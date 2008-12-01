@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<languages>
+	
+	<lang id="0" label="English" trad_file="/../langs/us.php">
+		<flags>
+			<url>../img/l/1.jpg</url>
+		</flags>
+		<isos>
+			<iso>en-us</iso>
+		</isos>
+		<idLangPS>en</idLangPS>
+	</lang>
+	
+	
+	<lang id="1" label="Français (French)" trad_file="/../langs/fr.php" >
+		<flags>
+			<url>../img/l/2.jpg</url>
+		</flags>
+		<isos>
+			<iso>fr-fr</iso>
+			<iso>fr</iso>
+		</isos>
+		<idLangPS>fr</idLangPS>
+	</lang>
+	
+</languages>

@@ -1,0 +1,1 @@
+<link rel="alternate" type="application/rss+xml" title="{$meta_title|escape:htmlall:'UTF-8'}" href="{$feedUrl}" />

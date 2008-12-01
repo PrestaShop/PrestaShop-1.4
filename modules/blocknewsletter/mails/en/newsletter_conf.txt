@@ -1,0 +1,5 @@
+Hi
+
+Thank you for subscribing our newsletter
+
+{shop_url} powered by PrestaShop

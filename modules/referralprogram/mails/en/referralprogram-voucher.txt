@@ -1,0 +1,13 @@
+Hi {firstname} {lastname},
+
+We inform you about the generation of a voucher to your name from your order #{id_order}.
+
+Here is the code of your voucher : {voucher_num}, with an amount of {voucher_amount} euros.
+Simply paste this code in your next cart before pay the order.
+
+Thank you for shopping at {shop_name}.
+
+{shop_name} - {shop_url}
+
+
+{shop_url} powered by PrestaShop&trade;

@@ -1,0 +1,3 @@
+<!-- MODULE ReferralProgram -->
+<li><a href="{$module_template_dir}referralprogram-program.php" title="{l s='Referral program' mod='referralprogram'}"><img src="{$module_template_dir}referralprogram.gif" alt="{l s='referralprogram' mod='referralprogram'}" class="icon" /></a><a href="{$module_template_dir}referralprogram-program.php" title="{l s='Referral program' mod='referralprogram'}">{l s='Referral program' mod='referralprogram'}</a></li>
+<!-- END : MODULE ReferralProgram -->

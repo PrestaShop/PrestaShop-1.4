@@ -1,0 +1,49 @@
+#datepicker_div, .datepicker_inline {
+	width:191px;
+}
+
+.datepicker_oneMonth {
+	width:191px;
+}
+
+.datepicker_granularity {
+	margin:0px;
+	padding:0px;
+}
+
+.datepicker_granularity input {
+	margin: 2px 0px;
+}
+
+.current_granularity_button {
+	font-size:7pt;
+	background-color:#D9E2E1;
+	color:#616B76;
+	width:18px;
+	height:18px;
+	border:2px solid #DF9496;
+	margin:0px;
+	padding:0px;
+}
+
+.granularity_button {
+	font-size:7pt;
+	background-color:#D9E2E1;
+	color:#616B76;
+	width:18px;
+	height:18px;
+	border:1px solid #A2ADBC;
+	margin:0px;
+	padding:0px;
+}
+
+.granularity_cell {
+	background: #D9E2E1;
+	width:27px;
+}
+
+.granularity_cell div {
+	overflow:hidden;
+	padding:0px;
+	margin:0px;
+}

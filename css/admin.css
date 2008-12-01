@@ -1,0 +1,858 @@
+/* CSS Admin PrestaShop */
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Verdana,Arial,Helvetica,sans-serif;
+	font-size: 12px;
+	color: #000;
+	text-align: center;
+	background-color: #EFEFEF;
+}
+
+a img {
+	border: 0;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+	outline: 0pt;
+}
+
+a:hover {
+	color: #222;
+	text-decoration: none;
+}
+
+a.link, a.link:hover {
+	color: #999999;
+}
+a.link {
+	text-decoration: underline;
+}
+
+img {
+	vertical-align: middle;
+}
+
+p {
+	margin: 0.5em 0;
+}
+
+hr {
+	border: none;
+	height: 1px;
+	color: #E0D0B1;
+	background-color: #E0D0B1;
+	padding: 0;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.block {
+	display: block;
+}
+
+/* FONTS */
+
+.bold {
+	font-weight: bold;
+}
+
+legend, th {
+	font-family : Trebuchet,Arial,Helvetica,sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family : "Trebuchet MS",Trebuchet,Arial,Helvetica,sans-serif;
+}
+
+h1 {
+	font-size: 1.6em;
+	margin: 0 0 .67em 0;
+}
+h2 {
+	font-size: 1.4em;
+	margin: 0 0 .83em 0;
+	color: #268CCD;
+}
+h3 {
+	font-size: 1.1em;
+	margin: 0 0 .83em 0;
+}
+h4 {
+	margin: 1.33em 0;
+}
+h5 {
+	font-size: 0.83em;
+	margin: 1.67em 0;
+}
+h6 {
+	font-size: 0.67em;
+	margin: 2.33em 0;
+}
+
+h3.blue {
+	color: #268CCD;
+}
+
+.red {
+	color: red;
+}
+
+.path_bar {
+	font-family : Trebuchet,Arial,Helvetica,sans-serif;
+	font-size: 13px;
+	padding:5px;
+	border: 1px solid #999999;
+	background-color:#E2EBEE;
+	margin-bottom:20px;
+}
+
+.path_bar a {
+	font-weight:bold;
+}
+
+.cat_bar {
+	font-family : Trebuchet,Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+	padding:5px;
+	border: 1px solid #999999;
+	background-color:#F4E8CD;
+	margin-bottom:20px;
+}
+
+.cat_bar a {
+	font-weight:bold;
+}
+
+/* FORMS */
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+form p {
+	margin: 0.5em 0 0 0;
+	padding: 0 0 0.5em 0;
+}
+
+form sup {
+	color: #CC0000;
+	font-weight: bold;
+	vertical-align: text-top;
+}
+
+.margin-form {
+	padding: 0 0 1em 190px;
+	color: #7F7F7F;
+	font-size: 0.85em;
+}
+
+fieldset.width1 .margin-form {
+	margin: 0 0 1em 130px;
+}
+
+fieldset {
+	margin: 0;
+	padding: 1em;
+	border: 1px solid #DFD5C3;
+	background: #FFFFF0;
+	font-size: 1.1em;
+}
+
+fieldset img {
+	padding: 0 4px 0 0;
+	vertical-align: bottom;
+}
+  
+legend {
+	margin: 0;
+	padding: 0.2em 0.5em;
+	border: 1px solid #DFD5C3;
+	background: #FFF6D3;
+	font-weight: bold;
+	text-align: left;
+}
+
+label {
+	float: left;
+	width: 180px;
+	padding: 0.2em 0 0 0;
+	text-align: right;
+	font-weight: bold;
+}
+
+#preview_import label {
+	float: left;
+	width: 340px;
+	padding: 0.2em 0 0 0;
+	text-align: left;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+label.t {
+	float: none;
+	clear: none;
+	padding: 0px;
+	margin: 0px;
+	font-weight: normal;
+	font-size: 12px;
+}
+label.std {
+	float: none;
+	margin: 0px;
+	width: 170px;
+	display: block;
+	font-size: 12px;
+	text-align: right;
+	font-weight: bold;
+}
+form div.std {
+	margin-top: -2em;
+}
+
+fieldset.width1 label {
+	width: 110px;
+}
+
+label:after {
+	clear: both;
+}
+
+input, textarea, option {
+	color: #000;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+input[type="text"], input[type="password"], input[type="file"], textarea {
+	padding: 2px 4px;
+	border: 1px solid #E0D0B1;
+}
+
+input[type="text"], input[type="password"], input[type="file"], input[type="radio"], input[type="checkbox"], textarea, select, option {
+	background-color: white;
+}
+
+select {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	border: 1px solid #E0D0B1;
+}
+
+input:focus, textarea:focus {
+	background-color: #F0EBD6;
+}
+
+fieldset {
+ 	_position: relative;
+}
+
+legend {
+	_position: relative;
+	_top: -2em;
+	_margin-top: 12px;
+}
+
+/* STRCTURE */
+
+#container {
+	width: 960px;
+	margin: 0 auto 2em auto;
+	text-align: left;
+}
+
+#main {
+	clear: left;
+	border: 1px solid #999;
+}
+
+#content {
+	padding: 1.25em;
+	background-color: #FFF;
+}
+
+#news {
+	width: 640px;
+	border: 1px solid #E0D0B1;
+}
+
+#help {
+	float: right;
+	width: 150px;
+	padding: 4px;
+	border: 1px solid #DFD5C3;
+	font-size: 0.9em;
+}
+
+#image {
+	float: right;
+	padding: 4px;
+	border: 1px solid #DFD5C3;
+	font-size: 0.9em;
+	text-align: center;
+}
+
+#product_link {
+ 	width: 240px;
+	float: right;
+	padding: 4px;
+	margin-top: 8px;
+	font-size: 0.9em;
+	text-align: center;
+	clear: right;
+}
+
+#help:after,
+#image:after {
+	clear: both;
+}
+
+/* NAV */
+
+#nav {
+	float: right;
+	margin: 1em 0;
+	font-size: 1.1em;
+	font-weight: bold;
+	vertical-align: middle;
+}
+
+#nav li {
+	display: inline;
+	list-style: none;
+	margin: 0 0 0 2em
+}
+
+#nav img {
+	vertical-align: bottom;
+}
+
+/* MENU */
+
+#menu {
+	float: left;
+	width: 100%;
+	height: 31px;
+	margin: 0;
+	padding: 0;
+	line-height : normal;
+}
+
+#menu li {
+	float: left;
+	list-style: none;
+	margin : 0 -1px 0 0;
+	padding : 0 0 0 5px;
+	background: url(../img/admin/tab_left.gif) no-repeat 0 -110px;
+}
+
+#menu img {
+	display: inline;
+	padding: 0 4px 0 0;
+	vertical-align: text-bottom;
+}
+
+#menu a {
+	float: left;
+	display: block;
+	background: url(../img/admin/tab_right.gif) no-repeat 100% -110px;
+	padding: 10px 10px 5px 3px;
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: bold;
+	font-size: 0.95em;
+}
+
+#menu li.active, #menu li.active:hover {
+	background-position: 0 0;
+}
+#menu li.active a, #menu li.active:hover a {
+	padding-bottom: 6px;
+	background-position: 100% 0;
+	color: #000;
+	text-decoration: none;
+}
+#menu li:hover {
+	background-position: 0 -220px;
+}
+#menu li:hover a {
+	background-position: 100% -220px;
+	color: #000;
+	text-decoration: none;
+}
+
+/* SUBMENU */
+
+#submenu {
+	clear: left;
+	margin: 0;
+	padding: 0.5em 1em;
+	border-bottom: 1px solid #CCC;
+	background: #ECEADE url(../img/admin/submenu-bg.gif) repeat-x bottom left;
+	color: #666;
+}
+
+#submenu li {
+	display: inline;
+	list-style: none;
+	margin: 0 5pt 0 0;
+}
+
+#submenu img {
+	vertical-align: middle;
+}
+
+#submenu a:hover {
+	color: #000;
+	text-decoration: underline;
+	/*font-weight: bold;*/
+}
+
+/* CONTENT */
+
+/* ERROR */
+
+#content .alert {
+	width: 500px;
+	margin: 0 0 15px 0;
+	padding: 10px 15px;
+	border-top: 1px solid #DF7B7B;
+	border-bottom: 1px solid #DF7B7B;
+	background-color: #FFE6E6;
+}
+
+#content .warning {
+	width: 400px;
+	margin: 0 0 15px 0;
+	line-height: 20px;
+	padding: 10px 20px 10px 20px;
+	border-top: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	background-color: #FFEBCC;
+	/*background: #FFEBCC url('../img/admin/warning.gif') no-repeat 5px 10px;*/
+}
+
+#content .conf {
+	width: 400px;
+	margin: 0 0 15px 0;
+	line-height: 20px;
+	padding: 10px 15px;
+	border-top: 1px solid #019609;
+	border-bottom: 1px solid #019609;
+	background-color: #CCFFCD;
+}
+
+#content .confirm h3 {
+	padding: 0 0 0 20px;
+	background: url(../img/admin/ok.gif) no-repeat 0 0;
+}
+
+#content .warn h3 {
+	padding: 0 0 0 20px;
+	background: url(../img/admin/warning.gif) no-repeat 0 0;
+}
+
+#content .error h3 {
+	padding: 0 0 0 20px;
+	background: url(../img/admin/warning.gif) no-repeat 0 0;
+}
+
+#content .error ol {
+	padding-bottom: 0;
+}
+
+/* CONTENT - COLUMN */
+
+.column {
+	float: left;
+	width: 173px;
+	margin: 0 50px 1.5em 0;
+	padding: 10px;
+	-moz-border-radius: 20px;
+	text-align: center;
+}
+
+#col_1 {
+	height: 235px;
+	color: #FFFFFF;
+	background: #FF8C76 url(../img/admin/col_1.gif) no-repeat;
+}
+
+#col_2 {
+	height: 235px;
+	color: #FFFFFF;
+	background: #FFC44F url(../img/admin/col_2.gif) no-repeat;
+}
+
+#col_3 {
+	height: 235px;
+	color: #FFFFFF;
+	background: #8CFF70 url(../img/admin/col_3.gif) no-repeat;
+}
+
+/* CONTENT - NEWS */
+
+#news img {
+	padding: 0 6px 0 0;
+	vertical-align: middle;
+}
+
+#news .infos,
+#news .content {
+	margin: 0;
+	padding: 4px;
+	font-family: Arial,Helvetica,sans-serif;
+	font-weight: normal;
+}
+
+/* CONTENT - TABLES */
+
+.table {
+	padding: 0;
+	border: 1px solid #DFD5C3;
+}
+
+.table th a {
+	text-decoration: underline;
+}
+
+.table a:hover {
+	text-decoration: none;
+}
+
+.table tr th {
+	padding: 4px 6px;
+	background: #F4E6C9 url(../img/admin/news-bg.gif) repeat-x top left;
+}
+
+
+.table tr td {
+	padding: 0 4px;
+	height: 23px;
+	color: #963;
+	border-bottom: 1px solid #F0EADA;
+	font-size: 0.9em;
+}
+
+.table tr.last td {
+	border-bottom: none;
+}
+
+/* FOOTER */
+
+#footer {
+	clear: both;
+	font-size: 0.9em;
+	text-align: center;
+}
+
+/* CLASS */
+
+h3.title {
+	clear: both;
+	margin: 0;
+	padding: 4px 10px;
+	border: 1px solid #E0D0B1;
+	border: none;
+}
+
+h3.subtitle {
+	color: #FF8D42;
+	font-size: 1.2em;
+}
+
+p.infos {
+	float: right;
+	margin: 0;
+	padding: 0;
+	font-size: 0.9em;
+	line-height: 1em;
+	vertical-align: top;
+}
+
+.width1 {
+	width: 350px;
+}
+
+.width2 {
+	width: 500px;
+}
+
+.width3 {
+	width: 600px;
+}
+
+.width4 {
+	width: 745px;
+}
+
+.widthfull {
+	width: 100%;
+}
+
+tr.deleted td {
+	background-color: #EEEEEE;
+}
+
+.contextnav {
+	margin: 10px 0;
+	padding: 3px 6px;
+	line-height: 1.30em;
+	border: 1px solid #E0D0B1;
+}
+
+.contextnav img {
+	vertical-align: text-top;
+}
+
+.contextnavleft {
+	float: left;
+	width: 6em;
+}
+
+.contextnavcenter {
+	text-align: center;
+}
+
+.contextnavcenter a,
+.contextnavcenter b {
+	letter-spacing: 6pt;
+}
+
+.contextnavright {
+	float: right;
+	width: 6em;
+	text-align: right;
+}
+
+.button {
+	border: 1px solid #DFD5AF;
+	border-top: 1px solid #FFF6D3;
+	border-left: 1px solid #FFF6D3;
+	color: #268CCD;
+	background-color: #FFF6D3;
+	padding: 3px;
+}
+
+.button:hover {
+	background-color: #F0EBD6;
+}
+
+.hidden {
+	height: 1px;
+	border-width: 1px 0 0 0;
+	border-style: solid;
+	border-color: #fff;
+}
+
+.clear {
+	clear: both;
+}
+
+.space {
+	margin-top: 1em;
+}
+
+.pspace {
+ 	padding-top: 1em;
+}
+
+.double-space {
+	margin-top: 2em ;
+}
+
+.space-bottom {
+	margin-bottom: 1em;
+}
+
+.double-bottom-space {
+	margin-bottom: 2em ;
+}
+
+.left {
+	text-align: left;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+	
+.small {
+	font-size: 0.85em;
+}
+
+.row {
+	background: #F4E6C9 url(../img/admin/news-bg.gif) repeat-x top left;
+}
+
+.alt_row {
+	background-color: #FFF6CF;
+}
+
+.noborder {
+	border: none;
+}
+
+.highlight {
+	background-color: #FFFF66;
+	font-weight: bold;
+}
+
+.discount_name {
+	background: #FFEBCC;
+	padding: 2px;
+	text-transform: uppercase;
+}
+
+.display_flags {
+	float: left;
+	margin-left: 5px;
+}
+
+.language_flags {
+	clear: both;
+	display: none;
+	width: 100px;
+	width: 80px;
+	background: #FFF;
+	padding: 8px;
+	border: 1px solid #555;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.imgm {
+	margin: 3px 0px 3px 0px;
+}
+
+.green {
+ 	color: forestgreen;
+}
+
+
+/* access management */
+#ajax_confirmation {
+	padding-top: 3px; 
+	padding-bottom: 6px;
+}
+
+/* help boxes */
+/* The hint to Hide and Show */
+.hint {
+	display: none;
+	float: left;
+	position: relative;
+	left: 0px;
+	width: 200px;
+	margin-top: 4px;
+	margin-bottom: 2px;
+	border: 1px solid #c93;
+	padding: 6px;
+	color: #7F7F7F;
+	/* to fix IE6, I can't just declare a background-color,
+	I must do a bg image, too!  So I'm duplicating the pointer.gif
+	image, and positioning it so that it doesn't show up
+	within the box */
+	background-color: #ffc;
+}
+
+/* The pointer image is hadded by using another span */
+.hint .hint-pointer {
+    position: absolute;
+    left: -10px;
+    top: 5px;
+    width: 10px;
+    height: 19px;
+}
+
+#flagsLanguage img {
+    padding: 3px;
+    margin-bottom: -4px;
+}
+
+#flagsLanguage .selected_language {
+    border: 1px solid #BBB;
+    padding: 2px;
+    margin-bottom: -4px;
+}
+
+.disable, .disable:hover {
+ 	background-color: #CCCCCC;
+ 	color: #AAAAAA;
+}
+
+/* Ajax classes */
+.ajax-warning, .ajax-success, .ajax-error {
+	border: 1px solid #CCCCCC;
+	padding: 5px 20px;
+	margin: 5px;
+	width: 70%;
+}
+.ajax-warning {
+	background-color: #FFBD6F;
+}
+.ajax-success {
+	background-color: #9FDF8B;
+}
+.ajax-error {
+	background-color: #FF7F84;
+}
+.ajax-loader {
+	margin: 5px 10px;
+}
+
+/* tab: AdminProducts */
+#upload-confirmation {
+	background-color: yellow;
+	font-weight:bold;
+}
+
+.productFieldComment {
+	color: #7F7F7F;
+	font-size: 0.8em;
+}
+
+/* Confirm box */
+a.confirm_yes, a.confirm_no {
+	width: 50px;
+	margin-left: 60px;
+	padding: 10px;
+	border-style: solid;
+	border-width: 1px;
+	text-align: center;
+	font-weight: bold;
+	color: white;
+}
+a.confirm_yes {
+	border-color: red;
+	background-color: red;
+}
+a.confirm_no {
+	border-color: green;
+	background-color: green;
+}
+
+/* tab: AdminImport */
+
+form#import_form {
+    padding-bottom:22px;
+    margin-left:15px;
+    margin-bottom:20px;
+}
+.table_overflow {
+	width:900px;
+	height:500px;
+	overflow:auto;
+}

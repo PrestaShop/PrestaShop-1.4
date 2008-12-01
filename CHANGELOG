@@ -1,0 +1,480 @@
+PrestaShop <support@prestashop.com>
+Open-source licence 3.0 (http://www.opensource.org/licenses/osl-3.0.php)
+
+####################################
+#   v1.1.0.3 - 6531 (2008-11-17)   #
+####################################
+
+Release Notes
+-------------
+
+	Added Features :
+
+- BO : added product location (eg. where product is located in your warehouse)
+- BO : added a warning if admin directory is not the real one
+- Dev : Database model added (made with MySQL Workbench)
+- Dir : added dir "docs" and "docs/dev"
+- BO : Add reference in search fields
+- BO & FO : Price display precision is now a php define
+- BO & FO : Currency decimals display support added
+- FO : added Scenes feature
+- FO : Warning message added when trying to add a customizable product to the cart without having filled all required fields
+- BO & FO : Customizable field requirement support added
+- BO & FO : Label configuration SQL upgrade added
+- BO & FO : Label multilingual support added
+- BO & FO : Label configuration support added to customized products
+- BO : You can now set an IP address allowed to access the shop when it's in maintenance
+- MO : New module Watermark
+- Customizable product textfield support added
+- Customizable product files & textfields dynamics support added
+- Customizable product support added to AJAX cart
+- BO : search by cart ID
+- BO : total weight in order summary
+- FO/BO : optimize the CMS feature
+- Classes : create a new language now auto fill all database field with default lang
+- Tools : added dir Languages
+- BO : you can now send csv files with data features in AdminImport
+- FO : if AJAX disabled in block-cart, now display last product added to cart in shopping-cart
+- FO : now display total remain for free shipping order in shopping-cart
+- MO : New module wishlist
+- MO : New module fidelity
+- MO : New module product comments
+- BO & FO : Customized product support added
+- BO/FO : you can now set your own meta-tags for each page
+- BO/FO : you can now disable invoice display for customers
+- BO/FO : Added discount on categories
+- Discount on categories
+- BO : you can now fix a wholesale price to an attribute combination
+- BO : you can now disabled a module without uninstall it
+- BO : you ca now select which currency a payment module will use, between shop currencies list, customer selected currency or defaut shop one.
+- MO : New module for automatic birthday vouchers
+- BO : you can now edit module's graft and its exceptions files
+- BO : You can now restrict the payment modules to countries or currencies
+- BO : you can now have a delivery slip for each order
+- BO : New link "save and go back to the category" on the product page
+- BO : Message template for orders
+- Modules : new stats module on the BO homepage
+- BO : you can now delete countries with a flag deleted (like carrier)
+- BO : you can now display un-positionable hooks in AdminModulesPositions
+- FO/BO : you can now set if currency take a blank between sign and price
+- BO : you can now repay shipping cost while canceling product
+- FO/BO : each invoice generated now has its own datetime separately from order
+- FO/BO : you can now set an invoice number for each order while updating status
+- Hook : new hook postUpdateOrderStatus
+- BO : Added TinyMCE compressor
+- Product picture support added
+- Fatal error added when UTF-8 support is unavailable on the SQL server
+- FO : Hack attempt error added when no default carrier selected
+- FO : New hook when returning a product
+- FO : Availability messages improved
+- BO : Category's url rewriting behavior changed (automatically filled only at the creation)
+- FO : Added some meta tags
+- BO : Statistics
+
+
+	Improved/changed features :
+
+- FO/BO : improved code style and vars types
+- FO : automatic meta tags for products and categories
+- FO : no specific controller for scenes
+- FO : customizable products listing upgraded (inside the cart page)
+- Image : new supplier image
+- Image : new manufacturer image
+- Dir : moved "licenses" in "docs/licenses"
+- MO : added link to hook blockmyaccount in blockwishlist
+- MO : referralprogram doesn't copy mails anymore
+- BO : new display of product page (catalog)
+- BO : remade all tabs of product page
+- TR : updated FR translations
+- BO : Customer's last connections improvment
+- Installer : updated content for CMS
+- BO : Customizable product option exported to a new product tab (in progress)
+- FO : Allowed uploadable file format display added on product page
+- MO : updated text and FR translations in Newsletter module
+- TR : updated FR translations
+- BO & FO : Label multilingual support improved (new multilingual label creation support added)
+- FO : Enable category default on accessories
+- Installer : Customizable product configuration variable definition added
+- FO : Customizable product form updated (on the product page)
+- TR : upgraded FR translations
+- TR : cleaned en front translation file
+- Mails : state variable fixed in order_conf.txt
+- Installer : added index on category_lang
+- MO : now blocknewsletter stock ip of suscriber in database
+- BO : improved admin languages and admin translations
+- BO : state is now included in the contact settings (and PDF)
+- BO : Fixed syntax
+- BO : Stock quantity now appears near the ordered quantity in the ordered products list
+- FO : wash and zip each js library
+- BO : minor ergonomy fix
+- FO/BO : you can use no longer a no-complete lang (missing files)
+- FO/BO : if you have a no-complete lang in your cookie, switching to default lang
+- FO : changed display of order history list
+- PDF : now display tax tab for order slip
+- Installer : no more new language added
+- Installer : double data lang for all languages
+- FO/BO : Improve security on allowing only 1 generating password every 6 hours
+- BO : Order and delivery PREFIX now  use multi-lang fields
+- MO blockvariouslinks : Added appliance to CMS
+- FO/BO : Added appliance to CMS
+- MO : blockpaymentlogo now takes its link from the CMS
+- MO : blockinformations now takes its links from the CMS
+- Installer : added auto discount for category
+- Installer : added auto currency/country for payment module
+- MO : moved editorial and homefeatured to Tools modules
+- TR : new FR translations
+- BO : Import of csv files 
+- BO : you can now upload image for a tab using BO
+- Installer : added SQL changes for category discount
+- Robots.txt : added search.php file cause of Google indexing
+- BO : Number of visitors online on the homepage
+- BO : improved display of AdminPayment.php
+- FO : payment module with no currencies set are no longer displayed
+- FO : You can (again) leave a message with an order
+- MO : improved CashOnDelivery display
+- MO : improved Gcheckout display
+- BO : Quantity discounts on attributes
+- MO : Google analytics snippet updated
+- TR : improved french translations/fr/admin.php
+- BO : improved AdminPayment display
+- MO : MailAlerts mails updated
+- BO : improved display of AdminBackup
+- TR : added french translations
+- MO : improved display of statshome
+- TR : Fixed french traduction for Google Checkout Module
+- FO : Reference on product page
+- BO : delete flag for the tabs' lists
+- BO : Error translation ergonomics
+- PDF : product names increased from 128 to 255 in order_detail
+- Modules : Tm4b can now send daily report
+- FPDF : Updated to 1.6
+- FO : SSL available for the contact form
+- BO : Categories tree is now generated faster in AdminProduct
+- FO : Smarty updated to 2.6.20
+- FO : added credit slip link into my-account.tpl
+- MO : added curl() and secure fsockopen() to PayPal (thanks to Paul C. from forum !)
+- MO : added notify_url to PayPal (no more website URL to add to PayPal profile) (thanks to Paul C. from forum !)
+- BO : you can now return product even with "Cancel" order state
+- Module : gAdSense can be display in top, left and right column
+- BO : You can now translate the static pages (index, login...)
+- FO : Duplicated SQL queries removed
+- BO : There are now textarea instead of small input in the translations
+- BO : updated AdminOrders, AdminReturn, PDF
+- Classes : improved Tools::passwdGen() method
+- BO : tabs in the product edition page are now loaded with Ajax 
+- jQuery : updated to 1.2.6
+- BO : new display for AdminOrders.php
+- BO : you cannot anymore view PDF for order without invoice
+- FO : Now you can't choose cash on delivery for virtual products 
+- BO : images and attributes are now linked on product duplication
+- BO : Accessories in the product page are now populated with Ajax
+- BO : Manufacturers and suppliers are now populated in ajax in the product page
+- BO : "New product" form lighter
+- FO : You can see the product category in the friendly URL
+- BO : Fixed bug in products default orderby select
+- BO : fixed bug in voucher creation 
+- FO : default category name available on each product
+
+	Fixed bugs :
+
+- BO : fixed id_lang bug in AdminLanguages
+- BO : fixed display bug in AdminTabs
+- Installer : reinstallation of the blockmyaccount fixed
+- MO : fixed currency bug in GCheckout
+- FO : Category voucher optimization
+- BO : fixed AdminCustomers display bug
+- Installer : Module tools added
+- Installer : Module tools added
+- Installer : reinstallation of the blockmyaccount added
+- FO : Customer account hook fixed (was the mix of two hooks!)
+- Installer : SQL default value fixed (FALSE)
+- BO : AdminTranslations tab display fixed
+- BO : Copying of translations fixed when the destination haven't all its translations' files complete
+- BO : Default language disabling by language edition locked
+- BO & FO & PDF : Order product cancellation fixed (when cancelled before shipping)
+- BO : Customer last connection feature fixed
+- BO : Customer tab display fixed
+- MO : Referral program module fixed on customer account creation
+- BO & FO : Favicon image relocated
+- FO : Reduction percentage fixed when NULL in database
+- FO : CSS property fixed
+- BO : Product combination image fixed on the order detail
+- Installer : SQL table creation issue fixed
+- FO : Terms & conditions thickbox fixed (right column persistence)
+- FO : Vourcher amount display fixed
+- MO : Specials & Best sales product listing fixed
+- BO & FO : Htmlentities cleaned
+- MO : Loyalty module - cancelling an item now cancel the points too
+- Installer : missing CMS tab in the upgrade
+- BO : Thumbnails resize do not crop anymore
+- BO : Bad image in order detail when product attribute is set
+- Installer : fixed old bug with update range price/weight
+- FO : fixed bug while getting last range price/weight
+- FO : Customizable product deletion fixed
+- BO : fixed bug while uploading scene
+- BO : renamed "Attributes" tab to "Declinations"
+- MO : fixed bug if no category set in Feeder
+- FO : fixed QuantityDiscount display bug
+- FO : fixed bug price in scenes
+- BO : fixed bug in AdminOrders.php
+- MO : fixed display bugs in BlockWishList
+- MO : added breadcrumb to WishList
+- MO : fixed average bug in ProductComment
+- DB : Tables product_picture and search dropped
+- DB : Gender table and class removed
+- image.inc.php : fixed bad character encoding
+- MO : Productcomments module's averages fixed
+- MO : fixed logged error in productcomments
+- MO : Productcomments module's code fixes
+- MO : Productcomments module's error/confirmation management fixed
+- MO : Productcomments module's averages fixed
+- BO : added &nbsp;
+- MO : tm4b now has its own mail dir
+- MO : Productcomments module's pagination fixed
+- Installer : SQL query fixed
+- BO : Product image glimps fixed (in product listing)
+- FO : fix minor bug for scenes features
+- MO : fixed error message bug in sendtoafriend
+- MO : fixed various dir mails
+- MO : Blockcurrencies fixed (replaced the smarty currency variable)
+- MO : fixed various display bugs
+- MO : fixed display bugs
+- MO : Editorial module display fixed (W3C compliant)
+- FO : Scene images' type check added
+- MO : fixed double <p> in Editorial
+- MO : fixed double id in blockwishlist
+- BO : Product image's legend length fixed (was to short when automatically generated from the product name)
+- FO : fixed bug with order step while adding new address
+- MO : fixed translation bug in referral
+- MO : fixed bugs on referral emails
+- MO : fixed bugs on referral emails
+- Mails : cleaned old tpl mails sponsorship
+- MO : referralprogram now has its own mail dir
+- MO : wishlist now has its own mail dir
+- MO : wishlist now has its own mail dir
+- BO : fixed htmlentities bug on product page
+- Mails : fixed htmlentities bug in FR wishlist
+- FO : fixed htmlentities bug with js vars
+- BO : fixed no id_lang while regenerating password
+- FO : Added fix of Jude for mouse over on image product
+- BO : fixed redirection bug of QuantityDiscount in product page
+- TR : Quantitydiscount translations fixed
+- MO : fixed several htmlentitie bugs
+- MO : fixed several htmlentitie bugs
+- FO : fixed htmlentitie bug in smarty function maxword
+- FO : Customization submit does not clean combination choice anymore on the product page
+- FO : fixed bug while posting a message in a new order
+- MO : fixed bugs in FR mails in MailAlerts
+- MO : fixed carrier name bug in MailAlerts
+- MO : fixed display bug in Editorial
+- MO : fixed version bug in MailAlert
+- FO : fixed bug while posting a message in a new order
+- MO : fixed bugs in FR mails in MailAlerts
+- MO : fixed commented line in editorial
+- MO : fixed some bugs in Loyalty
+- BO : fixed some bugs with color attribute groups
+- BO : Customization label deletion fixed
+- FO : Addition of customized product to the cart fixed (uploaded images stayed displayed)
+- MO : fixed display bug in statsorigin
+- Modules : fixed display bug in loyalty.php
+- BO : Customization label deletion fixed (restricted to label type)
+- FO : Customizable product warning display fixed (was displayed only when fields was for uploadable files)
+- TR : French translations put back
+- BO : Customization label addition fixed
+- FO : Customization submit button display fixed (when no customization field)
+- MO : Enable translation on voucher name 
+- BO : Uploadable files field (on product page >> customization) fixed
+- BO : Customization label management display fixed
+- TR : French translations updated
+- FO : Customization button width fixed on product page
+- BO : Customizable product multilingual label management fixed (a flag click change all multilingual fields now)
+- BO : Customizable product label display fixed
+- FO : fixed bug while showing "Terms of use" in process command with new CMS system
+- FO : Customizable fields quote support fixed
+- TR : updated various translations
+- FO : Customizable fields special characters support fixed
+- MO : fixed TR bugs in referralprogram
+- Mails : fixed FR translation bug
+- FO : fixed bug with add button and customizable products
+- MO : Fix Mail Color- MO : Fix XTML
+- MO: Fix bugs in referral program
+- FO : Customizable product list display fixed inside order history & shopping cart
+- FO : fixed double htmlentities() bug
+- Installer : no more smtp password required to set SMTP params
+- MO : fixed translations bugs in ReferralProgram
+- FO : fixed bug while displaying sub-categories with long name (center)
+- BO : double @ in new carriers
+- FO : "All new products" now display only new products
+- Installer : fixed SQL bugs between full and update
+- FO : fixed bug while displaying sub-categories with long name
+- Class : fixed bug in Validate::isEmail()
+- FO : Customizable product display added to the order history
+- FO : fixed quantity discount bug
+- BO : Multilingual label deletion support added
+- BO : Prestashop cache is refreshed when you update a product image
+- BO : fixed bug while adding shipping number
+- BO : Product quantity reestablition fixed
+- TR : French translations fixed
+- BO : fixed translation bug
+- : Customizable products' fields fixed (when file & textfield were mixed)
+- FO : Product quantity is the sum of the attribute's everywhere
+- AdminProducts.php function copyfrompost cleansed
+- Format "Minimum" in the FO vouchers list
+- French warning no more out of the background at the BO login page
+- Order # is now the same everywhere
+- Maximum number of days for a product return is now dynamic everywhere
+- Only valid discounts are displayed in the FO customer account now
+- MO: Fixed somes bugs on wishlist
+- FO : space after days and years in the dropdown menu for birthday
+- BO : AdminDiscounts table overflow problem fixed
+- BO : Order messages now appear in the message list
+- MO: Fixed bug on newsletter
+- Modules : Google checkout module installation/uninstallation fixed
+- MO : fixed bug in setting GCheckout configuration
+- Classes : fixed install bug while inserting default currencies for payment module
+- MO : fixed GCheckOut bug with used currency
+- BO : Access restriction to "read-only" on tab options fixed (e.g., voucher activation)
+- BO : Product page navigation improved
+- Modules : Product comments module fixed (file name case fixed)
+- FO : Price round calculation fixed (when a discount applied)
+- BO : Color picker title upgraded & new link to the attribute management tab added
+- BO : Product attribute deletion fixed (bad $currentIndex on ajax product tabs)
+- MO : PayPal now supports wrapping costs
+- Payment : Discount > 1000¤ fixed
+- FO : Price's display fixed when negative (e.g., vouchers) and its currency character on the left (e.g., "$")
+- BO : The order detail now display the correct product attribute image
+- FO : None customized product deletion link fixed inside the shopping cart
+- Installer : Product customization directory permission check added
+- FO : Blockcart deletion link fixed (displayed "product's deletion link" when customizable product)
+- BO : Discount tab renamed to "Vouchers"
+- Core : Percentage voucher calculation fixed (when a product was in several categories where the voucher applied to)
+- BO : Percentage voucher display of the customer last cart fixed
+- Structure : Customizable product's directory moved to a better location
+- Classes : fixed cache bug in Carrier
+- Classes : Vouchers are now set to all categories by default
+- MO : fixed various translations bugs
+- MO : fixed various htmlentities bugs
+- FO : Customizable product link to its cart fixed (when it is the first product added)
+- FO : Customizable product listing on the shopping cart fixed
+- FO : Customizable and classic product deletion conflicts fixed
+- FO : Blockcart product deletion fixed
+- FO : Customizable products deletion fixed
+- FO : Customizable products mixing inside the AJAX cart fixed
+- FO : Customizable product & product attributes mix updated insided the AJAX cart
+- BO : Date filters fixed
+- FO : Customizable product deletion fixed
+- FO : Customizable product deletion animation from the AJAX cart fixed
+- FO : hack attempt when a deleted customer placed an order fixed
+- Module : fix a minor display bug
+- MO : blockviewed cannot display inactive products anymore
+- MO : Tm4b templates and languages fixed
+- BO : Memory leak with tab included fixed
+- BO : Fixed bug in total weight floatval miscalculation
+- FO : no more empty ranges for shipping costs
+- FO : Discounts are deleted from carts when deleted, avoiding a hack attempt in the cart
+- Installer : cancel order status is no has "invoice state"
+- Installer : setting.inc.php is autoremoved after installation
+- MO : Bankwire's payment return translation impossibility fixed
+- FO : fixed display bug in block modules
+- Classes : fixed wrong argument in getSummaryDetails()
+- BO : set timeout() to 3sc for simplexml_load_file()
+- Installer : no more move_uploaded_file() function required
+- BO : added begin date for AdminInvoices and AdminDeliverySlip
+- Installer : added redefine of REQUEST_URI
+- MO : blockbestsellers is no longer required for the best sales page
+- BO : fixed manufacturer address
+- BO : manufacturer view page now display addresses list
+- FO: Fixed bug on displaying product accessories
+- BO : No more hack attempt while adding aliases
+- FO: Fixed bug on deleting discounts
+- BO : Fixed bug in GetFields 
+- FO : you cannot add more than once a virtual product to your cart anymore
+- BO : fixed some translations
+- FO : getProductProperties() no more fetch attribute price when there is no attribute
+- MO : Fixed recursive function of blockcategories which generated thousands of mysql queries
+- BO : fixing tab image issue
+- BO : fixed text bug on forget password pages
+- FO : Add space befor link when no adress available
+- BO : Default carrier undeletable
+- BO : Typo in Configuration::__construct()
+- BO : Manufacturers' description no more required
+- MO : fixed display bug in cheque and bankwire
+- BO : Fixed css for datepicker
+- BO : Translation bug on "Modify this attribute group" fixed
+- MO : fixed GCheckout lib error
+- MO : missed currencies warning in bankwire
+- Installer Fix duplicate id in query for tab
+- FO : Order minimum is now calculated without shipping
+- Mail : Do not crash anymore when the logo is unavailable
+- BO : Virtual products do not create products anymore when displaying an error 
+- FO : Smarty doesn't recompile every time anymore
+- FO : fixed redirect link in summary cart
+- BO : fixed empty variables while cut an image
+- Installer : fixed bugs
+- FO : fixed redirect URL bug
+- FO : fixed display quantity bug on summary cart
+- FO : fixed IE6 display bug
+- FO : CSS invalid property values
+- Module : gSitemap do not duplicate URLs anymore (#2)
+- FO : Discounts are now better calculated
+- Database : Useless primary key 'id_access' dropped
+- FO : fixed display bug in order-follow.tpl and order-slip.tpl
+- Module : MailAlerts is now cleaner
+- BO : Fixed a PHP warning when accessing a non-existing tab
+- BO/FO : "Free shipping starting at" is now '>=' and no more '>' only
+- PDF : tax detail fixed
+- BO : You can now enter an UTF-8 string for currency name
+- BO : remove a ';' in postProcess of AdminProducts
+- FO : fixed a quantity display bug in product page
+- FO : fixed display bug on shopping cart
+- FO : now use shipping fees even if order total is at 0 by using discount
+- Classe : fixed no return value in PaymentModule
+- BO : CSV import fixed
+- BO : Price isn't limited to (only) 9 999 999 anymore
+- FO : Manufacturer product sort fixed (concerning prices-drop.php & new-products.php)
+- BO : Manufacturers pagination fixed
+- FO : Product picture's deletion fixed
+- BO : Availability message caption fixed
+- BO & FO : Address selection fixed
+- FO : An error is now displayed when you submit a private discount code while not logged
+- Modules : gsitemap now set different priorities
+- BO & FO : Configuration addition/update fixed (provoked duplicated insertion and id equal to 0 on the database)
+- Installer : Correct INSERT query in db_settings_lite.sql
+- Database convertion to utf-8 fixed (0.9.7.2 -> 1.0.0.1)
+- Add to cart button of listed products fixed (when blockcart uninstalled)
+- BO : "Back to category" doesn't disappear from the product page anymore
+- BO : product tags can't be doubled anymore
+- BO : quantity of canceled products in AdminOrder can't be negative anymore
+- Installer : configuration names are now unique
+- FO : Customers now logout when de-activated in the back-office while connected
+- BO : The first carrier created is automaticaly set to the default one
+- MO : Blocksearch's left template fixed
+- BO : Mail parameters aren't corrupted anymore in the Orders tab
+- FO : Combination code fixed ("combinaisons" changed to "combinations")
+- BO & FO : Cookie's domain fixed (when domain extension comported several "domains" such as .co.uk, .co.jp, ...)
+- TR : French BO translations updated
+- BO : Manufacturer pagination fixed
+- BO : Default language status locked (status = is active or not)
+- FO : Fixed a cache related bug on the cart with Opera 9.27
+- BO : fixed bug in iframe
+- FO : Specific page titles doesn't appear anymore when the shop is disabled
+- BO : html_entity_decode put on the mail subject for product returns
+- Modules : gsitemap error message fixed
+- BO : You can now use accented characters in image legends
+- BO : product pictures aren't orderable anymore in the catalog tab
+- BO : you can now enter product weight up to 6 digits
+- FO : blanks in the password are now trimmed in the personal information form
+- BO : Button text is now displayed correctly in the product attributes tab
+- Installer : Netherlands were doubled in countries list
+- FO : Postcode '0' is now possible
+- TR : Translation keys updated (voucher's cumulation & "on sale" option)
+- FO : "Bad sql query" errors added
+- BO : Product default category selected (on <select />) fixed
+- FO : Attribute combination support added to "quantity discounts"
+- BO : Product page duplicate error display fixed
+- TR : French translations fixed & updated
+- BO & FO : Order details product prices fixed
+- FO : Ajax cart fixed
+- BO : Feature addition fixed
+- FO : fixed token bug
+- FO : PaymentModule email sending fixed (allow module to NOT send email when its order status is set to doesn't)
