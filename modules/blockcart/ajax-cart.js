@@ -390,7 +390,7 @@ var ajaxCart = {
 			/* If the customization is already displayed on the cart, no update's needed */
 			if($('#cart_block').find("div[@id^=deleteCustomizableProduct_" + customizationId + "_]").length)
 				return ('');
-			content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?deleteCustomizableProduct=' + customizationId + '&amp;add&amp;op=down&amp;qty=1&amp;id_product=' + productId + '&amp;token=' + static_token + '&amp;ipa=' + productAttributeId + '"> </a></div>';
+			content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
 
 			/* Give to the customized product the first textfield value as name */
 			$(this.datas).each(function(){

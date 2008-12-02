@@ -56,7 +56,8 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 				<ul class="cart_block_customizations" id="customization_{$productId}_{$productAttributeId}">
 					{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization' name='customizations'}
 						<li name="customization">
-							<div class="deleteCustomizableProduct" id="deleteCustomizableProduct_{$id_customization|intval}_{$product.id_product|intval}_{$product.id_product_attribute|intval}"><a class="ajax_cart_block_remove_link" href="{$base_dir}cart.php?deleteCustomizableProduct={$id_customization|intval}&amp;add&amp;op=down&amp;qty=1&amp;id_product={$product.id_product|intval}&amp;token={$static_token}&amp;ipa={$product.id_product_attribute|intval}"> </a></div>
+							<div class="deleteCustomizableProduct" id="deleteCustomizableProduct_{$id_customization|intval}_{$product.id_product|intval}_{$product.id_product_attribute|intval}"><a class="ajax_cart_block_remove_link" href="{$base_dir}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$static_token}"> </a></div>
+							<span class="quantity-formated"><span class="quantity">{$customization.quantity}</span>x</span>
 							{if isset($customization.datas.$CUSTOMIZE_TEXTFIELD.0)}{$customization.datas.$CUSTOMIZE_TEXTFIELD.0.value|truncate:28}
 							{else}
 							{l s='Customization #' mod='blockcart'}{$id_customization|intval}{l s=':' mod='blockcart'}

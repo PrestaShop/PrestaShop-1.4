@@ -24,6 +24,7 @@
 {* This empty line was made in purpose (product addition debug), please leave it here *}
 
 			'customizationId':	{$id_customization},
+			'quantity':			{$customization.quantity},
 			'datas': [
 {foreach from=$customization.datas key='type' item='datas'}
 				{ldelim}

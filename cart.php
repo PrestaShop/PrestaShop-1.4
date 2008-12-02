@@ -13,7 +13,6 @@ foreach ($cartDiscounts AS $k => $cartDiscount)
 
 $add = Tools::getIsset('add') ? 1 : 0;
 $delete = Tools::getIsset('delete') ? 1 : 0;
-$deleteCustomizableProduct = Tools::getIsset('deleteCustomizableProduct') ? Tools::getValue('deleteCustomizableProduct') : false;
 
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 	strcasecmp(Tools::getToken(false), Tools::getValue('token')) &&
@@ -21,7 +20,7 @@ if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 	$errors[] = Tools::displayError('invalid token');
 
 //update the cart...
-if ($add OR Tools::getIsset('update') OR $delete OR $deleteCustomizableProduct)
+if ($add OR Tools::getIsset('update') OR $delete)
 {
 	//get the values
  	$idProduct = intval(Tools::getValue('id_product', NULL));
@@ -29,31 +28,33 @@ if ($add OR Tools::getIsset('update') OR $delete OR $deleteCustomizableProduct)
 	$customizationId = intval(Tools::getValue('id_customization', 0));
 	$qty = intval(abs(Tools::getValue('qty', 1)));
 
-	if (!$idProduct)
+	if ($qty == 0)
+		$errors[] = Tools::displayError('null quantity');
+	elseif (!$idProduct)
 		$errors[] = Tools::displayError('product not found');
 	else
 	{
 		$producToAdd = new Product(intval($idProduct), false, intval($cookie->id_lang));
-		if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete AND !$deleteCustomizableProduct)
+		if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 			$errors[] = Tools::displayError('product is no longer available');
 		else
 		{
 			/* Check the quantity availability */
 			if ($idProductAttribute AND is_numeric($idProductAttribute))
 			{
-				if (!$delete AND !$deleteCustomizableProduct AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
+				if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
 					$errors[] = Tools::displayError('product is no longer available');
 			}
-			elseif ($producToAdd->hasAttributes() AND !$delete AND !$deleteCustomizableProduct)
+			elseif ($producToAdd->hasAttributes() AND !$delete)
 			{
 				$idProductAttribute = Product::getDefaultAttribute(intval($producToAdd->id));
 				if (!$idProductAttribute)
 					Tools::redirectAdmin($link->getProductLink($producToAdd));
 				else
-					if (!$delete AND !$deleteCustomizableProduct AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
+					if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
 						$errors[] = Tools::displayError('product is no longer available');
 			}
-			elseif (!$delete AND !$deleteCustomizableProduct AND !$producToAdd->checkQty(intval($qty)))
+			elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
 					$errors[] = Tools::displayError('product is no longer available');
 			/* Check vouchers compatibility */
 			if ($add AND (intval($producToAdd->reduction_price) OR intval($producToAdd->reduction_percent) OR $producToAdd->on_sale))

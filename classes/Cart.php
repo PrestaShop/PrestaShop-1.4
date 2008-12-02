@@ -365,9 +365,10 @@ class		Cart extends ObjectModel
 					$productQty = intval($result2['quantity']);
 				if (intval($quantity) > $productQty AND (intval($result2['out_of_stock']) == 0 OR (intval($result2['out_of_stock']) == 2 AND !Configuration::get('PS_ORDER_OUT_OF_STOCK'))))
 					return false;
-				return Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
+				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
 				'id_product_attribute' => intval($id_product_attribute), 'id_cart' => intval($this->id),
-				'quantity' => intval($quantity)), 'INSERT');
+				'quantity' => intval($quantity)), 'INSERT'))
+					return false;
 			}
 		}
 		return $this->_updateCustomizationQuantity(intval($quantity), intval($id_customization), intval($id_product), intval($id_product_attribute), $operator);
@@ -481,7 +482,7 @@ class		Cart extends ObjectModel
 			return false;
 
 		/* If the product still possesses customization it does not have to be deleted */
-		if (Db::getInstance()->NumRows())
+		if (Db::getInstance()->NumRows() AND intval($result['quantity']))
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product` SET `quantity` = '.intval($result['quantity']).' WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
 
 		/* Product deletion */
