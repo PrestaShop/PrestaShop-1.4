@@ -103,6 +103,9 @@ abstract class AdminTab
 	/** @var array Confirmations displayed after post processing */
 	private $_conf;
 
+	/** @var object Object corresponding to the tab */
+	private $_object = false;
+
 	/** @var array tabAccess */
 	public $tabAccess;
 
@@ -1256,13 +1259,17 @@ abstract class AdminTab
 	{
 		if ($id = intval(Tools::getValue($this->identifier)) AND Validate::isUnsignedId($id))
 		{
-			$object = new $this->className($id);
-			if (!Validate::isLoadedObject($object))
+			if (!$this->_object)
+				$this->_object = new $this->className($id);
+			if (!Validate::isLoadedObject($this->_object))
 				die (Tools::displayError('object cannot be loaded'));
-			return $object;
+			return $this->_object;
 		}
 		elseif ($opt)
-			return new $this->className();
+		{
+			$this->_object = new $this->className();
+			return $this->_object;
+		}
 		else
 			die(Tools::displayError('object cannot be loaded'));
 	}

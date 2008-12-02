@@ -229,13 +229,32 @@ class AdminOrders extends AdminTab
 		parent::postProcess();
 	}
 
-	private function displayCustomizedDatas($customizedDatas, $id_product, $id_product_attribute, $id_order)
+	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
 	{
-		if (is_array($customizedDatas) AND isset($customizedDatas[$id_product][$id_product_attribute]))
+		$order = $this->loadObject();
+		$customizationQuantityTotal = intval(Cart::getCustomizationQuantityTotal(intval($order->id_cart)));
+
+		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])]))
 		{
-			echo '<tr>
-					<td colspan="8">';
-			foreach ($customizedDatas[$id_product][$id_product_attribute] AS $customization)
+			echo '
+			<tr '.($product['deleted'] ? 'class="deleted"' : '').'>
+				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
+				'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
+				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
+					<span class="productName">'.$product['product_name'].'</span><br />
+					'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'] : '')
+					.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
+					.'</a></td>
+				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
+				<td align="center" class="productQuantity">'.$customizationQuantityTotal.'</td>
+				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
+				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
+			</tr>';
+			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customization)
+			{
+				echo '
+				<tr>
+					<td colspan="2">';
 				foreach ($customization['datas'] AS $type => $datas)
 					if ($type == _CUSTOMIZE_FILE_)
 					{
@@ -243,20 +262,25 @@ class AdminOrders extends AdminTab
 						echo '<ul style="margin: 4px 0px 4px 0px; padding: 0px; list-style-type: none;">';
 						foreach ($datas AS $data)
 							echo '<li style="display: inline; margin: 2px;">
-									<a href="displayImage.php?img='.$data['value'].'&name='.intval($id_order).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
+									<a href="displayImage.php?img='.$data['value'].'&name='.intval($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
 								</li>';
 						echo '</ul>';
 					}
 					elseif ($type == _CUSTOMIZE_TEXTFIELD_)
 					{
-						echo '<ul style="margin: 0px 0px 4px 0px; padding: 0px 0px 0px 6px; list-style-type: none;">';
 						$i = 0;
+						echo '<ul style="margin: 0px 0px 4px 0px; padding: 0px 0px 0px 6px; list-style-type: none;">';
 						foreach ($datas AS $data)
 							echo '<li>'.$this->l('Text #').++$i.$this->l(':').' '.$data['value'].'</li>';
 						echo '</ul>';
 					}
-			echo '	</td>
+				echo '</td>
+					<td align="center"></td>
+					<td align="center" class="productQuantity">'.$customization['quantity'].'</td>
+					<td align="center" class="productQuantity"></td>
+					<td align="center">'.Tools::displayPrice(floatval($product['product_price']) * floatval($customization['quantity']), $currency, false, false).'</td>
 				</tr>';
+			}
 		}
 	}
 
@@ -277,6 +301,8 @@ class AdminOrders extends AdminTab
 		$carrier = new Carrier($order->id_carrier);
 		$history = $order->getHistory($cookie->id_lang);
 		$products = $order->getProducts();
+		$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+		Product::addCustomizationPrice($products, $customizedDatas);
 		$discounts = $order->getDiscounts();
 		$messages = Message::getMessagesByOrderId($order->id);
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
@@ -466,7 +492,6 @@ class AdminOrders extends AdminTab
 							<th style="width: 90px; text-align: center">'.$this->l('Total').'</th>
 						</tr>';
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
-						$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 						foreach ($products as $k => $product)
 						{
 							$image = array();
@@ -486,6 +511,9 @@ class AdminOrders extends AdminTab
 							'.($product['product_attribute_id'] ? 'LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON p.id_product = pa.id_product' : '').'
 							WHERE p.id_product = '.intval($product['product_id']).'
 							'.($product['product_attribute_id'] ? 'AND pa.id_product_attribute = '.intval($product['product_attribute_id']) : ''));
+							/* Customization display */
+							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
+							$customizationQuantityTotal = (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])])) ? intval(Cart::getCustomizationQuantityTotal(intval($order->id_cart))) : 0;
 							echo '
 							<tr '.($product['deleted'] ? 'class="deleted"' : '').'>
 								<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
@@ -496,11 +524,10 @@ class AdminOrders extends AdminTab
 									.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
 									.'</a></td>
 								<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
-								<td align="center" class="productQuantity" >'.intval($product['product_quantity']).'</td>
-								<td align="center" class="productQuantity" >'.intval($stock['quantity']).'</td>
+								<td align="center" class="productQuantity">'.(intval($product['product_quantity']) - $customizationQuantityTotal).'</td>
+								<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 								<td align="center">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 							</tr>';
-							$this->displayCustomizedDatas($customizedDatas, intval($product['product_id']), intval($product['product_attribute_id']), intval($order->id));
 							if (isset($image['id_image']))
 							{
 								$target = '../img/tmp/product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg';
