@@ -219,7 +219,7 @@ abstract class PaymentModule extends Module
 				foreach ($discounts AS $discount)
 				{
 					$objDiscount = new Discount(intval($discount['id_discount']));
-					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, 1), $order->total_shipping, $order->id);
+					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, 1), $order->total_shipping, $cart->id);
 					$order->addDiscount($objDiscount->id, $objDiscount->name, $value);
 					if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_)
 						$objDiscount->quantity = $objDiscount->quantity - 1;
