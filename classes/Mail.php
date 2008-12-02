@@ -70,20 +70,24 @@ class Mail
 			}
 			else
 				$connection = new Swift_Connection_NativeMail();
+
 			if (!$connection)
 				return false;
 			$swift = new Swift($connection);
 			/* Get templates content */
 			$iso = Language::getIsoById(intval($id_lang));
-			$template = ((!$iso) ? '' : $iso.'/').$template;
-			
+			if (!$iso)
+				die (Tools::displayError('Error - No iso code for email !'));
+			$template = $iso.'/'.$template;
+
+				
 			if (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
 				die(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt');
 				
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = utf8_encode(strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8')));
+			include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
 
-			@include_once(dirname(__FILE__).'/../mails/'.$template = ((!$iso) ? '' : $iso.'/').'lang.php');
 			global $_LANGMAIL;
 			/* Create mail and attach differents parts */
 			$message = new Swift_Message('['.Configuration::get('PS_SHOP_NAME').'] '.((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject));
@@ -97,11 +101,9 @@ class Mail
 				$message->attach(new Swift_Message_Part($templateHtml, 'text/html', '8bit', 'utf-8'));
 			if ($fileAttachment AND isset($fileAttachment['content']) AND isset($fileAttachment['name']) AND isset($fileAttachment['mime']))
 				$message->attach(new Swift_Message_Attachment($fileAttachment['content'], $fileAttachment['name'], $fileAttachment['mime']));
-			
 			/* Send mail */
 			$send = $swift->send($message, $to, new Swift_Address($from, $fromName));
 			$swift->disconnect();
-			
 			return $send;
 		}
 	

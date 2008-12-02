@@ -19,7 +19,7 @@ class MailAlerts extends Module
 	{
 		$this->name = 'mailalerts';
         $this->tab = 'Tools';
-		$this->version = 1.0;
+		$this->version = 1.1;
 
 		$this->_mails =  Configuration::get('MA_MAILS');
 		$this->_alertNewOrder = intval(Configuration::get('MA_NEW_ORDER'));
@@ -68,7 +68,10 @@ class MailAlerts extends Module
 		$invoice = new Address(intval($order->id_address_invoice));
 		$order_date_text = Tools::displayDate($order->date_add, intval($id_lang));
 		$carrier = new Carrier(intval($order->id_carrier));
-     	
+		$message = $order->getLastMessage();
+		if (!$message OR empty($message))
+			$message = $this->l('No message');
+
 		$itemsTable = '';
 		foreach ($params['cart']->getProducts() AS $key => $product)
 		{
@@ -109,39 +112,41 @@ class MailAlerts extends Module
 		$template = 'new_order';
 		$subject = $this->l('New order');
 		$templateVars = array(
-		'{firstname}' => $customer->firstname,
-		'{lastname}' => $customer->lastname,
-		'{email}' => $customer->email,
-		'{delivery_firstname}' => $delivery->firstname,
-		'{delivery_lastname}' => $delivery->lastname,
-		'{delivery_address1}' => $delivery->address1,
-		'{delivery_address2}' => $delivery->address2,
-		'{delivery_city}' => $delivery->city,
-		'{delivery_postal_code}' => $delivery->postcode,
-		'{delivery_country}' => $delivery->country,
-		'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
-		'{delivery_phone}' => $delivery->phone,
-		'{invoice_firstname}' => $invoice->firstname,
-		'{invoice_lastname}' => $invoice->lastname,
-		'{invoice_address2}' => $invoice->address2,
-		'{invoice_address1}' => $invoice->address1,
-		'{invoice_city}' => $invoice->city,
-		'{invoice_postal_code}' => $invoice->postcode,
-		'{invoice_country}' => $invoice->country,
-		'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
-		'{invoice_phone}' => $invoice->phone,
-		'{order_name}' => sprintf("%06d", $order->id),
-		'{shop_name}' => Configuration::get('PS_SHOP_NAME'),
-		'{date}' => $order_date_text,
-		'{carrier}' => (($carrier->name == '0') ? Configuration::get('PS_SHOP_NAME') : $carrier->name),
-		'{payment}' => $order->payment,
-		'{items}' => $itemsTable,
-		'{total_paid}' => Tools::displayPrice($order->total_paid, $currency),
-		'{total_products}' => Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency),
-		'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency),
-		'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency),
-		'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency),
-		'{currency}' => $currency->sign);
+			'{firstname}' => $customer->firstname,
+			'{lastname}' => $customer->lastname,
+			'{email}' => $customer->email,
+			'{delivery_firstname}' => $delivery->firstname,
+			'{delivery_lastname}' => $delivery->lastname,
+			'{delivery_address1}' => $delivery->address1,
+			'{delivery_address2}' => $delivery->address2,
+			'{delivery_city}' => $delivery->city,
+			'{delivery_postal_code}' => $delivery->postcode,
+			'{delivery_country}' => $delivery->country,
+			'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
+			'{delivery_phone}' => $delivery->phone,
+			'{invoice_firstname}' => $invoice->firstname,
+			'{invoice_lastname}' => $invoice->lastname,
+			'{invoice_address2}' => $invoice->address2,
+			'{invoice_address1}' => $invoice->address1,
+			'{invoice_city}' => $invoice->city,
+			'{invoice_postal_code}' => $invoice->postcode,
+			'{invoice_country}' => $invoice->country,
+			'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
+			'{invoice_phone}' => $invoice->phone,
+			'{order_name}' => sprintf("%06d", $order->id),
+			'{shop_name}' => Configuration::get('PS_SHOP_NAME'),
+			'{date}' => $order_date_text,
+			'{carrier}' => (($carrier->name == '0') ? Configuration::get('PS_SHOP_NAME') : $carrier->name),
+			'{payment}' => $order->payment,
+			'{items}' => $itemsTable,
+			'{total_paid}' => Tools::displayPrice($order->total_paid, $currency),
+			'{total_products}' => Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency),
+			'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency),
+			'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency),
+			'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency),
+			'{currency}' => $currency->sign,
+			'{message}' => $message
+		);
 		Mail::Send($id_lang, $template, $subject, $templateVars, split(',', $this->_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
 	}
 

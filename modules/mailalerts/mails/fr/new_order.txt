@@ -29,3 +29,7 @@ Adresse de facturation
 {invoice_country} {invoice state}
 
 {shop_url} powered by PrestaShop&trade;
+
+Message client
+
+{message}

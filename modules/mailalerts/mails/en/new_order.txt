@@ -29,3 +29,7 @@ Billing address:
 {invoice_country} {invoice state}
 
 {shop_url} powered by PrestaShop&trade;
+
+Customer message:
+
+{message}
