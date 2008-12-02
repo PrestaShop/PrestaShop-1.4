@@ -430,9 +430,9 @@ class		Cart extends ObjectModel
 		return Cart::deleteCustomizationInformations(intval($id_product));
 	}
 
-	public function getCustomizationQuantityTotal()
+	static public function getCustomizationQuantityTotal($id_cart)
 	{
-		if (!$result = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS quantity FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id)))
+		if (!$result = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS quantity FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
 			return false;
 		return intval($result['quantity']);
 	}

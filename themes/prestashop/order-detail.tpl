@@ -115,7 +115,47 @@
 			{if !$product.deleted}
 				{assign var='productId' value=$product.product_id}
 				{assign var='productAttributeId' value=$product.product_attribute_id}
-				<tr class="{if $smarty.foreach.products.first}first_item{/if} {if $smarty.foreach.products.index % 2}alternate_item{else}item{/if}">
+				{if isset($customizedDatas.$productId.$productAttributeId)}{assign var='productQuantity' value=$product.product_quantity-$customizationQuantityTotal}{else}{assign var='productQuantity' value=$product.product_quantity}{/if}
+				<!-- Customized products -->
+				{if isset($customizedDatas.$productId.$productAttributeId)}
+					<tr class="item">
+						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$smarty.foreach.products.index}]" value="{$product.id_order_detail|intval}" /></td>{/if}
+						<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
+						<td class="bold">
+							<label for="cb_{$product.id_order_detail|intval}">{$product.product_name|escape:'htmlall':'UTF-8'}</label>
+						</td>
+						<td><input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$customizationQuantityTotal|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$customizationQuantityTotal|intval}</span></label></td>
+						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
+						<td><label for="cb_{$product.id_order_detail|intval}">{if isset($customizedDatas.$productId.$productAttributeId)}{convertPriceWithCurrency price=$product.total_customization_wt currency=$currency convert=0}{else}{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}{/if}</label></td>
+					</tr>
+					{foreach from=$customizedDatas.$productId.$productAttributeId item='customization'}
+					<tr class="alternate_item">
+						<td colspan="2">
+						{foreach from=$customization.datas key='type' item='datas'}
+							{if $type == $CUSTOMIZE_FILE}
+							<ul class="customizationUploaded">
+								{foreach from=$datas item='data'}
+									<li><img src="{$pic_dir}{$data.value}_small" alt="" class="customizationUploaded" /></li>
+								{/foreach}
+							</ul>
+							{elseif $type == $CUSTOMIZE_TEXTFIELD}
+							<ul class="typedText">{counter start=0 print=false}
+								{foreach from=$datas item='data'}
+									<li>{l s='Text #'}{counter}{l s=':'} {$data.value}</li>
+								{/foreach}
+							</ul>
+							{/if}
+						{/foreach}
+						</td>
+						<td>
+							<input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$customization.quantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$customization.quantity|intval}</span></label>
+						</td>
+						<td colspan="2"></td>
+					</tr>
+					{/foreach}
+				{/if}
+				<!-- Classic products -->
+				<tr class="item">
 					{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$smarty.foreach.products.index}]" value="{$product.id_order_detail|intval}" /></td>{/if}
 					<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
 					<td class="bold">
@@ -132,33 +172,10 @@
 							{/if}
 						</label>
 					</td>
-					<td><input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$product.product_quantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$product.product_quantity|intval}</span></label></td>
+					<td><input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$productQuantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$productQuantity|intval}</span></label></td>
 					<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
 					<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}</label></td>
 				</tr>
-				{if $customizedDatas.$productId.$productAttributeId}
-				<tr class="alternate_item">
-					<td colspan="5">
-					{foreach from=$customizedDatas.$productId.$productAttributeId.datas item='customization'}
-						{foreach from=$customization key='type' item='datas'}
-							{if $type == $CUSTOMIZE_FILE}
-							<ul class="customizationUploaded">
-								{foreach from=$datas item='data'}
-									<li><img src="{$pic_dir}{$data.value}_small" alt="" class="customizationUploaded" /></li>
-								{/foreach}
-							</ul>
-							{elseif $type == $CUSTOMIZE_TEXTFIELD}
-							<ul class="typedText">{counter start=0 print=false}
-								{foreach from=$datas item='data'}
-									<li>{l s='Text #'}{counter}{l s=':'} {$data.value}</li>
-								{/foreach}
-							</ul>
-							{/if}
-						{/foreach}
-					{/foreach}
-					</td>
-				</tr>
-				{/if}
 			{/if}
 		{/foreach}
 		{foreach from=$discounts item=discount}

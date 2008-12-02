@@ -383,20 +383,8 @@ function displaySummary()
 		$smarty->assign('carrierPicture', 1);
 	$summary = $cart->getSummaryDetails();
 
-	$products = &$summary['products'];
 	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
-	foreach ($products AS &$productUpdate)
-	{
-		$customizationQuantity = 0;
-		if (isset($customizedDatas[intval($productUpdate['id_product'])][intval($productUpdate['id_product_attribute'])]))
-			foreach ($customizedDatas[intval($productUpdate['id_product'])][intval($productUpdate['id_product_attribute'])] AS $customization)
-				$customizationQuantity += intval($customization['quantity']);
-		if ($customizationQuantity)
-		{
-			$productUpdate['total_wt'] = number_format($productUpdate['price_wt'] * (intval($productUpdate['quantity']) - $customizationQuantity), 2, '.', '');
-			$productUpdate['total_customization_wt'] = number_format($productUpdate['price_wt'] * $customizationQuantity, 2, '.', '');
-		}
-	}
+	Product::addCustomizationPrice($summary['products'], $customizedDatas);
 
 	if ($free_ship = intval(Configuration::get('PS_SHIPPING_FREE_PRICE')))
 		$smarty->assign('free_ship', $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']));
@@ -408,7 +396,7 @@ function displaySummary()
 		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
 		'shippingCost' => $cart->getOrderTotal(true, 5),
 		'customizedDatas' => $customizedDatas,
-		'customizationQuantityTotal' => $cart->getCustomizationQuantityTotal(),
+		'customizationQuantityTotal' => Cart::getCustomizationQuantityTotal(intval($cart->id)),
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_));
 	if ($lastProductAdded = intval(Tools::getValue('ipa')))

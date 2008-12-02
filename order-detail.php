@@ -74,6 +74,10 @@ else
 		$addressDelivery = new Address(intval($order->id_address_delivery));
 		if ($order->total_discounts > 0)
 		    $smarty->assign('total_old', floatval($order->total_paid - $order->total_discounts));
+		$products = $order->getProducts();
+		$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+		Product::addCustomizationPrice($products, $customizedDatas);
+
 		$smarty->assign(array(
 			'shop_name' => strval(Configuration::get('PS_SHOP_NAME')),
 			'order' => $order,
@@ -83,7 +87,7 @@ else
 			'invoiceAllowed' => intval(Configuration::get('PS_INVOICE')),
 			'invoice' => (OrderState::invoiceAvailable(intval($id_order_state)) OR $order->invoice_number),
 			'order_history' => $order->getHistory(intval($cookie->id_lang)),
-			'products' => $order->getProducts(),
+			'products' => $products,
 			'discounts' => $order->getDiscounts(),
 			'carrier' => $carrier,
 			'address_invoice' => $addressInvoice,
@@ -93,7 +97,8 @@ else
 			'messages' => Message::getMessagesByOrderId(intval($order->id), true),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-			'customizedDatas' => Product::getAllCustomizedDatas(intval($order->id_cart))));
+			'customizedDatas' => $customizedDatas,
+			'customizationQuantityTotal' => Cart::getCustomizationQuantityTotal(intval($order->id_cart))));
 		if ($carrier->url AND $order->shipping_number)
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 	}

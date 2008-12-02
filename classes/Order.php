@@ -233,7 +233,6 @@ class		Order extends ObjectModel
 		return Db::getInstance()->ExecuteS($query);
 	}
 
-
 	public function getProductsDetail()
 	{
 		return Db::getInstance()->ExecuteS('
@@ -241,7 +240,6 @@ class		Order extends ObjectModel
 		FROM `'._DB_PREFIX_.'order_detail` od
 		WHERE od.`id_order` = '.intval($this->id));
 	}
-	
 	
 
 	/**

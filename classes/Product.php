@@ -1788,6 +1788,28 @@ class		Product extends ObjectModel
 		return (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization)) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.intval($id_customization)));
 	}
 
+	static public function addCustomizationPrice(&$products, &$customizedDatas)
+	{
+		foreach ($products AS &$productUpdate)
+		{
+			$customizationQuantity = 0;
+			/* Compatibility */
+			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
+			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
+			$priceWt = intval(isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt']);
+			$productQuantity = intval(isset($productUpdate['quantity']) ? $productUpdate['quantity'] : $productUpdate['product_quantity']);
+
+			if (isset($customizedDatas[$productId][$productAttributeId]))
+				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
+					$customizationQuantity += intval($customization['quantity']);
+			if ($customizationQuantity)
+			{
+				$productUpdate['total_wt'] = number_format($priceWt * ($productQuantity - $customizationQuantity), 2, '.', '');
+				$productUpdate['total_customization_wt'] = number_format($priceWt * $customizationQuantity, 2, '.', '');
+			}
+		}
+	}
+
 	/*
 	** Customization fields' label management
 	*/
