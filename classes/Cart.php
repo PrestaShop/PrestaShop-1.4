@@ -392,7 +392,7 @@ class		Cart extends ObjectModel
 			return $this->_deleteCustomization(intval($id_customization));
 		/* Quantity update */
 		if (($result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization))) === false)
-			return false;
+			return true;
 		if (Db::getInstance()->NumRows())
 		{
 			if ($operator == 'down' AND intval($result['quantity']) - intval($quantity) < 1)
