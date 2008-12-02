@@ -1725,40 +1725,6 @@ class		Product extends ObjectModel
 	** Customization management
 	*/
 
-	public function addCustomizedDatas($id_cart, $id_product_attribute)
-	{
-		global $cookie;
-
-		/* Getting datas */
-		$files = $cookie->getFamily('pictures_'.intval($this->id).'_');
-		$textFields = $cookie->getFamily('textFields_'.intval($this->id).'_');
-		if (count($files) < 1 AND count($textFields) < 1)
-			return true;
-		/* Copying them inside the db */
-		if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'customization` (`id_cart`, `id_product`, `id_product_attribute`) VALUES ('.intval($id_cart).', '.intval($this->id).', '.intval($id_product_attribute).')'))
-			return false;
-		if (!$id_customization = Db::getInstance()->Insert_ID())
-			return false;
-		$query = 'INSERT INTO `'._DB_PREFIX_.'customized_data` (`id_customization`, `type`, `index`, `value`) VALUES ';
-		if (count($files))
-			foreach ($files AS $key => $filename)
-			{
-				$tmp = explode('_', $key);
-				$query .= '('.intval($id_customization).', '._CUSTOMIZE_FILE_.', '.$tmp[2].', \''.$filename.'\'), ';
-			}
-		if (count($textFields))
-			foreach ($textFields AS $key => $textFieldValue)
-			{
-				$tmp = explode('_', $key);
-				$query .= '('.intval($id_customization).', '._CUSTOMIZE_TEXTFIELD_.', '.$tmp[2].', \''.$textFieldValue.'\'), ';
-			}
-		$query = rtrim($query, ', ');
-		if (!$result = Db::getInstance()->Execute($query))
-			return false;
-		/* Deleting customized informations from the cart (we just copied them inside the db) */
-		return Cart::deleteCustomizationInformations(intval($this->id));
-	}
-
 	static public function getAllCustomizedDatas($id_cart)
 	{
 		if (!$result = Db::getInstance()->ExecuteS('

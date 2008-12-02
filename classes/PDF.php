@@ -238,7 +238,7 @@ class PDF extends FPDF
 	}
 	
 	/**
-	* Product table with price, quantities...
+	* Product table with references, quantities...
 	*/
 	function ProdReturnTab()
 	{
@@ -473,6 +473,7 @@ class PDF extends FPDF
 		else
 			$products = self::$order->getProducts();
 		$ecotax = 0;
+		$customizedDatas = Product::getAllCustomizedDatas(intval(self::$order->id_cart));
 		foreach($products AS $product)
 			if (!intval($product['deleted']))
 			{
@@ -481,7 +482,33 @@ class PDF extends FPDF
 				$unit_without_tax = $product['product_price'];
 				$total_without_tax = $product['total_price'];
 				$total_with_tax = $product['total_wt'];
-	
+				$productQuantity = intval($product['product_quantity']);
+				$customizationQuantityTotal = intval(Cart::getCustomizationQuantityTotal(intval(self::$order->id_cart)));
+
+				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+				{
+					if ($delivery)
+						$this->SetX(25);
+					$before = $this->GetY();
+					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
+					$lineSize = $this->GetY() - $before;
+					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
+					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
+					if (!$delivery)
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, $customizationQuantityTotal, 'B', 0, 'C');
+					if (!$delivery)
+					{
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * $customizationQuantityTotal, self::$currency, true, false)), 'B', 0, 'R');
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * $customizationQuantityTotal, self::$currency, true, false)), 'B', 0, 'R');
+					}
+					$this->Ln();
+					$i = -1;
+					$productQuantity = intval($product['product_quantity']) - $customizationQuantityTotal;
+					$total_without_tax = $unit_without_tax * $productQuantity;
+					$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
+				}
+
 				if ($delivery)
 					$this->SetX(25);
 				$before = $this->GetY();
@@ -491,7 +518,7 @@ class PDF extends FPDF
 				$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
 				if (!$delivery)
 					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-				$this->Cell($w[++$i], $lineSize, $product['product_quantity'], 'B', 0, 'C');
+				$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
 				if (!$delivery)
 				{
 					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
