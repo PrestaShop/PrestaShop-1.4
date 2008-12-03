@@ -127,7 +127,7 @@ $_LANG['There is no older version. Did you delete or rename the config/settings.
 $_LANG['This PrestaShop database already exists. Please revalidate your authentication informations to the database.'] = 'This PrestaShop database already exists. Please re-enter your database login information.';
 $_LANG['This email adress is wrong!'] = 'Invalid e-mail address';
 $_LANG['This installer is too old.'] = 'This installer is for an older version of PrestaShop';
-$_LANG['This is a test message, your server is now available to send mail'] = 'This is a test message. Your server is now sest up to send e-mail.';
+$_LANG['This is a test message, your server is now available to send mail'] = 'This is a test message. Your server is now set up to send e-mail.';
 $_LANG['This is not a valid file name.'] = 'Invalid file name';
 $_LANG['This is not a valid image file.'] = 'Invalid image file';
 $_LANG['Too long!'] = 'Too long';
