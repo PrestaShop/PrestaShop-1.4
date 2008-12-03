@@ -10,7 +10,7 @@ $shop_name = htmlentities(Configuration::get('PS_SHOP_NAME'), NULL, 'utf-8');
 $shop_url = 'http://'.$_SERVER['HTTP_HOST'];
 $customer = new Customer(intval($cookie->id_customer));
 
-$file = file_get_contents(dirname(__FILE__).'/mails/'.strval(Tools::getValue('mail')));
+$file = file_get_contents(dirname(__FILE__).'/mails/'.strval(preg_replace('#\.{2,}#', '.', Tools::getValue('mail'))));
 
 $file = str_replace('{shop_name}', $shop_name, $file);
 $file = str_replace('{shop_url}', $shop_url.__PS_BASE_URI__, $file);

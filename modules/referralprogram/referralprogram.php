@@ -342,7 +342,7 @@ class ReferralProgram extends Module
 		$cart = $params['cart'];
 		if (!isset($cart->id_customer))
 			return false;
-		if (!($id_referralprogram = ReferralProgramModule::isSponsorised($cart->id_customer, true)))
+		if (!($id_referralprogram = ReferralProgramModule::isSponsorised(intval($cart->id_customer), true)))
 			return false;
 		$referralprogram = new ReferralProgramModule($id_referralprogram);
 		if (!Validate::isLoadedObject($referralprogram))
@@ -438,7 +438,7 @@ class ReferralProgram extends Module
 								'{voucher_num}' => $discount->name,
 								'{voucher_amount}' => floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE')));
 							
-							Mail::Send(intval($params['cookie']->id_lang), 'referralprogram-voucher', $this->l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+							Mail::Send(intval($cookie->id_lang), 'referralprogram-voucher', $this->l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						}
 					}
 					return true;
@@ -460,7 +460,7 @@ class ReferralProgram extends Module
 
 		global $cookie;
 		$friends = ReferralProgramModule::getSponsorFriend($customer->id);
-		if ($id_referralprogram = ReferralProgramModule::isSponsorised($customer->id))
+		if ($id_referralprogram = ReferralProgramModule::isSponsorised(intval($customer->id), true))
 		{
 			$referralprogram = new ReferralProgramModule($id_referralprogram);
 			$sponsor = new Customer($referralprogram->id_sponsor);
@@ -518,7 +518,7 @@ class ReferralProgram extends Module
 		$customer = new Customer($order->id_customer);
 		$stats = $customer->getStats();
 		$nbOrdersCustomer = intval($stats['nb_orders']) + 1; // hack to count current order
-		$referralprogram = new ReferralProgramModule(ReferralProgramModule::isSponsorised($customer->id));
+		$referralprogram = new ReferralProgramModule(ReferralProgramModule::isSponsorised(intval($customer->id), true));
 		if (!Validate::isLoadedObject($referralprogram))
 			return false;
 		$sponsor = new Customer($referralprogram->id_sponsor);
@@ -554,7 +554,7 @@ class ReferralProgram extends Module
 		$customer = new Customer($order->id_customer);
 		$stats = $customer->getStats();
 		$nbOrdersCustomer = intval($stats['nb_orders']) + 1; // hack to count current order
-		$referralprogram = new ReferralProgramModule(ReferralProgramModule::isSponsorised($customer->id));
+		$referralprogram = new ReferralProgramModule(ReferralProgramModule::isSponsorised(intval($customer->id), true));
 		if (!Validate::isLoadedObject($referralprogram))
 			return false;
 		$sponsor = new Customer($referralprogram->id_sponsor);
