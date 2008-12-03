@@ -156,57 +156,36 @@ class		Order extends ObjectModel
 		return $fields;
 	}
 	
-	public function deleteProduct($productId, $quantity)
+	public function deleteProduct($order, $orderDetail, $quantity)
 	{
-		
-		$result = Db::getInstance()->getRow('
-		SELECT *
-		FROM `'._DB_PREFIX_.'order_detail`
-		WHERE `id_order` = '.intval($this->id).'
-		AND `id_order_detail` = '.intval($productId));
-		
-		/*if ($result['product_quantity'] - (intval($quantity) + $result['product_quantity_return']) < 0)
-			return false;*/
-
 		if (!$currentStatus = intval($this->getCurrentState()))
 			return false;
-		/* If the orders has not been sent yet, we cancel the product */
-		if (($currentStatus == _PS_OS_CHEQUE_) | ($currentStatus == _PS_OS_PAYMENT_) | ($currentStatus == _PS_OS_PREPARATION_) | ($currentStatus == _PS_OS_ERROR_) | ($currentStatus == _PS_OS_OUTOFSTOCK_) | ($currentStatus == _PS_OS_BANKWIRE_) | ($currentStatus == _PS_OS_CANCELED_))
+		
+		if ($this->hasBeenDelivered())
 		{
-			/* If this product has already been cancelled => update */
-			$alreadyExists = Db::getInstance()->getRow('SELECT `id_order_detail` FROM `'._DB_PREFIX_.'order_detail` WHERE `product_id` = '.intval($result['product_id']).' AND `product_attribute_id` = '.intval($result['product_attribute_id']).' AND `deleted` = 1');
-			if ($alreadyExists & !empty($alreadyExists))
-			{
-				if (!Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'order_detail`
-				SET `product_quantity` = `product_quantity` + '.intval($quantity).' WHERE `id_order_detail` = '.intval($alreadyExists['id_order_detail'])))
-				return false;
-			}
-			/* Else cancellation */
-			else
-			{
-				if (!Db::getInstance()->Execute('
-				INSERT INTO `'._DB_PREFIX_.'order_detail`
-				(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_return`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `download_hash`, `download_nb`, `download_deadline`, `deleted`)
-				VALUES ('.intval($this->id).', '.intval($result['product_id']).', '.intval($result['product_attribute_id']).', \''.$result['product_name'].'\', '.intval($quantity).', 0, '.floatval($result['product_price']).', '.intval($result['product_quantity_discount']).', \''.$result['product_ean13'].'\', \''.$result['product_reference'].'\', \''.$result['product_supplier_reference'].'\', '.floatval($result['product_weight']).', \''.$result['tax_name'].'\', '.floatval($result['tax_rate']).', '.floatval($result['ecotax']).', \''.intval($result['download_hash']).'\', '.intval($result['download_nb']).', \''.$result['download_deadline'].'\', 1)'))
-					return false;
-				
-			}
-			if (!Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'order_detail`
-			SET `product_quantity` = `product_quantity` - '.intval($quantity).' WHERE `id_order_detail` = '.intval($result['id_order_detail']))
-			OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order_detail` = '.intval($result['id_order_detail']).' AND `product_quantity` = 0'))
-			return false;
-
-			/* Order total update */
-			$priceWithoutTax = floatval($result['product_price']) * intval($quantity);
-			$priceWithTax = $priceWithoutTax * (1 + floatval($result['tax_rate']) / 100);
-			return (Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders` SET `total_paid` = `total_paid` - '.$priceWithTax.', `total_products` = `total_products` - '.$priceWithoutTax.' WHERE `id_order` = '.intval($this->id)));
+			$orderDetail->product_quantity_return += $quantity;
+			return $orderDetail->update();
 		}
-		/* Else we simply set the number of returned product */
-		return Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'order_detail`
-		SET `product_quantity_return` = `product_quantity_return` + '.intval($quantity).' WHERE `id_order_detail` = '.intval($result['id_order_detail']));
+		elseif ($this->hasBeenPaid())
+		{
+			$orderDetail->product_quantity_cancelled += $quantity;
+			return $orderDetail->update();
+		}
+		else
+		{
+			// Update order
+			$productPrice = ($orderDetail->product_price * (1 + ($orderDetail->tax_rate * 0.01))) * $quantity;
+			$order->total_paid -= $productPrice;
+			$order->total_paid_real -= $productPrice;
+			$order->total_products -= $productPrice;
+
+			// Update order detail
+			$orderDetail->product_quantity -= $quantity;
+			
+			if (!$orderDetail->product_quantity)
+				return $orderDetail->delete();
+			return $orderDetail->update() AND $order->update();
+		}
 	}
 
 	/**
@@ -241,6 +220,12 @@ class		Order extends ObjectModel
 		WHERE od.`id_order` = '.intval($this->id));
 	}
 	
+	public function getLastMessage()
+	{
+		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.$this->id.' ORDER BY `id_message` desc';
+		$result = Db::getInstance()->getRow($sql);
+		return $result['message'];
+	}
 
 	/**
 	 * Get order products
@@ -264,7 +249,7 @@ class		Order extends ObjectModel
 				if (!$row['product_quantity'])
 					continue ;
 			}
-			
+
 			$row['product_price_wt'] = number_format($row['product_price'] * (1 + ($row['tax_rate'] * 0.01)), 2, '.', '');
 			$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 			$row['total_price'] = number_format($row['total_wt'] / (1 + ($row['tax_rate'] * 0.01)), 2, '.', '');
@@ -386,6 +371,17 @@ class		Order extends ObjectModel
 
 		return $result ? intval($result['logable']) : false;
 	}
+	
+	public function hasBeenDelivered()
+	{
+		return sizeof($this->getHistory(Configuration::get('PS_DEFAULT_LANG'), _PS_OS_DELIVERED_));
+	}
+	
+	public function hasBeenPaid()
+	{
+		return sizeof($this->getHistory(Configuration::get('PS_DEFAULT_LANG'), _PS_OS_PAYMENT_));
+	}
+	
 	/**
 	 * Get customer orders
 	 *
@@ -455,8 +451,10 @@ class		Order extends ObjectModel
 
         $total = 0;
 		foreach ($products AS $k => $row)
-			$total += round(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * intval($row['product_quantity']);
-
+		{
+			$qty = intval($row['product_quantity']);
+			$total += round(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $qty;
+		}
 		return $total;
 	}
 
@@ -554,7 +552,7 @@ class		Order extends ObjectModel
 	{
 		return (intval(Configuration::get('PS_ORDER_RETURN')) == 1 AND intval($this->getCurrentState()) == _PS_OS_DELIVERED_ AND $this->getNumberOfDays());
 	}
-	
+
 	public function setInvoice()
 	{
 		// Set invoice number

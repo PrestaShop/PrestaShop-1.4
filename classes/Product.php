@@ -1768,11 +1768,11 @@ class		Product extends ObjectModel
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
 					$customizationQuantity += intval($customization['quantity']);
+			$productUpdate['customizationQuantityTotal'] = $customizationQuantity;
 			if ($customizationQuantity)
 			{
 				$productUpdate['total_wt'] = number_format($priceWt * ($productQuantity - $customizationQuantity), 2, '.', '');
 				$productUpdate['total_customization_wt'] = number_format($priceWt * $customizationQuantity, 2, '.', '');
-				$productUpdate['customizationQuantityTotal'] = $customizationQuantity;
 			}
 		}
 	}

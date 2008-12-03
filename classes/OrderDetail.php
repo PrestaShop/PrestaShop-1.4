@@ -26,14 +26,23 @@ class OrderDetail extends ObjectModel
 	/** @var integer */
 	public $product_attribute_id;
 
-	/** @var string */	
+	/** @var string */
 	public $product_name;
 
-	/** @var string */	
+	/** @var integer */
 	public $product_quantity;
+	
+	/** @var integer */
+	public $product_quantity_return;
+	
+	/** @var integer */
+	public $product_quantity_cancelled;
 
 	/** @var float */
 	public $product_price;
+	
+	/** @var float */
+	public $product_quantity_discount;
 	
 	/** @var float */
 	public $product_ean13;
@@ -42,7 +51,7 @@ class OrderDetail extends ObjectModel
 	public $product_reference;
 	
 	/** @var string */
-	public $product_supplier_reference;	
+	public $product_supplier_reference;
 	
 	/** @var float */
 	public $product_weight;
@@ -55,13 +64,39 @@ class OrderDetail extends ObjectModel
 	
 	/** @var float */
 	public $ecotax;
+	
+	/** @var string */
+	public $download_hash;
+	
+	/** @var integer */
+	public $download_nb;
+	
+	/** @var date */
+	public $download_deadline;
 
 	protected $tables = array ('order_detail');
 
 	protected	$fieldsRequired = array ('id_order', 'product_name', 'product_quantity', 'product_price', 'tax_name', 'tax_rate');
 
-	protected	$fieldsValidate = array ('id_order' => 'isUnsignedId', 'product_name' => 'isGenericName', 'product_quantity' => 'isInt', 'product_price' => 'isPrice',
-	'product_reference' => 'isReference', 'product_supplier_reference' => 'isReference', 'product_weight' => 'isFloat', 'tax_name' => 'isGenericName', 'tax_rate' => 'isFloat');
+	protected	$fieldsValidate = array (
+	'id_order' => 'isUnsignedId',
+	'product_id' => 'isUnsignedId',
+	'product_attribute_id' => 'isUnsignedId',
+	'product_name' => 'isGenericName',
+	'product_quantity' => 'isInt',
+	'product_quantity_return' => 'isInt',
+	'product_quantity_cancelled' => 'isInt',
+	'product_price' => 'isPrice',
+	'product_quantity_discount' => 'isFloat',
+	'product_ean13' => 'isEan13',
+	'product_reference' => 'isReference',
+	'product_supplier_reference' => 'isReference',
+	'product_weight' => 'isFloat',
+	'tax_name' => 'isGenericName',
+	'tax_rate' => 'isFloat',
+	'ecotax' => 'isFloat',
+	'download_nb' => 'isInt',
+	);
 	
 	protected 	$table = 'order_detail';
 	protected 	$identifier = 'id_order_detail';
@@ -75,13 +110,20 @@ class OrderDetail extends ObjectModel
 		$fields['product_attribute_id'] = intval($this->product_attribute_id);
 		$fields['product_name'] = pSQL($this->product_name);
 		$fields['product_quantity'] = intval($this->product_quantity);
+		$fields['product_quantity_return'] = intval($this->product_quantity_return);
+		$fields['product_quantity_cancelled'] = intval($this->product_quantity_cancelled);
 		$fields['product_price'] = floatval($this->product_price);
+		$fields['product_quantity_discount'] = floatval($this->product_quantity_discount);
 		$fields['product_ean13'] = pSQL($this->product_ean13);
 		$fields['product_reference'] = pSQL($this->product_reference);
 		$fields['product_supplier_reference'] = pSQL($this->product_reference);
 		$fields['product_weight'] = floatval($this->product_weight);
 		$fields['tax_name'] = pSQL($this->tax_name);
 		$fields['tax_rate'] = floatval($this->tax_rate);
+		$fields['ecotax'] = floatval($this->ecotax);
+		$fields['download_hash'] = pSQL($this->download_hash);
+		$fields['download_nb'] = intval($this->download_nb);
+		$fields['download_deadline'] = pSQL($this->download_deadline);
 		
 		return $fields;
 	}	
