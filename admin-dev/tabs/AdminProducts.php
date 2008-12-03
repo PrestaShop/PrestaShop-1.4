@@ -2095,7 +2095,7 @@ class AdminProducts extends AdminTab
 		  <tr><td colspan="2"><hr /></td></tr>
 		  <tr>
 			  <td width="150">'.$this->l('Wholesale price:').'</td>
-			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="6"  name="attribute_wholesale_price" id="attribute_wholesale_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Wholesale price on Information tab').')</td>
+			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="6"  name="attribute_wholesale_price" id="attribute_wholesale_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' <sup>*</sup> ('.$this->l('overrides Wholesale price on Information tab').')</td>
 		  </tr>
 		  <tr>
 			  <td width="150">'.$this->l('Impact on price:').'</td>
@@ -2104,7 +2104,7 @@ class AdminProducts extends AdminTab
 				  <option value="0">'.$this->l('None').'</option>
 				  <option value="1">'.$this->l('Increase').'</option>
 				  <option value="-1">'.$this->l('Reduction').'</option>
-				</select>
+				</select> <sup>*</sup>
 				<span id="span_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
 					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').'
 				</span>
@@ -2128,6 +2128,9 @@ class AdminProducts extends AdminTab
 			  <td width="150">'.$this->l('Quantity:').'</td>
 			  <td style="padding-bottom:5px;"><input type="text" size="3" name="attribute_quantity" id="attribute_quantity" value="1" /> ('.$this->l('overrides Quantity on Information tab').')</td>
 		  </tr>
+			<tr>
+				<td colspan="2" style="text-align: right"><sup>*</sup> '.$this->l('included tax').'</td>
+			</tr>
 		  <tr><td colspan="2"><hr /></td></tr>
 		  <tr>
 			  <td width="150">'.$this->l('Image:').'</td>

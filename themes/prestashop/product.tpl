@@ -194,7 +194,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}{if $product->customizable} class="required"{/if}>
 				<label>{l s='Quantity :'}</label>
-				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}1{/if}" size="2" maxlength="3" />{if $product->customizable} <sup>*</sup>{/if}
+				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}1{/if}" size="2" maxlength="3" />
 			</p>
 
 			<!-- availability -->
@@ -218,7 +218,6 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{if $HOOK_PRODUCT_ACTIONS}
 				{$HOOK_PRODUCT_ACTIONS}
 			{/if}
-			{if $product->customizable}<span class="required"><sup>*</sup> {l s='Feature in development'}</span>{/if}
 		</form>
 		{if $HOOK_EXTRA_RIGHT}{$HOOK_EXTRA_RIGHT}{/if}
 	</div>
@@ -261,7 +260,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {$HOOK_PRODUCT_FOOTER}
 
 <!-- description and features -->
-{if $product->description || $features}
+{if $product->description || $features || $accessories || $HOOK_PRODUCT_TAB}
 <div id="more_info_block" class="clear">
 	<ul id="more_info_tabs" class="idTabs idTabsShort">
 		{if $product->description}<li><a id="more_info_tab_more_info" href="#idTab1">{l s='More info'}</a></li>{/if}
