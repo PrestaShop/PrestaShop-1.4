@@ -474,58 +474,57 @@ class PDF extends FPDF
 			$products = self::$order->getProducts();
 		$ecotax = 0;
 		$customizedDatas = Product::getAllCustomizedDatas(intval(self::$order->id_cart));
+		Product::addCustomizationPrice($products, $customizedDatas);
 		foreach($products AS $product)
-			if (!intval($product['deleted']))
+		{
+			$i = -1;
+			$ecotax += $product['ecotax'] * intval($product['product_quantity']);
+			$unit_without_tax = $product['product_price'];
+			$total_without_tax = $product['total_price'];
+			$total_with_tax = $product['total_wt'];
+			$productQuantity = intval($product['product_quantity']);
+
+			if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 			{
-				$i = -1;
-				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
-				$unit_without_tax = $product['product_price'];
-				$total_without_tax = $product['total_price'];
-				$total_with_tax = $product['total_wt'];
-				$productQuantity = intval($product['product_quantity']);
-				$customizationQuantityTotal = intval(Cart::getCustomizationQuantityTotal(intval(self::$order->id_cart)));
-
-				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
-				{
-					if ($delivery)
-						$this->SetX(25);
-					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
-					$lineSize = $this->GetY() - $before;
-					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
-					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
-					if (!$delivery)
-						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, $customizationQuantityTotal, 'B', 0, 'C');
-					if (!$delivery)
-					{
-						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * $customizationQuantityTotal, self::$currency, true, false)), 'B', 0, 'R');
-						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * $customizationQuantityTotal, self::$currency, true, false)), 'B', 0, 'R');
-					}
-					$this->Ln();
-					$i = -1;
-					$productQuantity = intval($product['product_quantity']) - $customizationQuantityTotal;
-					$total_without_tax = $unit_without_tax * $productQuantity;
-					$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
-				}
-
 				if ($delivery)
 					$this->SetX(25);
 				$before = $this->GetY();
-				$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+				$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 				$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
 				if (!$delivery)
 					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-				$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
+				$this->Cell($w[++$i], $lineSize, intval($product['customizationQuantityTotal']), 'B', 0, 'C');
 				if (!$delivery)
 				{
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
 				}
 				$this->Ln();
+				$i = -1;
+				$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
+				$total_without_tax = $unit_without_tax * $productQuantity;
+				$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
 			}
+
+			if ($delivery)
+				$this->SetX(25);
+			$before = $this->GetY();
+			$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+			$lineSize = $this->GetY() - $before;
+			$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
+			$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
+			if (!$delivery)
+				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+			$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
+			if (!$delivery)
+			{
+				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
+			}
+			$this->Ln();
+		}
 
 		if (!sizeof(self::$order->getDiscounts()) AND !$delivery)
 			$this->Cell(array_sum($w), 0, '');
@@ -574,20 +573,19 @@ class PDF extends FPDF
 		$taxes = array();
 		/* Firstly calculate all prices */
 		foreach ($products AS &$product)
-			if (!intval($product['deleted']))
-			{
-				if (!isset($totalWithTax[$product['tax_rate']]))
-					$totalWithTax[$product['tax_rate']] = 0;
-				if (!isset($totalWithoutTax[$product['tax_rate']]))
-					$totalWithoutTax[$product['tax_rate']] = 0;
-				if (!isset($taxes[$product['tax_rate']]))
-					$taxes[$product['tax_rate']] = 0;
-				/* Without tax */
-				$product['priceWithoutTax'] = floatval($product['product_price']) * intval($product['product_quantity']);
-				$amountWithoutTax += $product['priceWithoutTax'];
-				/* With tax */
-				$product['priceWithTax'] = $product['priceWithoutTax'] * (1 + (floatval($product['tax_rate']) / 100));
-			}
+		{
+			if (!isset($totalWithTax[$product['tax_rate']]))
+				$totalWithTax[$product['tax_rate']] = 0;
+			if (!isset($totalWithoutTax[$product['tax_rate']]))
+				$totalWithoutTax[$product['tax_rate']] = 0;
+			if (!isset($taxes[$product['tax_rate']]))
+				$taxes[$product['tax_rate']] = 0;
+			/* Without tax */
+			$product['priceWithoutTax'] = floatval($product['product_price']) * intval($product['product_quantity']);
+			$amountWithoutTax += $product['priceWithoutTax'];
+			/* With tax */
+			$product['priceWithTax'] = $product['priceWithoutTax'] * (1 + (floatval($product['tax_rate']) / 100));
+		}
 		
 		$tmp = 0;
 		$product = &$tmp;
@@ -595,16 +593,15 @@ class PDF extends FPDF
 		/* And secondly assign to each tax its own reduction part */
 		$discountAmount = floatval(self::$order->total_discounts);
 		foreach ($products as $product)
-			if (!intval($product['deleted']))
-			{
-				$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
-				$priceWithTaxAndReduction = $product['total_wt'] - ($discountAmount * $ratio);
-				$vat = $priceWithTaxAndReduction - ($priceWithTaxAndReduction / ((floatval($product['tax_rate']) / 100) + 1));
-	
-				$taxes[$product['tax_rate']] += $vat;
-				$totalWithTax[$product['tax_rate']] += $priceWithTaxAndReduction;
-				$totalWithoutTax[$product['tax_rate']] += $priceWithTaxAndReduction - $vat;
-			}
+		{
+			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
+			$priceWithTaxAndReduction = $product['total_wt'] - ($discountAmount * $ratio);
+			$vat = $priceWithTaxAndReduction - ($priceWithTaxAndReduction / ((floatval($product['tax_rate']) / 100) + 1));
+
+			$taxes[$product['tax_rate']] += $vat;
+			$totalWithTax[$product['tax_rate']] += $priceWithTaxAndReduction;
+			$totalWithoutTax[$product['tax_rate']] += $priceWithTaxAndReduction - $vat;
+		}
 		
 		$carrier = new Carrier(self::$order->id_carrier);
 		$carrierTax = new Tax($carrier->id_tax);
