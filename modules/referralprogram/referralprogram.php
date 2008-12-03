@@ -438,7 +438,7 @@ class ReferralProgram extends Module
 								'{voucher_num}' => $discount->name,
 								'{voucher_amount}' => floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE')));
 							
-							Mail::Send(intval($cookie->id_lang), 'referralprogram-voucher', $this->l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+							Mail::Send(intval($params['cookie']->id_lang), 'referralprogram-voucher', $this->l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						}
 					}
 					return true;
