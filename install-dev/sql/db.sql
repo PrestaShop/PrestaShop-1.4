@@ -608,6 +608,7 @@ CREATE TABLE PREFIX_order_detail (
   product_name VARCHAR(255) NOT NULL,
   product_quantity INTEGER UNSIGNED NOT NULL DEFAULT 0,
   product_quantity_return INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  product_quantity_cancelled INT(10) UNSIGNED NOT NULL DEFAULT 0,
   product_price DECIMAL(13,6) NOT NULL DEFAULT 0,
   product_quantity_discount DECIMAL(13,6) NOT NULL DEFAULT 0,
   product_ean13 VARCHAR(13) default NULL,
@@ -620,7 +621,6 @@ CREATE TABLE PREFIX_order_detail (
   download_hash VARCHAR(255) DEFAULT NULL,
   download_nb INT(10) UNSIGNED DEFAULT 0,
   download_deadline DATETIME NULL DEFAULT 0,
-  deleted TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY(id_order_detail),
   INDEX order_detail_order(id_order)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -990,6 +990,7 @@ CREATE TABLE PREFIX_customization (
   id_product_attribute int(10) NOT NULL DEFAULT 0,
   id_cart int(10) NOT NULL,
   id_product int(10) NOT NULL,
+  quantity int(10) NOT NULL,
   PRIMARY KEY(id_customization, id_cart, id_product)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
