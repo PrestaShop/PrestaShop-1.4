@@ -1556,6 +1556,10 @@ td.cart_quantity a.cart_quantity_up, td.cart_quantity a.cart_quantity_down {
 	display: block;
 }
 
+tr.cart_free_shipping {
+	white-space: normal;
+}
+
 #order tfoot p {
 	margin: 0;
 	float: left;

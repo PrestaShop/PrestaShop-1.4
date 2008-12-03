@@ -80,8 +80,8 @@
 				<td class="price">{convertPrice price=$total_price}</td>
 			</tr>
 			{if $free_ship > 0}
-			<tr>
-				<td colspan="6">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
+			<tr class="cart_free_shipping">
+				<td colspan="6" style="white-space: normal;">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
 				<td class="price">{convertPrice price=$free_ship}</td>
 			</tr>
 			{/if}
