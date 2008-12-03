@@ -44,6 +44,7 @@ var customizationFields = new Array();
 var doesntExist = '{l s='The product does not exist in this model. Please choose another.' js=1}';
 var doesntExistNoMore = '{l s='This product is no longer in stock' js=1}';
 var doesntExistNoMoreBut = '{l s='with those attributes but is available with others' js=1}';
+var hookOutOfStock = '{$HOOK_PRODUCT_OOS}';
 var uploading_in_progress = '{l s='Uploading in progress, please wait...' js=1}';
 var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
@@ -201,7 +202,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<p id="availability_statut"{if ($allow_oosp && $product->quantity == 0 && !$product->available_later) || (!$product->available_now && $display_qties != 1) } style="display:none;"{/if}>
 				<span id="availability_label">{l s='Availability:'}</span>
 				<span id="availability_value"{if $product->quantity == 0} class="warning-inline"{/if}>
-					{if $product->quantity == 0}{if $allow_oosp}{$product->available_later}{else}{l s='This product is no longer in stock'}{/if}{else}{$product->available_now}{/if}
+					{if $product->quantity == 0}{if $allow_oosp}{$product->available_later}{else}{l s='This product is no longer in stock'}{$HOOK_PRODUCT_OOS}{/if}{else}{$product->available_now}{/if}
 				</span>
 			</p>
 

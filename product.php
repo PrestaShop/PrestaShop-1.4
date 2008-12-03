@@ -149,6 +149,7 @@ else
 			'col_img_dir' => _PS_COL_IMG_DIR_,
 			'HOOK_EXTRA_LEFT' => Module::hookExec('extraLeft'),
 			'HOOK_EXTRA_RIGHT' => Module::hookExec('extraRight'),
+			'HOOK_PRODUCT_OOS' => Module::hookExec('productOutOfStock'),
 			'HOOK_PRODUCT_FOOTER' => Hook::productFooter($product, $category),
 			'HOOK_PRODUCT_ACTIONS' => Module::hookExec('productActions'),
 			'HOOK_PRODUCT_TAB' =>  Module::hookExec('productTab'),

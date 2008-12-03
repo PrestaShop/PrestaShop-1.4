@@ -163,7 +163,7 @@ function updateDisplay()
 		
 		//display that the product is unavailable with theses attributes
 		if (!selectedCombination['unavailable'])
-			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning-inline');
+			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '') + hookOutOfStock).addClass('warning-inline');
 		else
 			$('#availability_value').text(doesntExist).addClass('warning-inline');
 		$('#availability_statut:hidden').show();
