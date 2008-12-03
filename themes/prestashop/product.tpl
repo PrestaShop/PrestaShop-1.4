@@ -214,7 +214,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			
 			<!-- Out of stock hook -->
 			<p id="oosHook"{if $product->quantity > 0} style="display:none;"{/if}>
-				azeaz
+				{$HOOK_PRODUCT_OOS}
 			</p>
 
 			<p class="warning-inline" id="last_quantities"{if ($product->quantity > $last_qties || $product->quantity == 0) || $allow_oosp} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
