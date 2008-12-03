@@ -114,6 +114,11 @@ class			Hook extends ObjectModel
 		return Module::hookExec('productFooter', array('product' => $product, 'category' => $category));
 	}
 	
+	static public function productOutOfStock($product)
+	{
+		return Module::hookExec('productOutOfStock', array('product' => $product));
+	}
+	
 	static public function addProduct($product)
 	{
 		return Module::hookExec('addProduct', array('product' => $product));
