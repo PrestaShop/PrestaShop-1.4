@@ -100,6 +100,10 @@ function updateDisplay()
 		
 		//show the "add to cart" button ONLY if it was hidden
 		$('#add_to_cart:hidden').fadeIn(600);
+		
+		//hide the hook out of stock
+		$('#oosHook').hide();
+		
 		//availability value management
 		if (availableNowValue != '')
 		{
@@ -144,13 +148,19 @@ function updateDisplay()
 		}
 	}
 	else if (allowBuyWhenOutOfStock && availableLaterValue != '')
-		{
-			//update the availability status of the product
-			$('#availability_value').text(availableLaterValue);
-			$('#availability_statut:hidden').show();
-		}
+	{
+		//hide the hook out of stock
+		$('#oosHook').hide();
+		
+		//update the availability status of the product
+		$('#availability_value').text(availableLaterValue);
+		$('#availability_statut:hidden').show();
+	}
 	else
 	{
+		//show the hook out of stock
+		$('#oosHook').show();
+		
 		//hide 'last quantities' message if it was previously visible
 		$('#last_quantities:visible').hide('slow');
 
@@ -163,7 +173,7 @@ function updateDisplay()
 		
 		//display that the product is unavailable with theses attributes
 		if (!selectedCombination['unavailable'])
-			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '') + hookOutOfStock).addClass('warning-inline');
+			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning-inline');
 		else
 			$('#availability_value').text(doesntExist).addClass('warning-inline');
 		$('#availability_statut:hidden').show();
