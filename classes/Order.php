@@ -455,8 +455,7 @@ class		Order extends ObjectModel
 
         $total = 0;
 		foreach ($products AS $k => $row)
-			if (!intval($row['deleted']))
-				$total += round(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * intval($row['product_quantity']);
+			$total += round(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * intval($row['product_quantity']);
 
 		return $total;
 	}

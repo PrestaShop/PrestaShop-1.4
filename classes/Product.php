@@ -1772,6 +1772,7 @@ class		Product extends ObjectModel
 			{
 				$productUpdate['total_wt'] = number_format($priceWt * ($productQuantity - $customizationQuantity), 2, '.', '');
 				$productUpdate['total_customization_wt'] = number_format($priceWt * $customizationQuantity, 2, '.', '');
+				$productUpdate['customizationQuantityTotal'] = $customizationQuantity;
 			}
 		}
 	}

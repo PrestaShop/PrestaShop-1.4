@@ -97,8 +97,7 @@ else
 			'messages' => Message::getMessagesByOrderId(intval($order->id), true),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-			'customizedDatas' => $customizedDatas,
-			'customizationQuantityTotal' => Cart::getCustomizationQuantityTotal(intval($order->id_cart))));
+			'customizedDatas' => $customizedDatas));
 		if ($carrier->url AND $order->shipping_number)
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 	}

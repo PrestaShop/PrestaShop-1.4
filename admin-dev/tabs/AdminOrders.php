@@ -232,12 +232,11 @@ class AdminOrders extends AdminTab
 	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
 	{
 		$order = $this->loadObject();
-		$customizationQuantityTotal = intval(Cart::getCustomizationQuantityTotal(intval($order->id_cart)));
 
 		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])]))
 		{
 			echo '
-			<tr '.($product['deleted'] ? 'class="deleted"' : '').'>
+			<tr>
 				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
 				'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
@@ -246,7 +245,7 @@ class AdminOrders extends AdminTab
 					.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
 					.'</a></td>
 				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
-				<td align="center" class="productQuantity">'.$customizationQuantityTotal.'</td>
+				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
 				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
 			</tr>';
@@ -513,9 +512,9 @@ class AdminOrders extends AdminTab
 							'.($product['product_attribute_id'] ? 'AND pa.id_product_attribute = '.intval($product['product_attribute_id']) : ''));
 							/* Customization display */
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
-							$customizationQuantityTotal = (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])])) ? intval(Cart::getCustomizationQuantityTotal(intval($order->id_cart))) : 0;
+							$customizationQuantityTotal = (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])])) ? intval(Cart::getCustomizationQuantityTotal(intval($order->id_cart), intval($product['product_id']))) : 0;
 							echo '
-							<tr '.($product['deleted'] ? 'class="deleted"' : '').'>
+							<tr>
 								<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
 								'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 								<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
@@ -568,12 +567,6 @@ class AdminOrders extends AdminTab
 							<th align="center" style="width: 50px">'.$this->l('Total').'</th>
 						</tr>';
 					foreach ($products as $k => $product)
-						if ($product['deleted'])
-							echo '<tr class="deleted"'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
-								<td colspan="2"></td>
-								<td align="center">'.intval($product['product_quantity']).'</td>
-							</tr>';
-						else
 					{
 						echo '
 						<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>

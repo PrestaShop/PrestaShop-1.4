@@ -396,7 +396,6 @@ function displaySummary()
 		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
 		'shippingCost' => $cart->getOrderTotal(true, 5),
 		'customizedDatas' => $customizedDatas,
-		'customizationQuantityTotal' => Cart::getCustomizationQuantityTotal(intval($cart->id)),
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_));
 	if ($lastProductAdded = intval(Tools::getValue('ipa')))
