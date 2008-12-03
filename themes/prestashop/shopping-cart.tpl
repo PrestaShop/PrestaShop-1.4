@@ -90,7 +90,7 @@
 		{foreach from=$products item=product name=productLoop}
 			{assign var='productId' value=$product.id_product}
 			{assign var='productAttributeId' value=$product.id_product_attribute}
-			{assign var='productDisplayed' value=0}
+			{assign var='quantityDisplayed' value=0}
 			{* Display the product line *}
 			{include file=$tpl_dir./shopping-cart-product-line.tpl}
 			{* Then the customized datas ones*}
@@ -121,10 +121,10 @@
 							<a class="cart_quantity_delete" href="{$base_dir}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" title="{l s='Delete this customization'}" class="icon" /></a>
 						</td>
 					</tr>
-					{assign var='productDisplayed' value=$productDisplayed+$customization.quantity}
+					{assign var='quantityDisplayed' value=$quantityDisplayed+$customization.quantity}
 				{/foreach}
 				{* If it exists also some uncustomized products *}
-				{if $product.quantity-$productDisplayed > 0}{include file=$tpl_dir./shopping-cart-product-line.tpl}{/if}
+				{if $product.quantity-$quantityDisplayed > 0}{include file=$tpl_dir./shopping-cart-product-line.tpl}{/if}
 			{/if}
 		{/foreach}
 		</tbody>
