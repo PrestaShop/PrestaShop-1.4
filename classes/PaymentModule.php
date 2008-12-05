@@ -201,18 +201,32 @@ abstract class PaymentModule extends Module
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 
+					$priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
 					$productsList .=
-						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
-							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
-							<td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * ($price * ($tax + 100) / 100), $currency, false, false).'</td>
-						</tr>';
+					   '<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
+						   <td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
+						   <td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+						   <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+						   <td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
+						   <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * $priceWithTax, $currency, false, false).'</td>
+					   </tr>'; 
 				} /* end foreach ($products) */
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
 
+				
+				
+				                   $priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
+                   $productsList .=
+                       '<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
+                           <td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
+                           <td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+                           <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+                           <td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
+                           <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * $priceWithTax, $currency, false, false).'</td>
+                       </tr>'; 
+				
+				
 				/* Insert discounts from cart into order_discount table */
 				$discounts = $cart->getDiscounts();
 				$discountsList = '';
