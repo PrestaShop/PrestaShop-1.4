@@ -155,7 +155,7 @@
 					{/foreach}
 				{/if}
 				<!-- Classic products -->
-				{if $product.quantity > $product.customizationQuantityTotal}
+				{if $product.product_quantity > $product.customizationQuantityTotal}
 					<tr class="item">
 						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$smarty.foreach.products.index}]" value="{$product.id_order_detail|intval}" /></td>{/if}
 						<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>

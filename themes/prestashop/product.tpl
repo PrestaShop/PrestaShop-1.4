@@ -87,7 +87,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		{if count($images) > 0}
 		<!-- thumbnails -->
 		<div id="views_block" {if count($images) < 2}class="hidden"{/if}>
-		{if count($images) > 3}<a id="view_scroll_left" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Next'}</a>{/if}
+		{if count($images) > 3}<a id="view_scroll_left" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Previous'}</a>{/if}
 		<div id="thumbs_list">
 			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px">
 				{foreach from=$images item=image name=thumbnails}
