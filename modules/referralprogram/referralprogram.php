@@ -46,6 +46,7 @@ class ReferralProgram extends Module
 				OR !$this->registerHook('adminCustomers')
 				OR !$this->registerHook('createAccount')
 				OR !$this->registerHook('createAccountForm')
+				OR !$this->registerHook('customerAccount')
 			)
 			return false;
 		/* This hook is optional */
@@ -370,6 +371,11 @@ class ReferralProgram extends Module
 	{
 		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
+	}
+	
+	public function hookMyAccountBlock($params)
+	{
+		return $this->hookCustomerAccount($params);
 	}
 
 	/**

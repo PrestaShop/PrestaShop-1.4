@@ -13,7 +13,7 @@
 			{if $voucherAllowed}
 			<li><a href="{$base_dir_ssl}discount.php" title="">{l s='My vouchers' mod='blockmyaccount'}</a></li>
 			{/if}
-			{$HOOK_CUSTOMER_ACCOUNT}
+			{$HOOK_BLOCK_MY_ACCOUNT}
 		</ul>
 		<p class="logout">
 			<a href="{$base_dir}index.php?mylogout" title="{l s='log out' mod='blockmyaccount'}">{l s='Sign out' mod='blockmyaccount'}</a>

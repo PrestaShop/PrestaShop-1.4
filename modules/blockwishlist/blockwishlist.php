@@ -32,6 +32,7 @@ class BlockWishList extends Module
 						!$this->registerHook('rightColumn') OR
 						!$this->registerHook('productActions') OR
 						!$this->registerHook('cart') OR
+						!$this->registerHook('customerAccount') OR
 						!Configuration::updateValue('PS_BLOCK_WISHLIST_ACTIVATED', 1)
 					)
 			return false;
@@ -248,6 +249,11 @@ class BlockWishList extends Module
 	{
 		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
+	}
+	
+	public function hookMyAccountBlock($params)
+	{
+		return $this->hookCustomerAccount($params);
 	}
 }
 

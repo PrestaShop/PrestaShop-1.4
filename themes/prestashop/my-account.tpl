@@ -14,6 +14,6 @@
 	{if $voucherAllowed}
 		<li><a href="{$base_dir_ssl}discount.php" title="{l s='Vouchers'}"><img src="{$img_dir}icon/voucher.gif" alt="{l s='Vouchers'}" class="icon" /></a><a href="{$base_dir_ssl}discount.php" title="{l s='Vouchers'}">{l s='Your vouchers'}</a></li>
 	{/if}
-	{$HOOK_MY_ACCOUNT_BLOCK}
+	{$HOOK_CUSTOMER_ACCOUNT}
 </ul>
 <p><a href="{$base_dir}" title="{l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a><a href="{$base_dir}" title="{l s='Home'}">{l s='Home'}</a></p>

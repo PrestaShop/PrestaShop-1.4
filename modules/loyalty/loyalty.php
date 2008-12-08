@@ -39,6 +39,7 @@ class Loyalty extends Module
 				OR !$this->registerHook('shoppingCart')
 				OR !$this->registerHook('orderReturn')
 				OR !$this->registerHook('cancelProduct')
+				OR !$this->registerHook('customerAccount')
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
 				OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
@@ -331,6 +332,11 @@ class Loyalty extends Module
 	{
 		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
+	}
+	
+	public function hookMyAccountBlock($params)
+	{
+		return $this->hookCustomerAccount($params);
 	}
 	
 	/* Catch product returns and substract loyalty points */
