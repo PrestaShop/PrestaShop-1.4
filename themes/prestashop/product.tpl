@@ -10,6 +10,9 @@ var currencyFormat = '{$currencyFormat|intval}';
 var currencyBlank = '{$currencyBlank|intval}';
 var taxRate = {$product->tax_rate|floatval};
 
+//JS Hook
+var oosHookJsCodeFunctions = new Array();
+
 // Parameters
 var id_product = '{$product->id|intval}';
 var productHasAttributes = {if isset($groups)}true{else}false{/if};

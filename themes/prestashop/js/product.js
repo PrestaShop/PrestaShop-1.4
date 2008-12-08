@@ -5,6 +5,24 @@ var selectedCombination = new Array();
 var globalQuantity = new Number;
 var colors = new Array();
 
+//check if a function exists
+function function_exists(function_name)
+{
+	if (typeof function_name == 'string')
+		return (typeof window[function_name] == 'function');
+	return (function_name instanceof Function);
+}
+
+//execute oosHook js code
+function oosHookJsCode()
+{
+	for (var i = 0; i < oosHookJsCodeFunctions.length; i++)
+	{
+		if (function_exists(oosHookJsCodeFunctions[i]))
+		setTimeout(oosHookJsCodeFunctions[i]+'()', 0);
+	}	
+}
+
 //add a combination of attributes in the global JS sytem
 function addCombination(idCombination, arrayOfIdAttributes, quantity, price, ecotax, id_image, reference)
 {
@@ -160,6 +178,8 @@ function updateDisplay()
 	{
 		//show the hook out of stock
 		$('#oosHook').show();
+		if ($('#oosHook').length > 0 && function_exists('oosHookJsCode'))
+			oosHookJsCode();
 		
 		//hide 'last quantities' message if it was previously visible
 		$('#last_quantities:visible').hide('slow');
