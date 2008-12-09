@@ -78,12 +78,12 @@ countries = new Array();
 			</p>
 			<p class="required text">
 				<label for="customer_firstname">{l s='First name'}</label>
-				<input onkeydown="$('#firstname').val(this.value);" type="text" class="text" id="customer_firstname" name="customer_firstname" value="{if isset($smarty.post.customer_firstname)}{$smarty.post.customer_firstname}{/if}" />
+				<input onkeyup="$('#firstname').val(this.value);" type="text" class="text" id="customer_firstname" name="customer_firstname" value="{if isset($smarty.post.customer_firstname)}{$smarty.post.customer_firstname}{/if}" />
 				<sup>*</sup>
 			</p>
 			<p class="required text">
 				<label for="customer_lastname">{l s='Last name'}</label>
-				<input onkeydown="$('#lastname').val(this.value);" type="text" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($smarty.post.customer_lastname)}{$smarty.post.customer_lastname}{/if}" />
+				<input onkeyup="$('#lastname').val(this.value);" type="text" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($smarty.post.customer_lastname)}{$smarty.post.customer_lastname}{/if}" />
 				<sup>*</sup>
 			</p>
 			<p class="required text">
