@@ -96,7 +96,7 @@ define('_USER_ID_LANG_', intval($cookie->id_lang));
 				</select>
 				<img src="../img/admin/nav-user.gif" alt="<?php echo translate('user') ?>" />&nbsp;
 				<a href="index.php?logout" title="<?php echo translate('logout') ?>">
-					<b><?php echo substr($cookie->firstname, 0, 1).'.&nbsp;'.htmlentities(Tools::strtoupper($cookie->lastname), ENT_COMPAT, 'UTF-8'); ?></b>
+					<b><?php echo Tools::substr($cookie->firstname, 0, 1).'.&nbsp;'.htmlentities(Tools::strtoupper($cookie->lastname), ENT_COMPAT, 'UTF-8'); ?></b>
 					<img src="../img/admin/nav-logout.gif" alt="<?php echo translate('logout') ?>" />
 				</a>
 			</div>
