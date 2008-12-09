@@ -255,7 +255,7 @@ class AdminOrders extends AdminTab
 				echo '
 				<tr>
 					<td colspan="2">';
-				foreach ($customization AS $type => $datas)
+				foreach ($customization['datas'] AS $type => $datas)
 					if ($type == _CUSTOMIZE_FILE_)
 					{
 						$i = 0;
