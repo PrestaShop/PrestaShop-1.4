@@ -111,7 +111,7 @@ else
 
 $countries = Country::getCountries(intval($cookie->id_lang), true);
 $countriesList = '';
-foreach ($countries as $country)
+foreach ($countries AS $country)
     $countriesList .= '<option value="'.intval($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
 include(dirname(__FILE__).'/header.php');

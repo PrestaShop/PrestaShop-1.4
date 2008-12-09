@@ -96,7 +96,8 @@ class		Country extends ObjectModel
 		foreach ($result AS &$country)
 			$countries[$country['id_country']] = $country;
 		foreach ($states AS &$state)
-			$countries[$state['id_country']]['states'][] = $state;
+			if (isset($countries[$state['id_country']])) /* Does not keep the state if its country has been disabled and not selected */
+				$countries[$state['id_country']]['states'][] = $state;
 		return $countries;
 	}
 
