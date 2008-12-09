@@ -6,7 +6,7 @@ class BlockMyAccount extends Module
 	{
 		$this->name = 'blockmyaccount';
 		$this->tab = 'Blocks';
-		$this->version = 1.2;
+		$this->version = '1.2';
 
 		/* The parent construct is required for translations */
 		parent::__construct();

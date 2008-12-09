@@ -70,6 +70,8 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES
 (43, 'sekeywords', 1),
 (44, 'statsproduct', 1);
 
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
+
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 (3, 1, 1),
 (6, 1, 2),
