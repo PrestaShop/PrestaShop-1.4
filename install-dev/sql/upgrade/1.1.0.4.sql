@@ -16,4 +16,5 @@ ALTER TABLE PREFIX_customization ADD quantity INT(10) NOT NULL;
 /* ################################# */
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`)
-	VALUES ('productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1);
+	VALUES ('productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1),
+	VALUES ('updateProductAttribute', 'Product attribute update', NULL, 1);

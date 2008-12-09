@@ -712,7 +712,9 @@ class		Product extends ObjectModel
 		'location' => pSQL($location),
 		'ean13' => pSQL($ean13),
 		'default_on' => intval($default));
-		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute));
+		$res = Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute));
+		Hook::updateProductAttribute($id_product_attribute);
+		return $res;
 	}
 
 	/**

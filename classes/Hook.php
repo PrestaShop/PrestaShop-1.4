@@ -134,6 +134,11 @@ class			Hook extends ObjectModel
 		return Module::hookExec('deleteProduct', array('product' => $product));
 	}
 	
+	static public function updateProductAttribute($id_product_attribute)
+	{
+		return Module::hookExec('updateProductAttribute', array('id_product_attribute' => $id_product_attribute));
+	}
+	
 	static public function orderConfirmation($id_order)
 	{
 	    if (Validate::isUnsignedId($id_order))

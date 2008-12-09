@@ -41,7 +41,8 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (38, 'watermark','Watermark', NULL, 0),
 (39, 'cancelProduct', 'Product cancelled', 'This hook is called when you cancel a product in an order', 0),
 (40, 'extraLeft', 'Extra actions on the product page (left column).', NULL, 0),
-(41, 'productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1);
+(41, 'productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1),
+(42, 'updateProductAttribute', 'Product attribute update', NULL, 0);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),
