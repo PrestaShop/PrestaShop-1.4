@@ -64,7 +64,7 @@ class AdminCustomers extends AdminTab
 		$customer = $this->loadObject();
 		$customerStats = $customer->getStats();
 		$addresses = $customer->getAddresses($defaultLanguage);
-		$discounts = Discount::getCustomerDiscounts($defaultLanguage, $customer->id);
+		$discounts = Discount::getCustomerDiscounts($defaultLanguage, $customer->id, false, false);
 		$orders = Order::getCustomerOrders($customer->id);
 		$cart = new Cart($customer->getLastCart());
 		$currency = new Currency($cart->id_currency);
