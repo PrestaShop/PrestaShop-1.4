@@ -33,6 +33,7 @@ class BlockWishList extends Module
 						!$this->registerHook('productActions') OR
 						!$this->registerHook('cart') OR
 						!$this->registerHook('customerAccount') OR
+						!$this->registerHook('header') OR
 						!Configuration::updateValue('PS_BLOCK_WISHLIST_ACTIVATED', 1)
 					)
 			return false;
@@ -200,7 +201,7 @@ class BlockWishList extends Module
 			</fieldset>
 		</form>';
 	}
-	
+		
 	public function hookRightColumn($params)
 	{
 		global $smarty;

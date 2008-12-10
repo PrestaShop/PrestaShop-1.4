@@ -2179,6 +2179,9 @@ ul.typedText {
 }
 
 /* mywishlist */
+div#mywishlist div#block-order-detail form.wl_send fieldset p input{
+	margin-left:60px;
+}
 div#mywishlist div#block-order-detail {
 	margin-top: 10px; 
 	display: block;
@@ -2237,7 +2240,7 @@ div#mywishlist div#block-order-detail ul li img {
 #view_wishlist #featured-products_block_center ul div li a img {
 	float: left;
 }
-#view_wishlist #featured-products_block_center ul div li a {
+#view_wishlist #featured-products_block_center ul div li a, #view_wishlist #featured-products_block_center ul div li span {
 	text-decoration: none;
 	float: left;
 }
@@ -2248,7 +2251,7 @@ div#mywishlist div#block-order-detail ul li img {
 div#mywishlist div#block-order-detail ul li span.wishlist_product_detail {
 	margin-bottom:5px;
 } 
-#view_wishlist #featured-products_block_center ul div li a.exclusive {
+#view_wishlist #featured-products_block_center ul div li a.exclusive, #view_wishlist #featured-products_block_center ul div li span.exclusive {
 	margin-left:55px;
 }
 #view_wishlist #featured-products_block_center ul div li.address_name input.text {

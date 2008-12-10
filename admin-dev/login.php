@@ -23,8 +23,8 @@ $pathServer = ereg_replace('^/', '', $_SERVER['PHP_SELF']);
 $pathUser = ereg_replace('^/', '', str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']));
 if (strcmp($pathServer, $pathUser))
 	$errors[] = Tools::displayError('Path is not the same between your browser and you server :').'<br /><br /><b>'.
-				Tools::displayError('- Server:').'</b><br />'.$pathServer.'<br /><br /><b>'.
-				Tools::displayError('- Browser:').'</b><br />'.$pathUser;
+				Tools::displayError('- Server:').'</b><br />'.htmlentities($pathServer).'<br /><br /><b>'.
+				Tools::displayError('- Browser:').'</b><br />'.htmlentities($pathUser);
 
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
 if (!isset($cookie->id_lang))

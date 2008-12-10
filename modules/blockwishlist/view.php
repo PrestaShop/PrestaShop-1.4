@@ -19,17 +19,30 @@ if (empty($token) === false)
 			continue;
 		else
 		{
-			$images = $obj->getImages(intval($cookie->id_lang));
-			foreach ($images AS $k => $image)
+			if ($products[$i]['id_product_attribute'] != 0)
 			{
-				if ($image['cover'])
-				{
-					$products[$i]['cover'] = $obj->id.'-'.$image['id_image'];
-					break;
-				}
+				$attrgrps = $obj->getAttributesGroups(intval($cookie->id_lang));
+				foreach ($attrgrps AS $attrgrp)
+					if ($attrgrp['id_product_attribute'] == intval($products[$i]['id_product_attribute']))
+					{
+						$products[$i]['cover'] = $obj->id.'-'.$attrgrp['id_image'];
+						break;
+					}
 			}
-			if (!isset($products[$i]['cover']))
-				$products[$i]['cover'] = Language::getIsoById(intval($cookie->id_lang)).'-default';
+			else
+			{
+				$images = $obj->getImages(intval($cookie->id_lang));
+				foreach ($images AS $k => $image)
+				{
+					if ($image['cover'])
+					{
+						$products[$i]['cover'] = $obj->id.'-'.$image['id_image'];
+						break;
+					}
+				}
+				if (!isset($products[$i]['cover']))
+					$products[$i]['cover'] = Language::getIsoById(intval($cookie->id_lang)).'-default';
+			}
 		}
 	}
 	WishList::incCounter(intval($wishlist['id_wishlist']));

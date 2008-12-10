@@ -152,7 +152,7 @@
 		{/foreach}
 		</ul>
 	{/if}
-	<form action="{$smarty.server.PHP_SELF}" method="post" id="voucher">
+	<form action="{$smarty.server.PHP_SELF|htmlentities}" method="post" id="voucher">
 		<fieldset>
 			<h4>{l s='Vouchers'}</h4>
 			<p>

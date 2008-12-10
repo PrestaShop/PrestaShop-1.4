@@ -89,7 +89,9 @@ function WishlistAddProductCart(token, id_product, id_product_attribute, id_quan
 function WishlistManage(id, id_wishlist)
 {
 	$.get(baseDir + 'modules/blockwishlist/managewishlist.php',
-	{ id_wishlist: id_wishlist },
+	{ id_wishlist: id_wishlist,
+		refresh: false
+	 },
 	function(data)
 	{
 		$('#' + id).hide();
@@ -105,22 +107,22 @@ function WishlistManage(id, id_wishlist)
  */
 function WishlistProductManage(id, action, id_wishlist, id_product, id_product_attribute, quantity, priority)
 {
-	$.get(baseDir + 'modules/blockwishlist/managewishlistproduct.php',
+	$.get(baseDir + 'modules/blockwishlist/managewishlist.php',
 	{ action: action,
 	  id_wishlist: id_wishlist,
 	  id_product: id_product,
 	  id_product_attribute: id_product_attribute,
 	  quantity: quantity,
-	  priority: priority },
+	  priority: priority,
+	  refresh: true },
 	function(data)
 	{
 		if (action == 'delete')
-			$('#' + id).slideUp('fast');
+			$('#wlp_' + id_product + '_' + id_product_attribute).fadeOut('fast');
 		else if (action == 'update')
 		{
-			$('#' + id).fadeOut('fast');
-			document.getElementById(id).innerHTML = data;
-			$('#' + id).fadeIn('fast');
+			$('#wlp_' + id_product + '_' + id_product_attribute).fadeOut('fast');
+			$('#wlp_' + id_product + '_' + id_product_attribute).fadeIn('fast');
 		}
 	});
 }
