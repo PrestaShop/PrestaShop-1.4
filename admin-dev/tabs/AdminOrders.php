@@ -199,7 +199,7 @@ class AdminOrders extends AdminTab
 						else
 						{
 							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $productList, 'qtyList' => $qtyList));
-							@Mail::Send(intval($order->id_lang), 'credit_slip', html_entity_decode($this->l('New credit slip regarding your order #').' '.$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send(intval($order->id_lang), 'credit_slip', html_entity_decode($this->l('New credit slip regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
 					
@@ -213,7 +213,7 @@ class AdminOrders extends AdminTab
 							$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false, false);
 							$params['{voucher_num}'] = $voucher->name;
-							@Mail::Send(intval($order->id_lang), 'voucher', html_entity_decode($this->l('New voucher regarding your order #').' '.$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send(intval($order->id_lang), 'voucher', html_entity_decode($this->l('New voucher regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
 				}
@@ -333,7 +333,7 @@ class AdminOrders extends AdminTab
 					<th>'.Tools::displayDate($row['date_add'], 1, true).'</th>
 					<th><img src="../img/os/'.$row['id_order_state'].'.gif" /></th>
 					<th>'.stripslashes($row['ostate_name']).'</th>
-					<th>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</th>
+					<th>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</th>
 				</tr>';
 			/* Display previous states */
 			foreach ($history AS $row)
@@ -343,7 +343,7 @@ class AdminOrders extends AdminTab
 					<td>'.Tools::displayDate($row['date_add'], 1, true).'</td>
 					<td><img src="../img/os/'.$row['id_order_state'].'.gif" /></td>
 					<td>'.stripslashes($row['ostate_name']).'</td>
-					<td>'.((!empty($row['employee_name'])) ? '('.stripslashes(substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
+					<td>'.((!empty($row['employee_name'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
 				</tr>';
 			}
 		echo '
