@@ -690,7 +690,7 @@ class AdminProducts extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
+						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 				}
 				else
 					$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Tools::displayError('cannot load object').')';
