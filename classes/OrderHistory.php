@@ -138,7 +138,9 @@ class		OrderHistory extends ObjectModel
 				$links = $smarty->fetch(_PS_MAIL_DIR_.$iso.'/download-product.tpl');
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);
 				$data = array_merge ($data, $tmpArray);
-				Mail::Send(intval($order->id_lang), 'download_product', 'Virtual product to download', $data, $result['email'], $result['firstname'].' '.$result['lastname']);
+				global $_LANGMAIL;
+				$subject = 'Virtual product to download';
+				Mail::Send(intval($order->id_lang), 'download_product', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 			}
 
 			if (Validate::isLoadedObject($order))
