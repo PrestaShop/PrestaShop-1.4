@@ -18,8 +18,8 @@ if (Tools::isSubmit('email'))
             $errors[] = Tools::displayError('there is no account registered to this e-mail address');
 		else
 		{
-			if ((strtotime($customer->last_passwd_gen.'+'.intval(Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
-				$errors[] = Tools::displayError('You can regenerate your password only each').' '.intval(_PS_MIN_TIME_GENERATE_PASSWD_).' '.Tools::displayError('minute(s)');
+			if ((strtotime($customer->last_passwd_gen.'+'.intval($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
+				$errors[] = Tools::displayError('You can regenerate your password only each').' '.intval($min_time).' '.Tools::displayError('minute(s)');
 			else
 			{
 			    $customer->passwd = Tools::encrypt($password = Tools::passwdGen(intval(MIN_PASSWD_LENGTH)));
