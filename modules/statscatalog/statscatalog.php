@@ -100,31 +100,37 @@ class StatsCatalog extends Module
 	}
 	
 	public function getProductsNB($id_lang)
-	{		
+	{
+		$precalc = Db::getInstance()->ExecuteS('
+		SELECT p.`id_product`
+		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = od.`product_id`
+		'.$this->_join.'
+		WHERE (
+			SELECT os.`invoice`
+			FROM `'._DB_PREFIX_.'orders` oo
+			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
+			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+			WHERE oo.`id_order` = o.`id_order`
+			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+			LIMIT 1
+		) = 1
+		'.$this->_where.'
+		AND p.`active` = 1
+		GROUP BY p.`id_product`');
+			
+		$precalc2 = array();
+		foreach ($precalc as $array)
+			$precalc2[] = intval($array['id_product']);
+		
 		$result = Db::getInstance()->ExecuteS('
-		SELECT DISTINCT p.*, pl.*
+		SELECT p.id_product, pl.name, pl.link_rewrite
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.id_lang = '.intval($id_lang).')
 		'.$this->_join.'
-		WHERE p.`id_product` NOT IN (
-			SELECT p.`id_product`
-			FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON p.`id_product` = od.`product_id`
-			LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
-			'.$this->_join.'
-			WHERE (
-				SELECT os.`invoice`
-				FROM `'._DB_PREFIX_.'orders` oo
-				LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-				WHERE oo.`id_order` = o.`id_order`
-				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-				LIMIT 1
-			) = 1
-			AND p.`active` = 1
-			'.$this->_where.'
-			GROUP BY p.`id_product`)
-		AND p.`active` = 1
+		WHERE p.`active` = 1
+		'.(sizeof($precalc2) ? 'AND p.`id_product` NOT IN ('.implode(',', $precalc2).')' : '').'
 		'.$this->_where);
 		return array('total' => Db::getInstance()->NumRows(), 'result' => $result);
 	}
