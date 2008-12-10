@@ -206,16 +206,16 @@ class		Language extends ObjectModel
 	
 	public function delete()
 	{
-		/* Database translations deletion */
+		// Database translations deletion
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
 			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]))
 				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.intval($this->id)))
 					return false;
 
-		/* Files deletion */
+		//Files deletion
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)
-			unlink($file);
+			unlink($key);
 		if (file_exists(_PS_MAIL_DIR_.$this->iso_code))
 			rmdir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
 		return parent::delete();
