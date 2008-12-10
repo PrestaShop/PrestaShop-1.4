@@ -76,7 +76,7 @@ class OrderDetail extends ObjectModel
 
 	protected $tables = array ('order_detail');
 
-	protected	$fieldsRequired = array ('id_order', 'product_name', 'product_quantity', 'product_price', 'tax_name', 'tax_rate');
+	protected	$fieldsRequired = array ('id_order', 'product_name', 'product_quantity', 'product_price', 'tax_rate');
 
 	protected	$fieldsValidate = array (
 	'id_order' => 'isUnsignedId',
