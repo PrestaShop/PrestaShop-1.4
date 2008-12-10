@@ -38,7 +38,6 @@ if ($back = Tools::getValue('back'))
 	$currentIndex .= '&back='.urlencode($back);
 
 /* Include appropriate language file */
-
 Tools::setCookieLanguage();
 if (Tools::isSubmit('adminlang'))
 {
