@@ -143,7 +143,7 @@ else
 			'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
 			'token' => Tools::getToken(false),
 			'productPriceWithoutEcoTax' => floatval($productPriceWithoutEcoTax),
-			'features' => $product->getFrontFeatures(intval($cookie->id_lang)),
+			'features' => $features,
 			'allow_oosp' => $product->isAvailableWhenOutOfStock(intval($product->out_of_stock)),
 			'last_qties' =>  intval($configs['PS_LAST_QTIES']),
 			'col_img_dir' => _PS_COL_IMG_DIR_,
