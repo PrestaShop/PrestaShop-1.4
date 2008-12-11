@@ -10,6 +10,14 @@ ALTER TABLE PREFIX_order_detail
 
 ALTER TABLE PREFIX_customization ADD quantity INT(10) NOT NULL;
 
+CREATE TABLE PREFIX_order_customization_return (
+  id_order int(10) NOT NULL,
+  product_id int(10) NOT NULL,
+  customization_id int(10) NOT NULL,
+  quantity int(10) NOT NULL,
+  PRIMARY KEY(id_order_detail, product_id, customization_id)
+);
+
 
 /* ################################# */
 /* 					CONTENTS				*/

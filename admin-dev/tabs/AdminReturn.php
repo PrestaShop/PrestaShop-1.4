@@ -203,6 +203,7 @@ class AdminReturn extends AdminTab
 							</tr>';
 
 			$order = new Order(intval($obj->id_order));
+			/* Classic products */
 			$products = OrderReturn::getOrdersReturnProducts($obj->id, $order);
 			foreach ($products AS $k => $product)
 			{
@@ -214,6 +215,16 @@ class AdminReturn extends AdminTab
 					<td class="center"><a href="'.$currentIndex.'&deleteorder_return_detail&id_order_return_detail='.$product['id_order_detail'].'&id_order_return='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/delete.gif"></a></td>
 				</tr>';
 			}
+			/* Customized ones */
+			if ($returnedCustomizations = OrderReturn::getReturnedCustomizedProducts(intval($obj->id_order)))
+				foreach ($returnedCustomizations AS $returnedCustomization)
+					echo '
+					<tr>
+						<td>'.$returnedCustomization['reference'].'</td>
+						<td class="center">'.$returnedCustomization['name'].'</td>
+						<td class="center">'.$returnedCustomization['quantity'].'</td>
+						<td class="center"><a href="">debug</a></td>
+					</tr>';
 			echo '
 							</table>
 						</td>

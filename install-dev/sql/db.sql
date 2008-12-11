@@ -1049,3 +1049,11 @@ CREATE TABLE IF NOT EXISTS `PREFIX_scene_products` (
   `zone_width` int(3) NOT NULL,
   `zone_height` int(3) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS PREFIX_order_customization_return (
+  id_order int(10) NOT NULL,
+  product_id int(10) NOT NULL,
+  customization_id int(10) NOT NULL,
+  quantity int(10) NOT NULL,
+  PRIMARY KEY(id_order_detail, product_id, customization_id)
+);

@@ -56,31 +56,64 @@ class OrderReturn extends ObjectModel
 		return $fields;
 	}
 	
-	public function addReturnDetail($orderDetailList, $productQtyList)
+	public function addReturnDetail($orderDetailList, $productQtyList, $customizationIds, $customizationQtyInput)
 	{
-		foreach ($orderDetailList as $key => $orderDetail)
-			if ($qty = intval($productQtyList[$key]))
-				Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_return_detail', array('id_order_return' => intval($this->id), 'id_order_detail' => intval($orderDetail), 'product_quantity' => $qty), 'INSERT');
+		/* Classic product return */
+		if ($orderDetailList)
+			foreach ($orderDetailList AS $key => $orderDetail)
+				if ($qty = intval($productQtyList[$key]))
+					Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_return_detail', array('id_order_return' => intval($this->id), 'id_order_detail' => intval($orderDetail), 'product_quantity' => $qty), 'INSERT');
+		/* Customized product return */
+		if ($customizationIds)
+			foreach ($customizationIds AS $productId => $customizations)
+				foreach ($customizations AS $customizationId)
+					if ($quantity = intval($customizationQtyInput[intval($customizationId)]))
+						Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_customization_return', array('id_order' => intval($this->id_order), 'product_id' => intval($productId), 'customization_id' => intval($customizationId), 'quantity' => $quantity), 'INSERT');
 	}
 	
-	public function checkEnoughProduct($orderDetailList, $productQtyList)
+	public function checkEnoughProduct($orderDetailList, $productQtyList, $customizationIds, $customizationQtyInput)
 	{
 		$order = new Order(intval($this->id_order));
+		if (!Validate::isLoadedObject($order))
+			die(Tools::displayError());
 		$products = $order->getProducts();
+		/* Classic products already returned */
 		$order_return = self::getOrdersReturn($order->id_customer, $order->id, true);
-		foreach ($order_return as $or)
+		foreach ($order_return AS $or)
 		{
 			$order_return_products = self::getOrdersReturnProducts($or['id_order_return'], $order);
-			foreach ($order_return_products as $key => $orp)
-				$products[$key]['product_quantity'] -= $orp['product_quantity'];
+			foreach ($order_return_products AS $key => $orp)
+				$products[$key]['product_quantity'] -= intval($orp['product_quantity']);
 		}
-		foreach ($orderDetailList as $key => $orderDetail)
-			if ($qty = intval($productQtyList[$key]))
-				if ($products[$key]['product_quantity'] - $qty < 0)
-					return false;
+		/* Customized products already returned */
+		$orderedCustomizations = Customization::getOrderedCustomizations(intval($order->id_cart));
+		if ($returnedCustomizations = Customization::getReturnedCustomizations($this->id_order))
+		{
+			$customizationQuantityByProduct = Customization::countCustomizationQuantityByProduct($returnedCustomizations);
+			foreach ($products AS &$product)
+				$product['product_quantity'] -= intval($customizationQuantityByProduct[intval($product['product_id'])]);
+		}
+		/* Quantity check */
+		if ($orderDetailList)
+			foreach ($orderDetailList AS $key => $orderDetail)
+				if ($qty = intval($productQtyList[$key]))
+					if ($products[$key]['product_quantity'] - $qty < 0)
+						return false;
+		/* Customization quantity check */
+		if ($customizationIds)
+			foreach ($customizationIds AS $productId => $customizations)
+				foreach ($customizations AS $customizationId)
+				{
+					$customizationId = intval($customizationId);
+					if (!isset($orderedCustomizations[$customizationId]))
+						return false;
+					$quantity = (isset($returnedCustomizations[$customizationId]) ? $returnedCustomizations[$customizationId] : 0) + (isset($customizationQtyInput[$customizationId]) ? intval($customizationQtyInput[$customizationId]) : 0);
+					if (intval($orderedCustomizations[$customizationId]['quantity']) - $quantity < 0)
+						return false;
+				}
 		return true;
 	}
-	
+
 	public function countProduct()
 	{
 		$data = Db::getInstance()->ExecuteS('
@@ -132,6 +165,21 @@ class OrderReturn extends ObjectModel
 				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];;
 			}
 		return $resTab;
+	}
+
+	static public function getReturnedCustomizedProducts($id_order)
+	{
+		$returns = Customization::getReturnedCustomizations($id_order);
+		$order = new Order(intval($id_order));
+		if (!Validate::isLoadedObject($order))
+			die(Tools::displayError());
+		$products = $order->getProducts();
+		foreach ($returns AS &$return)
+		{
+			$return['name'] = $products[intval($return['product_id'])]['product_name'];
+			$return['reference'] = $products[intval($return['product_id'])]['product_reference'];
+		}
+		return $returns;
 	}
 }
 

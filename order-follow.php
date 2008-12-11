@@ -16,19 +16,25 @@ if (Tools::isSubmit('submitReturnMerchandise'))
 {
 	if (!$id_order = intval(Tools::getValue('id_order')))
 		Tools::redirect('history.php');
-	if (!$ids_order_detail = Tools::getValue('ids_order_detail') OR !$order_qte_input = Tools::getValue('order_qte_input'))
-		Tools::redirect('order-follow.php?errorDetail');
+	if (!$order_qte_input = Tools::getValue('order_qte_input'))
+		Tools::redirect('order-follow.php?errorDetail1');
+	if ($customizationIds = Tools::getValue('customization_ids') AND !$customizationQtyInput = Tools::getValue('customization_qty_input'))
+		Tools::redirect('order-follow.php?errorDetail2');
+	if (!$ids_order_detail = Tools::getValue('ids_order_detail') AND !$customizationIds)
+		Tools::redirect('order-follow.php?errorDetail3');
+
 	$orderReturn = new OrderReturn();
 	$orderReturn->id_customer = intval($cookie->id_customer);
 	$orderReturn->id_order = intval(Tools::getValue('id_order'));
 	$orderReturn->question = strval(Tools::getValue('returnText'));
 	if (empty($orderReturn->question))
 		Tools::redirect('order-follow.php?errorMsg');
-	if (!$orderReturn->checkEnoughProduct($ids_order_detail, $order_qte_input))
+	if (!$orderReturn->checkEnoughProduct($ids_order_detail, $order_qte_input, $customizationIds, $customizationQtyInput))
 		Tools::redirect('order-follow.php?errorQuantity');
+
 	$orderReturn->state = 1;
 	$orderReturn->add();
-	$orderReturn->addReturnDetail($ids_order_detail, $order_qte_input);
+	$orderReturn->addReturnDetail($ids_order_detail, $order_qte_input, $customizationIds, $customizationQtyInput);
 	Module::hookExec('orderReturn', array('orderReturn' => $orderReturn));
 	Tools::redirect('order-follow.php');
 }

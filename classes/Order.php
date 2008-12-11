@@ -260,7 +260,7 @@ class		Order extends ObjectModel
 				$row['filename'] = ProductDownload::getFilenameFromIdProduct($row['product_id']);
 
 			/* Stock product */
-			$resultArray[] = $row;
+			$resultArray[intval($row['product_id'])] = $row;
 		}
 		return $resultArray;
 	}

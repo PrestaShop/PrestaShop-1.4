@@ -119,8 +119,7 @@
 				<!-- Customized products -->
 				{if isset($customizedDatas.$productId.$productAttributeId)}
 					<tr class="item">
-						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$smarty.foreach.products.index}]" value="{$product.id_order_detail|intval}" /></td>{/if}
-						<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
+						<td colspan="2"><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
 						<td class="bold">
 							<label for="cb_{$product.id_order_detail|intval}">{$product.product_name|escape:'htmlall':'UTF-8'}</label>
 						</td>
@@ -128,8 +127,9 @@
 						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
 						<td><label for="cb_{$product.id_order_detail|intval}">{if isset($customizedDatas.$productId.$productAttributeId)}{convertPriceWithCurrency price=$product.total_customization_wt currency=$currency convert=0}{else}{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}{/if}</label></td>
 					</tr>
-					{foreach from=$customizedDatas.$productId.$productAttributeId item='customization'}
+					{foreach from=$customizedDatas.$productId.$productAttributeId item='customization' key='customizationId'}
 					<tr class="alternate_item">
+						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="customization_ids[{$productId}][]" value="{$customizationId|intval}" /></td>{/if}
 						<td colspan="2">
 						{foreach from=$customization.datas key='type' item='datas'}
 							{if $type == $CUSTOMIZE_FILE}
@@ -148,7 +148,7 @@
 						{/foreach}
 						</td>
 						<td>
-							<input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$customization.quantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$customization.quantity|intval}</span></label>
+							<input class="order_qte_input" name="customization_qty_input[{$customizationId|intval}]" type="text" size="2" value="{$customization.quantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$customization.quantity|intval}</span></label>
 						</td>
 						<td colspan="2"></td>
 					</tr>
