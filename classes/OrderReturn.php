@@ -65,10 +65,10 @@ class OrderReturn extends ObjectModel
 					Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_return_detail', array('id_order_return' => intval($this->id), 'id_order_detail' => intval($orderDetail), 'product_quantity' => $qty), 'INSERT');
 		/* Customized product return */
 		if ($customizationIds)
-			foreach ($customizationIds AS $productId => $customizations)
+			foreach ($customizationIds AS $orderDetailId => $customizations)
 				foreach ($customizations AS $customizationId)
 					if ($quantity = intval($customizationQtyInput[intval($customizationId)]))
-						Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_customization_return', array('id_order' => intval($this->id_order), 'product_id' => intval($productId), 'customization_id' => intval($customizationId), 'quantity' => $quantity), 'INSERT');
+						Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_customization_return', array('id_order_detail' => intval($orderDetailId), 'customization_id' => intval($customizationId), 'quantity' => $quantity), 'INSERT');
 	}
 	
 	public function checkEnoughProduct($orderDetailList, $productQtyList, $customizationIds, $customizationQtyInput)
@@ -86,12 +86,12 @@ class OrderReturn extends ObjectModel
 				$products[$key]['product_quantity'] -= intval($orp['product_quantity']);
 		}
 		/* Customized products already returned */
-		$orderedCustomizations = Customization::getOrderedCustomizations(intval($order->id_cart));
 		if ($returnedCustomizations = Customization::getReturnedCustomizations($this->id_order))
 		{
 			$customizationQuantityByProduct = Customization::countCustomizationQuantityByProduct($returnedCustomizations);
-			foreach ($products AS &$product)
-				$product['product_quantity'] -= intval($customizationQuantityByProduct[intval($product['product_id'])]);
+			foreach ($products AS $id_order_detail => &$product)
+				if (isset($customizationQuantityByProduct[intval($id_order_detail)]))
+					$product['product_quantity'] -= intval($customizationQuantityByProduct[intval($id_order_detail)]);
 		}
 		/* Quantity check */
 		if ($orderDetailList)
@@ -101,16 +101,19 @@ class OrderReturn extends ObjectModel
 						return false;
 		/* Customization quantity check */
 		if ($customizationIds)
+		{
+			$orderedCustomizations = Customization::getOrderedCustomizations(intval($order->id_cart));
 			foreach ($customizationIds AS $productId => $customizations)
 				foreach ($customizations AS $customizationId)
 				{
 					$customizationId = intval($customizationId);
 					if (!isset($orderedCustomizations[$customizationId]))
 						return false;
-					$quantity = (isset($returnedCustomizations[$customizationId]) ? $returnedCustomizations[$customizationId] : 0) + (isset($customizationQtyInput[$customizationId]) ? intval($customizationQtyInput[$customizationId]) : 0);
+					$quantity = (isset($returnedCustomizations[$customizationId]) ? $returnedCustomizations[$customizationId]['quantity'] : 0) + (isset($customizationQtyInput[$customizationId]) ? intval($customizationQtyInput[$customizationId]) : 0);
 					if (intval($orderedCustomizations[$customizationId]['quantity']) - $quantity < 0)
 						return false;
 				}
+		}
 		return true;
 	}
 
@@ -162,7 +165,7 @@ class OrderReturn extends ObjectModel
 			if (isset($tmp[$product['id_order_detail']]))
 			{
 				$resTab[$key] = $product;
-				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];;
+				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];
 			}
 		return $resTab;
 	}
@@ -176,8 +179,10 @@ class OrderReturn extends ObjectModel
 		$products = $order->getProducts();
 		foreach ($returns AS &$return)
 		{
-			$return['name'] = $products[intval($return['product_id'])]['product_name'];
-			$return['reference'] = $products[intval($return['product_id'])]['product_reference'];
+			$return['product_id'] = intval($products[intval($return['id_order_detail'])]['product_id']);
+			$return['product_attribute_id'] = intval($products[intval($return['id_order_detail'])]['product_attribute_id']);
+			$return['name'] = $products[intval($return['id_order_detail'])]['product_name'];
+			$return['reference'] = $products[intval($return['id_order_detail'])]['product_reference'];
 		}
 		return $returns;
 	}

@@ -129,7 +129,7 @@
 					</tr>
 					{foreach from=$customizedDatas.$productId.$productAttributeId item='customization' key='customizationId'}
 					<tr class="alternate_item">
-						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="customization_ids[{$productId}][]" value="{$customizationId|intval}" /></td>{/if}
+						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="customization_ids[{$product.id_order_detail|intval}][]" value="{$customizationId|intval}" /></td>{/if}
 						<td colspan="2">
 						{foreach from=$customization.datas key='type' item='datas'}
 							{if $type == $CUSTOMIZE_FILE}
@@ -157,7 +157,7 @@
 				<!-- Classic products -->
 				{if $product.product_quantity > $product.customizationQuantityTotal}
 					<tr class="item">
-						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$smarty.foreach.products.index}]" value="{$product.id_order_detail|intval}" /></td>{/if}
+						{if $return_allowed}<td class="order_cb"><input type="checkbox" id="cb_{$product.id_order_detail|intval}" name="ids_order_detail[{$product.id_order_detail|intval}]" value="{$product.id_order_detail|intval}" /></td>{/if}
 						<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
 						<td class="bold">
 							<label for="cb_{$product.id_order_detail|intval}">
@@ -173,7 +173,7 @@
 								{/if}
 							</label>
 						</td>
-						<td><input class="order_qte_input" name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$productQuantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$productQuantity|intval}</span></label></td>
+						<td><input class="order_qte_input" name="order_qte_input[{$product.id_order_detail|intval}]" type="text" size="2" value="{$productQuantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$productQuantity|intval}</span></label></td>
 						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
 						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}</label></td>
 					</tr>

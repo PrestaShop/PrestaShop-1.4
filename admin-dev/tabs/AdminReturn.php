@@ -217,7 +217,10 @@ class AdminReturn extends AdminTab
 			}
 			/* Customized ones */
 			if ($returnedCustomizations = OrderReturn::getReturnedCustomizedProducts(intval($obj->id_order)))
+			{
+				$allCustomizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 				foreach ($returnedCustomizations AS $returnedCustomization)
+				{
 					echo '
 					<tr>
 						<td>'.$returnedCustomization['reference'].'</td>
@@ -225,6 +228,34 @@ class AdminReturn extends AdminTab
 						<td class="center">'.$returnedCustomization['quantity'].'</td>
 						<td class="center"><a href="">debug</a></td>
 					</tr>';
+					$customizationDatas = &$allCustomizedDatas[intval($returnedCustomization['product_id'])][intval($returnedCustomization['product_attribute_id'])][intval($returnedCustomization['customization_id'])]['datas'];
+					foreach ($customizationDatas AS $type => $datas)
+					{
+						echo '<tr>
+						<td colspan="4">';
+						if ($type == _CUSTOMIZE_FILE_)
+						{
+							$i = 0;
+							echo '<ul style="margin: 4px 0px 4px 0px; padding: 0px; list-style-type: none;">';
+							foreach ($datas AS $data)
+								echo '<li style="display: inline; margin: 2px;">
+										<a href="displayImage.php?img='.$data['value'].'&name='.intval($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
+									</li>';
+							echo '</ul>';
+						}
+						elseif ($type == _CUSTOMIZE_TEXTFIELD_)
+						{
+							$i = 0;
+							echo '<ul style="margin: 0px 0px 4px 0px; padding: 0px 0px 0px 6px; list-style-type: none;">';
+							foreach ($datas AS $data)
+								echo '<li>'.$this->l('Text #').++$i.$this->l(':').' '.$data['value'].'</li>';
+							echo '</ul>';
+						}
+						echo '</td>
+						</tr>';
+					}
+				}
+			}
 			echo '
 							</table>
 						</td>
