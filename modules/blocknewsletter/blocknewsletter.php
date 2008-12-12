@@ -50,12 +50,12 @@ class Blocknewsletter extends Module
 			if (isset($_POST['new_page']) AND Validate::isBool(intval($_POST['new_page'])))
 				Configuration::updateValue('NW_CONFIRMATION_NEW_PAGE', $_POST['new_page']);
 			if (isset($_POST['conf_email']) AND VAlidate::isBool(intval($_POST['conf_email'])))
-				Configuration::updateValue('NW_CONFIRMATION_EMAIL', $_POST['conf_email']);
+				Configuration::updateValue('NW_CONFIRMATION_EMAIL', pSQL($_POST['conf_email']));
 			if (!empty($_POST['voucher']) AND !Validate::isDiscountName($_POST['voucher']))
 				$this->_html .= '<div class="alert">'.$this->l('Voucher code is invalid').'</div>';
 			else
 			{
-				Configuration::updateValue('NW_VOUCHER_CODE', $_POST['voucher']);
+				Configuration::updateValue('NW_VOUCHER_CODE', pSQL($_POST['voucher']));
 				$this->_html .= '<div class="conf ok">'.$this->l('Updated successfully').'</div>';
 			}
 		}
@@ -105,7 +105,7 @@ class Blocknewsletter extends Module
  	
  	private function newsletterRegistration()
  	{
-	 	if (!Validate::isEmail($_POST['email']))
+	 	if (!Validate::isEmail(pSQL($_POST['email'])))
 			return $this->error = $this->l('Invalid e-mail address');
 	 	/* Unsubscription */
 	 	elseif ($_POST['action'] == '1')
@@ -137,9 +137,9 @@ class Blocknewsletter extends Module
 			/* If the user ins't a customer */
 			elseif ($registerStatus == -1)
 			{
-				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', \''.$_SERVER['REMOTE_ADDR'].'\')'))
+				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', \''.pSQL($_SERVER['REMOTE_ADDR']).'\')'))
 					return $this->error = $this->l('Error during subscription');
-				$this->sendVoucher($_POST['email']);
+				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');
 			}
 			/* If the user is a customer */
@@ -147,7 +147,7 @@ class Blocknewsletter extends Module
 			{
 			 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 1, `ip_registration_newsletter` = \''.pSQL($_SERVER['REMOTE_ADDR']).'\' WHERE `email` = \''.pSQL($_POST['email']).'\''))
 	 	 			return $this->error = $this->l('Error during subscription');
-				$this->sendVoucher($_POST['email']);
+				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');
 			}
 		}
@@ -178,14 +178,14 @@ class Blocknewsletter extends Module
 			{
 				$smarty->assign(array('color' => 'red',
 										'msg' => $this->error,
-										'nw_value' => isset($_POST['email']) ? $_POST['email'] : false,
+										'nw_value' => isset($_POST['email']) ? pSQL($_POST['email']) : false,
 										'nw_error' => true,
 										'action' => $_POST['action']));
 			}
 			elseif ($this->valid)
 			{
 				if (Configuration::get('NW_CONFIRMATION_EMAIL') AND isset($_POST['action']) AND intval($_POST['action']) == 0)
-					Mail::Send(intval($params['cookie']->id_lang), 'newsletter_conf', $this->l('Newsletter confirmation'), array(), $_POST['email'], NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					Mail::Send(intval($params['cookie']->id_lang), 'newsletter_conf', $this->l('Newsletter confirmation'), array(), pSQL($_POST['email']), NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
 				$smarty->assign(array('color' => 'green',
 										'msg' => $this->valid,
 										'nw_error' => false));
