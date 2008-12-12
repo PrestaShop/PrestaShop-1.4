@@ -23,6 +23,6 @@ ALTER TABLE PREFIX_orders
 /* 					CONTENTS				*/
 /* ################################# */
 
-INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`)
-	VALUES ('productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1),
-	VALUES ('updateProductAttribute', 'Product attribute update', NULL, 1);
+INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
+  ('productOutOfStock', 'Product out of stock', 'Make action while product is out of stock', 1),
+  ('updateProductAttribute', 'Product attribute update', NULL, 1);
