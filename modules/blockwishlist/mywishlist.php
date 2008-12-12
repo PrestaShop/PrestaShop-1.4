@@ -10,7 +10,7 @@ if ($cookie->isLogged())
 {
 	$add = Tools::getIsset('add');
 	$add = (empty($add) === false ? 1 : 0);
-	$delete = Tools::getIsset('delete');
+	$delete = Tools::getIsset('deleted');
 	$delete = (empty($delete) === false ? 1 : 0);
 	$id_wishlist = Tools::getValue('id_wishlist');
 	if (Tools::isSubmit('submitWishlist'))

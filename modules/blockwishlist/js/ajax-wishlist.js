@@ -138,7 +138,7 @@ function WishlistDelete(id, id_wishlist, msg)
 	if (res == false)
 		return (false);
 	$.get(baseDir + 'modules/blockwishlist/mywishlist.php',
-	{ delete: '',
+	{ deleted: '',
 	  id_wishlist: id_wishlist },
 	function(data)
 	{
