@@ -11,6 +11,8 @@ function __autoload($className)
 	include_once(INSTALL_PATH.'/../classes/'.$className.'.php');
 }
 
+define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
+
 // utf-8 conversion if needed (before v0.9.8.1 utf-8 was badly supported)
 require_once('utf8.php');
 // Configuration cleaner in order to get unique configuration names
@@ -42,7 +44,6 @@ elseif ($versionCompare == 0)
 	die('<action result="fail" error="28" />'."\n");
 elseif ($versionCompare === false)
 	die('<action result="fail" error="29" />'."\n");
-define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 
 //check DB access
 include(INSTALL_PATH.'/classes/ToolsInstall.php');

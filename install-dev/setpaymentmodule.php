@@ -2,7 +2,6 @@
 
 function set_payment_module()
 {
-	define('_PS_MODULE_DIR_', INSTALL_PATH.'/../modules/');
 	// Get all modules then select only payment ones
 	$modules = Module::getModulesInstalled();
 	foreach ($modules AS $module)
