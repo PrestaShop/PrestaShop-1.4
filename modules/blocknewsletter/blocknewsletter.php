@@ -110,13 +110,13 @@ class Blocknewsletter extends Module
 	 	/* Unsubscription */
 	 	elseif ($_POST['action'] == '1')
 	 	{
- 		 	$registerStatus = $this->isNewsletterRegistered($_POST['email']);
+ 		 	$registerStatus = $this->isNewsletterRegistered(pSQL($_POST['email']));
 	 	 	if ($registerStatus < 1)
 	 	 		return $this->error = $this->l('E-mail address not registered');
 	 	 	/* If the user ins't a customer */
 	 	 	elseif ($registerStatus == 1)
 	 	 	{
-			  	if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'newsletter WHERE `email` = \''.$_POST['email'].'\''))
+			  	if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'newsletter WHERE `email` = \''.pSQL($_POST['email']).'\''))
 	 	 			return $this->error = $this->l('Error during unsubscription');
 	 	 		return $this->valid = $this->l('Unsubscription successful');
 	 	 	}
@@ -131,7 +131,7 @@ class Blocknewsletter extends Module
 	 	/* Subscription */
 	 	elseif ($_POST['action'] == '0')
 	 	{
-	 	 	$registerStatus = $this->isNewsletterRegistered($_POST['email']);
+	 	 	$registerStatus = $this->isNewsletterRegistered(pSQL($_POST['email']));
 			if ($registerStatus > 0)
 				return $this->error = $this->l('E-mail address already registered');
 			/* If the user ins't a customer */
