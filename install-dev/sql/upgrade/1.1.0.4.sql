@@ -15,6 +15,10 @@ ALTER TABLE PREFIX_order_return_detail DROP PRIMARY KEY;
 ALTER TABLE PREFIX_order_return_detail ADD PRIMARY KEY (id_order_return, id_order_detail, id_customization);
 
 
+ALTER TABLE PREFIX_orders
+  CHANGE payment payment VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  CHANGE module module VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
 /* ################################# */
 /* 					CONTENTS				*/
 /* ################################# */
