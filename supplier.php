@@ -36,8 +36,9 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 else
 {
 	$data = call_user_func(array($className, 'get'.$className.'s'), true, false, intval($cookie->id_lang), false);
+	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
 	foreach ($data AS &$item)
-		$item['image'] = (!file_exists(_PS_MANU_IMG_DIR_.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
+		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
 			Language::getIsoById(intval($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
 
 	$nbProducts = sizeof($data); // pagination hack
