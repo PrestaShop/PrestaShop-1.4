@@ -2,7 +2,7 @@ PrestaShop <support@prestashop.com>
 Open-source licence 3.0 (http://www.opensource.org/licenses/osl-3.0.php)
 
 ####################################
-#   v1.1.0.3 - 6531 (2008-11-17)   #
+#   v1.1.0.4 - 116 (2008-12-12)   #
 ####################################
 
 Release Notes
@@ -10,6 +10,14 @@ Release Notes
 
 	Added Features :
 
+- BO : added hook while updating product combinations
+- CO : UTF-8 support added to Validate.php
+- FO : added hook when a product is out of stock
+- Module : Customized product quantity support added to the blockcart module
+- PDF : Customized product quantity support added to the invoice
+- BO : Customized product quantity support added to the order detail
+- FO : Customized product quantity support added to the order history
+- FO : Quantity support added to customizable product (need formatting inside order details/histories)
 - BO : added product location (eg. where product is located in your warehouse)
 - BO : added a warning if admin directory is not the real one
 - Dev : Database model added (made with MySQL Workbench)
@@ -74,6 +82,29 @@ Release Notes
 
 	Improved/changed features :
 
+- TR : updated FR translations
+- BO : fixed text "cancel" display
+- MO : fixed security hole in blockvariouslinks
+- MO : fixed security hole in blockrss
+- MO : fixed security hole in blocknewsletter
+- FO : Customized product display added to order return page
+- BO : Customized product deletion support added to "returned products"
+- BO : Customized products support added to "Merchandise returns" tab
+- FO : Customized product return support added
+- BO : Customized product returned display added (not finished)
+- TR : improved FR lang
+- SVN : ignore compiled smarty files when "svn status"
+- BO : SQL error message is now displayed when update fail
+- CO : Validate methodes optimized
+- BO : added new column to order_detail in goal to separate cancelled and returned product
+- Installer : 1.1.0.4 database installation added
+- Installer : version upgrade added
+- MO : mailalerts now display customer message in new order mails
+- FO/BO : added IP address info in customer (thanks to Marwan)
+- FO : add scenes directories
+- FO : add scenes directories
+- FO/BO : added P3P policies W3C for IE login bug
+- BO : Precisions added to the "Re-direction after adding product to cart" option
 - FO/BO : improved code style and vars types
 - FO : automatic meta tags for products and categories
 - FO : no specific controller for scenes
@@ -177,6 +208,67 @@ Release Notes
 
 	Fixed bugs :
 
+- MO : fixed button bug in BlockWishList
+- TR : Installer translations fixed
+- MO : fixed bug in ajax-cart.js
+- Installer : Order's payment & module field increased (in order to support more multibyte characters)
+- FO : Supplier image fixed
+- Installer : Code fix
+- BO : Customized products support in "Merchandise returns" tab fixed
+- Installer : SQL upgrade fixed
+- Classes : fixed translation bug in OrderHistory with virtual download mail
+- FO : Fixed displaying min_time_regeneration password bug on password.php
+- BO : fixed bug with discount customer in AdminCustomers
+- MO : blockwishlist fix some bugs
+- TR : Code fixes
+- FO : fixed double code
+- BO : fixed delete language files
+- BO : Employee firstname display fixed (UTF-8)
+- FO : Order slip PDF fixed
+- BO : fixed UTF-8 bug
+- FO : Address update fixed when a state is linked to a disabled country
+- FO : Address names copy fixed
+- Installer : Hook myAccountBlock added (because of the myAccountBlock module installation)
+- BO : Customized product images fixed on order detail
+- FO/Modules : fixed bug with 'blockmyaccount' and 'customeraccount' hook mistake
+- FO : Order detail fixed
+- FO : One more fix for tax and price rounding (not by me)
+- MO: fixed some bugs on referralprogram
+- Module : Referralprogram code fix
+- FO : Product comments display fixed when full description was missing
+- BO : Notice added to indicate that combination price increasing/decreasing include tax
+- FO : Free shipping sentence display fixed on the shopping cart
+- FO & BO : Customized product zero quantity does not appear anymore
+- FO & BO & PDF : Customized product quantity fixed (when there was more than a single customized product)
+- FO & BO : order detail's "deleted" field cleaned
+- Installer : Upgrade to 1.1.0.4 database added
+- FO : Product addition to the cart fixed (wrong quantity error)
+- DB : Wrong parameter given for calculating discount value in PaymentModule::validateOrder();
+- FO : Customized product addition to the cart fixed
+- MO: blockwishlist debug and css improvment
+- FO : Discount category association fixed (was reseted when an order was made)
+- BO : fix #849
+- FO : fix signin javascript name field repeat
+- BO : Icon fix
+- BO : fixed bug in AdminCustomers
+- MO : fixed bad template for mailalerts
+- MO : gsitemap now keep an almighty sitemap.xml file :] 
+- IN : new files and folders checked
+- BO : fixed default query text UTF-8 bug
+- FO : fixed bug in selected country
+- BO : fixed &nbsp; bug in AdminPayment
+- BO : fixed description bug in AdminOrdersStates
+- BO : fixed bad UTF8 encoding
+- FO : Syntax not supported by PHP version priori to 5.2.* in CMS.php
+- DB : Ip address is not longer required (Safari bug)
+- MO : Paypal configuration help updated
+- FO : category discount validity check fixed 
+- MO : Referralprogram module fixed (code fixes & mail sending fix)
+- TR : English mail translation file (lang.php) added
+- FO : Customizable product quantity locked to one (awaiting such support)
+- FO : None customized product deletion does not delete customized product anymore
+- BO : fixed bug while adding quantity discount with float price
+- FO: ip address is now stocked when suscription to newsletter
 - BO : fixed id_lang bug in AdminLanguages
 - BO : fixed display bug in AdminTabs
 - Installer : reinstallation of the blockmyaccount fixed
