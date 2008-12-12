@@ -75,18 +75,20 @@
 		<tbody>
 		{foreach from=$productsBoughts item=product name=i}
 			{foreach from=$product.bought item=bought name=j}
-			<tr>
-				<td class="first_item">
-				<span style="float:left;"><img src="{$img_prod_dir}{$product.cover}-small.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></span>
-				<span style="float:left;">{$product.name|truncate:40|escape:'htmlall':'UTF-8'}
-				{if isset($product.attributes_small)}
-					<br /><i>{$product.attributes_small|escape:'htmlall':'UTF-8'}</i>
-				{/if}</span>
-				</td>
-				<td class="item align_center">{$bought.quantity|intval}</td>
-				<td class="item align_center">{$bought.firstname} {$bought.lastname}</td>
-				<td class="last_item align_center">{$bought.date_add|date_format:"%Y-%m-%d"}</td>
-			</tr>
+			{if $bought.quantity > 0}
+				<tr>
+					<td class="first_item">
+					<span style="float:left;"><img src="{$img_prod_dir}{$product.cover}-small.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></span>
+					<span style="float:left;">{$product.name|truncate:40|escape:'htmlall':'UTF-8'}
+					{if isset($product.attributes_small)}
+						<br /><i>{$product.attributes_small|escape:'htmlall':'UTF-8'}</i>
+					{/if}</span>
+					</td>
+					<td class="item align_center">{$bought.quantity|intval}</td>
+					<td class="item align_center">{$bought.firstname} {$bought.lastname}</td>
+					<td class="last_item align_center">{$bought.date_add|date_format:"%Y-%m-%d"}</td>
+				</tr>
+			{/if}
 			{/foreach}
 		{/foreach}
 		</tbody>
