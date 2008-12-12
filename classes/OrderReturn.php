@@ -111,7 +111,7 @@ class OrderReturn extends ObjectModel
 
 	public function countProduct()
 	{
-		if (!$data = Db::getInstance()->ExecuteS('
+		if (!$data = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order_return`) AS total
 		FROM `'._DB_PREFIX_.'order_return_detail`
 		WHERE `id_order_return` = '.intval($this->id)))
@@ -182,6 +182,11 @@ class OrderReturn extends ObjectModel
 			$return['reference'] = $products[intval($return['id_order_detail'])]['product_reference'];
 		}
 		return $returns;
+	}
+
+	static public function deleteOrderReturnDetail($id_order_return, $id_order_detail, $id_customization = 0)
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_return_detail` WHERE `id_order_detail` = '.intval($id_order_detail).' AND `id_order_return` = '.intval($id_order_return).' AND `id_customization` = '.intval($id_customization));
 	}
 }
 
