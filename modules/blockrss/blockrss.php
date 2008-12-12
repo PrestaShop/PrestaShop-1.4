@@ -110,7 +110,7 @@ class Blockrss extends Module
 			for ($i = 0; isset($src) AND $i < ($nb ? $nb : 5); ++$i)
 			{
 				@$item = $src->getEntryByOffset($i);
-				$content .= '<li><a href="'.@$item->link.'">'.@$item->title.'</a></li>';
+				$content .= '<li><a href="'.urlencode(@$item->link).'">'.Tools::htmlentitiesUTF8(@$item->title).'</a></li>';
 			}
 		}
 		
