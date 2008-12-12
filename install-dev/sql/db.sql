@@ -277,7 +277,8 @@ CREATE TABLE PREFIX_connections (
   ip_address VARCHAR(16) NOT NULL,
   date_add DATETIME NOT NULL,
   http_referer VARCHAR(256) NULL,
-  PRIMARY KEY(id_connections)
+  PRIMARY KEY(id_connections),
+  INDEX id_guest (id_guest)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_attribute (
@@ -906,7 +907,8 @@ CREATE TABLE PREFIX_guest (
   real_player BOOL NULL DEFAULT NULL,
   windows_media BOOL NULL DEFAULT NULL,
   accept_language VARCHAR(8) NULL DEFAULT NULL,
-  PRIMARY KEY(id_guest)
+  PRIMARY KEY(id_guest),
+  INDEX id_customer (id_customer)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_connections_page (
