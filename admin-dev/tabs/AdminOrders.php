@@ -562,7 +562,7 @@ class AdminOrders extends AdminTab
 				<div style="float:right; width:150px;">
 					<table style="width:100%" cellspacing="0" cellpadding="0" class="table" id="cancelProducts">
 						<tr>
-							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.$this->l('Cancel').'</th>
+							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : $this->l('Cancel')).'</th>
 							<th align="center" style="width: 50px">'.(($order->hasBeenDelivered() OR $order->hasBeenPaid()) ? $this->l('Total') : '' ).'</th>';
 						echo '
 						</tr>';
@@ -602,7 +602,7 @@ class AdminOrders extends AdminTab
 							<input type="checkbox" id="generateDiscount" name="generateDiscount" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateDiscount" style="float:none; font-weight:normal;">'.$this->l('Generate a voucher').'</label><br />
 							<span id="spanShippingBack" style="display:none;"><input type="checkbox" id="shippingBack" name="shippingBack" class="button" />&nbsp;<label for="shippingBack" style="float:none; font-weight:normal;">'.$this->l('Repay shipping costs').'</label><br /></span>';
 						echo '
-							<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.$this->l('Cancel products').'" class="button" style="margin-top:8px;" /></div>
+							<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($order->hasBeenDelivered() ? $this->l('Return products') : $this->l('Cancel products')).'" class="button" style="margin-top:8px;" /></div>
 						</div>';
 					echo '
 				</div>';
