@@ -5,7 +5,7 @@
 	<li class="item"><a href="{$base_dir}best-sales.php" title="">{l s='Top sellers' mod='blockvariouslinks'}</a></li>
 	<li class="item"><a href="{$base_dir_ssl}contact-form.php" title="">{l s='Contact us' mod='blockvariouslinks'}</a></li>
 	{foreach from=$cmslinks item=cmslink}
-		<li class="item"><a href="{$cmslink.link}" title="{$cmslink.meta_title}">{$cmslink.meta_title}</a></li>
+		<li class="item"><a href="{$cmslink.link|addslashes}" title="{$cmslink.meta_title|escape:'htmlall':'UTF-8'}">{$cmslink.meta_title|escape:'htmlall':'UTF-8'}</a></li>
 	{/foreach}
 	<li class="last_item">{l s='Powered by' mod='blockvariouslinks'} <a href="http://www.prestashop.com">PrestaShop</a>&trade;</li>
 </ul>
