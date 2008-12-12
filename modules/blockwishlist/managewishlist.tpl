@@ -92,7 +92,6 @@
 		</tbody>
 	</table>
 	{/if}
-	{include file="managewishlistproduct.tpl" title="managewishlistproduct"}
 	{/if}
 {else}
 	{l s='No products' mod='blockwishlist'}
