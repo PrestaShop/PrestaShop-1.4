@@ -76,9 +76,9 @@ if ($lm->getIncludeTradFilename())
 		var txtNativeMailAvailable = "<?php echo lang('PHP \'mail()\' function is available'); ?>";
 		var txtNativeMailError = "<?php echo lang('PHP \'mail()\' function is unavailable'); ?>";
 		var txtDbCreated = "<?php echo lang('Database is created!'); ?>";
-		var testMsg = "<?php echo lang('This is a test message, your server is now available to send mail'); ?>";
+		var testMsg = "<?php echo lang('This is a test message, your server is now available to send email'); ?>";
 		var testSubject = "<?php echo lang('Test message - Prestashop'); ?>";
-		var mailSended = "<?php echo lang('A mail has been sended!'); ?>";
+		var mailSended = "<?php echo lang('An email has been sent!'); ?>";
 		var mailSubject = "<?php echo lang('Congratulation, your online shop is now ready!'); ?>";
 		var txtTabUpdater1 = "<?php echo lang('Welcome'); ?>";
 		var txtTabUpdater2 = "<?php echo lang('Disclaimer'); ?>";
@@ -95,7 +95,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[1] = "<?php echo lang('Too long!'); ?>";
 		txtError[2] = "<?php echo lang('Fields are different!'); ?>";
 		txtError[3] = "<?php echo lang('This email adress is wrong!'); ?>";
-		txtError[4] = "<?php echo lang('Impossible to send the mail!'); ?>";
+		txtError[4] = "<?php echo lang('Impossible to send the email!'); ?>";
 		txtError[5] = "<?php echo lang('Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[6] = "<?php echo lang('Can\'t write settings file, please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[7] = "<?php echo lang('Impossible to upload the file!'); ?>";
@@ -114,7 +114,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[23] = "<?php echo lang('Database connection is available!'); ?>";
 		txtError[24] = "<?php echo lang('Database Server is available but database is not found'); ?>";
 		txtError[25] = "<?php echo lang('Database Server is not found. Please verify the login, password and server fields.'); ?>";
-		txtError[26] = "<?php echo lang('An error occured while sending mail, please verify your parameters.'); ?>";
+		txtError[26] = "<?php echo lang('An error occured while sending email, please verify your parameters.'); ?>";
 		txtError[37] = "<?php echo lang('Impossible to write the image /img/logo.jpg. If this image already exists, please delete it.'); ?>";
 		txtError[38] = "<?php echo lang('The uploaded file exceeds the upload_max_filesize directive in php.ini'); ?>";
 		txtError[39] = "<?php echo lang('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'); ?>";
