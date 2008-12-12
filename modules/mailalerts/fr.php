@@ -5,6 +5,7 @@ $_MODULE = array();
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd30254803e8db32521d3390131a44da'] = 'Alertes email';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ab4b19c3e9db97c21357d9c23a053e38'] = 'Envoi des e-mails au marchand lorsqu\'une commande est validée';
 $_MODULE['<{mailalerts}prestashop>mailalerts_1d85d3d08947f87b0f2085be1ccb1480'] = 'Etes-vous sûr de vouloir supprimer tous vos gabarits de mails ?';
+$_MODULE['<{mailalerts}prestashop>mailalerts_7cb9a154f101c674c945f88dad5c5e28'] = 'Aucun message';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9137796c15dd92e5553c3f29574d0968'] = 'Code de réduction :';
 $_MODULE['<{mailalerts}prestashop>mailalerts_4c9120f1a5947445c0e9620254ceb30b'] = 'Nouvelle commande';
 $_MODULE['<{mailalerts}prestashop>mailalerts_644f9c907ef5a8315916bd1e2f61f783'] = 'Rupture de stock';

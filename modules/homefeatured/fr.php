@@ -12,6 +12,7 @@ $_MODULE['<{homefeatured}prestashop>homefeatured_20c47700083df21a87e47d9299ef4dc
 $_MODULE['<{homefeatured}prestashop>homefeatured_ada7594fb1614c6b6d271699c8511d5e'] = 'Le nombre de produits affichés sur la page d\'accueil (défaut : 10)';
 $_MODULE['<{homefeatured}prestashop>homefeatured_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{homefeatured}prestashop>homefeatured_578d26aacd7844a23f0a59ef743cf26c'] = 'produits phares';
+$_MODULE['<{homefeatured}prestashop>homefeatured_d3da97e2d9aee5c8fbe03156ad051c99'] = 'Plus d\'infos';
 $_MODULE['<{homefeatured}prestashop>homefeatured_4351cfebe4b61d8aa5efa1d020710005'] = 'Plus d\'infos';
 $_MODULE['<{homefeatured}prestashop>homefeatured_4351cfebe4b61d8aa5efa1d020710005'] = 'Plus d\'infos';
 $_MODULE['<{homefeatured}prestashop>homefeatured_2d0f6b8300be19cf35e89e66f0677f95'] = 'Ajouter au panier';
