@@ -25,7 +25,7 @@ if (Tools::isSubmit('submitReturnMerchandise'))
 
 	$orderReturn = new OrderReturn();
 	$orderReturn->id_customer = intval($cookie->id_customer);
-	$orderReturn->id_order = intval(Tools::getValue('id_order'));
+	$orderReturn->id_order = $id_order;
 	$orderReturn->question = strval(Tools::getValue('returnText'));
 	if (empty($orderReturn->question))
 		Tools::redirect('order-follow.php?errorMsg');
@@ -46,8 +46,8 @@ elseif (Tools::isSubmit('errorMsg'))
 	$smarty->assign('errorMsg', true);
 elseif (Tools::isSubmit('errorDetail'))
 	$smarty->assign('errorDetail', true);
-$smarty->assign('ordersReturn', $ordersReturn);
 
+$smarty->assign('ordersReturn', $ordersReturn);
 include(dirname(__FILE__).'/header.php');
 $smarty->display(_PS_THEME_DIR_.'order-follow.tpl');
 include(dirname(__FILE__).'/footer.php');

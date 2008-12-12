@@ -16,11 +16,48 @@
 		</thead>
 		<tbody>
 		{foreach from=$products item=product name=products}
-			<tr class="{if $smarty.foreach.products.first}first_item{/if} {if $smarty.foreach.products.index % 2}alternate_item{else}item{/if}">
-				<td>{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</td>
-				<td class="bold">{$product.product_name|escape:'htmlall':'UTF-8'}</td>
-				<td><span class="order_qte_span editable">{$product.product_quantity|intval}</span></td>
-			</tr>
+
+			{assign var='quantityDisplayed' value=0}
+			{foreach from=$returnedCustomizations item='customization' name=products}
+				{if $customization.product_id == $product.product_id}
+					<tr class="{if $smarty.foreach.products.first}first_item{/if} {if $smarty.foreach.products.index % 2}alternate_item{else}item{/if}">
+						<td>{if $customization.reference}{$customization.reference|escape:'htmlall':'UTF-8'}{else}--{/if}</td>
+						<td class="bold">{$customization.name|escape:'htmlall':'UTF-8'}</td>
+						<td><span class="order_qte_span editable">{$customization.product_quantity|intval}</span></td>
+					</tr>
+					{assign var='productId' value=$customization.product_id}
+					{assign var='productAttributeId' value=$customization.product_attribute_id}
+					{assign var='customizationId' value=$customization.id_customization}
+					{foreach from=$customizedDatas.$productId.$productAttributeId.$customizationId.datas key='type' item='datas'}
+						<tr class="alternate_item">
+							<td colspan="3">
+								{if $type == $CUSTOMIZE_FILE}
+								<ul class="customizationUploaded">
+									{foreach from=$datas item='data'}
+										<li><img src="{$pic_dir}{$data.value}_small" alt="" class="customizationUploaded" /></li>
+									{/foreach}
+								</ul>
+								{elseif $type == $CUSTOMIZE_TEXTFIELD}
+								<ul class="typedText">{counter start=0 print=false}
+									{foreach from=$datas item='data'}
+										<li>{l s='Text #'}{counter}{l s=':'} {$data.value}</li>
+									{/foreach}
+								</ul>
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
+					{assign var='quantityDisplayed' value=$quantityDisplayed+$customization.product_quantity}
+				{/if}
+			{/foreach}
+
+			{if $product.product_quantity > $quantityDisplayed}
+				<tr class="{if $smarty.foreach.products.first}first_item{/if} {if $smarty.foreach.products.index % 2}alternate_item{else}item{/if}">
+					<td>{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</td>
+					<td class="bold">{$product.product_name|escape:'htmlall':'UTF-8'}</td>
+					<td><span class="order_qte_span editable">{$product.product_quantity|intval}</span></td>
+				</tr>
+			{/if}
 		{/foreach}
 		</tbody>
 	</table>

@@ -27,7 +27,10 @@ else
 				'order' => $order,
 				'state_name' => $state->name[intval($cookie->id_lang)],
 				'return_allowed' => false,
-				'products' => OrderReturn::getOrdersReturnProducts(intval($orderRet->id), $order)));
+				'products' => OrderReturn::getOrdersReturnProducts(intval($orderRet->id), $order),
+				'returnedCustomizations' => OrderReturn::getReturnedCustomizedProducts(intval($orderRet->id_order)),
+				'customizedDatas' => Product::getAllCustomizedDatas(intval($order->id_cart))
+			));
 		}
 		else
 			$errors[] = Tools::displayError('cannot find this order return');
@@ -36,8 +39,11 @@ else
 		$errors[] = Tools::displayError('cannot find this order return');
 }
 
-$smarty->assign('errors', $errors);
-$smarty->assign('nbdaysreturn', intval(Configuration::get('PS_ORDER_RETURN_NB_DAYS')));
+$smarty->assign(array(
+	'errors' => $errors,
+	'nbdaysreturn' => intval(Configuration::get('PS_ORDER_RETURN_NB_DAYS'))
+));
+
 if (Tools::getValue('ajax') == 'true')
 	$smarty->display(_PS_THEME_DIR_.'order-return.tpl');
 else
