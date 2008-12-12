@@ -81,7 +81,7 @@ var ajaxCart = {
 				type: 'GET',
 				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
 				async: true,
-				data: 'ajax_blockcart_display=expand' + '&rand;=' + new Date().getTime()
+				data: 'ajax_blockcart_display=expand' + '&rand=' + new Date().getTime()
 			});
 			
 			
@@ -108,7 +108,7 @@ var ajaxCart = {
 				type: 'GET',
 				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
 				async: true,
-				data: 'ajax_blockcart_display=collapse' + '&rand;=' + new Date().getTime()
+				data: 'ajax_blockcart_display=collapse' + '&rand=' + new Date().getTime()
 			});
 		}
 	},
