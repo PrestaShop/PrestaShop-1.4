@@ -55,7 +55,7 @@ class AdminReturn extends AdminTab
 						$orderReturn = new OrderReturn($id_order_return);
 						if (!Validate::isLoadedObject($orderReturn))
 							die(Tools::displayError());
-						if (sizeof($orderReturn->countProduct()) >= 1)
+						if (intval($orderReturn->countProduct()) >= 1)
 						{
 							Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_return_detail` WHERE `id_order_detail` = '.intval($id_order_return_detail).' AND `id_order_return` = '.intval($id_order_return));
 							Tools::redirectAdmin($currentIndex.'&token='.$this->token);
@@ -68,6 +68,40 @@ class AdminReturn extends AdminTab
 				}
 				else
 					$this->_errors[] = Tools::displayError('impossible to delete order return detail');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		elseif (Tools::isSubmit('deleteorder_customization_return'))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+
+
+
+				if (($id_order_customization_return = intval(Tools::getValue('id_order_customization_return'))) AND Validate::isUnsignedId($id_order_return_detail))
+				{
+					if (($id_order_return = intval(Tools::getValue('id_order_return'))) AND Validate::isUnsignedId($id_order_return))
+					{
+						$orderReturn = new OrderReturn($id_order_return);
+						if (!Validate::isLoadedObject($orderReturn))
+							die(Tools::displayError());
+						if (intval($orderReturn->countProduct()) >= 1)
+						{
+							Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_return_detail` WHERE `id_order_detail` = '.intval($id_order_return_detail).' AND `id_order_return` = '.intval($id_order_return));
+							Tools::redirectAdmin($currentIndex.'&token='.$this->token);
+						}
+						else
+							$this->_errors[] = Tools::displayError('you need at least one product');
+					}
+					else
+						$this->_errors[] = Tools::displayError('impossible to delete order return detail');
+				}
+				else
+					$this->_errors[] = Tools::displayError('impossible to delete order return detail');
+
+
+
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -203,19 +237,8 @@ class AdminReturn extends AdminTab
 							</tr>';
 
 			$order = new Order(intval($obj->id_order));
-			/* Classic products */
-			$products = OrderReturn::getOrdersReturnProducts($obj->id, $order);
-			foreach ($products AS $k => $product)
-			{
-				echo '
-				<tr>
-					<td>'.$product['product_reference'].'</td>
-					<td class="center">'.$product['product_name'].'</td>
-					<td class="center">'.$product['product_quantity'].'</td>
-					<td class="center"><a href="'.$currentIndex.'&deleteorder_return_detail&id_order_return_detail='.$product['id_order_detail'].'&id_order_return='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/delete.gif"></a></td>
-				</tr>';
-			}
-			/* Customized ones */
+			$quantityDisplayed = array();
+			/* Customized products */
 			if ($returnedCustomizations = OrderReturn::getReturnedCustomizedProducts(intval($obj->id_order)))
 			{
 				$allCustomizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
@@ -225,10 +248,10 @@ class AdminReturn extends AdminTab
 					<tr>
 						<td>'.$returnedCustomization['reference'].'</td>
 						<td class="center">'.$returnedCustomization['name'].'</td>
-						<td class="center">'.$returnedCustomization['quantity'].'</td>
+						<td class="center">'.intval($returnedCustomization['product_quantity']).'</td>
 						<td class="center"><a href="">debug</a></td>
 					</tr>';
-					$customizationDatas = &$allCustomizedDatas[intval($returnedCustomization['product_id'])][intval($returnedCustomization['product_attribute_id'])][intval($returnedCustomization['customization_id'])]['datas'];
+					$customizationDatas = &$allCustomizedDatas[intval($returnedCustomization['product_id'])][intval($returnedCustomization['product_attribute_id'])][intval($returnedCustomization['id_customization'])]['datas'];
 					foreach ($customizationDatas AS $type => $datas)
 					{
 						echo '<tr>
@@ -254,8 +277,22 @@ class AdminReturn extends AdminTab
 						echo '</td>
 						</tr>';
 					}
+					$quantityDisplayed[intval($returnedCustomization['id_order_detail'])] = isset($quantityDisplayed[intval($returnedCustomization['id_order_detail'])]) ? $quantityDisplayed[intval($returnedCustomization['id_order_detail'])] + intval($returnedCustomization['product_quantity']) : intval($returnedCustomization['product_quantity']);
 				}
 			}
+
+			/* Classic products */
+			$products = OrderReturn::getOrdersReturnProducts($obj->id, $order);
+			foreach ($products AS $k => $product)
+				if (!isset($quantityDisplayed[intval($product['id_order_detail'])]) OR intval($product['product_quantity']) > intval($quantityDisplayed[intval($product['id_order_detail'])]))
+					echo '
+					<tr>
+						<td>'.$product['product_reference'].'</td>
+						<td class="center">'.$product['product_name'].'</td>
+						<td class="center">'.$product['product_quantity'].'</td>
+						<td class="center"><a href="'.$currentIndex.'&deleteorder_return_detail&id_order_return_detail='.$product['id_order_detail'].'&id_order_return='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/delete.gif"></a></td>
+					</tr>';
+
 			echo '
 							</table>
 						</td>

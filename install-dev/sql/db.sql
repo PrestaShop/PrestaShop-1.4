@@ -640,8 +640,9 @@ CREATE TABLE PREFIX_order_return (
 CREATE TABLE PREFIX_order_return_detail (
   id_order_return INTEGER UNSIGNED NOT NULL,
   id_order_detail  INTEGER UNSIGNED NOT NULL,
-  product_quantity int(10) unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY  (`id_order_return`,`id_order_detail`)
+  id_customization INTEGER(10) NOT NULL DEFAULT 0
+  product_quantity INTEGER(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (id_order_return, id_order_detail, id_customization)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_order_slip (

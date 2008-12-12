@@ -10,12 +10,9 @@ ALTER TABLE PREFIX_order_detail
 
 ALTER TABLE PREFIX_customization ADD quantity INT(10) NOT NULL;
 
-CREATE TABLE IF NOT EXISTS PREFIX_order_customization_return (
-  id_order_detail int(10) NOT NULL,
-  customization_id int(10) NOT NULL,
-  quantity int(10) NOT NULL,
-  PRIMARY KEY(id_order_detail, customization_id)
-);
+ALTER TABLE PREFIX_order_return_detail ADD id_customization INT(10) NOT NULL DEFAULT 0 AFTER id_order_detail;
+ALTER TABLE PREFIX_order_return_detail DROP PRIMARY KEY;
+ALTER TABLE PREFIX_order_return_detail ADD PRIMARY KEY (id_order_return, id_order_detail, id_customization);
 
 
 /* ################################# */
