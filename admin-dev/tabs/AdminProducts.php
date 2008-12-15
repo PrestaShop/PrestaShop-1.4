@@ -595,6 +595,7 @@ class AdminProducts extends AdminTab
 	public function submitAddproduct($token = NULL, $backToCategory = false)
 	{
 		global $currentIndex;
+//die($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
 
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
@@ -716,6 +717,8 @@ class AdminProducts extends AdminTab
 							Hook::addProduct($object);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&token='.($token ? $token : $this->token));
+							if ($backToCategory)
+								Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
 							Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=3&token='.($token ? $token : $this->token));
 						}
 					}
