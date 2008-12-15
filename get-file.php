@@ -1,28 +1,23 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
 
 function displayError($msg)
 {
 	$translations = array(
-	'FR' => array(
-		'return' => 'retour',
-		'Invalid key.' => 'Cl&eacute; non valide.',
-		'This product doesn\'t exists in our store.' => 'Ce produit est inexistant dans notre magasin.',
-		'This product has been deleted.' => 'Ce produit a &eacute;t&eacute; supprim&eacute;.',
-		'This file no more exists.'	=> 'Ce produit n\'existe plus.',
-		'The product deadline is in the past.' => 'La date limite du produit est d&eacute;pass&eacute;.',
-		'Dear customer, you exceed the expiration date.' => 'Cher client, vous avez d&eacute;pass&eacute; la date d\'expiration.',
-		'You reach the maximum number of allowed downloads.' => 'Vous avez d&eacute;pass&eacute; le nombre maximum de t&eacute;l&eacute;chargements autoris&eacute;s.'));
+		'Invalid key.' => Tools::displayError('Invalid key.'),
+		'This product doesn\'t exists in our store.' => Tools::displayError('This product doesn\'t exists in our store.'),
+		'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
+		'This file no more exists.'	=> Tools::displayError('This file no more exists.'),
+		'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
+		'Dear customer, you exceed the expiration date.' => Tools::displayError('Dear customer, you exceed the expiration date.'),
+		'You reach the maximum number of allowed downloads.' => Tools::displayError('You reach the maximum number of allowed downloads.'));
 ?>
 <script type="text/javascript">
 <!--
-alert("<?php echo html_entity_decode(Tools::historyc_l($msg, $translations), ENT_COMPAT, 'UTF-8') ?>");
-if(document.referrer!=document.URL)
-{
-	document.write('<a href="' + document.referrer + '"><?php echo Tools::historyc_l('return', $translations) ?></a>');
-	window.location.href = document.referrer;
-}
+alert("<?php echo html_entity_decode($translations['You reach the maximum number of allowed downloads.'], ENT_QUOTES, 'utf-8'); ?>");
+window.location.href = '<?php echo __PS_BASE_URI__ ?>';
 -->
 </script>
 <?php
@@ -42,7 +37,7 @@ if ($cookie->isLoggedBack() AND Tools::getValue('file'))
 else
 {
 	if (!($key = Tools::getValue('key')))
-		displayError('no key !');
+		displayError('Invalid key.');
 
 	$cookie = new Cookie('ps');
 	Tools::setCookieLanguage();

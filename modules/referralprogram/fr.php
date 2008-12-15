@@ -82,7 +82,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc
 $_MODULE['<{referralprogram}prestashop>referralprogram_5be920293db3e38c81330fd0798336b1'] = 'Champ HTML invalide, le Javascript y est interdit.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
-$_MODULE['<{referralprogram}prestashop>referralprogram_9a90c47f5f320658d2048852203ee2b9'] = 'Nombre de commandes nécéssaires pour obtenir un bon de réduction :';
+$_MODULE['<{referralprogram}prestashop>referralprogram_9a90c47f5f320658d2048852203ee2b9'] = 'Nombre de commandes nécessaires pour obtenir un bon de réduction :';
 $_MODULE['<{referralprogram}prestashop>referralprogram_46b8b61a5ef0bd397591fce508e31506'] = 'Nombre de filleuls affichés sur le formulaire d\'invitation :';
 $_MODULE['<{referralprogram}prestashop>referralprogram_9ad4f790c8bb9be21a2fa388c7730353'] = 'Type de bon :';
 $_MODULE['<{referralprogram}prestashop>referralprogram_37be07209f53a5d636d5c904ca9ae64c'] = 'Pourcentage';

@@ -300,7 +300,7 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$languages = Language::getLanguages();
-			echo '<fieldset class="width2"><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify Translations').'</legend>'.
+			echo '<fieldset class="width2"><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
 			$this->l('Here you can modify translations for every text input on PrestaShop.').'<br />'.
 			$this->l('First, select a section (such as Back Office or Modules), then click the flag representing the language you want to edit.').'<br /><br />
 			<form method="get" action="index.php" id="typeTranslationForm">
@@ -571,11 +571,10 @@ class AdminTranslations extends AdminTab
 			foreach (scandir($dir) AS $file)
 				if (ereg('.php$', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
 				{
-					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
+					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, true)?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
 					foreach($matches[1] as $key)
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}
-
 		$irow = 0;
 		echo '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>'.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />
 		<form method="post" action="'.$currentIndex.'&submitTranslationsErrors=1&lang='.$lang.'&token='.$this->token.'" class="form">

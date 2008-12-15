@@ -1,6 +1,7 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
 
 $cookie = new Cookie('ps');
 if (!$cookie->isLogged())
