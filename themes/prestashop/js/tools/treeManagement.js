@@ -26,6 +26,7 @@ function toggleBranch(jQueryElement, noAnimation) {
 //when the page is loaded...
 $(document).ready(function () {
 	//to do not execute this script as much as it's called...
+alert('GO go go !');
 	if(!$('ul.tree.dhtml').hasClass('dynamized'))
 	{
 		//add growers to each ul.tree elements
@@ -37,6 +38,7 @@ $(document).ready(function () {
 		//collapse every expanded branch
 		$('ul.tree.dhtml span.grower.OPEN').addClass('CLOSE').removeClass('OPEN').parent().find('ul:first').hide();
 		$('ul.tree.dhtml').show();
+		$('ul.tree.dhtml').removeClass('dhtml');
 		
 		//open the tree for the selected branch
 			$('ul.tree.dhtml .selected').parents().each( function() {
