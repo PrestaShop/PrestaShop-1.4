@@ -52,7 +52,24 @@ class		Attribute extends ObjectModel
 		parent::validateFieldsLang();
 		return parent::getTranslationsFields(array('name'));
 	}
-	
+
+	public function delete()
+	{
+		if (($result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.intval($this->id))) === false)
+			return false;
+		$combinationIds = array();
+		if (Db::getInstance()->numRows())
+		{
+			foreach ($result AS $row)
+				$combinationIds[] = intval($row['id_product_attribute']);
+			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.intval($this->id)) === false)
+				return false;
+			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $combinationIds).')') === false)
+				return false;
+		}
+		return parent::delete();
+	}
+
 	/**
 	 * Get all attributes for a given language
 	 *
