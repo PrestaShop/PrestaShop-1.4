@@ -104,3 +104,12 @@ function writeBookmarkLinkObject(url, title, insert)
 		return ('<a rel="sidebar" href="' + escape(url) + '" title="' + escape(title) + '">' + insert + '</a>');
 	return ('');
 }
+
+function checkCustomizations()
+{
+	for (var i = 0; i < customizationFields.length; i++)
+		/* If the field is required and empty then we abort */
+		if (parseInt(customizationFields[i][1]) == 1 && $('#' + customizationFields[i][0]).val() == '')
+			return false;
+	return true;
+}

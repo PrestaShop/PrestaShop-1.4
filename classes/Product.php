@@ -1891,6 +1891,16 @@ class		Product extends ObjectModel
 		return $customizationFields;
 	}
 
+	public function containsRequiredCustomizableField()
+	{
+		if (!$result = Db::getInstance()->ExecuteS('
+			SELECT cf.`id_customization_field`, cf.`required`
+			FROM `'._DB_PREFIX_.'customization_field` cf
+			WHERE cf.`id_product` = '.intval($this->id).' AND cf.`required` = 1'))
+			return false;
+		return Db::getInstance()->numRows();
+	}
+
 	/*
 	* Specify if a product already in base
 	*

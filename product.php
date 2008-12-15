@@ -99,9 +99,11 @@ else
 		elseif (isset($_GET['deletePicture']) AND !$cart->deletePictureToProduct(intval($product->id), intval(Tools::getValue('deletePicture'))))
 			$errors[] = Tools::displayError('An error occured while deleting the selected picture');
 
+		$files = $cookie->getFamily('pictures_'.intval($product->id));
+		$textFields = $cookie->getFamily('textFields_'.intval($product->id));
 		$smarty->assign(array(
-			'pictures' => $cookie->getFamily('pictures_'.intval($product->id)),
-			'textFields' => $cookie->getFamily('textFields_'.intval($product->id))));
+			'pictures' => $files,
+			'textFields' => $textFields));
 
 		$productPriceWithTax = floatval($product->getPrice(true, NULL, 2));
 		$productPriceWithoutEcoTax = floatval($productPriceWithTax - $product->ecotax);
@@ -233,9 +235,12 @@ else
 				'combinations' => $combinations,
 				'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false));
 		}
+		$customizationFields = $product->getCustomizationFields();
 		$smarty->assign(array(
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),
-			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang))));
+			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang)),
+			'customizationIsValid' => $product->containsRequiredCustomizableField()
+		));
 	}
 }
 $smarty->assign(array(

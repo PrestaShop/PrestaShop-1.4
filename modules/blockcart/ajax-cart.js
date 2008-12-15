@@ -115,7 +115,7 @@ var ajaxCart = {
 	
 	//add a product in the cart via ajax
 	add : function(idProduct, idCombination, addedFromProductPage, callerElement, quantity, whishlist, isProductPage){
-		if (isProductPage && !ajaxCart.checkCustomizations())
+		if (isProductPage && !checkCustomizations())
 		{
 			alert(fieldRequired);
 			return ;
@@ -489,14 +489,6 @@ var ajaxCart = {
 			});
 		}
 	},
-
-	checkCustomizations : function () {
-		for (var i = 0; i < customizationFields.length; i++)
-			/* If the field is required and empty then we abort */
-			if (parseInt(customizationFields[i][1]) == 1 && $('#' + customizationFields[i][0]).val() == '')
-				return false;
-		return true;
-	}
 }
 
 //when document is loaded...
