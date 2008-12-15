@@ -37,7 +37,6 @@ $(document).ready(function () {
 		//collapse every expanded branch
 		$('ul.tree.dhtml span.grower.OPEN').addClass('CLOSE').removeClass('OPEN').parent().find('ul:first').hide();
 		$('ul.tree.dhtml').show();
-		$('ul.tree.dhtml').removeClass('dhtml');
 		
 		//open the tree for the selected branch
 			$('ul.tree.dhtml .selected').parents().each( function() {
@@ -52,5 +51,7 @@ $(document).ready(function () {
 		});
 		//mark this 'ul.tree' elements as already 'dynamized'
 		$('ul.tree.dhtml').addClass('dynamized');
+
+		$('ul.tree.dhtml').removeClass('dhtml');
 	}
 });
