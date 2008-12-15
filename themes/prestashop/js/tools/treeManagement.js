@@ -26,7 +26,6 @@ function toggleBranch(jQueryElement, noAnimation) {
 //when the page is loaded...
 $(document).ready(function () {
 	//to do not execute this script as much as it's called...
-alert('GO go go !');
 	if(!$('ul.tree.dhtml').hasClass('dynamized'))
 	{
 		//add growers to each ul.tree elements
