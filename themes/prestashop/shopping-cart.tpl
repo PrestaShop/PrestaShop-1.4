@@ -76,7 +76,7 @@
 			</tr>
 			{/if}
 			<tr class="cart_total_price">
-				<td colspan="6">{if !$carrier->id}{l s='Total:'}{else}{l s='Total:'}{/if}</td>
+				<td colspan="6">{l s='Total:'}</td>
 				<td class="price">{convertPrice price=$total_price}</td>
 			</tr>
 			{if $free_ship > 0}
