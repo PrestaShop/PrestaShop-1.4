@@ -85,7 +85,11 @@ class		OrderHistory extends ObjectModel
 
 	static public function getLastOrderState($id_order)
 	{
-		$result = Db::getInstance()->getRow('SELECT `id_order_state` FROM '._DB_PREFIX_.'order_history WHERE `id_order` = '.intval($id_order).' ORDER BY date_add DESC');
+		$result = Db::getInstance()->getRow('
+		SELECT `id_order_state`
+		FROM `'._DB_PREFIX_.'order_history`
+		WHERE `id_order` = '.intval($id_order).'
+		ORDER BY `date_add` DESC, `id_order_history` DESC');
 		if (!$result OR empty($result) OR !key_exists('id_order_state', $result))
 			return false;
 		return new OrderState(intval($result['id_order_state']));

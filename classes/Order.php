@@ -334,13 +334,10 @@ class		Order extends ObjectModel
 	 */
 	public function getCurrentState()
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT `id_order_state`
-		FROM `'._DB_PREFIX_.'order_history`
-		WHERE `id_order` = '.intval($this->id).'
-		ORDER BY `date_add` DESC, `id_order_history` DESC');
-
-		return isset($result['id_order_state']) ? $result['id_order_state'] : false;
+		$orderHistory = OrderHistory::getLastOrderState($this->id);
+		if (!isset($orderHistory) OR !$orderHistory)
+			return false;
+		return $orderHistory->id;
 	}
 
 	/**
