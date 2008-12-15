@@ -349,8 +349,8 @@ class		Customer extends ObjectModel
 	  */
 	public static function searchByName($query)
 	{
-	 	if (!Validate::isName($query))
-	 		die (Tools::displayError());
+		if (!Validate::isName($query) AND !Validate::isEmail($query))
+			die (Tools::displayError()); 
 
 		return Db::getInstance()->ExecuteS('
 		SELECT c.*
