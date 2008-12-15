@@ -7,4 +7,4 @@ SET NAMES 'utf8';
 DROP TABLE IF EXISTS PREFIX_product_picture;
 
 /* PHP */
-/* PHP:moduleReinstaller('blockmyaccount'); */
+/* PHP:moduleReinstaller('blockmyaccount'); */;

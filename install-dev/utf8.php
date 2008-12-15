@@ -45,7 +45,7 @@ function latin1_database_to_utf8()
 					array('name' => 'product', 'id' => 'id_product', 'fields' => array('ean13', 'reference')),
 					array('name' => 'product_attribute', 'id' => 'id_product_attribute', 'fields' => array('reference', 'ean13')),
 					array('name' => 'product_download', 'id' => 'id_product_download', 'fields' => array('display_filename', 'physically_filename')),
-					array('name' => 'product_lang', 'id' => 'id_product', 'lang' => true, 'fields' => array('description', 'description_short', 'link_rewrite', 'meta_description', 'meta_keywords', 'meta_title', 'name', 'available_now', 'available_later')),
+					array('name' => 'product_lang', 'id' => 'id_product', 'lang' => true, 'fields' => array('description', 'description_short', 'link_rewrite', 'meta_description', 'meta_keywords', 'meta_title', 'name', 'availability')),
 					array('name' => 'profile_lang', 'id' => 'id_profile', 'lang' => true, 'fields' => array('name')),
 					array('name' => 'quick_access', 'id' => 'id_quick_access', 'fields' => array('link')),
 					array('name' => 'quick_access_lang', 'id' => 'id_quick_access', 'lang' => true, 'fields' => array('name')),
