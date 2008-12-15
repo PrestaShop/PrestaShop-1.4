@@ -368,7 +368,7 @@ class AdminOrders extends AdminTab
 		<br />
 		<fieldset style="width: 400px">
 			<legend><img src="../img/admin/tab-customers.gif" /> '.$this->l('Customer information').'</legend>
-			<span style="font-weight: bold; font-size: 14px;"><a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span><br />
+			<span style="font-weight: bold; font-size: 14px;"><a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
 			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, 1, true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
