@@ -39,6 +39,9 @@ class		Customer extends ObjectModel
 	
 	/** @var string Newsletter ip registration */
 	public		$ip_registration_newsletter;
+	
+	/** @var string Newsletter ip registration */
+	public		$newsletter_date_add;
 
 	/** @var boolean Opt-in subscription */
 	public 		$optin;
@@ -84,6 +87,7 @@ class		Customer extends ObjectModel
 		$fields['birthday'] = pSQL($this->birthday);
 		$fields['email'] = pSQL($this->email);
 		$fields['newsletter'] = intval($this->newsletter);
+		$fields['newsletter_date_add'] = pSQL($this->newsletter_date_add);
 		$fields['ip_registration_newsletter'] = pSQL($this->ip_registration_newsletter);
 		$fields['optin'] = intval($this->optin);
 		$fields['passwd'] = pSQL($this->passwd);
@@ -318,7 +322,7 @@ class		Customer extends ObjectModel
 	public static function getNewsletteremails()
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT `email`, `firstname`, `lastname`, `newsletter`, `ip_registration_newsletter`
+		SELECT `email`, `firstname`, `lastname`, `newsletter`, `ip_registration_newsletter`, `newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `newsletter` = 1
 		AND `active` = 1');

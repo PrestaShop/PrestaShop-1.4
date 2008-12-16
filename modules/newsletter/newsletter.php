@@ -88,7 +88,7 @@ class Newsletter extends Module
 	private function _getCustomers()
 	{
 		$rq = Db::getInstance()->ExecuteS('
-		SELECT c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`, c.`ip_registration_newsletter`
+		SELECT c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`, c.`ip_registration_newsletter`, c.`newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE 1
 		'.((isset($_POST['SUSCRIBERS']) AND intval($_POST['SUSCRIBERS']) != 0) ? 'AND c.`newsletter` = '.intval($_POST['SUSCRIBERS'] - 1) : '').'

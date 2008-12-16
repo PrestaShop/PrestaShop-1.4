@@ -31,7 +31,7 @@ class Blocknewsletter extends Module
  	{
  	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false)
  	 		return false;
- 	 	return Db::getInstance()->Execute('CREATE TABLE '._DB_PREFIX_.'newsletter (`id` int(6) NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `ip_registration_newsletter` varchar(15) NOT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM default CHARSET=utf8');
+ 	 	return Db::getInstance()->Execute('CREATE TABLE '._DB_PREFIX_.'newsletter (`id` int(6) NOT NULL AUTO_INCREMENT, `email` varchar(255) NOT NULL, `newsletter_date_add` DATETIME NULL, `ip_registration_newsletter` varchar(15) NOT NULL, PRIMARY KEY(`id`)) ENGINE=MyISAM default CHARSET=utf8');
  	}
  	
  	public function uninstall()
@@ -137,7 +137,7 @@ class Blocknewsletter extends Module
 			/* If the user ins't a customer */
 			elseif ($registerStatus == -1)
 			{
-				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', \''.pSQL($_SERVER['REMOTE_ADDR']).'\')'))
+				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', NOW(), \''.pSQL($_SERVER['REMOTE_ADDR']).'\')'))
 					return $this->error = $this->l('Error during subscription');
 				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');
@@ -145,7 +145,7 @@ class Blocknewsletter extends Module
 			/* If the user is a customer */
 			elseif ($registerStatus == 0)
 			{
-			 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 1, `ip_registration_newsletter` = \''.pSQL($_SERVER['REMOTE_ADDR']).'\' WHERE `email` = \''.pSQL($_POST['email']).'\''))
+			 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 1, newsletter_date_add = NOW(), `ip_registration_newsletter` = \''.pSQL($_SERVER['REMOTE_ADDR']).'\' WHERE `email` = \''.pSQL($_POST['email']).'\''))
 	 	 			return $this->error = $this->l('Error during subscription');
 				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');
