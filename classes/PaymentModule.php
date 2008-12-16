@@ -29,29 +29,30 @@ abstract class PaymentModule extends Module
 		// Insert currencies availability
 		if ($this->currencies_mode == 'checkbox')
 		{
-			Db::getInstance()->Execute('
+			if (!Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'module_currency` (id_module, id_currency)
-			SELECT '.intval($this->id).', id_currency FROM `'._DB_PREFIX_.'currency` WHERE deleted = 0');
+			SELECT '.intval($this->id).', id_currency FROM `'._DB_PREFIX_.'currency` WHERE deleted = 0'))
+				return false;
 		}
 		elseif ($this->currencies_mode == 'radio')
 		{
-			Db::getInstance()->Execute('
+			if (!Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'module_currency` (id_module, id_currency)
-			VALUES ('.intval($this->id).', -2)');
+			VALUES ('.intval($this->id).', -2)'))
+				return false;
 		}
 		else
 			Tools::displayError('No currency mode for payment module');
 		// Insert countries availability
-		Db::getInstance()->Execute('
+		return Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'module_country` (id_module, id_country)
 		SELECT '.intval($this->id).', id_country FROM `'._DB_PREFIX_.'country` WHERE active = 1');
-		return true;
 	}
 	
 	public function uninstall()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE id_module = '.intval($this->id));
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.intval($this->id));
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE id_module = '.intval($this->id)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.intval($this->id)))
+			return false;
 		return parent::uninstall();
 	}
 
@@ -214,11 +215,9 @@ abstract class PaymentModule extends Module
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
 
-				
-				
-				                   $priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
-                   $productsList .=
-                       '<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
+				$priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
+				$productsList .=
+                       '<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
                            <td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
                            <td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
                            <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>

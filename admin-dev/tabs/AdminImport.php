@@ -15,7 +15,7 @@ include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
 
-define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user firendly error or not
+define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
 
 // this value set the number of columns visible on each page
 define('MAX_COLUMNS', 6);
@@ -35,6 +35,7 @@ class AdminImport extends AdminTab
 	public static $default_values = array();
 			
 	public static $validators = array(
+		'active' => array('AdminImport', 'getBoolean'),
 		'tax_rate' => array('AdminImport', 'getPrice'),
 		'price_tex' => array('AdminImport', 'getPrice'), // Tax excluded
 		'price_tin' => array('AdminImport', 'getPrice'), // Tax included
@@ -234,12 +235,16 @@ class AdminImport extends AdminTab
 				'no' => $this->l('Ignore this column'),
 				'id' => $this->l('ID'),			
 				'name' => $this->l('Name *'),	
-				'description' => $this->l('Description'),			        
+				'description' => $this->l('Description'),
 				);
-									
-			break;			
+			break;
 		}
 		parent::__construct();
+	}
+
+	private static function getBoolean($field)
+	{
+		return (boolean)$field;
 	}
 
 	private static function getPrice($field)
@@ -333,7 +338,7 @@ class AdminImport extends AdminTab
 	private static function setDefaultValues(&$info)
 	{
 		foreach (self::$default_values AS $k => $v)
-			if (!isset($info[$k]) or empty($info[$k]))
+			if (!isset($info[$k]) OR $info[$k] == '')
 				$info[$k] = $v;				
 	}
 	
@@ -464,12 +469,11 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-			
+
 			self::setDefaultValues($info);
 			$product = new Product();
 
 			array_walk($info, array('AdminImport', 'fillInfo'), $product);
-			
 			
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
