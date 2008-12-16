@@ -102,7 +102,8 @@ class StatsBestCategories extends ModuleGrid
 	
 	public function getData()
 	{
-		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get(''._DB_PREFIX_.'LANG_DEFAULT'));
+		global $cookie;
+		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT'));
 	
 		$this->_totalCount = $this->getTotalCount();
 
