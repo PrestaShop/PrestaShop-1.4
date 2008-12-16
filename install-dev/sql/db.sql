@@ -746,6 +746,7 @@ CREATE TABLE PREFIX_cart_product (
   id_product INTEGER UNSIGNED NOT NULL,
   id_product_attribute INTEGER UNSIGNED NULL,
   quantity INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  date_add DATETIME NOT NULL,
   INDEX cart_product_index(id_cart, id_product)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

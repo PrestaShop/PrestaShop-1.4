@@ -171,6 +171,19 @@ class		Cart extends ObjectModel
 
 		return Db::getInstance()->NumRows();
 	}
+	
+	public function getLastProduct()
+	{
+		$sql = '
+			SELECT `id_product`
+			FROM `'._DB_PREFIX_.'cart_product`
+			WHERE `id_cart` = '.intval($this->id).'
+			ORDER BY `date_add` DESC';
+		$result = Db::getInstance()->GetRow($sql);
+		if ($result AND isset($result['id_product']) AND $result['id_product'])
+			return $result['id_product'];
+		return false;
+	}
 
 	/**
 	 * Return cart products
@@ -348,6 +361,7 @@ class		Cart extends ObjectModel
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
 					SET `quantity` = '.$qty.'
+					'.($operator == 'up' ? ', `date_add` = \''.pSql(date('Y-m-d h:i:s')).'\'' : '').'
 					WHERE `id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').'
 					AND `id_cart` = '.intval($this->id));
@@ -367,7 +381,7 @@ class		Cart extends ObjectModel
 					return false;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
 				'id_product_attribute' => intval($id_product_attribute), 'id_cart' => intval($this->id),
-				'quantity' => intval($quantity)), 'INSERT'))
+				'quantity' => intval($quantity), 'date_add' => pSql(date('Y-m-d h:i:s'))), 'INSERT'))
 					return false;
 			}
 		}

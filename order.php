@@ -382,7 +382,6 @@ function displaySummary()
 	if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
 		$smarty->assign('carrierPicture', 1);
 	$summary = $cart->getSummaryDetails();
-
 	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
 	Product::addCustomizationPrice($summary['products'], $customizedDatas);
 
@@ -397,9 +396,9 @@ function displaySummary()
 		'shippingCost' => $cart->getOrderTotal(true, 5),
 		'customizedDatas' => $customizedDatas,
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
-		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_));
-	if ($lastProductAdded = intval(Tools::getValue('ipa')))
-		$smarty->assign('lastProductAdded', $lastProductAdded);
+		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
+		'lastProductAdded' => $cart->getLastProduct()
+		));
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
