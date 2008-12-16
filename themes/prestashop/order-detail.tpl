@@ -119,7 +119,8 @@
 				<!-- Customized products -->
 				{if isset($customizedDatas.$productId.$productAttributeId)}
 					<tr class="item">
-						<td colspan="2"><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
+						{if $return_allowed}<td class="order_cb"></td>{/if}
+						<td><label for="cb_{$product.id_order_detail|intval}">{if $product.product_reference}{$product.product_reference|escape:'htmlall':'UTF-8'}{else}--{/if}</label></td>
 						<td class="bold">
 							<label for="cb_{$product.id_order_detail|intval}">{$product.product_name|escape:'htmlall':'UTF-8'}</label>
 						</td>
