@@ -18,7 +18,7 @@
 					<p>
 						<span class="price">{displayWtPrice p=$product.price}</span>
 						<a class="button" href="{$productLink}" title="{l s='View' mod='homefeatured'}">{l s='View' mod='homefeatured'}</a>
-						{if $allow_buy_when_out_of_stock OR ($product.quantity AND $product.quantity > 0) OR $product.allow_oosp}
+						{if ($product.quantity > 0 OR $product.allow_oosp) AND $product.customizable != 2}
 						<a class="exclusive ajax_add_to_cart_button" rel="ajax_id_product_{$product.id_product}" href="{$base_dir}cart.php?qty=1&amp;id_product={$product.id_product}&amp;token={$static_token}&amp;add" title="{l s='Add to cart' mod='homefeatured'}">{l s='Add to cart' mod='homefeatured'}</a>
 						{else}
 						<span class="exclusive">{l s='Add to cart' mod='homefeatured'}</span>

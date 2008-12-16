@@ -1891,18 +1891,32 @@ class		Product extends ObjectModel
 		return $customizationFields;
 	}
 
-	public function containsRequiredCustomizableField()
+	public function getCustomizationFieldIds()
 	{
-		if (!$result = Db::getInstance()->ExecuteS('
-			SELECT cf.`id_customization_field`, cf.`required`
-			FROM `'._DB_PREFIX_.'customization_field` cf
-			WHERE cf.`id_product` = '.intval($this->id).' AND cf.`required` = 1'))
+		return Db::getInstance()->ExecuteS('SELECT `id_customization_field`, `type` FROM `'._DB_PREFIX_.'customization_field` WHERE `id_product` = '.intval($this->id));
+	}
+
+	public function getRequiredCustomizableFields()
+	{
+		return Db::getInstance()->ExecuteS('SELECT `id_customization_field`, `type` FROM `'._DB_PREFIX_.'customization_field` WHERE `id_product` = '.intval($this->id).' AND `required` = 1');
+	}
+	
+	public function hasAllRequiredCustomizableFields()
+	{
+		global $cookie;
+
+		$fields = array_merge($cookie->getFamily('pictures_'.intval($this->id)), $cookie->getFamily('textFields_'.intval($this->id)));
+		if (!$requiredFields = $this->getRequiredCustomizableFields())
 			return false;
-		return Db::getInstance()->numRows();
+		$prefix = array(_CUSTOMIZE_FILE_ => 'pictures_'.intval($this->id).'_', _CUSTOMIZE_TEXTFIELD_ => 'textFields_'.intval($this->id).'_');
+		foreach ($requiredFields AS $field)
+			if (!isset($fields[$prefix[$field['type']].$field['id_customization_field']]) OR empty($fields[$prefix[$field['type']].$field['id_customization_field']]))
+				return false;
+		return true;
 	}
 
 	/*
-	* Specify if a product already in base
+	* Specify if a product is already in database
 	*
 	* @param $id_product Product id
 	* @return boolean

@@ -17,7 +17,7 @@
 
 				<span class="price">{convertPrice price=$product.price}</span>
 				<span class="availability">{if ($product.allow_oosp OR $product.quantity > 0)}{l s='Available'}{else}{l s='Out of stock'}{/if}</span>
-				{if ($product.allow_oosp OR $product.quantity > 0)}
+				{if ($product.allow_oosp OR $product.quantity > 0) && $product.customizable != 2}
 					<a class="button ajax_add_to_cart_button exclusive" rel="ajax_id_product_{$product.id_product|intval}" href="{$base_dir}cart.php?add&amp;id_product={$product.id_product|intval}&amp;token={$static_token}">{l s='Add to cart'}</a>
 				{else}
 						<span class="exclusive">{l s='Add to cart'}</span>

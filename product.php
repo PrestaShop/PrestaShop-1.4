@@ -5,9 +5,12 @@ function pictureUpload(Product $product, Cart $cart)
 {
 	global $errors;
 
+	if (!$fieldIds = $product->getCustomizationFieldIds())
+		return false;
 	$authorizedFileFields = array();
-	for ($i = 0; $i < intval($product->uploadable_files); $i++)
-		$authorizedFileFields[] = 'img'.intval($i);
+	foreach ($fieldIds AS $fieldId)
+		if ($fieldId['type'] == _CUSTOMIZE_FILE_)
+			$authorizedFileFields[intval($fieldId['id_customization_field'])] = 'file'.intval($fieldId['id_customization_field']);
 	$indexes = array_flip($authorizedFileFields); 
 	foreach ($_FILES AS $fieldName => $file)
 		if (in_array($fieldName, $authorizedFileFields) AND isset($file['tmp_name']) AND !empty($file['tmp_name']))
@@ -26,15 +29,19 @@ function pictureUpload(Product $product, Cart $cart)
 			else
 				$cart->addPictureToProduct(intval($product->id), $indexes[$fieldName], $fileName);
 		}
+	return true;
 }
 
 function textRecord(Product $product, Cart $cart)
 {
 	global $errors;
 
+	if (!$fieldIds = $product->getCustomizationFieldIds())
+		return false;
 	$authorizedTextFields = array();
-	for ($i = 0; $i < intval($product->text_fields); $i++)
-		$authorizedTextFields[] = 'textField'.intval($i);
+	foreach ($fieldIds AS $fieldId)
+		if ($fieldId['type'] == _CUSTOMIZE_TEXTFIELD_)
+			$authorizedTextFields[intval($fieldId['id_customization_field'])] = 'textField'.intval($fieldId['id_customization_field']);
 	$indexes = array_flip($authorizedTextFields);
 	foreach ($_POST AS $fieldName => $value)
 		if (in_array($fieldName, $authorizedTextFields) AND !empty($value))
@@ -235,11 +242,9 @@ else
 				'combinations' => $combinations,
 				'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false));
 		}
-		$customizationFields = $product->getCustomizationFields();
 		$smarty->assign(array(
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),
-			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang)),
-			'customizationIsValid' => $product->containsRequiredCustomizableField()
+			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang))
 		));
 	}
 }

@@ -9,7 +9,7 @@ class HomeFeatured extends Module
 	{
 		$this->name = 'homefeatured';
 		$this->tab = 'Tools';
-		$this->version = 0.8;
+		$this->version = '0.9';
 
 		parent::__construct(); // The parent construct is required for translations
 

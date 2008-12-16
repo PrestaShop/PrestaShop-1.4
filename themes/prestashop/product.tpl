@@ -195,7 +195,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/if}
 
 			<!-- quantity wanted -->
-			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}{if $product->customizable} class="required"{/if}>
+			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
 				<label>{l s='Quantity :'}</label>
 				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}1{/if}" size="2" maxlength="3" />
 			</p>
@@ -339,9 +339,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{counter start=0 assign='customizationField'}
 				{foreach from=$customizationFields item='field' name='customizationFields'}
 					{if $field.type == 0}
-						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$customizationField}
+						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
 							{if isset($pictures.$key)}<div class="customizationUploadBrowse"><img src="{$pic_dir}{$pictures.$key}_small" alt="" /><a href="{$link->getUrlWith('deletePicture', $customizationField)}"><img src="{$img_dir}icon/delete.gif" alt="{l s='delete'}" class="customization_delete_icon" /></a></div>{/if}
-							<div class="customizationUploadBrowse"><input type="file" name="img{$customizationField}" id="img{$customizationField}" value="" class="customization_block_input" />{if $field.required}<sup>*</sup>{/if}
+							<div class="customizationUploadBrowse"><input type="file" name="file{$field.id_customization_field}" id="img{$customizationField}" value="" class="customization_block_input" />{if $field.required}<sup>*</sup>{/if}
 							<div class="customizationUploadBrowseDescription">{if !empty($field.name)}{$field.name}{else}{l s='Please select an image file from your hard drive'}{/if}</div></div>
 						</li>
 						{counter}
@@ -356,8 +356,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{counter start=0 assign='customizationField'}
 				{foreach from=$customizationFields item='field' name='customizationFields'}
 					{if $field.type == 1}
-						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='textFields_'|cat:$product->id|cat:'_'|cat:$customizationField}
-							{if !empty($field.name)}{$field.name}{/if}<input type="text" name="textField{$customizationField}" id="textField{$customizationField}" value="{if isset($textFields.$key)}{$textFields.$key|stripslashes}{/if}" class="customization_block_input" />{if $field.required}<sup>*</sup>{/if}
+						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='textFields_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
+							{if !empty($field.name)}{$field.name}{/if}<input type="text" name="textField{$field.id_customization_field}" id="textField{$customizationField}" value="{if isset($textFields.$key)}{$textFields.$key|stripslashes}{/if}" class="customization_block_input" />{if $field.required}<sup>*</sup>{/if}
 						</li>
 						{counter}
 					{/if}

@@ -55,7 +55,9 @@ if ($add OR Tools::getIsset('update') OR $delete)
 						$errors[] = Tools::displayError('product is no longer available');
 			}
 			elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
-					$errors[] = Tools::displayError('product is no longer available');
+				$errors[] = Tools::displayError('product is no longer available');
+			elseif ($add AND !$producToAdd->hasAllRequiredCustomizableFields())
+				$errors[] = Tools::displayError('please fill all required fields');
 			/* Check vouchers compatibility */
 			if ($add AND (intval($producToAdd->reduction_price) OR intval($producToAdd->reduction_percent) OR $producToAdd->on_sale))
 			{
