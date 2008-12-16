@@ -616,7 +616,7 @@ class AdminOrders extends AdminTab
 		$slips = OrderSlip::getOrdersSlip($order->id_customer, $order->id);
 		echo '
 		<div style="float: left">
-			<form action="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'" method="post" onsubmit="if (getE(\'visibility\').checked == true) return confirm(\''.addslashes($this->l('Do you want to send this message to the customer?')).'\');">
+			<form action="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'" method="post" onsubmit="if (getE(\'visibility\').checked == true) return confirm(\''.$this->l('Do you want to send this message to the customer?', __CLASS__, true, false).'\');">
 			<fieldset style="width: 400px;">
 				<legend style="cursor: pointer;" onclick="openCloseLayer(\'message\');openCloseLayer(\'message_m\');"><img src="../img/admin/email_edit.gif" /> '.$this->l('New message').'</legend>
 				<div id="message_m" style="display: '.(Tools::getValue('message') ? 'none' : 'block').'">

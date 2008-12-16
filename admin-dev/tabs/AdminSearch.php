@@ -175,7 +175,7 @@ class AdminSearch extends AdminTab
 					<td>
 						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this product').'" /></a>&nbsp;
-						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Do you want to delete').' '.$product['name']).' ?\');">
+						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Do you want to delete', __CLASS__, true, false).' '.addslashes($product['name']).$this->l('?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" /></a>
 					</td>
 				</tr>';
@@ -214,7 +214,7 @@ class AdminSearch extends AdminTab
 						<img src="../img/admin/details.gif" alt="'.$this->l('View orders').'" /></a>
 						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this customer').'" /></a>
-						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure?')).'\');">
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this customer').'" /></a>
 					</td>
 				</tr>';

@@ -1059,7 +1059,7 @@ class AdminProducts extends AdminTab
 								<td width="100px">&nbsp;'.$qD['quantity'].'</td>
 								<td width="100px">'.($qD['id_discount_type'] == 1 ? $qD['value'].'%' : Tools::displayPrice($qD['value'], $defaultCurrency)).'</td>
 								<td width="50px" style="text-align:center;">
-									<a href="index.php?tab=AdminCatalog&id_category='.Tools::getValue('id_category').'&id_product='.Tools::getValue('id_product').'&token='.Tools::getValue('token').'&deleteQuantityDiscount&id_quantity_discount='.$qD['id_discount_quantity'].'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure?')).'\');">
+									<a href="index.php?tab=AdminCatalog&id_category='.Tools::getValue('id_category').'&id_product='.Tools::getValue('id_product').'&token='.Tools::getValue('token').'&deleteQuantityDiscount&id_quantity_discount='.$qD['id_discount_quantity'].'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 										<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this discount').'" />
 									</a>
 								</td>
@@ -1258,7 +1258,7 @@ class AdminProducts extends AdminTab
 			echo '				<option value="'.$id_manufacturer.'" selected="selected">'.Manufacturer::getNameById($id_manufacturer).'</option>
 								<option disabled="disabled">----------</option>';
 		echo '
-							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.intval(Tab::getIdFromClassName('AdminManufacturers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
+							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.intval(Tab::getIdFromClassName('AdminManufacturers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
 							<script type="text/javascript">
 								var ajaxManufacturersClicked = false;
 								$("select#id_manufacturer").focus(
@@ -1288,7 +1288,7 @@ class AdminProducts extends AdminTab
 			echo '				<option value="'.$id_supplier.'" selected="selected">'.Supplier::getNameById($id_supplier).'</option>
 								<option disabled="disabled">----------</option>';
 		echo '
-							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminSuppliers&addsupplier&token='.Tools::getAdminToken('AdminSuppliers'.intval(Tab::getIdFromClassName('AdminSuppliers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
+							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminSuppliers&addsupplier&token='.Tools::getAdminToken('AdminSuppliers'.intval(Tab::getIdFromClassName('AdminSuppliers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
 							<script type="text/javascript">
 								var ajaxSuppliersClicked = false;
 								$("select#id_supplier").focus(
@@ -1614,7 +1614,7 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 							<input type="radio" name="out_of_stock" id="out_of_stock_1" value="0" '.(intval($this->getFieldValue($obj, 'out_of_stock')) == 0 ? 'checked="checked"' : '').'/> <label for="out_of_stock_1" class="t">'.$this->l('Deny orders').'</label>
 							<br /><input type="radio" name="out_of_stock" id="out_of_stock_2" value="1" '.($this->getFieldValue($obj, 'out_of_stock') == 1 ? 'checked="checked"' : '').'/> <label for="out_of_stock_2" class="t">'.$this->l('Allow orders').'</label>
-							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t">'.$this->l('Default:').' <i>'.$this->l((intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.intval(Tab::getIdFromClassName('AdminPPreferences')).intval($cookie->id_employee)).'"  onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');">'.$this->l('Preferences').'</a>)</label>
+							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t">'.$this->l('Default:').' <i>'.$this->l((intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.intval(Tab::getIdFromClassName('AdminPPreferences')).intval($cookie->id_employee)).'"  onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');">'.$this->l('Preferences').'</a>)</label>
 						</td>
 					</tr>
 
@@ -1994,7 +1994,7 @@ class AdminProducts extends AdminTab
 					<td class="center"><a href="'.$currentIndex.'&id_image='.$image['id_image'].'&coverImage&token='.($token ? $token : $this->token).'"><img src="../img/admin/'.($image['cover'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
 					<td class="center">
 						<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&editImage&tabs=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/edit.gif" alt="'.$this->l('Modify this image').'" title="'.$this->l('Modify this image').'" /></a>
-						<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&deleteImage&tabs=1&token='.($token ? $token : $this->token).'" onclick="return confirm(\''.addslashes($this->l('Are you sure?')).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this image').'" title="'.$this->l('Delete this image').'" /></a>
+						<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&deleteImage&tabs=1&token='.($token ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this image').'" title="'.$this->l('Delete this image').'" /></a>
 					</td>
 				</tr>';
 			}
@@ -2158,7 +2158,7 @@ class AdminProducts extends AdminTab
 			  <td style="padding-bottom:5px;">
 				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this attribute').'" class="button" onclick="attr_selectall();" /> </span>
 				<span id="ResetSpan" style="float: left; margin-left: 8px; display: none;">
-				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="if (!confirm(\''.addslashes($this->l('Are you sure you want to cancel?', __CLASS__, true)).'\')) return;
+				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="if (!confirm(\''.$this->l('Are you sure you want to cancel?', __CLASS__, true, false).'\')) return;
 				  init_elems(); getE(\'submitProductAttribute\').value = \''.$this->l('Add this attributes group', __CLASS__, true).'\';
 				  getE(\'id_product_attribute\').value = -1; openCloseLayer(\'ResetSpan\');" class="button" value="'.$this->l('Cancel modification').'" /></span><span style="clear: both;"></span>
 			  </td>
@@ -2229,7 +2229,7 @@ class AdminProducts extends AdminTab
 							<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this combination').'"
 							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
 							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\');" /></a>&nbsp;
-							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure?')).'\');">
+							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /></a></td>
 						</tr>';
 					}
@@ -2271,14 +2271,14 @@ class AdminProducts extends AdminTab
 								echo '
 								</select>
 								&nbsp;&nbsp;<input type="submit" value="'.$this->l('OK').'" name="submitAdd'.$this->table.'" class="button" />
-								&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?tab=AdminAttributesGroups&token='.Tools::getAdminToken('AdminAttributesGroups'.intval(Tab::getIdFromClassName('AdminAttributesGroups')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');"><img src="../img/admin/asterisk.gif" alt="" /> '.$this->l('Color attribute management').'</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?tab=AdminAttributesGroups&token='.Tools::getAdminToken('AdminAttributesGroups'.intval(Tab::getIdFromClassName('AdminAttributesGroups')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/asterisk.gif" alt="" /> '.$this->l('Color attribute management').'</a>
 								<p >'.$this->l('Active the color choice by selecting a color attribute group.').'</p>
 							</td>
 						</tr>
 					</table>
 					<hr />
 					<div style="text-align:center;">
-						<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
+						<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
 					</div>
 					';
 				}
@@ -2372,7 +2372,7 @@ class AdminProducts extends AdminTab
 			echo '</table>
 			<hr />
 			<div style="text-align:center;">
-				<a href="index.php?tab=AdminFeatures&addfeature&token='.Tools::getAdminToken('AdminFeatures'.intval(Tab::getIdFromClassName('AdminFeatures')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Are you sure you want to delete entered product information?')).'\');"><img src="../img/admin/add.gif" alt="new_features" title="'.$this->l('Create new features').'" />&nbsp;'.$this->l('Create new features').'</a>
+				<a href="index.php?tab=AdminFeatures&addfeature&token='.Tools::getAdminToken('AdminFeatures'.intval(Tab::getIdFromClassName('AdminFeatures')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="new_features" title="'.$this->l('Create new features').'" />&nbsp;'.$this->l('Create new features').'</a>
 			</div>';
 		}
 		else

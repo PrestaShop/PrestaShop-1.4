@@ -152,7 +152,7 @@ class AdminImages extends AdminTab
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-			<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.addslashes($this->l('Are you sure?')).'\');" />
+			<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
 		</form>';
 	}
 

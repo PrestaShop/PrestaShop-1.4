@@ -1141,12 +1141,12 @@ abstract class AdminTab
 						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>';
 					if ($this->delete)
 						echo '
-						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.addslashes($this->l('Delete item #')).$id.' ?\');">
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, true, false).$id.$this->l('?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>';
 					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 					if ($this->duplicate)
 						echo '
-						<a class="pointer" onclick="if (confirm(\''.addslashes($this->l('Copy images too?')).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+						<a class="pointer" onclick="if (confirm(\''.$this->l('Copy images too?', __CLASS__, true, false).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
 						<img src="../img/admin/add.gif" border="0" alt="'.$this->l('Duplicate').'" title="'.$this->l('Duplicate').'" /></a>';
 					echo '</td>';
 				}

@@ -58,7 +58,7 @@ class AdminSlip extends AdminTab
 				<a href="pdf.php?id_order_slip='.$tr['id_order_slip'].'">
 				<img src="../img/admin/details.gif" border="0" alt="'.$this->l('View').'" title="'.$this->l('View').'" /></a>';
 				echo '
-				<a href="'.$currentIndex.'&id_'.$this->table.'='.$tr['id_order_slip'].'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.addslashes($this->l('Delete item #')).$tr['id_order_slip'].' ?\');">
+				<a href="'.$currentIndex.'&id_'.$this->table.'='.$tr['id_order_slip'].'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, true, false).$tr['id_order_slip'].$this->l('?', __CLASS__, true, false).'\');">
 				<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>';
 				echo '</td>';
 				echo '</tr>';

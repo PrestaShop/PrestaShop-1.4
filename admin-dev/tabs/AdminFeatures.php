@@ -89,7 +89,7 @@ class AdminFeatures extends AdminTab
 								<a href="'.$currentIndex.'&id_feature_value='.$feature['id_feature_value'].'&updatefeature_value&token='.$this->token.'">
 								<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>&nbsp;
 								<a href="'.$currentIndex.'&id_feature_value='.$feature['id_feature_value'].'&deletefeature_value&token='.$this->token.'"
-								onclick="return confirm(\''.addslashes($this->l('Delete value')).' #'.$feature['id_feature_value'].'?\');">
+								onclick="return confirm(\''.$this->l('Delete value', __CLASS__, true, false).' #'.$feature['id_feature_value'].'?\');">
 								<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>
 							</td>
 						</tr>';
@@ -100,7 +100,7 @@ class AdminFeatures extends AdminTab
 			echo '
 					</table>
 					<p><input type="Submit" class="button" name="submitDelfeature_value" value="'.$this->l('Delete selection').'"
-					onclick="changeFormParam(this.form, \'?tab=AdminFeatures\', '.$id.'); return confirm(\''.addslashes($this->l('Delete selected items?')).'\');" /></p>
+					onclick="changeFormParam(this.form, \'?tab=AdminFeatures\', '.$id.'); return confirm(\''.$this->l('Delete selected items?', __CLASS__, true, false).'\');" /></p>
 					</div>
 					</td>';
 
@@ -108,7 +108,7 @@ class AdminFeatures extends AdminTab
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center">
 					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&update'.$this->table.'&token='.$this->token.'">
 					<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>&nbsp;
-					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.addslashes($this->l('Delete item')).' #'.$id.'?\');">
+					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.$this->l('Delete item', __CLASS__, true, false).' #'.$id.'?\');">
 					<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>
 				</td>
 			</tr>';

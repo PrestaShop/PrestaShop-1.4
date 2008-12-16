@@ -247,6 +247,7 @@ $_ERRORS['5eac234aa1a2dfba8005259230b3881e'] = 'mot de passe manquant';
 $_ERRORS['962c91be4b1056412febf0c272760814'] = 'mot de passe requis';
 $_ERRORS['b94e28fcb3594165369a78965f7a96a0'] = 'mot de passe trop long';
 $_ERRORS['ee156665b0cfb44463a1466e50fc7869'] = 'Merci de choisir une langue et un thème';
+$_ERRORS['9ba0c2ea5cb877cb5679e9c50cce4b2c'] = 'merci de remplir tous les champs requis';
 $_ERRORS['73b79f52276b5985f70f7758259ae28b'] = 'merci de remplir le formulaire de recherche';
 $_ERRORS['aa5e06845f2bbda22045ead21a7ff273'] = 'merci de remplir le formulaire de recherche';
 $_ERRORS['fb32fd9bb2f3b22d3373f31cda7b4494'] = 'veuillez sélectionner un contact dans la liste';
