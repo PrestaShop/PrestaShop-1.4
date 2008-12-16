@@ -35,26 +35,37 @@ class StatsBestCustomers extends ModuleGrid
 				'id' => 'lastname',
 				'header' => $this->l('Lastname'),
 				'dataIndex' => 'lastname',
-				'width' => 100
+				'width' => 50
 			),
 			array(
 				'id' => 'firstname',
 				'header' => $this->l('Firstname'),
 				'dataIndex' => 'firstname',
-				'width' => 100
+				'width' => 50
 			),
 			array(
 				'id' => 'email',
 				'header' => $this->l('Email'),
 				'dataIndex' => 'email',
-				'width' => 150,
-				'align' => "right"
+				'width' => 120
 			),
 			array(
-				'id' => 'total',
-				'header' => $this->l('Total'),
-				'dataIndex' => 'total',
-				'width' => 50,
+				'id' => 'totalVisits',
+				'header' => $this->l('Visits'),
+				'dataIndex' => 'totalVisits',
+				'width' => 80,
+				'align' => 'right'),
+			array(
+				'id' => 'totalPageViewed',
+				'header' => $this->l('Page viewed'),
+				'dataIndex' => 'totalPageViewed',
+				'width' => 80,
+				'align' => 'right'),
+			array(
+				'id' => 'totalMoneySpent',
+				'header' => $this->l('Money spent'),
+				'dataIndex' => 'totalMoneySpent',
+				'width' => 80,
 				'align' => 'right')
 		);
 		
@@ -84,7 +95,6 @@ class StatsBestCustomers extends ModuleGrid
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
 			<h2 class="space">'.$this->l('Develop clients\' loyalty').'</h2>
-			<h3>'.$this->l('What should you do?').'</h3>
 			<p class="space">
 				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop its loyalty, in other words to make him come back in your webshop.').' <br />
 				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
@@ -115,14 +125,38 @@ class StatsBestCustomers extends ModuleGrid
 	{
 		$this->_totalCount = $this->getTotalCount();		
 		$this->_query = '
-		SELECT t.`id_customer` , t.`lastname` , t.`firstname` , t.`email`, SUM(t.`total_paid_real`) AS total
-		FROM (
-			SELECT c.`id_customer` , c.`lastname` , c.`firstname` , c.`email`, o.`total_paid_real` FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'customer` c ON c.id_customer = o.id_customer
-			WHERE ( SELECT os.`invoice` FROM `'._DB_PREFIX_.'orders` oo LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order` LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state` WHERE oo.`id_order` = o.`id_order` ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC LIMIT 1 ) = 1
-		) t
-		GROUP BY t.`id_customer` , t.`lastname` , t.`firstname` , t.`email`
-		';	
+		SELECT
+	c.`id_customer`,
+	c.`lastname`,
+	c.`firstname`,
+	c.`email`,
+	COUNT(DISTINCT co.`id_connections`) AS totalVisits,
+	COUNT(cop.`id_page`) AS totalPageViewed,
+	IFNULL(t.`total`, 0) AS totalMoneySpent
+FROM `'._DB_PREFIX_.'customer` c
+LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.`id_customer` = g.`id_customer`
+LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.`id_guest` = co.`id_guest`
+LEFT JOIN `'._DB_PREFIX_.'connections_page` cop ON co.`id_connections` = cop.`id_connections`
+LEFT JOIN
+(
+	SELECT
+	o.`id_customer`,
+	IFNULL(SUM(o.`total_paid_real`), 0) AS total
+	FROM `'._DB_PREFIX_.'orders` o
+	WHERE
+	(
+		SELECT
+			os.`invoice`
+		FROM `'._DB_PREFIX_.'orders` oo
+		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
+		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+		WHERE oo.`id_order` = o.`id_order`
+		ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+		LIMIT 1
+	) = 1
+	GROUP BY o.`id_customer`
+) t ON c.`id_customer` = t.`id_customer`
+GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))
 		{
 			$this->_query .= ' ORDER BY `'.$this->_sort.'`';
