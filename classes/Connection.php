@@ -27,7 +27,7 @@ class Connection extends ObjectModel
 	/** @var string */	
 	public $date_add;
 
-	protected	$fieldsRequired = array ('id_guest', 'id_page', 'ip_address');	
+	protected	$fieldsRequired = array ('id_guest', 'id_page');	
 	protected	$fieldsSize = array ('http_referer' => 256);	
 	protected	$fieldsValidate = array ('id_guest' => 'isUnsignedId', 'id_page' => 'isUnsignedId',
 										 'ip_address' => 'isInt', 'http_referer' => 'isAbsoluteUrl');
@@ -87,7 +87,7 @@ class Connection extends ObjectModel
 			$connection = new Connection();
 			$connection->id_guest = intval($cookie->id_guest);
 			$connection->id_page = Page::getCurrentId();
-			$connection->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
+			$connection->ip_address = isset($_SERVER['REMOTE_ADDR']) ? ip2long($_SERVER['REMOTE_ADDR']) : '';
 			$connection->http_referer = $referer;
 			$connection->add();
 			$cookie->id_connections = $connection->id;

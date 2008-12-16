@@ -275,7 +275,7 @@ CREATE TABLE PREFIX_connections (
   id_connections INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   id_guest INTEGER(10) UNSIGNED NOT NULL,
   id_page INTEGER(10) UNSIGNED NOT NULL,
-  ip_address VARCHAR(16) NOT NULL,
+  ip_address VARCHAR(16) NULL,
   date_add DATETIME NOT NULL,
   http_referer VARCHAR(256) NULL,
   PRIMARY KEY(id_connections),
