@@ -7,9 +7,9 @@
 	{include file=$tpl_dir./errors.tpl}
 {else}
 
-	<p>{if $manufacturers|@count > 1}{l s='There are'} <span class="bold">{$manufacturers|@count} {l s='manufacturers.'}</span>{else}{l s='There is'} <span class="bold">{$manufacturers|@count} {l s='manufacturer.'}</span>{/if}</p>
+	<p>{if $nbManufacturers > 1}{l s='There are'} <span class="bold">{$nbManufacturers} {l s='manufacturers.'}</span>{else}{l s='There is'} <span class="bold">{$nbManufacturers} {l s='manufacturer.'}</span>{/if}</p>
 
-{if $manufacturers|@count > 0}
+{if $nbManufacturers > 0}
 	{include file=$tpl_dir./product-sort.tpl}
 	<ul id="manufacturers_list">
 	{foreach from=$manufacturers item=manufacturer}

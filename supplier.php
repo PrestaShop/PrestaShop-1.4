@@ -35,21 +35,21 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 }
 else
 {
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, false, intval($cookie->id_lang), false);
+	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang));
+	$nbProducts = sizeof($data);
+	include(dirname(__FILE__).'/pagination.php');
+
+	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), false, $p, $n);
 	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
 	foreach ($data AS &$item)
 		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
 			Language::getIsoById(intval($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
 
-	$nbProducts = sizeof($data); // pagination hack
-	include(dirname(__FILE__).'/pagination.php');
-	
 	$smarty->assign(array(
-		'pages_nb' => ceil(sizeof($data) / intval($n)),
-		'nb'.$className.'s' => sizeof($data),
+		'pages_nb' => ceil($nbProducts / intval($n)),
+		'nb'.$className.'s' => $nbProducts,
 		$objectType.'s' => $data
 	));
-
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');
 }
 

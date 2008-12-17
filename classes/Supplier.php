@@ -63,7 +63,7 @@ class		Supplier extends ObjectModel
 	  *
 	  * @return array Suppliers
 	  */
-	static public function getSuppliers($getNbProducts = false, $prefix = false, $id_lang = 0, $active = true)
+	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
 	{
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
@@ -72,10 +72,10 @@ class		Supplier extends ObjectModel
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
 		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')';
 		if ($getNbProducts)
-			$query .= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON p.`id_supplier` = s.`id_supplier`
-			'.($active ? 'WHERE p.`active` = 1.' : '').'
+			$query .= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON (p.`id_supplier` = s.`id_supplier`)
+			'.($active ? 'WHERE p.`active` = 1' : '').'
 			GROUP BY s.`id_supplier`';
-		$query .= ' ORDER BY s.`name` ASC';
+		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$suppliers = Db::getInstance()->ExecuteS($query);
 		if ($suppliers === false)
 			return false;

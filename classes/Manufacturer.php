@@ -117,7 +117,7 @@ class		Manufacturer extends ObjectModel
 	  * @param boolean $getNbProducts [optional] return products numbers for each
 	  * @return array Manufacturers
 	  */
-	static public function getManufacturers($getNbProducts = false, $prefix = false, $id_lang = 0, $active = true)
+	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
 	{
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
@@ -126,10 +126,10 @@ class		Manufacturer extends ObjectModel
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')';
 		if ($getNbProducts)
-			$sql.= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON p.`id_manufacturer` = m.`id_manufacturer`
-			'.($active ? 'WHERE p.`active` = 1.' : '').'
+			$sql.= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON (p.`id_manufacturer` = m.`id_manufacturer`)
+			'.($active ? 'WHERE p.`active` = 1' : '').'
 			GROUP BY m.`id_manufacturer`';
-		$sql.= ' ORDER BY m.`name` ASC';
+		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$manufacturers = Db::getInstance()->ExecuteS($sql);
 		if ($manufacturers === false)
 			return false;
