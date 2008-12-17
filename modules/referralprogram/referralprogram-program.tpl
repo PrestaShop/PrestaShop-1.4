@@ -88,7 +88,7 @@
 				<p class="bold">
 					{l s='Important: Your friends\' e-mail addresses will only be used in the referral program. They will never be used for other purposes.' mod='referralprogram'}
 				</p>
-				<p class="checkbox"
+				<p class="checkbox">
 					<input type="checkbox" name="conditionsValided" id="conditionsValided" value="1" {if isset($smarty.post.conditionsValided) AND $smarty.post.conditionsValided eq 1}checked="checked"{/if} />
 					<label for="conditionsValided">
 						{l s='I have read the conditions of the referral program and accept them in their entirety. I also agree to have my friend reminded again in two weeks (if he or she still has not made a purchase on conditions).' mod='referralprogram'}
