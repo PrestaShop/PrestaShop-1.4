@@ -55,7 +55,7 @@ if (Tools::isSubmit('submitAccount'))
 	else
 	{
 		$customer = new Customer();
-		if ($_POST['newsletter'])
+		if (Tools::isSubmit('newsletter'))
 		{
 			$customer->ip_registration_newsletter = pSQL($_SERVER['REMOTE_ADDR']);
 			$customer->newsletter_date_add = pSQL(date('Y-m-d h:i:s'));
