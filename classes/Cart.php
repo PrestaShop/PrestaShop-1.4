@@ -308,6 +308,14 @@ class		Cart extends ObjectModel
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_discount', array('id_discount' => intval($id_discount), 'id_cart' => intval($this->id)), 'INSERT');
 	}
 
+	public function containsProduct($id_product, $id_product_attribute)
+	{
+		return Db::getInstance()->getRow('
+			SELECT `quantity`
+			FROM `'._DB_PREFIX_.'cart_product`
+			WHERE `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute).' AND `id_cart` = '.intval($this->id));
+	}
+
 	/**
 	 * Update product quantity
 	 *
@@ -323,11 +331,7 @@ class		Cart extends ObjectModel
 		else
 		{
 			/* Check if the product is already in the cart */
-			$result = Db::getInstance()->getRow('
-			SELECT `quantity`
-			FROM `'._DB_PREFIX_.'cart_product`
-			WHERE `id_product` = '.intval($id_product).
-			($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').' AND `id_cart` = '.intval($this->id));
+			$result = $this->containsProduct($id_product, $id_product_attribute);
 
 			/* Update quantity if product already exist */
 			if (Db::getInstance()->NumRows())
