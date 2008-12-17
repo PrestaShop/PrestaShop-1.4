@@ -171,7 +171,7 @@ class		Product extends ObjectModel
 		'weight' => 'isFloat',
 		'out_of_stock' => 'isUnsignedInt',
 		'quantity_discount' => 'isBool',
-		'customizable' => 'isBool',
+		'customizable' => 'isUnsignedInt',
 		'uploadable_files' => 'isUnsignedInt',
 		'text_fields' => 'isUnsignedInt',
 		'active' => 'isBool',
@@ -1852,6 +1852,7 @@ class		Product extends ObjectModel
 
 	public function updateLabels()
 	{
+		$hasRequiredFields = 0;
 		foreach ($_POST AS $field => $value)
 			/* Label update */
 			if (strncmp($field, 'label_', 6) == 0)
@@ -1864,11 +1865,14 @@ class		Product extends ObjectModel
 					(`id_customization_field`, `id_lang`, `name`) VALUES ('.intval($tmp[2]).', '.intval($tmp[3]).', \''.pSQL($value).'\')
 					ON DUPLICATE KEY UPDATE `name` = \''.pSQL($value).'\''))
 					return false;
-				$isRequired = isset($_POST['require_'.intval($tmp[1]).'_'.intval($tmp[2])]) ? true : false;
+				$isRequired = isset($_POST['require_'.intval($tmp[1]).'_'.intval($tmp[2])]) ? 1 : 0;
+				$hasRequiredFields |= $isRequired;
 				/* Require option update */
 				if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization_field` SET `required` = '.intval($isRequired).' WHERE `id_customization_field` = '.intval($tmp[2])))
 					return false;
 			}
+		if ($hasRequiredFields AND !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `customizable` = 2 WHERE `id_product` = '.intval($this->id)))
+			return false;
 		if (!$this->_deleteOldLabels())
 			return false;
 		return true;
