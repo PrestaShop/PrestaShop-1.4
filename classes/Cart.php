@@ -376,7 +376,7 @@ class		Cart extends ObjectModel
 					'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON p.`id_product` = pa.`id_product`' : '').'
 					WHERE p.`id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
-					$productQty = intval($result2['quantity']);
+				$productQty = intval($result2['quantity']);
 				if (intval($quantity) > $productQty AND (intval($result2['out_of_stock']) == 0 OR (intval($result2['out_of_stock']) == 2 AND !Configuration::get('PS_ORDER_OUT_OF_STOCK'))))
 					return false;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),

@@ -747,8 +747,8 @@ form#productsSortForm p select{ font-size:1em; }
 }
 #languages_block_top ul#first-languages {
 	float: left;
-	height:1.5em;
-	width:8.8em;
+	height: 1.5em;
+	width: 8.6em;
 }
 #languages_block_top ul#first-languages li {
 	float:left;
@@ -1049,7 +1049,7 @@ div.myaccount .block_content {
 #center_column .products_block p, #center_column .products_block h5 { margin: 0.5em 0.1em; }
 #center_column div.products_block h5 {
 	display: block;
-	height: 2.5em;
+	height: 2.57em;
 }
 #center_column div.products_block h5 a {
 	color: #374853;
@@ -1308,6 +1308,15 @@ ul#order_step {
 	clear: both;
 	margin-top:0.2em;
 }
+
+#cart_block dt {
+width: 175px;
+}
+
+#cart_block dd {
+width: 155px;
+}
+
 #cart_block dd{ margin-left:1em; margin-right:1em; font-style:italic;}
 #cart_block dl dt a { font-weight: bold; }
 #cart_block a.ajax_cart_block_remove_link {
@@ -1382,7 +1391,7 @@ ul#order_step {
 
 /* authentication.tpl */
 #authentication #create-account_form, #authentication #login_form {
-	width: 49.2%;
+	width: 49%;
 	height: 25em;
 	clear: none;
 	float: left;

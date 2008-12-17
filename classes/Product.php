@@ -1906,7 +1906,7 @@ class		Product extends ObjectModel
 		global $cookie;
 
 		$fields = array_merge($cookie->getFamily('pictures_'.intval($this->id)), $cookie->getFamily('textFields_'.intval($this->id)));
-		if (!$requiredFields = $this->getRequiredCustomizableFields())
+		if (($requiredFields = $this->getRequiredCustomizableFields()) === false)
 			return false;
 		$prefix = array(_CUSTOMIZE_FILE_ => 'pictures_'.intval($this->id).'_', _CUSTOMIZE_TEXTFIELD_ => 'textFields_'.intval($this->id).'_');
 		foreach ($requiredFields AS $field)

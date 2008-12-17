@@ -488,7 +488,7 @@ var ajaxCart = {
 				$('.ajax_cart_no_product:hidden').fadeIn('slow');
 			});
 		}
-	},
+	}
 }
 
 //when document is loaded...

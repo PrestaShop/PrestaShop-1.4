@@ -78,8 +78,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 					    if ($cart->id)
 							$cookie->id_cart = intval($cart->id);
 					}
-					$result = $cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
-					if (!$result)
+					if (!$cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up')))
 						$errors[] = Tools::displayError('you already have the maximum quantity available for this product')
 							.((basename($_SERVER['HTTP_REFERER']) == 'order.php') ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 							Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
