@@ -116,7 +116,23 @@ class		Category extends ObjectModel
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
 				$this->name[$k] = '0'.$value;
-		return parent::update();
+		if (!parent::update())
+			return false;
+		return $this->_updateChildren($nullValues);
+	}
+
+	private function _updateChildren($nullValues = false)
+	{
+		$children = $this->getSubCategories(intval(Configuration::get('PS_LANG_DEFAULT')), false);
+		foreach ($children AS $childDatas)
+		{
+			$childObject = new Category(intval($childDatas['id_category']));
+			if (!Validate::isLoadedObject($childObject))
+				die(Tools::displayError());
+			if (!$childObject->update($nullValues))
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -206,9 +222,10 @@ class		Category extends ObjectModel
 
 		/* Delete category and its child from database */
 		$list = sizeof($toDelete) > 1 ? implode(',', $toDelete) : intval($this->id);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.$list.')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')');
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')') === false OR
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.$list.')') === false OR
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')') === false)
+			return false;
 
 		/* Delete categories images */
 		foreach ($toDelete AS $id_category)
@@ -290,7 +307,7 @@ class		Category extends ObjectModel
 	}
 
 	/**
-	  * Return current category childs
+	  * Return current category children
 	  *
 	  * @param integer $id_lang Language ID
 	  * @param boolean $active return only active categories
