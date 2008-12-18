@@ -19,9 +19,9 @@
 	<tbody>
 	{foreach from=$discount item=discount name=myLoop}
 		<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
-			<td class="discount_code">{$discount.name|escape:'htmlall':'UTF-8'}</td>
-			<td class="discount_description">{$discount.description|escape:'htmlall':'UTF-8'}</td>
-			<td class="discount_quantity">{$discount.quantity_for_user|escape:'htmlall':'UTF-8'}</td>
+			<td class="discount_code">{$discount.name}</td>
+			<td class="discount_description">{$discount.description}</td>
+			<td class="discount_quantity">{$discount.quantity_for_user}</td>
 			<td class="discount_value">
 				{if $discount.id_discount_type == 1}
 					{$discount.value|escape:'htmlall':'UTF-8'}%
