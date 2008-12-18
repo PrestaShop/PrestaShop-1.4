@@ -199,7 +199,7 @@ class		Cart extends ObjectModel
 		$sql = '
 		SELECT cp.`id_product_attribute`, cp.`id_product`, cp.`quantity` AS cart_quantity, pl.`name`,
 		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`,
-		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`,
+		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`,
 		t.`id_tax`, tl.`name` AS tax, t.`rate`, pa.`price` AS price_attribute, pa.`weight` AS weight_attribute, pa.`quantity` AS quantity_attribute, 
         pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category,
         IF (IFNULL(pa.`reference`, \'\') = \'\', p.`reference`, pa.`reference`) AS reference, 
@@ -795,10 +795,12 @@ class		Cart extends ObjectModel
 		}
 		if ($discountObj->minimal > floatval($this->getOrderTotal(true, 1)))
 			return Tools::displayError('the total amount of your order isn\'t high enough to use this voucher');
+		$currentDate = date('Y-m-d');
 		if (!$discountObj->cumulable_reduction)
 		{
 			foreach ($products as $product)
-				if (intval($product['reduction_price']) OR intval($product['reduction_percent']) OR $product['on_sale'])
+				if ((intval($product['reduction_price']) OR intval($product['reduction_percent'])) AND ($product['reduction_from'] == $product['reduction_to'] OR ($currentDate >= $product['reduction_from'] AND $currentDate <= $product['reduction_to']))
+					OR $product['on_sale'])
 					return Tools::displayError('this voucher isn\'t cumulative on products with reduction or marked as on sale');
 		}
 

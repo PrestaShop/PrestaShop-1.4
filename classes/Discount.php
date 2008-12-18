@@ -91,7 +91,7 @@ class		Discount extends ObjectModel
 	{
 		if (parent::add($autodate, $nullValues))
 			$ret = true;
-		$categories = Tools::getValue('categoryBox');
+
 		$this->updateCategories($categories);
 		return $ret;
 	}
@@ -110,13 +110,13 @@ class		Discount extends ObjectModel
 	{
 		if (!parent::delete())
 			return false;
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.intval($this->id));
-		return true;
+		return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.intval($this->id));
 	}
 	
 	public function getTranslationsFieldsChild()
 	{
-		parent::validateFieldsLang();
+		if (!parent::validateFieldsLang())
+			return false;
 		return parent::getTranslationsFields(array('description'));
 	}
 	
