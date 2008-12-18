@@ -84,7 +84,12 @@ class AdminPDF extends AdminPreferences
 
 	public function display()
 	{
-		$this->_displayForm('PDF', $this->_fieldsPDF, $this->l('PDF settings'), 'width2', 'pdf');
+		global $cookie;
+
+		$language = new Language(intval($cookie->id_lang));
+		if (!Validate::isLoadedObject($language))
+			die(Tools::displayError());
+		$this->_displayForm('PDF', $this->_fieldsPDF, $this->l('PDF settings for the current language:').' '.$language->name, 'width2', 'pdf');
 	}
 }
 ?>

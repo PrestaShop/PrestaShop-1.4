@@ -42,6 +42,7 @@ class PDF extends FPDF
 			$cookie->id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$lang = strtoupper(Language::getIsoById($cookie->id_lang));
 		$conf = Configuration::getMultiple(array('PS_PDF_ENCODING_'.$lang, 'PS_PDF_FONT_'.$lang));
+
 		self::$_pdfparams[$lang] = array(
 			'encoding' => (isset($conf['PS_PDF_ENCODING_'.$lang]) AND $conf['PS_PDF_ENCODING_'.$lang] == true) ? $conf['PS_PDF_ENCODING_'.$lang] : 'iso-8859-1',
 			'font' => (isset($conf['PS_PDF_FONT_'.$lang]) AND $conf['PS_PDF_FONT_'.$lang] == true) ? $conf['PS_PDF_FONT_'.$lang] : 'helvetica'
