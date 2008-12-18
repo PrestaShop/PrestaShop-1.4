@@ -139,6 +139,8 @@ abstract class PaymentModule extends Module
 					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `download_deadline`, `download_hash`)
 				VALUES ';
 
+				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+				Product::addCustomizationPrice($products, $customizedDatas);
 				foreach ($products AS $key => $product)
 				{
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
@@ -203,29 +205,33 @@ abstract class PaymentModule extends Module
 						\''.pSQL($download_hash).'\'),';
 
 					$priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
-					$productsList .=
-					   '<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
-						   <td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-						   <td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-						   <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
-						   <td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
-						   <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * $priceWithTax, $currency, false, false).'</td>
-					   </tr>'; 
+					$customizationQuantity = 0;
+					if (isset($customizedDatas[$product['id_product']][$product['id_product_attribute']]))
+					{
+						$customizationQuantity = intval($product['customizationQuantityTotal']);
+						$productsList .=
+						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
+							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').' - '.$this->l('Customized').'</strong></td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:center;">'.$customizationQuantity.'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($customizationQuantity * $priceWithTax, $currency, false, false).'</td>
+						</tr>';
+					}
+
+					if (!$customizationQuantity OR intval($product['quantity']) > $customizationQuantity)
+						$productsList .=
+						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
+							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['quantity']) - $customizationQuantity).'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['quantity']) - $customizationQuantity) * $priceWithTax, $currency, false, false).'</td>
+						</tr>';
 				} /* end foreach ($products) */
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
 
-				$priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
-				$productsList .=
-                       '<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
-                           <td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-                           <td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-                           <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
-                           <td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
-                           <td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * $priceWithTax, $currency, false, false).'</td>
-                       </tr>'; 
-				
-				
 				/* Insert discounts from cart into order_discount table */
 				$discounts = $cart->getDiscounts();
 				$discountsList = '';
