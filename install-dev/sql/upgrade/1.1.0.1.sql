@@ -203,12 +203,12 @@ INSERT INTO `PREFIX_image_type` (`name` ,`width` ,`height` ,`products` ,`categor
 INSERT INTO `PREFIX_image_type` (`name` ,`width` ,`height` ,`products` ,`categories` ,`manufacturers` ,`suppliers` ,`scenes`)	VALUES ('thumb_scene', '161', '58', '0', '0', '0', '0', '1');
 
 /* CONFIGURATION VARIABLE */
+INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_INVOICE', '1', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_INVOICE_PREFIX', 'IN', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_DELIVERY_PREFIX', 'DE', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_PRODUCT_PICTURE_MAX_SIZE', '131072', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_PRODUCT_PICTURE_WIDTH', '64', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_PRODUCT_PICTURE_HEIGHT', '64', NOW(), NOW());
-INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_INVOICE', '1', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_PASSWD_TIME_BACK', '360', NOW(), NOW());
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_PASSWD_TIME_FRONT', '360', NOW(), NOW());
 

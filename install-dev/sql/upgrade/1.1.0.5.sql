@@ -17,6 +17,6 @@ ALTER TABLE PREFIX_cart_product
 /* 					CONTENTS				*/
 /* ################################# */
 
-
+INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_INVOICE_NUMBER', (SELECT COUNT(id_order) + 1 FROM PREFIX_orders LIMIT 1), NOW(), NOW());
 
 /* PHP: add_required_customization_field_flag(); */;
