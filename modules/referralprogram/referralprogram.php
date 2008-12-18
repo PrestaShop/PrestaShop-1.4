@@ -369,7 +369,6 @@ class ReferralProgram extends Module
 	*/
 	public function hookCustomerAccount($params)
 	{
-		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
 	}
 	
@@ -413,6 +412,7 @@ class ReferralProgram extends Module
 	*/
 	public function hookCreateAccount($params)
 	{
+		global $cookie;
 		$newCustomer = $params['newCustomer'];
 		if (!Validate::isLoadedObject($newCustomer))
 			return false;
