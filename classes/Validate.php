@@ -518,7 +518,7 @@ class Validate
 	*/
 	static public function isOrderWay($orderWay)
 	{
-		return ($orderWay === 'ASC' OR $orderWay === 'DESC');
+		return ($orderWay === 'ASC' | $orderWay === 'DESC' | $orderWay === 'asc' | $orderWay === 'desc');
 	}
 
 	/**
