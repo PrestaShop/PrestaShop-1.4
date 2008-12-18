@@ -23,8 +23,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ('PS_TOKEN_ENABLE', '1', NOW(), NOW()),
 ('PS_STATS_RENDER', 'graphxmlswfcharts', NOW(), NOW()),
 ('PS_STATS_OLD_CONNECT_AUTO_CLEAN', 'never', NOW(), NOW()),
-('PS_STATS_GRID_RENDER', 'gridextjs', NOW(), NOW()),
-('PS_INVOICE_NUMBER', '2', NOW(), NOW());
+('PS_STATS_GRID_RENDER', 'gridextjs', NOW(), NOW());
 
 INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES
 (1, 'homefeatured', 1),

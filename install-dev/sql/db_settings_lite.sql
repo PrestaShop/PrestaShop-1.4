@@ -81,7 +81,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (34, 'PS_PRODUCT_PICTURE_WIDTH', '64', NOW(), NOW()),
 (35, 'PS_PRODUCT_PICTURE_HEIGHT', '64', NOW(), NOW()),
 (36, 'PS_INVOICE_PREFIX', 'IN', NOW(), NOW()),
-(37, 'PS_INVOICE_NUMBER', '1', NOW(), NOW()),
+(37, 'PS_INVOICE_NUMBER', '2', NOW(), NOW()),
 (38, 'PS_DELIVERY_PREFIX', 'DE', NOW(), NOW()),
 (39, 'PS_DELIVERY_NUMBER', '1', NOW(), NOW()),
 (40, 'PS_INVOICE', '1', NOW(), NOW()),
