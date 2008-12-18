@@ -12,7 +12,7 @@ function __autoload($className)
 }
 
 define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
-define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php');
+define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
 
 // utf-8 conversion if needed (before v0.9.8.1 utf-8 was badly supported)
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'utf8.php');
@@ -28,6 +28,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodule.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setdiscountcategory.php');
 // Module installation tools
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'module_tools.php');
+// Customizations
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'customizations.php');
 
 //old version detection
 $oldversion = false;
