@@ -40,7 +40,7 @@ function updateAddressDisplay(addressType)
 	$('ul#address_' + addressType + ' li.address_country').html(addresses[idAddress][7] + (addresses[idAddress][8] != '' ? ' (' + addresses[idAddress][8] +')' : ''));
 	// change update link
 	var link = $('ul#address_' + addressType + ' li.address_update a').attr('href');
-	var expression = /id_address=\d/;
+	var expression = /id_address=\d+/;
 	link = link.replace(expression, 'id_address='+idAddress);
 	$('ul#address_' + addressType + ' li.address_update a').attr('href', link);
 }
