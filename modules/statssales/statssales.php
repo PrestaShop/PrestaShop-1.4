@@ -58,10 +58,9 @@ class StatsSales extends ModuleGraph
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<h2>'.$this->l('What is this?').'</h2>
-			<p>
-				'.$this->l('This graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas').'
-			</p>
+			<p><center><img src="../img/admin/down.gif" />
+				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
+			</center></p>
 			<p>
 				'.$this->l('Total orders:').' '.$totals['orderCount'].'
 			</p>
@@ -69,11 +68,18 @@ class StatsSales extends ModuleGraph
 			<p>
 				'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'
 			</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 2)).'</center>
-			<p class="space">
-				'.$this->l('Only valid orders are included in the graphs above. You can see the order state distribution below.').'
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 2)).'<br /><br />
+			<p class="space"><img src="../img/admin/down.gif" />
+				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			<center>'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => 3)) : $this->l('No order for this period')).'</center>
+			'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => 3)) : $this->l('No order for this period')).'</center>
+		</fieldset>
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+			<h2>'.$this->l('Various order status').'</h2>
+			<p>
+				'.$this->l('In your back-office, you can find many order status : Awaiting cheque payment, Payment accepted, Preparation in progress, Shipping, Delivered, Canceled, Refund, Payment error, Out of stock, and Awaiting bank wire payment.
+				These status cannot be removed from the back-office, but you have the possibility to add some more.').'
+			</p>
 		</fieldset>';
 		return $this->_html;
 	}

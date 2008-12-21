@@ -84,22 +84,21 @@ class StatsRegistrations extends ModuleGraph
 			</p>
 			<p>'.$this->l('Total customer accounts:').' '.$totalRegistrations.'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line')).'</center>
-			<div style="margin-top:20px">
-				<h2>'.$this->l('Number of customer accounts created').'</h2>
-				<h3>'.$this->l('What is this?').'</h3>
-				<p>'.$this->l('The total number of accounts created is not in itself important information. However, it is interesting to analyze the number created over time. This will indicate whether or not things are on the right track.').'</p>
-				<h3>'.$this->l('What to look for?').'</h3>
-				<p>
-					'.$this->l('If you let your shop run without changing anything, the number of customer registrations should stay stable or slightly decline.').'
-					'.$this->l('A significant increase or decrease shows that there has probably been a change to your shop; therefore, you have to identify it in order to backtrack if this change makes the number of registrations decrease, or continue with it if it is advantageous.').'<br />
-					'.$this->l('Here\'s a summary of what can affect the creation of customer accounts:').'
-					<ul>
-						<li>'.$this->l('An advertising campaign can attract a greater number of visitors. An increase in customer accounts which will ensue, which will depend on their \"quality\": well-targeted advertising can be more effective than large-scale advertising.').'</li>
-						<li>'.$this->l('Specials, sales, or contests create greater attention and curiosity, not only keeping your shop lively but also increasing its traffic. This way, you can push impulsive buyers to take the plunge.').'</li>
-						<li>'.$this->l('Design and user-friendliness are more important than ever: an ill-chosen or hard-to-follow graphical theme can turn off visitors. You have to strike the right balance between an innovative design and letting visitors move around easily. Proper spelling and clarity also inspire more customer confidence in your shop.').'</li>
-					</ul>
-				</p>
-			</div>
+		</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+			<h2>'.$this->l('Number of customer accounts created').'</h2>
+			<p>'.$this->l('The total number of accounts created is not in itself important information. However, it is interesting to analyze the number created over time. This will indicate whether or not things are on the right track.').'</p>
+			<br /><h3>'.$this->l('How to act on the registrations\' evolution?').'</h3>
+			<p>
+				'.$this->l('If you let your shop run without changing anything, the number of customer registrations should stay stable or slightly decline.').'
+				'.$this->l('A significant increase or decrease shows that there has probably been a change to your shop; therefore, you have to identify it in order to backtrack if this change makes the number of registrations decrease, or continue with it if it is advantageous.').'<br />
+				'.$this->l('Here\'s a summary of what can affect the creation of customer accounts:').'
+				<ul>
+					<li>'.$this->l('An advertising campaign can attract a greater number of visitors. An increase in customer accounts which will ensue, which will depend on their \"quality\": well-targeted advertising can be more effective than large-scale advertising.').'</li>
+					<li>'.$this->l('Specials, sales, or contests create greater attention and curiosity, not only keeping your shop lively but also increasing its traffic. This way, you can push impulsive buyers to take the plunge.').'</li>
+					<li>'.$this->l('Design and user-friendliness are more important than ever: an ill-chosen or hard-to-follow graphical theme can turn off visitors. You have to strike the right balance between an innovative design and letting visitors move around easily. Proper spelling and clarity also inspire more customer confidence in your shop.').'</li>
+				</ul>
+			</p><br />
 		</fieldset>';
 		return $this->_html;
 	}

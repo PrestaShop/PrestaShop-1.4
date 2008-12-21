@@ -30,7 +30,7 @@ class StatsOrigin extends ModuleGraph
 	{
 		return (parent::install() AND $this->registerHook('AdminStatsModules') AND $this->registerHook('adminOrder'));
 	}
-	
+
 	private function getOrigins()
 	{
 		$result = mysql_query('
@@ -55,7 +55,7 @@ class StatsOrigin extends ModuleGraph
 		arsort($websites);
 		return $websites;
 	}
-	
+
 	function hookAdminOrder($params)
 	{
 		$order = new Order(intval($params['id_order']));
@@ -80,14 +80,17 @@ class StatsOrigin extends ModuleGraph
 		if (sizeof($websites))
 		{
 			$this->_html .= '
-			<table class="table" border="0" cellspacing="0" cellspacing="0">
+			<center>
+			<p><img src="../img/admin/down.gif" />Here are the percentages of the 10 most websites............. </p>
+			'.ModuleGraph::engine(array('type' => 'pie')).'
+			<br /><br /><br /><table class="table" border="0" cellspacing="0" cellspacing="0">
 				<tr>
 					<th style="width:400px;">'.$this->l('Origin').'</th>
 					<th style="width:50px; text-align: right">'.$this->l('Total').'</th>
 				</tr>';
 			foreach ($websites as $website => $total)
 				$this->_html .= '<tr><td>'.(!strstr($website, ' ') ? '<a href="http://'.$website.'">' : '').$website.(!strstr($website, ' ') ? '</a>' : '').'</td><td style="text-align: right">'.$total.'</td></tr>';
-			$this->_html .= '</table><br /><center>'.ModuleGraph::engine(array('type' => 'pie')).'</center>';
+			$this->_html .= '</table></center>';
 		}
 		else
 			$this->_html .= '<p><strong>'.$this->l('Direct links only').'</strong></p>';

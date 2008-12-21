@@ -39,32 +39,37 @@ class StatsPersonalInfos extends ModuleGraph
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		if (sizeof(Customer::getCustomers()))
 			$this->_html .= '
-			<center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'gender')).'</center><br />
-			<center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'age')).'</center><br />
-			<center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'country')).'</center><br />
-			<center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'currency')).'</center><br />
-			<center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'language')).'</center>';
+			<center>
+				<p><img src="../img/admin/down.gif" />'.$this->l('Gender distribution allows you to determine the percentage of men and women among your customers.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'gender')).'<br class="clear" /><br />
+				<p><img src="../img/admin/down.gif" />'.$this->l('Age ranges allows you to determine in which age range your customers are.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'age')).'<br /><br />
+				<p><img src="../img/admin/down.gif" />'.$this->l('Country distribution allows you to determine in which part of the world your customers are.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'country')).'<br /><br />
+				<p><img src="../img/admin/down.gif" />'.$this->l('Currency ranges allows you to determine with which currency your customers pay.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'currency')).'<br /><br />
+				<p><img src="../img/admin/down.gif" />'.$this->l('Language distribution allows you to determine the general language your customers use on your shop.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'language')).'
+			</center>';
 		else
 			$this->_html .= '<p>'.$this->l('No customers registered yet.').'</p>';
 		$this->_html .= '
-			<div style="margin-top:20px">
-				<h2>'.$this->l('Target your audience').'</h2>
-				<h3>'.$this->l('What is this?').'</h3>
-				<p>
-					'.$this->l('In order for each message to have an impact, you need to know to whom it should be addressed.').'
-					'.$this->l('Addressing the right audience is essential for choosing the right tools for winning it over.').'
-					'.$this->l('It\'s best to limit action to a group or groups of clients.').'
-					'.$this->l('Registered customer information lets you more accurately define the typical customer profile so that you can adapt your specials to various criteria.').'
-				</p>
-				<h3>'.$this->l('So what should you do?').'</h3>
-				<p>
-					'.$this->l('Use this information for increasing your sales by:').'
-					<ul>
-						<li>'.$this->l('Launching ad campaigns addressed to specific customers who might be interested in a particular offer, at specific dates and times').'</li>
-						<li>'.$this->l('Contacting a group of clients by e-mail / newsletter.').'</li>
-					</ul>
-				</p>
-			</div>
+		</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+			<h2>'.$this->l('Target your audience').'</h2>
+			<p>
+				'.$this->l('In order for each message to have an impact, you need to know to whom it should be addressed.').'
+				'.$this->l('Addressing the right audience is essential for choosing the right tools for winning it over.').'
+				'.$this->l('It\'s best to limit action to a group or groups of clients.').'
+				'.$this->l('Registered customer information lets you more accurately define the typical customer profile so that you can adapt your specials to various criteria.').'
+			</p><br />
+			<p>
+				'.$this->l('You should use this information for increasing your sales by:').'
+				<ul>
+					<li class="bullet">'.$this->l('Launching ad campaigns addressed to specific customers who might be interested in a particular offer, at specific dates and times').'</li>
+					<li class="bullet">'.$this->l('Contacting a group of clients by e-mail / newsletter.').'</li>
+				</ul>
+			</p><br />
 		</fieldset>';
 		return $this->_html;
 	}

@@ -79,12 +79,10 @@ class StatsEquipment extends ModuleGraph
 		$equipment = $this->getEquipment();
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<h2>'.$this->l('How is this information useful?').'</h2>
-			<p>
-				'.$this->l('When managing Websites, it is important to keep track of software used by visitors in order to be sure that the site displays the same way for everyone, and PrestaShop was built in order to be compatible with most recent Web browsers and computer operating systems (OS). However, because you may end up adding advanced features to your Website or even modify the core PrestaShop code, these additions may not be accessible by everyone. That is why it is a good idea to keep tabs on the percentage of users for each type of software before adding or changing something that only a limited number of users will be able to access.').'
-			</p><br />
 			<center>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'wb')).'<br />
+				<p><img src="../img/admin/down.gif" />Determine the percentage of web browser used by your customers.</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'wb')).'<br /><br />
+				<p><img src="../img/admin/down.gif" />Determine the percentage of operating systems used by your customers.</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'os')).'';
 		if ($equipment)
 		{
@@ -96,6 +94,13 @@ class StatsEquipment extends ModuleGraph
 		}
 		$this->_html .= '
 			</center>
+		</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+		<h2>'.$this->l('Ensure that your website is accessible to all').'</h2>
+			<p>
+				'.$this->l('When managing Websites, it is important to keep track of software used by visitors in order to be sure that the site displays the same way for everyone, and PrestaShop was built in order to be compatible with most recent Web browsers and computer operating systems (OS). However, because you may end up adding advanced features to your Website or even modify the core PrestaShop code, these additions may not be accessible by everyone. That is why it is a good idea to keep tabs on the percentage of users for each type of software before adding or changing something that only a limited number of users will be able to access.').'
+			</p><br />
+			
 		</fieldset>';
 		return $this->_html;
 	}

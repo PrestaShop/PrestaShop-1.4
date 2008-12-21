@@ -7,10 +7,10 @@ $_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Visiteurs bloqués à la phase d\'inscription :';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_0d298316c16a0bbdb74d50ead21590b4'] = 'Visiteurs ayant passé une commande dès leur inscription :';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Total de comptes créés :';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Nombre de comptes créés';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_efc45797ddd32ddad81371c29f3d549b'] = 'Qu\'est-ce que c\'est ?';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_15d820295ae2d9d7e6d53e1ed9714273'] = 'Le nombre d\'inscrits en lui-même n\'est pas important. Il vous permet surtout d\'apprécier son évolution sur une période plus ou moins longue. ';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_bca1c23cb9e28844c08af870c4991b67'] = 'Que faire alors ?';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_57a6f41a27c9baa5b402d30e97d4c1e8'] = 'Comment agir sur l\'évolution des inscriptions ?';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_2d8c349a97131b417bf7da166afb17bd'] = 'Si vous laissez votre boutique tourner sans rien changer, le nombre d\'inscriptions devrait être stable ou baisser légèrement.  ';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_bf88699f842b6e63e0568ed0e71c68b7'] = 'Une forte croissance ou une forte baisse montre donc probablement un changement sur votre boutique. C\'est pourquoi vous devez l\'identifier de manière à pouvoir revenir sur vos pas au cas où ce changement fait décroître le nombre d\'inscriptions, ou au contraire continuer dans cette voie si celui-ci se trouve avantageux.';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_7f93ad00e5438305b72efd723da48cdb'] = 'Différents modificateurs sont possibles :  ';

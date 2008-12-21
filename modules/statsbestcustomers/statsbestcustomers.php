@@ -94,17 +94,19 @@ class StatsBestCustomers extends ModuleGrid
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
-			<h2 class="space">'.$this->l('Develop clients\' loyalty').'</h2>
+		</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+			<h2 >'.$this->l('Develop clients\' loyalty').'</h2>
 			<p class="space">
 				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop its loyalty, in other words to make him come back in your webshop.').' <br />
 				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
 				'.$this->l('In order to achieve this goal you can organize: ').'
 				<ul>
-					<li>- '.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
-					<li>- '.$this->l('Sustainable operations: loyalty or points cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
+					<li>'.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
+					<li>'.$this->l('Sustainable operations: loyalty or points cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
 				</ul>
 				'.$this->l('These operations encourage clients to buy and also to come back in your webshop regularly.').' <br />
-			</p>
+			</p><br />
 		</fieldset>';
 		return $this->_html;
 	}

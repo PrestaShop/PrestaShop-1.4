@@ -11,6 +11,7 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_ce8ae9da5b7cd6c3df2
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8b83489bd116cb60e2f348e9c63cd7f6'] = 'Meilleurs clients';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cdc31cfb8cc370e79d854a2f82849dd2'] = 'Classement des meilleurs clients';
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cb21e843b037359d0fb5b793fccf964f'] = 'Fidéliser les clients';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_0dc42f38b35e45090e1a1c94755c2d43'] = 'Que devriez-vous faire ?';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_e1b9cd2cf691574ade4e2e1077b03441'] = 'Garder un client est plus rentable que d’en conquérir un nouveau. Il est donc impératif de le fidéliser, c\'est-à-dire de le faire revenir sur votre boutique. ';
