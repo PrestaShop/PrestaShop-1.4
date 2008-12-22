@@ -43,6 +43,18 @@ class AdminCategories extends AdminTab
 		
 		$this->_category = AdminCatalog::getCurrentCategory();
 		$this->_filter = 'AND `id_parent` = '.intval($this->_category->id);
+		
+		
+		$children = Category::getChildren($this->_category->id, $cookie->id_lang);
+		foreach ($children as &$child)
+		{
+			$tmp_list = $this->_category->id.',';
+			$obj = new Category($child['id_category']);
+			$parents = $obj->getParentsCategories();
+			foreach ($parents as $parent)
+				$tmp_list .= $parent['id_category'].',';
+			$child['parent_id_list'] =  rtrim($tmp_list, ',');
+		}
 
 		parent::__construct();
 	}
