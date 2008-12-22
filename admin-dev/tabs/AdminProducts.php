@@ -419,7 +419,7 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occured while updating customization');
 					$product->uploadable_files = intval($_POST['uploadable_files']);
 					$product->text_fields = intval($_POST['text_fields']);
-					$product->customizable = (intval($_POST['uploadable_files']) > 0 OR intval($_POST['text_fields']) > 0) ? true : false;
+					$product->customizable = (intval($_POST['uploadable_files']) > 0 OR intval($_POST['text_fields']) > 0) ? 1 : 0;
 					if (!sizeof($this->_errors) AND !$product->update())
 						$this->_errors[] = Tools::displayError('an error occured while updating customization configuration');
 					if (!sizeof($this->_errors))
