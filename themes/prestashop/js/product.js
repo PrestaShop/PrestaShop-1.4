@@ -255,6 +255,8 @@ function displayImage(domAAroundImgThumb)
             var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
             $('#bigpic').fadeOut('fast', function(){
                 $(this).attr('src', newSrc);
+                if (jqZoomEnabled)
+	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
                 $(this).load(function() {
                   $(this).fadeIn('fast')
                 })
@@ -264,7 +266,7 @@ function displayImage(domAAroundImgThumb)
             $(domAAroundImgThumb).addClass('shown');
         }
     }
-} 
+}
 
 //To do after loading HTML
 $(document).ready(function(){
@@ -290,6 +292,17 @@ $(document).ready(function(){
 		function(){displayImage($(this));},
 		function(){}
 	);
+	
+	//set jqZoom parameters if needed
+	if (jqZoomEnabled)
+	{
+		$('img.jqzoom').jqueryzoom({
+			xzoom: 200, //zooming div default width(default width value is 200)
+			yzoom: 200, //zooming div default width(default height value is 200)
+			offset: 10 //zooming div default offset(default offset value is 10)
+			//position: "right" //zooming div position(default position value is "right")
+		});
+	}
 
 	//add a link on the span 'view full size' and on the big image
 	$('span#view_full_size, div#image-block img').click(function(){

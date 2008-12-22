@@ -9,6 +9,7 @@ var currencyRate = '{$currencyRate|floatval}';
 var currencyFormat = '{$currencyFormat|intval}';
 var currencyBlank = '{$currencyBlank|intval}';
 var taxRate = {$product->tax_rate|floatval};
+var jqZoomEnabled = {if $jqZoomEnabled}true{else}false{/if};
 
 //JS Hook
 var oosHookJsCodeFunctions = new Array();
@@ -81,7 +82,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<!-- product img-->
 		<div id="image-block">
 		{if $have_image}
-				<img src="{$img_prod_dir}{$cover.id_image}-large.jpg" alt="" id="bigpic" title="{$product->name|escape:'htmlall':'UTF-8'}"/>
+				<img src="{$img_prod_dir}{$cover.id_image}-large.jpg" {if $jqZoomEnabled}class="jqzoom" alt="{$img_prod_dir}{$cover.id_image}-thickbox.jpg"{else}alt="" {/if} id="bigpic" title="{$product->name|escape:'htmlall':'UTF-8'}"/>
 		{else}
 			<img src="{$img_prod_dir}{$lang_iso}-default-large.jpg" alt="" title="{$product->name|escape:'htmlall':'UTF-8'}" />
 		{/if}
@@ -95,7 +96,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px">
 				{foreach from=$images item=image name=thumbnails}
 				<li>
-					<a href="{$img_prod_dir}{$product->id}-{$image.id_image}-thickbox.jpg" rel="other-views" class="thickbox {if $smarty.foreach.thumbnails.first}shown{/if}">
+					<a href="{$img_prod_dir}{$product->id}-{$image.id_image}-thickbox.jpg" rel="other-views" class="{if !$jqZoomEnabled}thickbox{/if} {if $smarty.foreach.thumbnails.first}shown{/if}">
 						<img id="thumb_{$image.id_image}" src="{$img_prod_dir}{$product->id}-{$image.id_image}-medium.jpg" alt="{$image.legend|htmlspecialchars}" title="{$image.legend|htmlspecialchars}" />
 					</a>
 				</li>
