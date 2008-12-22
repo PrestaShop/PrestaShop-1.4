@@ -51,6 +51,9 @@ abstract class AdminTab
 
 	/** @var string Add fields into data query to display list */
 	protected $_select;
+	
+	/** @var string SQL query to display list */
+	protected $_sql_get_list;
 
 	/** @var string Join tables into data query to display list */
 	protected $_join;
@@ -496,7 +499,7 @@ abstract class AdminTab
 								$result = $object->update();
 							}
 							if (!$result)
-								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
 							elseif ($this->postImage($object->id))
 							{
 								if ($back = Tools::getValue('back'))
@@ -825,7 +828,7 @@ abstract class AdminTab
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter);
 		$this->_listTotal = intval($queryTotal['total']);
 		
-		/* Query in order to get results with all fields */
+		/* Query in order to get results with all fields */	
 		$sql = 
 		($this->_tmpTableFilter ? 'SELECT * FROM (' : '').'
 		SELECT '.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
@@ -837,6 +840,8 @@ abstract class AdminTab
 		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
+		if (isset($this->_sql_get_list))
+			$sql = $this->_sql_get_list;
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 	}
 

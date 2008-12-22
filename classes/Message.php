@@ -90,15 +90,35 @@ class		Message extends ObjectModel
 	 	if (!Validate::isBool($private))
 	 		die(Tools::displayError());
 
+		global $cookie;
 		$result = Db::getInstance()->ExecuteS('
-		SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname
-		FROM `'._DB_PREFIX_.'message` m
-		LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
-		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
-		WHERE `id_order` = '.intval($id_order).'
-		'.($private ? ' AND m.`private` = 0' : '').'
-		ORDER BY `date_add` ASC');
+			SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
+			FROM `'._DB_PREFIX_.'message` m
+			LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
+			LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.intval($cookie->id_employee).')
+			LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
+			WHERE id_order = '.intval($id_order).'
+			GROUP BY m.id_message
+			ORDER BY m.date_add DESC
+		');
+		return $result;
+	}
 	
+	/**
+	  * Registered a message 'readed'
+	  *
+	  * @param integer $id_message Message ID
+	  * @param integer $id_emplyee Employee ID
+	  */
+	static public function markAsReaded($id_message, $id_employee)
+	{
+	 	if (!Validate::isUnsignedId($id_message) OR !Validate::isUnsignedId($id_employee))
+	 		die(Tools::displayError());
+
+		$result = Db::getInstance()->Execute('
+		INSERT INTO '._DB_PREFIX_.'message_readed (id_message , id_employee , date_add) VALUES
+		('.intval($id_message).', '.intval($id_employee).', NOW());
+		');
 		return $result;
 	}
 }

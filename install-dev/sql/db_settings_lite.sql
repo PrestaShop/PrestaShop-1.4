@@ -421,7 +421,8 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (1, 55, 1, 1, 1, 1),
 (1, 56, 1, 1, 1, 1),
 (1, 57, 1, 1, 1, 1),
-(1, 58, 1, 1, 1, 1);
+(1, 58, 1, 1, 1, 1),
+(1, 59, 1, 1, 1, 1);
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
 INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
@@ -450,6 +451,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (49, 'AdminSlip', 3, 4),
 (13, 'AdminOrdersStates', 3, 5),
 (54, 'AdminOrderMessage', 3, 6),
+(59, 'AdminOrderMessages', 3, 7),
 (14, 'AdminDiscounts', 4, 3),
 (15, 'AdminCurrencies', 4, 1),
 (16, 'AdminTaxes', 4, 2),
@@ -543,6 +545,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 56, 'Meta-Tags'),
 (1, 57, 'CMS'),
 (1, 58, 'Image mapping'),
+(1, 59, 'Messages'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -598,7 +601,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 55, 'Bons de livraison'),
 (2, 56, 'Méta-Tags'),
 (2, 57, 'CMS'),
-(2, 58, 'Scènes');
+(2, 58, 'Scènes'),
+(2, 59, 'Messages');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`

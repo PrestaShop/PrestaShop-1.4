@@ -227,6 +227,10 @@ class AdminOrders extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
+		elseif (isset($_GET['messageReaded']))
+		{
+			Message::markAsReaded(intval($_GET['messageReaded']), intval($cookie->id_employee));
+		}
 		parent::postProcess();
 	}
 
@@ -645,11 +649,20 @@ class AdminOrders extends AdminTab
 			echo '
 			<br />
 			<fieldset style="width: 400px">
-			<legend><img src="../img/admin/email.gif" /> '.$this->l('Messages').'</legend>';
+			<legend><img src="../img/admin/email.gif" /> '.$this->l('Messages').'</legend>';		
 			foreach ($messages as $message)
-				echo '('.Tools::displayDate($message['date_add'], 1, true).') <b>'.(($message['elastname']) ? ($message['efirstname'].' '.$message['elastname']) : ($message['cfirstname'].' '.$message['clastname'])).'</b>'.(intval($message['private']) == 1 ? ' ['.$this->l('Private').']' : '').': '.nl2br2($message['message']).'<br />';
-			echo '
-			</fieldset>';
+			{
+				echo '<span '.($message['is_new_for_me'] ?'class="new_message"':'').'>';
+				if ($message['is_new_for_me'])
+					echo '<a class="new_message" title="'.$this->l('Mark this message as \'viewed\'').'" href="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'&messageReaded='.intval($message['id_message']).'"><img src="../img/admin/enabled.gif" alt="" /></a>';				
+				echo '('.Tools::displayDate($message['date_add'], 1, true).') ';
+				echo '<b>'.(($message['elastname']) ? ($message['efirstname'].' '.$message['elastname']) : ($message['cfirstname'].' '.$message['clastname'])).'</b>';
+				echo (intval($message['private']) == 1 ? ' ['.$this->l('Private').']' : '').': '.nl2br2($message['message']);
+				echo '</span>';
+				echo '<br />';
+			}
+			echo '<p class="info">'.$this->l('When you read a message, please click on the green check.').'</p>';
+			echo '</fieldset>';
 		}
 		echo '</div>';
 		

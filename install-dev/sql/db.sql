@@ -764,6 +764,13 @@ CREATE TABLE PREFIX_message (
   INDEX message_order(id_order)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE PREFIX_message_readed (
+  id_message INTEGER UNSIGNED NOT NULL,
+  id_employee INTEGER UNSIGNED NOT NULL,
+  date_add DATETIME NOT NULL,
+  PRIMARY KEY  (id_message,id_employee)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE PREFIX_product_attribute_combination (
   id_attribute INTEGER UNSIGNED NOT NULL,
   id_product_attribute INTEGER UNSIGNED NOT NULL,

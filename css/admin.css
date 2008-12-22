@@ -861,3 +861,7 @@ form#import_form {
 	height:500px;
 	overflow:auto;
 }
+
+.new_message{
+	background-color:#FFE35C;
+}
