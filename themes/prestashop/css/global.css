@@ -1622,6 +1622,11 @@ body#contact-form div#center_column form input#email, body#contact-form div#cent
 	width: 50%;
 }
 
+form.std p.desc_contact span.like_input {
+	width: 366px;
+	text-align: left;
+}
+
 /* history.tpl*/
 
 #block-history { color:#374853; }
