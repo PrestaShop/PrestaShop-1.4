@@ -1,0 +1,8 @@
+Bonjour,
+
+Product {product} is now available.
+Indeed, the item is once again in-stock.
+
+You can order it right now from our on-line shop.
+
+{shop_url} made by PrestaShop™
