@@ -332,7 +332,6 @@ class ProductComments extends Module
 		foreach ($averages AS $average)
 			$averageTotal += floatval($average);
 		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
-
 		$smarty->assign(array(
 			'logged' => intval($cookie->id_customer),
 			'action_url' => $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'],

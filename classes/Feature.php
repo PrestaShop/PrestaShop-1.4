@@ -57,16 +57,6 @@ class		Feature extends ObjectModel
 		WHERE f.`id_feature` = '.intval($id_feature));
 	}
 	
-	static public function getFeatureByNameWithoutLang($name)
-	{
-		Tools::d('
-		SELECT f.`id_feature`
-		FROM `'._DB_PREFIX_.'feature` f
-		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON ( f.`id_feature` = fl.`id_feature`)
-		WHERE fl.`name` = \''.pSQL($name).'\' LIMIT 1');
-	}
-	
-	
 	/**
 	 * Get all features for a given language
 	 *
