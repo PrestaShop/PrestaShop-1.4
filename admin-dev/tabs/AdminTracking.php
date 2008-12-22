@@ -91,6 +91,8 @@ class AdminTracking extends AdminTab
 		{
 			$nbCategories = sizeof($this->_list['obj']);
 			echo '<h3>'.$this->_list['message'].' '.$nbCategories.' '.('found').'</h3>';
+			if (!$nbCategories)
+				return ;
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">';
 			$irow = 0;

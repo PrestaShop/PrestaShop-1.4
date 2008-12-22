@@ -441,11 +441,12 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (29, 'AdminEmployees', 0, 8),
 (8, 'AdminPreferences', 0, 9),
 (9, 'AdminTools', 0, 10),
-(10, 'AdminManufacturers', 1, 1),
-(34, 'AdminSuppliers', 1, 2),
-(11, 'AdminAttributesGroups', 1, 3),
-(36, 'AdminFeatures', 1, 4),
-(60, 'AdminTracking', 1, 5),
+(60, 'AdminTracking', 1, 1),
+(10, 'AdminManufacturers', 1, 2),
+(34, 'AdminSuppliers', 1, 3),
+(11, 'AdminAttributesGroups', 1, 4),
+(36, 'AdminFeatures', 1, 5),
+(58, 'AdminScenes', 1, 6)
 (12, 'AdminAddresses', 2, 1),
 (42, 'AdminInvoices', 3, 1),
 (55, 'AdminDeliverySlip', 3, 2),
@@ -487,8 +488,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (52, 'AdminSubDomains', 9, 7),
 (53, 'AdminBackup', 9, 8),
 (43, 'AdminSearch', -1, 0),
-(57, 'AdminCMS', 9, 9),
-(58, 'AdminScenes', 1, 5);
+(57, 'AdminCMS', 9, 9);
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 1, 'Catalog'),
@@ -606,7 +606,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 57, 'CMS'),
 (2, 58, 'Scènes'),
 (2, 59, 'Messages'),
-(1, 60, 'Suivi'),;
+(2, 60, 'Suivi');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
