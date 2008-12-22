@@ -74,7 +74,7 @@
 'hasError' : true,
 errors : [
 {foreach from=$errors key=k item=error name='errors'}
-	'{$error|addslashes}'
+	'{$error|addslashes|html_entity_decode:2:'UTF-8'}'
 	{if !$smarty.foreach.errors.last},{/if}
 {/foreach}
 ]
