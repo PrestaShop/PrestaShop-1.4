@@ -8,7 +8,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.1
+  * @version 1.0
   *
   */
 
@@ -23,6 +23,8 @@ class AdminCategories extends AdminTab
 
 	public function __construct()
 	{
+		global $cookie;
+		
 		$this->table = 'category';
 	 	$this->className = 'Category';
 	 	$this->lang = true;
@@ -35,9 +37,10 @@ class AdminCategories extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_category' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 30),
 		'name' => array('title' => $this->l('Name'), 'width' => 100, 'callback' => 'hideCategoryPosition'),
-		'description' => array('title' => $this->l('Description'), 'width' => 550, 'maxlength' => 90, 'orderby' => false),
+		'description' => array('title' => $this->l('Description'), 'width' => 480, 'maxlength' => 90, 'orderby' => false),
+		'physical_products_quantity' => array('title' => $this->l('In stock Products'), 'align' => 'center', 'width' => 50),
 		'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
-
+		
 		$this->_category = AdminCatalog::getCurrentCategory();
 		$this->_filter = 'AND `id_parent` = '.intval($this->_category->id);
 

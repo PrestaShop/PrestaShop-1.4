@@ -8,7 +8,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.1
+  * @version 1.0
   *
   */
 
@@ -116,23 +116,7 @@ class		Category extends ObjectModel
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
 				$this->name[$k] = '0'.$value;
-		if (!parent::update())
-			return false;
-		return $this->_updateChildren($nullValues);
-	}
-
-	private function _updateChildren($nullValues = false)
-	{
-		$children = $this->getSubCategories(intval(Configuration::get('PS_LANG_DEFAULT')), false);
-		foreach ($children AS $childDatas)
-		{
-			$childObject = new Category(intval($childDatas['id_category']));
-			if (!Validate::isLoadedObject($childObject))
-				die(Tools::displayError());
-			if (!$childObject->update($nullValues))
-				return false;
-		}
-		return true;
+		return parent::update();
 	}
 
 	/**
@@ -222,10 +206,9 @@ class		Category extends ObjectModel
 
 		/* Delete category and its child from database */
 		$list = sizeof($toDelete) > 1 ? implode(',', $toDelete) : intval($this->id);
-		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')') === false OR
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.$list.')') === false OR
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')') === false)
-			return false;
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.$list.')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')');
 
 		/* Delete categories images */
 		foreach ($toDelete AS $id_category)
@@ -307,7 +290,7 @@ class		Category extends ObjectModel
 	}
 
 	/**
-	  * Return current category children
+	  * Return current category childs
 	  *
 	  * @param integer $id_lang Language ID
 	  * @param boolean $active return only active categories
@@ -337,6 +320,66 @@ class		Category extends ObjectModel
 			$resultsArray[] = $row;
 		}
 		return $resultsArray;
+	}
+	
+	private static function getAllSubCats(&$all_cats, $id_cat, $id_lang)
+	{
+		$category = new Category(intval($id_cat));
+		$sub_cats = $category->getSubcategories($id_lang);
+		if(count($sub_cats) > 0)
+			foreach ($sub_cats AS $sub_cat)
+			{
+				$all_cats[] = $sub_cat['id_category'];
+				self::getAllSubCats($all_cats, $sub_cat['id_category'], $id_lang);
+			}
+	}
+	
+	public static function countNbProductAndSub($id_category, $id_lang)
+	{
+		$tab = array(intval($id_category));
+		Category::getAllSubCats($tab, intval($id_category), intval($id_lang));
+		
+		$listCategories = implode(',', $tab);
+		$sql = 'SELECT
+		(
+		  (
+		    /* quantity of products witch don t have got attributes */
+		    IFNULL((
+				  SELECT SUM(quantity)
+				  FROM ps_product
+				  WHERE id_product NOT IN
+				  (
+				    /* products with attributes */
+				    SELECT DISTINCT(id_product)
+				    FROM ps_product_attribute
+				  )
+				  AND id_product IN
+				  (
+				  	/* products direclty in the categories listed bellow */
+				  	SELECT DISTINCT(id_product)
+				  	FROM ps_category_product
+				  	WHERE id_category IN ('.$listCategories.')
+				  )
+				),0)
+		  )
+		  +
+		  (
+		    /* quantity of products witch have attributes */
+				IFNULL((
+				  SELECT SUM(quantity)
+				  FROM ps_product_attribute pa
+				  WHERE pa.id_product IN
+				  (
+				  	/* products direclty in the categories listed bellow */
+				  	SELECT DISTINCT(id_product)
+				  	FROM ps_category_product
+				  	WHERE id_category IN ('.$listCategories.')
+				  )
+				),0)
+		  )
+		) as nb';
+		$result = Db::getInstance()->getRow($sql);
+		return $result['nb'];
 	}
 
 	/**
@@ -392,15 +435,15 @@ class		Category extends ObjectModel
 		$sql = '
 		SELECT p.*, pa.`id_product_attribute`, pl.`description`, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name, t.`rate`, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM `'._DB_PREFIX_.'category_product` cp
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = cp.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (p.`id_product` = pa.`id_product` AND default_on = 1)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		WHERE cp.`id_category` = '.intval($this->id).($active ? ' AND p.`active` = 1' : '').'
 		'.($id_supplier ? 'AND p.id_supplier = '.$id_supplier : '');
 		
@@ -410,13 +453,17 @@ class		Category extends ObjectModel
 			$sql .= 'LIMIT 0, '.intval($randomNumberProducts);
 		}
 		else
+		{
 			$sql .= 'ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
+		}
 		
 		$result = Db::getInstance()->ExecuteS($sql);
 		
 		if ($orderBy == 'price')
+		{
 			Tools::orderbyPrice($result, $orderWay);
+		}
 		if (!$result)
 			return false;
 
@@ -631,7 +678,175 @@ class		Category extends ObjectModel
 		WHERE c.`id_category` = '.intval($id_category));
 		
 		return isset($row['id_category']);
-	}	
+	}
+	
+	/**
+	* get empty categories
+	*
+	* @return array of id_categories
+	*/	
+	static public function getEmptyCategories()
+	{
+		//TODO
+		/*
+		$row = Db::getInstance()->getRow('
+		SELECT `id_category`
+		FROM '._DB_PREFIX_.'category c
+		WHERE c.`id_category` = '.intval($id_category));
+		
+		return isset($row['id_category']);
+		*/
+	}
+	
+	/**
+	* Return number of product in stock in this category
+	*
+	* @param $only_active_products Boolean
+	* @return int
+	*/	
+	public function getNumberOfInStockProducts($only_active_products = false)
+	{
+		//TODO
+		/*
+		$row = Db::getInstance()->getRow('
+		SELECT `id_category`
+		FROM '._DB_PREFIX_.'category c
+		WHERE c.`id_category` = '.intval($id_category));
+		
+		return isset($row['id_category']);
+		*/
+	}
+	
+	static function _non_empty_category_ids()
+	{
+		
+		/*
+		
+		a partir d'un id, lister le stock d'un produit
+		
+		lister tt les produits en stock
+		id_product, id_product_attribute, quantity
+		
+		
+		*/
+		
+		//////// OLD ///////////
+		$tmp1 = Db::s('
+			SELECT pa.id_product
+			FROM ps_product_attribute pa
+			GROUP BY pa.id_product
+			HAVING SUM(pa.quantity) = 0
+		');
+		$nbTmp1 = count($tmp1);
+		$tmp1string = '';
+		if ($nbTmp1)
+		{
+		$tmp1string = ' AND p.id_product NOT
+			IN (
+				/* Liste des ID des produits "qui ont des attributs" + "tous ces sont attributs ne sont plus en stock" */
+				/* note : pas de sous requête pour des raisons de perf : déjà testé! */
+				';
+		foreach ($tmp1 as $key => $tmp1i)
+		{
+			$tmp1string .= $tmp1i['id_product'];
+				if ($key != $nbTmp1 - 1)
+					$tmp1string .= ', ';
+		}
+		$tmp1string .= ')';
+		}
+		
+		$tmp2 = Db::s('
+			SELECT pa.id_product
+			FROM ps_product_attribute pa
+			GROUP BY pa.id_product
+			HAVING SUM( pa.quantity ) >0
+		');
+		$nbTmp2 = count($tmp2);
+		$tmp2string = '';
+		if ($nbTmp2)
+		{
+		$tmp2string = ' AND	p.id_product IN (
+		/* Liste des ID des produits "qui ont des attributs" + "au moins un de ces attributs a du stock" */
+				';
+		foreach ($tmp2 as $key => $tmp2i)
+		{
+			$tmp2string .= $tmp2i['id_product'];
+				if ($key != $nbTmp2 - 1)
+					$tmp2string .= ', ';
+		}
+		$tmp2string .= ')';
+		}
+		
+		$tmp3 = Db::s('
+			SELECT pa.id_product
+			FROM ps_product_attribute pa
+			GROUP BY pa.id_product
+			HAVING SUM( pa.quantity ) >0
+		');
+		$nbTmp3 = count($tmp3);
+		$tmp3string = '';
+		if ($nbTmp3)
+		{
+		$tmp3string = ' AND	p.id_product IN (
+		/* Liste des ID des produits "qui ont des attributs" + "au moins un de ces attributs a du stock" */
+				';
+		foreach ($tmp3 as $key => $tmp3i)
+		{
+			$tmp3string .= $tmp3i['id_product'];
+				if ($key != $nbTmp3 - 1)
+					$tmp3string .= ', ';
+		}
+		$tmp3string .= ')';
+		}
+		
+		//get categories which contains products to show
+		$ctr = microtime(true);
+		$sql_start = '
+			/* afficher les categs contenant au moins un produit affichable */
+			SELECT DISTINCT cp.id_category AS id_parent
+			FROM `ps_category_product` cp
+			WHERE 1
+			AND cp.id_product
+			IN (
+				/* Liste des ID des produits à afficher (géré en fonction de p.quantity ET de product_attribute.quantity) */
+				SELECT p.id_product
+				FROM ps_product p
+				WHERE 1
+				AND (
+					(
+						/* Liste des ID des produits "qui ont de la quantité" + "qui ne sont pas dans la liste des produits avec tous leurs attributs hors-stock" */
+						p.quantity >0';
+		$sql_start .= $tmp1string;
+		$sql_start .= '
+					)
+					OR
+					(
+						/* Liste des ID des produits "qui n ont plus de quantité" + "qui ont des attributs" + "qui ne sont pas dans la liste des produits avec tous leurs attributs hors-stock" */
+						p.quantity = 0';
+		$sql_start .= $tmp2string;
+		$sql_start .= $tmp3string;
+		$sql_start .= '
+					)
+					OR
+					(
+						show_if_out_of_stock = 1
+					)
+				)
+			)
+		';
+		$result_start = Db::s($sql_start);
+		$washed_result_start = array();
+		foreach ($result_start as $categ_start)
+			$washed_result_start[] = $categ_start['id_parent'];
+		$result_start = $washed_result_start;
+		if (($key = array_search(0, $result_start)) === 0)
+			unset($result_start[$key]);
+		if ($key = array_search(1, $result_start))
+			unset($result_start[$key]);
+		$result_start = array_values($result_start);
+		return $result_start;
+	}
+	
 }
 
 ?>

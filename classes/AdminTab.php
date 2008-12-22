@@ -7,7 +7,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.1
+  * @version 1.0
   *
   */
 
@@ -51,9 +51,6 @@ abstract class AdminTab
 
 	/** @var string Add fields into data query to display list */
 	protected $_select;
-	
-	/** @var string SQL query to display list */
-	protected $_sql_get_list;
 
 	/** @var string Join tables into data query to display list */
 	protected $_join;
@@ -499,7 +496,7 @@ abstract class AdminTab
 								$result = $object->update();
 							}
 							if (!$result)
-								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 							elseif ($this->postImage($object->id))
 							{
 								if ($back = Tools::getValue('back'))
@@ -828,7 +825,7 @@ abstract class AdminTab
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter);
 		$this->_listTotal = intval($queryTotal['total']);
 		
-		/* Query in order to get results with all fields */	
+		/* Query in order to get results with all fields */
 		$sql = 
 		($this->_tmpTableFilter ? 'SELECT * FROM (' : '').'
 		SELECT '.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
@@ -840,8 +837,6 @@ abstract class AdminTab
 		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
-		if (isset($this->_sql_get_list))
-			$sql = $this->_sql_get_list;
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 	}
 
@@ -1060,7 +1055,7 @@ abstract class AdminTab
 		 * icon   : icon determined by values
 		 * active : allow to toggle status
 		 */
-		global $currentIndex;
+		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		$irow = 0;
@@ -1122,6 +1117,8 @@ abstract class AdminTab
 						echo Tools::displayPrice($tr[$key], (isset($params['currency']) ? new Currency(intval($tr['id_currency'])) : $currency), false, false);
 					elseif (isset($params['float']))
 						echo rtrim(rtrim($tr[$key], '0'), '.');
+					elseif ($key == 'physical_products_quantity')
+						echo Category::countNbProductAndSub($tr['id_category'], $cookie->id_lang);
 					elseif (isset($tr[$key]))
 					{
 						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
@@ -1146,12 +1143,12 @@ abstract class AdminTab
 						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>';
 					if ($this->delete)
 						echo '
-						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, true, false).$id.$this->l('?', __CLASS__, true, false).'\');">
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.addslashes($this->l('Delete item #')).$id.' ?\');">
 						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>';
 					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 					if ($this->duplicate)
 						echo '
-						<a class="pointer" onclick="if (confirm(\''.$this->l('Copy images too?', __CLASS__, true, false).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+						<a class="pointer" onclick="if (confirm(\''.addslashes($this->l('Copy images too?')).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
 						<img src="../img/admin/add.gif" border="0" alt="'.$this->l('Duplicate').'" title="'.$this->l('Duplicate').'" /></a>';
 					echo '</td>';
 				}
