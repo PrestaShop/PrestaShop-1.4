@@ -108,4 +108,11 @@ class		ImageType extends ObjectModel
 		return Db::getInstance()->NumRows();
 	}
 
+	static public function getByNameNType($name, $type)
+	{
+		if (!in_array($type, array('products', 'categories', 'manufacturers', 'suppliers', 'scenes')))
+			die(Tools::displayError());
+		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.$type.'` = 1');
+	}
+
 }

@@ -608,7 +608,7 @@ class		Product extends ObjectModel
 	* @param float $weight Additional weight
 	* @param float $ecotax Additional ecotax
 	* @param integer $quantity Quantity available
-	* @param integer $id_image Image id
+	* @param integer $id_images Image ids
 	* @param string $reference Reference
 	* @param string $supplier_reference Supplier Reference
 	* @param string $location Location
@@ -616,16 +616,26 @@ class		Product extends ObjectModel
 	* @param boolean $default Is default attribute for product
 	* @return array Insertion result
 	*/
-	public function addProductAttribute($price, $weight, $ecotax, $quantity, $id_image, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
 		Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute',
 		array('id_product' => intval($this->id), 'price' => floatval($price), 'ecotax' => floatval($ecotax), 'quantity' => intval($quantity),
-		'id_image' => intval($id_image), 'weight' => ($weight ? floatval($weight) : 0), 'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
+		'weight' => ($weight ? floatval($weight) : 0), 'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
 		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'default_on' => intval($default)),
 		'INSERT');
-		return Db::getInstance()->Insert_ID();
+		if (!$id_product_attribute = Db::getInstance()->Insert_ID())
+			return false;
+		if (empty($id_images))
+			return true;
+		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
+		foreach ($id_images AS $id_image)
+			$query .= '('.intval($id_product_attribute).', '.intval($id_image).'), ';
+		$query = trim($query, ', ');
+		if (!Db::getInstance()->Execute($query))
+			return false;
+		return intval($id_product_attribute);
 	}
 
 	public function addProductAttributeMultiple($attributes, $setDefault = true)
@@ -692,7 +702,7 @@ class		Product extends ObjectModel
 	* @param string $ean13 Ean-13 barcode
 	* @return array Update result
 	*/
-	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $ecotax, $quantity, $id_image, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
 		Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
@@ -705,16 +715,22 @@ class		Product extends ObjectModel
 		'price' => floatval($price),
 		'ecotax' => floatval($ecotax),
 		'quantity' => intval($quantity),
-		'id_image' => intval($id_image),
 		'weight' => ($weight ? floatval($weight) : 0),
 		'reference' => pSQL($reference), 
 		'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location),
 		'ean13' => pSQL($ean13),
 		'default_on' => intval($default));
-		$res = Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute));
+		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
+			return false;
 		Hook::updateProductAttribute($id_product_attribute);
-		return $res;
+		if (empty($id_images))
+			return true;
+		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
+		foreach ($id_images AS $id_image)
+			$query .= '('.intval($id_product_attribute).', '.intval($id_image).'), ';
+		$query = trim($query, ', ');
+		return Db::getInstance()->Execute($query);
 	}
 
 	/**
@@ -861,6 +877,25 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($id_lang).')
 		WHERE pa.`id_product` = '.intval($this->id).'
 		ORDER BY pa.`id_product_attribute`');
+	}
+
+	public function getCombinationImages($id_lang)
+	{
+		if (!$productAttributes = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.intval($this->id)))
+			return false;
+		$ids = array();
+		foreach ($productAttributes AS $productAttribute)
+			$ids[] = intval($productAttribute['id_product_attribute']);
+		if (!$result = Db::getInstance()->ExecuteS('
+			SELECT pai.`id_image`, pai.`id_product_attribute`, il.`legend`
+			FROM `'._DB_PREFIX_.'product_attribute_image` pai
+			LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (il.`id_image` = pai.`id_image`)
+			WHERE pai.`id_product_attribute` IN ('.implode(', ', $ids).') AND il.`id_lang` = '.intval($id_lang)))
+			return false;
+		$images = array();
+		foreach ($result AS $row)
+			$images[$row['id_product_attribute']][] = $row;
+		return $images;
 	}
 
 	/**
@@ -1385,7 +1420,7 @@ class		Product extends ObjectModel
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT ag.`id_attribute_group`, agl.`name` AS group_name, agl.`public_name` AS public_group_name, a.`id_attribute`, al.`name` AS attribute_name,
-		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`id_image`, pa.`default_on`, pa.`reference`
+		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`default_on`, pa.`reference`
 		FROM `'._DB_PREFIX_.'product_attribute` pa
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`

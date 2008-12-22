@@ -88,18 +88,24 @@ function findCombination()
 			
 			//update the display
 			updateDisplay();
+			refreshProductImages(combinations[combination]['idCombination']);
 			
 			//leave the function because combination has been found
 			return;
 		}
 	}
-	//this combination don't exist (not created in back office)
+	//this combination doesn't exist (not created in back office)
 	selectedCombination['unavailable'] = true;
 	updateDisplay();
 }
 
 function updateColorSelect(id_attribute)
 {
+	if (id_attribute == 0)
+	{
+		refreshProductImages(0);
+		return ;
+	}
 	// Visual effect
 	$('#color_'+id_attribute).fadeTo('fast', 1, function(){	$(this).fadeTo('slow', 0, function(){ $(this).fadeTo('slow', 1, function(){}); }); });
 	// Attribute selection
@@ -268,6 +274,60 @@ function displayImage(domAAroundImgThumb)
     }
 }
 
+function resetThumbnailScroll()
+{
+	$('#thumbs_list').serialScroll({
+		items:'li',
+		prev:'a#view_scroll_left',
+		next:'a#view_scroll_right',
+		axis:'x',
+		offset:0,
+		start:0,
+		stop:true,
+		duration:700,
+		step: 0,
+		lock: false,
+		force:false,
+		cycle:false
+	});
+
+}
+
+/* Change the current product images regarding the combination selected */
+function refreshProductImages(id_product_attribute)
+{
+	var legend = 'debug';
+
+	$('#thumbs_list_frame').find('li[@id^=thumbnail_]').each(function() {
+		$(this).hide();
+	});
+	id_product_attribute = parseInt(id_product_attribute);
+
+	if (typeof(combinationImages[id_product_attribute]) != 'undefined')
+	{
+		for (i = 0; i < combinationImages[id_product_attribute].length; i++)
+			$('#thumbnail_' + parseInt(combinationImages[id_product_attribute][i])).show();
+		if (i <= 3)
+		{
+			$('#view_scroll_left').hide();
+			$('#view_scroll_right').hide();
+		}
+		else
+		{
+			$('#view_scroll_left').show();
+			$('#view_scroll_right').show();
+			resetThumbnailScroll();
+		}
+	}
+	else if (id_product_attribute == 0)
+	{
+		$('#view_scroll_left').show();
+		$('#view_scroll_right').show();
+		resetThumbnailScroll();
+	}
+	$('#thumbs_list').trigger('goto', [ 0 ]);
+}
+
 //To do after loading HTML
 $(document).ready(function(){
 	
@@ -324,6 +384,8 @@ $(document).ready(function(){
 	//init the price in relation of the selected attributes
 	if (typeof productHasAttributes != 'undefined' && productHasAttributes)
 		findCombination();
+	refreshProductImages(0);
+
 });
 
 function saveCustomization()

@@ -934,6 +934,7 @@ class AdminProducts extends AdminTab
 		<script type="text/javascript">
 			var pos_select = '.(($tab = Tools::getValue('tabs')) ? $tab : '0').';
 			id_language = Number('.$defaultLanguage.');
+			'.$this->initCombinationImagesJS().'
 		</script>
 		<script src="../js/tabpane.js" type="text/javascript"></script>
 		<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />
@@ -2028,6 +2029,23 @@ class AdminProducts extends AdminTab
 			</script>';
 	}
 
+	public function initCombinationImagesJS()
+	{
+		global $cookie;
+
+		$content = 'var combination_images = new Array();';
+		if (!$allCombinationImages = $this->loadObject()->getCombinationImages(intval($cookie->id_lang)))
+			return $content;
+		foreach ($allCombinationImages AS $id_product_attribute => $combinationImages)
+		{
+			$i = 0;
+			$content .= 'combination_images['.intval($id_product_attribute).'] = new Array();';
+			foreach ($combinationImages AS $combinationImage)
+				$content .= 'combination_images['.intval($id_product_attribute).']['.$i++.'] = '.intval($combinationImage['id_image']).';';
+		}
+		return $content;
+	}
+
 	function displayFormAttributes($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
@@ -2138,12 +2156,17 @@ class AdminProducts extends AdminTab
 		  <tr>
 			  <td width="150">'.$this->l('Image:').'</td>
 			  <td style="padding-bottom:5px;">
-				<select name="id_image_attr" id="id_image_attr" style="width: 140px; float: left;" onchange="changePic('.intval($obj->id).', this.value);">
-					<option value="0" selected="selected">'.$this->l('None').'</option>';
-			foreach ($images AS $k => $row)
-				echo '<option value="'.$row['id_image'].'">#'.$row['position'].(isset($row['legend']) ? ' - '.$row['legend'] : '').'</option>';
-			echo '
-				</select>
+				<ul id="id_image_attr">';
+			$i = 0;
+			$imageType = ImageType::getByNameNType('small', 'products');
+			$imageWidth = (isset($imageType['width']) ? intval($imageType['width']) : 64) + 25;
+			foreach ($images AS $image)
+			{
+				echo '<li style="float: left; width: '.$imageWidth.'px;"><input type="checkbox" name="id_image_attr[]" value="'.intval($image['id_image']).'" id="id_image_attr_'.intval($image['id_image']).'" />
+				<label for="id_image_attr_'.intval($image['id_image']).'" style="float: none;"><img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg" alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></label></li>';
+				++$i;
+			}
+			echo '</ul>
 				<img id="pic" alt="" title="" style="display: none; width: 100px; height: 100px; float: left; border: 1px dashed #BBB; margin-left: 20px;" />
 			  </td>
 		  </tr>
@@ -2175,7 +2198,6 @@ class AdminProducts extends AdminTab
 							<th>'.$this->l('Reference').'</th>
 							<th>'.$this->l('EAN13').'</th>
 							<th class="center">'.$this->l('Quantity').'</th>
-							<th class="center">'.$this->l('Image').'</th>
 							<th class="center">'.$this->l('Actions').'</th>
 						</tr>';
 			if ($obj->id)
@@ -2184,6 +2206,8 @@ class AdminProducts extends AdminTab
 				$combinaisons = $obj->getAttributeCombinaisons(intval($cookie->id_lang));
 				$groups = array();
 				if (is_array($combinaisons))
+				{
+					$combinationImages = $obj->getCombinationImages(intval($cookie->id_lang));
 					foreach ($combinaisons AS $k => $combinaison)
 					{
 						$combArray[$combinaison['id_product_attribute']]['wholesale_price'] = $combinaison['wholesale_price'];
@@ -2194,13 +2218,14 @@ class AdminProducts extends AdminTab
                         $combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
 						$combArray[$combinaison['id_product_attribute']]['location'] = $combinaison['location'];
 						$combArray[$combinaison['id_product_attribute']]['quantity'] = $combinaison['quantity'];
-						$combArray[$combinaison['id_product_attribute']]['id_image'] = $combinaison['id_image'];
+						$combArray[$combinaison['id_product_attribute']]['id_image'] = isset($combinationImages[$combinaison['id_product_attribute']][0]['id_image']) ? $combinationImages[$combinaison['id_product_attribute']][0]['id_image'] : 0;
 						$combArray[$combinaison['id_product_attribute']]['default_on'] = $combinaison['default_on'];
 						$combArray[$combinaison['id_product_attribute']]['ecotax'] = $combinaison['ecotax'];
 						$combArray[$combinaison['id_product_attribute']]['attributes'][] = array($combinaison['group_name'], $combinaison['attribute_name'], $combinaison['id_attribute']);
 						if ($combinaison['is_color_group'])
 							$groups[$combinaison['id_attribute_group']] = $combinaison['group_name'];
 					}
+				}
 				$irow = 0;
 				if (isset($combArray))
 					foreach ($combArray AS $id_product_attribute => $product_attribute)
@@ -2223,18 +2248,17 @@ class AdminProducts extends AdminTab
 							<td class="right">'.$product_attribute['reference'].'</td>
 							<td class="right">'.$product_attribute['ean13'].'</td>
 							<td class="center">'.$product_attribute['quantity'].'</td>
-							<td class="center">'.($attrImage ? '#'.$attrImage->position : $this->l('None')).'</td>
 							<td class="center">
 							<a style="cursor: pointer;">
 							<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this combination').'"
 							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
-							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\');" /></a>&nbsp;
+							\''.$product_attribute['quantity'].'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\');" /></a>&nbsp;
 							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /></a></td>
 						</tr>';
 					}
 						else
-				echo '<tr><td colspan="8" align="center"><i>'.$this->l('No attribute yet').'.</i></td></tr>';
+				echo '<tr><td colspan="7" align="center"><i>'.$this->l('No attribute yet').'.</i></td></tr>';
 			}
 			echo '
 						</table>

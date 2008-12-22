@@ -201,6 +201,7 @@ else
 		
 		if (Db::getInstance()->numRows())
 		{
+			$combinationImages = $product->getCombinationImages(intval($cookie->id_lang));
 			foreach ($attributesGroups AS $k => $row)
 			{
 				/* Color management */
@@ -225,7 +226,7 @@ else
 				$combinations[$row['id_product_attribute']]['weight'] = floatval($row['weight']);
 				$combinations[$row['id_product_attribute']]['quantity'] = intval($row['quantity']);
 				$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
-				$combinations[$row['id_product_attribute']]['id_image'] = (($row['id_image'] != NULL) ? intval($row['id_image']) : -1);
+				$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 			}
 			//wash attributes list (if some attributes are unavailables and if allowed to wash it)
 			if (Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
@@ -247,7 +248,8 @@ else
 				'groups' => $groups,
 				'combinaisons' => $combinations, /* Kept for compatibility purpose only */
 				'combinations' => $combinations,
-				'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false));
+				'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false,
+				'combinationImages' => $combinationImages));
 		}
 		$smarty->assign(array(
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),

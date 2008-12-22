@@ -44,6 +44,21 @@ var customizationFields = new Array();
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}][1] = {if $field.type|intval == 0 AND $pictures.$key}2{else}{$field.required|intval}{/if};
 {/foreach}
 
+// Images
+var img_prod_dir = '{$img_prod_dir}';
+var combinationImages = new Array();
+{foreach from=$combinationImages item='combination' key='combinationId' name='f_combinationImages'}
+combinationImages[{$combinationId}] = new Array();
+{foreach from=$combination item='image' name='f_combinationImage'}
+combinationImages[{$combinationId}][{$smarty.foreach.f_combinationImage.index}] = {$image.id_image|intval};
+{/foreach}
+{/foreach}
+
+combinationImages[0] = new Array();
+{foreach from=$images item='image' name='f_defaultImages'}
+combinationImages[0][{$smarty.foreach.f_defaultImages.index}] = {$image.id_image};
+{/foreach}
+
 // Translations
 var doesntExist = '{l s='The product does not exist in this model. Please choose another.' js=1}';
 var doesntExistNoMore = '{l s='This product is no longer in stock' js=1}';
@@ -93,9 +108,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<div id="views_block" {if count($images) < 2}class="hidden"{/if}>
 		{if count($images) > 3}<a id="view_scroll_left" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Previous'}</a>{/if}
 		<div id="thumbs_list">
-			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px">
+			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px" id="thumbs_list_frame">
 				{foreach from=$images item=image name=thumbnails}
-				<li>
+				<li id="thumbnail_{$image.id_image}">
 					<a href="{$img_prod_dir}{$product->id}-{$image.id_image}-thickbox.jpg" rel="other-views" class="{if !$jqZoomEnabled}thickbox{/if} {if $smarty.foreach.thumbnails.first}shown{/if}">
 						<img id="thumb_{$image.id_image}" src="{$img_prod_dir}{$product->id}-{$image.id_image}-medium.jpg" alt="{$image.legend|htmlspecialchars}" title="{$image.legend|htmlspecialchars}" />
 					</a>
@@ -136,6 +151,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{foreach from=$colors key='id_attribute' item='color'}
 				<a id="color_{$id_attribute|intval}" class="color_pick" style="background: {$color.value};" onclick="updateColorSelect({$id_attribute|intval});">{if file_exists($col_img_dir|cat:$id_attribute|cat:'.jpg')}<img src="{$img_col_dir}{$id_attribute}.jpg" alt="" title="{$color.name}" />{/if}</a>
 			{/foreach}
+				<a id="color_all" onclick="updateColorSelect(0);"><img src="{$img_dir}icon/cancel.png" alt="" title="{$color.name}" /></a>
 		</div>
 		{/if}
 

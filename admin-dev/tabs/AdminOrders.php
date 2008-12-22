@@ -497,7 +497,7 @@ class AdminOrders extends AdminTab
 							if (isset($product['product_attribute_id']) AND intval($product['product_attribute_id']))
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
-								FROM '._DB_PREFIX_.'product_attribute
+								FROM '._DB_PREFIX_.'product_attribute_image
 								WHERE id_product_attribute = '.intval($product['product_attribute_id']));
 						 	if (!isset($image['id_image']))
 								$image = Db::getInstance()->getRow('
