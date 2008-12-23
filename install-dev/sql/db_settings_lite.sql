@@ -430,7 +430,7 @@ INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
 (1, 1, 'Administrator'),
 (1, 2, 'Administrateur');
 
-INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES
+INSERT INTO `ps_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES
 (1, 'AdminCatalog', 0, 1),
 (2, 'AdminCustomers', 0, 2),
 (3, 'AdminOrders', 0, 3),
@@ -446,15 +446,15 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (34, 'AdminSuppliers', 1, 3),
 (11, 'AdminAttributesGroups', 1, 4),
 (36, 'AdminFeatures', 1, 5),
-(58, 'AdminScenes', 1, 6)
+(58, 'AdminScenes', 1, 6),
 (12, 'AdminAddresses', 2, 1),
 (42, 'AdminInvoices', 3, 1),
 (55, 'AdminDeliverySlip', 3, 2),
 (47, 'AdminReturn', 3, 3),
 (49, 'AdminSlip', 3, 4),
-(13, 'AdminOrdersStates', 3, 5),
-(54, 'AdminOrderMessage', 3, 6),
-(59, 'AdminOrderMessages', 3, 7),
+(59, 'AdminMessages', 3, 5),
+(13, 'AdminOrdersStates', 3, 6),
+(54, 'AdminOrderMessage', 3, 7),
 (14, 'AdminDiscounts', 4, 3),
 (15, 'AdminCurrencies', 4, 1),
 (16, 'AdminTaxes', 4, 2),
@@ -535,7 +535,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 43, 'Search'),
 (1, 44, 'Localization'),
 (1, 46, 'States'),
-(1, 47, 'Merchandise return (RMAs)'),
+(1, 47, 'Merchandise return'),
 (1, 48, 'PDF'),
 (1, 49, 'Credit slips'),
 (1, 50, 'Modules'),
@@ -547,7 +547,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 56, 'Meta-Tags'),
 (1, 57, 'CMS'),
 (1, 58, 'Image mapping'),
-(1, 59, 'Messages'),
+(1, 59, 'Customer messages'),
 (1, 60, 'Tracking'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
@@ -561,7 +561,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 10, 'Fabricants'),
 (2, 11, 'Attributs et groupes'),
 (2, 12, 'Adresses'),
-(2, 13, 'Statuts des commandes'),
+(2, 13, 'Statuts commandes'),
 (2, 14, 'Bons de réduction'),
 (2, 15, 'Devises'),
 (2, 16, 'Taxes'),
@@ -605,7 +605,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 56, 'Méta-Tags'),
 (2, 57, 'CMS'),
 (2, 58, 'Scènes'),
-(2, 59, 'Messages'),
+(2, 59, 'Messages clients'),
 (2, 60, 'Suivi');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)

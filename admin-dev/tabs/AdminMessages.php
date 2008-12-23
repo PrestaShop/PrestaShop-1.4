@@ -13,7 +13,7 @@
 
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
-class AdminOrderMessages extends AdminTab
+class AdminMessages extends AdminTab
 {
 	public function __construct()
 	{
