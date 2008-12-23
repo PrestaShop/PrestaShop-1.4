@@ -709,9 +709,18 @@ class AdminOrders extends AdminTab
 		else
 		{
 			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 			$this->displayList();
-			$this->displayOptionsList();
+			echo '<h2 class="space" style="text-align:right; margin-right:44px;">'.$this->l('Total:').' '.Tools::displayPrice($this->getTotal(), $currency).'</h2>';
 		}
+	}
+	
+	private function getTotal()
+	{
+		$total = 0;
+		foreach ($this->_list as $item)
+			$total += $item['total_paid'];
+		return $total;
 	}
 }
 
