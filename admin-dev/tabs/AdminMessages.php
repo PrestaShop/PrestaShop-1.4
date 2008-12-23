@@ -54,7 +54,7 @@ class AdminMessages extends AdminTab
 		is_numeric($_POST['submitFilter'.$this->table]))
 			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
 		
-		$this->_sql_get_list = '
+		$sql = '
 			SELECT m.id_message, m.id_cart, m.id_employee, m.id_order, m.message, m.private, m.date_add, CONCAT( LEFT( c.`firstname` , 1 ) , \'. \', c.`lastname` ) AS customer, c.id_customer, count( m.id_message ) nb_messages, (
 				SELECT message
 				FROM '._DB_PREFIX_.'message
@@ -82,13 +82,8 @@ class AdminMessages extends AdminTab
 			ORDER BY '.(isset($orderBy) ? pSQL($orderBy) : 'date_add') .' '.(isset($orderWay) ? pSQL($orderWay) : 'DESC')
 			.' LIMIT '.intval($start).','.intval($limit);
 		;
+		$this->_list = Db::getInstance()->ExecuteS($sql);
 		
-		global $cookie, $currentIndex;
-		$statesArray = array();
-		$states = OrderState::getOrderStates(intval($cookie->id_lang));
-		foreach ($states AS $state)
-			$statesArray[$state['id_order_state']] = $state['name'];
-
  		$this->fieldsDisplay = array(
 			'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 25),
 			'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
@@ -107,7 +102,6 @@ class AdminMessages extends AdminTab
 			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
 		else
 		{
-			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
 			$this->displayOptionsList();
 		}
