@@ -103,7 +103,7 @@ class StatsRegistrations extends ModuleGraph
 		return $this->_html;
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		$this->_query = '
 			SELECT `date_add`
@@ -111,24 +111,24 @@ class StatsRegistrations extends ModuleGraph
 			WHERE `date_add` LIKE \'';
 		$this->_query2 = '\'';
 		$this->_titles['main'] = $this->l('Number of customer accounts created');
-		$this->setDateGraph(true);
+		$this->setDateGraph($layers, true);
 	}
 	
-	protected function setYearValues()
+	protected function setYearValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1]++;
 	}
 	
-	protected function setMonthValues()
+	protected function setMonthValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)
 			$this->_values[intval(substr($row['date_add'], 8, 2)) - 1]++;
 	}
 
-	protected function setDayValues()
+	protected function setDayValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)

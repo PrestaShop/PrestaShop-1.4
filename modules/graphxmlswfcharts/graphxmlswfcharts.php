@@ -16,7 +16,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 	private	$_values = NULL;
 	private	$_legend = NULL;
 	private	$_legend_more = '';
-	private	$_main_title = '';
+	private	$_titles = '';
 
 	function __construct($type = null)
 	{
@@ -113,7 +113,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 	private function drawLine()
 	{
 		$this->drawColumn();
-		$this->_xml .= '<series_color><color>687B9F</color></series_color>
+		$this->_xml .= '<series_color><color>A3B6DA</color><color>C3413C</color><color>5A6C83</color><color>CA9A51</color><color>5B7751</color><color>55AA26</color><color>FF2398</color><color>427FC3</color></series_color>
 			<chart_pref line_thickness="2" point_shape="none" fill_shape="false" />';
 	}
 
@@ -153,7 +153,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 			case 'column':
 			default:
 				$this->drawColumn();
-				$this->_xml .= '<series_color><color>A3B6DA</color></series_color>';
+				$this->_xml .= '<series_color><color>A3B6DA</color><color>C3413C</color><color>5A6C83</color><color>CA9A51</color><color>5B7751</color><color>55AA26</color><color>FF2398</color><color>427FC3</color></series_color>';
 				break;
 		}
 	}
@@ -178,7 +178,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 	
 	public function setTitles($titles)
 	{
-		$this->_main_title = $titles['main'];
+		$this->_titles = $titles;
 		$this->_xml .= '<draw>';
 		if (isset($titles['main']))
 		{
@@ -202,12 +202,29 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 			$this->_xml .= '<string>'.$value.'</string>';
 		$this->_xml .= '</row>';
 		
-		$this->_xml .= '<row><string>'.$this->_main_title.'</string>';
-		foreach ($this->_values as $value)
-			$this->_xml .= '<number>'.$value.'</number>';
-		$this->_xml .= '</row></chart_data>';
-
+		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+		{
+			$this->_xml .= '<row><string>'.$this->_titles['main'].'</string>';
+			foreach ($this->_values as $value)
+				$this->_xml .= '<number>'. (($value > 0) ? $value : -$value) .'</number>'; //si jamais la valeur est négative... logiquement ne devrait jamais arriver
+			$this->_xml .= '</row>';
+		}
+		else
+		{
+			$i = 1;
+			foreach ($this->_values as $value)
+			{
+				$this->_xml .= '<row>';
+				if (isset($this->_titles['main'][$i]))
+					$this->_xml .= '<string>'.$this->_titles['main'][$i].'</string>';
+				foreach ($value as $val)
+					$this->_xml .= '<number>'.$val.'</number>';
+				$this->_xml .= '</row>';
+				$i++;
+			}
+		}
+		$this->_xml .= '</chart_data>';
 		$this->_xml .= '</chart>';
-		echo  $this->_xml;
+		echo $this->_xml;
 	}
 }

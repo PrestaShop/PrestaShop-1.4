@@ -277,7 +277,7 @@ CREATE TABLE PREFIX_connections (
   id_page INTEGER(10) UNSIGNED NOT NULL,
   ip_address VARCHAR(16) NULL,
   date_add DATETIME NOT NULL,
-  http_referer VARCHAR(256) NULL,
+  http_referer VARCHAR(255) NULL,
   PRIMARY KEY(id_connections),
   INDEX id_guest (id_guest)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -542,6 +542,7 @@ CREATE TABLE PREFIX_cart (
   id_address_invoice INTEGER UNSIGNED NOT NULL,
   id_currency INTEGER UNSIGNED NOT NULL,
   id_customer INTEGER UNSIGNED NOT NULL,
+  id_guest INTEGER UNSIGNED NOT NULL,
   recyclable TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
   gift TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   gift_message TEXT NULL,
@@ -875,7 +876,7 @@ CREATE TABLE PREFIX_operating_system (
 
 CREATE TABLE PREFIX_page_type (
   id_page_type INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(256) NOT NULL,
+  name VARCHAR(255) NOT NULL,
   PRIMARY KEY(id_page_type)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -889,7 +890,7 @@ CREATE TABLE PREFIX_date_range (
 CREATE TABLE PREFIX_page (
   id_page INTEGER(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   id_page_type INTEGER(10) UNSIGNED NOT NULL,
-  id_object VARCHAR(256) NULL,
+  id_object VARCHAR(255) NULL,
   PRIMARY KEY(id_page)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1060,6 +1061,53 @@ CREATE TABLE IF NOT EXISTS `PREFIX_scene_products` (
   `y_axis` int(4) NOT NULL,
   `zone_width` int(3) NOT NULL,
   `zone_height` int(3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_connections_source` (
+  id_connections_source INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_connections INTEGER UNSIGNED NOT NULL,
+  http_referer VARCHAR(255) NULL,
+  request_uri VARCHAR(255) NULL,
+  keywords VARCHAR(255) NULL,
+  date_add DATETIME NOT NULL,
+  PRIMARY KEY (id_connections_source),
+  INDEX connections (id_connections),
+  INDEX orderby (date_add),
+  INDEX http_referer (`http_referer`),
+  INDEX request_uri(`request_uri`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_referrer` (
+  id_referrer INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(64) NOT NULL,
+  passwd VARCHAR(32) NULL,
+  http_referer_regexp VARCHAR(64) NULL,
+  http_referer_like VARCHAR(64) NULL,
+  request_uri_regexp VARCHAR(64) NULL,
+  request_uri_like VARCHAR(64) NULL,
+  http_referer_regexp_not VARCHAR(64) NULL,
+  http_referer_like_not VARCHAR(64) NULL,
+  request_uri_regexp_not VARCHAR(64) NULL,
+  request_uri_like_not VARCHAR(64) NULL,
+  base_fee DECIMAL(4, 2) NOT NULL DEFAULT 0,
+  percent_fee DECIMAL(3, 2) NOT NULL DEFAULT 0,
+  cache_visitors INTEGER NULL,
+  cache_visits INTEGER NULL,
+  cache_pages INTEGER NULL,
+  cache_registrations INTEGER NULL,
+  cache_orders INTEGER NULL,
+  cache_sales DECIMAL(10,2) NULL,
+  cache_reg_rate DECIMAL(8,4) NULL,
+  cache_order_rate DECIMAL(8,4) NULL,
+  date_add DATETIME NOT NULL,
+  PRIMARY KEY (`id_referrer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
+	id_search_engine INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	server VARCHAR(64) NOT NULL,
+	getvar VARCHAR(16) NOT NULL,
+	PRIMARY KEY(id_search_engine)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS PREFIX_order_customization_return (

@@ -40,42 +40,20 @@ class SEKeywords extends ModuleGraph
 	{
 		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('AdminStatsModules'))
 			return false;
-		Db::getInstance()->Execute('
+		return Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'sekeyword` (
 			id_sekeyword INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 			keyword VARCHAR(256) NOT NULL,
 			date_add DATETIME NOT NULL,
 			PRIMARY KEY(id_sekeyword)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
-		Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'search_engine` (
-			id_search_engine INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-			server VARCHAR(64) NOT NULL,
-			getvar VARCHAR(16) NOT NULL,
-			PRIMARY KEY(id_search_engine)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
-		return Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'search_engine` (`server`,`getvar`)
-		VALUES  (\'google\',\'q\'),
-				(\'search.aol\',\'query\'),
-				(\'yandex.ru\',\'text\'),
-				(\'ask.com\',\'q\'),
-				(\'nhl.com\',\'q\'),
-				(\'search.yahoo\',\'p\'),
-				(\'baidu.com\',\'wd\'),
-				(\'search.lycos\',\'query\'),
-				(\'exalead\',\'q\'),
-				(\'search.live.com\',\'q\'),
-				(\'search.ke.voila\',\'rdata\'),
-				(\'altavista\',\'q\')');
 	}
 	
     function uninstall()
     {
         if (!parent::uninstall())
 			return false;
-		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'sekeyword`')
-				AND Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'search_engine`'));
+		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'sekeyword`'));
     }
 	
 	function hookTop($params)
@@ -151,7 +129,7 @@ class SEKeywords extends ModuleGraph
 		}
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first keywords');
 		$totalResult = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
@@ -166,10 +144,10 @@ class SEKeywords extends ModuleGraph
 			$this->_values[] = $row['occurences'];
 			$total2 += $row['occurences'];
 		}
-		if ($total != $total2)
+		if ($total >= $total2)
 		{
 			$this->_legend[] = $this->l('Others');
-			$this->_values[] = $total2 - $total;
+			$this->_values[] = $total - $total2;
 		}
 	}
 }

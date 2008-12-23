@@ -28,6 +28,9 @@ class		Cart extends ObjectModel
 	/** @var integer Customer ID */
 	public 		$id_customer;
 
+	/** @var integer Guest ID */
+	public 		$id_guest;
+
 	/** @var integer Language ID */
 	public 		$id_lang;
 
@@ -53,7 +56,7 @@ class		Cart extends ObjectModel
 	
 	protected	$fieldsRequired = array('id_currency', 'id_lang');
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
-		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
+		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
 
 	private		$_nb_products = NULL;
@@ -74,6 +77,7 @@ class		Cart extends ObjectModel
 		$fields['id_address_invoice'] = intval($this->id_address_invoice);
 		$fields['id_currency'] = intval($this->id_currency);
 		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_guest'] = intval($this->id_guest);
 		$fields['id_lang'] = intval($this->id_lang);
 		$fields['id_carrier'] = intval($this->id_carrier);
 		$fields['recyclable'] = intval($this->recyclable);

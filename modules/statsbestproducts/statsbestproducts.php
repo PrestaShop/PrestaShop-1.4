@@ -58,6 +58,13 @@ class StatsBestProducts extends ModuleGrid
 				'dataIndex' => 'totalPageViewed',
 				'width' => 30,
 				'align' => 'right'
+			),
+			array(
+				'id' => 'quantity',
+				'header' => $this->l('Stock'),
+				'dataIndex' => 'quantity',
+				'width' => 30,
+				'align' => 'right'
 			)
 		);
 		
@@ -109,6 +116,7 @@ class StatsBestProducts extends ModuleGrid
 
 $this->_query = 'SELECT
 pr.`id_product`,
+pr.quantity,
 pl.`name`,
 IFNULL(t.`totalQuantitySold`, 0) AS totalQuantitySold,
 IFNULL(t.`totalPriceSold`, 0) AS totalPriceSold,

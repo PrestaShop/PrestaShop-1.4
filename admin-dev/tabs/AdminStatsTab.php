@@ -104,6 +104,13 @@ abstract class AdminStatsTab extends AdminPreferences
 	
 	public function displayCalendar()
 	{
+		echo '<div id="calendar">';
+		self::displayCalendarStatic($this->l('Calendar', 'AdminStatsTab'), $this->l('OK'));
+		echo '<div class="clear space">&nbsp;</div></div>';
+	}
+	
+	public static function displayCalendarStatic($calendar, $ok)
+	{
 		global $cookie;
 		$year = isset($cookie->stats_year) ? $cookie->stats_year : date('Y');
 		$month = isset($cookie->stats_month) ? $cookie->stats_month - 1 : date('m') - 1;
@@ -114,8 +121,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		$iso_code = $result['iso_code'];
 
 		echo '
-		<div id="calendar">
-		<fieldset style="width: 200px"><legend><img src="../img/admin/date.png" /> '.$this->l('Calendar', 'AdminStatsTab').'</legend>
+		<fieldset style="width: 200px"><legend><img src="../img/admin/date.png" /> '.$calendar.'</legend>
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.js"></script>
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.granularity.js"></script>';
 		
@@ -141,16 +147,14 @@ abstract class AdminStatsTab extends AdminPreferences
 				<div id="date"></div>
 				<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 					<input style="width: 100px" id="dateInput" name="dateInput" type="text" readonly="readonly" value="" />
-					<input type="submit" name="stats_date" class="button" value="'.$this->l('OK').'" />
+					<input type="submit" name="stats_date" class="button" value="'.$ok.'" />
 					<input type="hidden" id="dateInputDay" name="dateInputDay" value="'.$day.'" />
 					<input type="hidden" id="dateInputMonth" name="dateInputMonth" value="'.$month.'" />
 					<input type="hidden" id="dateInputYear" name="dateInputYear" value="'.$year.'" />
 					<input type="hidden" id="dateInputGranularity" name="dateInputGranularity" value="'.$granularity.'" />
 				</form>
 			</div>
-		</fieldset>
-		<div class="clear space">&nbsp;</div>
-		</div>';
+		</fieldset>';
 	}
 	
 	public function displaySearch()

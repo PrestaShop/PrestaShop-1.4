@@ -28,7 +28,7 @@ class StatsOrigin extends ModuleGraph
 
 	function install()
 	{
-		return (parent::install() AND $this->registerHook('AdminStatsModules') AND $this->registerHook('adminOrder'));
+		return (parent::install() AND $this->registerHook('AdminStatsModules'));
 	}
 
 	private function getOrigins()
@@ -56,22 +56,6 @@ class StatsOrigin extends ModuleGraph
 		return $websites;
 	}
 
-	function hookAdminOrder($params)
-	{
-		$order = new Order(intval($params['id_order']));
-		$result = Db::getInstance()->getRow('
-		SELECT c.http_referer
-		FROM '._DB_PREFIX_.'connections c
-		LEFT JOIN '._DB_PREFIX_.'guest g ON c.id_guest = g.id_guest
-		WHERE g.id_customer = '.intval($order->id_customer).'
-		AND date_add < \''.pSQL($order->date_add).'\'
-		ORDER BY date_add DESC');
-		if (!isset($result['http_referer']))
-			return;
-		return '<fieldset style="width: 400px; margin-top: 10px;"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Origin').'</legend>
-		'.$this->l('This customer seems to come').' '.(empty($result['http_referer']) ? $this->l('from a direct link') :  $this->l('from').' <a href="'.$result['http_referer'].'">'.preg_replace('/^www./', '', parse_url($result['http_referer'], PHP_URL_HOST)).'</a>').'.</fieldset>';
-	}
-	
 	function hookAdminStatsModules()
 	{
 		$websites = $this->getOrigins();
@@ -98,7 +82,7 @@ class StatsOrigin extends ModuleGraph
 		return $this->_html;
 	}
 		
-	protected function getData()
+	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first websites');
 		$websites = $this->getOrigins();

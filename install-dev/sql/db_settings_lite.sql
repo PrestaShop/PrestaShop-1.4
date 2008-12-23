@@ -423,7 +423,9 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (1, 57, 1, 1, 1, 1),
 (1, 58, 1, 1, 1, 1),
 (1, 59, 1, 1, 1, 1),
-(1, 60, 1, 1, 1, 1);
+(1, 60, 1, 1, 1, 1),
+(1, 61, 1, 1, 1, 1),
+(1, 62, 1, 1, 1, 1);
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
 INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
@@ -465,7 +467,9 @@ INSERT INTO `ps_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES
 (20, 'AdminRangePrice', 5, 5),
 (21, 'AdminRangeWeight', 5, 6),
 (50, 'AdminStatsModules', 6, 1),
-(51, 'AdminStatsConf', 6, 4),
+(51, 'AdminStatsConf', 6, 2),
+(61, 'AdminSearchEngines', 6, 3),
+(62, 'AdminReferrers', 6, 4),
 (22, 'AdminModulesPositions', 7, 1),
 (30, 'AdminProfiles', 29, 1),
 (31, 'AdminAccess', 29, 2),
@@ -549,6 +553,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 58, 'Image mapping'),
 (1, 59, 'Customer messages'),
 (1, 60, 'Tracking'),
+(1, 61, 'Search engines'),
+(1, 62, 'Referrers'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -606,7 +612,9 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 57, 'CMS'),
 (2, 58, 'Scènes'),
 (2, 59, 'Messages clients'),
-(2, 60, 'Suivi');
+(2, 60, 'Suivi'),
+(2, 61, 'Moteurs de recherche'),
+(2, 62, 'Sites affluents');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
@@ -692,6 +700,19 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
 INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Firefox 2.x'),('Firefox 3.x'),('Opera'),('IE 6.x'),('IE 7.x'),('IE 8.x'),('Google Chrome');
 INSERT INTO `PREFIX_page_type` (`name`) VALUES ('product.php'),('category.php'),('order.php'),('manufacturer.php');
+INSERT INTO `PREFIX_search_engine` (`server`,`getvar`)
+VALUES  ('google','q'),
+		('search.aol','query'),
+		('yandex.ru','text'),
+		('ask.com','q'),
+		('nhl.com','q'),
+		('search.yahoo','p'),
+		('baidu.com','wd'),
+		('search.lycos','query'),
+		('exalead','q'),
+		('search.live.com','q'),
+		('search.ke.voila','rdata'),
+		('altavista','q');
 
 /* SubDomains */
 INSERT INTO PREFIX_subdomain (id_subdomain, name) VALUES (NULL, 'www');

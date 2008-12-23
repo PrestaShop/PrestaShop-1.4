@@ -86,7 +86,7 @@ class StatsEquipment extends ModuleGraph
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'os')).'';
 		if ($equipment)
 		{
-			$this->html .= '<table class="table space" border="0" cellspacing="0" cellpadding="0">
+			$this->_html .= '<table class="table space" border="0" cellspacing="0" cellpadding="0">
 			<tr><th style="width: 200px">'.$this->l('Plug-ins').'</th><th></th></tr>';
 			foreach ($equipment as $name => $value)	
 				$this->_html .= '<tr><td>'.$name.'</td><td>'.number_format(100 * $value, 2).'%</td></tr>';
@@ -105,7 +105,7 @@ class StatsEquipment extends ModuleGraph
 		return $this->_html;
 	}
 
-	public function setOption($option)
+	public function setOption($option, $layers = 1)
 	{
 		switch($option)
 		{
@@ -134,7 +134,7 @@ class StatsEquipment extends ModuleGraph
 		}
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		$this->_values = array();

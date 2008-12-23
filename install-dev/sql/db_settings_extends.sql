@@ -68,7 +68,10 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES
 (41, 'statsorigin', 1),
 (42, 'pagesnotfound', 1),
 (43, 'sekeywords', 1),
-(44, 'statsproduct', 1);
+(44, 'statsproduct', 1),
+(45, 'statsbestproducts', 1),
+(46, 'statsbestcategories', 1),
+(47, 'statsbestvouchers', 1);
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
 
@@ -122,6 +125,9 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 (42, 14, 6),
 (43, 14, 7),
 (44, 32, 12),
+(45, 32, 13),
+(46, 32, 15),
+(47, 32, 14),
 (25, 25, 1),
 (41, 20, 2);
 
@@ -140,17 +146,6 @@ CREATE TABLE `PREFIX_sekeyword` (
 	date_add DATETIME NOT NULL,
 	PRIMARY KEY(id_sekeyword)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `PREFIX_search_engine` (
-	id_search_engine INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	server VARCHAR(64) NOT NULL,
-	getvar VARCHAR(16) NOT NULL,
-	PRIMARY KEY(id_search_engine)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-INSERT INTO `PREFIX_search_engine` (`server`,`getvar`) VALUES
-('google','q'),('search.aol','query'),('yandex.ru','text'),('ask.com','q'),('nhl.com','q'),('search.yahoo','p'),
-('baidu.com','wd'),('search.lycos','query'),('exalead','q'),('search.live.com','q'),('search.ke.voila','rdata'),('altavista','q');
 
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES
 (1, 0, 0, 1, 0, 0),

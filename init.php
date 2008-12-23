@@ -61,6 +61,7 @@ if (!isset($cart) OR !$cart->id)
 	$cart = new Cart();
 	$cart->id_lang = intval($cookie->id_lang);
     $cart->id_currency = intval($cookie->id_currency);
+	$cart->id_guest = intval($cookie->id_guest);
     if ($cookie->id_customer)
     	$cart->id_customer = intval($cookie->id_customer);
 }

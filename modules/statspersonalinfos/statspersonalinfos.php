@@ -74,12 +74,12 @@ class StatsPersonalInfos extends ModuleGraph
 		return $this->_html;
 	}
 
-	public function setOption($option)
+	public function setOption($option, $layers = 1)
 	{
 		$this->_option = $option;
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		global $cookie;
 		

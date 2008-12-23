@@ -20,7 +20,7 @@ $token = $blowfish->decrypt($_POST['token']);
 
 if ($_POST['type'] == 'navinfo')
 {
-	if (!Validate::isUnsignedId($token))
+	if (!Validate::isUnsignedId(intval($token)))
 		exit;
 	$guest = new Guest($token);
 	$guest->javascript = true;

@@ -23,10 +23,10 @@ abstract class ModuleGraph extends Module
 		
 	/** @var ModuleGraphEngine graph engine */
 	protected $_render;
-		
-	abstract protected function getData();
 	
-	protected function setDateGraph($legend = false)
+	abstract protected function getData($layers);
+	
+	protected function setDateGraph($layers, $legend = false)
 	{
 		global $cookie;
 
@@ -35,11 +35,15 @@ abstract class ModuleGraph extends Module
 			if ($legend)
 				for ($i = 0; $i < 24; $i++)
 				{
-					$this->_values[$i] = 0;
+					if ($layers == 1)
+						$this->_values[$i] = 0;
+					else
+						for ($j = 0; $j < $layers; $j++)
+							$this->_values[$j][$i] = 0;
 					$this->_legend[$i] = (strlen($i) == 1) ? ('0'.$i) : $i;
 				}
 			if (is_callable(array($this, 'setDayValues')))
-				$this->setDayValues();
+				$this->setDayValues($layers);
 		}
 		elseif (isset($cookie->stats_granularity) AND $cookie->stats_granularity == 'm')
 		{
@@ -47,30 +51,38 @@ abstract class ModuleGraph extends Module
 			if ($legend)
 				for ($i = 0; $i < $max; $i++)
 				{
-					$this->_values[$i] = 0;
+					if ($layers == 1)
+						$this->_values[$i] = 0;
+					else
+						for ($j = 0; $j < $layers; $j++)
+							$this->_values[$j][$i] = 0;
 					$this->_legend[$i] = ($i != 0 && ($i + 1) % 5) ? '' : $i + 1;
 				}
 			if (is_callable(array($this, 'setMonthValues')))
-				$this->setMonthValues();
+				$this->setMonthValues($layers);
 		}
 		else
 		{
 			if ($legend)
 			{
-				$this->_values = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+				if ($layers == 1)
+					$this->_values = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+				else
+					for ($j = 0; $j < $layers; $j++)
+						$this->_values[$j] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 				$this->_legend = array('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12');
 			}
 			if (is_callable(array($this, 'setYearValues')))
-				$this->setYearValues();
+				$this->setYearValues($layers);
 		}
 	}
 	
-	public function create($render, $type, $width, $height)
+	public function create($render, $type, $width, $height, $layers)
 	{
 		require_once(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php');
 		$this->_render = new $render($type);
 		
-		$this->getData();
+		$this->getData($layers);
 		$this->_render->createValues($this->_values);
 		$this->_render->setSize($width, $height);
 		$this->_render->setLegend($this->_legend);
@@ -89,6 +101,8 @@ abstract class ModuleGraph extends Module
 		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
 			return Tools::displayError('Graph engine selected unavailable');
 
+		if (!isset($params['layers']))
+			$params['layers'] = 1;
 		if (!isset($params['type']))
 			$params['type'] = 'column';
 		if (!isset($params['width']))
@@ -96,7 +110,7 @@ abstract class ModuleGraph extends Module
 		if (!isset($params['height']))
 			$params['height'] = 270;
 		
-		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'];
+		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'];
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
 			

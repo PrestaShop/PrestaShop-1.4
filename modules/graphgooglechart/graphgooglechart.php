@@ -26,15 +26,15 @@ class GraphGoogleChart extends ModuleGraphEngine
 		}
 		else
 		{
-	        $this->name = 'graphgooglechart';
-	        $this->tab = 'Stats Engines';
-	        $this->version = 1.0;
-			$this->page = basename(__FILE__, '.php');
+			$this->name = 'graphgooglechart';
+			$this->tab = 'Stats Engines';
+			$this->version = 1.0;
+				$this->page = basename(__FILE__, '.php');
 
-	        Module::__construct();
-			
-	        $this->displayName = $this->l('Google Chart');
-	        $this->description = $this->l('The Google Chart API lets you dynamically generate charts.');
+			Module::__construct();
+				
+			$this->displayName = $this->l('Google Chart');
+			$this->description = $this->l('The Google Chart API lets you dynamically generate charts.');
 		}
     }
 
@@ -87,16 +87,23 @@ class GraphGoogleChart extends ModuleGraphEngine
 
 	private function drawColumn($max_y)
 	{
-		$sizeof_values = sizeof($this->_values);
+		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+			$sizeof_values = sizeof($this->_values);
+		else
+			$sizeof_values = sizeof($this->_values[0]);
 		$url = 'bvs&chxt=x,y&chxr=1,0,'.$max_y.'&chbh='.$this->getChbh($sizeof_values).'&chg=0,12.5&chxl=0:|';
 		for ($i = 0; $i < $sizeof_values; $i++)
-			$this->_values[$i] = ($this->_values[$i] * 100) / $max_y;
+			if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+				$this->_values[$i] = ($this->_values[$i] * 100) / $max_y;
+			else
+				foreach ($this->_values as $k => $value)
+					$this->_values[$k][$i] = ($this->_values[$k][$i] * 100) / $max_y;
 		return ($url);
 	}
 	
 	private function drawLine($max_y)
 	{
-		return ('lc&chxt=x,y&chbh='.$this->getChbh(sizeof($this->_values)).'&chg=0,12.5&chxl=0:|');
+		return ('lc'./*&chxt=x,y*/'&chbh='.$this->getChbh(sizeof($this->_values)).'&chg=0,12.5&chxl=0:|');
 	}
 
 	private function drawPie()
@@ -128,22 +135,85 @@ class GraphGoogleChart extends ModuleGraphEngine
 			$legend .= $label.'|';
 		$url .= htmlentities(urlencode(html_entity_decode(rtrim($legend, '|'))));
 
-		foreach ($this->_values as $label)
-			$values .= ($label ? $label : '0').',';
-		$url .= '&chd=t:'.urlencode(rtrim($values, ','));
-
+		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+		{
+			foreach ($this->_values as $label)
+				$values .= ($label ? $label : '0').',';
+			$url .= '&chd=t:'.urlencode(rtrim($values, ','));
+		}
+		else
+		{
+			$i = 0;
+			$url .= '&chd=t:';
+			foreach ($this->_values as $val)
+			{
+				$values = '';
+				if ($i++ > 0)
+					$url .= '|';
+				foreach ($val as $label)
+					$values .= ($label ? $label : '0').',';
+				$url .= urlencode(rtrim($values, ','));
+			}
+		}
+		
 		$url .= '&chs='.intval($this->_width).'x'.intval($this->_height);
-		$url .= (isset($this->_titles['main'])) ? '&chtt='.urlencode($this->_titles['main']) : '';
+		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+			$url .= (isset($this->_titles['main'])) ? '&chtt='.urlencode($this->_titles['main']) : '';
+		else
+		{
+			$url .= $this->getStringColor(sizeof($this->_values));
+			$i = 0;
+			foreach ($this->_titles['main'] as $val)
+			{
+				if ($i == 0 && !empty($this->_titles['main']))
+					$url .= '&chtt='.urlencode($this->_titles['main'][$i]);
+				else if ($i == 1)
+					$url .= '&chdl=';
+				else if ($i > 1)
+					$url .= '|';
+				if ($i != 0)
+					$url .= urlencode($this->_titles['main'][$i]);
+				$i++;
+			}
+		}
+		header("Content-type: image/png");
 		readfile($url);
 	}
 	
 	private function getYMax($values)
 	{
 		$max = 0;
-		foreach ($values as $k => $val)
-			if ($val > $max)
-				$max = $val;
+		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+		{
+			foreach ($values as $k => $val)
+				if ($val > $max)
+					$max = $val;
+		}
+		else
+		{
+			foreach ($values as $value)
+				foreach ($value as $val)
+					if ($val > $max)
+						$max = $val;
+		}
 		return ($max < 4) ? 4 : (round($max, 0));
+	}
+	
+	private function getStringColor($nb_colors)
+	{
+		$tabColors = array('ffb649', '427fc3', 'ff0000', '55a339', 'ff2398');
+		$color = '';
+		if ($nb_colors > 1)
+		{
+			$color = '&chco=';
+			for ($i = 0; $i < $nb_colors; $i++)
+			{
+				if ($i > 0)
+					$color .= ',';
+				$color .= $tabColors[$i % 5];
+			}
+		}
+		return $color;
 	}
 }
 

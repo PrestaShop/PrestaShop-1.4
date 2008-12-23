@@ -61,19 +61,17 @@ class StatsSales extends ModuleGraph
 			<p><center><img src="../img/admin/down.gif" />
 				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
 			</center></p>
-			<p>
-				'.$this->l('Total orders:').' '.$totals['orderCount'].'
-			</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 1)).'</center>
-			<p>
-				'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'
-			</p>
+			<p>'.$this->l('Total orders placed:').' '.intval($totals['orderCount']).'</p>
+			<p>'.$this->l('Total products ordered:').' '.intval($totals['products']).'</p>
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 1, 'layers' => 2)).'</center>
+			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 2)).'<br /><br />
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
 			'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => 3)) : $this->l('No order for this period')).'</center>
 		</fieldset>
+		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Various order status').'</h2>
 			<p>
@@ -87,8 +85,9 @@ class StatsSales extends ModuleGraph
 	private function getTotals()
 	{
 		return Db::getInstance()->getRow('
-		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) as orderSum
+		SELECT COUNT(DISTINCT o.`id_order`) as orderCount, SUM(o.`total_paid_real`) as orderSum, SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 		WHERE (
 			SELECT os.`invoice`
 			FROM `'._DB_PREFIX_.'orders` oo
@@ -101,12 +100,14 @@ class StatsSales extends ModuleGraph
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
 	}
 	
-	public function setOption($option)
+	public function setOption($option, $layers = 1)
 	{
 		switch ($option)
 		{
 			case 1:
-				$this->_titles['main'] = $this->l('Number of orders');
+				$this->_titles['main'][0] = $this->l('Number of orders and products ordered');
+				$this->_titles['main'][1] = $this->l('Orders');
+				$this->_titles['main'][2] = $this->l('Products');
 				$this->_option = 1;
 				break;
 			case 2:
@@ -121,14 +122,15 @@ class StatsSales extends ModuleGraph
 		}
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		if ($this->_option == 3)
 			return $this->getStatesData();
 			
 		$this->_query = '
-			SELECT o.`date_add`, o.`total_paid_real`
+			SELECT o.`date_add`, o.`total_paid_real`, od.product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			WHERE (
 				SELECT os.`invoice`
 				FROM `'._DB_PREFIX_.'orders` oo
@@ -140,28 +142,46 @@ class StatsSales extends ModuleGraph
 			) = 1
 			AND o.`date_add` LIKE \'';
 		$this->_query2 = '\'';
-		$this->setDateGraph(true);
+		$this->setDateGraph($layers, true);
 	}
 	
-	protected function setYearValues()
+	protected function setYearValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1] += ($this->_option == 1) ? 1 : $row['total_paid_real'];
+			if ($this->_option == 1)
+			{
+				$this->_values[0][intval(substr($row['date_add'], 5, 2)) - 1] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 5, 2)) - 1] += $row['product_quantity'];
+			}
+			else
+				$this->_values[intval(substr($row['date_add'], 5, 2)) - 1] += $row['total_paid_real'];
 	}
 	
-	protected function setMonthValues()
+	protected function setMonthValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 8, 2)) - 1] += ($this->_option == 1) ? 1 : $row['total_paid_real'];
+			if ($this->_option == 1)
+			{
+				$this->_values[0][intval(substr($row['date_add'], 8, 2)) - 1] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 8, 2)) - 1] += $row['product_quantity'];
+			}
+			else
+				$this->_values[intval(substr($row['date_add'], 8, 2)) - 1] += $row['total_paid_real'];
 	}
 
-	protected function setDayValues()
+	protected function setDayValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 11, 2))] += ($this->_option == 1) ? 1 : $row['total_paid_real'];
+			if ($this->_option == 1)
+			{
+				$this->_values[0][intval(substr($row['date_add'], 11, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 11, 2))] += $row['product_quantity'];
+			}
+			else
+				$this->_values[intval(substr($row['date_add'], 11, 2))] += $row['total_paid_real'];
 	}
 	
 	private function getStatesData()

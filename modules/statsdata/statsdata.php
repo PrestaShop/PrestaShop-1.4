@@ -72,6 +72,7 @@ class StatsData extends Module
 		
 		// Record the guest path then increment the visit counter of the page
 		$tokenArray = Connection::setPageConnection($params['cookie']);
+		ConnectionsSource::logHttpReferer();
 		Page::setPageViewed($tokenArray['id_page']);
 		
 		// Ajax request sending the time spend on the page

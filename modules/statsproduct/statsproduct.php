@@ -125,7 +125,7 @@ class StatsProduct extends ModuleGraph
 		return $this->_html;
 	}
 	
-	public function setOption($option)
+	public function setOption($option, $layers = 1)
 	{
 		list($this->_option, $this->_id_product) = explode('-', $option);
 		$dateLike = ModuleGraph::getDateLike();
@@ -186,10 +186,10 @@ class StatsProduct extends ModuleGraph
 		}
 	}
 	
-	protected function getData()
+	protected function getData($layers)
 	{
 		if ($this->_option != 3)
-			$this->setDateGraph(true);
+			$this->setDateGraph($layers, true);
 		else
 		{
 			global $cookie;
@@ -218,21 +218,21 @@ class StatsProduct extends ModuleGraph
 		}
 	}
 	
-	protected function setYearValues()
+	protected function setYearValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query);
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1] += $row['total'];
 	}
 	
-	protected function setMonthValues()
+	protected function setMonthValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query);
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 8, 2)) - 1] += $row['total'];
 	}
 
-	protected function setDayValues()
+	protected function setDayValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query);
 		foreach ($result AS $row)
