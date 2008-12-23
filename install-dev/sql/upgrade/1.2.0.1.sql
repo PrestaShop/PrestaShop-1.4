@@ -4,6 +4,21 @@ SET NAMES 'utf8';
 /* 					STRUCTURE				  */
 /* ##################################### */
 
+CREATE TABLE PREFIX_group (
+  id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  reduction DECIMAL(10,2) NOT NULL DEFAULT 0,
+  date_add DATETIME NOT NULL,
+  date_upd DATETIME NOT NULL,
+  PRIMARY KEY(id_group)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE PREFIX_group_lang (
+  id_group INTEGER UNSIGNED NOT NULL,
+  id_lang INTEGER UNSIGNED NOT NULL,
+  name VARCHAR(32) NOT NULL,
+  UNIQUE INDEX attribute_lang_index(id_group, id_lang)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE PREFIX_message_readed (
   id_message INTEGER UNSIGNED NOT NULL,
   id_employee INTEGER UNSIGNED NOT NULL,
@@ -58,6 +73,25 @@ CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
 	PRIMARY KEY(id_search_engine)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+/* ##################################### */
+/* 					CONTENTS				*/
+/* ##################################### */
+
+INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
+		(1, 'google','q'),
+		(2, 'search.aol','query'),
+		(3, 'yandex.ru','text'),
+		(4, 'ask.com','q'),
+		(5, 'nhl.com','q'),
+		(6, 'search.yahoo','p'),
+		(7, 'baidu.com','wd'),
+		(8, 'search.lycos','query'),
+		(9, 'exalead','q'),
+		(10, 'search.live.com','q'),
+		(11, 'search.ke.voila','rdata'),
+		(12, 'altavista','q')
+		ON DUPLICATE KEY UPDATE server = server;
+
 /* NEW TABS */
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp), 'AdminOrderMessages', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
@@ -99,18 +133,12 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Sites affluents'
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminReferrers' LIMIT 1), 1, 1, 1, 1);
 
-/* Content */
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`)
-VALUES  (1, 'google','q'),
-		(2, 'search.aol','query'),
-		(3, 'yandex.ru','text'),
-		(4, 'ask.com','q'),
-		(5, 'nhl.com','q'),
-		(6, 'search.yahoo','p'),
-		(7, 'baidu.com','wd'),
-		(8, 'search.lycos','query'),
-		(9, 'exalead','q'),
-		(10, 'search.live.com','q'),
-		(11, 'search.ke.voila','rdata'),
-		(12, 'altavista','q')
-ON DUPLICATE KEY UPDATE server = server;
+INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp), 'AdminGroups', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp )) AS tmp));
+INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
+	SELECT id_lang,
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGroups' LIMIT 1),
+	'Groups' FROM PREFIX_lang);
+UPDATE `PREFIX_tab_lang` SET `name` = 'Groupes'
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminGroups')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGroups' LIMIT 1), 1, 1, 1, 1);
