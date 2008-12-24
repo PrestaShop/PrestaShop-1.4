@@ -4,6 +4,8 @@ SET NAMES 'utf8';
 /* 					STRUCTURE				  */
 /* ##################################### */
 
+ALTER TABLE PREFIX_cart ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
+
 CREATE TABLE PREFIX_group (
   id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   reduction DECIMAL(10,2) NOT NULL DEFAULT 0,
