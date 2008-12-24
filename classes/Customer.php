@@ -446,6 +446,32 @@ public function getLastConnections()
 		
 		return isset($row['id_customer']);
 	}
+	
+	public function cleanGroups()
+	{
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id));
+	}
+	
+	public function addGroups($groups)
+	{
+		foreach ($groups as $group)
+		{
+			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group));
+			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
+		}
+	}
+	
+	public function getGroups()
+	{
+		$groups = array();
+		$result = Db::getInstance()->ExecuteS('
+		SELECT cg.`id_group`
+		FROM '._DB_PREFIX_.'customer_group cg
+		WHERE cg.`id_customer` = '.intval($this->id));
+		foreach ($result as $group)
+			$groups[] = $group['id_group'];
+		return $groups;
+	}
 }
 
 ?>

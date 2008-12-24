@@ -23,11 +23,16 @@ class AdminGroups extends AdminTab
 	 	$this->edit = true;
 	 	$this->view = true;
 	 	$this->delete = true;
+		
+		$this->_select = 'count(cg.id_customer) as nb';
+		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)';
+		$this->_where = 'GROUP BY cg.id_group';
 
  		$this->fieldsDisplay = array(
 		'id_group' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'b!name' => array('title' => $this->l('Name'), 'width' => 80, 'filter_key' => 'b!name'),
+		'name' => array('title' => $this->l('Name'), 'width' => 80, 'filter_key' => 'b!name'),
 		'reduction' => array('title' => $this->l('Reduction'), 'width' => 50, 'align' => 'right'),
+		'nb' => array('title' => $this->l('Members'), 'width' => 25, 'align' => 'center'),
 		'date_add' => array('title' => $this->l('Creation date'), 'width' => 60, 'type' => 'date'));
 
 		parent::__construct();
@@ -61,7 +66,7 @@ class AdminGroups extends AdminTab
 				<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Reduction:').' </label>
 				<div class="margin-form">
-					<input type="text" size="5" name="reduction" value="'.htmlentities($this->getFieldValue($obj, 'reduction'), ENT_COMPAT, 'UTF-8').'" /> %
+					<input type="text" size="5" name="reduction" value="'.htmlentities($this->getFieldValue($obj, 'reduction'), ENT_COMPAT, 'UTF-8').'" /> '.$this->l('%').'
 					<p>'.$this->l('Will automatically apply this value as a reduction on ALL shop\'s products for this group\'s members').'</p>
 				</div>
 				<div class="clear">&nbsp;</div>
@@ -71,6 +76,74 @@ class AdminGroups extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>';
+	}
+	
+	public function viewgroup()
+	{
+		global $cookie;
+		
+		$currentIndex = 'index.php';
+		$obj = $this->loadObject(true);
+		$group = new Group(intval($obj->id));
+		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		
+		echo '
+		<fieldset style="width: 400px">
+			<div style="float: right"><a href="'.$currentIndex.'&updategroup&id_group='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
+			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[$defaultLanguage]).'</span>
+			<div class="clear">&nbsp;</div>
+			'.$this->l('Reduction:').' '.floatval($obj->reduction).$this->l('%').'
+		</fieldset>
+		<div class="clear">&nbsp;</div>';
+		
+		$customers = $obj->getCustomers();
+		$this->fieldsDisplay = (array(
+			'ID' => array('title' => $this->l('ID')),
+			'sex' => array('title' => $this->l('Sex')),
+			'name' => array('title' => $this->l('Name')),
+			'e-mail' => array('title' => $this->l('e-mail')),
+			'birthdate' => array('title' => $this->l('Birth date')),
+			'register_date' => array('title' => $this->l('Register date')),
+			'orders' => array('title' => $this->l('Orders')),
+			'status' => array('title' => $this->l('Status')),
+			'actions' => array('title' => $this->l('Actions'))
+		));
+		
+		if (isset($customers) AND !empty($customers) AND $nbCustomers = sizeof($customers))
+		{
+			echo '<h2>'.$this->l('Customers member of this group').' ('.$nbCustomers.')</h2>
+			<table cellspacing="0" cellpadding="0" class="table widthfull">
+				<tr>';
+			foreach ($this->fieldsDisplay AS $field)
+				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
+			echo '
+				</tr>';
+			$irow = 0;
+			foreach ($customers AS $k => $customer)
+			{
+				$imgGender = $customer['id_gender'] == 1 ? '<img src="../img/admin/male.gif" alt="'.$this->l('Male').'" />' : ($customer['id_gender'] == 2 ? '<img src="../img/admin/female.gif" alt="'.$this->l('Female').'" />' : '');
+				echo '
+				<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+					<td>'.$customer['id_customer'].'</td>
+					<td class="center">'.$imgGender.'</td>
+					<td>'.stripslashes($customer['lastname']).' '.stripslashes($customer['firstname']).'</td>
+					<td>'.stripslashes($customer['email']).'<a href="mailto:'.stripslashes($customer['email']).'"> <img src="../img/admin/email_edit.gif" alt="'.$this->l('Write to this customer').'" /></a></td>
+					<td>'.Tools::displayDate($customer['birthday'], intval($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($customer['date_add'], intval($cookie->id_lang)).'</td>
+					<td>'.Order::getCustomerNbOrders($customer['id_customer']).'</td>
+					<td class="center"><img src="../img/admin/'.($customer['active'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></td>
+					<td class="center" width="60px">
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<img src="../img/admin/details.gif" alt="'.$this->l('View orders').'" /></a>
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this customer').'" /></a>
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
+						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this customer').'" /></a>
+					</td>
+				</tr>';
+			}
+			echo '</table>';
+		}
 	}
 }
 

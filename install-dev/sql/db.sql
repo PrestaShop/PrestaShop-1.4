@@ -231,6 +231,12 @@ CREATE TABLE PREFIX_customer (
   INDEX customer_login(email, passwd)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE PREFIX_customer_group (
+  id_customer INTEGER UNSIGNED NOT NULL,
+  id_group INTEGER UNSIGNED NOT NULL,
+  INDEX hook_module_index(id_customer, id_group)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE PREFIX_group (
   id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   reduction DECIMAL(10,2) NOT NULL DEFAULT 0,

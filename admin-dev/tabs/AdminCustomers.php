@@ -47,9 +47,49 @@ class AdminCustomers extends AdminTab
 
 	public function postProcess()
 	{
-		if (!Tools::getValue('id_customer') AND Tools::isSubmit('submitAdd'.$this->table) AND $customer_email = strval(Tools::getValue('email')) AND $customer = new Customer() AND $customer->getByEmail($customer_email))
-			if (intval($customer->id))
+		global $currentIndex;
+		
+		if(Tools::getValue('submitAdd'.$this->table))
+		{
+		 	/* Checking fields validity */
+			$this->validateRules();
+			if (!sizeof($this->_errors))
+			{
+				$id = intval(Tools::getValue('id_'.$this->table));
+
+				// Updating customer's group
+				if (isset($id) AND !empty($id))
+				{
+					if ($this->tabAccess['edit'] !== '1')
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+					else
+					{
+						$object = new $this->className($id);
+						if (Validate::isLoadedObject($object))
+						{
+							$object->cleanGroups();
+							if ($group_list = Tools::getValue('groupBox') AND sizeof($group_list))
+								$object->addGroups($group_list);
+						}
+						else
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					}
+				}
+			}
+			
+			// check if e-mail already used
+			$customer_email = strval(Tools::getValue('email'));
+			$customer = new Customer();
+			$customer->getByEmail($customer_email);
+			if (isset($id) AND !empty($id))
+			{
+				$object = new $this->className($id);
+				if (Validate::isLoadedObject($object))
+					if ($object->id != $customer->id)
+						$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
+			} elseif ($customer->id)
 				$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
+		}
 		return parent::postProcess();
 	}
 
@@ -265,7 +305,7 @@ class AdminCustomers extends AdminTab
 			echo $this->l('No cart available').'.';
 		echo '<div class="clear">&nbsp;</div>';
 		
-/* Last connections */
+		/* Last connections */
         $connections = $customer->getLastConnections();
         if (sizeof($connections))    
         {
@@ -295,7 +335,9 @@ class AdminCustomers extends AdminTab
 	{
 		global $currentIndex;
 		$obj = $this->loadObject(true);
+		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$birthday = split('-', $this->getFieldValue($obj, 'birthday'));
+		$customer_groups = $obj->getGroups();
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -390,6 +432,34 @@ class AdminCustomers extends AdminTab
 					<input type="radio" name="optin" id="optin_off" value="0" '.(!$this->getFieldValue($obj, 'optin') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="optin_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Customer will receive your ads via e-mail').'</p>
+				</div>
+				<label>'.$this->l('Groups:').' </label>
+				<div class="margin-form">';
+					$groups = Group::getGroups($defaultLanguage);
+					if (sizeof($groups))
+					{
+						echo '
+					<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+						<tr>
+							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)" /></th>
+							<th>'.$this->l('ID').'</th>
+							<th>'.$this->l('Group name').'</th>
+						</tr>';
+						$irow = 0;
+						foreach ($groups as $group)
+							echo '
+							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
+								<td>'.$group['id_group'].'</td>
+								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
+							</tr>';
+						echo '
+					</table>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of groups to which the customer is to be member').'<sup> *</sup></p>
+					';
+					} else
+						echo '<p>'.$this->l('No group created').'</p>';
+				echo '
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

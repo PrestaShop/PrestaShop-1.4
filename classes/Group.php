@@ -59,6 +59,25 @@ class		Group extends ObjectModel
 			return false;
 		return parent::getTranslationsFields(array('name'));
 	}
+	
+	static public function getGroups($id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT g.`id_group`, g.`reduction`, gl.`name`
+		FROM `'._DB_PREFIX_.'group` g
+		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($id_lang).')
+		ORDER BY g.`id_group` ASC');
+	}
+	
+	public function getCustomers()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT cg.`id_customer`, c.*
+		FROM `'._DB_PREFIX_.'customer_group` cg
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
+		WHERE cg.`id_group` = '.intval($this->id).'
+		ORDER BY cg.`id_customer` ASC');
+	}
 }
 
 ?>
