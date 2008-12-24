@@ -54,4 +54,7 @@ include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
 /* Database connection (singleton) */
 Db::getInstance();
 
+/* attribute id_lang is often needed, so we create a constant for performance reasons */
+define('_USER_ID_LANG_', intval($cookie->id_lang));
+
 ?>

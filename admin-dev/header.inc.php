@@ -15,10 +15,6 @@
 header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 require_once(dirname(__FILE__).'/init.php');
-
-/* attribute id_lang is often needed, so we create a constant for performance reasons */
-define('_USER_ID_LANG_', intval($cookie->id_lang));
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

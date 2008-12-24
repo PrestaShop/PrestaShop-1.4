@@ -343,21 +343,21 @@ class		Category extends ObjectModel
 		$sql = 'SELECT
 		(
 		  (
-		    /* quantity of products witch don t have got attributes */
+		    /* quantity of products witch don\'t have attributes */
 		    IFNULL((
 				  SELECT SUM(quantity)
-				  FROM ps_product
+				  FROM `'._DB_PREFIX_.'product
 				  WHERE id_product NOT IN
 				  (
 				    /* products with attributes */
 				    SELECT DISTINCT(id_product)
-				    FROM ps_product_attribute
+				    FROM `'._DB_PREFIX_.'product_attribute
 				  )
 				  AND id_product IN
 				  (
 				  	/* products direclty in the categories listed bellow */
 				  	SELECT DISTINCT(id_product)
-				  	FROM ps_category_product
+				  	FROM `'._DB_PREFIX_.'category_product
 				  	WHERE id_category IN ('.$listCategories.')
 				  )
 				),0)
@@ -367,12 +367,12 @@ class		Category extends ObjectModel
 		    /* quantity of products witch have attributes */
 				IFNULL((
 				  SELECT SUM(quantity)
-				  FROM ps_product_attribute pa
+				  FROM `'._DB_PREFIX_.'product_attribute pa
 				  WHERE pa.id_product IN
 				  (
 				  	/* products direclty in the categories listed bellow */
 				  	SELECT DISTINCT(id_product)
-				  	FROM ps_category_product
+				  	FROM `'._DB_PREFIX_.'category_product
 				  	WHERE id_category IN ('.$listCategories.')
 				  )
 				),0)
@@ -642,7 +642,7 @@ class		Category extends ObjectModel
 	  * @return array Corresponding categories
 	  */
 	public function getParentsCategories($idLang = null)
-	{	
+	{
 		//get idLang
 		$idLang = is_null($idLang) ? _USER_ID_LANG_ : intval($idLang);
 		
@@ -679,174 +679,6 @@ class		Category extends ObjectModel
 		
 		return isset($row['id_category']);
 	}
-	
-	/**
-	* get empty categories
-	*
-	* @return array of id_categories
-	*/	
-	static public function getEmptyCategories()
-	{
-		//TODO
-		/*
-		$row = Db::getInstance()->getRow('
-		SELECT `id_category`
-		FROM '._DB_PREFIX_.'category c
-		WHERE c.`id_category` = '.intval($id_category));
-		
-		return isset($row['id_category']);
-		*/
-	}
-	
-	/**
-	* Return number of product in stock in this category
-	*
-	* @param $only_active_products Boolean
-	* @return int
-	*/	
-	public function getNumberOfInStockProducts($only_active_products = false)
-	{
-		//TODO
-		/*
-		$row = Db::getInstance()->getRow('
-		SELECT `id_category`
-		FROM '._DB_PREFIX_.'category c
-		WHERE c.`id_category` = '.intval($id_category));
-		
-		return isset($row['id_category']);
-		*/
-	}
-	
-	static function _non_empty_category_ids()
-	{
-		
-		/*
-		
-		a partir d'un id, lister le stock d'un produit
-		
-		lister tt les produits en stock
-		id_product, id_product_attribute, quantity
-		
-		
-		*/
-		
-		//////// OLD ///////////
-		$tmp1 = Db::s('
-			SELECT pa.id_product
-			FROM ps_product_attribute pa
-			GROUP BY pa.id_product
-			HAVING SUM(pa.quantity) = 0
-		');
-		$nbTmp1 = count($tmp1);
-		$tmp1string = '';
-		if ($nbTmp1)
-		{
-		$tmp1string = ' AND p.id_product NOT
-			IN (
-				/* Liste des ID des produits "qui ont des attributs" + "tous ces sont attributs ne sont plus en stock" */
-				/* note : pas de sous requête pour des raisons de perf : déjà testé! */
-				';
-		foreach ($tmp1 as $key => $tmp1i)
-		{
-			$tmp1string .= $tmp1i['id_product'];
-				if ($key != $nbTmp1 - 1)
-					$tmp1string .= ', ';
-		}
-		$tmp1string .= ')';
-		}
-		
-		$tmp2 = Db::s('
-			SELECT pa.id_product
-			FROM ps_product_attribute pa
-			GROUP BY pa.id_product
-			HAVING SUM( pa.quantity ) >0
-		');
-		$nbTmp2 = count($tmp2);
-		$tmp2string = '';
-		if ($nbTmp2)
-		{
-		$tmp2string = ' AND	p.id_product IN (
-		/* Liste des ID des produits "qui ont des attributs" + "au moins un de ces attributs a du stock" */
-				';
-		foreach ($tmp2 as $key => $tmp2i)
-		{
-			$tmp2string .= $tmp2i['id_product'];
-				if ($key != $nbTmp2 - 1)
-					$tmp2string .= ', ';
-		}
-		$tmp2string .= ')';
-		}
-		
-		$tmp3 = Db::s('
-			SELECT pa.id_product
-			FROM ps_product_attribute pa
-			GROUP BY pa.id_product
-			HAVING SUM( pa.quantity ) >0
-		');
-		$nbTmp3 = count($tmp3);
-		$tmp3string = '';
-		if ($nbTmp3)
-		{
-		$tmp3string = ' AND	p.id_product IN (
-		/* Liste des ID des produits "qui ont des attributs" + "au moins un de ces attributs a du stock" */
-				';
-		foreach ($tmp3 as $key => $tmp3i)
-		{
-			$tmp3string .= $tmp3i['id_product'];
-				if ($key != $nbTmp3 - 1)
-					$tmp3string .= ', ';
-		}
-		$tmp3string .= ')';
-		}
-		
-		//get categories which contains products to show
-		$ctr = microtime(true);
-		$sql_start = '
-			/* afficher les categs contenant au moins un produit affichable */
-			SELECT DISTINCT cp.id_category AS id_parent
-			FROM `ps_category_product` cp
-			WHERE 1
-			AND cp.id_product
-			IN (
-				/* Liste des ID des produits à afficher (géré en fonction de p.quantity ET de product_attribute.quantity) */
-				SELECT p.id_product
-				FROM ps_product p
-				WHERE 1
-				AND (
-					(
-						/* Liste des ID des produits "qui ont de la quantité" + "qui ne sont pas dans la liste des produits avec tous leurs attributs hors-stock" */
-						p.quantity >0';
-		$sql_start .= $tmp1string;
-		$sql_start .= '
-					)
-					OR
-					(
-						/* Liste des ID des produits "qui n ont plus de quantité" + "qui ont des attributs" + "qui ne sont pas dans la liste des produits avec tous leurs attributs hors-stock" */
-						p.quantity = 0';
-		$sql_start .= $tmp2string;
-		$sql_start .= $tmp3string;
-		$sql_start .= '
-					)
-					OR
-					(
-						show_if_out_of_stock = 1
-					)
-				)
-			)
-		';
-		$result_start = Db::s($sql_start);
-		$washed_result_start = array();
-		foreach ($result_start as $categ_start)
-			$washed_result_start[] = $categ_start['id_parent'];
-		$result_start = $washed_result_start;
-		if (($key = array_search(0, $result_start)) === 0)
-			unset($result_start[$key]);
-		if ($key = array_search(1, $result_start))
-			unset($result_start[$key]);
-		$result_start = array_values($result_start);
-		return $result_start;
-	}
-	
 }
 
 ?>

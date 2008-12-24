@@ -2034,7 +2034,7 @@ class AdminProducts extends AdminTab
 		global $cookie;
 
 		$content = 'var combination_images = new Array();';
-		if (!$allCombinationImages = $this->loadObject()->getCombinationImages(intval($cookie->id_lang)))
+		if (!$allCombinationImages = $this->loadObject(true)->getCombinationImages(intval($cookie->id_lang)))
 			return $content;
 		foreach ($allCombinationImages AS $id_product_attribute => $combinationImages)
 		{
