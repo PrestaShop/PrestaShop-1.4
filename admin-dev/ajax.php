@@ -50,6 +50,27 @@ if (isset($_GET['ajaxProductAccessories']))
 	die('['.implode(',', $jsonArray).']');
 }
 
+if (isset($_GET['ajaxDiscountCustomers']))
+{
+	$currentIndex = 'index.php?tab=AdminDiscounts';
+	$jsonArray = array();
+	$filter = Tools::getValue('filter');
+	
+	$customers = Db::getInstance()->ExecuteS('
+	SELECT `id_customer`, `email`, CONCAT(`firstname`, \' \', `lastname`) as name
+	FROM `'._DB_PREFIX_.'customer`
+	WHERE email LIKE "%'.pSQL($filter).'%"
+	'.(intval($filter) ? 'OR id_customer = '.intval($filter) : '').'
+	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
+	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%"
+	ORDER BY `lastname` ASC
+	LIMIT 50');
+	
+	foreach ($customers AS $customer)
+		$jsonArray[] = '{value:'.intval($customer['id_customer']).', text:\''.addslashes($customer['name']).' ('.addslashes($customer['email']).')\'}';
+	die('['.implode(',', $jsonArray).']');
+}
+
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
 	require_once(dirname(__FILE__).'/init.php');
