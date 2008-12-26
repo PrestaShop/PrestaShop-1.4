@@ -69,7 +69,7 @@ class ReferralProgram extends Module
 			`date_upd` DATETIME NOT NULL,
 			PRIMARY KEY (`id_referralprogram`),
 			INDEX index_referralprogram_sponsor (`id_sponsor`),
-			UNIQUE KEY `index_unique_referralprogram_customer` (`id_customer`),
+			INDEX `index_referralprogram_customer` (`id_customer`),
 			UNIQUE KEY `index_unique_referralprogram_discount` (`id_discount`),
 			UNIQUE KEY `index_unique_referralprogram_email` (`email`)
 		) DEFAULT CHARSET=utf8 ;');
