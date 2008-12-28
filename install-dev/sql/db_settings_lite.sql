@@ -433,7 +433,7 @@ INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
 (1, 1, 'Administrator'),
 (1, 2, 'Administrateur');
 
-INSERT INTO `ps_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES
+INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES
 (1, 'AdminCatalog', 0, 1),
 (2, 'AdminCustomers', 0, 2),
 (3, 'AdminOrders', 0, 3),
