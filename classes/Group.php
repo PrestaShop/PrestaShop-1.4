@@ -78,6 +78,17 @@ class		Group extends ObjectModel
 		WHERE cg.`id_group` = '.intval($this->id).'
 		ORDER BY cg.`id_customer` ASC');
 	}
+	
+	static public function getReduction($id_customer)
+	{
+		$result = Db::getInstance()->getRow('
+		SELECT g.`reduction`
+		FROM `'._DB_PREFIX_.'group` g
+		LEFT JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = g.`id_group`)
+		WHERE g.`reduction` > 0 AND cg.`id_customer` = '.intval($id_customer).'
+		ORDER BY g.`reduction` DESC');
+		return $result['reduction'];
+	}
 }
 
 ?>
