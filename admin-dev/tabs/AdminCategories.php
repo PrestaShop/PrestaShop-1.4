@@ -106,6 +106,22 @@ class AdminCategories extends AdminTab
 					$this->_errors[] = Tools::displayError('category cannot be moved here');
 					return false;
 				}
+
+				// Updating customer's group
+				if ($this->tabAccess['edit'] !== '1')
+					$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				else
+				{
+					$object = new $this->className($id_category);
+					if (Validate::isLoadedObject($object))
+					{
+						$object->cleanGroups();
+						if ($group_list = Tools::getValue('groupBox') AND sizeof($group_list))
+							$object->addGroups($group_list);
+					}
+					else
+						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+				}
 			}
 		}
 		parent::postProcess();
@@ -132,6 +148,7 @@ class AdminCategories extends AdminTab
 		$langtags = 'cname¤cdescription¤clink_rewrite¤cmeta_title¤cmeta_keywords¤cmeta_description';
 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
 		$active = $this->getFieldValue($obj, 'active');
+		$customer_groups = $obj->getGroups();
 
 		echo '
 		<script type="text/javascript">
@@ -151,7 +168,7 @@ class AdminCategories extends AdminTab
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cname');
 		echo '		<div class="clear"></div>
 				</div>
-				<label>'.$this->l('Displayed').' </label>
+				<label>'.$this->l('Displayed:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($active ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
@@ -221,6 +238,34 @@ class AdminCategories extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'clink_rewrite');
 		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Groups access:').' </label>
+				<div class="margin-form">';
+					$groups = Group::getGroups($defaultLanguage);
+					if (sizeof($groups))
+					{
+						echo '
+					<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+						<tr>
+							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)" /></th>
+							<th>'.$this->l('ID').'</th>
+							<th>'.$this->l('Group name').'</th>
+						</tr>';
+						$irow = 0;
+						foreach ($groups as $group)
+							echo '
+							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
+								<td>'.$group['id_group'].'</td>
+								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
+							</tr>';
+						echo '
+					</table>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this category').'<sup> *</sup></p>
+					';
+					} else
+						echo '<p>'.$this->l('No group created').'</p>';
+				echo '
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

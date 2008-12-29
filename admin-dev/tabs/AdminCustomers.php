@@ -67,9 +67,15 @@ class AdminCustomers extends AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-							$object->cleanGroups();
-							if ($group_list = Tools::getValue('groupBox') AND sizeof($group_list))
-								$object->addGroups($group_list);
+							$groupList = Tools::getValue('groupBox');
+							
+							if (is_array($groupList) AND sizeof($groupList) > 0)
+							{
+								$object->cleanGroups();
+								$object->addGroups($groupList);
+							}
+							else
+								$this->_errors[] = Tools::displayError('You need to add your customer to at least one group');
 						}
 						else
 							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');

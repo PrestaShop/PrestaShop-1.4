@@ -89,6 +89,16 @@ class		Group extends ObjectModel
 		ORDER BY g.`reduction` DESC');
 		return $result['reduction'];
 	}
+	
+	public function delete()
+	{
+		if (parent::delete())
+		{
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.intval($this->id));
+			return true;
+		}
+		return false;
+	}
 }
 
 ?>

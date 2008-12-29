@@ -9,7 +9,13 @@ ALTER TABLE PREFIX_cart ADD id_guest INT UNSIGNED NULL AFTER id_customer;
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,
   id_group INTEGER UNSIGNED NOT NULL,
-  INDEX hook_module_index(id_customer, id_group)
+  INDEX customer_group_index(id_customer, id_group)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE PREFIX_category_group (
+  id_category INTEGER UNSIGNED NOT NULL,
+  id_group INTEGER UNSIGNED NOT NULL,
+  INDEX category_group_index(id_category, id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_group (
@@ -99,6 +105,22 @@ INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUE
 		(11, 'search.ke.voila','rdata'),
 		(12, 'altavista','q')
 		ON DUPLICATE KEY UPDATE server = server;
+
+/* GROUPS, CUSTOMERS GROUPS, & CATEGORY GROUPS */
+INSERT INTO `PREFIX_group` (`reduction`, `date_add`, `date_upd`) VALUES (0, NOW(), NOW());
+INSERT INTO `PREFIX_group_lang` (`id_lang`, `id_group`, `name`) (
+	SELECT `id_lang`,
+	(SELECT `id_group` FROM `PREFIX_group` LIMIT 1),
+	'Default' FROM `PREFIX_lang`);
+UPDATE `PREFIX_group_lang` SET `name` = 'Défaut'
+	WHERE `id_group` = (SELECT `id_group` FROM `PREFIX_group` LIMIT 1)
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+INSERT INTO `PREFIX_customer_group` (`id_customer`, `id_group`)
+	(SELECT `id_customer`,
+	(SELECT `id_group` FROM `PREFIX_group` LIMIT 1) FROM `PREFIX_customer`)
+INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`)
+	(SELECT `id_category`,
+	(SELECT `id_group` FROM `PREFIX_group` LIMIT 1) FROM `PREFIX_category`)
 
 /* NEW TABS */
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp), 'AdminMessages', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp )) AS tmp));

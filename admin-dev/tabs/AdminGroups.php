@@ -145,6 +145,37 @@ class AdminGroups extends AdminTab
 			echo '</table>';
 		}
 	}
+	
+	public function postProcess()
+	{
+		global $currentIndex;
+		
+		$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
+		
+		if (isset($_GET['delete'.$this->table]))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()))
+				{
+					if (sizeof($object->getCustomers()))
+						$this->_errors[] = Tools::displayError('You cannot delete this group because there are still some customers linked to!');
+					else
+					{
+						if ($object->delete())
+							Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		else
+			parent::postProcess();
+	}
 }
 
 ?>

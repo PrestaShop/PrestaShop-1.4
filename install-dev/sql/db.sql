@@ -234,7 +234,13 @@ CREATE TABLE PREFIX_customer (
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,
   id_group INTEGER UNSIGNED NOT NULL,
-  INDEX hook_module_index(id_customer, id_group)
+  INDEX customer_group_index(id_customer, id_group)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE PREFIX_category_group (
+  id_category INTEGER UNSIGNED NOT NULL,
+  id_group INTEGER UNSIGNED NOT NULL,
+  INDEX category_group_index(id_category, id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_group (
