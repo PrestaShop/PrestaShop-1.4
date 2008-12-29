@@ -71,10 +71,10 @@ abstract class PaymentModule extends Module
 	{
 		$cart = new Cart(intval($id_cart));
 
-		/* Does order already exists ? */
+		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() == 0)
 		{
-			/* Copying data from cart */
+			// Copying data from cart
 			$order = new Order();
 			$order->id_carrier = intval($cart->id_carrier);
 			$order->id_customer = intval($cart->id_customer);
@@ -102,23 +102,23 @@ abstract class PaymentModule extends Module
 			$order->total_shipping = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderShippingCost(), 2, '.', '')), $currency));
 			$order->total_wrapping = floatval(Tools::convertPrice(floatval(number_format(abs($cart->getOrderTotal(true, 6)), 2, '.', '')), $currency));
 			$order->total_paid = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderTotal(true, 3), 2, '.', '')), $currency));
-			/* Amount paid by customer is not the right one -> Status = payment error */
+			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;
 
-			/* Creating order */
+			// Creating order
 			$result = $order->add();
 
-			/* Next ! */
+			// Next !
 			if ($result AND isset($order->id))
 			{
-				/* Set order state in order history */
+				// Set order state in order history
 				$history = new OrderHistory();
 				$history->id_order = intval($order->id);
 				$history->changeIdOrderState(intval($id_order_state), intval($order->id));
 				$history->addWithemail(true, $extraVars);
 
-				/* Optional message to attach to this order */
+				// Optional message to attach to this order 
 				if (isset($message) AND !empty($message))
 				{
 					$msg = new Message();
@@ -131,7 +131,7 @@ abstract class PaymentModule extends Module
 					$msg->add();
 				}
 
-				/* Insert products from cart into order_detail table */
+				// Insert products from cart into order_detail table
 				$products = $cart->getProducts();
 				$productsList = '';
 				$db = Db::getInstance();
@@ -158,7 +158,7 @@ abstract class PaymentModule extends Module
 					$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
 					$price_wt = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
 
-					/* Add some informations for virtual products */
+					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
 					$download_hash = NULL;
 					$productDownload = new ProductDownload();
@@ -169,7 +169,7 @@ abstract class PaymentModule extends Module
 						$download_hash = $productDownload->getHash();
 					}
 
-					/* Exclude VAT */
+					// Exclude VAT
 					if (Tax::excludeTaxeOption())
 					{
 						$product['tax'] = 0;
@@ -178,7 +178,7 @@ abstract class PaymentModule extends Module
 					else
 						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']));
 
-					/* Quantity discount */
+					// Quantity discount
 					$reduc = 0.0;
 					if ($product['quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['quantity'])))
 					{
@@ -186,7 +186,7 @@ abstract class PaymentModule extends Module
 						$price -= $reduc / (1 + floatval($tax) / 100);
 					}
 
-					/* Query */
+					// Query
 					$query .= '('.intval($order->id).',
 						'.intval($product['id_product']).',
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',
@@ -228,11 +228,11 @@ abstract class PaymentModule extends Module
 							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['quantity']) - $customizationQuantity).'</td>
 							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['quantity']) - $customizationQuantity) * $priceWithTax, $currency, false, false).'</td>
 						</tr>';
-				} /* end foreach ($products) */
+				} // end foreach ($products)
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
 
-				/* Insert discounts from cart into order_discount table */
+				// Insert discounts from cart into order_discount table
 				$discounts = $cart->getDiscounts();
 				$discountsList = '';
 				foreach ($discounts AS $discount)
@@ -251,7 +251,7 @@ abstract class PaymentModule extends Module
 					</tr>';
 				}
 
-				/* Specify order id for message */
+				// Specify order id for message
 				$oldMessage = Message::getMessageByCartId(intval($cart->id));
 				if ($oldMessage)
 				{
@@ -260,7 +260,7 @@ abstract class PaymentModule extends Module
 					$message->update();
 				}
 
-				/* Hook new order */
+				// Hook new order
 				$orderStatus = new OrderState(intval($id_order_state));
 				if (Validate::isLoadedObject($orderStatus))
 				{
@@ -269,7 +269,7 @@ abstract class PaymentModule extends Module
 						if ($orderStatus->logable)
 							ProductSale::addProductSale($product['id_product'], $product['quantity']);
 				}
-				/* Send an e-mail to customer */
+				// Send an e-mail to customer
 				if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_ AND $customer->id)
 				{
 					$invoice = new Address(intval($order->id_address_invoice));
@@ -316,7 +316,7 @@ abstract class PaymentModule extends Module
 					if (is_array($extraVars))
 						$data = array_merge($data, $extraVars);
 
-					/* Join PDF invoice */
+					// Join PDF invoice
 					if (intval(Configuration::get('PS_INVOICE')) AND Validate::isLoadedObject($orderStatus) AND $orderStatus->invoice)
 					{
 						$fileAttachment['content'] = PDF::invoice($order, 'S');

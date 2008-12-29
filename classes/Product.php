@@ -1170,13 +1170,21 @@ class		Product extends ObjectModel
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1)
 	{
+		global $cookie;
+
+		// Get id_customer if exists
+		$id_customer = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_customer) AND $cookie->id_customer)
+			? intval($cookie->id_customer) : null);
+
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
-		
+
+		// Caching system
 		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity;
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
 
+		// Getting price
 		if ($usetax) $decimals = 2;
 		$result = Db::getInstance()->getRow('
 		SELECT p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`id_tax`, t.`rate`'.($id_product_attribute ? ', pa.`price` AS attribute_price' : '').'
@@ -1196,14 +1204,21 @@ class		Product extends ObjectModel
 			$price += $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + ($tax / 100)));
 		$reduc = self::getReductionValue($result, $usetax);
 
+		// Only reduction
 		if ($only_reduc)
 			return $reduc;
+
+		// Reduction
 		if ($usereduc)
 			$price -= $reduc;
 
 		// Quantity discount
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 			$price -= QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+
+		// Group reduction
+		if ($id_customer)
+			$price -= $usetax ? Group::getReduction($id_customer) : (Group::getReduction($id_customer) / (1 + ($tax / 100)));
 
 		self::$_prices[$cacheId] = ($divisor AND $divisor != 'NULL') ? number_format($price/$divisor, $decimals, '.', '') : number_format($price, $decimals, '.', '');
 		return self::$_prices[$cacheId];
