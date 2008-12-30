@@ -49,9 +49,10 @@ class MailAlerts extends Module
 		$query = '
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
 			`id_customer` int(10) unsigned NOT NULL,
+			`customer_email` varchar(128) NOT NULL,
 			`id_product` int(10) unsigned NOT NULL,
 			`id_product_attribute` int(10) unsigned NOT NULL,
-			PRIMARY KEY  (`id_customer`,`id_product`,`id_product_attribute`)
+			PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
 	 	if (!Db::getInstance()->Execute($query))
 	 		return false;
