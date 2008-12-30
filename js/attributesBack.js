@@ -1,4 +1,4 @@
-function fillCombinaison(wholesale_price, price_impact, weight_impact, reference, supplier_reference, ean, quantity, old_attr, id_product_attribute, default_attribute, eco_tax, location)
+function fillCombinaison(wholesale_price, price_impact, weight_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
 {
 	init_elems();
 	getE('attribute_quantity').value = quantity;
