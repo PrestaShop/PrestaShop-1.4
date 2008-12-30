@@ -16,6 +16,8 @@ else
 	$category = new Category(intval(Tools::getValue('id_category')), intval($cookie->id_lang));
 	if (!Validate::isLoadedObject($category))
 		$errors[] = Tools::displayError('category does not exist');
+	elseif (!$category->checkAccess(intval($cookie->id_customer)))
+		$errors[] = Tools::displayError('you do not have access to this category');
 	else
 	{
 		/* Scenes  (could be externalised to another controler if you need them */

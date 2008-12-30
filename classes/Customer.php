@@ -104,7 +104,11 @@ class		Customer extends ObjectModel
 		$this->birthday = (empty($this->years) ? $this->birthday : intval($this->years).'-'.intval($this->months).'-'.intval($this->days));
 		$this->secure_key = md5(uniqid(rand(), true));
 		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT')));
-	 	return parent::add($autodate, $nullValues);
+	 	$res = parent::add($autodate, $nullValues);
+		if (!$res)
+			return false;
+		$row = array('id_customer' => intval($this->id), 'id_group' => 1);
+		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 	}
 
 	public function update($nullValues = false)
@@ -449,7 +453,7 @@ public function getLastConnections()
 	
 	public function cleanGroups()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id).' AND `id_group` != 1');
 	}
 	
 	public function addGroups($groups)

@@ -26,7 +26,7 @@ class AdminGroups extends AdminTab
 		
 		$this->_select = 'count(cg.id_customer) as nb';
 		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)';
-		$this->_where = 'GROUP BY cg.id_group';
+		$this->_where = 'GROUP BY a.id_group';
 
  		$this->fieldsDisplay = array(
 		'id_group' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -158,8 +158,8 @@ class AdminGroups extends AdminTab
 			{
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
-					if (sizeof($object->getCustomers()))
-						$this->_errors[] = Tools::displayError('You cannot delete this group because there are still some customers linked to!');
+					if ($object->id == 1)
+						$this->_errors[] = Tools::displayError('You cannot delete default group');
 					else
 					{
 						if ($object->delete())

@@ -706,6 +706,26 @@ class		Category extends ObjectModel
 			$groups[] = $group['id_group'];
 		return $groups;
 	}
+	
+	public function checkAccess($id_customer)
+	{
+		if (!$id_customer)
+		{
+			$result = Db::getInstance()->getRow('
+			SELECT ctg.`id_group`
+			FROM '._DB_PREFIX_.'category_group ctg
+			WHERE ctg.`id_category` = '.intval($this->id).' AND ctg.`id_group` = 1');
+		} else {
+			$result = Db::getInstance()->getRow('
+			SELECT ctg.`id_group`
+			FROM '._DB_PREFIX_.'category_group ctg
+			LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.$id_customer.')
+			WHERE ctg.`id_category` = '.intval($this->id));
+		}
+		if ($result AND isset($result['id_group']) AND $result['id_group'])
+			return true;
+		return false;
+	}
 }
 
 ?>

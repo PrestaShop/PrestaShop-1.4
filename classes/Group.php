@@ -94,6 +94,7 @@ class		Group extends ObjectModel
 	{
 		if (parent::delete())
 		{
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.intval($this->id));
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.intval($this->id));
 			return true;
 		}

@@ -68,14 +68,9 @@ class AdminCustomers extends AdminTab
 						if (Validate::isLoadedObject($object))
 						{
 							$groupList = Tools::getValue('groupBox');
-							
+							$object->cleanGroups();
 							if (is_array($groupList) AND sizeof($groupList) > 0)
-							{
-								$object->cleanGroups();
 								$object->addGroups($groupList);
-							}
-							else
-								$this->_errors[] = Tools::displayError('You need to add your customer to at least one group');
 						}
 						else
 							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
@@ -114,6 +109,7 @@ class AdminCustomers extends AdminTab
 		$orders = Order::getCustomerOrders($customer->id);
 		$cart = new Cart($customer->getLastCart());
 		$currency = new Currency($cart->id_currency);
+		$groups = $customer->getGroups();
 
 		echo '
 		<div style="float: left">
@@ -141,6 +137,31 @@ class AdminCustomers extends AdminTab
 		if (($hook = Module::hookExec('adminCustomers', array('id_customer' => $customer->id))) !== false)
 			echo '<div>'.$hook.'</div>';
 
+		echo '<h2>'.$this->l('Groups').' ('.sizeof($groups).')</h2>';
+		if ($orders AND sizeof($orders))
+		{
+			echo '
+			<table cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th class="center">'.$this->l('ID').'</th>
+					<th class="center">'.$this->l('Name').'</th>
+					<th class="center">'.$this->l('Actions').'</th>
+				</tr>';
+			$tokenGroups = Tools::getAdminToken('AdminGroups'.intval(Tab::getIdFromClassName('AdminGroups')).intval($cookie->id_employee));
+			foreach ($groups AS $group)
+			{
+				$objGroup = new Group($group);
+				echo '
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminGroups&id_group='.$objGroup->id.'&viewgroup&token='.$tokenGroups.'\'">
+					<td class="center">'.$objGroup->id.'</td>
+					<td>'.$objGroup->name[$defaultLanguage].'</td>
+					<td align="center"><a href="?tab=AdminGroups&id_group='.$objGroup->id.'&viewgroup&token='.$tokenGroups.'"><img src="../img/admin/details.gif" /></a></td>
+				</tr>';
+			}
+			echo '
+			</table>';
+		}
+		echo '<div class="clear">&nbsp;</div>';
 		echo '<h2>'.$this->l('Orders').' ('.sizeof($orders).')</h2>';
 		if ($orders AND sizeof($orders))
 		{
@@ -310,7 +331,7 @@ class AdminCustomers extends AdminTab
 		else
 			echo $this->l('No cart available').'.';
 		echo '<div class="clear">&nbsp;</div>';
-		
+
 		/* Last connections */
         $connections = $customer->getLastConnections();
         if (sizeof($connections))    
@@ -335,7 +356,7 @@ class AdminCustomers extends AdminTab
             echo '</table><div class="clear">&nbsp;</div>';
         }
         echo '<a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to customer list').'</a><br />';
-    } 
+    }
 
 	public function displayForm()
 	{
@@ -441,7 +462,7 @@ class AdminCustomers extends AdminTab
 				</div>
 				<label>'.$this->l('Groups:').' </label>
 				<div class="margin-form">';
-					$groups = Group::getGroups($defaultLanguage);
+					$groups = Group::getGroups($defaultLanguage, true);
 					if (sizeof($groups))
 					{
 						echo '
@@ -453,12 +474,14 @@ class AdminCustomers extends AdminTab
 						</tr>';
 						$irow = 0;
 						foreach ($groups as $group)
+						{
 							echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
+								<td>'.($group['id_group'] != 1 ? '<input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/>' : '').'</td>
 								<td>'.$group['id_group'].'</td>
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';
+						}
 						echo '
 					</table>
 					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of groups to which the customer is to be member').'<sup> *</sup></p>
