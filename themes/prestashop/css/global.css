@@ -2323,4 +2323,10 @@ div.star a:hover{
 
 }
 
-.confirmation { color: forestgreen; font-weight: bold; };
+.confirmation { color: forestgreen; font-weight: bold; }
+
+.mailalerts_oos_email
+{
+	padding:2px;
+	margin:0px;
+}

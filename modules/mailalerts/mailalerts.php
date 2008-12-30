@@ -180,19 +180,25 @@ class MailAlerts extends Module
     {
 		global $smarty, $cookie;
 		
-		if (!$cookie->isLogged() OR !$this->_customer_qty)
+		if (!$this->_customer_qty)
 			return ;
 
-		$id_customer = intval($params['cookie']->id_customer);
 		$id_product = intval($params['product']->id);
 		$id_product_attribute = 0;
-		
-		if ($this->customerHasNotification($id_customer, $id_product, $id_product_attribute))
-			return ;
+
+		if (!$cookie->isLogged())
+			$smarty->assign('email', 1);
+		else
+		{
+			$id_customer = intval($params['cookie']->id_customer);
+			if ($this->customerHasNotification($id_customer, $id_product, $id_product_attribute))
+				return ;
+		}
 
 		$smarty->assign(array(
 			'id_product' => $id_product,
 			'id_product_attribute' => $id_product_attribute));
+
 		return $this->display(__FILE__, 'product.tpl');
 	}
 	
@@ -240,7 +246,7 @@ class MailAlerts extends Module
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
 		$customers = Db::getInstance()->ExecuteS('
-		SELECT id_customer
+		SELECT id_customer, customer_email
 		FROM `'._DB_PREFIX_.'mailalert_customer_oos`
 		WHERE `id_product` = '.intval($id_product).
 		($id_product_attribute ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
@@ -251,9 +257,19 @@ class MailAlerts extends Module
 		);
 		foreach ($customers as $cust)
 		{
-			$customer = new Customer(intval($cust['id_customer']));
-			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', $this->l('Product available'), $templateVars, strval($customer->email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
-			self::deleteAlert(intval($customer->id), intval($id_product), intval($id_product_attribute));
+			if ($cust['id_customer'])
+			{
+				$customer = new Customer(intval($cust['id_customer']));
+				$customer_email = $customer->email;
+				$customer_id = $customer->id;
+			}
+			else
+			{
+				$customer_email = $cust['customer_email'];
+				$customer_id = 0;
+			}
+			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', $this->l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			self::deleteAlert(intval($customer_id), strval($customer_email), intval($id_product), intval($id_product_attribute));
 		}
 	}
 	
@@ -432,10 +448,13 @@ class MailAlerts extends Module
 		return ($products);
 	}
 	
-	static public function deleteAlert($id_customer, $id_product, $id_product_attribute)
+	static public function deleteAlert($id_customer, $customer_email, $id_product, $id_product_attribute)
 	{
 		$query = 'DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-		WHERE `id_customer` = '.intval($id_customer).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute).';';
+		WHERE `id_customer` = '.intval($id_customer).'
+		AND `customer_email` = '.strval($customer_email).'
+		AND `id_product` = '.intval($id_product).'
+		AND `id_product_attribute` = '.intval($id_product_attribute).';';
 		return Db::getInstance()->Execute($query);
 	}
 }
