@@ -736,6 +736,10 @@ INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (6, 1);
 INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (6, 2);
 INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (6, 3);
 
+INSERT INTO `PREFIX_module_group` (`id_module`, `id_group`) VALUES (3, 1);
+INSERT INTO `PREFIX_module_group` (`id_module`, `id_group`) VALUES (4, 1);
+INSERT INTO `PREFIX_module_group` (`id_module`, `id_group`) VALUES (6, 1);
+
 INSERT INTO `PREFIX_module_country` (`id_module`, `id_country`) VALUES (3, 1);
 INSERT INTO `PREFIX_module_country` (`id_module`, `id_country`) VALUES (3, 2);
 INSERT INTO `PREFIX_module_country` (`id_module`, `id_country`) VALUES (3, 3);

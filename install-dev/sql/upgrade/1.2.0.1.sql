@@ -87,6 +87,12 @@ CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
 	PRIMARY KEY(id_search_engine)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_module_group` (
+  `id_module` INTEGER UNSIGNED NOT NULL,
+  `id_group` INTEGER NOT NULL,
+  PRIMARY KEY (`id_module`, `id_group`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 /* ##################################### */
 /* 					CONTENTS				*/
 /* ##################################### */
@@ -175,3 +181,4 @@ INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VA
 
 
 /* PHP:blocknewsletter(); */;
+/* PHP:set_payment_module_group(); */;

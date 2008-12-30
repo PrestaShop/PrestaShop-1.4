@@ -28,10 +28,17 @@ class AdminPayment extends AdminTab
 				$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.intval($module->id));
 				foreach ($countries as $country)
 					$module->country[] = $country['id_country'];
+
 				$module->currency = array();
 				$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.intval($module->id));
 				foreach ($currencies as $currency)
 					$module->currency[] = $currency['id_currency'];
+
+				$module->group = array();
+				$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.intval($module->id));
+				foreach ($groups as $group)
+					$module->group[] = $group['id_group'];
+
 				$this->paymentModules[] = $module;
 			}
 	
@@ -44,6 +51,8 @@ class AdminPayment extends AdminTab
 			$this->saveRestrictions('country');
 		elseif (Tools::isSubmit('submitModulecurrency'))
 			$this->saveRestrictions('currency');
+		elseif (Tools::isSubmit('submitModulegroup'))
+			$this->saveRestrictions('group');
 	}
 	
 	private function saveRestrictions($type)
@@ -69,15 +78,18 @@ class AdminPayment extends AdminTab
 		
 		$currencies = Currency::getCurrencies();
 		$countries = Country::getCountries(intval($cookie->id_lang));
+		$groups = Group::getGroups(intval($cookie->id_lang));
 		
 		$this->displayModules();
 		echo '<br /><h2 class="space">'.$this->l('Payment module restrictions').'</h2>';
 		$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies in which you want the payment module(s) available.');
 		$textCountries = $this->l('Please mark the checkbox(es) for the country or countries in which you want the payment module(s) available.');
+		$textGroups = $this->l('Please mark the checkbox(es) for the groups in which you want the payment module(s) available.');
 		$this->displayModuleRestrictions($currencies, $this->l('Currencies restrictions'), 'currency', $textCurrencies, 'dollar');
 		echo '<br />';
+		$this->displayModuleRestrictions($groups, $this->l('Groups restrictions'), 'group', $textGroups, 'group');
+		echo '<br />';
 		$this->displayModuleRestrictions($countries, $this->l('Countries restrictions'), 'country', $textCountries, 'world');
-	
 	}
 	
 	public function displayModuleRestrictions($items, $title, $nameId, $desc, $icon)

@@ -47,11 +47,17 @@ abstract class PaymentModule extends Module
 		return Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'module_country` (id_module, id_country)
 		SELECT '.intval($this->id).', id_country FROM `'._DB_PREFIX_.'country` WHERE active = 1');
+		// Insert group availability
+		return Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'module_group` (id_module, id_group)
+		SELECT '.intval($this->id).', id_group FROM `'._DB_PREFIX_.'group`');
 	}
 	
 	public function uninstall()
 	{
-		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE id_module = '.intval($this->id)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.intval($this->id)))
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE id_module = '.intval($this->id))
+			OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.intval($this->id))
+			OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_group` WHERE id_module = '.intval($this->id)))
 			return false;
 		return parent::uninstall();
 	}

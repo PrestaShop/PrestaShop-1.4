@@ -988,6 +988,12 @@ CREATE TABLE `PREFIX_module_currency` (
   PRIMARY KEY (`id_module`, `id_currency`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_module_group` (
+  `id_module` INTEGER UNSIGNED NOT NULL,
+  `id_group` INTEGER NOT NULL,
+  PRIMARY KEY (`id_module`, `id_group`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE PREFIX_meta (
   id_meta INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
   page VARCHAR(64) NOT NULL,
