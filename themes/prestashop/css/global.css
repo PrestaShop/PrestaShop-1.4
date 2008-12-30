@@ -1758,13 +1758,13 @@ div.categTree {
 	margin-bottom:1.5em;
 }
 #primary_block #color_picker p {
-	margin: 0 0 0.4em 0;
-	padding: 0 0 0 0;
+	margin: 0px;
+	padding: 0px;
 }
 #primary_block #color_picker {
 	padding: 0.7em;
 	background: #e5e6e7 url('../img/product-short-desc-bg.gif') repeat-x top left;
-	height: 42px;
+	min-height: 42px;
 	border: 1px #d0d3d8 solid;
 	margin-bottom: 1.5em;
 }
@@ -1773,7 +1773,7 @@ div.categTree {
 	height: 20px;
 	float: left;
 	border: 1px solid #666;
-	margin: 0 0.5em 0 0;
+	margin: 0.5em 0.5em 0 0;
 	cursor: pointer;
 }
 #primary_block a.color_pick:hover {
