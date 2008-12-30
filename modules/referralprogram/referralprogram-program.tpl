@@ -23,6 +23,8 @@
 			{l s='Someone with this e-mail address has already been sponsored!' mod='referralprogram'}
 		{elseif $error == 'no revive checked'}
 			{l s='Please mark at least one checkbox' mod='referralprogram'}
+		{elseif $error == 'cannot add friends'}
+			{l s='Cannot add friends to database' mod='referralprogram'}
 		{/if}
 	</p>
 {/if}

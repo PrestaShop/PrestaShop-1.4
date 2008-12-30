@@ -110,7 +110,7 @@ class ReferralProgramModule extends ObjectModel
 	  *
 	  * @return array Sponsor
 	  */
-	static public function getSponsorFriend($id_customer, $restriction=false)
+	static public function getSponsorFriend($id_customer, $restriction = false)
 	{
 		if (!intval($id_customer))
 			return array();
@@ -118,12 +118,12 @@ class ReferralProgramModule extends ObjectModel
 			SELECT s.*
 			FROM `'._DB_PREFIX_.'referralprogram` s
 			WHERE s.`id_sponsor` = '.intval($id_customer);
-		if ($restriction!==false)
+		if ($restriction)
 		{
-			if ($restriction=='pending')
-				$query.= ' AND s.`id_customer` IS NULL';
-			elseif ($restriction=='subscribed')
-				$query.= ' AND s.`id_customer` IS NOT NULL';
+			if ($restriction == 'pending')
+				$query.= ' AND s.`id_customer` = 0';
+			elseif ($restriction == 'subscribed')
+				$query.= ' AND s.`id_customer` != 0';
 		}
 		return Db::getInstance()->ExecuteS($query);
 	}

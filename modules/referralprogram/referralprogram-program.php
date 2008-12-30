@@ -82,7 +82,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 						$activeTab = 'pending';
 					}
 					else
-						$error = 'no revive checked';
+						$error = 'cannot add friends';
 				}
 			}
 			if ($error)
@@ -149,8 +149,7 @@ $smarty->assign(array(
 	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed')
 ));
 
-
-echo Module::display('referralprogram.php', 'referralprogram-program.tpl');
+echo Module::display(__FILE__, 'referralprogram-program.tpl');
 
 include(dirname(__FILE__).'/../../footer.php'); 
 
