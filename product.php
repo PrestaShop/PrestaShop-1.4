@@ -243,7 +243,6 @@ else
 				$attributeList = rtrim($attributeList, ',');
 				$combinations[$id_product_attribute]['list'] = $attributeList;
 			}
-
 			$smarty->assign(array(
 				'groups' => $groups,
 				'combinaisons' => $combinations, /* Kept for compatibility purpose only */

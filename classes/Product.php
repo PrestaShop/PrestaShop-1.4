@@ -628,7 +628,7 @@ class		Product extends ObjectModel
 		if (!$id_product_attribute = Db::getInstance()->Insert_ID())
 			return false;
 		if (empty($id_images))
-			return true;
+			return intval($id_product_attribute);
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
 		foreach ($id_images AS $id_image)
 			$query .= '('.intval($id_product_attribute).', '.intval($id_image).'), ';
