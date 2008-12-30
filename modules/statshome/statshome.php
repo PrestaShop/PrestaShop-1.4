@@ -79,7 +79,12 @@ class StatsHome extends Module
 		$this->_postProcess();
 		$currency = Currency::getCurrency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$results = $this->getResults();
-	
+
+		$employee = new Employee(intval($cookie->id_employee));
+		$id_tab_stats = Tab::getIdFromClassName('AdminStats');
+		$access = Profile::getProfileAccess($employee->id_profile, $id_tab_stats);
+		if (!$access['view'])
+			return '';
 		$this->_html = '
 		<fieldset style="width:520px;">
 			<legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Statistics').'</legend>
@@ -132,7 +137,7 @@ class StatsHome extends Module
 			</form>
 			</div>
 		</fieldset>
-		<div class="clear"></div>';
+		<div class="clear space"><br /><br /></div>';
 		return $this->_html;
 	}
 	

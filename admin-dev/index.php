@@ -86,7 +86,7 @@ else /* Else display homepage */
 	echo Module::hookExec('backOfficeHome');
 
 	/* News from PrestaShop website */
-	echo '<div class="clear space"><br /><br /></div>
+	echo '
 	<h2>'.translate('PrestaShop live feed').'</h2>';
 	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
