@@ -8,6 +8,11 @@ include_once(dirname(__FILE__).'/config/config.inc.php');
 $step = intval(Tools::getValue('step'));
 include_once(dirname(__FILE__).'/init.php');
 
+/*$name = 'ö';
+$a = Validate::isGenericName($name);
+var_dump($a);
+die($name);*/
+
 /* Disable some cache related bugs on the cart/order */
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -75,7 +80,7 @@ if ($cart->nbProducts())
 		$cart->deleteDiscount(intval($_GET['deleteDiscount']));
 		Tools::redirect('order.php');
 	}
-		
+
 	/* Is there only virtual product in cart */
 	if ($isVirtualCart = $cart->isVirtualCart())
 		setNoCarrier();
@@ -146,7 +151,7 @@ function checkFreeOrder()
 	if ($cart->getOrderTotal() <= 0)
 	{
 		$order = new FreeOrder();
-		$order->validateOrder(intval($cart->id), 2, 0, Tools::displayError('Free order'));
+		$order->validateOrder(intval($cart->id), 2, 0, Tools::displayError('Free order', false));
 		Tools::redirect('history.php');
 	}
 }
@@ -176,8 +181,8 @@ function processAddress()
 	{
 		$cart->id_address_delivery = intval($_POST['id_address_delivery']);
 		$cart->id_address_invoice = isset($_POST['same']) ? intval($_POST['id_address_delivery']) : intval($_POST['id_address_invoice']);
-		$cart->update();
-
+		if (!$cart->update())
+			$errors[] = Tools::displayError('an error occured while updating your cart');
 		if (isset($_POST['message']) AND !empty($_POST['message']))
 		{
 			if (!Validate::isMessage($_POST['message']))
@@ -230,7 +235,10 @@ function processCarrier()
 		$cart->gift = 0;
 
 	$address = new Address(intval($cart->id_address_delivery));
-	$id_zone = Address::getZoneById($address->id);
+	if (!Validate::isLoadedObject($address))
+		die(Tools::displayError());
+	if (!$id_zone = Address::getZoneById($address->id))
+		$errors[] = Tools::displayError('no zone match with your address');
 	if (isset($_POST['id_carrier']) AND Validate::isInt($_POST['id_carrier']) AND sizeof(Carrier::checkCarrierZone(intval($_POST['id_carrier']), intval($id_zone))))
 		$cart->id_carrier = intval($_POST['id_carrier']);
 	elseif (!$isVirtualCart)

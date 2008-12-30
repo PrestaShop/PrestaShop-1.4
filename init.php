@@ -12,6 +12,7 @@ elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !intval(Configurati
 ob_start();
 global $cart, $cookie, $_CONF, $link;
 
+
 /* get page name to display it in body id */
 $pathinfo = pathinfo(__FILE__);
 $page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);

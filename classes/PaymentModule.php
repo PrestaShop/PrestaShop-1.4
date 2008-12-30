@@ -87,7 +87,7 @@ abstract class PaymentModule extends Module
 			$order->id_cart = intval($cart->id);
 			$customer = new Customer(intval($order->id_customer));
 			$order->secure_key = pSQL($customer->secure_key);
-			$order->payment = substr($paymentMethod, 0, 32);
+			$order->payment = Tools::substr($paymentMethod, 0, 32);
 			if (isset($this->name))
 				$order->module = $this->name;
 			$order->total_paid_real = floatval(number_format($amountPaid, 2, '.', ''));
