@@ -197,7 +197,7 @@ class AdminCategories extends AdminTab
 					<input type="file" name="image" />
 				</div>';
 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)), 'left');				
-		echo'	<div class="clear"><br />	
+		echo'	<div class="clear"><br /></div>	
 				<label>'.$this->l('Meta title:').' </label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
