@@ -146,10 +146,9 @@ class AdminCategories extends AdminTab
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
 		$langtags = 'cname¤cdescription¤clink_rewrite¤cmeta_title¤cmeta_keywords¤cmeta_description';
-		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
 		$active = $this->getFieldValue($obj, 'active');
 		$customer_groups = $obj->getGroups();
-
+		
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
@@ -196,7 +195,9 @@ class AdminCategories extends AdminTab
 				<label>'.$this->l('Image:').' </label>
 				<div class="margin-form">
 					<input type="file" name="image" />
-				</div>
+				</div>';
+		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)), 'left');				
+		echo'	<div class="clear"><br />	
 				<label>'.$this->l('Meta title:').' </label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
