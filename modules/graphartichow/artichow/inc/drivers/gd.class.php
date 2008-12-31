@@ -159,7 +159,7 @@ class awGDDriver extends Driver {
 			imageantialias($this->resource, (bool)$bool);
 
 			$this->antiAliasing = (bool)$bool;
-		} else {
+		} elseif ($bool == true) {
 			awImage::drawErrorFile('missing-anti-aliasing');
 		}
 	}

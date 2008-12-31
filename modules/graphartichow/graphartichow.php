@@ -23,7 +23,7 @@ class GraphArtichow extends ModuleGraphEngine
 		{
 			require_once(dirname(__FILE__).'/artichow/Graph.class.php');
 			$this->_graph = new Graph();
-			$this->_graph->setAntiAliasing(true);
+			$this->_graph->setAntiAliasing(function_exists('imageantialias'));
 			parent::__construct($type);
 		}
 		else

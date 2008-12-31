@@ -13,7 +13,8 @@ function loadBaseImage($img_path)
 	imagecopy($img_tc, $img_png, 0, 0, 0, 0, $img_size[0], $img_size[1]);
 	imagedestroy($img_png);
 	
-	imageantialias($img_tc, true);
+	if (function_exists('imageantialias'))
+		imageantialias($img_tc, true);
 	return ($img_tc);
 }
 

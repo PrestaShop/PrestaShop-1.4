@@ -263,8 +263,8 @@ if(!window.Visifire)
 		{
 		    _uThisObject.id = 'VisifireControl' + _uThisObject.index;
 		}
-
-		var html = '<object id="' + _uThisObject.id + '" data="data:application/x-silverlight," type="application/x-silverlight-2" width="' + width + '" height="' + height + '">';
+        
+		var html = '<object id="' + _uThisObject.id + '" data="data:application/x-silverlight-2," type="application/x-silverlight-2" width="' + width + '" height="' + height + '">';
         
         html    +=  '<param name="source" value="' + _uThisObject.xapPath +'"/>'
 		        +	'<param name="onLoad" value="slLoaded' + _uThisObject.index +'"/>'
