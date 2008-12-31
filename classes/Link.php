@@ -105,6 +105,16 @@ class Link
 			(_PS_USE_SSL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom));
 		return _PS_USE_SSL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom);
 	}
+	
+	public function getImageLink($name, $ids, $type = null)
+	{
+		return ($this->allow == 1) ? (__PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg');
+	}
+	
+	public function getCatImageLink($name, $id_category, $type = null)
+	{
+		return ($this->allow == 1) ? (__PS_BASE_URI__.$id_category.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_CAT_DIR_.$id_category.($type ? '-'.$type : '').'.jpg');
+	}
 
 	
 	/**

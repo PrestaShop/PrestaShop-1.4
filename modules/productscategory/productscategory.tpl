@@ -12,7 +12,7 @@
 		{foreach from=$categoryProducts item='categoryProduct' name=categoryProduct}
 		<li {if count($categoryProducts) < 6}style="width: {math equation="width / nbImages" width=94 nbImages=$categoryProducts|@count}%"{/if}>
 			<a href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category)}" title="{$categoryProduct.name|htmlspecialchars}">
-				<img src="{$img_prod_dir}{$categoryProduct.id_image}-medium.jpg" alt="{$categoryProduct.name|htmlspecialchars}" />
+				<img src="{$link->getImageLink($categoryProduct.link_rewrite, $categoryProduct.id_image, 'medium')}" alt="{$categoryProduct.name|htmlspecialchars}" />
 			</a><br/>
 			<a href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category)}" title="{$categoryProduct.name|htmlspecialchars}">
 			{$categoryProduct.name|truncate:15}

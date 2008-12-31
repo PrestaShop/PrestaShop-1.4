@@ -4,8 +4,8 @@
 	<div class="block_content">
 	{if $best_sellers|@count > 0}
 		<ul class="product_images">
-			<li><a href="{$best_sellers.0.link}" title="{$best_sellers.0.legend}"><img src="{$img_prod_dir}{$best_sellers.0.id_image}-medium.jpg" alt="{$best_sellers.0.legend}" /></a></li>
-			{if $best_sellers|@count > 1}<li><a href="{$best_sellers.1.link}" title="{$best_sellers.1.legend}"><img src="{$img_prod_dir}{$best_sellers.1.id_image}-medium.jpg" alt="{$best_sellers.1.legend}" /></a></li>{/if}
+			<li><a href="{$best_sellers.0.link}" title="{$best_sellers.0.legend}"><img src="{$link->getImageLink($best_sellers.0.link_rewrite, $best_sellers.0.id_image, 'medium')}" alt="{$best_sellers.0.legend}" /></a></li>
+			{if $best_sellers|@count > 1}<li><a href="{$best_sellers.1.link}" title="{$best_sellers.1.legend}"><img src="{$link->getImageLink($best_sellers.1.link_rewrite, $best_sellers.1.id_image, 'medium')}" alt="{$best_sellers.1.legend}" /></a></li>{/if}
 		</ul>
 		<dl>
 		{foreach from=$best_sellers item=product name=myLoop}

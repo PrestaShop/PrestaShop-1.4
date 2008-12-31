@@ -97,7 +97,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<!-- product img-->
 		<div id="image-block">
 		{if $have_image}
-				<img src="{$img_prod_dir}{$cover.id_image}-large.jpg" {if $jqZoomEnabled}class="jqzoom" alt="{$img_prod_dir}{$cover.id_image}-thickbox.jpg"{else}alt="" {/if} id="bigpic" title="{$product->name|escape:'htmlall':'UTF-8'}"/>
+				<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}" {if $jqZoomEnabled}class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else}alt="" {/if} id="bigpic" title="{$product->name|escape:'htmlall':'UTF-8'}"/>
 		{else}
 			<img src="{$img_prod_dir}{$lang_iso}-default-large.jpg" alt="" title="{$product->name|escape:'htmlall':'UTF-8'}" />
 		{/if}
@@ -110,9 +110,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<div id="thumbs_list">
 			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px" id="thumbs_list_frame">
 				{foreach from=$images item=image name=thumbnails}
+				{assign var=imageIds value=`$product->id`-`$image.id_image`}
 				<li>
-					<a href="{$img_prod_dir}{$product->id}-{$image.id_image}-thickbox.jpg" rel="other-views" class="{if !$jqZoomEnabled}thickbox{/if} {if $smarty.foreach.thumbnails.first}shown{/if}">
-						<img id="thumb_{$image.id_image}" src="{$img_prod_dir}{$product->id}-{$image.id_image}-medium.jpg" alt="{$image.legend|htmlspecialchars}" title="{$image.legend|htmlspecialchars}" />
+					<a href="{$link->getImageLink($product->link_rewrite, $imageIds, 'thickbox')}" rel="other-views" class="{if !$jqZoomEnabled}thickbox{/if} {if $smarty.foreach.thumbnails.first}shown{/if}">
+						<img id="thumb_{$image.id_image}" src="{$link->getImageLink($product->link_rewrite, $imageIds, 'medium')}" alt="{$image.legend|htmlspecialchars}" title="{$image.legend|htmlspecialchars}" />
 					</a>
 				</li>
 				{/foreach}
@@ -318,7 +319,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 						<li class="ajax_block_product {if $smarty.foreach.accessories_list.first}first_item{elseif $smarty.foreach.accessories_list.last}last_item{else}item{/if} product_accessories_description">
 							<h5 class="align_center"><a href="{$accessoryLink|escape:'htmlall':'UTF-8'}">{$accessory.name|truncate:22|escape:'htmlall':'UTF-8'}</a></h5>
 							<p class="product_desc">
-								<a href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{$accessory.legend|escape:'htmlall':'UTF-8'}" class="product_image"><img src="{$img_prod_dir}{$accessory.id_image}-medium.jpg" alt="{$accessory.legend|escape:'htmlall':'UTF-8'}" /></a>
+								<a href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{$accessory.legend|escape:'htmlall':'UTF-8'}" class="product_image"><img src="{$link->getImageLink($accessory.link_rewrite, $accessory.id_image, 'medium')}" alt="{$accessory.legend|escape:'htmlall':'UTF-8'}" /></a>
 								<a href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='More'}" class="product_description">{$accessory.description_short|strip_tags|truncate:100}</a>
 							</p>
 							<p class="product_accessories_price">
