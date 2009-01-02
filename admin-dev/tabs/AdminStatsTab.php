@@ -33,11 +33,11 @@ abstract class AdminStatsTab extends AdminPreferences
 				$cookie->stats_day = $day;
 			else
 				unset($cookie->stats_day);
-			if ($month = Tools::getValue('dateInputMonth', -1) AND Validate::isUnsignedInt($month))
+			if (($month = Tools::getValue('dateInputMonth', -1)) != -1 AND Validate::isInt($month))
 				$cookie->stats_month = $month + 1;
 			else
 				unset($cookie->stats_month);
-			if ($year = Tools::getValue('dateInputYear', -1) AND Validate::isUnsignedInt($year))
+			if ($year = Tools::getValue('dateInputYear', date('Y')) AND Validate::isUnsignedInt($year))
 				$cookie->stats_year = $year;
 			else
 				unset($cookie->stats_year);
