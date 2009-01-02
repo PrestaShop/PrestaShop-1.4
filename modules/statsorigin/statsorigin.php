@@ -33,15 +33,16 @@ class StatsOrigin extends ModuleGraph
 
 	private function getOrigins()
 	{
+		$directLink = $this->l('Direct link');
 		$result = mysql_query('
 		SELECT http_referer
 		FROM '._DB_PREFIX_.'connections
 		WHERE date_add LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
-		$websites = array('Direct link' => 0);
+		$websites = array($directLink => 0);
 		while ($row = mysql_fetch_assoc($result))
 		{
 			if (!isset($row['http_referer']) OR empty($row['http_referer']))
-				++$websites['Direct link'];
+				++$websites[$directLink];
 			else
 			{
 				$website = preg_replace('/^www./', '', parse_url($row['http_referer'], PHP_URL_HOST));
@@ -65,7 +66,7 @@ class StatsOrigin extends ModuleGraph
 		{
 			$this->_html .= '
 			<center>
-			<p><img src="../img/admin/down.gif" />Here are the percentages of the 10 most websites............. </p>
+			<p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went through to get on your shop.').'</p>
 			'.ModuleGraph::engine(array('type' => 'pie')).'
 			<br /><br /><br /><table class="table" border="0" cellspacing="0" cellspacing="0">
 				<tr>
@@ -78,7 +79,19 @@ class StatsOrigin extends ModuleGraph
 		}
 		else
 			$this->_html .= '<p><strong>'.$this->l('Direct links only').'</strong></p>';
-		$this->_html .= '</fieldset>';
+		$this->_html .= '</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+		<h2>'.$this->l('What is a referrer website?').'</h2>
+			<p>
+				'.$this->l('When visiting a webpage, the referrer is the URL of the previous webpage from which a link was followed.').'<br />
+				'.$this->l('A referrer enables you to know which keywords are entered by visitors in search engines when they try to get on your shop; and also to optimize your web promotion.').'<br /><br />
+				'. $this->l('A referrer can be:').'
+				<ul>
+					<li class="bullet">'. $this->l('Someone who put a link on his website towards your shop').'</li>
+					<li class="bullet">'. $this->l('A partner with whom you made a link exchange in order to bring in sales or attract new customers').'</li>
+				</ul>
+			</p>
+		</fieldset>';
 		return $this->_html;
 	}
 		

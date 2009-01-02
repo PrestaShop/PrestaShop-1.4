@@ -121,7 +121,18 @@ class StatsProduct extends ModuleGraph
 			$this->_html .= '</ul>';
 		}
 		
-		$this->_html .= '</fieldset>';
+		$this->_html .= '</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+		<h2>'.$this->l('Number of purchases compared to number of viewings').'</h2>
+			<p>
+				'.$this->l('After choosing a category and selecting a product available in this category, some graphs appear. Then, you can analyze them.').'
+				<ul>
+					<li class="bullet">'.$this->l('If you notice that a product is successful, very purchased, but also little viewed: you should put it more prominently on your webshop front-office.').'</li>
+					<li class="bullet">'.$this->l('On the other hand, if a product knows a lot of viewings but is not really purchased: we advise you to check or modify this product\'s information, description and photography again.').'
+					</li>
+				</ul>
+			</p>
+		</fieldset>';
 		return $this->_html;
 	}
 	

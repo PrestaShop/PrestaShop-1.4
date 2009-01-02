@@ -7,6 +7,7 @@ $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_c11da97e88261de65e6
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_0df28a79b0b6ee5f2a91da83bb07117c'] = 'La répartition par genre vous permet de déterminer le pourcentage d\'hommes et de femmes parmis vos clients.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_66ea53c179f966ec08fc4710c60a85be'] = 'Les tranches d\'âges vous permettent de déterminer dans quelle tranche d\'âge se positionne votre clientèle.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_5186059c6452b447e8253c75b2afac5b'] = 'La répartition par pays vous permet de déterminer dans quelle partie du monde sont vos clients.';
+$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_f761b4cc905eb0fea56adb2bf7f8588f'] = 'Les tranches de devise vous permettent de déterminer avec quelle devise vos clients payent.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_104b6b6b33de198be0f8f3f438171c0f'] = 'La répartition par langues vous permet de déterminer la langue qu\'utilisent généralement vos clients dans votre boutique.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_7a7012cc5c52802b45aed45d1f616f1e'] = 'Aucun client enregistré pour le moment.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';

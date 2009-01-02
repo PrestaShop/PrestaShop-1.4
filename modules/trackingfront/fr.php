@@ -15,6 +15,8 @@ $_MODULE['<{trackingfront}prestashop>account_7442e29d7d53e549b78d93c46b8cdcfc'] 
 $_MODULE['<{trackingfront}prestashop>account_11ff9f68afb6b8b5b8eda218d7c83a65'] = 'Ventes';
 $_MODULE['<{trackingfront}prestashop>account_43005b13d452a4ad6f2d8e29b499c55a'] = 'Tx insc.';
 $_MODULE['<{trackingfront}prestashop>account_89741aae300253f498b0993fa678fa18'] = 'Tx com.';
+$_MODULE['<{trackingfront}prestashop>account_2e27c4006a026eacfc1f85b41bf9bc4c'] = 'Commission €';
+$_MODULE['<{trackingfront}prestashop>account_86190054fc32554662ffbb12b717e8d0'] = 'Commission %';
 $_MODULE['<{trackingfront}prestashop>login_bf15e68d25d8a2b7664950ba7385ed0a'] = 'Affiliation';
 $_MODULE['<{trackingfront}prestashop>login_8954e140059f7b2544469f40161ba507'] = 'Espace affilié';
 $_MODULE['<{trackingfront}prestashop>login_99dea78007133396a7b8ed70578ac6ae'] = 'Identifiant';
@@ -33,6 +35,8 @@ $_MODULE['<{trackingfront}prestashop>trackingfront_d7e637a6e9ff116de2fa89551240a
 $_MODULE['<{trackingfront}prestashop>trackingfront_d3139f39f1ad6324c80a9ddd50cc7867'] = 'Pages vues';
 $_MODULE['<{trackingfront}prestashop>trackingfront_a28735af01fbb1e35371cb120985ac47'] = 'Inscriptions';
 $_MODULE['<{trackingfront}prestashop>trackingfront_7442e29d7d53e549b78d93c46b8cdcfc'] = 'Commandes';
+$_MODULE['<{trackingfront}prestashop>trackingfront_2e27c4006a026eacfc1f85b41bf9bc4c'] = 'Commission €';
+$_MODULE['<{trackingfront}prestashop>trackingfront_86190054fc32554662ffbb12b717e8d0'] = 'Commission %';
 $_MODULE['<{trackingfront}prestashop>trackingfront_200f5c9c419f0a53d5d361eff7b33abc'] = 'Taux d\'inscription';
 $_MODULE['<{trackingfront}prestashop>trackingfront_11ff9f68afb6b8b5b8eda218d7c83a65'] = 'Ventes';
 $_MODULE['<{trackingfront}prestashop>trackingfront_89741aae300253f498b0993fa678fa18'] = 'Taux de commandes';

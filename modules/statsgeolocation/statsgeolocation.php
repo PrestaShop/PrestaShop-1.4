@@ -102,17 +102,22 @@ class StatsGeoLocation extends Module
 	{
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->displayName.'</legend>
-			<p>
-				'.$this->l('This module shows the country distribution of your customers by displaying different sized points on the worldmap below. See the fame of your website all around the world and which continent you\'ve not conquered yet.').'
-			<p>
+			<center>
+				<p><img src="../img/admin/down.gif" />'.$this->l('This module shows the country distribution of your customers by displaying different sized points on the worldmap below. See the fame of your website all around the world and which continent you\'ve not conquered yet.').'</p>
+			</center>
 			<p class="space">
 				<img src="'.$this->_path.'drawer.php" alt="" title="" />
 			</p>
-			<h3 class="space">'.$this->l('What to look for?').'</h3>
-			<ul>
-				<li>- '.$this->l('Add new languages to your shop if you see that a sufficient part of your customers come from a foreign country.').'</li>
-				<li>- '.$this->l('Enlarge your shipping area to meet the potential demand.').'</li>
-			</ul>
+			
+		</fieldset><br />
+		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
+		<h2>'.$this->l('Open to the world').'</h2>
+			<p>
+				<ul>
+					<li class="bullet">'.$this->l('Add new languages to your shop if you see that a sufficient part of your customers come from a foreign country.').'</li>
+				<li class="bullet">'.$this->l('Enlarge your shipping area to meet the potential demand.').'</li>
+				</ul>
+			</p>
 		</fieldset>';
 		return $this->_html;
 	}

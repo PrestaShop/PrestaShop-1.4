@@ -13,6 +13,11 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_0173374ac20f5843d58b553d5b226ef
 $_MODULE['<{statsproduct}prestashop>statsproduct_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Toutes';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3303da9d5241177588a06ad60d7edaba'] = 'Cliquez sur un produit pour accéder à ses statistiques.';
 $_MODULE['<{statsproduct}prestashop>statsproduct_6ccf03bc05e4b749b74b5d577c7e7d3a'] = 'Produits disponibles';
+$_MODULE['<{statsproduct}prestashop>statsproduct_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
+$_MODULE['<{statsproduct}prestashop>statsproduct_6c1a8292e4da90e1ef19ae9444226d8f'] = 'Comparaison du nombre d\'achat et du nombre de consultations';
+$_MODULE['<{statsproduct}prestashop>statsproduct_78b7f73e738991f2f0c08aa76e0c1354'] = 'Après avoir choisi une catégorie et sélectionné un produit disponible dans cette catégorie, des graphiques apparaissent. Vous pouvez ensuite les analyser.';
+$_MODULE['<{statsproduct}prestashop>statsproduct_4c694fbaea539b8c135a187da5b508eb'] = 'Si vous constatez qu\'un produit a du succès, qu\'il est beaucoup acheté mais très peu consulté : vous devriez le mettre davantage en évidence dans la vitrine de votre boutique.';
+$_MODULE['<{statsproduct}prestashop>statsproduct_47786db044f5982f2d9d475b03caa1ee'] = 'Si au contraire un produit connait un grand nombre de consultations mais est très peu acheté : nous vous conseillons alors de vérifier à nouveau ou de modifier les informations, description ou photographie(s) présentes dans sa fiche produit.';
 $_MODULE['<{statsproduct}prestashop>statsproduct_4b33418291d5e3b6348133ba3e764e74'] = 'Nombre d\'achats';
 $_MODULE['<{statsproduct}prestashop>statsproduct_f0be22f4eb9defecc69536505ead2298'] = 'Nombre de consultations';
 $_MODULE['<{statsproduct}prestashop>statsproduct_287234a1ff35a314b5b6bc4e5828e745'] = 'Attributs';
