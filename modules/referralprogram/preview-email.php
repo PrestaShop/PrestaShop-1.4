@@ -2,14 +2,17 @@
 
 require_once('../../config/config.inc.php');
 require_once('../../init.php');
-
+/*
 if (!$cookie->isLogged())
 	Tools::redirect('../../authentication.php?back=modules/referralprogram/referralprogram-program.php');
-
+*/
 $shop_name = htmlentities(Configuration::get('PS_SHOP_NAME'), NULL, 'utf-8');
 $shop_url = 'http://'.$_SERVER['HTTP_HOST'];
 $customer = new Customer(intval($cookie->id_customer));
 
+if (!preg_match("#.*\.html$#Ui", Tools::getValue('mail')) OR !preg_match("#.*\.html$#Ui", Tools::getValue('mail')))
+	die(Tools::displayError());
+	
 $file = file_get_contents(dirname(__FILE__).'/mails/'.strval(preg_replace('#\.{2,}#', '.', Tools::getValue('mail'))));
 
 $file = str_replace('{shop_name}', $shop_name, $file);
