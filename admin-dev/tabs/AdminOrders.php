@@ -641,7 +641,7 @@ class AdminOrders extends AdminTab
 					<a href="javascript:openCloseLayer(\'message\');openCloseLayer(\'message_m\');"><b>'.$this->l('Click here').'</b> '.$this->l('to add a comment or send a message to the customer').'</a>
 				</div>
 				<div id="message" style="display: '.(Tools::getValue('message') ? 'block' : 'none').'">
-					<select name="order_message" id="order_message" onchange="if (this.value != 0) { getE(\'txt_msg\').innerHTML = this.value; }">
+					<select name="order_message" id="order_message" onchange="orderOverwriteMessage(this, \''.$this->l('Do you want to overwrite your existing message?').'\')">
 						<option value="0" selected="selected">-- '.$this->l('Choose a standard message').' --</option>';
 		$orderMessages = OrderMessage::getOrderMessages(intval($order->id_lang));
         foreach ($orderMessages AS $orderMessage)

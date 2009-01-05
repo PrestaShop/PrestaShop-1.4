@@ -583,3 +583,16 @@ function showAttributeColorGroup(name, container)
 	else
 		openCloseLayer(container, 'close');
 }
+
+function orderOverwriteMessage(sl, text)
+{
+	var $zone = $('#txt_msg');
+	var sl_value = sl.options[sl.selectedIndex].value;
+	
+	if (sl_value != '0')
+	{
+		if ($zone.val().length > 0 && !confirm(text))
+			return ;
+		$zone.val(sl_value);
+	}
+}
