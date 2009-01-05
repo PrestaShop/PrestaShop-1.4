@@ -23,6 +23,7 @@ class AdminCustomers extends AdminTab
 	 	$this->edit = true;
 	 	$this->view = true;
 	 	$this->delete = true;
+	 	$this->deleted = true;
 
 		$genders = array(1 => $this->l('M'), 2 => $this->l('F'), 9 => $this->l('?'));
  		$this->fieldsDisplay = array(
@@ -44,7 +45,7 @@ class AdminCustomers extends AdminTab
 
 		parent::__construct();
 	}
-
+	
 	public function postProcess()
 	{
 		global $currentIndex;

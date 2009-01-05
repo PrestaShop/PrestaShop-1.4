@@ -53,7 +53,10 @@ class		Customer extends ObjectModel
 	public $last_passwd_gen;
 	
 	/** @var boolean Status */
-	public 		$active = 1;
+	public 		$active = true;
+	
+	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
+	public 		$deleted = 0;
 
 	/** @var string Object creation date */
 	public 		$date_add;
@@ -95,7 +98,7 @@ class		Customer extends ObjectModel
 		$fields['active'] = intval($this->active);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
-
+		$fields['deleted'] = intval($this->deleted);
 		return $fields;
 	}
 
@@ -476,6 +479,7 @@ public function getLastConnections()
 			$groups[] = $group['id_group'];
 		return $groups;
 	}
+	
 }
 
 ?>
