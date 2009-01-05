@@ -392,9 +392,19 @@ function displaySummary()
 	$summary = $cart->getSummaryDetails();
 	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
 	Product::addCustomizationPrice($summary['products'], $customizedDatas);
-
+	
 	if ($free_ship = intval(Configuration::get('PS_SHIPPING_FREE_PRICE')))
-		$smarty->assign('free_ship', $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']));
+	{
+		$discounts = $cart->getDiscounts();
+		$total_free_ship =  $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']);
+		foreach ($discounts as $discount)
+			if ($discount['id_discount_type'] == 3)
+			{
+				$total_free_ship = 0;
+				break ;
+			}
+		$smarty->assign('free_ship', $total_free_ship);
+	}
 	$smarty->assign($summary);
 	$token = Tools::getToken(false);
 	$smarty->assign(array(
