@@ -422,6 +422,11 @@ form.std p.submit {
 	margin-bottom: 1.5em;
 }
 
+#center_column form.std p.submit2 {
+	padding-left:170px;
+	margin-bottom: 1.5em;
+}
+
 /* START OF BUTTONS SECTION
  *  -tags : input, a, span
  *  -sizes : mini, small, normal, large
@@ -722,7 +727,6 @@ form#productsSortForm p select{ font-size:1em; }
 }
 #header #currencies_block_top ul li a:hover {
 	background-color:white;
-	border: #7C8187 1px solid;
 	color: black;
 }
 #header #currencies_block_top ul li.selected a {
@@ -732,6 +736,7 @@ form#productsSortForm p select{ font-size:1em; }
 	line-height: 1.2em;
 	font-weight: bold;
 	color: black;
+	border:1px solid white;
 }
 #header #currencies_block_top p {
 	clear: left;
@@ -748,7 +753,7 @@ form#productsSortForm p select{ font-size:1em; }
 #languages_block_top ul#first-languages {
 	float: left;
 	height: 1.5em;
-	width: 8.6em;
+	width: 8.5em;
 }
 #languages_block_top ul#first-languages li {
 	float:left;
@@ -1396,12 +1401,39 @@ width: 155px;
 	clear: none;
 	float: left;
 }
+#authentication #create-account_form h4 {
+	height: 3.4em;
+	padding:0.3em 3em 0 4em;
+}
+
+#authentication #create-account_form p.text, #authentication #login_form p.text{
+	height: 3.4em;
+	margin-left:4em;
+	padding-left:0;
+	padding-right:0;
+}
+
 #authentication #login_form a{ color:#374853; }
 #authentication #create-account_form { margin-right: 7px; }
+#authentication #create-account_form p.text {
+text-align:left;
+width:100px;
+}
+#authentication #create-account_form p.text label{
+	width:100px;
+}
 #authentication input#SubmitCreate, #authentication input#SubmitLogin{ margin:0; }
 #authentication p.submit {
 	margin-right: 0;
 	text-align:left;
+	padding-left:17% !important;
+}
+#authentication p.lost_password {
+	padding-left:4em;
+}
+
+#authentication #create-account_form fieldset, #authentication #login_form fieldset {
+	height:18em;
 }
 #authentication p.submit span { padding-right:0.5em; }
 #authentication #create-account_form label, #authentication #login_form label {
@@ -1728,9 +1760,6 @@ div.categTree {
 #primary_block #image-block{
     border:#d0d1d5 solid 1px;height:300px;width:300px;
 }
-#primary_block #image-block img{
-	border:#d0d1d5 solid 1px;
-}
 #primary_block #image-block img#bigpic{ cursor:pointer; }
 #primary_block ul#usefull_link_block{
 	list-style-type:none;
@@ -1758,13 +1787,13 @@ div.categTree {
 	margin-bottom:1.5em;
 }
 #primary_block #color_picker p {
-	margin: 0px;
-	padding: 0px;
+	margin: 0 0 0.4em 0;
+	padding: 0 0 0 0;
 }
 #primary_block #color_picker {
 	padding: 0.7em;
 	background: #e5e6e7 url('../img/product-short-desc-bg.gif') repeat-x top left;
-	min-height: 42px;
+	height: 42px;
 	border: 1px #d0d3d8 solid;
 	margin-bottom: 1.5em;
 }
@@ -1773,7 +1802,7 @@ div.categTree {
 	height: 20px;
 	float: left;
 	border: 1px solid #666;
-	margin: 0.5em 0.5em 0 0;
+	margin: 0 0.4em 0 0;
 	cursor: pointer;
 }
 #primary_block a.color_pick:hover {
@@ -2323,10 +2352,4 @@ div.star a:hover{
 
 }
 
-.confirmation { color: forestgreen; font-weight: bold; }
-
-.mailalerts_oos_email
-{
-	padding:2px;
-	margin:0px;
-}
+.confirmation { color: forestgreen; font-weight: bold; };
