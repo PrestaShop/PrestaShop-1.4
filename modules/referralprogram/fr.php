@@ -21,6 +21,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_83fc792f687bc45d7
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1019072b9e450c8652590cda2db45e49'] = 'Un ou plusieurs nom ou prénom sont incorrects !';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ff2d2e45b90b4426c3bb14bd56b95a2d'] = 'Quelqu\'un avec cette adresse e-mail est déjà enregistré !';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3f8a4c7f93945fea0d951fa402ee4272'] = 'Veuillez cocher au moins une case';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'Impossible d\'ajouter des amis à la base de données';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_e09520d63495ffef3a5531826cec56a5'] = 'Les e-mails ont été envoyés à vos filleuls !';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_96beb330d7b98b4eb32f59f2b46c5b5a'] = 'Un e-mail a été envoyé à votre filleul !';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_718fdfbda2560578d8277054cb2d6805'] = 'Des e-mails de rappel ont été envoyés à vos filleuls !';
