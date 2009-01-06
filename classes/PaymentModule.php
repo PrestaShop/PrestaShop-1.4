@@ -285,9 +285,11 @@ abstract class PaymentModule extends Module
 					$invoice_state = $invoice->id_state ? new State(intval($invoice->id_state)) : false;
 
 					$data = array(
+					
 						'{firstname}' => $customer->firstname,
 						'{lastname}' => $customer->lastname,
 						'{email}' => $customer->email,
+						'{delivery_company}' => $delivery->company,
 						'{delivery_firstname}' => $delivery->firstname,
 						'{delivery_lastname}' => $delivery->lastname,
 						'{delivery_address1}' => $delivery->address1,
@@ -297,6 +299,8 @@ abstract class PaymentModule extends Module
 						'{delivery_country}' => $delivery->country,
 						'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
 						'{delivery_phone}' => $delivery->phone,
+						'{delivery_other}' => $delivery->other,
+						'{invoice_company}' => $invoice->company,
 						'{invoice_firstname}' => $invoice->firstname,
 						'{invoice_lastname}' => $invoice->lastname,
 						'{invoice_address2}' => $invoice->address2,
@@ -306,6 +310,7 @@ abstract class PaymentModule extends Module
 						'{invoice_country}' => $invoice->country,
 						'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
 						'{invoice_phone}' => $invoice->phone,
+						'{invoice_other}' => $invoice->other,
 						'{order_name}' => sprintf("#%06d", intval($order->id)),
 						'{date}' => Tools::displayDate(date('Y-m-d h:i:s'), intval($order->id_lang), 1),
 						'{carrier}' => (strval($carrier->name) != '0' ? $carrier->name : Configuration::get('PS_SHOP_NAME')),
