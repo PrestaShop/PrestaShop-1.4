@@ -107,57 +107,48 @@ class StatsBestCategories extends ModuleGrid
 	
 		$this->_totalCount = $this->getTotalCount();
 
-$this->_query = 'SELECT
-	ca.`id_category`,
-	calang.`name`,
-	IFNULL(SUM(t.`totalQuantitySold`), 0) AS totalQuantitySold,
-	IFNULL(SUM(t.`totalPriceSold`), 0) AS totalPriceSold,
-	(
-		SELECT IFNULL(SUM(pv.`counter`), 0)
-		FROM `'._DB_PREFIX_.'page` p
-		LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
-		LEFT JOIN `'._DB_PREFIX_.'product` pr ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr.`id_product`
-		LEFT JOIN `'._DB_PREFIX_.'category_product` capr2 ON capr2.`id_product` = pr.`id_product`
-		WHERE
-		capr.`id_category` = capr2.`id_category`
-		AND p.`id_page_type` = 1
-	) AS totalPageViewed
-FROM `'._DB_PREFIX_.'category` ca
-LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON ca.`id_category` = calang.`id_category`
-LEFT JOIN `'._DB_PREFIX_.'category_product` capr ON ca.`id_category` = capr.`id_category`
-LEFT JOIN
-(
-	SELECT
-	pr.`id_product`,
-	t.`totalQuantitySold`,
-	t.`totalPriceSold`
-	FROM `'._DB_PREFIX_.'product` pr
-	LEFT JOIN
-	(
-		SELECT
-		pr.`id_product`,
-		IFNULL(SUM(cp.`product_quantity`), 0) AS totalQuantitySold,
-		IFNULL(SUM(pr.`price` * cp.`product_quantity`), 0) AS totalPriceSold
-		FROM `'._DB_PREFIX_.'product` pr
-		LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
-		WHERE
-		(
-			SELECT
-			os.`invoice`
-			FROM `'._DB_PREFIX_.'order_history` oh
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE cp.`id_order` = oh.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
-		GROUP BY pr.`id_product`
-	) t
-	ON t.`id_product` = pr.`id_product`
-) t
-ON t.`id_product` = capr.`id_product`
-WHERE calang.`id_lang` = '.$id_lang.'
-GROUP BY ca.`id_category`
-HAVING ca.`id_category` <> 1';
+		$this->_query = '
+		SELECT ca.`id_category`, calang.`name`,
+			IFNULL(SUM(t.`totalQuantitySold`), 0) AS totalQuantitySold,
+			IFNULL(SUM(t.`totalPriceSold`), 0) AS totalPriceSold,
+			(
+				SELECT IFNULL(SUM(pv.`counter`), 0)
+				FROM `'._DB_PREFIX_.'page` p
+				LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
+				LEFT JOIN `'._DB_PREFIX_.'product` pr ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr.`id_product`
+				LEFT JOIN `'._DB_PREFIX_.'category_product` capr2 ON capr2.`id_product` = pr.`id_product`
+				WHERE
+				capr.`id_category` = capr2.`id_category`
+				AND p.`id_page_type` = 1
+			) AS totalPageViewed
+		FROM `'._DB_PREFIX_.'category` ca
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON ca.`id_category` = calang.`id_category`
+		LEFT JOIN `'._DB_PREFIX_.'category_product` capr ON ca.`id_category` = capr.`id_category`
+		LEFT JOIN (
+			SELECT pr.`id_product`, t.`totalQuantitySold`, t.`totalPriceSold`
+			FROM `'._DB_PREFIX_.'product` pr
+			LEFT JOIN (
+				SELECT pr.`id_product`,
+					IFNULL(SUM(cp.`product_quantity`), 0) AS totalQuantitySold,
+					IFNULL(SUM(pr.`price` * cp.`product_quantity`), 0) / c.conversion_rate AS totalPriceSold
+				FROM `'._DB_PREFIX_.'product` pr
+				LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
+				LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
+				LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+				WHERE (
+					SELECT os.`invoice`
+					FROM `'._DB_PREFIX_.'order_history` oh
+					LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+					WHERE cp.`id_order` = oh.`id_order`
+					ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+					LIMIT 1
+				) = 1
+				GROUP BY pr.`id_product`
+			) t ON t.`id_product` = pr.`id_product`
+		) t	ON t.`id_product` = capr.`id_product`
+		WHERE calang.`id_lang` = '.$id_lang.'
+		GROUP BY ca.`id_category`
+		HAVING ca.`id_category` != 1';
 		if (Validate::IsName($this->_sort))
 		{
 			$this->_query .= ' ORDER BY `'.$this->_sort.'`';
