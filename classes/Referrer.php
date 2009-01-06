@@ -159,8 +159,9 @@ class Referrer extends ObjectModel
 		
 		return Db::getInstance()->getRow('
 		SELECT 	COUNT(o.id_order) AS orders,
-				SUM(o.total_paid_real) AS sales
+				SUM(o.total_paid_real) / c.conversion_rate AS sales
 		FROM '._DB_PREFIX_.'orders o
+		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.id_order IN (
 			SELECT DISTINCT oo.id_order
 			FROM '._DB_PREFIX_.'connections_source cs
