@@ -24,12 +24,16 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'invoicenumber.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'deliverynumber.php');
 // Set paiement module for each currency/country
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodule.php');
+// Set paiement module for each group
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodulegroup.php');
 // Set discount for all categories
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setdiscountcategory.php');
 // Module installation tools
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'module_tools.php');
 // Customizations
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'customizations.php');
+// Block newsletter
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'blocknewsletter.php');
 
 //old version detection
 $oldversion = false;
