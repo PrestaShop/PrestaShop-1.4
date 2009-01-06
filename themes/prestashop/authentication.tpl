@@ -38,7 +38,7 @@ countries = new Array();
 				<h4>{l s='Enter your e-mail address to create your account'}.</h4>
 				<p class="text">
 					<label for="email_create">{l s='E-mail address'}</label>
-					<input type="text" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|escape:'htmlall'|stripslashes}{/if}" class="account_input" />
+					<span><input type="text" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
 				</p>
 				<p class="submit">
 					<input type="submit" id="SubmitCreate" name="SubmitCreate" class="button_large" value="{l s='Create your account'}" />
@@ -49,20 +49,19 @@ countries = new Array();
 		<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" id="login_form" class="std">
 			<fieldset>
 				<h3>{l s='Already registered ?'}</h3>
-				<h4>{l s='Enter your e-mail address and password to access to your account'}.</h4>
 				<p class="text">
 					<label for="email">{l s='E-mail address'}</label>
-					<input type="text" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall'|stripslashes}{/if}" class="account_input" />
+					<span><input type="text" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
 				</p>
 				<p class="text">
 					<label for="passwd">{l s='Password'}</label>
-					<input type="password" id="passwd" name="passwd" value="{if isset($smarty.post.passwd)}{$smarty.post.passwd|escape:'htmlall'|stripslashes}{/if}" class="account_input" />
+					<span><input type="password" id="passwd" name="passwd" value="{if isset($smarty.post.passwd)}{$smarty.post.passwd|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
 				</p>
 				<p class="submit">
 					{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'htmlall':'UTF-8'}" />{/if}
 					<input type="submit" id="SubmitLogin" name="SubmitLogin" class="button" value="{l s='Log in'}" />
 				</p>
-				<p><a href="{$base_dir}password.php">{l s='Forgot your password?'}</a></p>
+				<p class="lost_password"><a href="{$base_dir}password.php">{l s='Forgot your password?'}</a></p>
 			</fieldset>
 		</form>
 	{else}
