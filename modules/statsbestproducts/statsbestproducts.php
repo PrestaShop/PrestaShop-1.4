@@ -109,49 +109,37 @@ class StatsBestProducts extends ModuleGrid
 	
 	public function getData()
 	{
-		global $cookie;
-		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT'));
-	
+		global $cookie;	
 		$this->_totalCount = $this->getTotalCount();
 
-$this->_query = 'SELECT
-pr.`id_product`,
-pr.quantity,
-pl.`name`,
-IFNULL(t.`totalQuantitySold`, 0) AS totalQuantitySold,
-IFNULL(t.`totalPriceSold`, 0) AS totalPriceSold,
-(
-	SELECT IFNULL(SUM(pv.`counter`), 0)
-	FROM `'._DB_PREFIX_.'page` p
-	LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
-	LEFT JOIN `'._DB_PREFIX_.'product` pr2 ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr2.`id_product`
-	WHERE p.`id_page_type` = 1 AND pr.`id_product` = pr2.`id_product`		
-) AS totalPageViewed
-FROM `'._DB_PREFIX_.'product` pr
-LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON pr.`id_product` = pl.`id_product`
-LEFT OUTER JOIN
-(
-	SELECT
-	pr.`id_product`,
-	IFNULL(SUM(cp.`product_quantity`), 0) AS totalQuantitySold,
-	IFNULL(SUM(pr.`price` * cp.`product_quantity`), 0) AS totalPriceSold
-	FROM `'._DB_PREFIX_.'product` pr
-	LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
-	WHERE
-	(
-		SELECT
-		os.`invoice`
-		FROM `'._DB_PREFIX_.'order_history` oh
-		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-		WHERE cp.`id_order` = oh.`id_order`
-		ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-		LIMIT 1
-	) = 1
-	GROUP BY pr.`id_product`
-) t
-ON t.`id_product` = pr.`id_product`
-WHERE
-pl.`id_lang` = '.$id_lang;
+		$this->_query = 'SELECT pr.`id_product`, pr.quantity, pl.`name`,
+			IFNULL(t.`totalQuantitySold`, 0) AS totalQuantitySold,
+			IFNULL(t.`totalPriceSold`, 0) AS totalPriceSold,
+			(
+				SELECT IFNULL(SUM(pv.`counter`), 0)
+				FROM `'._DB_PREFIX_.'page` p
+				LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
+				LEFT JOIN `'._DB_PREFIX_.'product` pr2 ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr2.`id_product`
+				WHERE p.`id_page_type` = 1 AND pr.`id_product` = pr2.`id_product`		
+			) AS totalPageViewed
+		FROM `'._DB_PREFIX_.'product` pr
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON pr.`id_product` = pl.`id_product`
+		LEFT OUTER JOIN	(
+			SELECT pr.`id_product`, IFNULL(SUM(cp.`product_quantity`), 0) AS totalQuantitySold, IFNULL(SUM(pr.`price` * cp.`product_quantity`), 0) / c.conversion_rate AS totalPriceSold
+			FROM `'._DB_PREFIX_.'product` pr
+			LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
+			LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+			WHERE (
+				SELECT os.`invoice`
+				FROM `'._DB_PREFIX_.'order_history` oh
+				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+				WHERE cp.`id_order` = oh.`id_order`
+				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+				LIMIT 1
+			) = 1
+			GROUP BY pr.`id_product`) t	ON t.`id_product` = pr.`id_product`
+		WHERE pl.`id_lang` = '.intval($cookie->id_lang);
 
 		if (Validate::IsName($this->_sort))
 		{
