@@ -84,8 +84,21 @@ class StatsSales extends ModuleGraph
 
 	private function getTotals()
 	{
-		return Db::getInstance()->getRow('
-		SELECT COUNT(DISTINCT o.`id_order`) as orderCount, SUM(o.`total_paid_real`) as orderSum, SUM(od.product_quantity) as products
+		$result1 = Db::getInstance()->getRow('
+		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) as orderSum
+		FROM `'._DB_PREFIX_.'orders` o
+		WHERE (
+			SELECT os.`invoice`
+			FROM `'._DB_PREFIX_.'orders` oo
+			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
+			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+			WHERE oo.`id_order` = o.`id_order`
+			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+			LIMIT 1
+		) = 1
+		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		$result2 = Db::getInstance()->getRow('
+		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 		WHERE (
@@ -98,6 +111,7 @@ class StatsSales extends ModuleGraph
 			LIMIT 1
 		) = 1
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		return array_merge($result1, $result2);
 	}
 	
 	public function setOption($option, $layers = 1)
@@ -128,7 +142,7 @@ class StatsSales extends ModuleGraph
 			return $this->getStatesData();
 			
 		$this->_query = '
-			SELECT o.`date_add`, o.`total_paid_real`, od.product_quantity
+			SELECT o.`date_add`, o.`total_paid_real`, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			WHERE (
@@ -141,7 +155,8 @@ class StatsSales extends ModuleGraph
 				LIMIT 1
 			) = 1
 			AND o.`date_add` LIKE \'';
-		$this->_query2 = '\'';
+		$this->_query2 = '\'
+			GROUP BY o.id_order';
 		$this->setDateGraph($layers, true);
 	}
 	
