@@ -118,8 +118,7 @@ class		Order extends ObjectModel
 		'total_products' => 'isPrice',
 		'total_shipping' => 'isPrice',
 		'total_wrapping' => 'isPrice',
-		'shipping_number' => 'isUrl',
-		'valid' => 'isUnsignedInt'
+		'shipping_number' => 'isUrl'
 	);
 
 	/* MySQL does not allow 'order' for a table name */
@@ -154,7 +153,7 @@ class		Order extends ObjectModel
 		$fields['delivery_number'] = intval($this->delivery_number);
 		$fields['invoice_date'] = pSQL($this->invoice_date);
 		$fields['delivery_date'] = pSQL($this->delivery_date);
-		$fields['valid'] = intval($this->valid);
+		$fields['valid'] = intval($this->valid) ? 1 : 0;
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
