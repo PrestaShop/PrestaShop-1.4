@@ -85,8 +85,9 @@ class StatsSales extends ModuleGraph
 	private function getTotals()
 	{
 		$result1 = Db::getInstance()->getRow('
-		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) as orderSum
+		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE (
 			SELECT os.`invoice`
 			FROM `'._DB_PREFIX_.'orders` oo
@@ -142,8 +143,9 @@ class StatsSales extends ModuleGraph
 			return $this->getStatesData();
 			
 		$this->_query = '
-			SELECT o.`date_add`, o.`total_paid_real`, SUM(od.product_quantity) as product_quantity
+			SELECT o.`date_add`, o.`total_paid_real` / c.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			WHERE (
 				SELECT os.`invoice`
