@@ -154,7 +154,7 @@ class		Order extends ObjectModel
 		$fields['delivery_number'] = intval($this->delivery_number);
 		$fields['invoice_date'] = pSQL($this->invoice_date);
 		$fields['delivery_date'] = pSQL($this->delivery_date);
-		$fields['valid'] = intval(this->valid);
+		$fields['valid'] = intval($this->valid);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
