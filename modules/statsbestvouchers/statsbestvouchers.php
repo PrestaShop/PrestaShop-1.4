@@ -101,15 +101,7 @@ class StatsBestVouchers extends ModuleGrid
 		FROM '._DB_PREFIX_.'order_discount od
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
-		WHERE (
-			SELECT os.`invoice`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
+		WHERE o.valid = 1
 		GROUP BY od.id_discount';
 
 		if (Validate::IsName($this->_sort))

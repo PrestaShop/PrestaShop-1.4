@@ -19,14 +19,13 @@ class AdminStats extends AdminStatsTab
 	private static function recordQuery($dateLike, $format, $order)
 	{
 		return Db::getInstance()->getRow('
-		SELECT records.`date`, SUM(records.`ht`) as totalht, SUM(records.`ttc`) as totalttc
-		FROM (
-			SELECT date_format(o.`date_add`, \''.$format.'\') as date, o.`total_paid` as ttc, o.`total_products` as ht
-			FROM `'._DB_PREFIX_.'orders` o
-			'.self::$validOrder.'
-			AND o.`date_add` LIKE \''.pSQL($dateLike).'\') records
-		GROUP BY records.date
-		ORDER BY SUM(records.ht) '.$order);
+		SELECT date_format(o.`date_add`, \''.$format.'\') as date, SUM(o.`total_products`) / c.conversion_rate as totalht, SUM(o.`total_paid`) / c.conversion_rate as totalttc
+		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+		WHERE o.valid = 1
+		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
+		GROUP BY date_format(o.`date_add`, \''.$format.'\')
+		ORDER BY totalht '.$order);
 	}
 	
 	public static function getRecords($dateLike)
@@ -43,26 +42,29 @@ class AdminStats extends AdminStatsTab
 	public static function getSales($dateLike)
 	{	
 		$result = Db::getInstance()->getRow('
-		SELECT COUNT(DISTINCT o.`id_order`) as orders, SUM(o.`total_paid`) as ttc, SUM(o.`total_products`) as ht
+		SELECT COUNT(DISTINCT o.`id_order`) as orders, SUM(o.`total_paid`) / c.conversion_rate as ttc, SUM(o.`total_products`) / c.conversion_rate as ht
 		FROM `'._DB_PREFIX_.'orders` o
-		'.self::$validOrder.'
+		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+		WHERE o.valid = 1
 		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
 		
 		$products = Db::getInstance()->getRow('
 		SELECT COUNT(od.`id_order_detail`) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
-		'.self::$validOrder.'
+		WHERE o.valid = 1
 		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
 		
 		$xtrems = Db::getInstance()->getRow('
 		SELECT MAX(`total_products`) as maxht, MIN(`total_products`) as minht, MAX(`total_paid`) as maxttc, MIN(`total_paid`) as minttc
 		FROM (
-			SELECT o.`total_paid`, o.`total_products`
+			SELECT o.`total_paid` / c.conversion_rate as total_paid, o.`total_products` / c.conversion_rate as total_products
 			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
-			'.self::$validOrder.'
+			WHERE o.valid = 1
 			AND o.`date_add` LIKE \''.pSQL($dateLike).'\') records');
+		
 		return array_merge($result, array_merge($xtrems, $products));
 	}
 	
@@ -71,8 +73,9 @@ class AdminStats extends AdminStatsTab
 		$xtrems = Db::getInstance()->getRow('
 		SELECT AVG(cartsum) as avg, MAX(cartsum) as max, MIN(cartsum) as min
 		FROM (
-			SELECT SUM(p.`price`) as cartsum
+			SELECT SUM(p.`price`) / c.conversion_rate as cartsum
 			FROM `'._DB_PREFIX_.'cart` c
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON c.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'cart_product` cp ON c.`id_cart` = cp.`id_cart`
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 			WHERE c.`date_upd` LIKE \''.pSQL($dateLike).'\'
@@ -84,21 +87,11 @@ class AdminStats extends AdminStatsTab
 	{
 		global $cookie;
 	
-		self::$validOrder = '
-		WHERE (
-			SELECT os.`invoice`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1';
-	
 		$currency = Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$language = Language::getLanguage(intval($cookie->id_lang));
 		$iso = $language['iso_code'];
 		$dateLike = ModuleGraph::getDateLike();
+		
 		$sales = self::getSales($dateLike);
 		$carts = self::getCarts($dateLike);
 		$records = self::getRecords($dateLike);

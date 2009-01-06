@@ -33,15 +33,7 @@ class StatsProduct extends ModuleGraph
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 		WHERE od.`product_id` = '.intval($id_product).'
-		AND (
-			SELECT os.`invoice`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
+		AND o.valid = 1
 		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
 		return isset($result['total']) ? $result['total'] : 0;
 	}
@@ -148,15 +140,7 @@ class StatsProduct extends ModuleGraph
 					FROM `'._DB_PREFIX_.'order_detail` od
 					LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
-					AND (
-						SELECT os.`invoice`
-						FROM `'._DB_PREFIX_.'orders` oo
-						LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-						LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-						WHERE oo.`id_order` = o.`id_order`
-						ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-						LIMIT 1
-					) = 1
+					AND o.valid = 1
 					AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
 					GROUP BY o.`date_add`';
 				$this->_titles['main'] = $this->l('Number of purchases');
@@ -181,15 +165,7 @@ class StatsProduct extends ModuleGraph
 					FROM `'._DB_PREFIX_.'orders` o
 					LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
-					AND (
-						SELECT os.`invoice`
-						FROM `'._DB_PREFIX_.'orders` oo
-						LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-						LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-						WHERE oo.`id_order` = o.`id_order`
-						ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-						LIMIT 1
-					) = 1
+					AND o.valid = 1
 					AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
 					GROUP BY od.`product_attribute_id`';
 				$this->_titles['main'] = $this->l('Attributes');

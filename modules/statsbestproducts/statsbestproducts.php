@@ -130,14 +130,7 @@ class StatsBestProducts extends ModuleGrid
 			LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
-			WHERE (
-				SELECT os.`invoice`
-				FROM `'._DB_PREFIX_.'order_history` oh
-				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-				WHERE cp.`id_order` = oh.`id_order`
-				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-				LIMIT 1
-			) = 1
+			WHERE o.valid = 1
 			GROUP BY pr.`id_product`) t	ON t.`id_product` = pr.`id_product`
 		WHERE pl.`id_lang` = '.intval($cookie->id_lang);
 

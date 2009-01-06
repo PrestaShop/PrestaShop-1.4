@@ -606,6 +606,7 @@ CREATE TABLE PREFIX_orders (
   delivery_number INTEGER(10) UNSIGNED NOT NULL DEFAULT 0,
   invoice_date DATETIME NOT NULL,
   delivery_date DATETIME NOT NULL,
+  valid INTEGER(1) UNSIGNED NOT NULL DEFAULT 0,
   date_add DATETIME NOT NULL,
   date_upd DATETIME NOT NULL,
   PRIMARY KEY(id_order),

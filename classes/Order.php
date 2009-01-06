@@ -86,6 +86,9 @@ class		Order extends ObjectModel
 	/** @var string Delivery creation date */
 	public 		$delivery_date;
 	
+	/** @var boolean Order validity (paid and not canceled) */
+	public 		$valid;
+	
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -115,7 +118,8 @@ class		Order extends ObjectModel
 		'total_products' => 'isPrice',
 		'total_shipping' => 'isPrice',
 		'total_wrapping' => 'isPrice',
-		'shipping_number' => 'isUrl'
+		'shipping_number' => 'isUrl',
+		'valid' => 'isUnsignedInt'
 	);
 
 	/* MySQL does not allow 'order' for a table name */
@@ -150,6 +154,7 @@ class		Order extends ObjectModel
 		$fields['delivery_number'] = intval($this->delivery_number);
 		$fields['invoice_date'] = pSQL($this->invoice_date);
 		$fields['delivery_date'] = pSQL($this->delivery_date);
+		$fields['valid'] = intval(this->valid);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 

@@ -75,6 +75,11 @@ class		OrderHistory extends ObjectModel
 			$order = new Order(intval($id_order));
 			if (!Validate::isLoadedObject($newOS) OR !Validate::isLoadedObject($order))
 				die(Tools::displayError('Invalid new order state'));
+			
+			/* The order is valid only if the invoice is available and the order is not cancelled */
+			$order->valid = ($newOS->invoice AND $newOS->id != _PS_OS_CANCELED_) ? true : false;
+			$order->update();
+			
 			if ($newOS->invoice AND !$order->invoice_number)
 				$order->setInvoice();
 			if ($newOS->delivery AND !$order->delivery_number)

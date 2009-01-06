@@ -7,6 +7,18 @@ SET NAMES 'utf8';
 ALTER TABLE PREFIX_cart
 	ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
 
+ALTER TABLE PREFIX_orders
+  ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT 0 AFTER delivery_date;
+
+UPDATE PREFIX_orders o SET o.valid = IFNULL((
+	SELECT os.invoice
+	FROM PREFIX_order_history oh
+	LEFT JOIN PREFIX_order_state os ON os.id_order_state = oh.id_order_state
+	WHERE oh.id_order = o.id_order
+	ORDER BY oh.date_add DESC, oh.id_order_history DESC
+	LIMIT 1
+), 0);
+  
 ALTER TABLE PREFIX_customer
 	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active;
 

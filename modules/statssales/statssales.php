@@ -88,29 +88,13 @@ class StatsSales extends ModuleGraph
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
-		WHERE (
-			SELECT os.`invoice`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
+		WHERE o.valid = 1
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
 		$result2 = Db::getInstance()->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
-		WHERE (
-			SELECT os.`invoice`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
+		WHERE o.valid = 1
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
 		return array_merge($result1, $result2);
 	}
@@ -147,15 +131,7 @@ class StatsSales extends ModuleGraph
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
-			WHERE (
-				SELECT os.`invoice`
-				FROM `'._DB_PREFIX_.'orders` oo
-				LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-				WHERE oo.`id_order` = o.`id_order`
-				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-				LIMIT 1
-			) = 1
+			WHERE o.valid = 1
 			AND o.`date_add` LIKE \'';
 		$this->_query2 = '\'
 			GROUP BY o.id_order';

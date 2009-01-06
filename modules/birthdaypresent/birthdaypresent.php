@@ -99,15 +99,7 @@ class BirthdayPresent extends Module
 		SELECT DISTINCT c.id_customer, firstname, lastname, email
 		FROM '._DB_PREFIX_.'customer c
 		LEFT JOIN '._DB_PREFIX_.'orders o ON c.id_customer = o.id_customer
-		WHERE (
-				SELECT os.`invoice`
-				FROM `'._DB_PREFIX_.'orders` oo
-				LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-				WHERE oo.`id_order` = o.`id_order`
-				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-				LIMIT 1
-			) = 1
+		WHERE o.valid = 1
 		AND c.birthday LIKE \'%'.date('-m-d').'\'');
 		foreach ($users as $user)
 		{
