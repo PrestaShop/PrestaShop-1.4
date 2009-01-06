@@ -8,7 +8,7 @@ ALTER TABLE PREFIX_cart
 	ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
 
 ALTER TABLE PREFIX_customer
-	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active; 
+	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active;
 
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,

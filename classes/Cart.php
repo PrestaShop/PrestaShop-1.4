@@ -731,7 +731,7 @@ class		Cart extends ObjectModel
 	*
 	* @return float Cart weight
 	*/
-	function getTotalWeight()
+	public function getTotalWeight()
 	{
 		if (!$this->id)
 			return 0;
@@ -753,7 +753,7 @@ class		Cart extends ObjectModel
 		WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
 		AND cp.`id_cart` = '.intval($this->id));
 
-		$this->_totalWeight = number_format(floatval($result['nb'] + $result2['nb']), 3);
+		$this->_totalWeight = round(floatval($result['nb']) + floatval($result2['nb']), 3);
 		return $this->_totalWeight;
 	}
 
