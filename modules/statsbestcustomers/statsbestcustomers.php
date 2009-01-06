@@ -113,7 +113,8 @@ class StatsBestCustomers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance()->GetRow('SELECT COUNT(DISTINCT c.`id_customer`) totalCount FROM `'._DB_PREFIX_.'customer` c
+		$result = Db::getInstance()->getRow('
+		SELECT COUNT(DISTINCT c.`id_customer`) totalCount FROM `'._DB_PREFIX_.'customer` c
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON c.id_customer = o.id_customer
 		WHERE ( SELECT os.`invoice` FROM `'._DB_PREFIX_.'orders` oo LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order` LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state` WHERE oo.`id_order` = o.`id_order` ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC LIMIT 1 ) = 1');
 		return $result['totalCount'];
@@ -127,38 +128,29 @@ class StatsBestCustomers extends ModuleGrid
 	{
 		$this->_totalCount = $this->getTotalCount();		
 		$this->_query = '
-		SELECT
-	c.`id_customer`,
-	c.`lastname`,
-	c.`firstname`,
-	c.`email`,
-	COUNT(DISTINCT co.`id_connections`) AS totalVisits,
-	COUNT(cop.`id_page`) AS totalPageViewed,
-	IFNULL(t.`total`, 0) AS totalMoneySpent
-FROM `'._DB_PREFIX_.'customer` c
-LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.`id_customer` = g.`id_customer`
-LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.`id_guest` = co.`id_guest`
-LEFT JOIN `'._DB_PREFIX_.'connections_page` cop ON co.`id_connections` = cop.`id_connections`
-LEFT JOIN
-(
-	SELECT
-	o.`id_customer`,
-	IFNULL(SUM(o.`total_paid_real`), 0) AS total
-	FROM `'._DB_PREFIX_.'orders` o
-	WHERE
-	(
-		SELECT
-			os.`invoice`
-		FROM `'._DB_PREFIX_.'orders` oo
-		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-		WHERE oo.`id_order` = o.`id_order`
-		ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-		LIMIT 1
-	) = 1
-	GROUP BY o.`id_customer`
-) t ON c.`id_customer` = t.`id_customer`
-GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
+		SELECT	c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
+			COUNT(DISTINCT co.`id_connections`) AS totalVisits,
+			COUNT(cop.`id_page`) AS totalPageViewed,
+			IFNULL(t.`total`, 0) AS totalMoneySpent
+		FROM `'._DB_PREFIX_.'customer` c
+		LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.`id_customer` = g.`id_customer`
+		LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.`id_guest` = co.`id_guest`
+		LEFT JOIN `'._DB_PREFIX_.'connections_page` cop ON co.`id_connections` = cop.`id_connections`
+		LEFT JOIN (
+			SELECT o.`id_customer`,	IFNULL(SUM(o.`total_paid_real`), 0) / c.conversion_rate AS total
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+			WHERE (
+				SELECT os.`invoice`
+				FROM `'._DB_PREFIX_.'orders` oo
+				LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
+				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
+				WHERE oo.`id_order` = o.`id_order`
+				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+				LIMIT 1	) = 1
+			GROUP BY o.`id_customer`
+		) t ON c.`id_customer` = t.`id_customer`
+		GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))
 		{
 			$this->_query .= ' ORDER BY `'.$this->_sort.'`';
