@@ -62,7 +62,7 @@ class AdminStatuses extends AdminTab
 			echo '<h2>'.$this->l('Order states').'</h2>';
 			$this->adminOrdersStates->display($this->token);
 		}
-		if (!Tools::isSubmit('updateorder_state') AND !Tools::isSubmit('submitAddupdateorder_state'))
+		if (!Tools::isSubmit('updateorder_state') AND !Tools::isSubmit('submitAddupdateorder_state') AND !Tools::isSubmit('addorder_state'))
 		{
 			if (!Tools::isSubmit('updateorder_return_state') AND !Tools::isSubmit('submitAddorder_return_state'))
 				echo '<div style="margin:10px">&nbsp;</div>';
