@@ -105,7 +105,7 @@ CREATE TABLE `PREFIX_module_group` (
 /* ##################################### */
 
 UPDATE PREFIX_orders o SET o.valid = IFNULL((
-	SELECT os.invoice
+	SELECT os.logable
 	FROM PREFIX_order_history oh
 	LEFT JOIN PREFIX_order_state os ON os.id_order_state = oh.id_order_state
 	WHERE oh.id_order = o.id_order
