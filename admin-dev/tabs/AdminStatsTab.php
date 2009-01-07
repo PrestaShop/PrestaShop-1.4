@@ -50,7 +50,11 @@ abstract class AdminStatsTab extends AdminPreferences
 		if (Tools::getValue('submitSettings'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
+			{
+				global $currentIndex;
+				$currentIndex .= '&module='.Tools::getValue('module');
 				$this->_postConfig($this->_fieldsSettings);
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit something here.');
 		}
@@ -66,7 +70,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		$arrayGridEngines = ModuleGridEngine::getGridEngines();
 		
 		echo '
-		<form action="'.$currentIndex.'&token='.$this->token.'&submitSettings=1'.(Tools::getValue('module') ? '&module='.Tools::getValue('module') : '').'" method="post">
+		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset><legend><img src="../img/admin/tab-preferences.gif" />'.$this->l('Settings', 'AdminStatsTab').'</legend>';
 		echo '<p><strong>'.$this->l('Graph engine', 'AdminStatsTab').' </strong><br />';
 		if (sizeof($arrayGraphEngines))
