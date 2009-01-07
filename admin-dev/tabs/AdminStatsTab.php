@@ -71,7 +71,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		
 		echo '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<fieldset><legend><img src="../img/admin/tab-preferences.gif" />'.$this->l('Settings', 'AdminStatsTab').'</legend>';
+			<fieldset style="width: 200px;"><legend><img src="../img/admin/tab-preferences.gif" />'.$this->l('Settings', 'AdminStatsTab').'</legend>';
 		echo '<p><strong>'.$this->l('Graph engine', 'AdminStatsTab').' </strong><br />';
 		if (sizeof($arrayGraphEngines))
 		{
@@ -125,7 +125,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		$iso_code = $result['iso_code'];
 
 		echo '
-		<fieldset style="width: 200px"><legend><img src="../img/admin/date.png" /> '.$calendar.'</legend>
+		<fieldset style="width: 200px;"><legend><img src="../img/admin/date.png" /> '.$calendar.'</legend>
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.js"></script>
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.granularity.js"></script>';
 		
@@ -165,7 +165,7 @@ abstract class AdminStatsTab extends AdminPreferences
 	{
 		return;
 		echo '
-		<fieldset style="margin-top:20px; width: 200px"><legend><img src="../img/admin/binoculars.png" /> '.$this->l('Search', 'AdminStatsTab').'</legend>
+		<fieldset style="margin-top:20px; width: 200px;"><legend><img src="../img/admin/binoculars.png" /> '.$this->l('Search', 'AdminStatsTab').'</legend>
 			<input type="text" /> <input type="button" class="button" value="'.$this->l('Go', 'AdminStatsTab').'" />
 		</fieldset>';
 	}
