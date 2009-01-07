@@ -154,10 +154,13 @@ class AdminProducts extends AdminTab
 					if ($product->add()
 					AND Category::duplicateProductCategories($id_product_old, $product->id)
 					AND Product::duplicateAttributes($id_product_old, $product->id)
-					AND Product::duplicateFeatures($id_product_old, $product->id))
+					AND Product::duplicateFeatures($id_product_old, $product->id)
+					AND Product::duplicateCustomizationFields($id_product_old, $product->id))
 					{
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id))
 							$this->_errors[] = Tools::displayError('an error occurred while copying images');
+						else
+							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=19&token='.($token ? $token : $this->token));
 					}
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while creating object');

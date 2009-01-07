@@ -129,7 +129,8 @@ abstract class AdminTab
 		11 => $this->l('Comment added'), 12 => $this->l('Module installed successfully'),
 		13 => $this->l('Module uninstalled successfully'), 14 => $this->l('Language successfully copied'),
 		15 => $this->l('Translations successfully added'), 16 => $this->l('Module transplanted successfully to hook'),
-		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'));
+		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
+		19 => $this->l('Duplication successfully done'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
 		$this->token = Tools::getAdminToken(get_class($this).intval($this->id).intval($cookie->id_employee));
@@ -338,12 +339,13 @@ abstract class AdminTab
 	{
 		/* Deleting object images and thumbnails (cache) */
 		if (key_exists('dir', $this->fieldImageSettings) AND $dir = $this->fieldImageSettings['dir'].'/')
-			if (file_exists(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType))
-				unlink(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType);
-		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType))
-			unlink(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType);
-		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType))
-			unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType);
+			if (file_exists(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType))
+				return false;
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType))
+			return false;
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType))
+			return false;
+		return true;
 	}
 
 	/**

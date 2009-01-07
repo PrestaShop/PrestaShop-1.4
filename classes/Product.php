@@ -344,17 +344,18 @@ class		Product extends ObjectModel
 	public function delete()
 	{
 		Hook::deleteProduct($this);
-		parent::delete();
-		$this->deleteCategories();
-		$this->deleteImages();
-		$this->deleteProductAttributes();
-		$this->deleteProductFeatures();
-		$this->deleteTags();
-		$this->deleteCartProducts();
-        $this->deleteAttributesImpacts();
+		if (!parent::delete() OR
+			!$this->deleteCategories() OR
+			!$this->deleteImages() OR
+			!$this->deleteProductAttributes() OR
+			!$this->deleteProductFeatures() OR
+			!$this->deleteTags() OR
+			!$this->deleteCartProducts() OR
+        	!$this->deleteAttributesImpacts())
+		return false;
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
-			if ($productDownload = new ProductDownload($id))
-				$productDownload->delete(true);
+			if ($productDownload = new ProductDownload($id) AND !$productDownload->delete(true))
+				return false;
 		return true;
 	}
 
@@ -468,11 +469,9 @@ class		Product extends ObjectModel
 		FROM `'._DB_PREFIX_.'image`
 		WHERE `id_product` = '.intval($this->id));
 		foreach($result as $row)
-		{
-			deleteImage(intval($this->id), $row['id_image']);
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image_lang` WHERE `id_image` = '.intval($row['id_image']));
-		}
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image` WHERE `id_product` = '.intval($this->id));
+			if (!deleteImage(intval($this->id), $row['id_image']) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image_lang` WHERE `id_image` = '.intval($row['id_image'])))
+				return false;
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image` WHERE `id_product` = '.intval($this->id));
 	}
 
 	static public function getProductAttribute($id_product_attribute)
@@ -1690,6 +1689,56 @@ class		Product extends ObjectModel
 			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'feature_product', $row, 'INSERT');
 		}
 		return $return;
+	}
+
+	static private function _getCustomizationFieldsNLabels($productId)
+	{
+		$customizations = array();
+		if (!$customizations['fields'] = Db::getInstance()->ExecuteS('
+			SELECT `id_customization_field`, `type`, `required`
+			FROM `'._DB_PREFIX_.'customization_field`
+			WHERE `id_product` = '.intval($productId)))
+			return false;
+		$customizationFieldIds = array();
+		foreach ($customizations['fields'] AS $customizationField)
+			$customizationFieldIds[] = intval($customizationField['id_customization_field']);
+		if (!$customizationLabels = Db::getInstance()->ExecuteS('
+			SELECT `id_customization_field`, `id_lang`, `name`
+			FROM `'._DB_PREFIX_.'customization_field_lang`
+			WHERE `id_customization_field` IN ('.implode(', ', $customizationFieldIds).')'))
+			return false;
+		foreach ($customizationLabels AS $customizationLabel)
+			$customizations['labels'][$customizationLabel['id_customization_field']][] = $customizationLabel;
+		return $customizations;
+	}
+
+	static public function duplicateCustomizationFields($oldProductId, $productId)
+	{
+		if (!$customizations = self::_getCustomizationFieldsNLabels($oldProductId))
+			return false;
+		if (empty($customizations))
+			return true;
+		foreach ($customizations['fields'] AS $customizationField)
+		{
+			/* The new datas concern the new product */
+			$customizationField['id_product'] = intval($productId);
+			$oldCustomizationFieldId = intval($customizationField['id_customization_field']);
+			unset($customizationField['id_customization_field']);
+			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'customization_field', $customizationField, 'INSERT'))
+				return false;
+			if (!$customizationFieldId = Db::getInstance()->Insert_ID())
+				return false;
+			if (isset($customizations['labels']))
+			{
+				$query = 'INSERT INTO `'._DB_PREFIX_.'customization_field_lang` (`id_customization_field`, `id_lang`, `name`) VALUES ';
+				foreach ($customizations['labels'][$oldCustomizationFieldId] AS $customizationLabel)
+					$query .= '('.intval($customizationFieldId).', '.$customizationLabel['id_lang'].', \''.$customizationLabel['name'].'\'), ';
+				$query = rtrim($query, ', ');			
+				if (!Db::getInstance()->Execute($query))
+					return false;
+			}
+		}
+		return true;
 	}
 
 	/**
