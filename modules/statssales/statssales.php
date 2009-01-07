@@ -16,6 +16,7 @@ class StatsSales extends ModuleGraph
     private $_query = '';
     private $_query2 = '';
     private $_option = '';
+    private $id_country = '';
 
     function __construct()
     {
@@ -37,6 +38,8 @@ class StatsSales extends ModuleGraph
 		
 	public function hookAdminStatsModules($params)
 	{
+		global $cookie;
+		
 		$totals = $this->getTotals();
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$result = Db::getInstance()->ExecuteS('
@@ -45,6 +48,7 @@ class StatsSales extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = 2)
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON os.`id_order_state` = oh.`id_order_state`
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = oh.`id_order`
+		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE oh.`id_order_history` = (
 			SELECT ios.`id_order_history`
 			FROM `'._DB_PREFIX_.'order_history` ios
@@ -53,23 +57,32 @@ class StatsSales extends ModuleGraph
 			LIMIT 1
 		)
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'
+		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		GROUP BY oh.`id_order_state`');
 		$numRows = Db::getInstance()->NumRows();
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="float: right;">
+				<select name="id_country">
+					<option value="0"'.((!Tools::getValue('id_order_state')) ? ' selected="selected"' : '').'>'.$this->l('All').'</option>';
+		foreach (Country::getCountries($cookie->id_lang) AS $country)
+			$this->_html .= '<option value="'.$country['id_country'].'"'.(($country['id_country'] == Tools::getValue('id_country')) ? ' selected="selected"' : '').'>'.$country['name'].'</option>';
+		$this->_html .= '</select>
+				<input type="submit" name="submitCountry" value="'.$this->l('Filter').'" class="button" />
+			</form>
 			<p><center><img src="../img/admin/down.gif" />
 				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
 			</center></p>
 			<p>'.$this->l('Total orders placed:').' '.intval($totals['orderCount']).'</p>
 			<p>'.$this->l('Total products ordered:').' '.intval($totals['products']).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 1, 'layers' => 2)).'</center>
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.intval(Tools::getValue('id_country')), 'layers' => 2)).'</center>
 			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => 2)).'<br /><br />
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.intval(Tools::getValue('id_country')))).'<br /><br />
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => 3)) : $this->l('No order for this period')).'</center>
+			'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.intval(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
@@ -88,19 +101,24 @@ class StatsSales extends ModuleGraph
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
+		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
 		$result2 = Db::getInstance()->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
+		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
+		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
 		return array_merge($result1, $result2);
 	}
 	
-	public function setOption($option, $layers = 1)
+	public function setOption($options, $layers = 1)
 	{
+		list($option, $this->id_country) = explode('-', $options);
 		switch ($option)
 		{
 			case 1:
@@ -131,7 +149,9 @@ class StatsSales extends ModuleGraph
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
+			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1
+			'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
 			AND o.`date_add` LIKE \'';
 		$this->_query2 = '\'
 			GROUP BY o.id_order';
@@ -185,6 +205,7 @@ class StatsSales extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = 2)
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON os.`id_order_state` = oh.`id_order_state`
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = oh.`id_order`
+		'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE oh.`id_order_history` = (
 			SELECT ios.`id_order_history`
 			FROM `'._DB_PREFIX_.'order_history` ios
@@ -192,6 +213,7 @@ class StatsSales extends ModuleGraph
 			ORDER BY ios.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		)
+		'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
 		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'
 		GROUP BY oh.`id_order_state`');
 		foreach ($result as $row)
