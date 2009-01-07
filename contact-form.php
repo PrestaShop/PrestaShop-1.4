@@ -27,7 +27,12 @@ if (Tools::isSubmit('submitMessage'))
 			$errors[] = Tools::displayError('an error occurred while sending message');
     }
 }
-$smarty->assign('errors', $errors);
+
+$email = Tools::getValue('from', ((isset($cookie) AND isset($cookie->email) AND Validate::isEmail($cookie->email)) ? $cookie->email : ''));
+$smarty->assign(array(
+	'errors' => $errors,
+	'email' => $email
+));
 
 $smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
 include(dirname(__FILE__).'/footer.php');

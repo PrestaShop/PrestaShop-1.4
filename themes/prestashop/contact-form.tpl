@@ -23,14 +23,14 @@
 				{/foreach}
 				</select>
 			</p>
-			<p id="desc_contact0" class="desc_contact"><label>{l s='Select a subject'}</label></p>
+			<p id="desc_contact0" class="desc_contact">&nbsp;</p>
 		{foreach from=$contacts item=contact}
 			<p id="desc_contact{$contact.id_contact|intval}" class="desc_contact" style="display:none;">
-			<label>{l s='Description'}</label><span class="like_input">{$contact.description|escape:'htmlall':'UTF-8'}</span></p>
+			<label>&nbsp;</label>{$contact.description|escape:'htmlall':'UTF-8'}</p>
 		{/foreach}
 		<p class="text">
 			<label for="email">{l s='E-mail address'}</label>
-			<input type="text" id="email" name="from" value="{if isset($smarty.post.from)}{$smarty.post.from|escape:'htmlall':'UTF-8'|stripslashes}{/if}" />
+			<input type="text" id="email" name="from" value="{$email}" />
 		</p>
 		<p class="textarea">
 			<label for="message">{l s='Message'}</label>
