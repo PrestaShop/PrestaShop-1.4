@@ -1144,10 +1144,3 @@ CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
 	getvar VARCHAR(16) NOT NULL,
 	PRIMARY KEY(id_search_engine)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS PREFIX_order_customization_return (
-  id_order_detail int(10) NOT NULL,
-  customization_id int(10) NOT NULL,
-  quantity int(10) NOT NULL,
-  PRIMARY KEY(id_order_detail, customization_id)
-);

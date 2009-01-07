@@ -4,6 +4,8 @@ SET NAMES 'utf8';
 /* 					STRUCTURE				  */
 /* ##################################### */
 
+DROP TABLE IF EXISTS PREFIX_order_customization_return;
+
 ALTER TABLE PREFIX_cart
 	ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
 
