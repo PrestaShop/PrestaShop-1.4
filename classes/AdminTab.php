@@ -1112,7 +1112,10 @@ abstract class AdminTab
 						}
 					}
 					elseif (isset($params['image']))
-						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$id.(isset($tr['id_image']) ? '-'.intval($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$id.'.'.$this->imageType, 45, $this->imageType);
+					{
+						$image_id = isset($params['image_id']) ? $tr[$params['image_id']] : $id;
+						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$image_id.(isset($tr['id_image']) ? '-'.intval($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$image_id.'.'.$this->imageType, 45, $this->imageType);
+					}
 					elseif (isset($params['icon']) AND (isset($params['icon'][$tr[$key]]) OR isset($params['icon']['default'])))
 						echo '<img src="../img/admin/'.(isset($params['icon'][$tr[$key]]) ? $params['icon'][$tr[$key]] : $params['icon']['default'].'" alt="'.$tr[$key]).'" title="'.$tr[$key].'" />';
                     elseif (isset($params['price']))

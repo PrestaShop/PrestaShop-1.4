@@ -35,7 +35,7 @@ class AdminTabs extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_tab' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 200),
-		'logo' => array('title' => $this->l('Icon'), 'align' => 'center', 'image' => 't', 'orderby' => false, 'search' => false),
+		'logo' => array('title' => $this->l('Icon'), 'align' => 'center', 'image' => 't', 'image_id' => 'class_name', 'orderby' => false, 'search' => false),
 		'parent' => array('title' => $this->l('Parent'), 'width' => 200, 'type' => 'select', 'select' => $tabs, 'filter_key' => 'a!id_parent'));
 	
 		parent::__construct();
@@ -131,7 +131,7 @@ class AdminTabs extends AdminTab
 				<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Icon:').'</label>
 				<div class="margin-form">
-					<img src="../img/t/'.$obj->id.'.gif" />&nbsp;/img/t/'.$obj->id.'.gif
+					'.($obj->id ? '<img src="../img/t/'.$obj->class_name.'.gif" />&nbsp;/img/t/'.$obj->class_name.'.gif' : '').'
 					<p><input type="file" name="icon" /></p>
 					<p>'.$this->l('Upload logo from your computer').' (.gif, .jpg, .jpeg '.$this->l('or').' .png)</p>
 				</div>
@@ -151,6 +151,12 @@ class AdminTabs extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>';
+	}
+	
+	public function afterImageUpload()
+	{
+		$obj = $this->loadObject(true);
+		@rename(_PS_IMG_DIR_.'t/'.$obj->id.'.gif', _PS_IMG_DIR_.'t/'.$obj->class_name.'.gif');
 	}
 }
 
