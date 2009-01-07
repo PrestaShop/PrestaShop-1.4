@@ -71,7 +71,7 @@ class TrackingFront extends Module
 				$cookie->stats_day = $day;
 			else
 				unset($cookie->stats_day);
-			if ($month = Tools::getValue('dateInputMonth') AND Validate::isUnsignedInt($month))
+			if (($month = Tools::getValue('dateInputMonth', -1)) != -1 AND Validate::isInt($month))
 				$cookie->stats_month = $month + 1;
 			else
 				unset($cookie->stats_month);

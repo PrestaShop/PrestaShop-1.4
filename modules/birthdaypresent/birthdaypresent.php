@@ -101,6 +101,7 @@ class BirthdayPresent extends Module
 		LEFT JOIN '._DB_PREFIX_.'orders o ON c.id_customer = o.id_customer
 		WHERE o.valid = 1
 		AND c.birthday LIKE \'%'.date('-m-d').'\'');
+
 		foreach ($users as $user)
 		{
 			$voucher = new Discount();
@@ -119,6 +120,8 @@ class BirthdayPresent extends Module
 			$voucher->active = true;
 			if ($voucher->add())
 				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'birthday', $this->l('Happy birthday!'), array('{firstname}' => $user['firstname'], '{lastname}' => $user['lastname']), $user['email'], NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			else
+				echo Db::getInstance()->getMsgError();
 		}
 	}
 }
