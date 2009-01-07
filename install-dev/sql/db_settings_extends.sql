@@ -187,9 +187,13 @@ INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES
 
 INSERT INTO `PREFIX_customer` (`id_customer`, `id_gender`, `secure_key`, `email`, `passwd`, `birthday`, `lastname`, `newsletter`, `optin`, `firstname`, `active`, `date_add`, `date_upd`)
 	VALUES (1, 1, '47ce86627c1f3c792a80773c5d2deaf8', 'pub@prestashop.com', 'ad807bdf0426766c05c64041124d30ce', '1970-01-15', 'DOE', 1, 1, 'John', 1, NOW(), NOW());
+INSERT INTO `PREFIX_connections` (`id_connections`, `id_guest`, `id_page`, `ip_address`, `date_add`, `http_referer`)
+	VALUES (1, 1, 1, '2130706433', NOW(), 'http://www.prestashop.com');
+INSERT INTO `PREFIX_guest` (`id_guest`, `id_operating_system`, `id_web_browser`, `id_customer`, `javascript`, `screen_resolution_x`, `screen_resolution_y`, `screen_color`, `sun_java`, `adobe_flash`, `adobe_director`, `apple_quicktime`, `real_player`, `windows_media`, `accept_language`)
+	VALUES (1, 1, 3, 1, 1, 1680, 1050, 32, 1, 1, 0, 1, 1, 0, 'en-us');
 
-INSERT INTO `PREFIX_cart` (`id_cart`, `id_carrier`, `id_lang`, `id_address_delivery`, `id_address_invoice`, `id_currency`, `id_customer`, `recyclable`, `gift`, `date_add`, `date_upd`)
-	VALUES (1, 2, 2, 6, 6, 1, 1, 1, 0, NOW(), NOW());
+INSERT INTO `PREFIX_cart` (`id_cart`, `id_carrier`, `id_lang`, `id_address_delivery`, `id_address_invoice`, `id_currency`, `id_customer`, `id_guest`, `recyclable`, `gift`, `date_add`, `date_upd`)
+	VALUES (1, 2, 2, 6, 6, 1, 1, 1, 1, 0, NOW(), NOW());
 INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`) VALUES (1, 7, 23, 1);
 INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`) VALUES (1, 9, 0, 1);
 

@@ -95,6 +95,7 @@ $_ERRORS['31a7316504b918da947e7d7a1d7769e9'] = 'Comportement de taxe inconnu !';
 $_ERRORS['12f9d32c39e630c928e001370285712c'] = 'Vous pouvez régénérer votre mot de passe seulement toutes les';
 $_ERRORS['2f236f9450ce8714611e468181064659'] = 'Vous ne pouvez pas changer le statut de la langue par défaut';
 $_ERRORS['f6eef841ad92e89ad56eadb17a242596'] = 'Vous ne pouvez pas supprimer de pays. Si vous souhaitez qu\'il ne soit pas disponible pour vos clients, vous pouvez le désactiver.';
+$_ERRORS['aa302db121642428e56d7f5eb43b296a'] = 'Vous ne pouvez pas effacer le groupe par défaut';
 $_ERRORS['81349d7b857695302c8a17e4382c5032'] = 'Vous n\'avez pas la permission';
 $_ERRORS['983571577df174638a1407007fdd601e'] = 'Vous n\'avez pas les droits suffisants pour l\'ajout.';
 $_ERRORS['44fedefc2571bc948924db608ab66853'] = 'Vous n\'avez pas la permission de supprimer un objet ici.';
