@@ -151,6 +151,7 @@ $_LANG['Welcome'] = 'Bienvenue';
 $_LANG['Welcome to the PrestaShop '.INSTALL_VERSION.' Installer.'] = 'Bienvenue dans l\'installation de PrestaShop '.INSTALL_VERSION;
 $_LANG['When your files and database are saving in an other support, please certify that your shop is really backed up.'] = 'Une fois que les fichiers de l\'application et votre base de données seront sauvegardés, nous vous demanderons de le certifier. De ce fait, vous assumerez l\'entière responsabilité d\'une éventuelle perte de données liée à la mise à jour de l\'application PrestaShop.';
 $_LANG['Write permissions on folders (and subfolders):'] = 'Droits en écriture sur les dossiers (et leurs sous-dossiers) :';
+$_LANG['Write permissions on files and folders:'] = 'Droits en écriture sur les fichiers et dossiers:';
 $_LANG['Write permissions on folders:'] = 'Droits en écriture sur les dossiers';
 $_LANG['You already have the ".INSTALL_VERSION." version.'] = 'Vous êtes déjà en possession de la version ".INSTALL_VERSION."';
 $_LANG['You\'ve just installed and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'] = 'Vous venez d\'installer et de configurer votre boutique en ligne, nous vous en remercions.';
