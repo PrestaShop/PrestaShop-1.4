@@ -1200,7 +1200,7 @@ abstract class AdminTab
 		</script>
 		<form action="'.$currentIndex.'" id="'.$tab['name'].'" name="'.$tab['name'].'" method="post" class="width3">
 			<fieldset>';
-				echo (isset($this->optionTitle) ? '<legend><img src="../img/t/'.$tab['id_tab'].'.gif" />'.$this->optionTitle.'</legend>' : '');
+				echo (isset($this->optionTitle) ? '<legend><img src="../img/t/'.$tab['class_name'].'.gif" />'.$this->optionTitle.'</legend>' : '');
 		foreach ($this->_fieldsOptions AS $key => $field)
 		{
 			$val = Tools::getValue($key, Configuration::get($key));
