@@ -107,7 +107,7 @@ class Mail
 			return $send;
 		}
 	
-		catch (Swift_Connection_Exception $e) { return false; }
+		catch (Swift_ConnectionException $e) { return false; }
 	}
 }
 
