@@ -307,12 +307,13 @@ INSERT INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `meta_title`, `meta_descript
 INSERT INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `meta_title`, `meta_description`, `meta_keywords`, `content`, `link_rewrite`) VALUES
 (5, 2, 'Paiement sécurisé', 'Notre offre de paiement sécurisé', 'paiement sécurisé, ssl, visa, mastercard, paypal', '<h2>Paiement sécurisé</h2>\r\n<h3>Notre offre de paiement sécurisé</h3><p>Avec SSL</p>\r\n<h3>Utilisation de Visa/Mastercard/Paypal</h3><p>A propos de ces services</p>', 'paiement-securise');
 
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockvariouslinks' LIMIT 1), 3);
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockvariouslinks' LIMIT 1), 4);
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 1);
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 2);
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 3);
-INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES ((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 4);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockvariouslinks' LIMIT 1), 0), 3);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockvariouslinks' LIMIT 1), 0), 4);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 0), 1);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 0), 2);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 0), 3);
+INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (IFNULL((SELECT id_module FROM PREFIX_module m WHERE m.name = 'blockinfos' LIMIT 1), 0), 4);
+DELETE FROM PREFIX_block_cms WHERE id_block = 0;
 
 /* NEW TABS */
 UPDATE PREFIX_tab_lang
