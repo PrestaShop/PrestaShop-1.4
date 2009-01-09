@@ -135,7 +135,7 @@
 				<td class="cart_discount_name" colspan="2">{$discount.name}</td>
 				<td class="cart_discount_description" colspan="3">{$discount.description}</td>
 				<td class="cart_discount_delete"><a href="{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
-				<td class="cart_discount_price"><span class="price-discount">{convertPrice price=$discount.value_real*-1}</span></td>
+				<td class="cart_discount_price"><span class="price-discount">{if $discount.value_real > 0}{convertPrice price=$discount.value_real*-1}/{if}</span></td>
 			</tr>
 		{/foreach}
 		</tbody>
