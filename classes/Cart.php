@@ -639,7 +639,7 @@ class		Cart extends ObjectModel
 						if(count($categories))
 						{
 							foreach($categories AS $category)
-								if($oProduct->isOnCategoryId($category))
+								if($oProduct->isOnCategoryId($category['id_category']))
 									return 0;
 						}
 					}	
