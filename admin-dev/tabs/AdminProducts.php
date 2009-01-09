@@ -1360,10 +1360,8 @@ class AdminProducts extends AdminTab
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/thickbox-modified.js"></script>
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/ajaxfileupload.js"></script>
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>date.js"></script>
-	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/jquery.datePicker.js"></script>
 	<style type="text/css">
 		<!--
-		@import url(<?php echo _PS_CSS_DIR_?>datePicker.css);
 		@import url(<?php echo _PS_CSS_DIR_?>thickbox.css);
 		-->
 	</style>
