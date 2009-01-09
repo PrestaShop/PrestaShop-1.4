@@ -35,10 +35,10 @@ function bindDatepicker($id, $time)
 function includeDatepicker($id, $time = false)
 {
 	global $cookie;
-	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>';
+	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>';
 	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang));
 	if ($iso != 'en')
-		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';
+		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';
 	echo '<script type="text/javascript">';
 		if (is_array($id))
 			foreach ($id as $id2)

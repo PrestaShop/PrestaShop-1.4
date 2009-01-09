@@ -146,7 +146,7 @@ class TrackingFront extends Module
 			$productsArray[] = $product['id_product'];
 		
 		$echo = '
-		<script type="text/javascript" src="../../tools/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang)).'.js"></script>
+		<script type="text/javascript" src="../../js/jquery/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang)).'.js"></script>
 		<script type="text/javascript">
 
 			$("#datepickerFrom").datepicker({

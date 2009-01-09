@@ -21,7 +21,7 @@ require_once(dirname(__FILE__).'/init.php');
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link type="text/css" rel="stylesheet" href="../tools/datepicker/datepicker.css" />
+		<link type="text/css" rel="stylesheet" href="../js/jquery/datepicker/datepicker.css" />
 		<link type="text/css" rel="stylesheet" href="../modules/gridextjs/extjs/resources/css/ext-all.css" />
 		<link type="text/css" rel="stylesheet" href="../css/admin.css" />
 		<title>PrestaShop&trade; - <?php echo translate('Administration panel') ?></title>
