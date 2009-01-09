@@ -88,7 +88,8 @@ class Connection extends ObjectModel
 			$connection->id_guest = intval($cookie->id_guest);
 			$connection->id_page = Page::getCurrentId();
 			$connection->ip_address = isset($_SERVER['REMOTE_ADDR']) ? ip2long($_SERVER['REMOTE_ADDR']) : '';
-			$connection->http_referer = $referer;
+			if (Validate::isAbsoluteUrl($referer))
+				$connection->http_referer = $referer;
 			$connection->add();
 			$cookie->id_connections = $connection->id;
 			return $connection->id_page;
