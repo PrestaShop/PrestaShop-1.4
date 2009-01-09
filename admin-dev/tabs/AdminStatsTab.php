@@ -25,39 +25,48 @@ abstract class AdminStatsTab extends AdminPreferences
 	
 	public function postProcess()
 	{
-		global $cookie;
+		global $cookie, $currentIndex;
 		
-		if (Tools::isSubmit('stats_date'))
+		if (Tools::isSubmit('submitDatePicker'))
 		{
-			if ($day = Tools::getValue('dateInputDay', -1) AND Validate::isUnsignedInt($day))
-				$cookie->stats_day = $day;
-			else
-				unset($cookie->stats_day);
-			if (($month = Tools::getValue('dateInputMonth', -1)) != -1 AND Validate::isInt($month))
-				$cookie->stats_month = $month + 1;
-			else
-				unset($cookie->stats_month);
-			if ($year = Tools::getValue('dateInputYear', date('Y')) AND Validate::isUnsignedInt($year))
-				$cookie->stats_year = $year;
-			else
-				unset($cookie->stats_year);
-			if ($granularity = Tools::getValue('dateInputGranularity', -1))
-				$cookie->stats_granularity = $granularity;
-			else
-				unset($cookie->stats_granularity);
+			if (!Validate::isDate($from = Tools::getValue('datepickerFrom')) OR !Validate::isDate($to = Tools::getValue('datepickerTo')))
+				$this->_errors[] = Tools::displayError('date specified not valid');
 		}
-		
+		if (Tools::isSubmit('submitDateToday'))
+		{
+			$from = date('Y-m-d');
+			$to = date('Y-m-d');
+		}
+		if (Tools::isSubmit('submitDateMonth'))
+		{
+			$from = date('Y-m-01');
+			$to = date('Y-m-t');
+		}
+		if (Tools::isSubmit('submitDateYear'))
+		{
+			$from = date('Y-01-01');
+			$to = date('Y-12-31');
+		}
+		if (isset($from) AND isset($to) AND !sizeof($this->_errors))
+		{
+			$employee = new Employee($cookie->id_employee);
+			$employee->stats_date_from = $from;
+			$employee->stats_date_to = $to;
+			$employee->update();
+			Tools::redirectAdmin($_SERVER['REQUEST_URI']);
+		}
 		if (Tools::getValue('submitSettings'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 			{
-				global $currentIndex;
 				$currentIndex .= '&module='.Tools::getValue('module');
 				$this->_postConfig($this->_fieldsSettings);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit something here.');
 		}
+		if (sizeof($this->_errors))
+			AdminTab::displayErrors();
 	}
 	
 	protected function displayEngines()
@@ -109,53 +118,27 @@ abstract class AdminStatsTab extends AdminPreferences
 	public function displayCalendar()
 	{
 		echo '<div id="calendar">';
-		self::displayCalendarStatic($this->l('Calendar', 'AdminStatsTab'), $this->l('OK'));
+		echo self::displayCalendarStatic(array('Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Today' => $this->l('Today', 'AdminStatsTab'), 
+										'Month' => $this->l('Month', 'AdminStatsTab'), 'Year' => $this->l('Year', 'AdminStatsTab')));
 		echo '<div class="clear space">&nbsp;</div></div>';
 	}
 	
-	public static function displayCalendarStatic($calendar, $ok)
+	public static function displayCalendarStatic($translations)
 	{
 		global $cookie;
-		$year = isset($cookie->stats_year) ? $cookie->stats_year : date('Y');
-		$month = isset($cookie->stats_month) ? $cookie->stats_month - 1 : date('m') - 1;
-		$day = isset($cookie->stats_day) ? $cookie->stats_day : date('d');
-		$granularity = isset($cookie->stats_granularity) ? $cookie->stats_granularity : 'd';
-		
-		$result = Db::getInstance()->getRow('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang));
-		$iso_code = $result['iso_code'];
+		$employee = new Employee($cookie->id_employee);
 
-		echo '
-		<fieldset style="width: 200px;"><legend><img src="../img/admin/date.png" /> '.$calendar.'</legend>
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.js"></script>
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui.datepicker.granularity.js"></script>';
-		
-		if (!is_null($iso_code) AND $iso_code != 'en')
-			echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/lang/ui.datepicker-'.$iso_code.'.js"></script>';
-			
-		echo	'<script type="text/javascript">
-				jQuery(document).ready(function() {
-					$(\'#date\').datepicker({
-						dateInputDay:\'#dateInputDay\',
-						dateInputMonth:\'#dateInputMonth\',
-						dateInputYear:\'#dateInputYear\',
-						dateInputGranularity:\'#dateInputGranularity\',
-						defaultDate:new Date("'.$year.'", "'.$month.'", "'.$day.'"),
-						granularity:"'.$granularity.'",';
-		echo	'		prevText:"&#x3c;&#x3c;",
-						nextText:"&#x3e;&#x3e;",';
-		echo	'onSelect: function(date) {$("#dateInput").attr("value", date);}
-				    });
-				});
-			</script>
-			<div style="width:150px;">
-				<div id="date"></div>
+		includeDatepicker(array('datepickerFrom', 'datepickerTo'));
+		return '
+		<fieldset style="width: 200px;"><legend><img src="../img/admin/date.png" /> '.$translations['Calendar'].'</legend>
+			<div>
 				<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-					<input style="width: 100px" id="dateInput" name="dateInput" type="text" readonly="readonly" value="" />
-					<input type="submit" name="stats_date" class="button" value="'.$ok.'" />
-					<input type="hidden" id="dateInputDay" name="dateInputDay" value="'.$day.'" />
-					<input type="hidden" id="dateInputMonth" name="dateInputMonth" value="'.$month.'" />
-					<input type="hidden" id="dateInputYear" name="dateInputYear" value="'.$year.'" />
-					<input type="hidden" id="dateInputGranularity" name="dateInputGranularity" value="'.$granularity.'" />
+					<input type="submit" name="submitDateToday" class="button" value="'.$translations['Today'].'">
+					<input type="submit" name="submitDateMonth" class="button" value="'.$translations['Month'].'">
+					<input type="submit" name="submitDateYear" class="button" value="'.$translations['Year'].'">
+					<p>From: <input type="text" name="datepickerFrom" id="datepickerFrom" value="'.Tools::getValue('datepickerFrom', $employee->stats_date_from).'"></p>
+					<p>To: <input type="text" name="datepickerTo" id="datepickerTo" value="'.Tools::getValue('datepickerTo', $employee->stats_date_to).'"></p>
+					<input type="submit" name="submitDatePicker" class="button" />
 				</form>
 			</div>
 		</fieldset>';

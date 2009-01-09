@@ -25,8 +25,8 @@ class SEKeywords extends ModuleGraph
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'sekeyword` sek
-		WHERE sek.`date_add` LIKE \'';
-		$this->_query2 = '\'
+		WHERE LEFT(sek.`date_add`, 10) BETWEEN ';
+		$this->_query2 = '
 		GROUP BY TRIM(sek.`keyword`)
 		ORDER BY COUNT(sek.`keyword`) DESC';
 
@@ -70,7 +70,7 @@ class SEKeywords extends ModuleGraph
 	
 	function hookAdminStatsModules()
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		$table = '<table class="table" border="0" cellspacing="0" cellspacing="0">
@@ -132,12 +132,12 @@ class SEKeywords extends ModuleGraph
 	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first keywords');
-		$totalResult = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$totalResult = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		$total = 0;
 		$total2 = 0;
 		foreach ($totalResult as $totalRow)
 			$total += $totalRow['occurences'];
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2.' LIMIT 9');
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2.' LIMIT 9');
 		foreach ($result as $row)
 		{
 			$this->_legend[] = $row['keyword'];

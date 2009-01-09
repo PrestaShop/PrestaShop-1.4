@@ -21,12 +21,15 @@ class TrackingFront extends Module
 
 		if (Tools::isSubmit('ajaxProductFilter'))
 		{
+			$fakeEmployee = new Employee();
+			$fakeEmployee->stats_date_from = $cookie->stats_date_from;
+			$fakeEmployee->stats_date_to = $cookie->stats_date_to;
 			$result = Db::getInstance()->getRow('
 			SELECT `id_referrer`
 			FROM `'._DB_PREFIX_.'referrer`
 			WHERE `id_referrer` = '.intval(Tools::getValue('id_referrer')).' AND `passwd` = \''.pSQL(Tools::getValue('token')).'\'');
 			if (isset($result['id_referrer']) ? $result['id_referrer'] : false)
-				Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')));
+				Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')), $fakeEmployee);
 		}
 		elseif (Tools::isSubmit('logout_tracking'))
 		{
@@ -65,24 +68,26 @@ class TrackingFront extends Module
 			}
 			$smarty->assign('errors', $errors);
 		}
-		elseif (Tools::isSubmit('submitTrackingRange'))
+
+		if (Tools::isSubmit('submitDatePicker'))
 		{
-			if ($day = Tools::getValue('dateInputDay') AND Validate::isUnsignedInt($day))
-				$cookie->stats_day = $day;
-			else
-				unset($cookie->stats_day);
-			if (($month = Tools::getValue('dateInputMonth', -1)) != -1 AND Validate::isInt($month))
-				$cookie->stats_month = $month + 1;
-			else
-				unset($cookie->stats_month);
-			if ($year = Tools::getValue('dateInputYear') AND Validate::isUnsignedInt($year))
-				$cookie->stats_year = $year;
-			else
-				unset($cookie->stats_year);
-			if ($granularity = Tools::getValue('dateInputGranularity'))
-				$cookie->stats_granularity = $granularity;
-			else
-				unset($cookie->stats_granularity);
+			$cookie->stats_date_from = Tools::getValue('datepickerFrom');
+			$cookie->stats_date_to = Tools::getValue('datepickerTo');
+		}
+		if (Tools::isSubmit('submitDateToday'))
+		{
+			$cookie->stats_date_from = date('Y-m-d');
+			$cookie->stats_date_to = date('Y-m-d');
+		}
+		if (Tools::isSubmit('submitDateMonth'))
+		{
+			$cookie->stats_date_from = date('Y-m-01');
+			$cookie->stats_date_to = date('Y-m-t');
+		}
+		if (Tools::isSubmit('submitDateYear'))
+		{
+			$cookie->stats_date_from = date('Y-01-01');
+			$cookie->stats_date_to = date('Y-12-31');
 		}
 	}
 	
@@ -106,14 +111,21 @@ class TrackingFront extends Module
 	public function displayAccount()
 	{
 		global $smarty, $cookie;
-		$smarty->assign('stats_year', isset($cookie->stats_year) ? $cookie->stats_year : date('Y'));
-		$smarty->assign('stats_month', isset($cookie->stats_month) ? $cookie->stats_month - 1 : date('m') - 1);
-		$smarty->assign('stats_day', isset($cookie->stats_day) ? $cookie->stats_day : date('d'));
-		$smarty->assign('stats_granularity', isset($cookie->stats_granularity) ? $cookie->stats_granularity : 'd');
 		
-		Referrer::refreshCache(array(array('id_referrer' => intval($cookie->tracking_id))));
+		if (!isset($cookie->stats_date_from))
+			$cookie->stats_date_from = date('Y-m-d');
+		if (!isset($cookie->stats_date_to))
+			$cookie->stats_date_to = date('Y-m-t');
+		$fakeEmployee = new Employee();
+		$fakeEmployee->stats_date_from = $cookie->stats_date_from;
+		$fakeEmployee->stats_date_to = $cookie->stats_date_to;
+		Referrer::refreshCache(array(array('id_referrer' => intval($cookie->tracking_id))), $fakeEmployee);
+		
 		$referrer = new Referrer(intval($cookie->tracking_id));
 		$smarty->assign('referrer', $referrer);
+		$smarty->assign('datepickerFrom', $fakeEmployee->stats_date_from);
+		$smarty->assign('datepickerTo', $fakeEmployee->stats_date_to);
+		
 		$displayTab = array(
 			'uniqs' => $this->l('Unique visitors'),
 			'visitors' => $this->l('Visitors'),
@@ -134,7 +146,18 @@ class TrackingFront extends Module
 			$productsArray[] = $product['id_product'];
 		
 		$echo = '
+		<script type="text/javascript" src="../../tools/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang)).'.js"></script>
 		<script type="text/javascript">
+
+			$("#datepickerFrom").datepicker({
+				prevText:"",
+				nextText:"",
+				dateFormat:"yy-mm-dd"});
+			$("#datepickerTo").datepicker({
+				prevText:"",
+				nextText:"",
+				dateFormat:"yy-mm-dd"});
+			
 			function updateValues()
 			{
 				$.getJSON("stats.php",{ajaxProductFilter:1,id_referrer:'.$referrer->id.',token:"'.$cookie->tracking_passwd.'",id_product:0},
@@ -186,7 +209,7 @@ class TrackingFront extends Module
 			showProductLines();
 		</script>';
 		
-		return $echo.$this->display(__FILE__, 'account.tpl').$echo2;
+		return $this->display(__FILE__, 'header.tpl').$echo.$this->display(__FILE__, 'account.tpl').$echo2;
 	}	
 }
 

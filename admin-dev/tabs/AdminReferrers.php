@@ -7,7 +7,7 @@ include_once(PS_ADMIN_DIR.'/init.php');
 if (Tools::getValue('token') == Tools::getAdminToken('AdminReferrers'.intval(Tab::getIdFromClassName('AdminReferrers')).intval(Tools::getValue('id_employee'))))
 {
 	if (Tools::isSubmit('ajaxProductFilter'))
-		Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')));
+		Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')), new Employee(intval(Tools::getValue('id_employee'))));
 	else if (Tools::isSubmit('ajaxFillProducts'))
 	{
 		$jsonArray = array();
@@ -37,7 +37,7 @@ class AdminReferrers extends AdminTab
 		$this->_select = '(cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
 		$this->fieldsDisplay = array(
 			'id_referrer' => array('title' => $this->l('ID'), 'width' => 25, 'align' => 'center'),
-			'name' => array('title' => $this->l('Name'), 'width' => 120),
+			'name' => array('title' => $this->l('Name'), 'width' => 100),
 			'cache_visitors' => array('title' => $this->l('Visitors'), 'width' => 40, 'align' => 'center'),
 			'cache_visits' => array('title' => $this->l('Visits'), 'width' => 40, 'align' => 'center'),
 			'cache_pages' => array('title' => $this->l('Pages'), 'width' => 40, 'align' => 'center'),
@@ -117,7 +117,7 @@ class AdminReferrers extends AdminTab
 		if ($this->enableCalendar())
 		{
 			echo '<div style="float: left; margin-right: 20px;">';
-			AdminStatsTab::displayCalendarStatic($this->l('Calendar'), $this->l('OK'));
+			echo AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
 			echo '</div>
 			<div style="float: left; margin-right: 20px;">
 				<fieldset class="width3"><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
@@ -155,7 +155,7 @@ class AdminReferrers extends AdminTab
 		}
 		if (Tools::isSubmit('submitSettings'))
 			Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', intval(Tools::getValue('tracking_dt')));
-		if (ModuleGraph::getDateLike() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshData'))
+		if (ModuleGraph::getDateBetween() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshData'))
 			Referrer::refreshCache();
 		
 		return parent::postProcess();
@@ -328,7 +328,7 @@ class AdminReferrers extends AdminTab
 				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:'.$referrer->id.',id_product:id_product},
 					function(j) {';
 		foreach ($displayTab as $key => $value)
-			echo '$("#tracking_dt").html(j[0].tracking_dt);';
+			echo '$("#'.$key.'").html(j[0].'.$key.');';
 		echo '		}
 				)
 			}

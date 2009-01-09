@@ -984,8 +984,11 @@ abstract class AdminTab
 				case 'date':
 					if (is_string($value))
 						$value = unserialize($value);
-					echo $this->l('From').' <input type="text" name="'.$this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key).'[0]" value="'.(isset($value[0]) ? $value[0] : '').'"'.$width.' '.$keyPress.' /><br />
-					'.$this->l('To').' <input type="text" name="'.$this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key).'[1]" value="'.(isset($value[1]) ? $value[1] : '').'"'.$width.' '.$keyPress.' />';
+					$name = $this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key);
+					$nameId = str_replace('!', '__', $name);
+					includeDatepicker(array($nameId.'_0', $nameId.'_1'));
+					echo $this->l('From').' <input type="text" id="'.$nameId.'_0" name="'.$name.'[0]" value="'.(isset($value[0]) ? $value[0] : '').'"'.$width.' '.$keyPress.' /><br />
+					'.$this->l('To').' <input type="text" id="'.$nameId.'_1" name="'.$name.'[1]" value="'.(isset($value[1]) ? $value[1] : '').'"'.$width.' '.$keyPress.' />';
 					break;
 
 				case 'select':

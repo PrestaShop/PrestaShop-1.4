@@ -40,7 +40,7 @@ class StatsVisits extends ModuleGraph
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(c.`id_connections`) AS total
 		FROM `'._DB_PREFIX_.'connections` c
-		WHERE c.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -49,7 +49,7 @@ class StatsVisits extends ModuleGraph
 		$result = Db::getInstance()->ExecuteS('
 		SELECT DISTINCT c.`id_guest`
 		FROM `'._DB_PREFIX_.'connections` c
-		WHERE c.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return Db::getInstance()->NumRows();
 	}
 	
@@ -66,9 +66,9 @@ class StatsVisits extends ModuleGraph
 			<div style="margin-top:20px"></div>
 			<p>'.$this->l('Total visits:').' '.$totalVisits.'</p>
 			<p>'.$this->l('Total visitors:').' '.$totalGuests.'</p>
-			'.ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<br /><br />
-			
-		</fieldset><br />
+			'.($totalVisits ? ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<br /><br />' : '').'
+		</fieldset>
+		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 				<h2>'.$this->l('Determine the interest of a visit').'</h2>
 				'.$this->l('Visitors\' evolution graph strongly looks like to the visits\' graph, but provides an additional information: <strong>Do your visitors come back?</strong>').'<br />
@@ -93,14 +93,13 @@ class StatsVisits extends ModuleGraph
 				$this->_query[0] = '
 					SELECT `date_add`
 					FROM `'._DB_PREFIX_.'connections`
-					WHERE `date_add` LIKE \'';
-				$this->_query2[0] = '\'';
+					WHERE LEFT(`date_add`, 10) BETWEEN ';
+				$this->_query2[0] = '';
 				$this->_query[1] = '
 					SELECT `date_add`
 					FROM `'._DB_PREFIX_.'connections`
-					WHERE `date_add` LIKE \'';
-				$this->_query2[1] = '\'
-				GROUP BY `id_guest`';
+					WHERE LEFT(`date_add`, 10) BETWEEN ';
+				$this->_query2[1] = ' GROUP BY `id_guest`';
 				break;
 		}
 	}
@@ -112,58 +111,31 @@ class StatsVisits extends ModuleGraph
 	
 	protected function setYearValues($layers)
 	{
-		if ($layers == 1)
+		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
 			foreach ($result AS $row)
-			    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1]++;
-		}
-		else
-		{
-			for ($i = 0; $i < $layers; $i++)
-			{
-				$result = Db::getInstance()->ExecuteS($this->_query[$i].pSQL(ModuleGraph::getDateLike()).$this->_query2[$i]);
-				foreach ($result AS $row)
-				    $this->_values[$i][intval(substr($row['date_add'], 5, 2)) - 1]++;
-			}
+				$this->_values[$i][intval(substr($row['date_add'], 5, 2))]++;
 		}
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		if ($layers == 1)
+		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
 			foreach ($result AS $row)
-				$this->_values[intval(substr($row['date_add'], 8, 2)) - 1]++;
-		}
-		else
-		{
-			for ($i = 0; $i < $layers; $i++)
-			{
-				$result = Db::getInstance()->ExecuteS($this->_query[$i].pSQL(ModuleGraph::getDateLike()).$this->_query2[$i]);
-				foreach ($result AS $row)
-					$this->_values[$i][intval(substr($row['date_add'], 8, 2)) - 1]++;
-			}
+				$this->_values[$i][intval(substr($row['date_add'], 8, 2))]++;
 		}
 	}
 
 	protected function setDayValues($layers)
 	{
-		if ($layers == 1)
+		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
 			foreach ($result AS $row)
-			    $this->_values[intval(substr($row['date_add'], 11, 2))]++;
-		}
-		else
-		{
-			for ($i = 0; $i < $layers; $i++)
-			{
-				$result = Db::getInstance()->ExecuteS($this->_query[$i].pSQL(ModuleGraph::getDateLike()).$this->_query2[$i]);
-				foreach ($result AS $row)
-				    $this->_values[$i][intval(substr($row['date_add'], 11, 2))]++;
-			}
+				$this->_values[$i][intval(substr($row['date_add'], 11, 2))]++;
 		}
 	}
 }

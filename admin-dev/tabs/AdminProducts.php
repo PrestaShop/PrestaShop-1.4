@@ -1219,6 +1219,7 @@ class AdminProducts extends AdminTab
 			$qty_state = '';
 		}
 
+		//includeDatepicker(array('reduction_from', 'reduction_to'));
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
@@ -1558,8 +1559,8 @@ class AdminProducts extends AdminTab
 					</tr>
 					<tr>
 						<td class="col-left">&nbsp;</td>
-						<td>'.$this->l('available from').' <input type="text" name="reduction_from" value="'.(($from = $this->getFieldValue($obj, 'reduction_from') AND $from != '0000-00-00' AND $from != '1942-01-01') ? $from : date('Y-m-d')).'" />
-							'.$this->l('to').' <input type="text" name="reduction_to" value="'.(($to = $this->getFieldValue($obj, 'reduction_to') AND $to != '0000-00-00' AND $to != '1942-01-01') ? $to : date('Y-m-d')).'" />
+						<td>'.$this->l('available from').' <input type="text" id="reduction_from" name="reduction_from" value="'.(($from = $this->getFieldValue($obj, 'reduction_from') AND $from != '0000-00-00' AND $from != '1942-01-01') ? $from : date('Y-m-d')).'" />
+							'.$this->l('to').' <input type="text" id="reduction_to" name="reduction_to" value="'.(($to = $this->getFieldValue($obj, 'reduction_to') AND $to != '0000-00-00' AND $to != '1942-01-01') ? $to : date('Y-m-d')).'" />
 							<p>'.$this->l('Leave same dates for undefined duration').'</p>
 						</td>
 					</tr>

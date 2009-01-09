@@ -48,6 +48,16 @@ class MySQL extends Db
 				return mysql_fetch_assoc($this->_result);
 		return false;
 	}
+
+	public function	getValue($query)
+	{
+		if (parent::blacklist($query))
+			return false;
+		$this->_result = false;
+		if ($this->_link AND $this->_result = mysql_query($query.' LIMIT 1', $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
+			return array_shift($tmpArray);
+		return false;
+	}
 	
 	public function	Execute($query)
 	{

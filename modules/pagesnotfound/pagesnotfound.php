@@ -52,8 +52,8 @@ class Pagesnotfound extends Module
 	{
 		$result = Db::getInstance()->ExecuteS('
 		SELECT *
-		FROM `'._DB_PREFIX_.'pagenotfound`
-		WHERE date_add LIKE \''.ModuleGraph::getDateLike().'\'');
+		FROM `'._DB_PREFIX_.'pagenotfound` p
+		WHERE LEFT(p.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween());
 
 		$pages = array();
 		foreach ($result as $row)

@@ -12,6 +12,7 @@
   
 abstract class ModuleGraph extends Module
 {
+	protected $_employee;
 	/** @var integer array graph data */
 	protected	$_values = array();
 	
@@ -26,11 +27,19 @@ abstract class ModuleGraph extends Module
 	
 	abstract protected function getData($layers);
 	
+	public function setEmployee($id_employee)
+	{
+		$this->_employee = new Employee(intval($id_employee));
+	}
+	
 	protected function setDateGraph($layers, $legend = false)
 	{
-		global $cookie;
-
-		if (isset($cookie->stats_granularity) AND $cookie->stats_granularity == 'd')
+		// Get dates in a manageable format
+		$fromArray = getdate(strtotime($this->_employee->stats_date_from));
+		$toArray = getdate(strtotime($this->_employee->stats_date_to));
+		
+		// If the granularity is inferior to 1 day
+		if ($this->_employee->stats_date_from == $this->_employee->stats_date_to)
 		{
 			if ($legend)
 				for ($i = 0; $i < 24; $i++)
@@ -40,37 +49,66 @@ abstract class ModuleGraph extends Module
 					else
 						for ($j = 0; $j < $layers; $j++)
 							$this->_values[$j][$i] = 0;
-					$this->_legend[$i] = (strlen($i) == 1) ? ('0'.$i) : $i;
+					$this->_legend[$i] = ($i % 2) ? '' : sprintf('%02dh', $i);
 				}
 			if (is_callable(array($this, 'setDayValues')))
 				$this->setDayValues($layers);
 		}
-		elseif (isset($cookie->stats_granularity) AND $cookie->stats_granularity == 'm')
+		// If the granularity is inferior to 1 month TODO : change to manage 28 to 31 days
+		elseif (strtotime($this->_employee->stats_date_to) - strtotime($this->_employee->stats_date_from) <= 2678400)
 		{
-			$max = date('t', mktime(0, 0, 0, $cookie->stats_month, 1, $cookie->stats_year)); 
 			if ($legend)
-				for ($i = 0; $i < $max; $i++)
+			{
+				$days = array();
+				if ($fromArray['mon'] == $toArray['mon'])
+					for ($i = $fromArray['mday']; $i <= $toArray['mday']; ++$i)
+						$days[] = $i;
+				else
+				{
+					$imax = date('t', mktime(0, 0, 0, $fromArray['mon'], 1, $fromArray['year']));
+					for ($i = $fromArray['mday']; $i <= $imax; ++$i)
+						$days[] = $i;
+					for ($i = 1; $i <= $toArray['mday']; ++$i)
+						$days[] = $i;
+				}
+				foreach ($days as $i)
 				{
 					if ($layers == 1)
 						$this->_values[$i] = 0;
 					else
 						for ($j = 0; $j < $layers; $j++)
 							$this->_values[$j][$i] = 0;
-					$this->_legend[$i] = ($i != 0 && ($i + 1) % 5) ? '' : $i + 1;
+					$this->_legend[$i] = ($i % 2) ? '' : sprintf('%02d', $i);
 				}
+			}
 			if (is_callable(array($this, 'setMonthValues')))
 				$this->setMonthValues($layers);
 		}
+		// If the granularity is superior to 1 month
 		else
 		{
 			if ($legend)
 			{
-				if ($layers == 1)
-					$this->_values = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+				$months = array();
+				if ($fromArray['year'] == $toArray['year'])
+					for ($i = $fromArray['mon']; $i <= $toArray['mon']; ++$i)
+						$months[] = $i;
 				else
-					for ($j = 0; $j < $layers; $j++)
-						$this->_values[$j] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-				$this->_legend = array('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12');
+				{
+					for ($i = $fromArray['mon']; $i <= 12; ++$i)
+						$months[] = $i;
+					for ($i = 1; $i <= $toArray['mon']; ++$i)
+						$months[] = $i;
+				}
+				foreach ($months as $i)
+				{
+					if ($layers == 1)
+						$this->_values[$i] = 0;
+					else
+						for ($j = 0; $j < $layers; $j++)
+							$this->_values[$j][$i] = 0;
+					$this->_legend[$i] = sprintf('%02d', $i);
+				}
 			}
 			if (is_callable(array($this, 'setYearValues')))
 				$this->setYearValues($layers);
@@ -100,6 +138,9 @@ abstract class ModuleGraph extends Module
 			return Tools::displayError('No graph engine selected');
 		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
 			return Tools::displayError('Graph engine selected unavailable');
+			
+		global $cookie;
+		$id_employee = intval($cookie->id_employee);
 
 		if (!isset($params['layers']))
 			$params['layers'] = 1;
@@ -110,7 +151,9 @@ abstract class ModuleGraph extends Module
 		if (!isset($params['height']))
 			$params['height'] = 270;
 		
-		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'];
+		global $cookie;
+		$id_employee = intval($cookie->id_employee);
+		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'].'&id_employee='.$id_employee;
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
 			
@@ -118,23 +161,34 @@ abstract class ModuleGraph extends Module
 		return call_user_func(array($render, 'hookGraphEngine'), $params, $drawer);
 	}
 	
-	public static function getDateLike()
+	private static function getEmployee($employee = null)
 	{
-		global $cookie;
-		if (!isset($cookie->stats_year))
-			$cookie->stats_year = date('Y');
-		if (!isset($cookie->stats_granularity))
-			$cookie->stats_granularity = 'y';
+		if (!$employee)
+		{
+			global $cookie;
+			$employee = new Employee(intval($cookie->id_employee));
+		}
 		
-		$dateLike = '';
-		if ($year = intval($cookie->stats_year))
-			$dateLike .= $year.'-';
-		if ($cookie->stats_granularity != 'y' AND isset($cookie->stats_month) AND $month = intval($cookie->stats_month))
-			$dateLike .= (strlen($month) == 1 ? '0' : '').$month.'-';
-		if ($cookie->stats_granularity == 'd' AND isset($cookie->stats_day) AND $day = intval($cookie->stats_day))
-			$dateLike .= (strlen($day) == 1 ? '0' : '').$day.' ';
-		$dateLike .= '%';
-		return $dateLike;
+		if (empty($employee->stats_date_from) OR empty($employee->stats_date_to))
+		{
+			if (empty($employee->stats_date_from))
+				$employee->stats_date_from = date('Y').'-01-01 00:00:00';
+			if (empty($employee->stats_date_to))
+				$employee->stats_date_to = date('Y').'-12-31 23:59:59';
+			$employee->update();
+		}
+		return $employee;
+	}
+	
+	public function getDate()
+	{
+		return self::getDateBetween($this->_employee);
+	}
+	
+	public static function getDateBetween($employee = null)
+	{
+		$employee = self::getEmployee($employee);
+		return ' \''.$employee->stats_date_from.'\' AND \''.$employee->stats_date_to.'\' ';
 	}
 }
 

@@ -16,44 +16,44 @@ class AdminStats extends AdminStatsTab
 {
 	private static $validOrder;
 	
-	private static function recordQuery($dateLike, $format, $order)
+	private static function recordQuery($dateBetween, $format, $order)
 	{
 		return Db::getInstance()->getRow('
 		SELECT date_format(o.`date_add`, \''.$format.'\') as date, SUM(o.`total_products`) / c.conversion_rate as totalht, SUM(o.`total_paid`) / c.conversion_rate as totalttc
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
-		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 		GROUP BY date_format(o.`date_add`, \''.$format.'\')
 		ORDER BY totalht '.$order);
 	}
 	
-	public static function getRecords($dateLike)
+	public static function getRecords($dateBetween)
 	{
 		$xtrems = array();
-		$xtrems['bestmonth'] = self::recordQuery($dateLike, '%Y-%m', 'DESC');
-		$xtrems['worstmonth'] = self::recordQuery($dateLike, '%Y-%m', 'ASC');
-		$xtrems['bestday'] = self::recordQuery($dateLike, '%Y-%m-%d', 'DESC');
-		$xtrems['worstday'] = self::recordQuery($dateLike, '%Y-%m-%d', 'ASC');
+		$xtrems['bestmonth'] = self::recordQuery($dateBetween, '%Y-%m', 'DESC');
+		$xtrems['worstmonth'] = self::recordQuery($dateBetween, '%Y-%m', 'ASC');
+		$xtrems['bestday'] = self::recordQuery($dateBetween, '%Y-%m-%d', 'DESC');
+		$xtrems['worstday'] = self::recordQuery($dateBetween, '%Y-%m-%d', 'ASC');
 		if ($xtrems['bestmonth'])
 			return $xtrems;
 	}
 	
-	public static function getSales($dateLike)
+	public static function getSales($dateBetween)
 	{	
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT o.`id_order`) as orders, SUM(o.`total_paid`) / c.conversion_rate as ttc, SUM(o.`total_products`) / c.conversion_rate as ht
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
-		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween);
 		
 		$products = Db::getInstance()->getRow('
 		SELECT COUNT(od.`id_order_detail`) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 		WHERE o.valid = 1
-		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween);
 		
 		$xtrems = Db::getInstance()->getRow('
 		SELECT MAX(`total_products`) as maxht, MIN(`total_products`) as minht, MAX(`total_paid`) as maxttc, MIN(`total_paid`) as minttc
@@ -63,24 +63,23 @@ class AdminStats extends AdminStatsTab
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 			WHERE o.valid = 1
-			AND o.`date_add` LIKE \''.pSQL($dateLike).'\') records');
+			AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.') records');
 		
 		return array_merge($result, array_merge($xtrems, $products));
 	}
 	
-	public static function getCarts($dateLike)
+	public static function getCarts($dateBetween)
 	{
-		$xtrems = Db::getInstance()->getRow('
-		SELECT AVG(cartsum) as avg, MAX(cartsum) as max, MIN(cartsum) as min
+		return Db::getInstance()->getRow('
+		SELECT AVG(cartsum) as average, MAX(cartsum) as highest, MIN(cartsum) as lowest
 		FROM (
-			SELECT SUM(p.`price`) / c.conversion_rate as cartsum
+			SELECT SUM(p.`price`) / cu.conversion_rate as cartsum
 			FROM `'._DB_PREFIX_.'cart` c
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON c.id_currency = c.id_currency
+			LEFT JOIN `'._DB_PREFIX_.'currency` cu ON c.id_currency = cu.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'cart_product` cp ON c.`id_cart` = cp.`id_cart`
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
-			WHERE c.`date_upd` LIKE \''.pSQL($dateLike).'\'
+			WHERE LEFT(c.`date_upd`, 10) BETWEEN '.$dateBetween.'
 			GROUP BY c.`id_cart`) carts');
-		return array('average' => $xtrems['avg'], 'highest' => $xtrems['max'], 'lowest' => $xtrems['min']);
 	}
 	
 	public function display()
@@ -90,11 +89,11 @@ class AdminStats extends AdminStatsTab
 		$currency = Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$language = Language::getLanguage(intval($cookie->id_lang));
 		$iso = $language['iso_code'];
-		$dateLike = ModuleGraph::getDateLike();
+		$dateBetween = ModuleGraph::getDateBetween();
 		
-		$sales = self::getSales($dateLike);
-		$carts = self::getCarts($dateLike);
-		$records = self::getRecords($dateLike);
+		$sales = self::getSales($dateBetween);
+		$carts = self::getCarts($dateBetween);
+		$records = self::getRecords($dateBetween);
 	
 		echo '
 		<div style="float: left">';
@@ -106,16 +105,9 @@ class AdminStats extends AdminStatsTab
 		</div>
 		<div style="float: left; margin-left: 40px;">
 			<fieldset class="width3"><legend><img src="../img/admin/tab-stats.gif" /> '.$this->l('Help').'</legend>
-				<p>
-					'.$this->l('Use the calendar on the left to select the time period.').'<br />
-					'.$this->l('First, click on a unit of time (D = one day, M = one month, Y = one year), then choose the date.').'<br />
-				</p>
-				<p>
-					'.$this->l('All available statistic modules are displayed in the Navigation list beneath the calendar.').'
-				</p>
-				<p>
-					'.$this->l('In the Settings sub-tab, you can also customize the Stats tab to fit your needs and resources, change the graph rendering engine, and adjust the database settings.').'
-				</p>
+				<p>'.$this->l('Use the calendar on the left to select the time period.').'</p>
+				<p>'.$this->l('All available statistic modules are displayed in the Navigation list beneath the calendar.').'</p>
+				<p>'.$this->l('In the Settings sub-tab, you can also customize the Stats tab to fit your needs and resources, change the graph rendering engine, and adjust the database settings.').'</p>
 			</fieldset>
 			<br /><br />
 			<fieldset class="width3"><legend><img src="../img/admin/___info-ca.gif" style="vertical-align: middle" /> '.$this->l('Sales').'</legend>

@@ -54,11 +54,11 @@ class StatsNewsletter extends ModuleGraph
 		$result1 = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT c.id_customer) as customers
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`newsletter_date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		WHERE LEFT(c.`newsletter_date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT n.id) as visitors
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		WHERE LEFT(n.`newsletter_date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return array('customers' => $result1['customers'], 'visitors' => $result2['visitors'], 'both' => $result1['customers'] + $result2['visitors']);
 	}
 		
@@ -72,44 +72,44 @@ class StatsNewsletter extends ModuleGraph
 		$this->_query = '
 		SELECT c.newsletter_date_add
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`newsletter_date_add` LIKE \'';
+		WHERE LEFT(c.`newsletter_date_add`, 10) BETWEEN ';
 		$this->_query2 = '
 		SELECT n.newsletter_date_add
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` LIKE \'';
+		WHERE LEFT(n.`newsletter_date_add`, 10) BETWEEN ';
 		$this->setDateGraph($layers, true);
 	}
 	
 	protected function setYearValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).'\'');
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.pSQL(ModuleGraph::getDateLike()).'\'');
+		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
-			$this->_values[0][intval(substr($row['newsletter_date_add'], 5, 2)) - 1] += 1;
+			$this->_values[0][intval(substr($row['newsletter_date_add'], 5, 2))] += 1;
 		if ($result2)
 			foreach ($result2 AS $row)
-				$this->_values[1][intval(substr($row['newsletter_date_add'], 5, 2)) - 1] += 1;
+				$this->_values[1][intval(substr($row['newsletter_date_add'], 5, 2))] += 1;
 		foreach ($this->_values[2] as $key => $zerofill)
 			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).'\'');
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.pSQL(ModuleGraph::getDateLike()).'\'');
+		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
-			$this->_values[0][intval(substr($row['newsletter_date_add'], 8, 2)) - 1] += 1;
+			$this->_values[0][intval(substr($row['newsletter_date_add'], 8, 2))] += 1;
 		if ($result2)
 			foreach ($result2 AS $row)
-				$this->_values[1][intval(substr($row['newsletter_date_add'], 8, 2)) - 1] += 1;
+				$this->_values[1][intval(substr($row['newsletter_date_add'], 8, 2))] += 1;
 		foreach ($this->_values[2] as $key => $zerofill)
 			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
 	}
 
 	protected function setDayValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).'\'');
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.pSQL(ModuleGraph::getDateLike()).'\'');
+		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 11, 2))] += 1;
 		if ($result2)

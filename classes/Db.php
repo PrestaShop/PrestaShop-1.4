@@ -228,9 +228,10 @@ abstract class Db
 	}
 
 	/**
-	 * Get Row
+	 * Get Row and get value
 	 */
 	abstract public function getRow($query);
+	abstract public function getValue($query);
 
 	/**
 	 * Returns the text of the error message from previous database operation

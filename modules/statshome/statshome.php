@@ -34,42 +34,9 @@ class StatsHome extends Module
 	
 	private function _postProcess()
 	{
-		if (Tools::isSubmit('submitStats'))
-		{
-			Configuration::updateValue('STATSHOME_YEAR_FROM', ($year = intval(Tools::getValue('statsYearFrom')) AND $year > 1970 AND $year < 2070) ? $year : date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_FROM', ($month = intval(Tools::getValue('statsMonthFrom')) AND $month > 0 AND $month <= 12) ? $month : 0);
-			Configuration::updateValue('STATSHOME_DAY_FROM', ($month AND $day = intval(Tools::getValue('statsDayFrom')) AND $day > 0 AND $day < 31) ? $day : 0);
-			Configuration::updateValue('STATSHOME_YEAR_TO', ($year = intval(Tools::getValue('statsYearTo')) AND $year > 1970 AND $year < 2070) ? $year : date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_TO', ($month = intval(Tools::getValue('statsMonthTo')) AND $month > 0 AND $month <= 12) ? $month : 0);
-			Configuration::updateValue('STATSHOME_DAY_TO', ($month AND $day = intval(Tools::getValue('statsDayTo')) AND $day > 0 AND $day < 31) ? $day : 0);
-		}
-		if (Tools::isSubmit('submitStatsToday'))
-		{
-			Configuration::updateValue('STATSHOME_YEAR_FROM', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_FROM', date('m'));
-			Configuration::updateValue('STATSHOME_DAY_FROM', date('d'));
-			Configuration::updateValue('STATSHOME_YEAR_TO', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_TO', date('m'));
-			Configuration::updateValue('STATSHOME_DAY_TO', date('d'));
-		}
-		if (Tools::isSubmit('submitStatsMonth'))
-		{
-			Configuration::updateValue('STATSHOME_YEAR_FROM', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_FROM', date('m'));
-			Configuration::updateValue('STATSHOME_DAY_FROM', 0);
-			Configuration::updateValue('STATSHOME_YEAR_TO', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_TO', date('m'));
-			Configuration::updateValue('STATSHOME_DAY_TO', 0);
-		}
-		if (Tools::isSubmit('submitStatsYear'))
-		{
-			Configuration::updateValue('STATSHOME_YEAR_FROM', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_FROM', 0);
-			Configuration::updateValue('STATSHOME_DAY_FROM', 0);
-			Configuration::updateValue('STATSHOME_YEAR_TO', date('Y'));
-			Configuration::updateValue('STATSHOME_MONTH_TO', 0);
-			Configuration::updateValue('STATSHOME_DAY_TO', 0);
-		}
+		include_once(dirname(__FILE__).'/../..'.substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')).'/tabs/AdminStats.php');
+		$calendarTab = new AdminStats();
+		$calendarTab->postProcess();
 	}
 	
 	public function hookBackOfficeHome($params)
@@ -110,31 +77,11 @@ class StatsHome extends Module
 					<p>'.(($results['total_viewed'] != 1) ? $this->l('product pages viewed') : $this->l('product page viewed')).'</p>
 				</div>
 			</div>
-			<div style="float:left;text-align:right;width:240px">
-			<form action="index.php" method="post">
-				<p>
-					<input type="submit" name="submitStatsToday" class="button" value="'.$this->l('Today').'">
-					<input type="submit" name="submitStatsMonth" class="button" value="'.$this->l('Month').'">
-					<input type="submit" name="submitStatsYear" class="button" value="'.$this->l('Year').'">
-				</p>
-				<p>
-					'.$this->l('From year').' <input type="text" name="statsYearFrom" style="width: 40px" value="'.(Configuration::get('STATSHOME_YEAR_FROM') ? Configuration::get('STATSHOME_YEAR_FROM') : date('Y')).'">
-					'.$this->l('to').' <input type="text" name="statsYearTo" style="width: 40px" value="'.(Configuration::get('STATSHOME_YEAR_TO') ? Configuration::get('STATSHOME_YEAR_TO') : date('Y')).'">
-				</p>
-				<p>
-					'.$this->l('From month').' <input type="text" name="statsMonthFrom" style="width: 40px" value="'.(Configuration::get('STATSHOME_MONTH_FROM')).'">
-					'.$this->l('to').' <input type="text" name="statsMonthTo" style="width: 40px" value="'.(Configuration::get('STATSHOME_MONTH_TO')).'">
-				</p>
-				<p>
-					'.$this->l('From day').' <input type="text" name="statsDayFrom" style="width: 40px" value="'.(Configuration::get('STATSHOME_DAY_FROM')).'">
-					'.$this->l('to').' <input type="text" name="statsDayTo" style="width: 40px" value="'.(Configuration::get('STATSHOME_DAY_TO')).'">
-				</p>
-				<p>
-					<input type="submit" name="submitStats" class="button" value="'.$this->l('OK').'">
-				</p>
-				<div class="space"></div>
+			<div style="float:right;text-align:right;width:240px">';
+		include_once(dirname(__FILE__).'/../..'.substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')).'/tabs/AdminStatsTab.php');
+		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
+		$this->_html .= '<div class="space"></div>
 				<p style=" font-weight: bold">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
-			</form>
 			</div>
 		</fieldset>
 		<div class="clear space"><br /><br /></div>';
@@ -172,22 +119,12 @@ class StatsHome extends Module
 		$result = Db::getInstance()->getRow('
 		SELECT SUM(o.`total_paid_real`) as total_sales, COUNT(o.`total_paid_real`) as total_orders
 		FROM `'._DB_PREFIX_.'orders` o
-		WHERE (
-			SELECT IF(os.`id_order_state` = 8, 0, 1)
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1
-		AND o.`date_add` >= \''.pSQL($yearFrom).'-'.pSQL($monthFrom).'-'.pSQL($dayFrom).' 00:00:00\'
-		AND o.`date_add` <= \''.pSQL($yearTo).'-'.pSQL($monthTo).'-'.pSQL($dayTo).' 23:59:59\'');
+		WHERE o.valid = 1
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT COUNT(`id_customer`) AS total_registrations
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`date_add` >= \''.pSQL($yearFrom).'-'.pSQL($monthFrom).'-'.pSQL($dayFrom).' 00:00:00\'
-		AND c.`date_add` <= \''.pSQL($yearTo).'-'.pSQL($monthTo).'-'.pSQL($dayTo).' 23:59:59\'');
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result3 = Db::getInstance()->getRow('
 		SELECT SUM(pv.`counter`) AS total_viewed
 		FROM `'._DB_PREFIX_.'page_viewed` pv
@@ -195,8 +132,8 @@ class StatsHome extends Module
 		LEFT JOIN `'._DB_PREFIX_.'page` p ON pv.`id_page` = p.`id_page`
 		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 		WHERE pt.`name` = \'product.php\'
-		AND dr.`time_start` >= \''.pSQL($yearFrom).'-'.pSQL($monthFrom).'-'.pSQL($dayFrom).' 00:00:00\'
-		AND dr.`time_end` <= \''.pSQL($yearTo).'-'.pSQL($monthTo).'-'.pSQL($dayTo).' 23:59:59\'');	
+		AND LEFT(dr.`time_start`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		AND LEFT(dr.`time_end`, 10) BETWEEN '.ModuleGraph::getDateBetween());	
 		return array_merge($result, array_merge($result2, $result3));
 	}
 }

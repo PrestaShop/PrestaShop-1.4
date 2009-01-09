@@ -56,14 +56,14 @@ class StatsSales extends ModuleGraph
 			ORDER BY ios.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		)
-		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		GROUP BY oh.`id_order_state`');
 		$numRows = Db::getInstance()->NumRows();
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="float: right;">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="float: right; margin-left: 10px;">
 				<select name="id_country">
 					<option value="0"'.((!Tools::getValue('id_order_state')) ? ' selected="selected"' : '').'>'.$this->l('All').'</option>';
 		foreach (Country::getCountries($cookie->id_lang) AS $country)
@@ -104,7 +104,7 @@ class StatsSales extends ModuleGraph
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
-		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
@@ -112,7 +112,7 @@ class StatsSales extends ModuleGraph
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
-		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return array_merge($result1, $result2);
 	}
 	
@@ -152,41 +152,40 @@ class StatsSales extends ModuleGraph
 			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1
 			'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
-			AND o.`date_add` LIKE \'';
-		$this->_query2 = '\'
-			GROUP BY o.id_order';
+			AND LEFT(o.`date_add`, 10) BETWEEN ';
+		$this->_query2 = ' GROUP BY o.id_order';
 		$this->setDateGraph($layers, true);
 	}
 	
 	protected function setYearValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[0][intval(substr($row['date_add'], 5, 2)) - 1] += 1;
-				$this->_values[1][intval(substr($row['date_add'], 5, 2)) - 1] += $row['product_quantity'];
+				$this->_values[0][intval(substr($row['date_add'], 5, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 5, 2))] += $row['product_quantity'];
 			}
 			else
-				$this->_values[intval(substr($row['date_add'], 5, 2)) - 1] += $row['total_paid_real'];
+				$this->_values[intval(substr($row['date_add'], 5, 2))] += $row['total_paid_real'];
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[0][intval(substr($row['date_add'], 8, 2)) - 1] += 1;
-				$this->_values[1][intval(substr($row['date_add'], 8, 2)) - 1] += $row['product_quantity'];
+				$this->_values[0][intval(substr($row['date_add'], 8, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 8, 2))] += $row['product_quantity'];
 			}
 			else
-				$this->_values[intval(substr($row['date_add'], 8, 2)) - 1] += $row['total_paid_real'];
+				$this->_values[intval(substr($row['date_add'], 8, 2))] += $row['total_paid_real'];
 	}
 
 	protected function setDayValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
@@ -214,7 +213,7 @@ class StatsSales extends ModuleGraph
 			LIMIT 1
 		)
 		'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
-		AND o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY oh.`id_order_state`');
 		foreach ($result as $row)
 		{

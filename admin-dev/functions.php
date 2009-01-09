@@ -13,6 +13,41 @@
 
 require_once(dirname(__FILE__).'/../images.inc.php'); 
 
+function bindDatepicker($id, $time)
+{
+	if ($time)
+	echo '
+		var dateObj = new Date();
+		var mins = dateObj.getMinutes();
+		if (mins < 10) { mins = "0" + mins; }
+		var time = " "+dateObj.getHours()+":"+mins+":"+dateObj.getSeconds();';
+
+	echo '
+	$(function() {
+		$("#'.$id.'").datepicker({
+			prevText:"",
+			nextText:"",
+			dateFormat:"yy-mm-dd"'.($time ? '+time' : '').'});
+	});';
+}
+
+// id can be a identifier or an array of identifiers
+function includeDatepicker($id, $time = false)
+{
+	global $cookie;
+	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>';
+	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang));
+	if ($iso != 'en')
+		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'tools/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';
+	echo '<script type="text/javascript">';
+		if (is_array($id))
+			foreach ($id as $id2)
+				bindDatepicker($id2, $time);
+		else
+			bindDatepicker($id, $time);
+	echo '</script>';
+}
+
 /**
   * Generate a new settings file, only transmitted parameters are updated
   *

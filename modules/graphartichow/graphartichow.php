@@ -51,13 +51,15 @@ class GraphArtichow extends ModuleGraphEngine
 	private function drawLine($values)
 	{
 		require_once(dirname(__FILE__).'/artichow/LinePlot.class.php');
-		if (!is_array($values[0])) //simpleline
+		// Single layer
+		if (!isset($values[0]) OR !is_array($values[0]))
 		{
 			$this->_plot = new LinePlot(array_values($values));
 			$this->_plot->setFillGradient(new LinearGradient(new Color(255, 246, 211, 20), new Color(240, 225, 160, 50), 90));
 			$this->_plot->setColor(new Color(80, 50, 0, 0));
 		}
-		else //multilines
+		// Multiple layers
+		else
 		{
 			$tabColors = array(new Color(120, 120, 30, 10), new Color(66, 127, 195, 10), new Color(195, 65, 60, 10), new Color(85, 163, 57, 10), new Color(255, 35, 152, 10));
 			$tabFilledColors = array(new Color(120, 120, 30, 90), new Color(66, 127, 195, 90), new Color(195, 65, 60, 90), new Color(85, 163, 57, 90), new Color(255, 35, 152, 90));
@@ -66,7 +68,7 @@ class GraphArtichow extends ModuleGraphEngine
 			$i = 0;
 			foreach ($values as $val)
 			{
-				$this->_plot[$i] = new LinePlot($val);
+				$this->_plot[$i] = new LinePlot(array_values($val));
 				$this->_plot[$i]->setColor($tabColors[$i % 5]);
 				$this->_plot[$i]->setFillColor($tabFilledColors[$i % 5]);
 				$this->_group->add($this->_plot[$i]);
@@ -170,6 +172,21 @@ class GraphArtichow extends ModuleGraphEngine
 
 	public function createValues($values)
 	{
+		// $this->_values = array();
+		// if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+			// foreach ($values as $value)
+				// $this->_values[] = $value;
+		// else
+		// {
+			// foreach ($values as $i => $layerValue)
+			// {
+				// $this->_values[$i] = array();
+				// foreach ($values[$i] as $value)
+					// $this->_values[$i][] = $value;
+			// }
+		// }
+		// $values = $this->_values;
+		
 		if (sizeof($values) == 0)
 		{
 			$this->setErrorImage();
@@ -200,6 +217,21 @@ class GraphArtichow extends ModuleGraphEngine
 	
 	public function setLegend($legend)
 	{
+		$this->_legend = array();
+		if (!isset($this->_legend[0]) || !is_array($this->_legend[0]))
+			foreach ($legend as $label)
+				$this->_legend[] = $label;
+		else
+		{
+			foreach ($legend as $i => $layerlabel)
+			{
+				$this->_legend[$i] = array();
+				foreach ($legend[$i] as $label)
+					$this->_legend[$i][] = $label;
+			}
+		}
+		$legend = $this->_legend;
+		
 		if ($this->_plot == NULL && $this->_group == NULL)
 			return;
 		foreach ($legend as $k => $val)

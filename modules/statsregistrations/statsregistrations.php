@@ -14,7 +14,6 @@ class StatsRegistrations extends ModuleGraph
 {
     private $_html = '';
     private $_query = '';
-    private $_query2 = '';
 
     function __construct()
     {
@@ -39,7 +38,7 @@ class StatsRegistrations extends ModuleGraph
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_customer`) as total
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		WHERE `date_add` BETWEEN '.ModuleGraph::getDateBetween());
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -54,7 +53,7 @@ class StatsRegistrations extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 		WHERE  pt.name = "authentication.php"
 		AND (g.id_customer IS NULL OR g.id_customer = 0)
-		AND c.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		AND LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return $result['blocked'];
 	}
 	
@@ -65,13 +64,13 @@ class StatsRegistrations extends ModuleGraph
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON o.id_customer = g.id_customer
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
-		WHERE o.`date_add` LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'
+		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		AND ABS(TIMEDIFF(o.date_add, c.date_add)+0) < 120000');
 		return $result['buyers'];
 	}
 		
 	public function hookAdminStatsModules($params)
-	{		
+	{
 		$totalRegistrations = $this->getTotalRegistrations();
 		$totalBlocked = $this->getBlockedVisitors();
 		$totalBuyers = $this->getFirstBuyers();
@@ -108,29 +107,28 @@ class StatsRegistrations extends ModuleGraph
 		$this->_query = '
 			SELECT `date_add`
 			FROM `'._DB_PREFIX_.'customer`
-			WHERE `date_add` LIKE \'';
-		$this->_query2 = '\'';
+			WHERE LEFT(`date_add`, 10) BETWEEN';
 		$this->_titles['main'] = $this->l('Number of customer accounts created');
 		$this->setDateGraph($layers, true);
 	}
 	
 	protected function setYearValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1]++;
+		    $this->_values[intval(substr($row['date_add'], 5, 2))]++;
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-			$this->_values[intval(substr($row['date_add'], 8, 2)) - 1]++;
+			$this->_values[intval(substr($row['date_add'], 8, 2))]++;
 	}
 
 	protected function setDayValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.pSQL(ModuleGraph::getDateLike()).$this->_query2);
+		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 11, 2))]++;
 	}

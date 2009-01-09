@@ -294,6 +294,8 @@ CREATE TABLE PREFIX_employee (
   email VARCHAR(128) NOT NULL,
   passwd VARCHAR(32) NOT NULL,
   last_passwd_gen TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  stats_date_from DATE NULL,
+  stats_date_to DATE NULL,
   active TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY(id_employee),
   INDEX employee_login(email, passwd)

@@ -16,6 +16,9 @@ class		Employee extends ObjectModel
 {
 	public 		$id;
 	
+	/** @var string Determine employee profile */
+	public 		$id_profile;
+	
 	/** @var string Lastname */
 	public 		$lastname;
 	
@@ -29,18 +32,19 @@ class		Employee extends ObjectModel
 	public 		$passwd;
 	
 	/** @var datetime Password */
-	public $last_passwd_gen;
+	public 		$last_passwd_gen;
+	
+	public $stats_date_from;
+	public $stats_date_to;
 	
 	/** @var boolean Status */
 	public 		$active = 1;
 	
-	/** @var string Determine employee profile */
-	public 		$id_profile;
 	
  	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile');
  	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32);
  	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 
-		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt');
+		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'stats_date_from' => 'isDate', 'stats_date_to' => 'isDate');
 	
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
@@ -49,13 +53,15 @@ class		Employee extends ObjectModel
 	{
 	 	parent::validateFields();
 		
+		$fields['id_profile'] = intval($this->id_profile);
 		$fields['lastname'] = pSQL(Tools::strtoupper($this->lastname));
 		$fields['firstname'] = pSQL(Tools::ucfirst($this->firstname));
 		$fields['email'] = pSQL($this->email);
 		$fields['passwd'] = pSQL($this->passwd);
 		$fields['last_passwd_gen'] = pSQL($this->last_passwd_gen);
+		$fields['stats_date_from'] = pSQL($this->stats_date_from);
+		$fields['stats_date_to'] = pSQL($this->stats_date_to);
 		$fields['active'] = intval($this->active);
-		$fields['id_profile'] = intval($this->id_profile);
 		
 		return $fields;
 	}

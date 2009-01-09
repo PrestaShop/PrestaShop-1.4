@@ -14,6 +14,11 @@ ALTER TABLE PREFIX_orders
 
 ALTER TABLE PREFIX_customer
 	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active;
+	
+ALTER TABLE PREFIX_employee
+	ADD stats_date_to DATE NULL AFTER last_passwd_gen;
+ALTER TABLE PREFIX_employee
+	ADD stats_date_from DATE NULL AFTER last_passwd_gen;
 
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,

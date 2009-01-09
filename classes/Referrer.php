@@ -98,7 +98,7 @@ class Referrer extends ObjectModel
 		return $regexp;
 	}
 	
-	public function getStatsVisits($id_product = null)
+	public function getStatsVisits($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
 		if (Validate::isUnsignedId($id_product))
@@ -118,12 +118,12 @@ class Referrer extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
 		LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 		'.$join.'
-		WHERE cs.date_add LIKE \''.ModuleGraph::getDateLike().'\'
+		WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		'.$this->getRegexp().'
 		'.$where);
 	}
 	
-	public function getRegistrations($id_product = null)
+	public function getRegistrations($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
 		if (Validate::isUnsignedId($id_product))
@@ -142,13 +142,13 @@ class Referrer extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON cu.id_customer = g.id_customer
 		'.$join.'
-		WHERE cu.date_add LIKE \''.ModuleGraph::getDateLike().'\'
+		WHERE LEFT(cu.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		'.$this->getRegexp().'
 		'.$where);
 		return $result['registrations'];
 	}
 	
-	public function getStatsSales($id_product = null)
+	public function getStatsSales($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
 		if (Validate::isUnsignedId($id_product))
@@ -169,7 +169,7 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
 			'.$join.'
-			WHERE oo.date_add LIKE \''.ModuleGraph::getDateLike().'\'
+			WHERE LEFT(oo.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)
@@ -184,7 +184,7 @@ class Referrer extends ObjectModel
 		) = 1');
 	}
 	
-	public function getStatsRegRate($id_product = null)
+	public function getStatsRegRate($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
 		if (Validate::isUnsignedId($id_product))
@@ -202,14 +202,14 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
 			'.$join.'
-			WHERE cs.date_add LIKE \''.ModuleGraph::getDateLike().'\'
+			WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)
-		AND cu.date_add LIKE \''.ModuleGraph::getDateLike().'\'');
+		AND LEFT(cu.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee));
 	}
 	
-	public function getStatsOrderRate($id_product = null)
+	public function getStatsOrderRate($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
 		if (Validate::isUnsignedId($id_product))
@@ -229,7 +229,7 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
 			'.$join.'
-			WHERE cs.date_add LIKE \''.ModuleGraph::getDateLike().'\'
+			WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)
@@ -244,47 +244,47 @@ class Referrer extends ObjectModel
 		) = 1');
 	}
 	
-	public static function refreshCache($referrers = null)
+	public static function refreshCache($referrers = null, $employee = null)
 	{
 		if (!$referrers OR !is_array($referrers))
 			$referrers = Db::getInstance()->ExecuteS('SELECT id_referrer FROM '._DB_PREFIX_.'referrer');
 		foreach ($referrers as $row)
 		{
 			$referrer = new Referrer(intval($row['id_referrer']));
-			$statsVisits = $referrer->getStatsVisits();
+			$statsVisits = $referrer->getStatsVisits(null, $employee);
 			$referrer->cache_visitors = $statsVisits['uniqs'];
 			$referrer->cache_visits = $statsVisits['visits'];
 			$referrer->cache_pages = $statsVisits['pages'];
-			$registrations = $referrer->getRegistrations();
+			$registrations = $referrer->getRegistrations(null, $employee);
 			$referrer->cache_registrations = $registrations;
-			$statsSales = $referrer->getStatsSales();
+			$statsSales = $referrer->getStatsSales(null, $employee);
 			$referrer->cache_orders = intval($statsSales['orders']);
 			$referrer->cache_sales = number_format($statsSales['sales'], 2, '.', '');
-			$statsTransfo = $referrer->getStatsRegRate();
+			$statsTransfo = $referrer->getStatsRegRate(null, $employee);
 			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? $statsTransfo['registrations'] / $statsVisits['uniqs'] : 0;
-			$statsTransfo2 = $referrer->getStatsOrderRate();
+			$statsTransfo2 = $referrer->getStatsOrderRate(null, $employee);
 			$referrer->cache_order_rate = $statsVisits['uniqs'] ? $statsTransfo2['uniqs'] / $statsVisits['uniqs'] : 0;
 			if (!$referrer->update())
 				Tools::dieObject(mysql_error());
-			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateLike());
+			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateBetween($employee));
 			Configuration::updateValue('PS_REFERRERS_CACHE_DATE', date('Y-m-d h:i:s'));
 		}
 		return true;
 	}
 	
-	public static function getAjaxProduct($id_referrer, $id_product)
+	public static function getAjaxProduct($id_referrer, $id_product, $employee = null)
 	{
 		$product = new Product($id_product, false, Configuration::get('PS_LANG_DEFAULT'));
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$referrer = new Referrer($id_referrer);
-		
-		$statsVisits = $referrer->getStatsVisits($id_product);
-		$registrations = $referrer->getRegistrations($id_product);
-		$statsSales = $referrer->getStatsSales($id_product);
-		$statsTransfo = $referrer->getStatsRegRate();
-		$statsTransfo2 = $referrer->getStatsOrderRate();
+		$statsVisits = $referrer->getStatsVisits($id_product, $employee);
+		$registrations = $referrer->getRegistrations($id_product, $employee);
+		$statsSales = $referrer->getStatsSales($id_product, $employee);
+		$statsTransfo = $referrer->getStatsRegRate($id_product, $employee);
+		$statsTransfo2 = $referrer->getStatsOrderRate($id_product, $employee);
 
-		if (!$statsVisits['visits'] AND !$statsSales['orders'])
+		// If it's not a product alone and it has no visits nor orders
+		if (!$id_product AND !$statsVisits['visits'] AND !$statsSales['orders'])
 			exit;
 		
 		$jsonArray = array();

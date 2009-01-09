@@ -31,13 +31,13 @@ class StatsOrigin extends ModuleGraph
 		return (parent::install() AND $this->registerHook('AdminStatsModules'));
 	}
 
-	private function getOrigins()
+	private function getOrigins($dateBetween)
 	{
 		$directLink = $this->l('Direct link');
 		$result = mysql_query('
-		SELECT http_referer
-		FROM '._DB_PREFIX_.'connections
-		WHERE date_add LIKE \''.pSQL(ModuleGraph::getDateLike()).'\'');
+		SELECT c.http_referer
+		FROM '._DB_PREFIX_.'connections c
+		WHERE LEFT(c.date_add, 10) BETWEEN '.$dateBetween);
 		$websites = array($directLink => 0);
 		while ($row = mysql_fetch_assoc($result))
 		{
@@ -59,7 +59,7 @@ class StatsOrigin extends ModuleGraph
 
 	function hookAdminStatsModules()
 	{
-		$websites = $this->getOrigins();
+		$websites = $this->getOrigins(ModuleGraph::getDateBetween());
 		
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> Origin</legend>';
 		if (sizeof($websites))
@@ -98,12 +98,14 @@ class StatsOrigin extends ModuleGraph
 	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first websites');
-		$websites = $this->getOrigins();
+		$websites = $this->getOrigins($this->getDate());
 		$total = 0;
 		$total2 = 0;
 		$i = 0;
 		foreach ($websites as $website => $totalRow)
 		{
+			if (!$totalRow)
+				continue;
 			$total += $totalRow;
 			if ($i++ < 9)
 			{

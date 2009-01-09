@@ -27,21 +27,20 @@ class StatsProduct extends ModuleGraph
 	
 	public function getTotalBought($id_product)
 	{
-		$dateLike = ModuleGraph::getDateLike();
+		$dateBetween = ModuleGraph::getDateBetween();
 		$result = Db::getInstance()->getRow('
 		SELECT SUM(od.`product_quantity`) AS total
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 		WHERE od.`product_id` = '.intval($id_product).'
 		AND o.valid = 1
-		AND o.`date_add` LIKE \''.pSQL($dateLike).'\'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'');
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
 	public function getTotalViewed($id_product)
 	{
-		$dateLike = ModuleGraph::getDateLike();
-		
+		$dateBetween = ModuleGraph::getDateBetween();
 		$result = Db::getInstance()->getRow('
 		SELECT SUM(pv.`counter`) AS total
 		FROM `'._DB_PREFIX_.'page_viewed` pv
@@ -50,8 +49,8 @@ class StatsProduct extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 		WHERE pt.`name` = \'product.php\'
 		AND p.`id_object` = '.intval($id_product).'
-		AND dr.`time_start` LIKE \''.pSQL($dateLike).'\'
-		AND dr.`time_end` LIKE \''.pSQL($dateLike).'\'');
+		AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+		AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'');
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -131,7 +130,7 @@ class StatsProduct extends ModuleGraph
 	public function setOption($option, $layers = 1)
 	{
 		list($this->_option, $this->_id_product) = explode('-', $option);
-		$dateLike = ModuleGraph::getDateLike();
+		$dateBetween = $this->getDate();
 		switch ($this->_option)
 		{
 			case 1:
@@ -141,7 +140,7 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
 					AND o.valid = 1
-					AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
+					AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY o.`date_add`';
 				$this->_titles['main'] = $this->l('Number of purchases');
 				break;
@@ -154,8 +153,8 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 					WHERE pt.`name` = \'product.php\'
 					AND p.`id_object` = '.intval($this->_id_product).'
-					AND dr.`time_start` LIKE \''.pSQL($dateLike).'\'
-					AND dr.`time_end` LIKE \''.pSQL($dateLike).'\'
+					AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+					AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY dr.`time_start`';
 				$this->_titles['main'] = $this->l('Number of visits');
 				break;
@@ -166,7 +165,7 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
 					AND o.valid = 1
-					AND o.`date_add` LIKE \''.pSQL($dateLike).'\'
+					AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY od.`product_attribute_id`';
 				$this->_titles['main'] = $this->l('Attributes');
 				break;
@@ -209,14 +208,14 @@ class StatsProduct extends ModuleGraph
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query);
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 5, 2)) - 1] += $row['total'];
+		    $this->_values[intval(substr($row['date_add'], 5, 2))] += $row['total'];
 	}
 	
 	protected function setMonthValues($layers)
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query);
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 8, 2)) - 1] += $row['total'];
+		    $this->_values[intval(substr($row['date_add'], 8, 2))] += $row['total'];
 	}
 
 	protected function setDayValues($layers)

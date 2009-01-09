@@ -64,7 +64,19 @@ class GraphVisifire extends ModuleGraphEngine
 			
 	public function createValues($values)
 	{
-		$this->_values = $values;
+		$this->_values = array();
+		if (!is_array($values[array_rand($values)]))
+			foreach ($values as $value)
+				$this->_values[] = $value;
+		else
+		{
+			foreach ($values as $i => $layerValue)
+			{
+				$this->_values[$i] = array();
+				foreach ($layerValue as $value)
+					$this->_values[$i][] = $value;
+			}
+		}
 	}
 	
 	public function setSize($width, $height)
@@ -74,7 +86,19 @@ class GraphVisifire extends ModuleGraphEngine
 
 	public function setLegend($legend)
 	{
-		$this->_legend = $legend;
+		$this->_legend = array();
+		if (!is_array($legend[array_rand($legend)]))
+			foreach ($legend as $label)
+				$this->_legend[] = $label;
+		else
+		{
+			foreach ($legend as $i => $layerlabel)
+			{
+				$this->_legend[$i] = array();
+				foreach ($layerlabel as $label)
+					$this->_legend[$i][] = $label;
+			}
+		}
 	}
 
 	public function setTitles($titles)
@@ -101,14 +125,13 @@ class GraphVisifire extends ModuleGraphEngine
 				$size = sizeof($this->_values[0]);
 			if ($size == sizeof($this->_legend))
 			{
-				if (!isset($this->_values[0]) || !is_array($this->_values[0]))
+				if (!is_array($this->_values[array_rand($this->_values)]))
 				{
 					$this->_xml .= '<vc:DataSeries RenderAs="'.$this->_type.'">';
 					for ($i = 0; $i < $size; $i++)
 					{
 						$this->_xml .= '<vc:DataPoint ';
-						if (!empty($this->_legend[$i]))
-							$this->_xml .= 'AxisLabel="'.str_replace('<', '&lt;', str_replace('>', '&gt;', str_replace('&', '&amp;', str_replace('&quot', "'", $this->_legend[$i])))).'" ';
+						$this->_xml .= 'AxisLabel=" '.str_replace('<', '&lt;', str_replace('>', '&gt;', str_replace('&', '&amp;', str_replace('&quot', "'", $this->_legend[$i])))).'" ';
 						$this->_xml .= 'YValue="'.$this->_values[$i].'"';
 						if ($this->_type == 'pie')
 							$this->_xml .= ' ExplodeOffset="0.2"';
@@ -118,22 +141,20 @@ class GraphVisifire extends ModuleGraphEngine
 				}
 				else
 				{
-					$main_i = 1;
-					foreach ($this->_values as $value)
+					foreach ($this->_values as $layer => $values)
 					{
-						$this->_xml .= '<vc:DataSeries Name="'.(isset($this->_titles['main'][$main_i]) ? $this->_titles['main'][$main_i] : '').'" RenderAs="'.$this->_type.'">';
-						for ($i = 0; $i < $size; $i++)
+						$this->_xml .= '<vc:DataSeries Name="'.(isset($this->_titles['main'][$layer+1]) ? $this->_titles['main'][$layer+1] : '').'" RenderAs="'.$this->_type.'">';
+						foreach ($values as $i => $value)
 						{
 							$this->_xml .= '<vc:DataPoint ';
-							if ($main_i == 1 && !empty($this->_legend[$i]))
-								$this->_xml .= 'AxisLabel="'.str_replace('<', '&lt;', str_replace('>', '&gt;', str_replace('&', '&amp;', str_replace('&quot', "'", $this->_legend[$i])))).'" ';
-							$this->_xml .= 'YValue="'.$value[$i].'"';
+							if ($layer == 0)
+								$this->_xml .= 'AxisLabel=" '.str_replace('<', '&lt;', str_replace('>', '&gt;', str_replace('&', '&amp;', str_replace('&quot', "'", $this->_legend[$i])))).'" ';
+							$this->_xml .= 'YValue="'.$value.'"';
 							if ($this->_type == 'pie')
 								$this->_xml .= ' ExplodeOffset="0.2"';
 							$this->_xml .= '/>';
 						}
 						$this->_xml .= '</vc:DataSeries>';
-						$main_i++;
 					}
 				}
 			}
