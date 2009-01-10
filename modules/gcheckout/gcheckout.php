@@ -13,7 +13,6 @@ class GCheckout extends PaymentModule
 
         parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Google Checkout');
         $this->description = $this->l('Google Checkout API implementation');
 		

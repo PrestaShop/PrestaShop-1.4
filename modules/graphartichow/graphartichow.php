@@ -31,8 +31,9 @@ class GraphArtichow extends ModuleGraphEngine
 	        $this->name = 'graphartichow';
 	        $this->tab = 'Stats Engines';
 	        $this->version = 1.0;
-			$this->page = basename(__FILE__, '.php');
+			
 	        Module::__construct();
+			
 	        $this->displayName = $this->l('Artichow');
 	        $this->description = $this->l('Artichow is a library which enable the display of simple picture-based graphs using PHP and GD.');
 		}

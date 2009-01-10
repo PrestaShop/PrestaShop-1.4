@@ -33,7 +33,6 @@ class Watermark extends Module
 		$this->xAlign = isset($config['WATERMARK_X_ALIGN']) ? $config['WATERMARK_X_ALIGN'] : '';
 		$this->transparency = isset($config['WATERMARK_TRANSPARENCY']) ? $config['WATERMARK_TRANSPARENCY'] : 60;
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Watermark');
 		$this->description = $this->l('Protect image by watermark');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');

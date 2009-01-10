@@ -11,7 +11,6 @@ class GAnalytics extends Module
 		
 	 	parent::__construct();
 		
-		$this->page = basename(__FILE__, '.php');
 		if (!Configuration::get('GANALYTICS_ID'))
 			$this->warning = $this->l('You have not yet set your Google Analytics ID');
         $this->description = $this->l('Integrate the Google Analytics script into your shop');

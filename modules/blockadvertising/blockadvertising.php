@@ -8,9 +8,8 @@ class BlockAdvertising extends Module
 		$this->tab = 'Blocks';
 		$this->version = 0.1;
 
-		parent::__construct(); // The parent construct is required for translations
+		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Block advertising');
 		$this->description = $this->l('Adds a block to display an advertising');
 	}

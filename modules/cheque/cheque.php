@@ -22,10 +22,9 @@ class Cheque extends PaymentModule
 			$this->chequeName = $config['CHEQUE_NAME'];
 		if (isset($config['CHEQUE_ADDRESS']))
 			$this->address = $config['CHEQUE_ADDRESS'];
+			
 		parent::__construct();
 
-		/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Cheque');
 		$this->description = $this->l('Module for accepting payments by cheque');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');

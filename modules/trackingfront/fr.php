@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{trackingfront}prestashop>account_bf15e68d25d8a2b7664950ba7385ed0a'] = 'Affiliation';
 $_MODULE['<{trackingfront}prestashop>account_8954e140059f7b2544469f40161ba507'] = 'Espace affilié';
 $_MODULE['<{trackingfront}prestashop>account_0323de4f66a1700e2173e9bcdce02715'] = 'Déconnexion';
 $_MODULE['<{trackingfront}prestashop>account_b718adec73e04ce3ec720dd11a06a308'] = 'ID';

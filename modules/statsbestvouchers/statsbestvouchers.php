@@ -24,7 +24,6 @@ class StatsBestVouchers extends ModuleGrid
 		$this->name = 'statsbestvouchers';
 		$this->tab = 'Stats';
 		$this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		$this->_defaultSortColumn = 'ca';
 		$this->_emptyMessage = $this->l('Empty recordset returned');

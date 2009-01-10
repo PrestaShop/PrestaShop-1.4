@@ -19,7 +19,6 @@ class BirthdayPresent extends Module
         $this->name = 'birthdaypresent';
         $this->tab = 'Tools';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		parent::__construct();
 		

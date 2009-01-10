@@ -12,8 +12,6 @@ class CashOnDelivery extends PaymentModule
 
 		parent::__construct();
 
-		/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Cash on delivery (COD)');
 		$this->description = $this->l('Accept cash on delivery payments');
 	}

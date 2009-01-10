@@ -22,8 +22,6 @@ class MailAlerts extends Module
 
 	 	parent::__construct();
 
-	 	/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 	 	$this->displayName = $this->l('Mail alerts');
 		$this->description = $this->l('Sends e-mails notifications to customers and merchants');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all customers notifications ?');

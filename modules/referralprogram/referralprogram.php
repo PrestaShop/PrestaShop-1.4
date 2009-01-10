@@ -8,9 +8,8 @@ class ReferralProgram extends Module
 		$this->tab = 'Tools';
 		$this->version = '1.4';
 
-		parent::__construct(); /* The parent construct is required for translations */
+		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->confirmUninstall = $this->l('All sponsor and friends would be deleted. Do you really want to uninstall this module ?');
 		$this->displayName = $this->l('Customer referral program');
 		$this->description = $this->l('Integrate a referral program system to your shop.');
@@ -23,9 +22,12 @@ class ReferralProgram extends Module
 		));
 		$this->_configuration['REFERRAL_DISCOUNT_DESCRIPTION'] = Configuration::getInt('REFERRAL_DISCOUNT_DESCRIPTION');
 
-		$this->_xmlFile = dirname(__FILE__).'/referralprogram.xml';
-		
-		include_once(dirname(__FILE__).'/ReferralProgramModule.php');
+		$path = dirname(__FILE__);
+		if (strpos(__FILE__, 'Module.php') !== false)
+			$path .= '/../modules/'.$this->name;
+			
+		$this->_xmlFile = $path.'/referralprogram.xml';
+		include_once($path.'/ReferralProgramModule.php');
 	}
 
 	public function install()

@@ -53,8 +53,6 @@ abstract class Module
 
 	protected $identifier = 'id_module';
 
-	protected $page;
-
 	static public $_db;
 
 	/**
@@ -307,11 +305,28 @@ abstract class Module
 	  */
 	public static function getModulesOnDisk()
 	{
+		$moduleList = array();
+		$errors = array();
 		$modules_dir = self::getModulesDirOnDisk();
 		foreach ($modules_dir AS $module)
 		{
-			require_once _PS_MODULE_DIR_.'/'.$module.'/'.$module.'.php';
-			$moduleList[] = new $module;
+			$file = trim(file_get_contents(_PS_MODULE_DIR_.'/'.$module.'/'.$module.'.php'));
+			if (substr($file, 0, 5) == '<?php')
+				$file = substr($file, 5);
+			if (substr($file, -2) == '?>')
+				$file = substr($file, 0, -2);
+			if (eval($file) !== false)
+				$moduleList[] = new $module;
+			else
+				$errors[] = $module;
+		}
+		
+		if (sizeof($errors))
+		{
+			echo '<div class="alert error"><h3>'.Tools::displayError('Parse error(s) in module(s)').'</h3><ol>';
+			foreach ($errors AS $error)
+				echo '<li>'.$error.'</li>';
+			echo '</ol></div>';
 		}
 		return $moduleList;
 	}
@@ -444,8 +459,8 @@ abstract class Module
 			return (str_replace('"', '&quot;', $string));
 
 		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$this->page.'_'.md5($string2);
-		$defaultKey = '<{'.$this->name.'}prestashop>'.$this->page.'_'.md5($string2);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$this->name.'_'.md5($string2);
+		$defaultKey = '<{'.$this->name.'}prestashop>'.$this->name.'_'.md5($string2);
 
 		if (key_exists($currentKey, $_MODULES))
 			$ret = stripslashes($_MODULES[$currentKey]);

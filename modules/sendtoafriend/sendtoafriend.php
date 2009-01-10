@@ -9,7 +9,7 @@ class sendToAFriend extends Module
  	 	$this->tab = 'Products';
 		
 		parent::__construct();
-		$this->page = basename(__FILE__, '.php');
+		
 		$this->displayName = $this->l('Send to a Friend module');
 		$this->description = $this->l('Allows customers to send a product link to a friend');
  	}

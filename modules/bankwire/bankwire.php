@@ -26,9 +26,8 @@ class BankWire extends PaymentModule
 		if (isset($config['BANK_WIRE_ADDRESS']))
 			$this->address = $config['BANK_WIRE_ADDRESS'];
 
-		parent::__construct(); /* The parent construct is required for translations */
+		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Bank Wire');
 		$this->description = $this->l('Accept payments by bank wire');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');

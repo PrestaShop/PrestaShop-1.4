@@ -17,7 +17,6 @@ class StatsLive extends Module
         $this->name = 'statslive';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
         parent::__construct();
 		

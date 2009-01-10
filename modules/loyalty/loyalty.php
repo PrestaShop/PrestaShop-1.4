@@ -10,12 +10,14 @@ class Loyalty extends Module
 
 		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Customer loyalty and rewards');
 		$this->description = $this->l('Provide a loyalty program to your customers');
-		
-		include_once(dirname(__FILE__).'/LoyaltyModule.php');
-		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+
+		$path = dirname(__FILE__);
+		if (strpos(__FILE__, 'Module.php') !== false)
+			$path .= '/../modules/'.$this->name;
+		include_once($path.'/LoyaltyModule.php');
+		include_once($path.'/LoyaltyStateModule.php');
 	}
 
 	private function instanceDefaultStates()

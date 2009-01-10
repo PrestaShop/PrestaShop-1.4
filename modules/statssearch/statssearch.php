@@ -21,7 +21,7 @@ class StatsSearch extends ModuleGraph
         $this->name = 'statssearch';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
+		
 		$this->_query = '
 		SELECT ss.`keyword`, COUNT(TRIM(ss.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'statssearch` ss

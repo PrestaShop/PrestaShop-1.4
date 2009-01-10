@@ -9,8 +9,6 @@ class Blocknewsletter extends Module
 
 	 	parent::__construct();
 
-	 	/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
  	 	$this->displayName = $this->l('Newsletter block');
  	 	$this->description = $this->l('Adds a block for newsletter subscription');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your contacts ?');

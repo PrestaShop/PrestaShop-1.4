@@ -11,9 +11,8 @@ class BlockViewed extends Module
 		$this->tab = 'Blocks';
 		$this->version = 0.9;
 
-		parent::__construct(); /* The parent construct is required for translations */
-
-		$this->page = basename(__FILE__, '.php');
+		parent::__construct();
+		
 		$this->displayName = $this->l('Viewed products block');
 		$this->description = $this->l('Adds a block displaying last-viewed products');
 	}

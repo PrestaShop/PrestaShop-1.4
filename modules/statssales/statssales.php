@@ -23,7 +23,6 @@ class StatsSales extends ModuleGraph
         $this->name = 'statssales';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		parent::__construct();
 		

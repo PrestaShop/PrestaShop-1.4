@@ -12,8 +12,6 @@ class Blockrss extends Module
 
 		parent::__construct();
 
-		/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('RSS feed block');
 		$this->description = $this->l('Adds a block displaying an RSS feed');
 

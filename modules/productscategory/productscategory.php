@@ -9,7 +9,7 @@ class productsCategory extends Module
  	 	$this->tab = 'Products';
 		
 		parent::__construct();
-		$this->page = basename(__FILE__, '.php');
+		
 		$this->displayName = $this->l('Products Category');
 		$this->description = $this->l('Display products of the same category on the product page');
  	}

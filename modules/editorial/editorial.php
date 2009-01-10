@@ -11,10 +11,8 @@ class Editorial extends Module
 		$this->tab = 'Tools';
 		$this->version = '1.4';
 		
-		/* The parent construct is required for translations */
 		parent::__construct();
 		
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Home text editor');
 		$this->description = $this->l('A text editor module for your homepage');
 	}

@@ -11,9 +11,8 @@ class HomeFeatured extends Module
 		$this->tab = 'Tools';
 		$this->version = '0.9';
 
-		parent::__construct(); // The parent construct is required for translations
-
-		$this->page = basename(__FILE__, '.php');
+		parent::__construct();
+		
 		$this->displayName = $this->l('Featured Products on the homepage');
 		$this->description = $this->l('Displays Featured Products in the middle of your homepage');
 	}

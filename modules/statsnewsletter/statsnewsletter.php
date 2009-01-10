@@ -22,7 +22,6 @@ class StatsNewsletter extends ModuleGraph
         $this->name = 'statsnewsletter';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		parent::__construct();
 		

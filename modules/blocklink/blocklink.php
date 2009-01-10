@@ -14,8 +14,6 @@ class BlockLink extends Module
 
 	 	parent::__construct();
 
-	 	/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Link block');
         $this->description = $this->l('Adds a block with additional links');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your links ?');

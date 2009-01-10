@@ -12,7 +12,6 @@ class GAdsense extends Module
 		
 	 	parent::__construct();
 		
-		$this->page = basename(__FILE__, '.php');
 		if (!Configuration::get('GADSENSE_ID'))
 			$this->warning = $this->l('You have not yet set your Google Adsense code');
         $this->description = $this->l('Integrate the Google Adsense script into your shop');

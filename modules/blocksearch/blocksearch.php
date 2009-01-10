@@ -8,9 +8,8 @@ class BlockSearch extends Module
 		$this->tab = 'Blocks';
 		$this->version = 1.0;
 
-		parent::__construct(); /* The parent construct is required for translations */
-
-		$this->page = basename(__FILE__, '.php');
+		parent::__construct();
+		
 		$this->displayName = $this->l('Quick Search block');
 		$this->description = $this->l('Adds a block with a quick search field');
 	}

@@ -21,7 +21,6 @@ class StatsPersonalInfos extends ModuleGraph
         $this->name = 'statspersonalinfos';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		parent::__construct();
 		

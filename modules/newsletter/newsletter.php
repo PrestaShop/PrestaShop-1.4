@@ -16,8 +16,6 @@ class Newsletter extends Module
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Newsletter');
         $this->description = $this->l('Generates a .CSV file for mass mailings');
 		$this->_file = 'export_'.Configuration::get('PS_NEWSLETTER_RAND').'.csv';

@@ -19,7 +19,6 @@ class Pagesnotfound extends Module
         $this->name = 'pagesnotfound';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 
         parent::__construct();
 		

@@ -10,7 +10,6 @@ class TrackingFront extends Module
 
 		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Tracking - Front office');
 		$this->description = $this->l('Enable your affiliates to access their own statistics.');
 	}

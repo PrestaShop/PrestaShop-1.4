@@ -17,8 +17,6 @@ class Gsitemap extends Module
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Google sitemap');
         $this->description = $this->l('Generate your Google sitemap file');
     }

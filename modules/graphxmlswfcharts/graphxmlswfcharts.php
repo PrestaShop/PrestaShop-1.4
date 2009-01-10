@@ -30,7 +30,6 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 			$this->name = 'graphxmlswfcharts';
 			$this->tab = 'Stats Engines';
 			$this->version = 1.0;
-			$this->page = basename(__FILE__, '.php');
 
 			Module::__construct();
 			

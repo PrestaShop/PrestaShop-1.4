@@ -15,13 +15,6 @@ $_MODULE['<{statshome}prestashop>statshome_c6ec77de3e93b75196f91e2df9c567ca'] = 
 $_MODULE['<{statshome}prestashop>statshome_1dd1c5fb7f25cd41b291d43a89e3aefd'] = 'Aujourd\'hui';
 $_MODULE['<{statshome}prestashop>statshome_7cbb885aa1164b390a0bc050a64e1812'] = 'Mois';
 $_MODULE['<{statshome}prestashop>statshome_537c66b24ef5c83b7382cdc3f34885f2'] = 'Année';
-$_MODULE['<{statshome}prestashop>statshome_01505f15053d9155733b5650422beb12'] = 'De l\'année';
-$_MODULE['<{statshome}prestashop>statshome_01b6e20344b68835c5ed1ddedf20d531'] = 'à';
-$_MODULE['<{statshome}prestashop>statshome_0981cac5b4921b24290064d5c1941929'] = 'Du mois';
-$_MODULE['<{statshome}prestashop>statshome_01b6e20344b68835c5ed1ddedf20d531'] = 'à';
-$_MODULE['<{statshome}prestashop>statshome_2c77f9514c7d09760ed145524a9d56e9'] = 'Du jour';
-$_MODULE['<{statshome}prestashop>statshome_01b6e20344b68835c5ed1ddedf20d531'] = 'à';
-$_MODULE['<{statshome}prestashop>statshome_e0aa021e21dddbd6d8cecec71e9cf564'] = 'OK';
 $_MODULE['<{statshome}prestashop>statshome_6799f652047c465ff8affc8c98cc4a74'] = 'Visiteurs actuellement connectés :';
 
 ?>

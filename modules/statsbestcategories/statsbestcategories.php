@@ -24,7 +24,6 @@ class StatsBestCategories extends ModuleGrid
 		$this->name = 'statsbestcategories';
 		$this->tab = 'Stats';
 		$this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
 		
 		$this->_defaultSortColumn = 'totalPriceSold';
 		$this->_emptyMessage = $this->l('Empty recordset returned');

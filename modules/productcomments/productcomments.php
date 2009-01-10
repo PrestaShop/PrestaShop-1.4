@@ -15,8 +15,6 @@ class ProductComments extends Module
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Product Comments');
         $this->description = $this->l('Allow users to post comment about a product');
     }

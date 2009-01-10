@@ -13,8 +13,6 @@ class BlockBestSellers extends Module
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-				$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Top seller block');
         $this->description = $this->l('Add a block displaying the shop\'s top sellers');
     }

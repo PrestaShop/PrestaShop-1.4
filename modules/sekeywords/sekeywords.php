@@ -21,7 +21,7 @@ class SEKeywords extends ModuleGraph
         $this->name = 'sekeywords';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
+		
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'sekeyword` sek

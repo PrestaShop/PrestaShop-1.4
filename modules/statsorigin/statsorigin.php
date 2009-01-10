@@ -19,7 +19,7 @@ class StatsOrigin extends ModuleGraph
         $this->name = 'statsorigin';
         $this->tab = 'Stats';
         $this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
+		
         parent::__construct();
 		
         $this->displayName = $this->l('Visitors origin');

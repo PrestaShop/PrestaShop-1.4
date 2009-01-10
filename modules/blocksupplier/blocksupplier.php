@@ -10,8 +10,6 @@ class BlockSupplier extends Module
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Suppliers block');
         $this->description = $this->l('Add a block displaying suppliers');
     }

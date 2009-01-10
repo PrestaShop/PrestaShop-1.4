@@ -20,8 +20,9 @@ class StatsGeoLocation extends Module
 		$this->name = 'statsgeolocation';
 		$this->tab = 'Stats';
 		$this->version = 1.0;
-		$this->page = basename(__FILE__, '.php');
+		
 		parent::__construct();
+		
 		$this->displayName = $this->l('Geolocation');
 		$this->description = $this->l('Display your customers\' origin');
 	}

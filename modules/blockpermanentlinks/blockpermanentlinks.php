@@ -8,9 +8,8 @@ class BlockPermanentLinks extends Module
 		$this->tab = 'Blocks';
 		$this->version = 0.1;
 
-		parent::__construct(); // The parent construct is required for translations
-
-		$this->page = basename(__FILE__, '.php');
+		parent::__construct();
+		
 		$this->displayName = $this->l('Permanent links block');
 		$this->description = $this->l('Adds a block that displays permanent links such as sitemap, contact, etc.');
 	}

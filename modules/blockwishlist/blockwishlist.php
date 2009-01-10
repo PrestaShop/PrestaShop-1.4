@@ -12,8 +12,9 @@ class BlockWishList extends Module
 		$this->name = 'blockwishlist';
 		$this->tab = 'Blocks';
 		$this->version = 0.2;
+		
 		parent::__construct();
-		$this->page = basename(__FILE__, '.php');
+		
 		$this->displayName = $this->l('Wishlist block');
 		$this->description = $this->l('Adds a block containing the customer\'s wishlists');
 	}

@@ -53,10 +53,9 @@ class Tm4b extends Module
 		$this->_alert_new_order_active = Configuration::get('TM4B_ALERT_NO_ACTIVE');
 		$this->_alert_update_quantity_active = Configuration::get('TM4B_ALERT_UQ_ACTIVE');
 		$this->_daily_report_active = Configuration::get('TM4B_DAILY_REPORT_ACTIVE');
+		
 		parent::__construct();
 		
-		/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = 'SMS Tm4b';
 		$this->description = $this->l('Sends an SMS for each new order');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your info?');

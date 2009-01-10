@@ -16,8 +16,6 @@ class Paypal extends PaymentModule
 
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('PayPal');
         $this->description = $this->l('Accepts payments by PayPal');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');

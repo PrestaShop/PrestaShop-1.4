@@ -13,8 +13,6 @@ class Feeder extends Module
 		$this->_directory = dirname(__FILE__).'/../../';
 		parent::__construct();
 		
-		/* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('RSS products feed');
 		$this->description = $this->l('Generate a RSS products feed');
 	}
