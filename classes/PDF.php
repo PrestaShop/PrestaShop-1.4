@@ -34,7 +34,7 @@ class PDF extends FPDF
 	/**
 	* Constructor
 	*/
-	function PDF($orientation='P', $unit='mm', $format='A4')
+	public function PDF($orientation='P', $unit='mm', $format='A4')
 	{
 		global $cookie;
 
@@ -59,7 +59,7 @@ class PDF extends FPDF
 	/**
 	* Invoice header
 	*/
-	function Header()
+	public function Header()
 	{
 		global $cookie;
 		
@@ -89,7 +89,7 @@ class PDF extends FPDF
 	/**
 	* Invoice footer
 	*/
-	function Footer()
+	public function Footer()
 	{
 		$this->SetY(-26);
 
@@ -241,7 +241,7 @@ class PDF extends FPDF
 	/**
 	* Product table with references, quantities...
 	*/
-	function ProdReturnTab()
+	public function ProdReturnTab()
 	{
 		global $ecotax;
 
@@ -286,13 +286,14 @@ class PDF extends FPDF
 		self::$order = $order;
 		self::$orderSlip = $slip;
 		self::$delivery = $delivery;
-		
 		self::$_iso = strtoupper(Language::getIsoById(intval(self::$order->id_lang)));
-		self::$currency = new Currency(intval(self::$order->id_currency));
-		self::$currency->sign = Tools::iconv('utf-8', self::encoding(), self::$currency->sign);
 
 		if (!$multiple)
 			$pdf = new PDF('P', 'mm', 'A4');
+
+		self::$currency = new Currency(intval(self::$order->id_currency));
+		self::$currency->sign = Tools::iconv('utf-8', self::encoding(), self::$currency->sign);
+
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 

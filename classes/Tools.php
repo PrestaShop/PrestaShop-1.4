@@ -784,9 +784,11 @@ class Tools
 
 	static public function iconv($from, $to, $string)
 	{
-	    $converted = htmlentities($string, ENT_NOQUOTES, $from);
-	    $converted = html_entity_decode($converted, ENT_NOQUOTES, $to);
-	    return $converted;
+		if (function_exists('iconv'))
+		{
+			return iconv($from, $to.'//TRANSLIT', str_replace('¥', '&yen;', str_replace('£', '&pound;', str_replace('€', '&euro;', $string))));
+		}
+		return html_entity_decode(htmlentities($string, ENT_NOQUOTES, $from), ENT_NOQUOTES, $to);
 	}
 
 }
