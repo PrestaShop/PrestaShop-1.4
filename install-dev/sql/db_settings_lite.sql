@@ -1,5 +1,12 @@
 SET NAMES 'utf8';
 
+/* Carrier */
+INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES
+(1, 0, 0, 1, 0, 0),
+(2, 1, 'My carrier', 1, 0, 1);
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+	('PS_CARRIER_DEFAULT', '2', NOW(), NOW());
+
 INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`) VALUES
 (1, 'payment', 'Payment', NULL, 1),
 (2, 'newOrder', 'New orders', NULL, 0),

@@ -625,7 +625,7 @@ class		Cart extends ObjectModel
 		// Checking discounts in cart
 		$products = $this->getProducts();
 		$discounts = $this->getDiscounts(true);
-		if ($discounts)		
+		if ($discounts)
 			foreach ($discounts AS $id_discount)
 			{
 				$discount = new Discount(intval($id_discount['id_discount']));

@@ -1,7 +1,6 @@
 SET NAMES 'utf8';
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
-	('PS_CARRIER_DEFAULT', '2', NOW(), NOW()),
 	('PAYPAL_BUSINESS', 'paypal@prestashop.com', NOW(), NOW()),
 	('PAYPAL_SANDBOX', 0, NOW(), NOW()),
 	('PAYPAL_CURRENCY', 'customer', NOW(), NOW()),
