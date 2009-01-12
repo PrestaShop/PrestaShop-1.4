@@ -327,6 +327,11 @@ class		Product extends ObjectModel
 			SELECT `id_product_attribute`
 			FROM `'._DB_PREFIX_.'product_attribute`
 			WHERE `quantity` > 0  AND `id_product` = '.intval($id_product));
+		if (!$result)
+			$result = Db::getInstance()->getRow('
+			SELECT `id_product_attribute`
+			FROM `'._DB_PREFIX_.'product_attribute`
+			WHERE `id_product` = '.intval($id_product));			
 		return $result['id_product_attribute'];
 	}
 
