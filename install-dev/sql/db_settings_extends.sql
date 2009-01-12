@@ -194,8 +194,8 @@ INSERT INTO `PREFIX_guest` (`id_guest`, `id_operating_system`, `id_web_browser`,
 
 INSERT INTO `PREFIX_cart` (`id_cart`, `id_carrier`, `id_lang`, `id_address_delivery`, `id_address_invoice`, `id_currency`, `id_customer`, `id_guest`, `recyclable`, `gift`, `date_add`, `date_upd`)
 	VALUES (1, 2, 2, 6, 6, 1, 1, 1, 1, 0, NOW(), NOW());
-INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`) VALUES (1, 7, 23, 1);
-INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`) VALUES (1, 9, 0, 1);
+INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`, `date_add`) VALUES (1, 7, 23, 1, , NOW());
+INSERT INTO `PREFIX_cart_product` (`id_cart`, `id_product`, `id_product_attribute`, `quantity`, `date_add`) VALUES (1, 9, 0, 1, , NOW());
 
 INSERT INTO `PREFIX_orders` (`id_order`, `id_carrier`, `id_lang`, `id_customer`, `id_cart`, `id_currency`, `id_address_delivery`, `id_address_invoice`, `secure_key`, `payment`, `module`, `recyclable`, `gift`, `gift_message`, `shipping_number`, `total_discounts`, `total_paid`, `total_paid_real`, `total_products`, `total_shipping`, `total_wrapping`, `invoice_number`, `delivery_number`, `invoice_date`, `delivery_date`, `date_add`, `date_upd`)
 	VALUES (1, 2, 2, 1, 1, 1, 2, 2, '47ce86627c1f3c792a80773c5d2deaf8', 'Chèque', 'cheque', 1, 0, '', '', '0.00', '625.98', '625.98', '516.72', '7.98', '0.00', 1, 0, '2008-09-10 15:30:44', '0000-00-00 00:00:00', NOW(), NOW());
