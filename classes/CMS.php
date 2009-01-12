@@ -107,7 +107,7 @@ class CMS extends ObjectModel
 	{
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms`
     															WHERE `id_block` ='.intval($id_block));
-		foreach($cms AS $id_cms)
+		foreach ($cms AS $id_cms)
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'block_cms (id_block, id_cms) VALUES
 																('.intval($id_block).', '.intval($id_cms).')');
 			return true;

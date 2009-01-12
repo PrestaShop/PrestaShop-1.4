@@ -50,15 +50,13 @@ class AdminCustomers extends AdminTab
 	{
 		global $currentIndex;
 		
-		if(Tools::getValue('submitAdd'.$this->table))
+		if (Tools::getValue('submitAdd'.$this->table))
 		{
 		 	/* Checking fields validity */
 			$this->validateRules();
 			if (!sizeof($this->_errors))
 			{
 				$id = intval(Tools::getValue('id_'.$this->table));
-
-				// Updating customer's group
 				if (isset($id) AND !empty($id))
 				{
 					if ($this->tabAccess['edit'] !== '1')
@@ -68,29 +66,26 @@ class AdminCustomers extends AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-							$groupList = Tools::getValue('groupBox');
-							$object->cleanGroups();
-							if (is_array($groupList) AND sizeof($groupList) > 0)
-								$object->addGroups($groupList);
+							// check if e-mail already used
+							$customer_email = strval(Tools::getValue('email'));
+							$customer = new Customer();
+							$customer->getByEmail($customer_email);
+							if ($customer->id)
+								$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
+							else
+							{
+								// Updating customer's group
+								$groupList = Tools::getValue('groupBox');
+								$object->cleanGroups();
+								if (is_array($groupList) AND sizeof($groupList) > 0)
+									$object->addGroups($groupList);
+							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('an error occurred while loading object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 				}
 			}
-			
-			// check if e-mail already used
-			$customer_email = strval(Tools::getValue('email'));
-			$customer = new Customer();
-			$customer->getByEmail($customer_email);
-			if (isset($id) AND !empty($id))
-			{
-				$object = new $this->className($id);
-				if (Validate::isLoadedObject($object))
-					if ($object->id != $customer->id)
-						$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
-			} elseif ($customer->id)
-				$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
 		}
 		return parent::postProcess();
 	}
