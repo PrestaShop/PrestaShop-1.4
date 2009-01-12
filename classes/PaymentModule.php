@@ -330,9 +330,13 @@ abstract class PaymentModule extends Module
 					// Join PDF invoice
 					if (intval(Configuration::get('PS_INVOICE')) AND Validate::isLoadedObject($orderStatus) AND $orderStatus->invoice)
 					{
-						$fileAttachment['content'] = PDF::invoice($order, 'S');
-						$fileAttachment['name'] = sprintf('FA%06d.pdf', intval($order->id));
-						$fileAttachment['mime'] = 'application/pdf';
+						$order->setInvoice();
+						if ($order->invoice_number)
+						{
+							$fileAttachment['content'] = PDF::invoice($order, 'S');
+							$fileAttachment['name'] = Configuration::get('PS_INVOICE_PREFIX', intval($order->id_lang)).sprintf('%06d', $order->invoice_number);
+							$fileAttachment['mime'] = 'application/pdf';
+						}
 					}
 					else
 						$fileAttachment = NULL;

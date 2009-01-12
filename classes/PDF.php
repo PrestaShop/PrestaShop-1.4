@@ -365,12 +365,12 @@ class PDF extends FPDF
 			$pdf->Cell(0, 6, self::l('DELIVERY SLIP #').Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->delivery_date, self::$order->id_lang), 1, 2, 'L', 1);
 		else
 			$pdf->Cell(0, 6, self::l('INVOICE #').Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->invoice_date, self::$order->id_lang), 1, 2, 'L', 1);
-		$pdf->Cell(75, 6, self::l('Order #').sprintf('%06d', self::$order->id), 'L', 0);
-		$pdf->Cell(50, 6, self::l('Carrier:'), 'L');
+		$pdf->Cell(55, 6, self::l('Order #').sprintf('%06d', self::$order->id), 'L', 0);
+		$pdf->Cell(70, 6, self::l('Carrier:'), 'L');
 		$pdf->Cell(0, 6, self::l('Payment method:'), 'LR');
 		$pdf->Ln(5);
-		$pdf->Cell(75, 6, (isset($shipping_date) ? self::l('Shipping date:').' '.Tools::displayDate($shipping_date, self::$order->id_lang) : ' '), 'LB', 0);
-		$pdf->Cell(50, 6, Tools::iconv('utf-8', self::encoding(), $carrier->name), 'LRB');
+		$pdf->Cell(55, 6, (isset($shipping_date) ? self::l('Shipping date:').' '.Tools::displayDate($shipping_date, self::$order->id_lang) : ' '), 'LB', 0);
+		$pdf->Cell(70, 6, Tools::iconv('utf-8', self::encoding(), $carrier->name), 'LRB');
 		$pdf->Cell(0, 6, Tools::iconv('utf-8', self::encoding(), $order->payment), 'LRB');
 		$pdf->Ln(15);
 		$pdf->ProdTab((self::$delivery ? true : ''));
