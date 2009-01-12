@@ -54,7 +54,7 @@ class		Manufacturer extends ObjectModel
 		/* Get the manufacturer's id_address */
 		$this->id_address = $this->getManufacturerAddress();
 		
-		$this->link_rewrite = $this->name;
+		$this->link_rewrite = $this->getLink();
 	}
 
 	public function getFields()
@@ -180,7 +180,7 @@ class		Manufacturer extends ObjectModel
 	
 	public function getLink()
 	{
-		return Tools::link_rewrite($this->name, true);
+		return Tools::link_rewrite($this->name, false);
 	}
 
 	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
