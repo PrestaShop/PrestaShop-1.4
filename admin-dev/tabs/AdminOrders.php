@@ -321,9 +321,18 @@ class AdminOrders extends AdminTab
 		if ($order->total_paid != $order->total_paid_real)
 			echo '<center><span class="warning" style="font-size: 16px">'.$this->l('Warning:').' '.Tools::displayPrice($order->total_paid_real, $currency, false, false).' '.$this->l('paid instead of').' '.Tools::displayPrice($order->total_paid, $currency, false, false).' !</span></center><div class="clear"><br /><br /></div>';
 
+		// display bar code if module enabled
+		$hook = Module::hookExec('invoice', array('id_order' => $order->id));
+		if ($hook !== false)
+		{
+			echo '<div style="float: right; margin: -40px 40px 10px 0;">';
+			echo $hook;
+			echo '</div><br style="clear: both;" />';
+		}
+
+		// display order header
 		echo '
 		<div style="float: left;">';
-		
 		echo '
 			<h2>'.$customer->firstname.' '.$customer->lastname.' '.$this->l('#').sprintf('%06d', $order->id).
 			(($currentState->invoice OR $order->invoice_number) ? ' - <a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" alt="'.$this->l('View invoice').'" title="'.$this->l('View invoice').'" /></a>' : '').
