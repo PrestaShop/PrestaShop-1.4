@@ -43,14 +43,17 @@ abstract class PaymentModule extends Module
 		}
 		else
 			Tools::displayError('No currency mode for payment module');
+
 		// Insert countries availability
-		return Db::getInstance()->Execute('
+		$return = Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'module_country` (id_module, id_country)
 		SELECT '.intval($this->id).', id_country FROM `'._DB_PREFIX_.'country` WHERE active = 1');
 		// Insert group availability
-		return Db::getInstance()->Execute('
+		$return &= Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'module_group` (id_module, id_group)
 		SELECT '.intval($this->id).', id_group FROM `'._DB_PREFIX_.'group`');
+		
+		return $return;
 	}
 	
 	public function uninstall()
