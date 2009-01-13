@@ -1785,7 +1785,9 @@ class		Product extends ObjectModel
 		$link = new Link();
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
-		$row['id_product_attribute'] = Product::getDefaultAttribute($row['id_product']);
+		// Must not override default id if no attribute has a quantity
+		if ($ipa_default = Product::getDefaultAttribute($row['id_product']))
+			$row['id_product_attribute'] = Product::getDefaultAttribute($row['id_product']);
 		$row['attribute_price'] = $row['id_product_attribute'] ? Product::getProductAttribute($row['id_product_attribute']) : 0;
 		$row['reduction'] = Product::getReductionValue($row, true);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
