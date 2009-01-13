@@ -315,7 +315,7 @@ abstract class Module
 				$file = substr($file, 5);
 			if (substr($file, -2) == '?>')
 				$file = substr($file, 0, -2);
-			if (eval($file) !== false)
+			if (class_exists($module, false) OR eval($file) !== false)
 				$moduleList[] = new $module;
 			else
 				$errors[] = $module;
