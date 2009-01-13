@@ -23,7 +23,8 @@ class AdminCustomers extends AdminTab
 	 	$this->edit = true;
 	 	$this->view = true;
 	 	$this->delete = true;
-	 	$this->deleted = true;
+		$this->deleted = true;
+
 
 		$genders = array(1 => $this->l('M'), 2 => $this->l('F'), 9 => $this->l('?'));
  		$this->fieldsDisplay = array(
@@ -46,7 +47,54 @@ class AdminCustomers extends AdminTab
 		parent::__construct();
 	}
 	
-	
+	public function postProcess()
+	{
+		global $currentIndex;
+		
+		if (Tools::getValue('submitAdd'.$this->table))
+		{
+		 	/* Checking fields validity */
+			$this->validateRules();
+			if (!sizeof($this->_errors))
+			{
+				$id = intval(Tools::getValue('id_'.$this->table));
+				if (isset($id) AND !empty($id))
+				{
+					if ($this->tabAccess['edit'] !== '1')
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+					else
+					{
+						$object = new $this->className($id);
+						if (Validate::isLoadedObject($object))
+						{
+							$customer_email = strval(Tools::getValue('email'));
+							
+							// check if e-mail already used
+							if ($customer_email != $object->email)
+							{
+								$customer = new Customer();
+								$customer->getByEmail($customer_email);
+								if ($customer->id)
+									$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
+							}
+							
+							// Updating customer's group
+							if (!sizeof($this->_errors))
+							{
+								$groupList = Tools::getValue('groupBox');
+								$object->cleanGroups();
+								if (is_array($groupList) AND sizeof($groupList) > 0)
+									$object->addGroups($groupList);
+							}
+						}
+						else
+							$this->_errors[] = Tools::displayError('an error occurred while loading object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					}
+				}
+			}
+		}
+		return parent::postProcess();
+	}
 
 	public function viewcustomer()
 	{
@@ -456,6 +504,11 @@ class AdminCustomers extends AdminTab
 	{
 		global $cookie;
 		return parent::getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+	}
+	
+	public function beforeDelete($object)
+	{
+		return $object->isUsed();
 	}
 }
 

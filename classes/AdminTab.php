@@ -481,12 +481,21 @@ abstract class AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
+							
 							/* Specific to objects which must not be deleted */
 							if ($this->deleted AND $this->beforeDelete($object))
 							{
+								// Create new one with old objet values
+								$objectNew = new $this->className($object->id);
+								$objectNew->id = NULL;
+								$objectNew->date_add = '';
+								$objectNew->date_upd = '';
+								
+								// Update old object to deleted
 								$object->deleted = 1;
 								$object->update();
-								$objectNew = new $this->className();
+
+								// Update new object with post values
 								$this->copyFromPost($objectNew, $this->table);
 								$result = $objectNew->add();
 								if (Validate::isLoadedObject($objectNew))
