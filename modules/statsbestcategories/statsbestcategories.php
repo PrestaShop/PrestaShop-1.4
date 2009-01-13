@@ -101,8 +101,8 @@ class StatsBestCategories extends ModuleGrid
 	
 	public function getData()
 	{
-		global $cookie;
-		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT'));
+		$dateBetween = $this->getDate();
+		$id_lang = intval($this->getLang());
 	
 		$this->_totalCount = $this->getTotalCount();
 
@@ -114,14 +114,16 @@ class StatsBestCategories extends ModuleGrid
 				SELECT IFNULL(SUM(pv.`counter`), 0)
 				FROM `'._DB_PREFIX_.'page` p
 				LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
+				LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`
 				LEFT JOIN `'._DB_PREFIX_.'product` pr ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr.`id_product`
 				LEFT JOIN `'._DB_PREFIX_.'category_product` capr2 ON capr2.`id_product` = pr.`id_product`
-				WHERE
-				capr.`id_category` = capr2.`id_category`
+				WHERE capr.`id_category` = capr2.`id_category`
 				AND p.`id_page_type` = 1
+				AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+				AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
 		FROM `'._DB_PREFIX_.'category` ca
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON ca.`id_category` = calang.`id_category`
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON (ca.`id_category` = calang.`id_category` AND calang.`id_lang` = '.$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_product` capr ON ca.`id_category` = capr.`id_category`
 		LEFT JOIN (
 			SELECT pr.`id_product`, t.`totalQuantitySold`, t.`totalPriceSold`
@@ -135,10 +137,10 @@ class StatsBestCategories extends ModuleGrid
 				LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
 				LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 				WHERE o.valid = 1
+				AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
 				GROUP BY pr.`id_product`
 			) t ON t.`id_product` = pr.`id_product`
 		) t	ON t.`id_product` = capr.`id_product`
-		WHERE calang.`id_lang` = '.$id_lang.'
 		GROUP BY ca.`id_category`
 		HAVING ca.`id_category` != 1';
 		if (Validate::IsName($this->_sort))

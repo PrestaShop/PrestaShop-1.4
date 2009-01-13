@@ -177,12 +177,11 @@ class StatsProduct extends ModuleGraph
 			$this->setDateGraph($layers, true);
 		else
 		{
-			global $cookie;
-			$product = new Product($this->_id_product, false, intval($cookie->id_lang));
+			$product = new Product($this->_id_product, false, intval($this->getLang()));
 			
 			$combArray = array();
 			$assocNames = array();
-			$combinaisons = $product->getAttributeCombinaisons(intval($cookie->id_lang));
+			$combinaisons = $product->getAttributeCombinaisons(intval($this->getLang()));
 			foreach ($combinaisons AS $k => $combinaison)
 				$combArray[$combinaison['id_product_attribute']][] = array('group' => $combinaison['group_name'], 'attr' => $combinaison['attribute_name']);
 			foreach ($combArray AS $id_product_attribute => $product_attribute)

@@ -90,17 +90,14 @@ class StatsBestVouchers extends ModuleGrid
 
 	public function getData()
 	{	
-		global $cookie;
-		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get(''._DB_PREFIX_.'LANG_DEFAULT'));
-	
 		$this->_totalCount = $this->getTotalCount();
-
 		$this->_query = '
 		SELECT od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / c.conversion_rate as ca
 		FROM '._DB_PREFIX_.'order_discount od
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
+		AND LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
 		GROUP BY od.id_discount';
 
 		if (Validate::IsName($this->_sort))

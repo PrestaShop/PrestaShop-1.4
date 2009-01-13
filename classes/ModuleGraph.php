@@ -13,6 +13,7 @@
 abstract class ModuleGraph extends Module
 {
 	protected $_employee;
+	
 	/** @var integer array graph data */
 	protected	$_values = array();
 	
@@ -30,6 +31,10 @@ abstract class ModuleGraph extends Module
 	public function setEmployee($id_employee)
 	{
 		$this->_employee = new Employee(intval($id_employee));
+	}
+	public function setLang($id_lang)
+	{
+		$this->_id_lang = $id_lang;
 	}
 	
 	protected function setDateGraph($layers, $legend = false)
@@ -141,6 +146,7 @@ abstract class ModuleGraph extends Module
 			
 		global $cookie;
 		$id_employee = intval($cookie->id_employee);
+		$id_lang = intval($cookie->id_lang);
 
 		if (!isset($params['layers']))
 			$params['layers'] = 1;
@@ -153,7 +159,7 @@ abstract class ModuleGraph extends Module
 		
 		global $cookie;
 		$id_employee = intval($cookie->id_employee);
-		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'].'&id_employee='.$id_employee;
+		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'].'&id_employee='.$id_employee.'&id_lang='.$id_lang;
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
 			
@@ -189,6 +195,11 @@ abstract class ModuleGraph extends Module
 	{
 		$employee = self::getEmployee($employee);
 		return ' \''.$employee->stats_date_from.'\' AND \''.$employee->stats_date_to.'\' ';
+	}
+	
+	public function getLang()
+	{
+		return $this->_id_lang;
 	}
 }
 
