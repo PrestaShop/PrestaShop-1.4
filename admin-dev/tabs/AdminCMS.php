@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
@@ -138,14 +138,14 @@ class AdminCMS extends AdminTab
 				});';
 		echo '</script>';
 	}
-	
+
 	function postProcess()
 	{
 		global $cookie, $link;
 		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
 			Tools::redirectLink($link->getCMSLink($cms));
 		return parent::postProcess();
-	}	
+	}
 }
 
 ?>

@@ -13,7 +13,8 @@ ALTER TABLE PREFIX_orders
 	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT 0 AFTER delivery_date;
 
 ALTER TABLE PREFIX_customer
-	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active;
+	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active,
+	DROP INDEX `customer_email`;
 	
 ALTER TABLE PREFIX_employee
 	ADD stats_date_to DATE NULL AFTER last_passwd_gen;
