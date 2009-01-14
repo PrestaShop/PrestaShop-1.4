@@ -349,7 +349,7 @@ class AdminImport extends AdminTab
 	
 	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
 	{
-		$tmpfile = tempnam("/tmp", "ps_import");
+		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, "ps_import");
 		$img = array('tmp_name' => $tmpfile);
 		
 		switch($entity)
