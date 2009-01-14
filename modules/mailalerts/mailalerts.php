@@ -176,7 +176,7 @@ class MailAlerts extends Module
 			'{currency}' => $currency->sign,
 			'{message}' => $message
 		);
-		Mail::Send($id_lang, $template, $subject, $templateVars, split(',', $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
+		Mail::Send($id_lang, $template, $subject, $templateVars, split(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
 	}
 	
 	public function hookProductOutOfStock($params)
@@ -221,7 +221,7 @@ class MailAlerts extends Module
 			$templateVars = array('{qty}' => $qty,
 			'{last_qty}' => intval(Configuration::get('PS_LAST_QTIES')),
 			'{product}' => strval($params['product']['name']));
-			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, split(',', $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, split(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
 	}
 	
