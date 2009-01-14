@@ -482,11 +482,7 @@ public function getLastConnections()
 	
 	public function isUsed()
 	{
-		$row = Db::getInstance()->getRow('
-		SELECT COUNT(`id_customer`) AS total
-		FROM `'._DB_PREFIX_.'orders`
-		WHERE `id_customer` = '.intval($this->id));
-		return intval($row['total']);
+		return false;
 	}
 }
 
