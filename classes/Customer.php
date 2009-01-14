@@ -389,7 +389,13 @@ class		Customer extends ObjectModel
 			FROM `'._DB_PREFIX_.'orders` oo
 			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
+			WHERE os.`id_order_state` = o.`id_order`
+			AND (
+				oo.`id_order` = '._PS_OS_PAYMENT_.'
+				OR oo.`id_order` = '._PS_OS_PREPARATION_.'
+				OR oo.`id_order` = '._PS_OS_SHIPPING_.'
+				OR oo.`id_order` = '._PS_OS_DELIVERED_.'
+				)
 			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		) = 1');
