@@ -1700,18 +1700,20 @@ class		Product extends ObjectModel
 	static private function _getCustomizationFieldsNLabels($productId)
 	{
 		$customizations = array();
-		if (!$customizations['fields'] = Db::getInstance()->ExecuteS('
+		if (($customizations['fields'] = Db::getInstance()->ExecuteS('
 			SELECT `id_customization_field`, `type`, `required`
 			FROM `'._DB_PREFIX_.'customization_field`
-			WHERE `id_product` = '.intval($productId)))
+			WHERE `id_product` = '.intval($productId))) === false)
 			return false;
+		if (empty($customizations['fields']))
+			return array();
 		$customizationFieldIds = array();
 		foreach ($customizations['fields'] AS $customizationField)
 			$customizationFieldIds[] = intval($customizationField['id_customization_field']);
-		if (!$customizationLabels = Db::getInstance()->ExecuteS('
+		if (($customizationLabels = Db::getInstance()->ExecuteS('
 			SELECT `id_customization_field`, `id_lang`, `name`
 			FROM `'._DB_PREFIX_.'customization_field_lang`
-			WHERE `id_customization_field` IN ('.implode(', ', $customizationFieldIds).')'))
+			WHERE `id_customization_field` IN ('.implode(', ', $customizationFieldIds).')')) === false)
 			return false;
 		foreach ($customizationLabels AS $customizationLabel)
 			$customizations['labels'][$customizationLabel['id_customization_field']][] = $customizationLabel;
@@ -1720,7 +1722,7 @@ class		Product extends ObjectModel
 
 	static public function duplicateCustomizationFields($oldProductId, $productId)
 	{
-		if (!$customizations = self::_getCustomizationFieldsNLabels($oldProductId))
+		if (($customizations = self::_getCustomizationFieldsNLabels($oldProductId)) === false)
 			return false;
 		if (empty($customizations))
 			return true;
