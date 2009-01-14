@@ -8,11 +8,6 @@ include_once(dirname(__FILE__).'/config/config.inc.php');
 $step = intval(Tools::getValue('step'));
 include_once(dirname(__FILE__).'/init.php');
 
-/*$name = 'ö';
-$a = Validate::isGenericName($name);
-var_dump($a);
-die($name);*/
-
 /* Disable some cache related bugs on the cart/order */
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
