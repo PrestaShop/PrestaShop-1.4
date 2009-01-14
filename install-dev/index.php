@@ -124,6 +124,9 @@ if ($lm->getIncludeTradFilename())
 		txtError[43] = "<?php echo lang('Failed to write file to disk'); ?>";
 		txtError[44] = "<?php echo lang('File upload stopped by extension'); ?>";
 		txtError[45] = "<?php echo lang('Cannot convert your database\'s data to utf-8.'); ?>";
+		txtError[46] = "<?php echo lang('Invalid shop name'); ?>";
+		txtError[47] = "<?php echo lang('Your firstname contains some invalid characters'); ?>";
+		txtError[48] = "<?php echo lang('Your lastname contains some invalid characters'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";

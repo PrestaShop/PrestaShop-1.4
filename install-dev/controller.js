@@ -591,21 +591,21 @@ function verifyShopInfos()
 	   data:
 		"method=checkShopInfos"+
 		"&isoCode="+isoCodeLocalLanguage+
-		"&infosShop="+ $("input#infosShop").val()+
-		"&infosFirstname="+ $("input#infosFirstname").val()+
-		"&infosName="+ $("input#infosName").val()+
-		"&infosEmail="+ $("input#infosEmail").val()+
-		"&infosPassword="+ $("input#infosPassword").val()+
-		"&infosPasswordRepeat="+ $("input#infosPasswordRepeat").val()+
+		"&infosShop="+ escape($("input#infosShop").val())+
+		"&infosFirstname="+ escape($("input#infosFirstname").val())+
+		"&infosName="+ escape($("input#infosName").val())+
+		"&infosEmail="+ escape($("input#infosEmail").val())+
+		"&infosPassword="+ escape($("input#infosPassword").val())+
+		"&infosPasswordRepeat="+ escape($("input#infosPasswordRepeat").val())+
 		"&infosNotification="+ ( ($("#infosNotification:checked").length > 0) ? "on" : "off" )+
 		urlLanguages+
 		"&infosMailMethod=" + ((smtpChecked) ? "smtp" : "native")+
-		"&smtpSrv="+ $("input#smtpSrv").val()+
-		"&smtpLogin="+ $("input#smtpLogin").val()+
-		"&smtpPassword="+ $("input#smtpPassword").val()+
-		"&smtpPort="+ $("input#smtpPort").val()+
-		"&smtpEnc="+ $("select#smtpEnc option:selected").val()+
-		"&mailSubject="+ mailSubject+
+		"&smtpSrv="+ escape($("input#smtpSrv").val())+
+		"&smtpLogin="+ escape($("input#smtpLogin").val())+
+		"&smtpPassword="+ escape($("input#smtpPassword").val())+
+		"&smtpPort="+ escape($("input#smtpPort").val())+
+		"&smtpEnc="+ escape($("select#smtpEnc option:selected").val())+
+		"&mailSubject="+ escape(mailSubject)+
 		"&isoCodeLocalLanguage="+isoCodeLocalLanguage
 	   ,
 	   

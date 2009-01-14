@@ -45,7 +45,22 @@ if(isset($_GET['infosEmail']) AND !Validate::isEmail($_GET['infosEmail']))
 	$error['infosEmail'] = '3';
 else
 	$error['infosEmail'] = '';
-	
+
+if (isset($_GET['infosShop']) AND !Validate::isGenericName($_GET['infosShop']))
+	$error['validateShop'] = '46';
+else
+	$error['validateShop'] = '';
+
+if (isset($_GET['infosFirstname']) AND !Validate::isName($_GET['infosFirstname']))
+	$error['validateFirstname'] = '47';
+else
+	$error['validateFirstname'] = '';
+
+if (isset($_GET['infosName']) AND !Validate::isName($_GET['infosName']))
+	$error['validateName'] = '48';
+else
+	$error['validateName'] = '';
+
 if(!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
 	$error['infosEmail'] = '0';
 
