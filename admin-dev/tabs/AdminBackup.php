@@ -179,7 +179,7 @@ class AdminBackup extends AdminTab
 			}
 			else
 			{
-				$age = floor($age / 86400).' '.$this->l('days');
+				$age = floor($age / 86400);
 				$age = $age.' '.(($age == 1) ? $this->l('day') : $this->l('days'));
 			}
 			$size = filesize(PS_ADMIN_DIR.'/backups/'.$file);
