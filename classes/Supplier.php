@@ -161,7 +161,7 @@ class		Supplier extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_supplier`
 		FROM '._DB_PREFIX_.'supplier s
-		WHERE c.`id_supplier` = '.intval($id_supplier));
+		WHERE s.`id_supplier` = '.intval($id_supplier));
 		
 		return isset($row['id_supplier']);
 	}
