@@ -385,7 +385,7 @@ class		Customer extends ObjectModel
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`id_customer` = '.intval($this->id).'
 		AND (
-			SELECT os.`invoice`
+			SELECT os.`logable`
 			FROM `'._DB_PREFIX_.'orders` oo
 			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
