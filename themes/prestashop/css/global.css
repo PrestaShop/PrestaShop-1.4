@@ -720,7 +720,8 @@ form#productsSortForm p select{ font-size:1em; }
 	background-color:#f1f2f4;
 	border:#595a5e 1px solid;
 	text-decoration:none;
-	width: 1.6em;
+	min-width: 1em;
+	padding: 0px 2px 0px 3px;
 	line-height: 1.5em;
 	text-align: center;
 	vertical-align: middle;
