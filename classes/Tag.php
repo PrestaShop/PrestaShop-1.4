@@ -32,7 +32,7 @@ class Tag extends ObjectModel
 	{
 		if ($id)
 			parent::__construct($id);
-		elseif($name AND Validate::isGenericName($name) AND $id_lang AND Validate::isUnsignedId($id_lang))
+		elseif ($name AND Validate::isGenericName($name) AND $id_lang AND Validate::isUnsignedId($id_lang))
 		{
 			$row = Db::getInstance()->getRow('
 			SELECT *
@@ -71,7 +71,8 @@ class Tag extends ObjectModel
 	 		Tools::displayError();
 	 	
 	 	$tmpTab = array_unique(array_map('trim', explode(',', $string)));
-	 	$list = '';
+	 	$list = array();
+		Tools::p($tmpTab);
 	 	foreach ($tmpTab AS $tag)
 	 	{
 	 	 	if (!Validate::isGenericName($tag))
@@ -85,17 +86,20 @@ class Tag extends ObjectModel
 				$tagObj->id_lang = intval($id_lang);
 				$tagObj->add();
 			}
-
-			$list .= '('.intval($tagObj->id).','.intval($id_product).'),';
+			if (!in_array($tagObj->id, $list))
+				$list[] = $tagObj->id;
 		}
-		$list = rtrim($list, ',');
-		
+		$data = '';
+		foreach ($list AS $tag)
+			$data .= '('.intval($tag).','.intval($id_product).'),';
+		$data = rtrim($data, ',');
+
 		if (!Validate::isValuesList($list))
 			Tools::displayError();
 
 		return Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_tag`, `id_product`) 
-		VALUES '.$list);
+		VALUES '.$data);
 	}
 	
 	static public function getMainTags($id_lang, $nb = 10)
