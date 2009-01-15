@@ -3,7 +3,7 @@ include(dirname(__FILE__).'/config/config.inc.php');
 
 function pictureUpload(Product $product, Cart $cart)
 {
-	global $errors; 
+	global $errors;
 
 	if (!$fieldIds = $product->getCustomizationFieldIds())
 		return false;
