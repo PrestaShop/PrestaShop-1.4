@@ -184,11 +184,6 @@ function delAccessory(id)
 	var div = getE('divAccessories');
 	var input = getE('inputAccessories');
 	var name = getE('nameAccessories');
-console.log('---');
- console.log(input);
- console.log('___');
-  console.log(name);
-
 	var reg = new RegExp('-', 'g');
 	var inputCut = input.value.split(reg);
 	var reg2 = new RegExp('¤', 'g');
