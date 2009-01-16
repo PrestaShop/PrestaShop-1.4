@@ -25,7 +25,15 @@ function isFormValid()
 // Check each POST data...
 
 $error = array();
-
+foreach ($_GET AS &$var)
+{	
+	if (is_string($var))
+		$var = html_entity_decode($var, ENT_COMPAT, 'UTF-8');
+	elseif (is_array($var))
+		foreach ($var AS &$row)
+			$row = html_entity_decode($row, ENT_COMPAT, 'UTF-8');
+}
+	
 if(!isset($_GET['infosShop']) OR empty($_GET['infosShop']))
 	$error['infosShop'] = '0';
 else

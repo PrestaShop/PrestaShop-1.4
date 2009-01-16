@@ -591,21 +591,21 @@ function verifyShopInfos()
 	   data:
 		"method=checkShopInfos"+
 		"&isoCode="+isoCodeLocalLanguage+
-		"&infosShop="+ escape($("input#infosShop").val())+
-		"&infosFirstname="+ escape($("input#infosFirstname").val())+
-		"&infosName="+ escape($("input#infosName").val())+
-		"&infosEmail="+ escape($("input#infosEmail").val())+
-		"&infosPassword="+ escape($("input#infosPassword").val())+
-		"&infosPasswordRepeat="+ escape($("input#infosPasswordRepeat").val())+
+		"&infosShop="+ encodeURIComponent($("input#infosShop").val())+
+		"&infosFirstname="+ encodeURIComponent($("input#infosFirstname").val())+
+		"&infosName="+ encodeURIComponent($("input#infosName").val())+
+		"&infosEmail="+ encodeURIComponent($("input#infosEmail").val())+
+		"&infosPassword="+ encodeURIComponent($("input#infosPassword").val())+
+		"&infosPasswordRepeat="+ encodeURIComponent($("input#infosPasswordRepeat").val())+
 		"&infosNotification="+ ( ($("#infosNotification:checked").length > 0) ? "on" : "off" )+
 		urlLanguages+
 		"&infosMailMethod=" + ((smtpChecked) ? "smtp" : "native")+
-		"&smtpSrv="+ escape($("input#smtpSrv").val())+
-		"&smtpLogin="+ escape($("input#smtpLogin").val())+
-		"&smtpPassword="+ escape($("input#smtpPassword").val())+
-		"&smtpPort="+ escape($("input#smtpPort").val())+
-		"&smtpEnc="+ escape($("select#smtpEnc option:selected").val())+
-		"&mailSubject="+ escape(mailSubject)+
+		"&smtpSrv="+ encodeURIComponent($("input#smtpSrv").val())+
+		"&smtpLogin="+ encodeURIComponent($("input#smtpLogin").val())+
+		"&smtpPassword="+ encodeURIComponent($("input#smtpPassword").val())+
+		"&smtpPort="+ encodeURIComponent($("input#smtpPort").val())+
+		"&smtpEnc="+ encodeURIComponent($("select#smtpEnc option:selected").val())+
+		"&mailSubject="+ encodeURIComponent(mailSubject)+
 		"&isoCodeLocalLanguage="+isoCodeLocalLanguage
 	   ,
 	   
