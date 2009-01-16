@@ -743,54 +743,51 @@ class Tools
 		return self::strtoupper(Tools::substr($str, 0, 1)).Tools::substr($str, 1);
 	}
 	
-	
 	static public function orderbyPrice(&$array, $orderWay)
 	{
 		foreach($array as &$row)
 			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		if(strtolower($orderWay) == 'desc')
-			uasort($array,"Tools::cmpPriceDesc");
+			uasort($array, 'cmpPriceDesc');
 		else
-			uasort($array,"Tools::cmpPriceAsc");
+			uasort($array, 'cmpPriceAsc');
 		foreach($array as &$row)
 			unset($row['price_tmp']);
-	}
-	
-		/**
-	 * Compare 2 price to sort Categories by price
-	 *
-	 * @param integer $a
-	 * @param integer $b 
-	 * @return bool 
-	 */
-
-	static public function cmpPriceDesc($a,$b)
-	{
-	    if ($a['price_tmp'] < $b['price_tmp'])
-			return (1);
-		elseif ($a['price_tmp'] > $b['price_tmp'])
-			return (-1);
-		return (0);
-	}
-
-	static public function cmpPriceAsc($a,$b)
-	{
-	    if ($a['price_tmp'] < $b['price_tmp'])
-			return (-1);
-		elseif ($a['price_tmp'] > $b['price_tmp'])
-			return (1);
-		return (0);
 	}
 
 	static public function iconv($from, $to, $string)
 	{
 		if (function_exists('iconv'))
-		{
 			return iconv($from, $to.'//TRANSLIT', str_replace('¥', '&yen;', str_replace('£', '&pound;', str_replace('€', '&euro;', $string))));
-		}
 		return html_entity_decode(htmlentities($string, ENT_NOQUOTES, $from), ENT_NOQUOTES, $to);
 	}
 
+}
+
+/**
+* Compare 2 prices to sort products
+*
+* @param float $a
+* @param float $b 
+* @return integer 
+*/
+/* Externalized because of a bug in PHP 5.1.6 when inside an object */
+function cmpPriceAsc($a,$b)
+{
+	if (floatval($a['price_tmp']) < floatval($b['price_tmp']))
+		return (-1);
+	elseif (floatval($a['price_tmp']) > floatval($b['price_tmp']))
+		return (1);
+	return (0);
+}
+
+function cmpPriceDesc($a,$b)
+{
+	if (floatval($a['price_tmp']) < floatval($b['price_tmp']))
+		return (1);
+	elseif (floatval($a['price_tmp']) > floatval($b['price_tmp']))
+		return (-1);
+	return (0);
 }
 
 ?>

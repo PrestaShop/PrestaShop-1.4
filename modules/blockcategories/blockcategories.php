@@ -99,13 +99,14 @@ class BlockCategories extends Module
 		
 		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
 		
-		$result = Db::getInstance()->ExecuteS('
-		SELECT * FROM '._DB_PREFIX_.'category c 
-		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category AND id_lang = '.intval($params['cookie']->id_lang).')
+		if (!$result = Db::getInstance()->ExecuteS('
+		SELECT * FROM `'._DB_PREFIX_.'category` c 
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($params['cookie']->id_lang).')
 		WHERE 1'
-		.(intval($maxdepth) != 0 ? 'AND level_depth <= '.intval($maxdepth) : '').'
-		AND c.active = 1
-		ORDER BY level_depth, cl.name ASC');
+		.(intval($maxdepth) != 0 ? ' AND `level_depth` <= '.intval($maxdepth) : '').'
+		AND c.`active` = 1
+		ORDER BY `level_depth` ASC, cl.`name` ASC'))
+			return;
 		$resultParents = array();
 		$resultIds = array();
 		foreach ($result as $row)

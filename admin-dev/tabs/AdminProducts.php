@@ -99,9 +99,9 @@ class AdminProducts extends AdminTab
 		if ($orderByPriceFinal == 'price_final')
 		{
 			if(strtolower($orderWayPriceFinal) == 'desc')
-				uasort($this->_list,"Tools::cmpPriceDesc");
+				uasort($this->_list, 'cmpPriceDesc');
 			else
-				uasort($this->_list,"Tools::cmpPriceAsc");
+				uasort($this->_list, 'cmpPriceAsc');
 		}
 		for ($i = 0; $this->_list AND $i < $nb; $i++)
 		{
