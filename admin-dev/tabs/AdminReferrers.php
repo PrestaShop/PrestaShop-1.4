@@ -34,20 +34,20 @@ class AdminReferrers extends AdminTab
 	 	$this->edit = true;
 		$this->delete = true;
 		
-		$this->_select = '(cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
+		$this->_select = 'IF(cache_orders > 0, ROUND(cache_sales/cache_orders, 2), 0) as cart, (cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
 		$this->fieldsDisplay = array(
 			'id_referrer' => array('title' => $this->l('ID'), 'width' => 25, 'align' => 'center'),
-			'name' => array('title' => $this->l('Name'), 'width' => 100),
+			'name' => array('title' => $this->l('Name'), 'width' => 80),
 			'cache_visitors' => array('title' => $this->l('Visitors'), 'width' => 40, 'align' => 'center'),
 			'cache_visits' => array('title' => $this->l('Visits'), 'width' => 40, 'align' => 'center'),
 			'cache_pages' => array('title' => $this->l('Pages'), 'width' => 40, 'align' => 'center'),
 			'cache_registrations' => array('title' => $this->l('Reg.'), 'width' => 40, 'align' => 'center'),
 			'cache_orders' => array('title' => $this->l('Orders'), 'width' => 40, 'align' => 'center'),
 			'cache_sales' => array('title' => $this->l('Sales'), 'width' => 100, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true),
-			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 40, 'align' => 'center'),
-			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 40, 'align' => 'center'),
-			'fee1' => array('title' => $this->l('Base'), 'width' => 40, 'align' => 'right', 'price' => true),
-			'fee2' => array('title' => $this->l('Percent'), 'width' => 40, 'align' => 'right', 'price' => true));
+			'cart' => array('title' => $this->l('Avg. cart'), 'width' => 60, 'align' => 'right', 'price' => true),
+			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 40, 'align' => 'center', 'suffix' => '%'),
+			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 40, 'align' => 'center', 'suffix' => '%'),
+			'fee' => array('title' => $this->l('Fee'), 'width' => 40, 'align' => 'right', 'price' => true),);
 			
 		parent::__construct();
 	}

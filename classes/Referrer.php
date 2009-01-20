@@ -62,8 +62,8 @@ class Referrer extends ObjectModel
 		$fields['cache_registrations'] = intval($this->cache_registrations);
 		$fields['cache_orders'] = intval($this->cache_orders);
 		$fields['cache_sales'] = number_format($this->cache_sales, 2, '.', '');
-		$fields['cache_reg_rate'] = number_format($this->cache_reg_rate, 4, '.', '');
-		$fields['cache_order_rate'] = number_format($this->cache_order_rate, 4, '.', '');
+		$fields['cache_reg_rate'] = $this->cache_reg_rate > 100 ? 100 : number_format(floatval($this->cache_reg_rate) * 100, 2, '.', '');
+		$fields['cache_order_rate'] = $this->cache_order_rate > 100 ? 100 : number_format(floatval($this->cache_order_rate) * 100, 2, '.', '');
 		$fields['date_add'] = pSQL($this->date_add);
 		return $fields;
 	}

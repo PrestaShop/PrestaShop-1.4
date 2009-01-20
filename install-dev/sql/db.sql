@@ -1134,8 +1134,8 @@ CREATE TABLE IF NOT EXISTS `PREFIX_referrer` (
   cache_registrations INTEGER NULL,
   cache_orders INTEGER NULL,
   cache_sales DECIMAL(10,2) NULL,
-  cache_reg_rate DECIMAL(8,4) NULL,
-  cache_order_rate DECIMAL(8,4) NULL,
+  cache_reg_rate DECIMAL(5,2) NULL,
+  cache_order_rate DECIMAL(5,2) NULL,
   date_add DATETIME NOT NULL,
   PRIMARY KEY (`id_referrer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
