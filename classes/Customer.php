@@ -111,7 +111,7 @@ class		Customer extends ObjectModel
 		if (!$res)
 			return false;
 
-		$row = array('id_customer' => intval($this->id), 'id_group' => 1, 'validate' => '1', 'date_add' => date('Y-m-d h:i:s'), 'date_upd' => date('Y-m-d h:i:s'));
+		$row = array('id_customer' => intval($this->id), 'id_group' => 1);
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 	}
 
@@ -464,7 +464,7 @@ public function getLastConnections()
 	{
 		foreach ($groups as $group)
 		{
-			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group), 'validate' => '1', 'date_add' => date('Y-m-d h:i:s'), 'date_upd' => date('Y-m-d h:i:s'));
+			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group));
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 		}
 	}
@@ -484,6 +484,16 @@ public function getLastConnections()
 	public function isUsed()
 	{
 		return false;
+	}
+	
+	public function isMemberOfGroup($id_group)
+	{
+		$result = Db::getInstance()->getRow('
+		SELECT count(cg.`id_group`) as nb
+		FROM '._DB_PREFIX_.'customer_group cg
+		WHERE cg.`id_customer` = '.intval($this->id).'
+		AND cg.`id_group` = '.intval($id_group));
+		return $result['nb'];
 	}
 }
 
