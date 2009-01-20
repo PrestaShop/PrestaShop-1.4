@@ -495,7 +495,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (52, 'AdminSubDomains', 9, 7),
 (53, 'AdminBackup', 9, 8),
 (57, 'AdminCMS', 9, 9),
-(63, 'AdminHtaccess', 9, 10),
+(64, 'AdminHtaccess', 9, 10),
 (43, 'AdminSearch', -1, 0);
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
@@ -560,7 +560,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 61, 'Search engines'),
 (1, 62, 'Referrers'),
 (1, 63, 'Groups'),
-(1, 63, 'Htaccess'),
+(1, 64, 'Htaccess'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -622,7 +622,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),
 (2, 63, 'Groupes'),
-(1, 64, 'Htaccess');
+(2, 64, 'Htaccess');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
