@@ -2049,44 +2049,6 @@ class		Product extends ObjectModel
 			return false;
 		return Db::getInstance()->NumRows();
 	}
-	
-	/*
-	* get disabled products
-	*
-	* @param $id_product Product id
-	* @return int
-	*/	
-	public static function getDisabledProducts($id_product)
-	{
-		//TODO
-		/*
-		$row = Db::getInstance()->getRow('
-		SELECT `id_product`
-		FROM '._DB_PREFIX_.'product p
-		WHERE p.`id_product` = '.intval($id_product));
-		
-		return isset($row['id_product']);
-		*/
-	}
-	
-	/*
-	* get products with empty stock
-	*
-	* @param $id_product Product id
-	* @return int
-	*/	
-	public static function getProductsWithEmptyStock($id_product)
-	{
-		//TODO
-		/*
-		$row = Db::getInstance()->getRow('
-		SELECT `id_product`
-		FROM '._DB_PREFIX_.'product p
-		WHERE p.`id_product` = '.intval($id_product));
-		
-		return isset($row['id_product']);
-		*/
-	}
 }
 
 ?>
