@@ -495,7 +495,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (52, 'AdminSubDomains', 9, 7),
 (53, 'AdminBackup', 9, 8),
 (57, 'AdminCMS', 9, 9),
-(57, 'AdminHtaccess', 9, 10),
+(63, 'AdminHtaccess', 9, 10),
 (43, 'AdminSearch', -1, 0);
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
