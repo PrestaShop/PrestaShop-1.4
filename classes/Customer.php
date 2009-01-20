@@ -110,7 +110,8 @@ class		Customer extends ObjectModel
 	 	$res = parent::add($autodate, $nullValues);
 		if (!$res)
 			return false;
-		$row = array('id_customer' => intval($this->id), 'id_group' => 1);
+
+		$row = array('id_customer' => intval($this->id), 'id_group' => 1, 'validate' => '1', 'date_add' => date('Y-m-d h:i:s'), 'date_upd' => date('Y-m-d h:i:s'));
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 	}
 
@@ -463,7 +464,7 @@ public function getLastConnections()
 	{
 		foreach ($groups as $group)
 		{
-			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group));
+			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group), 'validate' => '1', 'date_add' => date('Y-m-d h:i:s'), 'date_upd' => date('Y-m-d h:i:s'));
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 		}
 	}

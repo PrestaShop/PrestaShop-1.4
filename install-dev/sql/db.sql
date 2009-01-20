@@ -235,7 +235,9 @@ CREATE TABLE PREFIX_customer (
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,
   id_group INTEGER UNSIGNED NOT NULL,
-  active TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+  validate TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+  date_add DATETIME NOT NULL,
+  date_upd DATETIME NOT NULL,
   INDEX customer_group_index(id_customer, id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
