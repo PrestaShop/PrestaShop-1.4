@@ -133,6 +133,11 @@ class MailAlerts extends Module
 			</tr>';
 		}
 
+		if ($delivery->id_state)
+			$delivery_state = new State(intval($delivery->id_state));
+		if ($invoice->id_state)
+			$invoice_state = new State(intval($invoice->id_state));
+
 		// Filling-in vars for mail
 		$template = 'new_order';
 		$subject = $this->l('New order');
