@@ -34,7 +34,7 @@ class MySQL extends Db
 	public function	disconnect()
 	{
 		if ($this->_link)
-			mysql_close($this->_link);
+			@mysql_close($this->_link);
 		$this->_link = false;
 	}
 	
