@@ -89,13 +89,10 @@ class StatsHome extends Module
 	
 	private function getVisitorsNow()
 	{
-		$result = Db::getInstance()->ExecuteS('
-		SELECT cp.`id_connections`
+		return Db::getInstance()->getValue('
+		SELECT COUNT(DISTINCT cp.`id_connections`)
 		FROM `'._DB_PREFIX_.'connections_page` cp
-		WHERE cp.`time_end` IS NULL
-		AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
-		GROUP BY cp.`id_connections`');
-		return Db::getInstance()->NumRows();
+		WHERE TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900');
 	}
 	
 	private function getResults()
