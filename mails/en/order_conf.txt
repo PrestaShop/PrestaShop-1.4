@@ -38,4 +38,4 @@ Shipping
 
 You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website. 
 
-{shop_url} powered by PrestaShop™
+{shop_url} powered by PrestaShop
