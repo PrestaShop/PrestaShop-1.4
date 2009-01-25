@@ -213,6 +213,8 @@ countries = new Array();
 		{$HOOK_CREATE_ACCOUNT_FORM}
 		<p class="cart_navigation required submit">
 			<input type="hidden" name="email_create" value="1" />
+			<input type="hidden" name="translate_delivery" value="{l s='(Delivery)'}" />
+			<input type="hidden" name="translate_invoice" value="{l s='(Billing)'}" />
 			<input type="submit" name="submitAccount" id="submitAccount" value="{l s='Register'}" class="exclusive" />
 			<span><sup>*</sup>{l s='Required field'}</span>
 		</p>
