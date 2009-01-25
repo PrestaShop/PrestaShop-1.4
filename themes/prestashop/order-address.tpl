@@ -22,7 +22,7 @@
 	<div class="addresses">
 		<p class="address_delivery select">
 			<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
-			<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay();">
+			<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay(); updateAddresses();">
 			{foreach from=$addresses key=k item=address}
 				<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_delivery}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}
@@ -34,7 +34,7 @@
 		</p>
 		<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
 			<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
-			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();">
+			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay(); updateAddresses();">
 			{foreach from=$addresses key=k item=address}
 				<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_invoice}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}

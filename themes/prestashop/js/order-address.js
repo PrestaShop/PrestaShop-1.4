@@ -19,6 +19,7 @@ function updateAddressesDisplay()
 		$('#address_invoice_form:hidden').show('fast');
 		updateAddressDisplay('invoice');
 	}
+	return true;
 }
 
 function updateAddressDisplay(addressType)
@@ -43,4 +44,22 @@ function updateAddressDisplay(addressType)
 	var expression = /id_address=\d+/;
 	link = link.replace(expression, 'id_address='+idAddress);
 	$('ul#address_' + addressType + ' li.address_update a').attr('href', link);
+}
+
+function updateAddresses()
+{
+   var idAddress_delivery = $('select#id_address_delivery').val();
+   var idAddress_invoice = $('select#id_address_invoice').val();
+   
+   $.ajax({
+           type: 'POST',
+           url: baseDir + 'order.php',
+           async: true,
+           cache: false,
+           dataType : "json",
+           data: 'processAddress=true&step=2&ajax=true&id_address_delivery=' + idAddress_delivery + '&id_address_invoice=' + idAddress_invoice+ '&token=' + static_token ,
+           success: function(jsonData)
+           {},
+           error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+       });
 }
