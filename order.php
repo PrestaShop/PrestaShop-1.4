@@ -178,6 +178,9 @@ function processAddress()
 		$cart->id_address_invoice = isset($_POST['same']) ? intval($_POST['id_address_delivery']) : intval($_POST['id_address_invoice']);
 		if (!$cart->update())
 			$errors[] = Tools::displayError('an error occured while updating your cart');
+			
+
+		
 		if (isset($_POST['message']) AND !empty($_POST['message']))
 		{
 			if (!Validate::isMessage($_POST['message']))
@@ -197,6 +200,12 @@ function processAddress()
 				$message->add();
 			}
 		}
+	}
+	if (Tools::getValue('ajax') == 'true')
+	{
+		/* Adresses have been updated */
+	   die('true');
+	   exit;
 	}
 	if (sizeof($errors))
 	{
