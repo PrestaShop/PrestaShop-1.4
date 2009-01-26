@@ -86,7 +86,7 @@ else
 			'order_state' => intval($id_order_state),
 			'invoiceAllowed' => intval(Configuration::get('PS_INVOICE')),
 			'invoice' => (OrderState::invoiceAvailable(intval($id_order_state)) OR $order->invoice_number),
-			'order_history' => $order->getHistory(intval($cookie->id_lang)),
+			'order_history' => $order->getHistory(intval($cookie->id_lang), false, true),
 			'products' => $products,
 			'discounts' => $order->getDiscounts(),
 			'carrier' => $carrier,

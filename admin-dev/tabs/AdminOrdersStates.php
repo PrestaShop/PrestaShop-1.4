@@ -45,6 +45,7 @@ class AdminOrdersStates extends AdminTab
 			$_POST['invoice'] = Tools::getValue('invoice');
 			$_POST['logable'] = Tools::getValue('logable');
 			$_POST['send_email'] = Tools::getValue('send_email');
+			$_POST['hidden'] = Tools::getValue('hidden');
 			if (!$_POST['send_email'])
 			{
 				$languages = Language::getLanguages();
@@ -139,6 +140,12 @@ class AdminOrdersStates extends AdminTab
 					<p>
 						<input type="checkbox" name="invoice"'.(($this->getFieldValue($obj, 'invoice') == 1) ? ' checked="checked"' : '').' id="invoice_on" value="1" />
 						<label class="t" for="invoice_on"> '.$this->l('Allow customer to download and view PDF version of invoice').'</label>
+					</p>
+				</div>
+				<div class="margin-form">
+					<p>
+						<input type="checkbox" name="hidden"'.(($this->getFieldValue($obj, 'hidden') == 1) ? ' checked="checked"' : '').' id="hidden_on" value="1" />
+						<label class="t" for="hidden_on"> '.$this->l('Hide this state in order for customer').'</label>
 					</p>
 				</div>
 				<div class="margin-form">

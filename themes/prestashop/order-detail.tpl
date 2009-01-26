@@ -92,7 +92,7 @@
 				</td>
 			</tr>
 			{/if}
-			{if $order->total_wrapping > 0}			
+			{if $order->total_wrapping > 0}
 			<tr class="item">
 				<td colspan="{if $return_allowed}6{else}5{/if}">
 					{l s='Total gift-wrapping:'} <span class="price-wrapping">{displayWtPriceWithCurrency price=$order->total_wrapping currency=$currency convert=0}</span>

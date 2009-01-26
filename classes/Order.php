@@ -199,7 +199,7 @@ class		Order extends ObjectModel
 	 *
 	 * @return array History entries ordered by date DESC
 	 */
-	public function getHistory($id_lang, $id_order_state = false)
+	public function getHistory($id_lang, $id_order_state = false, $no_hidden = false)
 	{
 		$id_lang = $id_lang ? intval($id_lang) : 'o.`id_lang`';
 		$query = '
@@ -209,7 +209,8 @@ class		Order extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
 			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.$id_lang.')
 			LEFT JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = oh.`id_employee`
-			WHERE oh.id_order = '.intval($this->id);
+			WHERE oh.id_order = '.intval($this->id).'
+			'.($no_hidden ? ' AND os.hidden = 0' : '');
 		if (intval($id_order_state))
 			$query.= ' AND oh.`id_order_state` = '.intval($id_order_state);
 		$query.= ' ORDER BY oh.date_add DESC, oh.id_order_history DESC';
