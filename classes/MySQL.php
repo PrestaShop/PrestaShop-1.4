@@ -18,7 +18,7 @@ class MySQL extends Db
 	{
 		if ($this->_link = @mysql_connect($this->_server, $this->_user, $this->_password))
 		{
-			if(!mysql_select_db($this->_database, $this->_link))
+			if(!$this->set_db($this->_database))
 				die(Tools::displayError('The database selection cannot be made.'));
 		}
 		else
@@ -29,6 +29,11 @@ class MySQL extends Db
 		/* Disable some MySQL limitations */
 		mysql_query('SET GLOBAL SQL_MODE=\'\'', $this->_link);
 		return $this->_link;
+	}
+	
+	/* do not remove, useful for some modules */
+	public function set_db($db_name) {
+		return mysql_select_db($db_name, $this->_link);
 	}
 	
 	public function	disconnect()
