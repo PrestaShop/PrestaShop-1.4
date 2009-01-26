@@ -127,6 +127,8 @@ class AdminProducts extends AdminTab
 		{
 			if ($this->tabAccess['add'] === '1')
 				$this->submitAddproduct($token, Tools::isSubmit('submitAddproductAndBack'));
+			elseif (Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1')
+				$this->submitAddproduct($token, Tools::isSubmit('submitAddproductAndBack'));
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
