@@ -111,30 +111,29 @@ class StatsBestProducts extends ModuleGrid
 		$dateBetween = $this->getDate();
 		$this->_totalCount = $this->getTotalCount();
 
-		$this->_query = 'SELECT pr.`id_product`, pr.quantity, pl.`name`,
-			IFNULL(t.`totalQuantitySold`, 0) AS totalQuantitySold,
-			IFNULL(t.`totalPriceSold`, 0) AS totalPriceSold,
+		$this->_query = '
+		SELECT p.id_product, p.quantity, pl.name,
+			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
+			ROUND(IFNULL(SUM((p.price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
 			(
-				SELECT IFNULL(SUM(pv.`counter`), 0)
-				FROM `'._DB_PREFIX_.'page` p
-				LEFT JOIN `'._DB_PREFIX_.'page_viewed` pv ON p.`id_page` = pv.`id_page`
-				LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`
-				LEFT JOIN `'._DB_PREFIX_.'product` pr2 ON CAST(p.`id_object` AS UNSIGNED INTEGER) = pr2.`id_product`
-				WHERE p.`id_page_type` = 1 AND pr.`id_product` = pr2.`id_product`	
-				AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
-				AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'	
+				SELECT IFNULL(SUM(pv.counter), 0)
+				FROM '._DB_PREFIX_.'page pa
+				LEFT JOIN '._DB_PREFIX_.'page_viewed pv ON pa.id_page = pv.id_page
+				LEFT JOIN '._DB_PREFIX_.'date_range dr ON pv.id_date_range = dr.id_date_range
+				LEFT JOIN '._DB_PREFIX_.'product p2 ON CAST(pa.id_object AS UNSIGNED INTEGER) = p2.id_product
+				WHERE pa.id_page_type = 1
+				AND p.id_product = p2.id_product	
+				AND LEFT(dr.time_start, 10) BETWEEN '.$dateBetween.'
+				AND LEFT(dr.time_end, 10) BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
-		FROM `'._DB_PREFIX_.'product` pr
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pr.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($this->getLang()).')
-		LEFT OUTER JOIN	(
-			SELECT pr.`id_product`, IFNULL(SUM(cp.`product_quantity`), 0) AS totalQuantitySold, IFNULL(SUM(pr.`price` * cp.`product_quantity`), 0) / c.conversion_rate AS totalPriceSold
-			FROM `'._DB_PREFIX_.'product` pr
-			LEFT OUTER JOIN `'._DB_PREFIX_.'order_detail` cp ON pr.`id_product` = cp.`product_id`
-			LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
-			WHERE o.valid = 1
-			AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
-			GROUP BY pr.`id_product`) t	ON t.`id_product` = pr.`id_product`';
+		FROM '._DB_PREFIX_.'product p
+		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product AND pl.id_lang = '.intval($this->getLang()).')
+		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
+		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
+		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
+		WHERE o.valid = 1
+		AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
+		GROUP BY p.id_product';
 
 		if (Validate::IsName($this->_sort))
 		{
