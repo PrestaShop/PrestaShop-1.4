@@ -699,7 +699,6 @@ CREATE TABLE PREFIX_order_slip_detail (
 
 CREATE TABLE PREFIX_product_attribute (
   id_product_attribute INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_image INTEGER UNSIGNED NULL,
   id_product INTEGER UNSIGNED NOT NULL,
   reference VARCHAR(32) NULL,
   supplier_reference VARCHAR(32) NULL,  
@@ -1146,3 +1145,10 @@ CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
 	getvar VARCHAR(16) NOT NULL,
 	PRIMARY KEY(id_search_engine)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE PREFIX_product_attribute_image (
+  id_product_attribute int(10) NOT NULL,
+  id_image int(10) NOT NULL,
+  PRIMARY KEY(id_product_attribute, id_image)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

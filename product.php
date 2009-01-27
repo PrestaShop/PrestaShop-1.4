@@ -198,7 +198,7 @@ else
 		/* Attributes / Groups & colors */
 		$colors = array();
 		$attributesGroups = $product->getAttributesGroups(intval($cookie->id_lang));
-		
+
 		if (Db::getInstance()->numRows())
 		{
 			$combinationImages = $product->getCombinationImages(intval($cookie->id_lang));

@@ -108,6 +108,13 @@ CREATE TABLE `PREFIX_module_group` (
   PRIMARY KEY (`id_module`, `id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE PREFIX_product_attribute_image (
+  id_product_attribute int(10) NOT NULL,
+  id_image int(10) NOT NULL,
+  PRIMARY KEY(id_product_attribute, id_image)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 /* ##################################### */
 /* 					CONTENTS					*/
 /* ##################################### */
@@ -219,6 +226,9 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Statuts'
 	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminStatuses')
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 
+INSERT INTO PREFIX_product_attribute_image (id_image, id_product_attribute) (SELECT id_image, id_product_attribute FROM PREFIX_product_attribute);
+/* ALTER query must stay here (right after the INSERT INTO PREFIX_product_attribute_image)! */
+ALTER TABLE PREFIX_product_attribute DROP id_image;
 
 /* PHP:blocknewsletter(); */;
 /* PHP:set_payment_module_group(); */;

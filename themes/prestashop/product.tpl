@@ -111,7 +111,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<ul style="width: {math equation="width * nbImages" width=82 nbImages=$images|@count}px" id="thumbs_list_frame">
 				{foreach from=$images item=image name=thumbnails}
 				{assign var=imageIds value=`$product->id`-`$image.id_image`}
-				<li>
+				<li id="thumbnail_{$image.id_image}">
 					<a href="{$link->getImageLink($product->link_rewrite, $imageIds, 'thickbox')}" rel="other-views" class="{if !$jqZoomEnabled}thickbox{/if} {if $smarty.foreach.thumbnails.first}shown{/if}">
 						<img id="thumb_{$image.id_image}" src="{$link->getImageLink($product->link_rewrite, $imageIds, 'medium')}" alt="{$image.legend|htmlspecialchars}" title="{$image.legend|htmlspecialchars}" />
 					</a>
@@ -304,7 +304,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<!-- product's features -->
 		<ul id="idTab2" class="bullet">
 		{foreach from=$features item=feature}
-			<li><span>{$feature.name|escape:'htmlall':'UTF-8'}</span>{l s=':'} {$feature.value|escape:'htmlall':'UTF-8'}</li>
+			<li><span>{$feature.name|escape:'htmlall':'UTF-8'}</span> {$feature.value|escape:'htmlall':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	{/if}
