@@ -17,9 +17,9 @@ ALTER TABLE PREFIX_customer
 	DROP INDEX `customer_email`;
 	
 ALTER TABLE PREFIX_employee
-	ADD stats_date_to DATE NULL AFTER last_passwd_gen;
+	ADD stats_date_to DATE NULL DEFAULT NULL AFTER last_passwd_gen;
 ALTER TABLE PREFIX_employee
-	ADD stats_date_from DATE NULL AFTER last_passwd_gen;
+	ADD stats_date_from DATE NULL DEFAULT NULL AFTER last_passwd_gen;
 
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,
