@@ -364,14 +364,7 @@ class		Order extends ObjectModel
 
 	public function isLogable()
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT oh.`id_order_state`, os.`logable`
-		FROM `'._DB_PREFIX_.'order_history` oh
-		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
-		WHERE oh.`id_order` = '.intval($this->id).'
-		ORDER BY oh.`date_add` DESC');
-
-		return $result ? intval($result['logable']) : false;
+		return $this->valid;
 	}
 	
 	public function hasBeenDelivered()

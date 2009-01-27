@@ -385,15 +385,7 @@ class		Customer extends ObjectModel
 		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid`) AS total_orders
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`id_customer` = '.intval($this->id).'
-		AND (
-			SELECT os.`logable`
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE os.`id_order_state` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1');
+		o.valid = 1');
 
 		$result2 = Db::getInstance()->getRow('
 		SELECT MAX(c.`date_add`) AS last_visit
