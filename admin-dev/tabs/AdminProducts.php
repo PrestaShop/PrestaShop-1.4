@@ -1854,6 +1854,8 @@ class AdminProducts extends AdminTab
 			</script>
 			<script type="text/javascript">
 				tinyMCE.init({
+					width : 435,
+                  	height : 435,					
 					mode : "textareas",
 					plugins : "contextmenu, directionality, media, paste, preview, safari",
 					theme : "advanced",
