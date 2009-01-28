@@ -148,13 +148,19 @@ class AdminReferrers extends AdminTab
 	
 	public function postProcess()
 	{
+		global $currentIndex;
+		
 		if ($this->enableCalendar())
 		{
 			$calendarTab = new AdminStats();
 			$calendarTab->postProcess();
 		}
+
 		if (Tools::isSubmit('submitSettings'))
-			Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', intval(Tools::getValue('tracking_dt')));
+			if ($this->tabAccess['edit'] === '1')
+				if (Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', intval(Tools::getValue('tracking_dt'))))
+					Tools::redirectAdmin($currentIndex.'&conf=4&token='.Tools::getValue('token'));
+
 		if (ModuleGraph::getDateBetween() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshData'))
 			Referrer::refreshCache();
 		
