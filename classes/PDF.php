@@ -40,14 +40,24 @@ class PDF extends FPDF
 
 		if (!isset($cookie) OR !is_object($cookie))
 			$cookie->id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$lang = strtoupper(Language::getIsoById($cookie->id_lang));
-		$conf = Configuration::getMultiple(array('PS_PDF_ENCODING_'.$lang, 'PS_PDF_FONT_'.$lang));
-
-		self::$_pdfparams[$lang] = array(
-			'encoding' => (isset($conf['PS_PDF_ENCODING_'.$lang]) AND $conf['PS_PDF_ENCODING_'.$lang] == true) ? $conf['PS_PDF_ENCODING_'.$lang] : 'iso-8859-1',
-			'font' => (isset($conf['PS_PDF_FONT_'.$lang]) AND $conf['PS_PDF_FONT_'.$lang] == true) ? $conf['PS_PDF_FONT_'.$lang] : 'helvetica'
-		);
+		self::$_iso = strtoupper(Language::getIsoById($cookie->id_lang));
 		FPDF::FPDF($orientation, $unit, $format);
+		$this->_initPDFFonts();
+	}
+
+	private function _initPDFFonts()
+	{
+		if (!$languages = Language::getLanguages())
+			die(Tools::displayError());
+		foreach ($languages AS $language)
+		{
+			$isoCode = strtoupper($language['iso_code']);
+			$conf = Configuration::getMultiple(array('PS_PDF_ENCODING_'.$isoCode, 'PS_PDF_FONT_'.$isoCode));
+			self::$_pdfparams[$isoCode] = array(
+				'encoding' => (isset($conf['PS_PDF_ENCODING_'.$isoCode]) AND $conf['PS_PDF_ENCODING_'.$isoCode] == true) ? $conf['PS_PDF_ENCODING_'.$isoCode] : 'iso-8859-1',
+				'font' => (isset($conf['PS_PDF_FONT_'.$isoCode]) AND $conf['PS_PDF_FONT_'.$isoCode] == true) ? $conf['PS_PDF_FONT_'.$isoCode] : 'helvetica'
+			);
+		}
 
 		if ($font = self::embedfont())
 		{
@@ -280,7 +290,7 @@ class PDF extends FPDF
 	public static function invoice($order, $mode = 'D', $multiple = false, &$pdf = NULL, $slip = false, $delivery = false)
 	{
 	 	global $cookie, $ecotax;
-		
+
 		if (!Validate::isLoadedObject($order) OR (!$cookie->id_employee AND (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->invoice_number)))
 			die('Invalid order or invalid order state');
 		self::$order = $order;
@@ -296,7 +306,6 @@ class PDF extends FPDF
 
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
-
 		/* Display address information */
 		$invoice_address = new Address(intval($order->id_address_invoice));
 		$invoiceState = $invoice_address->id_state ? new State($invoice_address->id_state) : false;
