@@ -334,7 +334,7 @@ class AdminOrders extends AdminTab
 		echo '
 		<div style="float: left;">';
 		echo '
-			<h2>'.$customer->firstname.' '.$customer->lastname.' '.$this->l('#').sprintf('%06d', $order->id).
+			<h2 style="width: 430px;">'.$customer->firstname.' '.$customer->lastname.' '.$this->l('#').sprintf('%06d', $order->id).
 			(($currentState->invoice OR $order->invoice_number) ? ' - <a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" alt="'.$this->l('View invoice').'" title="'.$this->l('View invoice').'" /></a>' : '').
 			(($currentState->delivery OR $order->delivery_number) ? ' - <a href="pdf.php?id_delivery='.$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" title="'.$this->l('View delivery slip').'" /></a>' : '').
 			' - <a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /></a>';
