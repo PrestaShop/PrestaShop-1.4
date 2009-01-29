@@ -600,7 +600,6 @@ class AdminProducts extends AdminTab
 	public function submitAddproduct($token = NULL, $backToCategory = false)
 	{
 		global $currentIndex;
-//die($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
 
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
@@ -1837,7 +1836,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td colspan="2" style="text-align:center;">
 							<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;
-							<input type="submit" value="'.$this->l('Save and back to category').'" name="submitAdd'.$this->table.'AndBack" class="button" /></td>
+							'.(Tools::isSubmit('id_category') ? '<input type="submit" value="'.$this->l('Save and back to category').'" name="submitAdd'.$this->table.'AndBack" class="button" />' : '').'</td>
 					</tr>
 				</table>
 			</div>
