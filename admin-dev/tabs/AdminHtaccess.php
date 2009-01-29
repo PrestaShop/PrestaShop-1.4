@@ -17,17 +17,21 @@ class AdminHtaccess extends AdminTab
 		global $currentIndex;
 
 		$languages = Language::getLanguages();
-		echo '<fieldset class="width2"><legend><img src="../img/t/AdminHtaccess.gif" />'.$this->l('Htaccess file generation').'</legend>';
-		echo '<b>'.$this->l('Note:').' </b>'.$this->l('this tools can be used ONLY if you are hosted by an').' <b><a href="http://www.apache.org">'.$this->l('Apache web server').'</a></b>'.$this->l('.').' '.$this->l('Please ask your webhost.').'<br /><br />';
-		echo $this->l('This tools will automaticaly generate you an .htaccess file, that will grant you the possibility to do URL rewriting and catch 404 errors.');
-		echo '</fieldset><br />';
+		echo '<fieldset class="width2"><legend><img src="../img/t/AdminHtaccess.gif" />'.$this->l('Htaccess file generation').'</legend>
+		<p><b>'.$this->l('Warning:').' </b>'.$this->l('this tool can be ONLY used if you are hosted by an').'
+		<b><a href="http://www.apache.org">'.$this->l('Apache web server').'</a></b>
+		'.$this->l('.').' '.$this->l('Please ask to your webhost.').'</p><p>',
+		$this->l('This tool will automaticaly generate an ".htaccess" file, that will grant you the possibility to do URL rewriting and to catch 404 errors.'),
+		'</p><p>',
+		$this->l('If you did not have enabled the url-rewriting when generating the ".htaccess" file, such feature won\'t be available'),
+		'</p></fieldset><br />';
 
 		if ($this->_checkHtaccessConfiguration())
 		{
 			echo '
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 				<fieldset class="width2"><legend><img src="../img/admin/enabled.gif" />'.$this->l('Generate file').'</legend>';
-				echo $this->l('You can regenerate your file by clicking on following button:').'<br /><br />';
+				echo $this->l('You can regenerate your ".htaccess" file by clicking on the following button:').'<br /><br />';
 				echo '<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitGenerate" class="button" />
 				</fieldset>
 			</form>';
@@ -35,7 +39,7 @@ class AdminHtaccess extends AdminTab
 		else
 		{
 			echo '<fieldset class="width2"><legend><img src="../img/admin/forbbiden.gif" />'.$this->l('Prerequisite').'</legend>';
-			echo $this->l('Before be able to use this tools you need to:').'<br /><br />';
+			echo $this->l('Before being able to use this tool, you need to:').'<br /><br />';
 			echo $this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b><br />';
 			echo $this->l('- give it write permissions (chmod 777 on Unix system)');
 			echo '</fieldset>';
