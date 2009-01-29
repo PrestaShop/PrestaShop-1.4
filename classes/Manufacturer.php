@@ -251,7 +251,8 @@ class		Manufacturer extends ObjectModel
 		FROM `'._DB_PREFIX_.'address` AS a
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` AS cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'state` AS s ON (s.`id_state` = a.`id_state`)
-		WHERE `id_manufacturer` = '.intval($this->id));
+		WHERE `id_manufacturer` = '.intval($this->id).'
+		AND a.`deleted` = 0');
 	}
 }
 
