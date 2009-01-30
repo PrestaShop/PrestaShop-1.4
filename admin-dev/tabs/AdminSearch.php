@@ -112,10 +112,10 @@ class AdminSearch extends AdminTab
 			{
 				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
 				{
-					if ($id_order = Order::getOrderByCartId(intval($_POST['bo_query'])))
-						Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($id_order).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
-					else if ($cart = new Cart(intval($_POST['bo_query'])) AND $cart->id)
-						$this->_list['cart'] = $cart;
+					if ($cart = new Cart(intval($_POST['bo_query'])) AND $cart->id)
+					{
+						Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
+					}
 					else
 						$this->_errors[] = Tools::displayError('cart #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
 				}

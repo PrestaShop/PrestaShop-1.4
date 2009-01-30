@@ -217,21 +217,8 @@ function queryType()
 	var search_type = getE('bo_search_type').value;
 	var bo_query = getE('bo_query');
 
-	if (search_type == 1)
-	{
-		if (!dontChange(bo_query.value))
-			bo_query.value = search_texts[0];
-	}
-	else if (search_type == 2)
-	{
-		if (!dontChange(bo_query.value))
-			bo_query.value = search_texts[1];
-	}
-	else if (search_type == 3)
-	{
-		if (!dontChange(bo_query.value))
-			bo_query.value = search_texts[2];
-	}
+	if (!dontChange(bo_query.value))
+		bo_query.value = search_texts[search_type - 1];
 }
 
 function formSubmit(e, button)
