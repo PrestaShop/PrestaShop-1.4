@@ -45,7 +45,7 @@ class Link
 			return ($this->allow == 1)?(_PS_USE_SSL_.__PS_BASE_URI__.($id_product->category != 'home' ? $id_product->category.'/' : '').intval($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') : 
 			(_PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product->id));
 		elseif ($alias)
-			return ($this->allow == 1)?(_PS_USE_SSL_.__PS_BASE_URI__.($category AND $category != 'home' ? ($category.'/') : '').intval($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') : 
+			return ($this->allow == 1)?(_PS_USE_SSL_.__PS_BASE_URI__.(($category AND $category != 'home') ? ($category.'/') : '').intval($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') : 
 			(_PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product));
 		else
 			return _PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product);

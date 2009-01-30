@@ -600,7 +600,7 @@ class Validate
 	*/
 	static public function isUnsignedId($id)
 	{
-		return is_numeric($id) AND intval($id) > 0 AND intval($id) < 4294967296;
+		return self::isUnsignedInt($id); /* Because an id could be equal to zero when there is no association */
 	}
 
 	static public function isNullOrUnsignedId($id)

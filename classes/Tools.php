@@ -762,6 +762,11 @@ class Tools
 		return html_entity_decode(htmlentities($string, ENT_NOQUOTES, $from), ENT_NOQUOTES, $to);
 	}
 
+	static public function isEmpty($field)
+	{
+		return $field === '' OR $field === NULL;
+	}
+
 }
 
 /**
