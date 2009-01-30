@@ -132,10 +132,12 @@ class AdminReferrers extends AdminTab
 							<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
 						</div>
 						<br class="clear" />
+						<p>'.$this->l('Direct traffic can be quite consuming, you should consider enable it only if you have a strong database server.').'</p>
 						<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
 					</form>
 					<hr />
 					<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+					<p>'.$this->l('For you to sort and filter, data ara cached. You can refresh the cache by clicking on the button below.').'</p>
 						<input type="submit" class="button" value="'.$this->l('Refresh data').'" name="submitRefreshData" />
 					</form>
 				</fieldset>
@@ -238,7 +240,7 @@ class AdminReferrers extends AdminTab
 					<li>
 						En mode simple, vous avez la possibilité d\'utiliser des <b>caractères génériques</b>, c\'est-à-dire qui peuvent remplacer n\'importe quels autres caractères :
 						<ul>
-							<li>"-" remplacera un seul caractère. Pour utiliser un vrai "_", vous devez taper "\\\\_".</li>
+							<li>"_" remplacera un seul caractère. Pour utiliser un vrai "_", vous devez taper "\\\\_".</li>
 							<li>"%" remplacera n\'importe quel nombre de caractères. Pour utiliser un vrai "%", vous devez taper "\\\\%".</li>
 						</ul>
 					</li>
