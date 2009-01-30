@@ -244,7 +244,7 @@ class		Cart extends ObjectModel
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
 
 			/* Add attributes to the SQL result if needed */
-			if (isset($row['id_product_attribute']) AND Validate::isUnsignedInt($row['id_product_attribute']))
+			if (isset($row['id_product_attribute']) AND intval($row['id_product_attribute']))
 			{
 				$result2 = Db::getInstance()->ExecuteS('
 				SELECT agl.`public_name` AS public_group_name, al.`name` AS attribute_name
@@ -883,7 +883,11 @@ class		Cart extends ObjectModel
 		if (Configuration::get('PS_STOCK_MANAGEMENT'))
 			foreach ($this->getProducts() AS $product)
 			    if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['quantity']))
+{
+Tools::dieObject($product);
+echo 'Product: '.$product['name'];
 			    	return false;
+}
 		return true;
 	}
 
