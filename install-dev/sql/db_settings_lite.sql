@@ -101,11 +101,9 @@ INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`) VALUES
 
 INSERT INTO `PREFIX_category` VALUES
 (1, 0, 0, 1, NOW(), NOW());
-INSERT INTO `PREFIX_category_lang` VALUES
-(1, 1, 'Home', '', '', NULL, NULL, NULL),
-(1, 2, 'Accueil', '', '', NULL, NULL, NULL),
-(1, 3, 'Startseite', '', '', NULL, NULL, NULL),
-(1, 4, 'Inicio', '', '', NULL, NULL, NULL);
+INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
+(1, 1, 'Home', '', 'home', NULL, NULL, NULL),
+(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL);
 
 INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
 (1, 0, 1, 'lightblue', 1, 0, 0),

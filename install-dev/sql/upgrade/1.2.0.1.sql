@@ -233,5 +233,7 @@ INSERT INTO PREFIX_product_attribute_image (id_image, id_product_attribute) (SEL
 /* ALTER query must stay here (right after the INSERT INTO PREFIX_product_attribute_image)! */
 ALTER TABLE PREFIX_product_attribute DROP id_image;
 
+UPDATE PREFIX_category_lang SET link_rewrite = 'home' WHERE id_category = 1;
+
 /* PHP:blocknewsletter(); */;
 /* PHP:set_payment_module_group(); */;
