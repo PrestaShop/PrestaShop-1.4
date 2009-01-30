@@ -84,7 +84,9 @@ class Search
 		
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) 
 		OR !Validate::isBool($count) OR !Validate::isValidSearch($expr)
-		OR $orderBy AND !$orderWay)
+		OR $orderBy AND !$orderWay
+		OR ($orderBy AND !Validate::isOrderBy($orderBy))
+		OR ($orderWay AND !Validate::isOrderBy($orderWay)))
 			die(Tools::displayError());
 		
 		$id_supplier = intval(Tools::getValue('id_supplier'));
@@ -118,8 +120,8 @@ class Search
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON p.`id_tax` = t.`id_tax`
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		'.($id_category ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (p.id_product = cp.id_product AND id_category = '.intval($id_category).')' : '').'
 		WHERE p.`active` = 1
 		'.($id_supplier ? 'AND id_supplier = '.intval($id_supplier) : '').'
@@ -140,13 +142,16 @@ class Search
 	* @param string $pageSize Results per page (optional)
 	* @return array Tag search results
 	*/
-	public function tag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10)
+	public function tag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
 	{
 	 	global $link;
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) 
-		OR !Validate::isBool($count) OR !Validate::isValidSearch($tag))
+		OR !Validate::isBool($count) OR !Validate::isValidSearch($tag)
+		OR $orderBy AND !$orderWay
+		OR ($orderBy AND !Validate::isOrderBy($orderBy))
+		OR ($orderWay AND !Validate::isOrderBy($orderWay)))
 			die(Tools::displayError());
-		
+
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($pageSize < 1) $pageSize = 10;
 
@@ -156,7 +161,7 @@ class Search
 			$result = Db::getInstance()->getRow('
 			SELECT COUNT(pt.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON p.`id_product` = pt.`id_product`
+			LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.intval($id_lang).')
 			WHERE p.`active` = 1
 			AND t.`name` LIKE \'%'.pSQL($tag).'%\'');
@@ -164,17 +169,20 @@ class Search
 		}
 		/* Else we search for the expression */
 		$result = Db::getInstance()->ExecuteS('
-		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend` 
+		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, '.$this->_getScore($tag).'
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` tax ON p.`id_tax` = tax.`id_tax`
-		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON p.`id_product` = pt.`id_product`
+		LEFT JOIN `'._DB_PREFIX_.'tax` tax ON (p.`id_tax` = tax.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.intval($id_lang).')
 		WHERE p.`active` = 1
 		AND t.`name` LIKE \'%'.pSQL($tag).'%\'
-		GROUP BY pt.`id_product`');
+		GROUP BY pt.`id_product`
+		ORDER BY score DESC'.($orderBy ? ', '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
+		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize));
 		if (!$result) return false;
 
 		return Product::getProductsProperties($id_lang, $result);
@@ -188,11 +196,14 @@ class Search
 	* @param string $pageSize Results per page (optional)
 	* @return array Tag search results
 	*/
-	public function ref($id_lang, $ref, $count = false, $pageNumber = 0, $pageSize = 10)
+	public function ref($id_lang, $ref, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
 	{
 		global $link;
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) 
-		OR !Validate::isBool($count) OR !Validate::isValidSearch($ref))
+		OR !Validate::isBool($count) OR !Validate::isValidSearch($ref)
+		OR $orderBy AND !$orderWay
+		OR ($orderBy AND !Validate::isOrderBy($orderBy))
+		OR ($orderWay AND !Validate::isOrderBy($orderWay)))
 			die(Tools::displayError());
 		
 		if ($pageNumber < 0) $pageNumber = 0;
@@ -209,17 +220,20 @@ class Search
 		}
 		/* Else we search for the expression */
 		$result = Db::getInstance()->ExecuteS('
-		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend` 
+		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, '.$this->_getScore($ref).'
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` tax ON p.`id_tax` = tax.`id_tax`
-		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON p.`id_product` = pt.`id_product`
+		LEFT JOIN `'._DB_PREFIX_.'tax` tax ON (p.`id_tax` = tax.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.intval($id_lang).')
 		WHERE p.`active` = 1
 		AND p.`reference` LIKE \'%'.pSQL($ref).'%\'
-		GROUP BY pt.`id_product`');
+		GROUP BY pt.`id_product`
+		ORDER BY score DESC'.($orderBy ? ', '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
+		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize));
 		if (!$result) return false;
 
 		return Product::getProductsProperties($id_lang, $result);

@@ -155,7 +155,7 @@ class		Product extends ObjectModel
 		'id_manufacturer' => 'isUnsignedId',
 		'id_supplier' => 'isUnsignedId',
 		'id_category_default' => 'isUnsignedId',
-		'id_color_default' => 'isUnsignedId',
+		'id_color_default' => 'isUnsignedInt', /* unsigned integer because its value could be 0 if the feature is disabled */
 		'quantity' => 'isUnsignedInt',
 		'price' => 'isPrice',
 		'wholesale_price' => 'isPrice',

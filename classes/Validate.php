@@ -588,7 +588,7 @@ class Validate
 	*/
 	static public function isUnsignedInt($int)
 	{
-		return (int) ((string) $int) AND $int < 4294967296  AND $int >= 0;
+		return ((int) ((string) $int) OR $int == 0) AND $int < 4294967296 AND $int >= 0;
 	}
 
 	/**

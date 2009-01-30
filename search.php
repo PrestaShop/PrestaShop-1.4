@@ -30,7 +30,7 @@ elseif ($tag = Tools::getValue('tag'))
 	include(dirname(__FILE__).'/pagination.php');
 	$smarty->assign(array(
 		'tag' => $tag,
-		'products' => $search->tag(intval($cookie->id_lang), $tag, false, $p, $n),
+		'products' => $search->tag(intval($cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay),
 		'nbProducts' => $nbProducts));
 }
 
@@ -43,7 +43,7 @@ elseif ($ref = Tools::getValue('ref'))
 	$smarty->assign(array(
 		'ref' => $ref,
 		'query' => $ref,
-		'products' => $search->ref(intval($cookie->id_lang), $ref, false, $p, $n),
+		'products' => $search->ref(intval($cookie->id_lang), $ref, false, $p, $n, $orderBy, $orderWay),
 		'nbProducts' => $nbProducts));
 }
 else
