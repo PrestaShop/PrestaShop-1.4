@@ -38,7 +38,7 @@ class AdminHtaccess extends AdminTab
 		}
 		else
 		{
-			echo '<fieldset class="width2"><legend><img src="../img/admin/forbbiden.gif" />'.$this->l('Prerequisite').'</legend>';
+			echo '<fieldset class="width2"><legend><img src="../img/admin/forbbiden.gif" />'.$this->l('Require').'</legend>';
 			echo $this->l('Before being able to use this tool, you need to:').'<br /><br />';
 			echo $this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b><br />';
 			echo $this->l('- give it write permissions (chmod 777 on Unix system)');

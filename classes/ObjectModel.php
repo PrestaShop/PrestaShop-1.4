@@ -292,7 +292,7 @@ abstract class ObjectModel
 	 				die(Tools::displayError());
 
 				/* Copy the field, or the default language field if it's both required and empty */
-				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
+				if (isset($this->{$field}[$language['id_lang']]) AND $this->{$field}[$language['id_lang']] !== '')
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']]);
 				elseif (in_array($field, $this->fieldsRequiredLang))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
@@ -310,7 +310,7 @@ abstract class ObjectModel
 	public function validateFields($die = true)
 	{
 		foreach ($this->fieldsRequired as $field)
-			if (empty($this->{$field}) AND (!is_numeric($this->{$field})))
+			if ($this->{$field} === '' AND (!is_numeric($this->{$field})))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' is empty)');
 				return false;
@@ -325,7 +325,7 @@ abstract class ObjectModel
 		foreach ($this->fieldsValidate as $field => $method)
 			if (!method_exists($validate, $method))
 				die (Tools::displayError('validation function not found').' '.$method);
-			elseif (!empty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
+			elseif ($this->{$field} !== '' AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
 				return false;
@@ -343,7 +343,7 @@ abstract class ObjectModel
 		{
 			if (!is_array($this->{$fieldArray}))
 				continue ;
-			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR empty($this->{$fieldArray}[$defaultLanguage]))
+			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' is empty for default language)');
 				return false;
@@ -368,7 +368,7 @@ abstract class ObjectModel
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (!method_exists($validate, $method))
 					die (Tools::displayError('validation function not found').' '.$method);
-				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
+				elseif ($value !== '' AND !call_user_func(array('Validate', $method), $value))
 				{
 					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' = '.$value.' for language '.$k.')');
 					return false;

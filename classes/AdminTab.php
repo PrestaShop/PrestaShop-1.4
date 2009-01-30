@@ -294,18 +294,18 @@ abstract class AdminTab
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is required');
 		/* Checking for multilingual required fields */
 		foreach ($rules['requiredLang'] AS $fieldLang)
-			if (!Tools::getValue($fieldLang.'_'.$defaultLanguage->id))
+			if (Tools::getValue($fieldLang.'_'.$defaultLanguage->id) === false)
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
 
 		/* Checking for maximum fields sizes */
 		foreach ($rules['size'] AS $field => $maxLength)
-			if (Tools::getValue($field) AND Tools::strlen(Tools::getValue($field)) > $maxLength)
+			if (Tools::getValue($field) !== false AND Tools::strlen(Tools::getValue($field)) > $maxLength)
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
 
 		/* Checking for maximum multilingual fields size */
 		foreach ($rules['sizeLang'] AS $fieldLang => $maxLength)
 			foreach ($languages AS $language)
-				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) AND Tools::strlen(Tools::getValue($fieldLang.'_'.$language['id_lang'])) > $maxLength)
+				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) !== false AND Tools::strlen(Tools::getValue($fieldLang.'_'.$language['id_lang'])) > $maxLength)
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
 
 		/* Overload this method for custom checking */
@@ -313,14 +313,14 @@ abstract class AdminTab
 
 		/* Checking for fields validity */
 		foreach ($rules['validate'] AS $field => $function)
-			if (Tools::getValue($field))
+			if (Tools::getValue($field) !== false)
 				if (!Validate::$function(Tools::getValue($field)))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
 
 		/* Checking for multilingual fields validity */
 		foreach ($rules['validateLang'] AS $fieldLang => $function)
 			foreach ($languages AS $language)
-				if (Tools::getValue($fieldLang.'_'.$language['id_lang']))
+				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) !== false)
 					if (!Validate::$function(Tools::getValue($fieldLang.'_'.$language['id_lang'])))
 						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
 	}
