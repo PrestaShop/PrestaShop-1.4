@@ -314,6 +314,7 @@ class AdminOrders extends AdminTab
 		$currentLanguage = new Language(intval($cookie->id_lang));
 		$currentState = OrderHistory::getLastOrderState($order->id);
 		$sources = ConnectionsSource::getOrderSources($order->id);
+		$cart = Cart::getCartByOrderId($order->id);
 		$link = new Link();
 
 		$row = array_shift($history);
@@ -445,6 +446,8 @@ class AdminOrders extends AdminTab
 		<br />
 		<fieldset style="width: 400px">
 			<legend><img src="../img/admin/details.gif" /> '.$this->l('Order details').'</legend>
+			<label>'.$this->l('Original cart:').' </label>
+			<div style="margin: 2px 0 1em 190px;"><a href="?tab=AdminCarts&id_cart='.$cart->id.'&viewcart&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)).'">'.$this->l('Cart #').sprintf('%06d', $cart->id).'</a></div>
 			<label>'.$this->l('Payment mode:').' </label>
 			<div style="margin: 2px 0 1em 190px;">'.$order->payment.' '.($order->module ? '('.$order->module.')' : '').'</div>
 			<div style="margin: 2px 0 1em 50px;">

@@ -109,8 +109,7 @@ class AdminCustomers extends AdminTab
 		$addresses = $customer->getAddresses($defaultLanguage);
 		$discounts = Discount::getCustomerDiscounts($defaultLanguage, $customer->id, false, false);
 		$orders = Order::getCustomerOrders($customer->id);
-		$cart = new Cart($customer->getLastCart());
-		$currency = new Currency($cart->id_currency);
+		$carts = Cart::getCustomerCarts($customer->id);
 		$groups = $customer->getGroups();
 
 		echo '
@@ -266,68 +265,37 @@ class AdminCustomers extends AdminTab
 		}
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has no discount vouchers').'.';
-		echo '<div class="clear">&nbsp;</div>
-		<h2>'.$this->l('Last cart').($cart->id ? ' (#'.sprintf('%08d', $cart->id).')' : '').'</h2>';
-		if ($cart->id)
+		echo '<div class="clear">&nbsp;</div>';
+		
+		echo '<h2>'.$this->l('Carts').' ('.sizeof($carts).')</h2>';
+		if ($carts AND sizeof($carts))
 		{
-			$products = $cart->getProducts();
-			$discounts = $cart->getDiscounts();
-			$total_discounts = $cart->getOrderTotal(true, 2);
-			$total_shipping = $cart->getOrderShippingCost($cart->id_carrier);
-			$total_wrapping = $cart->getOrderTotal(true, 6);
-			$total_products = $cart->getOrderTotal(true, 1);
-			$total_price = $cart->getOrderTotal();
-
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
 				<tr>
-					<th width="75" align="center">'.$this->l('Reference').'</th>
-					<th>'.$this->l('Product').'</th>
-					<th width="55" align="center">'.$this->l('Quantity').'</th>
-					<th width="88" align="right">'.$this->l('Unit price').'</th>
-					<th width="80" align="right">'.$this->l('Total price').'</th>
+					<th class="center">'.$this->l('ID').'</th>
+					<th class="center">'.$this->l('Date').'</th>
+					<th class="center">'.$this->l('Total').'</th>
+					<th class="center">'.$this->l('Carrier').'</th>
+					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-			if ($products)
-				foreach ($products as $product)
-					echo '
-					<tr>
-						<td>'.$product['reference'].'</td>
-						<td>'.$product['name'].'</a></td>
-						<td align="right">'.$product['quantity'].'</td>
-						<td align="right">'.Tools::displayPrice($product['price'], $currency).'</td>
-						<td align="right">'.Tools::displayPrice($product['total_wt'], $currency).'</td>
-					</tr>';
-			if ($discounts)
-				foreach ($discounts as $discount)
-					echo '
-					<tr>
-						<td>'.$discount['name'].'</td>
-						<td>'.$discount['description'].'</td>
-						<td align="right">1</td>
-						<td align="right">-'.(intval($discount['id_discount_type']) === 1 ? abs($discount['value']).' %' : Tools::displayPrice($discount['value'], $currency)).'</td>
-						<td align="right">-'.(intval($discount['id_discount_type']) === 1 ? abs($discount['value']).' %' : Tools::displayPrice($discount['value'], $currency)).'</td>
-					</tr>';
+			$tokenCarts = Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee));
+			foreach ($carts AS $cart)
+			{
+				$cartI = new Cart(intval($cart['id_cart']));
+				$summary = $cartI->getSummaryDetails();
+				$currency = new Currency(intval($cart['id_currency']));
+				$carrier = new Carrier(intval($cart['id_carrier']));
+				echo '
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'\'">
+					<td class="center">'.sprintf('%06d', $cart['id_cart']).'</td>
+					<td>'.Tools::displayDate($cart['date_add'], 1, true).'</td>
+					<td align="right">'.Tools::displayPrice($summary['total_price'], $currency).'</td>
+					<td>'.$carrier->name.'</td>
+					<td align="center"><a href="?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'"><img src="../img/admin/details.gif" /></a></td>
+				</tr>';
+			}
 			echo '
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Products:').' </td>
-					<td>'.Tools::displayPrice($total_products, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Vouchers:').' </td>
-					<td>'.Tools::displayPrice($total_discounts, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Gift-wrapping:').' </td>
-					<td>'.Tools::displayPrice($total_wrapping, $currency).'</td>
-				</tr>				
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Shipping:').' </td>
-					<td>'.Tools::displayPrice($total_shipping, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Total:').' </td>
-					<td>'.Tools::displayPrice($total_price, $currency).'</td>
-				</tr>
 			</table>';
 		}
 		else

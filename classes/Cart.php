@@ -119,10 +119,10 @@ class		Cart extends ObjectModel
 	{
 		if (!$this->id)
 			return array();
-		if (!$lite AND is_array(self::$_discounts))
-			return self::$_discounts;
-		if ($lite AND is_array(self::$_discountsLite))
-			return self::$_discountsLite;
+		if (!$lite AND isset(self::$_discounts[$this->id]))
+			return self::$_discounts[$this->id];
+		if ($lite AND isset(self::$_discountsLite[$this->id]))
+			return self::$_discountsLite[$this->id];
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT d.*, `id_cart`
@@ -148,22 +148,22 @@ class		Cart extends ObjectModel
 
 		if ($lite)
 		{
-			self::$_discountsLite = $result;
+			self::$_discountsLite[$this->id] = $result;
 			return $result;
 		}
 
 		$total_products_wt = $this->getOrderTotal(true, 1);
 		$shipping = $this->getOrderShippingCost();
-		self::$_discounts = array();
+		self::$_discounts[$this->id] = array();
 		foreach ($result as $row)
 		{
 			$discount = new Discount($row['id_discount'], intval($this->id_lang));
 			$row['description'] = $discount->description ? $discount->description : $discount->name;
 			$row['value_real'] = $discount->getValue(sizeof($result), $total_products_wt, $shipping, $this->id);
-			self::$_discounts[] = $row;
+			self::$_discounts[$this->id][] = $row;
 		}
 
-		return self::$_discounts;
+		return isset(self::$_discounts[$this->id]) ? self::$_discounts[$this->id] : NULL;
 	}
 
 	public function getDiscountsCustomer($id_discount)
@@ -535,6 +535,14 @@ class		Cart extends ObjectModel
 	* @param integer $type Total type
 	* @return float Order total
 	*/
+	static public function getTotalCart($id_cart)
+	{
+		$cart = new Cart(intval($id_cart));
+		$summary = $cart->getSummaryDetails();
+		$currency = new Currency(intval($cart->id_currency));
+		return Tools::displayPrice($summary['total_price'], $currency, false, false);
+	}
+	
 	function getOrderTotal($withTaxes = true, $type = 3)
 	{
 		if (!$this->id)
@@ -562,7 +570,6 @@ class		Cart extends ObjectModel
 			$order_total += $total_price;
 		}
 		$order_total_products = $order_total;
-		
 		if ($type == 2) $order_total = 0;
 		
 		$wrapping_fees = $this->gift ? floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')) : 0;
@@ -999,4 +1006,14 @@ echo 'Product: '.$product['name'];
 		$cookie->unsetFamily('textFields_'.intval($id_product).'_');
 		return true;
 	}
+	
+	static public function getCustomerCarts($id_customer)
+    {
+	 	$result = Db::getInstance()->ExecuteS('
+		 	SELECT *
+			FROM '._DB_PREFIX_.'cart c
+			WHERE c.`id_customer` = '.intval($id_customer).'
+			ORDER BY c.`date_add` DESC');
+	 	return $result;
+    }
 }

@@ -425,7 +425,8 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (1, 61, 1, 1, 1, 1),
 (1, 62, 1, 1, 1, 1),
 (1, 63, 1, 1, 1, 1),
-(1, 64, 1, 1, 1, 1);
+(1, 64, 1, 1, 1, 1),
+(1, 65, 1, 1, 1, 1);
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
 INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
@@ -450,7 +451,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (36, 'AdminFeatures', 1, 5),
 (58, 'AdminScenes', 1, 6),
 (12, 'AdminAddresses', 2, 1),
-(63, 'AdminGroups', 2, 2),
+(65, 'AdminCarts', 2, 2),
 (42, 'AdminInvoices', 3, 1),
 (55, 'AdminDeliverySlip', 3, 2),
 (47, 'AdminReturn', 3, 3),
@@ -559,6 +560,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 62, 'Referrers'),
 (1, 63, 'Groups'),
 (1, 64, 'Htaccess'),
+(1, 65, 'Carts'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -620,7 +622,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),
 (2, 63, 'Groupes'),
-(2, 64, 'Htaccess');
+(2, 64, 'Htaccess'),
+(2, 65, 'Paniers');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
