@@ -5,7 +5,9 @@
 	{if $new_products}
 		<ul class="product_images">
 			<li><a href="{$new_products.0.link}" title="{$new_products.0.legend|escape:htmlall:'UTF-8'}"><img src="{$link->getImageLink($new_products.0.link_rewrite, $new_products.0.id_image, 'medium')}" alt="{$new_products.0.legend|escape:htmlall:'UTF-8'}" /></a></li>
+			{if isset($new_products.1)}
 			<li><a href="{$new_products.1.link}" title="{$new_products.1.legend|escape:htmlall:'UTF-8'}"><img src="{$link->getImageLink($new_products.1.link_rewrite, $new_products.1.id_image, 'medium')}" alt="{$new_products.1.legend|escape:htmlall:'UTF-8'}" /></a></li>
+			{/if}
 		</ul>
 		<dl class="products">
 		{foreach from=$new_products item=product name=myLoop}
