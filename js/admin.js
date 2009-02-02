@@ -578,3 +578,8 @@ function orderOverwriteMessage(sl, text)
 		$zone.val(sl_value);
 	}
 }
+
+function setCancelQuantity(itself, id_order_detail, quantity)
+{
+	$('#cancelQuantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
+}

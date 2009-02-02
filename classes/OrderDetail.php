@@ -36,7 +36,7 @@ class OrderDetail extends ObjectModel
 	public $product_quantity_return;
 	
 	/** @var integer */
-	public $product_quantity_cancelled;
+	public $product_quantity_refunded;
 
 	/** @var float */
 	public $product_price;
@@ -85,7 +85,7 @@ class OrderDetail extends ObjectModel
 	'product_name' => 'isGenericName',
 	'product_quantity' => 'isInt',
 	'product_quantity_return' => 'isInt',
-	'product_quantity_cancelled' => 'isInt',
+	'product_quantity_refunded' => 'isInt',
 	'product_price' => 'isPrice',
 	'product_quantity_discount' => 'isFloat',
 	'product_ean13' => 'isEan13',
@@ -111,7 +111,7 @@ class OrderDetail extends ObjectModel
 		$fields['product_name'] = pSQL($this->product_name);
 		$fields['product_quantity'] = intval($this->product_quantity);
 		$fields['product_quantity_return'] = intval($this->product_quantity_return);
-		$fields['product_quantity_cancelled'] = intval($this->product_quantity_cancelled);
+		$fields['product_quantity_refunded'] = intval($this->product_quantity_refunded);
 		$fields['product_price'] = floatval($this->product_price);
 		$fields['product_quantity_discount'] = floatval($this->product_quantity_discount);
 		$fields['product_ean13'] = pSQL($this->product_ean13);

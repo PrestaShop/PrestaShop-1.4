@@ -21,8 +21,9 @@ ALTER TABLE PREFIX_employee
 ALTER TABLE PREFIX_employee
 	ADD stats_date_from DATE NULL DEFAULT NULL AFTER last_passwd_gen;
 
-
 ALTER TABLE PREFIX_order_state ADD hidden TINYINT(1) NOT NULL DEFAULT 0 AFTER unremovable;
+
+ALTER TABLE PREFIX_order_detail CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 CREATE TABLE PREFIX_customer_group (
   id_customer INTEGER UNSIGNED NOT NULL,

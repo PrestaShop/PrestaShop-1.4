@@ -172,7 +172,7 @@ class		Order extends ObjectModel
 		}
 		elseif ($this->hasBeenPaid())
 		{
-			$orderDetail->product_quantity_cancelled += intval($quantity);
+			$orderDetail->product_quantity_refunded += intval($quantity);
 			return $orderDetail->update();
 		}
 		else

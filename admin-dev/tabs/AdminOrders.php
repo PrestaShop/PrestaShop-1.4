@@ -512,12 +512,14 @@ class AdminOrders extends AdminTab
 			<fieldset style="width: 868px; ">
 				<legend><img src="../img/admin/cart.gif" alt="'.$this->l('Products').'" />'.$this->l('Products').'</legend>
 				<div style="float:left;">
-					<table style="width: 700px;" cellspacing="0" cellpadding="0" class="table" id="orderProducts">
+					<table style="width: 740px;" cellspacing="0" cellpadding="0" class="table" id="orderProducts">
 						<tr>
 							<th align="center" style="width: 60px">&nbsp;</th>
 							<th>'.$this->l('Product').'</th>
 							<th style="width: 80px; text-align: center">'.$this->l('UP').'</th>
 							<th style="width: 20px; text-align: center">'.$this->l('Qty').'</th>
+							'.($order->hasBeenPaid() ? '<th style="width: 20px; text-align: center">'.$this->l('Refunded').'</th>' : '').'
+							'.($order->hasBeenDelivered() ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
 							<th style="width: 90px; text-align: center">'.$this->l('Total').'</th>
 						</tr>';
@@ -555,6 +557,8 @@ class AdminOrders extends AdminTab
 										.'</a></td>
 									<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
 									<td align="center" class="productQuantity">'.(intval($product['product_quantity']) - $product['customizationQuantityTotal']).'</td>
+									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_refunded']).'</td>' : '').'
+									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 									<td align="center">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 								</tr>';
@@ -589,11 +593,10 @@ class AdminOrders extends AdminTab
 				
 				// Cancel product
 				echo '
-				<div style="float:right; width:150px;">
+				<div style="float:right; width:110px;">
 					<table style="width:100%" cellspacing="0" cellpadding="0" class="table" id="cancelProducts">
 						<tr>
-							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : $this->l('Cancel')).'</th>
-							<th align="center" style="width: 50px">'.(($order->hasBeenDelivered() OR $order->hasBeenPaid()) ? $this->l('Total') : '' ).'</th>';
+							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
 						echo '
 						</tr>';
 					foreach ($products as $k => $product)
@@ -606,37 +609,35 @@ class AdminOrders extends AdminTab
 								<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 						if (intval($product['product_quantity_return']) < intval($product['product_quantity']))
 							echo '
-								<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" />';
+								<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', 1)" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
 						else
 							echo '--';
 						echo '
 							</td>
 							<td class="cancelQuantity">';
-						if (intval($product['product_quantity_return'] + $product['product_quantity_cancelled']) >= intval($product['product_quantity']))
-							echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />--';
+						if (intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity']))
+							echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';
 						else
 							echo '
-								<input type="text" value="" name="cancelQuantity['.$k.']" size="2" onClick="selectCheckbox(this);" />';
-						echo '
+								<input type="text" id="cancelQuantity_'.intval($product['id_order_detail']).'" name="cancelQuantity['.$k.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
+						echo ($order->hasBeenDelivered() ? intval($product['product_quantity_return']).'/'.(intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : ($order->hasBeenPaid() ? intval($product['product_quantity_refunded']).'/'.intval($product['product_quantity']) : '')).'
 							</td>
-							<td align="center">'.(($order->hasBeenDelivered() OR $order->hasBeenPaid()) ? (intval($product['product_quantity_return'] + $product['product_quantity_cancelled']).'/'.intval($product['product_quantity'])) : '').'</td>
 						</tr>';
 					}
 					echo '
 					</table>
-						<div style="margin-top:15px;">';
-						if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
-							echo '
-							<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />
-							<input type="checkbox" id="generateCreditSlip" name="generateCreditSlip" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateCreditSlip" style="float:none; font-weight:normal;">'.$this->l('Generate a credit slip').'</label><br />
-							<input type="checkbox" id="generateDiscount" name="generateDiscount" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateDiscount" style="float:none; font-weight:normal;">'.$this->l('Generate a voucher').'</label><br />
-							<span id="spanShippingBack" style="display:none;"><input type="checkbox" id="shippingBack" name="shippingBack" class="button" />&nbsp;<label for="shippingBack" style="float:none; font-weight:normal;">'.$this->l('Repay shipping costs').'</label><br /></span>';
-						echo '
-							<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($order->hasBeenDelivered() ? $this->l('Return products') : $this->l('Cancel products')).'" class="button" style="margin-top:8px;" /></div>
-						</div>';
+				</div>
+				<div style="float: right; width: 150px; margin-top:15px;">';
+				if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
 					echo '
+					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />
+					<input type="checkbox" id="generateCreditSlip" name="generateCreditSlip" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateCreditSlip" style="float:none; font-weight:normal;">'.$this->l('Generate a credit slip').'</label><br />
+					<input type="checkbox" id="generateDiscount" name="generateDiscount" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateDiscount" style="float:none; font-weight:normal;">'.$this->l('Generate a voucher').'</label><br />
+					<span id="spanShippingBack" style="display:none;"><input type="checkbox" id="shippingBack" name="shippingBack" class="button" />&nbsp;<label for="shippingBack" style="float:none; font-weight:normal;">'.$this->l('Repay shipping costs').'</label><br /></span>';
+				echo '
+					<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($order->hasBeenDelivered() ? $this->l('Return products') : $this->l('Cancel products')).'" class="button" style="margin-top:8px;" /></div>
 				</div>';
-			echo'
+			echo '
 			</fieldset>
 		</form>
 		<div class="clear" style="height:20px;">&nbsp;</div>';
