@@ -164,27 +164,27 @@ class		Order extends ObjectModel
 	{
 		if (!$currentStatus = intval($this->getCurrentState()))
 			return false;
-		
+
 		if ($this->hasBeenDelivered())
 		{
-			$orderDetail->product_quantity_return += $quantity;
+			$orderDetail->product_quantity_return += intval($quantity);
 			return $orderDetail->update();
 		}
 		elseif ($this->hasBeenPaid())
 		{
-			$orderDetail->product_quantity_cancelled += $quantity;
+			$orderDetail->product_quantity_cancelled += intval($quantity);
 			return $orderDetail->update();
 		}
 		else
 		{
+			$productPrice = (floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity);
+			$productPriceWithoutTax = floatval($orderDetail->product_price) * intval($quantity);
 			// Update order
-			$productPrice = ($orderDetail->product_price * (1 + ($orderDetail->tax_rate * 0.01))) * $quantity;
 			$order->total_paid -= $productPrice;
 			$order->total_paid_real -= $productPrice;
-			$order->total_products -= $productPrice;
-
+			$order->total_products -= $productPriceWithoutTax;
 			// Update order detail
-			$orderDetail->product_quantity -= $quantity;
+			$orderDetail->product_quantity -= intval($quantity);
 			
 			if (!$orderDetail->product_quantity)
 				return $orderDetail->delete();
@@ -369,12 +369,12 @@ class		Order extends ObjectModel
 	
 	public function hasBeenDelivered()
 	{
-		return sizeof($this->getHistory(Configuration::get('PS_DEFAULT_LANG'), _PS_OS_DELIVERED_));
+		return sizeof($this->getHistory(intval($this->id_lang), _PS_OS_DELIVERED_));
 	}
 	
 	public function hasBeenPaid()
 	{
-		return sizeof($this->getHistory(Configuration::get('PS_DEFAULT_LANG'), _PS_OS_PAYMENT_));
+		return sizeof($this->getHistory(intval($this->id_lang), _PS_OS_PAYMENT_));
 	}
 	
 	/**

@@ -99,7 +99,6 @@ abstract class PaymentModule extends Module
 			$order->payment = Tools::substr($paymentMethod, 0, 32);
 			if (isset($this->name))
 				$order->module = $this->name;
-			$order->total_paid_real = floatval(number_format($amountPaid, 2, '.', ''));
 			$order->recyclable = $cart->recyclable;
 			$order->gift = intval($cart->gift);
 			$order->gift_message = $cart->gift_message;
