@@ -359,8 +359,9 @@ function displayCarrier()
 		'giftAllowed' => intval(Configuration::get('PS_GIFT_WRAPPING')),
 		'conditions' => intval(Configuration::get('PS_CONDITIONS')),
 		'recyclable' => intval($cart->recyclable),
-		'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),		
+		'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 		'carriers' => $resultsArray,
+		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked)));
 
 	Tools::safePostVars();

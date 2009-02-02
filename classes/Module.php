@@ -377,6 +377,7 @@ abstract class Module
 			die(Tools::displayError());
 
 		global $cart, $cookie;
+		$altern = 0;
 
 		if (!isset($hookArgs['cookie']) OR !$hookArgs['cookie'])
 			$hookArgs['cookie'] = $cookie;
@@ -408,7 +409,10 @@ abstract class Module
 					if ($fileindex == $exception['file_name'])
 						$show = false;
 			if (is_callable(array($moduleInstance, 'hook'.$hook_name)) AND $show)
+			 {
+				$hookArgs['altern'] = ++$altern;
 				$output .= call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
+			}
 		}
 		return $output;
 	}

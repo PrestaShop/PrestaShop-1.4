@@ -430,6 +430,14 @@ class AdminOrders extends AdminTab
 			'.(($currentState->delivery OR $order->delivery_number) ? '<br /><a href="pdf.php?id_delivery='.$order->delivery_number.'">'.$this->l('Delivery slip #').'<b>'.Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', $order->delivery_number).'</b></a><br />' : '');
 			if ($order->shipping_number)
 				echo $this->l('Tracking number:').' <b>'.$order->shipping_number.'</b> (<a href="'.str_replace('@', $order->shipping_number, $carrier->url).'">'.$this->l('Track the shipment').'</a>)';
+			
+			/* Carrier module */
+			if ($carrier->ismodule == 1)
+			{
+				$module = Module::getInstanceByName($carrier->name);
+				echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);
+			}
+			
 			/* Display shipping number field */
 			if ($carrier->url AND $currentState->id == _PS_OS_SHIPPING_)
 			 echo '

@@ -68,8 +68,10 @@
 					<td class="carrier_price">{if $carrier.price}<span class="price">{convertPrice price=$carrier.price}</span>{else}{l s='Free!'}{/if}</td>
 				</tr>
 			{/foreach}
+			{$HOOK_EXTRACARRIER}
 			</tbody>
 		</table>
+		<div style="display: none;" id="extra_carrier"></div>
 	</div>
 	{else}
 		<p class="warning">{l s='There is no carrier available that will deliver to this address!'}</td></tr>
