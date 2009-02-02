@@ -494,8 +494,6 @@ class PDF extends FPDF
 			$total_without_tax = $product['total_price'];
 			$total_with_tax = $product['total_wt'];
 			$productQuantity = intval($product['product_quantity']);
-			if ($delivery);
-				$productQuantity -= $product['product_quantity_refunded'];
 			if ($productQuantity <= 0)
 				continue ;
 
