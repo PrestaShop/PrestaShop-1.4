@@ -188,6 +188,9 @@
 				<td><span class="order_qte_span editable">1</span></td>
 				<td>&nbsp;</td>
 				<td>{l s='-'}{convertPriceWithCurrency price=$discount.value currency=$currency convert=0}</td>
+				{if $return_allowed}
+				<td>&nbsp;</td>
+				{/if}
 			</tr>
 		{/foreach}
 		</tbody>
