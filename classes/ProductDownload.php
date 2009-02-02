@@ -137,7 +137,7 @@ class ProductDownload extends ObjectModel
 		WHERE `id_product` = ' . intval($id_product).'
 		AND `active` = 1');
 		self::$_productIds[$id_product] = isset($data['id_product_download']) ? $data['id_product_download'] : false;
-		return $data['id_product_download'];
+		return self::$_productIds[$id_product];
 	}
 
 	/**

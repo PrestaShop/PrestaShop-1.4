@@ -921,7 +921,7 @@ echo 'Product: '.$product['name'];
 			return false;
 		$allVirtual = true;
 		foreach ($this->getProducts() AS $product)
-			$allVirtual &= (Validate::isUnsignedInt(ProductDownload::getIdFromIdProduct($product['id_product'])) ? true : false);
+			$allVirtual &= (ProductDownload::getIdFromIdProduct($product['id_product']) ? true : false);
 		return $allVirtual;
 	}
 
