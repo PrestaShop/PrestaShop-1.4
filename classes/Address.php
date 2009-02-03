@@ -226,16 +226,16 @@ class		Address extends ObjectModel
 	}
 	
 	/*
-	* Specify if an adress is already in base
+	* Specify if an address is already in base
 	*
-	* @param $id_address Adress id
+	* @param $id_address Address id
 	* @return boolean
 	*/	
 	static public function addressExists($id_address)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_address`
-		FROM '._DB_PREFIX_.'adress a
+		FROM '._DB_PREFIX_.'address a
 		WHERE a.`id_address` = '.intval($id_address));
 		
 		return isset($row['id_address']);
