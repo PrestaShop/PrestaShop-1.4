@@ -68,7 +68,7 @@ class StatsProduct extends ModuleGraph
 	private function getSales($id_product, $id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT o.date_add, o.id_order, od.product_quantity, od.product_price, od.tax_name, od.product_name
+		SELECT o.date_add, o.id_order, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		WHERE LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
@@ -119,7 +119,7 @@ class StatsProduct extends ModuleGraph
 						<td>'.intval($sale['id_order']).'</td>
 						'.($hasAttribute ? '<td>'.$sale['product_name'].'</td>' : '').'
 						<td>'.intval($sale['product_quantity']).'</td>
-						<td>'.Tools::displayprice($sale['product_price'], $currency).'</td>
+						<td>'.Tools::displayprice($sale['total'], $currency).'</td>
 						<td>'.$sale['tax_name'].'</td>
 					</tr>';
 				$this->_html .= '</tbody></table></div>';
