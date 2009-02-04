@@ -57,7 +57,7 @@ class AdminSuppliers extends AdminTab
 				echo '
 				<table border="0" cellpadding="0" cellspacing="0" class="table width3">
 					<tr>
-						<th>'.$product->name.'</th>
+						<th><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></th>
 						'.(!empty($product->reference) ? '<th width="150">'.$this->l('Ref:').' '.$product->reference.'</th>' : '').'
 						'.(!empty($product->ean13) ? '<th width="120">'.$this->l('EAN13:').' '.$product->ean13.'</th>' : '').'
 						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="50">'.$this->l('Qty:').' '.$product->quantity.'</th>' : '').'
@@ -67,7 +67,7 @@ class AdminSuppliers extends AdminTab
 			else
 			{
 				echo '
-				<h3>'.$product->name.'</h3>
+				<h3><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></h3>
 				<table>
 					<tr>
 						<td colspan="2">
