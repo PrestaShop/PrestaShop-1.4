@@ -6,7 +6,7 @@ $_MODULE['<{sekeywords}prestashop>sekeywords_65b0b42febc8ea16db4652eab6f420a4'] 
 $_MODULE['<{sekeywords}prestashop>sekeywords_ed37c33642aec5c295e8d67ff1afa95c'] = 'Affiche les mots clés qui ont mené les visiteurs jusqu\'à votre boutique';
 $_MODULE['<{sekeywords}prestashop>sekeywords_867343577fa1f33caa632a19543bd252'] = 'mots clés';
 $_MODULE['<{sekeywords}prestashop>sekeywords_40d28e924bb30a0c3d5e45dab97861b5'] = 'Occurences';
-$_MODULE['<{sekeywords}prestashop>sekeywords_19945d4dc9feea9e8267ed0468b53e53'] = 'Aucun mot clé trouvé';
+$_MODULE['<{sekeywords}prestashop>sekeywords_ccd5aa8369e2f7c7650c08a3989a39cd'] = 'Aucun mot clé recherché plus d\'une fois trouvé.';
 $_MODULE['<{sekeywords}prestashop>sekeywords_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{sekeywords}prestashop>sekeywords_060ce52fbf64d0ad58c1b984a4230bb6'] = 'Identifier des mots de moteurs de recherche externes';
 $_MODULE['<{sekeywords}prestashop>sekeywords_8443e994889501b92bff8f2d18d6ff4d'] = 'Il y a de nombreux moyens pour accéder à un site internet, mais l\'un des plus courants est de passer par un moteur de recherche. Identifier les mots clés qui amènent le plus de visiteurs est donc très important car cela vous permet de connaître les produits que vous devez mettre en avant afin d\'attirer toujours plus de visiteurs et donc de clients potentiels.';
