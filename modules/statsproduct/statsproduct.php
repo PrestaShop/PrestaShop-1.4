@@ -53,15 +53,14 @@ class StatsProduct extends ModuleGraph
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
-	private function getProducts()
+	private function getProducts($id_lang)
 	{
-		global $cookie;
 		return Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pl.`name`
+		SELECT p.`id_product`, p.reference, pl.`name`, (p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.`id_product` = pl.`id_product`
 		'.(Tools::getValue('id_category') ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON p.`id_product` = cp.`id_product`' : '').'
-		WHERE pl.`id_lang` = '.intval($cookie->id_lang).'
+		WHERE pl.`id_lang` = '.intval($id_lang).'
 		'.(Tools::getValue('id_category') ? 'AND cp.id_category = '.intval(Tools::getValue('id_category')) : '').'
 		ORDER BY pl.`name`');
 	}
@@ -105,10 +104,18 @@ class StatsProduct extends ModuleGraph
 			'.$this->l('Click on a product to access its statistics.').'
 			<div class="clear space"></div>
 			<h2>'.$this->l('Products available').'</h2>
-			<ul>';
-			foreach ($this->getProducts() AS $product)
-				$this->_html .= '<li><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&module='.$this->name.'&id_product='.$product['id_product'].'">'.$product['name'].'</a></li>';
-			$this->_html .= '</ul>';
+			<div style="overflow-y: scroll; height: 600px;">
+			<table class="table" border="0" cellspacing="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th>'.$this->l('Ref.').'</th>
+					<th>'.$this->l('Name').'</th>
+					<th>'.$this->l('Stock').'</th>
+				</tr>
+			</thead><tbody>';
+			foreach ($this->getProducts($cookie->id_lang) AS $product)
+				$this->_html .= '<tr><td>'.$product['reference'].'</td><td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&module='.$this->name.'&id_product='.$product['id_product'].'">'.$product['name'].'</a></td><td>'.$product['quantity'].'</td></tr>';
+			$this->_html .= '</tbody></table></div>';
 		}
 		
 		$this->_html .= '</fieldset><br />

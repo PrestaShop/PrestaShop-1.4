@@ -28,6 +28,7 @@ class StatsSearch extends ModuleGraph
 		WHERE LEFT(ss.`date_add`, 10) BETWEEN ';
 		$this->_query2 = '
 		GROUP BY TRIM(ss.`keyword`)
+		HAVING occurences > 1
 		ORDER BY COUNT(ss.`keyword`) DESC';
 
         parent::__construct();
@@ -69,31 +70,25 @@ class StatsSearch extends ModuleGraph
 		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
-		$table = '<table class="table" border="0" cellspacing="0" cellspacing="0">
+		$table = '<div style="overflow-y: scroll; height: 600px;">
+		<table class="table" border="0" cellspacing="0" cellspacing="0">
 		<thead>
 			<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
 			<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th></tr>
-		</thead>';
+		</thead><tbody>';
 
-		$i = 0;
 		foreach ($result as $index => $row)
 		{
 			$keyword =& $row['keyword'];
 			$occurences =& $row['occurences'];
-			if ($i === 0)
-				$table .= '<tbody>';
 			$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
-			$i++;
 		}
+		$table .= '</tbody></table></div>';
 		
-		if ($i > 0)
-		{
-			$table .= '</tbody></table>';
-			$this->_html .= $table;
-			$this->_html .= '<br /><center>'.ModuleGraph::engine(array('type' => 'pie')).'</center>';
-		}
+		if (sizeof($result))
+			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
 		else
-			$this->_html .= '<p><strong>'.$this->l('No keyword found').'</strong></p>';
+			$this->_html .= '<p><strong>'.$this->l('No keyword searched more than once found.').'</strong></p>';
 		$this->_html .= '</fieldset>';
 		return $this->_html;
 	}
