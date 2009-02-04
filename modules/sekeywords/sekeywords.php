@@ -28,6 +28,7 @@ class SEKeywords extends ModuleGraph
 		WHERE LEFT(sek.`date_add`, 10) BETWEEN ';
 		$this->_query2 = '
 		GROUP BY TRIM(sek.`keyword`)
+		HAVING occurences > 1
 		ORDER BY COUNT(sek.`keyword`) DESC';
 
         parent::__construct();
@@ -71,35 +72,28 @@ class SEKeywords extends ModuleGraph
 	function hookAdminStatsModules()
 	{
 		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
-		$this->_html = '
-		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
-		$table = '<table class="table" border="0" cellspacing="0" cellspacing="0">
+		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
+		
+		$table = '<div style="overflow-y: scroll; height: 600px;">
+		<table class="table" border="0" cellspacing="0" cellspacing="0">
 		<thead>
 			<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
 			<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th></tr>
-		</thead>';
-
-		$i = 0;
+		</thead><tbody>';
 		foreach ($result as $index => $row)
 		{
 			$keyword =& $row['keyword'];
 			$occurences =& $row['occurences'];
-			if ($i === 0)
-				$table .= '<tbody>';
 			$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
-			$i++;
 		}
+		$table .= '</tbody></table></div>';
 		
-		if ($i > 0)
-		{
-			$table .= '</tbody></table>';
-			$this->_html .= $table;
-			$this->_html .= '<br /><center>'.ModuleGraph::engine(array('type' => 'pie')).'</center>';
-		}
+		if (sizeof($result))
+			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
 		else
-			$this->_html .= '<p><strong>'.$this->l('No keyword found').'</strong></p>';
+			$this->_html .= '<p><strong>'.$this->l('No keyword searched for more than once found').'</strong></p>';
 
-		$this->_html .= '</fieldset><br />
+		$this->_html .= '</fieldset><br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Identify external search engines keywords').'</h2>
 			<p>'.$this->l('There are many ways to find a website, but one of the most common is to find it with a search engine. Identifying the most "visitor-making" keywords entered by your new visitors is really important, it allows you to see which product you have to put in front if you want more visitors and customers.').'</p><br />

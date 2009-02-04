@@ -61,21 +61,21 @@ class StatsOrigin extends ModuleGraph
 	{
 		$websites = $this->getOrigins(ModuleGraph::getDateBetween());
 		
-		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> Origin</legend>';
+		$this->_html = '<fieldset class="width3 center"><legend><img src="../modules/'.$this->name.'/logo.gif" /> Origin</legend>';
 		if (sizeof($websites))
 		{
 			$this->_html .= '
-			<center>
 			<p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went through to get on your shop.').'</p>
-			'.ModuleGraph::engine(array('type' => 'pie')).'
-			<br /><br /><br /><table class="table" border="0" cellspacing="0" cellspacing="0">
+			'.ModuleGraph::engine(array('type' => 'pie')).'<br /><br />
+			<div style="overflow-y: scroll; height: 600px;">
+			<table class="table" border="0" cellspacing="0" cellspacing="0">
 				<tr>
 					<th style="width:400px;">'.$this->l('Origin').'</th>
 					<th style="width:50px; text-align: right">'.$this->l('Total').'</th>
 				</tr>';
 			foreach ($websites as $website => $total)
 				$this->_html .= '<tr><td>'.(!strstr($website, ' ') ? '<a href="http://'.$website.'">' : '').$website.(!strstr($website, ' ') ? '</a>' : '').'</td><td style="text-align: right">'.$total.'</td></tr>';
-			$this->_html .= '</table></center>';
+			$this->_html .= '</table></div>';
 		}
 		else
 			$this->_html .= '<p><strong>'.$this->l('Direct links only').'</strong></p>';

@@ -31,11 +31,18 @@ class StatsBestProducts extends ModuleGrid
 		
 		$this->_columns = array(
 			array(
+				'id' => 'reference',
+				'header' => $this->l('Ref.'),
+				'dataIndex' => 'reference',
+				'align' => 'left',
+				'width' => 100
+			),
+			array(
 				'id' => 'name',
 				'header' => $this->l('Name'),
 				'dataIndex' => 'name',
 				'align' => 'left',
-				'width' => 300
+				'width' => 200
 			),
 			array(
 				'id' => 'totalQuantitySold',
@@ -101,18 +108,14 @@ class StatsBestProducts extends ModuleGrid
 		$result = Db::getInstance()->GetRow('SELECT COUNT(p.`id_product`) totalCount FROM `'._DB_PREFIX_.'product` p');
 		return $result['totalCount'];
 	}
-	
-	public function setOption($option)
-	{
-	}
-	
+		
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
 		$this->_totalCount = $this->getTotalCount();
 
 		$this->_query = '
-		SELECT p.id_product, p.quantity, pl.name,
+		SELECT p.reference, p.id_product, (p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity, pl.name,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
 			ROUND(IFNULL(SUM((p.price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
 			(

@@ -92,6 +92,7 @@ class StatsLive extends Module
 		if ($totalVisitors)
 		{
 			echo $this->l('Total:').' '.intval($totalVisitors).'
+			<div style="overflow-y: scroll; height: 600px;">
 			<table cellpadding="0" cellspacing="0" class="table space">
 				<tr><th>#</th><th>'.$this->l('IP').'</th><th>'.$this->l('Since').'</th><th>'.$this->l('Referrer').'</th></tr>';
 			foreach ($visitors as $visitor)
@@ -102,7 +103,8 @@ class StatsLive extends Module
 						<td style="width: 100px;">'.Tools::displayDate($visitor['date_add'], intval($cookie->id_lang), true).'</td>
 						<td style="width: 300px;">'.(empty($visitor['http_referer']) ? $this->l('none') : parse_url($visitor['http_referer'], PHP_URL_HOST)).'</td>
 					</tr>';
-			echo '</table>';
+			echo '</table>
+			</div>';
 		}
 		else
 			echo $this->l('There is no visitor online now.');

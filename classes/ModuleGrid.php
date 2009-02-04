@@ -86,11 +86,11 @@ abstract class ModuleGrid extends Module
 		if (!isset($params['width']) OR !Validate::IsUnsignedInt($params['width']))
 			$params['width'] = 600;
 		if (!isset($params['height']) OR !Validate::IsUnsignedInt($params['height']))
-			$params['height'] = 400;
+			$params['height'] = 920;
 		if (!isset($params['start']) OR !Validate::IsUnsignedInt($params['start']))
 			$params['start'] = 0;
 		if (!isset($params['limit']) OR !Validate::IsUnsignedInt($params['height']))
-			$params['limit'] = 20;
+			$params['limit'] = 40;
 
 		$grider .= '&width='.$params['width'];
 		$grider .= '&height='.$params['height'];
