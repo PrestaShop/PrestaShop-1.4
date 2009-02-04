@@ -237,6 +237,7 @@ class		Carrier extends ObjectModel
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
+	 	
 		$sql = '
 			SELECT c.*, cl.delay
 			FROM `'._DB_PREFIX_.'carrier` c
@@ -250,9 +251,16 @@ class		Carrier extends ObjectModel
 			AND c.`ismodule` = 0
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
-		foreach ($carriers as $key => $carrier)
-			if ($carrier['name'] == '0')
-				$carriers[$key]['name'] = Configuration::get('PS_SHOP_NAME');
+		
+		if (is_array($carriers) AND count($carriers))
+		{
+			foreach ($carriers as $key => $carrier)
+				if ($carrier['name'] == '0')
+					$carriers[$key]['name'] = Configuration::get('PS_SHOP_NAME');
+		}
+		else
+			$carriers = array();
+
 		return $carriers;
 	}
 

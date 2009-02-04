@@ -203,7 +203,7 @@ function processAddress()
 	}
 	if (Tools::getValue('ajax') == 'true')
 	{
-		/* Adresses have been updated */
+		/* Adresses have been updated in order-address.tpl*/
 	   die('true');
 	   exit;
 	}
