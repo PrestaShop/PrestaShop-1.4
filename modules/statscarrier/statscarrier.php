@@ -41,7 +41,7 @@ class StatsCarrier extends ModuleGraph
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'orders` o
-		WHERE LEFT(o.`date_add`, 10) BETWEEN '.pSQL(ModuleGraph::getDateBetween()).'
+		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_order_state')) ? 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval(Tools::getValue('id_order_state')) : ''));
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
 	
@@ -73,12 +73,12 @@ class StatsCarrier extends ModuleGraph
 			$stateQuery = 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval($this->_option);
 		$this->_titles['main'] = $this->l('Percentage of orders by carrier');
 		$result = Db::getInstance()->ExecuteS('
-		SELECT COUNT(DISTINCT o.`id_order`) as total, c.name
-		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'carrier` c ON o.id_carrier = c.id_carrier
-		WHERE LEFT(o.`date_add`, 10) BETWEEN '.pSQL(ModuleGraph::getDateBetween()).'
+		SELECT c.name, COUNT(DISTINCT o.`id_order`) as total
+		FROM `'._DB_PREFIX_.'carrier` c
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.id_carrier = c.id_carrier
+		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		'.$stateQuery.'
-		GROUP BY o.`id_carrier`');
+		GROUP BY c.`id_carrier`');
 		foreach ($result as $row)
 		{
 		    $this->_values[] = $row['total'];
