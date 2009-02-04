@@ -118,8 +118,8 @@ class AdminStats extends AdminStatsTab
 				<table cellspacing="0" cellpadding="0" class="table space">
 					<tr>
 						<th style="width: 150px"></th>
-						<th style="width: 120px; text-align: center; font-weight: bold">'.$this->l('with tax').'</th>
-						<th style="width: 180px; text-align: center; font-weight: bold">'.$this->l('only products not incl. tax').'</th>
+						<th style="width: 120px; text-align: center; font-weight: bold">'.$this->l('total paid with tax').'</th>
+						<th style="width: 180px; text-align: center; font-weight: bold">'.$this->l('total products not incl. tax').'</th>
 					</tr>
 					<tr>
 						<th style="font-weight: bold">'.$this->l('Sales turnover').'</th>
