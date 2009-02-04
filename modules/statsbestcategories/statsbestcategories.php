@@ -35,13 +35,13 @@ class StatsBestCategories extends ModuleGrid
 				'header' => $this->l('Name'),
 				'dataIndex' => 'name',
 				'align' => 'left',
-				'width' => 300
+				'width' => 400
 			),
 			array(
 				'id' => 'totalQuantitySold',
 				'header' => $this->l('Total Quantity Sold'),
 				'dataIndex' => 'totalQuantitySold',
-				'width' => 30,
+				'width' => 20,
 				'align' => 'right'
 			),
 			array(
@@ -107,9 +107,9 @@ class StatsBestCategories extends ModuleGrid
 		$this->_totalCount = $this->getTotalCount();
 
 		$this->_query = '
-		SELECT ca.`id_category`, calang.`name`,
+		SELECT ca.`id_category`, CONCAT(parent.name, \' > \', calang.`name`) as name,
 			IFNULL(SUM(t.`totalQuantitySold`), 0) AS totalQuantitySold,
-			IFNULL(SUM(t.`totalPriceSold`), 0) AS totalPriceSold,
+			ROUND(IFNULL(SUM(t.`totalPriceSold`), 0), 2) AS totalPriceSold,
 			(
 				SELECT IFNULL(SUM(pv.`counter`), 0)
 				FROM `'._DB_PREFIX_.'page` p
@@ -124,6 +124,7 @@ class StatsBestCategories extends ModuleGrid
 			) AS totalPageViewed
 		FROM `'._DB_PREFIX_.'category` ca
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON (ca.`id_category` = calang.`id_category` AND calang.`id_lang` = '.$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` parent ON (ca.`id_parent` = parent.`id_category` AND parent.`id_lang` = '.$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_product` capr ON ca.`id_category` = capr.`id_category`
 		LEFT JOIN (
 			SELECT pr.`id_product`, t.`totalQuantitySold`, t.`totalPriceSold`
