@@ -19,6 +19,9 @@ function updateAddressesDisplay()
 		$('#address_invoice_form:hidden').show('fast');
 		updateAddressDisplay('invoice');
 	}
+	
+	updateAddresses();
+	
 	return true;
 }
 
@@ -48,8 +51,8 @@ function updateAddressDisplay(addressType)
 
 function updateAddresses()
 {
-   var idAddress_delivery = $('select#id_address_delivery').val();
-   var idAddress_invoice = $('select#id_address_invoice').val();
+	var idAddress_delivery = $('select#id_address_delivery').val();
+	var idAddress_invoice = $('input[type=checkbox]#addressesAreEquals:checked').length == 1 ? $('select#id_address_delivery').val() : $('select#id_address_invoice').val();
    
    $.ajax({
            type: 'POST',

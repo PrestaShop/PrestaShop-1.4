@@ -22,19 +22,19 @@
 	<div class="addresses">
 		<p class="address_delivery select">
 			<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
-			<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay(); updateAddresses();">
+			<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay();">
 			{foreach from=$addresses key=k item=address}
 				<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_delivery}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}
 			</select>
 		</p>
 		<p class="checkbox">
-			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" onchange="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery}checked="checked"{/if} />
+			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery}checked="checked"{/if} />
 			<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
 		</p>
 		<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
 			<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
-			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay(); updateAddresses();">
+			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();">
 			{foreach from=$addresses key=k item=address}
 				<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_invoice}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}
