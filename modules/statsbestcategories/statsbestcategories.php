@@ -4,7 +4,7 @@
   * Statistics
   * @category stats
   *
-  * @author John Thiriet / Epitech
+  * @author Damien Metzger / Epitech
   * @copyright Epitech / PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
   * @version 1.1
@@ -91,14 +91,9 @@ class StatsBestCategories extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance()->GetRow('SELECT COUNT(p.`id_category`) totalCount FROM `'._DB_PREFIX_.'category` p');
-		return $result['totalCount'];
+		return Db::getInstance()->getValue('SELECT COUNT(c.`id_category`) FROM `'._DB_PREFIX_.'category` c');
 	}
-	
-	public function setOption($option)
-	{
-	}
-	
+		
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
