@@ -929,7 +929,7 @@ class AdminProducts extends AdminTab
 
 		$cover = Product::getCover($obj->id);
 		$this->displayImage($obj->id, _PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg', 180, $cover['id_image'], Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
-
+			
 		if ($obj->id)
 			$currentIndex .= '&id_product='.$obj->id;
 
@@ -986,7 +986,8 @@ class AdminProducts extends AdminTab
 		{
 			echo '
 			<div id="product_link">
-				<b><a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a></b>
+				<b><a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a></b><br /><br />
+				<b><a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a></b>
 			</div>';
 		}
 

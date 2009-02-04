@@ -65,10 +65,21 @@ class StatsProduct extends ModuleGraph
 		ORDER BY pl.`name`');
 	}
 	
+	private function getSales($id_product, $id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT o.date_add, o.id_order, od.product_quantity, od.product_price, od.tax_name, od.product_name
+		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
+		WHERE LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
+		AND od.product_id = '.intval($id_product));
+	}
+	
 	public function hookAdminStatsModules($params)
 	{
 		global $cookie, $currentIndex;
 		$id_category = intval(Tools::getValue('id_category'));
+		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		if ($id_product = intval(Tools::getValue('id_product')))
@@ -82,8 +93,37 @@ class StatsProduct extends ModuleGraph
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.$id_product)).'</center>
 			<p>'.$this->l('Total viewed:').' '.$totalViewed.'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.$id_product)).'</center>';
-			if ($product->hasAttributes() AND $totalBought)
+			if ($hasAttribute = $product->hasAttributes() AND $totalBought)
 				$this->_html .= '<h3 class="space">'.$this->l('Attribute sales distribution').'</h3><center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.$id_product)).'</center>';
+			if ($totalBought)
+			{
+				$sales = $this->getSales($id_product, $cookie->id_lang);
+				$this->_html .= '<br class="clear" />
+				<h3>'.$this->l('Sales').'</h3>
+				<div style="overflow-y: scroll; height: 600px;">
+				<table class="table" border="0" cellspacing="0" cellspacing="0">
+				<thead>
+					<tr>
+						<th>'.$this->l('Date').'</th>
+						<th>'.$this->l('Order').'</th>
+						'.($hasAttribute ? '<th>'.$this->l('Attribute').'</th>' : '').'
+						<th>'.$this->l('Qty').'</th>
+						<th>'.$this->l('Price').'</th>
+						<th>'.$this->l('Tax').'</th>
+					</tr>
+				</thead><tbody>';
+				foreach ($sales as $sale)
+					$this->_html .= '
+					<tr>
+						<td>'.Tools::displayDate($sale['date_add'], false).'</td>
+						<td>'.intval($sale['id_order']).'</td>
+						'.($hasAttribute ? '<td>'.$sale['product_name'].'</td>' : '').'
+						<td>'.intval($sale['product_quantity']).'</td>
+						<td>'.Tools::displayprice($sale['product_price'], $currency).'</td>
+						<td>'.$sale['tax_name'].'</td>
+					</tr>';
+				$this->_html .= '</tbody></table></div>';
+			}
 		}
 		else
 		{
