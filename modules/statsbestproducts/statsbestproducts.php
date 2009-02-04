@@ -35,41 +35,48 @@ class StatsBestProducts extends ModuleGrid
 				'header' => $this->l('Ref.'),
 				'dataIndex' => 'reference',
 				'align' => 'left',
-				'width' => 100
+				'width' => 50
 			),
 			array(
 				'id' => 'name',
 				'header' => $this->l('Name'),
 				'dataIndex' => 'name',
 				'align' => 'left',
-				'width' => 200
+				'width' => 100
 			),
 			array(
 				'id' => 'totalQuantitySold',
-				'header' => $this->l('Total Quantity Sold'),
+				'header' => $this->l('Qty sold'),
 				'dataIndex' => 'totalQuantitySold',
-				'width' => 30,
+				'width' => 50,
+				'align' => 'right'
+			),
+			array(
+				'id' => 'averageQuantitySold',
+				'header' => $this->l('Qty sold / day'),
+				'dataIndex' => 'averageQuantitySold',
+				'width' => 60,
 				'align' => 'right'
 			),
 			array(
 				'id' => 'totalPriceSold',
-				'header' => $this->l('Total Price Sold'),
+				'header' => $this->l('Sales'),
 				'dataIndex' => 'totalPriceSold',
-				'width' => 30,
+				'width' => 50,
 				'align' => 'right'
 			),
 			array(
 				'id' => 'totalPageViewed',
-				'header' => $this->l('Total Viewed'),
+				'header' => $this->l('Page viewed'),
 				'dataIndex' => 'totalPageViewed',
-				'width' => 30,
+				'width' => 60,
 				'align' => 'right'
 			),
 			array(
 				'id' => 'quantity',
 				'header' => $this->l('Stock'),
 				'dataIndex' => 'quantity',
-				'width' => 30,
+				'width' => 50,
 				'align' => 'right'
 			)
 		);
@@ -103,29 +110,36 @@ class StatsBestProducts extends ModuleGrid
 		return $this->_html;
 	}
 	
-	public function getTotalCount()
+	public function getTotalCount($dateBetween)
 	{
-		$result = Db::getInstance()->GetRow('SELECT COUNT(p.`id_product`) totalCount FROM `'._DB_PREFIX_.'product` p');
+		$result = Db::getInstance()->GetRow('
+		SELECT COUNT(DISTINCT p.`id_product`) totalCount
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
+		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
+		WHERE p.active = 1 AND o.valid = 1
+		AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween);
 		return $result['totalCount'];
 	}
 		
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
-		$this->_totalCount = $this->getTotalCount();
+		$arrayDateBetween = explode(' AND ', $dateBetween);
+		$this->_totalCount = $this->getTotalCount($dateBetween);
 
 		$this->_query = '
-		SELECT p.reference, p.id_product, (p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity, pl.name,
+		SELECT p.reference, p.id_product, pl.name,
+			(p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
+			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
 			ROUND(IFNULL(SUM((p.price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
 			(
 				SELECT IFNULL(SUM(pv.counter), 0)
 				FROM '._DB_PREFIX_.'page pa
 				LEFT JOIN '._DB_PREFIX_.'page_viewed pv ON pa.id_page = pv.id_page
 				LEFT JOIN '._DB_PREFIX_.'date_range dr ON pv.id_date_range = dr.id_date_range
-				LEFT JOIN '._DB_PREFIX_.'product p2 ON CAST(pa.id_object AS UNSIGNED INTEGER) = p2.id_product
-				WHERE pa.id_page_type = 1
-				AND p.id_product = p2.id_product	
+				WHERE pa.id_object = p.id_product AND pa.id_page_type = 1
 				AND LEFT(dr.time_start, 10) BETWEEN '.$dateBetween.'
 				AND LEFT(dr.time_end, 10) BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
@@ -134,7 +148,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
 		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
-		WHERE o.valid = 1
+		WHERE p.active = 1 AND o.valid = 1
 		AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
 		GROUP BY p.id_product';
 

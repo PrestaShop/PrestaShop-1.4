@@ -85,7 +85,7 @@ var cm = new Ext.grid.ColumnModel([';
 			{
 				if ($i++ > 0)
 					$html .= ',';
-				$html .= $key.':"'.$value.'"';
+				$html .= $key.':'.(is_int($value) ? $value : '"'.$value.'"');
 			}
 			$html .= '}';
 		}
