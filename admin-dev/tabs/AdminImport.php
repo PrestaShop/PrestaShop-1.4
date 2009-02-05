@@ -589,22 +589,7 @@ class AdminImport extends AdminTab
 				}
 			}
 			
-			if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
-			{
-				foreach ($product->image AS $key => $url)
-				{
-					$image = new Image();
-					$image->id_product = intval($product->id);
-					$image->position = Image::getHighestPosition($product->id) + 1;
-					$image->cover = !$key ? true : false;
-					$image->legend = self::createMultiLangField($product->name[1]);
-					if ($image->validateFields(UNFRIENDLY_ERROR) AND $image->validateFieldsLang(UNFRIENDLY_ERROR))
-						if ($image->add())
-							self::copyImg($product->id, $image->id, $url);
-						else
-							$this->_warnings[] = mysql_error().' '.$image->legend[1].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
-				}			
-			}
+
 			
 			$valid_link = Validate::isLinkRewrite($product->link_rewrite);
 			
@@ -631,6 +616,22 @@ class AdminImport extends AdminTab
 				$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
 			else
 			{
+				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
+				{
+					foreach ($product->image AS $key => $url)
+					{
+						$image = new Image();
+						$image->id_product = intval($product->id);
+						$image->position = Image::getHighestPosition($product->id) + 1;
+						$image->cover = !$key ? true : false;
+						$image->legend = self::createMultiLangField($product->name[1]);
+						if ($image->validateFields(UNFRIENDLY_ERROR) AND $image->validateFieldsLang(UNFRIENDLY_ERROR))
+							if ($image->add())
+								self::copyImg($product->id, $image->id, $url);
+							else
+								$this->_warnings[] = mysql_error().' '.$image->legend[1].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
+					}			
+				}
 				$product->updateCategories(array_map('intval', $product->id_category));
 				
 				$features = get_object_vars($product);
