@@ -132,7 +132,7 @@ class StatsBestProducts extends ModuleGrid
 		SELECT p.reference, p.id_product, pl.name,
 			(p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
-			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
+			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (1 + LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
 			ROUND(IFNULL(SUM((p.price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
 			(
 				SELECT IFNULL(SUM(pv.counter), 0)
