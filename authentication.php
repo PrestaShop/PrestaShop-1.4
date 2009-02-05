@@ -81,18 +81,11 @@ if (Tools::isSubmit('submitAccount'))
 				$errors[] = Tools::displayError('an error occurred while creating your account');
 			else
 			{
-				$address->id_customer = intval($customer->id);
-				$aliasBackup = $address->alias;
-				$address->alias .= ' '.Tools::getValue('translate_delivery');
-				
+				$address->id_customer = intval($customer->id);			
 				if (!$address->add())
 					$errors[] = Tools::displayError('an error occurred while creating your address');
 				else
-				{
-					unset($address->id);
-					$address->alias = $aliasBackup.' '.Tools::getValue('translate_invoice');
-					$address->add();
-					
+				{				
 					if (Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
 					array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 						$smarty->assign('confirmation', 1);
