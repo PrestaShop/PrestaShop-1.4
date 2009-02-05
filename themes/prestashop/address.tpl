@@ -92,6 +92,7 @@ countries = new Array();
 	<p class="submit2">
 		{if isset($id_address)}<input type="hidden" name="a" value="{$id_address|intval}" />{/if}
 		{if isset($back)}<input type="hidden" name="back" value="{$back}?step=1" />{/if}
+		{if isset($select_address)}<input type="hidden" name="select_address" value="{$select_address|intval}" />{/if}
 		<input type="submit" name="submitAddress" id="submitAddress" value="{l s='Save'}" class="button" />
 	</p>
 	<p class="required"><sup>*</sup>{l s='Required field'}</p>

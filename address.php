@@ -34,8 +34,10 @@ if ($id_address = intval(Tools::getValue('id_address')))
 				Tools::redirect('addresses.php');
 			$errors[] = Tools::displayError('this address cannot be deleted');
 		}
-		$smarty->assign('address', $address);
-		$smarty->assign('id_address', intval($id_address));
+		$smarty->assign(array(
+			'address' => $address,
+			'id_address' => intval($id_address)
+		));
 	}
 	else
 		Tools::redirect('addresses.php');
@@ -81,8 +83,17 @@ if (Tools::isSubmit('submitAddress'))
 				}
 			}
 		}
+		
 		if ($result = $address->save())
+		{
+			if ((bool)(Tools::getValue('select_address', false)) == true)
+			{
+				/* This new adress is for invoice_adress, select it */
+				$cart->id_address_invoice = intval($address->id);
+				$cart->update();
+			}
 			Tools::redirect($back ? $back : 'addresses.php');
+		}
 		$errors[] = Tools::displayError('an error occurred while updating your address');
     }
 }
@@ -119,9 +130,8 @@ $smarty->assign('countries_list', $countriesList);
 $smarty->assign('countries', $countries);
 $smarty->assign('errors', $errors);
 $smarty->assign('token', Tools::getToken(false));
+$smarty->assign('select_address', intval(Tools::getValue('select_address')));
 Tools::safePostVars();
 $smarty->display(_PS_THEME_DIR_.'address.tpl');
-
 include(dirname(__FILE__).'/footer.php');
-
 ?>

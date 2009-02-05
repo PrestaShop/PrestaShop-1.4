@@ -1,4 +1,3 @@
-
 //update the display of the addresses
 function updateAddressesDisplay()
 {
@@ -17,11 +16,10 @@ function updateAddressesDisplay()
 	else
 	{
 		$('#address_invoice_form:hidden').show('fast');
-		updateAddressDisplay('invoice');
+		if ($('select#id_address_invoice').val())
+			updateAddressDisplay('invoice');
 	}
-	
 	updateAddresses();
-	
 	return true;
 }
 
@@ -52,7 +50,7 @@ function updateAddressDisplay(addressType)
 function updateAddresses()
 {
 	var idAddress_delivery = $('select#id_address_delivery').val();
-	var idAddress_invoice = $('input[type=checkbox]#addressesAreEquals:checked').length == 1 ? $('select#id_address_delivery').val() : $('select#id_address_invoice').val();
+	var idAddress_invoice = $('input[type=checkbox]#addressesAreEquals:checked').length == 1 ? idAddress_delivery : $('select#id_address_invoice').val();
    
    $.ajax({
            type: 'POST',
@@ -62,7 +60,21 @@ function updateAddresses()
            dataType : "json",
            data: 'processAddress=true&step=2&ajax=true&id_address_delivery=' + idAddress_delivery + '&id_address_invoice=' + idAddress_invoice+ '&token=' + static_token ,
            success: function(jsonData)
-           {},
-           error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+           {
+           		if (jsonData.hasError)
+				{
+					var errors = '';
+					for(error in jsonData.errors)
+						//IE6 bug fix
+						if(error != 'indexOf')
+							errors += jsonData.errors[error] + "\n";
+					alert(errors);
+				}
+			},
+           error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
        });
 }
+
+$(document).ready(function(){
+	updateAddressesDisplay();
+});

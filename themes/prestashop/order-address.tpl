@@ -29,18 +29,22 @@
 			</select>
 		</p>
 		<p class="checkbox">
-			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery}checked="checked"{/if} />
+			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery || $addresses|@count == 1}checked="checked"{/if} />
 			<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
 		</p>
 		<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
+		{if $addresses|@count > 1}
 			<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
 			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();">
 			{section loop=$addresses step=-1 name=address}
 				<option value="{$addresses[address].id_address|intval}" {if $addresses[address].id_address == $cart->id_address_invoice && $cart->id_address_delivery != $cart->id_address_invoice}selected="selected"{/if}>{$addresses[address].alias|escape:'htmlall':'UTF-8'}</option>
 			{/section}
 			</select>
+			{else}
+				<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order.php&amp;step=1&select_address=1" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+			{/if}
 		</p>
-
+		<div class="clear"></div>
 		<ul class="address item" id="address_delivery">
 			<li class="address_title">{l s='Your delivery address'}</li>
 			<li class="address_company"></li>
@@ -70,13 +74,6 @@
 			<p class="textarea"><textarea cols="60" rows="3" name="message">{$oldMessage}</textarea></p>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-	<!--
-		updateAddressesDisplay();
-	-->
-	</script>
-
 	<p class="cart_navigation submit">
 		<input type="hidden" class="hidden" name="step" value="2" />
 		<a href="{$base_dir_ssl}order.php?step=0" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
