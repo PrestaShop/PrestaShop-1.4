@@ -453,7 +453,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (58, 'AdminScenes', 1, 6),
 (12, 'AdminAddresses', 2, 1),
 (63, 'AdminGroups', 2, 2),
-(65, 'AdminCarts', 2, 2),
+(65, 'AdminCarts', 2, 3),
 (42, 'AdminInvoices', 3, 1),
 (55, 'AdminDeliverySlip', 3, 2),
 (47, 'AdminReturn', 3, 3),
