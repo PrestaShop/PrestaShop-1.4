@@ -745,7 +745,7 @@ form#productsSortForm p select{ font-size:1em; }
 
 /* block top languages */
 #header #languages_block_top {
-	margin: 0.4em 0.3em 0 0;
+	margin: 0.4em 0.1em 0 0;
 	float: left;
 }
 #header #languages_block_top p {
@@ -801,7 +801,7 @@ ul#header_links {
 #header #search_block_top {
 	background: #e5e6e7 url('../img/block_search_bg.jpg') no-repeat top right;
 	height: 28px;
-	width: 330px;
+	width: 336px;
 	float: left;
 }
 #header #search_block_top p { padding: 0.4em 0 0.4em 1em; }
