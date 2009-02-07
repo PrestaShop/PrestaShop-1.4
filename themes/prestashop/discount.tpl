@@ -54,11 +54,7 @@
 	<p class="warning">{l s='You do not possess any vouchers.'}</p>
 {/if}
 
-<p>
-	<a href="{$base_dir}my-account.php" title="{l s='Back to Your Account'}"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Back to Your Account'}" class="icon" /></a>
-	<a href="{$base_dir}my-account.php" title="{l s='Back to Your Account'}">{l s='Back to Your Account'}</a>
-</p>
-<p>
-	<a href="{$base_dir}" title="{l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a>
-	<a href="{$base_dir}my-account.php" title="{l s='Back to Your Account'}">{l s='Home'}</a>
-</p>
+<ul class="footer_links">
+	<li><a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$base_dir_ssl}my-account.php">{l s='Back to Your Account'}</a></li>
+	<li><a href="{$base_dir}"><img src="{$img_dir}icon/home.gif" alt="" class="icon" /></a><a href="{$base_dir}">{l s='Home'}</a></li>
+</ul>
