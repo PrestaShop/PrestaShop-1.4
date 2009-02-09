@@ -114,11 +114,7 @@ class AdminCategories extends AdminTab
 				{
 					$object = new $this->className($id_category);
 					if (Validate::isLoadedObject($object))
-					{
-						$object->cleanGroups();
-						if ($group_list = Tools::getValue('groupBox') AND sizeof($group_list))
-							$object->addGroups($group_list);
-					}
+						$object->updateGroup(Tools::getValue('groupBox'));
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 				}

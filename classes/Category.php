@@ -107,7 +107,9 @@ class		Category extends ObjectModel
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
 				$this->name[$k] = '0'.$value;
-		return parent::add($autodate);
+		$ret = parent::add($autodate);
+		$this->updateGroup(Tools::getValue('groupBox'));
+		return $ret;
 	}
 
 	public	function update($nullValues = false)
@@ -729,6 +731,13 @@ class		Category extends ObjectModel
 		if ($result AND isset($result['id_group']) AND $result['id_group'])
 			return true;
 		return false;
+	}
+	
+	public function updateGroup($list)
+	{
+		$this->cleanGroups();
+		if ($list AND sizeof($list))
+			$this->addGroups($list);
 	}
 }
 
