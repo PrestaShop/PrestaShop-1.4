@@ -432,7 +432,7 @@ class AdminOrders extends AdminTab
 				echo $this->l('Tracking number:').' <b>'.$order->shipping_number.'</b> (<a href="'.str_replace('@', $order->shipping_number, $carrier->url).'">'.$this->l('Track the shipment').'</a>)';
 			
 			/* Carrier module */
-			if ($carrier->ismodule == 1)
+			if ($carrier->is_module == 1)
 			{
 				$module = Module::getInstanceByName($carrier->name);
 				echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);

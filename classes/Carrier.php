@@ -39,11 +39,11 @@ class		Carrier extends ObjectModel
 	public		$range_behavior;
 	
 	/* @var boolean Carrier module */
-	public		$ismodule;
+	public		$is_module;
 
  	protected 	$fieldsRequired = array('name', 'active');
  	protected 	$fieldsSize = array('name' => 64);
- 	protected 	$fieldsValidate = array('id_tax' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'deleted' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool', 'ismodule' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_tax' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool');
  	protected 	$fieldsRequiredLang = array('delay');
  	protected 	$fieldsSizeLang = array('delay' => 128);
  	protected 	$fieldsValidateLang = array('delay' => 'isGenericName');
@@ -64,7 +64,7 @@ class		Carrier extends ObjectModel
 		$fields['deleted'] = intval($this->deleted);
 		$fields['shipping_handling'] = intval($this->shipping_handling);
 		$fields['range_behavior'] = intval($this->range_behavior);
-		$fields['ismodule'] = intval($this->ismodule);
+		$fields['is_module'] = intval($this->is_module);
 		return $fields;
 	}
 
@@ -248,7 +248,7 @@ class		Carrier extends ObjectModel
 			($active ? ' AND c.`active` = 1' : '').
 			($id_zone ? ' AND cz.`id_zone` = '.$id_zone.'
 			AND z.`active` = 1' : '').'
-			AND c.`ismodule` = 0
+			AND c.`is_module` = 0
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
 		
