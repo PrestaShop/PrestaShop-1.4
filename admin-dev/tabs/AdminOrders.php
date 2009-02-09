@@ -358,7 +358,7 @@ class AdminOrders extends AdminTab
 					<td>'.Tools::displayDate($row['date_add'], 1, true).'</td>
 					<td><img src="../img/os/'.$row['id_order_state'].'.gif" /></td>
 					<td>'.stripslashes($row['ostate_name']).'</td>
-					<td>'.((!empty($row['employee_name'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
+					<td>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
 				</tr>';
 			}
 		echo '
