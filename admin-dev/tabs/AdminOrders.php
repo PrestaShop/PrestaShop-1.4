@@ -551,11 +551,19 @@ class AdminOrders extends AdminTab
 							'.($product['product_attribute_id'] ? 'LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON p.id_product = pa.id_product' : '').'
 							WHERE p.id_product = '.intval($product['product_id']).'
 							'.($product['product_attribute_id'] ? 'AND pa.id_product_attribute = '.intval($product['product_attribute_id']) : ''));
-							/* Customization display */
+							if (isset($image['id_image']))
+							{
+								$target = '../img/tmp/product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg';
+								if (file_exists($target))
+									$products[$k]['image_size'] = getimagesize($target);
+							}
+							// Customization display
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
+							
+							// Normal display
 							if ($product['product_quantity'] > $product['customizationQuantityTotal'])
 								echo '
-								<tr>
+								<tr'.((isset($image['id_image']) AND isset($products[$k]['image_size'])) ? ' height="'.($products[$k]['image_size'][1] + 7).'"' : '').'>
 									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
 									'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 									<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
@@ -570,12 +578,7 @@ class AdminOrders extends AdminTab
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 									<td align="center">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 								</tr>';
-							if (isset($image['id_image']))
-							{
-								$target = '../img/tmp/product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg';
-								if (file_exists($target))
-									$products[$k]['image_size'] = getimagesize($target);
-							}
+
 						}
 					echo '
 					</table>';
@@ -635,7 +638,8 @@ class AdminOrders extends AdminTab
 					echo '
 					</table>
 				</div>
-				<div style="float: right; width: 150px; margin-top:15px;">';
+				<div style="clear:both; height:15px;">&nbsp;</div>
+				<div style="float: right; width: 150px;">';
 				if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
 					echo '
 					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />
