@@ -31,7 +31,9 @@ class SearchEngine extends ObjectModel
 	
 	public static function getKeywords($url)
 	{
-		$parsedUrl = parse_url($url);
+		$parsedUrl = @parse_url($url);
+		if (!isset($parsedUrl['host']) OR !isset($parsedUrl['query']))
+			return false;
 		$result = Db::getInstance()->ExecuteS('SELECT `server`, `getvar` FROM `'._DB_PREFIX_.'search_engine`');
 		foreach ($result as $index => $row)
 		{
