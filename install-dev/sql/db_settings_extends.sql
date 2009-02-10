@@ -70,7 +70,11 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES
 	(44, 'statsproduct', 1),
 	(45, 'statsbestproducts', 1),
 	(46, 'statsbestcategories', 1),
-	(47, 'statsbestvouchers', 1);
+	(47, 'statsbestvouchers', 1),
+	(48, 'statsbestsuppliers', 1),
+	(49, 'statscarrier', 1),
+	(50, 'statsnewsletter', 1),
+	(51, 'statssearch', 1);
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 	('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
@@ -128,6 +132,11 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 	(45, 32, 13),
 	(46, 32, 15),
 	(47, 32, 14),
+	(48, 32, 16),
+	(49, 32, 17),
+	(50, 32, 18),
+	(51, 32, 19),
+	(51, 14, 8),
 	(25, 25, 1),
 	(41, 20, 2);
 
@@ -139,6 +148,12 @@ CREATE TABLE `PREFIX_pagenotfound` (
   PRIMARY KEY(id_pagenotfound)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE PREFIX_statssearch (
+	id_statssearch INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	keyword VARCHAR(256) NOT NULL,
+	date_add DATETIME NOT NULL,
+	PRIMARY KEY(id_statssearch)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_sekeyword` (
 	id_sekeyword INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
