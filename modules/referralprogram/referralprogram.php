@@ -577,7 +577,7 @@ class ReferralProgram extends Module
 					'{discount_display}' => $discount_display,
 					'{discount_name}' => $discount->name
 				);
-				Mail::Send(intval($order->id_lang), 'referralprogram-congratulations', $this->l('Congratulations!'), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				Mail::Send(intval($order->id_lang), 'referralprogram-congratulations', $this->l('Congratulations!'), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 				return true;
 			}
 		}
