@@ -307,6 +307,12 @@ class BlockWishList extends Module
 			return $this->_html;
 		}
 	}
+	/*
+	* Display Error from controler
+	*/
+	public function errorLogged()
+	{
+		return $this->l('You need to be logged to manage your wishlist');
+	}
 }
-
 ?>

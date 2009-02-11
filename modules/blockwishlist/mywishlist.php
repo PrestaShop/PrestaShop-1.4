@@ -42,7 +42,8 @@ if ($cookie->isLogged())
 }
 else
 {
-	$errors[] = Tools::displayError('You need to be logged to manage your wishlist'); 
+	$wishlist = new BlockWishList();
+	$errors[] = $wishlist->errorLogged(); 
 }
 
 $smarty->assign('id_customer', intval($cookie->id_customer));
