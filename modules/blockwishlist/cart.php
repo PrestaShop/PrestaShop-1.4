@@ -13,7 +13,6 @@ $id_wishlist = intval(Tools::getValue('id_wishlist'));
 $id_product = intval(Tools::getValue('id_product'));
 $quantity = intval(Tools::getValue('quantity'));
 $id_product_attribute = intval(Tools::getValue('id_product_attribute'));
-
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 	strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 	$cookie->isLogged() === true)

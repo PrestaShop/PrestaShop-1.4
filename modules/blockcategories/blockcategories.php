@@ -109,6 +109,7 @@ class BlockCategories extends Module
 			return;
 		$resultParents = array();
 		$resultIds = array();
+
 		foreach ($result as $row)
 		{
 			$$row['name'] = Category::hideCategoryPosition($row['name']);

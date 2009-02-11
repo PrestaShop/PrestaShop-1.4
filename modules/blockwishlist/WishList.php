@@ -251,7 +251,8 @@ class		WishList extends ObjectModel
 					foreach ($result AS $k => $row)
 						$products[$i]['attributes_small'] .= $row['attribute_name'].', ';
 				$products[$i]['attributes_small'] = rtrim($products[$i]['attributes_small'], ', ');
-				$products[$i]['attribute_quantity'] = $result[0]['attribute_quantity'];
+				if (isset($result[0]))
+					$products[$i]['attribute_quantity'] = $result[0]['attribute_quantity'];
 			}
 			else
 				$products[$i]['attribute_quantity'] = $products[$i]['product_quantity'];
