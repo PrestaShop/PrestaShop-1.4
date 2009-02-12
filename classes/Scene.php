@@ -193,7 +193,9 @@ class	Scene extends ObjectModel
 			{
 				$product['details'] = new Product(intval($product['id_product']), !$liteResult, intval($id_lang));
 				$product['link'] = $link->getProductLink(intval($product['details']->id), $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
-				$product = array_merge(Product::getCover(intval($product['details']->id)), $product);
+				$cover = Product::getCover(intval($product['details']->id));
+				if(is_array($cover))
+					$product = array_merge($cover, $product);
 			}
 		
 		return $products;
