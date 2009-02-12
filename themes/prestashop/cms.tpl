@@ -1,10 +1,12 @@
 {if $cms}
 	{if $content_only}
-	<div style="text-align:left; padding:10px;">
+	<div style="text-align:left; padding:10px;" class="rte">
 		{$cms->content}
 	</div>
 	{else}
+	<div class="rte">
 		{$cms->content}
+	</div>
 	{/if}
 {else}
 	{l s='This page does not exist.'}
