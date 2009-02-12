@@ -46,7 +46,7 @@ abstract class Db
 	private static $_instance;
   
 	/** @var string Keywords not allowed in SQL string */
-	private static $_blacklist = 'UNION|LOAD_FILE|OUTFILE|DUMPFILE|ESCAPED|TERMINATED|CASCADE|INFILE|X509|TRIGGER|REVOKE';
+	private static $_blacklist = '/UNION|LOAD_FILE|OUTFILE|DUMPFILE|ESCAPED|TERMINATED|CASCADE|INFILE|X509|TRIGGER|REVOKE/ui';
   
 	/**
 	 * Get Db object instance (Singleton)
@@ -86,7 +86,7 @@ abstract class Db
 	 */
 	public static function blacklist(&$query)
 	{
-		return eregi(self::$_blacklist, $query) ? true : false;
+		return preg_match(self::$_blacklist, $query) ? true : false;
 	}
 	
 	/**

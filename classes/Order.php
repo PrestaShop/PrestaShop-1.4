@@ -159,7 +159,7 @@ class		Order extends ObjectModel
 
 		return $fields;
 	}
-	
+
 	public function deleteProduct($order, $orderDetail, $quantity)
 	{
 		if (!$currentStatus = intval($this->getCurrentState()))
@@ -177,17 +177,32 @@ class		Order extends ObjectModel
 		}
 		else
 		{
-			$productPrice = (floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity);
-			$productPriceWithoutTax = floatval($orderDetail->product_price) * intval($quantity);
+			$productPrice = round((floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity), 2);
+			$productPriceWithoutTax = round(floatval($orderDetail->product_price) * intval($quantity), 2);
+
 			// Update order
 			$order->total_paid -= $productPrice;
 			$order->total_paid_real -= $productPrice;
 			$order->total_products -= $productPriceWithoutTax;
+
 			// Update order detail
 			$orderDetail->product_quantity -= intval($quantity);
 			
 			if (!$orderDetail->product_quantity)
-				return $orderDetail->delete();
+			{
+				if (!$orderDetail->delete())
+					return false;
+				if (count($order->getProductsDetail()) == 0)
+				{
+					global $cookie;
+					$history = new OrderHistory();
+					$history->id_order = intval($order->id);
+					$history->changeIdOrderState(_PS_OS_CANCELED_, intval($order->id));
+					if (!$history->addWithemail())
+						return false;
+				}
+				return $order->update();
+			}
 			return $orderDetail->update() AND $order->update();
 		}
 	}
@@ -578,14 +593,14 @@ class		Order extends ObjectModel
 		$this->update();
 	}
 	
-	static public function  printPDFIcons($id_order)
+	static public function printPDFIcons($id_order, $tr)
 	{
 		$order = new Order($id_order);
 		$orderState = OrderHistory::getLastOrderState($id_order);
 		if (!Validate::isLoadedObject($orderState) OR !Validate::isLoadedObject($order))
 			die(Tools::displayError('Invalid objects!'));
 		echo '<span style="width:20px; margin-right:5px;">';
-		if ($orderState->invoice OR $order->invoice_number)
+		if (($orderState->invoice OR $order->invoice_number) AND intval($tr['product_number']))
 			echo '<a href="pdf.php?id_order='.intval($order->id).'&pdf"><img src="../img/admin/tab-invoice.gif" alt="invoice" /></a>';
 		else
 			echo '&nbsp;';

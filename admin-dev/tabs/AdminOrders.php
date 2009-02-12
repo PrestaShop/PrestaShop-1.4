@@ -21,7 +21,7 @@ class AdminOrders extends AdminTab
 	 	$this->className = 'Order';
 	 	$this->view = 'noActionColumn';
 		$this->colorOnBackground = true;
-	 	$this->_select = 'a.id_order AS id_pdf, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS `customer`, osl.`name` AS `osname`, os.`color`';
+	 	$this->_select = 'a.id_order AS id_pdf, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS `customer`, osl.`name` AS `osname`, os.`color`, (SELECT COUNT(od.`id_order`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = a.`id_order` GROUP BY `id_order`) AS product_number';
 	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = a.`id_customer`)
 	 	LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (oh.`id_order` = a.`id_order`)
 		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
@@ -336,7 +336,7 @@ class AdminOrders extends AdminTab
 		<div style="float: left;">';
 		echo '
 			<h2 style="width: 430px;">'.$customer->firstname.' '.$customer->lastname.' '.$this->l('#').sprintf('%06d', $order->id).
-			(($currentState->invoice OR $order->invoice_number) ? ' - <a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" alt="'.$this->l('View invoice').'" title="'.$this->l('View invoice').'" /></a>' : '').
+			((($currentState->invoice OR $order->invoice_number) AND count($products)) ? ' - <a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" alt="'.$this->l('View invoice').'" title="'.$this->l('View invoice').'" /></a>' : '').
 			(($currentState->delivery OR $order->delivery_number) ? ' - <a href="pdf.php?id_delivery='.$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" title="'.$this->l('View delivery slip').'" /></a>' : '').
 			' - <a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /></a>';
 		echo '</h2>';
@@ -413,7 +413,7 @@ class AdminOrders extends AdminTab
 		<div style="float: left; margin-left: 40px">';
 
 		/* Display invoice information */
-		if ($currentState->invoice OR $order->invoice_number)
+		if (($currentState->invoice OR $order->invoice_number) AND count($products))
 		echo '
 			<fieldset style="width: 400px">
 				<legend><a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" /> '.$this->l('Invoice').'</a></legend>

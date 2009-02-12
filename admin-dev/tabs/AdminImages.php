@@ -282,13 +282,7 @@ class AdminImages extends AdminTab
 			}
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write no-picture image into the suppliers images folder.<br />Please check its writing permissions.');
-			
-		
-		
-		
-		
-		
-		
+
 		/* Delete scenes images */
 		$toDel = scandir(_PS_SCENE_IMG_DIR_);
 		foreach ($toDel AS $d)
@@ -327,14 +321,6 @@ class AdminImages extends AdminTab
 			}
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write no-picture image into the scenes images folder.<br />Please check its writing permissions.');
-		
-		
-		
-		
-		
-		
-		
-		
 			
 		/* Delete products images */
 		$toDel = scandir(_PS_PROD_IMG_DIR_);

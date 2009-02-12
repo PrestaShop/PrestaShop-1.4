@@ -327,7 +327,7 @@ abstract class ObjectModel
 				die (Tools::displayError('validation function not found').' '.$method);
 			elseif (!Tools::isEmpty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')'.$method);
+				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
 				return false;
 			}
 		return true;
