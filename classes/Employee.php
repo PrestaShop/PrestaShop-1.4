@@ -44,7 +44,7 @@ class		Employee extends ObjectModel
  	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile');
  	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32);
  	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 
-		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'stats_date_from' => 'isDate', 'stats_date_to' => 'isDate');
+		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt');
 	
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
