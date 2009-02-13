@@ -267,6 +267,7 @@ function deleteImage($id_item, $id_image = NULL)
 			unlink($path.$id_item.'-'.$id_image.'-'.$imagesType['name'].'.jpg');
 		elseif (!$id_image AND file_exists($path.$id_item.'-'.$imagesType['name'].'.jpg'))
 			unlink($path.$id_item.'-'.$imagesType['name'].'.jpg');
+	return true;
 }
 
 ?>
