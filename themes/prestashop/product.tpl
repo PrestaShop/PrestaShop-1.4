@@ -97,7 +97,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<!-- product img-->
 		<div id="image-block">
 		{if $have_image}
-				<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}" {if $jqZoomEnabled}class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else}alt="" {/if} id="bigpic" title="{$product->name|escape:'htmlall':'UTF-8'}"/>
+				<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}" {if $jqZoomEnabled}class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else} title="{$product->name|escape:'htmlall':'UTF-8'}" alt="" {/if} id="bigpic"/>
 		{else}
 			<img src="{$img_prod_dir}{$lang_iso}-default-large.jpg" alt="" title="{$product->name|escape:'htmlall':'UTF-8'}" />
 		{/if}
@@ -127,7 +127,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<ul id="usefull_link_block">
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
 			<li><a href="javascript:print();">{l s='Print'}</a></li>
-			{if $have_image}
+			{if $have_image && !$jqZoomEnabled}
 			<li><span id="view_full_size" class="span_link">{l s='View full size'}</span></li>
 			{/if}
 		</ul>
