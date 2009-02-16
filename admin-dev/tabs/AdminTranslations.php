@@ -567,6 +567,21 @@ class AdminTranslations extends AdminTab
 							PS_ADMIN_DIR.'/../classes/',
 							PS_ADMIN_DIR.'/',
 							PS_ADMIN_DIR.'/tabs/');
+		if (!file_exists(_PS_MODULE_DIR_))
+				die($this->displayWarning(Tools::displayError('Fatal error: Module directory is not here anymore ').'('._PS_MODULE_DIR_.')'));
+			if (!is_writable(_PS_MODULE_DIR_))
+				$this->displayWarning(Tools::displayError('The module directory must be writable'));
+			if (!$modules = scandir(_PS_MODULE_DIR_))
+				$this->displayWarning(Tools::displayError('There are no modules in your copy of PrestaShop. Use the Modules tab to activate them or go to our Website to download additional Modules.'));
+			else
+			{
+				$allfiles = array();
+				$count = 0;
+
+				foreach ($modules AS $module)
+					if (is_dir(_PS_MODULE_DIR_.$module) && $module != '.' && $module != '..' && $module != '.svn' )
+						$dirToParse[] = _PS_MODULE_DIR_.$module.'/';
+			}
 		foreach ($dirToParse AS $dir)
 			foreach (scandir($dir) AS $file)
 				if (ereg('.php$', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
