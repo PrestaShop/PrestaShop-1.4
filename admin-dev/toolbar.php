@@ -27,10 +27,10 @@ function checkingTab($tab)
 	
 	if (!Validate::isTabName($tab))
 		return false;
-	if (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
-		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
-	elseif ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
+	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
 		include_once(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php');
+	elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
+		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
 	$id_tab = Tab::getIdFromClassName($tab);
 	if (!class_exists($tab, false) OR !$id_tab)
 	{
