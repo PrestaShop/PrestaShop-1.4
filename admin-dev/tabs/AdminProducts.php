@@ -214,8 +214,15 @@ class AdminProducts extends AdminTab
 				{
 					Image::deleteCover($image->id_product);
 					$image->cover = 1;
-					$image->update();
-					Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&tabs=1'.'&token='.($token ? $token : $this->token));
+					if (!$image->update())
+						$this->_errors[] = Tools::displayError('Impossible to change the product cover');
+					else
+					{
+						$productId = intval(Tools::getValue('id_product'));
+						@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$productId.'.jpg');
+						@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$productId.'.jpg');
+						Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&tabs=1'.'&token='.($token ? $token : $this->token));
+					}
 				}
 
 				/* Choose product image position */
