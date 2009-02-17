@@ -36,7 +36,8 @@ class AdminTabs extends AdminTab
 		'id_tab' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 200),
 		'logo' => array('title' => $this->l('Icon'), 'align' => 'center', 'image' => 't', 'image_id' => 'class_name', 'orderby' => false, 'search' => false),
-		'parent' => array('title' => $this->l('Parent'), 'width' => 200, 'type' => 'select', 'select' => $tabs, 'filter_key' => 'a!id_parent'));
+		'parent' => array('title' => $this->l('Parent'), 'width' => 200, 'type' => 'select', 'select' => $tabs, 'filter_key' => 'a!id_parent'),
+		'module' => array('title' => $this->l('Module')));
 	
 		parent::__construct();
 	}
@@ -127,6 +128,11 @@ class AdminTabs extends AdminTab
 				<label>'.$this->l('Class:').' </label>
 				<div class="margin-form">
 					<input type="text" name="class_name" value="'.htmlentities($this->getFieldValue($obj, 'class_name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+				</div>
+				<div class="clear">&nbsp;</div>
+				<label>'.$this->l('Module:').' </label>
+				<div class="margin-form">
+					<input type="text" name="module" value="'.htmlentities($this->getFieldValue($obj, 'module'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
 				<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Icon:').'</label>

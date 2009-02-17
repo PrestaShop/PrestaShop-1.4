@@ -8,6 +8,9 @@ DROP TABLE IF EXISTS PREFIX_order_customization_return;
 
 ALTER TABLE PREFIX_cart
 	ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
+	
+ALTER TABLE PREFIX_tab
+	ADD `module` varchar(64) NULL AFTER class_name;
 
 ALTER TABLE PREFIX_orders
 	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT 0 AFTER delivery_date;

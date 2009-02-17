@@ -19,6 +19,8 @@ class Tab extends ObjectModel
 
 	/** @var string Class and file name*/
 	public		$class_name;
+	
+	public		$module;
 
 	/** @var integer parent ID */
 	public		$id_parent;
@@ -27,8 +29,8 @@ class Tab extends ObjectModel
 	public		$position;
 
 	protected	$fieldsRequired = array('class_name', 'position');
-	protected	$fieldsSize = array('class_name' => 64, 'icon' => 64);
-	protected	$fieldsValidate = array('id_parent' => 'isUnsignedInt', 'position' => 'isUnsignedInt');
+	protected	$fieldsSize = array('class_name' => 64, 'module' => 64);
+	protected	$fieldsValidate = array('id_parent' => 'isUnsignedInt', 'position' => 'isUnsignedInt', 'module' => 'isTabName');
 
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);
@@ -40,8 +42,9 @@ class Tab extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['class_name'] = pSQL($this->class_name);
 		$fields['id_parent'] = intval($this->id_parent);
+		$fields['class_name'] = pSQL($this->class_name);
+		$fields['module'] = pSQL($this->module);
 		$fields['position'] = intval($this->position);
 		return $fields;
 	}
