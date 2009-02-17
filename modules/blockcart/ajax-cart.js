@@ -161,9 +161,9 @@ var ajaxCart = {
 			async: true,
 			cache: false,
 			dataType : "json",
-			data: 'ajax=true' + ((customizationId && customizationId != null) ? '&deleteCustomizableProduct=' + customizationId + '&add&op=down' : '&delete') + '&qty=1&id_product=' + idProduct + '&token=' + static_token + ( (idCombination != null && parseInt(idCombination)) ? '&ipa=' + idCombination : ''),
+			data: 'ajax=true' + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&delete' + '&id_product=' + idProduct + '&token=' + static_token + ( (idCombination != null && parseInt(idCombination)) ? '&ipa=' + idCombination : ''),
 			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) },
-			error: function() {alert('ERROR : unable to delete the product');}
+			error: function() {alert('ERROR: unable to delete the product');}
 		});
 	},
 	

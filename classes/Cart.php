@@ -492,7 +492,7 @@ class		Cart extends ObjectModel
 	public	function deleteProduct($id_product, $id_product_attribute = NULL, $id_customization = NULL)
 	{
 		if (intval($id_customization))
-			return $this->_deleteCustomization(intval($id_customization));
+			return $this->_deleteCustomization(intval($id_customization)) AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL);
 
 		/* Get customization quantity */
 		if (($result = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS \'quantity\' FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute))) === false)
