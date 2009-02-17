@@ -193,7 +193,6 @@ function	imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $f
 	imagecopyresampled($dest['ressource'], $src['ressource'], 0, 0, $dest['x'], $dest['y'], $dest['width'], $dest['height'], $dest['width'], $dest['height']);
 	imagecolortransparent($dest['ressource'], $white);
 	$return = returnDestImage($fileType, $dest['ressource'], $destFile);
-	Tools::p(var_dump($return));
 	return	($return);
 }
 

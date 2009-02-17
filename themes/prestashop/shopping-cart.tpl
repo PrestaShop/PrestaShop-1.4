@@ -15,7 +15,7 @@
 {if isset($lastProductAdded) AND $lastProductAdded}
 	{foreach from=$products item=product}
 		{if $product.id_product == $lastProductAdded}
-			<table id="cart_summary" class="std" style="width:300px; margin-left:130px;">
+			<table class="std cart_last_product">
 				<thead>
 					<tr>
 						<th class="cart_product first_item">&nbsp;</th>
@@ -24,7 +24,7 @@
 					</tr>
 				</thead>
 			</table>
-			<table style="margin:5px 0px 10px 130px;">
+			<table class="cart_last_product_content">
 				<tr>
 					<td class="cart_product"><a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'small')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></a></td>
 					<td class="cart_description">
@@ -201,5 +201,9 @@
 <p class="cart_navigation">
 	<a href="{$base_dir}order.php?step=1" class="exclusive" title="{l s='Next'}">{l s='Next'} &raquo;</a>
 	<a href="{if $smarty.server.HTTP_REFERER && strstr($smarty.server.HTTP_REFERER, 'order.php')}{$base_dir}index.php{else}{$smarty.server.HTTP_REFERER}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a>
+</p>
+<p class="clear"><br /><br /></p>
+<p class="cart_navigation_extra">
+	{$HOOK_SHOPPING_CART_EXTRA}
 </p>
 {/if}

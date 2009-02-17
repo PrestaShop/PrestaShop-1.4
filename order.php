@@ -412,6 +412,7 @@ function displaySummary()
 		'token_cart' => $token,
 		'voucherAllowed' => Configuration::get('PS_VOUCHERS'),
 		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
+		'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
 		'shippingCost' => $cart->getOrderTotal(true, 5),
 		'customizedDatas' => $customizedDatas,
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,

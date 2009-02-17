@@ -128,7 +128,9 @@ CREATE TABLE PREFIX_product_attribute_image (
 /* 					CONTENTS					*/
 /* ##################################### */
 
-INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES ('extraCarrier', 'Extra carrier (module mode)', NULL, 0);
+INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
+	('extraCarrier', 'Extra carrier (module mode)', NULL, 0),
+	('shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 0);
 
 UPDATE PREFIX_orders o SET o.valid = IFNULL((
 	SELECT os.logable

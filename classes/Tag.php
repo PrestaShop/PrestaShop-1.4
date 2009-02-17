@@ -72,7 +72,6 @@ class Tag extends ObjectModel
 	 	
 	 	$tmpTab = array_unique(array_map('trim', explode(',', $string)));
 	 	$list = array();
-		Tools::p($tmpTab);
 	 	foreach ($tmpTab AS $tag)
 	 	{
 	 	 	if (!Validate::isGenericName($tag))

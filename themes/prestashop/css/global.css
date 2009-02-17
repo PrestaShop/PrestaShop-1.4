@@ -1539,6 +1539,15 @@ ul#product_list li span.availability{
 ul#product_list li a.button{ margin-top:0.5em; }
 
 /* shopping cart */
+table.cart_last_product {
+	width:300px;
+	margin-left:130px;
+}
+
+table.cart_last_product_content {
+	margin:5px 0px 10px 130px;
+}
+
 p.cart_navigation {
 	padding: 1em 0!important;
 }
@@ -1547,6 +1556,10 @@ p.cart_navigation .button, p.cart_navigation .button_large {
 }
 p.cart_navigation .exclusive, p.cart_navigation .exclusive_large {
 	float: right;
+}
+p.cart_navigation_extra {
+	text-align:center;
+	width:auto;
 }
 form.std p.cart_navigation span {
 	float:none;
