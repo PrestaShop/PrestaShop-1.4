@@ -542,7 +542,7 @@ class AdminProducts extends AdminTab
 		}
 
 		/* Adding a new product image */
-		elseif(isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
+		elseif (isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
 		{
 			if (!Validate::isLoadedObject($product))
 				$this->_errors[] = Tools::displayError('cannot add image because product add failed');
@@ -553,7 +553,11 @@ class AdminProducts extends AdminTab
 				$_POST['id_product'] = $image->id_product;
 				$image->position = Image::getHighestPosition($product->id) + 1;
 				if (($cover = Tools::getValue('cover')) == 1)
+				{
 					Image::deleteCover($product->id);
+					@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
+					@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
+				}
 				$image->cover = !$cover ? !sizeof($product->getImages(Configuration::get('PS_LANG_DEFAULT'))) : true;
 				$this->validateRules('Image', 'image');
 				$this->copyFromPost($image, 'image');
