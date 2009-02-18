@@ -1016,4 +1016,11 @@ echo 'Product: '.$product['name'];
 			ORDER BY c.`date_add` DESC');
 	 	return $result;
     }
+  
+  
+  /* DEPRECATED */
+	public function getCustomeremail()
+	{		$customer = new Customer(intval($this->id_customer));
+		return $customer->email;
+	}
 }
