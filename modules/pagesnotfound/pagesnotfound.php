@@ -36,7 +36,8 @@ class Pagesnotfound extends Module
 		  request_uri VARCHAR(256) NOT NULL,
 		  http_referer VARCHAR(256) NOT NULL,
 		  date_add DATETIME NOT NULL,
-		  PRIMARY KEY(id_pagenotfound)
+		  PRIMARY KEY(id_pagenotfound),
+		  INDEX (`date_add`)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8;');
 	}
 	
@@ -50,9 +51,10 @@ class Pagesnotfound extends Module
 	private function getPages()
 	{
 		$result = Db::getInstance()->ExecuteS('
-		SELECT *
+		SELECT http_referer, request_uri, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'pagenotfound` p
-		WHERE LEFT(p.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(p.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		GROUP BY http_referer, request_uri');
 
 		$pages = array();
 		foreach ($result as $row)
@@ -61,12 +63,11 @@ class Pagesnotfound extends Module
 			if (!isset($row['http_referer']) OR empty($row['http_referer']))
 				$row['http_referer'] = '--';
 			if (!isset($pages[$row['request_uri']]))
-				$pages[$row['request_uri']] = array();
-			if (!isset($pages[$row['request_uri']][$row['http_referer']]))
-				$pages[$row['request_uri']][$row['http_referer']] = 1;
-			else
-				++$pages[$row['request_uri']][$row['http_referer']];
+				$pages[$row['request_uri']] = array('nb' => 0);
+			$pages[$row['request_uri']][$row['http_referer']] = $row['nb'];
+			$pages[$row['request_uri']]['nb'] += $row['nb'];
 		}
+		uasort($pages, 'pnfSort');
 		return $pages;
 	}
 	
@@ -88,12 +89,13 @@ class Pagesnotfound extends Module
 				</tr>';
 			foreach ($pages as $ru => $hrs)
 				foreach ($hrs as $hr => $counter)
-					$this->_html .= '
-					<tr>
-						<td>'.wordwrap($ru, 30, '<br />', true).'</td>
-						<td><a href="http://'.$hr.'">'.wordwrap($hr, 40, '<br />', true).'</a></td>
-						<td align="right">'.$counter.'</td>
-					</tr>';
+					if ($hr != 'nb')
+						$this->_html .= '
+						<tr>
+							<td><a href="'.$ru.'-admin404">'.wordwrap($ru, 30, '<br />', true).'</a></td>
+							<td><a href="http://'.$hr.'">'.wordwrap($hr, 40, '<br />', true).'</a></td>
+							<td align="right">'.$counter.'</td>
+						</tr>';
 			$this->_html .= '
 			</table>';
 		}
@@ -114,21 +116,23 @@ class Pagesnotfound extends Module
 	
 	function hookTop($params)
 	{
-		if (strstr($_SERVER['PHP_SELF'], '404.php'))
+		if (strstr($_SERVER['REQUEST_URI'], '404.php') AND isset($_SERVER['REDIRECT_URL']))
+			$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'];
+		if (!Validate::isUrl($request_uri = $_SERVER['REQUEST_URI']) OR strstr($_SERVER['REQUEST_URI'], '-admin404'))
+			return;
+		if (strstr($_SERVER['PHP_SELF'], '404.php') AND !strstr($_SERVER['REQUEST_URI'], '404.php'))
 		{
-			if (strstr($_SERVER['REQUEST_URI'], '404.php') AND isset($_SERVER['REDIRECT_URL']))
-				$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'];
-			if (!Validate::isUrl($request_uri = $_SERVER['REQUEST_URI']))
-				return;
 			$http_referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-			if (!empty($http_referer) AND !Validate::isAbsoluteUrl($http_referer))
-				return;
-			
-			Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'pagenotfound` (`request_uri`,`http_referer`,`date_add`)
-			VALUES (\''.pSQL($request_uri).'\',\''.pSQL($http_referer).'\',NOW())');
+			if (empty($http_referer) OR Validate::isAbsoluteUrl($http_referer))
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'pagenotfound` (`request_uri`,`http_referer`,`date_add`) VALUES (\''.pSQL($request_uri).'\',\''.pSQL($http_referer).'\',NOW())');
 		}
 	}
+}
+
+function pnfSort($a, $b) {
+    if ($a['nb'] == $b['nb'])
+        return 0;
+    return ($a['nb'] > $b['nb']) ? -1 : 1;
 }
 
 ?>
