@@ -81,7 +81,7 @@ abstract class PaymentModule extends Module
 		$cart = new Cart(intval($id_cart));
 
 		// Does order already exists ?
-		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() == 0)
+		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
 		{
 			// Copying data from cart
 			$order = new Order();
