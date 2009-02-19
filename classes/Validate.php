@@ -86,8 +86,8 @@ class Validate
 	
     static public function isUnsignedFloat($float)
     {
-		return strval(floatval($float)) == strval($float) AND $f >= 0;
-	}
+			return strval(floatval($float)) == strval($float) AND $float >= 0;
+		}
 
 	/**
 	* Check for a float number validity
@@ -135,7 +135,8 @@ class Validate
 	*/
 	static public function isName($name)
 	{
-		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/u', stripslashes($name));
+
+		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/ui', stripslashes($name));
 	}
 
 	/**
