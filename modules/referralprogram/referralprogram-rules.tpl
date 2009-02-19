@@ -2,6 +2,6 @@
 
 {if isset($xml)}
 <div id="referralprogram_rules">
-	{if isset($xml->body->$paragraph)}{$xml->body->$paragraph}{/if}
+	{if isset($xml->body->$paragraph)}{$xml->body->$paragraph|replace:"\'":"'"|replace:'\"':'"'}{/if}
 </div>
 {/if}
