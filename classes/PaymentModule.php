@@ -115,7 +115,10 @@ abstract class PaymentModule extends Module
 				$id_order_state = _PS_OS_ERROR_;
 
 			// Creating order
-			$result = $order->add();
+			if ($cart->OrderExists() === 0)
+				$result = $order->add();
+			else 
+				die(Tools::displayError('An order has already been placed using this cart'));
 
 			// Next !
 			if ($result AND isset($order->id))
