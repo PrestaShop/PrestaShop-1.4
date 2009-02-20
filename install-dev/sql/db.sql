@@ -1252,6 +1252,7 @@ CREATE TABLE `PREFIX_referrer` (
   `request_uri_like_not` varchar(64) default NULL,
   `base_fee` decimal(4,2) NOT NULL default '0.00',
   `percent_fee` decimal(3,2) NOT NULL default '0.00',
+  `click_fee` decimal(3,2) NOT NULL default '0.00',
   `cache_visitors` int(11) default NULL,
   `cache_visits` int(11) default NULL,
   `cache_pages` int(11) default NULL,

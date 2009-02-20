@@ -34,20 +34,21 @@ class AdminReferrers extends AdminTab
 	 	$this->edit = true;
 		$this->delete = true;
 		
-		$this->_select = 'IF(cache_orders > 0, ROUND(cache_sales/cache_orders, 2), 0) as cart, (cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
+		$this->_select = '(cache_visits*click_fee) as fee0, (cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
 		$this->fieldsDisplay = array(
 			'id_referrer' => array('title' => $this->l('ID'), 'width' => 25, 'align' => 'center'),
-			'name' => array('title' => $this->l('Name'), 'width' => 80),
+			'name' => array('title' => $this->l('Name'), 'width' => 100),
 			'cache_visitors' => array('title' => $this->l('Visitors'), 'width' => 40, 'align' => 'center'),
 			'cache_visits' => array('title' => $this->l('Visits'), 'width' => 40, 'align' => 'center'),
 			'cache_pages' => array('title' => $this->l('Pages'), 'width' => 40, 'align' => 'center'),
 			'cache_registrations' => array('title' => $this->l('Reg.'), 'width' => 40, 'align' => 'center'),
 			'cache_orders' => array('title' => $this->l('Orders'), 'width' => 40, 'align' => 'center'),
 			'cache_sales' => array('title' => $this->l('Sales'), 'width' => 100, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true),
-			'cart' => array('title' => $this->l('Avg. cart'), 'width' => 60, 'align' => 'right', 'price' => true),
-			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 40, 'align' => 'center', 'suffix' => '%'),
-			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 40, 'align' => 'center', 'suffix' => '%'),
-			'fee' => array('title' => $this->l('Fee'), 'width' => 40, 'align' => 'right', 'price' => true),);
+			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 40, 'align' => 'center'),
+			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 40, 'align' => 'center'),
+			'fee0' => array('title' => $this->l('Click'), 'width' => 40, 'align' => 'right', 'price' => true),
+			'fee1' => array('title' => $this->l('Base'), 'width' => 40, 'align' => 'right', 'price' => true),
+			'fee2' => array('title' => $this->l('Percent'), 'width' => 40, 'align' => 'right', 'price' => true));
 			
 		parent::__construct();
 	}
@@ -86,6 +87,7 @@ class AdminReferrers extends AdminTab
 				\'	<td align="right">\'+result.sales+\'</td>\'+
 				\'	<td align="center">\'+result.reg_rate+\'</td>\'+
 				\'	<td align="center">\'+result.order_rate+\'</td>\'+
+				\'	<td align="center">\'+result.click_fee+\'</td>\'+
 				\'	<td align="center">\'+result.base_fee+\'</td>\'+
 				\'	<td align="center">\'+result.percent_fee+\'</td>\'+
 				\'	<td align="center">--</td>\'+
@@ -198,6 +200,11 @@ class AdminReferrers extends AdminTab
 			</fieldset>
 			<br class="clear" />
 			<fieldset class="width4"><legend><img src="../img/admin/money.png" /> '.$this->l('Commission plan').'</legend>
+				<label>'.$this->l('Click fee').'</label>
+				<div class="margin-form">
+					<input type="text" size="8" name="click_fee" value="'.htmlentities($this->getFieldValue($obj, 'click_fee'), ENT_COMPAT, 'UTF-8').'" />
+					<p>'.$this->l('Fee given for each visit.').'</p>
+				</div>
 				<label>'.$this->l('Base fee').'</label>
 				<div class="margin-form">
 					<input type="text" size="8" name="base_fee" value="'.htmlentities($this->getFieldValue($obj, 'base_fee'), ENT_COMPAT, 'UTF-8').'" />
@@ -327,6 +334,7 @@ class AdminReferrers extends AdminTab
 			'sales' => $this->l('Sales'),
 			'reg_rate' => $this->l('Registration rate'),
 			'order_rate' => $this->l('Order rate'),
+			'click_fee' => $this->l('Click fee'),
 			'base_fee' => $this->l('Base fee'),
 			'percent_fee' => $this->l('Percent fee'));
 		echo '

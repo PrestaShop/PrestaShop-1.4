@@ -16,6 +16,7 @@ class Referrer extends ObjectModel
 	
 	public $base_fee;
 	public $percent_fee;
+	public $click_fee;
 	
 	public $cache_visitors;
 	public $cache_visits;
@@ -34,7 +35,7 @@ class Referrer extends ObjectModel
 		'name' => 'isGenericName', 'passwd' => 'isPasswd',
 		'http_referer_regexp' => 'isCleanHtml',	'request_uri_regexp' => 'isGenericName', 'http_referer_like' => 'isCleanHtml',	'request_uri_like' => 'isGenericName',
 		'http_referer_regexp_not' => 'isCleanHtml',	'request_uri_regexp_not' => 'isGenericName', 'http_referer_like_not' => 'isCleanHtml',	'request_uri_like_not' => 'isGenericName',
-		'base_fee' => 'isFloat', 'percent_fee' => 'isFloat',
+		'base_fee' => 'isFloat', 'percent_fee' => 'isFloat', 'click_fee' => 'isFloat',
 		'cache_visitors' => 'isUnsignedInt', 'cache_visits' => 'isUnsignedInt', 'cache_pages' => 'isUnsignedInt', 'cache_registrations' => 'isUnsignedInt',
 		'cache_orders' => 'isUnsignedInt', 'cache_sales' => 'isFloat', 'cache_reg_rate' => 'isFloat', 'cache_order_rate' => 'isFloat');
 
@@ -56,6 +57,7 @@ class Referrer extends ObjectModel
 		$fields['request_uri_like_not'] = pSQL($this->request_uri_like_not, true);
 		$fields['base_fee'] = number_format($this->base_fee, 2, '.', '');
 		$fields['percent_fee'] = number_format($this->percent_fee, 2, '.', '');
+		$fields['click_fee'] = number_format($this->percent_fee, 2, '.', '');
 		$fields['cache_visitors'] = intval($this->cache_visitors);
 		$fields['cache_visits'] = intval($this->cache_visits);
 		$fields['cache_pages'] = intval($this->cache_pages);
@@ -299,6 +301,7 @@ class Referrer extends ObjectModel
 		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
 		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsTransfo['registrations']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsTransfo2['uniqs']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
+		$jsonArray[] = 'click_fee:\''.Tools::displayPrice(intval($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
 		$jsonArray[] = 'base_fee:\''.Tools::displayPrice($statsSales['orders'] * $referrer->base_fee, $currency).'\'';
 		$jsonArray[] = 'percent_fee:\''.Tools::displayPrice($statsSales['sales'] * $referrer->percent_fee / 100, $currency).'\'';
 		die ('[{'.implode(',', $jsonArray).'}]');
