@@ -37,7 +37,7 @@ class Referrer extends ObjectModel
 		'http_referer_regexp_not' => 'isCleanHtml',	'request_uri_regexp_not' => 'isGenericName', 'http_referer_like_not' => 'isCleanHtml',	'request_uri_like_not' => 'isGenericName',
 		'base_fee' => 'isFloat', 'percent_fee' => 'isFloat', 'click_fee' => 'isFloat',
 		'cache_visitors' => 'isUnsignedInt', 'cache_visits' => 'isUnsignedInt', 'cache_pages' => 'isUnsignedInt', 'cache_registrations' => 'isUnsignedInt',
-		'cache_orders' => 'isUnsignedInt', 'cache_sales' => 'isFloat', 'cache_reg_rate' => 'isFloat', 'cache_order_rate' => 'isFloat');
+		'cache_orders' => 'isUnsignedInt', 'cache_sales' => 'isOptFloat', 'cache_reg_rate' => 'isOptFloat', 'cache_order_rate' => 'isOptFloat');
 
 	protected 	$table = 'referrer';
 	protected 	$identifier = 'id_referrer';
