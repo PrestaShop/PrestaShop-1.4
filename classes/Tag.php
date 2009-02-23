@@ -128,6 +128,31 @@ class Tag extends ObjectModel
 	 		$result[$tag['id_lang']][] = $tag['name'];
 	 	return $result;
 	}
+	
+	public function getProducts($associated = true)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT pl.name, pl.id_product
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.id_product = pl.id_product
+		WHERE pl.id_lang = '.intval($this->id_lang).'
+		AND p.active = 1
+		AND p.id_product '.($associated ? 'IN' : 'NOT IN').' (SELECT pt.id_product FROM `'._DB_PREFIX_.'product_tag` pt WHERE pt.id_tag = '.intval($this->id).')
+		ORDER BY pl.name');
+	}
+	
+	public function setProducts($array)
+	{
+		$result1 = Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_tag WHERE id_tag = '.intval($this->id));
+		if (is_array($array))
+		{
+			$ids = array();
+			foreach ($array as $id_product)
+				$ids[] = '('.intval($id_product).','.intval($this->id).')';
+			return $result1 & Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_tag (id_product, id_tag) VALUES '.implode(',',$ids));
+		}
+		return $result1;
+	}
 }
 
 ?>

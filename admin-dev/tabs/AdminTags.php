@@ -27,9 +27,10 @@ class AdminTags extends AdminTab
 	}
 	
 	public function postProcess()
-	{
-		global $currentIndex;
-		
+	{		
+		if ($this->tabAccess['edit'] === '1' AND Tools::getValue('submitAdd'.$this->table))
+			if ($id = intval(Tools::getValue($this->identifier)) AND $obj = new $this->className($id) AND Validate::isLoadedObject($obj))
+				$obj->setProducts($_POST['products']);
 		return parent::postProcess();
 	}
 	
@@ -38,9 +39,11 @@ class AdminTags extends AdminTab
 		global $currentIndex, $cookie;
 		$obj = $this->loadObject(true);
 		$languages = Language::getLanguages();
+		$products1 = $obj->getProducts(true);
+		$products2 = $obj->getProducts(false);
 		
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
+		<form id="formTag" action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/t/AdminTags.gif" />'.$this->l('Tag').'</legend>
 				<label>'.$this->l('Name').' </label>
@@ -51,17 +54,58 @@ class AdminTags extends AdminTab
 				<div class="margin-form">
 					<select name="id_lang">
 						<option value="">-</option>';
-						foreach ($languages as $language)
-							echo '<option value="'.$language['id_lang'].'" '.($language['id_lang'] == $this->getFieldValue($obj, 'id_lang') ? 'selected="selected"' : '').'>'.$language['name'].'</option>';
-					echo '
-					</select>
+		foreach ($languages as $language)
+			echo '		<option value="'.$language['id_lang'].'" '.($language['id_lang'] == $this->getFieldValue($obj, 'id_lang') ? 'selected="selected"' : '').'>'.$language['name'].'</option>';
+		echo '		</select> <sup>*</sup>
 				</div>
+				<h3>'.$this->l('Products').' </h3>
+				<table>
+					<tr>
+						<td>
+							<select multiple id="select1" name="products[]" style="width:300px;height:160px;">';
+		foreach ($products1 as $product)
+			echo '				<option value="'.$product['id_product'].'">'.$product['name'].'</option>';
+		echo '				</select><br /><br />
+							<a href="#" id="add"
+							style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+								'.$this->l('Remove').' &gt;&gt;
+							</a>
+						</td>
+						<td style="padding-left:20px;">
+							<select multiple id="select2" style="width:300px;height:160px;">';
+		foreach ($products2 as $product)
+			echo '				<option value="'.$product['id_product'].'">'.$product['name'].'</option>';
+		echo '				</select><br /><br />
+							<a href="#" id="remove"
+							style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+								&lt;&lt; '.$this->l('Add').'
+							</a>
+						</div>
+						</td>
+					</tr>
+				</table>
+				<div class="clear">&nbsp;</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
-		</form>';
+		</form>
+		<script type="text/javascript">  
+			$().ready(function() {  
+				$(\'#add\').click(function() {  
+					return !$(\'#select1 option:selected\').remove().appendTo(\'#select2\');  
+				});  
+				$(\'#remove\').click(function() {  
+					return !$(\'#select2 option:selected\').remove().appendTo(\'#select1\');  
+				});  
+			});
+			$(\'#formTag\').submit(function() {  
+				$(\'#select1 option\').each(function(i) {  
+					$(this).attr("selected", "selected");  
+				});  
+			}); 
+		</script>';
 	}
 
 }
