@@ -14,7 +14,7 @@ class AdminTags extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_tag' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25, 'filter_key' => 'a!id_seller_message'),
 		'lang' => array('title' => $this->l('Language'), 'filter_key' => 'l!name'),
-		'name' => array('title' => $this->l('Nom'), 'width' => 200),
+		'name' => array('title' => $this->l('Name'), 'width' => 200),
 		'products' => array('title' => $this->l('Products'), 'align' => 'right'));
 
 		$this->_select = 'l.name as lang, COUNT(pt.id_product) as products';

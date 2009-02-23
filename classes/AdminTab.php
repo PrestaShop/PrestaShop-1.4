@@ -826,20 +826,11 @@ abstract class AdminTab
 
 		/* SQL table : orders, but class name is Order */
 		$sqlTable = $this->table == 'order' ? 'orders' : $this->table;
-
-		/* Query in order to get results number */
-		$queryTotal = Db::getInstance()->getRow('
-		SELECT COUNT(a.`'.$this->identifier.'`) AS total
-		FROM `'._DB_PREFIX_.$sqlTable.'` a
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`'.$this->identifier.'` = a.`'.$this->identifier.'` AND b.`id_lang` = '.intval($id_lang).')' : '').'
-		'.((isset($this->_join) AND (!isset($this->_joinCount) OR $this->_joinCount)) ? $this->_join.' ' : '').'
-		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter);
-		$this->_listTotal = intval($queryTotal['total']);
 		
 		/* Query in order to get results with all fields */
-		$sql = 
-		($this->_tmpTableFilter ? 'SELECT * FROM (' : '').'
-		SELECT '.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
+		$sql = 'SELECT SQL_CALC_FOUND_ROWS
+		'.($this->_tmpTableFilter ? ' * FROM (' : '').'
+		'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
 		FROM `'._DB_PREFIX_.$sqlTable.'` a
 		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`'.$this->identifier.'` = a.`'.$this->identifier.'` AND b.`id_lang` = '.intval($id_lang).')' : '').'
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
@@ -849,6 +840,7 @@ abstract class AdminTab
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
 		$this->_list = Db::getInstance()->ExecuteS($sql);
+		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 	}
 
 	/**
@@ -926,6 +918,7 @@ abstract class AdminTab
 			echo '<option value="'.intval($value).'"'.((Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL)) == $value) ? ' selected="selected"' : '').'>'.intval($value).'</option>';
 		echo '
 						</select>
+						/ '.intval($this->_listTotal).' '.$this->l('result(s)').'
 					</span>
 					<span style="float: right;">
 						<input type="submit" name="submitReset'.$this->table.'" value="'.$this->l('Reset').'" class="button" />
