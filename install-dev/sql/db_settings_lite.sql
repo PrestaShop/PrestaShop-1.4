@@ -363,73 +363,6 @@ INSERT INTO `PREFIX_discount_type_lang` (`id_discount_type`, `id_lang`, `name`) 
 (2, 2, 'Réduction sur la commande (montant)'),
 (3, 2, 'Frais de port gratuits');
 
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES
-(1, 1, 1, 1, 1, 1),
-(1, 2, 1, 1, 1, 1),
-(1, 3, 1, 1, 1, 1),
-(1, 4, 1, 1, 1, 1),
-(1, 5, 1, 1, 1, 1),
-(1, 6, 1, 1, 1, 1),
-(1, 7, 1, 1, 1, 1),
-(1, 8, 1, 1, 1, 1),
-(1, 9, 1, 1, 1, 1),
-(1, 10, 1, 1, 1, 1),
-(1, 11, 1, 1, 1, 1),
-(1, 12, 1, 1, 1, 1),
-(1, 13, 1, 1, 1, 1),
-(1, 14, 1, 1, 1, 1),
-(1, 15, 1, 1, 1, 1),
-(1, 16, 1, 1, 1, 1),
-(1, 17, 1, 1, 1, 1),
-(1, 18, 1, 1, 1, 1),
-(1, 19, 1, 1, 1, 1),
-(1, 20, 1, 1, 1, 1),
-(1, 21, 1, 1, 1, 1),
-(1, 22, 1, 1, 1, 1),
-(1, 23, 1, 1, 1, 1),
-(1, 24, 1, 1, 1, 1),
-(1, 25, 1, 1, 1, 1),
-(1, 26, 1, 1, 1, 1),
-(1, 27, 1, 1, 1, 1),
-(1, 28, 1, 1, 1, 1),
-(1, 29, 1, 1, 1, 1),
-(1, 30, 1, 1, 1, 1),
-(1, 31, 1, 1, 1, 1),
-(1, 32, 1, 1, 1, 1),
-(1, 33, 1, 1, 1, 1),
-(1, 34, 1, 1, 1, 1),
-(1, 35, 1, 1, 1, 1),
-(1, 36, 1, 1, 1, 1),
-(1, 37, 1, 1, 1, 1),
-(1, 38, 1, 1, 1, 1),
-(1, 39, 1, 1, 1, 1),
-(1, 40, 1, 1, 1, 1),
-(1, 41, 1, 1, 1, 1),
-(1, 42, 1, 1, 1, 1),
-(1, 43, 1, 1, 1, 1),
-(1, 44, 1, 1, 1, 1),
-(1, 45, 1, 1, 1, 1),
-(1, 46, 1, 1, 1, 1),
-(1, 47, 1, 1, 1, 1),
-(1, 48, 1, 1, 1, 1),
-(1, 49, 1, 1, 1, 1),
-(1, 50, 1, 1, 1, 1),
-(1, 51, 1, 1, 1, 1),
-(1, 52, 1, 1, 1, 1),
-(1, 53, 1, 1, 1, 1),
-(1, 54, 1, 1, 1, 1),
-(1, 55, 1, 1, 1, 1),
-(1, 56, 1, 1, 1, 1),
-(1, 57, 1, 1, 1, 1),
-(1, 58, 1, 1, 1, 1),
-(1, 59, 1, 1, 1, 1),
-(1, 60, 1, 1, 1, 1),
-(1, 61, 1, 1, 1, 1),
-(1, 62, 1, 1, 1, 1),
-(1, 63, 1, 1, 1, 1),
-(1, 64, 1, 1, 1, 1),
-(1, 65, 1, 1, 1, 1);
-
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
 INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES
 (1, 1, 'Administrator'),
@@ -452,6 +385,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (11, 'AdminAttributesGroups', 1, 4),
 (36, 'AdminFeatures', 1, 5),
 (58, 'AdminScenes', 1, 6),
+(66, 'AdminTags', 1, 7),
 (12, 'AdminAddresses', 2, 1),
 (63, 'AdminGroups', 2, 2),
 (65, 'AdminCarts', 2, 3),
@@ -499,6 +433,8 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (57, 'AdminCMS', 9, 9),
 (64, 'AdminHtaccess', 9, 10),
 (43, 'AdminSearch', -1, 0);
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 1, 'Catalog'),
@@ -564,6 +500,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 63, 'Groups'),
 (1, 64, 'Htaccess'),
 (1, 65, 'Carts'),
+(1, 66, 'Tags'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -626,7 +563,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 62, 'Sites affluents'),
 (2, 63, 'Groupes'),
 (2, 64, 'Htaccess'),
-(2, 65, 'Paniers');
+(2, 65, 'Paniers'),
+(2, 66, 'Tags');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
