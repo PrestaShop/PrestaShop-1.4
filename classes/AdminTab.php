@@ -313,7 +313,7 @@ abstract class AdminTab
 
 		/* Checking for fields validity */
 		foreach ($rules['validate'] AS $field => $function)
-			if (Tools::getValue($field) !== false)
+			if (Tools::getValue($field))
 				if (!Validate::$function(Tools::getValue($field)))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
 
@@ -1132,7 +1132,7 @@ abstract class AdminTab
 					elseif (isset($tr[$key]))
 					{
 						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
-						echo isset($params['callback']) ? call_user_func_array(array($this->className, $params['callback']), array($echo, $tr)) : $echo;
+						echo isset($params['callback']) ? call_user_func(array($this->className, $params['callback']), $echo) : $echo;
 					}
 					else
 						echo '--';
