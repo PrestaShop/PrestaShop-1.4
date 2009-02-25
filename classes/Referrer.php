@@ -100,6 +100,27 @@ class Referrer extends ObjectModel
 		return $regexp;
 	}
 	
+	public static function getReferrers($id_customer)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT DISTINCT c.date_add, r.name
+		FROM '._DB_PREFIX_.'guest g
+		LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest
+		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON c.id_connections = cs.id_connections
+		LEFT JOIN '._DB_PREFIX_.'referrer r ON (
+			(r.http_referer_like IS NULL OR r.http_referer_like = \'\' OR cs.http_referer LIKE r.http_referer_like)
+			AND (r.request_uri_like IS NULL OR r.request_uri_like = \'\' OR cs.request_uri LIKE r.request_uri_like)
+			AND (r.http_referer_like_not IS NULL OR r.http_referer_like_not = \'\' OR cs.http_referer NOT LIKE r.http_referer_like_not)
+			AND (r.request_uri_like_not IS NULL OR r.request_uri_like_not = \'\' OR cs.request_uri NOT LIKE r.request_uri_like_not)
+			AND (r.http_referer_regexp IS NULL OR r.http_referer_regexp = \'\' OR cs.http_referer REGEXP r.http_referer_regexp)
+			AND (r.request_uri_regexp IS NULL OR r.request_uri_regexp = \'\' OR cs.request_uri REGEXP r.request_uri_regexp)
+			AND (r.http_referer_regexp_not IS NULL OR r.http_referer_regexp_not = \'\' OR cs.http_referer NOT REGEXP r.http_referer_regexp_not)
+			AND (r.request_uri_regexp_not IS NULL OR r.request_uri_regexp_not = \'\' OR cs.request_uri NOT REGEXP r.request_uri_regexp_not)
+		)
+		WHERE g.id_customer = '.intval($id_customer).'
+		AND r.name IS NOT NULL');
+	}
+	
 	public function getStatsVisits($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');

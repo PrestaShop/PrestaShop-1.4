@@ -111,6 +111,7 @@ class AdminCustomers extends AdminTab
 		$orders = Order::getCustomerOrders($customer->id);
 		$carts = Cart::getCustomerCarts($customer->id);
 		$groups = $customer->getGroups();
+		$referrers = Referrer::getReferrers($customer->id);
 
 		echo '
 		<div style="float: left">
@@ -322,6 +323,21 @@ class AdminCustomers extends AdminTab
                         <td>'.$connection['time'].'</td>
                         <td>'.($connection['http_referer'] ? preg_replace('/^www./', '', parse_url($connection['http_referer'], PHP_URL_HOST)) : $this->l('Direct link')).'</td>
                         <td>'.$connection['ipaddress'].'</td>
+                    </tr>';
+            echo '</table><div class="clear">&nbsp;</div>';
+        }
+        if (sizeof($referrers))    
+        {
+            echo '<h2>'.$this->l('Referrers').'</h2>
+            <table cellspacing="0" cellpadding="0" class="table">
+                <tr>
+                    <th style="width: 200px">'.$this->l('Date').'</th>
+                    <th style="width: 200px">'.$this->l('Name').'</th>
+                </tr>';
+            foreach ($referrers as $referrer)
+                echo '<tr>
+                        <td>'.Tools::displayDate($referrer['date_add'], intval($cookie->id_lang), true).'</td>
+                        <td>'.$referrer['name'].'</td>
                     </tr>';
             echo '</table><div class="clear">&nbsp;</div>';
         }
