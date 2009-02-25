@@ -1,5 +1,10 @@
+$(document).ready(function()
+{
+	updateAddressesDisplay(true);
+});
+
 //update the display of the addresses
-function updateAddressesDisplay()
+function updateAddressesDisplay(first_view)
 {
 	// update content of delivery address
 	updateAddressDisplay('delivery');
@@ -19,7 +24,10 @@ function updateAddressesDisplay()
 		if ($('select#id_address_invoice').val())
 			updateAddressDisplay('invoice');
 	}
-	updateAddresses();
+	
+	if(!first_view)
+		updateAddresses();
+		
 	return true;
 }
 
@@ -74,7 +82,3 @@ function updateAddresses()
            error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
        });
 }
-
-$(document).ready(function(){
-	updateAddressesDisplay();
-});
