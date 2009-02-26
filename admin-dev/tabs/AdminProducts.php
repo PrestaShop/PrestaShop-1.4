@@ -981,7 +981,7 @@ class AdminProducts extends AdminTab
 					if (toload[id])
 					{
 						toload[id] = false;
-						$.get("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\'},
+						$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\'},
 							function(rep) {
 								getE("step" + id).innerHTML = rep;
 								if (id == 3) populate_attrs();
