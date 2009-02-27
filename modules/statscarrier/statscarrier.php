@@ -41,7 +41,7 @@ class StatsCarrier extends ModuleGraph
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'orders` o
-		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_order_state')) ? 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval(Tools::getValue('id_order_state')) : ''));
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
 	
@@ -76,7 +76,7 @@ class StatsCarrier extends ModuleGraph
 		SELECT c.name, COUNT(DISTINCT o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'carrier` c
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.id_carrier = c.id_carrier
-		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.$stateQuery.'
 		GROUP BY c.`id_carrier`');
 		foreach ($result as $row)

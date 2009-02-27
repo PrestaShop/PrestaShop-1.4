@@ -25,7 +25,7 @@ class SEKeywords extends ModuleGraph
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'sekeyword` sek
-		WHERE LEFT(sek.`date_add`, 10) BETWEEN ';
+		WHERE sek.`date_add` BETWEEN ';
 		$this->_query2 = '
 		GROUP BY TRIM(sek.`keyword`)
 		HAVING occurences > 1

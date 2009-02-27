@@ -39,7 +39,7 @@ class StatsEquipment extends ModuleGraph
 		SELECT DISTINCT g.*
 		FROM `'._DB_PREFIX_.'connections` c 
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON g.`id_guest` = c.`id_guest`
-		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
 		
 		$calcArray = array('jsOK' => 0, 'jsKO' => 0, 'javaOK' => 0, 'javaKO' => 0, 'wmpOK' => 0, 'wmpKO' => 0, 'qtOK' => 0, 'qtKO' => 0, 'realOK' => 0, 'realKO' => 0, 'flashOK' => 0, 'flashKO' => 0, 'directorOK' => 0, 'directorKO' => 0);
 		while ($row = mysql_fetch_assoc($result))
@@ -115,7 +115,7 @@ class StatsEquipment extends ModuleGraph
 					FROM `'._DB_PREFIX_.'web_browser` wb
 					LEFT JOIN `'._DB_PREFIX_.'guest` g ON g.`id_web_browser` = wb.`id_web_browser`
 					LEFT JOIN `'._DB_PREFIX_.'connections` c ON g.`id_guest` = c.`id_guest`
-					WHERE LEFT(c.`date_add`, 10) BETWEEN ';
+					WHERE c.`date_add` BETWEEN ';
 				$this->_query2 = ' GROUP BY g.`id_web_browser`';
 				break;
 			case 'os':
@@ -125,7 +125,7 @@ class StatsEquipment extends ModuleGraph
 					FROM `'._DB_PREFIX_.'operating_system` os
 					LEFT JOIN `'._DB_PREFIX_.'guest` g ON g.`id_operating_system` = os.`id_operating_system`
 					LEFT JOIN `'._DB_PREFIX_.'connections` c ON g.`id_guest` = c.`id_guest`
-					WHERE LEFT(c.`date_add`, 10) BETWEEN ';
+					WHERE c.`date_add` BETWEEN ';
 				$this->_query2 = ' GROUP BY g.`id_operating_system`';
 				break;
 		}
