@@ -1132,7 +1132,7 @@ abstract class AdminTab
 					elseif (isset($tr[$key]))
 					{
 						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
-						echo isset($params['callback']) ? call_user_func(array($this->className, $params['callback']), $echo) : $echo;
+						echo isset($params['callback']) ? call_user_func_array(array($this->className, $params['callback']), array($echo, $tr)) : $echo;
 					}
 					else
 						echo '--';
