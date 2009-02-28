@@ -116,11 +116,11 @@ class StatsHome extends Module
 		SELECT SUM(o.`total_paid_real`) as total_sales, COUNT(o.`total_paid_real`) as total_orders
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.valid = 1
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT COUNT(`id_customer`) AS total_registrations
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result3 = Db::getInstance()->getRow('
 		SELECT SUM(pv.`counter`) AS total_viewed
 		FROM `'._DB_PREFIX_.'page_viewed` pv
@@ -128,8 +128,8 @@ class StatsHome extends Module
 		LEFT JOIN `'._DB_PREFIX_.'page` p ON pv.`id_page` = p.`id_page`
 		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 		WHERE pt.`name` = \'product.php\'
-		AND dr.`time_start` BETWEEN '.ModuleGraph::getDateBetween().'
-		AND dr.`time_end` BETWEEN '.ModuleGraph::getDateBetween());	
+		AND LEFT(dr.`time_start`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		AND LEFT(dr.`time_end`, 10) BETWEEN '.ModuleGraph::getDateBetween());	
 		return array_merge($result, array_merge($result2, $result3));
 	}
 }

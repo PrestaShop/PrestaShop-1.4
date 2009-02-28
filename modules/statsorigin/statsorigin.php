@@ -37,7 +37,7 @@ class StatsOrigin extends ModuleGraph
 		$result = mysql_query('
 		SELECT c.http_referer
 		FROM '._DB_PREFIX_.'connections c
-		WHERE c.date_add BETWEEN '.$dateBetween);
+		WHERE LEFT(c.date_add, 10) BETWEEN '.$dateBetween);
 		$websites = array($directLink => 0);
 		while ($row = mysql_fetch_assoc($result))
 		{

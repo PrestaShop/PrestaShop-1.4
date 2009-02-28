@@ -114,8 +114,8 @@ class StatsBestCategories extends ModuleGrid
 				LEFT JOIN `'._DB_PREFIX_.'category_product` capr2 ON capr2.`id_product` = pr.`id_product`
 				WHERE capr.`id_category` = capr2.`id_category`
 				AND p.`id_page_type` = 1
-				AND dr.`time_start` BETWEEN '.$dateBetween.'
-				AND dr.`time_end` BETWEEN '.$dateBetween.'
+				AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+				AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
 		FROM `'._DB_PREFIX_.'category` ca
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON (ca.`id_category` = calang.`id_category` AND calang.`id_lang` = '.$id_lang.')
@@ -133,7 +133,7 @@ class StatsBestCategories extends ModuleGrid
 				LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = cp.`id_order`
 				LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 				WHERE o.valid = 1
-				AND o.date_add BETWEEN '.$dateBetween.'
+				AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
 				GROUP BY pr.`id_product`
 			) t ON t.`id_product` = pr.`id_product`
 		) t	ON t.`id_product` = capr.`id_product`

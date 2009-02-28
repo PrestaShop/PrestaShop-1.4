@@ -141,7 +141,7 @@ class Referrer extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
 		LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 		'.$join.'
-		WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+		WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		'.$this->getRegexp().'
 		'.$where);
 	}
@@ -165,7 +165,7 @@ class Referrer extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON cu.id_customer = g.id_customer
 		'.$join.'
-		WHERE LEFT(cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+		WHERE LEFT(cu.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		'.$this->getRegexp().'
 		'.$where);
 		return $result['registrations'];
@@ -192,7 +192,7 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
 			'.$join.'
-			WHERE LEFT(oo.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+			WHERE LEFT(oo.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)
@@ -225,11 +225,11 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
 			'.$join.'
-			WHERE LEFT(cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+			WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)
-		AND LEFT(cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee));
+		AND LEFT(cu.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee));
 	}
 	
 	public function getStatsOrderRate($id_product = null, $employee = null)
@@ -252,7 +252,7 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
 			'.$join.'
-			WHERE LEFT(cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+			WHERE LEFT(cs.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			'.$this->getRegexp().'
 			'.$where.'
 		)

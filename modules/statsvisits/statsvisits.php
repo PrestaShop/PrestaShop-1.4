@@ -39,7 +39,7 @@ class StatsVisits extends ModuleGraph
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(c.`id_connections`) AS total
 		FROM `'._DB_PREFIX_.'connections` c
-		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -48,7 +48,7 @@ class StatsVisits extends ModuleGraph
 		$result = Db::getInstance()->ExecuteS('
 		SELECT DISTINCT c.`id_guest`
 		FROM `'._DB_PREFIX_.'connections` c
-		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return Db::getInstance()->NumRows();
 	}
 	
@@ -92,12 +92,12 @@ class StatsVisits extends ModuleGraph
 				$this->_query[0] = '
 					SELECT `date_add`
 					FROM `'._DB_PREFIX_.'connections`
-					WHERE `date_add` BETWEEN ';
+					WHERE LEFT(`date_add`, 10) BETWEEN ';
 				$this->_query2[0] = '';
 				$this->_query[1] = '
 					SELECT `date_add`
 					FROM `'._DB_PREFIX_.'connections`
-					WHERE `date_add` BETWEEN ';
+					WHERE LEFT(`date_add`, 10) BETWEEN ';
 				$this->_query2[1] = ' GROUP BY `id_guest`';
 				break;
 		}

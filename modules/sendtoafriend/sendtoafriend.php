@@ -21,7 +21,7 @@ class sendToAFriend extends Module
 	 	return $this->registerHook('extraLeft');
 	}
 	
-	function hookExtra$params)
+	function hookExtraLeft($params)
 	{
 		global $smarty;
 		$smarty->assign('this_path', $this->_path);

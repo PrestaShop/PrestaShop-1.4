@@ -53,11 +53,11 @@ class StatsNewsletter extends ModuleGraph
 		$result1 = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT c.id_customer) as customers
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(c.`newsletter_date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT n.id) as visitors
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE LEFT(n.`newsletter_date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return array('customers' => $result1['customers'], 'visitors' => $result2['visitors'], 'both' => $result1['customers'] + $result2['visitors']);
 	}
 		
@@ -71,11 +71,11 @@ class StatsNewsletter extends ModuleGraph
 		$this->_query = '
 		SELECT c.newsletter_date_add
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`newsletter_date_add` BETWEEN ';
+		WHERE LEFT(c.`newsletter_date_add`, 10) BETWEEN ';
 		$this->_query2 = '
 		SELECT n.newsletter_date_add
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` BETWEEN ';
+		WHERE LEFT(n.`newsletter_date_add`, 10) BETWEEN ';
 		$this->setDateGraph($layers, true);
 	}
 	

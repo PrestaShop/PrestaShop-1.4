@@ -23,7 +23,7 @@ class AdminStats extends AdminStatsTab
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
-		AND o.`date_add` BETWEEN '.$dateBetween.'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 		GROUP BY date_format(o.`date_add`, \''.$format.'\')
 		ORDER BY totalht '.$order);
 	}
@@ -46,14 +46,14 @@ class AdminStats extends AdminStatsTab
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
-		AND o.`date_add` BETWEEN '.$dateBetween);
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween);
 		
 		$products = Db::getInstance()->getRow('
 		SELECT COUNT(od.`id_order_detail`) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 		WHERE o.valid = 1
-		AND o.`date_add` BETWEEN '.$dateBetween);
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween);
 		
 		$xtrems = Db::getInstance()->getRow('
 		SELECT MAX(`total_products`) as maxht, MIN(`total_products`) as minht, MAX(`total_paid`) as maxttc, MIN(`total_paid`) as minttc
@@ -63,8 +63,7 @@ class AdminStats extends AdminStatsTab
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 			WHERE o.valid = 1
-			AND o.`date_add` BETWEEN '.$dateBetween.'
-		) records');
+			AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.') records');
 		
 		return array_merge($result, array_merge($xtrems, $products));
 	}
@@ -79,9 +78,8 @@ class AdminStats extends AdminStatsTab
 			LEFT JOIN `'._DB_PREFIX_.'currency` cu ON c.id_currency = cu.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'cart_product` cp ON c.`id_cart` = cp.`id_cart`
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
-			WHERE c.`date_upd` BETWEEN '.$dateBetween.'
-			GROUP BY c.`id_cart`
-		) carts');
+			WHERE LEFT(c.`date_upd`, 10) BETWEEN '.$dateBetween.'
+			GROUP BY c.`id_cart`) carts');
 	}
 	
 	public function display()

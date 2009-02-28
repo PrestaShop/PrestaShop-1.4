@@ -33,7 +33,7 @@ class StatsProduct extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 		WHERE od.`product_id` = '.intval($id_product).'
 		AND o.valid = 1
-		AND o.`date_add` BETWEEN '.$dateBetween.'');
+		AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'');
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -48,8 +48,8 @@ class StatsProduct extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 		WHERE pt.`name` = \'product.php\'
 		AND p.`id_object` = '.intval($id_product).'
-		AND dr.`time_start` BETWEEN '.$dateBetween.'
-		AND dr.`time_end` BETWEEN '.$dateBetween.'');
+		AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+		AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'');
 		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
@@ -71,7 +71,7 @@ class StatsProduct extends ModuleGraph
 		SELECT o.date_add, o.id_order, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
-		WHERE o.date_add BETWEEN '.$this->getDate().'
+		WHERE LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
 		AND od.product_id = '.intval($id_product));
 	}
 	
@@ -186,7 +186,7 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
 					AND o.valid = 1
-					AND o.`date_add` BETWEEN '.$dateBetween.'
+					AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY o.`date_add`';
 				$this->_titles['main'] = $this->l('Number of purchases');
 				break;
@@ -199,8 +199,8 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 					WHERE pt.`name` = \'product.php\'
 					AND p.`id_object` = '.intval($this->_id_product).'
-					AND dr.`time_start` BETWEEN '.$dateBetween.'
-					AND dr.`time_end` BETWEEN '.$dateBetween.'
+					AND LEFT(dr.`time_start`, 10) BETWEEN '.$dateBetween.'
+					AND LEFT(dr.`time_end`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY dr.`time_start`';
 				$this->_titles['main'] = $this->l('Number of visits');
 				break;
@@ -211,7 +211,7 @@ class StatsProduct extends ModuleGraph
 					LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
 					WHERE od.`product_id` = '.intval($this->_id_product).'
 					AND o.valid = 1
-					AND o.`date_add` BETWEEN '.$dateBetween.'
+					AND LEFT(o.`date_add`, 10) BETWEEN '.$dateBetween.'
 					GROUP BY od.`product_attribute_id`';
 				$this->_titles['main'] = $this->l('Attributes');
 				break;

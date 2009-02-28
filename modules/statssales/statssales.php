@@ -55,7 +55,7 @@ class StatsSales extends ModuleGraph
 			ORDER BY ios.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		)
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		GROUP BY oh.`id_order_state`');
 		$numRows = Db::getInstance()->NumRows();
@@ -102,7 +102,7 @@ class StatsSales extends ModuleGraph
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
-		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : ''));
 		$result1 = Db::getInstance()->getRow('
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
@@ -111,7 +111,7 @@ class StatsSales extends ModuleGraph
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
@@ -119,7 +119,7 @@ class StatsSales extends ModuleGraph
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return array_merge(array_merge($result0, $result1), $result2);
 	}
 	
@@ -156,7 +156,7 @@ class StatsSales extends ModuleGraph
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			'.(intval($this->id_country) ? 'WHERE a.id_country = '.intval($this->id_country).' AND ' : 'WHERE ').'
-			o.`date_add` BETWEEN ';
+			LEFT(o.`date_add`, 10) BETWEEN ';
 		$this->_query = '
 			SELECT o.`date_add`, o.`total_paid_real` / c.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
@@ -165,7 +165,7 @@ class StatsSales extends ModuleGraph
 			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1
 			'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
-			AND o.`date_add` BETWEEN ';
+			AND LEFT(o.`date_add`, 10) BETWEEN ';
 		$this->_query2 = ' GROUP BY o.id_order';
 		$this->setDateGraph($layers, true);
 	}
@@ -247,7 +247,7 @@ class StatsSales extends ModuleGraph
 			LIMIT 1
 		)
 		'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
+		AND LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY oh.`id_order_state`');
 		foreach ($result as $row)
 		{

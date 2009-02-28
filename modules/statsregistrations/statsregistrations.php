@@ -52,7 +52,7 @@ class StatsRegistrations extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 		WHERE  pt.name = "authentication.php"
 		AND (g.id_customer IS NULL OR g.id_customer = 0)
-		AND c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		AND LEFT(c.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween());
 		return $result['blocked'];
 	}
 	
@@ -63,7 +63,7 @@ class StatsRegistrations extends ModuleGraph
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON o.id_customer = g.id_customer
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
-		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE LEFT(o.`date_add`, 10) BETWEEN '.ModuleGraph::getDateBetween().'
 		AND ABS(TIMEDIFF(o.date_add, c.date_add)+0) < 120000');
 		return $result['buyers'];
 	}
@@ -106,7 +106,7 @@ class StatsRegistrations extends ModuleGraph
 		$this->_query = '
 			SELECT `date_add`
 			FROM `'._DB_PREFIX_.'customer`
-			WHERE `date_add` BETWEEN';
+			WHERE LEFT(`date_add`, 10) BETWEEN';
 		$this->_titles['main'] = $this->l('Number of customer accounts created');
 		$this->setDateGraph($layers, true);
 	}
