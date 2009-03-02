@@ -124,7 +124,7 @@ class Referrer extends ObjectModel
 	public function getStatsVisits($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product))
+		if (Validate::isUnsignedId($id_product) AND $id_product)
 		{
 			$join = 'LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
