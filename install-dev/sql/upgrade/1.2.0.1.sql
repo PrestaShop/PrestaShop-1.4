@@ -1,7 +1,7 @@
 SET NAMES 'utf8';
 
 /* ##################################### */
-/* 					STRUCTURE				  */
+/* 					STRUCTURE				 */
 /* ##################################### */
 
 DROP TABLE IF EXISTS PREFIX_order_customization_return;
@@ -13,7 +13,10 @@ ALTER TABLE PREFIX_tab
 	ADD `module` varchar(64) NULL AFTER class_name;
 
 ALTER TABLE PREFIX_orders
-	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT '0' AFTER delivery_date;
+	DROP INDEX `orders_customer`,
+	ADD INDEX id_customer (id_customer),
+	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT '0' AFTER delivery_date,
+	ADD INDEX `id_cart` (`id_cart`);
 
 ALTER TABLE PREFIX_customer
 	ADD deleted TINYINT(1) NOT NULL DEFAULT '0' AFTER active;
@@ -33,12 +36,9 @@ ALTER TABLE PREFIX_order_detail
 	CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	ADD INDEX product_id (product_id);
 
-ALTER TABLE PREFIX_referrer
-	ADD click_fee decimal(3,2) NOT NULL default '0.00' AFTER percent_fee;
-
 ALTER TABLE PREFIX_attribute_lang
 	ADD INDEX id_lang (`id_lang`, `name`),
-	ADD INDEX id_lang2 (`id_lang`),
+	ADD INDEX id_lang_2 (`id_lang`),
 	ADD INDEX id_attribute (`id_attribute`);
 
 ALTER TABLE PREFIX_block_cms
@@ -48,6 +48,7 @@ ALTER TABLE PREFIX_carrier_zone
 	ADD INDEX `id_carrier` (`id_carrier`);
 
 ALTER TABLE PREFIX_connections
+	CHANGE `http_referer` `http_referer` VARCHAR(255) DEFAULT NULL,
 	ADD INDEX `date_add` (`date_add`);
 
 ALTER TABLE PREFIX_customer
@@ -74,101 +75,107 @@ ALTER TABLE PREFIX_hook_module
 ALTER TABLE PREFIX_module
 	CHANGE `active` `active` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0';
 
-ALTER TABLE PREFIX_orders
-	ADD INDEX `id_cart` (`id_cart`);
-
 ALTER TABLE PREFIX_page
-  ADD INDEX `id_page_type` (`id_page_type`),
-  ADD INDEX `id_object` (`id_object`);
+	CHANGE `id_object` `id_object` INT UNSIGNED NULL DEFAULT NULL,
+	ADD INDEX `id_page_type` (`id_page_type`),
+	ADD INDEX `id_object` (`id_object`);
 
 ALTER TABLE PREFIX_page_type
-  ADD INDEX `name` (`name`);
+	ADD INDEX `name` (`name`),
+	CHANGE `name` `name` VARCHAR(255) NOT NULL;
 
 ALTER TABLE PREFIX_product_attribute
-  ADD INDEX reference (reference),
-  ADD INDEX supplier_reference (supplier_reference);
+	ADD INDEX reference (reference),
+	ADD INDEX supplier_reference (supplier_reference);
 
 ALTER TABLE PREFIX_product_lang
-  ADD INDEX id_product (id_product),
-  ADD INDEX id_lang (id_lang),
-  ADD INDEX `name` (`name`),
-  ADD FULLTEXT KEY ftsname (`name`);
+	ADD INDEX id_product (id_product),
+	ADD INDEX id_lang (id_lang),
+	ADD INDEX `name` (`name`),
+	ADD FULLTEXT KEY ftsname (`name`);
+
+ALTER TABLE PREFIX_discount_category
+	ADD PRIMARY KEY (id_discount,id_category);
+
+ALTER TABLE PREFIX_image_lang
+	ADD INDEX id_image (id_image);
 
 /* ############################################################ */
 
 CREATE TABLE `PREFIX_customer_group` (
-  `id_customer` int(10) unsigned NOT NULL,
-  `id_group` int(10) unsigned NOT NULL,
-  KEY `customer_group_index` (`id_customer`,`id_group`),
-  KEY `id_customer` (`id_customer`)
+	`id_customer` int(10) unsigned NOT NULL,
+	`id_group` int(10) unsigned NOT NULL,
+	KEY `customer_group_index` (`id_customer`,`id_group`),
+	KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_category_group (
-  id_category INTEGER UNSIGNED NOT NULL,
-  id_group INTEGER UNSIGNED NOT NULL,
-  INDEX category_group_index(id_category, id_group)
+	id_category INTEGER UNSIGNED NOT NULL,
+	id_group INTEGER UNSIGNED NOT NULL,
+	INDEX category_group_index(id_category, id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_group (
-  id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  reduction DECIMAL(10,2) NOT NULL DEFAULT 0,
-  date_add DATETIME NOT NULL,
-  date_upd DATETIME NOT NULL,
-  PRIMARY KEY(id_group)
+	id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	reduction DECIMAL(10,2) NOT NULL DEFAULT 0,
+	date_add DATETIME NOT NULL,
+	date_upd DATETIME NOT NULL,
+	PRIMARY KEY(id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_group_lang (
-  id_group INTEGER UNSIGNED NOT NULL,
-  id_lang INTEGER UNSIGNED NOT NULL,
-  name VARCHAR(32) NOT NULL,
-  UNIQUE INDEX attribute_lang_index(id_group, id_lang)
+	id_group INTEGER UNSIGNED NOT NULL,
+	id_lang INTEGER UNSIGNED NOT NULL,
+	name VARCHAR(32) NOT NULL,
+	UNIQUE INDEX attribute_lang_index(id_group, id_lang)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_message_readed (
-  id_message INTEGER UNSIGNED NOT NULL,
-  id_employee INTEGER UNSIGNED NOT NULL,
-  date_add DATETIME NOT NULL,
-  PRIMARY KEY  (id_message,id_employee)
+	id_message INTEGER UNSIGNED NOT NULL,
+	id_employee INTEGER UNSIGNED NOT NULL,
+	date_add DATETIME NOT NULL,
+	PRIMARY KEY	(id_message,id_employee)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_connections_source` (
-  id_connections_source INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_connections INTEGER UNSIGNED NOT NULL,
-  http_referer VARCHAR(255) NULL,
-  request_uri VARCHAR(255) NULL,
-  keywords VARCHAR(255) NULL,
-  date_add DATETIME NOT NULL,
-  PRIMARY KEY (id_connections_source),
-  INDEX connections (id_connections),
-  INDEX orderby (date_add),
-  INDEX http_referer (`http_referer`),
-  INDEX request_uri(`request_uri`)
+	id_connections_source INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	id_connections INTEGER UNSIGNED NOT NULL,
+	http_referer VARCHAR(255) NULL,
+	request_uri VARCHAR(255) NULL,
+	keywords VARCHAR(255) NULL,
+	date_add DATETIME NOT NULL,
+	PRIMARY KEY (id_connections_source),
+	INDEX connections (id_connections),
+	INDEX orderby (date_add),
+	INDEX http_referer (`http_referer`),
+	INDEX request_uri(`request_uri`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_referrer` (
-  id_referrer INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  name VARCHAR(64) NOT NULL,
-  passwd VARCHAR(32) NULL,
-  http_referer_regexp VARCHAR(64) NULL,
-  http_referer_like VARCHAR(64) NULL,
-  request_uri_regexp VARCHAR(64) NULL,
-  request_uri_like VARCHAR(64) NULL,
-  http_referer_regexp_not VARCHAR(64) NULL,
-  http_referer_like_not VARCHAR(64) NULL,
-  request_uri_regexp_not VARCHAR(64) NULL,
-  request_uri_like_not VARCHAR(64) NULL,
-  base_fee DECIMAL(4, 2) NOT NULL DEFAULT 0,
-  percent_fee DECIMAL(3, 2) NOT NULL DEFAULT 0,
-  cache_visitors INTEGER NULL,
-  cache_visits INTEGER NULL,
-  cache_pages INTEGER NULL,
-  cache_registrations INTEGER NULL,
-  cache_orders INTEGER NULL,
-  cache_sales DECIMAL(10,2) NULL,
-  cache_reg_rate DECIMAL(5,2) NULL,
-  cache_order_rate DECIMAL(5,2) NULL,
-  date_add DATETIME NOT NULL,
-  PRIMARY KEY (`id_referrer`)
+	id_referrer INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	name VARCHAR(64) NOT NULL,
+	passwd VARCHAR(32) NULL,
+	http_referer_regexp VARCHAR(64) NULL,
+	http_referer_like VARCHAR(64) NULL,
+	request_uri_regexp VARCHAR(64) NULL,
+	request_uri_like VARCHAR(64) NULL,
+	http_referer_regexp_not VARCHAR(64) NULL,
+	http_referer_like_not VARCHAR(64) NULL,
+	request_uri_regexp_not VARCHAR(64) NULL,
+	request_uri_like_not VARCHAR(64) NULL,
+	base_fee DECIMAL(4, 2) NOT NULL DEFAULT 0,
+	percent_fee DECIMAL(3, 2) NOT NULL DEFAULT 0,
+	click_fee decimal(3,2) NOT NULL default '0.00',
+	cache_visitors INTEGER NULL,
+	cache_visits INTEGER NULL,
+	cache_pages INTEGER NULL,
+	cache_registrations INTEGER NULL,
+	cache_orders INTEGER NULL,
+	cache_sales DECIMAL(10,2) NULL,
+	cache_reg_rate DECIMAL(5,2) NULL,
+	cache_order_rate DECIMAL(5,2) NULL,
+	date_add DATETIME NOT NULL,
+	PRIMARY KEY (`id_referrer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
@@ -179,22 +186,22 @@ CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_module_group` (
-  `id_module` INTEGER UNSIGNED NOT NULL,
-  `id_group` INTEGER NOT NULL,
-  PRIMARY KEY (`id_module`, `id_group`)
+	`id_module` INTEGER UNSIGNED NOT NULL,
+	`id_group` INTEGER NOT NULL,
+	PRIMARY KEY (`id_module`, `id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_attribute_image` (
-  `id_product_attribute` int(10) NOT NULL,
-  `id_image` int(10) NOT NULL,
-  PRIMARY KEY  (`id_product_attribute`,`id_image`),
-  KEY `id_product_attribute` (`id_product_attribute`),
-  KEY `id_image` (`id_image`)
+	`id_product_attribute` int(10) NOT NULL,
+	`id_image` int(10) NOT NULL,
+	PRIMARY KEY	(`id_product_attribute`,`id_image`),
+	KEY `id_product_attribute` (`id_product_attribute`),
+	KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 /* ##################################### */
-/* 					CONTENTS					*/
+/* 					CONTENTS					 */
 /* ##################################### */
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
@@ -211,19 +218,19 @@ UPDATE PREFIX_orders o SET o.valid = IFNULL((
 ), 0);
 
 INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-		(1, 'google','q'),
-		(2, 'search.aol','query'),
-		(3, 'yandex.ru','text'),
-		(4, 'ask.com','q'),
-		(5, 'nhl.com','q'),
-		(6, 'search.yahoo','p'),
-		(7, 'baidu.com','wd'),
-		(8, 'search.lycos','query'),
-		(9, 'exalead','q'),
-		(10, 'search.live.com','q'),
-		(11, 'search.ke.voila','rdata'),
-		(12, 'altavista','q')
-		ON DUPLICATE KEY UPDATE server = server;
+	(1, 'google','q'),
+	(2, 'search.aol','query'),
+	(3, 'yandex.ru','text'),
+	(4, 'ask.com','q'),
+	(5, 'nhl.com','q'),
+	(6, 'search.yahoo','p'),
+	(7, 'baidu.com','wd'),
+	(8, 'search.lycos','query'),
+	(9, 'exalead','q'),
+	(10, 'search.live.com','q'),
+	(11, 'search.ke.voila','rdata'),
+	(12, 'altavista','q')
+	ON DUPLICATE KEY UPDATE server = server;
 
 /* GROUPS, CUSTOMERS GROUPS, & CATEGORY GROUPS */
 INSERT INTO `PREFIX_group` (`reduction`, `date_add`, `date_upd`) VALUES (0, NOW(), NOW());
@@ -244,12 +251,12 @@ INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`)
 /* NEW TABS */
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp), 'AdminMessages', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
-    SELECT id_lang,
-    (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminMessages' LIMIT 1),
-    'Customer messages' FROM PREFIX_lang);
+	SELECT id_lang,
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminMessages' LIMIT 1),
+	'Customer messages' FROM PREFIX_lang);
 UPDATE `PREFIX_tab_lang` SET `name` = 'Messages clients'
-    WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminMessages')
-    AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminMessages')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminMessages' LIMIT 1), 1, 1, 1, 1);
 
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCatalog' LIMIT 1) AS tmp), 'AdminTracking', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCatalog' LIMIT 1) AS tmp )) AS tmp));
