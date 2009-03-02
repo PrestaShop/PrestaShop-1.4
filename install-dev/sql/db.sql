@@ -10,15 +10,11 @@ CREATE TABLE `PREFIX_access` (
   PRIMARY KEY  (`id_profile`,`id_tab`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_accessory` (
   `id_product_1` int(10) unsigned NOT NULL,
   `id_product_2` int(10) unsigned NOT NULL,
   KEY `accessory_product` (`id_product_1`,`id_product_2`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_address` (
   `id_address` int(10) unsigned NOT NULL auto_increment,
@@ -46,8 +42,6 @@ CREATE TABLE `PREFIX_address` (
   KEY `address_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_alias` (
   `alias` varchar(255) NOT NULL,
   `search` varchar(255) NOT NULL,
@@ -57,8 +51,6 @@ CREATE TABLE `PREFIX_alias` (
   UNIQUE KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_attribute` (
   `id_attribute` int(10) unsigned NOT NULL auto_increment,
   `id_attribute_group` int(10) unsigned NOT NULL,
@@ -67,15 +59,11 @@ CREATE TABLE `PREFIX_attribute` (
   KEY `attribute_group` (`id_attribute_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_attribute_group` (
   `id_attribute_group` int(10) unsigned NOT NULL auto_increment,
   `is_color_group` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id_attribute_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_attribute_group_lang` (
   `id_attribute_group` int(10) unsigned NOT NULL,
@@ -84,8 +72,6 @@ CREATE TABLE `PREFIX_attribute_group_lang` (
   `public_name` varchar(64) NOT NULL,
   PRIMARY KEY  (`id_attribute_group`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_attribute_impact` (
   `id_attribute_impact` int(11) NOT NULL auto_increment,
@@ -97,8 +83,6 @@ CREATE TABLE `PREFIX_attribute_impact` (
   UNIQUE KEY `id_product` (`id_product`,`id_attribute`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_attribute_lang` (
   `id_attribute` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
@@ -109,15 +93,11 @@ CREATE TABLE `PREFIX_attribute_lang` (
   KEY `id_attribute` (`id_attribute`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_block_cms` (
   `id_block` int(10) NOT NULL,
   `id_cms` int(10) NOT NULL,
   PRIMARY KEY  (`id_block`,`id_cms`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_carrier` (
   `id_carrier` int(10) unsigned NOT NULL auto_increment,
@@ -133,8 +113,6 @@ CREATE TABLE `PREFIX_carrier` (
   KEY `deleted` (`deleted`,`active`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_carrier_lang` (
   `id_carrier` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
@@ -142,16 +120,12 @@ CREATE TABLE `PREFIX_carrier_lang` (
   UNIQUE KEY `shipper_lang_index` (`id_lang`,`id_carrier`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_carrier_zone` (
   `id_carrier` int(10) unsigned NOT NULL,
   `id_zone` int(10) unsigned NOT NULL,
   KEY `carrier_zone_index` (`id_carrier`,`id_zone`),
   KEY `id_carrier` (`id_carrier`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_cart` (
   `id_cart` int(10) unsigned NOT NULL auto_increment,
@@ -171,15 +145,11 @@ CREATE TABLE `PREFIX_cart` (
   KEY `cart_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_cart_discount` (
   `id_cart` int(10) unsigned NOT NULL,
   `id_discount` int(10) unsigned NOT NULL,
   KEY `cart_discount_index` (`id_cart`,`id_discount`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_cart_product` (
   `id_cart` int(10) unsigned NOT NULL,
@@ -189,8 +159,6 @@ CREATE TABLE `PREFIX_cart_product` (
   `date_add` datetime NOT NULL,
   KEY `cart_product_index` (`id_cart`,`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_category` (
   `id_category` int(10) unsigned NOT NULL auto_increment,
@@ -203,15 +171,11 @@ CREATE TABLE `PREFIX_category` (
   KEY `category_parent` (`id_parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_category_group` (
   `id_category` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
   KEY `category_group_index` (`id_category`,`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_category_lang` (
   `id_category` int(10) unsigned NOT NULL,
@@ -226,8 +190,6 @@ CREATE TABLE `PREFIX_category_lang` (
   KEY `category_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_category_product` (
   `id_category` int(10) unsigned NOT NULL,
   `id_product` int(10) unsigned NOT NULL,
@@ -235,14 +197,10 @@ CREATE TABLE `PREFIX_category_product` (
   KEY `category_product_index` (`id_category`,`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_cms` (
   `id_cms` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id_cms`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_cms_lang` (
   `id_cms` int(10) unsigned NOT NULL auto_increment,
@@ -255,8 +213,6 @@ CREATE TABLE `PREFIX_cms_lang` (
   PRIMARY KEY  (`id_cms`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_configuration` (
   `id_configuration` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(32) NOT NULL,
@@ -268,8 +224,6 @@ CREATE TABLE `PREFIX_configuration` (
   KEY `configuration_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_configuration_lang` (
   `id_configuration` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
@@ -277,8 +231,6 @@ CREATE TABLE `PREFIX_configuration_lang` (
   `date_upd` datetime default NULL,
   PRIMARY KEY  (`id_configuration`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_connections` (
   `id_connections` int(10) unsigned NOT NULL auto_increment,
@@ -292,8 +244,6 @@ CREATE TABLE `PREFIX_connections` (
   KEY `date_add` (`date_add`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_connections_page` (
   `id_connections` int(10) unsigned NOT NULL,
   `id_page` int(10) unsigned NOT NULL,
@@ -301,8 +251,6 @@ CREATE TABLE `PREFIX_connections_page` (
   `time_end` datetime default NULL,
   PRIMARY KEY  (`id_connections`,`id_page`,`time_start`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_connections_source` (
   `id_connections_source` int(10) unsigned NOT NULL auto_increment,
@@ -318,16 +266,12 @@ CREATE TABLE `PREFIX_connections_source` (
   KEY `request_uri` (`request_uri`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_contact` (
   `id_contact` int(10) unsigned NOT NULL auto_increment,
   `email` varchar(128) NOT NULL,
   `position` tinyint(2) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_contact`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_contact_lang` (
   `id_contact` int(10) unsigned NOT NULL,
@@ -336,8 +280,6 @@ CREATE TABLE `PREFIX_contact_lang` (
   `description` text,
   UNIQUE KEY `contact_lang_index` (`id_contact`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_country` (
   `id_country` int(10) unsigned NOT NULL auto_increment,
@@ -350,16 +292,12 @@ CREATE TABLE `PREFIX_country` (
   KEY `country_` (`id_zone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_country_lang` (
   `id_country` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(64) NOT NULL,
   UNIQUE KEY `country_lang_index` (`id_country`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_currency` (
   `id_currency` int(10) unsigned NOT NULL auto_increment,
@@ -373,8 +311,6 @@ CREATE TABLE `PREFIX_currency` (
   `deleted` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_currency`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_customer` (
   `id_customer` int(10) unsigned NOT NULL auto_increment,
@@ -399,16 +335,12 @@ CREATE TABLE `PREFIX_customer` (
   KEY `customer_login` (`email`,`passwd`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_customer_group` (
   `id_customer` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
   KEY `customer_group_index` (`id_customer`,`id_group`),
   KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_customization` (
   `id_customization` int(10) NOT NULL auto_increment,
@@ -419,8 +351,6 @@ CREATE TABLE `PREFIX_customization` (
   PRIMARY KEY  (`id_customization`,`id_cart`,`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_customization_field` (
   `id_customization_field` int(10) NOT NULL auto_increment,
   `id_product` int(10) NOT NULL,
@@ -429,16 +359,12 @@ CREATE TABLE `PREFIX_customization_field` (
   PRIMARY KEY  (`id_customization_field`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_customization_field_lang` (
   `id_customization_field` int(10) NOT NULL,
   `id_lang` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY  (`id_customization_field`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_customized_data` (
   `id_customization` int(10) NOT NULL,
@@ -448,16 +374,12 @@ CREATE TABLE `PREFIX_customized_data` (
   PRIMARY KEY  (`id_customization`,`type`,`index`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_date_range` (
   `id_date_range` int(10) unsigned NOT NULL auto_increment,
   `time_start` datetime NOT NULL,
   `time_end` datetime NOT NULL,
   PRIMARY KEY  (`id_date_range`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_delivery` (
   `id_delivery` int(10) unsigned NOT NULL auto_increment,
@@ -470,8 +392,6 @@ CREATE TABLE `PREFIX_delivery` (
   KEY `id_zone` (`id_zone`),
   KEY `id_carrier` (`id_carrier`,`id_zone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_discount` (
   `id_discount` int(10) unsigned NOT NULL auto_increment,
@@ -492,8 +412,6 @@ CREATE TABLE `PREFIX_discount` (
   KEY `discount_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_discount_category` (
   `id_discount` int(11) NOT NULL,
   `id_category` int(11) NOT NULL,
@@ -502,16 +420,12 @@ CREATE TABLE `PREFIX_discount_category` (
   KEY `id_category` (`id_category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_discount_lang` (
   `id_discount` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
   PRIMARY KEY  (`id_discount`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_discount_quantity` (
   `id_discount_quantity` int(10) unsigned NOT NULL auto_increment,
@@ -523,14 +437,10 @@ CREATE TABLE `PREFIX_discount_quantity` (
   PRIMARY KEY  (`id_discount_quantity`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_discount_type` (
   `id_discount_type` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id_discount_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_discount_type_lang` (
   `id_discount_type` int(10) unsigned NOT NULL,
@@ -538,8 +448,6 @@ CREATE TABLE `PREFIX_discount_type_lang` (
   `name` varchar(64) NOT NULL,
   PRIMARY KEY  (`id_discount_type`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_employee` (
   `id_employee` int(10) unsigned NOT NULL auto_increment,
@@ -556,14 +464,10 @@ CREATE TABLE `PREFIX_employee` (
   KEY `employee_login` (`email`,`passwd`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_feature` (
   `id_feature` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id_feature`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_feature_lang` (
   `id_feature` int(10) unsigned NOT NULL,
@@ -571,8 +475,6 @@ CREATE TABLE `PREFIX_feature_lang` (
   `name` varchar(128) default NULL,
   PRIMARY KEY  (`id_feature`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_feature_product` (
   `id_feature` int(10) unsigned NOT NULL,
@@ -582,8 +484,6 @@ CREATE TABLE `PREFIX_feature_product` (
   KEY `id_feature` (`id_feature`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_feature_value` (
   `id_feature_value` int(10) unsigned NOT NULL auto_increment,
   `id_feature` int(10) unsigned NOT NULL,
@@ -592,16 +492,12 @@ CREATE TABLE `PREFIX_feature_value` (
   KEY `feature` (`id_feature`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_feature_value_lang` (
   `id_feature_value` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `value` varchar(255) default NULL,
   PRIMARY KEY  (`id_feature_value`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_group` (
   `id_group` int(10) unsigned NOT NULL auto_increment,
@@ -611,16 +507,12 @@ CREATE TABLE `PREFIX_group` (
   PRIMARY KEY  (`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_group_lang` (
   `id_group` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(32) NOT NULL,
   UNIQUE KEY `attribute_lang_index` (`id_group`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_guest` (
   `id_guest` int(10) unsigned NOT NULL auto_increment,
@@ -642,8 +534,6 @@ CREATE TABLE `PREFIX_guest` (
   KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_hook` (
   `id_hook` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) NOT NULL,
@@ -654,8 +544,6 @@ CREATE TABLE `PREFIX_hook` (
   UNIQUE KEY `hook_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_hook_module` (
   `id_module` int(10) unsigned NOT NULL,
   `id_hook` int(10) unsigned NOT NULL,
@@ -665,8 +553,6 @@ CREATE TABLE `PREFIX_hook_module` (
   KEY `id_hook` (`id_hook`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_hook_module_exceptions` (
   `id_hook_module_exceptions` int(10) unsigned NOT NULL auto_increment,
   `id_module` int(10) unsigned NOT NULL,
@@ -674,8 +560,6 @@ CREATE TABLE `PREFIX_hook_module_exceptions` (
   `file_name` varchar(255) default NULL,
   PRIMARY KEY  (`id_hook_module_exceptions`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_image` (
   `id_image` int(10) unsigned NOT NULL auto_increment,
@@ -686,8 +570,6 @@ CREATE TABLE `PREFIX_image` (
   KEY `image_product` (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_image_lang` (
   `id_image` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
@@ -695,8 +577,6 @@ CREATE TABLE `PREFIX_image_lang` (
   UNIQUE KEY `image_lang_index` (`id_image`,`id_lang`),
   KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_image_type` (
   `id_image_type` int(10) unsigned NOT NULL auto_increment,
@@ -712,8 +592,6 @@ CREATE TABLE `PREFIX_image_type` (
   KEY `image_type_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_lang` (
   `id_lang` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(32) NOT NULL,
@@ -723,8 +601,6 @@ CREATE TABLE `PREFIX_lang` (
   KEY `lang_iso_code` (`iso_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_manufacturer` (
   `id_manufacturer` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) NOT NULL,
@@ -733,16 +609,12 @@ CREATE TABLE `PREFIX_manufacturer` (
   PRIMARY KEY  (`id_manufacturer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_manufacturer_lang` (
   `id_manufacturer` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
   PRIMARY KEY  (`id_manufacturer`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_message` (
   `id_message` int(10) unsigned NOT NULL auto_increment,
@@ -757,8 +629,6 @@ CREATE TABLE `PREFIX_message` (
   KEY `message_order` (`id_order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_message_readed` (
   `id_message` int(10) unsigned NOT NULL,
   `id_employee` int(10) unsigned NOT NULL,
@@ -766,16 +636,12 @@ CREATE TABLE `PREFIX_message_readed` (
   PRIMARY KEY  (`id_message`,`id_employee`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_meta` (
   `id_meta` int(10) unsigned NOT NULL auto_increment,
   `page` varchar(64) NOT NULL,
   PRIMARY KEY  (`id_meta`),
   KEY `meta_name` (`page`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_meta_lang` (
   `id_meta` int(10) unsigned NOT NULL,
@@ -786,8 +652,6 @@ CREATE TABLE `PREFIX_meta_lang` (
   PRIMARY KEY  (`id_meta`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_module` (
   `id_module` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) NOT NULL,
@@ -796,15 +660,11 @@ CREATE TABLE `PREFIX_module` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_module_country` (
   `id_module` int(10) unsigned NOT NULL,
   `id_country` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_module`,`id_country`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_module_currency` (
   `id_module` int(10) unsigned NOT NULL,
@@ -812,23 +672,17 @@ CREATE TABLE `PREFIX_module_currency` (
   PRIMARY KEY  (`id_module`,`id_currency`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_module_group` (
   `id_module` int(10) unsigned NOT NULL,
   `id_group` int(11) NOT NULL,
   PRIMARY KEY  (`id_module`,`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_operating_system` (
   `id_operating_system` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) default NULL,
   PRIMARY KEY  (`id_operating_system`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_orders` (
   `id_order` int(10) unsigned NOT NULL auto_increment,
@@ -864,8 +718,6 @@ CREATE TABLE `PREFIX_orders` (
   KEY `id_cart` (`id_cart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_detail` (
   `id_order_detail` int(10) unsigned NOT NULL auto_increment,
   `id_order` int(10) unsigned NOT NULL,
@@ -873,8 +725,8 @@ CREATE TABLE `PREFIX_order_detail` (
   `product_attribute_id` int(10) unsigned default NULL,
   `product_name` varchar(255) NOT NULL,
   `product_quantity` int(10) unsigned NOT NULL default '0',
-  `product_quantity_return` int(10) unsigned NOT NULL default '0',
   `product_quantity_refunded` int(10) unsigned NOT NULL default '0',
+  `product_quantity_return` int(10) unsigned NOT NULL default '0',
   `product_price` decimal(13,6) NOT NULL default '0.000000',
   `product_quantity_discount` decimal(13,6) NOT NULL default '0.000000',
   `product_ean13` varchar(13) default NULL,
@@ -892,8 +744,6 @@ CREATE TABLE `PREFIX_order_detail` (
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_discount` (
   `id_order_discount` int(10) unsigned NOT NULL auto_increment,
   `id_order` int(10) unsigned NOT NULL,
@@ -903,8 +753,6 @@ CREATE TABLE `PREFIX_order_discount` (
   PRIMARY KEY  (`id_order_discount`),
   KEY `order_discount_order` (`id_order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_history` (
   `id_order_history` int(10) unsigned NOT NULL auto_increment,
@@ -916,15 +764,11 @@ CREATE TABLE `PREFIX_order_history` (
   KEY `order_history_order` (`id_order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_message` (
   `id_order_message` int(10) unsigned NOT NULL auto_increment,
   `date_add` datetime NOT NULL,
   PRIMARY KEY  (`id_order_message`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_message_lang` (
   `id_order_message` int(10) unsigned NOT NULL,
@@ -933,8 +777,6 @@ CREATE TABLE `PREFIX_order_message_lang` (
   `message` text NOT NULL,
   PRIMARY KEY  (`id_order_message`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_return` (
   `id_order_return` int(10) unsigned NOT NULL auto_increment,
@@ -948,8 +790,6 @@ CREATE TABLE `PREFIX_order_return` (
   KEY `order_return_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_return_detail` (
   `id_order_return` int(10) unsigned NOT NULL,
   `id_order_detail` int(10) unsigned NOT NULL,
@@ -958,15 +798,11 @@ CREATE TABLE `PREFIX_order_return_detail` (
   PRIMARY KEY  (`id_order_return`,`id_order_detail`,`id_customization`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_return_state` (
   `id_order_return_state` int(10) unsigned NOT NULL auto_increment,
   `color` varchar(32) default NULL,
   PRIMARY KEY  (`id_order_return_state`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_return_state_lang` (
   `id_order_return_state` int(10) unsigned NOT NULL,
@@ -974,8 +810,6 @@ CREATE TABLE `PREFIX_order_return_state_lang` (
   `name` varchar(64) NOT NULL,
   UNIQUE KEY `order_state_lang_index` (`id_order_return_state`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_slip` (
   `id_order_slip` int(10) unsigned NOT NULL auto_increment,
@@ -988,8 +822,6 @@ CREATE TABLE `PREFIX_order_slip` (
   KEY `order_slip_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_slip_detail` (
   `id_order_slip` int(10) unsigned NOT NULL,
   `id_order_detail` int(10) unsigned NOT NULL,
@@ -997,21 +829,17 @@ CREATE TABLE `PREFIX_order_slip_detail` (
   PRIMARY KEY  (`id_order_slip`,`id_order_detail`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_order_state` (
   `id_order_state` int(10) unsigned NOT NULL auto_increment,
   `invoice` tinyint(1) unsigned default '0',
   `send_email` tinyint(1) unsigned NOT NULL default '0',
   `color` varchar(32) default NULL,
   `unremovable` tinyint(1) unsigned NOT NULL,
-  `hidden` tinyint(1) NOT NULL default '0',
+  `hidden` tinyint(1) UNSIGNED NOT NULL default '0',
   `logable` tinyint(1) NOT NULL default '0',
   `delivery` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_order_state`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_order_state_lang` (
   `id_order_state` int(10) unsigned NOT NULL,
@@ -1020,8 +848,6 @@ CREATE TABLE `PREFIX_order_state_lang` (
   `template` varchar(64) NOT NULL,
   UNIQUE KEY `order_state_lang_index` (`id_order_state`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_page` (
   `id_page` int(10) unsigned NOT NULL auto_increment,
@@ -1032,8 +858,6 @@ CREATE TABLE `PREFIX_page` (
   KEY `id_object` (`id_object`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_page_type` (
   `id_page_type` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
@@ -1041,16 +865,12 @@ CREATE TABLE `PREFIX_page_type` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_page_viewed` (
   `id_page` int(10) unsigned NOT NULL,
   `id_date_range` int(10) unsigned NOT NULL,
   `counter` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_page`,`id_date_range`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_product` (
   `id_product` int(10) unsigned NOT NULL auto_increment,
@@ -1086,8 +906,6 @@ CREATE TABLE `PREFIX_product` (
   KEY `product_manufacturer` (`id_manufacturer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_product_attribute` (
   `id_product_attribute` int(10) unsigned NOT NULL auto_increment,
   `id_product` int(10) unsigned NOT NULL,
@@ -1107,15 +925,11 @@ CREATE TABLE `PREFIX_product_attribute` (
   KEY `supplier_reference` (`supplier_reference`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_product_attribute_combination` (
   `id_attribute` int(10) unsigned NOT NULL,
   `id_product_attribute` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_attribute`,`id_product_attribute`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_product_attribute_image` (
   `id_product_attribute` int(10) NOT NULL,
@@ -1124,8 +938,6 @@ CREATE TABLE `PREFIX_product_attribute_image` (
   KEY `id_product_attribute` (`id_product_attribute`),
   KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_product_download` (
   `id_product_download` int(10) unsigned NOT NULL auto_increment,
@@ -1139,8 +951,6 @@ CREATE TABLE `PREFIX_product_download` (
   `active` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`id_product_download`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_product_lang` (
   `id_product` int(10) unsigned NOT NULL,
@@ -1162,8 +972,6 @@ CREATE TABLE `PREFIX_product_lang` (
   FULLTEXT KEY `ftsname` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_product_sale` (
   `id_product` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL default '0',
@@ -1172,22 +980,16 @@ CREATE TABLE `PREFIX_product_sale` (
   PRIMARY KEY  (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_product_tag` (
   `id_product` int(10) unsigned NOT NULL,
   `id_tag` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_product`,`id_tag`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_profile` (
   `id_profile` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id_profile`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_profile_lang` (
   `id_lang` int(10) unsigned NOT NULL,
@@ -1196,8 +998,6 @@ CREATE TABLE `PREFIX_profile_lang` (
   PRIMARY KEY  (`id_profile`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_quick_access` (
   `id_quick_access` int(10) unsigned NOT NULL auto_increment,
   `new_window` tinyint(1) NOT NULL default '0',
@@ -1205,16 +1005,12 @@ CREATE TABLE `PREFIX_quick_access` (
   PRIMARY KEY  (`id_quick_access`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_quick_access_lang` (
   `id_quick_access` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY  (`id_quick_access`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_range_price` (
   `id_range_price` int(10) unsigned NOT NULL auto_increment,
@@ -1225,8 +1021,6 @@ CREATE TABLE `PREFIX_range_price` (
   UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_range_weight` (
   `id_range_weight` int(10) unsigned NOT NULL auto_increment,
   `id_carrier` int(10) unsigned NOT NULL,
@@ -1235,8 +1029,6 @@ CREATE TABLE `PREFIX_range_weight` (
   PRIMARY KEY  (`id_range_weight`),
   UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_referrer` (
   `id_referrer` int(10) unsigned NOT NULL auto_increment,
@@ -1265,15 +1057,11 @@ CREATE TABLE `PREFIX_referrer` (
   PRIMARY KEY  (`id_referrer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_scene` (
   `id_scene` int(10) NOT NULL auto_increment,
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id_scene`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_scene_category` (
   `id_scene` int(10) NOT NULL,
@@ -1281,16 +1069,12 @@ CREATE TABLE `PREFIX_scene_category` (
   PRIMARY KEY  (`id_scene`,`id_category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_scene_lang` (
   `id_scene` int(10) NOT NULL,
   `id_lang` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY  (`id_scene`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_scene_products` (
   `id_scene` int(10) NOT NULL,
@@ -1301,16 +1085,12 @@ CREATE TABLE `PREFIX_scene_products` (
   `zone_height` int(3) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_search_engine` (
   `id_search_engine` int(10) unsigned NOT NULL auto_increment,
   `server` varchar(64) NOT NULL,
   `getvar` varchar(16) NOT NULL,
   PRIMARY KEY  (`id_search_engine`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_state` (
   `id_state` int(10) unsigned NOT NULL auto_increment,
@@ -1323,15 +1103,11 @@ CREATE TABLE `PREFIX_state` (
   PRIMARY KEY  (`id_state`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_subdomain` (
   `id_subdomain` int(10) NOT NULL auto_increment,
   `name` varchar(16) NOT NULL,
   PRIMARY KEY  (`id_subdomain`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_supplier` (
   `id_supplier` int(10) unsigned NOT NULL auto_increment,
@@ -1341,16 +1117,12 @@ CREATE TABLE `PREFIX_supplier` (
   PRIMARY KEY  (`id_supplier`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_supplier_lang` (
   `id_supplier` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
   PRIMARY KEY  (`id_supplier`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_tab` (
   `id_tab` int(10) unsigned NOT NULL auto_increment,
@@ -1361,16 +1133,12 @@ CREATE TABLE `PREFIX_tab` (
   PRIMARY KEY  (`id_tab`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_tab_lang` (
   `id_lang` int(10) unsigned NOT NULL,
   `id_tab` int(10) unsigned NOT NULL,
   `name` varchar(32) default NULL,
   PRIMARY KEY  (`id_tab`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_tag` (
   `id_tag` int(10) unsigned NOT NULL auto_increment,
@@ -1380,15 +1148,11 @@ CREATE TABLE `PREFIX_tag` (
   KEY `tag_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_tax` (
   `id_tax` int(10) unsigned NOT NULL auto_increment,
   `rate` float NOT NULL,
   PRIMARY KEY  (`id_tax`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_tax_lang` (
   `id_tax` int(10) unsigned NOT NULL,
@@ -1397,15 +1161,11 @@ CREATE TABLE `PREFIX_tax_lang` (
   UNIQUE KEY `tax_lang_index` (`id_tax`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_tax_state` (
   `id_tax` int(10) unsigned NOT NULL,
   `id_state` int(10) unsigned NOT NULL,
   KEY `tax_state_index` (`id_tax`,`id_state`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_tax_zone` (
   `id_tax` int(10) unsigned NOT NULL,
@@ -1413,15 +1173,11 @@ CREATE TABLE `PREFIX_tax_zone` (
   KEY `tax_zone_index` (`id_tax`,`id_zone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `PREFIX_web_browser` (
   `id_web_browser` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) default NULL,
   PRIMARY KEY  (`id_web_browser`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 
 CREATE TABLE `PREFIX_zone` (
   `id_zone` int(10) unsigned NOT NULL auto_increment,

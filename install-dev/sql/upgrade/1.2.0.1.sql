@@ -8,34 +8,99 @@ DROP TABLE IF EXISTS PREFIX_order_customization_return;
 
 ALTER TABLE PREFIX_cart
 	ADD id_guest INT UNSIGNED NULL AFTER id_customer; 
-	
+
 ALTER TABLE PREFIX_tab
 	ADD `module` varchar(64) NULL AFTER class_name;
 
 ALTER TABLE PREFIX_orders
-	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT 0 AFTER delivery_date;
+	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT '0' AFTER delivery_date;
 
 ALTER TABLE PREFIX_customer
-	ADD deleted TINYINT(1) NOT NULL DEFAULT 0 AFTER active,
-	DROP INDEX `customer_email`;
+	ADD deleted TINYINT(1) NOT NULL DEFAULT '0' AFTER active;
 
 ALTER TABLE PREFIX_employee
-	ADD stats_date_to DATE NULL DEFAULT NULL AFTER last_passwd_gen;
-ALTER TABLE PREFIX_employee
+	ADD stats_date_to DATE NULL DEFAULT NULL AFTER last_passwd_gen,
 	ADD stats_date_from DATE NULL DEFAULT NULL AFTER last_passwd_gen;
 
-ALTER TABLE PREFIX_order_state ADD hidden TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER unremovable;
+ALTER TABLE PREFIX_order_state
+	ADD hidden TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER unremovable;
 
-ALTER TABLE PREFIX_carrier ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER range_behavior;
+ALTER TABLE PREFIX_carrier
+	ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER range_behavior,
+	ADD INDEX deleted (`deleted`, `active`);
 
-ALTER TABLE PREFIX_referrer ADD click_fee decimal(3,2) NOT NULL default '0.00' AFTER percent_fee;
+ALTER TABLE PREFIX_order_detail
+	CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	ADD INDEX product_id (product_id);
 
-ALTER TABLE PREFIX_order_detail CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE PREFIX_referrer
+	ADD click_fee decimal(3,2) NOT NULL default '0.00' AFTER percent_fee;
 
-CREATE TABLE PREFIX_customer_group (
-  id_customer INTEGER UNSIGNED NOT NULL,
-  id_group INTEGER UNSIGNED NOT NULL,
-  INDEX customer_group_index(id_customer, id_group)
+ALTER TABLE PREFIX_attribute_lang
+	ADD INDEX id_lang (`id_lang`, `name`),
+	ADD INDEX id_lang2 (`id_lang`),
+	ADD INDEX id_attribute (`id_attribute`);
+
+ALTER TABLE PREFIX_block_cms
+	ADD PRIMARY KEY (`id_block`, `id_cms`);
+
+ALTER TABLE PREFIX_carrier_zone
+	ADD INDEX `id_carrier` (`id_carrier`);
+
+ALTER TABLE PREFIX_connections
+	ADD INDEX `date_add` (`date_add`);
+
+ALTER TABLE PREFIX_customer
+	DROP INDEX `customer_email`,
+	ADD UNIQUE `customer_email` (`email`);
+
+ALTER TABLE PREFIX_delivery
+	ADD INDEX id_zone (`id_zone`),
+	ADD INDEX id_carrier (`id_carrier`, `id_zone`);
+
+ALTER TABLE PREFIX_discount_category
+	ADD INDEX id_discount (`id_discount`),
+	ADD INDEX id_category (`id_category`);
+
+ALTER TABLE PREFIX_feature_product
+	ADD INDEX `id_feature` (`id_feature`);
+
+ALTER TABLE PREFIX_hook_module
+	DROP INDEX `hook_module_index`,
+	ADD PRIMARY KEY (id_module,id_hook),
+	ADD INDEX id_module (`id_module`),
+	ADD INDEX id_hook (`id_hook`);
+
+ALTER TABLE PREFIX_module
+	CHANGE `active` `active` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0';
+
+ALTER TABLE PREFIX_orders
+	ADD INDEX `id_cart` (`id_cart`);
+
+ALTER TABLE PREFIX_page
+  ADD INDEX `id_page_type` (`id_page_type`),
+  ADD INDEX `id_object` (`id_object`);
+
+ALTER TABLE PREFIX_page_type
+  ADD INDEX `name` (`name`);
+
+ALTER TABLE PREFIX_product_attribute
+  ADD INDEX reference (reference),
+  ADD INDEX supplier_reference (supplier_reference);
+
+ALTER TABLE PREFIX_product_lang
+  ADD INDEX id_product (id_product),
+  ADD INDEX id_lang (id_lang),
+  ADD INDEX `name` (`name`),
+  ADD FULLTEXT KEY ftsname (`name`);
+
+/* ############################################################ */
+
+CREATE TABLE `PREFIX_customer_group` (
+  `id_customer` int(10) unsigned NOT NULL,
+  `id_group` int(10) unsigned NOT NULL,
+  KEY `customer_group_index` (`id_customer`,`id_group`),
+  KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_category_group (
@@ -119,10 +184,12 @@ CREATE TABLE `PREFIX_module_group` (
   PRIMARY KEY (`id_module`, `id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE PREFIX_product_attribute_image (
-  id_product_attribute int(10) NOT NULL,
-  id_image int(10) NOT NULL,
-  PRIMARY KEY(id_product_attribute, id_image)
+CREATE TABLE `PREFIX_product_attribute_image` (
+  `id_product_attribute` int(10) NOT NULL,
+  `id_image` int(10) NOT NULL,
+  PRIMARY KEY  (`id_product_attribute`,`id_image`),
+  KEY `id_product_attribute` (`id_product_attribute`),
+  KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
