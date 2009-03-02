@@ -28,6 +28,8 @@ ALTER TABLE PREFIX_order_state ADD hidden TINYINT(1) UNSIGNED NOT NULL DEFAULT 0
 
 ALTER TABLE PREFIX_carrier ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER range_behavior;
 
+ALTER TABLE PREFIX_referrer ADD click_fee decimal(3,2) NOT NULL default '0.00' AFTER percent_fee;
+
 ALTER TABLE PREFIX_order_detail CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT 0;
 
 CREATE TABLE PREFIX_customer_group (
