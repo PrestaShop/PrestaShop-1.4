@@ -852,7 +852,7 @@ CREATE TABLE `PREFIX_order_state_lang` (
 CREATE TABLE `PREFIX_page` (
   `id_page` int(10) unsigned NOT NULL auto_increment,
   `id_page_type` int(10) unsigned NOT NULL,
-  `id_object` varchar(255) default NULL,
+  `id_object` int(10) unsigned default NULL,
   PRIMARY KEY  (`id_page`),
   KEY `id_page_type` (`id_page_type`),
   KEY `id_object` (`id_object`)
