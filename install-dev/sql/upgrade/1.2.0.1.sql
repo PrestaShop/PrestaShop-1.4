@@ -100,6 +100,20 @@ ALTER TABLE PREFIX_discount_category
 ALTER TABLE PREFIX_image_lang
 	ADD INDEX id_image (id_image);
 
+ALTER TABLE PREFIX_range_price
+	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL,
+	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL,
+	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL,
+	DROP INDEX `range_price_unique`,
+	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
+
+ALTER TABLE PREFIX_range_weight
+	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL
+	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL
+	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL,
+	DROP INDEX `range_weight_unique`,
+	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
+
 /* ############################################################ */
 
 CREATE TABLE `PREFIX_customer_group` (
