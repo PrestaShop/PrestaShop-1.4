@@ -277,8 +277,7 @@ abstract class AdminTab
 		/* Class specific validation rules */
 		$rules = call_user_func(array($className, 'getValidationRules'), $className);
 
-		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang']))
-			AND method_exists(new $className, 'getTranslationsFieldsChild'))
+		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang'])))
 		{
 			/* Language() instance determined by default language */
 			$defaultLanguage = new Language(intval(Configuration::get('PS_LANG_DEFAULT')));

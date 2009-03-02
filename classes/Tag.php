@@ -56,6 +56,15 @@ class Tag extends ObjectModel
 		return $fields;
 	}
 	
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (!parent::add($autodate, $nullValues))
+			return false;
+		elseif (isset($_POST['products']))
+			return $this->setProducts($_POST['products']);
+		return true;		
+	}
+	
 	/**
 	* Add several tags in database and link it to a product
 	*
@@ -131,13 +140,19 @@ class Tag extends ObjectModel
 	
 	public function getProducts($associated = true)
 	{
+		global $cookie;
+		$id_lang = $this->id_lang ? $this->id_lang : $cookie->id_lang;
+		
+		if (!$this->id AND $associated)
+			return array();
+		
 		return Db::getInstance()->ExecuteS('
 		SELECT pl.name, pl.id_product
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.id_product = pl.id_product
-		WHERE pl.id_lang = '.intval($this->id_lang).'
+		WHERE pl.id_lang = '.intval($id_lang).'
 		AND p.active = 1
-		AND p.id_product '.($associated ? 'IN' : 'NOT IN').' (SELECT pt.id_product FROM `'._DB_PREFIX_.'product_tag` pt WHERE pt.id_tag = '.intval($this->id).')
+		'.($this->id ? ('AND p.id_product '.($associated ? 'IN' : 'NOT IN').' (SELECT pt.id_product FROM `'._DB_PREFIX_.'product_tag` pt WHERE pt.id_tag = '.intval($this->id).')') : '').'
 		ORDER BY pl.name');
 	}
 	
