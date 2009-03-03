@@ -128,18 +128,30 @@ class AdminTranslations extends AdminTab
 		}
 	}
 
-	public function findAndWriteTranslationsIntoFile($filename, $files, $themeName, $moduleName)
+	public function findAndWriteTranslationsIntoFile($filename, $files, $themeName, $moduleName, $dir = false)
 	{
+		static $_cacheFile = array();
+		
+		if (!isset($_cacheFile[$filename]))
+		{
+			$_cacheFile[$filename] = true;
+			if (!$fd = fopen($filename, 'w'))
+				die ($this->l('Cannot write the theme\'s language file ').'('.$filename.')'.$this->l('. Please check write permissions.'));
+			fwrite($fd, "<?php\n\nglobal \$_MODULE;\n\$_MODULE = array();\n");
+			fclose($fd);
+		}
+
 		$tplRegex = '/\{l s=\''._PS_TRANS_PATTERN_.'\'( mod=\'.+\')?( js=1)?\}/U';
 		$phpRegex = '/this->l\(\''._PS_TRANS_PATTERN_.'\'(, \'(.+)\')?(, (.+))?\)/U';
 
-		$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
-		if (!$writeFd = @fopen($filename, 'w'))
+		if (!$dir)
+			$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
+		if (!$writeFd = fopen($filename, 'a+'))
 			die ($this->l('Cannot write the theme\'s language file ').'('.$filename.')'.$this->l('. Please check write permissions.'));
 		else
 		{
-			fwrite($writeFd, "<?php\n\nglobal \$_MODULE;\n\$_MODULE = array();\n");
 			foreach ($files AS $templateFile)
+			{
 				if ((ereg('^(.*).tpl$', $templateFile) OR ($themeName == 'prestashop' AND ereg('^(.*).php$', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
 				{
 						/* Get translations key */
@@ -157,19 +169,20 @@ class AdminTranslations extends AdminTab
 								fwrite($writeFd, '$_MODULE[\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'] = \''.pSQL($_POST[$postKey]).'\';'."\n");
 						}
 				}
-			fwrite($writeFd, "\n?>\n");
+			}
 			fclose($writeFd);
 		}
 	}
 
-	public function findAndFillTranslations($files, &$translationsArray, $themeName, $moduleName)
+	public function findAndFillTranslations($files, &$translationsArray, $themeName, $moduleName, $dir = false)
 	{
 		global $_MODULES;
 		$tplRegex = '/\{l s=\''._PS_TRANS_PATTERN_.'\'( mod=\'.+\')?( js=1)?\}/U';
-		$phpRegex = '/this->l\(\''._PS_TRANS_PATTERN_.'\'(, \'(.+)\')?(, (.+))?\)/U';
+		$phpRegex = '/->l\(\''._PS_TRANS_PATTERN_.'\'(, \'(.+)\')?(, (.+))?\)/U';
 
 		$count = 0;
-		$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
+		if (!$dir)
+			$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
 		foreach ($files AS $templateFile)
 			if ((ereg('^(.*).tpl$', $templateFile) OR ($themeName == 'prestashop' AND ereg('^(.*).php$', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
 			{
@@ -254,19 +267,29 @@ class AdminTranslations extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitTranslationsModules'))
 		{
-			if ($this->tabAccess['edit'] === '1')
+		if ($this->tabAccess['edit'] === '1')
 			{
 				$lang = Tools::strtolower($_POST['lang']);
-
 				if (!$modules = scandir(_PS_MODULE_DIR_))
 					$this->displayWarning(Tools::displayError('There are no modules in your copy of PrestaShop. Use the Modules tab to activate them or go to our Website to download additional Modules.'));
 				else
+				{
 					foreach ($modules AS $module)
-						if ($module{0} != '.' AND $files = @scandir(_PS_MODULE_DIR_.$module.'/'))
-							$this->findAndWriteTranslationsIntoFile(_PS_MODULE_DIR_.$module.'/'.$lang.'.php', $files, 'prestashop', $module);
-
+					if ($module{0} != '.' AND is_dir(_PS_MODULE_DIR_.$module))
+					{
+						$filename = _PS_MODULE_DIR_.$module.'/'.$lang.'.php';
+						$content = scandir(_PS_MODULE_DIR_.$module);
+						foreach ($content as $cont)
+							if ($cont{0} != '.' AND $cont != 'img' AND $cont != 'mails' AND $cont != 'js' AND is_dir(_PS_MODULE_DIR_.$module.'/'.$cont))
+								if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'.$cont))
+									$this->findAndWriteTranslationsIntoFile($filename, $files, 'prestashop', $module, _PS_MODULE_DIR_.$module.'/'.$cont.'/');
+						if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'))
+							$this->findAndWriteTranslationsIntoFile($filename, $files, 'prestashop', $module);
+					}
+				}
 				/* Search language tags (eg {l s='to translate'}) */
 				if ($themes = scandir(_PS_ALL_THEMES_DIR_))
+				
 					foreach ($themes AS $theme)
 						if ($theme{0} != '.' AND is_dir(_PS_ALL_THEMES_DIR_.$theme) AND file_exists(_PS_ALL_THEMES_DIR_.$theme.'/modules/'))
 						{
@@ -575,7 +598,6 @@ class AdminTranslations extends AdminTab
 				$this->displayWarning(Tools::displayError('There are no modules in your copy of PrestaShop. Use the Modules tab to activate them or go to our Website to download additional Modules.'));
 			else
 			{
-				$allfiles = array();
 				$count = 0;
 
 				foreach ($modules AS $module)
@@ -676,10 +698,16 @@ class AdminTranslations extends AdminTab
 			$count = 0;
 
 			foreach ($modules AS $module)
-				if ($module{0} != '.')
+				if ($module{0} != '.' AND is_dir(_PS_MODULE_DIR_.$module))
 				{
 					@include_once(_PS_MODULE_DIR_.$module.'/'.$lang.'.php');
 					self::getModuleTranslations();
+					
+					$content = scandir(_PS_MODULE_DIR_.$module);
+					foreach ($content as $cont)
+						if ($cont{0} != '.' AND $cont != 'img' AND $cont != 'mails' AND $cont != 'js' AND is_dir(_PS_MODULE_DIR_.$module.'/'.$cont))
+							if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'.$cont))
+								$count += $this->findAndFillTranslations($files, $allfiles, 'prestashop', $module, 	_PS_MODULE_DIR_.$module.'/'.$cont.'/');
 
 					if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'))
 						$count += $this->findAndFillTranslations($files, $allfiles, 'prestashop', $module);
