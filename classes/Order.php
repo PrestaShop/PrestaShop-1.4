@@ -575,7 +575,7 @@ class		Order extends ObjectModel
 		$this->invoice_date = date('Y-m-d H:i:s');
 		
 		// Update object
-		$this->update();
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders`SET invoice_date=\''.pSQL($this->invoice_date).'\'');
 	}
 	
 	public function setDelivery()
