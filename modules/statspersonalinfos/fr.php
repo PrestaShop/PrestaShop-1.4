@@ -30,9 +30,6 @@ $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_fb0d334f12a24f10715
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_268750725a2f1cba57267447006d22ef'] = '35-49 ans';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_31974086ef82d676924acbb48fc3de1e'] = '50-59 ans';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_e7f407fa37f8cd8c5900329882ad4529'] = '60 ans';
-$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Inconnu';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_73b0130037e21b76351aebfd29d0b9aa'] = 'Répartition par pays';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_28e81c8343702f6c813cc31a7f90616a'] = 'Répartition par devise';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_f1dd68fb6a00d3e4d7f751deacde995d'] = 'Répartition par langue';
-
-?>

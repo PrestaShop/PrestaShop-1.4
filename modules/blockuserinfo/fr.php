@@ -14,6 +14,3 @@ $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_f5bf48aa40cad7891eb709fcf1fde
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_86024cad1e83101d97359d7351051156'] = 'produits';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_9e65b51e82f2a9b9f72ebe3e083582bb'] = '(vide)';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a0623b78a5f2cfe415d9dbbd4428ea40'] = 'Votre compte';
-$_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a0623b78a5f2cfe415d9dbbd4428ea40'] = 'Votre compte';
-
-?>

@@ -17,5 +17,3 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_c49393dfe6a439b15b8fb51993a7e902'
 $_MODULE['<{statsvisits}prestashop>statsvisits_39b960b0a5e2ebaaa638d946f1892050'] = 'Nombre de visites et visiteurs uniques';
 $_MODULE['<{statsvisits}prestashop>statsvisits_d7e637a6e9ff116de2fa89551240a94d'] = 'Visites';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ae5d01b6efa819cc7a7c05a8c57fcc2c'] = 'Visiteurs';
-
-?>

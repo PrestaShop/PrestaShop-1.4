@@ -31,8 +31,9 @@ $_MODULE['<{paypal}prestashop>paypal_6fb9e8044f1f4e90ec2faf0fc6828d8d'] = 'Retou
 $_MODULE['<{paypal}prestashop>paypal_d15305d7a4e34e02489c74a5ef542f36'] = 'Off';
 $_MODULE['<{paypal}prestashop>paypal_e126a7f3f1a9cdd4b0b36513a1d84990'] = 'Payment Data Transfer';
 $_MODULE['<{paypal}prestashop>paypal_01b6e20344b68835c5ed1ddedf20d531'] = 'à';
-$_MODULE['<{paypal}prestashop>paypal_efeb369cccbd560588a756610865664c'] = 'Dans';
 $_MODULE['<{paypal}prestashop>paypal_b05cc85dbc2bcb69a7a2980f3e9e3e8f'] = 'Profile >  Préférences de ventes > Frais de ports';
+$_MODULE['<{paypal}prestashop>paypal_5fa07e3cff039e290957b1b2d57975a4'] = 'Cliquez ici afin de permettre les transactions avec prise en charge des frais de ports afin d\'écraser les paramètres du profile de transport';
+$_MODULE['<{paypal}prestashop>paypal_0eba834883c770311c90fa1aac44cd9d'] = 'Toutes les devises de PrestaShop doivent être configurée dans Profile > Informations Financières > Balance des devises';
 $_MODULE['<{paypal}prestashop>paypal_ea5ddaff9590d897631f00a7bcb035a2'] = 'Erreur Paypal  : (compte Business invalide ou non défini)';
 $_MODULE['<{paypal}prestashop>paypal_e7ac6f09a936201890de4094b1ee4e50'] = 'Erreur Paypal  : (adresse ou client invalide)';
 $_MODULE['<{paypal}prestashop>paypal_d89a00d4ba79c176bb0fc17f12d42a18'] = 'La clef PayPal \'mc_gross\' n\'a pas été spécifiée, impossible de contrôler le montant payé.';
@@ -51,8 +52,4 @@ $_MODULE['<{paypal}prestashop>paypal_8358ec19f397d4cdd632688d4f79e535'] = 'Echec
 $_MODULE['<{paypal}prestashop>paypal_eca77e208634d52703b07672abbf16ec'] = 'Echec de la vérification (protocole cURL). Retour :';
 $_MODULE['<{paypal}prestashop>paypal_f7799c2ded739cf3c3e9babffc5f315b'] = 'La connection via le protocole cURL a échoué.';
 $_MODULE['<{paypal}prestashop>paypal_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer par PayPal';
-$_MODULE['<{paypal}prestashop>paypal_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer par PayPal';
-$_MODULE['<{paypal}prestashop>paypal_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer par PayPal';
 $_MODULE['<{paypal}prestashop>paypal_dae3b417a0fc4a49e851ce55d6d49551'] = 'Mon panier';
-
-?>

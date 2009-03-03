@@ -6,8 +6,6 @@ $_MODULE['<{referralprogram}prestashop>authentication_6b31baf25848e7a6563ecc3946
 $_MODULE['<{referralprogram}prestashop>authentication_8fdb2298a0db461ac64e71192a562ca1'] = 'Adresse mail de votre parrain';
 $_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Parrainage';
 $_MODULE['<{referralprogram}prestashop>my-account_d572857dd7611d7222fbcba5be919115'] = 'parrainage';
-$_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Parrainage';
-$_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Parrainage';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_6a1fc5f99c944639b4005366d393a1ee'] = 'Grâce à votre commande, votre parrain';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_eb8c6d2e305207c8fbc14a2ebb2e42fc'] = 'gagnera un bon de réduction d\'une valeur de';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_cda09d90a2d64cf06ae6516cc20ae468'] = 'quand cette commande sera confirmée.';
@@ -50,19 +48,11 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_a86073a0c3b0bebf1
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_7116a7c3972b72ec34293df1b50740a0'] = 'qui sera envoyé à vos filleuls.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ad3d06d03d94223fa652babc913de686'] = 'Validez';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_59352cd5314a67c0fb10c964831920f3'] = 'Pour devenir un parrain, vous devez réaliser au moins';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_12c500ed0b7879105fb46af0f246be87'] = 'commandes';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_70a17ffa722a3985b86d30b034ad06d7'] = 'commande';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ec7342814444c667ab93181b30b28e38'] = 'Ces filleuls n\'ont pas encore effectué d\'achat, mais vous pouvez les relancer ! Pour ce faire, vous devez cocher les cases des filleuls que vous voulez relancer, puis cliquer sur le bouton \"Relancer mes amis\"';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3f5eff9c40ee315d452392bed5309b'] = 'Nom';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_20db0bfeecd8fe60533206a2b5e9891a'] = 'Prénom';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_1e884e3078d9978e216a027ecd57fb34'] = 'E-mail';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3e717a04ff77cd5fa068d8ad9d3facc8'] = 'Dernière invitation';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9c9d4ed270f02c72124702edb192ff19'] = 'Relancer mes amis';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8b9f390369560635a2ba5ba271d953df'] = 'Vous n\'avez pas encore parrainé d\'amis.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_193f3d8bbaceba40499cab1a3545e9e8'] = 'Ici sont affichés les filleuls qui ont accepté votre invitation :';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3f5eff9c40ee315d452392bed5309b'] = 'Nom';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_20db0bfeecd8fe60533206a2b5e9891a'] = 'Prénom';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_1e884e3078d9978e216a027ecd57fb34'] = 'E-mail';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3c648ba41cfb45f13b083a9cbbacdfdf'] = 'Date d\'inscription';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d4e5c2bc4c3cf67d2b59b263a707cb6'] = 'Aucun filleul n\'a encore accepté votre invitation.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_0b3db27bc15f682e92ff250ebb167d4b'] = 'Retour à votre compte';
@@ -81,7 +71,6 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_3d31dd445991f35b1ee6491ee
 $_MODULE['<{referralprogram}prestashop>referralprogram_36bad0c5050aa8681926523cb705bbc0'] = 'Impossible de fermer le fichier XML.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc5269e1e'] = 'Impossible de mettre à jour le fichier XML. Veuillez vérifier les droits d\'écriture sur le fichier XML.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_5be920293db3e38c81330fd0798336b1'] = 'Champ HTML invalide, le Javascript y est interdit.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{referralprogram}prestashop>referralprogram_9a90c47f5f320658d2048852203ee2b9'] = 'Nombre de commandes nécessaires pour obtenir un bon de réduction :';
 $_MODULE['<{referralprogram}prestashop>referralprogram_46b8b61a5ef0bd397591fce508e31506'] = 'Nombre de filleuls affichés sur le formulaire d\'invitation :';
@@ -108,13 +97,9 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_9fd0a682f77d5f6d5ddc43fa6
 $_MODULE['<{referralprogram}prestashop>referralprogram_fc6e0920b914b164802d44220e6163f3'] = 'Nombre de commandes effectuées';
 $_MODULE['<{referralprogram}prestashop>referralprogram_72d6d0f7b762853f9feabb75fe31c02d'] = 'Incrit';
 $_MODULE['<{referralprogram}prestashop>referralprogram_5b541747d46b39c37f0e100ddfe44472'] = 'n\'a parrainé aucun filleul pour le moment.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_1a81759353d36dbd31059fc261af0aa2'] = 'Félicitations !';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_6b31baf25848e7a6563ecc3946626c80'] = 'Programme de parrainage';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_50b12ad08d38a2b00a790304bbe851be'] = 'Vous avez gagné un bon de réduction d\'une valeur de';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_6c8352dbdb1fa1433bd5974c603dced4'] = 'grâce à votre parrain !';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_764a957fffea7861310082f57445c83a'] = 'Saisissez le nom du bon';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_5c24e8005181f1a32b1df54bfe112525'] = 'pour profiter de la réduction sur cette commande.';
-$_MODULE['<{referralprogram}prestashop>shopping-cart_6b31baf25848e7a6563ecc3946626c80'] = 'Programme de parrainage';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_106527986549f3ec8da1ae5a7abde467'] = 'Voir votre programme de parrainage.';
-
-?>

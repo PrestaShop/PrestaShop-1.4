@@ -13,9 +13,5 @@ $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_e451e6943bb539d1bd804d2
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc4bbebd6a8d2fb633a1dd8ceda3fc8d'] = 'Détermine le nombre de produits à afficher dans ce bloc';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Nouveaux produits';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Nouveaux produits';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Tous les nouveaux produits';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Tous les nouveaux produits';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_d3cf1fa1c9e0e3187f9156ae8c121d06'] = 'Pas de nouveau produit pour le moment';
-
-?>

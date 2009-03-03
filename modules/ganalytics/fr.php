@@ -45,11 +45,5 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_b7f896191caad09b5fc34e79f1cefa76'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_53c84fd10cf8f7a912a13f582a75c8a7'] = 'N\'activez pas la case \'requis\' parce que les clients pourraient visiter directement par un bouton \'Ajouter au panier\', tel que dans le module HomeFeatured sur la page d\'accueil.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_3bab28a0105361c49ca261ca08a19bf7'] = 'Faites de même en entrant les urls suivantes comme étapes de l\'objectif';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = 'requis';
-$_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = 'requis';
-$_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = 'requis';
-$_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = 'requis';
-$_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = 'requis';
 $_MODULE['<{ganalytics}prestashop>ganalytics_6a47891ae07f45802bc948d2618e36f5'] = 'Vérifiez l\'option \'sensibilité de la casse\'';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d2d0c38d112e1d775057388122ae7545'] = 'Sauvegardez cet objectif';
-
-?>

@@ -26,5 +26,3 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_e2e882d58bbd478e17c5a542d5d6fcda'] = 'Les commandes doivent être passées en utilisant la même devise que celle indiquée dans votre compte marchand. Les paniers utilisant d\'autres devises seront convertis si l\'utilisateur décide de payer par le biais de ce module.';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9f06b28a40790c4c4df5739bce3c1eb0'] = 'Frais de port';
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Payer par GoogleCheckout';
-
-?>

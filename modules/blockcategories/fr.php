@@ -13,11 +13,7 @@ $_MODULE['<{blockcategories}prestashop>blockcategories_19561e33450d1d3dfe6af08df
 $_MODULE['<{blockcategories}prestashop>blockcategories_ef35cd8f1058f29151991e9ca94b36fb'] = 'Détermine la profondeur maximale affichée (0 = infinie)';
 $_MODULE['<{blockcategories}prestashop>blockcategories_971fd8cc345d8bd9f92e9f7d88fdf20c'] = 'Dynamique';
 $_MODULE['<{blockcategories}prestashop>blockcategories_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
-$_MODULE['<{blockcategories}prestashop>blockcategories_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
-$_MODULE['<{blockcategories}prestashop>blockcategories_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivé';
 $_MODULE['<{blockcategories}prestashop>blockcategories_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivé';
 $_MODULE['<{blockcategories}prestashop>blockcategories_2c1199ee18b344152f35ec237acb5796'] = 'Activer l\'arbre dynamique (animé)';
 $_MODULE['<{blockcategories}prestashop>blockcategories_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{blockcategories}prestashop>blockcategories_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
-
-?>

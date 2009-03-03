@@ -24,5 +24,3 @@ $_MODULE['<{watermark}prestashop>watermark_acf0fa79a73731e7d70cb208a62c249a'] = 
 $_MODULE['<{watermark}prestashop>watermark_489f2e730102b59aec48b5c27d2cbe1c'] = 'Alignement en Y';
 $_MODULE['<{watermark}prestashop>watermark_bd75d3144c69854488e26ae437bfc2f8'] = 'Choisissez les types d\'image pour lesquels le filigrane doit s\'appliquer';
 $_MODULE['<{watermark}prestashop>watermark_b17f3f4dcf653a5776792498a9b44d6a'] = 'Sauvegarder';
-
-?>

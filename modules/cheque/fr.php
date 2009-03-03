@@ -20,12 +20,10 @@ $_MODULE['<{cheque}prestashop>cheque_75475839e69bef6ed57a8200a5a71d37'] = 'A l\'
 $_MODULE['<{cheque}prestashop>cheque_dd7bf230fde8d4836917806aff6a6b27'] = 'Adresse';
 $_MODULE['<{cheque}prestashop>cheque_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour';
 $_MODULE['<{cheque}prestashop>payment_a5967aadef7d23b5027d46e107faf6d0'] = 'Payer par chèque';
-$_MODULE['<{cheque}prestashop>payment_a5967aadef7d23b5027d46e107faf6d0'] = 'Payer par chèque';
 $_MODULE['<{cheque}prestashop>payment_30bee0e9549e97b2f65f8fd8fc5948be'] = 'Payer par chèque (traitement plus long)';
 $_MODULE['<{cheque}prestashop>payment_execution_83aa0e5744c86bf2d9d006319db14839'] = 'Paiement par chèque';
 $_MODULE['<{cheque}prestashop>payment_execution_f1d3b424cd68795ecaa552883759aceb'] = 'Récapitulatif de commande';
 $_MODULE['<{cheque}prestashop>payment_execution_879f6b8877752685a966564d072f498f'] = 'Votre panier est vide.';
-$_MODULE['<{cheque}prestashop>payment_execution_83aa0e5744c86bf2d9d006319db14839'] = 'Paiement par chèque';
 $_MODULE['<{cheque}prestashop>payment_execution_c42b053ef8c36f950ff37a0897d3a963'] = 'chèque';
 $_MODULE['<{cheque}prestashop>payment_execution_6b3ef039e038a131d05bcd208a1b9799'] = 'Vous avez choisi de régler par chèque.';
 $_MODULE['<{cheque}prestashop>payment_execution_c884ed19483d45970c5bf23a681e2dd2'] = 'Voici un bref récapitulatif de votre commande :';
@@ -48,6 +46,3 @@ $_MODULE['<{cheque}prestashop>payment_return_ffd2478830ca2f519f7fe7ee259d4b96'] 
 $_MODULE['<{cheque}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Pour toute question ou information complémentaire merci de contacter notre';
 $_MODULE['<{cheque}prestashop>payment_return_64430ad2835be8ad60c59e7d44e4b0b1'] = 'support client';
 $_MODULE['<{cheque}prestashop>payment_return_8de637e24570c1edb0357826a2ad5aea'] = 'Nous avons rencontré un problème avec votre commande, merci de contacter notre support client';
-$_MODULE['<{cheque}prestashop>payment_return_64430ad2835be8ad60c59e7d44e4b0b1'] = 'support client';
-
-?>

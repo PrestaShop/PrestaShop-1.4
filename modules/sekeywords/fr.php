@@ -16,5 +16,3 @@ $_MODULE['<{sekeywords}prestashop>sekeywords_be5d5d37542d75f93a87094459f76678'] 
 $_MODULE['<{sekeywords}prestashop>sekeywords_b4b62e0919e72bba852ff03954b4a5ef'] = 'Bientôt il sera possible d\'ajouter dynamiquement de nouveaux moteurs de recherche à cette liste et ainsi contribuer au développement du module !';
 $_MODULE['<{sekeywords}prestashop>sekeywords_8d01ac22a68176ddd7067da99508751d'] = '10 premiers mots clés';
 $_MODULE['<{sekeywords}prestashop>sekeywords_52ef9633d88a7480b3a938ff9eaa2a25'] = 'Autres';
-
-?>

@@ -18,5 +18,3 @@ $_MODULE['<{statsorigin}prestashop>statsorigin_1a96cc9152cd011db4cb78a773f68614'
 $_MODULE['<{statsorigin}prestashop>statsorigin_95b90f58e843b56885beabf4802676a9'] = 'Un partenaire avec lequel vous avez fait un échange de lien visant à rapporter des ventes ou attirer de nouveaux clients';
 $_MODULE['<{statsorigin}prestashop>statsorigin_9465e6ab1ee03dea7b6c1eefdab8aa4b'] = '10 premiers sites';
 $_MODULE['<{statsorigin}prestashop>statsorigin_52ef9633d88a7480b3a938ff9eaa2a25'] = 'Autres';
-
-?>

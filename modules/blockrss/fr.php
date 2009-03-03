@@ -17,7 +17,4 @@ $_MODULE['<{blockrss}prestashop>blockrss_bf711b813a11f4dd1b6fbde4a439b11a'] = 'A
 $_MODULE['<{blockrss}prestashop>blockrss_ff9aa540e20285875ac8b190a3cb7ccf'] = 'Nombre de messages affichés';
 $_MODULE['<{blockrss}prestashop>blockrss_595f3fab84b35a00db28d3eb3b3d92fa'] = 'Nombre de messages affichés par le bloc (défaut : 5)';
 $_MODULE['<{blockrss}prestashop>blockrss_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
-$_MODULE['<{blockrss}prestashop>blockrss_9680162225162baf2a085dfdc2814deb'] = 'Flux RSS';
 $_MODULE['<{blockrss}prestashop>blockrss_10fd25dcd3353c0ba3731d4a23657f2e'] = 'Aucun flux RSS ajouté';
-
-?>

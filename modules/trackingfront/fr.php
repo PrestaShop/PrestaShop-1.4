@@ -45,5 +45,3 @@ $_MODULE['<{trackingfront}prestashop>trackingfront_86190054fc32554662ffbb12b717e
 $_MODULE['<{trackingfront}prestashop>trackingfront_200f5c9c419f0a53d5d361eff7b33abc'] = 'Taux d\'inscription';
 $_MODULE['<{trackingfront}prestashop>trackingfront_11ff9f68afb6b8b5b8eda218d7c83a65'] = 'Ventes';
 $_MODULE['<{trackingfront}prestashop>trackingfront_89741aae300253f498b0993fa678fa18'] = 'Taux de commandes';
-
-?>

@@ -16,5 +16,3 @@ $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_64d80b7a177f4bd0a1f1dde
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_4906a7c99f469d8d3ebb110bf3194fb0'] = 'Erreur : vous devez cliquer sur la carte ou sur le bouton Annuler';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_ad3d06d03d94223fa652babc913de686'] = 'Valider';
-
-?>

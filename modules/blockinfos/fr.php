@@ -11,5 +11,3 @@ $_MODULE['<{blockinfos}prestashop>blockinfos_49ee3087348e8d44e1feda1917443987'] 
 $_MODULE['<{blockinfos}prestashop>blockinfos_06933067aafd48425d67bcb01bba5cb6'] = 'Mise à jour';
 $_MODULE['<{blockinfos}prestashop>blockinfos_1f4fa45ebc93811596333e8b2e3a6f31'] = 'CMS mis à jour';
 $_MODULE['<{blockinfos}prestashop>blockinfos_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Informations';
-
-?>

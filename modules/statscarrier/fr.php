@@ -9,5 +9,3 @@ $_MODULE['<{statscarrier}prestashop>statscarrier_d7778d0c64b6ba21494c97f77a66885
 $_MODULE['<{statscarrier}prestashop>statscarrier_f160c01272a538c80098f2e08d979c6e'] = 'Ce graphique représente la répartition des transporteurs poiur vos commandes. Il est également possible de filtrer par état de commande.';
 $_MODULE['<{statscarrier}prestashop>statscarrier_07701328e4cdbd1c145f234f136892b5'] = 'Aucune commande valide pour cette période.';
 $_MODULE['<{statscarrier}prestashop>statscarrier_ca190d96c8c6f00f57f5e572708253fb'] = 'Pourcentage de commandes par transporteur';
-
-?>

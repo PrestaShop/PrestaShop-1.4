@@ -17,6 +17,3 @@ $_MODULE['<{statsregistrations}prestashop>statsregistrations_7f93ad00e5438305b72
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_c22f6af88c5ec8dcdba70e4fa394b08e'] = 'Une campagne de publicité peut attirer un grand nombre de visiteurs. De plus, une campagne de pub bien ciblée peut s\'avérer plus efficace qu\'une publicité à grande échelle.';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_d140e86c9fd44c00ed1df75b92ce8115'] = 'Les promotions, soldes ou jeux-concours attirent fortement l\'attention et la curiosité des visiteurs ; permettant non seulement l\'animation de votre boutique, mais aussi l\'augmentation de son trafic. De cette manière, vous pouvez pousser un acheteur \"spontané\" à se lancer.';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_97d6defbec1f8cd01e8219da3e917a0b'] = 'Esthétique : un changement de thème peut rebuter les visiteurs. L\'orthographe et la clarté sont également à soigner. ';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Nombre de comptes créés';
-
-?>

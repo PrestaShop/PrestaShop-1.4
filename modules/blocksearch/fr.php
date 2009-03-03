@@ -8,5 +8,3 @@ $_MODULE['<{blocksearch}prestashop>blocksearch_fdc0c9fab38a80228b525ad5325601f0'
 $_MODULE['<{blocksearch}prestashop>blocksearch_13348442cc6a27032d2b4aa28b75a5d3'] = 'Rechercher';
 $_MODULE['<{blocksearch}prestashop>blocksearch_52d578d063d6101bbdae388ece037e60'] = 'Entrez un nom de produit';
 $_MODULE['<{blocksearch}prestashop>blocksearch_34d1f91fb2e514b8576fab1a75a89a6b'] = 'ok';
-
-?>

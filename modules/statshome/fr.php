@@ -17,5 +17,3 @@ $_MODULE['<{statshome}prestashop>statshome_1dd1c5fb7f25cd41b291d43a89e3aefd'] = 
 $_MODULE['<{statshome}prestashop>statshome_7cbb885aa1164b390a0bc050a64e1812'] = 'Mois';
 $_MODULE['<{statshome}prestashop>statshome_537c66b24ef5c83b7382cdc3f34885f2'] = 'Année';
 $_MODULE['<{statshome}prestashop>statshome_6799f652047c465ff8affc8c98cc4a74'] = 'Visiteurs actuellement connectés :';
-
-?>

@@ -13,5 +13,3 @@ $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_63b1ba91576576e6cf2da6fab76
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_95d2137c196c7f84df5753ed78f18332'] = 'Mes bons de réductions';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_d16bd2107824208b9154ed0a59fa50d1'] = 'déconnexion';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_c87aacf5673fada1108c9f809d354311'] = 'Déconnexion';
-
-?>

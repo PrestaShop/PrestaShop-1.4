@@ -27,5 +27,3 @@ $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_f299b58558601a85c98a2d1d7
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_49c8045b620233da0fa2d7088b2cb1c9'] = 'Ces opérations incitent non seulement le client à acheter, mais aussi à revenir régulièrement sur votre boutique.';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d46bd07675d08116e85f8a4c7866de53'] = 'Votre cadeau d\'anniversaire !';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_ae1e2f44f5d28cf8e14e1a30cc105060'] = 'Bon anniversaire !';
-
-?>

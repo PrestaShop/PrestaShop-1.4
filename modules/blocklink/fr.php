@@ -9,8 +9,6 @@ $_MODULE['<{blocklink}prestashop>blocklink_fe3f38c46c80813d94b6775299e59f13'] = 
 $_MODULE['<{blocklink}prestashop>blocklink_9394bb34611399534ffac4f0ece96b7f'] = 'Mauvaise URL';
 $_MODULE['<{blocklink}prestashop>blocklink_c95df8ad4297e9cb6bc0019e4462ddbb'] = 'Le lien a été ajouté avec succès';
 $_MODULE['<{blocklink}prestashop>blocklink_7a2bf0efa79ed479a71cb42f43ded325'] = 'Une erreur est survenue lors de la création du lien';
-$_MODULE['<{blocklink}prestashop>blocklink_fe3f38c46c80813d94b6775299e59f13'] = 'Vous devez remplir l\'ensemble des champs';
-$_MODULE['<{blocklink}prestashop>blocklink_9394bb34611399534ffac4f0ece96b7f'] = 'Mauvaise URL';
 $_MODULE['<{blocklink}prestashop>blocklink_1273b5375e3f183e84f5d9ffb6b198a2'] = 'Une erreur est survenue lors de la mise à jour du lien';
 $_MODULE['<{blocklink}prestashop>blocklink_a9ab0ddae6fc226287f528411cc83396'] = 'Le lien a été mis à jour avec succès';
 $_MODULE['<{blocklink}prestashop>blocklink_8e49763b0be4b758960b153dfe8b8052'] = 'Le champ \"titre\" ne peut être laissé vide.';
@@ -36,12 +34,9 @@ $_MODULE['<{blocklink}prestashop>blocklink_f4f70727dc34561dfde1a3c529b6205c'] = 
 $_MODULE['<{blocklink}prestashop>blocklink_53db43446b84dd2e9ddac626fc02ead3'] = 'Trier la liste :';
 $_MODULE['<{blocklink}prestashop>blocklink_d36e9f57ea37903f81d28f7a189b9649'] = 'par liens les plus récents';
 $_MODULE['<{blocklink}prestashop>blocklink_6ccdff04699ffe6956a6b1465907414a'] = 'les premiers liens entrés';
-$_MODULE['<{blocklink}prestashop>blocklink_06933067aafd48425d67bcb01bba5cb6'] = 'Mettre à jour';
 $_MODULE['<{blocklink}prestashop>blocklink_387a8014f530f080bf2f3be723f8c164'] = 'Liste de liens';
 $_MODULE['<{blocklink}prestashop>blocklink_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{blocklink}prestashop>blocklink_9dffbf69ffba8bc38bc4e01abf4b1675'] = 'Texte';
 $_MODULE['<{blocklink}prestashop>blocklink_e6b391a8d2c4d45902a23a8b6585703d'] = 'URL';
 $_MODULE['<{blocklink}prestashop>blocklink_06df33001c1d7187fdd81ea1f5b277aa'] = 'Actions';
 $_MODULE['<{blocklink}prestashop>blocklink_fa83ae80c36586f0bc221f15784c5d5c'] = 'Il n\'y a pas encore de liens';
-
-?>

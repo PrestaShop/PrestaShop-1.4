@@ -24,5 +24,3 @@ $_MODULE['<{statscatalog}prestashop>statscatalog_1e7541c7ad7abda4288ff8f0016ef27
 $_MODULE['<{statscatalog}prestashop>statscatalog_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{statscatalog}prestashop>statscatalog_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{statscatalog}prestashop>statscatalog_8e7c9a35104a5a68199678bd6bc5d187'] = 'Editer / Voir';
-
-?>

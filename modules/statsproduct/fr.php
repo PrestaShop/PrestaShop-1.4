@@ -31,5 +31,3 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_47786db044f5982f2d9d475b03caa1e
 $_MODULE['<{statsproduct}prestashop>statsproduct_4b33418291d5e3b6348133ba3e764e74'] = 'Nombre d\'achats';
 $_MODULE['<{statsproduct}prestashop>statsproduct_f0be22f4eb9defecc69536505ead2298'] = 'Nombre de consultations';
 $_MODULE['<{statsproduct}prestashop>statsproduct_287234a1ff35a314b5b6bc4e5828e745'] = 'Attributs';
-
-?>
