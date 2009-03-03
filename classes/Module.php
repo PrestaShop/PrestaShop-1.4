@@ -463,7 +463,7 @@ abstract class Module
 			return (str_replace('"', '&quot;', $string));
 
 		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$this->name.'_'.md5($string2);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.get_class($this).'_'.md5($string2);
 		$defaultKey = '<{'.$this->name.'}prestashop>'.$this->name.'_'.md5($string2);
 
 		if (key_exists($currentKey, $_MODULES))

@@ -142,7 +142,7 @@ class AdminTranslations extends AdminTab
 		}
 
 		$tplRegex = '/\{l s=\''._PS_TRANS_PATTERN_.'\'( mod=\'.+\')?( js=1)?\}/U';
-		$phpRegex = '/this->l\(\''._PS_TRANS_PATTERN_.'\'(, \'(.+)\')?(, (.+))?\)/U';
+		$phpRegex = '/->l\(\''._PS_TRANS_PATTERN_.'\'(, \'(.+)\')?(, (.+))?\)/U';
 
 		if (!$dir)
 			$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
@@ -150,6 +150,7 @@ class AdminTranslations extends AdminTab
 			die ($this->l('Cannot write the theme\'s language file ').'('.$filename.')'.$this->l('. Please check write permissions.'));
 		else
 		{
+			$_tmp = array();
 			foreach ($files AS $templateFile)
 			{
 				if ((ereg('^(.*).tpl$', $templateFile) OR ($themeName == 'prestashop' AND ereg('^(.*).php$', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
@@ -159,14 +160,18 @@ class AdminTranslations extends AdminTab
 						$content = (filesize($tpl) ? fread($readFd, filesize($tpl)) : '');
 						preg_match_all(substr($templateFile, -4) == '.tpl' ? $tplRegex : $phpRegex, $content, $matches);
 						fclose($readFd);
-		
+
 						/* Write each translation on its module file */
 						$templateName = substr(basename($templateFile), 0, -4);
 						foreach ($matches[1] as $key)
 						{
 							$postKey = md5($moduleName.'_'.$themeName.'_'.$templateName.'_'.md5($key));
-							if (array_key_exists($postKey, $_POST) AND !empty($_POST[$postKey]))
-								fwrite($writeFd, '$_MODULE[\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'] = \''.pSQL($_POST[$postKey]).'\';'."\n");
+							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'';
+							if (array_key_exists($postKey, $_POST) AND !empty($_POST[$postKey]) AND !array_key_exists($pattern, $_tmp))
+							{
+								$_tmp[$pattern] = true;
+								fwrite($writeFd, '$_MODULE['.$pattern.'] = \''.pSQL($_POST[$postKey]).'\';'."\n");
+							}
 						}
 				}
 			}
