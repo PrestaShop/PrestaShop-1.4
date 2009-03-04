@@ -538,9 +538,9 @@ class		Cart extends ObjectModel
 	static public function getTotalCart($id_cart)
 	{
 		$cart = new Cart(intval($id_cart));
-		$summary = $cart->getSummaryDetails();
-		$currency = new Currency(intval($cart->id_currency));
-		return Tools::displayPrice($summary['total_price'], $currency, false, false);
+		if (!Validate::isLoadedObject($cart))
+			die(Tools::displayError());
+		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
 	}
 	
 	function getOrderTotal($withTaxes = true, $type = 3)
@@ -1020,7 +1020,8 @@ echo 'Product: '.$product['name'];
   
   /* DEPRECATED */
 	public function getCustomeremail()
-	{		$customer = new Customer(intval($this->id_customer));
+	{
+		$customer = new Customer(intval($this->id_customer));
 		return $customer->email;
 	}
 }
