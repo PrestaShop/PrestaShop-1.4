@@ -19,7 +19,7 @@ if (file_exists($xmlFile))
 	}
 }
 
-$smarty->display(_PS_MODULE_DIR_.'/referralprogram/referralprogram-rules.tpl');
+echo Module::display('referralprogram', 'referralprogram-rules.tpl');
 
 if (!Tools::getValue('width') AND !Tools::getValue('height'))
 	require_once(dirname(__FILE__).'/../../footer.php');
