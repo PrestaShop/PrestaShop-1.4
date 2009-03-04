@@ -90,12 +90,25 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (41, 'PS_PASSWD_TIME_BACK', '360', NOW(), NOW()),
 (42, 'PS_PASSWD_TIME_FRONT', '360', NOW(), NOW()),
 (43, 'PS_DISP_UNAVAILABLE_ATTR', '1', NOW(), NOW()),
-(44, 'PS_VOUCHERS', '1', NOW(), NOW());
+(44, 'PS_VOUCHERS', '1', NOW(), NOW()),
+(45, 'PS_SEARCH_MINWORDLEN', '3', NOW(), NOW()),
+(46, 'PS_SEARCH_BLACKLIST', '', NOW(), NOW()),
+(47, 'PS_SEARCH_WEIGHT_PNAME', '6', NOW(), NOW()),
+(48, 'PS_SEARCH_WEIGHT_REF', '10', NOW(), NOW()),
+(49, 'PS_SEARCH_WEIGHT_SHORTDESC', '1', NOW(), NOW()),
+(50, 'PS_SEARCH_WEIGHT_DESC', '1', NOW(), NOW()),
+(51, 'PS_SEARCH_WEIGHT_CNAME', '3', NOW(), NOW()),
+(52, 'PS_SEARCH_WEIGHT_MNAME', '3', NOW(), NOW()),
+(53, 'PS_SEARCH_WEIGHT_TAG', '4', NOW(), NOW()),
+(54, 'PS_SEARCH_WEIGHT_ATTRIBUTE', '2', NOW(), NOW()),
+(55, 'PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 1, 'IN', NOW());
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 2, 'FA', NOW());
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (38, 1, 'DE', NOW());
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (38, 2, 'LI', NOW());
+INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (46, 1, 'a|the|of|on|in|and|to', NOW());
+INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (46, 2, 'le|les|de|et|en|des|les|une', NOW());
 
 INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`) VALUES
 (1, 'English (English)', 1, 'en'),
@@ -422,6 +435,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (23, 'AdminDb', 8, 7),
 (48, 'AdminPDF', 8, 8),
 (44, 'AdminLocalization', 8, 9),
+(67, 'AdminSearchConf', 8, 10),
 (32, 'AdminLanguages', 9, 1),
 (33, 'AdminTranslations', 9, 2),
 (35, 'AdminTabs', 9, 3),
@@ -501,6 +515,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 64, 'Htaccess'),
 (1, 65, 'Carts'),
 (1, 66, 'Tags'),
+(1, 67, 'Search'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -564,7 +579,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 63, 'Groupes'),
 (2, 64, 'Htaccess'),
 (2, 65, 'Paniers'),
-(2, 66, 'Tags');
+(2, 66, 'Tags'),
+(2, 67, 'Recherche');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`

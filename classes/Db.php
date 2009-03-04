@@ -214,7 +214,12 @@ abstract class Db
 	/**
 	 * Fetches an array containing all of the rows from a result set
 	 */
-	abstract public function ExecuteS($query);
+	abstract public function ExecuteS($query, $array = true);
+	
+	/*
+	 * Get next row for a query which doesn't return an array 
+	 */
+	abstract public function nextRow($result = false);
 	
 	/**
 		 * Alias of Db::getInstance()->ExecuteS

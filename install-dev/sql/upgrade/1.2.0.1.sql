@@ -12,6 +12,9 @@ ALTER TABLE PREFIX_cart
 ALTER TABLE PREFIX_tab
 	ADD `module` varchar(64) NULL AFTER class_name;
 
+ALTER TABLE PREFIX_product_attribute
+	ADD `indexed` tinyint(1) NOT NULL default '0' AFTER `active`;
+	
 ALTER TABLE PREFIX_orders
 	DROP INDEX `orders_customer`,
 	ADD INDEX id_customer (id_customer),
@@ -83,7 +86,7 @@ ALTER TABLE PREFIX_page
 ALTER TABLE PREFIX_page_type
 	ADD INDEX `name` (`name`),
 	CHANGE `name` `name` VARCHAR(255) NOT NULL;
-
+	
 ALTER TABLE PREFIX_product_attribute
 	ADD INDEX reference (reference),
 	ADD INDEX supplier_reference (supplier_reference);
@@ -213,10 +216,37 @@ CREATE TABLE `PREFIX_product_attribute_image` (
 	KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_search_index` (
+  `id_product` int(11) NOT NULL,
+  `id_word` int(11) NOT NULL,
+  `weight` tinyint(4) NOT NULL default '1',
+  PRIMARY KEY  (`id_product`,`id_word`),
+  INDEX  (`id_word`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_search_word` (
+  `id_word` int(10) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `word` varchar(15) NOT NULL,
+  PRIMARY KEY  (`id_word`),
+  UNIQUE KEY `id_lang` (`id_lang`,`word`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 /* ##################################### */
 /* 					CONTENTS					 */
 /* ##################################### */
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_SEARCH_MINWORDLEN', '3', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_PNAME', '6', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_REF', '10', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_SHORTDESC', '1', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_DESC', '1', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_CNAME', '3', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_MNAME', '3', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_TAG', '4', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_ATTRIBUTE', '2', NOW(), NOW()),
+('PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW());
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('extraCarrier', 'Extra carrier (module mode)', NULL, 0),
@@ -336,6 +366,16 @@ INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
 	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminTags' LIMIT 1),
 	'Tags' FROM PREFIX_lang);
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminTags' LIMIT 1), 1, 1, 1, 1);
+
+INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPreferences' LIMIT 1) AS tmp), 'AdminSearchConf', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPreferences' LIMIT 1) AS tmp )) AS tmp));
+INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
+	SELECT id_lang,
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminSearchConf' LIMIT 1),
+	'Search' FROM PREFIX_lang);
+UPDATE `PREFIX_tab_lang` SET `name` = 'Recherche'
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminSearchConf')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminSearchConf' LIMIT 1), 1, 1, 1, 1);
 
 /* CHANGE TABS */
 UPDATE `PREFIX_tab` SET `class_name` = 'AdminStatuses' WHERE `class_name` = 'AdminOrdersStates';

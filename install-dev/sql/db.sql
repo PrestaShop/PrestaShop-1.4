@@ -899,6 +899,7 @@ CREATE TABLE `PREFIX_product` (
   `uploadable_files` tinyint(4) NOT NULL default '0',
   `text_fields` tinyint(4) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
+  `indexed` tinyint(4) NOT NULL default '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_product`),
@@ -1091,6 +1092,22 @@ CREATE TABLE `PREFIX_search_engine` (
   `getvar` varchar(16) NOT NULL,
   PRIMARY KEY  (`id_search_engine`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_search_index` (
+  `id_product` int(11) NOT NULL,
+  `id_word` int(11) NOT NULL,
+  `weight` tinyint(4) NOT NULL default '1',
+  PRIMARY KEY  (`id_product`,`id_word`),
+  INDEX  (`id_word`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_search_word` (
+  `id_word` int(10) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `word` varchar(15) NOT NULL,
+  PRIMARY KEY  (`id_word`),
+  UNIQUE KEY `id_lang` (`id_lang`,`word`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_state` (
   `id_state` int(10) unsigned NOT NULL auto_increment,

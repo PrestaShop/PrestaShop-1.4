@@ -4,47 +4,14 @@ include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 
-
-/* Classic search */
-if ($query = trim(Tools::getValue('search_query')))
+if ($query = Tools::getValue('search_query', Tools::getValue('tag', Tools::getValue('ref'))))
 {
-	if (!Validate::isValidSearch($query))
-		$smarty->assign('errors', array(Tools::displayError('invalid search')));
-	else
-	{
-		$search = new Search();
-		$nbProducts = intval($search->find(intval($cookie->id_lang), $query, true));
-		include(dirname(__FILE__).'/pagination.php');
-		$smarty->assign(array(
-			'products' => $search->find(intval($cookie->id_lang), $query, false, $p, $n, $orderBy, $orderWay),
-			'nbProducts' => $nbProducts,
-			'query' => $query));
-	}
-}
-
-/* Tags */
-elseif ($tag = Tools::getValue('tag'))
-{
-	$search = new Search();
-	$nbProducts = intval($search->tag(intval($cookie->id_lang), $tag, true));
+	$n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
+	$p = abs(intval(Tools::getValue('p', 1)));
+	$search = Search::find(intval($cookie->id_lang), $query, $p, $n, $orderBy, $orderWay);
+	$nbProducts = $search['total'];
 	include(dirname(__FILE__).'/pagination.php');
-	$smarty->assign(array(
-		'tag' => $tag,
-		'products' => $search->tag(intval($cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay),
-		'nbProducts' => $nbProducts));
-}
-
-/* Reference */
-elseif ($ref = Tools::getValue('ref'))
-{
-	$search = new Search();
-	$nbProducts = intval($search->ref(intval($cookie->id_lang), $ref, true));
-	include(dirname(__FILE__).'/pagination.php');
-	$smarty->assign(array(
-		'ref' => $ref,
-		'query' => $ref,
-		'products' => $search->ref(intval($cookie->id_lang), $ref, false, $p, $n, $orderBy, $orderWay),
-		'nbProducts' => $nbProducts));
+	$smarty->assign(array('products' => $search['result'], 'nbProducts' => $search['total'], 'query' => $query));
 }
 else
 {

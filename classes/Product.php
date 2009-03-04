@@ -133,6 +133,8 @@ class		Product extends ObjectModel
 
 	/** @var boolean Product statuts */
 	public		$active = 1;
+	
+	public		$indexed = 0;
 
 	/** @var string Object creation date */
 	public 		$date_add;
@@ -234,6 +236,7 @@ class		Product extends ObjectModel
 		$fields['uploadable_files'] = intval($this->uploadable_files);
 		$fields['text_fields'] = intval($this->text_fields);
 		$fields['active'] = intval($this->active);
+		$fields['indexed'] = 0; // Reset indexation every times
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);

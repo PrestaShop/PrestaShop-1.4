@@ -77,7 +77,7 @@ class MySQL extends Db
 		return false;
 	}
 	
-	public function	ExecuteS($query)
+	public function	ExecuteS($query, $array = true)
 	{
 		if (parent::blacklist($query))
 			return false;
@@ -85,12 +85,19 @@ class MySQL extends Db
 		if ($this->_link)
 			if ($this->_result = mysql_query($query, $this->_link))
 			{
+				if (!$array)
+					return $this->_result;
 				$resultArray = array();
 				while ($row = mysql_fetch_assoc($this->_result))
 					$resultArray[] = $row;
 				return $resultArray;
 			}
 		return false;
+	}
+
+	public function nextRow($result = false)
+	{
+		return mysql_fetch_assoc($result ? $result : $this->_result);
 	}
 	
 	public function	delete($table, $where = false, $limit = false)
