@@ -890,11 +890,7 @@ class		Cart extends ObjectModel
 		if (Configuration::get('PS_STOCK_MANAGEMENT'))
 			foreach ($this->getProducts() AS $product)
 			    if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['quantity']))
-{
-Tools::dieObject($product);
-echo 'Product: '.$product['name'];
 			    	return false;
-}
 		return true;
 	}
 
