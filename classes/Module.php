@@ -449,7 +449,7 @@ abstract class Module
 	 * @param string $string String to translate
 	 * @return string Translation
 	 */
-	public function l($string)
+	public function l($string, $specific = false)
 	{
 		global $_MODULES, $_MODULE, $cookie;
 		
@@ -462,9 +462,10 @@ abstract class Module
 		if (!is_array($_MODULES))
 			return (str_replace('"', '&quot;', $string));
 
+		$source = ($specific ? $specific : get_class($this));
 		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.get_class($this).'_'.md5($string2);
-		$defaultKey = '<{'.$this->name.'}prestashop>'.$this->name.'_'.md5($string2);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
+		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
 
 		if (key_exists($currentKey, $_MODULES))
 			$ret = stripslashes($_MODULES[$currentKey]);
