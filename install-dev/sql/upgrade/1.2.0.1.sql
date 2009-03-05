@@ -111,8 +111,8 @@ ALTER TABLE PREFIX_range_price
 	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
 
 ALTER TABLE PREFIX_range_weight
-	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL
-	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL
+	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL,
+	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL,
 	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL,
 	DROP INDEX `range_weight_unique`,
 	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
