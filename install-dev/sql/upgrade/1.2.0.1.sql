@@ -250,7 +250,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('extraCarrier', 'Extra carrier (module mode)', NULL, 0),
-	('shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 0);
+	('shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 0),
+	('search', 'Search', NULL, 0);
 
 UPDATE PREFIX_orders o SET o.valid = IFNULL((
 	SELECT os.logable

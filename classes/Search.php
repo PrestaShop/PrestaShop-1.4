@@ -176,6 +176,8 @@ class Search
 		
 		$result = Db::getInstance()->ExecuteS($queryResults);
 		$total = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
+		
+		Module::hookExec('search', array('expr' => $expr, 'total' => $total));
 
 		return array('total' => $total,'result' => Product::getProductsProperties($id_lang, $result));
 	}

@@ -23,28 +23,29 @@ class StatsSearch extends ModuleGraph
         $this->version = 1.0;
 		
 		$this->_query = '
-		SELECT ss.`keyword`, COUNT(TRIM(ss.`keyword`)) as occurences
+		SELECT ss.`keywords`, COUNT(TRIM(ss.`keywords`)) as occurences, MAX(results) as total
 		FROM `'._DB_PREFIX_.'statssearch` ss
 		WHERE LEFT(ss.`date_add`, 10) BETWEEN ';
 		$this->_query2 = '
-		GROUP BY TRIM(ss.`keyword`)
+		GROUP BY ss.`keywords`
 		HAVING occurences > 1
-		ORDER BY COUNT(ss.`keyword`) DESC';
+		ORDER BY occurences DESC';
 
         parent::__construct();
 		
-        $this->displayName = $this->l('Customer search');
+        $this->displayName = $this->l('Shop search');
         $this->description = $this->l('Display which keywords have been searched by your visitors');
     }
 
 	function install()
 	{
-		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('AdminStatsModules'))
+		if (!parent::install() OR !$this->registerHook('search') OR !$this->registerHook('AdminStatsModules'))
 			return false;
 		return Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'statssearch` (
 			id_statssearch INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-			keyword VARCHAR(256) NOT NULL,
+			keywords VARCHAR(255) NOT NULL,
+			results INT(6) NOT NULL DEFAULT 0,
 			date_add DATETIME NOT NULL,
 			PRIMARY KEY(id_statssearch)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
@@ -57,12 +58,9 @@ class StatsSearch extends ModuleGraph
 		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'statssearch`'));
     }
 	
-	function hookTop($params)
+	function hookSearch($params)
 	{
-		if ($query = trim(Tools::getValue('search_query')) AND Validate::isValidSearch($query))
-			Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'statssearch` (`keyword`,`date_add`)
-			VALUES (\''.pSQL($query).'\', NOW())');
+		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'statssearch` (`keywords`,`results`,`date_add`) VALUES (\''.pSQL($params['expr']).'\', '.intval($params['total']).', NOW())');
 	}
 	
 	function hookAdminStatsModules()
@@ -73,22 +71,25 @@ class StatsSearch extends ModuleGraph
 		$table = '<div style="overflow-y: scroll; height: 600px;">
 		<table class="table" border="0" cellspacing="0" cellspacing="0">
 		<thead>
-			<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
-			<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th></tr>
+			<tr>
+				<th style="width:400px;">'.$this->l('keywords').'</th>
+				<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th>
+				<th style="width:50px; text-align: right">'.$this->l('Results').'</th>
+			</tr>
 		</thead><tbody>';
 
-		foreach ($result as $index => $row)
-		{
-			$keyword =& $row['keyword'];
-			$occurences =& $row['occurences'];
-			$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
-		}
+		foreach ($result as $row)
+			$table .= '<tr>
+				<td>'.$row['keywords'].'</td>
+				<td style="text-align: right">'.$row['occurences'].'</td>
+				<td style="text-align: right">'.$row['total'].'</td>
+			</tr>';
 		$table .= '</tbody></table></div>';
 		
 		if (sizeof($result))
 			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
 		else
-			$this->_html .= '<p><strong>'.$this->l('No keyword searched more than once found.').'</strong></p>';
+			$this->_html .= '<p><strong>'.$this->l('No keywords searched more than once found.').'</strong></p>';
 		$this->_html .= '</fieldset>';
 		return $this->_html;
 	}
@@ -106,7 +107,7 @@ class StatsSearch extends ModuleGraph
 		{
 			if (!$row['occurences'])
 				continue;
-			$this->_legend[] = $row['keyword'];
+			$this->_legend[] = $row['keywords'];
 			$this->_values[] = $row['occurences'];
 			$total2 += $row['occurences'];
 		}

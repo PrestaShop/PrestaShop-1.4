@@ -136,7 +136,7 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 	(49, 32, 17),
 	(50, 32, 18),
 	(51, 32, 19),
-	(51, 14, 8),
+	(51, 45, 1),
 	(25, 25, 1),
 	(41, 20, 2);
 
@@ -150,7 +150,8 @@ CREATE TABLE `PREFIX_pagenotfound` (
 
 CREATE TABLE PREFIX_statssearch (
 	id_statssearch INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	keyword VARCHAR(256) NOT NULL,
+	keywords VARCHAR(255) NOT NULL,
+	results INT(6) NOT NULL DEFAULT 0,
 	date_add DATETIME NOT NULL,
 	PRIMARY KEY(id_statssearch)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
