@@ -12,7 +12,7 @@ ALTER TABLE PREFIX_cart
 ALTER TABLE PREFIX_tab
 	ADD `module` varchar(64) NULL AFTER class_name;
 
-ALTER TABLE PREFIX_product_attribute
+ALTER TABLE PREFIX_product
 	ADD `indexed` tinyint(1) NOT NULL default '0' AFTER `active`;
 	
 ALTER TABLE PREFIX_orders
