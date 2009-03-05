@@ -1,6 +1,17 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+
+if ($query = Tools::getValue('ajaxSearch'))
+{
+	$search = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
+	foreach ($search as $product)
+		echo $product['id_product'].'|'.$product['pname'].'|'.$product['cname']."\n";
+	die;
+}
+
+
+
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 

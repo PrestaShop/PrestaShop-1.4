@@ -123,7 +123,7 @@ class Search
 		return $string;
 	}
 
-	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'score', $orderWay = 'desc')
+	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false)
 	{
 		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
@@ -132,13 +132,13 @@ class Search
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderBy($orderWay))
 			die(Tools::displayError());
 			
-		$where = array();
-		$score = array();
+		$whereArray = array();
+		$scoreArray = array();
 		$words = explode(' ', Search::sanitize($expr, $id_lang));
 		foreach ($words as $key => $word)
 			if (!empty($word))
 			{
-				$where[] = ' p.id_product '.($word[0] == '-' ? 'NOT' : '').' IN (
+				$whereArray[] = ' p.id_product '.($word[0] == '-' ? 'NOT' : '').' IN (
 					SELECT id_product
 					FROM '._DB_PREFIX_.'search_word sw
 					LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word
@@ -146,31 +146,48 @@ class Search
 					AND sw.word LIKE '.($word[0] == '-' ? ' \''.pSQL(Tools::substr($word, 1, PS_SEARCH_MAX_WORD_LENGTH)).'%\'' : '\''.pSQL(Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'').'
 				) ';
 				if ($word[0] != '-')
-					$score[] = 'sw.word LIKE \''.pSQL(Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'';
+					$scoreArray[] = 'sw.word LIKE \''.pSQL(Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'';
 			}
 			else
 				unset($words[$key]);
 		if (!sizeof($words))
 			return array('total' => 0, 'result' => array());
+			
+		$score = '';
+		if (sizeof($scoreArray))
+			$score = ',(
+				SELECT SUM(weight)
+				FROM '._DB_PREFIX_.'search_word sw
+				LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word
+				WHERE sw.id_lang = '.intval($id_lang).'
+				AND si.id_product = p.id_product
+				AND ('.implode(' OR ', $scoreArray).')
+			) as position';
+		
+		if ($ajax)
+		{
+			$queryResults = '
+			SELECT p.id_product, pl.name as pname, cl.name as cname	'.$score.'
+			FROM '._DB_PREFIX_.'product p
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+			WHERE '.implode(' AND ', $whereArray).'
+			ORDER BY position DESC
+			LIMIT 10';
+			return Db::getInstance()->ExecuteS($queryResults);
+		}
 		
 		$queryResults = '
 		SELECT SQL_CALC_FOUND_ROWS p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
 		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name
-		'.(sizeof($score) ? ',(
-			SELECT SUM(weight)
-			FROM '._DB_PREFIX_.'search_word sw
-			LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word
-			WHERE sw.id_lang = '.intval($id_lang).'
-			AND si.id_product = p.id_product
-			AND ('.implode(' OR ', $score).')
-		) as position' : '').'
+		'.$score.'
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-		WHERE '.implode(' AND ', $where).'
+		WHERE '.implode(' AND ', $whereArray).'
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
 		
