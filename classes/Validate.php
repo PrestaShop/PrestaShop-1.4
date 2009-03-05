@@ -253,6 +253,11 @@ class Validate
 	{
 		return preg_match('/^[a-z]{2,3}$/ui', $isoCode);
 	}
+	
+	static public function isStateIsoCode($isoCode)
+	{
+		return preg_match('/^[a-z]{1,4}$/ui', $isoCode);
+	}
 
 	/**
 	* Check for gender code (ISO) validity

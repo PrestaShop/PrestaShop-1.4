@@ -35,6 +35,9 @@ ALTER TABLE PREFIX_carrier
 	ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER range_behavior,
 	ADD INDEX deleted (`deleted`, `active`);
 
+ALTER TABLE PREFIX_state
+	CHANGE iso_code `iso_code` char(4) NOT NULL;
+	
 ALTER TABLE PREFIX_order_detail
 	CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT '0',
 	ADD INDEX product_id (product_id);

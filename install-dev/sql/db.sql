@@ -1114,7 +1114,7 @@ CREATE TABLE `PREFIX_state` (
   `id_country` int(11) NOT NULL,
   `id_zone` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
-  `iso_code` varchar(3) NOT NULL,
+  `iso_code` char(4) NOT NULL,
   `tax_behavior` smallint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id_state`)

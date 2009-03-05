@@ -33,8 +33,8 @@ class		State extends ObjectModel
 	public		$active = true;
 
  	protected 	$fieldsRequired = array('id_country', 'id_zone', 'iso_code', 'name', 'tax_behavior');
- 	protected 	$fieldsSize = array('iso_code' => 3, 'name' => 32);
- 	protected 	$fieldsValidate = array('id_country' => 'isUnsignedId', 'id_zone' => 'isUnsignedId', 'iso_code' => 'isLanguageIsoCode', 'name' => 'isGenericName', 'tax_behavior' => 'isUnsignedInt', 'active' => 'isBool');
+ 	protected 	$fieldsSize = array('iso_code' => 4, 'name' => 32);
+ 	protected 	$fieldsValidate = array('id_country' => 'isUnsignedId', 'id_zone' => 'isUnsignedId', 'iso_code' => 'isStateIsoCode', 'name' => 'isGenericName', 'tax_behavior' => 'isUnsignedInt', 'active' => 'isBool');
 
 	protected 	$table = 'state';
 	protected 	$identifier = 'id_state';
