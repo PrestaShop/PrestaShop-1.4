@@ -200,7 +200,7 @@
 {/if}
 <p class="cart_navigation">
 	<a href="{$base_dir}order.php?step=1" class="exclusive" title="{l s='Next'}">{l s='Next'} &raquo;</a>
-	<a href="{if $smarty.server.HTTP_REFERER && strstr($smarty.server.HTTP_REFERER, 'order.php')}{$base_dir}index.php{else}{$smarty.server.HTTP_REFERER}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a>
+	<a href="{if $smarty.server.HTTP_REFERER && strstr($smarty.server.HTTP_REFERER, 'order.php')}{$base_dir}index.php{else}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a>
 </p>
 <p class="clear"><br /><br /></p>
 <p class="cart_navigation_extra">
