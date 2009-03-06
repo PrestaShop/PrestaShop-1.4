@@ -15,7 +15,7 @@ $add = Tools::getIsset('add') ? 1 : 0;
 $delete = Tools::getIsset('delete') ? 1 : 0;
 
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
-	strcasecmp(Tools::getToken(false), Tools::getValue('token')) &&
+	strcasecmp(Tools::getToken(false), strval(Tools::getValue('token'))) &&
 	$cookie->isLogged() === true)
 	$errors[] = Tools::displayError('invalid token');
 
