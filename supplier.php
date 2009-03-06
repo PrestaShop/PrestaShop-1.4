@@ -1,7 +1,10 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
-include(dirname(__FILE__).'/header.php');
+
+//will be initialized bellow...
+if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
+	$rewrited_url = null;
 
 if (!isset($objectType))
 	$objectType = 'supplier';
@@ -18,6 +21,13 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 		$errors[] = Tools::displayError('object does not exist');
 	else
 	{
+		/* rewrited url set */
+		if ($objectType == 'supplier')
+			$rewrited_url = $link->getSupplierLink($object->id, $object->link_rewrite);
+		elseif ($objectType == 'manufacturer')
+			$rewrited_url = $link->getManufacturerLink($object->id, $object->link_rewrite);
+		include(dirname(__FILE__).'/header.php');
+		
 		$nbProducts = $object->getProducts($id, NULL, NULL, NULL, $orderBy, $orderWay, true);
 		include(dirname(__FILE__).'/pagination.php');
 		$smarty->assign(array(
@@ -35,6 +45,7 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 }
 else
 {
+	include(dirname(__FILE__).'/header.php');
 	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang));
 	$nbProducts = sizeof($data);
 	include(dirname(__FILE__).'/pagination.php');

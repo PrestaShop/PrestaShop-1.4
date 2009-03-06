@@ -31,6 +31,9 @@ class		Supplier extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 	
+	/** @var string Friendly URL */
+	public 		$link_rewrite;
+	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
@@ -40,7 +43,19 @@ class		Supplier extends ObjectModel
 	
 	protected 	$table = 'supplier';
 	protected 	$identifier = 'id_supplier';
+	
+	public function __construct($id = NULL, $id_lang = NULL)
+	{
+		parent::__construct($id, $id_lang);
 		
+		$this->link_rewrite = $this->getLink();
+	}
+	
+	public function getLink()
+	{
+		return Tools::link_rewrite($this->name, false);
+	}
+	
 	public function getFields()
 	{
 		parent::validateFields();

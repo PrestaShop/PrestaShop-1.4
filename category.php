@@ -1,11 +1,15 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
+
+//will be initialized bellow...
+if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
+	$rewrited_url = null;
 
 /* CSS ans JS files calls */
 $css_files = array(__PS_BASE_URI__.'css/jquery.cluetip.css' => 'all', _THEME_CSS_DIR_.'scenes.css' => 'all');
 
-include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 
 $errors = array();
@@ -20,6 +24,9 @@ else
 		$errors[] = Tools::displayError('you do not have access to this category');
 	else
 	{
+		/* rewrited url set */
+		$rewrited_url = $link->getCategoryLink($category->id, $category->link_rewrite);
+		
 		/* Scenes  (could be externalised to another controler if you need them */
 		$smarty->assign('scenes', Scene::getScenes(intval($category->id), intval($cookie->id_lang), true, false));
 
@@ -59,6 +66,8 @@ else
 		));
 	}
 }
+
+include(dirname(__FILE__).'/header.php');
 
 $smarty->assign(array(
 	'allow_oosp' => intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')),

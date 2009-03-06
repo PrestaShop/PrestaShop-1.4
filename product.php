@@ -1,6 +1,10 @@
 <?php
 include(dirname(__FILE__).'/config/config.inc.php');
 
+//will be initialized bellow...
+if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
+	$rewrited_url = null;
+
 function pictureUpload(Product $product, Cart $cart)
 {
 	global $errors;
@@ -85,7 +89,7 @@ $js_files = array(
 
 global $errors;
 $errors = array();
-include_once(dirname(__FILE__).'/header.php');
+
 
 if (!isset($_GET['id_product']) OR !Validate::isUnsignedId($_GET['id_product']))
 	$errors[] = Tools::displayError('product not found');
@@ -99,7 +103,10 @@ else
 	else
 	{
 		$smarty->assign('virtual', ProductDownload::getIdFromIdProduct(intval($product->id)));
-	
+		
+		/* rewrited url set */
+		$rewrited_url = $link->getProductLink($product->id, $product->link_rewrite);
+		
 		/* Product pictures management */
 		require_once('images.inc.php');
 		$smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
@@ -256,6 +263,7 @@ else
 		));
 	}
 }
+include_once(dirname(__FILE__).'/header.php');
 $smarty->assign(array(
 	'ENT_NOQUOTES' => ENT_NOQUOTES,
 	'outOfStockAllowed' => intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')),

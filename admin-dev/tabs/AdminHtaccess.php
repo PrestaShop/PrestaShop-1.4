@@ -102,6 +102,7 @@ class AdminHtaccess extends AdminTab
 		$tab['RewriteEngine']['comment'] = '# URL rewriting module activation';
 		
 		// RewriteRules
+		//IMPORTANT : if you change the lines bellow, don"t forget to change the "urlcanonical" module too
 		$tab['RewriteRule']['comment'] = '# URL rewriting rules';
 		$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)(\-[a-zA-Z0-9-]*)/([a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2$3.jpg [L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)(\-[a-zA-Z0-9-]*)/([a-zA-Z0-9-]*)\.jpg$'] = 'img/c/$1$2.jpg [L,E]';
