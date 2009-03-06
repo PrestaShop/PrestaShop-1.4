@@ -66,16 +66,13 @@ class canonicalUrl extends Module
 		global $smarty, $protocol, $rewrited_url;
 		
 		$canonicalUrl = Configuration::get('CANONICAL_URL');
-		//TODO pages without url rewriting
-		//TODO pages with https prefix
-		//TODO pages with url rewriting
 		$ps_request = str_replace(__PS_BASE_URI__, '', $_SERVER['REQUEST_URI']);
 		
-		
-		if (isset($rewrited_url))
-			$smarty->assign('canonical_url', $protocol.$canonicalUrl.$rewrited_url);
-		else
-			$smarty->assign('canonical_url', $protocol.$canonicalUrl.$_SERVER['REQUEST_URI']);
+		if (strlen(Configuration::get('CANONICAL_URL')) > 0)
+			if (isset($rewrited_url))
+				$smarty->assign('canonical_url', $protocol.$canonicalUrl.$rewrited_url);
+			else
+				$smarty->assign('canonical_url', $protocol.$canonicalUrl.$_SERVER['REQUEST_URI']);
 		return $this->display(__FILE__, 'canonicalurl.tpl');
 	}
 }
