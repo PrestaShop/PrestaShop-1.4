@@ -105,6 +105,8 @@ class SEKeywords extends ModuleGraph
 	
 	function getKeywords($url)
 	{
+		if (!Validate::isAbsoluteUrl($url))
+			return false;
 		$parsedUrl = parse_url($url);
 		$result = Db::getInstance()->ExecuteS('SELECT `server`, `getvar` FROM `'._DB_PREFIX_.'search_engine`');
 		foreach ($result as $index => $row)
