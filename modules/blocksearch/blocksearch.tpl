@@ -9,4 +9,28 @@
 		</p>
 	</form>
 </div>
+<link rel="stylesheet" type="text/css" href="{$base_uri}css/jquery.autocomplete.css" />
+<script type="text/javascript" src="js/jquery/jquery.autocomplete.js"></script>
+<script type="text/javascript">
+	{literal}
+	
+	function formatSearch(row) {
+		return row[2] + ' > ' + row[1];
+	}
+
+	function redirectSearch(event, data, formatted) {
+		document.location.href = data[3];
+	}
+	
+	$('document').ready( function() {
+		$("#search_query").autocomplete(
+			'search.php', {
+			minChars: 3,
+			max:10,
+			formatItem:formatSearch,
+			extraParams:{ajaxSearch:1,id_lang:{/literal}{$cookie->id_lang}{literal}}
+		}).result(redirectSearch)
+	});
+	{/literal}
+</script>
 <!-- /Block search module -->

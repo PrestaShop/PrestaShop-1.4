@@ -167,7 +167,7 @@ class Search
 		if ($ajax)
 		{
 			$queryResults = '
-			SELECT p.id_product, pl.name as pname, cl.name as cname	'.$score.'
+			SELECT p.id_product, pl.name as pname, cl.name as cname	'.$score.', cl.link_rewrite as crewrite, pl.link_rewrite as prewrite
 			FROM '._DB_PREFIX_.'product p
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')

@@ -2,15 +2,14 @@
 
 include(dirname(__FILE__).'/config/config.inc.php');
 
-if ($query = Tools::getValue('ajaxSearch'))
+if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')))
 {
+	$link = new Link();
 	$search = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 	foreach ($search as $product)
-		echo $product['id_product'].'|'.$product['pname'].'|'.$product['cname']."\n";
+		echo $product['id_product'].'|'.$product['pname'].'|'.$product['cname'].'|'.$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite'])."\n";
 	die;
 }
-
-
 
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
