@@ -712,6 +712,8 @@ class Tools
 
 	static function strtolower($str)
 	{
+		if (is_array($str))
+			return false;
 		if (function_exists('mb_strtolower'))
 			return mb_strtolower($str, 'utf-8');
 		return strtolower($str);
@@ -719,6 +721,8 @@ class Tools
 
 	static function strlen($str)
 	{
+		if (is_array($str))
+			return false;
 		if (function_exists('mb_strlen'))
 			return mb_strlen($str, 'utf-8');
 		return strlen($str);
@@ -726,6 +730,8 @@ class Tools
 
 	static function strtoupper($str)
 	{
+		if (is_array($str))
+			return false;
 		if (function_exists('mb_strtoupper'))
 			return mb_strtoupper($str, 'utf-8');
 		return strtoupper($str);
@@ -733,8 +739,10 @@ class Tools
 
 	static function substr($str, $start, $length = false, $encoding = 'utf-8')
 	{
+		if (is_array($str))
+			return false;
 		if (function_exists('mb_substr'))
-			return mb_substr($str, $start, ($length === false ? Tools::strlen($str) : $length), $encoding);
+			return mb_substr($str, intval($start), ($length === false ? Tools::strlen($str) : intval($length)), $encoding);
 		return substr($str, $start, $length);
 	}
 

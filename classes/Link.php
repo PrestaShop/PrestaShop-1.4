@@ -161,7 +161,7 @@ class Link
 				$ifNb = (!$nb OR ($nb AND !in_array($k, $varsNb)));
 				$ifSort = (!$sort OR ($sort AND !in_array($k, $varsSort)));
 				$ifPagination = (!$pagination OR ($pagination AND !in_array($k, $varsPagination)));
-				if ($ifNb AND $ifSort AND $ifPagination)
+				if ($ifNb AND $ifSort AND $ifPagination AND !is_array($value))
 					!$array ? ($vars .= ((!$n++ AND ($this->allow == 1 OR $url == $this->url)) ? '?' : '&').urlencode($k).'='.urlencode($value)) : ($vars[urlencode($k)] = urlencode($value));
 			}
 		if (!$array)
