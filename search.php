@@ -2,7 +2,7 @@
 
 include(dirname(__FILE__).'/config/config.inc.php');
 
-if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')))
+if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')) AND !is_array($query))
 {
 	$link = new Link();
 	$search = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
@@ -14,7 +14,7 @@ if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')))
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 
-if ($query = Tools::getValue('search_query', Tools::getValue('tag', Tools::getValue('ref'))))
+if ($query = Tools::getValue('search_query', Tools::getValue('tag', Tools::getValue('ref'))) AND !is_array($query))
 {
 	$n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
 	$p = abs(intval(Tools::getValue('p', 1)));
