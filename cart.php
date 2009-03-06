@@ -80,7 +80,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 						$errors[] = Tools::displayError('Please fill all required fields, then save the customization.');
 					if (!sizeof($errors) AND !$cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up')))
 						$errors[] = Tools::displayError('you already have the maximum quantity available for this product')
-							.((basename($_SERVER['HTTP_REFERER']) == 'order.php') ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
+							.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php') ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 							Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
 				}
 				elseif ($delete)

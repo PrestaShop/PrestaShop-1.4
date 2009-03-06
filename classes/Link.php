@@ -133,7 +133,7 @@ class Link
         $n = 0;
 		$url = htmlentities($this->url, ENT_QUOTES, 'UTF-8');
         foreach ($_GET as $k => $value)
-			if ($k != $key AND Tools::isSubmit($k))
+			if (!is_array($value) AND $k != $key AND Tools::isSubmit($k))
 				$url .= ((!$n++) ? '?' : '&amp;').urlencode($k).($value ? '='.urlencode($value) : '');
         return $url.($n ? '&amp;' : '?').urlencode($key).'='.urlencode($val);
     }
