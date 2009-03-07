@@ -172,6 +172,7 @@ class Search
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
 			WHERE '.implode(' AND ', $whereArray).'
+			AND p.active = 1
 			ORDER BY position DESC
 			LIMIT 10';
 			return Db::getInstance()->ExecuteS($queryResults);
@@ -188,6 +189,7 @@ class Search
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE '.implode(' AND ', $whereArray).'
+		AND p.active = 1
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
 		
