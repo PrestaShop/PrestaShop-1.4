@@ -16,9 +16,12 @@ ALTER TABLE PREFIX_product
 	ADD `indexed` tinyint(1) NOT NULL default '0' AFTER `active`;
 	
 ALTER TABLE PREFIX_orders
-	DROP INDEX `orders_customer`,
-	ADD INDEX id_customer (id_customer),
-	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT '0' AFTER delivery_date,
+	DROP INDEX `orders_customer`;
+ALTER TABLE PREFIX_orders
+	ADD INDEX id_customer (id_customer);
+ALTER TABLE PREFIX_orders
+	ADD valid INTEGER(1) UNSIGNED NOT NULL DEFAULT '0' AFTER delivery_date;
+ALTER TABLE PREFIX_orders
 	ADD INDEX `id_cart` (`id_cart`);
 
 ALTER TABLE PREFIX_customer
@@ -32,14 +35,16 @@ ALTER TABLE PREFIX_order_state
 	ADD hidden TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER unremovable;
 
 ALTER TABLE PREFIX_carrier
-	ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER range_behavior,
+	ADD is_module TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' AFTER range_behavior;
+ALTER TABLE PREFIX_carrier
 	ADD INDEX deleted (`deleted`, `active`);
 
 ALTER TABLE PREFIX_state
 	CHANGE iso_code `iso_code` char(4) NOT NULL;
 	
 ALTER TABLE PREFIX_order_detail
-	CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT '0',
+	CHANGE product_quantity_cancelled product_quantity_refunded INT(10) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE PREFIX_order_detail
 	ADD INDEX product_id (product_id);
 
 ALTER TABLE PREFIX_attribute_lang
@@ -54,11 +59,13 @@ ALTER TABLE PREFIX_carrier_zone
 	ADD INDEX `id_carrier` (`id_carrier`);
 
 ALTER TABLE PREFIX_connections
-	CHANGE `http_referer` `http_referer` VARCHAR(255) DEFAULT NULL,
+	CHANGE `http_referer` `http_referer` VARCHAR(255) DEFAULT NULL;
+ALTER TABLE PREFIX_connections
 	ADD INDEX `date_add` (`date_add`);
 
 ALTER TABLE PREFIX_customer
-	DROP INDEX `customer_email`,
+	DROP INDEX `customer_email`;
+ALTER TABLE PREFIX_customer
 	ADD UNIQUE `customer_email` (`email`);
 
 ALTER TABLE PREFIX_delivery
@@ -73,8 +80,10 @@ ALTER TABLE PREFIX_feature_product
 	ADD INDEX `id_feature` (`id_feature`);
 
 ALTER TABLE PREFIX_hook_module
-	DROP INDEX `hook_module_index`,
-	ADD PRIMARY KEY (id_module,id_hook),
+	DROP INDEX `hook_module_index`;
+ALTER TABLE PREFIX_hook_module
+	ADD PRIMARY KEY (id_module,id_hook);
+ALTER TABLE PREFIX_hook_module
 	ADD INDEX id_module (`id_module`),
 	ADD INDEX id_hook (`id_hook`);
 
@@ -82,12 +91,14 @@ ALTER TABLE PREFIX_module
 	CHANGE `active` `active` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0';
 
 ALTER TABLE PREFIX_page
-	CHANGE `id_object` `id_object` INT UNSIGNED NULL DEFAULT NULL,
+	CHANGE `id_object` `id_object` INT UNSIGNED NULL DEFAULT NULL;
+ALTER TABLE PREFIX_page
 	ADD INDEX `id_page_type` (`id_page_type`),
 	ADD INDEX `id_object` (`id_object`);
 
 ALTER TABLE PREFIX_page_type
-	ADD INDEX `name` (`name`),
+	ADD INDEX `name` (`name`);
+ALTER TABLE PREFIX_page_type
 	CHANGE `name` `name` VARCHAR(255) NOT NULL;
 	
 ALTER TABLE PREFIX_product_attribute
@@ -109,15 +120,19 @@ ALTER TABLE PREFIX_image_lang
 ALTER TABLE PREFIX_range_price
 	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL,
 	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL,
-	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL,
-	DROP INDEX `range_price_unique`,
+	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE PREFIX_range_price
+	DROP INDEX `range_price_unique`;
+ALTER TABLE PREFIX_range_price
 	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
 
 ALTER TABLE PREFIX_range_weight
 	CHANGE `delimiter1` `delimiter1` DECIMAL(13, 6) NOT NULL,
 	CHANGE `delimiter2` `delimiter2` DECIMAL(13, 6) NOT NULL,
-	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL,
-	DROP INDEX `range_weight_unique`,
+	CHANGE `id_carrier` `id_carrier` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE PREFIX_range_weight
+	DROP INDEX `range_weight_unique`;
+ALTER TABLE PREFIX_range_weight
 	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
 
 /* ############################################################ */
