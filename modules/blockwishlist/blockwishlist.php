@@ -130,7 +130,13 @@ class BlockWishList extends Module
 		$wishlists = WishList::getByIdCustomer($id_customer);
 		if (!sizeof($wishlists))
 			return ($this->_html .= '</fieldset></form>');
-		$id_wishlist = intval(Tools::getValue('id_wishlist'));
+		$id_wishlist = false;
+		foreach ($wishlists AS $row)
+			if ($row['id_wishlist'] == Tools::getValue('id_wishlist'))
+			{
+				$id_wishlist = intval(Tools::getValue('id_wishlist'));
+				break;
+			}
 		if (!$id_wishlist)
 			$id_wishlist = $wishlists[0]['id_wishlist'];
 		$this->_html .= '
