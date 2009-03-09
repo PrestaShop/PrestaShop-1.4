@@ -312,15 +312,15 @@ abstract class AdminTab
 
 		/* Checking for fields validity */
 		foreach ($rules['validate'] AS $field => $function)
-			if (Tools::getValue($field))
-				if (!Validate::$function(Tools::getValue($field)))
+			if (($value = Tools::getValue($field)) !== false AND ($field != 'passwd'))
+				if (!Validate::$function($value))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
 
 		/* Checking for multilingual fields validity */
 		foreach ($rules['validateLang'] AS $fieldLang => $function)
 			foreach ($languages AS $language)
-				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) !== false)
-					if (!Validate::$function(Tools::getValue($fieldLang.'_'.$language['id_lang'])))
+				if (($value = Tools::getValue($fieldLang.'_'.$language['id_lang'])) !== false)
+					if (!Validate::$function($value))
 						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
 	}
 
