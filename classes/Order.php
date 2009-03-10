@@ -566,27 +566,28 @@ class		Order extends ObjectModel
 	public function setInvoice()
 	{
 		// Set invoice number
-		$this->invoice_number = intval(Configuration::get('PS_INVOICE_NUMBER'));
-		Configuration::updateValue('PS_INVOICE_NUMBER', $this->invoice_number + 1);
-		if (!intval($this->invoice_number))
+		$number = intval(Configuration::get('PS_INVOICE_NUMBER'));
+		if (!intval($number))
 			die(Tools::displayError('Invalid invoice number'));
-		
+		$this->invoice_number = $number;
+		Configuration::updateValue('PS_INVOICE_NUMBER', $number + 1);
+
 		// Set invoice date
 		$this->invoice_date = date('Y-m-d H:i:s');
 		
-		// Update object
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders`SET invoice_date=\''.pSQL($this->invoice_date).'\'
-																									WHERE `id_order`='.intval($this->id));
+		// Save
+		$this->update();
 	}
 	
 	public function setDelivery()
 	{
 		// Set delivery number
-		$this->delivery_number = intval(Configuration::get('PS_DELIVERY_NUMBER'));
-		Configuration::updateValue('PS_DELIVERY_NUMBER', $this->delivery_number + 1);
-		if (!intval($this->delivery_number))
+		$number = intval(Configuration::get('PS_DELIVERY_NUMBER'));
+		if (!intval($number))
 			die(Tools::displayError('Invalid delivery number'));
-		
+		$this->delivery_number = $number;
+		Configuration::updateValue('PS_DELIVERY_NUMBER', $number + 1);
+
 		// Set delivery date
 		$this->delivery_date = date('Y-m-d H:i:s');
 		
