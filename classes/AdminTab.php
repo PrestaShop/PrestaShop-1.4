@@ -828,7 +828,7 @@ abstract class AdminTab
 		
 		/* Query in order to get results with all fields */
 		$sql = 'SELECT SQL_CALC_FOUND_ROWS
-		'.($this->_tmpTableFilter ? ' * FROM (' : '').'
+		'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
 		'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
 		FROM `'._DB_PREFIX_.$sqlTable.'` a
 		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`'.$this->identifier.'` = a.`'.$this->identifier.'` AND b.`id_lang` = '.intval($id_lang).')' : '').'
@@ -930,7 +930,7 @@ abstract class AdminTab
 				<td>';
 
 		/* Display column names and arrows for ordering (ASC, DESC) */
-		echo '<table class="table" cellpadding="0" cellspacing="0"><tr>';
+		echo '<table class="table tableDnD" cellpadding="0" cellspacing="0"><tr  class="nodrag nodrop">';
 		if ($this->delete)
 			echo '<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" /></th>';
 		foreach ($this->fieldsDisplay AS $key => $params)
@@ -949,7 +949,7 @@ abstract class AdminTab
 		/* Check if object can be modified, deleted or detailed */
 		if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
 			echo '<th style="width: 52px">'.$this->l('Actions').'</th>';
-		echo '</tr><tr style="height: 35px;">';
+		echo '</tr><tr class="nodrag nodrop" style="height: 35px;">';
 
 		if ($this->delete)
 			echo '<td class="center">--</td>';
@@ -1075,7 +1075,7 @@ abstract class AdminTab
 			foreach ($this->_list AS $tr)
 			{
 				$id = $tr[$this->identifier];
-				echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>';
+				echo '<tr id="tr_'.$id.'"'.($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>';
 				if ($this->delete)
 					echo '<td class="center"><input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" /></td>';
 
@@ -1084,11 +1084,14 @@ abstract class AdminTab
 					$tmp = explode('!', $key);
 					$key = isset($tmp[1]) ? $tmp[1] : $tmp[0];
 					echo '
-					<td class="pointer '.(isset($params['align']) ? $params['align'] : '').'" '.
-						($this->view
+					<td '.(isset($params['position'])? ' id="td_'.$id.'"' : '').' class="pointer'.(isset($params['position'])? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
+					if (!isset($params['position']))
+					{
+						echo ($this->view
 						? ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'"'
 						: ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'"').'>'.
 						(isset($params['prefix']) ? $params['prefix'] : '');
+					}
 
 					if (isset($params['active']) AND isset($tr[$key]))
 						echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$params['active'].
