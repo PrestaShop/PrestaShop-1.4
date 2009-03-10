@@ -246,7 +246,7 @@ class AdminDiscounts extends AdminTab
 				<div class="margin-form">				
 					<select name="id_customer" id="id_customer">
 						<option value="0">-- '.$this->l('All customers').' --</option>
-					</select><br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" onkeyup="fillCustomersAjax();" class="space" value="'.($value = $this->getFieldValue($obj, 'id_customer') ? $value : '').'" />
+					</select><br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" onkeyup="fillCustomersAjax();" class="space" value="'.(($value = $this->getFieldValue($obj, 'id_customer')) ? $value : '').'" />
 					<script type="text/javascript">
 					
 						var formDiscount = document.layers ? document.forms.discount : document.discount;	
