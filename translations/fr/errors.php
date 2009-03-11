@@ -310,4 +310,3 @@ $_ERRORS['1e28dbd294012e4111bc7612925ec257'] = 'vous devez avoir au moins un pro
 $_ERRORS['fd61b68a08fbafc0f8361a7fee02b628'] = 'le mot de passe ne correspond pas avec l\'actuel';
 
 ?>
-
