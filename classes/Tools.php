@@ -632,7 +632,7 @@ class Tools
 			elseif ($char == ' ')
 				$purified .= '-';
 		}
-		return $purified;
+		return trim(self::strtolower($purified));
 	}
 
 	/**
