@@ -23,7 +23,12 @@ class AdminPreferences extends AdminTab
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
 
- 		$this->_fieldsGeneral = array(
+		$tmz = Tools::getTimezones();
+		$timezone = array();
+		foreach ($tmz as $id => $name)
+			$timezone[] = array('id' => $id, 'name' => $name);
+
+		$this->_fieldsGeneral = array(
 			'PS_BASE_URI' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 20, 'default' => '/'),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP address allowed to access the Front Office while the shop is disabled (e.g., 42.24.4.2)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
@@ -35,8 +40,9 @@ class AdminPreferences extends AdminTab
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping:'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrapping price:'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging:'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-		);
+			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'));
+			if (function_exists('date_default_timezone_set'))
+				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isUnsignedId', 'required' => true, 'cast' => 'intval', 'type' => 'select', 'list' => $timezone, 'identifier' => 'id');
 
 		parent::__construct();
 	}

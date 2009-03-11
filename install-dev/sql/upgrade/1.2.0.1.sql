@@ -264,7 +264,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ('PS_SEARCH_WEIGHT_MNAME', '3', NOW(), NOW()),
 ('PS_SEARCH_WEIGHT_TAG', '4', NOW(), NOW()),
 ('PS_SEARCH_WEIGHT_ATTRIBUTE', '2', NOW(), NOW()),
-('PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW());
+('PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW()),
+('PS_TIMEZONE', '336', NOW(), NOW());
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('extraCarrier', 'Extra carrier (module mode)', NULL, 0),

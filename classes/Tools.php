@@ -773,7 +773,23 @@ class Tools
 	{
 		return $field === '' OR $field === NULL;
 	}
-
+	
+	static public function getTimezones($select = false)
+	{
+		if (!class_exists('DateTimeZone') OR !method_exists('DateTimeZone', 'listAbbreviations'))
+			return array('336', 'Europe/Paris');
+		$timezones = DateTimeZone::listAbbreviations();
+		$cities = array();
+		foreach ($timezones as $key => $zones)
+			foreach ($zones as $id => $zone)
+				if (preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id']))
+					$cities[] = $zone['timezone_id'];
+		$cities = array_unique($cities);
+		if ($select)
+			return $cities[intval($select)];
+		asort($cities);
+		return $cities;
+	}
 }
 
 /**
