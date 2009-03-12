@@ -1160,7 +1160,7 @@ abstract class AdminTab
 					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 					if ($this->duplicate)
 						echo '
-						<a class="pointer" onclick="if (confirm(\''.addslashes($this->l('Copy images too?')).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+						<a class="pointer" onclick="if (confirm(\''.$this->l('Copy images too?', __CLASS__, TRUE, FALSE).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
 						<img src="../img/admin/add.gif" border="0" alt="'.$this->l('Duplicate').'" title="'.$this->l('Duplicate').'" /></a>';
 					echo '</td>';
 				}
