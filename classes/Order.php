@@ -632,6 +632,15 @@ class		Order extends ObjectModel
 		WHERE id_order = '.intval($this->id));
 		return $result['weight'];
 	}
+
+	static public function getInvoice($id_invoice)
+	{
+		$query = '
+			SELECT `invoice_number`, `id_order`
+			FROM `'._DB_PREFIX_.'orders`
+			WHERE invoice_number = '.intval($id_invoice);
+		return Db::getInstance()->getRow($query);
+	}
 }
 
 ?>

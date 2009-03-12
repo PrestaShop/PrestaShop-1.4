@@ -26,7 +26,7 @@ require_once(dirname(__FILE__).'/init.php');
 		<link type="text/css" rel="stylesheet" href="../css/admin.css" />
 		<title>PrestaShop&trade; - <?php echo translate('Administration panel') ?></title>
 		<script type="text/javascript">
-			var search_texts = Array('<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('cart id'); ?>');
+			var search_texts = Array('<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('invoice id'); ?>', '<?php echo translate('cart id'); ?>');
 			var helpboxes = <?php echo Configuration::get('PS_HELPBOX'); ?>;
 		</script>
 		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/jquery-1.2.6.pack.js"></script>
@@ -50,7 +50,9 @@ require_once(dirname(__FILE__).'/init.php');
 						<option value="3"<?php echo (isset($_POST['bo_search_type']) AND (
 						$_POST['bo_search_type'] == 3)) ? ' selected="selected"' : '' ?>><?php echo translate('orders') ?></option>
 						<option value="4"<?php echo (isset($_POST['bo_search_type']) AND (
-						$_POST['bo_search_type'] == 4)) ? ' selected="selected"' : '' ?>><?php echo translate('carts') ?></option>
+						$_POST['bo_search_type'] == 4)) ? ' selected="selected"' : '' ?>><?php echo translate('invoices') ?></option>
+						<option value="5"<?php echo (isset($_POST['bo_search_type']) AND (
+						$_POST['bo_search_type'] == 5)) ? ' selected="selected"' : '' ?>><?php echo translate('carts') ?></option>
 					</select>&nbsp;
 					<input type="submit" name="bo_search" value="<?php echo translate('Search') ?>" class="button" />
 					<script type="text/javascript">queryType();</script>

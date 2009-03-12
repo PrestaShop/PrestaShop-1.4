@@ -108,7 +108,7 @@ class AdminSearch extends AdminTab
 			}
 
 			/* Cart */
-			elseif (intval($_POST['bo_search_type']) == 4)
+			elseif (intval($_POST['bo_search_type']) == 5)
 			{
 				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
 				{
@@ -121,6 +121,22 @@ class AdminSearch extends AdminTab
 				}
 				else
 					$this->_errors[] = Tools::displayError('please type a cart ID');
+			}
+			
+			/* Invoices */
+			elseif (intval($_POST['bo_search_type']) == 4)
+			{
+				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				{
+					if ($invoice = Order::getInvoice(intval($_POST['bo_query'])))
+					{
+						Tools::redirectAdmin('pdf.php?id_order='.intval($invoice['id_order']).'&pdf');
+					}
+					else
+						$this->_errors[] = Tools::displayError('invoice #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+				}
+				else
+					$this->_errors[] = Tools::displayError('please type an invoice ID');
 			}
 			else
 				Tools::displayError('please fill in search form first.');
