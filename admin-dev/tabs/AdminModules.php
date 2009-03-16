@@ -61,24 +61,33 @@ class AdminModules extends AdminTab
 			} else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
-		if (isset($_POST['submitDownload']))
+		if (Tools::isSubmit('submitDownload'))
 		{
 		 	if ($this->tabAccess['add'] === '1')
 			{
-				if (!Validate::isPasswd($_POST['passwd'], 8) OR !Employee::checkPassword(intval($cookie->id_employee), Tools::encrypt($_POST['passwd'])))
-					$this->_errors[] = Tools::displayError('invalid password');
-				elseif (Validate::isModuleUrl($url = Tools::getValue('url'), $this->_errors))
+				if (Validate::isModuleUrl($url = Tools::getValue('url'), $this->_errors))
 				{
-					if (!@copy($url, _PS_MODULE_DIR_.basename($_POST['url'])))
-						$this->_errors[] = Tools::displayError('module not found');
+					if (!@copy($url, _PS_MODULE_DIR_.basename($url)))
+						$this->_errors[] = Tools::displayError('404 Module not found');
 					else
-					{
-						$archive = new Archive_Tar(_PS_MODULE_DIR_.basename($_POST['url']));
-			        	if ($archive->extract(_PS_MODULE_DIR_))
-							Tools::redirectAdmin($currentIndex.'&conf=8'.'&token='.$this->token);
-			        	$this->_errors[] = Tools::displayError('error while extracting module (file may be corrupted)');
-					}
+						$this->extractArchive(_PS_MODULE_DIR_.basename($url));
 				}
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+		}
+		if (Tools::isSubmit('submitDownload2'))
+		{
+		 	if ($this->tabAccess['add'] === '1')
+			{
+				if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))
+					$this->_errors[] = $this->l('no file selected');
+				elseif (substr($_FILES['file']['name'], -4) != '.tar' AND substr($_FILES['file']['name'], -4) != '.zip' AND substr($_FILES['file']['name'], -4) != '.tgz' AND substr($_FILES['file']['name'], -7) != '.tar.gz')
+					$errors[] = Tools::displayError('unknown archive type');
+				elseif (!@copy($_FILES['file']['tmp_name'], _PS_MODULE_DIR_.$_FILES['file']['name']))
+					$this->_errors[] = Tools::displayError('an error occured while copying archive to module directory');
+				else
+					$this->extractArchive(_PS_MODULE_DIR_.$_FILES['file']['name']);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -133,6 +142,38 @@ class AdminModules extends AdminTab
 		}
 	}
 
+	function extractArchive($file)
+	{
+		global $currentIndex;
+		
+		$success = false;
+		if (substr($file, -4) == '.zip')
+		{
+			if (class_exists('ZipArchive'))
+			{
+				$zip = new ZipArchive();
+				if ($zip->open($file, ZIPARCHIVE::OVERWRITE) === true AND $zip->extractTo(_PS_MODULE_DIR_) AND $zip->close())
+					$success = true;
+				else
+					$this->_errors[] = Tools::displayError('error while extracting module (file may be corrupted)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('zip is not installed on your server. Ask your host for further information.');
+		}
+		else
+		{
+			$archive = new Archive_Tar($file);
+			if ($archive->extract(_PS_MODULE_DIR_))
+				$success = true;
+			else
+				$this->_errors[] = Tools::displayError('error while extracting module (file may be corrupted)');
+		}
+		
+		@unlink($file);
+		if ($success)
+			Tools::redirectAdmin($currentIndex.'&conf=8'.'&token='.$this->token);
+	}
+	
 	public function display()
 	{
 		if (!isset($_GET['configure']) OR sizeof($this->_errors))
@@ -168,20 +209,30 @@ class AdminModules extends AdminTab
 
 		echo '
 		<h3 onclick="openCloseLayer(\'module_install\', 0);" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</h3>
-		<div id="module_install" style="display: none;">
+		<div id="module_install" '.(Tools::isSubmit('submitDownload') ? '' : 'style="display: none;"').'>
 			<fieldset class="width2">
 				<legend><img src="../img/admin/cog.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
+				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
+				<hr />
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 					<label>'.$this->l('Module URL:').'</label>
 					<div class="margin-form">
-						<input type="text" name="url" style="width: 300px;" value="http://" />
-					</div>
-					<label>'.$this->l('Your admin password:').'</label>
-					<div class="margin-form">
-						<input type="password" name="passwd" style="width: 150px;" />
+						<input type="text" name="url" style="width: 300px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
+						<p>'.$this->l('Download the module directly from a website.').'</p>
 					</div>
 					<div class="margin-form">
-						<input type="submit" name="submitDownload" value="'.$this->l('Install this module').'" class="button" />
+						<input type="submit" name="submitDownload" value="'.$this->l('Download this module').'" class="button" />
+					</div>
+				</form>
+				<hr />
+				<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
+					<label>'.$this->l('Module file:').'</label>
+					<div class="margin-form">
+						<input type="file" name="file" style="width: 300px;" />
+						<p>'.$this->l('Upload the module from your computer.').'</p>
+					</div>
+					<div class="margin-form">
+						<input type="submit" name="submitDownload2" value="'.$this->l('Upload this module').'" class="button" />
 					</div>
 				</form>
 			</fieldset>

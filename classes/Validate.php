@@ -36,8 +36,8 @@ class Validate
 	{
 		if (!$url OR $url == 'http://')
 			$errors[] = Tools::displayError('please specify module URL');
-		elseif (substr($url, -4) != '.tar')
-			$errors[] = Tools::displayError('this is not a valid module URL (must end with .tar)');
+		elseif (substr($url, -4) != '.tar' AND substr($url, -4) != '.zip' AND substr($url, -4) != '.tgz' AND substr($url, -7) != '.tar.gz')
+			$errors[] = Tools::displayError('unknown archive type');
 		else
 		{
 			if ((strpos($url, 'http')) === false)
