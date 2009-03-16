@@ -243,16 +243,19 @@ class AdminDiscounts extends AdminTab
 					</p>
 				</div>
 				<label>'.$this->l('To be used by:').' </label>
-				<div class="margin-form">				
+								<div class="margin-form">				
 					<select name="id_customer" id="id_customer">
 						<option value="0">-- '.$this->l('All customers').' --</option>
-					</select><br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" onkeyup="fillCustomersAjax();" class="space" value="'.(($value = $this->getFieldValue($obj, 'id_customer')) ? $value : '').'" />
+					</select><br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" id="filter" onkeyup="fillCustomersAjax();" class="space" value="" />
 					<script type="text/javascript">
-					
 						var formDiscount = document.layers ? document.forms.discount : document.discount;	
 						function fillCustomersAjax()
 						{
-							$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxDiscountCustomers:1,filter:formDiscount.filter.value},
+							var filterValue = \''.(($value = intval($this->getFieldValue($obj, 'id_customer'))) ? $value : '').'\';
+							if ($(\'#filter\').val())
+								filterValue = $(\'#filter\').val();
+							
+							$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxDiscountCustomers:1,filter:filterValue},
 								function(customers) {
 									if (customers.length == 0)
 									{
@@ -271,17 +274,21 @@ class AdminDiscounts extends AdminTab
 										}
 										if (customers.length >= 50)
 										{
-											formDiscount.id_customer.options[50].value = 0;
-											formDiscount.id_customer.options[50].text = "'.addslashes($this->l('Too much results...')).'";
+											formDiscount.id_customer.options[50].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
+											formDiscount.id_customer.options[50].value = "_";	
 										}
-										formDiscount.id_customer.options.selectedIndex = (formDiscount.filter.value == \'\' ? 0 : 1);
+										
+										if ($(\'#filter\').val())
+											formDiscount.id_customer.options.selectedIndex = 1;
+										else if(filterValue)
+											for (i = 0; i < customers.length; i++)
+												if (formDiscount.id_customer.options[i+1].value == filterValue)
+													formDiscount.id_customer.options.selectedIndex = i + 1;
 									}
 								}
 							);
 						}
-						
-						fillCustomersAjax();
-						  
+						fillCustomersAjax(); 
 					</script>
 				</div><br />';
 		includeDatepicker(array('date_from', 'date_to'), true);

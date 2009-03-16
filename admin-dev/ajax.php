@@ -57,13 +57,13 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	$filter = Tools::getValue('filter');
 	
 	$customers = Db::getInstance()->ExecuteS('
-	SELECT `id_customer`, `email`, CONCAT(`firstname`, \' \', `lastname`) as name
+	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
 	WHERE email LIKE "%'.pSQL($filter).'%"
 	'.(intval($filter) ? 'OR id_customer = '.intval($filter) : '').'
 	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
 	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%"
-	ORDER BY `lastname` ASC
+	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
 	LIMIT 50');
 	
 	foreach ($customers AS $customer)
