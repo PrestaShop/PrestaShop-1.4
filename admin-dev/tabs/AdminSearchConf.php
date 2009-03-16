@@ -24,6 +24,7 @@ class AdminSearchConf extends AdminPreferences
 		$this->table = 'configuration';
 
  		$this->_fieldsSearch = array(
+			'PS_SEARCH_AJAX' => array('title' => $this->l('Ajax search'), 'desc' => $this->l('Enable the ajax search for your visitors.'), 'validation' => 'isBool', 'type' => 'bool', 'cast' => 'intval'),
 			'PS_SEARCH_MINWORDLEN' => array('title' => $this->l('Minimum word length'), 'desc' => $this->l('Only words longer than this size will be indexed.'), 'size' => 4, 'validation' => 'isUnsignedInt', 'type' => 'text', 'cast' => 'intval'),
 			'PS_SEARCH_BLACKLIST' => array('title' => $this->l('Blacklisted words'), 'size' => 40, 'validation' => 'isGenericName', 'desc' => 'Please enter the words separated by a "|".', 'type' => 'textLang'),
 			'PS_SEARCH_WEIGHT_PNAME' => array('title' => $this->l('Product name weight'), 'size' => 4, 'validation' => 'isUnsignedInt', 'type' => 'text', 'cast' => 'intval'),

@@ -27,6 +27,7 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
 
@@ -34,6 +35,7 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
 
@@ -41,6 +43,7 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch-header.tpl');
 	}
 

@@ -103,7 +103,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (53, 'PS_SEARCH_WEIGHT_TAG', '4', NOW(), NOW()),
 (54, 'PS_SEARCH_WEIGHT_ATTRIBUTE', '2', NOW(), NOW()),
 (55, 'PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW()),
-(56, 'PS_TIMEZONE', '336', NOW(), NOW());
+(56, 'PS_SEARCH_AJAX', '1', NOW(), NOW()),
+(57, 'PS_TIMEZONE', '336', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 1, 'IN', NOW());
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 2, 'FA', NOW());

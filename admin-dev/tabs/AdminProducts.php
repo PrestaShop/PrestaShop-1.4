@@ -699,6 +699,7 @@ class AdminProducts extends AdminTab
 						elseif ($id_image = $this->addProductImage($object, Tools::getValue('resizer')))
 						{
 							Hook::updateProduct($object);
+							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&token='.($token ? $token : $this->token));
 							if ($backToCategory)
@@ -731,6 +732,7 @@ class AdminProducts extends AdminTab
 						elseif ($id_image = $this->addProductImage($object))
 						{
 							Hook::addProduct($object);
+							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&token='.($token ? $token : $this->token));
 							if ($backToCategory)

@@ -219,14 +219,14 @@ INSERT INTO `PREFIX_address` (`id_address`, `id_country`, `id_state`, `id_custom
 INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`) VALUES (1, 'AppleStore', NOW(), NOW());
 INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`) VALUES (2, 'Shure Online Store', NOW(), NOW());
 
-INSERT INTO `PREFIX_product` (`id_product`, `id_supplier`, `id_manufacturer`, `id_tax`, `id_category_default`, `id_color_default`, `on_sale`, `ean13`, `ecotax`, `quantity`, `price`, `wholesale_price`, `reduction_price`, `reduction_percent`, `reduction_from`, `reduction_to`, `reference`, `supplier_reference`, `weight`, `out_of_stock`, `quantity_discount`, `customizable`, `uploadable_files`, `text_fields`, `active`, `date_add`, `date_upd`) VALUES
-(1, 1, 1, 1, 2, 2, 0, '0', 0.00, 800, 124.581940, 70.000000, 0.00, 5, NOW(), NOW(), '', '', 0.5, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(2, 1, 1, 1, 2, 0, 0, '0', 0.00, 100, 66.053500, 33.000000, 0.00, 0, NOW(), NOW(), '', '', 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(5, 1, 1, 1, 4, 0, 0, '0', 0.00, 274, 1504.180602, 1000.000000, 0.00, 0, NOW(), NOW(), '', NULL, 1.36, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(6, 1, 1, 1, 4, 0, 0, '0', 0.00, 250, 1170.568561, 0.000000, 0.00, 0,NOW(), NOW(), '', NULL, 0.75, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(7, 0, 0, 1, 2, 0, 0, '', 0.00, 180, 241.638796, 200.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(8, 0, 0, 1, 3, 0, 0, '', 0.00, 1, 25.041806, 0.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
-(9, 2, 2, 1, 3, 0, 0, '', 0.00, 1, 124.581940, 0.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW());
+INSERT INTO `PREFIX_product` (`id_product`, `indexed`, `id_supplier`, `id_manufacturer`, `id_tax`, `id_category_default`, `id_color_default`, `on_sale`, `ean13`, `ecotax`, `quantity`, `price`, `wholesale_price`, `reduction_price`, `reduction_percent`, `reduction_from`, `reduction_to`, `reference`, `supplier_reference`, `weight`, `out_of_stock`, `quantity_discount`, `customizable`, `uploadable_files`, `text_fields`, `active`, `date_add`, `date_upd`) VALUES
+(1, 1, 1, 1, 1, 2, 2, 0, '0', 0.00, 800, 124.581940, 70.000000, 0.00, 5, NOW(), NOW(), '', '', 0.5, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(2, 1, 1, 1, 1, 2, 0, 0, '0', 0.00, 100, 66.053500, 33.000000, 0.00, 0, NOW(), NOW(), '', '', 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(5, 1, 1, 1, 1, 4, 0, 0, '0', 0.00, 274, 1504.180602, 1000.000000, 0.00, 0, NOW(), NOW(), '', NULL, 1.36, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(6, 1, 1, 1, 1, 4, 0, 0, '0', 0.00, 250, 1170.568561, 0.000000, 0.00, 0,NOW(), NOW(), '', NULL, 0.75, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(7, 1, 0, 0, 1, 2, 0, 0, '', 0.00, 180, 241.638796, 200.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(8, 1, 0, 0, 1, 3, 0, 0, '', 0.00, 1, 25.041806, 0.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
+(9, 1, 2, 2, 1, 3, 0, 0, '', 0.00, 1, 124.581940, 0.000000, 0.00, 0, NOW(), NOW(), '', NULL, 0, 2, 0, 0, 0, 0, 1, NOW(), NOW());
 
 
 INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `description_short`, `link_rewrite`, `meta_description`, `meta_keywords`, `meta_title`, `name`, `available_now`, `available_later`) VALUES
