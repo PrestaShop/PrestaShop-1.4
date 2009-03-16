@@ -194,6 +194,8 @@ abstract class ModuleGraph extends Module
 	public static function getDateBetween($employee = null)
 	{
 		$employee = self::getEmployee($employee);
+		if ($employee->stats_date_from == $employee->stats_date_to)
+			return ' \''.$employee->stats_date_from.' 00:00:00\' AND \''.$employee->stats_date_to.' 23:59:59\' ';
 		return ' \''.$employee->stats_date_from.'\' AND \''.$employee->stats_date_to.'\' ';
 	}
 	
