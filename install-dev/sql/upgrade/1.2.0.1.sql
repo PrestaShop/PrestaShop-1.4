@@ -364,12 +364,12 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Groupes'
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGroups' LIMIT 1), 1, 1, 1, 1);
 
-INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp), 'AdminHtaccess', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp )) AS tmp));
+INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp), 'AdminGenerator', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
 	SELECT id_lang,
-	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminHtaccess' LIMIT 1),
-	'Htaccess' FROM PREFIX_lang);
-INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminHtaccess' LIMIT 1), 1, 1, 1, 1);
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGenerator' LIMIT 1),
+	'Generator' FROM PREFIX_lang);
+INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGenerator' LIMIT 1), 1, 1, 1, 1);
 
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp), 'AdminCarts', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (

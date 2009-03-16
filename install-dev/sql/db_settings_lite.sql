@@ -448,7 +448,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (52, 'AdminSubDomains', 9, 7),
 (53, 'AdminBackup', 9, 8),
 (57, 'AdminCMS', 9, 9),
-(64, 'AdminHtaccess', 9, 10),
+(64, 'AdminGenerator', 9, 10),
 (43, 'AdminSearch', -1, 0);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
@@ -504,7 +504,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 50, 'Modules'),
 (1, 51, 'Settings'),
 (1, 52, 'Subdomains'),
-(1, 53, 'Database backup'),
+(1, 53, 'DB backup'),
 (1, 54, 'Order Messages'),
 (1, 55, 'Delivery slips'),
 (1, 56, 'Meta-Tags'),
@@ -515,7 +515,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 61, 'Search engines'),
 (1, 62, 'Referrers'),
 (1, 63, 'Groups'),
-(1, 64, 'Htaccess'),
+(1, 64, 'Generators'),
 (1, 65, 'Carts'),
 (1, 66, 'Tags'),
 (1, 67, 'Search'),
@@ -580,7 +580,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),
 (2, 63, 'Groupes'),
-(2, 64, 'Htaccess'),
+(2, 64, 'Générateurs'),
 (2, 65, 'Paniers'),
 (2, 66, 'Tags'),
 (2, 67, 'Recherche');
