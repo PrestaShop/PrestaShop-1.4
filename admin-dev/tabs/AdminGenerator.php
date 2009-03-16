@@ -153,7 +153,7 @@ class AdminGenerator extends AdminTab
 
 		// RewriteEngine
 		$tab['RewriteEngine']['comment'] = '# URL rewriting module activation';
-		
+
 		// RewriteRules
 		//IMPORTANT : if you change the lines bellow, don"t forget to change the "urlcanonical" module too
 		$tab['RewriteRule']['comment'] = '# URL rewriting rules';
