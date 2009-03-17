@@ -196,15 +196,7 @@ class Referrer extends ObjectModel
 			'.$this->getRegexp().'
 			'.$where.'
 		)
-		AND (
-			SELECT IF(oh.id_order_state = '._PS_OS_CANCELED_.', 0, os.`invoice`)
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1');
+		AND o.valid = 1');
 	}
 	
 	public function getStatsRegRate($id_product = null, $employee = null)
@@ -256,15 +248,7 @@ class Referrer extends ObjectModel
 			'.$this->getRegexp().'
 			'.$where.'
 		)
-		AND (
-			SELECT IF(oh.id_order_state = '._PS_OS_CANCELED_.', 0, os.`invoice`)
-			FROM `'._DB_PREFIX_.'orders` oo
-			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON oh.`id_order` = oo.`id_order`
-			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			WHERE oo.`id_order` = o.`id_order`
-			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		) = 1');
+		AND o.valid = 1');
 	}
 	
 	public static function refreshCache($referrers = null, $employee = null)
