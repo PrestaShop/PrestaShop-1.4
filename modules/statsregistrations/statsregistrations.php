@@ -106,7 +106,7 @@ class StatsRegistrations extends ModuleGraph
 		$this->_query = '
 			SELECT `date_add`
 			FROM `'._DB_PREFIX_.'customer`
-			WHERE `date_add`, 10) BETWEEN';
+			WHERE `date_add` BETWEEN';
 		$this->_titles['main'] = $this->l('Number of customer accounts created');
 		$this->setDateGraph($layers, true);
 	}
