@@ -1792,7 +1792,7 @@ class		Product extends ObjectModel
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
-		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], $row['allow_oosp']))
+		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
 			$row['id_product_attribute'] = $ipa_default;
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? Product::getProductAttribute($row['id_product_attribute']) : 0;
 		$row['reduction'] = Product::getReductionValue($row, true);
