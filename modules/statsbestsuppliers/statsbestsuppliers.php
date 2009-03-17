@@ -90,7 +90,7 @@ class StatsBestSuppliers extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'product p ON p.id_product = od.product_id
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		LEFT JOIN '._DB_PREFIX_.'supplier s ON s.id_supplier = p.id_supplier
-		WHERE LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
+		WHERE o.date_add BETWEEN '.$this->getDate().'
 		AND s.id_supplier IS NOT NULL');
 	}
 	
@@ -105,7 +105,7 @@ class StatsBestSuppliers extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		LEFT JOIN '._DB_PREFIX_.'currency c ON c.id_currency = o.id_currency
 		LEFT JOIN '._DB_PREFIX_.'supplier s ON s.id_supplier = p.id_supplier
-		WHERE LEFT(o.date_add, 10) BETWEEN '.$this->getDate().'
+		WHERE o.date_add BETWEEN '.$this->getDate().'
 		AND s.id_supplier IS NOT NULL
 		GROUP BY p.id_supplier';
 		if (Validate::IsName($this->_sort))

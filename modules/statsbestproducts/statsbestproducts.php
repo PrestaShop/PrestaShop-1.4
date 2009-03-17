@@ -118,7 +118,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
 		WHERE p.active = 1 AND o.valid = 1
-		AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween);
+		AND o.date_add BETWEEN '.$dateBetween);
 		return $result['totalCount'];
 	}
 		
@@ -140,8 +140,8 @@ class StatsBestProducts extends ModuleGrid
 				LEFT JOIN '._DB_PREFIX_.'page_viewed pv ON pa.id_page = pv.id_page
 				LEFT JOIN '._DB_PREFIX_.'date_range dr ON pv.id_date_range = dr.id_date_range
 				WHERE pa.id_object = p.id_product AND pa.id_page_type = 1
-				AND LEFT(dr.time_start, 10) BETWEEN '.$dateBetween.'
-				AND LEFT(dr.time_end, 10) BETWEEN '.$dateBetween.'
+				AND dr.time_start BETWEEN '.$dateBetween.'
+				AND dr.time_end BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product AND pl.id_lang = '.intval($this->getLang()).')
@@ -149,7 +149,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
 		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
 		WHERE p.active = 1 AND o.valid = 1
-		AND LEFT(o.date_add, 10) BETWEEN '.$dateBetween.'
+		AND o.date_add BETWEEN '.$dateBetween.'
 		GROUP BY p.id_product';
 
 		if (Validate::IsName($this->_sort))

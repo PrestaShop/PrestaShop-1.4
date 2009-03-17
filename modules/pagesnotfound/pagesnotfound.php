@@ -53,7 +53,7 @@ class Pagesnotfound extends Module
 		$result = Db::getInstance()->ExecuteS('
 		SELECT http_referer, request_uri, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'pagenotfound` p
-		WHERE LEFT(p.date_add, 10) BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE p.date_add BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY http_referer, request_uri');
 
 		$pages = array();

@@ -178,9 +178,9 @@ abstract class ModuleGraph extends Module
 		if (empty($employee->stats_date_from) OR empty($employee->stats_date_to))
 		{
 			if (empty($employee->stats_date_from))
-				$employee->stats_date_from = date('Y').'-01-01 00:00:00';
+				$employee->stats_date_from = date('Y').'-01-01';
 			if (empty($employee->stats_date_to))
-				$employee->stats_date_to = date('Y').'-12-31 23:59:59';
+				$employee->stats_date_to = date('Y').'-12-31';
 			$employee->update();
 		}
 		return $employee;
@@ -194,9 +194,7 @@ abstract class ModuleGraph extends Module
 	public static function getDateBetween($employee = null)
 	{
 		$employee = self::getEmployee($employee);
-		if ($employee->stats_date_from == $employee->stats_date_to)
-			return ' \''.$employee->stats_date_from.' 00:00:00\' AND \''.$employee->stats_date_to.' 23:59:59\' ';
-		return ' \''.$employee->stats_date_from.'\' AND \''.$employee->stats_date_to.'\' ';
+		return ' \''.$employee->stats_date_from.' 00:00:00\' AND \''.$employee->stats_date_to.' 23:59:59\' ';
 	}
 	
 	public function getLang()

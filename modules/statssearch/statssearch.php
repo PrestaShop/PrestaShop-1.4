@@ -25,7 +25,7 @@ class StatsSearch extends ModuleGraph
 		$this->_query = '
 		SELECT ss.`keywords`, COUNT(TRIM(ss.`keywords`)) as occurences, MAX(results) as total
 		FROM `'._DB_PREFIX_.'statssearch` ss
-		WHERE LEFT(ss.`date_add`, 10) BETWEEN ';
+		WHERE ss.`date_add` BETWEEN ';
 		$this->_query2 = '
 		GROUP BY ss.`keywords`
 		HAVING occurences > 1
