@@ -37,13 +37,13 @@ class AdminReferrers extends AdminTab
 		$this->_select = 'IF(cache_orders > 0, ROUND(cache_sales/cache_orders, 2), 0) as cart, (cache_visits*click_fee) as fee0, (cache_orders*base_fee) as fee1, (cache_sales*percent_fee/100) as fee2';
 		$this->fieldsDisplay = array(
 			'id_referrer' => array('title' => $this->l('ID'), 'width' => 25, 'align' => 'center'),
-			'name' => array('title' => $this->l('Name'), 'width' => 90),
+			'name' => array('title' => $this->l('Name'), 'width' => 80),
 			'cache_visitors' => array('title' => $this->l('Visitors'), 'width' => 30, 'align' => 'center'),
 			'cache_visits' => array('title' => $this->l('Visits'), 'width' => 30, 'align' => 'center'),
 			'cache_pages' => array('title' => $this->l('Pages'), 'width' => 30, 'align' => 'center'),
 			'cache_registrations' => array('title' => $this->l('Reg.'), 'width' => 30, 'align' => 'center'),
-			'cache_orders' => array('title' => $this->l('Orders'), 'width' => 30, 'align' => 'center'),
-			'cache_sales' => array('title' => $this->l('Sales'), 'width' => 90, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true),
+			'cache_orders' => array('title' => $this->l('Ord.'), 'width' => 30, 'align' => 'center'),
+			'cache_sales' => array('title' => $this->l('Sales'), 'width' => 80, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true),
 			'cart' => array('title' => $this->l('Avg. cart'), 'width' => 50, 'align' => 'right', 'price' => true),
 			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 30, 'align' => 'center'),
 			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 30, 'align' => 'center'),
@@ -59,7 +59,7 @@ class AdminReferrers extends AdminTab
 		return (!Tools::isSubmit('add'.$this->table) AND !Tools::isSubmit('submitAdd'.$this->table) AND !Tools::isSubmit('update'.$this->table));
 	}
 	
-	public function display()
+	public function displayJavascript()
 	{
 		global $cookie, $currentIndex;
 		
@@ -67,84 +67,102 @@ class AdminReferrers extends AdminTab
 		$productsArray = array();
 		foreach ($products as $product)
 			$productsArray[] = $product['id_product'];
+			
+		return '
+			<script type="text/javascript">
+				var productIds = new Array(\''.implode('\',\'', $productsArray).'\');
+				var referrerStatus = new Array();
+				
+				function newProductLine(id_referrer, result)
+				{
+					return \'\'+
+					\'<tr id="trprid_\'+id_referrer+\'_\'+result.id_product+\'" style="background-color: rgb(255, 255, 187);">\'+
+					\'	<td align="center">--</td>\'+
+					\'	<td align="center">\'+result.id_product+\'</td>\'+
+					\'	<td>\'+result.product_name+\'</td>\'+
+					\'	<td align="center">\'+result.uniqs+\'</td>\'+
+					\'	<td align="center">\'+result.visits+\'</td>\'+
+					\'	<td align="center">\'+result.pages+\'</td>\'+
+					\'	<td align="center">\'+result.registrations+\'</td>\'+
+					\'	<td align="center">\'+result.orders+\'</td>\'+
+					\'	<td align="right">\'+result.sales+\'</td>\'+
+					\'	<td align="center">\'+result.reg_rate+\'</td>\'+
+					\'	<td align="center">\'+result.order_rate+\'</td>\'+
+					\'	<td align="center">\'+result.click_fee+\'</td>\'+
+					\'	<td align="center">\'+result.base_fee+\'</td>\'+
+					\'	<td align="center">\'+result.percent_fee+\'</td>\'+
+					\'	<td align="center">--</td>\'+
+					\'</tr>\';
+				}
+				
+				function showProductLines(id_referrer)
+				{
+					if (!referrerStatus[id_referrer])
+					{
+						referrerStatus[id_referrer] = true;
+						for (var i = 0; i < productIds.length; ++i)
+							$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
+								function(result) {
+									var newLine = newProductLine(id_referrer, result[0]);
+									$(newLine).hide().insertAfter(getE(\'trid_\'+id_referrer)).fadeIn();
+								}
+							);
+					}
+					else
+					{
+						referrerStatus[id_referrer] = false;
+						for (var i = 0; i < productIds.length; ++i)
+							$("#trprid_"+id_referrer+"_"+productIds[i]).fadeOut("fast",	function(){$("#trprid_"+i).remove();});
+					}
+				}
+			</script>';
+	}
+	
+	public function display()
+	{
+		global $currentIndex;
 		
-		echo '
-		<script type="text/javascript">
-			var productIds = new Array(\''.implode('\',\'', $productsArray).'\');
-			var referrerStatus = new Array();
-			
-			function newProductLine(id_referrer, result)
-			{
-				return \'\'+
-				\'<tr id="trprid_\'+id_referrer+\'_\'+result.id_product+\'" style="background-color: rgb(255, 255, 187);">\'+
-				\'	<td align="center">--</td>\'+
-				\'	<td align="center">\'+result.id_product+\'</td>\'+
-				\'	<td>\'+result.product_name+\'</td>\'+
-				\'	<td align="center">\'+result.uniqs+\'</td>\'+
-				\'	<td align="center">\'+result.visits+\'</td>\'+
-				\'	<td align="center">\'+result.pages+\'</td>\'+
-				\'	<td align="center">\'+result.registrations+\'</td>\'+
-				\'	<td align="center">\'+result.orders+\'</td>\'+
-				\'	<td align="right">\'+result.sales+\'</td>\'+
-				\'	<td align="center">\'+result.reg_rate+\'</td>\'+
-				\'	<td align="center">\'+result.order_rate+\'</td>\'+
-				\'	<td align="center">\'+result.click_fee+\'</td>\'+
-				\'	<td align="center">\'+result.base_fee+\'</td>\'+
-				\'	<td align="center">\'+result.percent_fee+\'</td>\'+
-				\'	<td align="center">--</td>\'+
-				\'</tr>\';
-			}
-			
-			function showProductLines(id_referrer)
-			{
-				if (!referrerStatus[id_referrer])
-				{
-					referrerStatus[id_referrer] = true;
-					for (var i = 0; i < productIds.length; ++i)
-						$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
-							function(result) {
-								var newLine = newProductLine(id_referrer, result[0]);
-								$(newLine).hide().insertAfter(getE(\'trid_\'+id_referrer)).fadeIn();
-							}
-						);
-				}
-				else
-				{
-					referrerStatus[id_referrer] = false;
-					for (var i = 0; i < productIds.length; ++i)
-						$("#trprid_"+id_referrer+"_"+productIds[i]).fadeOut("fast",	function(){$("#trprid_"+i).remove();});
-				}
-			}
-		</script>';
+		if (!Tools::isSubmit('viewreferrer'))
+			echo $this->displayJavascript();
 		
 		if ($this->enableCalendar())
 		{
-			echo '<div style="float: left; margin-right: 20px;">';
-			echo AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
-			echo '</div>
+			echo '
 			<div style="float: left; margin-right: 20px;">
-				<fieldset class="width3"><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
-					<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
-						<label>'.$this->l('Save direct traffic').'</label>
-						<div class="float" style="margin-left: 200px;">
-							<label class="t" for="tracking_dt_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
-							<input type="radio" name="tracking_dt" id="tracking_dt_on" value="1" '.(intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').' />
-							<label class="t" for="tracking_dt_on"> '.$this->l('Yes').'</label>
-							<label class="t" for="tracking_dt_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" /></label>
-							<input type="radio" name="tracking_dt" id="tracking_dt_off" value="0" '.(!intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').'/>
-							<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
-						</div>
-						<br class="clear" />
-						<p>'.$this->l('Direct traffic can be quite consuming, you should consider enable it only if you have a strong database server.').'</p>
-						<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
-					</form>
-					<hr />
-					<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
-					<p>'.$this->l('For you to sort and filter, data ara cached. You can refresh the cache by clicking on the button below.').'</p>
-						<input type="submit" class="button" value="'.$this->l('Refresh data').'" name="submitRefreshData" />
-					</form>
-				</fieldset>
+				'.AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'))).'
 			</div>';
+			if (!Tools::isSubmit('viewreferrer'))
+				echo '
+				<div style="float: left; margin-right: 20px;">
+					<fieldset class="width3"><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
+						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+							<label>'.$this->l('Save direct traffic').'</label>
+							<div class="float" style="margin-left: 200px;">
+								<label class="t" for="tracking_dt_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
+								<input type="radio" name="tracking_dt" id="tracking_dt_on" value="1" '.(intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').' />
+								<label class="t" for="tracking_dt_on"> '.$this->l('Yes').'</label>
+								<label class="t" for="tracking_dt_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" /></label>
+								<input type="radio" name="tracking_dt" id="tracking_dt_off" value="0" '.(!intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').'/>
+								<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
+							</div>
+							<br class="clear" />
+							<p>'.$this->l('Direct traffic can be quite consuming, you should consider to enable it only if you have a strong database server and the need for it.').'</p>
+							<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
+						</form>
+						<hr />
+						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+						<p class="bold">'.$this->l('Indexation').'</p>
+						<p>'.$this->l('There is a huge quantity of data, so each connection corresponding to a referrer is indexed. You can refresh this index by clicking on the button below. Be aware that it may take a long time and it is only needed if you modified or added a referrer and if you want your changes to be retroactive.').'</p>
+						<input type="submit" class="button" value="'.$this->l('Refresh index').'" name="submitRefreshIndex" />
+						</form>
+						<hr />
+						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+						<p class="bold">'.$this->l('Cache').'</p>
+						<p>'.$this->l('For you to sort and filter your data, it is cached. You can refresh the cache by clicking on the button below.').'</p>
+						<input type="submit" class="button" value="'.$this->l('Refresh cache').'" name="submitRefreshCache" />
+						</form>
+					</fieldset>
+				</div>';
 		}
 		echo '<div class="clear space">&nbsp;</div>';
 		parent::display();
@@ -166,8 +184,10 @@ class AdminReferrers extends AdminTab
 				if (Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', intval(Tools::getValue('tracking_dt'))))
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.Tools::getValue('token'));
 
-		if (ModuleGraph::getDateBetween() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshData'))
+		if (ModuleGraph::getDateBetween() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshCache'))
 			Referrer::refreshCache();
+		if (Tools::isSubmit('submitRefreshIndex'))
+			Referrer::refreshIndex();
 		
 		return parent::postProcess();
 	}

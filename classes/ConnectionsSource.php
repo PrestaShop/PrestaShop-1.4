@@ -27,6 +27,13 @@ class ConnectionsSource extends ObjectModel
 		return $fields;
 	}
 	
+	public function add($autodate = true, $nullValues = false)
+	{
+		if($result = parent::add($autodate, $nullValues))
+			Referrer::cacheNewSource($this->id);
+		return $result;
+	}
+	
 	public static function logHttpReferer()
 	{
 		global $cookie;

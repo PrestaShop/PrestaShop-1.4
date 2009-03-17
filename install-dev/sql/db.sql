@@ -1052,10 +1052,18 @@ CREATE TABLE `PREFIX_referrer` (
   `cache_registrations` int(11) default NULL,
   `cache_orders` int(11) default NULL,
   `cache_sales` decimal(10,2) default NULL,
-  `cache_reg_rate` decimal(5,2) default NULL,
-  `cache_order_rate` decimal(5,2) default NULL,
+  `cache_reg_rate` decimal(5,4) default NULL,
+  `cache_order_rate` decimal(5,4) default NULL,
   `date_add` datetime NOT NULL,
   PRIMARY KEY  (`id_referrer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_referrer_cache` (
+  `id_referrer` int(11) NOT NULL,
+  `id_connections_source` int(11) NOT NULL,
+  PRIMARY KEY  (`id_referrer`,`id_connections_source`),
+  KEY `id_referrer` (`id_referrer`),
+  KEY `id_connections_source` (`id_connections_source`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_scene` (
@@ -1083,7 +1091,8 @@ CREATE TABLE `PREFIX_scene_products` (
   `x_axis` int(4) NOT NULL,
   `y_axis` int(4) NOT NULL,
   `zone_width` int(3) NOT NULL,
-  `zone_height` int(3) NOT NULL
+  `zone_height` int(3) NOT NULL,
+  PRIMARY KEY (`id_scene`,`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_search_engine` (

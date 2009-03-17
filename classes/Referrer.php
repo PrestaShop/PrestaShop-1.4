@@ -42,6 +42,15 @@ class Referrer extends ObjectModel
 	protected 	$table = 'referrer';
 	protected 	$identifier = 'id_referrer';
 	
+	private static $_join = '(r.http_referer_like IS NULL OR r.http_referer_like = \'\' OR cs.http_referer LIKE r.http_referer_like)
+			AND (r.request_uri_like IS NULL OR r.request_uri_like = \'\' OR cs.request_uri LIKE r.request_uri_like)
+			AND (r.http_referer_like_not IS NULL OR r.http_referer_like_not = \'\' OR cs.http_referer NOT LIKE r.http_referer_like_not)
+			AND (r.request_uri_like_not IS NULL OR r.request_uri_like_not = \'\' OR cs.request_uri NOT LIKE r.request_uri_like_not)
+			AND (r.http_referer_regexp IS NULL OR r.http_referer_regexp = \'\' OR cs.http_referer REGEXP r.http_referer_regexp)
+			AND (r.request_uri_regexp IS NULL OR r.request_uri_regexp = \'\' OR cs.request_uri REGEXP r.request_uri_regexp)
+			AND (r.http_referer_regexp_not IS NULL OR r.http_referer_regexp_not = \'\' OR cs.http_referer NOT REGEXP r.http_referer_regexp_not)
+			AND (r.request_uri_regexp_not IS NULL OR r.request_uri_regexp_not = \'\' OR cs.request_uri NOT REGEXP r.request_uri_regexp_not)';
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -64,40 +73,31 @@ class Referrer extends ObjectModel
 		$fields['cache_registrations'] = intval($this->cache_registrations);
 		$fields['cache_orders'] = intval($this->cache_orders);
 		$fields['cache_sales'] = number_format($this->cache_sales, 2, '.', '');
-		$fields['cache_reg_rate'] = $this->cache_reg_rate > 100 ? 100 : number_format(floatval($this->cache_reg_rate) * 100, 2, '.', '');
-		$fields['cache_order_rate'] = $this->cache_order_rate > 100 ? 100 : number_format(floatval($this->cache_order_rate) * 100, 2, '.', '');
+		$fields['cache_reg_rate'] = $this->cache_reg_rate > 1 ? 1 : number_format(floatval($this->cache_reg_rate), 4, '.', '');
+		$fields['cache_order_rate'] = $this->cache_order_rate > 1 ? 1 : number_format(floatval($this->cache_order_rate), 4, '.', '');
 		$fields['date_add'] = pSQL($this->date_add);
 		return $fields;
 	}
 	
 	public function add($autodate = true, $nullValues = false)
 	{
-		if (!parent::add($autodate, $nullValues))
+		if (!($result = parent::add($autodate, $nullValues)))
 			return false;
-		return $this->refreshCache(array(array('id_referrer' => $this->id)));
+		$this->refreshCache(array(array('id_referrer' => $this->id)));
+		$this->refreshIndex(array(array('id_referrer' => $this->id)));
+		return $result;
 	}
 	
-	private function getRegexp()
+	public static function cacheNewSource($id_connections_source)
 	{
-		$regexp = '';
-		if (!empty($this->http_referer_like))
-			$regexp .= ' AND cs.http_referer LIKE \''.pSQL($this->http_referer_like).'\' ';
-		if (!empty($this->request_uri_like))
-			$regexp .= ' AND cs.request_uri LIKE \''.pSQL($this->request_uri_like).'\' ';
-		if (!empty($this->http_referer_like_not))
-			$regexp .= ' AND cs.http_referer NOT LIKE \''.pSQL($this->http_referer_like_not).'\' ';
-		if (!empty($this->request_uri_like_not))
-			$regexp .= ' AND cs.request_uri NOT LIKE \''.pSQL($this->request_uri_like_not).'\' ';
-			
-		if (!empty($this->request_uri_regexp))
-			$regexp .= ' AND cs.request_uri REGEXP \''.pSQL($this->request_uri_regexp).'\' ';
-		if (!empty($this->http_referer_regexp))
-			$regexp .= ' AND cs.http_referer REGEXP \''.pSQL($this->http_referer_regexp).'\' ';
-		if (!empty($this->request_uri_regexp_not))
-			$regexp .= ' AND cs.request_uri NOT REGEXP \''.pSQL($this->request_uri_regexp_not).'\' ';
-		if (!empty($this->http_referer_regexp_not))
-			$regexp .= ' AND cs.http_referer NOT REGEXP \''.pSQL($this->http_referer_regexp_not).'\' ';
-		return $regexp;
+		Db::getInstance()->Execute('
+		INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
+			SELECT id_referrer, id_connections_source
+			FROM '._DB_PREFIX_.'referrer r
+			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
+			WHERE id_connections_source = '.intval($id_connections_source).'
+			LIMIT 1
+		)');
 	}
 	
 	public static function getReferrers($id_customer)
@@ -107,16 +107,7 @@ class Referrer extends ObjectModel
 		FROM '._DB_PREFIX_.'guest g
 		LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest
 		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON c.id_connections = cs.id_connections
-		LEFT JOIN '._DB_PREFIX_.'referrer r ON (
-			(r.http_referer_like IS NULL OR r.http_referer_like = \'\' OR cs.http_referer LIKE r.http_referer_like)
-			AND (r.request_uri_like IS NULL OR r.request_uri_like = \'\' OR cs.request_uri LIKE r.request_uri_like)
-			AND (r.http_referer_like_not IS NULL OR r.http_referer_like_not = \'\' OR cs.http_referer NOT LIKE r.http_referer_like_not)
-			AND (r.request_uri_like_not IS NULL OR r.request_uri_like_not = \'\' OR cs.request_uri NOT LIKE r.request_uri_like_not)
-			AND (r.http_referer_regexp IS NULL OR r.http_referer_regexp = \'\' OR cs.http_referer REGEXP r.http_referer_regexp)
-			AND (r.request_uri_regexp IS NULL OR r.request_uri_regexp = \'\' OR cs.request_uri REGEXP r.request_uri_regexp)
-			AND (r.http_referer_regexp_not IS NULL OR r.http_referer_regexp_not = \'\' OR cs.http_referer NOT REGEXP r.http_referer_regexp_not)
-			AND (r.request_uri_regexp_not IS NULL OR r.request_uri_regexp_not = \'\' OR cs.request_uri NOT REGEXP r.request_uri_regexp_not)
-		)
+		LEFT JOIN '._DB_PREFIX_.'referrer r ON ('.self::$_join.')
 		WHERE g.id_customer = '.intval($id_customer).'
 		AND r.name IS NOT NULL');
 	}
@@ -124,7 +115,7 @@ class Referrer extends ObjectModel
 	public function getStatsVisits($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product) AND $id_product)
+		if (Validate::isUnsignedId($id_product))
 		{
 			$join = 'LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
@@ -137,12 +128,13 @@ class Referrer extends ObjectModel
 				COUNT(DISTINCT cs.id_connections) as visitors,
 				COUNT(DISTINCT c.id_guest) as uniqs,
 				COUNT(DISTINCT cp.time_start) as pages
-		FROM '._DB_PREFIX_.'connections_source cs
+		FROM '._DB_PREFIX_.'referrer_cache rc
+		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
 		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
 		LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 		'.$join.'
 		WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		'.$this->getRegexp().'
+		AND rc.id_referrer = '.intval($this->id).'
 		'.$where);
 	}
 	
@@ -160,13 +152,14 @@ class Referrer extends ObjectModel
 		
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(DISTINCT cu.id_customer) AS registrations
-		FROM '._DB_PREFIX_.'connections_source cs
+		FROM '._DB_PREFIX_.'referrer_cache rc
+		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
 		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
 		LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON cu.id_customer = g.id_customer
 		'.$join.'
 		WHERE cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		'.$this->getRegexp().'
+		AND rc.id_referrer = '.intval($this->id).'
 		'.$where);
 		return $result['registrations'];
 	}
@@ -187,65 +180,14 @@ class Referrer extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.id_order IN (
 			SELECT DISTINCT oo.id_order
-			FROM '._DB_PREFIX_.'connections_source cs
+			FROM '._DB_PREFIX_.'referrer_cache rc
+			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
 			LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
 			LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
 			'.$join.'
 			WHERE oo.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-			'.$this->getRegexp().'
-			'.$where.'
-		)
-		AND o.valid = 1');
-	}
-	
-	public function getStatsRegRate($id_product = null, $employee = null)
-	{
-		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product))
-		{
-			$join =	'LEFT JOIN '._DB_PREFIX_.'order_detail od ON oo.id_order = od.id_order';
-			$where = 'AND od.product_id = '.intval($id_product);
-		}
-		
-		return Db::getInstance()->getRow('
-		SELECT 	COUNT(DISTINCT cu.id_customer) as registrations
-		FROM '._DB_PREFIX_.'customer cu
-		WHERE cu.id_customer IN (
-			SELECT g.id_customer
-			FROM '._DB_PREFIX_.'guest g
-			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
-			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
-			'.$join.'
-			WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-			'.$this->getRegexp().'
-			'.$where.'
-		)
-		AND cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee));
-	}
-	
-	public function getStatsOrderRate($id_product = null, $employee = null)
-	{
-		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product))
-		{
-			$join =	'LEFT JOIN '._DB_PREFIX_.'order_detail od ON oo.id_order = od.id_order';
-			$where = 'AND od.product_id = '.intval($id_product);
-		}
-		
-		return Db::getInstance()->getRow('
-		SELECT 	COUNT(DISTINCT o.id_customer) as visitors,
-				COUNT(o.id_customer) as uniqs
-		FROM '._DB_PREFIX_.'orders o
-		WHERE o.id_customer IN (
-			SELECT oo.id_customer
-			FROM '._DB_PREFIX_.'orders oo
-			LEFT JOIN '._DB_PREFIX_.'guest g ON oo.id_customer = g.id_customer
-			LEFT JOIN '._DB_PREFIX_.'connections c ON g.id_guest = c.id_guest
-			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON cs.id_connections = c.id_connections
-			'.$join.'
-			WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-			'.$this->getRegexp().'
+			AND rc.id_referrer = '.intval($this->id).'
 			'.$where.'
 		)
 		AND o.valid = 1');
@@ -263,20 +205,44 @@ class Referrer extends ObjectModel
 			$referrer->cache_visits = $statsVisits['visits'];
 			$referrer->cache_pages = $statsVisits['pages'];
 			$registrations = $referrer->getRegistrations(null, $employee);
-			$referrer->cache_registrations = $registrations;
+			$referrer->cache_registrations = intval($registrations);
 			$statsSales = $referrer->getStatsSales(null, $employee);
 			$referrer->cache_orders = intval($statsSales['orders']);
 			$referrer->cache_sales = number_format($statsSales['sales'], 2, '.', '');
-			$statsTransfo = $referrer->getStatsRegRate(null, $employee);
-			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? $statsTransfo['registrations'] / $statsVisits['uniqs'] : 0;
-			$statsTransfo2 = $referrer->getStatsOrderRate(null, $employee);
-			$referrer->cache_order_rate = $statsVisits['uniqs'] ? $statsTransfo2['uniqs'] / $statsVisits['uniqs'] : 0;
+			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? intval($registrations) / $statsVisits['uniqs'] : 0;
+			$referrer->cache_order_rate = $statsVisits['uniqs'] ? intval($statsSales['orders']) / $statsVisits['uniqs'] : 0;
 			if (!$referrer->update())
 				Tools::dieObject(mysql_error());
 			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateBetween($employee));
 			Configuration::updateValue('PS_REFERRERS_CACHE_DATE', date('Y-m-d h:i:s'));
 		}
 		return true;
+	}
+	
+	public static function refreshIndex($referrers = null)
+	{
+		if (!$referrers OR !is_array($referrers))
+		{
+			Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'referrer_cache');
+			Db::getInstance()->Execute('
+			INSERT INTO ps_referrer_cache (id_referrer, id_connections_source) (
+				SELECT id_referrer, id_connections_source
+				FROM ps_referrer r
+				LEFT JOIN ps_connections_source cs ON ('.self::$_join.')
+			)');
+		}
+		else
+			foreach ($referrers as $row)
+			{
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.intval($row['id_referrer']));
+				Db::getInstance()->Execute('
+				INSERT INTO ps_referrer_cache (id_referrer, id_connections_source) (
+					SELECT id_referrer, id_connections_source
+					FROM ps_referrer r
+					LEFT JOIN ps_connections_source cs ON ('.$this->_join.')
+					WHERE id_referrer = '.intval($row['id_referrer']).'
+				)');
+			}
 	}
 	
 	public static function getAjaxProduct($id_referrer, $id_product, $employee = null)
@@ -287,8 +253,6 @@ class Referrer extends ObjectModel
 		$statsVisits = $referrer->getStatsVisits($id_product, $employee);
 		$registrations = $referrer->getRegistrations($id_product, $employee);
 		$statsSales = $referrer->getStatsSales($id_product, $employee);
-		$statsTransfo = $referrer->getStatsRegRate($id_product, $employee);
-		$statsTransfo2 = $referrer->getStatsOrderRate($id_product, $employee);
 
 		// If it's not a product alone and it has no visits nor orders
 		if (!$id_product AND !$statsVisits['visits'] AND !$statsSales['orders'])
@@ -304,8 +268,8 @@ class Referrer extends ObjectModel
 		$jsonArray[] = 'registrations:\''.intval($registrations).'\'';
 		$jsonArray[] = 'orders:\''.intval($statsSales['orders']).'\'';
 		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
-		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsTransfo['registrations']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
-		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsTransfo2['uniqs']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
+		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($registrations) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
+		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsSales['orders']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'click_fee:\''.Tools::displayPrice(intval($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
 		$jsonArray[] = 'base_fee:\''.Tools::displayPrice($statsSales['orders'] * $referrer->base_fee, $currency).'\'';
 		$jsonArray[] = 'percent_fee:\''.Tools::displayPrice($statsSales['sales'] * $referrer->percent_fee / 100, $currency).'\'';
