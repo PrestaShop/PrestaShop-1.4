@@ -143,7 +143,7 @@ function updateDisplay()
 		}
 		
 		//'last quantities' message management
-		if (quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage)
+		if (quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage && !allowBuyWhenOutOfStock)
 		{
 			//display the 'last quantities' message
 			$('#last_quantities').show('slow');
