@@ -14,7 +14,7 @@
 
 class		Carrier extends ObjectModel
 {
-	/* @var int Tax id (none = 0) */
+	/** @var int Tax id (none = 0) */
 	public		$id_tax;
 
  	/** @var string Name */
@@ -32,13 +32,13 @@ class		Carrier extends ObjectModel
 	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
 
-	/* @var boolean Active or not the shipping handling */
+	/** @var boolean Active or not the shipping handling */
 	public		$shipping_handling = true;
 	
-	/* @var int Behavior taken for unknown range */
+	/** @var int Behavior taken for unknown range */
 	public		$range_behavior;
 	
-	/* @var boolean Carrier module */
+	/** @var boolean Carrier module */
 	public		$is_module;
 
  	protected 	$fieldsRequired = array('name', 'active');
@@ -71,7 +71,7 @@ class		Carrier extends ObjectModel
 	/**
 	* Check then return multilingual fields for database interaction
 	*
-	* @return array Multilingual fields�
+	* @return array Multilingual fields
 	*/
 	public function getTranslationsFieldsChild()
 	{

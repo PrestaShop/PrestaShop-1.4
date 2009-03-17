@@ -318,18 +318,18 @@ class		Product extends ObjectModel
 	*
 	* @return array Attributes list
 	*/
-	static public function getDefaultAttribute($id_product)
+	static public function getDefaultAttribute($id_product, $minimumQuantity = 0)
 	{
 
 		$sql = 'SELECT `id_product_attribute`
 		FROM `'._DB_PREFIX_.'product_attribute`
-		WHERE `default_on` = 1 AND `quantity` > 0 AND `id_product` = '.intval($id_product);
+		WHERE `default_on` = 1 '.(intval($minimumQuantity) > 0 ? 'AND `quantity` >= '.intval($minimumQuantity).' ' : '').'AND `id_product` = '.intval($id_product);
 		$result = Db::getInstance()->getRow($sql);
 		if (!$result)
 			$result = Db::getInstance()->getRow('
 			SELECT `id_product_attribute`
 			FROM `'._DB_PREFIX_.'product_attribute`
-			WHERE `quantity` > 0  AND `id_product` = '.intval($id_product));
+			WHERE '.(intval($minimumQuantity) > 0 ? '`quantity` >= '.intval($minimumQuantity).' AND ' : '').'`id_product` = '.intval($id_product));
 		if (!$result)
 			$result = Db::getInstance()->getRow('
 			SELECT `id_product_attribute`
@@ -1791,7 +1791,8 @@ class		Product extends ObjectModel
 		$link = new Link();
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
-		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product']))
+		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
+		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], $row['allow_oosp']))
 			$row['id_product_attribute'] = $ipa_default;
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? Product::getProductAttribute($row['id_product_attribute']) : 0;
 		$row['reduction'] = Product::getReductionValue($row, true);
@@ -1800,7 +1801,7 @@ class		Product extends ObjectModel
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic(intval($id_lang), $row['id_product']);
-		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
+		
 		return $row;
 	}
 
