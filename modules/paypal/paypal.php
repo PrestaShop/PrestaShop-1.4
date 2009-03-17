@@ -9,13 +9,14 @@ class Paypal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'Payment';
-		$this->version = '1.4';
+		$this->version = '1.5';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
 
         parent::__construct();
 
+		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('PayPal');
         $this->description = $this->l('Accepts payments by PayPal');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
@@ -55,8 +56,9 @@ class Paypal extends PaymentModule
 				$_POST['sandbox'] = 1;
 			if (!sizeof($this->_postErrors))
 			{
-				Configuration::updateValue('PAYPAL_BUSINESS', $_POST['business']);
+				Configuration::updateValue('PAYPAL_BUSINESS', strval($_POST['business']));
 				Configuration::updateValue('PAYPAL_SANDBOX', intval($_POST['sandbox']));
+				Configuration::updateValue('PAYPAL_HEADER', strval($_POST['header']));
 				$this->displayConf();
 			}
 			else
@@ -104,9 +106,10 @@ class Paypal extends PaymentModule
 
 	public function displayFormSettings()
 	{
-		$conf = Configuration::getMultiple(array('PAYPAL_BUSINESS', 'PAYPAL_SANDBOX'));
+		$conf = Configuration::getMultiple(array('PAYPAL_BUSINESS', 'PAYPAL_SANDBOX', 'PAYPAL_HEADER'));
 		$business = array_key_exists('business', $_POST) ? $_POST['business'] : (array_key_exists('PAYPAL_BUSINESS', $conf) ? $conf['PAYPAL_BUSINESS'] : '');
 		$sandbox = array_key_exists('sandbox', $_POST) ? $_POST['sandbox'] : (array_key_exists('PAYPAL_SANDBOX', $conf) ? $conf['PAYPAL_SANDBOX'] : '');
+		$header = array_key_exists('header', $_POST) ? $_POST['header'] : (array_key_exists('PAYPAL_HEADER', $conf) ? $conf['PAYPAL_HEADER'] : '');
 
 		$this->_html .= '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -119,6 +122,9 @@ class Paypal extends PaymentModule
 				<input type="radio" name="sandbox" value="1" '.($sandbox ? 'checked="checked"' : '').' /> '.$this->l('Yes').'
 				<input type="radio" name="sandbox" value="0" '.(!$sandbox ? 'checked="checked"' : '').' /> '.$this->l('No').'
 			</div>
+			<label>'.$this->l('Banner image URL').'</label>
+			<div class="margin-form"><input type="text" size="82" name="header" value="'.htmlentities($header, ENT_COMPAT, 'UTF-8').'" />
+			<p class="hint clear" style="display: block; width: 501px;">'.$this->l('The image should be host on a securised server in order to avoid security warnings. Size should be limited at 750x90px.').'</p></div><br /><br /><br />
 			<br /><center><input type="submit" name="submitPaypal" value="'.$this->l('Update settings').'" class="button" /></center>
 		</fieldset>
 		</form><br /><br />
@@ -141,6 +147,7 @@ class Paypal extends PaymentModule
 		$address = new Address(intval($params['cart']->id_address_invoice));
 		$customer = new Customer(intval($params['cart']->id_customer));
 		$business = Configuration::get('PAYPAL_BUSINESS');
+		$header = Configuration::get('PAYPAL_HEADER');
 		$currency = $this->getCurrency();
 
 		if (!Validate::isEmail($business))
@@ -164,6 +171,7 @@ class Paypal extends PaymentModule
 			'country' => new Country(intval($address->id_country)),
 			'customer' => $customer,
 			'business' => $business,
+			'header' => $header,
 			'currency' => $currency,
 			'paypalUrl' => $this->getPaypalUrl(),
 			'amount' => number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 4), $currency), 2, '.', ''),
@@ -174,6 +182,7 @@ class Paypal extends PaymentModule
 			'id_cart' => intval($params['cart']->id),
 			'goBackUrl' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.intval($params['cart']->id).'&id_module='.intval($this->id),
 			'returnUrl' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/paypal/validation.php',
+			'cancelUrl' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'index.php',
 			'this_path' => $this->_path
 		));
 
