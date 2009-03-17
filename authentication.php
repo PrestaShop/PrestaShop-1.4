@@ -81,7 +81,7 @@ if (Tools::isSubmit('submitAccount'))
 				$errors[] = Tools::displayError('an error occurred while creating your account');
 			else
 			{
-				$address->id_customer = intval($customer->id);			
+				$address->id_customer = intval($customer->id);
 				if (!$address->add())
 					$errors[] = Tools::displayError('an error occurred while creating your address');
 				else
