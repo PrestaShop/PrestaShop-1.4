@@ -495,26 +495,36 @@ class AdminImport extends AdminTab
 				$product->id_manufacturer = intval($product->manufacturer);
 			elseif (isset($product->manufacturer) AND is_string($product->manufacturer) AND !empty($product->manufacturer))
 			{
-				$manufacturer = new Manufacturer();
-				$manufacturer->name = $product->manufacturer;
-				if ($manufacturer->validateFields(UNFRIENDLY_ERROR) AND $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR))
-					if ($manufacturer->add())
-						$product->id_manufacturer = intval($manufacturer->id);
-					else
-						$this->_errors[] = mysql_error().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('cannot be saved');
+				if ($manufacturer = Manufacturer::getIdByName($product->manufacturer))
+					$product->id_manufacturer = intval($manufacturer);
+				else
+				{
+					$manufacturer = new Manufacturer();
+					$manufacturer->name = $product->manufacturer;
+					if ($manufacturer->validateFields(UNFRIENDLY_ERROR) AND $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR))
+						if ($manufacturer->add())
+							$product->id_manufacturer = intval($manufacturer->id);
+						else
+							$this->_errors[] = mysql_error().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('cannot be saved');
+				}
 			}
 			
 			if (isset($product->supplier) AND is_numeric($product->supplier) AND Supplier::supplierExists(intval($product->supplier)))
 				$product->id_supplier = intval($product->supplier);
 			elseif (isset($product->supplier) AND is_string($product->supplier) AND !empty($product->supplier))
-			{
-				$supplier = new Supplier();
-				$supplier->name = $product->supplier;
-				if ($supplier->validateFields(UNFRIENDLY_ERROR) AND $supplier->validateFieldsLang(UNFRIENDLY_ERROR))
-					if ($supplier->add())
-						$product->id_supplier = intval($supplier->id);
-					else
-						$this->_errors[] = mysql_error().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('cannot be saved');
+			{			
+				if ($supplier = Supplier::getIdByName($product->supplier))
+					$product->id_supplier = intval($supplier);
+				else
+				{
+					$supplier = new Supplier();
+					$supplier->name = $product->supplier;
+					if ($supplier->validateFields(UNFRIENDLY_ERROR) AND $supplier->validateFieldsLang(UNFRIENDLY_ERROR))
+						if ($supplier->add())
+							$product->id_supplier = intval($supplier->id);
+						else
+							$this->_errors[] = mysql_error().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('cannot be saved');
+				}
 			}
 			
 			if (isset($product->price_tex) AND !isset($product->price_tin))

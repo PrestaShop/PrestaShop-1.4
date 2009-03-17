@@ -119,7 +119,17 @@ class		Supplier extends ObjectModel
 			return $result['name'];
 		return false;
 	}
-	
+	static public function getIdByName($name)
+	{
+		$result = Db::getInstance()->getRow('
+		SELECT `id_supplier`
+		FROM `'._DB_PREFIX_.'supplier`
+		WHERE `name` = \''.pSQL($name).'\'');
+		if (isset($result['id_supplier']))
+			return intval($result['id_supplier']);
+		return false;
+ 	}
+
 	static public function getProducts($id_supplier, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
 	 	if (empty($orderBy)) $orderBy = 'name';
