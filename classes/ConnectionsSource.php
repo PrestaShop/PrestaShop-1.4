@@ -59,7 +59,11 @@ class ConnectionsSource extends ObjectModel
 		}
 		
 		$source->id_connections = intval($cookie->id_connections);
-		$source->request_uri = $_SERVER['HTTP_HOST'].(isset($_SERVER['REQUEST_URI']) ? strval($_SERVER['REQUEST_URI']) : '');
+		$source->request_uri = $_SERVER['HTTP_HOST'];
+		if (isset($_SERVER['REDIRECT_URL']))
+			$source->request_uri .= strval($_SERVER['REDIRECT_URL']);
+		elseif (isset($_SERVER['REQUEST_URI']))
+			$source->request_uri .= strval($_SERVER['REQUEST_URI']);
 		return $source->add();
 	}
 	
