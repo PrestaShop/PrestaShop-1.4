@@ -180,9 +180,9 @@ class AdminModules extends AdminTab
 			$this->displayList();
 	}
 
-	public function displayList()
+	public function displayJavascript()
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex;
 
 		echo '
 		<script type="text/javascript">
@@ -206,47 +206,70 @@ class AdminModules extends AdminTab
 				document.location.href=\''.$currentIndex.'&token='.$this->token.'&\'+action+\'=\'+module_list.substring(1, module_list.length);
 			}
 		</script>';
+	}
+	
+	public function displayList()
+	{
+		global $currentIndex;
+		
+		$serialModules = '';
+		$modules = Module::getModulesOnDisk();
+		foreach ($modules AS $module)
+			$serialModules .= $module->name.' '.$module->version."\n";
+		$serialModules = urlencode($serialModules);
 
+		$this->displayJavascript();
+
+		echo '<span onclick="openCloseLayer(\'module_install\', 0);" style="cursor: pointer;font-weight: 700; float: left;"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</span>';
+		if (@ini_get('allow_url_fopen'))
+			echo '<script type="text/javascript">
+				function getPrestaStore(){if (getE("prestastore").style.display!=\'block\')return;$.post("'.dirname($currentIndex).'/ajax.php",{page:"prestastore"},function(a){getE("prestastore-content").innerHTML=a;})}
+			</script>
+			<span onclick="openCloseLayer(\'prestastore\', 0); getPrestaStore();" style="cursor: pointer;font-weight: 700; float: left;margin-left:20px;"><img src="../img/admin/prestastore.gif" class="middle" /> '.$this->l('PrestaStore').'</span>';
 		echo '
-		<h3 onclick="openCloseLayer(\'module_install\', 0);" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</h3>
-		<div id="module_install" '.(Tools::isSubmit('submitDownload') ? '' : 'style="display: none;"').'>
-			<fieldset class="width2">
-				<legend><img src="../img/admin/cog.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
+		<div class="clear">&nbsp;</div>
+		<div id="module_install" style="float: left;'.(Tools::isSubmit('submitDownload') ? '' : 'display: none;').'" class="width1">
+			<fieldset>
+				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
 				<hr />
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-					<label>'.$this->l('Module URL:').'</label>
-					<div class="margin-form">
-						<input type="text" name="url" style="width: 300px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
+					<label style="width: 100px">'.$this->l('Module URL:').'</label>
+					<div class="margin-form" style="padding-left: 140px">
+						<input type="text" name="url" style="width: 200px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
 						<p>'.$this->l('Download the module directly from a website.').'</p>
 					</div>
-					<div class="margin-form">
+					<div class="margin-form" style="padding-left: 140px">
 						<input type="submit" name="submitDownload" value="'.$this->l('Download this module').'" class="button" />
 					</div>
 				</form>
 				<hr />
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-					<label>'.$this->l('Module file:').'</label>
-					<div class="margin-form">
-						<input type="file" name="file" style="width: 300px;" />
+					<label style="width: 100px">'.$this->l('Module file:').'</label>
+					<div class="margin-form" style="padding-left: 140px">
+						<input type="file" name="file" />
 						<p>'.$this->l('Upload the module from your computer.').'</p>
 					</div>
-					<div class="margin-form">
+					<div class="margin-form" style="padding-left: 140px">
 						<input type="submit" name="submitDownload2" value="'.$this->l('Upload this module').'" class="button" />
 					</div>
 				</form>
 			</fieldset>
-		</div><br />';
-	    $irow = 0;
+		</div>
+		<div id="prestastore" style="margin-left:40px; display:none; float: left" class="width1">
+			<fieldset>
+				<legend><img src="http://www.prestastore.com/modules.php?mods='.$serialModules.'" class="middle" />'.$this->l('Our selection').'</legend>
+				<div id="prestastore-content"></div>
+			</fieldset>
+		</div>
+		<div class="clear">&nbsp;</div>';
 
 		/* Scan modules directories and load modules classes */
-		$modules = Module::getModulesOnDisk();
 		$warnings = array();
 		$orderModule = array();
+	    $irow = 0;
 		foreach ($modules AS $module)
-		{
 			$orderModule[(isset($module->tab) AND !empty($module->tab)) ? $module->tab : $this->l('Not specified')][] = $module;
-		}
 		asort($orderModule);
 
 		foreach ($orderModule AS $tabModule)

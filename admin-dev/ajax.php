@@ -71,6 +71,9 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	die('['.implode(',', $jsonArray).']');
 }
 
+if (Tools::getValue('page') == 'prestastore')
+	readfile('http://www.prestastore.com/adminmodules.php');
+
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
 	require_once(dirname(__FILE__).'/init.php');
