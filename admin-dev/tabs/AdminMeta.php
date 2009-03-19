@@ -57,7 +57,11 @@ class AdminMeta extends AdminTab
 					echo '
 					<select name="page">';
 					foreach ($files as $file)
-						echo '<option value="'.$file.'">'.$file.'.php&nbsp;</option>';
+					{
+						echo '<option value="'.$file.'"';
+						echo $meta->page == $file? ' selected="selected"' : '' ;
+						echo'>'.$file.'.php&nbsp;</option>';
+					}
 					echo '
 					</select><sup> *</sup>
 					<p style="clear: both;">'.$this->l('Name of the related page').'</p>';
