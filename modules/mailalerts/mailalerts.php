@@ -312,7 +312,7 @@ class MailAlerts extends Module
 				<label>'.$this->l('Product availability:').' </label>
 				<div class="margin-form">
 					<input type="checkbox" value="1" id="mA_customer_qty" name="mA_customer_qty" '.(Tools::getValue('mA_customer_qty', $this->_customer_qty) == 1 ? 'checked' : '').'>
-					&nbsp;<label for="mA_customer_qty" class="t">'.$this->l('Give to customer possibility to receive a notification for a product avaibility if this one is out of stock').'</label>
+					&nbsp;<label for="mA_customer_qty" class="t">'.$this->l('Gives the customer the possibility to receive a notification for an available product if this one is out of stock ').'</label>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitMACustomer" class="button" />

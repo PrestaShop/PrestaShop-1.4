@@ -171,7 +171,7 @@ class Backup
 		
 			$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`');
 
-			if (count($data) > 0)
+			if ($data AND is_array($data) AND sizeof($data) > 0)
 			{
 				// Export the table data
 				fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
@@ -183,9 +183,9 @@ class Backup
 						$s .= "'" . mysql_real_escape_string($value) . "',";
 					$s = rtrim($s, ',');
 
-					if ($i%50 == 0 AND $i != sizeof($data))
+					if ($i%200 == 0 AND $i < sizeof($data) - 1)
 						$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
-					elseif ($i != sizeof($data))
+					elseif ($i < sizeof($data) - 1)
 						$s .= "),\n";
 					else
 						$s .= ");\n";
