@@ -256,7 +256,7 @@ class AdminImport extends AdminTab
 
 	private static function split($field)
 	{
-		$separator = is_null(Tools::getValue('field_separator')) ? ',' : Tools::getValue('field_separator');
+		$separator = is_null(Tools::getValue('multiple_value_separator')) ? ',' : Tools::getValue('multiple_value_separator');
 		$tab = explode($separator, $field);
 		$res = array_map('strval', $tab);
 		$res = array_map('trim', $tab);
@@ -673,7 +673,7 @@ class AdminImport extends AdminTab
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$fsep = Tools::getValue('field_separator');
+		$fsep = Tools::getValue('multiple_value_separator');
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
@@ -981,17 +981,19 @@ class AdminImport extends AdminTab
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
 		echo '				</select>
 						</div>
-						<label class="clear">'.$this->l('Column separator:').' </label>
-						<div class="margin-form">
-							<input type="text" size="2" value=";" name="separator"/>
-						</div>	
-						<label class="clear">'.$this->l('Field separator:').' </label>
-						<div class="margin-form">
-							<input type="text" size="2" value="," name="field_separator"/>
-						</div>								
 						<label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
 						<div class="margin-form">
 							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
+						</div>
+						<label class="clear">'.$this->l('Field separator:').' </label>
+						<div class="margin-form">
+							<input type="text" size="2" value=";" name="separator"/>
+							'.$this->l('e.g. ').'"1<span class="bold" style="color: red">;</span>Ipod<span class="bold" style="color: red">;</span>129.90<span class="bold" style="color: red">;</span>5"
+						</div>	
+						<label class="clear">'.$this->l('Multiple value separator:').' </label>
+						<div class="margin-form">
+							<input type="text" size="2" value="," name="multiple_value_separator"/>
+							'.$this->l('e.g. ').'"Ipod;red.jpg<span class="bold" style="color: red">,</span>blue.jpg<span class="bold" style="color: red">,</span>green.jpg;129.90"
 						</div>
 						<label for="truncate" class="clear">'.$this->l('Delete all').' <span id="entitie">'.$this->l('categories').'</span> '.$this->l('before import ?').' </label>
 						<div class="margin-form">
@@ -1137,7 +1139,7 @@ class AdminImport extends AdminTab
 			echo '<input type="hidden" name="truncate" value="1" />';
 		echo '
 			<input type="hidden" name="separator" value="'.strval(trim(Tools::getValue('separator'))).'">
-			<input type="hidden" name="field_separator" value="'.strval(trim(Tools::getValue('field_separator'))).'">
+			<input type="hidden" name="multiple_value_separator" value="'.strval(trim(Tools::getValue('multiple_value_separator'))).'">
 			<script type="text/javascript">
 				var current = 0;
 				function showTable(nb)
