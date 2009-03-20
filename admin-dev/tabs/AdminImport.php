@@ -950,6 +950,9 @@ class AdminImport extends AdminTab
 				<div class="margin-form">
 					<input type="submit" name="submitFileUpload" value="'.$this->l('Upload').'" class="button" />
 				</div>
+				<div class="margin-form">
+					'.$this->l('Allowed files are only UTF-8 and iso-8859-1 encoded ones').'
+				</div>
 			</form>
 		</fieldset>';
 		
@@ -986,7 +989,7 @@ class AdminImport extends AdminTab
 						<div class="margin-form">
 							<input type="text" size="2" value="," name="field_separator"/>
 						</div>								
-						<label for="convert" class="clear">'.$this->l('Convert file to Unicode?').' </label>
+						<label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
 						<div class="margin-form">
 							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
 						</div>
