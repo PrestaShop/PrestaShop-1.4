@@ -317,7 +317,7 @@ abstract class PaymentModule extends Module
 						'{invoice_phone}' => $invoice->phone,
 						'{invoice_other}' => $invoice->other,
 						'{order_name}' => sprintf("#%06d", intval($order->id)),
-						'{date}' => Tools::displayDate(date('Y-m-d h:i:s'), intval($order->id_lang), 1),
+						'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), intval($order->id_lang), 1),
 						'{carrier}' => (strval($carrier->name) != '0' ? $carrier->name : Configuration::get('PS_SHOP_NAME')),
 						'{payment}' => $order->payment,
 						'{products}' => $productsList,

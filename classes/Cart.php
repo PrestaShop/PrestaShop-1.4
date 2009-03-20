@@ -371,7 +371,7 @@ class		Cart extends ObjectModel
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
 					SET `quantity` = '.$qty.'
-					'.($operator == 'up' ? ', `date_add` = \''.pSql(date('Y-m-d h:i:s')).'\'' : '').'
+					'.($operator == 'up' ? ', `date_add` = \''.pSql(date('Y-m-d H:i:s')).'\'' : '').'
 					WHERE `id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').'
 					AND `id_cart` = '.intval($this->id));
@@ -391,7 +391,7 @@ class		Cart extends ObjectModel
 					return false;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
 				'id_product_attribute' => intval($id_product_attribute), 'id_cart' => intval($this->id),
-				'quantity' => intval($quantity), 'date_add' => pSql(date('Y-m-d h:i:s'))), 'INSERT'))
+				'quantity' => intval($quantity), 'date_add' => pSql(date('Y-m-d H:i:s'))), 'INSERT'))
 					return false;
 			}
 		}

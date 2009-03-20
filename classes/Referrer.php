@@ -214,7 +214,7 @@ class Referrer extends ObjectModel
 			if (!$referrer->update())
 				Tools::dieObject(mysql_error());
 			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateBetween($employee));
-			Configuration::updateValue('PS_REFERRERS_CACHE_DATE', date('Y-m-d h:i:s'));
+			Configuration::updateValue('PS_REFERRERS_CACHE_DATE', date('Y-m-d H:i:s'));
 		}
 		return true;
 	}

@@ -58,7 +58,7 @@ if (Tools::isSubmit('submitAccount'))
 		if (Tools::isSubmit('newsletter'))
 		{
 			$customer->ip_registration_newsletter = pSQL($_SERVER['REMOTE_ADDR']);
-			$customer->newsletter_date_add = pSQL(date('Y-m-d h:i:s'));
+			$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 		}
 		
 		$customer->birthday = (empty($_POST['years']) ? '' : intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']));
