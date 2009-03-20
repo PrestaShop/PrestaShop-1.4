@@ -1092,7 +1092,7 @@ CREATE TABLE `PREFIX_scene_products` (
   `y_axis` int(4) NOT NULL,
   `zone_width` int(3) NOT NULL,
   `zone_height` int(3) NOT NULL,
-  PRIMARY KEY (`id_scene`,`id_product`)
+  PRIMARY KEY (`id_scene`, `id_product`, `x_axis`, `y_axis`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_search_engine` (

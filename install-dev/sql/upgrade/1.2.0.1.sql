@@ -135,6 +135,9 @@ ALTER TABLE PREFIX_range_weight
 ALTER TABLE PREFIX_range_weight
 	ADD UNIQUE KEY `id_carrier` (`id_carrier`,`delimiter1`,`delimiter2`);
 
+ALTER TABLE PREFIX_scene_products
+	ADD PRIMARY KEY (`id_scene`, `id_product`, `x_axis`, `y_axis`);
+
 /* ############################################################ */
 
 CREATE TABLE `PREFIX_customer_group` (
