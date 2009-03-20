@@ -172,7 +172,7 @@ class AdminOrdersStates extends AdminTab
 					echo '		</select>';
 				}
 				echo '			<span class="hint" name="help_box">'.$this->l('Only letters, number and -_ are allowed').'<span class="hint-pointer">&nbsp;</span></span>
-								<img onclick="viewTemplates(\'template_select_'.$language['id_lang'].'\', '.$language['id_lang'].', \'../mails/'.$language['iso_code'].'/\', \'.html\');" src="../img/t/36.gif" class="pointer" alt="'.$this->l('Preview').'" title="'.$this->l('Preview').'" />
+								<img onclick="viewTemplates(\'template_select_'.$language['id_lang'].'\', '.$language['id_lang'].', \'../mails/'.$language['iso_code'].'/\', \'.html\');" src="../img/t/AdminFeatures.gif" class="pointer" alt="'.$this->l('Preview').'" title="'.$this->l('Preview').'" />
 						</div>';
 			}
 			$this->displayFlags($languages, $defaultLanguage, 'name¤template', 'template');

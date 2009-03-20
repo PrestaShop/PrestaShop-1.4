@@ -319,7 +319,7 @@ abstract class AdminTab
 		/* Checking for multilingual fields validity */
 		foreach ($rules['validateLang'] AS $fieldLang => $function)
 			foreach ($languages AS $language)
-				if (($value = Tools::getValue($fieldLang.'_'.$language['id_lang'])) !== false)
+				if (($value = Tools::getValue($fieldLang.'_'.$language['id_lang'])) !== false AND !empty($value))
 					if (!Validate::$function($value))
 						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
 	}
