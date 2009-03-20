@@ -1801,6 +1801,7 @@ class		Product extends ObjectModel
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic(intval($id_lang), $row['id_product']);
+		$row['attachments'] = Product::getAttachmentsStatic(intval($id_lang), $row['id_product']);
 		
 		return $row;
 	}
@@ -1833,6 +1834,21 @@ class		Product extends ObjectModel
 	public function getFrontFeatures($id_lang)
 	{
 		return self::getFrontFeaturesStatic($id_lang, $this->id);
+	}
+	
+	static public function getAttachmentsStatic($id_lang, $id_product)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM '._DB_PREFIX_.'product_attachment pa
+		LEFT JOIN '._DB_PREFIX_.'attachment a ON a.id_attachment = pa.id_attachment
+		LEFT JOIN '._DB_PREFIX_.'attachment_lang al ON (a.id_attachment = al.id_attachment AND al.id_lang = '.intval($id_lang).')
+		WHERE pa.id_product = '.intval($id_product));
+	}
+
+	public function getAttachments($id_lang)
+	{
+		return self::getAttachmentsStatic($id_lang, $this->id);
 	}
 
 	/*

@@ -51,6 +51,26 @@ CREATE TABLE `PREFIX_alias` (
   UNIQUE KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_attachment` (
+  `id_attachment` int(10) unsigned NOT NULL auto_increment,
+  `file` varchar(40) default NULL,
+  PRIMARY KEY  (`id_attachment`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_attachment_lang` (
+  `id_attachment` int(10) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `name` varchar(32) default NULL,
+  `description` TEXT,
+  PRIMARY KEY  (`id_attachment`, `id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_product_attachment` (
+  `id_product` int(10) NOT NULL,
+  `id_attachment` int(10) NOT NULL,
+  PRIMARY KEY  (`id_product`,`id_attachment`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `PREFIX_attribute` (
   `id_attribute` int(10) unsigned NOT NULL auto_increment,
   `id_attribute_group` int(10) unsigned NOT NULL,

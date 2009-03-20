@@ -142,6 +142,15 @@ class AdminProducts extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
 		}
+		
+		/* Update attachments */
+		elseif (Tools::isSubmit('submitAttachments'))
+		{
+			if ($this->tabAccess['edit'] === '1')
+				if ($id = intval(Tools::getValue($this->identifier)))
+					if (Attachment::attachToProduct($id, $_POST['attachments']))
+						Tools::redirectAdmin($currentIndex.'&id_product='.$id.'&conf=4&add'.$this->table.'&tabs=6&token='.($token ? $token : $this->token));
+		}
 
 		/* Product duplication */
 		elseif (isset($_GET['duplicate'.$this->table]))
@@ -941,9 +950,6 @@ class AdminProducts extends AdminTab
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
 
-		$cover = Product::getCover($obj->id);
-		$this->displayImage($obj->id, _PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg', 180, $cover['id_image'], Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
-			
 		if ($obj->id)
 			$currentIndex .= '&id_product='.$obj->id;
 
@@ -968,44 +974,43 @@ class AdminProducts extends AdminTab
 			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Combinations').'</h4></div>
 			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Features').'</h4></div>
 			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step6""><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>';
-		echo '
-			<script type="text/javascript">
-				var toload = new Array();
-				toload[3] = true;
-				toload[4] = true;
-				toload[5] = true;
-				toload[6] = true;
-				function loadTab(id)
-				{';
+			<div class="tab-page" id="step6""><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>
+			<div class="tab-page" id="step7""><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
+		echo '	<script type="text/javascript">
+					var toload = new Array();
+					toload[3] = true;
+					toload[4] = true;
+					toload[5] = true;
+					toload[6] = true;
+					toload[7] = true;
+					function loadTab(id) {';
 		if ($obj->id)
-			echo '
-					if (toload[id])
-					{
-						toload[id] = false;
-						$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\'},
-							function(rep) {
-								getE("step" + id).innerHTML = rep;
-								if (id == 3) populate_attrs();
-							}
-						)
-					}';
-		echo '
-				}
-			</script>
-		</div>';
-
-		/* Link to product page */
-		if (isset($obj->id))
-		{
-			echo '
-			<div id="product_link">
-				<b><a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a></b><br /><br />
-				<b><a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a></b>
-			</div>';
-		}
-
-		echo '
+			echo ' 		if (toload[id]) {
+							toload[id] = false;
+							$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\'},
+								function(rep) {
+									getE("step" + id).innerHTML = rep;
+									if (id == 3) populate_attrs();
+									if (id == 7)
+									{
+										$(\'#addAttachment\').click(function() {
+											return !$(\'#selectAttachment1 option:selected\').remove().appendTo(\'#selectAttachment2\');  
+										});  
+										$(\'#removeAttachment\').click(function() {  
+											return !$(\'#selectAttachment2 option:selected\').remove().appendTo(\'#selectAttachment1\');  
+										});  
+										$(\'#formAttach\').submit(function() {  
+											$(\'#selectAttachment1 option\').each(function(i) {  
+												$(this).attr("selected", "selected");  
+											});  
+										});
+									}
+								}
+							)
+						}';
+		echo '		}
+				</script>
+			</div>
 			<div class="clear"></div>
 			<input type="hidden" name="id_product_attribute" id="id_product_attribute" value="0" />
 		</form>';
@@ -1218,6 +1223,46 @@ class AdminProducts extends AdminTab
 				</tr>
 			</table>';
 	}
+	
+	function displayFormAttachments($obj, $languages, $defaultLanguage)
+	{
+		global $currentIndex, $cookie;
+		$obj = $this->loadObject(true);
+		$languages = Language::getLanguages();
+		$attach1 = Attachment::getAttachments($cookie->id_lang, $obj->id, true);
+		$attach2 = Attachment::getAttachments($cookie->id_lang, $obj->id, false);
+		
+		echo '
+		<form id="formAttach" action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
+			<a href="index.php?tab=AdminAttachments&addattachment&token='.Tools::getAdminToken('AdminAttachments'.intval(Tab::getIdFromClassName('AdminAttachments')).intval($cookie->id_employee)).'">
+				<img src="../img/admin/add.gif" alt="new" title="'.$this->l('Upload new attachment').'" />&nbsp;'.$this->l('Upload new attachment').'
+			</a>
+			<div class="clear">&nbsp;</div>
+			<table><tr>
+				<td>
+					<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
+		foreach ($attach1 as $attach)
+			echo '		<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+		echo '		</select><br /><br />
+					<a href="#" id="addAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+						'.$this->l('Remove').' &gt;&gt;
+					</a>
+				</td>
+				<td style="padding-left:20px;">
+					<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
+		foreach ($attach2 as $attach)
+			echo '		<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+		echo '		</select><br /><br />
+					<a href="#" id="removeAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+						&lt;&lt; '.$this->l('Add').'
+					</a>
+				</div>
+				</td>
+			</tr></table>
+			<div class="clear">&nbsp;</div>
+			<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />
+		</form>';
+	}
 
 	function displayFormInformations($obj, $currency, $languages, $defaultLanguage)
 	{
@@ -1234,24 +1279,40 @@ class AdminProducts extends AdminTab
 				$qty = 1;
 			$qty_state = '';
 		}
+		$cover = Product::getCover($obj->id);
+		$link = new Link();
 
 		//includeDatepicker(array('reduction_from', 'reduction_to'));
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
-				<table cellpadding="5">
-				<tr>
-					<td><b>'.$this->l('Product global informations').'</b></td>
-				</tr>
-				</table>
-				<hr /><br />
+				<table cellpadding="5" style="float:left">
+					<tr><td><b>'.$this->l('Product global informations').'</b></td></tr>';
+		if (isset($obj->id))
+			echo '
+			<tr><td id="product_link">
+				<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a><br /><br />
+				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>
+			</td></tr>';
+		echo '	</table>';
+		if (isset($obj->id))
+			echo '
+				<div style="float: right; text-align: center;">
+					<div style="float: left">'.cacheImage(_PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg', $this->table.'_'.intval($obj->id).'.'.$this->imageType, 100, $this->imageType).'</div>
+					<div style="float: right; margin: 20px 0 0 10px;">
+						<p align="center">'.$this->l('Filesize').' '.(filesize(_PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg') / 1000).'ko</p>
+						<a href="'.$currentIndex.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).($cover['id_image'] ? '&id_image='.intval($cover['id_image']) : '').'&deleteImage=1">
+						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /> '.$this->l('Delete').'</a>
+					</div>
+					<div class="clear"></div>
+				</div>';
+		echo '	<hr class="clear"/><br />
 				<table cellpadding="5" width="100%">
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
 						<td style="padding-bottom:5px;">';
 		foreach ($languages as $language)
-			echo '
-							<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+			echo '			<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="55" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onchange="updateCurrentText();" /><sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>

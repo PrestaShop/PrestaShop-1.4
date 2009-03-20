@@ -175,6 +175,26 @@ CREATE TABLE PREFIX_message_readed (
 	PRIMARY KEY	(id_message,id_employee)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_attachment` (
+  `id_attachment` int(10) unsigned NOT NULL auto_increment,
+  `file` varchar(40) default NULL,
+  PRIMARY KEY  (`id_attachment`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_attachment_lang` (
+  `id_attachment` int(10) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `name` varchar(32) default NULL,
+  `description` TEXT,
+  PRIMARY KEY  (`id_attachment`, `id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_product_attachment` (
+  `id_product` int(10) NOT NULL,
+  `id_attachment` int(10) NOT NULL,
+  PRIMARY KEY  (`id_product`,`id_attachment`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `PREFIX_connections_source` (
 	id_connections_source INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	id_connections INTEGER UNSIGNED NOT NULL,
@@ -400,6 +420,16 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Recherche'
 	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminSearchConf')
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminSearchConf' LIMIT 1), 1, 1, 1, 1);
+
+INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCatalog' LIMIT 1) AS tmp), 'AdminAttachments', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCatalog' LIMIT 1) AS tmp )) AS tmp));
+INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
+	SELECT id_lang,
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminAttachments' LIMIT 1),
+	'Attachments' FROM PREFIX_lang);
+UPDATE `PREFIX_tab_lang` SET `name` = 'Documents joints'
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminAttachments')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminAttachments' LIMIT 1), 1, 1, 1, 1);
 
 /* CHANGE TABS */
 UPDATE `PREFIX_tab` SET `class_name` = 'AdminStatuses' WHERE `class_name` = 'AdminOrdersStates';

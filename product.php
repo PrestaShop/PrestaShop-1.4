@@ -133,6 +133,7 @@ else
 
 		/* Features / Values */
 		$features = $product->getFrontFeatures(intval($cookie->id_lang));
+		$attachments = $product->getAttachments(intval($cookie->id_lang));
 		
 		/* Category */
 		if (isset($_SERVER['HTTP_REFERER']) AND ereg('^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
@@ -169,6 +170,7 @@ else
 			'token' => Tools::getToken(false),
 			'productPriceWithoutEcoTax' => floatval($productPriceWithoutEcoTax),
 			'features' => $features,
+			'attachments' => $attachments,
 			'allow_oosp' => $product->isAvailableWhenOutOfStock(intval($product->out_of_stock)),
 			'last_qties' =>  intval($configs['PS_LAST_QTIES']),
 			'col_img_dir' => _PS_COL_IMG_DIR_,

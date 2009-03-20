@@ -402,6 +402,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (36, 'AdminFeatures', 1, 5),
 (58, 'AdminScenes', 1, 6),
 (66, 'AdminTags', 1, 7),
+(68, 'AdminAttachments', 1, 7),
 (12, 'AdminAddresses', 2, 1),
 (63, 'AdminGroups', 2, 2),
 (65, 'AdminCarts', 2, 3),
@@ -519,6 +520,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 65, 'Carts'),
 (1, 66, 'Tags'),
 (1, 67, 'Search'),
+(1, 68, 'Attachments'),
 (2, 1, 'Catalogue'),
 (2, 2, 'Clients'),
 (2, 3, 'Commandes'),
@@ -583,7 +585,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 64, 'Générateurs'),
 (2, 65, 'Paniers'),
 (2, 66, 'Tags'),
-(2, 67, 'Recherche');
+(2, 67, 'Recherche'),
+(2, 68, 'Documents joints');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`

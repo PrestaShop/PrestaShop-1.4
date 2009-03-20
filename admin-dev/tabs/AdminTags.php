@@ -107,7 +107,6 @@ class AdminTags extends AdminTab
 			}); 
 		</script>';
 	}
-
 }
 
 ?>

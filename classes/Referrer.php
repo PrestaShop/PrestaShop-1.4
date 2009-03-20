@@ -66,7 +66,7 @@ class Referrer extends ObjectModel
 		$fields['request_uri_like_not'] = pSQL($this->request_uri_like_not, true);
 		$fields['base_fee'] = number_format($this->base_fee, 2, '.', '');
 		$fields['percent_fee'] = number_format($this->percent_fee, 2, '.', '');
-		$fields['click_fee'] = number_format($this->percent_fee, 2, '.', '');
+		$fields['click_fee'] = number_format($this->click_fee, 2, '.', '');
 		$fields['cache_visitors'] = intval($this->cache_visitors);
 		$fields['cache_visits'] = intval($this->cache_visits);
 		$fields['cache_pages'] = intval($this->cache_pages);

@@ -292,6 +292,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 	<ul id="more_info_tabs" class="idTabs idTabsShort">
 		{if $product->description}<li><a id="more_info_tab_more_info" href="#idTab1">{l s='More info'}</a></li>{/if}
 		{if $features}<li><a id="more_info_tab_data_sheet" href="#idTab2">{l s='Data sheet'}</a></li>{/if}
+		{if $attachments}<li><a id="more_info_tab_attachments" href="#idTab9">{l s='Download'}</a></li>{/if}
 		{if isset($accessories) AND $accessories}<li><a href="#idTab4">{l s='Accessories'}</a></li>{/if}
 		{$HOOK_PRODUCT_TAB}
 	</ul>
@@ -305,6 +306,13 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<ul id="idTab2" class="bullet">
 		{foreach from=$features item=feature}
 			<li><span>{$feature.name|escape:'htmlall':'UTF-8'}</span> {$feature.value|escape:'htmlall':'UTF-8'}</li>
+		{/foreach}
+		</ul>
+	{/if}
+	{if $attachments}
+		<ul id="idTab9" class="bullet">
+		{foreach from=$attachments item=attachment}
+			<li><a href="{$base_uri}attachment.php?id_attachment={$attachment.id_attachment}">{$attachment.name|escape:'htmlall':'UTF-8'}</a><br />{$attachment.description|escape:'htmlall':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	{/if}
