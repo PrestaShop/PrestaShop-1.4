@@ -32,9 +32,12 @@ if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 include(dirname(__FILE__).'/settings.inc.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
-$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
-	$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+	if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
+		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+}
 
 $currentDir = dirname(__FILE__);
 
