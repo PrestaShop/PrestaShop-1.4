@@ -45,9 +45,9 @@ if (Tools::isSubmit('submitAccount'))
 	$smarty->assign('email_create', 1);
 
 	if (!Validate::isEmail($email = Tools::getValue('email')))
-		$errors[] = Tools::displayError('e-mail not valid');	
+		$errors[] = Tools::displayError('e-mail not valid');
 	elseif (!Validate::isPasswd(Tools::getValue('passwd')))
-		$errors[] = Tools::displayError('invalid password');	
+		$errors[] = Tools::displayError('invalid password');
 	elseif (Customer::customerExists($email))
 		$errors[] = Tools::displayError('someone has already registered with this e-mail address');	
 	elseif (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
@@ -85,7 +85,7 @@ if (Tools::isSubmit('submitAccount'))
 				if (!$address->add())
 					$errors[] = Tools::displayError('an error occurred while creating your address');
 				else
-				{				
+				{
 					if (Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
 					array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 						$smarty->assign('confirmation', 1);

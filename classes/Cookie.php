@@ -196,6 +196,13 @@ class	Cookie
 		unset($this->_content['id_cart']);
 		$this->write();
 	}
+	
+	function makeNewLog()
+	{
+		unset($this->_content['id_customer']);
+		unset($this->_content['id_guest']);
+		Guest::setNewGuest($this);
+	}
 
 	/**
 	  * Get cookie content
