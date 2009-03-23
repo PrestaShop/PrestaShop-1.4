@@ -1295,7 +1295,7 @@ class AdminProducts extends AdminTab
 				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>
 			</td></tr>';
 		echo '	</table>';
-		if (isset($obj->id))
+		if (isset($obj->id) AND $cover AND isset($cover['id_image']) AND $cover['id_image'])
 			echo '
 				<div style="float: right; text-align: center;">
 					<div style="float: left">'.cacheImage(_PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg', $this->table.'_'.intval($obj->id).'.'.$this->imageType, 100, $this->imageType).'</div>
