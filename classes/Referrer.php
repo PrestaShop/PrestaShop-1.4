@@ -141,7 +141,7 @@ class Referrer extends ObjectModel
 	public function getRegistrations($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product))
+		if (intval($id_product))
 		{
 			$join = 'LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 					 LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
@@ -167,7 +167,7 @@ class Referrer extends ObjectModel
 	public function getStatsSales($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (Validate::isUnsignedId($id_product))
+		if (intval($id_product))
 		{
 			$join =	'LEFT JOIN '._DB_PREFIX_.'order_detail od ON oo.id_order = od.id_order';
 			$where = 'AND od.product_id = '.intval($id_product);

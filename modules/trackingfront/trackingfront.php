@@ -134,8 +134,9 @@ class TrackingFront extends Module
 			'orders' => $this->l('Orders'),
 			'base_fee' => $this->l('Base fee'),
 			'percent_fee' => $this->l('Percent fee'),
-			'reg_rate' => $this->l('Registration rate'),
 			'sales' => $this->l('Sales'),
+			'cart' => $this->l('Average cart'),
+			'reg_rate' => $this->l('Registration rate'),
 			'order_rate' => $this->l('Order rate'));
 		$smarty->assign('displayTab', $displayTab);
 		
@@ -182,6 +183,7 @@ class TrackingFront extends Module
 				\'	<td align="center">\'+result.registrations+\'</td>\'+
 				\'	<td align="center">\'+result.orders+\'</td>\'+
 				\'	<td align="right">\'+result.sales+\'</td>\'+
+				\'	<td align="right">\'+result.cart+\'</td>\'+
 				\'	<td align="center">\'+result.reg_rate+\'</td>\'+
 				\'	<td align="center">\'+result.order_rate+\'</td>\'+
 				\'	<td align="center">\'+result.base_fee+\'</td>\'+
