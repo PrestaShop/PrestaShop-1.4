@@ -86,6 +86,7 @@ class AdminReferrers extends AdminTab
 					\'	<td align="center">\'+result.registrations+\'</td>\'+
 					\'	<td align="center">\'+result.orders+\'</td>\'+
 					\'	<td align="right">\'+result.sales+\'</td>\'+
+					\'	<td align="right">\'+result.cart+\'</td>\'+
 					\'	<td align="center">\'+result.reg_rate+\'</td>\'+
 					\'	<td align="center">\'+result.order_rate+\'</td>\'+
 					\'	<td align="center">\'+result.click_fee+\'</td>\'+
