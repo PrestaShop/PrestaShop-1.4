@@ -130,6 +130,7 @@ $_ERRORS['2a0fad646bb2694202cbd53ce9dcf3f8'] = 'la date de fin est invalide (for
 $_ERRORS['07f66531cbc683b1676b7a4322237280'] = 'accès interdit';
 $_ERRORS['8827a81c1e06c19123ad57fe81b0bcc1'] = 'un compte existe déjà avec cette adresse mail :';
 $_ERRORS['7b2dca8bd3be732a1275fa75464bf138'] = 'une adresse localisée dans un pays contenant des états doit en sélectionner un';
+$_ERRORS['8cffef03eb1949c0dc58f4881b532e34'] = 'une erreur s\'est produite pendant la copie vers le dossier des modules';
 $_ERRORS['a4f1ad0c3c0e79aa87045afed4924c44'] = 'une erreur s\'est produite pendant la création des champs personnalisés';
 $_ERRORS['06626f1f5e647a10ec7fdff16fe4d1ba'] = 'une erreur s\'est produite pendant la suppression du retour produit';
 $_ERRORS['be97f859c37799a86bde7ef3652bc81a'] = 'une erreur s\'est produite pendant la mise à jour de la personnalisation';
@@ -307,6 +308,7 @@ $_ERRORS['26cba535e11d9bd9163ff545cb00a30f'] = 'ce bon de réduction n\'est pas 
 $_ERRORS['d2bffae0079777147065324599bed27c'] = 'ce bon de réduction n\'est pas cumulable avec d\'autre réductions';
 $_ERRORS['1ce9bcd601fe275f0b23ee2ddc18f39b'] = 'vers les catégories';
 $_ERRORS['bce40b341f85edded97e015272142bcb'] = 'essayez de vous identifier s\'il vous appartient';
+$_ERRORS['515ad096370a01b8a808736cb7893e82'] = 'type d\'archive inconnu';
 $_ERRORS['f0f11d9b25beebbbed90f82b51568e17'] = 'le nom de la caractéristique n\'est pas valide';
 $_ERRORS['809edd785505834e7f9cca7edb5a2000'] = 'validation de fonction introuvable';
 $_ERRORS['f9514af8b99096408b3cbd697f700458'] = 'la valeur est obligatoire';
@@ -323,5 +325,6 @@ $_ERRORS['3fd78daa8d5e2ece15d770d6ca1b5c05'] = 'vous devez sélectionner au moin
 $_ERRORS['4d8cc9390005a75ec4dea20aa62e1841'] = 'vous devez garder au moins un objet';
 $_ERRORS['1e28dbd294012e4111bc7612925ec257'] = 'vous devez avoir au moins un produit';
 $_ERRORS['fd61b68a08fbafc0f8361a7fee02b628'] = 'le mot de passe ne correspond pas avec l\'actuel';
+$_ERRORS['cf734ccbed4888a2a0c3847dad46a2d7'] = 'ZIP n\'est pas installé sur votre serveur, demandez à votre hébergeur pour plus d\'informations';
 
 ?>
