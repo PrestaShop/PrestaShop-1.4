@@ -13,12 +13,17 @@
 class StatsHome extends Module
 {
     private $_html = '';
+	private $_adminPath;
 
     function __construct()
     {
         $this->name = 'statshome';
         $this->tab = 'Stats';
         $this->version = 1.0;
+		
+		
+		$ru = dirname($_SERVER['REQUEST_URI'].'a');
+		$this->_adminPath = substr($ru, strrpos($ru, '/'));
 		
 		parent::__construct();
 		
@@ -33,7 +38,7 @@ class StatsHome extends Module
 	
 	private function _postProcess()
 	{
-		include_once(dirname(__FILE__).'/../..'.substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')).'/tabs/AdminStats.php');
+		include_once(dirname(__FILE__).'/../..'.$this->_adminPath.'/tabs/AdminStats.php');
 		$calendarTab = new AdminStats();
 		$calendarTab->postProcess();
 	}
@@ -77,7 +82,7 @@ class StatsHome extends Module
 				</div>
 			</div>
 			<div style="float:right;text-align:right;width:240px">';
-		include_once(dirname(__FILE__).'/../..'.substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')).'/tabs/AdminStatsTab.php');
+		include_once(dirname(__FILE__).'/../..'.$this->_adminPath.'/tabs/AdminStats.php');
 		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
 		$this->_html .= '<div class="space"></div>
 				<p style=" font-weight: bold">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
