@@ -117,8 +117,10 @@ class SEKeywords extends ModuleGraph
 			{
 				$kArray = array();
 				preg_match('/[^a-z]'.$varname.'=.+\&'.'/U', $parsedUrl['query'], $kArray);
-				if (empty($kArray[0]))
+				if (!isset($kArray[0]) OR empty($kArray[0]))
 					preg_match('/[^a-z]'.$varname.'=.+$'.'/', $parsedUrl['query'], $kArray);
+				if (!isset($kArray[0]) OR empty($kArray[0]))
+					return false;
 				$kString = urldecode(str_replace('+', ' ', ltrim(substr(rtrim($kArray[0], '&'), strlen($varname) + 1), '=')));
 				return $kString;
 			}
