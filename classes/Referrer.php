@@ -239,7 +239,7 @@ class Referrer extends ObjectModel
 				INSERT INTO ps_referrer_cache (id_referrer, id_connections_source) (
 					SELECT id_referrer, id_connections_source
 					FROM ps_referrer r
-					LEFT JOIN ps_connections_source cs ON ('.$this->_join.')
+					LEFT JOIN ps_connections_source cs ON ('.self::$_join.')
 					WHERE id_referrer = '.intval($row['id_referrer']).'
 				)');
 			}
