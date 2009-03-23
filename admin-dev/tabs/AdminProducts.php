@@ -1713,11 +1713,11 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('Catalog:').'</td>
 						<td>
 							<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
-							<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+							<table cellspacing="0" cellpadding="0" class="table">
 									<tr>
 										<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
 										<th>'.$this->l('ID').'</th>
-										<th>'.$this->l('Name').'</th>
+										<th style="width: 400px">'.$this->l('Name').'</th>
 									</tr>';
 		$done = array();
 		$index = array();
@@ -1807,7 +1807,7 @@ class AdminProducts extends AdminTab
 		foreach ($languages as $language)
 			echo '
 							<div id="cdesc_short_'.$language['id_lang'].'" style="float: left;">
-								<textarea cols="65" rows="10" id="description_short_'.$language['id_lang'].'" name="description_short_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description_short', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+								<textarea cols="100" rows="10" id="description_short_'.$language['id_lang'].'" name="description_short_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description_short', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc_short');
 		echo '
@@ -1819,7 +1819,7 @@ class AdminProducts extends AdminTab
 		foreach ($languages as $language)
 			echo '
 							<div id="cdesc_'.$language['id_lang'].'" style="float: left;">
-								<textarea cols="65" rows="20" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+								<textarea cols="100" rows="20" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc');
 		echo '
@@ -1929,7 +1929,7 @@ class AdminProducts extends AdminTab
 			</script>
 			<script type="text/javascript">
 				tinyMCE.init({
-					width : 435,
+					width : 600,
                   	height : 435,					
 					mode : "textareas",
 					plugins : "contextmenu, directionality, media, paste, preview, safari",
@@ -1961,8 +1961,8 @@ class AdminProducts extends AdminTab
 						getE(\'cdesc_short_'.$language['id_lang'].'\').style.display = \'none\';
 						getE(\'cdesc_'.$language['id_lang'].'\').rows = 54;
 						getE(\'cdesc_short_'.$language['id_lang'].'\').rows = 54;
-						getE(\'cdesc_'.$language['id_lang'].'\').cols = 10;
-						getE(\'cdesc_short_'.$language['id_lang'].'\').cols = 8;';
+						getE(\'cdesc_'.$language['id_lang'].'\').cols = 100;
+						getE(\'cdesc_short_'.$language['id_lang'].'\').cols = 100;';
 		echo '</script>';
 	}
 
@@ -2033,8 +2033,8 @@ class AdminProducts extends AdminTab
 					</tr>
 					<tr><td colspan="2"><hr /></td></tr>
 					<tr>
-						<td colspan="2"  style="text-align:center;">
-							<table cellspacing="0" cellpadding="0" class="table" style="margin:auto;">
+						<td colspan="2">
+							<table cellspacing="0" cellpadding="0" class="table">
 							<tr>
 								<th style="width: 100px;">'.$this->l('Image').'</th>
 								<th>&nbsp;</th>
@@ -2231,7 +2231,7 @@ class AdminProducts extends AdminTab
 			  <td style="padding-bottom:5px;"><input type="text" size="3" name="attribute_quantity" id="attribute_quantity" value="1" /> ('.$this->l('overrides Quantity on Information tab').')</td>
 		  </tr>
 			<tr>
-				<td colspan="2" style="text-align: right"><sup>*</sup> '.$this->l('included tax').'</td>
+				<td colspan="2"><sup>*</sup> '.$this->l('included tax').'</td>
 			</tr>
 		  <tr><td colspan="2"><hr /></td></tr>
 		  <tr>
