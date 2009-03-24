@@ -267,8 +267,8 @@ class Referrer extends ObjectModel
 		$jsonArray[] = 'pages:\''.intval($statsVisits['pages']).'\'';
 		$jsonArray[] = 'registrations:\''.intval($registrations).'\'';
 		$jsonArray[] = 'orders:\''.intval($statsSales['orders']).'\'';
-		$jsonArray[] = 'sales:\''.Tools::displayPrice((intval($statsSales['orders']) ? $statsSales['sales'] / intval($statsSales['orders']) : 0), $currency).'\'';
-		$jsonArray[] = 'cart:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
+		$jsonArray[] = 'cart:\''.Tools::displayPrice((intval($statsSales['orders']) ? $statsSales['sales'] / intval($statsSales['orders']) : 0), $currency).'\'';
+		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
 		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($registrations) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsSales['orders']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'click_fee:\''.Tools::displayPrice(intval($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
