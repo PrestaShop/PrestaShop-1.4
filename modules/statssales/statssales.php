@@ -41,24 +41,6 @@ class StatsSales extends ModuleGraph
 		
 		$totals = $this->getTotals();
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		$result = Db::getInstance()->ExecuteS('
-		SELECT osl.`name`, COUNT(oh.`id_order`) as total
-		FROM `'._DB_PREFIX_.'order_state` os
-		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = 2)
-		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON os.`id_order_state` = oh.`id_order_state`
-		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = oh.`id_order`
-		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
-		WHERE oh.`id_order_history` = (
-			SELECT ios.`id_order_history`
-			FROM `'._DB_PREFIX_.'order_history` ios
-			WHERE ios.`id_order` = oh.`id_order`
-			ORDER BY ios.`date_add` DESC, oh.`id_order_history` DESC
-			LIMIT 1
-		)
-		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
-		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
-		GROUP BY oh.`id_order_state`');
-		$numRows = Db::getInstance()->NumRows();
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
@@ -82,7 +64,7 @@ class StatsSales extends ModuleGraph
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			'.($numRows ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.intval(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
+			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.intval(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
@@ -247,7 +229,7 @@ class StatsSales extends ModuleGraph
 			LIMIT 1
 		)
 		'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
-		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
+		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY oh.`id_order_state`');
 		foreach ($result as $row)
 		{
