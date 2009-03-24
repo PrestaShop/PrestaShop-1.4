@@ -258,7 +258,7 @@ class AdminModules extends AdminTab
 		</div>
 		<div id="prestastore" style="margin-left:40px; display:none; float: left" class="width1">
 			<fieldset>
-				<legend><img src="http://www.prestastore.com/modules.php?mods='.$serialModules.'" class="middle" />'.$this->l('Our selection').'</legend>
+				<legend><img src="http://www.prestastore.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />'.$this->l('Our selection').'</legend>
 				<div id="prestastore-content"></div>
 			</fieldset>
 		</div>
