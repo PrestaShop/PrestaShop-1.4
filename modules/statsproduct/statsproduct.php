@@ -71,7 +71,7 @@ class StatsProduct extends ModuleGraph
 		SELECT o.date_add, o.id_order, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
-		WHERE o.date_add BETWEEN '.$this->getDate().'
+		WHERE o.date_add BETWEEN '.$this->getDate().' AND o.valid = 1
 		AND od.product_id = '.intval($id_product));
 	}
 	

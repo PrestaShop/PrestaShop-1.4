@@ -97,7 +97,7 @@ class StatsBestVouchers extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
-		AND o.date_add BETWEEN '.$this->getDate().'
+		AND o.invoice_date BETWEEN '.$this->getDate().'
 		GROUP BY od.id_discount';
 
 		if (Validate::IsName($this->_sort))

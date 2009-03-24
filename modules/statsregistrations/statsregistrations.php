@@ -63,7 +63,7 @@ class StatsRegistrations extends ModuleGraph
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON o.id_customer = g.id_customer
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
-		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
+		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().' AND o.valid = 1
 		AND ABS(TIMEDIFF(o.date_add, c.date_add)+0) < 120000');
 		return $result['buyers'];
 	}

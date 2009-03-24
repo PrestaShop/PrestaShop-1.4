@@ -121,7 +121,7 @@ class StatsHome extends Module
 		SELECT SUM(o.`total_paid_real`) as total_sales, COUNT(o.`total_paid_real`) as total_orders
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.valid = 1
-		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
 		SELECT COUNT(`id_customer`) AS total_registrations
 		FROM `'._DB_PREFIX_.'customer` c

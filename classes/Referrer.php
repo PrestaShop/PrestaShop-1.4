@@ -186,8 +186,9 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
 			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
 			'.$join.'
-			WHERE oo.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
+			WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
 			AND rc.id_referrer = '.intval($this->id).'
+			AND oo.valid = 1
 			'.$where.'
 		)
 		AND o.valid = 1');

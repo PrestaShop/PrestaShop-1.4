@@ -138,7 +138,7 @@ class StatsBestCustomers extends ModuleGrid
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.id_customer = c.id_customer
 		LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 		WHERE co.date_add BETWEEN '.$this->getDate().'
-		AND o.date_add BETWEEN '.$this->getDate().'
+		AND o.invoice_date BETWEEN '.$this->getDate().'
 		AND o.valid
 		GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))

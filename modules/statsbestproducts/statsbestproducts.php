@@ -118,7 +118,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
 		WHERE p.active = 1 AND o.valid = 1
-		AND o.date_add BETWEEN '.$dateBetween);
+		AND o.invoice_date BETWEEN '.$dateBetween);
 		return $result['totalCount'];
 	}
 		
@@ -149,7 +149,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
 		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
 		WHERE p.active = 1 AND o.valid = 1
-		AND o.date_add BETWEEN '.$dateBetween.'
+		AND o.invoice_date BETWEEN '.$dateBetween.'
 		GROUP BY p.id_product';
 
 		if (Validate::IsName($this->_sort))
