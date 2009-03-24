@@ -45,7 +45,8 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (42, 'updateProductAttribute', 'Product attribute update', NULL, 0),
 (43, 'extraCarrier', 'Extra carrier (module mode)', NULL, 0),
 (44, 'shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 0),
-(45, 'search', 'Search', NULL, 0);
+(45, 'search', 'Search', NULL, 0),
+(46, 'backBeforePayment', 'Redirect in order process', 'Redirect user to the module instead of displaying payment modules', 0);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

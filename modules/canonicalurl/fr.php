@@ -9,8 +9,5 @@ $_MODULE['<{canonicalurl}prestashop>canonicalurl_b573a17fc6b9327afdebe42f777c744
 $_MODULE['<{canonicalurl}prestashop>canonicalurl_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';
 $_MODULE['<{canonicalurl}prestashop>canonicalurl_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{canonicalurl}prestashop>canonicalurl_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
-$_MODULE['<{canonicalurl}prestashop>canonicalurl_ee096b45f2e0dcd83771ea27b049c76a'] = 'URL canonique';
 $_MODULE['<{canonicalurl}prestashop>canonicalurl_a00bd8a5cd12f581065d8dfa5b2c7bcc'] = 'Choisissez le nom de domaine principal pour votre référencement (ex : www.maboutique.com, maboutique.com, monsite.com/maboutique, etc...). Note : ne pas inclure le dernier slash (\"/\"), le suffixe \"/index.php\", ou encore le préfixe \"http(s)://\".';
 $_MODULE['<{canonicalurl}prestashop>canonicalurl_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
-
-?>

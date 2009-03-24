@@ -187,6 +187,14 @@ class			Hook extends ObjectModel
 			return false;
 		return Module::hookExec('PDFInvoice', array('pdf' => $pdf, 'id_order' => $id_order));
 	}
+	
+	static public function backBeforePayment($module)
+	{
+		$params['module'] = strval($module);
+		if (!$params['module'])
+			return false;
+		return Module::hookExec('backBeforePayment', $params);
+	}
 }
 
 ?>

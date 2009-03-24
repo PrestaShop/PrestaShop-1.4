@@ -76,6 +76,7 @@
 	</div>
 	<p class="cart_navigation submit">
 		<input type="hidden" class="hidden" name="step" value="2" />
+		<input type="hidden" name="back" value="{$back}" />
 		<a href="{$base_dir_ssl}order.php?step=0" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
 		<input type="submit" name="processAddress" value="{l s='Next'} &raquo;" class="exclusive" />
 	</p>

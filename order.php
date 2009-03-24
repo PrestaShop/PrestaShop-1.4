@@ -304,6 +304,7 @@ function displayAddress()
 	if ($oldMessage = Message::getMessageByCartId(intval($cart->id)))
 		$smarty->assign('oldMessage', $oldMessage['message']);
 	$smarty->assign('cart', $cart);
+	$smarty->assign('back', strval(Tools::getValue('back')));
 
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');
@@ -359,6 +360,7 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked)));
+	$smarty->assign('back', strval(Tools::getValue('back')));
 
 	Tools::safePostVars();
 	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
@@ -371,6 +373,9 @@ function displayCarrier()
 function displayPayment()
 {
 	global $smarty, $cart, $currency, $cookie, $orderTotal;
+
+	// Redirect instead of displaying payment modules if any module are grefted on
+	Hook::backBeforePayment(strval(Tools::getValue('back')));
 
 	/* We may need to display an order summary */
 	$smarty->assign($cart->getSummaryDetails());
