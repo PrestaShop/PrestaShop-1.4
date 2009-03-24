@@ -254,8 +254,8 @@ class Referrer extends ObjectModel
 		$registrations = $referrer->getRegistrations($id_product, $employee);
 		$statsSales = $referrer->getStatsSales($id_product, $employee);
 
-		// If it's not a product alone and it has no visits nor orders
-		if (!$id_product AND !$statsVisits['visits'] AND !$statsSales['orders'])
+		// If it's a product and it has no visits nor orders
+		if (intval($id_product) AND !$statsVisits['visits'] AND !$statsSales['orders'])
 			exit;
 		
 		$jsonArray = array();
@@ -267,8 +267,8 @@ class Referrer extends ObjectModel
 		$jsonArray[] = 'pages:\''.intval($statsVisits['pages']).'\'';
 		$jsonArray[] = 'registrations:\''.intval($registrations).'\'';
 		$jsonArray[] = 'orders:\''.intval($statsSales['orders']).'\'';
-		$jsonArray[] = 'cart:\''.Tools::displayPrice((intval($statsSales['orders']) ? $statsSales['sales'] / intval($statsSales['orders']) : 0), $currency).'\'';
 		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
+		$jsonArray[] = 'cart:\''.Tools::displayPrice((intval($statsSales['orders']) ? $statsSales['sales'] / intval($statsSales['orders']) : 0), $currency).'\'';
 		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($registrations) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsSales['orders']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
 		$jsonArray[] = 'click_fee:\''.Tools::displayPrice(intval($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';

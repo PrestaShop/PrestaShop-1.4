@@ -134,6 +134,7 @@ class TrackingFront extends Module
 			'orders' => $this->l('Orders'),
 			'base_fee' => $this->l('Base fee'),
 			'percent_fee' => $this->l('Percent fee'),
+			'click_fee' => $this->l('Click fee'),
 			'sales' => $this->l('Sales'),
 			'cart' => $this->l('Average cart'),
 			'reg_rate' => $this->l('Registration rate'),
@@ -148,7 +149,6 @@ class TrackingFront extends Module
 		$echo = '
 		<script type="text/javascript" src="../../js/jquery/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang)).'.js"></script>
 		<script type="text/javascript">
-
 			$("#datepickerFrom").datepicker({
 				prevText:"",
 				nextText:"",
@@ -186,6 +186,7 @@ class TrackingFront extends Module
 				\'	<td align="right">\'+result.cart+\'</td>\'+
 				\'	<td align="center">\'+result.reg_rate+\'</td>\'+
 				\'	<td align="center">\'+result.order_rate+\'</td>\'+
+				\'	<td align="center">\'+result.click_fee+\'</td>\'+
 				\'	<td align="center">\'+result.base_fee+\'</td>\'+
 				\'	<td align="center">\'+result.percent_fee+\'</td>\'+
 				\'</tr>\';

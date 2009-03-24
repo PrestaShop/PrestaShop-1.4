@@ -1,4 +1,4 @@
-﻿		<div style="width: 800px; height: 75px; background-color: #8AB50E; margin: 0 auto; color: white; font-family: arial; border-bottom: 5px solid #567500;">
+		<div style="width: 800px; height: 75px; background-color: #8AB50E; margin: 0 auto; color: white; font-family: arial; border-bottom: 5px solid #567500;">
 			<div style="float: left; font-size: 36px;  margin-left: 20px; font-weight: bold; height: 75px; line-height: 75px; vertical-align: middle;">{l s='Affiliation space' mod='trackingfront'}</div>
 			<div style="float: right; font-size: 18px; margin-right: 20px; font-weight: bold; height: 75px; line-height: 75px; vertical-align: middle;"><a href="{$php_self|escape:'htmlall':'UTF-8'}?logout_tracking">{l s='Logout' mod='trackingfront'}</a></div>
 		</div>
@@ -16,7 +16,7 @@
 			<div style="float:right; margin: 25px 50px 0 0;">
 				<fieldset style="width: 415px; padding: 20px; font-size: 12px; border: 1px solid #88B60E;"><legend style="color: #88B60E; font-size:20px; font-weight: bold;">{$referrer->name}</legend>
 					{foreach from=$displayTab key=data item=label}
-							<div style="float:left; width: 150px; height: 25px; margin-right: 40px;"><span style="float:left">{$label}</span><span id="{$data}" style="float: right; font-weight: bold;"></span></div>
+							<div style="float:left; width: 150px; height: 20px; margin-right: 40px;"><span style="float:left">{$label}</span><span id="{$data}" style="float: right; font-weight: bold;"></span></div>
 					{/foreach}			
 				</fieldset>
 			</div>
@@ -29,12 +29,14 @@
 				<th>{l s='Visits' mod='trackingfront'}</th>
 				<th>{l s='Pages' mod='trackingfront'}</th>
 				<th>{l s='Reg.' mod='trackingfront'}</th>
-				<th>{l s='Orders' mod='trackingfront'}</th>
+				<th>{l s='Ord.' mod='trackingfront'}</th>
 				<th>{l s='Sales' mod='trackingfront'}</th>
+				<th>{l s='Cart' mod='trackingfront'}</th>
 				<th>{l s='Reg. rate' mod='trackingfront'}</th>
-				<th>{l s='Order rate' mod='trackingfront'}</th>
-				<th>{l s='Base fee' mod='trackingfront'}</th>
-				<th>{l s='Percent fee' mod='trackingfront'}</th>
+				<th>{l s='Ord. rate' mod='trackingfront'}</th>
+				<th>{l s='Click' mod='trackingfront'}</th>
+				<th>{l s='¤' mod='trackingfront'}</th>
+				<th>{l s='%' mod='trackingfront'}</th>
 			</tr>
-			<tr id="trid_dummy"><td colspan="12" style="background: #567500;" /></tr>
+			<tr id="trid_dummy"><td colspan="14" style="background: #567500;" /></tr>
 		</table>
