@@ -96,7 +96,6 @@ class Referrer extends ObjectModel
 			FROM '._DB_PREFIX_.'referrer r
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
 			WHERE id_connections_source = '.intval($id_connections_source).'
-			LIMIT 1
 		)');
 	}
 	
@@ -187,6 +186,7 @@ class Referrer extends ObjectModel
 			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
 			'.$join.'
 			WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
+			AND oo.date_add > cs.date_add
 			AND rc.id_referrer = '.intval($this->id).'
 			AND oo.valid = 1
 			'.$where.'
