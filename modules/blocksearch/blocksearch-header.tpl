@@ -28,6 +28,8 @@
 				'search.php', {
 				minChars: 3,
 				max:10,
+				width:500,
+				scroll: false,
 				formatItem:formatSearch,
 				extraParams:{ajaxSearch:1,id_lang:{/literal}{$cookie->id_lang}{literal}}
 			}).result(redirectSearch)
