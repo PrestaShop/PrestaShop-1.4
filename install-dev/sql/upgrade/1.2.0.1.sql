@@ -300,7 +300,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('extraCarrier', 'Extra carrier (module mode)', NULL, 0),
-	('shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 0),
+	('shoppingCartExtra', 'Shopping cart extra button', 'Display some specific informations', 1),
 	('search', 'Search', NULL, 0),
 	('backBeforePayment', 'Redirect in order process', 'Redirect user to the module instead of displaying payment modules', 0);
 
