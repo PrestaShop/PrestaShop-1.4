@@ -1129,6 +1129,8 @@ abstract class AdminTab
 						echo Tools::displayPrice($tr[$key], (isset($params['currency']) ? new Currency(intval($tr['id_currency'])) : $currency), false, false);
 					elseif (isset($params['float']))
 						echo rtrim(rtrim($tr[$key], '0'), '.');
+					elseif (isset($params['type']) AND $params['type'] == 'date')
+						echo Tools::displayDate($tr[$key], $cookie->id_lang);
 					elseif ($key == 'physical_products_quantity')
 						echo Category::countNbProductAndSub($tr['id_category'], $cookie->id_lang);
 					elseif (isset($tr[$key]))

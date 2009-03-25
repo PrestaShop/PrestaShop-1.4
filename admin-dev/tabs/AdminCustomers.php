@@ -25,19 +25,19 @@ class AdminCustomers extends AdminTab
 	 	$this->delete = true;
 		$this->deleted = true;
 
-
+		$this->_select = '(YEAR(NOW()) - YEAR(birthday)) as age';
 		$genders = array(1 => $this->l('M'), 2 => $this->l('F'), 9 => $this->l('?'));
  		$this->fieldsDisplay = array(
 		'id_customer' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'id_gender' => array('title' => $this->l('Gender'), 'width' => 35, 'align' => 'center', 'icon' => array(1 => 'male.gif', 2 => 'female.gif', 'default' => 'unknown.gif'), 'orderby' => false, 'type' => 'select', 'select' => $genders, 'filter_key' => 'a!id_gender'),
+		'id_gender' => array('title' => $this->l('Gender'), 'width' => 25, 'align' => 'center', 'icon' => array(1 => 'male.gif', 2 => 'female.gif', 'default' => 'unknown.gif'), 'orderby' => false, 'type' => 'select', 'select' => $genders, 'filter_key' => 'a!id_gender'),
 		'lastname' => array('title' => $this->l('Last Name'), 'width' => 80),
 		'firstname' => array('title' => $this->l('First name'), 'width' => 60),
-		'email' => array('title' => $this->l('E-mail address'), 'width' => 140, 'maxlength' => 19),
-		'birthday' => array('title' => $this->l('Birthday'), 'width' => 60, 'type' => 'date'),
-		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
-		'newsletter' => array('title' => $this->l('Newsletter'), 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
-		'optin' => array('title' => $this->l('Opt-in'), 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
-		'date_add' => array('title' => $this->l('Registration Date'), 'width' => 60, 'type' => 'date'));
+		'email' => array('title' => $this->l('E-mail address'), 'width' => 120, 'maxlength' => 19),
+		'age' => array('title' => $this->l('Age'), 'width' => 30, 'suffix' => $this->l(' years old'), 'search' => false),
+		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
+		'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
+		'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
+		'date_add' => array('title' => $this->l('Registration'), 'width' => 60, 'type' => 'date'));
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
