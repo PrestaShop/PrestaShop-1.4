@@ -109,6 +109,7 @@ define('_PS_OS_REFUND_',      7);
 define('_PS_OS_ERROR_',       8);
 define('_PS_OS_OUTOFSTOCK_',  9);
 define('_PS_OS_BANKWIRE_',    10);
+define('_PS_OS_PAYPAL_',      11);
 
 /* Tax behavior */
 define('PS_PRODUCT_TAX', 0);

@@ -134,7 +134,8 @@ INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `co
 (7, 1, 1, '#FFFFBB', 1, 0, 0),
 (8, 0, 1, '#FFDFDF', 1, 0, 0),
 (9, 1, 1, '#FFD3D3', 1, 0, 0),
-(10, 0, 1, 'lightblue', 1, 0, 0);
+(10, 0, 1, 'lightblue', 1, 0, 0),
+(11, 0, 0, 'lightblue', 1, 0, 0);
 
 INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `template`) VALUES
 (1, 1, 'Awaiting cheque payment', 'cheque'),
@@ -147,6 +148,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (8, 1, 'Payment error', 'payment_error'),
 (9, 1, 'Out of stock', 'outofstock'),
 (10, 1, 'Awaiting bank wire payment', 'bankwire'),
+(11, 1, 'Awaiting PayPal payment', ''),
 (1, 2, 'En attente du paiement par chèque', 'cheque'),
 (2, 2, 'Paiement accepté', 'payment'),
 (3, 2, 'Préparation en cours', 'preparation'),
@@ -156,7 +158,8 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (7, 2, 'Remboursé', 'refund'),
 (8, 2, 'Erreur de paiement', 'payment_error'),
 (9, 2, 'Produit(s) indisponibles', 'outofstock'),
-(10, 2, 'En attente du paiement par virement bancaire', 'bankwire');
+(10, 2, 'En attente du paiement par virement bancaire', 'bankwire'),
+(11, 2, 'En attente du paiement par PayPal', '');
 
 INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`, `enabled`) VALUES
 (1, 'Europe', 1, 1),

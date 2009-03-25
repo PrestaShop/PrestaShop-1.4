@@ -277,6 +277,13 @@ CREATE TABLE `PREFIX_search_word` (
 /* 					CONTENTS					 */
 /* ##################################### */
 
+INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
+(11, 0, 0, 'lightblue', 1, 0, 0);
+
+INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `template`) VALUES
+(11, 1, 'Awaiting PayPal payment', ''),
+(11, 2, 'En attente du paiement par PayPal', '');
+
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_SEARCH_MINWORDLEN', '3', NOW(), NOW()),
 ('PS_SEARCH_WEIGHT_PNAME', '6', NOW(), NOW()),
