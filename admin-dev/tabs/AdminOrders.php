@@ -394,7 +394,7 @@ class AdminOrders extends AdminTab
 		if (sizeof($sources))
 		{
 			echo '<br />
-			<fieldset style="width: 400px"><legend><img src="../img/admin/tab-stats.gif" /> '.$this->l('Sources').'</legend><ul>';
+			<fieldset style="width: 400px;"><legend><img src="../img/admin/tab-stats.gif" /> '.$this->l('Sources').'</legend><ul '.(sizeof($sources) > 3 ? 'style="overflow-y: scroll; height: 200px"' : '').'>';
 			foreach ($sources as $source)
 				echo '<li>
 						'.Tools::displayDate($source['date_add'], intval($cookie->id_lang), true).'<br />
