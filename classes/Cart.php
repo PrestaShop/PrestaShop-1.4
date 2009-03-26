@@ -791,7 +791,7 @@ class		Cart extends ObjectModel
 			return Tools::displayError('this voucher is not yet valid');
 		if (strtotime($discountObj->date_to) < time())
 			return Tools::displayError('this voucher has expired');
-		if (sizeof($discounts) >= 1)
+		if (sizeof($discounts) >= 1 AND $checkCartDiscount)
 		{
 			if (!$discountObj->cumulable)
 				return Tools::displayError('this voucher isn\'t cumulative with other current discounts');
