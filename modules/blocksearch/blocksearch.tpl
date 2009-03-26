@@ -4,6 +4,8 @@
 	<form method="get" action="{$base_dir}search.php" id="searchbox">
 		<p class="block_content">
 			<label for="search_query">{l s='Enter a product name' mod='blocksearch'}</label>
+			<input type="hidden" name="orderby" value="position" />
+			<input type="hidden" name="orderway" value="desc" />
 			<input type="text" id="search_query" name="search_query" value="{if isset($smarty.get.search_query)}{$smarty.get.search_query|htmlentities:$ENT_QUOTES:'utf-8'}{/if}" />
 			<input type="submit" id="search_button" class="button_mini" value="{l s='go' mod='blocksearch'}" />
 		</p>
@@ -18,8 +20,9 @@
 		function formatSearch(row) {
 			return row[2] + ' > ' + row[1];
 		}
-
+		
 		function redirectSearch(event, data, formatted) {
+			$('#search_query').val(data[1]);
 			document.location.href = data[3];
 		}
 		

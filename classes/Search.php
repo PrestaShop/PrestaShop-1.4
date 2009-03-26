@@ -182,7 +182,7 @@ class Search
 		
 		$queryResults = '
 		SELECT SQL_CALC_FOUND_ROWS p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
-		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name,
+		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name
 		'.$score.'
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
