@@ -209,31 +209,38 @@ CREATE TABLE IF NOT EXISTS `PREFIX_connections_source` (
 	INDEX request_uri(`request_uri`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_referrer` (
-	id_referrer INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	name VARCHAR(64) NOT NULL,
-	passwd VARCHAR(32) NULL,
-	http_referer_regexp VARCHAR(64) NULL,
-	http_referer_like VARCHAR(64) NULL,
-	request_uri_regexp VARCHAR(64) NULL,
-	request_uri_like VARCHAR(64) NULL,
-	http_referer_regexp_not VARCHAR(64) NULL,
-	http_referer_like_not VARCHAR(64) NULL,
-	request_uri_regexp_not VARCHAR(64) NULL,
-	request_uri_like_not VARCHAR(64) NULL,
-	base_fee DECIMAL(4, 2) NOT NULL DEFAULT 0,
-	percent_fee DECIMAL(3, 2) NOT NULL DEFAULT 0,
-	click_fee decimal(3,2) NOT NULL default '0.00',
-	cache_visitors INTEGER NULL,
-	cache_visits INTEGER NULL,
-	cache_pages INTEGER NULL,
-	cache_registrations INTEGER NULL,
-	cache_orders INTEGER NULL,
-	cache_sales DECIMAL(10,2) NULL,
-	cache_reg_rate DECIMAL(5,2) NULL,
-	cache_order_rate DECIMAL(5,2) NULL,
-	date_add DATETIME NOT NULL,
-	PRIMARY KEY (`id_referrer`)
+CREATE TABLE `PREFIX_referrer` (
+  `id_referrer` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(64) NOT NULL,
+  `passwd` varchar(32) default NULL,
+  `http_referer_regexp` varchar(64) default NULL,
+  `http_referer_like` varchar(64) default NULL,
+  `request_uri_regexp` varchar(64) default NULL,
+  `request_uri_like` varchar(64) default NULL,
+  `http_referer_regexp_not` varchar(64) default NULL,
+  `http_referer_like_not` varchar(64) default NULL,
+  `request_uri_regexp_not` varchar(64) default NULL,
+  `request_uri_like_not` varchar(64) default NULL,
+  `base_fee` decimal(5,2) NOT NULL default '0.00',
+  `percent_fee` decimal(5,2) NOT NULL default '0.00',
+  `click_fee` decimal(5,2) NOT NULL default '0.00',
+  `cache_visitors` int(11) default NULL,
+  `cache_visits` int(11) default NULL,
+  `cache_pages` int(11) default NULL,
+  `cache_registrations` int(11) default NULL,
+  `cache_orders` int(11) default NULL,
+  `cache_sales` decimal(10,2) default NULL,
+  `cache_reg_rate` decimal(5,4) default NULL,
+  `cache_order_rate` decimal(5,4) default NULL,
+  `date_add` datetime NOT NULL,
+  PRIMARY KEY  (`id_referrer`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_referrer_cache` (
+  `id_referrer` int(11) NOT NULL,
+  `id_connections_source` int(11) NOT NULL,
+  PRIMARY KEY  (`id_referrer`,`id_connections_source`),
+  KEY `id_connections_source` (`id_connections_source`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (

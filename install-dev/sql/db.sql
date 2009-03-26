@@ -1082,7 +1082,6 @@ CREATE TABLE `PREFIX_referrer_cache` (
   `id_referrer` int(11) NOT NULL,
   `id_connections_source` int(11) NOT NULL,
   PRIMARY KEY  (`id_referrer`,`id_connections_source`),
-  KEY `id_referrer` (`id_referrer`),
   KEY `id_connections_source` (`id_connections_source`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
