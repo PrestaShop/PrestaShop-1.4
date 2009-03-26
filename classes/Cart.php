@@ -234,7 +234,7 @@ class		Cart extends ObjectModel
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
 				$row['ecotax'] = floatval($row['ecotax_attr']);
 			$row['stock_quantity'] = intval($row['quantity']);
-			$row['weight'] = intval($row['weight_attribute']);
+			$row['weight'] = $row['weight_attribute'];
 			$row['quantity'] = intval($row['cart_quantity']);
 			$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['quantity']));
 			$row['price_wt'] = number_format(Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity'])), 2, '.', '');
