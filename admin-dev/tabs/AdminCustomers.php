@@ -25,7 +25,13 @@ class AdminCustomers extends AdminTab
 	 	$this->delete = true;
 		$this->deleted = true;
 
-		$this->_select = '(YEAR(NOW()) - YEAR(birthday)) as age';
+		$this->_select = '(YEAR(NOW()) - YEAR(birthday)) as age, (
+			SELECT c.date_add FROM '._DB_PREFIX_.'guest g
+			LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest
+			WHERE g.id_customer = a.id_customer
+			ORDER BY c.date_add DESC
+			LIMIT 1
+		) as connect';
 		$genders = array(1 => $this->l('M'), 2 => $this->l('F'), 9 => $this->l('?'));
  		$this->fieldsDisplay = array(
 		'id_customer' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -33,11 +39,12 @@ class AdminCustomers extends AdminTab
 		'lastname' => array('title' => $this->l('Last Name'), 'width' => 80),
 		'firstname' => array('title' => $this->l('First name'), 'width' => 60),
 		'email' => array('title' => $this->l('E-mail address'), 'width' => 120, 'maxlength' => 19),
-		'age' => array('title' => $this->l('Age'), 'width' => 30, 'suffix' => $this->l(' years old'), 'search' => false),
+		'age' => array('title' => $this->l('Age'), 'width' => 30, 'search' => false),
 		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
 		'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
 		'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
-		'date_add' => array('title' => $this->l('Registration'), 'width' => 60, 'type' => 'date'));
+		'date_add' => array('title' => $this->l('Registration'), 'width' => 60, 'type' => 'date'),
+		'connect' => array('title' => $this->l('Connection'), 'width' => 60, 'type' => 'datetime', 'search' => false));
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(

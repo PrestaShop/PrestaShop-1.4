@@ -36,7 +36,7 @@ class AdminCarts extends AdminTab
 		'customer' => array('title' => $this->l('Customer'), 'width' => 80, 'filter_key' => 'c!lastname'),
 		'total' => array('title' => $this->l('Total'), 'callback' => 'getTotalCart', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
 		'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center'),
-		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'date', 'filter_key' => 'a!date_add'));
+		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'));
 		parent::__construct();
 	}
 

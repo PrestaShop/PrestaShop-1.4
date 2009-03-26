@@ -791,7 +791,7 @@ abstract class AdminTab
 
 		/* Manage default params values */
 		if (empty($limit))
-			$limit = ((!isset($cookie->{$this->table.'_pagination'})) ? $this->_pagination[0] : $limit = $cookie->{$this->table.'_pagination'});
+			$limit = ((!isset($cookie->{$this->table.'_pagination'})) ? $this->_pagination[1] : $limit = $cookie->{$this->table.'_pagination'});
 
 		if (!Validate::isTableOrIdentifier($this->table))
 			die (Tools::displayError('Table name is invalid:').' "'.$this->table.'"');
@@ -914,7 +914,7 @@ abstract class AdminTab
 						<select name="pagination">';
 		/* Choose number of results per page */
 		foreach ($this->_pagination AS $value)
-			echo '<option value="'.intval($value).'"'.((Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL)) == $value) ? ' selected="selected"' : '').'>'.intval($value).'</option>';
+			echo '<option value="'.intval($value).'"'.((Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL)) == $value) ? ' selected="selected"' : ($value == $this->_pagination[1] ? ' selected="selected"' : '')).'>'.intval($value).'</option>';
 		echo '
 						</select>
 						/ '.intval($this->_listTotal).' '.$this->l('result(s)').'
@@ -983,6 +983,7 @@ abstract class AdminTab
 					break;
 
 				case 'date':
+				case 'datetime':
 					if (is_string($value))
 						$value = unserialize($value);
 					$name = $this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key);
@@ -1131,6 +1132,8 @@ abstract class AdminTab
 						echo rtrim(rtrim($tr[$key], '0'), '.');
 					elseif (isset($params['type']) AND $params['type'] == 'date')
 						echo Tools::displayDate($tr[$key], $cookie->id_lang);
+					elseif (isset($params['type']) AND $params['type'] == 'datetime')
+						echo Tools::displayDate($tr[$key], $cookie->id_lang, true);
 					elseif ($key == 'physical_products_quantity')
 						echo Category::countNbProductAndSub($tr['id_category'], $cookie->id_lang);
 					elseif (isset($tr[$key]))
