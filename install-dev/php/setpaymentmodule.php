@@ -7,7 +7,11 @@ function set_payment_module()
 	foreach ($modules AS $module)
 	{
 		$file = _PS_MODULE_DIR_.$module['name'].'/'.$module['name'].'.php';
+		if (!file_exists($file))
+			continue;
 		$fd = fopen($file, 'r');
+		if (!$fd)
+			continue ;
 		$content = fread($fd, filesize($file));
 		if (preg_match_all('/extends PaymentModule/U', $content, $matches))
 		{
