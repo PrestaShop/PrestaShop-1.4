@@ -776,7 +776,8 @@ class Tools
 	
 	static public function getTimezones($select = false)
 	{
-		if (!class_exists('DateTimeZone') OR !method_exists('DateTimeZone', 'listAbbreviations'))
+		// get_declared_classes() is used to avoid crash for PHP version prior to 5.2 - DO NOT USE class_exists() which try and failed to load it
+		if (!in_array('DateTimeZone', get_declared_classes()) OR !method_exists('DateTimeZone', 'listAbbreviations'))
 			return array('336', 'Europe/Paris');
 		$timezones = DateTimeZone::listAbbreviations();
 		$cities = array();
