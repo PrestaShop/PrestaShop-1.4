@@ -778,7 +778,7 @@ class Tools
 	{
 		// get_declared_classes() is used to avoid crash for PHP version prior to 5.2 - DO NOT USE class_exists() which try and failed to load it
 		if (!in_array('DateTimeZone', get_declared_classes()) OR !method_exists('DateTimeZone', 'listAbbreviations'))
-			return array('336', 'Europe/Paris');
+			return 'Europe/Paris';
 		$timezones = DateTimeZone::listAbbreviations();
 		$cities = array();
 		foreach ($timezones as $key => $zones)
