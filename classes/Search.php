@@ -276,8 +276,8 @@ class Search
 		while ($product = $db->nextRow($products))
 		{
 			$product['tags'] = self::getTags($db, $product['id_product'], $product['id_lang']);
-			$product['features'] = self::getAttributes($db, $product['id_product'], $product['id_lang']);
-			$product['attributes'] = self::getFeatures($db, $product['id_product'], $product['id_lang']);
+			$product['attributes'] = self::getAttributes($db, $product['id_product'], $product['id_lang']);
+			$product['features'] = self::getFeatures($db, $product['id_product'], $product['id_lang']);
 
 			$pArray = array();
 			foreach ($product as $key => $value)
