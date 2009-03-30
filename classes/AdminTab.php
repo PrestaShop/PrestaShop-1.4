@@ -1150,7 +1150,7 @@ abstract class AdminTab
 				}
 				if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
 				{
-					echo '<td class="center">';
+					echo '<td class="center" style="white-space: nowrap;">';
 					if ($this->view)
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
