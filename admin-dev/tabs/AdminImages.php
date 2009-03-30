@@ -180,12 +180,8 @@ class AdminImages extends AdminTab
 		foreach ($categoriesImages as $image)
 			if (ereg('^[0-9]*\.jpg$', $image))
 				foreach ($categoriesTypes AS $k => $imageType)
-				{
-					$file['tmp_name'] = _PS_CAT_IMG_DIR_.$image;
-					$file['type'] = 'image/jpg';
-					if (!imageResize($file, _PS_CAT_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize(_PS_CAT_IMG_DIR_.$image, _PS_CAT_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
-				}
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write category image. Please check the folder\'s writing permissions.');
 
@@ -194,10 +190,9 @@ class AdminImages extends AdminTab
 		foreach ($categoriesTypes AS $k => $imageType)
 			foreach ($languages AS $language)
 			{
-				$file['tmp_name'] = _PS_CAT_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file['tmp_name']))
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_CAT_IMG_DIR_.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				if (!imageResize($file, _PS_CAT_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
 				intval($imageType['width']), intval($imageType['height'])))
 					$errors = true;
@@ -218,12 +213,8 @@ class AdminImages extends AdminTab
 		foreach ($manufacturersImages AS $image)
 			if (ereg('^[0-9]*\.jpg$', $image))
 				foreach ($manufacturersTypes AS $k => $imageType)
-				{
-					$file['tmp_name'] = _PS_MANU_IMG_DIR_.$image;
-					$file['type'] = 'image/jpg';
-					if (!imageResize($file, _PS_MANU_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize(_PS_MANU_IMG_DIR_.$image, _PS_MANU_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
-				}
 
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write manufacturer images. Please check the folder\'s writing permissions.');
@@ -233,10 +224,9 @@ class AdminImages extends AdminTab
 		foreach ($manufacturersTypes AS $k => $imageType)
 			foreach ($languages AS $language)
 			{
-				$file['tmp_name'] = _PS_MANU_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file['tmp_name']))
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_MANU_IMG_DIR_.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				if (!imageResize($file, _PS_MANU_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
 				intval($imageType['width']), intval($imageType['height'])))
 					$errors = true;
@@ -257,12 +247,8 @@ class AdminImages extends AdminTab
 		foreach ($suppliersImages AS $image)
 			if (ereg('^[0-9]*\.jpg$', $image))
 				foreach ($suppliersTypes AS $k => $imageType)
-				{
-					$file['tmp_name'] = _PS_SUPP_IMG_DIR_.$image;
-					$file['type'] = 'image/jpg';
-					if (!imageResize($file, _PS_SUPP_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize(_PS_SUPP_IMG_DIR_.$image, _PS_SUPP_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
-				}
 
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write supplier images into the supplier images folder. Please check the folder\'s writing permissions.');
@@ -272,10 +258,9 @@ class AdminImages extends AdminTab
 		foreach ($suppliersTypes AS $k => $imageType)
 			foreach ($languages AS $language)
 			{
-				$file['tmp_name'] = _PS_SUPP_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file['tmp_name']))
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_SUPP_IMG_DIR_.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				if (!imageResize($file, _PS_SUPP_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
 				intval($imageType['width']), intval($imageType['height'])))
 					$errors = true;
@@ -296,12 +281,8 @@ class AdminImages extends AdminTab
 		foreach ($scenesImages AS $image)
 			if (ereg('^[0-9]*\.jpg$', $image))
 				foreach ($scenesTypes AS $k => $imageType)
-				{
-					$file['tmp_name'] = _PS_SCENE_IMG_DIR_.$image;
-					$file['type'] = 'image/jpg';
-					if (!imageResize($file, _PS_SCENE_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize(_PS_SCENE_IMG_DIR_.$image, _PS_SCENE_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
-				}
 
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write scene images into the scene images folder. Please check the folder\'s writing permissions.');
@@ -311,10 +292,9 @@ class AdminImages extends AdminTab
 		foreach ($scenesTypes AS $k => $imageType)
 			foreach ($languages AS $language)
 			{
-				$file['tmp_name'] = _PS_SCENE_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file['tmp_name']))
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_SCENE_IMG_DIR_.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				if (!imageResize($file, _PS_SCENE_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
 				intval($imageType['width']), intval($imageType['height'])))
 					$errors = true;
@@ -334,10 +314,9 @@ class AdminImages extends AdminTab
 		foreach ($productsTypes AS $k => $imageType)
 			foreach ($languages AS $language)
 			{
-				$file['tmp_name'] = _PS_PROD_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file['tmp_name']))
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_PROD_IMG_DIR_.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				$newFile = _PS_PROD_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg';
 				if (!imageResize($file, $newFile,
 				intval($imageType['width']), intval($imageType['height'])))
@@ -353,10 +332,8 @@ class AdminImages extends AdminTab
 			if (file_exists(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 				foreach ($productsTypes AS $k => $imageType)
 				{
-					$file['tmp_name'] = _PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg';
-					$file['type'] = 'image/jpg';
 					$newFile = _PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg';
-					if (!imageResize($file, $newFile, intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg', $newFile, intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
 				}
 		}

@@ -596,19 +596,24 @@ class AdminProducts extends AdminTab
 	 */
 	public function copyImage($id_product, $id_image, $method = 'auto')
 	{
+		if (!isset($_FILES['image_product']['tmp_name']) OR !file_exists($_FILES['image_product']['tmp_name']))
+			return false;
 		if ($error = checkImage($_FILES['image_product'], $this->maxImageSize))
 			$this->_errors[] = $error;
 		else
 		{
-			if (!imageResize($_FILES['image_product'], _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
+			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
+				return false;
+			if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying image');
 			elseif($method == 'auto')
 			{
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($_FILES['image_product'], _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
+					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+						$this->_errors[] = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
 			}
+			unlink($tmpName);
 			Module::hookExec('watermark', array('id_image' => $id_image, 'id_product' => $id_product));
 		}
 	}

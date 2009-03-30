@@ -164,8 +164,7 @@ class AdminSuppliers extends AdminTab
 			$imagesTypes = ImageType::getImagesTypes('suppliers');
 			foreach ($imagesTypes AS $k => $imageType)
 			{
-				$file['tmp_name'] = _PS_SUPP_IMG_DIR_.$id_supplier.'.jpg';
-				$file['type'] = 'image/jpg';
+				$file = _PS_SUPP_IMG_DIR_.$id_supplier.'.jpg';
 				imageResize($file, _PS_SUPP_IMG_DIR_.$id_supplier.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 			}
 		}

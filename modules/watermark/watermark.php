@@ -187,8 +187,7 @@ class Watermark extends Module
 	public function hookwatermark($params)
 	{
 		global $smarty;
-		$file['tmp_name'] = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-watermark.jpg';
-		$file['type'] = 'image/jpg';
+		$file = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-watermark.jpg';
 		
 		//first make a watermark image
 		$this->watermarkByImage(_PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'.jpg',  dirname(__FILE__).'/watermark.gif', $file['tmp_name'], 23, 0, 0, 'right');

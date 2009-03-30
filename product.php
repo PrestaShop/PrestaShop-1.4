@@ -24,16 +24,19 @@ function pictureUpload(Product $product, Cart $cart)
 			$fileName = md5(uniqid(rand(), true));
 			if ($error = checkImage($file, intval(Configuration::get('PS_PRODUCT_PICTURE_MAX_SIZE'))))
 				$errors[] = $error;
+			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
+				return false;
 			/* Original file */
-			elseif (!imageResize($file, _PS_PROD_PIC_DIR_.$fileName))
+			elseif (!imageResize($tmpName, _PS_PROD_PIC_DIR_.$fileName))
 				$errors[] = Tools::displayError('An error occurred during the image upload.');
 			/* A smaller one */
-			elseif (!imageResize($file, _PS_PROD_PIC_DIR_.$fileName.'_small', intval(Configuration::get('PS_PRODUCT_PICTURE_WIDTH')), intval(Configuration::get('PS_PRODUCT_PICTURE_HEIGHT'))))
+			elseif (!imageResize($tmpName, _PS_PROD_PIC_DIR_.$fileName.'_small', intval(Configuration::get('PS_PRODUCT_PICTURE_WIDTH')), intval(Configuration::get('PS_PRODUCT_PICTURE_HEIGHT'))))
 				$errors[] = Tools::displayError('An error occurred during the image upload.');
 			elseif (!chmod(_PS_PROD_PIC_DIR_.$fileName, 0777) OR !chmod(_PS_PROD_PIC_DIR_.$fileName.'_small', 0777))
 				$errors[] = Tools::displayError('An error occurred during the image upload.');
 			else
 				$cart->addPictureToProduct(intval($product->id), $indexes[$fieldName], $fileName);
+			unlink($tmpName);
 		}
 	return true;
 }

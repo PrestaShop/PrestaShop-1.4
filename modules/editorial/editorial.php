@@ -98,14 +98,17 @@ class Editorial extends Module
 				Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
 					$this->_html .= $error;
-				elseif (!imageResize($_FILES['body_homepage_logo'], dirname(__FILE__).'/homepage_logo.jpg'))
+				elseif (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['body_homepage_logo']['tmp_name'], $tmpName))
+					return false;
+				elseif (!imageResize($tmpName, dirname(__FILE__).'/homepage_logo.jpg'))
 					$this->_html .= $this->displayError($this->l('An error occurred during the image upload.'));
+				unlink($tmpName);
 			}
 		}
 
 		/* display the editorial's form */
 		$this->_displayForm();
-
+	
 		return $this->_html;
 	}
 

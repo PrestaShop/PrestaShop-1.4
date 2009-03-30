@@ -51,25 +51,28 @@ class AdminLanguages extends AdminTab
 			$this->_errors[] = $error;
 		else
 		{
-			if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'p/'.$language.'.jpg'))
+			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['no-picture']['tmp_name'], $tmpName))
+				return false;
+			if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your product folder');
-			if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'c/'.$language.'.jpg'))
+			if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your category folder');
-			if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'m/'.$language.'.jpg'))
+			if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your manufacturer folder');
 			else
 			{	
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
 				{
-					if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'p/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your product directory');
-					if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'c/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your category directory');
-					if (!imageResize($_FILES['no-picture'], _PS_IMG_DIR_.'m/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your manufacturer directory');
 				}
 			}
+			unlink($tmpName);
 		}
 	}
 	

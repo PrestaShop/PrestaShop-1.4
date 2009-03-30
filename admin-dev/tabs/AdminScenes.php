@@ -54,10 +54,13 @@ class AdminScenes extends AdminTab
 			$imagesTypes = ImageType::getImagesTypes('scenes');
 			foreach ($imagesTypes AS $k => $imageType)
 			{
+				if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image']['tmp_name'], $tmpName))
+					return false;
 				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']))
-					imageResize($_FILES['image'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+					imageResize($tmpName, _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 				elseif ($imageType['name'] == 'thumb_scene')
-					imageResize((isset($_FILES['thumb'])  AND !$_FILES['thumb']['error']) ? $_FILES['thumb'] : $_FILES['image'], _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+					imageResize((isset($_FILES['thumb'])  AND !$_FILES['thumb']['error']) ? $_FILES['thumb'] : $tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+				unlink($tmpName);
 			}
 		}
 		return true;

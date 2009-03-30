@@ -126,11 +126,7 @@ class AdminCategories extends AdminTab
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
-			{
-				$file['tmp_name'] = _PS_CAT_IMG_DIR_.$id_category.'.jpg';
-				$file['type'] = 'image/jpg';
-				imageResize($file, _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
-			}
+				imageResize(_PS_CAT_IMG_DIR_.$id_category.'.jpg', _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 		}
 	}
 

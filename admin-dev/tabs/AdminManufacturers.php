@@ -81,11 +81,7 @@ class AdminManufacturers extends AdminTab
 		{
 			$imagesTypes = ImageType::getImagesTypes('manufacturers');
 			foreach ($imagesTypes AS $k => $imageType)
-			{
-				$file['tmp_name'] = _PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg';
-				$file['type'] = 'image/jpg';
-				imageResize($file, _PS_MANU_IMG_DIR_.$id_manufacturer.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
-			}
+				imageResize(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg', _PS_MANU_IMG_DIR_.$id_manufacturer.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 		}
 		parent::postProcess();
 	}

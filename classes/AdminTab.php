@@ -660,10 +660,12 @@ abstract class AdminTab
 			// Check image validity
 			if ($error = checkImage($_FILES[$name], $this->maxImageSize))
 				$this->_errors[] = $error;
-
+			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES[$name]['tmp_name'], $tmpName))
+				return false;
 			// Copy new image
-			else if (!imageResize($_FILES[$name], _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
+			else if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
 				$this->_errors[] = Tools::displayError('an error occurred while uploading image');
+			unlink($tmpName);
 		}
 		
 		if (sizeof($this->_errors))

@@ -114,15 +114,13 @@ function	checkIco($file, $maxFileSize)
   */
 function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg')
 {
-	if (!isset($sourceFile['tmp_name']) OR !file_exists($sourceFile['tmp_name']))
-		return false;
-	list($sourceWidth, $sourceHeight, $type, $attr) = @getimagesize($sourceFile['tmp_name']);
+	list($sourceWidth, $sourceHeight, $type, $attr) = @getimagesize($sourceFile);
 	if (!$sourceWidth)
 		return false;
 	if ($destWidth == NULL) $destWidth = $sourceWidth;
 	if ($destHeight == NULL) $destHeight = $sourceHeight;
 
-	$sourceImage = createSrcImage($type, $sourceFile['tmp_name']);
+	$sourceImage = createSrcImage($type, $sourceFile);
 
 	$widthDiff = $destWidth / $sourceWidth;
 	$heightDiff = $destHeight / $sourceHeight;
@@ -155,7 +153,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 
 	$white = imagecolorallocate($destImage, 255, 255, 255);
 	imagefill($destImage, 0, 0, $white);
-	
+
 	imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
 	imagecolortransparent($destImage, $white);
 	return (returnDestImage($fileType, $destImage, $destFile));

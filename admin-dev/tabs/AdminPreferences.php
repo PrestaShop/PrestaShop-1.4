@@ -151,8 +151,11 @@ class AdminPreferences extends AdminTab
 				{
 					if ($error = checkImage($_FILES['PS_LOGO'], 300000))
 						$this->_errors[] = $error;
-					elseif (!@imageResize($_FILES['PS_LOGO'], _PS_IMG_DIR_.'logo.jpg'))
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['PS_LOGO']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo.jpg'))
 						$this->_errors[] = 'an error occured during logo copy';
+					unlink($tmpName);
 				}
 				$this->uploadIco('PS_FAVICON', _PS_IMG_DIR_.'favicon.ico');
 			}
