@@ -2,6 +2,13 @@
 
 define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
+/* Getting cookie or logout */
+if (!class_exists('Cookie'))
+	exit();
+
+$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -10));
+if (!$cookie->isLoggedBack())
+	die;
 
 if (isset($_GET['ajaxProductManufacturers']))
 {
