@@ -213,8 +213,8 @@ class AdminModulesPositions extends AdminTab
 					{
 						echo '
 						<td class="positions" width="40">'.intval($position).'</td>
-						<td class="dragHandle" id="td_'.$instance->id.'" width="40">
-							<a'.($position == 1 ? ' style="display: none;"' : '' ).' href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=0&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a><br />
+						<td'.($nbModules >= 2? ' class="dragHandle"' : '').' id="td_'.$hook['id_hook'].'_'.$instance->id.'" width="40">
+						<a'.($position == 1 ? ' style="display: none;"' : '' ).' href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=0&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a><br />
 							<a '.($position == sizeof($instances) ? ' style="display: none;"' : '').'href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=1&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>
 						</td>
 						<td style="padding-left: 10px;">
