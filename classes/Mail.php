@@ -85,7 +85,7 @@ class Mail
 				die(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt');
 				
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
-			$templateTxt = utf8_encode(strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8')));
+			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8'));
 			include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
 
 			global $_LANGMAIL;
