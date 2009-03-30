@@ -4,6 +4,8 @@ include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
 class AdminAttachments extends AdminTab
 {
+	protected $maxFileSize  = 2000000;
+	
 	public function __construct()
 	{
 		global $cookie;
@@ -25,17 +27,26 @@ class AdminAttachments extends AdminTab
 	public function postProcess()
 	{
 		if (Tools::isSubmit('submitAdd'.$this->table))
-			if (isset($_FILES['file']) AND is_uploaded_file($_FILES['file']['tmp_name']))
-			{
-				$uploadDir = dirname(__FILE__).'/../../download/';
-				do $uniqid = sha1(microtime());	while (file_exists($uploadDir.$uniqid));
-				if (!copy($_FILES['file']['tmp_name'], $uploadDir.$uniqid))
-					$this->_errors[] = $this->l('File copy failed');
-				@unlink($_FILES['file']['tmp_name']);
-				$_POST['file'] = $uniqid;
-			}
-			elseif ($id = intval(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
+		{
+			if ($id = intval(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
 				$_POST['file'] = $a->file;
+			if (!sizeof($this->_errors))
+				if (isset($_FILES['file']) AND is_uploaded_file($_FILES['file']['tmp_name']))
+				{
+					if ($_FILES['file']['size'] > $this->maxFileSize)
+						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.($this->maxFileSize/1000).' '.$this->l('kb');
+					else
+					{
+						$uploadDir = dirname(__FILE__).'/../../download/';
+						do $uniqid = sha1(microtime());	while (file_exists($uploadDir.$uniqid));
+						if (!copy($_FILES['file']['tmp_name'], $uploadDir.$uniqid))
+							$this->_errors[] = $this->l('File copy failed');
+						@unlink($_FILES['file']['tmp_name']);
+						$_POST['file'] = $uniqid;
+					}
+				}
+			$this->validateRules();
+		}
 		return parent::postProcess();
 	}
 	

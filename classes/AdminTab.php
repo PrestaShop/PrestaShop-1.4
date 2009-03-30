@@ -291,9 +291,10 @@ abstract class AdminTab
 			if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
 				if (!Tools::getValue($this->identifier) OR ($field != 'passwd' AND $field != 'no-picture'))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is required');
+
 		/* Checking for multilingual required fields */
 		foreach ($rules['requiredLang'] AS $fieldLang)
-			if (Tools::getValue($fieldLang.'_'.$defaultLanguage->id) === false)
+			if (($empty = Tools::getValue($fieldLang.'_'.$defaultLanguage->id)) === false OR empty($empty))
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
 
 		/* Checking for maximum fields sizes */
