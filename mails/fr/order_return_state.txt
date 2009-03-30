@@ -1,7 +1,7 @@
 Bonjour {firstname} {lastname},
 
-Votre bon de retour {id_order_return} a chang� de statut en "{state_order_return}".
+Votre bon de retour {id_order_return} a changé de statut en "{state_order_return}".
 
-Vous pouvez acc�der � tout moment au suivi de votre bon de retour dans "Historique de mes commandes" de la rubrique "Mon compte" sur notre site.
+Vous pouvez accéder à tout moment au suivi de votre bon de retour dans "Historique de mes commandes" de la rubrique "Mon compte" sur notre site.
 
-{shop_name} - {shop_url}
+{shop_url} réalisé par PrestaShop™

@@ -1,14 +1,14 @@
 Bonjour {firstname} {lastname}, merci d'avoir passé commande chez {shop_name} !
 
-Détails de la commande
+DÃ©tails de la commande
 
-	Commande : {order_name} passée le {date}
+	Commande : {order_name} passÃ©e le {date}
 	Mode de paiement : {payment}
 
 	Produits : {total_products}
-	Bons d'achat et réductions : {total_discounts}
+	Bons d'achat et rÃ©ductions : {total_discounts}
 	Emballage Cadeau : {total_wrapping}
-	Frais d'expédition : {total_shipping}
+	Frais d'expÃ©dition : {total_shipping}
 	Total TTC : {total_paid}
 
 
@@ -36,6 +36,6 @@ Livraison
 	{invoice_country} {invoice state}
 	{invoice_other}
 
-Vous pouvez accéder au suivi de votre commande et télécharger votre facture dans "Historique des commandes" de la rubrique "Mon compte" sur notre site.
+Vous pouvez accÃ©der au suivi de votre commande et tÃ©lÃ©charger votre facture dans "Historique des commandes" de la rubrique "Mon compte" sur notre site.
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

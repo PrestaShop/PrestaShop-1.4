@@ -1,13 +1,13 @@
 Bonjour {firstname} {lastname},
 
-Nous vous informons de la génération d'un bon de réduction à votre nom relatif à votre commande n°{id_order}.
+Nous vous informons de la gÃ©nÃ©ration d'un bon de rÃ©duction Ã  votre nom relatif Ã  votre commande nÂ°{id_order}.
 
-Voici le numéro de votre bon de réduction : {voucher_num}, d'un montant total de {voucher_amount}.
-Copiez-collez ce numéro dans le panier de votre prochain achat avant de régler la commande.
+Voici le numÃ©ro de votre bon de rÃ©duction : {voucher_num}, d'un montant total de {voucher_amount}.
+Copiez-collez ce numÃ©ro dans le panier de votre prochain achat avant de rÃ©gler la commande.
 
-Merci et à bientôt sur {shop_name}.
+Merci et Ã  bientÃ´t sur {shop_name}.
 
 {shop_name} - {shop_url}
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

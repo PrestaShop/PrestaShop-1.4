@@ -1,11 +1,11 @@
 Bonjour {firstname} {lastname},
 
-Votre commande {id_order} est en cours de préparation.
+Votre commande {id_order} est en cours de prÃ©paration.
 
-Vous pouvez accéder à tout moment au suivi de votre commande dans "Historique de mes commandes" de la rubrique "Mon compte" sur notre site.
+Vous pouvez accÃ©der Ã  tout moment au suivi de votre commande dans "Historique de mes commandes" de la rubrique "Mon compte" sur notre site.
 
 {shop_name} - {shop_url}
 
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

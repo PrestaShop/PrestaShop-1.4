@@ -1,11 +1,11 @@
 Bonjour {firstname} {lastname},
 
-Votre commande {id_order} est bien enregistrée mais nécessite un réapprovisionnement.
+Votre commande {id_order} est bien enregistrÃ©e mais nÃ©cessite un rÃ©approvisionnement.
 
-Vous pouvez accéder à tout moment au suivi de votre commande dans la rubrique "Mon compte".
+Vous pouvez accÃ©der Ã  tout moment au suivi de votre commande dans la rubrique "Mon compte".
 
 {shop_name} - {shop_url}
 
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

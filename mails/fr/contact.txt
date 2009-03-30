@@ -1,8 +1,8 @@
-Vous avez reçu un message de la part d'un client depuis votre boutique {shop_name}
+Vous avez reÃ§u un message de la part d'un client depuis votre boutique {shop_name}
 
 Informations
 
-Adresse électronique : {email}
+Adresse Ã©lectronique : {email}
 
 Message
 
@@ -10,4 +10,4 @@ Message
 
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢
