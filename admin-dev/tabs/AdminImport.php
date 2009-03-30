@@ -14,14 +14,13 @@ include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
-ini_set('display_errors', 'on');
 
 define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
 
 // this value set the number of columns visible on each page
 define('MAX_COLUMNS', 6);
 // correct Mac error on eof
-ini_set('auto_detect_line_endings', '1');
+@ini_set('auto_detect_line_endings', '1');
 
 class AdminImport extends AdminTab
 {
