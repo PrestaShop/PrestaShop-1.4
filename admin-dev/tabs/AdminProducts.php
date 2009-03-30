@@ -1709,7 +1709,7 @@ class AdminProducts extends AdminTab
 						<td>
 							<select id="id_category_default" name="id_category_default" onchange="checkDefaultCategory(this.value);">';
 		$categories = Category::getCategories(intval($cookie->id_lang), false);
-		Category::recurseCategory($categories, $categories[0][1], 1, $this->getFieldValue($obj, 'id_category_default'));
+		Category::recurseCategory($categories, $categories[0][1], 1, ($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)));
 		echo '
 							</select>
 						</td>
