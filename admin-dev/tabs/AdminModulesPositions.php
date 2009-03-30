@@ -175,7 +175,7 @@ class AdminModulesPositions extends AdminTab
 					<option value="'.$module->id.'" '.($this->displayKey == $module->id ? 'selected="selected" ' : '').'>'.$module->displayName.'</option>';
 			echo '
 			</select><br /><br />
-			<input type="checkbox" id="hook_position" onChange="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.intval(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;'.$this->l('Display non-positionnable hook').'
+			<input type="checkbox" id="hook_position" onclick="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.intval(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;'.$this->l('Display non-positionnable hook').'
 		</form>';
 
 		// Print hook list
