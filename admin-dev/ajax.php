@@ -5,8 +5,8 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 
 if (isset($_GET['ajaxProductManufacturers']))
 {
-	require_once(dirname(__FILE__).'/init.php');
 	$currentIndex = 'index.php?tab=AdminCatalog';
+	require_once(dirname(__FILE__).'/init.php');
 	$manufacturers = Manufacturer::getManufacturers();
 	if ($manufacturers)
 	{
@@ -19,8 +19,8 @@ if (isset($_GET['ajaxProductManufacturers']))
 
 if (isset($_GET['ajaxProductSuppliers']))
 {
-	require_once(dirname(__FILE__).'/init.php');
 	$currentIndex = 'index.php?tab=AdminCatalog';
+	require_once(dirname(__FILE__).'/init.php');
 	$suppliers = Supplier::getSuppliers();
 	if ($suppliers)
 	{
@@ -34,6 +34,7 @@ if (isset($_GET['ajaxProductSuppliers']))
 if (isset($_GET['ajaxProductAccessories']))
 {
 	$currentIndex = 'index.php?tab=AdminCatalog';
+	require_once(dirname(__FILE__).'/init.php');
 	$jsonArray = array();
 	
 	$products = Db::getInstance()->ExecuteS('
@@ -55,10 +56,9 @@ if (isset($_GET['ajaxProductAccessories']))
 if (isset($_GET['ajaxDiscountCustomers']))
 {
 	$currentIndex = 'index.php?tab=AdminDiscounts';
+	require_once(dirname(__FILE__).'/init.php');
 	$jsonArray = array();
 	$filter = Tools::getValue('filter');
-	
-	require_once(dirname(__FILE__).'/init.php');
 	
 	$customers = Db::getInstance()->ExecuteS('
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
