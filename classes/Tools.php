@@ -794,7 +794,7 @@ class Tools
 		$tmz = Db::getInstance()->s('SELECT * FROM '._DB_PREFIX_.'timezone');
 		$tab = array();
 		foreach ($tmz as $timezone)
-			$tab[$timezone['id_timezone']] = $timezone['name'];
+			$tab[$timezone['id_timezone']] = str_replace('_', ' ', $timezone['name']);
 		return $tab;
 	}
 }
