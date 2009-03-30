@@ -77,8 +77,6 @@ ALTER TABLE PREFIX_delivery
 	ADD INDEX id_carrier (`id_carrier`, `id_zone`);
 
 ALTER TABLE PREFIX_discount_category
-	ADD INDEX id_discount (`id_discount`);
-ALTER TABLE PREFIX_discount_category
 	ADD INDEX id_category (`id_category`);
 
 ALTER TABLE PREFIX_feature_product
@@ -121,6 +119,9 @@ ALTER TABLE PREFIX_product_lang
 	ADD INDEX `name` (`name`);
 ALTER TABLE PREFIX_product_lang
 	ADD FULLTEXT KEY ftsname (`name`);
+	
+ALTER TABLE PREFIX_cart_discount
+	ADD INDEX `id_discount` (`id_discount`);
 
 ALTER TABLE PREFIX_discount_category
 	ADD PRIMARY KEY (id_discount,id_category);
@@ -152,6 +153,7 @@ ALTER TABLE PREFIX_range_weight
 
 ALTER TABLE PREFIX_scene_products
 	ADD PRIMARY KEY (`id_scene`, `id_product`, `x_axis`, `y_axis`);
+
 
 /* ############################################################ */
 

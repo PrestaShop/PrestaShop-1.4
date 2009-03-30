@@ -147,6 +147,8 @@ class		Product extends ObjectModel
 	
 	private static $_prices = array();
 
+	private static $_incat = array();
+	
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
 
@@ -2063,12 +2065,22 @@ class		Product extends ObjectModel
 		return isset($row['id_product']);
 	}
 	
-	public function isOnCategoryId($id_category)
+	public static function idIsOnCategoryId($id_product, $categories)
 	{
-		if (!Db::getInstance()->Execute('SELECT id_product FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` = '.intval($id_category).' AND `id_product` = '.intval($this->id)))
+		$sql = 'SELECT id_product FROM `'._DB_PREFIX_.'category_product` WHERE `id_product`='.intval($id_product).' AND `id_category` IN(';
+		foreach ($categories AS $category)
+			$sql .= intval($category['id_category']).',';
+		$sql = rtrim($sql, ',').')';
+
+		if (isset(self::$_incat[md5($sql)]))
+			return self::$_incat[md5($sql)];
+
+		if (!Db::getInstance()->Execute($sql))
 			return false;
-		return Db::getInstance()->NumRows();
+		self::$_incat[md5($sql)] =  (Db::getInstance()->NumRows() > 0 ? true : false);
+		return self::$_incat[md5($sql)];
 	}
+	
 }
 
 ?>

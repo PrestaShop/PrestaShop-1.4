@@ -149,7 +149,7 @@ $smarty->assign(array(
 	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed')
 ));
 
-echo Module::display(__FILE__, 'referralprogram-program.tpl');
+echo Module::display(dirname(__FILE__).'/referralprogram.php', 'referralprogram-program.tpl');
 
 include(dirname(__FILE__).'/../../footer.php'); 
 

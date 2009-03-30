@@ -146,7 +146,7 @@ function checkFreeOrder()
 	if ($cart->getOrderTotal() <= 0)
 	{
 		$order = new FreeOrder();
-		$order->validateOrder(intval($cart->id), 2, 0, Tools::displayError('Free order', false));
+		$order->validateOrder(intval($cart->id), _PS_OS_PAYMENT_, 0, Tools::displayError('Free order', false));
 		Tools::redirect('history.php');
 	}
 }

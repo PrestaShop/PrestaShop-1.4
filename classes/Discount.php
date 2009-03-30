@@ -219,25 +219,17 @@ class		Discount extends ObjectModel
 				$amount = 0;
 				$percentage = $this->value / 100;
 				foreach ($products AS $product)
-				{
-					$oProduct = new Product(intval($product['id_product']));
-					foreach ($categories AS $category)
-						if ($oProduct->isOnCategoryId(intval($category['id_category'])))
-						{
+						if (Product::idIsOnCategoryId($product['id_product'], $categories))
 							$amount += $product['total_wt'] * $percentage;
-							break;
-						}
-				}
 				return $amount;
 			case 2:
 				// amount
 				foreach ($products AS $product)
-				{
-					$oProduct = new Product(intval($product['id_product']));
-					foreach ($categories AS $category)
-						if ($oProduct->isOnCategoryId(intval($category['id_category'])))
+						if (Product::idIsOnCategoryId($product['id_product'], $categories))
+						{
 							$in_category = true;
-				}
+							break;
+						}
 				return (($in_category) ? $this->value : 0);
 			case 3:
 				// Shipping is free

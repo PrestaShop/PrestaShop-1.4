@@ -136,12 +136,11 @@ class		Cart extends ObjectModel
 			$categories = Discount::getCategories($discount['id_discount']);
 			$in_category = false;
 			foreach ($products AS $product)
-			{
-				$oProduct = new Product($product['id_product']);
-				foreach ($categories AS $category)
-					if ($oProduct->isOnCategoryId($category['id_category']))
+					if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
+					{
 						$in_category = true;
-			}
+						break;
+					}
 			if (!$in_category)
 				unset($result[$k]);
 		}
@@ -593,8 +592,7 @@ class		Cart extends ObjectModel
 								$oProduct = new Product($product['id_product']);
 								$categories = Discount::getCategories($discount->id);
 								if(count($categories))
-									foreach($categories AS $category)
-										if($oProduct->isOnCategoryId($category['id_category']))
+										if (Product::idIsOnCategoryId($product['id_product'], $categories))
 										{
 											if($type == 2)
 												$order_total -= $shipping_fees;
@@ -642,12 +640,10 @@ class		Cart extends ObjectModel
 				if ($discount->id_discount_type == 3)
 					foreach($products AS $product)
 					{
-						$oProduct = new Product($product['id_product']);
 						$categories = Discount::getCategories($discount->id);
 						if(count($categories))
 						{
-							foreach($categories AS $category)
-								if($oProduct->isOnCategoryId($category['id_category']))
+							if (Product::idIsOnCategoryId($product['id_product'], $categories))
 									return 0;
 						}
 					}	
@@ -830,9 +826,7 @@ class		Cart extends ObjectModel
 		$categories = Discount::getCategories($discountObj->id);
 		foreach ($products AS $product)
 		{
-			$oProduct = new Product($product['id_product']);
-			foreach ($categories AS $category)
-				if ($oProduct->isOnCategoryId($category['id_category']))
+				if (Product::idIsOnCategoryId($product['id_product'], $categories))
 					return true;
 		}
 		return false;

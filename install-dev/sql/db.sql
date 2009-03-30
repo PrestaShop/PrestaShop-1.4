@@ -168,7 +168,8 @@ CREATE TABLE `PREFIX_cart` (
 CREATE TABLE `PREFIX_cart_discount` (
   `id_cart` int(10) unsigned NOT NULL,
   `id_discount` int(10) unsigned NOT NULL,
-  KEY `cart_discount_index` (`id_cart`,`id_discount`)
+  KEY `cart_discount_index` (`id_cart`,`id_discount`),
+  KEY `id_discount` (`id_discount`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_cart_product` (
@@ -436,7 +437,6 @@ CREATE TABLE `PREFIX_discount_category` (
   `id_discount` int(11) NOT NULL,
   `id_category` int(11) NOT NULL,
   PRIMARY KEY  (`id_discount`,`id_category`),
-  KEY `id_discount` (`id_discount`),
   KEY `id_category` (`id_category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
