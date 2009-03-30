@@ -481,7 +481,7 @@ abstract class Module
 	 * @param boolean $id_hook Hook ID
 	 * @param boolean $way Up (1)  or Down (0)
 	 */
-	public function updatePosition($id_hook, $way)
+	public function updatePosition($id_hook, $way, $position = NULL)
 	{
 		if (!$res = Db::getInstance()->ExecuteS('SELECT hm.`id_module`, hm.`position`, hm.`id_hook` FROM `'._DB_PREFIX_.'hook_module` hm WHERE hm.`id_hook` = '.pSQL($id_hook).' ORDER BY hm.`position` '.(intval($way) ? 'ASC' : 'DESC')))
 			return false;
@@ -495,15 +495,20 @@ abstract class Module
 			return false;
 		$from = $res[$k];
 		$to = $res[$k + 1];
+
+		if (isset($position) and !empty($position))
+			$to['position'] = intval($position);
+		
 		return (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
-			SET `position`='.intval($to['position']).'
-			WHERE `'.pSQL($this->identifier).'` = '.intval($from[$this->identifier]).' AND `id_hook`='.intval($from['id_hook']))
+			SET `position`= position '.($way ? '-1' : '+1').'
+			WHERE position between '.min(array($from['position'], $to['position'])) .' AND '.max(array($from['position'], $to['position'])).'
+			AND `id_hook`='.intval($from['id_hook']))
 			AND
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
-			SET `position`='.intval($from['position']).'
-			WHERE `'.pSQL($this->identifier).'` = '.intval($to[$this->identifier]).' AND `id_hook`='.intval($to['id_hook']))
+			SET `position`='.intval($to['position']).'
+			WHERE `'.pSQL($this->identifier).'` = '.intval($from[$this->identifier]).' AND `id_hook`='.intval($to['id_hook']))
 		);
 	}
 

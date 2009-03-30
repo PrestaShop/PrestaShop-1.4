@@ -148,7 +148,13 @@ class AdminModulesPositions extends AdminTab
 	public function displayList()
 	{
 		global $currentIndex;
-
+		echo '
+		<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
+		<script type="text/javascript">
+			var token = \''.$this->token.'\';
+		</script>
+		<script type="text/javascript" src="../js/admin-dnd.js"></script>
+		';
 		echo '<a href="'.$currentIndex.'&addToHook'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> <b>'.$this->l('Transplant a module').'</b></a><br /><br />';
 
 		// Print select list
@@ -185,8 +191,8 @@ class AdminModulesPositions extends AdminTab
 			$nbModules = sizeof($modules);
 			echo '
 			<a name="'.$hook['name'].'"/>
-			<table cellpadding="0" cellspacing="0" class="table width3 space">
-			<tr><th colspan="4">'.$hook['title'].' - <span style="color: red">'.$nbModules.'</span> '.(($nbModules > 1) ? $this->l('modules') : $this->l('module'));
+			<table cellpadding="0" cellspacing="0" class="table width3 space'.($nbModules >= 2? ' tableDnD' : '' ).'" id="'.$hook['id_hook'].'">
+			<tr class="nodrag nodrop"><th colspan="4">'.$hook['title'].' - <span style="color: red">'.$nbModules.'</span> '.(($nbModules > 1) ? $this->l('modules') : $this->l('module'));
 			if (!empty($hook['description']))
 				echo '&nbsp;<span style="font-size:0.8em; font-weight: normal">['.$hook['description'].']</span>';
 			echo '</th></tr>';
@@ -202,14 +208,14 @@ class AdminModulesPositions extends AdminTab
 				foreach ($instances AS $position => $instance)
 				{
 					echo '
-					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' style="height: 42px;">';
+					<tr id="'.$hook['id_hook'].'_'.$instance->id.'"'.($irow++ % 2 ? ' class="alt_row"' : '').' style="height: 42px;">';
 					if (!$this->displayKey)
 					{
 						echo '
-						<td width="40">'.intval($position).'</td>
-						<td width="40">
-							'.($position != 1 ? ('<a href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=0&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a><br />') : '').'
-							'.($position < sizeof($instances) ? ('<a href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=1&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>') : '').'
+						<td class="positions" width="40">'.intval($position).'</td>
+						<td class="dragHandle" id="td_'.$instance->id.'" width="40">
+							<a'.($position == 1 ? ' style="display: none;"' : '' ).' href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=0&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a><br />
+							<a '.($position == sizeof($instances) ? ' style="display: none;"' : '').'href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=1&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>
 						</td>
 						<td style="padding-left: 10px;">
 						';

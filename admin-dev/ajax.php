@@ -5,6 +5,7 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 
 if (isset($_GET['ajaxProductManufacturers']))
 {
+	require_once(dirname(__FILE__).'/init.php');
 	$currentIndex = 'index.php?tab=AdminCatalog';
 	$manufacturers = Manufacturer::getManufacturers();
 	if ($manufacturers)
@@ -18,6 +19,7 @@ if (isset($_GET['ajaxProductManufacturers']))
 
 if (isset($_GET['ajaxProductSuppliers']))
 {
+	require_once(dirname(__FILE__).'/init.php');
 	$currentIndex = 'index.php?tab=AdminCatalog';
 	$suppliers = Supplier::getSuppliers();
 	if ($suppliers)
@@ -55,6 +57,8 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	$currentIndex = 'index.php?tab=AdminDiscounts';
 	$jsonArray = array();
 	$filter = Tools::getValue('filter');
+	
+	require_once(dirname(__FILE__).'/init.php');
 	
 	$customers = Db::getInstance()->ExecuteS('
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
@@ -108,5 +112,21 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 		$jsonArray[] = '{field: \''.addslashes($field).'\'}';
 	die('['.implode(',', $jsonArray).']');
 }
-
+if (array_key_exists('ajaxModulesPositions', $_GET))
+{		
+		require_once(dirname(__FILE__).'/init.php');
+		
+		$id_module = intval(Tools::getValue('id_module'));
+		$id_hook = intval(Tools::getValue('id_hook'));
+		$way = intval(Tools::getValue('way'));
+		$module = Module::getInstanceById($id_module);
+		$positions = Tools::getValue(strval($id_hook));
+		$position = (is_array($positions))? array_search($id_hook.'_'.$id_module, $positions): null;	
+		if (Validate::isLoadedObject($module))
+			if (die($module->updatePosition($id_hook, $way, $position)));
+			else
+				die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
+		else
+			die('{\'hasError\' : true, errors : \'Tis module can not be loaded\'}');
+}
 ?>

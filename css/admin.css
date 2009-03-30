@@ -865,3 +865,9 @@ form#import_form {
 .new_message{
 	background-color:#FFE35C;
 }
+.myDragClass {
+	background-color: #FFAA55;
+}
+.dragHandle{
+cursor: move;
+}
