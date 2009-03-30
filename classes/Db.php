@@ -56,12 +56,12 @@ abstract class Db
 			self::$_instance = new MySQL();
 		return self::$_instance;
 	}
-	
-    public function __destruct()
-    {
-        $this->disconnect();
-    }
-	
+
+	public function __destruct()
+	{
+		$this->disconnect();
+	}
+
 	/**
 	 * Build a Db object
 	 */
