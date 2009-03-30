@@ -1125,8 +1125,7 @@ CREATE TABLE `PREFIX_search_index` (
   `id_product` int(11) NOT NULL,
   `id_word` int(11) NOT NULL,
   `weight` tinyint(4) NOT NULL default '1',
-  PRIMARY KEY  (`id_product`,`id_word`),
-  INDEX  (`id_word`)
+  PRIMARY KEY  (`id_word`, `id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_search_word` (
@@ -1216,6 +1215,12 @@ CREATE TABLE `PREFIX_tax_zone` (
   `id_tax` int(10) unsigned NOT NULL,
   `id_zone` int(10) unsigned NOT NULL,
   KEY `tax_zone_index` (`id_tax`,`id_zone`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE PREFIX_timezone (
+	id_timezone INTEGER UNSIGNED NOT NULL auto_increment,
+	name VARCHAR(32) NOT NULL,
+	PRIMARY KEY timezone_index(`id_timezone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_web_browser` (

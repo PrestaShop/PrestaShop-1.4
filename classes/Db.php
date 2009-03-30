@@ -44,10 +44,7 @@ abstract class Db
   
 	/** @var mixed Object instance for singleton */
 	private static $_instance;
-  
-	/** @var string Keywords not allowed in SQL string */
-	private static $_blacklist = '/UNION|LOAD_FILE|OUTFILE|DUMPFILE|ESCAPED|TERMINATED|CASCADE|INFILE|X509|TRIGGER|REVOKE/ui';
-  
+
 	/**
 	 * Get Db object instance (Singleton)
 	 *
@@ -77,18 +74,7 @@ abstract class Db
 		$this->_database = _DB_NAME_;
 		$this->connect();
 	}
-		
-	/**
-	 * Filter SQL query within a blacklist
-	 *
-	 * @param string $query SQL query
-	 * @return boolean True if query need to be blocked
-	 */
-	public static function blacklist(&$query)
-	{
-		return preg_match(self::$_blacklist, $query) ? true : false;
-	}
-	
+
 	/**
 	 * Filter SQL query within a blacklist
 	 *

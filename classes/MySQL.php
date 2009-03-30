@@ -45,8 +45,6 @@ class MySQL extends Db
 	
 	public function	getRow($query)
 	{
-		if (parent::blacklist($query))
-			return false;
 		$this->_result = false;
 		if ($this->_link)
 			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
@@ -56,8 +54,6 @@ class MySQL extends Db
 
 	public function	getValue($query)
 	{
-		if (parent::blacklist($query))
-			return false;
 		$this->_result = false;
 		if ($this->_link AND $this->_result = mysql_query($query.' LIMIT 1', $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
 			return array_shift($tmpArray);
@@ -66,8 +62,6 @@ class MySQL extends Db
 	
 	public function	Execute($query)
 	{
-		if (parent::blacklist($query))
-			return false;
 		$this->_result = false;
 		if ($this->_link)
 		{
@@ -79,8 +73,6 @@ class MySQL extends Db
 	
 	public function	ExecuteS($query, $array = true)
 	{
-		if (parent::blacklist($query))
-			return false;
 		$this->_result = false;
 		if ($this->_link)
 			if ($this->_result = mysql_query($query, $this->_link))
@@ -130,8 +122,6 @@ class MySQL extends Db
 
 	protected function q($query)
 	{
-		if (parent::blacklist($query))
-			return false;
 		$this->_result = false;
 		if ($this->_link)
 			return mysql_query($query, $this->_link);

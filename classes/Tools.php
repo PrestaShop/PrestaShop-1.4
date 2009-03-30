@@ -776,20 +776,26 @@ class Tools
 	
 	static public function getTimezones($select = false)
 	{
-		// get_declared_classes() is used to avoid crash for PHP version prior to 5.2 - DO NOT USE class_exists() which try and failed to load it
-		if (!in_array('DateTimeZone', get_declared_classes()) OR !method_exists('DateTimeZone', 'listAbbreviations'))
-			return 'Europe/Paris';
-		$timezones = DateTimeZone::listAbbreviations();
-		$cities = array();
-		foreach ($timezones as $key => $zones)
-			foreach ($zones as $id => $zone)
-				if (preg_match( '/^(America|Antartica|Arctic|Asia|Atlantic|Europe|Indian|Pacific)\//', $zone['timezone_id']))
-					$cities[] = $zone['timezone_id'];
-		$cities = array_unique($cities);
+		static $_cache = 0;
+
+		// One select
 		if ($select)
-			return $cities[intval($select)];
-		asort($cities);
-		return $cities;
+		{
+			// No cache
+			if (!$_cache)
+			{
+				$tmz = Db::getInstance()->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.intval($select));
+				$_cache = $tmz['name'];
+			}
+			return $_cache;
+		}
+
+		// Multiple select
+		$tmz = Db::getInstance()->s('SELECT * FROM '._DB_PREFIX_.'timezone');
+		$tab = array();
+		foreach ($tmz as $timezone)
+			$tab[$timezone['id_timezone']] = $timezone['name'];
+		return $tab;
 	}
 }
 
