@@ -14,6 +14,7 @@ include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
+ini_set('display_errors', 'on');
 
 define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
 
@@ -345,7 +346,39 @@ class AdminImport extends AdminTab
 	private static function fillInfo($infos, $key, &$entity)
 	{
 		$entity->{$key} = isset(self::$validators[$key]) ? call_user_func(self::$validators[$key], $infos) : $infos;
+		return true;
 	}
+	
+	static public function array_walk(&$array, $funcname, &$user_data = false)
+	{
+		$func_is_method = false;
+		if (!isset($funcname[1]))
+		{
+			if (!function_exists($funcname[0]))
+			return false;
+		}
+		else
+		{
+			if (!class_exists($funcname[0], true) OR !method_exists($funcname[0], $funcname[1]))
+				return false;
+			else
+				$func_is_method = true;
+		}
+		foreach ($array AS $k => $row)
+		{
+			if ($func_is_method)
+			{
+				if (!call_user_func_array(array($funcname[0], $funcname[1]), array($row, $k, $user_data)))
+					return false;
+			}
+			else
+				if (!call_user_func_array($funcname[0], array($row, $key, $user_data)))
+					return false;
+		}
+		return true;
+	}
+
+
 	
 	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
 	{
@@ -392,7 +425,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$category = new Category();		
-			array_walk($info, array('AdminImport', 'fillInfo'), $category);
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $category);
 			
 			if (isset($category->parent) AND is_numeric($category->parent))
 			{
@@ -464,17 +497,16 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
+		
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
+
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-
 			self::setDefaultValues($info);
 			$product = new Product();
-
-			array_walk($info, array('AdminImport', 'fillInfo'), $product);
-			
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
 				$product->id_tax = intval(Tax::getTaxIdByRate(floatval($product->tax_rate)));
@@ -669,7 +701,7 @@ class AdminImport extends AdminTab
 			$groups[$group['name']] = $group['id_attribute_group'];
 		$attributes = array();
 		foreach (Attribute::getAttributes($defaultLanguage) as $attribute)
-			$attributes[$attribute['attribute']] = $attribute['id_attribute'];
+			$attributes[$attribute['id_attribute']] = $attribute['id_attribute'];
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
@@ -683,7 +715,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$product = new Product(intval($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), intval($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), intval($info['default_on']), strval($info['location']));
+			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), intval($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), intval($info['default_on']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
@@ -728,7 +760,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$customer = new Customer();		
-			array_walk($info, array('AdminImport', 'fillInfo'), $customer);
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $customer);
 			
 			if ($customer->passwd)
 				$customer->passwd = md5(_COOKIE_KEY_.$customer->passwd);
@@ -759,7 +791,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$address = new Address();		
-			array_walk($info, array('AdminImport', 'fillInfo'), $address);
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $address);
 			
 			if (isset($address->country) AND is_numeric($address->country))
 			{
@@ -873,7 +905,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$manufacturer = new Manufacturer();		
-			array_walk($info, array('AdminImport', 'fillInfo'), $manufacturer);
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $manufacturer);
 			
 			$res = false;				
 			if ($manufacturer->validateFields(UNFRIENDLY_ERROR) AND $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR))
@@ -901,7 +933,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$supplier = new Supplier();		
-			array_walk($info, array('AdminImport', 'fillInfo'), $supplier);
+			self::array_walk($info, array('AdminImport', 'fillInfo'), $supplier);
 			
 			if ($supplier->validateFields(UNFRIENDLY_ERROR) AND $supplier->validateFieldsLang(UNFRIENDLY_ERROR))
 			{				
@@ -1039,7 +1071,7 @@ class AdminImport extends AdminTab
 	public function utf8_encode_array(&$array) 
 	{
 	    if (is_array($array))
-			array_walk($array, array(get_class($this), 'utf8_encode_array'));
+			self::array_walk($array, array(get_class($this), 'utf8_encode_array'));
 		else
 			$array = utf8_encode($array);
 	}
@@ -1053,7 +1085,7 @@ class AdminImport extends AdminTab
 	
 	private function openCsvFile()
 	{
-		$handle = @fopen(dirname(__FILE__).'/../import/'.Tools::getValue('csv'), 'r');
+		$handle = fopen(dirname(__FILE__).'/../import/'.Tools::getValue('csv'), 'r');
 		if (!$handle)
 			die(Tools::displayError('Cannot read the csv file'));
 			
@@ -1259,7 +1291,7 @@ class AdminImport extends AdminTab
 		{
 			if (Tools::getValue('truncate'))
 				$this->truncateTables(intval(Tools::getValue('entity')));
-			
+
 			switch (intval(Tools::getValue('entity')))
 			{
 				case $this->entities[$this->l('Categories')]:
