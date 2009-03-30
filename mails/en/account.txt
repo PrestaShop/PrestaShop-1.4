@@ -17,4 +17,4 @@ Safety Tips:
 * Should you suspect someone is using your account illegally, please notify us immediately.
 
 
-{shop_url} powered by PrestaShop&trade;
+{shop_url} powered by PrestaShop™

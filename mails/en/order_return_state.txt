@@ -8,4 +8,4 @@ You can review this order return in the "Order history" section of your account 
 
 
 
-{shop_url} powered by PrestaShop&trade;
+{shop_url} powered by PrestaShop™

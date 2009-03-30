@@ -12,4 +12,4 @@ Message:
 
 
 
-{shop_url} powered by PrestaShop&trade;
+{shop_url} powered by PrestaShop™
