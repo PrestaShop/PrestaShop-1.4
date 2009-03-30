@@ -3,17 +3,11 @@
 define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 /* Getting cookie or logout */
-if (!class_exists('Cookie'))
-	exit();
-
-$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -10));
-if (!$cookie->isLoggedBack())
-	die;
+require_once(dirname(__FILE__).'/init.php');
 
 if (isset($_GET['ajaxProductManufacturers']))
 {
 	$currentIndex = 'index.php?tab=AdminCatalog';
-	require_once(dirname(__FILE__).'/init.php');
 	$manufacturers = Manufacturer::getManufacturers();
 	if ($manufacturers)
 	{
@@ -27,7 +21,6 @@ if (isset($_GET['ajaxProductManufacturers']))
 if (isset($_GET['ajaxProductSuppliers']))
 {
 	$currentIndex = 'index.php?tab=AdminCatalog';
-	require_once(dirname(__FILE__).'/init.php');
 	$suppliers = Supplier::getSuppliers();
 	if ($suppliers)
 	{
@@ -41,7 +34,6 @@ if (isset($_GET['ajaxProductSuppliers']))
 if (isset($_GET['ajaxProductAccessories']))
 {
 	$currentIndex = 'index.php?tab=AdminCatalog';
-	require_once(dirname(__FILE__).'/init.php');
 	$jsonArray = array();
 	
 	$products = Db::getInstance()->ExecuteS('
@@ -63,7 +55,6 @@ if (isset($_GET['ajaxProductAccessories']))
 if (isset($_GET['ajaxDiscountCustomers']))
 {
 	$currentIndex = 'index.php?tab=AdminDiscounts';
-	require_once(dirname(__FILE__).'/init.php');
 	$jsonArray = array();
 	$filter = Tools::getValue('filter');
 	
@@ -87,7 +78,6 @@ if (Tools::getValue('page') == 'prestastore')
 
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
-	require_once(dirname(__FILE__).'/init.php');
 	require_once(dirname(__FILE__).'/tabs/AdminCatalog.php');
 	$catalog = new AdminCatalog();
 	$admin = new AdminProducts();
@@ -108,7 +98,6 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 {
 	$currentIndex = 'index.php?tab=AdminImport';
 	$jsonArray = array();
-	require_once(dirname(__FILE__).'/init.php');
 	require_once(dirname(__FILE__).'/tabs/AdminImport.php');
 	$import = new AdminImport();
 
@@ -120,9 +109,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	die('['.implode(',', $jsonArray).']');
 }
 if (array_key_exists('ajaxModulesPositions', $_GET))
-{		
-		require_once(dirname(__FILE__).'/init.php');
-		
+{				
 		$id_module = intval(Tools::getValue('id_module'));
 		$id_hook = intval(Tools::getValue('id_hook'));
 		$way = intval(Tools::getValue('way'));
