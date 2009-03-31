@@ -71,15 +71,16 @@ class CMS extends ObjectModel
 		SELECT c.id_cms, cl.link_rewrite, cl.meta_title
 		FROM '._DB_PREFIX_.'cms c
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
-		'.(($selection AND sizeof($selection)) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : ''));
+		'.(($selection !== null) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : ''));
 		
 		$link = new Link();
 		$links = array();
-		foreach ($result as $row)
-		{
-			$row['link'] = $link->getCMSLink($row['id_cms'], $row['link_rewrite']);
-			$links[] = $row;
-		}
+		if ($result)
+			foreach ($result as $row)
+			{
+				$row['link'] = $link->getCMSLink($row['id_cms'], $row['link_rewrite']);
+				$links[] = $row;
+			}
 		return $links;
 	}
 	
