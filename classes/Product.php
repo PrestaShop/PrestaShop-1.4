@@ -1894,7 +1894,7 @@ class		Product extends ObjectModel
 			/* Compatibility */
 			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
-			$priceWt = intval(isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt']);
+			$priceWt = floatval(isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt']);
 			$productQuantity = intval(isset($productUpdate['quantity']) ? $productUpdate['quantity'] : $productUpdate['product_quantity']);
 
 			if (isset($customizedDatas[$productId][$productAttributeId]))
