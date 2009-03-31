@@ -41,7 +41,8 @@ class BlockVariousLinks extends Module
     return $this->_html;
    }
     
-	private function _displayForm()	{
+	private function _displayForm()
+	{
 		global $cookie;
 
 		$this->_html .=
@@ -80,6 +81,8 @@ class BlockVariousLinks extends Module
 			if (CMS::updateCmsToBlock($cms, $this->id))
 		 		$this->_html .= '<div class="conf confirm">'.$this->l('Cms Updated').'</div>';
 		 }
+		else
+		 	CMS::updateCmsToBlock(array(), $this->id);
 	}
 
 	/**
