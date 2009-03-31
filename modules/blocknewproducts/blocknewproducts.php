@@ -51,10 +51,10 @@ class BlockNewProducts extends Module
 			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Products displayed').'</label>
 				<div class="margin-form">
-					<input type="text" name="productNbr" value="'.Configuration::get('NEW_PRODUCTS_NBR').'" />
+					<input type="text" name="productNbr" value="'.intval(Configuration::get('NEW_PRODUCTS_NBR')).'" />
 					<p class="clear">'.$this->l('Set the number of products to be displayed in this block').'</p>
 				</div>
-				<center><input type="submit" name="submitBlockNewProducts" value="'.$this->l('Save').'" class="button" /></center>			
+				<center><input type="submit" name="submitBlockNewProducts" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>
 		</form>';
 		return $output;

@@ -43,7 +43,7 @@ class Tag extends ObjectModel
 			{
 			 	$this->id = intval($row['id_tag']);
 			 	$this->id_lang = intval($row['id_lang']);
-				$this->name = $row['name'];			
+				$this->name = $row['name'];
 			}
 		}
 	}
