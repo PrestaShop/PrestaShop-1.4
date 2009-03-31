@@ -589,7 +589,6 @@ class		Cart extends ObjectModel
 						if ($discount->id_discount_type == 3)
 							foreach($products AS $product)
 							{
-								$oProduct = new Product($product['id_product']);
 								$categories = Discount::getCategories($discount->id);
 								if(count($categories))
 										if (Product::idIsOnCategoryId($product['id_product'], $categories))
