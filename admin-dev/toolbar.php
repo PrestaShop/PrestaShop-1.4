@@ -24,7 +24,8 @@ function recursiveTab($id_tab)
 function checkingTab($tab)
 {
 	global $adminObj;
-	
+
+	$tab = trim($tab);
 	if (!Validate::isTabName($tab))
 		return false;
 	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
