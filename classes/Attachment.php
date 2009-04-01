@@ -33,6 +33,12 @@ class Attachment extends ObjectModel
 		return parent::getTranslationsFields(array('name', 'description'));
 	}
 	
+	public function delete()
+	{
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_attachment = '.intval($this->id));
+		return parent::delete();
+	}
+	
 	public static function getAttachments($id_lang, $id_product, $include = true)
 	{
 		return Db::getInstance()->ExecuteS('
