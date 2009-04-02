@@ -234,8 +234,7 @@ function formSubmit(e, button)
 		getE(button).focus();
 		getE(button).click();
 	}
-}
-
+} 
 function	noComma(elem)
 {
  	getE(elem).value = getE(elem).value.replace(new RegExp(',', 'g'), '.');
@@ -280,12 +279,17 @@ function prepareInputsForHints() {
 			var id = helpboxParser(this);
 			if (id > -1)
 				this.parentNode.getElementsByTagName('span')[id].style.display = 'inline';
+			if($(this).attr('id') == 'bo_query')
+				if(!dontChange($('input#bo_query').val()))
+					$('input#bo_query').val('');
 		}
 		// when the cursor moves away from the field, hide the hint
 		inputs[i].onblur = function () {
 		 	var id = helpboxParser(this);
 		 	if (id > -1)
 				this.parentNode.getElementsByTagName('span')[id].style.display = 'none';
+			if($(this).attr('id') == 'bo_query' && $(this).val().length < 1)
+				$(this).val(search_texts[$('select#bo_search_type').val() - 1]);	
 		}
 	}
 }
