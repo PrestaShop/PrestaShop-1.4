@@ -46,10 +46,10 @@ class StatsVisits extends ModuleGraph
 	public function getTotalGuests()
 	{
 		$result = Db::getInstance()->ExecuteS('
-		SELECT DISTINCT c.`id_guest`
+		SELECT COUNT(DISTINCT c.`id_guest`) AS total
 		FROM `'._DB_PREFIX_.'connections` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
-		return Db::getInstance()->NumRows();
+		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
 	public function hookAdminStatsModules($params)
@@ -90,15 +90,13 @@ class StatsVisits extends ModuleGraph
 				$this->_titles['main'][1] = $this->l('Visits');
 				$this->_titles['main'][2] = $this->l('Visitors');
 				$this->_query[0] = '
-					SELECT `date_add`
+					SELECT date_add, COUNT(`date_add`) as total
 					FROM `'._DB_PREFIX_.'connections`
 					WHERE `date_add` BETWEEN ';
-				$this->_query2[0] = '';
 				$this->_query[1] = '
-					SELECT `date_add`
+					SELECT date_add, COUNT(DISTINCT `id_guest`) as total
 					FROM `'._DB_PREFIX_.'connections`
 					WHERE `date_add` BETWEEN ';
-				$this->_query2[1] = ' GROUP BY `id_guest`';
 				break;
 		}
 	}
@@ -112,9 +110,9 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 7)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 5, 2))]++;
+				$this->_values[$i][intval(substr($row['date_add'], 5, 2))] = intval($row['total']);
 		}
 	}
 	
@@ -122,9 +120,9 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 10)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 8, 2))]++;
+				$this->_values[$i][intval(substr($row['date_add'], 8, 2))] = intval($row['total']);
 		}
 	}
 
@@ -132,9 +130,9 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().$this->_query2[$i]);
+			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 13)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 11, 2))]++;
+				$this->_values[$i][intval(substr($row['date_add'], 11, 2))] = intval($row['total']);
 		}
 	}
 }
