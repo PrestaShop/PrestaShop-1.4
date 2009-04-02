@@ -194,7 +194,6 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
 			{/if}
 
-			{if $product->reference}<p id="product_reference"><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>{/if}
 			{if isset($groups)}
 
 			<!-- attributes -->
@@ -212,6 +211,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/foreach}
 			</div>
 			{/if}
+
+			{if $product->reference}<p id="product_reference" {if isset($groups)}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>{/if}
 
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
