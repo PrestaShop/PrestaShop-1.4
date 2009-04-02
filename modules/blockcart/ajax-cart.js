@@ -134,12 +134,19 @@ var ajaxCart = {
 	},
 	
 	// add a product in the cart via ajax
-	add : function(idProduct, idCombination, addedFromProductPage, callerElement, quantity, whishlist, isProductPage){
-		if (isProductPage && !checkCustomizations())
+	add : function(idProduct, idCombination, addedFromProductPage, callerElement, quantity, whishlist){
+		if (addedFromProductPage && !checkCustomizations())
 		{
 			alert(fieldRequired);
 			return ;
 		}
+		
+		//disabled the button when adding to do not double add if user double click
+		if (addedFromProductPage)
+			$('body#product p#add_to_cart input').attr('disabled', 'disabled').removeClass('exclusive').addClass('exclusive_disabled');
+		else
+			$('.ajax_add_to_cart_button').attr('disabled', 'disabled');
+		
 		//send the ajax request to the server
 		$.ajax({
 			type: 'GET',
@@ -165,10 +172,24 @@ var ajaxCart = {
 							to: $('#cart_block').get(0),
 							className:'transferProduct',
 							duration: 800,
-							complete: function () {ajaxCart.updateCart(jsonData)}
+							complete: function () {
+								ajaxCart.updateCart(jsonData);
+								//reactive the button when adding has finished
+								if (addedFromProductPage)
+									$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
+								else
+									$('.ajax_add_to_cart_button').removeAttr('disabled');
+							}
 				});
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to add the product.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("TECHNICAL ERROR: unable to add the product.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+				//reactive the button when adding has finished
+				if (addedFromProductPage)
+					$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
+				else
+					$('.ajax_add_to_cart_button').removeAttr('disabled');
+			}
 		});
 	},
 	
