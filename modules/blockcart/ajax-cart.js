@@ -12,18 +12,18 @@ var ajaxCart = {
 		});
 		//for product page 'add' button...
 		$('body#product p#add_to_cart input').unbind('click').click(function(){
-			ajaxCart.add( $('#product_page_product_id').val(), $('#idCombination').val(), true, null, $('#quantity_wanted').val(), null, true);
+			ajaxCart.add( $('#product_page_product_id').val(), $('#idCombination').val(), true, null, $('#quantity_wanted').val(), null);
 			return false;
 		});
 	
 		//for 'delete' buttons in the cart block...
 		$('.ajax_cart_block_remove_link').unbind('click').click(function(){
-			/* Customized product management */
+			// Customized product management
 			var customizationId = 0;
 			var productId = 0;
 			var productAttributeId = 0;
 			if ($($(this).parent().parent()).attr('name') == 'customization')
-				/* Reverse two levels: a >> div >> li */
+				// Reverse two levels: a >> div >> li
 				var customizableProductDiv = $($(this).parent().parent()).find("div[@id^=deleteCustomizableProduct_]");
 			else
 				var customizableProductDiv = $($(this).parent()).find("div[@id^=deleteCustomizableProduct_]");
@@ -42,7 +42,7 @@ var ajaxCart = {
 				});
 			}
 
-			/* Common product management */
+			// Common product management
 			if (!customizationId)
 			{
 				//retrieve idProduct and idCombination from the displayed product in the block cart
@@ -54,13 +54,13 @@ var ajaxCart = {
 					productAttributeId = parseInt(ids[1]);
 			}
 
-			/* Removing product from the cart */
+			// Removing product from the cart
 			ajaxCart.remove(productId, productAttributeId, customizationId);
 			return false;
 		});
 	},
 	
-	//try to expand the cart
+	// try to expand the cart
 	expand : function(){
 		if ($('#cart_block #cart_block_list').hasClass('collapsed'))
 		{
@@ -71,12 +71,12 @@ var ajaxCart = {
 					complete: function(){$(this).addClass('expanded').removeClass('collapsed');}
 				});
 			});
-			//toogle the button expand/collapse button
+			// toogle the button expand/collapse button
 			$('#cart_block h4 span#block_cart_expand').fadeOut('slow', function(){
 				$('#cart_block h4 span#block_cart_collapse').fadeIn('fast');
 			});
 			
-			//save the expand statut in the user cookie
+			// save the expand statut in the user cookie
 			$.ajax({
 				type: 'GET',
 				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
@@ -88,7 +88,27 @@ var ajaxCart = {
 		}
 	},
 	
-	//try to collapse the cart
+	// cart to fix display when using back and previous browsers buttons
+	refresh : function(){
+		//send the ajax request to the server
+		$.ajax({
+			type: 'GET',
+			url: baseDir + 'cart.php',
+			async: true,
+			cache: false,
+			dataType : "json",
+			data: 'ajax=true&token=' + static_token,
+			success: function(jsonData)
+			{
+				ajaxCart.updateCart(jsonData)
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				alert("TECHNICAL ERROR: unable to refresh the cart.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+			}
+		});
+	},
+	
+	// try to collapse the cart
 	collapse : function(){
 		
 		if ($('#cart_block #cart_block_list').hasClass('expanded'))
@@ -103,7 +123,7 @@ var ajaxCart = {
 				$('#cart_block h4 span#block_cart_expand').fadeIn('fast');
 			});
 			
-			//save the expand statut in the user cookie
+			// save the expand statut in the user cookie
 			$.ajax({
 				type: 'GET',
 				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
@@ -113,7 +133,7 @@ var ajaxCart = {
 		}
 	},
 	
-	//add a product in the cart via ajax
+	// add a product in the cart via ajax
 	add : function(idProduct, idCombination, addedFromProductPage, callerElement, quantity, whishlist, isProductPage){
 		if (isProductPage && !checkCustomizations())
 		{
@@ -264,7 +284,7 @@ var ajaxCart = {
 			if (this.customizationId == customizationId)
 			{
 				exists = true;
-				/* This return does not mean that we found nothing but simply break the loop */
+				// This return does not mean that we found nothing but simply break the loop
 				return false;
 			}
 		});
@@ -340,11 +360,11 @@ var ajaxCart = {
 					var jsonProduct = this;
 					if($('dt#cart_block_product_' + domIdProduct + ' .quantity').text() != jsonProduct.quantity)
 					{
-						/* Usual product */
+						// Usual product
 						$('dt#cart_block_product_' + domIdProduct + ' .price').text(jsonProduct.priceByLine);
 						ajaxCart.updateProductQuantity(jsonProduct, jsonProduct.quantity);
 
-						/* Customized product */
+						// Customized product
 						if (jsonProduct.hasCustomizedDatas)
 						{
 							customizationFormatedDatas = ajaxCart.displayNewCustomizedDatas(jsonProduct);
@@ -387,12 +407,12 @@ var ajaxCart = {
 			var done = 0;
 			customizationId = parseInt(this.customizationId);
 			productAttributeId = typeof(product.idCombination) == 'undefined' ? 0 : parseInt(product.idCombination);
-			/* If the customization is already displayed on the cart, no update's needed */
+			// If the customization is already displayed on the cart, no update's needed
 			if($('#cart_block').find("div[@id^=deleteCustomizableProduct_" + customizationId + "_]").length)
 				return ('');
 			content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
 
-			/* Give to the customized product the first textfield value as name */
+			// Give to the customized product the first textfield value as name
 			$(this.datas).each(function(){
 				if (this['type'] == CUSTOMIZE_TEXTFIELD)
 				{
@@ -407,12 +427,12 @@ var ajaxCart = {
 				}
 			});
 
-			/* If the customized product did not have any textfield, it will have the customizationId as name */
+			// If the customized product did not have any textfield, it will have the customizationId as name
 			if (!done)
 				content += customizationIdMessage + customizationId;
 			if (!hasAlreadyCustomizations) content += '</li>';
 
-			/* Field cleaning */
+			// Field cleaning
 			if (customizationId)
 			{
 				$('#uploadable_files li div.customizationUploadBrowse img').remove();
@@ -502,5 +522,5 @@ $(document).ready(function(){
 			ajaxCart.expand();		
 	});
 	ajaxCart.overrideButtonsInThePage();
-	
+	ajaxCart.refresh();
 });
