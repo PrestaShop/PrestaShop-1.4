@@ -114,6 +114,7 @@ abstract class AdminTab
 
 	private $_includeObj = array();
 	protected $_includeVars = false;
+	protected $_includeContainer = true;
 
 	public function __construct()
 	{
@@ -508,7 +509,7 @@ abstract class AdminTab
 							}
 							if (!$result)
 								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
-							elseif ($this->postImage($object->id))
+							elseif ($this->postImage($object->id) AND !sizeof($this->_errors))
 							{
 								if ($back = Tools::getValue('back'))
 									Tools::redirectAdmin(urldecode($back).'&conf=4');
@@ -534,7 +535,7 @@ abstract class AdminTab
 						$this->copyFromPost($object, $this->table);
 						if (!$object->add())
 							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
-						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND $this->_redirect)
+						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
 							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&token='.$token);
 					}
 					else
@@ -652,6 +653,7 @@ abstract class AdminTab
 
 	protected function uploadImage($id, $name, $dir, $ext = false)
 	{
+	
 		if (isset($_FILES[$name]['tmp_name']) AND !empty($_FILES[$name]['tmp_name']))
 		{
 			// Delete old image
@@ -670,7 +672,6 @@ abstract class AdminTab
 		
 		if (sizeof($this->_errors))
 			return false;
-
 		return $this->afterImageUpload();
 	}
 
@@ -747,9 +748,7 @@ abstract class AdminTab
 	 */
 	public function displayErrors()
 	{
-		if ($this->includeSubTab('displayErrors'))
-			;
-		elseif ($nbErrors = sizeof($this->_errors))
+		if ($nbErrors = sizeof($this->_errors) AND $this->_includeContainer)
 		{
 			echo '<div class="alert error"><h3>'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'</h3>
 			<ol>';
@@ -758,6 +757,7 @@ abstract class AdminTab
 			echo '
 			</ol></div>';
 		}
+		$this->includeSubTab('displayErrors');
 	}
 
 	/**

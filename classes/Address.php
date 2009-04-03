@@ -91,6 +91,7 @@ class		Address extends ObjectModel
 	protected 	$table = 'address';
 	protected 	$identifier = 'id_address';
 	protected	$_includeVars = array('addressType' => 'table');
+	protected	$_includeContainer = false;
 
 	/**
 	 * Build an address
