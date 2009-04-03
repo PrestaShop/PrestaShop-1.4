@@ -72,10 +72,8 @@ class AdminManufacturers extends AdminTab
 		parent::__construct();
 	}
 
-	public function postProcess()
+	public function afterImageUpload()
 	{
-		global $currentIndex;
-
 		/* Generate image with differents size */
 		if (($id_manufacturer = intval(Tools::getValue('id_manufacturer'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg'))
 		{
@@ -83,7 +81,6 @@ class AdminManufacturers extends AdminTab
 			foreach ($imagesTypes AS $k => $imageType)
 				imageResize(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg', _PS_MANU_IMG_DIR_.$id_manufacturer.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 		}
-		parent::postProcess();
 	}
 
 	public function displayForm()
