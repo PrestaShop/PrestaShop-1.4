@@ -159,7 +159,7 @@ class AdminSuppliers extends AdminTab
 		global $currentIndex;
 		
 		/* Generate image with differents size */
-		if (($id_supplier = intval(Tools::getValue('id_supplier'))) AND isset($_FILES) AND file_exists(_PS_SUPP_IMG_DIR_.$id_supplier.'.jpg'))
+		if (($id_supplier = intval(Tools::getValue('id_supplier'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_SUPP_IMG_DIR_.$id_supplier.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('suppliers');
 			foreach ($imagesTypes AS $k => $imageType)
