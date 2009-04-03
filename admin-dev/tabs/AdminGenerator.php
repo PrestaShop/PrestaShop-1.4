@@ -24,39 +24,37 @@ class AdminGenerator extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		<fieldset class="width2"><legend><img src="../img/admin/htaccess.gif" />'.$this->l('Htaccess file generation').'</legend>
-		<p><b>'.$this->l('Warning:').' </b>'.$this->l('this tool can be ONLY used if you are hosted by an').' <b><a href="http://www.apache.org">'.$this->l('Apache web server').'</a></b>'.$this->l('.').' '.$this->l('Please ask to your webhost.').'</p>';
-		echo '<p>'.$this->l('This tool will automaticaly generate a ".htaccess" file, that will grant you the possibility to do URL rewriting and to catch 404 errors.').'</p>';
-		echo '<p>'.$this->l('If you did not have enabled the url-rewriting when generating the ".htaccess" file, such feature won\'t be available').'.</p>';
+		<p><b>'.$this->l('Warning:').'</b> '.$this->l('this tool can ONLY be used if you are hosted by an Apache web server. Please ask your webhost.').'</p>
+		<p>'.$this->l('This tool will automatically generate a ".htaccess" file that will grant you the possibility to do URL rewriting and to catch 404 errors.').'</p>
+		<p>'.$this->l('If you do not have the "Friendly URL" enabled when generating the ".htaccess" file, such feature won\'t be available.').'</p>';
 		if ($this->_checkConfiguration($this->_htFile))
-				echo '<p style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
-				<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>';
+			echo '
+			<p style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
+			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>';
 		else
-		{
-			echo '<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>';
-			echo '<p>'.$this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>';
-			echo '<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
-		}
-		echo '</p></fieldset>
-		</form>';
+			echo '
+			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
+			<p>'.$this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>
+			<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
+		echo '</p></fieldset></form>';
 
 		// Robots
 		echo '<br /><br />
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		<fieldset class="width2"><legend><img src="../img/admin/robots.gif" />'.$this->l('Robots file generation').'</legend>
-		<p><b>'.$this->l('Warning:').' </b>'.$this->l('Your file robots.txt MUST be in your website\'s root dir and nowhere else.').'</p>';
-		echo '<p>'.$this->l('eg: http://www.yoursite.com/robots.txt').'.</p>';
-		echo '<p>'.$this->l('This tool will automaticaly generate a "robots.txt" file, that will grant you the possibility to denie access to search engines for somes pages.').'</p>';
+		<p><b>'.$this->l('Warning:').' </b>'.$this->l('Your file robots.txt MUST be in your website\'s root dir and nowhere else.').'</p>
+		<p>'.$this->l('eg: http://www.yoursite.com/robots.txt').'.</p>
+		<p>'.$this->l('This tool will automatically generate a "robots.txt" file that will grant you the possibility to deny access to search engines for somes pages.').'</p>';
 		if ($this->_checkConfiguration($this->_rbFile))
-				echo '<p style="font-weight:bold;">'.$this->l('Generate your "robots.txt" file by clicking on the following button:').'<br /><br />
-				<input type="submit" value="'.$this->l('Generate robots.txt file').'" name="submitRobots" class="button" /></p>';
+			echo '
+			<p style="font-weight:bold;">'.$this->l('Generate your "robots.txt" file by clicking on the following button:').'<br /><br />
+			<input type="submit" value="'.$this->l('Generate robots.txt file').'" name="submitRobots" class="button" /></p>';
 		else
-		{
-			echo '<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>';
-			echo '<p>'.$this->l('- create a').' <b>'. $this->l('robots.txt').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>';
-			echo '<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
-		}
-		echo '</p></fieldset>
-		</form>';
+			echo '
+			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
+			<p>'.$this->l('- create a').' <b>'. $this->l('robots.txt').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>
+			<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
+		echo '</p></fieldset></form>';
 	}
 
 	public function _checkConfiguration($file)
