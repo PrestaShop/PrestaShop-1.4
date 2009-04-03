@@ -461,7 +461,7 @@ abstract class Module
 		if (!is_array($_MODULES))
 			return (str_replace('"', '&quot;', $string));
 
-		$source = ($specific ? $specific : get_class($this));
+		$source = Tools::strtolower($specific ? $specific : get_class($this));
 		$string2 = str_replace('\'', '\\\'', $string);
 		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
 		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
