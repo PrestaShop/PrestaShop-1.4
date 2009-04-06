@@ -73,13 +73,21 @@ class AdminStats extends AdminStatsTab
 		return Db::getInstance()->getRow('
 		SELECT AVG(cartsum) as average, MAX(cartsum) as highest, MIN(cartsum) as lowest
 		FROM (
-			SELECT SUM(p.`price`) / cu.conversion_rate as cartsum
+			SELECT SUM(
+				((1+t.rate/100) * p.`price` + IF(cp.id_product_attribute IS NULL OR cp.id_product_attribute = 0, 0, (
+					SELECT IFNULL(pa.price, 0) 
+					FROM '._DB_PREFIX_.'product_attribute pa
+					WHERE pa.id_product = cp.id_product
+					AND pa.id_product_attribute = cp.id_product_attribute
+				))) * cp.quantity) / cu.conversion_rate as cartsum
 			FROM `'._DB_PREFIX_.'cart` c
 			LEFT JOIN `'._DB_PREFIX_.'currency` cu ON c.id_currency = cu.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'cart_product` cp ON c.`id_cart` = cp.`id_cart`
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
+			LEFT JOIN `'._DB_PREFIX_.'tax` t ON p.`id_tax` = t.`id_tax`
 			WHERE c.`date_upd` BETWEEN '.$dateBetween.'
-			GROUP BY c.`id_cart`) carts');
+			GROUP BY c.`id_cart`
+		) carts');
 	}
 	
 	public function display()
@@ -139,11 +147,11 @@ class AdminStats extends AdminStatsTab
 				</table>
 			</fieldset>
 			<br /><br />
-			<fieldset class="width3"><legend><img src="../img/admin/products.gif" style="vertical-align: middle" /> '.$this->l('Carts (pre-tax prices)').'</legend>
+			<fieldset class="width3"><legend><img src="../img/admin/products.gif" style="vertical-align: middle" /> '.$this->l('Carts').'</legend>
 				<table cellspacing="0" cellpadding="0" class="table">
 					<tr>
 						<th style="width: 150px"></th>
-						<th style="width: 180px; text-align: center; font-weight: bold">'.$this->l('only products not incl. tax').'</th>
+						<th style="width: 180px; text-align: center; font-weight: bold">'.$this->l('Products total all tax inc.').'</th>
 					</tr>
 					<tr>
 						<th style="font-weight: bold">'.$this->l('Average cart').'</th>
