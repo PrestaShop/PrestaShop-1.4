@@ -413,7 +413,7 @@ class		Cart extends ObjectModel
 			return $this->_addCustomization(intval($id_product), intval($id_product_attribute), $files, $textFields, intval($quantity));
 		/* Deletion */
 		if (intval($id_customization) AND intval($quantity) < 1)
-			return $this->_deleteCustomization(intval($id_customization));
+			return $this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute));
 		/* Quantity update */
 		if (($result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization))) === false)
 			return true;
@@ -492,7 +492,7 @@ class		Cart extends ObjectModel
 	public	function deleteProduct($id_product, $id_product_attribute = NULL, $id_customization = NULL)
 	{
 		if (intval($id_customization))
-			return $this->_deleteCustomization(intval($id_customization)) AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL);
+			return $this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute)) AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL);
 
 		/* Get customization quantity */
 		if (($result = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS \'quantity\' FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute))) === false)
@@ -512,10 +512,13 @@ class		Cart extends ObjectModel
 	 * @param integer $id_customization
 	 * @return boolean result
 	 */
-	private	function _deleteCustomization($id_customization)
+	private	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
 		if (!$result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization)) OR 
-			!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product` SET `quantity` = `quantity` - '.intval($result['quantity'])))
+			!Db::getInstance()->Execute('
+				UPDATE `'._DB_PREFIX_.'cart_product`
+				SET `quantity` = `quantity` - '.intval($result['quantity']).'
+				WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).(intval($id_product_attribute) ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '')))
 			return false;
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization));
 	}
