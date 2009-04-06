@@ -83,7 +83,7 @@ class AdminModules extends AdminTab
 				if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))
 					$this->_errors[] = $this->l('no file selected');
 				elseif (substr($_FILES['file']['name'], -4) != '.tar' AND substr($_FILES['file']['name'], -4) != '.zip' AND substr($_FILES['file']['name'], -4) != '.tgz' AND substr($_FILES['file']['name'], -7) != '.tar.gz')
-					$errors[] = Tools::displayError('unknown archive type');
+					$this->_errors[] = Tools::displayError('unknown archive type');
 				elseif (!@copy($_FILES['file']['tmp_name'], _PS_MODULE_DIR_.$_FILES['file']['name']))
 					$this->_errors[] = Tools::displayError('an error occured while copying archive to module directory');
 				else
@@ -228,7 +228,7 @@ class AdminModules extends AdminTab
 			<span onclick="openCloseLayer(\'prestastore\', 0); getPrestaStore();" style="cursor: pointer;font-weight: 700; float: left;margin-left:20px;"><img src="../img/admin/prestastore.gif" class="middle" /> '.$this->l('PrestaStore').'</span>';
 		echo '
 		<div class="clear">&nbsp;</div>
-		<div id="module_install" style="float: left;'.(Tools::isSubmit('submitDownload') ? '' : 'display: none;').'" class="width1">
+		<div id="module_install" style="float: left;'.(Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2') ? '' : 'display: none;').'" class="width1">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
