@@ -154,6 +154,24 @@ ALTER TABLE PREFIX_range_weight
 ALTER TABLE PREFIX_scene_products
 	ADD PRIMARY KEY (`id_scene`, `id_product`, `x_axis`, `y_axis`);
 
+/* KEY management */
+ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
+ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;
+ALTER TABLE PREFIX_attribute_lang DROP INDEX `attribute_lang_index`, ADD PRIMARY KEY (`id_attribute`, `id_lang`);
+ALTER TABLE PREFX_carrier_zone DROP INDEX `carrier_zone_index`, DROP INDEX `id_carrier`, ADD PRIMARY KEY (`id_carrier`, `id_zone`);
+ALTER TABLE PREFIX_customer_group DROP INDEX `id_customer`;
+ALTER TABLE PREFIX_discount_category CHANGE `id_discount` `id_discount` int(11) NOT NULL AFTER `id_category`;
+ALTER TABLE PREFIX_discount_category DROP INDEX `id_category`;
+ALTER TABLE PREFIX_feature_product DROP INDEX `id_feature`;
+ALTER TABLE PREFIX_hook_module DROP INDEX `id_module`;
+ALTER TABLE PREFIX_image_lang DROP INDEX `id_image`;
+ALTER TABLE PREFIX_product_attribute_image DROP INDEX `id_product_attribute`;
+ALTER TABLE PREFIX_product_lang DROP INDEX `id_product`;
+
+ALTER TABLE PREFIX_referrer_cache CHANGE `id_referrer id_referrer` int(11) NOT NULL AFTER `id_connections_source`;
+ALTER TABLE PREFIX_referrer_cache DROP PRIMARY KEY, ADD PRIMARY KEY (`id_connections_source`, `id_referrer`);
+ALTER TABLE PREFIX_referrer_cache DROP INDEX `id_connections_source`;
+
 
 /* ############################################################ */
 
