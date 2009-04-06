@@ -978,9 +978,7 @@ CREATE TABLE `PREFIX_product_lang` (
   `available_later` varchar(255) default NULL,
   UNIQUE KEY `product_lang_index` (`id_product`,`id_lang`),
   KEY `id_lang` (`id_lang`),
-  KEY `name` (`name`),
-  FULLTEXT KEY `fts` (`name`,`description_short`,`description`),
-  FULLTEXT KEY `ftsname` (`name`)
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_sale` (

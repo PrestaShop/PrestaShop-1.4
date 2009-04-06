@@ -153,6 +153,9 @@ ALTER TABLE PREFIX_range_weight
 
 ALTER TABLE PREFIX_scene_products
 	ADD PRIMARY KEY (`id_scene`, `id_product`, `x_axis`, `y_axis`);
+	
+ALTER TABLE PREFIX_product_lang DROP INDEX fts; 
+ALTER TABLE PREFIX_product_lang DROP INDEX ftsname ;
 
 /* KEY management */
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
