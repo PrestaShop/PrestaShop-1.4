@@ -58,7 +58,7 @@ class		Category extends ObjectModel
 	protected $tables = array ('category', 'category_lang');
 
 	protected 	$fieldsRequired = array('id_parent', 'active');
- 	protected 	$fieldsSize = array('id_parent' => 4, 'active' => 1);
+ 	protected 	$fieldsSize = array('id_parent' => 10, 'active' => 1);
  	protected 	$fieldsValidate = array('active' => 'isBool');
 	protected 	$fieldsRequiredLang = array('name', 'link_rewrite');
  	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 128, 'meta_description' => 128);
