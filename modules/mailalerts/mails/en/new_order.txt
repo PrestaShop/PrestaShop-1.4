@@ -36,4 +36,6 @@ Customer message:
 
 {message}
 
-{shop_url} powered by PrestaShop™
+
+
+{shop_url} powered by PrestaShopâ„¢

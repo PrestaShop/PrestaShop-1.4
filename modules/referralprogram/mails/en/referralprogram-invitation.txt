@@ -10,6 +10,6 @@ It's very easy to sign up. Just click on the following link:
 
 When signing up, don't forget to provide the e-mail address of your sponsoring friend: {email}.
 
-Best regards,
 
-{shop_url}
+
+{shop_url} powered by PrestaShop™

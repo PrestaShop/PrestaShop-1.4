@@ -6,4 +6,6 @@ Remaining stock : {qty}
 
 You are advised to open the product's admin Product Page in order to replenish your inventory.
 
-{shop_url} made by PrestaShop™
+
+
+{shop_url} powered by PrestaShopâ„¢

@@ -1,8 +1,8 @@
 Bonjour,
 
-{firstname} {lastname} vous invite à visiter sa liste de cadeaux {wishlist} :
+{firstname} {lastname} vous invite Ã  visiter sa liste de cadeaux {wishlist} :
 {message}
 
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

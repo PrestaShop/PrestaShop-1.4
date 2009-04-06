@@ -10,6 +10,6 @@ Pour nous rejoindre, rien de plus simple, rendez-vous à l'adresse suivante :
 
 N'oubliez pas d'y préciser l'email de votre ami en tant que parrain lors de votre inscription : {email}.
 
-Bien cordialement,
 
-{shop_url}
+
+{shop_url} réalisé par PrestaShop™

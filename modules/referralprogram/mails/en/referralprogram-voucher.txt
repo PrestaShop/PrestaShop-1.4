@@ -7,7 +7,6 @@ Simply paste this code in your next cart before pay the order.
 
 Thank you for shopping at {shop_name}.
 
-{shop_name} - {shop_url}
 
 
-{shop_url} powered by PrestaShop&trade;
+{shop_url} powered by PrestaShop™

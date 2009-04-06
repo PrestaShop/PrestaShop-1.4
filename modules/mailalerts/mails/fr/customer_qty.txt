@@ -1,8 +1,8 @@
 Bonjour,
 
 Le produit {product} est de nouveau disponible.
-En effet, le stock a été réaprovisionné.
+En effet, le stock a Ã©tÃ© rÃ©aprovisionnÃ©.
 
 Vous pouvez donc de nouveau commander ce produit depuis notre catalogue en ligne.
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

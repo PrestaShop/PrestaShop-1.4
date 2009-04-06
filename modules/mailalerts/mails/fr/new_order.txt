@@ -1,13 +1,13 @@
 Bonjour,
 
-Vous avez reçu une nouvelle commande de {firstname} {lastname} sur {shop_name}.
+Vous avez reÃ§u une nouvelle commande de {firstname} {lastname} sur {shop_name}.
 
 Commande : {order_name}
 Date : {date}
 Transporteur : {shipper}
 Mode de paiement : {payment}
-Bons d'achat et réductions : {total_discounts}
-Frais d'expédition : {total_shipping}
+Bons d'achat et rÃ©ductions : {total_discounts}
+Frais d'expÃ©dition : {total_shipping}
 Total produits : {total_products}
 Emballage cadeau: {total_wrapping}
 Total TTC : {total_paid}
@@ -36,4 +36,4 @@ Message client :
 
 {message}
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} rÃ©alisÃ© par PrestaShopâ„¢

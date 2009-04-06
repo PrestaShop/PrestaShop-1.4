@@ -4,6 +4,6 @@ Your sponsored friend, {sponsored_firstname} {sponsored_lastname} has placed his
 
 We are pleased to offer you a voucher worth {discount_display} (voucher # {discount_name}) that you can use on your next order.
 
-Best regards,
 
-{shop_url}
+
+{shop_url} réalisé par PrestaShop™

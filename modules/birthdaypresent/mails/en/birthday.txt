@@ -4,4 +4,4 @@ Hi {firstname} {lastname},
 A surprise is waiting for you... log now on your account to see your discount voucher. And put it to good use!
 
 
-{shop_url} Powered by PrestaShop™
+{shop_url} Powered by PrestaShopâ„¢
