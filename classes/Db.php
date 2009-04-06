@@ -217,6 +217,19 @@ abstract class Db
 	{
 		return Db::getInstance()->ExecuteS($query);
 	}
+	
+	static public function ps($query)
+	{
+		$ret = Db::s($query);
+		p($ret);
+		return $ret;
+	}
+	
+	static public function ds($query)
+	{
+		Db::s($query);
+		die();
+	}
 
 	/**
 	 * Get Row and get value

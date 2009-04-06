@@ -21,6 +21,7 @@ $stop = intval($p + $range);
 if ($stop > $pages_nb)
 	$stop = intval($pages_nb);
 
-$smarty->assign(array('pages_nb' => intval($pages_nb), 'p' => intval($p), 'n' => intval($n), 'nArray' => $nArray, 'range' => intval($range), 'start' => intval($start),	'stop' => intval($stop)));
+$pagination_infos = array('pages_nb' => intval($pages_nb), 'p' => intval($p), 'n' => intval($n), 'nArray' => $nArray, 'range' => intval($range), 'start' => intval($start),	'stop' => intval($stop));
+$smarty->assign($pagination_infos);
 
 ?>

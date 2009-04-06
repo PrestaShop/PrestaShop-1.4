@@ -948,8 +948,10 @@ class		Product extends ObjectModel
 		{
 			$result = Db::getInstance()->getRow('
 			SELECT COUNT(`id_product`) AS nb
-			FROM `'._DB_PREFIX_.'product`
-			WHERE `active` = 1');
+			FROM `'._DB_PREFIX_.'product` p
+			WHERE `active` = 1
+			AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
+			');
 			return intval($result['nb']);
 		}
 

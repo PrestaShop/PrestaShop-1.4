@@ -28,7 +28,6 @@ if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 		die('Error: \'install\' directory is missing');
 	Tools::redirect('install', $dir);
 }
-
 include(dirname(__FILE__).'/settings.inc.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
@@ -97,6 +96,14 @@ define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
 define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 define('_PS_TRANS_PATTERN_',            '(.*[^\\\\])');
 define('_PS_MIN_TIME_GENERATE_PASSWD_', '360');
+
+/* aliases */
+function p($var) {
+	Tools::p($var);
+}
+function d($var) {
+	Tools::d($var);
+}
 
 /* Order states */
 define('_PS_OS_CHEQUE_',      1);
