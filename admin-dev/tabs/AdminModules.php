@@ -228,7 +228,7 @@ class AdminModules extends AdminTab
 			<span onclick="openCloseLayer(\'prestastore\', 0); getPrestaStore();" style="cursor: pointer;font-weight: 700; float: left;margin-left:20px;"><img src="../img/admin/prestastore.gif" class="middle" /> '.$this->l('PrestaStore').'</span>';
 		echo '
 		<div class="clear">&nbsp;</div>
-		<div id="module_install" style="float: left;'.(Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2') ? '' : 'display: none;').'" class="width1">
+		<div id="module_install" style="float: left;'.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'" class="width1">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
