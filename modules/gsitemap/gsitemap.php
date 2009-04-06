@@ -60,7 +60,7 @@ class Gsitemap extends Module
 			xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
 			http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 		</urlset>');
-        
+
 		$sitemap = $xml->addChild('url');
 		$sitemap->addChild('loc', 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__);
 		$sitemap->addChild('priority', '1.00');

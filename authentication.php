@@ -76,31 +76,38 @@ if (Tools::isSubmit('submitAccount'))
 		$errors = array_unique(array_merge($errors, $address->validateControler()));
 		if (!sizeof($errors))
 		{
-			$customer->active = 1;
-			if (!$customer->add())
-				$errors[] = Tools::displayError('an error occurred while creating your account');
+			if (!$country = new Country($address->id_country) OR !Validate::isLoadedObject($country))
+				die(Tools::displayError());
+			if (intval($country->contains_states) AND !intval($address->id_state))
+				$errors[] = Tools::displayError('this country require a state selection');
 			else
 			{
-				$address->id_customer = intval($customer->id);
-				if (!$address->add())
-					$errors[] = Tools::displayError('an error occurred while creating your address');
+				$customer->active = 1;
+				if (!$customer->add())
+					$errors[] = Tools::displayError('an error occurred while creating your account');
 				else
 				{
-					if (Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
-					array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
-						$smarty->assign('confirmation', 1);
-					$cookie->id_customer = intval($customer->id);
-					$cookie->customer_lastname = $customer->lastname;
-					$cookie->customer_firstname = $customer->firstname;
-					$cookie->passwd = $customer->passwd;
-					$cookie->logged = 1;
-					$cookie->email = $customer->email;
-					Module::hookExec('createAccount', array(
-						'_POST' => $_POST,
-						'newCustomer' => $customer
-					));
-					if ($back)
-						Tools::redirect($back);
+					$address->id_customer = intval($customer->id);
+					if (!$address->add())
+						$errors[] = Tools::displayError('an error occurred while creating your address');
+					else
+					{
+						if (Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
+						array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
+							$smarty->assign('confirmation', 1);
+						$cookie->id_customer = intval($customer->id);
+						$cookie->customer_lastname = $customer->lastname;
+						$cookie->customer_firstname = $customer->firstname;
+						$cookie->passwd = $customer->passwd;
+						$cookie->logged = 1;
+						$cookie->email = $customer->email;
+						Module::hookExec('createAccount', array(
+							'_POST' => $_POST,
+							'newCustomer' => $customer
+						));
+						if ($back)
+							Tools::redirect($back);
+					}
 				}
 			}
 		}
