@@ -38,18 +38,18 @@ class		Message extends ObjectModel
 	public 		$date_add;
 	
 	protected	$fieldsRequired = array('message');
-	protected	$fieldsSize = array('message' => 600);
+	protected	$fieldsSize = array('message' => 1200);
 	protected	$fieldsValidate = array(
-		'message' => 'isMessage', 'id_cart' => 'isUnsignedId', 'id_order' => 'isUnsignedId',
+		'message' => 'isCleanHtml', 'id_cart' => 'isUnsignedId', 'id_order' => 'isUnsignedId',
 		'id_customer' => 'isUnsignedId', 'id_employee' => 'isUnsignedId', 'private' => 'isBool');
-	
+
 	protected 	$table = 'message';
 	protected 	$identifier = 'id_message';
 
 	public function getFields()
 	{
 		parent::validateFields();
-		
+
 		$fields['message'] = pSQL($this->message, true);
 		$fields['id_cart'] = intval($this->id_cart);
 		$fields['id_order'] = intval($this->id_order);
@@ -57,7 +57,7 @@ class		Message extends ObjectModel
 		$fields['id_employee'] = intval($this->id_employee);
 		$fields['private'] = intval($this->private);
 		$fields['date_add'] = pSQL($this->date_add);
-				
+
 		return $fields;
 	}
 
@@ -82,7 +82,7 @@ class		Message extends ObjectModel
 	  * Return name from Order ID
 	  *
 	  * @param integer $id_order Order ID
-	  * @param boolean $private return only private messages
+	  * @param boolean $private return WITH private messages
 	  * @return array Messages
 	  */
 	static public function getMessagesByOrderId($id_order, $private = false)
@@ -98,6 +98,7 @@ class		Message extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.intval($cookie->id_employee).')
 			LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
 			WHERE id_order = '.intval($id_order).'
+			'.(!$private ? ' AND m.`private` = 0' : '').'
 			GROUP BY m.id_message
 			ORDER BY m.date_add DESC
 		');

@@ -134,7 +134,7 @@ abstract class PaymentModule extends Module
 				{
 					$msg = new Message();
 					$message = strip_tags($message, '<br>');
-					if (!Validate::isMessage($message))
+					if (!Validate::isCleanHtml($message))
 						$message = $this->l('Payment message is not valid, please check your module!');
 					$msg->message = $message;
 					$msg->id_order = intval($order->id);

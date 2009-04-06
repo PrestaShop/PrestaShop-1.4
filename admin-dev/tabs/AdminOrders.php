@@ -308,7 +308,7 @@ class AdminOrders extends AdminTab
 		$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 		$discounts = $order->getDiscounts();
-		$messages = Message::getMessagesByOrderId($order->id);
+		$messages = Message::getMessagesByOrderId($order->id, true);
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
 		$currency = new Currency($order->id_currency);
 		$currentLanguage = new Language(intval($cookie->id_lang));
