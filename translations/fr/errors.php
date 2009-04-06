@@ -80,6 +80,7 @@ $_ERRORS['b60dbf792bbfc96ddd9cf73944390c5c'] = 'Aucun module disponible';
 $_ERRORS['8912e1863fe81af9cabd76f5de9e7495'] = 'Aucun produit ou quantité sélectionné.';
 $_ERRORS['b7d99b30df0aade1e4d459fab8c7078f'] = 'Aucun profil';
 $_ERRORS['7f3f9fec825792f2b728db9d55078e80'] = 'Aucune quantité sélectionnée pour le produit.';
+$_ERRORS['a9839ad48cf107667f73bad1d651f2ca'] = 'Aucun gabarit trouvé';
 $_ERRORS['b08d3867be98e6fff3233cd40ab8134a'] = 'La création de la commande a échoué';
 $_ERRORS['d29668efafb8068ad1ee29de5f9a0b88'] = 'Erreur(s) de parsing dans le(s) module(s)';
 $_ERRORS['1d6ab37603059a647b4ddaf4640b5075'] = 'Le chemin n\'est pas le même entre votre navigateur et votre serveur :';

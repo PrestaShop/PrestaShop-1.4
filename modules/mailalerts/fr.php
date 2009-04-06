@@ -12,8 +12,8 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_644f9c907ef5a8315916bd1e2f61f783'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_923524e0ff0364df2987d3b8269f03d1'] = 'Produit disponible';
 $_MODULE['<{mailalerts}prestashop>mailalerts_7a608706e248c21437882f5d1a8ece3a'] = 'Notification client';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ea379dd90c33c1345f40aa0afa6688d8'] = 'Disponibilité du produit';
-$_MODULE['<{mailalerts}prestashop>mailalerts_b66ca62045a46ca24aab2a8f0a7b3eeb'] = 'Donnez au client la possibilité de recevoir une notification lorsqu\'un produit hors stock est à nouveau disponible';
-$_MODULE['<{mailalerts}prestashop>mailalerts_38fb7d24e0d60a048f540ecb18e13376'] = 'Sauver';
+$_MODULE['<{mailalerts}prestashop>mailalerts_0fe15591b4ee3412815c9aa0128af02f'] = 'Donne au client la possibilité de recevoir une notification lorsqu\'un produit hors-stock est de nouveau disponible';
+$_MODULE['<{mailalerts}prestashop>mailalerts_38fb7d24e0d60a048f540ecb18e13376'] = 'Enregistrer';
 $_MODULE['<{mailalerts}prestashop>mailalerts_d9b64868bb5b490c5c0627abe835acf6'] = 'Notification marchand';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nouvelle commande : ';
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Recevoir une notification si une nouvelle commande est passée';

@@ -601,7 +601,7 @@ abstract class Module
 			$result = $smarty->fetch(dirname($file).'/'.$template);
 		}
 		else
-			$result = '';
+			$result = Tools::displayError('No template found');
 		$smarty->currentTemplate = $previousTemplate;
 		return $result;
 	}
