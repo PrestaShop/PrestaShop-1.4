@@ -338,6 +338,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('PS_SEARCH_AJAX', '1', NOW(), NOW());
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 	('PS_TIMEZONE', '277', NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+	('BLOCKTAGS_NBR', '10', NOW(), NOW());
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('extraCarrier', 'Extra carrier (module mode)', NULL, 0);
