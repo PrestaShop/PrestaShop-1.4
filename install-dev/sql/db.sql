@@ -357,6 +357,7 @@ CREATE TABLE `PREFIX_customer_group` (
   `id_customer` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
   KEY `customer_group_index` (`id_customer`,`id_group`),
+  KEY `customer_login` (`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customization` (
