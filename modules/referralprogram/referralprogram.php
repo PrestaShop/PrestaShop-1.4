@@ -497,7 +497,7 @@ class ReferralProgram extends Module
 					<td class="center">'.(intval($friend['id_customer']) ? $friend['id_customer'] : '--').'</td>
 					<td>'.$friend['firstname'].' '.$friend['lastname'].'</td>
 					<td>'.$friend['email'].'</td>
-					<td>'.Tools::displayDate($friend['date_add'], 1, true).'</td>
+					<td>'.Tools::displayDate($friend['date_add'], intval($cookie->id_lang), true).'</td>
 					<td align="right">'.sizeof(ReferralProgramModule::getSponsorFriend($friend['id_customer'])).'</td>
 					<td align="right">'.($orders ? sizeof($orders) : 0).'</td>
 					<td align="center">'.(intval($friend['id_customer']) ? '<img src="'._PS_ADMIN_IMG_.'enabled.gif" />' : '<img src="'._PS_ADMIN_IMG_.'disabled.gif" />').'</td>

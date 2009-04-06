@@ -345,7 +345,7 @@ class AdminOrders extends AdminTab
 		echo '
 			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
 				<tr>
-					<th>'.Tools::displayDate($row['date_add'], 1, true).'</th>
+					<th>'.Tools::displayDate($row['date_add'], intval($cookie->id_lang), true).'</th>
 					<th><img src="../img/os/'.$row['id_order_state'].'.gif" /></th>
 					<th>'.stripslashes($row['ostate_name']).'</th>
 					<th>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</th>
@@ -355,7 +355,7 @@ class AdminOrders extends AdminTab
 			{
 				echo '
 				<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-					<td>'.Tools::displayDate($row['date_add'], 1, true).'</td>
+					<td>'.Tools::displayDate($row['date_add'], intval($cookie->id_lang), true).'</td>
 					<td><img src="../img/os/'.$row['id_order_state'].'.gif" /></td>
 					<td>'.stripslashes($row['ostate_name']).'</td>
 					<td>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
@@ -385,7 +385,7 @@ class AdminOrders extends AdminTab
 			<legend><img src="../img/admin/tab-customers.gif" /> '.$this->l('Customer information').'</legend>
 			<span style="font-weight: bold; font-size: 14px;"><a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
-			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, 1, true).'<br />
+			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
 			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />
 		</fieldset>';
@@ -688,17 +688,18 @@ class AdminOrders extends AdminTab
 		{
 			echo '
 			<br />
-			<fieldset style="width: 400px">
-			<legend><img src="../img/admin/email.gif" /> '.$this->l('Messages').'</legend>';		
+			<fieldset style="width: 400px;">
+			<legend><img src="../img/admin/email.gif" /> '.$this->l('Messages').'</legend>';
 			foreach ($messages as $message)
 			{
-				echo '<span '.($message['is_new_for_me'] ?'class="new_message"':'').'>';
+				echo '<div style="overflow:auto; width:400px;" '.($message['is_new_for_me'] ?'class="new_message"':'').'>';
 				if ($message['is_new_for_me'])
-					echo '<a class="new_message" title="'.$this->l('Mark this message as \'viewed\'').'" href="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'&messageReaded='.intval($message['id_message']).'"><img src="../img/admin/enabled.gif" alt="" /></a>';				
-				echo '('.Tools::displayDate($message['date_add'], 1, true).') ';
-				echo '<b>'.(($message['elastname']) ? ($message['efirstname'].' '.$message['elastname']) : ($message['cfirstname'].' '.$message['clastname'])).'</b>';
-				echo (intval($message['private']) == 1 ? ' ['.$this->l('Private').']' : '').': '.nl2br2($message['message']);
-				echo '</span>';
+					echo '<a class="new_message" title="'.$this->l('Mark this message as \'viewed\'').'" href="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'&messageReaded='.intval($message['id_message']).'"><img src="../img/admin/enabled.gif" alt="" /></a>';
+				echo $this->l('At').' <i>'.Tools::displayDate($message['date_add'], intval($cookie->id_lang), true);
+				echo '</i> '.$this->l('from').' <b>'.(($message['elastname']) ? ($message['efirstname'].' '.$message['elastname']) : ($message['cfirstname'].' '.$message['clastname'])).'</b>';
+				echo (intval($message['private']) == 1 ? '<span style="color:red; font-weight:bold;">'.$this->l('Private:').'</span>' : '');
+				echo '<p>'.nl2br2($message['message']).'</p>';
+				echo '</div>';
 				echo '<br />';
 			}
 			echo '<p class="info">'.$this->l('When you read a message, please click on the green check.').'</p>';

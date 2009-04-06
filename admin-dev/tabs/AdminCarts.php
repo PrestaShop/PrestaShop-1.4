@@ -70,7 +70,7 @@ class AdminCarts extends AdminTab
 				echo '
 			<a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
-			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, 1, true).'<br />
+			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
 			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />';
 			else

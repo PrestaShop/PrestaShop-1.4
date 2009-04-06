@@ -127,16 +127,16 @@ class AdminCustomers extends AdminTab
 			<img src="../img/admin/'.($customer->id_gender == 2 ? 'female' : ($customer->id_gender == 1 ? 'male' : 'unknown')).'.gif" style="margin-bottom: 5px" /><br />
 			<a href="mailto:'.$customer->email.'" style="text-decoration: underline; color: blue">'.$customer->email.'</a><br /><br />
 			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).'<br />
-			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, 1, true).'<br />
-			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], 1, true) : $this->l('never')).'
+			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
+			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], intval($cookie->id_lang), true) : $this->l('never')).'
 		</fieldset>
 		</div>
 		<div style="float: left; margin-left: 50px">
 		<fieldset style="width: 300px"><div style="float: right"><a href="'.$currentIndex.'&addcustomer&id_customer='.$customer->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
 			'.$this->l('Newsletter:').' '.($customer->newsletter ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
 			'.$this->l('Opt-in:').' '.($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
-			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, 1).')' : $this->l('unknown')).'<br /><br />
-			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, 1, true).'<br />
+			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, intval($cookie->id_lang)).')' : $this->l('unknown')).'<br /><br />
+			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'
 		</fieldset>
 		</div>
@@ -190,7 +190,7 @@ class AdminCustomers extends AdminTab
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 					<td class="center">'.sprintf('%06d', $order['id_order']).'</td>
-					<td>'.Tools::displayDate($order['date_add'], 1, true).'</td>
+					<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang), true).'</td>
 					<td align="right">'.$order['nb_products'].'</td>
 					<td align="right">'.Tools::displayPrice($order['total_paid'], new Currency(intval($order['id_currency']))).'</td>
 					<td>'.$order['payment'].'</td>
@@ -297,7 +297,7 @@ class AdminCustomers extends AdminTab
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'\'">
 					<td class="center">'.sprintf('%06d', $cart['id_cart']).'</td>
-					<td>'.Tools::displayDate($cart['date_add'], 1, true).'</td>
+					<td>'.Tools::displayDate($cart['date_add'], intval($cookie->id_lang), true).'</td>
 					<td align="right">'.Tools::displayPrice($summary['total_price'], $currency).'</td>
 					<td>'.$carrier->name.'</td>
 					<td align="center"><a href="?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'"><img src="../img/admin/details.gif" /></a></td>

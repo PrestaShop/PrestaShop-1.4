@@ -115,7 +115,7 @@ class StatsProduct extends ModuleGraph
 				foreach ($sales as $sale)
 					$this->_html .= '
 					<tr>
-						<td>'.Tools::displayDate($sale['date_add'], false).'</td>
+						<td>'.Tools::displayDate($sale['date_add'], intval($cookie->id_lang), false).'</td>
 						<td>'.intval($sale['id_order']).'</td>
 						'.($hasAttribute ? '<td>'.$sale['product_name'].'</td>' : '').'
 						<td>'.intval($sale['product_quantity']).'</td>
