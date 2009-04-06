@@ -618,20 +618,7 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';
-
-			if (isset($product->tags) AND !empty($product->tags))
-			{
-				$tag = new Tag();
-				$array = self::createMultiLangField($product->tags);
-				foreach ($array AS $key => $tags)
-				{
-					$tag->addTags($key, $product->id, $tags);
-				}
-			}
-			
-
-			
+			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';			
 			$valid_link = Validate::isLinkRewrite($product->link_rewrite);
 			
 			$bak = $product->link_rewrite;
@@ -657,6 +644,14 @@ class AdminImport extends AdminTab
 				$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
 			else
 			{
+				if (isset($product->tags) AND !empty($product->tags))
+				{
+					$tag = new Tag();
+					$array = self::createMultiLangField($product->tags);
+					foreach ($array AS $key => $tags)
+						$a = $tag->addTags($key, $product->id, $tags);
+				}
+
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
 				{
 					foreach ($product->image AS $key => $url)
