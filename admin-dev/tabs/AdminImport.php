@@ -700,7 +700,7 @@ class AdminImport extends AdminTab
 			$groups[$group['name']] = $group['id_attribute_group'];
 		$attributes = array();
 		foreach (Attribute::getAttributes($defaultLanguage) as $attribute)
-			$attributes[$attribute['id_attribute']] = $attribute['id_attribute'];
+			$attributes[$attribute['name'].'_'.$attribute['id_attribute']] = $attribute['id_attribute'];
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
@@ -730,7 +730,7 @@ class AdminImport extends AdminTab
 						$groups[$group] = $obj->id;
 					}
 				}
-				if (!isset($attributes[$attribute]))
+				if (!isset($attributes[$group.'_'.$attribute]))
 				{
 					$obj = new Attribute();
 					$obj->id_attribute_group = $groups[$group];
@@ -738,10 +738,10 @@ class AdminImport extends AdminTab
 					if ($obj->validateFields(UNFRIENDLY_ERROR) AND $obj->validateFieldsLang(UNFRIENDLY_ERROR))
 					{
 						$obj->add();
-						$attributes[$attribute] = $obj->id;
+						$attributes[$group.'_'.$attribute] = $obj->id;
 					}
 				}
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.intval($attributes[$attribute]).','.intval($id_product_attribute).')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.intval($attributes[$group.'_'.$attribute]).','.intval($id_product_attribute).')');
 			}
 		}
 		$this->closeCsvFile($handle);
