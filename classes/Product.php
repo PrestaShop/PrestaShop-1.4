@@ -1135,6 +1135,7 @@ class		Product extends ObjectModel
 
 		// tax value
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
+		
 
 		// prices values
 		$price = floatval($result['price']);
@@ -1151,6 +1152,7 @@ class		Product extends ObjectModel
 			$reduction_price /= (1 + ($tax / 100));
 		$reduction_percent = floatval($result['reduction_percent']);
 		$reductionValue = $price * $reduction_percent / 100;
+
 		// make the reduction
 		if ($reduction_price AND $reduction_price > 0)
 		{

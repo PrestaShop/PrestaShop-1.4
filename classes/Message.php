@@ -38,7 +38,7 @@ class		Message extends ObjectModel
 	public 		$date_add;
 	
 	protected	$fieldsRequired = array('message');
-	protected	$fieldsSize = array('message' => 1200);
+	protected	$fieldsSize = array('message' => 1600);
 	protected	$fieldsValidate = array(
 		'message' => 'isCleanHtml', 'id_cart' => 'isUnsignedId', 'id_order' => 'isUnsignedId',
 		'id_customer' => 'isUnsignedId', 'id_employee' => 'isUnsignedId', 'private' => 'isBool');

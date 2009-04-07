@@ -380,7 +380,7 @@ function displayPayment()
 	/* We may need to display an order summary */
 	$smarty->assign($cart->getSummaryDetails());
 
-	$cookie->checkedTOS = true;
+	$cookie->checkedTOS = '1';
 	$smarty->assign(array('HOOK_PAYMENT' => Module::hookExecPayment(), 'total_price' => floatval($orderTotal)));
 
 	Tools::safePostVars();
