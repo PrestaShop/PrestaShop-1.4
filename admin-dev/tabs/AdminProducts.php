@@ -1291,27 +1291,14 @@ class AdminProducts extends AdminTab
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
-				<table cellpadding="5" style="float:left">
-					<tr><td><b>'.$this->l('Product global informations').'</b></td></tr>';
-		if (isset($obj->id))
-			echo '
-			<tr><td id="product_link">
-				<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a><br /><br />
-				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>
-			</td></tr>';
-		echo '	</table>';
-		if (isset($obj->id) AND $cover AND isset($cover['id_image']) AND $cover['id_image'])
-			echo '
-				<div style="float: right; text-align: center;">
-					<div style="float: left">'.cacheImage(_PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg', $this->table.'_'.intval($obj->id).'.'.$this->imageType, 100, $this->imageType).'</div>
-					<div style="float: right; margin: 20px 0 0 10px;">
-						<p align="center">'.$this->l('Filesize').' '.(filesize(_PS_IMG_DIR_.'p/'.$obj->id.'-'.$cover['id_image'].'.jpg') / 1000).'ko</p>
-						<a href="'.$currentIndex.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).($cover['id_image'] ? '&id_image='.intval($cover['id_image']) : '').'&deleteImage=1">
-						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /> '.$this->l('Delete').'</a>
-					</div>
-					<div class="clear"></div>
-				</div>';
-		echo '	<hr class="clear"/><br />
+			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
+			if (isset($obj->id))
+				echo '
+			<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>&nbsp;-&nbsp;
+			<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
+			echo '	
+			<hr class="clear"/>
+			<br />
 				<table cellpadding="5" width="100%">
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
