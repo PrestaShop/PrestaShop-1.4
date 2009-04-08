@@ -793,7 +793,7 @@ class AdminImport extends AdminTab
 			
 			if (isset($address->country) AND is_numeric($address->country))
 			{
-				if (Country::getNameById(intval($address->country), Configuration::get('PS_LANG_DEFAULT')))
+				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), intval($address->country)))
 					$address->id_country = intval($address->country);				
 			}
 			elseif(isset($address->country) AND is_string($address->country) AND !empty($address->country))

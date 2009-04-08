@@ -150,7 +150,7 @@ class		Country extends ObjectModel
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'country_lang`
 		WHERE `id_lang` = '.intval($id_lang).'
-		AND `id_country` = '.intval($id_country).'');
+		AND `id_country` = '.intval($id_country));
 
         return $result['name'];
     }
