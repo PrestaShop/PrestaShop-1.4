@@ -70,14 +70,14 @@ class BlockCategories extends Module
 		</form>';
 	}
 
-	function getTree($resultParents, $resultIds, $id_category = 1, $currentDepth = 0)
+	function getTree($resultParents, $resultIds, $maxDepth, $id_category = 1, $currentDepth = 0)
 	{
 		global $link;
 		
 		$children = array();
-		if (isset($resultParents[$id_category]) AND sizeof($resultParents[$id_category]) AND (Configuration::get('BLOCK_CATEG_MAX_DEPTH') == 0 OR $currentDepth < Configuration::get('BLOCK_CATEG_MAX_DEPTH')))
+		if (isset($resultParents[$id_category]) AND sizeof($resultParents[$id_category]) AND ($maxDepth == 0 OR $currentDepth < $maxDepth))
 			foreach ($resultParents[$id_category] as $subcat)
-				$children[] = $this->getTree($resultParents, $resultIds, $subcat['id_category'], $currentDepth + 1);
+				$children[] = $this->getTree($resultParents, $resultIds, $maxDepth, $subcat['id_category'], $currentDepth + 1);
 		if (!isset($resultIds[$id_category]))
 			return false;
 		return array('id' => $id_category, 'link' => $link->getCategoryLink($id_category, $resultIds[$id_category]['link_rewrite']),
@@ -104,7 +104,7 @@ class BlockCategories extends Module
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($params['cookie']->id_lang).')
 		WHERE 1'
 		.(intval($maxdepth) != 0 ? ' AND `level_depth` <= '.intval($maxdepth) : '').'
-		AND c.`active` = 1
+		AND (c.`active` = 1 OR c.`id_category`= 1)
 		ORDER BY `level_depth` ASC, cl.`name` ASC'))
 			return;
 		$resultParents = array();
@@ -116,8 +116,8 @@ class BlockCategories extends Module
 			$resultParents[$row['id_parent']][] = $row;
 			$resultIds[$row['id_category']] = $row;
 		}
-		$blockCategTree = $this->getTree($resultParents, $resultIds);
-				
+		$blockCategTree = $this->getTree($resultParents, $resultIds, Configuration::get('BLOCK_CATEG_MAX_DEPTH'));
+		p(array($result));
 		$isDhtml = (Configuration::get('BLOCK_CATEG_DHTML') == 1 ? true : false);
 
 		if (isset($_GET['id_category']))
