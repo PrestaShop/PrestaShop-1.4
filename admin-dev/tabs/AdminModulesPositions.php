@@ -172,7 +172,7 @@ class AdminModulesPositions extends AdminTab
 				ksort($cm);
 				foreach ($cm AS $module)
 					echo '
-					<option value="'.$module->id.'" '.($this->displayKey == $module->id ? 'selected="selected" ' : '').'>'.$module->displayName.'</option>';
+					<option value="'.intval($module->id).'" '.($this->displayKey == $module->id ? 'selected="selected" ' : '').'>'.$module->displayName.'</option>';
 			echo '
 			</select><br /><br />
 			<input type="checkbox" id="hook_position" onclick="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.intval(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;'.$this->l('Display non-positionnable hook').'
@@ -254,6 +254,7 @@ class AdminModulesPositions extends AdminTab
 		}
 		$excepts = strval(Tools::getValue('exceptions', ((isset($slModule) AND Validate::isLoadedObject($slModule)) ? $excepts : '')));
 		$modules = Module::getModulesInstalled(0);
+
 		$instances = array();
 		foreach ($modules AS $module)
 			if ($tmpInstance = Module::getInstanceById($module['id_module']))

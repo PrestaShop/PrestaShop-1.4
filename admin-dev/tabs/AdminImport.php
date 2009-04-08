@@ -509,7 +509,7 @@ class AdminImport extends AdminTab
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
 				$product->id_tax = intval(Tax::getTaxIdByRate(floatval($product->tax_rate)));
-			
+
 			if (isset($product->tax_rate) AND !$product->id_tax)
 			{
 				$tax = new Tax();
@@ -539,7 +539,7 @@ class AdminImport extends AdminTab
 							$this->_errors[] = mysql_error().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('cannot be saved');
 				}
 			}
-			
+
 			if (isset($product->supplier) AND is_numeric($product->supplier) AND Supplier::supplierExists(intval($product->supplier)))
 				$product->id_supplier = intval($product->supplier);
 			elseif (isset($product->supplier) AND is_string($product->supplier) AND !empty($product->supplier))
@@ -557,7 +557,7 @@ class AdminImport extends AdminTab
 							$this->_errors[] = mysql_error().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('cannot be saved');
 				}
 			}
-			
+
 			if (isset($product->price_tex) AND !isset($product->price_tin))
 				$product->price = $product->price_tex;	
 			elseif (isset($product->price_tin) AND !isset($product->price_tex))

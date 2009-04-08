@@ -82,7 +82,7 @@ class		Employee extends ObjectModel
 	
 	public function add($autodate = true, $nullValues = true)
 	{
-		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_BACK')));
+		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_BACK').'minutes'));
 	 	return parent::add($autodate, $nullValues);
 	}
 		

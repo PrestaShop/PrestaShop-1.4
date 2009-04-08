@@ -106,7 +106,7 @@ class		Customer extends ObjectModel
 	{
 		$this->birthday = (empty($this->years) ? $this->birthday : intval($this->years).'-'.intval($this->months).'-'.intval($this->days));
 		$this->secure_key = md5(uniqid(rand(), true));
-		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT')));
+		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT').'minutes'));
 	 	$res = parent::add($autodate, $nullValues);
 		if (!$res)
 			return false;
