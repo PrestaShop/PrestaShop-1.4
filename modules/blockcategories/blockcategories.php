@@ -117,7 +117,6 @@ class BlockCategories extends Module
 			$resultIds[$row['id_category']] = $row;
 		}
 		$blockCategTree = $this->getTree($resultParents, $resultIds, Configuration::get('BLOCK_CATEG_MAX_DEPTH'));
-		p(array($result));
 		$isDhtml = (Configuration::get('BLOCK_CATEG_DHTML') == 1 ? true : false);
 
 		if (isset($_GET['id_category']))
