@@ -416,6 +416,7 @@ class AdminImport extends AdminTab
 	
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
+		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
@@ -434,7 +435,7 @@ class AdminImport extends AdminTab
 			}
 			elseif (isset($category->parent) AND is_string($category->parent))
 			{
-				$categoryParent = Category::searchByName(1, $category->parent, true);
+				$categoryParent = Category::searchByName($defaultLanguageId, $category->parent, true);
 				if ($categoryParent['id_category'])
 					$category->id_parent =	intval($categoryParent['id_category']);
 				else
@@ -447,7 +448,7 @@ class AdminImport extends AdminTab
 						if ($categoryToCreate->add())
 							$category->id_parent = $categoryToCreate->id;
 						else
-							$this->_errors[] = mysql_error().' '.$categoryToCreate->name[1].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
+							$this->_errors[] = mysql_error().' '.$categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
 				}
 			}
 			
@@ -459,7 +460,7 @@ class AdminImport extends AdminTab
 			
 			$bak = $category->link_rewrite;
 			if ((isset($category->link_rewrite) AND empty($category->link_rewrite)) OR !$valid_link)
-				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[1]));
+				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[$defaultLanguageId]));
 			if (!$valid_link)
 				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite;
 			
@@ -468,7 +469,7 @@ class AdminImport extends AdminTab
 			$res = false;
 			if ($category->validateFields(UNFRIENDLY_ERROR) AND $category->validateFieldsLang(UNFRIENDLY_ERROR))
 			{
-				$categoryAlreadyCreated = Category::searchByName(1, $category->name[1], true);
+				$categoryAlreadyCreated = Category::searchByName($defaultLanguageId, $category->name[$defaultLanguageId], true);
 
 				// If category already in base, get id category back
 				if ($categoryAlreadyCreated['id_category'])
@@ -496,7 +497,8 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		
+		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
+
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 
@@ -519,7 +521,7 @@ class AdminImport extends AdminTab
 					if ($tax->add())
 						$product->id_tax = intval($tax->id);
 					else
-						$this->_errors[] = mysql_error().' TAX '.$tax->name[1].' '.Tools::displayError('cannot be saved');
+						$this->_errors[] = mysql_error().' TAX '.$tax->name[$defaultLanguageId].' '.Tools::displayError('cannot be saved');
 			}
 			
 			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists(intval($product->manufacturer)))
@@ -591,13 +593,13 @@ class AdminImport extends AdminTab
 								if ($categoryToCreate->add())
 									$product->id_category[] = intval($categoryToCreate->id);
 								else
-									$this->_errors[] = mysql_error().' '.$categoryToCreate->name[1].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
+									$this->_errors[] = mysql_error().' '.$categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
 							
 						}	
 					}
 					elseif (is_string($value) AND !empty($value))
 					{
-						$category = Category::searchByName(1, $value, true);
+						$category = Category::searchByName($defaultLanguageId, $value, true);
 						if ($category['id_category'])
 						{
 							$product->id_category[] =	intval($category['id_category']);
@@ -612,7 +614,7 @@ class AdminImport extends AdminTab
 								if ($categoryToCreate->add())
 									$product->id_category[] = intval($categoryToCreate->id);
 								else
-									$this->_errors[] = mysql_error().' '.$categoryToCreate->name[1].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
+									$this->_errors[] = mysql_error().' '.$categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
 						}
 					}
 				}
@@ -623,7 +625,7 @@ class AdminImport extends AdminTab
 			
 			$bak = $product->link_rewrite;
 			if ((isset($product->link_rewrite) AND empty($product->link_rewrite)) OR !$valid_link)
-				$product->link_rewrite = Tools::link_rewrite($product->name[1]);
+				$product->link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
 			if (!$valid_link)
 				$this->_warnings[] = Tools::displayError('Rewrited link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$product->link_rewrite;
 		
@@ -664,12 +666,12 @@ class AdminImport extends AdminTab
 						$image->id_product = intval($product->id);
 						$image->position = Image::getHighestPosition($product->id) + 1;
 						$image->cover = !$key ? true : false;
-						$image->legend = self::createMultiLangField($product->name[1]);
+						$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
 						if ($image->validateFields(UNFRIENDLY_ERROR) AND $image->validateFieldsLang(UNFRIENDLY_ERROR))
 							if ($image->add())
 								self::copyImg($product->id, $image->id, $url);
 							else
-								$this->_warnings[] = mysql_error().' '.$image->legend[1].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
+								$this->_warnings[] = mysql_error().' '.$image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
 					}			
 				}
 				$product->updateCategories(array_map('intval', $product->id_category));
@@ -812,7 +814,7 @@ class AdminImport extends AdminTab
 						if ($country->add())
 							$address->id_country = intval($country->id);
 						else
-							$this->_errors[] = mysql_error().' '.$country->name[1].' '.Tools::displayError('cannot be saved');
+							$this->_errors[] = mysql_error().' '.$country->name[$defaultLanguageId].' '.Tools::displayError('cannot be saved');
 				}
 			}
 					
