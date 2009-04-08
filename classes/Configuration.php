@@ -158,9 +158,11 @@ class		Configuration extends ObjectModel
 
 		$resTab = array();
 		if (!$id_lang)
+		{
 			foreach ($keys AS $key)
 				if (key_exists($key, self::$_CONF))
 					$resTab[$key] = self::$_CONF[$key];
+		}
 		elseif (key_exists($id_lang, self::$_CONF_LANG))
 			foreach ($keys AS $key)
 				if (key_exists($key, self::$_CONF_LANG[intval($id_lang)]))

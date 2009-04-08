@@ -30,11 +30,11 @@ class AdminManufacturers extends AdminTab
 		$this->edit = true;
 	 	$this->delete = true;
 		
-		// Sub tab adresses
+		// Sub tab addresses
 		$countries = Country::getCountries(intval($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
-		$this->fieldsDisplayAdresses = array(
+		$this->fieldsDisplayAddresses = array(
 		'id_address' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'm!manufacturer_name' => array('title' => $this->l('Manufacturer'), 'width' => 100),
 		'firstname' => array('title' => $this->l('First name'), 'width' => 80),
@@ -43,11 +43,11 @@ class AdminManufacturers extends AdminTab
 		'city' => array('title' => $this->l('City'), 'width' => 150),
 		'country' => array('title' => $this->l('Country'), 'width' => 100, 'type' => 'select', 'select' => $this->countriesArray, 'filter_key' => 'cl!id_country'));
 		$this->_includeTabTitle = array($this->l('Manufacturers addresses'));
-		$this->_joinAdresses = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON 
+		$this->_joinAddresses = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON 
 		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($cookie->id_lang).') ';
-	 	$this->_joinAdresses .= 'LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (a.`id_manufacturer` = m.`id_manufacturer`)';
-		$this->_selectAdresses = 'cl.`name` as country, m.`name` AS manufacturer_name';
-		$this->_includeTab = array('Addresses' => array('addressType' => 'manufacturer', 'fieldsDisplay' => $this->fieldsDisplayAdresses, '_join' => $this->_joinAdresses, '_select' => $this->_selectAdresses));
+	 	$this->_joinAddresses .= 'LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (a.`id_manufacturer` = m.`id_manufacturer`)';
+		$this->_selectAddresses = 'cl.`name` as country, m.`name` AS manufacturer_name';
+		$this->_includeTab = array('Addresses' => array('addressType' => 'manufacturer', 'fieldsDisplay' => $this->fieldsDisplayAddresses, '_join' => $this->_joinAddresses, '_select' => $this->_selectAddresses));
 		
 		$this->view = true;
 		$this->_select = 'COUNT(`id_product`) AS `products`, (SELECT COUNT(ad.`id_manufacturer`) as `addresses` FROM `'._DB_PREFIX_.'address` ad WHERE ad.`id_manufacturer` = a.`id_manufacturer` GROUP BY ad.`id_manufacturer`) as `addresses`';
@@ -164,7 +164,7 @@ class AdminManufacturers extends AdminTab
 					</tr>
 				</table>';
 		if (!sizeof($addresses))
-			echo 'No adresse for this manufacturer.';
+			echo 'No address for this manufacturer.';
 		echo '<br /><br />';
 		echo '<h3>'.$this->l('Total products:').' '.sizeof($products).'</h3>';
 		foreach ($products AS $product)
