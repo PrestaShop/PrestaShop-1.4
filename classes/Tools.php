@@ -288,7 +288,7 @@ class Tools
 	 	if ($language AND strtolower($language['iso_code']) == 'fr')
 	 		return ($tmpTab[2].'-'.$tmpTab[1].'-'.$tmpTab[0].($full ? $hour : ''));
 	 	else
-	 		return 'loul'.($tmpTab[0].'-'.$tmpTab[1].'-'.$tmpTab[2].($full ? $hour : ''));
+	 		return ($tmpTab[0].'-'.$tmpTab[1].'-'.$tmpTab[2].($full ? $hour : ''));
 	}
 
 	/**
