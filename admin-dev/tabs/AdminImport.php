@@ -634,7 +634,11 @@ class AdminImport extends AdminTab
 			{
 				// If id product AND id product already in base, trying to update
 				if ($product->id AND $product->productExists(intval($product->id)))
+				{
+					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.intval($product->id));
+					$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
+				}
 				// If no id_product or update failed
 				if (!$res)
 					$res = $product->add();

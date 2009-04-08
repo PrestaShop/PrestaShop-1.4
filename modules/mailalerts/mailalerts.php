@@ -57,6 +57,7 @@ class MailAlerts extends Module
 		
 		/* This hook is optional */
 		$this->registerHook('myAccountBlock');
+		return true;
 	}
 
 	public function uninstall()
