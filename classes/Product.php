@@ -1232,7 +1232,7 @@ class		Product extends ObjectModel
 
 		// Group reduction
 		if ($id_customer)
-			$price -= $usetax ? Group::getReduction($id_customer) : (Group::getReduction($id_customer) / (1 + ($tax / 100)));
+			$price *= ((100 - Group::getReduction($id_customer))/100);
 
 		self::$_prices[$cacheId] = ($divisor AND $divisor != 'NULL') ? number_format($price/$divisor, $decimals, '.', '') : number_format($price, $decimals, '.', '');
 		return self::$_prices[$cacheId];
