@@ -2,11 +2,11 @@
 
 class CashOnDelivery extends PaymentModule
 {	
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'cashondelivery';
 		$this->tab = 'Payment';
-		$this->version = 0.1;
+		$this->version = '0.2';
 		
 		$this->currencies = false;
 
@@ -16,14 +16,14 @@ class CashOnDelivery extends PaymentModule
 		$this->description = $this->l('Accept cash on delivery payments');
 	}
 
-	function install()
+	public function install()
 	{
-        parent::install();
-		$this->registerHook('payment');
-		$this->registerHook('paymentReturn');
+        if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn'))
+			return false;
+		return true;
 	}
 
-	function hookPayment($params)
+	public function hookPayment($params)
 	{
 		global $smarty;
 		
@@ -38,7 +38,7 @@ class CashOnDelivery extends PaymentModule
 		return $this->display(__FILE__, 'payment.tpl');
 	}
 	
-	function hookPaymentReturn($params)
+	public function hookPaymentReturn($params)
 	{
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
