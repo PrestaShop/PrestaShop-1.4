@@ -1465,7 +1465,7 @@ class AdminProducts extends AdminTab
 					}
 					else
 					{
-						$('#virtual_product_file').hide();
+						$('#virtual_product_file').remove();
 						$('#virtual_product_file_label').hide();
 						$('#virtual_product_name').attr('value', fileName);
 						$('#upload-confirmation').html(
