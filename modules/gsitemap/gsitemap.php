@@ -9,7 +9,7 @@ class Gsitemap extends Module
     {
         $this->name = 'gsitemap';
         $this->tab = 'Tools';
-        $this->version = 1.3;
+        $this->version = '1.4';
 
         $this->_directory = dirname(__FILE__).'/../../';
         $this->_filename = $this->_directory.'sitemap.xml';
@@ -70,8 +70,8 @@ class Gsitemap extends Module
 		$cmss = Db::getInstance()->ExecuteS('
 		SELECT DISTINCT b.id_cms, cl.link_rewrite, cl.id_lang
 		FROM '._DB_PREFIX_.'block_cms b
-		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON b.id_cms = cl.id_cms
-		LEFT JOIN '._DB_PREFIX_.'lang l ON cl.id_lang = l.id_lang
+		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
+		LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 		WHERE l.`active` = 1');
 
       	foreach($cmss AS $cms)
@@ -87,7 +87,7 @@ class Gsitemap extends Module
 		FROM '._DB_PREFIX_.'category c
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON c.id_category = cl.id_category
 		LEFT JOIN '._DB_PREFIX_.'lang l ON cl.id_lang = l.id_lang
-		WHERE l.`active` = 1 AND c.`active` = 1 AND c.id_category !=1
+		WHERE l.`active` = 1 AND c.`active` = 1 AND c.id_category != 1
 		ORDER BY date_upd DESC');
 		foreach($categories as $category)
         {
@@ -106,7 +106,7 @@ class Gsitemap extends Module
 			FROM '._DB_PREFIX_.'product p2
 			LEFT JOIN '._DB_PREFIX_.'category_product cp2 ON p2.id_product = cp2.id_product
 			LEFT JOIN '._DB_PREFIX_.'category c2 ON cp2.id_category = c2.id_category
-			WHERE p2.id_product = p.id_product) AS level_depth
+			WHERE p2.id_product = p.id_product AND p2.`active` = 1 AND c2.`active` = 1) AS level_depth
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON p.id_product = pl.id_product
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
@@ -123,7 +123,7 @@ class Gsitemap extends Module
             $sitemap->addChild('lastmod', $product['date_upd']);
             $sitemap->addChild('changefreq', 'daily');
         }
-        
+
         $xmlString = $xml->asXML();
         fwrite($fp, $xmlString, Tools::strlen($xmlString));
         fclose($fp);
