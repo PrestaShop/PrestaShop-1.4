@@ -77,7 +77,7 @@ class OrderSlip extends ObjectModel
 		($id_order_detail ? 'SELECT sum(`product_quantity`) as `total`' : 'SELECT *').
 		'FROM `'._DB_PREFIX_.'order_slip_detail`'
 		.($id_order_slip ? ' WHERE `id_order_slip` = '.intval($id_order_slip) : '')
-		.($id_order_detail ? ' WHERE `id_order_detail` = '.intval($id_order_detail) : ''), false);
+		.($id_order_detail ? ' WHERE `id_order_detail` = '.intval($id_order_detail) : ''));
 	}
 	
 	static public function getOrdersSlipProducts($orderSlipId, $order)

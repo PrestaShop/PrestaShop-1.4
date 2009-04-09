@@ -486,58 +486,60 @@ class PDF extends FPDF
 		$ecotax = 0;
 		$customizedDatas = Product::getAllCustomizedDatas(intval(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
+		$isInPreparation = self::$order->isInPreparation();
 		foreach($products AS $product)
-		{
-			$i = -1;
-			$ecotax += $product['ecotax'] * intval($product['product_quantity']);
-			$unit_without_tax = $product['product_price'];
-			$total_without_tax = $product['total_price'];
-			$total_with_tax = $product['total_wt'];
-			$productQuantity = intval($product['product_quantity']);
-			if ($productQuantity <= 0)
-				continue ;
-
-			if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+			if (!$delivery OR ($isInPreparation AND intval($product['product_quantity']) - intval($product['product_quantity_refunded']) > 0))
 			{
+				$i = -1;
+				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
+				$unit_without_tax = $product['product_price'];
+				$total_without_tax = $product['total_price'];
+				$total_with_tax = $product['total_wt'];
+				$productQuantity = $isInPreparation ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
+				if ($productQuantity <= 0)
+					continue ;
+	
+				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+				{
+					if ($delivery)
+						$this->SetX(25);
+					$before = $this->GetY();
+					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
+					$lineSize = $this->GetY() - $before;
+					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
+					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
+					if (!$delivery)
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, intval($product['customizationQuantityTotal']), 'B', 0, 'C');
+					if (!$delivery)
+					{
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+					}
+					$this->Ln();
+					$i = -1;
+					$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
+					$total_without_tax = $unit_without_tax * $productQuantity;
+					$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
+				}
+	
 				if ($delivery)
 					$this->SetX(25);
 				$before = $this->GetY();
-				$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
+				$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 				$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
 				if (!$delivery)
 					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-				$this->Cell($w[++$i], $lineSize, intval($product['customizationQuantityTotal']), 'B', 0, 'C');
+				$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
 				if (!$delivery)
 				{
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
 				}
 				$this->Ln();
-				$i = -1;
-				$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
-				$total_without_tax = $unit_without_tax * $productQuantity;
-				$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
 			}
-
-			if ($delivery)
-				$this->SetX(25);
-			$before = $this->GetY();
-			$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
-			$lineSize = $this->GetY() - $before;
-			$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
-			$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
-			if (!$delivery)
-				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-			$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
-			if (!$delivery)
-			{
-				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-				$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
-			}
-			$this->Ln();
-		}
 
 		if (!sizeof(self::$order->getDiscounts()) AND !$delivery)
 			$this->Cell(array_sum($w), 0, '');
