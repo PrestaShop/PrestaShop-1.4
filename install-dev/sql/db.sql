@@ -227,7 +227,7 @@ CREATE TABLE `PREFIX_cms_lang` (
   `meta_title` varchar(128) NOT NULL,
   `meta_description` varchar(255) default NULL,
   `meta_keywords` varchar(255) default NULL,
-  `content` text,
+  `content` longtext,
   `link_rewrite` varchar(128) NOT NULL,
   PRIMARY KEY  (`id_cms`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
