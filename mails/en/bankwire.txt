@@ -10,7 +10,7 @@ Please note that you have selected to pay by bank wire. Please send your wire to
 
 {bankwire_address}
 
-Order total amout is {total_paid}
+Order total amount is {total_paid}
 
 You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
 
