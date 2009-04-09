@@ -37,6 +37,7 @@ class Attachment extends ObjectModel
 	
 	public function delete()
 	{
+		@unlink(_PS_DOWNLOAD_DIR_.$this->file);
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_attachment = '.intval($this->id));
 		return parent::delete();
 	}
