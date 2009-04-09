@@ -257,13 +257,16 @@ function deleteImage($id_item, $id_image = NULL)
 		unlink($path.$id_item.'-'.$id_image.'.jpg');
 	elseif (!$id_image AND file_exists($path.$id_item.'.jpg'))
 		unlink($path.$id_item.'.jpg');
-	
+	/* Auto-generated images */
 	$imagesTypes = ImageType::getImagesTypes();
 	foreach ($imagesTypes AS $k => $imagesType)
 		if ($id_image AND file_exists($path.$id_item.'-'.$id_image.'-'.$imagesType['name'].'.jpg'))
 			unlink($path.$id_item.'-'.$id_image.'-'.$imagesType['name'].'.jpg');
 		elseif (!$id_image AND file_exists($path.$id_item.'-'.$imagesType['name'].'.jpg'))
 			unlink($path.$id_item.'-'.$imagesType['name'].'.jpg');
+	/* BO "mini" image */
+	if (file_exists(_PS_TMP_IMG_DIR_.$table.'_mini_'.$id_item.'.jpg'))
+		unlink(_PS_TMP_IMG_DIR_.$table.'_mini_'.$id_item.'.jpg');
 	return true;
 }
 
