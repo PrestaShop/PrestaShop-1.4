@@ -56,26 +56,18 @@ class StatsCatalog extends Module
 		return isset($result['viewed']) ? $result['viewed'] : 0;
 	}
 	
-	public function getProductsNV()
+	public function getTotalProductViewed()
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(p.`id_product`) as total
-		FROM `'._DB_PREFIX_.'product` p
+		return Db::getInstance()->getValue('
+		SELECT COUNT(DISTINCT pa.`id_object`)
+		FROM `'._DB_PREFIX_.'page_viewed` pv
+		LEFT JOIN `'._DB_PREFIX_.'page` pa ON pv.`id_page` = pa.`id_page`
+		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = pa.`id_page_type`
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = pa.`id_object`
 		'.$this->_join.'
-		WHERE p.`id_product` NOT IN (
-			SELECT pa.`id_object`
-			FROM `'._DB_PREFIX_.'page_viewed` pv
-			LEFT JOIN `'._DB_PREFIX_.'page` pa ON pv.`id_page` = pa.`id_page`
-			LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = pa.`id_page_type`
-			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = pa.`id_object`
-			'.$this->_join.'
-			WHERE pt.`name` = \'product.php\'
-			AND p.`active` = 1
-			'.$this->_where.'
-			GROUP BY pa.`id_object`)
+		WHERE pt.`name` = \'product.php\'
 		AND p.`active` = 1
 		'.$this->_where);
-		return $result['total'];
 	}
 	
 	public function getTotalBought()
@@ -152,7 +144,7 @@ class StatsCatalog extends Module
 		if ($conversionReverse = number_format(floatval($totalBought ? ($totalPageViewed / $totalBought) : 0), 2, '.', ''))
 			$conversion .= ' (1 '.$this->l('purchase').' / '.$conversionReverse.' '.$this->l('visits').')';
 
-		$totalNV = $this->getProductsNV();
+		$totalNV = $total - $this->getTotalProductViewed();
 		
 		$html = '
 		<script type="text/javascript" language="javascript">openCloseLayer(\'calendar\');</script>
