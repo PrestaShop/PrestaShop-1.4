@@ -1,6 +1,7 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
 
 //will be initialized bellow...
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
@@ -16,7 +17,7 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 {
 	include(dirname(__FILE__).'/product-sort.php');
 	
-	$object = new $className(intval($id));
+	$object = new $className(intval($id), $cookie->id_lang);
 	if (!Validate::isLoadedObject($object))
 		$errors[] = Tools::displayError('object does not exist');
 	else
