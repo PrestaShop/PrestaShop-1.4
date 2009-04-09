@@ -43,6 +43,7 @@ class AdminAttachments extends AdminTab
 							$this->_errors[] = $this->l('File copy failed');
 						@unlink($_FILES['file']['tmp_name']);
 						$_POST['file'] = $uniqid;
+						$_POST['mime'] = $_FILES['file']['type'];
 					}
 				}
 			$this->validateRules();

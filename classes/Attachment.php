@@ -4,14 +4,15 @@ class Attachment extends ObjectModel
 {
 	public		$file;
 	public		$name;
+	public		$mime;
 	public		$description;
 
 	/** @var integer position */
 	public		$position;
 
-	protected	$fieldsRequired = array('file');
-	protected	$fieldsSize = array('file' => 40);
-	protected	$fieldsValidate = array('file' => 'isGenericName');
+	protected	$fieldsRequired = array('file', 'mime');
+	protected	$fieldsSize = array('file' => 40, 'mime' => 32);
+	protected	$fieldsValidate = array('file' => 'isGenericName', 'mime' => 'isCleanHtml');
 
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);
@@ -24,6 +25,7 @@ class Attachment extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['file'] = pSQL($this->file);
+		$fields['mime'] = pSQL($this->mime);
 		return $fields;
 	}
 
