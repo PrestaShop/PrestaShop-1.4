@@ -139,17 +139,23 @@ else
 		$attachments = $product->getAttachments(intval($cookie->id_lang));
 		
 		/* Category */
+		$category = false;
 		if (isset($_SERVER['HTTP_REFERER']) AND ereg('^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
 		{
 			if (isset($regs[2]) AND is_numeric($regs[2]))
-				$category = new Category(intval($regs[2]), intval($cookie->id_lang));
+			{
+				if (Product::idIsOnCategoryId(intval($product->id), array(intval($regs[2]))))
+					$category = new Category(intval($regs[2]), intval($cookie->id_lang));
+			}
 			elseif (isset($regs[5]) AND is_numeric($regs[5]))
-				$category = new Category(intval($regs[5]), intval($cookie->id_lang));
+			{
+				if (Product::idIsOnCategoryId(intval($product->id), array(intval($regs[5]))))
+					$category = new Category(intval($regs[5]), intval($cookie->id_lang));
+			}
 		}
-		else
-		{
+		if (!$category)
 			$category = new Category($product->id_category_default, intval($cookie->id_lang));
-		}
+
 		if (isset($category) AND Validate::isLoadedObject($category))
 		{
 			$smarty->assign(array(
