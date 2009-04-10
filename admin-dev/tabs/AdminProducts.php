@@ -1004,7 +1004,7 @@ class AdminProducts extends AdminTab
 										$(\'#removeAttachment\').click(function() {  
 											return !$(\'#selectAttachment2 option:selected\').remove().appendTo(\'#selectAttachment1\');  
 										});  
-										$(\'#formAttach\').submit(function() {  
+										$(\'#product\').submit(function() {  
 											$(\'#selectAttachment1 option\').each(function(i) {  
 												$(this).attr("selected", "selected");  
 											});  
@@ -1238,35 +1238,33 @@ class AdminProducts extends AdminTab
 		$attach2 = Attachment::getAttachments($cookie->id_lang, $obj->id, false);
 		
 		echo '
-		<form id="formAttach" action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
-			<a href="index.php?tab=AdminAttachments&addattachment&token='.Tools::getAdminToken('AdminAttachments'.intval(Tab::getIdFromClassName('AdminAttachments')).intval($cookie->id_employee)).'">
-				<img src="../img/admin/add.gif" alt="new" title="'.$this->l('Upload new attachment').'" />&nbsp;'.$this->l('Upload new attachment').'
-			</a>
-			<div class="clear">&nbsp;</div>
-			<table><tr>
-				<td>
-					<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
+		<a href="index.php?tab=AdminAttachments&addattachment&token='.Tools::getAdminToken('AdminAttachments'.intval(Tab::getIdFromClassName('AdminAttachments')).intval($cookie->id_employee)).'">
+			<img src="../img/admin/add.gif" alt="new" title="'.$this->l('Upload new attachment').'" />&nbsp;'.$this->l('Upload new attachment').'
+		</a>
+		<div class="clear">&nbsp;</div>
+		<table><tr>
+			<td>
+				<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
 		foreach ($attach1 as $attach)
-			echo '		<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
-		echo '		</select><br /><br />
-					<a href="#" id="addAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
-						'.$this->l('Remove').' &gt;&gt;
-					</a>
-				</td>
-				<td style="padding-left:20px;">
-					<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
+			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+		echo '	</select><br /><br />
+				<a href="#" id="addAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+					'.$this->l('Remove').' &gt;&gt;
+				</a>
+			</td>
+			<td style="padding-left:20px;">
+				<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
 		foreach ($attach2 as $attach)
-			echo '		<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
-		echo '		</select><br /><br />
-					<a href="#" id="removeAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
-						&lt;&lt; '.$this->l('Add').'
-					</a>
-				</div>
-				</td>
-			</tr></table>
-			<div class="clear">&nbsp;</div>
-			<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />
-		</form>';
+			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+		echo '	</select><br /><br />
+				<a href="#" id="removeAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+					&lt;&lt; '.$this->l('Add').'
+				</a>
+			</div>
+			</td>
+		</tr></table>
+		<div class="clear">&nbsp;</div>
+		<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />';
 	}
 
 	function displayFormInformations($obj, $currency, $languages, $defaultLanguage)
