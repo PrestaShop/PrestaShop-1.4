@@ -23,6 +23,7 @@ $_FIELDS['Alias_06a943c59f33a34bb5924aaf72cd2995'] = 'recherche';
 $_FIELDS['Alias_724874d1be77f450a09b305fc1534afb'] = 'alias';
 $_FIELDS['Alias_c76a5e84e4bdee527e274ea30c680d79'] = 'actif';
 $_FIELDS['Attachment_8c7dd922ad47494fc02c388e12c00eac'] = 'fichier';
+$_FIELDS['Attachment_d02a169f33469c888396a24dd9d9f1c6'] = 'mime';
 $_FIELDS['Attachment_b068931cc450442b63f5b3d276ea4297'] = 'nom';
 $_FIELDS['Attachment_67daf92c833c41c95db874e18fcb2786'] = 'description';
 $_FIELDS['Attribute_7b45130ec39fb910fdc94eab007b1e76'] = 'groupe d\'attributs';
