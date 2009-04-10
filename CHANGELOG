@@ -2,64 +2,401 @@ PrestaShop <support@prestashop.com>
 Open-source licence 3.0 (http://www.opensource.org/licenses/osl-3.0.php)
 
 ####################################
-#   v1.1.0.5 - 184 (2008-18-12)   #
+#   v1.2.0.1 - 748 (2009-10-04)    #
 ####################################
 
 Release Notes
 -------------
 
+
 	Added Features :
 
-- MO : New stats modules: best products and best categories
-- MO : New stats module: best vouchers
+[+] FO/BO : added jqZoom feature
+[+] MO : new mailalert module version
+[+] FO/BO : you can now set multiples pictures for a combination
+[+] BO : new tab customer notifications thread
+[+] BO : added new "Tracking" tab in catalog
+[+] BO : you can now see for each category how many quantity product there is inside (and sub categories)
+[+] New visitor tracking system with affiliation
+[+] New stats module newsletter
+[+] BO : added a total amount of orders displayed in AdminOrders
+[+] BO : added new tab to create Groups
+[+] BO : you can now add a customer to one or multiples groups
+[+] MO : keep http_referer in blocknewsletter module
+[+] FO/BO : you can now set a reduction to group's members
+[+] FO/BO : customer need to be part of at least one group
+[+] FO/BO : you can now set group access to category
+[+] FO/BO : you can now set group access to payment module
+[+] BO : you can now edit order return statuses by using Statuses tab in Orders tabs
+[+] MO : new module statscarrier
+[+] MO : new module statssearch (keywords of the internal search engine)
+[+] BO : Stats now available from date to date
+[+] BO : you can now generate your own .htaccess file with server parameters
+[+] BO/FO : you can now set an order state as hidden for customers
+[+] BO : Color attributes now display their color on the attribute list (BO >> Catalog >> Attributes and groups)
+[+] BO : Feature's zero value support added
+[+] FO : Sorting support added to product listing by tags & references
+[+] BO : new tab "Carts" which a list with all carts + a view for each of them
+[+] BO : information cart on "Customer" view
+[+] BO : information cart on "Order" view
+[+] BO : you can now search for a cart
+[+] MO : added carrier module feature
+[+] BO : product stats and sales link added in the product page
+[+] MO : new module statsbestsuppliers
+[+] BO : Order's auto cancellation support added (when all products have been cancelled)
+[+] BO : Add Ref in AdminProducts.php bottom tab
+[+] BO/MO : You can now specify a module in the tab table in which the class can be found
+[+] FO : added new hook shoppingCartExtra on shopping-cart
+[+] BO : New tab available : Tags (will be improved soon)
+[+] FO : Withdraw address alias when adding a new address from command process
+[+] FO : Search re-developed from scratch (you need to re-index your products in BO > Preferences > Search)
+[+] MODULES : adding a "canonical url support" standard base module
+[+] BO : you can now search for invoice
+[+] BO : You can now upload modules from your computer, both zip file and tarball
+[+] BO : new tab Generator, where you can generate automatically .htaccess and robots.txt files
+[+] BO/FO : you can now attach downloadable files to the product page (like PDF..)
+[+] BO : Drag and drop for modules positions in AdminModulesPositions.php
+[+] MO : you can now set number of tags displayed in blocktags module
+[+] FO/BO : you can now set your own timezone
+[+] FO : Ajax suggestions for the search block !
 
 
 	Improved/changed features :
 
-- BO : added customer number to order details
-- Classes : improved Customer::searchByName check
-- TR : improved FR translations (thanks to Zendik)
-- Installer : beta 5 ready :P
-- FO : ip address no longer required for connection
+[*] BO : AdminDiscounts - customer list now in ajax and filter improved
+[*] MO : statshome no longer display in back-office if user doesn't have access to Stats tab
+[*] MO : you can now receive notification with mailalert even if you are guest
+[*] BO : improve selecting auto-message in AdminOrders
+[*] Mails : improved standard mails by adding 'company' and 'other' fields (thanks to Jolvil)
+[*] DB : field "valid' added in orders table for whether the order must be taken into account in the stats
+[*] MO : several stats modules speed increased
+[*] TR : improved FR translations
+[*] BO : Customization field support added to product duplication
+[*] BO : tab icons are now based on class_name instead of id (better for updates)
+[*] FO : made some display changes on contact-form
+[*] BO : Fixed integration for stats on IE6
+[*] MO : statssales - you can now filter by country
+[*] FO : remove unuseful images
+[*] Swift (mails) updated to 3.3.3
+[*] BO : modules page should no more display a blank page when there's a parse error in a module
+[*] PDF : fixed a display bug
+[*] BO : stats modules with grids now take the date into account
+[*] FO : wash css file
+[*] FO : wash css file
+[*] FO : wash css file
+[*] FO : wash css file
+[*] Installer : added "active" fields to customer_group
+[*] Classes : added isMemberOfGroup() function in Customer.php
+[*] BO : Added average cart in referrers' tab and converted rate in percent
+[*] FO: Create an address alias for billing on authentication 
+[*] FO : Save addresses choices on change in order-address.tpl
+[*] BO : add set_db function
+[*] FO : 404 page now manage images
+[*] BO : Fix Tiny MCE height in AdminProducts.php
+[*] BO : Documentation of the .htaccess generation tool improved
+[*] TR : new FR translations
+[*] FO : Small enhancement for addresses choice in address.tpl
+[*] FO : Code fixes and new way to add an address in order-address.tpl
+[*] FO : Replace weird footer links
+[*] TR : new FR translations
+[*] DB : Added several indexes and unified install file
+[*] MO : Pages not found improved
+[*] BO : Tags tab improved
+[*] BO : Referrers ar now show on the customer page
+[*] FO : Withdraw a POST call on dom ready in order-address form
+[*] BO : module translations system now catch subdir (one level depth)
+[*] TR : updated FR translations for modules
+[*] BO : States can now be 1- to 4-letter long
+[*] MODULES : adding a french translation for the "canonical url support" module
+[*] minor improve for the "Canonical URL" module
+[*] FO : new search improvements
+[*] MO : PayPal now support header image and cancelUrl
+[*] BO : New cache/index layer for tracking/affiliation
+[*] BO : added new translations for AdminGenerators
+[*] FO : added a new hook for redirect before payment (last step)
+[*] TR : new FR translations
+[*] FO : added new order state (PayPal pending)
+[*] FO : search improved (bug with '-' and some css changes)
+[*] BO : Small nowrap fix for catalog
+[*] FO/BO : improved Tools::getTimezones() by adding a table
+[*] Classes : no more blacklist in Db.php
+[*] Classes: Optimization of category discount
+[*] BO : added a trim() call in toolbar.php
+[*] FO : the "Add to cart" button inactive while a product is being added to the cart, fixed #1644
+[*] MO : statsvisits optimization
+[*] BO : Enhance quick search focus/blur
+[*] TR : new FR translations
+[*] MO : now display an error if no template found
+[*] Db : Table keys improvement
+[*] DB : Add index forgotten
+[*] BO : Cart records in Stats Tab improved (taxes, attributes...)
+[*] Classes : Message has now 1600 chars limit
+[*] FO : added mime type to product attachments
+[*] BO : better deletion of product attachments
+[*] BO : Range explanations improved
 
 
 	Fixed bugs :
 
-- Classes : fixed double code
-- BO : fixed currency bug in AdminCustomers
-- MO : Category display fixed on Konqueror (module blockcategories)
-- Class : Attribute deletion fixed (now delete linked combinations and group associations)
-- FO : Category tree fixed (expansion)
-- BO : "Save and go back to category" link fixed when creating a new product
-- FO : fixed some bugs when displaying errors in pdf and get-file
-- FO : fixed translation bug in shopping-cart
-- Installer : php upgrade file reorganisation
-- Installer : Required customization field update added
-- Installer : SQL install fixed (FALSE value)
-- MO : Homefeatured code cleaned
-- FO : Customizable products containing required fields are not addable to cart from category or home page anymore
-- Class : Link class code fixed
-- BO : CSV Import active field fixed
-- FO : fixed display bug in order-detail with customized product
-- BO : fixed some bugs with confirm translation text (javascript)
-- BO : fixed product quantity cancelled in delivery slip
-- FO : fixed last product added to cart bug
-- FO : fixed dispay bug in authentication.tpl
-- FO : fixed bug while signing-up
-- FO : IE6 bugs fixed
-- FO : Product addition to the cart fixed
-- MO : Referral program checkbox fixed
-- FO : Manufacturer & supplier pagination fixed
-- FO : Customized product quantity upgrade fixed
-- BO : Customizable products upgrade fixed (when required fields were set)
-- FO : English scene images fixed (was french -_-')
-- FO : Customized product picture deletion fixed
-- Class : Category level modification fixed (recursivity added)
-- BO : Tab filters (order ways) fixed
-- FO : Old discount on product does not lock none cumulative vouchers anymore
-- Mail : Order confirmation email fixed when customized products were part of the order
-- Installer : Invoice number fixed
-- FO : Discount description display fixed
-- FO : Customized product addition to the cart fixed (when some fields were required)
-- BO : PDF configuration detailed
-- Installer : Upgrade fixed
+[-] FO : Contact form display fixed (when description was too long)
+[-] FO : Product combination discounted price fixed when current currency was different from the default one
+[-] FO : JavaScript errors display fixed (on product page)
+[-] MO : Blockcart product name truncate fixed
+[-] MO : Cheque module code fixed
+[-] BO : Customizable product creation fixed
+[-] BO : fixed bug while listing customer messages in AdminMessages
+[-] FO/BO : fixed various bugs
+[-] MO : referralprogram - id_customer is no longer unique in database
+[-] MO : fixed mail bug in referralprogram
+[-] MO : fixed display bug in referralprogram
+[-] BO : fixed link bug in AdminGroups
+[-] Installer : fixed SQL bug (;)
+[-] FO : "Free order" string encoding fixed
+[-] BO : Combination management fixed (creation & update)
+[-] FO : Color picker display fixed (when more than 7 colors was displayed)
+[-] MO : fixed various bugs in ReferralProgram
+[-] BO : fixed bug while editing combination
+[-] BO : artichow and geolocation now works even without anti-aliasing
+[-] FO : Friendly URL for product and category images
+[-] BO : Fixed category image position
+[-] BO : bug "no statistics for january 2009" fixed
+[-] BO : you can now delete a customer without affecting existing orders
+[-] FO : when customer use a free shipping voucher, no longer display "Total remains for free shipping"
+[-] MO : statssales - wrong totals fixed
+[-] MO : statssales now  take the currency into account
+[-] MO : statsbestbustomers now take the currency into account
+[-] MO : statsbestproducts now take the currency into account
+[-] MO : statsbestcategories now take the currency into account
+[-] MO : statsbestvouchers now take the currency into account
+[-] BO : Referrers stats now take the currency into account
+[-] FO : IE6 general fixes
+[-] FO : fix bug #1034 (star red squares for product comments)
+[-] Class : Weight calculation fixed
+[-] Installer : fixed bug in doUpgrade
+[-] FO : new products pagination bug fix
+[-] FO : Customized product addition to cart fixed (when file inputs were required)
+[-] BO : Product deletion fixed
+[-] BO : Product duplication fixed
+[-] DB : Dead code cleaned
+[-] FO : NULL values fixed (inside templates)
+[-] Installer : updated FR translation
+[-] Installer: Fixed bug in setting all categories to discounts on updater
+[-] IN : update from 1.1.0.1 fixed (bug with CMS when some modules weren't installed)
+[-] FO : avoid a very rare hack attempt on the http referrer
+[-] BO/FO: fixed bug in freeshipping discounts when calculating ShippingCost
+[-] Installer : fixed default value bug for cart data
+[-] PDF : None latin character support fixed
+[-] BO : fixed bug while processing AdminCustomers
+[-] Installer : CMS data are now in lite mode too
+[-] Installer : carriers are now set directly in simple mode
+[-] FO : now generate an invoice if order state send e-mail with PDF
+[-] FO : fixed #1201 : manufacturer link fixed
+[-] Module : fixed 1196 whishlist error
+[-] BO : added 'invoice' hook in AdminOrders
+[-] BO : now send correctly message to customer
+[-] MO : sitemap fixed and improved
+[-] FO : product with only attributes without stock where displayed at 0?
+[-] BO : fixed some bugs while editing customers
+[-] BO : lang was not the right one for some stats module graphs
+[-] Classes : fixed bug in PaymentModule
+[-] FO : Product::getPriceStatic automatically get default attribute when called if not specified
+[-] BO : AdminBackup dispay fixed
+[-] MO : blockcurrencies display fixed (when a currency did not have any sign but characters)
+[-] Class : supplierExists() SQL query fixed
+[-] MO : Mailalert module code fix
+[-] BO : Image import fixed
+[-] Classes : fixed bug while adding similar tags
+[-] Installer : Last step controllers fixed
+[-] BO : Customer stats (number of validated orders, total paid since account creation) fixed
+[-] Classes : fixed bug while selecting customer's stats
+[-] BO : Product duplication fixed (false error)
+[-] FO : fixed #1074 : block categorie when depth = 0
+[-] BO : Disable console.log that crashes FF3 and IE6
+[-] Installer : UTF-8 support in data sending by forms
+[-] FO : Product sort (in categories) fixed (hack for PHP 5.1.6)
+[-] MO : blockcategories module fixed (SQL query fixed)
+[-] FO: Fixed bug getProducts where orderby price when products have reductions
+[-] Installer : SQL file fixed (duplicate entry)
+[-] Installer : fixed bug in default admin tabs
+[-] MO : Mailalerts module fixed (delivery & invoice state object added)
+[-] MO : sekeywords do not warn anymore when it's wrong
+[-] FO : hide a useless message
+[-] MAILS : fixing encoding...
+[-] FO : Break template displaying when Ajax call from order-address.js
+[-] BO : you can now edit a product page
+[-] Installer : Multipictures for combinations SQL table creation added
+[-] FO : Multipictures for combinations display fixed
+[-] BO : rights fixed on stats > referrers when saving direct traffic configuration
+[-] BO : PDF Multi invoices & multi delivery slips' encoding fixed
+[-] Installer : Order status hidden property added to the database
+[-] BO : Manufacturer addresses list fixed (deleted addresses do not appear anymore)
+[-] BO : Product "save & go back to category" button does not appear anymore when employee does not come from a none category page
+[-] BO : Order display fixed (when customer name was too long)
+[-] BO : Product cancellation (before the status "payment accepted") fixed (the order's total was wronlgy changed)
+[-] BO : Order detail display fixed (ambigiouses existed between cancelled, refunded & returned products)
+[-] BO & FO : Invoices fixed (refounded & returned quantities)
+[-] Classes : fixed bug while checking if virtual product in ProductDownload
+[-] FO : fixed #1138 gray box in the summary
+[-] FO : fixed bugs in order-address.js and order-address.tpl
+[-] FO : Fix bug when no carriers defined 
+[-] FO : Do not create anymore a second address on account creation 
+[-] BO : Fix bug when importing images with no product ID in AdminImport.php 
+[-] FO : Fixed bug in css for search_block_top background
+[-] BO:  Fixed unable to translate two links in loyalty.tpl and referralprogram-program.tpl
+[-] MO : Re enable 2 translations in mywishlist.tpl
+[-] FO : fix newsletter block input size
+[-] FO : fix rss block links (#1087)
+[-] FO : fix thickbox legend display (#1406)
+[-] BO : fixed display bug
+[-] BO : fixed bug while adding category with group
+[-] BO : Fixed employee name in order detail
+[-] BO : Renamed translation file for date picker (Swedish language)
+[-] MO: fixed bug in refererral program when you update the order status
+[-] MO : Translate subject for referral program congrats email
+[-] MO : Enable translation for error when not logged
+[-] MO BlockWishList: Solve many bugs
+[-] fix url rewriting bug (fixed #1249)
+[-] MO : Revert changes from revision 466
+[-] BO : Order products' cancellation fixed
+[-] MO : Blocknewproducts fixed (the second image is not displayed anymore when there is only one new product)
+[-] FO : Product researches ordered by manufacturer name fixed
+[-] FO : Product url rewriting fixed (category name)
+[-] Class : validation controls fixed
+[-] Class : ObjectModel property filling fixed (when ids = 0)
+[-] FO : image map fix (#1268)
+[-] FO : fix cms display (#1372)
+[-] BO : fixed bug on images when deleting multiple products
+[-] fix View Full Size image not working bug (#1400)
+[-] MODULES : Can?\226?\128?\153t translate Errors messages in blockwhishlist (fixed #1418)
+[-] BO : Product cover changing refresh the product miniature
+[-] BO : Product image addition does refresh the product miniature if defined as the product cover
+[-] FO : Product customization deletion from cart fixed
+[-] fix image display in image list (#1421)
+[-] BO : Definitely fixed the counting rows bug for all the BO tables
+[-] FO/BO : fix "no more french translation" bug
+[-] BO : temporary (or not) fix for BO forms asking for fields that are not visible
+[-] FO : No bad redirect when changing language on a product page
+[-] FO : HTTPS is now allowed in Validate::isAbsoluteUrl
+[-] FO : improve breadcrumb display (fixed #1491)
+[-] BO : Probably fix the cache problem with the attributes in the product page
+[-] BO : Link to PDF invoice in order page fixed
+[-] BO : Tags addition fixed
+[-] BO : Bug with referrers and product ids fixed
+[-] Installer : fixed some bugs between full and upgrade installation
+[-] DB : Stats optimization
+[-] SO: validateOrder now set good value on valid field
+[-] Class : AdminCart code cleaned/optimized
+[-] MO : Take theme template for rules
+[-] FO : Security patch
+[-] FO : Security patch
+[-] Security : URL control regexp fixed !
+[-] FO : Search only for active products
+[-] BO : Controllers fixed (when 0 value sent)
+[-] BO : Voucher form filter (customer) memorization fixed
+[-] FO : fix product page bug when loyalty is enabled
+[-] BO : Fix filtering in orders listing
+[-] BO : Fix bug in filtering customers for a voucher
+[-] Classes : fixed bug in Order and PaymentModule with set invoice number
+[-] FO : Fix bug when printing pdf file
+[-] BO : Fix bug when trying to duplicate product
+[-] BO : Fix AdminDiscounts.php ajax selection for attributing a voucher to someone or everyone
+[-] BO : Backup fixed for huge databases
+[-] BO : fixed icon bug
+[-] MO : fixed vicious bug with daily stats with some versions of MySQL
+[-] Class : Default product combination selection fixed
+[-] FO : Default product combination addition to the cart fixed
+[-] FO : Last quantity message display fixed
+[-] BO : Product positioning inside category fixed (conficted with pagination)
+[-] BO/FO/MO : fixed various minor bugs
+[-] BO : Import do not duplicate manufacturer and supplier anymore
+[-] BO : Fix bug in AdminMeta.php
+[-] Installer : scene_products table primary key fixed
+[-] BO : AdminGenerator link (on the Preference tab) fixed
+[-] BO : CSV Importation encoding clarification
+[-] BO : OrderStatuses update/creation fixed
+[-] BO : OrderStatuses preview icon fixed
+[-] BO : CSV importation denomination fixed
+[-] Core : date records fixed
+[-] Installer : full version fixed (french text translated)
+[-] TR : Loyalty module translation fixed (french)
+[-] MO : removed conflict on blocknewproduct
+[-] MO : statssales and somes others are now based on invoice date instead of order date
+[-] BO : attribute weight is now saved in the order (it was not the case earlier, only the product weight)
+[*] BO : Last connection date added in the customer tab
+[-] FO : Payment module aren't duplicated anymore
+[-] BO : Fix bug in updater when file not exists but module exists in base
+[-] FO : No more crashes with DateTimeZone
+[-] FO : one less warning for timezones
+[-] BO : CSS bug fix for drag and drop
+[-] BO : Fix bug on non-positionnable hook checkbox for IE6
+[-] BO : Code fixes in ajax.php
+[-] BO : Fix blank page / seg fault in AdminImport.php, fix Attributes import and withdraw location from attributes
+[-] BO : Withdraw display error // Small change
+[-] BO : Fix code to avoid security hole in ajax.php
+[-] BO : Image upload fixed
+[-] Mail : UTF-8 charset fixed (utf8_encode removed)
+[-] Mails : all files are now in UTF-8
+[-] BO : Default category selection fixed (for new products)
+[-] BO : Fix css for H4 tabs
+[-] BO : Order preloaded message length doubled
+[-] FO : Product customization price fixed on the cart summary (was rounded down)
+[-] MO : Fix bug when no checkboxes enabled
+[-] BO : Fix bug when no cms activated
+[-] MO : Truncates fixed (with none latin characters)
+[-] FO : Smart deletion for file attachments
+[-] FO : ajax cart behaviour is now fixed when back and previous browsers buttons are used, fixed #1603
+[-] FO : Reference nbr in FO is now hidden as soon as the page starts to load when attributes are present, fixed #1479
+[-] MO : fixed some bugs in blockinfos configuration
+[-] BO : Do not resize when simply editing a Manufacturer or Supplier
+[-] BO : Fix no displaying errors when tabs is in container
+[-] BO : Fix bug when error on uploading image and resizing
+[-] BO : Fix Bug for translating
+[-] FO : Customized product deletion fixed (was updating quantity of all cart products)
+[-] INSTALLER : forgot default tags nbr (blocktags)
+[-] FO : State requirement fixed (while signing up)
+[-] FO : fix new-products pagination, fixed #1663
+[-] DB : old fulltext indexes dropped
+[-] FO : Emails sent through the contact form have now the sender email as "Return-path"
+[-] BO : Attribute import fixed (when several attributes got the same name but was not inside the same group)
+[-] BO : CSV Tag import fixed
+[-] Classes : fixed missed bool "private" in getMessagesByOrderId in Message
+[-] BO/FO : fixed several bugs while calling Tools::displayDate()
+[-] FO : Category id limitation removed (was 9999 and annoying when importing from an external CSV)
+[-] FO : fixed TOS checked bug
+[-] BO : fixed display in AdminProducts
+[-] MO : fix blockCategory modules bug, fix #1154
+[-] FO/BO : Last password generation time fixed
+[-] MO : Mail alert install confirmation fixed
+[-] BO : Product Import does not erase the "date_add" attribute anymore
+[-] Group reduction is now fixed on product page, fix #1572
+[-] BO : Address import fixed (country association)
+[-] BO : Import fixed (when english language was deleted)
+[-] BO : AdminAddress fixed
+[-] Class : Configuration::getMultiple() fixed
+[-] BO : Downloadable product file upload fixed (do not upload the file twice anymore)
+[-] BO : Order slip fixed (code fix)
+[-] BO : Delivery slip fixed (when some products were refunded)
+[-] BO : Product & category image deletion fixed ("mini" image deletion added)
+[-] FO : Breadcrumb fixed (when customer comes from a module to the product page)
+[-] MO : Google sitemap module fixed (inactive cateories & products are not displayed anymore)
+[-] MO : Cash on delivery installation fixed (return value)
+[-] TR : Email translations improved
+[-] TR : Translation fixed
+[-] BO : Character encoding fixed (javascript)
+[-] FO : Fix lack of $cookie when creating object
+[-] TR : French translation fixed
+[-] BO : Country "enable" filter fixed
+[-] BO : BO filters fixed
+[-] BO : Debug removed
+[-] BO : Category import fixed (default customer group association added)
+[-] Doc : File header updated (1.2)
+[-] BO : No image resize on empty filename
+[-] Installer : upgrade fixed
+[-] Installer : SQL update fixed
+[-] Installer : SQL update fixed
+[-] Installer : SQL update fixed (search engine queries) 
+[-] Installer : Upgrade fixed
+[-] MO : BlockWishlist fixed displaying on switching customer
+[-] MO : fix little bug in wishlist translation dispay (#1443)
+[-] FO : fix required field bug on product page with customization activated (#1380)
+[-] MO : fix display of referral rules (#1450)
