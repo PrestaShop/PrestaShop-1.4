@@ -112,7 +112,7 @@ abstract class Module
 		$result = Db::getInstance()->ExecuteS('
 				SELECT `id_hook`
 				FROM `'._DB_PREFIX_.'hook_module` hm
-				WHERE `id_module` = '.$this->id);
+				WHERE `id_module` = '.intval($this->id));
 		foreach	($result AS $row)
 		{
 			Db::getInstance()->Execute('
