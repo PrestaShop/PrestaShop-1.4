@@ -483,9 +483,10 @@ class AdminImport extends AdminTab
 					$res = $category->update();
 
 				// If no id_category or update failed
-				if (!$res)
-					$res = $category->add();
-			}				
+				if (!$res AND $res = $category->add())
+					/* Associate the category to the default customer group */
+					$category->addGroups(array(1));
+			}
 			// If both failed, mysql error
 			if (!$res)
 				$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
