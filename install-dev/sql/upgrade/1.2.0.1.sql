@@ -58,9 +58,6 @@ ALTER TABLE PREFIX_attribute_lang
 ALTER TABLE PREFIX_block_cms
 	ADD PRIMARY KEY (`id_block`, `id_cms`);
 
-ALTER TABLE PREFIX_carrier_zone
-	ADD INDEX `id_carrier` (`id_carrier`);
-
 ALTER TABLE PREFIX_connections
 	CHANGE `http_referer` `http_referer` VARCHAR(255) DEFAULT NULL;
 ALTER TABLE PREFIX_connections
@@ -161,7 +158,7 @@ ALTER TABLE PREFIX_product_lang DROP INDEX ftsname ;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `attribute_lang_index`, ADD PRIMARY KEY (`id_attribute`, `id_lang`);
-ALTER TABLE PREFX_carrier_zone DROP INDEX `carrier_zone_index`, DROP INDEX `id_carrier`, ADD PRIMARY KEY (`id_carrier`, `id_zone`);
+ALTER TABLE PREFIX_carrier_zone DROP INDEX `carrier_zone_index`, ADD PRIMARY KEY (`id_carrier`, `id_zone`);
 ALTER TABLE PREFIX_discount_category CHANGE `id_discount` `id_discount` int(11) NOT NULL AFTER `id_category`;
 ALTER TABLE PREFIX_discount_category DROP INDEX `id_category`;
 ALTER TABLE PREFIX_feature_product DROP INDEX `id_feature`;
@@ -269,7 +266,7 @@ CREATE TABLE `PREFIX_referrer` (
 CREATE TABLE `PREFIX_referrer_cache` (
   `id_connections_source` int(11) NOT NULL,
   `id_referrer` int(11) NOT NULL,
-  PRIMARY KEY  (`id_connections_source`, `id_referrer`),
+  PRIMARY KEY  (`id_connections_source`, `id_referrer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_search_engine` (
