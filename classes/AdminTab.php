@@ -61,6 +61,9 @@ abstract class AdminTab
 	/** @var string Group rows into data query to display list */
 	protected $_group;
 
+	/** @var string Having rows into data query to display list */
+	protected $_having;
+
 	/** @var array Name and directory where class image are located */
 	public $fieldImageSettings = array();
 
@@ -838,10 +841,12 @@ abstract class AdminTab
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
+		'.(isset($this->_having) ? $this->_having.' ' : '').'
 		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
 		$this->_list = Db::getInstance()->ExecuteS($sql);
+echo $sql.'<br />';
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 	}
 

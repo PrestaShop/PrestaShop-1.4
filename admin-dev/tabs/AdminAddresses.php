@@ -45,8 +45,8 @@ class AdminAddresses extends AdminTab
 
 		$this->fieldsDisplay = array(
 		'id_address' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'firstname' => array('title' => $this->l('First name'), 'width' => 80),
-		'lastname' => array('title' => $this->l('Last name'), 'width' => 100, 'filter_key' => 'a!name'),
+		'firstname' => array('title' => $this->l('First name'), 'width' => 80, 'filter_key' => 'a!firstname'),
+		'lastname' => array('title' => $this->l('Last name'), 'width' => 100, 'filter_key' => 'a!lastname'),
 		'address1' => array('title' => $this->l('Address'), 'width' => 200),
 		'postcode' => array('title' => $this->l('Post/Zip code'), 'align' => 'right', 'width' => 50),
 		'city' => array('title' => $this->l('City'), 'width' => 150),
