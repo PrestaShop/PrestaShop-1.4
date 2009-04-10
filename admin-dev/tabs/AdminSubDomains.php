@@ -1,5 +1,16 @@
 <?php
 
+/**
+  * Sub domains tab for admin panel, AdminSubDomains.php
+  * @category admin
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.2
+  *
+  */
+
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
 class AdminSubDomains extends AdminTab

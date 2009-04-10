@@ -1,4 +1,5 @@
 <?php
+
 /**
   * Admin panel main class, AdminTab.php
   * Abstract class for admin panel tabs
@@ -7,7 +8,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.0
+  * @version 1.2
   *
   */
 

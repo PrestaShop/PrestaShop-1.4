@@ -1,4 +1,15 @@
-﻿<?php
+<?php
+
+/**
+  * Tags tab for admin panel, AdminTags.php
+  * @category admin
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.2
+  *
+  */
 
 class AdminTags extends AdminTab
 {

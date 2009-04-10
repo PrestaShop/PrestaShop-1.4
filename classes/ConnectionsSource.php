@@ -1,5 +1,17 @@
 <?php
-  
+
+/**
+  * ConnectionsSource class, ConnectionsSource.php
+  * Connection source management
+  * @category classes
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.2
+  *
+  */
+
 class ConnectionsSource extends ObjectModel
 {
 	public $id_connections;

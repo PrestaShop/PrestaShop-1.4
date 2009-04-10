@@ -8,7 +8,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.0
+  * @version 1.2
   *
   */
 
@@ -213,7 +213,8 @@ class		WishList extends ObjectModel
 	 * Get Wishlist products by Customer ID
 	 *
 	 * @return array Results
-	 */	static public function getProductByIdCustomer($id_wishlist, $id_customer, $id_lang, $id_product = null, $quantity = false)
+	 */
+	static public function getProductByIdCustomer($id_wishlist, $id_customer, $id_lang, $id_product = null, $quantity = false)
 	{
 		if (!Validate::isUnsignedId($id_customer) OR
 			!Validate::isUnsignedId($id_lang) OR
@@ -285,7 +286,8 @@ class		WishList extends ObjectModel
 	 */
 	static public function addProduct($id_wishlist, $id_customer, $id_product, $id_product_attribute, $quantity)
 	{
-		if (!Validate::isUnsignedId($id_wishlist) OR			!Validate::isUnsignedId($id_customer) OR
+		if (!Validate::isUnsignedId($id_wishlist) OR
+			!Validate::isUnsignedId($id_customer) OR
 			!Validate::isUnsignedId($id_product) OR
 			!Validate::isUnsignedId($quantity))
 			die (Tools::displayError());

@@ -2,9 +2,6 @@
 
 include_once(dirname(__FILE__).'/../config/config.inc.php');
 
-
-
-
 /* Getting cookie or logout */
 if (!class_exists('Cookie'))
 	exit();

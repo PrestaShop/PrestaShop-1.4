@@ -1,5 +1,16 @@
 <?php
 
+/**
+  * Referrer tab for admin panel, AdminReferrers.php
+  * @category admin
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.2
+  *
+  */
+
 if (!defined('PS_ADMIN_DIR')) define('PS_ADMIN_DIR', getcwd().'/..');
 include_once(PS_ADMIN_DIR.'/../config/config.inc.php');
 include_once(PS_ADMIN_DIR.'/init.php');
@@ -242,35 +253,35 @@ class AdminReferrers extends AdminTab
 			<fieldset class="width4"><legend onclick="openCloseLayer(\'tracking_help\')" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
 			<div id="tracking_help" style="display: none;">
 			'.utf8_encode('
-				<p>Définitions :</p>
+				<p>Dï¿½finitions :</p>
 				<ul style="list-style: disc; margin-left: 20px;">
 					<li>
-						les champs <b>http_referer</b> représentent le site d\'où vient le visiteur.<br />
-						Par exemple, les visiteurs qui viennent de Google sur votre boutique auront un http_referer qui pourra ressembler à celui-ci : <a href="http://www.google.fr/search?q=prestashop" style="font-style: italic;">http://www.google.fr/search?q=prestashop</a>.<br />
+						les champs <b>http_referer</b> reprï¿½sentent le site d\'oï¿½ vient le visiteur.<br />
+						Par exemple, les visiteurs qui viennent de Google sur votre boutique auront un http_referer qui pourra ressembler ï¿½ celui-ci : <a href="http://www.google.fr/search?q=prestashop" style="font-style: italic;">http://www.google.fr/search?q=prestashop</a>.<br />
 						Si le visiteur vient directement sur le site (en tapant l\'adresse ou depuis ses favoris par exemple), le http_referer sera vide.<br />
 						Donc pour filtrer tous les visiteurs provenant de Google, il vous suffit de taper "%google%" dans ce champ, ou encore "%google.fr%" si vous ne voulez que les visiteurs provenant de Google France.
 					</li>
 					<br />
 					<li>
-						les champs <b>request_uri</b> représentent l\'URL par laquelle le visiteur arrive sur votre boutique.<br />
-						Si il accède directement à une fiche produit, cette adresse sera par exemple <a href="'.$uri.'music-ipods/1-ipod-nano.html" style="font-style: italic;">'.$uri.'music-ipods/1-ipod-nano.html</a>.<br />
-						L\'intérêt est que vous pouvez rajouter des indicateurs dans les liens qui pointent vers votre site. Ainsi, si vous postez sur le forum prestashop un lien <a href="'.$uri.'index.php?prestashop" style="font-style: italic;">'.$uri.'index.php?prestashop</a> et que vous entrez dans le champ request_uri le mot "%prestashop", vous pourrez filtrer tous les visiteurs provenant du forum.
-						Cette méthode est plus fiable que le filtre par http_referer, mais elle comporte des dangers. Si un moteur de recherche référence une page contenant le lien en question, alors il le proposera dans ses résultats de recherche, et vous n\'aurez plus alors seulement les visiteurs du forum mais également ceux qui viennent de ce moteur par ce lien.
+						les champs <b>request_uri</b> reprï¿½sentent l\'URL par laquelle le visiteur arrive sur votre boutique.<br />
+						Si il accï¿½de directement ï¿½ une fiche produit, cette adresse sera par exemple <a href="'.$uri.'music-ipods/1-ipod-nano.html" style="font-style: italic;">'.$uri.'music-ipods/1-ipod-nano.html</a>.<br />
+						L\'intï¿½rï¿½t est que vous pouvez rajouter des indicateurs dans les liens qui pointent vers votre site. Ainsi, si vous postez sur le forum prestashop un lien <a href="'.$uri.'index.php?prestashop" style="font-style: italic;">'.$uri.'index.php?prestashop</a> et que vous entrez dans le champ request_uri le mot "%prestashop", vous pourrez filtrer tous les visiteurs provenant du forum.
+						Cette mï¿½thode est plus fiable que le filtre par http_referer, mais elle comporte des dangers. Si un moteur de recherche rï¿½fï¿½rence une page contenant le lien en question, alors il le proposera dans ses rï¿½sultats de recherche, et vous n\'aurez plus alors seulement les visiteurs du forum mais ï¿½galement ceux qui viennent de ce moteur par ce lien.
 					</li>
 					<br />
 					<li>
-						les champs <b>include</b> indiquent ce qui doit être inclu dans l\'URL.
+						les champs <b>include</b> indiquent ce qui doit ï¿½tre inclu dans l\'URL.
 					</li>
 					<br />
 					<li>
-						les champs <b>exclude</b> indiquent ce qui ne doit pas être inclu dans l\'URL.
+						les champs <b>exclude</b> indiquent ce qui ne doit pas ï¿½tre inclu dans l\'URL.
 					</li>
 					<br />
 					<li>
-						En mode simple, vous avez la possibilité d\'utiliser des <b>caractères génériques</b>, c\'est-à-dire qui peuvent remplacer n\'importe quels autres caractères :
+						En mode simple, vous avez la possibilitï¿½ d\'utiliser des <b>caractï¿½res gï¿½nï¿½riques</b>, c\'est-ï¿½-dire qui peuvent remplacer n\'importe quels autres caractï¿½res :
 						<ul>
-							<li>"_" remplacera un seul caractère. Pour utiliser un vrai "_", vous devez taper "\\\\_".</li>
-							<li>"%" remplacera n\'importe quel nombre de caractères. Pour utiliser un vrai "%", vous devez taper "\\\\%".</li>
+							<li>"_" remplacera un seul caractï¿½re. Pour utiliser un vrai "_", vous devez taper "\\\\_".</li>
+							<li>"%" remplacera n\'importe quel nombre de caractï¿½res. Pour utiliser un vrai "%", vous devez taper "\\\\%".</li>
 						</ul>
 					</li>
 					<br />

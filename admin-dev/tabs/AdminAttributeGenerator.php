@@ -1,5 +1,16 @@
 <?php
 
+/**
+  * Attribute generator tab for admin panel, AdminAttributeGenerator.php
+  * @category admin
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.2
+  *
+  */
+
 @ini_set('max_execution_time', 3600);
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
