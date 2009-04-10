@@ -671,12 +671,11 @@ abstract class AdminTab
 			// Copy new image
 			else if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
 				$this->_errors[] = Tools::displayError('an error occurred while uploading image');
-			unlink($tmpName);
+			unlink($tmpName);				
+			if (sizeof($this->_errors))
+				return false;
+			return $this->afterImageUpload();
 		}
-		
-		if (sizeof($this->_errors))
-			return false;
-		return $this->afterImageUpload();
 	}
 
 	
