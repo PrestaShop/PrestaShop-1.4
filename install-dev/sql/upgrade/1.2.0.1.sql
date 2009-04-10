@@ -368,28 +368,17 @@ UPDATE PREFIX_orders o SET o.valid = IFNULL((
 ), 0);
 
 INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(1, 'google','q');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(2, 'search.aol','query');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(3, 'yandex.ru','text');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(4, 'ask.com','q');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(5, 'nhl.com','q');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(6, 'search.yahoo','p');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(7, 'baidu.com','wd');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(8, 'search.lycos','query');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(9, 'exalead','q');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(10, 'search.live.com','q');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
-	(11, 'search.ke.voila','rdata');
-INSERT INTO `PREFIX_search_engine` (`id_search_engine`, `server`,`getvar`) VALUES
+	(1, 'google','q'),
+	(2, 'search.aol','query'),
+	(3, 'yandex.ru','text'),
+	(4, 'ask.com','q'),
+	(5, 'nhl.com','q'),
+	(6, 'search.yahoo','p'),
+	(7, 'baidu.com','wd'),
+	(8, 'search.lycos','query'),
+	(9, 'exalead','q'),
+	(10, 'search.live.com','q'),
+	(11, 'search.ke.voila','rdata'),
 	(12, 'altavista','q')
 	ON DUPLICATE KEY UPDATE server = server;
 
