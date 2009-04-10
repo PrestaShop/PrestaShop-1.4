@@ -29,10 +29,10 @@ class AdminCountries extends AdminTab
 				
 		$this->fieldsDisplay = array(
 		'id_country' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'name' => array('title' => $this->l('Country'), 'width' => 130, 'filter_key' => 'b!name'),
+		'b!name' => array('title' => $this->l('Country'), 'width' => 130, 'filter_key' => 'b!name'),
 		'iso_code' => array('title' => $this->l('ISO code'), 'width' => 70, 'align' => 'center'),
-		'zone' => array('title' => $this->l('Zone'), 'width' => 100, 'filter_key' => 'z!name'),
-		'a!active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
+		'z!zone' => array('title' => $this->l('Zone'), 'width' => 100, 'filter_key' => 'z!name'),
+		'a!active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false, 'filter_key' => 'a!active'));
 	
 		$this->optionTitle = $this->l('Countries options');
 		$this->_fieldsOptions = array(
