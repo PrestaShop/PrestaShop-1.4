@@ -846,7 +846,6 @@ abstract class AdminTab
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
 		$this->_list = Db::getInstance()->ExecuteS($sql);
-echo $sql.'<br />';
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 	}
 
