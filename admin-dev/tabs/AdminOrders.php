@@ -670,7 +670,7 @@ class AdminOrders extends AdminTab
 						<option value="0" selected="selected">-- '.$this->l('Choose a standard message').' --</option>';
 		$orderMessages = OrderMessage::getOrderMessages(intval($order->id_lang));
         foreach ($orderMessages AS $orderMessage)
-            echo '		<option value="'.addslashes($orderMessage['message']).'">'.$orderMessage['name'].'</option>';
+            echo '		<option value="'.htmlentities($orderMessage['message'], ENT_COMPAT, 'UTF-8').'">'.$orderMessage['name'].'</option>';
 		echo '		</select><br /><br />
 					<b>'.$this->l('Display to consumer?').'</b>
 					<input type="radio" name="visibility" id="visibility" value="0" /> '.$this->l('Yes').'
