@@ -87,7 +87,7 @@ class Validate
     static public function isUnsignedFloat($float)
     {
 			return strval(floatval($float)) == strval($float) AND $float >= 0;
-		}
+	}
 
 	/**
 	* Check for a float number validity

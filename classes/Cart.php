@@ -220,7 +220,8 @@ class		Cart extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($this->id_lang).')
 		WHERE `id_cart` = '.intval($this->id).'
 		'.($id_product ? ' AND cp.`id_product` = '.intval($id_product) : '').'
-		AND p.`id_product` IS NOT NULL';
+		AND p.`id_product` IS NOT NULL
+		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
 
 		/* Modify SQL results */
