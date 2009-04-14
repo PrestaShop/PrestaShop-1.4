@@ -166,7 +166,7 @@ class AdminTranslations extends AdminTab
 						foreach ($matches[1] as $key)
 						{
 							$postKey = md5($moduleName.'_'.$themeName.'_'.$templateName.'_'.md5($key));
-							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'';
+							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.Tools::strtolower($templateName).'_'.md5($key).'\'';
 							if (array_key_exists($postKey, $_POST) AND !empty($_POST[$postKey]) AND !array_key_exists($pattern, $_tmp))
 							{
 								$_tmp[$pattern] = true;
