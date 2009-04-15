@@ -339,8 +339,8 @@ class MailAlerts extends Module
 						<textarea name="mA_merchant_mails" rows="10" cols="30">'.Tools::getValue('mA_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
 					</div>
 					<div style="float:left;">
-						Une adresse email par ligne<br />
-						Ex : bob@example.com
+						'.$this->l('One email adress each line').'<br />
+						'.$this->l('Eg: bob@example.com').'
 					</div>
 				</div>
 				<div style="clear:both;">&nbsp;</div>

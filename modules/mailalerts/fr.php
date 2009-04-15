@@ -20,6 +20,8 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Hors stock : ';
 $_MODULE['<{mailalerts}prestashop>mailalerts_43c1063924fd0d29b5945682013c14a9'] = 'Recevoir une notification si un produit est hors stock';
 $_MODULE['<{mailalerts}prestashop>mailalerts_95ba1239ebac05e1d10d5dae049e32f5'] = 'Envoyer ces emails : ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_684d1085265996e9da47be8845b65d2c'] = 'Une adresse email par ligne';
+$_MODULE['<{mailalerts}prestashop>mailalerts_c409f6f6922b2d832743d45f7529f752'] = 'Ex : bob@example.com';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c1ee76f076a5b97e3b4b0c0e5703246e'] = 'Mise à jour des réglages impossible';
 $_MODULE['<{mailalerts}prestashop>mailalerts_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
