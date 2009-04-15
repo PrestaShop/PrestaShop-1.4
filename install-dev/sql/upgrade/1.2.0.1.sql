@@ -204,7 +204,8 @@ CREATE TABLE PREFIX_message_readed (
 
 CREATE TABLE `PREFIX_attachment` (
   `id_attachment` int(10) unsigned NOT NULL auto_increment,
-  `file` varchar(40) default NULL,
+  `file` varchar(40) NOT NULL,
+  `mime` varchar(32) NOT NULL,
   PRIMARY KEY  (`id_attachment`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
