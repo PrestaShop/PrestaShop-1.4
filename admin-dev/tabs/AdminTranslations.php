@@ -201,7 +201,7 @@ class AdminTranslations extends AdminTab
 					$templateName = substr(basename($templateFile), 0, -4);
 					foreach ($matches[1] as $key)
 					{
-						$moduleKey = '<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key);
+						$moduleKey = '<{'.$moduleName.'}'.$themeName.'>'.Tools::strtolower($templateName).'_'.md5($key);
 						$translationsArray[$themeName][$moduleName][$templateName][$key] = key_exists($moduleKey, $_MODULES) ? html_entity_decode($_MODULES[$moduleKey], ENT_COMPAT, 'UTF-8') : '';
 					}
 					$count += isset($translationsArray[$themeName][$moduleName][$templateName]) ? sizeof($translationsArray[$themeName][$moduleName][$templateName]) : 0;
