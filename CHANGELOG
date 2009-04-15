@@ -17,8 +17,8 @@ Release Notes
 [+] BO : new tab customer notifications thread
 [+] BO : added new "Tracking" tab in catalog
 [+] BO : you can now see for each category how many quantity product there is inside (and sub categories)
-[+] New visitor tracking system with affiliation
-[+] New stats module newsletter
+[+] BO : New visitor tracking system with affiliation
+[+] BO : New stats module newsletter
 [+] BO : added a total amount of orders displayed in AdminOrders
 [+] BO : added new tab to create Groups
 [+] BO : you can now add a customer to one or multiples groups
@@ -50,7 +50,7 @@ Release Notes
 [+] BO : New tab available : Tags (will be improved soon)
 [+] FO : Withdraw address alias when adding a new address from command process
 [+] FO : Search re-developed from scratch (you need to re-index your products in BO > Preferences > Search)
-[+] MODULES : adding a "canonical url support" standard base module
+[+] MO : adding a "canonical url support" standard base module
 [+] BO : you can now search for invoice
 [+] BO : You can now upload modules from your computer, both zip file and tarball
 [+] BO : new tab Generator, where you can generate automatically .htaccess and robots.txt files
@@ -107,8 +107,8 @@ Release Notes
 [*] BO : module translations system now catch subdir (one level depth)
 [*] TR : updated FR translations for modules
 [*] BO : States can now be 1- to 4-letter long
-[*] MODULES : adding a french translation for the "canonical url support" module
-[*] minor improve for the "Canonical URL" module
+[*] MO : adding a french translation for the "canonical url support" module
+[*] MO : minor improve for the "Canonical URL" module
 [*] FO : new search improvements
 [*] MO : PayPal now support header image and cancelUrl
 [*] BO : New cache/index layer for tracking/affiliation
@@ -171,7 +171,7 @@ Release Notes
 [-] BO : Referrers stats now take the currency into account
 [-] FO : IE6 general fixes
 [-] FO : fix bug #1034 (star red squares for product comments)
-[-] Class : Weight calculation fixed
+[-] Classes : Weight calculation fixed
 [-] Installer : fixed bug in doUpgrade
 [-] FO : new products pagination bug fix
 [-] FO : Customized product addition to cart fixed (when file inputs were required)
@@ -254,24 +254,24 @@ Release Notes
 [-] MO: fixed bug in refererral program when you update the order status
 [-] MO : Translate subject for referral program congrats email
 [-] MO : Enable translation for error when not logged
-[-] MO BlockWishList: Solve many bugs
-[-] fix url rewriting bug (fixed #1249)
+[-] MO : BlockWishList: Solve many bugs
+[-] FO : fix url rewriting bug (fixed #1249)
 [-] MO : Revert changes from revision 466
 [-] BO : Order products' cancellation fixed
 [-] MO : Blocknewproducts fixed (the second image is not displayed anymore when there is only one new product)
 [-] FO : Product researches ordered by manufacturer name fixed
 [-] FO : Product url rewriting fixed (category name)
-[-] Class : validation controls fixed
-[-] Class : ObjectModel property filling fixed (when ids = 0)
+[-] Classes : validation controls fixed
+[-] Classes : ObjectModel property filling fixed (when ids = 0)
 [-] FO : image map fix (#1268)
 [-] FO : fix cms display (#1372)
 [-] BO : fixed bug on images when deleting multiple products
-[-] fix View Full Size image not working bug (#1400)
-[-] MODULES : Can?\226?\128?\153t translate Errors messages in blockwhishlist (fixed #1418)
+[-] FO : fix View Full Size image not working bug (#1400)
+[-] MO : Can?\226?\128?\153t translate Errors messages in blockwhishlist (fixed #1418)
 [-] BO : Product cover changing refresh the product miniature
 [-] BO : Product image addition does refresh the product miniature if defined as the product cover
 [-] FO : Product customization deletion from cart fixed
-[-] fix image display in image list (#1421)
+[-] FO : fix image display in image list (#1421)
 [-] BO : Definitely fixed the counting rows bug for all the BO tables
 [-] FO/BO : fix "no more french translation" bug
 [-] BO : temporary (or not) fix for BO forms asking for fields that are not visible
@@ -285,7 +285,7 @@ Release Notes
 [-] Installer : fixed some bugs between full and upgrade installation
 [-] DB : Stats optimization
 [-] SO: validateOrder now set good value on valid field
-[-] Class : AdminCart code cleaned/optimized
+[-] Classes : AdminCart code cleaned/optimized
 [-] MO : Take theme template for rules
 [-] FO : Security patch
 [-] FO : Security patch
@@ -352,7 +352,7 @@ Release Notes
 [-] BO : Fix bug when error on uploading image and resizing
 [-] BO : Fix Bug for translating
 [-] FO : Customized product deletion fixed (was updating quantity of all cart products)
-[-] INSTALLER : forgot default tags nbr (blocktags)
+[-] Installer : forgot default tags nbr (blocktags)
 [-] FO : State requirement fixed (while signing up)
 [-] FO : fix new-products pagination, fixed #1663
 [-] DB : old fulltext indexes dropped
@@ -368,7 +368,7 @@ Release Notes
 [-] FO/BO : Last password generation time fixed
 [-] MO : Mail alert install confirmation fixed
 [-] BO : Product Import does not erase the "date_add" attribute anymore
-[-] Group reduction is now fixed on product page, fix #1572
+[-] FO : Group reduction is now fixed on product page, fix #1572
 [-] BO : Address import fixed (country association)
 [-] BO : Import fixed (when english language was deleted)
 [-] BO : AdminAddress fixed
