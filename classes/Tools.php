@@ -727,6 +727,13 @@ class Tools
 		return strlen($str);
 	}
 
+	static function stripslashes($string)
+	{
+		if (_PS_MAGIC_QUOTES_GPC_)
+			$string = stripslashes($string);
+		return $string;
+	}
+
 	static function strtoupper($str)
 	{
 		if (is_array($str))

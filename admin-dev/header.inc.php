@@ -40,7 +40,7 @@ require_once(dirname(__FILE__).'/init.php');
 		<div id="container">
 			<div style="float: left; margin-top: 11px;">
 				<form action="index.php?tab=AdminSearch&token=<?php echo Tools::getAdminToken('AdminSearch'.intval(Tab::getIdFromClassName('AdminSearch')).intval($cookie->id_employee)) ?>" method="post">
-					<input type="text" name="bo_query" id="bo_query" style="width: 120px;" value="<?php echo (isset($_POST['bo_query']) ? stripslashes($_POST['bo_query']) : ''); ?>" /> <?php translate('in') ?>
+					<input type="text" name="bo_query" id="bo_query" style="width: 120px;" value="<?php echo (isset($_POST['bo_query']) ? Tools::stripslashes($_POST['bo_query']) : ''); ?>" /> <?php translate('in') ?>
 					<select name="bo_search_type" id="bo_search_type" onchange="queryType();" style="font-size: 1em;">
 						<option value="1"<?php echo (isset($_POST['bo_search_type']) AND
 						($_POST['bo_search_type'] == 1)) ? ' selected="selected"' : '' ?>><?php echo translate('catalog') ?></option>
