@@ -153,7 +153,7 @@ class Search
 			else
 				unset($words[$key]);
 		if (!sizeof($words))
-			return array('total' => 0, 'result' => array());
+			return ($ajax ? array() : array('total' => 0, 'result' => array()));
 			
 		$score = '';
 		if (sizeof($scoreArray))
