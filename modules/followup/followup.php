@@ -9,6 +9,7 @@ class Followup extends Module
 		$this->name = 'followup';
 		$this->tab = 'Tools';
 		$this->version = '1.0';
+
 		$this->confKeys = array(
 		'PS_FOLLOW_UP_ENABLE_1', 'PS_FOLLOW_UP_ENABLE_2', 'PS_FOLLOW_UP_ENABLE_3', 'PS_FOLLOW_UP_ENABLE_4', 
 		'PS_FOLLOW_UP_AMOUNT_1', 'PS_FOLLOW_UP_AMOUNT_2', 'PS_FOLLOW_UP_AMOUNT_3', 'PS_FOLLOW_UP_AMOUNT_4', 
@@ -21,18 +22,39 @@ class Followup extends Module
 
 		$this->displayName = $this->l('Customers follow-up');
 		$this->description = $this->l('Follow-up your customers with daily customized e-mails');
+		$this->confirmUninstall = $this->l('Are you sure you want to delete all settings and your logs?');
 	}
 	
 	public function install()
 	{
 		$logEmailTable = Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'`.`log_email` (
+		CREATE TABLE '._DB_PREFIX_.'log_email (
 		`id_log_email` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 		`id_email_type` INT UNSIGNED NOT NULL ,
+		`id_discount` INT UNSIGNED NOT NULL ,
 		`id_customer` INT UNSIGNED NULL ,
-		`id_cart` INT UNSIGNED NULL ,
+		`id_cart` INT UNSIGNED NULL ,		
 		`date_add` DATETIME NOT NULL
 		) ENGINE = MYISAM');
+		
+		foreach ($this->confKeys AS $key)
+			Configuration::updateValue($key, 0);
+			
+		Configuration::updateValue('PS_FOLLOWUP_SECURE_KEY', strtoupper(Tools::passwdGen(16)));
+			
+		return parent::install();
+	}
+	
+	public function uninstall()
+	{
+		foreach ($this->confKeys AS $key)
+			Configuration::deleteByName($key);
+			
+		Configuration::deleteByName('PS_FOLLOWUP_SECURE_KEY');
+		
+		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'log_email');
+
+		return parent::uninstall();
 	}
 	
 	public function getContent()
@@ -44,19 +66,20 @@ class Followup extends Module
 		
 		/* Init */
 		$conf = Configuration::getMultiple($this->confKeys);
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		foreach ($this->confKeys AS $k)
+			if (!isset($conf[$k]))
+				$conf[$k] = '';
+		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		$n1 = $this->cancelledCart(true);
 		$n2 = $this->reOrder(true);
 		$n3 = $this->bestCustomer(true);
 		$n4 = $this->badCustomer(true);
 		
-		Configuration::updateValue('PS_FOLLOWUP_SECURE_KEY', 'ok');
-		
 		echo '
 		<h2>'.$this->l('Customers follow-up').'</h2>
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">			
-			<fieldset class="width2">
+			<fieldset style="width: 400px; float: left;">
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<p>'.$this->l('Four kinds of e-mail alerts in order to stay in touch with your customers!').'<br /><br />
 				'.$this->l('Define settings and put this URL in crontab or call it manually daily:').'<br />
@@ -106,6 +129,104 @@ class Followup extends Module
 				<hr size="1" />
 				<center><input type="submit" name="submitFollowUp" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>
+			
+			<style type="text/css">
+				table tr th {
+					text-align: center;
+					font-weight: bold;
+				}
+				
+				table tr td, table tr th {
+					padding: 3px;
+				}
+				
+				table tr td {
+					text-align: right;
+				}
+				
+				table { width: 460px; border: 1px solid #666; }
+			</style>
+			<fieldset style="width: 460px; margin-left: 10px; float: left;">
+				<legend><img src="'.$this->_path.'logo-2.gif" alt="" title="" />'.$this->l('Statistics').'</legend>
+				'.$this->l('Detailed statistics for last 30 days:').'<br /><br />
+				<p style="font-size: 10px; font-weight: bold;">
+				'.$this->l('S = Number of sent e-mails').'<br />
+				'.$this->l('U = Number of discounts used (valid orders only)').'<br />
+				'.$this->l('% = Conversion rate').'
+				</p><br />
+				<table border="1" style="font-size: 11px;">
+					<tr>
+						<th rowspan="2" style="width: 75px;">'.$this->l('Date').'</th>
+						<th colspan="3">'.$this->l('Cancelled carts').'</th>
+						<th colspan="3">'.$this->l('Re-order').'</th>
+						<th colspan="3">'.$this->l('Best cust.').'</th>
+						<th colspan="3">'.$this->l('Bad cust.').'</th>
+					</tr>';
+					
+			$stats = Db::getInstance()->ExecuteS('
+			SELECT DATE_FORMAT(l.date_add, \'%Y-%m-%d\') date_stat, l.id_email_type, COUNT(l.id_log_email) nb, 
+			(SELECT COUNT(l2.id_discount) 
+			FROM '._DB_PREFIX_.'log_email l2
+			LEFT JOIN '._DB_PREFIX_.'order_discount od ON (od.id_discount = l2.id_discount)
+			LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = od.id_order)
+			WHERE l2.id_email_type = l.id_email_type AND l2.date_add = l.date_add AND od.id_order IS NOT NULL AND o.valid = 1) nb_used
+			FROM '._DB_PREFIX_.'log_email l
+			WHERE l.date_add >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+			GROUP BY l.date_add, l.id_email_type');
+			
+			$statsArray = array();
+			foreach ($stats AS $stat)
+			{
+				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb'] = intval($stat['nb']);
+				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb_used'] = intval($stat['nb_used']);
+			}
+			
+			echo '
+			<tr>
+				<td class="center">'.$this->l('S').'</td>
+				<td class="center">'.$this->l('U').'</td>
+				<td class="center">%</td>
+				<td class="center">'.$this->l('S').'</td>
+				<td class="center">'.$this->l('U').'</td>
+				<td class="center">%</td>
+				<td class="center">'.$this->l('S').'</td>
+				<td class="center">'.$this->l('U').'</td>
+				<td class="center">%</td>
+				<td class="center">'.$this->l('S').'</td>
+				<td class="center">'.$this->l('U').'</td>
+				<td class="center">%</td>
+			</tr>';
+			
+			if (!sizeof($statsArray))
+				echo '<tr><td colspan="13" style="font-weight: bold; text-align: center;">'.$this->l('No statistics yet').'</td></tr>';
+			
+			foreach ($statsArray AS $date_stat => $array)
+			{
+				$rates = array();
+				for ($i = 1; $i != 5; $i++)
+					if (isset($statsArray[$date_stat][$i]['nb']) AND isset($statsArray[$date_stat][$i]['nb_used']) AND $statsArray[$date_stat][$i]['nb_used'] > 0)
+						$rates[$i] = number_format(($statsArray[$date_stat][$i]['nb'] / $statsArray[$date_stat][$i]['nb_used'])*100, 2, '.', '');
+				
+				echo '
+				<tr>
+					<td>'.$date_stat.'</td>';
+					
+				for ($i = 1; $i != 5; $i++)
+				{
+					echo '
+					<td>'.(isset($statsArray[$date_stat][$i]['nb']) ? intval($statsArray[$date_stat][$i]['nb']) : 0).'</td>
+					<td>'.(isset($statsArray[$date_stat][$i]['nb_used']) ? intval($statsArray[$date_stat][$i]['nb_used']) : 0).'</td>
+					<td>'.(isset($rates[$i]) ? '<b>'.$rates[$i].'</b>' : '0.00').'</td>';
+				}
+
+				echo '
+				</tr>';
+			}
+			
+			echo '
+				</table>
+			</fieldset>
+			<div class="clear"></div>
 		</form>';
 	}
 	
@@ -147,13 +268,31 @@ class Followup extends Module
 		}
 	}
 	
-	/* For all validated orders, a discount if re-ordering before 15 days */
+	/* For all validated orders, a discount if re-ordering before x days */
 	private function reOrder($count = false)
 	{
-		$emails = array();
+		$emails = Db::getInstance()->ExecuteS('
+		SELECT o.id_order, c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
+		FROM '._DB_PREFIX_.'orders o
+		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
+		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
+		WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_order NOT IN 
+		(SELECT id_order FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 2)');
 
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
+			
+		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_2', 'PS_FOLLOW_UP_DAYS_2'));
+		foreach ($emails AS $email)
+		{
+				$voucher = $this->createDiscount(2, floatval($conf['PS_FOLLOW_UP_AMOUNT_2']), intval($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.intval($conf['PS_FOLLOW_UP_DAYS_2']).' day')), $this->l('Thanks for your order'));				
+				if ($voucher !== false)
+				{
+					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_2'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_2'], '{voucher_num}' => $voucher->name);
+					$result = Mail::Send(intval($email['id_lang']), 'followup_2', $this->l('Thanks for your order'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					$this->logEmail(2, intval($voucher->id), intval($email['id_customer']), intval($email['id_cart']));
+				}
+		}
 	}
 	
 	/* For all customers with more than x euros in 90 days */
@@ -244,7 +383,7 @@ class Followup extends Module
 	public function cronTask()
 	{
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_ENABLE_1', 'PS_FOLLOW_UP_ENABLE_2', 'PS_FOLLOW_UP_ENABLE_3', 'PS_FOLLOW_UP_ENABLE_4', 'PS_FOLLOW_UP_CLEAN_DB'));
-	
+
 		if ($conf['PS_FOLLOW_UP_ENABLE_1'])
 			$this->cancelledCart();
 		if ($conf['PS_FOLLOW_UP_ENABLE_2'])
