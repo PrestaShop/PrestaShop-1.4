@@ -412,7 +412,7 @@ class Tools
 	{
 		global $maintenance;
 
-		if (!$maintenance)
+		if (!(isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 		 	/* Products specifics meta tags */
 			if ($id_product = Tools::getValue('id_product'))
