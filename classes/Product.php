@@ -1121,52 +1121,33 @@ class		Product extends ObjectModel
 	* @param boolean $wt With taxes or not (optional)
 	* @return float Reduction value in euros
 	*/
-	public static function getReductionValue($result, $wt = true)
+	public static function getReductionValue($reduction_price, $reduction_percent, $date_from, $date_to, $product_price, $usetax, $taxrate)
 	{
-		if (!is_array($result) OR !Validate::isBool($wt))
-			die(Tools::displayError());
-			
 		// Avoid an error with 1970-01-01
-		if (!Validate::isDate($result['reduction_from']) OR !Validate::isDate($result['reduction_to']))
+		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
 			return 0;
 		$currentDate = date('Y-m-d');
-		if ($result['reduction_from'] != $result['reduction_to'] AND ($currentDate > $result['reduction_to'] OR $currentDate < $result['reduction_from']))
+		if ($date_from != $date_to AND ($currentDate > $date_to OR $currentDate < $date_from))
 			return 0;
 
-		// tax value
-		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
-		
-
-		// prices values
-		$price = floatval($result['price']);
-		$attribute_price = isset($result['attribute_price']) ? floatval($result['attribute_price']) : 0;
-		$price_ht = $price + ($attribute_price / (1 + ($tax / 100)));
-		if ($wt)
-			$price = $price_ht * (1 + ($tax / 100));
-		else
-			$price = $price_ht;
-
 		// reduction values
-		$reduction_price = floatval($result['reduction_price']);
-		if (!$wt)
-			$reduction_price /= (1 + ($tax / 100));
-		$reduction_percent = floatval($result['reduction_percent']);
-		$reductionValue = $price * $reduction_percent / 100;
+		if (!$usetax)
+			$reduction_price /= (1 + ($taxrate / 100));
 
 		// make the reduction
 		if ($reduction_price AND $reduction_price > 0)
 		{
-			if ($reduction_price >= $price)
-				$ret = $price;
+			if ($reduction_price >= $product_price)
+				$ret = $product_price;
 			else
 				$ret = $reduction_price;
 		}
 		elseif ($reduction_percent AND $reduction_percent > 0)
 		{
 			if ($reduction_percent >= 100)
-				$ret = $price;
+				$ret = $product_price;
 			else
-				$ret = $reductionValue ;
+				$ret = $product_price * $reduction_percent / 100;
 		}
 		return isset($ret) ? $ret : 0;
 	}
@@ -1208,20 +1189,25 @@ class		Product extends ObjectModel
 		WHERE p.`id_product` = '.intval($id_product));
 		$price = $result['price'];
 
+
 		// Exclude tax
-		if (Tax::excludeTaxeOption())
-			$usetax = false;
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
+		if (Tax::excludeTaxeOption() OR !$tax)
+			$usetax = false;
 		if ($usetax)
 			$price *= (1 + ($tax / 100));
+
+		// Attribute price
+		$attribute_price = $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		if (isset($result['attribute_price']))
-			$price += $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + ($tax / 100)));
-		$reduc = self::getReductionValue($result, $usetax);
+			$price += $attribute_price;
+		$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'],
+				$price, $usetax, floatval($result['rate']));
 
 		// Only reduction
 		if ($only_reduc)
 			return $reduc;
-
+		
 		// Reduction
 		if ($usereduc)
 			$price -= $reduc;
@@ -1795,14 +1781,23 @@ class		Product extends ObjectModel
 		if (!$row['id_product'])
 			return false;
 		$link = new Link();
+
+		// Tax
+		$usetax = true;
+		$tax = floatval(Tax::getApplicableTax(intval($row['id_tax']), floatval($row['rate'])));
+		if (Tax::excludeTaxeOption() OR !$tax)
+			$usetax = false;
+
+		// Datas
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
 			$row['id_product_attribute'] = $ipa_default;
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? Product::getProductAttribute($row['id_product_attribute']) : 0;
-		$row['reduction'] = Product::getReductionValue($row, true);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
+		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'],
+							$row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);

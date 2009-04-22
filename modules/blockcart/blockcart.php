@@ -29,8 +29,12 @@ class BlockCart extends Module
 		if (!Validate::isLoadedObject($currency))
 			$currency = new Currency(intval(Configuration::get('PS_DEFAULT_CURRENCY')));
 
+		$products = $params['cart']->getProducts(true);
+		foreach ($products as $k => $product)
+			$products[$k]['real_price'] = Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, false, true, $product['cart_quantity']);
+
 		$smarty->assign(array(
-			'products'=> $params['cart']->getProducts(true),
+			'products'=> $products,
 			'customizedDatas' => Product::getAllCustomizedDatas(intval($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,

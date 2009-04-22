@@ -215,6 +215,13 @@ else
 		if (sizeof($productImages))
 			$smarty->assign('images', $productImages);
 
+		// Tax
+		$tax_datas = Db::getInstance()->getRow('
+		SELECT p.`id_tax`, t.`rate`
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
+		WHERE p.`id_product` = '.intval($product->id));
+		$tax = floatval(Tax::getApplicableTax(intval($tax_datas['id_tax']), floatval($tax_datas['rate'])));
 		/* Attributes / Groups & colors */
 		$colors = array();
 		$attributesGroups = $product->getAttributesGroups(intval($cookie->id_lang));
