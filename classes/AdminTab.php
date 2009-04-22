@@ -605,7 +605,7 @@ abstract class AdminTab
 				/* Extracting filters from $_POST on key filter_ */
 				if ($value != NULL AND !strncmp($key, $this->table.'Filter_', 7 + Tools::strlen($this->table)))
 				{
-					$key = substr($key, 7 + Tools::strlen($this->table));
+					$key = Tools::substr($key, 7 + Tools::strlen($this->table));
 					/* Table alias could be specified using a ! eg. alias!field */
 					$tmpTab = explode('!', $key);
 					$filter = count($tmpTab) > 1 ? $tmpTab[1] : $tmpTab[0];
@@ -1146,7 +1146,7 @@ abstract class AdminTab
 						echo Category::countNbProductAndSub($tr['id_category'], $cookie->id_lang);
 					elseif (isset($tr[$key]))
 					{
-						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
+						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? Tools::substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
 						echo isset($params['callback']) ? call_user_func_array(array($this->className, $params['callback']), array($echo, $tr)) : $echo;
 					}
 					else

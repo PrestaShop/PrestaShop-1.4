@@ -311,7 +311,7 @@ class		Carrier extends ObjectModel
 	 */
 	public function addZone($id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`)
 			VALUES ('.$this->id.', '.$id_zone.')');
 	}
@@ -321,7 +321,7 @@ class		Carrier extends ObjectModel
 	 */
 	public function deleteZone($id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'carrier_zone`
 			WHERE `id_carrier` = '.$this->id.'
 			AND `id_zone` = '.$id_zone.' LIMIT 1');
