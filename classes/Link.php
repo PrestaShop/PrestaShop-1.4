@@ -140,7 +140,7 @@ class Link
 	
 	public function goPage($url, $p)
 	{
-		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&').'p='.intval($p));
+		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.intval($p));
 	}
 	
 	public function getPaginationLink($type, $id_object, $nb = FALSE, $sort = FALSE, $pagination = FALSE, $array = FALSE)
@@ -162,7 +162,7 @@ class Link
 				$ifSort = (!$sort OR ($sort AND !in_array($k, $varsSort)));
 				$ifPagination = (!$pagination OR ($pagination AND !in_array($k, $varsPagination)));
 				if ($ifNb AND $ifSort AND $ifPagination AND !is_array($value))
-					!$array ? ($vars .= ((!$n++ AND ($this->allow == 1 OR $url == $this->url)) ? '?' : '&').urlencode($k).'='.urlencode($value)) : ($vars[urlencode($k)] = urlencode($value));
+					!$array ? ($vars .= ((!$n++ AND ($this->allow == 1 OR $url == $this->url)) ? '?' : '&amp;').urlencode($k).'='.urlencode($value)) : ($vars[urlencode($k)] = urlencode($value));
 			}
 		if (!$array)
 			return $url.$vars;
@@ -174,7 +174,7 @@ class Link
 	
 	public function addSortDetails($url, $orderby, $orderway)
 	{
-		return $url.(!strstr($url, '?') ? '?' : '&').'orderby='.urlencode($orderby).'&orderway='.urlencode($orderway);
+		return $url.(!strstr($url, '?') ? '?' : '&amp;').'orderby='.urlencode($orderby).'&amp;orderway='.urlencode($orderway);
 	}
 }
 
