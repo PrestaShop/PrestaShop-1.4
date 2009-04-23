@@ -36,7 +36,7 @@ class AdminBackup extends AdminTab
 	 	$this->deleted = false;
 
 		$this->fieldsDisplay = array (
-			'date'     => array('title' => $this->l('Date'), 'type' => 'date', 'width' => 120),
+			'date'     => array('title' => $this->l('Date'), 'type' => 'datetime', 'width' => 120),
 			'age'      => array('title' => $this->l('Age')),
 			'filename' => array('title' => $this->l('Filename'), 'width' => 200),
 			'filesize' => array('title' => $this->l('File size')),
@@ -186,7 +186,7 @@ class AdminBackup extends AdminTab
 			$this->_list[] = array(
 				'filename' => $file, 
 				'age' => $age,
-				'date' => Tools::displayDate($date, $this->_lang, true),
+				'date' => $date,
 				'filesize' => number_format($size / 1000, 2).' Kb',
 				'timestamp' => $timestamp,
 				'filesize_sort' => $size,
