@@ -1803,6 +1803,9 @@ class		Product extends ObjectModel
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic(intval($id_lang), $row['id_product']);
 		$row['attachments'] = Product::getAttachmentsStatic(intval($id_lang), $row['id_product']);
+		$row['pack'] = Pack::isPack($row['id_product']);
+		$row['packItems'] = $row['pack'] ? Pack::getItemTable($row['id_product'], $id_lang) : array();
+		$row['nopackprice'] = $row['pack'] ? Pack::noPackPrice($row['id_product']) : 0;
 		
 		return $row;
 	}
@@ -2080,6 +2083,10 @@ class		Product extends ObjectModel
 		return self::$_incat[md5($sql)];
 	}
 	
+	public function getNoPackPrice()
+	{
+		return Pack::noPackPrice($this->id);
+	}
 }
 
 ?>

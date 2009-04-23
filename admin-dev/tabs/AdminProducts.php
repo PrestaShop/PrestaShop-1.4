@@ -706,7 +706,9 @@ class AdminProducts extends AdminTab
 					{
 						$this->updateAccessories($object);
 						$this->updateDownloadProduct($object);
-						if (!$object->updateCategories($_POST['categoryBox'], true))
+						if (!$this->updatePackItems($object))
+							$this->_errors[] = Tools::displayError('an error occurred while adding products to the pack');
+						elseif (!$object->updateCategories($_POST['categoryBox'], true))
 							$this->_errors[] = Tools::displayError('an error occurred while linking object').' <b>'.$this->table.'</b> '.Tools::displayError('to categories');
 						elseif (!$this->updateTags($languages, $object))
 							$this->_errors[] = Tools::displayError('an error occurred while adding tags');
@@ -736,6 +738,8 @@ class AdminProducts extends AdminTab
 				if ($object->add())
 				{
 					$this->updateAccessories($object);
+					if (!$this->updatePackItems($object))
+						$this->_errors[] = Tools::displayError('an error occurred while adding products to the pack');
 					$this->updateDownloadProduct($object);
 					if (!sizeof($this->_errors))
 					{
@@ -1404,6 +1408,8 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr><td colspan="2"><hr /></td></tr>';
+					$this->displayPack($obj);
+		echo '		<tr><td colspan="2"><hr /></td></tr>';
 
 /*
  * Form for add a virtual product like software, mp3, etc...
@@ -2480,6 +2486,170 @@ class AdminProducts extends AdminTab
 			if (intval($accessory['id_product']) == intval($accessoryId))
 				return true;
 		return false;
+	}
+
+	private function displayPack(Product $obj)
+	{
+		global $currentIndex, $cookie;
+		
+		$boolPack = (($obj->id AND Pack::isPack($obj->id)) OR Tools::getValue('ppack')) ? true : false;
+		$packItems = $boolPack ? Pack::getItems($obj->id, $cookie->id_lang) : array();
+
+		echo '
+		<tr>
+			<td>
+				<input type="checkbox" name="ppack" id="ppack" value="1"'.($boolPack ? ' checked="checked"' : '').' onchange="openCloseLayer(\'ppackdiv\');" />
+				<label class="t" for="ppack">'.$this->l('Pack').'</label>
+			</td>
+			<td>
+				<div id="ppackdiv" '.($boolPack ? '' : ' style="display: none;"').'>
+					<div id="divPackItems">';
+		foreach ($packItems as $packItem)
+			echo $packItem->pack_quantity.' x '.$packItem->name.'<span onclick="delPackItem('.$packItem->id.');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />';
+		echo '		</div>
+					<input type="hidden" name="inputPackItems" id="inputPackItems" value="'; foreach ($packItems as $packItem) echo $packItem->pack_quantity.'x'.$packItem->id.'-'; echo '" />
+					<input type="hidden" name="namePackItems" id="namePackItems" value="'; foreach ($packItems as $packItem) echo $packItem->pack_quantity.'x '.$packItem->name.'¤'; echo '" />
+					<script type="text/javascript">
+						var formProduct;
+						var packItems = new Array();
+						'.$this->fillPackItems($obj).'
+						'.$this->addPackItem().'
+						'.$this->delPackItem().'
+					</script>
+					<select id="selectPackItems" name="selectPackItems" style="width: 380px;" onfocus="fillPackItems();">
+						<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
+					</select>
+					<input type="text" name="quantityPackItems" id="quantityPackItems" value="1" size="1" />
+					<span onclick="addPackItem();" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add an item to the pack').'" title="'.$this->l('Add an item to the pack').'" /></span>
+					<br />'.$this->l('Filter:').' <input type="text" size="25" name="filterPack" onkeyup="fillPackItems();" class="space" />
+				</td>
+			</div>
+		</tr>';
+	}
+	
+	private function fillPackItems($obj)
+	{
+		global $currentIndex, $cookie;
+		
+		return '
+		function fillPackItems()
+		{
+			$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductPackItems:1,id_lang:'.intval($cookie->id_lang).',id_product:'.($obj->id ? intval($obj->id) : 0).'},
+				function(result) {
+					for (var i = 0; i < result.length; i++)
+						packItems[i] = new Array(result[i].value, result[i].text);
+						
+					formProduct = document.layers ? document.forms.product : document.product;
+					formProduct.selectPackItems.length = packItems.length + 1;
+					for (i = 0, j = 1; i < packItems.length; i++)
+					{
+						if (formProduct.filterPack.value)
+							if (packItems[i][1].toLowerCase().indexOf(formProduct.filterPack.value.toLowerCase()) == -1)
+								continue;
+						formProduct.selectPackItems.options[j].value = packItems[i][0];
+						formProduct.selectPackItems.options[j].text = packItems[i][1];
+						j++;
+					}
+					if (j == 1)
+					{
+						formProduct.selectPackItems.length = 2;
+						formProduct.selectPackItems.options[1].value = -1;
+						formProduct.selectPackItems.options[1].text = \''.$this->l('No match found').'\';
+						formProduct.selectPackItems.options.selectedIndex = 1;
+					}
+					else
+					{
+						formProduct.selectPackItems.length = j;
+						formProduct.selectPackItems.options.selectedIndex = (formProduct.filterPack.value == \'\' ? 0 : 1);
+					}
+				}
+			);
+		}';
+	}
+	
+	private function packItemJsInit()
+	{
+		return '
+			var reg = new RegExp(\'-\', \'g\');
+			var regx = new RegExp(\'x\', \'g\');
+			
+			var div = getE(\'divPackItems\');
+			var input = getE(\'inputPackItems\');
+			var name = getE(\'namePackItems\');
+			var select = getE(\'selectPackItems\');
+			var select_quantity = getE(\'quantityPackItems\');';
+	}
+	
+	private function addPackItem()
+	{
+		return '
+		function addPackItem()
+		{
+			'.$this->packItemJsInit().'
+
+			if (select.value == \'0\')
+				return;
+			var cut = select.value.split(reg);
+				
+			var inputCut = input.value.split(reg);
+			for (var i = 0; i < inputCut.length; ++i)
+				if (inputCut[i])
+				{
+					var inputQty = inputCut[i].split(regx);
+					if (inputQty[1] == cut[0])
+						return false;
+				}
+			
+
+			for (i = 0; i < select.length; ++i)
+				if (select.options[i].selected == true)
+					select.options[i] = null;
+			select.selectedIndex = 0;
+
+			var nameStr = \'\';
+			for (i = 1; i < cut.length; ++i)
+				nameStr += select_quantity.value + \' x \' + cut[i];
+			input.value += select_quantity.value + \'x\' + cut[0] + \'-\';
+			name.value += select_quantity.value + \' x \' + nameStr + \'¤\';
+			div.innerHTML += nameStr + \' <span onclick="delPackItem(\' + cut[0] + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
+		}';
+	}
+	
+	private function delPackItem()
+	{
+		return '
+		function delPackItem(id)
+		{
+			'.$this->packItemJsInit().'
+			
+			var inputCut = input.value.split(reg);
+			var nameCut = name.value.split(new RegExp(\'¤\', \'g\'));
+
+			input.value = \'\';
+			name.value = \'\';
+			div.innerHTML = \'\';
+
+			for (var i = 0; i < inputCut.length; ++i)
+				if (inputCut[i])
+				{
+					var inputQty = inputCut[i].split(regx);
+					if (inputQty[1] != id)
+					{
+						input.value += inputCut[i] + \'-\';
+						name.value += nameCut[i] + \'¤\';
+						div.innerHTML += nameCut[i] + \' <span onclick="delPackItem(\' + inputQty[1] + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
+					}
+				}
+		}';
+	}
+	
+	public function updatePackItems($product)
+	{
+		Pack::deleteItems($product->id);
+		if (Tools::getValue('ppack') AND $items = Tools::getValue('inputPackItems') AND sizeof($ids = array_unique(split('-', $items))))
+			if (!Pack::addItems($product->id, $ids))
+				return false;
+		return true;
 	}
 }
 

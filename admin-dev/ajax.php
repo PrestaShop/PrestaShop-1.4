@@ -123,4 +123,20 @@ if (array_key_exists('ajaxModulesPositions', $_GET))
 		else
 			die('{\'hasError\' : true, errors : \'Tis module can not be loaded\'}');
 }
+
+if (isset($_GET['ajaxProductPackItems']))
+{
+	$jsonArray = array();
+	$products = Db::getInstance()->ExecuteS('
+	SELECT p.`id_product`, pl.`name`
+	FROM `'._DB_PREFIX_.'product` p
+	NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+	WHERE pl.`id_lang` = '.intval(Tools::getValue('id_lang')).'
+	AND p.`id_product` != '.intval(Tools::getValue('id_product')));
+	
+	foreach ($products AS $packItem)
+		$jsonArray[] = '{value: \''.intval($packItem['id_product']).'-'.addslashes($packItem['name']).'\', text:\''.intval($packItem['id_product']).' - '.addslashes($packItem['name']).'\'}';
+	die('['.implode(',', $jsonArray).']');
+}
+
 ?>

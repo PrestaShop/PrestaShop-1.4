@@ -4,6 +4,12 @@ SET NAMES 'utf8';
 /* 				STRUCTURE			 		 */
 /* ##################################### */
 
+CREATE TABLE `PREFIX_pack` (
+  `id_product_pack` int(10) unsigned NOT NULL,
+  `id_product_item` int(10) unsigned NOT NULL,
+  `quantity` int(10) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY  (`id_product_pack`,`id_product_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /* ##################################### */
 /* 					CONTENTS					 */

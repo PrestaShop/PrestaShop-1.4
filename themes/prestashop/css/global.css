@@ -2372,4 +2372,11 @@ div.star a:hover{
 
 }
 
+.pack_content{
+	margin: 10px 0 10px 0;
+}
+.pack_price {
+	float: right; margin-right:3px; font-size: 12px;
+}
+
 .confirmation { color: forestgreen; font-weight: bold; };

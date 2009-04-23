@@ -281,8 +281,13 @@ else
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),
 			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang))
 		));
+		
+		// Pack management
+		$smarty->assign('packItems', Pack::getItemTable($product->id, intval($cookie->id_lang), true));
+		$smarty->assign('packs', Pack::getPacksTable($product->id, intval($cookie->id_lang), true, 1));
 	}
 }
+
 include_once(dirname(__FILE__).'/header.php');
 $smarty->assign(array(
 	'ENT_NOQUOTES' => ENT_NOQUOTES,

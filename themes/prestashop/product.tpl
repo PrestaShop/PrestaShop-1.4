@@ -135,11 +135,22 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
 	<!-- left infos-->
 	<div id="pb-left-column">
-		{if $product->description_short}
+		{if $product->description_short OR $packItems|@count > 0}
 		<div id="short_description_block">
-			<div id="short_description_content" class="rte align_justify">{$product->description_short}</div>
+			{if $product->description_short}
+				<div id="short_description_content" class="rte align_justify">{$product->description_short}</div>
+			{/if}
 			{if $product->description}
 			<p class="buttons_bottom_block"><a href="javascript:{ldelim}{rdelim}" class="button">{l s='More details'}</a></p>
+			{/if}
+			{if $packItems|@count > 0}
+				<h3>{l s='Pack content'}</h3>
+				{foreach from=$packItems item=packItem}
+					<div class="pack_content">
+						{$packItem.pack_quantity} x <a href="{$link->getProductLink($packItem.id_product, $packItem.link_rewrite, $packItem.category)}">{$packItem.name|escape:'htmlall':'UTF-8'}</a>
+						<p>{$packItem.description_short}</p>
+					</div>
+				{/foreach}
 			{/if}
 		</div>
 		{/if}
@@ -189,6 +200,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/if}
 			{if $product->reduction_percent != 0 && ($product->reduction_from == $product->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d' <= $product->reduction_to && $smarty.now|date_format:'%Y-%m-%d' >= $product->reduction_from))}
 				<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->reduction_percent|floatval}</span> %{l s=')'}</p>
+			{/if}
+			{if $packItems|@count}
+				<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>
+				<br class="clear" />
 			{/if}
 			{if $product->ecotax != 0}
 				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
@@ -399,6 +414,13 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 		</form>
 		<p class="clear required"><sup>*</sup> {l s='required fields'}</p>
+	</div>
+{/if}
+
+{if $packItems|@count > 0}
+	<div>
+		<h2>{l s='Pack content'}</h2>
+		{include file=$tpl_dir./product-list.tpl products=$packItems}
 	</div>
 {/if}
 

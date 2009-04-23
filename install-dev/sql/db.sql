@@ -863,6 +863,13 @@ CREATE TABLE `PREFIX_order_state_lang` (
   UNIQUE KEY `order_state_lang_index` (`id_order_state`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_pack` (
+  `id_product_pack` int(10) unsigned NOT NULL,
+  `id_product_item` int(10) unsigned NOT NULL,
+  `quantity` int(10) unsigned NOT NULL DEFAULT 1,
+  PRIMARY KEY  (`id_product_pack`,`id_product_item`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `PREFIX_page` (
   `id_page` int(10) unsigned NOT NULL auto_increment,
   `id_page_type` int(10) unsigned NOT NULL,
