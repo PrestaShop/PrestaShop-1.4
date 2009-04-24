@@ -16,7 +16,7 @@ class MailAlerts extends Module
 	{
 		$this->name = 'mailalerts';
         $this->tab = 'Tools';
-		$this->version = 2.0;
+		$this->version = '2.1';
 
 		$this->_refreshProperties();
 
@@ -139,7 +139,7 @@ class MailAlerts extends Module
 		if ($invoice->id_state)
 			$invoice_state = new State(intval($invoice->id_state));
 
-		// Filling-in vars for mail
+		// Filling-in vars for email
 		$template = 'new_order';
 		$subject = $this->l('New order');
 		$templateVars = array(
@@ -182,7 +182,9 @@ class MailAlerts extends Module
 			'{currency}' => $currency->sign,
 			'{message}' => $message
 		);
-		Mail::Send($id_lang, $template, $subject, $templateVars, split(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
+		$iso = Language::getIsoById(intval($id_lang));
+		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
+			Mail::Send($id_lang, $template, $subject, $templateVars, split(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
 	}
 	
 	public function hookProductOutOfStock($params)
@@ -339,8 +341,8 @@ class MailAlerts extends Module
 						<textarea name="mA_merchant_mails" rows="10" cols="30">'.Tools::getValue('mA_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
 					</div>
 					<div style="float:left;">
-						'.$this->l('One email adress each line').'<br />
-						'.$this->l('Eg: bob@example.com').'
+						'.$this->l('One email address per line').'<br />
+						'.$this->l('e.g.,').' bob@example.com
 					</div>
 				</div>
 				<div style="clear:both;">&nbsp;</div>

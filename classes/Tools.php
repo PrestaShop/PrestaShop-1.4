@@ -75,8 +75,6 @@ class Tools
 	*/
 	static public function getValue($key, $defaultValue = false)
 	{
-		global $cookie;
-
 	 	if (!isset($key) OR empty($key) OR !is_string($key))
 			return false;
 		$ret = (isset($_POST[$key]) ? $_POST[$key] : (isset($_GET[$key]) ? $_GET[$key] : $defaultValue));

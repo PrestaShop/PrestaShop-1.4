@@ -19,7 +19,7 @@ class		Zone extends ObjectModel
 	
 	/** @var boolean Zone statuts */
 	public 		$active = true;
-	public 		$eu_zone = false;
+	public 		$eu_zone = false; /* Obsolete; to remove */
 	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
