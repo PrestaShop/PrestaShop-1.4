@@ -9,7 +9,7 @@ class Paypal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'Payment';
-		$this->version = '1.5';
+		$this->version = '1.6';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
