@@ -577,4 +577,13 @@ INSERT INTO `PREFIX_timezone` (`name`) VALUES
 	('W-SU'),
 	('WET'),
 	('Zulu');
-	
+
+DELETE FROM  `PREFIX_discount_category` 
+WHERE `id_discount` IN (
+	SELECT `id_discount` FROM (
+		SELECT dc.`id_discount`
+		FROM `PREFIX_discount_category` dc
+		LEFT JOIN `PREFIX_discount`d ON (d.`id_discount` = dc.`id_discount`)
+		WHERE d.`id_discount` IS NULL
+		GROUP BY dc.`id_discount`) discount_category_tmp
+	);

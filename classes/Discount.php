@@ -110,7 +110,8 @@ class		Discount extends ObjectModel
 	{
 		if (!parent::delete())
 			return false;
-		return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.intval($this->id));
+		return (Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.intval($this->id)) 
+								AND Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'discount_category WHERE id_discount = '.intval($this->id)));
 	}
 	
 	public function getTranslationsFieldsChild()
