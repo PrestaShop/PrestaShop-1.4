@@ -122,7 +122,7 @@ class AdminCategories extends AdminTab
 		}
 		parent::postProcess();
 
-		if (($id_category = intval(Tools::getValue('id_category'))) AND isset($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
+		if (($id_category = intval(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
