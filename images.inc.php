@@ -25,7 +25,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
 			else
 			{
 				$ratioX = $x / ($y / $size);
-				$newImage = ($imageType == 'gif' ? imagecreatetruecolor($ratioX, $size) : imagecreatetruecolor($ratioX, $size));
+				$newImage = ($imageType == 'gif' ? imagecreate($ratioX, $size) : imagecreatetruecolor($ratioX, $size));
 				
 				/* Allow to keep nice look even if resized */
 				$white = imagecolorallocate($newImage, 255, 255, 255);
