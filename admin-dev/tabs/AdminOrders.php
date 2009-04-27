@@ -170,24 +170,26 @@ class AdminOrders extends AdminTab
 					foreach ($productList AS $key => $id_order_detail)
 					{
 						$qtyCancelProduct = abs($qtyList[$key]);
-						$orderDetail = new OrderDetail(intval($id_order_detail));
-						
 						if (!$qtyCancelProduct)
-						{
 							$this->_errors[] = Tools::displayError('No quantity selected for product.');
-							break ;
-						}
-						
-						// Delete product
-						if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
-							$this->_errors[] = Tools::displayError('an error occurred during deletion for the product').' <span class="bold">'.$orderDetail->product_name.'</span>';
-						Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => $id_order_detail));
-						
-						// Reinject product
-						if (isset($_POST['reinjectQuantities']) OR (!$order->hasBeenDelivered() AND !$order->hasBeenPaid()))
-							if (!Product::reinjectQuantities($id_order_detail, $qtyCancelProduct))
-								$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
 					}
+					
+					if (!sizeof($this->_errors))
+						foreach ($productList AS $key => $id_order_detail)
+						{
+							$qtyCancelProduct = abs($qtyList[$key]);
+							$orderDetail = new OrderDetail(intval($id_order_detail));
+							
+							// Delete product
+							if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
+								$this->_errors[] = Tools::displayError('an error occurred during deletion for the product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => $id_order_detail));
+							
+							// Reinject product
+							if (isset($_POST['reinjectQuantities']) OR (!$order->hasBeenDelivered() AND !$order->hasBeenPaid()))
+								if (!Product::reinjectQuantities($id_order_detail, $qtyCancelProduct))
+									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+						}
 					
 					// E-mail params
 					if ((isset($_POST['generateCreditSlip']) OR isset($_POST['generateDiscount'])) AND !sizeof($this->_errors))
