@@ -105,7 +105,7 @@ class AdminTracking extends AdminTab
 	public function displayProducts()
 	{
 		global $currentIndex, $cookie;
-		Tools::d($currentIndex);
+
 		if (isset($this->_list['obj']))
 		{
 			$nbProducts = sizeof($this->_list['obj']);
