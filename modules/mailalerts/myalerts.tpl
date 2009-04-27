@@ -36,7 +36,7 @@
 		</div>
 		<div id="block-order-detail">&nbsp;</div>
 		{else}
-			<p class="warning">{l s='You do not suscribed to any alerts.' mod='mailalerts'}</p>
+			<p class="warning">{l s='You are not subscribed to any alerts.' mod='mailalerts'}</p>
 		{/if}
 	{/if}
 

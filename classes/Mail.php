@@ -89,25 +89,33 @@ class Mail
 			include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
 
 			global $_LANGMAIL;
-			/* Create mail and attach differents parts */
+			// Create mail and attach differents parts
 			$message = new Swift_Message('['.Configuration::get('PS_SHOP_NAME').'] '.((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject));
 			$templateVars['{shop_logo}'] = (file_exists(_PS_IMG_DIR_.'logo.jpg')) ? $message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo.jpg'))) : '';
 			$templateVars['{shop_name}'] = htmlentities(Configuration::get('PS_SHOP_NAME'), NULL, 'utf-8');
 			$templateVars['{shop_url}'] = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__;
 			$swift->attachPlugin(new Swift_Plugin_Decorator(array($to_plugin => $templateVars)), 'decorator');
+			
+			// Send mail
 			if ($configuration['PS_MAIL_TYPE'] == 3 OR $configuration['PS_MAIL_TYPE'] == 2)
-				$message->attach(new Swift_Message_Part($templateTxt, 'text/plain', '8bit', 'utf-8'));
+				$send = self::SendMail($swift, $message, $fileAttachment, $templateTxt, 'text/plain', $to, $from, $fromName);
 			if ($configuration['PS_MAIL_TYPE'] == 3 OR $configuration['PS_MAIL_TYPE'] == 1)
-				$message->attach(new Swift_Message_Part($templateHtml, 'text/html', '8bit', 'utf-8'));
-			if ($fileAttachment AND isset($fileAttachment['content']) AND isset($fileAttachment['name']) AND isset($fileAttachment['mime']))
-				$message->attach(new Swift_Message_Attachment($fileAttachment['content'], $fileAttachment['name'], $fileAttachment['mime']));
-			/* Send mail */
-			$send = $swift->send($message, $to, new Swift_Address($from, $fromName));
+				$send &= self::SendMail($swift, $message, $fileAttachment, $templateHtml, 'text/html', $to, $from, $fromName);
+
+			// Disconnect and exit
 			$swift->disconnect();
 			return $send;
 		}
 	
 		catch (Swift_ConnectionException $e) { return false; }
+	}
+	
+	static public function SendMail($swift, $message, $fileAttachment, $template, $type, $to, $from, $fromName)
+	{
+		$message->attach(new Swift_Message_Part($template, $type, '8bit', 'utf-8'));
+		if ($fileAttachment AND isset($fileAttachment['content']) AND isset($fileAttachment['name']) AND isset($fileAttachment['mime']))
+			$message->attach(new Swift_Message_Attachment($fileAttachment['content'], $fileAttachment['name'], $fileAttachment['mime']));
+		return $swift->send($message, $to, new Swift_Address($from, $fromName));
 	}
 }
 
