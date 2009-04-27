@@ -141,7 +141,7 @@ class Paypal extends PaymentModule
 			'.$this->l('In').' <i>'.$this->l('Profile > Selling Preferences > Website Payment Preferences').'</i>, '. $this->l('set:').'<br />
 			- <b>'.$this->l('Auto Return').'</b> : '.$this->l('Off').',<br />
 			- <b>'.$this->l('Payment Data Transfer').'</b> '.$this->l('to').' <b>Off</b>.<br /><br />
-			'.$this->l('In').' <i>'.$this->l('Profile > Selling Preferences > Shipping Calculations:').'</i><br />
+			'.$this->l('In').' <i>'.$this->l('Profile > Selling Preferences > Postage Calculations').'</i><br />
 			- check <b>'.$this->l('Click here to allow transaction-based shipping values to override the profile shipping settings listed above').'</b><br /><br />
 			<b style="color: red;">'.$this->l('All PrestaShop currencies must be also configured</b> inside Profile > Financial Information > Currency balances').'<br />
 		</fieldset>';
