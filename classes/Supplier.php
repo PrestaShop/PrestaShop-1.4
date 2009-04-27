@@ -38,7 +38,7 @@ class		Supplier extends ObjectModel
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 	
-	protected	$fieldsSizeLang = array('description' => 128);
+	protected	$fieldsSizeLang = array('description' => 65536);
 	protected	$fieldsValidateLang = array('description' => 'isGenericName');
 	
 	protected 	$table = 'supplier';

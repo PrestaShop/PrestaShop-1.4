@@ -41,7 +41,7 @@ class		Manufacturer extends ObjectModel
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 
-	protected	$fieldsSizeLang = array('description' => 1000);
+	protected	$fieldsSizeLang = array('description' => 65536);
 	protected	$fieldsValidateLang = array('description' => 'isGenericName');
 	
 	protected 	$table = 'manufacturer';

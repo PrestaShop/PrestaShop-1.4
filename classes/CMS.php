@@ -21,7 +21,7 @@ class CMS extends ObjectModel
 	public $link_rewrite;
 
  	protected $fieldsRequiredLang = array('meta_title', 'link_rewrite');
-	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255, 'meta_title' => 128, 'link_rewrite' => 128);
+	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255, 'meta_title' => 128, 'link_rewrite' => 128, 'content' => 65536);
 	protected $fieldsValidateLang = array('meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName', 'meta_title' => 'isGenericName', 'link_rewrite' => 'isLinkRewrite', 'content' => 'isCleanHTML');
 
 	protected $table = 'cms';
