@@ -484,9 +484,9 @@ class AdminImport extends AdminTab
 					$res = $category->update();
 
 				// If no id_category or update failed
-				if (!$res AND $res = $category->add())
-					/* Associate the category to the default customer group */
-					$category->addGroups(array(1));
+				if (!$res)
+					if ($res = $category->add())
+						$category->addGroups(array(1));
 			}
 			// If both failed, mysql error
 			if (!$res)
@@ -761,7 +761,7 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 			
 			self::setDefaultValues($info);
-			$customer = new Customer();		
+			$customer = new Customer();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $customer);
 			
 			if ($customer->passwd)
@@ -769,11 +769,13 @@ class AdminImport extends AdminTab
 				
 			$res = false;
 			if ($customer->validateFields(UNFRIENDLY_ERROR) AND $customer->validateFieldsLang(UNFRIENDLY_ERROR))
-			{								
+			{
 				if ($customer->id AND $customer->customerIdExists($customer->id))
 					$res = $customer->update();
 				if (!$res)
 					$res = $customer->add();
+				if ($res)
+					$customer->addGroups(array(1));
 			}
 			if (!$res)
 					$this->_errors[] = mysql_error().' '.$info['email'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
@@ -792,13 +794,13 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 			
 			self::setDefaultValues($info);
-			$address = new Address();		
+			$address = new Address();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $address);
 			
 			if (isset($address->country) AND is_numeric($address->country))
 			{
 				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), intval($address->country)))
-					$address->id_country = intval($address->country);				
+					$address->id_country = intval($address->country);
 			}
 			elseif(isset($address->country) AND is_string($address->country) AND !empty($address->country))
 			{
@@ -823,7 +825,7 @@ class AdminImport extends AdminTab
 			if (isset($address->state) AND is_numeric($address->state))
 			{
 				if (State::getNameById(intval($address->state)))
-					$address->id_state = intval($address->state);				
+					$address->id_state = intval($address->state);
 			}
 			elseif(isset($address->state) AND is_string($address->state) AND !empty($address->state))
 			{
