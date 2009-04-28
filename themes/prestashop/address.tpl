@@ -10,6 +10,9 @@ countries = new Array();
 		{/foreach}
 	{/if}
 {/foreach}
+$(function(){ldelim}
+	$('.id_state option[value={if isset($smarty.post.id_state)}{$smarty.post.id_state}{else}{$address->id_state|escape:'htmlall':'UTF-8'}{/if}]').attr('selected', 'selected');
+{rdelim});
 //]]>
 </script>
 
