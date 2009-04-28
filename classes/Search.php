@@ -284,6 +284,8 @@ class Search
 			foreach ($product as $key => $value)
 				if (strncmp($key, 'id_', 3))
 				{
+					if ($key == 'cname')
+						$value = Category::hideCategoryPosition($value);
 					$words = explode(' ', self::sanitize($value, $product['id_lang'], true));
 					foreach ($words as $word)
 						if (!empty($word))
