@@ -261,7 +261,7 @@ class		Cart extends ObjectModel
 				if ($result2)
 					foreach ($result2 AS $k2 => $row2)
 					{
-						$attributesList .= $row2['public_group_name'].': '.$row2['attribute_name'].', ';
+						$attributesList .= $row2['public_group_name'].' : '.$row2['attribute_name'].', ';
 						$attributesListSmall .= $row2['attribute_name'].', ';
 					}
 				$attributesList = rtrim($attributesList, ', ');
