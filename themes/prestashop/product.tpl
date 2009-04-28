@@ -27,6 +27,7 @@ var reduction_percent = {if $product->reduction_percent}{$product->reduction_per
 var reduction_price = {if $product->reduction_percent}0{else}{$product->getPrice(true, $smarty.const.NULL, 2, $smarty.const.NULL, true)}{/if};
 var reduction_from = '{$product->reduction_from}';
 var reduction_to = '{$product->reduction_to}';
+var group_reduction = '{$group_reduction}';
 var default_eco_tax = {$product->ecotax};
 var currentDate = '{$smarty.now|date_format:'%Y-%m-%d'}';
 var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};

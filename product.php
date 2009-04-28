@@ -182,6 +182,7 @@ else
 			'attachments' => $attachments,
 			'allow_oosp' => $product->isAvailableWhenOutOfStock(intval($product->out_of_stock)),
 			'last_qties' =>  intval($configs['PS_LAST_QTIES']),
+			'group_reduction' => (100 - Group::getReduction(intval($cookie->id_customer))) / 100,
 			'col_img_dir' => _PS_COL_IMG_DIR_,
 			'HOOK_EXTRA_LEFT' => Module::hookExec('extraLeft'),
 			'HOOK_EXTRA_RIGHT' => Module::hookExec('extraRight'),
