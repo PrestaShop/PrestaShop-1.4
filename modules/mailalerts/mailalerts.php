@@ -16,7 +16,7 @@ class MailAlerts extends Module
 	{
 		$this->name = 'mailalerts';
         $this->tab = 'Tools';
-		$this->version = '2.1';
+		$this->version = '2.2';
 
 		$this->_refreshProperties();
 
@@ -101,28 +101,15 @@ class MailAlerts extends Module
 		$itemsTable = '';
 		foreach ($params['cart']->getProducts() AS $key => $product)
 		{
-			$reduc = 0.0;
-			$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
-			$price_wt = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
-			if (Tax::excludeTaxeOption())
-			{
-				$product['tax'] = 0;
-				$product['rate'] = 0;
-			}
-			else
-				$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']));
-			if ($product['quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['quantity'])))
-			{
-				$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value);
-				$price -= $reduc / (1 + floatval($tax) / 100);
-			}
+			$unit_price = Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute']);
+			$price = Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, false, true, $product['quantity']);
 			$itemsTable .=
 				'<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 					<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
 					<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($unit_price, $currency, false, false).'</td>
 					<td style="padding:0.6em 0.4em; text-align:center;">'.intval($product['quantity']).'</td>
-					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(intval($product['quantity']) * ($price * ($tax + 100) / 100), $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($price * $product['quantity']), $currency, false, false).'</td>
 				</tr>';
 		}
 		foreach ($params['cart']->getDiscounts() AS $discount)
