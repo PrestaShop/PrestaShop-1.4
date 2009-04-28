@@ -162,6 +162,7 @@ class AdminProducts extends AdminTab
 					$id_product_old = $product->id;
 					unset($product->id);
 					unset($product->id_product);
+					$product->indexed = 0;
 
 					if ($product->add()
 					AND Category::duplicateProductCategories($id_product_old, $product->id)
@@ -172,7 +173,10 @@ class AdminProducts extends AdminTab
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id))
 							$this->_errors[] = Tools::displayError('an error occurred while copying images');
 						else
+						{
+							Search::indexation(false);
 							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=19&token='.($token ? $token : $this->token));
+						}
 					}
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while creating object');
