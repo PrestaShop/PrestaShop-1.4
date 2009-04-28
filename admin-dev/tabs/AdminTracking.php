@@ -143,7 +143,7 @@ class AdminTracking extends AdminTab
 					<td align="center">'.($product->manufacturer_name != NULL ? stripslashes($product->manufacturer_name) : '--').'</td>
 					<td>'.$product->reference.'</td>AdminCatalog
 					<a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken(''.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.stripslashes($product->name).'</a></td>
-					<td>'.Tools::displayPrice($product->getPstatusrice(), $currency).'</td>
+					<td>'.Tools::displayPrice($product->getPrice(), $currency).'</td>
 					<td>'.stripslashes($tax->name[intval($cookie->id_lang)]).'</td>
 					<td align="center">'.$product->quantity.'</td>
 					<td align="center">'.$product->weight.' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
