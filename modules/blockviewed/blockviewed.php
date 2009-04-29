@@ -70,6 +70,7 @@ class BlockViewed extends Module
 		if (sizeof($productsViewed))
 		{
 			$productsViewedObj = array();
+			
 			foreach ($productsViewed AS $productViewed)
 			{
 				$obj = new Product(intval($productViewed), false, intval($params['cookie']->id_lang));
@@ -104,7 +105,7 @@ class BlockViewed extends Module
 
 			if (!sizeof($productsViewedObj))
 				return ;
-
+			
 			$smarty->assign('productsViewedObj', $productsViewedObj);
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
