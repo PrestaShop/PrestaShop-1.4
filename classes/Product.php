@@ -293,7 +293,7 @@ class		Product extends ObjectModel
 		if (!$res = Db::getInstance()->ExecuteS('
 		SELECT cp.`id_product`, cp.`position`, cp.`id_category` 
 		FROM `'._DB_PREFIX_.'category_product` cp
-		WHERE cp.`id_category` = '.pSQL(Tools::getValue('id_category')).' 
+		WHERE cp.`id_category` = '.intval(Tools::getValue('id_category')).' 
 		ORDER BY cp.`position` '.(intval($way) ? 'ASC' : 'DESC')))
 			return false;
 		foreach ($res AS $key => $values)
@@ -309,7 +309,7 @@ class		Product extends ObjectModel
 
 		if (isset($position))
 			$to['position'] = intval($position);
-		
+					
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'category_product`
 		SET `position`= position '.($way ? '-1' : '+1').'
@@ -321,8 +321,29 @@ class		Product extends ObjectModel
 		UPDATE `'._DB_PREFIX_.'category_product`
 		SET `position`='.intval($to['position']).'
 		WHERE `'.pSQL($this->identifier).'` = '.intval($from[$this->identifier]).'
-		AND `id_category`='.intval($to['id_category']))
-		);
+		AND `id_category`='.intval($to['id_category'])));
+	}
+	
+	/*
+	 * Reorder product position
+	 *
+	 * @param boolean $id_hook Hook ID
+	 */
+	public function cleanPositions($id_category)
+	{
+		$result = Db::getInstance()->ExecuteS('
+		SELECT `id_product`
+		FROM `'._DB_PREFIX_.'category_product`
+		WHERE `id_category` = '.intval($id_category).'
+		ORDER BY `position`');
+		$sizeof = sizeof($result);
+		for ($i = 0; $i < $sizeof; ++$i)
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'category_product`
+			SET `position` = '.($i).'
+			WHERE `id_category` = '.intval($id_category).'
+			AND `id_product` = '.intval($result[$i]['id_product']));
+		return true;
 	}
 
 	/**
@@ -453,7 +474,11 @@ class		Product extends ObjectModel
 	*/
 	public function deleteCategories()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
+		$result = Db::getInstance()->Executes('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
+		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
+		foreach($result AS $row)
+			$this->cleanPositions(intval($row['id_category']));
+		return $return;
 	}
 
 	/**
