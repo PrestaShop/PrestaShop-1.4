@@ -132,6 +132,7 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 		$id_category = intval(Tools::getValue('id_category'));
 		$positions = Tools::getValue(strval($id_category));
 		$position = (is_array($positions)) ? array_search($id_category.'_'.$id_product, $positions) : null;
+		$position = $position - 2; // Two empty first row in product table
 		$product = new Product($id_product);
 		if (Validate::isLoadedObject($product))
 			if (die($product->updatePosition($way, $position)));

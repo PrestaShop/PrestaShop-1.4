@@ -302,12 +302,12 @@ class		Product extends ObjectModel
 				$k = $key ;
 				break ;
 			}
-		if (!isset($k))
+		if (!isset($k) OR !isset($res[$k]) OR !isset($res[$k + 1]))
 			return false;
 		$from = $res[$k];
 		$to = $res[$k + 1];
 
-		if (isset($position) and !empty($position))
+		if (isset($position))
 			$to['position'] = intval($position);
 		
 		return (Db::getInstance()->Execute('
