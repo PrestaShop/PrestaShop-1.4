@@ -14,7 +14,61 @@
 
 include_once(_PS_FPDF_PATH_.'fpdf.php');
 
-class PDF extends FPDF
+class PDF_PageGroup extends FPDF
+{
+	var $NewPageGroup;   // variable indicating whether a new group was requested
+	var $PageGroups;	 // variable containing the number of pages of the groups
+	var $CurrPageGroup;  // variable containing the alias of the current page group
+
+	// create a new page group; call this before calling AddPage()
+	function StartPageGroup()
+	{
+		$this->NewPageGroup=true;
+	}
+
+	// current page in the group
+	function GroupPageNo()
+	{
+		return $this->PageGroups[$this->CurrPageGroup];
+	}
+
+	// alias of the current page group -- will be replaced by the total number of pages in this group
+	function PageGroupAlias()
+	{
+		return $this->CurrPageGroup;
+	}
+
+	function _beginpage($orientation, $arg2)
+	{
+		parent::_beginpage($orientation, $arg2);
+		if($this->NewPageGroup)
+		{
+			// start a new group
+			$n = sizeof($this->PageGroups)+1;
+			$alias = "{nb$n}";
+			$this->PageGroups[$alias] = 1;
+			$this->CurrPageGroup = $alias;
+			$this->NewPageGroup=false;
+		}
+		elseif($this->CurrPageGroup)
+			$this->PageGroups[$this->CurrPageGroup]++;
+	}
+
+	function _putpages()
+	{
+		$nb = $this->page;
+		if (!empty($this->PageGroups))
+		{
+			// do page number replacement
+			foreach ($this->PageGroups as $k => $v)
+				for ($n = 1; $n <= $nb; $n++)
+					$this->pages[$n]=str_replace($k, $v, $this->pages[$n]);
+		}
+		parent::_putpages();
+	}
+}
+
+class PDF extends PDF_PageGroup
 {
 	private static $order = NULL;
 	private static $orderReturn = NULL;
@@ -72,7 +126,7 @@ class PDF extends FPDF
 	public function Header()
 	{
 		global $cookie;
-		
+
 		$conf = Configuration::getMultiple(array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_STATE'));
 		$conf['PS_SHOP_NAME'] = isset($conf['PS_SHOP_NAME']) ? Tools::iconv('utf-8', self::encoding(), $conf['PS_SHOP_NAME']) : 'Your company';
 		$conf['PS_SHOP_ADDR1'] = isset($conf['PS_SHOP_ADDR1']) ? Tools::iconv('utf-8', self::encoding(), $conf['PS_SHOP_ADDR1']) : 'Your company';
@@ -87,21 +141,23 @@ class PDF extends FPDF
 		$this->Cell(115);
 		
 		if (self::$orderReturn)
-			$this->Cell(80, 10, self::l('RETURN #').sprintf('%06d', self::$orderReturn->id), 0, 0, 'C');
+			$this->Cell(77, 10, self::l('RETURN #').' '.sprintf('%06d', self::$orderReturn->id), 0, 1, 'R');
 		elseif (self::$orderSlip)
-			$this->Cell(80, 10, self::l('SLIP #').sprintf('%06d', self::$orderSlip->id), 0, 0, 'C');
+			$this->Cell(77, 10, self::l('SLIP #').' '.sprintf('%06d', self::$orderSlip->id), 0, 1, 'R');
 		elseif (self::$delivery)
-			$this->Cell(80, 10, self::l('DELIVERY SLIP #').Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery), 0, 0, 'C');
+			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery), 0, 1, 'R');
 		else
-			$this->Cell(80, 10, self::l('INVOICE #').Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number), 0, 0, 'C');
-	}
+			$this->Cell(77, 10, self::l('INVOICE #').' '.Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
+   }
 
 	/**
 	* Invoice footer
 	*/
 	public function Footer()
 	{
-		$this->SetY(-26);
+		$this->SetY(-33);
+		$this->SetFont(self::fontname(), '', 7);
+		$this->Cell(190, 5, ' '."\n".'P. '.$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
 
 		/*
 		 * Display a message for customer
@@ -116,7 +172,8 @@ class PDF extends FPDF
 			$this->Cell(0, 10, $textFooter, 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');			
 			$this->Ln(4);
 			$this->Cell(0, 10, Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_SHOP_NAME')).' '.self::l('website using your e-mail address and password (which you created while placing your first order).'), 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
-		} else
+		}
+		else
 			$this->Ln(4);
 		$this->Ln(9);
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
@@ -145,10 +202,9 @@ class PDF extends FPDF
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf);
 		}
-
 		return $pdf->Output('invoices.pdf', 'D');
 	}
-	
+
 	public static function multipleDelivery($slips)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
@@ -158,16 +214,17 @@ class PDF extends FPDF
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf, false, $orderObj->delivery_number);
 		}
-
 		return $pdf->Output('invoices.pdf', 'D');
 	}
-	
+
 	public static function orderReturn($orderReturn, $mode = 'D', $multiple = false, &$pdf = NULL)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
 		self::$orderReturn = $orderReturn;
 		$order = new Order($orderReturn->id_order);
 		self::$order = $order;
+		$pdf->SetAutoPageBreak(true, 35);
+		$pdf->StartPageGroup();
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 		
@@ -182,9 +239,8 @@ class PDF extends FPDF
 		foreach ($arrayConf as $key)
 			if (!isset($conf[$key]))
 				$conf[$key] = '';
-		
-		$width = 100;
 
+		$width = 100;
 		$pdf->SetX(10);
 		$pdf->SetY(25);
 		$pdf->SetFont(self::fontname(), '', 9);
@@ -206,7 +262,7 @@ class PDF extends FPDF
 		$pdf->Cell($width, 10, $delivery_address->postcode.' '.Tools::iconv('utf-8', self::encoding(), $delivery_address->city), 0, 'L');
 		$pdf->Ln(5);
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $delivery_address->country.($deliveryState ? ' - '.$deliveryState->name : '')), 0, 'L');
-		
+
 		/*
 		 * display order information
 		 */
@@ -244,7 +300,7 @@ class PDF extends FPDF
 		$pdf->SetFont(self::fontname(), 'B', 10);
 		$pdf->Cell(0, 6, self::l('If the conditions of return listed above are not respected,'), 'TRL', 2, 'C');
 		$pdf->Cell(0, 6, self::l('we reserve the right to refuse your package and/or reimbursement.'), 'BRL', 2, 'C');
-		
+
 		return $pdf->Output(sprintf('%06d', self::$order->id).'.pdf', $mode);
 	}
 	
@@ -272,7 +328,7 @@ class PDF extends FPDF
 		foreach ($products AS $product)
 		{
 			$before = $this->GetY();
-            $this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+			$this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX() + $w[0], $this->GetY() - $lineSize);
 			$this->Cell($w[1], $lineSize, ($product['product_reference'] != '' ? $product['product_reference'] : '---'), 'B');
@@ -301,8 +357,10 @@ class PDF extends FPDF
 		if (!$multiple)
 			$pdf = new PDF('P', 'mm', 'A4');
 
+		$pdf->SetAutoPageBreak(true, 35);
+		$pdf->StartPageGroup();
+
 		self::$currency = new Currency(intval(self::$order->id_currency));
-		self::$currency->sign = Tools::iconv('utf-8', self::encoding(), self::$currency->sign);
 
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
@@ -383,7 +441,7 @@ class PDF extends FPDF
 		$pdf->Cell(0, 6, Tools::iconv('utf-8', self::encoding(), $order->payment), 'LRB');
 		$pdf->Ln(15);
 		$pdf->ProdTab((self::$delivery ? true : ''));
-		
+
 		/* Exit if delivery */
 		if (!self::$delivery)
 		{
@@ -405,35 +463,35 @@ class PDF extends FPDF
 				$pdf->Cell(0, 0, (!self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_discounts, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
-			
+
 			if(isset(self::$order->total_wrapping) and (floatval(self::$order->total_wrapping) > 0))
 			{
-	            $pdf->Cell($width, 0, self::l('Total wrapping').' : ', 0, 0, 'R');
-	            $pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
-	            $pdf->Ln(4);
-	        }		
-			
+				$pdf->Cell($width, 0, self::l('Total wrapping').' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+			}
+
 			if (self::$order->total_shipping != '0.00' AND (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost)))
 			{
 				$pdf->Cell($width, 0, self::l('Total shipping').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
-			
+
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
 				$pdf->Cell($width, 0, self::l('Total with Tax').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$orderSlip ? ($totalProductsTi + self::$order->total_discounts + self::$order->total_shipping) : self::$order->total_paid), self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
-			
+
 			if ($ecotax != '0.00' AND !self::$orderSlip)
 			{
 				$pdf->Cell($width, 0, self::l('Eco-participation').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($ecotax, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(5);
 			}
-			
+
 			$pdf->TaxTab();
 		}
 		Hook::PDFInvoice($pdf, self::$order->id);
@@ -442,13 +500,8 @@ class PDF extends FPDF
 			return $pdf->Output(sprintf('%06d', self::$order->id).'.pdf', $mode);
 	}
 
-	/**
-	* Product table with price, quantities...
-	*/
-	public function ProdTab($delivery = false)
+	public function ProdTabHeader($delivery = false)
 	{
-		global $ecotax;
-
 		if (!$delivery)
 		{
 			$header = array(
@@ -478,7 +531,20 @@ class PDF extends FPDF
 			$this->Cell($w[$i], 5, $header[$i][0], 'T', 0, $header[$i][1], 1);
 		$this->Ln();
 		$this->SetFont(self::fontname(), '', 8);
+	}
 
+	/**
+	* Product table with price, quantities...
+	*/
+	public function ProdTab($delivery = false)
+	{
+		global $ecotax;
+
+		if (!$delivery)
+			$w = array(90, 15, 25, 10, 25, 25);
+		else
+			$w = array(120, 30, 10);
+		self::ProdTabHeader($delivery);
 		if (isset(self::$order->products) AND sizeof(self::$order->products))
 			$products = self::$order->products;
 		else
@@ -486,10 +552,29 @@ class PDF extends FPDF
 		$ecotax = 0;
 		$customizedDatas = Product::getAllCustomizedDatas(intval(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
+
+		$counter = 0;
+		$lines = 25;
+		$lineSize = 0;
+		$line = 0;
+
 		$isInPreparation = self::$order->isInPreparation();
+
 		foreach($products AS $product)
 			if (!$delivery OR ($isInPreparation AND intval($product['product_quantity']) - intval($product['product_quantity_refunded']) > 0))
 			{
+				if($counter >= $lines)
+				{
+					$this->AddPage();
+					$this->Ln();
+					self::ProdTabHeader($delivery);
+					$lineSize = 0;
+					$counter = 0;
+					$lines = 40;
+					$line++;
+				}
+				$counter = $counter + ($lineSize / 5) ;
+
 				$i = -1;
 				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
 				$unit_without_tax = $product['product_price'];
@@ -498,7 +583,7 @@ class PDF extends FPDF
 				$productQuantity = $isInPreparation ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
 				if ($productQuantity <= 0)
 					continue ;
-	
+
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
 					if ($delivery)
@@ -671,7 +756,7 @@ class PDF extends FPDF
 		if (self::$order->total_wrapping && self::$order->total_wrapping != '0.00')
 		{
 			$total_wrapping_wt = self::$order->total_wrapping / (1 + ($tax_rate / 100));
-	        $before = $this->GetY();
+			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Wrapping'), 0, 0, 'R');
@@ -701,22 +786,20 @@ class PDF extends FPDF
 		return (Tools::iconv('utf-8', self::encoding(), $str));
 	}
 
-    static private function encoding()
-    {
+	static private function encoding()
+	{
 		return (isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['encoding']) ? self::$_pdfparams[self::$_iso]['encoding'] : 'iso-8859-1';
 	}
 
-    static private function embedfont()
-    {
+	static private function embedfont()
+	{
 		return (((isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['font']) AND !in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts)) ? self::$_pdfparams[self::$_iso]['font'] : false);
 	}
 
-    static private function fontname()
-    {
+	static private function fontname()
+	{
 		$font = self::embedfont();
 		return $font ? $font : 'Arial';
  	}
 	
 }
-
-?>
