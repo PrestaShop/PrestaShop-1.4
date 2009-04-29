@@ -108,7 +108,7 @@ class Paypal extends PaymentModule
 		<b>'.$this->l('This module allows you to accept payments by PayPal.').'</b><br /><br />
 		'.$this->l('If the client chooses this payment mode, your PayPal account will be automatically credited.').'<br />
 		'.$this->l('You need to configure your PayPal account first before using this module.').'
-		<br /><br /><br /><br /><br /><br /><br />';
+		<div style="clear:both;">&nbsp;</div>';
 	}
 
 	public function displayFormSettings()

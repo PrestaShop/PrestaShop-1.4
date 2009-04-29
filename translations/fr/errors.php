@@ -145,6 +145,7 @@ $_ERRORS['38d1ae87858ec02bb53357f11e5c8730'] = 'une erreur s\'est produite penda
 $_ERRORS['530f2f587616386e3086bf46d7f7f2bf'] = 'une erreur s\'est produite pendant la suppression de l\'image';
 $_ERRORS['e4ad8bbe1b2e3424a9093dd1737a3537'] = 'une erreur s\'est produite pendant la suppression de l\'image';
 $_ERRORS['95c3c63a54d0cf5a232baf037b63daaa'] = 'une erreur est survenue lors du changement de mot de passe';
+$_ERRORS['2ca546ea5aee7ef786fb7b5f2c455691'] = 'une erreur est survenue lors de l\'ajout des produits au pack';
 $_ERRORS['38f2f63536e5a88bb59a8901ef9eb219'] = 'une erreur s\'est produite lors de l\'ajout de tags';
 $_ERRORS['ea7766819f0e302a8df983e49f413995'] = 'une erreur est survenue lors du changement de statut et/ou de l\'envoi de l\'e-mail au client';
 $_ERRORS['9f5f57d83cbd4706e35376923e2db02c'] = 'Une erreur est survenue lors de la copie de l\'image';
