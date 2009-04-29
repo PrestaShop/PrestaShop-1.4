@@ -30,7 +30,7 @@ $(document).ready(function()
 				var dest = 'ajax.php';		
 		       	var way = (originalOrder.indexOf(row.id) < $.tableDnD.serialize().indexOf(row.id))? 1 : 0;
 		       	var ids = row.id.split('_');
-				var table = $('#' + table.id);
+				var tableDrag = $('#' + table.id);
 				var params = '';
 							
 				if (come_from == 'AdminModulesPositions')
@@ -48,22 +48,23 @@ $(document).ready(function()
 					{
 						if (come_from == 'AdminModulesPositions')
 						{
-							table.find('tr').removeClass('alt_row');
-				       		table.find('tr' + reOrder).addClass('alt_row');
-							table.find('td.positions').each(function(i){
+							tableDrag.find('tr').removeClass('alt_row');
+				       		tableDrag.find('tr' + reOrder).addClass('alt_row');
+							tableDrag.find('td.positions').each(function(i)
+							{
 								$(this).html(i+1);
 							});
-							table.find('td.dragHandle a:hidden').show();
-							table.find('td.dragHandle:first a:even').hide();
-							table.find('td.dragHandle:last a:odd').hide();
+							tableDrag.find('td.dragHandle a:hidden').show();
+							tableDrag.find('td.dragHandle:first a:even').hide();
+							tableDrag.find('td.dragHandle:last a:odd').hide();
 						}
 						else if (come_from == 'product')
 						{
-							table.find('tr:not(".nodrag")').removeClass('alt_row');
-				       		table.find('tr:not(".nodrag"):odd').addClass('alt_row');
-							table.find('tr td.dragHandle a:hidden').show();
-							table.find('tr td.dragHandle:first a:odd').hide();
-							table.find('tr td.dragHandle:last a:even').hide()							
+							tableDrag.find('tr').not('.nodrag').removeClass('alt_row');
+				       		tableDrag.find('tr:not(".nodrag"):odd').addClass('alt_row');
+							tableDrag.find('tr td.dragHandle a:hidden').show();
+							tableDrag.find('tr td.dragHandle:first a:odd').hide();
+							tableDrag.find('tr td.dragHandle:last a:even').hide()							
 						}		
 					}
 				});
