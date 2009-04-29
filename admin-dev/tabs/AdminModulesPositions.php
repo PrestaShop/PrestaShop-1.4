@@ -152,6 +152,7 @@ class AdminModulesPositions extends AdminTab
 		<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
 		<script type="text/javascript">
 			var token = \''.$this->token.'\';
+			var come_from = \'AdminModulesPositions\';
 		</script>
 		<script type="text/javascript" src="../js/admin-dnd.js"></script>
 		';

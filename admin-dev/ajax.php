@@ -108,20 +108,37 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 		$jsonArray[] = '{field: \''.addslashes($field).'\'}';
 	die('['.implode(',', $jsonArray).']');
 }
-if (array_key_exists('ajaxModulesPositions', $_GET))
+
+if (array_key_exists('ajaxModulesPositions', $_POST))
 {				
 		$id_module = intval(Tools::getValue('id_module'));
 		$id_hook = intval(Tools::getValue('id_hook'));
-		$way = intval(Tools::getValue('way'));
-		$module = Module::getInstanceById($id_module);
+		$way = intval(Tools::getValue('way'));	
 		$positions = Tools::getValue(strval($id_hook));
-		$position = (is_array($positions))? array_search($id_hook.'_'.$id_module, $positions): null;	
+		$position = (is_array($positions)) ? array_search($id_hook.'_'.$id_module, $positions) : null;
+		$module = Module::getInstanceById($id_module);
 		if (Validate::isLoadedObject($module))
 			if (die($module->updatePosition($id_hook, $way, $position)));
 			else
 				die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
 		else
-			die('{\'hasError\' : true, errors : \'Tis module can not be loaded\'}');
+			die('{\'hasError\' : true, errors : \'This module can not be loaded\'}');
+}
+
+if (array_key_exists('ajaxProductsPositions', $_POST))
+{				
+		$way = intval(Tools::getValue('way'));
+		$id_product = intval(Tools::getValue('id_product'));
+		$id_category = intval(Tools::getValue('id_category'));
+		$positions = Tools::getValue(strval($id_category));
+		$position = (is_array($positions)) ? array_search($id_category.'_'.$id_product, $positions) : null;
+		$product = new Product($id_product);
+		if (Validate::isLoadedObject($product))
+			if (die($product->updatePosition($way, $position)));
+			else
+				die('{\'hasError\' : true, errors : \'Can not update product position\'}');	
+		else
+			die('{\'hasError\' : true, errors : \'This product can not be loaded\'}');
 }
 
 if (isset($_GET['ajaxProductPackItems']))

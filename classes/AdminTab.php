@@ -938,7 +938,15 @@ abstract class AdminTab
 				<td>';
 
 		/* Display column names and arrows for ordering (ASC, DESC) */
-		echo '<table class="table tableDnD" cellpadding="0" cellspacing="0"><tr  class="nodrag nodrop">';
+		echo '
+		<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
+		<script type="text/javascript">
+			var token = \''.($token!=NULL ? $token : $this->token).'\';
+			var come_from = \''.$this->table.'\';
+		</script>
+		<script type="text/javascript" src="../js/admin-dnd.js"></script>
+		';
+		echo '<table'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category'))) ? $id_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_product' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0"><tr class="nodrag nodrop">';
 		if ($this->delete)
 			echo '<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" /></th>';
 		foreach ($this->fieldsDisplay AS $key => $params)
@@ -1080,11 +1088,10 @@ abstract class AdminTab
 			sort($positions);
 		}
 		if ($this->_list)
-			
-			foreach ($this->_list AS $tr)
+			foreach ($this->_list AS $i => $tr)
 			{
 				$id = $tr[$this->identifier];
-				echo '<tr id="tr_'.$id.'"'.($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>';
+				echo '<tr'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category'))) ? $id_category : '').'_'.$id.'"' : '').($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>';
 				if ($this->delete)
 					echo '<td class="center"><input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" /></td>';
 
@@ -1093,7 +1100,7 @@ abstract class AdminTab
 					$tmp = explode('!', $key);
 					$key = isset($tmp[1]) ? $tmp[1] : $tmp[0];
 					echo '
-					<td '.(isset($params['position'])? ' id="td_'.$id.'"' : '').' class="pointer'.(isset($params['position'])? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
+					<td '.(isset($params['position']) ? ' id="td_'.(($id_category = intval(Tools::getValue('id_category'))) ? $id_category : '').'_'.$id.'"' : '').' class="pointer'.(isset($params['position']) ? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
 					if (!isset($params['position']))
 					{
 						echo ($this->view
@@ -1101,7 +1108,6 @@ abstract class AdminTab
 						: ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'"').'>'.
 						(isset($params['prefix']) ? $params['prefix'] : '');
 					}
-
 					if (isset($params['active']) AND isset($tr[$key]))
 						echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$params['active'].
 						((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
@@ -1112,20 +1118,14 @@ abstract class AdminTab
 						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" />';
 					elseif (isset($params['position']))
 					{
-						if ($tr[$key] != $positions[sizeof($positions) - 1] OR $positions[sizeof($positions) - 1] <= intval($this->_listTotal))
-						{
-							echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=1'.
+						echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1] OR $positions[sizeof($positions) - 1] <= intval($this->_listTotal)) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=1'.
 								((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 								<img src="../img/admin/down.gif"
 								alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>';
-						}
-						if ($tr[$key] != $positions[0] OR intval($positions[0]) > 1)
-						{
-							echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=0'.
+						echo '<a'.(!($tr[$key] != $positions[0]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=0'.
 								((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 								<img src="../img/admin/up.gif"
 								alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>';
-						}
 					}
 					elseif (isset($params['image']))
 					{
