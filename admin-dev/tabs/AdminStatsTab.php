@@ -130,7 +130,7 @@ abstract class AdminStatsTab extends AdminPreferences
 
 		includeDatepicker(array('datepickerFrom', 'datepickerTo'));
 		return '
-		<fieldset style="width: 200px;"><legend><img src="../img/admin/date.png" /> '.$translations['Calendar'].'</legend>
+		<fieldset style="width: 200px; font-size:13px;"><legend><img src="../img/admin/date.png" /> '.$translations['Calendar'].'</legend>
 			<div>
 				<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 					<input type="submit" name="submitDateToday" class="button" value="'.$translations['Today'].'">

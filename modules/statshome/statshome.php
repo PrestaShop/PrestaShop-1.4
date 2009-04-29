@@ -85,7 +85,7 @@ class StatsHome extends Module
 		include_once(dirname(__FILE__).'/../..'.$this->_adminPath.'/tabs/AdminStats.php');
 		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Today' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
 		$this->_html .= '<div class="space"></div>
-				<p style=" font-weight: bold">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
+				<p style=" font-weight: bold ">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
 			</div>
 		</fieldset>
 		<div class="clear space"><br /><br /></div>';
