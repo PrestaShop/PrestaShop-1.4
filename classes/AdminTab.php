@@ -1118,6 +1118,7 @@ abstract class AdminTab
 						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" />';
 					elseif (isset($params['position']))
 					{
+						echo '>';
 						echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1] OR $positions[sizeof($positions) - 1] <= intval($this->_listTotal)) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=1'.
 								((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 								<img src="../img/admin/down.gif"
