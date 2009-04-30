@@ -561,7 +561,7 @@ class PDF extends PDF_PageGroup
 		$isInPreparation = self::$order->isInPreparation();
 
 		foreach($products AS $product)
-			if (!$delivery OR ($isInPreparation AND intval($product['product_quantity']) - intval($product['product_quantity_refunded']) > 0))
+			if (!$delivery OR (intval($product['product_quantity']) - intval($product['product_quantity_refunded']) > 0))
 			{
 				if($counter >= $lines)
 				{
@@ -580,7 +580,7 @@ class PDF extends PDF_PageGroup
 				$unit_without_tax = $product['product_price'];
 				$total_without_tax = $product['total_price'];
 				$total_with_tax = $product['total_wt'];
-				$productQuantity = $isInPreparation ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
+				$productQuantity = $delivery ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
 				if ($productQuantity <= 0)
 					continue ;
 
