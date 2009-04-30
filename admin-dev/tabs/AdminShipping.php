@@ -141,17 +141,14 @@ class AdminShipping extends AdminTab
 		foreach ($confKeys AS $key => $confKey)
 		{
 			$postValue = Tools::getValue($key);
-
+			$sign_left = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('left') : '');
+			$sign_right = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('right') : (is_string($confKey['suffix']) ? '&nbsp;'.$confKey['suffix'] : ''));
 			echo '
 			<label class="clear">'.$confKey['title'].':</label>
 			<div class="margin-form">';
-			if (is_object($confKey['suffix']) AND $confKey['suffix']->format == 1)
-				echo $confKey['suffix']->sign.'&nbsp;';
+			echo $sign_left;
 			echo '<input size="5" type="text" name="'.$key.'" value="'.(($postValue != false OR (string)$postValue == '0') ? $postValue : $confValues[$key]).'" />';
-			if (is_object($confKey['suffix']) AND $confKey['suffix']->format == 2)
-				echo '&nbsp;'.$confKey['suffix']->sign;
-			elseif (is_string($confKey['suffix']))
-				echo '&nbsp;'.$confKey['suffix'];
+			echo $sign_right;
 			echo '</div>';
 		}
 
