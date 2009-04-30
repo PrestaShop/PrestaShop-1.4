@@ -349,7 +349,7 @@ class AdminImages extends AdminTab
 				if (file_exists(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 					foreach ($result AS $k => $module)
 						if ($moduleInstance = Module::getInstanceByName($module['name']) AND is_callable(array($moduleInstance, 'hookwatermark')))
-							$output .= call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $image['id_image'], 'id_product' => $image['id_product']));
+							call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $image['id_image'], 'id_product' => $image['id_product']));
 
 		if ($errors)
 			$this->_errors[] = Tools::displayError('Cannot write product image. Please check the folder\'s writing permissions.');

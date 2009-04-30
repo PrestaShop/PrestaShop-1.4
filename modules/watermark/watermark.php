@@ -190,35 +190,35 @@ class Watermark extends Module
 		$file = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-watermark.jpg';
 		
 		//first make a watermark image
-		$this->watermarkByImage(_PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'.jpg',  dirname(__FILE__).'/watermark.gif', $file['tmp_name'], 23, 0, 0, 'right');
-		
+		$return = $this->watermarkByImage(_PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'.jpg',  dirname(__FILE__).'/watermark.gif', $file, 23, 0, 0, 'right');
+
 		//go through file formats defined for watermark and resize them
 		foreach($this->imageTypes as $imageType)
 		{
 		    $newFile = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-'.stripslashes($imageType['name']).'.jpg';
 		    if (!imageResize($file, $newFile, intval($imageType['width']), intval($imageType['height'])))
-				$errors = true;    
+				$return = false;    
 		}
-		return $errors;
+		return $return;
 	}
 
 	private function watermarkByImage($imagepath, $watermarkpath, $outputpath)
 	{	
-		$Xoffset = 0;
-		$Yoffset = 0;
-		$image = imagecreatefromjpeg($imagepath); 
-		$imagew = imagecreatefromgif($watermarkpath);
+		$Xoffset = $Yoffset = $xpos = $ypos = 0;
+		if (!$image = imagecreatefromjpeg($imagepath))
+			return false;
+		if (!$imagew = imagecreatefromgif($watermarkpath))
+			return false;
 		list($watermarkWidth, $watermarkHeight) = getimagesize($watermarkpath); 
 		list($imageWidth, $imageHeight) = getimagesize($imagepath); 
-		$xpos = 0; 
-		$ypos = 0;
 		if ($this->xAlign == "middle") { $xpos = $imageWidth/2 - $watermarkWidth/2 + $Xoffset; } 
 		if ($this->xAlign == "left") { $xpos = 0 + $Xoffset; } 
 		if ($this->xAlign == "right") { $xpos = $imageWidth - $watermarkWidth - $Xoffset; } 
 		if ($this->yAlign == "middle") { $ypos = $imageHeight/2 - $watermarkHeight/2 + $Yoffset; } 
 		if ($this->yAlign == "top") { $ypos = 0 + $Yoffset; } 
 		if ($this->yAlign == "bottom") { $ypos = $imageHeight - $watermarkHeight - $Yoffset; } 
-		imagecopymerge($image, $imagew, $xpos, $ypos, 0, 0, $watermarkWidth, $watermarkHeight, $this->transparency); 
+		if (!imagecopymerge($image, $imagew, $xpos, $ypos, 0, 0, $watermarkWidth, $watermarkHeight, $this->transparency))
+			return false;
 		return imagejpeg($image, $outputpath, 100); 
 	} 
 }
