@@ -42,6 +42,7 @@ br.clear {
 	font-size:0;
 	height:0;
 }
+noscript ul {list-style-type:none; background:black; color:white; padding:10px; border:1px solid gray;}
 
 /* Footer links */
 ul.footer_links{
@@ -191,7 +192,6 @@ h1#logo {
 }
 #header {
 	float: left;
-	height:100px;
 	width: 71%;
 	text-align: right;
 }
@@ -2207,6 +2207,68 @@ ul.typedText {
 #productscategory_scroll_right{
 	background-image: url('../img/thumbs_right.gif');
 }
+
+/* module blockmenutop */
+#menu-top {
+	clear:both;
+	width:100%;
+	height:40px;
+}
+
+#menu-top dl{
+	float:left;
+	position:relative;
+	padding-right:10px;
+}
+
+#menu-top dl dt{
+	line-height:30px;
+	height:30px;
+}
+
+#menu-top dl dt a{
+	text-decoration:none;
+	background:#eeeeee;
+	display:block;
+	height:30px;
+	width:100px;
+	padding-left:5px;
+	padding-right:5px;
+}
+
+#menu-top dl dt a:hover{
+	background:#ccc;
+}
+
+#menu-top dl:hover dd{
+	display:block;
+}
+
+#menu-top dl dd{
+	display:none;
+	position:absolute;
+	width:100px;
+}
+
+#menu-top dl dd ul{
+	width:100%;
+	text-align:left;
+	background:#cccccc;
+}
+
+#menu-top dl dd ul li a{
+	display:block;
+	background:#eee;
+	width:100%;
+	text-decoration:none;
+	padding:10px;
+}
+
+#menu-top dl dd ul li a:hover{
+	background:#ccc;
+}
+
+
 
 /* module blockwishlist */
 #wishlist_block #wishlist_block_list dl.products {

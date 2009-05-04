@@ -39,6 +39,7 @@
 	
 	<body {if $page_name}id="{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
 	{if !$content_only}
+		<noscript><ul><li>{l s='This shop requires JavaScript to run correctly. Please activate JavaScript in your browser.'}</li></ul></noscript>
 		<div id="page">
 
 			<!-- Header -->
