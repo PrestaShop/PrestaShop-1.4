@@ -1,0 +1,1 @@
+<a href="modules/paypalapi/express/submit.php"><img src="modules/paypalapi/express/button.gif" alt="paypal" title="{l s='Pay with PayPal Express Checkout' mod='paypalapi'}" /></a>
