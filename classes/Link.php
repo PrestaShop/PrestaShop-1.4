@@ -174,7 +174,7 @@ class Link
 	
 	public function addSortDetails($url, $orderby, $orderway)
 	{
-		return $url.(!strstr($url, '?') ? '?' : '&amp;').'orderby='.urlencode($orderby).'&amp;orderway='.urlencode($orderway);
+		return $url.(!strstr($url, '?') ? '?' : '&').'orderby='.urlencode($orderby).'&orderway='.urlencode($orderway);
 	}
 }
 
