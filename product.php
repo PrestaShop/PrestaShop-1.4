@@ -302,8 +302,12 @@ $smarty->assign(array(
 
 if (file_exists(_PS_THEME_DIR_.'thickbox.tpl'))
 	$smarty->display(_PS_THEME_DIR_.'thickbox.tpl');
-
-$smarty->assign(array('currencySign' => $currency->sign, 'currencyRate' => $currency->conversion_rate, 'currencyFormat' => $currency->format));
+$smarty->assign(array(
+	'currencySign' => $currency->sign,
+	'currencyRate' => $currency->conversion_rate,
+	'currencyFormat' => $currency->format,
+	'currencyBlank' => $currency->blank)
+	);
 $smarty->display(_PS_THEME_DIR_.'product.tpl');
 
 include(dirname(__FILE__).'/footer.php');
