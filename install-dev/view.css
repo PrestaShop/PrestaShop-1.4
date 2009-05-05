@@ -481,7 +481,7 @@ html>body div#PrestaShopLogo {
 }
 
 div.updaterVersion, div.installerVersion{
-	height:37px;
+	height:42px;
 	text-indent:-1000px;
 	margin:10px auto;
 }
