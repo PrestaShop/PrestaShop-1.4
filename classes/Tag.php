@@ -20,10 +20,8 @@ class Tag extends ObjectModel
  	/** @var string Name */
 	public 		$name;
 	
- 	protected 	$fieldsRequired = array('id_lang');
- 	protected 	$fieldsValidate = array('id_lang' => 'isUnsignedId');
- 	protected	$fieldsRequiredLang = array('name');
- 	protected	$fieldsValidateLang = array('name' => 'isGenericName');
+ 	protected 	$fieldsRequired = array('id_lang', 'name');
+ 	protected 	$fieldsValidate = array('id_lang' => 'isUnsignedId', 'name' => 'isGenericName');
 
 	protected 	$table = 'tag';
 	protected 	$identifier = 'id_tag';
