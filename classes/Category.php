@@ -313,15 +313,13 @@ class		Category extends ObjectModel
 		ORDER BY `name` ASC');
 
 		/* Modify SQL result */
-		$resultsArray = array();
-		foreach ($result AS $row)
+		foreach ($result AS &$row)
 		{
 			$row['name'] = Category::hideCategoryPosition($row['name']);
 			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? $row['id_category'] : Language::getIsoById($cookie->id_lang).'-default';
 			$row['legend'] = 'no picture';
-			$resultsArray[] = $row;
 		}
-		return $resultsArray;
+		return $result;
 	}
 	
 	private static function getAllSubCats(&$all_cats, $id_cat, $id_lang)
