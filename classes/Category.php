@@ -305,7 +305,7 @@ class		Category extends ObjectModel
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance()->ExecuteS('
-		SELECT *
+		SELECT c.*, cl.id_lang, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description 
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($id_lang).')
 		WHERE `id_parent` = '.intval($this->id).'
