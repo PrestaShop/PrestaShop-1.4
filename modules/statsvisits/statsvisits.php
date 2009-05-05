@@ -36,20 +36,18 @@ class StatsVisits extends ModuleGraph
 	
 	public function getTotalVisits()
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(c.`id_connections`) AS total
+		return Db::getInstance()->getValue('
+		SELECT COUNT(c.`id_connections`)
 		FROM `'._DB_PREFIX_.'connections` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
-		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
 	public function getTotalGuests()
 	{
-		$result = Db::getInstance()->ExecuteS('
-		SELECT COUNT(DISTINCT c.`id_guest`) AS total
+		return Db::getInstance()->getValue('
+		SELECT COUNT(DISTINCT c.`id_guest`)
 		FROM `'._DB_PREFIX_.'connections` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
-		return isset($result['total']) ? $result['total'] : 0;
 	}
 	
 	public function hookAdminStatsModules($params)
