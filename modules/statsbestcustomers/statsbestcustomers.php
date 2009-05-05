@@ -129,17 +129,19 @@ class StatsBestCustomers extends ModuleGrid
 		$this->_query = '
 		SELECT	c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
 			COUNT(DISTINCT co.`id_connections`) AS totalVisits,
-			COUNT(cop.`id_page`) AS totalPageViewed,
-			IFNULL(IFNULL(SUM(o.`total_paid_real`), 0) / cu.conversion_rate, 0) AS totalMoneySpent
+			COUNT(cop.`id_page`) AS totalPageViewed, (
+				SELECT IFNULL(IFNULL(SUM(o.`total_paid_real`), 0) / cu.conversion_rate, 0)
+				FROM `'._DB_PREFIX_.'orders` o
+				LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
+				WHERE o.id_customer = c.id_customer
+				AND o.invoice_date BETWEEN '.$this->getDate().'
+				AND o.valid
+			) AS totalMoneySpent
 		FROM `'._DB_PREFIX_.'customer` c
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.`id_customer` = g.`id_customer`
 		LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.`id_guest` = co.`id_guest`
 		LEFT JOIN `'._DB_PREFIX_.'connections_page` cop ON co.`id_connections` = cop.`id_connections`
-		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.id_customer = c.id_customer
-		LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 		WHERE co.date_add BETWEEN '.$this->getDate().'
-		AND o.invoice_date BETWEEN '.$this->getDate().'
-		AND o.valid
 		GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))
 		{
