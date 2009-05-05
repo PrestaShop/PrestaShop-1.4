@@ -131,7 +131,7 @@ class Search
 		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 1;
 		
-		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderBy($orderWay))
+		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
 			
 		$whereArray = array();
