@@ -14,7 +14,7 @@
 {else}
 {if isset($lastProductAdded) AND $lastProductAdded}
 	{foreach from=$products item=product}
-		{if $product.id_product == $lastProductAdded}
+		{if $product.id_product == $lastProductAdded.id_product AND (!$product.id_product_attribute OR ($product.id_product_attribute == $lastProductAdded.id_product_attribute))}
 			<table class="std cart_last_product">
 				<thead>
 					<tr>

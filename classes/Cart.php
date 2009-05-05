@@ -178,13 +178,13 @@ class		Cart extends ObjectModel
 	public function getLastProduct()
 	{
 		$sql = '
-			SELECT `id_product`
+			SELECT `id_product`, `id_product_attribute`
 			FROM `'._DB_PREFIX_.'cart_product`
 			WHERE `id_cart` = '.intval($this->id).'
 			ORDER BY `date_add` DESC';
 		$result = Db::getInstance()->GetRow($sql);
 		if ($result AND isset($result['id_product']) AND $result['id_product'])
-			return $result['id_product'];
+			return $result;
 		return false;
 	}
 
