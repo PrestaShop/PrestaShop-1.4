@@ -264,7 +264,7 @@ function displayImage(domAAroundImgThumb)
         {
             var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
             $('#bigpic').fadeOut('fast', function(){
-                $(this).attr('src', newSrc);
+                $(this).attr('src', newSrc).show();
                 if (jqZoomEnabled)
 	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
                 $(this).load(function() {
