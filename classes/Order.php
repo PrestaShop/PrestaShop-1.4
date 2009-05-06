@@ -310,15 +310,18 @@ class		Order extends ObjectModel
 		$products = $this->getProducts();
 		if (count($products) < 1)
 			return false;
-		$virtual = 1;
+		$virtual = false;
 		foreach ($products AS $product)
 		{
-			$isVirtualProduct = Validate::isUnsignedInt(ProductDownload::getIdFromIdProduct(intval($product['product_id'])));
-			if ($strict === false AND $isVirtualProduct)
-				return true;
-			$virtual &= ($isVirtualProduct ? true : false);
+			$pd = ProductDownload::getIdFromIdProduct(intval($product['product_id']));
+			if ($pd AND Validate::isUnsignedInt($pd) AND $product['download_hash'])
+			{
+				if ($strict === false)
+					return true;
+				$virtual &= true;
+			}
 		}
-		return((bool) $virtual);
+		return $virtual;
 	}
 
 
