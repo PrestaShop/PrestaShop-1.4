@@ -679,9 +679,7 @@ class AdminImport extends AdminTab
 				$product->updateCategories(array_map('intval', $product->id_category));
 				
 				$features = get_object_vars($product);
-				
 				foreach ($features AS $feature => $value)
-				{
 					if (!strncmp($feature, '#F_', 3))
 					{
 						$feature_name = str_replace('#F_', '', $feature);
@@ -689,7 +687,6 @@ class AdminImport extends AdminTab
 						$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});
 						Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
 					}
-				}
 			}	
 		}
 		$this->closeCsvFile($handle);

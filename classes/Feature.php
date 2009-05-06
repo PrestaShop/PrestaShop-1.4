@@ -147,18 +147,16 @@ class		Feature extends ObjectModel
 	*/	
 	static public function addFeatureImport($name)
 	{
-		$rq = Db::getInstance()->ExecuteS('SELECT `id_feature` FROM '._DB_PREFIX_.'feature_lang WHERE lower(`name`) LIKE \''.utf8_encode(trim(pSQL($name))).'\' GROUP BY `id_feature` LIMIT 1');
-		if (!$id_feature = intval($rq[0]['id_feature']))
-		{
-			// Feature doesn't exist, create it
-			$feature = new Feature();
-			$languages = Language::getLanguages();
-			foreach ($languages as $language)
-				$feature->name[$language['id_lang']] = strval($name);
-			$feature->add();
-			return $feature->id;
-		}
-		return intval($id_feature);
+		$rq = Db::getInstance()->getRow('SELECT `id_feature` FROM '._DB_PREFIX_.'feature_lang WHERE lower(`name`) LIKE \''.utf8_encode(trim(pSQL($name))).'\' GROUP BY `id_feature`');
+		if (!empty($rq))
+			return intval($rq['id_feature']);
+		// Feature doesn't exist, create it
+		$feature = new Feature();
+		$languages = Language::getLanguages();
+		foreach ($languages as $language)
+			$feature->name[$language['id_lang']] = strval($name);
+		$feature->add();
+		return $feature->id;
 	}
 }
 ?>
