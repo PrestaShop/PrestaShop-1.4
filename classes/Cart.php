@@ -215,12 +215,14 @@ class		Cart extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = cp.`id_product_attribute`)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($this->id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = cp.`id_product` AND i.`cover` = 1)
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute_image` pai ON (pai.`id_product_attribute` = cp.`id_product_attribute`)
+		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = cp.`id_product` AND (IF(pai.`id_image`, pai.`id_image` = i.`id_image`, i.`cover` = 1)))
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($this->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($this->id_lang).')
 		WHERE `id_cart` = '.intval($this->id).'
 		'.($id_product ? ' AND cp.`id_product` = '.intval($id_product) : '').'
 		AND p.`id_product` IS NOT NULL
+		GROUP BY cp.`id_product_attribute`
 		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
 
