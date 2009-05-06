@@ -680,7 +680,7 @@ class AdminImport extends AdminTab
 				
 				$features = get_object_vars($product);
 				foreach ($features AS $feature => $value)
-					if (!strncmp($feature, '#F_', 3))
+					if (!strncmp($feature, '#F_', 3) AND Tools::strlen($product->{$feature}))
 					{
 						$feature_name = str_replace('#F_', '', $feature);
 						$id_feature = Feature::addFeatureImport(Tools::strtolower($feature_name));
