@@ -1810,16 +1810,22 @@ div.categTree {
 #primary_block #color_picker {
 	padding: 0.7em;
 	background: #e5e6e7 url('../img/product-short-desc-bg.gif') repeat-x top left;
-	height: 42px;
 	border: 1px #d0d3d8 solid;
 	margin-bottom: 1.5em;
 }
+#primary_block #color_to_pick_list {
+
+}
+#primary_block #color_to_pick_list li {
+	display: inline;
+	float: left;
+	margin: 0 0.4em 0.4em 0;
+}
 #primary_block a.color_pick {
+	display: block;
 	width: 20px;
 	height: 20px;
-	float: left;
 	border: 1px solid #666;
-	margin: 0 0.4em 0 0;
 	cursor: pointer;
 }
 #primary_block a.color_pick:hover {
