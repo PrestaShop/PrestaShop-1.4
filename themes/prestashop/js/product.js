@@ -288,6 +288,7 @@ function resetThumbnailScroll()
 		offset:0,
 		start:0,
 		stop:true,
+		onBefore:serialScrollFixLock,
 		duration:700,
 		step: 0,
 		lock: false,
@@ -296,7 +297,16 @@ function resetThumbnailScroll()
 	});
 
 }
-
+function serialScrollFixLock(event, targeted, scrolled, items, position)
+{
+	$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);
+	$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').fadeTo(0, position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 0 : 1);
+	if (position + serialScrollNbImagesDisplayed >= serialScrollNbImages)
+		$('a#view_scroll_right').hide();
+	else
+		$('a#view_scroll_right').show();
+	return true;
+}
 /* Change the current product images regarding the combination selected */
 function refreshProductImages(id_product_attribute)
 {
@@ -335,6 +345,10 @@ function refreshProductImages(id_product_attribute)
 //To do after loading HTML
 $(document).ready(function(){
 	
+	serialScrollNbImages = $('#thumbs_list_frame li').length;
+	serialScrollNbImagesDisplayed = 3;
+	serialScrollActualImagesIndex = 0;
+	
 	//init the serialScroll for thumbs
 	$('#thumbs_list').serialScroll({
 		items:'li',
@@ -344,6 +358,7 @@ $(document).ready(function(){
 		offset:0,
 		start:0,
 		stop:true,
+		onBefore:serialScrollFixLock,
 		duration:700,
 		step: 2,
 		lock: false,
