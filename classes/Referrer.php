@@ -239,10 +239,10 @@ class Referrer extends ObjectModel
 		{
 			Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'referrer_cache');
 			Db::getInstance()->Execute('
-			INSERT INTO ps_referrer_cache (id_referrer, id_connections_source) (
+			INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
 				SELECT id_referrer, id_connections_source
-				FROM ps_referrer r
-				LEFT JOIN ps_connections_source cs ON ('.self::$_join.')
+				FROM '._DB_PREFIX_.'referrer r
+				LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
 			)');
 		}
 		else
@@ -250,10 +250,10 @@ class Referrer extends ObjectModel
 			{
 				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.intval($row['id_referrer']));
 				Db::getInstance()->Execute('
-				INSERT INTO ps_referrer_cache (id_referrer, id_connections_source) (
+				INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
 					SELECT id_referrer, id_connections_source
-					FROM ps_referrer r
-					LEFT JOIN ps_connections_source cs ON ('.self::$_join.')
+					FROM '._DB_PREFIX_.'referrer r
+					LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
 					WHERE id_referrer = '.intval($row['id_referrer']).'
 				)');
 			}
