@@ -329,7 +329,7 @@ class		Product extends ObjectModel
 	 *
 	 * @param boolean $id_hook Hook ID
 	 */
-	public function cleanPositions($id_category)
+	static public function cleanPositions($id_category)
 	{
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_product`
