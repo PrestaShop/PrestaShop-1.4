@@ -263,15 +263,18 @@ function displayImage(domAAroundImgThumb)
         if (domAAroundImgThumb.attr('href'))
         {
             var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
-            $('#bigpic').fadeOut('fast', function(){
-                $(this).attr('src', newSrc).show();
-                if (jqZoomEnabled)
-	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
-                $(this).load(function() {
-                  $(this).fadeIn('fast')
-                })
-                ;
-            });
+            if ($('#bigpic').attr('src') != newSrc)
+			{ 
+	            $('#bigpic').fadeOut('fast', function(){
+	                $(this).attr('src', newSrc).show();
+	                if (jqZoomEnabled)
+		                $(this).attr('alt', domAAroundImgThumb.attr('href'));
+	                $(this).load(function() {
+	                  $(this).fadeIn('fast')
+	                })
+	                ;
+	            });
+	        }
             $('#views_block li a').removeClass('shown');
             $(domAAroundImgThumb).addClass('shown');
         }
