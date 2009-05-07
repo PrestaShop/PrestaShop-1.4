@@ -74,8 +74,8 @@ define('_PS_THEME_DIR_',            _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/');
 define('_PS_IMG_DIR_',              _PS_ROOT_DIR_.'/img/');
 define('_PS_CAT_IMG_DIR_',          _PS_IMG_DIR_.'c/');
 define('_PS_PROD_IMG_DIR_',         _PS_IMG_DIR_.'p/');
-define('_PS_SCENE_IMG_DIR_',         _PS_IMG_DIR_.'scenes/');
-define('_PS_SCENE_THUMB_IMG_DIR_',         _PS_IMG_DIR_.'scenes/thumbs/');
+define('_PS_SCENE_IMG_DIR_',        _PS_IMG_DIR_.'scenes/');
+define('_PS_SCENE_THUMB_IMG_DIR_',  _PS_IMG_DIR_.'scenes/thumbs/');
 define('_PS_MANU_IMG_DIR_',         _PS_IMG_DIR_.'m/');
 define('_PS_SHIP_IMG_DIR_',         _PS_IMG_DIR_.'s/');
 define('_PS_SUPP_IMG_DIR_',         _PS_IMG_DIR_.'su/');
@@ -153,5 +153,3 @@ if (function_exists('date_default_timezone_set'))
 
 /* Smarty */
 include(dirname(__FILE__).'/smarty.config.inc.php');
-
-?>
