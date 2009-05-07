@@ -96,9 +96,7 @@ $smarty->assign('navigationPipe', $navigationPipe);
 
 $smarty->assign(array(
 	'base_dir' => __PS_BASE_URI__,
-	'base_dir_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://'). ($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__,
-	/* If the current page need SSL encryption and the shop allow it, then active it */
-	'protocol' => $protocol,
+	'base_dir_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__,
 	'img_ps_dir' => _PS_IMG_,
 	'img_cat_dir' => _THEME_CAT_DIR_,
 	'img_lang_dir' => _THEME_LANG_DIR_,
