@@ -204,7 +204,7 @@ class		Cart extends ObjectModel
 		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`,
 		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`,
 		t.`id_tax`, tl.`name` AS tax, t.`rate`, pa.`price` AS price_attribute, pa.`quantity` AS quantity_attribute, 
-        pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category,
+        pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category, CONCAT(cp.`id_product`, cp.`id_product_attribute`) AS unique_id,
         IF (IFNULL(pa.`reference`, \'\') = \'\', p.`reference`, pa.`reference`) AS reference, 
         IF (IFNULL(pa.`supplier_reference`, \'\') = \'\', p.`supplier_reference`, pa.`supplier_reference`) AS supplier_reference, 
         IF (IFNULL(pa.`weight`, \'\') = \'\', p.`weight`, pa.`weight`) AS weight_attribute,
@@ -222,7 +222,7 @@ class		Cart extends ObjectModel
 		WHERE `id_cart` = '.intval($this->id).'
 		'.($id_product ? ' AND cp.`id_product` = '.intval($id_product) : '').'
 		AND p.`id_product` IS NOT NULL
-		GROUP BY cp.`id_product_attribute`
+		GROUP BY unique_id
 		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
 
