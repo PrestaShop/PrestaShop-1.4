@@ -150,6 +150,7 @@ if (isset($_GET['ajaxProductPackItems']))
 	FROM `'._DB_PREFIX_.'product` p
 	NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
 	WHERE pl.`id_lang` = '.intval(Tools::getValue('id_lang')).'
+	AND p.`id_product` NOT IN (SELECT DISTINCT id_product_pack FROM `'._DB_PREFIX_.'pack`)
 	AND p.`id_product` != '.intval(Tools::getValue('id_product')));
 	
 	foreach ($products AS $packItem)
