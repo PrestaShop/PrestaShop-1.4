@@ -273,28 +273,51 @@ function prepareInputsForHints() {
 	var found;
 
 	// For each input
-	for (var i=0; i<inputs.length; i++) {
+	for (var i=0; i<inputs.length; i++)
+	{
 		// on focus, show the hint
-		inputs[i].onfocus = function () {
+		inputs[i].onfocus = function ()
+		{
 			var id = helpboxParser(this);
 			if (id > -1)
 				this.parentNode.getElementsByTagName('span')[id].style.display = 'inline';
+		}
+		// when the cursor moves away from the field, hide the hint
+		inputs[i].onblur = function ()
+		{
+		 	var id = helpboxParser(this);
+		 	if (id > -1)
+				this.parentNode.getElementsByTagName('span')[id].style.display = 'none';
+		}
+	}
+}
+
+function prepareBoQuery() {
+	var inputs = document.getElementsByTagName('input');
+	var found;
+
+	// For each input
+	for (var i=0; i<inputs.length; i++)
+	{
+		// on focus, show the hint
+		inputs[i].onfocus = function ()
+		{
 			if($(this).attr('id') == 'bo_query')
 				if(!dontChange($('input#bo_query').val()))
 					$('input#bo_query').val('');
 		}
 		// when the cursor moves away from the field, hide the hint
-		inputs[i].onblur = function () {
-		 	var id = helpboxParser(this);
-		 	if (id > -1)
-				this.parentNode.getElementsByTagName('span')[id].style.display = 'none';
+		inputs[i].onblur = function ()
+		{
 			if($(this).attr('id') == 'bo_query' && $(this).val().length < 1)
-				$(this).val(search_texts[$('select#bo_search_type').val() - 1]);	
+				$(this).val(search_texts[$('select#bo_search_type').val() - 1]);
 		}
 	}
 }
+
 if (helpboxes)
 	addLoadEvent(prepareInputsForHints);
+addLoadEvent(prepareBoQuery);
 
 function changePic(id_product, id_image)
 {
