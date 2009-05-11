@@ -627,6 +627,10 @@ CREATE TABLE `PREFIX_manufacturer_lang` (
   `id_manufacturer` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
+  `short_description` varchar(254) default NULL,
+  `meta_title` varchar(254) default NULL,
+  `meta_keywords` varchar(254) default NULL,
+  `meta_description` varchar(254) default NULL,
   PRIMARY KEY  (`id_manufacturer`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1161,6 +1165,9 @@ CREATE TABLE `PREFIX_supplier_lang` (
   `id_supplier` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
+  `meta_title` varchar(254) default NULL,
+  `meta_keywords` varchar(254) default NULL,
+  `meta_description` varchar(254) default NULL,
   PRIMARY KEY  (`id_supplier`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

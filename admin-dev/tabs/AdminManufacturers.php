@@ -85,12 +85,13 @@ class AdminManufacturers extends AdminTab
 
 	public function displayForm()
 	{
-		global $currentIndex;
-
+		global $currentIndex, $cookie;
+		$divLangName = 'cdesc¤cdesc2';
 		$manufacturer = $this->loadObject(true);
 		$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
+		$langtags = 'mmeta_title¤mmeta_keywords¤mmeta_description';
 
 		echo '
 		<script type="text/javascript">
@@ -103,22 +104,99 @@ class AdminManufacturers extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="40" name="name" value="'.htmlentities(Tools::getValue('name', $manufacturer->name), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<label>'.$this->l('Description:').' </label>
+				</div>';
+
+		echo '<br class="clear" /><br /><br /><label>'.$this->l('Short description:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
-					echo '
-					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
-						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('Will appear in manufacturer list').'</p>
-					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
-		echo '	</div>
-				<label>'.$this->l('Logo:').' </label>
+		foreach ($languages as $language)
+			echo '
+							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;">
+								<textarea cols="38" rows="5" id="short_description_'.$language['id_lang'].'" name="short_description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'short_description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+							</div>';
+		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc2');
+		echo '</div>';
+				
+		echo '<br class="clear" /><br /><br /><label>'.$this->l('Description:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '
+							<div id="cdesc_'.$language['id_lang'].'" style="float: left;">
+								<textarea cols="38" rows="10" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+							</div>';
+		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc');
+		echo '</div>';
+
+			echo '	
+			<script type="text/javascript" src="../js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript">
+				tinyMCE.init({
+					language : "';
+		$iso = Language::getIsoById(intval($cookie->id_lang));
+		echo ((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
+					mode : "textareas",
+					theme : "advanced",
+					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
+					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo",
+					theme_advanced_buttons3 : "preview, code, tablecontrols, pastetext, pasteword, selectall, link, unlink, advhr",
+					paste_create_paragraphs : false,
+					paste_create_linebreaks : false,
+					paste_use_dialog : true,
+					paste_auto_cleanup_on_paste : true,
+					paste_convert_middot_lists : false,
+					paste_unindented_list_class : "unindentedList",
+					paste_convert_headers_to_strong : true,
+					theme_advanced_toolbar_location : "top",
+					theme_advanced_toolbar_align : "left",
+					plugins : "advhr, advlink, cleanup, paste, preview, table",
+					cleanup : true,
+					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],object[classid|codebase|width|height],param[name|value],embed[src|quality|width|height|type|pluginspage|bgcolor|allowFullScreen]"
+				});';
+		foreach ($languages as $language)
+			if ($language['id_lang'] != $defaultLanguage)
+				echo '
+						getE(\'cdesc_'.$language['id_lang'].'\').style.display = \'none\';
+						getE(\'cdesc_'.$language['id_lang'].'\').rows = 38;
+						getE(\'cdesc_'.$language['id_lang'].'\').cols = 8;
+						getE(\'cdesc2_'.$language['id_lang'].'\').style.display = \'none\';
+						getE(\'cdesc2_'.$language['id_lang'].'\').rows = 5;
+						getE(\'cdesc2_'.$language['id_lang'].'\').cols = 8;';
+		echo '</script>';		
+		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo:').' </label>
 				<div class="margin-form">
 					<input type="file" name="logo" />
 					<p>'.$this->l('Upload manufacturer logo from your computer').'</p>
+				</div>
+				<label>'.$this->l('Meta title:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '
+					<div id="mmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+					</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_title');
+		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Meta description:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '<div id="mmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+				</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_description');
+		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Meta keywords:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '
+					<div id="mmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+					</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_keywords');
+		echo '		<div class="clear"></div>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

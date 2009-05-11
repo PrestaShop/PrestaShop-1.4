@@ -111,12 +111,13 @@ class AdminSuppliers extends AdminTab
 	
 	public function displayForm()
 	{
-		global $currentIndex;
+				global $currentIndex;
 		
 		$supplier = $this->loadObject(true);
 		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
+		$langtags = 'smeta_title¤smeta_keywords¤smeta_description';
 
 		echo '
 		<script type="text/javascript">
@@ -145,6 +146,38 @@ class AdminSuppliers extends AdminTab
 				<div class="margin-form">
 					<input type="file" name="logo" />
 					<p>'.$this->l('Upload supplier logo from your computer').'</p>
+				</div>
+				<label>'.$this->l('Meta title:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '
+					<div id="smeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+					</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'smeta_title');
+		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Meta description:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '<div id="smeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+				</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'smeta_description');
+		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Meta keywords:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '
+					<div id="smeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+					</div>';
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'smeta_keywords');
+		echo '		<div class="clear"></div>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

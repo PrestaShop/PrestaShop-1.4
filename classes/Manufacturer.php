@@ -22,8 +22,11 @@ class		Manufacturer extends ObjectModel
 	/** @var string Name */
 	public 		$name;
 	
-	/** @var string A short description for the discount */
+	/** @var string A description */
 	public 		$description;
+	
+	/** @var string A short description */
+	public 		$short_description;
 
 	/** @var int Address */
 	public 		$id_address;
@@ -37,12 +40,21 @@ class		Manufacturer extends ObjectModel
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
 	
+	/** @var string Meta title */
+	public 		$meta_title;
+
+	/** @var string Meta keywords */
+	public 		$meta_keywords;
+
+	/** @var string Meta description */
+	public 		$meta_description;	
+	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 
-	protected	$fieldsSizeLang = array('description' => 65536);
-	protected	$fieldsValidateLang = array('description' => 'isGenericName');
+	protected	$fieldsSizeLang = array('short_description' => 100, 'meta_title' => 255, 'meta_description' => 255, 'meta_description' => 255);
+	protected	$fieldsValidateLang = array('description' => 'isCleanHtml', 'short_description' => 'isCleanHtml', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 	
 	protected 	$table = 'manufacturer';
 	protected 	$identifier = 'id_manufacturer';
@@ -70,8 +82,33 @@ class		Manufacturer extends ObjectModel
 	
 	public function getTranslationsFieldsChild()
 	{
-		parent::validateFieldsLang();
-		return parent::getTranslationsFields(array('description'));
+		$fieldsArray = array('description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description');
+		$fields = array();
+		$languages = Language::getLanguages();
+		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
+		foreach ($languages as $language)
+		{		
+			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
+			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
+			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
+			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
+			
+			foreach ($fieldsArray as $field)
+			{
+				if (!Validate::isTableOrIdentifier($field))
+					die(Tools::displayError());
+				
+				/* Check fields validity */
+				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
+					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']], true);
+				elseif (in_array($field, $this->fieldsRequiredLang))
+					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
+				else
+					$fields[$language['id_lang']][$field] = '';
+									
+			}
+		}
+		return $fields;
 	}
 
 	public function delete()

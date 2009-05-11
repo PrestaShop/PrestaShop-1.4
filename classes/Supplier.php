@@ -34,12 +34,21 @@ class		Supplier extends ObjectModel
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
 	
+	/** @var string Meta title */
+	public 		$meta_title;
+
+	/** @var string Meta keywords */
+	public 		$meta_keywords;
+
+	/** @var string Meta description */
+	public 		$meta_description;	
+	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 	
-	protected	$fieldsSizeLang = array('description' => 65536);
-	protected	$fieldsValidateLang = array('description' => 'isGenericName');
+	protected	$fieldsSizeLang = array('description' => 128, 'meta_title' => 128, 'meta_description' => 128, 'meta_description' => 128);
+	protected	$fieldsValidateLang = array('description' => 'isGenericName', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 	
 	protected 	$table = 'supplier';
 	protected 	$identifier = 'id_supplier';
@@ -70,7 +79,7 @@ class		Supplier extends ObjectModel
 	public function getTranslationsFieldsChild()
 	{
 		parent::validateFieldsLang();
-		return parent::getTranslationsFields(array('description'));
+		return parent::getTranslationsFields(array('description', 'meta_title', 'meta_keywords', 'meta_description'));
 	}
 	
 	/**
