@@ -82,7 +82,7 @@ echo '
 if (isset($confirmation))
 	echo '	<br />
 			<div style="font-weight: bold;">'.translate('Your password has been e-mailed to you').'.</div>
-			<div style="margin: 2em 0 0 0; text-align: right;"><a href="index.php">> '.translate('back to login home').'</a></div>';
+			<div style="margin: 2em 0 0 0; text-align: right;"><a href="login.php?email='.Tools::safeOutput(Tools::getValue('email')).'">> '.translate('back to login home').'</a></div>';
 else
 	echo '	<span style="font-weight: bold;">'.translate('Please, enter your e-mail address').' </span>
 			'.translate('(the one you wrote during your registration) in order to receive your access codes by e-mail').'.<br />

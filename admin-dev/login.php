@@ -126,10 +126,10 @@ if(file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admi
 else
 {
 	echo '			<label>'.translate('E-mail address:').'</label><br />
-					<input type="text" id="email" name="email" value="'.Tools::safeOutput(Tools::getValue('email')).'" class="input" />
+					<input type="text" id="email" name="email" value="'.Tools::safeOutput(Tools::getValue('email')).'" class="input"/>
 					<div style="margin: 0.5em 0 0 0;">
 						<label>'.translate('Password:').'</label><br />
-						<input type="password" name="passwd" class="input" />
+						<input type="password" name="passwd" class="input" value=""/>
 					</div>
 					<div>
 						<div id="submit"><input type="submit" name="Submit" value="'.translate('Connection').'" class="button" /></div>
