@@ -341,7 +341,7 @@ abstract class AdminTab
 	 * @param integer $id Object id used for deleting images
 	 */
 	public function deleteImage($id)
-	{
+	{	
 		/* Deleting object images and thumbnails (cache) */
 		if (key_exists('dir', $this->fieldImageSettings) AND $dir = $this->fieldImageSettings['dir'].'/')
 			if (file_exists(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType))
@@ -350,6 +350,10 @@ abstract class AdminTab
 			return false;
 		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType))
 			return false;
+		$types = ImageType::getImagesTypes();
+		foreach ($types AS $imageType)
+			if (file_exists(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType))
+				return false;
 		return true;
 	}
 
@@ -374,12 +378,9 @@ abstract class AdminTab
 		if (isset($_GET['deleteImage']))
 		{
 			if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
-			{
-				$this->deleteImage($object->id);
-				Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
-			}
-			else
-				$this->_errors[] = Tools::displayError('an error occurred during image deletion (cannot load object)');
+				if ($this->deleteImage($object->id))
+					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
+			$this->_errors[] = Tools::displayError('an error occurred during image deletion (cannot load object)');
 		}
 
 		/* Delete object */
