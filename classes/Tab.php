@@ -30,7 +30,7 @@ class Tab extends ObjectModel
 
 	protected	$fieldsRequired = array('class_name', 'position');
 	protected	$fieldsSize = array('class_name' => 64, 'module' => 64);
-	protected	$fieldsValidate = array('id_parent' => 'isUnsignedInt', 'position' => 'isUnsignedInt', 'module' => 'isTabName');
+	protected	$fieldsValidate = array('id_parent' => 'isInt', 'position' => 'isUnsignedInt', 'module' => 'isTabName');
 
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);

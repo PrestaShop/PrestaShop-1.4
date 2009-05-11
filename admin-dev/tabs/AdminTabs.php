@@ -41,7 +41,7 @@ class AdminTabs extends AdminTab
 	
 		parent::__construct();
 	}
-	
+
 	public function postProcess()
 	{
 		if (($id_tab = intval(Tools::getValue('id_tab'))) AND ($direction = Tools::getValue('move')) AND Validate::isLoadedObject($tab = new Tab($id_tab)))
@@ -57,7 +57,7 @@ class AdminTabs extends AdminTab
 			parent::postProcess();
 		}
 	}
-	
+
 	private function _posTabs($name, $arrayTabs)
 	{
 		global $currentIndex;
@@ -100,11 +100,11 @@ class AdminTabs extends AdminTab
 	public function displayForm()
 	{
 		global $currentIndex, $cookie;
-		
+
 		$obj = $this->loadObject(true);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		
+
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
@@ -120,7 +120,7 @@ class AdminTabs extends AdminTab
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>';							
+					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
 		echo '
 				</div>
@@ -145,7 +145,8 @@ class AdminTabs extends AdminTab
 				<label>'.$this->l('Parent:').'</label>
 				<div class="margin-form">
 					<select name="id_parent">
-						<option value="0">'.$this->l('Home').'</option>';
+						<option value="-1" '.(($this->getFieldValue($obj, 'id_parent') == -1) ? 'selected="selected"' : '').'>'.$this->l('None').'</option>
+						<option value="0" '.(($this->getFieldValue($obj, 'id_parent') == 0) ? 'selected="selected"' : '').'>'.$this->l('Home').'</option>';
 		foreach (Tab::getTabs(intval($cookie->id_lang), 0) AS $tab)
 			echo '		<option value="'.$tab['id_tab'].'" '.($tab['id_tab'] == $this->getFieldValue($obj, 'id_parent') ? 'selected="selected"' : '').'>'.$tab['name'].'</option>';
 		echo '		</select>
@@ -158,12 +159,10 @@ class AdminTabs extends AdminTab
 			</fieldset>
 		</form>';
 	}
-	
+
 	public function afterImageUpload()
 	{
 		$obj = $this->loadObject(true);
 		@rename(_PS_IMG_DIR_.'t/'.$obj->id.'.gif', _PS_IMG_DIR_.'t/'.$obj->class_name.'.gif');
 	}
 }
-
-?>
