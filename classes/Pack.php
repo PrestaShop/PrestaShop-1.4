@@ -108,6 +108,15 @@ class Pack extends Product
 		}
 		return true;
 	}
+	
+	public static function duplicate($id_product_old, $id_product_new)
+	{
+		Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'pack (id_product_pack, id_product_item, quantity)
+		(SELECT '.intval($id_product_new).', id_product_item, quantity FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product_old).')');
+		
+		// If return query result, a non-pack product will return false
+		return true;
+	}
 }
 
 ?>

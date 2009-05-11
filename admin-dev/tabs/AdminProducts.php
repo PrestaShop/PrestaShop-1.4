@@ -168,6 +168,7 @@ class AdminProducts extends AdminTab
 					AND Category::duplicateProductCategories($id_product_old, $product->id)
 					AND Product::duplicateAttributes($id_product_old, $product->id)
 					AND Product::duplicateFeatures($id_product_old, $product->id)
+					AND Pack::duplicate($id_product_old, $product->id)
 					AND Product::duplicateCustomizationFields($id_product_old, $product->id))
 					{
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id))
