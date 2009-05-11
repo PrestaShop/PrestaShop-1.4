@@ -659,6 +659,9 @@ class PDF extends PDF_PageGroup
 	*/
 	public function TaxTab()
 	{
+		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
+			die(Tools::displayError());
+
 		if (self::$order->total_paid == '0.00' OR !intval(Configuration::get('PS_TAX')))
 			return ;
 
@@ -718,6 +721,8 @@ class PDF extends PDF_PageGroup
 		$this->Ln();
 		$this->SetFont(self::fontname(), '', 7);
 		
+		$nb_tax = 0;
+		
 		// Display product tax
 		if (intval(Configuration::get('PS_TAX')) AND self::$order->total_paid != '0.00')
 		{
@@ -725,6 +730,7 @@ class PDF extends PDF_PageGroup
 			{
 				if ($tax_rate == '0.00' OR $totalWithTax[$tax_rate] == '0.00')
 					continue ;
+				$nb_tax++;
 				$before = $this->GetY();
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
@@ -738,8 +744,9 @@ class PDF extends PDF_PageGroup
 		}
 
 		// Display carrier tax
-		if ($carrierTax->rate && $carrierTax->rate != '0.00')
+		if ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone)))
 		{
+			$nb_tax++;
 			$total_shipping_wt = self::$order->total_shipping / (1 + ($carrierTax->rate / 100));
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
@@ -751,10 +758,11 @@ class PDF extends PDF_PageGroup
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
 			$this->Ln();
 		}
-		
+
 		// Display wrapping tax
-		if (self::$order->total_wrapping && self::$order->total_wrapping != '0.00')
+		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
+			$nb_tax++;
 			$total_wrapping_wt = self::$order->total_wrapping / (1 + ($tax_rate / 100));
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
@@ -765,6 +773,9 @@ class PDF extends PDF_PageGroup
 			$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $total_wrapping_wt, self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
 		}
+		
+		if (!$nb_tax)
+			$this->Cell(190, 10, self::l('No tax'), 0, 0, 'C');
 	}
 
 	static private function convertSign($s)

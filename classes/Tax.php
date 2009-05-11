@@ -219,5 +219,3 @@ class Tax extends ObjectModel
 		return $tax ? intval($tax['id_tax']) : false;
 	}
 }
-
-?>
