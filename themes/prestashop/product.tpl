@@ -306,7 +306,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {$HOOK_PRODUCT_FOOTER}
 
 <!-- description and features -->
-{if $product->description || $features || $accessories || $HOOK_PRODUCT_TAB}
+{if $product->description || $features || $accessories || $HOOK_PRODUCT_TAB || $attachments}
 <div id="more_info_block" class="clear">
 	<ul id="more_info_tabs" class="idTabs idTabsShort">
 		{if $product->description}<li><a id="more_info_tab_more_info" href="#idTab1">{l s='More info'}</a></li>{/if}
