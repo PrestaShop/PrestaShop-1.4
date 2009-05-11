@@ -19,6 +19,7 @@ ALTER TABLE PREFIX_state ADD id_zone INT NULL AFTER id_country;
 ALTER TABLE PREFIX_country ADD contains_states tinyint(1) NOT NULL DEFAULT 0;
 
 UPDATE PREFIX_customer SET secure_key = MD5(RAND()) WHERE secure_key = '-1';
+UPDATE PREFIX_orders o SET secure_key = (SELECT secure_key FROM PREFIX_customer c WHERE c.id_customer = o.id_customer);
 
 CREATE TABLE PREFIX_order_return (
   id_order_return INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
