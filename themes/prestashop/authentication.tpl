@@ -32,7 +32,7 @@ countries = new Array();
 	</div>
 {else}
 	{if !isset($email_create)}
-		<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" id="create-account_form" class="std">
+		<form action="{$base_dir_ssl}authentication.php" method="post" id="create-account_form" class="std">
 			<fieldset>
 				<h3>{l s='Create your account'}</h3>
 				<h4>{l s='Enter your e-mail address to create your account'}.</h4>
@@ -46,7 +46,7 @@ countries = new Array();
 				</p>
 			</fieldset>
 		</form>
-		<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" id="login_form" class="std">
+		<form action="{$base_dir_ssl}authentication.php" method="post" id="login_form" class="std">
 			<fieldset>
 				<h3>{l s='Already registered ?'}</h3>
 				<p class="text">
@@ -65,7 +65,7 @@ countries = new Array();
 			</fieldset>
 		</form>
 	{else}
-	<form action="{$request_uri|escape:'htmlall':'UTF-8'|replace:'&amp;':'&'}" method="post" id="account-creation_form" class="std">
+	<form action="{$base_dir_ssl}authentication.php" method="post" id="account-creation_form" class="std">
 		<fieldset class="account_creation">
 			<h3>{l s='Your personal information'}</h3>
 			<p class="radio required">
