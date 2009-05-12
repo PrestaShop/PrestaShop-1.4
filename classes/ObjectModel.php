@@ -336,7 +336,7 @@ abstract class ObjectModel
 	/**
 	 * Check for multilingual fields validity before database interaction
 	 */
-	public function validateFieldsLang($die = true)
+	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($this->fieldsRequiredLang as $fieldArray)
@@ -345,8 +345,8 @@ abstract class ObjectModel
 				continue ;
 			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' is empty for default language)');
-				return false;
+				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language)'));
+				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language') : false;
 			}
 		}
 		foreach ($this->fieldsSizeLang as $fieldArray => $size)
@@ -356,8 +356,8 @@ abstract class ObjectModel
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (Tools::strlen($value) > $size)
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' length > '.$size.' for language '.$k.')'.$value);
-					return false;
+					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('length > '.$size.' for language').' '.$k.')');
+					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('length > '.$size.' for language').' '.$k : false;
 				}
 		}
 		$validate = new Validate();
@@ -370,8 +370,8 @@ abstract class ObjectModel
 					die (Tools::displayError('validation function not found').' '.$method);
 				elseif (!Tools::isEmpty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' = '.$value.' for language '.$k.')');
-					return false;
+					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
+					return $errorReturn ? get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
 				}
 		}
 		return true;

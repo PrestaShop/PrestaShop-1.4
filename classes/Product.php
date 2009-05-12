@@ -371,15 +371,15 @@ class		Product extends ObjectModel
 		return $result['id_product_attribute'];
 	}
 
-	public function validateFieldsLang($die = true)
+	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
 		foreach ($this->description_short as $k => $value)
 			if (Tools::strlen(strip_tags($value)) > 400)
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).'->description: length > 400 for language '.$k.')');
-				return false;
+				return $errorReturn ? get_class($this).'->'.Tools::displayError('description: length > 400 for language').' '.$k : false;
 			}
-		return parent::validateFieldsLang($die);
+		return parent::validateFieldsLang($die, $errorReturn);
 	}
 
 	public function delete()
