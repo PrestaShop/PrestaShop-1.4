@@ -165,44 +165,58 @@ function addAccessory()
 {
 	var valueToAdd = $('#selectAccessories').val();
 	
-	if(valueToAdd == '0')
+	if (valueToAdd == '0')
 		return false;
 	
 	var $divAccessories = $('#divAccessories');
 	var $inputAccessories = $('#inputAccessories');
 	var $nameAccessories = $('#nameAccessories');
-	var valuesToAdd = valueToAdd.split('-');
-	var productId = valuesToAdd[0];
-	var productName = valuesToAdd[1];
 	
+	pos = valueToAdd.indexOf('-');
+	var productId = valueToAdd.slice(0, pos);
+	var productName = valueToAdd.slice(pos + 1);
+
 	/* delete product from select + add product line to the div, input_name, input_ids elements */
-	$('#selectAccessories option[value='+valueToAdd+']').remove();
+	$('#selectAccessories option[value=' + valueToAdd + ']').remove();
 	$divAccessories.html($divAccessories.html() + productName + ' <span onclick="delAccessory(' + productId + ');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />');
 	$nameAccessories.val($nameAccessories.val() + productName + '¤');
 	$inputAccessories.val($inputAccessories.val() + productId + '-');
 }
+
 
 function delAccessory(id)
 {
 	var div = getE('divAccessories');
 	var input = getE('inputAccessories');
 	var name = getE('nameAccessories');
-	var reg = new RegExp('-', 'g');
-	var inputCut = input.value.split(reg);
-	var reg2 = new RegExp('¤', 'g');
-	var nameCut = name.value.split(reg2);
-	
+
+	// Cut hidden fields in array
+	var inputCut = input.value.split('-');
+	var nameCut = name.value.split('¤');
+
+	if (inputCut.lenght != nameCut.lenght)
+		return alert('Bad size');
+
+	// Reset all hidden fields
 	input.value = '';
 	name.value = '';
 	div.innerHTML = '';
+	for (i in inputCut)
+	{
+		// If empty, error, next
+		if (!inputCut[i] || !nameCut[i])
+			continue ;
 
-	for (var i = 0; i < inputCut.length; ++i)
-		if (inputCut[i] && inputCut[i] != id)
+		// Add to hidden fields no selected products OR add to select field selected product
+		if (inputCut[i] != id)
 		{
 			input.value += inputCut[i] + '-';
 			name.value += nameCut[i] + '¤';
 			div.innerHTML += nameCut[i] + ' <span onclick="delAccessory(' + inputCut[i] + ');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />';
 		}
+		else
+			$('#selectAccessories').append('<option selected="selected" value="' + inputCut[i] + '-' + nameCut[i] + '">' + inputCut[i] + ' - ' + nameCut[i] + '</option>');
+	}
 }
 
 function dontChange(srcText)

@@ -1866,12 +1866,13 @@ class AdminProducts extends AdminTab
 					echo '" />
 							<script type="text/javascript">
 								var formProduct;
-								var accessories = new Array();	
+								var accessories = new Array();
 								
 								function fillAccessories()
 								{
 									$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductAccessories:1,id_lang:'.intval($cookie->id_lang).',id_product:'.($obj->id ? intval($obj->id) : 0).'},
-										function(j) {
+										function(j)
+										{
 											for (var i = 0; i < j.length; i++)
 												accessories[i] = new Array(j[i].value, j[i].text);
 												
@@ -1902,9 +1903,12 @@ class AdminProducts extends AdminTab
 									);
 								}
 							</script>
-							<select id="selectAccessories" name="selectAccessories" style="width: 380px;" onfocus="fillAccessories();">
+							<select id="selectAccessories" name="selectAccessories" style="width: 380px;">
 								<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
 							</select>
+							<script type="text/javascript">
+								fillAccessories();
+							</script>
 							<span onclick="addAccessory();" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" /></span>
 							<br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" onkeyup="fillAccessories();" class="space" />
 						</td>
@@ -1931,7 +1935,7 @@ class AdminProducts extends AdminTab
 			<script type="text/javascript">
 				tinyMCE.init({
 					width : 600,
-                  	height : 435,					
+                  	height : 435,
 					mode : "textareas",
 					plugins : "contextmenu, directionality, media, paste, preview, safari",
 					theme : "advanced",
