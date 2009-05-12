@@ -195,26 +195,34 @@ class		Discount extends ObjectModel
 	  */
 	function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $idCart = false)
 	{
-		$totalAmount = floatval($order_total_products) + floatval($shipping_fees);
-		if ($this->minimal > 0 AND $totalAmount < $this->minimal)
-			return 0;
+		$totalAmount = 0;
+
 		if (!$this->cumulable AND intval($nb_discounts) > 1)
 			return 0;
 		if (!$this->active)
 			return 0;
 		if (!$this->quantity)
 			return 0;
-        $date_start = strtotime($this->date_from);
-        $date_end = strtotime($this->date_to);
-        if (time() < $date_start OR time() > $date_end) return 0;
+    $date_start = strtotime($this->date_from);
+    $date_end = strtotime($this->date_to);
+    if (time() < $date_start OR time() > $date_end) return 0;
 
 		$cart = new Cart(intval($idCart));
 		$products = $cart->getProducts();
 		$categories = Discount::getCategories(intval($this->id));
 		$in_category = false;
 
-        switch ($this->id_discount_type)
-        {
+		foreach ($products AS $product)
+			if(count($categories))
+				if (Product::idIsOnCategoryId($product['id_product'], $categories))
+					$totalAmount += $product['total_wt'];
+		
+		$totalAmount += floatval($shipping_fees);
+		if ($this->minimal > 0 AND $totalAmount < $this->minimal)
+			return 0;
+
+		switch ($this->id_discount_type)
+		{
 			case 1:
 				// % on order
 				$amount = 0;

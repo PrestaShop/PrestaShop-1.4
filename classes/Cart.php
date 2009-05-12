@@ -643,15 +643,18 @@ class		Cart extends ObjectModel
 				if (!Validate::isLoadedObject($discount))
 					die(Tools::displayError());
 				if ($discount->id_discount_type == 3)
+				{
+					$total_cart = 0;
+				$categories = Discount::getCategories($discount->id);
 					foreach($products AS $product)
 					{
-						$categories = Discount::getCategories($discount->id);
 						if(count($categories))
-						{
 							if (Product::idIsOnCategoryId($product['id_product'], $categories))
-									return 0;
-						}
-					}	
+									$total_cart += $product['total_wt'];
+					}
+					if ($total_cart >= $discount->minimal)
+						return 0;
+				}
 			}
 
 		// Order total without fees
@@ -808,8 +811,6 @@ class		Cart extends ObjectModel
 				return Tools::displayError('you cannot use this voucher').' - '.Tools::displayError('try to log in if you own it');
 			return Tools::displayError('you cannot use this voucher');
 		}
-		if ($discountObj->minimal > floatval($this->getOrderTotal(true, 1)))
-			return Tools::displayError('the total amount of your order isn\'t high enough to use this voucher');
 		$currentDate = date('Y-m-d');
 		if (!$discountObj->cumulable_reduction)
 		{
@@ -818,10 +819,17 @@ class		Cart extends ObjectModel
 					OR $product['on_sale'])
 					return Tools::displayError('this voucher isn\'t cumulative on products with reduction or marked as on sale');
 		}
-
-		if (!$this->hasProductInCategory($discountObj))
-			return Tools::displayError('this voucher cannot be used with those products');					
-		
+		$products  = $this->getProducts();
+		$total_cart = 0;
+		$categories = Discount::getCategories($discountObj->id);
+		foreach($products AS $product)
+		{
+			if(count($categories))
+				if (Product::idIsOnCategoryId($product['id_product'], $categories))
+						$total_cart += $product['total_wt'];
+		}
+		if ($total_cart < $discountObj->minimal)
+			return Tools::displayError('the total amount of your order isn\'t high enough or this voucher cannot be used with those products');
 		return false;
 	}
 
