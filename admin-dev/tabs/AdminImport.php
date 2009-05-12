@@ -382,8 +382,7 @@ class AdminImport extends AdminTab
 	
 	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
 	{
-		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, "ps_import");
-		$img = array('tmp_name' => $tmpfile);
+		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
 		
 		switch($entity)
 		{
@@ -398,16 +397,16 @@ class AdminImport extends AdminTab
 
 		if (@copy($url, $tmpfile))
 		{
-			imageResize($img, $path.'.jpg');
+			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
 			foreach ($imagesTypes AS $k => $imageType)
-				imageResize($img, $path.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+				imageResize($tmpfile, $path.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
 		}
 		else
 		{
+			unlink($tmpfile);
 			return false;
 		}
-		unlink($tmpfile);
 		return true;
 	}	
 
