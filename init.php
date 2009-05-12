@@ -18,9 +18,13 @@ $pathinfo = pathinfo(__FILE__);
 $page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
 $page_name = (ereg('^[0-9]', $page_name)) ? 'page_'.$page_name : $page_name;
 
+// Init Cookie
 $cookie = new Cookie('ps');
-Tools::setCookieLanguage();
+
+// Switch language if needed and init cookie language
 Tools::switchLanguage();
+Tools::setCookieLanguage();
+
 /* attribute id_lang is often needed, so we create a constant for performance reasons */
 define('_USER_ID_LANG_', intval($cookie->id_lang));
 

@@ -100,8 +100,6 @@ if (!isset($_GET['id_product']) OR !Validate::isUnsignedId($_GET['id_product']))
 	$errors[] = Tools::displayError('product not found');
 else
 {
-	$cookie = new Cookie('ps');
-	Tools::setCookieLanguage();
 	$product = new Product(intval($_GET['id_product']), true, intval($cookie->id_lang));
 	if (!Validate::isLoadedObject($product) OR !$product->active)
 		$errors[] = Tools::displayError('product is no longer available');

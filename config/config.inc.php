@@ -145,7 +145,6 @@ Tax::loadTaxZones();
 $defaultCountry = new Country(intval(Configuration::get('PS_COUNTRY_DEFAULT')));
 
 /* Define default timezone */
-
 $timezone = Tools::getTimezones(Configuration::get('PS_TIMEZONE'));
 
 if (function_exists('date_default_timezone_set'))

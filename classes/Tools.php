@@ -133,28 +133,8 @@ class Tools
 	{
 		global $cookie;
 		
-		/* Language switching */
 		if ($id_lang = intval(Tools::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
-		{
 			$cookie->id_lang = $id_lang;
-			$cookie->update();
-			$link = new Link();
-			if ($id_product = intval(Tools::getValue('id_product')) AND !isset($_GET['adminlang']))
-				$url = $link->getProductLink(new Product($id_product, false, $id_lang));
-			elseif ($id_category = intval(Tools::getValue('id_category')) AND !isset($_GET['adminlang']))
-				$url = $link->getCategoryLink(new Category($id_category, $id_lang));
-			elseif ($id_cms = intval(Tools::getValue('id_cms')) AND !isset($_GET['adminlang']))
-				$url = $link->getCMSLink(new CMS($id_cms, $id_lang));
-			else
-			{
-				$n = 0;
-				$url = $_SERVER['PHP_SELF'];
-				unset($_GET['id_lang'], $_GET['adminlang']);
-				foreach ($_GET AS $k => $value)
-					$url .= ((!$n++) ? '?' : '&').urlencode(stripslashes($k)).'='.urlencode(stripslashes($value));
-			}
-			Tools::redirectLink($url);
-		}
 	}
 
 	static public function setCurrency()
