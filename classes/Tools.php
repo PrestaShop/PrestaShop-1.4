@@ -421,7 +421,32 @@ class Tools
 					return self::completeMetaTags($row, Category::hideCategoryPosition($row['name']));
 				}
 			}
-
+			elseif ($id_manufacturer = Tools::getValue('id_manufacturer'))
+			{
+				$row = Db::getInstance()->getRow('
+				SELECT `meta_title`, `meta_description`, `meta_keywords`
+				FROM `'._DB_PREFIX_.'manufacturer_lang`
+				WHERE id_lang = '.intval($id_lang).' AND id_manufacturer = '.intval($id_manufacturer));
+				if ($row)
+				{
+					if (empty($row['meta_description']))
+						$row['meta_description'] = strip_tags($row['meta_description']);
+					return self::completeMetaTags($row, $row['meta_title']);
+				}
+			}
+			elseif ($id_supplier = Tools::getValue('id_supplier'))
+			{
+				$row = Db::getInstance()->getRow('
+				SELECT `meta_title`, `meta_description`, `meta_keywords`
+				FROM `'._DB_PREFIX_.'supplier_lang`
+				WHERE id_lang = '.intval($id_lang).' AND id_supplier = '.intval($id_supplier));
+				if ($row)
+				{
+					if (empty($row['meta_description']))
+						$row['meta_description'] = strip_tags($row['meta_description']);
+					return self::completeMetaTags($row, $row['meta_title']);
+				}
+			}			
 			/* CMS specifics meta tags */
 			elseif ($id_cms = Tools::getValue('id_cms'))
 			{
