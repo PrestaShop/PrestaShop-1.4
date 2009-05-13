@@ -27,7 +27,7 @@ countries = new Array();
 	<div class="confirmation">
 		<p class="success">{l s='Your account has been successfully created.'}</p>
 		<p>
-			<a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Your account'}" title="{l s='Your account'}" class="icon" />{l s='Access your account'}</a>
+			<a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Your account'}" title="{l s='Your account'}" class="icon" /></a><a href="{$base_dir_ssl}my-account.php">{l s='Access your account'}</a>
 		</p>
 	</div>
 {else}

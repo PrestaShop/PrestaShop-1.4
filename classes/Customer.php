@@ -162,7 +162,9 @@ class		Customer extends ObjectModel
 		$result = Db::getInstance()->GetRow('
 		SELECT *
 		FROM `'._DB_PREFIX_	.'customer`
-		WHERE `active` = 1 AND `email` = \''.pSQL($email).'\''.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : ''));
+		WHERE `active` = 1
+		AND `email` = \''.pSQL($email).'\''.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'
+		AND `deleted` = 0' : ''));
 
 		if (!$result)
 			return false;
@@ -187,7 +189,8 @@ class		Customer extends ObjectModel
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `id_customer` = \''.intval($id_customer).'\'
-		AND active = 1');
+		AND active = 1
+		AND `deleted` = 0');
 		if (isset($result['id_customer']))
 			return false;
         return true;
