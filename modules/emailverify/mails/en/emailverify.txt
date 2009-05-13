@@ -1,0 +1,6 @@
+Hi {firstname} {lastname},
+
+In order to activate your account at {shop_name}, please click the following link:
+{link}
+
+{shop_url} powered by PrestaShop™

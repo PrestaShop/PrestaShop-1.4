@@ -192,6 +192,7 @@ $_ERRORS['686734151a34210ebdcfca059a255082'] = 'commande introuvable dans la bas
 $_ERRORS['4c6dc77086b6d41a3b70370f8bb2c566'] = 'impossible de trouver cette commande';
 $_ERRORS['9d807a1d80fd9b166f2a1ef6d6755731'] = 'impossible de trouver le bon de retour';
 $_ERRORS['996a4369c2a9eb2dd34198d7d1140779'] = 'chargement impossible de l\'objet';
+$_ERRORS['0c3c5c78819ff66a6a4ed79e189cffe6'] = 'impossible d\'envoyer un mail';
 $_ERRORS['816fcb31aac02bb4c6aa0875287acf0d'] = 'panier n°';
 $_ERRORS['1362030a7ef78e3e4a8556d084acae3f'] = 'ID de catégorie manquant';
 $_ERRORS['b6d4d90df104388c3fecf04aebec60e1'] = 'cette catégorie ne peut pas être déplacée ici';
