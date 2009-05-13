@@ -41,7 +41,7 @@
 	<input type="hidden" name="return" value="{$goBackUrl}" />
 	<input type="hidden" name="cancel_return" value="{$cancelUrl}" />
 	<input type="hidden" name="notify_url" value="{$returnUrl}" />
-	<input type="hidden" name="cpp_header_image" value="{$header}" />
+	{if $header}<input type="hidden" name="cpp_header_image" value="{$header}" />{/if}
     <input type="hidden" name="rm" value="2" />
 	<input type="hidden" name="bn" value="PRESTASHOP_WPS" />
 	<input type="hidden" name="cbt" value="{l s='Return to' mod='paypal'} {$meta_title}" />

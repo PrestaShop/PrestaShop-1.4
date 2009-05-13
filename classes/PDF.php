@@ -146,8 +146,10 @@ class PDF extends PDF_PageGroup
 			$this->Cell(77, 10, self::l('SLIP #').' '.sprintf('%06d', self::$orderSlip->id), 0, 1, 'R');
 		elseif (self::$delivery)
 			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery), 0, 1, 'R');
-		else
+		elseif (self::$order->invoice_number)
 			$this->Cell(77, 10, self::l('INVOICE #').' '.Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
+		else
+			$this->Cell(77, 10, self::l('ORDER #').' '.sprintf('%06d', self::$order->id), 0, 1, 'R');
    }
 
 	/**
