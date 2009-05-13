@@ -342,10 +342,14 @@ abstract class AdminTab
 	 */
 	public function deleteImage($id)
 	{	
+		$dir = null;
 		/* Deleting object images and thumbnails (cache) */
-		if (key_exists('dir', $this->fieldImageSettings) AND $dir = $this->fieldImageSettings['dir'].'/')
+		if (key_exists('dir', $this->fieldImageSettings) AND $this->fieldImageSettings['dir'].'/')
+		{
+			$dir = $this->fieldImageSettings['dir'].'/';
 			if (file_exists(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'.'.$this->imageType))
 				return false;
+		}
 		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_'.$id.'.'.$this->imageType))
 			return false;
 		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType))
@@ -669,13 +673,21 @@ abstract class AdminTab
 				$this->_errors[] = $error;
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES[$name]['tmp_name'], $tmpName))
 				return false;
-			// Copy new image
-			else if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
-				$this->_errors[] = Tools::displayError('an error occurred while uploading image');
-			unlink($tmpName);
-			if (sizeof($this->_errors))
+			else
+			{
+				$_FILES[$name]['tmp_name'] = $tmpName;
+				// Copy new image
+				if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
+					$this->_errors[] = Tools::displayError('an error occurred while uploading image');
+				if (sizeof($this->_errors))
+					return false;
+				if ($this->afterImageUpload())
+				{
+					unlink($tmpName);
+					return true;
+				}
 				return false;
-			return $this->afterImageUpload();
+			}
 		}
 		return true;
 	}
