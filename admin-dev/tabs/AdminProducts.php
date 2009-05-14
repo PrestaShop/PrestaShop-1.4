@@ -175,6 +175,7 @@ class AdminProducts extends AdminTab
 							$this->_errors[] = Tools::displayError('an error occurred while copying images');
 						else
 						{
+							Hook::addProduct($product);
 							Search::indexation(false);
 							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=19&token='.($token ? $token : $this->token));
 						}
@@ -606,10 +607,10 @@ class AdminProducts extends AdminTab
 		if ($error = checkImage($_FILES['image_product'], $this->maxImageSize))
 			$this->_errors[] = $error;
 		else
-		{
+		{		
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
-				return false;
-			if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
+				$this->_errors[] = Tools::displayError('An error occured during the image upload');
+			elseif (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying image');
 			elseif($method == 'auto')
 			{
@@ -618,7 +619,7 @@ class AdminProducts extends AdminTab
 					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 						$this->_errors[] = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
 			}
-			unlink($tmpName);
+			@unlink($tmpName);
 			Module::hookExec('watermark', array('id_image' => $id_image, 'id_product' => $id_product));
 		}
 	}
