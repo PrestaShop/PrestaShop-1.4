@@ -20,7 +20,7 @@
 		{elseif $error == 'name invalid'}
 			{l s='At least one first name or last name is invalid!' mod='referralprogram'}
 		{elseif $error == 'email exists'}
-			{l s='Someone with this e-mail address has already been sponsored!' mod='referralprogram'}
+			{l s='Someone with this e-mail address has already been sponsored!' mod='referralprogram'}: {foreach from=$mails_exists item=mail}{$mail} {/foreach}
 		{elseif $error == 'no revive checked'}
 			{l s='Please mark at least one checkbox' mod='referralprogram'}
 		{elseif $error == 'cannot add friends'}

@@ -38,6 +38,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 	{
 		$friendsLastName = Tools::getValue('friendsLastName');
 		$friendsFirstName = Tools::getValue('friendsFirstName');
+		$mails_exists = array();
 		foreach ($friendsEmail as $key => $friendEmail)
 		{
 			$friendEmail = strval($friendEmail);
@@ -51,7 +52,11 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 			elseif (empty($friendFirstName) OR empty($friendLastName) OR !Validate::isName($friendLastName) OR !Validate::isName($friendFirstName))
 				$error = 'name invalid';
 			elseif (ReferralProgramModule::isEmailExists($friendEmail) OR Customer::customerExists($friendEmail))
+			{
 				$error = 'email exists';
+				$mails_exists[] = $friendEmail;
+
+			}
 			else
 			{
 				$referralprogram = new ReferralProgramModule();
@@ -74,7 +79,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 							'{lastname_friend}' => $friendLastName,
 							'{firstname_friend}' => $friendFirstName,
 							'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($blowfish->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
-							'{discount}' => $discount
+							'{discount}' => $discount,
 						);
 						Mail::Send(intval($cookie->id_lang), 'referralprogram-invitation', 'Referral Program', $vars, $friendEmail, $friendFirstName.' '.$friendLastName, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						$invitation_sent = true;
@@ -146,7 +151,8 @@ $smarty->assign(array(
 	'pendingFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'pending'),
 	'revive_sent' => $revive_sent,
 	'nbRevive' => $nbRevive,
-	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed')
+	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed'),
+	'mails_exists' => $mails_exists
 ));
 
 echo Module::display(dirname(__FILE__).'/referralprogram.php', 'referralprogram-program.tpl');
