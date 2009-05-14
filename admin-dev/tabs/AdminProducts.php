@@ -1001,7 +1001,7 @@ class AdminProducts extends AdminTab
 		if ($obj->id)
 			echo ' 		if (toload[id]) {
 							toload[id] = false;
-							$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\'},
+							$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\',id_category:'.intval(Tools::getValue('id_category')).'},
 								function(rep) {
 									getE("step" + id).innerHTML = rep;
 									if (id == 3) populate_attrs();
@@ -2388,7 +2388,7 @@ class AdminProducts extends AdminTab
 					</table>
 					<hr />
 					<div style="text-align:center;">
-						<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
+						<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&id_category='.intval(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
 					</div>
 					';
 				}
@@ -2539,7 +2539,7 @@ class AdminProducts extends AdminTab
 	private function fillPackItems($obj)
 	{
 		global $currentIndex, $cookie;
-		
+		echo '<script type="text/javascript">console.log("id_category: '.intval(Tools::getValue('id_category')).'");</script>';
 		return '
 		function fillPackItems()
 		{

@@ -81,7 +81,7 @@ class AdminAttributeGenerator extends AdminTab
 			}
 		}
 		elseif (isset($_POST['back']))
-			Tools::redirectAdmin($currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&addproduct'.'&tabs=2&token='.Tools::getValue('token'));
+			Tools::redirectAdmin($currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&id_category='.intval(Tools::getValue('id_category')).'&addproduct'.'&tabs=2&token='.Tools::getValue('token'));
 		parent::postProcess();
 	}
 
@@ -227,7 +227,7 @@ class AdminAttributeGenerator extends AdminTab
 			</div>';
 		echo '
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
-			<form enctype="multipart/form-data"  method="post" id="generator" action=""'.$currentIndex.'&token='.Tools::getValue('token').'">
+			<form enctype="multipart/form-data" method="post" id="generator" action=""'.$currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'token='.Tools::getValue('token').'">
 				<fieldset style="margin-bottom: 35px;"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes generator').'</legend>'.
 				$this->l('Add or modify attributes for this product:').'
 					<br /><br />
