@@ -671,7 +671,7 @@ abstract class AdminTab
 			// Check image validity
 			if ($error = checkImage($_FILES[$name], $this->maxImageSize))
 				$this->_errors[] = $error;
-			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES[$name]['tmp_name'], $tmpName))
+			elseif (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES[$name]['tmp_name'], $tmpName))
 				return false;
 			else
 			{
