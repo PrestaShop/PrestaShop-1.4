@@ -208,7 +208,7 @@ class Watermark extends Module
 		if (!$image = imagecreatefromjpeg($imagepath))
 			return false;
 		if (!$imagew = imagecreatefromgif($watermarkpath))
-			return false;
+			die ($this->l('the watermark image is not a real gif, please CONVERT and not rename it'));
 		list($watermarkWidth, $watermarkHeight) = getimagesize($watermarkpath); 
 		list($imageWidth, $imageHeight) = getimagesize($imagepath); 
 		if ($this->xAlign == "middle") { $xpos = $imageWidth/2 - $watermarkWidth/2 + $Xoffset; } 
