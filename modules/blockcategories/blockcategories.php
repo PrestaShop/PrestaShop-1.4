@@ -87,7 +87,7 @@ class BlockCategories extends Module
 
 	function hookLeftColumn($params)
 	{
-		global $smarty;
+		global $smarty, $cookie;
 
 		/*  ONLY FOR THEME OLDER THAN v1.0 */
 		global $link;
@@ -125,7 +125,20 @@ class BlockCategories extends Module
 		$isDhtml = (Configuration::get('BLOCK_CATEG_DHTML') == 1 ? true : false);
 
 		if (isset($_GET['id_category']))
-			$smarty->assign('currentCategoryId', intval($_GET['id_category']));
+		{
+			$cookie->last_visited_category = intval($_GET['id_category']);
+			$smarty->assign('currentCategoryId', intval($_GET['id_category']));	
+		}
+		if (isset($_GET['id_product']))
+		{			
+			if (!isset($cookie->last_visited_category) OR !Product::idIsOnCategoryId(intval($_GET['id_product']), array($cookie->last_visited_category)))
+			{
+				$product = new Product(intval($_GET['id_product']));
+				if (isset($product) AND Validate::isLoadedObject($product))
+					$cookie->last_visited_category = intval($product->id_category_default);
+			}
+			$smarty->assign('currentCategoryId', intval($cookie->last_visited_category));
+		}	
 		$smarty->assign('blockCategTree', $blockCategTree);
 		
 		if (file_exists(_PS_THEME_DIR_.'modules/blockcategories/blockcategories.tpl'))
@@ -134,7 +147,7 @@ class BlockCategories extends Module
 			$smarty->assign('branche_tpl_path', _PS_MODULE_DIR_.'blockcategories/category-tree-branch.tpl');
 		$smarty->assign('isDhtml', $isDhtml);
 		/* /ONLY FOR THEME OLDER THAN v1.0 */
-
+		
 		return $this->display(__FILE__, 'blockcategories.tpl');
 	}
 
