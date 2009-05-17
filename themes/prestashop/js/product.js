@@ -287,7 +287,7 @@ function serialScrollFixLock(event, targeted, scrolled, items, position)
 	return true;
 }
 
-/* Change the current product images regarding the combination selected */
+// Change the current product images regarding the combination selected
 function refreshProductImages(id_product_attribute)
 {
 	$('#thumbs_list_frame').scrollTo('li:eq(0)', 700, {axis:'x'});
@@ -299,7 +299,7 @@ function refreshProductImages(id_product_attribute)
 		for (var i = 0; i < combinationImages[id_product_attribute].length; i++)
 			$('#thumbnail_' + parseInt(combinationImages[id_product_attribute][i])).show();
 	}
-	$('#thumbs_list_frame').width(parseInt($('#thumbs_list_frame >li').width() * i));
+	$('#thumbs_list_frame').width((parseInt(($('#thumbs_list_frame >li').width())* i) + 3) + 'px'); //  Bug IE6, needs 3 pixels more ?
 	$('#thumbs_list').trigger('goto', 0);
 	serialScrollFixLock('', '', '', '', 0);// SerialScroll Bug on goto 0 ?
 }
