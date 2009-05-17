@@ -40,7 +40,7 @@ function addCombination(idCombination, arrayOfIdAttributes, quantity, price, eco
 }
 
 // search the combinations' case of attributes and update displaying of availability, prices, ecotax, and image
-function findCombination()
+function findCombination(firstTime)
 {
 	//create a temporary 'choice' array containing the choices of the customer
 	var choice = new Array();
@@ -88,8 +88,11 @@ function findCombination()
 			
 			//update the display
 			updateDisplay();
-			refreshProductImages(combinations[combination]['idCombination']);
-			
+
+			if(typeof(firstTime) != 'undefined' && firstTime)
+				refreshProductImages(0);
+			else
+				refreshProductImages(combinations[combination]['idCombination']);
 			//leave the function because combination has been found
 			return;
 		}
@@ -258,103 +261,56 @@ function updateDisplay()
 //update display of the large image
 function displayImage(domAAroundImgThumb)
 {
-    if (!domAAroundImgThumb.hasClass('shown'))
+    if (domAAroundImgThumb.attr('href'))
     {
-        if (domAAroundImgThumb.attr('href'))
-        {
-            var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
-            if ($('#bigpic').attr('src') != newSrc)
-			{ 
-	            $('#bigpic').fadeOut('fast', function(){
-	                $(this).attr('src', newSrc).show();
-	                if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
-		                $(this).attr('alt', domAAroundImgThumb.attr('href'));
-	                $(this).load(function() {
-	                  $(this).fadeIn('fast')
-	                })
-	                ;
-	            });
-	        }
-            $('#views_block li a').removeClass('shown');
-            $(domAAroundImgThumb).addClass('shown');
+        var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
+        if ($('#bigpic').attr('src') != newSrc)
+		{ 
+            $('#bigpic').fadeOut('fast', function(){
+                $(this).attr('src', newSrc).show();
+                if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
+	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
+            });
         }
+        $('#views_block li a').removeClass('shown');
+        $(domAAroundImgThumb).addClass('shown');
     }
 }
 
-function resetThumbnailScroll()
-{
-	$('#thumbs_list').serialScroll({
-		items:'li',
-		prev:'a#view_scroll_left',
-		next:'a#view_scroll_right',
-		axis:'x',
-		offset:0,
-		start:0,
-		stop:true,
-		onBefore:serialScrollFixLock,
-		duration:700,
-		step: 0,
-		lock: false,
-		force:false,
-		cycle:false
-	});
-
-}
+// Serialscroll exclude option bug ?
 function serialScrollFixLock(event, targeted, scrolled, items, position)
 {
-	$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);
-	$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').fadeTo(0, position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 0 : 1);
-	if (position + serialScrollNbImagesDisplayed >= serialScrollNbImages)
-		$('a#view_scroll_right').hide();
-	else
-		$('a#view_scroll_right').show();
+	serialScrollNbImages = $('#thumbs_list li:visible').length;
+	serialScrollNbImagesDisplayed = 3;
+	if (position != 1) // SerialScroll Bug goto 0 has no effect, needs goto 1 first ?
+	{
+		$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);		
+		$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').css('display', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'none' : 'block');
+	}
 	return true;
 }
+
 /* Change the current product images regarding the combination selected */
 function refreshProductImages(id_product_attribute)
 {
-	var legend = 'debug';
-
-	$('#thumbs_list_frame').find('li[@id^=thumbnail_]').each(function() {
-		$(this).hide();
-	});
+	$('#thumbs_list li').hide();
 	id_product_attribute = parseInt(id_product_attribute);
 
 	if (typeof(combinationImages) != 'undefined' && typeof(combinationImages[id_product_attribute]) != 'undefined')
 	{
-		for (i = 0; i < combinationImages[id_product_attribute].length; i++)
+		for (var i = 0; i < combinationImages[id_product_attribute].length; i++)
 			$('#thumbnail_' + parseInt(combinationImages[id_product_attribute][i])).show();
-		if (i <= 3)
-		{
-			$('#view_scroll_left').hide();
-			$('#view_scroll_right').hide();
-		}
-		else
-		{
-			$('#view_scroll_left').show();
-			$('#view_scroll_right').show();
-			resetThumbnailScroll();
-		}
 	}
-	else if (id_product_attribute == 0)
-	{
-		$('#view_scroll_left').show();
-		$('#view_scroll_right').show();
-		resetThumbnailScroll();
-	}
-	$('#thumbs_list').trigger('goto', [ 0 ]);
+	$('#thumbs_list').trigger('goto', 1); // SerialScroll Bug goto 0 has no effect, needs goto 1 first ?
+	$('#thumbs_list').trigger('goto', 0);
 }
 
 //To do after loading HTML
 $(document).ready(function(){
-	
-	serialScrollNbImages = $('#thumbs_list_frame li').length;
-	serialScrollNbImagesDisplayed = 3;
-	serialScrollActualImagesIndex = 0;
-	
+
 	//init the serialScroll for thumbs
 	$('#thumbs_list').serialScroll({
-		items:'li',
+		items:'li:visible',
 		prev:'a#view_scroll_left',
 		next:'a#view_scroll_right',
 		axis:'x',
@@ -405,9 +361,7 @@ $(document).ready(function(){
 
 	//init the price in relation of the selected attributes
 	if (typeof productHasAttributes != 'undefined' && productHasAttributes)
-		findCombination();
-	refreshProductImages(0);
-
+		findCombination(true);
 });
 
 function saveCustomization()

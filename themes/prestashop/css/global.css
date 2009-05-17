@@ -1775,9 +1775,15 @@ div.categTree {
 	float:left;
 }
 #primary_block #image-block{
-    border:#d0d1d5 solid 1px;height:300px;width:300px;
+    border:#d0d1d5 solid 1px;
+	height:302px;
+	width:300px;
 }
-#primary_block #image-block img#bigpic{ cursor:pointer; }
+#primary_block #image-block img#bigpic{ 
+	cursor:pointer; 
+	height:300px;
+	width:300px;
+}
 #primary_block ul#usefull_link_block{
 	list-style-type:none;
 	margin-top:2em;
@@ -1910,13 +1916,13 @@ position:relative;
 /* views block */
 #views_block{
 	margin:0pt auto;
-	width:268px;
+	width: 274px;
 }
 
 #thumbs_list{
 	overflow:hidden;
 	float:left;
-	width:250px;
+	width: 240px;
 }
 #thumbs_list ul{
 	padding-left:0px;
@@ -1926,6 +1932,8 @@ position:relative;
 #thumbs_list li{
 	float:left;
 	cursor:pointer;
+	width: 80px;
+	height: 80px;
 }
 #view_scroll_left, #view_scroll_right{
 	background: url('../img/thumbs_left.gif') no-repeat center;
@@ -1935,9 +1943,12 @@ position:relative;
 	height:18px;
 	float:left;
 	margin-top:30px;
+	padding-right: 4px;
+	padding-left: 4px;
 }
 #view_scroll_right{
 	background-image: url('../img/thumbs_right.gif');
+
 }
 
 /* manufacturers-list.tpl && suppliers-list.tpl */
