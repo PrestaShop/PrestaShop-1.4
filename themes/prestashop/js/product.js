@@ -282,17 +282,15 @@ function serialScrollFixLock(event, targeted, scrolled, items, position)
 {
 	serialScrollNbImages = $('#thumbs_list li:visible').length;
 	serialScrollNbImagesDisplayed = 3;
-	if (position != 1) // SerialScroll Bug goto 0 has no effect, needs goto 1 first ?
-	{
-		$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);		
-		$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').css('display', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'none' : 'block');
-	}
+	$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);		
+	$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').css('display', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'none' : 'block');
 	return true;
 }
 
 /* Change the current product images regarding the combination selected */
 function refreshProductImages(id_product_attribute)
 {
+	$('#thumbs_list_frame').scrollTo('li:eq(0)', 700, {axis:'x'});
 	$('#thumbs_list li').hide();
 	id_product_attribute = parseInt(id_product_attribute);
 
@@ -301,13 +299,14 @@ function refreshProductImages(id_product_attribute)
 		for (var i = 0; i < combinationImages[id_product_attribute].length; i++)
 			$('#thumbnail_' + parseInt(combinationImages[id_product_attribute][i])).show();
 	}
-	$('#thumbs_list').trigger('goto', 1); // SerialScroll Bug goto 0 has no effect, needs goto 1 first ?
+	$('#thumbs_list_frame').width(parseInt($('#thumbs_list_frame >li').width() * i));
 	$('#thumbs_list').trigger('goto', 0);
+	serialScrollFixLock('', '', '', '', 0);// SerialScroll Bug on goto 0 ?
 }
 
 //To do after loading HTML
-$(document).ready(function(){
-
+$(document).ready(function()
+{
 	//init the serialScroll for thumbs
 	$('#thumbs_list').serialScroll({
 		items:'li:visible',
@@ -320,10 +319,14 @@ $(document).ready(function(){
 		onBefore:serialScrollFixLock,
 		duration:700,
 		step: 2,
+		lazy: true,
 		lock: false,
 		force:false,
 		cycle:false
 	});
+	
+	$('#thumbs_list').trigger('goto', 1);// SerialScroll Bug on goto 0 ?
+	$('#thumbs_list').trigger('goto', 0);
 
 	//hover 'other views' images management
 	$('#views_block li a').hover(
