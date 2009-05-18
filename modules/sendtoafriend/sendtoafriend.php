@@ -40,8 +40,6 @@ class sendToAFriend extends Module
 			/* Product informations */
 			$product = new Product(intval(Tools::getValue('id_product')), false, intval($cookie->id_lang));
 			$productLink = $link->getProductLink($product);
-			$backToProduct = '<a href="'.$productLink.'" class="bold">'.$this->l('Back to').' "'.$product->name.'"</a>';
-			$smarty->assign('backToProduct', $backToProduct);
 			
 			/* Fields verifications */
 			if (empty($_POST['email']) OR empty($_POST['name']))
@@ -101,4 +99,3 @@ class sendToAFriend extends Module
 		return $this->display(__FILE__, 'sendtoafriend.tpl');
 	}
 }
-?>

@@ -1256,7 +1256,6 @@ div#categories_block_left span.CLOSE{ background-image: url('../img/icon/more.gi
 ul.step {
 	background: transparent url('../img/step_start.gif') no-repeat bottom left;
 	list-style: none;
-	width: 479px;
 	margin:0.8em auto 2em;
 	padding-left: 40px;
 	height: 25px;
