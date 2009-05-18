@@ -1,3 +1,9 @@
+<script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
 {capture name=path}{l s='Your payment method'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 

@@ -1,5 +1,11 @@
+<script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
 <div id="mywishlist">
-	{capture name=path}<a href="my-account.php">{l s='My account' mod='blockwishlist'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My wishlists' mod='blockwishlist'}{/capture}
+	{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account' mod='blockwishlist'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My wishlists' mod='blockwishlist'}{/capture}
 	{include file=$tpl_dir./breadcrumb.tpl}
 
 	<h2>{l s='My wishlists' mod='blockwishlist'}</h2>
@@ -7,7 +13,7 @@
 	{include file=$tpl_dir./errors.tpl}
 
 	{if $id_customer|intval neq 0}
-		<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
+		<form action="{$base_dir_ssl}modules/blockwishlist/mywishlist.php" method="post" class="std">
 			<fieldset>
 				<h3>{l s='New wishlist' mod='blockwishlist'}</h3>
 				<input type="hidden" name="token" value="{$token|escape:'htmlall':'UTF-8'}" />

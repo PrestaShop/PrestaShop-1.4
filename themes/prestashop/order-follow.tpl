@@ -1,4 +1,10 @@
-{capture name=path}<a href="my-account.php">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Return Merchandise Authorization (RMA)'}{/capture}
+<script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
+{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Return Merchandise Authorization (RMA)'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='Return Merchandise Authorization (RMA)'}</h2>

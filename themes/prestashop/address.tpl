@@ -1,4 +1,10 @@
 <script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
+<script type="text/javascript">
 // <![CDATA[
 idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}false{/if};
 countries = new Array();

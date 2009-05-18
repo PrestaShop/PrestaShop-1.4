@@ -1,4 +1,10 @@
 <script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
+<script type="text/javascript">
 // <![CDATA[
 	ThickboxI18nClose = "{l s='Close' mod='referralprogram'}";
 	ThickboxI18nOrEscKey = "{l s='or Esc key' mod='referralprogram'}";
@@ -6,7 +12,7 @@
 	//]]>
 </script>
 
-{capture name=path}<a href="{$base_dir}my-account.php">{l s='My account' mod='referralprogram'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='ReferralProgram' mod='referralprogram'}{/capture}
+{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account' mod='referralprogram'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='ReferralProgram' mod='referralprogram'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='Referral program' mod='referralprogram'}</h2>
@@ -66,7 +72,7 @@
 				{l s='When one of them makes at least' mod='referralprogram'} {$orderQuantity} {if $orderQuantity > 1}{l s='orders' mod='referralprogram'}{else}{l s='order' mod='referralprogram'}{/if},
 				{l s='he or she will receive' mod='referralprogram'} {$discount} {l s='credit and you will receive your own credit slip worth' mod='referralprogram'} {$discount}.
 			</p>
-			<form method="post" action="{$smarty.server.SCRIPT_NAME}" class="std">
+			<form method="post" action="{$base_dir_ssl}modules/referralprogram/referralprogram-program.php" class="std">
 				<table class="std">
 				<thead>
 					<tr>
@@ -98,7 +104,7 @@
 					<a href="{$base_dir}modules/referralprogram/referralprogram-rules.php?height=500&amp;width=400" class="thickbox" title="{l s='Conditions of the referral program' mod='referralprogram'}">{l s='Read conditions.' mod='referralprogram'}</a>
 				</p>
 				<p>
-					{l s='Preview' mod='referralprogram'} <a href="{$base_dir}modules/referralprogram/preview-email.php?height=500&amp;width=600&amp;mail={$lang_iso}/referralprogram-invitation.html" class="thickbox" title="{l s='Invitation e-mail' mod='referralprogram'}">{l s='the default e-mail' mod='referralprogram'}</a> {l s='that will be sent to your(s) friend(s).' mod='referralprogram'}
+					{l s='Preview' mod='referralprogram'} <a href="{$base_dir_ssl}modules/referralprogram/preview-email.php?height=500&amp;width=600&amp;mail={$lang_iso}/referralprogram-invitation.html" class="thickbox" title="{l s='Invitation e-mail' mod='referralprogram'}">{l s='the default e-mail' mod='referralprogram'}</a> {l s='that will be sent to your(s) friend(s).' mod='referralprogram'}
 				</p>
 				<p class="submit">
 					<input type="submit" id="submitSponsorFriends" name="submitSponsorFriends" class="button_large" value="{l s='Validate' mod='referralprogram'}" />
@@ -116,7 +122,7 @@
 		<p>
 			{l s='These friends have not yet placed an order on this Website since you sponsored them, but you can try again! To do so, mark the checkboxes of the friend(s) you want to remind, then click on the button "Remind my friend(s)"' mod='referralprogram'}
 		</p>
-		<form method="post" action="{$smarty.server.SCRIPT_NAME}" class="std">
+		<form method="post" action="{$base_dir_ssl}modules/referralprogram/referralprogram-program.php" class="std">
 			<table class="std">
 			<thead>
 				<tr>
@@ -189,5 +195,5 @@
 
 <ul class="footer_links">
 	<li><a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$base_dir_ssl}my-account.php">{l s='Back to Your Account' mod='referralprogram'}</a></li>
-	<li><a href="{$base_dir}"><img src="{$img_dir}icon/home.gif" alt="" class="icon" /></a><a href="{$base_dir}">{l s='Home' mod='referralprogram'}</a></li>
+	<li><a href="{$base_dir}"><img src="{$img_dir}icon/home.gif" alt="" class="icon" /></a><a href="{$base_dir_ssl}">{l s='Home' mod='referralprogram'}</a></li>
 </ul>

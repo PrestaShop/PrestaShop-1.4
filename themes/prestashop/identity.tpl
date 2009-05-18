@@ -1,4 +1,10 @@
-{capture name=path}<a href="my-account.php">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your personal information'}{/capture}
+<script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+-->
+</script>
+
+{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your personal information'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='Your personal information'}</h2>
@@ -13,7 +19,7 @@
 {else}
 	<h3>{l s='Do not hesitate to update your personal information if it has changed.'}</h3>
 	<p class="required"><sup>*</sup>{l s='Required field'}</p>
-	<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
+	<form action="{$base_dir_ssl}identity.php" method="post" class="std">
 		<fieldset>
 			<p class="radio">
 				<span>{l s='Gender'}</span>

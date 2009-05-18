@@ -152,7 +152,7 @@ $smarty->assign(array(
 	'revive_sent' => $revive_sent,
 	'nbRevive' => $nbRevive,
 	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed'),
-	'mails_exists' => $mails_exists
+	'mails_exists' => (isset($mails_exists) ? $mails_exists : array())
 ));
 
 echo Module::display(dirname(__FILE__).'/referralprogram.php', 'referralprogram-program.tpl');
