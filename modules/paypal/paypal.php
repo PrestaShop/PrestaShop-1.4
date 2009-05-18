@@ -29,15 +29,19 @@ class Paypal extends PaymentModule
 
 	public function install()
 	{
-		if (!parent::install() OR !Configuration::updateValue('PAYPAL_BUSINESS', 'paypal@prestashop.com')
-			OR !Configuration::updateValue('PAYPAL_SANDBOX', 1) OR !$this->registerHook('payment'))
+		if (!parent::install()
+			OR !Configuration::updateValue('PAYPAL_BUSINESS', 'paypal@prestashop.com')
+			OR !Configuration::updateValue('PAYPAL_SANDBOX', 1)
+			OR !$this->registerHook('payment')
+			OR !$this->registerHook('paymentReturn'))
 			return false;
 		return true;
 	}
 
 	public function uninstall()
 	{
-		if (!Configuration::deleteByName('PAYPAL_BUSINESS') OR !Configuration::deleteByName('PAYPAL_SANDBOX')
+		if (!Configuration::deleteByName('PAYPAL_BUSINESS')
+			OR !Configuration::deleteByName('PAYPAL_SANDBOX')
 			OR !parent::uninstall())
 			return false;
 		return true;
@@ -194,8 +198,13 @@ class Paypal extends PaymentModule
 		));
 
 		return $this->display(__FILE__, 'paypal.tpl');
-    }
-	
+	}
+
+	public function hookPaymentReturn($params)
+	{
+		return $this->display(__FILE__, 'confirmation.tpl');
+	}
+
 	public function getL($key)
 	{
 		$translations = array(
@@ -218,5 +227,3 @@ class Paypal extends PaymentModule
 		return $translations[$key];
 	}
 }
-
-?>
