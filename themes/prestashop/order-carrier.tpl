@@ -21,7 +21,7 @@
 
 {include file=$tpl_dir./errors.tpl}
 
-<form id="form" action="{$base_dir}order.php" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
+<form id="form" action="{$base_dir_ssl}order.php" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
 
 {if $conditions}
 	<h3 class="condition_title">{l s='Terms of service'}</h3>

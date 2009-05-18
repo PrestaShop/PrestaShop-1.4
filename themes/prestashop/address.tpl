@@ -25,7 +25,7 @@ $(function(){ldelim}
 
 {include file=$tpl_dir./errors.tpl}
 
-<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
+<form action="{$base_dir_ssl}address.php" method="post" class="std">
 	<fieldset>
 		<h3>{if isset($id_address)}{l s='Your address'}{else}{l s='New address'}{/if}</h3>
 		<p class="text">

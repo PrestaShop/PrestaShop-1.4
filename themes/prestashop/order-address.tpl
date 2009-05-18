@@ -18,7 +18,7 @@
 
 {include file=$tpl_dir./errors.tpl}
 
-<form action="{$base_dir}order.php" method="post">
+<form action="{$base_dir_ssl}order.php" method="post">
 	<div class="addresses">
 		<p class="address_delivery select">
 			<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
