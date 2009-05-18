@@ -59,7 +59,7 @@ class AdminGroups extends AdminTab
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
-					</div>';							
+					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
 		echo '
 				</div>
@@ -90,7 +90,7 @@ class AdminGroups extends AdminTab
 		echo '
 		<fieldset style="width: 400px">
 			<div style="float: right"><a href="'.$currentIndex.'&updategroup&id_group='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
-			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[$defaultLanguage]).'</span>
+			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[intval($cookie->id_lang)]).'</span>
 			<div class="clear">&nbsp;</div>
 			'.$this->l('Reduction:').' '.floatval($obj->reduction).$this->l('%').'
 		</fieldset>
@@ -177,5 +177,3 @@ class AdminGroups extends AdminTab
 			parent::postProcess();
 	}
 }
-
-?>
