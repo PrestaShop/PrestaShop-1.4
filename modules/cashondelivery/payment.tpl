@@ -5,5 +5,4 @@
 		<br />{l s='You pay for the merchandise upon delivery' mod='cashondelivery'}
 		<br style="clear:both;" />
 	</a>
-	
 </p>
