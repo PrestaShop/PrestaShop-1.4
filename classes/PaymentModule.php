@@ -123,12 +123,6 @@ abstract class PaymentModule extends Module
 			// Next !
 			if ($result AND isset($order->id))
 			{
-				// Set order state in order history
-				$history = new OrderHistory();
-				$history->id_order = intval($order->id);
-				$history->changeIdOrderState(intval($id_order_state), intval($order->id));
-				$history->addWithemail(true, $extraVars);
-
 				// Optional message to attach to this order 
 				if (isset($message) AND !empty($message))
 				{
@@ -280,6 +274,13 @@ abstract class PaymentModule extends Module
 						if ($orderStatus->logable)
 							ProductSale::addProductSale($product['id_product'], $product['quantity']);
 				}
+
+				// Set order state in order history
+				$new_history = new OrderHistory();
+				$new_history->id_order = intval($order->id);
+				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
+				$new_history->addWithemail(true, $extraVars);
+
 				// Send an e-mail to customer
 				if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_ AND $customer->id)
 				{
@@ -344,7 +345,6 @@ abstract class PaymentModule extends Module
 
 					if ($orderStatus->send_email AND Validate::isEmail($customer->email))
 						Mail::Send(intval($order->id_lang), 'order_conf', 'Order confirmation', $data, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, $fileAttachment);
-
 					$this->currentOrder = intval($order->id);
 					return true;
 				}
