@@ -20,7 +20,6 @@ else
 {
 	/* or ask for confirmation */ 
 	$smarty->assign(array(
-		'currency_default' => new Currency(Configuration::get('PS_CURRENCY_DEFAULT')),
 		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
 		'this_path_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/cashondelivery/'
 	));
