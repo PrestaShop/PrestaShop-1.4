@@ -782,7 +782,7 @@ class PDF extends PDF_PageGroup
 
 	static private function convertSign($s)
 	{
-		return str_replace('&yen;', chr(165), str_replace('&pound;', chr(163), str_replace('&euro;', chr(128), $s)));
+		return str_replace('¥', chr(165), str_replace('£', chr(163), str_replace('€', chr(128), $s)));
 	}
 
 	static protected function l($string)
