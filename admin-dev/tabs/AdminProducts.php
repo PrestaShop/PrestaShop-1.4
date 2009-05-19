@@ -2540,7 +2540,6 @@ class AdminProducts extends AdminTab
 	private function fillPackItems($obj)
 	{
 		global $currentIndex, $cookie;
-		echo '<script type="text/javascript">console.log("id_category: '.intval(Tools::getValue('id_category')).'");</script>';
 		return '
 		function fillPackItems()
 		{
