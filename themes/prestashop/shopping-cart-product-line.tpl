@@ -14,7 +14,12 @@
 			<img src="{$img_dir}icon/unavailable.gif" alt="{l s='Out of stock'}" />
 		{/if}
 	</td>
-	<td class="cart_unit"><span class="price">{convertPrice price=$product.price_wt}</span></td>
+	<td class="cart_unit">
+		<span class="price">
+			{convertPrice price=$product.price_wt} {l s='+Tx'}<br />
+			{convertPrice price=$product.price} {l s='-Tx'}
+		</span>
+	</td>
 	<td class="cart_quantity">
 		{if isset($customizedDatas.$productId.$productAttributeId) AND $quantityDisplayed == 0}{$product.customizationQuantityTotal}{/if}
 		{if !isset($customizedDatas.$productId.$productAttributeId) OR $quantityDisplayed > 0}
@@ -24,5 +29,15 @@
 			<a class="cart_quantity_down" href="{$base_dir}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;op=down&amp;token={$token_cart}" title="{l s='Subtract'}"><img src="{$img_dir}icon/quantity_down.gif" alt="{l s='Subtract'}" /></a>
 		{/if}
 	</td>
-	<td class="cart_total"><span class="price">{if $quantityDisplayed == 0 AND isset($customizedDatas.$productId.$productAttributeId)}{convertPrice price=$product.total_customization_wt}{else}{convertPrice price=$product.total_wt}{/if}</span></td>
+	<td class="cart_total">
+		<span class="price">
+			{if $quantityDisplayed == 0 AND isset($customizedDatas.$productId.$productAttributeId)}
+				{convertPrice price=$product.total_customization_wt} {l s='+Tx'}<br />
+				{convertPrice price=$product.total_customization} {l s='-Tx'}
+			{else}
+				{convertPrice price=$product.total_wt} {l s='+Tx'}<br />
+				{convertPrice price=$product.total} {l s='-Tx'}
+			{/if}
+		</span>
+	</td>
 </tr>

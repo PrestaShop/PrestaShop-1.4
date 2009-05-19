@@ -15,7 +15,8 @@
 					<p class="product_desc"><a href="{$product.link}" title="{l s='More' mod='homefeatured'}">{$product.description_short|truncate:130|strip_tags:htmlall:'UTF-8'}</a></p>
 					<a href="{$product.link}" title="{$product.legend|escape:htmlall:'UTF-8'}" class="product_image"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'home')}" alt="{$product.legend|escape:htmlall:'UTF-8'}" /></a>
 					<p>
-						<span class="price">{displayWtPrice p=$product.price}</span>
+						<div class="price_container"><span class="price">{convertPrice price=$product.price}</span> {l s='Tax inc.' mod='homefeatured'}</div>
+						<div class="price_container"><span class="price">{convertPrice price=$product.price_tax_exc}</span> {l s='Tax exc.' mod='homefeatured'}</div>
 						<a class="button" href="{$product.link}" title="{l s='View' mod='homefeatured'}">{l s='View' mod='homefeatured'}</a>
 						{if ($product.quantity > 0 OR $product.allow_oosp) AND $product.customizable != 2}
 						<a class="exclusive ajax_add_to_cart_button" rel="ajax_id_product_{$product.id_product}" href="{$base_dir}cart.php?qty=1&amp;id_product={$product.id_product}&amp;token={$static_token}&amp;add" title="{l s='Add to cart' mod='homefeatured'}">{l s='Add to cart' mod='homefeatured'}</a>

@@ -60,8 +60,12 @@
 		</thead>
 		<tfoot>
 			<tr class="cart_total_product">
-				<td colspan="6">{l s='Total products:'}</td>
+				<td colspan="6">{l s='Total products (tax incl.):'}</td>
 				<td class="price">{convertPrice price=$total_products_wt}</td>
+			</tr>
+			<tr class="cart_total_voucher">
+				<td colspan="6">{l s='Total products (tax excl.):'}</td>
+				<td class="price">{convertPrice price=$total_products}</td>
 			</tr>
 			{if $total_discounts != 0}
 			<tr class="cart_total_voucher">
@@ -81,8 +85,12 @@
 				<td class="price">{convertPrice price=$shippingCost}</td>
 			</tr>
 			{/if}
+			<tr class="cart_total_voucher">
+				<td colspan="6">{l s='Total (tax excl.):'}</td>
+				<td class="price">{convertPrice price=$total_price_without_tax}</td>
+			</tr>
 			<tr class="cart_total_price">
-				<td colspan="6">{l s='Total:'}</td>
+				<td colspan="6">{l s='Total (tax incl.):'}</td>
 				<td class="price">{convertPrice price=$total_price}</td>
 			</tr>
 			{if $free_ship > 0}

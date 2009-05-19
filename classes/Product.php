@@ -1828,6 +1828,7 @@ class		Product extends ObjectModel
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
 			$row['id_product_attribute'] = $ipa_default;
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
+		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'],
 							$row['price'], $usetax, floatval($row['rate']));
@@ -1930,6 +1931,7 @@ class		Product extends ObjectModel
 			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
 			$priceWt = floatval(isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt']);
+			$price = floatval(isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price']);
 			$productQuantity = intval(isset($productUpdate['quantity']) ? $productUpdate['quantity'] : $productUpdate['product_quantity']);
 
 			if (isset($customizedDatas[$productId][$productAttributeId]))
@@ -1940,6 +1942,8 @@ class		Product extends ObjectModel
 			{
 				$productUpdate['total_wt'] = number_format($priceWt * ($productQuantity - $customizationQuantity), 2, '.', '');
 				$productUpdate['total_customization_wt'] = number_format($priceWt * $customizationQuantity, 2, '.', '');
+				$productUpdate['total'] = number_format($price * ($productQuantity - $customizationQuantity), 2, '.', '');
+				$productUpdate['total_customization'] = number_format($price * $customizationQuantity, 2, '.', '');
 			}
 		}
 	}

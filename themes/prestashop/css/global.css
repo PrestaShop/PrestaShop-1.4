@@ -1099,7 +1099,10 @@ div.myaccount .block_content {
 	text-align: center;
 	font-size: 1.6em;
 	padding: 0.5em 0;
-	display: block;
+	/*display: block;*/
+}
+div.price_container {
+	text-align: center;
 }
 #center_column .products_block .featured_price { 
 	margin-top:2.5em;
@@ -1511,7 +1514,7 @@ ul#product_list li div.right_block{
 	width: 11em;
 	text-align:right;
 	margin-left:1em;
-	margin-top:1.5em;
+	margin-top:0;
 }
 ul#product_list li .discount{
 	color:#da0f00;
