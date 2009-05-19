@@ -2,7 +2,7 @@
 
 define('PAYPAL_API_VERSION', '53.0');
 
-class PaypalAPI extends PaypalAPI
+class PaypalLib extends PaypalAPI
 {
 	private $_logs = array();
 

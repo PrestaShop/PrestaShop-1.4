@@ -36,8 +36,8 @@ class PaypalExpress extends PaypalAPI
 		if ($this->_header) $request .= '&HDRIMG='.urlencode($this->_header);
 
 		// Calling PayPal API
-		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalAPI.php');
-		$ppAPI = new PaypalAPI();
+		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+		$ppAPI = new PaypalLib();
 		$result = $ppAPI->makeCall($this->getAPIURL(), $this->getAPIScript(), 'SetExpressCheckout', $request);
 		$this->_logs = array_merge($this->_logs, $ppAPI->getLogs());
 		return $result;
@@ -51,8 +51,8 @@ class PaypalExpress extends PaypalAPI
 		$request = '&TOKEN='.urlencode(strval($cookie->paypal_token));
 
 		// Calling PayPal API
-		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalAPI.php');
-		$ppAPI = new PaypalAPI();
+		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+		$ppAPI = new PaypalLib();
 		$result = $ppAPI->makeCall($this->getAPIURL(), $this->getAPIScript(), 'GetExpressCheckoutDetails', $request);
 		$this->_logs = array_merge($this->_logs, $ppAPI->getLogs());
 		return $result;

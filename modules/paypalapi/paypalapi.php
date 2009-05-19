@@ -236,8 +236,8 @@ class PaypalAPI extends PaymentModule
 		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn;
 
 		// Calling PayPal API
-		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalAPI.php');
-		$ppAPI = new PaypalAPI();
+		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+		$ppAPI = new PaypalLib();
 		$result = $ppAPI->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoExpressCheckoutPayment', $request);
 		$this->_logs = array_merge($this->_logs, $ppAPI->getLogs());
 

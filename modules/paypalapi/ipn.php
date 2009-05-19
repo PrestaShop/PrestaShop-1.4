@@ -4,7 +4,7 @@ include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
 
 include_once(_PS_MODULE_DIR_.'paypalapi/paypalapi.php');
-$pp = new PaypalAPI();
+$pp = new PaypalLib();
 
 if (!$transaction_id = strval(Tools::getValue('txn_id')))
 	die('No transaction id');
@@ -26,8 +26,8 @@ foreach ($_POST AS $key => $value)
 	$params .= '&'.$key.'='.urlencode(stripslashes($value));
 
 // Checking params by asking PayPal
-include(_PS_MODULE_DIR_.'paypalapi/api/PaypalAPI.php');
-$ppAPI = new PaypalAPI();
+include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+$ppAPI = new PaypalLib();
 $result = $ppAPI->makeSimpleCall($ppAPI->getPayPalURL(), $ppAPI->getPayPalScript(), $params);
 if (!$result OR (Tools::strlen($result) < 8) OR (!$statut = substr($result, -8)) OR $statut != 'VERIFIED')
 	die('Incorrect PayPal verified');
