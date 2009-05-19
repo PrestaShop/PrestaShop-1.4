@@ -18,11 +18,11 @@
 	</p>
 	<p style="margin-top:20px;">
 		- {l s='The total amount of your order is' mod='paypalapi'}
-			<span id="amount_{$currency->id_currency}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span>
+			<span id="amount_{$currency->id}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span>
 	</p>
 	<p>
 		- {l s='We accept the following currency to be sent by PayPal:' mod='paypalapi'}&nbsp;<b>{$currency->name}</b>
-			<input type="hidden" name="currency_payement" value="{$currency->id_currency}">
+			<input type="hidden" name="currency_payement" value="{$currency->id}">
 	</p>
 	<p>
 		<b>{l s='Please confirm your order by clicking \'I confirm my order\'' mod='paypalapi'}.</b>
