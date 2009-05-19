@@ -225,7 +225,7 @@ class PaypalAPI extends PaymentModule
 		$currency = new Currency(intval($id_currency));
 		$iso_currency = $currency->iso_code;
 		$token = strval($cookie->paypal_token);
-		$total = floatval($cart->getOrderTotal(true, 3));
+		$total = number_format(floatval($cart->getOrderTotal(true, 3)), 2, '.', '');
 		$payerID = strval($payerID);
 		$paymentType = 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);
@@ -271,7 +271,7 @@ class PaypalAPI extends PaymentModule
 		}
 
 		// Execute Module::validateOrder()
-		$this->validateOrder($id_cart, $id_order_state, $total, $this->displayName, $message, array(), $id_currency);
+		$this->validateOrder($id_cart, $id_order_state, floatval($cart->getOrderTotal(true, 3)), $this->displayName, $message, array(), $id_currency);
 
 		// Filling PayPal table
 		$this->addOrder($id_transaction);

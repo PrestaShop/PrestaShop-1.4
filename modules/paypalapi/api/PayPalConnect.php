@@ -9,18 +9,14 @@ class PayPalConnect extends PaypalAPI
 		$this->_logs[] = $this->l('Making new connection to').' \''.$host.$script.'\'';
 		if (function_exists('curl_exec'))
 			$return = $this->_connectByCURL($host.$script, $body);
-		if (!isset($return) OR !$return)
-		{
-			$tmp = $this->_connectByFSOCK($host, $script, $body);
-			if ($simple_mode)
-			{
-				preg_match('#.*(TOKEN.*)$#Ui', $tmp, $result);
-				$return = $result[1];
-			}
-			else
-				$return = $tmp;
-		}
-		return $return;
+		if (isset($return) AND $return)
+			return $return;
+		$tmp = $this->_connectByFSOCK($host, $script, $body);
+		if (!$simple_mode || !preg_match('/[A-Z]+=/', $tmp, $result))
+			return $tmp;
+		$pos = strpos($tmp, $result[0]);
+		$body = substr($tmp, $pos);
+		return $body;
 	}
 
 	public function getLogs()

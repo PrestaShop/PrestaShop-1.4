@@ -29,8 +29,13 @@ class PaypalLib extends PaypalAPI
 		foreach ($response as $k => $res)
 		{
 			$tmp = explode('=', $res);
-			$response[$tmp[0]] = urldecode($tmp[1]);
-			unset($response[$k]);
+			if (!isset($tmp[1]))
+				$response[$tmp[0]] = urldecode($tmp[0]);
+			else
+			{
+				$response[$tmp[0]] = urldecode($tmp[1]);
+				unset($response[$k]);
+			}
 		}
 		$this->_logs[] = '<b>'.$this->l('PayPal response:').'</b>';
 		foreach ($response as $k => $res)
