@@ -18,30 +18,11 @@
 	</p>
 	<p style="margin-top:20px;">
 		- {l s='The total amount of your order is' mod='paypalapi'}
-		{if $currencies|@count > 1}
-			{foreach from=$currencies item=currency}
-				<span id="amount_{$currency.id_currency}" class="price" style="display:none;">{convertPriceWithCurrency price=$total currency=$currency}</span>
-			{/foreach}
-		{else}
-			<span id="amount_{$currencies.0.id_currency}" class="price">{convertPriceWithCurrency price=$total currency=$currencies.0}</span>
-		{/if}
+			<span id="amount_{$currency->id_currency}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span>
 	</p>
 	<p>
-		-
-		{if $currencies|@count > 1}
-			{l s='We accept several currencies to be sent by PayPal.' mod='paypalapi'}
-			<br /><br />
-			{l s='Choose one of the following:' mod='paypalapi'}
-			<select id="currency_payement" name="currency_payement" onChange="showElemFromSelect('currency_payement', 'amount_')">
-				{foreach from=$currencies item=currency}
-					<option value="{$currency.id_currency}" {if $currency.id_currency == $cust_currency}selected="selected"{/if}>{$currency.name}</option>
-				{/foreach}
-			</select>
-			<script language="javascript">showElemFromSelect('currency_payement', 'amount_');</script>
-		{else}
-			{l s='We accept the following currency to be sent by PayPal:' mod='paypalapi'}&nbsp;<b>{$currencies.0.name}</b>
-			<input type="hidden" name="currency_payement" value="{$currencies.0.id_currency}">
-		{/if}
+		- {l s='We accept the following currency to be sent by PayPal:' mod='paypalapi'}&nbsp;<b>{$currency->name}</b>
+			<input type="hidden" name="currency_payement" value="{$currency->id_currency}">
 	</p>
 	<p>
 		<b>{l s='Please confirm your order by clicking \'I confirm my order\'' mod='paypalapi'}.</b>

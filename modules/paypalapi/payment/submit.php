@@ -49,7 +49,7 @@ function displayConfirm()
 
 	$smarty->assign(array(
 		'cust_currency' => $cookie->id_currency,
-		'currencies' => $ppPayment->getCurrency(),
+		'currency' => $ppPayment->getCurrency(),
 		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
 		'this_path_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'
