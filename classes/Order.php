@@ -247,6 +247,13 @@ class		Order extends ObjectModel
 		return $result['message'];
 	}
 
+	public function getFirstMessage()
+	{
+		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.$this->id.' ORDER BY `id_message` asc';
+		$result = Db::getInstance()->getRow($sql);
+		return $result['message'];
+	}
+
 	/**
 	 * Get order products
 	 *

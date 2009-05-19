@@ -94,7 +94,7 @@ class MailAlerts extends Module
 		$invoice = new Address(intval($order->id_address_invoice));
 		$order_date_text = Tools::displayDate($order->date_add, intval($id_lang));
 		$carrier = new Carrier(intval($order->id_carrier));
-		$message = $order->getLastMessage();
+		$message = $order->getFirstMessage();
 		if (!$message OR empty($message))
 			$message = $this->l('No message');
 
