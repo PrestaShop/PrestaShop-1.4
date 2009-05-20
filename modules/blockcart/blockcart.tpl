@@ -29,7 +29,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 		<span class="ajax_cart_quantity">{if $cart_qties > 0}{$cart_qties}{/if}</span>
 		<span class="ajax_cart_product_txt_s{if $cart_qties < 2} hidden{/if}">{l s='products' mod='blockcart'}</span>
 		<span class="ajax_cart_product_txt{if $cart_qties != 1} hidden{/if}">{l s='product' mod='blockcart'}</span>
-		<span class="ajax_cart_total">{if $cart_qties > 0}{convertPrice price=$cart->getOrderTotal(true)}{/if}</span>
+		<span class="ajax_cart_total">{if $cart_qties > 0}{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false)}{else}{convertPrice price=$cart->getOrderTotal(true)}{/if}{/if}</span>
 		<span class="ajax_cart_no_product">{if $cart_qties == 0}{l s='(empty)' mod='blockcart'}{/if}</span>
 	</div>
 	<!-- block list of products -->
@@ -100,6 +100,11 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			<span>{l s='Total' mod='blockcart'}</span>
 			<span id="cart_block_total" class="price ajax_block_cart_total">{$total}</span>
 		</p>
+		{if $priceDisplay == 2}
+			<p id="cart-price-precisions">
+				Product prices & Total are tax included
+			</p>
+		{/if}
 		<p id="cart-buttons">
 			<a href="{$base_dir_ssl}order.php" class="button_small" title="{l s='Cart' mod='blockcart'}">{l s='Cart' mod='blockcart'}</a>
 			<a href="{$base_dir_ssl}order.php?step=1" id="button_order_cart" class="exclusive" title="{l s='Check out' mod='blockcart'}">{l s='Check out' mod='blockcart'}</a>

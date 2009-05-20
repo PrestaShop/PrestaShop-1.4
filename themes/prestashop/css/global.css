@@ -1396,6 +1396,14 @@ width: 155px;
 	list-style-type: square;
 }
 
+#cart_block #cart-price-precisions {
+	margin-top:0.5em;
+	padding-top: 0.4em;
+	border-top:1px solid white;
+	font-size: 0.8em;
+	height: 2em;
+}
+
 /* authentication.tpl */
 #authentication #create-account_form, #authentication #login_form {
 	width: 49%;
