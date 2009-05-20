@@ -598,3 +598,5 @@ WHERE `id_discount` IN (
 		WHERE d.`id_discount` IS NULL
 		GROUP BY dc.`id_discount`) discount_category_tmp
 	);
+
+DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_DISPLAY_WITHOUT_TAX';

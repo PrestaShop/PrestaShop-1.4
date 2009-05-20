@@ -129,5 +129,7 @@ $smarty->assign(array(
 	'languages' => Language::getLanguages(),
 	'logged' => $cookie->isLogged(),
 	'page_name' => $page_name,
-	'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)));
+	'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
+	'priceDisplay' => intval(Configuration::get('PS_PRICE_DISPLAY'))
+));
 ?>
