@@ -59,23 +59,31 @@
 			</tr>
 		</thead>
 		<tfoot>
-			{if !$priceDisplay || $priceDisplay == 2}
-				<tr class="cart_total_product">
-					<td colspan="6">{l s='Total products (tax incl.):'}</td>
-					<td class="price">{convertPrice price=$total_products_wt}</td>
-				</tr>
-			{/if}
 			{if $priceDisplay}
-				<tr class="cart_total_voucher">
+				<tr class="cart_total_product">
 					<td colspan="6">{l s='Total products (tax excl.):'}</td>
 					<td class="price">{convertPrice price=$total_products}</td>
 				</tr>
 			{/if}
+			{if !$priceDisplay || $priceDisplay == 2}
+				<tr class="cart_total_{if !$priceDisplay}product{else}voucher{/if}">
+					<td colspan="6">{l s='Total products (tax incl.):'}</td>
+					<td class="price">{convertPrice price=$total_products_wt}</td>
+				</tr>
+			{/if}
 			{if $total_discounts != 0}
-			<tr class="cart_total_voucher">
-				<td colspan="6">{l s='Total vouchers:'}</td>
-				<td class="price-discount">{convertPrice price=$total_discounts}</td>
-			</tr>
+				{if $priceDisplay}
+					<tr class="cart_total_voucher">
+						<td colspan="6">{l s='Total vouchers (tax excl.):'}</td>
+						<td class="price-discount">{convertPrice price=$total_discounts_tax_exc}</td>
+					</tr>
+				{/if}
+				{if !$priceDisplay || $priceDisplay == 2}
+					<tr class="cart_total_voucher">
+						<td colspan="6">{l s='Total vouchers (tax incl.):'}</td>
+						<td class="price-discount">{convertPrice price=$total_discounts}</td>
+					</tr>
+				{/if}
 			{/if}
 			{if $total_wrapping > 0}
 			<tr class="cart_total_voucher">
@@ -84,10 +92,18 @@
 			</tr>
 			{/if}
 			{if $shippingCost > 0}
-			<tr class="cart_total_delivery">
-				<td colspan="6">{l s='Total shipping:'}</td>
-				<td class="price">{convertPrice price=$shippingCost}</td>
-			</tr>
+				{if $priceDisplay}
+					<tr class="cart_total_delivery">
+						<td colspan="6">{l s='Total shipping (tax excl.):'}</td>
+						<td class="price">{convertPrice price=$shippingCostTaxExc}</td>
+					</tr>
+				{/if}
+				{if !$priceDisplay || $priceDisplay == 2}
+					<tr class="cart_total_delivery">
+						<td colspan="6">{l s='Total shipping (tax incl.):'}</td>
+						<td class="price">{convertPrice price=$shippingCost}</td>
+					</tr>
+				{/if}
 			{/if}
 			<tr class="cart_total_voucher">
 				<td colspan="6">{l s='Total (tax excl.):'}</td>
@@ -153,7 +169,12 @@
 				<td class="cart_discount_name" colspan="2">{$discount.name}</td>
 				<td class="cart_discount_description" colspan="3">{$discount.description}</td>
 				<td class="cart_discount_delete"><a href="{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
-				<td class="cart_discount_price"><span class="price-discount">{if $discount.value_real > 0}{convertPrice price=$discount.value_real*-1}{/if}</span> {l s='+Tx'}</td>
+				<td class="cart_discount_price"><span class="price-discount">
+					{if $discount.value_real > 0}
+						{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$discount.value_real*-1}{if $priceDisplay == 2} {l s='+Tx'}<br />{/if}{/if}
+						{if $priceDisplay}{convertPrice price=$discount.value_tax_exc*-1}{if $priceDisplay == 2} {l s='-Tx'}{/if}{/if}
+					{/if}
+				</span></td>
 			</tr>
 		{/foreach}
 		</tbody>

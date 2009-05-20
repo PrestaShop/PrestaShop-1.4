@@ -80,7 +80,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			{foreach from=$discounts item=discount}
 				<tr id="bloc_cart_voucher_{$discount.id_discount}">
 					<td class="name" title="{$discount.description}">{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...':true:false}</td>
-					<td class="price">-{convertPrice price=$discount.value_real}</td>
+					<td class="price">-{if $priceDisplay == 1}{convertPrice price=$discount.value_tax_exc}{else}{convertPrice price=$discount.value_real}{/if}</td>
 					<td class="delete"><a href="{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
 				</tr>
 			{/foreach}
@@ -102,7 +102,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 		</p>
 		{if $priceDisplay == 2}
 			<p id="cart-price-precisions">
-				Product prices & Total are tax included
+				{l s='Prices are tax included' mod='blockcart'}
 			</p>
 		{/if}
 		<p id="cart-buttons">

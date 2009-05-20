@@ -419,6 +419,7 @@ function displaySummary()
 		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
 		'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
 		'shippingCost' => $cart->getOrderTotal(true, 5),
+		'shippingCostTaxExc' => $cart->getOrderTotal(false, 5),
 		'customizedDatas' => $customizedDatas,
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,

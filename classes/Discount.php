@@ -193,7 +193,7 @@ class		Discount extends ObjectModel
 	  * @param boolean $order_total_products Total cart products amount
 	  * @return mixed Return a float value or '!' if reduction is 'Shipping free'
 	  */
-	function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $idCart = false)
+	function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $idCart = false, $useTax = true)
 	{
 		$totalAmount = 0;
 
@@ -203,9 +203,9 @@ class		Discount extends ObjectModel
 			return 0;
 		if (!$this->quantity)
 			return 0;
-    $date_start = strtotime($this->date_from);
-    $date_end = strtotime($this->date_to);
-    if (time() < $date_start OR time() > $date_end) return 0;
+		$date_start = strtotime($this->date_from);
+		$date_end = strtotime($this->date_to);
+		if (time() < $date_start OR time() > $date_end) return 0;
 
 		$cart = new Cart(intval($idCart));
 		$products = $cart->getProducts();
@@ -215,7 +215,7 @@ class		Discount extends ObjectModel
 		foreach ($products AS $product)
 			if(count($categories))
 				if (Product::idIsOnCategoryId($product['id_product'], $categories))
-					$totalAmount += $product['total_wt'];
+					$totalAmount += $useTax ? $product['total_wt'] : $product['total'];
 		
 		$totalAmount += floatval($shipping_fees);
 		if ($this->minimal > 0 AND $totalAmount < $this->minimal)
@@ -229,7 +229,7 @@ class		Discount extends ObjectModel
 				$percentage = $this->value / 100;
 				foreach ($products AS $product)
 						if (Product::idIsOnCategoryId($product['id_product'], $categories))
-							$amount += $product['total_wt'] * $percentage;
+							$amount += ($useTax ? $product['total_wt'] : $product['total']) * $percentage;
 				return $amount;
 			case 2:
 				// amount

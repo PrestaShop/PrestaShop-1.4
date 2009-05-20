@@ -58,7 +58,7 @@
 		'description':     '{$discount.description|addslashes}',
 		'nameDescription': '{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...':true:false}',
 		'link':            '{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}',
-		'price':           '-{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_real}'
+		'price':           '-{if $priceDisplay == 1}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_tax_exc}{else}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_real}{/if}'
 	{rdelim}
 	{if !$smarty.foreach.discounts.last},{/if}
 {/foreach}{/if}

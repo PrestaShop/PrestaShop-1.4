@@ -152,13 +152,16 @@ class		Cart extends ObjectModel
 		}
 
 		$total_products_wt = $this->getOrderTotal(true, 1);
-		$shipping = $this->getOrderShippingCost();
+		$total_products = $this->getOrderTotal(false, 1);
+		$shipping_wt = $this->getOrderShippingCost();
+		$shipping = $this->getOrderShippingCost(NULL, false);
 		self::$_discounts[$this->id] = array();
 		foreach ($result as $row)
 		{
 			$discount = new Discount($row['id_discount'], intval($this->id_lang));
 			$row['description'] = $discount->description ? $discount->description : $discount->name;
-			$row['value_real'] = $discount->getValue(sizeof($result), $total_products_wt, $shipping, $this->id);
+			$row['value_real'] = $discount->getValue(sizeof($result), $total_products_wt, $shipping_wt, $this->id);
+			$row['value_tax_exc'] = $discount->getValue(sizeof($result), $total_products, $shipping, $this->id, false);
 			self::$_discounts[$this->id][] = $row;
 		}
 
@@ -563,7 +566,7 @@ class		Cart extends ObjectModel
 			return 0;
 		if ($virtual AND $type == 3)
 			$type = 4;
-		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost() : 0;
+		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost(NULL, intval($withTaxes)) : 0;
 		if ($type == 7)
 			$type = 1;
 			
@@ -610,7 +613,7 @@ class		Cart extends ObjectModel
 				/* Secondly applying all vouchers to the correct amount */
 				foreach ($discounts AS $discount)
 					if ($discount->id_discount_type != 3)
-						$order_total -= floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id));
+						$order_total -= floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes)));
 			}
 		}
 		if ($type == 5) return $shipping_fees;
@@ -626,8 +629,8 @@ class		Cart extends ObjectModel
 	* @param integer $id_carrier Carrier ID (default : current carrier)
 	* @return float Shipping total
 	*/
-    function getOrderShippingCost($id_carrier = NULL)
-    {	
+    function getOrderShippingCost($id_carrier = NULL, $useTax = true)
+    {
 		global $defaultCountry;
 
 		if ($this->isVirtualCart())
@@ -645,7 +648,7 @@ class		Cart extends ObjectModel
 				if ($discount->id_discount_type == 3)
 				{
 					$total_cart = 0;
-				$categories = Discount::getCategories($discount->id);
+					$categories = Discount::getCategories($discount->id);
 					foreach($products AS $product)
 					{
 						if(count($categories))
@@ -686,14 +689,13 @@ class		Cart extends ObjectModel
 			$id_zone = intval($defaultCountry->id_zone);
 		
 		// Select carrier tax
-		if ($carrier->id_tax)
+		if ($useTax AND $carrier->id_tax)
 		{
 			if (!isset(self::$_taxes[$carrier->id_tax]))
 				self::$_taxes[$carrier->id_tax] = new Tax(intval($carrier->id_tax));
 			$tax = self::$_taxes[$carrier->id_tax];
-			if (Validate::isLoadedObject($tax))
-				if (Tax::zoneHasTax(intval($tax->id), intval($id_zone)) AND !Tax::excludeTaxeOption())
-					$carrierTax = $tax->rate;
+			if (Validate::isLoadedObject($tax) AND Tax::zoneHasTax(intval($tax->id), intval($id_zone)) AND !Tax::excludeTaxeOption())
+				$carrierTax = $tax->rate;
 		}
 		$configuration = Configuration::getMultiple(array('PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
 		// Free fees
@@ -860,8 +862,10 @@ class		Cart extends ObjectModel
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(),
 			'total_discounts' => number_format($this->getOrderTotal(true, 2), 2, '.', ''),
+			'total_discounts_tax_exc' => number_format($this->getOrderTotal(false, 2), 2, '.', ''),
 			'total_wrapping' => number_format($this->getOrderTotal(true, 6), 2, '.', ''),
 			'total_shipping' => number_format($this->getOrderShippingCost(), 2, '.', ''),
+			'total_shipping_tax_exc' => number_format($this->getOrderShippingCost(NULL, false), 2, '.', ''),
 			'total_products_wt' => number_format($this->getOrderTotal(true, 1), 2, '.', ''),
 			'total_products' => number_format($this->getOrderTotal(false, 1), 2, '.', ''),
 			'total_price' => number_format($this->getOrderTotal(), 2, '.', ''),
