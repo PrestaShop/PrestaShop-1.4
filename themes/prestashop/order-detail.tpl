@@ -80,9 +80,16 @@
 			</tr>
 		</thead>
 		<tfoot>
+			{if $priceDisplay}
+				<tr class="item">
+					<td colspan="{if $return_allowed}6{else}5{/if}">
+						{l s='Total products (tax excl.):'} <span class="price">{displayWtPriceWithCurrency price=$order->getTotalProductsWithoutTaxes() currency=$currency convert=0}</span>
+					</td>
+				</tr>
+			{/if}
 			<tr class="item">
 				<td colspan="{if $return_allowed}6{else}5{/if}">
-					{l s='Total products:'} <span class="price">{displayWtPriceWithCurrency price=$order->getTotalProductsWithTaxes() currency=$currency convert=0}</span>
+					{l s='Total products (tax incl.):'} <span class="price">{displayWtPriceWithCurrency price=$order->getTotalProductsWithTaxes() currency=$currency convert=0}</span>
 				</td>
 			</tr>
 			{if $order->total_discounts > 0}
@@ -98,10 +105,10 @@
 					{l s='Total gift-wrapping:'} <span class="price-wrapping">{displayWtPriceWithCurrency price=$order->total_wrapping currency=$currency convert=0}</span>
 				</td>
 			</tr>
-			{/if}			
+			{/if}
 			<tr class="item">
 				<td colspan="{if $return_allowed}6{else}5{/if}">
-					{l s='Total shipping:'} <span class="price-shipping">{displayWtPriceWithCurrency price=$order->total_shipping currency=$currency convert=0}</span>
+					{l s='Total shipping (tax incl.):'} <span class="price-shipping">{displayWtPriceWithCurrency price=$order->total_shipping currency=$currency convert=0}</span>
 				</td>
 			</tr>
 			<tr class="item">

@@ -6,6 +6,7 @@ $_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Retour n°';
 $_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Avoir n°';
 $_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Bon de livraison n°';
 $_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Facture n°';
+$_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Commande n°';
 $_LANGPDF['PDF_invoice8dae339c20973fe3fcdeb5f2e8e8f894'] = 'Une version électronique est conservée sur votre compte. Pour y accéder, identifiez-vous sur le site';
 $_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'Une version électronique est conservée sur votre compte. Pour y accéder, identifiez-vous sur le site';
 $_LANGPDF['PDF_invoicef14e57cfbfd08615bbb665cb803f46b1'] = 'avec vos identifiants (créés lors de votre première commande).';
@@ -37,7 +38,8 @@ $_LANGPDF['PDF_invoiced1228f5476d15142b1358ae4b5fa2454'] = 'Commande n°';
 $_LANGPDF['PDF_invoicef8617a92ba0a0a4eabee724eab7c9f48'] = 'Transporteur :';
 $_LANGPDF['PDF_invoicec1f6368d15f7c13c4e5e8f70c68c747f'] = 'Méthode de paiement :';
 $_LANGPDF['PDF_invoicea3a79b28bc45b7fd393effd056b917e1'] = 'Date d\'expédition :';
-$_LANGPDF['PDF_invoice1d449f39dc4e1dbfc87e588ace899356'] = 'Total produits TTC';
+$_LANGPDF['PDF_invoice2370a4958c4ebe6d6c8045cd49a6b392'] = 'Total produits HT';
+$_LANGPDF['PDF_invoiceebaee01719541f61281c16ba22ebbfde'] = 'Total produits TTC';
 $_LANGPDF['PDF_invoiceb76c1a1463e45cece931ef4467c0bdf8'] = 'Total réductions';
 $_LANGPDF['PDF_invoice7a5b34426b4672759796f035bbc2674e'] = 'Total emballage';
 $_LANGPDF['PDF_invoicef4e8b53a114e5a17d051ab84d326cae5'] = 'Total livraison';
@@ -54,5 +56,6 @@ $_LANGPDF['PDF_invoiceb602e0d0c6a72053d0a5be60cb2f8126'] = 'Taxe totale';
 $_LANGPDF['PDF_invoice068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_LANGPDF['PDF_invoice914419aa32f04011357d3b604a86d7eb'] = 'Transporteur';
 $_LANGPDF['PDF_invoiceba794350deb07c0c96fe73bd12239059'] = 'Emballage';
+$_LANGPDF['PDF_invoice6f3455d187a23443796efdcbe044096b'] = 'Aucune taxe';
 
 ?>

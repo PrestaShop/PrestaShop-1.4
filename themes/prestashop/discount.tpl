@@ -16,7 +16,7 @@
 			<th class="discount_code first_item">{l s='Code'}</th>
 			<th class="discount_description item">{l s='Description'}</th>
 			<th class="discount_quantity item">{l s='Quantity'}</th>
-			<th class="discount_value item">{l s='Value'}</th>
+			<th class="discount_value item">{l s='Value'}*</th>
 			<th class="discount_minimum item">{l s='Minimum'}</th>
 			<th class="discount_cumulative item">{l s='Cumulative'}</th>
 			<th class="discount_expiration_date last_item">{l s='Expiration date'}</th>
@@ -56,6 +56,9 @@
 	{/foreach}
 	</tbody>
 </table>
+<p>
+	*{l s='Tax included'}
+</p>
 {else}
 	<p class="warning">{l s='You do not possess any vouchers.'}</p>
 {/if}
