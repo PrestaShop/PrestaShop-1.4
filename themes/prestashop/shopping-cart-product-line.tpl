@@ -16,8 +16,8 @@
 	</td>
 	<td class="cart_unit">
 		<span class="price">
-			{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.price_wt} {l s='+Tx'}{/if}{if $priceDisplay == 2}<br />{/if}
-			{if $priceDisplay}{convertPrice price=$product.price} {l s='-Tx'}{/if}
+			{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.price_wt}{if $priceDisplay == 2} {l s='+Tx'}{/if}{/if}{if $priceDisplay == 2}<br />{/if}
+			{if $priceDisplay}{convertPrice price=$product.price}{if $priceDisplay == 2} {l s='-Tx'}{/if}{/if}
 		</span>
 	</td>
 	<td class="cart_quantity">
@@ -32,11 +32,11 @@
 	<td class="cart_total">
 		<span class="price">
 			{if $quantityDisplayed == 0 AND isset($customizedDatas.$productId.$productAttributeId)}
-				{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.total_customization_wt} {l s='+Tx'}{/if}{if $priceDisplay == 2}<br />{/if}
-				{if $priceDisplay}{convertPrice price=$product.total_customization} {l s='-Tx'}{/if}
+				{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.total_customization_wt}{if $priceDisplay == 2} {l s='+Tx'}{/if}{/if}{if $priceDisplay == 2}<br />{/if}
+				{if $priceDisplay}{convertPrice price=$product.total_customization}{if $priceDisplay == 2} {l s='-Tx'}{/if}{/if}
 			{else}
-				{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.total_wt} {l s='+Tx'}{/if}{if $priceDisplay == 2}<br />{/if}
-				{if $priceDisplay}{convertPrice price=$product.total} {l s='-Tx'}{/if}
+				{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.total_wt}{if $priceDisplay == 2} {l s='+Tx'}{/if}{/if}{if $priceDisplay == 2}<br />{/if}
+				{if $priceDisplay}{convertPrice price=$product.total}{if $priceDisplay == 2} {l s='-Tx'}{/if}{/if}
 			{/if}
 		</span>
 	</td>
