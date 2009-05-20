@@ -28,6 +28,7 @@ $_MODULE['<{cheque}prestashop>payment_execution_c42b053ef8c36f950ff37a0897d3a963
 $_MODULE['<{cheque}prestashop>payment_execution_6b3ef039e038a131d05bcd208a1b9799'] = 'Vous avez choisi de régler par chèque.';
 $_MODULE['<{cheque}prestashop>payment_execution_c884ed19483d45970c5bf23a681e2dd2'] = 'Voici un bref récapitulatif de votre commande :';
 $_MODULE['<{cheque}prestashop>payment_execution_e2867a925cba382f1436d1834bb52a1c'] = 'Le montant total de votre commande s\'élève à';
+$_MODULE['<{cheque}prestashop>payment_execution_1f87346a16cf80c372065de3c54c86d9'] = 'TTC';
 $_MODULE['<{cheque}prestashop>payment_execution_2f1585fcd1150d6a7d6edbe3468a63f8'] = 'Nous acceptons plusieurs devises pour les chèques.';
 $_MODULE['<{cheque}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'Merci de choisir parmi les suivantes :';
 $_MODULE['<{cheque}prestashop>payment_execution_c4309902a6192747d56f3539941acc49'] = 'Nous acceptons la devise suivante pour votre paiement :';
