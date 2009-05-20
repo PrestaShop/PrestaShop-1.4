@@ -5,11 +5,12 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
-#   v1.2.0.2 - 921 (2009-20-05)    #
+#   v1.2.0.2 - 927 (2009-20-05)    #
 ####################################
 
 	Added Features :
 
+	[+] FO : Shipping costs & vouchers display are taking care of the BO price display preference
 	[+] MO: Added Hook updateCarrier
 	[+] FO : Price display choice added (between 'Tax exc.', 'Tax inc.' and 'Both')
 	[+] FO/MO : Product price (tax excluded) added to the order process (including basic payment modules)
@@ -27,6 +28,9 @@ Release Notes for PrestaShop 1.2
 
 	Improved/changed features :
 
+	[*] FO: do not load jqzoom.js if not needed
+	[*] PDF : Product total without tax added to the invoice
+	[*] MO : The modules "blockuserinfo" & "blockspecials" take care of the BO price display preference
 	[*] MO : when js is not activated, it now show the tree
 	[*] MO : The "blockcart" module display product prices following the BO selected rule
 	[*] The product price display type is now showed only when the selected option is "Both"

@@ -345,7 +345,7 @@ abstract class ObjectModel
 				continue ;
 			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language)'));
+				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language').')');
 				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language') : false;
 			}
 		}
@@ -356,8 +356,8 @@ abstract class ObjectModel
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (Tools::strlen($value) > $size)
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('length > '.$size.' for language').' '.$k.')');
-					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('length > '.$size.' for language').' '.$k : false;
+					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('length >').' '.$size.' '.Tools::displayError('for language').')');
+					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('length >').' '.$size.' '.Tools::displayError('for language') : false;
 				}
 		}
 		$validate = new Validate();
