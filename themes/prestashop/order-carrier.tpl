@@ -70,7 +70,16 @@
 						</label>
 					</td>
 					<td class="carrier_infos">{$carrier.delay|escape:'htmlall':'UTF-8'}</td>
-					<td class="carrier_price">{if $carrier.price}<span class="price">{convertPrice price=$carrier.price}</span>{else}{l s='Free!'}{/if}</td>
+					<td class="carrier_price">
+						{if $carrier.price}
+							<span class="price">
+								{if $priceDisplay == 1}{convertPrice price=$carrier.price_tax_exc}{else}{convertPrice price=$carrier.price}{/if}
+							</span>
+							{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}
+						{else}
+							{l s='Free!'}
+						{/if}
+					</td>
 				</tr>
 			{/foreach}
 			{$HOOK_EXTRACARRIER}
