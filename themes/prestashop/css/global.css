@@ -1209,7 +1209,6 @@ div.paiement_logo_block img { margin: 0 0.5em; }
 
 /* Block categories */
 div#categories_block_left ul.tree { padding-left:0.5em; }
-div#categories_block_left ul.dhtml{ display:none; }
 div#categories_block_left ul.tree li {
 	border:none;
 	padding-left:15px;
