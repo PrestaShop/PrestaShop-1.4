@@ -483,6 +483,25 @@ class		Order extends ObjectModel
 		return $total;
 	}
 
+    /**
+     * Get product total without taxes
+     *
+     * @return Product total with taxes
+     */
+    public function getTotalProductsWithoutTaxes($products = false)
+	{
+		if (!$products)
+			$products = $this->getProductsDetail();
+
+        $total = 0;
+		foreach ($products AS $k => $row)
+		{
+			$qty = intval($row['product_quantity']);
+			$total += floatval($row['product_price']) * $qty;
+		}
+		return round($total, 2);
+	}
+
 	/**
 	 * Get customer orders number
 	 *

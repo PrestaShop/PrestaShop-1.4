@@ -454,7 +454,14 @@ class PDF extends PDF_PageGroup
 			$pdf->Ln(5);
 			$pdf->SetFont(self::fontname(), 'B', 8);
 			$width = 165;
-			$pdf->Cell($width, 0, self::l('Total products TI').' : ', 0, 0, 'R');
+			$pdf->Cell($width, 0, self::l('Total products (tax excl.)').' : ', 0, 0, 'R');
+			$totalProductsTe = self::$order->getTotalProductsWithoutTaxes((self::$orderSlip ? self::$order->products : false));
+			$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($totalProductsTe, self::$currency, true, false)), 0, 0, 'R');
+			$pdf->Ln(4);
+
+			$pdf->SetFont(self::fontname(), 'B', 8);
+			$width = 165;
+			$pdf->Cell($width, 0, self::l('Total products (tax incl.)').' : ', 0, 0, 'R');
 			$totalProductsTi = self::$order->getTotalProductsWithTaxes((self::$orderSlip ? self::$order->products : false));
 			$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($totalProductsTi, self::$currency, true, false)), 0, 0, 'R');
 			$pdf->Ln(4);
