@@ -5,13 +5,13 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
-#   v1.2.0.2 - 927 (2009-20-05)    #
+#   v1.2.0.2 - 933 (2009-20-05)    #
 ####################################
 
 	Added Features :
 
 	[+] FO : Shipping costs & vouchers display are taking care of the BO price display preference
-	[+] MO: Added Hook updateCarrier
+	[+] MO : Added Hook updateCarrier
 	[+] FO : Price display choice added (between 'Tax exc.', 'Tax inc.' and 'Both')
 	[+] FO/MO : Product price (tax excluded) added to the order process (including basic payment modules)
 	[+] FO : Product price (tax excluded) added to homefeature module category, product page& cart page
@@ -28,7 +28,9 @@ Release Notes for PrestaShop 1.2
 
 	Improved/changed features :
 
-	[*] FO: do not load jqzoom.js if not needed
+	[*] FO : Carrier selection show prices regarding to the BO price display preference
+	[*] FO : Price display preference applied to my account's discount & order detail page
+	[*] FO : do not load jqzoom.js if not needed
 	[*] PDF : Product total without tax added to the invoice
 	[*] MO : The modules "blockuserinfo" & "blockspecials" take care of the BO price display preference
 	[*] MO : when js is not activated, it now show the tree
@@ -63,6 +65,7 @@ Release Notes for PrestaShop 1.2
 
 	Fixed bugs :
 
+	[-] Installer : fixed SQL bug
 	[-] FO : Withdraw white background
 	[-] Installer : updated SQL data and logo
 	[-] MO : fixed message bug in MailAlerts, eg. with PayPal (#1174)
