@@ -195,6 +195,13 @@ class			Hook extends ObjectModel
 			return false;
 		return Module::hookExec('backBeforePayment', $params);
 	}
+	
+	static public function updateCarrier($id_carrier, $carrier)
+	{
+		if (!Validate::isUnsignedId($id_carrier) OR !is_object($carrier))
+			return false;
+		return Module::hookExec('updateCarrier', array('id_carrier' => $id_carrier, 'carrier' => $carrier));
+	}
 }
 
 ?>

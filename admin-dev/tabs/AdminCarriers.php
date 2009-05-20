@@ -173,7 +173,10 @@ public function postProcess()
 							$this->copyFromPost($objectNew, $this->table);
 							$result = $objectNew->add();
 							if (Validate::isLoadedObject($objectNew))
+							{
 								$this->afterDelete($objectNew, $object->id);
+								Hook::updateCarrier(intval($object->id), $objectNew);
+							}
 							
 							if (!$result)
 								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
