@@ -80,7 +80,7 @@ CREATE TABLE  PREFIX_cms_lang (
   meta_title VARCHAR(128) NOT NULL,
   meta_description VARCHAR(255) DEFAULT NULL,
   meta_keywords VARCHAR(255) DEFAULT NULL,
-  content TEXT NULL,
+  content longtext NULL,
   link_rewrite VARCHAR(128) NOT NULL,
   PRIMARY KEY  (id_cms, id_lang)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

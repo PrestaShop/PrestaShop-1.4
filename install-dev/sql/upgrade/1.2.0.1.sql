@@ -121,7 +121,7 @@ ALTER TABLE PREFIX_cart_discount
 	ADD INDEX `id_discount` (`id_discount`);
 
 ALTER TABLE PREFIX_discount_category
-	ADD PRIMARY KEY (id_discount,id_category);
+	ADD PRIMARY KEY (id_category,id_discount);
 
 ALTER TABLE PREFIX_image_lang
 	ADD INDEX id_image (id_image);

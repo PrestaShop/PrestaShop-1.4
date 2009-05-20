@@ -11,16 +11,24 @@ CREATE TABLE `PREFIX_pack` (
   PRIMARY KEY  (`id_product_pack`,`id_product_item`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-ALTER TABLE `PREFIX_manufacturer_lang` 
-ADD `short_description` VARCHAR( 254 ) NULL DEFAULT NULL ,
-ADD `meta_title` VARCHAR( 254 ) NULL DEFAULT NULL ,
-ADD `meta_keywords` VARCHAR( 254 ) NULL DEFAULT NULL ,
-ADD `meta_description` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_manufacturer_lang`
+	ADD `short_description` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_manufacturer_lang`
+	ADD `meta_title` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_manufacturer_lang`
+	ADD `meta_keywords` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_manufacturer_lang`
+	ADD `meta_description` VARCHAR( 254 ) NULL DEFAULT NULL;
 
-ALTER TABLE `PREFIX_supplier_lang` 
-ADD `meta_title` VARCHAR( 254 ) NULL DEFAULT NULL ,
-ADD `meta_keywords` VARCHAR( 254 ) NULL DEFAULT NULL ,
-ADD `meta_description` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_supplier_lang`
+	ADD `meta_title` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_supplier_lang`
+	ADD `meta_keywords` VARCHAR( 254 ) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_supplier_lang`
+	ADD `meta_description` VARCHAR( 254 ) NULL DEFAULT NULL;
+
+ALTER TABLE PREFIX_customer_group
+	ADD INDEX customer_login (id_group);
 
 /* ##################################### */
 /* 					CONTENTS					 */
