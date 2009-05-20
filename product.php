@@ -78,19 +78,27 @@ function formTargetFormat()
 
 /* CSS ans JS files calls */
 $css_files = array(
-	__PS_BASE_URI__.'css/thickbox.css' => 'screen',
-	__PS_BASE_URI__.'css/jqzoom.css' => 'screen'
+	__PS_BASE_URI__.'css/thickbox.css' => 'screen'
 );
 
 $js_files = array(
 	__PS_BASE_URI__.'js/jquery/thickbox-modified.js',
-	__PS_BASE_URI__.'js/jquery/jquery.jqzoom.js',
 	__PS_BASE_URI__.'js/jquery/jquery.idTabs.modified.js',
 	__PS_BASE_URI__.'js/jquery/jquery.scrollto.js',
 	__PS_BASE_URI__.'js/jquery/jquery.serialScroll.js',
 	_THEME_JS_DIR_.'tools.js',
 	_THEME_JS_DIR_.'product.js'
 );
+
+/* jqZoom */
+$jqZoomEnabled = (Configuration::get('PS_DISPLAY_JQZOOM') == 1);
+if ($jqZoomEnabled)
+{
+	$js_files[] = __PS_BASE_URI__.'js/jquery/jquery.jqzoom.js';
+	$css_files[__PS_BASE_URI__.'css/jqzoom.css'] = 'screen';
+}
+
+
 
 global $errors;
 $errors = array();
@@ -172,7 +180,7 @@ else
 		$smarty->assign(array(
 			'quantity_discounts' => QuantityDiscount::getQuantityDiscounts(intval($product->id), $product->getPriceWithoutReduct()),
 			'product' => $product,
-			'jqZoomEnabled' => Configuration::get('PS_DISPLAY_JQZOOM') == 1,
+			'jqZoomEnabled' => $jqZoomEnabled,
 			'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
 			'token' => Tools::getToken(false),
 			'productPriceWithoutEcoTax' => floatval($productPriceWithoutEcoTax),
