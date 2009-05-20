@@ -27,6 +27,7 @@
 	{else}
 		<span id="amount_{$currencies.0.id_currency}" class="price">{convertPriceWithCurrency price=$total currency=$currencies.0}</span>
 	{/if}
+	{l s='(tax incl.)'}
 </p>
 <p>
 	-
