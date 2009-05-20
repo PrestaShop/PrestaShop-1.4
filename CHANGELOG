@@ -5,7 +5,7 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
-#   v1.2.0.2 - 933 (2009-20-05)    #
+#   v1.2.0.2 - 935 (2009-20-05)    #
 ####################################
 
 	Added Features :
@@ -65,6 +65,7 @@ Release Notes for PrestaShop 1.2
 
 	Fixed bugs :
 
+	[-] FO : Avoid little flashing when no products
 	[-] Installer : fixed SQL bug
 	[-] FO : Withdraw white background
 	[-] Installer : updated SQL data and logo
