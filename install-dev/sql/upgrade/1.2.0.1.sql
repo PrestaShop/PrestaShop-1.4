@@ -358,8 +358,6 @@ INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('search', 'Search', NULL, 0);
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('backBeforePayment', 'Redirect in order process', 'Redirect user to the module instead of displaying payment modules', 0);
-INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
-	('updateCarrier', 'Carrier update', 'This hook is called when a carrier is updated', 0);	
 
 UPDATE PREFIX_orders o SET o.valid = IFNULL((
 	SELECT os.logable
