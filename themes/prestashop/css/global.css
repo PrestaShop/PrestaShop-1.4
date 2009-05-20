@@ -1157,9 +1157,7 @@ a.tag_level1 { font-size: 1em; color:#888!important;}
 	clear: none;
 	width: 48%;
 }
-.blockspecials span {
-	display: block;
-}
+
 .blockspecials p.product_image {
 	margin-right: 0.3em;
 }
