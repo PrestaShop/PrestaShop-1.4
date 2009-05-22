@@ -97,7 +97,7 @@ input:focus, textarea:focus {
 #error h3 {
 	margin: 0 0 .83em 0;
 	padding: 0 0 0 20px;
-	background: url(../img/install/warning.gif) no-repeat 0 0;
+	background: url(../img/admin/warning.gif) no-repeat 0 0;
 	font-size: 1em;
 }
 
