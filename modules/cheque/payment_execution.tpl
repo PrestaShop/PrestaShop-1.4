@@ -35,7 +35,7 @@
 			{l s='We accept several currencies for cheques.' mod='cheque'}
 			<br /><br />
 			{l s='Choose one of the following:' mod='cheque'}
-			<select id="currency_payement" name="currency_payement" onChange="showElemFromSelect('currency_payement', 'amount_')">
+			<select id="currency_payement" name="currency_payement" onchange="showElemFromSelect('currency_payement', 'amount_')">
 			{foreach from=$currencies item=currency}
 				<option value="{$currency.id_currency}" {if $currency.id_currency == $cust_currency}selected="selected"{/if}>{$currency.name}</option>
 			{/foreach}

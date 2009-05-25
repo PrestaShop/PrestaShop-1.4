@@ -17,7 +17,7 @@
 	{if $form_list}
 		<form action="{$smarty.server.SCRIPT_NAME}" method="get">
 			<p>
-				<select id="supplier_list" onChange="autoUrl('supplier_list', '');">
+				<select id="supplier_list" onchange="autoUrl('supplier_list', '');">
 					<option value="0">{l s='All suppliers' mod='blocksupplier'}</option>
 				{foreach from=$suppliers item=supplier}
 					<option value="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)}">{$supplier.name}</option>

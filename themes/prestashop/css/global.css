@@ -1101,7 +1101,7 @@ div.myaccount .block_content {
 	padding: 0.5em 0;
 	/*display: block;*/
 }
-div.price_container {
+p.price_container {
 	text-align: center;
 }
 #center_column .products_block .featured_price { 
