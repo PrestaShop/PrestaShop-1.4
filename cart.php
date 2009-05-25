@@ -67,7 +67,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 
 			if (!sizeof($errors))
 			{
-				if ($add AND $qty >= 0 AND intval($cookie->id_guest))
+				if ($add AND $qty >= 0)
 				{
 					/* Product addition to the cart */
 					if (!isset($cart->id) OR !$cart->id)
