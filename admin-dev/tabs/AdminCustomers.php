@@ -147,7 +147,7 @@ class AdminCustomers extends AdminTab
 			echo '<div>'.$hook.'</div>';
 
 		echo '<h2>'.$this->l('Groups').' ('.sizeof($groups).')</h2>';
-		if ($orders AND sizeof($orders))
+		if ($groups AND sizeof($groups))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
