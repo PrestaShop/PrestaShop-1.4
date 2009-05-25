@@ -1,4 +1,4 @@
-<!-- Block search module HEADER -->
+<!-- Block search module TOP -->
 <div id="search_block_top">
 	<form method="get" action="{$base_dir}search.php" id="searchbox">
 	<p>
@@ -11,8 +11,6 @@
 	</form>
 </div>
 {if $ajaxsearch}
-	<link rel="stylesheet" type="text/css" href="{$base_uri}css/jquery.autocomplete.css" />
-	<script type="text/javascript" src="js/jquery/jquery.autocomplete.js"></script>
 	<script type="text/javascript">
 		{literal}
 		
@@ -39,4 +37,4 @@
 		{/literal}
 	</script>
 {/if}
-<!-- /Block search module HEADER -->
+<!-- /Block search module TOP -->

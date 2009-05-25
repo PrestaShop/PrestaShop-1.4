@@ -16,11 +16,9 @@ class BlockSearch extends Module
 
 	function install()
 	{
-		if (!parent::install())
+		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('header'))
 			return false;
-		//return $this->registerHook('leftColumn');
-		//return $this->registerHook('rightColumn');
-		return $this->registerHook('top');
+		return true;
 	}
 
 	function hookLeftColumn($params)
@@ -44,7 +42,12 @@ class BlockSearch extends Module
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
 		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
-		return $this->display(__FILE__, 'blocksearch-header.tpl');
+		return $this->display(__FILE__, 'blocksearch-top.tpl');
 	}
 
+	function hookHeader($params)
+	{
+		if (Configuration::get('PS_SEARCH_AJAX'))
+			return $this->display(__FILE__, 'header.tpl');
+	}
 }
