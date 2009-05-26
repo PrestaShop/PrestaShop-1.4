@@ -1928,10 +1928,9 @@ class		Product extends ObjectModel
 			/* Compatibility */
 			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
-			
 			$productQuantity = intval(isset($productUpdate['quantity']) ? $productUpdate['quantity'] : $productUpdate['product_quantity']);
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
-			$priceWt = $price * (1 + ($productUpdate['tax_rate'] * 0.01));
+			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate'])* 0.01));
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
 					$customizationQuantity += intval($customization['quantity']);

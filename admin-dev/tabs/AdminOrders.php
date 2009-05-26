@@ -260,6 +260,8 @@ class AdminOrders extends AdminTab
 					.'</a></td>
 				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
+				<td align="center">-</td>
+				<td align="center">-</td>
 				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
 			</tr>';
@@ -288,9 +290,11 @@ class AdminOrders extends AdminTab
 						echo '</ul>';
 					}
 				echo '</td>
-					<td align="center"></td>
+					<td align="center">-</td>
 					<td align="center" class="productQuantity">'.$customization['quantity'].'</td>
-					<td align="center" class="productQuantity"></td>
+					<td align="center">-</td>
+					<td align="center">-</td>
+					<td align="center">-</td>
 					<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * ($product['customizationQuantityTotal']), $currency, false, false).'</td>
 				</tr>';
 			}
@@ -533,7 +537,7 @@ class AdminOrders extends AdminTab
 						<tr>
 							<th align="center" style="width: 60px">&nbsp;</th>
 							<th>'.$this->l('Product').'</th>
-							<th style="width: 80px; text-align: center">'.$this->l('UP').'</th>
+							<th style="width: 80px; text-align: center">'.$this->l('UP').' <sup>*</sup></th>
 							<th style="width: 20px; text-align: center">'.$this->l('Qty').'</th>
 							'.($order->hasBeenPaid() ? '<th style="width: 20px; text-align: center">'.$this->l('Refunded').'</th>' : '').'
 							'.($order->hasBeenDelivered() ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
@@ -594,7 +598,9 @@ class AdminOrders extends AdminTab
 					if (sizeof($discounts))
 					{
 						echo '
-					<table cellspacing="0" cellpadding="0" class="table" style="width:280px; margin:15px 0px 0px 420px;">
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').'</div>
+					<div style="float:right; width:280px; margin-top:15px;">
+					<table cellspacing="0" cellpadding="0" class="table" style="width:100%;">
 						<tr>
 							<th><img src="../img/admin/coupon.gif" alt="'.$this->l('Discounts').'" />'.$this->l('Discount name').'</th>
 							<th align="center" style="width: 100px">'.$this->l('Value').'</th>
@@ -606,7 +612,7 @@ class AdminOrders extends AdminTab
 							<td align="center">- '.Tools::displayPrice($discount['value'], $currency, false).'</td>
 						</tr>';
 						echo '
-					</table>';
+					</table></div>';
 					}
 				echo '
 				</div>';
