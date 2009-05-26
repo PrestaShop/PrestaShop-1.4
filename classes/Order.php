@@ -478,9 +478,9 @@ class		Order extends ObjectModel
 		foreach ($products AS $k => $row)
 		{
 			$qty = intval($row['product_quantity']);
-			$total += round(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $qty;
+			$total += floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1) * $qty;
 		}
-		return $total;
+		return round($total, 2);
 	}
 
     /**

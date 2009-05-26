@@ -31,7 +31,7 @@ class BlockCart extends Module
 
 		$products = $params['cart']->getProducts(true);
 		foreach ($products as $k => $product)
-			$products[$k]['real_price'] = Product::getPriceStatic($product['id_product'], (intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true), $product['id_product_attribute'], 6, NULL, false, true, $product['cart_quantity']);
+			$products[$k]['real_price'] = Product::getPriceStatic($product['id_product'], intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, $product['id_product_attribute'], 6, NULL, false, true, $product['cart_quantity']) * $product['cart_quantity'];
 
 		$smarty->assign(array(
 			'products'=> $products,

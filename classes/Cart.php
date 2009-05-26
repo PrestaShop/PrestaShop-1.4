@@ -241,10 +241,10 @@ class		Cart extends ObjectModel
 			$row['stock_quantity'] = intval($row['quantity']);
 			$row['weight'] = $row['weight_attribute'];
 			$row['quantity'] = intval($row['cart_quantity']);
-			$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['quantity']));
-			$row['price_wt'] = number_format(Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity'])), 2, '.', '');
+			$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity']));
+			$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity']));
 			$row['total'] = $row['price'] * intval($row['quantity']);
-			$row['total_wt'] = number_format($row['price_wt'] * intval($row['quantity']), 2, '.', '');
+			$row['total_wt'] = $row['price_wt'] * intval($row['quantity']);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));

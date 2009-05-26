@@ -586,12 +586,18 @@ class PDF extends PDF_PageGroup
 
 				$i = -1;
 				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
+
+				// Unit vars
 				$unit_without_tax = $product['product_price'];
-				$total_without_tax = $product['total_price'];
-				$total_with_tax = $product['total_wt'];
+				$unit_with_tax = $product['product_price'] * (1 + ($product['tax_rate'] * 0.01));
 				$productQuantity = $delivery ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
+
 				if ($productQuantity <= 0)
 					continue ;
+
+				// Total prices
+				$total_without_tax = $unit_without_tax * $productQuantity;
+				$total_with_tax = $unit_with_tax * $productQuantity;
 
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
@@ -608,15 +614,14 @@ class PDF extends PDF_PageGroup
 					if (!$delivery)
 					{
 						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
-						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($product['product_price_wt'] * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_with_tax * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
 					}
 					$this->Ln();
 					$i = -1;
 					$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
 					$total_without_tax = $unit_without_tax * $productQuantity;
-					$total_with_tax = floatval($product['product_price_wt']) * $productQuantity;
+					$total_with_tax = $unit_with_tax * $productQuantity;
 				}
-	
 				if ($delivery)
 					$this->SetX(25);
 				$before = $this->GetY();
@@ -707,9 +712,8 @@ class PDF extends PDF_PageGroup
 		foreach ($products as $product)
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
-			$priceWithTaxAndReduction = $product['total_wt'] - ($discountAmount * $ratio);
+			$priceWithTaxAndReduction = $product['priceWithTax'] - ($discountAmount * $ratio);
 			$vat = $priceWithTaxAndReduction - ($priceWithTaxAndReduction / ((floatval($product['tax_rate']) / 100) + 1));
-
 			$taxes[$product['tax_rate']] += $vat;
 			$totalWithTax[$product['tax_rate']] += $priceWithTaxAndReduction;
 			$totalWithoutTax[$product['tax_rate']] += $priceWithTaxAndReduction - $vat;

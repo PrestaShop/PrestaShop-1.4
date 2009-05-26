@@ -16,8 +16,7 @@
 	</td>
 	<td class="cart_unit">
 		<span class="price">
-			{if !$priceDisplay || $priceDisplay == 2}{convertPrice price=$product.price_wt}{if $priceDisplay == 2} {l s='+Tx'}{/if}{/if}{if $priceDisplay == 2}<br />{/if}
-			{if $priceDisplay}{convertPrice price=$product.price}{if $priceDisplay == 2} {l s='-Tx'}{/if}{/if}
+			{convertPrice price=$product.price} {l s='-Tx'}
 		</span>
 	</td>
 	<td class="cart_quantity">
