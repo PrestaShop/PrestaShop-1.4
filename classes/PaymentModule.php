@@ -160,8 +160,8 @@ abstract class PaymentModule extends Module
 							}
 						Hook::updateQuantity($product, $order);
 					}
-					$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
-					$price_wt = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 4), $currency);
+					$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']), $currency);
+					$price_wt = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']), $currency);
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
@@ -186,10 +186,7 @@ abstract class PaymentModule extends Module
 					// Quantity discount
 					$reduc = 0.0;
 					if ($product['quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['quantity'])))
-					{
 						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value);
-						$price -= $reduc / (1 + floatval($tax) / 100);
-					}
 
 					// Query
 					$query .= '('.intval($order->id).',

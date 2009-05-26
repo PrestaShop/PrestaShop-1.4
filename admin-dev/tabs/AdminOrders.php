@@ -291,7 +291,7 @@ class AdminOrders extends AdminTab
 					<td align="center"></td>
 					<td align="center" class="productQuantity">'.$customization['quantity'].'</td>
 					<td align="center" class="productQuantity"></td>
-					<td align="center">'.Tools::displayPrice(floatval($product['product_price']) * floatval($customization['quantity']), $currency, false, false).'</td>
+					<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * ($product['customizationQuantityTotal']), $currency, false, false).'</td>
 				</tr>';
 			}
 		}
@@ -585,7 +585,7 @@ class AdminOrders extends AdminTab
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 								</tr>';
 
 						}

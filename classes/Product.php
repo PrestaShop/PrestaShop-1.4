@@ -1221,7 +1221,6 @@ class		Product extends ObjectModel
 		WHERE p.`id_product` = '.intval($id_product));
 		$price = $result['price'];
 
-
 		// Exclude tax
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
 		if (Tax::excludeTaxeOption() OR !$tax)
@@ -1929,20 +1928,20 @@ class		Product extends ObjectModel
 			/* Compatibility */
 			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
-			$priceWt = floatval(isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt']);
-			$price = floatval(isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price']);
+			
 			$productQuantity = intval(isset($productUpdate['quantity']) ? $productUpdate['quantity'] : $productUpdate['product_quantity']);
-
+			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
+			$priceWt = $price * (1 + ($productUpdate['tax_rate'] * 0.01));
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
 					$customizationQuantity += intval($customization['quantity']);
 			$productUpdate['customizationQuantityTotal'] = $customizationQuantity;
 			if ($customizationQuantity)
 			{
-				$productUpdate['total_wt'] = number_format($priceWt * ($productQuantity - $customizationQuantity), 2, '.', '');
-				$productUpdate['total_customization_wt'] = number_format($priceWt * $customizationQuantity, 2, '.', '');
-				$productUpdate['total'] = number_format($price * ($productQuantity - $customizationQuantity), 2, '.', '');
-				$productUpdate['total_customization'] = number_format($price * $customizationQuantity, 2, '.', '');
+				$productUpdate['total_wt'] = $priceWt * ($productQuantity - $customizationQuantity);
+				$productUpdate['total_customization_wt'] = $priceWt * $customizationQuantity;
+				$productUpdate['total'] = $price * ($productQuantity - $customizationQuantity);
+				$productUpdate['total_customization'] = $price * $customizationQuantity;
 			}
 		}
 	}
