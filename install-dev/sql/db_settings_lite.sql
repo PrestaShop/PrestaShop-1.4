@@ -1302,3 +1302,12 @@ INSERT INTO `PREFIX_timezone` (`name`) VALUES
 	('W-SU'),
 	('WET'),
 	('Zulu');
+
+INSERT INTO `PREFIX_group` (`id_group`, `reduction`, `date_add`, `date_upd`) VALUES
+	(1, 0, NOW(), NOW());
+INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES
+	(1, 1, 'Default'),
+	(1, 2, 'Défaut');
+
+INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES
+	(1, 1);

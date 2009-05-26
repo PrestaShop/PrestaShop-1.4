@@ -175,16 +175,9 @@ INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight
 (4, 1, NULL, 2, 1, 5.00),
 (5, 1, NULL, 2, 2, 5.00);
 
-INSERT INTO `PREFIX_group` (`id_group`, `reduction`, `date_add`, `date_upd`) VALUES
-	(1, 0, NOW(), NOW());
-INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES
-	(1, 1, 'Default'),
-	(1, 2, 'Défaut');
-
 INSERT INTO `PREFIX_customer_group` (`id_customer`, `id_group`) VALUES
 	(1, 1);
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES
-	(1, 1),
 	(2, 1),
 	(3, 1),
 	(4, 1);
