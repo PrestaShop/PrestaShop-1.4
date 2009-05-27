@@ -154,6 +154,9 @@ ALTER TABLE PREFIX_scene_products
 ALTER TABLE PREFIX_product_lang DROP INDEX fts; 
 ALTER TABLE PREFIX_product_lang DROP INDEX ftsname ;
 
+ALTER TABLE PREFIX_customer_group
+	ADD INDEX customer_login (id_group);
+
 /* KEY management */
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;

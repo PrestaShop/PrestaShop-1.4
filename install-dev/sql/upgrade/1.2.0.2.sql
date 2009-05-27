@@ -27,9 +27,6 @@ ALTER TABLE `PREFIX_supplier_lang`
 ALTER TABLE `PREFIX_supplier_lang`
 	ADD `meta_description` VARCHAR( 254 ) NULL DEFAULT NULL;
 
-ALTER TABLE PREFIX_customer_group
-	ADD INDEX customer_login (id_group);
-
 /* ##################################### */
 /* 					CONTENTS					 */
 /* ##################################### */
