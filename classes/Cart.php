@@ -98,6 +98,7 @@ class		Cart extends ObjectModel
 
 	public function update($nullValues = false)
 	{
+		self::$_nbProducts = 0;
 		$return = parent::update();
 		Module::hookExec('cart');
 		return $return;
@@ -338,6 +339,7 @@ class		Cart extends ObjectModel
 	 */
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
+		self::$_nbProducts = 0;
 		if (intval($quantity) <= 0)
 			return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
 		else
@@ -497,6 +499,7 @@ class		Cart extends ObjectModel
 	 */
 	public	function deleteProduct($id_product, $id_product_attribute = NULL, $id_customization = NULL)
 	{
+		self::$_nbProducts = 0;
 		if (intval($id_customization))
 			return $this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute)) AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL);
 
@@ -580,8 +583,18 @@ class		Cart extends ObjectModel
 		}
 		$order_total_products = $order_total;
 		if ($type == 2) $order_total = 0;
-		
-		$wrapping_fees = $this->gift ? floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')) : 0;
+
+		// Wrapping Fees
+		$wrapping_fees = 0;
+		if ($this->gift)
+		{
+			$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+			if (!$withTaxes)
+			{
+				$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+				$wrapping_fees /= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
+			}
+		}
 
 		if ($type != 1)
 		{
@@ -864,6 +877,7 @@ class		Cart extends ObjectModel
 			'total_discounts' => number_format($this->getOrderTotal(true, 2), 2, '.', ''),
 			'total_discounts_tax_exc' => number_format($this->getOrderTotal(false, 2), 2, '.', ''),
 			'total_wrapping' => number_format($this->getOrderTotal(true, 6), 2, '.', ''),
+			'total_wrapping_tax_exc' => number_format($this->getOrderTotal(false, 6), 2, '.', ''),
 			'total_shipping' => number_format($this->getOrderShippingCost(), 2, '.', ''),
 			'total_shipping_tax_exc' => number_format($this->getOrderShippingCost(NULL, false), 2, '.', ''),
 			'total_products_wt' => number_format($this->getOrderTotal(true, 1), 2, '.', ''),

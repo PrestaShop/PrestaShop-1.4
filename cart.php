@@ -101,6 +101,8 @@ if ($add OR Tools::getIsset('update') OR $delete)
 					if (!Cart::getNbProducts(intval($cart->id)))
 					{
 						$cart->id_carrier = 0;
+						$cart->gift = 0;
+						$cart->gift_message = '';
 						$cart->update();
 					}
 				}

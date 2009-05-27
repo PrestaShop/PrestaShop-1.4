@@ -42,7 +42,7 @@ class BlockCart extends Module
 			'nb_total_products' =>$params['cart']->nbProducts(),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 5), $currency),
 			'show_wrapping' => floatval($params['cart']->getOrderTotal(true, 6)) > 0 ? true : false,
-			'wrapping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(true, 6), $currency),
+			'wrapping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 6), $currency),
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 4), $currency),
 			'total' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true), $currency),
 			'id_carrier' => $params['cart']->id_carrier,

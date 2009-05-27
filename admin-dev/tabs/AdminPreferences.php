@@ -24,9 +24,13 @@ class AdminPreferences extends AdminTab
 		$this->table = 'configuration';
 
 		$tmz = Tools::getTimezones();
+		$txs = Tax::getTaxes(intval($cookie->id_lang));
 		$timezone = array();
 		foreach ($tmz as $id => $name)
 			$timezone[] = array('id' => $id, 'name' => $name);
+		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
+		foreach ($txs as $tax)
+			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
 
 		$this->_fieldsGeneral = array(
 			'PS_BASE_URI' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 20, 'default' => '/'),
@@ -39,6 +43,7 @@ class AdminPreferences extends AdminTab
 			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping:'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrapping price:'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
+			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax:'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging:'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'));
 			if (function_exists('date_default_timezone_set'))

@@ -317,7 +317,7 @@ function displayCarrier()
 	global $smarty, $cart, $cookie, $defaultCountry;
 
 	$address = new Address(intval($cart->id_address_delivery));
-    $id_zone = Address::getZoneById($address->id);
+	$id_zone = Address::getZoneById($address->id);
 	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone));
 	$resultsArray = array();
 	foreach ($result AS $k => $row)
@@ -342,6 +342,11 @@ function displayCarrier()
 		$resultsArray[] = $row;
 	}
 
+	// Wrapping fees
+	$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+	$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+	$wrapping_fees_tax_exc = $wrapping_fees / (1 + ((floatval($wrapping_fees_tax->rate) / 100)));
+
 	if (Validate::isUnsignedInt($cart->id_carrier))
 	{
 		$carrier = new Carrier(intval($cart->id_carrier));
@@ -350,7 +355,6 @@ function displayCarrier()
 	}
 	if (!isset($checked))
 		$checked = intval(Configuration::get('PS_CARRIER_DEFAULT'));
-
 	$smarty->assign(array(
 		'checkedTOS' => intval($cookie->checkedTOS),
 		'recyclablePackAllowed' => intval(Configuration::get('PS_RECYCLABLE_PACK')),
@@ -360,9 +364,10 @@ function displayCarrier()
 		'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 		'carriers' => $resultsArray,
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
-		'checked' => intval($checked)));
-	$smarty->assign('back', strval(Tools::getValue('back')));
-
+		'checked' => intval($checked),
+		'back', strval(Tools::getValue('back')),
+		'total_wrapping' => number_format($wrapping_fees, 2, '.', ''),
+		'total_wrapping_tax_exc' => number_format($wrapping_fees_tax_exc, 2, '.', '')));
 	Tools::safePostVars();
 	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 	$js_files = array(__PS_BASE_URI__.'js/jquery/thickbox-modified.js');

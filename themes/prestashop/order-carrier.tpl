@@ -96,7 +96,15 @@
 		<p class="checkbox">
 			<input type="checkbox" name="gift" id="gift" value="1" {if $cart->gift == 1}checked="checked"{/if} onclick="$('#gift_div').toggle('slow');" />
 			<label for="gift">{l s='I would like the order to be gift-wrapped.'}</label>
-			{if $gift_wrapping_price > 0}({l s='Additional cost of'}&nbsp;{convertPrice price=$gift_wrapping_price}){/if}
+			<br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			{if $gift_wrapping_price > 0}
+				({l s='Additional cost of'}
+				<span class="price">
+					{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc}{else}{convertPrice price=$total_wrapping}{/if}
+				</span>
+				{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if})
+			{/if}
 		</p>
 		<p id="gift_div" class="textarea">
 			<label for="gift_message">{l s='If you wish, you can add a note to the gift:'}</label>

@@ -60,13 +60,13 @@
 		</thead>
 		<tfoot>
 			{if $priceDisplay}
-				<tr class="cart_total_product">
+				<tr class="cart_total_price">
 					<td colspan="6">{l s='Total products (tax excl.):'}</td>
 					<td class="price">{convertPrice price=$total_products}</td>
 				</tr>
 			{/if}
 			{if !$priceDisplay || $priceDisplay == 2}
-				<tr class="cart_total_{if !$priceDisplay}product{else}voucher{/if}">
+				<tr class="cart_total_price">
 					<td colspan="6">{l s='Total products (tax incl.):'}</td>
 					<td class="price">{convertPrice price=$total_products_wt}</td>
 				</tr>
@@ -86,10 +86,18 @@
 				{/if}
 			{/if}
 			{if $total_wrapping > 0}
-			<tr class="cart_total_voucher">
-				<td colspan="6">{l s='Total gift-wrapping:'}</td>
-				<td class="price-discount">{convertPrice price=$total_wrapping}</td>
-			</tr>
+				{if $priceDisplay}
+					<tr class="cart_total_voucher">
+						<td colspan="6">{l s='Total gift-wrapping (tax excl.):'}</td>
+						<td class="price-discount">{convertPrice price=$total_wrapping_tax_exc}</td>
+					</tr>
+				{/if}
+				{if !$priceDisplay || $priceDisplay == 2}
+					<tr class="cart_total_voucher">
+						<td colspan="6">{l s='Total gift-wrapping (tax incl.):'}</td>
+						<td class="price-discount">{convertPrice price=$total_wrapping}</td>
+					</tr>
+				{/if}
 			{/if}
 			{if $shippingCost > 0}
 				{if $priceDisplay}
@@ -105,14 +113,16 @@
 					</tr>
 				{/if}
 			{/if}
-			<tr class="cart_total_voucher">
-				<td colspan="6">{l s='Total (tax excl.):'}</td>
-				<td class="price">{convertPrice price=$total_price_without_tax}</td>
-			</tr>
-			<tr class="cart_total_voucher">
-				<td colspan="6">{l s='Total tax:'}</td>
-				<td class="price">{convertPrice price=$total_tax}</td>
-			</tr>
+			{if $priceDisplay}
+				<tr class="cart_total_price">
+					<td colspan="6">{l s='Total (tax excl.):'}</td>
+					<td class="price">{convertPrice price=$total_price_without_tax}</td>
+				</tr>
+				<tr class="cart_total_voucher">
+					<td colspan="6">{l s='Total tax:'}</td>
+					<td class="price">{convertPrice price=$total_tax}</td>
+				</tr>
+			{/if}
 			<tr class="cart_total_price">
 				<td colspan="6">{l s='Total (tax incl.):'}</td>
 				<td class="price">{convertPrice price=$total_price}</td>

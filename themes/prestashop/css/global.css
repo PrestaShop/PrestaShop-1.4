@@ -1350,10 +1350,19 @@ width: 155px;
 	float: right;
 }
 #cart_block_wrapping_cost, #cart_block_shipping_cost , #cart_block_total{ padding-right:1.3em; }
-#cart_block table#vouchers, #cart_block p#cart-prices {
+#cart_block table#vouchers {
 	margin-top:0.5em;
 	border-top:1px solid white;
 	height: 3em;
+	padding-top:0.4em;
+	margin-bottom:0.5em;
+	clear:both;
+}
+
+ #cart_block p#cart-prices {
+	margin-top:0.5em;
+	border-top:1px solid white;
+	height: 4em;
 	padding-top:0.4em;
 	margin-bottom:0.5em;
 	clear:both;

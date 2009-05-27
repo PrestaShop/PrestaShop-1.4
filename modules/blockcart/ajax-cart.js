@@ -256,7 +256,7 @@ var ajaxCart = {
 				$('#'+removedProductId).addClass('strike').fadeTo('slow', 0, function(){
 					$(this).slideUp('slow', function(){
 						$(this).remove();
-						///if the cart is now empty, show the 'no product in the cart' message
+						//if the cart is now empty, show the 'no product in the cart' message
 						if($('#cart_block dl.products dt').length == 0)
 						{
 							$('p#cart_block_no_products:hidden').slideDown('fast');
@@ -540,7 +540,7 @@ $(document).ready(function(){
 			ajaxCart.collapse();
 	});
 	$('#block_cart_expand').click(function(){
-			ajaxCart.expand();		
+			ajaxCart.expand();
 	});
 	ajaxCart.overrideButtonsInThePage();
 	ajaxCart.refresh();
