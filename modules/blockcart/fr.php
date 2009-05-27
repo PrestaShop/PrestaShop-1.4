@@ -27,4 +27,5 @@ $_MODULE['<{blockcart}prestashop>blockcart_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 
 $_MODULE['<{blockcart}prestashop>blockcart_ba794350deb07c0c96fe73bd12239059'] = 'Emballage';
 $_MODULE['<{blockcart}prestashop>blockcart_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{blockcart}prestashop>blockcart_0d11c2b75cf03522c8d97938490466b2'] = 'Les prix sont TTC';
+$_MODULE['<{blockcart}prestashop>blockcart_41202aa6b8cf7ae885644717dab1e8b4'] = 'Les prix sont HT';
 $_MODULE['<{blockcart}prestashop>blockcart_377e99e7404b414341a9621f7fb3f906'] = 'Commander';

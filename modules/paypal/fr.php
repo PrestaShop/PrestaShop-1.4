@@ -2,6 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{paypal}prestashop>confirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';
+$_MODULE['<{paypal}prestashop>confirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'est bien enregistrée.';
+$_MODULE['<{paypal}prestashop>confirmation_15b0f8e55c6bdfc3d5fd0b6b3b6cb3ee'] = 'Vous avez choisi de payer avec PayPal.';
+$_MODULE['<{paypal}prestashop>confirmation_e6dc7945b557a1cd949bea92dd58963e'] = 'Votre commande vous sera envoyée très prochainement.';
+$_MODULE['<{paypal}prestashop>confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Pour toute question ou information complémentaire merci de contacter notre';
+$_MODULE['<{paypal}prestashop>confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'support client';
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_5960af4a01187dce25879df9a4c30df1'] = 'Accepter les paiements par PayPal';
 $_MODULE['<{paypal}prestashop>paypal_fa214007826415a21a8456e3e09f999d'] = 'Etes-vous sûr de vouloir supprimer vos paramètres ?';
