@@ -109,6 +109,10 @@
 				<td colspan="6">{l s='Total (tax excl.):'}</td>
 				<td class="price">{convertPrice price=$total_price_without_tax}</td>
 			</tr>
+			<tr class="cart_total_voucher">
+				<td colspan="6">{l s='Total tax:'}</td>
+				<td class="price">{convertPrice price=$total_tax}</td>
+			</tr>
 			<tr class="cart_total_price">
 				<td colspan="6">{l s='Total (tax incl.):'}</td>
 				<td class="price">{convertPrice price=$total_price}</td>

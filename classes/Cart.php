@@ -869,6 +869,7 @@ class		Cart extends ObjectModel
 			'total_products_wt' => number_format($this->getOrderTotal(true, 1), 2, '.', ''),
 			'total_products' => number_format($this->getOrderTotal(false, 1), 2, '.', ''),
 			'total_price' => number_format($this->getOrderTotal(), 2, '.', ''),
+			'total_tax' => number_format($this->getOrderTotal() - $this->getOrderTotal(false), 2, '.', ''),
 			'total_price_without_tax' => number_format($this->getOrderTotal(false), 2, '.', ''));
 	}
 
