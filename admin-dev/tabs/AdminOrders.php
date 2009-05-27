@@ -594,11 +594,11 @@ class AdminOrders extends AdminTab
 
 						}
 					echo '
-					</table>';
+					</table>
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').'</div>';
 					if (sizeof($discounts))
 					{
 						echo '
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').'</div>
 					<div style="float:right; width:280px; margin-top:15px;">
 					<table cellspacing="0" cellpadding="0" class="table" style="width:100%;">
 						<tr>
