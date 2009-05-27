@@ -105,6 +105,7 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 	(13, 14, 2),
 	(18, 14, 3),
 	(19, 14, 4),
+	(19, 14, 9),
 	(22, 14, 5),
 	(8, 19, 1),
 	(23, 21, 1),
