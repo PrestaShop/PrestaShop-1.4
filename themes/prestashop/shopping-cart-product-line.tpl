@@ -19,7 +19,7 @@
 			{convertPrice price=$product.price} {l s='-Tx'}
 		</span>
 	</td>
-	<td class="cart_quantity">
+	<td class="cart_quantity"{if isset($customizedDatas.$productId.$productAttributeId) AND $quantityDisplayed == 0} style="text-align: center;"{/if}>
 		{if isset($customizedDatas.$productId.$productAttributeId) AND $quantityDisplayed == 0}{$product.customizationQuantityTotal}{/if}
 		{if !isset($customizedDatas.$productId.$productAttributeId) OR $quantityDisplayed > 0}
 			<a class="cart_quantity_delete" href="{$base_dir}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;token={$token_cart}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a>
