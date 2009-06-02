@@ -1903,10 +1903,14 @@ class		Product extends ObjectModel
 		$customizedDatas = array();
 		foreach ($result AS $row)
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['datas'][intval($row['type'])][] = $row;
-		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
+		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity`, `quantity_refunded`, `quantity_returned` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
 			return false;
 		foreach ($result AS $row)
+		{
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity'] = intval($row['quantity']);
+			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity_refunded'] = intval($row['quantity_refunded']);
+			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity_returned'] = intval($row['quantity_returned']);
+		}
 		return $customizedDatas;
 	}
 
@@ -1925,6 +1929,8 @@ class		Product extends ObjectModel
 		foreach ($products AS &$productUpdate)
 		{
 			$customizationQuantity = 0;
+			$customizationQuantityRefunded = 0;
+			$customizationQuantityReturned = 0;
 			/* Compatibility */
 			$productId = intval(isset($productUpdate['id_product']) ? $productUpdate['id_product'] : $productUpdate['product_id']);
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
@@ -1933,8 +1939,14 @@ class		Product extends ObjectModel
 			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate'])* 0.01));
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
+				{
 					$customizationQuantity += intval($customization['quantity']);
+					$customizationQuantityRefunded += intval($customization['quantity_refunded']);
+					$customizationQuantityReturned += intval($customization['quantity_returned']);
+				}
 			$productUpdate['customizationQuantityTotal'] = $customizationQuantity;
+			$productUpdate['customizationQuantityRefunded'] = $customizationQuantityRefunded;
+			$productUpdate['customizationQuantityReturned'] = $customizationQuantityReturned;
 			if ($customizationQuantity)
 			{
 				$productUpdate['total_wt'] = $priceWt * ($productQuantity - $customizationQuantity);

@@ -163,18 +163,28 @@ class AdminOrders extends AdminTab
 		 	if ($this->tabAccess['delete'] === '1')
 			{
 				$productList = Tools::getValue('id_order_detail');
+				$customizationList = Tools::getValue('id_customization');
 				$qtyList = Tools::getValue('cancelQuantity');
-				
-				if ($productList AND sizeof($productList) AND $qtyList AND sizeof($qtyList))
+				$customizationQtyList = Tools::getValue('cancelCustomizationQuantity');
+
+				if ($productList OR $customizationList)
 				{
-					foreach ($productList AS $key => $id_order_detail)
-					{
-						$qtyCancelProduct = abs($qtyList[$key]);
-						if (!$qtyCancelProduct)
-							$this->_errors[] = Tools::displayError('No quantity selected for product.');
-					}
-					
-					if (!sizeof($this->_errors))
+					if ($productList)
+						foreach ($productList AS $key => $id_order_detail)
+						{
+							$qtyCancelProduct = abs($qtyList[$key]);
+							if (!$qtyCancelProduct)
+								$this->_errors[] = Tools::displayError('No quantity selected for product.');
+						}
+					if ($customizationList)
+						foreach ($customizationList AS $id_customization => $id_order_detail)
+						{
+							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
+							if (!$qtyCancelProduct)
+								$this->_errors[] = Tools::displayError('No quantity selected for product.');
+						}
+
+					if (!sizeof($this->_errors) AND $productList)
 						foreach ($productList AS $key => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
@@ -190,7 +200,14 @@ class AdminOrders extends AdminTab
 								if (!Product::reinjectQuantities($id_order_detail, $qtyCancelProduct))
 									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
 						}
-					
+					if (!sizeof($this->_errors) AND $customizationList)
+						foreach ($customizationList AS $id_customization => $id_order_detail)
+						{
+							$orderDetail = new OrderDetail(intval($id_order_detail));
+							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
+							if (!$order->deleteCustomization($id_customization, $qtyCancelProduct, $orderDetail))
+								$this->_errors[] = Tools::displayError('an error occurred during deletion for the product customization').' '.$id_customization;
+						}
 					// E-mail params
 					if ((isset($_POST['generateCreditSlip']) OR isset($_POST['generateDiscount'])) AND !sizeof($this->_errors))
 					{
@@ -228,7 +245,7 @@ class AdminOrders extends AdminTab
 				}
 				else
 					$this->_errors[] = Tools::displayError('No product or quantity selected.');
-				
+
 				// Redirect if no errors
 				if (!sizeof($this->_errors))
 					Tools::redirectLink($currentIndex.'&id_order='.$order->id.'&vieworder&conf=1&token='.$this->token);
@@ -243,7 +260,7 @@ class AdminOrders extends AdminTab
 		parent::postProcess();
 	}
 
-	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
+	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog)
 	{
 		$order = $this->loadObject();
 
@@ -254,15 +271,15 @@ class AdminOrders extends AdminTab
 				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
 				'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
-					<span class="productName">'.$product['product_name'].'</span><br />
+					<span class="productName">'.$product['product_name'].' - '.$this->l('customized').'</span><br />
 					'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'] : '')
 					.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
 					.'</a></td>
 				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
-				<td align="center">-</td>
-				<td align="center">-</td>
-				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
+				'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityRefunded'].'</td>' : '').'
+				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
+				<td align="center" class="productQuantity"> - </td>
 				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
 			</tr>';
 			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customization)
@@ -292,13 +309,65 @@ class AdminOrders extends AdminTab
 				echo '</td>
 					<td align="center">-</td>
 					<td align="center" class="productQuantity">'.$customization['quantity'].'</td>
+					'.($order->hasBeenPaid() ? '<td align="center">'.$customization['quantity_refunded'].'</td>' : '').'
+					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
-					<td align="center">-</td>
-					<td align="center">-</td>
-					<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * ($product['customizationQuantityTotal']), $currency, false, false).'</td>
+					<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * ($customization['quantity']), $currency, false, false).'</td>
 				</tr>';
 			}
 		}
+	}
+
+	private function displayCancelCustomizations(&$customizedDatas, &$product, &$image, $id_order_detail)
+	{
+		$order = $this->loadObject();
+
+		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])]))
+		{
+			echo '
+			<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
+				<td align="center" class="cancelCheck">--</td>
+			</tr>';
+			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customizationId => $customization)
+			{
+				echo '
+				<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
+					<td align="center" class="cancelCheck">
+						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($customization['quantity_returned']).'" />
+						<input type="hidden" name="totalQty" id="totalQty" value="'.intval($customization['quantity']).'" />
+						<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
+				if (intval(($customization['quantity_returned']) < intval($customization['quantity'])))
+					echo '
+						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \'_'.$customizationId.'\', 1)" '.((intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
+				else
+					echo '--';
+				echo '
+					</td>
+					<td class="cancelQuantity">';
+				if (intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity']))
+					echo '<input type="hidden" name="cancelCustomizationQuantity['.$customizationId.']" value="0" />';
+				else
+					echo '
+						<input type="text" id="cancelQuantity_'.$customizationId.'" name="cancelCustomizationQuantity['.$customizationId.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
+				echo ($order->hasBeenDelivered() ? intval($customization['quantity_returned']).'/'.(intval($customization['quantity']) - intval($customization['quantity_refunded'])) : ($order->hasBeenPaid() ? intval($customization['quantity_refunded']).'/'.intval($customization['quantity']) : '')).'
+					</td>
+				</tr>';
+			}
+		}
+	}
+
+	private function getCancelledProductNumber(&$order, &$product)
+	{
+		$productQuantity = array_key_exists('customizationQuantityTotal', $product) ? $product['product_quantity'] - $product['customizationQuantityTotal'] : $product['product_quantity'];
+		$productRefunded = $product['product_quantity_refunded'];
+//array_key_exists('customizationQuantityRefunded', $product) ? $product['product_quantity_refunded'] + $product['customizationQuantityRefunded'] : $product['product_quantity_refunded'];
+		$productReturned = $product['product_quantity_return'];
+//array_key_exists('customizationQuantityReturned', $product) ? $product['product_quantity_return'] + $product['customizationQuantityReturned'] : $product['product_quantity_return'];
+		if ($order->hasBeenDelivered())
+			$content = $productReturned.'/'.($productQuantity - $productRefunded);
+		elseif ($order->hasBeenPaid())
+			$content = $productRefunded.'/'.$productQuantity;
+		return $content;
 	}
 
 	public function viewDetails()
@@ -571,7 +640,7 @@ class AdminOrders extends AdminTab
 									$products[$k]['image_size'] = getimagesize($target);
 							}
 							// Customization display
-							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
+							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog);
 							
 							// Normal display
 							if ($product['product_quantity'] > $product['customizationQuantityTotal'])
@@ -627,6 +696,7 @@ class AdminOrders extends AdminTab
 						</tr>';
 					foreach ($products as $k => $product)
 					{
+						$this->displayCancelCustomizations($customizedDatas, $product, $image, $k);
 						echo '
 						<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
 							<td align="center" class="cancelCheck">
@@ -646,7 +716,7 @@ class AdminOrders extends AdminTab
 						else
 							echo '
 								<input type="text" id="cancelQuantity_'.intval($product['id_order_detail']).'" name="cancelQuantity['.$k.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
-						echo ($order->hasBeenDelivered() ? intval($product['product_quantity_return']).'/'.(intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : ($order->hasBeenPaid() ? intval($product['product_quantity_refunded']).'/'.intval($product['product_quantity']) : '')).'
+						echo $this->getCancelledProductNumber($order, $product).'
 							</td>
 						</tr>';
 					}

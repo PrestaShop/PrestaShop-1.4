@@ -160,6 +160,7 @@ class		Order extends ObjectModel
 		return $fields;
 	}
 
+	/* Does NOT delete a product but "cancel" it (which means return/refund/delete it depending of the case) */
 	public function deleteProduct($order, $orderDetail, $quantity)
 	{
 		if (!$currentStatus = intval($this->getCurrentState()))
@@ -175,36 +176,53 @@ class		Order extends ObjectModel
 			$orderDetail->product_quantity_refunded += intval($quantity);
 			return $orderDetail->update();
 		}
-		else
+		return $this->_deleteProduct($orderDetail, intval($quantity));
+	}
+
+	/* DOES delete the product */
+	private function _deleteProduct($orderDetail, $quantity)
+	{
+		$productPrice = round((floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity), 2);
+		$productPriceWithoutTax = round(floatval($orderDetail->product_price) * intval($quantity), 2);
+
+		// Update order
+		$this->total_paid -= $productPrice;
+		$this->total_paid_real -= $productPrice;
+		$this->total_products -= $productPriceWithoutTax;
+
+		// Update order detail
+		$orderDetail->product_quantity -= intval($quantity);
+		
+		if (!$orderDetail->product_quantity)
 		{
-			$productPrice = round((floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity), 2);
-			$productPriceWithoutTax = round(floatval($orderDetail->product_price) * intval($quantity), 2);
-
-			// Update order
-			$order->total_paid -= $productPrice;
-			$order->total_paid_real -= $productPrice;
-			$order->total_products -= $productPriceWithoutTax;
-
-			// Update order detail
-			$orderDetail->product_quantity -= intval($quantity);
-			
-			if (!$orderDetail->product_quantity)
+			if (!$orderDetail->delete())
+				return false;
+			if (count($this->getProductsDetail()) == 0)
 			{
-				if (!$orderDetail->delete())
+				global $cookie;
+				$history = new OrderHistory();
+				$history->id_order = intval($this->id);
+				$history->changeIdOrderState(_PS_OS_CANCELED_, intval($this->id));
+				if (!$history->addWithemail())
 					return false;
-				if (count($order->getProductsDetail()) == 0)
-				{
-					global $cookie;
-					$history = new OrderHistory();
-					$history->id_order = intval($order->id);
-					$history->changeIdOrderState(_PS_OS_CANCELED_, intval($order->id));
-					if (!$history->addWithemail())
-						return false;
-				}
-				return $order->update();
 			}
-			return $orderDetail->update() AND $order->update();
+			return $this->update();
 		}
+		return $orderDetail->update() AND $this->update();
+	}
+
+	public function deleteCustomization($id_customization, $quantity, $orderDetail)
+	{
+		if (!$currentStatus = intval($this->getCurrentState()))
+			return false;
+
+		if ($this->hasBeenDelivered())
+			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity_returned` = `quantity_returned` + '.intval($quantity).' WHERE `id_customization` = '.intval($id_customization).' AND `id_cart` = '.intval($this->id_cart).' AND `id_product` = '.intval($orderDetail->product_id));
+		elseif ($this->hasBeenPaid())
+			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity_refunded` = `quantity_refunded` + '.intval($quantity).' WHERE `id_customization` = '.intval($id_customization).' AND `id_cart` = '.intval($this->id_cart).' AND `id_product` = '.intval($orderDetail->product_id));
+		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` - '.intval($quantity).' WHERE `id_customization` = '.intval($id_customization).' AND `id_cart` = '.intval($this->id_cart).' AND `id_product` = '.intval($orderDetail->product_id)))
+			return false;
+		return $this->_deleteProduct($orderDetail, intval($quantity));
 	}
 
 	/**

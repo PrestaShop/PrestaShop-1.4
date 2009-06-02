@@ -601,6 +601,7 @@ class PDF extends PDF_PageGroup
 
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
+					$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
@@ -618,26 +619,28 @@ class PDF extends PDF_PageGroup
 					}
 					$this->Ln();
 					$i = -1;
-					$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
 					$total_without_tax = $unit_without_tax * $productQuantity;
 					$total_with_tax = $unit_with_tax * $productQuantity;
 				}
 				if ($delivery)
 					$this->SetX(25);
-				$before = $this->GetY();
-				$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
-				$lineSize = $this->GetY() - $before;
-				$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
-				$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
-				if (!$delivery)
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-				$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
-				if (!$delivery)
+				if ($productQuantity)
 				{
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$before = $this->GetY();
+					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+					$lineSize = $this->GetY() - $before;
+					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
+					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
+					if (!$delivery)
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($unit_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+					$this->Cell($w[++$i], $lineSize, $productQuantity, 'B', 0, 'C');
+					if (!$delivery)
+					{
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_without_tax, self::$currency, true, false)), 'B', 0, 'R');
+						$this->Cell($w[++$i], $lineSize, self::convertSign(Tools::displayPrice($total_with_tax, self::$currency, true, false)), 'B', 0, 'R');
+					}
+					$this->Ln();
 				}
-				$this->Ln();
 			}
 
 		if (!sizeof(self::$order->getDiscounts()) AND !$delivery)
