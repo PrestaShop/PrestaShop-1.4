@@ -138,13 +138,13 @@ class Editorial extends Module
 					mode : "textareas",
 					elements : "nourlconvert",
 					convert_urls : false,
+					plugins : "ibrowser,contextmenu, directionality, media, paste, preview, safari",
 					theme : "advanced",
-					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
+					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect, ibrowser",
 					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo, separator, link, unlink, separator, code",
 					theme_advanced_buttons3 : "",
 					theme_advanced_toolbar_location : "top",
 					theme_advanced_toolbar_align : "left",
-					plugins : "contextmenu, directionality, media, paste, preview, safari",
 					theme_advanced_buttons3_add : "ltr,rtl,pastetext,pasteword,selectall",
 					theme_advanced_buttons1_add : "media,preview",
 					paste_create_paragraphs : false,
@@ -213,7 +213,7 @@ class Editorial extends Module
 				{
 					$this->_html .= '
 					<div id="cpara_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<textarea cols="100" rows="30" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.($xml ? stripslashes(htmlspecialchars($xml->body->{'paragraph_'.$language['id_lang']})) : '').'</textarea>
+						<textarea cols="70" rows="30" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.($xml ? stripslashes(htmlspecialchars($xml->body->{'paragraph_'.$language['id_lang']})) : '').'</textarea>
 					</div>';
 				 }
 				
