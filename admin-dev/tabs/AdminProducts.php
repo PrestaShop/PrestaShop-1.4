@@ -1935,17 +1935,15 @@ class AdminProducts extends AdminTab
 			</script>
 			<script type="text/javascript">
 				tinyMCE.init({
-					width : 600,
-                  	height : 435,
 					mode : "textareas",
-					plugins : "contextmenu, directionality, media, paste, preview, safari",
+					plugins : "contextmenu, directionality, media, paste, preview, safari, ibrowser",
 					theme : "advanced",
 					language : "'.((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
 					elements : "nourlconvert",
 					convert_urls : false,
 					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
 					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo, separator, link, unlink, separator, code",
-					theme_advanced_buttons3 : "",
+					theme_advanced_buttons3 : "ibrowser",
 					theme_advanced_toolbar_location : "top",
 					theme_advanced_toolbar_align : "left",
 					theme_advanced_buttons3_add : "ltr,rtl,pastetext,pasteword,selectall",
@@ -1959,7 +1957,7 @@ class AdminProducts extends AdminTab
 					paste_convert_headers_to_strong : true,
 					plugin_preview_width : "500",
 					plugin_preview_height : "600",
-					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"
+					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],style[type|id]"
 				});';
 		foreach ($languages as $language)
 			if ($language['id_lang'] != $defaultLanguage)

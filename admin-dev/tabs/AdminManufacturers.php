@@ -149,7 +149,7 @@ class AdminManufacturers extends AdminTab
 					theme_advanced_toolbar_align : "left",
 					plugins : "advhr, advlink, cleanup, paste, preview, table",
 					cleanup : true,
-					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],object[classid|codebase|width|height],param[name|value],embed[src|quality|width|height|type|pluginspage|bgcolor|allowFullScreen]"
+					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],object[classid|codebase|width|height],param[name|value],embed[src|quality|width|height|type|pluginspage|bgcolor|allowFullScreen],style[type|id]"
 				});';
 		foreach ($languages as $language)
 			if ($language['id_lang'] != $defaultLanguage)
