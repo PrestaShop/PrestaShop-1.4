@@ -98,11 +98,10 @@ if ($jqZoomEnabled)
 	$css_files[__PS_BASE_URI__.'css/jqzoom.css'] = 'screen';
 }
 
-
+include_once(dirname(__FILE__).'/header.php');
 
 global $errors;
 $errors = array();
-
 
 if (!isset($_GET['id_product']) OR !Validate::isUnsignedId($_GET['id_product']))
 	$errors[] = Tools::displayError('product not found');
@@ -295,7 +294,6 @@ else
 	}
 }
 
-include_once(dirname(__FILE__).'/header.php');
 $smarty->assign(array(
 	'ENT_NOQUOTES' => ENT_NOQUOTES,
 	'outOfStockAllowed' => intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')),
