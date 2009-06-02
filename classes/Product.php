@@ -1270,7 +1270,7 @@ class		Product extends ObjectModel
 			return self::getPriceStatic(intval($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
 	}
 
-	public function getPriceWithoutReduct()
+	public function getPriceWithoutReduct($notax = false)
 	{
 		$res = Db::getInstance()->getRow('
 			SELECT p.`price`, t.`rate`, t.`id_tax`
@@ -1280,7 +1280,7 @@ class		Product extends ObjectModel
 		if (!$res)
 			return false;
 		$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
-		if (!Tax::excludeTaxeOption())
+		if (!Tax::excludeTaxeOption() || $notax)
 			return ($res['price'] * (1 + $tax / 100));
 		return ($res['price']);
 	}

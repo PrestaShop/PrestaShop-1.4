@@ -299,7 +299,6 @@ include_once(dirname(__FILE__).'/header.php');
 $smarty->assign(array(
 	'ENT_NOQUOTES' => ENT_NOQUOTES,
 	'outOfStockAllowed' => intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')),
-	'displayPreTax' => intval(Configuration::get('PS_DISPLAY_WITHOUT_TAX')),
 	'errors' => $errors,
 	'categories' => Category::getHomeCategories(intval($cookie->id_lang)),
 	'have_image' => Product::getCover(intval(Tools::getValue('id_product'))),

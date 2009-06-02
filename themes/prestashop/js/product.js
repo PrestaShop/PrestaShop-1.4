@@ -248,9 +248,14 @@ function updateDisplay()
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
 
+		if (displayPrice == 1)
+		{
+			priceProduct = productPricePretaxed;
+			productPriceWithoutReduction2 /= tax;
+		}
+
 		if (group_reduction)
 			priceProduct *= group_reduction;
-
 		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));
