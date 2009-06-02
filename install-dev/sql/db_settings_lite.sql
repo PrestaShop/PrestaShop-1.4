@@ -48,6 +48,7 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (45, 'search', 'Search', NULL, 0),
 (46, 'backBeforePayment', 'Redirect in order process', 'Redirect user to the module instead of displaying payment modules', 0),
 (47, 'updateCarrier', 'Carrier Update', 'This hook is called when a carrier is updated', 0);
+(48, 'postUpdateOrderStatus', 'Post update of order status', NULL, 0);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

@@ -208,6 +208,8 @@ class AdminProducts extends AdminTab
 						SET `cover` = 1
 						WHERE `id_image` = '.intval($first_img['id_image']));
 					}
+					@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$image->id_product.'.jpg');
+					@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$image->id_product.'.jpg'); 
 					Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=1'.'&token='.($token ? $token : $this->token));
 				}
 
@@ -548,11 +550,7 @@ class AdminProducts extends AdminTab
 				if (sizeof($this->_errors) OR !$image->update())
 					$this->_errors[] = Tools::displayError('an error occurred while updating image');
 				elseif (isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
-				{
 					$this->copyImage($product->id, $image->id, $method);
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
-				}
 			}
 		}
 
@@ -568,11 +566,7 @@ class AdminProducts extends AdminTab
 				$_POST['id_product'] = $image->id_product;
 				$image->position = Image::getHighestPosition($product->id) + 1;
 				if (($cover = Tools::getValue('cover')) == 1)
-				{
 					Image::deleteCover($product->id);
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
-				}
 				$image->cover = !$cover ? !sizeof($product->getImages(Configuration::get('PS_LANG_DEFAULT'))) : true;
 				$this->validateRules('Image', 'image');
 				$this->copyFromPost($image, 'image');
@@ -591,6 +585,8 @@ class AdminProducts extends AdminTab
 			$image->delete();
 		if (sizeof($this->_errors))
 			return false;
+		@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
+		@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
 		return ((isset($id_image) AND is_int($id_image) AND $id_image) ? $id_image : true);
 	}
 

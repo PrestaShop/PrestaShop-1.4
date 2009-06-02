@@ -11,3 +11,6 @@ ALTER TABLE `PREFIX_customization`
 /* ##################################### */
 /* 					CONTENTS					 */
 /* ##################################### */
+
+INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
+	('postUpdateOrderStatus', 'Post update of order status', NULL, 0);
