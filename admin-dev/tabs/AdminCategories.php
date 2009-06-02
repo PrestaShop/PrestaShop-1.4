@@ -121,13 +121,18 @@ class AdminCategories extends AdminTab
 			}
 		}
 		parent::postProcess();
+	}
 
+	protected function postImage($id)
+	{
+		$ret = parent::postImage($id);
 		if (($id_category = intval(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
 				imageResize(_PS_CAT_IMG_DIR_.$id_category.'.jpg', _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 		}
+		return $ret;
 	}
 
 	public function displayForm($token=NULL)

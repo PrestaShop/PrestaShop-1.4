@@ -662,7 +662,6 @@ abstract class AdminTab
 
 	protected function uploadImage($id, $name, $dir, $ext = false)
 	{
-	
 		if (isset($_FILES[$name]['tmp_name']) AND !empty($_FILES[$name]['tmp_name']))
 		{
 			// Delete old image
