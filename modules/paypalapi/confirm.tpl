@@ -18,7 +18,7 @@
 	</p>
 	<p style="margin-top:20px;">
 		- {l s='The total amount of your order is' mod='paypalapi'}
-			<span id="amount_{$currency->id}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span>
+			<span id="amount_{$currency->id}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span> {l s='(tax incl.)' mod='paypalapi'}
 	</p>
 	<p>
 		- {l s='We accept the following currency to be sent by PayPal:' mod='paypalapi'}&nbsp;<b>{$currency->name}</b>

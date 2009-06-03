@@ -958,6 +958,7 @@ $_LANGADM['AdminOrdersabe01af80b6bc9f1fa34feaa068336b2'] = 'Nouveau message conc
 $_LANGADM['AdminOrdersadf793b7546d19eca0c8c1e07817f6e5'] = 'Nouvel avoir à propos de votre commande n°';
 $_LANGADM['AdminOrdersce06c769dac054ae0bed803d833f3f1c'] = 'Avoir concernant la commande n°';
 $_LANGADM['AdminOrdersc48bdb7793d0e08f5eeaf02d8b65d3e9'] = 'Nouveau bon de réduction à propos de votre commande';
+$_LANGADM['AdminOrderse183b47cb3af26aadf83cddda0d47453'] = 'personnalisé';
 $_LANGADM['AdminOrderse78b6f4eb3be046f4d25c07ce54954d4'] = 'Réf :';
 $_LANGADM['AdminOrders2fb3b950fd7711136f7f251ae5fbdbdc'] = 'Texte n°';
 $_LANGADM['AdminOrders853ae90f0351324bd73ea615e6487517'] = ' :';

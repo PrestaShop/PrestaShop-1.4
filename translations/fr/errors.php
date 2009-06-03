@@ -141,6 +141,7 @@ $_ERRORS['c850df733bd0eb9b04b04793f7507a6c'] = 'une erreur s\'est produite penda
 $_ERRORS['64a06bf1b0f982dc6d728aed39ea384d'] = 'une erreur est survenue avant d\'envoyer le message';
 $_ERRORS['158c7d9c63c850cb4a255a290a1c845b'] = 'une erreur s\'est produite pendant la suppression';
 $_ERRORS['fd55949890a94891319d741ea36ab546'] = 'une erreur est survenue lors de la suppression du produit';
+$_ERRORS['f9cd6cac5e572b6f8449ba38fb9b81a8'] = 'une erreur est survenue lors de la suppression du produit personnalisé';
 $_ERRORS['3acd72f72da8b26d103b79ac90661418'] = 'une erreur s\'est produite pendant la suppression de l\'image';
 $_ERRORS['38d1ae87858ec02bb53357f11e5c8730'] = 'une erreur s\'est produite pendant la suppression du produit';
 $_ERRORS['530f2f587616386e3086bf46d7f7f2bf'] = 'une erreur s\'est produite pendant la suppression de l\'image';

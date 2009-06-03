@@ -53,6 +53,7 @@ $_MODULE['<{paypalapi}prestashop>paypalconnect_bf059c9751bb1a20b449b7917b1df374'
 $_MODULE['<{paypalapi}prestashop>paypalconnect_ae27c8959b49f085b1dd3df98411d3e6'] = 'Connection avec la méthode fsockopen réussi';
 $_MODULE['<{paypalapi}prestashop>paypalconnect_6e9aa4cb541e09b07602d4ea96080811'] = 'L\'envoie avec la méthode fsockopen a échoué !';
 $_MODULE['<{paypalapi}prestashop>paypalconnect_3360e6cccbea4f35cf10a6fe9de8348e'] = 'L\'envoie avec la méthode fsockopen réussi';
+$_MODULE['<{paypalapi}prestashop>paypallib_7c2d00d8c94d1ce0f515db8b0481db40'] = 'Réponse PayPal :';
 $_MODULE['<{paypalapi}prestashop>paypalexpress_b601224a2a6c61f38738ca903fb019a2'] = 'Panier non valide';
 $_MODULE['<{paypalapi}prestashop>paypalexpress_ee9dc1e678d54c517f481583c3fb2db8'] = 'Devise non valide';
 $_MODULE['<{paypalapi}prestashop>authentication_1d411343b5f713888c5ec283ba9c014e'] = 'Vérifiez vos informations';
@@ -119,6 +120,7 @@ $_MODULE['<{paypalapi}prestashop>confirm_dd23adc5fb6bda9c384397b31e57fc53'] = 'P
 $_MODULE['<{paypalapi}prestashop>confirm_62d74398cb6ebaa69ab7339052ca5c92'] = 'Vous avez choisi de payer avec PayPal.';
 $_MODULE['<{paypalapi}prestashop>confirm_c884ed19483d45970c5bf23a681e2dd2'] = 'Voici un court résumé de votre commande :';
 $_MODULE['<{paypalapi}prestashop>confirm_e2867a925cba382f1436d1834bb52a1c'] = 'Le montant total de votre commande s\'élève à';
+$_MODULE['<{paypalapi}prestashop>confirm_1f87346a16cf80c372065de3c54c86d9'] = '(TTC)';
 $_MODULE['<{paypalapi}prestashop>confirm_8ed356c32b198c9cb2abab7c3d262b93'] = 'Nous acceptons la devise suivante pour votre paiement :';
 $_MODULE['<{paypalapi}prestashop>confirm_0881a11f7af33bc1b43e437391129d66'] = 'Merci de confirmer votre commande en cliquant sur \"Je confirme ma commande\"';
 $_MODULE['<{paypalapi}prestashop>confirm_569fd05bdafa1712c4f6be5b153b8418'] = 'Autres moyens de paiement';
