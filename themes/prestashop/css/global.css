@@ -1954,7 +1954,6 @@ position:relative;
 #view_scroll_left, #view_scroll_right{
 	background: url('../img/thumbs_left.gif') no-repeat center;
 	text-indent:-3000px;
-	display:block;
 	width:9px;
 	height:18px;
 	float:left;
@@ -1964,7 +1963,11 @@ position:relative;
 }
 #view_scroll_right{
 	background-image: url('../img/thumbs_right.gif');
-
+}
+span.view_scroll_spacer{
+	float: left;
+	width: 17px;
+	height: 80px;
 }
 
 /* manufacturers-list.tpl && suppliers-list.tpl */

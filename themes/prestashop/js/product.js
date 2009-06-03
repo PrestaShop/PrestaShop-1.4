@@ -287,8 +287,12 @@ function serialScrollFixLock(event, targeted, scrolled, items, position)
 {
 	serialScrollNbImages = $('#thumbs_list li:visible').length;
 	serialScrollNbImagesDisplayed = 3;
-	$('a#view_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(0, position == 0 ? 0 : 1);		
-	$('a#view_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'default' : 'pointer').css('display', position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? 'none' : 'block');
+	
+	var leftArrow = position == 0 ? true : false;
+	var rightArrow = position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? true : false;
+	
+	$('a#view_scroll_left').css('cursor', leftArrow ? 'default' : 'pointer').css('display', leftArrow ? 'none' : 'block').fadeTo(0, leftArrow ? 0 : 1);		
+	$('a#view_scroll_right').css('cursor', rightArrow ? 'default' : 'pointer').fadeTo(0, rightArrow ? 0 : 1).css('display', rightArrow ? 'none' : 'block');
 	return true;
 }
 
