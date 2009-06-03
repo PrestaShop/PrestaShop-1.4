@@ -1,4 +1,4 @@
-{capture name=path}<a href="order.php">{l s='Your shopping cart' mod='paypalapi'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal ExpressCheckout' mod='paypalapi'}{/capture}
+{capture name=path}<a href="{$base_dir_ssl}order.php">{l s='Your shopping cart' mod='paypalapi'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal ExpressCheckout' mod='paypalapi'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{$message}</h2>

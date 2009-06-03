@@ -1,4 +1,4 @@
-{capture name=path}<a href="order.php">{l s='Your shopping cart' mod='paypalapi'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypalapi'}{/capture}
+{capture name=path}<a href="{$base_dir_ssl}order.php">{l s='Your shopping cart' mod='paypalapi'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypalapi'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='Order summary' mod='paypalapi'}</h2>
@@ -11,7 +11,7 @@
 	<input type="hidden" name="token" value="{$ppToken|escape:'htmlall'|stripslashes}" />
 	<input type="hidden" name="payerID" value="{$payerID|escape:'htmlall'|stripslashes}" />
 	<p>
-		<img src="modules/paypalapi/paypalapi.gif" alt="{l s='PayPal' mod='paypalapi'}" style="float:left; margin: 0px 10px 5px 0px;" />
+		<img src="{$content_dir}modules/paypalapi/paypalapi.gif" alt="{l s='PayPal' mod='paypalapi'}" style="float:left; margin: 0px 10px 5px 0px;" />
 		{l s='You have chosen to pay with PayPal.' mod='paypalapi'}
 		<br/><br />
 		{l s='Here is a short summary of your order:' mod='paypalapi'}

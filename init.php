@@ -99,24 +99,32 @@ $smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI
 $navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 $smarty->assign('navigationPipe', $navigationPipe);
 
+/* Server Params */
+$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
+$protocole = 'http://';
+$protocle_ssl = 'https://';
+$protocole_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
+$protocole_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
+
 $smarty->assign(array(
-	'base_dir' => __PS_BASE_URI__,
-	'base_dir_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__,
-	'img_ps_dir' => _PS_IMG_,
-	'img_cat_dir' => _THEME_CAT_DIR_,
-	'img_lang_dir' => _THEME_LANG_DIR_,
-	'img_prod_dir' => _THEME_PROD_DIR_,
-	'img_manu_dir' => _THEME_MANU_DIR_,
-	'img_sup_dir' => _THEME_SUP_DIR_,
-	'img_ship_dir' => _THEME_SHIP_DIR_,
-	'img_col_dir' => _THEME_COL_DIR_,
-	'img_dir' => _THEME_IMG_DIR_,
-	'css_dir' => _THEME_CSS_DIR_,
-	'js_dir' => _THEME_JS_DIR_,
+	'base_dir' => $protocole.$server_host.__PS_BASE_URI__,
+	'base_dir_ssl' => $protocole_link.$server_host.__PS_BASE_URI__,
+	'content_dir' => $protocole_content.$server_host.__PS_BASE_URI__,
+	'img_ps_dir' => $protocole_content.$server_host._PS_IMG_,
+	'img_cat_dir' => $protocole_content.$server_host._THEME_CAT_DIR_,
+	'img_lang_dir' => $protocole_content.$server_host._THEME_LANG_DIR_,
+	'img_prod_dir' => $protocole_content.$server_host._THEME_PROD_DIR_,
+	'img_manu_dir' => $protocole_content.$server_host._THEME_MANU_DIR_,
+	'img_sup_dir' => $protocole_content.$server_host._THEME_SUP_DIR_,
+	'img_ship_dir' => $protocole_content.$server_host._THEME_SHIP_DIR_,
+	'img_col_dir' => $protocole_content.$server_host._THEME_COL_DIR_,
+	'img_dir' => $protocole_content.$server_host._THEME_IMG_DIR_,
+	'css_dir' => $protocole_content.$server_host._THEME_CSS_DIR_,
+	'js_dir' => $protocole_content.$server_host._THEME_JS_DIR_,
 	'tpl_dir' => _PS_THEME_DIR_,
 	'modules_dir' => _MODULE_DIR_,
 	'mail_dir' => _MAIL_DIR_,
-	'pic_dir' => _THEME_PROD_PIC_DIR_,
+	'pic_dir' => $protocole_content.$server_host._THEME_PROD_PIC_DIR_,
 	'lang_iso' => $ps_language->iso_code,
 	'come_from' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlentities($_SERVER['REQUEST_URI']),
 	'shop_name' => Configuration::get('PS_SHOP_NAME'),

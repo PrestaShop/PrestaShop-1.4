@@ -4,7 +4,7 @@
 <p>
 	{l s='Other wishlists of' mod='blockwishlist'} {$current_wishlist.firstname} {$current_wishlist.lastname}: 
 	{foreach from=$wishlists item=wishlist name=i}
-	<a href="modules/blockwishlist/view.php?token={$wishlist.token}">{$wishlist.name}</a>
+	<a href="{$base_dir_ssl}modules/blockwishlist/view.php?token={$wishlist.token}">{$wishlist.name}</a>
 		{if !$smarty.foreach.i.last}
 			/
 		{/if}

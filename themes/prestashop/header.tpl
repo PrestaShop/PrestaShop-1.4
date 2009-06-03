@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$lang_iso}">
 	<head>
-		<base href="http://{$smarty.server.HTTP_HOST|escape:'htmlall':'UTF-8'}{$base_dir}" />
 		<title>{$meta_title|escape:'htmlall':'UTF-8'}</title>
 {if isset($meta_description) AND $meta_description}
 		<meta name="description" content="{$meta_description|escape:htmlall:'UTF-8'}" />
@@ -19,16 +18,16 @@
 	<link href="{$css_uri}" rel="stylesheet" type="text/css" media="{$media}" />
 	{/foreach}
 {/if}
-		<script type="text/javascript" src="{$base_dir}js/tools.js"></script>
+		<script type="text/javascript" src="{$content_dir}js/tools.js"></script>
 		<script type="text/javascript">
-			var baseDir = '{$base_dir}';
+			var baseDir = '{$content_dir}';
 			var static_token = '{$static_token}';
 			var token = '{$token}';
 			var priceDisplayPrecision = {$priceDisplayPrecision*$currency->decimals};
 		</script>
-		<script type="text/javascript" src="{$base_dir}js/jquery/jquery-1.2.6.pack.js"></script>
-		<script type="text/javascript" src="{$base_dir}js/jquery/jquery.easing.1.3.js"></script>
-		<script type="text/javascript" src="{$base_dir}js/jquery/jquery.hotkeys-0.7.8-packed.js"></script>
+		<script type="text/javascript" src="{$content_dir}js/jquery/jquery-1.2.6.pack.js"></script>
+		<script type="text/javascript" src="{$content_dir}js/jquery/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="{$content_dir}js/jquery/jquery.hotkeys-0.7.8-packed.js"></script>
 {if isset($js_files)}
 	{foreach from=$js_files item=js_uri}
 	<script type="text/javascript" src="{$js_uri}"></script>

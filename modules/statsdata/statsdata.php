@@ -35,6 +35,8 @@ class StatsData extends Module
     
 	function hookFooter($params)
 	{
+		global $protocole_content, $server_host;
+
 		// Identification information are encrypted to prevent hacking attempts
 		$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 		if (!isset($params['cookie']->id_guest))
@@ -44,7 +46,7 @@ class StatsData extends Module
 			// Ajax request sending browser information
 			$token = $blowfish->encrypt($params['cookie']->id_guest);
 			$this->_html = '
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/pluginDetect.js"></script>
+			<script type="text/javascript" src="'.$protocole_content.$server_host.__PS_BASE_URI__.'js/pluginDetect.js"></script>
 			<script type="text/javascript">
 				plugins = new Object;
 				
@@ -63,7 +65,7 @@ class StatsData extends Module
 							navinfo[i] = plugins[i];
 						navinfo.type = "navinfo";
 						navinfo.token = "'.$token.'";
-						$.post("'.__PS_BASE_URI__.'statistics.php", navinfo);
+						$.post("'.$protocole_content.$server_host.__PS_BASE_URI__.'statistics.php", navinfo);
 					}
 				);
 			</script>';
@@ -91,7 +93,7 @@ class StatsData extends Module
 					pagetime.type = "pagetime";
 					pagetime.token = "'.$token.'";
 					pagetime.time = time_end-time_start;
-					$.post("'.__PS_BASE_URI__.'statistics.php", pagetime);
+					$.post("'.$protocole_content.$server_host.__PS_BASE_URI__.'statistics.php", pagetime);
 				}
 			);
 		</script>';

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link type="text/css" rel="stylesheet" href="../../css/login.css" />
+		<link type="text/css" rel="stylesheet" href="{$content_dir}css/login.css" />
 		<title>PrestaShop&trade; - {l s='Affiliation' mod='trackingfront'}</title>
 	</head>
 	<body>

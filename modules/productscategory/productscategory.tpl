@@ -1,6 +1,6 @@
 {if count($categoryProducts) > 1}
 <script type="text/javascript">var middle = {$middlePosition};</script>
-<script type="text/javascript" src="{$base_dir}modules/productscategory/js/productscategory.js"></script>
+<script type="text/javascript" src="{$content_dir}modules/productscategory/js/productscategory.js"></script>
 <ul class="idTabs">
 	<li><a href="#idTab3">{l s='In the same category' mod='productscategory'}</a></li>
 </ul>

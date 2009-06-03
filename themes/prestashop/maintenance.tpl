@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$lang_iso}" lang="{$lang_iso}">
 	<head>
-		<base href="http://{$smarty.server.HTTP_HOST|escape:'htmlall':'UTF-8'}{$base_dir}" />
 		<title>{$meta_title|escape:'htmlall':'UTF-8'}</title>	
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 {if isset($meta_description)}
@@ -16,9 +15,9 @@
 	</head>
 	<body>
 		<div id="maintenance">
-			 <p><img src="{$base_dir}img/logo.jpg" alt="logo" /><br /><br /></p>
+			 <p><img src="{$content_dir}img/logo.jpg" alt="logo" /><br /><br /></p>
 			 <p id="message">
-				<img src="{$base_dir}img/admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='In order to perform site maintenance, our online shop has been taken offline temporarily. We apologize for the inconvenience, and ask that you please try again later !'}
+				<img src="{$content_dir}img/admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='In order to perform site maintenance, our online shop has been taken offline temporarily. We apologize for the inconvenience, and ask that you please try again later !'}
 			 </p>
 			 <span style="clear:both;">&nbsp;</span>
 		</div>
