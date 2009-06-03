@@ -1813,6 +1813,7 @@ div.categTree {
 	padding-left:15px;
 	display:block;
 	height:15px;
+	width:100px;	
 }
 #primary_block #pb-left-column{
 	float:left;
