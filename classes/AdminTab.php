@@ -322,6 +322,15 @@ abstract class AdminTab
 				if (!Validate::$function($value))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
 
+		/* Checking for passwd_old validity */
+		if (($value = Tools::getValue('passwd')) != false)
+		{
+			if ($className == 'Employee' AND !Validate::isPasswdAdmin($value))
+				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), 'passwd', $className).'</b> '.$this->l('is invalid');
+			elseif ($className == 'Customer' AND !Validate::isPasswd($value))
+				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), 'passwd', $className).'</b> '.$this->l('is invalid');
+		}
+
 		/* Checking for multilingual fields validity */
 		foreach ($rules['validateLang'] AS $fieldLang => $function)
 			foreach ($languages AS $language)
