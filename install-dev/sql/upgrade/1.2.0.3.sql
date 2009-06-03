@@ -14,3 +14,5 @@ ALTER TABLE `PREFIX_customization`
 
 INSERT INTO PREFIX_hook (`name`, `title`, `description`, `position`) VALUES
 	('postUpdateOrderStatus', 'Post update of order status', NULL, 0);
+
+INSERT INTO `PREFIX_search_engine` (`server`,`getvar`) VALUES ('bing.com','q');
