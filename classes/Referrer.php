@@ -45,8 +45,8 @@ class Referrer extends ObjectModel
 	protected	$fieldsSize = array('name' => 64, 'http_referer_regexp' => 64, 'request_uri_regexp' => 64, 'http_referer_like' => 64, 'request_uri_like' => 64, 'passwd' => 32);	
 	protected	$fieldsValidate = array(
 		'name' => 'isGenericName', 'passwd' => 'isPasswd',
-		'http_referer_regexp' => 'isCleanHtml',	'request_uri_regexp' => 'isGenericName', 'http_referer_like' => 'isCleanHtml',	'request_uri_like' => 'isGenericName',
-		'http_referer_regexp_not' => 'isCleanHtml',	'request_uri_regexp_not' => 'isGenericName', 'http_referer_like_not' => 'isCleanHtml',	'request_uri_like_not' => 'isGenericName',
+		'http_referer_regexp' => 'isCleanHtml',	'request_uri_regexp' => 'isCleanHtml', 'http_referer_like' => 'isCleanHtml',	'request_uri_like' => 'isCleanHtml',
+		'http_referer_regexp_not' => 'isCleanHtml',	'request_uri_regexp_not' => 'isCleanHtml', 'http_referer_like_not' => 'isCleanHtml',	'request_uri_like_not' => 'isCleanHtml',
 		'base_fee' => 'isFloat', 'percent_fee' => 'isFloat', 'click_fee' => 'isFloat',
 		'cache_visitors' => 'isUnsignedInt', 'cache_visits' => 'isUnsignedInt', 'cache_pages' => 'isUnsignedInt', 'cache_registrations' => 'isUnsignedInt',
 		'cache_orders' => 'isUnsignedInt', 'cache_sales' => 'isOptFloat', 'cache_reg_rate' => 'isOptFloat', 'cache_order_rate' => 'isOptFloat');
