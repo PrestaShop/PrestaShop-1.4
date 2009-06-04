@@ -177,7 +177,7 @@ class ProductDownload extends ObjectModel
 	{
 		$sql = 'SELECT `display_filename`
 				FROM `'._DB_PREFIX_.'product_download`
-				WHERE `physically_filename` = \'' . strval($physically_filename) . '\'';
+				WHERE `physically_filename` = \'' . pSQL($physically_filename) . '\'';
 		$data = Db::getInstance()->getRow($sql);
 		return $data['display_filename'];
 	}

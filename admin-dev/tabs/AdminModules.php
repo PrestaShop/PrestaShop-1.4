@@ -37,7 +37,7 @@ class AdminModules extends AdminTab
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'module`
 					SET `active`= 1
-					WHERE `name` = \''.strval(Tools::getValue('module_name')).'\'');
+					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
 					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token);
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
@@ -54,7 +54,7 @@ class AdminModules extends AdminTab
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'module`
 					SET `active`= 0
-					WHERE `name` = \''.strval(Tools::getValue('module_name')).'\'');
+					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
 					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token);
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');

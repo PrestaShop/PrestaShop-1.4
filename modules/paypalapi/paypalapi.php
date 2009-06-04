@@ -194,14 +194,14 @@ class PaypalAPI extends PaymentModule
 	{
 		return Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'paypal_order` (`id_order`, `id_transaction`)
-		VALUES('.intval($this->currentOrder).', \''.strval($id_transaction).'\')');
+		VALUES('.intval($this->currentOrder).', \''.pSQL($id_transaction).'\')');
 	}
 
 	public function getOrder($id_transaction)
 	{
 		$rq = Db::getInstance()->getRow('
 		SELECT `id_order` FROM `'._DB_PREFIX_.'paypal_order`
-		WHERE id_transaction = \''.strval($id_transaction).'\'');
+		WHERE id_transaction = \''.pSQL($id_transaction).'\'');
 		return $rq['id_order'];
 	}
 
