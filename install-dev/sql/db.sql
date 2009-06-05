@@ -1221,7 +1221,7 @@ CREATE TABLE `PREFIX_tax_zone` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_timezone (
-	id_timezone int(10) unisgned NOT NULL auto_increment,
+	id_timezone int(10) unsigned NOT NULL auto_increment,
 	name VARCHAR(32) NOT NULL,
 	PRIMARY KEY timezone_index(`id_timezone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
