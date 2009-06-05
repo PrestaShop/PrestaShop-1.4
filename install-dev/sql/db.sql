@@ -43,10 +43,10 @@ CREATE TABLE `PREFIX_address` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_alias` (
+  `id_alias` int(10) unsigned NOT NULL auto_increment,
   `alias` varchar(255) NOT NULL,
   `search` varchar(255) NOT NULL,
   `active` tinyint(1) NOT NULL default '1',
-  `id_alias` int(10) NOT NULL auto_increment,
   PRIMARY KEY  (`id_alias`),
   UNIQUE KEY `alias` (`alias`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -95,7 +95,7 @@ CREATE TABLE `PREFIX_attribute_group_lang` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_attribute_impact` (
-  `id_attribute_impact` int(11) NOT NULL auto_increment,
+  `id_attribute_impact` int(11) unsigned NOT NULL auto_increment,
   `id_product` int(11) NOT NULL,
   `id_attribute` int(11) NOT NULL,
   `weight` float NOT NULL,
@@ -362,7 +362,7 @@ CREATE TABLE `PREFIX_customer_group` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customization` (
-  `id_customization` int(10) NOT NULL auto_increment,
+  `id_customization` int(10) unsigned NOT NULL auto_increment,
   `id_product_attribute` int(10) NOT NULL default '0',
   `id_cart` int(10) NOT NULL,
   `id_product` int(10) NOT NULL,
@@ -371,7 +371,7 @@ CREATE TABLE `PREFIX_customization` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customization_field` (
-  `id_customization_field` int(10) NOT NULL auto_increment,
+  `id_customization_field` int(10) unsigned NOT NULL auto_increment,
   `id_product` int(10) NOT NULL,
   `type` tinyint(1) NOT NULL,
   `required` tinyint(1) NOT NULL,
@@ -1086,7 +1086,7 @@ CREATE TABLE `PREFIX_referrer_cache` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_scene` (
-  `id_scene` int(10) NOT NULL auto_increment,
+  `id_scene` int(10) unsigned NOT NULL auto_increment,
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id_scene`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1148,7 +1148,7 @@ CREATE TABLE `PREFIX_state` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_subdomain` (
-  `id_subdomain` int(10) NOT NULL auto_increment,
+  `id_subdomain` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(16) NOT NULL,
   PRIMARY KEY  (`id_subdomain`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1221,7 +1221,7 @@ CREATE TABLE `PREFIX_tax_zone` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_timezone (
-	id_timezone INTEGER UNSIGNED NOT NULL auto_increment,
+	id_timezone int(10) unisgned NOT NULL auto_increment,
 	name VARCHAR(32) NOT NULL,
 	PRIMARY KEY timezone_index(`id_timezone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
