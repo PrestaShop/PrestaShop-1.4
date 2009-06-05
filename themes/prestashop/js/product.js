@@ -174,15 +174,6 @@ function updateDisplay()
 			}
 		}
 	}
-	else if (allowBuyWhenOutOfStock && availableLaterValue != '')
-	{
-		//hide the hook out of stock
-		$('#oosHook').hide();
-		
-		//update the availability status of the product
-		$('#availability_value').text(availableLaterValue);
-		$('#availability_statut:hidden').show();
-	}
 	else
 	{
 		//show the hook out of stock
@@ -212,7 +203,14 @@ function updateDisplay()
 		if (allowBuyWhenOutOfStock && !selectedCombination['unavailable'])
 		{
 			$('#add_to_cart:hidden').fadeIn(600);
-			$('p#availability_statut:visible').hide('slow');
+
+			if (availableLaterValue != '')
+			{
+				$('#availability_value').text(availableLaterValue);
+				$('p#availability_statut:hidden').show('slow');
+			}
+			else
+				$('p#availability_statut:visible').hide('slow');			
 		}
 		else
 		{
