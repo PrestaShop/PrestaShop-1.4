@@ -360,9 +360,7 @@ class AdminOrders extends AdminTab
 	{
 		$productQuantity = array_key_exists('customizationQuantityTotal', $product) ? $product['product_quantity'] - $product['customizationQuantityTotal'] : $product['product_quantity'];
 		$productRefunded = $product['product_quantity_refunded'];
-//array_key_exists('customizationQuantityRefunded', $product) ? $product['product_quantity_refunded'] + $product['customizationQuantityRefunded'] : $product['product_quantity_refunded'];
 		$productReturned = $product['product_quantity_return'];
-//array_key_exists('customizationQuantityReturned', $product) ? $product['product_quantity_return'] + $product['customizationQuantityReturned'] : $product['product_quantity_return'];
 		$content = '0/'.$productQuantity;
 		if ($order->hasBeenDelivered())
 			$content = $productReturned.'/'.($productQuantity - $productRefunded);
