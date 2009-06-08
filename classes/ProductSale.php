@@ -107,7 +107,7 @@ class		ProductSale
 		ORDER BY sales DESC
 		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
 		if (!$result)
-			return false;
+			return $result;
 		
 		foreach ($result AS &$row)
 		{
