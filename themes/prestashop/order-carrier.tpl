@@ -116,7 +116,7 @@
 	<p class="cart_navigation submit">
 		<input type="hidden" name="step" value="3" />
 		<input type="hidden" name="back" value="{$back}" />
-		<a href="{$base_dir_ssl}order.php?step=1" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
+		<a href="{$base_dir_ssl}order.php?step=1{if $back}&back={$back}{/if}" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
 		<input type="submit" name="processCarrier" value="{l s='Next'} &raquo;" class="exclusive" />
 	</p>
 </form>

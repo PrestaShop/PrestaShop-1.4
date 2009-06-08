@@ -365,7 +365,7 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
-		'back', strval(Tools::getValue('back')),
+		'back' => strval(Tools::getValue('back')),
 		'total_wrapping' => number_format($wrapping_fees, 2, '.', ''),
 		'total_wrapping_tax_exc' => number_format($wrapping_fees_tax_exc, 2, '.', '')));
 	Tools::safePostVars();
