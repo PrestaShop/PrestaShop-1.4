@@ -19,7 +19,7 @@ if (file_exists($xmlFile))
 	}
 }
 
-echo Module::display('referralprogram', 'referralprogram-rules.tpl');
+echo Module::display(dirname(__FILE__).'/referralprogram', 'referralprogram-rules.tpl'); 
 
 if (!Tools::getValue('width') AND !Tools::getValue('height'))
 	require_once(dirname(__FILE__).'/../../footer.php');
