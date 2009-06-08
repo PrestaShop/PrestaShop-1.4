@@ -8,7 +8,7 @@
 		'link':          '{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|addslashes}',
 		'quantity':      {$product.cart_quantity},
 		'priceByLine':   '{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.real_price}',
-		'name':          '{$product.name|addslashes|truncate:16}',
+		'name':          '{$product.name|addslashes|truncate:16:'...':TRUE|escape:'htmlall':'UTF-8'}',
 		'price':         '{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.real_price}',
 		'idCombination': {if isset($product.attributes_small)}{$productAttributeId}{else}0{/if},
 {if isset($product.attributes_small)}
@@ -36,7 +36,7 @@
 						{ldelim}
 						'index':			{$index},
 						'value':			'{$data.value|addslashes}',
-						'truncatedValue':	'{$data.value|truncate:28|addslashes}'
+						'truncatedValue':	'{$data.value|truncate:28:'...':TRUE|addslashes}'
 						{rdelim},
 					{/foreach}]
 				{rdelim},

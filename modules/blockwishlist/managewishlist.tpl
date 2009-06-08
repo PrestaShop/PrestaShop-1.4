@@ -15,7 +15,7 @@
 	<div class="wlp_bought">
 	{foreach from=$products item=product name=i}
 	<ul class="address {if $smarty.foreach.i.index % 2}alternate_{/if}item" style="margin:5px 0 0 5px;border-bottom:1px solid #ccc;" id="wlp_{$product.id_product}_{$product.id_product_attribute}">
-		<li class="address_title">{$product.name|truncate:30|escape:'htmlall':'UTF-8'}</li>
+		<li class="address_title">{$product.name|truncate:30:'...':TRUE|escape:'htmlall':'UTF-8'}</li>
 		<li class="address_name">
 			<a href="{$link->getProductlink($product.id_product, $product.link_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
 				<img src="{$img_prod_dir}{$product.cover}-medium.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
@@ -79,7 +79,7 @@
 				<tr>
 					<td class="first_item">
 					<span style="float:left;"><img src="{$img_prod_dir}{$product.cover}-small.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></span>
-					<span style="float:left;">{$product.name|truncate:40|escape:'htmlall':'UTF-8'}
+					<span style="float:left;">{$product.name|truncate:40:'...':TRUE|escape:'htmlall':'UTF-8'}
 					{if isset($product.attributes_small)}
 						<br /><i>{$product.attributes_small|escape:'htmlall':'UTF-8'}</i>
 					{/if}</span>

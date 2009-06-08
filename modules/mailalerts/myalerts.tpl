@@ -27,7 +27,7 @@
 				<tr>
 					<td class="first_item">
 					<span style="float:left;"><a href="{$product.link|escape:'htmlall':'UTF-8'}"><img src="{$img_prod_dir}{$product.cover}-small.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></a></span>
-					<span style="float:left;"><a href="{$product.link|escape:'htmlall':'UTF-8'}">{$product.name|truncate:40|escape:'htmlall':'UTF-8'}</a>
+					<span style="float:left;"><a href="{$product.link|escape:'htmlall':'UTF-8'}">{$product.name|truncate:40:'...':TRUE|escape:'htmlall':'UTF-8'}</a>
 					{if isset($product.attributes_small)}
 						<br /><i>{$product.attributes_small|escape:'htmlall':'UTF-8'}</i>
 					{/if}</span>

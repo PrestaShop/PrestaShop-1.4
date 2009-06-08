@@ -18,7 +18,7 @@
 	{foreach from=$products item=product name=i}
 	<ul class="address {if $smarty.foreach.i.last}last_item{elseif $smarty.foreach.i.first}first_item{/if} {if $smarty.foreach.i.index % 2}alternate_item{else}item{/if}" id="block_{$product.id_product}_{$product.id_product_attribute}">
 	<div class="ajax_block_product">
-		<li class="address_title"><a href="{$link->getProductLink($product.id_product, $product.link_rewrite)}" title="{l s='View' mod='blockwishlist'}">{$product.name|truncate:30|escape:'htmlall':'UTF-8'}</a></li>
+		<li class="address_title"><a href="{$link->getProductLink($product.id_product, $product.link_rewrite)}" title="{l s='View' mod='blockwishlist'}">{$product.name|truncate:30:'...':TRUE|escape:'htmlall':'UTF-8'}</a></li>
 		<li class="address_name">
 			<a	href="{$link->getProductlink($product.id_product, $product.link_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
 				<img src="{$img_prod_dir}{$product.cover}-medium.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
