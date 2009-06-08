@@ -454,7 +454,7 @@ class AdminImport extends AdminTab
 				}
 			}
 			
-			if (isset($category->image) and !empty($category->image))
+			if (isset($category->image) AND !empty($category->image))
 				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
 					$this->_warnings[] = $category->image.' '.Tools::displayError('cannot be copied');
 			
@@ -676,23 +676,22 @@ class AdminImport extends AdminTab
 				}
 
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
-				{
 					foreach ($product->image AS $key => $url)
-					{
-						$image = new Image();
-						$image->id_product = intval($product->id);
-						$image->position = Image::getHighestPosition($product->id) + 1;
-						$image->cover = !$key ? true : false;
-						$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
-						if (($fieldError = $image->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $image->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $image->add())
-							self::copyImg($product->id, $image->id, $url);
-						else
+						if (!empty($url))
 						{
-							$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
-							$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+							$image = new Image();
+							$image->id_product = intval($product->id);
+							$image->position = Image::getHighestPosition($product->id) + 1;
+							$image->cover = !$key ? true : false;
+							$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
+							if (($fieldError = $image->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $image->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $image->add())
+								self::copyImg($product->id, $image->id, $url);
+							else
+							{
+								$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
+								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+							}
 						}
-					}			
-				}
 				$product->updateCategories(array_map('intval', $product->id_category));
 				
 				$features = get_object_vars($product);
