@@ -102,9 +102,7 @@ else
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 	}
 	else
-	{
 		$errors[] = Tools::displayError('cannot find this order');
-	}
 }
 
 $smarty->assign('errors', $errors);

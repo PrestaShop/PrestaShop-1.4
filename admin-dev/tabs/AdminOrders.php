@@ -363,6 +363,7 @@ class AdminOrders extends AdminTab
 //array_key_exists('customizationQuantityRefunded', $product) ? $product['product_quantity_refunded'] + $product['customizationQuantityRefunded'] : $product['product_quantity_refunded'];
 		$productReturned = $product['product_quantity_return'];
 //array_key_exists('customizationQuantityReturned', $product) ? $product['product_quantity_return'] + $product['customizationQuantityReturned'] : $product['product_quantity_return'];
+		$content = '0/'.$productQuantity;
 		if ($order->hasBeenDelivered())
 			$content = $productReturned.'/'.($productQuantity - $productRefunded);
 		elseif ($order->hasBeenPaid())
