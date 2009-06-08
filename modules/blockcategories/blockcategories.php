@@ -105,7 +105,7 @@ class BlockCategories extends Module
 		FROM `'._DB_PREFIX_.'category` c 
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($params['cookie']->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = c.`id_category`)
-		'.($id_customer ? 'INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.$id_customer.')' : '' ).'
+		'.($id_customer ? 'INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.intval($id_customer).')' : '' ).'
 		WHERE 1'
 		.(intval($maxdepth) != 0 ? ' AND `level_depth` <= '.intval($maxdepth) : '').'
 		AND (c.`active` = 1 OR c.`id_category`= 1)

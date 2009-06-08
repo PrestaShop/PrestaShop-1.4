@@ -14,10 +14,10 @@
 		// Check if already in dbb
 		$query = '
 			SELECT * FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-			WHERE `id_customer` = '.$id_customer.'
-			AND `customer_email` = \''.$customer_email.'\'
-			AND `id_product` = '.$id_product.'
-			AND `id_product_attribute` = '.$id_product_attribute;
+			WHERE `id_customer` = '.intval($id_customer).'
+			AND `customer_email` = \''.pSQL($customer_email).'\'
+			AND `id_product` = '.intval($id_product).'
+			AND `id_product_attribute` = '.intval($id_product_attribute);
 		if (Db::getInstance()->ExecuteS($query))
 			die('1');
 	}
@@ -29,8 +29,7 @@
 
 	$query = '
 		INSERT INTO `'._DB_PREFIX_.'mailalert_customer_oos` (`id_customer`, `customer_email`, `id_product` , `id_product_attribute`)
-		VALUES (\''.$id_customer.'\', \''.$customer_email.'\', \''.$id_product.'\', \''.$id_product_attribute.'\');
-	';
+		VALUES ('.intval($id_customer).', \''.pSQL($customer_email).'\', '.intval($id_product).', '.intval($id_product_attribute).')';
 
 	if (Db::getInstance()->Execute($query))
 		die ('1');
