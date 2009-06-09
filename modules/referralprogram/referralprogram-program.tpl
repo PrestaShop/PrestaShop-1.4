@@ -70,7 +70,7 @@
 			<p>
 				{l s='It\'s quick and it\'s easy. Just fill in the first name, last name, and e-mail address(es) of your friend(s) in the fields below.' mod='referralprogram'}
 				{l s='When one of them makes at least' mod='referralprogram'} {$orderQuantity} {if $orderQuantity > 1}{l s='orders' mod='referralprogram'}{else}{l s='order' mod='referralprogram'}{/if},
-				{l s='he or she will receive' mod='referralprogram'} {$discount} {l s='credit and you will receive your own credit slip worth' mod='referralprogram'} {$discount}.
+				{l s='he or she will receive a' mod='referralprogram'} {$discount} {l s='voucher and you will receive your own voucher worth' mod='referralprogram'} {$discount}.
 			</p>
 			<form method="post" action="{$base_dir_ssl}modules/referralprogram/referralprogram-program.php" class="std">
 				<table class="std">

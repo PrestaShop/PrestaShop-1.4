@@ -74,16 +74,15 @@ class MySQL extends Db
 	public function	ExecuteS($query, $array = true)
 	{
 		$this->_result = false;
-		if ($this->_link)
-			if ($this->_result = mysql_query($query, $this->_link))
-			{
-				if (!$array)
-					return $this->_result;
-				$resultArray = array();
-				while ($row = mysql_fetch_assoc($this->_result))
-					$resultArray[] = $row;
-				return $resultArray;
-			}
+		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
+		{
+			if (!$array)
+				return $this->_result;
+			$resultArray = array();
+			while ($row = mysql_fetch_assoc($this->_result))
+				$resultArray[] = $row;
+			return $resultArray;
+		}
 		return false;
 	}
 
