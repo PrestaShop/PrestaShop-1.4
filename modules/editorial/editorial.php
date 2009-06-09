@@ -157,6 +157,8 @@ class Editorial extends Module
 					paste_insert_word_content_callback : "convertWord",
 					plugin_preview_width : "500",
 					plugin_preview_height : "600",
+					entities : "",
+					entity_encoding : "named",
 					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],style[type|id]"
 				});
 				function convertWord(type, content)
