@@ -523,7 +523,6 @@ abstract class AdminTab
 							else
 							{
 								$this->copyFromPost($object, $this->table);
-								Tools::d($_POST);
 								$result = $object->update();
 							}
 							if (!$result)
