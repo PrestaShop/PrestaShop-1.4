@@ -117,8 +117,8 @@ class AdminSuppliers extends AdminTab
 		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		$langtags = 'smeta_title¤smeta_keywords¤smeta_description';
 
+		$langtags = 'descriptionÂ¤smeta_titleÂ¤smeta_keywordsÂ¤smeta_description';
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
@@ -140,7 +140,7 @@ class AdminSuppliers extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both;">'.$this->l('Will appear in supplier list').'</p>
 					</div>';							
-				$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
+				$this->displayFlags($languages, $defaultLanguage, $langtags, 'description');
 		echo '	</div>
 				<label>'.$this->l('Logo:').' </label>
 				<div class="margin-form">

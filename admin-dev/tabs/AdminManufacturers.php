@@ -86,12 +86,11 @@ class AdminManufacturers extends AdminTab
 	public function displayForm()
 	{
 		global $currentIndex, $cookie;
-		$divLangName = 'cdesc¤cdesc2';
 		$manufacturer = $this->loadObject(true);
 		$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		$langtags = 'mmeta_title¤mmeta_keywords¤mmeta_description';
+		$langtags = 'cdesc2Â¤cdescÂ¤mmeta_titleÂ¤mmeta_keywordsÂ¤mmeta_description';
 
 		echo '
 		<script type="text/javascript">
@@ -113,7 +112,7 @@ class AdminManufacturers extends AdminTab
 							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;">
 								<textarea cols="38" rows="5" id="short_description_'.$language['id_lang'].'" name="short_description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'short_description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc2');
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc2');
 		echo '</div>';
 				
 		echo '<br class="clear" /><br /><br /><label>'.$this->l('Description:').' </label>
@@ -123,7 +122,7 @@ class AdminManufacturers extends AdminTab
 							<div id="cdesc_'.$language['id_lang'].'" style="float: left;">
 								<textarea cols="38" rows="10" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc');
+		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc');
 		echo '</div>';
 
 			echo '	
