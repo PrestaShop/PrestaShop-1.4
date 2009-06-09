@@ -5,6 +5,61 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.0.3 - 1005 (2009-09-06)   #
+####################################
+
+	Improved/changed features :
+
+	[*] Installer : some ids were not unsigned
+	[*] BO : bing.com keywords are now recognized
+	[*] TR : new FR translation
+	[*] BO : allow to put style tags in tinyMCE (fixed #1726)[+] Class/BO : Customized product deletion/refund/return support from orders added
+	[*] FO : added total tax in summary page[-] Installer : fixed SQL bug in update 1.2
+	[*] BO : you can now specify tax for wrapping cost
+
+
+	Fixed bugs :
+
+	[-] FO : fixed truncate bug in template[-] Installer : fixed some bugs in SQL data
+	[-] BO : fixed flags bug[-] BO : fixed htmlentities encode in TinyMCE
+	[-] MO : Loyalty module template overload fixed
+	[-] MO: Referral module translations fixed
+	[-] BO : Order\'s 'new' filter fixed
+	[-] FO : fixed bugs in order.php
+	[-] BO : Import page display fixed
+	[-] FO : String truncates fixed[-] BO : Product image import fixed (when some products did not have any pictures associated)
+	[-] FO : fixed bug in downloadable product
+	[-] FO : Customized product addition (with required pictures) fixed (when added a first time with required datas)[-] FO/BO : Customizated product return display fixed
+	[-] MO : fixed referralprogram tpl bug (#2091)
+	[-] FO : fixed bug with id_address in address.tpl[-] FO : Can not buy when allowBuyWhenOutOfStock with availableLaterValue message and a non-existing combination
+	[-] FO : PNG loves IE6
+	[-] FO : Some links on product page too long
+	[-] FO : Avoid little thumbs arrow flashing
+	[-] FO/MO : fixed SSL bug browser alert
+	[-] BO : some characters where not allowed in the referrers like and regexp
+	[-] BO : wholesale price is not mandatory for attributes (neither somewhere else btw)
+	[-] BO : fixed bad password check for Employee and Customer
+	[-] MO : fixed translations bug
+	[-] Installer : fixed bad SQL query
+	[-] BO : fixed bug while uploading image for category (#2058)[-] FO/BO/MO : fixed various minor bugs[-] FO/MO : fixed blank page with header.php (#1862)[-] FO : fixed some display price with tax and no tax on product page[*] BO : allow to put style tags in tinyMCE (fixed #1726)
+	[-] MO : fixed width for editor wysiwyg (fixed #1999)[-] FO: Customizable product quantity display fixed on the shopping cart page[*] TR : new FR translations
+	[-] BO : fixed display bug in AdminOrders
+	[-] FO : when cart is empty, now delete wrapping cost and wrapping message
+	[-] MO : when cart is empty, now delete wrapping cost and wrapping message in blockcart
+	[-] Classes : cache cart is nos updated if product added or deleted
+	[-] Installer : fixed missing hook for blocksearch (js error)[-] FO : fixed back redirect for authentification
+	[-] Installer : fixed no group category in simple mode
+	[-] MO : fixed quantity bug in blockcart[-] BO/Classes : fixed bugs with prices rounding off
+	[-] FO/PDF/Classes : fixed bugs with prices rounding off[-] FO/MO : fixed several W3C bugs
+	[-] MO : fixed W3C bugs in blocksearch
+	[-] FO/MO : fixed several bugs with groups[-] BO : fixed displaying customer groups
+	[-] MO : fixed DISTINCT bug in blockcategories
+	[-] FO : "add product" fixed when stats modules disable
+	[-] FO : fixing header width
+	[-] FO : wrong image path in login.css
+
+
+####################################
 #   v1.2.0.2 - 935 (2009-20-05)    #
 ####################################
 
