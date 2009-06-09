@@ -83,7 +83,7 @@ $smarty->assign(array(
 	'discounts' => $discounts
 ));
 
-$smarty->display(_PS_MODULE_DIR_.'/loyalty/loyalty.tpl');
+echo Module::display(dirname(__FILE__).'/loyalty.php', 'loyalty.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
 

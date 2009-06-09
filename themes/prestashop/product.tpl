@@ -186,7 +186,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<!-- prices -->
 			<p class="price">
 				{if $product->on_sale}
-					<img src="{$img_dir}onsale_{$lang_iso}.gif" class="on_sale_img"/>
+					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
 					<span class="on_sale">{l s='On sale!'}</span>
 				{elseif ($product->reduction_price != 0 || $product->reduction_percent != 0) && ($product->reduction_from == $product->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d' <= $product->reduction_to && $smarty.now|date_format:'%Y-%m-%d' >= $product->reduction_from))}
 					<span class="discount">{l s='Price lowered!'}</span>
