@@ -32,7 +32,7 @@
 					{if $supplier.nb_products > 0}
 					<a href="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)|escape:'htmlall':'UTF-8'}">
 					{/if}
-					{$supplier.name|truncate:60:'...':TRUE|escape:'htmlall':'UTF-8'}
+					{$supplier.name|truncate:60:'...'|escape:'htmlall':'UTF-8'}
 					{if $supplier.nb_products > 0}
 					</a>
 					{/if}

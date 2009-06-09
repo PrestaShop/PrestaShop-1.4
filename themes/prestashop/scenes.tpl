@@ -32,7 +32,7 @@ $(function () {ldelim}
 						<a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.details->name|escape:'htmlall':'UTF-8'}">
 							<img src="{$link->getImageLink($product.id_product, $imageIds, 'medium')}" alt="" />
 						</a>
-						<p class="description">{$product.details->description_short|strip_tags|truncate:170:'...':TRUE}</p>
+						<p class="description">{$product.details->description_short|strip_tags|truncate:170:'...'}</p>
 					</div>
 				</div>
 			{/foreach}

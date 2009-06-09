@@ -10,7 +10,7 @@
 		<dl>
 		{foreach from=$best_sellers item=product name=myLoop}
 			<dt class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}"><a href="{$product.link}" title="{$product.name}">{$product.name}</a></dt>
-			{if $product.description_short}<dd class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}">{$product.description_short|truncate:50:'...':TRUE}</dd>{/if}
+			{if $product.description_short}<dd class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}">{$product.description_short|truncate:50:'...'}</dd>{/if}
 		{/foreach}
 		</dl>
 		<p><a href="{$base_dir}best-sales.php" title="{l s='All best sellers' mod='blockbestsellers'}" class="button_large">{l s='All best sellers' mod='blockbestsellers'}</a></p>

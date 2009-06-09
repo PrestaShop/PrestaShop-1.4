@@ -8,7 +8,7 @@
 		'link':          '{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|addslashes}',
 		'quantity':      {$product.cart_quantity},
 		'priceByLine':   '{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.real_price}',
-		'name':          '{$product.name|addslashes|truncate:16:'...':TRUE|escape:'htmlall':'UTF-8'}',
+		'name':          '{$product.name|addslashes|truncate:16:'...'|escape:'htmlall':'UTF-8'}',
 		'price':         '{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.real_price}',
 		'idCombination': {if isset($product.attributes_small)}{$productAttributeId}{else}0{/if},
 {if isset($product.attributes_small)}
@@ -36,7 +36,7 @@
 						{ldelim}
 						'index':			{$index},
 						'value':			'{$data.value|addslashes}',
-						'truncatedValue':	'{$data.value|truncate:28:'...':TRUE|addslashes}'
+						'truncatedValue':	'{$data.value|truncate:28:'...'|addslashes}'
 						{rdelim},
 					{/foreach}]
 				{rdelim},
@@ -54,9 +54,9 @@
 {if $discounts}{foreach from=$discounts item=discount name='discounts'}
 	{ldelim}
 		'id':              '{$discount.id_discount}',
-		'name':            '{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...':true:false|addslashes}',
+		'name':            '{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...'|addslashes}',
 		'description':     '{$discount.description|addslashes}',
-		'nameDescription': '{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...':true:false}',
+		'nameDescription': '{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...'}',
 		'link':            '{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}',
 		'price':           '-{if $priceDisplay == 1}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_tax_exc}{else}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_real}{/if}'
 	{rdelim}

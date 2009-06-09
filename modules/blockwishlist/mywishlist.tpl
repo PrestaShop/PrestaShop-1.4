@@ -38,7 +38,7 @@
 				<tbody>
 				{section name=i loop=$wishlists}
 					<tr id="wishlist_{$wishlists[i].id_wishlist|intval}">
-						<td class="bold" style="width:200px;"><a href="javascript:;" onclick="javascript:WishlistManage('block-order-detail', '{$wishlists[i].id_wishlist|intval}');">{$wishlists[i].name|truncate:30:'...':TRUE|escape:'htmlall':'UTF-8'}</a></td>
+						<td class="bold" style="width:200px;"><a href="javascript:;" onclick="javascript:WishlistManage('block-order-detail', '{$wishlists[i].id_wishlist|intval}');">{$wishlists[i].name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</a></td>
 						<td class="bold align_center">
 						{assign var=n value=0}
 						{foreach from=$nbProducts item=nb name=i}

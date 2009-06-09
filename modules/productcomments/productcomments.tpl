@@ -49,7 +49,7 @@
 				<tr>
 					<td style="vertical-align: top">
 						{dateFormat date=$comment.date_add|escape:'html':'UTF-8' full=0}
-						{$comment.firstname|escape:'html':'UTF-8'} {$comment.lastname|truncate:1:'...':TRUE|escape:'htmlall':'UTF-8'}.
+						{$comment.firstname|escape:'html':'UTF-8'} {$comment.lastname|truncate:1:'...'|escape:'htmlall':'UTF-8'}.
 					</td>
 					<td style="vertical-align: top">
 						{$comment.content|escape:'html':'UTF-8'|nl2br}
