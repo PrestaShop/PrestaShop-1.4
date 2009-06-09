@@ -154,9 +154,6 @@ ALTER TABLE PREFIX_scene_products
 ALTER TABLE PREFIX_product_lang DROP INDEX fts; 
 ALTER TABLE PREFIX_product_lang DROP INDEX ftsname ;
 
-ALTER TABLE PREFIX_customer_group
-	ADD INDEX customer_login (id_group);
-
 /* KEY management */
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;
@@ -174,7 +171,8 @@ ALTER TABLE PREFIX_product_lang DROP INDEX `id_product`;
 CREATE TABLE `PREFIX_customer_group` (
 	`id_customer` int(10) unsigned NOT NULL,
 	`id_group` int(10) unsigned NOT NULL,
-	KEY `customer_group_index` (`id_customer`,`id_group`)
+	PRIMARY KEY `customer_group_index` (`id_customer`,`id_group`),
+	INDEX customer_login(id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE PREFIX_category_group (

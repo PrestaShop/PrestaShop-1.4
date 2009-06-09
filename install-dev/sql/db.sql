@@ -95,7 +95,7 @@ CREATE TABLE `PREFIX_attribute_group_lang` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_attribute_impact` (
-  `id_attribute_impact` int(11) unsigned NOT NULL auto_increment,
+  `id_attribute_impact` int(10) unsigned NOT NULL auto_increment,
   `id_product` int(11) NOT NULL,
   `id_attribute` int(11) NOT NULL,
   `weight` float NOT NULL,
@@ -357,8 +357,8 @@ CREATE TABLE `PREFIX_customer` (
 CREATE TABLE `PREFIX_customer_group` (
   `id_customer` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
-  KEY `customer_group_index` (`id_customer`,`id_group`),
-  KEY `customer_login` (`id_group`)
+  PRIMARY KEY `customer_group_index` (`id_customer`,`id_group`),
+  INDEX customer_login(id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customization` (
@@ -367,6 +367,8 @@ CREATE TABLE `PREFIX_customization` (
   `id_cart` int(10) NOT NULL,
   `id_product` int(10) NOT NULL,
   `quantity` int(10) NOT NULL,
+  `quantity_refunded` INT NOT NULL DEFAULT '0',
+  `quantity_returned` INT NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id_customization`,`id_cart`,`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
