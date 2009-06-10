@@ -37,6 +37,15 @@ $currentIndex = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE
 if ($back = Tools::getValue('back'))
 	$currentIndex .= '&back='.urlencode($back);
 
+/* Server Params */
+$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
+$protocole = 'http://';
+$protocle_ssl = 'https://';
+$protocole_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
+$protocole_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
+define('_PS_BASE_URL_', $protocole.$server_host);
+define('_PS_BASE_URL_SSL_', $protocle_ssl.$server_host);
+
 /* Include appropriate language file */
 Tools::setCookieLanguage();
 if (Tools::isSubmit('adminlang'))
