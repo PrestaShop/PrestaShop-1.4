@@ -12,10 +12,6 @@
   *
   */
 
-/* SSL Management */
-if (!defined('_PS_USE_SSL_'))
-	define('_PS_USE_SSL_', (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? 'https://'.$_SERVER['SERVER_NAME'] : '');
-
 class Link
 {
 	/** @var boolean Rewriting activation */
@@ -42,68 +38,68 @@ class Link
 	{
 	 	if (!isset($this->allow)) $this->allow = 0;
 		if (is_object($id_product))
-			return ($this->allow == 1)?(_PS_USE_SSL_.__PS_BASE_URI__.(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').intval($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product->id));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').intval($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product->id));
 		elseif ($alias)
-			return ($this->allow == 1)?(_PS_USE_SSL_.__PS_BASE_URI__.(($category AND $category != 'home') ? ($category.'/') : '').intval($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.(($category AND $category != 'home') ? ($category.'/') : '').intval($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product));
 		else
-			return _PS_USE_SSL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product);
+			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product);
 	}
 
 	public function getCategoryLink($id_category, $alias = NULL)
 	{
 		if (is_object($id_category))
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_category->id).'-'.$id_category->link_rewrite) : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_category->id).'-'.$id_category->link_rewrite) : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_category).'-'.$alias) :
-			(_PS_USE_SSL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category));
-		return _PS_USE_SSL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_category).'-'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category);
 	}
 
 	public function getCMSLink($cms, $alias = null)
 	{
 		if (is_object($cms))
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.'content/'.intval($cms->id).'-'.$cms->link_rewrite) : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/'.intval($cms->id).'-'.$cms->link_rewrite) : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.'content/'.intval($cms).'-'.$alias) :
-			(_PS_USE_SSL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms));
-		return _PS_USE_SSL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/'.intval($cms).'-'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms);
 	}
 	
 	public function getSupplierLink($id_supplier, $alias = NULL)
 	{
 		if (is_object($id_supplier))
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_supplier->id).'__'.$id_supplier->link_rewrite) : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_supplier->id).'__'.$id_supplier->link_rewrite) : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_supplier).'__'.$alias) :
-			(_PS_USE_SSL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier));
-		return _PS_USE_SSL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_supplier).'__'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier);
 	}
 	
 	public function getManufacturerLink($id_manufacturer, $alias = NULL)
 	{
 		if (is_object($id_manufacturer))
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_manufacturer->id).'_'.$id_manufacturer->link_rewrite) : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_manufacturer->id).'_'.$id_manufacturer->link_rewrite) : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_manufacturer).'_'.$alias) :
-			(_PS_USE_SSL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer));
-		return _PS_USE_SSL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_manufacturer).'_'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer);
 	}
 
 	public function getCustomLink($id_custom, $page, $prefix = '~', $alias = NULL)
 	{
 		if (is_object($id_custom))
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_custom->id).$prefix.$id_custom->link_rewrite) : 
-			(_PS_USE_SSL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_custom->id).$prefix.$id_custom->link_rewrite) : 
+			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_USE_SSL_.__PS_BASE_URI__.intval($id_custom).$prefix.$alias) :
-			(_PS_USE_SSL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom));
-		return _PS_USE_SSL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.intval($id_custom).$prefix.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom));
+		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom);
 	}
 	
 	public function getImageLink($name, $ids, $type = null)

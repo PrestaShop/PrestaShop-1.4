@@ -105,9 +105,11 @@ $protocole = 'http://';
 $protocle_ssl = 'https://';
 $protocole_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
 $protocole_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
+define('_PS_BASE_URL_', $protocole.$server_host);
+define('_PS_BASE_URL_SSL_', $protocle_ssl.$server_host);
 
 $smarty->assign(array(
-	'base_dir' => $protocole.$server_host.__PS_BASE_URI__,
+	'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
 	'base_dir_ssl' => $protocole_link.$server_host.__PS_BASE_URI__,
 	'content_dir' => $protocole_content.$server_host.__PS_BASE_URI__,
 	'img_ps_dir' => $protocole_content.$server_host._PS_IMG_,
