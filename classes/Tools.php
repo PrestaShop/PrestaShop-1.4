@@ -537,7 +537,7 @@ class Tools
 	* @param integer category id
 	* @param string finish of the path
 	*/
-	static public function getPath($id_category, $path = '')
+	static public function getPath($id_category, $path = '', $linkOntheLastItem = false)
 	{
 		global $link, $cookie;
 		$category = new Category(intval($id_category), intval($cookie->id_lang));
@@ -547,9 +547,23 @@ class Tools
 			return '<span class="navigation_end">'.$path.'</span>';
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 		$category_name = Category::hideCategoryPosition($category->name);
+		// htmlentitiezed because this method generates some view
 		if ($path != $category_name)
-			$path = '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">'.$category_name.'</a> '.$pipe.' '.$path;
+			$path = '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">'.htmlentities($category_name, ENT_NOQUOTES, 'UTF-8').'</a> '.$pipe.' '.$path;
+		else
+			$path = ($linkOntheLastItem ? '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
 		return Tools::getPath(intval($category->id_parent), $path);
+	}
+
+	static public function getFullPath($id_category, $end)
+	{
+		global $cookie;
+
+		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
+		$category = new Category(intval($id_category), intval($cookie->id_lang));
+		if (!Validate::isLoadedObject($category))
+			die(Tools::displayError());
+		return self::getPath($id_category, $category->name, true).' '.$pipe.' '.htmlentities($end, ENT_NOQUOTES, 'UTF-8');
 	}
 
 	/**

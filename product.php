@@ -170,9 +170,11 @@ else
 			'id_category_parent' => intval($category->id_parent),
 			'return_category_name' => Tools::safeOutput(Category::hideCategoryPosition($category->name))));
 		}
+		else
+			$defaultCategory = new Category(intval($product->id_category_default), intval($cookie->id_lang));
 		$smarty->assign(array(
 			'return_link' => (isset($category->id) AND $category->id) ? Tools::safeOutput($link->getCategoryLink($category)) : 'javascript: history.back();',
-			'path' => (isset($category->id) AND $category->id) ? Tools::getPath(intval($category->id), $product->name) : Tools::getPath(intval($product->id_category_default), $product->name)
+			'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath(intval($category->id), $product->name) : Tools::getFullPath(intval($product->id_default_category), $product->name))
 		));
 
 		/* /Quantity discount management */
