@@ -1,6 +1,0 @@
-Bonjour {firstname} {lastname},
-
-Afin d'activer votre compte sur {shop_name}, merci de cliquer sur le lien suivant :
-{link}
-
-{shop_url} par PrestaShop™
