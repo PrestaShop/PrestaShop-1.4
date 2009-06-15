@@ -103,7 +103,7 @@ class Newsletter extends Module
 		$rq = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'newsletter`');
-		$header = array('id_customer', 'email', 'ip_address');
+		$header = array('id_customer', 'email', 'newsletter_date_add', 'ip_address');
 		$result = (is_array($rq) ? array_merge(array($header), $rq) : $header);
 		return $result;
 	}
