@@ -54,11 +54,27 @@ class AdminAddresses extends AdminTab
 
 		parent::__construct();
 	}
-	
+
 	public function postProcess()
 	{
 		if (isset($_POST['submitAdd'.$this->table]))
 		{
+			// Transform e-mail in id_customer for parent processing
+			if ($this->addressType == 'customer')
+			{
+				if (Validate::isEmail(Tools::getValue('email')))
+				{
+					$customer = new Customer;
+					$customer = $customer->getByemail(Tools::getValue('email'));
+					if (Validate::isLoadedObject($customer))
+						$_POST['id_customer'] = $customer->id;
+					else
+						$this->_errors[] = Tools::displayError('this e-mail address is not registered');
+				}
+				elseif (!Tools::getValue('id_customer'))
+					$this->_errors[] = Tools::displayError('customer e-mail address is not valid');
+			}
+
 			// Check manufacturer selected
 			if ($this->addressType == 'manufacturer')
 			{
@@ -87,7 +103,7 @@ class AdminAddresses extends AdminTab
 		}
 		if (!sizeof($this->_errors))
 			parent::postProcess();
-			
+
 		/* Reassignation of the order's new (invoice or delivery) address */
 		$address_type = (intval(Tools::getValue('address_type')) == 2 ? 'invoice' : (intval(Tools::getValue('address_type')) == 1 ? 'delivery' : ''));
 		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = intval(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
@@ -193,11 +209,23 @@ class AdminAddresses extends AdminTab
 				break;
 			case 'customer':
 			default:
-				$customer = new Customer($obj->id_customer);
-				$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
-				echo '<label>'.$this->l('Customer:').'</label>
-				<div class="margin-form"><a style="display: block; padding-top: 34px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>
-				<label>'.$this->l('Alias:').'</label>
+				if ($obj->id)
+				{
+					$customer = new Customer($obj->id_customer);
+					$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
+					echo '
+					<label>'.$this->l('Customer:').'</label>
+					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>';
+				}
+				else
+				{
+					echo
+					'<label>'.$this->l('Customer e-mail:').'</label>
+					<div class="margin-form">
+						<input type="text" size="33" name="email" value="'.htmlentities(Tools::getValue('email'), ENT_COMPAT, 'UTF-8').'" style="text-transform: lowercase;" /> <sup>*</sup>
+					</div>';
+				}
+				echo '<label>'.$this->l('Alias:').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="alias" value="'.htmlentities($this->getFieldValue($obj, 'alias'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
