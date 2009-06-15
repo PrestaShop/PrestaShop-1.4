@@ -36,7 +36,7 @@ class		Group extends ObjectModel
 	
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);
-	protected	$fieldsValidateLang = array('name' => 'isName');
+	protected	$fieldsValidateLang = array('name' => 'isGenericName');
 
 	protected 	$table = 'group';
 	protected 	$identifier = 'id_group';
