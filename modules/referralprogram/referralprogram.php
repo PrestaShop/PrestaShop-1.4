@@ -172,7 +172,7 @@ class ReferralProgram extends Module
 		if (!eregi('^'.$section.'_', $key))
 			return 0;
 		$key = eregi_replace('^'.$section.'_', '', $key);
-		$field = htmlspecialchars($field);
+		$field = Tools::htmlentitiesDecodeUTF8(htmlspecialchars($field));
 		if (!$field)
 			return 0;
 		return ("\n\t\t".'<'.$key.'>'.$field.'</'.$key.'>');

@@ -39,7 +39,7 @@ class Editorial extends Module
 			return 0;
 		$key = eregi_replace('^'.$section.'_', '', $key);
 		//$field = pSQL($field);
-		$field = htmlspecialchars($field);
+		$field = Tools::htmlentitiesDecodeUTF8(htmlspecialchars($field));
 		if (!$field)
 			return 0;
 		return ("\n".'		<'.$key.'>'.$field.'</'.$key.'>');

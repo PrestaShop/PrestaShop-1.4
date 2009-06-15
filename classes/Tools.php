@@ -290,6 +290,13 @@ class Tools
 		return htmlentities($string, ENT_QUOTES, 'utf-8'); 
 	}
 
+	static public function htmlentitiesDecodeUTF8($string)
+	{
+		if (is_array($string))
+			return array_map(array('Tools', 'htmlentitiesDecodeUTF8'), $string);
+		return html_entity_decode($string, ENT_QUOTES, 'utf-8'); 
+	}
+
 	static public function safePostVars()
 	{
 		$_POST = array_map(array('Tools', 'htmlentitiesUTF8'), $_POST);

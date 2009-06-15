@@ -41,7 +41,7 @@ class CMS extends ObjectModel
 		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
 			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
-			$fields[$language['id_lang']]['content'] = (isset($this->content[$language['id_lang']])) ? pSQL($this->content[$language['id_lang']], true) : '';
+			$fields[$language['id_lang']]['content'] = (isset($this->content[$language['id_lang']])) ? Tools::htmlentitiesDecodeUTF8(pSQL($this->content[$language['id_lang']], true)) : '';
 			foreach ($fieldsArray as $field)
 			{
 				if (!Validate::isTableOrIdentifier($field))

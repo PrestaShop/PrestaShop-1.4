@@ -73,7 +73,7 @@ class		Manufacturer extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_manufacturer'] = intval($this->id);			
+			$fields['id_manufacturer'] = intval($this->id);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
@@ -90,8 +90,8 @@ class		Manufacturer extends ObjectModel
 		{		
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
 			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
-			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
-			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
+			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? Tools::htmlentitiesDecodeUTF8(pSQL($this->description[$language['id_lang']], true)) : '';
+			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? Tools::htmlentitiesDecodeUTF8(pSQL($this->short_description[$language['id_lang']], true)) : '';
 			
 			foreach ($fieldsArray as $field)
 			{
