@@ -72,7 +72,22 @@ function smartyMaxWords($params, &$smarty)
 
 	return implode(' ',  Tools::htmlentitiesUTF8($words));
 }
+
 $smarty->register_function('m', 'smartyMaxWords');
+
+function smartyTruncate($params, &$smarty)
+{
+	$text = isset($params['strip']) ? strip_tags($params['text']) : $params['text'];
+	$length = $params['length'];
+	$sep = isset($params['sep']) ? $params['sep'] : '...';
+
+	if (Tools::strlen($text) > $length + Tools::strlen($sep))
+		$text = substr($text, 0, $length).$sep;
+
+	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text) : $text);
+}
+
+$smarty->register_function('t', 'smartyTruncate');
 
 global $link;
 
