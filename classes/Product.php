@@ -538,7 +538,7 @@ class		Product extends ObjectModel
 	* @param string $orderWay Way for ordering (ASC or DESC)
 	* @return array Products details
 	*/
-	static public function getProducts($id_lang, $start, $limit, $orderBy, $orderWay, $id_category = false)
+	static public function getProducts($id_lang, $start, $limit, $orderBy, $orderWay, $id_category = false, $only_active = false)
 	{
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
@@ -558,7 +558,8 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (s.`id_supplier` = p.`id_supplier`)'.
 		($id_category ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` c ON (c.`id_product` = p.`id_product`)' : '').'
 		WHERE pl.`id_lang` = '.intval($id_lang).
-		($id_category ? ' AND c.`id_category` = '.$id_category : '').'
+		($id_category ? ' AND c.`id_category` = '.$id_category : '').
+		($only_active ? ' AND p.`active` = 1' : '').'
 		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($limit > 0 ? ' LIMIT '.intval($start).','.intval($limit) : '')
 		);
@@ -567,7 +568,6 @@ class		Product extends ObjectModel
 
 		return ($rq);
 	}
-
 
 	static public function getSimpleProducts($id_lang)
 	{
