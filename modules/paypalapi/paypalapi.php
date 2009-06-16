@@ -15,7 +15,7 @@ class PaypalAPI extends PaymentModule
 	{
 		$this->name = 'paypalapi';
 		$this->tab = 'Payment';
-		$this->version = '2.0';
+		$this->version = '1.0';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';

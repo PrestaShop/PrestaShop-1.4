@@ -115,7 +115,7 @@ class PaypalAdmin extends PaypalAPI
 		$html= '
 		<fieldset>
 			<legend><img src="../img/admin/unknown.gif" />'.$this->l('Server Information').'</legend>
-			<b style="color: red;">'.$this->l('In order to use your PayPalAPI payment module, your webserver NEED to support SSL protocol (eg. openSSL)').'.</b><br /><br />
+			<b style="color: red;">'.$this->l('In order to use your PayPalAPI payment module, your webserver NEEDS to support SSL protocol (eg. openSSL)').'.</b><br /><br />
 			'.$this->l('Without SSL, PayPalAPI module will not be able to contact PayPal').'.<br />
 		</fieldset>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin-top:20px; float:left;">
@@ -134,7 +134,7 @@ class PaypalAdmin extends PaypalAPI
 				<label style="clear:both; width:140px;">'.$this->l('Banner image URL:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
 					<input type="text" size="40" name="header" value="'.($header ? htmlentities($header, ENT_COMPAT, 'UTF-8') : '').'" />
-					<p class="hint clear" style="display: block;">'.$this->l('The image should be host on a securised server. Max: 750x90px.').'</p>
+					<p class="hint clear" style="display: block;">'.$this->l('The image should be host on a secure (https) server. Max: 750x90px.').'</p>
 				</div>
 				<center style="clear:both; margin-top:50px;"><input type="submit" name="submitPaypalSettings" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>
@@ -157,14 +157,15 @@ class PaypalAdmin extends PaypalAPI
 			<legend><img src="../img/admin/unknown.gif" />'.$this->l('API settings').'</legend>
 			'.$this->l('Follow these steps in order to obtain your API authentication information by using an API signature as the authentication mechanism. If you are testing with a virtual account, repeat these steps both on the virtual account and on the real account at the same time. We recommend that you open a separate Web browser session when carrying out this procedure.').'<br /><br />
 			'.$this->l('1. Log in to your PayPal Premier or Business account.').'<br /><br />
-			'.$this->l('2. Click on the Preferences sub-tab found in the upper part of the navigation zone.').'<br /><br />
-			'.$this->l('3. Click on the "API Access" link under Personal Information.').'<br /><br />
-			'.$this->l('4. Click on Request API Authentication Information.').'<br /><br />
-			'.$this->l('5. Select the API Signature option button under Type of Authentication Information.').'<br /><br />
-			'.$this->l('6. Fill out the API Authentication Information Request form, mark the Accept checkbox, then click on Send.').'<br /><br />
-			'.$this->l('7. Make a note of the API username and API password values.').'<br /><br />
-			'.$this->l('8. Select the value indicated opposite Signature Hash, copy it, and save it in a file or somewhere else. This is your API signature.').'<br /><br />
-			'.$this->l('9. You have just generated your API username, API password, and API signature. You now possess all authentication information necessary to use the PayPal API.').'<br />
+			'.$this->l('2. Click the Profile subtab located under the My Account heading.').'<br /><br />
+			'.$this->l('3. Click the API Access link under the Account Information header.').'<br /><br />
+			'.$this->l('4. Click the View API Certificate link in the right column.').'<br /><br />
+			'.$this->l('5. Click the Request API Credentials link.').'<br /><br />
+			'.$this->l('6. Click the Request API signature radio button on the Request API Credentials page.').'<br /><br />
+			'.$this->l('7. Complete the Request API Credential Request form by clicking the agreement checkbox and clicking Submit.').'<br /><br />
+			'.$this->l('8. Save the values for API Username, Password and Signature (make sure this long character signature is copied).').'<br /><br />
+			'.$this->l('9. Click the Done button after copying your API Username, Password, and Signature.').'<br /><br />
+			'.$this->l('10. This will take you back to the API Access screen where you are finished.').'<br /><br />
 		</fieldset>';
 		return $html;
 	}
