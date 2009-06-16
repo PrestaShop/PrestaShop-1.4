@@ -67,7 +67,7 @@ if ($tab)
 }
 else /* Else display homepage */
 {
-	echo '
+	echo '<div id="adminHeader">
 	<img src="../img/logo.jpg" alt="Logo" title="Logo" /><br /><br />
 	<h2>'.translate('Welcome to your Back Office').'</h2>
 	'.translate('Click the tabs to navigate.').'
@@ -82,15 +82,16 @@ else /* Else display homepage */
 		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="'.translate('http://www.php.net/manual/en/ref.filesystem.php').'">'.translate('more infos').'</a>]</p>';
 		echo '<p>'.translate('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 	}
+  echo '</div>';
 
 	echo Module::hookExec('backOfficeHome');
 
 	/* News from PrestaShop website */
-	echo '
+	echo '<div id="adminNews">
 	<h2>'.translate('PrestaShop live feed').'</h2>';
 	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
-	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="http://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="http://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe></div>';
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
