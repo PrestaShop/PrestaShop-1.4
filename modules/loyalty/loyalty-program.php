@@ -45,7 +45,13 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 	$voucher->date_to = date('Y-m-d H:i:s', $dateFrom + 31536000); // + 1 year
 	$voucher->minimal = 0;
 	$voucher->active = 1;
-	$voucher->description[$cookie->id_lang] = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval($cookie->id_lang));
+	$languages = Language::getLanguages(true);
+	$default_text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval(Configuration::get('PS_LANG_DEFAULT')));
+	foreach ($languages as $language)
+	{
+		$text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval($language['id_lang']));
+		$voucher->description[intval($language['id_lang'])] = $text ? strval($text) : strval($default_text);
+	}
 	$voucher->save();
 
 	/* register order(s) which contribute to create this voucher */
