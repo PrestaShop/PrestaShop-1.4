@@ -124,11 +124,11 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		{if count($images) > 3}<a id="view_scroll_right" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Next'}</a>{/if}
 		</div>
 		{/if}
-		<br class="clear" />
+		<p class="align_center clear"><a id="resetImages" href="{$link->getProductLink($product)}" onclick="return (false);">{l s='Display all pictures'}</a></p>
 		<!-- usefull links-->
 		<ul id="usefull_link_block">
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
-			<li><a href="javascript:print();">{l s='Print'}</a></li>
+			<li><a href="javascript:print();">{l s='Print'}</a><br class="clear" /></li>
 			{if $have_image && !$jqZoomEnabled}
 			<li><span id="view_full_size" class="span_link">{l s='View full size'}</span></li>
 			{/if}

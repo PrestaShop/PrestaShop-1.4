@@ -372,6 +372,11 @@ $(document).ready(function()
 	//init the price in relation of the selected attributes
 	if (typeof productHasAttributes != 'undefined' && productHasAttributes)
 		findCombination(true);
+
+	//
+	$('a#resetImages').click(function() {
+		updateColorSelect(0);
+	});
 });
 
 function saveCustomization()

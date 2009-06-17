@@ -1802,18 +1802,16 @@ div.categTree {
 }
 #primary_block ul#usefull_link_block{
 	list-style-type:none;
-	margin-top:2em;
+	margin-top:1em;
 }
-#primary_block ul#usefull_link_block li{ margin:0.5em 1em 0.5em 0; }
+#primary_block ul#usefull_link_block li{ margin:0.5em 1em 0.5em 0; display: block; }
 #primary_block ul#usefull_link_block li a, #primary_block ul#usefull_link_block span.span_link, #primary_block ul#usefull_link_block span.span_link:hover{
 	text-decoration:none;
 	color:#76839b;
 	font-size:0.9em;
 	background: white url('../img/bullet_alt.jpg') no-repeat top left;
 	padding-left:15px;
-	display:block;
 	height:15px;
-	width:100px;	
 }
 #primary_block #pb-left-column{
 	float:left;

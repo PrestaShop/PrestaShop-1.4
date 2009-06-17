@@ -939,7 +939,7 @@ abstract class AdminTab
 			echo '
 						<input type="image" src="../img/admin/list-next.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.($page + 1).'"/>
 						 &nbsp;<input type="image" src="../img/admin/list-next2.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.$totalPages.'"/>';
-		echo '			| '.$this->l('Display').'
+		echo '			| '.$this->l('Display').' ['.$this->table.'_pagination] '.'
 						<select name="pagination">';
 		/* Choose number of results per page */
 		foreach ($this->_pagination AS $value)
