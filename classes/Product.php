@@ -1903,10 +1903,15 @@ class		Product extends ObjectModel
 		$customizedDatas = array();
 		foreach ($result AS $row)
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['datas'][intval($row['type'])][] = $row;
-		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
+		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity`, `quantity_refunded`, `quantity_returned` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
 			return false;
+
 		foreach ($result AS $row)
+		{
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity'] = intval($row['quantity']);
+			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity_refunded'] = intval($row['quantity_refunded']);
+			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity_returned'] = intval($row['quantity_returned']);
+		}
 		return $customizedDatas;
 	}
 
