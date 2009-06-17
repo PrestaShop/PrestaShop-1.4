@@ -633,7 +633,7 @@ class		Cart extends ObjectModel
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
-		return $order_total;
+		return floatval($order_total);
 	}
 
 	/**
@@ -946,7 +946,7 @@ class		Cart extends ObjectModel
 			return false;
 		$allVirtual = true;
 		foreach ($this->getProducts() AS $product)
-			$allVirtual &= (ProductDownload::getIdFromIdProduct($product['id_product']) ? true : false);
+			$allVirtual &= (ProductDownload::getIdFromIdProduct(intval($product['id_product'])) ? true : false);
 		return $allVirtual;
 	}
 

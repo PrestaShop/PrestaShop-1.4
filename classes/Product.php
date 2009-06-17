@@ -438,7 +438,7 @@ class		Product extends ObjectModel
 		$positions = array();
 		$result = Db::getInstance()->ExecuteS('SELECT IFNULL(MAX(`position`), 0) + 1 AS max, `id_category`
 				FROM `'._DB_PREFIX_.'category_product`
-				WHERE `id_category` IN('.implode(',', $categories).')
+				WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).')
 				GROUP BY `id_category`
 			');
 		if (!is_array($result))
@@ -558,9 +558,9 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (s.`id_supplier` = p.`id_supplier`)'.
 		($id_category ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` c ON (c.`id_product` = p.`id_product`)' : '').'
 		WHERE pl.`id_lang` = '.intval($id_lang).
-		($id_category ? ' AND c.`id_category` = '.$id_category : '').
+		($id_category ? ' AND c.`id_category` = '.intval($id_category) : '').
 		($only_active ? ' AND p.`active` = 1' : '').'
-		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
+		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($limit > 0 ? ' LIMIT '.intval($start).','.intval($limit) : '')
 		);
 		if($orderBy == 'price')
@@ -596,11 +596,11 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = cp.id_product)
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product`)
-		WHERE cp.id_category = ' . $this->id_category_default . '
-		AND id_lang = ' . $idLang . '
+		WHERE cp.id_category = ' . intval($this->id_category_default) . '
+		AND id_lang = ' . intval($idLang) . '
 		AND p.`active` = 1
 		AND i.`cover` = 1
-		'. (is_null($limit) ? '' : ' LIMIT 0 , ' . $limit));
+		'. (is_null($limit) ? '' : ' LIMIT 0 , ' . intval($limit)));
 		return $result;
 	}
 
@@ -609,7 +609,7 @@ class		Product extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 			SELECT id_product FROM `'._DB_PREFIX_.'product` p
 			WHERE 1
-			AND id_product = '.$this->id.'
+			AND id_product = '.intval($this->id).'
 			AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
 		');
 		return sizeof($result) > 0;
@@ -889,10 +889,10 @@ class		Product extends ObjectModel
 			if ($tab['custom']) {
 				$result2 = Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'feature_value`
-				WHERE `id_feature_value` = '.$tab['id_feature_value']);
+				WHERE `id_feature_value` = '.intval($tab['id_feature_value']));
 				$result3 = Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'feature_value_lang`
-				WHERE `id_feature_value` = '.$tab['id_feature_value']);
+				WHERE `id_feature_value` = '.intval($tab['id_feature_value']));
 			}
 		// Delete product features
 		$result4 = Db::getInstance()->Execute('
@@ -999,7 +999,7 @@ class		Product extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 			WHERE p.`active` = 1
 			AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
-			ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
+			ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 			LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
 		if ($orderBy == 'price')
 			Tools::orderbyPrice($result, $orderWay);
@@ -1029,9 +1029,9 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
 		WHERE (`reduction_price` > 0 OR `reduction_percent` > 0)
 		'.((!$beginning AND !$ending) ?
-			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.$currentDate.'\' AND `reduction_to` >= \''.$currentDate.'\'))'
+			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
 		:
-			($beginning ? 'AND `reduction_from` <= \''.$beginning.'\'' : '').($ending ? 'AND `reduction_to` >= \''.$ending.'\'' : '')).'
+			($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 		AND p.`active` = 1
 		ORDER BY RAND()');
 
@@ -1088,11 +1088,11 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE (`reduction_price` > 0 OR `reduction_percent` > 0)
 		'.((!$beginning AND !$ending) ?
-			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.$currentDate.'\' AND `reduction_to` >= \''.$currentDate.'\'))'
+			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
 		:
-			($beginning ? 'AND `reduction_from` <= \''.$beginning.'\'' : '').($ending ? 'AND `reduction_to` >= \''.$ending.'\'' : '')).'
+			($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 		AND p.`active` = 1
-		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
+		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
 		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
 		if($orderBy == 'price')
 		{
@@ -1596,7 +1596,7 @@ class		Product extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT id_feature, id_product, id_feature_value
 		FROM `'._DB_PREFIX_.'feature_product`
-		WHERE `id_product` = '.$id_product);
+		WHERE `id_product` = '.intval($id_product));
 	}
 
 	/**

@@ -234,7 +234,7 @@ class		Image extends ObjectModel
 	
 	static public function getSize($type)
 	{
-	 	return Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.$type.'\'');
+	 	return Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
 	}
 }
 

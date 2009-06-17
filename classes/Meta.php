@@ -90,7 +90,7 @@ class		Meta extends ObjectModel
 		SELECT *
 		FROM '._DB_PREFIX_.'meta m
 		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)
-		WHERE m.page = \''.$page.'\' AND ml.id_lang = '.intval($id_lang));
+		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.intval($id_lang));
 	}
 }
 ?>

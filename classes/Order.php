@@ -240,7 +240,7 @@ class		Order extends ObjectModel
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON o.`id_order` = oh.`id_order`
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.$id_lang.')
+			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = oh.`id_employee`
 			WHERE oh.id_order = '.intval($this->id).'
 			'.($no_hidden ? ' AND os.hidden = 0' : '');
@@ -260,14 +260,14 @@ class		Order extends ObjectModel
 	
 	public function getLastMessage()
 	{
-		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.$this->id.' ORDER BY `id_message` desc';
+		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.intval($this->id).' ORDER BY `id_message` desc';
 		$result = Db::getInstance()->getRow($sql);
 		return $result['message'];
 	}
 
 	public function getFirstMessage()
 	{
-		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.$this->id.' ORDER BY `id_message` asc';
+		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.intval($this->id).' ORDER BY `id_message` asc';
 		$result = Db::getInstance()->getRow($sql);
 		return $result['message'];
 	}
@@ -472,8 +472,8 @@ class		Order extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_order`
 		FROM `'._DB_PREFIX_.'orders`
-		WHERE DATE_ADD(date_add, INTERVAL -1 DAY) <= \''.$date_to.'\' AND date_add >= \''.$date_from.'\''
-		.($type ? ' AND '.strval($type).'_number != 0' : '')
+		WHERE DATE_ADD(date_add, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND date_add >= \''.pSQL($date_from).'\''
+		.($type ? ' AND '.pSQL(strval($type)).'_number != 0' : '')
 		.($id_customer ? ' AND id_customer = '.intval($id_customer) : ''));
 
 		$orders = array();
@@ -603,7 +603,7 @@ class		Order extends ObjectModel
 			return true;
 		$result = Db::getInstance()->getRow('
 		SELECT TO_DAYS(NOW()) - TO_DAYS(`date_add`)  AS days FROM `'._DB_PREFIX_.'orders`
-		WHERE `id_order` = '.$this->id);
+		WHERE `id_order` = '.intval($this->id));
 		if ($result['days'] <= $nbReturnDays)
 			return true;
 		return false;

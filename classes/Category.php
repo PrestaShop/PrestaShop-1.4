@@ -546,7 +546,7 @@ class		Category extends ObjectModel
 		$row = array();
 		if ($result)
 			foreach ($result AS $i)
-				$row[] = '('.implode(', ', array(intval($id_new), $i['id_category'], '(SELECT tmp.max + 1 FROM (SELECT MAX(cp.`position`) AS max FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_category`='.$i['id_category'].') AS tmp)')).')';
+				$row[] = '('.implode(', ', array(intval($id_new), $i['id_category'], '(SELECT tmp.max + 1 FROM (SELECT MAX(cp.`position`) AS max FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_category`='.intval($i['id_category']).') AS tmp)')).')';
 
 		$flag = Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'category_product` (`id_product`, `id_category`, `position`) VALUES '.implode(',', $row));
 		return $flag;
@@ -723,7 +723,7 @@ class		Category extends ObjectModel
 			$result = Db::getInstance()->getRow('
 			SELECT ctg.`id_group`
 			FROM '._DB_PREFIX_.'category_group ctg
-			INNER JOIN '._DB_PREFIX_.'customer_group cg on (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.$id_customer.')
+			INNER JOIN '._DB_PREFIX_.'customer_group cg on (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.intval($id_customer).')
 			WHERE ctg.`id_category` = '.intval($this->id));
 		}
 		if ($result AND isset($result['id_group']) AND $result['id_group'])

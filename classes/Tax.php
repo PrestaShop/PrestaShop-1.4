@@ -121,8 +121,8 @@ class Tax extends ObjectModel
 	{
 		return Db::getInstance()->ExecuteS('
 			DELETE FROM `'._DB_PREFIX_.'tax_zone`
-			WHERE `id_tax` = '.$this->id.'
-			AND `id_zone` = '.$id_zone.' LIMIT 1');
+			WHERE `id_tax` = '.intval($this->id).'
+			AND `id_zone` = '.intval($id_zone).' LIMIT 1');
 	}
 
 	/**

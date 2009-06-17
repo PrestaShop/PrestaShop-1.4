@@ -112,7 +112,7 @@ class		ImageType extends ObjectModel
 	{
 		if (!in_array($type, array('products', 'categories', 'manufacturers', 'suppliers', 'scenes')))
 			die(Tools::displayError());
-		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.$type.'` = 1');
+		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
 	}
 
 }

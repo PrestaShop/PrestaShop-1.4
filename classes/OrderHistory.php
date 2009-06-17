@@ -78,8 +78,7 @@ class		OrderHistory extends ObjectModel
 			
 			/* The order is valid only if the invoice is available and the order is not cancelled */
 			$order->valid = $newOS->logable;
-			$order->update();
-			
+			$order->update();
 			if ($newOS->invoice AND !$order->invoice_number)
 				$order->setInvoice();
 			if ($newOS->delivery AND !$order->delivery_number)

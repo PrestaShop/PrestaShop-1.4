@@ -294,7 +294,7 @@ class		Discount extends ObjectModel
 
 	static public function discountExists($discountName, $id_discount = 0)
 	{
-		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.$discountName.'\' AND `id_discount` != '.intval($id_discount));
+		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.pSQL($discountName).'\' AND `id_discount` != '.intval($id_discount));
 	}
 
 	static public function createOrderDiscount($order, $productList, $qtyList, $name, $shipping_cost = false, $id_category = 0, $subcategory = 0)

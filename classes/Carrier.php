@@ -241,12 +241,12 @@ class		Carrier extends ObjectModel
 		$sql = '
 			SELECT c.*, cl.delay
 			FROM `'._DB_PREFIX_.'carrier` c
-			LEFT JOIN `'._DB_PREFIX_.'carrier_lang` cl ON (c.`id_carrier` = cl.`id_carrier` AND cl.`id_lang` = '.$id_lang.')
+			LEFT JOIN `'._DB_PREFIX_.'carrier_lang` cl ON (c.`id_carrier` = cl.`id_carrier` AND cl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'carrier_zone` cz  ON (cz.`id_carrier` = c.`id_carrier`)'.
-			($id_zone ? 'LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.$id_zone.')' : '').'
+			($id_zone ? 'LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.intval($id_zone).')' : '').'
 			WHERE c.`deleted` '.($delete ? '= 1' : ' = 0').
 			($active ? ' AND c.`active` = 1' : '').
-			($id_zone ? ' AND cz.`id_zone` = '.$id_zone.'
+			($id_zone ? ' AND cz.`id_zone` = '.intval($id_zone).'
 			AND z.`active` = 1' : '').'
 			AND c.`is_module` = 0
 			GROUP BY c.`id_carrier`';
@@ -289,7 +289,7 @@ class		Carrier extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'carrier_zone`
-			WHERE `id_carrier` = '. $this->id);
+			WHERE `id_carrier` = '. intval($this->id));
 	}
 
 	/**
@@ -313,7 +313,7 @@ class		Carrier extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`)
-			VALUES ('.$this->id.', '.$id_zone.')');
+			VALUES ('.intval($this->id).', '.intval($id_zone).')');
 	}
 
 	/**
@@ -323,8 +323,8 @@ class		Carrier extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'carrier_zone`
-			WHERE `id_carrier` = '.$this->id.'
-			AND `id_zone` = '.$id_zone.' LIMIT 1');
+			WHERE `id_carrier` = '.intval($this->id).'
+			AND `id_zone` = '.intval($id_zone).' LIMIT 1');
 	}
 
 	/**
@@ -387,7 +387,7 @@ class		Carrier extends ObjectModel
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
 			WHERE id_carrier = '.intval($oldId).'
-			AND id_range_price = '.$val['id_range_price']);
+			AND id_range_price = '.intval($val['id_range_price']));
 			foreach ($res2 as $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
