@@ -116,11 +116,11 @@ class		Cart extends ObjectModel
 	 *
 	 * @result array Discounts
 	 */
-	public function getDiscounts($lite = false)
+	public function getDiscounts($lite = false, $refresh = false)
 	{
 		if (!$this->id)
 			return array();
-		if (!$lite AND isset(self::$_discounts[$this->id]))
+		if (!$lite AND !$refresh AND isset(self::$_discounts[$this->id]))
 			return self::$_discounts[$this->id];
 		if ($lite AND isset(self::$_discountsLite[$this->id]))
 			return self::$_discountsLite[$this->id];

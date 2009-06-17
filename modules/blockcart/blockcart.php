@@ -38,7 +38,7 @@ class BlockCart extends Module
 			'customizedDatas' => Product::getAllCustomizedDatas(intval($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-			'discounts' => $params['cart']->getDiscounts(),
+			'discounts' => $params['cart']->getDiscounts(false, true),
 			'nb_total_products' =>$params['cart']->nbProducts(),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 5), $currency),
 			'show_wrapping' => floatval($params['cart']->getOrderTotal(true, 6)) > 0 ? true : false,
