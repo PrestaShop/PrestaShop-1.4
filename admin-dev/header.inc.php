@@ -109,7 +109,6 @@ require_once(dirname(__FILE__).'/init.php');
 
 					/* Get current tab informations */
 					$id_parent_tab_current = intval(Tab::getCurrentParentId());
-
 					$tabs = Tab::getTabs(intval($cookie->id_lang), 0);
 					foreach ($tabs AS $t)
 					{
@@ -117,10 +116,9 @@ require_once(dirname(__FILE__).'/init.php');
 							$id_parent = $t['id_tab'];
 						if (checkTabRights($t['id_tab']) === true)
 						{
-              $img = '../img/t/'.$t['class_name'].'.gif';
-              if($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($t['class_name']).'\''))
-                $img = _MODULE_DIR_.$module.'/'.$t['class_name'].'.gif';
-
+							$img = '../img/t/'.$t['class_name'].'.gif';
+							if (trim($t['module']) != '')
+								$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 							echo '
 							<li'.((($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab'])) ? ' class="active"' : '').'>
 								<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" /> '.$t['name'].'</a>
@@ -143,10 +141,9 @@ require_once(dirname(__FILE__).'/init.php');
                         {
 							if (checkTabRights($t['id_tab']) === true)
 							{
-                $img = '../img/t/'.$t['class_name'].'.gif';
-                if($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($t['class_name']).'\''))
-                  $img = _MODULE_DIR_.$module.'/'.$t['class_name'].'.gif';
-                
+								$img = '../img/t/'.$t['class_name'].'.gif';
+								if (trim($t['module']) != '')
+									$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 								echo '
 								<li>
 									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
