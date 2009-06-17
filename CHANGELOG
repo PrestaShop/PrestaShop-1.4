@@ -5,6 +5,43 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.0.4 - 1035 (2009-17-06)   #
+####################################
+
+	Improved/changed features :
+
+	[*] Installer : added 1.2.0.4.sql file
+	[*] Installer : added "moulinette" html_entity_decode for old TinyMCE datas
+	[*] MO : fixed some text bugs in PayPalAPI (thanks to Melinda)
+	[*] Classes : Group name is now generic (#2144)
+	[*] FO : added new truncate function to smarty because original is buggy
+	[*] BO : added dynamically icon image for tabs module
+	[*] BO : added 2 divs for DOM
+	[*] Classes : added security fixes
+
+	Fixed bugs :
+
+	[-] MO : feeder module now only select inactive products
+	[-] MO : feeder module now has correct URL for product
+	[-] MO : fixed SSL warning in PayPalAPI (#2132)
+	[-] BO : fixed adding new adresse (#2147)
+	[-] MO : fixed newsletter bug (#2141)
+	[-] BO/FO : fixed &nbsp; bug with TinyMCE (#2145)
+	[-] FO : Fix bug with breadcrumb and category position prefix
+	[-] FO : Breadcrumb charset fixed
+	[-] BO : fixed undefined var in init.php
+	[-] BO : fixed width too large in AdminProducts.php for Mac (#2109)
+	[-] FO : fixed SSL bug
+	[-] MO : fixed bug in Loyalty when creating voucher with different language than default one
+	[-] FO: Fix little bug in order-return.tpl message
+	[-] MO : Wrong smarty.post value for email
+	[-] MO : fixed bug in loyalty
+	[-] BO : "Number of items to display per page" field fixed
+	[-] FO : Product image display fixed (reset link added)
+	[-] MO : AJAX cart block module voucher amount display fixed
+	[-] BO : Order total weight calculation fixed
+
+####################################
 #   v1.2.0.3 - 1006 (2009-09-06)   #
 ####################################
 
@@ -16,7 +53,6 @@ Release Notes for PrestaShop 1.2
 	[*] BO : allow to put style tags in tinyMCE (fixed #1726)[+] Class/BO : Customized product deletion/refund/return support from orders added
 	[*] FO : added total tax in summary page[-] Installer : fixed SQL bug in update 1.2
 	[*] BO : you can now specify tax for wrapping cost
-
 
 	Fixed bugs :
 
@@ -58,7 +94,6 @@ Release Notes for PrestaShop 1.2
 	[-] FO : fixing header width
 	[-] FO : wrong image path in login.css
 
-
 ####################################
 #   v1.2.0.2 - 935 (2009-20-05)    #
 ####################################
@@ -79,7 +114,6 @@ Release Notes for PrestaShop 1.2
 	[+] BO : DnD for products position within Catalog + code fixes for module position DnD
 	[+] BO : Added customers follow-up by email (4 kinds of alerts)
 	[+] FO : Simple bundle pack management
-
 
 	Improved/changed features :
 
@@ -116,7 +150,6 @@ Release Notes for PrestaShop 1.2
 	[*] BO : Improved customers follow-up by email (4 kinds of alerts)
 	[*] FO : search now take the ean13 into account
 	[*] Installer : added new timezones
-
 
 	Fixed bugs :
 
@@ -242,7 +275,6 @@ Release Notes for PrestaShop 1.2
 	[-] BO : fixed bug while translating modules
 	[-] BO : Fixed UTF-8 bug with order messages
 
-
 ####################################
 #   v1.2.0.1 - 748 (2009-10-04)    #
 ####################################
@@ -297,7 +329,6 @@ Release Notes for PrestaShop 1.2
 	[+] MO : you can now set number of tags displayed in blocktags module
 	[+] FO/BO : you can now set your own timezone
 	[+] FO : Ajax suggestions for the search block !
-
 
 	Improved/changed features :
 
@@ -372,7 +403,6 @@ Release Notes for PrestaShop 1.2
 	[*] FO : added mime type to product attachments
 	[*] BO : better deletion of product attachments
 	[*] BO : Range explanations improved
-
 
 	Fixed bugs :
 
