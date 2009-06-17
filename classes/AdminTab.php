@@ -939,11 +939,12 @@ abstract class AdminTab
 			echo '
 						<input type="image" src="../img/admin/list-next.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.($page + 1).'"/>
 						 &nbsp;<input type="image" src="../img/admin/list-next2.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.$totalPages.'"/>';
-		echo '			| '.$this->l('Display').' ['.$this->table.'_pagination] '.'
+		echo '			| '.$this->l('Display').'
 						<select name="pagination">';
 		/* Choose number of results per page */
+		$selectedPagination = Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL));
 		foreach ($this->_pagination AS $value)
-			echo '<option value="'.intval($value).'"'.((Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL)) == $value) ? ' selected="selected"' : ($value == $this->_pagination[1] ? ' selected="selected"' : '')).'>'.intval($value).'</option>';
+			echo '<option value="'.intval($value).'"'.($selectedPagination == $value ? ' selected="selected"' : (($selectedPagination == NULL && $value == $this->_pagination[1]) ? ' selected="selected2"' : '')).'>'.intval($value).'</option>';
 		echo '
 						</select>
 						/ '.intval($this->_listTotal).' '.$this->l('result(s)').'
