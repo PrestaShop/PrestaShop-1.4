@@ -20,7 +20,6 @@ header('Expires: Sat, 26 Jul 1997 05:00:00 GMT');
 
 require_once(dirname(__FILE__).'/init.php');
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<head>
@@ -138,7 +137,7 @@ require_once(dirname(__FILE__).'/init.php');
 					{
 					 	$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($id_parent));
 						foreach ($subTabs AS $t)
-                        {
+						{
 							if (checkTabRights($t['id_tab']) === true)
 							{
 								$img = '../img/t/'.$t['class_name'].'.gif';
@@ -149,7 +148,7 @@ require_once(dirname(__FILE__).'/init.php');
 									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
 								</li>';
 							}
-                        }
+						}
 					}
 				?>
 				</ul>
