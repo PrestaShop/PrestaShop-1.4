@@ -240,7 +240,7 @@ class Validate
 	*/
 	static public function isPrice($price)
 	{
-		return true;preg_match('/^[0-9]{1,10}(\[0-9]{1,9})?$/ui', $price);
+		return preg_match('/^[0-9]{1,10}(\.[0-9]{1,9})?$/ui', $price);
 	}
 
 	/**
