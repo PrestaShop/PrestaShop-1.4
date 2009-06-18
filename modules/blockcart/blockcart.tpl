@@ -52,7 +52,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 
 			<!-- Customizable datas -->
 			{if isset($customizedDatas.$productId.$productAttributeId)}
-				{if !isset($product.attributes_small)}<dd class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}">{/if}
+				{if !isset($product.attributes_small)}<dd id="cart_block_combination_of_{$product.id_product}{if $product.id_product_attribute}_{$product.id_product_attribute}{/if}" class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}">{/if}
 				<ul class="cart_block_customizations" id="customization_{$productId}_{$productAttributeId}">
 					{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization' name='customizations'}
 						<li name="customization">

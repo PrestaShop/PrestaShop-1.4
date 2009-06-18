@@ -205,7 +205,7 @@ var ajaxCart = {
 			async: true,
 			cache: false,
 			dataType : "json",
-			data: 'ajax=true' + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&delete' + '&id_product=' + idProduct + '&token=' + static_token + ( (idCombination != null && parseInt(idCombination)) ? '&ipa=' + idCombination : ''),
+			data: 'delete' + '&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
 			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) },
 			error: function() {alert('ERROR: unable to delete the product');}
 		});
@@ -217,6 +217,8 @@ var ajaxCart = {
 		if($('#cart_block #cart_block_list dl.products').length > 0)
 		{
 			var removedProductId = null;
+			var removedProductData = null;
+			var removedProductDomId = null;
 			//look for a product to delete...
 			$('#cart_block_list dl.products dt').each(function(){
 				//retrieve idProduct and idCombination from the displayed product in the block cart
@@ -230,24 +232,19 @@ var ajaxCart = {
 				{
 					//we've called the variable aProduct because IE6 bug if this variable is called product
 					//if product has attributes
-					if (ids[1])
+					if (jsonData.products[aProduct]['id'] == ids[0] && (!ids[1] || jsonData.products[aProduct]['idCombination'] == ids[1]))
 					{
-						if (jsonData.products[aProduct]['id'] == ids[0] && jsonData.products[aProduct]['idCombination'] == ids[1]) 
-						{
-							stayInTheCart = true;
-							ajaxCart.hideOldProductCustomizations(jsonData.products[aProduct], domIdProduct);
-						}
+						stayInTheCart = true;
+						// update the product customization display (when the product is still in the cart)
+						ajaxCart.hideOldProductCustomizations(jsonData.products[aProduct], domIdProduct);
 					}
-					else 
-						if (jsonData.products[aProduct]['id'] == ids[0])
-						{
-							stayInTheCart = true;
-							ajaxCart.hideOldProductCustomizations(jsonData.products[aProduct], domIdProduct);
-						}
 				}
 				//remove product if it's no more in the cart
 				if(!stayInTheCart)
+				{
 					removedProductId = $(this).attr('id');
+					//return false; // Regarding that the customer can only remove products one by one, we break the loop
+				}
 			});
 			
 			//if there is a removed product, delete it from the displayed block cart
@@ -255,7 +252,7 @@ var ajaxCart = {
 			{
 				var firstCut =  removedProductId.replace('cart_block_product_', '');
 				var ids = firstCut.split('_');
-				
+
 				$('#'+removedProductId).addClass('strike').fadeTo('slow', 0, function(){
 					$(this).slideUp('slow', function(){
 						$(this).remove();
@@ -377,7 +374,6 @@ var ajaxCart = {
 					if (this.hasAttributes) content += '</dd>';
 
 					$('#cart_block dl.products').append(content);
-					$('#cart_block dl.products .hidden').slideDown('slow').removeClass('hidden');
 				}
 				//else update the product's line
 				else{
@@ -397,13 +393,14 @@ var ajaxCart = {
 								if (jsonProduct.hasAttributes)
 									$('#cart_block dd#cart_block_combination_of_' + domIdProduct).append(customizationFormatedDatas);
 								else
-									$('#cart_block dt#cart_block_product_' + domIdProduct).append(customizationFormatedDatas);
+									$('#cart_block dl.products').append(customizationFormatedDatas);
 							}
 							else
 								$('#cart_block ul#customization_' + domIdProductAttribute).append(customizationFormatedDatas);
 						}
 					}
 				}
+				$('#cart_block dl.products .hidden').slideDown('slow').removeClass('hidden');
 
 			var removeLinks = $('#cart_block_product_' + domIdProduct).find('a.ajax_cart_block_remove_link');
 			if (this.hasCustomizedDatas && removeLinks.length)
@@ -423,7 +420,7 @@ var ajaxCart = {
 
 		if (!hasAlreadyCustomizations)
 		{
-			if (!product.hasAttributes) content += '<dd class="hidden">';
+			if (!product.hasAttributes) content += '<dd id="cart_block_combination_of_' + productId + '" class="hidden">';
 			content += '<ul class="cart_block_customizations" id="customization_' + productId + '_' + productAttributeId + '">';
 		}
 
