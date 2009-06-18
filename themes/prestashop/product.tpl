@@ -40,7 +40,7 @@ var customizationFields = new Array();
 {assign var='imgIndex' value=0}
 {assign var='textFieldIndex' value=0}
 {foreach from=$customizationFields item='field' name='customizationFields'}
-{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$imgIndex}
+{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}] = new Array();
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}][0] = '{if $field.type|intval == 0}img{$imgIndex++}{else}textField{$textFieldIndex++}{/if}';
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}][1] = {if $field.type|intval == 0 AND $pictures.$key}2{else}{$field.required|intval}{/if};
