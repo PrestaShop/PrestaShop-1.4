@@ -29,15 +29,19 @@ $(document).ready(function()
 			{
 				var dest = 'ajax.php';		
 		       	var way = (originalOrder.indexOf(row.id) < $.tableDnD.serialize().indexOf(row.id))? 1 : 0;
+		       		
+		       	var bak = alternate;
+		       	alternate = (alternate == 1 && way == 0 ? 1 : (alternate == 1 && way == 1 ? 0 : way)); // If orderWay = DESC alternate the way
 		       	var ids = row.id.split('_');
 				var tableDrag = $('#' + table.id);
+
 				var params = '';
 							
 				if (come_from == 'AdminModulesPositions')
-			       	params = 'ajaxModulesPositions=true&way=' + way + '&id_module=' + ids[1] + '&id_hook=' + ids[0] + '&token=' + token +'&' + $.tableDnD.serialize();
+			       	params = 'ajaxModulesPositions=true&way=' + way + '&id_module=' + ids[2] + '&id_hook=' + ids[1] + '&token=' + token +'&' + $.tableDnD.serialize();
 			    else if (come_from == 'product')
-			    	params = 'ajaxProductsPositions=true&id_product=' + ids[1] + '&id_category=' + ids[0] + '&way=' + way +'&' + $.tableDnD.serialize() + '&token=' + token ;
-		       	
+			    	params = 'ajaxProductsPositions=true&id_product=' + ids[2] + '&id_category=' + ids[1] + '&way=' + way + '&alternate=' + alternate +'&' + $.tableDnD.serialize() + '&token=' + token ;
+
 		       	$.ajax(
 				{
 					type: 'POST',
@@ -63,8 +67,17 @@ $(document).ready(function()
 							tableDrag.find('tr').not('.nodrag').removeClass('alt_row');
 				       		tableDrag.find('tr:not(".nodrag"):odd').addClass('alt_row');
 							tableDrag.find('tr td.dragHandle a:hidden').show();
-							tableDrag.find('tr td.dragHandle:first a:odd').hide();
-							tableDrag.find('tr td.dragHandle:last a:even').hide()							
+
+							if (bak)
+							{
+								tableDrag.find('tr td.dragHandle:first a:even').hide();
+								tableDrag.find('tr td.dragHandle:last a:odd').hide();
+							}
+							else
+							{
+								tableDrag.find('tr td.dragHandle:first a:odd').hide();
+								tableDrag.find('tr td.dragHandle:last a:even').hide();
+							}						
 						}		
 					}
 				});

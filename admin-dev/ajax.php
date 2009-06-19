@@ -118,7 +118,8 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 		$position = (is_array($positions)) ? array_search($id_hook.'_'.$id_module, $positions) : null;
 		$module = Module::getInstanceById($id_module);
 		if (Validate::isLoadedObject($module))
-			if (die($module->updatePosition($id_hook, $way, $position)));
+			if ($module->updatePosition($id_hook, $way, $position))
+				die(true);
 			else
 				die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
 		else
@@ -128,16 +129,41 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 if (array_key_exists('ajaxProductsPositions', $_POST))
 {				
 		$way = intval(Tools::getValue('way'));
+		$alternate = intval(Tools::getValue('alternate'));
 		$id_product = intval(Tools::getValue('id_product'));
 		$id_category = intval(Tools::getValue('id_category'));
 		$positions = Tools::getValue(strval($id_category));
-		$position = (is_array($positions)) ? array_search($id_category.'_'.$id_product, $positions) : null;
-		$position = $position - 2; // Two empty first row in product table
+
+		if (is_array($positions))
+		{
+			foreach ($positions AS $key => $value)
+			{
+				$pos = explode('_', $value);
+				if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_product))
+				{
+					if ($way == 0)
+					{
+						$pos = explode('_', $positions[$key + 1]);
+						$position = $pos[3];
+					}
+					else
+					{
+						$pos = explode('_', $positions[$key - 1]);
+						$position = $pos[3];
+					}
+					break;
+				}
+			}
+		}
+
 		$product = new Product($id_product);
 		if (Validate::isLoadedObject($product))
-			if (die($product->updatePosition($way, $position)));
+		{
+			if($product->updatePosition($alternate, $position))
+				die(true);
 			else
-				die('{\'hasError\' : true, errors : \'Can not update product position\'}');	
+				die('{\'hasError\' : true, errors : \'Can not update product position\'}');
+		}
 		else
 			die('{\'hasError\' : true, errors : \'This product can not be loaded\'}');
 }

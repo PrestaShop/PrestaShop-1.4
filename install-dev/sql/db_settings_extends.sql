@@ -254,17 +254,17 @@ INSERT INTO `PREFIX_category_lang` VALUES
 (4, 2, 'Portables', 'Le tout dernier processeur Intel, un disque dur plus spacieux, de la mémoire à profusion et d''autres nouveautés. Le tout, dans à peine 2,59 cm qui vous libèrent de toute entrave. Les nouveaux portables Mac réunissent les performances, la puissance et la connectivité d''un ordinateur de bureau. Sans la partie bureau.', 'portables-apple', 'Portables Apple', 'portables apple macbook air', 'portables apple puissants et design');
 
 INSERT INTO `PREFIX_category_product` (`id_category`, `id_product`, `position`) VALUES 
-(4, 5, 1),
-(2, 2, 2),
-(2, 1, 1),
-(1, 6, 4),
-(1, 1, 1),
-(1, 2, 2),
-(2, 7, 3),
-(1, 7, 5),
+(1, 1, 0),
+(1, 2, 1),
+(1, 6, 2),
+(1, 7, 3),
+(2, 1, 0),
+(2, 2, 1),
+(2, 7, 2),
 (3, 8, 0),
-(4, 6, 2),
-(3, 9, 1);
+(3, 9, 1),
+(4, 5, 0),
+(4, 6, 1);
 
 INSERT INTO `PREFIX_attribute_group` (`id_attribute_group`, `is_color_group`) VALUES
 (1, 0),
