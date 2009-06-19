@@ -36,6 +36,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'module_tools.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'customizations.php');
 // Block newsletter
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'blocknewsletter.php');
+// Reorder product positions for drag an drop
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'reorderpositions.php');
 
 //old version detection
 $oldversion = false;
