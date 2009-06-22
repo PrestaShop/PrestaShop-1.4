@@ -56,7 +56,7 @@ class sendToAFriend extends Module
 				$subject = ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : $this->l('A friend')).' '.$this->l('send you a link to').' '.$product->name;
 				$templateVars = array(
 					'{product}' => $product->name,
-					'{product_link}' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$productLink,
+					'{product_link}' => $productLink,
 					'{customer}' => ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : $this->l('A friend')),
 					'{name}' => Tools::safeOutput($_POST['name'])
 				);
