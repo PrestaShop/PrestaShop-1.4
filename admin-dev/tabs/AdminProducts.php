@@ -1546,12 +1546,12 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_expiration_date" class="t"><?php echo $this->l('Expiration date') ?></label>
 					<input type="text" id="virtual_product_expiration_date" name="virtual_product_expiration_date" value="<?php echo ($productDownload->id > 0) ? ((!empty($productDownload->date_expiration) AND $productDownload->date_expiration != '0000-00-00 00:00:00') ? date('Y-m-d', strtotime($productDownload->date_expiration))
-: '' ) : htmlentities(Tools::getValue('virtual_product_expiration_date'), ENT_COMPAT, 'UTF-8') ?>" size="11" maxlength="10" autocomplete="off" />
+: '' ) : htmlentities(Tools::getValue('virtual_product_expiration_date'), ENT_COMPAT, 'UTF-8') ?>" size="11" maxlength="10" autocomplete="off" /> (yyyy/mm/dd)
 					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('No expiration date if you leave this blank').'<br/>'.$this->l('Format: YYYY-MM-DD'); ?></span>
 				</p>
 				<p class="block">
 					<label for="virtual_product_nb_days" class="t"><?php echo $this->l('Number of days') ?></label>
-					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" />
+					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" /><sup> *</sup>
 					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?></span>
 				</p>
 	<?php endif; // check if download directory is writable ?>
