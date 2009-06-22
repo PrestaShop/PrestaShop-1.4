@@ -43,7 +43,9 @@ class productsCategory extends Module
 		if ($category->id_category == 1 AND isset($product->id_category_default) AND $product->id_category_default > 1)
 			$category = New Category(intval($product->id_category_default));
 		if (!Validate::isLoadedObject($category))
-			Tools::displayError('Bad category !');
+			Tools::displayError('Bad category!');
+		if (intval($category->id_category) === 1)
+			return;
 		
 		// Get infos
 		$sizeOfCategoryProducts = $category->getProducts(intval($cookie->id_lang), 1, 30, NULL, NULL, true);
