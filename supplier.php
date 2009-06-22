@@ -47,11 +47,11 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 else
 {
 	include(dirname(__FILE__).'/header.php');
-	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang));
+	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang), true);
 	$nbProducts = sizeof($data);
 	include(dirname(__FILE__).'/pagination.php');
 
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), false, $p, $n);
+	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), true, $p, $n);
 	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
 	foreach ($data AS &$item)
 		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 

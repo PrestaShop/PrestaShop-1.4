@@ -17,7 +17,7 @@ class		Supplier extends ObjectModel
 	public 		$id;
 	
 	/** @var integer supplier ID */
-	public $id_supplier;
+	public		$id_supplier;
 	
 	/** @var string Name */
 	public 		$name;
