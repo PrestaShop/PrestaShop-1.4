@@ -1041,8 +1041,12 @@ class		Cart extends ObjectModel
 			ORDER BY c.`date_add` DESC');
 	 	return $result;
     }
-  
-  
+
+	static public function replaceZeroByShopName($echo, $tr)
+	{
+		return ($echo == '0' ? Configuration::get('PS_SHOP_NAME') : $echo);
+	}
+
   /* DEPRECATED */
 	public function getCustomeremail()
 	{

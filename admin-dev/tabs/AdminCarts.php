@@ -35,7 +35,7 @@ class AdminCarts extends AdminTab
 		'id_cart' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'customer' => array('title' => $this->l('Customer'), 'width' => 80, 'filter_key' => 'c!lastname'),
 		'total' => array('title' => $this->l('Total'), 'callback' => 'getTotalCart', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
-		'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center'),
+		'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center', 'callback' => 'replaceZeroByShopName'),
 		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'));
 		parent::__construct();
 	}
@@ -186,36 +186,35 @@ class AdminCarts extends AdminTab
 				<td class="price bold right">'.Tools::displayPrice($summary['total_price'], $currency, false).'</td>
 			</tr>
 			</table>';
-					
-					
-					if (sizeof($discounts))
-					{
-						echo '
-					<table cellspacing="0" cellpadding="0" class="table" style="width:280px; margin:15px 0px 0px 420px;">
-						<tr>
-							<th><img src="../img/admin/coupon.gif" alt="'.$this->l('Discounts').'" />'.$this->l('Discount name').'</th>
-							<th align="center" style="width: 100px">'.$this->l('Value').'</th>
-						</tr>';
-						
-						foreach ($discounts as $discount)
-							echo '
-						<tr>
-							<td><a href="?tab=AdminDiscounts&id_discount='.$discount['id_discount'].'&updatediscount&token='.Tools::getAdminToken('AdminDiscounts'.intval(Tab::getIdFromClassName('AdminDiscounts')).intval($cookie->id_employee)).'">'.$discount['name'].'</a></td>
-							<td align="center">- '.Tools::displayPrice($discount['value_real'], $currency, false).'</td>
-						</tr>';
-						echo '
-					</table>';
-					}
+
+			if (sizeof($discounts))
+			{
+				echo '
+			<table cellspacing="0" cellpadding="0" class="table" style="width:280px; margin:15px 0px 0px 420px;">
+				<tr>
+					<th><img src="../img/admin/coupon.gif" alt="'.$this->l('Discounts').'" />'.$this->l('Discount name').'</th>
+					<th align="center" style="width: 100px">'.$this->l('Value').'</th>
+				</tr>';
+				
+				foreach ($discounts as $discount)
+					echo '
+				<tr>
+					<td><a href="?tab=AdminDiscounts&id_discount='.$discount['id_discount'].'&updatediscount&token='.Tools::getAdminToken('AdminDiscounts'.intval(Tab::getIdFromClassName('AdminDiscounts')).intval($cookie->id_employee)).'">'.$discount['name'].'</a></td>
+					<td align="center">- '.Tools::displayPrice($discount['value_real'], $currency, false).'</td>
+				</tr>';
+				echo '
+			</table>';
+			}
 				echo '
 				</div>';
-				
+
 				// Cancel product
 				echo '
 			</fieldset>
 		<div class="clear" style="height:20px;">&nbsp;</div>';
 	}
 	
-		private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
+	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
 	{
 		$order = $this->loadObject();
 
