@@ -47,7 +47,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 			}
 			elseif ($producToAdd->hasAttributes() AND !$delete)
 			{
-				$idProductAttribute = Product::getDefaultAttribute(intval($producToAdd->id), !intval($producToAdd->out_of_stock));
+				$idProductAttribute = Product::getDefaultAttribute(intval($producToAdd->id), intval($producToAdd->out_of_stock) == 2 ? !intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : !intval($producToAdd->out_of_stock));
 				if (!$idProductAttribute)
 					Tools::redirectAdmin($link->getProductLink($producToAdd));
 				else

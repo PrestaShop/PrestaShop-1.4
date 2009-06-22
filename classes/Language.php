@@ -98,7 +98,8 @@ class		Language extends ObjectModel
 			'payment_error.html',			'payment_error.txt',
 			'preparation.html',				'preparation.txt',
 			'refund.html',					'refund.txt',
-			'shipping.html',				'shipping.txt',
+			'shipped.html',					'shipped.txt',
+			'in_transit.txt',				'in_transit.html',
 			'test.html',					'test.txt',
 			'voucher.html',					'voucher.txt',
 		);

@@ -1824,7 +1824,9 @@ class		Product extends ObjectModel
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
+{
 			$row['id_product_attribute'] = $ipa_default;
+}
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
 		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);

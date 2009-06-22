@@ -69,8 +69,21 @@ class AdminOrders extends AdminTab
 					$this->_errors[] = Tools::displayError('Invalid new order status!');
 				else
 				{
+					global $_LANGMAIL;
 					$order->shipping_number = $shipping_number;
 					$order->update();
+					$customer = new Customer(intval($order->id_customer));
+					$carrier = new Carrier(intval($order->id_carrier));
+					if (!Validate::isLoadedObject($customer) OR !Validate::isLoadedObject($carrier))
+						die(Tools::displayError());
+					$templateVars = array(
+						'{followup}' => str_replace('@', $order->shipping_number, $carrier->url),
+						'{firstname}' => $customer->firstname,
+						'{lastname}' => $customer->lastname,
+						'{id_order}' => intval($order->id)
+					);
+					$subject = 'Package in transit';
+					Mail::Send(intval($order->id_lang), 'in_transit', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
 				}
 			}
 			else
