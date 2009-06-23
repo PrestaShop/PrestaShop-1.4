@@ -1674,13 +1674,6 @@ class		Product extends ObjectModel
 		return $return;
 	}
 
-	
-	/**
-	* Duplicate attributes when duplicating a product
-	*
-	* @param integer $id_product_old Old product id
-	* @param integer $id_product_old New product id
-	*/
 	static public function duplicateAccessories($id_product_old, $id_product_new)
 	{
 		$return = true;
@@ -1695,6 +1688,23 @@ class		Product extends ObjectModel
 				'id_product_1' => intval($id_product_new),
 				'id_product_2' => intval($row['id_product_2']));
 			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'accessory', $data, 'INSERT');
+		}
+		return $return;
+	}
+
+	static public function duplicateQuantityDiscount($id_product_old, $id_product_new)
+	{
+		$return = true;
+
+		$result = Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'discount_quantity`
+		WHERE `id_product` = '.intval($id_product_old));
+		foreach ($result as $row)
+		{
+			$row['id_product'] = intval($id_product_new);
+			unset($row['id_discount_quantity']);
+			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'discount_quantity', $row, 'INSERT');
 		}
 		return $return;
 	}
