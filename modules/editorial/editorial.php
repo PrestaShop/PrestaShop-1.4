@@ -9,7 +9,7 @@ class Editorial extends Module
 	{
 		$this->name = 'editorial';
 		$this->tab = 'Tools';
-		$this->version = '1.4';
+		$this->version = '1.5';
 		
 		parent::__construct();
 		
@@ -21,12 +21,6 @@ class Editorial extends Module
 	{
 		if (!parent::install())
 			return false;
-		// Trunk file if already exists with contents
-		/*
-		if (!$fd = @fopen(dirname(__FILE__).'/editorial.xml', 'w'))
-			return false;
-		@fclose($fd);
-		*/
 		return $this->registerHook('home');
 	}
 
@@ -38,8 +32,7 @@ class Editorial extends Module
 		if (!eregi('^'.$section.'_', $key))
 			return 0;
 		$key = eregi_replace('^'.$section.'_', '', $key);
-		//$field = pSQL($field);
-		$field = Tools::htmlentitiesDecodeUTF8(htmlspecialchars($field));
+		$field = htmlspecialchars($field);
 		if (!$field)
 			return 0;
 		return ("\n".'		<'.$key.'>'.$field.'</'.$key.'>');
@@ -125,7 +118,7 @@ class Editorial extends Module
 		/* xml loading */
 		$xml = false;
 		if (file_exists(dirname(__FILE__).'/editorial.xml'))
-				if (!$xml = @simplexml_load_file(dirname(__FILE__).'/editorial.xml'))
+				if (!$xml = simplexml_load_file(dirname(__FILE__).'/editorial.xml'))
 					$this->_html .= $this->displayError($this->l('Your editor file is empty.'));
 
 		$this->_html .= '<br />
@@ -157,8 +150,6 @@ class Editorial extends Module
 					paste_insert_word_content_callback : "convertWord",
 					plugin_preview_width : "500",
 					plugin_preview_height : "600",
-					entities : "",
-					entity_encoding : "named",
 					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],style[type|id]"
 				});
 				function convertWord(type, content)
