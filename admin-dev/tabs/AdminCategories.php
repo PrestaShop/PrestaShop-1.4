@@ -259,7 +259,7 @@ class AdminCategories extends AdminTab
 							</tr>';
 						echo '
 					</table>
-					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this category').'<sup> *</sup></p>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this category').'</p>
 					';
 					} else
 						echo '<p>'.$this->l('No group created').'</p>';
