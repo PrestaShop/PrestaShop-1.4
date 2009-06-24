@@ -173,6 +173,8 @@ class		Supplier extends ObjectModel
 		$result = Db::getInstance()->ExecuteS($sql);
 		if (!$result)
 			return false;
+		if ($orderBy == 'price')
+			Tools::orderbyPrice($result, $orderWay);			
 		return Product::getProductsProperties($id_lang, $result);
 	}
 	
