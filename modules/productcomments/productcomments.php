@@ -84,7 +84,7 @@ class ProductComments extends Module
 	private function _checkCriterion()
 	{
 		$action_criterion = Tools::getValue('criterion_action');
-		if (Tools::isSubmit('submitCriterion'))
+		if (Tools::isSubmit('submitCriterion') AND !empty($action_criterion))
 		{
 			global $cookie;
 			
