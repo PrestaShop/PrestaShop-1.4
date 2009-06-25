@@ -40,7 +40,10 @@ class AdminAttachments extends AdminTab
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
 			if ($id = intval(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
+			{
 				$_POST['file'] = $a->file;
+				$_POST['mime'] = $a->mime;
+			}
 			if (!sizeof($this->_errors))
 				if (isset($_FILES['file']) AND is_uploaded_file($_FILES['file']['tmp_name']))
 				{
