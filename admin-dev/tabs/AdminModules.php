@@ -145,11 +145,10 @@ class AdminModules extends AdminTab
 	function extractArchive($file)
 	{
 		global $currentIndex;
-		
 		$success = false;
 		if (substr($file, -4) == '.zip')
 		{
-			if (class_exists('ZipArchive'))
+			if (class_exists('ZipArchive', false))
 			{
 				$zip = new ZipArchive();
 				if ($zip->open($file, ZIPARCHIVE::OVERWRITE) === true AND $zip->extractTo(_PS_MODULE_DIR_) AND $zip->close())
