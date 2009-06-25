@@ -4,6 +4,7 @@ include(dirname(__FILE__).'/config/config.inc.php');
 
 if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')) AND !is_array($query))
 {
+	include(dirname(__FILE__).'/init.php');
 	$link = new Link();
 	$search = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 	foreach ($search as $product)

@@ -74,22 +74,23 @@ class SEKeywords extends ModuleGraph
 		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		
-		$table = '<div style="overflow-y: scroll; height: 600px;">
-		<table class="table" border="0" cellspacing="0" cellspacing="0">
-		<thead>
-			<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
-			<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th></tr>
-		</thead><tbody>';
-		foreach ($result as $index => $row)
+		if ($result AND sizeof($result))
 		{
-			$keyword =& $row['keyword'];
-			$occurences =& $row['occurences'];
-			$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
-		}
-		$table .= '</tbody></table></div>';
-		
-		if (sizeof($result))
+			$table = '<div style="overflow-y: scroll; height: 600px;">
+			<table class="table" border="0" cellspacing="0" cellspacing="0">
+			<thead>
+				<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
+				<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th></tr>
+			</thead><tbody>';
+			foreach ($result as $index => $row)
+			{
+				$keyword =& $row['keyword'];
+				$occurences =& $row['occurences'];
+				$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
+			}
+			$table .= '</tbody></table></div>';
 			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
+		}
 		else
 			$this->_html .= '<p><strong>'.$this->l('No keyword searched for more than once found').'</strong></p>';
 

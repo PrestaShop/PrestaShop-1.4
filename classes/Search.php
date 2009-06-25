@@ -311,6 +311,7 @@ class Search
 		}
 		$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1');
 		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
+		return true;
 	}
 }
 	
