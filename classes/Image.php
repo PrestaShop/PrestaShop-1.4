@@ -174,7 +174,7 @@ class		Image extends ObjectModel
 	  * @param integer $id_product_old Source product ID
 	  * @param boolean $id_product_new Destination product ID
 	  */
-	static public function duplicateProductImages($id_product_old, $id_product_new)
+	static public function duplicateProductImages($id_product_old, $id_product_new, $combinationImages)
 	{
 		$imagesTypes = ImageType::getImagesTypes('products');
 		$result = Db::getInstance()->ExecuteS('
@@ -202,13 +202,37 @@ class		Image extends ObjectModel
 				SET id_image = '.intval($image->id).'
 				WHERE id_image = '.intval($saved_id).'
 				AND id_product = '.intval($id_product_new));
+				self::replaceAttributeImageAssociationId($combinationImages, intval($saved_id), intval($image->id));
             }
 			else
 				return false;
 		}
-		return true;
+		return self::duplicateAttributeImageAssociations($combinationImages);
 	}
-	
+
+	static private function replaceAttributeImageAssociationId(&$combinationImages, $saved_id, $id_image)
+	{
+		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
+			foreach ($imageIds AS $key => $imageId)
+				if (intval($imageId) == intval($saved_id))
+					$combinationImages['new'][$id_product_attribute][$key] = intval($id_image);
+	}
+
+	/**
+	* Duplicate product attribute image associations
+	* @param integer $id_product_attribute_old
+	* @return boolean
+	*/
+	static public function duplicateAttributeImageAssociations($combinationImages)
+	{
+		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
+		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
+			foreach ($imageIds AS $imageId)
+				$query .= '('.intval($id_product_attribute).', '.intval($imageId).'), ';
+		$query = rtrim($query, ', ');
+		return DB::getInstance()->Execute($query);
+	}
+
 	/**
 	  * Reposition image
 	  *

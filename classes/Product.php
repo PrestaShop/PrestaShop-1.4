@@ -1643,11 +1643,12 @@ class		Product extends ObjectModel
 	* Duplicate attributes when duplicating a product
 	*
 	* @param integer $id_product_old Old product id
-	* @param integer $id_product_old New product id
+	* @param integer $id_product_new New product id
 	*/
 	static public function duplicateAttributes($id_product_old, $id_product_new)
 	{
 		$return = true;
+		$combinationImages = array();
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT *
@@ -1655,23 +1656,47 @@ class		Product extends ObjectModel
 		WHERE `id_product` = '.intval($id_product_old));
 		foreach ($result as $row)
 		{
+			$id_product_attribute_old = intval($row['id_product_attribute']);
 			$result2 = Db::getInstance()->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'product_attribute_combination`
-			WHERE `id_product_attribute` = '.intval($row['id_product_attribute']));
+			WHERE `id_product_attribute` = '.$id_product_attribute_old);
 
 			$row['id_product'] = $id_product_new;
 			unset($row['id_product_attribute']);
 			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $row, 'INSERT');
 
-			$id_product_attribute = Db::getInstance()->Insert_ID();
+			$id_product_attribute_new = intval(Db::getInstance()->Insert_ID());
+			if ($result = self::_getAttributeImageAssociations($id_product_attribute_old))
+			{
+				$combinationImages['old'][$id_product_attribute_old] = $result;
+				$combinationImages['new'][$id_product_attribute_new] = $result;
+			}
+			$return &= $result;
 			foreach ($result2 AS $row2)
 			{
-				$row2['id_product_attribute'] = $id_product_attribute;
+				$row2['id_product_attribute'] = $id_product_attribute_new;
 				$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute_combination', $row2, 'INSERT');
 			}
 		}
-		return $return;
+		return !$return ? false : $combinationImages;
+	}
+
+	/**
+	* Get product attribute image associations
+	* @param integer $id_product_attribute_old
+	* @return boolean
+	*/
+	static private function _getAttributeImageAssociations($id_product_attribute_old)
+	{
+		$combinationImages = array();
+		$data = Db::getInstance()->ExecuteS('
+			SELECT *
+			FROM `'._DB_PREFIX_.'product_attribute_image`
+			WHERE `id_product_attribute` = '.intval($id_product_attribute_old));
+		foreach ($data AS $row)
+			$combinationImages[] = intval($row['id_image']);
+		return $combinationImages;
 	}
 
 	static public function duplicateAccessories($id_product_old, $id_product_new)
