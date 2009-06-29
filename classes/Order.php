@@ -602,7 +602,7 @@ class		Order extends ObjectModel
 		if (!$nbReturnDays)
 			return true;
 		$result = Db::getInstance()->getRow('
-		SELECT TO_DAYS(NOW()) - TO_DAYS(`date_add`)  AS days FROM `'._DB_PREFIX_.'orders`
+		SELECT TO_DAYS(NOW()) - TO_DAYS(`delivery_date`)  AS days FROM `'._DB_PREFIX_.'orders`
 		WHERE `id_order` = '.intval($this->id));
 		if ($result['days'] <= $nbReturnDays)
 			return true;

@@ -230,7 +230,7 @@ class Paypal extends PaymentModule
 		return $translations[$key];
 	}
 
-	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL)
+	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
 	{
 		$currency = $this->getCurrency();
 		$cart = new Cart(intval($id_cart));
