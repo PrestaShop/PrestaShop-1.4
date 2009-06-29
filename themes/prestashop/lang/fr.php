@@ -387,6 +387,7 @@ $_LANG['product_61866f5cea4cd05eaf682dc7aad70b58'] = 'Merci de remplir tous les 
 $_LANG['product_9981d2af851e4b4a4ea612d59f08ab9c'] = 'Autres vues';
 $_LANG['product_dd1f775e443ff3b9a89270713580a51b'] = 'Précédent';
 $_LANG['product_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
+$_LANG['product_02ea084dc2ef3e9965dbba4ec87d2f9b'] = 'Afficher toutes les images';
 $_LANG['product_13dba24862cf9128167a59100e154c8d'] = 'Imprimer';
 $_LANG['product_c6beb9157a0e29e604ad5ec484488608'] = 'Agrandir';
 $_LANG['product_2b56b60f878922093facd42284848a0c'] = 'Plus de détails';
