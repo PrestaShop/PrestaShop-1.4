@@ -187,12 +187,11 @@ label {
 }
 
 #preview_import label {
-	float: left;
-	width: 270px;
-	padding: 0.2em 0 0 0;
-	text-align: left;
-	font-weight: bold;
-	white-space: nowrap;
+	float:left;
+	font-weight:bold;
+	padding:0.2em 0 0;
+	text-align:left;
+	width:270px;
 }
 
 label.t {
