@@ -76,7 +76,7 @@ abstract class PaymentModule extends Module
 	* @param string $message Message to attach to order
 	*/
 
-	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL)
+	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
 	{
 		$cart = new Cart(intval($id_cart));
 
@@ -103,7 +103,7 @@ abstract class PaymentModule extends Module
 			$order->gift = intval($cart->gift);
 			$order->gift_message = $cart->gift_message;
 			$currency = new Currency($order->id_currency);
-			$amountPaid = floatval(Tools::convertPrice(floatval(number_format($amountPaid, 2, '.', '')), $currency));
+			$amountPaid = !$dont_touch_amount ? floatval(Tools::convertPrice(floatval(number_format($amountPaid, 2, '.', '')), $currency)) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
 			$order->total_products = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderTotal(false, 1), 2, '.', '')), $currency));
 			$order->total_discounts = floatval(Tools::convertPrice(floatval(number_format(abs($cart->getOrderTotal(true, 2)), 2, '.', '')), $currency));
