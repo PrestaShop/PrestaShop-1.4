@@ -17,6 +17,8 @@ class AdminOrders extends AdminTab
 {
 	public function __construct()
 	{
+		global $cookie, $currentIndex;
+
 	 	$this->table = 'order';
 	 	$this->className = 'Order';
 	 	$this->view = 'noActionColumn';
@@ -31,15 +33,14 @@ class AdminOrders extends AdminTab
 	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = a.`id_customer`)
 	 	LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (oh.`id_order` = a.`id_order`)
 		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
-		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = a.`id_lang`)';
+		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($cookie->id_lang).')';
 		$this->_where = 'AND oh.`id_order_history` = (SELECT MAX(`id_order_history`) FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = a.`id_order` GROUP BY moh.`id_order`)';
-		
-		global $cookie, $currentIndex;
+
 		$statesArray = array();
 		$states = OrderState::getOrderStates(intval($cookie->id_lang));
+
 		foreach ($states AS $state)
 			$statesArray[$state['id_order_state']] = $state['name'];
-
  		$this->fieldsDisplay = array(
 		'id_order' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'new' => array('title' => $this->l('New'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'filter_key' => 'new', 'tmpTableFilter' => true, 'icon' => array(0 => 'blank.gif', 1 => 'news-new.gif'), 'orderby' => false),
