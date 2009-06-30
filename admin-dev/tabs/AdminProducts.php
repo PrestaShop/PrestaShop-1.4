@@ -1526,9 +1526,15 @@ class AdminProducts extends AdminTab
 					</p>
 		<?php endif; ?>
 					<p><?php echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;' . ini_get('upload_max_filesize') ?></p>
+					<?php if (!strval(Tools::getValue('virtual_product_filename'))): ?>
 					<label id="virtual_product_file_label" for="virtual_product_file" class="t"><?php echo $this->l('Upload a file') ?></label>
 					<input type="file" id="virtual_product_file" name="virtual_product_file" value="" class="" onchange="uploadFile()" maxlength="<?php echo $this->maxFileSize ?>" />
-					<div id="upload-confirmation"></div>
+					<?php endif; ?>
+					<div id="upload-confirmation">
+					<?php if ($up_filename = strval(Tools::getValue('virtual_product_filename'))): ?>
+						<input type="hidden" id="virtual_product_filename" name="virtual_product_filename" value="<?php echo $up_filename ?>" />
+					<?php endif; ?>
+					</div>
 	<?php else: ?>
 					<input type="hidden" id="virtual_product_filename" name="virtual_product_filename" value="<?php echo $productDownload->physically_filename ?>" />
 					<?php echo $this->l('This is the link').':&nbsp;'.$productDownload->getHtmlLink(false, true) ?>
@@ -1548,8 +1554,8 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_expiration_date" class="t"><?php echo $this->l('Expiration date') ?></label>
 					<input type="text" id="virtual_product_expiration_date" name="virtual_product_expiration_date" value="<?php echo ($productDownload->id > 0) ? ((!empty($productDownload->date_expiration) AND $productDownload->date_expiration != '0000-00-00 00:00:00') ? date('Y-m-d', strtotime($productDownload->date_expiration))
-: '' ) : htmlentities(Tools::getValue('virtual_product_expiration_date'), ENT_COMPAT, 'UTF-8') ?>" size="11" maxlength="10" autocomplete="off" /> (yyyy/mm/dd)
-					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('No expiration date if you leave this blank').'<br/>'.$this->l('Format: YYYY-MM-DD'); ?></span>
+: '' ) : htmlentities(Tools::getValue('virtual_product_expiration_date'), ENT_COMPAT, 'UTF-8') ?>" size="11" maxlength="10" autocomplete="off" /> <?php echo $this->l('Format: YYYY-MM-DD'); ?>
+					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('No expiration date if you leave this blank'); ?></span>
 				</p>
 				<p class="block">
 					<label for="virtual_product_nb_days" class="t"><?php echo $this->l('Number of days') ?></label>
