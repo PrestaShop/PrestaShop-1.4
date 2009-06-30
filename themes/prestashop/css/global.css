@@ -1141,7 +1141,7 @@ a.tag_level1 { font-size: 1em; color:#888!important;}
 
 /* Block manufacturer */
 .blockmanufacturer ul, .blocksupplier ul {
-	margin-bottom: 0.6em;
+	padding-bottom: 0.6em;
 }
 .blockmanufacturer select, .blocksupplier select {
 	width: 100%;
