@@ -1,4 +1,4 @@
-{if count($categoryProducts) > 1}
+{if count($categoryProducts) > 0}
 <script type="text/javascript">var middle = {$middlePosition};</script>
 <script type="text/javascript" src="{$content_dir}modules/productscategory/js/productscategory.js"></script>
 <ul class="idTabs">

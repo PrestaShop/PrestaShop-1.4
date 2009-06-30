@@ -51,6 +51,19 @@ class productsCategory extends Module
 		$sizeOfCategoryProducts = $category->getProducts(intval($cookie->id_lang), 1, 30, NULL, NULL, true);
 		$categoryProducts = $category->getProducts(intval($cookie->id_lang), 1, $sizeOfCategoryProducts);
 		
+		//remove current product from the list
+		$current_product_key = null;
+		foreach ($categoryProducts as $key => $categoryProduct)
+		{
+			if ($categoryProduct['id_product'] == $idProduct)
+			{
+				$current_product_key = $key;
+				break;
+			}
+		}
+		if (isset($categoryProducts[$current_product_key]))
+			unset($categoryProducts[$current_product_key]);
+		
 		// Get positions
 		$middlePosition = round($sizeOfCategoryProducts / 2, 0);
 		$productPosition = $this->getCurrentProduct($categoryProducts, $idProduct);
