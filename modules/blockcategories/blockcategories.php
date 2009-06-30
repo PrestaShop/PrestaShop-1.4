@@ -131,7 +131,7 @@ class BlockCategories extends Module
 		}
 		if (isset($_GET['id_product']))
 		{			
-			if (!isset($cookie->last_visited_category) OR !Product::idIsOnCategoryId(intval($_GET['id_product']), array($cookie->last_visited_category)))
+			if (!isset($cookie->last_visited_category) OR !Product::idIsOnCategoryId(intval($_GET['id_product']), array('0' => array('id_category' => $cookie->last_visited_category))))
 			{
 				$product = new Product(intval($_GET['id_product']));
 				if (isset($product) AND Validate::isLoadedObject($product))

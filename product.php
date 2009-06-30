@@ -149,12 +149,12 @@ else
 		{
 			if (isset($regs[2]) AND is_numeric($regs[2]))
 			{
-				if (Product::idIsOnCategoryId(intval($product->id), array(intval($regs[2]))))
+				if (Product::idIsOnCategoryId(intval($product->id), array('0' => array('id_category' => intval($regs[2])))))
 					$category = new Category(intval($regs[2]), intval($cookie->id_lang));
 			}
 			elseif (isset($regs[5]) AND is_numeric($regs[5]))
 			{
-				if (Product::idIsOnCategoryId(intval($product->id), array(intval($regs[5]))))
+				if (Product::idIsOnCategoryId(intval($product->id), array('0' => array('id_category' => intval($regs[5])))))
 					$category = new Category(intval($regs[5]), intval($cookie->id_lang));
 			}
 		}

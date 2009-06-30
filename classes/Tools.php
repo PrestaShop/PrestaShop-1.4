@@ -569,6 +569,8 @@ class Tools
 		$category = new Category(intval($id_category), intval($cookie->id_lang));
 		if (!Validate::isLoadedObject($category))
 			die(Tools::displayError());
+		if ($id_category == 1)
+			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
 		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).' '.$pipe.' '.htmlentities($end, ENT_NOQUOTES, 'UTF-8');
 	}
 
