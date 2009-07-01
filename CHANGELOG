@@ -5,6 +5,59 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.0.5 - 1077 (2009-01-07)   #
+####################################
+
+	Improved/changed features :
+
+	[*] BO : link to attribute generator is now at top
+	[*] Installer : 244 default countries instead of only 34
+	[*] Installer : added 1.2.0.5.sql file and reordering products in categories 
+
+	Fixed bugs :
+
+	[-] BO : fixed bug while editing address
+	[-] MO : fixing bug #2206 (not to much product listed in productscategory module)
+	[-] MO : fixing bug #2209 (wrong display of manufacturers and suppliers blocks)
+	[-] FO : fixed breadcumb
+	[-] BO : fixed bug while uploading file with bad date on AdminProducts
+	[-] Classes : order return is now fixed on shipping date
+	[-] BO : fixed order status translation in AdminOrders
+	[-] BO : fixed CSS bug
+	[-] BO : fixed AdminOrders display bug
+	[-] MO : fixed currency bug in PayPal transactions
+	[-] BO : Product duplication fixed (combination image association)
+	[-] BO : Fix bug in Drag and Drop for positions
+	[-] TR : French translation fixed (mailalert module)
+	[-] BO : smart error management for zip module load
+	[-] BO : no more datepicker white bar in the admin bottom left
+	[-] BO : edit attachments without re-uploading files
+	[-] FO : bug with undefined variable in the ajax search fixed
+	[-] BO : new tags are now correctly indexed in the search
+	[-] MO : sekeywords warning fixed
+	[-] FO : crash on Firefox 3.0.11 fixed
+	[-] MO : fixed empty criterion bug (#2214)
+	[-] FO : Wrong order by price
+	[-] Core : URL validation method fixed
+	[-] MO : fixed bug while saving editorial (#2224)
+	[-] BO : fixed red star in AdminCategories for grouplist (#2182)
+	[-] BO : duplicate a product now duplicate its discount quantity (#2210)
+	[-] BO : duplicate a product now duplicate its accessories (#2217)
+	[-] BO : Shipping number sending fixed
+	[-] FO: Wrong order by price on Manufacturer.php
+	[-] MO : Send to friend e-mailed product link fixed
+	[-] BO : Product form addition/edition fixed
+	[-] BO : Cart carrier name display fixed (when it was the shop which was the carrier)
+	[-] MO : Newsletter module fixed (addition date was missing from the CSV header)
+	[-] FO : Supplier product number display fixed
+	[-] MO : Product category module fixed (disabled when the product default category is "home")
+	[-] BO : Fix various bugs in positions handlers and Drag 'n Drop
+	[-] FO : Customizable product addition check (when some fields are required) fixed
+	[-] MO : Customized product addition/deletion from the blockcart module fixed
+	[-] FO : Customized product display/remove fixed on cart page and block (reverted)
+	[-] FO : Customized product display/remove fixed on cart page and block
+
+####################################
 #   v1.2.0.4 - 1035 (2009-17-06)   #
 ####################################
 
