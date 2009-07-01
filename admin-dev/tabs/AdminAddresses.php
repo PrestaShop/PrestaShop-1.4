@@ -71,8 +71,16 @@ class AdminAddresses extends AdminTab
 					else
 						$this->_errors[] = Tools::displayError('this e-mail address is not registered');
 				}
-				elseif (!Tools::getValue('id_customer'))
-					$this->_errors[] = Tools::displayError('customer e-mail address is not valid');
+				elseif ($id_customer = Tools::getValue('id_customer'))
+				{
+					$customer = new Customer(intval($id_customer));
+					if (Validate::isLoadedObject($customer))
+						$_POST['id_customer'] = $customer->id;
+					else
+						$this->_errors[] = Tools::displayError('unknown customer');
+				}
+				else
+					$this->_errors[] = Tools::displayError('unknown customer');
 			}
 
 			// Check manufacturer selected
@@ -215,7 +223,8 @@ class AdminAddresses extends AdminTab
 					$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
 					echo '
 					<label>'.$this->l('Customer:').'</label>
-					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>';
+					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>
+					<input type="hidden" name="id_customer" value="'.$customer->id.'" />';
 				}
 				else
 				{
