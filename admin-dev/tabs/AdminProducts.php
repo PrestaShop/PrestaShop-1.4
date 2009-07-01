@@ -2155,7 +2155,9 @@ class AdminProducts extends AdminTab
 				echo '
 			<table cellpadding="5">
 				<tr>
-					<td colspan="2"><b>'.$this->l('Add or modify attributes for this product').'</b></td>
+					<td colspan="2"><b>'.$this->l('Add or modify attributes for this product').'</b> - 
+					&nbsp;<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&id_category='.intval(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
+					</td>
 				</tr>
 			</table>
 			<hr style="width:730px;"><br />
@@ -2391,12 +2393,7 @@ class AdminProducts extends AdminTab
 								<p >'.$this->l('Active the color choice by selecting a color attribute group.').'</p>
 							</td>
 						</tr>
-					</table>
-					<hr style="width:730px;">
-					<div style="text-align:center;">
-						<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&id_category='.intval(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
-					</div>
-					';
+					</table>';
 				}
 				else
 					echo '<b>'.$this->l('You must save this product before adding attributes').'.</b>';
