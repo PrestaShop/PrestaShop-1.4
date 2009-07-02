@@ -121,7 +121,7 @@ class		Feature extends ObjectModel
 		return $result;
 	}
 	
-	/*
+	/**
 	* Count number of features for a given language
 	*
 	* @param integer $id_lang Language id
@@ -138,7 +138,7 @@ class		Feature extends ObjectModel
 		return ($result['nb']);
 	}
 	
-	/*
+	/**
 	* Create a feature from import
 	*
 	* @param integer $id_feature Feature id
@@ -147,7 +147,7 @@ class		Feature extends ObjectModel
 	*/	
 	static public function addFeatureImport($name)
 	{
-		$rq = Db::getInstance()->getRow('SELECT `id_feature` FROM '._DB_PREFIX_.'feature_lang WHERE lower(`name`) LIKE \''.utf8_encode(trim(pSQL($name))).'\' GROUP BY `id_feature`');
+		$rq = Db::getInstance()->getRow('SELECT `id_feature` FROM '._DB_PREFIX_.'feature_lang WHERE `name` = \''.pSQL($name).'\' GROUP BY `id_feature`');
 		if (!empty($rq))
 			return intval($rq['id_feature']);
 		// Feature doesn't exist, create it
