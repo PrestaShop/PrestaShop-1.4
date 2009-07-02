@@ -699,7 +699,7 @@ class AdminImport extends AdminTab
 					if (!strncmp($feature, '#F_', 3) AND Tools::strlen($product->{$feature}))
 					{
 						$feature_name = str_replace('#F_', '', $feature);
-						$id_feature = Feature::addFeatureImport(Tools::strtolower($feature_name));
+						$id_feature = Feature::addFeatureImport($feature_name);
 						$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});
 						Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
 					}
@@ -1159,7 +1159,7 @@ class AdminImport extends AdminTab
 		echo '
 			</tr>';
 		ob_flush();
-		ob_clean ();
+		ob_clean();
 		
 		/* Datas */
 		for ($current_line = 0; $current_line < 10 AND $line = fgetcsv($handle, MAX_LINE_SIZE, $glue); $current_line++)
