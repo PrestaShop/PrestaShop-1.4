@@ -1577,8 +1577,11 @@ class		Product extends ObjectModel
 	
 	static public function addFeatureProductImport($id_product, $id_feature, $id_feature_value)
 	{
-		$row = array('id_feature' => intval($id_feature), 'id_product' => intval($id_product), 'id_feature_value' => intval($id_feature_value));
-		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_product', $row, 'INSERT');
+		return Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'feature_product` (`id_feature`, `id_product`, `id_feature_value`)
+			VALUES ('.intval($id_feature).', '.intval($id_product).', '.intval($id_feature_value).')
+			ON DUPLICATE KEY UPDATE `id_feature_value` = '.intval($id_feature_value)
+		);
 	}
 
 	/**
