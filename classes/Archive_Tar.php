@@ -201,9 +201,9 @@ class Archive_Tar extends PEAR
     // }}}
 
     // {{{ extract()
-    function extract($p_path='')
+    function extract($p_path='', $check_base_dir = true)
     {
-        return $this->extractModify($p_path, '');
+        return $this->extractModify($p_path, '', $check_base_dir);
     }
     // }}}
 
@@ -429,14 +429,14 @@ class Archive_Tar extends PEAR
     * @access public
     * @see extractList()
     */
-    function extractModify($p_path, $p_remove_path)
+    function extractModify($p_path, $p_remove_path, $check_base_dir = true)
     {
         $v_result = true;
         $v_list_detail = array();
 
         if ($v_result = $this->_openRead()) {
             $v_result = $this->_extractList($p_path, $v_list_detail,
-			                                "complete", 0, $p_remove_path);
+			                                "complete", 0, $p_remove_path, $check_base_dir);
             $this->_close();
         }
 
@@ -1351,7 +1351,7 @@ class Archive_Tar extends PEAR
 
     // {{{ _extractList()
     function _extractList($p_path, &$p_list_detail, $p_mode,
-	                      $p_file_list, $p_remove_path)
+	                      $p_file_list, $p_remove_path, $check_base_dir = true)
     {
     $v_result=true;
     $v_nb = 0;
@@ -1464,11 +1464,14 @@ class Archive_Tar extends PEAR
 			              .' already exists as a file');
             return false;
           }
-          if (!is_writeable($v_header['filename'])) {
-            $this->_error('File '.$v_header['filename']
-			              .' already exists and is write protected');
-            return false;
-          }
+          if ($check_base_dir OR _PS_ROOT_DIR_ != realpath($v_header['filename']))
+          {
+		      if (!is_writeable($v_header['filename'])) {
+		        $this->_error('File '.$v_header['filename']
+					          .' already exists and is write protected');
+		        return false;
+		      }
+		   }
           if (filemtime($v_header['filename']) > $v_header['mtime']) {
             // To be completed : An error or silent no replace ?
           }

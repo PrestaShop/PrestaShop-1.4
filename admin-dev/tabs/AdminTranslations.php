@@ -122,7 +122,7 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
-			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../'))
+			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../'), false)
 				Tools::redirectAdmin($currentIndex.'&conf=15&token='.$this->token);
 			$this->_errors[] = Tools::displayError('archive cannot be extracted');
 		}
