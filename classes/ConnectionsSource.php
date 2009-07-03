@@ -76,6 +76,8 @@ class ConnectionsSource extends ObjectModel
 			$source->request_uri .= strval($_SERVER['REDIRECT_URL']);
 		elseif (isset($_SERVER['REQUEST_URI']))
 			$source->request_uri .= strval($_SERVER['REQUEST_URI']);
+		if (!Validate::isUrl($source->request_uri))
+			unset($source->request_uri);
 		return $source->add();
 	}
 	
