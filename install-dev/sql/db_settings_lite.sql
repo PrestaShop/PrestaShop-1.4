@@ -1321,7 +1321,8 @@ VALUES  ('google','q'),
 		('exalead','q'),
 		('search.live.com','q'),
 		('search.ke.voila','rdata'),
-		('altavista','q');
+		('altavista','q'),
+		('bing.com','q');
 
 /* SubDomains */
 INSERT INTO PREFIX_subdomain (id_subdomain, name) VALUES (NULL, 'www');
