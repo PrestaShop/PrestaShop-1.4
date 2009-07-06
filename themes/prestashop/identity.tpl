@@ -40,8 +40,8 @@
 				<label for="email">{l s='E-mail'}<sup>*</sup></label>
 				<input type="text" name="email" id="email" value="{$smarty.post.email}" />
 			</p>
-			<p class="password">
-				<label for="old_passwd">{l s='Current password'}</label>
+			<p class="required text">
+				<label for="old_passwd">{l s='Current password'}<sup>*</sup></label>
 				<input type="password" name="old_passwd" id="old_passwd" />
 			</p>
 			<p class="password">
