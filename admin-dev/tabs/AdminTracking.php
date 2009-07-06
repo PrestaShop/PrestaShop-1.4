@@ -90,7 +90,7 @@ class AdminTracking extends AdminTab
 		if (isset($this->_list['obj']))
 		{
 			$nbCategories = sizeof($this->_list['obj']);
-			echo '<h3>'.$this->_list['message'].' '.$nbCategories.' '.('found').'</h3>';
+			echo '<h3>'.$this->_list['message'].' '.$nbCategories.' '.$this->l('found').'</h3>';
 			if (!$nbCategories)
 				return ;
 			echo '
@@ -109,7 +109,7 @@ class AdminTracking extends AdminTab
 		if (isset($this->_list['obj']))
 		{
 			$nbProducts = sizeof($this->_list['obj']);
-			echo '<h3>'.$this->_list['message'].' '.$nbProducts.' '.('found').'</h3>';
+			echo '<h3>'.$this->_list['message'].' '.$nbProducts.' '.$this->l('found').'</h3>';
 			if (!$nbProducts)
 				return ;
 			$this->fieldsDisplay = (array(
