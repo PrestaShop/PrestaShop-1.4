@@ -77,7 +77,7 @@ class Gsitemap extends Module
       	foreach($cmss AS $cms)
       	{
 			$sitemap = $xml->addChild('url');
-            $sitemap->addChild('loc', 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlspecialchars($this->getUrlWith($link->getCMSLink($cms['id_cms'], $cms['link_rewrite']), 'id_lang', intval($cms['id_lang']))));
+            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getCMSLink($cms['id_cms'], $cms['link_rewrite']), 'id_lang', intval($cms['id_lang']))));
             $sitemap->addChild('priority', '0.9');
             $sitemap->addChild('changefreq', 'monthly');
 		}
@@ -94,7 +94,7 @@ class Gsitemap extends Module
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
 			$sitemap = $xml->addChild('url');
-            $sitemap->addChild('loc', 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlspecialchars($this->getUrlWith($link->getCategoryLink($category['id_category'], $category['link_rewrite']), 'id_lang', intval($category['id_lang']))));
+            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getCategoryLink($category['id_category'], $category['link_rewrite']), 'id_lang', intval($category['id_lang']))));
             $sitemap->addChild('priority', $priority);
             $sitemap->addChild('lastmod', $category['date_upd']);
             $sitemap->addChild('changefreq', 'daily');
@@ -118,7 +118,7 @@ class Gsitemap extends Module
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
             $sitemap = $xml->addChild('url');
-            $sitemap->addChild('loc', 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlspecialchars($this->getUrlWith($link->getProductLink($product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13']), 'id_lang', intval($product['id_lang']))));
+            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getProductLink($product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13']), 'id_lang', intval($product['id_lang']))));
             $sitemap->addChild('priority', $priority);
             $sitemap->addChild('lastmod', $product['date_upd']);
             $sitemap->addChild('changefreq', 'daily');
