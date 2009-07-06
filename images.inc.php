@@ -70,14 +70,14 @@ function isPicture($file)
 
     if (function_exists('finfo_open'))
     {
-        $finfo = @finfo_open(FILEINFO_MIME);
-        $mime_type = @finfo_file($finfo, $file['tmp_name']);
-        @finfo_close($finfo);
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mime_type = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
     }
     elseif (function_exists('mime_content_type'))
-        $mime_type = @mime_content_type($file['tmp_name']);
+        $mime_type = mime_content_type($file['tmp_name']);
     elseif (function_exists('exec'))
-        $mime_type = trim(@exec('file -bi '.escapeshellarg($file['tmp_name'])));
+        $mime_type = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
      if (empty($mime_type)|| $mime_type == 'regular file')
 		$mime_type = $file['type'];
 
@@ -114,7 +114,7 @@ function	checkIco($file, $maxFileSize)
   */
 function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg')
 {
-	list($sourceWidth, $sourceHeight, $type, $attr) = @getimagesize($sourceFile);
+	list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($sourceFile);
 	if (!$sourceWidth)
 		return false;
 	if ($destWidth == NULL) $destWidth = $sourceWidth;
@@ -149,7 +149,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 	$borderWidth = intval(($destWidth - $nextWidth) / 2);
 	$borderHeight = intval(($destHeight - $nextHeight) / 2);
 	
-	$destImage = @imagecreatetruecolor($destWidth, $destHeight);
+	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 
 	$white = imagecolorallocate($destImage, 255, 255, 255);
 	imagefill($destImage, 0, 0, $white);
@@ -175,7 +175,7 @@ function	imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $f
 		return false;
 
 	// Source infos
-	$srcInfos = @getimagesize($srcFile['tmp_name']);
+	$srcInfos = getimagesize($srcFile['tmp_name']);
 	$src['width'] = $srcInfos[0];
 	$src['height'] = $srcInfos[1];
 	$src['ressource'] = createSrcImage($srcInfos[2], $srcFile['tmp_name']);
@@ -199,23 +199,23 @@ function	createSrcImage($type, $filename)
 	switch ($type)
 	{
 		case 1:
-			return @imagecreatefromgif($filename);
+			return imagecreatefromgif($filename);
 			break;
 		case 3:
-			return @imagecreatefrompng($filename);
+			return imagecreatefrompng($filename);
 			break;
 		case 2:
 		default:
-			return @imagecreatefromjpeg($filename);
+			return imagecreatefromjpeg($filename);
 			break;
 	}
 }
 
 function	createDestImage($width, $height)
 {
-	$image = @imagecreatetruecolor($width, $height);
-	$white = @imagecolorallocate($image, 255, 255, 255);
-	@imagefill($image, 0, 0, $white);
+	$image = imagecreatetruecolor($width, $height);
+	$white = imagecolorallocate($image, 255, 255, 255);
+	imagefill($image, 0, 0, $white);
 	return $image;
 }
 
