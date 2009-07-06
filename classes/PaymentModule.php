@@ -334,7 +334,7 @@ abstract class PaymentModule extends Module
 					if (intval(Configuration::get('PS_INVOICE')) AND Validate::isLoadedObject($orderStatus) AND $orderStatus->invoice AND $order->invoice_number)
 					{
 						$fileAttachment['content'] = PDF::invoice($order, 'S');
-						$fileAttachment['name'] = Configuration::get('PS_INVOICE_PREFIX', intval($order->id_lang)).sprintf('%06d', $order->invoice_number);
+						$fileAttachment['name'] = Configuration::get('PS_INVOICE_PREFIX', intval($order->id_lang)).sprintf('%06d', $order->invoice_number).'.pdf';
 						$fileAttachment['mime'] = 'application/pdf';
 					}
 					else
