@@ -181,7 +181,7 @@ CREATE TABLE PREFIX_category_group (
 	INDEX category_group_index(id_category, id_group)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE PREFIX_group (
+CREATE TABLE `PREFIX_group` (
 	id_group INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	reduction DECIMAL(10,2) NOT NULL DEFAULT 0,
 	date_add DATETIME NOT NULL,
