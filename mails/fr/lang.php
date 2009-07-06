@@ -11,4 +11,6 @@ $_LANGMAIL['My personal informations'] = 'Mes informations personnelles';
 $_LANGMAIL['Message from a customer'] = 'Message d\'un client';
 $_LANGMAIL['Virtual product to download'] = 'Produit virtuel à télécharger';
 $_LANGMAIL['Referral Program'] = 'Programme de parrainage';
+$_LANGMAIL['Package in transit'] = 'Colis en cours d\'envoie';
+
 ?>
