@@ -1,8 +1,8 @@
 <?php
 
-require(dirname(__FILE__).'/../../config/config.inc.php');
-require(dirname(__FILE__).'/../../header.php');
-require(dirname(__FILE__).'/WishList.php');
+require_once(dirname(__FILE__).'/../../config/config.inc.php');
+require_once(dirname(__FILE__).'/../../header.php');
+require_once(dirname(__FILE__).'/WishList.php');
 
 $token = Tools::getValue('token');
 if (empty($token) === false)
