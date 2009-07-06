@@ -49,7 +49,7 @@ class AdminTracking extends AdminTab
 					  FROM `'._DB_PREFIX_.'category_product`
 					)
 				';
-				$this->_list['message'] = 'List of empty categories:';
+				$this->_list['message'] = $this->l('List of empty categories:');
 				break ;
 			case 'products_disabled':
 				$sql = '
@@ -57,7 +57,7 @@ class AdminTracking extends AdminTab
 					FROM `'._DB_PREFIX_.'product`
 					WHERE active = 0
 				';
-				$this->_list['message'] = 'List of disabled products:';
+				$this->_list['message'] = $this->l('List of disabled products:');
 				break ;
 			case 'products_nostock':
 				$sql = '
@@ -77,7 +77,7 @@ class AdminTracking extends AdminTab
 					  WHERE pa.quantity <= 0
 					)
 				';
-				$this->_list['message'] = 'List of out of stock products:';
+				$this->_list['message'] = $this->l('List of out of stock products:');
 				break ;
 		}
 		$this->_list['obj'] = Db::getInstance()->ExecuteS($sql);
