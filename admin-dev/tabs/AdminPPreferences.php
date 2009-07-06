@@ -42,7 +42,7 @@ class AdminPPreferences extends AdminPreferences
 			'PS_PURCHASE_MINIMUM' => array('title' => $this->l('Minimum purchase total required in order to validate order:'), 'desc' => $this->l('Set to 0 to disable this feature'), 'validation' => 'isFloat', 'cast' => 'floatval', 'type' => 'price'),
 			'PS_LAST_QTIES' => array('title' => $this->l('Display last quantities when qty is lower than:'), 'desc' => $this->l('Set to 0 to disable this feature'), 'validation' => 'isUnsignedId', 'required' => true, 'cast' => 'intval', 'type' => 'text'),
 			'PS_NB_DAYS_NEW_PRODUCT' => array('title' => $this->l('Number of days during which the product is considered \'new\':'), 'validation' => 'isUnsignedInt', 'cast' => 'intval', 'type' => 'text'),
-			'PS_CART_REDIRECT' => array('title' => $this->l('Re-direction after adding product to cart:'), 'desc' => $this->l('Concerns only the AJAX version of the cart'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('previous page'), 1 => $this->l('cart summary'))),
+			'PS_CART_REDIRECT' => array('title' => $this->l('Re-direction after adding product to cart:'), 'desc' => $this->l('Concerns only the non-AJAX version of the cart'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('previous page'), 1 => $this->l('cart summary'))),
 			'PS_PRODUCTS_PER_PAGE' => array('title' => $this->l('Products per page:'), 'desc' => $this->l('Products displayed per page. Default is 10.'), 'validation' => 'isUnsignedInt', 'cast' => 'intval', 'type' => 'text'),
 			'PS_PRODUCTS_ORDER_BY' => array('title' => $this->l('Default order by:'), 'desc' => $this->l('Default order by for product list'), 'type' => 'select', 'list' => 
 				array(
@@ -72,7 +72,7 @@ class AdminPPreferences extends AdminPreferences
 		 			if(!Tools::getValue('PS_STOCK_MANAGEMENT'))
 		 			{
 		 				$_POST['PS_ORDER_OUT_OF_STOCK'] = 1;
-		 				$_POST['PS_DISPLAY_QTIES'] = 0;		 				
+		 				$_POST['PS_DISPLAY_QTIES'] = 0;
 		 			}
 					$this->_postConfig($this->_fieldsProduct);
 				}
