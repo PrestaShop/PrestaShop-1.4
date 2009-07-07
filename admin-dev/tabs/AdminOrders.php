@@ -737,7 +737,7 @@ class AdminOrders extends AdminTab
 					</table>
 				</div>
 				<div style="clear:both; height:15px;">&nbsp;</div>
-				<div style="float: right; width: 150px;">';
+				<div style="float: right; width: 160px;">';
 				if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
 					echo '
 					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />
