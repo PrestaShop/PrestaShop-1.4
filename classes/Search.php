@@ -138,7 +138,7 @@ class Search
 		$scoreArray = array();
 		$words = explode(' ', Search::sanitize($expr, $id_lang));
 		foreach ($words as $key => $word)
-			if (!empty($word))
+			if (Tools::strlen($word) > Configuration::get('PS_SEARCH_MINWORDLEN'))
 			{
 				$whereArray[] = ' p.id_product '.($word[0] == '-' ? 'NOT' : '').' IN (
 					SELECT id_product
