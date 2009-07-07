@@ -30,8 +30,8 @@ class BlockSpecials extends Module
 		if ($special = Product::getRandomSpecial(intval($params['cookie']->id_lang)))
 			$smarty->assign(array(
 			'special' => $special,
-			'oldPrice' => number_format($special['price'] + $special['reduction'], 2, '.', '')
-));
+			'oldPrice' => number_format($special['price'] + $special['reduction'], 2, '.', ''),
+			'mediumSize' => Image::getSize('medium')));
 		return $this->display(__FILE__, 'blockspecials.tpl');
 	}
 	

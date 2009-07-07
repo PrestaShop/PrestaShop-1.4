@@ -106,7 +106,9 @@ class BlockViewed extends Module
 			if (!sizeof($productsViewedObj))
 				return ;
 			
-			$smarty->assign('productsViewedObj', $productsViewedObj);
+			$smarty->assign(array(
+				'productsViewedObj' => $productsViewedObj,
+				'mediumSize' => Image::getSize('medium')));
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
 		elseif (isset($product) AND Validate::isLoadedObject($product))

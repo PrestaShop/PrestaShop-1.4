@@ -214,10 +214,10 @@ else
 		if (!isset($cover))
 			$cover = array('id_image' => Language::getIsoById($cookie->id_lang).'-default', 'legend' => 'No picture', 'title' => 'No picture');
 		$size = Image::getSize('large');
-
 		$smarty->assign(array(
 			'cover' => $cover,
 			'imgWidth' => intval($size['width']),
+			'mediumSize' => Image::getSize('medium'),
 			'accessories' => $product->getAccessories(intval($cookie->id_lang))));
 		if (sizeof($productImages))
 			$smarty->assign('images', $productImages);

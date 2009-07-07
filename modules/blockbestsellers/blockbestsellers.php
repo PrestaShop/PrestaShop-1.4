@@ -40,7 +40,9 @@ class BlockBestSellers extends Module
 			$bestseller['price'] = Tools::displayPrice(Product::getPriceStatic(intval($bestseller['id_product'])), $currency);
 			$best_sellers[] = $bestseller;
 		}
-		$smarty->assign('best_sellers', $best_sellers);
+		$smarty->assign(array(
+			'best_sellers' => $best_sellers,
+			'mediumSize' => Image::getSize('medium')));
 		return $this->display(__FILE__, 'blockbestsellers.tpl');
 	}
 	

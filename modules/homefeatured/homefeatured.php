@@ -66,6 +66,7 @@ class HomeFeatured extends Module
 		$category = new Category(1);
 		$nb = intval(Configuration::get('HOME_FEATURED_NBR'));
 		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10), 'date_add', 'DESC');
+		//Tools::d($products);
 		$smarty->assign(array(
 			'allow_buy_when_out_of_stock' => Configuration::get('PS_ORDER_OUT_OF_STOCK', false),
 			'max_quantity_to_allow_display' => Configuration::get('PS_LAST_QTIES'),
@@ -73,7 +74,8 @@ class HomeFeatured extends Module
 			'products' => $products,
 			'currency' => new Currency(intval($params['cart']->id_currency)),
 			'lang' => Language::getIsoById(intval($params['cookie']->id_lang)),
-			'productNumber' => sizeof($products)
+			'productNumber' => sizeof($products),
+			'homeSize' => Image::getSize('home')
 		));
 		return $this->display(__FILE__, 'homefeatured.tpl');
 	}

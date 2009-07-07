@@ -70,7 +70,9 @@ class BlockNewProducts extends Module
 			foreach ($newProducts AS $newProduct)
 				$new_products[] = $newProduct;
 
-		$smarty->assign('new_products', $new_products);
+		$smarty->assign(array(
+			'new_products' => $new_products,
+			'mediumSize' => Image::getSize('medium')));
 		return $this->display(__FILE__, 'blocknewproducts.tpl');
 	}
 	
