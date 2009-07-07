@@ -239,8 +239,7 @@ CREATE TABLE `PREFIX_configuration` (
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_configuration`),
-  UNIQUE KEY `name` (`name`),
-  KEY `configuration_name` (`name`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_configuration_lang` (
