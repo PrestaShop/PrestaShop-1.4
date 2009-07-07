@@ -84,7 +84,7 @@ class AdminCarriers extends AdminTab
 				</div>
 				<label>'.$this->l('URL:').' </label>
 				<div class="margin-form">
-					<input type="text" size="40" name="url" value="'.htmlentities($this->getFieldValue($obj, 'url'), ENT_COMPAT, 'UTF-8').(!$this->getFieldValue($obj, 'url') ? '@' : '').'" />
+					<input type="text" size="40" name="url" value="'.htmlentities($this->getFieldValue($obj, 'url'), ENT_COMPAT, 'UTF-8').'" />
 					<p class="clear">'.$this->l('URL for the tracking number; type \'@\' where the tracking number will appear').'</p>
 				</div>
 				<label>'.$this->l('Tax:').'</label>

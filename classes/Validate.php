@@ -655,7 +655,9 @@ class Validate
 	*/
 	static public function isAbsoluteUrl($url)
 	{
-		return preg_match('/^https?:\/\/([[:alnum:]]|[#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
+		if (!empty($url))
+			return preg_match('/^https?:\/\/([[:alnum:]]|[#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
+		return true;
 	}
 
 	/**
