@@ -1075,7 +1075,7 @@ class AdminImport extends AdminTab
 						<div class="space margin-form">
 							<input type="submit" name="submitImportFile" value="'.$this->l('Next step').'" class="button"/>
 						</div>
-						<div class="">
+						<div>
 							'.$this->l('Note that the category import does not support categories of the same name').'
 						</div>
 					</fieldset>
