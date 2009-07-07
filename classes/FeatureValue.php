@@ -117,7 +117,7 @@ class		FeatureValue extends ObjectModel
 			SELECT fv.`id_feature_value`
 			FROM '._DB_PREFIX_.'feature_value fv
 			LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.`id_feature_value` = fv.`id_feature_value`)
-			WHERE lower(`value`) LIKE \''.utf8_encode(trim(pSQL($name))).'\'
+			WHERE `value` = \''.pSQL($name).'\'
 			AND fv.`id_feature` = '.intval($id_feature).'
 			GROUP BY fv.`id_feature_value` LIMIT 1');
 		if (!isset($rq[0]['id_feature_value']) OR !$id_feature_value = intval($rq[0]['id_feature_value']))
