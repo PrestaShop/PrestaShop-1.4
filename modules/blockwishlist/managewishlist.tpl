@@ -1,8 +1,8 @@
 {if $products}
 {if !$refresh}
 	<br />
-	<a href="javascript:;" id="hideBoughtProducts" class="button_account_large"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Hide bought products' mod='blockwishlist'}</a>
-	<a href="javascript:;" id="showBoughtProducts" class="button_account_large"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Show bought products' mod='blockwishlist'}</a>
+	<a href="javascript:;" id="hideBoughtProducts" class="button_account_large"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Hide products' mod='blockwishlist'}</a>
+	<a href="javascript:;" id="showBoughtProducts" class="button_account_large"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Show products' mod='blockwishlist'}</a>
 	{if count($productsBoughts)}
 	<a href="javascript:;" id="hideBoughtProductsInfos" class="button_account_large" onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos');">{l s='Hide bought product\'s infos' mod='blockwishlist'}</a>
 	<a href="javascript:;" id="showBoughtProductsInfos" class="button_account_large"  onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos');">{l s='Show bought product\'s infos' mod='blockwishlist'}</a>
