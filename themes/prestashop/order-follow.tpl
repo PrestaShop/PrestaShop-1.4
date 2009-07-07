@@ -14,8 +14,11 @@
 {if $errorMsg}
 	<p class="error">{l s='Please provide an explanation for your RMA.'}</p>
 {/if}
-{if $errorDetail}
-	<p class="error">{l s='Please indicate which product and the quantity you want to return.'}</p>
+{if $errorDetail1}
+	<p class="error">{l s='Please check at least one product you want to return.'}</p>
+{/if}
+{if $errorDetail2}
+	<p class="error">{l s='Please provide quantity for product you checked.'}</p>
 {/if}
 
 <p>{l s='Here are the merchandise returns you have made since ordering'}.</p>

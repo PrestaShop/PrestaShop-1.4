@@ -19,9 +19,9 @@ if (Tools::isSubmit('submitReturnMerchandise'))
 	if (!$order_qte_input = Tools::getValue('order_qte_input'))
 		Tools::redirect('order-follow.php?errorDetail1');
 	if ($customizationIds = Tools::getValue('customization_ids') AND !$customizationQtyInput = Tools::getValue('customization_qty_input'))
-		Tools::redirect('order-follow.php?errorDetail2');
+		Tools::redirect('order-follow.php?errorDetail1');
 	if (!$ids_order_detail = Tools::getValue('ids_order_detail') AND !$customizationIds)
-		Tools::redirect('order-follow.php?errorDetail3');
+		Tools::redirect('order-follow.php?errorDetail2');
 
 	$orderReturn = new OrderReturn();
 	$orderReturn->id_customer = intval($cookie->id_customer);
@@ -44,8 +44,10 @@ if (Tools::isSubmit('errorQuantity'))
 	$smarty->assign('errorQuantity', true);
 elseif (Tools::isSubmit('errorMsg'))
 	$smarty->assign('errorMsg', true);
-elseif (Tools::isSubmit('errorDetail'))
-	$smarty->assign('errorDetail', true);
+elseif (Tools::isSubmit('errorDetail1'))
+	$smarty->assign('errorDetail1', true);
+elseif (Tools::isSubmit('errorDetail2'))
+	$smarty->assign('errorDetail2', true);
 
 $smarty->assign('ordersReturn', $ordersReturn);
 include(dirname(__FILE__).'/header.php');
