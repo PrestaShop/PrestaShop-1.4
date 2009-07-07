@@ -27,14 +27,14 @@
 		{if isset($product.attributes_small)}
 			<br /><a href="{$link->getProductlink($product.id_product, $product.link_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">{$product.attributes_small|escape:'htmlall':'UTF-8'}</a>
 		{/if}
-			<br />{l s='Quantity' mod='blockwishlist'}:<input type="text" id="{$product.id_product}_{$product.id_product_attribute}" size="3" value="{$product.quantity|intval}" />
-			<br />{l s='Priority' mod='blockwishlist'}:
+			<br />{l s='Quantity:' mod='blockwishlist'}<input type="text" id="{$product.id_product}_{$product.id_product_attribute}" size="3" value="{$product.quantity|intval}" />
+			<br />{l s='Priority:' mod='blockwishlist'}
 			{if $product.priority eq 0}
-				<span style="color:darkred;">{l s='High' mod='blockwishlist'}</span>
+				<span style="color:darkred; float:right;">{l s='High' mod='blockwishlist'}</span>
 			{elseif $product.priority eq 1}
-				<span style="color:darkorange;">{l s='Medium' mod='blockwishlist'}</span>
+				<span style="color:darkorange; float:right;">{l s='Medium' mod='blockwishlist'}</span>
 			{else}
-				<span style="color:green;">{l s='Low' mod='blockwishlist'}</span>
+				<span style="color:green; float:right;">{l s='Low' mod='blockwishlist'}</span>
 			{/if}
 		</span>
 		</li>
