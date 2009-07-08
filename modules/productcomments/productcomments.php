@@ -84,16 +84,16 @@ class ProductComments extends Module
 	private function _checkCriterion()
 	{
 		$action_criterion = Tools::getValue('criterion_action');
-		if (Tools::isSubmit('submitCriterion') AND !empty($action_criterion))
+		$name = Tools::getValue('criterion');
+		if (Tools::isSubmit('submitCriterion') AND empty($action_criterion) AND !empty($name))
 		{
 			global $cookie;
-			
-			$name = Tools::getValue('criterion');
+
 			require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
 			ProductCommentCriterion::add($cookie->id_lang, $name);
 			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
-		else if (empty($action_criterion) === false)
+		elseif (!empty($action_criterion) AND empty($name))
 		{
 			$id_product_comment_criterion = Tools::getValue('id_product_comment_criterion');
 			require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
