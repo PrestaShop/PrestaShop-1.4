@@ -1883,7 +1883,7 @@ class AdminProducts extends AdminTab
 												
 											formProduct = document.layers ? document.forms.product : document.product;
 											formProduct.selectAccessories.length = accessories.length + 1;
-											for (i = 1, j = 1; i < accessories.length; i++)
+											for (i = 0, j = 1; i < accessories.length; i++)
 											{
 												if (formProduct.filter.value)
 													if (accessories[i][1].toLowerCase().indexOf(formProduct.filter.value.toLowerCase()) == -1)
