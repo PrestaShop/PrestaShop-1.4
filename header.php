@@ -29,9 +29,7 @@ if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE
 	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 	exit;
 }
-/* SMW */
-$smarty->assign('marquee', Configuration::get('PS_SHOP_NAME').' '.Configuration::get('PS_SHOP_MARQUEE'));
-/* */
+
 $smarty->display(_PS_THEME_DIR_.'header.tpl');
 
 ?>

@@ -40,12 +40,7 @@ class BlockAdvertising extends Module
 	{
 		return $this->hookRightColumn($params);
 	}
-	/* SMW */
-	function hookTop($params)
-	{
-		return $this->hookRightColumn($params);
-	}	
-	/* */
+
 }
 
 ?>
