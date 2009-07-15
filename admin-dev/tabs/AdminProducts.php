@@ -797,6 +797,12 @@ class AdminProducts extends AdminTab
 				$this->_errors[] = $this->l('the field').' <b>'.$this->l('expiration date').'</b> '.$this->l('is not valid');
 				return false;
 			}
+			// The oos behavior MUST be "Deny orders" for virtual products
+			if (Tools::getValue('out_of_stock') != 0)
+			{
+				$this->_errors[] = $this->l('The "when out of stock" behavior selection must be "deny order" for virtual products');
+				return false;
+			}
 
 			$download = new ProductDownload(Tools::getValue('virtual_product_id'));
 			$download->id_product          = $product->id;
@@ -1447,9 +1453,22 @@ class AdminProducts extends AdminTab
 	function toggleVirtualProduct(elt)
 	{
 		if (elt.checked)
+		{
 			$('#virtual_good').show('slow');
+			getE('out_of_stock_1').checked = 'checked';
+			getE('out_of_stock_2').readOnly = true;
+			getE('out_of_stock_3').readOnly = true;
+			getE('label_out_of_stock_2').setAttribute('for', '');
+			getE('label_out_of_stock_3').setAttribute('for', '');
+		}
 		else
+		{
 			$('#virtual_good').hide('slow');
+			getE('out_of_stock_2').readOnly = false;
+			getE('out_of_stock_3').readOnly = false;
+			getE('label_out_of_stock_2').setAttribute('for', 'out_of_stock_2');
+			getE('label_out_of_stock_3').setAttribute('for', 'out_of_stock_3');
+		}
 	}
 	function uploadFile()
 	{
@@ -1507,7 +1526,7 @@ class AdminProducts extends AdminTab
 	?>
 	<tr>
 		<td colspan="2">
-			<input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onchange="toggleVirtualProduct(this)" onclick="toggleVirtualProduct(this)" <?php if(($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
+			<input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onchange="toggleVirtualProduct(this)" onclick="toggleVirtualProduct(this);" <?php if(($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
 			<label for="is_virtual_good" class="t bold"><?php echo $this->l('Is this a downloadable product?') ?></label>
 			<div id="virtual_good" <?php if(!$productDownload->id OR !$productDownload->active) echo 'style="display:none;"' ?> >
 	<?php if(!ProductDownload::checkWritableDir()): ?>
@@ -1698,9 +1717,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('When out of stock:').'</td>
 						<td style="padding-bottom:5px;">
-							<input type="radio" name="out_of_stock" id="out_of_stock_1" value="0" '.(intval($this->getFieldValue($obj, 'out_of_stock')) == 0 ? 'checked="checked"' : '').'/> <label for="out_of_stock_1" class="t">'.$this->l('Deny orders').'</label>
-							<br /><input type="radio" name="out_of_stock" id="out_of_stock_2" value="1" '.($this->getFieldValue($obj, 'out_of_stock') == 1 ? 'checked="checked"' : '').'/> <label for="out_of_stock_2" class="t">'.$this->l('Allow orders').'</label>
-							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t">'.$this->l('Default:').' <i>'.$this->l((intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.intval(Tab::getIdFromClassName('AdminPPreferences')).intval($cookie->id_employee)).'"  onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');">'.$this->l('Preferences').'</a>)</label>
+							<input type="radio" name="out_of_stock" id="out_of_stock_1" value="0" '.(intval($this->getFieldValue($obj, 'out_of_stock')) == 0 ? 'checked="checked"' : '').'/> <label for="out_of_stock_1" class="t" id="label_out_of_stock_1">'.$this->l('Deny orders').'</label>
+							<br /><input type="radio" name="out_of_stock" id="out_of_stock_2" value="1" '.($this->getFieldValue($obj, 'out_of_stock') == 1 ? 'checked="checked"' : '').'/> <label for="out_of_stock_2" class="t" id="label_out_of_stock_2">'.$this->l('Allow orders').'</label>
+							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t" id="label_out_of_stock_3">'.$this->l('Default:').' <i>'.$this->l((intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.intval(Tab::getIdFromClassName('AdminPPreferences')).intval($cookie->id_employee)).'"  onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');">'.$this->l('Preferences').'</a>)</label>
 						</td>
 					</tr>
 
@@ -1974,7 +1993,9 @@ class AdminProducts extends AdminTab
 						getE(\'cdesc_short_'.$language['id_lang'].'\').rows = 54;
 						getE(\'cdesc_'.$language['id_lang'].'\').cols = 100;
 						getE(\'cdesc_short_'.$language['id_lang'].'\').cols = 100;';
-		echo '</script>';
+		echo '
+			toggleVirtualProduct(getE(\'is_virtual_good\'));
+		</script>';
 	}
 
 	function displayFormImages($obj, $languages, $defaultLanguage, $token = NULL)

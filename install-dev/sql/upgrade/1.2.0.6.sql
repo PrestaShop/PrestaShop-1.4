@@ -11,3 +11,4 @@ ALTER TABLE `PREFIX_order_detail` ADD `product_quantity_reinjected` INT(10) UNSI
 /* ##################################### */
 /* 					CONTENTS					 */
 /* ##################################### */
+UPDATE `PREFIX_product` SET `out_of_stock` = 0 WHERE `id_product` IN ((SELECT `id_product` FROM `PREFIX_product_download`));

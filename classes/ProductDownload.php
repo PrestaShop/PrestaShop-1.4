@@ -146,11 +146,13 @@ class ProductDownload extends ObjectModel
 		$data = Db::getInstance()->getRow('
 		SELECT `id_product_download`
 		FROM `'._DB_PREFIX_.'product_download`
-		WHERE `id_product` = ' . intval($id_product).'
+		WHERE `id_product` = '.intval($id_product).'
 		AND `active` = 1');
 		self::$_productIds[$id_product] = isset($data['id_product_download']) ? $data['id_product_download'] : false;
 		return self::$_productIds[$id_product];
 	}
+
+UPDATE `PREFIX_product` SET `out_of_stock` = 0 WHERE `id_product` IN ((SELECT `id_product` FROM `PREFIX_product_download`))
 
 	/**
 	 * Return the filename from an id_product
