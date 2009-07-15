@@ -127,6 +127,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[46] = "<?php echo lang('Invalid shop name'); ?>";
 		txtError[47] = "<?php echo lang('Your firstname contains some invalid characters'); ?>";
 		txtError[48] = "<?php echo lang('Your lastname contains some invalid characters'); ?>";
+		txtError[49] = "<?php echo lang('Your database server does not support the utf-8 charset.'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";
@@ -139,7 +140,6 @@ if ($lm->getIncludeTradFilename())
 		txtError[34] = "<?php echo lang('Error while inserting content into the database'); ?>";
 		txtError[35] = "<?php echo lang('Unfortunately,'); ?>";
 		txtError[36] = "<?php echo lang('SQL errors have occurred.'); ?>";
-		txtError[37] = "<?php echo lang('Impossible to copy languages\'s flags.'); ?>";
 
 	</script>
 	<script type="text/javascript" src="controller.js"></script>

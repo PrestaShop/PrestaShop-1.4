@@ -167,5 +167,5 @@ $_LANG['view the log'] = 'voir le rapport';
 $_LANG['(no old version detected)'] = '(aucune ancienne version détectée)';
 $_LANG['Can\'t write settings file, please create a file named settings.inc.php in config directory.'] = 'Le fichier de paramètres n\'a pu être écrit, veuillez créer un fichier nommé settings.inc.php dans votre répertoire de configuration.';
 $_LANG['Cannot convert your database\'s data to utf-8.'] = 'Impossible de convertir les données de votre base de données en utf-8.';
-
+$_LANG['Your database server does not support the utf-8 charset.'] = 'Votre serveur de base de données ne supporte pas le jeu de caractère utf-8.';
 ?>

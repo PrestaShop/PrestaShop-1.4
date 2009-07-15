@@ -149,7 +149,19 @@ class MySQL extends Db
 			return 1;
 		if (!@mysql_select_db($db, $link))
 			return 2;
+		@mysql_close($link);
 		return 0;
+	}
+
+	static public function tryUTF8($server, $user, $pwd)
+	{
+		$link = @mysql_connect($server, $user, $pwd);
+		if (!mysql_query('SET NAMES \'utf8\'', $link))
+			$ret = false;
+		else
+			$ret = true;
+		@mysql_close($link);
+		return $ret;
 	}
 }
 
