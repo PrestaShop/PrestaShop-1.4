@@ -19,13 +19,8 @@ class canonicalUrl extends Module
 
 	function install()
 	{
-		if (
-			parent::install() == false
-			OR $this->registerHook('header') == false
-			OR Configuration::updateValue('CANONICAL_URL', '') == false
-		)
+		if (!parent::install() OR !$this->registerHook('header') OR !Configuration::updateValue('CANONICAL_URL', ''))
 			return false;
-		return true;
 	}
 
 	public function getContent()
@@ -63,16 +58,16 @@ class canonicalUrl extends Module
 
 	function hookHeader($params)
 	{
-		global $smarty, $protocol, $rewrited_url;
+		global $smarty, $protocole, $rewrited_url;
 		
 		$canonicalUrl = Configuration::get('CANONICAL_URL');
 		$ps_request = str_replace(__PS_BASE_URI__, '', $_SERVER['REQUEST_URI']);
 		
 		if (strlen(Configuration::get('CANONICAL_URL')) > 0)
 			if (isset($rewrited_url))
-				$smarty->assign('canonical_url', $protocol.$canonicalUrl.$rewrited_url);
+				$smarty->assign('canonical_url', $protocole.$canonicalUrl.$rewrited_url);
 			else
-				$smarty->assign('canonical_url', $protocol.$canonicalUrl.$_SERVER['REQUEST_URI']);
+				$smarty->assign('canonical_url', $protocole.$canonicalUrl.$_SERVER['REQUEST_URI']);
 		return $this->display(__FILE__, 'canonicalurl.tpl');
 	}
 }
