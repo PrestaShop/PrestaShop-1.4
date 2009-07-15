@@ -534,7 +534,7 @@ class AdminOrders extends AdminTab
 			}
 			
 			/* Display shipping number field */
-			if ($carrier->url AND $currentState->id == _PS_OS_SHIPPING_)
+			if ($carrier->url)
 			 echo '
 				<form action="'.$currentIndex.'&view'.$this->table.'&token='.$this->token.'" method="post" style="margin-top:10px;">
 					<input type="text" name="shipping_number" value="'. $order->shipping_number.'" />
