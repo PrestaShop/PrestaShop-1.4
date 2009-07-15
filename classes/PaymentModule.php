@@ -141,13 +141,15 @@ abstract class PaymentModule extends Module
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
 				foreach ($products AS $key => $product)
 				{
+					$productQuantity = intval(Product::getQuantity(intval($product['id_product']), (isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : NULL)));
+					$quantityInStock = $productQuantity - intval($product['quantity']) < 0 ? $productQuantity : intval($product['quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
 						if (($id_order_state != _PS_OS_OUTOFSTOCK_) AND (($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
@@ -194,6 +196,7 @@ abstract class PaymentModule extends Module
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.intval($product['quantity']).',
+						'.$quantityInStock.',
 						'.floatval($price).',
 						'.floatval($reduc).',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',

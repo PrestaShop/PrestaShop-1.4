@@ -279,8 +279,9 @@ class AdminAddresses extends AdminTab
 				<label>'.$this->l('Country:').'</label>
 				<div class="margin-form">
 					<select name="id_country" />';
+		$selectedCountry = $this->getFieldValue($obj, 'id_country');
 		foreach ($this->countriesArray AS $id_country => $name)
-			echo '		<option value="'.$id_country.'"'.(($this->getFieldValue($obj, 'id_country') == $id_country) ? ' selected="selected"' : ((Configuration::get('PS_COUNTRY_DEFAULT')) == $id_country) ? ' selected="selected"' : '').'>'.$name.'</option>';
+			echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>
 				<label>'.$this->l('State:').'</label>

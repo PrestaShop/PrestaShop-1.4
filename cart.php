@@ -50,9 +50,8 @@ if ($add OR Tools::getIsset('update') OR $delete)
 				$idProductAttribute = Product::getDefaultAttribute(intval($producToAdd->id), intval($producToAdd->out_of_stock) == 2 ? !intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : !intval($producToAdd->out_of_stock));
 				if (!$idProductAttribute)
 					Tools::redirectAdmin($link->getProductLink($producToAdd));
-				else
-					if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
-						$errors[] = Tools::displayError('product is no longer available');
+				elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
+					$errors[] = Tools::displayError('product is no longer available');
 			}
 			elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
 				$errors[] = Tools::displayError('product is no longer available');

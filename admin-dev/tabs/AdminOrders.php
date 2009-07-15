@@ -203,16 +203,20 @@ class AdminOrders extends AdminTab
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
 							$orderDetail = new OrderDetail(intval($id_order_detail));
-							
+
+							// Reinject product
+							if (isset($_POST['reinjectQuantities']) OR (!$order->hasBeenDelivered() AND !$order->hasBeenPaid()))
+							{
+								$reinjectableQuantity = intval($orderDetail->product_quantity_in_stock) - intval($orderDetail->product_quantity_reinjected);
+								$quantityToReinject = $qtyCancelProduct > $reinjectableQuantity ? $reinjectableQuantity : $qtyCancelProduct;
+								if (!Product::reinjectQuantities($orderDetail, $quantityToReinject))
+									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+							}
+
 							// Delete product
 							if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
 								$this->_errors[] = Tools::displayError('an error occurred during deletion for the product').' <span class="bold">'.$orderDetail->product_name.'</span>';
 							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => $id_order_detail));
-							
-							// Reinject product
-							if (isset($_POST['reinjectQuantities']) OR (!$order->hasBeenDelivered() AND !$order->hasBeenPaid()))
-								if (!Product::reinjectQuantities($id_order_detail, $qtyCancelProduct))
-									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
 						}
 					if (!sizeof($this->_errors) AND $customizationList)
 						foreach ($customizationList AS $id_customization => $id_order_detail)

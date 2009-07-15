@@ -1380,10 +1380,10 @@ class		Product extends ObjectModel
 		if ($result['quantity'] < $product['quantity'])
 		{
 			Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? ' product_attribute' : 'product').'`
+			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
 			SET `quantity` = 0
-			WHERE id_product = '.intval($product['id_product']).($product['id_product_attribute'] ?
-			' AND id_product_attribute = '.intval($product['id_product_attribute']) : ''));
+			WHERE `id_product` = '.intval($product['id_product']).($product['id_product_attribute'] ?
+			' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
 			return false;
 		}
 
@@ -1394,15 +1394,22 @@ class		Product extends ObjectModel
 		($product['id_product_attribute'] ? ' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
 	}
 
-	public static function reinjectQuantities($product_id, $quantity)
+	public static function reinjectQuantities(&$orderDetail, $quantity)
 	{
-		$orderDetail = new OrderDetail(intval($product_id));
+		if (!Validate::isLoadedObject($orderDetail))
+			die(Tools::displayError());
 		$sql = '
 		UPDATE `'._DB_PREFIX_.'product'.($orderDetail->product_attribute_id ? '_attribute' : '').'`
 		SET `quantity` = `quantity`+'.intval($quantity).'
 		WHERE `id_product` = '.intval($orderDetail->product_id).
 		($orderDetail->product_attribute_id ? ' AND `id_product_attribute` = '.intval($orderDetail->product_attribute_id) : '');
-		return Db::getInstance()->Execute($sql);
+		if (!Db::getInstance()->Execute($sql) OR !Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'order_detail`
+			SET `product_quantity_reinjected` = `product_quantity_reinjected` + '.intval($quantity).'
+			WHERE `id_order_detail` = '.intval($orderDetail->id)))
+			return false;
+		$orderDetail->product_quantity_reinjected += intval($quantity);
+		return true;
 	}
 
 	public static function isAvailableWhenOutOfStock($oos)

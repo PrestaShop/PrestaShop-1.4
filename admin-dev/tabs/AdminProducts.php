@@ -305,7 +305,7 @@ class AdminProducts extends AdminTab
 						if ($this->tabAccess['edit'] === '1')
 						{
 							if ($product->productAttributeExists($_POST['attribute_combinaison_list']))
-								$this->_errors[] = Tools::displayError('This attribute already exists.');
+								$this->_errors[] = Tools::displayError('This combination already exists.');
 							else
 								$id_product_attribute = $product->addProductAttribute(Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'),
                                 Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'), Tools::getValue('attribute_ecotax'), 
@@ -2155,7 +2155,7 @@ class AdminProducts extends AdminTab
 				echo '
 			<table cellpadding="5">
 				<tr>
-					<td colspan="2"><b>'.$this->l('Add or modify attributes for this product').'</b> - 
+					<td colspan="2"><b>'.$this->l('Add or modify combinations for this product').'</b> - 
 					&nbsp;<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&id_category='.intval(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/appearance.gif" alt="combinations_generator" class="middle" title="'.$this->l('Product combinations generator').'" />&nbsp;'.$this->l('Product combinations generator').'</a>
 					</td>
 				</tr>
@@ -2267,13 +2267,13 @@ class AdminProducts extends AdminTab
 			<tr>
 			  <td style="width:150px">'.$this->l('Default:').'<br /><br /></td>
 			  <td style="padding-bottom:5px;">
-				<input type="checkbox" name="attribute_default" id="attribute_default" value="1" />&nbsp;'.$this->l('Make the default attribute for this product').'<br /><br />
+				<input type="checkbox" name="attribute_default" id="attribute_default" value="1" />&nbsp;'.$this->l('Make the default combination for this product').'<br /><br />
 			  </td>
 		  </tr>
 		  <tr>
 			  <td style="width:150px">&nbsp;</td>
 			  <td style="padding-bottom:5px;">
-				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this attribute').'" class="button" onclick="attr_selectall();" /> </span>
+				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this combination').'" class="button" onclick="attr_selectall();" /> </span>
 				<span id="ResetSpan" style="float: left; margin-left: 8px; display: none;">
 				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="if (!confirm(\''.$this->l('Are you sure you want to cancel?', __CLASS__, true, false).'\')) return;
 				  init_elems(); getE(\'submitProductAttribute\').value = \''.$this->l('Add this attributes group', __CLASS__, true).'\';
@@ -2352,13 +2352,13 @@ class AdminProducts extends AdminTab
 						</tr>';
 					}
 						else
-				echo '<tr><td colspan="7" align="center"><i>'.$this->l('No attribute yet').'.</i></td></tr>';
+				echo '<tr><td colspan="7" align="center"><i>'.$this->l('No combination yet').'.</i></td></tr>';
 			}
 			echo '
 						</table>
-						<br />'.$this->l('The row in blue is the default attribute.').'
+						<br />'.$this->l('The row in blue is the default combination.').'
 						<br />
-						'.$this->l('A default attribute must be designated for each product.').'
+						'.$this->l('A default combination must be designated for each product.').'
 						</td>
 						</tr>
 					</table>
@@ -2396,7 +2396,7 @@ class AdminProducts extends AdminTab
 					</table>';
 				}
 				else
-					echo '<b>'.$this->l('You must save this product before adding attributes').'.</b>';
+					echo '<b>'.$this->l('You must save this product before adding combinations').'.</b>';
 	}
 
 	function displayFormFeatures($obj, $languages, $defaultLanguage)
