@@ -152,8 +152,6 @@ class ProductDownload extends ObjectModel
 		return self::$_productIds[$id_product];
 	}
 
-UPDATE `PREFIX_product` SET `out_of_stock` = 0 WHERE `id_product` IN ((SELECT `id_product` FROM `PREFIX_product_download`))
-
 	/**
 	 * Return the filename from an id_product
 	 *
