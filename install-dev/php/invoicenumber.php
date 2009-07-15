@@ -1,10 +1,8 @@
 <?php
 
-global $_CONF;
-Configuration::loadConfiguration();
-
 function invoice_number_set()
 {
+	Configuration::loadConfiguration();
 	$number = 1;
 
 	// Update each order with a number
