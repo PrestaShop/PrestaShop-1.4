@@ -11,11 +11,11 @@ function updateAddressesDisplay(first_view)
 
 	// update content of invoice address
 	//if addresses have to be equals...
+	var txtInvoiceTitle = $('ul#address_invoice li.address_title').html();	
 	if ($('input[type=checkbox]#addressesAreEquals:checked').length == 1)
 	{
 		$('#address_invoice_form:visible').hide('fast');
-		var txtInvoiceTitle = $('ul#address_invoice li.address_title').html();
-		$('ul#address_invoice').html( $('ul#address_delivery').html() );
+		$('ul#address_invoice').html($('ul#address_delivery').html());
 		$('ul#address_invoice li.address_title').html(txtInvoiceTitle);
 	}
 	else
@@ -23,6 +23,11 @@ function updateAddressesDisplay(first_view)
 		$('#address_invoice_form:hidden').show('fast');
 		if ($('select#id_address_invoice').val())
 			updateAddressDisplay('invoice');
+		else
+		{
+			$('ul#address_invoice').html($('ul#address_delivery').html());
+			$('ul#address_invoice li.address_title').html(txtInvoiceTitle);
+		}	
 	}
 	
 	if(!first_view)
