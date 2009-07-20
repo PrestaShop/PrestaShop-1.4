@@ -48,8 +48,8 @@ class canonicalUrl extends Module
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Canonical URL').'</label>
 				<div class="margin-form">
-					http(s)://<input type="text" name="canonicalUrl" value="'.Configuration::get('CANONICAL_URL').'" />/a_prestashop_webpage.php
-					<p class="clear">'.$this->l('Choose the primary domain name for your referencing (e.g., www.myshop.com or myshop.com or mywebsite.com/shop). Note: Do not include the last slash ("/"), the "/index.php" suffix, or the "http(s)://" prefix.').'</p>
+					http(s)://<input type="text" name="canonicalUrl" value="'.Configuration::get('CANONICAL_URL').'" />/some/directories/a_prestashop_webpage.php
+					<p class="clear">'.$this->l('Choose the primary domain name for your referencing (e.g., www.myshop.com or myshop.com or mywebsite.com). Note: Do not include the last slash ("/"), the "/index.php" suffix, or the "http(s)://" prefix.').'</p>
 				</div>
 				<center><input type="submit" name="submitCanonicalUrl" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>
