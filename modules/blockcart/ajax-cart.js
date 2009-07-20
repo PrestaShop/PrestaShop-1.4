@@ -103,7 +103,7 @@ var ajaxCart = {
 				ajaxCart.updateCart(jsonData)
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
-				alert("TECHNICAL ERROR: unable to refresh the cart.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+				//alert("TECHNICAL ERROR: unable to refresh the cart.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
 			}
 		});
 	},
