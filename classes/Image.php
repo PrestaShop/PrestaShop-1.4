@@ -212,6 +212,8 @@ class		Image extends ObjectModel
 
 	static private function replaceAttributeImageAssociationId(&$combinationImages, $saved_id, $id_image)
 	{
+		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
+			return ;
 		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
 			foreach ($imageIds AS $key => $imageId)
 				if (intval($imageId) == intval($saved_id))
@@ -225,6 +227,8 @@ class		Image extends ObjectModel
 	*/
 	static public function duplicateAttributeImageAssociations($combinationImages)
 	{
+		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
+			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
 		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
 			foreach ($imageIds AS $imageId)
