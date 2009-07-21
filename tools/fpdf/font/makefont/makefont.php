@@ -301,7 +301,7 @@ function MakeFont($fontfile, $afmfile, $enc='cp1252', $patch=array(), $type='Tru
 {
 	//Generate a font definition file
 	if(get_magic_quotes_runtime())
-		@set_magic_quotes_runtime(0);
+		Tools::ps_set_magic_quotes_runtime(0);
 	ini_set('auto_detect_line_endings','1');
 	if($enc)
 	{

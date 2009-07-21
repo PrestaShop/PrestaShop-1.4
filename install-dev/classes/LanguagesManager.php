@@ -48,7 +48,7 @@ class LanguageManager {
 		
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
 			
-			$FirstHAL = split(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			$FirstHAL = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 			$iso = $FirstHAL[0];
 			
 			if ( $iso != "en-us" ) {

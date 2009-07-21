@@ -174,7 +174,7 @@ if (isset($create_account))
 		$selectedCountry = intval($_POST['id_country']);
 	elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 	{
-		$array = split(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$array = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		if (Validate::isLanguageIsoCode($array[0]))
 		{
 			$selectedCountry = Country::getByIso($array[0]);

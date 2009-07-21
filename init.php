@@ -16,7 +16,7 @@ global $cart, $cookie, $_CONF, $link;
 /* get page name to display it in body id */
 $pathinfo = pathinfo(__FILE__);
 $page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
-$page_name = (ereg('^[0-9]', $page_name)) ? 'page_'.$page_name : $page_name;
+$page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_name;
 
 // Init Cookie
 $cookie = new Cookie('ps');

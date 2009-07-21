@@ -29,9 +29,9 @@ class Editorial extends Module
 		foreach ($forbidden AS $line)
 			if ($key == $line)
 				return 0;
-		if (!eregi('^'.$section.'_', $key))
+		if (!preg_match('/^'.$section.'_/i', $key))
 			return 0;
-		$key = eregi_replace('^'.$section.'_', '', $key);
+		$key = preg_replace('/^'.$section.'_/i', '', $key);
 		$field = htmlspecialchars($field);
 		if (!$field)
 			return 0;

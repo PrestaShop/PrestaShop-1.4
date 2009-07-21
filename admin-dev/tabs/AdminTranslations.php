@@ -153,7 +153,7 @@ class AdminTranslations extends AdminTab
 			$_tmp = array();
 			foreach ($files AS $templateFile)
 			{
-				if ((ereg('^(.*).tpl$', $templateFile) OR ($themeName == 'prestashop' AND ereg('^(.*).php$', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
+				if ((preg_match('/^(.*).tpl$/', $templateFile) OR ($themeName == 'prestashop' AND preg_match('/^(.*).php$/', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
 				{
 						/* Get translations key */
 						$readFd = fopen($tpl, 'r');
@@ -189,7 +189,7 @@ class AdminTranslations extends AdminTab
 		if (!$dir)
 			$dir = ($themeName == 'prestashop' ? _PS_MODULE_DIR_.$moduleName.'/' : _PS_ALL_THEMES_DIR_.$themeName.'/modules/'.$moduleName.'/');
 		foreach ($files AS $templateFile)
-			if ((ereg('^(.*).tpl$', $templateFile) OR ($themeName == 'prestashop' AND ereg('^(.*).php$', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
+			if ((preg_match('/^(.*).tpl$/', $templateFile) OR ($themeName == 'prestashop' AND preg_match('/^(.*).php$/', $templateFile))) AND file_exists($tpl = $dir.$templateFile))
 			{
 					/* Get translations key */
 					$readFd = fopen($tpl, 'r');
@@ -465,7 +465,7 @@ class AdminTranslations extends AdminTab
 		$count = 0;
 		$files = array();
 		foreach ($templates AS $template)
-			if (ereg('^(.*).tpl$', $template) AND file_exists($tpl = _PS_THEME_DIR_.$template))
+			if (preg_match('/^(.*).tpl$/', $template) AND file_exists($tpl = _PS_THEME_DIR_.$template))
 			{
 				$template = substr(basename($template), 0, -4);
 				$newLang = array();
@@ -528,7 +528,7 @@ class AdminTranslations extends AdminTab
 		$tabs[] = '../../classes/AdminTab.php';
 		$files = array();
 		foreach ($tabs AS $tab)
-			if (ereg('^(.*)\.php$', $tab) AND file_exists($tpl = PS_ADMIN_DIR.'/tabs/'.$tab))
+			if (preg_match('/^(.*)\.php$/', $tab) AND file_exists($tpl = PS_ADMIN_DIR.'/tabs/'.$tab))
 			{
 				$tab = basename(substr($tab, 0, -4));
 				$fd = fopen($tpl, 'r');
@@ -611,7 +611,7 @@ class AdminTranslations extends AdminTab
 			}
 		foreach ($dirToParse AS $dir)
 			foreach (scandir($dir) AS $file)
-				if (ereg('.php$', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
+				if (preg_match('/.php$/', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
 				{
 					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, true)?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
 					foreach($matches[1] as $key)

@@ -295,7 +295,7 @@ class Tm4b extends Module
 		$this->_new_order_numbers = '';
 		foreach ($numbers as $number)
 		{
-		  if (ereg ("([0-9]+)", $number, $regs))
+		  if (preg_match("/([0-9]+)/", $number, $regs))
 			$this->_new_order_numbers .= $regs[1].self::__TM4B_NUMBER_DELIMITOR__;
 		}
 		Configuration::updateValue('TM4B_NEW_ORDER_NUMBERS', $this->_new_order_numbers);
@@ -316,7 +316,7 @@ class Tm4b extends Module
 			$this->_postErrors[] = $this->l('Mode is mandatory');
 		elseif (empty($_POST['new_order_numbers']))
 			$this->_postErrors[] = $this->l('Please enter a phone number');
-		elseif (ereg ("([^0-9[:space:],])", $_POST['new_order_numbers'], $regs))
+		elseif (preg_match('/([^0-9[:space:],])/', $_POST['new_order_numbers'], $regs))
 			$this->_postErrors[]  = $this->l('Phone number invalid');
 	}
 	

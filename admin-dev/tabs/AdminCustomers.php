@@ -356,7 +356,7 @@ class AdminCustomers extends AdminTab
 		global $currentIndex;
 		$obj = $this->loadObject(true);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$birthday = split('-', $this->getFieldValue($obj, 'birthday'));
+		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = $obj->getGroups();
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">

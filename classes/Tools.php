@@ -109,7 +109,7 @@ class Tools
 		/* Automatically detect language if not already defined */
 		if (!$cookie->id_lang AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			$array = split(',', Tools::strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+			$array = explode(',', Tools::strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
 			if (Validate::isLanguageIsoCode($array[0]))
 			{
 				$lang = new Language(intval(Language::getIdByIso(strval($array[0]))));
@@ -828,6 +828,16 @@ class Tools
 		foreach ($tmz as $timezone)
 			$tab[$timezone['id_timezone']] = str_replace('_', ' ', $timezone['name']);
 		return $tab;
+	}
+
+	/**
+	* DEPRECATED FUNCTION
+	* DO NOT USE IT
+	**/
+	static public function ps_set_magic_quotes_runtime($var)
+	{
+		if (function_exists('set_magic_quotes_runtime'))
+			@set_magic_quotes_runtime($var);
 	}
 }
 

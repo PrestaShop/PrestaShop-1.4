@@ -24,7 +24,7 @@ class Watermark extends Module
 		$config = Configuration::getMultiple(array('WATERMARK_TYPES', 'WATERMARK_Y_ALIGN', 'WATERMARK_X_ALIGN', 'WATERMARK_TRANSPARENCY'));
 		if (!isset($config['WATERMARK_TYPES']))
 			$config['WATERMARK_TYPES'] = '';
-		$tmp = split(',', $config['WATERMARK_TYPES']);
+		$tmp = explode(',', $config['WATERMARK_TYPES']);
 		foreach (ImageType::getImagesTypes('products') as $type)
 		    if (in_array($type['id_image_type'], $tmp))
 				$this->imageTypes[] = $type;

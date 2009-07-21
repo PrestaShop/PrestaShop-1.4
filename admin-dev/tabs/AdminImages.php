@@ -171,14 +171,14 @@ class AdminImages extends AdminTab
 		/* Delete categories images */
 		$toDel = scandir(_PS_CAT_IMG_DIR_);
 		foreach ($toDel AS $d)
-			if (ereg('^[0-9]+\-(.*)\.jpg$', $d) OR ereg('^([[:lower:]]{2})\-default\-(.*)\.jpg$', $d))
+			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 				unlink(_PS_CAT_IMG_DIR_.$d);
 
 		/* Regenerate categories images */
 		$errors = false;
 		$categoriesImages = scandir(_PS_CAT_IMG_DIR_);
 		foreach ($categoriesImages as $image)
-			if (ereg('^[0-9]*\.jpg$', $image))
+			if (preg_match('/^[0-9]*\.jpg$/', $image))
 				foreach ($categoriesTypes AS $k => $imageType)
 					if (!imageResize(_PS_CAT_IMG_DIR_.$image, _PS_CAT_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
@@ -203,7 +203,7 @@ class AdminImages extends AdminTab
 		/* Delete manufacturers images */
 		$toDel = scandir(_PS_MANU_IMG_DIR_);
 		foreach ($toDel AS $d)
-			if (ereg('^[0-9]+\-(.*)\.jpg$', $d) OR ereg('^([[:lower:]]{2})\-default\-(.*)\.jpg$', $d))
+			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 				unlink(_PS_MANU_IMG_DIR_.$d);
 
 		/* Regenerate manufacturers images */
@@ -211,7 +211,7 @@ class AdminImages extends AdminTab
 		$manufacturersImages = scandir(_PS_MANU_IMG_DIR_);
 		$errors = false;
 		foreach ($manufacturersImages AS $image)
-			if (ereg('^[0-9]*\.jpg$', $image))
+			if (preg_match('/^[0-9]*\.jpg$/', $image))
 				foreach ($manufacturersTypes AS $k => $imageType)
 					if (!imageResize(_PS_MANU_IMG_DIR_.$image, _PS_MANU_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
@@ -237,7 +237,7 @@ class AdminImages extends AdminTab
 		/* Delete suppliers images */
 		$toDel = scandir(_PS_SUPP_IMG_DIR_);
 		foreach ($toDel AS $d)
-			if (ereg('^[0-9]+\-(.*)\.jpg$', $d) OR ereg('^([[:lower:]]{2})\-default\-(.*)\.jpg$', $d))
+			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 				unlink(_PS_SUPP_IMG_DIR_.$d);
 
 		/* Regenerate suppliers images */
@@ -245,7 +245,7 @@ class AdminImages extends AdminTab
 		$suppliersImages = scandir(_PS_SUPP_IMG_DIR_);
 		$errors = false;
 		foreach ($suppliersImages AS $image)
-			if (ereg('^[0-9]*\.jpg$', $image))
+			if (preg_match('/^[0-9]*\.jpg$/', $image))
 				foreach ($suppliersTypes AS $k => $imageType)
 					if (!imageResize(_PS_SUPP_IMG_DIR_.$image, _PS_SUPP_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
@@ -271,7 +271,7 @@ class AdminImages extends AdminTab
 		/* Delete scenes images */
 		$toDel = scandir(_PS_SCENE_IMG_DIR_);
 		foreach ($toDel AS $d)
-			if (ereg('^[0-9]+\-(.*)\.jpg$', $d) OR ereg('^([[:lower:]]{2})\-default\-(.*)\.jpg$', $d))
+			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 				unlink(_PS_SCENE_IMG_DIR_.$d);
 
 		/* Regenerate scenes images */
@@ -279,7 +279,7 @@ class AdminImages extends AdminTab
 		$scenesImages = scandir(_PS_SCENE_IMG_DIR_);
 		$errors = false;
 		foreach ($scenesImages AS $image)
-			if (ereg('^[0-9]*\.jpg$', $image))
+			if (preg_match('/^[0-9]*\.jpg$/', $image))
 				foreach ($scenesTypes AS $k => $imageType)
 					if (!imageResize(_PS_SCENE_IMG_DIR_.$image, _PS_SCENE_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
 						$errors = true;
@@ -305,7 +305,7 @@ class AdminImages extends AdminTab
 		/* Delete products images */
 		$toDel = scandir(_PS_PROD_IMG_DIR_);
 		foreach ($toDel AS $d)
-			if (ereg('^[0-9]+\-[0-9]+\-(.*)\.jpg$', $d) OR ereg('^([[:lower:]]{2})\-default\-(.*)\.jpg$', $d))
+			if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 				unlink(_PS_PROD_IMG_DIR_.$d);
 		
 		

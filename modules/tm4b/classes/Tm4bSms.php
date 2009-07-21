@@ -187,7 +187,7 @@ class Tm4bSms  {
    
    public function isSent()
    {
-		if (isset($this->_id) AND ereg('^MT.*', $this->_id))
+		if (isset($this->_id) AND preg_match('/^MT.*/', $this->_id))
 			return true;
 		return false;	
    }

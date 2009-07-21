@@ -102,7 +102,7 @@ class Pack extends Product
 		array_pop($ids);
 		foreach ($ids as $id_product_item)
 		{
-			$idQty = split('x', $id_product_item);
+			$idQty = explode('x', $id_product_item);
 			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => intval($id_product), 'id_product_item' => intval($idQty[1]), 'quantity' => intval($idQty[0])), 'INSERT'))
 				return false;
 		}

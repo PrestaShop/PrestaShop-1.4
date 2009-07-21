@@ -26,7 +26,7 @@ class BlockWishList extends Module
 		else if (!$sql = file_get_contents(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
 			return (false);
 		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
-		$sql = preg_split("/;\s*[\r\n]+/",$sql);
+		$sql = preg_split("/;\s*[\r\n]+/", $sql);
 		foreach ($sql AS $k=>$query)
 			Db::getInstance()->Execute(trim($query));
 		if (!parent::install() OR

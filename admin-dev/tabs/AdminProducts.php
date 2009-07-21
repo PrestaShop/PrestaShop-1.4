@@ -356,7 +356,7 @@ class AdminProducts extends AdminTab
 					$languages = Language::getLanguages();
 					foreach ($_POST AS $key => $val)
 					{
-						if (eregi("^feature_([0-9]+)_value", $key, $match))
+						if (preg_match("/^feature_([0-9]+)_value/i", $key, $match))
 						{
 							if ($val)
 								$product->addFeaturesToDB($match[1], $val);
@@ -840,7 +840,7 @@ class AdminProducts extends AdminTab
 		$product->deleteAccessories();
 		if ($accessories = Tools::getValue('inputAccessories'))
 		{
-			$accessories_id = array_unique(split('-', $accessories));
+			$accessories_id = array_unique(explode('-', $accessories));
 			if (sizeof($accessories_id))
 			{
 				array_pop($accessories_id);
@@ -2678,7 +2678,7 @@ class AdminProducts extends AdminTab
 	public function updatePackItems($product)
 	{
 		Pack::deleteItems($product->id);
-		if (Tools::getValue('ppack') AND $items = Tools::getValue('inputPackItems') AND sizeof($ids = array_unique(split('-', $items))))
+		if (Tools::getValue('ppack') AND $items = Tools::getValue('inputPackItems') AND sizeof($ids = array_unique(explode('-', $items))))
 			if (!Pack::addItems($product->id, $ids))
 				return false;
 		return true;

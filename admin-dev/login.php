@@ -19,8 +19,8 @@ include(PS_ADMIN_DIR.'/functions.php');
 $errors = array();
 
 // Checking path
-$pathServer = ereg_replace('^/', '', $_SERVER['PHP_SELF']);
-$pathUser = ereg_replace('^/', '', str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']));
+$pathServer = preg_replace('!^/!', '', $_SERVER['PHP_SELF']);
+$pathUser = preg_replace('!^/!', '', str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']));
 if (strcmp($pathServer, $pathUser))
 	$errors[] = Tools::displayError('Path is not the same between your browser and you server :').'<br /><br /><b>'.
 				Tools::displayError('- Server:').'</b><br />'.htmlentities($pathServer).'<br /><br /><b>'.

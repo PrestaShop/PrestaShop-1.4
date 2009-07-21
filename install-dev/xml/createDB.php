@@ -25,7 +25,7 @@ if ($resultDB !== true){
 // Check POST data...
 $data_check = array(
 	!isset($_GET['mode']) OR ( $_GET['mode'] != "full" AND $_GET['mode'] != "lite"),
-	!isset($_GET['tablePrefix']) OR !Validate::isMailName($_GET['tablePrefix']) OR !eregi('^[a-z0-9_]*$', $_GET['tablePrefix'])
+	!isset($_GET['tablePrefix']) OR !Validate::isMailName($_GET['tablePrefix']) OR !preg_match('/^[a-z0-9_]*$/i', $_GET['tablePrefix'])
 );
 foreach ($data_check AS $data)
 	if ($data)

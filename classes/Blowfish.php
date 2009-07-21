@@ -409,7 +409,7 @@ class Blowfish extends Crypt_Blowfish
 	function decrypt($ciphertext)
 	{
 		$plaintext = '';
-		$chunks = split('=', $ciphertext);
+		$chunks = explode('=', $ciphertext);
 		$ending_value = sizeof($chunks) ;
 		for($counter = 0; $counter < ($ending_value - 1); $counter++)
 		{

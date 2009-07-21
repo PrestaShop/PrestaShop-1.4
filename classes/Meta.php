@@ -57,7 +57,7 @@ class		Meta extends ObjectModel
 		'pdf-order-return', 'pdf-order-slip', 'product-sort', 'statistics', 'zoom', 'images.inc', 'header', 'footer', 'init',
 		'category', 'product', 'cms');
 		foreach ($files as $file)
-			if (eregi('^[a-z0-9_.-]*\.php$', $file) AND !in_array(str_replace('.php', '', $file), $exludePages))
+			if (preg_match('/^[a-z0-9_.-]*\.php$/i', $file) AND !in_array(str_replace('.php', '', $file), $exludePages))
 				$selectedPages[] = str_replace('.php', '', $file);
 		// Exclude page already filled
 		if ($excludeFilled)

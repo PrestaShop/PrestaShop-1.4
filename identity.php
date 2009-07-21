@@ -62,7 +62,7 @@ else
 	$_POST = array_map('stripslashes', $customer->getFields());
 
 if ($customer->birthday)
-	$birthday = split('-', $customer->birthday);
+	$birthday = explode('-', $customer->birthday);
 else
 	$birthday = array('-', '-', '-');
 

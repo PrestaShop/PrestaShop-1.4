@@ -114,7 +114,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 				if (isset($_SERVER['HTTP_REFERER']))
 				{
 					// Redirect to previous page
-					ereg('http(s?)://(.*)/(.*)', $_SERVER['HTTP_REFERER'], $regs);
+					preg_match('!http(s?)://(.*)/(.*)!', $_SERVER['HTTP_REFERER'], $regs);
 					if (isset($regs[3]) AND !Configuration::get('PS_CART_REDIRECT') AND Tools::getValue('ajax') != 'true')
 						Tools::redirect($regs[3]);
 				}
