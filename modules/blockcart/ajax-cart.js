@@ -321,6 +321,8 @@ var ajaxCart = {
 					$('#bloc_cart_voucher_' + this.id + ' td.price').text(this.price);
 			}
 		});
+		if (jsonData.discounts.length == 0)
+			$('#vouchers').remove();
 	},
 
 	// Update product quantity
