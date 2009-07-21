@@ -533,7 +533,9 @@ abstract class AdminTab
 									Tools::redirectAdmin(urldecode($back).'&conf=4');
 								if (Tools::getValue('stay_here') == 'on' || Tools::getValue('stay_here') == 'true' || Tools::getValue('stay_here') == '1')
 									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&updatescene&token='.$token);
-								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&token='.$token);
+								if (Tools::getValue('id_parent', 1) AND Tools::getValue('submitAdd'.$this->table.'AndBack'))
+									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.intval(Tools::getValue('id_parent', 1)).'&conf=4&token='.$token);
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&update'.$this->table.'&token='.$token);
 								
 							}
 						}
@@ -554,7 +556,11 @@ abstract class AdminTab
 						if (!$object->add())
 							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
-							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&token='.$token);
+						{
+							if ($id_parent = intval(Tools::getValue('id_parent', 1)) AND Tools::getValue('submitAdd'.$this->table.'AndBack'))
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$id_parent.'&conf=3&token='.$token);
+							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$token);
+						}
 					}
 					else
 						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');

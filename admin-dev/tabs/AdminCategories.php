@@ -243,9 +243,9 @@ class AdminCategories extends AdminTab
 					if (sizeof($groups))
 					{
 						echo '
-					<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+					<table cellspacing="0" cellpadding="0" class="table" style="width: 28em;">
 						<tr>
-							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)" /></th>
+							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)"'.(!isset($obj->id) ? 'checked="checked" ' : '').' /></th>
 							<th>'.$this->l('ID').'</th>
 							<th>'.$this->l('Group name').'</th>
 						</tr>';
@@ -253,7 +253,7 @@ class AdminCategories extends AdminTab
 						foreach ($groups as $group)
 							echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
+								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.((in_array($group['id_group'], $customer_groups) OR (!isset($obj->id))) ? 'checked="checked" ' : '').'/></td>
 								<td>'.$group['id_group'].'</td>
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';
@@ -266,7 +266,9 @@ class AdminCategories extends AdminTab
 				echo '
 				</div>
 				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
+					<input type="submit" class="button" name="submitAdd'.$this->table.'AndBack" value="'.$this->l('Save and back to category').'"/><br /><br />
+					<input type="hidden" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'"/>
+					<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'" class="button" />		
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
