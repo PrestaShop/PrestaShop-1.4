@@ -1354,7 +1354,12 @@ class AdminProducts extends AdminTab
 											function(j) {
 												var options = \'\';
 												for (var i = 0; i < getE("id_manufacturer").options.length; i++)
-													options += \'<option value="\' + getE("id_manufacturer").value + \'">\' + getE("id_manufacturer").options[i].innerHTML + \'</option>\';
+												{
+													if (getE("id_manufacturer").options[i].innerHTML == \'----------\')
+														options += \'<option disabled="disabled">----------</option>\';
+													else
+														options += \'<option value="\' +  getE("id_manufacturer").options[i].value + \'">\' + getE("id_manufacturer").options[i].innerHTML + \'</option>\';
+												}
 												for (var i = 0; i < j.length; i++)
 													options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 												$("select#id_manufacturer").html(options);
@@ -1384,7 +1389,12 @@ class AdminProducts extends AdminTab
 											function(j) {
 												var options = \'\';
 												for (var i = 0; i < getE("id_supplier").options.length; i++)
-													options += \'<option value="\' + getE("id_supplier").value + \'">\' + getE("id_supplier").options[i].innerHTML + \'</option>\';
+												{
+													if (getE("id_supplier").options[i].innerHTML == \'----------\')
+														options += \'<option disabled="disabled">----------</option>\';
+													else
+														options += \'<option value="\' +  getE("id_supplier").options[i].value + \'">\' + getE("id_supplier").options[i].innerHTML + \'</option>\';
+												}
 												for (var i = 0; i < j.length; i++)
 													options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 												$("select#id_supplier").html(options);
