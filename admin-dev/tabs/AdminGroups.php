@@ -27,6 +27,7 @@ class AdminGroups extends AdminTab
 		$this->_select = 'count(cg.id_customer) as nb';
 		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)';
 		$this->_group = 'GROUP BY a.id_group';
+		$this->_listSkipDelete = array(1);
 
  		$this->fieldsDisplay = array(
 		'id_group' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -37,6 +38,8 @@ class AdminGroups extends AdminTab
 
 		parent::__construct();
 	}
+	
+	
 
 	public function displayForm()
 	{

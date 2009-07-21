@@ -1202,7 +1202,7 @@ abstract class AdminTab
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
 						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>';
-					if ($this->delete)
+					if ($this->delete AND !in_array($id, $this->_listSkipDelete))
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?\');">
 						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete', __CLASS__, TRUE, FALSE).'" title="'.$this->l('Delete', __CLASS__, TRUE, FALSE).'" /></a>';
