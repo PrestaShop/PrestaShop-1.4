@@ -175,7 +175,7 @@ class ReferralProgram extends Module
 		$field = Tools::htmlentitiesDecodeUTF8(htmlspecialchars($field));
 		if (!$field)
 			return 0;
-		return ("\n\t\t".'<'.$key.'>'.$field.'</'.$key.'>');
+		return ("\n\t\t".'<'.$key.'><![CDATA['.$field.']]></'.$key.'>');
 	}
 
 	public function getContent()
