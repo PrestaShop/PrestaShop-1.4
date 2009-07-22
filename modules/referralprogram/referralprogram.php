@@ -272,48 +272,37 @@ class ReferralProgram extends Module
 				$this->_html .= $this->displayError($this->l('Your text is empty.'));
 		}
 
-		$this->_html .= '<br />
-			<script type="text/javascript" src="'._PS_JS_DIR_.'tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-			<script language="javascript" type="text/javascript">
-				tinyMCE.init({
-					language : "';
-		$iso = Language::getIsoById(intval($cookie->id_lang));
-		$this->_html .= ((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
-					mode : "textareas",
+		$this->_html .= '
+		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+		<script type="text/javascript">
+		function tinyMCEInit(element)
+		{
+			$().ready(function() {
+				$(element).tinymce({
+					// Location of TinyMCE script
+					script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
+					// General options
 					theme : "advanced",
-					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
-					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo, separator, link, unlink, separator, code",
-					theme_advanced_buttons3 : "",
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
 					theme_advanced_toolbar_location : "top",
 					theme_advanced_toolbar_align : "left",
-					plugins : "contextmenu, directionality, media, paste, preview, safari",
-					theme_advanced_buttons3_add : "ltr,rtl,pastetext,pasteword,selectall",
-					theme_advanced_buttons1_add : "media,preview",
-					paste_create_paragraphs : false,
-					paste_create_linebreaks : false,
-					paste_use_dialog : true,
-					paste_auto_cleanup_on_paste : true,
-					paste_convert_middot_lists : false,
-					paste_unindented_list_class : "unindentedList",
-					paste_convert_headers_to_strong : true,
-					paste_insert_word_content_callback : "convertWord",
-					plugin_preview_width : "500",
-					plugin_preview_height : "600",
-					entities : "",
-					entity_encoding : "named",
-					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],style[type|id]"
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : true,
+					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js"
 				});
-				function convertWord(type, content)
-				{
-					switch (type)
-					{
-						case "before":
-							break;
-						case "after":
-							break;
-					}
-					return content;
-				}
+			});
+		}
+		tinyMCEInit(\'textarea.rte\');
 		</script>
 		<script language="javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" enctype="multipart/form-data">
@@ -323,7 +312,7 @@ class ReferralProgram extends Module
 		{
 			$this->_html .= '
 			<div id="cpara_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-				<textarea cols="120" rows="25" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.($xml ? stripslashes(htmlspecialchars($xml->body->{'paragraph_'.$language['id_lang']})) : '').'</textarea>
+				<textarea class="rte" cols="120" rows="25" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.($xml ? stripslashes(htmlspecialchars($xml->body->{'paragraph_'.$language['id_lang']})) : '').'</textarea>
 			</div>';
 		}
 		$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'cpara', true);

@@ -105,12 +105,12 @@ class AdminManufacturers extends AdminTab
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 
-		echo '<br class="clear" /><br /><br /><label>'.$this->l('Short description:').' </label>
+		echo '<br class="clear" /><br /><br /><br /><br /><br /><br /><br /><br /><br /><label>'.$this->l('Short description:').' </label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;">
-								<textarea cols="38" rows="5" id="short_description_'.$language['id_lang'].'" name="short_description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'short_description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $defaultLanguage ? 'display:none;' : '').'">
+								<textarea class="rte" cols="48" rows="5" id="short_description_'.$language['id_lang'].'" name="short_description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'short_description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc2');
 		echo '</div>';
@@ -119,49 +119,46 @@ class AdminManufacturers extends AdminTab
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cdesc_'.$language['id_lang'].'" style="float: left;">
-								<textarea cols="38" rows="10" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+							<div id="cdesc_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $defaultLanguage ? 'display:none;' : '').'">
+								<textarea class="rte" cols="48" rows="10" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc');
 		echo '</div>';
 
-			echo '	
-			<script type="text/javascript" src="../js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-			<script type="text/javascript">
-				tinyMCE.init({
-					language : "';
-		$iso = Language::getIsoById(intval($cookie->id_lang));
-		echo ((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
-					mode : "textareas",
+		// TinyMCE
+		echo '
+		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+		<script type="text/javascript">
+		function tinyMCEInit(element)
+		{
+			$().ready(function() {
+				$(element).tinymce({
+					// Location of TinyMCE script
+					script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
+					// General options
 					theme : "advanced",
-					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
-					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo",
-					theme_advanced_buttons3 : "preview, code, tablecontrols, pastetext, pasteword, selectall, link, unlink, advhr",
-					paste_create_paragraphs : false,
-					paste_create_linebreaks : false,
-					paste_use_dialog : true,
-					paste_auto_cleanup_on_paste : true,
-					paste_convert_middot_lists : false,
-					paste_unindented_list_class : "unindentedList",
-					paste_convert_headers_to_strong : true,
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
 					theme_advanced_toolbar_location : "top",
 					theme_advanced_toolbar_align : "left",
-					plugins : "advhr, advlink, cleanup, paste, preview, table",
-					cleanup : true,
-					entities : "",
-					entity_encoding : "named",
-					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],object[classid|codebase|width|height],param[name|value],embed[src|quality|width|height|type|pluginspage|bgcolor|allowFullScreen],style[type|id]"
-				});';
-		foreach ($languages as $language)
-			if ($language['id_lang'] != $defaultLanguage)
-				echo '
-						getE(\'cdesc_'.$language['id_lang'].'\').style.display = \'none\';
-						getE(\'cdesc_'.$language['id_lang'].'\').rows = 38;
-						getE(\'cdesc_'.$language['id_lang'].'\').cols = 8;
-						getE(\'cdesc2_'.$language['id_lang'].'\').style.display = \'none\';
-						getE(\'cdesc2_'.$language['id_lang'].'\').rows = 5;
-						getE(\'cdesc2_'.$language['id_lang'].'\').cols = 8;';
-		echo '</script>';		
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : true,
+					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js"
+				});
+			});
+		}
+		tinyMCEInit(\'textarea.rte\');
+		</script>
+		';
 		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo:').' </label>
 				<div class="margin-form">
 					<input type="file" name="logo" />

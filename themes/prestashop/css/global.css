@@ -214,6 +214,11 @@ h1#logo {
 
 /* global RTE fields */
 
+div.rte,
+.mceContentBody {
+	text-align:left;
+}
+
 div.rte html, div.rte div, div.rte span, div.rte applet, div.rte object, div.rte iframe,
 div.rte h1, div.rte h2, div.rte h3, div.rte h4, div.rte h5, div.rte h6, div.rte p, div.rte blockquote, div.rte pre,
 div.rte a, div.rte abbr, div.rte acronym, div.rte address, div.rte big, div.rte cite, div.rte code,
@@ -221,7 +226,15 @@ div.rte del, div.rte dfn, div.rte em, div.rte font, div.rte img, div.rte ins, di
 div.rte small, div.rte strike, div.rte strong, div.rte sub, div.rte sup, div.rte tt, div.rte var,
 div.rte dl, div.rte dt, div.rte dd, div.rte ol, div.rte ul, div.rte li,
 div.rte fieldset, div.rte form, div.rte label, div.rte legend,
-div.rte table, div.rte caption, div.rte tbody, div.rte tfoot, div.rte thead, div.rte tr, div.rte th, div.rte td {
+div.rte table, div.rte caption, div.rte tbody, div.rte tfoot, div.rte thead, div.rte tr, div.rte th, div.rte td,
+.mceContentBody html, .mceContentBody div, .mceContentBody span, .mceContentBody applet, .mceContentBody object, .mceContentBody iframe,
+.mceContentBody h1, .mceContentBody h2, .mceContentBody h3, .mceContentBody h4, .mceContentBody h5, .mceContentBody h6, .mceContentBody p, .mceContentBody blockquote, .mceContentBody pre,
+.mceContentBody a, .mceContentBody abbr, .mceContentBody acronym, .mceContentBody address, .mceContentBody big, .mceContentBody cite, .mceContentBody code,
+.mceContentBody del, .mceContentBody dfn, .mceContentBody em, .mceContentBody font, .mceContentBody img, .mceContentBody ins, .mceContentBody kbd, .mceContentBody q, .mceContentBody s, .mceContentBody samp,
+.mceContentBody small, .mceContentBody strike, .mceContentBody strong, .mceContentBody sub, .mceContentBody sup, .mceContentBody tt, .mceContentBody var,
+.mceContentBody dl, .mceContentBody dt, .mceContentBody dd, .mceContentBody ol, .mceContentBody ul, .mceContentBody li,
+.mceContentBody fieldset, .mceContentBody form, .mceContentBody label, .mceContentBody legend,
+.mceContentBody table, .mceContentBody caption, .mceContentBody tbody, .mceContentBody tfoot, .mceContentBody thead, .mceContentBody tr, .mceContentBody th, .mceContentBody td {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -232,47 +245,53 @@ div.rte table, div.rte caption, div.rte tbody, div.rte tfoot, div.rte thead, div
 	font-family: inherit;
 	vertical-align: baseline;
 }
-div.rte h1, div.rte h2, div.rte h3, div.rte h4, div.rte h5, div.rte h6 {
+div.rte h1, div.rte h2, div.rte h3, div.rte h4, div.rte h5, div.rte h6,
+.mceContentBody h1, .mceContentBody h2, .mceContentBody h3, .mceContentBody h4, .mceContentBody h5, .mceContentBody h6 {
 	margin: 0.75em 0 0.3em 0;
 	color: #374853;
 }
-div.rte h1 {
+div.rte h1,
+.mceContentBody h1 {
 	font-size: 25px;
 	font-weight:bold;
 }
-div.rte h2 {
+div.rte h2,
+.mceContentBody h2 {
 	font-size: 20px;
 	background:none;
 	text-transform:none;
 }
-div.rte h3 {font-size: 16px;}
-div.rte h4 {font-size: 14px;}
-div.rte h5 {font-size: 12px;}
-div.rte h6 {font-size:  8px;}
+div.rte h3, .mceContentBody h3 {font-size: 16px;}
+div.rte h4, .mceContentBody h4 {font-size: 14px;}
+div.rte h5,.mceContentBody h5 {font-size: 12px;}
+div.rte h6, div.rte h6 {font-size:  8px;}
 
-div.rte ol, div.rte ul {
+div.rte ol, .mceContentBody ul,
+div.rte ol, .mceContentBody ul
+ {
 	padding-left: 2em;
 }
 
-div.rte ul {
+div.rte ul, .mceContentBody ul{
 	list-style-type:square;
 }
 
-div.rte strong {
+div.rte strong, .mceContentBody strong {
 	font-weight:bold;
 }
 
-div.rte em {
+div.rte em, .mceContentBody em {
 	font-style:italic;
 }
 
 /* tables still need 'cellspacing="0"' in the markup */
-div.rte table {
+div.rte table,.mceContentBody table {
 	border-collapse: separate;
 	border-spacing: 1px;
 	width:auto;
 }
-div.rte caption, div.rte th, div.rte td, div.rte table {
+div.rte caption, div.rte th, div.rte td, div.rte table,
+.mceContentBody caption, .mceContentBody th, .mceContentBody td, .mceContentBody table {
 	text-align: left;
 	font-weight: normal;
 	background:none;
@@ -281,13 +300,15 @@ div.rte caption, div.rte th, div.rte td, div.rte table {
 	text-align:center;
 }
 
-div.rte th {
+div.rte th,
+.mceContentBody th {
 	padding-left:1em;
 	padding-right:1em;
 	background:#e5e6e7;
 }
 
-div.rte p {
+div.rte p,
+.mceContentBody p {
 	margin:0.5em 0pt;
 	padding-left:0.7em;
 }

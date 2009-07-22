@@ -96,7 +96,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			echo '	<div id="ccontent_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<textarea cols="80" rows="30" id="content_'.$language['id_lang'].'" name="content_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'content', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+						<textarea class="rte" cols="80" rows="30" id="content_'.$language['id_lang'].'" name="content_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'content', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'ccontent');
 		echo '	</div><div class="clear space">&nbsp;</div>';
@@ -111,45 +111,38 @@ class AdminCMS extends AdminTab
 		
 		// TinyMCE
 		echo '
-			<script type="text/javascript" src="../js/tinymce/jscripts/tiny_mce/tiny_mce_gzip.js"></script>
-			<script type="text/javascript">
-				tinyMCE_GZ.init({
-					plugins : "contextmenu, directionality, media, paste, preview, safari",
-					themes : "advanced",
-					languages : "'.((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
-					disk_cache : false,
-					debug : false
-				});
-			</script>
-			<script type="text/javascript">
-				tinyMCE.init({
-					mode : "textareas",
-					plugins : "contextmenu, directionality, media, paste, preview, safari",
+		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+		<script type="text/javascript">
+		function tinyMCEInit(element)
+		{
+			$().ready(function() {
+				$(element).tinymce({
+					// Location of TinyMCE script
+					script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
+					// General options
 					theme : "advanced",
-					language : "'.((!file_exists(PS_ADMIN_DIR.'/../js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js')) ? 'en' : $iso).'",
-					elements : "nourlconvert",
-					convert_urls : false,
-					theme_advanced_buttons1 : "bold, italic, underline, fontselect, fontsizeselect",
-					theme_advanced_buttons2 : "forecolor, backcolor, separator, justifyleft, justifycenter, justifyright, justifyfull, separator, bullist, numlist, separator, undo, redo, separator, link, unlink, separator, code",
-					theme_advanced_buttons3 : "",
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
 					theme_advanced_toolbar_location : "top",
 					theme_advanced_toolbar_align : "left",
-					theme_advanced_buttons3_add : "ltr,rtl,pastetext,pasteword,selectall",
-					theme_advanced_buttons1_add : "media,preview",
-					paste_create_paragraphs : false,
-					paste_create_linebreaks : false,
-					paste_use_dialog : true,
-					paste_auto_cleanup_on_paste : true,
-					paste_convert_middot_lists : false,
-					paste_unindented_list_class : "unindentedList",
-					paste_convert_headers_to_strong : true,
-					plugin_preview_width : "500",
-					plugin_preview_height : "600",
-					entities : "",
-					entity_encoding : "named",
-					extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style],style[type|id]"
-				});';
-		echo '</script>';
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : true,
+					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js"
+				});
+			});
+		}
+		tinyMCEInit(\'textarea.rte\');
+		</script>
+		';
 	}
 
 	function postProcess()
