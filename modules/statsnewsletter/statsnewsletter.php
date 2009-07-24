@@ -51,13 +51,13 @@ class StatsNewsletter extends ModuleGraph
 	private function getTotals()
 	{
 		$result1 = Db::getInstance()->getRow('
-		SELECT COUNT(DISTINCT c.id_customer) as customers
+		SELECT COUNT(*) as customers
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance()->getRow('
-		SELECT COUNT(DISTINCT n.id) as visitors
+		SELECT COUNT(*) as visitors
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE n.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
 		return array('customers' => $result1['customers'], 'visitors' => $result2['visitors'], 'both' => $result1['customers'] + $result2['visitors']);
 	}
 		
@@ -73,9 +73,9 @@ class StatsNewsletter extends ModuleGraph
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`newsletter_date_add` BETWEEN ';
 		$this->_query2 = '
-		SELECT n.newsletter_date_add
+		SELECT n.date_add
 		FROM '._DB_PREFIX_.'newsletter n
-		WHERE n.`newsletter_date_add` BETWEEN ';
+		WHERE n.`date_add` BETWEEN ';
 		$this->setDateGraph($layers, true);
 	}
 	
@@ -87,7 +87,7 @@ class StatsNewsletter extends ModuleGraph
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 5, 2))] += 1;
 		if ($result2)
 			foreach ($result2 AS $row)
-				$this->_values[1][intval(substr($row['newsletter_date_add'], 5, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 5, 2))] += 1;
 		foreach ($this->_values[2] as $key => $zerofill)
 			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
 	}
@@ -100,7 +100,7 @@ class StatsNewsletter extends ModuleGraph
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 8, 2))] += 1;
 		if ($result2)
 			foreach ($result2 AS $row)
-				$this->_values[1][intval(substr($row['newsletter_date_add'], 8, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 8, 2))] += 1;
 		foreach ($this->_values[2] as $key => $zerofill)
 			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
 	}
@@ -113,7 +113,7 @@ class StatsNewsletter extends ModuleGraph
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 11, 2))] += 1;
 		if ($result2)
 			foreach ($result2 AS $row)
-				$this->_values[1][intval(substr($row['newsletter_date_add'], 11, 2))] += 1;
+				$this->_values[1][intval(substr($row['date_add'], 11, 2))] += 1;
 		foreach ($this->_values[2] as $key => $zerofill)
 			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
 	}
