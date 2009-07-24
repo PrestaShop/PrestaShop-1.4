@@ -535,7 +535,7 @@ abstract class AdminTab
 									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&updatescene&token='.$token);
 								if (Tools::getValue('id_parent', 1) AND Tools::getValue('submitAdd'.$this->table.'AndBack'))
 									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.intval(Tools::getValue('id_parent', 1)).'&conf=4&token='.$token);
-								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&update'.$this->table.'&token='.$token);
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4'.$this->table.'&token='.$token);
 								
 							}
 						}
@@ -559,7 +559,7 @@ abstract class AdminTab
 						{
 							if ($id_parent = intval(Tools::getValue('id_parent', 1)) AND Tools::getValue('submitAdd'.$this->table.'AndBack'))
 								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$id_parent.'&conf=3&token='.$token);
-							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$token);
+							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3'.$this->table.'&token='.$token);
 						}
 					}
 					else
