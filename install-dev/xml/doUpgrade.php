@@ -181,10 +181,6 @@ foreach($sqlContent as $query)
 	}
 }
 
-// Flags copy
-if(!$languagesId = Db::getInstance()->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang`'))
-	$error['infosLanguages'] = '11';
-
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");

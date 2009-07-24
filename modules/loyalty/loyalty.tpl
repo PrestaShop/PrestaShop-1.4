@@ -31,7 +31,7 @@
 		<tbody>
 		{foreach from=$orders item='order'}
 			<tr class="alternate_item">
-				<td class="history_link bold">{l s='#'}{$order.id|string_format:"%06d"}</td>
+				<td class="history_link bold">{l s='#' mod='loyalty'}{$order.id|string_format:"%06d"}</td>
 				<td class="history_date">{dateFormat date=$order.date full=1}</td>
 				<td class="history_method">{$order.points|intval}</td>
 				<td class="history_method">{$order.state|escape:'htmlall':'UTF-8'}</td>
