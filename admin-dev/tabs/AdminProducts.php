@@ -784,23 +784,23 @@ class AdminProducts extends AdminTab
 		{
 			if (!Tools::getValue('virtual_product_name'))
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('display filename').'</b> '.$this->l('is required');
+				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('display filename').'</b> '.Tools::displayError('is required');
 				return false;
 			}
 			if (!Tools::getValue('virtual_product_nb_days'))
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('number of days').'</b> '.$this->l('is required');
+				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('number of days').'</b> '.Tools::displayError('is required');
 				return false;
 			}
 			if (Tools::getValue('virtual_product_expiration_date') AND !Validate::isDate(Tools::getValue('virtual_product_expiration_date')))
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('expiration date').'</b> '.$this->l('is not valid');
+				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('expiration date').'</b> '.Tools::displayError('is not valid');
 				return false;
 			}
 			// The oos behavior MUST be "Deny orders" for virtual products
 			if (Tools::getValue('out_of_stock') != 0)
 			{
-				$this->_errors[] = $this->l('The "when out of stock" behavior selection must be "deny order" for virtual products');
+				$this->_errors[] = Tools::displayError('The "when out of stock" behavior selection must be "deny order" for virtual products');
 				return false;
 			}
 
