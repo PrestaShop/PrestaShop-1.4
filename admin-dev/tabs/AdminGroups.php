@@ -38,8 +38,6 @@ class AdminGroups extends AdminTab
 
 		parent::__construct();
 	}
-	
-	
 
 	public function displayForm()
 	{
@@ -64,12 +62,13 @@ class AdminGroups extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
-		echo '
+				$reduction = htmlentities($this->getFieldValue($obj, 'reduction'), ENT_COMPAT, 'UTF-8');
+				echo '
 				</div>
 				<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Reduction:').' </label>
 				<div class="margin-form">
-					<input type="text" size="5" name="reduction" value="'.htmlentities($this->getFieldValue($obj, 'reduction'), ENT_COMPAT, 'UTF-8').'" /> '.$this->l('%').'
+					<input type="text" size="5" name="reduction" value="'.($reduction ? $reduction : '0').'" /> '.$this->l('%').'
 					<p>'.$this->l('Will automatically apply this value as a reduction on ALL shop\'s products for this group\'s members').'</p>
 				</div>
 				<div class="clear">&nbsp;</div>
@@ -80,7 +79,7 @@ class AdminGroups extends AdminTab
 			</fieldset>
 		</form>';
 	}
-	
+
 	public function viewgroup()
 	{
 		global $cookie;
@@ -98,7 +97,7 @@ class AdminGroups extends AdminTab
 			'.$this->l('Reduction:').' '.floatval($obj->reduction).$this->l('%').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
-		
+
 		$customers = $obj->getCustomers();
 		$this->fieldsDisplay = (array(
 			'ID' => array('title' => $this->l('ID')),
@@ -111,7 +110,7 @@ class AdminGroups extends AdminTab
 			'status' => array('title' => $this->l('Status')),
 			'actions' => array('title' => $this->l('Actions'))
 		));
-		
+
 		if (isset($customers) AND !empty($customers) AND $nbCustomers = sizeof($customers))
 		{
 			echo '<h2>'.$this->l('Customers member of this group').' ('.$nbCustomers.')</h2>
@@ -148,7 +147,7 @@ class AdminGroups extends AdminTab
 			echo '</table>';
 		}
 	}
-	
+
 	public function postProcess()
 	{
 		global $currentIndex;
