@@ -419,7 +419,12 @@ class		Order extends ObjectModel
 	{
 		return sizeof($this->getHistory(intval($this->id_lang), _PS_OS_PAYMENT_));
 	}
-	
+
+	public function hasBeenShipped()
+	{
+		return sizeof($this->getHistory(intval($this->id_lang), _PS_OS_SHIPPING_));
+	}
+
 	public function isInPreparation()
 	{
 		return sizeof($this->getHistory(intval($this->id_lang), _PS_OS_PREPARATION_));

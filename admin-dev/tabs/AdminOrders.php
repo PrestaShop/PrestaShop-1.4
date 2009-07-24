@@ -65,6 +65,8 @@ class AdminOrders extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{
+				if (!$order->hasBeenShipped())
+					die(Tools::displayError('The shipping number can only be set once the order has been shipped!'));
 				$_GET['view'.$this->table] = true;
 				if (!$shipping_number = pSQL(Tools::getValue('shipping_number')))
 					$this->_errors[] = Tools::displayError('Invalid new order status!');
@@ -538,7 +540,7 @@ class AdminOrders extends AdminTab
 			}
 			
 			/* Display shipping number field */
-			if ($carrier->url)
+			if ($carrier->url && $order->hasBeenShipped())
 			 echo '
 				<form action="'.$currentIndex.'&view'.$this->table.'&token='.$this->token.'" method="post" style="margin-top:10px;">
 					<input type="text" name="shipping_number" value="'. $order->shipping_number.'" />
