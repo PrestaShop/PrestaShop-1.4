@@ -101,6 +101,7 @@ class AdminShipping extends AdminTab
 
 						/* Update delivery prices */
 						$carrier->addDeliveryPrice($priceList);
+						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
 					}
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating fees (cannot load carrier object)');

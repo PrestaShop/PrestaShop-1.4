@@ -42,6 +42,7 @@ class Editorial extends Module
 	{
 		/* display the module name */
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
+		$errors = '';
 
 		/* update the editorial xml */
 		if (isset($_POST['submitUpdate']))
@@ -78,25 +79,26 @@ class Editorial extends Module
 			if ($fd = @fopen(dirname(__FILE__).'/editorial.xml', 'w'))
 			{
 				if (!@fwrite($fd, $newXml))
-					$this->_html .= $this->displayError($this->l('Unable to write to the editor file.'));
+					$errors .= $this->displayError($this->l('Unable to write to the editor file.'));
 				if (!@fclose($fd))
-					$this->_html .= $this->displayError($this->l('Can\'t close the editor file.'));
+					$errors .= $this->displayError($this->l('Can\'t close the editor file.'));
 			}
 			else
-				$this->_html .= $this->displayError($this->l('Unable to update the editor file.<br />Please check the editor file\'s writing permissions.'));
+				$errors .= $this->displayError($this->l('Unable to update the editor file.<br />Please check the editor file\'s writing permissions.'));
 
 			/* upload the image */
 			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
 			{
 				Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
-					$this->_html .= $error;
+					$errors .= $error;
 				elseif (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['body_homepage_logo']['tmp_name'], $tmpName))
 					return false;
 				elseif (!imageResize($tmpName, dirname(__FILE__).'/homepage_logo.jpg'))
-					$this->_html .= $this->displayError($this->l('An error occurred during the image upload.'));
+					$errors .= $this->displayError($this->l('An error occurred during the image upload.'));
 				unlink($tmpName);
 			}
+			$this->_html .= $errors == '' ? $this->displayConfirmation('Settings updated successfully') : $errors;
 		}
 
 		/* display the editorial's form */
