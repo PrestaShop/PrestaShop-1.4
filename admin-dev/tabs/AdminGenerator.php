@@ -189,7 +189,7 @@ class AdminGenerator extends AdminTab
 		$tab = array();
 
 		// Directories
-		$tab['Directories'] = array('classes/', 'config/', 'download/', 'mails/', 'modules/', 'themes/', 'translations/', 'tools/');
+		$tab['Directories'] = array('classes/', 'config/', 'download/', 'mails/', 'modules/', 'translations/', 'tools/');
 
 		// Files
 		$tab['Files'] = array('addresses.php', 'address.php', 'authentication.php', 'cart.php', 'contact-form.php', 'discount.php', 'footer.php',
