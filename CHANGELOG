@@ -5,6 +5,47 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.0.7 - 1167 (2009-24-07)   #
+####################################
+
+	Improved/changed features :
+
+	[*] TR : updated FR translation for BO
+	[*] BO : Fixed translation in AdminCategories.php
+	[*] BO : Confirmation messages added
+	[*] TR : updated FR translation for BO
+	[*] BO : Product stock management preferences made clearer
+	[*] BO : fixed a default value to reduction in AdminGroups
+	[*] BO : adding new tinyMCE 3.2.5
+	[*] BO : remove old tinyMCE
+	[*] BO : added new button to AdminCategories
+
+	Fixed bugs :
+
+	[-] BO: fixed bugs with redirections on Product/Categories creation
+	[-] BO : Fix bug on saving an object
+	[-] BO : some BO icons & minor texts fixed
+	[-] MO : statsbestcustomers take now more than 1 order into account
+	[-] BO : Feature value tab icon display fixed
+	[-] BO : Virtual product error messages fixed
+	[-] MO : visitors registration to the newsletter integrated into the stats
+	[-] MO : Loyalty module text fixed
+	[-] BO : Order shipping number fixed (was allowed before having selected the "shipped" status)
+	[-] FO : Carrier name fixed (when being the shop's one)
+	[-] MO : Blocklink & productcomments modules' SQL keys added/fixed
+	[-] MO : refferal program rules are editable now
+	[-] MO : refferal program rules are editable now
+	[-] BO : fixed duplicate bug on non attribute product (#2309)
+	[-] BO : fixed edit manufacturer/supplier in product page (#2385)
+	[-] BO : cannot delete default group anymore (#2420)
+	[-] PHP 5.3 compatibility
+	[-] MO : fixed bug #2305 (ajax cart vouchers)
+	[-] MO : fixed bug #2299 (canonical URL)
+	[-] FO : fixed bug #2294
+	[-] FO : ':' were forbidden in Validate::isUrl(), you couldn't change your port!
+	[-] FO : Fix bug on invoice ul when page reloads with cache
+
+####################################
 #   v1.2.0.6 - 1131 (2009-15-07)   #
 ####################################
 
