@@ -68,6 +68,13 @@ class		Carrier extends ObjectModel
 		return $fields;
 	}
 
+	public function __construct($id = NULL, $id_lang = NULL)
+	{
+		parent::__construct($id, $id_lang);
+		if ($this->name == '0')
+			$this->name = Configuration::get('PS_SHOP_NAME');
+	}
+
 	/**
 	* Check then return multilingual fields for database interaction
 	*
