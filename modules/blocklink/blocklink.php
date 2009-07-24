@@ -10,7 +10,7 @@ class BlockLink extends Module
 	{
 	 	$this->name = 'blocklink';
 	 	$this->tab = 'Blocks';
-	 	$this->version = '1.3';
+	 	$this->version = '1.4';
 
 	 	parent::__construct();
 
@@ -26,7 +26,7 @@ class BlockLink extends Module
 		$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink (`id_link` int(2) NOT NULL AUTO_INCREMENT, `url` varchar(255) NOT NULL, new_window TINYINT(1) NOT NULL, PRIMARY KEY(`id_link`)) ENGINE=MyISAM default CHARSET=utf8';
 	 	if (!Db::getInstance()->Execute($query))
 	 		return false;
-	 	$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink_lang (`id_link` int(2) NOT NULL, `id_lang` int(2) NOT NULL, `text` varchar(64) NOT NULL) ENGINE=MyISAM default CHARSET=utf8';
+	 	$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink_lang (`id_link` int(2) NOT NULL, `id_lang` int(2) NOT NULL, `text` varchar(64) NOT NULL, PRIMARY KEY(`id_link`, `id_lang`)) ENGINE=MyISAM default CHARSET=utf8';
 	 	if (!Db::getInstance()->Execute($query))
 	 		return false;
 	 	return (Configuration::updateValue('PS_BLOCKLINK_TITLE', array('1' => 'Block link', '2' => 'Bloc lien')) AND Configuration::updateValue('PS_BLOCKLINK_TITLE', ''));
@@ -53,7 +53,7 @@ class BlockLink extends Module
 			'title' => Configuration::get('PS_BLOCKLINK_TITLE', $cookie->id_lang),
 			'url' => Configuration::get('PS_BLOCKLINK_URL'),
 			'lang' => 'text_'.$cookie->id_lang
-));
+		));
 	 	if (!$links)
 			return false;
 		return $this->display(__FILE__, 'blocklink.tpl');
