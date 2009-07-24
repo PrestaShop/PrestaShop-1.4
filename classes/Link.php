@@ -121,7 +121,10 @@ class Link
 	  */
 	public function getLanguageLink($id_lang)
 	{
-		return $this->getUrlWith('id_lang', intval($id_lang));
+		if ($this->allow == 1)
+			return _PS_BASE_URL_.__PS_BASE_URI__.'lang-'.Language::getIsoById($id_lang).'/'.substr(preg_replace('#/lang-([a-z]{2})/#', '/', $_SERVER['REQUEST_URI']), strlen(__PS_BASE_URI__));
+		else
+			return $this->getUrlWith('id_lang', intval($id_lang));
 	}
 	
 	public function getUrlWith($key, $val)

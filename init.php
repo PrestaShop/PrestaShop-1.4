@@ -22,6 +22,9 @@ $page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_n
 $cookie = new Cookie('ps');
 
 // Switch language if needed and init cookie language
+if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = intval(Language::getIdByIso($iso))))
+	$_GET['id_lang'] = $id_lang;
+	
 Tools::switchLanguage();
 Tools::setCookieLanguage();
 
