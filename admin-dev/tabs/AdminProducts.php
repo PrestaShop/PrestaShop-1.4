@@ -122,14 +122,13 @@ class AdminProducts extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $currentIndex;
-
 		/* Add a new product */
-		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndBack'))
+		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay'))
 		{
 			if ($this->tabAccess['add'] === '1')
-				$this->submitAddproduct($token, Tools::isSubmit('submitAddproductAndBack'));
+				$this->submitAddproduct($token);
 			elseif (Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1')
-				$this->submitAddproduct($token, Tools::isSubmit('submitAddproductAndBack'));
+				$this->submitAddproduct($token);
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
@@ -627,7 +626,7 @@ class AdminProducts extends AdminTab
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function submitAddproduct($token = NULL, $backToCategory = false)
+	public function submitAddproduct($token = NULL)
 	{
 		global $currentIndex;
 
@@ -721,10 +720,12 @@ class AdminProducts extends AdminTab
 							Hook::updateProduct($object);
 							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
-								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&token='.($token ? $token : $this->token));
-							if ($backToCategory)
-								Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
-							Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=4&tabs='.intval(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
+								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&edit='.strval(Tools::getValue('productCreated')).'&id_image='.$id_image.'&imageresize&toconf=4&submitAddAndStay='.((Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR Tools::getValue('productCreated') == 'on') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
+							// Save and stay on same form
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true))
+								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=4&tabs='.intval(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
+							// Default behavior (save and back)
+							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
 						}
 					}
 					else
@@ -756,10 +757,12 @@ class AdminProducts extends AdminTab
 							Hook::addProduct($object);
 							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
-								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&token='.($token ? $token : $this->token));
-							if ($backToCategory)
-								Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
-							Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=3&token='.($token ? $token : $this->token));
+								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&toconf=3&submitAddAndStay='.(Tools::isSubmit('submitAdd'.$this->table.'AndStay') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
+							// Save and stay on same form
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
+								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=3&tabs='.intval(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
+							// Default behavior (save and back)
+							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=3&token='.($token ? $token : $this->token));
 						}
 					}
 					else
@@ -784,23 +787,23 @@ class AdminProducts extends AdminTab
 		{
 			if (!Tools::getValue('virtual_product_name'))
 			{
-				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('display filename').'</b> '.Tools::displayError('is required');
+				$this->_errors[] = $this->l('the field').' <b>'.$this->l('display filename').'</b> '.$this->l('is required');
 				return false;
 			}
 			if (!Tools::getValue('virtual_product_nb_days'))
 			{
-				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('number of days').'</b> '.Tools::displayError('is required');
+				$this->_errors[] = $this->l('the field').' <b>'.$this->l('number of days').'</b> '.$this->l('is required');
 				return false;
 			}
 			if (Tools::getValue('virtual_product_expiration_date') AND !Validate::isDate(Tools::getValue('virtual_product_expiration_date')))
 			{
-				$this->_errors[] = Tools::displayError('the field').' <b>'.Tools::displayError('expiration date').'</b> '.Tools::displayError('is not valid');
+				$this->_errors[] = $this->l('the field').' <b>'.$this->l('expiration date').'</b> '.$this->l('is not valid');
 				return false;
 			}
 			// The oos behavior MUST be "Deny orders" for virtual products
 			if (Tools::getValue('out_of_stock') != 0)
 			{
-				$this->_errors[] = Tools::displayError('The "when out of stock" behavior selection must be "deny order" for virtual products');
+				$this->_errors[] = $this->l('The "when out of stock" behavior selection must be "deny order" for virtual products');
 				return false;
 			}
 
@@ -1950,8 +1953,8 @@ class AdminProducts extends AdminTab
 					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:730px;"></td></tr>
 					<tr>
 						<td colspan="2" style="text-align:center;">
-							<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;
-							'.(Tools::isSubmit('id_category') ? '<input type="submit" value="'.$this->l('Save and back to category').'" name="submitAdd'.$this->table.'AndBack" class="button" />' : '').'</td>
+							'.(Tools::isSubmit('id_category') ? '<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />' : '').'
+							&nbsp;<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" /></td>
 					</tr>
 				</table>
 			</div>
@@ -1989,7 +1992,6 @@ class AdminProducts extends AdminTab
 			tinyMCEInit(\'textarea.rte\');
 			toggleVirtualProduct(getE(\'is_virtual_good\'));
 			</script>
-		-->
 		';
 	}
 
@@ -2046,20 +2048,36 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('Thumbnails resize method:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="resizer">
-								<option value="auto">'.$this->l('Automatic').'</option>
-								<option value="man">'.$this->l('Manual').'</option>
+								<option value="auto"'.(Tools::getValue('resizer', 'auto') == 'auto' ? ' selected="selected"' : '').'>'.$this->l('Automatic').'</option>
+								<option value="man"'.(Tools::getValue('resizer', 'auto') == 'man' ? ' selected="selected"' : '').'>'.$this->l('Manual').'</option>
 							</select>
 							<p>'.$this->l('Method you want to use to generate resized thumbnails').'</p>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2" style="text-align:center;">
-							<input type="submit" value="'.$this->l('   Save image   ').'" name="submitAdd'.$this->table.'" class="button" />
-							'.(isset($_POST['id_image']) ? '<input type="hidden" name="id_image" value="'.intval($_POST['id_image']).'" />' : '').'
+						<td colspan="2" style="text-align:center;">';
+					$images = Image::getImages(intval($cookie->id_lang), $obj->id);
+					$imagesTotal = Image::getImagesTotal($obj->id);
+					
+							if (isset($obj->id) AND sizeof($images))
+							{
+								echo '<input type="submit" value="'.$this->l('   Save image   ').'" name="submitAdd'.$this->table.'" class="button" />';
+								echo '<input type="hidden" value="on" name="productCreated" /><br /><br />';
+							}
+							(isset($_POST['id_image']) ? '<input type="hidden" name="id_image" value="'.intval($_POST['id_image']).'" />' : '').'
 						</td>
 					</tr>
-					<tr><td colspan="2"><hr style="width:730px;"></td></tr>
-					<tr>
+					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:730px;"></td></tr>';
+					if (!sizeof($images) OR !isset($obj->id))
+						echo '<tr>
+						<td colspan="2" style="text-align:center;">
+							<input type="hidden" value="off" name="productCreated" />
+							'.(Tools::isSubmit('id_category') ? '<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />' : '').'
+							&nbsp;<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" /></td>
+					</tr>';
+					else
+					{
+					echo '<tr>
 						<td colspan="2">
 							<table cellspacing="0" cellpadding="0" class="table">
 							<tr>
@@ -2070,8 +2088,6 @@ class AdminProducts extends AdminTab
 								<th>'.$this->l('Action').'</th>
 							</tr>';
 
-			$images = Image::getImages(intval($cookie->id_lang), $obj->id);
-			$imagesTotal = Image::getImagesTotal($obj->id);
 			foreach ($images AS $k => $image)
 			{
 				echo '
@@ -2107,12 +2123,14 @@ class AdminProducts extends AdminTab
 					</td>
 				</tr>';
 			}
+			}
 			echo '
 							</table>
 						</td>
 					</tr>
 				</table>
-			</div>
+			</div>';
+			echo '
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
 			<script type="text/javascript">
 				var attrs = new Array();

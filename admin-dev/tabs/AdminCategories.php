@@ -77,12 +77,6 @@ class AdminCategories extends AdminTab
 	{
 		global $currentIndex, $cookie;
 
-		if ((($conf = intval(Tools::getValue('conf'))) == 3 OR $conf == 4) AND !Tools::getValue('id_category'))
-		{
-			$category = new Category(intval(Tools::getValue('id_category')));
-			Tools::redirectLink(Link::getUrlWith('id_category', $category->id_parent).'&conf='.$conf.'&token='.($token!=NULL ? $token : $this->token));
-		}
-
 		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'name' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
 		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCatalog&add'.$this->table.'&id_parent='.Tools::getValue('id_category').'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new subcategory').'</a>
@@ -152,7 +146,7 @@ class AdminCategories extends AdminTab
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token!=NULL ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width2"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('Category').'</legend>
+			<fieldset class="width2" style="width:520px;"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('Category').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
@@ -184,7 +178,7 @@ class AdminCategories extends AdminTab
 		foreach ($languages as $language)
 			echo '
 					<div id="cdescription_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<textarea name="description_'.$language['id_lang'].'" rows="3" cols="30">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+						<textarea name="description_'.$language['id_lang'].'" rows="5" cols="40">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdescription');
 		echo '		<div class="clear"></div>
@@ -266,9 +260,8 @@ class AdminCategories extends AdminTab
 				echo '
 				</div>
 				<div class="margin-form">
-					<input type="submit" class="button" name="submitAdd'.$this->table.'AndBack" value="'.$this->l('Save and back to category').'"/><br /><br />
-					<input type="hidden" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'"/>
-					<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />		
+					<input type="submit" class="button" name="submitAdd'.$this->table.'" value="'.$this->l('Save').'"/>
+					&nbsp;<input type="submit" value="'.$this->l('Save and back to parent category').'" name="submitAdd'.$this->table.'AndBackToParent" class="button" />
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
@@ -276,5 +269,3 @@ class AdminCategories extends AdminTab
 		<div class="clear"></div>';
 	}
 }
-
-?>
