@@ -62,7 +62,7 @@ class AdminRangePrice extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Prices ranges').'</legend>
+			<fieldset><legend><img src="../img/t/AdminRangePrice.gif" />'.$this->l('Price ranges').'</legend>
 				<label>'.$this->l('Carrier:').'</label>
 				<div class="margin-form">
 					<select name="id_carrier">';

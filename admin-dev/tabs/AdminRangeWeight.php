@@ -61,7 +61,7 @@ class AdminRangeWeight extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Weights ranges').'</legend>
+			<fieldset><legend><img src="../img/t/AdminRangeWeight.gif" />'.$this->l('Weight ranges').'</legend>
 				<label>'.$this->l('Carrier:').'</label>
 				<div class="margin-form">
 					<select name="id_carrier">';
