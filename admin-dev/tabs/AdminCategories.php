@@ -267,8 +267,8 @@ class AdminCategories extends AdminTab
 				</div>
 				<div class="margin-form">
 					<input type="submit" class="button" name="submitAdd'.$this->table.'AndBack" value="'.$this->l('Save and back to category').'"/><br /><br />
-					<input type="hidden" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'"/>
-					<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'" class="button" />		
+					<input type="hidden" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'"/>
+					<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />		
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
