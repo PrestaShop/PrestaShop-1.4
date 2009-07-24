@@ -627,3 +627,18 @@ function setCancelQuantity(itself, id_order_detail, quantity)
 {
 	$('#cancelQuantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
 }
+
+function stockManagementActivationAuthorization()
+{
+	if (getE('PS_STOCK_MANAGEMENT_on').checked)
+	{
+		getE('PS_ORDER_OUT_OF_STOCK_on').readOnly = false;
+		getE('PS_ORDER_OUT_OF_STOCK_off').readOnly = false;
+	}
+	else
+	{
+		getE('PS_ORDER_OUT_OF_STOCK_on').checked = true;
+		getE('PS_ORDER_OUT_OF_STOCK_on').readOnly = true;
+		getE('PS_ORDER_OUT_OF_STOCK_off').readOnly = true;
+	}
+}
