@@ -260,8 +260,8 @@ class AdminCategories extends AdminTab
 				echo '
 				</div>
 				<div class="margin-form">
-					<input type="submit" class="button" name="submitAdd'.$this->table.'" value="'.$this->l('Save').'"/>
-					&nbsp;<input type="submit" value="'.$this->l('Save and back to parent category').'" name="submitAdd'.$this->table.'AndBackToParent" class="button" />
+					<input type="submit" value="'.$this->l('Save and back to parent category').'" name="submitAdd'.$this->table.'AndBackToParent" class="button" />
+					&nbsp;<input type="submit" class="button" name="submitAdd'.$this->table.'" value="'.$this->l('Save').'"/>
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
