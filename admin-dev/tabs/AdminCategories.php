@@ -233,7 +233,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Groups access:').' </label>
 				<div class="margin-form">';
-					$groups = Group::getGroups($defaultLanguage);
+					$groups = Group::getGroups(intval($cookie->id_lang));
 					if (sizeof($groups))
 					{
 						echo '
