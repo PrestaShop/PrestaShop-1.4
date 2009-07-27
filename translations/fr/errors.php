@@ -101,6 +101,7 @@ $_ERRORS['71f4f008985ea6abc73e89a668e15197'] = 'Cet attribut existe déjà.';
 $_ERRORS['e22a6ea51eb74bee7acaa4acf2846c7b'] = 'Cette combinaison existe déjà';
 $_ERRORS['1eabf5338ecfa6114719e9239766134f'] = 'Ce fichier doit être éditable :';
 $_ERRORS['3c29ac1eddb8aadac1b3072af3c83a15'] = 'Ce fichier n\'existe plus.';
+$_ERRORS['e8fcf90b386196c374b33272a7d11f87'] = 'Ce module est désactivé';
 $_ERRORS['a88b277fbf02198a708ea65876dc2e32'] = 'Ce produit n\'existe pas dans notre boutique.';
 $_ERRORS['38d5595927b80b331239ef904341b07c'] = 'Ce produit a été supprimé.';
 $_ERRORS['4eb9ec8ac71ad17fdc99b5371ace9f6e'] = 'Impossible de créer une sauvegarde';
