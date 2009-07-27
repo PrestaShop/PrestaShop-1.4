@@ -221,7 +221,7 @@ class AdminReferrers extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="20" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
-				<label>'.$this->l('passwd:').'</label>
+				<label>'.$this->l('Password').'</label>
 				<div class="margin-form">
 					<input type="password" name="passwd" value="" />
 					<p>'.$this->l('Leave blank if no change').'</p>
@@ -252,45 +252,43 @@ class AdminReferrers extends AdminTab
 			<br class="clear" />
 			<fieldset class="width4"><legend onclick="openCloseLayer(\'tracking_help\')" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
 			<div id="tracking_help" style="display: none;">
-			'.utf8_encode('
-				<p>Définitions :</p>
+				<p>'.$this->l('Definitions:').'</p>
 				<ul style="list-style: disc; margin-left: 20px;">
 					<li>
-						les champs <b>http_referer</b> représentent le site d\'où vient le visiteur.<br />
-						Par exemple, les visiteurs qui viennent de Google sur votre boutique auront un http_referer qui pourra ressembler à celui-ci : <a href="http://www.google.fr/search?q=prestashop" style="font-style: italic;">http://www.google.fr/search?q=prestashop</a>.<br />
-						Si le visiteur vient directement sur le site (en tapant l\'adresse ou depuis ses favoris par exemple), le http_referer sera vide.<br />
-						Donc pour filtrer tous les visiteurs provenant de Google, il vous suffit de taper "%google%" dans ce champ, ou encore "%google.fr%" si vous ne voulez que les visiteurs provenant de Google France.
+						'.$this->l('The field `http_referer` is the website from which your customers come.').'<br />
+						'.$this->l('For example, visitors coming from Google will have a `http_referer` like this one: "http://www.google.com/search?q=prestashop".').'<br />
+						'.$this->l('If the visitor come directly (by typing the URL of your shop or by using its bookmarks for example), `http_referer` will be empty.').'<br />
+						'.$this->l('So if you want all the visitors coming from google, you can type "%google%" in this field, or "%google.fr%" if you want the visitors coming from Google France only.').'<br />
 					</li>
 					<br />
 					<li>
-						les champs <b>request_uri</b> représentent l\'URL par laquelle le visiteur arrive sur votre boutique.<br />
-						Si il accède directement à une fiche produit, cette adresse sera par exemple <a href="'.$uri.'music-ipods/1-ipod-nano.html" style="font-style: italic;">'.$uri.'music-ipods/1-ipod-nano.html</a>.<br />
-						L\'intérêt est que vous pouvez rajouter des indicateurs dans les liens qui pointent vers votre site. Ainsi, si vous postez sur le forum prestashop un lien <a href="'.$uri.'index.php?prestashop" style="font-style: italic;">'.$uri.'index.php?prestashop</a> et que vous entrez dans le champ request_uri le mot "%prestashop", vous pourrez filtrer tous les visiteurs provenant du forum.
-						Cette méthode est plus fiable que le filtre par http_referer, mais elle comporte des dangers. Si un moteur de recherche référence une page contenant le lien en question, alors il le proposera dans ses résultats de recherche, et vous n\'aurez plus alors seulement les visiteurs du forum mais également ceux qui viennent de ce moteur par ce lien.
+						'.$this->l('The field `request_uri` is the URL by which the customer come to your website.').'<br />
+						'.$this->l('For example, if the visitor access to a product page, this URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
+						'.$this->l('This is interesting because you can add some tags or token in the links pointing to your website. For exemple, you can post a link').' "'.$uri.'index.php?prestashop" '.$this->l('in the forum and get statistics by entering "%prestashop" in the field `request_uri`. You will get all the visitors coming from the forum.').'
+						'.$this->l('This method is more reliable than the `http_referer` one, but there is a danger: if a search engine read a page with your link, then it will be displayed in its results and you will have not only the forum visitors, but also the ones from the search engine.').'
 					</li>
 					<br />
 					<li>
-						les champs <b>include</b> indiquent ce qui doit être inclu dans l\'URL.
+						'.$this->l('The fields `include` indicate what has to be included in the URL.').'
 					</li>
 					<br />
 					<li>
-						les champs <b>exclude</b> indiquent ce qui ne doit pas être inclu dans l\'URL.
+						'.$this->l('The fields `exclude` indicate what has to be excluded from the URL.').'
 					</li>
 					<br />
 					<li>
-						En mode simple, vous avez la possibilité d\'utiliser des <b>caractères génériques</b>, c\'est-à-dire qui peuvent remplacer n\'importe quels autres caractères :
+						'.$this->l('When using the simple mode, you can use some generic characters which can replace any characters:').'
 						<ul>
-							<li>"_" remplacera un seul caractère. Pour utiliser un vrai "_", vous devez taper "\\\\_".</li>
-							<li>"%" remplacera n\'importe quel nombre de caractères. Pour utiliser un vrai "%", vous devez taper "\\\\%".</li>
+							<li>'.$this->l('"_" will replace one character. If you want to use the real "_", you should type "\\\\_".').'</li>
+							<li>'.$this->l('"%" will replace any number of characters. If you want to use the real "%", you should type "\\\\%".').'</li>
 						</ul>
 					</li>
 					<br />
 					<li>
-						'.$this->l('The simple mode uses the MySQL "LIKE", but for a higher potency you can use').' <b>'.$this->l('MySQL regular expressions').'</b>.
+						'.$this->l('The simple mode uses the MySQL "LIKE", but for a higher potency you can use MySQL regular expressions.').'
 						<a href="http://dev.mysql.com/doc/refman/5.0/en/regexp.html" target="_blank" style="font-style: italic;">'.$this->l('Take a look to the documentation for more details...').'</a>
 					</li>
 				</ul>
-			').'
 			</div>
 			</fieldset>
 			<br class="clear" />

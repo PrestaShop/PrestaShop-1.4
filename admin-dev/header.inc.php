@@ -69,7 +69,7 @@ require_once(dirname(__FILE__).'/init.php');
 				if (sizeof($languages) != 1)
 					foreach ($languages AS $language)
 					{
-						echo '<a href="'.$link->getLanguageLink($language['id_lang'], $language['name']).'&adminlang=1"><img src="'._PS_IMG_.'l/'.$language['id_lang'].'.jpg" alt="'.strtoupper($language['iso_code']).'" title="'.$language['name'].'" '.($language['id_lang'] == $cookie->id_lang ? 'class="selected_language"' : '').' /></a> ';
+						echo '<a href="'.$link->getLanguageLinkAdmin($language['id_lang'], $language['name']).'&adminlang=1"><img src="'._PS_IMG_.'l/'.$language['id_lang'].'.jpg" alt="'.strtoupper($language['iso_code']).'" title="'.$language['name'].'" '.($language['id_lang'] == $cookie->id_lang ? 'class="selected_language"' : '').' /></a> ';
 						if ($i == 4)
 							echo '</div><div style="margin-top:5px;">';
 						$i++;

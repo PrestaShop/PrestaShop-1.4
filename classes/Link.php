@@ -127,6 +127,11 @@ class Link
 			return $this->getUrlWith('id_lang', intval($id_lang));
 	}
 	
+	public function getLanguageLinkAdmin($id_lang)
+	{
+		return $this->getUrlWith('id_lang', intval($id_lang));
+	}
+	
 	public function getUrlWith($key, $val)
     {
         $n = 0;
