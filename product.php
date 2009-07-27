@@ -110,6 +110,8 @@ else
 	$product = new Product(intval($_GET['id_product']), true, intval($cookie->id_lang));
 	if (!Validate::isLoadedObject($product) OR !$product->active)
 		$errors[] = Tools::displayError('product is no longer available');
+	elseif (!$product->checkAccess(intval($cookie->id_customer)))
+		$errors[] = Tools::displayError('you do not have access to this product');
 	else
 	{
 		$smarty->assign('virtual', ProductDownload::getIdFromIdProduct(intval($product->id)));

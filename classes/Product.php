@@ -1894,14 +1894,12 @@ class		Product extends ObjectModel
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
-{
 			$row['id_product_attribute'] = $ipa_default;
-}
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
 		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'],
-							$row['price'], $usetax, floatval($row['rate']));
+		$row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
@@ -1910,7 +1908,6 @@ class		Product extends ObjectModel
 		$row['pack'] = Pack::isPack($row['id_product']);
 		$row['packItems'] = $row['pack'] ? Pack::getItemTable($row['id_product'], $id_lang) : array();
 		$row['nopackprice'] = $row['pack'] ? Pack::noPackPrice($row['id_product']) : 0;
-		
 		return $row;
 	}
 
@@ -2205,6 +2202,28 @@ class		Product extends ObjectModel
 	public function getNoPackPrice()
 	{
 		return Pack::noPackPrice($this->id);
+	}
+
+	public function checkAccess($id_customer)
+	{
+		if (!$id_customer)
+		{
+			$result = Db::getInstance()->getRow('
+			SELECT ctg.`id_group`
+			FROM `'._DB_PREFIX_.'category_product` cp
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			WHERE cp.`id_product` = '.intval($this->id).' AND ctg.`id_group` = 1');
+		} else {
+			$result = Db::getInstance()->getRow('
+			SELECT cg.`id_group`
+			FROM `'._DB_PREFIX_.'category_product` cp
+			INNER JOIN '._DB_PREFIX_.'category_group ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN '._DB_PREFIX_.'customer_group cg ON (cg.`id_group` = ctg.`id_group`)
+			WHERE cp.`id_product` = '.intval($this->id).' AND cg.`id_customer` = '.intval($id_customer));
+		}
+		if ($result AND isset($result['id_group']) AND $result['id_group'])
+			return true;
+		return false;
 	}
 }
 
