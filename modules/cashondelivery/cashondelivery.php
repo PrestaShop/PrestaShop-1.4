@@ -26,7 +26,7 @@ class CashOnDelivery extends PaymentModule
 	public function hookPayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		global $smarty;
 
@@ -48,7 +48,7 @@ class CashOnDelivery extends PaymentModule
 	public function hookPaymentReturn($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}

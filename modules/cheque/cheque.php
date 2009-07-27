@@ -121,7 +121,7 @@ class Cheque extends PaymentModule
 	function execPayment($cart)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		global $cookie, $smarty;
 		
@@ -143,7 +143,7 @@ class Cheque extends PaymentModule
 	function hookPayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		global $smarty;
 
@@ -157,7 +157,7 @@ class Cheque extends PaymentModule
 	function hookPaymentReturn($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		global $smarty;
 		$state = $params['objOrder']->getCurrentState();

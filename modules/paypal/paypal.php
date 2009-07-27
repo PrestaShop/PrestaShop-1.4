@@ -154,7 +154,7 @@ class Paypal extends PaymentModule
 	public function hookPayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		global $smarty;
 
@@ -209,7 +209,7 @@ class Paypal extends PaymentModule
 	public function hookPaymentReturn($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
@@ -239,7 +239,7 @@ class Paypal extends PaymentModule
 	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is inactive'));
+			die(Tools::displayError('This module is disabled'));
 
 		$currency = $this->getCurrency();
 		$cart = new Cart(intval($id_cart));
