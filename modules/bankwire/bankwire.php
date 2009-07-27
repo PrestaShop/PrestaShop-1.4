@@ -133,6 +133,9 @@ class BankWire extends PaymentModule
 
 	public function execPayment($cart)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $cookie, $smarty;
 
 		$smarty->assign(array(
@@ -153,6 +156,9 @@ class BankWire extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 
 		$smarty->assign(array(
@@ -164,6 +170,9 @@ class BankWire extends PaymentModule
 
 	public function hookPaymentReturn($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 		$state = $params['objOrder']->getCurrentState();
 		if ($state == _PS_OS_BANKWIRE_ OR $state == _PS_OS_OUTOFSTOCK_)
@@ -179,7 +188,4 @@ class BankWire extends PaymentModule
 			$smarty->assign('status', 'failed');
 		return $this->display(__FILE__, 'payment_return.tpl');
 	}
-
 }
-
-?>

@@ -116,6 +116,9 @@ class GCheckout extends PaymentModule
 
 	function hookPayment($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 		
 		require_once('library/googlecart.php');
@@ -144,6 +147,9 @@ class GCheckout extends PaymentModule
 	
     function hookPaymentReturn($params)
     {
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		return $this->display(__FILE__, 'payment_return.tpl');
     }
 }

@@ -25,6 +25,9 @@ class CashOnDelivery extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 
 		// Check if cart has product download
@@ -44,8 +47,9 @@ class CashOnDelivery extends PaymentModule
 	
 	public function hookPaymentReturn($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
 }
-
-?>

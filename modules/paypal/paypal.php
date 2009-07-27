@@ -153,6 +153,9 @@ class Paypal extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 
 		$address = new Address(intval($params['cart']->id_address_invoice));
@@ -205,6 +208,9 @@ class Paypal extends PaymentModule
 
 	public function hookPaymentReturn($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
 
@@ -232,6 +238,9 @@ class Paypal extends PaymentModule
 
 	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		$currency = $this->getCurrency();
 		$cart = new Cart(intval($id_cart));
 		$cart->id_currency = $currency->id;

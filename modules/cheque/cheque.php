@@ -120,6 +120,9 @@ class Cheque extends PaymentModule
 
 	function execPayment($cart)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $cookie, $smarty;
 		
 		$smarty->assign(array(
@@ -139,6 +142,9 @@ class Cheque extends PaymentModule
 
 	function hookPayment($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 
 		$smarty->assign(array(
@@ -150,6 +156,9 @@ class Cheque extends PaymentModule
 
 	function hookPaymentReturn($params)
 	{
+		if (!$this->active)
+			die(Tools::displayError('This module is inactive'));
+
 		global $smarty;
 		$state = $params['objOrder']->getCurrentState();
 		if ($state == _PS_OS_CHEQUE_ OR $state == _PS_OS_OUTOFSTOCK_)
@@ -166,5 +175,3 @@ class Cheque extends PaymentModule
 	}
 
 }
-
-?>
