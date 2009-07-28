@@ -122,11 +122,11 @@ class GAnalytics extends Module
 	
 	function hookFooter($params)
 	{
-		global $step, $protocole_content;
+		global $step, $protocol_content;
 
 		$output = '
 		<script type="text/javascript">
-			document.write(unescape("%3Cscript src=\''.$protocole_content.'www.google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+			document.write(unescape("%3Cscript src=\''.$protocol_content.'www.google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
 		</script>
 		<script type="text/javascript">
 		try
@@ -143,7 +143,7 @@ class GAnalytics extends Module
 	
 	function hookOrderConfirmation($params)
 	{
-		global $protocole_content;
+		global $protocol_content;
 
 		$order = $params['objOrder'];
 		if (Validate::isLoadedObject($order))
@@ -152,7 +152,7 @@ class GAnalytics extends Module
 			
 			/* Order general informations */
 			$output = '
-			<script src="'.$protocole_content.'www.google-analytics.com/ga.js" type="text/javascript"></script>
+			<script src="'.$protocol_content.'www.google-analytics.com/ga.js" type="text/javascript"></script>
 	
 			<script type="text/javascript">
 			  var pageTracker = _gat._getTracker("'.Configuration::get('GANALYTICS_ID').'");

@@ -11,8 +11,7 @@ class Gsitemap extends Module
         $this->tab = 'Tools';
         $this->version = '1.4';
 
-        $this->_directory = dirname(__FILE__).'/../../';
-        $this->_filename = $this->_directory.'sitemap.xml';
+        $this->_filename = dirname(__FILE__).'/../../sitemap.xml';
         $this->_filename_http = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml';
 
         parent::__construct();
@@ -26,13 +25,9 @@ class Gsitemap extends Module
     function uninstall()
     {
         file_put_contents($this->_filename, '');
-        parent::uninstall();
-		
-		// Hack for 'gsitemap' to uninstall it correctly
-		Db::getInstance()->Execute('
-				DELETE FROM `'._DB_PREFIX_.'module`
-				WHERE `id_module` = '.intval($this->id));
+        return parent::uninstall();
     }
+	
     private function _postValidation()
     {
         file_put_contents($this->_filename, '');
@@ -53,9 +48,9 @@ class Gsitemap extends Module
 
     private function _postProcess()
     {
-		$id_default_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$link = new Link();
-        $fp = fopen($this->_filename, 'w');
+		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
+		$ruBackup = $_SERVER['REQUEST_URI'];
 		
         $xml = new SimpleXMLElement('<urlset
 			xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -75,15 +70,20 @@ class Gsitemap extends Module
 		FROM '._DB_PREFIX_.'block_cms b
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
 		LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
-		WHERE l.`active` = 1');
+		WHERE l.`active` = 1
+		ORDER BY cl.id_cms, cl.id_lang ASC');
 
       	foreach($cmss AS $cms)
       	{
 			$sitemap = $xml->addChild('url');
-			$sitemap->addChild('loc', htmlspecialchars(
-				$this->getUrlWith($link->getCMSLink($cms['id_cms'], $cms['link_rewrite']), 'id_lang', (intval($cms['id_lang']) != $id_default_lang ? intval($cms['id_lang']) : ''))));
-            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getCMSLink($cms['id_cms'], $cms['link_rewrite']), 'id_lang', intval($cms['id_lang']))));
-            $sitemap->addChild('priority', '0.9');
+			$tmpLink = $link->getCMSLink($cms['id_cms'], $cms['link_rewrite']);
+			if ($cms['id_lang'] != $defaultLanguage)
+			{
+				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
+			}
+            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
+            $sitemap->addChild('priority', '0.8');
             $sitemap->addChild('changefreq', 'monthly');
 		}
 
@@ -93,16 +93,22 @@ class Gsitemap extends Module
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON c.id_category = cl.id_category
 		LEFT JOIN '._DB_PREFIX_.'lang l ON cl.id_lang = l.id_lang
 		WHERE l.`active` = 1 AND c.`active` = 1 AND c.id_category != 1
-		ORDER BY date_upd DESC');
+		ORDER BY cl.id_category, cl.id_lang ASC');
 		foreach($categories as $category)
         {
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
 			$sitemap = $xml->addChild('url');
-            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getCategoryLink($category['id_category'], $category['link_rewrite']), 'id_lang', (intval($category['id_lang']) != $id_default_lang ? intval($category['id_lang']) : ''))));
+			$tmpLink = $link->getCategoryLink($category['id_category'], $category['link_rewrite']);
+			if ($category['id_lang'] != $defaultLanguage)
+			{
+				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$tmpLink = $link->getLanguageLink(intval($category['id_lang']));
+			}
+            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
             $sitemap->addChild('lastmod', $category['date_upd']);
-            $sitemap->addChild('changefreq', 'daily');
+            $sitemap->addChild('changefreq', 'weekly');
       	}
 
         $products = Db::getInstance()->ExecuteS('
@@ -117,19 +123,27 @@ class Gsitemap extends Module
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
 		LEFT JOIN '._DB_PREFIX_.'lang l ON pl.id_lang = l.id_lang
 		WHERE l.`active` = 1 AND p.`active` = 1
-		ORDER BY date_upd DESC');
+		ORDER BY pl.id_product, pl.id_lang ASC');
         foreach($products as $product)
         {
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
             $sitemap = $xml->addChild('url');
-            $sitemap->addChild('loc', htmlspecialchars($this->getUrlWith($link->getProductLink($product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13']), 'id_lang', (intval($product['id_lang']) != $id_default_lang ? intval($product['id_lang']) : ''))));
+			$tmpLink = $link->getProductLink($product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13']);
+			if ($product['id_lang'] != $defaultLanguage)
+			{
+				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$tmpLink = $link->getLanguageLink(intval($product['id_lang']));
+			}
+            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
             $sitemap->addChild('lastmod', $product['date_upd']);
-            $sitemap->addChild('changefreq', 'daily');
+            $sitemap->addChild('changefreq', 'weekly');
         }
 
         $xmlString = $xml->asXML();
+		
+        $fp = fopen($this->_filename, 'w');
         fwrite($fp, $xmlString, Tools::strlen($xmlString));
         fclose($fp);
 
@@ -137,6 +151,8 @@ class Gsitemap extends Module
         $this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
         $this->_html .= $res ? $this->l('Sitemap file successfully generated') : $this->l('Error while creating sitemap file');
         $this->_html .= '</h3>';
+		
+		$_SERVER['REQUEST_URI'] = $ruBackup;
     }
 
     private function _displaySitemap()

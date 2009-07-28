@@ -39,12 +39,12 @@ if ($back = Tools::getValue('back'))
 
 /* Server Params */
 $server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
-$protocole = 'http://';
-$protocle_ssl = 'https://';
-$protocole_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
-$protocole_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocle_ssl : $protocole;
-define('_PS_BASE_URL_', $protocole.$server_host);
-define('_PS_BASE_URL_SSL_', $protocle_ssl.$server_host);
+$protocol = 'http://';
+$protocol_ssl = 'https://';
+$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+define('_PS_BASE_URL_', $protocol.$server_host);
+define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
 
 /* Include appropriate language file */
 Tools::setCookieLanguage();
