@@ -2553,14 +2553,27 @@ class AdminProducts extends AdminTab
 		foreach ($packItems as $packItem)
 			echo $packItem->pack_quantity.' x '.$packItem->name.'<span onclick="delPackItem('.$packItem->id.');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />';
 		echo '		</div>
-					<input type="hidden" name="inputPackItems" id="inputPackItems" value="'; foreach ($packItems as $packItem) echo $packItem->pack_quantity.'x'.$packItem->id.'-'; echo '" />
-					<input type="hidden" name="namePackItems" id="namePackItems" value="'; foreach ($packItems as $packItem) echo $packItem->pack_quantity.'x '.$packItem->name.'¤'; echo '" />
+					<input type="hidden" name="inputPackItems" id="inputPackItems" value="';
+					if (Tools::getValue('inputPackItems'))
+						echo Tools::getValue('inputPackItems');
+					else
+						foreach ($packItems as $packItem)
+							echo $packItem->pack_quantity.'x'.$packItem->id.'-';
+					echo '" />
+					<input type="hidden" name="namePackItems" id="namePackItems" value="';
+					if (Tools::getValue('namePackItems'))
+						echo Tools::getValue('namePackItems');
+					else
+					foreach ($packItems as $packItem)
+						echo $packItem->pack_quantity.'x '.$packItem->name.'¤';
+					echo '" />
 					<script type="text/javascript">
 						var formProduct;
 						var packItems = new Array();
 						'.$this->fillPackItems($obj).'
 						'.$this->addPackItem().'
 						'.$this->delPackItem().'
+						delPackItem(0);
 					</script>
 					<select id="selectPackItems" name="selectPackItems" style="width: 380px;" onfocus="fillPackItems();">
 						<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
@@ -2655,7 +2668,7 @@ class AdminProducts extends AdminTab
 			for (i = 1; i < cut.length; ++i)
 				nameStr += select_quantity.value + \' x \' + cut[i];
 			input.value += select_quantity.value + \'x\' + cut[0] + \'-\';
-			name.value += select_quantity.value + \' x \' + nameStr + \'¤\';
+			name.value += nameStr + \'¤\';
 			div.innerHTML += nameStr + \' <span onclick="delPackItem(\' + cut[0] + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
 		}';
 	}
