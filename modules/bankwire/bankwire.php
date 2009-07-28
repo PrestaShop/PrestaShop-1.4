@@ -134,7 +134,7 @@ class BankWire extends PaymentModule
 	public function execPayment($cart)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $cookie, $smarty;
 
@@ -157,7 +157,7 @@ class BankWire extends PaymentModule
 	public function hookPayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $smarty;
 
@@ -171,7 +171,7 @@ class BankWire extends PaymentModule
 	public function hookPaymentReturn($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $smarty;
 		$state = $params['objOrder']->getCurrentState();

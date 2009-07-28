@@ -145,7 +145,7 @@ class PaypalAPI extends PaymentModule
 	public function hookPayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		include(_PS_MODULE_DIR_.'/paypalapi/payment/PaypalPayment.php');
 		$ppPayment = new PaypalPayment();
@@ -155,9 +155,9 @@ class PaypalAPI extends PaymentModule
 	public function hookShoppingCartExtra($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
-	if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT'))
+		if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT') AND !$cookie->isLogged())
 		{
 			include(_PS_MODULE_DIR_.'/paypalapi/express/PaypalExpress.php');
 			$ppExpress = new PaypalExpress();
@@ -168,7 +168,7 @@ class PaypalAPI extends PaymentModule
 	public function hookBackBeforePayment($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $cookie;
 
@@ -184,7 +184,7 @@ class PaypalAPI extends PaymentModule
 	public function hookPaymentReturn($params)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $smarty;
 
@@ -224,7 +224,7 @@ class PaypalAPI extends PaymentModule
 	protected function displayFinal($id_cart)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		global $cookie;
 
@@ -236,7 +236,7 @@ class PaypalAPI extends PaymentModule
 	public function validOrder($cookie, $cart, $id_currency, $payerID, $type)
 	{
 		if (!$this->active)
-			die(Tools::displayError('This module is disabled'));
+			return ;
 
 		// Filling-in vars
 		$id_cart = intval($cart->id);
