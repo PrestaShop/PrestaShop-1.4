@@ -154,6 +154,8 @@ class PaypalAPI extends PaymentModule
 
 	public function hookShoppingCartExtra($params)
 	{
+		global $cookie;
+
 		if (!$this->active)
 			return ;
 
