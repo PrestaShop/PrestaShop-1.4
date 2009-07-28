@@ -319,9 +319,24 @@ else
 		if (!Tools::isSubmit('submitAccount') AND !Tools::isSubmit('submitLogin'))
 			$result = getInfos();
 
-		// Form was submitted (errors) or displaying form for the first time
-		$email = (Tools::getValue('email') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('email'))) : $result['EMAIL']);
-		$payerID = (Tools::getValue('payerID') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID'))) : $result['PAYERID']);
+		if (Tools::getValue('email') AND Tools::getValue('payerID'))
+		{
+			// Form was submitted (errors)
+			$email = Tools::htmlentitiesUTF8(strval(Tools::getValue('email')));
+			$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID')));
+		}
+		elseif (isset($result['EMAIL']) AND isset($result['PAYERID']))
+		{
+			// Displaying form for the first time
+			$email = $result['EMAIL'];
+			$payerID = $result['PAYERID'];
+		}
+		else
+		{
+			// Error in token, we need to make authorization again
+			unset($cookie->paypal_token);
+			Tools::redirect('modules/paypalapi/express/submit.php');
+		}
 		if (Customer::customerExists($email) OR Tools::isSubmit('submitLogin'))
 			displayLogin();
 		displayAccount();
