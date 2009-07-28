@@ -610,10 +610,11 @@ function verifyShopInfos()
 			else if (!ajaxRefreshField(1, "resultInfosFirstname", fieldsList, "infosFirstname")) validShopInfos = false;
 			else if (!ajaxRefreshField(2, "resultInfosName", fieldsList, "infosName")) validShopInfos = false;
 			else if (!ajaxRefreshField(3, "resultInfosEmail", fieldsList, "infosEmail")) validShopInfos = false;
-			else if (!ajaxRefreshField(4, "resultInfosPassword", fieldsList, "infosPassword")) validShopInfos = false;
-			else if (!ajaxRefreshField(5, "resultInfosLanguages", fieldsList, "infosLanguages")) validShopInfos = false;
-			else if (!ajaxRefreshField(6, "resultInfosSQL", fieldsList, "infosSQL")) validShopInfos = false;
-			else if (!ajaxRefreshField(7, "resultInfosNotification", fieldsList, "infosNotification")) validShopInfos = false;
+			else if (!ajaxRefreshField(7, "resultInfosPassword", fieldsList, "infosPassword")) validShopInfos = false;
+			else if (!ajaxRefreshField(8, "resultInfosPasswordRepeat", fieldsList, "infosPasswordRepeat")) validShopInfos = false;
+			else if (!ajaxRefreshField(9, "resultInfosLanguages", fieldsList, "infosLanguages")) validShopInfos = false;
+			else if (!ajaxRefreshField(11, "resultInfosSQL", fieldsList, "infosSQL")) validShopInfos = false;
+			else if (!ajaxRefreshField(10, "resultInfosNotification", fieldsList, "infosNotification")) validShopInfos = false;
 			else
 			{
 				$('#endShopName').html($('input#infosShop').val());

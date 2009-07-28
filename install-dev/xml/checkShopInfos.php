@@ -72,13 +72,16 @@ else
 if(!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
 	$error['infosEmail'] = '0';
 
-if(!isset($_GET['infosPassword'])
-	OR empty($_GET['infosPassword'])
-	OR !isset($_GET['infosPasswordRepeat'])
-	OR empty($_GET['infosPasswordRepeat']))
+if (!isset($_GET['infosPassword']) OR empty($_GET['infosPassword']))
 	$error['infosPassword'] = '0';
 else
 	$error['infosPassword'] = '';
+	
+if (!isset($_GET['infosPasswordRepeat']) OR empty($_GET['infosPasswordRepeat']))
+	$error['infosPasswordRepeat'] = '0';
+else
+	$error['infosPasswordRepeat'] = '';
+
 	
 if($error['infosPassword'] == '' AND $_GET['infosPassword'] != $_GET['infosPasswordRepeat'])
 	$error['infosPassword'] = '2';
