@@ -430,13 +430,6 @@ function verifyMail()
 				smtpIsOk = false;
 				return false;
 			}
-			
-			if($("#smtpLogin[value=]").length > 0)
-			{
-				$("#mailResultCheck").addClass("fail").removeClass("ok").removeClass('userInfos').html(txtSmtpLoginEmpty);
-				smtpIsOk = false;
-				return false;
-			}
 		}
 		
 		
