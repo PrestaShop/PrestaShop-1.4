@@ -110,13 +110,19 @@ class Tag extends ObjectModel
 	
 	static public function getMainTags($id_lang, $nb = 10)
 	{
+		global $cookie;
+
 		return Db::getInstance()->ExecuteS('
 		SELECT t.name, COUNT(pt.id_tag) AS times
 		FROM `'._DB_PREFIX_.'product_tag` pt
 		LEFT JOIN `'._DB_PREFIX_.'tag` t ON t.id_tag = pt.id_tag
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = pt.id_product
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+		INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+		INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 		WHERE id_lang = '.intval($id_lang).'
 		AND p.active = 1
+		AND cg.`id_customer` = '.intval($cookie->id_customer).'
 		GROUP BY t.id_tag
 		ORDER BY times DESC
 		LIMIT 0, '.intval($nb));

@@ -127,6 +127,8 @@ class Search
 
 	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false)
 	{
+		global $cookie;
+
 		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 1;
@@ -173,8 +175,12 @@ class Search
 			FROM '._DB_PREFIX_.'product p
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE '.implode(' AND ', $whereArray).'
 			AND p.active = 1
+			AND cg.`id_customer` = '.intval($cookie->id_customer).'
 			ORDER BY position DESC
 			LIMIT 10';
 			return Db::getInstance()->ExecuteS($queryResults);
@@ -182,7 +188,7 @@ class Search
 		
 		$queryResults = '
 		SELECT SQL_CALC_FOUND_ROWS p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
-		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name
+		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, cg.`id_group`
 		'.$score.'
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
@@ -190,14 +196,18 @@ class Search
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+		INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+		INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 		WHERE '.implode(' AND ', $whereArray).'
 		AND p.active = 1
+		AND cg.`id_customer` = '.intval($cookie->id_customer).'
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
-		
+
 		$result = Db::getInstance()->ExecuteS($queryResults);
 		$total = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
-		
+
 		Module::hookExec('search', array('expr' => $expr, 'total' => $total));
 
 		return array('total' => $total,'result' => Product::getProductsProperties($id_lang, $result));

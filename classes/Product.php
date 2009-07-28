@@ -968,7 +968,7 @@ class		Product extends ObjectModel
 
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
-		if (empty($orderBy)) $orderBy = 'date_add';
+		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'date_add';
 		if (empty($orderWay)) $orderWay = 'DESC';
 		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
 			$orderByPrefix = 'p';
@@ -997,8 +997,13 @@ class		Product extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
 			LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE p.`active` = 1
 			AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
+			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			GROUP BY p.`id_product`
 			ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 			LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
 		if ($orderBy == 'price')
@@ -2217,8 +2222,8 @@ class		Product extends ObjectModel
 			$result = Db::getInstance()->getRow('
 			SELECT cg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
-			INNER JOIN '._DB_PREFIX_.'category_group ctg ON (ctg.`id_category` = cp.`id_category`)
-			INNER JOIN '._DB_PREFIX_.'customer_group cg ON (cg.`id_group` = ctg.`id_group`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE cp.`id_product` = '.intval($this->id).' AND cg.`id_customer` = '.intval($id_customer));
 		}
 		if ($result AND isset($result['id_group']) AND $result['id_group'])

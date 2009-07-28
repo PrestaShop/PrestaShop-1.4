@@ -156,21 +156,33 @@ class		Manufacturer extends ObjectModel
 	  */
 	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
 	{
+		global $cookie;
+
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$sql = 'SELECT m.*, ml.`description`';
-		if ($getNbProducts) $sql.= ' , COUNT(p.`id_product`) as nb_products';
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')';
-		if ($getNbProducts)
-			$sql.= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON (p.`id_manufacturer` = m.`id_manufacturer`)
-			'.($active ? 'WHERE p.`active` = 1' : '').'
-			GROUP BY m.`id_manufacturer`';
 		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$manufacturers = Db::getInstance()->ExecuteS($sql);
 		if ($manufacturers === false)
 			return false;
-
+		if ($getNbProducts)
+			foreach ($manufacturers as $key => $manufacturer)
+			{
+				$sql = '
+					SELECT p.`id_product`
+					FROM `'._DB_PREFIX_.'product` p
+					LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
+					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+					INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+					INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+					WHERE cg.`id_customer` = '.intval($cookie->id_customer).'
+					AND m.`id_manufacturer` = '.intval($manufacturer['id_manufacturer']).'
+					GROUP BY p.`id_product`';
+				$result = Db::getInstance()->ExecuteS($sql);
+				$manufacturers[$key]['nb_products'] = sizeof($result);
+			}
 		for ($i = 0; $i < sizeof($manufacturers); $i++)
 			if (intval(Configuration::get('PS_REWRITING_SETTINGS')))
 				$manufacturers[$i]['link_rewrite'] = Tools::link_rewrite($manufacturers[$i]['name'], false);
@@ -222,7 +234,9 @@ class		Manufacturer extends ObjectModel
 
 	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
-	 	if (empty($orderBy)) $orderBy = 'name';
+		global $cookie;
+
+	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 			
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
@@ -231,12 +245,17 @@ class		Manufacturer extends ObjectModel
 		/* Return only the number of products */
 		if ($getTotal)
 		{
-			$result = Db::getInstance()->getRow('
-			SELECT COUNT(p.`id_product`) AS total 
+			$result = Db::getInstance()->ExecuteS('
+			SELECT p.`id_product`
 			FROM `'._DB_PREFIX_.'product` p
-			WHERE p.id_manufacturer = '.intval($id_manufacturer)
-			.($active ? ' AND p.`active` = 1' : ''));
-			return isset($result) ? $result['total'] : 0;
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+			WHERE p.id_manufacturer = '.intval($id_manufacturer).'
+			AND cg.`id_customer` = '.intval($cookie->id_customer)
+			.($active ? ' AND p.`active` = 1' : '')
+			.'GROUP BY p.`id_product`');
+			return intval(sizeof($result));
 		}
 		
 		$sql = '
@@ -248,7 +267,12 @@ class		Manufacturer extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
 				LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
 				LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
+				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+				INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+				INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE p.`id_manufacturer` = '.intval($id_manufacturer).($active ? ' AND p.`active` = 1' : '').'
+			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			GROUP BY p.`id_product`
 			ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
 		$result = Db::getInstance()->ExecuteS($sql);

@@ -89,21 +89,33 @@ class		Supplier extends ObjectModel
 	  */
 	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
 	{
+		global $cookie;
+
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$query = 'SELECT s.*, sl.`description`';
-		if ($getNbProducts) $query .= ' , COUNT(p.`id_product`) as nb_products';
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
 		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')';
-		if ($getNbProducts)
-			$query .= ' LEFT JOIN `'._DB_PREFIX_.'product` as p ON (p.`id_supplier` = s.`id_supplier`)
-			'.($active ? 'WHERE p.`active` = 1' : '').'
-			GROUP BY s.`id_supplier`';
 		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$suppliers = Db::getInstance()->ExecuteS($query);
 		if ($suppliers === false)
 			return false;
-
+		if ($getNbProducts)
+			foreach ($suppliers as $key => $supplier)
+			{
+				$sql = '
+					SELECT p.`id_product`
+					FROM `'._DB_PREFIX_.'product` p
+					LEFT JOIN `'._DB_PREFIX_.'supplier` as m ON (m.`id_supplier`= p.`id_supplier`)
+					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+					INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+					INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+					WHERE cg.`id_customer` = '.intval($cookie->id_customer).'
+					AND m.`id_supplier` = '.intval($supplier['id_supplier']).'
+					GROUP BY p.`id_product`';
+				$result = Db::getInstance()->ExecuteS($sql);
+				$suppliers[$key]['nb_products'] = sizeof($result);
+			}
 		for ($i = 0; $i < sizeof($suppliers); $i++)
 			if (intval(Configuration::get('PS_REWRITING_SETTINGS')))
 				$suppliers[$i]['link_rewrite'] = Tools::link_rewrite($suppliers[$i]['name'], false);
@@ -141,7 +153,9 @@ class		Supplier extends ObjectModel
 
 	static public function getProducts($id_supplier, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
-	 	if (empty($orderBy)) $orderBy = 'name';
+		global $cookie;
+
+	 	if (empty($orderBy) OR $orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 			
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
@@ -150,14 +164,19 @@ class		Supplier extends ObjectModel
 		/* Return only the number of products */
 		if ($getTotal)
 		{
-			$result = Db::getInstance()->getRow('
-			SELECT COUNT(p.`id_product`) AS total 
+			$result = Db::getInstance()->ExecuteS('
+			SELECT p.`id_product`
 			FROM `'._DB_PREFIX_.'product` p
-			WHERE p.id_supplier = '.intval($id_supplier)
-			.($active ? ' AND p.`active` = 1' : ''));
-			return isset($result) ? $result['total'] : 0;
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+			WHERE p.id_supplier = '.intval($id_supplier).'
+			AND cg.`id_customer` = '.intval($cookie->id_customer)
+			.($active ? ' AND p.`active` = 1' : '')
+			.'GROUP BY p.`id_product`');
+			return intval(sizeof($result));
 		}
-	 
+
 		$sql = '
 			SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, s.`name` AS supplier_name, tl.`name` AS tax_name, t.`rate`
 			FROM `'._DB_PREFIX_.'product` p
@@ -167,14 +186,19 @@ class		Supplier extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
 				LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
 				LEFT JOIN `'._DB_PREFIX_.'supplier` s ON s.`id_supplier` = p.`id_supplier`
+				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+				INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+				INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE p.`id_supplier` = '.intval($id_supplier).($active ? ' AND p.`active` = 1' : '').'
+			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			GROUP BY p.`id_product`
 			ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
 		$result = Db::getInstance()->ExecuteS($sql);
 		if (!$result)
 			return false;
 		if ($orderBy == 'price')
-			Tools::orderbyPrice($result, $orderWay);			
+			Tools::orderbyPrice($result, $orderWay);
 		return Product::getProductsProperties($id_lang, $result);
 	}
 	
