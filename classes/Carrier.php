@@ -153,7 +153,7 @@ class		Carrier extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
+		INNER JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY w.`delimiter2` DESC LIMIT 1');
@@ -207,7 +207,7 @@ class		Carrier extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
+		INNER JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY r.`delimiter2` DESC LIMIT 1');
