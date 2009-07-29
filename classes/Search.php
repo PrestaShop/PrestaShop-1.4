@@ -181,6 +181,7 @@ class Search
 			WHERE '.implode(' AND ', $whereArray).'
 			AND p.active = 1
 			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			GROUP BY p.`id_product`
 			ORDER BY position DESC
 			LIMIT 10';
 			return Db::getInstance()->ExecuteS($queryResults);
@@ -202,9 +203,9 @@ class Search
 		WHERE '.implode(' AND ', $whereArray).'
 		AND p.active = 1
 		AND cg.`id_customer` = '.intval($cookie->id_customer).'
+		GROUP BY p.`id_product`
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
-
 		$result = Db::getInstance()->ExecuteS($queryResults);
 		$total = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 
