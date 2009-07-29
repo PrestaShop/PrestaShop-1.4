@@ -2181,13 +2181,13 @@ class		Product extends ObjectModel
 		return true;
 	}
 
-	/*
+	/**
 	* Specify if a product is already in database
 	*
 	* @param $id_product Product id
 	* @return boolean
 	*/	
-	public function productExists($id_product)
+	public static function existsInDatabase($id_product)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_product`

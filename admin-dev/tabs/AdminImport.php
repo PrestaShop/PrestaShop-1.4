@@ -163,8 +163,8 @@ class AdminImport extends AdminTab
 				'quantity' => 0,
 				'price' => 0,
 				'id_tax' => 0,
-				'description_short' => '', // See class construct
-				'link_rewrite' => '',	
+				'description_short' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
+				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),	
 				);
 				
 				break;
@@ -340,9 +340,17 @@ class AdminImport extends AdminTab
 	{
 		foreach (self::$default_values AS $k => $v)
 			if (!isset($info[$k]) OR $info[$k] == '')
-				$info[$k] = $v;				
+				$info[$k] = $v;
 	}
-	
+
+	private static function setEntityDefaultValues(&$entity)
+	{
+		$members = get_object_vars($entity);
+		foreach (self::$default_values AS $k => $v)
+			if ((array_key_exists($k, $members) AND $entity->$k === NULL) OR !array_key_exists($k, $members))
+				$entity->$k = $v;
+	}
+
 	private static function fillInfo($infos, $key, &$entity)
 	{
 		$entity->{$key} = isset(self::$validators[$key]) ? call_user_func(self::$validators[$key], $infos) : $infos;
@@ -497,7 +505,7 @@ class AdminImport extends AdminTab
 		}
 		$this->closeCsvFile($handle);
 	}
-	
+
 	public function productImport()
 	{
 		global $cookie;
@@ -511,8 +519,11 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-			self::setDefaultValues($info);
-			$product = new Product();
+			if (array_key_exists('id', $info) AND intval($info['id']) AND Product::existsInDatabase(intval($info['id'])))
+				$product = new Product(intval($info['id']));
+			else
+				$product = new Product();
+			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
@@ -636,21 +647,22 @@ class AdminImport extends AdminTab
 			}
 
 			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';			
-			$valid_link = Validate::isLinkRewrite($product->link_rewrite);
+			$link_rewrite = is_array($product->link_rewrite) ? $product->link_rewrite[$defaultLanguageId] : '';
+			$valid_link = Validate::isLinkRewrite($link_rewrite);
 			
 			$bak = $product->link_rewrite;
-			if ((isset($product->link_rewrite) AND empty($product->link_rewrite)) OR !$valid_link)
-				$product->link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
+			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
+				$link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
 			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrited link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$product->link_rewrite;
+				$this->_warnings[] = Tools::displayError('Rewrited link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
 		
-			$product->link_rewrite = self::createMultiLangField($product->link_rewrite);
+			$product->link_rewrite = self::createMultiLangField($link_rewrite);
 			
 			$res = false;
 			if (($fieldError = $product->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $product->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
 				// If id product AND id product already in base, trying to update
-				if ($product->id AND $product->productExists(intval($product->id)))
+				if ($product->id AND Product::existsInDatabase(intval($product->id)))
 				{
 					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.intval($product->id));
 					$product->date_add = pSQL($datas['date_add']);
@@ -696,7 +708,8 @@ class AdminImport extends AdminTab
 							}
 						}
 				}
-				$product->updateCategories(array_map('intval', $product->id_category));
+				if (isset($product->id_category))
+					$product->updateCategories(array_map('intval', $product->id_category));
 				
 				$features = get_object_vars($product);
 				foreach ($features AS $feature => $value)
