@@ -85,7 +85,7 @@ class AdminTranslations extends AdminTab
 			return ;
 
 		$bool = true;
-		$items = Language::getFilesList($fromLang, $fromTheme, $toLang, $toTheme);
+		$items = Language::getFilesList($fromLang, $fromTheme, $toLang, $toTheme, false, false, true);
 		foreach ($items as $source => $dest)
 		{
 			$bool &= $this->checkDirAndCreate($dest);

@@ -146,7 +146,6 @@ class		Language extends ObjectModel
 				$modDir = _PS_MODULE_DIR_.$mod;
 				if (file_exists($modDir.'/'.strval($iso_from).'.php'))
 					$files_modules[$modDir.'/'.strval($iso_from).'.php'] = ($copy ? $modDir.'/'.strval($iso_to).'.php' : ++$number);
-				
 				// Mails files
 				$modMailDirFrom = $modDir.'/mails/'.strval($iso_from);
 				$modMailDirTo = $modDir.'/mails/'.strval($iso_to);
