@@ -58,7 +58,7 @@ function textRecord(Product $product, Cart $cart)
 			if (!Validate::isMessage($value))
 				$errors[] = Tools::displayError('Invalid message');
 			else
-				$cart->addTextFieldToProduct(intval($product->id), $indexes[$fieldName], htmlentities($value, ENT_COMPAT, 'UTF-8'));
+				$cart->addTextFieldToProduct(intval($product->id), $indexes[$fieldName], $value);
 		}
 		elseif (in_array($fieldName, $authorizedTextFields) AND empty($value))
 			$cart->deleteTextFieldFromProduct(intval($product->id), $indexes[$fieldName]);
