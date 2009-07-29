@@ -84,7 +84,7 @@ function smartyTruncate($params, &$smarty)
 	if (Tools::strlen($text) > $length + Tools::strlen($sep))
 		$text = substr($text, 0, $length).$sep;
 
-	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text) : $text);
+	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text, ENT_NOQUOTES) : $text);
 }
 
 $smarty->register_function('t', 'smartyTruncate');

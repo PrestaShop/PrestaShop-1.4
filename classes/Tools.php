@@ -283,11 +283,11 @@ class Tools
 		return $string;
 	}
 
-	static public function htmlentitiesUTF8($string)
+	static public function htmlentitiesUTF8($string, $type = ENT_QUOTES)
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesUTF8'), $string);
-		return htmlentities($string, ENT_QUOTES, 'utf-8'); 
+		return htmlentities($string, $type, 'utf-8'); 
 	}
 
 	static public function htmlentitiesDecodeUTF8($string)
