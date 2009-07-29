@@ -177,7 +177,7 @@ class		Manufacturer extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
 					INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 					INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
-					WHERE cg.`id_customer` = '.intval($cookie->id_customer).'
+					WHERE (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
 					AND m.`id_manufacturer` = '.intval($manufacturer['id_manufacturer']).'
 					GROUP BY p.`id_product`';
 				$result = Db::getInstance()->ExecuteS($sql);
@@ -252,7 +252,7 @@ class		Manufacturer extends ObjectModel
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE p.id_manufacturer = '.intval($id_manufacturer).'
-			AND cg.`id_customer` = '.intval($cookie->id_customer)
+			AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)'
 			.($active ? ' AND p.`active` = 1' : '')
 			.'GROUP BY p.`id_product`');
 			return intval(sizeof($result));
@@ -271,7 +271,7 @@ class		Manufacturer extends ObjectModel
 				INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 				INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE p.`id_manufacturer` = '.intval($id_manufacturer).($active ? ' AND p.`active` = 1' : '').'
-			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
 			GROUP BY p.`id_product`
 			ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);

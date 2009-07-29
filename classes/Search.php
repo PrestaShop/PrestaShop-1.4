@@ -180,7 +180,7 @@ class Search
 			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE '.implode(' AND ', $whereArray).'
 			AND p.active = 1
-			AND cg.`id_customer` = '.intval($cookie->id_customer).'
+			AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
 			GROUP BY p.`id_product`
 			ORDER BY position DESC
 			LIMIT 10';
@@ -202,7 +202,7 @@ class Search
 		INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 		WHERE '.implode(' AND ', $whereArray).'
 		AND p.active = 1
-		AND cg.`id_customer` = '.intval($cookie->id_customer).'
+		AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
 		GROUP BY p.`id_product`
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
