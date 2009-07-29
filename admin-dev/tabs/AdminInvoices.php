@@ -75,7 +75,7 @@ class AdminInvoices extends AdminTab
 				$this->_errors[] = $this->l('Invalid end date');
 			if (!sizeof($this->_errors))
 			{
-				$orders = Order::getOrdersIdByDate($_POST['date_from'], $_POST['date_to'], NULL, 'invoice');
+				$orders = Order::getOrdersIdInvoiceByDate($_POST['date_from'], $_POST['date_to'], NULL, 'invoice');
 				if (sizeof($orders))
 					Tools::redirectAdmin('pdf.php?invoices='.urlencode(serialize($orders)).'&token='.$this->token);
 				else
