@@ -222,6 +222,8 @@ class		Order extends ObjectModel
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity_refunded` = `quantity_refunded` + '.intval($quantity).' WHERE `id_customization` = '.intval($id_customization).' AND `id_cart` = '.intval($this->id_cart).' AND `id_product` = '.intval($orderDetail->product_id));
 		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` - '.intval($quantity).' WHERE `id_customization` = '.intval($id_customization).' AND `id_cart` = '.intval($this->id_cart).' AND `id_product` = '.intval($orderDetail->product_id)))
 			return false;
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `quantity` = 0'))
+			return false;
 		return $this->_deleteProduct($orderDetail, intval($quantity));
 	}
 
