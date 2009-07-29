@@ -94,7 +94,23 @@ class PaypalAPI extends PaymentModule
 	public function displayError($message, $log = false)
 	{
 		global $cookie, $smarty;
-		
+
+		// Sanitinize log
+		foreach ($log as $key => $string)
+			if (substr($string, 0, 6) == 'METHOD')
+			{
+				$values = explode('&', $string);
+				foreach ($values as $key2 => $value)
+				{
+					$values2 = explode('=', $value);
+					foreach ($values2 as $key3 => $value2)
+						if ($value2 == 'PWD' || $value2 == 'SIGNATURE')
+							$values2[$key3 + 1] = '*********';
+					$values[$key2] = implode('=', $values2);
+				}
+				$log[$key] = implode('&', $values);
+			}
+
 		include(dirname(__FILE__).'/../../header.php');
 		$smarty->assign('message', $message);
 		$smarty->assign('logs', $log);
