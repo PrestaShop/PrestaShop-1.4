@@ -500,6 +500,7 @@ class AdminImport extends AdminTab
 	
 	public function productImport()
 	{
+		global $cookie;
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
@@ -676,13 +677,15 @@ class AdminImport extends AdminTab
 				}
 
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
+				{
+					$productHasImages = (bool)Image::getImages(intval($cookie->id_lang), intval($product->id));
 					foreach ($product->image AS $key => $url)
 						if (!empty($url))
 						{
 							$image = new Image();
 							$image->id_product = intval($product->id);
 							$image->position = Image::getHighestPosition($product->id) + 1;
-							$image->cover = !$key ? true : false;
+							$image->cover = (!$key AND !$productHasImages) ? true : false;
 							$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
 							if (($fieldError = $image->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $image->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $image->add())
 								self::copyImg($product->id, $image->id, $url);
@@ -692,6 +695,7 @@ class AdminImport extends AdminTab
 								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
 							}
 						}
+				}
 				$product->updateCategories(array_map('intval', $product->id_category));
 				
 				$features = get_object_vars($product);
