@@ -614,7 +614,7 @@ class AdminOrders extends AdminTab
 							'.($order->hasBeenDelivered() ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
 							<th style="width: 90px; text-align: center">'.$this->l('Total').'</th>
-							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
+							<th colspan="2" style="width: 120px;"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
 		echo '
 						</tr>';
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
@@ -626,7 +626,7 @@ class AdminOrders extends AdminTab
 								SELECT id_image
 								FROM '._DB_PREFIX_.'product_attribute_image
 								WHERE id_product_attribute = '.intval($product['product_attribute_id']));
-						 	if (!isset($image['id_image']))
+						 	if (!isset($image['id_image']) OR !$image['id_image'])
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
 								FROM '._DB_PREFIX_.'image
