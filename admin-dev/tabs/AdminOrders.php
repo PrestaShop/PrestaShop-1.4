@@ -280,7 +280,7 @@ class AdminOrders extends AdminTab
 		parent::postProcess();
 	}
 
-	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog)
+	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, $id_order_detail)
 	{
 		$order = $this->loadObject();
 
@@ -301,8 +301,9 @@ class AdminOrders extends AdminTab
 				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
 				<td align="center" class="productQuantity"> - </td>
 				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
+				<td align="center" class="cancelCheck">--</td>
 			</tr>';
-			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customization)
+			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customizationId => $customization)
 			{
 				echo '
 				<tr>
@@ -333,25 +334,6 @@ class AdminOrders extends AdminTab
 					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
 					<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * ($customization['quantity']), $currency, false, false).'</td>
-				</tr>';
-			}
-		}
-	}
-
-	private function displayCancelCustomizations(&$customizedDatas, &$product, &$image, $id_order_detail)
-	{
-		$order = $this->loadObject();
-
-		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])]))
-		{
-			echo '
-			<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
-				<td align="center" class="cancelCheck">--</td>
-			</tr>';
-			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customizationId => $customization)
-			{
-				echo '
-				<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
 					<td align="center" class="cancelCheck">
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.intval($customization['quantity']).'" />
@@ -370,7 +352,8 @@ class AdminOrders extends AdminTab
 					echo '
 						<input type="text" id="cancelQuantity_'.$customizationId.'" name="cancelCustomizationQuantity['.$customizationId.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
 				echo ($order->hasBeenDelivered() ? intval($customization['quantity_returned']).'/'.(intval($customization['quantity']) - intval($customization['quantity_refunded'])) : ($order->hasBeenPaid() ? intval($customization['quantity_refunded']).'/'.intval($customization['quantity']) : '')).'
-					</td>
+					</td>';
+				echo '
 				</tr>';
 			}
 		}
@@ -621,7 +604,7 @@ class AdminOrders extends AdminTab
 			<fieldset style="width: 868px; ">
 				<legend><img src="../img/admin/cart.gif" alt="'.$this->l('Products').'" />'.$this->l('Products').'</legend>
 				<div style="float:left;">
-					<table style="width: 740px;" cellspacing="0" cellpadding="0" class="table" id="orderProducts">
+					<table style="width: 868px;" cellspacing="0" cellpadding="0" class="table" id="orderProducts">
 						<tr>
 							<th align="center" style="width: 60px">&nbsp;</th>
 							<th>'.$this->l('Product').'</th>
@@ -631,6 +614,8 @@ class AdminOrders extends AdminTab
 							'.($order->hasBeenDelivered() ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
 							<th style="width: 90px; text-align: center">'.$this->l('Total').'</th>
+							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
+		echo '
 						</tr>';
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
 						foreach ($products as $k => $product)
@@ -659,10 +644,11 @@ class AdminOrders extends AdminTab
 									$products[$k]['image_size'] = getimagesize($target);
 							}
 							// Customization display
-							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog);
+							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $k);
 							
 							// Normal display
 							if ($product['product_quantity'] > $product['customizationQuantityTotal'])
+							{
 								echo '
 								<tr'.((isset($image['id_image']) AND isset($products[$k]['image_size'])) ? ' height="'.($products[$k]['image_size'][1] + 7).'"' : '').'>
 									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
@@ -678,8 +664,27 @@ class AdminOrders extends AdminTab
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 									<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center" class="cancelCheck">
+										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
+										<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />
+										<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
+								if (intval($product['product_quantity_return']) < intval($product['product_quantity']))
+									echo '
+										<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', 1)" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
+								else
+									echo '--';
+								echo '
+									</td>
+									<td class="cancelQuantity">';
+								if (intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity']))
+									echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';
+								else
+									echo '
+										<input type="text" id="cancelQuantity_'.intval($product['id_order_detail']).'" name="cancelQuantity['.$k.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
+								echo $this->getCancelledProductNumber($order, $product).'
+									</td>
 								</tr>';
-
+							}
 						}
 					echo '
 					</table>
@@ -707,41 +712,6 @@ class AdminOrders extends AdminTab
 				
 				// Cancel product
 				echo '
-				<div style="float:right; width:110px;">
-					<table style="width:100%" cellspacing="0" cellpadding="0" class="table" id="cancelProducts">
-						<tr>
-							<th colspan="2"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
-						echo '
-						</tr>';
-					foreach ($products as $k => $product)
-					{
-						$this->displayCancelCustomizations($customizedDatas, $product, $image, $k);
-						echo '
-						<tr'.((isset($image['id_image']) AND isset($product['image_size'])) ? ' height="'.($product['image_size'][1] + 7).'"' : '').'>
-							<td align="center" class="cancelCheck">
-								<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
-								<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />
-								<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
-						if (intval($product['product_quantity_return']) < intval($product['product_quantity']))
-							echo '
-								<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', 1)" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
-						else
-							echo '--';
-						echo '
-							</td>
-							<td class="cancelQuantity">';
-						if (intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity']))
-							echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';
-						else
-							echo '
-								<input type="text" id="cancelQuantity_'.intval($product['id_order_detail']).'" name="cancelQuantity['.$k.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
-						echo $this->getCancelledProductNumber($order, $product).'
-							</td>
-						</tr>';
-					}
-					echo '
-					</table>
-				</div>
 				<div style="clear:both; height:15px;">&nbsp;</div>
 				<div style="float: right; width: 160px;">';
 				if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
