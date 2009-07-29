@@ -217,6 +217,7 @@ h1#logo {
 div.rte,
 .mceContentBody {
 	text-align:left;
+	background-color:white;
 }
 
 div.rte html, div.rte div, div.rte span, div.rte applet, div.rte object, div.rte iframe,
