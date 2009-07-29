@@ -226,7 +226,7 @@ class		Address extends ObjectModel
 		return $result;
 	}
 	
-	/*
+	/**
 	* Specify if an address is already in base
 	*
 	* @param $id_address Address id
@@ -240,6 +240,15 @@ class		Address extends ObjectModel
 		WHERE a.`id_address` = '.intval($id_address));
 		
 		return isset($row['id_address']);
+	}
+
+	static public function getFirstCustomerAddressId($id_customer, $active = true)
+	{
+		return Db::getInstance()->getValue('
+			SELECT `id_address`
+			FROM `'._DB_PREFIX_.'address`
+			WHERE `id_customer` = '.intval($id_customer).' AND `deleted` = 0'.($active ? ' AND `active` = 1' : '')
+		);
 	}
 }
 

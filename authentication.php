@@ -146,7 +146,10 @@ if (Tools::isSubmit('SubmitLogin'))
 			$cookie->passwd = $customer->passwd;
 			$cookie->email = $customer->email;
 			if (Configuration::get('PS_CART_FOLLOWING') AND (empty($cookie->id_cart) OR Cart::getNbProducts($cookie->id_cart) == 0))
-				$cookie->id_cart = Cart::lastNoneOrderedCart($customer->id);
+				$cookie->id_cart = intval(Cart::lastNoneOrderedCart(intval($customer->id)));
+			$id_address = intval(Address::getFirstCustomerAddressId(intval($customer->id)));
+			$cookie->id_address_delivery = $id_address;
+			$cookie->id_address_invoice = $id_address;
 			Module::hookExec('authentication');
 			if ($back = Tools::getValue('back'))
 				Tools::redirect($back);

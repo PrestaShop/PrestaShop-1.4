@@ -71,6 +71,8 @@ if ($add OR Tools::getIsset('update') OR $delete)
 					/* Product addition to the cart */
 					if (!isset($cart->id) OR !$cart->id)
 					{
+						$cart->id_address_delivery = intval($cookie->id_address_delivery);
+						$cart->id_address_invoice = intval($cookie->id_address_invoice);
 					    $cart->add();
 					    if ($cart->id)
 							$cookie->id_cart = intval($cart->id);

@@ -194,6 +194,8 @@ class	Cookie
 		unset($this->_content['logged']);
 		unset($this->_content['email']);
 		unset($this->_content['id_cart']);
+		unset($this->_content['id_address_invoice']);
+		unset($this->_content['id_address_delivery']);
 		$this->write();
 	}
 	
