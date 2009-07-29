@@ -2,6 +2,7 @@
 
 function update_modules_sql()
 {
+	Configuration::loadConfiguration();
 	$blocklink = Module::getInstanceByName('blocklink');
 	if ($blocklink->id)
 		Db::getInstance()->Execute('ALTER IGNORE TABLE `'._DB_PREFIX_.'blocklink_lang` ADD PRIMARY KEY (`id_link`, `id_lang`);');
