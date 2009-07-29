@@ -5,6 +5,54 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.0.8 - 1210 (2009-29-07)   #
+####################################
+
+	Improved/changed features :
+
+	[*] Classes : added optional parameter for Tools::htmlentities
+	[*] MO : one more attempt to improve the sitemap
+	[*] Installer : smtp login is not required now (#2454)
+
+	Fixed bugs :
+
+	[-] Installer : Upgrade fixed (1.1.0.5 to 1.2.0.8)
+	[-] BO : CSV import fixed (was overridding ignored columns when a product already existed)
+	[-] MO : no more display password and signature in PayPalAPI
+	[-] BO : CSV image import fixed
+	[-] Installer : fixed while updating modules structure (#2492)
+	[-] MO : fixed bug while filtering content for access
+	[-] BO : Translation copy fixed (forgot modules' ones)
+	[-] BO : Order detail display fixed (product combination image)
+	[-] BO : Order detail display fixed (cancel table)
+	[-] MO : fixed #2491 : now blocksearch doesn\'t display slashes when quotes (single or double) are used
+	[-] FO : Price display fixed (when both excluded and included tax was displayed)
+	[-] FO : "Display all pictures" link display fixed
+	[-] Classes : fixed bug while duplicating product result in search
+	[-] BO : tinymce background is now white (fixed #2446)
+	[-] FO : Price display fixed (when the customer log in and is in a different zone to the default country one)
+	[-] BO : AdminInvoices now select by invoice date (#2487)
+	[-] Installer : messages are now at the right place (#2450)
+	[-] MO : deleted an old Tools::d()
+	[-] FO : you cannot select anymore a carrier without a delivery range set for
+	[-] Installer : upgrade fixed
+	[-] BO : Customized product removing from an order fixed
+	[-] FO : Customizable product customized text display fixed (was htmlentitized)
+	[-] MO : fixed various bug in PayPalAPI
+	[-] MO : fixed bug while submiting twice PayPalCheckout (#2440)
+	[-] Classes : fixed several bugs while selecting products
+	[-] BO : Pack bugs on AdminProducts
+	[-] Translations : adminreferrers translations
+	[-] BO : you can change your language again
+	[-] MO : Currencies weren't taken into account in statshome
+	[-] MO : fixed active access to payment modules (#2475)
+	[-] FO : cannot access anymore at a product page if customer have no rights
+	[-] BO : fixed unchecked zone when error on carrier form submitted (#2458)
+	[-] BO : fixed required fields in AdminPreferences
+	[-] BO : fixed language used for display list of groups in AdminCategories
+	[-] BO : switched submit button in AdminCategories
+
+####################################
 #   v1.2.0.7 - 1167 (2009-24-07)   #
 ####################################
 
