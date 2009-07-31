@@ -31,8 +31,9 @@ class BlockAdvertising extends Module
 	*/
 	function hookRightColumn($params)
 	{
-		global $smarty;
-		$smarty->assign('image', './modules/'.$this->name.'/advertising.jpg');
+		global $smarty, $protocol_content, $server_host;
+
+		$smarty->assign('image', $protocol_content.$server_host.__PS_BASE_URI__.'/modules/'.$this->name.'/advertising.jpg');
 		return $this->display(__FILE__, 'blockadvertising.tpl');
 	}
 
