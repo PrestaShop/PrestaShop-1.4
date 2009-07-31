@@ -315,12 +315,15 @@ class Search
 				$queryArray[] = '('.intval($product['id_lang']).',\''.pSQL($word).'\')';
 				$queryArray2[] = '('.intval($product['id_product']).',(SELECT id_word FROM '._DB_PREFIX_.'search_word WHERE word = \''.pSQL($word).'\' AND id_lang = '.intval($product['id_lang']).' LIMIT 1),'.intval($weight).')';
 			}
-			if (!($rows = $db->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != sizeof($queryArray))
-				Tools::d(array(mysql_error(), $queryArray));
-			if (!($rows = $db->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',',$queryArray2).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)')) OR $rows != sizeof($queryArray2))
-				Tools::d(array(mysql_error(), $queryArray2));
+			if (sizeof($queryArray) AND sizeof($queryArray2))
+			{
+				if (!($rows = $db->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != sizeof($queryArray))
+					Tools::d(array(mysql_error(), $queryArray));
+				if (!($rows = $db->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',',$queryArray2).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)')) OR $rows != sizeof($queryArray2))
+					Tools::d(array(mysql_error(), $queryArray2));
+			}
+			$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product = '.intval($product['id_product']));
 		}
-		$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1');
 		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}
