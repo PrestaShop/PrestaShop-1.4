@@ -29,7 +29,7 @@ class AdminManufacturers extends AdminTab
 		$this->lang = false;
 		$this->edit = true;
 	 	$this->delete = true;
-		
+
 		// Sub tab addresses
 		$countries = Country::getCountries(intval($cookie->id_lang));
 		foreach ($countries AS $country)
@@ -48,7 +48,6 @@ class AdminManufacturers extends AdminTab
 	 	$this->_joinAddresses .= 'LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (a.`id_manufacturer` = m.`id_manufacturer`)';
 		$this->_selectAddresses = 'cl.`name` as country, m.`name` AS manufacturer_name';
 		$this->_includeTab = array('Addresses' => array('addressType' => 'manufacturer', 'fieldsDisplay' => $this->fieldsDisplayAddresses, '_join' => $this->_joinAddresses, '_select' => $this->_selectAddresses));
-		
 		$this->view = true;
 		$this->_select = 'COUNT(`id_product`) AS `products`, (SELECT COUNT(ad.`id_manufacturer`) as `addresses` FROM `'._DB_PREFIX_.'address` ad WHERE ad.`id_manufacturer` = a.`id_manufacturer` GROUP BY ad.`id_manufacturer`) as `addresses`';
 		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'product` p ON (a.`id_manufacturer` = p.`id_manufacturer`)';
@@ -105,7 +104,7 @@ class AdminManufacturers extends AdminTab
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 
-		echo '<br class="clear" /><br /><br /><br /><br /><br /><br /><br /><br /><br /><label>'.$this->l('Short description:').' </label>
+		echo '<br class="clear" /><label>'.$this->l('Short description:').' </label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			echo '
