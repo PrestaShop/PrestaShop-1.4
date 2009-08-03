@@ -2066,7 +2066,7 @@ class AdminProducts extends AdminTab
 								echo '<input type="submit" value="'.$this->l('   Save image   ').'" name="submitAdd'.$this->table.'" class="button" />';
 								echo '<input type="hidden" value="on" name="productCreated" /><br /><br />';
 							}
-							echo (Tools::getValue('id_image') ? '<input type="hidden" name="id_image" value="'.intval(Tools::getValue('id_image')).'" />' : 'héhé').'
+							echo (Tools::getValue('id_image') ? '<input type="hidden" name="id_image" value="'.intval(Tools::getValue('id_image')).'" />' : '').'
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:730px;"></td></tr>';
