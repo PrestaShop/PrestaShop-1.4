@@ -169,28 +169,30 @@ class Backup
 			fwrite($fp, '/* Scheme for table ' . $schema[0]['Table'] . " */\n");
 			fwrite($fp, $schema[0]['Create Table'] . ";\n\n");
 		
-			$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`');
-
-			if ($data AND is_array($data) AND sizeof($data) > 0)
+			$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`', false);
+			$sizeof = DB::getInstance()->NumRows();
+			if ($data AND $sizeof > 0)
 			{
 				// Export the table data
 				fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
 
-				foreach ($data as $i => $row)
+				$i = 1;
+				while ($row = DB::getInstance()->nextRow($data))
 				{
 					$s = '(';
 					foreach ($row as $field => $value)
 						$s .= "'" . mysql_real_escape_string($value) . "',";
 					$s = rtrim($s, ',');
 
-					if ($i%200 == 0 AND $i < sizeof($data) - 1)
+					if ($i%200 == 0 AND $i < $sizeof - 1)
 						$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
-					elseif ($i < sizeof($data) - 1)
+					elseif ($i < $sizeof - 1)
 						$s .= "),\n";
 					else
 						$s .= ");\n";
 					
 					fwrite($fp, $s);
+					++$i;
 				}
 			}
 			$found++;
