@@ -1089,10 +1089,10 @@ abstract class AdminTab
 	 */
 	public function displayList()
 	{
-		/* Do not copy category ID */
-		$currentIndex2 = __PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab='.Tools::getValue('tab');
+		global $currentIndex;
+
 		if ($this->edit AND (!isset($this->noAdd) OR !$this->noAdd))
-			echo '<br /><a href="'.$currentIndex2.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add new').'</a><br /><br />';
+			echo '<br /><a href="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add new').'</a><br /><br />';
 		/* Append when we get a syntax error in SQL query */
 		if ($this->_list === false)
 		{

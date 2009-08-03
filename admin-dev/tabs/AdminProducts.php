@@ -879,10 +879,12 @@ class AdminProducts extends AdminTab
 		global $currentIndex, $cookie;
 
 		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'position' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
-
+		$id_category = intval(Tools::getValue('id_category'));
+		if (!$id_category)
+			$id_category = 1;
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('No products found')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('products') : $this->l('product')))).' '.
 		$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
-		echo '<a href="'.$currentIndex.'&add'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new product').'</a>
+		echo '<a href="'.$currentIndex.'&id_category='.$id_category.'&add'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new product').'</a>
 		<div style="margin:10px;">';
 		$this->displayList($token);
 		echo '</div>';

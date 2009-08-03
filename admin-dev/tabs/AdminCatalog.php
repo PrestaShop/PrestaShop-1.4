@@ -111,7 +111,6 @@ class AdminCatalog extends AdminTab
 			$id_category = intval(Tools::getValue('id_category'));
 			if (!$id_category)
 				$id_category = 1;
-			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
 			echo '<div class="cat_bar"><span style="color: #3C8534;">'.$this->l('Current category').' :</span>&nbsp;&nbsp;&nbsp;'.getPath($currentIndex, $id_category).'</div>';
 			echo '<h2>'.$this->l('Categories').'</h2>';
 			$this->adminCategories->display($this->token);
