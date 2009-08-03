@@ -1078,16 +1078,20 @@ class		Product extends ObjectModel
 
 		if ($count)
 		{
-			$result = Db::getInstance()->getRow('
-			SELECT COUNT(`id_product`) AS nb
-			FROM `'._DB_PREFIX_.'product`
-			WHERE `reduction_price` > 0
-			OR `reduction_percent` > 0
-			AND `active` = 1');
+			$sql = '
+			SELECT COUNT(DISTINCT p.`id_product`) AS nb
+			FROM `'._DB_PREFIX_.'product` p
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+			WHERE (p.`reduction_price` > 0 OR p.`reduction_percent` > 0)
+			AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
+			AND p.`active` = 1';
+			$result = Db::getInstance()->getRow($sql);
 			return intval($result['nb']);
 		}
 		$currentDate = date('Y-m-d');
-		$result = Db::getInstance()->ExecuteS('
+		$sql = '
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, i.`id_image`, il.`legend`, t.`rate`, (p.`reduction_price` + (p.`reduction_percent` * p.`price`)) AS myprice, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
@@ -1107,7 +1111,8 @@ class		Product extends ObjectModel
 		AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
 		GROUP BY p.`id_product`
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
-		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
+		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts);
+		$result = Db::getInstance()->ExecuteS($sql);
 		if($orderBy == 'price')
 		{
 			Tools::orderbyPrice($result,$orderWay);
