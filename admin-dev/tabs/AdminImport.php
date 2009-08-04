@@ -526,6 +526,9 @@ class AdminImport extends AdminTab
 					$product->reduction_from = date('Y-m-d');
 				if ($product->reduction_to == '0000-00-00')
 					$product->reduction_to = date('Y-m-d');
+				$categoryData = Product::getIndexedCategories(intval($product->id));
+				foreach ($categoryData as $tmp)
+					$product->category[] = $tmp['id_category'];
 			}
 			else
 				$product = new Product();
