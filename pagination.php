@@ -1,6 +1,6 @@
 <?php
 
-$nArray = array(10, 20, 50);
+$nArray = intval(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array(intval(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 $n = abs(intval(Tools::getValue('n', intval(Configuration::get('PS_PRODUCTS_PER_PAGE')))));
 $p = abs(intval(Tools::getValue('p', 1)));
 $range = 2; /* how many pages around page selected */
