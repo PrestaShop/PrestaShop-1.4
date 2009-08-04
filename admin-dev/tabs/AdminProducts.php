@@ -94,7 +94,7 @@ class AdminProducts extends AdminTab
 				Attribute::updateQtyProduct($this->_list[$i]);
 			/* update product final price */
 			for ($i = 0; $i < $nb; $i++)
-				$this->_list[$i]['price_tmp'] = Product::getPriceStatic($this->_list[$i]['id_product']);
+				$this->_list[$i]['price_tmp'] = Product::getPriceStatic($this->_list[$i]['id_product'], $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = true);
 		}
 		
 		if ($orderByPriceFinal == 'price_final')

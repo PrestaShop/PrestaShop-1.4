@@ -1214,7 +1214,7 @@ class		Product extends ObjectModel
 	* @param integer $divisor Util when paying many time without fees (optional)
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false)
 	{
 		global $cookie;
 
@@ -1242,6 +1242,8 @@ class		Product extends ObjectModel
 
 		// Exclude tax
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
+		if ($forceAssociatedTax)
+			$tax = floatval($result['rate']);
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
 		if ($usetax)
