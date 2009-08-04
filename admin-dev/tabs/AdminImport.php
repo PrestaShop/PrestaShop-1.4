@@ -164,7 +164,7 @@ class AdminImport extends AdminTab
 				'price' => 0,
 				'id_tax' => 0,
 				'description_short' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),	
+				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => '')
 				);
 				
 				break;
@@ -520,7 +520,13 @@ class AdminImport extends AdminTab
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 			if (array_key_exists('id', $info) AND intval($info['id']) AND Product::existsInDatabase(intval($info['id'])))
+			{
 				$product = new Product(intval($info['id']));
+				if ($product->reduction_from == '0000-00-00')
+					$product->reduction_from = date('Y-m-d');
+				if ($product->reduction_to == '0000-00-00')
+					$product->reduction_to = date('Y-m-d');
+			}
 			else
 				$product = new Product();
 			self::setEntityDefaultValues($product);
@@ -659,7 +665,9 @@ class AdminImport extends AdminTab
 			$product->link_rewrite = self::createMultiLangField($link_rewrite);
 			
 			$res = false;
-			if (($fieldError = $product->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $product->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
+			$fieldError = $product->validateFields(UNFRIENDLY_ERROR, true);
+			$langFieldError = $product->validateFieldsLang(UNFRIENDLY_ERROR, true);
+			if ($fieldError === true AND $langFieldError === true)
 			{
 				// If id product AND id product already in base, trying to update
 				if ($product->id AND Product::existsInDatabase(intval($product->id)))
