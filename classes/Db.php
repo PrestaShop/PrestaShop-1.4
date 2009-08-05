@@ -155,7 +155,7 @@ abstract class Db
 				$query .= '`'.$key.'` = '.(($value === '' OR $value === NULL) ? 'NULL' : '\''.$value.'\'').',';
 			$query = rtrim($query, ',');
 			if ($where)
-				$query .= ' WHERE '.$where;			
+				$query .= ' WHERE '.$where;
 			if ($limit)
 				$query .= ' LIMIT '.intval($limit);
 			return $this->q($query);
