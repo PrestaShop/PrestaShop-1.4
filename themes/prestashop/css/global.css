@@ -1212,6 +1212,9 @@ div.paiement_logo_block img { margin: 0 0.5em; }
 
 /* Block editorial */
 .editorial_block { margin-bottom: 2em; }
+.editorial_block .rte{
+	background:transparent none repeat scroll 0 0;
+}
 .editorial_block h2 {
 	background: none;
 	padding: 0;
@@ -1883,7 +1886,9 @@ position:relative;
 
 #primary_block p.buttons_bottom_block{ margin:0; }
 #primary_block p.buttons_bottom_block a, #primary_block p.buttons_bottom_block input { margin:0.9em auto 0 auto; }
-#primary_block #short_description_content{ margin-bottom:0.5em; }
+#primary_block #short_description_content{
+	margin-bottom:0.5em;
+}
 #primary_block form#buy_block{
 	background: #f1f2f4 url('../img/product-buy-bg.gif') repeat-x top left;
 	font-size:1.1em;
@@ -2502,4 +2507,8 @@ div.star a:hover{
 	float: right; margin-right:3px; font-size: 12px;
 }
 
-.confirmation { color: forestgreen; font-weight: bold; };
+.confirmation { color: forestgreen; font-weight: bold;}
+
+#page .rte {
+	background:transparent none repeat scroll 0 0;
+}

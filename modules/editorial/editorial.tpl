@@ -6,6 +6,6 @@
 	{if $xml->body->$logo_subheading}{$xml->body->$logo_subheading|stripslashes}{/if} 
 	{if $xml->body->$title}<h2>{$xml->body->$title|stripslashes}</h2>{/if}
 	{if $xml->body->$subheading}<h3>{$xml->body->$subheading|stripslashes}</h3>{/if}
-	{if $xml->body->$paragraph}<div>{$xml->body->$paragraph|stripslashes}</div>{/if}
+	{if $xml->body->$paragraph}<div class="rte">{$xml->body->$paragraph|stripslashes}</div>{/if}
 </div>
 <!-- /Module Editorial -->
