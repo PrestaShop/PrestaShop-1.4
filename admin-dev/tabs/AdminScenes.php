@@ -206,9 +206,10 @@ class AdminScenes extends AdminTab
 		
 		echo '
 					<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
+					<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'js/jquery/imgareaselect/imgareaselect-default.css" />
 					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
 					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.hotkeys-0.7.8-packed.js"></script>
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.imgareaselect-0.5.1.min.js"></script>
+					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/imgareaselect/jquery.imgareaselect.pack.js"></script>
 					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/admin-scene-cropping.js"></script>
 		';
 				
