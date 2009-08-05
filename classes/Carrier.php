@@ -373,7 +373,7 @@ class		Carrier extends ObjectModel
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'delivery`
 		SET id_carrier = '.intval($this->id).'
-		WHERE id_carrier = '.intval($oldId).')');
+		WHERE id_carrier = '.intval($oldId));
 
 		$oldLogo = _PS_SHIP_IMG_DIR_.'/'.intval($oldId).'.jpg';
 		if (file_exists($oldLogo))
