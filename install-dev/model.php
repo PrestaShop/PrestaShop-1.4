@@ -5,6 +5,7 @@ if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
+$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
 define('INSTALL_VERSION', '1.2.1.0');
 define('INSTALL_PATH', dirname(__FILE__));

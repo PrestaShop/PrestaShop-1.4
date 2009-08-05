@@ -4,6 +4,7 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
+$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
@@ -43,11 +44,11 @@ if ($lm->getIncludeTradFilename())
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title><?php echo lang('PrestaShop '.INSTALL_VERSION.' Installer')?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
-	<script type="text/javascript" src="../js/jquery/jquery-1.2.6.pack.js"></script>
-	<script type="text/javascript" src="../js/jquery/ajaxfileupload.js"></script>
-	<script type="text/javascript" src="../js/jquery/jquery.pngFix.pack.js"></script>
-	<script type="text/javascript" src="../js/jquery/jqminmax-compressed.js"></script>
-	<link rel="shortcut icon" href="../img/favicon.ico" />
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.2.6.pack.js"></script>
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/ajaxfileupload.js"></script>
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery.pngFix.pack.js"></script>
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jqminmax-compressed.js"></script>
+	<link rel="shortcut icon" href="<?php echo PS_BASE_URI ?>img/favicon.ico" />
 	
 	<script type="text/javascript">
 		//php to js vars
