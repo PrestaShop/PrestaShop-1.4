@@ -209,7 +209,7 @@ abstract class AdminStatsTab extends AdminPreferences
 			// Needed for the graphics display when this is the default module
 			$_GET['module'] = $moduleName;
 			$moduleInstance = Module::getInstanceByName($moduleName);
-			if ($moduleInstance)
+			if ($moduleInstance AND $moduleInstance->active)
 				echo Module::hookExec(Tools::getValue('tab'), NULL, $moduleInstance->id);
 			else
 				echo $this->l('Module not found', 'AdminStatsTab');
