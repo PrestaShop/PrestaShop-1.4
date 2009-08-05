@@ -136,7 +136,9 @@ class AdminCMS extends AdminTab
 					template_external_list_url : "lists/template_list.js",
 					external_link_list_url : "lists/link_list.js",
 					external_image_list_url : "lists/image_list.js",
-					media_external_list_url : "lists/media_list.js"
+					media_external_list_url : "lists/media_list.js",
+					elements : "nourlconvert",
+					convert_urls : false
 				});
 			});
 		}
