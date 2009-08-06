@@ -104,8 +104,17 @@ class		Configuration extends ObjectModel
 		FROM `'._DB_PREFIX_.'configuration` c
 		'.($id_lang ? ('LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.`id_configuration` = cl.`id_configuration` AND cl.`id_lang` = '.intval($id_lang).')') : '').'
 		WHERE `name` = \''.pSQL($key).'\'');
-
-		return ($result ? $result['value'] : false);
+		
+		if ($id_lang)
+		{
+			self::$_CONF_LANG[intval($id_lang)][$key] = ($result ? $result['value'] : false);
+			return self::$_CONF_LANG[intval($id_lang)][$key];
+		}
+		else
+		{
+			self::$_CONF[$key] = ($result ? $result['value'] : false);
+			return self::$_CONF[$key];
+		}
 	}
 
 	/**

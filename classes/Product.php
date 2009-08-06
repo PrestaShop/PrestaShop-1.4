@@ -1898,29 +1898,37 @@ class		Product extends ObjectModel
 		return $row['id_image'];
 	}
 
+	private static $producPropertiesCache = array();
+	
 	static public function getProductProperties($id_lang, $row)
 	{
 		if (!$row['id_product'])
 			return false;
-		$link = new Link();
-
+		
+		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
+		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
+			$row['id_product_attribute'] = $ipa_default;
+		if (!isset($row['id_product_attribute']))
+			$row['id_product_attribute'] = 0;
+		
 		// Tax
 		$usetax = true;
 		$tax = floatval(Tax::getApplicableTax(intval($row['id_tax']), floatval($row['rate'])));
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
+		
+		$cacheKey = $row['id_product'].'-'.$row['id_product_attribute'].'-'.$id_lang.'-'.intval($usetax);
+		if (array_key_exists($cacheKey, self::$producPropertiesCache))
+			return self::$producPropertiesCache[$cacheKey];
 
 		// Datas
+		$link = new Link();
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
-		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
-		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
-			$row['id_product_attribute'] = $ipa_default;
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
 		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
 		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
-		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'],
-		$row['price'], $usetax, floatval($row['rate']));
+		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'], $row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
@@ -1929,7 +1937,9 @@ class		Product extends ObjectModel
 		$row['pack'] = Pack::isPack($row['id_product']);
 		$row['packItems'] = $row['pack'] ? Pack::getItemTable($row['id_product'], $id_lang) : array();
 		$row['nopackprice'] = $row['pack'] ? Pack::noPackPrice($row['id_product']) : 0;
-		return $row;
+		
+		self::$producPropertiesCache[$cacheKey] = $row;
+		return self::$producPropertiesCache[$cacheKey];
 	}
 
 	static public function getProductsProperties($id_lang, $query_result)

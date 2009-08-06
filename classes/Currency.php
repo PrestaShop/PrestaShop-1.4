@@ -47,6 +47,8 @@ class		Currency extends ObjectModel
 
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
+	
+	private static $currencyCacheArray = NULL;
 
 	public function getFields()
 	{
@@ -123,15 +125,19 @@ class		Currency extends ObjectModel
 	  */
 	static public function getCurrencies($object = false)
 	{
-		$tab = Db::getInstance()->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'currency`
-		WHERE `deleted` = 0
-		ORDER BY `name` ASC');
-		if ($object)
-			foreach ($tab as $key => $currency)
-				$tab[$key] = new Currency($currency['id_currency']);
-		return $tab;
+		if (!self::$currencyCacheArray)
+		{
+			$tab = Db::getInstance()->ExecuteS('
+			SELECT *
+			FROM `'._DB_PREFIX_.'currency`
+			WHERE `deleted` = 0
+			ORDER BY `name` ASC');
+			if ($object)
+				foreach ($tab as $key => $currency)
+					$tab[$key] = new Currency($currency['id_currency']);
+			self::$currencyCacheArray = $tab;
+		}
+		return self::$currencyCacheArray;
 	}
 	
 	static public function getPaymentCurrenciesSpecial($id_module)

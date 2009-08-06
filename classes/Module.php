@@ -60,6 +60,7 @@ abstract class Module
 	 *
 	 * @param string $name Module unique name
 	 */
+	private static $modulesCache = NULL;
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -68,12 +69,18 @@ abstract class Module
 			$this->name = $this->id;
 		if ($this->name != NULL)
 		{
-			$result = Db::getInstance()->GetRow('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `name` = \''.pSQL($this->name).'\'');
-			if (!$result)
+			if (self::$modulesCache == NULL AND !is_array(self::$modulesCache))
+			{
+				self::$modulesCache = array();
+				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'`');
+				foreach ($result as $row)
+					self::$modulesCache[$row['name']] = $row;
+			}
+			if (!isset($result[$this->name]))
 				return false;
 			$this->active = true;
-			$this->id = $result['id_module'];
-			foreach ($result AS $key => $value)
+			$this->id = $result[$this->name]['id_module'];
+			foreach ($result[$this->name] AS $key => $value)
 				if (key_exists($key, $this))
 					$this->{$key} = $value;
 			$this->_path = __PS_BASE_URI__.'modules/'.$this->name.'/';
@@ -583,13 +590,23 @@ abstract class Module
 	 * @param int $id_hook Hook ID
 	 * @return array Exceptions
 	 */
+	private static $exceptionsCache = NULL;
 	public function getExceptions($id_hook)
 	{
-		return Db::getInstance()->ExecuteS('
-		SELECT `file_name`
-		FROM `'._DB_PREFIX_.'hook_module_exceptions`
-		WHERE `id_hook` = '.intval($id_hook).'
-		AND  `id_module` = '.intval($this->id));
+		if (self::$exceptionsCache == NULL AND !is_array(self::$exceptionsCache))
+		{
+			self::$exceptionsCache = array();
+			$result = Db::getInstance()->ExecuteS('
+			SELECT CONCAT(id_hook, \'-\', id_module) as `key`, `file_name` as value
+			FROM `'._DB_PREFIX_.'hook_module_exceptions`');
+			foreach ($result as $row)
+			{
+				if (!array_key_exists($row['key'], self::$exceptionsCache))
+					self::$exceptionsCache[$row['key']] = array();
+				self::$exceptionsCache[$row['key']][] = array('file_name' => $row['value']);
+			}
+		}
+		return (array_key_exists(intval($id_hook).'-'.intval($this->id), self::$exceptionsCache) ? self::$exceptionsCache[intval($id_hook).'-'.intval($this->id)] : array());
 	}
 
 	public static function display($file, $template)

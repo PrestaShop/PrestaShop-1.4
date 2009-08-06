@@ -7,13 +7,13 @@ class Pack extends Product
 	
 	public static function isPack($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT COUNT(id_product_item) as items FROM '._DB_PREFIX_.'pack where id_product_pack = '.intval($id_product));
+		$result = Db::getInstance()->getRow('SELECT COUNT(*) as items FROM '._DB_PREFIX_.'pack where id_product_pack = '.intval($id_product));
 		return $result['items'] > 0 ? true : false;
 	}
 	
 	public static function isPacked($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT COUNT(id_product_pack) as packs FROM '._DB_PREFIX_.'pack where id_product_item = '.intval($id_product));
+		$result = Db::getInstance()->getRow('SELECT COUNT(*) as packs FROM '._DB_PREFIX_.'pack where id_product_item = '.intval($id_product));
 		return $result['packs'] > 0 ? true : false;
 	}
 	
