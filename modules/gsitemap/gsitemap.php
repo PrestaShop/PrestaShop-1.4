@@ -1,5 +1,6 @@
 <?php
 
+
 class Gsitemap extends Module
 {
     private $_html = '';
@@ -11,27 +12,24 @@ class Gsitemap extends Module
         $this->tab = 'Tools';
         $this->version = '1.4';
 
-        $this->_filename = dirname(__FILE__).'/../../sitemap.xml';
-        $this->_filename_http = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml';
-
         parent::__construct();
 
-        /* The parent construct is required for translations */
-		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('Google sitemap');
         $this->description = $this->l('Generate your Google sitemap file');
+		
+		define('GSITEMAP_FILE', dirname(__FILE__).'/../../sitemap.xml');
     }
 
     function uninstall()
     {
-        file_put_contents($this->_filename, '');
+        file_put_contents(GSITEMAP_FILE, '');
         return parent::uninstall();
     }
 	
     private function _postValidation()
     {
-        file_put_contents($this->_filename, '');
-		if (!$fp = fopen($this->_filename, 'w'))
+        file_put_contents(GSITEMAP_FILE, '');
+		if (!($fp = fopen(GSITEMAP_FILE, 'w')))
 			$this->_postErrors[] = $this->l('Cannot create').' '.realpath(dirname(__FILE__.'/../..')).'/'.$this->l('sitemap.xml file.');
 		else
 			fclose($fp);
@@ -51,6 +49,8 @@ class Gsitemap extends Module
 		$link = new Link();
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		$ruBackup = $_SERVER['REQUEST_URI'];
+		$snBackup = $_SERVER['SCRIPT_NAME'];
+		$getBackup = $_GET;
 		
         $xml = new SimpleXMLElement('<urlset
 			xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -72,21 +72,24 @@ class Gsitemap extends Module
 		LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 		WHERE l.`active` = 1
 		ORDER BY cl.id_cms, cl.id_lang ASC');
-
       	foreach($cmss AS $cms)
       	{
 			$sitemap = $xml->addChild('url');
 			$tmpLink = $link->getCMSLink($cms['id_cms'], $cms['link_rewrite']);
+			$_GET = array('id_cms' => $cms['id_cms']);
 			if ($cms['id_lang'] != $defaultLanguage)
 			{
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
+				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', '0.8');
             $sitemap->addChild('changefreq', 'monthly');
 		}
-
+		
         $categories = Db::getInstance()->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
 		FROM '._DB_PREFIX_.'category c
@@ -100,10 +103,14 @@ class Gsitemap extends Module
 				$priority = 0.1;
 			$sitemap = $xml->addChild('url');
 			$tmpLink = $link->getCategoryLink($category['id_category'], $category['link_rewrite']);
+			$_GET = array('id_category' => $category['id_category']);
 			if ($category['id_lang'] != $defaultLanguage)
 			{
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($category['id_lang']));
+				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
@@ -130,43 +137,66 @@ class Gsitemap extends Module
 				$priority = 0.1;
             $sitemap = $xml->addChild('url');
 			$tmpLink = $link->getProductLink($product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13']);
+			$_GET = array('id_product' => $product['id_product']);
 			if ($product['id_lang'] != $defaultLanguage)
 			{
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
+				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($product['id_lang']));
+				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
             $sitemap->addChild('lastmod', $product['date_upd']);
             $sitemap->addChild('changefreq', 'weekly');
         }
+		
+        $images = Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM '._DB_PREFIX_.'product p
+		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
+		LEFT JOIN '._DB_PREFIX_.'image_lang il ON i.id_image = il.id_image AND il.id_lang = '.intval($defaultLanguage).'
+		WHERE p.`active` = 1
+		ORDER BY p.id_product');
+        foreach($images as $image)
+        {
+            $sitemap = $xml->addChild('url');
+			$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image']);
+            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
+            $sitemap->addChild('priority', 0.4);
+            $sitemap->addChild('lastmod', $image['date_upd']);
+            $sitemap->addChild('changefreq', 'monthly');
+        }
 
         $xmlString = $xml->asXML();
 		
-        $fp = fopen($this->_filename, 'w');
+        $fp = fopen(GSITEMAP_FILE, 'w');
         fwrite($fp, $xmlString, Tools::strlen($xmlString));
         fclose($fp);
 
-        $res = file_exists($this->_filename);
+        $res = file_exists(GSITEMAP_FILE);
         $this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
         $this->_html .= $res ? $this->l('Sitemap file successfully generated') : $this->l('Error while creating sitemap file');
         $this->_html .= '</h3>';
 		
 		$_SERVER['REQUEST_URI'] = $ruBackup;
+		$_SERVER['SCRIPT_NAME'] = $snBackup;
+		$_GET = $getBackup;
     }
 
     private function _displaySitemap()
     {
-        if (file_exists($this->_filename) AND filesize($this->_filename))
+        if (file_exists(GSITEMAP_FILE) AND filesize(GSITEMAP_FILE))
         {			
-            $fp = fopen($this->_filename, 'r');
+            $fp = fopen(GSITEMAP_FILE, 'r');
             $fstat = fstat($fp);
             fclose($fp);
-            $xml = simplexml_load_file($this->_filename);
+            $xml = simplexml_load_file(GSITEMAP_FILE);
             $nbPages = sizeof($xml->url);
 
             $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
-            <a href="'.$this->_filename_http.'"><b>'.$this->_filename_http.'</b></a></p><br />';
+            <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml"><b>http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
             $this->_html .= $this->l('Update:').' <b>'.strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime']).'</b><br />';
             $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'mo</b><br />';
@@ -179,7 +209,7 @@ class Gsitemap extends Module
         $this->_html .=
         '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<input name="btnSubmit" class="button" type="submit"
-			value="'.((!file_exists($this->_filename)) ? $this->l('Generate sitemap file') : $this->l('Update sitemap file')).'" />
+			value="'.((!file_exists(GSITEMAP_FILE)) ? $this->l('Generate sitemap file') : $this->l('Update sitemap file')).'" />
         </form>';
     }
     
