@@ -257,7 +257,7 @@ class AdminLanguages extends AdminTab
 						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>';
 					if ($this->delete)
 						echo '
-						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token != NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, true, false).$id.$this->l('?', __CLASS__, true, false).'\');">
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token != NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('When you delete a language, ALL RELATED TRANSLATIONS IN THE DATABASE WILL BE DELETED, are you sure to delete this langauge ?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>';
 					echo '</td>';
 				}
