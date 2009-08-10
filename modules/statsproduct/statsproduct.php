@@ -68,7 +68,7 @@ class StatsProduct extends ModuleGraph
 	private function getSales($id_product, $id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT o.date_add, o.id_order, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
+		SELECT o.date_add, o.id_order, o.id_customer, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		WHERE o.date_add BETWEEN '.$this->getDate().' AND o.valid = 1
@@ -106,21 +106,23 @@ class StatsProduct extends ModuleGraph
 					<tr>
 						<th>'.$this->l('Date').'</th>
 						<th>'.$this->l('Order').'</th>
+						<th>'.$this->l('Customer').'</th>
 						'.($hasAttribute ? '<th>'.$this->l('Attribute').'</th>' : '').'
 						<th>'.$this->l('Qty').'</th>
 						<th>'.$this->l('Price').'</th>
-						<th>'.$this->l('Tax').'</th>
 					</tr>
 				</thead><tbody>';
+				$tokenOrder = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+				$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
 				foreach ($sales as $sale)
 					$this->_html .= '
 					<tr>
 						<td>'.Tools::displayDate($sale['date_add'], intval($cookie->id_lang), false).'</td>
-						<td>'.intval($sale['id_order']).'</td>
+						<td align="center"><a href="?tab=AdminOrders&id_order='.$sale['id_order'].'&vieworder&token='.$tokenOrder.'">'.intval($sale['id_order']).'</a></td>
+						<td align="center"><a href="?tab=AdminCustomers&id_customer='.$sale['id_customer'].'&viewcustomer&token='.$tokenCustomer.'">'.intval($sale['id_customer']).'</a></td>
 						'.($hasAttribute ? '<td>'.$sale['product_name'].'</td>' : '').'
 						<td>'.intval($sale['product_quantity']).'</td>
 						<td>'.Tools::displayprice($sale['total'], $currency).'</td>
-						<td>'.$sale['tax_name'].'</td>
 					</tr>';
 				$this->_html .= '</tbody></table></div>';
 			}
