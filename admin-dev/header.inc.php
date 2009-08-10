@@ -88,9 +88,14 @@ require_once(dirname(__FILE__).'/init.php');
 						echo '<option value="0">---</option>';
 						foreach ($quicks AS $quick)
 						{
-							preg_match('/tab=(.+)&/', $quick['link'], $adminTab);
+							preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
+							p($adminTab);
 							if (isset($adminTab[1]))
+							{
+								if (strpos($adminTab[1], '&'))
+									$adminTab[1] = substr($adminTab[1], 0, strpos($adminTab[1], '&'));
 								$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee));
+							}
 							echo '<option value="'.$quick['link'].intval($quick['new_window']).'">'.Category::hideCategoryPosition($quick['name']).'</option>';
 						}
 					?>
