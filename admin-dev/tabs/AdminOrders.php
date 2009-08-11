@@ -338,7 +338,7 @@ class AdminOrders extends AdminTab
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.intval($customization['quantity']).'" />
 						<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
-				if (Configuration::get('PS_ORDER_RETURN') AND intval(($customization['quantity_returned']) < intval($customization['quantity'])))
+				if ((!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN')) AND intval(($customization['quantity_returned']) < intval($customization['quantity'])))
 					echo '
 						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \'_'.$customizationId.'\', 1)" '.((intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
 				else
@@ -348,7 +348,7 @@ class AdminOrders extends AdminTab
 					<td class="cancelQuantity">';
 				if (intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity']))
 					echo '<input type="hidden" name="cancelCustomizationQuantity['.$customizationId.']" value="0" />';
-				elseif (Configuration::get('PS_ORDER_RETURN'))
+				elseif (!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN'))
 					echo '
 						<input type="text" id="cancelQuantity_'.$customizationId.'" name="cancelCustomizationQuantity['.$customizationId.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
 				echo ($order->hasBeenDelivered() ? intval($customization['quantity_returned']).'/'.(intval($customization['quantity']) - intval($customization['quantity_refunded'])) : ($order->hasBeenPaid() ? intval($customization['quantity_refunded']).'/'.intval($customization['quantity']) : '')).'
@@ -668,7 +668,7 @@ class AdminOrders extends AdminTab
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />
 										<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
-								if (Configuration::get('PS_ORDER_RETURN') AND intval($product['product_quantity_return']) < intval($product['product_quantity']))
+								if ((!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN')) AND intval($product['product_quantity_return']) < intval($product['product_quantity']))
 									echo '
 										<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', 1)" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
 								else
@@ -678,7 +678,7 @@ class AdminOrders extends AdminTab
 									<td class="cancelQuantity">';
 								if (intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity']))
 									echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';
-								elseif (Configuration::get('PS_ORDER_RETURN'))
+								elseif (!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN'))
 									echo '
 										<input type="text" id="cancelQuantity_'.intval($product['id_order_detail']).'" name="cancelQuantity['.$k.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
 								echo $this->getCancelledProductNumber($order, $product).'
@@ -688,7 +688,7 @@ class AdminOrders extends AdminTab
 						}
 					echo '
 					</table>
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').'</div>';
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
 					if (sizeof($discounts))
 					{
 						echo '
@@ -714,14 +714,16 @@ class AdminOrders extends AdminTab
 				echo '
 				<div style="clear:both; height:15px;">&nbsp;</div>
 				<div style="float: right; width: 160px;">';
-				if ($order->hasBeenDelivered() OR $order->hasBeenPaid())
+				if ((!$order->hasBeenDelivered() AND $order->hasBeenPaid()) OR ($order->hasBeenDelivered() AND Configuration::get('PS_ORDER_RETURN')))
 					echo '
 					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />
 					<input type="checkbox" id="generateCreditSlip" name="generateCreditSlip" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateCreditSlip" style="float:none; font-weight:normal;">'.$this->l('Generate a credit slip').'</label><br />
 					<input type="checkbox" id="generateDiscount" name="generateDiscount" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateDiscount" style="float:none; font-weight:normal;">'.$this->l('Generate a voucher').'</label><br />
 					<span id="spanShippingBack" style="display:none;"><input type="checkbox" id="shippingBack" name="shippingBack" class="button" />&nbsp;<label for="shippingBack" style="float:none; font-weight:normal;">'.$this->l('Repay shipping costs').'</label><br /></span>';
+				if (!$order->hasBeenDelivered() OR ($order->hasBeenDelivered() AND Configuration::get('PS_ORDER_RETURN')))
+					echo '
+					<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($order->hasBeenDelivered() ? $this->l('Return products') : ($order->hasBeenPaid() ? $this->l('Refund products') : $this->l('Cancel products'))).'" class="button" style="margin-top:8px;" /></div>';
 				echo '
-					<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($order->hasBeenDelivered() ? $this->l('Return products') : ($order->hasBeenPaid() ? $this->l('Refund products') : $this->l('Cancel products'))).'" class="button" style="margin-top:8px;" /></div>
 				</div>';
 			echo '
 			</fieldset>
