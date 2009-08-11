@@ -1715,16 +1715,16 @@ class		Product extends ObjectModel
 
 	/**
 	* Get product attribute image associations
-	* @param integer $id_product_attribute_old
+	* @param integer $id_product_attribute
 	* @return boolean
 	*/
-	static private function _getAttributeImageAssociations($id_product_attribute_old)
+	static public function _getAttributeImageAssociations($id_product_attribute)
 	{
 		$combinationImages = array();
 		$data = Db::getInstance()->ExecuteS('
-			SELECT *
+			SELECT `id_image`
 			FROM `'._DB_PREFIX_.'product_attribute_image`
-			WHERE `id_product_attribute` = '.intval($id_product_attribute_old));
+			WHERE `id_product_attribute` = '.intval($id_product_attribute));
 		foreach ($data AS $row)
 			$combinationImages[] = intval($row['id_image']);
 		return $combinationImages;

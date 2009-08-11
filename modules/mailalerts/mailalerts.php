@@ -423,9 +423,9 @@ class MailAlerts extends Module
 				// cover
 				$attrgrps = $obj->getAttributesGroups(intval($id_lang));
 				foreach ($attrgrps AS $attrgrp)
-					if ($attrgrp['id_product_attribute'] == intval($products[$i]['id_product_attribute']) AND $attrgrp['id_image'])
+					if ($attrgrp['id_product_attribute'] == intval($products[$i]['id_product_attribute']) AND $images = Product::_getAttributeImageAssociations(intval($attrgrp['id_product_attribute'])))
 					{
-						$products[$i]['cover'] = $obj->id.'-'.$attrgrp['id_image'];
+						$products[$i]['cover'] = $obj->id.'-'.array_pop($images);
 						break;
 					}
 			}
