@@ -184,9 +184,9 @@ class Backup
 						$s .= "'" . mysql_real_escape_string($value) . "',";
 					$s = rtrim($s, ',');
 
-					if ($i%200 == 0 AND $i < $sizeof - 1)
+					if ($i%200 == 0 AND $i < $sizeof)
 						$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
-					elseif ($i < $sizeof - 1)
+					elseif ($i < $sizeof)
 						$s .= "),\n";
 					else
 						$s .= ");\n";
