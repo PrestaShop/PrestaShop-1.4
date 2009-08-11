@@ -1698,12 +1698,11 @@ class		Product extends ObjectModel
 			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $row, 'INSERT');
 
 			$id_product_attribute_new = intval(Db::getInstance()->Insert_ID());
-			if ($result = self::_getAttributeImageAssociations($id_product_attribute_old))
+			if ($resultImages = self::_getAttributeImageAssociations($id_product_attribute_old))
 			{
-				$combinationImages['old'][$id_product_attribute_old] = $result;
-				$combinationImages['new'][$id_product_attribute_new] = $result;
+				$combinationImages['old'][$id_product_attribute_old] = $resultImages;
+				$combinationImages['new'][$id_product_attribute_new] = $resultImages;
 			}
-			$return &= $result;
 			foreach ($result2 AS $row2)
 			{
 				$row2['id_product_attribute'] = $id_product_attribute_new;
