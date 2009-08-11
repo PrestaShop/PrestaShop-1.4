@@ -119,10 +119,10 @@ class Tag extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = pt.id_product
 		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
 		INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
-		INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+		'.($cookie->id_customer ? 'INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)' : '').'
 		WHERE id_lang = '.intval($id_lang).'
 		AND p.active = 1
-		AND (cg.`id_customer` = '.intval($cookie->id_customer).' OR ctg.`id_group` = 1)
+		AND ('.($cookie->id_customer ? 'cg.`id_customer` = '.intval($cookie->id_customer).' OR' : '').' ctg.`id_group` = 1)
 		GROUP BY t.id_tag
 		ORDER BY times DESC
 		LIMIT 0, '.intval($nb));
