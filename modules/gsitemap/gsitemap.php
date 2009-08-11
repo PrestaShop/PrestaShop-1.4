@@ -114,7 +114,7 @@ class Gsitemap extends Module
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
-            $sitemap->addChild('lastmod', $category['date_upd']);
+            $sitemap->addChild('lastmod', substr($category['date_upd'], 0, 10));
             $sitemap->addChild('changefreq', 'weekly');
       	}
 
@@ -148,7 +148,7 @@ class Gsitemap extends Module
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
-            $sitemap->addChild('lastmod', $product['date_upd']);
+            $sitemap->addChild('lastmod', substr($product['date_upd'], 0, 10));
             $sitemap->addChild('changefreq', 'weekly');
         }
 		
@@ -165,7 +165,7 @@ class Gsitemap extends Module
 			$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image']);
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', 0.4);
-            $sitemap->addChild('lastmod', $image['date_upd']);
+            $sitemap->addChild('lastmod', substr($image['date_upd'], 0, 10));
             $sitemap->addChild('changefreq', 'monthly');
         }
 
