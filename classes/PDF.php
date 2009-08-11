@@ -780,12 +780,14 @@ class PDF extends PDF_PageGroup
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$nb_tax++;
-			$total_wrapping_wt = self::$order->total_wrapping / (1 + ($tax_rate / 100));
+			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
+			$taxRate = floatval($wrappingTax->rate);
+			$total_wrapping_wt = self::$order->total_wrapping / (1 + ($taxRate / 100));
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Wrapping'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($tax_rate, 2, ',', ' '), 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($taxRate, 2, ',', ' '), 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($total_wrapping_wt, self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $total_wrapping_wt, self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
