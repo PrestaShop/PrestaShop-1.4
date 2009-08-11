@@ -25,7 +25,7 @@
 		
 		$('document').ready( function() {
 			$("#search_query").autocomplete(
-				'search.php', {
+				'{/literal}{$base_dir}{literal}search.php', {
 				minChars: 3,
 				max:10,
 				width:500,
