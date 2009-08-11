@@ -152,7 +152,7 @@ abstract class PaymentModule extends Module
 					$quantityInStock = $productQuantity - intval($product['quantity']) < 0 ? $productQuantity : intval($product['quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
-						if (($id_order_state != _PS_OS_OUTOFSTOCK_) AND (($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
+						if ($id_order_state != _PS_OS_OUTOFSTOCK_ AND (($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
 							{
 								$id_order_state = _PS_OS_OUTOFSTOCK_;
 								$history = new OrderHistory();
@@ -275,11 +275,15 @@ abstract class PaymentModule extends Module
 							ProductSale::addProductSale($product['id_product'], $product['quantity']);
 				}
 
-				// Set order state in order history
-				$new_history = new OrderHistory();
-				$new_history->id_order = intval($order->id);
-				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
-				$new_history->addWithemail(true, $extraVars);
+				// Set order state in order history ONLY if the "out of stock" status has not been yet reached
+				// If it has, a status changing has already been applied at that time
+				if ($id_order_state != _PS_OS_OUTOFSTOCK_)
+				{
+					$new_history = new OrderHistory();
+					$new_history->id_order = intval($order->id);
+					$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
+					$new_history->addWithemail(true, $extraVars);
+				}
 
 				// Send an e-mail to customer
 				if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_ AND $customer->id)
