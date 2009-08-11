@@ -77,7 +77,7 @@ function isPicture($file)
     elseif (function_exists('mime_content_type'))
         $mime_type = mime_content_type($file['tmp_name']);
     elseif (function_exists('exec'))
-        $mime_type = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
+        $mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
      if (empty($mime_type)|| $mime_type == 'regular file')
 		$mime_type = $file['type'];
 
