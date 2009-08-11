@@ -40,6 +40,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'blocknewsletter.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'reorderpositions.php');
 // Clean some module sql structures
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatemodulessql.php');
+// Clean carrier URL
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
 
 //old version detection
 $oldversion = false;
