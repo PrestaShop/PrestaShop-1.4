@@ -5,6 +5,79 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.1.0 - 1277 (2009-12-08)   #
+####################################
+
+	Added Features :
+
+	[+] BO : theme from v1.1 are now compatible with 1.2 by checking option in AdminPreferences
+
+	Improved/changed features :
+
+	[*] BO: add language support for tinyMCE
+	[*] TR : new french translations
+	[*] Classes : added a print error when SQL error happens
+	[*] BO : you can now include sub tab with a module
+	[*] MO : statsproduct improved
+	[*] BO : improve warning message when employee delete a language
+	[*] MO : added images to gsitemap
+	[*] FO : SQL optimization
+	[*] BO : Backups now take only PrestaShop tables
+	[*] BO : Backups now take far less memory
+
+	Fixed bugs :
+
+	[-] MO: left arrow is now visible when products of the same category are displayed
+	[-] FO: bullets in RTE are displayed correctly (fixed #2572)
+	[-] FO : fixed bad sort price (#2640)
+	[-] FO : forbid use of '%' in the search
+	[-] BO : fixed bug while moving product position in AdminProducts (#2640)
+	[-] BO : Category SQL query fixed (backquotes were missing)
+	[-] BO : fixed bug while translating modules (#2615)
+	[-] BO: text color of tiny mce is now black as default
+	[-] Classes : fixed 2 SQL bugs in Manufacturer and MySQL (#2565)
+	[-] FO : trying to ajust price font size (#2634)
+	[-] Mails : Shop name encoding fixed
+	[-] Fixed incorrect call to file function in images.inc.php (#2603)
+	[-] All files are now in Unix format (#2596)
+	[-] BO : fixed bug while making database backup (#2592)
+	[-] BO : Cancellation button display fixed
+	[-] BO : fixed bug while duplicating product with attribute but no image (#2587)
+	[-] Classe : revert SQL optim in Currency (#2620)
+	[-] FO : Duplicate "out of stock" status changing fixed
+	[-] Installer : not valid carrier URL will be erased
+	[-] Module : mailalert module display fixed
+	[-] Classes : fixed bugs while no customer in database for selecting products
+	[-] PDF : Wrapping tax display fixed
+	[-] FO : no more 404 in ajax search
+	[-] BO : fixed bug while editing carrier, no correctly update delivery
+	[-] BO : QuickAccess token fixed
+	[-] BO: Scenes now works with IE8 (fixed #2508)
+	[-] BO: Scenes now works with IE8 (fixed #2508)
+	[-] INSTALL: fixed #2564 : work with install//
+	[-] BO : tinymce image url path fixed (fixed #2539)
+	[-] FO : rte fields background now fixed (fixed #2501)
+	[-] BO : link to product sales does not appear anymore when the module is not there
+	[-] FO : category position does not appear anymore in ajax search
+	[-] Classes : fixed bug in Carrier class (#2559)
+	[-] BO : feature preview of TinyMCE has been removed
+	[-] PDF : Shop name display fixed when upperized
+	[-] BO : Product return support is really disabled when the feature is disabled
+	[-] BO : Product import fixed (when updating a product without specifying its category)
+	[-] BO : Product import fixed (when reduction_from & reduction_to were set to 0)
+	[-] FO : Pagination choice fixed
+	[-] BO : Product listing fixed (final price display)
+	[-] FO : Product attribute listing display fixed (when names were too long)
+	[-] BO : fixed "héhé" bug (#2538)
+	[-] BO : fixed display bug in AdminManufacturers
+	[-] BO : fixed several bugs using $currentIndex (#2545)
+	[-] Installer : fixed bad update content (#2518)
+	[-] Classes :fixed bad count in getPricesDrop (#2541)
+	[-] BO : fixed a bug while updating image in AdminProducts (#2514)
+	[-] BO : indexation for products without anything to index fixed
+	[-] MO : fixed bad URL for image insert in blockadvertising (#2509)
+
+####################################
 #   v1.2.0.8 - 1210 (2009-29-07)   #
 ####################################
 
