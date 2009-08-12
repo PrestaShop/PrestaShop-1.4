@@ -455,7 +455,7 @@ abstract class AdminTab
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
 				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			elseif (!$object->updatePosition(intval($_GET['position'])))
-				$this->_errors[] = Tools::displayError('an error occurred while moving object').' <b>'.$this->table.'</b> ';
+				Tools::d('end');
 			else
 				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
 		}
@@ -1167,11 +1167,11 @@ abstract class AdminTab
                    		if ($this->_orderBy == 'position')
                    		{
 							echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=1'.
-									((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+									($id_category = intval(Tools::getValue('id_category')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'down' : 'up').'.gif"
 									alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>';
 							echo '<a'.(!($tr[$key] != $positions[0]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=0'.
-									((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+									($id_category = intval(Tools::getValue('id_category')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'up' : 'down').'.gif"
 									alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>';
 						}

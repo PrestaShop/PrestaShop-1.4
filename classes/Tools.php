@@ -427,6 +427,8 @@ class Tools
 					return self::completeMetaTags($row, Category::hideCategoryPosition($row['name']));
 				}
 			}
+
+			/* Manufacturers specifics meta tags */
 			elseif ($id_manufacturer = Tools::getValue('id_manufacturer'))
 			{
 				$row = Db::getInstance()->getRow('
@@ -440,6 +442,8 @@ class Tools
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
 			}
+
+			/* Suppliers specifics meta tags */
 			elseif ($id_supplier = Tools::getValue('id_supplier'))
 			{
 				$row = Db::getInstance()->getRow('
@@ -452,7 +456,8 @@ class Tools
 						$row['meta_description'] = strip_tags($row['meta_description']);
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
-			}			
+			}
+
 			/* CMS specifics meta tags */
 			elseif ($id_cms = Tools::getValue('id_cms'))
 			{
@@ -467,6 +472,7 @@ class Tools
 				}
 			}
 		}
+
 		/* Default meta tags */
 		return Tools::getHomeMetaTags($id_lang);
 	}
