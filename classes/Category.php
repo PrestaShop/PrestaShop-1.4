@@ -464,7 +464,7 @@ class		Category extends ObjectModel
 		
 		$result = Db::getInstance()->ExecuteS($sql);
 		
-		if ($orderBy == 'price')
+		if ($orderBy == 'orderprice')
 		{
 			Tools::orderbyPrice($result, $orderWay);
 		}
