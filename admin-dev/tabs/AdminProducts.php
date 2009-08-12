@@ -1836,6 +1836,8 @@ class AdminProducts extends AdminTab
 											<span class="hint" name="help_box">'.$this->l('Only letters and the "less" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
 		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'clink_rewrite');
+		global $cookie;
+		$iso = Language::getIsoById(intval($cookie->id_lang));
 		echo '
 										<p style="clear: both; width: 360px; word-wrap: break-word; overflow: auto;">'.$this->l('Product link will look like this:').' '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].'/id_product-<span id="friendly-url"></span>.html</p>
 									</td>
@@ -1993,7 +1995,8 @@ class AdminProducts extends AdminTab
 						external_image_list_url : "lists/image_list.js",
 						media_external_list_url : "lists/media_list.js",
 						elements : "nourlconvert",
-						convert_urls : false
+						convert_urls : false,
+						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 					});
 				});
 			}

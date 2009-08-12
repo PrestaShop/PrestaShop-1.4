@@ -123,8 +123,10 @@ class AdminManufacturers extends AdminTab
 							</div>';
 		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc');
 		echo '</div>';
-
+		
 		// TinyMCE
+		global $cookie;
+		$iso = Language::getIsoById(intval($cookie->id_lang));
 		echo '
 		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
 		<script type="text/javascript">
@@ -153,7 +155,8 @@ class AdminManufacturers extends AdminTab
 					external_image_list_url : "lists/image_list.js",
 					media_external_list_url : "lists/media_list.js",
 					elements : "nourlconvert",
-					convert_urls : false
+					convert_urls : false,
+					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 				});
 			});
 		}
