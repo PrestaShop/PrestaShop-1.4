@@ -173,7 +173,7 @@ class		Supplier extends ObjectModel
 			WHERE p.id_supplier = '.intval($id_supplier).'
 			AND ('.($cookie->id_customer ? 'cg.`id_customer` = '.intval($cookie->id_customer).' OR' : '').' ctg.`id_group` = 1)'
 			.($active ? ' AND p.`active` = 1' : '')
-			.'GROUP BY p.`id_product`');
+			.' GROUP BY p.`id_product`');
 			return intval(sizeof($result));
 		}
 
