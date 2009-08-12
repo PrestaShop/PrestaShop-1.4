@@ -103,14 +103,15 @@ $navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get
 $smarty->assign('navigationPipe', $navigationPipe);
 
 /* Server Params */
+$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
+$protocol = 'http://';
+$protocol_ssl = 'https://';
+$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+define('_PS_BASE_URL_', $protocol.$server_host);
+
 if (!Configuration::get('PS_THEME_V11'))
 {
-	$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
-	$protocol = 'http://';
-	$protocol_ssl = 'https://';
-	$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-	$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-	define('_PS_BASE_URL_', $protocol.$server_host);
 	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
 	$smarty->assign(array(
 		'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
