@@ -166,7 +166,7 @@ class AdminTranslations extends AdminTab
 						foreach ($matches[1] as $key)
 						{
 							$postKey = md5($moduleName.'_'.$themeName.'_'.$templateName.'_'.md5($key));
-							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.Tools::strtolower($templateName).'_'.md5($key).'\'';
+							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'';
 							if (array_key_exists($postKey, $_POST) AND !empty($_POST[$postKey]) AND !array_key_exists($pattern, $_tmp))
 							{
 								$_tmp[$pattern] = true;
@@ -201,7 +201,7 @@ class AdminTranslations extends AdminTab
 					$templateName = substr(basename($templateFile), 0, -4);
 					foreach ($matches[1] as $key)
 					{
-						$moduleKey = '<{'.$moduleName.'}'.$themeName.'>'.Tools::strtolower($templateName).'_'.md5($key);
+						$moduleKey = '<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key);
 						$translationsArray[$themeName][$moduleName][$templateName][$key] = key_exists($moduleKey, $_MODULES) ? html_entity_decode($_MODULES[$moduleKey], ENT_COMPAT, 'UTF-8') : '';
 					}
 					$count += isset($translationsArray[$themeName][$moduleName][$templateName]) ? sizeof($translationsArray[$themeName][$moduleName][$templateName]) : 0;
