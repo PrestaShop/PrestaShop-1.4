@@ -346,18 +346,18 @@ class		Category extends ObjectModel
 		    /* quantity of products witch don\'t have attributes */
 		    IFNULL((
 				  SELECT SUM(quantity)
-				  FROM `'._DB_PREFIX_.'product
+				  FROM `'._DB_PREFIX_.'product`
 				  WHERE id_product NOT IN
 				  (
 				    /* products with attributes */
 				    SELECT DISTINCT(id_product)
-				    FROM `'._DB_PREFIX_.'product_attribute
+				    FROM `'._DB_PREFIX_.'product_attribute`
 				  )
 				  AND id_product IN
 				  (
 				  	/* products direclty in the categories listed bellow */
 				  	SELECT DISTINCT(id_product)
-				  	FROM `'._DB_PREFIX_.'category_product
+				  	FROM `'._DB_PREFIX_.'category_product`
 				  	WHERE id_category IN ('.$listCategories.')
 				  )
 				),0)
@@ -367,12 +367,12 @@ class		Category extends ObjectModel
 		    /* quantity of products witch have attributes */
 				IFNULL((
 				  SELECT SUM(quantity)
-				  FROM `'._DB_PREFIX_.'product_attribute pa
+				  FROM `'._DB_PREFIX_.'product_attribute` pa
 				  WHERE pa.id_product IN
 				  (
 				  	/* products direclty in the categories listed bellow */
 				  	SELECT DISTINCT(id_product)
-				  	FROM `'._DB_PREFIX_.'category_product
+				  	FROM `'._DB_PREFIX_.'category_product`
 				  	WHERE id_category IN ('.$listCategories.')
 				  )
 				),0)
