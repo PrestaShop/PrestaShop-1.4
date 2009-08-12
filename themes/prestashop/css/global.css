@@ -276,6 +276,7 @@ div.rte ol, .mceContentBody ul
 
 div.rte ul, .mceContentBody ul{
 	list-style-type:square;
+	margin-left:10px;
 }
 
 div.rte strong, .mceContentBody strong {
