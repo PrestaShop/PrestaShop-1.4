@@ -15,8 +15,8 @@
 				{elseif ($product.reduction_price != 0 || $product.reduction_percent != 0) && ($product.reduction_from == $product.reduction_to OR ($smarty.now|date_format:'%Y-%m-%d' <= $product.reduction_to && $smarty.now|date_format:'%Y-%m-%d' >= $product.reduction_from))}
 					<span class="discount">{l s='Price lowered!'}</span>
 				{/if}
-				{if !$priceDisplay || $priceDisplay == 2}<div><span class="price" style="display: inline;">{convertPrice price=$product.price}</span>{if $priceDisplay == 2} {l s='Tax inc.'}{/if}</div>{/if}
-				{if $priceDisplay}<div><span class="price" style="display: inline;">{convertPrice price=$product.price_tax_exc}</span>{if $priceDisplay == 2} {l s='Tax exc.'}{/if}</div>{/if}
+				{if !$priceDisplay || $priceDisplay == 2}<div><span class="price" style="display: inline;">{convertPrice price=$product.price}</span>{if $priceDisplay == 2} {l s='+Tx'}{/if}</div>{/if}
+				{if $priceDisplay}<div><span class="price" style="display: inline;">{convertPrice price=$product.price_tax_exc}</span>{if $priceDisplay == 2} {l s='-Tx'}{/if}</div>{/if}
 				{if ($product.allow_oosp OR $product.quantity > 0) && $product.customizable != 2}
 					<a class="button ajax_add_to_cart_button exclusive" rel="ajax_id_product_{$product.id_product|intval}" href="{$base_dir}cart.php?add&amp;id_product={$product.id_product|intval}&amp;token={$static_token}">{l s='Add to cart'}</a>
 				{else}

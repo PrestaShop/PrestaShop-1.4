@@ -1119,7 +1119,7 @@ div.myaccount .block_content {
 #center_column div.products_block ul li p.product_desc a { font-weight:normal; }
 #center_column .products_block span.price {
 	text-align: center;
-	font-size: 1.6em;
+	font-size: 1.5em;
 	padding: 0.5em 0;
 	/*display: block;*/
 }
@@ -1573,7 +1573,7 @@ ul#product_list li .reduction {
 }
 ul#product_list li .price{
 	display: block;
-	font-size: 170%;
+	font-size: 1.5em;
 	margin-bottom: 0.2em;
 }
 ul#product_list li span.availability{
