@@ -158,7 +158,7 @@ class		Carrier extends ObjectModel
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY w.`delimiter2` DESC LIMIT 1');
 		if (!isset($result[0]['price']))
-			return 0;
+			return false;
 		return $result[0]['price'];
 	}
 
@@ -212,7 +212,7 @@ class		Carrier extends ObjectModel
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY r.`delimiter2` DESC LIMIT 1');
 		if (!isset($result[0]['price']))
-			return 0;
+			return false;
 		return $result[0]['price'];
 	}
 

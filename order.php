@@ -323,8 +323,8 @@ function displayCarrier()
 	foreach ($result AS $k => $row)
 	{
 		$carrier = new Carrier(intval($row['id_carrier']));
-		if ((Configuration::get('PS_SHIPPING_METHOD') AND !$carrier->getMaxDeliveryPriceByWeight($id_zone))
-		OR (!Configuration::get('PS_SHIPPING_METHOD') AND !$carrier->getMaxDeliveryPriceByPrice($id_zone)))
+		if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+		OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
 		{
 			unset($result[$k]);
 			continue ;
