@@ -235,7 +235,8 @@ class		Manufacturer extends ObjectModel
 	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
 		global $cookie;
-
+		
+		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 			

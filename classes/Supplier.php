@@ -155,6 +155,7 @@ class		Supplier extends ObjectModel
 	{
 		global $cookie;
 
+		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) OR $orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 			
