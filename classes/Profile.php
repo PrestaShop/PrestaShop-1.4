@@ -68,19 +68,7 @@ class Profile extends ObjectModel
 	public function add($autodate = true, $nullValues = false)
 	{
 	 	if (parent::add($autodate, true))
-	 	{
-		 	$id_profile = $this->id;
-		 	$tabs = Db::getInstance()->ExecuteS('SELECT `id_tab` FROM `'._DB_PREFIX_.'tab`');
-			$query = 'INSERT INTO `'._DB_PREFIX_.'access` VALUES ';
-			if (!$tabs OR !$id_profile)
-			{
-			 	$this->_errors[] = 'No tab or profile';
-			 	return false;
-			}
-			foreach($tabs AS $tab)
-		 		$query .=  ($tab === $tabs[0] ? '' : ', ').'('.$id_profile.', '.intval($tab['id_tab']).', 0, 0, 0, 0)';
-			return Db::getInstance()->Execute($query);
-		}
+			return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'access (SELECT '.intval($this->id).', id_tab, 0, 0, 0, 0 FROM '._DB_PREFIX_.'tab)');
 		return false;
 	}
 	
