@@ -48,13 +48,7 @@ class MySQL extends Db
 		$this->_result = false;
 		if ($this->_link)
 			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
-			{
-				if (mysql_errno())
-					die(Tools::displayError($this->getMsgError($query)));
 				return mysql_fetch_assoc($this->_result);
-			}
-		if (mysql_errno())
-			die(Tools::displayError($this->getMsgError($query)));
 		return false;
 	}
 
@@ -72,12 +66,8 @@ class MySQL extends Db
 		if ($this->_link)
 		{
 			$this->_result = mysql_query($query, $this->_link);
-			if (mysql_errno())
-				die(Tools::displayError($this->getMsgError($query)));
 			return $this->_result;
 		}
-		if (mysql_errno())
-			die(Tools::displayError($this->getMsgError($query)));
 		return false;
 	}
 	
@@ -86,8 +76,6 @@ class MySQL extends Db
 		$this->_result = false;
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
-			if (mysql_errno())
-				die(Tools::displayError($this->getMsgError($query)));
 			if (!$array)
 				return $this->_result;
 			$resultArray = array();
@@ -95,8 +83,6 @@ class MySQL extends Db
 				$resultArray[] = $row;
 			return $resultArray;
 		}
-		if (mysql_errno())
-			die(Tools::displayError($this->getMsgError($query)));
 		return false;
 	}
 
