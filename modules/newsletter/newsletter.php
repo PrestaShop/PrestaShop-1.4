@@ -68,7 +68,12 @@ class Newsletter extends Module
 			if ($_POST['action'] == 'customers')
 				$result = $this->_getCustomers();
 			else
-				$result = $this->_getBlockNewsletter();
+			{
+				if (!Module::isInstalled('blocknewsletter'))
+					$this->_html .= $this->displayError('The module "blocknewsletter" is required for this feature');
+				else
+					$result = $this->_getBlockNewsletter();
+			}
 			if (!$nb = intval(Db::getInstance()->NumRows()))
 				$this->_html .= $this->displayError($this->l('No customers were found with these filters !'));
 			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval($_POST['action']).'_'.$this->_file, 'w'))

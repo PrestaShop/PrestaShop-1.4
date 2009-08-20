@@ -630,4 +630,10 @@ abstract class Module
 		$smarty->currentTemplate = $previousTemplate;
 		return $result;
 	}
+
+	public static function isInstalled($moduleName)
+	{
+		Db::getInstance()->Execute('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
+		return (bool)Db::getInstance()->NumRows();
+	}
 }
