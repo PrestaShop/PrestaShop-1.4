@@ -1754,6 +1754,16 @@ class		Product extends ObjectModel
 		return $return;
 	}
 
+	static public function duplicateTags($id_product_old, $id_product_new)
+	{
+		$resource = Db::getInstance()->Execute('SELECT `id_tag` FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.intval($id_product_old));
+		$query = 'INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_product`, `id_tag`) VALUES';
+		while ($row = Db::getInstance()->nextRow($resource))
+			$query .= ' ('.intval($id_product_new).', '.intval($row['id_tag']).'),';
+		$query = rtrim($query, ',');
+		return Db::getInstance()->Execute($query);
+	}
+
 	static public function duplicateQuantityDiscount($id_product_old, $id_product_new)
 	{
 		$return = true;

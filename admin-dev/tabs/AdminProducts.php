@@ -170,7 +170,8 @@ class AdminProducts extends AdminTab
 					AND Product::duplicateFeatures($id_product_old, $product->id)
 					AND Product::duplicateQuantityDiscount($id_product_old, $product->id)
 					AND Pack::duplicate($id_product_old, $product->id)
-					AND Product::duplicateCustomizationFields($id_product_old, $product->id))
+					AND Product::duplicateCustomizationFields($id_product_old, $product->id)
+					AND Product::duplicateTags($id_product_old, $product->id))
 					{
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id, $combinationImages))
 							$this->_errors[] = Tools::displayError('an error occurred while copying images');
