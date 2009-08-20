@@ -154,6 +154,7 @@ else
 	$smarty->assign(array(
 		'base_dir' => __PS_BASE_URI__,
 		'base_dir_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__,
+		'content_dir' => __PS_BASE_URI__,
 		/* If the current page need SSL encryption and the shop allow it, then active it */
 		'protocol' => $protocol,
 		'img_ps_dir' => _PS_IMG_,
