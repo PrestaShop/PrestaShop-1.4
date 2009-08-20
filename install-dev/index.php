@@ -13,7 +13,8 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 define('INSTALL_VERSION', '1.2.1.0');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
-define('PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(substr($_SERVER['REQUEST_URI'],0,-1), strrpos( substr($_SERVER['REQUEST_URI'],0,-1),"/" )+1))));
+$tmpBaseUri = substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(substr($_SERVER['REQUEST_URI'],0,-1), strrpos( substr($_SERVER['REQUEST_URI'],0,-1),"/" )+1)));
+define('PS_BASE_URI', $tmpBaseUri[strlen($tmpBaseUri)] == '/' ? $tmpBaseUri : $tmpBaseUri.'/');
 define('PS_BASE_URI_ABSOLUTE', 'http://'.htmlspecialchars($_SERVER["HTTP_HOST"], ENT_COMPAT, 'UTF-8').PS_BASE_URI);
 
 /* Old version detection */
