@@ -148,8 +148,8 @@ abstract class PaymentModule extends Module
 				Product::addCustomizationPrice($products, $customizedDatas);
 				foreach ($products AS $key => $product)
 				{
-					$productQuantity = intval(Product::getQuantity(intval($product['id_product']), (isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : NULL)));
-					$quantityInStock = $productQuantity - intval($product['quantity']) < 0 ? $productQuantity : intval($product['quantity']);
+					$productQuantity = intval(Product::getQuantity(intval($product['id_product']), ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL)));
+					$quantityInStock = ($productQuantity - intval($product['quantity']) < 0) ? $productQuantity : intval($product['quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
 						if ($id_order_state != _PS_OS_OUTOFSTOCK_ AND (($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
