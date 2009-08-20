@@ -656,7 +656,7 @@ class		Product extends ObjectModel
 	* @param string $location Location
 	* @param string $ean13 Ean-13 barcode
 	* @param boolean $default Is default attribute for product
-	* @return array Insertion result
+	* @return mixed $id_product_attribute or false
 	*/
 	public function addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
@@ -676,6 +676,13 @@ class		Product extends ObjectModel
 			$query .= '('.intval($id_product_attribute).', '.intval($id_image).'), ';
 		$query = trim($query, ', ');
 		if (!Db::getInstance()->Execute($query))
+			return false;
+		return intval($id_product_attribute);
+	}
+
+	public function addCombinationEntity($wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	{
+		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL) OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		return intval($id_product_attribute);
 	}

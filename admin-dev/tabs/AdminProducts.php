@@ -277,7 +277,7 @@ class AdminProducts extends AdminTab
 					// Change existing one
 					if ($id_product_attribute = intval(Tools::getValue('id_product_attribute')))
 					{
-						if ($this->tabAccess['add'] === '1')
+						if ($this->tabAccess['edit'] === '1')
 						{
 							if ($product->productAttributeExists($_POST['attribute_combinaison_list'], $id_product_attribute))
 								$this->_errors[] = Tools::displayError('This attribute already exists.');
@@ -301,12 +301,12 @@ class AdminProducts extends AdminTab
 					// Add new
 					else
 					{
-						if ($this->tabAccess['edit'] === '1')
+						if ($this->tabAccess['add'] === '1')
 						{
 							if ($product->productAttributeExists($_POST['attribute_combinaison_list']))
 								$this->_errors[] = Tools::displayError('This combination already exists.');
 							else
-								$id_product_attribute = $product->addProductAttribute(Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'),
+								$id_product_attribute = $product->addCombinationEntity(Tools::getValue('attribute_wholesale_price'), Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'),
                                 Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'), Tools::getValue('attribute_ecotax'), 
                                 Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'), 
                                 Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'));
