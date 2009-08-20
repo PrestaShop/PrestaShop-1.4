@@ -42,7 +42,7 @@ $cms = CMS::listCms(intval($cookie->id_lang));
 $id_cms = array();
 foreach($cms AS $row)
 	$id_cms[] = intval($row['id_cms']);
-$smarty->assign('cmslinks', CMS::getLinks(intval($cookie->id_lang), $id_cms));	
+$smarty->assign('cmslinks', CMS::getLinks(intval($cookie->id_lang), $id_cms ? $id_cms : NULL));	
 
 $smarty->assign('voucherAllowed', intval(Configuration::get('PS_VOUCHERS')));
 $smarty->display(_PS_THEME_DIR_.'sitemap.tpl');

@@ -8,7 +8,8 @@ class BlockInfos extends Module
 	{
 		$this->name = 'blockinfos';
 		$this->tab = 'Blocks';
-		$this->version = 1.1;
+		$this->version = 1.1;
+
 		parent::__construct();
 
 		$this->displayName = $this->l('Info block');
@@ -105,7 +106,7 @@ class BlockInfos extends Module
 		$id_cms = array();
 		foreach($cms AS $row)
 			$id_cms[] = intval($row['id_cms']);
-		$smarty->assign('cmslinks', CMS::getLinks($cookie->id_lang, $id_cms));
+		$smarty->assign('cmslinks', CMS::getLinks($cookie->id_lang, $id_cms ? $id_cms : NULL));
 		return $this->display(__FILE__, 'blockinfos.tpl');
 	}
 

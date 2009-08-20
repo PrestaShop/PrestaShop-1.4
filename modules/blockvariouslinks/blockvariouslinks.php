@@ -99,7 +99,7 @@ class BlockVariousLinks extends Module
 		foreach($cms AS $row)
 			$id_cms[] = intval($row['id_cms']);
 			
-		$smarty->assign('cmslinks', CMS::getLinks($cookie->id_lang, $id_cms));
+		$smarty->assign('cmslinks', CMS::getLinks($cookie->id_lang, $id_cms ? $id_cms : NULL));
 		return $this->display(__FILE__, 'blockvariouslinks.tpl');
 	}
 
