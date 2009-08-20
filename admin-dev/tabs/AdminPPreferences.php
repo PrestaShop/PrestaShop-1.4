@@ -36,7 +36,7 @@ class AdminPPreferences extends AdminPreferences
 			),
 			'PS_ORDER_OUT_OF_STOCK' => array('title' => $this->l('Allow ordering out-of-stock product:'), 'desc' => $this->l('Add to cart button is hidden when product is unavailable'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_STOCK_MANAGEMENT' => array('title' => $this->l('Enable stock management:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool', 'js' => array('on' => 'onchange="stockManagementActivationAuthorization()"', 'off' => 'onchange="stockManagementActivationAuthorization()"')),
-			'PS_DISPLAY_QTIES' => array('title' => $this->l('Display Quantity on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
+			'PS_DISPLAY_QTIES' => array('title' => $this->l('Display available quantities on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_DISPLAY_JQZOOM' => array('title' => $this->l('Enable JqZoom instead of Thickbox on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_DISP_UNAVAILABLE_ATTR' => array('title' => $this->l('Display unavailable product attributes on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_PURCHASE_MINIMUM' => array('title' => $this->l('Minimum purchase total required in order to validate order:'), 'desc' => $this->l('Set to 0 to disable this feature'), 'validation' => 'isFloat', 'cast' => 'floatval', 'type' => 'price'),
