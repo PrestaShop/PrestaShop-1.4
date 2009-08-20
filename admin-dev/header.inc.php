@@ -142,18 +142,11 @@ require_once(dirname(__FILE__).'/init.php');
 					{
 					 	$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($id_parent));
 						foreach ($subTabs AS $t)
-						{
 							if (checkTabRights($t['id_tab']) === true)
-							{
-								$img = '../img/t/'.$t['class_name'].'.gif';
-								if (trim($t['module']) != '')
-									$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 								echo '
 								<li>
-									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
+									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="../img/t/'.$t['class_name'].'.gif" alt="" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
 								</li>';
-							}
-						}
 					}
 				?>
 				</ul>
