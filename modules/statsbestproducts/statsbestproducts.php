@@ -52,10 +52,10 @@ class StatsBestProducts extends ModuleGrid
 				'align' => 'right'
 			),
 			array(
-				'id' => 'averageQuantitySold',
-				'header' => $this->l('Qty sold / day'),
-				'dataIndex' => 'averageQuantitySold',
-				'width' => 60,
+				'id' => 'avgPriceSold',
+				'header' => $this->l('Price sold'),
+				'dataIndex' => 'avgPriceSold',
+				'width' => 50,
 				'align' => 'right'
 			),
 			array(
@@ -63,6 +63,13 @@ class StatsBestProducts extends ModuleGrid
 				'header' => $this->l('Sales'),
 				'dataIndex' => 'totalPriceSold',
 				'width' => 50,
+				'align' => 'right'
+			),
+			array(
+				'id' => 'averageQuantitySold',
+				'header' => $this->l('Qty sold / day'),
+				'dataIndex' => 'averageQuantitySold',
+				'width' => 60,
 				'align' => 'right'
 			),
 			array(
@@ -129,11 +136,11 @@ class StatsBestProducts extends ModuleGrid
 		$this->_totalCount = $this->getTotalCount($dateBetween);
 
 		$this->_query = '
-		SELECT p.reference, p.id_product, pl.name,
+		SELECT p.reference, p.id_product, pl.name, ROUND(AVG(od.product_price / c.conversion_rate), 2) as avgPriceSold, 
 			(p.quantity + IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), 0)) as quantity,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
 			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (1 + LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
-			ROUND(IFNULL(SUM((p.price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
+			ROUND(IFNULL(SUM((od.product_price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
 			(
 				SELECT IFNULL(SUM(pv.counter), 0)
 				FROM '._DB_PREFIX_.'page pa
@@ -150,7 +157,7 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
 		WHERE p.active = 1 AND o.valid = 1
 		AND o.invoice_date BETWEEN '.$dateBetween.'
-		GROUP BY p.id_product';
+		GROUP BY od.product_id';
 
 		if (Validate::IsName($this->_sort))
 		{
