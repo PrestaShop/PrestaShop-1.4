@@ -435,7 +435,8 @@ CREATE TABLE `PREFIX_discount` (
 CREATE TABLE `PREFIX_discount_category` (
   `id_category` int(11) NOT NULL,
   `id_discount` int(11) NOT NULL,
-  PRIMARY KEY  (`id_category`, `id_discount`)
+  PRIMARY KEY  (`id_category`, `id_discount`),
+  KEY `discount` (`id_discount`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_discount_lang` (
