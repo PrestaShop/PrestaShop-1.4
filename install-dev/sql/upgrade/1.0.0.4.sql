@@ -51,6 +51,17 @@ INSERT  IGNORE  INTO  PREFIX_range_price ( id_carrier, delimiter1, delimiter2 )
 	AND c.active = 1
 	);
 
+UPDATE `PREFIX_delivery` d SET d.`id_range_price` = (
+	SELECT rw.`id_range_price` FROM `PREFIX_range_price` rw WHERE
+		rw.`id_carrier` = d.`id_carrier` AND
+		rw.`delimiter1` = (
+			SELECT `delimiter1` FROM `PREFIX_range_price` rw2 WHERE rw2.`id_range_price` = d.`id_range_price` LIMIT 1
+		) AND
+		rw.`delimiter2` = (
+			SELECT `delimiter2` FROM `PREFIX_range_price` rw3 WHERE rw3.`id_range_price` = d.`id_range_price` LIMIT 1
+		)
+);
+
 INSERT  IGNORE  INTO  PREFIX_range_weight ( id_carrier, delimiter1, delimiter2 )
 	(SELECT c.id_carrier, rp.delimiter1, rp.delimiter2
 	FROM  PREFIX_range_weight rp
@@ -58,6 +69,17 @@ INSERT  IGNORE  INTO  PREFIX_range_weight ( id_carrier, delimiter1, delimiter2 )
 	WHERE c.deleted = 0
 	AND c.active = 1
 	);
+
+UPDATE `PREFIX_delivery` d SET d.`id_range_weight` = (
+	SELECT rw.`id_range_weight` FROM `PREFIX_range_weight` rw WHERE
+		rw.`id_carrier` = d.`id_carrier` AND
+		rw.`delimiter1` = (
+			SELECT `delimiter1` FROM `PREFIX_range_weight` rw2 WHERE rw2.`id_range_weight` = d.`id_range_weight` LIMIT 1
+		) AND
+		rw.`delimiter2` = (
+			SELECT `delimiter2` FROM `PREFIX_range_weight` rw3 WHERE rw3.`id_range_weight` = d.`id_range_weight` LIMIT 1
+		)
+);
 
 DELETE FROM PREFIX_range_price WHERE id_carrier IS NULL;
 DELETE FROM PREFIX_range_weight WHERE id_carrier IS NULL;
