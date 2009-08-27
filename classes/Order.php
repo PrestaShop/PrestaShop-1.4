@@ -168,13 +168,13 @@ class		Order extends ObjectModel
 
 		if ($this->hasBeenDelivered())
 		{
+			if (!Configuration::get('PS_ORDER_RETURN'))
+				die(Tools::displayError());
 			$orderDetail->product_quantity_return += intval($quantity);
 			return $orderDetail->update();
 		}
 		elseif ($this->hasBeenPaid())
 		{
-			if (!Configuration::get('PS_ORDER_RETURN'))
-				die(Tools::displayError());
 			$orderDetail->product_quantity_refunded += intval($quantity);
 			return $orderDetail->update();
 		}
