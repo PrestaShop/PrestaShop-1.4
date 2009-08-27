@@ -5,6 +5,41 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.2.0 - 1302 (2009-27-08)   #
+####################################
+
+	Added Features :
+
+	[+] MO : isInstalled(moduleName) method has been added
+
+	Improved/changed features :
+
+	[*] DB : discount category index
+
+	Fixed bugs :
+
+	[-] Installer : Upgrade fixed (from 1.2.0.8)
+	[-] Installer : Delivery price upgrade fixed (for versions >= 1.0.0.4)
+	[-] Installer : Delivery price upgrade fixed (from versions < 1.0.0.4)
+	[-] Installer : Upgrade fixed (blocksearch javascript error)
+	[-] Installer : Base URI definition fixed
+	[-] FO : Product price tax excluded display fixed when no tax was applicable
+	[-] BO : Product refund fixed when merchandise returns were disabled
+	[-] BO : Product duplication fixed (was not duplicating the associated tags)
+	[-] BO : Product combination wholesale price saving fixed
+	[-] FO : $content_dir smarty variable fixed (was not here when the 1.1 theme compatibility mode was enabled)
+	[-] MO : CMS link selection fixed (when no one was selected)
+	[-] MO : Bankwire translations fixed
+	[-] Installer : ending slash issue hacked
+	[-] BO : Product re-stock fixed
+	[-] BO/MO : Module tab image display fixed. This image must now be located only on /img/t/
+	[-] MO : Newsletter module fixed (blocknewsletter dependency is required)
+	[-] BO: The name of the product quantity display feature has been fixed
+	[-] BO : new profiles accesses fixed
+	[-] FO : product list for page -1 fixed (manufacturer and supplier)
+	[-] FO : carriers are not unavailable anymore when the shipping is free (larger range = 0.00)
+
+####################################
 #   v1.2.1.0 - 1277 (2009-12-08)   #
 ####################################
 
@@ -68,7 +103,7 @@ Release Notes for PrestaShop 1.2
 	[-] FO : Pagination choice fixed
 	[-] BO : Product listing fixed (final price display)
 	[-] FO : Product attribute listing display fixed (when names were too long)
-	[-] BO : fixed "héhé" bug (#2538)
+	[-] BO : fixed "hï¿½hï¿½" bug (#2538)
 	[-] BO : fixed display bug in AdminManufacturers
 	[-] BO : fixed several bugs using $currentIndex (#2545)
 	[-] Installer : fixed bad update content (#2518)
