@@ -133,6 +133,8 @@ global $requests, $warningExist;
 $requests = '';
 $warningExist = false;
 
+Configuration::loadConfiguration();
+
 foreach($sqlContent as $query)
 {
 	$query = trim($query);
