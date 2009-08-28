@@ -125,7 +125,7 @@ require_once(dirname(__FILE__).'/init.php');
 								$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 							echo '
 							<li'.((($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab'])) ? ' class="active"' : '').'>
-								<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" /> '.$t['name'].'</a>
+								<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t['name'].'</a>
 							</li>';
 						}
 					}
@@ -145,7 +145,7 @@ require_once(dirname(__FILE__).'/init.php');
 							if (checkTabRights($t['id_tab']) === true)
 								echo '
 								<li>
-									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="../img/t/'.$t['class_name'].'.gif" alt="" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
+									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="../img/t/'.$t['class_name'].'.gif" alt="" style="width:16px;height:16px" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
 								</li>';
 					}
 				?>
