@@ -114,6 +114,7 @@ class AdminCustomers extends AdminTab
 		$customer = $this->loadObject();
 		$customerStats = $customer->getStats();
 		$addresses = $customer->getAddresses($defaultLanguage);
+		$products = $customer->getBoughtProducts();
 		$discounts = Discount::getCustomerDiscounts($defaultLanguage, $customer->id, false, false);
 		$orders = Order::getCustomerOrders($customer->id);
 		$carts = Cart::getCustomerCarts($customer->id);
@@ -202,6 +203,29 @@ class AdminCustomers extends AdminTab
 		}
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has placed no orders yet');
+		if ($products AND sizeof($products))
+		{
+			echo '<div class="clear">&nbsp;</div>
+			<h2>'.$this->l('Products').' ('.sizeof($products).')</h2>
+			<table cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th class="center">'.$this->l('Date').'</th>
+					<th class="center">'.$this->l('Name').'</th>
+					<th class="center">'.$this->l('Quantity').'</th>
+					<th class="center">'.$this->l('Actions').'</th>
+				</tr>';
+			$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+			foreach ($products AS $product)
+				echo '
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'\'">
+					<td>'.Tools::displayDate($product['date_add'], intval($cookie->id_lang), true).'</td>
+					<td>'.$product['product_name'].'</td>
+					<td align="right">'.$product['product_quantity'].'</td>
+					<td align="center"><a href="?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
+				</tr>';
+			echo '
+			</table>';
+		}
 		echo '<div class="clear">&nbsp;</div>
 		<h2>'.$this->l('Addresses').' ('.sizeof($addresses).')</h2>';
 		if (sizeof($addresses))

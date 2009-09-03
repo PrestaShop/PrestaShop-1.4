@@ -490,6 +490,14 @@ public function getLastConnections()
 		AND cg.`id_group` = '.intval($id_group));
 		return $result['nb'];
 	}
+	
+	public function getBoughtProducts()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT * FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
+		WHERE o.valid = 1 AND o.`id_customer` = '.intval($this->id));
+	}
 }
 
 ?>
