@@ -135,7 +135,6 @@ class Validate
 	*/
 	static public function isName($name)
 	{
-
 		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/ui', stripslashes($name));
 	}
 

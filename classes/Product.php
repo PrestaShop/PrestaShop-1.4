@@ -1415,11 +1415,12 @@ class		Product extends ObjectModel
 			return false;
 		}
 
-		return Db::getInstance()->Execute('
+		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product'.($product['id_product_attribute'] ? '_attribute' : '').'`
 		SET `quantity` = `quantity`-'.intval($product['quantity']).'
 		WHERE `id_product` = '.intval($product['id_product']).
 		($product['id_product_attribute'] ? ' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
+		return true;
 	}
 
 	public static function reinjectQuantities(&$orderDetail, $quantity)
