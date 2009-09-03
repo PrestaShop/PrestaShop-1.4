@@ -379,7 +379,6 @@ class		Cart extends ObjectModel
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
 					SET `quantity` = '.$qty.'
-					'.($operator == 'up' ? ', `date_add` = \''.pSql(date('Y-m-d H:i:s')).'\'' : '').'
 					WHERE `id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').'
 					AND `id_cart` = '.intval($this->id));
