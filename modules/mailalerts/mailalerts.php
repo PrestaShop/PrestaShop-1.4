@@ -450,7 +450,7 @@ class MailAlerts extends Module
 	{
 		$query = 'DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
 		WHERE `id_customer` = '.intval($id_customer).'
-		AND `customer_email` = '.strval($customer_email).'
+		AND `customer_email` = \''.pSQL($customer_email).'\'
 		AND `id_product` = '.intval($id_product).'
 		AND `id_product_attribute` = '.intval($id_product_attribute).';';
 		return Db::getInstance()->Execute($query);
