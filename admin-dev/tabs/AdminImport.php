@@ -1320,7 +1320,6 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_impact');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute`');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group_combination`');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group`');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group_lang`');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute`');
