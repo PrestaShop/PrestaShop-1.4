@@ -92,7 +92,7 @@ countries = new Array();
 				<sup>*</sup>
 			</p>
 			<p class="required password">
-				<label for="password">{l s='Password'}</label>
+				<label for="passwd">{l s='Password'}</label>
 				<input type="password" class="text" name="passwd" id="passwd" />
 				<sup>*</sup>
 				<span class="form_info">{l s='(5 characters min.)'}</span>
