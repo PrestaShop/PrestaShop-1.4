@@ -89,7 +89,6 @@ require_once(dirname(__FILE__).'/init.php');
 						foreach ($quicks AS $quick)
 						{
 							preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
-							p($adminTab);
 							if (isset($adminTab[1]))
 							{
 								if (strpos($adminTab[1], '&'))
