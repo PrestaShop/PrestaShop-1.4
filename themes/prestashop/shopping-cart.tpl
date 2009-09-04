@@ -43,7 +43,7 @@
 	{/foreach}
 {/if}
 <p>
-	{l s='Your shopping cart contains'} {$products|@count} {if $products|@count > 1}{l s='products'}{else}{l s='product'}{/if}
+	{l s='Your shopping cart contains'} {$productNumber} {if $productNumber > 1}{l s='products'}{else}{l s='product'}{/if}
 </p>
 <div id="order-detail-content" class="table_block">
 	<table id="cart_summary" class="std">

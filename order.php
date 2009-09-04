@@ -429,6 +429,7 @@ function displaySummary()
 	$token = Tools::getToken(false);
 	$smarty->assign(array(
 		'token_cart' => $token,
+		'productNumber' => $cart->nbProducts(),
 		'voucherAllowed' => Configuration::get('PS_VOUCHERS'),
 		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
 		'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
