@@ -196,7 +196,12 @@ class BlockWishList extends Module
 			$smarty->assign(array('products' => false, 'wishlists' => false));
 		return ($this->display(__FILE__, 'blockwishlist.tpl'));
 	}
-	
+
+	public function hookLeftColumn($params)
+	{
+		return $this->hookRightColumn($params);
+	}
+
 	public function hookProductActions($params)
 	{
 		global $smarty;
