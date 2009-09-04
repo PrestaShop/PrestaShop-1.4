@@ -65,7 +65,7 @@ class HomeFeatured extends Module
 		global $smarty;
 		$category = new Category(1);
 		$nb = intval(Configuration::get('HOME_FEATURED_NBR'));
-		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10), 'date_add', 'DESC');
+		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10));
 		$smarty->assign(array(
 			'allow_buy_when_out_of_stock' => Configuration::get('PS_ORDER_OUT_OF_STOCK', false),
 			'max_quantity_to_allow_display' => Configuration::get('PS_LAST_QTIES'),
