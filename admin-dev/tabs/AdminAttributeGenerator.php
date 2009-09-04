@@ -198,7 +198,7 @@ class AdminAttributeGenerator extends AdminTab
 					<thead>
 						<tr>
 							<th id="tab_h1" style="width: 250px">'.htmlspecialchars(stripslashes($attributeGroup['name'])).'</th>
-							<th id="tab_h2" style="width: 150px">'.$this->l('Price impact').' ('.$currency->sign.')'.'</th>
+							<th id="tab_h2" style="width: 150px">'.$this->l('Price impact').' ('.$currency->sign.')'.' <sup>*</sup></th>
 							<th style="width: 150px">'.$this->l('Weight impact').' (kg)'.'</th>
 						</tr>
 					</thead>
@@ -210,6 +210,7 @@ class AdminAttributeGenerator extends AdminTab
 						echo '<script type="text/javascript">getE(\'table_\' + '.$idGroup.').appendChild(create_attribute_row('.$k.', '.$idGroup.', \''.addslashes($attribute['attribute_name']).'\', '.$attribute['price'].', '.$attribute['weight'].'));toggle(getE(\'table_\' + '.$idGroup.').parentNode, true);</script>';
 			}
 		}
+		echo '<p><sup>*</sup> '.$this->l('tax included').'</p>';
 	}
 
 	public function displayForm()
