@@ -75,6 +75,28 @@ class StatsProduct extends ModuleGraph
 		AND od.product_id = '.intval($id_product));
 	}
 	
+	private function getCrossSales($id_product, $id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT pl.name as pname, pl.id_product, SUM(od.product_quantity) as pqty, AVG(od.product_price) as pprice
+		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = od.product_id AND pl.id_lang = '.intval($id_lang).')
+		WHERE o.id_customer IN (
+			SELECT o.id_customer
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
+			WHERE o.date_add BETWEEN '.$this->getDate().'
+			AND o.valid = 1
+			AND od.product_id = '.intval($id_product).'
+		)
+		AND o.date_add BETWEEN '.$this->getDate().'
+		AND o.valid = 1
+		AND od.product_id != '.intval($id_product).'
+		GROUP BY od.product_id
+		ORDER BY pqty DESC');
+	}
+	
 	public function hookAdminStatsModules($params)
 	{
 		global $cookie, $currentIndex;
@@ -88,11 +110,10 @@ class StatsProduct extends ModuleGraph
 			$totalBought = $this->getTotalBought($product->id);
 			$totalViewed = $this->getTotalViewed($product->id);
 			$this->_html .= '<h3>'.$product->name.' - '.$this->l('Details').'</h3>
-			<p>'.$this->l('Conversion rate:').' '.number_format($totalViewed ? $totalBought / $totalViewed : 0, 2).'</p>
 			<p>'.$this->l('Total bought:').' '.$totalBought.'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.$id_product)).'</center>
 			<p>'.$this->l('Total viewed:').' '.$totalViewed.'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.$id_product)).'</center>';
+			<p>'.$this->l('Conversion rate:').' '.number_format($totalViewed ? $totalBought / $totalViewed : 0, 2).'</p>
+			<center>'.ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => '1-'.$id_product)).'</center>';
 			if ($hasAttribute = $product->hasAttributes() AND $totalBought)
 				$this->_html .= '<h3 class="space">'.$this->l('Attribute sales distribution').'</h3><center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.$id_product)).'</center>';
 			if ($totalBought)
@@ -100,7 +121,7 @@ class StatsProduct extends ModuleGraph
 				$sales = $this->getSales($id_product, $cookie->id_lang);
 				$this->_html .= '<br class="clear" />
 				<h3>'.$this->l('Sales').'</h3>
-				<div style="overflow-y: scroll; height: 600px;">
+				<div style="overflow-y: scroll; height: '.min(400, (count($sales)+1)*32).'px;">
 				<table class="table" border="0" cellspacing="0" cellspacing="0">
 				<thead>
 					<tr>
@@ -125,6 +146,31 @@ class StatsProduct extends ModuleGraph
 						<td>'.Tools::displayprice($sale['total'], $currency).'</td>
 					</tr>';
 				$this->_html .= '</tbody></table></div>';
+				
+				$crossSelling = $this->getCrossSales($id_product, $cookie->id_lang);
+				if (count($crossSelling))
+				{
+					$this->_html .= '<br class="clear" />
+					<h3>'.$this->l('Cross Selling').'</h3>
+					<div style="overflow-y: scroll; height: 200px;">
+					<table class="table" border="0" cellspacing="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th>'.$this->l('Product name').'</th>
+							<th>'.$this->l('Quantity sold').'</th>
+							<th>'.$this->l('Average price').'</th>
+						</tr>
+					</thead><tbody>';
+					$tokenProducts = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
+					foreach ($crossSelling as $selling)
+						$this->_html .= '
+						<tr>
+							<td ><a href="?tab=AdminCatalog&id_product='.intval($selling['id_product']).'&addproduct&token='.$tokenProducts.'">'.$selling['pname'].'</a></td>
+							<td align="center">'.intval($selling['pqty']).'</td>
+							<td align="right">'.Tools::displayprice($selling['pprice'], $currency).'</td>
+						</tr>';
+					$this->_html .= '</tbody></table></div>';
+				}
 			}
 		}
 		else
@@ -182,7 +228,10 @@ class StatsProduct extends ModuleGraph
 		switch ($this->_option)
 		{
 			case 1:
-				$this->_query = '
+				$this->_titles['main'][0] = $this->l('Popularity');
+				$this->_titles['main'][1] = $this->l('Sales');
+				$this->_titles['main'][2] = $this->l('Visits (x100)');
+				$this->_query[0] = '
 					SELECT o.`date_add`, SUM(od.`product_quantity`) AS total
 					FROM `'._DB_PREFIX_.'order_detail` od
 					LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
@@ -190,11 +239,8 @@ class StatsProduct extends ModuleGraph
 					AND o.valid = 1
 					AND o.`date_add` BETWEEN '.$dateBetween.'
 					GROUP BY o.`date_add`';
-				$this->_titles['main'] = $this->l('Number of purchases');
-				break;
-			case 2:
-				$this->_query = '
-					SELECT dr.`time_start` AS date_add, SUM(pv.`counter`) AS total
+				$this->_query[1] = '
+					SELECT dr.`time_start` AS date_add, (SUM(pv.`counter`) / 100) AS total
 					FROM `'._DB_PREFIX_.'page_viewed` pv
 					LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`
 					LEFT JOIN `'._DB_PREFIX_.'page` p ON pv.`id_page` = p.`id_page`
@@ -204,7 +250,6 @@ class StatsProduct extends ModuleGraph
 					AND dr.`time_start` BETWEEN '.$dateBetween.'
 					AND dr.`time_end` BETWEEN '.$dateBetween.'
 					GROUP BY dr.`time_start`';
-				$this->_titles['main'] = $this->l('Number of visits');
 				break;
 			case 3:
 				$this->_query = '
@@ -253,23 +298,32 @@ class StatsProduct extends ModuleGraph
 	
 	protected function setYearValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query);
-		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 5, 2))] += $row['total'];
+		for ($i = 0; $i < $layers; $i++)
+		{
+			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			foreach ($result AS $row)
+			    $this->_values[$i][intval(substr($row['date_add'], 5, 2))] += $row['total'];
+		}
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query);
-		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 8, 2))] += $row['total'];
+		for ($i = 0; $i < $layers; $i++)
+		{
+			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			foreach ($result AS $row)
+			    $this->_values[$i][intval(substr($row['date_add'], 8, 2))] += $row['total'];
+		}
 	}
 
 	protected function setDayValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query);
-		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 11, 2))] += $row['total'];
+		for ($i = 0; $i < $layers; $i++)
+		{
+			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			foreach ($result AS $row)
+			    $this->_values[$i][intval(substr($row['date_add'], 11, 2))] += $row['total'];
+		}
 	}
 }
 
