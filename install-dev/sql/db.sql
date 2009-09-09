@@ -213,7 +213,8 @@ CREATE TABLE `PREFIX_category_product` (
   `id_category` int(10) unsigned NOT NULL,
   `id_product` int(10) unsigned NOT NULL,
   `position` int(10) unsigned NOT NULL default '0',
-  KEY `category_product_index` (`id_category`,`id_product`)
+  KEY `category_product_index` (`id_category`,`id_product`),
+  INDEX (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_cms` (
