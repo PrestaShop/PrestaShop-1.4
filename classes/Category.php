@@ -338,46 +338,13 @@ class		Category extends ObjectModel
 	{
 		$tab = array(intval($id_category));
 		Category::getAllSubCats($tab, intval($id_category), intval($id_lang));
-		
 		$listCategories = implode(',', $tab);
-		$sql = 'SELECT
-		(
-		  (
-		    /* quantity of products witch don\'t have attributes */
-		    IFNULL((
-				  SELECT SUM(quantity)
-				  FROM `'._DB_PREFIX_.'product`
-				  WHERE id_product NOT IN
-				  (
-				    /* products with attributes */
-				    SELECT DISTINCT(id_product)
-				    FROM `'._DB_PREFIX_.'product_attribute`
-				  )
-				  AND id_product IN
-				  (
-				  	/* products direclty in the categories listed bellow */
-				  	SELECT DISTINCT(id_product)
-				  	FROM `'._DB_PREFIX_.'category_product`
-				  	WHERE id_category IN ('.$listCategories.')
-				  )
-				),0)
-		  )
-		  +
-		  (
-		    /* quantity of products witch have attributes */
-				IFNULL((
-				  SELECT SUM(quantity)
-				  FROM `'._DB_PREFIX_.'product_attribute` pa
-				  WHERE pa.id_product IN
-				  (
-				  	/* products direclty in the categories listed bellow */
-				  	SELECT DISTINCT(id_product)
-				  	FROM `'._DB_PREFIX_.'category_product`
-				  	WHERE id_category IN ('.$listCategories.')
-				  )
-				),0)
-		  )
-		) as nb';
+		$sql = '
+			SELECT SUM(IFNULL(pa.`quantity`, p.`quantity`)) AS nb
+			FROM `'._DB_PREFIX_.'category` c
+			INNER JOIN `'._DB_PREFIX_.'category_product` pc ON (pc.`id_category` = c.`id_category` AND c.`id_category` IN ('.$listCategories.'))
+			INNER JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = pc.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)';
 		$result = Db::getInstance()->getRow($sql);
 		return $result['nb'];
 	}
