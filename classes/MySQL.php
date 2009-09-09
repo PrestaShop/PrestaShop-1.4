@@ -48,7 +48,11 @@ class MySQL extends Db
 		$this->_result = false;
 		if ($this->_link)
 			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
+			{
+				$this->displayMySQLError($query);
 				return mysql_fetch_assoc($this->_result);
+			}
+		$this->displayMySQLError($query);
 		return false;
 	}
 
@@ -66,8 +70,10 @@ class MySQL extends Db
 		if ($this->_link)
 		{
 			$this->_result = mysql_query($query, $this->_link);
+			$this->displayMySQLError($query);
 			return $this->_result;
 		}
+		$this->displayMySQLError($query);
 		return false;
 	}
 	
@@ -76,6 +82,7 @@ class MySQL extends Db
 		$this->_result = false;
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
+			$this->displayMySQLError($query);
 			if (!$array)
 				return $this->_result;
 			$resultArray = array();
@@ -83,6 +90,7 @@ class MySQL extends Db
 				$resultArray[] = $row;
 			return $resultArray;
 		}
+		$this->displayMySQLError($query);
 		return false;
 	}
 
@@ -135,16 +143,19 @@ class MySQL extends Db
 	 */
 	public function getMsgError($query = false)
 	{
-		if ($query)
-			return mysql_error().'<br /><br /><pre>'.$query.'</pre>';
 		return mysql_error();
 	}
 	
-	public function getNumberError()
+	public function displayMySQLError($query = false)
 	{
-		return mysql_errno();
+		if (_PS_DEBUG_ AND mysql_errno())
+		{
+			if ($query)
+				die(Tools::displayError(mysql_error().'<br /><br /><pre>'.$query.'</pre>'));
+			die(Tools::displayError((mysql_error())));
+		}
 	}
-	
+
 	static public function tryToConnect($server, $user, $pwd, $db)
 	{
 		if (!$link = @mysql_connect($server, $user, $pwd))
@@ -166,5 +177,3 @@ class MySQL extends Db
 		return $ret;
 	}
 }
-
-?>

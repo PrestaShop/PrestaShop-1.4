@@ -1,7 +1,11 @@
 <?php
 
+/* Debug mode */
+define('_PS_DEBUG_', true);
+
 /* Improve PHP configuration to prevent issues */
-@ini_set('display_errors', 'on');
+if (_PS_DEBUG_)
+	@ini_set('display_errors', 'on');
 @ini_set('upload_max_filesize', '100M');
 @ini_set('default_charset', 'utf-8');
 

@@ -332,6 +332,7 @@ class Tools
 	{
 		global $_ERRORS;
 
+		d(debug_backtrace());
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
