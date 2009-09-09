@@ -1962,7 +1962,7 @@ class AdminProducts extends AdminTab
 					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:730px;"></td></tr>
 					<tr>
 						<td colspan="2" style="text-align:center;">
-							'.(Tools::isSubmit('id_category') ? '<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />' : '').'
+							<input type="submit" value="'.$this->l('Save').'" name="submitAdd'.$this->table.'" class="button" />
 							&nbsp;<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" /></td>
 					</tr>
 				</table>
