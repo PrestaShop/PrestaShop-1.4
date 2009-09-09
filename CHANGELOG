@@ -5,6 +5,39 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.3.0 - 1328 (2009-09-09)   #
+####################################
+
+	Added Features :
+
+	[+] MO : added cross selling to statsproduct
+	[+] BO : added products bought by the customer on the customer page
+
+	Improved/changed features :
+
+	[*] Classes : added debug mode for PHP and MySQL return
+	[*] BO : tab images size fixed
+	[*] BO : Combination generator tax information added
+
+	Fixed bugs :
+
+	[-] BO : fixed slowless in product quantity of each category
+	[-] BO : fixed back button on AdminProducts (#2789)
+	[-] Classes : fixed group SQL slowness
+	[-] Installer : deleted double hook inserted (#2848)
+	[-] FO : Shopping cart product number fixed
+	[-] MO : Home featured product positioning fixed
+	[-] BO : Image upload fixed (when the mime type contained extra information)
+	[-] FO : Free shipping fixed (was casted to integer value)
+	[-] Classes : Email validation method fixed
+	[-] MO : Email sending when quantity is lower than X fixed when the stock management was disabled
+	[-] FO : Authentication label tag fixed
+	[-] BO : Import wrong table truncate removed
+	[-] MO : Mailalerts translations fixed
+	[-] MO : Mailalert re-stock notification subscription/unsubscription fixed
+	[-] FO : Cart product quantity modification does not update anymore the date of the addition to the cart
+
+####################################
 #   v1.2.2.0 - 1302 (2009-27-08)   #
 ####################################
 
