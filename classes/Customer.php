@@ -445,7 +445,7 @@ public function getLastConnections()
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM '._DB_PREFIX_.'customer c
-		WHERE p.`id_customer` = '.intval($id_customer));
+		WHERE c.`id_customer` = '.intval($id_customer));
 		
 		return isset($row['id_customer']);
 	}
