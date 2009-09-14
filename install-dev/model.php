@@ -1,8 +1,5 @@
 <?php
 
-/* Debug mode */
-define('_PS_DEBUG_', false);
-
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];

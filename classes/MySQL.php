@@ -12,6 +12,8 @@
   *
   */
 
+define('_PS_DEBUG_', true);
+
 class MySQL extends Db
 {
 	public function	connect()

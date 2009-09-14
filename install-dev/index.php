@@ -1,8 +1,5 @@
 <?php
 
-/* Debug mode */
-define('_PS_DEBUG_', false);
-
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
