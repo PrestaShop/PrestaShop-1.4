@@ -1763,6 +1763,8 @@ class		Product extends ObjectModel
 	static public function duplicateTags($id_product_old, $id_product_new)
 	{
 		$resource = Db::getInstance()->Execute('SELECT `id_tag` FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.intval($id_product_old));
+		if (!Db::getInstance()->NumRows())
+			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_product`, `id_tag`) VALUES';
 		while ($row = Db::getInstance()->nextRow($resource))
 			$query .= ' ('.intval($id_product_new).', '.intval($row['id_tag']).'),';
