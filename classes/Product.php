@@ -1091,7 +1091,7 @@ class		Product extends ObjectModel
 			$sql = '
 			SELECT COUNT(DISTINCT p.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
-			AND p.`active` = 1
+			WHERE p.`active` = 1
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
