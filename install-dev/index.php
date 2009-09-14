@@ -1,5 +1,8 @@
 <?php
 
+/* Debug mode */
+define('_PS_DEBUG_', false);
+
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
@@ -10,7 +13,7 @@ if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 
-define('INSTALL_VERSION', '1.2.3.0');
+define('INSTALL_VERSION', '1.2.4.0');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
 $tmpBaseUri = substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(substr($_SERVER['REQUEST_URI'],0,-1), strrpos( substr($_SERVER['REQUEST_URI'],0,-1),"/" )+1)));
