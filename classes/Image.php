@@ -197,11 +197,6 @@ class		Image extends ObjectModel
                 if (file_exists(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'.jpg'))
                     copy(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'.jpg',
                             _PS_PROD_IMG_DIR_.intval($id_product_new).'-'.intval($image->id).'.jpg');
-				Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'product_attribute`
-				SET id_image = '.intval($image->id).'
-				WHERE id_image = '.intval($saved_id).'
-				AND id_product = '.intval($id_product_new));
 				self::replaceAttributeImageAssociationId($combinationImages, intval($saved_id), intval($image->id));
             }
 			else
