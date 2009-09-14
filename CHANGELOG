@@ -5,6 +5,19 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
+#   v1.2.4.0 - 1336 (2009-15-09)   #
+####################################
+
+	Fixed bugs :
+
+	[-] BO : fixed bug whith pagination and category in BO
+	[-] BO : fixed bug duplicating product with image (#2862)
+	[-] Classes : fixed SQL error in Customer.php (#2868). Thanks to jahazzz !
+	[-] Classes : fixed bug while duplicating product without tags (#2860). Thanks to Victor Berchet !
+	[-] Classes : fixed SQL price drop bug (#2870)
+	[-] Installer : fixed error while updating
+
+####################################
 #   v1.2.3.0 - 1328 (2009-09-09)   #
 ####################################
 
@@ -136,7 +149,7 @@ Release Notes for PrestaShop 1.2
 	[-] FO : Pagination choice fixed
 	[-] BO : Product listing fixed (final price display)
 	[-] FO : Product attribute listing display fixed (when names were too long)
-	[-] BO : fixed "h�h�" bug (#2538)
+	[-] BO : fixed "héhé" bug (#2538)
 	[-] BO : fixed display bug in AdminManufacturers
 	[-] BO : fixed several bugs using $currentIndex (#2545)
 	[-] Installer : fixed bad update content (#2518)
