@@ -119,6 +119,15 @@ class AdminCatalog extends AdminTab
 			$this->adminProducts->display($this->token);
 		}
 	}
+	
+	public function displayListHeader($token = NULL)
+	{
+		global $currentIndex;
+
+		$id_category = intval(Tools::getValue('id_category'));
+		if ($id_category)
+			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
+	}
 }
 
 ?>
