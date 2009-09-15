@@ -147,7 +147,12 @@ class MySQL extends Db
 	{
 		return mysql_error();
 	}
-	
+
+	public function getNumberError()
+	{
+		return mysql_errno();
+	}
+
 	public function displayMySQLError($query = false)
 	{
 		if (_PS_DEBUG_ AND mysql_errno())
