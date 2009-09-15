@@ -5,11 +5,12 @@ Release Notes for PrestaShop 1.2
 --------------------------------
 
 ####################################
-#   v1.2.4.0 - 1336 (2009-15-09)   #
+#   v1.2.4.0 - 1339 (2009-15-09)   #
 ####################################
 
 	Fixed bugs :
 
+	[-] Classe : fixed getNumberError() in MySQL.php (#2903)
 	[-] BO : fixed bug whith pagination and category in BO
 	[-] BO : fixed bug duplicating product with image (#2862)
 	[-] Classes : fixed SQL error in Customer.php (#2868). Thanks to jahazzz !
