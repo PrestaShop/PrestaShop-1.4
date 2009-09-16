@@ -2712,7 +2712,7 @@ class AdminProducts extends AdminTab
 				}
 		}';
 	}
-	
+
 	public function updatePackItems($product)
 	{
 		Pack::deleteItems($product->id);
@@ -2720,6 +2720,16 @@ class AdminProducts extends AdminTab
 			if (!Pack::addItems($product->id, $ids))
 				return false;
 		return true;
+	}
+
+	public function displayListHeader($token = NULL)
+	{
+		global $currentIndex;
+
+		$id_category = intval(Tools::getValue('id_category'));
+		if ($id_category)
+			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
+		parent::displayListHeader();
 	}
 }
 

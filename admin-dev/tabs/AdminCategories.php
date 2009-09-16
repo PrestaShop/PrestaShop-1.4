@@ -268,4 +268,14 @@ class AdminCategories extends AdminTab
 		</form>
 		<div class="clear"></div>';
 	}
+
+	public function displayListHeader($token = NULL)
+	{
+		global $currentIndex;
+
+		$id_category = intval(Tools::getValue('id_category'));
+		if ($id_category)
+			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
+		parent::displayListHeader();
+	}
 }

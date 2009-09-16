@@ -939,7 +939,7 @@ abstract class AdminTab
 		if (Tools::getIsset($this->table.'Orderby'))
 		{
 			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).
-			'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));	
+			'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
 		}
 		echo '#'.$this->table.'" class="form">
 		<input type="hidden" id="submitFilter'.$this->table.'" name="submitFilter'.$this->table.'" value="0">
