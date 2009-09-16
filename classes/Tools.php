@@ -781,7 +781,7 @@ class Tools
 			return false;
 		if (function_exists('mb_substr'))
 			return mb_substr($str, intval($start), ($length === false ? Tools::strlen($str) : intval($length)), $encoding);
-		return substr($str, $start, $length);
+		return substr($str, $start, ($length === false ? strlen($str) : intval($length)));
 	}
 
 	static function ucfirst($str)
