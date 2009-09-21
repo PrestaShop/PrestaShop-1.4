@@ -16,20 +16,9 @@
 	<input type="hidden" name="country" value="{$country->iso_code}" />
 	<input type="hidden" name="amount" value="{$amount}" />
 	<input type="hidden" name="email" value="{$customer->email}" />
-{if !$discounts}
-	<input type="hidden" name="shipping_1" value="{$shipping}" />
-	{counter assign=i}
-	{foreach from=$products item=product}
-	<input type="hidden" name="item_name_{$i}" value="{$product.name}{if isset($product.attributes)} - {$product.attributes}{/if}" />
-	<input type="hidden" name="amount_{$i}" value="{$product.paypalAmount}" />
-	<input type="hidden" name="quantity_{$i}" value="{$product.quantity}" />
-	{counter print=false}
-	{/foreach}
-{else}
 	<input type="hidden" name="item_name_1" value="{l s='My cart' mod='paypal'}" />
 	<input type="hidden" name="amount_1" value="{$total}" />
 	<input type="hidden" name="quantity_1" value="1" />
-{/if}
 	<input type="hidden" name="business" value="{$business}" />
 	<input type="hidden" name="receiver_email" value="{$business}" />
 	<input type="hidden" name="cmd" value="_cart" />

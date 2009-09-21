@@ -178,7 +178,7 @@ class Paypal extends PaymentModule
 			if (isset($product['attributes']))
 				$products[$key]['attributes'] = str_replace('"', '\'', $product['attributes']);
 			$products[$key]['name'] = htmlentities(utf8_decode($product['name']));
-			$products[$key]['paypalAmount'] = number_format(Tools::convertPrice($product['price_wt'], $currency), 2, '.', '');
+			$products[$key]['paypalAmount'] = number_format(Tools::convertPrice($product['price_wt'], $currency), 6, '.', '');
 		}
 		$smarty->assign(array(
 			'address' => $address,
@@ -190,10 +190,6 @@ class Paypal extends PaymentModule
 			'paypalUrl' => $this->getPaypalUrl(),
 			// products + discounts - shipping cost
 			'amount' => number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 4), $currency), 2, '.', ''),
-			// shipping cost + wrapping
-			'shipping' =>  number_format(Tools::convertPrice(($params['cart']->getOrderShippingCost() + $params['cart']->getOrderTotal(true, 6)), $currency), 2, '.', ''),
-			'discounts' => $params['cart']->getDiscounts(),
-			'products' => $products,
 			// products + discounts + shipping cost
 			'total' => number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 3), $currency), 2, '.', ''),
 			'id_cart' => intval($params['cart']->id),
