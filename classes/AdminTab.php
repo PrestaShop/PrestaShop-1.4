@@ -652,6 +652,8 @@ abstract class AdminTab
 						$key = isset($tmpTab[1]) ? $tmpTab[0].'.`'.$tmpTab[1].'`' : '`'.$tmpTab[0].'`';
 						if (array_key_exists('tmpTableFilter', $field))
 							$sqlFilter = & $this->_tmpTableFilter;
+						elseif (array_key_exists('havingFilter', $field))
+							$sqlFilter = & $this->_filterHaving;
 						else
 							$sqlFilter = & $this->_filter;
 
@@ -884,7 +886,7 @@ abstract class AdminTab
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
-		'.(isset($this->_having) ? $this->_having.' ' : '').'
+		'.((isset($this->_filterHaving) || isset($this->_having)) ? 'HAVING ' : '').(isset($this->_filterHaving) ? ltrim($this->_filterHaving, ' AND ') : '').(isset($this->_having) ? $this->_having.' ' : '').'
 		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);

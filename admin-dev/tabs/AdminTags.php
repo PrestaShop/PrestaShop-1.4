@@ -26,12 +26,12 @@ class AdminTags extends AdminTab
 		'id_tag' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25, 'filter_key' => 'a!id_seller_message'),
 		'lang' => array('title' => $this->l('Language'), 'filter_key' => 'l!name'),
 		'name' => array('title' => $this->l('Name'), 'width' => 200),
-		'products' => array('title' => $this->l('Products'), 'align' => 'right'));
+		'products' => array('title' => $this->l('Products'), 'align' => 'right', 'havingFilter' => true));
 
 		$this->_select = 'l.name as lang, COUNT(pt.id_product) as products';
 		$this->_join = '
 		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (a.`id_tag` = pt.`id_tag`)
-		LEFT JOIN `'._DB_PREFIX_.'lang` l ON l.`id_lang` = a.`id_lang`';
+		LEFT JOIN `'._DB_PREFIX_.'lang` l ON (l.`id_lang` = a.`id_lang`)';
 		$this->_where = 'GROUP BY a.name, a.id_lang';
 
 		parent::__construct();
