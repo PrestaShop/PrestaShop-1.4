@@ -28,7 +28,7 @@ class AdminCarriers extends AdminTab
 	 	$this->delete = true;
 	 	$this->deleted = true;
  		$this->fieldImageSettings = array('name' => 'logo', 'dir' => 's');
- 				
+
 		$this->fieldsDisplay = array(
 		'id_carrier' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 100),
@@ -77,7 +77,7 @@ class AdminCarriers extends AdminTab
 					echo '
 					<div id="delay_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" size="41" maxlength="128" name="delay_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'delay', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					</div>';							
+					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'delay', 'delay');
 				echo '
 					<p style="clear: both">'.$this->l('Time taken for product delivery; displayed during checkout').'</p>
@@ -128,6 +128,14 @@ class AdminCarriers extends AdminTab
 						<option value="1"'.($this->getFieldValue($obj, 'range_behavior') ? ' selected="selected"' : '').'>'.$this->l('Disable carrier').'</option>
 					</select>
 					<p>'.$this->l('Out-of-range behavior when none is defined (e.g., when a customer\'s cart weight is superior to the highest range limit)').'</p>
+				</div>
+				<label>'.$this->l('Module:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="is_module" id="active_on" value="1" '.($this->getFieldValue($obj, 'is_module') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="is_module" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'is_module') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+					<p>'.$this->l('Mark this carrier as linked to a module').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
