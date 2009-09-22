@@ -1085,13 +1085,18 @@ class		Product extends ObjectModel
             $orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-
+		$currentDate = date('Y-m-d');
 		if ($count)
 		{
 			$sql = '
 			SELECT COUNT(DISTINCT p.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE p.`active` = 1
+			AND (`reduction_price` > 0 OR `reduction_percent` > 0)
+			'.((!$beginning AND !$ending) ?
+			'	AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
+			:
+				($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
@@ -1101,7 +1106,6 @@ class		Product extends ObjectModel
 			$result = Db::getInstance()->getRow($sql);
 			return intval($result['nb']);
 		}
-		$currentDate = date('Y-m-d');
 		$sql = '
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, i.`id_image`, il.`legend`, t.`rate`, (p.`reduction_price` + (p.`reduction_percent` * p.`price`)) AS myprice, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'product` p
