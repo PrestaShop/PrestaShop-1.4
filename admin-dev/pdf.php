@@ -49,7 +49,7 @@ elseif (isset($_GET['id_delivery']))
 }
 elseif (isset($_GET['invoices']))
 {
-	$invoices = unserialize(urldecode($_GET['invoices']));
+	$invoices = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], NULL, 'invoice');
 	if (is_array($invoices))
 		PDF::multipleInvoices($invoices);
 }

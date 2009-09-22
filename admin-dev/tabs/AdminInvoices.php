@@ -77,10 +77,9 @@ class AdminInvoices extends AdminTab
 			{
 				$orders = Order::getOrdersIdInvoiceByDate($_POST['date_from'], $_POST['date_to'], NULL, 'invoice');
 				if (sizeof($orders))
-					Tools::redirectAdmin('pdf.php?invoices='.urlencode(serialize($orders)).'&token='.$this->token);
-				else
-					$this->_errors[] = $this->l('No invoice found for this period');
-			}			
+					Tools::redirectAdmin('pdf.php?invoices&date_from='.strval($_POST['date_from']).'&date_to='.strval($_POST['date_to']).'&token='.$this->token);
+				$this->_errors[] = $this->l('No invoice found for this period');
+			}
 		}
 		else
 			parent::postProcess();

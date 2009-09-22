@@ -280,8 +280,6 @@ abstract class Module
 	  */
 	static public function getInstanceByName($moduleName)
 	{
-		if (!Validate::isModuleName($moduleName))
-			die(Tools::displayError());
 		if (!file_exists(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
 			return false;
 		include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
