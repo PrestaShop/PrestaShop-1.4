@@ -253,7 +253,10 @@ function updateDisplay()
 		}
 
 		if (group_reduction)
+		{
 			priceProduct *= group_reduction;
+			productPricePretaxed *= group_reduction;
+		}
 		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));
