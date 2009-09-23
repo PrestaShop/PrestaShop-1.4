@@ -79,8 +79,10 @@ class Gsitemap extends Module
 			$_GET = array('id_cms' => $cms['id_cms']);
 			if ($cms['id_lang'] != $defaultLanguage)
 			{
+				$tmpLink = str_replace("http://", "", $tmpLink);
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
 				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
+				
 				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
 				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
@@ -106,6 +108,7 @@ class Gsitemap extends Module
 			$_GET = array('id_category' => $category['id_category']);
 			if ($category['id_lang'] != $defaultLanguage)
 			{
+				$tmpLink = str_replace("http://", "", $tmpLink);
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
 				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 				$link = new Link();
@@ -140,6 +143,7 @@ class Gsitemap extends Module
 			$_GET = array('id_product' => $product['id_product']);
 			if ($product['id_lang'] != $defaultLanguage)
 			{
+				$tmpLink = str_replace("http://", "", $tmpLink);
 				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
 				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 				$link = new Link();
@@ -161,8 +165,9 @@ class Gsitemap extends Module
 		ORDER BY p.id_product');
         foreach($images as $image)
         {
+				$image['legend'] = str_replace('- ', '', $image['legend']);
             $sitemap = $xml->addChild('url');
-			$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image']);
+				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image'], 'thickbox');
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', 0.4);
             $sitemap->addChild('lastmod', substr($image['date_upd'], 0, 10));
