@@ -118,14 +118,16 @@ class BlockLink extends Module
 	 	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 	 	if (!$languages)
 			 return false;
+		if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'blocklink_lang WHERE `id_link` = '.intval($_POST['id'])))
+			return false ;
 	 	foreach ($languages AS $language)
 	 	 	if (!empty($_POST['text_'.$language['id_lang']]))
 	 	 	{
-	 	 		if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'blocklink_lang SET `text`=\''.pSQL($_POST['text_'.$language['id_lang']]).'\' WHERE `id_link`='.intval($_POST['id']).' AND `id_lang`='.$language['id_lang']))
+	 	 		if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink_lang VALUES ('.intval($_POST['id']).', '.$language['id_lang'].', \''.pSQL($_POST['text_'.$language['id_lang']]).'\')'))
 	 	 			return false;
 	 	 	}
 	 	 	else
-	 	 		if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'blocklink_lang SET `text`=\''.pSQL($_POST['text_'.$defaultLanguage]).'\' WHERE `id_link`='.intval($_POST['id']).' AND `id_lang`='.$language['id_lang']))
+				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink_lang VALUES ('.intval($_POST['id']).', '.$language['id_lang'].', \''.pSQL($_POST['text_'.$defaultLanguage]).'\')'))
 	 	 			return false;
 	 	return true;
 	}
@@ -303,7 +305,10 @@ class BlockLink extends Module
 	 		{
 	 			$this->_html .= 'links['.$link['id'].'] = new Array(\''.addslashes($link['url']).'\', '.$link['newWindow'];
 	 			foreach ($languages AS $language)
-	 				$this->_html .= ', \''.addslashes($link['text_'.$language['id_lang']]).'\'';
+					if (isset($link['text_'.$language['id_lang']]))
+						$this->_html .= ', \''.addslashes($link['text_'.$language['id_lang']]).'\'';
+					else
+						$this->_html .= ', \'\'';
 	 			$this->_html .= ');';
 	 		}
 	 		$this->_html .= '</script>';
@@ -341,4 +346,3 @@ class BlockLink extends Module
 		<input type="hidden" id="languageNb" value="'.sizeof($languages).'" />';
 	}
 }
-?>
