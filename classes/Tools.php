@@ -110,7 +110,14 @@ class Tools
 		if (!$cookie->id_lang AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
 			$array = explode(',', Tools::strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
-			if (Validate::isLanguageIsoCode($array[0]))
+			if (Tools::strlen($array[0]) > 2)
+			{
+				$tab = explode('-', $array[0]);
+				$string = $tab[0];
+			}
+			else
+				$string = $array[0];
+			if (Validate::isLanguageIsoCode($string))
 			{
 				$lang = new Language(intval(Language::getIdByIso(strval($array[0]))));
 				if (Validate::isLoadedObject($lang) AND $lang->active)
