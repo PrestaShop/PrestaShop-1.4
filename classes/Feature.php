@@ -100,6 +100,8 @@ class		Feature extends ObjectModel
 	 	/* Also delete related attributes */
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value_lang` WHERE `id_feature_value` IN (SELECT id_feature_value FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.intval($this->id).')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.intval($this->id));
+		/* Also delete related products */
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature` = '.intval($this->id));
 		return parent::delete();
 	}
 	

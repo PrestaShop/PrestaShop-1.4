@@ -134,6 +134,13 @@ class		FeatureValue extends ObjectModel
 		}
 		return $id_feature_value;
 	}
+
+	public function delete()
+	{
+		/* Also delete related products */
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature_value` = '.intval($this->id));
+		return parent::delete();
+	}
 }
 
 ?>
