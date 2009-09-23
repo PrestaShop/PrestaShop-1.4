@@ -119,7 +119,7 @@ class Tools
 				$string = $array[0];
 			if (Validate::isLanguageIsoCode($string))
 			{
-				$lang = new Language(intval(Language::getIdByIso(strval($array[0]))));
+				$lang = new Language(intval(Language::getIdByIso($string)));
 				if (Validate::isLoadedObject($lang) AND $lang->active)
 					$cookie->id_lang = intval($lang->id);
 			}
@@ -339,7 +339,7 @@ class Tools
 	{
 		global $_ERRORS;
 
-		//d(debug_backtrace());
+		d(debug_backtrace());
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
