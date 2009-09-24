@@ -34,12 +34,22 @@ class AdminAppearance extends AdminPreferences
 
 	public function display()
 	{
+		global $currentIndex;
+		
 		// No cache for auto-refresh uploaded logo
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		$this->_displayForm('appearance', $this->_fieldsAppearance, $this->l('Appearance'), 'width3', 'appearance');
 		echo '<br /><br />';
 		$this->_displayForm('themes', $this->_fieldsTheme, $this->l('Themes'), 'width3', 'themes');
+		echo '<br /><br />';
+		if (@ini_get('allow_url_fopen'))
+			echo '<script type="text/javascript">
+				$.post("'.dirname($currentIndex).'/ajax.php",{page:"themes"},function(a){getE("prestastore-content").innerHTML="<legend><img src=\"../img/admin/prestastore.gif\" class=\"middle\" /> '.$this->l('Live from PrestaStore!').'</legend>"+a;});
+			</script>
+			<fieldset id="prestastore-content" class="width3"></fieldset>';			
+		else
+			echo '<a href="http://www.prestastore.com/3-prestashop-themes">'.$this->l('Find new themes on PrestaStore!').'</a>';
 	}
 	
 	/**

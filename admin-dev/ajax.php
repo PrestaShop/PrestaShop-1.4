@@ -75,6 +75,8 @@ if (isset($_GET['ajaxDiscountCustomers']))
 
 if (Tools::getValue('page') == 'prestastore')
 	readfile('http://www.prestastore.com/adminmodules.php');
+if (Tools::getValue('page') == 'themes')
+	readfile('http://www.prestastore.com/adminthemes.php');
 
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
