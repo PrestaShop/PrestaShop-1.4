@@ -280,9 +280,9 @@ function displayAccount()
 		'email' => $email,
 		'firstname' => (Tools::getValue('customer_firstname') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('customer_firstname'))) : $result['FIRSTNAME']),
 		'lastname' => (Tools::getValue('customer_lastname') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('customer_lastname'))) : $result['LASTNAME']),
-		'street' => (Tools::getValue('address1') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('address1'))) : (isset($result['SHIPTOSTREET']) ? $result['SHIPTOSTREET'] : ''),
-		'city' => (Tools::getValue('city') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('city'))) : (isset($result['SHIPTOCITY']) ? $result['SHIPTOCITY'] : '')$result['']),
-		'zip' => (Tools::getValue('postcode') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('postcode'))) : (isset($result['SHIPTOZIP']) ? $result['SHIPTOZIP'] : ''),
+		'street' => (Tools::getValue('address1') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('address1'))) : (isset($result['SHIPTOSTREET']) ? $result['SHIPTOSTREET'] : '')),
+		'city' => (Tools::getValue('city') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('city'))) : (isset($result['SHIPTOCITY']) ? $result['SHIPTOCITY'] : '')$result[''])),
+		'zip' => (Tools::getValue('postcode') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('postcode'))) : (isset($result['SHIPTOZIP']) ? $result['SHIPTOZIP'] : '')),
 		'payerID' => $payerID,
 		'ppToken' => strval($cookie->paypal_token),
 		'errors'=> $errors
