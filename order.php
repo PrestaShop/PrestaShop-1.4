@@ -39,8 +39,7 @@ if ($orderTotalDefaultCurrency < $minimalPurchase)
 if (!$cookie->isLogged() AND in_array($step, array(1, 2, 3)))
 	Tools::redirect('authentication.php?back=order.php?step='.$step);
 
-if ($back = Tools::getValue('back'))
-	$smarty->assign('back', Tools::safeOutput($back));
+$smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
 
 if ($cart->nbProducts())
 {
