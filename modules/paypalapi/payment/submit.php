@@ -50,6 +50,7 @@ function displayConfirm()
 	include(_PS_ROOT_DIR_.'/header.php');
 
 	$smarty->assign(array(
+		'back' => Tools::safeOutput(Tools::getValue('back')),
 		'logo' => $ppPayment->getLogo(),
 		'cust_currency' => $cookie->id_currency,
 		'currency' => $ppPayment->getCurrency(),
