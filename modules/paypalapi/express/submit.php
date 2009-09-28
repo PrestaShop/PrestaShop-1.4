@@ -77,6 +77,7 @@ function displayConfirm()
 	include(_PS_ROOT_DIR_.'/header.php');
 
 	$smarty->assign(array(
+		'logo' => $ppPayment->getLogo(),
 		'ppToken' => strval($cookie->paypal_token),
 		'cust_currency' => $cookie->id_currency,
 		'currencies' => $ppExpress->getCurrency(),
