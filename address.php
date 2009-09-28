@@ -16,7 +16,7 @@ $js_files = array(
 
 if ($back = Tools::getValue('back'))
 	$smarty->assign('back', Tools::safeOutput($back));
-if ($mod = Tools::getValue('back'))
+if ($mod = Tools::getValue('mod'))
 	$smarty->assign('mod', Tools::safeOutput($mod));
 
 $errors = array();
