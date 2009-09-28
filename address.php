@@ -16,7 +16,9 @@ $js_files = array(
 
 if ($back = Tools::getValue('back'))
 	$smarty->assign('back', Tools::safeOutput($back));
-	
+if ($mod = Tools::getValue('back'))
+	$smarty->assign('mod', Tools::safeOutput($mod));
+
 $errors = array();
 	
 if ($id_address = intval(Tools::getValue('id_address')))
@@ -92,7 +94,7 @@ if (Tools::isSubmit('submitAddress'))
 				$cart->id_address_invoice = intval($address->id);
 				$cart->update();
 			}
-			Tools::redirect($back ? $back : 'addresses.php');
+			Tools::redirect($back ? ($mod ? $back.'&back='.$mod : $back) : 'addresses.php');
 		}
 		$errors[] = Tools::displayError('an error occurred while updating your address');
     }

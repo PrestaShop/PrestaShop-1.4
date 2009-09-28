@@ -42,7 +42,7 @@
 			{/section}
 			</select>
 			{else}
-				<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order.php&amp;step=1&select_address=1" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+				<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order.php&amp;step=1&select_address=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 			{/if}
 		</p>
 		<div class="clear"></div>
@@ -54,7 +54,7 @@
 			<li class="address_address2"></li>
 			<li class="address_city"></li>
 			<li class="address_country"></li>
-			<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order.php&amp;step=1" title="{l s='Update'}">{l s='Update'}</a></li>
+			<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
 		</ul>
 		<ul class="address alternate_item" id="address_invoice">
 			<li class="address_title">{l s='Your billing address'}</li>
@@ -64,11 +64,11 @@
 			<li class="address_address2"></li>
 			<li class="address_city"></li>
 			<li class="address_country"></li>
-			<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order.php&amp;step=1" title="{l s='Update'}">{l s='Update'}</a></li>
+			<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
 		</ul>
 		<br class="clear" />
 		<p class="address_add submit">
-			<a href="{$base_dir_ssl}address.php?back=order.php&amp;step=1" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+			<a href="{$base_dir_ssl}address.php?back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 		</p>
 		<div id="ordermsg">
 			<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
