@@ -39,6 +39,9 @@ if ($orderTotalDefaultCurrency < $minimalPurchase)
 if (!$cookie->isLogged() AND in_array($step, array(1, 2, 3)))
 	Tools::redirect('authentication.php?back=order.php?step='.$step);
 
+if ($back = Tools::getValue('back'))
+	$smarty->assign('back', Tools::safeOutput($back));
+
 if ($cart->nbProducts())
 {
 	/* Manage discounts */
@@ -304,7 +307,6 @@ function displayAddress()
 	if ($oldMessage = Message::getMessageByCartId(intval($cart->id)))
 		$smarty->assign('oldMessage', $oldMessage['message']);
 	$smarty->assign('cart', $cart);
-	$smarty->assign('back', strval(Tools::getValue('back')));
 
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');
@@ -373,7 +375,6 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
-		'back' => strval(Tools::getValue('back')),
 		'total_wrapping' => number_format($wrapping_fees, 2, '.', ''),
 		'total_wrapping_tax_exc' => number_format($wrapping_fees_tax_exc, 2, '.', '')));
 	Tools::safePostVars();
