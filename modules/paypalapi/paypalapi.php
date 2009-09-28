@@ -10,6 +10,7 @@ class PaypalAPI extends PaymentModule
 	protected	$_apiSignature;
 	protected	$_sandbox;
 	protected	$_expressCheckout;
+	protected	$_pp_integral;
 
 	public function __construct()
 	{
@@ -33,7 +34,7 @@ class PaypalAPI extends PaymentModule
 
 	protected function _init()
 	{
-		$config = Configuration::getMultiple(array('PAYPAL_HEADER', 'PAYPAL_SANDBOX', 'PAYPAL_API_USER', 'PAYPAL_API_PASSWORD', 'PAYPAL_API_SIGNATURE', 'PAYPAL_EXPRESS_CHECKOUT'));
+		$config = Configuration::getMultiple(array('PAYPAL_HEADER', 'PAYPAL_SANDBOX', 'PAYPAL_API_USER', 'PAYPAL_API_PASSWORD', 'PAYPAL_API_SIGNATURE', 'PAYPAL_EXPRESS_CHECKOUT', 'PAYPAL_INTEGRAL', 'PAYPAL_OPTION_PLUS'));
 		if (isset($config['PAYPAL_HEADER']))
 			$this->_header = $config['PAYPAL_HEADER'];
 		if (isset($config['PAYPAL_SANDBOX']))
@@ -46,6 +47,8 @@ class PaypalAPI extends PaymentModule
 			$this->_apiSignature = $config['PAYPAL_API_SIGNATURE'];
 		if (isset($config['PAYPAL_EXPRESS_CHECKOUT']))
 			$this->_expressCheckout = $config['PAYPAL_EXPRESS_CHECKOUT'];
+		if (isset($config['PAYPAL_INTEGRAL']))
+			$this->_pp_integral = $config['PAYPAL_INTEGRAL'];
 	}
 
 	public function install()
@@ -68,12 +71,13 @@ class PaypalAPI extends PaymentModule
 			OR !Configuration::updateValue('PAYPAL_API_USER', 0)
 			OR !Configuration::updateValue('PAYPAL_API_PASSWORD', 0)
 			OR !Configuration::updateValue('PAYPAL_API_SIGNATURE', 0)
-			OR !Configuration::deleteByName('PAYPAL_EXPRESS_CHECKOUT', 0)
+			OR !Configuration::updateValue('PAYPAL_EXPRESS_CHECKOUT', 0)
+			OR !Configuration::updateValue('PAYPAL_INTEGRAL', 0)
 			OR !$this->registerHook('payment')
 			OR !$this->registerHook('shoppingCartExtra')
 			OR !$this->registerHook('backBeforePayment')
 			OR !$this->registerHook('paymentReturn')
-			)
+			OR !$this->registerHook('rightColumn'))
 			return false;
 		return true;
 	}
@@ -86,7 +90,9 @@ class PaypalAPI extends PaymentModule
 			OR !Configuration::deleteByName('PAYPAL_API_USER')
 			OR !Configuration::deleteByName('PAYPAL_API_PASSWORD')
 			OR !Configuration::deleteByName('PAYPAL_API_SIGNATURE')
-			OR !Configuration::deleteByName('PAYPAL_EXPRESS_CHECKOUT'))
+			OR !Configuration::deleteByName('PAYPAL_EXPRESS_CHECKOUT')
+			OR !Configuration::deleteByName('PAYPAL_INTEGRAL')
+			)
 			return false;
 		return true;
 	}
@@ -216,6 +222,24 @@ class PaypalAPI extends PaymentModule
 		return $this->display(__FILE__, 'payment_return.tpl');
 	}
 
+	function hookRightColumn($params)
+	{
+		global $smarty, $cookie;
+
+		$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
+		if ($iso_code == 'FR')
+			$logo = _MODULE_DIR_.$this->name.'/img/vertical_FR_large.png';
+		else
+			$logo = _MODULE_DIR_.$this->name.'/img/vertical_US_large.png';
+		$smarty->assign('logo', $logo);
+		return $this->display(__FILE__, 'column.tpl');
+	}
+
+	function hookLeftColumn($params)
+	{
+		return $this->hookRightColumn($params);
+	}
+
 	/************************************************************/
 	/************************ ORDER TABLE ************************/
 	/************************************************************/
@@ -314,5 +338,73 @@ class PaypalAPI extends PaymentModule
 
 		// Displaying output
 		$this->displayFinal($id_cart);
+	}
+
+	public function getCountryCode()
+	{
+		global $cookie;
+
+		$cart = new Cart(intval($cookie->id_cart));
+		$address = new Address(intval($cart->id_address_invoice));
+		$country = new Country(intval($address->id_country));
+		return $country->iso_code;
+	}
+
+	public function getLocaleCode()
+	{
+		global $cookie;
+
+		return Language::getIsoById(intval($cookie->id_lang)).'_'.Tools::strtoupper($this->getCountryCode());
+	}
+	
+	public function getLogo($ppExpress = false)
+	{
+		global $cookie;
+
+		if ($ppExpress)
+		{
+			$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
+			$logo = array(
+				'FR' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=fr_FR',
+				'DE' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=de_DE',
+				'US' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=en_US',
+				'UK' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=en_EN',
+				'IT' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=it_IT',
+				'ES' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=es_ES',
+				'PL' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=pl_PL',
+				'NL' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=nl_NL',
+				'AU' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=au_AU',
+				'CA' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=ca_CA',
+				'CN' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=cn_CN',
+				'JP' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=jp_JP'
+			);
+			if (isset($logo[$iso_code]))
+				return $logo[$iso_code];
+			return $logo['US'];
+		}
+
+		if ($this->_pp_integral)
+		{
+			$country_code = $this->getCountryCode();
+			$logo = array(
+				'FR' => 'https://www.paypal.com/en_US/FR/i/bnr/bnr_horizontal_solution_PP_327wx80h.gif',
+				'DE' => 'https://www.paypal.com/de_DE/DE/i/logo/lockbox_150x65.gif',
+				'US' => 'https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif',
+				'UK' => 'https://www.paypal.com/en_GB/i/bnr/horizontal_solution_PP.gif',
+				'IT' => 'https://www.paypal.com/en_US/IT/i/bnr/bnr_horizontal_solution_PP_178wx80h.gif',
+				'ES' => 'https://www.paypal.com/es_ES/ES/i/bnr/horizontal_solution_PP.gif',
+				'PL' => 'https://www.paypal.com/en_US/PL/i/bnr/horizontal_solution_PP.gif',
+				'NL' => 'https://www.paypal.com/nl_NL/NL/i/bnr/horizontal_solution_PP.gif',
+				'AU' => 'https://www.paypal.com/en_AU/AU/i/bnr/horizontal_solution_PP.gif',
+				'CA' => 'https://www.paypal.com/fr_XC/i/bnr/horizontal_solution_PPeCheck.gif',
+				'CN' => 'https://www.paypal.com/zh_CN/i/bnr/horizontal_solution_PP.gif',
+				'JP' => 'https://www.paypal.com/en_US/JP/i/bnr/horizontal_solution_3_noamex_jcb.gif'
+			);
+			if (isset($logo[$country_code]))
+				return $logo[$country_code];
+			return $logo['US'];
+		}
+		else
+			return 'https://www.paypal.com/en_US/i/logo/PayPal_mark_60x38.gif';
 	}
 }

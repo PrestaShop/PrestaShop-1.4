@@ -8,6 +8,7 @@ class PaypalExpress extends PaypalAPI
 	{
 		global $smarty;
 
+		$smarty->assign('logo', $this->getLogo(true));
 		return $this->display(__FILE__, 'shopping_cart.tpl');
 	}
 
@@ -33,6 +34,11 @@ class PaypalExpress extends PaypalAPI
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = 'Sale';
 		$request = '&Amt='.urlencode($paymentAmount).'&PAYMENTACTION='.urlencode($paymentType).'&ReturnUrl='.urlencode($returnURL).'&CANCELURL='.urlencode($cancelURL).'&CURRENCYCODE='.urlencode($currencyCodeType);
+		if ($this->_pp_integral)
+			$request .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
+		else
+			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
+		$request .= '&LOCALECODE='.strval($this->getCountryCode());
 		if ($this->_header) $request .= '&HDRIMG='.urlencode($this->_header);
 
 		// Calling PayPal API

@@ -11,8 +11,8 @@
 	<input type="hidden" name="token" value="{$ppToken|escape:'htmlall'|stripslashes}" />
 	<input type="hidden" name="payerID" value="{$payerID|escape:'htmlall'|stripslashes}" />
 	<p>
-		<img src="{$content_dir}modules/paypalapi/paypalapi.gif" alt="{l s='PayPal' mod='paypalapi'}" style="float:left; margin: 0px 10px 5px 0px;" />
-		{l s='You have chosen to pay with PayPal.' mod='paypalapi'}
+		<img src="{$logo}" alt="{l s='PayPal' mod='paypalapi'}" style="margin-bottom: 5px" />
+		<br />{l s='You have chosen to pay with PayPal.' mod='paypalapi'}
 		<br/><br />
 		{l s='Here is a short summary of your order:' mod='paypalapi'}
 	</p>

@@ -23,6 +23,11 @@ class PaypalPayment extends PaypalAPI
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = 'Sale';
 		$request = '&Amt='.urlencode($paymentAmount).'&PAYMENTACTION='.urlencode($paymentType).'&ReturnUrl='.urlencode($returnURL).'&CANCELURL='.urlencode($cancelURL).'&CURRENCYCODE='.urlencode($currencyCodeType).'&NOSHIPPING=1';
+		if ($this->_pp_integral)
+			$request .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
+		else
+			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
+		$request .= '&LOCALECODE='.strval($this->getCountryCode());
 		if ($this->_header)
 			$request .= '&HDRIMG='.urlencode($this->_header);
 
@@ -36,6 +41,9 @@ class PaypalPayment extends PaypalAPI
 
 	public function home($params)
 	{
+		global $smarty;
+
+		$smarty->assign('logo', $this->getLogo());
 		return $this->display(__FILE__.'../', 'payment.tpl');
 	}
 

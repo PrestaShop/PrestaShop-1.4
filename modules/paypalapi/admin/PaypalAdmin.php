@@ -79,6 +79,7 @@ class PaypalAdmin extends PaypalAPI
 			Configuration::updateValue('PAYPAL_HEADER', strval($_POST['header']));
 			Configuration::updateValue('PAYPAL_SANDBOX', intval($_POST['sandbox']));
 			Configuration::updateValue('PAYPAL_EXPRESS_CHECKOUT', intval($_POST['expressCheckout']));
+			Configuration::updateValue('PAYPAL_INTEGRAL', intval($_POST['pp_integral']));
 		}
 		elseif (isset($_POST['submitPaypalAPI']))
 		{
@@ -111,6 +112,7 @@ class PaypalAdmin extends PaypalAPI
 		$apiPassword = isset($_POST['apiPassword']) ? strval($_POST['apiPassword']) : $this->_apiPassword;
 		$apiSignature = isset($_POST['apiSignature']) ? strval($_POST['apiSignature']) : $this->_apiSignature;
 		$expressCheckout = isset($_POST['expressCheckout']) ? intval($_POST['expressCheckout']) : $this->_expressCheckout;
+		$pp_integral = isset($_POST['pp_integral']) ? intval($_POST['pp_integral']) : $this->_pp_integral;
 
 		$html= '
 		<fieldset>
@@ -119,12 +121,20 @@ class PaypalAdmin extends PaypalAPI
 			'.$this->l('Without SSL, PayPalAPI module will not be able to contact PayPal').'.<br />
 		</fieldset>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin-top:20px; float:left;">
-			<fieldset style="height:180px; width:400px;">
+			<fieldset style="height:260px; width:400px;">
 				<legend><img src="../img/admin/edit.gif" />'.$this->l('General settings').'</legend>
 				<label style="width:140px;">'.$this->l('Sandbox mode:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
 					<input type="radio" name="sandbox" value="1" '.($sandbox ? 'checked="checked"' : '').' /> '.$this->l('Yes').'
 					<input type="radio" name="sandbox" value="0" '.(!$sandbox ? 'checked="checked"' : '').' /> '.$this->l('No').'
+				</div>
+				<label style="clear:both; width:140px;">'.$this->l('PayPal Integral:').'</label>
+				<div class="margin-form" style="padding-left:160px;">
+					<input type="radio" name="pp_integral" value="1" '.($pp_integral ? 'checked="checked"' : '').' /> '.$this->l('Activate payments with PayPal account, credit cards (CB, Visa, Mastercard) and private cards (Aurore, Cofinoga, 4 stars)').'
+				</div>
+				<label style="clear:both; width:140px;">'.$this->l('PayPal Option+:').'</label>
+				<div class="margin-form" style="padding-left:160px;">
+					<input type="radio" name="pp_integral" value="0" '.(!$pp_integral ? 'checked="checked"' : '').' /> '.$this->l('Activate payments with PayPal account').'
 				</div>
 				<label style="clear:both; width:140px;">'.$this->l('Express Checkout:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
@@ -140,7 +150,7 @@ class PaypalAdmin extends PaypalAPI
 			</fieldset>
 		</form>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin:20px 0px 0px 40px; float:left;">
-			<fieldset style="height:180px; width:428px;">
+			<fieldset style="height:260px; width:428px;">
 				<legend><img src="../img/admin/cog.gif" />'.$this->l('API settings:').'</legend>
 				<label style="width:140px;">'.$this->l('API user:').'</label>
 				<div class="margin-form" style="padding-left:160px;"><input type="text" size="20" name="apiUser" value="'.($apiUser ? htmlentities($apiUser, ENT_COMPAT, 'UTF-8') : '').'" /></div>
