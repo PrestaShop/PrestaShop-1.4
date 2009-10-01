@@ -13,7 +13,7 @@ class BankWire extends PaymentModule
 	{
 		$this->name = 'bankwire';
 		$this->tab = 'Payment';
-		$this->version = 0.4;
+		$this->version = '0.5';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';
@@ -41,6 +41,7 @@ class BankWire extends PaymentModule
 	{
 		if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn'))
 			return false;
+		return true;
 	}
 
 	public function uninstall()
@@ -50,6 +51,7 @@ class BankWire extends PaymentModule
 				OR !Configuration::deleteByName('BANK_WIRE_ADDRESS')
 				OR !parent::uninstall())
 			return false;
+		return true;
 	}
 
 	private function _postValidation()
