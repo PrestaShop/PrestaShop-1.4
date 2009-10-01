@@ -352,6 +352,7 @@ abstract class PaymentModule extends Module
 					$this->currentOrder = intval($order->id);
 					return true;
 				}
+				$this->currentOrder = intval($order->id);
 				return true;
 			}
 			else
