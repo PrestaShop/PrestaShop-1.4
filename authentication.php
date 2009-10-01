@@ -15,6 +15,9 @@ $js_files = array(
 $errors = array();
 
 $back = Tools::getValue('back');
+$key = Tools::safeOutput(Tools::getValue('key'));
+if (!empty($key))
+	$back .= (strpos($back, '?') !== false ? '&' : '?').'key='.$key;
 if (!empty($back))
 	$smarty->assign('back', Tools::safeOutput($back));
 
