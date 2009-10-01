@@ -12,7 +12,7 @@ countries = new Array();
 	{if isset($country.states)}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
-			countries[{$country.id_country|intval}]['{$state.id_state|intval}'] = '{$state.name}';
+			countries[{$country.id_country|intval}]['{$state.id_state|intval}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
 		{/foreach}
 	{/if}
 {/foreach}

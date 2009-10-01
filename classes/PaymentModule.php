@@ -152,7 +152,7 @@ abstract class PaymentModule extends Module
 					$quantityInStock = ($productQuantity - intval($product['quantity']) < 0) ? $productQuantity : intval($product['quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
-						if ($id_order_state != _PS_OS_OUTOFSTOCK_ AND (($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
+						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1) AND $id_order_state != _PS_OS_OUTOFSTOCK_)
 							{
 								$id_order_state = _PS_OS_OUTOFSTOCK_;
 								$history = new OrderHistory();
