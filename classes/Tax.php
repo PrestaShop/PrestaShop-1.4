@@ -52,6 +52,13 @@ class Tax extends ObjectModel
 		return parent::getTranslationsFields(array('name'));
 	}
 
+	public function delete()
+	{
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id)))
+			return false;
+		return parent::delete();
+	}
+
 	public static function checkTaxZone($id_tax, $id_zone)
 	{
 		return isset(self::$_TAX_ZONES[intval($id_zone)][intval($id_tax)]);
@@ -172,7 +179,6 @@ class Tax extends ObjectModel
 			if ($address_ids['id_state'])
 			{
 				$state = new State(intval($address_ids['id_state']));
-				
 				if (!Validate::isLoadedObject($state))
 					die(Tools::displayError());
 				/* Return tax value depending to the tax behavior */
