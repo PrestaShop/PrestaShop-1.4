@@ -1700,7 +1700,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Quantity:').'</td>
 						<td style="padding-bottom:5px;"><input size="3" maxlength="6" '.$qty_state.' name="quantity" type="text" value="'.$qty.'" '.
-						((isset($_POST['attQty']) AND $_POST['attQty']) ? 'onclick="alert(\''.$this->l('Quantity is already defined by Attributes').'.<br />'.$this->l('Delete attributes first').'.\');" readonly="readonly" ' : '').'/><sup> *</sup>
+						((isset($_POST['attQty']) AND $_POST['attQty']) ? 'onclick="alert(\''.$this->l('Quantity is already defined by Attributes').'.<br />'.$this->l('Delete attributes first').'.\');" readonly="readonly" ' : '').'/><sup> *</sup> ('.$this->l('If you use combinations, you can\'t edit this information').')</td>
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Displayed text when in-stock:').'</td>
