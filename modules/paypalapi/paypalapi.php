@@ -77,7 +77,8 @@ class PaypalAPI extends PaymentModule
 			OR !$this->registerHook('shoppingCartExtra')
 			OR !$this->registerHook('backBeforePayment')
 			OR !$this->registerHook('paymentReturn')
-			OR !$this->registerHook('rightColumn'))
+			OR !$this->registerHook('rightColumn')
+			OR !$this->registerHook('header'))
 			return false;
 		return true;
 	}
@@ -224,8 +225,10 @@ class PaypalAPI extends PaymentModule
 
 	function hookRightColumn($params)
 	{
-		global $smarty, $cookie;
+		global $smarty, $cookie, $js_files, $css_files;
 
+		$js_files = array(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+		$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 		$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 		if (!$this->_pp_integral)
 			$logo = 'https://www.paypal.com/en_US/i/logo/PayPal_mark_60x38.gif';
@@ -244,6 +247,11 @@ class PaypalAPI extends PaymentModule
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
+	}
+
+	function hookHeader($params)
+	{
+		return $this->display(__FILE__, 'header.tpl');
 	}
 
 	/************************************************************/

@@ -2493,13 +2493,12 @@ div#mywishlist div#block-order-detail ul li span.wishlist_product_detail {
  background-position: 0 0px;
 
 }
-div.star_on a{
+div.star_on a {
  background-position: 0 -16px;
 }
 div.star_hover a,
-div.star a:hover{
+div.star a:hover {
  background-position: 0 -32px;
-
 }
 
 .pack_content{
@@ -2513,4 +2512,13 @@ div.star a:hover{
 
 #page .rte {
 	background:transparent none repeat scroll 0 0;
+}
+
+/* module paypalapi */
+.paypalapi_about {
+	text-align:justify;
+}
+
+.paypalapi_about ul {
+	padding-left: 20px;
 }
