@@ -170,12 +170,11 @@ class PaypalAdmin extends PaypalAPI
 			'.$this->l('2. Click the Profile subtab located under the My Account heading.').'<br /><br />
 			'.$this->l('3. Click the API Access link under the Account Information header.').'<br /><br />
 			'.$this->l('4. Click the View API Certificate link in the right column.').'<br /><br />
-			'.$this->l('5. Click the Request API Credentials link.').'<br /><br />
-			'.$this->l('6. Click the Request API signature radio button on the Request API Credentials page.').'<br /><br />
-			'.$this->l('7. Complete the Request API Credential Request form by clicking the agreement checkbox and clicking Submit.').'<br /><br />
-			'.$this->l('8. Save the values for API Username, Password and Signature (make sure this long character signature is copied).').'<br /><br />
-			'.$this->l('9. Click the Done button after copying your API Username, Password, and Signature.').'<br /><br />
-			'.$this->l('10. This will take you back to the API Access screen where you are finished.').'<br /><br />
+			'.$this->l('5. Click the Request API signature radio button on the Request API Credentials page.').'<br /><br />
+			'.$this->l('6. Complete the Request API Credential Request form by clicking the agreement checkbox and clicking Submit.').'<br /><br />
+			'.$this->l('7. Save the values for API Username, Password and Signature (make sure this long character signature is copied).').'<br /><br />
+			'.$this->l('8. Click the Done button after copying your API Username, Password, and Signature.').'<br /><br />
+			'.$this->l('9. This will take you back to the API Access screen where you are finished.').'<br /><br />
 		</fieldset>';
 		return $html;
 	}
