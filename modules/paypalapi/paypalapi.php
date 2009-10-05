@@ -226,11 +226,11 @@ class PaypalAPI extends PaymentModule
 	{
 		global $smarty, $cookie;
 
+		$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 		if (!$this->_pp_integral)
 			$logo = 'https://www.paypal.com/en_US/i/logo/PayPal_mark_60x38.gif';
 		else
 		{
-			$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 			if ($iso_code == 'FR')
 				$logo = _MODULE_DIR_.$this->name.'/img/vertical_FR_large.png';
 			else
