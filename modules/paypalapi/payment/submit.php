@@ -28,6 +28,7 @@ function getAuthorization()
 			{
 
 				$cookie->paypal_token = strval($result['TOKEN']);
+				$cookie->paypal_token_date = time();
 				header('Location: https://'.$ppPayment->getPayPalURL().'/webscr&cmd=_express-checkout&token='.urldecode(strval($cookie->paypal_token)).'&useraction=commit');
 			}
 			else
@@ -90,6 +91,7 @@ function validOrder()
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
 		die('Invalid token');
+	Tools::d(Tools::getValue('token'));
 	if ($token != strval($cookie->paypal_token))
 		die('Invalid cookie token');
 	if (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('PayerID'))))
