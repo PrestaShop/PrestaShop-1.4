@@ -4,7 +4,7 @@ include_once(dirname(__FILE__).'/../../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../../init.php');
 
 include_once(_PS_MODULE_DIR_.'paypalapi/paypalapi.php');
-include_once(_PS_MODULE_DIR_.'paypalapi/express/PaypalExpress.php');
+include_once(_PS_MODULE_DIR_.'paypalapi/express/paypalexpress.php');
 
 $ppExpress = new PaypalExpress();
 $errors = array();

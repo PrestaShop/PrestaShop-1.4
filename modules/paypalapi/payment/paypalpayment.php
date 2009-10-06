@@ -32,7 +32,7 @@ class PaypalPayment extends PaypalAPI
 			$request .= '&HDRIMG='.urlencode($this->_header);
 
 		// Calling PayPal API
-		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+		include(_PS_MODULE_DIR_.'paypalapi/api/paypallib.php');
 		$ppAPI = new PaypalLib();
 		$result = $ppAPI->makeCall($this->getAPIURL(), $this->getAPIScript(), 'SetExpressCheckout', $request);
 		$this->_logs = array_merge($this->_logs, $ppAPI->getLogs());

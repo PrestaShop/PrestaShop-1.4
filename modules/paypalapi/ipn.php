@@ -26,7 +26,7 @@ foreach ($_POST AS $key => $value)
 	$params .= '&'.$key.'='.urlencode(stripslashes($value));
 
 // Checking params by asking PayPal
-include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+include(_PS_MODULE_DIR_.'paypalapi/api/paypallib.php');
 $ppAPI = new PaypalLib();
 $result = $ppAPI->makeSimpleCall($ppAPI->getPayPalURL(), $ppAPI->getPayPalScript(), $params);
 if (!$result OR (Tools::strlen($result) < 8) OR (!$statut = substr($result, -8)) OR $statut != 'VERIFIED')

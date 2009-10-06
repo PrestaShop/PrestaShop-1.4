@@ -19,7 +19,7 @@ class PaypalLib extends PaypalAPI
 		$request .= '&SIGNATURE='.urlencode($this->_apiSignature).$string;
 
 		// Making connection
-		include(_PS_MODULE_DIR_.'paypalapi/api/PayPalConnect.php');
+		include(_PS_MODULE_DIR_.'paypalapi/api/paypalconnect.php');
 		$ppConnect = new PaypalConnect();
 		$result = $ppConnect->makeConnection($host, $script, $request, true);
 		$this->_logs = $ppConnect->getLogs();
@@ -46,7 +46,7 @@ class PaypalLib extends PaypalAPI
 	public function makeSimpleCall($host, $script, $request)
 	{
 		// Making connection
-		include(_PS_MODULE_DIR_.'paypalapi/api/PayPalConnect.php');
+		include(_PS_MODULE_DIR_.'paypalapi/api/paypalconnect.php');
 		$ppConnect = new PaypalConnect();
 		$result = $ppConnect->makeConnection($host, $script, $request);
 		$this->_logs = $ppConnect->getLogs();

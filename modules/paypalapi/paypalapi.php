@@ -156,7 +156,7 @@ class PaypalAPI extends PaymentModule
 
 	public function getContent()
 	{
-		include(_PS_MODULE_DIR_.'/paypalapi/admin/PaypalAdmin.php');
+		include(_PS_MODULE_DIR_.'/paypalapi/admin/paypaladmin.php');
 		$ppAdmin = new PaypalAdmin();
 		return $ppAdmin->home();
 	}
@@ -170,7 +170,7 @@ class PaypalAPI extends PaymentModule
 		if (!$this->active)
 			return ;
 
-		include(_PS_MODULE_DIR_.'/paypalapi/payment/PaypalPayment.php');
+		include(_PS_MODULE_DIR_.'/paypalapi/payment/paypalpayment.php');
 		$ppPayment = new PaypalPayment();
 		return $ppPayment->home($params);
 	}
@@ -184,7 +184,7 @@ class PaypalAPI extends PaymentModule
 
 		if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT') AND !$cookie->isLogged())
 		{
-			include(_PS_MODULE_DIR_.'/paypalapi/express/PaypalExpress.php');
+			include(_PS_MODULE_DIR_.'/paypalapi/express/paypalexpress.php');
 			$ppExpress = new PaypalExpress();
 			return $ppExpress->home($params);
 		}
@@ -310,7 +310,7 @@ class PaypalAPI extends PaymentModule
 		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn;
 
 		// Calling PayPal API
-		include(_PS_MODULE_DIR_.'paypalapi/api/PaypalLib.php');
+		include(_PS_MODULE_DIR_.'paypalapi/api/paypallib.php');
 		$ppAPI = new PaypalLib();
 		$result = $ppAPI->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoExpressCheckoutPayment', $request);
 		$this->_logs = array_merge($this->_logs, $ppAPI->getLogs());
