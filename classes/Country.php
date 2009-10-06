@@ -81,6 +81,7 @@ class		Country extends ObjectModel
 		$states = Db::getInstance()->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'state` s
+		ORDER BY s.`name` ASC
 		');
 
 		$result = Db::getInstance()->ExecuteS('
