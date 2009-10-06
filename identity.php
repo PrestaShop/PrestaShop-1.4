@@ -13,7 +13,7 @@ $customer = new Customer(intval($cookie->id_customer));
 
 if (sizeof($_POST))
 {
- 	$exclusion = array('secure_key', 'old_passwd', 'passwd', 'active', 'date_add', 'date_upd');
+ 	$exclusion = array('secure_key', 'old_passwd', 'passwd', 'active', 'date_add', 'date_upd', 'last_passwd_gen', 'newsletter_date_add');
 	$fields = $customer->getFields();
 	foreach ($fields AS $key => $value)
 		if (!in_array($key, $exclusion))
