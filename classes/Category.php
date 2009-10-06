@@ -61,7 +61,7 @@ class		Category extends ObjectModel
  	protected 	$fieldsSize = array('id_parent' => 10, 'active' => 1);
  	protected 	$fieldsValidate = array('active' => 'isBool');
 	protected 	$fieldsRequiredLang = array('name', 'link_rewrite');
- 	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 128, 'meta_description' => 128);
+ 	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
  	protected 	$fieldsValidateLang = array('name' => 'isCatalogName', 'link_rewrite' => 'isLinkRewrite', 'description' => 'isCleanHtml',
 											'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 
@@ -81,7 +81,7 @@ class		Category extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_category'] = intval($this->id);		
+			$fields['id_category'] = intval($this->id);
 		$fields['active'] = intval($this->active);
 		$fields['id_parent'] = intval($this->id_parent);
 		$fields['level_depth'] = intval($this->level_depth);
