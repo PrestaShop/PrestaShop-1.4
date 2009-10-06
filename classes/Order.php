@@ -462,13 +462,11 @@ class		Order extends ObjectModel
 				SELECT os.`id_order_state`, osl.`name` AS order_state, os.`invoice`
 				FROM `'._DB_PREFIX_.'order_history` oh
 				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
-				LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($val['id_lang']).')
-				WHERE oh.`id_order_history` = (
-						SELECT MAX(`id_order_history`)
-						FROM `'._DB_PREFIX_.'order_history` moh
-						WHERE moh.`id_order` = '.intval($val['id_order']).'
-						GROUP BY moh.`id_order`)
+				INNER JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($val['id_lang']).')
+				WHERE oh.`id_order` = '.intval($val['id_order']).'
+				AND os.`hidden` != 1
 				ORDER BY oh.`date_add` DESC
+				LIMIT 1
 			');
 			if ($res2)
 				$res[$key] = array_merge($res[$key], $res2[0]);
