@@ -318,6 +318,12 @@ else
 	// We got an error or we still not submit form
 	if ((!Tools::isSubmit('submitAccount') AND !Tools::isSubmit('submitLogin')) OR sizeof($errors))
 	{
+		if (isset($cookie->paypal_token) AND isset($cookie->paypal_token_date) AND (time() - 10800 > $cookie->paypal_token_date))
+		{
+			// Token expired, unset it
+			unset($cookie->paypal_token);
+			Tools::redirect('modules/paypalapi/express/submit.php');
+		}
 		//  We didn't submit form, getting PayPal informations
 		if (!Tools::isSubmit('submitAccount') AND !Tools::isSubmit('submitLogin'))
 			$result = getInfos();
