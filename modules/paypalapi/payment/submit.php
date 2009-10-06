@@ -91,7 +91,6 @@ function validOrder()
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
 		die('Invalid token');
-	Tools::d(Tools::getValue('token'));
 	if ($token != strval($cookie->paypal_token))
 		die('Invalid cookie token');
 	if (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('PayerID'))))
