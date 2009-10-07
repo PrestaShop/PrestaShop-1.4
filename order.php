@@ -324,12 +324,16 @@ function displayCarrier()
 	foreach ($result AS $k => $row)
 	{
 		$carrier = new Carrier(intval($row['id_carrier']));
+		
+		// Get only carriers that are compliant with shipping method
 		if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
 		OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
 		{
 			unset($result[$k]);
 			continue ;
 		}
+
+		// If out-of-range behavior carrier is set on "Desactivate carrier"
 		if ($row['range_behavior'])
 		{
 			// Get id zone
@@ -337,6 +341,8 @@ function displayCarrier()
 				$id_zone = Address::getZoneById(intval($cart->id_address_delivery));
 			else
 				$id_zone = intval($defaultCountry->id_zone);
+
+			// Get only carriers that have a range compatible with cart
 			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
 			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
 				{
