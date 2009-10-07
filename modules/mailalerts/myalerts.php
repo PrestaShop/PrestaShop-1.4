@@ -2,7 +2,7 @@
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../header.php');
-
+include_once(dirname(__FILE__).'/mailalerts.php');
 
 $errors = array();
 
@@ -27,5 +27,3 @@ $smarty->assign('errors', $errors);
 $smarty->display(dirname(__FILE__).'/myalerts.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
-
-?>
