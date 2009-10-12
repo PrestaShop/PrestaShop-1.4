@@ -811,7 +811,7 @@ class AdminProducts extends AdminTab
 			$download = new ProductDownload(Tools::getValue('virtual_product_id'));
 			$download->id_product          = $product->id;
 			$download->display_filename    = Tools::getValue('virtual_product_name');
-			$download->physically_filename = Tools::getValue('virtual_product_filename') ? Tools::getValue('virtual_product_filename') : $download->getNewFilename();
+			$download->physically_filename = Tools::getValue('virtual_product_filename') ? Tools::getValue('virtual_product_filename') : ProductDownload::getNewFilename();
 			$download->date_deposit        = date('Y-m-d H:i:s');
 			$download->date_expiration     = Tools::getValue('virtual_product_expiration_date') ? Tools::getValue('virtual_product_expiration_date').' 23:59:59' : '';
 			$download->nb_days_accessible  = Tools::getValue('virtual_product_nb_days');

@@ -245,11 +245,11 @@ class ProductDownload extends ObjectModel
 	 *
 	 * @return string Sha1 unique filename
 	 */
-	function getNewFilename()
+	static public function getNewFilename()
 	{
 		$ret = sha1(microtime());
 		if (file_exists(_PS_DOWNLOAD_DIR_.$ret))
-			$ret = $this->getNewFilename();
+			$ret = ProductDownload::getNewFilename();
 		return $ret;
 	}
 
