@@ -402,7 +402,7 @@ class		Product extends ObjectModel
 
 	public function deleteSelection($products)
 	{
-		$return = true;
+		$return = 1;
 		foreach ($products AS $id_product)
 		{
 			$product = new Product(intval($id_product));

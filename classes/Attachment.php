@@ -54,6 +54,17 @@ class Attachment extends ObjectModel
 		return parent::delete();
 	}
 	
+	public function deleteSelection($attachments)
+	{
+		$return = 1;
+		foreach ($attachments AS $id_attachment)
+		{
+			$attachment = new Attachment(intval($id_attachment));
+			$return &= $attachment->delete();
+		}
+		return $return;
+	}
+	
 	public static function getAttachments($id_lang, $id_product, $include = true)
 	{
 		return Db::getInstance()->ExecuteS('
