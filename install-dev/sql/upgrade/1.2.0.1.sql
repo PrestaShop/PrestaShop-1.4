@@ -99,9 +99,9 @@ ALTER TABLE PREFIX_page
 	ADD INDEX `id_object` (`id_object`);
 
 ALTER TABLE PREFIX_page_type
-	ADD INDEX `name` (`name`);
-ALTER TABLE PREFIX_page_type
 	CHANGE `name` `name` VARCHAR(255) NOT NULL;
+ALTER TABLE PREFIX_page_type
+	ADD INDEX `name` (`name`);
 	
 ALTER TABLE PREFIX_product_attribute
 	ADD INDEX reference (reference);
