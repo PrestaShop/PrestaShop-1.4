@@ -581,9 +581,9 @@ class Validate
 	* @param integer $id Integer to validate
 	* @return boolean Validity is ok or not
 	*/
-	static public function isInt($int)
+	static public function isInt($value)
 	{
-		return (int) ((string) $int) OR $int == 0;
+		return ((string)(int)$value === (string)$value OR $value === false);
 	}
 
 	/**
@@ -592,9 +592,9 @@ class Validate
 	* @param integer $id Integer to validate
 	* @return boolean Validity is ok or not
 	*/
-	static public function isUnsignedInt($int)
+	static public function isUnsignedInt($value)
 	{
-		return ((int) ((string) $int) OR $int == 0) AND $int < 4294967296 AND $int >= 0;
+		return (self::isInt($value) AND $value < 4294967296 AND $value >= 0);
 	}
 
 	/**
