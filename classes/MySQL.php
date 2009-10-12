@@ -12,8 +12,6 @@
   *
   */
 
-define('_PS_DEBUG_', true);
-
 class MySQL extends Db
 {
 	public function	connect()
@@ -155,7 +153,7 @@ class MySQL extends Db
 
 	public function displayMySQLError($query = false)
 	{
-		if (_PS_DEBUG_ AND mysql_errno())
+		if (_PS_DEBUG_SQL_ AND mysql_errno())
 		{
 			if ($query)
 				die(Tools::displayError(mysql_error().'<br /><br /><pre>'.$query.'</pre>'));
