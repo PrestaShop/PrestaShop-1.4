@@ -313,14 +313,16 @@ class PaypalAPI extends PaymentModule
 			$cart = new Cart(intval($cookie->id_cart));
 		if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
 			$address = new Address(intval($cart->id_address_delivery));
+		$requestAddress = '';
 		if (Validate::isLoadedObject($address))
 		{
-			$addressString = $address->company.' '.$address->lastname.' '.$address->firstname;
-			$addressString .= ' '.$address->address1.' '.$address->address2.' '.$address->postcode.' '.$address->city.' '.$address->country;
+			$country = new Country(intval($address->id_country));
+			$state = new State(intval($address->id_state));
+			$requestAddress = '&SHIPTONAME='.urlencode($address->company.' '.$address->lastname.' '.$address->firstname).'&SHIPTOSTREET='.urlencode($address->address1.' '.$address->address2).'&SHIPTOCITY='.urlencode($address->city).'&SHIPTOSTATE='.urlencode($state->iso_code).'&SHIPTOCOUNTRYCODE='.urlencode($country->iso_code).'&SHIPTOZIP='.urlencode($address->postcode);
 		}
 
 		// Making request
-		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn.'&SHIPTOADDRESS='.urlencode($addressString);
+		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn.$requestAddress ;
 
 		// Calling PayPal API
 		include(_PS_MODULE_DIR_.'paypalapi/api/paypallib.php');
