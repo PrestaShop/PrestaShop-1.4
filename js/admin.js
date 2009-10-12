@@ -23,6 +23,7 @@ function str2url(str,encoding,ucfirst)
 	str = str.replace(/[^a-z0-9\s\'\:\/\[\]-]/g,'');
 	str = str.replace(/[\s\'\:\/\[\]-]+/g,' ');
 	str = str.replace(/[ ]/g,'-');
+	str = str.replace(/[\/]/g,'-');
 
 	if (ucfirst == 1) {
 		c = str.charAt(0);
