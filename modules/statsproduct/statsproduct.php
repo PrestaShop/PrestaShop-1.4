@@ -291,7 +291,7 @@ class StatsProduct extends ModuleGraph
 			foreach ($result as $row)
 			{
 			    $this->_values[] = $row['total'];
-			    $this->_legend[] = $assocNames[$row['product_attribute_id']];
+			    $this->_legend[] = @$assocNames[$row['product_attribute_id']];
 			}
 		}
 	}

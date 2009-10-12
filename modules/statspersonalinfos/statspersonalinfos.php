@@ -90,7 +90,7 @@ class StatsPersonalInfos extends ModuleGraph
 				SELECT c.`id_gender`, COUNT(c.`id_customer`) AS total
 				FROM `'._DB_PREFIX_.'customer` c
 				GROUP BY c.`id_gender`');
-				$gender = array(1 => $this->l('Male'), 2 => $this->l('Female'), 9 => $this->l('Unknown'));
+				$gender = array(1 => $this->l('Male'), 2 => $this->l('Female'), 9 => $this->l('Unknown'), 0 => $this->l('Unknown'));
 				foreach ($result as $row)
 				{
 					$this->_values[] = $row['total'];
