@@ -291,6 +291,8 @@ class PaypalAPI extends PaymentModule
 
 	public function validOrder($cookie, $cart, $id_currency, $payerID, $type)
 	{
+		global $cookie;
+
 		if (!$this->active)
 			return ;
 
@@ -306,8 +308,19 @@ class PaypalAPI extends PaymentModule
 		$bn = ($type == 'express' ? 'ECS' : 'ECM');
 		$notifyURL = urlencode('http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/paypalapi/ipn.php');
 
+		// Getting address
+		if (isset($cookie->id_cart) AND $cookie->id_cart)
+			$cart = new Cart(intval($cookie->id_cart));
+		if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
+			$address = new Address(intval($cart->id_address_delivery));
+		if (Validate::isLoadedObject($address))
+		{
+			$addressString = $address->company.' '.$address->lastname.' '.$address->firstname;
+			$addressString .= ' '.$address->address1.' '.$address->address2.' '.$address->postcode.' '.$address->city.' '.$address->country;
+		}
+
 		// Making request
-		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn;
+		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn.'&SHIPTOADDRESS='.urlencode($addressString);
 
 		// Calling PayPal API
 		include(_PS_MODULE_DIR_.'paypalapi/api/paypallib.php');
