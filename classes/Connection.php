@@ -82,7 +82,8 @@ class Connection extends ObjectModel
 		if (!$result['id_guest'] AND intval($cookie->id_guest))
 		{
 			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-			if (preg_replace('/^www./', '', parse_url($referer, PHP_URL_HOST)) == preg_replace('/^www./', '', $_SERVER['HTTP_HOST']))
+			$arrayUrl = parse_url($referer);
+			if (!isset($arrayUrl['host']) OR preg_replace('/^www./', '', $arrayUrl['host']) == preg_replace('/^www./', '', $_SERVER['HTTP_HOST']))
 				$referer = '';
 			$connection = new Connection();
 			$connection->id_guest = intval($cookie->id_guest);
