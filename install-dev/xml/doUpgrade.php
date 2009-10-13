@@ -61,7 +61,7 @@ elseif ($versionCompare === false)
 	die('<action result="fail" error="29" />'."\n");
 
 //check DB access
-include(INSTALL_PATH.'/classes/ToolsInstall.php');
+include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 $resultDB = ToolsInstall::checkDB(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_, false);
 if ($resultDB !== true)
 	die("<action result='fail' error='".$resultDB."'/>\n");

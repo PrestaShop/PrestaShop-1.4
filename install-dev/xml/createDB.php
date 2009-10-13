@@ -15,7 +15,7 @@ include(INSTALL_PATH.'/../classes/Db.php');
 include(INSTALL_PATH.'/../classes/Tools.php');
 
 //check db access
-include(INSTALL_PATH.'/classes/ToolsInstall.php');
+include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 $resultDB = ToolsInstall::checkDB($_GET['server'], $_GET['login'], $_GET['password'], $_GET['name']);
 if ($resultDB !== true){
 	die("<action result='fail' error='".$resultDB."'/>\n");

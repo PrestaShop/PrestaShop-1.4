@@ -1,6 +1,6 @@
 <?php
 
-include(INSTALL_PATH.'/classes/ToolsInstall.php');
+include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 
 $smtpChecked = (trim($_GET['mailMethod']) ==  'smtp');
 $smtpServer = $_GET['smtpSrv'];
@@ -8,7 +8,7 @@ $content = $_GET['testMsg'];
 $subject = $_GET['testSubject'];
 $type = 'text/html';
 $to =  $_GET['testEmail'];
-$from = 'no-reply@'.Tools::getHttpHost(false, true);
+$from = 'no-reply@'.ToolsInstall::getHttpHost(false, true);
 $smtpLogin = $_GET['smtpLogin'];
 $smtpPassword = $_GET['smtpPassword'];
 $smtpPort = $_GET['smtpPort'];

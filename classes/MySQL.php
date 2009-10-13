@@ -16,6 +16,8 @@ class MySQL extends Db
 {
 	public function	connect()
 	{
+		if (!defined('_PS_DEBUG_SQL_'))
+			define('_PS_DEBUG_SQL_', false);
 		if ($this->_link = @mysql_connect($this->_server, $this->_user, $this->_password))
 		{
 			if(!$this->set_db($this->_database))
