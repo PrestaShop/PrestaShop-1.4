@@ -211,7 +211,7 @@ class AdminReferrers extends AdminTab
 		$obj = $this->loadObject(true);
 		foreach (array('http_referer_like', 'http_referer_regexp', 'request_uri_like', 'request_uri_regexp') as $field)
 			$obj->{$field} = str_replace('\\', '\\\\', $obj->{$field});
-		$uri = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__;
+		$uri = Tools::getHttpHost(true, true).__PS_BASE_URI__;
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">

@@ -21,7 +21,7 @@ else
 	/* or ask for confirmation */ 
 	$smarty->assign(array(
 		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
-		'this_path_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/cashondelivery/'
+		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/cashondelivery/'
 	));
 
 	$smarty->assign('this_path', __PS_BASE_URI__.'modules/cashondelivery/');

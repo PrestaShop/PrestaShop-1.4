@@ -30,7 +30,7 @@ if ($cookie->isLogged())
 			'{lastname}' => $customer->lastname, 
 			'{firstname}' => $customer->firstname, 
 			'{wishlist}' => $wishlist['name'],
-			'{message}' => 'http://'.htmlentities($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist['token']),
+			'{message}' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist['token']),
 			$to, $toName, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, dirname(__FILE__).'/mails/');
 	}
 }

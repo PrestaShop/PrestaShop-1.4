@@ -56,7 +56,7 @@ class Feeder extends Module
 		if (!in_array($orderWay, $orderWayValues))
 			$orderWay = $orderWayValues[0];
 		$smarty->assign(array(
-			'feedUrl' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/'.$this->name.'/rss.php?id_category='.$id_category.'&amp;orderby='.$orderBy.'&amp;orderway='.$orderWay,
+			'feedUrl' => 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/'.$this->name.'/rss.php?id_category='.$id_category.'&amp;orderby='.$orderBy.'&amp;orderway='.$orderWay,
 		));
 		return $this->display(__FILE__, 'feederHeader.tpl');
 	}

@@ -193,7 +193,7 @@ class ProductDownload extends ObjectModel
 	public function getTextLink($admin=true, $hash=false)
 	{
 		$key = $this->physically_filename . '-' . ($hash ? $hash : 'orderdetail');
-		$link = ($admin) ? './get-file-admin.php?' : 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'get-file.php?';
+		$link = ($admin) ? './get-file-admin.php?' : Tools::getHttpHost(true, true).__PS_BASE_URI__.'get-file.php?';
 		$link .= ($admin) ? 'file='.$this->physically_filename : 'key='.$key;
 		return $link;
 	}

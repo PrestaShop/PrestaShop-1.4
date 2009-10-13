@@ -53,7 +53,7 @@ class AdminAccess extends AdminTab
 		<table class="table" cellspacing="0">
 			<tr>
 				<th>
-					<select name="profile" onchange="redirect(\''.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$currentIndex.'&token='.$this->token.'&profile=\'+this.options[this.selectedIndex].value)">';
+					<select name="profile" onchange="redirect(\''.Tools::getHttpHost(true, true).$currentIndex.'&token='.$this->token.'&profile=\'+this.options[this.selectedIndex].value)">';
 		if ($profiles)
 			foreach ($profiles AS $profile)
 				echo '<option value="'.intval($profile['id_profile']).'" '.(intval($profile['id_profile']) == $currentProfile ? 'selected="selected"' : '').'>'.$profile['name'].'</option>';

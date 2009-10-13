@@ -306,7 +306,7 @@ class PaypalAPI extends PaymentModule
 		$paymentType = 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);
 		$bn = ($type == 'express' ? 'ECS' : 'ECM');
-		$notifyURL = urlencode('http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/paypalapi/ipn.php');
+		$notifyURL = urlencode('http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/paypalapi/ipn.php');
 
 		// Getting address
 		if (isset($cookie->id_cart) AND $cookie->id_cart)

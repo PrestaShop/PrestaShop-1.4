@@ -58,8 +58,8 @@ class ConnectionsSource extends ObjectModel
 		$source = new ConnectionsSource();
 		if (isset($_SERVER['HTTP_REFERER']) AND Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
 		{
-			if ((preg_replace('/^www./', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)) == preg_replace('/^www./', '', $_SERVER['HTTP_HOST']))
-				AND !strncmp(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), parse_url('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__, PHP_URL_PATH), strlen(__PS_BASE_URI__)))
+			if ((preg_replace('/^www./', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)) == preg_replace('/^www./', '', Tools::getHttpHost(false, false)))
+				AND !strncmp(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), parse_url('http://'.Tools::getHttpHost(false, false).__PS_BASE_URI__, PHP_URL_PATH), strlen(__PS_BASE_URI__)))
 				return false;
 			if (Validate::isAbsoluteUrl(strval($_SERVER['HTTP_REFERER'])))
 			{
@@ -71,7 +71,7 @@ class ConnectionsSource extends ObjectModel
 		}
 		
 		$source->id_connections = intval($cookie->id_connections);
-		$source->request_uri = $_SERVER['HTTP_HOST'];
+		$source->request_uri = Tools::getHttpHost(false, false);
 		if (isset($_SERVER['REDIRECT_URL']))
 			$source->request_uri .= strval($_SERVER['REDIRECT_URL']);
 		elseif (isset($_SERVER['REQUEST_URI']))

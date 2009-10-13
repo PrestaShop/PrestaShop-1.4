@@ -103,7 +103,7 @@ $navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get
 $smarty->assign('navigationPipe', $navigationPipe);
 
 /* Server Params */
-$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
+$server_host = Tools::getHttpHost(false, true);
 $protocol = 'http://';
 $protocol_ssl = 'https://';
 $protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
@@ -133,7 +133,7 @@ if (!Configuration::get('PS_THEME_V11'))
 		'mail_dir' => _MAIL_DIR_,
 		'pic_dir' => $protocol_content.$server_host._THEME_PROD_PIC_DIR_,
 		'lang_iso' => $ps_language->iso_code,
-		'come_from' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlentities($_SERVER['REQUEST_URI']),
+		'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
 		'shop_name' => Configuration::get('PS_SHOP_NAME'),
 		'cart_qties' => intval($cart->nbProducts()),
 		'cart' => $cart,
@@ -153,7 +153,7 @@ else
 	$protocol = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
 	$smarty->assign(array(
 		'base_dir' => __PS_BASE_URI__,
-		'base_dir_ssl' => (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__,
+		'base_dir_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__,
 		'content_dir' => __PS_BASE_URI__,
 		/* If the current page need SSL encryption and the shop allow it, then active it */
 		'protocol' => $protocol,
@@ -173,7 +173,7 @@ else
 		'mail_dir' => _MAIL_DIR_,
 		'pic_dir' => _THEME_PROD_PIC_DIR_,
 		'lang_iso' => $ps_language->iso_code,
-		'come_from' => 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').htmlentities($_SERVER['REQUEST_URI']),
+		'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
 		'shop_name' => Configuration::get('PS_SHOP_NAME'),
 		'cart_qties' => intval($cart->nbProducts()),
 		'cart' => $cart,

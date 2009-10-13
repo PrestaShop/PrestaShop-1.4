@@ -131,7 +131,7 @@ if (isFormValid())
 		$subject = $_GET['infosShop']." - " . $_GET['mailSubject'];
 		$type = 'text/html';
 		$to =  $_GET['infosEmail'];
-		$from = "no-reply@".htmlspecialchars($_SERVER["HTTP_HOST"], ENT_COMPAT, 'UTF-8');
+		$from = "no-reply@".Tools::getHttpHost(false, true);
 		$smtpLogin = $_GET['smtpLogin'];
 		$smtpPassword = $_GET['smtpPassword'];
 		$smtpPort = $_GET['smtpPort'];//'default','secure'

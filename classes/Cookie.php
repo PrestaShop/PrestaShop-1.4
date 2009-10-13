@@ -64,12 +64,12 @@ class	Cookie
 	private function getDomain()
 	{
 		$r = '!(?:(\w+)://)?(?:(\w+)\:(\w+)@)?([^/:]+)?(?:\:(\d*))?([^#?]+)?(?:\?([^#]+))?(?:#(.+$))?!i';
-	    preg_match ($r, $_SERVER['HTTP_HOST'], $out);
+	    preg_match ($r, Tools::getHttpHost(false, false), $out);
 		if (preg_match('/^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]{1}[0-9]|[1-9]).)'. 
          '{1}((25[0-5]|2[0-4][0-9]|[1]{1}[0-9]{2}|[1-9]{1}[0-9]|[0-9]).)'. 
          '{2}((25[0-5]|2[0-4][0-9]|[1]{1}[0-9]{2}|[1-9]{1}[0-9]|[0-9]){1}))$/', $out[4]))
 			return false;
-		if (!strstr($_SERVER['HTTP_HOST'], '.'))
+		if (!strstr(Tools::getHttpHost(false, false), '.'))
 			return false;
 		$domain = $out[4];
 		$subDomains = SubDomain::getSubDomains();

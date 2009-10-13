@@ -83,7 +83,7 @@ class Followup extends Module
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<p>'.$this->l('Four kinds of e-mail alerts in order to stay in touch with your customers!').'<br /><br />
 				'.$this->l('Define settings and put this URL in crontab or call it manually daily:').'<br />
-				<b>http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/followup/cron.php?secure_key='.Configuration::get('PS_FOLLOWUP_SECURE_KEY').'</b></p>
+				<b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/followup/cron.php?secure_key='.Configuration::get('PS_FOLLOWUP_SECURE_KEY').'</b></p>
 				<hr size="1" />
 				<p><b>1. '.$this->l('Canceled carts').'</b><br /><br />'.$this->l('For each cancelled cart (with no order), generate a discount and send it to the customer').'</p>
 				<label>'.$this->l('Enable').'</label>

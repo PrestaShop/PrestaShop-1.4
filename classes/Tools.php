@@ -65,6 +65,16 @@ class Tools
 		exit;
 	}
 
+	static public function getHttpHost($http = false, $entities = false)
+	{
+		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
+		if ($entities)
+			$host = htmlspecialchars($host, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
+		return $host;
+	}
+	
 	/**
 	* Get a value from $_POST / $_GET
 	* if unavailable, take a default value
@@ -339,6 +349,7 @@ class Tools
 	{
 		global $_ERRORS;
 
+		//d(debug_backtrace());
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));

@@ -28,8 +28,8 @@ class PaypalExpress extends PaypalAPI
 			return false;
 
 		// Making request
-		$returnURL = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/paypalapi/express/submit.php';
-		$cancelURL = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php';
+		$returnURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/paypalapi/express/submit.php';
+		$cancelURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php';
 		$paymentAmount = number_format(floatval($cart->getOrderTotal()), 2, '.', '');
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = 'Sale';

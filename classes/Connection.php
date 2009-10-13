@@ -50,7 +50,7 @@ class Connection extends ObjectModel
 	public static function setPageConnection($cookie)
 	{
 		// The connection is created if it does not exist yet and we get the current page id
-		if (!isset($cookie->id_connections) OR !strstr(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '', $_SERVER['HTTP_HOST']))	
+		if (!isset($cookie->id_connections) OR !strstr(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '', Tools::getHttpHost(false, false)))	
 			$id_page = Connection::setNewConnection($cookie);
 		if (!isset($id_page) OR !$id_page)
 			$id_page = Page::getCurrentId();
@@ -83,7 +83,7 @@ class Connection extends ObjectModel
 		{
 			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 			$arrayUrl = parse_url($referer);
-			if (!isset($arrayUrl['host']) OR preg_replace('/^www./', '', $arrayUrl['host']) == preg_replace('/^www./', '', $_SERVER['HTTP_HOST']))
+			if (!isset($arrayUrl['host']) OR preg_replace('/^www./', '', $arrayUrl['host']) == preg_replace('/^www./', '', Tools::getHttpHost(false, false)))
 				$referer = '';
 			$connection = new Connection();
 			$connection->id_guest = intval($cookie->id_guest);

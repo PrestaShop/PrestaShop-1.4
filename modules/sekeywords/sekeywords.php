@@ -59,7 +59,7 @@ class SEKeywords extends ModuleGraph
 	
 	function hookTop($params)
 	{
-		if (!isset($_SERVER['HTTP_REFERER']) OR strstr($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']))
+		if (!isset($_SERVER['HTTP_REFERER']) OR strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false)))
 			return;
 		if (!Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
 			return;

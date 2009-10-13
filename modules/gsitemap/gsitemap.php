@@ -60,7 +60,7 @@ class Gsitemap extends Module
 		</urlset>');
 
 		$sitemap = $xml->addChild('url');
-		$sitemap->addChild('loc', 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__);
+		$sitemap->addChild('loc', 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__);
 		$sitemap->addChild('priority', '1.00');
 		$sitemap->addChild('lastmod', date("Y-m-d"));
 		$sitemap->addChild('changefreq', 'daily');
@@ -85,7 +85,7 @@ class Gsitemap extends Module
 				
 				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
-				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
+				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', '0.8');
@@ -113,7 +113,7 @@ class Gsitemap extends Module
 				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($category['id_lang']));
-				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
+				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
@@ -148,7 +148,7 @@ class Gsitemap extends Module
 				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
 				$link = new Link();
 				$tmpLink = $link->getLanguageLink(intval($product['id_lang']));
-				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$tmpLink;
+				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
 			}
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', $priority);
@@ -167,7 +167,7 @@ class Gsitemap extends Module
         {
 				$image['legend'] = str_replace('- ', '', $image['legend']);
             $sitemap = $xml->addChild('url');
-				$tmpLink = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image'], 'thickbox');
+				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image'], 'thickbox');
             $sitemap->addChild('loc', htmlspecialchars($tmpLink));
             $sitemap->addChild('priority', 0.4);
             $sitemap->addChild('lastmod', substr($image['date_upd'], 0, 10));
@@ -201,7 +201,7 @@ class Gsitemap extends Module
             $nbPages = sizeof($xml->url);
 
             $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
-            <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml"><b>http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
+            <a href="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml"><b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
             $this->_html .= $this->l('Update:').' <b>'.strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime']).'</b><br />';
             $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'mo</b><br />';

@@ -38,7 +38,7 @@ if ($back = Tools::getValue('back'))
 	$currentIndex .= '&back='.urlencode($back);
 
 /* Server Params */
-$server_host = htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8');
+$server_host = Tools::getHttpHost(false, true);
 $protocol = 'http://';
 $protocol_ssl = 'https://';
 $protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
