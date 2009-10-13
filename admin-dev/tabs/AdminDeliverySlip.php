@@ -66,7 +66,7 @@ class AdminDeliverySlip extends AdminTab
 	{
 		global $currentIndex;
 		
-		if(Tools::getValue('submitPrint'))
+		if (Tools::getValue('submitPrint'))
 		{
 			if (!Validate::isDate($_POST['date_from']))
 				$this->_errors[] = $this->l('Invalid from date');

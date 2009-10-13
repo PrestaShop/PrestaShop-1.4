@@ -476,12 +476,13 @@ class		Order extends ObjectModel
 
 	static public function getOrdersIdByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$sql = '
 		SELECT `id_order`
 		FROM `'._DB_PREFIX_.'orders`
-		WHERE DATE_ADD(date_add, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND date_add >= \''.pSQL($date_from).'\''
+		WHERE DATE_ADD(date_upd, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND date_upd >= \''.pSQL($date_from).'\''
 		.($type ? ' AND '.pSQL(strval($type)).'_number != 0' : '')
-		.($id_customer ? ' AND id_customer = '.intval($id_customer) : ''));
+		.($id_customer ? ' AND id_customer = '.intval($id_customer) : '');
+		$result = Db::getInstance()->ExecuteS($sql);
 
 		$orders = array();
 		foreach ($result AS $order)
