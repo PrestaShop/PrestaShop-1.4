@@ -117,7 +117,7 @@ class PaypalAdmin extends PaypalAPI
 		$html= '
 		<fieldset>
 			<legend><img src="../img/admin/unknown.gif" />'.$this->l('Server Information').'</legend>
-			<b style="color: red;">'.$this->l('In order to use your PayPalAPI payment module, your webserver NEEDS to support SSL protocol (eg. openSSL)').'.</b><br /><br />
+			<b style="color: red;">'.$this->l('Prior to the use of the PayPal module, please check if Curl or openSSL are activated on your server').'.</b><br /><br />
 			'.$this->l('Without SSL, PayPalAPI module will not be able to contact PayPal').'.<br />
 		</fieldset>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin-top:20px; float:left;">
