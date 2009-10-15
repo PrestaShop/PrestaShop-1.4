@@ -168,4 +168,13 @@ $_LANG['(no old version detected)'] = '(aucune ancienne version détectée)';
 $_LANG['Can\'t write settings file, please create a file named settings.inc.php in config directory.'] = 'Le fichier de paramètres n\'a pu être écrit, veuillez créer un fichier nommé settings.inc.php dans votre répertoire de configuration.';
 $_LANG['Cannot convert your database\'s data to utf-8.'] = 'Impossible de convertir les données de votre base de données en utf-8.';
 $_LANG['Your database server does not support the utf-8 charset.'] = 'Votre serveur de base de données ne supporte pas le jeu de caractère utf-8.';
+$_LANG['Improve your user experience and your visitors\', discover our websites and services:'] = 'Améliorez votre expérience et celle de vos visiteurs, découvrez nos sites et services :';
+$_LANG['Be different with a'] = 'Faites la différence avec une';
+$_LANG['design'] = 'charte graphique';
+$_LANG['which fit with your shop and find the'] = 'adaptée à votre activité et trouvez le';
+$_LANG['payment mean'] = 'moyen de paiement';
+$_LANG['you like the most.'] = 'qui vous convient le plus.';
+$_LANG['Themes'] = 'Thèmes';
+$_LANG['Payment modules'] = 'Modules de paiement';
+
 ?>
