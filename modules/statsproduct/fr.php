@@ -16,6 +16,10 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_ce26601dac0dea138b7295f02b7620a
 $_MODULE['<{statsproduct}prestashop>statsproduct_f2bbdf9f72c085adc4d0404e370f0f4c'] = 'Attribut';
 $_MODULE['<{statsproduct}prestashop>statsproduct_03ab340b3f99e03cff9e84314ead38c0'] = 'Qté';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3601146c4e948c32b6424d2c0a7f0118'] = 'Prix';
+$_MODULE['<{statsproduct}prestashop>statsproduct_a1892c39b2598b4f30f9cc92c59f1aa5'] = 'Ventes croisées';
+$_MODULE['<{statsproduct}prestashop>statsproduct_df644ae155e79abf54175bd15d75f363'] = 'Article';
+$_MODULE['<{statsproduct}prestashop>statsproduct_2a0440eec72540c5b30d9199c01f348c'] = 'Quantité vendue';
+$_MODULE['<{statsproduct}prestashop>statsproduct_844c29394eea07066bb2efefc35784ec'] = 'Prix moyen';
 $_MODULE['<{statsproduct}prestashop>statsproduct_0173374ac20f5843d58b553d5b226ef6'] = 'Choisissez une catégorie';
 $_MODULE['<{statsproduct}prestashop>statsproduct_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Toutes';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3303da9d5241177588a06ad60d7edaba'] = 'Cliquez sur un produit pour accéder à ses statistiques.';
@@ -28,4 +32,6 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_6c1a8292e4da90e1ef19ae9444226d8
 $_MODULE['<{statsproduct}prestashop>statsproduct_78b7f73e738991f2f0c08aa76e0c1354'] = 'Après avoir choisi une catégorie et sélectionné un produit disponible dans cette catégorie, des graphiques apparaissent. Vous pouvez ensuite les analyser.';
 $_MODULE['<{statsproduct}prestashop>statsproduct_4c694fbaea539b8c135a187da5b508eb'] = 'Si vous constatez qu\'un produit a du succès, qu\'il est beaucoup acheté mais très peu consulté : vous devriez le mettre davantage en évidence dans la vitrine de votre boutique.';
 $_MODULE['<{statsproduct}prestashop>statsproduct_47786db044f5982f2d9d475b03caa1ee'] = 'Si au contraire un produit connait un grand nombre de consultations mais est très peu acheté : nous vous conseillons alors de vérifier à nouveau ou de modifier les informations, description ou photographie(s) présentes dans sa fiche produit.';
+$_MODULE['<{statsproduct}prestashop>statsproduct_e22269bb51f9f2394e148716babbafbb'] = 'Popularité';
+$_MODULE['<{statsproduct}prestashop>statsproduct_5e9613e58f3bdbc89b1fef07274c0877'] = 'Visites (x100)';
 $_MODULE['<{statsproduct}prestashop>statsproduct_287234a1ff35a314b5b6bc4e5828e745'] = 'Attributs';

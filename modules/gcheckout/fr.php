@@ -24,5 +24,6 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_a82be0f551b8708bc08eb33cd9ded0cf'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_c4ddab20febbb0e75bb211ac8cd4c541'] = 'Pour utiliser votre module Google Checkout, vous devez configurer votre compte marchand (en mode bac à sable comme en mode réel). Accédez à votre compte Google Checkout puis allez dans Settings > Integration. L\'API callback URL doit être :';
 $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 'La \"callback method\" doit être réglée sur';
 $_MODULE['<{gcheckout}prestashop>gcheckout_e2e882d58bbd478e17c5a542d5d6fcda'] = 'Les commandes doivent être passées en utilisant la même devise que celle indiquée dans votre compte marchand. Les paniers utilisant d\'autres devises seront convertis si l\'utilisateur décide de payer par le biais de ce module.';
+$_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Emballage';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9f06b28a40790c4c4df5739bce3c1eb0'] = 'Frais de port';
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Payer par GoogleCheckout';
