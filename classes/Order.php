@@ -505,24 +505,6 @@ class		Order extends ObjectModel
 		return $orders;
 	}
 
-    /**
-     * Get product total with taxes
-     *
-     * @return Product total with taxes
-     */
-    public function getTotalProductsWithTaxes($products = false)
-	{
-		if (!$products)
-			$products = $this->getProductsDetail();
-
-        $total = 0;
-		foreach ($products AS $k => $row)
-		{
-			$qty = intval($row['product_quantity']);
-			$total += floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1) * $qty;
-		}
-		return round($total, 2);
-	}
 
     /**
      * Get product total without taxes
@@ -537,10 +519,34 @@ class		Order extends ObjectModel
         $total = 0;
 		foreach ($products AS $k => $row)
 		{
-			$qty = intval($row['product_quantity']);
-			$total += floatval($row['product_price']) * $qty;
+			$quantity = intval($row['product_quantity']);
+			// The product price is rounded to 2 decimals in order to match with the displayed prices
+			// If we keep the 6 decimals price, the displayed price won't match with the ROUNDED product prices detail
+			$total += Tools::ceilf(floatval($row['product_price']), 2) * $quantity;
 		}
-		return round($total, 2);
+		return $total;
+	}
+
+    /**
+     * Get product total with taxes
+     *
+     * @return Product total with taxes
+     */
+    public function getTotalProductsWithTaxes($products = false)
+	{
+		if (!$products)
+			$products = $this->getProductsDetail();
+
+        $total = 0;
+		foreach ($products AS $k => $row)
+		{
+			$quantity = intval($row['product_quantity']);
+			// Product price 2 decimal round => see the getTotalProductsWithoutTaxes() comment just above
+			// The product price multiplication by the tax rate is also up-rounded to 2 decimals in order to be displayed
+			// And once again, displayed prices MUST NOT be different from the paid prices
+			$total += Tools::ceilf(Tools::ceilf(floatval($row['product_price']), 2) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
+		}
+		return $total;
 	}
 
 	/**

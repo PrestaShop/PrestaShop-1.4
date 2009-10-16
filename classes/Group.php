@@ -22,6 +22,9 @@ class		Group extends ObjectModel
 	/** @var string Reduction */
 	public 		$reduction;
 
+	/** @var int Price display method (tax inc/tax exc) */
+	public		$price_display_method;
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -30,9 +33,9 @@ class		Group extends ObjectModel
 
 	protected $tables = array ('group');
 
- 	protected 	$fieldsRequired = array();
+ 	protected 	$fieldsRequired = array('price_display_method');
  	protected 	$fieldsSize = array();
- 	protected 	$fieldsValidate = array('reduction' => 'isFloat');
+ 	protected 	$fieldsValidate = array('reduction' => 'isFloat', 'price_display_method' => 'isPriceDisplayMethod');
 	
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);
@@ -46,7 +49,8 @@ class		Group extends ObjectModel
 		parent::validateFields();
 		if (isset($this->id))
 			$fields['id_group'] = intval($this->id);
-		$fields['reduction'] =floatval($this->reduction);
+		$fields['reduction'] = floatval($this->reduction);
+		$fields['price_display_method'] = intval($this->price_display_method);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
@@ -63,7 +67,7 @@ class		Group extends ObjectModel
 	static public function getGroups($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT g.`id_group`, g.`reduction`, gl.`name`
+		SELECT g.`id_group`, g.`reduction`, g.`price_display_method`, gl.`name`
 		FROM `'._DB_PREFIX_.'group` g
 		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($id_lang).')
 		ORDER BY g.`id_group` ASC');
@@ -89,7 +93,15 @@ class		Group extends ObjectModel
 		ORDER BY g.`reduction` DESC');
 		return $result['reduction'];
 	}
-	
+
+	static public function getPriceDisplayMethod($id_customer)
+	{
+		return Db::getInstance()->getValue('
+		SELECT g.`price_display_method`
+		FROM `'._DB_PREFIX_.'group` g
+		LEFT JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = g.`id_group` AND cg.`id_customer` = '.intval($id_customer).')');
+	}
+
 	public function delete()
 	{
 		if (parent::delete())

@@ -863,6 +863,12 @@ class Tools
 		if (function_exists('set_magic_quotes_runtime'))
 			@set_magic_quotes_runtime($var);
 	}
+
+	static public function ceilf($value, $precision = 0)
+	{
+		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);
+		return ceil($value * $precisionFactor) / $precisionFactor;
+	}
 }
 
 /**

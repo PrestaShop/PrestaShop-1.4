@@ -72,6 +72,15 @@ class AdminGroups extends AdminTab
 					<p>'.$this->l('Will automatically apply this value as a reduction on ALL shop\'s products for this group\'s members').'</p>
 				</div>
 				<div class="clear">&nbsp;</div>
+				<label>'.$this->l('Price display method:').' </label>
+				<div class="margin-form">
+					<select name="price_display_method">
+						<option value="'.PS_TAX_EXC.'"'.(intval($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_EXC ? ' selected="selected"' : '').'>'.$this->l('Tax excluded').'</option>
+						<option value="'.PS_TAX_INC.'"'.(intval($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_INC ? ' selected="selected"' : '').'>'.$this->l('Tax included').'</option>
+					</select>
+					<p>'.$this->l('How the prices are displayed on order summary for this customer group (tax included or excluded).').'</p>
+				</div>
+				<div class="clear">&nbsp;</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>

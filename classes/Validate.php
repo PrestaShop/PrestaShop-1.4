@@ -735,6 +735,17 @@ class Validate
 	{
 		return (preg_match('/^[^{}<>]*$/ui', $label));
 	}
+
+	/**
+	* Price display method validity
+	*
+	* @param integer $data Data to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isPriceDisplayMethod($data)
+	{
+		return ($data == PS_TAX_EXC OR $data == PS_TAX_INC);
+	}
 }
 
 ?>

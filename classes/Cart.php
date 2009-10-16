@@ -577,6 +577,8 @@ class		Cart extends ObjectModel
 		foreach ($products AS $product)
 		{
 			$price = floatval(Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']));
+/*if ($type == 1 && $withTaxes)
+p($price);*/
 			$total_price = $price * intval($product['quantity']);
 			$order_total += $total_price;
 		}

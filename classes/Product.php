@@ -1263,7 +1263,10 @@ class		Product extends ObjectModel
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
 		if ($usetax)
+{
 			$price *= (1 + ($tax / 100));
+//p((1 + ($tax / 100)));
+}
 
 		// Attribute price
 		$attribute_price = $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
