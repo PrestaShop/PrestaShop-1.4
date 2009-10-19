@@ -174,7 +174,7 @@ class Search
 		if ($ajax)
 		{
 			$queryResults = '
-			SELECT p.id_product, pl.name as pname, IF(cl.name REGEXP "^[0-9]{2}\\.", SUBSTRING(cl.name, 4), cl.name) as cname	'.$score.', cl.link_rewrite as crewrite, pl.link_rewrite as prewrite
+			SELECT DISTINCT p.id_product, pl.name as pname, IF(cl.name REGEXP "^[0-9]{2}\\.", SUBSTRING(cl.name, 4), cl.name) as cname	'.$score.', cl.link_rewrite as crewrite, pl.link_rewrite as prewrite
 			FROM '._DB_PREFIX_.'product p
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
@@ -195,7 +195,7 @@ class Search
 		}
 
 		$queryResults = '
-		SELECT SQL_CALC_FOUND_ROWS p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
+		SELECT SQL_CALC_FOUND_ROWS DISTINCT p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
 		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name 
 		'.$score.'
 		FROM '._DB_PREFIX_.'product p
