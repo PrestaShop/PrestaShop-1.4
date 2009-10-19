@@ -178,8 +178,11 @@ class Search
 			FROM '._DB_PREFIX_.'product p
 			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
 			WHERE '.implode(' AND ', $whereArray).'
 			AND p.active = 1
+			AND c.`active` = 1 
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
@@ -201,8 +204,11 @@ class Search
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
 		WHERE '.implode(' AND ', $whereArray).'
 		AND p.active = 1
+		AND c.`active` = 1 
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
