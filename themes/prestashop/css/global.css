@@ -414,7 +414,6 @@ input, textarea, select, span.editable {
 	margin-left: 0.7em;
 	font-size: 12px;
 	font-family: Verdana, Arial, Helvetica, Sans-Serif;
-	vertical-align: top;
 	outline: none;
 }
 
