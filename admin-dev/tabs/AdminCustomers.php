@@ -98,6 +98,34 @@ class AdminCustomers extends AdminTab
 							$this->_errors[] = Tools::displayError('an error occurred while loading object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 				}
+				else
+				{
+					if ($this->tabAccess['add'] === '1')
+					{
+						$object = new $this->className();
+						$this->copyFromPost($object, $this->table);
+						if (!$object->add())
+							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
+						{
+							// Add Associated groups
+							$group_list = Tools::getValue('groupBox');
+							if (is_array($group_list) && sizeof($group_list) > 0)
+								$object->addGroups($group_list);
+							$parent_id = intval(Tools::getValue('id_parent', 1));
+							// Save and stay on same form
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$this->token);
+							// Save and back to parent
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndBackToParent'))
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$parent_id.'&conf=3&token='.$this->token);
+							// Default behavior (save and back)
+							Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$this->token);
+						}
+					}
+					else
+						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				}
 			}
 		}
 		return parent::postProcess();
@@ -381,7 +409,7 @@ class AdminCustomers extends AdminTab
 		$obj = $this->loadObject(true);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
-		$customer_groups = $obj->getGroups();
+		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
