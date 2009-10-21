@@ -43,6 +43,7 @@ class PaypalPayment extends PaypalAPI
 	{
 		global $smarty;
 
+		$smarty->assign('integral', $this->_pp_integral);
 		$smarty->assign('logo', _MODULE_DIR_.$this->name.'/paypalapi.gif');
 		return $this->display(__FILE__.'../', 'payment.tpl');
 	}
