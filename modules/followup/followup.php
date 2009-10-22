@@ -33,7 +33,7 @@ class Followup extends Module
 		`id_email_type` INT UNSIGNED NOT NULL ,
 		`id_discount` INT UNSIGNED NOT NULL ,
 		`id_customer` INT UNSIGNED NULL ,
-		`id_cart` INT UNSIGNED NULL ,		
+		`id_cart` INT UNSIGNED NULL ,
 		`date_add` DATETIME NOT NULL
 		) ENGINE = MYISAM');
 		
@@ -78,7 +78,7 @@ class Followup extends Module
 		
 		echo '
 		<h2>'.$this->l('Customers follow-up').'</h2>
-		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">			
+		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset style="width: 400px; float: left;">
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<p>'.$this->l('Four kinds of e-mail alerts in order to stay in touch with your customers!').'<br /><br />
@@ -200,12 +200,13 @@ class Followup extends Module
 			if (!sizeof($statsArray))
 				echo '<tr><td colspan="13" style="font-weight: bold; text-align: center;">'.$this->l('No statistics yet').'</td></tr>';
 			
+			Tools::p($statsArray);
 			foreach ($statsArray AS $date_stat => $array)
 			{
 				$rates = array();
 				for ($i = 1; $i != 5; $i++)
 					if (isset($statsArray[$date_stat][$i]['nb']) AND isset($statsArray[$date_stat][$i]['nb_used']) AND $statsArray[$date_stat][$i]['nb_used'] > 0)
-						$rates[$i] = number_format(($statsArray[$date_stat][$i]['nb'] / $statsArray[$date_stat][$i]['nb_used'])*100, 2, '.', '');
+						$rates[$i] = number_format(($statsArray[$date_stat][$i]['nb_used'] / $statsArray[$date_stat][$i]['nb'])*100, 2, '.', '');
 				
 				echo '
 				<tr>
