@@ -199,8 +199,6 @@ class Followup extends Module
 			
 			if (!sizeof($statsArray))
 				echo '<tr><td colspan="13" style="font-weight: bold; text-align: center;">'.$this->l('No statistics yet').'</td></tr>';
-			
-			Tools::p($statsArray);
 			foreach ($statsArray AS $date_stat => $array)
 			{
 				$rates = array();
