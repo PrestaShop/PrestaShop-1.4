@@ -22,14 +22,6 @@ $smarty->assign(array(
 if(isset($css_files) AND !empty($css_files)) $smarty->assign('css_files', $css_files);
 if(isset($js_files) AND !empty($js_files)) $smarty->assign('js_files', $js_files);
 
-/* Display a maintenance page if shop is closed */
-if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP')))
-{
-	header('HTTP/1.1 503 temporarily overloaded');
-	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
-	exit;
-}
-
 $smarty->display(_PS_THEME_DIR_.'header.tpl');
 
 ?>

@@ -9,6 +9,14 @@ if (!is_dir(dirname(__FILE__).'/themes/'._THEME_NAME_))
 elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !intval(Configuration::get('PS_SHOP_ENABLE')))
 	$maintenance = true;
 
+/* Display a maintenance page if shop is closed */
+if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP')))
+{
+	header('HTTP/1.1 503 temporarily overloaded');
+	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
+	exit;
+}
+	
 ob_start();
 global $cart, $cookie, $_CONF, $link;
 
