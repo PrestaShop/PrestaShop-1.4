@@ -1,5 +1,8 @@
 <?php
 
+/* SSL Management */
+$useSSL = true;
+
 require_once(dirname(__FILE__).'/../../config/config.inc.php');
 require_once(dirname(__FILE__).'/../../init.php');
 
@@ -29,7 +32,7 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 	while (Discount::discountExists($voucherCode));
 
 	/* voucher creation and add to customer */
-	$voucher = new Discount();	
+	$voucher = new Discount();
 	$voucher->name = $voucherCode;
 	$voucher->id_discount_type = 2; // Discount on order (amount)
 	$voucher->id_customer = intval($cookie->id_customer);
