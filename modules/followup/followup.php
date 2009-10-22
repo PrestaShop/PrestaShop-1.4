@@ -172,8 +172,8 @@ class Followup extends Module
 			WHERE l2.id_email_type = l.id_email_type AND l2.date_add = l.date_add AND od.id_order IS NOT NULL AND o.valid = 1) nb_used
 			FROM '._DB_PREFIX_.'log_email l
 			WHERE l.date_add >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-			GROUP BY l.date_add, l.id_email_type');
-			
+			GROUP BY DATE_FORMAT(l.date_add, \'%Y-%m-%d\'), l.id_email_type');
+
 			$statsArray = array();
 			foreach ($stats AS $stat)
 			{
