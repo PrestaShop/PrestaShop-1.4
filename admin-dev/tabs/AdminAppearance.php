@@ -22,8 +22,8 @@ class AdminAppearance extends AdminPreferences
 		$this->table = 'configuration';
 
  		$this->_fieldsAppearance = array(
-			'PS_LOGO' => array('title' => $this->l('Header logo:'), 'desc' => $this->l('Will appear on page and e-mail headers'), 'type' => 'file', 'thumb' => array('file' => _PS_IMG_.'logo.jpg?date='.urlencode(time()), 'pos' => 'before')),
-			'PS_FAVICON' => array('title' => $this->l('Favicon:'), 'desc' => $this->l('The favicon used by your shop'), 'type' => 'file', 'thumb' => array('file' => _PS_IMG_.'favicon.ico?date='.urlencode(time()), 'pos' => 'after')),
+			'PS_LOGO' => array('title' => $this->l('Header logo:'), 'desc' => $this->l('Will appear on page and e-mail headers'), 'type' => 'file', 'thumb' => array('file' => _PS_IMG_.'logo.jpg?date='.time(), 'pos' => 'before')),
+			'PS_FAVICON' => array('title' => $this->l('Favicon:'), 'desc' => $this->l('The favicon used by your shop'), 'type' => 'file', 'thumb' => array('file' => _PS_IMG_.'favicon.ico?date='.time(), 'pos' => 'after')),
 			'PS_NAVIGATION_PIPE' => array('title' => $this->l('Navigation pipe:'), 'desc' => $this->l('Used for navigation path inside categories/product'), 'cast' => 'strval', 'type' => 'text', 'size' => 20),
 		);
 		$this->_fieldsTheme = array(
