@@ -368,7 +368,7 @@ function displayCarrier()
 		if ($carrier->active AND !$carrier->deleted)
 			$checked = intval($cart->id_carrier);
 	}
-	if (!isset($checked))
+	if (!isset($checked) OR intval($checked) == 0)
 		$checked = intval(Configuration::get('PS_CARRIER_DEFAULT'));
 	$smarty->assign(array(
 		'checkedTOS' => intval($cookie->checkedTOS),
