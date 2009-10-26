@@ -613,7 +613,7 @@ class AdminOrders extends AdminTab
 							'.($order->hasBeenPaid() ? '<th style="width: 20px; text-align: center">'.$this->l('Refunded').'</th>' : '').'
 							'.($order->hasBeenDelivered() ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
-							<th style="width: 90px; text-align: center">'.$this->l('Total').'</th>
+							<th style="width: 90px; text-align: center">'.$this->l('Total').' <sup>*</sup></th>
 							<th colspan="2" style="width: 120px;"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.($order->hasBeenDelivered() ? $this->l('Return') : ($order->hasBeenPaid() ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
 		echo '
 						</tr>';
@@ -688,7 +688,7 @@ class AdminOrders extends AdminTab
 						}
 					echo '
 					</table>
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed without taxes').(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed with taxes').(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
 					if (sizeof($discounts))
 					{
 						echo '
