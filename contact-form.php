@@ -30,7 +30,7 @@ if (Tools::isSubmit('submitMessage'))
     }
 }
 
-$email = Tools::getValue('from', ((isset($cookie) AND isset($cookie->email) AND Validate::isEmail($cookie->email)) ? $cookie->email : ''));
+$email = Tools::safeOutput(Tools::getValue('from', ((isset($cookie) AND isset($cookie->email) AND Validate::isEmail($cookie->email)) ? $cookie->email : '')));
 $smarty->assign(array(
 	'errors' => $errors,
 	'email' => $email

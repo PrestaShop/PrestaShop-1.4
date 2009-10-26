@@ -76,7 +76,7 @@ class Newsletter extends Module
 			}
 			if (!$nb = intval(Db::getInstance()->NumRows()))
 				$this->_html .= $this->displayError($this->l('No customers were found with these filters !'));
-			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval($_POST['action']).'_'.$this->_file, 'w'))
+			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
 			{
 				foreach ($result AS $tab)
 					$this->_my_fputcsv($fd, $tab);

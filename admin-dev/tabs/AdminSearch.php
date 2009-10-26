@@ -164,7 +164,7 @@ class AdminSearch extends AdminTab
 		/* Display categories if any has been matching */
 		if (isset($this->_list['categories']) AND $nbCategories = sizeof($this->_list['categories']))
 		{
-			echo '<h3>'.$nbCategories.' '.($nbCategories > 1 ? $this->l('categories found with') : $this->l('category found with')).' <b>"'.$query.'"</b></h3>';
+			echo '<h3>'.$nbCategories.' '.($nbCategories > 1 ? $this->l('categories found with') : $this->l('category found with')).' <b>"'.Tools::safeOutput($query).'"</b></h3>';
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">';
 			$irow = 0;
@@ -178,7 +178,7 @@ class AdminSearch extends AdminTab
 		/* Display products if any has been matching */
 		if (isset($this->_list['products']) AND !empty($this->_list['products']) AND $nbProducts = sizeof($this->_list['products']))
 		{
-			echo '<h3>'.$nbProducts.' '.($nbProducts > 1 ? $this->l('products found with') : $this->l('product found with')).' <b>"'.$query.'"</b></h3>
+			echo '<h3>'.$nbProducts.' '.($nbProducts > 1 ? $this->l('products found with') : $this->l('product found with')).' <b>"'.Tools::safeOutput($query).'"</b></h3>
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
 			foreach ($this->fieldsDisplay AS $field)
@@ -215,7 +215,7 @@ class AdminSearch extends AdminTab
 		/* Display customers if any has been matching */
 		if (isset($this->_list['customers']) AND !empty($this->_list['customers']) AND $nbCustomers = sizeof($this->_list['customers']))
 		{
-			echo '<h3>'.$nbCustomers.' '.($nbCustomers > 1 ? $this->l('customers') : $this->l('customer')).' '.$this->l('found with').' <b>"'.$query.'"</b></h3>
+			echo '<h3>'.$nbCustomers.' '.($nbCustomers > 1 ? $this->l('customers') : $this->l('customer')).' '.$this->l('found with').' <b>"'.Tools::safeOutput($query).'"</b></h3>
 			<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';
 			foreach ($this->fieldsDisplay AS $field)

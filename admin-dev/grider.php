@@ -13,9 +13,11 @@ $start = intval(Tools::getValue('start', 0));
 $limit = intval(Tools::getValue('limit', 40));
 $sort = Tools::getValue('sort', 0); // Should be a String. Default value is an Integer because we don't know what can be the name of the column to sort.
 $dir = Tools::getValue('dir', 0); // Should be a String : Either ASC or DESC
-$id_employee = Tools::getValue('id_employee');
-$id_lang = Tools::getValue('id_lang');
+$id_employee = intval(Tools::getValue('id_employee'));
+$id_lang = intval(Tools::getValue('id_lang'));
 
+if (!Validate::isModuleName($module))
+	die(Tools::displayError());
 require_once(dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php');
 
 $grid = new $module();

@@ -71,14 +71,16 @@ if (Tools::isSubmit('Submit'))
 				$url = strval($_GET['redirect'].(isset($_GET['token']) ? ('&token='.$_GET['token']) : ''));
 			else
 				$url = 'index.php';
+			if (!Validate::isCleanHtml($url))
+				die(Tools::displayError());
 			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-				<meta http-equiv="Refresh" content="0;URL='.$url.'">
+				<meta http-equiv="Refresh" content="0;URL='.Tools::safeOutput($url).'">
 				<head>
 					<script language="javascript" type="text/javascript">
-						window.location.replace("'.$url.'");
+						window.location.replace("'.Tools::safeOutput($url).'");
 					</script>
-					<div style="text-align:center; margin-top:250px;"><a href="'.$url.'">'.translate('Click here to launch Administration panel').'</a></div>
+					<div style="text-align:center; margin-top:250px;"><a href="'.Tools::safeOutput($url).'">'.translate('Click here to launch Administration panel').'</a></div>
 				</head>
 			</html>';
 			exit ;

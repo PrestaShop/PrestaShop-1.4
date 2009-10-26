@@ -29,7 +29,9 @@ if ($cookie->isLoggedBack() AND Tools::getValue('file'))
 {
 	/* Admin can directly access to file */
 	$filename = Tools::getValue('file');
-	$file = _PS_DOWNLOAD_DIR_.$filename;
+	if (!Validate::isSha1($filename))
+		die(Tools::displayError());
+	$file = _PS_DOWNLOAD_DIR_.strval(preg_replace('/\.{2,}/', '.',$filename));
 	$filename = ProductDownload::getFilenameFromFilename(Tools::getValue('file'));
 	if (!file_exists($file))
 		Tools::redirect('index.php');

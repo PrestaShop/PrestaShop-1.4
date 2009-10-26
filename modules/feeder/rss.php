@@ -15,7 +15,7 @@ if (!in_array($orderWay, $orderWayValues))
 $id_category = (intval(Tools::getValue('id_category')) ? intval(Tools::getValue('id_category')) : 1);
 $products = Product::getProducts(intval($cookie->id_lang), 0, ($number > 10 ? 10 : $number), $orderBy, $orderWay, $id_category, true);
 $currency = new Currency(intval($cookie->id_currency));
-$affiliate = (Tools::getValue('ac') ? '?ac='.Tools::getValue('ac') : '');
+$affiliate = (Tools::getValue('ac') ? '?ac='.intval(Tools::getValue('ac')) : '');
 
 // Send feed
 header("Content-Type:text/xml; charset=utf-8");
@@ -41,7 +41,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		echo "\t\t\t<title><![CDATA[".$product['name']." - ".html_entity_decode(Tools::displayPrice(Product::getPriceStatic($product['id_product']), $currency), ENT_COMPAT, 'UTF-8')." ]]></title>\n";
 		echo "\t\t\t<description>&lt;img src=&quot;"._PS_BASE_URL_.__PS_BASE_URI__."img/p/".$image[0]['id_product']."-".$image[0]['id_image']."-small.jpg&quot; title=&quot;".$product['name']."&quot; alt=&quot;thumb&quot; /&gt;
 		<![CDATA[".$product['description_short']."]]></description>\n";
-		echo "\t\t\t<link><![CDATA[".htmlspecialchars($link->getproductLink($product['id_product'], $product['link_rewrite'], Tools::getValue('id_category'))).$affiliate."]]></link>\n";
+		echo "\t\t\t<link><![CDATA[".htmlspecialchars($link->getproductLink($product['id_product'], $product['link_rewrite'], intval(Tools::getValue('id_category')))).$affiliate."]]></link>\n";
 		echo "\t\t</item>\n";
 	}
 ?>
