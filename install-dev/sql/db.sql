@@ -521,6 +521,7 @@ CREATE TABLE `PREFIX_feature_value_lang` (
 CREATE TABLE `PREFIX_group` (
   `id_group` int(10) unsigned NOT NULL auto_increment,
   `reduction` decimal(10,2) NOT NULL default '0.00',
+  `price_display_method` TINYINT NOT NULL DEFAULT 0,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_group`)
@@ -757,7 +758,7 @@ CREATE TABLE `PREFIX_order_detail` (
   `product_supplier_reference` varchar(32) default NULL,
   `product_weight` float NOT NULL,
   `tax_name` varchar(16) NOT NULL,
-  `tax_rate` decimal(10,2) NOT NULL default '0.00',
+  `tax_rate` DECIMAL(10, 3) NOT NULL DEFAULT '0.000',
   `ecotax` decimal(10,2) NOT NULL default '0.00',
   `download_hash` varchar(255) default NULL,
   `download_nb` int(10) unsigned default '0',
@@ -917,8 +918,8 @@ CREATE TABLE `PREFIX_product` (
   `wholesale_price` decimal(13,6) NOT NULL default '0.000000',
   `reduction_price` decimal(10,2) default NULL,
   `reduction_percent` float default NULL,
-  `reduction_from` date default NULL,
-  `reduction_to` date default NULL,
+  `reduction_from` DATE NOT NULL DEFAULT '1970-01-01',
+  `reduction_to` DATE NOT NULL DEFAULT '1970-01-01',
   `reference` varchar(32) default NULL,
   `supplier_reference` varchar(32) default NULL,
   `location` varchar(64) default NULL,
