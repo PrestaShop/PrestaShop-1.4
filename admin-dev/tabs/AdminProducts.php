@@ -718,6 +718,7 @@ class AdminProducts extends AdminTab
 							$this->_errors[] = Tools::displayError('an error occurred while adding tags');
 						elseif ($id_image = $this->addProductImage($object, Tools::getValue('resizer')))
 						{
+							$currentIndex .= '&image_updated='.intval(Tools::getValue('id_image'));
 							Hook::updateProduct($object);
 							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
@@ -2105,7 +2106,7 @@ class AdminProducts extends AdminTab
 				echo '
 				<tr>
 					<td style="padding: 4px;"><a href="../img/p/'.$obj->id.'-'.$image['id_image'].'.jpg" target="_blank">
-					<img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg"
+					<img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg'.(intval(Tools::getValue('image_updated')) === intval($image['id_image']) ? '?date='.time() : '').'"
 					alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></a></td>
 					<td class="center">'.intval($image['position']).'</td>
 					<td class="center">';
