@@ -312,6 +312,7 @@ class		Category extends ObjectModel
 		WHERE `id_parent` = '.intval($this->id).'
 		'.($active ? 'AND `active` = 1' : '').'
 		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+		GROUP BY c.`id_category`
 		ORDER BY `name` ASC');
 
 		/* Modify SQL result */
