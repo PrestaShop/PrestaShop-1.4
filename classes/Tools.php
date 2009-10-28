@@ -595,7 +595,7 @@ class Tools
 			die(Tools::displayError());
 		if ($id_category == 1)
 			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
-		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).' '.$pipe.' '.htmlentities($end, ENT_NOQUOTES, 'UTF-8');
+		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).' '.$pipe.' <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
 	}
 
 	/**

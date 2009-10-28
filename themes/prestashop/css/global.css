@@ -2521,3 +2521,6 @@ div.star a:hover {
 .paypalapi_about ul {
 	padding-left: 20px;
 }
+
+/* cms pages */
+#cms div.content_only { text-align:left; padding:10px; }
