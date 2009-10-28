@@ -307,19 +307,19 @@ abstract class ObjectModel
 	/**
 	 * Check for fields validity before database interaction
 	 */
-	public function validateFields($die = true)
+	public function validateFields($die = true, $errorReturn = false)
 	{
 		foreach ($this->fieldsRequired as $field)
 			if (Tools::isEmpty($this->{$field}) AND (!is_numeric($this->{$field})))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' is empty)');
-				return false;
+				return $errorReturn ? get_class($this).' -> '.$field.' is empty' : false;
 			}
 		foreach ($this->fieldsSize as $field => $size)
 			if (isset($this->{$field}) AND Tools::strlen($this->{$field}) > $size)
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' length > '.$size.')');
-				return false;
+				return $errorReturn ? get_class($this).' -> '.$field.' length > '.$size : false;
 			}
 		$validate = new Validate();
 		foreach ($this->fieldsValidate as $field => $method)
@@ -328,7 +328,7 @@ abstract class ObjectModel
 			elseif (!Tools::isEmpty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
-				return false;
+				return $errorReturn ? get_class($this).' -> '.$field.' = '.$this->{$field} : false;
 			}
 		return true;
 	}

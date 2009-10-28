@@ -825,7 +825,7 @@ class AdminImport extends AdminTab
 			if (!$res)
 			{
 				$this->_errors[] = $info['email'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				$this->_errors[] = ($fieldError !== true ? $fieldError : ($langFieldError !== true ? $langFieldError : '')).mysql_error();
 			}
 		}
 		$this->closeCsvFile($handle);
