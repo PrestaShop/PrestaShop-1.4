@@ -835,8 +835,12 @@ class AdminOrders extends AdminTab
 	private function getTotal()
 	{
 		$total = 0;
+		$currencyData = Currency::getCurrencies();
+		$currencies = array();
+		foreach ($currencyData as $currency)
+			$currencies[intval($currency['id_currency'])] = $currency;
 		foreach ($this->_list as $item)
-			$total += $item['total_paid'];
+			$total += Tools::convertPrice($item['total_paid'], $currencies[intval($item['id_currency'])]);
 		return $total;
 	}
 }
