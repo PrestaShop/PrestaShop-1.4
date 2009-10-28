@@ -2729,7 +2729,7 @@ class AdminProducts extends AdminTab
 		$id_category = intval(Tools::getValue('id_category'));
 		if ($id_category)
 			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
-		parent::displayListHeader();
+		parent::displayListHeader($token);
 	}
 }
 
