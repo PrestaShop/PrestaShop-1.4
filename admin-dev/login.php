@@ -75,12 +75,12 @@ if (Tools::isSubmit('Submit'))
 				die(Tools::displayError());
 			echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 			<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
-				<meta http-equiv="Refresh" content="0;URL='.Tools::safeOutput($url).'">
+				<meta http-equiv="Refresh" content="0;URL='.Tools::safeOutput($url, true).'">
 				<head>
 					<script language="javascript" type="text/javascript">
-						window.location.replace("'.Tools::safeOutput($url).'");
+						window.location.replace("'.Tools::safeOutput($url, true).'");
 					</script>
-					<div style="text-align:center; margin-top:250px;"><a href="'.Tools::safeOutput($url).'">'.translate('Click here to launch Administration panel').'</a></div>
+					<div style="text-align:center; margin-top:250px;"><a href="'.Tools::safeOutput($url, true).'">'.translate('Click here to launch Administration panel').'</a></div>
 				</head>
 			</html>';
 			exit ;
