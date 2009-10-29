@@ -423,12 +423,12 @@ class		Category extends ObjectModel
 		
 		if ($random === true)
 		{
-			$sql .= 'ORDER BY RAND()';
-			$sql .= 'LIMIT 0, '.intval($randomNumberProducts);
+			$sql .= ' ORDER BY RAND()';
+			$sql .= ' LIMIT 0, '.intval($randomNumberProducts);
 		}
 		else
 		{
-			$sql .= 'ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
+			$sql .= ' ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
 		}
 		
