@@ -346,7 +346,7 @@ class		Category extends ObjectModel
 				SELECT SUM(IFNULL(pa.`quantity`, p.`quantity`)) AS nb
 				FROM '._DB_PREFIX_.'product  p
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-				WHERE p.id_product IN (SELECT DISTINCT pc.id_product  FROM `'._DB_PREFIX_.'category_product` pc WHERE pc.`id_category` IN ('.$listCategories.'))';
+				WHERE p.id_product IN (SELECT pc.id_product  FROM `'._DB_PREFIX_.'category_product` pc WHERE pc.`id_category` IN ('.$listCategories.'))';
 			$result = Db::getInstance()->getRow($sql);
 		return $result['nb'];
 	}
