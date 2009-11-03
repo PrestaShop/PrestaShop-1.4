@@ -187,7 +187,7 @@ else
 }
 
 /* Display a maintenance page if shop is closed */
-if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP')))
+if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR !in_array($_SERVER['REMOTE_ADDR'], explode(',', Configuration::get('PS_MAINTENANCE_IP')))))
 {
 	header('HTTP/1.1 503 temporarily overloaded');
 	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
