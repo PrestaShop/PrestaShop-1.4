@@ -46,7 +46,7 @@ class AdminImages extends AdminTab
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 		 	{
-				if ($this->_regenerateThumbnails())
+				if ($this->_regenerateThumbnails(Tools::getValue('type')))
 					Tools::redirectAdmin($currentIndex.'&conf=9'.'&token='.$this->token);
 				$this->_errors[] = Tools::displayError('An error occured while thumbnails\' regeneration.');
 			}
@@ -146,12 +146,45 @@ class AdminImages extends AdminTab
 	{
 	 	global $currentIndex;
 
+		$types = array(
+			'categories' => $this->l('Categories'),
+			'manufacturers' => $this->l('Manufacturers'),
+			'suppliers' => $this->l('Suppliers'),
+			'scenes' => $this->l('Scenes'),
+			'products' => $this->l('Products')
+		);
 		echo '
 		<h2 class="space">'.$this->l('Regenerate thumbnails').'</h2>
 		'.$this->l('Regenerates thumbnails for all existing product images').'.<br /><br />';
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+			<select name="type" onchange="changeFormat(this)">
+				<option value="all">'.$this->l('All').'</option>';
+		foreach ($types as $k => $type)
+			echo '<option value="'.$k.'">'.$type.'</option>';
+		echo '
+			</select>&nbsp;';
+			
+		foreach ($types as $k => $type)
+		{
+			$formats = ImageType::getImagesTypes($k);
+			echo '
+			<select class="second-select" name="format_'.Tools::strtolower($type).'" id="format_'.Tools::strtolower($type).'" style="display:none">
+				<option value="all">'.$this->l('All').'</option>';
+			foreach ($formats as $format)
+				echo '<option value="'.$format['id_image_type'].'">'.$format['name'].'</option>';
+			echo '</select>';
+		}
+		echo '
+			<script>
+				function changeFormat(elt)
+				{
+					$elt = $(elt);
+					$(\'.second-select\').hide();
+					$(\'#format_\' + $elt.val()).show();
+				}
+			</script>
 			<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
 		</form>';
 	}
@@ -159,203 +192,119 @@ class AdminImages extends AdminTab
 	/**
 	  * Delete resized image then regenerate new one with updated settings
 	  */
-	private function _regenerateThumbnails()
+
+	// Delete old images
+	private function _deleteOldImages($dir, $type, $product = false)
 	{
-		@ini_set('max_execution_time', 3600);
-		
-		$productsTypes = ImageType::getImagesTypes('products');
-		$categoriesTypes = ImageType::getImagesTypes('categories');
-		$languages = Language::getLanguages();
-		$productsImages = Image::getAllImages();
-
-		/* Delete categories images */
-		$toDel = scandir(_PS_CAT_IMG_DIR_);
+		$toDel = scandir($dir);
 		foreach ($toDel AS $d)
-			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-				unlink(_PS_CAT_IMG_DIR_.$d);
-
-		/* Regenerate categories images */
-		$errors = false;
-		$categoriesImages = scandir(_PS_CAT_IMG_DIR_);
-		foreach ($categoriesImages as $image)
-			if (preg_match('/^[0-9]*\.jpg$/', $image))
-				foreach ($categoriesTypes AS $k => $imageType)
-					if (!imageResize(_PS_CAT_IMG_DIR_.$image, _PS_CAT_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
-						$errors = true;
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write category image. Please check the folder\'s writing permissions.');
-
-		/* Regenerate No-picture images */
-		$errors = false;
-		foreach ($categoriesTypes AS $k => $imageType)
-			foreach ($languages AS $language)
+			foreach ($type as $imageType)
 			{
-				$file = _PS_CAT_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize($file, _PS_CAT_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
-				intval($imageType['width']), intval($imageType['height'])))
-					$errors = true;
+				if (preg_match('/^[0-9]+\-'.($product ? '[0-9]+\-' : '').$imageType['name'].'\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
+					unlink($dir.$d);
 			}
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write no-picture image to the category images folder. Please check the folder\'s writing permissions.');
+	}
 
-		/* Delete manufacturers images */
-		$toDel = scandir(_PS_MANU_IMG_DIR_);
-		foreach ($toDel AS $d)
-			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-				unlink(_PS_MANU_IMG_DIR_.$d);
-
-		/* Regenerate manufacturers images */
-		$manufacturersTypes = ImageType::getImagesTypes('manufacturers');
-		$manufacturersImages = scandir(_PS_MANU_IMG_DIR_);
+	// Regenerate images
+	private function _regenerateNewImages($dir, $type, $productsImages = false)
+	{
 		$errors = false;
-		foreach ($manufacturersImages AS $image)
-			if (preg_match('/^[0-9]*\.jpg$/', $image))
-				foreach ($manufacturersTypes AS $k => $imageType)
-					if (!imageResize(_PS_MANU_IMG_DIR_.$image, _PS_MANU_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
-						$errors = true;
-
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write manufacturer images. Please check the folder\'s writing permissions.');
-
-		/* Regenerate No-picture images */
-		$errors = false;
-		foreach ($manufacturersTypes AS $k => $imageType)
-			foreach ($languages AS $language)
+		$toRegen = scandir($dir);
+		if (!$productsImages)
+			foreach ($toRegen as $image)
 			{
-				$file = _PS_MANU_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize($file, _PS_MANU_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
-				intval($imageType['width']), intval($imageType['height'])))
-					$errors = true;
+				if (preg_match('/^[0-9]*\.jpg$/', $image))
+					foreach ($type AS $k => $imageType)
+						if (!imageResize($dir.$image, $dir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+							$errors = true;
 			}
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write no-picture image to the manufacturer images folder. Please check the folder\'s writing permissions.');
-
-		/* Delete suppliers images */
-		$toDel = scandir(_PS_SUPP_IMG_DIR_);
-		foreach ($toDel AS $d)
-			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-				unlink(_PS_SUPP_IMG_DIR_.$d);
-
-		/* Regenerate suppliers images */
-		$suppliersTypes = ImageType::getImagesTypes('suppliers');
-		$suppliersImages = scandir(_PS_SUPP_IMG_DIR_);
-		$errors = false;
-		foreach ($suppliersImages AS $image)
-			if (preg_match('/^[0-9]*\.jpg$/', $image))
-				foreach ($suppliersTypes AS $k => $imageType)
-					if (!imageResize(_PS_SUPP_IMG_DIR_.$image, _PS_SUPP_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
-						$errors = true;
-
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write supplier images into the supplier images folder. Please check the folder\'s writing permissions.');
-
-		/* Regenerate No-picture images */
-		$errors = false;
-		foreach ($suppliersTypes AS $k => $imageType)
-			foreach ($languages AS $language)
-			{
-				$file = _PS_SUPP_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize($file, _PS_SUPP_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
-				intval($imageType['width']), intval($imageType['height'])))
-					$errors = true;
-			}
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write no-picture image into the suppliers images folder.<br />Please check its writing permissions.');
-
-		/* Delete scenes images */
-		$toDel = scandir(_PS_SCENE_IMG_DIR_);
-		foreach ($toDel AS $d)
-			if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-				unlink(_PS_SCENE_IMG_DIR_.$d);
-
-		/* Regenerate scenes images */
-		$scenesTypes = ImageType::getImagesTypes('scenes');
-		$scenesImages = scandir(_PS_SCENE_IMG_DIR_);
-		$errors = false;
-		foreach ($scenesImages AS $image)
-			if (preg_match('/^[0-9]*\.jpg$/', $image))
-				foreach ($scenesTypes AS $k => $imageType)
-					if (!imageResize(_PS_SCENE_IMG_DIR_.$image, _PS_SCENE_IMG_DIR_.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
-						$errors = true;
-
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write scene images into the scene images folder. Please check the folder\'s writing permissions.');
-
-		/* Regenerate No-picture images */
-		$errors = false;
-		foreach ($scenesTypes AS $k => $imageType)
-			foreach ($languages AS $language)
-			{
-				$file = _PS_SCENE_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize($file, _PS_SCENE_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg',
-				intval($imageType['width']), intval($imageType['height'])))
-					$errors = true;
-			}
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write no-picture image into the scenes images folder.<br />Please check its writing permissions.');
-			
-		/* Delete products images */
-		$toDel = scandir(_PS_PROD_IMG_DIR_);
-		foreach ($toDel AS $d)
-			if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-				unlink(_PS_PROD_IMG_DIR_.$d);
-		
-		
-		/* Regenerate No-picture images */
-		$errors = false;
-		foreach ($productsTypes AS $k => $imageType)
-			foreach ($languages AS $language)
-			{
-				$file = _PS_PROD_IMG_DIR_.$language['iso_code'].'.jpg';
-				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				$newFile = _PS_PROD_IMG_DIR_.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg';
-				if (!imageResize($file, $newFile,
-				intval($imageType['width']), intval($imageType['height'])))
-					$errors = true;
-			}
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write no-picture image to the product images folder. Please check the folder\'s writing permissions.');
-
-		/* Regenerate products images */
-		$errors = false;
-		foreach ($productsImages AS $k => $image)
+		else
 		{
-			if (file_exists(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg'))
-				foreach ($productsTypes AS $k => $imageType)
-				{
-					$newFile = _PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg';
-					if (!imageResize(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg', $newFile, intval($imageType['width']), intval($imageType['height'])))
-						$errors = true;
-				}
-		}
-		
-		// Hook watermark optimization
-		$result = Db::getInstance()->ExecuteS('
-		SELECT m.`name` FROM `'._DB_PREFIX_.'module` m
-		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
-		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
-		WHERE h.`name` = \'watermark\' AND m.`active` = 1');
-		if ($result AND sizeof($result))
+			$productsImages = Image::getAllImages();
 			foreach ($productsImages AS $k => $image)
-				if (file_exists(_PS_PROD_IMG_DIR_.$image['id_product'].'-'.$image['id_image'].'.jpg'))
+				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
+					foreach ($type AS $k => $imageType)
+						if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+							$errors = true;
+		}
+		return $errors;
+	}
+
+	// Regenerate no-pictures images
+	private function _regenerateNoPictureImages($dir, $type, $languages)
+	{
+		$errors = false;
+		foreach ($type AS $k => $imageType)
+			foreach ($languages AS $language)
+			{
+				$file = $dir.$language['iso_code'].'.jpg';
+				if (!file_exists($file))
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
+				if (!imageResize($file, $dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					$errors = true;
+			}
+		return $errors;
+	}
+
+	// Hook watermark optimization
+	private function _regenerateWatermark($dir)
+	{
+		$result = Db::getInstance()->ExecuteS('
+			SELECT m.`name` FROM `'._DB_PREFIX_.'module` m
+			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
+			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
+			WHERE h.`name` = \'watermark\' AND m.`active` = 1');
+		if ($result AND sizeof($result))
+		{
+			$productsImages = Image::getAllImages();
+			foreach ($productsImages AS $k => $image)
+				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 					foreach ($result AS $k => $module)
 						if ($moduleInstance = Module::getInstanceByName($module['name']) AND is_callable(array($moduleInstance, 'hookwatermark')))
 							call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $image['id_image'], 'id_product' => $image['id_product']));
+		}
+	}
 
-		if ($errors)
-			$this->_errors[] = Tools::displayError('Cannot write product image. Please check the folder\'s writing permissions.');
-			
+	private function _regenerateThumbnails($type = 'all')
+	{
+		@ini_set('max_execution_time', 3600);
+		$languages = Language::getLanguages();
+
+		$process =
+			array(
+				array('type' => 'categories', 'dir' => _PS_CAT_IMG_DIR_),
+				array('type' => 'manufacturers', 'dir' => _PS_MANU_IMG_DIR_),
+				array('type' => 'suppliers', 'dir' => _PS_SUPP_IMG_DIR_),
+				array('type' => 'scenes', 'dir' => _PS_SCENE_IMG_DIR_),
+				array('type' => 'products', 'dir' => _PS_PROD_IMG_DIR_),
+			);
+
+		// Launching generation process
+		foreach ($process as $k => $proc)
+		{
+			if ($type != 'all' && $type != $proc['type'])
+				continue ;
+
+			// Getting format generation
+			$formats = ImageType::getImagesTypes($proc['type']);
+			if ($type != 'all')
+			{
+				$format = strval(Tools::getValue('format_'.$type));
+				if ($format != 'all')
+					foreach ($formats as $k => $form)
+					{
+						if ($form['id_image_type'] != $format)
+							unset($formats[$k]);
+					}
+			}
+			$this->_deleteOldImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false));
+			if ($this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false)))
+				$this->_errors[] = Tools::displayError('Cannot write '.$proc['type'].' images. Please check the folder\'s writing permissions.');
+			if ($proc['type'] == 'products')
+				$this->_regenerateWatermark($proc['dir']);
+			if ($this->_regenerateNoPictureImages($proc['dir'], $formats, $languages))
+				$this->_errors[] = Tools::displayError('Cannot write no-picture image to '.$proc['type'].' images folder. Please check the folder\'s writing permissions.');
+		}
 		return (sizeof($this->_errors) > 0 ? false : true);
 	}
 }
-
-?>
