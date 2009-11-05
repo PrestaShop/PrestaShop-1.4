@@ -180,6 +180,7 @@ else
 		'currencies' => Currency::getCurrencies(),
 		'id_currency_cookie' => intval($currency->id),
 		'currency' => $currency,
+		'cookie' => $cookie,
 		'languages' => Language::getLanguages(),
 		'logged' => $cookie->isLogged(),
 		'page_name' => $page_name,
