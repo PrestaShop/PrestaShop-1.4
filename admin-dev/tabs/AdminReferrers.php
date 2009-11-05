@@ -279,8 +279,8 @@ class AdminReferrers extends AdminTab
 					<li>
 						'.$this->l('When using the simple mode, you can use some generic characters which can replace any characters:').'
 						<ul>
-							<li>'.$this->l('"_" will replace one character. If you want to use the real "_", you should type "\\\\_".').'</li>
-							<li>'.$this->l('"%" will replace any number of characters. If you want to use the real "%", you should type "\\\\%".').'</li>
+							<li>'.$this->l('"_" will replace one character. If you want to use the real "_", you should type').' "\\\\_".</li>
+							<li>'.$this->l('"%" will replace any number of characters. If you want to use the real "%", you should type').' "\\\\%".</li>
 						</ul>
 					</li>
 					<br />
