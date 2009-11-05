@@ -85,7 +85,7 @@ class StatsBestSuppliers extends ModuleGrid
 	public function getTotalCount()
 	{
 		return Db::getInstance()->getValue('
-		SELECT COUNT(DISTINCT(s.id_supplier)
+		SELECT COUNT(DISTINCT(s.id_supplier))
 		FROM '._DB_PREFIX_.'order_detail od
 		LEFT JOIN '._DB_PREFIX_.'product p ON p.id_product = od.product_id
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
