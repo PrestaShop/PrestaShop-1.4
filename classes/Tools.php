@@ -457,6 +457,7 @@ class Tools
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['meta_description']);
+					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
 			}
@@ -472,6 +473,7 @@ class Tools
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['meta_description']);
+					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
 			}
@@ -485,7 +487,7 @@ class Tools
 				WHERE id_lang = '.intval($id_lang).' AND id_cms = '.intval($id_cms));
 				if ($row)
 				{
-					$row['meta_title'] = Configuration::get('PS_SHOP_NAME').' - '.$row['meta_title'];
+					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
 			}
@@ -507,7 +509,7 @@ class Tools
 
 		/* Metas-tags */
 		$metas = Meta::getMetaByPage($page_name, $id_lang);
-		$ret['meta_title'] = (isset($metas['title']) AND $metas['title']) ? Configuration::get('PS_SHOP_NAME').' - '.$metas['title'] : Configuration::get('PS_SHOP_NAME');
+		$ret['meta_title'] = (isset($metas['title']) AND $metas['title']) ? $metas['title'].' - '.Configuration::get('PS_SHOP_NAME') : Configuration::get('PS_SHOP_NAME');
 		$ret['meta_description'] = (isset($metas['description']) AND $metas['description']) ? $metas['description'] : '';
 		$ret['meta_keywords'] = (isset($metas['keywords']) AND $metas['keywords']) ? $metas['keywords'] :  '';
 		return $ret;
@@ -519,7 +521,7 @@ class Tools
 		global $cookie;
 
 		if ($metaTags['meta_title'] == NULL)
-			$metaTags['meta_title'] = Configuration::get('PS_SHOP_NAME').' - '.$defaultValue;
+			$metaTags['meta_title'] = $defaultValue.' - '.Configuration::get('PS_SHOP_NAME');
 		if ($metaTags['meta_description'] == NULL)
 			$metaTags['meta_description'] = Configuration::get('PS_META_DESCRIPTION', intval($cookie->id_lang)) ? Configuration::get('PS_META_DESCRIPTION', intval($cookie->id_lang)) : '';
 		if ($metaTags['meta_keywords'] == NULL)
