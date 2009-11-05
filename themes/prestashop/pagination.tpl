@@ -45,6 +45,7 @@
 		{/if}
 		</ul>
 	{/if}
+	{if $nb_products > 10}
 		<form action="{if !is_array($requestNb)}{$requestNb}{else}{$requestNb.requestUrl}{/if}" method="get" class="pagination">
 			<p>
 				{if isset($query) AND $query}<input type="hidden" name="search_query" value="{$query|escape:'htmlall':'UTF-8'}" />{/if}
@@ -53,7 +54,9 @@
 				<label for="nb_item">{l s='items:'}</label>
 				<select name="n" id="nb_item">
 				{foreach from=$nArray item=nValue}
-					<option value="{$nValue|escape:'htmlall':'UTF-8'}" {if $n == $nValue}selected="selected"{/if}>{$nValue|escape:'htmlall':'UTF-8'}</option>
+					{if $nValue <= $nb_products}
+						<option value="{$nValue|escape:'htmlall':'UTF-8'}" {if $n == $nValue}selected="selected"{/if}>{$nValue|escape:'htmlall':'UTF-8'}</option>
+					{/if}
 				{/foreach}
 				</select>
 				{if is_array($requestNb)}
@@ -65,6 +68,7 @@
 				{/if}
 			</p>
 		</form>
+	{/if}
 	</div>
 	<!-- /Pagination -->
 {/if}
