@@ -70,8 +70,8 @@ class StatsSales extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Various order status').'</h2>
 			<p>
-				'.$this->l('In your back-office, you can find many order status : Awaiting cheque payment, Payment accepted, Preparation in progress, Shipping, Delivered, Canceled, Refund, Payment error, Out of stock, and Awaiting bank wire payment.
-				These status cannot be removed from the back-office, but you have the possibility to add some more.').'
+				'.$this->l('In your back-office, you can find many order status : Awaiting cheque payment, Payment accepted, Preparation in progress, Shipping, Delivered, Canceled, Refund, Payment error, Out of stock, and Awaiting bank wire payment.').'<br />
+				'.$this->l('These status cannot be removed from the back-office, but you have the possibility to add some more.').'
 			</p>
 		</fieldset>';
 		return $this->_html;

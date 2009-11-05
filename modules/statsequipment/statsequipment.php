@@ -79,9 +79,9 @@ class StatsEquipment extends ModuleGraph
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<center>
-				<p><img src="../img/admin/down.gif" />Determine the percentage of web browser used by your customers.</p>
+				<p><img src="../img/admin/down.gif" />'.$this->l('Determine the percentage of web browser used by your customers.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'wb')).'<br /><br />
-				<p><img src="../img/admin/down.gif" />Determine the percentage of operating systems used by your customers.</p>
+				<p><img src="../img/admin/down.gif" />'.$this->l('Determine the percentage of operating systems used by your customers.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'os')).'';
 		if ($equipment)
 		{
