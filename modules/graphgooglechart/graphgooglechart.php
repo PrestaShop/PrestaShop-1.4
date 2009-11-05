@@ -96,7 +96,11 @@ class GraphGoogleChart extends ModuleGraphEngine
 				$this->_values[$i] = ($this->_values[$i] * 100) / $max_y;
 			else
 				foreach ($this->_values as $k => $value)
+				{
+					if (!isset($this->_values[$k][$i]))
+						$this->_values[$k][$i] = 0;
 					$this->_values[$k][$i] = ($this->_values[$k][$i] * 100) / $max_y;
+				}
 		return ($url);
 	}
 	
