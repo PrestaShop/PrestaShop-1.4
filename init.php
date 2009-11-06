@@ -183,6 +183,7 @@ else
 		'cookie' => $cookie,
 		'languages' => Language::getLanguages(),
 		'logged' => $cookie->isLogged(),
+		'priceDisplay' => intval(Configuration::get('PS_PRICE_DISPLAY')),
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)));
 }
