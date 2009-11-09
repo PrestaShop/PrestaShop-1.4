@@ -870,3 +870,20 @@ form#import_form {
 .dragHandle{
 cursor: move;
 }
+
+p#mailResultCheck{
+	margin:2px 0;
+	padding-left:18px;
+	font-size:12px;
+}
+
+p.ok{
+	background:url('../img/admin/enabled.gif') no-repeat top left;
+	color:green;
+}
+
+p.fail{
+	background:url('../img/admin/disabled.gif') no-repeat top left;
+	font-weight:bold;
+	color:red;
+}

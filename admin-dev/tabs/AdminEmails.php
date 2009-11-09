@@ -55,6 +55,38 @@ class AdminEmails extends AdminPreferences
 	
 	public function display() {
 		$this->_displayForm('email', $this->_fieldsEmail, $this->l('E-mail'), 'width2', 'email');
+		$this->_displayMailTest();
+	}
+	
+	private function _displayMailTest()
+	{
+		echo '
+		<fieldset style="width:51%;margin-top:10px;">
+			<legend><img src="../img/admin/email.gif" alt="" /> '.$this->l('Test your mail configuration').'</legend>
+			<script type="text/javascript">
+				var textMsg = "'.$this->l('This is a test message, your server is now available to send email').'";
+				var textSubject = "'.$this->l('Test message - Prestashop').'";
+				var textSendOk = "'.$this->l('Mail is send').'";
+				var textSendError= "'.$this->l('Error: please check your configuration').'";
+				var errorMail = "'.$this->l('This email adress is wrong!').'";
+			</script>
+			<script type="text/javascript" src="'._PS_JS_DIR_.'/sendMailTest.js"></script>
+			<div style="clear: both; padding-top:15px;">
+				<label>'.$this->l('Send a mail test at:').'</label>
+				<div class="margin-form">
+					<input type="text" name="testEmail" id="testEmail" value="'.Configuration::get('PS_SHOP_EMAIL').'" style="width:210px;margin-bottom:4px;" /><br />
+					<input type="hidden" id="PS_MAIL_METHOD" name="PS_MAIL_METHOD" value="'.Configuration::get('PS_MAIL_METHOD').'" />
+					<input type="hidden" id="PS_MAIL_SERVER" name="PS_MAIL_SERVER" value="'.Configuration::get('PS_MAIL_SERVER').'" />
+					<input type="hidden" id="PS_MAIL_USER" name="PS_MAIL_USER" value="'.Configuration::get('PS_MAIL_USER').'" />
+					<input type="hidden" id="PS_MAIL_PASSWD" name="PS_MAIL_PASSWD" value="'.Configuration::get('PS_MAIL_PASSWD').'" />
+					<input type="hidden" id="PS_MAIL_SMTP_PORT" name="PS_MAIL_SMTP_PORT" value="'.Configuration::get('PS_MAIL_SMTP_PORT').'" />
+					<input type="hidden" id="PS_MAIL_SMTP_ENCRYPTION" name="PS_MAIL_SMTP_ENCRYPTION" value="'.Configuration::get('PS_MAIL_SMTP_ENCRYPTION').'" />
+					<input type="button" class="button" name="btEmailTest" id="btEmailTest" value="'.$this->l('Send a mail test').'" onClick="verifyMail();" /><br />
+					<p id="mailResultCheck" style="display:none;"></p>
+				</div>
+			</div>
+		</fieldset>
+		';
 	}
 }
 

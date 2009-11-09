@@ -109,4 +109,48 @@ class Mail
 	
 		catch (Swift_ConnectionException $e) { return false; }
 	}
+	
+	static public function sendMailTest($smtpChecked, $smtpServer, $content, $subject, $type, $to, $from, $smtpLogin, $smtpPassword, $smtpPort = 25, $smtpEncryption)
+	{
+		$swift = NULL;
+		$result = NULL;
+		try
+		{
+			
+			if($smtpChecked)
+			{
+				
+				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == "off") ? Swift_Connection_SMTP::ENC_OFF : (($smtpEncryption == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_SSL));
+				$smtp->setUsername($smtpLogin);
+				$smtp->setpassword($smtpPassword);
+				$smtp->setTimeout(5);
+				$swift = new Swift($smtp);
+			}
+			else
+			{
+				$swift = new Swift(new Swift_Connection_NativeMail());
+			}
+			
+			$message = new Swift_Message($subject, $content, $type);
+			
+			if ($swift->send($message, $to, $from))
+			{
+				$result = true;
+			}
+			else
+			{
+				$result = 999;
+			}
+			$swift->disconnect();
+		}
+		catch (Swift_Connection_Exception $e)
+		{
+		 $result = $e->getCode();
+		}
+		catch (Swift_Message_MimeException $e)
+		{
+		 $result = $e->getCode();
+		}
+		return $result;	
+	}
 }
