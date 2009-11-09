@@ -91,6 +91,7 @@ class		Language extends ObjectModel
 			'order_canceled.html',			'order_canceled.txt',
 			'order_conf.html',				'order_conf.txt',
 			'order_customer_comment.html',	'order_customer_comment.txt',
+			'order_merchant_comment.html',	'order_merchant_comment.txt',
 			'order_return_state.html',		'order_return_state.txt',
 			'outofstock.html',				'outofstock.txt',
 			'password.html',				'password.txt',
