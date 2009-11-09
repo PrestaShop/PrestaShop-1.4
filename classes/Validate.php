@@ -365,7 +365,7 @@ class Validate
 	*/
 	static public function isCityName($city)
 	{
-		return preg_match('/^[^!<>;?=+@#"°{}_$%0-9]*$/ui', $city);
+		return preg_match('/^[^!<>;?=+@#"°{}_$%]*$/ui', $city);
 	}
 
 	/**
