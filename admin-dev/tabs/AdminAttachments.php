@@ -56,6 +56,7 @@ class AdminAttachments extends AdminTab
 						if (!copy($_FILES['file']['tmp_name'], $uploadDir.$uniqid))
 							$this->_errors[] = $this->l('File copy failed');
 						@unlink($_FILES['file']['tmp_name']);
+						$_POST['name_2'] .= '.'.pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
 						$_POST['file'] = $uniqid;
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
