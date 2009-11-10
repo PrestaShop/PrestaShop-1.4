@@ -1274,8 +1274,8 @@ class		Product extends ObjectModel
 		$attribute_price = $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		if (isset($result['attribute_price']))
 			$price += $attribute_price;
-		$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'],
-				$price, $usetax, floatval($result['rate']));
+		if ($only_reduc OR $usereduc)
+			$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
 
 		// Only reduction
 		if ($only_reduc)
