@@ -155,24 +155,6 @@ class Gsitemap extends Module
             $sitemap->addChild('lastmod', substr($product['date_upd'], 0, 10));
             $sitemap->addChild('changefreq', 'weekly');
         }
-		
-        $images = Db::getInstance()->ExecuteS('
-		SELECT *
-		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
-		LEFT JOIN '._DB_PREFIX_.'image_lang il ON i.id_image = il.id_image AND il.id_lang = '.intval($defaultLanguage).'
-		WHERE p.`active` = 1
-		ORDER BY p.id_product');
-        foreach($images as $image)
-        {
-				$image['legend'] = str_replace('- ', '', $image['legend']);
-            $sitemap = $xml->addChild('url');
-				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$link->getImageLink(Tools::link_rewrite($image['legend']), $image['id_product'].'-'.$image['id_image'], 'thickbox');
-            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
-            $sitemap->addChild('priority', 0.4);
-            $sitemap->addChild('lastmod', substr($image['date_upd'], 0, 10));
-            $sitemap->addChild('changefreq', 'monthly');
-        }
 
         $xmlString = $xml->asXML();
 		
