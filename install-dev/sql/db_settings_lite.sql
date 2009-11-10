@@ -971,9 +971,9 @@ INSERT INTO `PREFIX_state` (`id_state`, `id_country`, `id_zone`, `name`, `iso_co
 (52, 21, 2, 'US Virgin Islands', 'VI', 1);
 
 INSERT INTO `PREFIX_currency` (name, iso_code, sign, blank, conversion_rate, format, deleted) VALUES
-('Euro', 'EUR', '&#128;', 1, 1, 2, 0),
-('Dollar', 'USD', '&#36;', 0, 1.47, 1, 0),
-('Pound', 'GBP', '&#163;', 0, 0.8, 1, 0);
+('Euro', 'EUR', '€', 1, 1, 2, 0),
+('Dollar', 'USD', '$', 0, 1.47, 1, 0),
+('Pound', 'GBP', '£', 0, 0.8, 1, 0);
 
 INSERT INTO `PREFIX_tax` (`id_tax`, `rate`) VALUES
 (1, 19.6),
