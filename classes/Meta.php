@@ -48,7 +48,7 @@ class		Meta extends ObjectModel
 	{
 		$selectedPages = array();
 		if (!$files = scandir(_PS_ROOT_DIR_))
-			die(Tools::displayError('Cannot scan base URI'));
+			die(Tools::displayError('Cannot scan root directory'));
 		
 		// Exclude pages forbidden
 		$exludePages = array(
