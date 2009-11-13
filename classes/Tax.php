@@ -170,9 +170,9 @@ class Tax extends ObjectModel
 	{
 		global $cart, $cookie, $defaultCountry;
 
-		$id_address_invoice = intval((Validate::isLoadedObject($cart) AND $cart->id_address_invoice) ? $cart->id_address_invoice : (isset($cookie->id_address_invoice) ? $cookie->id_address_invoice : 0));
+		$id_address_delivery = intval((Validate::isLoadedObject($cart) AND $cart->id_address_delivery) ? $cart->id_address_delivery : (isset($cookie->id_address_delivery) ? $cookie->id_address_delivery : 0));
 		/* If customer has an address (implies that he is registered and logged) */
-		if ($id_address_invoice AND $address_ids = Address::getCountryAndState($id_address_invoice))
+		if ($id_address_delivery AND $address_ids = Address::getCountryAndState($id_address_delivery))
 		{
 			$id_zone_country = Country::getIdZone(intval($address_ids['id_country']));
 			/* If customer's invoice address is inside a state */
@@ -193,7 +193,7 @@ class Tax extends ObjectModel
 				die(Tools::displayError('Unknown tax behavior!'));
 			}
 			/* Else getting country zone tax */
-			if (!$id_zone = Address::getZoneById($id_address_invoice))
+			if (!$id_zone = Address::getZoneById($id_address_delivery))
 				die(Tools::displayError());
 			return $productTax * Tax::zoneHasTax(intval($id_tax), intval($id_zone));
 		}
