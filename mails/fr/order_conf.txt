@@ -1,4 +1,4 @@
-Bonjour {firstname} {lastname}, merci d'avoir passé commande chez {shop_name} !
+﻿Bonjour {firstname} {lastname}, merci d'avoir passé commande chez {shop_name} !
 
 Détails de la commande
 
@@ -23,7 +23,7 @@ Livraison
 	{delivery_address1}
 	{delivery_address2}
 	{delivery_postal_code} {delivery_city}
-	{delivery_country} {delivery state}
+	{delivery_country} {delivery_state}
 	{delivery_other}
 
 	Adresse de facturation :
@@ -33,7 +33,7 @@ Livraison
 	{invoice_address1}
 	{invoice_address2}
 	{invoice_postal_code} {invoice_city}
-	{invoice_country} {invoice state}
+	{invoice_country} {invoice_state}
 	{invoice_other}
 
 Vous pouvez accéder au suivi de votre commande et télécharger votre facture dans "Historique des commandes" de la rubrique "Mon compte" sur notre site.
