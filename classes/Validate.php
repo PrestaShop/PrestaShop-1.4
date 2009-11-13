@@ -501,7 +501,7 @@ class Validate
 	*/
 	static public function isEan13($ean13)
 	{
-		return !$ean13 OR preg_match('/[0-9]{0,13}/ui', $ean13);
+		return !$ean13 OR preg_match('/^[0-9]{0,13}$/ui', $ean13);
 	}
 
 	/**
