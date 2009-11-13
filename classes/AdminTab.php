@@ -995,9 +995,11 @@ abstract class AdminTab
 			<script type="text/javascript" src="../js/admin-dnd.js"></script>
 			';
 		}
-		echo '<table'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category', '1'))) ? $id_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_product' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0"><tr class="nodrag nodrop">';
+		echo '<table'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category', '1'))) ? $id_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_product' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0"><tr class="nodrag nodrop">
+				<th>';
 		if ($this->delete)
-			echo '<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" /></th>';
+			echo '<input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" />';
+		echo '</th>';
 		foreach ($this->fieldsDisplay AS $key => $params)
 		{
 			echo '
@@ -1014,10 +1016,11 @@ abstract class AdminTab
 		/* Check if object can be modified, deleted or detailed */
 		if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
 			echo '<th style="width: 52px">'.$this->l('Actions').'</th>';
-		echo '</tr><tr class="nodrag nodrop" style="height: 35px;">';
-
+		echo '</tr><tr class="nodrag nodrop" style="height: 35px;">
+				<td class="center">';
 		if ($this->delete)
-			echo '<td class="center">--</td>';
+			echo '--';
+		echo '</td>';
 
 		/* Javascript hack in order to catch ENTER keypress event */
 		$keyPress = 'onkeypress="formSubmit(event, \'submitFilterButton_'.$this->table.'\');"';
