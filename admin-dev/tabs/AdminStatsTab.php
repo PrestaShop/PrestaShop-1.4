@@ -32,20 +32,38 @@ abstract class AdminStatsTab extends AdminPreferences
 			if (!Validate::isDate($from = Tools::getValue('datepickerFrom')) OR !Validate::isDate($to = Tools::getValue('datepickerTo')))
 				$this->_errors[] = Tools::displayError('date specified not valid');
 		}
-		if (Tools::isSubmit('submitDateToday'))
+		if (Tools::isSubmit('submitDateDay'))
 		{
 			$from = date('Y-m-d');
 			$to = date('Y-m-d');
+		}
+		if (Tools::isSubmit('submitDateDayPrev'))
+		{
+			$yesterday = time() - 60*60*24;
+			$from = date('Y-m-d', $yesterday);
+			$to = date('Y-m-d', $yesterday);
 		}
 		if (Tools::isSubmit('submitDateMonth'))
 		{
 			$from = date('Y-m-01');
 			$to = date('Y-m-t');
 		}
+		if (Tools::isSubmit('submitDateMonthPrev'))
+		{
+			$m = (date('m') == 1 ? 12 : date('m') - 1);
+			$y = ($m == 12 ? date('Y') - 1 : date('Y'));
+			$from = $y.'-'.$m.'-01';
+			$to = $y.'-'.$m.date('-t', mktime(12, 0, 0, $m, 15, $y));
+		}
 		if (Tools::isSubmit('submitDateYear'))
 		{
 			$from = date('Y-01-01');
 			$to = date('Y-12-31');
+		}
+		if (Tools::isSubmit('submitDateYearPrev'))
+		{
+			$from = (date('Y') - 1).date('-01-01');
+			$to = (date('Y') - 1).date('-12-31');
 		}
 		if (isset($from) AND isset($to) AND !sizeof($this->_errors))
 		{
@@ -118,7 +136,7 @@ abstract class AdminStatsTab extends AdminPreferences
 	public function displayCalendar()
 	{
 		echo '<div id="calendar">';
-		echo self::displayCalendarStatic(array('Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Today' => $this->l('Today', 'AdminStatsTab'), 
+		echo self::displayCalendarStatic(array('Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Day' => $this->l('Day', 'AdminStatsTab'), 
 										'Month' => $this->l('Month', 'AdminStatsTab'), 'Year' => $this->l('Year', 'AdminStatsTab')));
 		echo '<div class="clear space">&nbsp;</div></div>';
 	}
@@ -133,9 +151,12 @@ abstract class AdminStatsTab extends AdminPreferences
 		<fieldset style="width: 200px; font-size:13px;"><legend><img src="../img/admin/date.png" /> '.$translations['Calendar'].'</legend>
 			<div>
 				<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-					<input type="submit" name="submitDateToday" class="button" value="'.$translations['Today'].'">
+					<input type="submit" name="submitDateDay" class="button" value="'.$translations['Day'].'">
 					<input type="submit" name="submitDateMonth" class="button" value="'.$translations['Month'].'">
-					<input type="submit" name="submitDateYear" class="button" value="'.$translations['Year'].'">
+					<input type="submit" name="submitDateYear" class="button" value="'.$translations['Year'].'"><br />
+					<input type="submit" name="submitDateDayPrev" class="button" value="'.$translations['Day'].'-1">
+					<input type="submit" name="submitDateMonthPrev" class="button" value="'.$translations['Month'].'-1">
+					<input type="submit" name="submitDateYearPrev" class="button" value="'.$translations['Year'].'-1">
 					<p>From: <input type="text" name="datepickerFrom" id="datepickerFrom" value="'.Tools::getValue('datepickerFrom', $employee->stats_date_from).'"></p>
 					<p>To: <input type="text" name="datepickerTo" id="datepickerTo" value="'.Tools::getValue('datepickerTo', $employee->stats_date_to).'"></p>
 					<input type="submit" name="submitDatePicker" class="button" />

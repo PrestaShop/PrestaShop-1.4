@@ -73,20 +73,38 @@ class TrackingFront extends Module
 			$cookie->stats_date_from = Tools::getValue('datepickerFrom');
 			$cookie->stats_date_to = Tools::getValue('datepickerTo');
 		}
-		if (Tools::isSubmit('submitDateToday'))
+		if (Tools::isSubmit('submitDateDay'))
 		{
-			$cookie->stats_date_from = date('Y-m-d');
-			$cookie->stats_date_to = date('Y-m-d');
+			$from = date('Y-m-d');
+			$to = date('Y-m-d');
+		}
+		if (Tools::isSubmit('submitDateDayPrev'))
+		{
+			$yesterday = time() - 60*60*24;
+			$from = date('Y-m-d', $yesterday);
+			$to = date('Y-m-d', $yesterday);
 		}
 		if (Tools::isSubmit('submitDateMonth'))
 		{
-			$cookie->stats_date_from = date('Y-m-01');
-			$cookie->stats_date_to = date('Y-m-t');
+			$from = date('Y-m-01');
+			$to = date('Y-m-t');
+		}
+		if (Tools::isSubmit('submitDateMonthPrev'))
+		{
+			$m = (date('m') == 1 ? 12 : date('m') - 1);
+			$y = ($m == 12 ? date('Y') - 1 : date('Y'));
+			$from = $y.'-'.$m.'-01';
+			$to = $y.'-'.$m.date('-t', mktime(12, 0, 0, $m, 15, $y));
 		}
 		if (Tools::isSubmit('submitDateYear'))
 		{
-			$cookie->stats_date_from = date('Y-01-01');
-			$cookie->stats_date_to = date('Y-12-31');
+			$from = date('Y-01-01');
+			$to = date('Y-12-31');
+		}
+		if (Tools::isSubmit('submitDateYearPrev'))
+		{
+			$from = (date('Y') - 1).date('-01-01');
+			$to = (date('Y') - 1).date('-12-31');
 		}
 	}
 	
