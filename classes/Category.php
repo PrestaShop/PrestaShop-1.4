@@ -400,7 +400,7 @@ class		Category extends ObjectModel
 			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON p.`id_product` = cp.`id_product`
 			WHERE cp.`id_category` = '.intval($this->id).($active ? ' AND p.`active` = 1' : '').'
-			'.($id_supplier ? 'AND p.id_supplier = '.$id_supplier : '').'');
+			'.($id_supplier ? 'AND p.id_supplier = '.intval($id_supplier) : ''));
 			return isset($result) ? $result['total'] : 0;
 		}
 

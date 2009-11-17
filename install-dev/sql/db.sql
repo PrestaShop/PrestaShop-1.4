@@ -193,7 +193,8 @@ CREATE TABLE `PREFIX_category` (
 CREATE TABLE `PREFIX_category_group` (
   `id_category` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
-  KEY `category_group_index` (`id_category`,`id_group`)
+  KEY `category_group_index` (`id_category`,`id_group`),
+  KEY `id_category` (`id_category`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_category_lang` (
@@ -351,14 +352,16 @@ CREATE TABLE `PREFIX_customer` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_customer`),
   UNIQUE KEY `customer_email` (`email`),
-  KEY `customer_login` (`email`,`passwd`)
+  KEY `customer_login` (`email`,`passwd`),
+  KEY `id_customer_passwd` (`id_customer`,`passwd`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customer_group` (
   `id_customer` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
   PRIMARY KEY `customer_group_index` (`id_customer`,`id_group`),
-  INDEX customer_login(id_group)
+  INDEX customer_login(id_group),
+  KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customization` (
@@ -569,7 +572,8 @@ CREATE TABLE `PREFIX_hook_module` (
   `id_hook` int(10) unsigned NOT NULL,
   `position` tinyint(2) unsigned NOT NULL,
   PRIMARY KEY  (`id_module`,`id_hook`),
-  KEY `id_hook` (`id_hook`)
+  KEY `id_hook` (`id_hook`),
+  KEY `id_module` (`id_module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_hook_module_exceptions` (
@@ -586,7 +590,9 @@ CREATE TABLE `PREFIX_image` (
   `position` tinyint(2) unsigned NOT NULL default '0',
   `cover` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_image`),
-  KEY `image_product` (`id_product`)
+  KEY `image_product` (`id_product`),
+  KEY `product_position` (`id_product`,`position`),
+  KEY `id_product_cover` (`id_product`,`cover`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_image_lang` (
@@ -1198,7 +1204,8 @@ CREATE TABLE `PREFIX_tag` (
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(32) NOT NULL,
   PRIMARY KEY  (`id_tag`),
-  KEY `tag_name` (`name`)
+  KEY `tag_name` (`name`),
+  KEY `id_lang` (`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_tax` (

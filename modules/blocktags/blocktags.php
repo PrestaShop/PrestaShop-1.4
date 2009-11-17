@@ -69,8 +69,7 @@ class BlockTags extends Module
 	{
 		global $smarty;
 
-		$numberTags = intval(Configuration::get('BLOCKTAGS_NBR'));
-		$tags = Tag::getMainTags(intval($params['cookie']->id_lang), $numberTags);
+		$tags = Tag::getMainTags(intval($params['cookie']->id_lang), intval(Configuration::get('BLOCKTAGS_NBR')));
 		if (!sizeof($tags))
 			return '';
 		$maxFontSize = 18;

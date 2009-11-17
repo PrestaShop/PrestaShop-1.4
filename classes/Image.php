@@ -42,6 +42,8 @@ class		Image extends ObjectModel
 	protected 	$table = 'image';
 	protected 	$identifier = 'id_image';	
 	
+	private	static $_cacheGetSize = array();
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -248,16 +250,18 @@ class		Image extends ObjectModel
 		SET `position` = `position`'.($direction ? '+1' : '-1').'
 		WHERE `id_product` = '.intval($this->id_product).'
 		AND `position` = '.($direction ? $position - 1 : $position + 1));
+		
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = `position`'.($direction ? '-1' : '+1').'
-		WHERE `id_product` = '.intval($this->id_product).'
-		AND `id_image` = '.intval($this->id).'');
+		WHERE `id_image` = '.intval($this->id));
 	}
 	
 	static public function getSize($type)
 	{
-	 	return Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
+		if (!isset(self::$_cacheGetSize[$type]) OR self::$_cacheGetSize[$type] === NULL)
+			self::$_cacheGetSize[$type] = Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
+	 	return self::$_cacheGetSize[$type];
 	}
 }
 

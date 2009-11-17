@@ -71,7 +71,7 @@ class		State extends ObjectModel
 	    $result = Db::getInstance()->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'state`
-		WHERE `id_state` = '.intval($id_state).'');
+		WHERE `id_state` = '.intval($id_state));
 
         return $result['name'];
     }

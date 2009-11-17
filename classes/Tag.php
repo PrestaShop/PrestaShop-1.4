@@ -115,9 +115,9 @@ class Tag extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT t.name, COUNT(pt.id_tag) AS times
 		FROM `'._DB_PREFIX_.'product_tag` pt
-		LEFT JOIN `'._DB_PREFIX_.'tag` t ON t.id_tag = pt.id_tag
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = pt.id_product
-		WHERE id_lang = '.intval($id_lang).'
+		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (t.id_tag = pt.id_tag)
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = pt.id_product)
+		WHERE t.`id_lang` = '.intval($id_lang).'
 		AND p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`

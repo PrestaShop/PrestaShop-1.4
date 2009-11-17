@@ -63,7 +63,7 @@ class			Hook extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
-		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.id_module = m.id_module
+		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
 		WHERE hm.id_hook = '.intval($id_hook));
 	}
 	
@@ -72,8 +72,8 @@ class			Hook extends ObjectModel
 		return Db::getInstance()->GetRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
-		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.id_module = m.id_module
-		WHERE hm.id_hook = '.intval($id_hook).' AND m.id_module = '.intval($id_module).'');
+		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
+		WHERE hm.id_hook = '.intval($id_hook).' AND m.id_module = '.intval($id_module));
 	}
 	
 	static public function newOrder($cart, $order, $customer, $currency, $orderStatus)

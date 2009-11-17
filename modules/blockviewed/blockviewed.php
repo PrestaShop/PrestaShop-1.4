@@ -59,45 +59,61 @@ class BlockViewed extends Module
 		</form>';
 		return $output;
 	}
-
+	
 	function hookRightColumn($params)
 	{
 		global $link, $smarty;
+		
 		$id_product = intval(Tools::getValue('id_product'));
-		if ($id_product)
-			$product = new Product($id_product);
 		$productsViewed = (isset($params['cookie']->viewed) AND !empty($params['cookie']->viewed)) ? array_slice(explode(',', $params['cookie']->viewed), 0, Configuration::get('PRODUCTS_VIEWED_NBR')) : array();
+		
 		if (sizeof($productsViewed))
 		{
-			$productsViewedObj = array();
+			$defaultCover = Language::getIsoById($params['cookie']->id_lang).'-default';
+		
+			$productIds = implode(',', $productsViewed);
 			
+			$productsImages = Db::getInstance()->ExecuteS('
+			SELECT i.id_image, i.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
+			FROM '._DB_PREFIX_.'image i
+			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
+			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = i.id_product)
+			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
+			WHERE i.id_product IN ('.$productIds.') 
+			AND i.cover = 1 
+			AND	il.id_lang = '.intval($params['cookie']->id_lang).' AND il.id_lang = '.intval($params['cookie']->id_lang));
+
+			$productsImagesArray = array();
+			foreach ($productsImages AS $pi)
+				$productsImagesArray[$pi['id_product']] = $pi;
+			
+			$productsViewedObj = array();
 			foreach ($productsViewed AS $productViewed)
 			{
-				$obj = new Product(intval($productViewed), false, intval($params['cookie']->id_lang));
-				if (!Validate::isLoadedObject($obj) OR !$obj->active)
+				$obj = (object) 'Product';
+				$obj->active = $productsImagesArray[$pi['id_product']]['active'];
+				if (!$obj->active)
 					continue;
 				else
 				{
-					$images = $obj->getImages(intval($params['cookie']->id_lang));
-					foreach ($images AS $k => $image)
-					{
-						if ($image['cover'])
-						{
-							$obj->cover = $obj->id.'-'.$image['id_image'];
-							$obj->legend = $image['legend'];
-							break;
-						}
-					}
+					$obj->id = intval($productsImagesArray[$pi['id_product']]['id_product']);
+					$obj->cover = intval($productsImagesArray[$pi['id_product']]['id_product']).'-'.intval($productsImagesArray[$pi['id_product']]['id_image']);
+					$obj->legend = $productsImagesArray[$pi['id_product']]['legend'];
+					$obj->name = $productsImagesArray[$pi['id_product']]['name'];
+					$obj->description_short = $productsImagesArray[$pi['id_product']]['description_short'];
+					$obj->link_rewrite = $productsImagesArray[$pi['id_product']]['link_rewrite'];
+					
 					if (!isset($obj->cover))
 					{
-						$obj->cover = Language::getIsoById($params['cookie']->id_lang).'-default';
+						$obj->cover = $defaultCover;
 						$obj->legend = '';
 					}
 					$productsViewedObj[] = $obj;
 				}
 			}
-			if (isset($product) AND $product AND !in_array($product->id, $productsViewed))
-				array_unshift($productsViewed, $product->id);
+			
+			if ($id_product AND !in_array($id_product, $productsViewed))
+				array_unshift($productsViewed, $id_product);
 			$viewed = '';
 			foreach ($productsViewed AS $id_product_viewed)
 				$viewed .= intval($id_product_viewed).',';
@@ -106,13 +122,14 @@ class BlockViewed extends Module
 			if (!sizeof($productsViewedObj))
 				return ;
 			
-			$smarty->assign(array(
-				'productsViewedObj' => $productsViewedObj,
-				'mediumSize' => Image::getSize('medium')));
+			// $smarty->assign(array(
+				// 'productsViewedObj' => $productsViewedObj,
+				// 'mediumSize' => Image::getSize('medium')));
+			
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
-		elseif (isset($product) AND Validate::isLoadedObject($product))
-			$params['cookie']->viewed = intval($product->id);
+		elseif ($id_product)
+			$params['cookie']->viewed = intval($id_product);
 		return ;
 	}
 

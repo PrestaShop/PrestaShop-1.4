@@ -205,8 +205,11 @@ class		Product extends ObjectModel
 			$this->tax_rate = floatval($tax->rate);
 			$this->new = $this->isNew();
 		}
-		$this->category = Category::getLinkRewrite(intval($this->id_category_default), intval($id_lang));
-		$this->tags = Tag::getProductTags($this->id);
+		
+		if ($this->id_category_default)
+			$this->category = Category::getLinkRewrite(intval($this->id_category_default), intval($id_lang));
+		if ($this->id)
+			$this->tags = Tag::getProductTags(intval($this->id));
 	}
 
 	public function getFields()
