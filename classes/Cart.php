@@ -62,6 +62,7 @@ class		Cart extends ObjectModel
 	private		$_nb_products = NULL;
 	private		$_products = NULL;
 	private		$_totalWeight = NULL;
+	private		$_taxCalculationMethod = PS_TAX_EXC;
 	private	static $_discounts = NULL;
 	private	static $_discountsLite = NULL;
 	private	static $_carriers = NULL;
@@ -87,6 +88,12 @@ class		Cart extends ObjectModel
 		$fields['date_upd'] = pSQL($this->date_upd);
 
 		return $fields;
+	}
+
+	public function __construct($id = NULL, $id_lang = NULL)
+	{
+		parent::__construct($id, $id_lang);
+		$this->_taxCalculationMethod = $this->id_customer ? Group::getPriceDisplayMethod(intval($this->id_customer)) : Group::getDefaultPriceDisplayMethod();
 	}
 
 	public function add($autodate = true, $nullValues = false)
@@ -137,11 +144,11 @@ class		Cart extends ObjectModel
 			$categories = Discount::getCategories($discount['id_discount']);
 			$in_category = false;
 			foreach ($products AS $product)
-					if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
-					{
-						$in_category = true;
-						break;
-					}
+				if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
+				{
+					$in_category = true;
+					break;
+				}
 			if (!$in_category)
 				unset($result[$k]);
 		}
@@ -242,10 +249,19 @@ class		Cart extends ObjectModel
 			$row['stock_quantity'] = intval($row['quantity']);
 			$row['weight'] = $row['weight_attribute'];
 			$row['quantity'] = intval($row['cart_quantity']);
-			$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity']));
-			$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity']));
-			$row['total'] = $row['price'] * intval($row['quantity']);
-			$row['total_wt'] = $row['price_wt'] * intval($row['quantity']);
+			if ($this->_taxCalculationMethod == PS_TAX_EXC)
+			{
+				$row['price'] = Tools::ceilf(Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity'])), 2); // Here taxes are computed only once the quantity has been applied to the product price
+				$row['price_wt'] = 0.0;
+				$row['total_wt'] = $row['price'] * floatval($row['quantity']) * (1 + floatval($row['rate']) / 100);
+			}
+			else
+			{
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['quantity']);
+				$row['price_wt'] = Tools::ceilf(Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 6, NULL, false, true, $row['quantity']), 2);
+				$row['total_wt'] = $row['price_wt'] * intval($row['quantity']);
+			}
+			$row['total'] = Tools::ceilf($row['price'] * intval($row['quantity']), 2);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
@@ -554,7 +570,7 @@ class		Cart extends ObjectModel
 		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
 	}
 	
-	function getOrderTotal($withTaxes = true, $type = 3)
+	public function getOrderTotal($withTaxes = true, $type = 3)
 	{
 		if (!$this->id)
 			return 0;
@@ -571,15 +587,26 @@ class		Cart extends ObjectModel
 		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost(NULL, intval($withTaxes)) : 0;
 		if ($type == 7)
 			$type = 1;
-			
+
 		$products = $this->getProducts();
 		$order_total = 0;
 		foreach ($products AS $product)
 		{
-			$price = floatval(Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']));
-/*if ($type == 1 && $withTaxes)
-p($price);*/
-			$total_price = $price * intval($product['quantity']);
+			if ($this->_taxCalculationMethod == PS_TAX_EXC)
+			{
+				// Here taxes are computed only once the quantity has been applied to the product price
+				$price = Tools::ceilf(Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']), 2);
+				$total_price = $price * intval($product['quantity']);
+				if ($withTaxes)
+					$total_price = Tools::ceilf($total_price * (1 + floatval($product['rate']) / 100), 2);
+			}
+			else
+			{
+				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']);
+				if ($withTaxes)
+					$price = Tools::ceilf($price, 2);
+				$total_price = $withTaxes ? Tools::ceilf($price * intval($product['quantity']), 2) : Tools::floorf($price * intval($product['quantity']), 2);
+			}
 			$order_total += $total_price;
 		}
 		$order_total_products = $order_total;
@@ -875,17 +902,17 @@ p($price);*/
 			'carrier' => new Carrier(intval($this->id_carrier), $cookie->id_lang),
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(),
-			'total_discounts' => number_format($this->getOrderTotal(true, 2), 2, '.', ''),
-			'total_discounts_tax_exc' => number_format($this->getOrderTotal(false, 2), 2, '.', ''),
-			'total_wrapping' => number_format($this->getOrderTotal(true, 6), 2, '.', ''),
-			'total_wrapping_tax_exc' => number_format($this->getOrderTotal(false, 6), 2, '.', ''),
-			'total_shipping' => number_format($this->getOrderShippingCost(), 2, '.', ''),
-			'total_shipping_tax_exc' => number_format($this->getOrderShippingCost(NULL, false), 2, '.', ''),
-			'total_products_wt' => number_format($this->getOrderTotal(true, 1), 2, '.', ''),
-			'total_products' => number_format($this->getOrderTotal(false, 1), 2, '.', ''),
-			'total_price' => number_format($this->getOrderTotal(), 2, '.', ''),
-			'total_tax' => number_format($this->getOrderTotal() - $this->getOrderTotal(false), 2, '.', ''),
-			'total_price_without_tax' => number_format($this->getOrderTotal(false), 2, '.', ''));
+			'total_discounts' => $this->getOrderTotal(true, 2),
+			'total_discounts_tax_exc' => $this->getOrderTotal(false, 2),
+			'total_wrapping' => $this->getOrderTotal(true, 6),
+			'total_wrapping_tax_exc' => $this->getOrderTotal(false, 6),
+			'total_shipping' => $this->getOrderShippingCost(),
+			'total_shipping_tax_exc' => $this->getOrderShippingCost(NULL, false),
+			'total_products_wt' => $this->getOrderTotal(true, 1),
+			'total_products' => $this->getOrderTotal(false, 1),
+			'total_price' => $this->getOrderTotal(),
+			'total_tax' => $this->getOrderTotal() - $this->getOrderTotal(false),
+			'total_price_without_tax' => $this->getOrderTotal(false));
 	}
 
 	/**

@@ -20,7 +20,7 @@ else
 {
 	/* or ask for confirmation */ 
 	$smarty->assign(array(
-		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
+		'total' => $cart->getOrderTotal(true, 3),
 		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/cashondelivery/'
 	));
 

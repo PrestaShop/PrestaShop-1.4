@@ -110,6 +110,8 @@ $protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $proto
 $protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
 define('_PS_BASE_URL_', $protocol.$server_host);
 
+Product::initPricesComputation();
+
 if (!Configuration::get('PS_THEME_V11'))
 {
 	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
@@ -145,7 +147,7 @@ if (!Configuration::get('PS_THEME_V11'))
 		'logged' => $cookie->isLogged(),
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-		'priceDisplay' => intval(Configuration::get('PS_PRICE_DISPLAY'))
+		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod())
 	));
 }
 else
@@ -183,7 +185,7 @@ else
 		'cookie' => $cookie,
 		'languages' => Language::getLanguages(),
 		'logged' => $cookie->isLogged(),
-		'priceDisplay' => intval(Configuration::get('PS_PRICE_DISPLAY')),
+		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod()),
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)));
 }

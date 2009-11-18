@@ -5,7 +5,7 @@ class BlockCart extends Module
     private $_html = '';
     private $_postErrors = array();
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blockcart';
 		$this->tab = 'Blocks';
@@ -17,7 +17,7 @@ class BlockCart extends Module
 		$this->description = $this->l('Adds a block containing the customer\'s shopping cart');
 	}
 	
-	function smartyAssigns(&$smarty, &$params)
+	public function smartyAssigns(&$smarty, &$params)
 	{
 		global $errors;
 
@@ -28,10 +28,14 @@ class BlockCart extends Module
 			$currency = new Currency(intval($params['cart']->id_currency));
 		if (!Validate::isLoadedObject($currency))
 			$currency = new Currency(intval(Configuration::get('PS_DEFAULT_CURRENCY')));
+		$taxCalculationMethod = $params['cart']->id_customer ? Group::getPriceDisplayMethod(intval($params['cart']->id_customer)) : Group::getDefaultPriceDisplayMethod();
 
 		$products = $params['cart']->getProducts(true);
 		foreach ($products as $k => $product)
-			$products[$k]['real_price'] = Product::getPriceStatic($product['id_product'], intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, $product['id_product_attribute'], 6, NULL, false, true, $product['cart_quantity']) * $product['cart_quantity'];
+		{
+			$price = Product::getPriceStatic($product['id_product'], $taxCalculationMethod == PS_TAX_EXC ? false : true, ((isset($product['id_product_attribute']) AND !empty($product['id_product_attribute'])) ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, intval($product['cart_quantity']));
+			$products[$k]['real_price'] = Tools::ceilf($price, 2) * intval($product['cart_quantity']);
+		}
 
 		$smarty->assign(array(
 			'products'=> $products,
@@ -40,11 +44,11 @@ class BlockCart extends Module
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			'discounts' => $params['cart']->getDiscounts(false, true),
 			'nb_total_products' =>$params['cart']->nbProducts(),
-			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 5), $currency),
+			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(true, 5), $currency),
 			'show_wrapping' => floatval($params['cart']->getOrderTotal(true, 6)) > 0 ? true : false,
-			'wrapping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 6), $currency),
-			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true, 4), $currency),
-			'total' => Tools::displayPrice($params['cart']->getOrderTotal(intval(Configuration::get('PS_PRICE_DISPLAY')) == 1 ? false : true), $currency),
+			'wrapping_cost' => Tools::displayPrice($params['cart']->getOrderTotal(true, 6), $currency),
+			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal(true, 4), $currency),
+			'total' => Tools::displayPrice($params['cart']->getOrderTotal(), $currency),
 			'id_carrier' => $params['cart']->id_carrier,
 			'ajax_allowed' => intval(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false
 		));
@@ -92,31 +96,31 @@ class BlockCart extends Module
 		</form>';
 	}
 
-	function install()
+	public function install()
 	{
-			if
-			(
-				parent::install() == false
-				OR $this->registerHook('rightColumn') == false
-				OR Configuration::updateValue('PS_BLOCK_CART_AJAX', 1) == false
-			)
+		if
+		(
+			parent::install() == false
+			OR $this->registerHook('rightColumn') == false
+			OR Configuration::updateValue('PS_BLOCK_CART_AJAX', 1) == false
+		)
 			return false;
 		return true;
 	}
 
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		global $smarty;
 		$this->smartyAssigns($smarty, $params);
 		return $this->display(__FILE__, 'blockcart.tpl');
 	}
 
-	function hookLeftColumn($params)
+	public function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
 	}
 
-	function hookAjaxCall($params)
+	public function hookAjaxCall($params)
 	{
 		global $smarty;
 		$this->smartyAssigns($smarty, $params);

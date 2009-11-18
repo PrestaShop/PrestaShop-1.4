@@ -145,6 +145,7 @@ class		Product extends ObjectModel
 	/*** @var array Tags */
 	public		$tags;
 	
+	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
 
 	private static $_incat = array();
@@ -283,6 +284,13 @@ class		Product extends ObjectModel
 			}
 		}
 		return $fields;
+	}
+
+	public static function initPricesComputation()
+	{
+		global $cookie;
+
+		self::$_taxCalculationMethod = $cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod();
 	}
 
 	/**
@@ -1268,13 +1276,10 @@ class		Product extends ObjectModel
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
 		if ($usetax)
-{
-			$price *= (1 + ($tax / 100));
-//p((1 + ($tax / 100)));
-}
+			$price = $price * (1 + ($tax / 100));
 
 		// Attribute price
-		$attribute_price = $usetax ? $result['attribute_price'] : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
+		$attribute_price = $usetax ? Tools::ceilf($result['attribute_price'], 2) : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		if (isset($result['attribute_price']))
 			$price += $attribute_price;
 		if ($only_reduc OR $usereduc)
@@ -1299,9 +1304,9 @@ class		Product extends ObjectModel
 
 		// Group reduction
 		if ($id_customer)
-			$price *= ((100 - Group::getReduction($id_customer))/100);
+			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 
-		self::$_prices[$cacheId] = ($divisor AND $divisor != 'NULL') ? number_format($price/$divisor, $decimals, '.', '') : number_format($price, $decimals, '.', '');
+		self::$_prices[$cacheId] = number_format(($divisor AND $divisor != NULL) ? $price/$divisor : $price, $decimals);
 		return self::$_prices[$cacheId];
 	}
 
@@ -1940,7 +1945,7 @@ class		Product extends ObjectModel
 	}
 
 	private static $producPropertiesCache = array();
-	
+
 	static public function getProductProperties($id_lang, $row)
 	{
 		if (!$row['id_product'])
@@ -1967,10 +1972,16 @@ class		Product extends ObjectModel
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['attribute_price'] = isset($row['id_product_attribute']) AND $row['id_product_attribute'] ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
-		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
-		$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
+		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6);
+		if (self::$_taxCalculationMethod == PS_TAX_EXC)
+		{
+			$row['price_tax_exc'] = Tools::ceilf($row['price_tax_exc'], 2);
+			$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : 	NULL), 6);
+		}
+		else
+			$row['price'] = Tools::ceilf(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6), 2);
 		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'], $row['price'], $usetax, floatval($row['rate']));
-		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2, NULL, false, false);
+		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic(intval($id_lang), $row['id_product']);

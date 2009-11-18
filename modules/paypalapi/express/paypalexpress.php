@@ -30,7 +30,7 @@ class PaypalExpress extends PaypalAPI
 		// Making request
 		$returnURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/paypalapi/express/submit.php';
 		$cancelURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php';
-		$paymentAmount = number_format(floatval($cart->getOrderTotal()), 2, '.', '');
+		$paymentAmount = floatval($cart->getOrderTotal());
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = 'Sale';
 		$request = '&Amt='.urlencode($paymentAmount).'&PAYMENTACTION='.urlencode($paymentType).'&ReturnUrl='.urlencode($returnURL).'&CANCELURL='.urlencode($cancelURL).'&CURRENCYCODE='.urlencode($currencyCodeType);

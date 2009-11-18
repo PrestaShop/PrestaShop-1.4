@@ -201,6 +201,7 @@ class Tools
 		$ret = 0;
 		if (($isNegative = ($price < 0)))
 			$price *= -1;
+		$price = Tools::ceilf($price, $c_decimals);
 		switch ($c_format)
 	 	{
 	 	 	/* X 0,000.00 */
@@ -869,7 +870,27 @@ class Tools
 	static public function ceilf($value, $precision = 0)
 	{
 		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);
-		return ceil($value * $precisionFactor) / $precisionFactor;
+		$tmp = $value * $precisionFactor;
+		$tmp2 = (string)$tmp;
+		// If the current value has already the desired precision
+		if (strpos($tmp2, '.') === false)
+			return ($value);
+		if ($tmp2[strlen($tmp2) - 1] == 0)
+			return $value;
+		return ceil($tmp) / $precisionFactor;
+	}
+
+	static public function floorf($value, $precision = 0)
+	{
+		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);
+		$tmp = $value * $precisionFactor;
+		$tmp2 = (string)$tmp;
+		// If the current value has already the desired precision
+		if (strpos($tmp2, '.') === false)
+			return ($value);
+		if ($tmp2[strlen($tmp2) - 1] == 0)
+			return $value;
+		return floor($tmp) / $precisionFactor;
 	}
 }
 

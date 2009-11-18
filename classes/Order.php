@@ -124,6 +124,7 @@ class		Order extends ObjectModel
 	/* MySQL does not allow 'order' for a table name */
 	protected 	$table = 'orders';
 	protected 	$identifier = 'id_order';
+	private		$_taxCalculationMethod = PS_TAX_EXC;
 
 	public function getFields()
 	{
@@ -158,6 +159,12 @@ class		Order extends ObjectModel
 		$fields['date_upd'] = pSQL($this->date_upd);
 
 		return $fields;
+	}
+
+	public function __construct($id = NULL, $id_lang = NULL)
+	{
+		parent::__construct($id, $id_lang);
+		$this->_taxCalculationMethod = $this->id_customer ? Group::getPriceDisplayMethod(intval($this->id_customer)) : Group::getDefaultPriceDisplayMethod();
 	}
 
 	/* Does NOT delete a product but "cancel" it (which means return/refund/delete it depending of the case) */
@@ -298,11 +305,9 @@ class		Order extends ObjectModel
 				if (!$row['product_quantity'])
 					continue ;
 			}
-
-			$row['product_price_wt'] = number_format($row['product_price'] * (1 + ($row['tax_rate'] * 0.01)), 2, '.', '');
+			$row['product_price_wt'] = $row['product_price'] * (1 + ($row['tax_rate'] * 0.01));
 			$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
-			$row['total_price'] = number_format($row['total_wt'] / (1 + ($row['tax_rate'] * 0.01)), 2, '.', '');
-			$row['total_wt'] = number_format($row['total_wt'], 2, '.', '');
+			$row['total_price'] = $row['product_quantity'] * Tools::ceilf($row['product_price'], 2);
 
 			/* Add information for virtual product */
 			if ($row['download_hash'] AND !empty($row['download_hash']))
@@ -520,8 +525,6 @@ class		Order extends ObjectModel
 		foreach ($products AS $k => $row)
 		{
 			$quantity = intval($row['product_quantity']);
-			// The product price is rounded to 2 decimals in order to match with the displayed prices
-			// If we keep the 6 decimals price, the displayed price won't match with the ROUNDED product prices detail
 			$total += Tools::ceilf(floatval($row['product_price']), 2) * $quantity;
 		}
 		return $total;
@@ -541,10 +544,10 @@ class		Order extends ObjectModel
 		foreach ($products AS $k => $row)
 		{
 			$quantity = intval($row['product_quantity']);
-			// Product price 2 decimal round => see the getTotalProductsWithoutTaxes() comment just above
-			// The product price multiplication by the tax rate is also up-rounded to 2 decimals in order to be displayed
-			// And once again, displayed prices MUST NOT be different from the paid prices
-			$total += Tools::ceilf(Tools::ceilf(floatval($row['product_price']), 2) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
+			if ($this->_taxCalculationMethod == PS_TAX_EXC)
+				$total += Tools::ceilf(Tools::ceilf(floatval($row['product_price']), 2) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
+			else
+				$total += Tools::ceilf(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
 		}
 		return $total;
 	}

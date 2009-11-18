@@ -54,7 +54,7 @@ function displayConfirm()
 		'logo' => $ppPayment->getLogo(),
 		'cust_currency' => $cookie->id_currency,
 		'currency' => $ppPayment->getCurrency(),
-		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
+		'total' => $cart->getOrderTotal(true, 3),
 		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'
 	));

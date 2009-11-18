@@ -105,11 +105,11 @@ abstract class PaymentModule extends Module
 			$currency = new Currency($order->id_currency);
 			$amountPaid = !$dont_touch_amount ? floatval(Tools::convertPrice(floatval(number_format($amountPaid, 2, '.', '')), $currency)) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
-			$order->total_products = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderTotal(false, 1), 2, '.', '')), $currency));
-			$order->total_discounts = floatval(Tools::convertPrice(floatval(number_format(abs($cart->getOrderTotal(true, 2)), 2, '.', '')), $currency));
-			$order->total_shipping = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderShippingCost(), 2, '.', '')), $currency));
-			$order->total_wrapping = floatval(Tools::convertPrice(floatval(number_format(abs($cart->getOrderTotal(true, 6)), 2, '.', '')), $currency));
-			$order->total_paid = floatval(Tools::convertPrice(floatval(number_format($cart->getOrderTotal(true, 3), 2, '.', '')), $currency));
+			$order->total_products = floatval(Tools::convertPrice(floatval($cart->getOrderTotal(false, 1)), $currency));
+			$order->total_discounts = floatval(Tools::convertPrice(floatval(abs($cart->getOrderTotal(true, 2))), $currency));
+			$order->total_shipping = floatval(Tools::convertPrice(floatval($cart->getOrderShippingCost()), $currency));
+			$order->total_wrapping = floatval(Tools::convertPrice(floatval(abs($cart->getOrderTotal(true, 6))), $currency));
+			$order->total_paid = floatval(Tools::convertPrice(floatval($cart->getOrderTotal(true, 3)), $currency));
 			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;

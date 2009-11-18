@@ -22,18 +22,6 @@ class AdminPPreferences extends AdminPreferences
 		$this->table = 'configuration';
  		
  		$this->_fieldsProduct = array(
-			'PS_PRICE_DISPLAY' => array(
-				'title' => $this->l('Price display:'),
-				'desc' => $this->l('How prices are displayed').'<br /><sup>**</sup>'.$this->l('Only totals show excluded tax').'<br /><sup>***</sup>'.$this->l('Only totals show included tax'),
-				'type' => 'select',
-				'list' =>
-					array(
-						array('id' => '0', 'name' => $this->l('Tax included').'**'),
-						array('id' => '1', 'name' => $this->l('Tax excluded').'***'),
-						array('id' => '2', 'name' => $this->l('Both excluded and included tax'))
-					),
-				'identifier' => 'id'
-			),
 			'PS_ORDER_OUT_OF_STOCK' => array('title' => $this->l('Allow ordering out-of-stock product:'), 'desc' => $this->l('Add to cart button is hidden when product is unavailable'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_STOCK_MANAGEMENT' => array('title' => $this->l('Enable stock management:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool', 'js' => array('on' => 'onchange="stockManagementActivationAuthorization()"', 'off' => 'onchange="stockManagementActivationAuthorization()"')),
 			'PS_DISPLAY_QTIES' => array('title' => $this->l('Display available quantities on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),

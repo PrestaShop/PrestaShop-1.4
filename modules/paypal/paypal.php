@@ -178,7 +178,7 @@ class Paypal extends PaymentModule
 			if (isset($product['attributes']))
 				$products[$key]['attributes'] = str_replace('"', '\'', $product['attributes']);
 			$products[$key]['name'] = htmlentities(utf8_decode($product['name']));
-			$products[$key]['paypalAmount'] = number_format(Tools::convertPrice($product['price_wt'], $currency), 6, '.', '');
+			$products[$key]['paypalAmount'] = Tools::convertPrice($product['price_wt'], $currency);
 		}
 		$smarty->assign(array(
 			'address' => $address,
@@ -189,9 +189,9 @@ class Paypal extends PaymentModule
 			'currency' => $currency,
 			'paypalUrl' => $this->getPaypalUrl(),
 			// products + discounts - shipping cost
-			'amount' => number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 4), $currency), 2, '.', ''),
+			'amount' => Tools::convertPrice($params['cart']->getOrderTotal(true, 4), $currency),
 			// products + discounts + shipping cost
-			'total' => number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 3), $currency), 2, '.', ''),
+			'total' => Tools::convertPrice($params['cart']->getOrderTotal(true, 3), $currency),
 			'id_cart' => intval($params['cart']->id),
 			'goBackUrl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.intval($params['cart']->id).'&id_module='.intval($this->id),
 			'notify' => 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/paypal/validation.php',

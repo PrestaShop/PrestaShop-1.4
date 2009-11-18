@@ -1,10 +1,21 @@
+function ceilf(value, precision)
+{
+	if (typeof(precision) == 'undefined')
+		precision = 0;
+	precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
+	tmp = value * precisionFactor;
+	tmp2 = tmp.toString();
+	if (tmp2[tmp2.length - 1] == 0)
+		return value;
+	return Math.ceil(value * precisionFactor) / precisionFactor;
+}
 
 //return a formatted price
 function formatCurrency(price, currencyFormat, currencySign, currencyBlank)
 {
-	//if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
-
+	// if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
 	blank = '';
+	price = ceilf(price, priceDisplayPrecision);
 	if (currencyBlank > 0)
 		blank = ' ';
 	if (currencyFormat == 1)

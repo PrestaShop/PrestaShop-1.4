@@ -144,7 +144,7 @@ class BankWire extends PaymentModule
 			'nbProducts' => $cart->nbProducts(),
 			'cust_currency' => $cookie->id_currency,
 			'currencies' => $this->getCurrency(),
-			'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
+			'total' => $cart->getOrderTotal(true, 3),
 			'isoCode' => Language::getIsoById(intval($cookie->id_lang)),
 			'bankwireDetails' => nl2br2($this->details),
 			'bankwireAddress' => nl2br2($this->address),

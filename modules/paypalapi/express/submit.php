@@ -83,7 +83,7 @@ function displayConfirm()
 		'ppToken' => strval($cookie->paypal_token),
 		'cust_currency' => $cookie->id_currency,
 		'currencies' => $ppExpress->getCurrency(),
-		'total' => number_format($cart->getOrderTotal(true, 3), 2, '.', ''),
+		'total' => $cart->getOrderTotal(true, 3),
 		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
 		'payerID' => $payerID,
 		'mode' => 'express/'

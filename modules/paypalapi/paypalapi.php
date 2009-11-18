@@ -301,7 +301,7 @@ class PaypalAPI extends PaymentModule
 		$currency = new Currency(intval($id_currency));
 		$iso_currency = $currency->iso_code;
 		$token = strval($cookie->paypal_token);
-		$total = number_format(floatval($cart->getOrderTotal(true, 3)), 2, '.', '');
+		$total = floatval($cart->getOrderTotal(true, 3));
 		$payerID = strval($payerID);
 		$paymentType = 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);

@@ -380,8 +380,8 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
-		'total_wrapping' => number_format($wrapping_fees, 2, '.', ''),
-		'total_wrapping_tax_exc' => number_format($wrapping_fees_tax_exc, 2, '.', '')));
+		'total_wrapping' => $wrapping_fees,
+		'total_wrapping_tax_exc' => $wrapping_fees_tax_exc));
 	Tools::safePostVars();
 	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 	$js_files = array(__PS_BASE_URI__.'js/jquery/thickbox-modified.js');

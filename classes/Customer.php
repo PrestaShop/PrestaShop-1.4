@@ -406,7 +406,7 @@ class		Customer extends ObjectModel
 		return $result;
 	}
 	
-public function getLastConnections()
+	public function getLastConnections()
     {
         return Db::getInstance()->ExecuteS('
         SELECT c.date_add, COUNT(cp.id_page) AS pages, TIMEDIFF(MAX(cp.time_end), c.date_add) as time, http_referer,INET_NTOA(ip_address) as ipaddress

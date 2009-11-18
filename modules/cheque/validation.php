@@ -5,7 +5,7 @@ include(dirname(__FILE__).'/../../header.php');
 include(dirname(__FILE__).'/cheque.php');
 
 $currency = new Currency(intval(isset($_POST['currency_payement']) ? $_POST['currency_payement'] : $cookie->id_currency));
-$total = floatval(number_format($cart->getOrderTotal(true, 3), 2, '.', ''));
+$total = floatval($cart->getOrderTotal(true, 3));
 $mailVars =	array(
 	'{cheque_name}' => Configuration::get('CHEQUE_NAME'),
 	'{cheque_address}' => Configuration::get('CHEQUE_ADDRESS'),

@@ -128,12 +128,12 @@ class GCheckout extends PaymentModule
 		$currency = $this->getCurrency();
 		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
 		foreach ($params['cart']->getProducts() as $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name']), utf8_decode($product['description_short']), intval($product['quantity']), number_format(Tools::convertPrice($product['price_wt'], $currency), 2, '.', '')));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name']), utf8_decode($product['description_short']), intval($product['quantity']), Tools::convertPrice($product['price_wt'], $currency)));
 		if ($wrapping = $params['cart']->getOrderTotal(true, 6))
-			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, number_format(Tools::convertPrice($wrapping, $currency), 2, '.', '')));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
 		foreach ($params['cart']->getDiscounts() as $voucher)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.number_format(Tools::convertPrice($voucher['value_real'], $currency), 2, '.', '')));
-		$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), number_format(Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency), 2, '.', '')));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
+		$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
 		
 		$googleCart->SetEditCartUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php');
 		$googleCart->SetContinueShoppingUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php');

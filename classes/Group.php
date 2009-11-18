@@ -102,6 +102,14 @@ class		Group extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = g.`id_group` AND cg.`id_customer` = '.intval($id_customer).')');
 	}
 
+	static public function getDefaultPriceDisplayMethod()
+	{
+		return Db::getInstance()->getValue('
+		SELECT `price_display_method`
+		FROM `'._DB_PREFIX_.'group`
+		WHERE `id_group` = 1');
+	}
+
 	public function delete()
 	{
 		if (parent::delete())

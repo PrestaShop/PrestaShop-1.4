@@ -194,17 +194,17 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<br />
 				<span class="our_price_display">
 				{if !$priceDisplay || $priceDisplay == 2}
-					<span id="our_price_display">{convertPrice price=$product->getPrice(true, $smarty.const.NULL, 2)}</span>
+					<span id="our_price_display">{convertPrice price=$product->getPrice(true, $smarty.const.NULL)}</span>
 						{l s='tax incl.'}
 				{/if}
 				{if $priceDisplay == 1}
-					<span id="our_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL, 2)}</span>
+					<span id="our_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>
 						{l s='tax excl.'}
 				{/if}
 				</span>
 				{if $priceDisplay == 2}
 					<br />
-					<span id="pretaxe_price"><span id="pretaxe_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL, 2)}</span>&nbsp;{l s='tax excl.'}</span>
+					<span id="pretaxe_price"><span id="pretaxe_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>&nbsp;{l s='tax excl.'}</span>
 				{/if}
 				<br />
 			</p>
