@@ -1306,7 +1306,7 @@ class		Product extends ObjectModel
 		if ($id_customer)
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 
-		self::$_prices[$cacheId] = number_format(($divisor AND $divisor != NULL) ? $price/$divisor : $price, $decimals);
+		self::$_prices[$cacheId] = Tools::ceilf(($divisor AND $divisor != NULL) ? $price/$divisor : $price, $decimals);
 		return self::$_prices[$cacheId];
 	}
 
