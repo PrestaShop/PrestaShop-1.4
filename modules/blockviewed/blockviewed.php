@@ -74,14 +74,15 @@ class BlockViewed extends Module
 			$productIds = implode(',', $productsViewed);
 			
 			$productsImages = Db::getInstance()->ExecuteS('
-			SELECT i.id_image, i.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
-			FROM '._DB_PREFIX_.'image i
-			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
-			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = i.id_product)
-			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
-			WHERE i.id_product IN ('.$productIds.') 
-			AND i.cover = 1 
-			AND	il.id_lang = '.intval($params['cookie']->id_lang).' AND il.id_lang = '.intval($params['cookie']->id_lang));
+				SELECT i.id_image, i.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
+				FROM '._DB_PREFIX_.'image i
+				LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
+				LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = i.id_product)
+				LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
+				WHERE i.id_product IN ('.$productIds.') 
+				AND i.cover = 1 
+				AND	il.id_lang = '.intval($params['cookie']->id_lang).' AND il.id_lang = '.intval($params['cookie']->id_lang).'
+			');
 
 			$productsImagesArray = array();
 			foreach ($productsImages AS $pi)
@@ -96,12 +97,12 @@ class BlockViewed extends Module
 					continue;
 				else
 				{
-					$obj->id = intval($productsImagesArray[$pi['id_product']]['id_product']);
-					$obj->cover = intval($productsImagesArray[$pi['id_product']]['id_product']).'-'.intval($productsImagesArray[$pi['id_product']]['id_image']);
-					$obj->legend = $productsImagesArray[$pi['id_product']]['legend'];
-					$obj->name = $productsImagesArray[$pi['id_product']]['name'];
-					$obj->description_short = $productsImagesArray[$pi['id_product']]['description_short'];
-					$obj->link_rewrite = $productsImagesArray[$pi['id_product']]['link_rewrite'];
+					$obj->id = intval($productsImagesArray[$productViewed]['id_product']);
+					$obj->cover = intval($productsImagesArray[$productViewed]['id_product']).'-'.intval($productsImagesArray[$productViewed]['id_image']);
+					$obj->legend = $productsImagesArray[$productViewed]['legend'];
+					$obj->name = $productsImagesArray[$productViewed]['name'];
+					$obj->description_short = $productsImagesArray[$productViewed]['description_short'];
+					$obj->link_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
 					
 					if (!isset($obj->cover))
 					{
@@ -122,9 +123,9 @@ class BlockViewed extends Module
 			if (!sizeof($productsViewedObj))
 				return ;
 			
-			// $smarty->assign(array(
-				// 'productsViewedObj' => $productsViewedObj,
-				// 'mediumSize' => Image::getSize('medium')));
+			$smarty->assign(array(
+				'productsViewedObj' => $productsViewedObj,
+				'mediumSize' => Image::getSize('medium')));
 			
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
