@@ -92,7 +92,7 @@ class BlockViewed extends Module
 			foreach ($productsViewed AS $productViewed)
 			{
 				$obj = (object) 'Product';
-				$obj->active = $productsImagesArray[$pi['id_product']]['active'];
+				$obj->active = $productsImagesArray[$productViewed]['active'];
 				if (!$obj->active)
 					continue;
 				else
