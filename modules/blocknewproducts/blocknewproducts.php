@@ -60,18 +60,14 @@ class BlockNewProducts extends Module
 		return $output;
 	}
 
-    function hookRightColumn($params)
-    {
+	function hookRightColumn($params)
+	{
 		global $smarty;
 		$currency = new Currency(intval($params['cookie']->id_currency));
 		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, Configuration::get('NEW_PRODUCTS_NBR'));
-		$new_products = array();
-		if ($newProducts)
-			foreach ($newProducts AS $newProduct)
-				$new_products[] = $newProduct;
 
 		$smarty->assign(array(
-			'new_products' => $new_products,
+			'new_products' => $newProducts,
 			'mediumSize' => Image::getSize('medium')));
 		return $this->display(__FILE__, 'blocknewproducts.tpl');
 	}
@@ -81,6 +77,5 @@ class BlockNewProducts extends Module
 		return $this->hookRightColumn($params);
 	}
 }
-
 
 ?>
