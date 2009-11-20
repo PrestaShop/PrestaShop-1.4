@@ -6,7 +6,6 @@ purple #d41958
 green #7eb423
 */
 
-
 body{
 	background-image : url(img/bg-body.png);
 	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -44,6 +43,35 @@ div#loader{
 div#leftpannel{
 	float:left;
 	width:230px;
+}
+
+div#leftpannel div#help{
+	width:175px;
+	height:129px;
+	margin:20px auto;
+	padding:5px;
+	background:url('img/bg_help.png') no-repeat;
+	font-family:Arial;
+}
+div#leftpannel div#help img.ico_help{float:left; margin:5px;}
+div#leftpannel div#help div.content{
+	float:right;
+	width:132px;
+}
+div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:16px;margin:4px 0 3px 0;}
+div#leftpannel div#help div.content p.title_down{color:#383838;font-family:Arial;font-size:11px;margin:0;}
+div#leftpannel div#help div.content ul{margin:10px 0;padding:0;}
+div#leftpannel div#help div.content ul li{clear:both;padding-bottom:5px;list-style-type:none;}
+div#leftpannel div#help div.content ul li img,
+ div#leftpannel div#help div.content ul li a{ float:left; }
+div#leftpannel div#help div.content ul li a{
+	display:block; 
+	margin-left:6px;
+	color:#fff;
+	font-weight:bold;
+	line-height:17px; 
+	vertical-align:middle;
+	text-decoration:underline;
 }
 
 ol#tabs{

@@ -24,20 +24,29 @@ class AdminPayment extends AdminTab
 		foreach ($modules AS $module)
 			if ($module->tab == 'Payment')
 			{
-				$module->country = array();
-				$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.intval($module->id));
-				foreach ($countries as $country)
-					$module->country[] = $country['id_country'];
-
-				$module->currency = array();
-				$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.intval($module->id));
-				foreach ($currencies as $currency)
-					$module->currency[] = $currency['id_currency'];
-
-				$module->group = array();
-				$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.intval($module->id));
-				foreach ($groups as $group)
-					$module->group[] = $group['id_group'];
+				if($module->id)
+				{
+					$module->country = array();
+					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.intval($module->id));
+					foreach ($countries as $country)
+						$module->country[] = $country['id_country'];
+						
+					$module->currency = array();
+					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.intval($module->id));
+					foreach ($currencies as $currency)
+						$module->currency[] = $currency['id_currency'];
+						
+					$module->group = array();
+					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.intval($module->id));
+					foreach ($groups as $group)
+						$module->group[] = $group['id_group'];
+				}
+				else
+				{
+					$module->country = NULL;
+					$module->currency = NULL;
+					$module->group = NULL;
+				}
 
 				$this->paymentModules[] = $module;
 			}

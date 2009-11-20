@@ -1294,13 +1294,17 @@ class		Product extends ObjectModel
 			$price -= $reduc;
 
 		// Quantity discount
-		$totalQuantity = intval(Db::getInstance()->getValue('
-			SELECT SUM(`quantity`)
-			FROM `'._DB_PREFIX_.'cart_product`
-			WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cookie->id_cart))
-		) + intval($quantity);
-		if ($totalQuantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $totalQuantity)))
-			$price -= QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+		if (intval($cookie->id_cart))
+		{
+			$totalQuantity = intval(Db::getInstance()->getValue('
+				SELECT SUM(`quantity`)
+				FROM `'._DB_PREFIX_.'cart_product`
+				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cookie->id_cart))
+			) + intval($quantity);
+			
+			if ($totalQuantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $totalQuantity)))
+				$price -= QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+		}
 
 		// Group reduction
 		if ($id_customer)

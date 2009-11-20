@@ -484,7 +484,8 @@ CREATE TABLE `PREFIX_employee` (
   `stats_date_to` date default NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_employee`),
-  KEY `employee_login` (`email`,`passwd`)
+  KEY `employee_login` (`email`,`passwd`),
+  KEY `id_employee_passwd` (`id_employee`,`passwd`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_feature` (
@@ -697,7 +698,8 @@ CREATE TABLE `PREFIX_module_country` (
 CREATE TABLE `PREFIX_module_currency` (
   `id_module` int(10) unsigned NOT NULL,
   `id_currency` int(11) NOT NULL,
-  PRIMARY KEY  (`id_module`,`id_currency`)
+  PRIMARY KEY  (`id_module`,`id_currency`),
+  KEY `id_module` (`id_module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_module_group` (
@@ -960,7 +962,8 @@ CREATE TABLE `PREFIX_product_attribute` (
   PRIMARY KEY  (`id_product_attribute`),
   KEY `product_attribute_product` (`id_product`),
   KEY `reference` (`reference`),
-  KEY `supplier_reference` (`supplier_reference`)
+  KEY `supplier_reference` (`supplier_reference`),
+  KEY `product_default` (`id_product`,`default_on`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_attribute_combination` (
@@ -986,7 +989,8 @@ CREATE TABLE `PREFIX_product_download` (
   `nb_days_accessible` int(10) unsigned default NULL,
   `nb_downloadable` int(10) unsigned default '1',
   `active` tinyint(1) unsigned NOT NULL default '1',
-  PRIMARY KEY  (`id_product_download`)
+  PRIMARY KEY  (`id_product_download`),
+  KEY `product_active` (`id_product`,`active`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_lang` (
@@ -1189,7 +1193,8 @@ CREATE TABLE `PREFIX_tab` (
   `class_name` varchar(64) NOT NULL,
   `module` varchar(64) NULL,
   `position` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id_tab`)
+  PRIMARY KEY  (`id_tab`),
+  KEY `class_name` (`class_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_tab_lang` (

@@ -170,5 +170,9 @@ $_LANG['online documentation'] = 'online documentation';
 $_LANG['the already installed version detected is too old, no more update available'] = 'The existing installation of PrestaShop is outdated. No updates are available';
 $_LANG['Cannot convert your database\'s data to utf-8.'] = 'Cannot convert your database\'s data to utf-8.';
 $_LANG['Your database server does not support the utf-8 charset.'] = 'Your database server does not support the utf-8 charset.';
+$_LANG['Need help ?'] = 'Need help ?';
+$_LANG['All tips and advice about Prestashop'] = 'All tips and advice about Prestashop';
+$_LANG['Forum'] = 'Forum';
+$_LANG['Blog'] = 'Blog';
 
 ?>

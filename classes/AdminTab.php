@@ -1133,6 +1133,12 @@ abstract class AdminTab
 		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
+		$_cacheLang['View'] = $this->l('View');
+		$_cacheLang['Edit'] = $this->l('Edit');
+		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+		$_cacheLang['Duplicate'] = $this->l('Duplicate');
+		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, TRUE, FALSE);
+		
 		$irow = 0;
 		if ($this->_list AND isset($this->fieldsDisplay['position']))
 		{
@@ -1199,8 +1205,6 @@ abstract class AdminTab
 						echo Tools::displayDate($tr[$key], $cookie->id_lang);
 					elseif (isset($params['type']) AND $params['type'] == 'datetime')
 						echo Tools::displayDate($tr[$key], $cookie->id_lang, true);
-					elseif ($key == 'physical_products_quantity')
-						echo Category::countNbProductAndSub($tr['id_category'], $cookie->id_lang);
 					elseif (isset($tr[$key]))
 					{
 						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? Tools::substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
@@ -1218,20 +1222,20 @@ abstract class AdminTab
 					if ($this->view)
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
-						<img src="../img/admin/details.gif" border="0" alt="'.$this->l('View').'" title="'.$this->l('View').'" /></a>';
+						<img src="../img/admin/details.gif" border="0" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
 					if ($this->edit)
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
-						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>';
+						<img src="../img/admin/edit.gif" border="0" alt="'.$_cacheLang['Edit'].'" title="'.$_cacheLang['Edit'].'" /></a>';
 					if ($this->delete AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?\');">
-						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete', __CLASS__, TRUE, FALSE).'" title="'.$this->l('Delete', __CLASS__, TRUE, FALSE).'" /></a>';
+						<img src="../img/admin/delete.gif" border="0" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 					if ($this->duplicate)
 						echo '
-						<a class="pointer" onclick="if (confirm(\''.$this->l('Copy images too?', __CLASS__, TRUE, FALSE).'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
-						<img src="../img/admin/add.gif" border="0" alt="'.$this->l('Duplicate').'" title="'.$this->l('Duplicate').'" /></a>';
+						<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+						<img src="../img/admin/add.gif" border="0" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
 					echo '</td>';
 				}
 				echo '</tr>';

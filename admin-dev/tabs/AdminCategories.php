@@ -37,24 +37,11 @@ class AdminCategories extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_category' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 30),
 		'name' => array('title' => $this->l('Name'), 'width' => 100, 'callback' => 'hideCategoryPosition'),
-		'description' => array('title' => $this->l('Description'), 'width' => 480, 'maxlength' => 90, 'orderby' => false),
-		'physical_products_quantity' => array('title' => $this->l('In stock Products'), 'align' => 'center', 'width' => 80),
+		'description' => array('title' => $this->l('Description'), 'width' => 560, 'maxlength' => 90, 'orderby' => false),
 		'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 		
 		$this->_category = AdminCatalog::getCurrentCategory();
 		$this->_filter = 'AND `id_parent` = '.intval($this->_category->id);
-		
-		
-		$children = Category::getChildren($this->_category->id, $cookie->id_lang);
-		foreach ($children as &$child)
-		{
-			$tmp_list = $this->_category->id.',';
-			$obj = new Category($child['id_category']);
-			$parents = $obj->getParentsCategories();
-			foreach ($parents as $parent)
-				$tmp_list .= $parent['id_category'].',';
-			$child['parent_id_list'] =  rtrim($tmp_list, ',');
-		}
 
 		parent::__construct();
 	}

@@ -176,5 +176,9 @@ $_LANG['payment mean'] = 'moyen de paiement';
 $_LANG['you like the most.'] = 'qui vous convient le plus.';
 $_LANG['Themes'] = 'Thèmes';
 $_LANG['Payment modules'] = 'Modules de paiement';
+$_LANG['Need help ?'] = 'Besoin d\'aide ?';
+$_LANG['All tips and advice about Prestashop'] = 'Toutes les astuces et conseils autour de Prestashop';
+$_LANG['Forum'] = 'Le forum';
+$_LANG['Blog'] = 'Le blog';
 
 ?>

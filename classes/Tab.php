@@ -38,7 +38,9 @@ class Tab extends ObjectModel
 
 	protected 	$table = 'tab';
 	protected 	$identifier = 'id_tab';
-
+	
+	private static $_getIdFromClassName = array();
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -154,9 +156,15 @@ class Tab extends ObjectModel
 	 */
 	static public function getIdFromClassName($class_name)
 	{
-		$sql = 'SELECT id_tab AS id FROM `'._DB_PREFIX_.'tab` t WHERE t.`class_name` = \''.pSQL($class_name).'\'';
-		$result = Db::getInstance()->getRow($sql);
-		return intval($result['id']);
+		if (isset(self::$_getIdFromClassName[$class_name]) AND self::$_getIdFromClassName[$class_name])
+			return intval(self::$_getIdFromClassName[$class_name]['id']);
+			
+		self::$_getIdFromClassName[$class_name] = Db::getInstance()->getRow('
+		SELECT id_tab AS id 
+		FROM `'._DB_PREFIX_.'tab` t 
+		WHERE LOWER(t.`class_name`) = \''.pSQL($class_name).'\'');
+		
+		return intval(self::$_getIdFromClassName[$class_name]['id']);
 	}
 
 	static public function getClassNameFromID($id_tab)

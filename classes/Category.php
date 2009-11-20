@@ -337,20 +337,6 @@ class		Category extends ObjectModel
 			}
 	}
 
-	public static function countNbProductAndSub($id_category, $id_lang)
-	{
-		$tab = array(intval($id_category));
-		Category::getAllSubCats($tab, intval($id_category), intval($id_lang));
-		$listCategories = implode(',', $tab);
-		$sql = '
-				SELECT SUM(IFNULL(pa.`quantity`, p.`quantity`)) AS nb
-				FROM '._DB_PREFIX_.'product  p
-				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-				WHERE p.id_product IN (SELECT pc.id_product  FROM `'._DB_PREFIX_.'category_product` pc WHERE pc.`id_category` IN ('.$listCategories.'))';
-			$result = Db::getInstance()->getRow($sql);
-		return $result['nb'];
-	}
-
 	/**
 	  * Return current category products
 	  *

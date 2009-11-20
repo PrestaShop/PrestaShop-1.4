@@ -168,6 +168,20 @@ if ($lm->getIncludeTradFilename())
 	</h1>
 	
 	<ol id="tabs"><li>&nbsp;</li></ol>
+	
+	<div id="help">
+		<img src="img/ico_help.gif" alt="help" class="ico_help" />
+		
+		<div class="content">
+			<p class="title"><?php echo lang('Need help ?'); ?></p>
+			<p class="title_down"><?php echo lang('All tips and advice about Prestashop'); ?></p>
+			
+			<ul>
+				<li><img src="img/puce.gif" alt="" /> <a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Forum'); ?></a><br class="clear" /></li>
+				<li><img src="img/puce.gif" alt="" /> <a href="http://www.prestashop.com/blog/"><?php echo lang('Blog'); ?></a><br class="clear" /></li>
+			</ul>
+		</div>
+	</div>
 </div>
 
 

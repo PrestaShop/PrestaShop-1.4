@@ -16,6 +16,11 @@ ALTER TABLE `PREFIX_tag` ADD INDEX `id_lang` (`id_lang`);
 ALTER TABLE `PREFIX_customer_group` ADD INDEX `id_customer` (`id_customer`);
 ALTER TABLE `PREFIX_category_group` ADD INDEX `id_category` (`id_category`);
 ALTER TABLE `PREFIX_image` ADD INDEX `id_product_cover` (`id_product`, `cover`);
+ALTER TABLE `PREFIX_employee` ADD INDEX `id_employee_passwd` (`id_employee`, `passwd`);
+ALTER TABLE `PREFIX_product_attribute` ADD INDEX `product_default` (`id_product`, `default_on`);
+ALTER TABLE `PREFIX_product_download` ADD INDEX `product_active` (`id_product`, `active`);
+ALTER TABLE `PREFIX_tab` ADD INDEX `class_name` (`class_name`);
+ALTER TABLE `PREFIX_module_currency` ADD INDEX `id_module` (`id_module`);
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY';
