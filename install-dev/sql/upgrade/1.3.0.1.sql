@@ -21,6 +21,7 @@ ALTER TABLE `PREFIX_product_attribute` ADD INDEX `product_default` (`id_product`
 ALTER TABLE `PREFIX_product_download` ADD INDEX `product_active` (`id_product`, `active`);
 ALTER TABLE `PREFIX_tab` ADD INDEX `class_name` (`class_name`);
 ALTER TABLE `PREFIX_module_currency` ADD INDEX `id_module` (`id_module`);
+ALTER TABLE `PREFIX_product_attribute_combination` ADD INDEX `id_product_attribute` (`id_product_attribute`);
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY';

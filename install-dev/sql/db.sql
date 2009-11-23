@@ -969,7 +969,8 @@ CREATE TABLE `PREFIX_product_attribute` (
 CREATE TABLE `PREFIX_product_attribute_combination` (
   `id_attribute` int(10) unsigned NOT NULL,
   `id_product_attribute` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id_attribute`,`id_product_attribute`)
+  PRIMARY KEY  (`id_attribute`,`id_product_attribute`),
+  KEY `id_product_attribute` (`id_product_attribute`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_attribute_image` (
