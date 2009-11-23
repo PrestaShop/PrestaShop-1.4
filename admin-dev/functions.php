@@ -18,9 +18,13 @@ function bindDatepicker($id, $time)
 	if ($time)
 	echo '
 		var dateObj = new Date();
+		var hours = dateObj.getHours();
 		var mins = dateObj.getMinutes();
+		var secs = dateObj.getSeconds();
+		if (hours < 10) { hours = "0" + hours; }
 		if (mins < 10) { mins = "0" + mins; }
-		var time = " "+dateObj.getHours()+":"+mins+":"+dateObj.getSeconds();';
+		if (secs < 10) { secs = "0" + secs; }
+		var time = " "+hours+":"+mins+":"+secs;';
 
 	echo '
 	$(function() {
