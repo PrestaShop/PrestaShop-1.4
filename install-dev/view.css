@@ -51,15 +51,15 @@ div#leftpannel div#help{
 	margin:20px auto;
 	padding:5px;
 	background:url('img/bg_help.png') no-repeat;
-	font-family:Arial;
+	font-family:Arial, sans-serif;
 }
 div#leftpannel div#help img.ico_help{float:left; margin:5px;}
 div#leftpannel div#help div.content{
 	float:right;
 	width:132px;
 }
-div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:16px;margin:4px 0 3px 0;}
-div#leftpannel div#help div.content p.title_down{color:#383838;font-family:Arial;font-size:11px;margin:0;}
+div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:11pt;margin:4pt 0 3px 0;}
+div#leftpannel div#help div.content p.title_down{color:#383838;font-size:8pt;margin:0;}
 div#leftpannel div#help div.content ul{margin:10px 0;padding:0;}
 div#leftpannel div#help div.content ul li{clear:both;padding-bottom:5px;list-style-type:none;}
 div#leftpannel div#help div.content ul li img,
