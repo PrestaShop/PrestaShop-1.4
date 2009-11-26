@@ -22,30 +22,30 @@ class AdminMessages extends AdminTab
 	 	$this->className = 'Order';
 	 	$this->view = 'noActionColumn';
 		$this->colorOnBackground = true;
-		
+
 		$start = 0;
 		$this->_defaultOrderBy = 'date_add';
-		
+
 		/* Manage default params values */
 		if (empty($limit))
 			$limit = ((!isset($cookie->{$this->table.'_pagination'})) ? $this->_pagination[0] : $limit = $cookie->{$this->table.'_pagination'});
 
 		if (!Validate::isTableOrIdentifier($this->table))
 			die (Tools::displayError('Table name is invalid:').' "'.$this->table.'"');
-		
+
 		if (empty($orderBy))
 			$orderBy = Tools::getValue($this->table.'Orderby', $this->_defaultOrderBy);
 		if (empty($orderWay))
 			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');
-		
+
 		$limit = intval(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
-		
+
 		/* Check params validity */
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay)
 			OR !is_numeric($start) OR !is_numeric($limit))
 			die(Tools::displayError('get list params is not valid'));
-		
+
 		/* Determine offset from current page */
 		if ((isset($_POST['submitFilter'.$this->table]) OR
 		isset($_POST['submitFilter'.$this->table.'_x']) OR
@@ -53,7 +53,7 @@ class AdminMessages extends AdminTab
 		!empty($_POST['submitFilter'.$this->table]) AND
 		is_numeric($_POST['submitFilter'.$this->table]))
 			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
-		
+
 		$sql = '
 			SELECT m.id_message, m.id_cart, m.id_employee, m.id_order, m.message, m.private, m.date_add, CONCAT( LEFT( c.`firstname` , 1 ) , \'. \', c.`lastname` ) AS customer, c.id_customer, count( m.id_message ) nb_messages, (
 				SELECT message
@@ -71,7 +71,7 @@ class AdminMessages extends AdminTab
 				IN (
 					SELECT mr2.id_message
 					FROM '._DB_PREFIX_.'message_readed mr2
-					WHERE mr2.id_employee ='.$cookie->id_employee.'
+					WHERE mr2.id_employee ='.(int)$cookie->id_employee.'
 				)
 				GROUP BY m2.id_order
 			)nb_messages_not_readed_by_me
@@ -83,7 +83,7 @@ class AdminMessages extends AdminTab
 			.' LIMIT '.intval($start).','.intval($limit);
 		;
 		$this->_list = Db::getInstance()->ExecuteS($sql);
-		
+
  		$this->fieldsDisplay = array(
 			'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 25),
 			'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
