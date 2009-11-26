@@ -31,7 +31,7 @@ class		WishList extends ObjectModel
 
 	/** @var string Object last modification date */
 	public 		$date_upd;
-	
+
 	protected	$fieldsSize = array('name' => 64, 'token' => 64);
 	protected	$fieldsRequired = array('id_customer', 'name', 'token');
 	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'name' => 'isMessage',
@@ -60,7 +60,7 @@ class		WishList extends ObjectModel
 			unset($cookie->id_wishlist);
 		return (parent::delete());
 	}
-	
+
 	/**
 	 * Increment counter
 	 *
@@ -81,7 +81,7 @@ class		WishList extends ObjectModel
 		`counter` = '.intval($result['counter'] + 1).'
 		WHERE `id_wishlist` = '.intval($id_wishlist)));
 	}
-	
+
 	/**
 	 * Return true if wishlist exists else false
 	 *
@@ -106,7 +106,7 @@ class		WishList extends ObjectModel
 		}
 		return (false);
 	}
-	
+
 	/**
 	 * Get ID wishlist by Token
 	 *
@@ -149,13 +149,13 @@ class		WishList extends ObjectModel
 			JOIN `'._DB_PREFIX_.'cart_product` cp ON (wpc.id_cart = cp.id_cart)
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON (o.id_cart = c.id_cart)
 			WHERE (wp.id_wishlist='.intval($id_wishlist).' AND o.id_cart IS NULL)
-			HAVING timecart  >= 3600*6 
+			HAVING timecart  >= 3600*6
 		');
 
 		if(isset($old_carts) AND $old_carts != false)
 			foreach ($old_carts AS $old_cart)
 				Db::getInstance()->Execute('
-					DELETE FROM `'._DB_PREFIX_.'cart_product` 
+					DELETE FROM `'._DB_PREFIX_.'cart_product`
 					WHERE id_cart='.intval($old_cart['id_cart']).' AND id_product='.intval($old_cart['id_product']).' AND id_product_attribute='.intval($old_cart['id_product_attribute'])
 				);
 
@@ -175,18 +175,18 @@ class		WishList extends ObjectModel
 			JOIN `'._DB_PREFIX_.'cart_product` cp ON (cp.id_cart = wpc.id_cart AND cp.id_product = wp.id_product AND cp.id_product_attribute = wp.id_product_attribute)
 			WHERE wp.id_wishlist='.intval($id_wishlist)
 		);
-		
+
 		if(isset($res) AND $res != false)
 			foreach ($res AS $refresh)
 				if($refresh['wish_quantity'] > $refresh['cart_quantity'])
 				{
 					Db::getInstance()->Execute('
-						UPDATE `'._DB_PREFIX_.'wishlist_product` 
+						UPDATE `'._DB_PREFIX_.'wishlist_product`
 						SET `quantity`= `quantity` + '.(intval($refresh['wish_quantity']) - intval($refresh['cart_quantity'])).'
-						WHERE id_wishlist_product='.intval($refresh['id_wishlist_product']) 
+						WHERE id_wishlist_product='.intval($refresh['id_wishlist_product'])
 					);
 					Db::getInstance()->Execute('
-						UPDATE `'._DB_PREFIX_.'wishlist_product_cart` 
+						UPDATE `'._DB_PREFIX_.'wishlist_product_cart`
 						SET `quantity`='.intval($refresh['cart_quantity']).'
 						WHERE id_wishlist_product='.intval($refresh['id_wishlist_product']).' AND id_cart='.intval($refresh['id_cart'])
 					);
@@ -203,12 +203,12 @@ class		WishList extends ObjectModel
 					WHERE `id_wishlist_product`='.intval($prodcustomer['id_wishlist_product']).' AND `id_wishlist`='.intval($id_wishlist)
 					);
 				Db::getInstance()->Execute('
-					DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart` 
+					DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart`
 					WHERE `id_wishlist_product`='.intval($prodcustomer['id_wishlist_product']).' AND `id_cart`='.intval($prodcustomer['id_cart'])
 					);
 			}
 	}
-	
+
 	/**
 	 * Get Wishlist products by Customer ID
 	 *
@@ -221,7 +221,7 @@ class		WishList extends ObjectModel
 			!Validate::isUnsignedId($id_wishlist))
 			die (Tools::displayError());
 		$products = Db::getInstance()->ExecuteS('
-		SELECT wp.`id_product`, wp.`quantity`, p.`quantity` AS product_quantity, pl.`name`, wp.`id_product_attribute`, wp.`priority`
+		SELECT wp.`id_product`, wp.`quantity`, p.`quantity` AS product_quantity, pl.`name`, wp.`id_product_attribute`, wp.`priority`, pl.link_rewrite
 	  FROM `'._DB_PREFIX_.'wishlist_product` wp
 		JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = wp.`id_product`
 		JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = wp.`id_product`
@@ -260,7 +260,7 @@ class		WishList extends ObjectModel
 		}
 		return ($products);
 	}
-	
+
 	/**
 	 * Get Wishlists number products by Customer ID
 	 *
@@ -278,7 +278,7 @@ class		WishList extends ObjectModel
 		GROUP BY w.`id_wishlist`
 		ORDER BY w.`name` ASC'));
 	}
-	
+
 	/**
 	 * Add product to ID wishlist
 	 *
@@ -318,9 +318,9 @@ class		WishList extends ObjectModel
 			'.intval($id_product).',
 			'.intval($id_product_attribute).',
 			'.intval($quantity).', 1)'));
-			
+
 	}
-	
+
 	/**
 	 * Update product to wishlist
 	 *
@@ -341,7 +341,7 @@ class		WishList extends ObjectModel
 		AND `id_product` = '.intval($id_product).'
 		AND `id_product_attribute` = '.intval($id_product_attribute)));
 	}
-	
+
 	/**
 	 * Remove product from wishlist
 	 *
@@ -377,7 +377,7 @@ class		WishList extends ObjectModel
 		AND `wp.id_product` = '.intval($id_product).'
 		AND `wp.id_product_attribute` = '.intval($id_product_attribute)));
 	}
-	
+
 	/**
 	 * Return bought product by ID wishlist
 	 *
@@ -385,7 +385,7 @@ class		WishList extends ObjectModel
 	 */
 	static public function getBoughtProduct($id_wishlist)
 	{
-		
+
 		if (!Validate::isUnsignedId($id_wishlist))
 			die (Tools::displayError());
 		return (Db::getInstance()->ExecuteS('
@@ -396,7 +396,7 @@ class		WishList extends ObjectModel
 		JOIN `'._DB_PREFIX_.'customer` cu ON (cu.`id_customer` = ca.`id_customer`)
 		WHERE wp.`id_wishlist` = '.intval($id_wishlist)));
 	}
-	
+
 	/**
 	 * Add bought product
 	 *
@@ -414,16 +414,16 @@ class		WishList extends ObjectModel
 			WHERE `id_wishlist` = '.intval($id_wishlist).'
 			AND `id_product` = '.intval($id_product).'
 			AND `id_product_attribute` = '.intval($id_product_attribute));
-		
+
 		if (!sizeof($result) OR
 			($result['quantity'] - $quantity) < 0 OR
 			$quantity > $result['quantity'])
 			return (false);
 
 			Db::getInstance()->Execute('
-			SELECT *  
+			SELECT *
 			FROM `'._DB_PREFIX_.'wishlist_product_cart`
-			WHERE `id_wishlist_product`='.intval($result['id_wishlist_product']).' AND `id_cart`='.intval($id_cart) 
+			WHERE `id_wishlist_product`='.intval($result['id_wishlist_product']).' AND `id_cart`='.intval($id_cart)
 			);
 
 		if (Db::getInstance()->NumRows() > 0)
@@ -438,7 +438,7 @@ class		WishList extends ObjectModel
 				INSERT INTO `'._DB_PREFIX_.'wishlist_product_cart`
 				(`id_wishlist_product`, `id_cart`, `quantity`, `date_add`) VALUES(
 				'.intval($result['id_wishlist_product']).',
-				'.intval($id_cart).',	
+				'.intval($id_cart).',
 				'.intval($quantity).',
 				\''.pSQL(date('Y-m-d H:i:s')).'\')');
 
@@ -451,7 +451,7 @@ class		WishList extends ObjectModel
 			AND `id_product` = '.intval($id_product).'
 			AND `id_product_attribute` = '.intval($id_product_attribute)));
 	}
-	
+
 	/**
 	 * Add email to wishlist
 	 *
@@ -468,7 +468,7 @@ class		WishList extends ObjectModel
 		\''.pSQL($email).'\',
 		\''.pSQL(date('Y-m-d H:i:s')).'\')'));
 	}
-	
+
 	/**
 	 * Get email from wishlist
 	 *
