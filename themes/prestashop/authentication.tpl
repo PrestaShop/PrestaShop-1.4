@@ -67,6 +67,7 @@ countries = new Array();
 		</form>
 	{else}
 	<form action="{$base_dir_ssl}authentication.php" method="post" id="account-creation_form" class="std">
+		{$HOOK_CREATE_ACCOUNT_TOP}
 		<fieldset class="account_creation">
 			<h3>{l s='Your personal information'}</h3>
 			<p class="radio required">

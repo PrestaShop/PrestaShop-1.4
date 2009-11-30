@@ -2453,7 +2453,27 @@ div#mywishlist div#block-order-detail ul li span.wishlist_product_detail {
 	font-size: 11px;
 	border:0;
 }
+/* module reversoform*/
+.account_creation #reverso-form {
+	width:100%;
+}
 
+.account_creation #reverso-form label {
+	width: 250px;
+	text-align:left;
+	margin-left:10px;
+}
+
+.account_creation #reverso-form label#legend_reverso {
+	clear:both;
+	width:100%;
+	font-size:10px;
+	text-align:left;
+}
+
+.account_creation #reverso-form input#reverso_form {
+	margin-top:20px;
+}
 /* module productcomments */
 .rating {
  cursor: pointer;

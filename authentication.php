@@ -10,7 +10,8 @@ if ($cookie->isLogged())
 
 //CSS ans JS file calls
 $js_files = array(
-	_THEME_JS_DIR_.'tools/statesManagement.js'
+	_THEME_JS_DIR_.'tools/statesManagement.js',
+	__PS_BASE_URI__.'js/jquery/jquery-typewatch.pack.js'
 );
 $errors = array();
 
@@ -63,7 +64,7 @@ if (Tools::isSubmit('submitAccount'))
 			$customer->ip_registration_newsletter = pSQL($_SERVER['REMOTE_ADDR']);
 			$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 		}
-		
+
 		$customer->birthday = (empty($_POST['years']) ? '' : intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']));
 
 		/* Customer and address, same fields, caching data */
@@ -204,7 +205,9 @@ if (isset($create_account))
 	));
 
 	/* Call a hook to display more information on form */
-	$smarty->assign('HOOK_CREATE_ACCOUNT_FORM', Module::hookExec('createAccountForm'));
+	$smarty->assign(array('HOOK_CREATE_ACCOUNT_FORM' => Module::hookExec('createAccountForm'),
+																			'HOOK_CREATE_ACCOUNT_TOP' => Module::hookExec('createAccountTop')
+														));
 }
 
 include(dirname(__FILE__).'/header.php');
