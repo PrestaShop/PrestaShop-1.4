@@ -72,17 +72,15 @@ class BlockViewed extends Module
 			$defaultCover = Language::getIsoById($params['cookie']->id_lang).'-default';
 		
 			$productIds = implode(',', $productsViewed);
-			
 			$productsImages = Db::getInstance()->ExecuteS('
-				SELECT i.id_image, i.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
-				FROM '._DB_PREFIX_.'image i
-				LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
-				LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = i.id_product)
-				LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
-				WHERE i.id_product IN ('.$productIds.') 
-				AND i.cover = 1 
-				AND	il.id_lang = '.intval($params['cookie']->id_lang).' AND il.id_lang = '.intval($params['cookie']->id_lang).'
-			');
+			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
+			FROM '._DB_PREFIX_.'product p
+			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
+			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product)
+			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
+			WHERE p.id_product IN ('.$productIds.')
+			AND pl.id_lang = '.intval($params['cookie']->id_lang)
+			);
 
 			$productsImagesArray = array();
 			foreach ($productsImages AS $pi)
