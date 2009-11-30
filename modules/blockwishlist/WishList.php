@@ -221,16 +221,17 @@ class		WishList extends ObjectModel
 			!Validate::isUnsignedId($id_wishlist))
 			die (Tools::displayError());
 		$products = Db::getInstance()->ExecuteS('
-		SELECT wp.`id_product`, wp.`quantity`, p.`quantity` AS product_quantity, pl.`name`, wp.`id_product_attribute`, wp.`priority`, pl.link_rewrite
+		SELECT wp.`id_product`, wp.`quantity`, p.`quantity` AS product_quantity, pl.`name`, wp.`id_product_attribute`, wp.`priority`, pl.link_rewrite, cl.link_rewrite AS category_rewrite
 	  FROM `'._DB_PREFIX_.'wishlist_product` wp
 		JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = wp.`id_product`
 		JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = wp.`id_product`
 		JOIN `'._DB_PREFIX_.'wishlist` w ON w.`id_wishlist` = wp.`id_wishlist`
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON cl.`id_category` = p.`id_category_default` AND cl.id_lang='.(int)$id_lang.'
 		WHERE w.`id_customer` = '.intval($id_customer).'
 		AND pl.`id_lang` = '.intval($id_lang).'
 		AND wp.`id_wishlist` = '.intval($id_wishlist).
 		(empty($id_product) === false ? ' AND wp.`id_product` = '.intval($id_product) : '').
-		($quantity == true ? ' AND wp.`quantity` != 0' : ''));
+		($quantity == true ? ' AND wp.`quantity` != 0': ''));
 		if (empty($products) === true OR !sizeof($products))
 			return array();
 		for ($i = 0; $i < sizeof($products); ++$i)
