@@ -1309,7 +1309,7 @@ class		Product extends ObjectModel
 		// Group reduction
 		if ($id_customer)
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
-
+		$price = number_format($price, $decimals, '.', '');
 		self::$_prices[$cacheId] = Tools::ceilf(($divisor AND $divisor != NULL) ? $price/$divisor : $price, $decimals);
 		return self::$_prices[$cacheId];
 	}
@@ -1702,7 +1702,7 @@ class		Product extends ObjectModel
 		$resultsArray = array();
 		foreach ($result AS $k => $row)
 		{
-			$row['price'] = Product::getPriceStatic($row['id_product'], true, NULL, 2);
+			$row['price'] = Tools::ceilf(Product::getPriceStatic($row['id_product'], true, NULL, 6), 2);
 			$row['quantity'] = Product::getQuantity($row['id_product']);
 			$resultsArray[] = $row;
 		}
