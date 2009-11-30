@@ -362,7 +362,7 @@ function displayCarrier()
 	$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 	$wrapping_fees_tax_exc = $wrapping_fees / (1 + ((floatval($wrapping_fees_tax->rate) / 100)));
 
-	if (Validate::isUnsignedInt($cart->id_carrier))
+	if (Validate::isUnsignedInt($cart->id_carrier) AND $cart->id_carrier)
 	{
 		$carrier = new Carrier(intval($cart->id_carrier));
 		if ($carrier->active AND !$carrier->deleted)
