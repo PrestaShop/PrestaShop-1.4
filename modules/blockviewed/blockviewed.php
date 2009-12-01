@@ -62,7 +62,7 @@ class BlockViewed extends Module
 	
 	function hookRightColumn($params)
 	{
-		global $link, $smarty;
+		global $link, $smarty, $cookie;
 		
 		$id_product = intval(Tools::getValue('id_product'));
 		$productsViewed = (isset($params['cookie']->viewed) AND !empty($params['cookie']->viewed)) ? array_slice(explode(',', $params['cookie']->viewed), 0, Configuration::get('PRODUCTS_VIEWED_NBR')) : array();
@@ -112,7 +112,20 @@ class BlockViewed extends Module
 			}
 			
 			if ($id_product AND !in_array($id_product, $productsViewed))
-				array_unshift($productsViewed, $id_product);
+			{
+				// Check if the user to the right of access to this product
+				$result = Db::getInstance()->getRow('
+				SELECT COUNT(cug.`id_customer`) AS total
+				FROM `'._DB_PREFIX_.'product` p
+				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
+				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = cp.`id_category`)
+				LEFT JOIN `'._DB_PREFIX_.'customer_group` cug ON (cug.`id_group` = cg.`id_group`)
+				WHERE p.`id_product` = '.intval($id_product).'
+				AND cug.`id_customer` = '.intval($cookie->id_customer)
+				);
+				if ($result['total'])
+					array_unshift($productsViewed, $id_product);
+			}
 			$viewed = '';
 			foreach ($productsViewed AS $id_product_viewed)
 				$viewed .= intval($id_product_viewed).',';
