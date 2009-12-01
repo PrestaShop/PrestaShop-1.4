@@ -16,18 +16,22 @@ class Reverso extends Module
 	
 	public function uninstall()
 	{
-		parent::uninstall();
+		return parent::uninstall();
 	}
 	
-  public function install()
-  {
-  	return (parent::install() AND 
-			$this->registerHook('createAccountTop') AND 
-			Configuration::updateValue('REVERSO_SERIAL', '0123456789123') AND
-			Configuration::updateValue('REVERSO_BAD_NUMBER', 1) AND
-			Configuration::updateValue('REVERSO_UNKNOWN_NUMBER', 2) AND
-			Configuration::updateValue('REVERSO_ADDRESS', str_replace('http://', '', $_SERVER['HTTP_HOST'])));
-  }
+	public function install()
+	{
+		if (!parent::install())
+			return false;
+		
+		if (!$this->registerHook('createAccountTop'))
+			return false;
+		
+		return (Configuration::updateValue('REVERSO_SERIAL', '0123456789123') AND
+				Configuration::updateValue('REVERSO_BAD_NUMBER', 1) AND
+				Configuration::updateValue('REVERSO_UNKNOWN_NUMBER', 2) AND
+				Configuration::updateValue('REVERSO_ADDRESS', str_replace('http://', '', $_SERVER['HTTP_HOST'])));
+	}
   
 	private function _postProcess()
 	{
@@ -39,7 +43,7 @@ class Reverso extends Module
 	public function hookCreateAccountTop($params)
 	{
 		global $smarty;
-		$tag = '<img src='.($_SERVER['HTTPS'] ? 'https://' : 'http://').'api.reversoform.com/includes/'.($_SERVER['HTTPS'] ? 'www.reversoform.com/' : '').'js/trans.giff?d='.date('U').' with="0" height="0" />';
+		$tag = '<img src='.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').'api.reversoform.com/includes/'.(Configuration::get('PS_SSL_ENABLED') ? 'www.reversoform.com/' : '').'js/trans.giff?d='.date('U').' with="0" height="0" />';
 		$smarty->assign(array('reverso_tag' => $tag));
 		return $this->display(__FILE__, 'reverso.tpl');
 	}
