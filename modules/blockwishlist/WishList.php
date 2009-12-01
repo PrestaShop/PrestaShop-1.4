@@ -355,28 +355,27 @@ class		WishList extends ObjectModel
 			!Validate::isUnsignedId($id_product))
 			die (Tools::displayError());
 		$result = Db::getInstance()->getRow('
-		SELECT `id_wishlist`
-		  FROM `'._DB_PREFIX_.'wishlist`
+		SELECT w.`id_wishlist`, wp.`id_wishlist_product`
+		FROM `'._DB_PREFIX_.'wishlist` w
+		LEFT JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.`id_wishlist` = w.`id_wishlist`)
 		WHERE `id_customer` = '.intval($id_customer).'
-		AND `id_wishlist` = '.intval($id_wishlist));
+		AND w.`id_wishlist` = '.intval($id_wishlist));
 		if (empty($result) === true OR
 			$result === false OR
 			!sizeof($result) OR
 			$result['id_wishlist'] != $id_wishlist)
 			return (false);
-		$result = Db::getInstance()->Execute('
+		// Delete product in wishlist_product_cart
+		Db::getInstance()->Execute('
+		DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart`
+		WHERE `id_wishlist_product` = '.intval($result['id_wishlist_product'])
+		);
+		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'wishlist_product`
 		WHERE `id_wishlist` = '.intval($id_wishlist).'
 		AND `id_product` = '.intval($id_product).'
-		AND `id_product_attribute` = '.intval($id_product_attribute));
-		if ($result == false)
-			return (false);
-		return (Db::getInstance()->Execute('
-		DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
-		JOIN `'._DB_PREFIX_.'wishlist_product` pc ON (wp.id_wishlist_product = wpc.id_wishlist_product)
-		WHERE `wp.id_wishlist` = '.intval($id_wishlist).'
-		AND `wp.id_product` = '.intval($id_product).'
-		AND `wp.id_product_attribute` = '.intval($id_product_attribute)));
+		AND `id_product_attribute` = '.intval($id_product_attribute)
+		);
 	}
 
 	/**

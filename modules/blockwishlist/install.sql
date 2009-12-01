@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_wishlist` (
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_wishlist`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_wishlist_email` (
   `id_wishlist` int(10) unsigned NOT NULL,
