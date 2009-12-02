@@ -271,6 +271,12 @@ class AdminLanguages extends AdminTab
 		$obj = $this->loadObject(true);
 
 		echo '
+		<script type="text/javascript">
+		var langPackOk = "'.$this->l('A langage pack is available for this iso code:').'";
+		var noLangPack = "'.$this->l('No langage pack available for this iso code').'";
+		var download = "'.$this->l('Download').'";
+		</script>
+		<script type="text/javascript" src="'._PS_JS_DIR_.'/checkLangPack.js"></script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('Languages').'</legend>
@@ -280,7 +286,7 @@ class AdminLanguages extends AdminTab
 				</div>
 				<label>'.$this->l('ISO code:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="2" name="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="2" name="iso_code" id="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" onKeyUp="checkLangPack();" /> <sup>*</sup>
 					<p>'.$this->l('2-letter ISO code (e.g., fr, en, de)').'</p>
 				</div>
 				<label>'.$this->l('Flag:').' </label>
@@ -301,6 +307,7 @@ class AdminLanguages extends AdminTab
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Allow or disallow this language to be selected by the customer').'</p>
 				</div>
+				<p id="resultCheckLangPack"></p>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
