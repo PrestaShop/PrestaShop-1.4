@@ -622,6 +622,7 @@ class		Cart extends ObjectModel
 				$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 				$wrapping_fees /= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
 			}
+			$wrapping_fees = Tools::ceilf($wrapping_fees, 2);
 		}
 
 		if ($type != 1)
@@ -641,13 +642,13 @@ class		Cart extends ObjectModel
 							{
 								$categories = Discount::getCategories($discount->id);
 								if(count($categories))
-										if (Product::idIsOnCategoryId($product['id_product'], $categories))
-										{
-											if($type == 2)
-												$order_total -= $shipping_fees;
-											$shipping_fees = 0;
-											break;
-										}
+									if (Product::idIsOnCategoryId($product['id_product'], $categories))
+									{
+										if($type == 2)
+											$order_total -= $shipping_fees;
+										$shipping_fees = 0;
+										break;
+									}
 							}
 					}
 				}
@@ -661,7 +662,7 @@ class		Cart extends ObjectModel
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
-		return floatval($order_total);
+		return Tools::ceilf(floatval($order_total), 2);
 	}
 
 	/**
@@ -778,7 +779,7 @@ class		Cart extends ObjectModel
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
             $shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
-		return floatval($shipping_cost);
+		return floatval(Tools::ceilf(floatval($shipping_cost), 2));
     }
 
 	/**
