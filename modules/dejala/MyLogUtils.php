@@ -8,7 +8,7 @@ class MyLogUtils
 		$fh = fopen($filepath, 'a');
 		if (FALSE !==  $fh)
 		{
-			fwrite($fh, date("d/m/y-H:i:s\t", mktime()));
+			fwrite($fh, date("d/m/y-H:i:s\t", time()));
 			fwrite($fh, $msg . "\r\n");
 			fclose($fh);
 		}
