@@ -15,19 +15,20 @@ class Dejala extends Module
 	public $DEJALA_DEBUG = FALSE;
 	public $dejalaConfig;
 
-
 	public function __construct()
 	{
 		$this->name = 'dejala';
-    $this->tab = 'Tools';
+		$this->tab = 'Tools';
 		$this->version = 1.2;
 		$this->internal_version = '1.2.3';
+		// Iso code of countries where the module can be used, if none module available for all countries
+		$this->limited_countries = array('fr');
 
 		parent::__construct();
 
 		if (true !== extension_loaded('curl')) {
-  		$this->warning = $this->l('this module requires php extension cURL to function properly. Please install the php extension "cURL" first');
-  	}
+			$this->warning = $this->l('this module requires php extension cURL to function properly. Please install the php extension "cURL" first');
+		}
 
 		// load configuration
 		$this->dejalaConfig = new DejalaConfig();
