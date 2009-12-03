@@ -31,7 +31,7 @@ $_LANG['Database is created!'] = 'Base de données installée !';
 $_LANG['Database name'] = 'Nom de la base';
 $_LANG['Disclaimer'] = 'Avertissement';
 $_LANG['Documentation Wiki'] = 'documentation Wiki';
-$_LANG['E-mail'] = 'email';
+$_LANG['E-mail'] = 'Email';
 $_LANG['E-mail address'] = 'Adresse e-mail';
 $_LANG['E-mail delivery set-up'] = 'Paramètres d\'envoi des emails';
 $_LANG['Encryption'] = 'Cryptage';
@@ -180,5 +180,11 @@ $_LANG['Need help ?'] = 'Besoin d\'aide ?';
 $_LANG['All tips and advice about Prestashop'] = 'Toutes les astuces et conseils autour de Prestashop';
 $_LANG['Forum'] = 'Le forum';
 $_LANG['Blog'] = 'Le blog';
+$_LANG['Back Office'] = 'Back Office';
+$_LANG['Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'] = 'Administrez votre boutique avec votre back office. Gérer vos commandes et vos clients, ajouter des modules, modifier votre thème, etc...';
+$_LANG['Manage your store'] = 'Gérez votre boutique';
+$_LANG['Front Office'] = 'Front Office';
+$_LANG['Find your store as your future customers will see !'] = 'Découvrez votre boutique tel que vos futurs clients la verront !';
+$_LANG['Discover my shop'] = 'Découvrir ma boutique';
 
 ?>

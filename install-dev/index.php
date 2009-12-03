@@ -454,34 +454,48 @@ if ($lm->getIncludeTradFilename())
 				<h3><?php echo lang('Your installation is finished !'); ?></h3>
 				<p><?php echo lang('You\'ve just installed and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
 				<p><?php echo lang('Here are your shop information. You can modify them once logged in.'); ?></p>
-				<p id="resultInstall">
-				<?php echo lang('Shop name'); ?>: <span id="endShopName"></span><br/>
-				<?php echo lang('First name'); ?> : <span id="endFirstName"></span><br/>
-				<?php echo lang('Last name'); ?> : <span id="endName"></span><br/>
-				<?php echo lang('E-mail'); ?> : <span id="endEmail"></span>
-				</p>
+				<table id="resultInstall" cellspacing="0">
+					<tr>
+						<td class="label"><?php echo lang('Shop name'); ?> :</td>
+						<td id="endShopName" class="resultEnd">&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="label"><?php echo lang('First name'); ?> :</td>
+						<td id="endFirstName" class="resultEnd">&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="label"><?php echo lang('Last name'); ?> :</td>
+						<td id="endName" class="resultEnd">&nbsp;</td>
+					</tr>
+					<tr>
+						<td class="label"><?php echo lang('E-mail'); ?> :</td>
+						<td id="endEmail" class="resultEnd">&nbsp;</td>
+					</tr>
+				</table>
 				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder.'); ?></h3>
-				<p><?php echo lang('And now, discover your new store and Back Office'); ?>:</p>
-				<ul>
-					<li><a id="endFO" href="../"><?php echo lang('My shop'); ?></a></li>
-					<li><a id="endBO" href="../admin"><?php echo lang('My Back Office'); ?></a></li>
-				</ul>
+				
+				<a href="../admin" id="access" class="BO" target="_blank">
+					<span class="title"><?php echo lang('Back Office'); ?></span>
+					<span class="description"><?php echo lang('Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'); ?></span>
+					<span class="message"><?php echo lang('Manage your store'); ?></span>
+				</a>
+				<a href="../" id="access" class="FO" target="_blank">
+					<span class="title"><?php echo lang('Front Office'); ?></span>
+					<span class="description"><?php echo lang('Find your store as your future customers will see !'); ?></span>
+					<span class="message"><?php echo lang('Discover my shop'); ?></span>
+				</a>
+				<div id="resultEnd"></div>
 			</div>
-			<div style="height:250px;background:#DEDEDE;border-top:1px solid #008000">
-				<p style="margin:20px;color:#7EB423;font-size:12px;font-weight:bold">
-					<?php echo lang('Improve your user experience and your visitors\', discover our websites and services:'); ?>
-				</p>
-				<div style="width:220px;padding:0 20px;margin:auto;font-family:Arial,helvetica,sans-serif;font-size:11px;color:#383838">
-					<a href="http://www.prestastore.com" title="PrestaStore"><img src="img/prestastore.png" alt="PrestaStore" style="border:0" /></a>
-					<p><?php echo lang('Be different with a'); ?> <b><?php echo lang('design'); ?></b> <?php echo lang('which fit with your shop and find the'); ?> <b><?php echo lang('payment mean'); ?></b> <?php echo lang('you like the most.'); ?></p>
-					<p>
-						<img src="img/bullet.png" style="margin-right:5px;vertical-align:middle" /><a href="http://www.prestastore.com/3-themes" style="color:#CD075C;font-weight:700;text-decoration:underline"><?php echo lang('Themes'); ?></a><br />
-					</p>
-					<p>
-						<img src="img/bullet.png" style="margin-right:5px;vertical-align:middle" /><a href="http://www.prestastore.com/4-payment-modules" style="color:#CD075C;font-weight:700;text-decoration:underline"><?php echo lang('Payment modules'); ?></a>
-					</p>
-				</div>
-			</div>
+			<?php
+			// Check if can contact prestastore.com
+			if (false): // it's temporary
+			?>
+			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" style="width:100%;height:300px;border:none;border-top:2px solid #000;margin:0px;">
+				<p>Your browser does not support iframes.</p>
+			</iframe>
+			<?php
+			endif;
+			?>
 		</div>
 		
 		<div class="sheet" id="sheet_disclaimer">

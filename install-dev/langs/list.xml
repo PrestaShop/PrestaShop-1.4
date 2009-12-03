@@ -23,4 +23,15 @@
 		<idLangPS>fr</idLangPS>
 	</lang>
 	
+	<lang id="2" label="Español (Spanish)" trad_file="/../langs/es.php" >
+		<flags>
+			<url>../img/l/3.jpg</url>
+		</flags>
+		<isos>
+			<iso>es-es</iso>
+			<iso>es</iso>
+		</isos>
+		<idLangPS>es</idLangPS>
+	</lang>
+	
 </languages>

@@ -174,5 +174,11 @@ $_LANG['Need help ?'] = 'Need help ?';
 $_LANG['All tips and advice about Prestashop'] = 'All tips and advice about Prestashop';
 $_LANG['Forum'] = 'Forum';
 $_LANG['Blog'] = 'Blog';
+$_LANG['Back Office'] = 'Back Office';
+$_LANG['Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'] = 'Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...';
+$_LANG['Manage your store'] = 'Manage your store';
+$_LANG['Front Office'] = 'Front Office';
+$_LANG['Find your store as your future customers will see !'] = 'Find your store as your future customers will see !';
+$_LANG['Discover my shop'] = 'Discover my shop';
 
 ?>

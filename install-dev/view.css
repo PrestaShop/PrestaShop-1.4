@@ -21,7 +21,7 @@ a:hover{
 
 #container{
 	margin:1em auto 0 auto;
-	width:880px;
+	width:910px;
 	padding:30px 30px 0px 30px;
 	font-size:0.8em;
 	background : #456d01 url(img/bg-ctnr.png) top repeat-x;
@@ -253,7 +253,7 @@ div#sheets {
 	background-color:white;
 	margin-top:15px;
 	min-height:400px;
-	padding-bottom:2em;
+	
 }
 * html div#sheets {
 	height: 400px;
@@ -261,7 +261,7 @@ div#sheets {
 
 #sheets div.sheet{
 	display:none;
-	width:620px;
+	width:650px;
 	padding:1em;
 }
 
@@ -450,12 +450,22 @@ div#updateLog{
 	overflow:auto;
 	display:none;
 }
-p#resultInstall{
-	width:60%;
-	border:1px solid green;
-	margin:2em auto;
-	padding:1em;
+
+table#resultInstall{
+	width:100%;
+	margin:10px auto 5px auto;
+	border:none;
 }
+table#resultInstall td{
+	border-bottom:3px solid #FFF;
+	background:#F5FFE4;
+	padding:5px;
+}
+table#resultInstall td.label{
+	width:35%;
+	text-align:right;
+}
+table#resultInstall td.resultEnd{width:65%;color:#D41956;font-weight:bold;}
 p#alignedLogo{
 	text-align:center;
 }
@@ -542,3 +552,18 @@ div#noJavaScript{
 	background-color: white;
 	text-align: center;
 }
+
+a#access{
+	display:block;
+	width:300px;
+	height:150px;
+	background:url('img/btn-installeur.png') top left;
+	font-family:Arial, sans-serif;
+}
+a#access:hover{background:url('img/btn-installeur.png') bottom left;}
+a#access.BO{float:left;}
+a#access.FO{float:right;}
+a#access span{display:block;}
+a#access span.title{margin:5px 15px;font-size:18pt;font-weight:bold;color:#FFF;}
+a#access span.description{margin:10px 20px;color:#FFF;height:63px;}
+a#access span.message{margin-left:20px;font-weight:bold;color:#FFF;}
