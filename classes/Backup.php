@@ -16,7 +16,7 @@ class Backup
 {
 	/** @var integer Object id */
 	public $id;
-	
+
 	/** @var string Last error messages */
 	public $error;
 
@@ -55,7 +55,7 @@ class Backup
 
 		return $backupfile;
 	}
-	
+
 	/**
 	 * Get the URL used to retreive this backup file
 	 *
@@ -100,7 +100,7 @@ class Backup
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Creates a new backup file
 	 *
@@ -143,7 +143,7 @@ class Backup
 
 		fwrite($fp, '/* Backup for ' . Tools::getHttpHost(false, false) . __PS_BASE_URI__ . "\n *  at " . date($date) . "\n */\n");
 		fwrite($fp, "\n".'SET NAMES \'utf8\';'."\n\n");
-		
+
 		// Find all tables
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES');
 		$found = 0;
@@ -168,7 +168,7 @@ class Backup
 
 			fwrite($fp, '/* Scheme for table ' . $schema[0]['Table'] . " */\n");
 			fwrite($fp, $schema[0]['Create Table'] . ";\n\n");
-		
+
 			$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`', false);
 			$sizeof = DB::getInstance()->NumRows();
 			if ($data AND $sizeof > 0)
@@ -179,6 +179,7 @@ class Backup
 				$i = 1;
 				while ($row = DB::getInstance()->nextRow($data))
 				{
+					p($row);
 					$s = '(';
 					foreach ($row as $field => $value)
 						$s .= "'" . mysql_real_escape_string($value) . "',";
@@ -190,14 +191,14 @@ class Backup
 						$s .= "),\n";
 					else
 						$s .= ");\n";
-					
+
 					fwrite($fp, $s);
 					++$i;
 				}
 			}
 			$found++;
 		}
-		
+
 		fclose($fp);
 		if ($found == 0)
 		{
@@ -205,8 +206,8 @@ class Backup
 			echo Tools::displayError('No valid tables were found to backup.' );
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 }
