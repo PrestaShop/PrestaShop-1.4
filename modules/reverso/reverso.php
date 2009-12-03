@@ -8,6 +8,9 @@ class Reverso extends Module
        $this->name = 'reverso';
        $this->tab = 'Tools';
        $this->version = '1.0';
+	   // Iso code of countries where the module can be used, if none module available for all countries
+		$this->limited_countries = array('fr');
+		
        parent::__construct();
         /* The parent construct is required for translations */
        $this->displayName = $this->l('ReversoForm');
@@ -21,6 +24,19 @@ class Reverso extends Module
 	
 	public function install()
 	{
+		// Check if hook exists
+		$result = Db::getInstance()->getValue('
+		SELECT COUNT(*) AS total
+		FROM `'._DB_PREFIX_.'hook`
+		WHERE `name` = \'createAccountTop\'
+		');
+		if (!$result)
+			if(!Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'hook` (`name`, `title`, `description`, `position`) 
+			VALUES (\'createAccountTop\', \'Block above the form for create an account\', NULL , \'1\');
+			'))
+				return false;
+		
 		if (!parent::install())
 			return false;
 		
