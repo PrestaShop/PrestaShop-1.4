@@ -125,13 +125,14 @@ class Reverso extends Module
 														);
 		$to_presta  = array();
 		foreach ($fields AS $k => $field)
-			$to_presta[$field] = $address[$k];
+			if (array_key_exists($k, $address))
+				$to_presta[$field] = $address[$k];
 
 		$to_presta  = '';
 		foreach ($fields AS $k => $field)
-			$to_presta .= ($address[$k] != '' ? $field.':'.$address[$k].',' : '');
+			$to_presta .= (array_key_exists($k, $address) ? $field.':'.$address[$k].',' : '');
 			
-		$to_presta .= 'customer_firstname:'.$address['first_name'].',customer_lastname:'.$address['last_name'];
+		$to_presta .= 'customer_firstname:'.(array_key_exists('first_name', $address) ? $address['first_name'] : '').',customer_lastname:'.(array_key_exists('last_name', $address) ? $address['last_name'] : '');
 		
 		return rtrim($to_presta, ',');
 	}

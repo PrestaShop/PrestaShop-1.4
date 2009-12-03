@@ -20,7 +20,6 @@ function updateAddress(phone)
 			var fields = data.split(',');
 			$(fields).each(function(){
 				var field  = this.split(':');
-				console.log(field);
 				$('form#account-creation_form  input[name=\''+ field[0] +'\']').val(field[1]);
 			});
 		}
