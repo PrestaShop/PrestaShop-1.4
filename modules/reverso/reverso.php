@@ -72,22 +72,22 @@ class Reverso extends Module
 		$this->_html .=
 			'<br /><fieldset><legend>'.$this->l('Configuration').'
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<label for="serial">'.$this->l('Serial Number').' :</label>
+			<label for="serial">'.$this->l('Serial number').' :</label>
 			<div class="margin-form">
 				<input type="text" name="reverso_serial" value="'.$conf['REVERSO_SERIAL'].'" />
 			</div>
-			<label for="address">'.$this->l('Site Address').': </label>
+			<label for="address">'.$this->l('Site address').': </label>
 			<div class="margin-form">
 				<input type="text" name="reverso_address" value="'.$conf['REVERSO_ADDRESS'].'" />
 			</div>
-			<input type="submit" name="submitReverso" value="'.$this->l('Update').'" />
+			<input type="submit" name="submitReverso" class="button" value="'.$this->l('Update').'" />
 			</form></fieldset>';
 	}
     
 	public function getContent()
 	{
-		$this->_html .= '<h2>'.$this->l('Reverso Account configuration').'</h2>
-		'.$this->l('Yout don\'t have ReversoForm account yet ?').' <a href="http://www.reversoform.com/api/">'.$this->l('Register now').' !</a>';
+		$this->_html .= '<h2>'.$this->l('Reverso account configuration').'</h2>
+		'.$this->l('You don\'t have ReversoForm account yet?').' <a href="http://www.reversoform.com/api/">'.$this->l('Register now!').'</a>';
 		if (!empty($_POST))
 			$this->_postProcess();
 		else
