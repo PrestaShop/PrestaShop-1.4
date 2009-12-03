@@ -12,7 +12,7 @@ class BlockViewed extends Module
 		$this->version = 0.9;
 
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Viewed products block');
 		$this->description = $this->l('Adds a block displaying last-viewed products');
 	}
@@ -54,38 +54,40 @@ class BlockViewed extends Module
 					<input type="text" name="productNbr" value="'.Configuration::get('PRODUCTS_VIEWED_NBR').'" />
 					<p class="clear">'.$this->l('Define the number of products displayed in this block').'</p>
 				</div>
-				<center><input type="submit" name="submitBlockViewed" value="'.$this->l('Save').'" class="button" /></center>			
+				<center><input type="submit" name="submitBlockViewed" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>
 		</form>';
 		return $output;
 	}
-	
+
 	function hookRightColumn($params)
 	{
 		global $link, $smarty, $cookie;
-		
+
 		$id_product = intval(Tools::getValue('id_product'));
 		$productsViewed = (isset($params['cookie']->viewed) AND !empty($params['cookie']->viewed)) ? array_slice(explode(',', $params['cookie']->viewed), 0, Configuration::get('PRODUCTS_VIEWED_NBR')) : array();
-		
+
 		if (sizeof($productsViewed))
 		{
 			$defaultCover = Language::getIsoById($params['cookie']->id_lang).'-default';
-		
+
 			$productIds = implode(',', $productsViewed);
 			$productsImages = Db::getInstance()->ExecuteS('
-			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite
-			FROM '._DB_PREFIX_.'product p
-			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
-			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product)
-			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
-			WHERE p.id_product IN ('.$productIds.')
-			AND pl.id_lang = '.intval($params['cookie']->id_lang)
+			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite, cl.link_rewrite AS category_rewrite
+            FROM '._DB_PREFIX_.'product p
+            LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
+            LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product)
+            LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
+            LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
+            WHERE p.id_product IN ('.$productIds.')
+            AND pl.id_lang = '.intval($params['cookie']->id_lang).'
+            AND cl.id_lang = '.(int)$params['cookie']->id_lang
 			);
 
 			$productsImagesArray = array();
 			foreach ($productsImages AS $pi)
 				$productsImagesArray[$pi['id_product']] = $pi;
-			
+
 			$productsViewedObj = array();
 			foreach ($productsViewed AS $productViewed)
 			{
@@ -101,7 +103,8 @@ class BlockViewed extends Module
 					$obj->name = $productsImagesArray[$productViewed]['name'];
 					$obj->description_short = $productsImagesArray[$productViewed]['description_short'];
 					$obj->link_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
-					
+					$obj->category_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
+
 					if (!isset($obj->cover))
 					{
 						$obj->cover = $defaultCover;
@@ -110,7 +113,7 @@ class BlockViewed extends Module
 					$productsViewedObj[] = $obj;
 				}
 			}
-			
+
 			if ($id_product AND !in_array($id_product, $productsViewed))
 			{
 				// Check if the user to the right of access to this product
@@ -133,11 +136,11 @@ class BlockViewed extends Module
 
 			if (!sizeof($productsViewedObj))
 				return ;
-			
+
 			$smarty->assign(array(
 				'productsViewedObj' => $productsViewedObj,
 				'mediumSize' => Image::getSize('medium')));
-			
+
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
 		elseif ($id_product)
