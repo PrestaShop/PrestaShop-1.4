@@ -28,8 +28,9 @@ class BlockWishList extends Module
 		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
 		$sql = preg_split("/;\s*[\r\n]+/", $sql);
 		foreach ($sql AS $query)
-			if(!Db::getInstance()->Execute(trim($query)))
-				return false;
+			if($query)
+				if(!Db::getInstance()->Execute(trim($query)))
+					return false;
 		if (!parent::install() OR
 						!$this->registerHook('rightColumn') OR
 						!$this->registerHook('productActions') OR
