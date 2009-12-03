@@ -2,7 +2,7 @@
 <h2>{l s='Wishlist' mod='blockwishlist'}</h2>
 {if $wishlists}
 <p>
-	{l s='Other wishlists of' mod='blockwishlist'} {$current_wishlist.firstname} {$current_wishlist.lastname}: 
+	{l s='Other wishlists of' mod='blockwishlist'} {$current_wishlist.firstname} {$current_wishlist.lastname}:
 	{foreach from=$wishlists item=wishlist name=i}
 	<a href="{$base_dir_ssl}modules/blockwishlist/view.php?token={$wishlist.token}">{$wishlist.name}</a>
 		{if !$smarty.foreach.i.last}
@@ -14,18 +14,19 @@
 {if $products}
 <div class="addresses" id="featured-products_block_center">
 	<h3>{l s='Welcome to the wishlist of' mod='blockwishlist'} {$current_wishlist.firstname} {$current_wishlist.lastname}: {$current_wishlist.name}</h3>
-	<p /> 
+	<p />
 	{foreach from=$products item=product name=i}
 	<ul class="address {if $smarty.foreach.i.last}last_item{elseif $smarty.foreach.i.first}first_item{/if} {if $smarty.foreach.i.index % 2}alternate_item{else}item{/if}" id="block_{$product.id_product}_{$product.id_product_attribute}">
 	<div class="ajax_block_product">
-		<li class="address_title"><a href="{$link->getProductLink($product.id_product, $product.link_rewrite)}" title="{l s='View' mod='blockwishlist'}">{$product.name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</a></li>
+		<li class="address_title"><a href="{$link->getProductLink($product.id_product,
+		$product.link_rewrite, $product.category_rewrite)}" title="{l s='View' mod='blockwishlist'}">{$product.name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</a></li>
 		<li class="address_name">
-			<a	href="{$link->getProductlink($product.id_product, $product.link_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
+			<a	href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
 				<img src="{$img_prod_dir}{$product.cover}-medium.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
 			</a>
 		<span class="wishlist_product_detail">
 		{if isset($product.attributes_small)}
-			<br /><a href="{$link->getProductlink($product.id_product, $product.link_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">{$product.attributes_small|escape:'htmlall':'UTF-8'}</a>
+			<br /><a href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">{$product.attributes_small|escape:'htmlall':'UTF-8'}</a>
 		{/if}
 			<br />{l s='Quantity:' mod='blockwishlist'}<input type="text" id="{$product.id_product}_{$product.id_product_attribute}" size="3" value="{$product.quantity|intval}" />
 			<br />{l s='Priority:' mod='blockwishlist'}
@@ -39,7 +40,7 @@
 		</span>
 		</li>
 		<li class="address_address1 clear">
-			<a class="button_small clear" href="{$link->getProductLink($product.id_product, $product.link_rewrite)}" title="{l s='View' mod='blockwishlist'}">{l s='View' mod='blockwishlist'}</a>
+			<a class="button_small clear" href="{$link->getProductLink($product.id_product,  $product.link_rewrite, $product.category_rewrite)}" title="{l s='View' mod='blockwishlist'}">{l s='View' mod='blockwishlist'}</a>
 			{if $product.attribute_quantity AND $product.attribute_quantity >= 1}
 			{if !$ajax}
 			<form id="addtocart_{$product.id_product|intval}_{$product.id_product_attribute|intval}" action="{$base_dir}cart.php" method="post">
