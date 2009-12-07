@@ -492,9 +492,9 @@ if ($lm->getIncludeTradFilename())
 			</div>
 			<?php
 			// Check if can contact prestastore.com
-			if (false): // it's temporary
+			if (@fsockopen('www.prestastore.com', 80)): // it's temporary
 			?>
-			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" style="width:100%;height:300px;border:none;border-top:2px solid #000;margin:0px;">
+			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
