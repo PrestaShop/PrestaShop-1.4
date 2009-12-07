@@ -213,6 +213,10 @@ if ($lm->getIncludeTradFilename())
 			<?php endforeach?>
 			</ul>
 		</form>
+		<h3 class="no-margin"><?php echo lang('Did you know?'); ?></h3>
+		<p>
+			<?php echo lang('Prestashop and community offers over 40 different languages for free download on'); ?> <a href="http://www.prestashop.com" target="_blank">http://www.prestashop.com</a>
+		</p>
 		
 		<h3><?php echo lang('Installation method')?></h3>
 		<form id="formSetMethod" action="<?php $_SERVER['REQUEST_URI']; ?>" method="post">

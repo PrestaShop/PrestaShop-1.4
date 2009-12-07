@@ -186,5 +186,7 @@ $_LANG['Manage your store'] = 'Gérez votre boutique';
 $_LANG['Front Office'] = 'Front Office';
 $_LANG['Find your store as your future customers will see !'] = 'Découvrez votre boutique tel que vos futurs clients la verront !';
 $_LANG['Discover my shop'] = 'Découvrir ma boutique';
+$_LANG['Did you know?'] = 'Le saviez-vous ?';
+$_LANG['Prestashop and community offers over 40 different languages for free download on'] = 'Prestashop et sa communauté propose plus de 40 langues différentes en téléchargement gratuit sur';
 
 ?>
