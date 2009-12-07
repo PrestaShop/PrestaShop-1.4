@@ -58,7 +58,7 @@ div#leftpannel div#help div.content{
 	float:right;
 	width:132px;
 }
-div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:11pt;margin:4pt 0 3px 0;}
+div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:10.5pt;margin:4pt 0 3px 0;}
 div#leftpannel div#help div.content p.title_down{color:#383838;font-size:8pt;margin:0;}
 div#leftpannel div#help div.content ul{margin:10px 0;padding:0;}
 div#leftpannel div#help div.content ul li{clear:both;padding-bottom:5px;list-style-type:none;}
@@ -538,6 +538,14 @@ div#installerVersion-fr {
 
 div#updaterVersion-fr {
 	background: url(img/langs/fr/updater-version.gif) left no-repeat;
+}
+
+div#installerVersion-es {
+	background: url(img/langs/es/installer-version.gif) left no-repeat;
+}
+
+div#updaterVersion-es {
+	background: url(img/langs/es/updater-version.gif) left no-repeat;
 }
 p#dbResultCheck{
 	height:auto;
