@@ -1,0 +1,1 @@
+Hola {firstname} {lastname},\r\n\r\nHa recibido un nuevo mensaje referente al pedido #{id_order}:\r\n\r\n{message}\r\n\r\n\r\n{shop_url} gestionado por PrestaShop&trade;

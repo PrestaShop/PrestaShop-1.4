@@ -1,0 +1,1 @@
+Hola {firstname} {lastname}.\r\n\r\nHa recibido un mensaje de un cliente desde su tienda: {shop_name}\r\n\r\nDetalles del mensaje:\r\n\r\nEmail: {email}\r\n\r\nMensaje:\r\n\r\n{message}\r\n\r\n\r\n\r\n{shop_url} gestionada por PrestaShop™\r\n

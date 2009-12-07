@@ -238,8 +238,14 @@ INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `desc
 (8, 1, '<p>Lorem ipsum</p>', '<p>Lorem ipsum</p>', 'housse-portefeuille-en-cuir-belkin-pour-ipod-nano-noir-chocolat', '', '', '', 'Housse portefeuille en cuir Belkin pour iPod nano - Noir/Chocolat', '', NULL),
 (8, 2, '<p><strong>Caractéristiques</strong></p>\r\n<li>Cuir doux résistant<br /> </li>\r\n<li>Accès au bouton Hold<br /> </li>\r\n<li>Fermeture magnétique<br /> </li>\r\n<li>Accès au Dock Connector<br /> </li>\r\n<li>Protège-écran</li>', '<p>Cet étui en cuir tendance assure une protection complète contre les éraflures et les petits aléas de la vie quotidienne. Sa conception élégante et compacte vous permet de glisser votre iPod directement dans votre poche ou votre sac à main.</p>', 'housse-portefeuille-en-cuir-ipod-nano-noir-chocolat', '', '', '', 'Housse portefeuille en cuir (iPod nano) - Noir/Chocolat', '', NULL),
 (9, 1, '<div class="product-overview-full">Using Hi-Definition MicroSpeakers to deliver full-range audio, the ergonomic and lightweight design of the SE210 earphones is ideal for premium on-the-go listening on your iPod or iPhone. They offer the most accurate audio reproduction from both portable and home stereo audio sources--for the ultimate in precision highs and rich low end. In addition, the flexible design allows you to choose the most comfortable fit from a variety of wearing positions. <br /> <br /> <strong>Features </strong> <br /> \r\n<ul>\r\n<li>Sound-isolating design </li>\r\n<li> Hi-Definition MicroSpeaker with a single balanced armature driver </li>\r\n<li> Detachable, modular cable so you can make the cable longer or shorter depending on your activity </li>\r\n<li> Connector compatible with earphone ports on both iPod and iPhone </li>\r\n</ul>\r\n<strong>Specifications </strong><br /> \r\n<ul>\r\n<li>Speaker type: Hi-Definition MicroSpeaker </li>\r\n<li> Frequency range: 25Hz-18.5kHz </li>\r\n<li> Impedance (1kHz): 26 Ohms </li>\r\n<li> Sensitivity (1mW): 114 dB SPL/mW </li>\r\n<li> Cable length (with extension): 18.0 in./45.0 cm (54.0 in./137.1 cm) </li>\r\n</ul>\r\n<strong>In the box</strong><br /> \r\n<ul>\r\n<li>Shure SE210 earphones </li>\r\n<li> Extension cable (36.0 in./91.4 cm) </li>\r\n<li> Three pairs foam earpiece sleeves (small, medium, large) </li>\r\n<li> Three pairs soft flex earpiece sleeves (small, medium, large) </li>\r\n<li> One pair triple-flange earpiece sleeves </li>\r\n<li> Carrying case </li>\r\n</ul>\r\nWarranty<br /> Two-year limited <br />(For details, please visit <br />www.shure.com/PersonalAudio/CustomerSupport/ProductReturnsAndWarranty/index.htm.) <br /><br /> Mfr. Part No.: SE210-A-EFS <br /><br />Note: Products sold through this website that do not bear the Apple Brand name are serviced and supported exclusively by their manufacturers in accordance with terms and conditions packaged with the products. Apple''s Limited Warranty does not apply to products that are not Apple-branded, even if packaged or sold with Apple products. Please contact the manufacturer directly for technical support and customer service.</div>', '<p>Evolved from personal monitor technology road-tested by pro musicians and perfected by Shure engineers, the lightweight and stylish SE210 delivers full-range audio that''s free from outside noise.</p>', 'ecouteurs-a-isolation-sonore-shure-se210-blanc', '', '', '', 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone', '', NULL),
-(9, 2, '<p>Basés sur la technologie des moniteurs personnels testée sur la route par des musiciens professionnels et perfectionnée par les ingénieurs Shure, les écouteurs SE210, légers et élégants, fournissent une sortie audio à gamme étendue exempte de tout bruit externe.</p>\r\n<p><img src="http://store.apple.com/Catalog/fr/Images/TM255_screen1.jpg" border="0" /></p>\r\n<p><strong>Conception à isolation sonore <br /></strong>Les embouts à isolation sonore fournis bloquent plus de 90 % du bruit ambiant. Combinés à un design ergonomique séduisant et un câble modulaire, ils minimisent les intrusions du monde extérieur, vous permettant de vous concentrer sur votre musique. Conçus pour les amoureux de la musique qui souhaitent faire évoluer leur appareil audio portable, les écouteurs SE210 vous permettent d''emmener la performance avec vous. <br /> <br /><strong>Micro-transducteur haute définition <br /></strong>Développés pour une écoute de qualité supérieure en déplacement, les écouteurs SE210 utilisent un seul transducteur à armature équilibrée pour bénéficier d''une gamme audio étendue. Le résultat ? Un confort d''écoute époustouflant qui restitue tous les détails d''un spectacle live.</p>\r\n<p><strong>Le kit universel Deluxe comprend les éléments suivants : <br /></strong>- <strong><em>Embouts à isolation sonore</em></strong> <br />Les embouts à isolation sonore inclus ont un double rôle : bloquer les bruits ambiants et garantir un maintien et un confort personnalisés. Comme chaque oreille est différente, le kit universel Deluxe comprend trois tailles (S, M, L) d''embouts mousse et flexibles. Choisissez la taille et le style d''embout qui vous conviennent le mieux : une bonne étanchéité est un facteur clé pour optimiser l''isolation sonore et la réponse des basses, ainsi que pour accroître le confort en écoute prolongée.<br /><br />- <em><strong>Câble modulaire</strong></em> <br />En se basant sur les commentaires de nombreux utilisateurs, les ingénieurs de Shure ont développé une solution de câble détachable pour permettre un degré de personnalisation sans précédent. Le câble de 1 mètre fourni vous permet d''adapter votre confort en fonction de l''activité et de l''application.<br /> <br />- <em><strong>Étui de transport</strong></em> <br />Outre les embouts à isolation sonore et le câble modulaire, un étui de transport compact et résistant est fourni avec les écouteurs SE210 pour vous permettre de ranger vos écouteurs de manière pratique et sans encombres.<br /> <br />- <strong><em>Garantie limitée de deux ans <br /></em></strong>Chaque solution SE210 achetée est couverte par une garantie pièces et main-d''œuvre de deux ans.<br /><br /><strong>Caractéristiques techniques</strong></p>\r\n<ul>\r\n<li> Type de transducteur : micro-transducteur haute définition<br /></li>\r\n<li> Sensibilité (1 mW) : pression acoustique de 114 dB/mW<br /></li>\r\n<li> Impédance (à 1 kHz) : 26 W<br /></li>\r\n<li> Gamme de fréquences : 25 Hz – 18,5 kHz<br /></li>\r\n<li> Longueur de câble / avec rallonge : 45 cm / 136 cm<br /></li>\r\n</ul>\r\n<p><strong>Contenu du coffret<br /></strong></p>\r\n<ul>\r\n<li> Écouteurs Shure SE210<br /></li>\r\n<li> Kit universel Deluxe (embouts à isolation sonore, câble modulaire, étui de transport)</li>\r\n</ul>', '<p>Les écouteurs à isolation sonore ergonomiques et légers offrent la reproduction audio la plus fidèle en provenance de sources audio stéréo portables ou de salon.</p>', 'ecouteurs-a-isolation-sonore-shure-se210', '', '', '', 'Écouteurs à isolation sonore Shure SE210', '', NULL);
-
+(9, 2, '<p>Basés sur la technologie des moniteurs personnels testée sur la route par des musiciens professionnels et perfectionnée par les ingénieurs Shure, les écouteurs SE210, légers et élégants, fournissent une sortie audio à gamme étendue exempte de tout bruit externe.</p>\r\n<p><img src="http://store.apple.com/Catalog/fr/Images/TM255_screen1.jpg" border="0" /></p>\r\n<p><strong>Conception à isolation sonore <br /></strong>Les embouts à isolation sonore fournis bloquent plus de 90 % du bruit ambiant. Combinés à un design ergonomique séduisant et un câble modulaire, ils minimisent les intrusions du monde extérieur, vous permettant de vous concentrer sur votre musique. Conçus pour les amoureux de la musique qui souhaitent faire évoluer leur appareil audio portable, les écouteurs SE210 vous permettent d''emmener la performance avec vous. <br /> <br /><strong>Micro-transducteur haute définition <br /></strong>Développés pour une écoute de qualité supérieure en déplacement, les écouteurs SE210 utilisent un seul transducteur à armature équilibrée pour bénéficier d''une gamme audio étendue. Le résultat ? Un confort d''écoute époustouflant qui restitue tous les détails d''un spectacle live.</p>\r\n<p><strong>Le kit universel Deluxe comprend les éléments suivants : <br /></strong>- <strong><em>Embouts à isolation sonore</em></strong> <br />Les embouts à isolation sonore inclus ont un double rôle : bloquer les bruits ambiants et garantir un maintien et un confort personnalisés. Comme chaque oreille est différente, le kit universel Deluxe comprend trois tailles (S, M, L) d''embouts mousse et flexibles. Choisissez la taille et le style d''embout qui vous conviennent le mieux : une bonne étanchéité est un facteur clé pour optimiser l''isolation sonore et la réponse des basses, ainsi que pour accroître le confort en écoute prolongée.<br /><br />- <em><strong>Câble modulaire</strong></em> <br />En se basant sur les commentaires de nombreux utilisateurs, les ingénieurs de Shure ont développé une solution de câble détachable pour permettre un degré de personnalisation sans précédent. Le câble de 1 mètre fourni vous permet d''adapter votre confort en fonction de l''activité et de l''application.<br /> <br />- <em><strong>Étui de transport</strong></em> <br />Outre les embouts à isolation sonore et le câble modulaire, un étui de transport compact et résistant est fourni avec les écouteurs SE210 pour vous permettre de ranger vos écouteurs de manière pratique et sans encombres.<br /> <br />- <strong><em>Garantie limitée de deux ans <br /></em></strong>Chaque solution SE210 achetée est couverte par une garantie pièces et main-d''œuvre de deux ans.<br /><br /><strong>Caractéristiques techniques</strong></p>\r\n<ul>\r\n<li> Type de transducteur : micro-transducteur haute définition<br /></li>\r\n<li> Sensibilité (1 mW) : pression acoustique de 114 dB/mW<br /></li>\r\n<li> Impédance (à 1 kHz) : 26 W<br /></li>\r\n<li> Gamme de fréquences : 25 Hz – 18,5 kHz<br /></li>\r\n<li> Longueur de câble / avec rallonge : 45 cm / 136 cm<br /></li>\r\n</ul>\r\n<p><strong>Contenu du coffret<br /></strong></p>\r\n<ul>\r\n<li> Écouteurs Shure SE210<br /></li>\r\n<li> Kit universel Deluxe (embouts à isolation sonore, câble modulaire, étui de transport)</li>\r\n</ul>', '<p>Les écouteurs à isolation sonore ergonomiques et légers offrent la reproduction audio la plus fidèle en provenance de sources audio stéréo portables ou de salon.</p>', 'ecouteurs-a-isolation-sonore-shure-se210', '', '', '', 'Écouteurs à isolation sonore Shure SE210', '', NULL),
+(7, 3, '<p>Cinco nuevas aplicaciones a mano</p>\r\n<p><br /> Consulta tu correo en formato HTML enriquecido, con fotos y ficheros adjuntos en formato PDF, Word y Excel. Consigue mapas, itinerarios e información sobre el estado de la carreteras en tiempo real. Escribe notas y consulta la bolsa y el tiempo. <br /> Alcanza con un dedo tu música y tus videos, entre otras cosas. <br /> La tecnología multi-touch revolucionaria integrada a la magnífica pantalla de 3,5 pulgadas te permitirá efectuar zoom hacia adelante y hacia atrás, y pasar y ojear las páginas solo con la ayuda de tus dedos.</p>\r\n<p>Internet en tu bolsillo</p>\r\n<p>Con el navegador Safari, podrás consultar sitios web en su compaginación de origen y efectuar un zoom hacia adelante y hacia atrás con la simple presión de un dedo en la pantalla.</p>\r\n<p>Contenido del estuche<br />    * iPod touch<br />    * Auriculares<br />    * Cable USB 2.0<br />    * Adaptador Dock<br />    * Paño de limpieza<br />    * Base<br />    * Guía de inicio rápido<br /> Título<br /> Párrafo</p>', '<p>Interfaz multi-touch revolucionaria<br /> Pantalla panorámica color de 3,5 pulgadas<br /> Wi-Fi (802.11b/g)<br /> 8 mm de espesor<br /> Safari, YouTube, iTunes Wi-Fi Music Store, Correo, Mapas, Bolsa, El tiempo, Notas</p>', 'ipod-touch', '', '', '', 'iPod touch', 'Disponible', ''),
+(1, 3, '<p><strong>Curvas aerodinámicas.</strong></p>\r\n<p>Para los aficionados a las sensaciones fuertes, os presentamos nueve nuevos colores. ¡ Y eso no es todo ! Experimenta el diseño elíptico de aluminio y vidrio. ¡ No querrás separarte de él nunca más !</p>\r\n<p><strong><br /> Estético e inteligente.</strong></p>\r\n<p>La nueva aplicación Genius hace de iPod nano tu discjockey personal. Genuis crea listas de lectura buscando en tu biblioteca las canciones que combinan entre si.</p>\r\n<p><strong><br /> Hecho para moverse contigo.</strong><br /> iPod nano está equipado de un acelerómetro. Muévelo para mezclar tu música. Voltéalo para mostrar Cover Flow. Y descubre juegos adaptados a tus movimientos.</p>', '<p>Nuevo diseño. Nuevas aplicaciones. Ahora disponible en 8 y 16 Go. iPod nano, más rock que nunca.</p>', 'ipod-nano', '', '', '', 'iPod Nano', 'Disponible', ''),
+(2, 3, '<p><strong>Un enlace inmediato.</strong><br /> <br /> Lleva hasta 500 canciones colgadas de tu manga, de tu cinturón o de tu pantalón. Presume con tu iPod shuffle como signo exterior de tu pasión por la música. Ahora ya existen cuatro nuevos colores más llamativos. <br /> <br /> <strong>Llena tu iPod shuffle.</strong><br /> <br /> iTunes es una enorme tienda dedicada a la diversión, una colección de música organizada perfectamente y un jukebox. Con tan solo un clic puedes llenar tu iPod shuffle con canciones. <br /> <br /> <strong>La música en tecnicolor. </strong><br /> <br /> iPod shuffle presenta nuevos colores vivos que realzan su diseño estilizado en aluminio anodizado. Elige entre azul, verde, rosa, rojo y el plateado de origen.</p>', '<p>iPod shuffle, el walkman más portátil del mundo, ahora en azul, verde, rosa y rojo.</p>', 'ipod-shuffle', '', '', '', 'iPod shuffle', 'Disponible', ''),
+(6, 3, '<p>Cada MacBook está equipado de un disco duro más espacioso, de una capacidad de hasta  250 Go, para almacenar tus colecciones multimedia en expansión y tus datos más preciados. <br /> El modelo  MacBook de 2,4 GHz integra 2 Go de memoria en estándar. Lo ideal para realizar sin dificultad tus aplicaciones preferidas.</p>', '<p>MacBook te ofrece una gran libertad de movimientos gracias a su exterior resistente en policarbonato, a su tecnología sin cable y a su adaptador cargador sector innovador que se desconecta automáticamente si alguien se engancha en el cable.</p>', 'macbook', '', '', '', 'MacBook', 'Disponible', ''),
+(5, 3, '<p>MacBook Air es casi tan fino como tu dedo. Se ha simplificado al máximo y a pesar de ello dispone de una pantalla panorámica de 13,3 pulgadas, de un teclado completo y de un amplio trackpad multi-touch. Portátil al 100%, te evitará tener que hacer un compromiso en lo que concierne a la pantalla y al teclado.  <br /> <br /> La increíble sutileza de MacBook Air es el resultado de un gran número de innovaciones en materia de reducción de tamaño y peso. Desde un disco duro más fino hasta puertos E/S disimulados hábilmente pasando por una batería más plana, cada detalle se consideró para que el resultado fuera lo más fino posible.<br /> <br /> MacBook Air fue creado y elaborado para disfrutar plenamente del mundo inalámbrico. Un mundo en el que la norma Wi-Fi 802.11n es tan rápida y accesible que permite liberarse completamente de cualquier atadura para comprar videos en línea, descargar programas, almacenar y compartir archivos en la Red.</p>', '<p>MacBook Air es ultra fino, ultra portátil y ultra diferente de todo el resto. Pero no se pierden kilos y centímetros en tan solo una noche. Todo esto es el resultado de un nuevo invento de normas. De un sinfín de novedades sin cable. Y de una revolución en el diseño. Con MacBook Air, la informática móvil adquiere una nueva dimensión.</p>', 'macbook-air', '', '', '', 'MacBook Air', 'Disponible', ''),
+(8, 3, '<p><strong>Características</strong></p>\r\n<ul>\r\n<li> Cuero suave resistente</li>\r\n<li>Acceso a la tecla Hold</li>\r\n<li>Cierre magnético</li>\r\n<li>Acceso al Dock Conector</li>\r\n<li>Salva pantallas</li>\r\n</ul>', '<p>Este estuche de cuero de última moda garantiza una completa protección contra los arañazos y los pequeños contratiempos de la vida diaria. Su diseño elegante y compacto te permite meter tu Ipod directamente en tu bolsillo o en tu bolso.</p>', 'funda-cuero-ipod-nano-negro-chocolate', '', '', '', 'Leather Case (iPod nano) - Negro / Chocolate', 'Disponible', ''),
+(9, 3, '<p>Los auriculares SE210, ligeros y elegantes, están basados en la tecnología de los monitores personales que los músicos profesionales utilizan en carretera y que los ingenieros de Shure han perfeccionado. También están provistos de una salida audio de gama extendida exenta de todo ruido exterior. <br /> <br /> <strong>Creado para un aislamiento sonoro</strong></p>\r\n<p>Las almohadillas provistas de un aislamiento sonoro bloquean más del 90% del ruido ambiente. Combinadas con un diseño ergonómico atractivo y un cable modular, minimizan las intrusiones del mundo exterior y te permiten concentrarte en tu música. Creados para los apasionados por la música que quieren que su aparato audio móvil evolucione, los auriculares  SE210 te permitirán llevar la tecnología allí donde tú vayas. <br /> <br /> <strong>Micro-transductor alta definición </strong><br /> Desarrollados para poder tener una audición de calidad durante los desplazamientos, los auriculares SE210 utilizan un único transductor con un armazón equilibrado para poder disfrutar de una gama audio extendida. ¿El resultado ? Un confort audio increíble que restituye cada detalle de un espectáculo en directo. <br /> <br /> <strong>El kit universal Deluxe incluye los siguientes elementos :</strong><br /> - Almohadillas para aislamiento sonoro<br /> Las almohadillas para el aislamiento sonoro tienen una doble función : bloquear el ruido ambiente y garantizar una estabilidad y un confort personalizados. Como cada oreja es diferente el kit universal Deluxe incluye tres tallas (S, M, L) de almohadillas de espuma y flexibles. Elige la talla y el estilo de almohadilla que mejor te convenga : un buen aislamiento es un factor clave tanto para optimizar el aislamiento sonoro y la respuesta de los bajos como para aumentar el confort durante una audición prolongada. <br /> <br /> - Cable modular</p>\r\n<p>Basándose en los comentarios de los numerosos usuarios, los ingenieros de Shure han creado una solución de cable separable para permitir un grado de personalización sin precedentes. El cable de 1 metro te permite adaptar el confort en función de la actividad del momento y de la aplicación. <br /> <br /> - Estuche para el transporte</p>\r\n<p>Además de las almohadillas de aislamiento sonoro y del cable modular, los auriculares SE210 están provistos de un estuche de transporte compacto y resistente para guardar los auriculares de manera práctica y sin dificultad. <br /> - Garantía límite de dos años <br /> Cada solución SE210 tiene una garantía piezas y mano de obra de dos años.</p>\r\n<p><br /> <em><strong>Características técnicas</strong></em></p>\r\n<ul>\r\n<li>Tipo de transductor : micro-transductor alta definición</li>\r\n<li>Sensibilidad (1 mW) : presión acústica de 114 dB/mW</li>\r\n<li>Impedancia : (à 1 kHz) : 26 W</li>\r\n<li>Gama de frecuencias : 25 Hz ˆ 18,5 kHz</li>\r\n<li>Longitud del cable / con alargador : 45 cm / 136 cm</li>\r\n</ul>\r\n<p><br /> <strong><em>Contenido de la caja</em></strong></p>\r\n<ul>\r\n<li>Altavoces Shure SE210</li>\r\n<li>Kit universal Deluxe (almohadillas de aislamiento sonoro, cable modular, estuche de transporte)</li>\r\n</ul>', '<p>Los auriculares con aislamiento ergonómicos y ligeros ofrecen la reproducción más fiel proveniente de fuentes audio estéreo móviles o de salón.</p>', 'auriculares-aislantes-del-sonido-shure-se210', '', '', '', 'Auriculares aislantes del sonido Shure SE210', 'Disponible', '');
 
 INSERT INTO `PREFIX_category` VALUES (2, 1, 1, 1, NOW(), NOW());
 INSERT INTO `PREFIX_category` VALUES (3, 1, 1, 1, NOW(), NOW());
@@ -251,7 +257,10 @@ INSERT INTO `PREFIX_category_lang` VALUES
 (3, 1, 'Accessories', 'Wonderful accessories for your iPod', 'accessories-ipod', '', '', ''),
 (3, 2, 'Accessoires', 'Tous les accessoires à la mode pour votre iPod', 'accessoires-ipod', '', '', ''),
 (4, 1, 'Laptops', 'The latest Intel processor, a bigger hard drive, plenty of memory, and even more new features all fit inside just one liberating inch. The new Mac laptops have the performance, power, and connectivity of a desktop computer. Without the desk part.', 'laptops', 'Apple laptops', 'Apple laptops MacBook Air', 'Powerful and chic Apple laptops'),
-(4, 2, 'Portables', 'Le tout dernier processeur Intel, un disque dur plus spacieux, de la mémoire à profusion et d''autres nouveautés. Le tout, dans à peine 2,59 cm qui vous libèrent de toute entrave. Les nouveaux portables Mac réunissent les performances, la puissance et la connectivité d''un ordinateur de bureau. Sans la partie bureau.', 'portables-apple', 'Portables Apple', 'portables apple macbook air', 'portables apple puissants et design');
+(4, 2, 'Portables', 'Le tout dernier processeur Intel, un disque dur plus spacieux, de la mémoire à profusion et d''autres nouveautés. Le tout, dans à peine 2,59 cm qui vous libèrent de toute entrave. Les nouveaux portables Mac réunissent les performances, la puissance et la connectivité d''un ordinateur de bureau. Sans la partie bureau.', 'portables-apple', 'Portables Apple', 'portables apple macbook air', 'portables apple puissants et design'),
+(4, 3, 'Portátiles', 'El último procesador Intel, un disco duro más grande, con profusión de memoria y otras novedades. Todo en sólo 2,59 cm libres de cualquier obstrucción. Las nuevas portátiles Mac cumplir rendimiento, potencia y conectividad de una computadora de escritorio. Sin la parte del escritorio.', 'portátiles-apple', 'Portátiles Apple', 'portátiles apple macbook air', 'portátiles apple poderoso y el diseño'),
+(3, 3, 'Accesorios', 'Todos los accesorios de moda para tu iPod', 'ipod-accesorios', '', '', ''),
+(2, 3, 'iPods', 'Es hora de que el mejor jugador de la música, al escenario para hacer un bis. Con el nuevo iPod, el mundo es tu escenario.', 'musica-ipods', '', '', '');
 
 INSERT INTO `PREFIX_category_product` (`id_category`, `id_product`, `position`) VALUES 
 (1, 1, 0),
@@ -277,7 +286,10 @@ INSERT INTO `PREFIX_attribute_group_lang` VALUES
 (2, 1, 'Color', 'Color'),
 (2, 2, 'Couleur', 'Couleur'),
 (3, 1, 'ICU', 'Processor'),
-(3, 2, 'ICU', 'Processeur');
+(3, 2, 'ICU', 'Processeur'),
+(1, 3, 'Capacidad', 'Capacidad'),
+(2, 3, 'Color', 'Color'),
+(3, 3, 'ICU', 'Procesador');
 
 INSERT INTO `PREFIX_attribute_impact` (`id_attribute_impact`, `id_product`, `id_attribute`, `weight`, `price`) VALUES
 (1, 1, 2, 0, 60.00),
@@ -306,10 +318,13 @@ INSERT INTO `PREFIX_scene_category` (`id_scene`, `id_category`) VALUES
 INSERT INTO `PREFIX_scene_lang` (`id_scene`, `id_lang`, `name`) VALUES
 (1, 1, 'The iPods Nano'),
 (1, 2, 'Les iPods Nano'),
+(1, 3, 'El iPod Nano'),
 (2, 1, 'The iPods'),
 (2, 2, 'Les iPods'),
+(2, 3, 'El iPod'),
 (3, 1, 'The MacBooks'),
-(3, 2, 'Les MacBooks');
+(3, 2, 'Les MacBooks'),
+(3, 3, 'El MacBook');
 
 INSERT INTO `PREFIX_scene_products` (`id_scene`, `id_product`, `x_axis`, `y_axis`, `zone_width`, `zone_height`) VALUES
 (1, 1, 474, 15, 72, 166),
@@ -356,46 +371,66 @@ INSERT INTO `PREFIX_attribute` (`id_attribute`, `id_attribute_group`, `color`) V
 INSERT INTO `PREFIX_attribute_lang` VALUES
 (1, 1, '2GB'),
 (1, 2, '2Go'),
+(1, 3, '2Go'),
 (2, 1, '4GB'),
 (2, 2, '4Go'),
+(2, 3, '4Go'),
 (3, 1, 'Metal'),
 (3, 2, 'Metal'),
+(3, 3, 'Metal'),
 (4, 1, 'Blue'),
 (4, 2, 'Bleu'),
+(4, 3, 'Azul'),
 (5, 1, 'Pink'),
 (5, 2, 'Rose'),
+(5, 3, 'Rosa'),
 (6, 1, 'Green'),
 (6, 2, 'Vert'),
+(6, 3, 'Verde'),
 (7, 1, 'Orange'),
 (7, 2, 'Orange'),
+(7, 3, 'Naranja'),
 (8, 1, 'Optional 64GB solid-state drive'),
 (8, 2, 'Disque dur SSD (solid-state drive) de 64 Go '),
+(8, 3, 'SSD (solid-state drive) 64 Go '),
 (9, 1, '80GB Parallel ATA Drive @ 4200 rpm'),
 (9, 2, 'Disque dur PATA de 80 Go à 4 200 tr/min'),
+(9, 3, 'Disco duro PATA 80 Go 4 200 tr/min'),
 (10, 1, '1.60GHz Intel Core 2 Duo'),
 (10, 2, 'Intel Core 2 Duo à 1,6 GHz'),
+(10, 3, 'Intel Core 2 Duo para 1,6 GHz'),
 (11, 1, '1.80GHz Intel Core 2 Duo'),
 (11, 2, 'Intel Core 2 Duo à 1,8 GHz'),
+(11, 3, 'Intel Core 2 Duo para 1,8 GHz'),
 (12, 1, '80GB: 20,000 Songs'),
 (12, 2, '80 Go : 20 000 chansons'),
+(12, 3, '80 Go : 20 000 canciones'),
 (13, 1, '160GB: 40,000 Songs'),
 (13, 2, '160 Go : 40 000 chansons'),
+(13, 3, '160 Go : 40 000 canciones'),
 (14, 2, 'Noir'),
+(14, 3, 'Negro'),
 (14, 1, 'Black'),
 (15, 1, '8Go'),
 (15, 2, '8Go'),
+(15, 3, '8Go'),
 (16, 1, '16Go'),
 (16, 2, '16Go'),
+(16, 3, '16Go'),
 (17, 1, '32Go'),
-(17, 2, '32Go');
+(17, 2, '32Go'),
+(17, 3, '32Go');
 
 INSERT INTO `PREFIX_attribute_lang` (`id_attribute`, `id_lang`, `name`) VALUES
 (18, 1, 'Purple'),
 (18, 2, 'Violet'),
+(18, 3, 'Violeta'),
 (19, 1, 'Yellow'),
 (19, 2, 'Jaune'),
+(19, 3, 'Amarillo'),
 (20, 1, 'Red'),
-(20, 2, 'Rouge');
+(20, 2, 'Rouge'),
+(20, 3, 'Rojo');
 
 INSERT INTO `PREFIX_product_attribute` (`id_product_attribute`, `id_product`, `reference`, `supplier_reference`, `ean13`, `wholesale_price`, `price`, `ecotax`, `quantity`, `weight`, `default_on`) VALUES
 (30, 1, '', '', '', 0.000000, 0.00, 0.00, 50, 0, 0),
@@ -516,7 +551,12 @@ INSERT INTO `PREFIX_feature_lang` (`id_feature`, `id_lang`, `name`) VALUES
 (2, 1, 'Width'), (2, 2, 'Largeur'),
 (3, 1, 'Depth'), (3, 2, 'Profondeur'),
 (4, 1, 'Weight'), (4, 2, 'Poids'),
-(5, 1, 'Headphone'), (5, 2, 'Prise casque');
+(5, 1, 'Headphone'), (5, 2, 'Prise casque'),
+(1, 3, 'Alto'),
+(2, 3, 'Ancho'),
+(3, 3, 'Profundo'),
+(4, 3, 'Peso'),
+(5, 3, 'Toma auriculares');
 
 INSERT INTO `PREFIX_feature_product` (`id_feature`, `id_product`, `id_feature_value`) VALUES
 (1, 1, 11),
@@ -555,31 +595,45 @@ INSERT INTO `PREFIX_feature_value` (`id_feature_value`, `id_feature`, `custom`) 
 INSERT INTO `PREFIX_feature_value_lang` (`id_feature_value`, `id_lang`, `value`) VALUES
 (13, 1, '49.2 grams'),
 (13, 2, '49,2 grammes'),
+(13, 3, '49,2 g'),
 (12, 2, '52,3 mm'),
 (12, 1, '52.3 mm'),
+(12, 3, '52.3 mm'),
 (11, 2, '69,8 mm'),
 (11, 1, '69.8 mm'),
+(11, 3, '69.8 mm'),
 (17, 2, '15,5 g'),
 (17, 1, '15.5 g'),
+(17, 3, '15.5 g'),
 (16, 2, '41,2 mm'),
 (16, 1, '41.2 mm'),
+(16, 3, '41.2 mm'),
 (15, 2, '27,3 mm'),
 (15, 1, '27.3 mm'),
+(15, 3, '27.3 mm'),
 (9, 1, 'Jack stereo'),
 (9, 2, 'Jack stéréo'),
+(9, 3, 'Jack stereo'),
 (10, 1, 'Mini-jack stereo'),
 (10, 2, 'Mini-jack stéréo'),
+(10, 3, 'Mini-jack stéréo'),
 (14, 1, '6,5 mm'),
 (14, 2, '6,5 mm'),
+(14, 3, '6,5 mm'),
 (18, 1, '10,5 mm (clip compris)'),
 (18, 2, '10,5 mm (clip compris)'),
+(18, 3, '10,5 mm (clip incluyendo)'),
 (26, 2, '8mm'),
 (26, 1, '8mm'),
+(26, 3, '8mm'),
 (25, 2, '120g'),
+(25, 3, '120g'),
 (25, 1, '120g'),
 (24, 2, '70mm'),
 (24, 1, '70mm'),
+(24, 3, '70mm'),
 (23, 2, '110mm'),
+(23, 3, '110mm'),
 (23, 1, '110mm');
 
 INSERT INTO `PREFIX_image` (`id_image`, `id_product`, `position`, `cover`) VALUES
@@ -614,67 +668,98 @@ INSERT INTO `PREFIX_image` (`id_image`, `id_product`, `position`, `cover`) VALUE
 
 INSERT INTO `PREFIX_image_lang` (`id_image`, `id_lang`, `legend`) VALUES
 (40, 2, 'iPod Nano'),
+(40, 3, 'iPod Nano'),
 (40, 1, 'iPod Nano'),
 (39, 2, 'iPod Nano'),
+(39, 3, 'iPod Nano'),
 (39, 1, 'iPod Nano'),
 (38, 2, 'iPod Nano'),
+(38, 3, 'iPod Nano'),
 (38, 1, 'iPod Nano'),
 (37, 2, 'iPod Nano'),
+(37, 3, 'iPod Nano'),
 (37, 1, 'iPod Nano'),
 (48, 2, 'iPod shuffle'),
+(48, 3, 'iPod shuffle'),
 (48, 1, 'iPod shuffle'),
 (47, 2, 'iPod shuffle'),
+(47, 3, 'iPod shuffle'),
 (47, 1, 'iPod shuffle'),
 (49, 2, 'iPod shuffle'),
+(49, 3, 'iPod shuffle'),
 (49, 1, 'iPod shuffle'),
 (46, 2, 'iPod shuffle'),
+(46, 3, 'iPod shuffle'),
 (46, 1, 'iPod shuffle'),
 (10, 1, 'luxury-cover-for-ipod-video'),
+(10, 3, 'luxury-cover-for-ipod-video'),
 (10, 2, 'housse-luxe-pour-ipod-video'),
 (11, 1, 'cover'),
 (11, 2, 'housse'),
+(11, 3, 'cubrir'),
 (12, 1, 'myglove-ipod-nano'),
 (12, 2, 'myglove-ipod-nano'),
+(12, 3, 'myglove-ipod-nano'),
 (13, 1, 'myglove-ipod-nano'),
 (13, 2, 'myglove-ipod-nano'),
+(13, 3, 'myglove-ipod-nano'),
 (14, 1, 'myglove-ipod-nano'),
 (14, 2, 'myglove-ipod-nano'),
+(14, 3, 'myglove-ipod-nano'),
 (15, 1, 'MacBook Air'),
 (15, 2, 'macbook-air-1'),
+(15, 3, 'macbook-air-1'),
 (16, 1, 'MacBook Air'),
 (16, 2, 'macbook-air-2'),
+(16, 3, 'macbook-air-2'),
 (17, 1, 'MacBook Air'),
 (17, 2, 'macbook-air-3'),
+(17, 3, 'macbook-air-3'),
 (18, 1, 'MacBook Air'),
 (18, 2, 'macbook-air-4'),
+(18, 3, 'macbook-air-4'),
 (19, 1, 'MacBook Air'),
 (19, 2, 'macbook-air-5'),
+(19, 3, 'macbook-air-5'),
 (20, 1, ' MacBook Air SuperDrive'),
 (20, 2, 'superdrive-pour-macbook-air-1'),
+(20, 3, 'superdrive-pour-macbook-air-1'),
 (24, 2, 'iPod touch'),
 (24, 1, 'iPod touch'),
+(24, 3, 'iPod touch'),
 (33, 1, 'housse-portefeuille-en-cuir'),
+(33, 3, 'housse-portefeuille-en-cuir'),
 (26, 1, 'iPod touch'),
 (26, 2, 'iPod touch'),
+(26, 3, 'iPod touch'),
 (27, 1, 'iPod touch'),
 (27, 2, 'iPod touch'),
+(27, 3, 'iPod touch'),
 (29, 1, 'iPod touch'),
 (29, 2, 'iPod touch'),
+(29, 3, 'iPod touch'),
 (30, 1, 'iPod touch'),
 (30, 2, 'iPod touch'),
+(30, 3, 'iPod touch'),
 (32, 1, 'iPod touch'),
 (32, 2, 'iPod touch'),
+(32, 3, 'iPod touch'),
 (33, 2, 'housse-portefeuille-en-cuir-ipod-nano'),
 (36, 2, 'Écouteurs à isolation sonore Shure SE210'),
+(36, 3, 'Auriculares aislantes del sonido Shure SE210'),
 (36, 1, 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone'),
 (41, 1, 'iPod Nano'),
 (41, 2, 'iPod Nano'),
+(41, 3, 'iPod Nano'),
 (42, 1, 'iPod Nano'),
 (42, 2, 'iPod Nano'),
+(42, 3, 'iPod Nano'),
 (44, 1, 'iPod Nano'),
 (44, 2, 'iPod Nano'),
+(44, 3, 'iPod Nano'),
 (45, 1, 'iPod Nano'),
-(45, 2, 'iPod Nano');
+(45, 2, 'iPod Nano'),
+(45, 3, 'iPod Nano');
 
 INSERT INTO `PREFIX_tag` (`id_tag`, `id_lang`, `name`) VALUES (5, 1, 'apple');
 INSERT INTO `PREFIX_tag` (`id_tag`, `id_lang`, `name`) VALUES (6, 2, 'ipod');
@@ -727,6 +812,15 @@ Un des éléments de votre commande est actuellement en réapprovisionnement, ce
 Merci de votre compréhension.
 
 Cordialement, 
+');
+INSERT INTO `PREFIX_order_message_lang` (`id_order_message`, `id_lang`, `name`, `message`) VALUES
+(1, 3, 'Plazo', 'Hola,
+
+Uno de los elementos de su solicitud se encuentra actualmente la reposición, el cual poco puede retrasar el envío.
+
+Gracias por su comprensión.
+
+Saludos cordiales,
 ');
 
 /* Currency/Country module */

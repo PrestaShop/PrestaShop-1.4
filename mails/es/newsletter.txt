@@ -1,0 +1,1 @@
+Boletín de Noticias de {shop_name} \r\n\r\nMensaje\r\n\r\n{message}\r\n\r\n\r\n\r\n{shop_url} \r\n\r\n

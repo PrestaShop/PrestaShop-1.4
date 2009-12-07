@@ -157,6 +157,22 @@ class		Country extends ObjectModel
     }
     
 	/**
+	* Get a country iso with its ID
+	*
+	* @param integer $id_country Country ID
+	* @return string Country iso
+	*/
+	static public function getIsoById($id_country)
+    {
+	    $result = Db::getInstance()->getRow('
+		SELECT `iso_code`
+		FROM `'._DB_PREFIX_.'country`
+		WHERE `id_country` = '.intval($id_country));
+
+        return $result['iso_code'];
+    }
+	
+	/**
 	* Get a country id with its name
 	*
 	* @param integer $id_lang Language ID
