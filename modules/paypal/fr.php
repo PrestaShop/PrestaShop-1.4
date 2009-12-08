@@ -11,6 +11,7 @@ $_MODULE['<{paypal}prestashop>confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_5960af4a01187dce25879df9a4c30df1'] = 'Accepter les paiements par PayPal';
 $_MODULE['<{paypal}prestashop>paypal_fa214007826415a21a8456e3e09f999d'] = 'Etes-vous sûr de vouloir supprimer vos paramètres ?';
+$_MODULE['<{paypal}prestashop>paypal_8edbd23e3562203eaf09db67ff656118'] = 'Vous utilisez actuellement l\'adresse e-mail PayPal par défaut, vous devez la remplacer par votre propre adresse';
 $_MODULE['<{paypal}prestashop>paypal_fea16fa8c8fe3045f2107f66c07270a4'] = 'L\'adresse email Paypal Business est requise.';
 $_MODULE['<{paypal}prestashop>paypal_eee1cda3b15829bb68c71304c5028609'] = 'Paypal Business doit être une adresse email';
 $_MODULE['<{paypal}prestashop>paypal_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';

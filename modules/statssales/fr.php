@@ -15,6 +15,8 @@ $_MODULE['<{statssales}prestashop>statssales_0718e1ec4754e199aa9cb4bc43a6ff53'] 
 $_MODULE['<{statssales}prestashop>statssales_3991390ca135c8c780b4a7d9c7c7daf5'] = 'Aucune commande pour cette période';
 $_MODULE['<{statssales}prestashop>statssales_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statssales}prestashop>statssales_cc23e852e21d85a834defe24867e3d05'] = 'Plusieurs statuts de commande';
+$_MODULE['<{statssales}prestashop>statssales_1ac658f97c9370fb579beca0d7277d56'] = 'Au sein de votre Back-office, plusieurs statuts de commande sont disponibles : En attente du paiement par chèque, Paiement accepté, Préparation en cours, En cours de livraison, Livré, Annulé, Remboursé, Erreur de paiement, Produits indisponibles et en attente du paiement par virement bancaire.';
+$_MODULE['<{statssales}prestashop>statssales_ba3224a4f47de7a622fa8e17236b01e3'] = 'Ces statuts ne peuvent être supprimés depuis le Back-office, cependant vous pouvez en ajouter de nouveaux.';
 $_MODULE['<{statssales}prestashop>statssales_58d14111d598ec5174fe85dfebe71c56'] = 'Nombre de commandes et produits commandés';
 $_MODULE['<{statssales}prestashop>statssales_7442e29d7d53e549b78d93c46b8cdcfc'] = 'Commandes';
 $_MODULE['<{statssales}prestashop>statssales_2e80bb3c2f0ddd12eeb8204ce2906bd0'] = 'Commandes valides';
