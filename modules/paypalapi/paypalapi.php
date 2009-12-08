@@ -231,7 +231,7 @@ class PaypalAPI extends PaymentModule
 		$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 		$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 		if (!$this->_pp_integral)
-			$logo = 'https://www.paypal.com/en_US/i/logo/PayPal_mark_60x38.gif';
+			$logo = _MODULE_DIR_.$this->name.'/img/PayPal_mark_60x38.gif';
 		else
 		{
 			if ($iso_code == 'FR')
@@ -394,18 +394,18 @@ class PaypalAPI extends PaymentModule
 		{
 			$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 			$logo = array(
-				'FR' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=fr_FR',
-				'DE' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=de_DE',
-				'US' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=en_US',
-				'UK' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=en_EN',
-				'IT' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=it_IT',
-				'ES' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=es_ES',
-				'PL' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=pl_PL',
-				'NL' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=nl_NL',
-				'AU' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=au_AU',
-				'CA' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=ca_CA',
-				'CN' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=cn_CN',
-				'JP' => 'https://fpdbs.paypal.com/dynamicimageweb?cmd=_dynamic-image&locale=jp_JP'
+				'FR' => _MODULE_DIR_.$this->name.'/img/FR_pp_express.gif',
+				'DE' => _MODULE_DIR_.$this->name.'/img/DE_pp_express.gif',
+				'US' => _MODULE_DIR_.$this->name.'/img/US_pp_express.gif',
+				'UK' => _MODULE_DIR_.$this->name.'/img/UK_pp_express.gif',
+				'ES' => _MODULE_DIR_.$this->name.'/img/ES_pp_express.gif',
+				'IT' => _MODULE_DIR_.$this->name.'/img/IT_pp_express.gif',
+				'PL' => _MODULE_DIR_.$this->name.'/img/PL_pp_express.gif',
+				'NL' => _MODULE_DIR_.$this->name.'/img/NL_pp_express.gif',
+				'AU' => _MODULE_DIR_.$this->name.'/img/AU_pp_express.gif',
+				'CA' => _MODULE_DIR_.$this->name.'/img/CA_pp_express.gif',
+				'CN' => _MODULE_DIR_.$this->name.'/img/CN_pp_express.gif',
+				'JP' => _MODULE_DIR_.$this->name.'/img/JP_pp_express.gif'
 			);
 			if (isset($logo[$iso_code]))
 				return $logo[$iso_code];
@@ -416,24 +416,24 @@ class PaypalAPI extends PaymentModule
 		{
 			$country_code = $this->getCountryCode();
 			$logo = array(
-				'FR' => 'https://www.paypal.com/en_US/FR/i/bnr/bnr_horizontal_solution_PP_327wx80h.gif',
-				'DE' => 'https://www.paypal.com/de_DE/DE/i/logo/lockbox_150x65.gif',
-				'US' => 'https://www.paypal.com/en_US/i/bnr/horizontal_solution_PPeCheck.gif',
-				'UK' => 'https://www.paypal.com/en_GB/i/bnr/horizontal_solution_PP.gif',
-				'IT' => 'https://www.paypal.com/en_US/IT/i/bnr/bnr_horizontal_solution_PP_178wx80h.gif',
-				'ES' => 'https://www.paypal.com/es_ES/ES/i/bnr/horizontal_solution_PP.gif',
-				'PL' => 'https://www.paypal.com/en_US/PL/i/bnr/horizontal_solution_PP.gif',
-				'NL' => 'https://www.paypal.com/nl_NL/NL/i/bnr/horizontal_solution_PP.gif',
-				'AU' => 'https://www.paypal.com/en_AU/AU/i/bnr/horizontal_solution_PP.gif',
-				'CA' => 'https://www.paypal.com/fr_XC/i/bnr/horizontal_solution_PPeCheck.gif',
-				'CN' => 'https://www.paypal.com/zh_CN/i/bnr/horizontal_solution_PP.gif',
-				'JP' => 'https://www.paypal.com/en_US/JP/i/bnr/horizontal_solution_3_noamex_jcb.gif'
+				'FR' => _MODULE_DIR_.$this->name.'/img/FR_pp_integral.gif',
+				'DE' => _MODULE_DIR_.$this->name.'/img/DE_pp_integral.gif',
+				'US' => _MODULE_DIR_.$this->name.'/img/US_pp_integral.gif',
+				'UK' => _MODULE_DIR_.$this->name.'/img/UK_pp_integral.gif',
+				'ES' => _MODULE_DIR_.$this->name.'/img/ES_pp_integral.gif',
+				'IT' => _MODULE_DIR_.$this->name.'/img/IT_pp_integral.gif',
+				'PL' => _MODULE_DIR_.$this->name.'/img/PL_pp_integral.gif',
+				'NL' => _MODULE_DIR_.$this->name.'/img/NL_pp_integral.gif',
+				'AU' => _MODULE_DIR_.$this->name.'/img/AU_pp_integral.gif',
+				'CA' => _MODULE_DIR_.$this->name.'/img/CA_pp_integral.gif',
+				'CN' => _MODULE_DIR_.$this->name.'/img/CN_pp_integral.gif',
+				'JP' => _MODULE_DIR_.$this->name.'/img/JP_pp_integral.gif'
 			);
 			if (isset($logo[$country_code]))
 				return $logo[$country_code];
 			return $logo['US'];
 		}
 		else
-			return 'https://www.paypal.com/en_US/i/logo/PayPal_mark_60x38.gif';
+			return _MODULE_DIR_.$this->name.'/img/PayPal_mark_60x38.gif';
 	}
 }
