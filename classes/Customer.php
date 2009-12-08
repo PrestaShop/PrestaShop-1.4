@@ -34,6 +34,9 @@ class		Customer extends ObjectModel
 	/** @var string e-mail */
 	public 		$email;
 
+	/** @var string dni */
+	public		$dni;
+	
 	/** @var boolean Newsletter subscription */
 	public 		$newsletter;
 	
@@ -71,9 +74,9 @@ class		Customer extends ObjectModel
 	protected $tables = array ('customer');
 
  	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
- 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128);
+ 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16);
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
-		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool');
+		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDni');
 
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
@@ -89,6 +92,7 @@ class		Customer extends ObjectModel
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['birthday'] = pSQL($this->birthday);
 		$fields['email'] = pSQL($this->email);
+		$fields['dni'] = pSQL($this->dni);
 		$fields['newsletter'] = intval($this->newsletter);
 		$fields['newsletter_date_add'] = pSQL($this->newsletter_date_add);
 		$fields['ip_registration_newsletter'] = pSQL($this->ip_registration_newsletter);

@@ -307,6 +307,7 @@ CREATE TABLE `PREFIX_country` (
   `iso_code` varchar(3) NOT NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
   `contains_states` tinyint(1) NOT NULL default '0',
+  `need_identification_number` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id_country`),
   KEY `country_iso_code` (`iso_code`),
   KEY `country_` (`id_zone`)
@@ -346,6 +347,7 @@ CREATE TABLE `PREFIX_customer` (
   `newsletter_date_add` datetime default NULL,
   `optin` tinyint(1) unsigned NOT NULL default '0',
   `firstname` varchar(32) NOT NULL,
+  `dni` varchar(16) DEFAULT NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
   `deleted` tinyint(1) NOT NULL default '0',
   `date_add` datetime NOT NULL,

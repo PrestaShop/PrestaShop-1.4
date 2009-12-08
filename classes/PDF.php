@@ -376,6 +376,7 @@ class PDF extends PDF_PageGroup
 		$delivery_address = new Address(intval($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 		$shop_country = Configuration::get('PS_SHOP_COUNTRY');
+		$invoice_customer = new Customer(intval($invoice_address->id_customer));
 
 		$width = 100;
 
@@ -412,6 +413,8 @@ class PDF extends PDF_PageGroup
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->country.($invoiceState ? ' - '.$invoiceState->name : '')), 0, 'L');
 		$pdf->Ln(5);
 		$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
+		if($invoice_customer->dni != NULL)
+			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_customer->dni), 0, 'L');
 		if (!empty($delivery_address->phone_mobile))
 		{
 			$pdf->Ln(5);

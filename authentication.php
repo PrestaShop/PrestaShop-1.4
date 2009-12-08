@@ -47,13 +47,25 @@ if (Tools::isSubmit('submitAccount'))
 {
 	$create_account = 1;
 	$smarty->assign('email_create', 1);
+	$validateDni = Validate::isDni(Tools::getValue('dni'));
 
 	if (!Validate::isEmail($email = Tools::getValue('email')))
 		$errors[] = Tools::displayError('e-mail not valid');
 	elseif (!Validate::isPasswd(Tools::getValue('passwd')))
 		$errors[] = Tools::displayError('invalid password');
 	elseif (Customer::customerExists($email))
-		$errors[] = Tools::displayError('someone has already registered with this e-mail address');	
+		$errors[] = Tools::displayError('someone has already registered with this e-mail address');
+	elseif (Tools::getValue('dni') != NULL AND $validateDni != 1)
+	{
+		$error = array(
+		0 => Tools::displayError('DNI isn\'t valid'),
+		-1 => Tools::displayError('this DNI has been already used'),
+		-2 => Tools::displayError('NIF isn\'t valid'),
+		-3 => Tools::displayError('CIF isn\'t valid'),
+		-4 => Tools::displayError('NIE isn\'t valid')
+		);
+		$errors[] = $error[$validateDni];
+	}
 	elseif (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
 		$errors[] = Tools::displayError('invalid birthday');
 	else

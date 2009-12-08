@@ -28,6 +28,9 @@ class		Country extends ObjectModel
 	/** @var boolean Contain states */
 	public		$contains_states;
 
+	/** @var boolean Need identification number dni/nif/nie */
+	public		$need_identification_number;
+	
 	/** @var boolean Status for delivery */
 	public		$active = true;
 

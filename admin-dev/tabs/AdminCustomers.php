@@ -155,7 +155,7 @@ class AdminCustomers extends AdminTab
 			<span style="font-weight: bold; font-size: 14px;">'.$customer->firstname.' '.$customer->lastname.'</span>
 			<img src="../img/admin/'.($customer->id_gender == 2 ? 'female' : ($customer->id_gender == 1 ? 'male' : 'unknown')).'.gif" style="margin-bottom: 5px" /><br />
 			<a href="mailto:'.$customer->email.'" style="text-decoration: underline; color: blue">'.$customer->email.'</a><br /><br />
-			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).'<br />
+			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).($customer->dni != NULL ? ' | '.$this->l('DNI:').' '.$customer->dni : '').'<br />
 			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], intval($cookie->id_lang), true) : $this->l('never')).'
 		</fieldset>

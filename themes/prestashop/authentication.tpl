@@ -4,13 +4,18 @@
 <script type="text/javascript">
 // <![CDATA[
 idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}false{/if};
+valueDni = {if isset($smarty.post.dni)}{$smarty.post.dni}{else}false{/if};
 countries = new Array();
+countriesNeedIDNumber = new Array();
 {foreach from=$countries item='country'}
 	{if isset($country.states)}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
 			countries[{$country.id_country|intval}]['{$state.id_state|intval}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
 		{/foreach}
+	{/if}
+	{if $country.need_identification_number}
+		countriesNeedIDNumber.push({$country.id_country|intval});
 	{/if}
 {/foreach}
 //]]>
@@ -210,6 +215,15 @@ countries = new Array();
 				<label for="alias">{l s='Assign an address title for future reference'} !</label>
 				<input type="text" class="text" name="alias" id="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{else}{l s='My address'}{/if}" />
 				<sup>*</sup>
+			</p>
+		</fieldset>
+		<fieldset class="account_creation dni">
+			<h3>{l s='Tax identification'}</h3>
+		
+			<p class="required text">
+				<label for="dni">{l s='Identication number'}</label>
+				<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
+				<span class="form_info">{l s='DNI / NIF / NIE'}</span>
 			</p>
 		</fieldset>
 		{$HOOK_CREATE_ACCOUNT_FORM}

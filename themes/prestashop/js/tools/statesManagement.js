@@ -1,8 +1,10 @@
 $(document).ready(function(){
 	$('select#id_country').change(function(){
 		updateState();
+		updateNeedIDNumber();
 	});
 	updateState();
+	updateNeedIDNumber();
 });
 
 function updateState()
@@ -21,4 +23,14 @@ function updateState()
 		}
 		else
 			$('p.id_state').slideUp('fast');
+}
+
+function updateNeedIDNumber()
+{
+	var idCountry = parseInt($('select#id_country').val());
+	
+	if ($.inArray(idCountry, countriesNeedIDNumber) >= 0)
+		$('fieldset.dni').slideDown('slow');
+	else
+		$('fieldset.dni').slideUp('fast');
 }

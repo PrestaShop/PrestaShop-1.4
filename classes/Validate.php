@@ -746,6 +746,78 @@ class Validate
 	{
 		return ($data == PS_TAX_EXC OR $data == PS_TAX_INC);
 	}
+	
+	/**
+	* Check for Dni validity
+	*
+	* @param string $dni to validate
+	* @return int
+	*/
+	static public function isDni($dni)
+	{
+		/*
+		Return code:
+		1 : It's Ok
+		0 : Bad format for DNI
+		-1 : DNI duplicate
+		-2 : NIF error
+		-3 : CIF error
+		-4 : NIE error
+		*/
+	
+		$dni = strtoupper($dni);
+		if (!preg_match('/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/', $dni)) 
+			return 0;
+		
+		$result = Db::getInstance()->getValue('
+		SELECT COUNT(`id_customer`) AS total 
+		FROM `'._DB_PREFIX_.'customer` 
+		WHERE `dni` = \''.pSQL($dni).'\'
+		');
+		if($result)
+			return -1;
+		
+		for ($i=0;$i<9;$i++)
+			$char[$i] = substr($dni, $i, 1);
+		// 12345678T
+		if (preg_match('/(^[0-9]{8}[A-Z]{1}$)/', $dni))
+			if ($char[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', substr($dni, 0, 8) % 23, 1))
+				return 1;
+			else
+				return -2;
+		
+		$sum = $char[2] + $char[4] + $char[6];
+		for ($i = 1; $i < 8; $i += 2)
+			$sum += substr((2 * $char[$i]),0,1) + substr((2 * $char[$i]),1,1);
+		
+		$n = 10 - substr($sum, strlen($sum) - 1, 1);
+		
+		if (preg_match('/^[KLM]{1}/', $dni))
+			if ($char[8] == chr(64 + $n))
+				return 1;
+			else
+	 			return -2;
+		
+		if (preg_match('/^[ABCDEFGHJNPQRSUVW]{1}/', $dni))
+			if ($char[8] == chr(64 + $n) || $char[8] == substr($n, strlen($n) - 1, 1))
+				return 1;
+			else
+				return -3;
+		
+		if (preg_match('/^[T]{1}/', $dni))
+			if ($char[8] == preg_match('/^[T]{1}[A-Z0-9]{8}$/', $dni))
+				return 1;
+			else
+				return -4;
+		
+		if (preg_match('/^[XYZ]{1}/', $dni))
+			if ($char[8] == substr('TRWAGMYFPDXBNJZSQVHLCKE', substr(str_replace(array('X','Y','Z'), array('0','1','2'), $dni), 0, 8) % 23, 1))
+				return 1;
+			else
+				return -4;
+		
+		return 0;
+	}
 }
 
 ?>
