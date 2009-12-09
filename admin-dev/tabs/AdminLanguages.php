@@ -272,8 +272,8 @@ class AdminLanguages extends AdminTab
 
 		echo '
 		<script type="text/javascript">
-		var langPackOk = "'.$this->l('A langage pack is available for this iso code:').'";
-		var noLangPack = "'.$this->l('No langage pack available for this iso code').'";
+		var langPackOk = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('A langage pack is available for this iso code:').'";
+		var noLangPack = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('No langage pack available on prestashop.com for this iso code').'";
 		var download = "'.$this->l('Download').'";
 		</script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'/checkLangPack.js"></script>
@@ -307,7 +307,7 @@ class AdminLanguages extends AdminTab
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Allow or disallow this language to be selected by the customer').'</p>
 				</div>
-				<p id="resultCheckLangPack"></p>
+				<p id="resultCheckLangPack"><img src="'._PS_IMG_.'admin/ajax-loader.gif" alt="" /> '.$this->l('Check if a language pack is available for this iso code...').'</p>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>

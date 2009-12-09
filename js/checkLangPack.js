@@ -13,6 +13,8 @@ function checkLangPack(){
 		   {
 				if (ret == "ok")
 					$('p#resultCheckLangPack').html(langPackOk+' <a href="http://www.prestashop.com/download/lang_packs/gzip/'+$('#iso_code').val()+'.gzip" target="_blank">'+download+'</a>').show("slow");
+				else if (ret == "offline")
+					$('p#resultCheckLangPack').show('slow');
 				else
 					$('p#resultCheckLangPack').html(noLangPack).show("slow");
 		   }

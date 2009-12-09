@@ -887,3 +887,8 @@ p.fail{
 	font-weight:bold;
 	color:red;
 }
+#resultCheckLangPack{
+	border: 1px solid #DFD5C3;
+	padding:10px;
+	margin-bottom:10px;
+}
