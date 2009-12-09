@@ -41,6 +41,10 @@ class AdminBackup extends AdminTab
 			'filename' => array('title' => $this->l('Filename'), 'width' => 200),
 			'filesize' => array('title' => $this->l('File size')),
 		);
+		$this->optionTitle = $this->l('Backup option');
+		$this->_fieldsOptions = array(
+			'PS_BACKUP_ALL' => array('title' => $this->l('Backup all tables:'), 'desc' => $this->l('If you disable this option, only the necessary tables will be imported (connections and statistics will not be imported)'), 'cast' => 'intval', 'type' => 'bool')
+		);
 
 		$this->identifier = 'filename';
 	}

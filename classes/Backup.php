@@ -114,6 +114,11 @@ class Backup
 			return false;
 		}
 
+		if (!Configuration::get('PS_BACKUP_ALL'))
+			$ignore_insert_table = array(_DB_PREFIX_.'connections', _DB_PREFIX_.'connections_page', _DB_PREFIX_.'connections_source', _DB_PREFIX_.'guest', _DB_PREFIX_.'statssearch');
+		else
+			$ignore_insert_table = array();
+		
 		// Generate some random number, to make it extra hard to guess backup file names
 		$rand = dechex ( mt_rand(0, min(0xffffffff, mt_getrandmax() ) ) );
 		$date = time();
@@ -169,31 +174,33 @@ class Backup
 			fwrite($fp, '/* Scheme for table ' . $schema[0]['Table'] . " */\n");
 			fwrite($fp, $schema[0]['Create Table'] . ";\n\n");
 
-			$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`', false);
-			$sizeof = DB::getInstance()->NumRows();
-			if ($data AND $sizeof > 0)
+			if (!in_array($schema[0]['Table'], $ignore_insert_table))
 			{
-				// Export the table data
-				fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
-
-				$i = 1;
-				while ($row = DB::getInstance()->nextRow($data))
+				$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`', false);
+				$sizeof = DB::getInstance()->NumRows();
+				if ($data AND $sizeof > 0)
 				{
-					p($row);
-					$s = '(';
-					foreach ($row as $field => $value)
-						$s .= "'" . mysql_real_escape_string($value) . "',";
-					$s = rtrim($s, ',');
+					// Export the table data
+					fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
 
-					if ($i%200 == 0 AND $i < $sizeof)
-						$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
-					elseif ($i < $sizeof)
-						$s .= "),\n";
-					else
-						$s .= ");\n";
+					$i = 1;
+					while ($row = DB::getInstance()->nextRow($data))
+					{
+						$s = '(';
+						foreach ($row as $field => $value)
+							$s .= "'" . mysql_real_escape_string($value) . "',";
+						$s = rtrim($s, ',');
 
-					fwrite($fp, $s);
-					++$i;
+						if ($i%200 == 0 AND $i < $sizeof)
+							$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
+						elseif ($i < $sizeof)
+							$s .= "),\n";
+						else
+							$s .= ");\n";
+
+						fwrite($fp, $s);
+						++$i;
+					}
 				}
 			}
 			$found++;

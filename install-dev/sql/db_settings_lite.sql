@@ -112,7 +112,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (58, 'PS_THEME_V11', 0, NOW(), NOW()),
 (59, 'PRESTASTORE_LIVE', 1, NOW(), NOW()),
 (60, 'PS_TIN_ACTIVE', 0, NOW(), NOW()),
-(61, 'PS_SHOW_ALL_MODULES', 0, NOW(), NOW());
+(61, 'PS_SHOW_ALL_MODULES', 0, NOW(), NOW()),
+(62, 'PS_BACKUP_ALL', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 1, 'IN', NOW());
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 2, 'FA', NOW());
