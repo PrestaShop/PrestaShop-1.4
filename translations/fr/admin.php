@@ -320,6 +320,7 @@ $_LANGADM['AdminCountriesd42225935a374f1249f2a45ebed00772'] = 'Activé ou désac
 $_LANGADM['AdminCountriescef82d41923398076fb06d463541d707'] = 'Contient des états :';
 $_LANGADM['AdminCountries93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_LANGADM['AdminCountriesbafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
+$_LANGADM['AdminCountries09545da0018af8fd4d2725858aa9b26d'] = 'Requiert un numéro d\'identification fiscale ?';
 $_LANGADM['AdminCountries38fb7d24e0d60a048f540ecb18e13376'] = 'Enregistrer';
 $_LANGADM['AdminCountries19f823c6453c2b1ffd09cb715214813d'] = 'Champs requis';
 $_LANGADM['AdminCurrenciesb718adec73e04ce3ec720dd11a06a308'] = 'ID';
