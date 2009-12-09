@@ -1301,7 +1301,7 @@ class		Product extends ObjectModel
 				FROM `'._DB_PREFIX_.'cart_product`
 				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cookie->id_cart))
 			) + intval($quantity);
-			
+		}
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 		{
 			$discount_qty_price =  QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
@@ -1330,7 +1330,7 @@ class		Product extends ObjectModel
 	*/
 	public function getPrice($tax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1)
 	{
-			return self::getPriceStatic(intval($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
+		return self::getPriceStatic(intval($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
 	}
 
 	public function getPriceWithoutReduct($notax = false)
