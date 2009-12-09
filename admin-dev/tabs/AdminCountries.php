@@ -109,6 +109,13 @@ class AdminCountries extends AdminTab
 					<input type="radio" name="contains_states" id="contains_states_off" value="0" '.((!$this->getFieldValue($obj, 'contains_states') AND $obj->id) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="contains_states_off"> <img src="../img/admin/disabled.gif" alt="" title="" />'.$this->l('No').'</label>
 				</div>
+				<label>'.$this->l('Need tax identification number?').' </label>
+				<div class="margin-form">
+					<input type="radio" name="need_identification_number" id="need_identification_number_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'need_identification_number')) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="need_identification_number_on"> <img src="../img/admin/enabled.gif" alt="" title="" />'.$this->l('Yes').'</label>
+					<input type="radio" name="need_identification_number" id="need_identification_number_off" value="0" '.((!$this->getFieldValue($obj, 'need_identification_number') AND $obj->id) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="need_identification_number_off"> <img src="../img/admin/disabled.gif" alt="" title="" />'.$this->l('No').'</label>
+				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>

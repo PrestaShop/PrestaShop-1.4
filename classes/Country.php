@@ -38,9 +38,9 @@ class		Country extends ObjectModel
 
 	protected 	$tables = array ('country', 'country_lang');
 
- 	protected 	$fieldsRequired = array('id_zone', 'iso_code', 'contains_states');
+ 	protected 	$fieldsRequired = array('id_zone', 'iso_code', 'contains_states', 'need_identification_number');
  	protected 	$fieldsSize = array('iso_code' => 3);
- 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 64);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -55,6 +55,7 @@ class		Country extends ObjectModel
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
 		$fields['active'] = intval($this->active);
 		$fields['contains_states'] = intval($this->contains_states);
+		$fields['need_identification_number'] = intval($this->need_identification_number);
 		return $fields;
 	}
 
