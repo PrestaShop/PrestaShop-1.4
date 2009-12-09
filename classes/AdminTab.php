@@ -144,8 +144,15 @@ abstract class AdminTab
 	protected function l($string, $class = __CLASS__, $addslashes = FALSE, $htmlentities = TRUE)
 	{
 		global $_LANGADM;
+		
+		/* Disabled in 1.3a1 version for performance issues, however that case must not appen
+		
 		if (!is_array($_LANGADM))
+		{
 			return str_replace('"', '&quot;', $string);
+		}
+		*/
+		
 		$key = md5(str_replace('\'', '\\\'', $string));
 		$str = (key_exists(get_class($this).$key, $_LANGADM)) ? $_LANGADM[get_class($this).$key] : ((key_exists($class.$key, $_LANGADM)) ? $_LANGADM[$class.$key] : $string);
 		$str = $htmlentities ? htmlentities($str, ENT_QUOTES, 'utf-8') : $str;
@@ -890,6 +897,7 @@ abstract class AdminTab
 		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 		LIMIT '.intval($start).','.intval($limit);
+		
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 	}
@@ -1136,6 +1144,7 @@ abstract class AdminTab
 		$_cacheLang['View'] = $this->l('View');
 		$_cacheLang['Edit'] = $this->l('Edit');
 		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE);		
 		$_cacheLang['Duplicate'] = $this->l('Duplicate');
 		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, TRUE, FALSE);
 		
@@ -1146,6 +1155,7 @@ abstract class AdminTab
 			sort($positions);
 		}
 		if ($this->_list)
+		{
 			foreach ($this->_list AS $i => $tr)
 			{
 				$id = $tr[$this->identifier];
@@ -1222,24 +1232,25 @@ abstract class AdminTab
 					if ($this->view)
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
-						<img src="../img/admin/details.gif" border="0" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
+						<img src="../img/admin/details.gif" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
 					if ($this->edit)
 						echo '
 						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
-						<img src="../img/admin/edit.gif" border="0" alt="'.$_cacheLang['Edit'].'" title="'.$_cacheLang['Edit'].'" /></a>';
+						<img src="../img/admin/edit.gif" alt="" title="'.$_cacheLang['Edit'].'" /></a>';
 					if ($this->delete AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
 						echo '
-						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?\');">
-						<img src="../img/admin/delete.gif" border="0" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].$id.' ?\');">
+						<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 					$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 					if ($this->duplicate)
 						echo '
 						<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
-						<img src="../img/admin/add.gif" border="0" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
+						<img src="../img/admin/add.gif" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
 					echo '</td>';
 				}
 				echo '</tr>';
-			}
+			}			
+		}
 	}
 
 	/**

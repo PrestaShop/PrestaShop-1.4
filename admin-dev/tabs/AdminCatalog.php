@@ -15,8 +15,6 @@
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include(PS_ADMIN_DIR.'/tabs/AdminCategories.php');
 include(PS_ADMIN_DIR.'/tabs/AdminProducts.php');
-include(PS_ADMIN_DIR.'/tabs/AdminAttributeGenerator.php');
-include(PS_ADMIN_DIR.'/tabs/AdminImageResize.php');
 
 class AdminCatalog extends AdminTab
 {
@@ -47,8 +45,6 @@ class AdminCatalog extends AdminTab
 		$this->table = array('category', 'product');
 		$this->adminCategories = new AdminCategories();
 		$this->adminProducts = new AdminProducts();
-		$this->attributeGenerator = new AdminAttributeGenerator();
-		$this->imageResize = new AdminImageResize();
 
 		parent::__construct();
 	}
@@ -76,9 +72,23 @@ class AdminCatalog extends AdminTab
 		if (!Tools::getValue('id_product'))
 			$this->adminCategories->postProcess();
 		elseif (isset($_GET['attributegenerator']))
+		{
+			if (!isset($this->attributeGenerator))
+			{
+				include_once(PS_ADMIN_DIR.'/tabs/AdminAttributeGenerator.php');
+				$this->attributeGenerator = new AdminAttributeGenerator();
+			}
 			$this->attributeGenerator->postProcess();
+		}
 		elseif (isset($_GET['imageresize']))
+		{
+			if (!isset($this->imageResize))
+			{
+				include_once(PS_ADMIN_DIR.'/tabs/AdminImageResize.php');
+				$this->imageResize = new AdminImageResize();
+			}
 			$this->imageResize->postProcess();
+		}
 		$this->adminProducts->postProcess($this->token);
 	}
 
@@ -103,9 +113,23 @@ class AdminCatalog extends AdminTab
 			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 		}
 		elseif (isset($_GET['attributegenerator']))
+		{
+			if (!isset($this->attributeGenerator))
+			{
+				include_once(PS_ADMIN_DIR.'/tabs/AdminAttributeGenerator.php');
+				$this->attributeGenerator = new AdminAttributeGenerator();
+			}
 			$this->attributeGenerator->displayForm();
+		}
 		elseif (isset($_GET['imageresize']))
+		{
+			if (!isset($this->imageResize))
+			{
+				include_once(PS_ADMIN_DIR.'/tabs/AdminImageResize.php');
+				$this->imageResize = new AdminImageResize();
+			}
 			$this->imageResize->displayForm();
+		}
 		elseif (!isset($_GET['editImage']))
 		{
 			$id_category = intval(Tools::getValue('id_category'));
