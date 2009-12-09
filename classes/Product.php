@@ -1302,8 +1302,12 @@ class		Product extends ObjectModel
 				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cookie->id_cart))
 			) + intval($quantity);
 			
-			if ($totalQuantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $totalQuantity)))
-				$price -= QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
+		{
+			$discount_qty_price =  QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+			if (!$usetax)
+				$discount_qty_price /= (1 + ($tax / 100));
+			$price -= $discount_qty_price;
 		}
 
 		// Group reduction
