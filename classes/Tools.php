@@ -582,10 +582,18 @@ class Tools
 		$category_name = Category::hideCategoryPosition($category->name);
 		// htmlentitiezed because this method generates some view
 		if ($path != $category_name)
-			$path = '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">'.htmlentities($category_name, ENT_NOQUOTES, 'UTF-8').'</a> '.$pipe.' '.$path;
+		{
+			$displayedPath = '';
+			if ($category->active)
+				$displayedPath .= '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">';
+			$displayedPath .= htmlentities($category_name, ENT_NOQUOTES, 'UTF-8');
+			if ($category->active)
+				$displayedPath .= '</a>';
+			$displayedPath .= ' '.$pipe.' '.$path;
+		}
 		else
-			$path = ($linkOntheLastItem ? '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
-		return Tools::getPath(intval($category->id_parent), $path);
+			$displayedPath = ($linkOntheLastItem ? '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
+		return Tools::getPath(intval($category->id_parent), $displayedPath);
 	}
 
 	static public function getFullPath($id_category, $end)
