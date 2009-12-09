@@ -1,11 +1,17 @@
 <?php
+
+define('PS_ADMIN_DIR', getcwd());
+include(PS_ADMIN_DIR.'/../config/config.inc.php');
+/* Getting cookie or logout */
+require_once(dirname(__FILE__).'/init.php');
+	
 if(!isset($_GET['iso']) OR empty($_GET['iso']))
 	die('fail:0');
 
 if(@fsockopen('www.prestashop.com', 80))
 {
 	// Get all iso code available
-	$lang_packs = file_get_contents('http://prestashop.com/rss/lang_exists.php');
+	$lang_packs = file_get_contents('http://www.prestashop.com/rss/lang_exists.php');
 
 	if ($lang_packs)
 	{

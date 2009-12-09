@@ -1,15 +1,9 @@
 <?php
 
-include_once(dirname(__FILE__).'/../config/config.inc.php');
-
+define('PS_ADMIN_DIR', getcwd());
+include(PS_ADMIN_DIR.'/../config/config.inc.php');
 /* Getting cookie or logout */
-if (!class_exists('Cookie'))
-	exit();
-
-
-$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -10));
-if (!$cookie->isLoggedBack())
-	die;
+require_once(dirname(__FILE__).'/init.php');
 
 $query = Tools::getValue('q', false);
 
@@ -22,8 +16,8 @@ $items = Db::s('
 	LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
 	WHERE 1
 	AND (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\')
-	AND pl.id_lang = '.intval($cookie->id_lang).'
-');
+	AND pl.id_lang = '.intval($cookie->id_lang)
+);
 if ($items)
 	foreach ($items as $item)
 		echo $item['name'].(!empty($item['reference']) ? '('.$item['reference'].')' : '').'|'.$item['id_product']."\n";
