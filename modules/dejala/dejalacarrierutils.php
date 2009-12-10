@@ -55,7 +55,7 @@ class DejalaCarrierUtils
 		}
 		$carrier->add();
 		
-		$sql = 'INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`) VALUES ('.intval($carrier->id).', ' . $id_zone . ')';
+		$sql = 'INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`) VALUES ('.intval($carrier->id).', ' . intval($id_zone) . ')';
 		Db::getInstance()->Execute($sql);
 
 		$rangeW = new RangeWeight();
