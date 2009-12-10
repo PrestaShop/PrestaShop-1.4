@@ -1,1 +1,12 @@
-Hola {firstname} {lastname},\r\n\r\nEl historial de su pedido #{id_order}\r\n\r\nEstamos preparando su pedido.\r\n\r\nPuede revisar su pedido y descargar la factura en la seccion \"Historial de pedidos\" de su cuenta haciendo clic en \"Mi cuenta\" en nuestro sitio web.\r\n\r\n{shop_name} - {shop_url}\r\n\r\n\r\n\r\n{shop_url} gestionado por PrestaShop&trade;
+Hola {firstname} {lastname},
+	
+Sobre tu pedido #{id_order}:
+
+Estamos preparando tu pedido.
+
+Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos).
+
+{shop_name} - {shop_url}
+
+
+{shop_url} powered by PrestaShop®

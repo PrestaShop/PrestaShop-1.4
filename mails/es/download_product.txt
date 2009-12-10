@@ -1,1 +1,12 @@
-{firstname} {lastname}, gracias por comprar en {shop_name}!\r\n\r\nTiene {nbProducts} producto(s) para descargar.\r\n\r\nEste es el acceso directo:\r\n{virtualProducts}\r\n\r\n\r\nPuede revisar este recibo y descargar su factura desde la sección \"Seguimiento de Pedido\" de su cuenta haciendo clic sobre \"Mi cuenta\" en nuestra web.\r\n\r\n\r\n{shop_url} gestionado por PrestaShop™
+{firstname} {lastname}, gracias por comprar en {shop_name}!
+
+Tiene {nbProducts} producto(s) para descargar.
+
+Este es el acceso directo:
+{virtualProducts}
+
+
+Puede revisar este recibo y descargar su factura desde la sección "Seguimiento de Pedido" de su cuenta pulsando "Mi cuenta" en nuestra web.
+
+
+{shop_url} powered by PrestaShop®

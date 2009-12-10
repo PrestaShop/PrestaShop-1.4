@@ -1,1 +1,15 @@
-Hola {firstname} {lastname},\r\n\r\nHay un problema con el pago de su pedido #{id_order}. Por favor, pongase en contacto con nosotros en cuanto le sea posible.\r\n\r\nSu pedido no sera enviado hasta que resolvamos este problema.\r\n\r\nPuede revisar su pedido y descargar su factura en la sección \"Historial de pedidos\" de su cuenta haciendo clic sobre \"Mi cuenta\" en nuestro sitio web.\r\n{shop_name} - {shop_url}\r\n\r\n\r\n\r\n{shop_url} gestionado por PrestaShop&trade
+Hola {firstname} {lastname},
+
+
+Hay un problema con tu pago para el pedido: #{id_order}. Por favor, contacte con nosotros en cuanto le sea posible.
+
+Su pedido no será enviado hasta que resolvamos este problema. 
+
+
+Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos). 
+
+{shop_name} - {shop_url}
+
+
+
+{shop_url} powered by PrestaShop®

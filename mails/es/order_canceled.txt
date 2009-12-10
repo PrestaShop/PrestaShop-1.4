@@ -1,1 +1,13 @@
-Hola {firstname} {lastname},\r\n\r\nConcierne su pedido n#{id_order}:\r\n\r\nSu pedido ha sido cancelado.\r\n\r\nPuede revisar su pedido y descargar su factura desde la sección \"Historial pedidos\" de su cuenta haciendo clic sobre \"Mi cuenta\" en nuestro sitio web. \r\n\r\n{shop_name} - {shop_url}\r\n\r\n\r\n\r\n{shop_url} gestionado por PrestaShop™
+Hola {firstname} {lastname},
+
+Respecto a su pedido #{id_order}:
+		
+Su pedido ha sido cancelado.
+
+Puedes revisar este pedido y descargar tu factura desde la seccion de "Historial de Pedidos" dentro de tu cuenta en nuestra web. 
+
+{shop_name} - {shop_url}
+
+
+
+{shop_url} powered by PrestaShop®

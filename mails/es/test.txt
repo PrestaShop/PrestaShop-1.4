@@ -1,1 +1,3 @@
-Hola:\r\n\r\nEste es un correo de prueba de su tienda online Prestashop.
+Hola,
+
+Esto es una prueba de correo desde tu tienda Prestashop.

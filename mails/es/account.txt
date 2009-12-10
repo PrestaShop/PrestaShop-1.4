@@ -1,1 +1,20 @@
-Hola {firstname} {lastname}.\r\n\r\nGracias por crear su cuenta en {shop_name}.\r\n\r\nDatos de acceso a su cuenta:\r\n\r\nCorreo electrónico: {email}\r\nContraseña: {passwd}\r\n \r\nYa puede realizar pedidos en nuestra tienda: {shop_url}\r\n\r\nConsejos útiles sobre seguridad:\r\n\r\n* Mantenga a salvo los datos de su cuenta.\r\n* No revele a nadie los datos de acceso a su cuenta.\r\n* Cambie regularmente su contraseña. \r\n* Si sospecha que alguien está usando ilegalmente su cuenta, notifíquenoslo inmediatamente. \r\n\r\n\r\n{shop_url} está gestionada con PrestaShop™
+Hola {firstname} {lastname},
+
+Gracias por crear tu cuenta en {shop_name}.
+
+Detalles de tu cuenta:
+
+Email: {email}
+Contraseña: {passwd}
+ 
+Ahora podrás guardar y consultar tus pedidos en nuestra web: {shop_url}
+
+Consejos de Seguridad:
+
+* Mantén los datos de tu cuenta en lugar seguro.
+* No des los detalles de tu cuenta a nadie.
+* Cambia tu contraseña regularmente.
+* Si sospechas que alguien esta usando ilegalmente tu cuenta, avísanos inmediatamente.
+
+
+{shop_url} powered by PrestaShop®

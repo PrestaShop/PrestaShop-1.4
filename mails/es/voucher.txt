@@ -1,1 +1,14 @@
-Hola {firstname} {lastname},\r\n\r\nLe informamos que hemos creado un vale a su nombre como resultado de su pedido #{id_order}.\r\n\r\nEsta es elcódigo de su vale : {voucher_num}, por un importe de {voucher_amount}.\r\n\r\nIntroduzca este codigo en su proximo pedido antes de efectuar su pago.\r\n\r\nGracias por su compra en {shop_name}.\r\n\r\n{shop_name} - {shop_url}\r\n\r\n\r\n{shop_url} gestionado por PrestaShop&trade;
+Hola {firstname} {lastname},
+
+Te informamos de la creación de un cupón de descuento para tí como resultado de tu pedido #{id_order}.
+
+Aquí tienes tu código del cupón:{voucher_num}, por la cantidad de:{voucher_amount}.
+
+Simplemente copia y pega éste código durante el proceso de pago de tu próximo pedido.
+
+Gracias por comprar en {shop_name}.
+
+{shop_name} - {shop_url}
+
+
+{shop_url} powered by PrestaShop®

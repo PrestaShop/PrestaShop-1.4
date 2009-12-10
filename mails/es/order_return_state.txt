@@ -1,1 +1,9 @@
-Hola {firstname} {lastname},\r\n\r\nSu historial de devolución de su pedido #{id_order_return} ha cambiado a \"{state_order_return}\".\r\n\r\nPuede revisar la devolución de su pedido en la sección \"Historial de pedidos\" de su cuenta haciendo clic en \"Mi cuenta\" en nuestro sitio web.\r\n\r\n{shop_name} - {shop_url}\r\n\r\n\r\n\r\n{shop_url} gestionado por PrestaShop&trade;
+Buenos días: {firstname} {lastname},
+
+El estado de su devolución {id_order_return} a cambiado a "{state_order_return}".
+
+Puedes revisar esta orden de devolución en "Historial y detalles de tus pedidos" de tu cuenta pulsando sobre "Mi cuenta" en nuestro sitio web.
+
+{shop_name} - {shop_url}
+
+{shop_url} powered by PrestaShop®

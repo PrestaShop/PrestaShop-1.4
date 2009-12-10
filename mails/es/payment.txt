@@ -1,1 +1,13 @@
-Hola {firstname} {lastname},\r\n\r\nEl historial de su pedido #{id_order}\r\n\r\nEl pago de su pedido ha sido recibido correctamente.\r\n\r\nPuede revisar su pedido y descargar su factura en la sección \"historial de pedidos\" de su cuenta haciendo clic sobre \"Mi cuenta\" en nuestro sitio web.\r\n\r\n{shop_name} - {shop_url}\r\n\r\nGracias por su compra en {shop_name}.\r\n\r\n{shop_url} gestionado por PrestaShop&trade;
+Hola {firstname} {lastname},
+	
+En referencia a tu pedido #{id_order}: 
+
+El pago de tu pedido fue CORRECTAMENTE recibido.
+
+Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos).
+
+{shop_name} - {shop_url}
+
+Gracias por comprar en {shop_name}.
+
+{shop_url} powered by PrestaShop®
