@@ -912,15 +912,13 @@ class AdminTranslations extends AdminTab
 				if ($lang_packs)
 				{
 					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
-					if ($flag)
+					if ($flag != NULL && !preg_match('/<body>/', $flag))
 					{
 						$file = @fopen(dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg', 'w');
 						if ($file)
 						{
 							fwrite($file, $flag);
 							fclose($file);
-							if(trim(exec('file -bi '.escapeshellarg(dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg'))) != 'image/jpeg')
-								$this->_copyNoneFlag($insert_id);
 						}
 						else
 							$this->_copyNoneFlag($insert_id);
