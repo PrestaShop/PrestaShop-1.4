@@ -864,6 +864,24 @@ class AdminTranslations extends AdminTab
 		return isset($themes) ? $themes : array();
 	}
 	
+	private function _copyNoneFlag($id)
+	{
+		// $flag = @file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/none.jpg');
+		// if ($flag)
+		// {
+			// $file = @fopen(dirname(__FILE__).'/../../img/l/'.$id.'.jpg', 'w');
+			// if ($file)
+			// {
+				// fwrite($file, $flag);
+				// fclose($file);
+			// }
+			// else
+				// copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg');
+		// }
+		// else
+		copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$id.'.jpg');
+	}
+	
 	private function _checkAndAddLangage($iso_code)
 	{
 		$result = Db::getInstance()->getValue('
@@ -906,7 +924,7 @@ class AdminTranslations extends AdminTab
 				
 				if ($lang_packs)
 				{
-					$flag = @file_get_contents('http://www.prestashop.com/download/lang_packs/flags/'.$iso_code.'.gif');
+					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
 					if ($flag)
 					{
 						$file = @fopen(dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg', 'w');
@@ -914,15 +932,17 @@ class AdminTranslations extends AdminTab
 						{
 							fwrite($file, $flag);
 							fclose($file);
+							if(trim(exec('file -bi '.escapeshellarg(dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg'))) != 'image/jpeg')
+								$this->_copyNoneFlag($insert_id);
 						}
 						else
-							copy(dirname(__FILE__).'/../../img/l/0.jpg', dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg');
+							$this->_copyNoneFlag($insert_id);
 					}
 					else
-						copy(dirname(__FILE__).'/../../img/l/0.jpg', dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg');
+						$this->_copyNoneFlag($insert_id);
 				}
 				else
-					copy(dirname(__FILE__).'/../../img/l/0.jpg', dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg');
+					$this->_copyNoneFlag($insert_id);
 				
 				$url_to_dir = dirname(__FILE__).'/../../img/l/';
 				
