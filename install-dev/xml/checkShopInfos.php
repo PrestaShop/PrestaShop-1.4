@@ -151,6 +151,8 @@ if (isFormValid())
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_EMAIL', '".pSQL($_GET['infosEmail'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_METHOD', '".pSQL($_GET['infosMailMethod'] == "smtp" ? "2": "1")."', NOW(), NOW())";
 	$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
+	if(intval($_GET['infosCountry']) != 0)
+		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.intval($_GET['infosCountry']).' WHERE name = \'PS_COUNTRY_DEFAULT\'';
 	
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{
