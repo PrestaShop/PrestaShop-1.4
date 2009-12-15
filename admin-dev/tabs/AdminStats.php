@@ -19,7 +19,7 @@ class AdminStats extends AdminStatsTab
 	private static function recordQuery($dateBetween, $format, $order)
 	{
 		return Db::getInstance()->getRow('
-		SELECT date_format(o.`date_add`, \''.$format.'\') as date, SUM(o.`total_products`) / c.conversion_rate as totalht, SUM(o.`total_paid`) / c.conversion_rate as totalttc
+		SELECT date_format(o.`date_add`, \''.$format.'\') as date, SUM(o.`total_products` / c.conversion_rate) as totalht, SUM(o.`total_paid` / c.conversion_rate) as totalttc
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
@@ -42,9 +42,9 @@ class AdminStats extends AdminStatsTab
 	public static function getSales($dateBetween)
 	{	
 		$result = Db::getInstance()->getRow('
-		SELECT COUNT(DISTINCT o.`id_order`) as orders, SUM(o.`total_paid`) / c.conversion_rate as ttc, SUM(o.`total_products`) / c.conversion_rate as ht
+		SELECT COUNT(DISTINCT o.`id_order`) as orders, SUM(o.`total_paid` / c.conversion_rate) as ttc, SUM(o.`total_products` / c.conversion_rate) as ht
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+		INNER JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.$dateBetween);
 		
