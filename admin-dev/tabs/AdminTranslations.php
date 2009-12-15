@@ -866,19 +866,6 @@ class AdminTranslations extends AdminTab
 	
 	private function _copyNoneFlag($id)
 	{
-		// $flag = @file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/none.jpg');
-		// if ($flag)
-		// {
-			// $file = @fopen(dirname(__FILE__).'/../../img/l/'.$id.'.jpg', 'w');
-			// if ($file)
-			// {
-				// fwrite($file, $flag);
-				// fclose($file);
-			// }
-			// else
-				// copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg');
-		// }
-		// else
 		copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$id.'.jpg');
 	}
 	
