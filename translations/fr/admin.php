@@ -1812,6 +1812,7 @@ $_LANGADM['AdminStatsTab423e5f3a91ed4e4b023ea6eebddd25b5'] = 'Aucun moteur de gr
 $_LANGADM['AdminStatsTab018c0d798c754ada9fbc026ca9a80092'] = 'Aucun moteur de tableaux sélectionné';
 $_LANGADM['AdminStatsTab38fb7d24e0d60a048f540ecb18e13376'] = 'Mettre à jour';
 $_LANGADM['AdminStatsTab8ff922bbcd8ad41cdfc48d3c5163b2ab'] = 'Calendrier';
+$_LANGADM['AdminStatsTab03727ac48595a24daed975559c944a44'] = 'Jour';
 $_LANGADM['AdminStatsTab7cbb885aa1164b390a0bc050a64e1812'] = 'Mois';
 $_LANGADM['AdminStatsTab537c66b24ef5c83b7382cdc3f34885f2'] = 'Année';
 $_LANGADM['AdminStatsTab13348442cc6a27032d2b4aa28b75a5d3'] = 'Rechercher';
