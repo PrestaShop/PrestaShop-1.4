@@ -561,19 +561,25 @@ div#noJavaScript{
 	text-align: center;
 }
 
-a#access{
+a#access, a#access_update{
 	display:block;
 	width:300px;
 	height:150px;
 	background:url('img/btn-installeur.png') top left;
 	font-family:Arial, sans-serif;
 }
-a#access:hover{background:url('img/btn-installeur.png') bottom left;}
+a#access:hover,a#access_update:hover{background:url('img/btn-installeur.png') bottom left;}
 a#access.BO{float:left;}
 a#access.FO{float:right;}
 a#access span{display:block;}
 a#access span.title{margin:5px 15px;font-size:18pt;font-weight:bold;color:#FFF;}
 a#access span.description{margin:10px 20px;color:#FFF;height:63px;}
 a#access span.message{margin-left:20px;font-weight:bold;color:#FFF;}
+a#access_update{float:left;}
+a#access_update span{display:block;}
+a#access_update span.title{margin:5px 15px;font-size:18pt;font-weight:bold;color:#FFF;}
+a#access_update span.description{margin:10px 20px;color:#FFF;height:63px;}
+a#access_update span.message{margin-left:20px;font-weight:bold;color:#FFF;}
 h3.no-margin{margin:0;}
 iframe#prestastore{width:100%;height:430px;border:none;margin:0px;}
+iframe#prestastore_update{clear:both;width:100%;height:430px;border:none;margin-top:15px;}

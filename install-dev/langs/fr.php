@@ -145,7 +145,7 @@ $_LANG['Update is complete!'] = 'Mise à jour terminée !';
 $_LANG['Upgrade : get the latest stable version!'] = 'Mise à jour : installez la dernière version de PrestaShop';
 $_LANG['Verify now!'] = 'Tester la connexion SQL';
 $_LANG['Verify system compatibility'] = 'Compatibilité système';
-$_LANG['WARNING : For more security, you must delete the \'install\' folder.'] = 'ATTENTION : pour plus de sécurité, merci de supprimer le dossier \'/install\'.';
+$_LANG['WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'] = 'ATTENTION : pour plus de sécurité, merci de supprimer le dossier \'/install\' et les fichiers readme (readme_fr.txt, readme_en.txt, readme_es.txt).';
 $_LANG['Warning : a manual backup is HIGHLY recommended before continuing!'] = 'Attention : une sauvegarde manuelle est INDISPENSABLE avant de procéder à la mise à jour de l\'application PrestaShop, cela afin de prévenir toute perte de données accidentelle';
 $_LANG['Welcome'] = 'Bienvenue';
 $_LANG['Welcome to the PrestaShop '.INSTALL_VERSION.' Installer.'] = 'Bienvenue dans l\'installation de PrestaShop '.INSTALL_VERSION;
@@ -433,5 +433,9 @@ $_LANG['French Polynesia'] = 'Polynésie française';
 $_LANG['French Southern Territories'] = 'Terres australes françaises';
 $_LANG['Aland Islands'] = 'Îles Åland';
 $_LANG['Default country :'] = 'Pays par défaut :';
+$_LANG['Your configuration is valid, click next to continue!'] = 'Votre configuration est valide, cliquez sur suivant pour continuer !';
+$_LANG['Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'] = 'Votre configuration n\'est pas valide, merci de configurer les paramètres indiquer par un \"-\". Vous pouvez vous renseigner sur';
+$_LANG['the official forum.'] = 'le forum officiel.';
+$_LANG['You must create a database for Prestashop, you can find help in readme.txt'] = 'Vous devez créer une base de données pour PrestaShop, vous pouvez trouver de l\'aide dans le fichier readme.txt';
 
 ?>

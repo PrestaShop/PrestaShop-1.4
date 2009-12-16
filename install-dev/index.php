@@ -92,6 +92,8 @@ if ($lm->getIncludeTradFilename())
 		var txtTabInstaller3 = "<?php echo lang('System configuration'); ?>";
 		var txtTabInstaller4 = "<?php echo lang('Shop configuration'); ?>";
 		var txtTabInstaller5 = "<?php echo lang('Installation is complete!'); ?>";
+		var txtConfigIsOk = "<?php echo lang('Your configuration is valid, click next to continue!'); ?>";
+		var txtConfigIsNotOk = "<?php echo lang('Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'); ?> <a href=\"http://www.prestashop.com/forum/\" target=\"_blank\"><?php echo lang('the official forum.'); ?></a>";
 		
 		var txtError = new Array();
 		txtError[0] = "<?php echo lang('Required field'); ?>";
@@ -239,6 +241,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
+			<h3 id="resultConfig" style="width:100%;text-align:center;padding:0px;display:none;"></h3>
 			<ul id="required">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>
@@ -277,6 +280,7 @@ if ($lm->getIncludeTradFilename())
 			
 			<p><?php echo lang('Configure your database by filling out the following fields')?> :</p>
 			<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
+				<h3 style="padding:0;margin:0;"><?php echo lang('You must create a database for Prestashop, you can find help in readme.txt'); ?></h3>
 				<p>
 					<label for="dbServer"><?php echo lang('Server')?> : </label>
 					<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
@@ -725,7 +729,7 @@ if ($lm->getIncludeTradFilename())
 						<td id="endEmail" class="resultEnd">&nbsp;</td>
 					</tr>
 				</table>
-				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder.'); ?></h3>
+				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
 				
 				<a href="../admin" id="access" class="BO" target="_blank">
 					<span class="title"><?php echo lang('Back Office'); ?></span>
@@ -774,7 +778,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forum/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
-			
+			<h3 id="resultConfig_update" style="width:100%;text-align:center;padding:0px;display:none;"></h3>
 			<ul id="required_update">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>
@@ -812,17 +816,31 @@ if ($lm->getIncludeTradFilename())
 			<p id="detailsError"></p>
 		</div>
 		
-		<div class="sheet" id="sheet_end_update">
-			<h2><?php echo lang('PrestaShop is ready!'); ?></h2>
-			<h3><?php echo lang('Your update is finished !'); ?></h3>
-			<p class="fail" id="txtErrorUpdateSQL"></p>
-			<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
-			<div id="updateLog"></div>
-			<p><?php echo lang('You\'ve just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
-			<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder.'); ?></h3>
-			<ul>
-				<li><a href="../"><?php echo lang('My shop'); ?></a></li>
-			</ul>
+		<div class="sheet" id="sheet_end_update" style="padding:0px;">
+			<div style="padding:1em;">
+				<h2><?php echo lang('PrestaShop is ready!'); ?></h2>
+				<h3><?php echo lang('Your update is finished !'); ?></h3>
+				<p class="fail" id="txtErrorUpdateSQL"></p>
+				<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
+				<div id="updateLog"></div>
+				<p><?php echo lang('You\'ve just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
+				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
+				<a href="../" id="access_update" target="_blank">
+					<span class="title"><?php echo lang('Front Office'); ?></span>
+					<span class="description"><?php echo lang('Find your store as your future customers will see !'); ?></span>
+					<span class="message"><?php echo lang('Discover my shop'); ?></span>
+				</a>
+			</div>
+			<?php
+			// Check if can contact prestastore.com
+			if (@fsockopen('www.prestastore.com', 80)): // it's temporary
+			?>
+			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
+				<p>Your browser does not support iframes.</p>
+			</iframe>
+			<?php
+			endif;
+			?>
 		</div>
 	
 </div>

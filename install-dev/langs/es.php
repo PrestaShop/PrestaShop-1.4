@@ -145,7 +145,7 @@ $_LANG['Update is complete!'] = 'Actualización completa!';
 $_LANG['Upgrade : get the latest stable version!'] = 'Actualización : instala la última versión de PrestShop';
 $_LANG['Verify now!'] = 'Verifique ahora!';
 $_LANG['Verify system compatibility'] = 'Compatibilidad sistema';
-$_LANG['WARNING : For more security, you must delete the \'install\' folder.'] = 'ATENCION : para más seguridad, por favor suprime la carpeta \'/install\'.';
+$_LANG['WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'] = 'ATENCION : para más seguridad, por favor suprime la carpeta \'/install\' y los archivos readme (readme_fr.txt, readme_en.txt, readme_es.txt)..';
 $_LANG['Warning : a manual backup is HIGHLY recommended before continuing!'] = 'Atención: una copia de seguridad manual es altamente recomendable, antes de continuar!';
 $_LANG['Welcome'] = 'Bienvenido';
 $_LANG['Welcome to the PrestaShop '.INSTALL_VERSION.' Installer.'] = 'Bienvenido a la instalación de PrestaShop '.INSTALL_VERSION;
@@ -433,5 +433,9 @@ $_LANG['French Polynesia'] = 'Polinesia francés';
 $_LANG['French Southern Territories'] = 'Territorios del sur francés';
 $_LANG['Aland Islands'] = 'Islas Åland';
 $_LANG['Default country :'] = 'País por defecto :';
+$_LANG['Your configuration is valid, click next to continue!'] = 'Su configuración es válida, haga clic en Siguiente para continuar!';
+$_LANG['Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'] = 'Su configuración no es válida, gracias a configurar la configuración especificada por un \"-\". Usted puede encontrar información sobre';
+$_LANG['the official forum.'] = 'el foro oficial.';
+$_LANG['You must create a database for Prestashop, you can find help in readme.txt'] = 'Usted debe crear una base de datos para Prestashop, usted puede encontrar ayuda en el archivo readme.txt';
 
 ?>

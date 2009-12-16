@@ -59,28 +59,28 @@ function showStep(aStep)
 				$('#tabs li:nth-child(1)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(2)').addClass("selected").removeClass("finished");
 				$('#tabs li:nth-child(3)').removeClass("selected").removeClass("finished");
-				$('#tabs li:nth-child(3)').removeClass("selected").removeClass("finished");
+				$('#tabs li:nth-child(4)').removeClass("selected").removeClass("finished");
 				break;
 				
 				case 7 :
 				$('#tabs li:nth-child(1)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(2)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(3)').addClass("selected").removeClass("finished");
-				$('#tabs li:nth-child(3)').removeClass("selected").removeClass("finished");
+				$('#tabs li:nth-child(4)').removeClass("selected").removeClass("finished");
 				break;
 				
 				case 8 :
 				$('#tabs li:nth-child(1)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(2)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(3)').addClass("selected").removeClass("finished");
-				$('#tabs li:nth-child(3)').removeClass("selected").removeClass("finished");
+				$('#tabs li:nth-child(4)').removeClass("selected").removeClass("finished");
 				break;
 				
 				case 9 :
 				$('#tabs li:nth-child(1)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(2)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(3)').removeClass("selected").addClass("finished");
-				$('#tabs li:nth-child(3)').removeClass("selected").removeClass("finished");
+				$('#tabs li:nth-child(4)').addClass("selected").removeClass("finished");
 				break;
 				
 			}
@@ -252,6 +252,7 @@ function verifyAndSetRequire()
 				if (result == "fail") configIsOk = false;
 			}
 			
+			
 			testListOptional = testLists[1].getElementsByTagName('test');
 			
 			for (i = 0; i < testListOptional.length; i++){
@@ -260,6 +261,11 @@ function verifyAndSetRequire()
 					.removeClass( (result == "fail") ? "ok" : "fail" )
 					.addClass(result);
 			}
+			
+			if(configIsOk)
+				$('h3#resultConfig'+isUpdate).html(txtConfigIsOk).slideDown('slow');
+			else
+				$('h3#resultConfig'+isUpdate).html(txtConfigIsNotOk).slideDown('slow');
 			
 			$("div#sheet_require"+isUpdate+" > ul").slideDown("1500");
 			
