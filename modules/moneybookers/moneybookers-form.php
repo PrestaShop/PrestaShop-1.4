@@ -286,25 +286,6 @@ $mbParams['status_url'] = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modul
 /* Assign settings to Smarty template */
 $smarty->assign($mbParams);
 
-/*	<input type="hidden" name="return_url" value="{$return_url}">
-<input type="hidden" name="return_url_text" value="{$return_url}">
-<input type="hidden" name="cancel_url" value="{$return_url}">
-
-<input type="hidden" name="state" value="{$state}">
-
-<input type="hidden" name="amount2_description" value="{$amount2_description}">
-<input type="hidden" name="amount2" value="{$amount2}">
-<input type="hidden" name="amount3_description" value="{$amount3_description}">
-<input type="hidden" name="amount3" value="{$amount3}">
-<input type="hidden" name="amount4_description" value="{$amount4_description}">
-<input type="hidden" name="amount4" value="{$amount4}"> */
-	
-$products = $cart->getProducts();
-foreach ($products as $key => $product)
-{
-	
-}
-
 $smarty->display(dirname(__FILE__).'/moneybookers-form.tpl');
 
 ?>

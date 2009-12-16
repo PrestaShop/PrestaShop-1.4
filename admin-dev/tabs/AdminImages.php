@@ -159,33 +159,41 @@ class AdminImages extends AdminTab
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-			<select name="type" onchange="changeFormat(this)">
-				<option value="all">'.$this->l('All').'</option>';
-		foreach ($types as $k => $type)
-			echo '<option value="'.$k.'">'.$type.'</option>';
-		echo '
-			</select>&nbsp;';
-			
-		foreach ($types as $k => $type)
-		{
-			$formats = ImageType::getImagesTypes($k);
+			<fieldset style="width:400px;">
+				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Regenerate thumbnails').'</legend><br />
+				<label>'.$this->l('Select image:').'</label>
+				<div class="margin-form">
+					<select name="type" onchange="changeFormat(this)">
+						<option value="all">'.$this->l('All').'</option>';
+				foreach ($types as $k => $type)
+					echo '<option value="'.$k.'">'.$type.'</option>';
+				echo '
+					</select>
+				</div>';
+				
+			foreach ($types as $k => $type)
+			{
+				$formats = ImageType::getImagesTypes($k);
+				echo '
+				<label class="second-select format_'.Tools::strtolower($type).'" style="display:none;">'.$this->l('Select format:').'</label>
+				<div class="second-select margin-form format_'.Tools::strtolower($type).'" style="display:none;">
+				<select class="second-select format_'.Tools::strtolower($type).'" name="format_'.Tools::strtolower($type).'">
+					<option value="all">'.$this->l('All').'</option>';
+				foreach ($formats as $format)
+					echo '<option value="'.$format['id_image_type'].'">'.$format['name'].'</option>';
+				echo '</select></div>';
+			}
 			echo '
-			<select class="second-select" name="format_'.Tools::strtolower($type).'" id="format_'.Tools::strtolower($type).'" style="display:none">
-				<option value="all">'.$this->l('All').'</option>';
-			foreach ($formats as $format)
-				echo '<option value="'.$format['id_image_type'].'">'.$format['name'].'</option>';
-			echo '</select>';
-		}
-		echo '
-			<script>
-				function changeFormat(elt)
-				{
-					$elt = $(elt);
-					$(\'.second-select\').hide();
-					$(\'#format_\' + $elt.val()).show();
-				}
-			</script>
-			<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
+				<script>
+					function changeFormat(elt)
+					{
+						$elt = $(elt);
+						$(\'.second-select\').hide();
+						$(\'.format_\' + $elt.val()).show();
+					}
+				</script>
+				<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
+			</fieldset>
 		</form>';
 	}
 
