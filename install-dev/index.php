@@ -104,7 +104,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[5] = "<?php echo lang('Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[6] = "<?php echo lang('Can\'t write settings file, please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[7] = "<?php echo lang('Impossible to upload the file!'); ?>";
-		txtError[8] = "<?php echo lang('Data integrity is not valided. Hack attempt ?'); ?>";
+		txtError[8] = "<?php echo lang('Data integrity is not valided. Hack attempt?'); ?>";
 		txtError[9] = "<?php echo lang('Impossible the read the content of a MySQL content file.'); ?>";
 		txtError[10] = "<?php echo lang('Impossible the access the a MySQL content file.'); ?>";
 		txtError[11] = "<?php echo lang('Error while inserting data in the database:'); ?>";
@@ -137,8 +137,8 @@ if ($lm->getIncludeTradFilename())
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";
 		txtError[28] = "<?php echo lang('You already have the '.INSTALL_VERSION.' version.'); ?>";
-		txtError[29] = "<?php echo lang('There is no older version. Did you delete or rename the config/settings.inc.php file ?'); ?>";
-		txtError[30] = "<?php echo lang('The config/settings.inc.php file was not found. Did you delete or rename this file ?'); ?>";
+		txtError[29] = "<?php echo lang('There is no older version. Did you delete or rename the config/settings.inc.php file?'); ?>";
+		txtError[30] = "<?php echo lang('The config/settings.inc.php file was not found. Did you delete or rename this file?'); ?>";
 		txtError[31] = "<?php echo lang('Can\'t find the sql upgrade files. Please verify that the /install/sql/upgrade folder is not empty)'); ?>";
 		txtError[32] = "<?php echo lang('No upgrade is possible.'); ?>";
 		txtError[33] = "<?php echo lang('Error while loading sql upgrade file.'); ?>";
@@ -175,7 +175,7 @@ if ($lm->getIncludeTradFilename())
 		<img src="img/ico_help.gif" alt="help" class="ico_help" />
 		
 		<div class="content">
-			<p class="title"><?php echo lang('Need help ?'); ?></p>
+			<p class="title"><?php echo lang('Need help?'); ?></p>
 			<p class="title_down"><?php echo lang('All tips and advice about Prestashop'); ?></p>
 			
 			<ul>
@@ -202,7 +202,7 @@ if ($lm->getIncludeTradFilename())
 			<?php echo lang('For more information, please consult our') ?> <a href="http://www.prestashop.com/wiki/Getting_Started/"><?php echo lang('online documentation') ?></a>.
 		</p>
 		
-		<h3><?php echo lang('Choose the installer language')?> :</h3>
+		<h3><?php echo lang('Choose the installer language:')?></h3>
 		<form id="formSetInstallerLanguage" action="<?php $_SERVER['REQUEST_URI']; ?>" method="get">
 			<ul id="langList">
 			<?php foreach ($lm->getAvailableLangs() as $lang):?>
@@ -223,7 +223,7 @@ if ($lm->getIncludeTradFilename())
 		<h3><?php echo lang('Installation method')?></h3>
 		<form id="formSetMethod" action="<?php $_SERVER['REQUEST_URI']; ?>" method="post">
 			<p><input <?php echo (!($oldversion AND !$tooOld AND !$sameVersions)) ? 'checked="checked"' : '' ?> type="radio" value="install" name="typeInstall" id="typeInstallInstall"/><label for="typeInstallInstall"><?php echo lang('Installation : complete install of the PrestaShop Solution')?></label></p>
-			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/><label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade : get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : lang('installed version detected').' : '.$oldversion    ).")") ?></label></p>
+			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/><label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade: get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : lang('installed version detected').' : '.$oldversion    ).")") ?></label></p>
 		</form>
 		
 	</div>
@@ -278,23 +278,23 @@ if ($lm->getIncludeTradFilename())
 		<div class="sheet" id="sheet_db">
 			<h2><?php echo lang('Database configuration')?></h2>
 			
-			<p><?php echo lang('Configure your database by filling out the following fields')?> :</p>
+			<p><?php echo lang('Configure your database by filling out the following fields:')?></p>
 			<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
-				<h3 style="padding:0;margin:0;"><?php echo lang('You must create a database for Prestashop, you can find help in readme.txt'); ?></h3>
+				<h3 style="padding:0;margin:0;"><?php echo lang('You must create a database for Prestashop, you can find help in readme_en.txt'); ?></h3>
 				<p>
-					<label for="dbServer"><?php echo lang('Server')?> : </label>
+					<label for="dbServer"><?php echo lang('Server:')?> </label>
 					<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
 				</p>
 				<p>
-					<label for="dbName"><?php echo lang('Database name')?> : </label>
+					<label for="dbName"><?php echo lang('Database name:')?> </label>
 					<input size="10" class="text" type="text" id="dbName" value="prestashop"/>
 				</p>
 				<p>
-					<label for="dbLogin"><?php echo lang('Login')?> : </label>
+					<label for="dbLogin"><?php echo lang('Login:')?> </label>
 					<input class="text" size="10" type="text" id="dbLogin" value="root"/>
 				</p>
 				<p>
-					<label for="dbPassword"><?php echo lang('Password')?> : </label>
+					<label for="dbPassword"><?php echo lang('Password:')?> </label>
 					<input class="text" autocomplete="off" size="10" type="password" id="dbPassword"/>
 				</p>
 				<p class="aligned">
@@ -305,10 +305,10 @@ if ($lm->getIncludeTradFilename())
 			
 			<div id="dbTableParam">
 				<form action="#" method="post" onsubmit="createDB(); return false;">
-				<p><label for="db_prefix"><?php echo lang('Tables prefix')?> : </label><input class="text" type="text" id="db_prefix" value="ps_"/></p>
+				<p><label for="db_prefix"><?php echo lang('Tables prefix:')?> </label><input class="text" type="text" id="db_prefix" value="ps_"/></p>
 				<p id="dbModeSetter">
-					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet"/><label for="db_mode_complet"><?php echo lang('Full mode : Install the main modules and add sample products')?></label><br/>
-					<input value="lite" type="radio" name="db_mode" id="db_mode_simple"/><label for="db_mode_simple"><?php echo lang('Simple mode : Don\'t install any module')?></label>
+					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet"/><label for="db_mode_complet"><?php echo lang('Full mode: Install the main modules and add sample products')?></label><br/>
+					<input value="lite" type="radio" name="db_mode" id="db_mode_simple"/><label for="db_mode_simple"><?php echo lang('Simple mode: Don\'t install any module')?></label>
 				</p>
 				</form>
 				<p id="dbCreateResultCheck"></p>
@@ -325,11 +325,11 @@ if ($lm->getIncludeTradFilename())
 				<div id="mailSMTPParam">
 					<form class="aligned" action="#" method="post" onsubmit="verifyMail(); return false;">
 						<p>
-							<label for="smtpSrv"><?php echo lang('SMTP server'); ?> : </label>
+							<label for="smtpSrv"><?php echo lang('SMTP server:'); ?> </label>
 							<input class="text" type="text" id="smtpSrv" value="smtp."/>
 						</p>
 						<p>
-							<label for="smtpEnc"><?php echo lang('Encryption'); ?> :</label>
+							<label for="smtpEnc"><?php echo lang('Encryption:'); ?></label>
 							<select id="smtpEnc">
 								<option value="off" selected="selected"><?php echo lang('None'); ?></option>
 								<option value="tls">TLS</option>
@@ -338,17 +338,17 @@ if ($lm->getIncludeTradFilename())
 						</p>
 						
 						<p>
-							<label for="smtpPort"><?php echo lang('Port'); ?> :</label>
+							<label for="smtpPort"><?php echo lang('Port:'); ?></label>
 							<input type="text" size="5" id="smtpPort" value="25" />
 						</p>
 						
 						<p>
-							<label for="smtpLogin"><?php echo lang('Login'); ?> : </label>
+							<label for="smtpLogin"><?php echo lang('Login:'); ?> </label>
 							<input class="text" type="text" size="10" id="smtpLogin" value="" />
 						</p>
 
 						<p>
-							<label for="smtpPassword"><?php echo lang('Password'); ?> : </label>
+							<label for="smtpPassword"><?php echo lang('Password:'); ?> </label>
 							<input autocomplete="off" class="text" type="password" size="10" id="smtpPassword" />
 						</p>
 
@@ -374,7 +374,7 @@ if ($lm->getIncludeTradFilename())
 					<span id="resultInfosShop" class="result aligned"></span>
 				</div>
 				<div class="field">
-					<label for="infosCountry" class="aligned"><?php echo lang('Default country :'); ?></label>
+					<label for="infosCountry" class="aligned"><?php echo lang('Default country:'); ?></label>
 					<select id="infosCountry" style="width:175px;border:1px solid #D41958">
 						<option value="231"><?php echo lang('Afghanistan'); ?></option>
 						<option value="244"><?php echo lang('Aland Islands'); ?></option>
@@ -626,7 +626,7 @@ if ($lm->getIncludeTradFilename())
 					<label for="infosLogo" class="aligned logo"><?php echo lang('Shop logo'); ?> : </label>
 					<input type="file" onchange="uploadLogo()" name="fileToUpload" id="fileToUpload"/>
 					<span id="resultInfosLogo" class="result"></span>
-					<p class="userInfos aligned"><?php echo lang('recommended dimensions : 230px X 75px'); ?></p>
+					<p class="userInfos aligned"><?php echo lang('recommended dimensions: 230px X 75px'); ?></p>
 					<p id="alignedLogo"><img id="uploadedImage" src="<?php echo PS_BASE_URI ?>img/logo.jpg" alt="Logo" /></p>
 				</div>
 				
@@ -708,28 +708,28 @@ if ($lm->getIncludeTradFilename())
 		<div class="sheet" id="sheet_end" style="padding:0">
 			<div style="padding:1em">
 				<h2><?php echo lang('PrestaShop is ready!'); ?></h2>			
-				<h3><?php echo lang('Your installation is finished !'); ?></h3>
+				<h3><?php echo lang('Your installation is finished!'); ?></h3>
 				<p><?php echo lang('You\'ve just installed and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
 				<p><?php echo lang('Here are your shop information. You can modify them once logged in.'); ?></p>
 				<table id="resultInstall" cellspacing="0">
 					<tr>
-						<td class="label"><?php echo lang('Shop name'); ?> :</td>
+						<td class="label"><?php echo lang('Shop name:'); ?></td>
 						<td id="endShopName" class="resultEnd">&nbsp;</td>
 					</tr>
 					<tr>
-						<td class="label"><?php echo lang('First name'); ?> :</td>
+						<td class="label"><?php echo lang('First name:'); ?></td>
 						<td id="endFirstName" class="resultEnd">&nbsp;</td>
 					</tr>
 					<tr>
-						<td class="label"><?php echo lang('Last name'); ?> :</td>
+						<td class="label"><?php echo lang('Last name:'); ?></td>
 						<td id="endName" class="resultEnd">&nbsp;</td>
 					</tr>
 					<tr>
-						<td class="label"><?php echo lang('E-mail'); ?> :</td>
+						<td class="label"><?php echo lang('E-mail:'); ?></td>
 						<td id="endEmail" class="resultEnd">&nbsp;</td>
 					</tr>
 				</table>
-				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
+				<h3><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
 				
 				<a href="../admin" id="access" class="BO" target="_blank">
 					<span class="title"><?php echo lang('Back Office'); ?></span>
@@ -738,8 +738,8 @@ if ($lm->getIncludeTradFilename())
 				</a>
 				<a href="../" id="access" class="FO" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
-					<span class="description"><?php echo lang('Find your store as your future customers will see !'); ?></span>
-					<span class="message"><?php echo lang('Discover my shop'); ?></span>
+					<span class="description"><?php echo lang('Find your store as your customers will!'); ?></span>
+					<span class="message"><?php echo lang('Discover your store'); ?></span>
 				</a>
 				<div id="resultEnd"></div>
 			</div>
@@ -757,7 +757,7 @@ if ($lm->getIncludeTradFilename())
 		
 		<div class="sheet" id="sheet_disclaimer">
 			<h2><?php echo lang('Disclaimer'); ?></h2>			
-			<h3><?php echo lang('Warning : a manual backup is HIGHLY recommended before continuing!'); ?></h3>
+			<h3><?php echo lang('Warning: a manual backup is HIGHLY recommended before continuing!'); ?></h3>
 			<p><?php echo lang('Before continuing, you have to backup your data. Please backup the database and backup the files of the application.'); ?></p>
 			<p><?php echo lang('When your files and database are saving in an other support, please certify that your shop is really backed up.'); ?><br /><br /></p>
 			<div id="disclaimerDivCertify">
@@ -810,7 +810,7 @@ if ($lm->getIncludeTradFilename())
 		</div>
 		
 		<div class="sheet" id="sheet_updateErrors">
-			<h2><?php echo lang('Error !'); ?></h2>			
+			<h2><?php echo lang('Error!'); ?></h2>			
 			<h3><?php echo lang('One or more errors have occurred...'); ?></h3>
 			<p id="resultUpdate"></p>
 			<p id="detailsError"></p>
@@ -819,12 +819,12 @@ if ($lm->getIncludeTradFilename())
 		<div class="sheet" id="sheet_end_update" style="padding:0px;">
 			<div style="padding:1em;">
 				<h2><?php echo lang('PrestaShop is ready!'); ?></h2>
-				<h3><?php echo lang('Your update is finished !'); ?></h3>
+				<h3><?php echo lang('Your update is finished!'); ?></h3>
 				<p class="fail" id="txtErrorUpdateSQL"></p>
 				<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
 				<div id="updateLog"></div>
 				<p><?php echo lang('You\'ve just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
-				<h3><?php echo lang('WARNING : For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
+				<h3><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
 				<a href="../" id="access_update" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
 					<span class="description"><?php echo lang('Find your store as your future customers will see !'); ?></span>

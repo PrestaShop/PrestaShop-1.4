@@ -4,7 +4,7 @@ Open-source licence 3.0 (http://www.opensource.org/licenses/osl-3.0.php)
 VERSION: Prestashop 1.3a1
 
 PREPARATION
-###########
+===========
 
 To install PrestaShop, you need a remote web server or on your computer (MAMP), with access to a database like MySQL.
 You'll need access to phpMyAdmin to create a database and to indicate the information in the database in the installer.
@@ -14,7 +14,7 @@ We invite you to visit:
 	http://www.prestabox.com/
 
 INSTALLATION
-############
+============
 
 Simply go to your PrestaShop web directory and use installer :-)
 
@@ -30,20 +30,20 @@ If you don't find any solution to launch installer, please post on our forum :
 There are always solutions for your issues ;-)
 
 DOCUMENTATION
-#############
+=============
 
 For any extra documentation (how-to), please read our wiki :
 	http://www.prestashop.com/wiki/
 
 FORUMS
-######
+======
 
 You can also discute, help and contribute with PrestaShop community on our forums :
 	http://www.prestashop.com/forums/
 
 Thanks for downloading and using PrestaShop e-commerce open-source solution !
 
-##########################
-#     The PrestaTeam'    #
-#   www.PrestaShop.com   #
-##########################
+==========================
+=     The PrestaTeam'    =
+=   www.PrestaShop.com   =
+==========================
