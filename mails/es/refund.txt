@@ -1,11 +1,11 @@
 Hola {firstname} {lastname},
 	
-El pago de tu pedido ha sido reembolsado. 
+Se ha reembolsado el pago de tu pedido. 
 
-Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos). 
+Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (historial de pedidos). 
 
 {shop_name} - {shop_url}
 
 
 
-{shop_url} powered by PrestaShop®
+{shop_url} desarrollado por PrestaShop®

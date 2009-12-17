@@ -2,12 +2,12 @@ Hola {firstname} {lastname},
 	
 En referencia a tu pedido #{id_order}: 
 
-El pago de tu pedido fue CORRECTAMENTE recibido.
+El pago de tu pedido fue recibido CORRECTAMENTE .
 
-Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos).
+Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (historial de pedidos).
 
 {shop_name} - {shop_url}
 
 Gracias por comprar en {shop_name}.
 
-{shop_url} powered by PrestaShop®
+{shop_url} desarrollado por PrestaShop®

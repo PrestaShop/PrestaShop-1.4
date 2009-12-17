@@ -1,7 +1,7 @@
 Hola {firstname} {lastname},
 
 Tu pedido acaba de ser enviado.
-Recibirás pronto una URL para realizar el seguimiento de tu pedido.
+Pronto recibirás una URL para realizar el seguimiento de tu pedido.
 
 Puedes revisar este pedido y descargar tu factura en la sección "Historial" dentro de tu cuenta en nuestra web.
 

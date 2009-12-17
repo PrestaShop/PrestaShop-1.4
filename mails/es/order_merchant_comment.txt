@@ -1,10 +1,10 @@
-Bonjour {firstname} {lastname},
+Hola {firstname} {lastname},
 
-Vous avez reçu un nouveau message concernant la commande n°{id_order} :
+Has recibido un mensaje sobre el pedido n°{id_order} :
 {message}
 
-Vous pouvez à tout moment consulter vos anciens messages dans votre suivi de commande.
+Puedes, en cualquier momento, consultar tus antiguos mensajes en Seguimiento de pedido..
 
 
 
-{shop_url} réalisé par PrestaShop™
+{shop_url} desarrollado por PrestaShop™

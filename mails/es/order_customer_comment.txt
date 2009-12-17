@@ -1,8 +1,8 @@
 Hola {firstname} {lastname},
 
-Has recibido un nuevo mensaje sobre tu pedido #{id_order}:
+Has recibido un nuevo mensaje sobre el pedido #{id_order}:
 
 {message}
 
 
-{shop_url} powered by PrestaShop®
+{shop_url} desarrollado por PrestaShop®

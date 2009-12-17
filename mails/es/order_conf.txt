@@ -7,7 +7,7 @@
 	
 	Total Productos: {total_products}
 	Descuentos: {total_discounts}
-	Gastos Envíos: {total_shipping}
+	Gastos Envío: {total_shipping}
 	Total: {total_paid}
 	
 	
@@ -29,8 +29,8 @@
 	{invoice_postal_code} {invoice_city}
 	{invoice_country}
 		
-	Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (histórico de pedidos).
+	Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (historial de pedidos).
 	
 	Gracias por comprar en {shop_name}.
 
-	{shop_url} powered by PrestaShop®
+	{shop_url} desarrollado por PrestaShop®
