@@ -74,7 +74,7 @@ class Tools
 			$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
 		return $host;
 	}
-	
+
 	/**
 	* Get a value from $_POST / $_GET
 	* if unavailable, take a default value
@@ -115,7 +115,7 @@ class Tools
 			if (!Validate::isLoadedObject($lang) OR !$lang->active)
 				$cookie->id_lang = NULL;
 		}
-		
+
 		/* Automatically detect language if not already defined */
 		if (!$cookie->id_lang AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
@@ -134,22 +134,22 @@ class Tools
 					$cookie->id_lang = intval($lang->id);
 			}
 		}
-		
+
 		/* If language file not present, you must use default language file */
 		if (!$cookie->id_lang OR !Validate::isUnsignedId($cookie->id_lang))
 			$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
-		
+
 		$iso = Language::getIsoById($cookie->id_lang);
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
 		return $iso;
 	}
-	
+
 	static public function switchLanguage()
 	{
 		global $cookie;
-		
+
 		if ($id_lang = intval(Tools::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
 			$cookie->id_lang = $id_lang;
 	}
@@ -182,7 +182,7 @@ class Tools
 	* Return price with currency sign for a given product
 	*
 	* @param float $price Product price
-	* @param object $currency Current currency object
+* @param object $currency Current currency object
 	* @param boolean $convert Need to convert currency sign to UTF8 (for FPDF), (optional)
 	* @return string Price with currency sign
 	*/
@@ -227,7 +227,7 @@ class Tools
 			return str_replace('€', chr(128), $ret);
 		return $ret;
 	}
-	
+
 	static public function displayPriceSmarty($params, &$smarty)
 	{
 		$currency = new Currency(intval($params['currency']));
@@ -305,14 +305,14 @@ class Tools
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesUTF8'), $string);
-		return htmlentities($string, $type, 'utf-8'); 
+		return htmlentities($string, $type, 'utf-8');
 	}
 
 	static public function htmlentitiesDecodeUTF8($string)
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesDecodeUTF8'), $string);
-		return html_entity_decode($string, ENT_QUOTES, 'utf-8'); 
+		return html_entity_decode($string, ENT_QUOTES, 'utf-8');
 	}
 
 	static public function safePostVars()
@@ -370,8 +370,9 @@ class Tools
 		echo '</pre><br />';
 		if ($kill)
 			die('END');
+		return ($object);
 	}
-	
+
 	/**
 	* ALIAS OF dieObject() - Display an error with detailed object
 	*
@@ -379,9 +380,9 @@ class Tools
 	*/
 	static public function d($object, $kill = true)
 	{
-		self::dieObject($object, $kill = true);
+		return (self::dieObject($object, $kill = true));
 	}
-	
+
 	/**
 	* ALIAS OF dieObject() - Display an error with detailed object but don't stop the execution
 	*
@@ -553,7 +554,7 @@ class Tools
 		else
 			return (Tools::encrypt($cookie->id_customer.$cookie->passwd.$page));
 	}
-	
+
 	/**
 	* Encrypt password
 	*
@@ -816,7 +817,7 @@ class Tools
 	{
 		return self::strtoupper(Tools::substr($str, 0, 1)).Tools::substr($str, 1);
 	}
-	
+
 	static public function orderbyPrice(&$array, $orderWay)
 	{
 		foreach($array as &$row)
@@ -840,7 +841,7 @@ class Tools
 	{
 		return $field === '' OR $field === NULL;
 	}
-	
+
 	static public function getTimezones($select = false)
 	{
 		static $_cache = 0;
@@ -906,8 +907,8 @@ class Tools
 * Compare 2 prices to sort products
 *
 * @param float $a
-* @param float $b 
-* @return integer 
+* @param float $b
+* @return integer
 */
 /* Externalized because of a bug in PHP 5.1.6 when inside an object */
 function cmpPriceAsc($a,$b)
