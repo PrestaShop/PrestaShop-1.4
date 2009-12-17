@@ -97,7 +97,7 @@ define('_PS_MIN_TIME_GENERATE_PASSWD_', '360');
 
 /* aliases */
 function p($var) {
-	Tools::p($var);
+	return (Tools::p($var));
 }
 function d($var) {
 	Tools::d($var);
