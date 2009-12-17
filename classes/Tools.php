@@ -390,7 +390,7 @@ class Tools
 	*/
 	static public function p($object)
 	{
-		self::dieObject($object, false);
+		return (self::dieObject($object, false));
 	}
 
 	/**

@@ -6,7 +6,7 @@ include_once(dirname(__FILE__).'/init.php');
 //will be initialized bellow...
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;
-
+p(p('toto'));
 function pictureUpload(Product $product, Cart $cart)
 {
 	global $errors;
@@ -17,7 +17,7 @@ function pictureUpload(Product $product, Cart $cart)
 	foreach ($fieldIds AS $fieldId)
 		if ($fieldId['type'] == _CUSTOMIZE_FILE_)
 			$authorizedFileFields[intval($fieldId['id_customization_field'])] = 'file'.intval($fieldId['id_customization_field']);
-	$indexes = array_flip($authorizedFileFields); 
+	$indexes = array_flip($authorizedFileFields);
 	foreach ($_FILES AS $fieldName => $file)
 		if (in_array($fieldName, $authorizedFileFields) AND isset($file['tmp_name']) AND !empty($file['tmp_name']))
 		{
@@ -115,10 +115,10 @@ else
 	else
 	{
 		$smarty->assign('virtual', ProductDownload::getIdFromIdProduct(intval($product->id)));
-		
+
 		/* rewrited url set */
 		$rewrited_url = $link->getProductLink($product->id, $product->link_rewrite);
-		
+
 		/* Product pictures management */
 		require_once('images.inc.php');
 		$smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
@@ -144,7 +144,7 @@ else
 		/* Features / Values */
 		$features = $product->getFrontFeatures(intval($cookie->id_lang));
 		$attachments = $product->getAttachments(intval($cookie->id_lang));
-		
+
 		/* Category */
 		$category = false;
 		if (isset($_SERVER['HTTP_REFERER']) AND preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
@@ -199,7 +199,7 @@ else
 			'HOOK_PRODUCT_ACTIONS' => Module::hookExec('productActions'),
 			'HOOK_PRODUCT_TAB' =>  Module::hookExec('productTab'),
 			'HOOK_PRODUCT_TAB_CONTENT' =>  Module::hookExec('productTabContent')));
-		
+
 		$images = $product->getImages(intval($cookie->id_lang));
 		$productImages = array();
 		foreach ($images AS $k => $image)
@@ -270,7 +270,7 @@ else
 					foreach ($group['attributes_quantity'] AS $key => &$quantity)
 						if (!$quantity)
 							unset($group['attributes'][$key]);
-			
+
 			foreach ($combinations AS $id_product_attribute => $comb)
 			{
 				$attributeList = '';
@@ -290,7 +290,7 @@ else
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),
 			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang))
 		));
-		
+
 		// Pack management
 		$smarty->assign('packItems', Pack::getItemTable($product->id, intval($cookie->id_lang), true));
 		$smarty->assign('packs', Pack::getPacksTable($product->id, intval($cookie->id_lang), true, 1));
