@@ -6,7 +6,6 @@ include_once(dirname(__FILE__).'/init.php');
 //will be initialized bellow...
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;
-p(p('toto'));
 function pictureUpload(Product $product, Cart $cart)
 {
 	global $errors;
