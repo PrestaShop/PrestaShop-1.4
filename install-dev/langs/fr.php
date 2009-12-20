@@ -433,9 +433,8 @@ $_LANG['French Polynesia'] = 'Polynésie française';
 $_LANG['French Southern Territories'] = 'Terres australes françaises';
 $_LANG['Aland Islands'] = 'Îles Åland';
 $_LANG['Default country:'] = 'Pays par défaut :';
-$_LANG['Your configuration is valid, click next to continue!'] = 'Votre configuration est valide, cliquez sur suivant pour continuer !';
-$_LANG['Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'] = 'Votre configuration n\'est pas valide, merci de configurer les paramètres indiquer par un \"-\". Vous pouvez vous renseigner sur';
-$_LANG['the official forum.'] = 'le forum officiel.';
-$_LANG['You must create a database for Prestashop, you can find help in readme_en.txt'] = 'Vous devez créer une base de données pour PrestaShop, vous pouvez trouver de l\'aide dans le fichier readme_fr.txt';
+$_LANG['Your configuration is valid, click next to continue!'] = 'Votre configuration est valide,<br />cliquez sur suivant pour continuer !';
+$_LANG['Your configuration is invalid,<br />thank you to fix these small issues:'] = 'Votre configuration n\'est pas valide,<br />merci de corriger ces problèmes :';
+$_LANG['You have to create a database, help available in readme_en.txt'] = 'Vous devez au préalable créer une base de données (aide disponible dans le fichier readme.txt)';
 
 ?>

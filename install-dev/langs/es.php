@@ -434,9 +434,8 @@ $_LANG['French Southern Territories'] = 'Territorios del sur francés';
 $_LANG['Aland Islands'] = 'Islas Åland';
 $_LANG['Default country:'] = 'País por defecto:';
 $_LANG['Your configuration is valid, click next to continue!'] = 'Su configuración es válida, haga clic en Siguiente para continuar';
-$_LANG['Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'] = 'Su configuración no es válida, gracias por actualizar la configuración especificada por un \"-\". Puede encontrar más información en';
-$_LANG['the official forum.'] = 'el foro oficial.';
-$_LANG['You must create a database for Prestashop, you can find help in readme_en.txt'] = 'Debe crear una base de datos para Prestashop, puede encontrar ayuda en el archivo readme_es.txt';
+$_LANG['Your configuration is invalid,<br />thank you to fix these small issues:'] = 'Su configuración no es válida,<br />gracias por corregir la configuración:';
+$_LANG['You have to create a database, help available in readme_en.txt'] = 'Debe crear una base de datos, puede encontrar ayuda en el archivo readme_es.txt';
 $_LANG['Discover your store'] = 'Descubra su tienda';
 
 ?>

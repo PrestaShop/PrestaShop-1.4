@@ -143,12 +143,14 @@ class ProductDownload extends ObjectModel
 	{
 		if (array_key_exists($id_product, self::$_productIds))
 			return self::$_productIds[$id_product];
+			
 		$data = Db::getInstance()->getRow('
 		SELECT `id_product_download`
 		FROM `'._DB_PREFIX_.'product_download`
-		WHERE `id_product` = '.intval($id_product).'
-		AND `active` = 1');
-		self::$_productIds[$id_product] = isset($data['id_product_download']) ? $data['id_product_download'] : false;
+		WHERE `id_product` = '.intval($id_product).' AND `active` = 1');
+		
+		self::$_productIds[$id_product] = isset($data['id_product_download']) ? intval($data['id_product_download']) : false;
+		
 		return self::$_productIds[$id_product];
 	}
 

@@ -93,7 +93,7 @@ if ($lm->getIncludeTradFilename())
 		var txtTabInstaller4 = "<?php echo lang('Shop configuration'); ?>";
 		var txtTabInstaller5 = "<?php echo lang('Installation is complete!'); ?>";
 		var txtConfigIsOk = "<?php echo lang('Your configuration is valid, click next to continue!'); ?>";
-		var txtConfigIsNotOk = "<?php echo lang('Your configuration is invalid, thank you to configure the settings specified by a \"-\". You can find out about'); ?> <a href=\"http://www.prestashop.com/forum/\" target=\"_blank\"><?php echo lang('the official forum.'); ?></a>";
+		var txtConfigIsNotOk = "<?php echo lang('Your configuration is invalid,<br />thank you to fix these small issues:'); ?>";
 		
 		var txtError = new Array();
 		txtError[0] = "<?php echo lang('Required field'); ?>";
@@ -241,7 +241,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
-			<h3 id="resultConfig" style="width:100%;text-align:center;padding:0px;display:none;"></h3>
+			<h3 id="resultConfig" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
 			<ul id="required">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>
@@ -280,8 +280,8 @@ if ($lm->getIncludeTradFilename())
 			
 			<p><?php echo lang('Configure your database by filling out the following fields:')?></p>
 			<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
-				<h3 style="padding:0;margin:0;"><?php echo lang('You must create a database for Prestashop, you can find help in readme_en.txt'); ?></h3>
-				<p>
+				<h3 style="padding:0;margin:0;"><?php echo lang('You have to create a database, help available in readme_en.txt'); ?></h3>
+				<p style="margin-top: 15px;">
 					<label for="dbServer"><?php echo lang('Server:')?> </label>
 					<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
 				</p>
@@ -370,7 +370,7 @@ if ($lm->getIncludeTradFilename())
 				
 				<h3><?php echo lang('Merchant info'); ?></h3>
 				<div class="field">
-					<label for="infosShop" class="aligned"><?php echo lang('Shop name'); ?> : </label><input class="text required" type="text" id="infosShop" value=""/><br/>
+					<label for="infosShop" class="aligned"><?php echo lang('Shop name:'); ?> </label><input class="text required" type="text" id="infosShop" value=""/><br/>
 					<span id="resultInfosShop" class="result aligned"></span>
 				</div>
 				<div class="field">
@@ -778,7 +778,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forum/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
-			<h3 id="resultConfig_update" style="width:100%;text-align:center;padding:0px;display:none;"></h3>
+			<h3 id="resultConfig_update" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
 			<ul id="required_update">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>

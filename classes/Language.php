@@ -36,13 +36,9 @@ class		Language extends ObjectModel
 	private static $_checkedLangs;
 	private static $_LANGUAGES;
 	
-	public	function __construct($id_address = NULL, $id_lang = NULL)
+	public	function __construct($id = NULL, $id_lang = NULL)
 	{
-		parent::__construct($id_address);
-		
-		// Check if all files needed are here, if not, disabled language
-		if ($this->iso_code != 'en' AND !$this->checkFiles())
-			$this->active = false;
+		parent::__construct($id);
 	}
 	
 	public function checkFiles()
@@ -321,15 +317,13 @@ class		Language extends ObjectModel
 	static public function loadLanguages()
 	{
 		self::$_LANGUAGES = array();
-		$result = Db::getInstance()->ExecuteS('SELECT `id_lang`, `name`, `iso_code`, `active` FROM `'._DB_PREFIX_.'lang`');
-		if ($result === false)
-			die(Tools::displayError('Invalid loadLanguage() SQL query!'));
+		
+		$result = Db::getInstance()->ExecuteS('
+		SELECT `id_lang`, `name`, `iso_code`, `active` 
+		FROM `'._DB_PREFIX_.'lang`');
+		
 		foreach ($result AS $row)
-		{
-			if (!self::checkFilesWithIsoCode($row['iso_code']))
-				$row['active'] = 0;
 			self::$_LANGUAGES[intval($row['id_lang'])] = array('id_lang' => intval($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => intval($row['active']));
-		}
 	}
 }
 

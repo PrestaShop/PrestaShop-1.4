@@ -283,7 +283,50 @@ class Crypt_Blowfish
     function __construct($key, $iv)
     {
 		$_iv = $iv;
-		$this->setKey($key);		
+		
+		$len = strlen($key);
+
+        $k = 0;
+        $data = 0;
+        $datal = 0;
+        $datar = 0;
+
+        for ($i = 0; $i < 18; $i++)
+		{
+            $data = 0;
+            for ($j = 4; $j > 0; $j--)
+			{
+				$data = $data << 8 | ord($key{$k});
+				$k = ($k + 1) % $len;
+            }
+            $this->_P[$i] ^= $data;
+        }
+        
+        for ($i = 0; $i <= 16; $i += 2) {
+            $this->_encipher($datal, $datar);
+            $this->_P[$i] = $datal;
+            $this->_P[$i+1] = $datar;
+        }
+        for ($i = 0; $i < 256; $i += 2) {
+            $this->_encipher($datal, $datar);
+            $this->_S[0][$i] = $datal;
+            $this->_S[0][$i+1] = $datar;
+        }
+        for ($i = 0; $i < 256; $i += 2) {
+            $this->_encipher($datal, $datar);
+            $this->_S[1][$i] = $datal;
+            $this->_S[1][$i+1] = $datar;
+        }
+        for ($i = 0; $i < 256; $i += 2) {
+            $this->_encipher($datal, $datar);
+            $this->_S[2][$i] = $datal;
+            $this->_S[2][$i+1] = $datar;
+        }
+        for ($i = 0; $i < 256; $i += 2) {
+            $this->_encipher($datal, $datar);
+            $this->_S[3][$i] = $datal;
+            $this->_S[3][$i+1] = $datar;
+        }		
     }
 
     function _encipher(&$Xl, &$Xr)
@@ -339,53 +382,6 @@ class Crypt_Blowfish
             $plainText .= pack('N2', $Xl, $Xr);
         }
         return $plainText;
-    }
-
-    function setKey($key)
-    {
-        $len = strlen($key);
-
-        $k = 0;
-        $data = 0;
-        $datal = 0;
-        $datar = 0;
-
-        for ($i = 0; $i < 18; $i++)
-		{
-            $data = 0;
-            for ($j = 4; $j > 0; $j--)
-			{
-				$data = $data << 8 | ord($key{$k});
-				$k = ($k + 1) % $len;
-            }
-            $this->_P[$i] ^= $data;
-        }
-        
-        for ($i = 0; $i <= 16; $i += 2) {
-            $this->_encipher($datal, $datar);
-            $this->_P[$i] = $datal;
-            $this->_P[$i+1] = $datar;
-        }
-        for ($i = 0; $i < 256; $i += 2) {
-            $this->_encipher($datal, $datar);
-            $this->_S[0][$i] = $datal;
-            $this->_S[0][$i+1] = $datar;
-        }
-        for ($i = 0; $i < 256; $i += 2) {
-            $this->_encipher($datal, $datar);
-            $this->_S[1][$i] = $datal;
-            $this->_S[1][$i+1] = $datar;
-        }
-        for ($i = 0; $i < 256; $i += 2) {
-            $this->_encipher($datal, $datar);
-            $this->_S[2][$i] = $datal;
-            $this->_S[2][$i+1] = $datar;
-        }
-        for ($i = 0; $i < 256; $i += 2) {
-            $this->_encipher($datal, $datar);
-            $this->_S[3][$i] = $datal;
-            $this->_S[3][$i+1] = $datar;
-        }
     }
 }
 

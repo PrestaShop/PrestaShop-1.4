@@ -139,9 +139,9 @@ class		Cart extends ObjectModel
 		WHERE `id_cart` = '.intval($this->id));
 
 		$products = $this->getProducts();
-		foreach ($result AS $k=>$discount)
+		foreach ($result AS $k => $discount)
 		{
-			$categories = Discount::getCategories($discount['id_discount']);
+			$categories = Discount::getCategories(intval($discount['id_discount']));
 			$in_category = false;
 			foreach ($products AS $product)
 				if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
@@ -682,25 +682,29 @@ class		Cart extends ObjectModel
 		$products = $this->getProducts();
 		$discounts = $this->getDiscounts(true);
 		if ($discounts)
+		{
 			foreach ($discounts AS $id_discount)
 			{
-				$discount = new Discount(intval($id_discount['id_discount']));
-				if (!Validate::isLoadedObject($discount))
-					die(Tools::displayError());
-				if ($discount->id_discount_type == 3)
-				{
-					$total_cart = 0;
-					$categories = Discount::getCategories($discount->id);
-					foreach($products AS $product)
+				if ($id_discount['id_discount_type'] == 3)
+				{				
+					if ($id_discount['minimal'] > 0)
 					{
-						if(count($categories))
-							if (Product::idIsOnCategoryId($product['id_product'], $categories))
+						$total_cart = 0;
+
+						$categories = Discount::getCategories(intval($id_discount['id_discount']));
+						if (sizeof($categories))
+							foreach($products AS $product)
+								if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
 									$total_cart += $product['total_wt'];
+						
+						if ($total_cart >= $id_discount['minimal'])
+							return 0;
 					}
-					if ($total_cart >= $discount->minimal)
+					else
 						return 0;
 				}
 			}
+		}
 
 		// Order total without fees
 		$orderTotal = $this->getOrderTotal(true, 7);
@@ -973,9 +977,15 @@ class		Cart extends ObjectModel
 	{
 		if (!intval(self::getNbProducts($this->id)))
 			return false;
+
 		$allVirtual = true;
 		foreach ($this->getProducts() AS $product)
-			$allVirtual &= (ProductDownload::getIdFromIdProduct(intval($product['id_product'])) ? true : false);
+		{
+			$res = (ProductDownload::getIdFromIdProduct(intval($product['id_product'])) ? true : false);
+			$allVirtual &= $res;
+			if (!$res)
+				return $allVirtual;
+		}
 		return $allVirtual;
 	}
 

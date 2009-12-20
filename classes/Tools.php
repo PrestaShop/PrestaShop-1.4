@@ -137,9 +137,9 @@ class Tools
 
 		/* If language file not present, you must use default language file */
 		if (!$cookie->id_lang OR !Validate::isUnsignedId($cookie->id_lang))
-			$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
+			$cookie->id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
 
-		$iso = Language::getIsoById($cookie->id_lang);
+		$iso = Language::getIsoById(intval($cookie->id_lang));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');

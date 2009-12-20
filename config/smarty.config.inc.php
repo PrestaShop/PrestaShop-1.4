@@ -7,7 +7,7 @@ $smarty->compile_dir 	= _PS_SMARTY_DIR_.'compile';
 $smarty->cache_dir 		= _PS_SMARTY_DIR_.'cache';
 $smarty->config_dir 	= _PS_SMARTY_DIR_.'configs';
 $smarty->caching 		= false;
-$smarty->force_compile	= true;
+$smarty->force_compile	= false;
 $smarty->compile_check	= false;
 //$smarty->debugging		= true;
 $smarty->debug_tpl		= _PS_ALL_THEMES_DIR_ . 'debug.tpl';
@@ -28,14 +28,16 @@ function smartyTranslate($params, &$smarty)
 	$key = $smarty->currentTemplate.'_'.md5($string);
 	if ($params['mod'])
 	{
-		if (file_exists(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.Language::getIsoById($cookie->id_lang).'.php'))
+		$iso = Language::getIsoById($cookie->id_lang);
+
+		if (file_exists(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
 		{
-			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.Language::getIsoById($cookie->id_lang).'.php';
+			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php';
 			$modKey = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
 		}
 		else
 		{
-			$translationsFile = _PS_MODULE_DIR_.$params['mod'].'/'.Language::getIsoById($cookie->id_lang).'.php';
+			$translationsFile = _PS_MODULE_DIR_.$params['mod'].'/'.$iso.'.php';
 			$modKey = '<{'.$params['mod'].'}prestashop>'.$key;
 		}
 
