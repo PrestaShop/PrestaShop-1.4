@@ -110,7 +110,6 @@ $_LANG['Send me a test email!'] = 'Send me a test e-mail';
 $_LANG['Server:'] = 'Database server name:';
 $_LANG['Shop configuration'] = 'Shop configuration';
 $_LANG['Shop logo'] = 'Shop logo';
-$_LANG['Shop name:'] = 'Shop name';
 $_LANG['Shop password'] = 'Shop password';
 $_LANG['Shop\'s default language'] = 'Your shop\'s default language';
 $_LANG['Shop\'s languages'] = 'Shop languages';

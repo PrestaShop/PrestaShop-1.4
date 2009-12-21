@@ -204,11 +204,11 @@ if ($lm->getIncludeTradFilename())
 		
 		<h3><?php echo lang('Choose the installer language:')?></h3>
 		<form id="formSetInstallerLanguage" action="<?php $_SERVER['REQUEST_URI']; ?>" method="get">
-			<ul id="langList">
+			<ul id="langList" style="line-height: 20px;">
 			<?php foreach ($lm->getAvailableLangs() as $lang):?>
-				<li><input onclick="setInstallerLanguage()" type="radio" value="<?php echo $lang['id'] ?>" <?php echo ( $lang['id'] == $lm->getIdSelectedLang() ) ? "checked=\"checked\"" : '' ?> id="lang_<?php echo $lang['id'] ?>" name="language"/><label for="lang_<?php echo $lang['id'] ?>">
+				<li><input onclick="setInstallerLanguage()" type="radio" value="<?php echo $lang['id'] ?>" <?php echo ( $lang['id'] == $lm->getIdSelectedLang() ) ? "checked=\"checked\"" : '' ?> id="lang_<?php echo $lang['id'] ?>" name="language" style="vertical-align: middle; margin-right: 0;" /><label for="lang_<?php echo $lang['id'] ?>">
 				<?php foreach ($lang->flags->url as $url_flag):?>
-					<img src="<?php echo $url_flag ?>" alt="<?php echo $lang['label'] ?>"/>
+					<img src="<?php echo $url_flag ?>" alt="<?php echo $lang['label'] ?>" style="vertical-align: middle;" />
 				<?php endforeach ?>
 				<?php echo $lang['label'] ?></label></li>
 				
@@ -307,8 +307,8 @@ if ($lm->getIncludeTradFilename())
 				<form action="#" method="post" onsubmit="createDB(); return false;">
 				<p><label for="db_prefix"><?php echo lang('Tables prefix:')?> </label><input class="text" type="text" id="db_prefix" value="ps_"/></p>
 				<p id="dbModeSetter">
-					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet"/><label for="db_mode_complet"><?php echo lang('Full mode: Install the main modules and add sample products')?></label><br/>
-					<input value="lite" type="radio" name="db_mode" id="db_mode_simple"/><label for="db_mode_simple"><?php echo lang('Simple mode: Don\'t install any module')?></label>
+					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" /><label for="db_mode_complet"><?php echo lang('Full mode: Install the main modules and add sample products')?></label><br/>
+					<input value="lite" type="radio" name="db_mode" id="db_mode_simple" /><label for="db_mode_simple"><?php echo lang('Simple mode: Don\'t install any module')?></label>
 				</p>
 				</form>
 				<p id="dbCreateResultCheck"></p>
@@ -317,8 +317,7 @@ if ($lm->getIncludeTradFilename())
 				<h2><?php echo lang('E-mail delivery set-up')?></h2>
 				
 				<p>
-					<input type="checkbox" id="set_stmp"/>
-					<label for="set_stmp"><?php echo lang('Configure SMTP manually (advanced users only)'); ?></label><br/>
+					<input type="checkbox" id="set_stmp" style="vertical-align: middle;" /><label for="set_stmp"><?php echo lang('Configure SMTP manually (advanced users only)'); ?></label><br/>
 					<span class="userInfos"><?php echo lang('By default, the PHP \'mail()\' function is used'); ?></span>
 				</p>
 				
@@ -631,31 +630,31 @@ if ($lm->getIncludeTradFilename())
 				</div>
 				
 				<div class="field">
-					<label for="infosFirstname" class="aligned"><?php echo lang('First name'); ?> : </label><input class="text required" type="text" id="infosFirstname"/><br/>
+					<label for="infosFirstname" class="aligned"><?php echo lang('First name:'); ?> </label><input class="text required" type="text" id="infosFirstname"/><br/>
 					<span id="resultInfosFirstname" class="result aligned"></span>
 				</div>
 				
 				<div class="field">
-					<label for="infosName" class="aligned"><?php echo lang('Last name'); ?> : </label><input class="text required" type="text" id="infosName"/><br/>
+					<label for="infosName" class="aligned"><?php echo lang('Last name:'); ?> </label><input class="text required" type="text" id="infosName"/><br/>
 					<span id="resultInfosName" class="result aligned"></span>
 				</div>
 				
 				<div class="field">
-					<label for="infosEmail" class="aligned"><?php echo lang('E-mail address'); ?> : </label><input type="text" class="text required" id="infosEmail"/><br/>
+					<label for="infosEmail" class="aligned"><?php echo lang('E-mail address:'); ?> </label><input type="text" class="text required" id="infosEmail"/><br/>
 					<span id="resultInfosEmail" class="result aligned"></span>
 				</div>
 				
 				<div class="field">
-					<label for="infosPassword" class="aligned"><?php echo lang('Shop password'); ?> : </label><input autocomplete="off" type="password" class="text required" id="infosPassword"/><br/>
+					<label for="infosPassword" class="aligned"><?php echo lang('Shop password:'); ?> </label><input autocomplete="off" type="password" class="text required" id="infosPassword"/><br/>
 					<span id="resultInfosPassword" class="result aligned"></span>
 				</div>
 				<div class="field">
-					<label class="aligned" for="infosPasswordRepeat"><?php echo lang('Re-type to confirm'); ?> : </label><input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/><br/>
+					<label class="aligned" for="infosPasswordRepeat"><?php echo lang('Re-type to confirm:'); ?> </label><input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/><br/>
 					<span id="resultInfosPasswordRepeat" class="result aligned"></span>
 				</div>
 				
 				<div class="field">
-					<input type="checkbox" id="infosNotification" class="aligned"/><label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
+					<input type="checkbox" id="infosNotification" class="aligned" style="vertical-align: middle;" /><label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
 					<span id="resultInfosNotification" class="result aligned"></span>
 				</div>
 				

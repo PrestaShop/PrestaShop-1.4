@@ -290,7 +290,7 @@ class AdminModules extends AdminTab
 		echo '
 		<form method="POST" id="form_all_module" name="fomr_all_module" action="">
 			<input type="hidden" name="all_module_send" value="" />
-			<input type="checkbox" name="all_module" id="all_module" '.(!Configuration::get('PS_SHOW_ALL_MODULES') ? 'checked="checked"' : '').' onchange="document.getElementById(\'form_all_module\').submit();" /> 
+			<input type="checkbox" name="all_module" style="vertical-align: middle;" id="all_module" '.(!Configuration::get('PS_SHOW_ALL_MODULES') ? 'checked="checked"' : '').' onchange="document.getElementById(\'form_all_module\').submit();" /> 
 			<label class="t" for="all_module">'.$this->l('Show only modules that can be used in my country').'</label> ('.$this->l('Current country:').' <a href="index.php?tab=AdminCountries&token='.Tools::getAdminToken('AdminCountries'.intval(Tab::getIdFromClassName('AdminCountries')).intval($cookie->id_employee)).'">'.$nameCountryDefault.'</a>)
 		</form>';
 
