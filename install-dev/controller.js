@@ -122,9 +122,9 @@ function showStep(aStep)
 		case 4:
 		document.title = step4title;
 		$("#btBack")
-			.removeAttr("disabled")
-			.removeClass("disabled")
-			.show('slow');
+			.attr("disabled", "disabled")
+			.addClass("disabled")
+			.hide('slow');
 		break;
 		
 		case 5 :
