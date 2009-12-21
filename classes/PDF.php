@@ -833,7 +833,7 @@ class PDF extends PDF_PageGroup
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 				$this->Cell($w[0], $lineSize, self::l('Products'), 0, 0, 'R');
-				$this->Cell($w[1], $lineSize, number_format($tax_rate, 3, ',', ' '), 0, 0, 'R');
+				$this->Cell($w[1], $lineSize, number_format($tax_rate, 2, ',', ' '), 0, 0, 'R');
 				$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
 				$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice($vat, self::$currency, true, false)), 0, 0, 'R');
 				$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
