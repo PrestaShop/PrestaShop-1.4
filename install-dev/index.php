@@ -745,7 +745,7 @@ if ($lm->getIncludeTradFilename())
 			</div>
 			<?php
 			// Check if can contact prestastore.com
-			if (@fsockopen('www.prestastore.com', 80)): // it's temporary
+			if (@fsockopen('www.prestastore.com', 80)):
 			?>
 			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
 				<p>Your browser does not support iframes.</p>
@@ -833,7 +833,7 @@ if ($lm->getIncludeTradFilename())
 			</div>
 			<?php
 			// Check if can contact prestastore.com
-			if (@fsockopen('www.prestastore.com', 80)): // it's temporary
+			if (@fsockopen('www.prestastore.com', 80)):
 			?>
 			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
 				<p>Your browser does not support iframes.</p>
