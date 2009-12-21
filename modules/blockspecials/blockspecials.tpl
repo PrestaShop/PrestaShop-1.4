@@ -15,7 +15,7 @@
 			</li>
 		</ul>
 		<p>
-			<a href="{$base_dir}prices-drop.php" title="{l s='All specials' mod='blockspecials'}" class="button">{l s='All specials' mod='blockspecials'}</a>
+			<a href="{$base_dir}prices-drop.php" title="{l s='All specials' mod='blockspecials'}" class="button_large">{l s='All specials' mod='blockspecials'}</a>
 		</p>
 {else}
 		<p>{l s='No specials at this time' mod='blockspecials'}</p>
