@@ -39,6 +39,7 @@ require_once(dirname(__FILE__).'/init.php');
 		<script type="text/javascript" src="../js/tools.js"></script>
 		<script type="text/javascript" src="../js/ajax.js"></script>
 		<link rel="shortcut icon" href="../img/favicon.ico" />
+		<?php echo Module::hookExec('backOfficeHeader'); ?>
 	</head>
 	<body>
 		<div id="container">

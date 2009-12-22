@@ -176,7 +176,7 @@ if ($lm->getIncludeTradFilename())
 		
 		<div class="content">
 			<p class="title"><?php echo lang('Need help?'); ?></p>
-			<p class="title_down"><?php echo lang('All tips and advice about Prestashop'); ?></p>
+			<p class="title_down"><?php echo lang('All tips and advice about PrestaShop'); ?></p>
 			
 			<ul>
 				<li><img src="img/puce.gif" alt="" /> <a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Forum'); ?></a><br class="clear" /></li>
