@@ -4,12 +4,12 @@
 	<div class="block_content">
 	{if $new_products != false}
 		<ul class="product_images">
-			<li><a href="{$new_products.0.link}" title="{$new_products.0.legend|escape:htmlall:'UTF-8'}"><img src="{$link->getImageLink($new_products.0.link_rewrite, $new_products.0.id_image, 'medium')}" alt="{$new_products.0.legend|escape:htmlall:'UTF-8'}" /></a></li>
-			{if $new_products|@count > 1}<li><a href="{$new_products.1.link}" title="{$new_products.1.legend|escape:htmlall:'UTF-8'}"><img src="{$link->getImageLink($new_products.1.link_rewrite, $new_products.1.id_image, 'medium')}" height="{$mediumSize.height}" width="{$mediumSize.width}" alt="{$new_products.1.legend|escape:htmlall:'UTF-8'}" /></a></li>{/if}
+			<li><a href="{$new_products.0.link}" title="{$new_products.0.legend|escape:html:'UTF-8'}"><img src="{$link->getImageLink($new_products.0.link_rewrite, $new_products.0.id_image, 'medium')}" alt="{$new_products.0.legend|escape:html:'UTF-8'}" /></a></li>
+			{if $new_products|@count > 1}<li><a href="{$new_products.1.link}" title="{$new_products.1.legend|escape:html:'UTF-8'}"><img src="{$link->getImageLink($new_products.1.link_rewrite, $new_products.1.id_image, 'medium')}" height="{$mediumSize.height}" width="{$mediumSize.width}" alt="{$new_products.1.legend|escape:html:'UTF-8'}" /></a></li>{/if}
 		</ul>
 		<dl class="products">
 		{foreach from=$new_products item=newproduct name=myLoop}
-			<dt class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}"><a href="{$newproduct.link}" title="{$newproduct.name|escape:htmlall:'UTF-8'}">{$newproduct.name|strip_tags|escape:htmlall:'UTF-8'}</a></dt>
+			<dt class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}"><a href="{$newproduct.link}" title="{$newproduct.name|escape:html:'UTF-8'}">{$newproduct.name|strip_tags|escape:html:'UTF-8'}</a></dt>
 			{if $newproduct.description_short}<dd class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if}"><a href="{$newproduct.link}">{t text=$newproduct.description_short length='50' strip='true' encode='true'}</a>&nbsp;<a href="{$newproduct.link}"><img alt=">>" src="{$img_dir}bullet.gif"/></a></dd>{/if}
 		{/foreach}
 		</dl>
