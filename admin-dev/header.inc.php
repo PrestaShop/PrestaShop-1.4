@@ -108,6 +108,7 @@ require_once(dirname(__FILE__).'/init.php');
 				</a>
 			</div>
 			<br style="clear:both;" />
+			<?php echo Module::hookExec('backOfficeTop'); ?>
 			<ul id="menu" style="margin-top:20px">
 				<?php
 					global $cookie;

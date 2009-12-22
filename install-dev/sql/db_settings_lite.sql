@@ -50,7 +50,9 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (47, 'updateCarrier', 'Carrier Update', 'This hook is called when a carrier is updated', 0),
 (48, 'postUpdateOrderStatus', 'Post update of order status', NULL, 0),
 (49, 'createAccountTop', 'Block above the form for create an account', NULL, 1),
-(50, 'backOfficeHeader', 'Administration panel header', NULL , 0);
+(50, 'backOfficeHeader', 'Administration panel header', NULL , 0),
+(51, 'backOfficeTop', 'Administration panel hover the tabs', NULL , 1),
+(52, 'backOfficeFooter', 'Administration panel footer', NULL , 1);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

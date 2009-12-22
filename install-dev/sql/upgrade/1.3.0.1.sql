@@ -12,7 +12,9 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_BACKUP_ALL', 0, NOW(), NOW());
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES 
 ('createAccountTop', 'Block above the form for create an account', NULL , '1'),
-('backOfficeHeader', 'Administration panel header', NULL , '0');
+('backOfficeHeader', 'Administration panel header', NULL , '0'),
+('backOfficeTop', 'Administration panel top hover the tabs', NULL , '1'),
+('backOfficeFooter', 'Administration panel footer', NULL , '1');
 
 ALTER TABLE `PREFIX_country` ADD `need_identification_number` TINYINT( 1 ) NOT NULL;
 ALTER TABLE `PREFIX_customer` ADD `dni` VARCHAR( 16 ) NULL AFTER `firstname`;
