@@ -21,6 +21,7 @@ class canonicalUrl extends Module
 	{
 		if (!parent::install() OR !$this->registerHook('header') OR !Configuration::updateValue('CANONICAL_URL', ''))
 			return false;
+		return true;
 	}
 
 	public function getContent()
