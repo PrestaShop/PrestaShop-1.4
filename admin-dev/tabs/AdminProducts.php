@@ -2497,12 +2497,15 @@ class AdminProducts extends AdminTab
 							<select name="feature_'.$tab_features['id_feature'].'_value">
 							<option value="0">---&nbsp;</option>';
 					$feature_values = FeatureValue::getFeatureValuesWithLang(intval($cookie->id_lang), $tab_features['id_feature']);
-					foreach ($feature_values AS $tab_values) {
-						if (!$tab_values['custom']) {
-							echo '<option value="'.$tab_values['id_feature_value'].'"'.(($current_item == $tab_values['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($tab_values['value'], 0, 40).(Tools::strlen($tab_values['value']) > 40 ? '...' : '').'&nbsp;</option>';
-						} else
-							$custom = true;
+					if(sizeof($feature_values))
+					{
+						foreach ($feature_values AS $tab_values)
+							if (!$tab_values['custom'])
+								echo '<option value="'.$tab_values['id_feature_value'].'"'.(($current_item == $tab_values['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($tab_values['value'], 0, 40).(Tools::strlen($tab_values['value']) > 40 ? '...' : '').'&nbsp;</option>';
 					}
+					else
+						$custom = true;
+						
 						echo '
 							</select>
 						</td>
