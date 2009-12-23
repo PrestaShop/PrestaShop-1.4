@@ -156,7 +156,7 @@ class PaypalAPI extends PaymentModule
 
 	public function getContent()
 	{
-		include(_PS_MODULE_DIR_.'/paypalapi/admin/paypaladmin.php');
+		include(_PS_MODULE_DIR_.'paypalapi/admin/paypaladmin.php');
 		$ppAdmin = new PaypalAdmin();
 		return $ppAdmin->home();
 	}
@@ -170,7 +170,7 @@ class PaypalAPI extends PaymentModule
 		if (!$this->active)
 			return ;
 
-		include(_PS_MODULE_DIR_.'/paypalapi/payment/paypalpayment.php');
+		include(_PS_MODULE_DIR_.'paypalapi/payment/paypalpayment.php');
 		$ppPayment = new PaypalPayment();
 		return $ppPayment->home($params);
 	}
@@ -184,7 +184,7 @@ class PaypalAPI extends PaymentModule
 
 		if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT') AND !$cookie->isLogged())
 		{
-			include(_PS_MODULE_DIR_.'/paypalapi/express/paypalexpress.php');
+			include(_PS_MODULE_DIR_.'paypalapi/express/paypalexpress.php');
 			$ppExpress = new PaypalExpress();
 			return $ppExpress->home($params);
 		}
