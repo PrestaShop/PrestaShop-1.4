@@ -121,7 +121,7 @@ class MoneyBookers extends PaymentModule
                 <p style="text-align: center; margin-top: 30px;"><a href="'.($lang->iso_code == 'fr' ? 'http://www.moneybookers.com/partners/prestashop/' : 'https://www.moneybookers.com/app/register.pl?l='.strtoupper($lang->iso_code)).'"><img src="../modules/moneybookers/prestashop_mb_'.$lang->iso_code.'.gif" alt="PrestaShop & Moneybookers" /></a></p>
 		<div style="clear: right;"></div>
        	        </div>
-        	<img src="../modules/paypal/mb.gif" style="float:left; margin-right:15px;" />
+        	
                	<b>'.$this->l('This module allows you to accept payments by Moneybookers.').'</b><br /><br />		
 		<b>'.$this->l('About Moneybookers').'</b><br /><br />'.
 		$this->l('Moneybookers is one of Europe\'s largest online payments systems and among the world\'s leading eWallet providers, with over nine million account holders. The simple eWallet enables any customer to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by simply using an email address.').'<br /><br />'.
