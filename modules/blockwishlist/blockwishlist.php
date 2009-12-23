@@ -162,7 +162,12 @@ class BlockWishList extends Module
 		$this->_html .= 	'</fieldset>
 		</form>';
 	}
-		
+	
+	public function hookHeader($params)
+	{
+		return '<script type="text/javascript" src="'._MODULE_DIR_.'blockwishlist/js/ajax-wishlist.js"></script>';
+	}
+	
 	public function hookRightColumn($params)
 	{
 		global $smarty;

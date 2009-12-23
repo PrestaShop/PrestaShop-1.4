@@ -1,4 +1,3 @@
-<script type="text/javascript" src="{$content_dir}modules/blockwishlist/js/ajax-wishlist.js"></script>
 <div id="wishlist_block" class="block account">
 	<h4>
 		<a href="{$base_dir_ssl}/modules/blockwishlist/mywishlist.php">{l s='Wishlist' mod='blockwishlist'}</a>

@@ -13,9 +13,12 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 		data: 'action=' + action + '&id_product=' + id_product + '&quantity=' + quantity + '&token=' + static_token + '&id_product_attribute=' + id_product_attribute,
 		success: function(data)
 		{
-			$('#' + id).slideUp('normal');
-			document.getElementById(id).innerHTML = data;
-			$('#' + id).slideDown('normal');
+			if($('#' + id).length != 0)
+			{
+				$('#' + id).slideUp('normal');
+				document.getElementById(id).innerHTML = data;
+				$('#' + id).slideDown('normal');
+			}
 		}
 	});	
 }
