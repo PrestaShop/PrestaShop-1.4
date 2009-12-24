@@ -515,9 +515,11 @@ INSERT INTO PREFIX_block_cms (`id_block`, `id_cms`) VALUES (23, 3),(23, 4),(12, 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (1, 0, 0, 1, 0, 0),(2, 1, 'My carrier', 1, 0, 1);
 
+INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) VALUES (1, 1), (2, 1);
+
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (1, 1, 'Pick up in-store'),(1, 2, 'Retrait au magasin'),
 (1, 3, 'Recogida en la tienda'),(2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!');
-	
+
 INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (1, 1),(2, 1),(2, 2);
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES	('PS_CARRIER_DEFAULT', '2', NOW(), NOW());

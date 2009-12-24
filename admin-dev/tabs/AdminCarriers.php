@@ -20,7 +20,7 @@ class AdminCarriers extends AdminTab
 	public function __construct()
 	{
 		global $cookie;
-		
+
 	 	$this->table = 'carrier';
 	 	$this->className = 'Carrier';
 	 	$this->lang = true;
@@ -40,14 +40,14 @@ class AdminCarriers extends AdminTab
 		$this->_fieldsOptions = array(
 			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers(intval($cookie->id_lang), true)),
 		);
-		
+
 		parent::__construct();
 	}
 
 	public function displayForm()
 	{
 		global $currentIndex, $cookie;
-		
+
 		$obj = $this->loadObject(true);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$currentLanguage = intval($cookie->id_lang);
@@ -104,7 +104,35 @@ class AdminCarriers extends AdminTab
 					foreach ($zones AS $zone)
 						echo '<input type="checkbox" id="zone_'.$zone['id_zone'].'" name="zone_'.$zone['id_zone'].'" value="true" '.(Tools::getValue('zone_'.$zone['id_zone'], (is_array($carrier_zones) AND in_array(array('id_carrier' => $obj->id, 'id_zone' => $zone['id_zone']), $carrier_zones))) ? ' checked="checked"' : '').'><label class="t" for="zone_'.$zone['id_zone'].'">&nbsp;<b>'.$zone['name'].'</b></label><br />';
 				echo '<p>'.$this->l('The zone in which this carrier is to be used').'</p>
-				</div>
+	</div>
+				<label>'.$this->l('Group access:').'</label>
+				<div class="margin-form">';
+					$groups = Group::getGroups(intval($cookie->id_lang));
+					if (sizeof($groups))
+					{
+						echo '
+					<table cellspacing="0" cellpadding="0" class="table" style="width: 28em;">
+						<tr>
+							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)"'.(!isset($obj->id) ? 'checked="checked" ' : '').' /></th>
+							<th>'.$this->l('ID').'</th>
+							<th>'.$this->l('Group name').'</th>
+						</tr>';
+						$irow = 0;
+						foreach ($groups as $group)
+							echo '
+							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.((Db::getInstance()->getValue('SELECT id_group FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($obj->id).' AND id_group='.intval($group['id_group'])) OR (!isset($obj->id))) ? 'checked="checked" ' : '').'/></td>
+								<td>'.$group['id_group'].'</td>
+								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
+							</tr>';
+						echo '
+					</table>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this carrier').'</p>
+					';
+					}
+					else
+						echo '<p>'.$this->l('No group created').'</p>';
+					echo '				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
@@ -144,22 +172,32 @@ class AdminCarriers extends AdminTab
 			</fieldset>
 		</form>';
 	}
-	
+
 	public function beforeDelete($object)
 	{
 		return $object->isUsed();
 	}
-	
+
 	public function afterDelete($object, $oldId)
 	{
 		$object->copyCarrierData(intval($oldId));
 	}
-	
-public function postProcess()
+
+	private function changeGroups($id_carrier, $delete = true)
+	{
+		if ($delete)
+			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($id_carrier));
+		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'group');
+		foreach ($groups as $group)
+			if (in_array($group['id_group'], $_POST['groupBox']))
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.intval($group['id_group']).','.intval($id_carrier).')');
+	}
+
+	public function postProcess()
 	{
 		global $currentIndex;
-		
-		if(Tools::getValue('submitAdd'.$this->table))
+
+		if (Tools::getValue('submitAdd'.$this->table))
 		{
 		 	/* Checking fields validity */
 			$this->validateRules();
@@ -175,6 +213,7 @@ public function postProcess()
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
+							Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($id));
 							$object->deleted = 1;
 							$object->update();
 							$objectNew = new $this->className();
@@ -185,7 +224,7 @@ public function postProcess()
 								$this->afterDelete($objectNew, $object->id);
 								Hook::updateCarrier(intval($object->id), $objectNew);
 							}
-							
+							$this->changeGroups($objectNew->id);
 							if (!$result)
 								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
 							elseif ($this->postImage($objectNew->id))
@@ -200,7 +239,7 @@ public function postProcess()
 					else
 						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				}
-				
+
 				/* Object creation */
 				else
 				{
@@ -213,6 +252,7 @@ public function postProcess()
 						elseif (($_POST['id_'.$this->table] = $object->id /* voluntary */) AND $this->postImage($object->id) AND $this->_redirect)
 						{
 							$this->changeZones($object->id);
+							$this->changeGroups($object->id);
 							Tools::redirectAdmin($currentIndex.'&id_'.$this->table.'='.$object->id.'&conf=3'.'&token='.$this->token);
 						}
 					}
@@ -229,8 +269,8 @@ public function postProcess()
 				parent::postProcess();
 		}
 	}
-	
-	
+
+
 	function changeZones($id)
 	{
 		$carrier = new $this->className($id);
@@ -247,7 +287,7 @@ public function postProcess()
 				if (isset($_POST['zone_'.$zone['id_zone']]) AND $_POST['zone_'.$zone['id_zone']])
 					$carrier->addZone($zone['id_zone']);
 	}
-	
+
 	public function displayListContent($token = NULL)
 	{
 		foreach ($this->_list as $key => $list)

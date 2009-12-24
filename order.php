@@ -180,7 +180,7 @@ function processAddress()
 		$cart->id_address_invoice = isset($_POST['same']) ? intval($_POST['id_address_delivery']) : intval($_POST['id_address_invoice']);
 		if (!$cart->update())
 			$errors[] = Tools::displayError('an error occured while updating your cart');
-		
+
 		if (isset($_POST['message']) AND !empty($_POST['message']))
 		{
 			if (!Validate::isMessage($_POST['message']))
@@ -318,13 +318,18 @@ function displayCarrier()
 	global $smarty, $cart, $cookie, $defaultCountry;
 
 	$address = new Address(intval($cart->id_address_delivery));
-	$id_zone = Address::getZoneById($address->id);
+	$id_zone = Address::getZoneById(intval($address->id));
+	if (isset($cookie->id_customer))
+		$customer = new Customer(intval($cookie->id_customer));
+	else
+		die(Tools::displayError($this->l('Hack attempt: No customer')));
+	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $customer->getGroups());
 	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone));
 	$resultsArray = array();
 	foreach ($result AS $k => $row)
 	{
 		$carrier = new Carrier(intval($row['id_carrier']));
-		
+
 		// Get only carriers that are compliant with shipping method
 		if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
 		OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
@@ -412,13 +417,13 @@ function displayPayment()
 function displaySummary()
 {
 	global $smarty, $cart;
-	
+
 	if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
 		$smarty->assign('carrierPicture', 1);
 	$summary = $cart->getSummaryDetails();
 	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
 	Product::addCustomizationPrice($summary['products'], $customizedDatas);
-	
+
 	if ($free_ship = floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')))
 	{
 		$discounts = $cart->getDiscounts();

@@ -1260,3 +1260,9 @@ CREATE TABLE `PREFIX_zone` (
   `enabled` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_zone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_carrier_group` (
+  `id_carrier` int(10) unsigned NOT NULL,
+  `id_group` int(10) unsigned NOT NULL,
+  UNIQUE KEY `id_carrier` (`id_carrier`,`id_group`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

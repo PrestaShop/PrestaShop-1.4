@@ -10,11 +10,19 @@ ALTER TABLE `PREFIX_group` ADD `price_display_method` TINYINT NOT NULL DEFAULT 0
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PRESTASTORE_LIVE', 1, NOW(), NOW());
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_SHOW_ALL_MODULES', 0, NOW(), NOW());
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_BACKUP_ALL', 0, NOW(), NOW());
-INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES 
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('createAccountTop', 'Block above the form for create an account', NULL , '1'),
 ('backOfficeHeader', 'Administration panel header', NULL , '0'),
 ('backOfficeTop', 'Administration panel top hover the tabs', NULL , '1'),
 ('backOfficeFooter', 'Administration panel footer', NULL , '1');
+
+CREATE TABLE `PREFIX_carrier_group` (
+  `id_carrier` int(10) unsigned NOT NULL,
+  `id_group` int(10) unsigned NOT NULL,
+  UNIQUE KEY `id_carrier` (`id_carrier`,`id_group`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM ps_carrier c, ps_group g WHERE c.active = 1);
 
 ALTER TABLE `PREFIX_country` ADD `need_identification_number` TINYINT( 1 ) NOT NULL;
 ALTER TABLE `PREFIX_customer` ADD `dni` VARCHAR( 16 ) NULL AFTER `firstname`;

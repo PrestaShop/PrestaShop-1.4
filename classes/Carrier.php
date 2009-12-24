@@ -34,10 +34,10 @@ class		Carrier extends ObjectModel
 
 	/** @var boolean Active or not the shipping handling */
 	public		$shipping_handling = true;
-	
+
 	/** @var int Behavior taken for unknown range */
 	public		$range_behavior;
-	
+
 	/** @var boolean Carrier module */
 	public		$is_module;
 
@@ -50,7 +50,7 @@ class		Carrier extends ObjectModel
 
 	protected 	$table = 'carrier';
 	protected 	$identifier = 'id_carrier';
-	
+
 	private static $priceByWeight = array();
 	private static $priceByPrice = array();
 
@@ -133,7 +133,7 @@ class		Carrier extends ObjectModel
 			return $this->getMaxDeliveryPriceByWeight($id_zone);
 		return $result['price'];
 	}
-	
+
 	static public function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
 	{
 		$result = Db::getInstance()->getRow('
@@ -149,7 +149,7 @@ class		Carrier extends ObjectModel
 			return false;
 		return true;
 	}
-	
+
 	public function getMaxDeliveryPriceByWeight($id_zone)
 	{
 		$result = Db::getInstance()->ExecuteS('
@@ -173,7 +173,7 @@ class		Carrier extends ObjectModel
 	 */
 	public function getDeliveryPriceByPrice($orderTotal, $id_zone)
 	{
-		
+
 		if (isset(self::$priceByPrice[$this->id]))
 			return self::$priceByPrice[$this->id];
 		$result = Db::getInstance()->getRow('
@@ -189,7 +189,7 @@ class		Carrier extends ObjectModel
 			return $this->getMaxDeliveryPriceByPrice($id_zone);
 		return $result['price'];
 	}
-	
+
 	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone)
 	{
 		$result = Db::getInstance()->getRow('
@@ -205,7 +205,7 @@ class		Carrier extends ObjectModel
 			return false;
 		return true;
 	}
-	
+
 	public function getMaxDeliveryPriceByPrice($id_zone)
 	{
 		$result = Db::getInstance()->ExecuteS('
@@ -244,11 +244,19 @@ class		Carrier extends ObjectModel
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
 	 */
-	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false)
+	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, array $ids_group = NULL)
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
-	 	
+	 	if ($ids_group)
+		{
+			$ids = '';
+			foreach ($ids_group as $id)
+				$ids .= intval($id).', ';
+			$ids = rtrim($ids, ', ');
+			if ($ids == '')
+				return (array());
+		}
 		$sql = '
 			SELECT c.*, cl.delay
 			FROM `'._DB_PREFIX_.'carrier` c
@@ -260,9 +268,10 @@ class		Carrier extends ObjectModel
 			($id_zone ? ' AND cz.`id_zone` = '.intval($id_zone).'
 			AND z.`active` = 1' : '').'
 			AND c.`is_module` = 0
+		    '.($ids_group ? 'AND c.id_carrier IN (SELECT id_carrier FROM '._DB_PREFIX_.'carrier_group WHERE id_group IN ('.$ids.')) ' : '').'
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
-		
+
 		if (is_array($carriers) AND count($carriers))
 		{
 			foreach ($carriers as $key => $carrier)
@@ -397,7 +406,7 @@ class		Carrier extends ObjectModel
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
 				VALUES ('.$this->id.','.intval($maxRangePrice).',NULL,'.$val2['id_zone'].','.$val2['price'].')');
 		}
-		
+
 		// Copy existing ranges weight
 		$res = Db::getInstance()->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'range_weight`
