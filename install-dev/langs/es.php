@@ -184,7 +184,7 @@ $_LANG['Manage your store with your back office. Manage your orders and customer
 $_LANG['Manage your store'] = 'Administre su tienda';
 $_LANG['Front Office'] = 'Front Office';
 $_LANG['Find your store as your customers will!'] = '¡Descubra su tienda tal como la verán sus clientes!';
-$_LANG['Discover your shop'] = 'Descubra su tienda';
+$_LANG['Discover your store'] = 'Descubra su tienda';
 $_LANG['Did you know?'] = '¿Sabía que?';
 $_LANG['Prestashop and community offers over 40 different languages for free download on'] = 'La comunidad Prestashop ofrece más de 40 idiomas diferentes para su descarga gratuita en';
 $_LANG['Germany'] = 'Alemania';
