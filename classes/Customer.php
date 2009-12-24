@@ -167,8 +167,9 @@ class		Customer extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_	.'customer`
 		WHERE `active` = 1
-		AND `email` = \''.pSQL($email).'\''.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'
-		AND `deleted` = 0' : ''));
+		AND `email` = \''.pSQL($email).'\' 
+		'.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : '').'
+		AND `deleted` = 0');
 
 		if (!$result)
 			return false;
