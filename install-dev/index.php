@@ -737,7 +737,7 @@ if ($lm->getIncludeTradFilename())
 				</a>
 				<a href="../" id="access" class="FO" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
-					<span class="description"><?php echo lang('Find your store as your customers will!'); ?></span>
+					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
 					<span class="message"><?php echo lang('Discover your store'); ?></span>
 				</a>
 				<div id="resultEnd"></div>
@@ -826,8 +826,8 @@ if ($lm->getIncludeTradFilename())
 				<h3><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
 				<a href="../" id="access_update" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
-					<span class="description"><?php echo lang('Find your store as your future customers will see !'); ?></span>
-					<span class="message"><?php echo lang('Discover my shop'); ?></span>
+					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
+					<span class="message"><?php echo lang('Discover your store'); ?></span>
 				</a>
 			</div>
 			<?php
