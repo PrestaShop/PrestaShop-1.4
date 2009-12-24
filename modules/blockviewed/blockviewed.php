@@ -81,7 +81,7 @@ class BlockViewed extends Module
             LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
             WHERE p.id_product IN ('.$productIds.')
             AND pl.id_lang = '.intval($params['cookie']->id_lang).'
-            AND cl.id_lang = '.(int)$params['cookie']->id_lang
+            AND cl.id_lang = '.intval($params['cookie']->id_lang)
 			);
 
 			$productsImagesArray = array();
@@ -124,7 +124,8 @@ class BlockViewed extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = cp.`id_category`)
 				LEFT JOIN `'._DB_PREFIX_.'customer_group` cug ON (cug.`id_group` = cg.`id_group`)
 				WHERE p.`id_product` = '.intval($id_product).'
-				AND cug.`id_customer` = '.intval($cookie->id_customer)
+				'.($cookie->id_customer ? 'AND cug.`id_customer` = '.intval($cookie->id_customer) : 
+				'AND cg.`id_group` = 1')
 				);
 				if ($result['total'])
 					array_unshift($productsViewed, $id_product);
