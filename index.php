@@ -1,12 +1,6 @@
 <?php
 
-function microtime_float()
-{
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
-}
-
-$time_start = microtime_float();include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/config/config.inc.php');
 
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = __PS_BASE_URI__;
@@ -17,10 +11,5 @@ $smarty->assign('HOOK_HOME', Module::hookExec('home'));
 $smarty->display(_PS_THEME_DIR_.'index.tpl');
 
 include(dirname(__FILE__).'/footer.php');
-
-$time_end = microtime_float();
-$time = $time_end - $time_start;
-
-echo 'Total : '.$time.' sec<br />';
 
 ?>
