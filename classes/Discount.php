@@ -321,7 +321,7 @@ class		Discount extends ObjectModel
 		$voucher->active = 1;
 		$now = time();
 		$voucher->date_from = date('Y-m-d H:i:s', $now);
-		$voucher->date_to = date('Y-m-d H:i:s', $now + (60 * 60 * 24 * 184));
+		$voucher->date_to = date('Y-m-d H:i:s', $now + (3600 * 24 * 365.25)); /* 1 year */
 		if (!$voucher->validateFieldsLang(false) OR !$voucher->add())
 			return false;
 		// set correct name
