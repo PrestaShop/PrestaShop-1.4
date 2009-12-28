@@ -350,7 +350,7 @@ class		Category extends ObjectModel
 	  * @param int $randomNumberProducts number of products to return if random is activated
 	  * @return mixed Products or number of products
 	  */
-	public function getProducts($id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $random = false, $randomNumberProducts = 1 )
+	public function getProducts($id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $random = false, $randomNumberProducts = 1)
 	{
 		global $cookie;
 

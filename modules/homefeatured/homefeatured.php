@@ -33,7 +33,7 @@ class HomeFeatured extends Module
 			if (!$nbr OR $nbr <= 0 OR !Validate::isInt($nbr))
 				$errors[] = $this->l('Invalid number of product');
 			else
-				Configuration::updateValue('HOME_FEATURED_NBR', $nbr);
+				Configuration::updateValue('HOME_FEATURED_NBR', intval($nbr));
 			if (isset($errors) AND sizeof($errors))
 				$output .= $this->displayError(implode('<br />', $errors));
 			else
@@ -50,7 +50,7 @@ class HomeFeatured extends Module
 				<p>'.$this->l('In order to add products to your homepage, just add them to the "home" category.').'</p><br />
 				<label>'.$this->l('Number of product displayed').'</label>
 				<div class="margin-form">
-					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', Configuration::get('HOME_FEATURED_NBR')).'" />
+					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', intval(Configuration::get('HOME_FEATURED_NBR'))).'" />
 					<p class="clear">'.$this->l('The number of products displayed on homepage (default: 10)').'</p>
 					
 				</div>
@@ -63,20 +63,12 @@ class HomeFeatured extends Module
 	function hookHome($params)
 	{
 		global $smarty;
+
 		$category = new Category(1);
 		$nb = intval(Configuration::get('HOME_FEATURED_NBR'));
 		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10));
-		$smarty->assign(array(
-			'allow_buy_when_out_of_stock' => Configuration::get('PS_ORDER_OUT_OF_STOCK', false),
-			'max_quantity_to_allow_display' => Configuration::get('PS_LAST_QTIES'),
-			'category' => $category,
-			'products' => $products,
-			'currency' => new Currency(intval($params['cart']->id_currency)),
-			'lang' => Language::getIsoById(intval($params['cookie']->id_lang)),
-			'productNumber' => sizeof($products),
-			'homeSize' => Image::getSize('home')
-		));
+		$smarty->assign(array('products' => $products, 'homeSize' => Image::getSize('home')));
+
 		return $this->display(__FILE__, 'homefeatured.tpl');
 	}
-
 }

@@ -63,8 +63,9 @@ class BlockNewProducts extends Module
 	function hookRightColumn($params)
 	{
 		global $smarty;
+		
 		$currency = new Currency(intval($params['cookie']->id_currency));
-		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, Configuration::get('NEW_PRODUCTS_NBR'));
+		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, intval(Configuration::get('NEW_PRODUCTS_NBR')));
 
 		$smarty->assign(array(
 			'new_products' => $newProducts,

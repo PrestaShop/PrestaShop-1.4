@@ -1852,17 +1852,14 @@ div.categTree {
 	margin-bottom:1.5em;
 }
 #primary_block #color_picker p {
-	margin: 0 0 0.4em 0;
-	padding: 0 0 0 0;
+	margin-bottom: 0.4em;
+	padding: 0;
 }
 #primary_block #color_picker {
-	padding: 0.7em;
+	padding: 0.6em 0.7em 0.4em 0.7em;
 	background: #e5e6e7 url('../img/product-short-desc-bg.gif') repeat-x top left;
 	border: 1px #d0d3d8 solid;
 	margin-bottom: 1.5em;
-}
-#primary_block #color_to_pick_list {
-
 }
 #primary_block #color_to_pick_list li {
 	display: inline;
@@ -1881,8 +1878,8 @@ div.categTree {
 }
 
 #primary_block #image-block img#bigpic.jqzoom{
-cursor:crosshair;
-position:relative;
+	cursor: crosshair;
+	position: relative;
 }
 
 #primary_block p.buttons_bottom_block{ margin:0; }

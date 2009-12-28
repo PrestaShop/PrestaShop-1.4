@@ -191,15 +191,25 @@ class		Order extends ObjectModel
 	/* DOES delete the product */
 	private function _deleteProduct($orderDetail, $quantity)
 	{
-		$productPrice = round((floatval($orderDetail->product_price) * (1 + (floatval($orderDetail->tax_rate) * 0.01))) * intval($quantity), 2);
-		$productPriceWithoutTax = round(floatval($orderDetail->product_price) * intval($quantity), 2);
+		$unitPrice = number_format($orderDetail->product_price * (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
+		$productPrice = number_format($quantity * $unitPrice, 2, '.', '');
+		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
 
-		// Update order
+		/* Update order */
 		$this->total_paid -= $productPrice;
-		$this->total_paid_real -= $productPrice;
+		$this->total_paid_real -= $productPrice;		
 		$this->total_products -= $productPriceWithoutTax;
+		
+		/* Prevent from floating precision issues (total_products has only 2 decimals) */
+		if ($this->total_products < 0)
+			$this->total_products = 0;
+			
+		/* Prevent from floating precision issues */
+		$this->total_paid = number_format($this->total_paid, 2, '.', '');
+		$this->total_paid_real = number_format($this->total_paid_real, 2, '.', '');
+		$this->total_products = number_format($this->total_products, 2, '.', '');
 
-		// Update order detail
+		/* Update order detail */
 		$orderDetail->product_quantity -= intval($quantity);
 		
 		if (!$orderDetail->product_quantity)
@@ -711,19 +721,19 @@ class		Order extends ObjectModel
 	public function getTotalWeight()
 	{
 		$result = Db::getInstance()->getRow('
-		SELECT SUM(product_weight*product_quantity) as weight
+		SELECT SUM(product_weight * product_quantity) weight
 		FROM '._DB_PREFIX_.'order_detail
 		WHERE id_order = '.intval($this->id));
-		return $result['weight'];
+
+		return floatval($result['weight']);
 	}
 
 	static public function getInvoice($id_invoice)
 	{
-		$query = '
-			SELECT `invoice_number`, `id_order`
-			FROM `'._DB_PREFIX_.'orders`
-			WHERE invoice_number = '.intval($id_invoice);
-		return Db::getInstance()->getRow($query);
+		return Db::getInstance()->getRow('
+		SELECT `invoice_number`, `id_order`
+		FROM `'._DB_PREFIX_.'orders`
+		WHERE invoice_number = '.intval($id_invoice));
 	}
 }
 

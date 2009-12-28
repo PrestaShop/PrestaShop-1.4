@@ -25,9 +25,9 @@ class Backup
 	 *
 	 * @param string $filename Filename of the backup file
 	 */
-	public function __construct( $filename = NULL )
+	public function __construct($filename = NULL)
 	{
-		if ( $filename )
+		if ($filename)
 			$this->id = self::getBackupPath($filename);
 	}
 
@@ -39,19 +39,15 @@ class Backup
 	 */
 	public static function getBackupPath($filename)
 	{
-		$backupdir = realpath( PS_ADMIN_DIR . '/backups/' );
+		$backupdir = realpath(PS_ADMIN_DIR.'/backups/');
 
-		if ( $backupdir === false  )
-		{
-			die ( Tools::displayError('Backups directory does not exist') );
-		}
+		if ($backupdir === false)
+			die(Tools::displayError('Backups directory does not exist'));
 
 		// Check the realpath so we can validate the backup file is under the backup directory
-		$backupfile = realpath( $backupdir . '/' . $filename );
-		if ( $backupfile === false OR strncmp($backupdir, $backupfile, strlen($backupdir)) != 0 )
-		{
-			die ( Tools::displayError('Hack attempt') );
-		}
+		$backupfile = realpath($backupdir.'/'.$filename);
+		if ($backupfile === false OR strncmp($backupdir, $backupfile, strlen($backupdir)) != 0)
+			die (Tools::displayError('Hack attempt'));
 
 		return $backupfile;
 	}
@@ -66,7 +62,7 @@ class Backup
 		$adminDir = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__) );
 		$adminDir = substr($adminDir, 0, strrpos($adminDir, '/'));
 
-		return $adminDir . '/backup.php?filename=' . basename ($this->id);
+		return $adminDir.'/backup.php?filename='.basename($this->id);
 	}
 
 	/**
@@ -74,13 +70,13 @@ class Backup
 	 *
 	 * @return boolean Deletion result, true on success
 	 */
-	public function delete() {
-		if ( !$this->id || !unlink ( $this->id ) )
+	public function delete()
+	{
+		if (!$this->id || !unlink($this->id))
 		{
-			$this->error = Tools::displayError('Error deleting') . ' ' . ($this->id ? '"' . $this->id . '"' : Tools::displayError('Invalid ID'));
+			$this->error = Tools::displayError('Error deleting').' '.($this->id ? '"'.$this->id.'"' : Tools::displayError('Invalid ID'));
 			return false;
 		}
-
 		return true;
 	}
 
@@ -89,8 +85,10 @@ class Backup
 	 *
 	 * @return boolean True on success
 	 */
-	public function deleteSelection($list) {
-		foreach ($list as $file) {
+	public function deleteSelection($list)
+	{
+		foreach ($list as $file)
+		{
 			$backup = new Backup($file);
 			if (!$backup->delete())
 			{

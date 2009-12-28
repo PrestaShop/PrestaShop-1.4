@@ -4,7 +4,7 @@ var pc_serialScrollActualImagesIndex;
 
 function pc_serialScrollFixLock(event, targeted, scrolled, items, position){
 	$('#productscategory_scroll_left').css('cursor', position == 0 ? 'default' : 'pointer').fadeTo(500, position == 0 ? 0.2 : 1);
-	$('#productscategory_scroll_right').css('cursor', position + serialScrollNbImagesDisplayed == serialScrollNbImages ? 'default' : 'pointer').fadeTo(500, position + serialScrollNbImagesDisplayed == serialScrollNbImages ? 0.2 : 1);
+	$('#productscategory_scroll_right').css('cursor', position + pc_serialScrollNbImagesDisplayed == pc_serialScrollNbImages ? 'default' : 'pointer').fadeTo(500, position + pc_serialScrollNbImagesDisplayed == pc_serialScrollNbImages ? 0.2 : 1);
 	return true;
 }
 

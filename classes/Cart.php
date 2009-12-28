@@ -218,7 +218,7 @@ class		Cart extends ObjectModel
         pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category, CONCAT(cp.`id_product`, cp.`id_product_attribute`) AS unique_id,
         IF (IFNULL(pa.`reference`, \'\') = \'\', p.`reference`, pa.`reference`) AS reference, 
         IF (IFNULL(pa.`supplier_reference`, \'\') = \'\', p.`supplier_reference`, pa.`supplier_reference`) AS supplier_reference, 
-        IF (IFNULL(pa.`weight`, 0) = \'\', p.`weight`, pa.`weight`) AS weight_attribute,
+        (p.`weight`+ pa.`weight`) weight_attribute,
         IF (IFNULL(pa.`ean13`, \'\') = \'\', p.`ean13`, pa.`ean13`) AS ean13
 		FROM `'._DB_PREFIX_.'cart_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
@@ -247,7 +247,8 @@ class		Cart extends ObjectModel
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
 				$row['ecotax'] = floatval($row['ecotax_attr']);
 			$row['stock_quantity'] = intval($row['quantity']);
-			$row['weight'] = $row['weight_attribute'];
+			if ($row['id_product_attribute'])
+				$row['weight'] = $row['weight_attribute'];
 			$row['quantity'] = intval($row['cart_quantity']);
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
@@ -295,6 +296,7 @@ class		Cart extends ObjectModel
 			$products[] = $row;
 		}
 		$this->_products = $products;
+		
 		return $this->_products;
 	}
 
