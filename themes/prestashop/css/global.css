@@ -315,6 +315,11 @@ div.rte p,
 	margin:0.5em 0pt;
 	padding-left:0.7em;
 }
+
+div.rte ol, .mceContentBody ol{
+	list-style-type:decimal;
+	margin-left:10px;
+} 
 /* /global RTE fields */
 
 /* global table style */
