@@ -248,6 +248,7 @@ else
 
 				$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
 				$groups[$row['id_attribute_group']]['name'] = $row['public_group_name'];
+				$groups[$row['id_attribute_group']]['is_color_group'] = $row['is_color_group'];
 				if ($row['default_on'])
 					$groups[$row['id_attribute_group']]['default'] = intval($row['id_attribute']);
 				if (!isset($groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']]))
