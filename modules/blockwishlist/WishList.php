@@ -41,7 +41,7 @@ class		WishList extends ObjectModel
 
 	public function getFields()
 	{
-		parent::validateFields(false);
+		parent::validateFields();
 		$fields['id_customer'] = intval($this->id_customer);
 		$fields['token'] = pSQL($this->token);
 		$fields['name'] = pSQL($this->name);
@@ -53,11 +53,12 @@ class		WishList extends ObjectModel
 	public function delete()
 	{
 		global $cookie;
+		
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_email` WHERE `id_wishlist` = '.intval($this->id));
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product` WHERE `id_wishlist` = '.intval($this->id));
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product_customer` WHERE `id_wishlist` = '.intval($this->id));
 		if (isset($cookie->id_wishlist))
 			unset($cookie->id_wishlist);
+		
 		return (parent::delete());
 	}
 
@@ -82,6 +83,19 @@ class		WishList extends ObjectModel
 		WHERE `id_wishlist` = '.intval($id_wishlist)));
 	}
 
+	
+	static public function isExistsByNameForUser($name)
+	{
+		global $cookie;
+	
+		return Db::getInstance()->getValue('
+		SELECT COUNT(*) AS total
+		FROM `'._DB_PREFIX_.'wishlist` 
+		WHERE `name` = \''.pSQL($name).'\'
+		AND `id_customer` = '.intval($cookie->id_customer)
+		);
+	}
+	
 	/**
 	 * Return true if wishlist exists else false
 	 *
