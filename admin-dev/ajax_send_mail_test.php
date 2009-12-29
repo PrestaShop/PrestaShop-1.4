@@ -2,6 +2,9 @@
 
 include_once(dirname(__FILE__).'/../config/config.inc.php');
 
+/* Getting cookie or logout */
+require_once(dirname(__FILE__).'/init.php');
+
 $smtpChecked = (trim($_GET['mailMethod']) ==  'smtp');
 $smtpServer = $_GET['smtpSrv'];
 $content = $_GET['testMsg'];
