@@ -747,7 +747,8 @@ CREATE TABLE `PREFIX_orders` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_order`),
   KEY `id_customer` (`id_customer`),
-  KEY `id_cart` (`id_cart`)
+  KEY `id_cart` (`id_cart`),
+  KEY `invoice_number` (`invoice_number`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_order_detail` (
@@ -1024,7 +1025,8 @@ CREATE TABLE `PREFIX_product_sale` (
 CREATE TABLE `PREFIX_product_tag` (
   `id_product` int(10) unsigned NOT NULL,
   `id_tag` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id_product`,`id_tag`)
+  PRIMARY KEY  (`id_product`,`id_tag`),
+  KEY `id_tag` (`id_tag`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_profile` (
