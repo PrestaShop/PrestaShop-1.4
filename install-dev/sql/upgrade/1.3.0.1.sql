@@ -44,4 +44,14 @@ ALTER TABLE `PREFIX_orders` ADD INDEX `invoice_number` (`invoice_number`);
 ALTER TABLE `PREFIX_product_tag` ADD INDEX `id_tag` (`id_tag`);
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
+
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY';
+DELETE FROM `PREFIX_product_attachment` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_discount_quantity` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_pack` WHERE `id_product_pack` NOT IN (SELECT `id_product` FROM `PREFIX_product`) OR `id_product_item` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_product_sale` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_scene_products` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_search_index` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);
+DELETE FROM `PREFIX_search_word` WHERE `id_word` NOT IN (SELECT `id_word` FROM `PREFIX_search_index`);
+DELETE FROM `PREFIX_tag` WHERE `id_lang` NOT IN (SELECT `id_lang` FROM `PREFIX_lang`);
+DELETE FROM `PREFIX_search_word` WHERE `id_lang` NOT IN (SELECT `id_lang` FROM `PREFIX_lang`);
