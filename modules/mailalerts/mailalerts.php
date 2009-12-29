@@ -246,8 +246,8 @@ class MailAlerts extends Module
 		$customers = Db::getInstance()->ExecuteS('
 		SELECT id_customer, customer_email
 		FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-		WHERE `id_product` = '.intval($id_product).
-		($id_product_attribute ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
+		WHERE `id_product` = '.intval($id_product).' 
+		AND `id_product_attribute` = '.intval($id_product_attribute));
 		
 		$product =  new Product(intval($id_product));
 		$templateVars = array(
