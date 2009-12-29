@@ -41,13 +41,13 @@ class BirthdayPresent extends Module
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<p>'.$this->l('Create a voucher for your clients celebrating their birthday').'</p>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+			<p>'.$this->l('Create a voucher for customers celebrating their birthday and having at least one valid order').'</p>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="margin-top: 15px;">
 				<label>'.$this->l('Active').'</label>
 				<div class="margin-form">
 					<img src="../img/admin/enabled.gif" /> <input type="radio" name="bp_active" value="1"'.(Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
 					<img src="../img/admin/disabled.gif" /> <input type="radio" name="bp_active" value="0"'.(!Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
-					<p style="clear: both;">'.$this->l('Additionnaly, you have to set a CRON rule which calls the file').' '.dirname(__FILE__).'/cron.php '.$this->l('everyday').'</p>
+					<p style="clear: both;">'.$this->l('Additionnaly, you have to set a CRON rule which calls the file').'<br />http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/birthdaypresent/cron.php '.$this->l('everyday').'</p>
 				</div>
 				<label>'.$this->l('Type').'</label>
 				<div class="margin-form">
@@ -97,24 +97,24 @@ class BirthdayPresent extends Module
 		$users = Db::getInstance()->ExecuteS('
 		SELECT DISTINCT c.id_customer, firstname, lastname, email
 		FROM '._DB_PREFIX_.'customer c
-		LEFT JOIN '._DB_PREFIX_.'orders o ON c.id_customer = o.id_customer
+		LEFT JOIN '._DB_PREFIX_.'orders o ON (c.id_customer = o.id_customer)
 		WHERE o.valid = 1
 		AND c.birthday LIKE \'%'.date('-m-d').'\'');
 
 		foreach ($users as $user)
 		{
 			$voucher = new Discount();
-			$voucher->id_customer = $user['id_customer'];
-			$voucher->id_discount_type = Configuration::get('BIRTHDAY_DISCOUNT_TYPE');
-			$voucher->name = 'birthday';
-			$voucher->description[Configuration::get('PS_LANG_DEFAULT')] = $this->l('Your birthday present !');
+			$voucher->id_customer = intval($user['id_customer']);
+			$voucher->id_discount_type = intval(Configuration::get('BIRTHDAY_DISCOUNT_TYPE'));
+			$voucher->name = 'BIRTHDAY-'.intval($voucher->id_customer).'-'.date('Y');
+			$voucher->description[intval(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Your birthday present !');
 			$voucher->value = Configuration::get('BIRTHDAY_DISCOUNT_VALUE');
 			$voucher->quantity = 1;
 			$voucher->quantity_per_user = 1;
 			$voucher->cumulable = 1;
 			$voucher->cumulable_reduction = 1;
 			$voucher->date_from = date('Y-m-d');
-			$voucher->date_to = (date('Y') + 1).date('-m-d');
+			$voucher->date_to = strftime('%Y-%m-%d', strtotime('+1 month'));
 			$voucher->minimal = Configuration::get('BIRTHDAY_MINIMAL_ORDER');
 			$voucher->active = true;
 			if ($voucher->add())

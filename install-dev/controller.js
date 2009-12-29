@@ -325,7 +325,7 @@ function verifyDbAccess ()
 			+"&type=MySQL"
 			+"&server="+ $("#dbServer").val()
 			+"&login="+ $("#dbLogin").val()
-			+"&password="+ $("#dbPassword").val()
+			+"&password="+encodeURIComponent($("#dbPassword").val())
 			+"&name="+ $("#dbName").val()
 		,
 		success: function(ret)
@@ -370,7 +370,7 @@ function createDB()
 		"&type=MySQL"+
 		"&server="+ $("#dbServer").val()+
 		"&login="+ $("#dbLogin").val()+
-		"&password="+ $("#dbPassword").val()+
+		"&password="+encodeURIComponent($("#dbPassword").val())+
 		"&name="+ $("#dbName").val()
 	   ,
 	   success: function(ret)

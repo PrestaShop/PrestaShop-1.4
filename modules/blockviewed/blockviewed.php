@@ -103,7 +103,7 @@ class BlockViewed extends Module
 					$obj->name = $productsImagesArray[$productViewed]['name'];
 					$obj->description_short = $productsImagesArray[$productViewed]['description_short'];
 					$obj->link_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
-					$obj->category_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
+					$obj->category_rewrite = $productsImagesArray[$productViewed]['category_rewrite'];
 
 					if (!isset($obj->cover))
 					{
