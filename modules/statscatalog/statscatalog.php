@@ -76,6 +76,7 @@ class StatsCatalog extends Module
 		SELECT SUM(od.`product_quantity`) AS bought
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = od.`product_id`
 		'.$this->_join.'
 		WHERE o.valid = 1
 		'.$this->_where);
@@ -121,7 +122,7 @@ class StatsCatalog extends Module
 		
 		if ($id_category = intval(Tools::getValue('id_category')))
 		{
-			$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON cp.`id_product` = p.`id_product`';
+			$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)';
 			$this->_where = 'AND cp.`id_category` = '.$id_category;
 		}
 		
