@@ -152,14 +152,8 @@ abstract class PaymentModule extends Module
 					$quantityInStock = ($productQuantity - intval($product['quantity']) < 0) ? $productQuantity : intval($product['quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
-						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1) AND $id_order_state != _PS_OS_OUTOFSTOCK_)
-							{
-								$id_order_state = _PS_OS_OUTOFSTOCK_;
-								$history = new OrderHistory();
-								$history->id_order = intval($order->id);
-								$history->changeIdOrderState(_PS_OS_OUTOFSTOCK_, intval($order->id));
-								$history->addWithemail();
-							}
+						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
+							$outOfStock = true;						
 						Hook::updateQuantity($product, $order);
 					}
 					$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']), $currency);
@@ -251,8 +245,8 @@ abstract class PaymentModule extends Module
 
 					$discountsList .=
 					'<tr style="background-color:#EBECEE;">
-							<td colspan="4" style="padding:0.6em 0.4em; text-align:right;">'.$this->l('Voucher code:').' '.$objDiscount->name.'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($value, $currency, false, false).'</td>
+							<td colspan="4" style="padding: 0.6em 0.4em; text-align: right;">'.$this->l('Voucher code:').' '.$objDiscount->name.'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">-'.Tools::displayPrice($value, $currency, false, false).'</td>
 					</tr>';
 				}
 
@@ -272,17 +266,22 @@ abstract class PaymentModule extends Module
 					Hook::newOrder($cart, $order, $customer, $currency, $orderStatus);
 					foreach ($cart->getProducts() as $product)
 						if ($orderStatus->logable)
-							ProductSale::addProductSale($product['id_product'], $product['quantity']);
-				}
+							ProductSale::addProductSale(intval($product['id_product']), intval($product['quantity']));
+				}				
 
-				// Set order state in order history ONLY if the "out of stock" status has not been yet reached
-				// If it has, a status changing has already been applied at that time
-				if ($id_order_state != _PS_OS_OUTOFSTOCK_)
+				// Set order state in order history ONLY even if the "out of stock" status has not been yet reached
+				// So you migth have two order states
+				$new_history = new OrderHistory();
+				$new_history->id_order = intval($order->id);
+				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
+				$new_history->addWithemail(true, $extraVars);
+				
+				if (isset($outOfStock) AND $outOfStock)
 				{
-					$new_history = new OrderHistory();
-					$new_history->id_order = intval($order->id);
-					$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
-					$new_history->addWithemail(true, $extraVars);
+					$history = new OrderHistory();
+					$history->id_order = intval($order->id);
+					$history->changeIdOrderState(_PS_OS_OUTOFSTOCK_, intval($order->id));
+					$history->addWithemail();
 				}
 
 				// Send an e-mail to customer
@@ -294,45 +293,43 @@ abstract class PaymentModule extends Module
 					$delivery_state = $delivery->id_state ? new State(intval($delivery->id_state)) : false;
 					$invoice_state = $invoice->id_state ? new State(intval($invoice->id_state)) : false;
 
-					$data = array(
-					
-						'{firstname}' => $customer->firstname,
-						'{lastname}' => $customer->lastname,
-						'{email}' => $customer->email,
-						'{delivery_company}' => $delivery->company,
-						'{delivery_firstname}' => $delivery->firstname,
-						'{delivery_lastname}' => $delivery->lastname,
-						'{delivery_address1}' => $delivery->address1,
-						'{delivery_address2}' => $delivery->address2,
-						'{delivery_city}' => $delivery->city,
-						'{delivery_postal_code}' => $delivery->postcode,
-						'{delivery_country}' => $delivery->country,
-						'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
-						'{delivery_phone}' => $delivery->phone,
-						'{delivery_other}' => $delivery->other,
-						'{invoice_company}' => $invoice->company,
-						'{invoice_firstname}' => $invoice->firstname,
-						'{invoice_lastname}' => $invoice->lastname,
-						'{invoice_address2}' => $invoice->address2,
-						'{invoice_address1}' => $invoice->address1,
-						'{invoice_city}' => $invoice->city,
-						'{invoice_postal_code}' => $invoice->postcode,
-						'{invoice_country}' => $invoice->country,
-						'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
-						'{invoice_phone}' => $invoice->phone,
-						'{invoice_other}' => $invoice->other,
-						'{order_name}' => sprintf("#%06d", intval($order->id)),
-						'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), intval($order->id_lang), 1),
-						'{carrier}' => (strval($carrier->name) != '0' ? $carrier->name : Configuration::get('PS_SHOP_NAME')),
-						'{payment}' => $order->payment,
-						'{products}' => $productsList,
-						'{discounts}' => $discountsList,
-						'{total_paid}' => Tools::displayPrice($order->total_paid, $currency, false, false),
-						'{total_products}' => Tools::displayPrice($order->total_paid - $order->total_shipping - $order->total_wrapping+ $order->total_discounts, $currency, false, false),
-						'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency, false, false),
-						'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency, false, false),
-						'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency, false, false)
-					);
+					$data = array(					
+					'{firstname}' => $customer->firstname,
+					'{lastname}' => $customer->lastname,
+					'{email}' => $customer->email,
+					'{delivery_company}' => $delivery->company,
+					'{delivery_firstname}' => $delivery->firstname,
+					'{delivery_lastname}' => $delivery->lastname,
+					'{delivery_address1}' => $delivery->address1,
+					'{delivery_address2}' => $delivery->address2,
+					'{delivery_city}' => $delivery->city,
+					'{delivery_postal_code}' => $delivery->postcode,
+					'{delivery_country}' => $delivery->country,
+					'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
+					'{delivery_phone}' => $delivery->phone,
+					'{delivery_other}' => $delivery->other,
+					'{invoice_company}' => $invoice->company,
+					'{invoice_firstname}' => $invoice->firstname,
+					'{invoice_lastname}' => $invoice->lastname,
+					'{invoice_address2}' => $invoice->address2,
+					'{invoice_address1}' => $invoice->address1,
+					'{invoice_city}' => $invoice->city,
+					'{invoice_postal_code}' => $invoice->postcode,
+					'{invoice_country}' => $invoice->country,
+					'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
+					'{invoice_phone}' => $invoice->phone,
+					'{invoice_other}' => $invoice->other,
+					'{order_name}' => sprintf("#%06d", intval($order->id)),
+					'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), intval($order->id_lang), 1),
+					'{carrier}' => (strval($carrier->name) != '0' ? $carrier->name : Configuration::get('PS_SHOP_NAME')),
+					'{payment}' => $order->payment,
+					'{products}' => $productsList,
+					'{discounts}' => $discountsList,
+					'{total_paid}' => Tools::displayPrice($order->total_paid, $currency, false, false),
+					'{total_products}' => Tools::displayPrice($order->total_paid - $order->total_shipping - $order->total_wrapping+ $order->total_discounts, $currency, false, false),
+					'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency, false, false),
+					'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency, false, false),
+					'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency, false, false));
 					
 					if (is_array($extraVars))
 						$data = array_merge($data, $extraVars);

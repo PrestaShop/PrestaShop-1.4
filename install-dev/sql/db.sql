@@ -224,7 +224,7 @@ CREATE TABLE `PREFIX_cms` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_cms_lang` (
-  `id_cms` int(10) unsigned NOT NULL auto_increment,
+  `id_cms` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `meta_title` varchar(128) NOT NULL,
   `meta_description` varchar(255) default NULL,

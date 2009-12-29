@@ -43,6 +43,8 @@ class Blockrss extends Module
 				$errors[] = $this->l('Invalid title');
 			elseif (!$nbr OR $nbr <= 0 OR !Validate::isInt($nbr))
 				$errors[] = $this->l('Invalid number of feeds');
+			elseif (stristr($urlfeed, $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
+				$errors[] = $this->l('You cannot select your own RSS feed');
 			else
 			{
 				Configuration::updateValue('RSS_FEED_URL', $urlfeed);

@@ -47,7 +47,7 @@ class AdminGenerator extends AdminTab
 			echo '
 			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
 			<p>'.$this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>
-			<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
+			<br />'.$this->l('- give it write permissions (CHMOD 666 on Unix system)').'</p>';
 		echo '</p></fieldset></form>';
 
 		// Robots
@@ -66,7 +66,7 @@ class AdminGenerator extends AdminTab
 			echo '
 			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
 			<p>'.$this->l('- create a').' <b>'. $this->l('robots.txt').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>
-			<br />'.$this->l('- give it write permissions (chmod 777 on Unix system)').'</p>';
+			<br />'.$this->l('- give it write permissions (CHMOD 666 on Unix system)').'</p>';
 		echo '</p></fieldset></form>';
 	}
 
