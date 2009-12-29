@@ -186,7 +186,13 @@ class Backup
 					{
 						$s = '(';
 						foreach ($row as $field => $value)
-							$s .= "'" . mysql_real_escape_string($value) . "',";
+						{
+							$tmp = "'" . mysql_real_escape_string($value) . "',";
+							if($tmp != "'',")
+								$s .= $tmp;
+							else
+								$s .= "NULL,";
+						}
 						$s = rtrim($s, ',');
 
 						if ($i%200 == 0 AND $i < $sizeof)
