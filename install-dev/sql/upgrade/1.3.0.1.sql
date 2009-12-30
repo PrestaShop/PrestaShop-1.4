@@ -42,6 +42,7 @@ ALTER TABLE `PREFIX_module_currency` ADD INDEX `id_module` (`id_module`);
 ALTER TABLE `PREFIX_product_attribute_combination` ADD INDEX `id_product_attribute` (`id_product_attribute`);
 ALTER TABLE `PREFIX_orders` ADD INDEX `invoice_number` (`invoice_number`);
 ALTER TABLE `PREFIX_product_tag` ADD INDEX `id_tag` (`id_tag`);
+ALTER TABLE `PREFIX_cms_lang` CHANGE `id_cms` `id_cms` INT(10) UNSIGNED NOT NULL;
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
 
