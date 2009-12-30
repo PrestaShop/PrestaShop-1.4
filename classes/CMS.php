@@ -36,10 +36,10 @@ class CMS extends ObjectModel
 		$fieldsArray = array('meta_title', 'meta_description', 'meta_keywords', 'link_rewrite');
 		$fields = array();
 		$languages = Language::getLanguages();
-		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($languages as $language)
 		{
-			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
+			$fields[$language['id_lang']]['id_lang'] = intval($language['id_lang']);
 			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
 			$fields[$language['id_lang']]['content'] = (isset($this->content[$language['id_lang']])) ? Tools::htmlentitiesDecodeUTF8(pSQL($this->content[$language['id_lang']], true)) : '';
 			foreach ($fieldsArray as $field)
@@ -77,26 +77,29 @@ class CMS extends ObjectModel
 		return $result;
 	}
 	
-	public static function getLinks($id_lang, $selection = null)
+	public static function getLinks($id_lang, $selection = NULL)
 	{
 		$result = Db::getInstance()->ExecuteS('
 		SELECT c.id_cms, cl.link_rewrite, cl.meta_title
 		FROM '._DB_PREFIX_.'cms c
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
-		'.(($selection !== null) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : ''));
+		'.(($selection !== NULL) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : ''));
 		$link = new Link();
 		$links = array();
 		if ($result)
 			foreach ($result as $row)
 			{
-				$row['link'] = $link->getCMSLink($row['id_cms'], $row['link_rewrite']);
+				$row['link'] = $link->getCMSLink(intval($row['id_cms']), $row['link_rewrite']);
 				$links[] = $row;
 			}
 		return $links;
 	}
 	
-	public static function listCms($id_lang = _PS_LANG_DEFAULT_, $id_block = false)
+	public static function listCms($id_lang = NULL, $id_block = false)
 	{
+		if (empty($id_lang))
+			$id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
+
 		$result = Db::getInstance()->ExecuteS('
 		SELECT c.id_cms, l.meta_title
 		FROM  '._DB_PREFIX_.'cms c
@@ -109,22 +112,27 @@ class CMS extends ObjectModel
 	
 	public static function isInBlock($id_cms, $id_block)
 	{
-		Db::getInstance()->Execute('
+		Db::getInstance()->getRow('
 		SELECT id_cms FROM '._DB_PREFIX_.'block_cms
-		WHERE  id_block = '.intval($id_block).' AND id_cms='.intval($id_cms));
+		WHERE id_block = '.intval($id_block).' AND id_cms = '.intval($id_cms));
+		
 		return (Db::getInstance()->NumRows());
 	}
 		
 	public static function updateCmsToBlock($cms, $id_block)
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms`
-    															WHERE `id_block` ='.intval($id_block));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` ='.intval($id_block));
+
+		$list = '';
 		foreach ($cms AS $id_cms)
-			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'block_cms (id_block, id_cms) VALUES
-																('.intval($id_block).', '.intval($id_cms).')');
-			return true;
-	}
-	
+			$list .= '('.intval($id_block).', '.intval($id_cms).'),';
+		$list = rtrim($list, ',');
+		
+		if (!empty($list))
+			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'block_cms (id_block, id_cms) VALUES '.pSQL($list));
+			
+		return true;
+	}	
 }
 
 ?>

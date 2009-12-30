@@ -28,8 +28,7 @@ class BlockVariousLinks extends Module
 	}
 	public function uninstall()
 	{
-	 	Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms`
-    														WHERE `id_block` ='.intval($this->id));
+	 	Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.intval($this->id));
     	parent::uninstall();
   }
 	
@@ -59,10 +58,9 @@ class BlockVariousLinks extends Module
 								</tr>
 							</thead>
 							<tbody>';	
-		$cms = CMS::listCms($cookie->id_lang);
+		$cms = CMS::listCms(intval($cookie->id_lang));
 		foreach($cms AS $row)
-			$this->_html.='
-										<tr><td><input type="checkbox" class="noborder" value="'.$row['id_cms'].'" name="categoryBox[]" '.((CMS::isInBlock($row['id_cms'], $this->id)) ? 'checked="checked"' : '').'></td><td>'.$row['id_cms'].'</td><td>'.$row['meta_title'].'</td></tr>';
+			$this->_html.='<tr><td><input type="checkbox" class="noborder" value="'.intval($row['id_cms']).'" name="categoryBox[]" '.((CMS::isInBlock(intval($row['id_cms']), intval($this->id))) ? 'checked="checked"' : '').'></td><td>'.intval($row['id_cms']).'</td><td>'.$row['meta_title'].'</td></tr>';
 		$this->_html .='
 										</tbody>
 									</table>
@@ -78,11 +76,11 @@ class BlockVariousLinks extends Module
 		{
 			foreach ($_POST['categoryBox'] AS $row)
 				$cms[] = intval($row);
-			if (CMS::updateCmsToBlock($cms, $this->id))
+			if (CMS::updateCmsToBlock($cms, intval($this->id)))
 		 		$this->_html .= '<div class="conf confirm">'.$this->l('Cms Updated').'</div>';
 		 }
 		else
-		 	CMS::updateCmsToBlock(array(), $this->id);
+		 	CMS::updateCmsToBlock(array(), intval($this->id));
 	}
 
 	/**

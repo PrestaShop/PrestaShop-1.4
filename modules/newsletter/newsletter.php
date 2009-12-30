@@ -22,8 +22,7 @@ class Newsletter extends Module
 		$this->_postValid = array();
 
 		// Getting data...
-		$id_lang = intval($cookie->id_lang);
-		$_countries = Country::getCountries($id_lang);
+		$_countries = Country::getCountries(intval($cookie->id_lang));
 
 		// ...formatting array
 		$countries[0] = $this->l('All countries');
@@ -81,7 +80,14 @@ class Newsletter extends Module
 				foreach ($result AS $tab)
 					$this->_my_fputcsv($fd, $tab);
 				fclose($fd);
-				$this->_html .= $this->displayConfirmation($this->l('The .CSV file has been successfully exported').' ('.$nb.' '.$this->l('customers found').')<br />> <a href="../modules/newsletter/'.strval($_POST['action']).'_'.$this->_file.'"><b>'.$this->l('Download the file').'</b></a>');
+				$this->_html .= $this->displayConfirmation(
+				$this->l('The .CSV file has been successfully exported').
+				' ('.$nb.' '.$this->l('customers found').')<br />> 
+				<a href="../modules/newsletter/'.strval($_POST['action']).'_'.$this->_file.'"><b>'.$this->l('Download the file').' '.$this->_file.'</b></a>
+				<br />
+				<ol style="margin-top: 10px;">
+					<li style="color: red;">'.$this->l('WARNING: If you try to open this the .csv file with Excel, do no forget to choose UTF-8 encoding or you\'ll may see strange characters').'</li>
+				</ol>');
 			}
 			else
 				$this->_html .= $this->displayError($this->l('Error: cannot write to').' '.dirname(__FILE__).'/'.strval($_POST['action']).'_'.$this->_file.' !');
@@ -117,7 +123,7 @@ class Newsletter extends Module
 	{
 		$line = implode(';', $array);
 		$line .= "\n";
-		if (!fwrite($fd, utf8_decode($line), 4096))
+		if (!fwrite($fd, $line, 4096))
 			$this->_postErrors[] = $this->l('Error: cannot write to').' '.dirname(__FILE__).'/'.$this->_file.' !';
 	}
 
@@ -135,7 +141,8 @@ class Newsletter extends Module
                 2. '.$this->l('Customers that have checked "yes" to receive a newsletter in their customer profile.').'<br />
                 '.$this->l('The "Export Customers" section below filters which customers you want to send a newsletter.').'
             </li>
-        </ol></p>
+        </ol>
+		</p>
         </fieldset><br />
         <fieldset class="width3"><legend>'.$this->l('Export Newsletter Subscribers').'</legend>
         <form action="'.$_SERVER['REQUEST_URI'].'" method="post">

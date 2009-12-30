@@ -186,4 +186,18 @@ if (isset($_GET['ajaxProductPackItems']))
 	die('['.implode(',', $jsonArray).']');
 }
 
+if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
+{
+	$states = Db::getInstance()->ExecuteS('
+	SELECT s.id_state, s.name
+	FROM '._DB_PREFIX_.'state s
+	WHERE s.id_country = '.intval(Tools::getValue('id_country')).' AND s.active = 1');
+	
+	$list = '<option value="0">-----------</option>'."\n";
+	foreach ($states AS $state)
+		$list .= '<option value="'.intval($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
+		
+	die($list);
+}
+
 ?>

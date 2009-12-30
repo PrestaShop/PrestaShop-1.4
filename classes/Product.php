@@ -404,6 +404,13 @@ class		Product extends ObjectModel
 			!$this->deleteTags() OR
 			!$this->deleteCartProducts() OR
         	!$this->deleteAttributesImpacts() OR
+			!$this->deleteAttachments() OR
+			!$this->deleteCustomization() OR
+			!$this->deleteQuantityDiscounts() OR
+			!$this->deletePack() OR
+			!$this->deleteProductSale() OR
+			!$this->deleteSceneProducts() OR
+			!$this->deleteSearchIndexes() OR
 			!$this->deleteAccessories())
 		return false;
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
@@ -805,9 +812,7 @@ class		Product extends ObjectModel
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
 		WHERE `id_product_attribute` IN (SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.intval($this->id).')');
 
-		$result2 = Db::getInstance()->Execute('
-		DELETE FROM `'._DB_PREFIX_.'product_attribute`
-		WHERE `id_product` = '.intval($this->id));
+		$result2 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.intval($this->id));
 
 		return ($result & $result2);
 	}
@@ -819,9 +824,7 @@ class		Product extends ObjectModel
 	*/
     public function deleteAttributesImpacts()
     {
-        return Db::getInstance()->Execute('
-		DELETE FROM `'._DB_PREFIX_.'attribute_impact`
-		WHERE `id_product` = '.intval($this->id));
+        return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_impact` WHERE `id_product` = '.intval($this->id));
     }
 
 	/**
@@ -832,6 +835,89 @@ class		Product extends ObjectModel
 	public function deleteProductFeatures()
 	{
 		return $this->deleteFeatures();
+	}
+	
+	/**
+	* Delete product attachments
+	*
+	* @return array Deletion result
+	*/
+	public function deleteAttachments()
+	{
+		$attachments = Db::getInstance()->ExecuteS('SELECT id_attachment FROM `'._DB_PREFIX_.'product_attachment` WHERE `id_product` = '.intval($this->id));
+		$result = true;
+		foreach ($attachments AS $attachment)
+		{
+			$attachmentObj = new Attachment(intval($attachment['id_attachment']));
+			if (Validate::isLoadedObject($attachmentObj))
+				$result &= $attachmentObj->delete();
+		}
+		
+		return $result;
+	}
+	
+	/**
+	* Delete product customizations
+	*
+	* @return array Deletion result
+	*/
+	public function deleteCustomization()
+	{
+		return 
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization_field` WHERE `id_product` = '.intval($this->id)) && 
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization_field_lang` WHERE `id_customization_field` NOT IN (SELECT id_customization_field FROM `'._DB_PREFIX_.'customization_field`)');
+	}
+	
+	/**
+	* Delete product quantity discounts
+	*
+	* @return array Deletion result
+	*/
+	public function deleteQuantityDiscounts()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_quantity` WHERE `id_product` = '.intval($this->id));
+	}
+	
+	/**
+	* Delete product pack details
+	*
+	* @return array Deletion result
+	*/
+	public function deletePack()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'pack` WHERE `id_product_pack` = '.intval($this->id).' OR `id_product_item` = '.intval($this->id));
+	}
+	
+	/**
+	* Delete product sales
+	*
+	* @return array Deletion result
+	*/
+	public function deleteProductSale()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_sale` WHERE `id_product` = '.intval($this->id));
+	}
+	
+	/**
+	* Delete product in its scenes
+	*
+	* @return array Deletion result
+	*/
+	public function deleteSceneProducts()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'scene_products` WHERE `id_product` = '.intval($this->id));
+	}
+	
+	/**
+	* Delete product indexed words
+	*
+	* @return array Deletion result
+	*/
+	public function deleteSearchIndexes()
+	{
+		return 
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'search_index` WHERE `id_product` = '.intval($this->id)) && 
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'search_word` WHERE `id_word` NOT IN (SELECT id_word FROM `'._DB_PREFIX_.'search_index`)');
 	}
 
 	/**

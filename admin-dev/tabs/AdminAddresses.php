@@ -17,9 +17,6 @@ class AdminAddresses extends AdminTab
 {
 	/** @var array countries list */
 	private $countriesArray = array();
-
-	/** @var array State list */
-	private $stateList = array();
 	
 	public function __construct()
 	{
@@ -41,7 +38,6 @@ class AdminAddresses extends AdminTab
 		$countries = Country::getCountries(intval($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
-		$this->stateList = State::getStates(intval($cookie->id_lang));
 
 		$this->fieldsDisplay = array(
 		'id_address' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -194,6 +190,19 @@ class AdminAddresses extends AdminTab
 		$obj = $this->loadObject(true);
 
 		echo '
+		<script type="text/javascript">
+			function populateStates(id_country, id_state)
+			{
+				$.ajax({
+				  url: "ajax.php",
+				  cache: false,
+				  data: "ajaxStates=1&id_country="+id_country+"&id_state="+id_state,
+				  success: function(html){
+					$("#id_state").html(html);
+				  }
+				});
+			}
+		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
 		'.(intval($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.intval($obj->id).'" />' : '').'
 		'.(($id_order = intval(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.intval($id_order).'" />' : '').'
@@ -278,20 +287,19 @@ class AdminAddresses extends AdminTab
 				</div>
 				<label>'.$this->l('Country:').'</label>
 				<div class="margin-form">
-					<select name="id_country" />';
+					<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.intval($this->getFieldValue($obj, 'id_state')).');" />';
 		$selectedCountry = $this->getFieldValue($obj, 'id_country');
 		foreach ($this->countriesArray AS $id_country => $name)
 			echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>
+				<script type="text/javascript">
+					populateStates('.intval($this->getFieldValue($obj, 'id_country')).', '.intval($this->getFieldValue($obj, 'id_state')).');
+				</script>
 				<label>'.$this->l('State:').'</label>
 				<div class="margin-form">
-					<select name="id_state" />
-					<option value="0">-----------</option>';
-		if ($this->stateList)
-			foreach ($this->stateList AS $state)
-				echo '	<option value="'.intval($state['id_state']).'"'.(($this->getFieldValue($obj, 'id_state') == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>';
-		echo '		</select>
+					<select name="id_state" id="id_state">
+					</select>
 				</div>
 				<label>'.$this->l('Home phone:').'</label>
 				<div class="margin-form">
