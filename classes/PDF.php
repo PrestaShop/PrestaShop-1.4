@@ -335,7 +335,7 @@ class PDF extends PDF_PageGroup
 			$this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX() + $w[0], $this->GetY() - $lineSize);
-			$this->Cell($w[1], $lineSize, ($product['product_reference'] != '' ? $product['product_reference'] : '---'), 'B');
+			$this->Cell($w[1], $lineSize, ($product['product_reference'] != '' ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '---'), 'B');
 			$this->Cell($w[2], $lineSize, $product['product_quantity'], 'B', 0, 'C');
 			$this->Ln();
 		}
@@ -498,7 +498,7 @@ class PDF extends PDF_PageGroup
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
 				$pdf->Cell($width, 0, self::l('Total').' : ', 0, 0, 'R');
-				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : ($priceBreakDown['totalWithTax'] + (self::$orderSlip ? (self::$order->total_discounts + self::$order->total_shipping) : 0))), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : ($priceBreakDown['totalWithTax'] + ((!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost)) ? (self::$order->total_discounts + self::$order->total_shipping) : 0))), self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
 
