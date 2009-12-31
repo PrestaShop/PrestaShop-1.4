@@ -120,6 +120,20 @@ class AdminShipping extends AdminTab
 
 	public function display()
 	{
+	   $badCarriers = Db::getInstance()->ExecuteS('	SELECT c.`name`
+										  	FROM `'._DB_PREFIX_.'carrier` c
+										   	LEFT JOIN `'._DB_PREFIX_.'delivery` d ON (c.`id_carrier`=d.`id_carrier`)
+											WHERE !c.`deleted` AND c.`active`
+									   		GROUP BY c.`id_carrier`
+									   		HAVING SUM(`'.(Configuration::get('PS_SHIPPING_METHOD') ? 'id_range_price' : 'id_range_weight').'`) > 0');
+		if ($badCarriers)
+		{
+			echo '<div class="warning"><h3>'.$this->l('Warning :').'</h3>'.$this->l('No fee defined for : ');
+			$carriers = '';
+			foreach ($badCarriers AS $badCarrier)
+				$carriers .= $badCarrier['name'].', ';
+			echo rtrim($carriers, ', ').'.</div>';
+		}
 		$this->displayFormHandling();
 		$this->displayFormFees();
 	}
