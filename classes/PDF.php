@@ -140,7 +140,7 @@ class PDF extends PDF_PageGroup
 			$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
 		$this->SetFont(self::fontname(), 'B', 15);
 		$this->Cell(115);
-		
+
 		if (self::$orderReturn)
 			$this->Cell(77, 10, self::l('RETURN #').' '.sprintf('%06d', self::$orderReturn->id), 0, 1, 'R');
 		elseif (self::$orderSlip)
@@ -231,7 +231,7 @@ class PDF extends PDF_PageGroup
 		$pdf->StartPageGroup();
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
-		
+
 		/* Display address information */
 		$delivery_address = new Address(intval($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
@@ -307,7 +307,7 @@ class PDF extends PDF_PageGroup
 
 		return $pdf->Output(sprintf('%06d', self::$order->id).'.pdf', $mode);
 	}
-	
+
 	/**
 	* Product table with references, quantities...
 	*/
@@ -672,8 +672,8 @@ class PDF extends PDF_PageGroup
 			$this->Cell($w[0], 6, self::l('Discount:').' '.$discount['name'], 'B');
 			$this->Cell($w[1], 6, '', 'B');
 			$this->Cell($w[2], 6, '', 'B');
-			$this->Cell($w[3], 6, '1', 'B', 0, 'C');
-			$this->Cell($w[4], 6, '', 'B', 0, 'R');
+			$this->Cell($w[3], 6, '', 'B', 0, 'R');
+			$this->Cell($w[4], 6, '1', 'B', 0, 'C');
 			$this->Cell($w[5], 6, (!self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($discount['value'], self::$currency, true, false)), 'B', 0, 'R');
 			$this->Ln();
 		}
@@ -820,7 +820,7 @@ class PDF extends PDF_PageGroup
 
 		$this->Ln();
 		$this->SetFont(self::fontname(), '', 7);
-		
+
 		$nb_tax = 0;
 		$total = 0;
 		// Display product tax
@@ -869,7 +869,7 @@ class PDF extends PDF_PageGroup
 			$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
 		}
-		
+
 		if (!$nb_tax)
 			$this->Cell(190, 10, self::l('No tax'), 0, 0, 'C');
 	}
@@ -908,5 +908,5 @@ class PDF extends PDF_PageGroup
 		$font = self::embedfont();
 		return $font ? $font : 'Arial';
  	}
-	
+
 }
