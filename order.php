@@ -337,7 +337,7 @@ function displayCarrier()
 			unset($result[$k]);
 			continue ;
 		}
-
+		
 		// If out-of-range behavior carrier is set on "Desactivate carrier"
 		if ($row['range_behavior'])
 		{
@@ -383,6 +383,7 @@ function displayCarrier()
 		'recyclable' => intval($cart->recyclable),
 		'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 		'carriers' => $resultsArray,
+		'default_carrier' => intval(Configuration::get('PS_CARRIER_DEFAULT')),
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
 		'total_wrapping' => $wrapping_fees,
