@@ -262,6 +262,7 @@ div.rte h2,
 	font-size: 20px;
 	background:none;
 	text-transform:none;
+	height: auto;
 }
 div.rte h3, .mceContentBody h3 {font-size: 16px;}
 div.rte h4, .mceContentBody h4 {font-size: 14px;}
