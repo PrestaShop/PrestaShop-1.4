@@ -849,6 +849,7 @@ $_LANGADM['AdminLanguages7dce122004969d56ae2e0245cb754d35'] = 'Editar';
 $_LANGADM['AdminLanguagesc387e4af31585ed190b97b1bc9949249'] = 'Cuando se elimina un idioma, todas las traducciones AFINES EN LA BASE DE DATOS se eliminarán, ¿está seguro de eliminar este Idioma?';
 $_LANGADM['AdminLanguagesf2a6c498fb90ee345d997f888fce3b18'] = 'Eliminar';
 $_LANGADM['AdminLanguages878465c2af2b68f626a3050a643e6af7'] = 'Un paquete idioma está disponible para el código ISO';
+$_LANGADM['AdminLanguages47af6b8e142393bfc961371f4f38a0e2'] = 'Después de la creación de la lengua puede importar el contenido del paquete de idioma que puede descargar más arriba, en \"Herramientas> Traducciones\"';
 $_LANGADM['AdminLanguages8600e2c0403b417759eb49381973ea36'] = 'No disponible en pack idioma prestashop.com de este código ISO';
 $_LANGADM['AdminLanguages801ab24683a4a8c433c6eb40c48bcd9d'] = 'Descargar';
 $_LANGADM['AdminLanguages3a08e2e340ab29fd9263af48193cbf8e'] = 'Idiomas';
