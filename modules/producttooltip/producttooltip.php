@@ -44,13 +44,15 @@ class ProductToolTip extends Module
 	public function getContent()
 	{
 		/* Update values in DB */
-		if (isset($_POST['SubmitToolTip']))
+		if (Tools::isSubmit('SubmitToolTip'))
 		{
-			Configuration::updateValue('PS_PTOOLTIP_PEOPLE', intval($_POST['ps_ptooltip_people']));
-			Configuration::updateValue('PS_PTOOLTIP_DATE_CART', intval($_POST['ps_ptooltip_date_cart']));
-			Configuration::updateValue('PS_PTOOLTIP_DATE_ORDER', intval($_POST['ps_ptooltip_date_order']));
-			Configuration::updateValue('PS_PTOOLTIP_DAYS', intval($_POST['ps_ptooltip_days']));
-			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', intval($_POST['ps_ptooltip_lifetime']));
+			Configuration::updateValue('PS_PTOOLTIP_PEOPLE', intval(Tools::getValue('ps_ptooltip_people')));
+			Configuration::updateValue('PS_PTOOLTIP_DATE_CART', intval(Tools::getValue('ps_ptooltip_date_cart')));
+			Configuration::updateValue('PS_PTOOLTIP_DATE_ORDER', intval(Tools::getValue('ps_ptooltip_date_order')));
+			Configuration::updateValue('PS_PTOOLTIP_DAYS', intval(Tools::getValue('ps_ptooltip_days')));
+			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', intval(Tools::getValue('ps_ptooltip_lifetime')));
+			
+			echo $this->displayConfirmation($this->l('Settings updated'));
 		}
 
 		/* Configuration form */
