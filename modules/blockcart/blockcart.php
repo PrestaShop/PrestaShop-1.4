@@ -27,7 +27,7 @@ class BlockCart extends Module
 		else
 			$currency = new Currency(intval($params['cart']->id_currency));
 		if (!Validate::isLoadedObject($currency))
-			$currency = new Currency(intval(Configuration::get('PS_DEFAULT_CURRENCY')));
+			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$taxCalculationMethod = $params['cart']->id_customer ? Group::getPriceDisplayMethod(intval($params['cart']->id_customer)) : Group::getDefaultPriceDisplayMethod();
 
 		$products = $params['cart']->getProducts(true);
