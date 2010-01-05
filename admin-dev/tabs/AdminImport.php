@@ -672,6 +672,9 @@ class AdminImport extends AdminTab
 			$langFieldError = $product->validateFieldsLang(UNFRIENDLY_ERROR, true);
 			if ($fieldError === true AND $langFieldError === true)
 			{
+				// check quantity
+				if ($product->quantity == NULL)
+					$product->quantity = 0; 
 				// If id product AND id product already in base, trying to update
 				if ($product->id AND Product::existsInDatabase(intval($product->id)))
 				{
