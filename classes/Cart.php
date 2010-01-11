@@ -612,7 +612,8 @@ class		Cart extends ObjectModel
 			$order_total += $total_price;
 		}
 		$order_total_products = $order_total;
-		if ($type == 2) $order_total = 0;
+		if ($type == 2)
+			$order_total = 0;
 
 		// Wrapping Fees
 		$wrapping_fees = 0;
@@ -643,21 +644,20 @@ class		Cart extends ObjectModel
 							foreach($products AS $product)
 							{
 								$categories = Discount::getCategories($discount->id);
-								if(count($categories))
-									if (Product::idIsOnCategoryId($product['id_product'], $categories))
-									{
-										if($type == 2)
-											$order_total -= $shipping_fees;
-										$shipping_fees = 0;
-										break;
-									}
+								if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))
+								{
+									if($type == 2)
+										$order_total -= $shipping_fees;
+									$shipping_fees = 0;
+									break;
+								}
 							}
 					}
 				}
 				/* Secondly applying all vouchers to the correct amount */
 				foreach ($discounts AS $discount)
 					if ($discount->id_discount_type != 3)
-						$order_total -= floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes)));
+						$order_total -= Tools::ceilf(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes))), 2);
 			}
 		}
 		if ($type == 5) return $shipping_fees;
@@ -777,7 +777,7 @@ class		Cart extends ObjectModel
 			else
 				$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 		}
-		
+		$shipping_cost = Tools::convertPrice($shipping_cost);
 		// Apply tax
 		if (isset($carrierTax))
 			 $shipping_cost *= 1 + ($carrierTax / 100);

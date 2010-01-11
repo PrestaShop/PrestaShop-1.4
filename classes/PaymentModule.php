@@ -103,13 +103,13 @@ abstract class PaymentModule extends Module
 			$order->gift = intval($cart->gift);
 			$order->gift_message = $cart->gift_message;
 			$currency = new Currency($order->id_currency);
-			$amountPaid = !$dont_touch_amount ? Tools::ceilf(floatval(Tools::convertPrice(floatval($amountPaid), $currency)), 2) : $amountPaid;
+			$amountPaid = !$dont_touch_amount ? Tools::ceilf(floatval($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
-			$order->total_products = floatval(Tools::convertPrice(floatval($cart->getOrderTotal(false, 1)), $currency));
-			$order->total_discounts = floatval(Tools::convertPrice(floatval(abs($cart->getOrderTotal(true, 2))), $currency));
-			$order->total_shipping = floatval(Tools::convertPrice(floatval($cart->getOrderShippingCost()), $currency));
-			$order->total_wrapping = floatval(Tools::convertPrice(floatval(abs($cart->getOrderTotal(true, 6))), $currency));
-			$order->total_paid = floatval(Tools::ceilf(floatval(Tools::convertPrice(floatval($cart->getOrderTotal(true, 3)), $currency)), 2));
+			$order->total_products = floatval($cart->getOrderTotal(false, 1));
+			$order->total_discounts = floatval(abs($cart->getOrderTotal(true, 2)));
+			$order->total_shipping = floatval($cart->getOrderShippingCost());
+			$order->total_wrapping = floatval(abs($cart->getOrderTotal(true, 6)));
+			$order->total_paid = floatval(Tools::ceilf(floatval($cart->getOrderTotal(true, 3)), 2));
 			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;
@@ -156,8 +156,8 @@ abstract class PaymentModule extends Module
 							$outOfStock = true;						
 						Hook::updateQuantity($product, $order);
 					}
-					$price = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']), $currency);
-					$price_wt = Tools::convertPrice(Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']), $currency);
+					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']);
+					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']);
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';

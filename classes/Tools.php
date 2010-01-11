@@ -182,15 +182,14 @@ class Tools
 	* Return price with currency sign for a given product
 	*
 	* @param float $price Product price
-* @param object $currency Current currency object
-	* @param boolean $convert Need to convert currency sign to UTF8 (for FPDF), (optional)
-	* @return string Price with currency sign
+	* @param object $currency Current currency (object, id_currency, NULL => getCurrent())
+	* @return string Price correctly formated (sign, decimal separator...)
 	*/
-	static public function displayPrice($price, $currency, $no_utf8 = false, $convert = true)
+	static public function displayPrice($price, $currency = NULL, $no_utf8 = false)
 	{
+		if ($currency === NULL)
+			$currency = Currency::getCurrent();
 		/* if you modified this function, don't forget to modify the Javascript function formatCurrency (in tools.js) */
-		if ($convert)
-			$price = self::convertPrice($price, $currency);
 		if (is_int($currency))
 			$currency = new Currency(intval($currency));
 		$c_char = (is_array($currency) ? $currency['sign'] : $currency->sign);
@@ -242,8 +241,10 @@ class Tools
 	* @param float $price Product price
 	* @param object $currency Current currency object
 	*/
-	static public function convertPrice($price, $currency)
+	static public function convertPrice($price, $currency = NULL)
 	{
+		if ($currency === NULL)
+			$currency = Currency::getCurrent();
 		$c_id = (is_array($currency) ? $currency['id_currency'] : $currency->id);
 		$c_rate = (is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate);
 		if ($c_id != intval(Configuration::get('PS_CURRENCY_DEFAULT')))

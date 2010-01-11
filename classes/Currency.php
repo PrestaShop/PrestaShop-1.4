@@ -48,6 +48,9 @@ class		Currency extends ObjectModel
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
 
+	/** @var Currency Current currency */
+	static private	$current = NULL;
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -221,6 +224,19 @@ class		Currency extends ObjectModel
 		foreach ($currencies as $currency)
 			if ($currency->iso_code != $defaultCurrency->iso_code)
 				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
+	}
+
+	static public function getCurrent()
+	{
+		global $cookie;
+		if (!self::$current)
+		{
+			if (isset($cookie->id_currency) AND $cookie->id_currency)
+				self::$current = new Currency(intval($cookie->id_currency));
+			else
+				self::$current = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+		}
+		return self::$current;
 	}
 }
 

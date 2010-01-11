@@ -1353,7 +1353,7 @@ class		Product extends ObjectModel
 		'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.intval($id_product_attribute) : '').'
 		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
 		WHERE p.`id_product` = '.intval($id_product));
-		$price = $result['price'];
+		$price = Tools::convertPrice(floatval($result['price']));
 
 		// Exclude tax
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
@@ -1365,9 +1365,9 @@ class		Product extends ObjectModel
 			$price = $price * (1 + ($tax / 100));
 
 		// Attribute price
-		$attribute_price = $usetax ? Tools::ceilf($result['attribute_price'], 2) : ($result['attribute_price'] / (1 + (($tax ? $tax : $result['rate']) / 100)));
-		if (isset($result['attribute_price']))
-			$price += $attribute_price;
+		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0);
+		$attribute_price = $usetax ? Tools::ceilf($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
+		$price += $attribute_price;
 		if ($only_reduc OR $usereduc)
 			$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
 
@@ -1430,8 +1430,8 @@ class		Product extends ObjectModel
 			return false;
 		$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
 		if (!Tax::excludeTaxeOption() || $notax)
-			return ($res['price'] * (1 + $tax / 100));
-		return ($res['price']);
+			return (Tools::convertPrice($res['price']) * (1 + $tax / 100));
+		return (Tools::convertPrice($res['price']));
 	}
 
 	/**
