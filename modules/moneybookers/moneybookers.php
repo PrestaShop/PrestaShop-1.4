@@ -110,7 +110,7 @@ class MoneyBookers extends PaymentModule
 
 		$lang = new Language(intval($cookie->id_lang));
 		if ($lang->iso_code != 'fr' AND $lang->iso_code != 'en')
-			$lang->iso_code != 'en';
+			$lang->iso_code = 'en';
 
 		/* Display settings form */
 		$output .= '

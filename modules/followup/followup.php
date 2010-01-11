@@ -1,7 +1,5 @@
 <?php
 
-ini_set('display_errors', 'on');
-
 class Followup extends Module
 {
 	function __construct()
