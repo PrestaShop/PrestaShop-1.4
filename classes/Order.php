@@ -555,7 +555,7 @@ class		Order extends ObjectModel
 		{
 			$quantity = intval($row['product_quantity']);
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$total += Tools::ceilf(Tools::ceilf(floatval($row['product_price']), 2) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
+				$total += Tools::ceilf(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
 			else
 				$total += Tools::ceilf(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
 		}

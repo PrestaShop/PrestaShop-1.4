@@ -597,7 +597,7 @@ class		Cart extends ObjectModel
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
 				// Here taxes are computed only once the quantity has been applied to the product price
-				$price = Tools::ceilf(Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']), 2);
+				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']);
 				$total_price = $price * intval($product['quantity']);
 				if ($withTaxes)
 					$total_price = Tools::ceilf($total_price * (1 + floatval($product['rate']) / 100), 2);
