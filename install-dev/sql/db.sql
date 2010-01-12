@@ -1220,7 +1220,7 @@ CREATE TABLE `PREFIX_tag` (
 
 CREATE TABLE `PREFIX_tax` (
   `id_tax` int(10) unsigned NOT NULL auto_increment,
-  `rate` float NOT NULL,
+  `rate` DECIMAL(10, 3) NOT NULL,
   PRIMARY KEY  (`id_tax`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

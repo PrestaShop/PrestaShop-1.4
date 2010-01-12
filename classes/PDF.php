@@ -824,7 +824,7 @@ class PDF extends PDF_PageGroup
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 				$this->Cell($w[0], $lineSize, self::l('Products'), 0, 0, 'R');
-				$this->Cell($w[1], $lineSize, number_format($tax_rate, 2, ',', ' '), 0, 0, 'R');
+				$this->Cell($w[1], $lineSize, number_format($tax_rate, 3, ',', ' '), 0, 0, 'R');
 				$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
 				$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice($vat, self::$currency, true, false)), 0, 0, 'R');
 				$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
@@ -840,7 +840,7 @@ class PDF extends PDF_PageGroup
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Carrier'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($carrierTax->rate, 2, ',', ' '), 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($carrierTax->rate, 3, ',', ' '), 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_shipping - $priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
@@ -855,7 +855,7 @@ class PDF extends PDF_PageGroup
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Wrapping'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($taxRate, 2, ',', ' '), 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($taxRate, 3, ',', ' '), 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');

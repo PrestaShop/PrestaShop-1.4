@@ -43,6 +43,7 @@ ALTER TABLE `PREFIX_product_attribute_combination` ADD INDEX `id_product_attribu
 ALTER TABLE `PREFIX_orders` ADD INDEX `invoice_number` (`invoice_number`);
 ALTER TABLE `PREFIX_product_tag` ADD INDEX `id_tag` (`id_tag`);
 ALTER TABLE `PREFIX_cms_lang` CHANGE `id_cms` `id_cms` INT(10) UNSIGNED NOT NULL;
+ALTER TABLE `PREFIX_tax` CHANGE `rate` `rate` DECIMAL(10, 3) NOT NULL;
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
 
