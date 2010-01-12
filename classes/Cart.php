@@ -571,7 +571,7 @@ class		Cart extends ObjectModel
 			die(Tools::displayError());
 		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
 	}
-	
+
 	public function getOrderTotal($withTaxes = true, $type = 3)
 	{
 		if (!$this->id)
@@ -607,7 +607,7 @@ class		Cart extends ObjectModel
 				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']);
 				if ($withTaxes)
 					$price = Tools::ceilf($price, 2);
-				$total_price = $withTaxes ? Tools::ceilf($price * intval($product['quantity']), 2) : Tools::floorf($price * intval($product['quantity']), 2);
+				$total_price = $withTaxes ? Tools::ceilf($price * intval($product['quantity']), 2) : Tools::ceilf($price * intval($product['quantity']), 2);
 			}
 			$order_total += $total_price;
 		}

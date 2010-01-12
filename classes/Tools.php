@@ -229,10 +229,13 @@ class Tools
 
 	static public function displayPriceSmarty($params, &$smarty)
 	{
-		$currency = new Currency(intval($params['currency']));
-		if (Validate::isLoadedObject($currency))
-			return self::displayPrice($params['price'], $currency, false, false);
-		return 0;
+		if (array_key_exists('currency', $params))
+		{
+			$currency = new Currency(intval($params['currency']));
+			if (Validate::isLoadedObject($currency))
+				return self::displayPrice($params['price'], $currency, false);
+		}
+		return self::displayPrice($params['price']);
 	}
 
 	/**

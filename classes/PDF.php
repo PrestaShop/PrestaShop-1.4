@@ -366,7 +366,7 @@ class PDF extends PDF_PageGroup
 		$pdf->SetAutoPageBreak(true, 35);
 		$pdf->StartPageGroup();
 
-		self::$currency = new Currency(intval(self::$order->id_currency));
+		self::$currency = Currency::getCurrencyInstance(intval(self::$order->id_currency));
 
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
@@ -457,7 +457,6 @@ class PDF extends PDF_PageGroup
 			$pdf->DiscTab();
 			$priceBreakDown = array();
 			$pdf->priceBreakDownCalculation($priceBreakDown);
-
 			/*
 			 * Display price summation
 			 */
@@ -714,6 +713,7 @@ class PDF extends PDF_PageGroup
 			/* With tax */
 			$product['priceWithTax'] = (self::$_priceDisplayMethod == PS_TAX_INC ? Tools::ceilf(floatval($product['product_price']) * (1 + floatval($product['tax_rate']) / 100), 2) : Tools::ceilf($product['product_price'], 2) * (1 + (floatval($product['tax_rate']) / 100))) * intval($product['product_quantity']);
 		}
+
 		$priceBreakDown['totalsProductsWithoutTax'] = $priceBreakDown['totalsWithoutTax'];
 		$priceBreakDown['totalsProductsWithTax'] = $priceBreakDown['totalsWithTax'];
 
@@ -749,8 +749,7 @@ class PDF extends PDF_PageGroup
 
 		// Display product tax
 		foreach ($taxes AS $tax_rate => &$vat)
-			if ($tax_rate != '0.00')
-			{
+		{
 				$vat = Tools::ceilf($vat, 2);
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
 				{
@@ -769,14 +768,6 @@ class PDF extends PDF_PageGroup
 				$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
 				$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
 				$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
-			}
-		// If there is no tax at all
-		if (array_key_exists('0.000', $priceBreakDown['totalsWithoutTax']))
-		{
-			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithoutTax']['0.000'];
-			$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax']['0.000'];
-			$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax']['0.000'];
-			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithoutTax']['0.000'];
 		}
 		$priceBreakDown['taxes'] = $taxes;
 		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : 0;

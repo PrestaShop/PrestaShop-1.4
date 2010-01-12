@@ -50,6 +50,8 @@ class		Currency extends ObjectModel
 
 	/** @var Currency Current currency */
 	static private	$current = NULL;
+	/** @var array Currency cache */
+	static private	$currencies = array();
 
 	public function getFields()
 	{
@@ -237,6 +239,13 @@ class		Currency extends ObjectModel
 				self::$current = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		}
 		return self::$current;
+	}
+
+	static public function getCurrencyInstance($id)
+	{
+		if (!array_key_exists($id, self::$currencies))
+			self::$currencies[intval($id)] = new Currency(intval($id));
+		return self::$currencies[intval($id)];
 	}
 }
 
