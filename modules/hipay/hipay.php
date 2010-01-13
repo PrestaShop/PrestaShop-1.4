@@ -16,7 +16,7 @@ class Hipay extends PaymentModule
 		parent::__construct();
 		
 		$this->displayName = $this->l('Hipay');
-		$this->description = '';
+		$this->description = $this->l('Accepts payments by Hipay');
 	}
    
 	public function	install()
