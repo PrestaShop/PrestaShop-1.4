@@ -256,7 +256,7 @@ CREATE TABLE `PREFIX_connections` (
   `id_connections` int(10) unsigned NOT NULL auto_increment,
   `id_guest` int(10) unsigned NOT NULL,
   `id_page` int(10) unsigned NOT NULL,
-  `ip_address` varchar(16) default NULL,
+  `ip_address` int UNSIGNED NULL DEFAULT NULL,
   `date_add` datetime NOT NULL,
   `http_referer` varchar(255) default NULL,
   PRIMARY KEY  (`id_connections`),
