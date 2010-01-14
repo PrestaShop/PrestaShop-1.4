@@ -221,7 +221,7 @@ class AdminModules extends AdminTab
 		$serialModules = '';
 		$modules = Module::getModulesOnDisk();
 		foreach ($modules AS $module)
-			$serialModules .= $module->name.' '.$module->version."\n";
+			$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
 		$serialModules = urlencode($serialModules);
 
 		$this->displayJavascript();
