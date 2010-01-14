@@ -24,7 +24,7 @@ class Tools
 	{
 		$str = 'abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		for ($i = 0, $passwd = ''; $i < $length; $i++)
-			$passwd .= Tools::substr($str, mt_rand(0, Tools::strlen($str) - 1), 1);
+			$passwd .= self::substr($str, mt_rand(0, self::strlen($str) - 1), 1);
 		return $passwd;
 	}
 
@@ -119,8 +119,8 @@ class Tools
 		/* Automatically detect language if not already defined */
 		if (!$cookie->id_lang AND isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
-			$array = explode(',', Tools::strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
-			if (Tools::strlen($array[0]) > 2)
+			$array = explode(',', self::strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']));
+			if (self::strlen($array[0]) > 2)
 			{
 				$tab = explode('-', $array[0]);
 				$string = $tab[0];
@@ -150,7 +150,7 @@ class Tools
 	{
 		global $cookie;
 
-		if ($id_lang = intval(Tools::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
+		if ($id_lang = intval(self::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
 			$cookie->id_lang = $id_lang;
 	}
 
@@ -200,7 +200,7 @@ class Tools
 		$ret = 0;
 		if (($isNegative = ($price < 0)))
 			$price *= -1;
-		$price = Tools::ceilf($price, $c_decimals);
+		$price = self::ceilf($price, $c_decimals);
 		switch ($c_format)
 	 	{
 	 	 	/* X 0,000.00 */
@@ -264,7 +264,7 @@ class Tools
 	*/
 	static public function dateFormat($params, &$smarty)
 	{
-		return Tools::displayDate($params['date'], $smarty->ps_language->id, $params['full']);
+		return self::displayDate($params['date'], $smarty->ps_language->id, $params['full']);
 	}
 
 	/**
@@ -280,7 +280,7 @@ class Tools
 	 	if (!$date OR !strtotime($date))
 	 		return $date;
 		if (!Validate::isDate($date) OR !Validate::isBool($full))
-			die (Tools::displayError('Invalid date'));
+			die (self::displayError('Invalid date'));
 	 	$tmpTab = explode($separator, substr($date, 0, 10));
 	 	$hour = ' '.substr($date, -8);
 
@@ -422,7 +422,7 @@ class Tools
 		if (!(isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 		 	/* Products specifics meta tags */
-			if ($id_product = Tools::getValue('id_product'))
+			if ($id_product = self::getValue('id_product'))
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description_short`
@@ -437,7 +437,7 @@ class Tools
 			}
 
 			/* Categories specifics meta tags */
-			elseif ($id_category = Tools::getValue('id_category'))
+			elseif ($id_category = self::getValue('id_category'))
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
@@ -452,7 +452,7 @@ class Tools
 			}
 
 			/* Manufacturers specifics meta tags */
-			elseif ($id_manufacturer = Tools::getValue('id_manufacturer'))
+			elseif ($id_manufacturer = self::getValue('id_manufacturer'))
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
@@ -468,7 +468,7 @@ class Tools
 			}
 
 			/* Suppliers specifics meta tags */
-			elseif ($id_supplier = Tools::getValue('id_supplier'))
+			elseif ($id_supplier = self::getValue('id_supplier'))
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
@@ -484,7 +484,7 @@ class Tools
 			}
 
 			/* CMS specifics meta tags */
-			elseif ($id_cms = Tools::getValue('id_cms'))
+			elseif ($id_cms = self::getValue('id_cms'))
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
@@ -499,7 +499,7 @@ class Tools
 		}
 
 		/* Default meta tags */
-		return Tools::getHomeMetaTags($id_lang);
+		return self::getHomeMetaTags($id_lang);
 	}
 
 	/**
@@ -553,9 +553,9 @@ class Tools
 	{
 		global $cookie;
 		if ($page === true)
-			return (Tools::encrypt($cookie->id_customer.$cookie->passwd.$_SERVER['SCRIPT_NAME']));
+			return (self::encrypt($cookie->id_customer.$cookie->passwd.$_SERVER['SCRIPT_NAME']));
 		else
-			return (Tools::encrypt($cookie->id_customer.$cookie->passwd.$page));
+			return (self::encrypt($cookie->id_customer.$cookie->passwd.$page));
 	}
 
 	/**
@@ -565,7 +565,7 @@ class Tools
 	*/
 	static public function getAdminToken($string)
 	{
-		return !empty($string) ? Tools::encrypt($string) : false;
+		return !empty($string) ? self::encrypt($string) : false;
 	}
 
 	/**
@@ -579,7 +579,7 @@ class Tools
 		global $link, $cookie;
 		$category = new Category(intval($id_category), intval($cookie->id_lang));
 		if (!Validate::isLoadedObject($category))
-			die (Tools::displayError());
+			die (self::displayError());
 		if ($category->id == 1)
 			return '<span class="navigation_end">'.$path.'</span>';
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
@@ -589,15 +589,15 @@ class Tools
 		{
 			$displayedPath = '';
 			if ($category->active)
-				$displayedPath .= '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">';
+				$displayedPath .= '<a href="'.self::safeOutput($link->getCategoryLink($category)).'">';
 			$displayedPath .= htmlentities($category_name, ENT_NOQUOTES, 'UTF-8');
 			if ($category->active)
 				$displayedPath .= '</a>';
 			$displayedPath .= ' '.$pipe.' '.$path;
 		}
 		else
-			$displayedPath = ($linkOntheLastItem ? '<a href="'.Tools::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
-		return Tools::getPath(intval($category->id_parent), $displayedPath);
+			$displayedPath = ($linkOntheLastItem ? '<a href="'.self::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
+		return self::getPath(intval($category->id_parent), $displayedPath);
 	}
 
 	static public function getFullPath($id_category, $end)
@@ -607,7 +607,7 @@ class Tools
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 		$category = new Category(intval($id_category), intval($cookie->id_lang));
 		if (!Validate::isLoadedObject($category))
-			die(Tools::displayError());
+			die(self::displayError());
 		if ($id_category == 1)
 			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
 		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).' <span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
@@ -669,7 +669,7 @@ class Tools
 	{
 		global $cookie;
 		if (!$translations OR !is_array($translations))
-			die(Tools::displayError());
+			die(self::displayError());
 		$iso = strtoupper(Language::getIsoById($cookie->id_lang));
 		$lang = key_exists($iso, $translations) ? $translations[$iso] : false;
 		return (($lang AND is_array($lang) AND key_exists($key, $lang)) ? stripslashes($lang[$key]) : $key);
@@ -678,13 +678,13 @@ class Tools
 	static public function link_rewrite($str, $utf8_decode = false)
 	{
 		$purified = '';
-		$length = Tools::strlen($str);
+		$length = self::strlen($str);
 		if ($utf8_decode)
 			$str = utf8_decode($str);
 		for ($i = 0; $i < $length; $i++)
 		{
-			$char = Tools::substr($str, $i, 1);
-			if (Tools::strlen(htmlentities($char)) > 1)
+			$char = self::substr($str, $i, 1);
+			if (self::strlen(htmlentities($char)) > 1)
 			{
 				$entity = htmlentities($char, ENT_COMPAT, 'UTF-8');
 				$purified .= $entity{1};
@@ -711,10 +711,10 @@ class Tools
 	** For other purposes use the smarty function instead */
 	static public function truncate($str, $maxLen, $suffix = '...')
 	{
-	 	if (Tools::strlen($str) <= $maxLen)
+	 	if (self::strlen($str) <= $maxLen)
 	 		return $str;
 	 	$str = utf8_decode($str);
-	 	return (utf8_encode(substr($str, 0, $maxLen - Tools::strlen($suffix)).$suffix));
+	 	return (utf8_encode(substr($str, 0, $maxLen - self::strlen($suffix)).$suffix));
 	}
 
 	/**
@@ -756,7 +756,7 @@ class Tools
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
-		    $date .= ' ' . Tools::hourGenerate(0, 0, 0);
+		    $date .= ' ' . self::hourGenerate(0, 0, 0);
 		return $date;
 	}
 
@@ -764,7 +764,7 @@ class Tools
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
-		    $date .= ' ' . Tools::hourGenerate(23, 59, 59);
+		    $date .= ' ' . self::hourGenerate(23, 59, 59);
 		return $date;
 	}
 
@@ -812,13 +812,21 @@ class Tools
 		if (is_array($str))
 			return false;
 		if (function_exists('mb_substr'))
-			return mb_substr($str, intval($start), ($length === false ? Tools::strlen($str) : intval($length)), $encoding);
+			return mb_substr($str, intval($start), ($length === false ? self::strlen($str) : intval($length)), $encoding);
 		return substr($str, $start, ($length === false ? strlen($str) : intval($length)));
 	}
 
 	static function ucfirst($str)
 	{
-		return self::strtoupper(Tools::substr($str, 0, 1)).Tools::substr($str, 1);
+		return self::strtoupper(self::substr($str, 0, 1)).self::substr($str, 1);
+	}
+	
+	// Required for usort(product_features)
+	static function naturalSortByName($a, $b) 
+	{
+		if (!is_array($a) && !is_array($b))
+			return false;
+		return strnatcmp(self::strtolower($a['name']), self::strtolower($b['name']));
 	}
 
 	static public function orderbyPrice(&$array, $orderWay)
