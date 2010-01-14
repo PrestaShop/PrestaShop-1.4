@@ -200,7 +200,7 @@ abstract class PaymentModule extends Module
 						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
 						'.floatval($tax).',
 						'.floatval($product['ecotax']).',
-						'.(bool)QuantityDiscount::getDiscountFromQuantity(intval($product['id_product']), intval($product['cart_quantity'])).',
+						'.(int)QuantityDiscount::getDiscountFromQuantity(intval($product['id_product']), intval($product['cart_quantity'])).',
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 
