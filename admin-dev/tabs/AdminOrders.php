@@ -425,7 +425,7 @@ class AdminOrders extends AdminTab
 			' - <a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /></a>';
 		echo '</h2>';
 		
-		/* Display current state */
+		/* Display current status */
 		echo '
 			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
 				<tr>
@@ -434,7 +434,7 @@ class AdminOrders extends AdminTab
 					<th>'.stripslashes($row['ostate_name']).'</th>
 					<th>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</th>
 				</tr>';
-			/* Display previous states */
+			/* Display previous status */
 			foreach ($history AS $row)
 			{
 				echo '
@@ -449,7 +449,7 @@ class AdminOrders extends AdminTab
 			</table>
 			<br />';
 
-		/* Display state form */
+		/* Display status form */
 		echo '
 			<form action="'.$currentIndex.'&view'.$this->table.'&token='.$this->token.'" method="post" style="text-align:center;">
 				<select name="id_order_state">';
@@ -461,7 +461,7 @@ class AdminOrders extends AdminTab
 				<input type="hidden" name="id_order" value="'.$order->id.'" />
 				<input type="submit" name="submitState" value="'.$this->l('Change').'" class="button" />
 			</form>';
-		
+
 		/* Display customer information */
 		echo '
 		<br />
@@ -473,7 +473,7 @@ class AdminOrders extends AdminTab
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
 			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />
 		</fieldset>';
-		
+
 		/* Display sources */
 		if (sizeof($sources))
 		{

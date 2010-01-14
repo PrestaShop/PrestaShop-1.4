@@ -32,11 +32,6 @@ class BlockCart extends Module
 		$usetax = $taxCalculationMethod == PS_TAX_EXC ? false : true;
 
 		$products = $params['cart']->getProducts(true);
-		foreach ($products as $k => $product)
-		{
-			$price = Product::getPriceStatic($product['id_product'], $usetax, ((isset($product['id_product_attribute']) AND !empty($product['id_product_attribute'])) ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, intval($product['cart_quantity']));
-			$products[$k]['real_price'] = Tools::ceilf($price, 2) * intval($product['cart_quantity']);
-		}
 
 		$smarty->assign(array(
 			'products'=> $products,

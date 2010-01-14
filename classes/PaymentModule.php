@@ -141,7 +141,7 @@ abstract class PaymentModule extends Module
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
@@ -149,15 +149,15 @@ abstract class PaymentModule extends Module
 				foreach ($products AS $key => $product)
 				{
 					$productQuantity = intval(Product::getQuantity(intval($product['id_product']), ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL)));
-					$quantityInStock = ($productQuantity - intval($product['quantity']) < 0) ? $productQuantity : intval($product['quantity']);
+					$quantityInStock = ($productQuantity - intval($product['cart_quantity']) < 0) ? $productQuantity : intval($product['cart_quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
 						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
-							$outOfStock = true;						
+							$outOfStock = true;
 						Hook::updateQuantity($product, $order);
 					}
-					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']);
-					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['quantity']);
+					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity']);
+					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity']);
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
@@ -181,7 +181,7 @@ abstract class PaymentModule extends Module
 
 					// Quantity discount
 					$reduc = 0.0;
-					if ($product['quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['quantity'])))
+					if ($product['cart_quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['cart_quantity'])))
 						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value);
 
 					// Query
@@ -189,7 +189,7 @@ abstract class PaymentModule extends Module
 						'.intval($product['id_product']).',
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
-						'.intval($product['quantity']).',
+						'.intval($product['cart_quantity']).',
 						'.$quantityInStock.',
 						'.floatval($price).',
 						'.floatval($reduc).',
@@ -200,6 +200,7 @@ abstract class PaymentModule extends Module
 						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
 						'.floatval($tax).',
 						'.floatval($product['ecotax']).',
+						'.(bool)QuantityDiscount::getDiscountFromQuantity(intval($product['id_product']), intval($product['cart_quantity'])).',
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 
@@ -224,8 +225,8 @@ abstract class PaymentModule extends Module
 							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
 							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
 							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
-							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['quantity']) - $customizationQuantity).'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['quantity']) - $customizationQuantity) * $priceWithTax, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['cart_quantity']) - $customizationQuantity).'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $priceWithTax, $currency, false, false).'</td>
 						</tr>';
 				} // end foreach ($products)
 				$query = rtrim($query, ',');
@@ -266,7 +267,7 @@ abstract class PaymentModule extends Module
 					Hook::newOrder($cart, $order, $customer, $currency, $orderStatus);
 					foreach ($cart->getProducts() as $product)
 						if ($orderStatus->logable)
-							ProductSale::addProductSale(intval($product['id_product']), intval($product['quantity']));
+							ProductSale::addProductSale(intval($product['id_product']), intval($product['cart_quantity']));
 				}				
 
 				// Set order state in order history ONLY even if the "out of stock" status has not been yet reached

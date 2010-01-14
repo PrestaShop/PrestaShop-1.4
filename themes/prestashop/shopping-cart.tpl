@@ -53,7 +53,7 @@
 				<th class="cart_description item">{l s='Description'}</th>
 				<th class="cart_ref item">{l s='Ref.'}</th>
 				<th class="cart_availability item">{l s='Avail.'}</th>
-				<th class="cart_unit item">{l s='Unit price'}</th>
+				<th class="cart_unit item">{l s='Unit price'}<sup>{l s='*'}</sup></th>
 				<th class="cart_quantity item">{l s='Qty'}</th>
 				<th class="cart_total last_item">{l s='Total'}</th>
 			</tr>
@@ -186,6 +186,7 @@
 		</tbody>
 	{/if}
 	</table>
+	<p><sup>{l s='*'}</sup> {l s='When discount quantity applies, the unit price may be rounded up to 2 decimals'}</p>
 </div>
 
 {if $voucherAllowed}

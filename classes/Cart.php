@@ -236,12 +236,12 @@ class		Cart extends ObjectModel
 		GROUP BY unique_id
 		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
-
-		/* Modify SQL results */
-		$products = array();
-
 		if (empty($result))
 			return array();
+
+		/* Modify SQL results */
+		$this->_products = array();
+
 		foreach ($result AS $k => $row)
 		{
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
@@ -249,20 +249,19 @@ class		Cart extends ObjectModel
 			$row['stock_quantity'] = intval($row['quantity']);
 			if ($row['id_product_attribute'])
 				$row['weight'] = $row['weight_attribute'];
-			$row['quantity'] = intval($row['cart_quantity']);
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
-				$row['price'] = Tools::ceilf(Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 6, NULL, false, true, intval($row['quantity'])), 2); // Here taxes are computed only once the quantity has been applied to the product price
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity'])); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = 0.0;
-				$row['total_wt'] = $row['price'] * floatval($row['quantity']) * (1 + floatval($row['rate']) / 100);
+				$row['total_wt'] = Tools::ceilf($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
 			}
 			else
 			{
-				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['quantity']);
-				$row['price_wt'] = Tools::ceilf(Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 6, NULL, false, true, $row['quantity']), 2);
-				$row['total_wt'] = $row['price_wt'] * intval($row['quantity']);
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity']);
+				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity']);
+				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
 			}
-			$row['total'] = Tools::ceilf($row['price'] * intval($row['quantity']), 2);
+			$row['total'] = Tools::ceilf($row['price'] * intval($row['cart_quantity']), 2);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
@@ -293,10 +292,8 @@ class		Cart extends ObjectModel
 				$row['attributes_small'] = $attributesListSmall;
 				$row['stock_quantity'] = $row['quantity_attribute'];
 			}
-			$products[] = $row;
+			$this->_products[] = $row;
 		}
-		$this->_products = $products;
-		
 		return $this->_products;
 	}
 
@@ -597,17 +594,15 @@ class		Cart extends ObjectModel
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
 				// Here taxes are computed only once the quantity has been applied to the product price
-				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']);
-				$total_price = $price * intval($product['quantity']);
+				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity']);
+				$total_price = $price * intval($product['cart_quantity']);
 				if ($withTaxes)
 					$total_price = Tools::ceilf($total_price * (1 + floatval($product['rate']) / 100), 2);
 			}
 			else
 			{
-				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['quantity']);
-				if ($withTaxes)
-					$price = Tools::ceilf($price, 2);
-				$total_price = $withTaxes ? Tools::ceilf($price * intval($product['quantity']), 2) : Tools::ceilf($price * intval($product['quantity']), 2);
+				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity']);
+				$total_price = Tools::ceilf($price * intval($product['cart_quantity']), 2);
 			}
 			$order_total += $total_price;
 		}
@@ -684,9 +679,7 @@ class		Cart extends ObjectModel
 		$products = $this->getProducts();
 		$discounts = $this->getDiscounts(true);
 		if ($discounts)
-		{
 			foreach ($discounts AS $id_discount)
-			{
 				if ($id_discount['id_discount_type'] == 3)
 				{				
 					if ($id_discount['minimal'] > 0)
@@ -705,8 +698,6 @@ class		Cart extends ObjectModel
 					else
 						return 0;
 				}
-			}
-		}
 
 		// Order total without fees
 		$orderTotal = $this->getOrderTotal(true, 7);
@@ -953,7 +944,7 @@ class		Cart extends ObjectModel
 	{
 		if (Configuration::get('PS_STOCK_MANAGEMENT'))
 			foreach ($this->getProducts() AS $product)
-			    if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['quantity']))
+			    if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']))
 			    	return false;
 		return true;
 	}

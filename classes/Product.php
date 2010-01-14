@@ -1326,7 +1326,7 @@ class		Product extends ObjectModel
 	* @param boolean $tax With taxes or not (optional)
 	* @param integer $id_product_attribute Product attribute id (optional)
 	* @param integer $decimals Number of decimals (optional)
-	* @param integer $divisor Util when paying many time without fees (optional)
+	* @param integer $divisor Useful when paying many time without fees (optional)
 	* @return float Product price
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false)
@@ -1390,7 +1390,7 @@ class		Product extends ObjectModel
 		}
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 		{
-			$discount_qty_price =  QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
 			if (!$usetax)
 				$discount_qty_price /= (1 + ($tax / 100));
 			$price -= $discount_qty_price;
@@ -1399,8 +1399,10 @@ class		Product extends ObjectModel
 		// Group reduction
 		if ($id_customer)
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
-		$price = number_format($price, $decimals, '.', '');
-		self::$_prices[$cacheId] = Tools::ceilf(($divisor AND $divisor != NULL) ? $price/$divisor : $price, $decimals);
+		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
+		if ($quantity <= 1 OR !$qtyD)
+			$price = Tools::ceilf($price, $decimals);
+		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
 
@@ -1526,7 +1528,7 @@ class		Product extends ObjectModel
 		if (self::isAvailableWhenOutOfStock($product['out_of_stock']) AND intval($result['quantity']) == 0)
 			return -1;
 
-		if ($result['quantity'] < $product['quantity'])
+		if ($result['quantity'] < $product['cart_quantity'])
 		{
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
@@ -1538,7 +1540,7 @@ class		Product extends ObjectModel
 
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product'.($product['id_product_attribute'] ? '_attribute' : '').'`
-		SET `quantity` = `quantity`-'.intval($product['quantity']).'
+		SET `quantity` = `quantity`-'.intval($product['cart_quantity']).'
 		WHERE `id_product` = '.intval($product['id_product']).
 		($product['id_product_attribute'] ? ' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
 		return true;

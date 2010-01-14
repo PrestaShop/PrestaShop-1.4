@@ -771,6 +771,7 @@ CREATE TABLE `PREFIX_order_detail` (
   `tax_name` varchar(16) NOT NULL,
   `tax_rate` DECIMAL(10, 3) NOT NULL DEFAULT '0.000',
   `ecotax` decimal(10,2) NOT NULL default '0.00',
+  `discount_quantity_applied` TINYINT(1) NOT NULL DEFAULT 0,
   `download_hash` varchar(255) default NULL,
   `download_nb` int(10) unsigned default '0',
   `download_deadline` datetime default '0000-00-00 00:00:00',

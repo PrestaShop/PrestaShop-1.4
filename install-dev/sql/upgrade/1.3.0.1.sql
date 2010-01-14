@@ -40,6 +40,8 @@ ALTER TABLE `PREFIX_tax` CHANGE `rate` `rate` DECIMAL(10, 3) NOT NULL;
 
 ALTER TABLE `PREFIX_connections` CHANGE `ip_address` `ip_address` INT UNSIGNED NULL DEFAULT NULL;
 
+ALTER TABLE `PREFIX_order_detail` ADD `discount_quantity_applied` TINYINT(1) NOT NULL DEFAULT 0 AFTER `ecotax`;
+
 /* ##################################### */
 /* 					CONTENTS					 */
 /* ##################################### */
@@ -67,3 +69,5 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('backOfficeFooter', 'Administration panel footer', NULL , '1');
 
 INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM ps_carrier c, ps_group g WHERE c.active = 1);
+
+INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES (NULL, 'PS_1_3_UPDATE_DATE', NOW(), '', '');

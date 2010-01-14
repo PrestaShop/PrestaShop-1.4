@@ -554,11 +554,10 @@ class		Order extends ObjectModel
         $total = 0;
 		foreach ($products AS $k => $row)
 		{
-			$quantity = intval($row['product_quantity']);
-			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$total += Tools::ceilf(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
-			else
-				$total += Tools::ceilf(floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1), 2) * $quantity;
+			$price = floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1);
+			if ($row['product_quantity'] <= 1 OR ($this->date_add > Configuration::get('PS_1_3_UPDATE_DATE') AND !$row['discount_quantity_applied']))
+				$price = Tools::ceilf($price, 2);
+			$total += $price * intval($row['product_quantity']);
 		}
 		return $total;
 	}
