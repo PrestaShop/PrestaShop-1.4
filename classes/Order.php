@@ -512,7 +512,8 @@ class		Order extends ObjectModel
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE DATE_ADD(invoice_date, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND invoice_date >= \''.pSQL($date_from).'\''
 		.($type ? ' AND '.pSQL(strval($type)).'_number != 0' : '')
-		.($id_customer ? ' AND id_customer = '.intval($id_customer) : ''));
+		.($id_customer ? ' AND id_customer = '.intval($id_customer) : '').
+		' ORDER BY invoice_date ASC');
 
 		$orders = array();
 		foreach ($result AS $order)
