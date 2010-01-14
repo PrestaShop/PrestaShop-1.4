@@ -68,6 +68,9 @@ class		Order extends ObjectModel
 	/** @var float Products total */
 	public 		$total_products;
 
+	/** @var float Products total tax excluded */
+	public 		$total_products_wt;
+
 	/** @var float Shipping total */
 	public 		$total_shipping;
 	
@@ -97,7 +100,7 @@ class		Order extends ObjectModel
 
 	protected $tables = array ('orders');
 
-	protected	$fieldsRequired = array('id_address_delivery', 'id_address_invoice', 'id_cart', 'id_currency', 'id_lang', 'id_customer', 'id_carrier', 'payment', 'total_paid', 'total_paid_real', 'total_products');
+	protected	$fieldsRequired = array('id_address_delivery', 'id_address_invoice', 'id_cart', 'id_currency', 'id_lang', 'id_customer', 'id_carrier', 'payment', 'total_paid', 'total_paid_real', 'total_products', 'total_products_wt');
 	protected	$fieldsSize = array('payment' => 32);
 	protected	$fieldsValidate = array(
 		'id_address_delivery' => 'isUnsignedId',
@@ -116,6 +119,7 @@ class		Order extends ObjectModel
 		'total_paid' => 'isPrice',
 		'total_paid_real' => 'isPrice',
 		'total_products' => 'isPrice',
+		'total_products_wt' => 'isPrice',
 		'total_shipping' => 'isPrice',
 		'total_wrapping' => 'isPrice',
 		'shipping_number' => 'isUrl'
@@ -148,6 +152,7 @@ class		Order extends ObjectModel
 		$fields['total_paid'] = floatval($this->total_paid);
 		$fields['total_paid_real'] = floatval($this->total_paid_real);
 		$fields['total_products'] = floatval($this->total_products);
+		$fields['total_products_wt'] = floatval($this->total_products_wt);
 		$fields['total_shipping'] = floatval($this->total_shipping);
 		$fields['total_wrapping'] = floatval($this->total_wrapping);
 		$fields['invoice_number'] = intval($this->invoice_number);
@@ -165,6 +170,11 @@ class		Order extends ObjectModel
 	{
 		parent::__construct($id, $id_lang);
 		$this->_taxCalculationMethod = $this->id_customer ? Group::getPriceDisplayMethod(intval($this->id_customer)) : Group::getDefaultPriceDisplayMethod();
+	}
+
+	public function getTaxCalculationMethod()
+	{
+		return intval($this->_taxCalculationMethod);
 	}
 
 	/* Does NOT delete a product but "cancel" it (which means return/refund/delete it depending of the case) */
@@ -199,6 +209,7 @@ class		Order extends ObjectModel
 		$this->total_paid -= $productPrice;
 		$this->total_paid_real -= $productPrice;		
 		$this->total_products -= $productPriceWithoutTax;
+		$this->total_products_wt -= $productPrice;
 		
 		/* Prevent from floating precision issues (total_products has only 2 decimals) */
 		if ($this->total_products < 0)
@@ -208,6 +219,7 @@ class		Order extends ObjectModel
 		$this->total_paid = number_format($this->total_paid, 2, '.', '');
 		$this->total_paid_real = number_format($this->total_paid_real, 2, '.', '');
 		$this->total_products = number_format($this->total_products, 2, '.', '');
+		$this->total_products_wt = number_format($this->total_products_wt, 2, '.', '');
 
 		/* Update order detail */
 		$orderDetail->product_quantity -= intval($quantity);
@@ -529,16 +541,7 @@ class		Order extends ObjectModel
      */
     public function getTotalProductsWithoutTaxes($products = false)
 	{
-		if (!$products)
-			$products = $this->getProductsDetail();
-
-        $total = 0;
-		foreach ($products AS $k => $row)
-		{
-			$quantity = intval($row['product_quantity']);
-			$total += Tools::ceilf(floatval($row['product_price']), 2) * $quantity;
-		}
-		return $total;
+		return $this->total_products;
 	}
 
     /**
@@ -548,18 +551,7 @@ class		Order extends ObjectModel
      */
     public function getTotalProductsWithTaxes($products = false)
 	{
-		if (!$products)
-			$products = $this->getProductsDetail();
-
-        $total = 0;
-		foreach ($products AS $k => $row)
-		{
-			$price = floatval($row['product_price']) * (floatval($row['tax_rate']) * 0.01 + 1);
-			if ($row['product_quantity'] <= 1 OR ($this->date_add > Configuration::get('PS_1_3_UPDATE_DATE') AND !$row['discount_quantity_applied']))
-				$price = Tools::ceilf($price, 2);
-			$total += $price * intval($row['product_quantity']);
-		}
-		return $total;
+		return $this->total_products_wt;
 	}
 
 	/**

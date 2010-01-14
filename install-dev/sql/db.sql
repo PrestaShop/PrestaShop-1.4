@@ -736,6 +736,7 @@ CREATE TABLE `PREFIX_orders` (
   `total_paid` decimal(10,2) NOT NULL default '0.00',
   `total_paid_real` decimal(10,2) NOT NULL default '0.00',
   `total_products` decimal(10,2) NOT NULL default '0.00',
+  `total_products_wt` DECIMAL(10, 2) NOT NULL default '0.00',
   `total_shipping` decimal(10,2) NOT NULL default '0.00',
   `total_wrapping` decimal(10,2) NOT NULL default '0.00',
   `invoice_number` int(10) unsigned NOT NULL default '0',

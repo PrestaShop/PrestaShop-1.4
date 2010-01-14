@@ -106,6 +106,7 @@ abstract class PaymentModule extends Module
 			$amountPaid = !$dont_touch_amount ? Tools::ceilf(floatval($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
 			$order->total_products = floatval($cart->getOrderTotal(false, 1));
+			$order->total_products_wt = floatval($cart->getOrderTotal(true, 1));
 			$order->total_discounts = floatval(abs($cart->getOrderTotal(true, 2)));
 			$order->total_shipping = floatval($cart->getOrderShippingCost());
 			$order->total_wrapping = floatval(abs($cart->getOrderTotal(true, 6)));

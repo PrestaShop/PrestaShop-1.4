@@ -658,12 +658,12 @@ class AdminOrders extends AdminTab
 										'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'] : '')
 										.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
 										.'</a></td>
-									<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], $currency, false, false).'</td>
 									<td align="center" class="productQuantity">'.(intval($product['product_quantity']) - $product['customizationQuantityTotal']).'</td>
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice(($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : Tools::ceilf($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 									<td align="center" class="cancelCheck">
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />
@@ -688,7 +688,7 @@ class AdminOrders extends AdminTab
 						}
 					echo '
 					</table>
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('Prices are printed with taxes').(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('According to the group of this customer, prices are printed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
 					if (sizeof($discounts))
 					{
 						echo '
