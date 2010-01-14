@@ -75,6 +75,7 @@ else
 		if ($order->total_discounts > 0)
 		    $smarty->assign('total_old', floatval($order->total_paid - $order->total_discounts));
 		$products = $order->getProducts();
+//d($products);
 		$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 

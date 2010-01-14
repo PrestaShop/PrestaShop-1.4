@@ -158,7 +158,7 @@ abstract class PaymentModule extends Module
 						Hook::updateQuantity($product, $order);
 					}
 					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity']);
-					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity']);
+					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity']);
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
@@ -214,7 +214,7 @@ abstract class PaymentModule extends Module
 						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
 							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
 							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').' - '.$this->l('Customized').'</strong></td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
 							<td style="padding:0.6em 0.4em; text-align:center;">'.$customizationQuantity.'</td>
 							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($customizationQuantity * $priceWithTax, $currency, false, false).'</td>
 						</tr>';
@@ -225,9 +225,9 @@ abstract class PaymentModule extends Module
 						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
 							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
 							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price * ($tax + 100) / 100, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
 							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['cart_quantity']) - $customizationQuantity).'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $priceWithTax, $currency, false, false).'</td>
+							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $price_wt, $currency, false, false).'</td>
 						</tr>';
 				} // end foreach ($products)
 				$query = rtrim($query, ',');
@@ -328,7 +328,7 @@ abstract class PaymentModule extends Module
 					'{products}' => $productsList,
 					'{discounts}' => $discountsList,
 					'{total_paid}' => Tools::displayPrice($order->total_paid, $currency, false, false),
-					'{total_products}' => Tools::displayPrice($order->total_paid - $order->total_shipping - $order->total_wrapping+ $order->total_discounts, $currency, false, false),
+					'{total_products}' => Tools::displayPrice($order->total_paid - $order->total_shipping - $order->total_wrapping + $order->total_discounts, $currency, false, false),
 					'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency, false, false),
 					'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency, false, false),
 					'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency, false, false));
