@@ -554,6 +554,20 @@ class		Order extends ObjectModel
      */
     public function getTotalProductsWithTaxes($products = false)
 	{
+		if ($this->total_products_wt)
+			return $this->total_products_wt;
+
+		if (!$products)
+			$products = $this->getProductsDetail();
+
+        $total = 0;
+		foreach ($products AS $k => $row)
+		{
+			$qty = intval($row['product_quantity']);
+			$total += floatval($row['product_price']) * $qty;
+		}
+		$this->total_products_wt = round($total, 2);
+		$this->update();
 		return $this->total_products_wt;
 	}
 
