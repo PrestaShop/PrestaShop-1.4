@@ -2,59 +2,59 @@
 
 class MailAlerts extends Module
 {
- 	private $_html = '';
-    private $_postErrors = array();
+	private $_html = '';
+	private $_postErrors = array();
 
- 	private $_merchant_mails;
- 	private $_merchant_order;
- 	private $_merchant_oos;
+	private $_merchant_mails;
+	private $_merchant_order;
+	private $_merchant_oos;
 	private $_customer_qty;
 
- 	const __MA_MAIL_DELIMITOR__ = ',';
+	const __MA_MAIL_DELIMITOR__ = ',';
 
 	public function __construct()
 	{
 		$this->name = 'mailalerts';
-        $this->tab = 'Tools';
+		$this->tab = 'Tools';
 		$this->version = '2.2';
 
 		$this->_refreshProperties();
 
-	 	parent::__construct();
+		parent::__construct();
 
-	 	$this->displayName = $this->l('Mail alerts');
+		$this->displayName = $this->l('Mail alerts');
 		$this->description = $this->l('Sends e-mails notifications to customers and merchants');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all customers notifications ?');
 	}
 
-   	public function install()
-   	{
+	public function install()
+	{
 		if (!parent::install() OR
-	   	 	!$this->registerHook('newOrder') OR
-	   	 	!$this->registerHook('updateQuantity') OR
+			!$this->registerHook('newOrder') OR
+			!$this->registerHook('updateQuantity') OR
 			!$this->registerHook('productOutOfStock') OR
 			!$this->registerHook('customerAccount') OR
 			!$this->registerHook('updateProduct') OR
 			!$this->registerHook('updateProductAttribute')
-			)
+		)
 			return false;
 
 		Configuration::updateValue('MA_MERCHANT_ORDER', 1);
 		Configuration::updateValue('MA_MERCHANT_OOS', 1);
 		Configuration::updateValue('MA_CUSTOMER_QTY', 1);
 		Configuration::updateValue('MA_MERCHANT_MAILS', Configuration::get('PS_SHOP_EMAIL'));
-		
-		$query = '
-		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
-			`id_customer` int(10) unsigned NOT NULL,
-			`customer_email` varchar(128) NOT NULL,
-			`id_product` int(10) unsigned NOT NULL,
-			`id_product_attribute` int(10) unsigned NOT NULL,
-			PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
-		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
-	 	if (!Db::getInstance()->Execute($query))
+
+		if (!Db::getInstance()->Execute('
+			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
+				`id_customer` int(10) unsigned NOT NULL,
+				`customer_email` varchar(128) NOT NULL,
+				`id_product` int(10) unsigned NOT NULL,
+				`id_product_attribute` int(10) unsigned NOT NULL,
+				PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci')
+		)
 	 		return false;
-		
+
 		/* This hook is optional */
 		$this->registerHook('myAccountBlock');
 		return true;
@@ -73,20 +73,20 @@ class MailAlerts extends Module
 	
 	private function _refreshProperties()
 	{
-		$this->_merchant_mails =  Configuration::get('MA_MERCHANT_MAILS');
+		$this->_merchant_mails = Configuration::get('MA_MERCHANT_MAILS');
 		$this->_merchant_order = intval(Configuration::get('MA_MERCHANT_ORDER'));
 		$this->_merchant_oos = intval(Configuration::get('MA_MERCHANT_OOS'));
 		$this->_customer_qty = intval(Configuration::get('MA_CUSTOMER_QTY'));
 	}
 
-    public function hookNewOrder($params)
-    {
+	public function hookNewOrder($params)
+	{
 		if (!$this->_merchant_order OR empty($this->_merchant_mails))
 			return;
 
 		// Getting differents vars
 		$id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
-     	$currency = $params['currency'];
+	 	$currency = $params['currency'];
 		$configuration = Configuration::getMultiple(array('PS_SHOP_EMAIL', 'PS_MAIL_METHOD', 'PS_MAIL_SERVER', 'PS_MAIL_USER', 'PS_MAIL_PASSWD', 'PS_SHOP_NAME'));
 		$order = $params['order'];
 		$customer = $params['customer'];
@@ -120,7 +120,6 @@ class MailAlerts extends Module
 					<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($discount['value_real'], $currency, false, false).'</td>
 			</tr>';
 		}
-
 		if ($delivery->id_state)
 			$delivery_state = new State(intval($delivery->id_state));
 		if ($invoice->id_state)
@@ -173,11 +172,11 @@ class MailAlerts extends Module
 		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
 			Mail::Send($id_lang, $template, $subject, $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
 	}
-	
+
 	public function hookProductOutOfStock($params)
-    {
+	{
 		global $smarty, $cookie;
-		
+
 		if (!$this->_customer_qty)
 			return ;
 
@@ -199,27 +198,31 @@ class MailAlerts extends Module
 
 		return $this->display(__FILE__, 'product.tpl');
 	}
-	
+
 	public function customerHasNotification($id_customer, $id_product, $id_product_attribute)
 	{
-		$query = 'SELECT * FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-		WHERE `id_customer` = '.intval($id_customer).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute).';';
-		$result = Db::getInstance()->ExecuteS($query);
+		$result = Db::getInstance()->ExecuteS('
+			SELECT * 
+			FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
+			WHERE `id_customer` = '.intval($id_customer).' 
+			AND `id_product` = '.intval($id_product).' 
+			AND `id_product_attribute` = '.intval($id_product_attribute));
 		return sizeof($result);
 	}
-	
+
 	public function hookUpdateQuantity($params)
 	{
 		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - intval($params['product']['quantity']);
 		if ($qty <= intval(Configuration::get('PS_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
-			$templateVars = array('{qty}' => $qty,
-			'{last_qty}' => intval(Configuration::get('PS_LAST_QTIES')),
-			'{product}' => strval($params['product']['name']));
+			$templateVars = array(
+				'{qty}' => $qty,
+				'{last_qty}' => intval(Configuration::get('PS_LAST_QTIES')),
+				'{product}' => strval($params['product']['name']));
 			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
 	}
-	
+
 	public function hookUpdateProduct($params)
 	{
 		if (!$this->_customer_qty)
@@ -228,14 +231,15 @@ class MailAlerts extends Module
 		if ($qty > intval(Configuration::get('PS_LAST_QTIES')))
 			$this->sendCustomerAlert(intval($params['product']->id), 0);
 	}
-	
+
 	public function hookUpdateProductAttribute($params)
 	{
 		if (!$this->_customer_qty)
 			return ;
+
 		$result = Db::getInstance()->GetRow('
-		SELECT `id_product`, `quantity` FROM `'._DB_PREFIX_.'product_attribute`
-		WHERE `id_product_attribute` = '.intval($params['id_product_attribute']));
+			SELECT `id_product`, `quantity` FROM `'._DB_PREFIX_.'product_attribute`
+			WHERE `id_product_attribute` = '.intval($params['id_product_attribute']));
 		$qty = intval($result['quantity']);
 		if ($qty > intval(Configuration::get('PS_LAST_QTIES')))
 			$this->sendCustomerAlert(intval($result['id_product']), intval($params['id_product_attribute']));
@@ -244,10 +248,10 @@ class MailAlerts extends Module
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
 		$customers = Db::getInstance()->ExecuteS('
-		SELECT id_customer, customer_email
-		FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-		WHERE `id_product` = '.intval($id_product).' 
-		AND `id_product_attribute` = '.intval($id_product_attribute));
+			SELECT id_customer, customer_email
+			FROM `'._DB_PREFIX_.'mailalert_customer_oos`
+			WHERE `id_product` = '.intval($id_product).' 
+			AND `id_product_attribute` = '.intval($id_product_attribute));
 		
 		$product =  new Product(intval($id_product));
 		$templateVars = array(
@@ -290,13 +294,13 @@ class MailAlerts extends Module
 		return $this->_html;
 	}
 
-    private function _displayForm()
-    {
+	private function _displayForm()
+	{
 		$tab = Tools::getValue('tab');
 		$currentIndex = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__)).($tab ? '?tab='.$tab : '');
 		$token = Tools::getValue('token');
-		
-        $this->_html .= '
+
+		$this->_html .= '
 		<form action="'.$currentIndex.'&token='.$token.'&configure=mailalerts" method="post">
 			<fieldset class="width3"><legend><img src="'.$this->_path.'logo.gif" />'.$this->l('Customer notification').'</legend>
 				<label>'.$this->l('Product availability:').' </label>
@@ -339,7 +343,7 @@ class MailAlerts extends Module
 			</fieldset>
 		</form>';
 	}
-	
+
 	private function _postProcess()
 	{
 		if (Tools::isSubmit('submitMACustomer'))
@@ -380,20 +384,21 @@ class MailAlerts extends Module
 		}
 		$this->_refreshProperties();
 	}
-	
+
 	static public function getProductsAlerts($id_customer, $id_lang)
 	{
-		if (
-			!Validate::isUnsignedId($id_customer) OR
-			!Validate::isUnsignedId($id_lang))
+		if (!Validate::isUnsignedId($id_customer) OR
+			!Validate::isUnsignedId($id_lang)
+		)
 			die (Tools::displayError());
+
 		$products = Db::getInstance()->ExecuteS('
-		SELECT ma.`id_product`, p.`quantity` AS product_quantity, pl.`name`, ma.`id_product_attribute`
-		FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
-		JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
-		JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = ma.`id_product`
-		WHERE ma.`id_customer` = '.intval($id_customer).'
-		AND pl.`id_lang` = '.intval($id_lang));
+			SELECT ma.`id_product`, p.`quantity` AS product_quantity, pl.`name`, ma.`id_product_attribute`
+			FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
+			JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
+			JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = ma.`id_product`
+			WHERE ma.`id_customer` = '.intval($id_customer).'
+			AND pl.`id_lang` = '.intval($id_lang));
 		if (empty($products) === true OR !sizeof($products))
 			return array();
 		for ($i = 0; $i < sizeof($products); ++$i)
@@ -401,19 +406,19 @@ class MailAlerts extends Module
 			$obj = new Product(intval($products[$i]['id_product']), false, intval($id_lang));
 			if (!Validate::isLoadedObject($obj))
 				continue;
-			
+
 			if (isset($products[$i]['id_product_attribute']) AND
 				Validate::isUnsignedInt($products[$i]['id_product_attribute']))
 			{
 				$result = Db::getInstance()->ExecuteS('
-				SELECT al.`name` AS attribute_name
-				  FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON (ag.`id_attribute_group` = a.`id_attribute_group`)
-				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($id_lang).')
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($id_lang).')
-				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pac.`id_product_attribute` = pa.`id_product_attribute`)
-				WHERE pac.`id_product_attribute` = '.intval($products[$i]['id_product_attribute']));
+					SELECT al.`name` AS attribute_name
+					FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+					LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)
+					LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON (ag.`id_attribute_group` = a.`id_attribute_group`)
+					LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($id_lang).')
+					LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($id_lang).')
+					LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pac.`id_product_attribute` = pa.`id_product_attribute`)
+					WHERE pac.`id_product_attribute` = '.intval($products[$i]['id_product_attribute']));
 				$products[$i]['attributes_small'] = '';
 				if ($result)
 					foreach ($result AS $k => $row)
@@ -445,15 +450,15 @@ class MailAlerts extends Module
 		}
 		return ($products);
 	}
-	
+
 	static public function deleteAlert($id_customer, $customer_email, $id_product, $id_product_attribute)
 	{
-		$query = 'DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-		WHERE `id_customer` = '.intval($id_customer).'
-		AND `customer_email` = \''.pSQL($customer_email).'\'
-		AND `id_product` = '.intval($id_product).'
-		AND `id_product_attribute` = '.intval($id_product_attribute).';';
-		return Db::getInstance()->Execute($query);
+		return Db::getInstance()->Execute('
+			DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
+			WHERE `id_customer` = '.intval($id_customer).'
+			AND `customer_email` = \''.pSQL($customer_email).'\'
+			AND `id_product` = '.intval($id_product).'
+			AND `id_product_attribute` = '.intval($id_product_attribute));
 	}
 }
 
