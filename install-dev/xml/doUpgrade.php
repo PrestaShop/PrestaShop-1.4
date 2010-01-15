@@ -42,6 +42,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'reorderpositions.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatemodulessql.php');
 // Clean carrier URL
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
+// Convert prices to the new 1.3 rounding system
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
 
 //old version detection
 $oldversion = false;

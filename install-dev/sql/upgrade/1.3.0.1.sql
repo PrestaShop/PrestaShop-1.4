@@ -72,3 +72,6 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM ps_carrier c, ps_group g WHERE c.active = 1);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES (NULL, 'PS_1_3_UPDATE_DATE', NOW(), '', '');
+
+/* PHP */
+/* PHP:convert_product_price(); */;

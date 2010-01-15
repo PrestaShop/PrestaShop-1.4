@@ -115,3 +115,33 @@ function checkCustomizations()
 			return false;
 	return true;
 }
+
+function ceilf(value, precision)
+{
+	if (typeof(precision) == 'undefined')
+		precision = 0
+	var precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
+	var tmp = value * precisionFactor;
+	var tmp2 = tmp.toString();
+	// If the current value has already the desired precision
+	if (tmp2.indexOf('.') === false)
+		return (value);
+	if (tmp2.charAt(tmp2.length - 1) == 0)
+		return value;
+	return Math.ceil(tmp) / precisionFactor;
+}
+
+function floorf(value, precision)
+{
+	if (typeof(precision) == 'undefined')
+		precision = 0
+	var precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
+	var tmp = value * precisionFactor;
+	var tmp2 = tmp.toString();
+	// If the current value has already the desired precision
+	if (tmp2.indexOf('.') === false)
+		return (value);
+	if (tmp2.charAt(tmp2.length - 1) == 0)
+		return value;
+	return Math.floor(tmp) / precisionFactor;
+}

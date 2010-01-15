@@ -31,7 +31,7 @@ function calcPriceTE()
 	var priceTI = parseFloat(document.getElementById('priceTI').value);
 	var newPrice = priceTI / ((tax / 100) + 1);
 	document.getElementById('priceTE').value =	(isNaN(newPrice) == true || newPrice < 0) ? '' :
-	 											formatPrice(newPrice).toFixed(6);
+	 											floorf(newPrice, 6);
 	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
 												formatPrice(priceTI).toFixed(2);
 	calcReduction();

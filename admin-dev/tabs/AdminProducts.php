@@ -2736,6 +2736,4 @@ class AdminProducts extends AdminTab
 	}
 }
 
-
-
 ?>
