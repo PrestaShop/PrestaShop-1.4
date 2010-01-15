@@ -60,14 +60,10 @@ else
 	$error['validateShop'] = '';
 
 if (isset($_GET['infosFirstname']) AND !Validate::isName($_GET['infosFirstname']))
-	$error['validateFirstname'] = '47';
-else
-	$error['validateFirstname'] = '';
+	$error['infosFirstname'] = '47';
 
 if (isset($_GET['infosName']) AND !Validate::isName($_GET['infosName']))
-	$error['validateName'] = '48';
-else
-	$error['validateName'] = '';
+	$error['infosName'] = '48';
 
 if(!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
 	$error['infosEmail'] = '0';
@@ -95,7 +91,6 @@ if($error['infosPassword'] == '' AND (Tools::strlen($_GET['infosPassword']) < 8 
 
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 $dbInstance = Db::getInstance();
-
 // set Languages
 $error['infosLanguages'] = '';
 if(isFormValid())
