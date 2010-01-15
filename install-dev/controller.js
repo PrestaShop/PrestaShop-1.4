@@ -1,6 +1,5 @@
 //constant
 verifMailREGEX = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-verifNameREGEX = /^[^0-9!<>,;?=+()@#"°{}_$%:]*$/;
 
 //params
 configIsOk = false;
@@ -682,50 +681,6 @@ function autoCheckField(idField, idResultSpan, typeVerif)
 			);
 		break;
 		
-		case "firstnameFormat" :
-			$(idField).blur(
-			function()
-				{
-					if (!verifNameREGEX.test( $(this).val() ))
-					{
-						$(idResultSpan)
-							.show("slow")
-							.addClass("fail")
-							.html(txtError[47]);
-					}
-					else
-					{
-						$(idResultSpan)
-							.hide("slow")
-							.removeClass("fail")
-							.html("");
-					}
-				}
-			);
-		break;
-		
-		case "nameFormat" :
-			$(idField).blur(
-			function()
-				{
-					if (!verifNameREGEX.test( $(this).val() ))
-					{
-						$(idResultSpan)
-							.show("slow")
-							.addClass("fail")
-							.html(txtError[48]);
-					}
-					else
-					{
-						$(idResultSpan)
-							.hide("slow")
-							.removeClass("fail")
-							.html("");
-					}
-				}
-			);
-		break;
-		
 		default : return false;
 	}
 }
@@ -904,8 +859,8 @@ $(document).ready(
 		
 		//autocheck fields
 		autoCheckField("#infosShop", "#resultInfosShop", "required");
-		autoCheckField("#infosFirstname", "#resultInfosFirstname", "firstnameFormat");
-		autoCheckField("#infosName", "#resultInfosName", "nameFormat");
+		autoCheckField("#infosFirstname", "#resultInfosFirstname", "required");
+		autoCheckField("#infosName", "#resultInfosName", "required");
 		autoCheckField("#infosEmail", "#resultInfosEmail", "mailFormat");
 		autoCheckField("#infosPassword", "#resultInfosPassword", "required");
 		autoCheckField("#infosPasswordRepeat", "#resultInfosPasswordRepeat", "required");

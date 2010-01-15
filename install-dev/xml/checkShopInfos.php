@@ -60,10 +60,14 @@ else
 	$error['validateShop'] = '';
 
 if (isset($_GET['infosFirstname']) AND !Validate::isName($_GET['infosFirstname']))
-	$error['infosFirstname'] = '47';
+	$error['validateFirstname'] = '47';
+else
+	$error['validateFirstname'] = '';
 
 if (isset($_GET['infosName']) AND !Validate::isName($_GET['infosName']))
-	$error['infosName'] = '48';
+	$error['validateName'] = '48';
+else
+	$error['validateName'] = '';
 
 if(!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
 	$error['infosEmail'] = '0';
