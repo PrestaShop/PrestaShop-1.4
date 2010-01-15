@@ -554,7 +554,7 @@ class		Order extends ObjectModel
      */
     public function getTotalProductsWithTaxes($products = false)
 	{
-		if ($this->total_products_wt)
+		if ($this->total_products_wt != '0.00')
 			return $this->total_products_wt;
 
 		if (!$products)
@@ -564,7 +564,7 @@ class		Order extends ObjectModel
 		foreach ($products AS $k => $row)
 		{
 			$qty = intval($row['product_quantity']);
-			$total += floatval($row['product_price']) * $qty;
+			$total += floatval($row['product_price']) * $qty * (1 + $row['tax_rate'] / 100);
 		}
 		$this->total_products_wt = round($total, 2);
 		$this->update();
