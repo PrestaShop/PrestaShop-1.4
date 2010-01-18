@@ -1927,7 +1927,7 @@ class AdminProducts extends AdminTab
 											formProduct.selectAccessories.length = accessories.length + 1;
 											for (i = 0, j = 1; i < accessories.length; i++)
 											{
-												if (formProduct.filter.value)
+												if (formProduct.filter.value != null)
 													if (accessories[i][1].toLowerCase().indexOf(formProduct.filter.value.toLowerCase()) == -1)
 														continue;
 												formProduct.selectAccessories.options[j].value = accessories[i][0];
@@ -2559,7 +2559,7 @@ class AdminProducts extends AdminTab
 		echo '
 		<tr>
 			<td>
-				<input type="checkbox" name="ppack" id="ppack" value="1"'.($boolPack ? ' checked="checked"' : '').' onchange="openCloseLayer(\'ppackdiv\');" />
+				<input type="checkbox" name="ppack" id="ppack" value="1"'.($boolPack ? ' checked="checked"' : '').' onclick="openCloseLayer(\'ppackdiv\');" />
 				<label class="t" for="ppack">'.$this->l('Pack').'</label>
 			</td>
 			<td>

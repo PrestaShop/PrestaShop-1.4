@@ -4,7 +4,7 @@
 <script type="text/javascript">
 // <![CDATA[
 idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}false{/if};
-valueDni = {if isset($smarty.post.dni)}{$smarty.post.dni}{else}false{/if};
+valueDni = {if isset($smarty.post.dni) && $smarty.post.dni}{$smarty.post.dni}{else}false{/if};
 countries = new Array();
 countriesNeedIDNumber = new Array();
 {foreach from=$countries item='country'}
