@@ -1391,11 +1391,8 @@ class		Product extends ObjectModel
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 		{
 			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
-			if (!$usetax)
-				$discount_qty_price /= (1 + ($tax / 100));
 			$price -= $discount_qty_price;
 		}
-
 		// Group reduction
 		if ($id_customer)
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
