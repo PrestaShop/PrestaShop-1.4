@@ -3,6 +3,8 @@
 include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/moneybookers.php');
 
+$moneyBookers = new MoneyBookers();
+
 $errors = array();
 
 /* Check for mandatory fields */
