@@ -251,14 +251,14 @@ class		Cart extends ObjectModel
 				$row['weight'] = $row['weight_attribute'];
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
-				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity'])); // Here taxes are computed only once the quantity has been applied to the product price
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL)); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = 0.0;
 				$row['total_wt'] = Tools::ceilf($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
 			}
 			else
 			{
-				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity']);
-				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity']);
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
+				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
 			}
 			$row['total'] = Tools::ceilf($row['price'] * intval($row['cart_quantity']), 2);
@@ -594,14 +594,14 @@ class		Cart extends ObjectModel
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
 				// Here taxes are computed only once the quantity has been applied to the product price
-				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity']);
+				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$total_price = $price * intval($product['cart_quantity']);
 				if ($withTaxes)
 					$total_price = Tools::ceilf($total_price * (1 + floatval($product['rate']) / 100), 2);
 			}
 			else
 			{
-				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity']);
+				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$total_price = Tools::ceilf($price * intval($product['cart_quantity']), 2);
 			}
 			$order_total += $total_price;
