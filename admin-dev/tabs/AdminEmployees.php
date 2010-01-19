@@ -48,7 +48,7 @@ class AdminEmployees extends AdminTab
 
 		$this->optionTitle = $this->l('Employees options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_BACK' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for regenerate a new password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' minutes'),
+			'PS_PASSWD_TIME_BACK' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for regenerate a new password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes')),
 		);
 
 		parent::__construct();
