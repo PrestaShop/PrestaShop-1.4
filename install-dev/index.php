@@ -656,6 +656,7 @@ if ($lm->getIncludeTradFilename())
 				<div class="field">
 					<input type="checkbox" id="infosNotification" class="aligned" style="vertical-align: middle;" /><label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
 					<span id="resultInfosNotification" class="result aligned"></span>
+					<p class="userInfos aligned"><?php echo lang('This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'); ?></p>
 				</div>
 				
 				<!--<h3><?php echo lang('Shop\'s languages'); ?></h3>

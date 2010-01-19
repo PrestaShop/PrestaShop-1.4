@@ -436,5 +436,6 @@ $_LANG['Your configuration is valid, click next to continue!'] = 'Su configuraci
 $_LANG['Your configuration is invalid,<br />thank you to fix these small issues:'] = 'Su configuración no es válida,<br />gracias por corregir la configuración:';
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Debe crear una base de datos, puede encontrar ayuda en el archivo readme_es.txt';
 $_LANG['Discover your store'] = 'Descubra su tienda';
+$_LANG['This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'] = 'Esta opción se puede bloquear si su configuración de correo electrónico está mal, gracias a desactivarla si usted no puede moverse a la siguiente etapa.';
 
 ?>
