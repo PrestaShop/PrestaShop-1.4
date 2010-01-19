@@ -457,6 +457,18 @@ class PDF extends PDF_PageGroup
 			$pdf->DiscTab();
 			$priceBreakDown = array();
 			$pdf->priceBreakDownCalculation($priceBreakDown);
+			
+			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
+			{
+				$priceBreakDown['totalWithoutTax'] += Tools::ceilf($priceBreakDown['shippingCostWithoutTax'], 2);
+				$priceBreakDown['totalWithTax'] += self::$order->total_shipping;
+			}
+			if (!self::$orderSlip)
+			{
+				$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
+				$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
+			}
+			
 			/*
 			 * Display price summation
 			 */
@@ -483,21 +495,27 @@ class PDF extends PDF_PageGroup
 			if(isset(self::$order->total_wrapping) and (floatval(self::$order->total_wrapping) > 0))
 			{
 				$pdf->Cell($width, 0, self::l('Total wrapping').' : ', 0, 0, 'R');
-				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
+				if (self::$_priceDisplayMethod == PS_TAX_EXC)
+					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
+				else
+					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
 
 			if (self::$order->total_shipping != '0.00' AND (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost)))
 			{
 				$pdf->Cell($width, 0, self::l('Total shipping').' : ', 0, 0, 'R');
-				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
+				if (self::$_priceDisplayMethod == PS_TAX_EXC)
+					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(Tools::ceilf($priceBreakDown['shippingCostWithoutTax'], 2), self::$currency, true, false)), 0, 0, 'R');
+				else
+					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
 
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
 				$pdf->Cell($width, 0, self::l('Total').' : ', 0, 0, 'R');
-				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : ($priceBreakDown['totalWithTax'] + ((!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost)) ? (self::$order->total_discounts + self::$order->total_shipping) : 0))), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : $priceBreakDown['totalWithTax']), self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
 
@@ -826,7 +844,7 @@ class PDF extends PDF_PageGroup
 				$this->Cell($w[0], $lineSize, self::l('Products'), 0, 0, 'R');
 				$this->Cell($w[1], $lineSize, number_format($tax_rate, 3, ',', ' '), 0, 0, 'R');
 				$this->Cell($w[2], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
-				$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice($vat, self::$currency, true, false)), 0, 0, 'R');
+				$this->Cell($w[3], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
 				$this->Cell($w[4], $lineSize, self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
 				$this->Ln();
 			}
