@@ -166,11 +166,12 @@ class Tax extends ObjectModel
 		return $tax ? floatval($tax['rate']) : false;
 	}
 
-	static public function getApplicableTax($id_tax, $productTax)
+	static public function getApplicableTax($id_tax, $productTax, $id_address_delivery = NULL)
 	{
 		global $cart, $cookie, $defaultCountry;
 
-		$id_address_delivery = intval((Validate::isLoadedObject($cart) AND $cart->id_address_delivery) ? $cart->id_address_delivery : (isset($cookie->id_address_delivery) ? $cookie->id_address_delivery : 0));
+		if (!$id_address_delivery)
+			$id_address_delivery = intval((Validate::isLoadedObject($cart) AND $cart->id_address_delivery) ? $cart->id_address_delivery : (isset($cookie->id_address_delivery) ? $cookie->id_address_delivery : 0));
 		/* If customer has an address (implies that he is registered and logged) */
 		if ($id_address_delivery AND $address_ids = Address::getCountryAndState($id_address_delivery))
 		{

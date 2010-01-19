@@ -1329,13 +1329,19 @@ class		Product extends ObjectModel
 	* @param integer $divisor Useful when paying many time without fees (optional)
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address_delivery = NULL)
 	{
 		global $cookie;
 
 		// Get id_customer if exists
-		$id_customer = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_customer) AND $cookie->id_customer)
-			? intval($cookie->id_customer) : null);
+		if (!$id_customer)
+			$id_customer = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : null);
+
+		if (!$id_cart)
+			$id_cart = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_cart) AND $cookie->id_cart) ? intval($cookie->id_cart) : null);
+
+		if (!$id_address_delivery)
+			$id_address_delivery = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_address_delivery) AND $cookie->id_address_delivery) ? intval($cookie->id_address_delivery) : null);
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
@@ -1356,7 +1362,7 @@ class		Product extends ObjectModel
 		$price = Tools::convertPrice(floatval($result['price']));
 
 		// Exclude tax
-		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate'])));
+		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address_delivery ? intval($id_address_delivery) : NULL)));
 		if ($forceAssociatedTax)
 			$tax = floatval($result['rate']);
 		if (Tax::excludeTaxeOption() OR !$tax)
@@ -1380,7 +1386,7 @@ class		Product extends ObjectModel
 			$price -= $reduc;
 
 		// Quantity discount
-		if (intval($cookie->id_cart))
+		if (intval($id_cart))
 		{
 			$totalQuantity = intval(Db::getInstance()->getValue('
 				SELECT SUM(`quantity`)

@@ -157,8 +157,8 @@ abstract class PaymentModule extends Module
 							$outOfStock = true;
 						Hook::updateQuantity($product, $order);
 					}
-					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity']);
-					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity']);
+					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
+					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
@@ -178,7 +178,7 @@ abstract class PaymentModule extends Module
 						$product['rate'] = 0;
 					}
 					else
-						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']));
+						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->id_address_delivery));
 
 					// Quantity discount
 					$reduc = 0.0;
