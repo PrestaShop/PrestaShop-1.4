@@ -18,7 +18,7 @@ foreach ($requiredFields AS $field)
 /* Check for MD5 signature */
 $md5 = strtoupper(md5($_POST['merchant_id'].$_POST['transaction_id'].strtoupper(md5(Configuration::get('MB_SECRET_WORD'))).$_POST['mb_amount'].$_POST['mb_currency'].$_POST['status']));
 if ($md5 != $_POST['md5sig'])
-	$errors[] = 'Invalid MD5 signature (Yours / MB) ['.$md5.'] ['.$_POST['md5sig'].']';
+	$errors[] = 'Please double-check your Moneybookers account to make sure you have received the payment (Yours / MB) ['.$md5.'] ['.$_POST['md5sig'].']';
 
 $message = '';
 foreach ($_POST AS $key => $value)
