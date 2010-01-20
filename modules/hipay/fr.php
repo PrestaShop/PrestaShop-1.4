@@ -13,7 +13,6 @@ $_MODULE['<{hipay}prestashop>hipay_8eafa453be20eba610cc8f5a8170681c'] = '[Hipay]
 $_MODULE['<{hipay}prestashop>hipay_7497e14da8b704f9542872558d62b325'] = 'La directive allow_url_fopen est désactivée';
 $_MODULE['<{hipay}prestashop>hipay_6401593f1412a6b385c8e645d1f056ac'] = 'La librairie cURL n\'est pas activée';
 $_MODULE['<{hipay}prestashop>hipay_f8b94463fa8b5591e5edbbb8021e8038'] = 'OpenSSL n\'est pas activé';
-$_MODULE['<{hipay}prestashop>hipay_173fb9bfb03e294a3087246103aecb30'] = 'Impossible d\'utiliser la fonction fsock_open()';
 $_MODULE['<{hipay}prestashop>hipay_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{hipay}prestashop>hipay_08bd40c7543007ad06e4fce31618f6ec'] = 'Compte Hipay';
 $_MODULE['<{hipay}prestashop>hipay_aeda5c9c68fbc42071d76a8d2b3d73e8'] = 'test';

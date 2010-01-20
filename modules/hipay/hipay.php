@@ -219,15 +219,13 @@ class Hipay extends PaymentModule
 		$allow_url_fopen = ini_get('allow_url_fopen');
 		$openssl = extension_loaded('openssl');
 		$curl = extension_loaded('curl');
-		$fsock_open = is_callable('fsock_open');
-		if (!$allow_url_fopen OR !$openssl OR !$fsock_open OR !$curl)
+		if (!$allow_url_fopen OR !$openssl OR !$curl)
 		{
 			echo '
 			<div class="warning warn">
 				'.($allow_url_fopen ? '' : '<h3>'.$this->l('You are not allowed to open external URLs (allow_url_fopen)').'</h3>').'
 				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
-				'.($fsock_open ? '' : '<h3>'.$this->l('fsock_open() is not callable').'</h3>').'
 			</div>';
 		}
 		
