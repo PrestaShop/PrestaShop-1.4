@@ -229,7 +229,6 @@ class Hipay extends PaymentModule
 			</div>';
 		}
 		
-		
 		$link = $currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token');
 		$form = '
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
@@ -245,19 +244,19 @@ class Hipay extends PaymentModule
 	          	<label for="HIPAY_ACCOUNT">'.$this->l('Account number').'</label>
 				<div class="margin-form">
 					<input type="text" id="HIPAY_ACCOUNT" name="HIPAY_ACCOUNT" value="'.Tools::getValue('HIPAY_ACCOUNT', Configuration::get('HIPAY_ACCOUNT')).'" />
-					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png">'.$this->l('screenshot').'</a></p>
+					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png" target="_blank">'.$this->l('screenshot').'</a></p>
 				</div>
 				<div class="clear">&nbsp;</div>
 	          	<label for="HIPAY_PASSWORD">'.$this->l('Merchant password').'</label>
 				<div class="margin-form">
 					<input type="text" id="HIPAY_PASSWORD" name="HIPAY_PASSWORD" value="'.Tools::getValue('HIPAY_PASSWORD', Configuration::get('HIPAY_PASSWORD')).'" />
-					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/merchantpassword.png">'.$this->l('screenshot').'</a></p>
+					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/merchantpassword.png" target="_blank">'.$this->l('screenshot').'</a></p>
 				</div>
 				<div class="clear">&nbsp;</div>
 	          	<label for="HIPAY_SITEID">'.$this->l('Site ID').'</label>
 				<div class="margin-form">
 					<input type="text" id="HIPAY_SITEID" name="HIPAY_SITEID" value="'.Tools::getValue('HIPAY_SITEID', Configuration::get('HIPAY_SITEID')).'" />
-					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/siteid.png">'.$this->l('screenshot').'</a></p>
+					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/siteid.png" target="_blank">'.$this->l('screenshot').'</a></p>
 				</div>';
 		if (Configuration::get('HIPAY_SITEID'))
 		{
