@@ -3,6 +3,7 @@
 class Hipay extends PaymentModule
 {
 	private $arrayCategories;
+	private $prod;
 
 	public function __construct()
 	{
@@ -14,6 +15,8 @@ class Hipay extends PaymentModule
 		$this->currencies_mode = 'radio';
 		
 		parent::__construct();
+		
+		$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
 		
 		$this->displayName = $this->l('Hipay');
 		$this->description = $this->l('Accepts payments by Hipay');
@@ -57,6 +60,8 @@ class Hipay extends PaymentModule
 		$carrier = new Carrier($cart->id_carrier, $cart->id_lang);
 		$id_zone = Db::getInstance()->getValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
 
+		// Define extracted from mapi/mapi_defs.php
+		define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
@@ -112,7 +117,6 @@ class Hipay extends PaymentModule
 			$item->setRef($product['id_product'].($product['id_product_attribute'] ? '-'.$product['id_product_attribute'] : ''));
 			$item->setCategory(Configuration::get('HIPAY_CATEGORY_'.(int)$product['id_category_default']) ? Configuration::get('HIPAY_CATEGORY_'.(int)$product['id_category_default']) : Configuration::get('HIPAY_CATEGORY'));
 			$price = Product::getPriceStatic($product['id_product'], false, $product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity']);
-			//$price = Tools::convertPrice($price, $currency);
 			$item->setPrice($price);
 			if (Tax::checkTaxZone($product['id_tax'], $id_zone))
 		       	  $item->setTax(array($taxes[$product['id_tax']]));
@@ -120,12 +124,27 @@ class Hipay extends PaymentModule
 			    return $this->l('[Hipay] Error: cannot create Product').' ('.$product['id_product'].($product['id_product_attribute'] ? '-'.$product['id_product_attribute'] : '').')';
 			$items[] = $item;
 		}
+
+		/*
+		foreach ($cart->getDiscounts() as $voucher)
+		{
+			$item = new HIPAY_MAPI_Product();
+			$item->setName($voucher['name']);
+			$item->setInfo($voucher['description']);
+			$item->setquantity(1);
+			$item->setRef('voucher_'.$voucher['id_discount']);
+			$item->setCategory(Configuration::get('HIPAY_CATEGORY'));
+			$item->setPrice(-1 * $voucher['value_real']);
+			if (!$item->check())
+			    return $this->l('[Hipay] Error: cannot create Voucher').' ('.$voucher['name'].')';
+			$items[] = $item;
+		}
+		*/
 		
 		$order = new HIPAY_MAPI_Order();
 		$order->setOrderTitle(Configuration::get('PS_SHOP_NAME'));
 		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));	
 		$price = $cart->getOrderShippingCost($carrier->id, false);
-		//$price = Tools::convertPrice($price, $currency);
 		$shippingTax = (Tax::checkTaxZone($carrier->id_tax, $id_zone) ? array($taxes[$carrier->id_tax]) : array());
 		$order->setShipping($price, $shippingTax);
 
@@ -165,13 +184,16 @@ class Hipay extends PaymentModule
 		
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
+
+		if ((int)Order::getOrderByCartId($id_cart))
+		  return;
 		
 		$orderStatus = _PS_OS_ERROR_;
 		if (strtolower($status) == 'ok')
 			$orderStatus = _PS_OS_PAYMENT_;
 
-		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.$amount.' '.$currency."\n".'id_cart: '.$id_cart;
-		$this->validateOrder((int)$id_cart, $orderStatus, $amount, $this->displayName, $orderMessage);
+		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
+		$this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
 	}
 
 	public function getContent()
@@ -182,6 +204,7 @@ class Hipay extends PaymentModule
 		
 		if (Tools::isSubmit('submitHipay'))
 		{
+			Configuration::updateValue('HIPAY_PROD', Tools::getValue('HIPAY_PROD'));
 			Configuration::updateValue('HIPAY_ACCOUNT', Tools::getValue('HIPAY_ACCOUNT'));
 			Configuration::updateValue('HIPAY_PASSWORD', Tools::getValue('HIPAY_PASSWORD'));
 			Configuration::updateValue('HIPAY_SITEID', Tools::getValue('HIPAY_SITEID'));
@@ -192,10 +215,35 @@ class Hipay extends PaymentModule
 			Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token').'&conf=4');
 		}
 		
+		// Check configuration
+		$allow_url_fopen = ini_get('allow_url_fopen');
+		$openssl = extension_loaded('openssl');
+		$curl = extension_loaded('curl');
+		$fsock_open = is_callable('fsock_open');
+		if (!$allow_url_fopen OR !$openssl OR !$fsock_open OR !$curl)
+		{
+			echo '
+			<div class="warning warn">
+				'.($allow_url_fopen ? '' : '<h3>'.$this->l('You are not allowed to open external URLs (allow_url_fopen)').'</h3>').'
+				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
+				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
+				'.($fsock_open ? '' : '<h3>'.$this->l('fsock_open() is not callable').'</h3>').'
+			</div>';
+		}
+		
+		
 		$link = $currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token');
 		$form = '
-		<fieldset><legend>'.$this->l('Configuration').'</legend>
+		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
 			<form action="'.$link.'" method="post">
+	          	<label for="HIPAY_PROD">'.$this->l('Account').'</label>
+				<div class="margin-form">
+					<input type="radio" name="HIPAY_PROD" value="0" '.((int)$this->prod ? '' : 'checked="checked"').'/>
+					'.$this->l('sandbox / test').'<br />
+					<input type="radio" name="HIPAY_PROD" value="1" '.((int)$this->prod ? 'checked="checked"' : '').'/>
+					'.$this->l('real').'
+				</div>
+				<div class="clear">&nbsp;</div>
 	          	<label for="HIPAY_ACCOUNT">'.$this->l('Account number').'</label>
 				<div class="margin-form">
 					<input type="text" id="HIPAY_ACCOUNT" name="HIPAY_ACCOUNT" value="'.Tools::getValue('HIPAY_ACCOUNT', Configuration::get('HIPAY_ACCOUNT')).'" />
@@ -214,7 +262,7 @@ class Hipay extends PaymentModule
 					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/siteid.png">'.$this->l('screenshot').'</a></p>
 				</div>';
 		if (Configuration::get('HIPAY_SITEID'))
-		  {
+		{
 		    $form .= '<hr class="clear" />
 	          	<label for="HIPAY_RATING">'.$this->l('Authorized age group').'</label>
 				<div class="margin-form">
@@ -229,26 +277,26 @@ class Hipay extends PaymentModule
 	          	<label for="HIPAY_CATEGORY">'.$this->l('Main category').'</label>
 				<div class="margin-form">
 					<select id="HIPAY_CATEGORY" name="HIPAY_CATEGORY">';
-		foreach ($this->getHipayCategories() as $id => $name)
-			$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY', Configuration::get('HIPAY_CATEGORY')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
-	    $form .= '	</select>
+			foreach ($this->getHipayCategories() as $id => $name)
+				$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY', Configuration::get('HIPAY_CATEGORY')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+			$form .= '	</select>
 					'.(!count($this->getHipayCategories()) ? '<p style="color:red">'.$this->l('Impossible to retrieve Hipay categories. Please refer to your error log for more details.').'</p>' : '').'
 				</div>
 				<hr class="clear" />
 				<p>'.$this->l('You can override your main Hipay category for each category of your own.').'</p>';
-		foreach ($categories as $category)
-		{
-			$form .= '<div class="clear">&nbsp;</div>
-				<label for="HIPAY_CATEGORY_'.(int)$category['id_category'].'">'.$category['name'].'</label>
-				<div class="margin-form">
-					<select id="HIPAY_CATEGORY_'.(int)$category['id_category'].'" name="HIPAY_CATEGORY_'.(int)$category['id_category'].'">
-						<option value="0">'.$this->l('-- Default --').'</otpion>';
-			foreach ($this->getHipayCategories() as $id => $name)
-				$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_'.(int)$category['id_category'].'', Configuration::get('HIPAY_CATEGORY_'.(int)$category['id_category'].'')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
-		    $form .= '</select>
-				</div>';
+			foreach ($categories as $category)
+			{
+				$form .= '<div class="clear">&nbsp;</div>
+					<label for="HIPAY_CATEGORY_'.(int)$category['id_category'].'">'.$category['name'].'</label>
+					<div class="margin-form">
+						<select id="HIPAY_CATEGORY_'.(int)$category['id_category'].'" name="HIPAY_CATEGORY_'.(int)$category['id_category'].'">
+							<option value="0">'.$this->l('-- Default --').'</otpion>';
+				foreach ($this->getHipayCategories() as $id => $name)
+					$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_'.(int)$category['id_category'].'', Configuration::get('HIPAY_CATEGORY_'.(int)$category['id_category'].'')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+				$form .= '</select>
+					</div>';
+			}
 		}
-		  }
 		$form .= '<hr class="clear" />
 				<input type="submit" name="submitHipay" value="'.$this->l('Update configuration').'" class="button" />
         	</form>
@@ -261,8 +309,7 @@ class Hipay extends PaymentModule
 		if (!is_array($this->arrayCategories))
 		{
 			$this->arrayCategories = array();
-			// Todo: change test by prod
-			if ($xml = simplexml_load_string(file_get_contents('https://test.www.hipay.com/payment-order/list-categories/id/'.Configuration::get('HIPAY_SITEID'))))
+			if ($xml = simplexml_load_string(file_get_contents('https://'.($this->prod ? '' : 'test.').'www.hipay.com/payment-order/list-categories/id/'.Configuration::get('HIPAY_SITEID'))))
 			{
 				foreach ($xml->children() as $categoriesList)
 					foreach ($categoriesList->children() as $category)

@@ -84,6 +84,4 @@ define('HIPAY_MAPI_CURL_LOGFILE', '/tmp/curl.log');
 
 define('MAPI_VERSION','1.0');
 
-
-define('HIPAY_GATEWAY_URL','https://test.payment.hipay.com/order/');
 ?>
