@@ -8,7 +8,7 @@
 	{foreach from=$suppliers item=supplier name=supplier_list}
 		{if $smarty.foreach.supplier_list.iteration <= $text_list_nb}
 		<li class="{if $smarty.foreach.supplier_list.last}last_item{elseif $smarty.foreach.supplier_list.first}first_item{else}item{/if}">
-			<a href="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)}" title="{l s='More about' mod='blocksupplier'} {$supplier.name}">{$supplier.name}</a>
+			<a href="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)}" title="{l s='More about' mod='blocksupplier'} {$supplier.name}">{$supplier.name|escape:'htmlall':'UTF-8'}</a>
 		</li>
 		{/if}
 	{/foreach}
@@ -20,7 +20,7 @@
 				<select id="supplier_list" onchange="autoUrl('supplier_list', '');">
 					<option value="0">{l s='All suppliers' mod='blocksupplier'}</option>
 				{foreach from=$suppliers item=supplier}
-					<option value="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)}">{$supplier.name}</option>
+					<option value="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)}">{$supplier.name|escape:'htmlall':'UTF-8'}</option>
 				{/foreach}
 				</select>
 			</p>
