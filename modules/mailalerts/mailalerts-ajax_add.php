@@ -11,6 +11,9 @@
 		$id_customer = 0;
 		$customer_email = strval(Tools::getValue('customer_email'));
 		
+		if (!Validate::isEmail($customer_email))
+			die ('0');
+		
 		// Check if already in dbb
 		$query = '
 			SELECT * FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
