@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{gcheckout}prestashop>gcheckout_6c132b5e262594950586ae13a7d3aa94'] = 'Google checkout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_3f3c0194c5adbe6953eb571f125af16d'] = 'Implementación Google Checkout API';
 $_MODULE['<{gcheckout}prestashop>gcheckout_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda configurada para este módulo';

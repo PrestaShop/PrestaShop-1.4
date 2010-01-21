@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_9e31b08a00c1ed653bcaa517dee84714'] = 'Bloque newsletter';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_e95e612048e381ba2b1f310e07d1b1a3'] = 'Añada un bloque para suscribirse a la newsletter ';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_179bbcbd2e1104cdf9dcecd91264a961'] = '¿Está seguro de querer eliminar todos sus contactos?';

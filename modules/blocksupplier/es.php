@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blocksupplier}prestashop>blocksupplier_9ae42413e3cb9596efe3857f75bad3df'] = 'Bloque proveedor';
 $_MODULE['<{blocksupplier}prestashop>blocksupplier_e2452f139d5dd09e70de9e8ddbf6b371'] = 'Añadir un bloque para mostrar los proveedores';
 $_MODULE['<{blocksupplier}prestashop>blocksupplier_cf64d2d0bc5de5ce3d309d0e899d36fb'] = 'número de elementos no válido';

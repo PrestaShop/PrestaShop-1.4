@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bc3e73cfa718a3237fb1d7e1da491395'] = 'Bloque de marcas';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_9859921e6d3733788e09599adb681dcd'] = 'Mostrar bloque de marcas';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_cf64d2d0bc5de5ce3d309d0e899d36fb'] = 'Número de elementos incorrecto';

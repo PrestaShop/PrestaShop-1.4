@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statsnewsletter}prestashop>statsnewsletter_ffb7e666a70151215b4c55c6268d7d72'] = 'Newsletter';
 $_MODULE['<{statsnewsletter}prestashop>statsnewsletter_eb4337ccc2c2e7d7622d21554e1bcc25'] = 'Mostrar suscripciones a la newsletter';
 $_MODULE['<{statsnewsletter}prestashop>statsnewsletter_39d3d2445552ee17e870d7f64262669f'] = 'Suscripciones de clientes:';

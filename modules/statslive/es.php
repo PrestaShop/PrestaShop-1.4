@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statslive}prestashop>statslive_fa55230e9791f2b71322869318a5f00f'] = 'Visitantes en línea';
 $_MODULE['<{statslive}prestashop>statslive_65b97b824779d02dedaa8f200f3be285'] = 'Mostrar la lista de clientes y visitantes conectados';
 $_MODULE['<{statslive}prestashop>statslive_5c948349bdf1a7a77ba54497d019e4ca'] = 'Clientes en línea';

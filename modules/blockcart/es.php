@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blockcart}prestashop>blockcart_c2e1362a9710a3dd86f937c2ea1f336d'] = 'Carrito';
 $_MODULE['<{blockcart}prestashop>blockcart_b3c2bf363aa5f1a47c4b1c718ec15a13'] = 'Añadir un bloque que contenga el carrito de compra del cliente';
 $_MODULE['<{blockcart}prestashop>blockcart_eb4ae207521bbe6403f7fe9564d38cda'] = 'Ajax: opción incorrecta.';
@@ -28,4 +26,6 @@ $_MODULE['<{blockcart}prestashop>blockcart_f2a6c498fb90ee345d997f888fce3b18'] = 
 $_MODULE['<{blockcart}prestashop>blockcart_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 'trasporte';
 $_MODULE['<{blockcart}prestashop>blockcart_ba794350deb07c0c96fe73bd12239059'] = 'Embalaje';
 $_MODULE['<{blockcart}prestashop>blockcart_96b0141273eabab320119c467cdcaf17'] = 'total';
+$_MODULE['<{blockcart}prestashop>blockcart_0d11c2b75cf03522c8d97938490466b2'] = 'Estos precios son con IVA incluído';
+$_MODULE['<{blockcart}prestashop>blockcart_41202aa6b8cf7ae885644717dab1e8b4'] = 'Estos precios son sin IVA';
 $_MODULE['<{blockcart}prestashop>blockcart_377e99e7404b414341a9621f7fb3f906'] = 'Confirmar';

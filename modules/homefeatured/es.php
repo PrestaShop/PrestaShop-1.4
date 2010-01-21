@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{homefeatured}prestashop>homefeatured_cd2c2dc24eaf11ba856da4a2e2a248be'] = 'Productos Destacados en la Página de inicio';
 $_MODULE['<{homefeatured}prestashop>homefeatured_b494beb5de5dd7b4fad67262e0de6321'] = 'Mostrar Productos Destacados en el centro de su página de inicio';
 $_MODULE['<{homefeatured}prestashop>homefeatured_ced2b9f1aad1f8a5b351a3120e4b1212'] = 'Número de productos no válido';

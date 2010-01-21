@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blockvariouslinks}prestashop>blockvariouslinks_bd132cd1723cb8de6c23f4233578cff6'] = 'Bloque enlaces pie de página';
 $_MODULE['<{blockvariouslinks}prestashop>blockvariouslinks_29bb2b1824eb758128d5abce02e15d4b'] = 'Mostrar enlaces varios (generalmente a pie de página)';
 $_MODULE['<{blockvariouslinks}prestashop>blockvariouslinks_f0f2c414f4953aa7d9b9c5e087f809de'] = 'Archivos seleccionados para mostrar';

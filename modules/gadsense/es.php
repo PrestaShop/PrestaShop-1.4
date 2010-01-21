@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{gadsense}prestashop>gadsense_8a41674922e424cde4dd47c91f9d62e8'] = 'Google Adsense';
 $_MODULE['<{gadsense}prestashop>gadsense_4148996483a2cfeed90c66dc539c8f1a'] = 'Aún no ha configurado su código de Google Adsense';
 $_MODULE['<{gadsense}prestashop>gadsense_fe98dd96c9736120bbadeac5a2957326'] = 'Integrar el script de Google Adsense en su tienda';

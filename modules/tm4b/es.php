@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{tm4b}prestashop>tm4b_599f02a21a8d80cfa87a3a42f9aef067'] = 'Enviar un SMS para cada nuevo pedido';
 $_MODULE['<{tm4b}prestashop>tm4b_2c8be96b677dc6b891a343193822fea4'] = '¿Está seguro de querer eliminar toda su información?';
 $_MODULE['<{tm4b}prestashop>tm4b_0c478a7069ab13f446e9e765cffd1550'] = 'Mensaje enviado correctamente';
@@ -12,7 +10,7 @@ $_MODULE['<{tm4b}prestashop>tm4b_884b60418e2f1f9a6a40f12e8ca0a64d'] = 'Login y n
 $_MODULE['<{tm4b}prestashop>tm4b_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Información';
 $_MODULE['<{tm4b}prestashop>tm4b_8b58aafd28dcaee7f6e92442c96e31db'] = 'Probar envío de SMS';
 $_MODULE['<{tm4b}prestashop>tm4b_43e9e66e3a7acefd0663287c95acd407'] = 'Introduzca su número de teléfono';
-$_MODULE['<{tm4b}prestashop>tm4b_35ba634a7df95f937550c54b7b94d2c5'] = 'ej: 33642424242\r\n\r\n';
+$_MODULE['<{tm4b}prestashop>tm4b_35ba634a7df95f937550c54b7b94d2c5'] = 'ej: 33642424242rnrn';
 $_MODULE['<{tm4b}prestashop>tm4b_2e1779891f69b099b16616ae7ea2e76c'] = 'crédito SMS';
 $_MODULE['<{tm4b}prestashop>tm4b_00db7aae85aecb79c75afca7daa8f22e'] = 'Tiene';
 $_MODULE['<{tm4b}prestashop>tm4b_928735d6f2c63bee316dd511c8ccaf55'] = 'de crédito';

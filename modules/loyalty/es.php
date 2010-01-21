@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'La fidelidad de los clientes y las recompensas';
 $_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Proporcionar un programa de fidelización a sus clientes';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Ajustes actualizados.';
@@ -38,7 +36,6 @@ $_MODULE['<{loyalty}prestashop>loyalty_01abfc750a0c942167651c40d088531d'] = '#';
 $_MODULE['<{loyalty}prestashop>loyalty_66c2c90ea9f6f4a12854195085781d7f'] = 'Total puntos disponibles:';
 $_MODULE['<{loyalty}prestashop>loyalty_928666bdf20510dfa5c58393b77f1798'] = 'Valor de bono:';
 $_MODULE['<{loyalty}prestashop>loyalty_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mi cuenta:';
-$_MODULE['<{loyalty}prestashop>my-account_c540093e64d84440025b2d8201f04336'] = 'Mis puntos de fidelidad';
 $_MODULE['<{loyalty}prestashop>loyalty_3c770669863f000c90fce39b4ef7ab6d'] = 'Mi puntos recompensa';
 $_MODULE['<{loyalty}prestashop>loyalty_5acc2ceeb883ba07cef2d02ea382f242'] = 'Usted no ha solicitado pedidos.';
 $_MODULE['<{loyalty}prestashop>loyalty_fd705bf8dca1ce13cc9ec5c418ecd63b'] = '¿Está seguro de querer transformar sus puntos en vales de compra?';
@@ -61,12 +58,13 @@ $_MODULE['<{loyalty}prestashop>loyalty_8e69341aca5dbf9f55c2e75a2ed5df3c'] = 'Sin
 $_MODULE['<{loyalty}prestashop>loyalty_00d56a5e37c19c59d521530fc8e7f337'] = 'Sin recompensa de puntos todavía';
 $_MODULE['<{loyalty}prestashop>loyalty_0b3db27bc15f682e92ff250ebb167d4b'] = 'Volver a su cuenta';
 $_MODULE['<{loyalty}prestashop>loyalty_8cf04a9734132302f96da8e113e80ce5'] = 'Inicio';
-$_MODULE['<{loyalty}prestashop>shopping-cart_ded9088edfbcc1041c3a642b031c8f72'] = 'Programa de fidelidad';
+$_MODULE['<{loyalty}prestashop>my-account_c540093e64d84440025b2d8201f04336'] = 'Mis puntos de fidelidad';
 $_MODULE['<{loyalty}prestashop>product_08ef6b34ab8e7039ef0ee69378f0ac0b'] = 'Al comprar este producto puede obtener hasta';
 $_MODULE['<{loyalty}prestashop>product_1b1294111f6d84b896c2269b650e6c04'] = 'un vale de puntos como recompensa';
 $_MODULE['<{loyalty}prestashop>product_e94d481804904a48c1a8093e7a069570'] = 'No hay puntos de recompensa para este producto.';
-$_MODULE['<{loyalty}prestashop>shopping-cart_a4fc94f1bea7abafcf906b3120b1e1c2'] = 'Sus puntos de recompensa.';
 $_MODULE['<{loyalty}prestashop>shopping-cart_ea2c0ea1a08add3a75273e7f32f05f7a'] = 'fidelidad';
 $_MODULE['<{loyalty}prestashop>shopping-cart_7aa2e4465844717563eba41c59270128'] = 'Al finalizar esta compra usted puede reunir';
 $_MODULE['<{loyalty}prestashop>shopping-cart_10a0357fb0bab7dc40c1722ead786e8d'] = 'puntos de fidelidad como un vale de ';
 $_MODULE['<{loyalty}prestashop>shopping-cart_8cec799df06a3f5a026b31fcd95e0172'] = 'Añadir más productos al carrito para obtener puntos de fidelidad.';
+$_MODULE['<{loyalty}prestashop>shopping-cart_ded9088edfbcc1041c3a642b031c8f72'] = 'Programa de fidelidad';
+$_MODULE['<{loyalty}prestashop>shopping-cart_a4fc94f1bea7abafcf906b3120b1e1c2'] = 'Sus puntos de recompensa.';

@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{editorial}prestashop>editorial_a46dcd3561c3feeb53903dfc0f796a35'] = 'Editor de textos página de inicio';
 $_MODULE['<{editorial}prestashop>editorial_1051bed4568ad9936781f20fb0536509'] = 'Un módulo de editor de texto para su página de inicio';
 $_MODULE['<{editorial}prestashop>editorial_5be920293db3e38c81330fd0798336b1'] = 'Campo html no válido, no puede utilizarse javascrip ';

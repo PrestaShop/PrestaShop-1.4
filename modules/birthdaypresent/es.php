@@ -2,11 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_c2796655c25e1b0b8582716036aece08'] = 'Regalo de cumpleaños';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d1f5899bf2af57ed816390d9d740daf6'] = 'Ofrezca a sus clientes regalos de cumpleaños automáticamente';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_487011dccb5c5f3f8b6cfa32b1d4c4b9'] = 'Crear un vale para sus clientes por la celebración de su cumpleaños';
+$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_ccfcf858237a83953c1ac03b5abde35e'] = 'Cree un vale descuento ara los clientes que celebren su cumpleaños y que pueda usarse una sola vez';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Activo';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_59cb7946b9d916e80a7e05defd004120'] = 'Adicionalemente, debe establecer una regla CRON que pida el archivo';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_9939846b096f52609cb7c31de24e20e7'] = 'todos los días';

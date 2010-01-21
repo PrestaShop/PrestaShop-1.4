@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{blocktags}prestashop>blocktags_f2568a62d4ac8d1d5b532556379772ba'] = 'Bloque etiquetas';
 $_MODULE['<{blocktags}prestashop>blocktags_b95abf236932a6bbd0f79867b9bf9308'] = 'Añada un bloque que contenga una nube de etiquetas';
 $_MODULE['<{blocktags}prestashop>blocktags_189f63f277cd73395561651753563065'] = 'Etiquetas';

@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statsbestcategories}prestashop>statsbestcategories_4f29d8c727dcf2022ac241cb96c31083'] = 'El recordset se devolvió vacío';
 $_MODULE['<{statsbestcategories}prestashop>statsbestcategories_eab2b4237a7cd89c309119e35f62d168'] = 'mostrando';
 $_MODULE['<{statsbestcategories}prestashop>statsbestcategories_8bf8854bebe108183caeb845c7676ae4'] = 'de';

@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_8b15fc6468c919d299f9a601b61b95fc'] = 'Cuenstas cliente';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f5426466d40fea'] = 'Mostrar la progresión de la suscripción cliente';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Visitantes que no han pasado de la suscripción:';

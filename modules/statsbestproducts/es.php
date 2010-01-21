@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statsbestproducts}prestashop>statsbestproducts_4f29d8c727dcf2022ac241cb96c31083'] = 'Ningún resultado';
 $_MODULE['<{statsbestproducts}prestashop>statsbestproducts_eab2b4237a7cd89c309119e35f62d168'] = 'Mostrar';
 $_MODULE['<{statsbestproducts}prestashop>statsbestproducts_8bf8854bebe108183caeb845c7676ae4'] = 'en';

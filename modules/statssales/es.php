@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statssales}prestashop>statssales_45c4b3e103155326596d6ccd2fea0f25'] = 'Ventas y pedidos';
 $_MODULE['<{statssales}prestashop>statssales_09a6e97d1ccb13182c8fd316450dbebf'] = 'Mostrar la evolución de las ventas y de los pedidos por estados';
 $_MODULE['<{statssales}prestashop>statssales_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Todos';

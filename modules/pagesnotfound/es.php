@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_251295238bdf7693252f2804c8d3707e'] = 'Página no encontrada';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_52a8f5d93ac4baca3b296bdef71248c6'] = 'Mostrar las páginas solicitadas por sus visitantes pero no encontradas';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_6cb944288ac528fcfd76b20156dddce1'] = 'Usted debe utilizar un archivo .htaccess para volver a redirigir error 404 al \\\" de la página; 404.php\\\"';

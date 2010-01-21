@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{statscatalog}prestashop>statscatalog_cf3aa21c6a2147ddbd86f34091daeccd'] = 'Catálogo de estadísticas';
 $_MODULE['<{statscatalog}prestashop>statscatalog_627672b26180c7f5a23e1086e3466039'] = 'Estadísticas generales sobre su catálogo';
 $_MODULE['<{statscatalog}prestashop>statscatalog_85dbdb21fe502c4d7a1e81bca0aa396d'] = 'compras';

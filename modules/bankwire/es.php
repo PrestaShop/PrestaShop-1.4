@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-
 $_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Trasferencia bancaria';
 $_MODULE['<{bankwire}prestashop>bankwire_e3812ea692bf9e274abec33c85a9d7d1'] = 'Se aceptan pagos por trasferencia bancaria';
 $_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';
@@ -32,24 +30,25 @@ $_MODULE['<{bankwire}prestashop>payment_execution_e40a43534d7f4ece69347847d75401
 $_MODULE['<{bankwire}prestashop>payment_execution_afda466128ee0594745d9f8152699b74'] = 'Ha elegido pagar por trasferencia bancaria';
 $_MODULE['<{bankwire}prestashop>payment_execution_c884ed19483d45970c5bf23a681e2dd2'] = 'He aquí un resumen de su pedido:';
 $_MODULE['<{bankwire}prestashop>payment_execution_e2867a925cba382f1436d1834bb52a1c'] = 'El importe total de su pedido es';
+$_MODULE['<{bankwire}prestashop>payment_execution_1f87346a16cf80c372065de3c54c86d9'] = 'IVA incluído';
 $_MODULE['<{bankwire}prestashop>payment_execution_e2c147f82d998eeeb147ae172a31a88e'] = 'Aceptamos diferentes monedas para trasferencia bancaria.';
 $_MODULE['<{bankwire}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'elija una de las siguientes:';
 $_MODULE['<{bankwire}prestashop>payment_execution_2c1ce705702e11fd5e2188c2353c0c86'] = 'Aceptamos las siguientes monedas para trasferencias bancarias:';
 $_MODULE['<{bankwire}prestashop>payment_execution_3dd021316505c0204989f984246c6ff1'] = 'La información para realizar la trasferencia bancaria aparecerá en la página siguiente.';
-$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Por favor, acepte su pedido haciendo clic en\\\'confirmo mi pedido\\\'';
+$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Por favor, acepte su pedido haciendo clic en\'confirmo mi pedido\'';
 $_MODULE['<{bankwire}prestashop>payment_execution_569fd05bdafa1712c4f6be5b153b8418'] = 'Otros modos de pago';
 $_MODULE['<{bankwire}prestashop>payment_execution_46b9e3665f187c739c55983f757ccda0'] = 'Confirmo mi pedido';
 $_MODULE['<{bankwire}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido';
 $_MODULE['<{bankwire}prestashop>payment_return_75fbf512d744977d62599cc3f0ae2bb4'] = 'está completo.';
-$_MODULE['<{bankwire}prestashop>payment_return_1552c5916ccfe019f35d91fd8955755e'] = 'por favor, háganos una trasferencia con:';
+$_MODULE['<{bankwire}prestashop>payment_return_1552c5916ccfe019f35d91fd8955755e'] = 'por favor, háganos una trasferencia por:';
 $_MODULE['<{bankwire}prestashop>payment_return_c7c0ae2912f0fbc0edf688ae887aa50f'] = 'un importe de';
 $_MODULE['<{bankwire}prestashop>payment_return_c51326a2ac458845d579a82a92f111f0'] = 'al propietario de la cuenta';
-$_MODULE['<{bankwire}prestashop>payment_return_54255f6a23aa478acc093c9f9e6fd464'] = 'con los siguientes detalles';
+$_MODULE['<{bankwire}prestashop>payment_return_54255f6a23aa478acc093c9f9e6fd464'] = 'con los siguientes datos';
 $_MODULE['<{bankwire}prestashop>payment_return_619b26a60df1af3649d2e8920a7949cd'] = 'a este banco';
 $_MODULE['<{bankwire}prestashop>payment_return_4fac1f51a5f4b3dd634800fe3d408a45'] = 'No se olvide añadir su pedido #';
 $_MODULE['<{bankwire}prestashop>payment_return_160cc5007c97764468df2ae6cb18b388'] = 'en el objeto de su trasferencia';
 $_MODULE['<{bankwire}prestashop>payment_return_13f4ac6dc75b5829499cb9cf8b733071'] = 'Le hemos enviado un email con esta información.';
 $_MODULE['<{bankwire}prestashop>payment_return_c4457a9f2f20e39386008bbb2cd3a78f'] = 'Su pedido será enviado próximamente, en cuanto recibamos su pago.';
-$_MODULE['<{bankwire}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para otras dudas, por favor contacte con nosotros';
+$_MODULE['<{bankwire}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda, por favor contacte con nosotros';
 $_MODULE['<{bankwire}prestashop>payment_return_64430ad2835be8ad60c59e7d44e4b0b1'] = 'atención al cliente';
 $_MODULE['<{bankwire}prestashop>payment_return_8de637e24570c1edb0357826a2ad5aea'] = 'Hemos detectado un problema con su pedido. Si considera que hay un error, por favor, contacte con nosotros';
