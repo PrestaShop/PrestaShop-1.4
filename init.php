@@ -147,7 +147,8 @@ if (!Configuration::get('PS_THEME_V11'))
 		'logged' => $cookie->isLogged(),
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod())
+		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod()),
+		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE'))
 	));
 }
 else
@@ -187,7 +188,8 @@ else
 		'logged' => $cookie->isLogged(),
 		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod()),
 		'page_name' => $page_name,
-		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)));
+		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
+		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE'))));
 }
 
 /* Display a maintenance page if shop is closed */

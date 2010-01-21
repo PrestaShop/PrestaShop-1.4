@@ -24,6 +24,7 @@
 			var static_token = '{$static_token}';
 			var token = '{$token}';
 			var priceDisplayPrecision = {$priceDisplayPrecision*$currency->decimals};
+			var roundMode = {$roundMode};
 		</script>
 		<script type="text/javascript" src="{$content_dir}js/jquery/jquery-1.2.6.pack.js"></script>
 		<script type="text/javascript" src="{$content_dir}js/jquery/jquery.easing.1.3.js"></script>
