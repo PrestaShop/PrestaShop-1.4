@@ -778,7 +778,6 @@ class PDF extends PDF_PageGroup
 			else
 			{
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::floorf($priceBreakDown['totalsProductsWithTax'][$tax_rate] / (1 + $tax_rate / 100), 2);
-				//$vat = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsWithoutTax'][$tax_rate];
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $vat;
 			}
 			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithTax'][$tax_rate];

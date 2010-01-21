@@ -1373,13 +1373,7 @@ class		Product extends ObjectModel
 		// Attribute price
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0);
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
-/*if ($id_product == 1 AND $usetax == false)
-p('original price: '.$price);
-if ($id_product == 1 AND $usetax == false)
-p('attribute price: '.$attribute_price);*/
 		$price += $attribute_price;
-/*if ($id_product == 1 AND $usetax == false)
-p('combination price: '.$price);*/
 		if ($only_reduc OR $usereduc)
 			$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
 
@@ -1390,8 +1384,7 @@ p('combination price: '.$price);*/
 		// Reduction
 		if ($usereduc)
 			$price -= $reduc;
-/*if ($id_product == 1 AND $usetax == false)
-p('final price: '.$price);*/
+
 		// Quantity discount
 		if (intval($id_cart))
 		{
