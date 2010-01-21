@@ -60,9 +60,12 @@ DELETE FROM `PREFIX_search_word` WHERE `id_word` NOT IN (SELECT `id_word` FROM `
 DELETE FROM `PREFIX_tag` WHERE `id_lang` NOT IN (SELECT `id_lang` FROM `PREFIX_lang`);
 DELETE FROM `PREFIX_search_word` WHERE `id_lang` NOT IN (SELECT `id_lang` FROM `PREFIX_lang`);
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PRESTASTORE_LIVE', 1, NOW(), NOW());
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_SHOW_ALL_MODULES', 0, NOW(), NOW());
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_BACKUP_ALL', 0, NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PRESTASTORE_LIVE', 1, NOW(), NOW()),
+('PS_SHOW_ALL_MODULES', 0, NOW(), NOW()),
+('PS_BACKUP_ALL', 0, NOW(), NOW()),
+('PS_1_3_UPDATE_DATE', NOW(), NOW(), NOW()),
+('PS_PRICE_ROUND_MODE', 2, NOW(), NOW());
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('createAccountTop', 'Block above the form for create an account', NULL , '1'),
 ('backOfficeHeader', 'Administration panel header', NULL , '0'),
@@ -70,8 +73,6 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('backOfficeFooter', 'Administration panel footer', NULL , '1');
 
 INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM ps_carrier c, ps_group g WHERE c.active = 1);
-
-INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES (NULL, 'PS_1_3_UPDATE_DATE', NOW(), '', '');
 
 /* PHP */
 /* PHP:convert_product_price(); */;

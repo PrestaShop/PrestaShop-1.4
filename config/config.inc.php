@@ -125,6 +125,10 @@ define('_PS_PRICE_DISPLAY_PRECISION_', 2);
 define('PS_TAX_EXC', 1);
 define('PS_TAX_INC', 0);
 
+define('PS_ROUND_UP', 0);
+define('PS_ROUND_DOWN', 1);
+define('PS_ROUND_HALF', 2);
+
 global $_MODULES;
 $_MODULES = array();
 

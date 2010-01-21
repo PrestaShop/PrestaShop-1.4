@@ -887,6 +887,16 @@ class Tools
 			@set_magic_quotes_runtime($var);
 	}
 
+	static public function ps_round($value, $precision = 0)
+	{
+		$method = intval(Configuration::get('PS_PRICE_ROUND_MODE'));
+		if ($method == PS_ROUND_UP)
+			return Tools::ceilf($value, $precision);
+		elseif ($method == PS_ROUND_DOWN)
+			return Tools::floorf($value, $precision);
+		return round($value, $precision);
+	}
+
 	static public function ceilf($value, $precision = 0)
 	{
 		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);

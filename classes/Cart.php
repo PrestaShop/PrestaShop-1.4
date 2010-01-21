@@ -253,7 +253,7 @@ class		Cart extends ObjectModel
 			{
 				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL)); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = 0.0;
-				$row['total_wt'] = Tools::ceilf($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
+				$row['total_wt'] = Tools::ps_round($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
 			}
 			else
 			{
@@ -261,7 +261,7 @@ class		Cart extends ObjectModel
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
 			}
-			$row['total'] = Tools::ceilf($row['price'] * intval($row['cart_quantity']), 2);
+			$row['total'] = Tools::ps_round($row['price'] * intval($row['cart_quantity']), 2);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
@@ -597,19 +597,20 @@ class		Cart extends ObjectModel
 				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$total_price = $price * intval($product['cart_quantity']);
 				if ($withTaxes)
-					$total_price = Tools::ceilf($total_price * (1 + floatval($product['rate']) / 100), 2);
+					$total_price = Tools::ps_round($total_price * (1 + floatval($product['rate']) / 100), 2);
 			}
 			else
 			{
 				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-				$total_price = Tools::ceilf($price * intval($product['cart_quantity']), 2);
+if ($type == 1 AND $withTaxes == false)
+p('>> '.$price);
+				$total_price = Tools::ps_round($price * intval($product['cart_quantity']), 2);
 			}
 			$order_total += $total_price;
 		}
 		$order_total_products = $order_total;
 		if ($type == 2)
 			$order_total = 0;
-
 		// Wrapping Fees
 		$wrapping_fees = 0;
 		if ($this->gift)
@@ -620,7 +621,7 @@ class		Cart extends ObjectModel
 				$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 				$wrapping_fees /= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
 			}
-			$wrapping_fees = Tools::ceilf($wrapping_fees, 2);
+			$wrapping_fees = Tools::ps_round($wrapping_fees, 2);
 		}
 
 		if ($type != 1)
@@ -652,14 +653,14 @@ class		Cart extends ObjectModel
 				/* Secondly applying all vouchers to the correct amount */
 				foreach ($discounts AS $discount)
 					if ($discount->id_discount_type != 3)
-						$order_total -= Tools::ceilf(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes))), 2);
+						$order_total -= Tools::ps_round(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes))), 2);
 			}
 		}
 		if ($type == 5) return $shipping_fees;
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
-		return Tools::ceilf(floatval($order_total), 2);
+		return Tools::ps_round(floatval($order_total), 2);
 	}
 
 	/**
@@ -776,7 +777,7 @@ class		Cart extends ObjectModel
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
             $shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
-		return floatval(Tools::ceilf(floatval($shipping_cost), 2));
+		return floatval(Tools::ps_round(floatval($shipping_cost), 2));
     }
 
 	/**

@@ -329,8 +329,8 @@ class		Order extends ObjectModel
 			}
 			$price = $row['product_price'];
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$price = Tools::ceilf($price, 2);
-			$row['product_price_wt'] = Tools::ceilf($price * (1 + ($row['tax_rate'] * 0.01)), 2);
+				$price = Tools::ps_round($price, 2);
+			$row['product_price_wt'] = Tools::ps_round($price * (1 + ($row['tax_rate'] * 0.01)), 2);
 			$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 			$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
 

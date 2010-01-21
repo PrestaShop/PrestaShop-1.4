@@ -103,14 +103,14 @@ abstract class PaymentModule extends Module
 			$order->gift = intval($cart->gift);
 			$order->gift_message = $cart->gift_message;
 			$currency = new Currency($order->id_currency);
-			$amountPaid = !$dont_touch_amount ? Tools::ceilf(floatval($amountPaid), 2) : $amountPaid;
+			$amountPaid = !$dont_touch_amount ? Tools::ps_round(floatval($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
 			$order->total_products = floatval($cart->getOrderTotal(false, 1));
 			$order->total_products_wt = floatval($cart->getOrderTotal(true, 1));
 			$order->total_discounts = floatval(abs($cart->getOrderTotal(true, 2)));
 			$order->total_shipping = floatval($cart->getOrderShippingCost());
 			$order->total_wrapping = floatval(abs($cart->getOrderTotal(true, 6)));
-			$order->total_paid = floatval(Tools::ceilf(floatval($cart->getOrderTotal(true, 3)), 2));
+			$order->total_paid = floatval(Tools::ps_round(floatval($cart->getOrderTotal(true, 3)), 2));
 			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;

@@ -1372,19 +1372,26 @@ class		Product extends ObjectModel
 
 		// Attribute price
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0);
-		$attribute_price = $usetax ? Tools::ceilf($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
+		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
+/*if ($id_product == 1 AND $usetax == false)
+p('original price: '.$price);
+if ($id_product == 1 AND $usetax == false)
+p('attribute price: '.$attribute_price);*/
 		$price += $attribute_price;
+/*if ($id_product == 1 AND $usetax == false)
+p('combination price: '.$price);*/
 		if ($only_reduc OR $usereduc)
 			$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
 
 		// Only reduction
 		if ($only_reduc)
 			return $reduc;
-		
+
 		// Reduction
 		if ($usereduc)
 			$price -= $reduc;
-
+/*if ($id_product == 1 AND $usetax == false)
+p('final price: '.$price);*/
 		// Quantity discount
 		if (intval($id_cart))
 		{
@@ -1404,7 +1411,7 @@ class		Product extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		if ($quantity <= 1 OR !$qtyD)
-			$price = Tools::ceilf($price, $decimals);
+			$price = Tools::ps_round($price, $decimals);
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
@@ -1797,7 +1804,7 @@ class		Product extends ObjectModel
 		$resultsArray = array();
 		foreach ($result AS $k => $row)
 		{
-			$row['price'] = Tools::ceilf(Product::getPriceStatic($row['id_product'], true, NULL, 6), 2);
+			$row['price'] = Product::getPriceStatic($row['id_product'], true, NULL, 2);
 			$row['quantity'] = Product::getQuantity($row['id_product']);
 			$resultsArray[] = $row;
 		}
@@ -2074,11 +2081,11 @@ class		Product extends ObjectModel
 		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6);
 		if (self::$_taxCalculationMethod == PS_TAX_EXC)
 		{
-			$row['price_tax_exc'] = Tools::ceilf($row['price_tax_exc'], 2);
+			$row['price_tax_exc'] = Tools::ps_round($row['price_tax_exc'], 2);
 			$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : 	NULL), 6);
 		}
 		else
-			$row['price'] = Tools::ceilf(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6), 2);
+			$row['price'] = Tools::ps_round(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6), 2);
 		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'], $row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);

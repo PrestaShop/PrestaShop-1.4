@@ -333,7 +333,7 @@ class AdminOrders extends AdminTab
 					'.($order->hasBeenPaid() ? '<td align="center">'.$customization['quantity_refunded'].'</td>' : '').'
 					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
-					<td align="center">'.Tools::displayPrice(Tools::ceilf($product['product_price'], 2) * (1 + ($product['tax_rate'] * 0.01)) * ($customization['quantity']), $currency, false, false).'</td>
+					<td align="center">'.Tools::displayPrice(Tools::ps_round($product['product_price'], 2) * (1 + ($product['tax_rate'] * 0.01)) * ($customization['quantity']), $currency, false, false).'</td>
 					<td align="center" class="cancelCheck">
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.intval($customization['quantity']).'" />
@@ -663,7 +663,7 @@ class AdminOrders extends AdminTab
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice(($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : Tools::ceilf($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice(($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : Tools::ps_round($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2)) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 									<td align="center" class="cancelCheck">
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />

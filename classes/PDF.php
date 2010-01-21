@@ -460,7 +460,7 @@ class PDF extends PDF_PageGroup
 			
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
-				$priceBreakDown['totalWithoutTax'] += Tools::ceilf($priceBreakDown['shippingCostWithoutTax'], 2);
+				$priceBreakDown['totalWithoutTax'] += Tools::ps_round($priceBreakDown['shippingCostWithoutTax'], 2);
 				$priceBreakDown['totalWithTax'] += self::$order->total_shipping;
 			}
 			if (!self::$orderSlip)
@@ -506,7 +506,7 @@ class PDF extends PDF_PageGroup
 			{
 				$pdf->Cell($width, 0, self::l('Total shipping').' : ', 0, 0, 'R');
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
-					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(Tools::ceilf($priceBreakDown['shippingCostWithoutTax'], 2), self::$currency, true, false)), 0, 0, 'R');
+					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(Tools::ps_round($priceBreakDown['shippingCostWithoutTax'], 2), self::$currency, true, false)), 0, 0, 'R');
 				else
 					$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
@@ -612,8 +612,8 @@ class PDF extends PDF_PageGroup
 				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
 
 				// Unit vars
-				$unit_without_tax = Tools::ceilf($product['product_price'], 2);
-				$unit_with_tax = Tools::ceilf($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2);
+				$unit_without_tax = Tools::ps_round($product['product_price'], 2);
+				$unit_with_tax = Tools::ps_round($product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2);
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
 					$unit_price = &$unit_without_tax;
 				else
@@ -726,10 +726,10 @@ class PDF extends PDF_PageGroup
 			if (!isset($taxes[$product['tax_rate']]))
 				$taxes[$product['tax_rate']] = 0;
 			/* Without tax */
-			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ceilf(floatval($product['product_price']), 2) : floatval($product['product_price'])) * intval($product['product_quantity']);
+			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ps_round(floatval($product['product_price']), 2) : floatval($product['product_price'])) * intval($product['product_quantity']);
 			$amountWithoutTax += $product['priceWithoutTax'];
 			/* With tax */
-			$product['priceWithTax'] = (self::$_priceDisplayMethod == PS_TAX_INC ? Tools::ceilf(floatval($product['product_price']) * (1 + floatval($product['tax_rate']) / 100), 2) : Tools::ceilf($product['product_price'], 2) * (1 + (floatval($product['tax_rate']) / 100))) * intval($product['product_quantity']);
+			$product['priceWithTax'] = (self::$_priceDisplayMethod == PS_TAX_INC ? Tools::ps_round(floatval($product['product_price']) * (1 + floatval($product['tax_rate']) / 100), 2) : Tools::ps_round($product['product_price'], 2) * (1 + (floatval($product['tax_rate']) / 100))) * intval($product['product_quantity']);
 		}
 
 		$priceBreakDown['totalsProductsWithoutTax'] = $priceBreakDown['totalsWithoutTax'];
@@ -743,7 +743,7 @@ class PDF extends PDF_PageGroup
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
 			$priceWithTaxAndReduction = $product['priceWithTax'] - $discountAmount * $ratio;
-			$vat = $priceWithTaxAndReduction - Tools::ceilf($priceWithTaxAndReduction / $product['product_quantity'] / ((floatval($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
+			$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / ((floatval($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 			$taxes[$product['tax_rate']] += $vat;
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)
 			{
@@ -768,24 +768,23 @@ class PDF extends PDF_PageGroup
 		// Display product tax
 		foreach ($taxes AS $tax_rate => &$vat)
 		{
-				$vat = Tools::ceilf($vat, 2);
-				if (self::$_priceDisplayMethod == PS_TAX_EXC)
-				{
-					$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::ceilf($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
-					$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ceilf($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
-					$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ceilf($priceBreakDown['totalsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
-					$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ceilf($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
-				}
-				else
-				{
-					$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::floorf($priceBreakDown['totalsProductsWithTax'][$tax_rate] / (1 + $tax_rate / 100), 2);
-					$vat = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsWithoutTax'][$tax_rate];
-					$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $vat;
-				}
-				$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithTax'][$tax_rate];
-				$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
-				$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
-				$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
+			if (self::$_priceDisplayMethod == PS_TAX_EXC)
+			{
+				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
+				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
+				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
+				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
+			}
+			else
+			{
+				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::floorf($priceBreakDown['totalsProductsWithTax'][$tax_rate] / (1 + $tax_rate / 100), 2);
+				//$vat = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsWithoutTax'][$tax_rate];
+				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $vat;
+			}
+			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithTax'][$tax_rate];
+			$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
+			$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
+			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 		}
 		$priceBreakDown['taxes'] = $taxes;
 		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : 0;
