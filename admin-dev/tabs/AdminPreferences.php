@@ -31,6 +31,21 @@ class AdminPreferences extends AdminTab
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
 		foreach ($txs as $tax)
 			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
+		
+		$round_mode = array(
+			array(
+				'value' => PS_ROUND_UP,
+				'name' => $this->l('superior')
+			),
+			array(
+				'value' => PS_ROUND_DOWN,
+				'name' => $this->l('inferior')
+			),
+			array(
+				'value' => PS_ROUND_HALF,
+				'name' => $this->l('classical')
+			)
+		);
 
 		$this->_fieldsGeneral = array(
 			'PS_BASE_URI' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 20, 'default' => '/'),
@@ -46,6 +61,7 @@ class AdminPreferences extends AdminTab
 			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax:'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging:'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode:'), 'desc' => $this->l('You can choose the rounding of prices, rounding always superior, inferior or classical rounding.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
 			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check updates to modules'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'));
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isUnsignedId', 'cast' => 'intval', 'type' => 'select', 'list' => $timezone, 'identifier' => 'id');

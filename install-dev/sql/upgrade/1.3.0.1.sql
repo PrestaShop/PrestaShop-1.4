@@ -1,7 +1,7 @@
 SET NAMES 'utf8';
 
 /* ##################################### */
-/* 				STRUCTURE			 		 */
+/* 				STRUCTURE			 	 */
 /* ##################################### */
 
 ALTER TABLE `PREFIX_product`
@@ -44,10 +44,26 @@ ALTER TABLE `PREFIX_order_detail` ADD `discount_quantity_applied` TINYINT(1) NOT
 ALTER TABLE `PREFIX_orders` ADD `total_products_wt` DECIMAL(10, 2) NOT NULL AFTER `total_products`;
 
 /* ##################################### */
-/* 					CONTENTS					 */
+/* 					CONTENTS			 */
 /* ##################################### */
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
+
+UPDATE `PREFIX_configuration` 
+SET `value` = ROUND(value / (1 + (
+	SELECT rate FROM (
+		SELECT t.`rate`, COUNT(*) n
+		FROM `PREFIX_orders` o
+		LEFT JOIN `PREFIX_carrier` c ON (o.`id_carrier` = c.`id_carrier`) 
+		LEFT JOIN `PREFIX_tax` t ON (t.`id_tax` = c.`id_tax`)
+		WHERE c.`deleted` = 0 
+		AND c.`shipping_handling` = 1
+		GROUP BY o.`id_carrier`
+		ORDER BY n DESC
+		LIMIT 1
+	) myrate
+) / 100), 6)
+WHERE `name` = 'PS_SHIPPING_HANDLING';
 
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY';
 DELETE FROM `PREFIX_product_attachment` WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product`);

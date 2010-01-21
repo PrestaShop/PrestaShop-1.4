@@ -141,6 +141,7 @@ class AdminShipping extends AdminTab
 
 		foreach ($confKeys AS $key => $confKey)
 		{
+			p($key);
 			$postValue = Tools::getValue($key);
 			$sign_left = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('left') : '');
 			$sign_right = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('right') : (is_string($confKey['suffix']) ? '&nbsp;'.$confKey['suffix'] : ''));
@@ -148,8 +149,8 @@ class AdminShipping extends AdminTab
 			<label class="clear">'.$confKey['title'].':</label>
 			<div class="margin-form">';
 			echo $sign_left;
-			echo '<input size="5" type="text" name="'.$key.'" value="'.(($postValue != false OR (string)$postValue == '0') ? $postValue : $confValues[$key]).'" />';
-			echo $sign_right;
+			echo '<input size="6" type="text" name="'.$key.'" value="'.(($postValue != false OR (string)$postValue == '0') ? $postValue : $confValues[$key]).'" />';
+			echo $sign_right.' '.($key == 'PS_SHIPPING_HANDLING' ? $this->l('(tax excl.)') : '');
 			echo '</div>';
 		}
 

@@ -602,8 +602,6 @@ class		Cart extends ObjectModel
 			else
 			{
 				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-if ($type == 1 AND $withTaxes == false)
-p('>> '.$price);
 				$total_price = Tools::ps_round($price * intval($product['cart_quantity']), 2);
 			}
 			$order_total += $total_price;
@@ -770,13 +768,15 @@ p('>> '.$price);
 				$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 		}
 		$shipping_cost = Tools::convertPrice($shipping_cost);
+		
+		// Adding handling charges
+		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
+            $shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
+		
 		// Apply tax
 		if (isset($carrierTax))
 			 $shipping_cost *= 1 + ($carrierTax / 100);
 
-		// Adding handling charges
-		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
-            $shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
 		return floatval(Tools::ps_round(floatval($shipping_cost), 2));
     }
 
