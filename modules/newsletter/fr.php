@@ -18,6 +18,7 @@ $_MODULE['<{newsletter}prestashop>newsletter_cbfbc813d2b33a2c264e878e31cf2cc0'] 
 $_MODULE['<{newsletter}prestashop>newsletter_f8db2243069bf76570a084ea11d1c667'] = 'Le fichier .CSV a été créé avec succès';
 $_MODULE['<{newsletter}prestashop>newsletter_55caa4828d4e935c2ba9f1558f1c4edd'] = 'clients trouvés';
 $_MODULE['<{newsletter}prestashop>newsletter_48e3d5f66961b621c78f709afcd7d437'] = 'Télécharger le fichier';
+$_MODULE['<{newsletter}prestashop>newsletter_ba99ad4de3eb578339572fe5b082c7f0'] = 'ATTENTION: Si vous tentez d\'ouvrir le fichier .csv avec Excel, n\'oubliez pas de sélectionner l\'UTF-8 comme encodage, sinon vous aurez des caractères incorrects';
 $_MODULE['<{newsletter}prestashop>newsletter_d04e6ff103ecd59c2e24d89137fd772c'] = 'Erreur : impossible d\'écrire vers';
 $_MODULE['<{newsletter}prestashop>newsletter_8d550e9bf69bfc7a09be6eeb1622ae23'] = 'Ce module est divisé en 2 parties :';
 $_MODULE['<{newsletter}prestashop>newsletter_23e8f8a55548b88bfbdcd1f6ba26a010'] = 'Les personnes ayant indiqué leur adresse dans le bloc newsletter de la page d\'accueil';

@@ -8,8 +8,10 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28
 $_MODULE['<{moneybookers}prestashop>moneybookers_07bf11ff6eaf27b8aa91f42d7fb4200c'] = 'Acceptez les paiements par Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = 'Etes-vous sûr de vouloir supprimer vos paramètres ?';
 $_MODULE['<{moneybookers}prestashop>moneybookers_bd65b912e0152f62629b6afeaa8398f4'] = 'Serveur d\'activation injoignable, merci d\'essayer ultérieurement';
-$_MODULE['<{moneybookers}prestashop>moneybookers_911c339fcd9423295d3fbef09b8ace45'] = 'L\'activation a échoué, vos identifiants sont invalides';
-$_MODULE['<{moneybookers}prestashop>moneybookers_059788849121f8cfbad7994594a01c56'] = 'Activation OK';
+$_MODULE['<{moneybookers}prestashop>moneybookers_c9f3e0397a1b070092ab4f0bf046fd4a'] = 'Erreur lors de la validation du compte, votre adresse e-mail est peut être incorrecte';
+$_MODULE['<{moneybookers}prestashop>moneybookers_214186253fc29d921411c68ac88d942e'] = 'Erreur lors de la validation de votre mot secret, vous avez dépassé le nombre maximum d\'essai (3 par heure)';
+$_MODULE['<{moneybookers}prestashop>moneybookers_ccd8489089bfa25fffbc82674bf6b8b5'] = 'Erreur lors de la validation de votre mot secret, votre mot secret est peut être incorrect';
+$_MODULE['<{moneybookers}prestashop>moneybookers_8e6b1c8d8d05890a5073b598c7b5dc54'] = 'Activation réussie';
 $_MODULE['<{moneybookers}prestashop>moneybookers_86ea4c04e5385412960348c17da0d549'] = 'Ouvrez votre compte Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c3b308778c00b817007364e347123b86'] = 'Ouvrez votre compte Moneybookers :';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6ad110d7504947dafa5c737284fe9f00'] = 'Ce module vous permet d\'accepter des paiements via Moneybookers';
@@ -19,7 +21,6 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_f6ff89c78b4fcf340b2702e9f5e4ac6
 $_MODULE['<{moneybookers}prestashop>moneybookers_04a0e2e14bfc47151f158db3c1b03661'] = 'Moneybookers a été crée en 2001 à London et est contrôlé par la FSA (Autorité des Services Financiers) du Royaume Uni.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{moneybookers}prestashop>moneybookers_cb7a0a41ef8d2fb632ae4a56d04fbc7f'] = 'Votre adresse e-mail :';
-$_MODULE['<{moneybookers}prestashop>moneybookers_88424e8e22d916e8dd7b33b10a423906'] = 'Votre ID client :';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c5107a07a5be59f893a4184e09cecc21'] = 'Votre mot secret :';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c3592b2bb3405f766f58dac4378306bd'] = 'Page affichée si paiement OK :';
 $_MODULE['<{moneybookers}prestashop>moneybookers_87337b7475d1287ff99aaa30446b3bb7'] = 'Page affichée si erreur de paiement :';
