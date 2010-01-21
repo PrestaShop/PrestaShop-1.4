@@ -141,7 +141,6 @@ class AdminShipping extends AdminTab
 
 		foreach ($confKeys AS $key => $confKey)
 		{
-			p($key);
 			$postValue = Tools::getValue($key);
 			$sign_left = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('left') : '');
 			$sign_right = (is_object($confKey['suffix']) ? $confKey['suffix']->getSign('right') : (is_string($confKey['suffix']) ? '&nbsp;'.$confKey['suffix'] : ''));
