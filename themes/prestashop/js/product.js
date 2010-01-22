@@ -237,7 +237,7 @@ function updateDisplay()
 		else
 			$('#product_reference:visible').hide('slow');
 
-		var productPriceWithoutReduction2 = (attribut_price_tmp + productPriceWithoutReduction) * currencyRate;
+		var productPriceWithoutReduction2 = (attribut_price_tmp + productPriceWithoutReduction);
 		
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
 			var priceReduct = 0;
@@ -257,6 +257,7 @@ function updateDisplay()
 			priceProduct *= group_reduction;
 			productPricePretaxed *= group_reduction;
 		}
+		
 		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));
