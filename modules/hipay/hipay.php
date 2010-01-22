@@ -66,7 +66,7 @@ class Hipay extends PaymentModule
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
 		$paymentParams->setLogin(Configuration::get('HIPAY_ACCOUNT'), Configuration::get('HIPAY_PASSWORD'));
-		$paymentParams->setAccounts(Configuration::get('HIPAY_ACCOUNT'));
+		$paymentParams->setAccounts(Configuration::get('HIPAY_ACCOUNT'), Configuration::get('HIPAY_TAX_ACCOUNT') ? Configuration::get('HIPAY_TAX_ACCOUNT') : Configuration::get('HIPAY_ACCOUNT'));
 		$paymentParams->setDefaultLang(strtolower($language->iso_code).'_'.strtoupper($language->iso_code));
 		$paymentParams->setMedia('WEB');
 		$paymentParams->setRating(Configuration::get('HIPAY_RATING'));
@@ -209,6 +209,7 @@ class Hipay extends PaymentModule
 		{
 			Configuration::updateValue('HIPAY_PROD', Tools::getValue('HIPAY_PROD'));
 			Configuration::updateValue('HIPAY_ACCOUNT', Tools::getValue('HIPAY_ACCOUNT'));
+			Configuration::updateValue('HIPAY_TAX_ACCOUNT', Tools::getValue('HIPAY_TAX_ACCOUNT'));
 			Configuration::updateValue('HIPAY_PASSWORD', Tools::getValue('HIPAY_PASSWORD'));
 			Configuration::updateValue('HIPAY_SITEID', Tools::getValue('HIPAY_SITEID'));
 			Configuration::updateValue('HIPAY_RATING', Tools::getValue('HIPAY_RATING'));
@@ -248,6 +249,12 @@ class Hipay extends PaymentModule
 				<div class="margin-form">
 					<input type="text" id="HIPAY_ACCOUNT" name="HIPAY_ACCOUNT" value="'.Tools::getValue('HIPAY_ACCOUNT', Configuration::get('HIPAY_ACCOUNT')).'" />
 					<p>'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png" target="_blank">'.$this->l('screenshot').'</a></p>
+				</div>
+				<div class="clear">&nbsp;</div>
+	          	<label for="HIPAY_TAX_ACCOUNT">'.$this->l('Tax account').'</label>
+				<div class="margin-form">
+					<input type="text" id="HIPAY_TAX_ACCOUNT" name="HIPAY_TAX_ACCOUNT" value="'.Tools::getValue('HIPAY_TAX_ACCOUNT', Configuration::get('HIPAY_TAX_ACCOUNT')).'" />
+					<p>'.$this->l('You can set the same account as the main one').'</a></p>
 				</div>
 				<div class="clear">&nbsp;</div>
 	          	<label for="HIPAY_PASSWORD">'.$this->l('Merchant password').'</label>
