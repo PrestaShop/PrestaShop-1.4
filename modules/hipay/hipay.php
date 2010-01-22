@@ -125,9 +125,11 @@ class Hipay extends PaymentModule
 			$items[] = $item;
 		}
 
-		/*
 		foreach ($cart->getDiscounts() as $voucher)
 		{
+			// For the moment, if there is a couher you can't use hipay
+			return;
+			
 			$item = new HIPAY_MAPI_Product();
 			$item->setName($voucher['name']);
 			$item->setInfo($voucher['description']);
@@ -139,7 +141,6 @@ class Hipay extends PaymentModule
 			    return $this->l('[Hipay] Error: cannot create Voucher').' ('.$voucher['name'].')';
 			$items[] = $item;
 		}
-		*/
 		
 		$order = new HIPAY_MAPI_Order();
 		$order->setOrderTitle(Configuration::get('PS_SHOP_NAME'));
