@@ -143,6 +143,7 @@ $_MODULE['<{dejala}prestashop>dejala_menu_3eb0f1d14d6ec438d91fcfdab94fc1ca'] = '
 $_MODULE['<{dejala}prestashop>dejala_menu_e16dd6e118732c5d1586d6aba0b62f3a'] = 'Precios';
 $_MODULE['<{dejala}prestashop>dejala_menu_9bbd45bad55cfc620803907f2d8a0217'] = 'Historial de entregas';
 $_MODULE['<{dejala}prestashop>dejala_menu_36d5423bb12a6d74d1d0f0ba09ef47cb'] = 'Parámetros técnicos';
+$_MODULE['<{dejala}prestashop>dejala_menu_35cf95ca41b6d074cfaeac16b0e0906c'] = 'DEJALA PRO';
 $_MODULE['<{dejala}prestashop>dejala_picking_timetable_845398bc903ec28114a5f9874d83936b'] = 'El stock está abierto :';
 $_MODULE['<{dejala}prestashop>dejala_picking_timetable_2084c04f7a380a68b653e5fc82d352f0'] = 'De';
 $_MODULE['<{dejala}prestashop>dejala_picking_timetable_7fc56270e7a70fa81a5935b72eacbe29'] = 'A';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{sendtoafriend}prestashop>product_page_2107f6398c37b4b9ee1e1b5afb5d3b2a'] = 'Enviar a un amigo';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2074615eb70699e55b1f9289c6c77c25'] = 'Módulo enviar a un amigo';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_b6835a400c888d666e6e5aee9f2a7bc6'] = 'Permitir a los clientes enviar un enlace del producto a un amigo';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_c38f24359344dada5d54e7eef08de8bb'] = 'Debe rellenar todos los campos.';

@@ -28,6 +28,7 @@ $_MODULE['<{cheque}prestashop>payment_execution_c42b053ef8c36f950ff37a0897d3a963
 $_MODULE['<{cheque}prestashop>payment_execution_6b3ef039e038a131d05bcd208a1b9799'] = 'Ha elegido pagar por cheque.';
 $_MODULE['<{cheque}prestashop>payment_execution_c884ed19483d45970c5bf23a681e2dd2'] = 'Este es el resumen de su pedido:';
 $_MODULE['<{cheque}prestashop>payment_execution_e2867a925cba382f1436d1834bb52a1c'] = 'El importe total de su pedido es';
+$_MODULE['<{cheque}prestashop>payment_execution_1f87346a16cf80c372065de3c54c86d9'] = 'IVA incluído';
 $_MODULE['<{cheque}prestashop>payment_execution_2f1585fcd1150d6a7d6edbe3468a63f8'] = 'Aceptamos las siguientes divisas para los cheques:';
 $_MODULE['<{cheque}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'Elija una de las siguientes:';
 $_MODULE['<{cheque}prestashop>payment_execution_c4309902a6192747d56f3539941acc49'] = 'Aceptamos las siguientes divisas para los envíos de cheques:';
