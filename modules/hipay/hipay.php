@@ -75,8 +75,10 @@ class Hipay extends PaymentModule
 		$paymentParams->setCurrency(strtoupper($currency->iso_code));
 		$paymentParams->setIdForMerchant($cart->id);
 		$paymentParams->setMerchantSiteId(Configuration::get('HIPAY_SITEID'));
-		$paymentParams->setUrlOk((Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key));
-		$paymentParams->setUrlAck((Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php'));
+		$paymentParams->setUrlCancel(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
+		$paymentParams->setUrlNok(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
+		$paymentParams->setUrlOk(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
+		$paymentParams->setUrlAck(Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php');
 		$paymentParams->setBackgroundColor('#FFFFFF');
 
 		if (!$paymentParams->check())
