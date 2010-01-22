@@ -20,6 +20,7 @@ class MoneyBookers extends PaymentModule
 	{
 		if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn'))
 			return false;
+		Configuration::updateValue('MB_HIDE_LOGIN', 1);
 		return true;
 	}
 

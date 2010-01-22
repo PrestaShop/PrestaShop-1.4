@@ -261,6 +261,8 @@ $mbParams['recipient_description'] = Configuration::get('PS_SHOP_NAME');
 $mbParams['hide_login'] = intval(Configuration::get('MB_HIDE_LOGIN'));
 $mbParams['id_logo'] = intval(Configuration::get('MB_ID_LOGO'));
 $mbParams['id_logo_wallet'] = intval(Configuration::get('MB_ID_LOGO_WALLET'));
+$mbParams['return_url'] = Configuration::get('MB_RETURN_URL');
+$mbParams['cancel_url'] = Configuration::get('MB_CANCEL_URL');
 
 /* About the customer */
 $mbParams['pay_from_email'] = $customer->email;

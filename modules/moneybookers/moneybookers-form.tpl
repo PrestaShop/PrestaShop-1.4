@@ -11,7 +11,7 @@
 			<input type="hidden" name="status_url2" value="{$pay_to_email}" />
 			<input type="hidden" name="language" value="{$language}" />
 			<input type="hidden" name="hide_login" value="{$hide_login}" />
-			<input type="hidden" name="pay_from_email" value="fff{$pay_from_email}" />
+			<input type="hidden" name="pay_from_email" value="{$pay_from_email}" />
 			<input type="hidden" name="firstname" value="{$firstname}" />
 			<input type="hidden" name="lastname" value="{$lastname}" />
 			{if (!empty($date_of_birth))}<input type="hidden" name="date_of_birth" value="{$date_of_birth}" />{/if}
@@ -31,8 +31,8 @@
 			<input type="hidden" name="amount4_description" value="{$amount4_description}" />
 			<input type="hidden" name="amount4" value="{$amount4}" />
 			<input type="hidden" name="payment_methods" value="ACC">
-			<input type="hidden" name="return_url_target" value="3">  
-			<input type="hidden" name="cancel_url_target" value="3">  
+			<input type="hidden" name="return_url_target" value="2">  
+			<input type="hidden" name="cancel_url_target" value="2">  
 			<input type="hidden" name="merchant_fields" value="platform"> 
 			<input type="hidden" name="platform" value="prestashop">
 			<input type="image" src="{$base_dir}modules/moneybookers/logo-cc-{$id_logo}.gif" name="Submit" style="float: left; margin-right: 20px;" />
@@ -51,7 +51,7 @@
 			<input type="hidden" name="language" value="{$language}" />
 			<input type="hidden" name="hide_login" value="{$hide_login}" />
 			{if (!empty($logo_url))}<input type="hidden" name="logo_url" value="{$logo_url}" />{/if}
-			<input type="hidden" name="pay_from_email" value="fff{$pay_from_email}" />
+			<input type="hidden" name="pay_from_email" value="{$pay_from_email}" />
 			<input type="hidden" name="firstname" value="{$firstname}" />
 			<input type="hidden" name="lastname" value="{$lastname}" />
 			{if (!empty($date_of_birth))}<input type="hidden" name="date_of_birth" value="{$date_of_birth}" />{/if}
@@ -71,8 +71,8 @@
 			<input type="hidden" name="amount4_description" value="{$amount4_description}" />
 			<input type="hidden" name="amount4" value="{$amount4}" />
 			<input type="hidden" name="payment_methods" value="WLT">
-			<input type="hidden" name="return_url_target" value="3">  
-			<input type="hidden" name="cancel_url_target" value="3">  
+			<input type="hidden" name="return_url_target" value="2">  
+			<input type="hidden" name="cancel_url_target" value="2">  
 			<input type="hidden" name="merchant_fields" value="platform"> 
 			<input type="hidden" name="platform" value="prestashop">
 			<input type="image" style="float: left; margin-right: 20px;" src="{$base_dir}modules/moneybookers/logo-mb-{$id_logo_wallet}.gif" name="Submit">
