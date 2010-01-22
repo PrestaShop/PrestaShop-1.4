@@ -200,7 +200,7 @@ class Tools
 		$ret = 0;
 		if (($isNegative = ($price < 0)))
 			$price *= -1;
-		$price = self::ceilf($price, $c_decimals);
+		$price = self::ps_round($price, $c_decimals);
 		switch ($c_format)
 	 	{
 	 	 	/* X 0,000.00 */
