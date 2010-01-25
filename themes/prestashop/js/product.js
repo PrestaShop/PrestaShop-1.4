@@ -224,7 +224,7 @@ function updateDisplay()
 	{
 		var attribut_price_tmp = selectedCombination['price'];
 
-		var tax = noTaxForThisProduct ? 1 : ((taxRate / 100) + 1);
+		var tax = (taxRate / 100) + 1;
 
 		if (noTaxForThisProduct)
 			attribut_price_tmp /= tax;
