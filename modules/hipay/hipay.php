@@ -188,15 +188,11 @@ class Hipay extends PaymentModule
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
 
-		if ((int)Order::getOrderByCartId($id_cart))
-		  return;
-
 		$orderStatus = _PS_OS_ERROR_;
 		if (strtolower($status) == 'ok')
 			$orderStatus = _PS_OS_PAYMENT_;
 			
 		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
-
         if (trim($operation) == 'authorization' AND trim(strtolower($status)) == 'ok')
         {
             /**
@@ -214,6 +210,7 @@ class Hipay extends PaymentModule
         }
         elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
         {
+			
             /**
              * Paiement remboursé sur Hipay
              *
