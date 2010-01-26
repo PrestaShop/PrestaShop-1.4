@@ -10,18 +10,18 @@ class Hipay extends PaymentModule
 		$this->name = 'hipay';
 		$this->tab = 'Payment';
 		$this->version = 1.0;
-		
+
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
-		
+
 		parent::__construct();
-		
+
 		$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
-		
+
 		$this->displayName = $this->l('Hipay');
 		$this->description = $this->l('Accepts payments by Hipay');
 	}
-   
+
 	public function	install()
 	{
 		Configuration::updateValue('HIPAY_UNIQID', uniqid());
@@ -32,7 +32,7 @@ class Hipay extends PaymentModule
 	public function hookPayment($params)
 	{
 		global $smarty;
-		
+
 		if (Configuration::get('HIPAY_ACCOUNT') AND Configuration::get('HIPAY_PASSWORD') AND Configuration::get('HIPAY_SITEID')
 			AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
 		{
@@ -40,11 +40,11 @@ class Hipay extends PaymentModule
 			return $this->display(__FILE__, 'payment.tpl');
 		}
 	}
-	
+
 	public function payment()
 	{
 		global $cookie, $cart;
-		
+
 		$id_currency = (int)Db::getInstance()->getValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
 		if (!$id_currency OR $id_currency == -2)
 			$id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
@@ -83,7 +83,7 @@ class Hipay extends PaymentModule
 
 		if (!$paymentParams->check())
 		  return $this->l('[Hipay] Error: cannot create PaymentParams');
-		  
+
 		$taxes = array();
 		$result = Db::getInstance()->executeS('
 		SELECT DISTINCT t.id_tax, tl.name, t.rate
@@ -108,7 +108,7 @@ class Hipay extends PaymentModule
 				return $this->l('[Hipay] Error: cannot create Tax');
 			$taxes[$row['id_tax']] = $tax;
 		}
-		
+
 		$items = array();
 		foreach ($cart->getProducts($cookie->id_lang) as $product)
 		{
@@ -131,7 +131,7 @@ class Hipay extends PaymentModule
 		{
 			// For the moment, if there is a couher you can't use hipay
 			return;
-			
+
 			$item = new HIPAY_MAPI_Product();
 			$item->setName($voucher['name']);
 			$item->setInfo($voucher['description']);
@@ -143,25 +143,25 @@ class Hipay extends PaymentModule
 			    return $this->l('[Hipay] Error: cannot create Voucher').' ('.$voucher['name'].')';
 			$items[] = $item;
 		}
-		
+
 		$order = new HIPAY_MAPI_Order();
 		$order->setOrderTitle(Configuration::get('PS_SHOP_NAME'));
-		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));	
+		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));
 		$price = $cart->getOrderShippingCost($carrier->id, false);
 		$shippingTax = (Tax::checkTaxZone($carrier->id_tax, $id_zone) ? array($taxes[$carrier->id_tax]) : array());
 		$order->setShipping($price, $shippingTax);
 
 		if (!$order->check())
 		    return $this->l('[Hipay] Error: cannot create Order');
- 
+
 		try {
 			$commande = new HIPAY_MAPI_SimplePayment($paymentParams, $order, $items);
 		} catch (Exception $e) {
 		  	return $this->l('[Hipay] Error:').' '.$e->getMessage();
 		}
-		
+
 		$xmlTx = $commande->getXML();
-		//d(htmlentities($xmlTx));		
+		//d(htmlentities($xmlTx));
 		$output = HIPAY_MAPI_SEND_XML::sendXML($xmlTx);
 		$reply = HIPAY_MAPI_COMM_XML::analyzeResponseXML($output, $url, $err_msg, $err_keyword, $err_value, $err_code);
 
@@ -177,34 +177,68 @@ class Hipay extends PaymentModule
 			include(dirname(__FILE__).'/../../footer.php');
 		}
 	}
-	
+
 	public function validation()
 	{
 		if (!array_key_exists('xml', $_POST))
 			return;
 
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
-		
+
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
 
 		if ((int)Order::getOrderByCartId($id_cart))
 		  return;
-		
+
 		$orderStatus = _PS_OS_ERROR_;
 		if (strtolower($status) == 'ok')
 			$orderStatus = _PS_OS_PAYMENT_;
-
+			
 		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
-		$this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
+
+        if (trim($operation) == 'authorization' AND trim(strtolower($status)) == 'ok')
+        {
+            /**
+             * Autorisation accepté
+             */
+            $orderStatus = _PS_OS_PAYMENT_;
+        }
+        elseif (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
+        {
+            /**
+             * Paiement capturé sur Hipay = Paiement accepté sur Prestashop
+             */
+            $orderStatus = _PS_OS_PAYMENT_;
+            $this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
+        }
+        elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
+        {
+            /**
+             * Paiement remboursé sur Hipay
+             *
+             * FIXME : C'est ici qu'il faudra ajouter votre code pour mettre un paiement au statut "remboursé"
+             */
+			if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
+				die(Tools::displayError());
+            $order = new Order(intval($id_order));
+            if (!$order->valid OR $order->getCurrentState() === _PS_OS_REFUND_)
+				die(Tools::displayError());
+			$orderHistory = new OrderHistory();
+			$orderHistory->id_order = intval($order->id);
+			$orderHistory->changeIdOrderState(intval(_PS_OS_REFUND_), intval($id_order));
+			$orderHistory->addWithemail();
+        }
+
+		//$this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
 	}
 
 	public function getContent()
 	{
 		global $currentIndex, $cookie;
-		
+
 		$categories = DB::getInstance()->ExecuteS('SELECT c.id_category, cl.name FROM '._DB_PREFIX_.'category c INNER JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category AND cl.id_lang = '.(int)$cookie->id_lang.') ORDER BY cl.name');
-		
+
 		if (Tools::isSubmit('submitHipay'))
 		{
 			Configuration::updateValue('HIPAY_PROD', Tools::getValue('HIPAY_PROD'));
@@ -218,7 +252,7 @@ class Hipay extends PaymentModule
 				Configuration::updateValue('HIPAY_CATEGORY_'.(int)$category['id_category'], Tools::getValue('HIPAY_CATEGORY_'.(int)$category['id_category']));
 			Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token').'&conf=4');
 		}
-		
+
 		// Check configuration
 		$allow_url_fopen = ini_get('allow_url_fopen');
 		$openssl = extension_loaded('openssl');
@@ -232,7 +266,7 @@ class Hipay extends PaymentModule
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
 			</div>';
 		}
-		
+
 		$link = $currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token');
 		$form = '
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
@@ -310,7 +344,7 @@ class Hipay extends PaymentModule
 		</fieldset>';
 		return $form;
 	}
-	
+
 	private function getHipayCategories()
 	{
 		if (!is_array($this->arrayCategories))
@@ -324,7 +358,7 @@ class Hipay extends PaymentModule
 			}
 		}
 		return $this->arrayCategories;
-	}	
+	}
 }
 
 ?>
