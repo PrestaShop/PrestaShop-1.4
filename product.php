@@ -270,7 +270,6 @@ else
 					foreach ($group['attributes_quantity'] AS $key => &$quantity)
 						if (!$quantity)
 							unset($group['attributes'][$key]);
-			usort($groups, "Tools::naturalSortByName"); 
 			foreach($groups AS &$group)
 				natcasesort($group['attributes']);
 			foreach ($combinations AS $id_product_attribute => $comb)

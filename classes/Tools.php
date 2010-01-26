@@ -820,14 +820,6 @@ class Tools
 	{
 		return self::strtoupper(self::substr($str, 0, 1)).self::substr($str, 1);
 	}
-	
-	// Required for usort(product_features)
-	static function naturalSortByName($a, $b) 
-	{
-		if (!is_array($a) && !is_array($b))
-			return false;
-		return strnatcmp(self::strtolower($a['name']), self::strtolower($b['name']));
-	}
 
 	static public function orderbyPrice(&$array, $orderWay)
 	{
