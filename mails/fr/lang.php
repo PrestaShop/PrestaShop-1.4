@@ -2,7 +2,7 @@
 
 global $_LANGMAIL;
 $_LANGMAIL = array();
-$_LANGMAIL['Your new admin password'] = 'Votre nouveau mot de passe administateur';
+$_LANGMAIL['Your new admin password'] = 'Votre nouveau mot de passe administrateur';
 $_LANGMAIL['Your password'] = 'Votre nouveau mot de passe';
 $_LANGMAIL['Welcome!'] = 'Bienvenue !';
 $_LANGMAIL['Order confirmation'] = 'Confirmation de commande';
