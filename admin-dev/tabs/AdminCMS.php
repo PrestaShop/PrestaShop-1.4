@@ -132,6 +132,7 @@ class AdminCMS extends AdminTab
 					theme_advanced_statusbar_location : "bottom",
 					theme_advanced_resizing : true,
 					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					document_base_url : "'.__PS_BASE_URI__.'",
 					// Drop lists for link/image/media/template dialogs
 					template_external_list_url : "lists/template_list.js",
 					external_link_list_url : "lists/link_list.js",
