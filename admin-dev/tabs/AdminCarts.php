@@ -146,7 +146,7 @@ class AdminCarts extends AdminTab
 										.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 										.'</a></td>
 									<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
-									<td align="center" class="productQuantity">'.(intval($product['quantity']) - $product['customizationQuantityTotal']).'</td>
+									<td align="center" class="productQuantity">'.(intval($product['cart_quantity']) - $product['customizationQuantityTotal']).'</td>
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
 									<td align="right">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 								</tr>';
