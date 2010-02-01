@@ -49,19 +49,19 @@ $_MODULES = array();
 
 $currency = Tools::setCurrency();
 
-if (is_numeric($cookie->id_cart))
+if (intval($cookie->id_cart))
 {
 	$cart = new Cart(intval($cookie->id_cart));
-	$cart->id_lang = intval($cookie->id_lang);
 	if ($cart->OrderExists())
 		unset($cookie->id_cart, $cart);
-	else
-	{	
+	elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)
+	{
 		if ($cookie->id_customer)
-    		$cart->id_customer = intval($cookie->id_customer);
-    	$cart->id_currency = intval($cookie->id_currency);
-    	$cart->update();
-    }
+			$cart->id_customer = intval($cookie->id_customer);
+		$cart->id_lang = intval($cookie->id_lang);
+		$cart->id_currency = intval($cookie->id_currency);
+		$cart->update();
+	}
 }
 
 if (!isset($cart) OR !$cart->id)
