@@ -24,9 +24,17 @@ class AdminGroups extends AdminTab
 	 	$this->view = true;
 	 	$this->delete = true;
 		
-		$this->_select = 'count(cg.id_customer) as nb';
-		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)';
+		$this->_select = '
+		(SELECT COUNT(jcg.`id_customer`)
+		FROM `'._DB_PREFIX_.'customer_group` jcg 
+		LEFT JOIN `'._DB_PREFIX_.'customer` jc ON (jc.`id_customer` = jcg.`id_customer`) 
+		WHERE jc.`deleted` != 1 
+		AND jcg.`id_group` = a.`id_group`) AS nb
+		';
+		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)
+						JOIN '._DB_PREFIX_.'customer c on (c.id_customer = cg.id_customer)';
 		$this->_group = 'GROUP BY a.id_group';
+		//$this->_where = ' AND c.`deleted` != 1';
 		$this->_listSkipDelete = array(1);
 
  		$this->fieldsDisplay = array(
@@ -155,6 +163,8 @@ class AdminGroups extends AdminTab
 			}
 			echo '</table>';
 		}
+		else
+			echo '<p><img src="../img/admin/information.png" style="float:left;margin-right:5px;" alt="" /> '.$this->l('No user in this group.').'</p>';
 	}
 
 	public function postProcess()

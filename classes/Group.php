@@ -79,7 +79,8 @@ class		Group extends ObjectModel
 		SELECT cg.`id_customer`, c.*
 		FROM `'._DB_PREFIX_.'customer_group` cg
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
-		WHERE cg.`id_group` = '.intval($this->id).'
+		WHERE cg.`id_group` = '.intval($this->id).' 
+		AND c.`deleted` != 1 
 		ORDER BY cg.`id_customer` ASC');
 	}
 	
