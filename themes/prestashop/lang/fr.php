@@ -460,6 +460,7 @@ $_LANG['shopping-cart_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_LANG['shopping-cart_12d3c7a4296542c62474856ec452c045'] = 'Réf.';
 $_LANG['shopping-cart_9ff9c46512c186ebae182519a55dc6a9'] = 'Dispo.';
 $_LANG['shopping-cart_6c957f72dc8cdacc75762f2cbdcdfaf2'] = 'Prix unitaire';
+$_LANG['shopping-cart_3389dae361af79b04c9c8e7057f60cc6'] = '*';
 $_LANG['shopping-cart_03ab340b3f99e03cff9e84314ead38c0'] = 'Qté';
 $_LANG['shopping-cart_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_LANG['shopping-cart_3a5199ec2407f4b2f90496072ea8f006'] = 'Total produits HT :';

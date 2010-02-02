@@ -20,7 +20,7 @@ if (!strlen($error) &&
 	$wishlist = WishList::getByToken($token);
 	if ($wishlist !== false)
 		WishList::addBoughtProduct($wishlist['id_wishlist'], $id_product, $id_product_attribute, $cart->id, 1);
-}
+}
 else
 	$error = Tools::displayError('You need to login');
 
