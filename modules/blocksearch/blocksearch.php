@@ -25,6 +25,8 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		// check if library javascript load in header hook
+		$this->_disabledSearchAjax();
 		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
@@ -33,6 +35,8 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		// check if library javascript load in header hook
+		$this->_disabledSearchAjax();
 		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
@@ -41,6 +45,8 @@ class BlockSearch extends Module
 	{
 		global $smarty;
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		// check if library javascript load in header hook
+		$this->_disabledSearchAjax();
 		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch-top.tpl');
 	}
@@ -49,5 +55,11 @@ class BlockSearch extends Module
 	{
 		if (Configuration::get('PS_SEARCH_AJAX'))
 			return $this->display(__FILE__, 'header.tpl');
+	}
+	
+	private function _disabledSearchAjax()
+	{
+		if (!$this->isRegisteredInHook('header'))
+			Configuration::updateValue('PS_SEARCH_AJAX', 0);
 	}
 }

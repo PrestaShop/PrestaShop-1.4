@@ -634,4 +634,18 @@ abstract class Module
 		Db::getInstance()->Execute('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
 		return (bool)Db::getInstance()->NumRows();
 	}
+	
+	public function isRegisteredInHook($hook)
+	{
+		if (!$this->id)
+			return false;
+		
+		return Db::getInstance()->getValue('
+		SELECT COUNT(*) 
+		FROM `'._DB_PREFIX_.'hook_module` hm
+		LEFT JOIN `'._DB_PREFIX_.'hook` h ON (h.`id_hook` = hm.`id_hook`) 
+		WHERE h.`name` = \''.pSQL($hook).'\'
+		AND hm.`id_module` = '.intval($this->id)
+		);
+	}
 }
