@@ -152,9 +152,16 @@ class AdminShipping extends AdminTab
 			echo $sign_right.' '.($key == 'PS_SHIPPING_HANDLING' ? $this->l('(tax excl.)') : '');
 			echo '</div>';
 		}
-
 		echo '
-				<label class="clear">'.$this->l('Billing:').' </label>
+			<div class="margin-form">
+				<input type="submit" value="'.$this->l('   Save   ').'" name="submitHandling'.$this->table.'" class="button" />
+			</div>
+			<p style="font-size:12px;color:#7F7F7F;">'.$this->l('If you set these parameters to 0, they will be disabled.').'</p>
+		</fieldset>
+		<br />
+		<fieldset>
+			<legend><img src="../img/admin/money.gif" />'.$this->l('Billing').'</legend>
+				<label class="clear">'.$this->l('Choice of range:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="PS_SHIPPING_METHOD" value="0" id="total_price"
 					'.((isset($confValues['PS_SHIPPING_METHOD']) AND $confValues['PS_SHIPPING_METHOD'] == 0) ? 'checked="checked"' : '').'/>
