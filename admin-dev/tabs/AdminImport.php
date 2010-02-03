@@ -359,30 +359,11 @@ class AdminImport extends AdminTab
 	
 	static public function array_walk(&$array, $funcname, &$user_data = false)
 	{
-		$func_is_method = false;
-		if (!isset($funcname[1]))
-		{
-			if (!function_exists($funcname[0]))
-			return false;
-		}
-		else
-		{
-			if (!class_exists($funcname[0], true) OR !method_exists($funcname[0], $funcname[1]))
-				return false;
-			else
-				$func_is_method = true;
-		}
+		if (!is_callable($funcname)) return false;
+		
 		foreach ($array AS $k => $row)
-		{
-			if ($func_is_method)
-			{
-				if (!call_user_func_array(array($funcname[0], $funcname[1]), array($row, $k, $user_data)))
-					return false;
-			}
-			else
-				if (!call_user_func_array($funcname[0], array($row, $key, $user_data)))
-					return false;
-		}
+			if (!call_user_func_array($funcname, array($row, $k, $user_data)))
+				return false;
 		return true;
 	}
 
