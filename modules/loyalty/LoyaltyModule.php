@@ -143,14 +143,14 @@ class LoyaltyModule extends ObjectModel
 	static public function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate=false)
 	{
 		$query = '
-			SELECT f.id_order AS id, fh.date_add AS date, (o.total_paid - o.total_shipping) AS total_without_shipping, fh.points AS points, fh.id_loyalty AS id_loyalty, fh.id_loyalty_state AS id_loyalty_state, fsl.name AS state
-			FROM `'._DB_PREFIX_.'loyalty_history` fh
-			LEFT JOIN `'._DB_PREFIX_.'loyalty` f ON (f.id_loyalty = fh.id_loyalty)
+			SELECT f.id_order AS id, f.date_add AS date, (o.total_paid - o.total_shipping) AS total_without_shipping, f.points AS points, f.id_loyalty AS id_loyalty, f.id_loyalty_state AS id_loyalty_state, fsl.name AS state
+			FROM `'._DB_PREFIX_.'loyalty` f
 			LEFT JOIN `'._DB_PREFIX_.'orders` o ON (f.id_order = o.id_order)
-			LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (fh.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.intval($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (f.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.intval($id_lang).')
 			WHERE f.id_customer = '.intval($id_customer);
 		if ($onlyValidate===true)
-			$query.= ' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getValidationId()).' GROUP BY f.id_loyalty';
+			$query.= ' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getValidationId());
+		$query .= ' GROUP BY f.id_loyalty';
 		return Db::getInstance()->ExecuteS($query);
 	}
 
