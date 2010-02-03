@@ -98,7 +98,7 @@ class LoyaltyModule extends ObjectModel
 		$points = 0;
 		if (Validate::isLoadedObject($product))
 		{
-			if (!intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND ($product->reduction_price > 0 OR $product->reduction_percent > 0 OR $product->on_sale))
+			if (!intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND ($product->reduction_from == $product->reduction_to OR (date('Y-m-d') <= $product->reduction_to AND date('Y-m-d') >= $product->reduction_from) AND ($product->reduction_price > 0 OR $product->reduction_percent > 0 OR $product->on_sale)))
 				return $points;
 			$price = $product->getPrice();
 			if (intval($id_product_attribute) AND $id_product_attribute!==false)
