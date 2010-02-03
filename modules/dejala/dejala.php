@@ -600,7 +600,7 @@ class Dejala extends Module
 			$this->mylog('product:');
 			$this->mylog($this->logValue($product, 1));
 
-			$orderedQuantity = intval($product['quantity']);
+			$orderedQuantity = intval($product['cart_quantity']);
 			$productQuantity = intval($product['stock_quantity']);
 			if ( ($productQuantity < $orderedQuantity) || ($productQuantity <= 0) )
 				return (TRUE);
