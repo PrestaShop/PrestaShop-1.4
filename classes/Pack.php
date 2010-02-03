@@ -19,10 +19,18 @@ class Pack extends Product
 	
 	public static function noPackPrice($id_product)
 	{
+		global $cookie;
+		
 		$sum = 0;
+		
+		if (intval($cookie->id_customer) != 0)
+			$price_display_method = !Group::getPriceDisplayMethod(intval($cookie->id_customer));
+		else
+			$price_display_method = !Group::getDefaultPriceDisplayMethod();
+		
 		$items = self::getItems($id_product, Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($items as $item)
-			$sum += $item->getPrice() * $item->pack_quantity;
+			$sum += $item->getPrice($price_display_method) * $item->pack_quantity;
 		return $sum;		
 	}
 	
