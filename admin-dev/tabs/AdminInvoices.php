@@ -23,7 +23,7 @@ class AdminInvoices extends AdminTab
 		$this->_fieldsOptions = array(
 			'PS_INVOICE' => array('title' => $this->l('Enable invoices:'), 'desc' => $this->l('Select whether or not to activate invoice for your shop'), 'cast' => 'intval', 'type' => 'bool'),
 			'PS_INVOICE_PREFIX' => array('title' => $this->l('Invoice prefix:'), 'desc' => $this->l('Prefix used for invoices'), 'size' => 2, 'type' => 'textLang'),
-			'PS_INVOICE_NUMBER' => array('title' => $this->l('Invoice number:'), 'desc' => $this->l('The next invoice will begin with this number, and then increase with each additional invoice'), 'size' => 2, 'type' => 'text'),
+			'PS_INVOICE_NUMBER' => array('title' => $this->l('Invoice number:'), 'desc' => $this->l('The next invoice will begin with this number, and then increase with each additional invoice'), 'size' => 2, 'type' => 'text', 'cast' => 'intval')
 		);
 
 		parent::__construct();
@@ -67,19 +67,26 @@ class AdminInvoices extends AdminTab
 	{
 		global $currentIndex;
 		
-		if(Tools::getValue('submitPrint'))
+		if(Tools::isSubmit('submitPrint'))
 		{
-			if (!Validate::isDate($_POST['date_from']))
+			if (!Validate::isDate(Tools::getValue('date_from')))
 				$this->_errors[] = $this->l('Invalid from date');
-			if (!Validate::isDate($_POST['date_to']))
+			if (!Validate::isDate(Tools::getValue('date_to')))
 				$this->_errors[] = $this->l('Invalid end date');
 			if (!sizeof($this->_errors))
 			{
-				$orders = Order::getOrdersIdInvoiceByDate($_POST['date_from'], $_POST['date_to'], NULL, 'invoice');
+				$orders = Order::getOrdersIdInvoiceByDate(Tools::getValue('date_from'), Tools::getValue('date_to'), NULL, 'invoice');
 				if (sizeof($orders))
-					Tools::redirectAdmin('pdf.php?invoices&date_from='.urlencode($_POST['date_from']).'&date_to='.urlencode($_POST['date_to']).'&token='.$this->token);
+					Tools::redirectAdmin('pdf.php?invoices&date_from='.urlencode(Tools::getValue('date_from')).'&date_to='.urlencode(Tools::getValue('date_to')).'&token='.$this->token);
 				$this->_errors[] = $this->l('No invoice found for this period');
 			}
+		}
+		elseif (Tools::isSubmit('submitOptionsinvoice'))
+		{
+			if (intval(Tools::getValue('PS_INVOICE_NUMBER')) == 0)
+				$this->_errors[] = $this->l('Invalid invoice number');
+			else
+				parent::postProcess();
 		}
 		else
 			parent::postProcess();
