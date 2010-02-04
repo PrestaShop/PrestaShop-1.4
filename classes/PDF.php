@@ -703,7 +703,7 @@ class PDF extends PDF_PageGroup
 	{
 		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
 			die(Tools::displayError());
-//d(Configuration::get('PS_TAX'));
+
 		if (self::$order->total_paid == '0.00')
 			return ;
 
