@@ -804,7 +804,7 @@ class PDF extends PDF_PageGroup
 		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
 			die(Tools::displayError());
 
-		if (self::$order->total_paid == '0.00' OR !intval(Configuration::get('PS_TAX')))
+		if (self::$order->total_paid == '0.00' OR (!intval(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
 			return ;
 
 		// Setting products tax
