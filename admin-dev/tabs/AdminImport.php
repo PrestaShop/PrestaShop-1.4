@@ -222,7 +222,7 @@ class AdminImport extends AdminTab
 				
 				self::$default_values = array(
 				'alias' => 'Alias',	
-				'postcode' => 'X',			trunk/img/tmp/product_mini_9.jpg
+				'postcode' => 'X'
 				);				
 								
 			break;			
