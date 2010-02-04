@@ -242,7 +242,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{assign var='groupName' value='group_'|cat:$id_attribute_group}
 				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $group.is_color_group}$('#resetImages').show('slow');{/if}">
 					{foreach from=$group.attributes key=id_attribute item=group_attribute}
-						<option value="{$id_attribute|intval}"{if (isset($smarty.get.$groupName) && $smarty.get.$groupName|intval == $id_attribute) || $group.default == $id_attribute} selected="selected"{/if}>{$group_attribute|escape:'htmlall':'UTF-8'}</option>
+						<option value="{$id_attribute|intval}"{if (isset($smarty.get.$groupName) && $smarty.get.$groupName|intval == $id_attribute) || $group.default == $id_attribute} selected="selected"{/if} title="{$group_attribute|escape:'htmlall':'UTF-8'}">{$group_attribute|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
 				</select>
 			</p>
