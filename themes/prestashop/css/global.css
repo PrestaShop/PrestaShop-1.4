@@ -572,7 +572,7 @@ img.icon { margin-right: 0.5em; vertical-align: middle }
 .breadcrumb a:hover { text-decoration: underline }
 
 /* pagination.tpl */
-div.pagination { margin: 1em 0 }
+div.pagination { padding: 1em 0 }
 ul.pagination {
 	list-style: none;
 	float: left
@@ -750,7 +750,7 @@ ul#header_links {
 	background: #e5e6e7 url('../img/block_search_bg.jpg') no-repeat top right;
 	height: 28px;
 	width: 336px;
-	float: left
+	float: right
 }
 #header #search_block_top p { padding: 0.4em 0 0.4em 1em }
 #header #search_block_top label, #header #search_block_top input { float: left }
