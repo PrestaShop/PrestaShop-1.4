@@ -135,7 +135,7 @@ class AdminCarts extends AdminTab
 							'.($product['id_product_attribute'] ? 'AND pa.id_product_attribute = '.intval($product['id_product_attribute']) : ''));
 							/* Customization display */
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
-							if ($product['quantity'] > $product['customizationQuantityTotal'])
+							if ($product['cart_quantity'] > $product['customizationQuantityTotal'])
 								echo '
 								<tr>
 									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['id_product']).'-'.intval($image['id_image']).'.jpg',
@@ -218,23 +218,23 @@ class AdminCarts extends AdminTab
 	{
 		$order = $this->loadObject();
 
-		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])]))
+		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['id_product'])][intval($product['id_product_attribute'])]))
 		{
 			echo '
 			<tr>
-				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['product_id']).'-'.intval($image['id_image']).'.jpg',
-				'product_mini_'.intval($product['product_id']).(isset($product['product_attribute_id']) ? '_'.intval($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
-				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
-					<span class="productName">'.$product['product_name'].'</span><br />
-					'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'] : '')
-					.(($product['product_reference'] AND $product['product_supplier_reference']) ? ' / '.$product['product_supplier_reference'] : '')
+				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['id_product']).'-'.intval($image['id_image']).'.jpg',
+				'product_mini_'.intval($product['id_product']).(isset($product['id_product_attribute']) ? '_'.intval($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
+				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
+					<span class="productName">'.$product['name'].'</span><br />
+					'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
+					.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 					.'</a></td>
-				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
+				<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
 				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
+				<td align="right">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
 			</tr>';
-			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customization)
+			foreach ($customizedDatas[intval($product['id_product'])][intval($product['id_product_attribute'])] AS $customization)
 			{
 				echo '
 				<tr>
@@ -262,7 +262,7 @@ class AdminCarts extends AdminTab
 					<td align="center"></td>
 					<td align="center" class="productQuantity">'.$customization['quantity'].'</td>
 					<td align="center" class="productQuantity"></td>
-					<td align="center">'.Tools::displayPrice(floatval($product['product_price']) * floatval($customization['quantity']), $currency, false, false).'</td>
+					<td align="center"></td>
 				</tr>';
 			}
 		}
