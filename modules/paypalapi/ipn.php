@@ -4,7 +4,7 @@ include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
 
 include_once(_PS_MODULE_DIR_.'paypalapi/paypalapi.php');
-$pp = new PaypalLib();
+$pp = new PaypalApi();
 
 if (!$transaction_id = strval(Tools::getValue('txn_id')))
 	die('No transaction id');
