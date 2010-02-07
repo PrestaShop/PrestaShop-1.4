@@ -433,7 +433,7 @@ $_LANG['French Southern Territories'] = 'Terres australes françaises';
 $_LANG['Aland Islands'] = 'Îles Åland';
 $_LANG['Default country:'] = 'Pays par défaut :';
 $_LANG['Your configuration is valid, click next to continue!'] = 'Votre configuration est valide,<br />cliquez sur suivant pour continuer !';
-$_LANG['Your configuration is invalid,<br />thank you to fix these small issues:'] = 'Votre configuration n\'est pas valide,<br />merci de corriger ces problèmes :';
+$_LANG['Your configuration is invalid. Please fix the issues below:'] = 'Votre configuration n\'est pas valide,<br />merci de corriger ces problèmes :';
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Vous devez au préalable créer une base de données (aide disponible dans le fichier readme.txt)';
 $_LANG['This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'] = 'Cette option peut être bloquante si votre configuration e-mail est erronée, merci de la désactiver si vous ne pouvez pas passer à l\'étape suivante.';
 
