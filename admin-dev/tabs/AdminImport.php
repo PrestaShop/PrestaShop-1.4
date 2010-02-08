@@ -16,7 +16,7 @@ include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
 
-define('UNFRIENDLY_ERROR', true); // Used for validatefields diying without user friendly error or not
+define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
 
 // this value set the number of columns visible on each page
 define('MAX_COLUMNS', 6);
