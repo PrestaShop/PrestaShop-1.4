@@ -23,7 +23,7 @@ if (Tools::isSubmit('submitMessage'))
     {
 		if (intval($cookie->id_customer))
 			$customer = new Customer(intval($cookie->id_customer));
-		if (Mail::Send(intval($cookie->id_lang), 'contact', 'Message from contact form', array('{email}' => $_POST['from'], '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from)))
+		if (Mail::Send(intval($cookie->id_lang), 'contact', 'Message from contact form', array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from)))
 			$smarty->assign('confirmation', 1);
 		else
 			$errors[] = Tools::displayError('an error occurred while sending message');
