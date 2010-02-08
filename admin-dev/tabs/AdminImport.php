@@ -677,10 +677,28 @@ class AdminImport extends AdminTab
 			{
 				if (isset($product->tags) AND !empty($product->tags))
 				{
+					// Delete tags for this id product, for no duplicating error
+					Tag::deleteTagsForProduct($product->id);
+					
 					$tag = new Tag();
-					$array = self::createMultiLangField($product->tags);
-					foreach ($array AS $key => $tags)
-						$a = $tag->addTags($key, $product->id, $tags);
+					if (!is_array($product->tags))
+					{
+						$product->tags = self::createMultiLangField($product->tags);
+						foreach($product->tags AS $key => $tags)
+							$a = $tag->addTags($key, $product->id, $tags);
+					}
+					else
+					{
+						foreach ($product->tags AS $key => $tags)
+						{
+							$str = '';
+							foreach($tags AS $one_tag)
+								$str .= $one_tag.',';
+							$str = rtrim($str, ',');
+							
+							$a = $tag->addTags($key, $product->id, $str);
+						}
+					}
 				}
 
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))

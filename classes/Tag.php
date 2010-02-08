@@ -176,6 +176,11 @@ class Tag extends ObjectModel
 		}
 		return $result1;
 	}
+	
+	static public function deleteTagsForProduct($id_product)
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.intval($id_product));
+	}
 }
 
 ?>
