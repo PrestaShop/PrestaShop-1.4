@@ -74,9 +74,9 @@ if (isset($_GET['ajaxDiscountCustomers']))
 }
 
 if (Tools::getValue('page') == 'prestastore')
-	readfile('http://www.prestastore.com/adminmodules.php');
+	readfile('http://www.prestastore.com/adminmodules.php?lang='.Language::getIsoById($cookie->id_lang));
 if (Tools::getValue('page') == 'themes')
-	readfile('http://www.prestastore.com/adminthemes.php');
+	readfile('http://www.prestastore.com/adminthemes.php?lang='.Language::getIsoById($cookie->id_lang));
 
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
