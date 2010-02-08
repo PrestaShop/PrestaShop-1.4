@@ -32,9 +32,8 @@ class AdminGroups extends AdminTab
 		AND jcg.`id_group` = a.`id_group`) AS nb
 		';
 		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer_group cg on (cg.id_group = a.id_group)
-						JOIN '._DB_PREFIX_.'customer c on (c.id_customer = cg.id_customer)';
+						LEFT JOIN '._DB_PREFIX_.'customer c on (c.id_customer = cg.id_customer)';
 		$this->_group = 'GROUP BY a.id_group';
-		//$this->_where = ' AND c.`deleted` != 1';
 		$this->_listSkipDelete = array(1);
 
  		$this->fieldsDisplay = array(
