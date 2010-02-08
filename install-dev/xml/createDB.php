@@ -1,5 +1,8 @@
 <?php
 
+if (function_exists('date_default_timezone_set'))
+	date_default_timezone_set('Europe/Paris');
+
 //delete settings file if it exist
 if(file_exists(SETTINGS_FILE))
 {
