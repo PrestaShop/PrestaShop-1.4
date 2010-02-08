@@ -16,7 +16,7 @@ include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
 
-define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
+define('UNFRIENDLY_ERROR', true); // Used for validatefields diying without user friendly error or not
 
 // this value set the number of columns visible on each page
 define('MAX_COLUMNS', 6);
@@ -695,7 +695,10 @@ class AdminImport extends AdminTab
 							$image->cover = (!$key AND !$productHasImages) ? true : false;
 							$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
 							if (($fieldError = $image->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $image->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $image->add())
-								self::copyImg($product->id, $image->id, $url);
+							{
+								if (!self::copyImg($product->id, $image->id, $url))
+									$this->_warnings[] = Tools::displayError('Error copying image: ').$url; 
+							}
 							else
 							{
 								$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('cannot be saved');
@@ -1377,6 +1380,7 @@ class AdminImport extends AdminTab
 					$this->_errors[] = $this->l('no entity selected');
 			}
 		}
+		
 		parent::postProcess();
 	}
 }
