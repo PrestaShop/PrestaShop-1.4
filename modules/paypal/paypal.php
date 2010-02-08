@@ -164,24 +164,14 @@ class Paypal extends PaymentModule
 		$customer = new Customer(intval($params['cart']->id_customer));
 		$business = Configuration::get('PAYPAL_BUSINESS');
 		$header = Configuration::get('PAYPAL_HEADER');
-		$currency = $this->getCurrency();
+		$currency = new Currency($params['cart']->id_currency);
 
 		if (!Validate::isEmail($business))
 			return $this->l('Paypal error: (invalid or undefined business account email)');
 
 		if (!Validate::isLoadedObject($address) OR !Validate::isLoadedObject($customer) OR !Validate::isLoadedObject($currency))
 			return $this->l('Paypal error: (invalid address or customer)');
-			
-		$products = $params['cart']->getProducts();
 
-		foreach ($products as $key => $product)
-		{
-			$products[$key]['name'] = str_replace('"', '\'', $product['name']);
-			if (isset($product['attributes']))
-				$products[$key]['attributes'] = str_replace('"', '\'', $product['attributes']);
-			$products[$key]['name'] = htmlentities(utf8_decode($product['name']));
-			$products[$key]['paypalAmount'] = Tools::convertPrice($product['price_wt'], $currency);
-		}
 		$smarty->assign(array(
 			'address' => $address,
 			'country' => new Country(intval($address->id_country)),
@@ -191,9 +181,9 @@ class Paypal extends PaymentModule
 			'currency' => $currency,
 			'paypalUrl' => $this->getPaypalUrl(),
 			// products + discounts - shipping cost
-			'amount' => Tools::convertPrice($params['cart']->getOrderTotal(true, 4), $currency),
+			'amount' => $params['cart']->getOrderTotal(true, 4),
 			// products + discounts + shipping cost
-			'total' => Tools::convertPrice($params['cart']->getOrderTotal(true, 3), $currency),
+			'total' => $params['cart']->getOrderTotal(true, 3),
 			'id_cart' => intval($params['cart']->id),
 			'goBackUrl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.intval($params['cart']->id).'&id_module='.intval($this->id),
 			'notify' => 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/paypal/validation.php',
