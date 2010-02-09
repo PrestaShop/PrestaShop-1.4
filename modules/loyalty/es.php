@@ -37,7 +37,6 @@ $_MODULE['<{loyalty}prestashop>loyalty_66c2c90ea9f6f4a12854195085781d7f'] = 'Tot
 $_MODULE['<{loyalty}prestashop>loyalty_928666bdf20510dfa5c58393b77f1798'] = 'Valor de bono:';
 $_MODULE['<{loyalty}prestashop>loyalty_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mi cuenta:';
 $_MODULE['<{loyalty}prestashop>loyalty_c540093e64d84440025b2d8201f04336'] = 'Mis puntos recompensa';
-$_MODULE['<{loyalty}prestashop>loyalty_3c770669863f000c90fce39b4ef7ab6d'] = 'Mis puntos recompensa';
 $_MODULE['<{loyalty}prestashop>loyalty_5acc2ceeb883ba07cef2d02ea382f242'] = 'Usted no ha solicitado pedidos.';
 $_MODULE['<{loyalty}prestashop>loyalty_fd705bf8dca1ce13cc9ec5c418ecd63b'] = '¿Está seguro de querer transformar sus puntos en vales de compra?';
 $_MODULE['<{loyalty}prestashop>loyalty_4db04271e368fe3d4e1aa7332a18fa9d'] = 'Transformar mis puntos en un vale de';

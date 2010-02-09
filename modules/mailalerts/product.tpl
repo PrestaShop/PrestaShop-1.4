@@ -46,6 +46,7 @@ function  addNotification()
 			{ldelim}
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
+				$('#oosHook').html("{l s='Request notification registered' mod='mailalerts'}");
 			{rdelim}
 		{rdelim}
 	{rdelim});
