@@ -17,6 +17,8 @@ class Hipay extends PaymentModule
 		parent::__construct();
 
 		$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
+		// Define extracted from mapi/mapi_defs.php
+		define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
 
 		$this->displayName = $this->l('Hipay');
 		$this->description = $this->l('Accepts payments by Hipay');
@@ -60,8 +62,6 @@ class Hipay extends PaymentModule
 		$carrier = new Carrier($cart->id_carrier, $cart->id_lang);
 		$id_zone = Db::getInstance()->getValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
 
-		// Define extracted from mapi/mapi_defs.php
-		define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
@@ -189,9 +189,6 @@ class Hipay extends PaymentModule
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
 
 		$orderStatus = _PS_OS_ERROR_;
-		if (strtolower($status) == 'ok')
-			$orderStatus = _PS_OS_PAYMENT_;
-			
 		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
         if (trim($operation) == 'authorization' AND trim(strtolower($status)) == 'ok')
         {
@@ -213,8 +210,6 @@ class Hipay extends PaymentModule
 			
             /**
              * Paiement remboursé sur Hipay
-             *
-             * FIXME : C'est ici qu'il faudra ajouter votre code pour mettre un paiement au statut "remboursé"
              */
 			if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
 				die(Tools::displayError());
@@ -226,8 +221,6 @@ class Hipay extends PaymentModule
 			$orderHistory->changeIdOrderState(intval(_PS_OS_REFUND_), intval($id_order));
 			$orderHistory->addWithemail();
         }
-
-		//$this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
 	}
 
 	public function getContent()
@@ -254,13 +247,15 @@ class Hipay extends PaymentModule
 		$allow_url_fopen = ini_get('allow_url_fopen');
 		$openssl = extension_loaded('openssl');
 		$curl = extension_loaded('curl');
-		if (!$allow_url_fopen OR !$openssl OR !$curl)
+		$ping = file_exists(HIPAY_GATEWAY_URL);
+		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping)
 		{
 			echo '
 			<div class="warning warn">
 				'.($allow_url_fopen ? '' : '<h3>'.$this->l('You are not allowed to open external URLs (allow_url_fopen)').'</h3>').'
 				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
+				'.($ping ? '' : '<h3>'.$this->l('Cannot access payment gateway').' '.HIPAY_GATEWAY_URL.' ('.$this->l('check your firewall').')</h3>').'
 			</div>';
 		}
 
