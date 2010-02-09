@@ -10,7 +10,7 @@ idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intv
 countries = new Array();
 countriesNeedIDNumber = new Array();
 {foreach from=$countries item='country'}
-	{if isset($country.states)}
+	{if isset($country.states) && $country.contains_states}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
 			countries[{$country.id_country|intval}]['{$smarty.foreach.states.iteration}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
