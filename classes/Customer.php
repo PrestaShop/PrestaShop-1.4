@@ -124,6 +124,8 @@ class		Customer extends ObjectModel
 		$this->birthday = (empty($this->years) ? $this->birthday : intval($this->years).'-'.intval($this->months).'-'.intval($this->days));
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
+		if ($this->dni === 0)
+			$this->dni = NULL;
 	 	return parent::update(true);
 	}
 	
