@@ -58,7 +58,7 @@ function	checkImage($file, $maxFileSize)
 	if (!isPicture($file))
 		return Tools::displayError('image format not recognized, allowed formats are: .gif, .jpg, .png');
 	if ($file['error'])
-		return Tools::displayError('error while uploading image; change your server\'s settings');
+		return Tools::displayError('error while uploading image; change your server\'s settings').'('.Tools::displayError('Error code: ').$file['error'].')';
 	return false;
 }
 
