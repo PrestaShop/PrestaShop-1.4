@@ -171,7 +171,7 @@ class Hipay extends PaymentModule
 		{
 			global $smarty;
 			include(dirname(__FILE__).'/../../header.php');
-			$smarty->assign('errors', array('[Hipay] '.strval($err_msg)));
+			$smarty->assign('errors', array('[Hipay] '.strval($err_msg).' ('.$output.')'));
 			$_SERVER['HTTP_REFERER'] = Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3';
 			$smarty->display(_PS_THEME_DIR_.'errors.tpl');
 			include(dirname(__FILE__).'/../../footer.php');
