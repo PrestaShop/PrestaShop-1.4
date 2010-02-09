@@ -65,13 +65,23 @@ class Gsitemap extends Module
 		$sitemap->addChild('lastmod', date("Y-m-d"));
 		$sitemap->addChild('changefreq', 'daily');
 		
-		$cmss = Db::getInstance()->ExecuteS('
-		SELECT DISTINCT b.id_cms, cl.link_rewrite, cl.id_lang
-		FROM '._DB_PREFIX_.'block_cms b
-		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
-		LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
-		WHERE l.`active` = 1
-		ORDER BY cl.id_cms, cl.id_lang ASC');
+		if (Tools::getValue('all_cms'))
+			$sql_cms = '
+			SELECT DISTINCT cl.id_cms, cl.link_rewrite, cl.id_lang
+			FROM '._DB_PREFIX_.'cms_lang cl
+			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
+			WHERE l.`active` = 1
+			ORDER BY cl.id_cms, cl.id_lang ASC';
+		else
+			$sql_cms = '
+			SELECT DISTINCT b.id_cms, cl.link_rewrite, cl.id_lang
+			FROM '._DB_PREFIX_.'block_cms b
+			LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
+			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
+			WHERE l.`active` = 1
+			ORDER BY cl.id_cms, cl.id_lang ASC';
+		
+		$cmss = Db::getInstance()->ExecuteS($sql_cms);
       	foreach($cmss AS $cms)
       	{
 			$sitemap = $xml->addChild('url');
@@ -195,33 +205,35 @@ class Gsitemap extends Module
     {
         $this->_html .=
         '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+			<div style="margin:0 0 20px 0;">
+				<input type="checkbox" name="all_cms" id="all_cms" style="vertical-align: middle;" value="1" /> <label class="t" for="all_cms">'.$this->l('Sitemap must be conatins all CMS page').'</label>
+				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default, only CMS pages on block CMS are included on Sitemap').'</p>
+			</div>
 			<input name="btnSubmit" class="button" type="submit"
 			value="'.((!file_exists(GSITEMAP_FILE)) ? $this->l('Generate sitemap file') : $this->l('Update sitemap file')).'" />
-        </form>';
-    }
-    
-    function getContent()
-    {
-        $this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
+		</form>';
+	}
+	
+	function getContent()
+	{
+		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
 		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html">
 		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
-        if (!empty($_POST))
-        {
-            $this->_postValidation();
-            if (!sizeof($this->_postErrors))
-                $this->_postProcess();
-            else
-                foreach ($this->_postErrors AS $err)
-                    $this->_html .= '<div class="alert error">'.$err.'</div>';
-        }
-        else
-            $this->_html .= '<br />';
+		if (!empty($_POST))
+		{
+			$this->_postValidation();
+			if (!sizeof($this->_postErrors))
+				$this->_postProcess();
+			else
+				foreach ($this->_postErrors AS $err)
+					$this->_html .= '<div class="alert error">'.$err.'</div>';
+		}
 
-        $this->_displaySitemap();
-        $this->_displayForm();
+		$this->_displaySitemap();
+		$this->_displayForm();
 
-        return $this->_html;
-    }
+		return $this->_html;
+	}
 }
 
 
