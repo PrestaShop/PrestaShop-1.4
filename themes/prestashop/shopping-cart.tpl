@@ -21,30 +21,22 @@
 {if isset($lastProductAdded) AND $lastProductAdded}
 	{foreach from=$products item=product}
 		{if $product.id_product == $lastProductAdded.id_product AND (!$product.id_product_attribute OR ($product.id_product_attribute == $lastProductAdded.id_product_attribute))}
-			<table class="std cart_last_product">
-				<thead>
-					<tr>
-						<th class="cart_product first_item">&nbsp;</th>
-						<th class="cart_description item">{l s='Last added product'}</th>
-						<th class="cart_total last_item">&nbsp;</th>
-					</tr>
-				</thead>
-			</table>
-			<table class="cart_last_product_content">
-				<tr>
-					<td class="cart_product"><a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'small')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></a></td>
-					<td class="cart_description">
-						<h5><a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}">{$product.name|escape:'htmlall':'UTF-8'}</a></h5>
-						{if $product.attributes}<a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}">{$product.attributes|escape:'htmlall':'UTF-8'}</a>{/if}
-					</td>
-				</tr>
-			</table>
+			<div class="cart_last_product">
+				<div class="cart_last_product_header">
+					<div class="right"></div>
+					<div class="left">{l s='Last added product'}</div>
+				</div>
+				<a  class="cart_last_product_img" href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'small')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></a>
+				<div class="cart_last_product_content">
+					<h5><a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}">{$product.name|escape:'htmlall':'UTF-8'}</a></h5>
+					{if $product.attributes}<a href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}">{$product.attributes|escape:'htmlall':'UTF-8'}</a>{/if}
+				</div>
+				<br class="clear" />
+			</div>
 		{/if}
 	{/foreach}
 {/if}
-<p>
-	{l s='Your shopping cart contains'} {$productNumber} {if $productNumber > 1}{l s='products'}{else}{l s='product'}{/if}
-</p>
+<p>{l s='Your shopping cart contains'} {$productNumber} {if $productNumber > 1}{l s='products'}{else}{l s='product'}{/if}</p>
 <div id="order-detail-content" class="table_block">
 	<table id="cart_summary" class="std">
 		<thead>

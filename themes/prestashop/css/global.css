@@ -41,7 +41,7 @@ br.clear {
 	font-size: 0;
 	height: 0
 }
-noscript ul {list-style-type: none; background: black; color: white; padding: 10px; border: 1px solid gray;}
+noscript ul {list-style-type: none; background: black; color: white; padding: 10px; border: 1px solid gray }
 
 /* Footer links */
 ul.footer_links {
@@ -195,18 +195,17 @@ h1#logo {
 #left_column {
 	clear: left;
 	width: 191px;
-	padding-right: 19px;
-	overflow-x:hidden
+	padding-right: 21px;
+	overflow-x: hidden
 }
 #center_column {
-	width: 560px;
-	margin: 0 0 30px 0;
-	overflow-x:hidden
+	width: 556px;
+	margin: 0 0 30px 0
 }
 #right_column {
 	width: 191px;
-	padding-left: 19px;
-	overflow-x:hidden
+	padding-left: 21px;
+	overflow-x: hidden
 }
 
 /* global RTE fields */
@@ -245,10 +244,10 @@ div.rte h2,
 	text-transform: none;
 	height: auto
 }
-div.rte h3, .mceContentBody h3 {font-size: 16px;}
-div.rte h4, .mceContentBody h4 {font-size: 14px;}
-div.rte h5,.mceContentBody h5 {font-size: 12px;}
-div.rte h6, div.rte h6 {font-size: 8px;}
+div.rte h3, .mceContentBody h3 { font-size: 16px }
+div.rte h4, .mceContentBody h4 { font-size: 14px }
+div.rte h5,.mceContentBody h5 { font-size: 12px }
+div.rte h6, div.rte h6 { font-size: 8px }
 div.rte ol, .mceContentBody ul, div.rte ol, .mceContentBody ul { padding-left: 2em }
 div.rte ul, .mceContentBody ul {
 	list-style-type: square;
@@ -902,8 +901,8 @@ div.myaccount .block_content {
 }
 
 /* block in the center column */
-#center_column p { margin: 0.5em 0; padding-left: 0.7em;}
-#center_column div.block { width: 536px; margin: auto;}
+#center_column p { margin: 0.5em 0; padding-left: 0.7em }
+#center_column div.block { width: 536px; margin: auto }
 #center_column div.block h4 {
 	background: transparent url('../img/block_header_large.gif') no-repeat top left;
 	height: 17px;
@@ -1069,9 +1068,9 @@ div.tags_block p a:hover {
 	background-color: #5D717E;
 	text-decoration: none
 }
-a.tag_level3 { font-size: 1.8em; font-weight: bold;}
-a.tag_level2 { font-size: 1.4em;}
-a.tag_level1 { font-size: 1em; color: #888!important;}
+a.tag_level3 { font-size: 1.8em; font-weight: bold }
+a.tag_level2 { font-size: 1.4em }
+a.tag_level1 { font-size: 1em; color: #888!important }
 
 /* Block manufacturer */
 .blockmanufacturer ul, .blocksupplier ul { padding-bottom: 0.6em }
@@ -1103,7 +1102,7 @@ div#viewed-products_block_left div.block_content ul.products li img { margin-rig
 /* Block newsletter */
 div#newsletter_block_left div.block_content { padding: 1em 0; text-align: center }
 div#newsletter_block_left div.block_content p { padding: 0.3em 0; text-align: center }
-div#newsletter_block_left div.block_content input.button_mini { margin: 1em auto 0em auto;}
+div#newsletter_block_left div.block_content input.button_mini { margin: 1em auto 0em auto }
 
 /* Block RSS */
 div#rss_block_left p { margin: 0.5em 0; text-align: center }
@@ -1121,7 +1120,7 @@ div.paiement_logo_block img { margin: 0 0.5em }
 	padding: 0;
 	margin-bottom: 1em
 }
-.editorial_block p { text-align: justify; padding-top: 0.4em;}
+.editorial_block p { text-align: justify; padding-top: 0.4em }
 #editorial_block_center p { padding-left: 0 }
 
 /* Block advertising */
@@ -1454,11 +1453,35 @@ ul#product_list li span.availability {
 ul#product_list li a.button { margin-top: 0.5em }
 
 /* shopping cart */
-table.cart_last_product {
+#order div.cart_last_product { 
 	width: 300px;
-	margin-left: 130px
+	margin: 0 auto 12px
 }
-table.cart_last_product_content { margin: 5px 0 10px 130px }
+#order div.cart_last_product .cart_last_product_header div {
+	background:url('../img/table_header.gif') no-repeat;
+	height:24px
+}
+#order div.cart_last_product .cart_last_product_header div.left {
+	margin:0 24px 5px 0;
+	padding-left:27px;
+	line-height:24px;
+	color:#374853;
+	font-weight:bold
+}
+#order div.cart_last_product .cart_last_product_header div.right {
+	float:right;
+	background-position:right 0;
+	width:24px
+}
+#order div.cart_last_product a.cart_last_product_img { float:left }
+#order div.cart_last_product a.cart_last_product_img img {
+	margin:0 6px;
+	border:1px solid #D0D1D5
+}
+#order div.cart_last_product .cart_last_product_content { float:right; width:241px }
+#order div.cart_last_product .cart_last_product_content a { text-decoration:none }
+#order div.cart_last_product .cart_last_product_content h5 { font-size:9px }
+#order div.cart_last_product .cart_last_product_content h5 a { color:#595A5E }
 
 p.cart_navigation { padding: 1em 0!important }
 p.cart_navigation .button,
