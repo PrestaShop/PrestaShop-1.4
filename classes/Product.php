@@ -1893,6 +1893,18 @@ class		Product extends ObjectModel
 		return Db::getInstance()->Execute($query);
 	}
 
+	static public function duplicateDownload($id_product_old, $id_product_new)
+	{
+		$resource = Db::getInstance()->Execute('SELECT `display_filename`, `physically_filename`, `date_deposit`, `date_expiration`, `nb_days_accessible`, `nb_downloadable`, `active` FROM `'._DB_PREFIX_.'product_download` WHERE `id_product` = '.intval($id_product_old));
+		if (!Db::getInstance()->NumRows())
+			return true;
+		$query = 'INSERT INTO `'._DB_PREFIX_.'product_download` (`id_product`, `display_filename`, `physically_filename`, `date_deposit`, `date_expiration`, `nb_days_accessible`, `nb_downloadable`, `active`) VALUES';
+		while ($row = Db::getInstance()->nextRow($resource))
+			$query .= ' ('.intval($id_product_new).', \''.pSQL($row['display_filename']).'\', \''.pSQL($row['physically_filename']).'\', \''.pSQL($row['date_deposit']).'\', \''.pSQL($row['date_expiration']).'\', '.intval($row['nb_days_accessible']).', '.intval($row['nb_downloadable']).', '.intval($row['active']).'),';
+		$query = rtrim($query, ',');
+		return Db::getInstance()->Execute($query);
+	}
+
 	static public function duplicateQuantityDiscount($id_product_old, $id_product_new)
 	{
 		$return = true;
