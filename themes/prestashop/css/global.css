@@ -1457,28 +1457,30 @@ ul#product_list li a.button { margin-top: 0.5em }
 	width: 300px;
 	margin: 0 auto 12px
 }
-#order div.cart_last_product .cart_last_product_header div {
-	background:url('../img/table_header.gif') no-repeat;
-	height:24px
+#order div.cart_last_product .cart_last_product_header,
+ #order div.cart_last_product .cart_last_product_header div.left {
+	background: url('../img/table_header.gif') right 0;
 }
 #order div.cart_last_product .cart_last_product_header div.left {
-	margin:0 24px 5px 0;
-	padding-left:27px;
-	line-height:24px;
-	color:#374853;
-	font-weight:bold
-}
-#order div.cart_last_product .cart_last_product_header div.right {
-	float:right;
-	background-position:right 0;
-	width:24px
+	background-color:#fff;
+	background-position:0 0;
+	margin-bottom:5px;
+	padding-left: 27px;
+	width: 249px;
+	height: 24px;
+	line-height: 24px;
+	color: #374853;
+	font-weight: bold
 }
 #order div.cart_last_product a.cart_last_product_img { float:left }
 #order div.cart_last_product a.cart_last_product_img img {
 	margin:0 6px;
 	border:1px solid #D0D1D5
 }
-#order div.cart_last_product .cart_last_product_content { float:right; width:241px }
+#order div.cart_last_product .cart_last_product_content { 
+	float:right; 
+	width:241px 
+}
 #order div.cart_last_product .cart_last_product_content a { text-decoration:none }
 #order div.cart_last_product .cart_last_product_content h5 { font-size:9px }
 #order div.cart_last_product .cart_last_product_content h5 a { color:#595A5E }

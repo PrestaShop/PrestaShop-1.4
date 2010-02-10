@@ -23,7 +23,6 @@
 		{if $product.id_product == $lastProductAdded.id_product AND (!$product.id_product_attribute OR ($product.id_product_attribute == $lastProductAdded.id_product_attribute))}
 			<div class="cart_last_product">
 				<div class="cart_last_product_header">
-					<div class="right"></div>
 					<div class="left">{l s='Last added product'}</div>
 				</div>
 				<a  class="cart_last_product_img" href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|escape:'htmlall':'UTF-8'}"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'small')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></a>
