@@ -365,7 +365,7 @@ function displayCarrier()
 	// Wrapping fees
 	$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
 	$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-	$wrapping_fees_tax_exc = $wrapping_fees / (1 + ((floatval($wrapping_fees_tax->rate) / 100)));
+	$wrapping_fees_tax_inc = $wrapping_fees * (1 + ((floatval($wrapping_fees_tax->rate) / 100)));
 
 	if (Validate::isUnsignedInt($cart->id_carrier) AND $cart->id_carrier)
 	{
@@ -386,8 +386,8 @@ function displayCarrier()
 		'default_carrier' => intval(Configuration::get('PS_CARRIER_DEFAULT')),
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
-		'total_wrapping' => $wrapping_fees,
-		'total_wrapping_tax_exc' => $wrapping_fees_tax_exc));
+		'total_wrapping' => $wrapping_fees_tax_inc,
+		'total_wrapping_tax_exc' => $wrapping_fees));
 	Tools::safePostVars();
 	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 	$js_files = array(__PS_BASE_URI__.'js/jquery/thickbox-modified.js');

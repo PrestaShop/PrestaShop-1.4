@@ -324,7 +324,7 @@ class AdminPreferences extends AdminTab
 
 				case 'price':
 					$default_currency = new Currency(intval(Configuration::get("PS_CURRENCY_DEFAULT")));
-					echo $default_currency->getSign('left').'<input type="'.$field['type'].'" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.$default_currency->getSign('right');
+					echo $default_currency->getSign('left').'<input type="'.$field['type'].'" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.$default_currency->getSign('right').' '.$this->l('(tax excl.)');
 					break;
 
 				case 'textLang':

@@ -614,10 +614,10 @@ class		Cart extends ObjectModel
 		if ($this->gift)
 		{
 			$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
-			if (!$withTaxes)
+			if ($withTaxes)
 			{
 				$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-				$wrapping_fees /= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
+				$wrapping_fees *= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
 			}
 			$wrapping_fees = Tools::ps_round($wrapping_fees, 2);
 		}

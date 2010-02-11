@@ -866,6 +866,9 @@ class PDF extends PDF_PageGroup
 		// Display wrapping tax
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
+			$tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+			$taxRate = $tax->rate;
+			
 			$nb_tax++;
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;

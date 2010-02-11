@@ -69,3 +69,19 @@ CHANGE `id_zone` `id_zone` int(11) unsigned NOT NULL;
 
 ALTER TABLE `PREFIX_tab` 
 CHANGE `id_parent` `id_parent` int(11) unsigned NOT NULL;
+
+UPDATE `PREFIX_configuration` 
+SET `value` = IFNULL(ROUND(value / (1 + (
+	SELECT `rate` 
+	FROM `PREFIX_tax` 
+	WHERE `id_tax` = (
+		SELECT `value` 
+		FROM (
+			SELECT `value`
+			FROM `PREFIX_configuration` 
+			WHERE `name` = 'PS_GIFT_WRAPPING_TAX'
+		)tmp
+	)
+) / 100), 2), 0) 
+WHERE `name` = 'PS_GIFT_WRAPPING_PRICE';
+
