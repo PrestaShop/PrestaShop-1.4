@@ -92,6 +92,29 @@ function smartyTruncate($params, &$smarty)
 
 $smarty->register_function('t', 'smartyTruncate');
 
+function smarty_modifier_truncate($string, $length = 80, $etc = '...',
+								  $break_words = false, $middle = false, $charset = 'UTF-8')
+{
+	if ($length == 0)
+		return '';
+ 
+	if (strlen($string) > $length) {
+		$length -= min($length, strlen($etc));
+		if (!$break_words && !$middle) {
+			$string = preg_replace('/\s+?(\S+)?$/', '', Tools::substr($string, 0, $length+1, $charset));
+		}
+		if(!$middle) {
+			return Tools::substr($string, 0, $length, $charset) . $etc;
+		} else {
+			return Tools::substr($string, 0, $length/2, $charset) . $etc . Tools::substr($string, -$length/2, $charset);
+		}
+	} else {
+		return $string;
+	}
+}
+
+$smarty->register_modifier('truncate', 'smarty_modifier_truncate');
+
 global $link;
 
 $link = new Link();
