@@ -332,7 +332,7 @@ class ProductComments extends Module
 		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
 		$smarty->assign(array(
 			'logged' => intval($cookie->id_customer),
-			'action_url' => $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'],
+			'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
 			'comments' => ProductComment::getByProduct(intval($_GET['id_product'])),
 			'criterions' => ProductCommentCriterion::getByProduct(intval($_GET['id_product']), intval($cookie->id_lang)),
 			'averages' => $averages,
