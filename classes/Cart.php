@@ -767,11 +767,12 @@ class		Cart extends ObjectModel
 			else
 				$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 		}
-		$shipping_cost = Tools::convertPrice($shipping_cost);
 		
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
-            $shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
+			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
+		
+		$shipping_cost = Tools::convertPrice($shipping_cost, new Currency(intval($this->id_currency)));
 		
 		// Apply tax
 		if (isset($carrierTax))

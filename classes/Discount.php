@@ -234,7 +234,7 @@ class		Discount extends ObjectModel
 						$in_category = true;
 						break;
 					}
-				return (($in_category) ? Tools::convertPrice($this->value) : 0);
+				return (($in_category) ? Tools::convertPrice($this->value, ((isset($cart->id_currency) && $cart->id_currency != 0) ? new Currency(intval($cart->id_currency)) : NULL)) : 0);
 			case 3:
 				// Shipping is free
 				return '!';

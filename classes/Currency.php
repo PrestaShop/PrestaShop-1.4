@@ -231,6 +231,7 @@ class		Currency extends ObjectModel
 	static public function getCurrent()
 	{
 		global $cookie;
+		
 		if (!self::$current)
 		{
 			if (isset($cookie->id_currency) AND $cookie->id_currency)
