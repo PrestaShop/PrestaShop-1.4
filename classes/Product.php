@@ -1341,8 +1341,11 @@ class		Product extends ObjectModel
 			$cart = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_cart) AND $cookie->id_cart) ? new Cart(intval($cookie->id_cart)) : null);
 		else
 			$cart = new Cart(intval($id_cart));
-
-		$currency = new Currency(intval($cart->id_currency));
+		
+		if (Validate::isLoadedObject($cart))
+			$currency = new Currency(intval($cart->id_currency));
+		else
+			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		
 		if (!$id_address_delivery)
 			$id_address_delivery = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_address_delivery) AND $cookie->id_address_delivery) ? intval($cookie->id_address_delivery) : null);
@@ -1390,7 +1393,7 @@ class		Product extends ObjectModel
 			$price -= $reduc;
 
 		// Quantity discount
-		if (intval($cart->id))
+		if (intval($id_cart))
 		{
 			$totalQuantity = intval(Db::getInstance()->getValue('
 				SELECT SUM(`quantity`)
