@@ -26,11 +26,11 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 	<div class="block_content">
 	<!-- block summary -->
 	<div id="cart_block_summary" class="{if $colapseExpandStatus eq 'expanded' || !$ajax_allowed}collapsed{else}expanded{/if}">
-		<span class="ajax_cart_quantity">{if $cart_qties > 0}{$cart_qties}{/if}</span>
+		{if $cart_qties > 0}<span class="ajax_cart_quantity">{$cart_qties}</span>{/if}
 		<span class="ajax_cart_product_txt_s{if $cart_qties < 2} hidden{/if}">{l s='products' mod='blockcart'}</span>
 		<span class="ajax_cart_product_txt{if $cart_qties != 1} hidden{/if}">{l s='product' mod='blockcart'}</span>
-		<span class="ajax_cart_total">{if $cart_qties > 0}{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false)}{else}{convertPrice price=$cart->getOrderTotal(true)}{/if}{/if}</span>
-		<span class="ajax_cart_no_product">{if $cart_qties == 0}{l s='(empty)' mod='blockcart'}{/if}</span>
+		{if $cart_qties > 0}<span class="ajax_cart_total">{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false)}{else}{convertPrice price=$cart->getOrderTotal(true)}{/if}</span>{/if}
+		{if $cart_qties == 0}<span class="ajax_cart_no_product">{if $cart_qties == 0}{l s='(empty)' mod='blockcart'}{/if}</span>{/if}
 	</div>
 	<!-- block list of products -->
 	<div id="cart_block_list" class="{if $colapseExpandStatus eq 'expanded' || !$ajax_allowed}expanded{else}collapsed{/if}">
