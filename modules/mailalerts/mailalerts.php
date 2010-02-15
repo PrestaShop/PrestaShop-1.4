@@ -262,7 +262,7 @@ class MailAlerts extends Module
 			if ($cust['id_customer'])
 			{
 				$customer = new Customer(intval($cust['id_customer']));
-				$customer_email = 0;
+				$customer_email = $customer->email;
 				$customer_id = $customer->id;
 			}
 			else
@@ -271,6 +271,8 @@ class MailAlerts extends Module
 				$customer_id = 0;
 			}
 			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', $this->l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			if ($customer_id)
+				$customer_email = 0;
 			self::deleteAlert(intval($customer_id), strval($customer_email), intval($id_product), intval($id_product_attribute));
 		}
 	}
