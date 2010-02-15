@@ -262,7 +262,7 @@ class MailAlerts extends Module
 			if ($cust['id_customer'])
 			{
 				$customer = new Customer(intval($cust['id_customer']));
-				$customer_email = $customer->email;
+				$customer_email = 0;
 				$customer_id = $customer->id;
 			}
 			else
