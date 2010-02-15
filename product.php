@@ -304,6 +304,7 @@ $smarty->assign(array(
 	'errors' => $errors,
 	'categories' => Category::getHomeCategories(intval($cookie->id_lang)),
 	'have_image' => Product::getCover(intval(Tools::getValue('id_product'))),
+	'tax_enabled' => Configuration::get('PS_TAX'),
 	'display_qties' => intval(Configuration::get('PS_DISPLAY_QTIES')),
 	'display_ht' => !Tax::excludeTaxeOption()));
 

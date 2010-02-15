@@ -195,11 +195,11 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<span class="our_price_display">
 				{if !$priceDisplay || $priceDisplay == 2}
 					<span id="our_price_display">{convertPrice price=$product->getPrice(true, $smarty.const.NULL)}</span>
-						{l s='tax incl.'}
+						{if $tax_enabled}{l s='tax incl.'}{/if}
 				{/if}
 				{if $priceDisplay == 1}
 					<span id="our_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>
-						{l s='tax excl.'}
+						{if $tax_enabled}{l s='tax excl.'}{/if}
 				{/if}
 				</span>
 				{if $priceDisplay == 2}
@@ -212,11 +212,11 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<p id="old_price"><span class="bold">
 				{if !$priceDisplay || $priceDisplay == 2}
 					<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct()}</span>
-						{l s='tax incl.'}
+						{if $tax_enabled}{l s='tax incl.'}{/if}
 				{/if}
 				{if $priceDisplay == 1}
 					<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct(true)}</span>
-						{l s='tax excl.'}
+						{if $tax_enabled}{l s='tax excl.'}{/if}
 				{/if}
 				</span>
 				</p>
