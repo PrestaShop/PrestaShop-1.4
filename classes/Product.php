@@ -1344,6 +1344,8 @@ class		Product extends ObjectModel
 		
 		if (Validate::isLoadedObject($cart))
 			$currency = new Currency(intval($cart->id_currency));
+		elseif (isset($cookie->id_currency) AND intval($cookie->id_currency))
+			$currency = new Currency(intval($cookie->id_currency));
 		else
 			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		
@@ -1392,8 +1394,8 @@ class		Product extends ObjectModel
 		if ($usereduc)
 			$price -= $reduc;
 
-		// Quantity discount
 		if (intval($id_cart))
+		// Quantity discount
 		{
 			$totalQuantity = intval(Db::getInstance()->getValue('
 				SELECT SUM(`quantity`)
