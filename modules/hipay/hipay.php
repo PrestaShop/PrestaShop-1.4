@@ -48,24 +48,26 @@ class Hipay extends PaymentModule
 		}
 	}
 
-  private function getModuleCurrency($cart)
-  {
+	private function getModuleCurrency($cart)
+	{
 		$id_currency = (int)Db::getInstance()->getValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
 		if (!$id_currency OR $id_currency == -2)
 			$id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
 		elseif ($id_currency == -1)
 			$id_currency = $cart->id_currency;
 		return $id_currency;
-  }
+	}
 
 	public function payment()
 	{
-	  global $cookie, $cart;
+		global $cookie, $cart;
 
-	  $id_currency = $this->getModuleCurrency($cart);
+		$id_currency = $this->getModuleCurrency($cart);
+		// If the currency is forced to a different one than the current one, then the cart must be updated
 		if ($cart->id_currency != $id_currency)
 			if (Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'cart SET id_currency = '.(int)$id_currency.' WHERE id_cart = '.(int)$cart->id))
 				$cart->id_currency = $id_currency;
+		
 		$currency = new Currency($id_currency);
 		$language = new Language($cart->id_lang);
 		$customer = new Customer($cart->id_customer);
@@ -98,85 +100,20 @@ class Hipay extends PaymentModule
 		if (!$paymentParams->check())
 		  return $this->l('[Hipay] Error: cannot create PaymentParams');
 
-		// $taxes = array();
-		// $result = Db::getInstance()->executeS('
-		// SELECT DISTINCT t.id_tax, tl.name, t.rate
-		// FROM '._DB_PREFIX_.'cart_product cp
-		// INNER JOIN '._DB_PREFIX_.'product p ON cp.id_product = p.id_product
-		// INNER JOIN '._DB_PREFIX_.'tax t ON p.id_tax = t.id_tax
-		// INNER JOIN '._DB_PREFIX_.'tax_lang tl ON tl.id_tax = t.id_tax AND tl.id_lang = '.(int)$cookie->id_lang.'
-		// WHERE cp.id_cart = '.(int)$cart->id.'
-		// UNION
-		// SELECT t2.id_tax, tl2.name, t2.rate
-		// FROM '._DB_PREFIX_.'cart c
-		// INNER JOIN '._DB_PREFIX_.'carrier ca ON c.id_carrier = ca.id_carrier
-		// INNER JOIN '._DB_PREFIX_.'tax t2 ON ca.id_tax = t2.id_tax
-		// INNER JOIN '._DB_PREFIX_.'tax_lang tl2 ON tl2.id_tax = t2.id_tax AND tl2.id_lang = '.(int)$cookie->id_lang.'
-		// WHERE c.id_cart = '.(int)$cart->id);
-		// foreach ($result as $row)
-		// {
-			// $tax = new HIPAY_MAPI_Tax();
-			// $tax->setTaxName($row['name']);
-			// $tax->setTaxVal($row['rate']);
-			// if (!$tax->check())
-				// return $this->l('[Hipay] Error: cannot create Tax');
-			// $taxes[$row['id_tax']] = $tax;
-		// }
-
-		// $items = array();
-		// foreach ($cart->getProducts($cookie->id_lang) as $product)
-		// {
-			// $item = new HIPAY_MAPI_Product();
-			// $item->setName($product['name']);
-			// $item->setInfo($product['reference']);
-			// $item->setquantity($product['cart_quantity']);
-			// $item->setRef($product['id_product'].($product['id_product_attribute'] ? '-'.$product['id_product_attribute'] : ''));
-			// $item->setCategory(Configuration::get('HIPAY_CATEGORY_'.(int)$product['id_category_default']) ? Configuration::get('HIPAY_CATEGORY_'.(int)$product['id_category_default']) : Configuration::get('HIPAY_CATEGORY'));
-			// $price = Product::getPriceStatic($product['id_product'], false, $product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity']);
-			// $item->setPrice($price);
-			// if (Tax::checkTaxZone($product['id_tax'], $id_zone))
-		       	  // $item->setTax(array($taxes[$product['id_tax']]));
-			// if (!$item->check())
-			    // return $this->l('[Hipay] Error: cannot create Product').' ('.$product['id_product'].($product['id_product_attribute'] ? '-'.$product['id_product_attribute'] : '').')';
-			// $items[] = $item;
-		// }
-		
-
-			$item = new HIPAY_MAPI_Product();
-			$item->setName($this->l('Cart'));
-			$item->setInfo('');
-			$item->setquantity(1);
-			$item->setRef($cart->id);
-			$item->setCategory(Configuration::get('HIPAY_CATEGORY'));
-			$item->setPrice($cart->getOrderTotal());
-			if (!$item->check())
-			    return $this->l('[Hipay] Error: cannot create "Cart" Product');
-			$items = array($item);
-
-
-		// foreach ($cart->getDiscounts() as $voucher)
-		// {
-			/* For the moment, if there is a voucher you can't use hipay */
-			// return;
-
-			// $item = new HIPAY_MAPI_Product();
-			// $item->setName($voucher['name']);
-			// $item->setInfo($voucher['description']);
-			// $item->setquantity(1);
-			// $item->setRef('voucher_'.$voucher['id_discount']);
-			// $item->setCategory(Configuration::get('HIPAY_CATEGORY'));
-			// $item->setPrice(-1 * $voucher['value_real']);
-			// if (!$item->check())
-			    // return $this->l('[Hipay] Error: cannot create Voucher').' ('.$voucher['name'].')';
-			// $items[] = $item;
-		// }
+		$item = new HIPAY_MAPI_Product();
+		$item->setName($this->l('Cart'));
+		$item->setInfo('');
+		$item->setquantity(1);
+		$item->setRef($cart->id);
+		$item->setCategory(Configuration::get('HIPAY_CATEGORY'));
+		$item->setPrice($cart->getOrderTotal());
+		if (!$item->check())
+			return $this->l('[Hipay] Error: cannot create "Cart" Product');
+		$items = array($item);
 
 		$order = new HIPAY_MAPI_Order();
 		$order->setOrderTitle(Configuration::get('PS_SHOP_NAME'));
 		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));
-		// $price = $cart->getOrderShippingCost($carrier->id, false);
-		// $shippingTax = (Tax::checkTaxZone($carrier->id_tax, $id_zone) ? array($taxes[$carrier->id_tax]) : array());
-		// $order->setShipping($price, $shippingTax);
 
 		if (!$order->check())
 		    return $this->l('[Hipay] Error: cannot create Order');
