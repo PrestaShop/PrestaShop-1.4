@@ -4,7 +4,7 @@
  * N'est pas utilisé directement
  *
  */
-abstract class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
+class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 
 	/**
 	 * Paramètres du paiement

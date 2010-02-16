@@ -1,5 +1,6 @@
 <?php
-abstract class HIPAY_MAPI_COMM_XML {
+class HIPAY_MAPI_COMM_XML
+{
 	/**
 	 * Traitement de la réponse de la plateforme après l'envoi du
 	 * flux représentant un paiement
@@ -12,7 +13,8 @@ abstract class HIPAY_MAPI_COMM_XML {
 	 * @param string $err_code
 	 * @return boolean
 	 */
-	public function analyzeResponseXML($xml,&$url,&$err_msg,&$err_keyword,&$err_value,&$err_code) {
+	public static function analyzeResponseXML($xml,&$url,&$err_msg,&$err_keyword,&$err_value,&$err_code)
+        {
 		$url='';
 		$err_msg='';
 		$err_keyword='';
@@ -53,12 +55,13 @@ abstract class HIPAY_MAPI_COMM_XML {
 	 * @param array $merchantdatas
 	 * @return boolean
 	 */
-	public function analyzeNotificationXML($xml,&$operation,&$status,&$date,&$time,&$transid,&$origAmount,&$origCurrency,&$idformerchant,&$merchantdatas) {
+	public static function analyzeNotificationXML($xml,&$operation,&$status,&$date,&$time,&$transid,&$origAmount,&$origCurrency,&$idformerchant,&$merchantdatas)
+        {
 		$operation='';
 		$status='';
 		$date='';
 		$time='';
-        $transid='';
+                $transid='';
 		$origAmount='';
 		$origCurrency='';
 		$idformerchant='';
@@ -103,7 +106,7 @@ abstract class HIPAY_MAPI_COMM_XML {
 		if (isset($obj->result[0]->merchantDatas)) {
 			$d = $obj->result[0]->merchantDatas->children();
 			foreach($d as $xml2) {
-				if (eregi('^_aKey_',$xml2->getName())) {
+				if (preg_match('#^_aKey_#i',$xml2->getName())) {
 					$indice = substr($xml2->getName(),6);
 					$xml2 = (array)$xml2;
 					$valeur = (string)$xml2[0];

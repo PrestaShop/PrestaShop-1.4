@@ -3,7 +3,7 @@
  * Représente une ligne de la commande
  *
  */
-abstract class HIPAY_MAPI_Item extends HIPAY_MAPI_lockable {
+class HIPAY_MAPI_Item extends HIPAY_MAPI_lockable {
 	function __construct() {
 		parent::__construct();
 	}

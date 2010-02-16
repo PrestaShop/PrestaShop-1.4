@@ -1,5 +1,5 @@
 <?php
-abstract class HIPAY_MAPI_lockable extends HIPAY_MAPI_XML {
+class HIPAY_MAPI_lockable extends HIPAY_MAPI_XML {
 	/**
 	 * Etat du vérou
 	 *

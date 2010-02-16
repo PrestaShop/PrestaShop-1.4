@@ -48,7 +48,7 @@ class HIPAY_MAPI_UTILS {
 	 * @return boolean
 	 */
 	public static function checkURL( $url ) {
-		return eregi( '^(((http|https):\/\/){0,1})(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(.*)', $url );
+		return preg_match( '#^(((http|https):\/\/){0,1})(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(.*)#i', $url );
 	}
 
 	/**
@@ -58,7 +58,7 @@ class HIPAY_MAPI_UTILS {
 	 * @return boolean
 	 */
 	public static function checkemail( $email ) {
-		return eregi( '^[_a-z0-9-]+(\.[_a-z0-9-]*)*@[a-z0-9-]+(\.[a-z0-9-]+)+$', $email );
+		return preg_match( '#^[_a-z0-9-]+(\.[_a-z0-9-]*)*@[a-z0-9-]+(\.[a-z0-9-]+)+$#i', $email );
 	}
 
 	public static function parseDelay( $delay )

@@ -323,7 +323,7 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		if (!ereg("[A-Z]{2}_[a-z]{2}",$defaultLang))
+        if (!preg_match('#^[A-Z]{2}_[a-z]{2}$#',$defaultLang))
 			return false;
 		$this->defaultLang=$defaultLang;
 		return true;
@@ -348,7 +348,7 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		if (!ereg("[A-Z]+",$media))
+        if (!preg_match('#^[A-Z]+$#',$media))
 			return false;
 		$this->media=$media;
 		return true;
@@ -454,9 +454,9 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		if (!ereg("[A-Z]{3}",$currency))
+        if (!preg_match('#^[A-Z]{3}$#',$currency))
 			return false;
-		$this->currency=$currency;
+		$this->currency = $currency;
 		return true;
 	}
 
@@ -739,10 +739,10 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setBackgroundColor($bg_color) {
 		if ($this->_locked)
 			return false;
-		$bg_color=trim($bg_color);
-		if (!eregi("#([0-9a-f]){6}",$bg_color) && $bg_color!='')
+		$bg_color = trim($bg_color);
+        if (!preg_match('#^\#([0-9a-f]){6}$#i', $bg_color) && $bg_color != '')
 			return false;
-		$this->bg_color=$bg_color;
+		$this->bg_color = $bg_color;
 		return true;
 	}
 

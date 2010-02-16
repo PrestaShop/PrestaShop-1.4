@@ -1,5 +1,5 @@
 <?php
-abstract class HIPAY_MAPI_SEND_XML {
+class HIPAY_MAPI_SEND_XML {
 
     /**
      * Envoi le flux XML et retourne la réponse du serveur

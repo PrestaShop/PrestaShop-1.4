@@ -1,5 +1,5 @@
 <?php
-abstract class HIPAY_MAPI_UTF8 {
+class HIPAY_MAPI_UTF8 {
 	/**
 	 * Test si une chaine est en UTF-8
 	 *

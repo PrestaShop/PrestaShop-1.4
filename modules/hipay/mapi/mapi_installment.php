@@ -82,12 +82,12 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 			return false;
 		$paymentDelay=trim($paymentDelay);
 		if ($first) {
-			if (!ereg("[0-9]+[HDM]",$paymentDelay))
+			if (!preg_match("#[0-9]+[HDM]#",$paymentDelay))
 			{
 				return false;
 			}
 		} else {
-			if (!ereg("[0-9]+[DM]",$paymentDelay)) {
+			if (!preg_match("#[0-9]+[DM]#",$paymentDelay)) {
 				return false;
 			}
 		}

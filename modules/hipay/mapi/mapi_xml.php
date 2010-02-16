@@ -1,5 +1,5 @@
 <?php
-abstract class HIPAY_MAPI_XML {
+class HIPAY_MAPI_XML {
 
 	/**
 	 * Cré le flux XML de cet objet.
