@@ -34,29 +34,38 @@ class Hipay extends PaymentModule
 
 	public function hookPayment($params)
 	{
-		global $smarty;
+		global $smarty, $cart;
 
-		if (Configuration::get('HIPAY_ACCOUNT') AND Configuration::get('HIPAY_PASSWORD') AND Configuration::get('HIPAY_SITEID')
-			AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
+		$currency = new Currency($this->getModuleCurrency($cart));
+		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
+		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD') : Configuration::get('HIPAY_PASSWORD_TEST'));
+		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
+		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
 		{
-			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
-			return $this->display(__FILE__, 'payment.tpl');
+		  $smarty->assign('hipay_prod', $this->prod);
+		  $smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
+		  return $this->display(__FILE__, 'payment.tpl');
 		}
 	}
 
-	public function payment()
-	{
-		global $cookie, $cart;
-
+  private function getModuleCurrency($cart)
+  {
 		$id_currency = (int)Db::getInstance()->getValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
 		if (!$id_currency OR $id_currency == -2)
 			$id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
 		elseif ($id_currency == -1)
 			$id_currency = $cart->id_currency;
+		return $id_currency;
+  }
+
+	public function payment()
+	{
+	  global $cookie, $cart;
+
+	  $id_currency = $this->getModuleCurrency($cart);
 		if ($cart->id_currency != $id_currency)
 			if (Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'cart SET id_currency = '.(int)$id_currency.' WHERE id_cart = '.(int)$cart->id))
 				$cart->id_currency = $id_currency;
-
 		$currency = new Currency($id_currency);
 		$language = new Language($cart->id_lang);
 		$customer = new Customer($cart->id_customer);
@@ -65,9 +74,9 @@ class Hipay extends PaymentModule
 
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 		
-		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT') : Configuration::get('HIPAY_ACCOUNT_TEST'));
+		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
 		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD') : Configuration::get('HIPAY_PASSWORD_TEST'));
-		$hipaySiteID = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
+		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
 		$paymentParams->setLogin($hipayAccount, $hipayPassword);
@@ -79,7 +88,7 @@ class Hipay extends PaymentModule
 		$paymentParams->setCaptureDay(HIPAY_MAPI_CAPTURE_IMMEDIATE);
 		$paymentParams->setCurrency(strtoupper($currency->iso_code));
 		$paymentParams->setIdForMerchant($cart->id);
-		$paymentParams->setMerchantSiteId($hipaySiteID);
+		$paymentParams->setMerchantSiteId($hipaySiteId);
 		$paymentParams->setUrlCancel(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
 		$paymentParams->setUrlNok(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
 		$paymentParams->setUrlOk(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
@@ -261,15 +270,12 @@ class Hipay extends PaymentModule
 
 			Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token').'&conf=4');
 		}
-
-		$hipaySiteID = (int)($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
 		
 		// Check configuration
 		$allow_url_fopen = ini_get('allow_url_fopen');
 		$openssl = extension_loaded('openssl');
 		$curl = extension_loaded('curl');
-		$ping = ($allow_url_fopen AND $openssl AND file_exists(HIPAY_GATEWAY_URL));
-		$siteid = ($allow_url_fopen AND $openssl AND $hipaySiteID AND file_exists('https://'.($this->prod ? '' : 'test.').'www.hipay.com/payment-order/list-categories/id/'.$hipaySiteID));
+		$ping = ($allow_url_fopen AND $openssl AND $fd = fsockopen('payment.hipay.com', 443) AND fclose($fd));
 		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping)
 		{
 			echo '
@@ -278,7 +284,6 @@ class Hipay extends PaymentModule
 				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
 				'.(($allow_url_fopen AND $openssl AND !$ping) ? '<h3>'.$this->l('Cannot access payment gateway').' '.HIPAY_GATEWAY_URL.' ('.$this->l('check your firewall').')</h3>' : '').'
-				'.(($allow_url_fopen AND $openssl AND $hipaySiteID AND !$siteid) ? '<h3>'.$this->l('Cannot retrieve Hipay categories (check your Site ID)').'</h3>' : '').'
 			</div>';
 		}
 
@@ -340,7 +345,7 @@ class Hipay extends PaymentModule
 						<td class="hipay_test" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_SITEID_TEST" name="HIPAY_SITEID_TEST" value="'.Tools::getValue('HIPAY_SITEID_TEST', Configuration::get('HIPAY_SITEID_TEST')).'" /></td>
 					</tr>
 				</table>';
-		if ($siteid)
+		if ($ping AND $hipaySiteId = (int)($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST')))
 		{
 		    $form .= '<hr class="clear" />
 	          	<label for="HIPAY_RATING">'.$this->l('Authorized age group').'</label>
@@ -356,10 +361,10 @@ class Hipay extends PaymentModule
 	          	<label for="HIPAY_CATEGORY">'.$this->l('Main category').'</label>
 				<div class="margin-form">
 					<select id="HIPAY_CATEGORY" name="HIPAY_CATEGORY">';
-			foreach ($this->getHipayCategories() as $id => $name)
+			foreach ($this->getHipayCategories($this->prod, $hipaySiteId) as $id => $name)
 				$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY', Configuration::get('HIPAY_CATEGORY')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
 			$form .= '	</select>
-					'.(!count($this->getHipayCategories()) ? '<p style="color:red">'.$this->l('Impossible to retrieve Hipay categories. Please refer to your error log for more details.').'</p>' : '').'
+					'.(!count($this->getHipayCategories($this->prod, $hipaySiteId)) ? '<p style="color:red">'.$this->l('Impossible to retrieve Hipay categories. Please refer to your error log for more details.').'</p>' : '').'
 				</div>';
 		}
 		$form .= '<hr class="clear" />
@@ -411,12 +416,12 @@ class Hipay extends PaymentModule
 		return $form;
 	}
 
-	private function getHipayCategories()
+	private function getHipayCategories($prod, $hipaySiteId)
 	{
 		if (!is_array($this->arrayCategories))
 		{
 			$this->arrayCategories = array();
-			if ($xml = simplexml_load_string(file_get_contents('https://'.($this->prod ? '' : 'test.').'www.hipay.com/payment-order/list-categories/id/'.Configuration::get('HIPAY_SITEID'))))
+			if ($xml = simplexml_load_string(file_get_contents('https://'.($prod ? '' : 'test.').'www.hipay.com/payment-order/list-categories/id/'.$hipaySiteId)))
 			{
 				foreach ($xml->children() as $categoriesList)
 					foreach ($categoriesList->children() as $category)
