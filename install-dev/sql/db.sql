@@ -699,7 +699,7 @@ CREATE TABLE `PREFIX_module_country` (
 
 CREATE TABLE `PREFIX_module_currency` (
   `id_module` int(10) unsigned NOT NULL,
-  `id_currency` int(11) unsigned NOT NULL,
+  `id_currency` int(11) NOT NULL,
   PRIMARY KEY  (`id_module`,`id_currency`),
   KEY `id_module` (`id_module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

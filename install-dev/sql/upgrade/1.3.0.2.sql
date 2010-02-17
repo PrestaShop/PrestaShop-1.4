@@ -85,3 +85,4 @@ SET `value` = IFNULL(ROUND(value / (1 + (
 ) / 100), 2), 0) 
 WHERE `name` = 'PS_GIFT_WRAPPING_PRICE';
 
+ALTER TABLE `PREFIX_module_currency` CHANGE `id_currency` `id_currency` INT(11) NOT NULL;
