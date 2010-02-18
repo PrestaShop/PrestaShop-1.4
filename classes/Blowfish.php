@@ -1,5 +1,8 @@
 <?php
 
+define('PS_UNPACK_NATIVE', 1);
+define('PS_UNPACK_MODIFIED', 2);
+
 class Crypt_Blowfish
 {
 
@@ -279,6 +282,8 @@ class Crypt_Blowfish
 	);
 	
     var $_iv = NULL;
+	
+	private $_unpackMode = PS_UNPACK_NATIVE;
 
     function __construct($key, $iv)
     {
@@ -290,6 +295,10 @@ class Crypt_Blowfish
         $data = 0;
         $datal = 0;
         $datar = 0;
+		
+		$phpVersion = phpversion();
+		if ($phpVersion == '5.2.1' OR $phpVersion == '5.2.6')
+			$this->_unpackMode = PS_UNPACK_MODIFIED;
 
         for ($i = 0; $i < 18; $i++)
 		{
@@ -363,8 +372,9 @@ class Crypt_Blowfish
         $cipherText = '';
         $len = strlen($plainText);
         $plainText .= str_repeat(chr(0), (8 - ($len % 8)) % 8);
-        for ($i = 0; $i < $len; $i += 8) {
-            list(, $Xl, $Xr) = unpack('N2',substr($plainText, $i, 8));
+        for ($i = 0; $i < $len; $i += 8)
+		{
+            list(, $Xl, $Xr) = ($this->_unpackMode == PS_UNPACK_NATIVE ? unpack('N2', substr($plainText, $i, 8)) : $this->myUnpackN2(substr($plainText, $i, 8)));
             $this->_encipher($Xl, $Xr);
             $cipherText .= pack('N2', $Xl, $Xr);
         }
@@ -376,13 +386,27 @@ class Crypt_Blowfish
         $plainText = '';
         $len = strlen($cipherText);
         $cipherText .= str_repeat(chr(0), (8 - ($len % 8)) % 8);
-        for ($i = 0; $i < $len; $i += 8) {
-            list(, $Xl, $Xr) = unpack('N2', substr($cipherText, $i, 8));
+        for ($i = 0; $i < $len; $i += 8)
+		{
+            list(, $Xl, $Xr) = ($this->_unpackMode == PS_UNPACK_NATIVE ? unpack('N2', substr($cipherText, $i, 8)) : $this->myUnpackN2(substr($cipherText, $i, 8)));
             $this->_decipher($Xl, $Xr);
             $plainText .= pack('N2', $Xl, $Xr);
         }
         return $plainText;
     }
+	
+	function myUnpackN($str)
+	{
+		if (pack('L', 0x6162797A) == pack('V', 0x6162797A))
+			return ((ord($str) << 24) | (ord(substr($str, 1)) << 16) | (ord(substr($str, 2)) << 8) | ord(substr($str, 3)));
+		else
+			return (ord($str) | (ord(substr($str, 1)) << 8) | (ord(substr($str, 2)) << 16) | (ord(substr($str, 3)) << 24));
+	}
+
+	function myUnpackN2($str)
+	{
+		return array('1' => $this->myUnpackN($str), '2' => $this->myUnpackN(substr($str, 4)));
+	} 
 }
 
 class Blowfish extends Crypt_Blowfish
