@@ -1,5 +1,9 @@
 SET NAMES 'utf8';
 
+/* ##################################### */
+/* 				STRUCTURE			 	 */
+/* ##################################### */
+
 ALTER TABLE `PREFIX_product_attachment` 
 CHANGE `id_product` `id_product` INT(10) UNSIGNED NOT NULL,
 CHANGE `id_attachment` `id_attachment` INT(10) UNSIGNED NOT NULL;
@@ -29,9 +33,6 @@ CHANGE `id_customization` `id_customization` int(10) unsigned NOT NULL;
 ALTER TABLE `PREFIX_discount_category` 
 CHANGE `id_category` `id_category` int(11) unsigned NOT NULL,
 CHANGE `id_discount` `id_discount` int(11) unsigned NOT NULL;
-
-ALTER TABLE `PREFIX_module_currency` 
-CHANGE `id_currency` `id_currency` int(11) unsigned NOT NULL;
 
 ALTER TABLE `PREFIX_module_group` 
 CHANGE `id_group` `id_group` int(11) unsigned NOT NULL;
@@ -67,8 +68,51 @@ ALTER TABLE `PREFIX_state`
 CHANGE `id_country` `id_country` int(11) unsigned NOT NULL,
 CHANGE `id_zone` `id_zone` int(11) unsigned NOT NULL;
 
-ALTER TABLE `PREFIX_tab` 
-CHANGE `id_parent` `id_parent` int(11) unsigned NOT NULL;
+/* ##################################### */
+/* 				PRICE RANGE			 	 */
+/* ##################################### */
+
+ALTER TABLE `PREFIX_attribute_impact` CHANGE `price` `price` DECIMAL(17, 2) NOT NULL;
+
+ALTER TABLE `PREFIX_delivery` CHANGE `price` `price` DECIMAL(17, 2) NOT NULL;
+
+ALTER TABLE `PREFIX_discount` CHANGE `value` `value` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `minimal` `minimal` DECIMAL(17, 2) NULL DEFAULT NULL;
+
+ALTER TABLE `PREFIX_discount_quantity` CHANGE `value` `value` DECIMAL(17, 2) UNSIGNED NOT NULL;
+
+ALTER TABLE `PREFIX_group` CHANGE `reduction` `reduction` DECIMAL(17, 2) NOT NULL DEFAULT '0.00';
+
+ALTER TABLE `PREFIX_orders` CHANGE `total_discounts` `total_discounts` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_paid` `total_paid` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_paid_real` `total_paid_real` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_products` `total_products` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_products_wt` `total_products_wt` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_shipping` `total_shipping` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `total_wrapping` `total_wrapping` DECIMAL(17, 2) NOT NULL DEFAULT '0.00';
+
+ALTER TABLE `PREFIX_order_detail` CHANGE `product_price` `product_price` DECIMAL(20, 6) NOT NULL DEFAULT '0.000000',
+CHANGE `product_quantity_discount` `product_quantity_discount` DECIMAL(20, 6) NOT NULL DEFAULT '0.000000',
+CHANGE `ecotax` `ecotax` decimal(17,2) NOT NULL default '0.00';
+
+ALTER TABLE `PREFIX_order_discount` CHANGE `value` `value` DECIMAL(17, 2) NOT NULL DEFAULT '0.00';
+
+ALTER TABLE `PREFIX_product` CHANGE `price` `price` DECIMAL(20, 6) NOT NULL DEFAULT '0.000000',
+CHANGE `wholesale_price` `wholesale_price` DECIMAL(20, 6) NOT NULL DEFAULT '0.000000',
+CHANGE `ecotax` `ecotax` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `reduction_price` `reduction_price` DECIMAL(17, 2) NULL DEFAULT NULL;
+
+ALTER TABLE `PREFIX_product_attribute` CHANGE `wholesale_price` `wholesale_price` DECIMAL(20, 6) NOT NULL DEFAULT '0.000000',
+CHANGE `price` `price` DECIMAL(17, 2) NOT NULL DEFAULT '0.00',
+CHANGE `ecotax` `ecotax` DECIMAL(17, 2) NOT NULL DEFAULT '0.00';
+
+ALTER TABLE `PREFIX_range_price` CHANGE `delimiter1` `delimiter1` DECIMAL(20, 6) NOT NULL,
+CHANGE `delimiter2` `delimiter2` DECIMAL(20, 6) NOT NULL;
+
+ALTER TABLE `PREFIX_range_weight` CHANGE `delimiter1` `delimiter1` DECIMAL(20, 6) NOT NULL,
+CHANGE `delimiter2` `delimiter2` DECIMAL(20, 6) NOT NULL;
+
+ALTER TABLE `PREFIX_referrer` CHANGE `cache_sales` `cache_sales` DECIMAL(17, 2) NULL DEFAULT NULL;
 
 UPDATE `PREFIX_configuration` 
 SET `value` = IFNULL(ROUND(value / (1 + (
@@ -84,5 +128,3 @@ SET `value` = IFNULL(ROUND(value / (1 + (
 	)
 ) / 100), 2), 0) 
 WHERE `name` = 'PS_GIFT_WRAPPING_PRICE';
-
-ALTER TABLE `PREFIX_module_currency` CHANGE `id_currency` `id_currency` INT(11) NOT NULL;
