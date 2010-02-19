@@ -150,10 +150,10 @@ class Search
 					FROM '._DB_PREFIX_.'search_word sw
 					LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word
 					WHERE sw.id_lang = '.intval($id_lang).'
-					AND sw.word LIKE '.($word[0] == '-' ? ' \''.pSQL(substr($word, 1, PS_SEARCH_MAX_WORD_LENGTH)).'%\'' : '\''.pSQL(substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'').'
+					AND sw.word LIKE '.($word[0] == '-' ? ' \''.pSQL(Tools::substr($word, 1, PS_SEARCH_MAX_WORD_LENGTH)).'%\'' : '\''.pSQL(Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'').'
 				) ';
 				if ($word[0] != '-')
-					$scoreArray[] = 'sw.word LIKE \''.pSQL(substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'';
+					$scoreArray[] = 'sw.word LIKE \''.pSQL(Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH)).'%\'';
 			}
 			else
 				unset($words[$key]);
@@ -312,7 +312,7 @@ class Search
 					foreach ($words as $word)
 						if (!empty($word))
 						{
-							$word = substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
+							$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
 							if (!isset($pArray[$word]))
 								$pArray[$word] = $weightArray[$key];
 							else
