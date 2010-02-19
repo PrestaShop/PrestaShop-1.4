@@ -185,6 +185,7 @@ h1#logo {
 }
 #header {
 	float: left;
+	margin-bottom: 15px;
 	width: 73%;
 	text-align: right
 }
