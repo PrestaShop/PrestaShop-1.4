@@ -144,10 +144,7 @@ a {
 	outline: none
 }
 a:hover { text-decoration: none }
-input:focus {
-	outline: 0;
-	outline-offset: 0
-}
+.input:focus { outline: 0 }
 a img {
 	outline: none;
 	border: none;
@@ -183,12 +180,12 @@ h4 { font-size: 1em }
 }
 h1#logo {
 	float: left;
-	width: 29%;
+	width: 27%;
 	margin-top: 0.5em
 }
 #header {
 	float: left;
-	width: 71%;
+	width: 73%;
 	text-align: right
 }
 #left_column, #center_column, #right_column { float: left }
@@ -196,7 +193,7 @@ h1#logo {
 	clear: left;
 	width: 191px;
 	padding-right: 21px;
-	overflow-x: hidden
+	overflow: hidden
 }
 #center_column {
 	width: 556px;
@@ -205,7 +202,7 @@ h1#logo {
 #right_column {
 	width: 191px;
 	padding-left: 21px;
-	overflow-x: hidden
+	overflow: hidden
 }
 
 /* global RTE fields */
@@ -417,7 +414,7 @@ span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large 
 	font-weight: bold;
 	font-size: 10px!important;
 	text-align: center;
-	text-decoration: none!important;	
+	text-decoration: none!important;
 	cursor: pointer;
 	display: block;
 	line-height: 18px;
@@ -662,15 +659,13 @@ form#productsSortForm p select { font-size: 1em }
 /* block top currencies */
 #header #currencies_block_top {
 	margin: 0.4em 0.5em 0 0;
-	float: left
-}
-#header #currencies_block_top ul {
 	float: left;
-	height: 1.5em
+	width: 8em
 }
 #header #currencies_block_top ul li {
 	float: left;
-	margin-right: 0.2em
+	margin-right: 0.2em;
+	margin-bottom: 2px
 }
 #header #currencies_block_top ul li a {
 	display: block;
@@ -691,7 +686,7 @@ form#productsSortForm p select { font-size: 1em }
 #header #currencies_block_top ul li.selected a {
 	border: none;
 	background-color: transparent;
-	font-size: 1.1em;
+	font-size: 11px;
 	line-height: 1.2em;
 	font-weight: bold;
 	color: black;
@@ -705,14 +700,12 @@ form#productsSortForm p select { font-size: 1em }
 	float: left
 }
 #header #languages_block_top p { clear: left }
-#languages_block_top ul#first-languages {
-	float: left;
-	height: 1.5em;
-	width: 8em
+#languages_block_top {
+	width: 80px
 }
 #languages_block_top ul#first-languages li {
 	float: left;
-	margin-right: 0.3em
+	margin-right: 3px
 }
 #languages_block_top ul#first-languages li.selected_language {
 	float: left;
@@ -769,10 +762,10 @@ ul#header_links {
 
 /* block top user information */
 #header #header_user {
-	width: 99%;
+	float: right;
+	width: 46%;
 	text-align: right;
-	clear: left;
-	margin: 0.6em 0.6em 0 0
+	margin: 9px 6px 0 0
 }
 #header_user p { color: #595a5e }
 #header_user span { font-weight: bold }
@@ -1231,7 +1224,7 @@ ul#order_step { background-color: white }
 #cart_block dd { 
 	margin-left: 1em; 
 	margin-right: 1em; 
-	font-style: italic; 
+	font-style: italic 
 }
 #cart_block dl dt a { font-weight: bold }
 #cart_block a.ajax_cart_block_remove_link {
@@ -2214,7 +2207,7 @@ div#mywishlist div#block-order-detail ul li span.wishlist_product_detail { margi
 	clear: both;
 	display: block
 }
-.rating: after {
+.rating:after {
 	content: '.';
 	display: block;
 	height: 0;
@@ -2247,8 +2240,8 @@ div.star_hover a, div.star a:hover { background-position: 0 -32px }
 	font-size: 12px
 }
 .confirmation { 
-	color: forestgreen; 
-	font-weight: bold; 
+	color: #808000; 
+	font-weight: bold 
 }
 #page .rte { background: transparent none repeat scroll 0 0 }
 
