@@ -740,10 +740,11 @@ ul#header_links {
 
 /* block top search */
 #header #search_block_top {
+	float: right;
 	background: #e5e6e7 url('../img/block_search_bg.jpg') no-repeat top right;
-	height: 28px;
+	margin-bottom: 11px;
 	width: 336px;
-	float: right
+	height: 28px
 }
 #header #search_block_top p { padding: 0.4em 0 0.4em 1em }
 #header #search_block_top label, #header #search_block_top input { float: left }
@@ -764,9 +765,9 @@ ul#header_links {
 /* block top user information */
 #header #header_user {
 	float: right;
-	width: 46%;
+	width: 535px;
 	text-align: right;
-	margin: 9px 6px 0 0
+	margin-right: 6px
 }
 #header_user p { color: #595a5e }
 #header_user span { font-weight: bold }
@@ -778,6 +779,7 @@ ul#header_links {
 	white-space: nowrap
 }
 #header_user #shopping_cart, #header_user #your_account { font-size: 0.9em }
+#header_user li#your_account { margin-left: 0 }
 #header_user #shopping_cart a, #header_user #your_account a {
 	background-repeat: no-repeat;
 	background-position: top left;
