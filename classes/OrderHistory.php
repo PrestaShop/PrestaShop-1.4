@@ -59,14 +59,20 @@ class		OrderHistory extends ObjectModel
 			$newOS = new OrderState(intval($new_order_state));
 			$oldOrderStatus = OrderHistory::getLastOrderState(intval($id_order));
 			$cart = Cart::getCartByOrderId($id_order);
+			$isValidated = $this->isValidated();
 			if (Validate::isLoadedObject($cart))
 				foreach ($cart->getProducts() as $product)
+				{
 					/* If becoming logable => adding sale */
 					if ($newOS->logable AND (!$oldOrderStatus OR !$oldOrderStatus->logable))
 						ProductSale::addProductSale($product['id_product'], $product['quantity']);
 					/* If becoming unlogable => removing sale */
 					elseif (!$newOS->logable AND ($oldOrderStatus AND $oldOrderStatus->logable))
 						ProductSale::removeProductSale($product['id_product'], $product['quantity']);
+					if (!$isValidated AND $newOS->logable AND $oldOrderStatus)
+						Product::updateQuantity($product);
+					Hook::updateQuantity($product, $order);
+				}
 			
 			$this->id_order_state = intval($new_order_state);
 			
@@ -159,6 +165,17 @@ class		OrderHistory extends ObjectModel
 		if ($lastOrderState->id !== $this->id_order_state)
 			Hook::postUpdateOrderStatus($this->id_order_state, intval($this->id_order));
 		return true;
+	}
+	
+	public function isValidated()
+	{
+		return Db::getInstance()->getValue('
+		SELECT COUNT(oh.`id_order_history`) AS nb
+		FROM `'._DB_PREFIX_.'order_state` os 
+		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (os.`id_order_state` = oh.`id_order_state`) 
+		WHERE oh.`id_order` = '.intval($this->id_order).'
+		AND os.`logable` = 1
+		');
 	}
 
 }
