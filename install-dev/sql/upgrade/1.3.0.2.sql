@@ -68,6 +68,23 @@ ALTER TABLE `PREFIX_state`
 CHANGE `id_country` `id_country` int(11) unsigned NOT NULL,
 CHANGE `id_zone` `id_zone` int(11) unsigned NOT NULL;
 
+ALTER TABLE `PREFIX_category_lang` 
+CHANGE `meta_keywords` `meta_keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+CHANGE `meta_description` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `PREFIX_supplier_lang` 
+CHANGE `meta_title` `meta_title` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+CHANGE `meta_keywords` `meta_keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+CHANGE `meta_description` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `PREFIX_manufacturer_lang` 
+CHANGE `meta_title` `meta_title` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+CHANGE `meta_keywords` `meta_keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+CHANGE `meta_keywords` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `PREFIX_meta_lang` 
+CHANGE `title` `title` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
 /* ##################################### */
 /* 				PRICE RANGE			 	 */
 /* ##################################### */

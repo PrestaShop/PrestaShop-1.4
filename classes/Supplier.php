@@ -47,7 +47,7 @@ class		Supplier extends ObjectModel
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 	
-	protected	$fieldsSizeLang = array('description' => 128, 'meta_title' => 128, 'meta_description' => 128, 'meta_description' => 128);
+	protected	$fieldsSizeLang = array('description' => 128, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
 	protected	$fieldsValidateLang = array('description' => 'isGenericName', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 	
 	protected 	$table = 'supplier';
@@ -69,7 +69,7 @@ class		Supplier extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_supplier'] = intval($this->id);			
+			$fields['id_supplier'] = intval($this->id);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd); 

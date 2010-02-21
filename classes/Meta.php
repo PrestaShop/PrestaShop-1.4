@@ -26,7 +26,7 @@ class		Meta extends ObjectModel
  	protected 	$fieldsValidate = array('page' => 'isFileName');
 	
 	protected	$fieldsRequiredLang = array();
-	protected	$fieldsSizeLang = array('title' => 255, 'description' => 255, 'keywords' => 255);
+	protected	$fieldsSizeLang = array('title' => 128, 'description' => 255, 'keywords' => 255);
 	protected	$fieldsValidateLang = array('title' => 'isGenericName', 'description' => 'isGenericName', 'keywords' => 'isGenericName');
 	
 	protected 	$table = 'meta';

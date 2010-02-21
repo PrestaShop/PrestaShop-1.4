@@ -204,8 +204,8 @@ CREATE TABLE `PREFIX_category_lang` (
   `description` text,
   `link_rewrite` varchar(128) NOT NULL,
   `meta_title` varchar(128) default NULL,
-  `meta_keywords` varchar(128) default NULL,
-  `meta_description` varchar(128) default NULL,
+  `meta_keywords` varchar(255) default NULL,
+  `meta_description` varchar(255) default NULL,
   UNIQUE KEY `category_lang_index` (`id_category`,`id_lang`),
   KEY `category_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -641,9 +641,9 @@ CREATE TABLE `PREFIX_manufacturer_lang` (
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
   `short_description` varchar(254) default NULL,
-  `meta_title` varchar(254) default NULL,
-  `meta_keywords` varchar(254) default NULL,
-  `meta_description` varchar(254) default NULL,
+  `meta_title` varchar(128) default NULL,
+  `meta_keywords` varchar(255) default NULL,
+  `meta_description` varchar(255) default NULL,
   PRIMARY KEY  (`id_manufacturer`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -677,7 +677,7 @@ CREATE TABLE `PREFIX_meta` (
 CREATE TABLE `PREFIX_meta_lang` (
   `id_meta` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
-  `title` varchar(255) default NULL,
+  `title` varchar(128) default NULL,
   `description` varchar(255) default NULL,
   `keywords` varchar(255) default NULL,
   PRIMARY KEY  (`id_meta`,`id_lang`)
@@ -1188,9 +1188,9 @@ CREATE TABLE `PREFIX_supplier_lang` (
   `id_supplier` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `description` text,
-  `meta_title` varchar(254) default NULL,
-  `meta_keywords` varchar(254) default NULL,
-  `meta_description` varchar(254) default NULL,
+  `meta_title` varchar(128) default NULL,
+  `meta_keywords` varchar(255) default NULL,
+  `meta_description` varchar(255) default NULL,
   PRIMARY KEY  (`id_supplier`,`id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
