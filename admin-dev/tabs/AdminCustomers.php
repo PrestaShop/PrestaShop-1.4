@@ -85,6 +85,9 @@ class AdminCustomers extends AdminTab
 									$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
 							}
 							
+							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
+								$this->_errors[] = Tools::displayError('indetification number is incorrect or already used');
+							
 							// Updating customer's group
 							if (!sizeof($this->_errors))
 							{
@@ -407,6 +410,7 @@ class AdminCustomers extends AdminTab
 	{
 		global $currentIndex;
 		$obj = $this->loadObject(true);
+		if ($obj->id) $need_identifcation_number = $obj->getNeedDNI();
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());
@@ -480,8 +484,14 @@ class AdminCustomers extends AdminTab
 						foreach ($years as $v)
 							echo '<option value="'.$v.'" '.($sl_year == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
 					echo '</select>
-				</div>
-				<label>'.$this->l('Status:').' </label>
+				</div>';
+				if (isset($need_identifcation_number) AND $need_identifcation_number) 
+					echo '<label for="dni">'.$this->l('Identification Number:').'</label>
+				<div class="margin-form">
+					<input type="text" name="dni" id="dni" value="'.htmlentities($this->getFieldValue($obj, 'dni'), ENT_COMPAT, 'UTF-8').'" />
+					<p>'.$this->l('DNI / NIF / NIE').'</p>
+				</div>';
+				echo '<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>

@@ -194,7 +194,19 @@ class		Country extends ObjectModel
 		 	
 		$result = Db::getInstance()->getRow($sql);
         return (intval($result['id_country']));
-    }    
+    }   
+    
+    static public function getNeedIdentifcationNumber($id_country)
+    {
+    	if (!intval($id_country))
+    		return false;
+    	
+    	return Db::getInstance()->getValue('
+    	SELECT `need_identification_number` 
+    	FROM `'._DB_PREFIX_.'country` 
+    	WHERE `id_country` = '.intval($id_country)
+    	);
+    } 
 }
 
 ?>

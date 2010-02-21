@@ -503,6 +503,21 @@ class		Customer extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		WHERE o.valid = 1 AND o.`id_customer` = '.intval($this->id));
 	}
+	
+	public function getNeedDNI()
+	{
+		$countries = Db::getInstance()->Executes('
+		SELECT `id_country` 
+		FROM `'._DB_PREFIX_.'address` 
+		WHERE `id_customer` = '.intval($this->id).' 
+		AND `deleted` = 0
+		');
+		
+		foreach($countries AS $country)
+			if (Country::getNeedIdentifcationNumber(intval($country['id_country'])))
+				return true;
+		return false;
+	}
 }
 
 ?>

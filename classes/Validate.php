@@ -421,7 +421,7 @@ class Validate
 	*/
 	static public function isPasswd($passwd, $size = 5)
 	{
-		return preg_match('/^[.a-z_0-9-]{'.$size.',32}$/ui', $passwd);
+		return preg_match('/^[.a-z_0-9-!@#$%\^&*()]{'.$size.',32}$/ui', $passwd);
 	}
 
 	static public function isPasswdAdmin($passwd)
@@ -764,7 +764,10 @@ class Validate
 		-3 : CIF error
 		-4 : NIE error
 		*/
-	
+		
+		if (!$dni)
+			return 1;
+		
 		$dni = strtoupper($dni);
 		if (!preg_match('/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/', $dni)) 
 			return 0;

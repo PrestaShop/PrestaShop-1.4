@@ -87,6 +87,13 @@
 					{/foreach}
 				</select>
 			</p>
+			{if $need_identification_number}
+			<p class="required text">
+				<label for="dni">{l s='Identication number'}</label>
+				<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
+				<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+			</p>
+			{/if}
 			<p class="checkbox">
 				<input type="checkbox" id="newsletter" name="newsletter" value="1" {if $smarty.post.newsletter == 1} checked="checked"{/if} />
 				<label for="newsletter">{l s='Sign up for our newsletter'}</label>

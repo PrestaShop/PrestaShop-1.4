@@ -10,6 +10,7 @@ if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=identity.php');
 
 $customer = new Customer(intval($cookie->id_customer));
+$need_identification_number = $customer->getNeedDNI();
 
 if (sizeof($_POST))
 {
@@ -38,6 +39,8 @@ if (Tools::isSubmit('submitIdentity'))
 			$errors[] = Tools::displayError('your current password is not that one');
 		elseif ($_POST['passwd'] != $_POST['confirmation'])
 			$errors[] = Tools::displayError('password and confirmation do not match');
+		elseif ($need_identification_number AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
+			$errors[] = Tools::displayError('identification number is incorrect or already used');
 		else
 			$errors = $customer->validateControler();
 
@@ -68,6 +71,7 @@ else
 
 /* Generate years, months and days */
 $smarty->assign(array(
+	'need_identification_number' => $need_identification_number,
 	'years' => Tools::dateYears(),
 	'sl_year' => $birthday[0],
 	'months' => Tools::dateMonths(),
