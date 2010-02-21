@@ -177,11 +177,10 @@ class ProductDownload extends ObjectModel
 	 */
 	public static function getFilenameFromFilename($physically_filename)
 	{
-		$sql = 'SELECT `display_filename`
-				FROM `'._DB_PREFIX_.'product_download`
-				WHERE `physically_filename` = \'' . pSQL($physically_filename) . '\'';
-		$data = Db::getInstance()->getRow($sql);
-		return $data['display_filename'];
+		return Db::getInstance()->getValue('
+		SELECT `display_filename`
+		FROM `'._DB_PREFIX_.'product_download`
+		WHERE `physically_filename` = \''.pSQL($physically_filename).'\'');
 	}
 
 	/**

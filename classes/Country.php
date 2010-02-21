@@ -85,8 +85,7 @@ class		Country extends ObjectModel
 		$states = Db::getInstance()->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'state` s
-		ORDER BY s.`name` ASC
-		');
+		ORDER BY s.`name` ASC');
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT cl.*,c.*, cl.`name` AS country, z.`name` AS zone
@@ -103,6 +102,7 @@ class		Country extends ObjectModel
 		foreach ($states AS &$state)
 			if (isset($countries[$state['id_country']])) /* Does not keep the state if its country has been disabled and not selected */
 				$countries[$state['id_country']]['states'][] = $state;
+
 		return $countries;
 	}
 

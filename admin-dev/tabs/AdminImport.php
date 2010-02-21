@@ -67,7 +67,7 @@ class AdminImport extends AdminTab
 				$this->available_fields = array(
 					'no' => $this->l('Ignore this column'),
 					'id_product' => $this->l('Product ID'),
-					'options' => $this->l('Options'),
+					'options' => $this->l('Options (Group:Value)'),
 					'reference' => $this->l('Reference'),
 					'supplier_reference' => $this->l('Supplier reference'),
 					'ean13' => $this->l('EAN13'),
@@ -745,11 +745,11 @@ class AdminImport extends AdminTab
 	{
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		$groups = array();
-		foreach (AttributeGroup::getAttributesGroups($defaultLanguage) as $group)
-			$groups[$group['name']] = $group['id_attribute_group'];
+		foreach (AttributeGroup::getAttributesGroups($defaultLanguage) AS $group)
+			$groups[$group['name']] = intval($group['id_attribute_group']);
 		$attributes = array();
-		foreach (Attribute::getAttributes($defaultLanguage) as $attribute)
-			$attributes[$attribute['name'].'_'.$attribute['id_attribute']] = $attribute['id_attribute'];
+		foreach (Attribute::getAttributes($defaultLanguage) AS $attribute)
+			$attributes[$attribute['attribute_group'].'_'.$attribute['name']] = intval($attribute['id_attribute']);
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
@@ -1166,6 +1166,12 @@ class AdminImport extends AdminTab
 	private function openCsvFile()
 	{
 		$handle = fopen(dirname(__FILE__).'/../import/'.Tools::getValue('csv'), 'r');
+		
+		/* No BOM allowed */
+		$bom = fread($handle, 3);
+		if ($bom != '\xEF\xBB\xBF')
+			rewind($handle, 0);
+
 		if (!$handle)
 			die(Tools::displayError('Cannot read the csv file'));
 			

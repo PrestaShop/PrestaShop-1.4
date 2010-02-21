@@ -1518,7 +1518,7 @@ class AdminProducts extends AdminTab
 						$('#virtual_product_file_label').hide();
 						$('#virtual_product_name').attr('value', fileName);
 						$('#upload-confirmation').html(
-							'<a class="link" href="get-file-admin.php?file=' + msg + '"><?php echo $this->l('The file') ?>&nbsp;"' + fileName + '"&nbsp;<?php echo $this->l('has successfully been uploaded') ?></a>' +
+							'<a class="link" href="get-file-admin.php?file='+msg+'&filename='+fileName+'"><?php echo $this->l('The file') ?>&nbsp;"' + fileName + '"&nbsp;<?php echo $this->l('has successfully been uploaded') ?></a>' +
 							'<input type="hidden" id="virtual_product_filename" name="virtual_product_filename" value="' + msg + '" />');
 					}
 				}

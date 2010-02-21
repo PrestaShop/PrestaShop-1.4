@@ -132,9 +132,9 @@ class		Customer extends ObjectModel
 	public function delete()
 	{
 		$addresses = $this->getAddresses(intval(Configuration::get('PS_LANG_DEFAULT')));
-		foreach ($addresses as $address)
+		foreach ($addresses AS $address)
 		{
-			$obj = new Address($address['id_address']);
+			$obj = new Address(intval($address['id_address']));
 			$obj->delete();
 		}
 		return parent::delete();
@@ -273,12 +273,10 @@ class		Customer extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT a.*, cl.`name` AS country, s.name AS state
 		FROM `'._DB_PREFIX_.'address` a
-		LEFT JOIN `'._DB_PREFIX_.'country` c ON a.`id_country` = c.`id_country`
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON c.`id_country` = cl.`id_country`
-		LEFT JOIN `'._DB_PREFIX_.'state` s ON s.`id_state` = a.`id_state`
-		WHERE `id_lang` = '.intval($id_lang).'
-		AND `id_customer` = '.intval($this->id).'
-		AND a.`deleted` = 0');
+		LEFT JOIN `'._DB_PREFIX_.'country` c ON (a.`id_country` = c.`id_country`)
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
+		LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = a.`id_state`)
+		WHERE `id_lang` = '.intval($id_lang).' AND `id_customer` = '.intval($this->id).' AND a.`deleted` = 0');
 	}
 
 

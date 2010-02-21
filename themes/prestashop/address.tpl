@@ -13,7 +13,7 @@ countriesNeedIDNumber = new Array();
 	{if isset($country.states) && $country.contains_states}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
-			countries[{$country.id_country|intval}]['{$smarty.foreach.states.iteration}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
+			countries[{$country.id_country|intval}]['{$state.id_state}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
 		{/foreach}
 	{/if}
 {/foreach}
