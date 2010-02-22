@@ -112,30 +112,25 @@ class AdminAttributeGenerator extends AdminTab
 
 	private function displayGroupSelect($attributeJs, $attributesGroups)
 	{
-			echo '
-					<div>
-						<select multiple name="attributes[]" id="attribute_group" style="width: 200px; height: 350px;">';
-			foreach ($attributesGroups AS $k => $attributeGroup)
+		echo '	<div>
+					<select multiple name="attributes[]" id="attribute_group" style="width: 200px; height: 350px;">';
+					
+		foreach ($attributesGroups AS $k => $attributeGroup)
+		{
+			$idGroup = $attributeGroup['id_attribute_group'];
+			
+			if (isset($attributeJs[$idGroup]))
 			{
-				$idGroup = $attributeGroup['id_attribute_group'];
-				if (isset($attributeJs[$idGroup]))
-				{
-					echo '
-								<optgroup onclick="target=getE(\'group_'.$idGroup.'\');toggle(target,target.style.display == \'none\');" name="title_'.$idGroup.'" id="group_title_'.$idGroup.'" label="'.htmlspecialchars(stripslashes($attributeGroup['name'])).'">
-
-						<optgroup style="display: none;" name="'.$idGroup.'" id="group_'.$idGroup.'">';
-					foreach ($attributeJs[$idGroup] AS $k => $v)
-						echo '
-									<option name="'.$k.'" id="attr_'.$k.'" value="'.$v.'">'.$v.'</option>';
-					echo '</optgroup>
-							</optgroup>';
-				}
+				echo '	<optgroup name="'.$idGroup.'" id="'.$idGroup.'" label="'.htmlspecialchars(stripslashes($attributeGroup['name'])).'">';
+						
+				foreach ($attributeJs[$idGroup] AS $k => $v)
+					echo '	<option name="'.$k.'" id="attr_'.$k.'" value="'.$v.'" title="'.$v.'"">'.$v.'</option>';
+					
+				echo '	</optgroup>';
 			}
-			echo '
-							</select>
-						</div>
-			';
-
+		}
+		echo '		</select>
+				</div>';
 	}
 
     static private function setAttributesImpacts($id_product, $tab)

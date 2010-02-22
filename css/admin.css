@@ -258,6 +258,15 @@ legend {
 	_top: -2em;
 	_margin-top: 12px;
 }
+select optgroup { 
+	background: #fff;
+	padding: 2px;
+	color: #000
+}
+select optgroup option {
+	padding: 0 9px;
+	color: #000
+}
 
 /* STRCTURE */
 
