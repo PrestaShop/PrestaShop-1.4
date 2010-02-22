@@ -1170,7 +1170,7 @@ class AdminImport extends AdminTab
 		/* No BOM allowed */
 		$bom = fread($handle, 3);
 		if ($bom != '\xEF\xBB\xBF')
-			rewind($handle, 0);
+			rewind($handle);
 
 		if (!$handle)
 			die(Tools::displayError('Cannot read the csv file'));
