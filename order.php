@@ -324,6 +324,8 @@ function displayCarrier()
 	else
 		die(Tools::displayError($this->l('Hack attempt: No customer')));
 	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $customer->getGroups());
+	if (!$result)
+		$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone));
 	$resultsArray = array();
 	foreach ($result AS $k => $row)
 	{
