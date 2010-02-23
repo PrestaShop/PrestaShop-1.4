@@ -206,7 +206,7 @@ class Gsitemap extends Module
         $this->_html .=
         '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<div style="margin:0 0 20px 0;">
-				<input type="checkbox" name="all_cms" id="all_cms" style="vertical-align: middle;" value="1" /> <label class="t" for="all_cms">'.$this->l('Sitemap must be conatins all CMS page').'</label>
+				<input type="checkbox" name="all_cms" id="all_cms" style="vertical-align: middle;" value="1" /> <label class="t" for="all_cms">'.$this->l('Sitemap contains all CMS pages').'</label>
 				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default, only CMS pages on block CMS are included on Sitemap').'</p>
 			</div>
 			<input name="btnSubmit" class="button" type="submit"
