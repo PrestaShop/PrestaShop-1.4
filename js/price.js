@@ -16,7 +16,7 @@ function formatPrice(price)
 function calcPriceTI()
 {
 	var tax = getTax();
-	var priceTE = parseFloat(document.getElementById('priceTE').value);
+	var priceTE = parseFloat(document.getElementById('priceTE').value.replace(/,/g, '.'));
 	var newPrice = priceTE *  ((tax / 100) + 1);
 	document.getElementById('priceTI').value = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
 												formatPrice(newPrice).toFixed(6);
@@ -28,7 +28,7 @@ function calcPriceTI()
 function calcPriceTE()
 {
 	var tax = getTax();
-	var priceTI = parseFloat(document.getElementById('priceTI').value);
+	var priceTI = parseFloat(document.getElementById('priceTI').value.replace(/,/g, '.'));
 	var newPrice = priceTI / ((tax / 100) + 1);
 	document.getElementById('priceTE').value =	(isNaN(newPrice) == true || newPrice < 0) ? '' :
 	 											floorf(newPrice, 6);
