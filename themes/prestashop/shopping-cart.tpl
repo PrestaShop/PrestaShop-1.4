@@ -112,7 +112,7 @@
 				<td colspan="6">{l s='Total (tax incl.):'}</td>
 				<td class="price">{displayPrice price=$total_price}</td>
 			</tr>
-			{if $free_ship > 0}
+			{if $free_ship > 0 AND !$isVirtualCart}
 			<tr class="cart_free_shipping">
 				<td colspan="6" style="white-space: normal;">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
 				<td class="price">{displayPrice price=$free_ship}</td>
