@@ -1516,6 +1516,7 @@ class AdminProducts extends AdminTab
 					{
 						$('#virtual_product_file').remove();
 						$('#virtual_product_file_label').hide();
+						$('#file_missing').hide();
 						$('#virtual_product_name').attr('value', fileName);
 						$('#upload-confirmation').html(
 							'<a class="link" href="get-file-admin.php?file='+msg+'&filename='+fileName+'"><?php echo $this->l('The file') ?>&nbsp;"' + fileName + '"&nbsp;<?php echo $this->l('has successfully been uploaded') ?></a>' +
@@ -1561,7 +1562,7 @@ class AdminProducts extends AdminTab
 				<p class="block">
 	<?php if(!$productDownload->checkFile()): ?>
 		<?php if($productDownload->id): ?>
-					<p class="alert">
+					<p class="alert" id="file_missing">
 						<?php echo $this->l('This product is missing') ?>:<br/>
 						<?php echo realpath(_PS_DOWNLOAD_DIR_) .'/'. $productDownload->physically_filename ?>
 					</p>
