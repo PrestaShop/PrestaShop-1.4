@@ -357,7 +357,7 @@ class Swift_Connection_SMTP extends Swift_ConnectionBase
       $handle = opendir($dir);
       while (false !== $file = readdir($handle))
       {
-        if (preg_match("/^[A-Za-z0-9-]+\\.php\$/", $file))
+		if (preg_match("/^[A-Za-z0-9-]+\\.php\$/", $file) && $file != "index.php")
         {
           $name = preg_replace('/[^a-zA-Z0-9]+/', '', substr($file, 0, -4));
           require_once $dir . "/" . $file;
