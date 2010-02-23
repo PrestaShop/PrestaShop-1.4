@@ -22,6 +22,8 @@ class Paypal extends PaymentModule
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 		if (Configuration::get('PAYPAL_BUSINESS') == 'paypal@prestashop.com')
 			$this->warning = $this->l('You are currently using the default PayPal email address, you need to use your own email address');
+		if ($_SERVER['SERVER_NAME'] == 'localhost')
+			$this->warning = $this->l('Your are in localhost, PayPal we can\'t validate order');
 	}
 
 	public function getPaypalUrl()

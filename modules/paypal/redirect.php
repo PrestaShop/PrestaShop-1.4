@@ -16,10 +16,10 @@ $currency_order = new Currency($cart->id_currency);
 $currency_module = $paypal->getCurrency();
 
 if (!Validate::isEmail($business))
-	return $paypal->l('Paypal error: (invalid or undefined business account email)');
+	die($paypal->l('Paypal error: (invalid or undefined business account email)'));
 
 if (!Validate::isLoadedObject($address) OR !Validate::isLoadedObject($customer) OR !Validate::isLoadedObject($currency_module))
-	return $paypal->l('Paypal error: (invalid address or customer)');
+	die($paypal->l('Paypal error: (invalid address or customer)'));
 
 // check currency of payment
 if ($currency_order->id != $currency_module->id)
