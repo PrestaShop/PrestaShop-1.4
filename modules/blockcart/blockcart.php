@@ -106,7 +106,8 @@ class BlockCart extends Module
 
 	public function hookRightColumn($params)
 	{
-		global $smarty;
+		global $smarty, $page_name;
+		$smarty->assign('order_page', $page_name == 'order');
 		$this->smartyAssigns($smarty, $params);
 		return $this->display(__FILE__, 'blockcart.tpl');
 	}

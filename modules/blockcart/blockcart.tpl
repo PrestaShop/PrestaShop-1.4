@@ -11,7 +11,9 @@ var CUSTOMIZE_TEXTFIELD = {$CUSTOMIZE_TEXTFIELD};
 var customizationIdMessage = '{l s='Customization #' mod='blockcart' js=1}';
 var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' js=1}';
 </script>
+{if !$order_page}
 <script type="text/javascript" src="{$content_dir}modules/blockcart/ajax-cart.js"></script>
+{/if}
 {/if}
 
 <!-- MODULE Block cart -->
