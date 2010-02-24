@@ -1081,7 +1081,7 @@ class		Cart extends ObjectModel
 		return ($echo == '0' ? Configuration::get('PS_SHOP_NAME') : $echo);
 	}
 
-  /* DEPRECATED */
+	/* DEPRECATED */
 	public function getCustomeremail()
 	{
 		$customer = new Customer(intval($this->id_customer));

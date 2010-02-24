@@ -1347,7 +1347,7 @@ class		Product extends ObjectModel
 				die(Tools::displayError());
 			$cart = $id_cart ? new Cart(intval($id_cart)) : new Cart(intval($cookie->id_cart));
 		}
-		
+
 		if (Validate::isLoadedObject($cart))
 			$currency = new Currency(intval($cart->id_currency));
 		elseif (isset($cookie->id_currency) AND intval($cookie->id_currency))

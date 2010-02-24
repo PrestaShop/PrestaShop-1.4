@@ -140,8 +140,6 @@ else
 		if (Product::$_taxCalculationMethod == PS_TAX_INC)
 			$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
 
-
-		/*$productPriceWithTax = floatval($product->getPrice(true, NULL, 2));*/
 		$productPriceWithoutEcoTax = floatval($productPriceWithTax - $product->ecotax);
 		$configs = Configuration::getMultiple(array('PS_ORDER_OUT_OF_STOCK', 'PS_LAST_QTIES'));
 
