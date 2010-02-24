@@ -75,7 +75,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 					    if ($cart->id)
 							$cookie->id_cart = intval($cart->id);
 					}
-					if ($add AND !$cart->containsProduct(intval($idProduct), intval($idProductAttribute), $customizationId) AND !$producToAdd->hasAllRequiredCustomizableFields())
+					if ($add AND !$producToAdd->hasAllRequiredCustomizableFields() AND !$customizationId)
 						$errors[] = Tools::displayError('Please fill all required fields, then save the customization.');
 					if (!sizeof($errors) AND !$cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up')))
 						$errors[] = Tools::displayError('you already have the maximum quantity available for this product')
