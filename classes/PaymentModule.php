@@ -111,6 +111,8 @@ abstract class PaymentModule extends Module
 			$order->total_shipping = floatval($cart->getOrderShippingCost());
 			$order->total_wrapping = floatval(abs($cart->getOrderTotal(true, 6)));
 			$order->total_paid = floatval(Tools::ps_round(floatval($cart->getOrderTotal(true, 3)), 2));
+			$order->invoice_date = '0000-00-00 00:00:00';
+			$order->delivery_date = '0000-00-00 00:00:00';
 			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;
