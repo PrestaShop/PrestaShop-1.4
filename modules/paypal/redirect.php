@@ -12,7 +12,7 @@ $country = new Country(intval($address->id_country));
 $customer = new Customer(intval($cart->id_customer));
 $business = Configuration::get('PAYPAL_BUSINESS');
 $header = Configuration::get('PAYPAL_HEADER');
-$currency_order = new Currency($cart->id_currency);
+$currency_order = new Currency(intval($cart->id_currency));
 $currency_module = $paypal->getCurrency();
 
 if (!Validate::isEmail($business))
@@ -64,7 +64,11 @@ echo '
 	<input type="hidden" name="bn" value="PRESTASHOP_WPS" />
 	<input type="hidden" name="cbt" value="'.$paypal->l('Return to shop').'" />
 </form>
-<script type="text/javascript">$(\'#paypal_form\').submit();</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(\'#paypal_form\').submit();
+});
+</script>
 </body></html>
 ';
 
