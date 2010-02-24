@@ -515,7 +515,13 @@ class		Cart extends ObjectModel
 	{
 		self::$_nbProducts = 0;
 		if (intval($id_customization))
-			return $this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute)) AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL);
+		{
+			$productTotalQuantity = intval(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute)));
+			$customizationQuantity = intval(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute)));
+			if (!$this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute)))
+				return false;
+			return ($customizationQuantity == $productTotalQuantity AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL));
+		}
 
 		/* Get customization quantity */
 		if (($result = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS \'quantity\' FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute))) === false)
