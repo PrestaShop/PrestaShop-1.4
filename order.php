@@ -176,12 +176,12 @@ function processAddress()
 		$errors[] = 'this address is not in a valid area';
 	else
 	{
-		$cart->id_address_delivery = intval($_POST['id_address_delivery']);
-		$cart->id_address_invoice = isset($_POST['same']) ? intval($_POST['id_address_delivery']) : intval($_POST['id_address_invoice']);
+		$cart->id_address_delivery = intval(Tools::getValue('id_address_delivery'));
+		$cart->id_address_invoice = Tools::isSubmit('same') ? $cart->id_address_delivery : intval(Tools::getValue('id_address_invoice'));
 		if (!$cart->update())
 			$errors[] = Tools::displayError('an error occured while updating your cart');
 
-		if (isset($_POST['message']) AND !empty($_POST['message']))
+		if (Tools::isSubmit('message') AND !empty($_POST['message']))
 		{
 			if (!Validate::isMessage($_POST['message']))
 				$errors[] = Tools::displayError('invalid message');

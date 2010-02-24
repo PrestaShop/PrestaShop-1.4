@@ -821,6 +821,17 @@ class Validate
 		
 		return 0;
 	}
+
+	/**
+	* Check if $data is a PrestaShop cookie object
+	*
+	* @param mixed $data to validate
+	* @return bool
+	*/
+	static public function isCookie($data)
+	{
+		return (is_object($data) AND get_class($data) == 'Cookie');
+	}
 }
 
 ?>

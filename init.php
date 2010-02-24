@@ -71,7 +71,16 @@ if (!isset($cart) OR !$cart->id)
     $cart->id_currency = intval($cookie->id_currency);
 	$cart->id_guest = intval($cookie->id_guest);
     if ($cookie->id_customer)
+	{
     	$cart->id_customer = intval($cookie->id_customer);
+		$cart->id_address_delivery = intval(Address::getFirstCustomerAddressId($cart->id_customer));
+		$cart->id_address_invoice = $cart->id_address_delivery;
+	}
+	else
+	{
+		$cart->id_address_delivery = 0;
+		$cart->id_address_invoice = 0;
+	}
 }
 if (!$cart->nbProducts())
 	$cart->id_carrier = NULL;

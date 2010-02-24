@@ -102,11 +102,11 @@ include_once(dirname(__FILE__).'/header.php');
 global $errors;
 $errors = array();
 
-if (!isset($_GET['id_product']) OR !Validate::isUnsignedId($_GET['id_product']))
+if (!$id_product = intval(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
 	$errors[] = Tools::displayError('product not found');
 else
 {
-	$product = new Product(intval($_GET['id_product']), true, intval($cookie->id_lang));
+	$product = new Product($id_product, true, intval($cookie->id_lang));
 	if (!Validate::isLoadedObject($product) OR !$product->active)
 		$errors[] = Tools::displayError('product is no longer available');
 	elseif (!$product->checkAccess(intval($cookie->id_customer)))
@@ -136,7 +136,12 @@ else
 			'pictures' => $files,
 			'textFields' => $textFields));
 
-		$productPriceWithTax = floatval($product->getPrice(true, NULL, 2));
+		$productPriceWithTax = Product::getPriceStatic($id_product, true, NULL, 6);
+		if (Product::$_taxCalculationMethod == PS_TAX_INC)
+			$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
+
+
+		/*$productPriceWithTax = floatval($product->getPrice(true, NULL, 2));*/
 		$productPriceWithoutEcoTax = floatval($productPriceWithTax - $product->ecotax);
 		$configs = Configuration::getMultiple(array('PS_ORDER_OUT_OF_STOCK', 'PS_LAST_QTIES'));
 

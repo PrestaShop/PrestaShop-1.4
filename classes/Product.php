@@ -1331,16 +1331,22 @@ class		Product extends ObjectModel
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address_delivery = NULL)
 	{
-		global $cookie;
+		global $cookie, $cart;
 
 		// Get id_customer if exists
 		if (!$id_customer)
-			$id_customer = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : null);
+			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : null);
 
-		if (!intval($id_cart))
-			$cart = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_cart) AND $cookie->id_cart) ? new Cart(intval($cookie->id_cart)) : null);
-		else
-			$cart = new Cart(intval($id_cart));
+		if (!is_object($cart))
+		{
+			/*
+			* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
+			* When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
+			*/
+			if (!$id_cart AND !Validate::isCookie($cookie))
+				die(Tools::displayError());
+			$cart = $id_cart ? new Cart(intval($id_cart)) : new Cart(intval($cookie->id_cart));
+		}
 		
 		if (Validate::isLoadedObject($cart))
 			$currency = new Currency(intval($cart->id_currency));
@@ -1348,9 +1354,9 @@ class		Product extends ObjectModel
 			$currency = new Currency(intval($cookie->id_currency));
 		else
 			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
-		
+
 		if (!$id_address_delivery)
-			$id_address_delivery = ((isset($cookie) AND get_class($cookie) == 'Cookie' AND isset($cookie->id_address_delivery) AND $cookie->id_address_delivery) ? intval($cookie->id_address_delivery) : null);
+			$id_address_delivery = $cart->id_address_delivery;
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
