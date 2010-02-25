@@ -115,8 +115,8 @@ $smarty->assign('navigationPipe', $navigationPipe);
 $server_host = Tools::getHttpHost(false, true);
 $protocol = 'http://';
 $protocol_ssl = 'https://';
-$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR $_SERVER['HTTPS']) ? $protocol_ssl : $protocol;
+$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR $_SERVER['HTTPS']) ? $protocol_ssl : $protocol;
 define('_PS_BASE_URL_', $protocol.$server_host);
 
 Product::initPricesComputation();
@@ -162,7 +162,7 @@ if (!Configuration::get('PS_THEME_V11'))
 }
 else
 {
-	$protocol = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+	$protocol = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR $_SERVER['HTTPS']) ? 'https://' : 'http://';
 	$smarty->assign(array(
 		'base_dir' => __PS_BASE_URI__,
 		'base_dir_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__,
