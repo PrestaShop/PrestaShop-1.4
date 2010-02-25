@@ -87,7 +87,7 @@ class AdminAccess extends AdminTab
 		echo '<tr><td'.($is_child ? '' : ' class="bold"').'>'.($is_child ? ' &raquo; ' : '').$tab['name'].'</td>';
 		foreach ($perms as $perm)
 			if($this->tabAccess['edit'] == 1)
-				echo '<td class="center"><input type="checkbox" name="1" onchange="ajax_power(this, \''.$perm.'\', '.intval($access['id_tab']).', '.intval($access['id_profile']).', \''.$this->token.'\')" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').'/></td>';
+				echo '<td class="center"><input type="checkbox" name="1" onclick="ajax_power(this, \''.$perm.'\', '.intval($access['id_tab']).', '.intval($access['id_profile']).', \''.$this->token.'\')" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').'/></td>';
 			else
 				echo '<td class="center"><input type="checkbox" name="1" disabled="disabled" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').' /></td>';
 		echo '</tr>';
