@@ -80,7 +80,7 @@ CHANGE `meta_description` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 C
 ALTER TABLE `PREFIX_manufacturer_lang` 
 CHANGE `meta_title` `meta_title` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
 CHANGE `meta_keywords` `meta_keywords` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-CHANGE `meta_keywords` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+CHANGE `meta_description` `meta_description` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
 
 ALTER TABLE `PREFIX_meta_lang` 
 CHANGE `title` `title` VARCHAR( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
