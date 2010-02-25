@@ -27,7 +27,7 @@ class PaypalPayment extends PaypalAPI
 			$request .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
 		else
 			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
-		$request .= '&LOCALECODE='.strval($this->getCountryCode());
+		$request .= '&LOCALECODE='.Language::getIsoById($cart->id_lang);
 		if ($this->_header)
 			$request .= '&HDRIMG='.urlencode($this->_header);
 
