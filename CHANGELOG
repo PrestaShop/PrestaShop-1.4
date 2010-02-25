@@ -5,6 +5,140 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.2 - 1902 (2010-25-02)   #
+####################################
+
+	Added Features :
+	
+	[+] Classes : new feature that disables AJAX search if the module "block search" is removed from hook Header to avoid javascript errors on Front Office
+
+	Improved/changed features :
+	
+	[*] Project : Convert all files to unix format
+	
+	[*] FO : Cart performances improved
+	[*] FO : Alignment of wishlist icon
+	[*] FO : IE issue with option width in select with defined width. Best practice advise to use title attribute on option tags.
+	[*] FO : The header no more collapses with the lower content when user infos are larger
+	[*] FO : global.css is now valid W3C
+	
+	[*] FO / BO : now if states are desactived for one country, these states not showing on account edition on FO and BO
+	[*] FO / BO : now you can edit the identification number of customer
+	
+	[*] BO : improved configuration of shipping
+	[*] BO : added check after send the invoice number configuration
+	[*] BO : improved method array_walk() on AdminImport.php
+	[*] BO : management errors related to images when importing CSV
+	[*] BO : Improved mime type detection method! no more finfo method required
+	
+	[*] Classes : redefine Smarty truncate in smarty.config.inc.php and check if mb_string librairy is active or not for use mb_substr method
+	[*] Classes : Gift-wrapping price is now tax ecluded
+	[*] Classes : improved the use of SSL with for example the block cart Ajax when server force SSL
+	[*] Classes : added php error code when upload file failed
+	
+	[*] MO : added possibility on Gsitemap module, you can now generate sitemap with all CMS pages or only CMS pages in block CMS
+	[*] MO : added spanish mail templates on module ReferralProgram
+	[*] MO : added spannish templates mail for module blocknewsletter
+	[*] MO : adjusting the configuration explanation from PayPal module to the new interface Paypal
+	[*] MO : Hipay updated
+	[*] MO : added warning on PayPal module when you are in localhost
+	
+	[*] TR : update transaltions
+	
+	[*] SQL : size price is now increased (#3693, #3668)
+
+	Fixed bugs :
+	
+	[-] Project : remove zoom.php file, this file is no longer used in the solution
+	
+	[-] Installer : fixed a bug with installer and 5.3.1 php version
+	[-] Installer : Fixed bug when trying to reach the installer specifying index.php in the URL
+	[-] Installer : Fixed bug #3624 - Wording modification
+	[-] Installer : fixed timeout bug #3715
+	
+	[-] FO : correction in the command history of the statute which was not translated into the language of the user
+	[-] FO : fixed error in cart quantity (retroactive)
+	[-] FO : fixed a bug on product page when Jqzoom actived
+	[-] FO : Fixed CSS bug with Safari
+	[-] FO : fixed a Hack attempt error when you edit your personal information
+	[-] FO : contact-form sanitized 'from' field (#3486)
+	[-] FO : fixed layout issue with last product added in cart
+	[-] FO : Meta description fixed for category page (#3659)
+	[-] FO : fixed bug on showing parse for disponibility
+	[-] FO : when taxes disabled the price on product page aren't followed by 'tax incl.'
+	[-] FO : Fixed bug #3387 - Bad state selection and display on address add/modify
+	[-] FO : Fixed bug #3719 - Thickbox picture position was too low (IE 6/7/8)
+	[-] FO : added redirect when you put an out of stock product (#3711)
+	[-] FO : fixed blocks' strict width in the header
+	[-] FO: bug fixed #3601 : fix price input
+	[-] FO : small fix for some chars in the search
+	[-] FO: bug fixed #3662 : allow to reset images for non-color attributes selection
+	[-] FO: bug fixed #3694 : no ajax cart for order pages
+	[-] FO : fixed restriction of carrier with groups (#3623)
+	[-] FO : Remove the parse: "Remaining amount to be added to your cart in order to obtain free shipping" when only virtual product in cart
+	[-] FO : Customizable product addition to the cart fixed
+	
+	[-] BO : deleted users are no longer counted in their group
+	[-] BO : fixed a bug in tinyMCE when you add a local image
+	[-] BO : fixed a bug with cart product quantity on AdminCarts page
+	[-] BO : checkbox for showed all module or not, now works on IE
+	[-] BO : fixed a bug, customer group not showed when no user in this.
+	[-] BO : Fixed bug #3474 - Managing new characters in friendly URLs (ěščřžůĚŠČŘŽŮ)
+	[-] BO : fixed a bug in AdminCarts when products have costumizedDatas
+	[-] BO : fixed bug on CSV import with tags product
+	[-] BO : on AdminManufacturers, manufacturer's addresses deleted are now not counted
+	[-] BO : Downloadable product duplication fixed
+	[-] BO : Fixed bug #3512 - File download preview wasn't working properly if product not yet saved
+	[-] BO : Fixed bug #3687 - BOM is not skipped for UTF-8 CSV files
+	[-] BO : Fixed bug #3712 - Attribute value import was always new
+	[-] BO : fixed decrementing of stock during the transition to a validated status of an order
+	[-] BO : Fixed bug #3696, meta length modified and uniformized for all tables/classes
+	[-] BO : Fixed bug #3717, disable capability to define a scene on homepage
+	[-] BO : Fixed multiple bugs with AdminAttributeGenerator select (wrong display in Opera, no event in IE...)
+	[-] BO : when you delete file product and upload new file, now, the error message for file missing dispear
+	[-] BO : permissions update is now compatible with Internet Explorer
+	
+	[-] Classes : fixed generation of PDF when tax disabled
+	[-] Classes : fixed noPackPrice() method in mode tax excluded
+	[-] Classes : fixed isBirthDate() validation method
+	[-] Classes : fixed error on use of finfo_open() in isPicture() function
+	[-] Classes : fixed bug with use of convertPrice method
+	[-] Classes : replace substr() by Tools::substr()
+	[-] Classes : Now Prestashop accept new characters on password (!@#$%^&*())
+	[-] Classes : fix a SSL authentication bug with gmail with swift
+	[-] Classes : Customizable product deletion fixed
+	[-] Classes : Customer address retrieval fixed (used the cookie which was corrupted. Use the cart instead now)
+	[-] Classes : fixed issue with some versions of Mysql on order creation
+	
+	[-] MO : now, showing the logo of moneybookers by default if logo configuration not define on choice of payment method
+	[-] MO : fixed bug with cart quantity on mailalert module
+	[-] MO : fixed errors in module Loyalty (#3497)
+	[-] MO : fixed module productscategory with added ean13 on link of products
+	[-] MO : fixed an error with cart quantity on module dejala
+	[-] MO : Loyalty module now takes into account the dates of product promotions
+	[-] MO : paypal, fixed a price convertion problems with currency
+	[-] MO : incorrect class name in paypal ipn
+	[-] MO : fixed bug in PayPalAPI while using a special currency
+	[-] MO : Now, a message appear for confirm the registration on mail alert on product page
+	[-] MO : fixed XSS on productcomments module
+	[-] MO : fixed an error in module mailalert that prevented the removal alerts
+	[-] MO : fixed empty <span> when cart quantities == 0 on module blockcart and blockuserinfo
+	[-] MO : fixed bug with PayPal module and device different as default
+	[-] MO : fixed producttooltip module on Internet Explorer
+	[-] MO: bug fixed #3601 : fix a minor translation in gsitemap
+	[-] MO : fixed currency change on the payment page of the module cheque and bankwire
+	[-] MO : small fixes in PayPal module
+	
+	[-] TR : Fixed a french translation error in mail
+	
+	[-] MAILS : Fixed bug #3688 - Missing ES emails
+	
+	[-] SQL : related fields on database are now same data type
+	[-] SQL : fixed bug with configuration of currency for payment module
+	[-] SQL : fixed SQL of upgrade file (#3699)
+
+
+####################################
 #   v1.3.0.1 - 1783 (2010-26-01)   #
 ####################################
 
