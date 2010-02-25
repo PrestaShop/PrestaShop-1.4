@@ -115,8 +115,8 @@ $smarty->assign('navigationPipe', $navigationPipe);
 $server_host = Tools::getHttpHost(false, true);
 $protocol = 'http://';
 $protocol_ssl = 'https://';
-$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR $_SERVER['HTTPS']) ? $protocol_ssl : $protocol;
-$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR $_SERVER['HTTPS']) ? $protocol_ssl : $protocol;
+$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'])) ? $protocol_ssl : $protocol;
+$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'])) ? $protocol_ssl : $protocol;
 define('_PS_BASE_URL_', $protocol.$server_host);
 
 Product::initPricesComputation();
