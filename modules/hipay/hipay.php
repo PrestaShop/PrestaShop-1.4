@@ -112,7 +112,7 @@ class Hipay extends PaymentModule
 		$items = array($item);
 
 		$order = new HIPAY_MAPI_Order();
-		$order->setOrderTitle(Configuration::get('PS_SHOP_NAME'));
+		$order->setOrderTitle($this->l('Order total'));
 		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));
 
 		if (!$order->check())
@@ -232,11 +232,12 @@ class Hipay extends PaymentModule
 			<ul>
 			'.(Configuration::get('HIPAY_SITEID')
 				? '<li><a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a></li>'
-				: '<li><a href="https://www.hipay.com/info/merchants" style="color:#D9263F;font-weight:700">'.$this->l('Create a hipay account').'</a></li>').'
+				: '<li><a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700">'.$this->l('Create a hipay account').'</a></li>').'
 			'.(Configuration::get('HIPAY_SITEID_TEST')
 				? '<li><a href="https://test.www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your test account').'</a></li>'
 				: '<li><a href="https://test.www.hipay.com/registration/register" style="color:#D9263F">'.$this->l('Create a test account').'</a></li>').'
 			</ul>
+			<br />'.$this->l('Notice: if you want to refund a payment, please log in to your Hipay account then go to Merchant Management > Sales management.').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
@@ -305,6 +306,7 @@ class Hipay extends PaymentModule
 				</div>';
 		}
 		$form .= '<hr class="clear" />
+				<p>'.$this->l('Notice: please verify that the currency mode you\'ve chosen in the payment tab is compatible with your Hipay account(s).').'</p>
 				<input type="submit" name="submitHipay" value="'.$this->l('Update configuration').'" class="button" />
         	</form>
 		</fieldset>
