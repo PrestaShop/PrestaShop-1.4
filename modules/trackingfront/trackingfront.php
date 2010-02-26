@@ -226,7 +226,7 @@ class TrackingFront extends Module
 		$echo2 = '
 		<script type="text/javascript">
 			updateValues();
-			showProductLines();
+			//showProductLines();
 		</script>';
 		
 		return $this->display(__FILE__, 'header.tpl').$echo.$this->display(__FILE__, 'account.tpl').$echo2;

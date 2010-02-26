@@ -185,26 +185,35 @@ class Referrer extends ObjectModel
 			$where = 'AND od.product_id = '.intval($id_product);
 		}
 		
-		return Db::getInstance()->getRow('
-		SELECT 	COUNT(o.id_order) AS orders,
-				SUM(o.total_paid_real) / c.conversion_rate AS sales
-		FROM '._DB_PREFIX_.'orders o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
-		WHERE o.id_order IN (
-			SELECT DISTINCT oo.id_order
-			FROM '._DB_PREFIX_.'referrer_cache rc
-			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
-			LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
-			LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
-			LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
-			'.$join.'
-			WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
-			AND oo.date_add > cs.date_add
-			AND rc.id_referrer = '.intval($this->id).'
-			AND oo.valid = 1
-			'.$where.'
-		)
-		AND o.valid = 1');
+		$result = Db::getInstance()->executeS('
+		SELECT oo.id_order
+		FROM '._DB_PREFIX_.'referrer_cache rc
+		INNER JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
+		INNER JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
+		INNER JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
+		LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
+		'.$join.'
+		WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
+		AND oo.date_add > cs.date_add
+		AND rc.id_referrer = '.intval($this->id).'
+		AND oo.valid = 1
+		'.$where);
+		
+		$implode = array();
+		foreach ($result as $row)
+			if ((int)$row['id_order'])
+				$implode[] = (int)$row['id_order'];
+		
+		if ($implode)
+			return Db::getInstance()->getRow('
+			SELECT 	COUNT(o.id_order) AS orders,
+					SUM(o.total_paid_real) / c.conversion_rate AS sales
+			FROM '._DB_PREFIX_.'orders o
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
+			WHERE o.id_order IN ('.implode($implode, ',').')
+			AND o.valid = 1');
+		else
+			return array('orders' => 0, 'sales' => 0);
 	}
 	
 	public static function refreshCache($referrers = null, $employee = null)

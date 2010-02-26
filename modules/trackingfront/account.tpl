@@ -21,6 +21,7 @@
 				</fieldset>
 			</div>
 		</div>
+		{*
 		<table style="width: 800px; margin: 0 auto; font-family: arial; font-size: 10px; border-bottom: 5px solid #8AB50E;" cellspacing="0" cellpadding="2">
 			<tr style="background-color: #8AB50E; font-weight: bold; color: white; font-size: 12px;">
 				<th>{l s='ID' mod='trackingfront'}</th>
@@ -40,3 +41,4 @@
 			</tr>
 			<tr id="trid_dummy"><td colspan="14" style="background: #567500;" /></tr>
 		</table>
+		*}
