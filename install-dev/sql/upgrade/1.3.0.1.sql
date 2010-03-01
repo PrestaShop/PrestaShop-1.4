@@ -38,8 +38,6 @@ ALTER TABLE `PREFIX_product_tag` ADD INDEX `id_tag` (`id_tag`);
 ALTER TABLE `PREFIX_cms_lang` CHANGE `id_cms` `id_cms` INT(10) UNSIGNED NOT NULL;
 ALTER TABLE `PREFIX_tax` CHANGE `rate` `rate` DECIMAL(10, 3) NOT NULL;
 
-ALTER TABLE `PREFIX_connections` CHANGE `ip_address` `ip_address` INT UNSIGNED NULL DEFAULT NULL;
-
 ALTER TABLE `PREFIX_order_detail` ADD `discount_quantity_applied` TINYINT(1) NOT NULL DEFAULT 0 AFTER `ecotax`;
 ALTER TABLE `PREFIX_orders` ADD `total_products_wt` DECIMAL(10, 2) NOT NULL AFTER `total_products`;
 
