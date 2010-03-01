@@ -56,7 +56,7 @@ $_LANG['However, you will have to know how to do the following manually:'] = 'To
 $_LANG['I certify'] = 'Je le certifie';
 $_LANG['If you have any questions, please visit our '] = 'Si vous avez la moindre question, merci de jeter un oeil sur notre ';
 $_LANG['Impossible the access the a MySQL content file.'] = 'Impossible d\'accéder au contenu d\'un des fichiers *.sql.';
-$_LANG['Impossible the read the content of a MySQL content file.'] = 'Impossible de lire le contenu d\'un des fichiers *.sql.';
+$_LANG['Impossible to read the content of a MySQL content file.'] = 'Impossible de lire le contenu d\'un des fichiers *.sql.';
 $_LANG['Impossible to copy languages\'s flags.'] = 'Impossible de copier les drapeaux des langues';
 $_LANG['Impossible to send the email!'] = 'Impossible d\'envoyer l\'email !';
 $_LANG['Impossible to upload the file!'] = 'Impossible d\'envoyer le fichier !';
@@ -435,6 +435,6 @@ $_LANG['Default country:'] = 'Pays par défaut :';
 $_LANG['Your configuration is valid, click next to continue!'] = 'Votre configuration est valide,<br />cliquez sur suivant pour continuer !';
 $_LANG['Your configuration is invalid. Please fix the issues below:'] = 'Votre configuration n\'est pas valide,<br />merci de corriger ces problèmes :';
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Vous devez au préalable créer une base de données (aide disponible dans le fichier readme.txt)';
-$_LANG['This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'] = 'Cette option peut être bloquante si votre configuration e-mail est erronée, merci de la désactiver si vous ne pouvez pas passer à l\'étape suivante.';
+$_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Cette option peut être bloquante si votre configuration e-mail est erronée, merci de la désactiver si vous ne pouvez pas passer à l\'étape suivante.';
 
 ?>

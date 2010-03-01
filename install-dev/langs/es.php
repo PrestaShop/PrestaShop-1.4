@@ -56,7 +56,7 @@ $_LANG['However, you will have to know how to do the following manually:'] = 'No
 $_LANG['I certify'] = 'Certifico';
 $_LANG['If you have any questions, please visit our '] = 'Si tiene alguna duda o pregunta, eche un vistazo a nuestra ';
 $_LANG['Impossible the access the a MySQL content file.'] = 'No se puede acceder al contenido de un archivo *.sql.';
-$_LANG['Impossible the read the content of a MySQL content file.'] = 'No se puede leer el contenido de un archivo *.sql.';
+$_LANG['Impossible to read the content of a MySQL content file.'] = 'No se puede leer el contenido de un archivo *.sql.';
 $_LANG['Impossible to copy languages\'s flags.'] = 'No se pueden copiar las banderas de los idiomas de';
 $_LANG['Impossible to send the email!'] = '¡No se puede enviar un correo electrónico!';
 $_LANG['Impossible to upload the file!'] = '¡No se puede enviar el archivo!';
@@ -436,6 +436,6 @@ $_LANG['Your configuration is valid, click next to continue!'] = 'Su configuraci
 $_LANG['Your configuration is invalid. Please fix the issues below:'] = 'Su configuración no es válida,<br />gracias por corregir la configuración:';
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Debe crear una base de datos, puede encontrar ayuda en el archivo readme_es.txt';
 $_LANG['Discover your store'] = 'Descubra su tienda';
-$_LANG['This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'] = 'Esta opción se puede bloquear si su configuración de correo electrónico está mal, gracias a desactivarla si usted no puede moverse a la siguiente etapa.';
+$_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Esta opción se puede bloquear si su configuración de correo electrónico está mal, gracias a desactivarla si usted no puede moverse a la siguiente etapa.';
 
 ?>

@@ -109,7 +109,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[6] = "<?php echo lang('Can\'t write settings file, please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[7] = "<?php echo lang('Impossible to upload the file!'); ?>";
 		txtError[8] = "<?php echo lang('Data integrity is not valided. Hack attempt?'); ?>";
-		txtError[9] = "<?php echo lang('Impossible the read the content of a MySQL content file.'); ?>";
+		txtError[9] = "<?php echo lang('Impossible to read the content of a MySQL content file.'); ?>";
 		txtError[10] = "<?php echo lang('Impossible the access the a MySQL content file.'); ?>";
 		txtError[11] = "<?php echo lang('Error while inserting data in the database:'); ?>";
 		txtError[12] = "<?php echo lang('The password is incorrect (alphanumeric string at least 8 characters).'); ?>";
@@ -660,7 +660,7 @@ if ($lm->getIncludeTradFilename())
 				<div class="field">
 					<input type="checkbox" id="infosNotification" class="aligned" style="vertical-align: middle;" /><label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
 					<span id="resultInfosNotification" class="result aligned"></span>
-					<p class="userInfos aligned"><?php echo lang('This option can be blocking if your mail configuration is wrong, thank you to disable it if you can not move to the next step.'); ?></p>
+					<p class="userInfos aligned"><?php echo lang('This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'); ?></p>
 				</div>
 				
 				<!--<h3><?php echo lang('Shop\'s languages'); ?></h3>
