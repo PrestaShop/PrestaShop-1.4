@@ -145,9 +145,3 @@ SET `value` = IFNULL(ROUND(value / (1 + (
 	)
 ) / 100), 2), 0) 
 WHERE `name` = 'PS_GIFT_WRAPPING_PRICE';
-
-DELETE FROM `PREFIX_tab` 
-WHERE `class_name` = 'AdminSearch';
-
-INSERT INTO `PREFIX_tab` (`class_name`, `id_parent`, `position`) 
-VALUES ('AdminSearch', -1, 0);
