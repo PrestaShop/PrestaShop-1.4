@@ -1,4 +1,6 @@
 <?php
+header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date dans le passé
 
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
@@ -48,6 +50,10 @@ if ($lm->getIncludeTradFilename())
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache" content="no store" />
+	<meta http-equiv="Expires" content="-1" />
 	<title><?php echo lang('PrestaShop '.INSTALL_VERSION.' Installer')?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.2.6.pack.js"></script>
