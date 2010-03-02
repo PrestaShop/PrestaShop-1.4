@@ -661,7 +661,8 @@ form#productsSortForm p select { font-size: 1em }
 #header #currencies_block_top {
 	margin: 0.4em 0.5em 0 0;
 	float: left;
-	width: 8em
+	width: 8em;
+	text-align: left
 }
 #header #currencies_block_top ul li {
 	float: left;
