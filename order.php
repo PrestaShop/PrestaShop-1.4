@@ -44,7 +44,7 @@ $smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
 if ($cart->nbProducts())
 {
 	/* Manage discounts */
-	if ((Tools::isSubmit('submitDiscount') OR isset($_GET['submitDiscount'])) AND Tools::getValue('discount_name'))
+	if ((Tools::isSubmit('submitDiscount') OR Tools::isSubmit('submitDiscount')) AND Tools::getValue('discount_name'))
 	{
 		$discountName = Tools::getValue('discount_name');
 		if (!Validate::isDiscountName($discountName))

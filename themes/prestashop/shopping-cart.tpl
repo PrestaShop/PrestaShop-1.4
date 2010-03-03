@@ -160,7 +160,7 @@
 			{/if}
 		{/foreach}
 		</tbody>
-	{if $discounts}
+	{if $discounts AND $total_discounts != 0}
 		<tbody>
 		{foreach from=$discounts item=discount name=discountLoop}
 			<tr class="cart_discount {if $smarty.foreach.discountLoop.last}last_item{elseif $smarty.foreach.discountLoop.first}first_item{else}item{/if}">
