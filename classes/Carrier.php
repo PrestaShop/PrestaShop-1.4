@@ -126,7 +126,7 @@ class		Carrier extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON (d.`id_range_weight` = w.`id_range_weight`)
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND '.floatval($totalWeight).' >= w.`delimiter1`
-		AND '.floatval($totalWeight).' <= w.`delimiter2`
+		AND '.floatval($totalWeight).' < w.`delimiter2`
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY w.`delimiter1` ASC');
 		if (!isset($result['price']))
@@ -142,7 +142,7 @@ class		Carrier extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND '.floatval($totalWeight).' >= w.`delimiter1`
-		AND '.floatval($totalWeight).' <= w.`delimiter2`
+		AND '.floatval($totalWeight).' < w.`delimiter2`
 		AND d.`id_carrier` = '.intval($id_carrier).'
 		ORDER BY w.`delimiter1` ASC');
 		if (!isset($result['price']))
@@ -182,7 +182,7 @@ class		Carrier extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND '.floatval($orderTotal).' >= r.`delimiter1`
-		AND '.floatval($orderTotal).' <= r.`delimiter2`
+		AND '.floatval($orderTotal).' < r.`delimiter2`
 		AND d.`id_carrier` = '.intval($this->id).'
 		ORDER BY r.`delimiter1` ASC');
 		if (!isset($result['price']))
@@ -198,7 +198,7 @@ class		Carrier extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
 		WHERE d.`id_zone` = '.intval($id_zone).'
 		AND '.floatval($orderTotal).' >= r.`delimiter1`
-		AND '.floatval($orderTotal).' <= r.`delimiter2`
+		AND '.floatval($orderTotal).' < r.`delimiter2`
 		AND d.`id_carrier` = '.intval($id_carrier).'
 		ORDER BY r.`delimiter1` ASC');
 		if (!isset($result['price']))
