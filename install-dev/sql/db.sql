@@ -1196,7 +1196,7 @@ CREATE TABLE `PREFIX_supplier_lang` (
 
 CREATE TABLE `PREFIX_tab` (
   `id_tab` int(10) unsigned NOT NULL auto_increment,
-  `id_parent` int(11) unsigned NOT NULL,
+  `id_parent` int(11) NOT NULL,
   `class_name` varchar(64) NOT NULL,
   `module` varchar(64) NULL,
   `position` int(10) unsigned NOT NULL,
