@@ -212,7 +212,7 @@ class MailAlerts extends Module
 
 	public function hookUpdateQuantity($params)
 	{
-		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - intval($params['product']['cart_quantity']);
+		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
 		if ($qty <= intval(Configuration::get('PS_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(

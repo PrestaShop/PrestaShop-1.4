@@ -70,8 +70,10 @@ class		OrderHistory extends ObjectModel
 					elseif (!$newOS->logable AND ($oldOrderStatus AND $oldOrderStatus->logable))
 						ProductSale::removeProductSale($product['id_product'], $product['quantity']);
 					if (!$isValidated AND $newOS->logable AND isset($oldOrderStatus) AND $oldOrderStatus->id == _PS_OS_ERROR_)
+					{
 						Product::updateQuantity($product);
-					Hook::updateQuantity($product, $order);
+						Hook::updateQuantity($product, $order);
+					}
 				}
 			
 			$this->id_order_state = intval($new_order_state);
