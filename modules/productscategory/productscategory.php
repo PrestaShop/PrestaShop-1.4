@@ -53,34 +53,38 @@ class productsCategory extends Module
 		
 		//remove current product from the list
 		$current_product_key = null;
-		foreach ($categoryProducts as $key => $categoryProduct)
+		if (sizeof($categoryProducts))
 		{
-			if ($categoryProduct['id_product'] == $idProduct)
+			foreach ($categoryProducts as $key => $categoryProduct)
 			{
-				$current_product_key = $key;
-				break;
+				if ($categoryProduct['id_product'] == $idProduct)
+				{
+					$current_product_key = $key;
+					break;
+				}
 			}
-		}
-		if (isset($categoryProducts[$current_product_key]))
-			unset($categoryProducts[$current_product_key]);
+			if (isset($categoryProducts[$current_product_key]))
+				unset($categoryProducts[$current_product_key]);
 		
-		// Get positions
-		$middlePosition = round($sizeOfCategoryProducts / 2, 0);
-		$productPosition = $this->getCurrentProduct($categoryProducts, $idProduct);
 		
-		// Flip middle product with current product
-		if ($productPosition)
-		{
-			$tmp = $categoryProducts[$middlePosition-1];
-			$categoryProducts[$middlePosition-1] = $categoryProducts[$productPosition];
-			$categoryProducts[$productPosition] = $tmp;
-		}
+			// Get positions
+			$middlePosition = round($sizeOfCategoryProducts / 2, 0);
+			$productPosition = $this->getCurrentProduct($categoryProducts, $idProduct);
 		
-		// If products tab higher than 30, slice it
-		if ($sizeOfCategoryProducts > 30)
-		{
-			$categoryProducts = array_slice($categoryProducts, $middlePosition - 15, 30, true);
-			$middlePosition = 15;
+			// Flip middle product with current product
+			if ($productPosition)
+			{
+				$tmp = $categoryProducts[$middlePosition-1];
+				$categoryProducts[$middlePosition-1] = $categoryProducts[$productPosition];
+				$categoryProducts[$productPosition] = $tmp;
+			}
+		
+			// If products tab higher than 30, slice it
+			if ($sizeOfCategoryProducts > 30)
+			{
+				$categoryProducts = array_slice($categoryProducts, $middlePosition - 15, 30, true);
+				$middlePosition = 15;
+			}
 		}
 		
 		// Display tpl
