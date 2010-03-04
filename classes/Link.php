@@ -133,14 +133,18 @@ class Link
 	}
 
 	public function getUrlWith($key, $val)
-    {
-        $n = 0;
+	{
+		$n = 0;
 		$url = htmlentities($this->url, ENT_QUOTES, 'UTF-8');
-        foreach ($_GET as $k => $value)
-			if (!is_array($value) AND $k != $key AND Tools::isSubmit($k))
-				$url .= ((!$n++) ? '?' : '&amp;').urlencode($k).($value ? '='.urlencode($value) : '');
-        return $url.($n ? '&amp;' : '?').urlencode($key).'='.urlencode($val);
-    }
+		
+		foreach ($_GET as $k => $value)
+			// adminlang is an hand-written param in BO
+			if ($k != 'adminlang')
+				if (!is_array($value) AND $k != $key AND Tools::isSubmit($k))
+					$url .= ((!$n++) ? '?' : '&amp;').urlencode($k).($value ? '='.urlencode($value) : '');
+		
+		return $url.($n ? '&amp;' : '?').urlencode($key).'='.urlencode($val);
+	}
 
 	public function goPage($url, $p)
 	{
