@@ -25,7 +25,11 @@ else
 	));
 
 	$smarty->assign('this_path', __PS_BASE_URI__.'modules/cashondelivery/');
-	echo Module::display('cashondelivery.php', 'validation.tpl');
+	$template = 'validation.tpl';
+	if (file_exists(_PS_THEME_DIR_.'modules/cashondelivery/'.$template))
+		echo Module::display('cashondelivery', $template);
+	else
+		echo Module::display(__FILE__, $template);
 }
 
 include(dirname(__FILE__).'/../../footer.php');
