@@ -274,7 +274,16 @@ class Search
 			$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 0');
 		}
 		else
-			$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN (SELECT id_product FROM '._DB_PREFIX_.'product WHERE indexed = 0)');
+		{
+			$products = $db->ExecuteS('SELECT id_product FROM '._DB_PREFIX_.'product WHERE indexed = 0');
+			
+			$ids = array();
+			if ($products)
+				foreach($products AS $product)
+					$ids[] = intval($product['id_product']);
+			if (sizeof($ids))
+				$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN ('.implode(',', $ids).')');
+		}
 	
 		$weightArray = array(
 			'pname' => Configuration::get('PS_SEARCH_WEIGHT_PNAME'),
