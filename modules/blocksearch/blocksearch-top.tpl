@@ -28,6 +28,7 @@
 				'{/literal}{$base_dir}{literal}search.php', {
 				minChars: 3,
 				max:10,
+				selectFirst:false,
 				width:500,
 				scroll: false,
 				formatItem:formatSearch,

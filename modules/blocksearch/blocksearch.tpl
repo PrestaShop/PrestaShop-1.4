@@ -30,6 +30,7 @@
 				minChars: 3,
 				max:10,
 				width:500,
+				selectFirst:false,
 				scroll: false,
 				formatItem:formatSearch,
 				extraParams:{ajaxSearch:1,id_lang:{/literal}{$cookie->id_lang}{literal}}
