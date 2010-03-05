@@ -47,15 +47,15 @@ class QuantityDiscount extends ObjectModel
 		return $fields;
 	}
 
-    public static function getValue($product_price, $id_discount_type, $value)
+    public static function getValue($product_price, $id_discount_type, $value, $usetax = true, $taxrate = 1)
     {
 		if ($id_discount_type == 1)
 		{
 			$percentage = $value / 100;
-			return $percentage * floatval($product_price);
+			return $percentage * floatval($product_price);		
 		}
 		elseif ($id_discount_type == 2)
-			return $value;
+			return !$usetax ? ($value / (1 + ($taxrate / 100))) : $value;
 		return 0;
     }
 

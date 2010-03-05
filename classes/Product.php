@@ -1416,7 +1416,7 @@ class		Product extends ObjectModel
 		}
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 		{
-			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value);
+			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value, $usetax, floatval($result['rate']));
 			$price -= $discount_qty_price;
 		}
 		// Group reduction
@@ -2111,6 +2111,7 @@ class		Product extends ObjectModel
 		}
 		else
 			$row['price'] = Tools::ps_round(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6), 2);
+			
 		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'], $row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		$row['quantity'] = Product::getQuantity($row['id_product']);
