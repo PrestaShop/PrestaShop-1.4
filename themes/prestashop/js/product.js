@@ -157,7 +157,7 @@ function updateDisplay()
 			$('#last_quantities').hide('slow');
 		}
 	
-		//display the quantities of pieces (only if allowed)
+		//display the quantities of pieces (only if allowe,17d)
 		if (quantitiesDisplayAllowed)
 		{
 			$('#pQuantityAvailable:hidden').show('slow');
@@ -237,13 +237,14 @@ function updateDisplay()
 		else
 			$('#product_reference:visible').hide('slow');
 
-		var productPriceWithoutReduction2 = (attribut_price_tmp + productPriceWithoutReduction);
+		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 		
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
 			var priceReduct = 0;
 		else
-			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + (reduction_price * currencyRate);
+			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + (reduction_price);
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
+		
 		var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
 
 		if (displayPrice == 1)
