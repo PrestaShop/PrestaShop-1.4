@@ -57,6 +57,19 @@ class AdminSubDomains extends AdminTab
 			</fieldset>
 		</form>';
 	}
+	
+	public function postProcess()
+	{
+		$result = Db::getInstance()->ExecuteS('
+			SELECT `id_subdomain`
+			FROM `'._DB_PREFIX_.'subdomain`
+		');
+		if (sizeof($result) === 1)
+			foreach ($result AS $row)
+				$this->_listSkipDelete = array($row['id_subdomain']);
+		
+		return parent::postProcess();
+	}
 }
 
 ?>
