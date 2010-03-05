@@ -331,7 +331,7 @@ class AdminPreferences extends AdminTab
 					foreach ($languages as $language)
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="margin-bottom:8px; display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; vertical-align: top;">
-							<input type="text" name="'.$key.'_'.$language['id_lang'].'" value="'.htmlentities($this->getVal($confValues, $key.'_'.$language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
+							<input type="text" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'_'.$language['id_lang'].'" value="'.htmlentities($this->getVal($confValues, $key.'_'.$language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 						</div>';
 					$this->displayFlags($languages, $defaultLanguage, $divLangName, $key);
 					break;

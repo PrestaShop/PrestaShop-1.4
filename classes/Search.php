@@ -112,9 +112,10 @@ class Search
 		
 		if ($indexation)
 		{
-			$minWordLen = Configuration::get('PS_SEARCH_MINWORDLEN');
-			if ($minWordLen)
+			$minWordLen = intval(Configuration::get('PS_SEARCH_MINWORDLEN'));
+			if ($minWordLen > 1)
 			{
+				$minWordLen -= 1;
 				$string = preg_replace('/(?<=\s)[^\s]{1,'.$minWordLen.'}(?=\s)/Su', ' ', $string);
 				$string = preg_replace('/^[^\s]{1,'.$minWordLen.'}(?=\s)/Su', '', $string);
 				$string = preg_replace('/(?<=\s)[^\s]{1,'.$minWordLen.'}$/Su', '', $string);

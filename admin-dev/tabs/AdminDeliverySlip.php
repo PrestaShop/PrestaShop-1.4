@@ -21,8 +21,8 @@ class AdminDeliverySlip extends AdminTab
 		
 		$this->optionTitle = $this->l('Delivery slips options');
 		$this->_fieldsOptions = array(
-			'PS_DELIVERY_PREFIX' => array('title' => $this->l('Delivery prefix:'), 'desc' => $this->l('Prefix used for delivery slips'), 'size' => 2, 'type' => 'textLang'),
-			'PS_DELIVERY_NUMBER' => array('title' => $this->l('Delivery number:'), 'desc' => $this->l('The next delivery slip will begin with this number, and then increase with each additional slip'), 'size' => 2, 'type' => 'text'),
+			'PS_DELIVERY_PREFIX' => array('title' => $this->l('Delivery prefix:'), 'desc' => $this->l('Prefix used for delivery slips'), 'size' => 6, 'type' => 'textLang'),
+			'PS_DELIVERY_NUMBER' => array('title' => $this->l('Delivery number:'), 'desc' => $this->l('The next delivery slip will begin with this number, and then increase with each additional slip'), 'size' => 6, 'type' => 'text'),
 		);
 
 		parent::__construct();

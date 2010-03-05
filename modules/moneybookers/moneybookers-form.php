@@ -282,7 +282,7 @@ $mbParams['language'] = strtoupper($lang->iso_code);
 $mbParams['date_of_birth'] = substr($customer->birthday, 5, 2).substr($customer->birthday, 8, 2).substr($customer->birthday, 0, 4);
 
 /* About the cart */
-$mbParams['transaction_id'] = intval($cart->id);
+$mbParams['transaction_id'] = intval($cart->id).'_'.date('YmdHis');
 $mbParams['currency'] = $currency->iso_code;
 $mbParams['amount'] = number_format($cart->getOrderTotal(), 2, '.', '');
 

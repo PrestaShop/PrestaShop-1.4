@@ -21,6 +21,11 @@ class MoneyBookers extends PaymentModule
 		if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn'))
 			return false;
 		Configuration::updateValue('MB_HIDE_LOGIN', 1);
+		Configuration::updateValue('MB_PAY_TO_EMAIL', Configuration::get('PS_SHOP_EMAIL'));
+		Configuration::updateValue('MB_RETURN_URL', 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'history.php');
+		Configuration::updateValue('MB_CANCEL_URL', 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		Configuration::updateValue('MB_ID_LOGO', 1);
+		Configuration::updateValue('MB_ID_LOGO_WALLET', 1);
 		return true;
 	}
 
@@ -74,16 +79,16 @@ class MoneyBookers extends PaymentModule
 					$errors[] = $this->l('Account validation failed, your email might be wrong');
 				else
 				{
-					$fp2 = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&sw=1&secret_word='.md5(Configuration::get('MB_SECRET_WORD')), 'r');
+					$fp2 = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&sw=1&secret_word='.md5($_POST['mb_secret_word']), 'r');
 					if (!$fp2)
-		                                $errors[] = $this->l('Impossible to contact activation server, please try later');
+						$errors[] = $this->l('Impossible to contact activation server, please try later');
 					else
-		                        {
+					{
 						$response2 = trim(strtolower(fgets($fp2, 4096)));
 						if (strstr('velocity_check_exceeded', $response2))
 							$errors[] = $this->l('Secret word validation failed, execeeded max tries (3 per hour)');
 						elseif (!strstr('ok', $response2))
-		                                        $errors[] = $this->l('Secret word validation failed, your secret word might be wrong');
+							$errors[] = $this->l('Secret word validation failed, your secret word might be wrong');
 						else
 							$conf = true;
 					}
@@ -151,12 +156,12 @@ class MoneyBookers extends PaymentModule
 				<div style="clear: both;"></div>
 				<label>'.$this->l('Page displayed after successful payment:').'</label>
 				<div class="margin-form">
-					<input type="text" name="mb_return_url" value="'.Configuration::get('MB_RETURN_URL', 'http://').'" style="width: 300px;" />
+					<input type="text" name="mb_return_url" value="'.Configuration::get('MB_RETURN_URL').'" style="width: 300px;" />
 				</div>
 				<div style="clear: both;"></div>
 				<label>'.$this->l('Page displayed after payment cancellation:').'</label>
 				<div class="margin-form">
-					<input type="text" name="mb_cancel_url" value="'.Configuration::get('MB_CANCEL_URL', 'http://').'" style="width: 300px;" />
+					<input type="text" name="mb_cancel_url" value="'.Configuration::get('MB_CANCEL_URL').'" style="width: 300px;" />
 				</div>
 				<div style="clear: both;"></div>
 				<label>'.$this->l('Hide the login form on Moneybookers page').'</label>

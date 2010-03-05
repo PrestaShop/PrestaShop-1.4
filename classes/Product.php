@@ -301,20 +301,25 @@ class		Product extends ObjectModel
 	 */
 	public function updatePosition($way, $position = NULL)
 	{
+		$id_category = intval(Tools::getValue('id_category', 1));
+		
 		if (!$res = Db::getInstance()->ExecuteS('
 		SELECT cp.`id_product`, cp.`position`, cp.`id_category` 
 		FROM `'._DB_PREFIX_.'category_product` cp
-		WHERE cp.`id_category` = '.intval(Tools::getValue('id_category')).' 
+		WHERE cp.`id_category` = '.intval($id_category).' 
 		ORDER BY cp.`position` '.(intval($way) ? 'ASC' : 'DESC')))
 			return false;
+
 		foreach ($res AS $key => $values)
 			if (intval($values[$this->identifier]) == intval($this->id))
 			{
 				$k = $key ;
 				break ;
 			}
+
 		if (!isset($k) OR !isset($res[$k]) OR !isset($res[$k + 1]))
 			return false;
+
 		$from = $res[$k];
 		$to = $res[$k + 1];
 
