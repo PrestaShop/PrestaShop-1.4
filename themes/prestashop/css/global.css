@@ -163,7 +163,7 @@ h2 {
 }
 h2 span {
 	font-size: 0.9em;
-	text-transform: lowercase;
+	text-transform: none;
 	font-weight: normal;
 	font-style: italic;
 	color: #374853;

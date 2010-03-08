@@ -15,7 +15,7 @@
 		</dl>
 		<p><a href="{$base_dir}new-products.php" title="{l s='All new products' mod='blocknewproducts'}" class="button_large">{l s='All new products' mod='blocknewproducts'}</a></p>
 	{else}
-		<p>{l s='No new product at this time' mod='blocknewproducts'}</p>
+		<p>{l s='No new products at this time' mod='blocknewproducts'}</p>
 	{/if}
 	</div>
 </div>

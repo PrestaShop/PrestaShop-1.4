@@ -88,7 +88,7 @@
 		<div style="display: none;" id="extra_carrier"></div>
 	</div>
 	{else}
-		<p class="warning">{l s='There is no carrier available that will deliver to this address!'}</td></tr>
+		<p class="warning">{l s='There are no carriers available that will deliver to this address!'}</td></tr>
 	{/if}
 
 	{if $giftAllowed}

@@ -2,9 +2,16 @@
 {include file=$tpl_dir./errors.tpl}
 
 {if $category->id AND $category->active}
-	<h2 class="category_title">
+	<h2 class="category_title">{strip}
 		{$category->name|escape:'htmlall':'UTF-8'}
-		<span>{$nb_products|intval}&nbsp;{if $nb_products>1}{l s='products'}{else}{l s='product'}{/if}</span>
+		<span>
+			{if $nb_products == 0}{l s='There are no products.'}
+			{else}
+				{if $nb_products == 1}{l s='There is'}{else}{l s='There are'}{/if}&#160;
+				{$nb_products}&#160;
+				{if $nb_products == 1}{l s='product.'}{else}{l s='products.'}{/if}
+			{/if}
+		</span>{/strip}
 	</h2>
 
 	{if $scenes}
@@ -48,7 +55,7 @@
 			{include file=$tpl_dir./product-list.tpl products=$products}
 			{include file=$tpl_dir./pagination.tpl}
 		{elseif !isset($subcategories)}
-			<p class="warning">{l s='There is no product in this category.'}</p>
+			<p class="warning">{l s='There are no products in this category.'}</p>
 		{/if}
 {elseif $category->id}
 	<p class="warning">{l s='This category is currently unavailable.'}</p>

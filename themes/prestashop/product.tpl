@@ -233,7 +233,6 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/if}
 
 			{if isset($groups)}
-
 			<!-- attributes -->
 			<div id="attributes">
 			{foreach from=$groups key=id_attribute_group item=group}
@@ -267,10 +266,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- number of item in stock -->
-			<p id="pQuantityAvailable"{if $display_qties != 1 || ($allow_oosp && $product->quantity == 0)} style="display:none;"{/if}>
+			<p id="pQuantityAvailable"{if $display_qties != 1 || $product->quantity == 0} style="display:none;"{/if}>
 				<span id="quantityAvailable">{$product->quantity|intval}</span>
 				<span{if $product->quantity > 1} style="display:none;"{/if} id="quantityAvailableTxt">{l s='item in stock'}</span>
-				<span{if $product->quantity < 2} style="display:none;"{/if} id="quantityAvailableTxtMultiple">{l s='items in stock'}</span>
+				<span{if $product->quantity == 1} style="display:none;"{/if} id="quantityAvailableTxtMultiple">{l s='items in stock'}</span>
 			</p>
 			
 			<!-- Out of stock hook -->
@@ -298,7 +297,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 <div id="quantityDiscount">
 	<table class="std">
 			<tr>
-				{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
+			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
 				<th>{$quantity_discount.quantity|intval} 
 				{if $quantity_discount.quantity|intval > 1}
 					{l s='quantities'}
@@ -306,10 +305,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					{l s='quantity'}
 				{/if}
 				</th>
-				{/foreach}
+			{/foreach}
 			</tr>
 			<tr>
-				{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
+			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
 				<td>
 				{if $quantity_discount.id_discount_type|intval == 1}
 					-{$quantity_discount.value|floatval}%
@@ -317,7 +316,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					-{convertPrice price=$quantity_discount.value|floatval}
 				{/if}
 				</td>
-				{/foreach}
+			{/foreach}
 			</tr>
 	</table>
 </div>

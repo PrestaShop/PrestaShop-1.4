@@ -7,7 +7,16 @@
 	{include file=$tpl_dir./errors.tpl}
 {else}
 
-	<p>{if $nbSuppliers > 1}{l s='There are'} <span class="bold">{$nbSuppliers} {l s='suppliers.'}</span>{else}{l s='There is'} <span class="bold">{$nbSuppliers} {l s='supplier.'}</span>{/if}</p>
+	<p>{strip}
+		<span class="bold">
+			{if $nbSuppliers == 0}{l s='There are no manufacturers.'}
+			{else}
+				{if $nbSuppliers == 1}{l s='There is'}{else}{l s='There are'}{/if}&#160;
+				{$nbSuppliers}&#160;
+				{if $nbSuppliers == 1}{l s='supplier.'}{else}{l s='suppliers.'}{/if}
+			{/if}
+		</span>{/strip}
+	</p>
 
 {if $nbSuppliers > 0}
 	{include file=$tpl_dir./product-sort.tpl}
@@ -54,7 +63,7 @@
 			{if $supplier.nb_products > 0}
 				<a href="{$link->getsupplierLink($supplier.id_supplier, $supplier.link_rewrite)|escape:'htmlall':'UTF-8'}">
 			{/if}
-				<span>{$supplier.nb_products|intval} {if $supplier.nb_products > 1}{l s='products'}{else}{l s='products'}{/if}</span>
+				<span>{$supplier.nb_products|intval} {if $supplier.nb_products == 1}{l s='product'}{else}{l s='products'}{/if}</span>
 			{if $supplier.nb_products > 0}
 				</a>
 			{/if}
