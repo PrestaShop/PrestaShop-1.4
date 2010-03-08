@@ -259,7 +259,7 @@ class AdminImport extends AdminTab
 
 	private static function split($field)
 	{
-		$separator = is_null(Tools::getValue('multiple_value_separator')) ? ',' : Tools::getValue('multiple_value_separator');
+		$separator = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
 		$tab = explode($separator, $field);
 		$res = array_map('strval', $tab);
 		$res = array_map('trim', $tab);
@@ -359,6 +359,19 @@ class AdminImport extends AdminTab
 		return true;
 	}
 	
+	public static function fgetcsv($handle, $lenght, $delimiter)
+	{
+		$line = fgets($handle, $lenght);
+		if ($line === false)
+			return false;
+		$tmpTab = explode($delimiter, $line);	
+		
+		foreach ($tmpTab AS &$row)
+			if (preg_match ('/^".*"$/Ui',$row))
+				$row = trim($row, '"');
+		return $tmpTab;
+	}
+	
 	static public function array_walk(&$array, $funcname, &$user_data = false)
 	{
 		if (!is_callable($funcname)) return false;
@@ -408,7 +421,7 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -496,9 +509,8 @@ class AdminImport extends AdminTab
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
 
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
-
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
@@ -661,6 +673,7 @@ class AdminImport extends AdminTab
 				// If id product AND id product already in base, trying to update
 				if ($product->id AND Product::existsInDatabase(intval($product->id)))
 				{
+				
 					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.intval($product->id));
 					$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
@@ -674,6 +687,7 @@ class AdminImport extends AdminTab
 			{
 				$this->_errors[] = $info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
 				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				
 			}
 			else
 			{
@@ -756,7 +770,7 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$fsep = Tools::getValue('multiple_value_separator');
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -806,7 +820,7 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -842,7 +856,7 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -967,7 +981,7 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -998,7 +1012,7 @@ class AdminImport extends AdminTab
 	{		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -1209,12 +1223,11 @@ class AdminImport extends AdminTab
 		ob_clean();
 		
 		/* Datas */
-		for ($current_line = 0; $current_line < 10 AND $line = fgetcsv($handle, MAX_LINE_SIZE, $glue); $current_line++)
+		for ($current_line = 0; $current_line < 10 AND $line = self::fgetcsv($handle, MAX_LINE_SIZE, $glue); $current_line++)
 		{
 			/* UTF-8 conversion */
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
-				
 			echo '<tr id="table_'.$current_table.'_line_'.$current_line.'" style="padding: 4px">';
 			foreach ($line AS $nb_c => $column)
 				if ((MAX_COLUMNS * intval($current_table) <= $nb_c) AND (intval($nb_c) < MAX_COLUMNS * (intval($current_table) + 1)))
