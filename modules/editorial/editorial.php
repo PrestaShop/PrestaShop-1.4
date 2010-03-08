@@ -51,7 +51,7 @@ class Editorial extends Module
 			$forbidden = array('submitUpdate');
 			
 			foreach ($_POST AS $key => $value)
-				if (!Validate::isCleanHtml($_POST[$key]))
+				if (!Validate::isString($_POST[$key]))
 				{
 					$this->_html .= $this->displayError($this->l('Invalid html field, javascript is forbidden'));
 					$this->_displayForm();

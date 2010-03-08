@@ -832,6 +832,17 @@ class Validate
 	{
 		return (is_object($data) AND get_class($data) == 'Cookie');
 	}
+
+	/**
+	* Price display method validity
+	*
+	* @param string $data Data to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isString($data)
+	{
+		return is_string($data);
+	}
 }
 
 ?>
