@@ -349,6 +349,51 @@ class Search
 		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}
+	
+	public function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
+	{
+	 	global $link;
+		
+		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) 
+		OR !Validate::isBool($count) OR !Validate::isValidSearch($tag)
+		OR $orderBy AND !$orderWay
+		OR ($orderBy AND !Validate::isOrderBy($orderBy))
+		OR ($orderWay AND !Validate::isOrderBy($orderWay)))
+			die(Tools::displayError());
+
+		if ($pageNumber < 0) $pageNumber = 0;
+		if ($pageSize < 1) $pageSize = 10;
+
+		if ($count)
+		{
+			$result = Db::getInstance()->getRow('
+			SELECT COUNT(pt.`id_product`) AS nb
+			FROM `'._DB_PREFIX_.'product` p
+			LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
+			LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.intval($id_lang).')
+			WHERE p.`active` = 1
+			AND t.`name` LIKE \'%'.pSQL($tag).'%\'');
+			return isset($result['nb']) ? $result['nb'] : 0;
+		}
+		$result = Db::getInstance()->ExecuteS('
+		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, 1 as position
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'tax` tax ON (p.`id_tax` = tax.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
+		LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.intval($id_lang).')
+		WHERE p.`active` = 1
+		AND t.`name` LIKE \'%'.pSQL($tag).'%\'
+		GROUP BY pt.`id_product`
+		ORDER BY position DESC'.($orderBy ? ', '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
+		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize));
+		if (!$result) return false;
+
+		return Product::getProductsProperties($id_lang, $result);
+	}
 }
 	
 ?>
