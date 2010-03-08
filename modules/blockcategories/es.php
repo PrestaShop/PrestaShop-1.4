@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockcategories}prestashop>blockcategories_8f0ed7c57fca428f7e3f8e64d2f00918'] = 'Bloque de categorías ';
-$_MODULE['<{blockcategories}prestashop>blockcategories_bdfd1b1bece2a3a5a52afa810a643a0d'] = 'añdir un bloque que ofrezca categorías de productos';
+$_MODULE['<{blockcategories}prestashop>blockcategories_bdfd1b1bece2a3a5a52afa810a643a0d'] = 'Añdir un bloque que ofrezca categorías de productos';
 $_MODULE['<{blockcategories}prestashop>blockcategories_23e0d4ecc25de9b2777fdaca3e2f3193'] = 'Nivel máximo: Número incorrecto';
 $_MODULE['<{blockcategories}prestashop>blockcategories_0cf328636f0d607ac24a5c435866b94b'] = 'HTML dinámico: opción no válida';
 $_MODULE['<{blockcategories}prestashop>blockcategories_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';

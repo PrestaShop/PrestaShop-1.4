@@ -21,8 +21,8 @@ $_MODULE['<{productcomments}prestashop>productcomments_0048bfb5ec7540fce6a826232
 $_MODULE['<{productcomments}prestashop>productcomments_5425e30a4f2d17eebb3ccbc8d9e4b879'] = 'Criterio de los comentarios';
 $_MODULE['<{productcomments}prestashop>productcomments_ec211f7c20af43e742bf2570c3cb84f9'] = 'Añadir';
 $_MODULE['<{productcomments}prestashop>productcomments_549f9fb7be6d7edda6c5560f4ec30be4'] = 'Cree un nuevo criterio de clasificación para sus productos.';
-$_MODULE['<{productcomments}prestashop>productcomments_dd33a09f24a2e9e889b7f1f1a0255c22'] = 'Una vez creado, debe activarlo para los productos deseados bajo la suguiente forma.';
-$_MODULE['<{productcomments}prestashop>productcomments_daa1f0640f2e6759e4b4f2b981b21285'] = 'STenga presente que los criterios son independientes en cada idioma.';
+$_MODULE['<{productcomments}prestashop>productcomments_dd33a09f24a2e9e889b7f1f1a0255c22'] = 'Una vez creado, debe activarlo para los productos deseados bajo la siguiente forma.';
+$_MODULE['<{productcomments}prestashop>productcomments_daa1f0640f2e6759e4b4f2b981b21285'] = 'Tenga presente que los criterios son independientes en cada idioma.';
 $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc880988b'] = 'Criterio';
 $_MODULE['<{productcomments}prestashop>productcomments_e04d057b0b4f26f6d67294bb953fa84b'] = 'Criterios de los productos';
 $_MODULE['<{productcomments}prestashop>productcomments_5d4b6d89c4c760deacf872899482ff06'] = 'Seleccione los criterios de clasificación que corresponden a cada producto. Puede seleccionar criterios múltiples pulsando la tecla Ctrl.';
