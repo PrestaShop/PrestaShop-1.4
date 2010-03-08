@@ -36,6 +36,7 @@ echo '
 <html><head><script type="text/javascript" src="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'/js/jquery/jquery-1.2.6.pack.js"></script></head><body>
 <form action="'.$paypal->getPaypalUrl().'" method="post" id="paypal_form" class="hidden">
 	<input type="hidden" name="upload" value="1" />
+	<input type="hidden" name="address_override" value="1" />
 	<input type="hidden" name="first_name" value="'.$address->firstname.'" />
 	<input type="hidden" name="last_name" value="'.$address->lastname.'" />
 	<input type="hidden" name="address1" value="'.$address->address1.'" />
