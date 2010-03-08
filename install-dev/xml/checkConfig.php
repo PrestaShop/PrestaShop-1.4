@@ -15,6 +15,7 @@ $tests = array(
 	'mysql_support' => false,
 	'config_dir' => INSTALL_PATH.'/../config/',
 	'tools_dir' => INSTALL_PATH.'/../tools/smarty/compile',
+	'sitemap' => INSTALL_PATH.'/../sitemap.xml',
 	'img_dir' => INSTALL_PATH.'/../img/',
 	'mails_dir' => INSTALL_PATH.'/../mails/',
 	'module_dir' => INSTALL_PATH.'/../modules/',

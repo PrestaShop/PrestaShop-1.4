@@ -23,7 +23,6 @@ if (Tools::isSubmit('email'))
 			else
 			{
 			    $customer->passwd = Tools::encrypt($password = Tools::passwdGen(intval(MIN_PASSWD_LENGTH)));
-				
 				$customer->last_passwd_gen = date('Y-m-d H:i:s', time());
 		        if ($customer->update())
 				{
@@ -35,8 +34,6 @@ if (Tools::isSubmit('email'))
 					$customer->email, 
 					$customer->firstname.' '.$customer->lastname);
 					$smarty->assign(array('confirmation' => 1, 'email' => $customer->email));
-					
-					echo $password ; exit ;
 				}
 				else
 					$errors[] = Tools::displayError('error with your account and your new password cannot be sent to your e-mail; please report your problem using the contact form');

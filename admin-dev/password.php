@@ -50,7 +50,6 @@ if (isset($_POST['Submit']))
 				{
 					Mail::Send($id_lang, 'password', 'Your new admin password', array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname);
 					$confirmation = 'ok';
-					echo $pwd ;
 				}
 			}
 		}
