@@ -902,9 +902,15 @@ class		Cart extends ObjectModel
 	function getSummaryDetails()
 	{
 		global $cookie;
+		
+		$delivery = new Address(intval($this->id_address_delivery));
+		$invoice = new Address(intval($this->id_address_invoice));
+		
 		return array(
-			'delivery' => new Address(intval($this->id_address_delivery)),
-			'invoice' => new Address(intval($this->id_address_invoice)),
+			'delivery' => $delivery,
+			'delivery_state' => State::getNameById($delivery->id_state),
+			'invoice' => $invoice,
+			'invoice_state' => State::getNameById($invoice->id_state),
 			'carrier' => new Carrier(intval($this->id_carrier), $cookie->id_lang),
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(),

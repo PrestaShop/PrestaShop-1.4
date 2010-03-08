@@ -212,7 +212,7 @@
 		<li class="address_address1">{$delivery->address1|escape:'htmlall':'UTF-8'}</li>
 		{if $delivery->address2}<li class="address_address2">{$delivery->address2|escape:'htmlall':'UTF-8'}</li>{/if}
 		<li class="address_city">{$delivery->postcode|escape:'htmlall':'UTF-8'} {$delivery->city|escape:'htmlall':'UTF-8'}</li>
-		<li class="address_country">{$delivery->country|escape:'htmlall':'UTF-8'}</li>
+		<li class="address_country">{$delivery->country|escape:'htmlall':'UTF-8'} {if $delivery_state}({$delivery_state|escape:'htmlall':'UTF-8'}){/if}</li>
 	</ul>
 	{/if}
 	{if $invoice->id}
@@ -223,7 +223,7 @@
 		<li class="address_address1">{$invoice->address1|escape:'htmlall':'UTF-8'}</li>
 		{if $invoice->address2}<li class="address_address2">{$invoice->address2|escape:'htmlall':'UTF-8'}</li>{/if}
 		<li class="address_city">{$invoice->postcode|escape:'htmlall':'UTF-8'} {$invoice->city|escape:'htmlall':'UTF-8'}</li>
-		<li class="address_country">{$invoice->country|escape:'htmlall':'UTF-8'}</li>
+		<li class="address_country">{$invoice->country|escape:'htmlall':'UTF-8'} {if $invoice_state}({$invoice_state|escape:'htmlall':'UTF-8'}){/if}</li>
 	</ul>
 	{/if}
 	{if $carrier->id AND !$virtualCart}
