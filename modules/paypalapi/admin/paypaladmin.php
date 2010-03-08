@@ -121,16 +121,17 @@ class PaypalAdmin extends PaypalAPI
 			'.$this->l('Without SSL, PayPalAPI module will not be able to contact PayPal').'.<br />
 		</fieldset>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin-top:20px; float:left;">
-			<fieldset style="height:260px; width:400px;">
+			<fieldset style="width:400px;">
 				<legend><img src="../img/admin/edit.gif" />'.$this->l('General settings').'</legend>
 				<label style="width:140px;">'.$this->l('Sandbox mode:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
 					<input type="radio" name="sandbox" value="1" '.($sandbox ? 'checked="checked"' : '').' /> '.$this->l('Yes').'
 					<input type="radio" name="sandbox" value="0" '.(!$sandbox ? 'checked="checked"' : '').' /> '.$this->l('No').'
+					<p class="hint" style="display: block;float: none;">'.$this->l('When you active this option, PayPal run on mode test.').'</p>
 				</div>
 				<label style="clear:both; width:140px;">'.$this->l('PayPal Integral:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
-					<input type="radio" name="pp_integral" value="1" '.($pp_integral ? 'checked="checked"' : '').' /> '.$this->l('Activate payments with PayPal account, credit cards (CB, Visa, Mastercard) and private cards (Aurore, Cofinoga, 4 stars)').'
+					<input type="radio" name="pp_integral" value="1" '.($pp_integral ? 'checked="checked"' : '').' /> '.$this->l('Activate payments credit cards (CB, Visa, Mastercard) and private cards (Amex, Aurore, Cofinoga, 4 stars), and with PayPal account').'
 				</div>
 				<label style="clear:both; width:140px;">'.$this->l('PayPal Option+:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
@@ -140,24 +141,25 @@ class PaypalAdmin extends PaypalAPI
 				<div class="margin-form" style="padding-left:160px;">
 					<input type="radio" name="expressCheckout" value="1" '.($expressCheckout ? 'checked="checked"' : '').' /> '.$this->l('Yes').'
 					<input type="radio" name="expressCheckout" value="0" '.(!$expressCheckout ? 'checked="checked"' : '').' /> '.$this->l('No').'
+					<p class="hint" style="display: block;float: none;">'.$this->l('Payment with PayPal account in just two clicks (button from the PayPal shopping cart)').'</p>
 				</div>
 				<label style="clear:both; width:140px;">'.$this->l('Banner image URL:').'</label>
 				<div class="margin-form" style="padding-left:160px;">
-					<input type="text" size="40" name="header" value="'.($header ? htmlentities($header, ENT_COMPAT, 'UTF-8') : '').'" />
-					<p class="hint clear" style="display: block;">'.$this->l('The image should be host on a secure (https) server. Max: 750x90px.').'</p>
+					<input type="text" size="30" name="header" value="'.($header ? htmlentities($header, ENT_COMPAT, 'UTF-8') : '').'" />
+					<p class="hint" style="display: block;">'.$this->l('The image should be host on a secure (https) server. Max: 750x90px.').'</p>
 				</div>
 				<center style="clear:both; margin-top:50px;"><input type="submit" name="submitPaypalSettings" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>
 		</form>
 		<form action="'.strval($_SERVER['REQUEST_URI']).'" method="post" style="margin:20px 0px 0px 40px; float:left;">
-			<fieldset style="height:260px; width:428px;">
+			<fieldset style="width:428px;">
 				<legend><img src="../img/admin/cog.gif" />'.$this->l('API settings:').'</legend>
 				<label style="width:140px;">'.$this->l('API user:').'</label>
 				<div class="margin-form" style="padding-left:160px;"><input type="text" size="20" name="apiUser" value="'.($apiUser ? htmlentities($apiUser, ENT_COMPAT, 'UTF-8') : '').'" /></div>
-				<label style="width:140px;">'.$this->l('API password:').'</label>
+				<label style="width:141px;">'.$this->l('API password:').'</label>
 				<div class="margin-form" style="padding-left:160px;"><input type="password" size="20" name="apiPassword" value="'.($apiPassword ? htmlentities($apiPassword, ENT_COMPAT, 'UTF-8') : '').'" /></div>
 				<label style="width:140px;">'.$this->l('API signature:').'</label>
-				<div class="margin-form" style="padding-left:160px;"><input type="text" size="33" name="apiSignature" value="'.($apiSignature ? htmlentities($apiSignature, ENT_COMPAT, 'UTF-8') : '').'" /></div>
+				<div class="margin-form" style="padding-left:160px;"><input type="text" size="30" name="apiSignature" value="'.($apiSignature ? htmlentities($apiSignature, ENT_COMPAT, 'UTF-8') : '').'" /></div>
 				<br />
 				<center style="clear:both;"><input type="submit" name="submitPaypalAPI" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>

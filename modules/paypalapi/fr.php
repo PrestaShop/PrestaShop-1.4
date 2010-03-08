@@ -24,11 +24,13 @@ $_MODULE['<{paypalapi}prestashop>paypaladmin_de62775a71fc2bf7a13d7530ae24a7ed'] 
 $_MODULE['<{paypalapi}prestashop>paypaladmin_b28187aa56eb79fa76bf27d5940c4957'] = 'Mode Sandbox :';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
+$_MODULE['<{paypalapi}prestashop>paypaladmin_ebe9c0808488ced5f94fadb541943a03'] = 'lorsque vous activez cette option, PayPal fonctionnera en mode test.';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_d0a0d88bc7edd02f74f60c84d5be0c65'] = 'PayPal intégral :';
-$_MODULE['<{paypalapi}prestashop>paypaladmin_205e8dd90685e3065b4ecd1560064dad'] = 'Paiements avec les comptes PayPal, les cartes de crédits (CB, Visa, Mastercard) et les cartes privées (Aurore, Cofinoga, 4 stars)';
+$_MODULE['<{paypalapi}prestashop>paypaladmin_390ea543d3ad4fa59132f263917b3ce7'] = 'Paiements par cartes bancaires (CB, Visa, MasterCard), privatives (Amex, Aurore, Cofinoga, 4Etoiles), et par compte PayPal';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_e73b57f95825d883b8790ad452563b23'] = 'PayPal Option+ :';
-$_MODULE['<{paypalapi}prestashop>paypaladmin_082cd54d7f73bac5628d0f7408f58229'] = 'Paiements avec les comptes PayPal';
+$_MODULE['<{paypalapi}prestashop>paypaladmin_082cd54d7f73bac5628d0f7408f58229'] = 'Paiements par compte PayPal uniquement';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_534031f5c8822c02c24f6b82c2a63251'] = 'PayPal Express :';
+$_MODULE['<{paypalapi}prestashop>paypaladmin_e301b9b7d4455937274abbe0c4147b0d'] = 'Paiement par compte PayPal et en 2 clics (bouton PayPal dès le panier d\'achat)';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_647ed8e1e8ab874ec805c95f43244fb9'] = 'URL img bannière :';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_111aa6b07c143dd96d2eee12f1dbd6e7'] = 'Doit être hébergée sur un serveur sécurisé pour ne pas afficher d\'avertissement. Max: 750x90px.';
 $_MODULE['<{paypalapi}prestashop>paypaladmin_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mise à jour des réglages';

@@ -115,8 +115,9 @@ class MoneyBookers extends PaymentModule
 		}
 
 		$lang = new Language(intval($cookie->id_lang));
+		$iso_img = $lang->iso_code;
 		if ($lang->iso_code != 'fr' AND $lang->iso_code != 'en')
-			$lang->iso_code = 'en';
+			$iso_img = 'en';
 
 		/* Display settings form */
 		$output .= '
@@ -124,7 +125,7 @@ class MoneyBookers extends PaymentModule
 	        <h2>'.$this->l('Opening your Moneybookers account').'</h2>
         	<div style="clear: both;"></div>
                 <p>'.$this->l('Open your Moneybookers account:').'</p>
-                <p style="text-align: center; margin-top: 30px;"><a href="'.($lang->iso_code == 'fr' ? 'http://www.moneybookers.com/partners/prestashop/' : 'https://www.moneybookers.com/app/register.pl?l='.strtoupper($lang->iso_code)).'"><img src="../modules/moneybookers/prestashop_mb_'.$lang->iso_code.'.gif" alt="PrestaShop & Moneybookers" /></a></p>
+                <p style="text-align: center; margin-top: 30px;"><a href="http://www.moneybookers.com/partners/prestashop/'.($lang->iso_code == 'fr' ? '' : strtolower($lang->iso_code).'/').'"><img src="../modules/moneybookers/prestashop_mb_'.$iso_img.'.gif" alt="PrestaShop & Moneybookers" /></a></p>
 		<div style="clear: right;"></div>
        	        </div>
         	
