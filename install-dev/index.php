@@ -262,7 +262,6 @@ if ($lm->getIncludeTradFilename())
 				<li class="title"><?php echo lang('Write permissions on files and folders:')?></li>
 				<li class="required">/config</li>
 				<li class="required">/tools/smarty/compile</li>
-				<li class="required">/sitemap.xml</li>
 				<li class="title"><?php echo lang('Write permissions on folders (and subfolders):')?></li>
 				<li class="required">/img</li>
 				<li class="required">/mails</li>
