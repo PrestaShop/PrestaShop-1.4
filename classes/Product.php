@@ -1540,6 +1540,18 @@ class		Product extends ObjectModel
 		if (!is_array($product))
 			die (Tools::displayError());
 
+		if (Pack::isPack(intval($product['id_product'])))
+		{
+			$products_pack = Pack::getItems(intval($product['id_product']), intval(Configuration::get('PS_LANG_DEFAULT')));
+			foreach($products_pack AS $product_pack)
+			{
+				$tab_product_pack['id_product'] = intval($product_pack->id);
+				$tab_product_pack['id_product_attribute'] = 0;
+				$tab_product_pack['cart_quantity'] = intval($product_pack->pack_quantity * $product['cart_quantity']);
+				self::updateQuantity($tab_product_pack);
+			}
+		}
+
 		$result = Db::getInstance()->getRow('
 		SELECT `quantity`
 		FROM `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
