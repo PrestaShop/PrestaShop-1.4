@@ -224,7 +224,7 @@ class Tax extends ObjectModel
 		$tax = Db::getInstance()->getRow('
 			SELECT `id_tax`
 			FROM `'._DB_PREFIX_.'tax`
-			WHERE `rate` LIKE '.floatval($rate));
+			WHERE `rate` = '.floatval($rate));
 		return $tax ? intval($tax['id_tax']) : false;
 	}
 }

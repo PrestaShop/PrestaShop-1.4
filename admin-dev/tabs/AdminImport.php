@@ -361,6 +361,8 @@ class AdminImport extends AdminTab
 	
 	public static function fgetcsv($handle, $lenght, $delimiter)
 	{
+		if (feof($handle))
+			return false;
 		$line = fgets($handle, $lenght);
 		if ($line === false)
 			return false;
@@ -461,9 +463,12 @@ class AdminImport extends AdminTab
 			if (isset($category->image) AND !empty($category->image))
 				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
 					$this->_warnings[] = $category->image.' '.Tools::displayError('cannot be copied');
-			
-			$valid_link = Validate::isLinkRewrite($category->link_rewrite);
-			
+
+			if (isset($category->link_rewrite) AND empty($category->link_rewrite))
+				$valid_link = Validate::isLinkRewrite($category->link_rewrite);
+			else
+				$valid_link = false;
+
 			$bak = $category->link_rewrite;
 			if ((isset($category->link_rewrite) AND empty($category->link_rewrite)) OR !$valid_link)
 				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[$defaultLanguageId]));
@@ -532,7 +537,6 @@ class AdminImport extends AdminTab
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
 				$product->id_tax = intval(Tax::getTaxIdByRate(floatval($product->tax_rate)));
-
 			if (isset($product->tax_rate) AND !$product->id_tax)
 			{
 				$tax = new Tax();
@@ -769,7 +773,7 @@ class AdminImport extends AdminTab
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$fsep = Tools::getValue('multiple_value_separator');
+		$fsep = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
 		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
