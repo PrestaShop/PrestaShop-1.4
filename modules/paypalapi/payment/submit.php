@@ -47,12 +47,20 @@ function displayConfirm()
 		die('Not logged');
 	unset($cookie->paypal_token);
 
+	if ($cart->id_currency != $ppPayment->getCurrency()->id)
+	{
+		$cart->id_currency = intval($ppPayment->getCurrency()->id);
+		$cookie->id_currency = intval($cart->id_currency);
+		$cart->update();
+		Tools::redirect('modules/'.$ppPayment->name.'/payment/submit.php');
+	}
+
 	// Display all and exit
 	include(_PS_ROOT_DIR_.'/header.php');
 
 	$smarty->assign(array(
 		'logo' => $ppPayment->getLogo(),
-		'cust_currency' => $cookie->id_currency,
+		'cust_currency' => $cart->id_currency,
 		'currency' => $ppPayment->getCurrency(),
 		'total' => $cart->getOrderTotal(true, 3),
 		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
@@ -84,7 +92,6 @@ function submitConfirm()
 function validOrder()
 {
 	global $cookie, $cart, $ppPayment;
-
 	if (!$cookie->isLogged())
 		die('Not logged');
 	elseif (!$cart->getOrderTotal(true, 3))
@@ -95,7 +102,7 @@ function validOrder()
 		die('Invalid cookie token');
 	if (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('PayerID'))))
 		die('Invalid payerID');
-	$ppPayment->validOrder($cookie, $cart, $cookie->id_currency, $payerID, 'payment');
+	$ppPayment->validOrder($cookie, $cart, $cart->id_currency, $payerID, 'payment');
 }
 
 // #####
