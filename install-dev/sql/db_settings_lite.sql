@@ -134,7 +134,7 @@ INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `descripti
 
 INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
 (1, 0, 1, 'lightblue', 1, 0, 0),(2, 1, 1, '#DDEEFF', 1, 1, 0),(3, 1, 1, '#FFDD99', 1, 1, 1),(4, 1, 1, '#EEDDFF', 1, 1, 1),(5, 1, 0, '#DDFFAA', 1, 1, 1),
-(6, 1, 1, '#DADADA', 1, 0, 0),(7, 1, 1, '#FFFFBB', 1, 0, 0),(8, 0, 1, '#FFDFDF', 1, 0, 0),(9, 1, 1, '#FFD3D3', 1, 0, 0),(10, 0, 1, 'lightblue', 1, 0, 0),(11, 0, 0, 'lightblue', 1, 0, 0);
+(6, 0, 1, '#DADADA', 1, 0, 0),(7, 1, 1, '#FFFFBB', 1, 0, 0),(8, 0, 1, '#FFDFDF', 1, 0, 0),(9, 1, 1, '#FFD3D3', 1, 0, 0),(10, 0, 1, 'lightblue', 1, 0, 0),(11, 0, 0, 'lightblue', 1, 0, 0);
 
 INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `template`) VALUES
 (1, 1, 'Awaiting cheque payment', 'cheque'),

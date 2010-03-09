@@ -36,7 +36,7 @@
 				<td class="history_method">{$order.payment|escape:'htmlall':'UTF-8'}</td>
 				<td class="history_state">{$order.order_state|escape:'htmlall':'UTF-8'}</td>
 				<td class="history_invoice">
-				{if ($order.invoice or $order.invoice_number) AND $invoiceAllowed}
+				{if ($order.invoice AND $order.invoice_number) AND $invoiceAllowed}
 					<a href="{$base_dir}pdf-invoice.php?id_order={$order.id_order|intval}" title="{l s='Invoice'} {$order.name|escape:'htmlall':'UTF-8'}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Invoice'} {$order.name|escape:'htmlall':'UTF-8'}" class="icon" /></a>
 					<a href="{$base_dir}pdf-invoice.php?id_order={$order.id_order|intval}" title="{l s='Invoice'} {$order.name|escape:'htmlall':'UTF-8'}">{l s='PDF'}</a>
 				{else}-{/if}
