@@ -487,7 +487,7 @@ class PDF extends PDF_PageGroup
 
 			if (self::$order->total_discounts != '0.00')
 			{
-				$pdf->Cell($width, 0, self::l('Total discounts').' : ', 0, 0, 'R');
+				$pdf->Cell($width, 0, self::l('Total discounts (tax incl.)').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, (!self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_discounts, self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
