@@ -5,6 +5,71 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.3 - 1965 (2010-09-03)   #
+####################################
+
+	Improved/changed features :
+	
+	[*] FO : Fixed size of color picker images
+	[*] FO : Optimized jQZoom js file
+	[*] FO : Fix display of languages flags when using low bandpass or when image does not exist
+	
+	[*] FO / MO : fixed english grammar and trads
+	
+	[*] BO : Description words are now indexed from 3 characters (instead 4 before) - (request was made on bug #3420)
+	[*] BO : Field size increased for some fields such as invoices prefix
+	
+	[*] Classes : optimized the indexation search (#3786)
+	
+	Fixed bugs :
+	
+	[-] Installer : fixed cache problem in installer with Internet Explorer
+	[-] Installer : fixed translations (#3760, #3761)
+	
+	[-] FO : invoice link not showing when order is cancelled (#3627)
+	[-] FO : You can search by tag again
+	[-] FO : now, on summary page, state appear (#3807)
+	[-] FO : fixed bug on product page with currency
+	[-] FO : fixed an error on check of SSL in init.php
+	[-] FO : fixed focus in ajax search
+	[-] FO : fix last fix (now works with AND without custom tpl...)
+	[-] FO : fix bug when adding custom template/validation.tpl for cashondelivery module
+	[-] FO : fixed CSS align for "Currency" text
+	[-] FO : fixed bug on summary page with discount (#3648)
+	
+	[-] BO : Fixed import  #3541
+	[-] BO : Fixed import special chars #3198 #3473
+	[-] BO : you can't change status of order with no products (#3546)
+	[-] BO : Increase CMS content field size (limitated 65k before)
+	[-] BO : Fixed bug #3748, Quantity discount value (tax excl.) was false in cart
+	[-] BO : fix undeletable last subdomain
+	[-] BO : Fixed bug #2892 - Position switching wasn't working properly on the "Home" category
+	[-] BO : Fixed missing link_rewrite field on Product import #3501
+	[-] BO : fix duplicated adminlang param into language links
+	[-] BO : fixed an error in stock gestion
+	[-] BO : fixed with the search engine in header
+	[-] BO : fixed a notice error in Back Office (#3772)
+	
+	[-] Classes : fixed discount values without taxes (#3319)
+	[-] Classes : js activated in tinyMCE (fixed #3380)
+	[-] Classes : fixed the stock management for product pack (#3274)
+	[-] Classes : Now range end for carrier is excluded
+	
+	[-] MO : fixed bug with currency on module PayPalAPI
+	[-] MO : small changes on the PayPalAPI module
+	[-] MO : small change on the MoneyBookers module
+	[-] MO : Fixed bug #3735 - Moneybookers first setting validation failed
+	[-] MO : Fixed bug #3637 - Visitors wasn't able to reload Moneybookers payment page
+	[-] MO : fixed an error in module mailalert with "product out of stock" mail (#2999)
+	[-] MO : fixed a bug in module referralprogram with mail template (#2945)
+	[-] MO : fixed PHP error on module productcategory when no others products on category
+	
+	[-] TR : fixed english translation in BO
+	[-] TR : change french translation for "Available"
+	
+	[-] SQL : fixed error on databases structure and upgrade
+
+####################################
 #   v1.3.0.2 - 1902 (2010-25-02)   #
 ####################################
 
