@@ -387,8 +387,8 @@ function displayCarrier()
 		'default_carrier' => intval(Configuration::get('PS_CARRIER_DEFAULT')),
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 		'checked' => intval($checked),
-		'total_wrapping' => $wrapping_fees_tax_inc,
-		'total_wrapping_tax_exc' => $wrapping_fees));
+		'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency(intval($cookie->id_currency))),
+		'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency(intval($cookie->id_currency)))));
 	Tools::safePostVars();
 	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 	$js_files = array(__PS_BASE_URI__.'js/jquery/thickbox-modified.js');
