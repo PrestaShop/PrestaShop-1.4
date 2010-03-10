@@ -238,7 +238,10 @@ class		Configuration extends ObjectModel
 			}
 			else
 			{
-				return self::_addConfiguration($key, $values);
+				$result = self::_addConfiguration($key, $values);
+				if ($result)
+					self::$_CONF[$key] = $values;
+				return $result;
 			}
 		}
 
