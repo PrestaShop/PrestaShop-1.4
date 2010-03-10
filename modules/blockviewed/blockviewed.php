@@ -91,9 +91,8 @@ class BlockViewed extends Module
 			$productsViewedObj = array();
 			foreach ($productsViewed AS $productViewed)
 			{
-				$obj = (object) 'Product';
-				$obj->active = $productsImagesArray[$productViewed]['active'];
-				if (!$obj->active)
+				$obj = (object)'Product';
+				if (!isset($productsImagesArray[$productViewed]) || (!$obj->active = $productsImagesArray[$productViewed]['active']))
 					continue;
 				else
 				{
