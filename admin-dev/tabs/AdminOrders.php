@@ -837,13 +837,17 @@ class AdminOrders extends AdminTab
 	
 	private function getTotal()
 	{
+		global $cookie;
+		
 		$total = 0;
-		$currencyData = Currency::getCurrencies();
-		$currencies = array();
-		foreach ($currencyData as $currency)
-			$currencies[intval($currency['id_currency'])] = $currency;
-		foreach ($this->_list as $item)
-			$total += Tools::convertPrice($item['total_paid'], $currencies[intval($item['id_currency'])]);
+		foreach($this->_list AS $item)
+			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
+				$total += floatval($item['total_paid']);
+			else
+			{
+				$currency = new Currency(intval($item['id_currency']));
+				$total += Tools::ps_round(floatval($item['total_paid']) / floatval($currency->conversion_rate), 2);
+			}
 		return $total;
 	}
 }

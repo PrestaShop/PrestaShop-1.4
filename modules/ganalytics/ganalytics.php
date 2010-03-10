@@ -153,7 +153,14 @@ class GAnalytics extends Module
 		if (Validate::isLoadedObject($order))
 		{
 			$deliveryAddress = new Address(intval($order->id_address_delivery));
-			
+
+			$conversion_rate = 1;
+			if ($order->id_currency != Configuration::get('PS_CURRENCY_DEFAULT'))
+			{
+				$currency = new Currency(intval($order->id_currency));
+				$conversion_rate = floatval($currency->conversion_rate);
+			}
+
 			/* Order general informations */
 			$output = '
 			<script src="'.$protocol_content.$gaJsHost.'google-analytics.com/ga.js" type="text/javascript"></script>
@@ -165,9 +172,9 @@ class GAnalytics extends Module
 			  pageTracker._addTrans(
 				"'.intval($order->id).'",               	// Order ID
 				"PrestaShop",      							// Affiliation
-				"'.floatval($order->total_paid).'",       	// Total
+				"'.Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2).'",       	// Total
 				"0",               							// Tax
-				"'.floatval($order->total_shipping).'",     // Shipping
+				"'.Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2).'",     // Shipping
 				"'.$deliveryAddress->city.'",           	// City
 				"",         								// State
 				"'.$deliveryAddress->country.'"             // Country
@@ -183,7 +190,7 @@ class GAnalytics extends Module
 					"'.$product['product_reference'].'",			// SKU
 					"'.$product['product_name'].'",					// Product Name 
 					"",												// Category
-					"'.floatval($product['product_price_wt']).'",		// Price
+					"'.Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2).'",		// Price
 					"'.intval($product['product_quantity']).'"		// Quantity
 				);';
 			}
