@@ -80,14 +80,14 @@ class StatsSales extends ModuleGraph
 	private function getTotals()
 	{
 		$result0 = Db::getInstance()->getRow('
-		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
+		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : ''));
 		$result1 = Db::getInstance()->getRow('
-		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real`) / c.conversion_rate as orderSum
+		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
