@@ -474,7 +474,7 @@ class AdminOrders extends AdminTab
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
 			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
-			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />
+			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false, false).'</b><br />
 		</fieldset>';
 
 		/* Display sources */

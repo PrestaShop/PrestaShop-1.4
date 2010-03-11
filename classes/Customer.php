@@ -390,8 +390,9 @@ class		Customer extends ObjectModel
 	public function getStats()
 	{
 		$result = Db::getInstance()->getRow('
-		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid`) AS total_orders
-		FROM `'._DB_PREFIX_.'orders` o
+		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / c.`conversion_rate`) AS total_orders
+		FROM `'._DB_PREFIX_.'orders` o 
+		LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`) 
 		WHERE o.`id_customer` = '.intval($this->id).'
 		AND o.valid = 1');
 
