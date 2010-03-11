@@ -1455,7 +1455,7 @@ class		Product extends ObjectModel
 		if (!$res)
 			return false;
 		$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
-		if (!Tax::excludeTaxeOption() || $notax)
+		if (Tax::excludeTaxeOption() || !$notax)
 			return (Tools::convertPrice($res['price']) * (1 + $tax / 100));
 		return (Tools::convertPrice($res['price']));
 	}
