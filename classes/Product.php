@@ -1394,8 +1394,9 @@ class		Product extends ObjectModel
 		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $currency);
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		$price += $attribute_price;
+		$reduc = Tools::convertPrice($result['reduction_price'], $currency);
 		if ($only_reduc OR $usereduc)
-			$reduc = self::getReductionValue($result['reduction_price'], $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
+			$reduc = self::getReductionValue($reduc, $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
 
 		// Only reduction
 		if ($only_reduc)

@@ -242,7 +242,7 @@ function updateDisplay()
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
 			var priceReduct = 0;
 		else
-			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + (reduction_price);
+			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + (reduction_price * currencyRate);
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		
 		var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
