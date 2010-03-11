@@ -23,7 +23,15 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('PS_STATS_RENDER', 'graphxmlswfcharts', NOW(), NOW()),
 	('PS_STATS_OLD_CONNECT_AUTO_CLEAN', 'never', NOW(), NOW()),
 	('PS_STATS_GRID_RENDER', 'gridextjs', NOW(), NOW()),
-	('BLOCKTAGS_NBR', '10', NOW(), NOW());
+	('BLOCKTAGS_NBR', '10', NOW(), NOW()),
+	('CHECKUP_DESCRIPTIONS_LT', '100', NOW(), NOW()),
+	('CHECKUP_DESCRIPTIONS_GT', '400', NOW(), NOW()),
+	('CHECKUP_IMAGES_LT', '1', NOW(), NOW()),
+	('CHECKUP_IMAGES_GT', '2', NOW(), NOW()),
+	('CHECKUP_SALES_LT', '1', NOW(), NOW()),
+	('CHECKUP_SALES_GT', '2', NOW(), NOW()),
+	('CHECKUP_STOCK_LT', '1', NOW(), NOW()),
+	('CHECKUP_STOCK_GT', '3', NOW(), NOW());
 
 INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'paypal', 1),(5, 'editorial', 1),
 (6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockinfos', 1),
@@ -32,7 +40,7 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeat
 (26, 'statsvisits', 1),(27, 'statssales', 1),(28, 'statsregistrations', 1),(30, 'statspersonalinfos', 1),(31, 'statslive', 1),(32, 'statsequipment', 1),(33, 'statscatalog', 1),
 (34, 'graphvisifire', 1),(35, 'graphxmlswfcharts', 1),(36, 'graphgooglechart', 1),(37, 'graphartichow', 1),(38, 'statshome', 1),(39, 'gridextjs', 1),(40, 'statsbestcustomers', 1),
 (41, 'statsorigin', 1),(42, 'pagesnotfound', 1),(43, 'sekeywords', 1),(44, 'statsproduct', 1),(45, 'statsbestproducts', 1),(46, 'statsbestcategories', 1),
-(47, 'statsbestvouchers', 1),(48, 'statsbestsuppliers', 1),(49, 'statscarrier', 1),(50, 'statsnewsletter', 1),(51, 'statssearch', 1);
+(47, 'statsbestvouchers', 1),(48, 'statsbestsuppliers', 1),(49, 'statscarrier', 1),(50, 'statsnewsletter', 1),(51, 'statssearch', 1),(52, 'statscheckup', 1);
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 	('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
@@ -41,7 +49,7 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (3,
 (20, 6, 4),(15, 7, 1),(21, 7, 2),(10, 7, 3),(24, 7, 4),(14, 7, 5),(12, 7, 6),(7, 7, 7),(17, 7, 8),(5, 8, 1),(1, 8, 2),(19, 9, 1),(11, 14, 1),(13, 14, 2),(18, 14, 3),
 (19, 14, 4),(22, 14, 5),(8, 19, 1),(23, 21, 1),(25, 11, 1),(25, 21, 2),(26, 32, 1),(27, 32, 2),(28, 32, 3),(30, 32, 4),(31, 32, 5),(32, 32, 6),(33, 32, 7),(34, 33, 1),
 (35, 33, 2),(36, 33, 3),(37, 33, 4),(38, 36, 1),(39, 37, 1),(40, 32, 8),(41, 32, 9),(42, 32, 10),(43, 32, 11),(42, 14, 6),(43, 14, 7),(44, 32, 12),(45, 32, 13),(46, 32, 15),
-(47, 32, 14),(48, 32, 16),(49, 32, 17),(50, 32, 18),(51, 32, 19),(51, 45, 1),(25, 25, 1),(41, 20, 2);
+(47, 32, 14),(48, 32, 16),(49, 32, 17),(50, 32, 18),(51, 32, 19),(51, 45, 1),(25, 25, 1),(41, 20, 2),(52, 32, 20);
 
 CREATE TABLE `PREFIX_pagenotfound` (
   id_pagenotfound INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,

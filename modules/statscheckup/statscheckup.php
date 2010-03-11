@@ -159,7 +159,7 @@ class StatsCheckUp extends Module
 			
 			$html .= '<tr>
 				<td>'.$row['id_product'].'</td>
-				<td style="text-align:left"><a href="index.php?tab=AdminCatalog&updateproduct&id_product='.$row['id_product'].'&token='.$tokenProducts.'">'.$row['name'].'</a></td>
+				<td style="text-align:left"><a href="index.php?tab=AdminCatalog&updateproduct&id_product='.$row['id_product'].'&token='.$tokenProducts.'">'.Tools::substr($row['name'], 0, 42).'</a></td>
 				<td>'.$arrayColors[$scores['active']].'</td>';
 			foreach ($languages as $language)
 				$html .= '<td>'.(int)$row['desclength_'.$language['iso_code']].' '.$arrayColors[$scores['description_'.$language['iso_code']]].'</td>';
@@ -213,7 +213,7 @@ class StatsCheckUp extends Module
 		</table>
 		<div class="clear">&nbsp;</div>
 		<script type="text/javascript">
-			$(document).ready(function(){$("#container").css("width", "1100px");});
+			$(document).ready(function(){$("#container").css("width", "1200px");});
 		</script>';
 		
         return $html;
