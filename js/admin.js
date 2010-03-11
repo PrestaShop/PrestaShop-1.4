@@ -340,7 +340,18 @@ function prepareBoQuery() {
 }
 
 if (helpboxes)
-	addLoadEvent(prepareInputsForHints);
+{
+	$(function(){
+		$('input').focus(function() {
+			$(this).parent().find('.hint').css('display', 'inline');
+		});
+		$('input').blur(function() {
+			$(this).parent().find('.hint').css('display', 'none');
+		});
+	});
+	
+	//addLoadEvent(prepareInputsForHints);
+}
 addLoadEvent(prepareBoQuery);
 
 function changePic(id_product, id_image)
