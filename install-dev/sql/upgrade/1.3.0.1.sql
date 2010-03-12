@@ -86,7 +86,7 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('backOfficeTop', 'Administration panel top hover the tabs', NULL , '1'),
 ('backOfficeFooter', 'Administration panel footer', NULL , '1');
 
-INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM ps_carrier c, ps_group g WHERE c.active = 1);
+INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id_group FROM PREFIX_carrier c, PREFIX_group g WHERE c.active = 1);
 
 /* PHP */
 /* PHP:convert_product_price(); */;
