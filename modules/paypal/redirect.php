@@ -34,6 +34,7 @@ $total = $cart->getOrderTotal(true, 3);
 
 echo '
 <html><head><script type="text/javascript" src="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'/js/jquery/jquery-1.2.6.pack.js"></script></head><body>
+<p>'.$paypal->l('We going to redirect on PayPal...').'<br /><a href="javascript:history.go(-1);">'.$paypal->l('Cancel').'</a></p>
 <form action="'.$paypal->getPaypalUrl().'" method="post" id="paypal_form" class="hidden">
 	<input type="hidden" name="upload" value="1" />
 	<input type="hidden" name="address_override" value="1" />

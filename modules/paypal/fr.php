@@ -64,5 +64,7 @@ $_MODULE['<{paypal}prestashop>paypal_f7799c2ded739cf3c3e9babffc5f315b'] = 'La co
 $_MODULE['<{paypal}prestashop>paypal_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer par PayPal';
 $_MODULE['<{paypal}prestashop>redirect_ea5ddaff9590d897631f00a7bcb035a2'] = 'Erreur Paypal: (invalid or undefined business account email)';
 $_MODULE['<{paypal}prestashop>redirect_e7ac6f09a936201890de4094b1ee4e50'] = 'Erreur Paypal: (invalid address or customer)';
+$_MODULE['<{paypal}prestashop>redirect_aa473b48185c51e219261b0eb1f43fc5'] = 'Vous allez être redirigé sur PayPal...';
+$_MODULE['<{paypal}prestashop>redirect_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
 $_MODULE['<{paypal}prestashop>redirect_dae3b417a0fc4a49e851ce55d6d49551'] = 'Mon panier';
 $_MODULE['<{paypal}prestashop>redirect_9bfa2332c9c7198ac9774c6710bf76c4'] = 'Retour au magasin';
