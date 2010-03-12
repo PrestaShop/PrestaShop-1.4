@@ -426,7 +426,7 @@ function displaySummary()
 	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
 	Product::addCustomizationPrice($summary['products'], $customizedDatas);
 
-	if ($free_ship = floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')))
+	if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency(intval($cart->id_currency))))
 	{
 		$discounts = $cart->getDiscounts();
 		$total_free_ship =  $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']);
