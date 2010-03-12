@@ -454,7 +454,8 @@ class PDF extends PDF_PageGroup
 		/* Exit if delivery */
 		if (!self::$delivery)
 		{
-			$pdf->DiscTab();
+			if (!self::$orderSlip)
+				$pdf->DiscTab();
 			$priceBreakDown = array();
 			$pdf->priceBreakDownCalculation($priceBreakDown);
 			
@@ -485,7 +486,7 @@ class PDF extends PDF_PageGroup
 			$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithTax'], self::$currency, true, false)), 0, 0, 'R');
 			$pdf->Ln(4);
 
-			if (self::$order->total_discounts != '0.00')
+			if (!self::$orderSlip AND self::$order->total_discounts != '0.00')
 			{
 				$pdf->Cell($width, 0, self::l('Total discounts (tax incl.)').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, (!self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_discounts, self::$currency, true, false)), 0, 0, 'R');
