@@ -486,7 +486,7 @@ class		Order extends ObjectModel
         GROUP BY o.`id_order`
         ORDER BY o.`date_add` DESC');
 		if (!$res)
-			return false;
+			return array();
 
 		foreach ($res AS $key => $val)
 		{
