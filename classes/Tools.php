@@ -594,7 +594,7 @@ class Tools
 			$displayedPath .= htmlentities($category_name, ENT_NOQUOTES, 'UTF-8');
 			if ($category->active)
 				$displayedPath .= '</a>';
-			$displayedPath .= ' '.$pipe.' '.$path;
+			$displayedPath .= '<span class="navigation-pipe">'.$pipe.'</span>'.$path;
 		}
 		else
 			$displayedPath = ($linkOntheLastItem ? '<a href="'.self::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
@@ -611,7 +611,7 @@ class Tools
 			die(self::displayError());
 		if ($id_category == 1)
 			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
-		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).' <span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
+		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).'<span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
 	}
 
 	/**
