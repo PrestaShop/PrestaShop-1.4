@@ -561,7 +561,10 @@ class AdminOrders extends AdminTab
 			<div style="float: left; margin-right: 10px;">
 				<span class="bold">'.$this->l('Gift wrapping:').'</span>
 				 '.($order->gift ? '<img src="../img/admin/enabled.gif" />
-			'.(!empty($order->gift_message) ? '<div style="border: 1px dashed #999; padding: 5px; margin-top: 8px;"><b>'.$this->l('Message:').'</b><br />'.$order->gift_message.'</div>' : '') : '<img src="../img/admin/disabled.gif" />').'</div>
+			</div>
+			<div style="clear: left; margin: 0px 42px 0px 42px; padding-top: 2px;">
+				'.(!empty($order->gift_message) ? '<div style="border: 1px dashed #999; padding: 5px; margin-top: 8px;"><b>'.$this->l('Message:').'</b><br />'.nl2br2($order->gift_message).'</div>' : '') : '<img src="../img/admin/disabled.gif" />').'
+			</div>
 		</fieldset>';
 
 		echo '
