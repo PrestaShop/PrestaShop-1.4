@@ -267,7 +267,7 @@ class AdminManufacturers extends AdminTab
 			else
 			{
 				echo '
-				<h3>'.$product->name.'</h3>
+				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.$product->name.'</a></h3>
 				<table>
 					<tr>
 						<td colspan="2">
