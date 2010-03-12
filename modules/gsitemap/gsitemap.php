@@ -217,7 +217,7 @@ class Gsitemap extends Module
 	function getContent()
 	{
 		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
-		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html">
+		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html" style="font-weight:bold;text-decoration:underline;">
 		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
 		if (!empty($_POST))
 		{
