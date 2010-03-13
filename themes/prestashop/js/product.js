@@ -157,7 +157,7 @@ function updateDisplay()
 			$('#last_quantities').hide('slow');
 		}
 	
-		//display the quantities of pieces (only if allowe,17d)
+		//display the quantities of pieces (only if allowed)
 		if (quantitiesDisplayAllowed)
 		{
 			$('#pQuantityAvailable:hidden').show('slow');
