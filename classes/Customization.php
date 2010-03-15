@@ -47,6 +47,20 @@ class Customization
 		return $total;
 	}
 
+	static public function getLabel($id_customization, $id_lang)
+	{
+		if (!$id_customization || !$id_lang)
+			return false;
+
+		$result = Db::getInstance()->getRow('
+		SELECT `name` 
+		FROM `'._DB_PREFIX_.'customization_field_lang` 
+		WHERE `id_customization_field` = '.intval($id_customization).' 
+		AND `id_lang` = '.intval($id_lang)
+		);
+
+		return $result['name'];
+	}
 }
 
 ?>
