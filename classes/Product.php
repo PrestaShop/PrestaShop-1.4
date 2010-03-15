@@ -1547,7 +1547,7 @@ class		Product extends ObjectModel
 			foreach($products_pack AS $product_pack)
 			{
 				$tab_product_pack['id_product'] = intval($product_pack->id);
-				$tab_product_pack['id_product_attribute'] = 0;
+				$tab_product_pack['id_product_attribute'] = self::getDefaultAttribute($tab_product_pack['id_product'], 1);
 				$tab_product_pack['cart_quantity'] = intval($product_pack->pack_quantity * $product['cart_quantity']);
 				self::updateQuantity($tab_product_pack);
 			}
