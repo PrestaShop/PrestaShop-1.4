@@ -189,6 +189,12 @@ class Paypal extends PaymentModule
 			'socketmethod' => $this->l('Verification failure (using fsockopen). Returned: '),
 			'curlmethod' => $this->l('Verification failure (using cURL). Returned: '),
 			'curlmethodfailed' => $this->l('Connection using cURL failed'),
+			'Please wait, redirecting to Paypal... Thanks.' => $this->l('Please wait, redirecting to Paypal... Thanks.'),
+			'Cancel' => $this->l('Cancel'),
+			'My cart' => $this->l('My cart'),
+			'Return to shop' => $this->l('Return to shop'),
+			'Paypal error: (invalid or undefined business account email)' => $this->l('Paypal error: (invalid or undefined business account email)'),
+			'Paypal error: (invalid address or customer)' => $this->l('Paypal error: (invalid address or customer)')
 		);
 		return $translations[$key];
 	}
