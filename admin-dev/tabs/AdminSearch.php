@@ -23,17 +23,13 @@ class AdminSearch extends AdminTab
 	public function searchCatalog($query)
 	{
 		global $cookie;
+		
+		$this->_list['products'] = Product::searchByName(intval($cookie->id_lang), $query);
+		if (!empty($this->_list['products']))
+			for ($i = 0; $i < count($this->_list['products']); $i++)
+				$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.$query.'</span>', $this->_list['products'][$i]['name']);
 
-		$products = false;
-		if (Validate::isCatalogName($query))
-		{
-			$this->_list['products'] = Product::searchByName(intval($cookie->id_lang), $query);
-			if (!empty($this->_list['products']))
-				for ($i = 0; $i < count($this->_list['products']); $i++)
-					$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.$query.'</span>', $this->_list['products'][$i]['name']);
-		}
-		if (Validate::isCatalogName($query))
-			$this->_list['categories'] = Category::searchByName(intval($cookie->id_lang), $query);
+		$this->_list['categories'] = Category::searchByName(intval($cookie->id_lang), $query);
 	}
 
 	/**
@@ -57,10 +53,12 @@ class AdminSearch extends AdminTab
 		}
 		else
 		{
+			$_POST['bo_query'] = trim($_POST['bo_query']);
+			
 			/* Product research */
-			if (intval($_POST['bo_search_type']) == 1)
+			if (!intval($_POST['bo_search_type']) OR intval($_POST['bo_search_type']) == 1)
 			{
-				$this->fieldsDisplay = (array(
+				$this->fieldsDisplay['catalog'] = (array(
 					'ID' => array('title' => $this->l('ID')),
 					'manufacturer' => array('title' => $this->l('Manufacturer')),
 					'reference' => array('title' => $this->l('Reference')),
@@ -76,9 +74,9 @@ class AdminSearch extends AdminTab
 			}
 
 			/* Customer */
-			elseif (intval($_POST['bo_search_type']) == 2)
+			if (!intval($_POST['bo_search_type']) OR intval($_POST['bo_search_type']) == 2)
 			{
-				$this->fieldsDisplay = (array(
+				$this->fieldsDisplay['customers'] = (array(
 					'ID' => array('title' => $this->l('ID')),
 					'sex' => array('title' => $this->l('Sex')),
 					'name' => array('title' => $this->l('Name')),
@@ -89,8 +87,9 @@ class AdminSearch extends AdminTab
 					'status' => array('title' => $this->l('Status')),
 					'actions' => array('title' => $this->l('Actions'))
 				));
+
 				/* Handle customer ID */
-				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				if (intval($_POST['bo_search_type']) AND intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
 				{
 					$customer = new Customer(intval($_POST['bo_query']));
 					if ($customer->id)
@@ -104,7 +103,7 @@ class AdminSearch extends AdminTab
 			}
 
 			/* Order */
-			elseif (intval($_POST['bo_search_type']) == 3)
+			if (intval($_POST['bo_search_type']) == 3)
 			{
 				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
 				{
@@ -117,25 +116,9 @@ class AdminSearch extends AdminTab
 				else
 					$this->_errors[] = Tools::displayError('please type an order ID');
 			}
-
-			/* Cart */
-			elseif (intval($_POST['bo_search_type']) == 5)
-			{
-				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
-				{
-					if ($cart = new Cart(intval($_POST['bo_query'])) AND $cart->id)
-					{
-						Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
-					}
-					else
-						$this->_errors[] = Tools::displayError('cart #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
-				}
-				else
-					$this->_errors[] = Tools::displayError('please type a cart ID');
-			}
 			
 			/* Invoices */
-			elseif (intval($_POST['bo_search_type']) == 4)
+			if (intval($_POST['bo_search_type']) == 4)
 			{
 				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
 				{
@@ -151,6 +134,22 @@ class AdminSearch extends AdminTab
 			}
 			else
 				Tools::displayError('please fill in search form first.');
+
+			/* Cart */
+			if (intval($_POST['bo_search_type']) == 5)
+			{
+				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				{
+					if ($cart = new Cart(intval($_POST['bo_query'])) AND $cart->id)
+					{
+						Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
+					}
+					else
+						$this->_errors[] = Tools::displayError('cart #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+				}
+				else
+					$this->_errors[] = Tools::displayError('please type a cart ID');
+			}
 		}
 	}
 
@@ -181,7 +180,7 @@ class AdminSearch extends AdminTab
 			echo '<h3>'.$nbProducts.' '.($nbProducts > 1 ? $this->l('products found with') : $this->l('product found with')).' <b>"'.Tools::safeOutput($query).'"</b></h3>
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
-			foreach ($this->fieldsDisplay AS $field)
+			foreach ($this->fieldsDisplay['catalog'] AS $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
@@ -207,7 +206,8 @@ class AdminSearch extends AdminTab
 					</td>
 				</tr>';
 			}
-			echo '</table>';
+			echo '</table>
+			<div class="clear">&nbsp;</div>';
 		}
 		else
 			$nbProducts = 0;
@@ -218,7 +218,7 @@ class AdminSearch extends AdminTab
 			echo '<h3>'.$nbCustomers.' '.($nbCustomers > 1 ? $this->l('customers') : $this->l('customer')).' '.$this->l('found with').' <b>"'.Tools::safeOutput($query).'"</b></h3>
 			<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';
-			foreach ($this->fieldsDisplay AS $field)
+			foreach ($this->fieldsDisplay['customers'] AS $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
@@ -246,7 +246,8 @@ class AdminSearch extends AdminTab
 					</td>
 				</tr>';
 			}
-			echo '</table>';
+			echo '</table>
+			<div class="clear">&nbsp;</div>';
 		}
 		else
 			$nbCustomers = 0;
@@ -312,7 +313,8 @@ class AdminSearch extends AdminTab
 					<td colspan="4">'.$this->l('Total:').' </td>
 					<td>'.Tools::displayPrice($total_price, $currency).'</td>
 				</tr>
-			</table>';
+			</table>
+			<div class="clear">&nbsp;</div>';
 		}
 			
 		/* Display error if nothing has been matching */

@@ -30,7 +30,7 @@ require_once(dirname(__FILE__).'/init.php');
 		<link type="text/css" rel="stylesheet" href="../css/admin.css" />
 		<title>PrestaShop&trade; - <?php echo translate('Administration panel') ?></title>
 		<script type="text/javascript">
-			var search_texts = Array('<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('invoice id'); ?>', '<?php echo translate('cart id'); ?>');
+			var search_texts = Array('<?php echo translate('product, customer, id...'); ?>','<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('invoice id'); ?>', '<?php echo translate('cart id'); ?>');
 			var helpboxes = <?php echo Configuration::get('PS_HELPBOX'); ?>;
 		</script>
 		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/jquery-1.2.6.pack.js"></script>
@@ -45,8 +45,9 @@ require_once(dirname(__FILE__).'/init.php');
 		<div id="container">
 			<div style="float: left; margin-top: 11px;">
 				<form action="index.php?tab=AdminSearch&token=<?php echo Tools::getAdminToken('AdminSearch'.intval(Tab::getIdFromClassName('AdminSearch')).intval($cookie->id_employee)) ?>" method="post">
-					<input type="text" name="bo_query" id="bo_query" style="width: 120px;" value="<?php echo (isset($_POST['bo_query']) ? Tools::safeOutput(Tools::stripslashes($_POST['bo_query'])) : ''); ?>" /> <?php translate('in') ?>
+					<input type="text" name="bo_query" id="bo_query" style="width: 140px;" value="<?php echo (isset($_POST['bo_query']) ? Tools::safeOutput(Tools::stripslashes($_POST['bo_query'])) : ''); ?>" /> <?php translate('in') ?>
 					<select name="bo_search_type" id="bo_search_type" onchange="queryType();" style="font-size: 1em;">
+						<option value="0"><?php echo translate('everywhere') ?></option>
 						<option value="1"<?php echo (isset($_POST['bo_search_type']) AND
 						($_POST['bo_search_type'] == 1)) ? ' selected="selected"' : '' ?>><?php echo translate('catalog') ?></option>
 						<option value="2"<?php echo (isset($_POST['bo_search_type']) AND

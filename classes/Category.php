@@ -578,9 +578,6 @@ class		Category extends ObjectModel
 	  */
 	static public function searchByName($id_lang, $query, $unrestricted = false)
 	{
-	 	if (!Validate::isCatalogName($query))
-	 		die(Tools::displayError());
-
 		if ($unrestricted === true)
 			return Db::getInstance()->getRow('
 			SELECT c.*, cl.*

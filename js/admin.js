@@ -245,7 +245,7 @@ function queryType()
 	var bo_query = getE('bo_query');
 
 	if (!dontChange(bo_query.value))
-		bo_query.value = search_texts[search_type - 1];
+		bo_query.value = search_texts[search_type];
 }
 
 function formSubmit(e, button)

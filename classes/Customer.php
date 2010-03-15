@@ -371,13 +371,11 @@ class		Customer extends ObjectModel
 	  */
 	public static function searchByName($query)
 	{
-		if (!Validate::isName($query) AND !Validate::isEmail($query))
-			die (Tools::displayError()); 
-
 		return Db::getInstance()->ExecuteS('
 		SELECT c.*
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`email` LIKE \'%'.pSQL($query).'%\'
+		OR c.`id_customer` LIKE \'%'.pSQL($query).'%\'
 		OR c.`lastname` LIKE \'%'.pSQL($query).'%\'
 		OR c.`firstname` LIKE \'%'.pSQL($query).'%\'');
 	}

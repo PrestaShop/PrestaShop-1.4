@@ -1806,9 +1806,6 @@ class		Product extends ObjectModel
 	*/
 	static public function searchByName($id_lang, $query)
 	{
-		if (!Validate::isCatalogName($query))
-			die(Tools::displayError());
-
 		$result = Db::getInstance()->ExecuteS('
 		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`,
 		il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name
