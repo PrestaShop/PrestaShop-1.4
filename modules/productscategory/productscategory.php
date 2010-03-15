@@ -53,7 +53,7 @@ class productsCategory extends Module
 		
 		//remove current product from the list
 		$current_product_key = null;
-		if (sizeof($categoryProducts))
+		if (is_array($categoryProducts) AND sizeof($categoryProducts))
 		{
 			foreach ($categoryProducts as $key => $categoryProduct)
 			{
