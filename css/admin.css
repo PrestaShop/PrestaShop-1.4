@@ -769,7 +769,6 @@ tr.deleted td {
 /* The hint to Hide and Show */
 .hint {
 	display: none;
-	float: left;
 	position: relative;
 	left: 0px;
 	width: 200px;

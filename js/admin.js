@@ -343,7 +343,7 @@ if (helpboxes)
 {
 	$(function(){
 		$('input').focus(function() {
-			$(this).parent().find('.hint').css('display', 'inline');
+			$(this).parent().find('.hint').css('display', 'block');
 		});
 		$('input').blur(function() {
 			$(this).parent().find('.hint').css('display', 'none');
