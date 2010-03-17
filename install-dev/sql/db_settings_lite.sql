@@ -71,7 +71,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (14, 'PS_NAVIGATION_PIPE', '>', NOW(), NOW()),
 (15, 'PS_PRODUCTS_PER_PAGE', '10', NOW(), NOW()),
 (16, 'PS_PURCHASE_MINIMUM', '0', NOW(), NOW()),
-(17, 'PS_PRODUCTS_ORDER_WAY', '1', NOW(), NOW()),
+(17, 'PS_PRODUCTS_ORDER_WAY', '0', NOW(), NOW()),
 (18, 'PS_PRODUCTS_ORDER_BY', '4', NOW(), NOW()),
 (19, 'PS_DISPLAY_QTIES', '1', NOW(), NOW()),
 (20, 'PS_SHIPPING_HANDLING', '2', NOW(), NOW()),
