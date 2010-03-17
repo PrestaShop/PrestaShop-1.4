@@ -86,7 +86,7 @@ class AdminCustomers extends AdminTab
 							}
 							
 							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
-								$this->_errors[] = Tools::displayError('indetification number is incorrect or already used');
+								$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
 							
 							// Updating customer's group
 							if (!sizeof($this->_errors))

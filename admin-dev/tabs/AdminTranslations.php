@@ -325,9 +325,9 @@ class AdminTranslations extends AdminTab
 		$translations = array(
 						'front' => $this->l('Front Office translations'),
 						'back' => $this->l('Back Office translations'),
-						'errors' => $this->l('Errors messages translations'),
-						'fields' => $this->l('Fields name translations'),
-						'modules' => $this->l('Modules translations'),
+						'errors' => $this->l('Error message translations'),
+						'fields' => $this->l('Field name translations'),
+						'modules' => $this->l('Module translations'),
 						'pdf' => $this->l('PDF translations'),
 						);
 
