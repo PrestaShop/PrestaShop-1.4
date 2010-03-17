@@ -463,20 +463,20 @@ class AdminImport extends AdminTab
 			if (isset($category->image) AND !empty($category->image))
 				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
 					$this->_warnings[] = $category->image.' '.Tools::displayError('cannot be copied');
-
-			if (isset($category->link_rewrite) AND empty($category->link_rewrite))
-				$valid_link = Validate::isLinkRewrite($category->link_rewrite);
+			if (isset($category->link_rewrite) AND !empty($category->link_rewrite[$defaultLanguageId]))
+				$valid_link = Validate::isLinkRewrite($category->link_rewrite[$defaultLanguageId]);
 			else
 				$valid_link = false;
 
-			$bak = $category->link_rewrite;
-			if ((isset($category->link_rewrite) AND empty($category->link_rewrite)) OR !$valid_link)
+			$bak = $category->link_rewrite[$defaultLanguageId];
+			if ((isset($category->link_rewrite) AND empty($category->link_rewrite[$defaultLanguageId])) OR !$valid_link)
+			{
 				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[$defaultLanguageId]));
-			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite;
-			
-			$category->link_rewrite = self::createMultiLangField($category->link_rewrite);
+				$category->link_rewrite = self::createMultiLangField($category->link_rewrite);
+			}
 				
+			if (!$valid_link)
+				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite;	
 			$res = false;
 			if (($fieldError = $category->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $category->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
