@@ -151,7 +151,7 @@ class StatsCheckUp extends Module
 			foreach ($descriptions as $description)
 			{
 				$row['desclength_'.$description['iso_code']] = Tools::strlen(strip_tags($description['description']));
-				$scores['description_'.$description['iso_code']] = ($row['desclength_'.$description['iso_code']] < Configuration::get('CHECKUP_SALES_LT') ? 0 : ($row['desclength_'.$description['iso_code']] > Configuration::get('CHECKUP_SALES_GT') ? 2 : 1));
+				$scores['description_'.$description['iso_code']] = ($row['desclength_'.$description['iso_code']] < Configuration::get('CHECKUP_DESCRIPTIONS_LT') ? 0 : ($row['desclength_'.$description['iso_code']] > Configuration::get('CHECKUP_DESCRIPTIONS_GT') ? 2 : 1));
 				$totals['description_'.$description['iso_code']] += $scores['description_'.$description['iso_code']];
 			}
 			$scores['average'] = array_sum($scores) / $divisor;
