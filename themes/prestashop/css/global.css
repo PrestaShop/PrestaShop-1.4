@@ -789,7 +789,6 @@ ul#header_links {
 	text-decoration: none
 }
 #header_user #shopping_cart a { background-image: url('../img/icon/cart.gif') }
-#header_user #shopping_cart span.ajax_cart_quantity { padding-right: 0.5em }
 #header_user #your_account a { background-image: url('../img/icon/my-account.gif') }
 
 /* Footer */
@@ -916,7 +915,6 @@ div.myaccount .block_content {
 .products_block li.item img { margin-right: 5px }
 .products_block li.last_item { border: none }
 .products_block li img {
-	vertical-align: top;
 	float: left;
 	margin-right: 0.2em
 }
