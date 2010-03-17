@@ -243,6 +243,7 @@ $_LANGADM['AdminCarts689202409e48743b914713f96d93947c'] = 'Valor';
 $_LANGADM['AdminCarts2fb3b950fd7711136f7f251ae5fbdbdc'] = 'Texto n°';
 $_LANGADM['AdminCarts853ae90f0351324bd73ea615e6487517'] = ':';
 $_LANGADM['AdminCatalog630f6dc397fe74e52d5189e2c80f282b'] = 'Volver a la lista';
+$_LANGADM['AdminCatalogc61cd01963c2a9f399c2906e02c7a52a'] = 'Volver al catálogo';
 $_LANGADM['AdminCatalog62381fc27e62649a16182a616de3f7ea'] = 'Categoría actual';
 $_LANGADM['AdminCatalogaf1b98adf7f686b84cd0b443e022b7a0'] = 'Categorías';
 $_LANGADM['AdminCatalog4afecbe4d149447b74b9ab54434c42e4'] = 'Productos en esta categoría';

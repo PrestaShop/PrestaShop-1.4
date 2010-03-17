@@ -98,6 +98,8 @@ class AdminCatalog extends AdminTab
 		$this->adminCategories->displayErrors();
 	}
 
+	
+	
 	public function display()
 	{
 		global $currentIndex;
@@ -110,7 +112,7 @@ class AdminCatalog extends AdminTab
 		elseif (((Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay')) AND sizeof($this->adminProducts->_errors)) OR Tools::isSubmit('updateproduct') OR Tools::isSubmit('addproduct'))
 		{
 			$this->adminProducts->displayForm($this->token);
-			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+			echo '<br /><br /><a href="index.php?tab='.Tools::getValue('tab').'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to catalog').'</a><br />';
 		}
 		elseif (isset($_GET['attributegenerator']))
 		{

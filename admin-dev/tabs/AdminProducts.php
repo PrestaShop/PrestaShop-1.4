@@ -1042,7 +1042,13 @@ class AdminProducts extends AdminTab
 			<input type="hidden" name="id_product_attribute" id="id_product_attribute" value="0" />
 		</form>';
 		if (Tools::getValue('id_category') > 1)
-			echo '<br /><br /><a href="'.$currentIndex.($token ? '&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)) : '').'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to the category').'</a><br />';
+		{
+			$productIndex = preg_replace('/(&id_product=[0-9]*)/', '', $currentIndex);
+			echo '<br /><br />
+			<a href="'.$productIndex.($token ? '&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)) : '').'">
+				<img src="../img/admin/arrow2.gif" /> '.$this->l('Back to the category').'
+			</a><br />';
+		}
 	}
 
 	function displayFormQuantityDiscount($obj, $languages, $defaultLanguage)
