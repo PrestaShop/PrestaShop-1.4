@@ -219,20 +219,36 @@ class AdminImages extends AdminTab
 		$errors = false;
 		$toRegen = scandir($dir);
 		if (!$productsImages)
+		{
 			foreach ($toRegen as $image)
-			{
 				if (preg_match('/^[0-9]*\.jpg$/', $image))
 					foreach ($type AS $k => $imageType)
-						if (!imageResize($dir.$image, $dir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					{
+						// Customizable writing dir
+						$newDir = $dir;
+						if ($imageType['name'] == 'thumb_scene')
+							$newDir .= 'thumbs/';
+						if (!imageResize(
+							$dir.$image, 
+							$newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', 
+							intval($imageType['width']), 
+							intval($imageType['height'])
+						))
 							$errors = true;
-			}
+					}
+		}
 		else
 		{
 			$productsImages = Image::getAllImages();
 			foreach ($productsImages AS $k => $image)
 				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 					foreach ($type AS $k => $imageType)
-						if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+						if (!imageResize(
+							$dir.$image['id_product'].'-'.$image['id_image'].'.jpg', 
+							$dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', 
+							intval($imageType['width']), 
+							intval($imageType['height'])
+						))
 							$errors = true;
 		}
 		return $errors;
@@ -248,7 +264,12 @@ class AdminImages extends AdminTab
 				$file = $dir.$language['iso_code'].'.jpg';
 				if (!file_exists($file))
 					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize($file, $dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+				if (!imageResize(
+					$file, 
+					$dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', 
+					intval($imageType['width']), 
+					intval($imageType['height'])
+				))
 					$errors = true;
 			}
 		return $errors;
