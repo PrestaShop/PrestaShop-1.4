@@ -351,7 +351,7 @@ class PDF extends PDF_PageGroup
 	{
 	 	global $cookie, $ecotax;
 
-		if (!Validate::isLoadedObject($order) OR (!$cookie->id_employee AND (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->invoice_number)))
+		if (!Validate::isLoadedObject($order) OR !OrderState::invoiceAvailable($order->getCurrentState()) OR (!$cookie->id_employee AND !$order->invoice_number))
 			die('Invalid order or invalid order state');
 		self::$order = $order;
 		self::$orderSlip = $slip;

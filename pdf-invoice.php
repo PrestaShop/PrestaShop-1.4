@@ -15,7 +15,7 @@ if (!isset($order) OR !Validate::isLoadedObject($order))
 elseif ($order->id_customer != $cookie->id_customer)
     die(Tools::displayError('invoice not found'));
 elseif (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->invoice_number)
-	die(Tools::displayError('current order state doesn\'t allow to edit this invoice'));
+	die(Tools::displayError('No invoice available'));
 else
 		PDF::invoice($order);
 
