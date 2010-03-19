@@ -486,8 +486,11 @@ INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows V
 INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Firefox 2.x'),('Firefox 3.x'),('Opera'),('IE 6.x'),('IE 7.x'),('IE 8.x'),('Google Chrome');
 INSERT INTO `PREFIX_page_type` (`name`) VALUES ('product.php'),('category.php'),('order.php'),('manufacturer.php');
 INSERT INTO `PREFIX_search_engine` (`server`,`getvar`)
-VALUES  ('google','q'),('search.aol','query'),('yandex.ru','text'),('ask.com','q'),('nhl.com','q'),('search.yahoo','p'),
-('baidu.com','wd'),('search.lycos','query'),('exalead','q'),('search.live.com','q'),('search.ke.voila','rdata'),('altavista','q'),('bing.com','q');
+VALUES  ('google','q'),('aol','q'),('yandex','text'),('ask.com','q'),('nhl.com','q'),('yahoo','p'),('baidu','wd'),
+('lycos','query'),('exalead','q'),('search.live','q'),('voila','rdata'),('altavista','q'),('bing','q'),('daum','q'),
+('eniro','search_word'),('naver','query'),('msn','q'),('netscape','query'),('cnn','query'),('about','terms'),('mamma','query'),
+('alltheweb','q'),('virgilio','qs'),('alice','qs'),('najdi','q'),('mama','query'),('seznam','q'),('onet','qt'),('szukacz','q'),
+('yam','k'),('pchome','q'),('kvasir','q'),('sesam','q'),('ozu','q'),('terra','query'),('mynet','q'),('ekolay','q'),('rambler','words');
 
 /* SubDomains */
 INSERT INTO PREFIX_subdomain (id_subdomain, name) VALUES (NULL, 'www');
