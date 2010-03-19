@@ -704,7 +704,14 @@ class PDF extends PDF_PageGroup
 	{
 		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
 			die(Tools::displayError());
-
+		$priceBreakDown['totalsWithoutTax'] = array();
+		$priceBreakDown['totalsWithTax'] = array();
+		$priceBreakDown['wrappingCostWithoutTax'] = 0;
+		$priceBreakDown['shippingCostWithoutTax'] = 0;
+		$priceBreakDown['totalWithoutTax'] = 0;
+		$priceBreakDown['totalWithTax'] = 0;
+		$priceBreakDown['totalProductsWithoutTax'] = 0;
+		$priceBreakDown['totalProductsWithTax'] = 0;
 		if (self::$order->total_paid == '0.00')
 			return ;
 
@@ -713,8 +720,6 @@ class PDF extends PDF_PageGroup
 			$products = self::$order->products;
 		else
 			$products = self::$order->getProducts();
-		$priceBreakDown['totalsWithoutTax'] = array();
-		$priceBreakDown['totalsWithTax'] = array();
 		$amountWithoutTax = 0;
 		$taxes = array();
 		/* Firstly calculate all prices */
@@ -761,10 +766,6 @@ class PDF extends PDF_PageGroup
 		$carrierTax = new Tax($carrier->id_tax);
 		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrierTax->rate OR $carrierTax->rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
-		$priceBreakDown['totalWithoutTax'] = 0;
-		$priceBreakDown['totalWithTax'] = 0;
-		$priceBreakDown['totalProductsWithoutTax'] = 0;
-		$priceBreakDown['totalProductsWithTax'] = 0;
 
 		// Display product tax
 		foreach ($taxes AS $tax_rate => &$vat)
@@ -793,8 +794,6 @@ class PDF extends PDF_PageGroup
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
 			$priceBreakDown['wrappingCostWithoutTax'] = self::$order->total_wrapping / (1 + (floatval($wrappingTax->rate) / 100));
 		}
-		else
-			$priceBreakDown['wrappingCostWithoutTax'] = 0;
 	}
 
 	/**
