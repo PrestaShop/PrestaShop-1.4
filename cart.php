@@ -43,7 +43,7 @@ if ($add OR Tools::getIsset('update') OR $delete)
 			if ($idProductAttribute AND is_numeric($idProductAttribute))
 			{
 				if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
-					$errors[] = Tools::displayError('product is no longer available');
+					$errors[] = Tools::displayError('there is not enough product in stock');
 			}
 			elseif ($producToAdd->hasAttributes() AND !$delete)
 			{
@@ -51,10 +51,10 @@ if ($add OR Tools::getIsset('update') OR $delete)
 				if (!$idProductAttribute)
 					Tools::redirectAdmin($link->getProductLink($producToAdd));
 				elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
-					$errors[] = Tools::displayError('product is no longer available');
+					$errors[] = Tools::displayError('there is not enough product in stock');
 			}
 			elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
-				$errors[] = Tools::displayError('product is no longer available');
+				$errors[] = Tools::displayError('there is not enough product in stock');
 			/* Check vouchers compatibility */
 			if ($add AND (intval($producToAdd->reduction_price) OR intval($producToAdd->reduction_percent) OR $producToAdd->on_sale))
 			{
