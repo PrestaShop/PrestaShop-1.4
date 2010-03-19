@@ -86,7 +86,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			echo '	<div id="link_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="30" type="text" name="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="30" type="text" name="link_rewrite_'.$language['id_lang'].'" onkeyup="this.value = str2url(this.value); updateFriendlyURL();" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'link_rewrite');
 		echo '	</div><div class="clear space">&nbsp;</div>';
