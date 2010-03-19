@@ -1042,7 +1042,8 @@ class		Product extends ObjectModel
 			SELECT pai.`id_image`, pai.`id_product_attribute`, il.`legend`
 			FROM `'._DB_PREFIX_.'product_attribute_image` pai
 			LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (il.`id_image` = pai.`id_image`)
-			WHERE pai.`id_product_attribute` IN ('.implode(', ', $ids).') AND il.`id_lang` = '.intval($id_lang)))
+			LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_image` = pai.`id_image`)
+			WHERE pai.`id_product_attribute` IN ('.implode(', ', $ids).') AND il.`id_lang` = '.intval($id_lang).' ORDER by i.`position`'))
 			return false;
 		$images = array();
 		foreach ($result AS $row)
