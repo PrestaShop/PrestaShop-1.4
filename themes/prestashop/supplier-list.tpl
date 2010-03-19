@@ -9,7 +9,7 @@
 
 	<p>{strip}
 		<span class="bold">
-			{if $nbSuppliers == 0}{l s='There are no manufacturers.'}
+			{if $nbSuppliers == 0}{l s='There are no suppliers.'}
 			{else}
 				{if $nbSuppliers == 1}{l s='There is'}{else}{l s='There are'}{/if}&#160;
 				{$nbSuppliers}&#160;

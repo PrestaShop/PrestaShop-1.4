@@ -6,15 +6,15 @@
 {if isset($errors) AND $errors}
 	{include file=$tpl_dir./errors.tpl}
 {else}
-	<p>
-		<span class="bold">{strip}
+	<p>{strip}
+		<span class="bold">
 			{if $nbManufacturers == 0}{l s='There are no manufacturers.'}
 			{else}
 				{if $nbManufacturers == 1}{l s='There is'}{else}{l s='There are'}{/if}&#160;
 				{$nbManufacturers}&#160;
 				{if $nbManufacturers == 1}{l s='manufacturer.'}{else}{l s='manufacturers.'}{/if}
-			{/if}{/strip}
-		</span>
+			{/if}
+		</span>{/strip}
 	</p>
 
 	{if $nbManufacturers > 0}
