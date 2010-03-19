@@ -128,7 +128,7 @@ class GCheckout extends PaymentModule
 		$currency = $this->getCurrency();
 		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
 		foreach ($params['cart']->getProducts() as $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name']), utf8_decode($product['description_short']), intval($product['quantity']), Tools::convertPrice($product['price_wt'], $currency)));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name']), utf8_decode($product['description_short']), intval($product['cart_quantity']), Tools::convertPrice($product['price_wt'], $currency)));
 		if ($wrapping = $params['cart']->getOrderTotal(true, 6))
 			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
 		foreach ($params['cart']->getDiscounts() as $voucher)
