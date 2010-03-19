@@ -416,7 +416,8 @@ class		Product extends ObjectModel
 			!$this->deleteProductSale() OR
 			!$this->deleteSceneProducts() OR
 			!$this->deleteSearchIndexes() OR
-			!$this->deleteAccessories())
+			!$this->deleteAccessories() OR
+			!$this->deleteFromAccessories())
 		return false;
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
 			if ($productDownload = new ProductDownload($id) AND !$productDownload->delete(true))
@@ -1682,7 +1683,17 @@ class		Product extends ObjectModel
 	*/
 	public function deleteAccessories()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'accessory` WHERE `id_product_1` = '.intval($this->id)) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'accessory` WHERE `id_product_2` = '.intval($this->id));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'accessory` WHERE `id_product_1` = '.intval($this->id));
+	}
+	
+	/**
+	* Delete product from other products accessories
+	*
+	* @return mixed Deletion result
+	*/
+	public function deleteFromAccessories()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'accessory` WHERE `id_product_2` = '.intval($this->id));
 	}
 
 	/**
