@@ -36,5 +36,6 @@ $_MODULE['<{mailalerts}prestashop>myalerts_f2a6c498fb90ee345d997f888fce3b18'] = 
 $_MODULE['<{mailalerts}prestashop>myalerts_074c07016d3e5a9f011aa8e62abe4517'] = 'Vous n\'avez souscrit à aucune alerte.';
 $_MODULE['<{mailalerts}prestashop>myalerts_0b3db27bc15f682e92ff250ebb167d4b'] = 'Retour à votre compte';
 $_MODULE['<{mailalerts}prestashop>myalerts_8cf04a9734132302f96da8e113e80ce5'] = 'Accueil';
+$_MODULE['<{mailalerts}prestashop>product_416f61a2ce16586f8289d41117a2554e'] = 'votre e-mail';
 $_MODULE['<{mailalerts}prestashop>product_546e02eaa9a986c83cc347e273269f2c'] = 'Prévenez-moi lorsque le produit est disponible';
 $_MODULE['<{mailalerts}prestashop>product_61172eb93737ebf095d3fa02119ce1df'] = 'Demande de notification enregistrée';
