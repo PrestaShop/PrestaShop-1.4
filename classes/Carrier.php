@@ -51,8 +51,8 @@ class		Carrier extends ObjectModel
 	protected 	$table = 'carrier';
 	protected 	$identifier = 'id_carrier';
 
-	private static $priceByWeight = array();
-	private static $priceByPrice = array();
+	protected static $priceByWeight = array();
+	protected static $priceByPrice = array();
 
 	public function getFields()
 	{
