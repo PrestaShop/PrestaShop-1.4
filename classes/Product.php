@@ -402,7 +402,7 @@ class		Product extends ObjectModel
 	{
 		Hook::deleteProduct($this);
 		if (!parent::delete() OR
-			!$this->deleteCategories() OR
+			!$this->deleteCategories(true) OR
 			!$this->deleteImages() OR
 			!$this->deleteProductAttributes() OR
 			!$this->deleteProductFeatures() OR
@@ -494,15 +494,17 @@ class		Product extends ObjectModel
 
 	/**
 	* Delete categories where product is indexed
-	*
+	* 
+	* @param boolean $cleanPositions clean category positions after deletion
 	* @return array Deletion result
 	*/
-	public function deleteCategories()
+	public function deleteCategories($cleanPositions = false)
 	{
 		$result = Db::getInstance()->Executes('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
 		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
-		foreach($result AS $row)
-			$this->cleanPositions(intval($row['id_category']));
+		if ($cleanPositions === true)
+			foreach($result AS $row)
+				$this->cleanPositions(intval($row['id_category']));
 		return $return;
 	}
 

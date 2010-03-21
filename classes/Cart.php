@@ -672,10 +672,12 @@ class		Cart extends ObjectModel
 						$order_total -= Tools::ps_round(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes))), 2);
 			}
 		}
+
 		if ($type == 5) return $shipping_fees;
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
+		
 		return Tools::ps_round(floatval($order_total), 2);
 	}
 
@@ -717,7 +719,7 @@ class		Cart extends ObjectModel
 				}
 
 		// Order total without fees
-		$orderTotal = $this->getOrderTotal(true, 7);
+		$orderTotal = $this->getOrderTotal(true, 7);	
 		
 		// Start with shipping cost at 0
         $shipping_cost = 0;
@@ -758,7 +760,8 @@ class		Cart extends ObjectModel
 		$free_fees_price = 0;
 		if (isset($configuration['PS_SHIPPING_FREE_PRICE']))
 			$free_fees_price = Tools::convertPrice(floatval($configuration['PS_SHIPPING_FREE_PRICE']), new Currency(intval($this->id_currency)));
-		if ($orderTotal >= floatval($free_fees_price) AND floatval($free_fees_price) > 0)
+		$orderTotalwithDiscounts = $this->getOrderTotal(true, 4);
+		if ($orderTotalwithDiscounts >= floatval($free_fees_price) AND floatval($free_fees_price) > 0)
 			return $shipping_cost;
 		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $this->getTotalWeight() >= floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) AND floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
 			return $shipping_cost;

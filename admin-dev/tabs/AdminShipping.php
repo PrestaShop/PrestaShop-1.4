@@ -153,10 +153,14 @@ class AdminShipping extends AdminTab
 			echo '</div>';
 		}
 		echo '
-			<div class="margin-form">
+			<div class="margin-form" style="margin-top: 20px;">
 				<input type="submit" value="'.$this->l('   Save   ').'" name="submitHandling'.$this->table.'" class="button" />
 			</div>
-			<p style="font-size:12px;color:#7F7F7F;">'.$this->l('If you set these parameters to 0, they will be disabled.').'</p>
+			<p style="font-weight: bold; font-size: 11px;">'.$this->l('Tips:').'</p>
+			<ul style="list-style-type: disc; font-size: 11px; color:#7F7F7F; margin-left: 30px; line-height: 20px;">
+				<li>'.$this->l('If you set these parameters to 0, they will be disabled').'</li>
+				<li>'.$this->l('Coupons are not taken into account when calculating free shipping').'</li>
+			</ul>
 		</fieldset>
 		<br />
 		<fieldset>

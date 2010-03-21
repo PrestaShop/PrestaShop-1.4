@@ -241,15 +241,15 @@ class		Discount extends ObjectModel
 				
 				if ($totalProducts_moy != 0 AND !$useTax)
 					$taxDiscount = Tools::ps_round($ratioTax / $totalProducts_moy, 2);
-				if (!$useTax AND $taxDiscount != 1) $this->value = abs(Tools::ps_round($this->value * $taxDiscount / 100 - $this->value, 2));
+				if (!$useTax AND $taxDiscount != 1)
+					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
 				
 				foreach ($products AS $product)
 					if (Product::idIsOnCategoryId($product['id_product'], $categories))
 					{
 						$in_category = true;
 						break;
-					}
-				
+					}				
 				return (($in_category) ? Tools::convertPrice($this->value, ((isset($cart->id_currency) && $cart->id_currency != 0) ? new Currency(intval($cart->id_currency)) : NULL)) : 0);
 			case 3:
 				// Shipping is free
