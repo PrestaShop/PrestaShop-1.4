@@ -51,6 +51,10 @@ $smarty->assign(array(
 	'url' => Tools::getHttpHost(false, true).__PS_BASE_URI__
 ));
 
-echo $paypal->display(__FILE__, 'redirect.tpl');
+
+if (is_file(_PS_THEME_DIR_.'modules/paypal/redirect.tpl'))
+	$smarty->display(_PS_THEME_DIR_.'modules/'.$paypal->name.'/redirect.tpl');
+else
+	$smarty->display(_PS_MODULE_DIR_.$paypal->name.'/redirect.tpl');
 
 ?>
