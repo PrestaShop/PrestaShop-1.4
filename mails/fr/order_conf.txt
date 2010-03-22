@@ -9,7 +9,7 @@ Détails de la commande
 	Bons d'achat et réductions : {total_discounts}
 	Emballage Cadeau : {total_wrapping}
 	Frais d'expédition : {total_shipping}
-	Total TTC : {total_paid}
+	Total payé : {total_paid}
 
 
 Livraison
