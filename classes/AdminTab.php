@@ -1022,7 +1022,7 @@ abstract class AdminTab
 		}
 
 		/* Check if object can be modified, deleted or detailed */
-		if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
+		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
 			echo '<th style="width: 52px">'.$this->l('Actions').'</th>';
 		echo '</tr><tr class="nodrag nodrop" style="height: 35px;">
 				<td class="center">';
@@ -1091,7 +1091,7 @@ abstract class AdminTab
 			echo '</td>';
 		}
 
-		if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
+		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
 			echo '<td class="center">--</td>';
 
 		echo '</tr>';
@@ -1226,7 +1226,8 @@ abstract class AdminTab
 					echo (isset($params['suffix']) ? $params['suffix'] : '').
 					'</td>';
 				}
-				if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
+
+				if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
 				{
 					echo '<td class="center" style="white-space: nowrap;">';
 					if ($this->view)

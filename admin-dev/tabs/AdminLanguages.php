@@ -248,7 +248,7 @@ class AdminLanguages extends AdminTab
 						echo '--';
 					'</td>';
 				}
-				if ($this->edit OR $this->delete OR ($this->view AND $this->view != 'noActionColumn'))
+				if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
 				{
 					echo '<td class="center">';
 					if ($this->edit)

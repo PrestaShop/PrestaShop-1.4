@@ -21,7 +21,7 @@ class AdminOrders extends AdminTab
 
 	 	$this->table = 'order';
 	 	$this->className = 'Order';
-	 	$this->view = 'noActionColumn';
+	 	$this->view = true;
 		$this->colorOnBackground = true;
 	 	$this->_select = '
 			a.id_order AS id_pdf,
