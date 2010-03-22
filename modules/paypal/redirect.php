@@ -40,9 +40,12 @@ $smarty->assign(array(
 	'amount' => floatval($cart->getOrderTotal(true, 4)),
 	'customer' => $customer,
 	'total' => floatval($cart->getOrderTotal(true, 3)),
+	'shipping' => $cart->getOrderShippingCost(),
+	'discount' => $cart->getOrderTotal(true, 2),
 	'business' => $business,
 	'currency_module' => $currency_module,
 	'cart_id' => intval($cart->id),
+	'products' => $cart->getProducts(),
 	'paypal_id' => intval($paypal->id),
 	'header' => $header,
 	'url' => Tools::getHttpHost(false, true).__PS_BASE_URI__

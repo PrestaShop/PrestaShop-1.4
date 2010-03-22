@@ -18,9 +18,18 @@
 			<input type="hidden" name="country" value="{$country->iso_code}" />
 			<input type="hidden" name="amount" value="{$amount}" />
 			<input type="hidden" name="email" value="{$customer->email}" />
+			{if !$discount}
+			{foreach from=$products key=k item=product}
+			<input type="hidden" name="item_name_{$k+1}" value="{$product.name}{if isset($product.attributes)} - {$product.attributes}{/if}" />
+			<input type="hidden" name="amount_{$k+1}" value="{$product.price_wt}" />
+			<input type="hidden" name="quantity_{$k+1}" value="{$product.cart_quantity}" />
+			{/foreach}
+			<input type="hidden" name="shipping_1" value="{$shipping}" />
+			{else}
 			<input type="hidden" name="item_name_1" value="{$cart_text}" />
 			<input type="hidden" name="amount_1" value="{$total}" />
 			<input type="hidden" name="quantity_1" value="1" />
+			{/if}
 			<input type="hidden" name="business" value="{$business}" />
 			<input type="hidden" name="receiver_email" value="{$business}" />
 			<input type="hidden" name="cmd" value="_cart" />
