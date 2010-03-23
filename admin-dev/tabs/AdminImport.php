@@ -369,7 +369,7 @@ class AdminImport extends AdminTab
 		$tmpTab = explode($delimiter, $line);	
 		
 		foreach ($tmpTab AS &$row)
-			if (preg_match ('/^".*"$/Ui',$row))
+			if (preg_match ('/^".*"$/Uims',$row))
 				$row = trim($row, '"');
 		return $tmpTab;
 	}
@@ -423,7 +423,8 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -513,8 +514,8 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
-
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -774,7 +775,8 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$fsep = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -824,7 +826,8 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -860,7 +863,8 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -985,7 +989,8 @@ class AdminImport extends AdminTab
 	{
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -1016,7 +1021,8 @@ class AdminImport extends AdminTab
 	{		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		for ($current_line = 0; $line = self::fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
@@ -1108,9 +1114,15 @@ class AdminImport extends AdminTab
 		foreach (scandir(dirname(__FILE__).'/../import') as $filename)
 			if (!in_array($filename, array('.','..','.htaccess','index.php')))
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
+		$languages = Language::getLanguages(false);
 		echo '				</select>
 						</div>
-						<label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
+						<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
+						<div class="margin-form">
+							<select name="iso_lang">';
+						foreach ($languages AS $lang)
+							echo '<option value="'.$lang['iso_code'].' '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').' ">'.$lang['name'].'</option>';
+						echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
 						<div class="margin-form">
 							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
 						</div>
@@ -1227,7 +1239,8 @@ class AdminImport extends AdminTab
 		ob_clean();
 		
 		/* Datas */
-		for ($current_line = 0; $current_line < 10 AND $line = self::fgetcsv($handle, MAX_LINE_SIZE, $glue); $current_line++)
+		self::setLocale();
+		for ($current_line = 0; $current_line < 10 AND $line = fgetcsv($handle, MAX_LINE_SIZE, $glue); $current_line++)
 		{
 			/* UTF-8 conversion */
 			if (Tools::getValue('convert'))
@@ -1271,7 +1284,8 @@ class AdminImport extends AdminTab
 			'.$this->l('Skip').' <input type="text" size="2" name="skip" value="0" /> '.$this->l('lines').'.
 			<input type="hidden" name="csv" value="'.Tools::getValue('csv').'" />
 			<input type="hidden" name="convert" value="'.Tools::getValue('convert').'" />
-			<input type="hidden" name="entity" value="'.intval(Tools::getValue('entity')).'" />';
+			<input type="hidden" name="entity" value="'.intval(Tools::getValue('entity')).'" />
+			<input type="hidden" name="iso_lang" value="'.Tools::getValue('iso_lang').'" />';
 		if (Tools::getValue('truncate'))
 			echo '<input type="hidden" name="truncate" value="1" />';
 		echo '
@@ -1425,6 +1439,12 @@ class AdminImport extends AdminTab
 		}
 		
 		parent::postProcess();
+	}
+	
+	public static function setLocale()
+	{
+		$iso_lang  = trim(Tools::getValue('iso_lang'));
+		setlocale(LC_ALL, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 	}
 }
 ?>
