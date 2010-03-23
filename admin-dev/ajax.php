@@ -45,7 +45,8 @@ if (isset($_GET['ajaxProductAccessories']))
 	AND p.`id_product` NOT IN (
 		SELECT a.`id_product_2`
 		FROM `'._DB_PREFIX_.'accessory` a
-		WHERE a.`id_product_1` = '.intval(Tools::getValue('id_product')).')');
+		WHERE a.`id_product_1` = '.intval(Tools::getValue('id_product')).')
+	ORDER BY pl.`name`');
 	
 	foreach ($products AS $accessory)
 		$jsonArray[] = '{value: \''.intval($accessory['id_product']).'-'.addslashes($accessory['name']).'\', text:\''.intval($accessory['id_product']).' - '.addslashes($accessory['name']).'\'}';
