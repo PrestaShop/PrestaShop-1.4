@@ -88,7 +88,7 @@ class		Customer extends ObjectModel
 			$fields['id_customer'] = intval($this->id);
 		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['id_gender'] = intval($this->id_gender);
-		$fields['lastname'] = pSQL(Tools::strtoupper($this->lastname));
+		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['birthday'] = pSQL($this->birthday);
 		$fields['email'] = pSQL($this->email);

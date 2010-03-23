@@ -137,7 +137,7 @@ class		Address extends ObjectModel
 		$fields['id_state'] = intval($this->id_state);
 		$fields['alias'] = pSQL($this->alias);
 		$fields['company'] = pSQL($this->company);
-		$fields['lastname'] = pSQL(Tools::strtoupper($this->lastname));
+		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['address1'] = pSQL($this->address1);
 		$fields['address2'] = pSQL($this->address2);

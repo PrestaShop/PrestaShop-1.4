@@ -46,7 +46,7 @@ if (Tools::isSubmit('submitIdentity'))
 
 		if (!sizeof($errors))
 		{
-			$customer->lastname = Tools::strtoupper($customer->lastname);
+			$customer->lastname = $customer->lastname;
 		    $customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
 			if (Tools::getValue('passwd'))
 				$cookie->passwd = $customer->passwd;

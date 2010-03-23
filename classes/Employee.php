@@ -54,7 +54,7 @@ class		Employee extends ObjectModel
 	 	parent::validateFields();
 		
 		$fields['id_profile'] = intval($this->id_profile);
-		$fields['lastname'] = pSQL(Tools::strtoupper($this->lastname));
+		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL(Tools::ucfirst($this->firstname));
 		$fields['email'] = pSQL($this->email);
 		$fields['passwd'] = pSQL($this->passwd);

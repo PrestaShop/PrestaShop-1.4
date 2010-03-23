@@ -104,7 +104,7 @@ require_once(dirname(__FILE__).'/init.php');
 				</select>
 				<img src="../img/admin/nav-user.gif" alt="<?php echo translate('user') ?>" />&nbsp;
 				<a href="index.php?logout" title="<?php echo translate('logout') ?>">
-					<b><?php echo Tools::substr($cookie->firstname, 0, 1).'.&nbsp;'.htmlentities(Tools::strtoupper($cookie->lastname), ENT_COMPAT, 'UTF-8'); ?></b>
+					<b><?php echo Tools::substr($cookie->firstname, 0, 1).'.&nbsp;'.htmlentities($cookie->lastname, ENT_COMPAT, 'UTF-8'); ?></b>
 					<img src="../img/admin/nav-logout.gif" alt="<?php echo translate('logout') ?>" />
 				</a>
 			</div>

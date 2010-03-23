@@ -878,14 +878,6 @@ $(document).ready(
 				}
 			}
 		);
-		
-		$('#infosName').keyup(
-			function()
-			{
-				//auto-CAPS_LOCK for name field
-				$(this).val( $(this).val().toUpperCase() );
-			}
-		);
 
 		//preset mail step 4
 		$("#testEmail").change(
