@@ -395,9 +395,9 @@ class AdminProducts extends AdminTab
 				{
 					if (!($id_discount_type = intval(Tools::getValue('id_discount_type'))))
 						$this->_errors[] = Tools::displayError('discount type not selected');
-					else if (!($quantity_discount = intval(Tools::getValue('quantity_discount'))))
-						$this->_errors[] = Tools::displayError('quantity is required');
-					else if (!($value_discount = floatval(Tools::getValue('value_discount'))))
+					elseif (!($quantity_discount = intval(Tools::getValue('quantity_discount'))) OR $quantity_discount <= 1)
+						$this->_errors[] = Tools::displayError('quantity is required and must be superior of 1');
+					elseif (!($value_discount = floatval(Tools::getValue('value_discount'))))
 						$this->_errors[] = Tools::displayError('value is required');
 					else
 					{
