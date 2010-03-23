@@ -159,7 +159,7 @@ class AdminDiscounts extends AdminTab
 			<fieldset class="width3"><legend><img src="../img/admin/coupon.gif" />'.$this->l('Vouchers').'</legend>
 				<label>'.$this->l('Code:').' </label>
 				<div class="margin-form">
-					<input type="text" size="30" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" id="code" />
+					<input type="text" size="30" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" id="code" />
 					<sup>*</sup>
 					<img src="../img/admin/news-new.gif" onclick="gencode(8);" style="cursor: pointer" />
 					<span class="hint" name="help_box">'.$this->l('Invalid characters: numbers and').' !<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>

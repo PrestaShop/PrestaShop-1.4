@@ -76,11 +76,11 @@ class AdminEmployees extends AdminTab
 			<fieldset><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
-					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
+					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
 				<label>'.$this->l('First name:').' </label>
 				<div class="margin-form">
-					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" style="text-transform: capitalize;" /> <sup>*</sup>
+					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
 				<label>'.$this->l('Password:').' </label>
 				<div class="margin-form">
