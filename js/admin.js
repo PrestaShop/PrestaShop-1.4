@@ -69,35 +69,39 @@ function strToAltImgAttr(str,encoding,ucfirst)
 
 function copy2friendlyURL()
 {
-	getE('link_rewrite_' + id_language).value = str2url(getE('name_' + id_language).value.replace(/^[0-9]+\./, ''), 'UTF-8');
+	$('#link_rewrite_' + id_language).val(str2url($('#name_' + id_language).val().replace(/^[0-9]+\./, ''), 'UTF-8'));
 }
 
 function updateCurrentText()
 {
-	getE('current_product').innerHTML = getE('name_' + id_language).value;
+	$('#current_product').html($('#name_' + id_language).val());
 }
 
 function updateFriendlyURL()
 {
-	getE('link_rewrite_' + id_language).value = str2url(getE('link_rewrite_' + id_language).value,'UTF-8');
-	getE('friendly-url').innerHTML = getE('link_rewrite_' + id_language).value;
+	$('#link_rewrite_' + id_language).val(str2url($('#link_rewrite_' + id_language).val(), 'UTF-8'));
+	$('#friendly-url').html($('link_rewrite_' + id_language).val());
 }
 
 function	showLanguages(id)
 {
-	getE('languages_' + id).style.display = 'block';
+	$('#languages_' + id).show();
 }
 
 function	changeLanguage(field, fieldsString, id_language_new, iso_code)
 {
 	var fields = fieldsString.split('¤');
-	for (var i = 0; i < fields.length; ++i)
+	for (var i = 0; i < fields.length; i++)
 	{
-		getE(fields[i] + '_' + id_language).style.display = 'none';
-		getE(fields[i] + '_' + id_language_new).style.display = 'block';
-		getE('language_current_' + fields[i]).src = '../img/l/' + id_language_new + '.jpg';
+		new_elt = $('#' + fields[i] + '_' + id_language_new);
+		new_elt.siblings().each(function() {
+			if (!$(this).hasClass('display_flags'))
+				$(this).hide();
+		});
+		new_elt.show();
+		$('#language_current_' + fields[i]).attr('src', '../img/l/' + id_language_new + '.jpg');
 	}
- 	getE('languages_' + field).style.display = 'none';
+ 	$('#languages_' + field).hide();
 	id_language = id_language_new;
 }
 
