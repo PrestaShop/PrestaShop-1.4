@@ -1139,7 +1139,7 @@ class		Product extends ObjectModel
 	{
 		global	$link, $cookie;
 
-		$currentDate = date('Y-m-d');
+		$currentDate = date('Y-m-d H:m:i');
 		$row = Db::getInstance()->getRow('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
 			i.`id_image`, il.`legend`, t.`rate`
@@ -1193,7 +1193,7 @@ class		Product extends ObjectModel
             $orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-		$currentDate = date('Y-m-d');
+		$currentDate = date('Y-m-d H:m:i');
 		if ($count)
 		{
 			$sql = '
@@ -1302,7 +1302,7 @@ class		Product extends ObjectModel
 		// Avoid an error with 1970-01-01
 		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
 			return 0;
-		$currentDate = date('Y-m-d');
+		$currentDate = date('Y-m-d H:m:i');
 		if ($date_from != $date_to AND ($currentDate > $date_to OR $currentDate < $date_from))
 			return 0;
 
