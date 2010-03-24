@@ -9,6 +9,9 @@ $cart = new Cart(intval($cookie->id_cart));
 
 $address = new Address(intval($cart->id_address_invoice));
 $country = new Country(intval($address->id_country));
+$state = NULL;
+if ($address->id_state)
+	$state = new State(intval($address->id_state));
 $customer = new Customer(intval($cart->id_customer));
 $business = Configuration::get('PAYPAL_BUSINESS');
 $header = Configuration::get('PAYPAL_HEADER');
@@ -37,6 +40,7 @@ $smarty->assign(array(
 	'paypal_url' => $paypal->getPaypalUrl(),
 	'address' => $address,
 	'country' => $country,
+	'state' => $state,
 	'amount' => floatval($cart->getOrderTotal(true, 4)),
 	'customer' => $customer,
 	'total' => floatval($cart->getOrderTotal(true, 3)),

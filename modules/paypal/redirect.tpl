@@ -16,6 +16,9 @@
 			<input type="hidden" name="city" value="{$address->city}" />
 			<input type="hidden" name="zip" value="{$address->postcode}" />
 			<input type="hidden" name="country" value="{$country->iso_code}" />
+			{if $state != NULL}
+			<input type="hidden" name="state" value="{$state->iso_code}" />
+			{/if}
 			<input type="hidden" name="amount" value="{$amount}" />
 			<input type="hidden" name="email" value="{$customer->email}" />
 			{if !$discount}
