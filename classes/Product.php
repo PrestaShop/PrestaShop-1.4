@@ -2199,12 +2199,17 @@ class		Product extends ObjectModel
 	** Customization management
 	*/
 
-	static public function getAllCustomizedDatas($id_cart)
+	static public function getAllCustomizedDatas($id_cart, $id_lang = null)
 	{
+		global $cookie;
+		if (!$id_lang)
+			$id_lang = $cookie->id_lang;
+		
 		if (!$result = Db::getInstance()->ExecuteS('
-			SELECT cd.`id_customization`, c.`id_product`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`
+			SELECT cd.`id_customization`, c.`id_product`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`, cfl.`name`
 			FROM `'._DB_PREFIX_.'customized_data` cd
 			NATURAL JOIN `'._DB_PREFIX_.'customization` c
+			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.intval($cookie->id_lang).')
 			WHERE c.`id_cart` = '.intval($id_cart).'
 			ORDER BY `id_product`, `id_product_attribute`, `type`, `index`'))
 			return false;
@@ -2213,7 +2218,6 @@ class		Product extends ObjectModel
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['datas'][intval($row['type'])][] = $row;
 		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity`, `quantity_refunded`, `quantity_returned` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
 			return false;
-
 		foreach ($result AS $row)
 		{
 			$customizedDatas[intval($row['id_product'])][intval($row['id_product_attribute'])][intval($row['id_customization'])]['quantity'] = intval($row['quantity']);

@@ -149,7 +149,7 @@
 							{elseif $type == $CUSTOMIZE_TEXTFIELD}
 							<ul class="typedText">{counter start=0 print=false}
 								{foreach from=$datas item='data'}
-									<li>{l s='Text #'}{counter}{l s=':'} {$data.value}</li>
+									<li>{$data.name}{l s=':'} {$data.value}</li>
 								{/foreach}
 							</ul>
 							{/if}
