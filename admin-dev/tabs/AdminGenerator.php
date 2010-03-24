@@ -195,7 +195,7 @@ class AdminGenerator extends AdminTab
 		$tab['Files'] = array('addresses.php', 'address.php', 'authentication.php', 'cart.php', 'contact-form.php', 'discount.php', 'footer.php',
 		'get-file.php', 'header.php', 'history.php', 'identity.php', 'images.inc.php', 'init.php', 'my-account.php', 'order.php',
 		'order-slip.php', 'order-detail.php', 'order-follow.php', 'order-return.php', 'order-confirmation.php', 'pagination.php', 'password.php',
-		'pdf-invoice.php', 'pdf-order-return.php', 'pdf-order-slip.php', 'product-sort.php', 'search.php', 'statistics.php', 'zoom.php');
+		'pdf-invoice.php', 'pdf-order-return.php', 'pdf-order-slip.php', 'product-sort.php', 'search.php', 'statistics.php');
 
 		return $tab;
 	}
