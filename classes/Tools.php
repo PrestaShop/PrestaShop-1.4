@@ -787,6 +787,7 @@ class Tools
 	{
 		if (is_array($str))
 			return false;
+		$str = htmlspecialchars_decode($str);
 		if (function_exists('mb_strlen'))
 			return mb_strlen($str, 'utf-8');
 		return strlen($str);
