@@ -19,7 +19,7 @@ class BlockCart extends Module
 	
 	public function smartyAssigns(&$smarty, &$params)
 	{
-		global $errors;
+		global $errors, $cookie;
 
 		// Set currency
 		if (!intval($params['cart']->id_currency))
@@ -50,8 +50,8 @@ class BlockCart extends Module
 		));
 		if (sizeof($errors))
 			$smarty->assign('errors', $errors);
-		if(isset($params['cookie']->ajax_blockcart_display))
-			$smarty->assign('colapseExpandStatus', $params['cookie']->ajax_blockcart_display);
+		if(isset($cookie->ajax_blockcart_display))
+			$smarty->assign('colapseExpandStatus', $cookie->ajax_blockcart_display);
 	}
 
 	public function getContent()
