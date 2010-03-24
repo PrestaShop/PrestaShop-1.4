@@ -230,18 +230,22 @@ class		Discount extends ObjectModel
 				// amount
 				$totalProducts_moy = 0;
 				$ratioTax = 0;
-				foreach ($products AS $product)
-					if (!$useTax)
-					{
-						if ($product['rate'] == 0)
-							$product['rate'] = 1;
-						$totalProducts_moy += $product['total_wt'];
-						$ratioTax += $product['total_wt'] * $product['rate'];
-					}
 				
+				if (Configuration::get('PS_TAX'))
+				{
+					foreach ($products AS $product)
+						if (!$useTax)
+						{
+							if ($product['rate'] == 0)
+								$product['rate'] = 1;
+							$totalProducts_moy += $product['total_wt'];
+							$ratioTax += $product['total_wt'] * $product['rate'];
+						}
+				}
+
 				if ($totalProducts_moy != 0 AND !$useTax)
 					$taxDiscount = Tools::ps_round($ratioTax / $totalProducts_moy, 2);
-				if (!$useTax AND $taxDiscount != 1)
+				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
 					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
 				
 				foreach ($products AS $product)
