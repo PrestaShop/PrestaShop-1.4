@@ -66,10 +66,10 @@ class MoneyBookers extends PaymentModule
 			Configuration::updateValue('MB_HIDE_LOGIN', intval($_POST['mb_hide_login']));
 			Configuration::updateValue('MB_SECRET_WORD', $_POST['mb_secret_word']);
 			Configuration::updateValue('MB_ID_LOGO', $_POST['mb_id_logo']);
-			Configuration::updateValue('MB_ID_LOGO_WALLET', $_POST['mb_id_logo']);
+			Configuration::updateValue('MB_ID_LOGO_WALLET', $_POST['mb_id_logo_wallet']);
 
 			/* Check account validity */
-			$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&url='.'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
+			$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
 			if (!$fp)
 				$errors[] = $this->l('Impossible to contact activation server, please try later');
 			else
@@ -79,7 +79,7 @@ class MoneyBookers extends PaymentModule
 					$errors[] = $this->l('Account validation failed, your email might be wrong');
 				else
 				{
-					$fp2 = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&sw=1&secret_word='.md5($_POST['mb_secret_word']), 'r');
+					$fp2 = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_pay_to_email'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_secret_word']), 'r');
 					if (!$fp2)
 						$errors[] = $this->l('Impossible to contact activation server, please try later');
 					else
@@ -131,8 +131,8 @@ class MoneyBookers extends PaymentModule
         	
                	<b>'.$this->l('This module allows you to accept payments by Moneybookers.').'</b><br /><br />		
 		<b>'.$this->l('About Moneybookers').'</b><br /><br />'.
-		$this->l('Moneybookers is one of Europe\'s largest online payments systems and among the world\'s leading eWallet providers, with over nine million account holders. The simple eWallet enables any customer to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by simply using an email address.').'<br /><br />'.
-		$this->l('Moneybookers. worldwide payment network offers businesses access to over 60 local payment options in over 200 countries with just one integration. Already more than 40,000 merchants use Moneybookers. payments service, including global partners such as eBay, Skype and Thomas Cook').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'
+		$this->l('Moneybookers is one of Europe\'s largest online payments systems and among the world\'s leading eWallet providers, with over 11 million account holders. The simple eWallet enables any customer to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by simply using an email address.').'<br /><br />'.
+		$this->l('Moneybookers. worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use Moneybookers. payments service, including global partners such as eBay, Skype and Thomas Cook').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'
 
                 <div style="clear:both;">&nbsp;</div>
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'">

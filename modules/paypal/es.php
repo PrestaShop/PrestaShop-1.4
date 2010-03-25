@@ -62,7 +62,3 @@ $_MODULE['<{paypal}prestashop>paypal_8358ec19f397d4cdd632688d4f79e535'] = 'Error
 $_MODULE['<{paypal}prestashop>paypal_eca77e208634d52703b07672abbf16ec'] = 'Error de verificación  (protocolo cURL) . Retroceso: ';
 $_MODULE['<{paypal}prestashop>paypal_f7799c2ded739cf3c3e9babffc5f315b'] = 'Error de conexión con protocolo cURL. ';
 $_MODULE['<{paypal}prestashop>paypal_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Pagar con PayPal';
-$_MODULE['<{paypal}prestashop>redirect_ea5ddaff9590d897631f00a7bcb035a2'] = 'Error Paypal: (invalid or undefined business account email)';
-$_MODULE['<{paypal}prestashop>redirect_e7ac6f09a936201890de4094b1ee4e50'] = 'Error Paypal: (invalid address or customer)';
-$_MODULE['<{paypal}prestashop>redirect_dae3b417a0fc4a49e851ce55d6d49551'] = 'Mi carrito';
-$_MODULE['<{paypal}prestashop>redirect_9bfa2332c9c7198ac9774c6710bf76c4'] = 'Devolver a la tienda';

@@ -1,1 +1,1 @@
-<iframe src="{$base_dir}modules/moneybookers/moneybookers-form.php" style="background-color:#FFF; border:1px solid #595A5E; color:#374853; padding: 0.6em; width: 533px; height: 540px; margin-left: 8px;"></iframe>
+<iframe src="{$base_dir}modules/moneybookers/moneybookers-form.php" style="background-color:#FFF; border:1px solid #595A5E; color:#374853; padding: 0.6em; width: 533px; height: 190px; margin-left: 8px;" onmouseover="$('iframe').css('height', '540px');"></iframe>
