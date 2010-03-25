@@ -1,5 +1,5 @@
 <?php
-
+//die(htmlentities('<toto href="&">'));
 /**
   * Homepage and main page for admin panel, index.php
   * @category admin

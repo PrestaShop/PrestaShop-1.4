@@ -55,7 +55,6 @@ function editThisZone(aInFixedZoneElement) {
 	selectionCurrent['width'] = width;
 	selectionCurrent['height'] = height;
 	
-	
 	$fixedZoneElement.remove();
 	$('#product_autocomplete_input').val( $fixedZoneElement.find('p').text() );
 	showAutocompleteBox(x1, y1+parseInt(height));
