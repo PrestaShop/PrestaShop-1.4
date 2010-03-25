@@ -47,6 +47,7 @@ class Watermark extends Module
 		Configuration::updateValue('WATERMARK_TRANSPARENCY', 60);
 		Configuration::updateValue('WATERMARK_Y_ALIGN', 'bottom');
 		Configuration::updateValue('WATERMARK_X_ALIGN', 'right');
+		return true;
 	}
 
 	public function uninstall()
