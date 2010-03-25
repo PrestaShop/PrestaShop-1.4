@@ -50,6 +50,15 @@ class Pack extends Product
 		return self::$cachePackItems[$id_product];
 	}
 	
+	public static function isInStock($id_product, $id_lang)
+	{
+		$items = self::getItems(intval($id_product), intval($id_lang));
+		foreach ($items AS $item)
+			if ($item->quantity == 0 AND !$item->isAvailableWhenOutOfStock(intval($item->out_of_stock)))
+				return false;
+		return true;
+	}
+	
 	public static function getItemTable($id_product, $id_lang, $full = false)
 	{
 		$result = Db::getInstance()->ExecuteS('

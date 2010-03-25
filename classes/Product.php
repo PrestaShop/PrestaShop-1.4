@@ -1524,6 +1524,10 @@ class		Product extends ObjectModel
 	*/
 	public static function getQuantity($id_product, $id_product_attribute = NULL)
 	{
+		$lang = Configuration::get('PS_LANG_DEFAULT');
+		if (Pack::isPack(intval($id_product), intval($lang)) AND !Pack::isInStock(intval($id_product), intval($lang)))
+			return 0;
+		
 		$result = Db::getInstance()->GetRow('
 		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
 		FROM `'._DB_PREFIX_.'product` p
@@ -1617,6 +1621,10 @@ class		Product extends ObjectModel
 	*/
 	public function checkQty($qty)
 	{
+		$lang = Configuration::get('PS_LANG_DEFAULT');
+		if (Pack::isPack(intval($this->id), intval($lang)) AND !Pack::isInStock(intval($this->id), intval($lang)))
+			return false;
+		
 		if ($this->isAvailableWhenOutOfStock($this->out_of_stock))
 			return true;
 

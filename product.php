@@ -179,6 +179,10 @@ else
 			'return_link' => (isset($category->id) AND $category->id) ? Tools::safeOutput($link->getCategoryLink($category)) : 'javascript: history.back();',
 			'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath(intval($category->id), $product->name) : Tools::getFullPath(intval($product->id_default_category), $product->name))
 		));
+		
+		$lang = Configuration::get('PS_LANG_DEFAULT');
+		if (Pack::isPack(intval($product->id), intval($lang)) AND !Pack::isInStock(intval($product->id), intval($lang)))
+			$product->quantity = 0;
 
 		/* /Quantity discount management */
 		$smarty->assign(array(
