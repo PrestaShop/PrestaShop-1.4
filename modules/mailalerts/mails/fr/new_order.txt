@@ -1,4 +1,4 @@
-﻿Bonjour,
+Bonjour,
 
 Vous avez reçu une nouvelle commande de {firstname} {lastname} sur {shop_name}.
 

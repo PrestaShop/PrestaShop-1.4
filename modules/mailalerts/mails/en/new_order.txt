@@ -1,4 +1,4 @@
-﻿Hi,
+Hi,
 
 You've a new order from {firstname} {lastname} on {shop_name}.
 

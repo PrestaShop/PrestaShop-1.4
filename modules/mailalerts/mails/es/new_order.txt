@@ -1,4 +1,4 @@
-﻿Hola,
+Hola,
 
 Has un nuevo orden de {firstname} {lastname} en {shop_name}.
 

@@ -1,4 +1,4 @@
-﻿Bonjour {firstname} {lastname}, merci d'avoir passé commande chez {shop_name} !
+Bonjour {firstname} {lastname}, merci d'avoir passé commande chez {shop_name} !
 
 Détails de la commande
 
