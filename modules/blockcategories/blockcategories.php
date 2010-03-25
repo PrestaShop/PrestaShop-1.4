@@ -116,7 +116,7 @@ class BlockCategories extends Module
 
 		foreach ($result as $row)
 		{
-			$$row['name'] = Category::hideCategoryPosition($row['name']);
+			$row['name'] = Category::hideCategoryPosition($row['name']);
 			$resultParents[$row['id_parent']][] = $row;
 			$resultIds[$row['id_category']] = $row;
 		}
