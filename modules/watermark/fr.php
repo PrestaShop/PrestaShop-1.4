@@ -13,6 +13,7 @@ $_MODULE['<{watermark}prestashop>watermark_8fe9c39f4bf87082caabcf3650970c71'] = 
 $_MODULE['<{watermark}prestashop>watermark_c2cf8e33c907a4cc689881dc8fa571c2'] = 'Alignement X requis';
 $_MODULE['<{watermark}prestashop>watermark_3a1f788dbe8957be92048606cf0d3fcb'] = 'Valeur incorrecte pour l\'alignement en X';
 $_MODULE['<{watermark}prestashop>watermark_a9cac4be0fa0b815376b96f49e1435d7'] = 'Au moins un type d\'image doit être selectionné';
+$_MODULE['<{watermark}prestashop>watermark_3deee3a74625e5d28cdeba65f9c449dc'] = 'l\'image doit être au format GIF';
 $_MODULE['<{watermark}prestashop>watermark_444bcb3a3fcf8389296c49467f27e1d6'] = 'OK';
 $_MODULE['<{watermark}prestashop>watermark_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres sauvegardés';
 $_MODULE['<{watermark}prestashop>watermark_c0275788cf97660b52ab23f1f8c7c8d7'] = 'Configuration du filigrane';

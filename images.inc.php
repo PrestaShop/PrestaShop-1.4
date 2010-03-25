@@ -62,28 +62,29 @@ function	checkImage($file, $maxFileSize)
 	return false;
 }
 
-function isPicture($file)
+function isPicture($file, $types = NULL)
 {
-    /* Detect mime content type */
-    $mime_type = false;
-    $types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
+	/* Detect mime content type */
+	$mime_type = false;
+	if (!$types)
+		$types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 
-    if (function_exists('finfo_open'))
-    {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime_type = finfo_file($finfo, $file['tmp_name']);
-        finfo_close($finfo);
-    }
-    elseif (function_exists('mime_content_type'))
-        $mime_type = mime_content_type($file['tmp_name']);
-    elseif (function_exists('exec'))
-        $mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
+	if (function_exists('finfo_open'))
+	{
+		$finfo = finfo_open(FILEINFO_MIME_TYPE);
+		$mime_type = finfo_file($finfo, $file['tmp_name']);
+		finfo_close($finfo);
+	}
+	elseif (function_exists('mime_content_type'))
+		$mime_type = mime_content_type($file['tmp_name']);
+	elseif (function_exists('exec'))
+		$mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
 	if (empty($mime_type) || $mime_type == 'regular file')
 		$mime_type = $file['type'];
 	if (($pos = strpos($mime_type, ';')) !== false)
 		$mime_type = substr($mime_type, 0, $pos);
-    // is it a picture ?
-    return $mime_type && in_array($mime_type, $types);
+	// is it a picture ?
+	return $mime_type && in_array($mime_type, $types);
 }
 
 /**

@@ -61,32 +61,35 @@ class Watermark extends Module
 
 	private function _postValidation()
 	{
-			$yalign = Tools::getValue('yalign');
-			$xalign = Tools::getValue('xalign');
-			$transparency = intval(Tools::getValue('transparency'));
-			$image_types = Tools::getValue('image_types');
-			
-			if (empty($transparency))
-				$this->_postErrors[] = $this->l('Transparency is required.');
-			elseif($transparency < 0 || $transparency > 100)
-				$this->_postErrors[] = $this->l('Transparency is not in allowed range.');
+		$yalign = Tools::getValue('yalign');
+		$xalign = Tools::getValue('xalign');
+		$transparency = intval(Tools::getValue('transparency'));
+		$image_types = Tools::getValue('image_types');
+		
+		if (empty($transparency))
+			$this->_postErrors[] = $this->l('Transparency is required.');
+		elseif($transparency < 0 || $transparency > 100)
+			$this->_postErrors[] = $this->l('Transparency is not in allowed range.');
 
-			if (empty($yalign))
-				$this->_postErrors[] = $this->l('Y-Align is required.');
-			elseif(!in_array($yalign, $this->yaligns))
-				$this->_postErrors[] = $this->l('Y-Align is not in allowed range.');
-			
-			if (empty($xalign))
-				$this->_postErrors[] = $this->l('X-Align is required.');
-			elseif(!in_array($xalign, $this->xaligns))
-				$this->_postErrors[] = $this->l('X-Align is not in allowed range.');
-			if (empty($image_types))
-				$this->_postErrors[] = $this->l('At least one image type is required.');
+		if (empty($yalign))
+			$this->_postErrors[] = $this->l('Y-Align is required.');
+		elseif(!in_array($yalign, $this->yaligns))
+			$this->_postErrors[] = $this->l('Y-Align is not in allowed range.');
+		
+		if (empty($xalign))
+			$this->_postErrors[] = $this->l('X-Align is required.');
+		elseif(!in_array($xalign, $this->xaligns))
+			$this->_postErrors[] = $this->l('X-Align is not in allowed range.');
+		if (empty($image_types))
+			$this->_postErrors[] = $this->l('At least one image type is required.');
 
-			if (isset($_FILES['PS_WATERMARK']['tmp_name']) AND !empty($_FILES['PS_WATERMARK']['tmp_name'])){
-			
+		if (isset($_FILES['PS_WATERMARK']['tmp_name']) AND !empty($_FILES['PS_WATERMARK']['tmp_name']))
+		{
+			if (!isPicture($_FILES['PS_WATERMARK'], array('image/gif')))
+				$this->_postErrors[] = $this->l('image must be at GIF format');
 		}
-		return !sizeof($this->_errors) ? true : false;
+		
+		return !sizeof($this->_postErrors) ? true : false;
 	}
 
 	private function _postProcess(){	
@@ -97,7 +100,7 @@ class Watermark extends Module
 		Configuration::updateValue('WATERMARK_TRANSPARENCY', Tools::getValue('transparency'));
 
 		//submited watermark
-		if (isset($_FILES['PS_WATERMARK']))
+		if (isset($_FILES['PS_WATERMARK']) AND !empty($_FILES['PS_WATERMARK']['tmp_name']))
 		{
 			/* Check watermark validity */
 			if ($error = checkImage($_FILES['PS_WATERMARK'], $this->maxImageSize))
@@ -120,11 +123,14 @@ class Watermark extends Module
 				<table border="0" width="500" cellpadding="0" cellspacing="0" id="form">
 					<tr>
 						<td />
-						<td>'.(file_exists(dirname(__FILE__).'/watermark.gif') ? '<img src="../modules/'.$this->name.'/watermark.gif" />' : $this->l('No watermark uploaded yet')).'</td>
+						<td>'.(file_exists(dirname(__FILE__).'/watermark.gif') ? '<img src="../modules/'.$this->name.'/watermark.gif?t='.time().'" />' : $this->l('No watermark uploaded yet')).'</td>
 					</tr>
 					<tr>
 						<td>'.$this->l('Watermark file').'</td>
-						<td><input type="file" name="PS_WATERMARK" /></td>
+						<td>
+							<input type="file" name="PS_WATERMARK" />
+							<p style="color:#7F7F7F;font-size:0.85em;margin:0;padding:0;">'.$this->l('Must be at format GIF').'</p>
+						</td>
 					</tr>
 					<tr>
 						<td width="270" style="height: 35px;">'.$this->l('Watermark transparency (0-100)').'</td>
