@@ -162,7 +162,10 @@ class StatsCheckUp extends Module
 				<td style="text-align:left"><a href="index.php?tab=AdminCatalog&updateproduct&id_product='.$row['id_product'].'&token='.$tokenProducts.'">'.Tools::substr($row['name'], 0, 42).'</a></td>
 				<td>'.$arrayColors[$scores['active']].'</td>';
 			foreach ($languages as $language)
-				$html .= '<td>'.(int)$row['desclength_'.$language['iso_code']].' '.$arrayColors[$scores['description_'.$language['iso_code']]].'</td>';
+				if (isset($row['desclength_'.$language['iso_code']]))
+					$html .= '<td>'.(int)$row['desclength_'.$language['iso_code']].' '.$arrayColors[$scores['description_'.$language['iso_code']]].'</td>';
+				else
+					$html .= '<td>0 '.$arrayColors[0].'</td>';
 			$html .= '
 				<td>'.(int)$row['nbImages'].' '.$arrayColors[$scores['images']].'</td>
 				<td>'.(int)$row['nbSales'].' '.$arrayColors[$scores['sales']].'</td>
