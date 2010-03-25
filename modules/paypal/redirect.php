@@ -44,7 +44,7 @@ $smarty->assign(array(
 	'amount' => floatval($cart->getOrderTotal(true, 4)),
 	'customer' => $customer,
 	'total' => floatval($cart->getOrderTotal(true, 3)),
-	'shipping' => floatval$cart->getOrderShippingCost()) + floatval($cart->getOrderTotal(true, 6)),
+	'shipping' => floatval($cart->getOrderShippingCost()) + floatval($cart->getOrderTotal(true, 6)),
 	'discount' => $cart->getOrderTotal(true, 2),
 	'business' => $business,
 	'currency_module' => $currency_module,
