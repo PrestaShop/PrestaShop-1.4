@@ -36,6 +36,7 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 	$voucher->name = $voucherCode;
 	$voucher->id_discount_type = 2; // Discount on order (amount)
 	$voucher->id_customer = intval($cookie->id_customer);
+	$voucher->id_currency = intval($cookie->id_currency);
 	$voucher->value = LoyaltyModule::getVoucherValue($customerPoints);
 	$voucher->quantity = 1;
 	$voucher->quantity_per_user = 1;
@@ -69,7 +70,7 @@ $orders = LoyaltyModule::getAllByIdCustomer(intval($cookie->id_customer), intval
 $smarty->assign(array(
 	'orders' => $orders,
 	'totalPoints' => $customerPoints,
-	'voucher' => LoyaltyModule::getVoucherValue($customerPoints),
+	'voucher' => LoyaltyModule::getVoucherValue($customerPoints, $cookie->id_currency),
 	'validation_id' => LoyaltyStateModule::getValidationId(),
 	'transformation_allowed' => $customerPoints > 0
 ));
