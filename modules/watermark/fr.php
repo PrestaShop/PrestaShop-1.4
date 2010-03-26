@@ -20,6 +20,7 @@ $_MODULE['<{watermark}prestashop>watermark_c0275788cf97660b52ab23f1f8c7c8d7'] = 
 $_MODULE['<{watermark}prestashop>watermark_b203c3456625a1ae950961bb1da18ef7'] = 'Une fois que vous avez configuré le module, vous devez régénérer les images à l\'aide de l\'outil disponible dans Préférences > Images. Notez que le filigrane sera intégré automatiquement aux nouvelles images que vous ajouterez.';
 $_MODULE['<{watermark}prestashop>watermark_f237761e479d501b4ec1ebe0ef8947cb'] = 'Aucun filigrane pour le moment';
 $_MODULE['<{watermark}prestashop>watermark_c9519bff5a6fe31e0f26b1c52dad7ad8'] = 'Fichier du filigrane';
+$_MODULE['<{watermark}prestashop>watermark_6ceef3b44f3ca247b2d32b5e934a4d9d'] = 'L\'image doit être au format GIF';
 $_MODULE['<{watermark}prestashop>watermark_3ccc25c1409aec574beb82bad14b5ebc'] = 'Transparence';
 $_MODULE['<{watermark}prestashop>watermark_acf0fa79a73731e7d70cb208a62c249a'] = 'Alignement en X';
 $_MODULE['<{watermark}prestashop>watermark_489f2e730102b59aec48b5c27d2cbe1c'] = 'Alignement en Y';

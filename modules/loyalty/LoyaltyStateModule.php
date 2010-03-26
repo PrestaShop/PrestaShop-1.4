@@ -39,28 +39,29 @@ class LoyaltyStateModule extends ObjectModel
 
 	static public function insertDefaultData()
 	{
+		$loyaltyModule = new Loyalty();
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		
 		$default = new LoyaltyStateModule(LoyaltyStateModule::getDefaultId());
-		$default->name[$defaultLanguage] = 'Validation';
+		$default->name[$defaultLanguage] = $loyaltyModule->getL('Awaiting validation');
 		$default->save();
 
 		$validation = new LoyaltyStateModule(LoyaltyStateModule::getValidationId());
 		$validation->id_order_state = _PS_OS_DELIVERED_;
-		$validation->name[$defaultLanguage] = 'Available';
+		$validation->name[$defaultLanguage] = $loyaltyModule->getL('Available');
 		$validation->save();
 
 		$cancel = new LoyaltyStateModule(LoyaltyStateModule::getCancelId());
 		$cancel->id_order_state = _PS_OS_CANCELED_;
-		$cancel->name[$defaultLanguage] = 'Canceled';
+		$cancel->name[$defaultLanguage] = $loyaltyModule->getL('Canceled');
 		$cancel->save();
 
 		$convert = new LoyaltyStateModule(LoyaltyStateModule::getConvertId());
-		$convert->name[$defaultLanguage] = 'Converted';
+		$convert->name[$defaultLanguage] = $loyaltyModule->getL('Already converted');
 		$convert->save();
 
 		$noneAward = new LoyaltyStateModule(LoyaltyStateModule::getNoneAwardId());
-		$noneAward->name[$defaultLanguage] = 'Unavailable on discounts';
+		$noneAward->name[$defaultLanguage] = $loyaltyModule->getL('Unavailable on discounts');
 		$noneAward->save();
 
 		return true;

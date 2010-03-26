@@ -6,7 +6,7 @@ class Loyalty extends Module
 	{
 		$this->name = 'loyalty';
 		$this->tab = 'Tools';
-		$this->version = '1.6';
+		$this->version = '1.7';
 
 		parent::__construct();
 
@@ -491,9 +491,30 @@ class Loyalty extends Module
 			return false;
 
 		$loyalty->points = $loyalty->points - LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
-		$loyalty->id_loyalty_state = LoyaltyStateModule::getCancelId();
-		return $loyalty->save(); // Automatically "historize" the modification
+		$loyalty->save();
+		
+		$loyaltyNew = new LoyaltyModule(intval(LoyaltyModule::getByOrderId(intval($params['order']->id))));
+		$loyaltyNew->points = LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
+		$loyaltyNew->id_loyalty_state = LoyaltyStateModule::getCancelId();
+		$loyaltyNew->id_order = intval($params['order']->id);
+		$loyaltyNew->id_customer = intval($loyalty->id_customer);
+		$loyaltyNew->add();
+		
+		return;
 	}
+	
+	public function getL($key)
+	{
+		$translations = array(
+		'Awaiting validation' => $this->l('Awaiting validation'),
+		'Available' => $this->l('Available'),
+		'Canceled' => $this->l('Canceled'),
+		'Already converted' => $this->l('Already converted'),
+		'Unavailable on discounts' => $this->l('Unavailable on discounts'));
+
+		return $translations[$key];
+	}
+
 }
 
 ?>

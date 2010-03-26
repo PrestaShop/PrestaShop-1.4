@@ -13,7 +13,7 @@ if (!in_array($orderWay, $orderWayValues))
 $smarty->assign(array(
 	'orderby' => $orderBy,
 	'orderway' => $orderWay,
-	'stock_management' => $stock_management
-));
+	'orderwayposition' => $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
+	'stock_management' => intval($stock_management)));
 
 ?>

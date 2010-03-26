@@ -33,12 +33,12 @@ class LoyaltyModule extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['id_loyalty_state'] = intval($this->id_loyalty_state);
-		$fields['id_customer']   = intval($this->id_customer);
-		$fields['id_order']      = intval($this->id_order);
-		$fields['id_discount']   = intval($this->id_discount);
-		$fields['points']        = intval($this->points);
-		$fields['date_add']      = pSQL($this->date_add);
-		$fields['date_upd']      = pSQL($this->date_upd);
+		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_order'] = intval($this->id_order);
+		$fields['id_discount'] = intval($this->id_discount);
+		$fields['points'] = intval($this->points);
+		$fields['date_add'] = pSQL($this->date_add);
+		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
 	}
 
@@ -52,10 +52,12 @@ class LoyaltyModule extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_order))
 			return false;
+
 		$result = Db::getInstance()->getRow('
 		SELECT f.id_loyalty
 		FROM `'._DB_PREFIX_.'loyalty` f
 		WHERE f.id_order = '.intval($id_order));
+
 		return isset($result['id_loyalty']) ? $result['id_loyalty'] : false;
 	}
 
@@ -132,37 +134,39 @@ class LoyaltyModule extends ObjectModel
 	static public function getPointsByCustomer($id_customer)
 	{
 		$return = Db::getInstance()->getRow('
-		SELECT sum(f.points) AS points
+		SELECT SUM(f.points) points
 		FROM `'._DB_PREFIX_.'loyalty` f
 		WHERE f.id_customer = '.intval($id_customer).'
-		AND f.id_loyalty_state IN
-			('.intval(LoyaltyStateModule::getValidationId()).', '.intval(LoyaltyStateModule::getCancelId()).', '.intval(LoyaltyStateModule::getNoneAwardId()).')');
-		return $return['points'];
+		AND f.id_loyalty_state IN ('.intval(LoyaltyStateModule::getValidationId()).', '.intval(LoyaltyStateModule::getNoneAwardId()).')');
+		
+		return intval($return['points']);
 	}
 
 	static public function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate=false)
 	{
 		$query = '
-			SELECT f.id_order AS id, f.date_add AS date, (o.total_paid - o.total_shipping) AS total_without_shipping, f.points AS points, f.id_loyalty AS id_loyalty, f.id_loyalty_state AS id_loyalty_state, fsl.name AS state
-			FROM `'._DB_PREFIX_.'loyalty` f
-			LEFT JOIN `'._DB_PREFIX_.'orders` o ON (f.id_order = o.id_order)
-			LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (f.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.intval($id_lang).')
-			WHERE f.id_customer = '.intval($id_customer);
-		if ($onlyValidate===true)
+		SELECT f.id_order AS id, f.date_add AS date, (o.total_paid - o.total_shipping) AS total_without_shipping, f.points AS points, f.id_loyalty AS id_loyalty, f.id_loyalty_state AS id_loyalty_state, fsl.name AS state
+		FROM `'._DB_PREFIX_.'loyalty` f
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (f.id_order = o.id_order)
+		LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (f.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.intval($id_lang).')
+		WHERE f.id_customer = '.intval($id_customer);
+		if ($onlyValidate === true)
 			$query.= ' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getValidationId());
 		$query .= ' GROUP BY f.id_loyalty';
+
 		return Db::getInstance()->ExecuteS($query);
 	}
 
 	static public function getDiscountByIdCustomer($id_customer, $last=false)
 	{
 		$query = '
-			SELECT f.id_discount AS id_discount, f.date_upd AS date_add
-			FROM `'._DB_PREFIX_.'loyalty` f
-			WHERE f.id_customer = '.intval($id_customer).'
-				AND id_discount > 0';
-		if ($last===true) $query.= ' ORDER BY f.id_loyalty DESC LIMIT 0,1';
+		SELECT f.id_discount AS id_discount, f.date_upd AS date_add
+		FROM `'._DB_PREFIX_.'loyalty` f
+		WHERE f.id_customer = '.intval($id_customer).' AND id_discount > 0';
+		if ($last === true)
+			$query.= ' ORDER BY f.id_loyalty DESC LIMIT 0,1';
 		$query.= ' GROUP BY f.id_discount';
+
 		return Db::getInstance()->ExecuteS($query);
 	}
 
@@ -183,10 +187,10 @@ class LoyaltyModule extends ObjectModel
 	static public function getOrdersByIdDiscount($id_discount)
 	{
 		$query = '
-			SELECT f.id_order AS id_order, f.points AS points, f.date_upd AS date
-			FROM `'._DB_PREFIX_.'loyalty` f
-			WHERE f.id_discount = '.intval($id_discount).'
-				AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getConvertId());
+		SELECT f.id_order AS id_order, f.points AS points, f.date_upd AS date
+		FROM `'._DB_PREFIX_.'loyalty` f
+		WHERE f.id_discount = '.intval($id_discount).' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getConvertId());
+
 		$items = Db::getInstance()->ExecuteS($query);
 		if (!empty($items) AND is_array($items))
 		{
@@ -200,19 +204,16 @@ class LoyaltyModule extends ObjectModel
 			}
 			return $items;
 		}
+
 		return false;
 	}
 
 	/* Register all transaction in a specific history table */
 	private function historize()
 	{
-		$points = intval($this->points);
-		$query = '
-			INSERT INTO `'._DB_PREFIX_.'loyalty_history`
-				(`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
-			VALUES
-				('.intval($this->id).', '.intval($this->id_loyalty_state).', '.intval($points).', NOW())';
-		Db::getInstance()->Execute($query);
+		Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'loyalty_history` (`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
+		VALUES ('.intval($this->id).', '.intval($this->id_loyalty_state).', '.intval($this->points).', NOW())');
 	}
 
 }

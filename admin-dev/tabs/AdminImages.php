@@ -279,10 +279,11 @@ class AdminImages extends AdminTab
 	private function _regenerateWatermark($dir)
 	{
 		$result = Db::getInstance()->ExecuteS('
-			SELECT m.`name` FROM `'._DB_PREFIX_.'module` m
-			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
-			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
-			WHERE h.`name` = \'watermark\' AND m.`active` = 1');
+		SELECT m.`name` FROM `'._DB_PREFIX_.'module` m
+		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
+		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
+		WHERE h.`name` = \'watermark\' AND m.`active` = 1');
+
 		if ($result AND sizeof($result))
 		{
 			$productsImages = Image::getAllImages();
@@ -296,7 +297,7 @@ class AdminImages extends AdminTab
 
 	private function _regenerateThumbnails($type = 'all')
 	{
-		@ini_set('max_execution_time', 3600);
+		@ini_set('max_execution_time', 7200);
 		$languages = Language::getLanguages();
 
 		$process =

@@ -70,7 +70,7 @@ $orders = LoyaltyModule::getAllByIdCustomer(intval($cookie->id_customer), intval
 $smarty->assign(array(
 	'orders' => $orders,
 	'totalPoints' => $customerPoints,
-	'voucher' => LoyaltyModule::getVoucherValue($customerPoints, $cookie->id_currency),
+	'voucher' => LoyaltyModule::getVoucherValue($customerPoints, intval($cookie->id_currency)),
 	'validation_id' => LoyaltyStateModule::getValidationId(),
 	'transformation_allowed' => $customerPoints > 0
 ));
