@@ -473,11 +473,16 @@ class AdminImport extends AdminTab
 			if ((isset($category->link_rewrite) AND empty($category->link_rewrite[$defaultLanguageId])) OR !$valid_link)
 			{
 				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[$defaultLanguageId]));
+				if ($category->link_rewrite == '')
+				{
+					$category->link_rewrite = 'friendly-url-autogeneration-failed';
+					$this->_warnings[] = Tools::displayError('URL rewriting failed to auto-generate a friendly URL for: ').$category->name[$defaultLanguageId];
+				}
 				$category->link_rewrite = self::createMultiLangField($category->link_rewrite);
 			}
 				
 			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite;	
+				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite[$defaultLanguageId];
 			$res = false;
 			if (($fieldError = $category->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $category->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
@@ -661,7 +666,11 @@ class AdminImport extends AdminTab
 			
 			$bak = $product->link_rewrite;
 			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
+			{
 				$link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
+				if ($link_rewrite == '')
+					$link_rewrite = 'friendly-url-autogeneration-failed';
+			}
 			if (!$valid_link)
 				$this->_warnings[] = Tools::displayError('Rewrited link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
 		
