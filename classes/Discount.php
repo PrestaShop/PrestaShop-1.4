@@ -19,6 +19,9 @@ class		Discount extends ObjectModel
 	/** @var integer Customer id only if discount is reserved */
 	public		$id_customer;
 	
+	/** @var integer Currency ID only if the discount type is 2 */
+	public		$id_currency;
+	
 	/** @var integer Discount type ID */
 	public		$id_discount_type;
 	
@@ -57,7 +60,7 @@ class		Discount extends ObjectModel
 	
 	protected	$fieldsRequired = array('id_discount_type', 'name', 'value', 'quantity', 'quantity_per_user', 'date_from', 'date_to');
 	protected	$fieldsSize = array('name' => '32', 'date_from' => '32', 'date_to' => '32');
-	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_discount_type' => 'isUnsignedId',
+	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_discount_type' => 'isUnsignedId', 'id_currency' => 'isUnsignedId',
 		'name' => 'isDiscountName', 'value' => 'isPrice', 'quantity' => 'isUnsignedInt', 'quantity_per_user' => 'isUnsignedInt',
 		'cumulable' => 'isBool', 'cumulable_reduction' => 'isBool', 'date_from' => 'isDate',
 		'date_to' => 'isDate', 'minimal' => 'isFloat', 'active' => 'isBool');
@@ -73,6 +76,7 @@ class		Discount extends ObjectModel
 		parent::validateFields();
 		
 		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_currency'] = intval($this->id_currency);
 		$fields['id_discount_type'] = intval($this->id_discount_type);
 		$fields['name'] = pSQL($this->name);
 		$fields['value'] = floatval($this->value);
@@ -218,16 +222,24 @@ class		Discount extends ObjectModel
 
 		switch ($this->id_discount_type)
 		{
+			/* Relative value (% of the order total) */
 			case 1:
-				// % on order
+				
+				
 				$amount = 0;
 				$percentage = $this->value / 100;
 				foreach ($products AS $product)
 						if (Product::idIsOnCategoryId($product['id_product'], $categories))
 							$amount += ($useTax ? $product['total_wt'] : $product['total']) * $percentage;
 				return $amount;
-			case 2:
-				// amount
+				
+			/* Absolute value */
+			case 2:				
+				// An "absolute" voucher is available in one currency only
+				$currency = ((int)$cart->id_currency ? new Currency($cart->id_currency) : Currency::getCurrent());
+				if ($this->id_currency != $currency->id)
+					return 0;
+			
 				$totalProducts_moy = 0;
 				$ratioTax = 0;
 				
@@ -248,15 +260,16 @@ class		Discount extends ObjectModel
 				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
 					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
 				
+				// Main return
 				foreach ($products AS $product)
 					if (Product::idIsOnCategoryId($product['id_product'], $categories))
-					{
-						$in_category = true;
-						break;
-					}				
-				return (($in_category) ? Tools::convertPrice($this->value, ((isset($cart->id_currency) && $cart->id_currency != 0) ? new Currency(intval($cart->id_currency)) : NULL)) : 0);
+						return $this->value;
+				
+				// Return 0 if there are no applicable categories
+				return 0;
+				
+			/* Free shipping (does not return a value but a special code) */
 			case 3:
-				// Shipping is free
 				return '!';
 		}
 		return 0;
@@ -316,6 +329,8 @@ class		Discount extends ObjectModel
 	{
 		$languages = Language::getLanguages($order);
 		$products = $order->getProducts(false, $productList, $qtyList);
+		
+		// Totals are stored in the order currency (or at least should be)
 		$total = $order->getTotalProductsWithTaxes($products);
 		if ($shipping_cost)
 			$total += $order->total_shipping;
@@ -328,6 +343,7 @@ class		Discount extends ObjectModel
 		$voucher->value = floatval($total);
 		$voucher->name = 'V0C'.intval($order->id_customer).'O'.intval($order->id);
 		$voucher->id_customer = intval($order->id_customer);
+		$voucher->id_currency = intval($order->id_currency);
 		$voucher->quantity = 1;
 		$voucher->quantity_per_user = 1;
 		$voucher->cumulable = 1;

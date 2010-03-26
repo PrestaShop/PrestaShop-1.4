@@ -851,6 +851,9 @@ class		Cart extends ObjectModel
 			return Tools::displayError('this voucher has already been used or is disabled');
 		if (!$discountObj->quantity)
 			return Tools::displayError('this voucher has expired (usage limit attained)');
+		if ($discountObj->id_discount_type == 2 AND $this->id_currency != $discountObj->id_currency)
+			return Tools::displayError('this voucher can only be used in the following currency:').'
+				'.Db::getInstance()->getValue('SELECT `name` FROM `'._DB_PREFIX_.'currency` WHERE id_currency = '.(int)$discountObj->id_currency);
 		if ($checkCartDiscount
 			AND (
 				$this->getDiscountsCustomer($discountObj->id) >= $discountObj->quantity_per_user

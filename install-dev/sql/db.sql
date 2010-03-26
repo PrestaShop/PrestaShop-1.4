@@ -441,6 +441,7 @@ CREATE TABLE `PREFIX_discount` (
   `id_discount` int(10) unsigned NOT NULL auto_increment,
   `id_discount_type` int(10) unsigned NOT NULL,
   `id_customer` int(10) unsigned NOT NULL,
+  `id_currency` int unsigned NOT NULL DEFAULT 0,
   `name` varchar(32) NOT NULL,
   `value` decimal(17,2) NOT NULL default '0.00',
   `quantity` int(10) unsigned NOT NULL default '0',

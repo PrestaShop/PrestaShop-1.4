@@ -25,8 +25,12 @@ class AdminDiscounts extends AdminTab
 	 	$this->lang = true;
 	 	$this->edit = true;
 	 	$this->delete = true;
-	 	$this->_select = 'dtl.`name` AS discount_type';
-	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'discount_type` dt ON (dt.`id_discount_type` = a.`id_discount_type`)
+	 	$this->_select = 'dtl.`name` AS discount_type, 
+		IF(a.id_discount_type = 1, CONCAT(a.value, " %"),
+		IF(a.id_discount_type = 2, CONCAT(a.value, " ", c.sign),
+		"--")) as strvalue';
+	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'currency` c ON (c.`id_currency` = a.`id_currency`)
+						LEFT JOIN `'._DB_PREFIX_.'discount_type` dt ON (dt.`id_discount_type` = a.`id_discount_type`)
 						LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($cookie->id_lang).')';
 		
 		$typesArray = array();
@@ -39,7 +43,7 @@ class AdminDiscounts extends AdminTab
 		'name' => array('title' => $this->l('Code'), 'width' => 85, 'prefix' => '<span class="discount_name">', 'suffix' => '</span>', 'filter_key' => 'a!name'),
 		'description' => array('title' => $this->l('Description'), 'width' => 100, 'filter_key' => 'b!description'),
 		'discount_type' => array('title' => $this->l('Type'), 'type' => 'select', 'select' => $typesArray, 'filter_key' => 'dt!id_discount_type'),
-		'value' => array('title' => $this->l('Value'), 'width' => 50, 'align' => 'right'),
+		'strvalue' => array('title' => $this->l('Value'), 'width' => 50, 'align' => 'right', 'filter_key' => 'a!value'),
 		'quantity' => array('title' => $this->l('Qty'), 'width' => 40, 'align' => 'right'),
 		'date_to' => array('title' => $this->l('To'), 'width' => 60, 'type' => 'date'),
 		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
@@ -153,6 +157,31 @@ class AdminDiscounts extends AdminTab
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
+			
+			function discountType()
+			{
+				if ($("#id_discount_type").val() == 0)
+					$("#value-div").css("display", "none");
+				else if ($("#id_discount_type").val() == 1)
+				{
+					$("#value-div").css("display", "block");
+					$("#percent-span").css("display", "block");
+					$("#id_currency").css("display", "none");
+				}
+				else if ($("#id_discount_type").val() == 2)
+				{
+					$("#value-div").css("display", "block");
+					$("#percent-span").css("display", "none");
+					$("#id_currency").css("display", "block");
+				}
+				else if ($("#id_discount_type").val() == 3)
+					$("#value-div").css("display", "none");
+			}
+			$(document).ready(function(){
+				$("#id_discount_type").change(function(){discountType();});
+				discountType();
+			});
+			
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" id="discount" name="discount" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -167,16 +196,41 @@ class AdminDiscounts extends AdminTab
 				</div>
 				<label>'.$this->l('Type:').' </label>
 				<div class="margin-form">
-					<select name="id_discount_type" id="id_discount_type" onchange="free_shipping()">';
-					
+					<select name="id_discount_type" id="id_discount_type" onchange="free_shipping()">
+						<option value="0">'.$this->l('-- Choose --').'</option>';
 		$discountTypes = Discount::getDiscountTypes(intval($cookie->id_lang));
 		foreach ($discountTypes AS $discountType)
 			echo '<option value="'.intval($discountType['id_discount_type']).'"'.
 			(($this->getFieldValue($obj, 'id_discount_type') == $discountType['id_discount_type']) ? ' selected="selected"' : '').'>'.$discountType['name'].'</option>';
-			
-		echo '
-					</select>
+		echo '		</select> <sup>*</sup>
 				</div>
+				<div class="clear">&nbsp;</div>
+				<div id="value-div" style="display:none">
+					<label>'.$this->l('Value:').'</label>
+					<div class="margin-form">
+						<input style="float:left;width:80px" type="text" name="value" id="discount_value" value="'.floatval($this->getFieldValue($obj, 'value')).'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
+						<select id="id_currency" name="id_currency" style="float:left;margin-left:10px;width:50px;display:none">
+							<option value="0">--</option>';
+		foreach (Currency::getCurrencies() as $row)
+			echo '			<option value="'.(int)$row['id_currency'].'" '.(($this->getFieldValue($obj, 'id_currency') == $row['id_currency']) ? 'selected="selected"' : '').'>'.$row['sign'].'</option>';
+		echo '			</select>
+						<span id="percent-span" style="margin-left:10px;display:none;float:left;font-size:12px;font-weight:bold;color:black"> %</span>
+						<sup style="float:left;margin-left:5px">*</sup>
+						<p style="clear: both;">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
+					</div>
+				<div class="clear">&nbsp;</div>
+				</div>
+				<label>'.$this->l('Description:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '	<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+						<p style="clear: both;">'.$this->l('Will appear in cart next to voucher code').'</p>
+					</div>';							
+		$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
+		echo '	</div>
+				<div class="clear" / >
 				<label>'.$this->l('Categories:').' </label>
 					<div class="margin-form">
 							<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
@@ -197,24 +251,6 @@ class AdminDiscounts extends AdminTab
 							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applicated').'<sup> *</sup></p>
 						</div>
 				<div class="clear" / >
-				<label>'.$this->l('Description:').' </label>
-				<div class="margin-form">';
-				foreach ($languages as $language)
-					echo '
-					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
-						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('Will appear in cart next to voucher code').'</p>
-					</div>';							
-				$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
-		echo '
-				</div><br /><br /><br />
-				<div class="clear" / >
-				<label>'.$this->l('Value:').' </label>
-				<div class="margin-form">
-					<input type="text" size="15" name="value" id="discount_value" value="'.floatval($this->getFieldValue($obj, 'value')).'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
-				</div>
 				<label>'.$this->l('Total quantity:').' </label>
 				<div class="margin-form">
 					<input type="text" size="15" name="quantity" value="'.intval($this->getFieldValue($obj, 'quantity')).'" /> <sup>*</sup>

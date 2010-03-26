@@ -9,6 +9,9 @@ UPDATE `PREFIX_product`
 SET `reduction_to` = DATE_ADD(reduction_to, INTERVAL 1 DAY) 
 WHERE `reduction_from` != `reduction_to`;
 
+ALTER TABLE `PREFIX_discount` ADD `id_currency` INT UNSIGNED NOT NULL DEFAULT 0 AFTER `id_customer`;
+UPDATE `PREFIX_discount` SET `id_currency` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CURRENCY_DEFAULT' LIMIT 1) WHERE `id_discount_type` = 2;
+
 ALTER TABLE `PREFIX_address` ADD INDEX (id_country);
 ALTER TABLE `PREFIX_address` ADD INDEX (id_state);
 ALTER TABLE `PREFIX_address` ADD INDEX (id_manufacturer);
