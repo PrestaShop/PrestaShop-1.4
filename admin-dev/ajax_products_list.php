@@ -19,7 +19,7 @@ $items = Db::s('
 	WHERE 1
 	AND (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\')
 	AND pl.id_lang = '.intval($cookie->id_lang)
-	.($excludeIds !== false ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : '')
+	.(!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : '')
 );
 if ($items)
 	foreach ($items as $item)

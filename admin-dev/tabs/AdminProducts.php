@@ -1922,41 +1922,6 @@ class AdminProducts extends AdminTab
 							<script type="text/javascript">
 								var formProduct;
 								var accessories = new Array();
-								
-								function fillAccessories()
-								{
-									$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductAccessories:1,id_lang:'.intval($cookie->id_lang).',id_product:'.($obj->id ? intval($obj->id) : 0).'},
-										function(j)
-										{
-											for (var i = 0; i < j.length; i++)
-												accessories[i] = new Array(j[i].value, j[i].text);
-												
-											formProduct = document.layers ? document.forms.product : document.product;
-											formProduct.selectAccessories.length = accessories.length + 1;
-											for (i = 0, j = 1; i < accessories.length; i++)
-											{
-												if (formProduct.filter.value != null)
-													if (accessories[i][1].toLowerCase().indexOf(formProduct.filter.value.toLowerCase()) == -1)
-														continue;
-												formProduct.selectAccessories.options[j].value = accessories[i][0];
-												formProduct.selectAccessories.options[j].text = accessories[i][1];
-												j++;
-											}
-											if (j == 1)
-											{
-												formProduct.selectAccessories.length = 2;
-												formProduct.selectAccessories.options[1].value = -1;
-												formProduct.selectAccessories.options[1].text = \''.$this->l('No match found').'\';
-												formProduct.selectAccessories.options.selectedIndex = 1;
-											}
-											else
-											{
-												formProduct.selectAccessories.length = j;
-												formProduct.selectAccessories.options.selectedIndex = (formProduct.filter.value == \'\' ? 0 : 1);
-											}
-										}
-									);
-								}
 							</script>
 							
 							<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
@@ -1978,21 +1943,16 @@ class AdminProducts extends AdminTab
 											matchContains: true,
 											mustMatch:true,
 											scroll:false,
-											cacheLength:0
+											cacheLength:0,
+											formatItem: function(item) {
+												return item[1]+\' - \'+item[0];
+											}
 										}).result(addAccessory);
 									$(\'#product_autocomplete_input\').setOptions({
 										extraParams: {excludeIds : $(\'#inputAccessories\').val().replace(/\-/g,\',\').replace(/\,$/,\'\')}
 									});
 								});
 							</script>
-							
-							
-							<!--<select id="selectAccessories" name="selectAccessories" style="width: 380px;">
-								<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
-							</select>
-							<script type="text/javascript">
-								fillAccessories();
-							</script>-->
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:764px;" /></td></tr>
