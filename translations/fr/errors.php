@@ -2,6 +2,8 @@
 
 global $_ERRORS;
 $_ERRORS = array();
+$_ERRORS['c0f7541fd97178b80a0c4688da914c0e'] = '. Merci de vérifier des droits d\'écriture sur le dossier.';
+$_ERRORS['952ae48b085160f3a632721d37924f47'] = '. Merci de vérifier des droits d\'écriture sur le dossier.';
 $_ERRORS['77ae44aa6c998166fcf1a87496278ad5'] = 'impossible de charger l\'objet';
 $_ERRORS['181b54319aa5e214091165789cb5f252'] = ', vous ne pouvez pas tous les supprimer';
 $_ERRORS['c569f40ca6bfe8ca10f2d6aa2f253f7a'] = '- Navigateur :';
@@ -27,8 +29,8 @@ $_ERRORS['584af0372d96b2e4cfd49a7269891ceb'] = 'Impossible de récupérer le flu
 $_ERRORS['485b638d795fe1d171e10ee16076dc62'] = 'Impossible de restocker la quantité du produit';
 $_ERRORS['c1f58a6fcaabd67e48522eb9da0f1cc8'] = 'Impossible de lire le fichier CSV';
 $_ERRORS['36757394a699878de6f0e51f203d1ee7'] = 'Impossible de parcourir le répertoire racine';
-$_ERRORS['86af9baf2fe57f6ee3dba6f9382ce951'] = 'Ne peut écrire l\'image. Merci de vérifier les permissions du dossier.';
-$_ERRORS['72cbc1d6b789126a0a404eab29eb1ab7'] = 'Ne peut écrire l\'image \"pas d\'image\" dans le dossier d\'image. Merci de vérifier les permissions du dossier.';
+$_ERRORS['14b8bac6e5716ca19c21b71ba132a2cc'] = 'Impossible d\'écrire l\'image ';
+$_ERRORS['a28970bf371075d4fe7eac473c1aae89'] = 'Impossible d\'écrire l\'image \"Pas d\'image\" dans le dossier ';
 $_ERRORS['a3c3e1b7a8edb4a9dc8e713b28657327'] = 'Paramètre de panier manquant.';
 $_ERRORS['1976d7f704de389d9fe064e08ea35b2d'] = 'Colonne';
 $_ERRORS['9d35e3b5d28c6a068a6c6856e359b87b'] = 'Thème actuel indisponible. Merci de vérifier le répertoire de votre thème ou ses permissions.';

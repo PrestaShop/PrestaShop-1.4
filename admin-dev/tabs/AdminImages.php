@@ -328,11 +328,11 @@ class AdminImages extends AdminTab
 			}
 			$this->_deleteOldImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false));
 			if ($this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false)))
-				$this->_errors[] = Tools::displayError('Cannot write '.$proc['type'].' images. Please check the folder\'s writing permissions.');
+				$this->_errors[] = Tools::displayError('Cannot write ').$proc['type'].Tools::displayError(' images. Please check the folder\'s writing permissions.');
 			if ($proc['type'] == 'products')
 				$this->_regenerateWatermark($proc['dir']);
 			if ($this->_regenerateNoPictureImages($proc['dir'], $formats, $languages))
-				$this->_errors[] = Tools::displayError('Cannot write no-picture image to '.$proc['type'].' images folder. Please check the folder\'s writing permissions.');
+				$this->_errors[] = Tools::displayError('Cannot write no-picture image to ').$proc['type'].Tools::displayError(' images folder. Please check the folder\'s writing permissions.');
 		}
 		return (sizeof($this->_errors) > 0 ? false : true);
 	}
