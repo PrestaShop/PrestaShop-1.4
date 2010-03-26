@@ -2,8 +2,8 @@
 
 global $_ERRORS;
 $_ERRORS = array();
-$_ERRORS['c0f7541fd97178b80a0c4688da914c0e'] = '. Merci de vérifier des droits d\'écriture sur le dossier.';
-$_ERRORS['952ae48b085160f3a632721d37924f47'] = '. Merci de vérifier des droits d\'écriture sur le dossier.';
+$_ERRORS['c0f7541fd97178b80a0c4688da914c0e'] = '. Merci de vérifier les droits d\'écriture sur le dossier.';
+$_ERRORS['952ae48b085160f3a632721d37924f47'] = '. Merci de vérifier les droits d\'écriture sur le dossier.';
 $_ERRORS['77ae44aa6c998166fcf1a87496278ad5'] = 'impossible de charger l\'objet';
 $_ERRORS['181b54319aa5e214091165789cb5f252'] = ', vous ne pouvez pas tous les supprimer';
 $_ERRORS['c569f40ca6bfe8ca10f2d6aa2f253f7a'] = '- Navigateur :';
