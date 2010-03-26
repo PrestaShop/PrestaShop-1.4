@@ -2,9 +2,9 @@
 
 global $_ERRORS;
 $_ERRORS = array();
-$_ERRORS['c0f7541fd97178b80a0c4688da914c0e'] = '. Merci de vérifier les droits d\'écriture sur le dossier.';
-$_ERRORS['952ae48b085160f3a632721d37924f47'] = '. Merci de vérifier les droits d\'écriture sur le dossier.';
+$_ERRORS['952ae48b085160f3a632721d37924f47'] = 'images. Merci de vérifier les droits d\'écriture sur le dossier.';
 $_ERRORS['77ae44aa6c998166fcf1a87496278ad5'] = 'impossible de charger l\'objet';
+$_ERRORS['d7b6fe08583d23c907a08f0f571c4838'] = ') dans le dossier img. Merci de vérifier les permissions sur ce dossier.';
 $_ERRORS['181b54319aa5e214091165789cb5f252'] = ', vous ne pouvez pas tous les supprimer';
 $_ERRORS['c569f40ca6bfe8ca10f2d6aa2f253f7a'] = '- Navigateur :';
 $_ERRORS['c275af86720129cf046d885816ee5481'] = '- Serveur :';
@@ -30,7 +30,7 @@ $_ERRORS['485b638d795fe1d171e10ee16076dc62'] = 'Impossible de restocker la quant
 $_ERRORS['c1f58a6fcaabd67e48522eb9da0f1cc8'] = 'Impossible de lire le fichier CSV';
 $_ERRORS['36757394a699878de6f0e51f203d1ee7'] = 'Impossible de parcourir le répertoire racine';
 $_ERRORS['14b8bac6e5716ca19c21b71ba132a2cc'] = 'Impossible d\'écrire l\'image ';
-$_ERRORS['a28970bf371075d4fe7eac473c1aae89'] = 'Impossible d\'écrire l\'image \"Pas d\'image\" dans le dossier ';
+$_ERRORS['a1a5f7a7386d51abce7150245a47892d'] = 'Impossible d\'écrire l\'image \"Pas d\'image\" (';
 $_ERRORS['a3c3e1b7a8edb4a9dc8e713b28657327'] = 'Paramètre de panier manquant.';
 $_ERRORS['1976d7f704de389d9fe064e08ea35b2d'] = 'Colonne';
 $_ERRORS['9d35e3b5d28c6a068a6c6856e359b87b'] = 'Thème actuel indisponible. Merci de vérifier le répertoire de votre thème ou ses permissions.';
@@ -104,6 +104,7 @@ $_ERRORS['1eabf5338ecfa6114719e9239766134f'] = 'Ce fichier doit être éditable 
 $_ERRORS['3c29ac1eddb8aadac1b3072af3c83a15'] = 'Ce fichier n\'existe plus.';
 $_ERRORS['a88b277fbf02198a708ea65876dc2e32'] = 'Ce produit n\'existe pas dans notre boutique.';
 $_ERRORS['38d5595927b80b331239ef904341b07c'] = 'Ce produit a été supprimé.';
+$_ERRORS['9d0af39694637f8184020a6193a3943c'] = 'La ré-écriture d\'URL automatique n\'est pas parvenue à générer une valeur par défaut pour :';
 $_ERRORS['4eb9ec8ac71ad17fdc99b5371ace9f6e'] = 'Impossible de créer une sauvegarde';
 $_ERRORS['d906ff9d856174f452e62e5dbdb83f11'] = 'Impossible d\'afficher le fichier de sauvegarde';
 $_ERRORS['3a32eca93014c0eab89b7b0b9ddaeca5'] = 'Impossible de charger les paramètres, des combinaisons manquent ou l\'objet ne peux être chargé.';
