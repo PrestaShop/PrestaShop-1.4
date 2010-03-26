@@ -4,9 +4,9 @@
 	</h4>
 	<div class="block_content">
 		<div id="wishlist_block_list" class="expanded">
-		{if $products}
+		{if $wishlist_products}
 			<dl class="products">
-			{foreach from=$products item=product name=i}
+			{foreach from=$wishlist_products item=product name=i}
 				<dt class="clear {if $smarty.foreach.i.first}first_item{elseif $smarty.foreach.i.last}last_item{else}item{/if}">
 					<span class="quantity-formated"><span class="quantity">{$product.quantity|intval}</span>x</span>
 					<a class="cart_block_product_name"

@@ -170,8 +170,7 @@ class BlockWishList extends Module
 	
 	public function hookRightColumn($params)
 	{
-		global $smarty;
-		global $errors;
+		global $smarty, $errors;
 
 		if (Configuration::get('PS_BLOCK_WISHLIST_ACTIVATED') == 0)
 			return (null);
@@ -195,7 +194,7 @@ class BlockWishList extends Module
 			$smarty->assign(array(
 				'id_wishlist' => $id_wishlist,
 				'isLogged' => true,
-				'products' => ($id_wishlist == false ? false : WishList::getProductByIdCustomer($id_wishlist, $params['cookie']->id_customer, $params['cookie']->id_lang, null, true)),
+				'wishlist_products' => ($id_wishlist == false ? false : WishList::getProductByIdCustomer($id_wishlist, $params['cookie']->id_customer, $params['cookie']->id_lang, null, true)),
 				'wishlists' => $wishlists,
 				'ptoken' => Tools::getToken(false)));
 		}
