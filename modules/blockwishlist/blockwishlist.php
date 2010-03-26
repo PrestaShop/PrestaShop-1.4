@@ -199,7 +199,7 @@ class BlockWishList extends Module
 				'ptoken' => Tools::getToken(false)));
 		}
 		else
-			$smarty->assign(array('products' => false, 'wishlists' => false));
+			$smarty->assign(array('wishlist_products' => false, 'wishlists' => false));
 		return ($this->display(__FILE__, 'blockwishlist.tpl'));
 	}
 
