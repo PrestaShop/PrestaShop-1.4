@@ -175,26 +175,25 @@ function changeFormParam(pForm, url, gid)
 	pForm.elements["groupid"].value = gid;
 }
 
-function addAccessory()
+function addAccessory(event, data, formatted)
 {
-	var valueToAdd = $('#selectAccessories').val();
-	
-	if (valueToAdd == '0')
+	if (data == null)
 		return false;
+	var productId = data[1];
+	var productName = data[0];
 	
 	var $divAccessories = $('#divAccessories');
 	var $inputAccessories = $('#inputAccessories');
 	var $nameAccessories = $('#nameAccessories');
-	
-	pos = valueToAdd.indexOf('-');
-	var productId = valueToAdd.slice(0, pos);
-	var productName = valueToAdd.slice(pos + 1);
 
 	/* delete product from select + add product line to the div, input_name, input_ids elements */
-	$('#selectAccessories option[value=' + valueToAdd + ']').remove();
 	$divAccessories.html($divAccessories.html() + productName + ' <span onclick="delAccessory(' + productId + ');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />');
 	$nameAccessories.val($nameAccessories.val() + productName + '¤');
 	$inputAccessories.val($inputAccessories.val() + productId + '-');
+	$('#product_autocomplete_input').val('');
+	$('#product_autocomplete_input').setOptions({
+		extraParams: {excludeIds : $('#inputAccessories').val().replace(/\-/g,',').replace(/\,$/,'')}
+	});
 }
 
 

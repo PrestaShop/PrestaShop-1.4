@@ -1958,14 +1958,41 @@ class AdminProducts extends AdminTab
 									);
 								}
 							</script>
-							<select id="selectAccessories" name="selectAccessories" style="width: 380px;">
+							
+							<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
+							<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
+							<div id="ajax_choose_product" style="padding:6px; padding-top:2px; width:600px;">
+								<p style="clear: both">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
+								<input type="text" value="" id="product_autocomplete_input" />
+								<img onclick="$(this).prev().search();" style="cursor: pointer;" src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" />
+							</div>
+							<script type="text/javascript">
+								urlToCall = null;
+								/* function autocomplete */
+								$(function() {
+									$(\'#product_autocomplete_input\')
+										.autocomplete(\'ajax_products_list.php\', {
+											minChars: 1,
+											autoFill: true,
+											max:20,
+											matchContains: true,
+											mustMatch:true,
+											scroll:false,
+											cacheLength:0
+										}).result(addAccessory);
+									$(\'#product_autocomplete_input\').setOptions({
+										extraParams: {excludeIds : $(\'#inputAccessories\').val().replace(/\-/g,\',\').replace(/\,$/,\'\')}
+									});
+								});
+							</script>
+							
+							
+							<!--<select id="selectAccessories" name="selectAccessories" style="width: 380px;">
 								<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
 							</select>
 							<script type="text/javascript">
 								fillAccessories();
-							</script>
-							<span onclick="addAccessory();" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" /></span>
-							<br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" onkeyup="fillAccessories();" class="space" />
+							</script>-->
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:10px;"><hr style="width:764px;" /></td></tr>
