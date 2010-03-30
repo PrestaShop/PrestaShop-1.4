@@ -78,6 +78,8 @@ abstract class PaymentModule extends Module
 
 	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
 	{
+		global $cart;
+
 		$cart = new Cart(intval($id_cart));
 
 		// Does order already exists ?
