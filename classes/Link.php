@@ -170,7 +170,7 @@ class Link
 				$ifSort = (!$sort OR ($sort AND !in_array($k, $varsSort)));
 				$ifPagination = (!$pagination OR ($pagination AND !in_array($k, $varsPagination)));
 				if ($ifNb AND $ifSort AND $ifPagination AND !is_array($value))
-					!$array ? ($vars .= ((!$n++ AND ($this->allow == 1 OR $url == $this->url)) ? '?' : '&amp;').urlencode($k).'='.urlencode($value)) : ($vars[urlencode($k)] = urlencode($value));
+					!$array ? ($vars .= ((!$n++ AND ($this->allow == 1 OR $url == $this->url)) ? '?' : '&').urlencode($k).'='.urlencode($value)) : ($vars[urlencode($k)] = urlencode($value));
 			}
 		if (!$array)
 			return $url.$vars;
