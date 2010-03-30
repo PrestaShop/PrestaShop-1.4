@@ -1212,16 +1212,16 @@ ul#order_step { background-color: white }
 #cart_block dl dt a,
  #cart_block dl dt span.quantity-formated { float: left }
 #cart_block dl { font-size: 0.9em }
-#cart_block dt {
-	padding-top: 0.4em;
-	height: 1.2em
-}
-#cart_block dl span.quantity-formated { padding-right: 0.3em }
+#cart_block dt { padding-top: 0.4em }
+#cart_block dl span.quantity-formated { padding-right: 1px }
 #cart_block dt, #cart_block dd {
 	clear: both;
 	margin-top: 0.2em
 }
-#cart_block dt { width: 175px }
+#cart_block dt { 
+	width: 175px;
+	text-align: right
+}
 #cart_block dd { width: 155px }
 #cart_block dd { 
 	margin-left: 1em; 
@@ -1253,7 +1253,7 @@ ul#order_step { background-color: white }
 #cart_block dl span.price {
 	font-weight: normal;
 	color: white;
-	float: right
+	float: none
 }
 #cart_block_wrapping_cost,
  #cart_block_shipping_cost,
