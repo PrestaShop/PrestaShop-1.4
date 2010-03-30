@@ -326,7 +326,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 		}
-		elseif (isset($_GET['deleteProductAttribute']))
+		elseif (Tools::isSubmit('deleteProductAttribute'))
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
@@ -338,6 +338,21 @@ class AdminProducts extends AdminTab
 				}
 				else
 					$this->_errors[] = Tools::displayError('impossible to delete attribute');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		elseif (Tools::isSubmit('deleteAllProductAttributes'))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (($id_product = intval(Tools::getValue('id_product'))) AND Validate::isUnsignedId($id_product) AND Validate::isLoadedObject($product = new Product($id_product)))
+				{
+					$product->deleteProductAttributes();
+					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
+				}
+				else
+					$this->_errors[] = Tools::displayError('impossible to delete attributes');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -2365,6 +2380,7 @@ class AdminProducts extends AdminTab
 				}
 				$irow = 0;
 				if (isset($combArray))
+				{
 					foreach ($combArray AS $id_product_attribute => $product_attribute)
 					{
 						$list = '';
@@ -2394,8 +2410,10 @@ class AdminProducts extends AdminTab
 							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /></a></td>
 						</tr>';
 					}
-						else
-				echo '<tr><td colspan="7" align="center"><i>'.$this->l('No combination yet').'.</i></td></tr>';
+					echo '<tr><td colspan="7" align="center"><a href="'.$currentIndex.'&deleteAllProductAttributes&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /> '.$this->l('Delete all combinations').'</a></td></tr>';
+				}
+				else
+					echo '<tr><td colspan="7" align="center"><i>'.$this->l('No combination yet').'.</i></td></tr>';
 			}
 			echo '
 						</table>
