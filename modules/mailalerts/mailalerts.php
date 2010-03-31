@@ -43,6 +43,7 @@ class MailAlerts extends Module
 		Configuration::updateValue('MA_MERCHANT_OOS', 1);
 		Configuration::updateValue('MA_CUSTOMER_QTY', 1);
 		Configuration::updateValue('MA_MERCHANT_MAILS', Configuration::get('PS_SHOP_EMAIL'));
+		Configuration::updateValue('MA_LAST_QTIES', Configuration::get('PS_LAST_QTIES'));
 
 		if (!Db::getInstance()->Execute('
 			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
@@ -66,9 +67,10 @@ class MailAlerts extends Module
 		Configuration::deleteByName('MA_MERCHANT_OOS');
 		Configuration::deleteByName('MA_CUSTOMER_QTY');
 		Configuration::deleteByName('MA_MERCHANT_MAILS');
+		Configuration::deleteByName('MA_LAST_QTIES');
 	 	if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'mailalert_customer_oos'))
 	 		return false;
-		parent::uninstall();
+		return parent::uninstall();
 	}
 	
 	private function _refreshProperties()
@@ -213,11 +215,11 @@ class MailAlerts extends Module
 	public function hookUpdateQuantity($params)
 	{
 		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
-		if ($qty <= intval(Configuration::get('PS_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
+		if ($qty <= intval(Configuration::get('mA_last_qties')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
-				'{qty}' => $qty,
-				'{last_qty}' => intval(Configuration::get('PS_LAST_QTIES')),
+				'{qty}' => $qty - $params['product']['cart_quantity'],
+				'{last_qty}' => intval(Configuration::get('mA_last_qties')),
 				'{product}' => strval($params['product']['name']));
 			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
@@ -328,7 +330,7 @@ class MailAlerts extends Module
 				</div>
 				<label>'.$this->l('Alert threshold:').'</label>
 				<div class="margin-form">
-					<input type="text" name="PS_LAST_QTIES" value="'.(Tools::getValue('PS_LAST_QTIES') != NULL ? intval(Tools::getValue('PS_LAST_QTIES')) : Configuration::get('PS_LAST_QTIES')).'" size="3" />
+					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != NULL ? intval(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
 					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
 				<label>'.$this->l('Send to this emails:').' </label>
@@ -383,7 +385,7 @@ class MailAlerts extends Module
 					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
 				elseif (!Configuration::updateValue('MA_MERCHANT_OOS', intval(Tools::getValue('mA_merchand_oos'))))
 					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
-				elseif (!Configuration::updateValue('PS_LAST_QTIES', intval(Tools::getValue('PS_LAST_QTIES'))))
+				elseif (!Configuration::updateValue('MA_LAST_QTIES', intval(Tools::getValue('MA_LAST_QTIES'))))
 					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
 				else
 					$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';

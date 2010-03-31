@@ -60,3 +60,10 @@ ALTER TABLE `PREFIX_state` ADD INDEX (id_country);
 ALTER TABLE `PREFIX_state` ADD INDEX (id_zone);
 ALTER TABLE `PREFIX_tab` ADD INDEX (id_parent);
 ALTER TABLE `PREFIX_cart` ADD INDEX (id_guest);
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`) 
+VALUES (
+	SELECT 'MA_LAST_QTIES', '3' 
+	FROM `PREFIX_module` WHERE `name` = 'mailalerts'
+)
+
