@@ -137,6 +137,8 @@ class BankWire extends PaymentModule
 	{
 		if (!$this->active)
 			return ;
+		if (!$this->_checkCurrency($cart))
+			return ;
 
 		global $cookie, $smarty;
 
@@ -159,6 +161,8 @@ class BankWire extends PaymentModule
 	public function hookPayment($params)
 	{
 		if (!$this->active)
+			return ;
+		if (!$this->_checkCurrency($params['cart']))
 			return ;
 
 		global $smarty;
@@ -189,5 +193,17 @@ class BankWire extends PaymentModule
 		else
 			$smarty->assign('status', 'failed');
 		return $this->display(__FILE__, 'payment_return.tpl');
+	}
+	
+	private function _checkCurrency($cart)
+	{
+		$currency_order = new Currency(intval($cart->id_currency));
+		$currencies_module = $this->getCurrency();
+		$currency_default = Configuration::get('PS_CURRENCY_DEFAULT');
+		
+		if (is_array($currencies_module))
+			foreach ($currencies_module AS $currency_module)
+				if ($currency_order->id == $currency_module['id_currency'])
+					return true;
 	}
 }
