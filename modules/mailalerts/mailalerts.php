@@ -221,14 +221,14 @@ class MailAlerts extends Module
 				'{product}' => strval($params['product']['name']));
 			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
+		
+		if ($this->_customer_qty AND $params['product']->quantity > 0)
+			$this->sendCustomerAlert(intval($params['product']->id), 0);
 	}
 
 	public function hookUpdateProduct($params)
 	{
-		if (!$this->_customer_qty)
-			return ;
-		$qty = intval($params['product']->quantity);
-		if ($qty > intval(Configuration::get('PS_LAST_QTIES')))
+		if ($this->_customer_qty AND $params['product']->quantity > 0)
 			$this->sendCustomerAlert(intval($params['product']->id), 0);
 	}
 

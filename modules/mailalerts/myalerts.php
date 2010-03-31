@@ -17,8 +17,8 @@ if ($cookie->isLogged())
 		if (!$id_product = intval(Tools::getValue('id_product')))
 			$errors[] = Tools::displayError('You need a product to delete an alert'); 
 		$id_product_attribute = intval(Tools::getValue('id_product_attribute'));
-		$customer = new Customer($id_customer);
-		MailAlerts::deleteAlert($id_customer, 0, $id_product, $id_product_attribute);
+		$customer = new Customer(intval($id_customer));
+		MailAlerts::deleteAlert(intval($id_customer), 0, intval($id_product), intval($id_product_attribute));
 	}
 	$smarty->assign('alerts', MailAlerts::getProductsAlerts(intval($cookie->id_customer), intval($cookie->id_lang)));
 }

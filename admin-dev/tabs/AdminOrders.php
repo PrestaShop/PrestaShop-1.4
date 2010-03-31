@@ -213,6 +213,16 @@ class AdminOrders extends AdminTab
 								$quantityToReinject = $qtyCancelProduct > $reinjectableQuantity ? $reinjectableQuantity : $qtyCancelProduct;
 								if (!Product::reinjectQuantities($orderDetail, $quantityToReinject))
 									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+								else
+								{
+									$updProductAttributeID = !empty($orderDetail->product_attribute_id) ? intval($orderDetail->product_attribute_id) : NULL;
+									$newProductQty = Product::getQuantity(intval($orderDetail->product_id), $updProductAttributeID);
+									if (!empty($orderDetail->product_attribute_id))
+										$updProduct['quantity_attribute'] = intval($newProductQty);
+									else
+										$updProduct['stock_quantity'] = intval($newProductQty);
+									Hook::updateQuantity($updProduct, $order);
+								}
 							}
 
 							// Delete product

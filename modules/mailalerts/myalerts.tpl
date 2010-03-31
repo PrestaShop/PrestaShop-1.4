@@ -33,7 +33,7 @@
 					{/if}</span>
 					</td>
 					<td class="align_center">
-						<a href="{$base_dir_ssl}modules/mailalerts/myalerts.php?action=delete&id_product={$product.id_product}&id_product_attribute={$product.id_product_attribute}"><img src="{$content_dir}modules/mailalerts/img/delete.gif" alt="{l s='Delete' mod='mailalerts'}" /></a>
+						<a href="{$base_dir_ssl}modules/mailalerts/myalerts.php?action=delete&id_product={$product.id_product}{if $product.id_product_attribute}&id_product_attribute={$product.id_product_attribute}{/if}"><img src="{$content_dir}modules/mailalerts/img/delete.gif" alt="{l s='Delete' mod='mailalerts'}" /></a>
 					</td>
 				</tr>
 				</tbody>
