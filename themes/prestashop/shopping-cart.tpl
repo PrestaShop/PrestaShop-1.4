@@ -230,7 +230,7 @@
 				<label for="discount_name">{l s='Code:'}</label>
 				<input type="text" id="discount_name" name="discount_name" value="{if $discount_name}{$discount_name}{/if}" />
 			</p>
-			<p class="submit"><input type="submit" name="submitDiscount" value="{l s='Add'}" class="button" /></p>
+			<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
 		</fieldset>
 	</form>
 </div>
