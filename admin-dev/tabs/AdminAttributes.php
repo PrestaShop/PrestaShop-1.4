@@ -65,7 +65,7 @@ class AdminAttributes extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
 		echo '
-					<div style="clear: both;"></div>
+					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Group:').' </label>
 				<div class="margin-form">

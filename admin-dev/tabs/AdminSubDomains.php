@@ -48,7 +48,7 @@ class AdminSubDomains extends AdminTab
 				<label>'.$this->l('Subdomain:').' </label>
 				<div class="margin-form">
 					<input type="text" size="15" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Additionnal subdomain').'</p>
+					<p class="clear">'.$this->l('Additionnal subdomain').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

@@ -71,17 +71,17 @@ class AdminRangeWeight extends AdminTab
 				echo '<option value="'.intval($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
 			echo '
 					</select>
-					<p style="clear: both;">'.$this->l('Carrier to which this range will be applied').'</p>
+					<p class="clear">'.$this->l('Carrier to which this range will be applied').'</p>
 				</div>
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" name="delimiter1" value="'.htmlentities($this->getFieldValue($obj, 'delimiter1'), ENT_COMPAT, 'UTF-8').'" /> '.Configuration::get('PS_WEIGHT_UNIT').' <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Range start (included)').'</p>
+					<p class="clear">'.$this->l('Range start (included)').'</p>
 				</div>
 				<label>'.$this->l('To:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" name="delimiter2" value="'.htmlentities($this->getFieldValue($obj, 'delimiter2'), ENT_COMPAT, 'UTF-8').'" /> '.Configuration::get('PS_WEIGHT_UNIT').' <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Range end (excluded)').'</p>
+					<p class="clear">'.$this->l('Range end (excluded)').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

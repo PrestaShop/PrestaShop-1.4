@@ -64,12 +64,12 @@ class AdminTaxes extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
-		echo '	<p style="clear: both;">'.$this->l('Tax name to display in cart and on invoice, e.g., VAT').'</p>
+		echo '	<p class="clear">'.$this->l('Tax name to display in cart and on invoice, e.g., VAT').'</p>
 				</div>
 				<label>'.$this->l('Rate:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="5" name="rate" value="'.htmlentities($this->getFieldValue($obj, 'rate'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Format: XX.XX (e.g., 19.60)').'</p>
+					<p class="clear">'.$this->l('Format: XX.XX (e.g., 19.60)').'</p>
 				</div>
 				<label>'.$this->l('Zone:').'</label>
 				<div class="margin-form">';

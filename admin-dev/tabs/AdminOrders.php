@@ -422,7 +422,7 @@ class AdminOrders extends AdminTab
 		{
 			echo '<div style="float: right; margin: -40px 40px 10px 0;">';
 			echo $hook;
-			echo '</div><br style="clear: both;" />';
+			echo '</div><br class="clear" />';
 		}
 
 		// display order header

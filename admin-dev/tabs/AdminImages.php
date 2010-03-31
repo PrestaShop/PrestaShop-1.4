@@ -77,17 +77,17 @@ class AdminImages extends AdminTab
 				<label>'.$this->l('Type name:').' </label>
 				<div class="margin-form">
 					<input type="text" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Letters only (e.g., small, medium, large, extra-large)').'</p>
+					<p class="clear">'.$this->l('Letters only (e.g., small, medium, large, extra-large)').'</p>
 				</div>
 				<label>'.$this->l('Width:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="5" name="width" value="'.intval($this->getFieldValue($obj, 'width')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Maximum image width in pixels').'</p>
+					<p class="clear">'.$this->l('Maximum image width in pixels').'</p>
 				</div>
 				<label>'.$this->l('Height:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="5" name="height" value="'.intval($this->getFieldValue($obj, 'height')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Maximum image height in pixels').'</p>
+					<p class="clear">'.$this->l('Maximum image height in pixels').'</p>
 				</div>
 				<label>'.$this->l('Products:').' </label>
 				<div class="margin-form">

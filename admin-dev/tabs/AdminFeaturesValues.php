@@ -56,7 +56,7 @@ class AdminFeaturesValues extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, 'value', 'value');
 		echo '
-					<div style="clear: both;"></div>
+					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Feature:').' </label>
 				<div class="margin-form">

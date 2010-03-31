@@ -192,7 +192,7 @@ class AdminDiscounts extends AdminTab
 					<sup>*</sup>
 					<img src="../img/admin/news-new.gif" onclick="gencode(8);" style="cursor: pointer" />
 					<span class="hint" name="help_box">'.$this->l('Invalid characters: numbers and').' !<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
-					<p style="clear: both;">'.$this->l('The voucher\'s code, at least 3 characters long, which the customer types in during check-out').'</p>
+					<p class="clear">'.$this->l('The voucher\'s code, at least 3 characters long, which the customer types in during check-out').'</p>
 				</div>
 				<label>'.$this->l('Type:').' </label>
 				<div class="margin-form">
@@ -216,7 +216,7 @@ class AdminDiscounts extends AdminTab
 		echo '			</select>
 						<span id="percent-span" style="margin-left:10px;display:none;float:left;font-size:12px;font-weight:bold;color:black"> %</span>
 						<sup style="float:left;margin-left:5px">*</sup>
-						<p style="clear: both;">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
+						<p class="clear">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
 					</div>
 				<div class="clear">&nbsp;</div>
 				</div>
@@ -226,7 +226,7 @@ class AdminDiscounts extends AdminTab
 			echo '	<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('Will appear in cart next to voucher code').'</p>
+						<p class="clear">'.$this->l('Will appear in cart next to voucher code').'</p>
 					</div>';							
 		$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
 		echo '	</div>
@@ -254,17 +254,17 @@ class AdminDiscounts extends AdminTab
 				<label>'.$this->l('Total quantity:').' </label>
 				<div class="margin-form">
 					<input type="text" size="15" name="quantity" value="'.intval($this->getFieldValue($obj, 'quantity')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Total quantity available (mainly for vouchers open to everyone)').'</p>
+					<p class="clear">'.$this->l('Total quantity available (mainly for vouchers open to everyone)').'</p>
 				</div>
 				<label>'.$this->l('Qty per each user:').' </label>
 				<div class="margin-form">
 					<input type="text" size="15" name="quantity_per_user" value="'.intval($this->getFieldValue($obj, 'quantity_per_user')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Number of times a single customer can use this voucher').'</p>
+					<p class="clear">'.$this->l('Number of times a single customer can use this voucher').'</p>
 				</div>
 				<label>'.$this->l('Minimum amount').'</label>
 				<div class="margin-form">
 					<input type="text" size="15" name="minimal" value="'.($this->getFieldValue($obj, 'minimal') ? floatval($this->getFieldValue($obj, 'minimal')) : '0').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Leave blank or 0 if not applicable').'</p>
+					<p class="clear">'.$this->l('Leave blank or 0 if not applicable').'</p>
 				</div>
 				<div class="margin-form">
 					<p>
@@ -332,12 +332,12 @@ class AdminDiscounts extends AdminTab
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="20" id="date_from" name="date_from" value="'.($this->getFieldValue($obj, 'date_from') ? htmlentities($this->getFieldValue($obj, 'date_from'), ENT_COMPAT, 'UTF-8') : date('Y-m-d H:i:s')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Start date/time from which voucher can be used').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
+					<p class="clear">'.$this->l('Start date/time from which voucher can be used').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
 				</div>
 				<label>'.$this->l('To:').' </label>
 				<div class="margin-form">
 					<input type="text" size="20" id="date_to" name="date_to" value="'.($this->getFieldValue($obj, 'date_to') ? htmlentities($this->getFieldValue($obj, 'date_to'), ENT_COMPAT, 'UTF-8') : (date('Y') + 1).date('-m-d H:i:s')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('End date/time at which voucher is no longer valid').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
+					<p class="clear">'.$this->l('End date/time at which voucher is no longer valid').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">

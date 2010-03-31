@@ -95,7 +95,7 @@ function	changeLanguage(field, fieldsString, id_language_new, iso_code)
 	{
 		new_elt = $('#' + fields[i] + '_' + id_language_new);
 		new_elt.siblings().each(function() {
-			if (!$(this).hasClass('display_flags'))
+			if (!$(this).hasClass('display_flags') && !$(this).hasClass('clear'))
 				$(this).hide();
 		});
 		new_elt.show();

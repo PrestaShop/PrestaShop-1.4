@@ -64,7 +64,7 @@ class AdminMeta extends AdminTab
 					}
 					echo '
 					</select><sup> *</sup>
-					<p style="clear: both;">'.$this->l('Name of the related page').'</p>';
+					<p class="clear">'.$this->l('Name of the related page').'</p>';
 				}
 				echo '
 				</div>
@@ -75,7 +75,7 @@ class AdminMeta extends AdminTab
 					<div id="title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('Title of this page').'</p>
+						<p class="clear">'.$this->l('Title of this page').'</p>
 					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'title¤description¤keywords', 'title');
 		echo '	</div>
@@ -87,7 +87,7 @@ class AdminMeta extends AdminTab
 					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="50" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('A short description').'</p>
+						<p class="clear">'.$this->l('A short description').'</p>
 					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'title¤description¤keywords', 'description');
 		echo '	</div>
@@ -99,7 +99,7 @@ class AdminMeta extends AdminTab
 					<div id="keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input size="50" type="text" name="keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						<p style="clear: both;">'.$this->l('List of keywords').'</p>
+						<p class="clear">'.$this->l('List of keywords').'</p>
 					</div>';
 				$this->displayFlags($languages, $defaultLanguage, 'title¤description¤keywords', 'keywords');
 		echo '	</div>

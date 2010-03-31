@@ -46,7 +46,7 @@ class AdminStates extends AdminTab
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="30" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('State name to display in addresses and on invoices').'</p>
+					<p class="clear">'.$this->l('State name to display in addresses and on invoices').'</p>
 				</div>
 				<label>'.$this->l('ISO code:').' </label>
 				<div class="margin-form">

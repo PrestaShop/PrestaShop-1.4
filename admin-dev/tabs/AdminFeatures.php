@@ -145,7 +145,7 @@ class AdminFeatures extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
 		echo '
-					<div style="clear: both;"></div>
+					<div class="clear"></div>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

@@ -1102,7 +1102,7 @@ class AdminImport extends AdminTab
 		
 		echo '
 		<div class="space" style="height: 420px;">
-				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" class="width2" style="display: inline;" enctype="multipart/form-data" style="clear: both;" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
+				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" class="width2" style="display: inline;" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
 					<fieldset style="float: left; width: 650px">
 						<legend><img src="../img/admin/import.gif" />'.$this->l('Importation').'</legend>
 						<label class="clear">'.$this->l('Select which entity to import:').' </label>

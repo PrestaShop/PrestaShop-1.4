@@ -39,12 +39,12 @@ class AdminDeliverySlip extends AdminTab
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="10" name="date_from" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Format: 2007-12-31 (inclusive)').'</p>
+					<p class="clear">'.$this->l('Format: 2007-12-31 (inclusive)').'</p>
 				</div>
 				<label>'.$this->l('To:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="10" name="date_to" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Format: 2008-12-31 (inclusive)').'</p>
+					<p class="clear">'.$this->l('Format: 2008-12-31 (inclusive)').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint" class="button" />

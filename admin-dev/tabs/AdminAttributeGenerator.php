@@ -188,7 +188,7 @@ class AdminAttributeGenerator extends AdminTab
 			if (isset($attributeJs[$idGroup]))
 			{
 				echo '
-				<br style="clear: both;"/>
+				<br class="clear"/>
 				<table class="table" cellpadding="0" cellspacing="0" align="left" style="margin-bottom: 10px; display: none;">
 					<thead>
 						<tr>

@@ -130,12 +130,12 @@ class AdminCurrencies extends AdminTab
 				<label>'.$this->l('Symbol:').' </label>
 				<div class="margin-form">
 					<input type="text" size="3" maxlength="8" name="sign" value="'.htmlentities($this->getFieldValue($obj, 'sign'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Will appear on Front Office, e.g., &euro;, $').'...</p>
+					<p class="clear">'.$this->l('Will appear on Front Office, e.g., &euro;, $').'...</p>
 				</div>
 				<label>'.$this->l('Conversion rate:').' </label>
 				<div class="margin-form">
 					<input type="text" size="3" maxlength="11" name="conversion_rate" value="'.htmlentities($this->getFieldValue($obj, 'conversion_rate')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1€) to this currency. For example, if the default currency is euros and this currency is dollars, type \'1.52\'').' 1&euro; = $1.38</p>
+					<p class="clear">'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1€) to this currency. For example, if the default currency is euros and this currency is dollars, type \'1.52\'').' 1&euro; = $1.38</p>
 				</div>
 				<label>'.$this->l('Formatting:').' </label>
 				<div class="margin-form">
@@ -150,7 +150,7 @@ class AdminCurrencies extends AdminTab
 					echo '<option value="'.$nb.'"'.($this->getFieldValue($obj, 'format') == $nb ? 'selected="selected"' : '').'>'.$desc.'</option>';
 				echo '
 					</select>
-					<p style="clear: both;">'.$this->l('Applies to all prices, e.g.,').' $1,240.15</p>
+					<p class="clear">'.$this->l('Applies to all prices, e.g.,').' $1,240.15</p>
 				</div>
 				<label>'.$this->l('Decimals:').' </label>
 				<div class="margin-form">

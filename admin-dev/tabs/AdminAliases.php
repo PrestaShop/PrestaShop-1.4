@@ -70,13 +70,13 @@ class AdminAliases extends AdminTab
 				<label>'.$this->l('Alias:').' </label>
 				<div class="margin-form">
 					<input type="text" size="40" name="alias" value="'.Tools::getValue('alias', htmlentities($obj->getAliases(), ENT_COMPAT, 'UTF-8')).'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Enter each alias separated by a comma (\',\')').' '.$this->l('(e.g., \'prestshop,preztashop,prestasohp\')').'<br />
+					<p class="clear">'.$this->l('Enter each alias separated by a comma (\',\')').' '.$this->l('(e.g., \'prestshop,preztashop,prestasohp\')').'<br />
 					'.$this->l('Forbidden characters:').' <>;=#{}</p>
 				</div>
 				<label>'.$this->l('Result:').' </label>
 				<div class="margin-form">
 					<input type="text" size="15" name="search" value="'.htmlentities($this->getFieldValue($obj, 'search'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p style="clear: both;">'.$this->l('Search this word instead.').'</p>
+					<p class="clear">'.$this->l('Search this word instead.').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

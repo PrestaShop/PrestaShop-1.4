@@ -180,7 +180,7 @@ class AdminAttributesGroups extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, 'name¤public_name', 'name');
 		echo '
-					<div style="clear: both;"></div>
+					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Public name:').' </label>
 				<div class="margin-form">';
@@ -193,7 +193,7 @@ class AdminAttributesGroups extends AdminTab
 					</div>';
 		$this->displayFlags($languages, $defaultLanguage, 'name¤public_name', 'public_name');
 		echo '
-					<div style="clear: both;"></div>
+					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Color group:').' </label>
 				<div class="margin-form">
