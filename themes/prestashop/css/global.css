@@ -42,6 +42,17 @@ br.clear {
 	height: 0
 }
 noscript ul {list-style-type: none; background: black; color: white; padding: 10px; border: 1px solid gray }
+/* new clearfix */
+.clearfix:after { 
+	clear: both; 
+	display: block; 
+	height: 0; 
+	font-size: 0; 
+	visibility: hidden; 
+	content: "."; 
+}
+* html .clearfix { zoom: 1 }
+*:first-child+html .clearfix { zoom: 1 }
 
 /* Footer links */
 ul.footer_links {
@@ -193,7 +204,7 @@ h1#logo {
 #left_column {
 	clear: left;
 	width: 191px;
-	padding-right: 21px;
+	margin-right: 21px;
 	overflow: hidden
 }
 #center_column {
@@ -202,7 +213,7 @@ h1#logo {
 }
 #right_column {
 	width: 191px;
-	padding-left: 21px;
+	margin-left: 21px;
 	overflow: hidden
 }
 
@@ -816,7 +827,7 @@ div.block {
 }
 #left_column div.block,
  #right_column div.block {
-	padding-bottom: 6px;
+	padding-bottom: 5px;
 	background: transparent url('../img/block_footer.gif') no-repeat bottom left
 }
 div.block h4 {
@@ -841,9 +852,9 @@ div.block a:hover { text-decoration: underline }
 div.block .block_content {
 	border-left: 1px #d0d3d8;
 	border-right: 1px #d0d3d8;
-	padding: 0.5em 0.7em 0;
+	padding: 0 0.7em;
 	background: #f1f2f4 url('../img/block_bg.jpg') repeat-x bottom left;
-	min-height: 20px
+	min-height: 16px
 }
 div.block li {
 	padding: 0.2em 0 0.2em 0em;
@@ -908,10 +919,7 @@ div.myaccount .block_content {
 /* Styles for products blocks */
 
 /* block products (new, features, viewed, etc...) on left and right column */
-.products_block li {
-	clear: left;
-	margin-top: 0.2em
-}
+.products_block li { margin-top: 0.2em }
 .products_block li.item img { margin-right: 5px }
 .products_block li.last_item { border: none }
 .products_block li img {
@@ -933,7 +941,7 @@ div.myaccount .block_content {
 .products_block dl {
 	clear: both;
 	border-top: 1px solid #374853;
-	padding: 0.2em 0.4em
+	padding: 0 4px 4px
 }
 .products_block dl dt {
 	margin-top: 0.3em;
@@ -957,15 +965,13 @@ div.myaccount .block_content {
 }
 #center_column .products_block ul li:hover { background-color: #bdc2c9 }
 #center_column .products_block ul li {
-	border-right: 1px solid white;
-	border-bottom: 1px solid white;
 	float: left;
-	clear: none;
-	width: 133px;
-	/*height: 375px;*/
 	background-color: #d0d3d8;
-	padding: 0;
-	margin-top: 0
+	margin-top: 0;
+	padding: 0 0 1px;
+	width: 133px;
+	border-right: 1px solid white;
+	border-bottom: 1px solid white
 }
 #center_column .products_block ul .product_accessories_description {
 	margin: 0;
@@ -988,6 +994,7 @@ div.myaccount .block_content {
 #center_column .products_block p, #center_column .products_block h5 { margin: 0.5em 0.1em }
 #center_column div.products_block h5 {
 	display: block;
+	margin-top: 8px;
 	height: 2.57em
 }
 #center_column div.products_block h5 a {
@@ -999,15 +1006,16 @@ div.myaccount .block_content {
 	padding: 0
 }
 #center_column div.products_block p.product_desc {
-	height: 9.5em;
+	height: 9em;
 	color: #595a5e
 }
 #center_column div.products_block a.product_image {
 	display: block;
 	background-color: transparent;
+	margin-bottom: 2px;
+	margin-left: 2px;
 	width: 129px;
-	height: 129px;
-	margin-left: 2px
+	height: 129px
 }
 #center_column div.products_block .product_accessories_description a.product_image {
 	width: 118px;
@@ -1049,7 +1057,7 @@ p.price_container { text-align: center }
 #center_column .products_block.accessories_block .block_content li.last_item a.product_image { border: none }
 
 /* Block tags */
-div.tags_block .block_content { padding: 0.2em 0.6em }
+div.tags_block .block_content { padding: 3px 6px 0 }
 div.tags_block p {
 	text-align: justify;
 	font-size: 0.9em
@@ -1068,14 +1076,23 @@ a.tag_level2 { font-size: 1.4em }
 a.tag_level1 { font-size: 1em; color: #888!important }
 
 /* Block manufacturer */
-.blockmanufacturer ul, .blocksupplier ul { padding-bottom: 0.6em }
+.blockmanufacturer ul, .blocksupplier ul { padding: 4px 0 6px }
 .blockmanufacturer select, .blocksupplier select {
 	width: 100%;
 	margin: 0
 }
 
+/* Block CMS links */
+#informations_block_left .block_content { padding-top: 3px }
+
+/* Block best sellers */
+#best-sellers_block_right p { 
+	margin: 0;
+	padding-top:3px
+}
+
 /* Block specials */
-.blockspecials ul { height: 8em }
+.blockspecials ul { padding-top: 5px }
 .blockspecials li {
 	float: left;
 	clear: none;
@@ -1091,7 +1108,10 @@ a.tag_level1 { font-size: 1em; color: #888!important }
 .blockspecials p a { margin: 0 auto }
 
 /* Block Viewed Products */
-div#viewed-products_block_left div.block_content ul.products li { height: 85px }
+div#viewed-products_block_left div.block_content ul.products li { 
+	margin-top: 0;
+	padding: 4px 0 0 
+}
 div#viewed-products_block_left div.block_content ul.products li img { margin-right: 7px }
 
 /* Block newsletter */
@@ -1122,26 +1142,34 @@ div.paiement_logo_block img { margin: 0 0.5em }
 .advertising_block { width: 191px; margin-bottom: 1em; text-align: center }
 
 /* Block new products */
+#new-products_block_right ul { padding: 5px 0 }
+#new-products_block_right ul li { 
+	margin-top: 0;
+	padding:0
+}
+#new-products_block_right ul.product_images li.first { margin-right: 11px }
 #new-products_block_right dt a { font-size: 0.8em; font-weight: bold }
 
 /* Block categories */
 div#categories_block_left ul.tree { padding-left: 0.5em }
 div#categories_block_left ul.tree li {
 	border: none;
+	padding-top: 5px;
 	padding-left: 15px;
 	background: none;
 	margin-left: 0;
 	font-weight: bold;
 	font-size: 13px;
-	line-height: 13px;
-	margin-top: 2px
+	line-height: 13px
 }
+div#categories_block_left ul.tree li ul { padding: 2px 0 0 }
 div#categories_block_left ul.tree li ul li {
-	padding-left: 15px;
+	padding: 1px 0 1px 15px;
 	background: none;
 	font-size: 11px;
 	font-weight: normal
 }
+div#categories_block_left ul.tree li ul li.last { padding-bottom: 0 }
 div#categories_block_left ul.tree li ul li ul li {
 	padding-left: 15px;
 	font-size: 9px
@@ -1162,8 +1190,8 @@ div#categories_block_left span.grower {
 	background-repeat: no-repeat;
 	width: 9px;
 	height: 15px;
-	margin: 0 0 0 -10px!important;
-	margin: 0 0 0 -6px;
+	margin: 0 0 0 -12px!important;
+	margin: 0 0 0 -8px;
 	padding: 0
 }
 div#categories_block_left span.OPEN { background-image: url('../img/icon/less.gif') }
@@ -1196,7 +1224,7 @@ ul.step li#step_end.step_current { background: transparent url('../img/step_end_
 ul#order_step { background-color: white }
 
 /* Special style for block cart*/
-#cart_block .block_content { padding: 0.6em }
+#cart_block .block_content { padding: 6px 6px 2px }
 #cart_block h4 { background-image: url('../img/block_header_exclusive_cart.gif') }
 #cart_block h4 span {
 	text-transform: none;
@@ -1232,7 +1260,7 @@ ul#order_step { background-color: white }
 #cart_block a.ajax_cart_block_remove_link {
 	width: 11px;
 	height: 13px;
-	margin-left: 4px;
+	margin-left: 6px;
 	float: right;
 	font-size: 0;
 	display: block;
@@ -1267,12 +1295,12 @@ ul#order_step { background-color: white }
 	clear: both
 }
  #cart_block p#cart-prices {
-	margin-top: 0.5em;
-	border-top: 1px solid white;
-	height: 4em;
-	padding-top: 0.4em;
+	clear: both;
+	margin-top: 8px;
 	margin-bottom: 0.5em;
-	clear: both
+	padding-top: 0.4em;
+	height: 3em;
+	border-top: 1px solid white
 }
 #cart_block table#vouchers td {
 	padding: 0;
@@ -2062,10 +2090,10 @@ ul.typedText {
 	font-size: 10px;
 	border-bottom: 1px solid #fff;
 	margin: 0 0 5px 0;
-	padding: 0 0 5px 0
+	padding: 3px 0 5px
 }
 #wishlist_block div.block_content #wishlist_block_list dl.products dt a.cart_block_product_name { font-weight: bold }
-#wishlist_block div.block_content #wishlist_block_list dl.products dt { margin: 4px 0 4px 0 }
+#wishlist_block div.block_content #wishlist_block_list dl.products dt { margin: 2px 0 }
 #wishlist_block div.block_content #wishlist_block_list dl.products dt a.ajax_cart_block_remove_link { float: right }
 #wishlist_block div.block_content #wishlist_block_list dl.products dd {
 	font-style: italic;

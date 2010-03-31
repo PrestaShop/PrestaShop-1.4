@@ -7,7 +7,7 @@
 		{if $wishlist_products}
 			<dl class="products">
 			{foreach from=$wishlist_products item=product name=i}
-				<dt class="clear {if $smarty.foreach.i.first}first_item{elseif $smarty.foreach.i.last}last_item{else}item{/if}">
+				<dt class="{if $smarty.foreach.i.first}first_item{elseif $smarty.foreach.i.last}last_item{else}item{/if}">
 					<span class="quantity-formated"><span class="quantity">{$product.quantity|intval}</span>x</span>
 					<a class="cart_block_product_name"
 					href="{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{$product.name|escape:'htmlall':'UTF-8'}">{$product.name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</a>
