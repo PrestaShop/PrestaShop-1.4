@@ -234,14 +234,12 @@ class MailAlerts extends Module
 
 	public function hookUpdateProductAttribute($params)
 	{
-		if (!$this->_customer_qty)
-			return ;
-
 		$result = Db::getInstance()->GetRow('
-			SELECT `id_product`, `quantity` FROM `'._DB_PREFIX_.'product_attribute`
+			SELECT `id_product`, `quantity` 
+			FROM `'._DB_PREFIX_.'product_attribute` 
 			WHERE `id_product_attribute` = '.intval($params['id_product_attribute']));
 		$qty = intval($result['quantity']);
-		if ($qty > intval(Configuration::get('PS_LAST_QTIES')))
+		if ($this->_customer_qty AND $qty > 0)
 			$this->sendCustomerAlert(intval($result['id_product']), intval($params['id_product_attribute']));
 	}
 	
@@ -326,7 +324,12 @@ class MailAlerts extends Module
 				<label>'.$this->l('Out of stock:').' </label>
 				<div class="margin-form">
 					<input type="checkbox" value="1" id="mA_merchand_oos" name="mA_merchand_oos" '.(Tools::getValue('mA_merchand_oos', $this->_merchant_oos) == 1 ? 'checked' : '').'>
-					&nbsp;<label for="mA_merchand_oos" class="t">'.$this->l('Receive a notification if a product is out of stock').'</label>
+					&nbsp;<label for="mA_merchand_oos" class="t">'.$this->l('Receive a notification if the quantity of a product is below the alert threshold').'</label>
+				</div>
+				<label>'.$this->l('Alert threshold:').'</label>
+				<div class="margin-form">
+					<input type="text" name="PS_LAST_QTIES" value="'.(Tools::getValue('PS_LAST_QTIES') != NULL ? intval(Tools::getValue('PS_LAST_QTIES')) : Configuration::get('PS_LAST_QTIES')).'" size="3" />
+					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
 				<label>'.$this->l('Send to this emails:').' </label>
 				<div class="margin-form">
@@ -379,6 +382,8 @@ class MailAlerts extends Module
 				elseif (!Configuration::updateValue('MA_MERCHANT_ORDER', intval(Tools::getValue('mA_merchand_order'))))
 					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
 				elseif (!Configuration::updateValue('MA_MERCHANT_OOS', intval(Tools::getValue('mA_merchand_oos'))))
+					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
+				elseif (!Configuration::updateValue('PS_LAST_QTIES', intval(Tools::getValue('PS_LAST_QTIES'))))
 					$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
 				else
 					$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
