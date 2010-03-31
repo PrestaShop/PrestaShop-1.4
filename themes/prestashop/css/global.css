@@ -209,7 +209,8 @@ h1#logo {
 }
 #center_column {
 	width: 556px;
-	margin: 0 0 30px 0
+	margin: 0 0 30px 0;
+	overflow: hidden
 }
 #right_column {
 	width: 191px;
@@ -507,7 +508,7 @@ form p.id_state { display: none }
 /* generic style */
 ul.bullet li, .block ul.bullet li {
 	padding-left: 2em;
-	background: transparent url('../img/bullet.gif') no-repeat 0.6em 0.5em;
+	background: transparent url('../img/bullet.gif') no-repeat 6px 4px;
 	list-style-type: none
 }
 
@@ -975,14 +976,6 @@ div.myaccount .block_content {
 }
 #center_column .products_block ul .product_accessories_description {
 	margin: 0;
-	padding: 0
-}
-#center_column .products_block ul .product_accessories_description .product_accessories_price {
-	margin-top: 75px!important;
-	margin-top: 0
-}
-#center_column .products_block ul .product_accessories_description {
-	margin: 0;
 	padding: 0;
 	height: 280px
 }
@@ -1032,10 +1025,7 @@ div.myaccount .block_content {
 	float: none;
 	margin: 0
 }
-#center_column div.products_block p.product_desc, #center_column div.products_block h5 {
-	margin-left: 0.5em;
-	margin-right: 0.5em
-}
+#center_column div.products_block p.product_desc, #center_column div.products_block h5 { margin: 0 5px 3px 5px }
 #center_column div.products_block ul li p.product_desc a { font-weight: normal }
 #center_column .products_block span.price {
 	text-align: center;
@@ -1051,9 +1041,14 @@ p.price_container { text-align: center }
 
 /* Special style for block accessories in center column (product page) */
 #center_column .products_block.accessories_block .block_content { background: none }
-#center_column div.products_block.accessories_block p.product_desc { height: 6.5em }
-#center_column .products_block.accessories_block .block_content li { background: none; }
-#center_column .products_block.accessories_block .block_content li a.product_image, #center_column .products_block.accessories_block .block_content li a.product_description { border-right: 1px solid #d0d3d8; font-weight: bolder }
+#center_column div.products_block.accessories_block p.product_desc { 
+	margin-right: 0;
+	height: 150px; 
+	border-right: 1px solid #d0d3d8 
+}
+#center_column .products_block.accessories_block .block_content li { background: none; text-align: center }
+#center_column .products_block.accessories_block .block_content li h5,
+ #center_column .products_block.accessories_block .block_content li a.product_description { text-align:left }
 #center_column .products_block.accessories_block .block_content li.last_item a.product_image { border: none }
 
 /* Block tags */
