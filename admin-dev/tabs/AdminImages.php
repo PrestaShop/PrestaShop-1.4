@@ -175,9 +175,9 @@ class AdminImages extends AdminTab
 			{
 				$formats = ImageType::getImagesTypes($k);
 				echo '
-				<label class="second-select format_'.Tools::strtolower($type).'" style="display:none;">'.$this->l('Select format:').'</label>
-				<div class="second-select margin-form format_'.Tools::strtolower($type).'" style="display:none;">
-				<select class="second-select format_'.Tools::strtolower($type).'" name="format_'.Tools::strtolower($type).'">
+				<label class="second-select format_'.$k.'" style="display:none;">'.$this->l('Select format:').'</label>
+				<div class="second-select margin-form format_'.$k.'" style="display:none;">
+				<select class="second-select format_'.$k.'" name="format_'.$k.'">
 					<option value="all">'.$this->l('All').'</option>';
 				foreach ($formats as $format)
 					echo '<option value="'.$format['id_image_type'].'">'.$format['name'].'</option>';
@@ -187,9 +187,8 @@ class AdminImages extends AdminTab
 				<script>
 					function changeFormat(elt)
 					{
-						$elt = $(elt);
 						$(\'.second-select\').hide();
-						$(\'.format_\' + $elt.val()).show();
+						$(\'.format_\' + $(elt).val()).show();
 					}
 				</script>
 				<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
