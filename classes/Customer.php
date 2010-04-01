@@ -460,7 +460,7 @@ class		Customer extends ObjectModel
 	
 	public function cleanGroups()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id).' AND `id_group` != 1');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id));
 	}
 	
 	public function addGroups($groups)

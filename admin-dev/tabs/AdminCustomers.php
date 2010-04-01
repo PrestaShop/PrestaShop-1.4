@@ -60,6 +60,8 @@ class AdminCustomers extends AdminTab
 		
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
+		 	$groupList = Tools::getValue('groupBox');
+		 	
 		 	/* Checking fields validity */
 			$this->validateRules();
 			if (!sizeof($this->_errors))
@@ -88,10 +90,15 @@ class AdminCustomers extends AdminTab
 							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
 								$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
 							
+							if (!is_array($groupList) OR sizeof($groupList) == 0)
+								$this->_errors[] = Tools::displayError('customer must be in at least one group');
+							else
+								if (!in_array(Tools::getValue('id_default_group'), $groupList))
+									$this->_errors[] = Tools::displayError('default customer group must be selected on group box');
+							
 							// Updating customer's group
 							if (!sizeof($this->_errors))
 							{
-								$groupList = Tools::getValue('groupBox');
 								$object->cleanGroups();
 								if (is_array($groupList) AND sizeof($groupList) > 0)
 									$object->addGroups($groupList);
@@ -518,7 +525,7 @@ class AdminCustomers extends AdminTab
 				</div>
 				<label>'.$this->l('Default group:').' </label>
 				<div class="margin-form">
-					<select name="id_default_group">';
+					<select name="id_default_group" onchange="checkDefaultGroup(this.value);">';
 				foreach ($groups as $group)
 					echo '<option value="'.intval($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
 				echo '
@@ -541,7 +548,7 @@ class AdminCustomers extends AdminTab
 						{
 							echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-								<td>'.($group['id_group'] != 1 ? '<input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/>' : '').'</td>
+								<td>'.'<input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
 								<td>'.$group['id_group'].'</td>
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';

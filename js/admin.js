@@ -488,6 +488,15 @@ function checkDefaultCategory(category_id)
 	checkbox.addClass('id_category_default');
 }
 
+function checkDefaultGroup(group_id)
+{
+	var oldCheckbox = $('.id_group_default');
+	oldCheckbox.removeClass('id_group_default');
+	var checkbox = $('#groupBox_'+group_id);
+	checkbox.attr('checked', 'checked');
+	checkbox.addClass('id_group_default');
+}
+
 function chooseTypeTranslation(id_lang)
 {
 	getE('translation_lang').value = id_lang;
