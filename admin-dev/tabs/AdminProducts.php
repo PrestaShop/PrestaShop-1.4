@@ -999,7 +999,6 @@ class AdminProducts extends AdminTab
 		<h3>'.$this->l('Current product:').' <span id="current_product" style="font-weight: normal;">'.$this->l('no name').'</span></h3>
 		<script type="text/javascript">
 			var pos_select = '.(($tab = Tools::getValue('tabs')) ? $tab : '0').';
-			id_language = Number('.$defaultLanguage.');
 			'.$this->initCombinationImagesJS().'
 		</script>
 		<script src="../js/tabpane.js" type="text/javascript"></script>
@@ -1018,39 +1017,45 @@ class AdminProducts extends AdminTab
 			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Customization').'</h4></div>
 			<div class="tab-page" id="step6""><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>
 			<div class="tab-page" id="step7""><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
-		echo '	<script type="text/javascript">
+		echo '<script type="text/javascript">
 					var toload = new Array();
 					toload[3] = true;
 					toload[4] = true;
 					toload[5] = true;
 					toload[6] = true;
 					toload[7] = true;
-					function loadTab(id) {';
+					function loadTab(id, show_flags) {';
 		if ($obj->id)
-			echo ' 		if (toload[id]) {
+			echo ' 	if (toload[id]) {
 							toload[id] = false;
-							$.post("'.dirname($currentIndex).'/ajax.php",{ajaxProductTab:id,id_product:'.$obj->id.',token:\''.Tools::getValue('token').'\',id_category:'.intval(Tools::getValue('id_category')).'},
-								function(rep) {
-									getE("step" + id).innerHTML = rep;
-									if (id == 3) populate_attrs();
+							$.post(
+								"'.dirname($currentIndex).'/ajax.php", { 
+									ajaxProductTab: id, id_product: '.$obj->id.',
+									token: \''.Tools::getValue('token').'\', 
+									id_category: '.intval(Tools::getValue('id_category')).'},
+								function(rep) { 
+									$("#step" + id).html(rep);
+									displayFlags(languages, id_language);
+									if (id == 3) 
+										populate_attrs();
 									if (id == 7)
 									{
-										$(\'#addAttachment\').click(function() {
-											return !$(\'#selectAttachment1 option:selected\').remove().appendTo(\'#selectAttachment2\');  
-										});  
-										$(\'#removeAttachment\').click(function() {  
-											return !$(\'#selectAttachment2 option:selected\').remove().appendTo(\'#selectAttachment1\');  
-										});  
-										$(\'#product\').submit(function() {  
-											$(\'#selectAttachment1 option\').each(function(i) {  
+										$(\'#addAttachment\').click(function() { 
+											return !$(\'#selectAttachment1 option:selected\').remove().appendTo(\'#selectAttachment2\'); 
+										}); 
+										$(\'#removeAttachment\').click(function() { 
+											return !$(\'#selectAttachment2 option:selected\').remove().appendTo(\'#selectAttachment1\'); 
+										}); 
+										$(\'#product\').submit(function() { 
+											$(\'#selectAttachment1 option\').each(function(i) { 
 												$(this).attr("selected", "selected");  
-											});  
+											}); 
 										});
 									}
 								}
 							)
 						}';
-		echo '		}
+		echo '	}
 				</script>
 			</div>
 			<div class="clear"></div>
@@ -1173,18 +1178,18 @@ class AdminProducts extends AdminTab
 	{
 		$fieldsName = 'label_'.$type.'_'.intval($id_customization_field);
 		$fieldsContainerName = 'labelContainer_'.$type.'_'.intval($id_customization_field);
-		echo '<div id="'.$fieldsContainerName.'">';
+		echo '<div id="'.$fieldsContainerName.'" class="translatable clear" style="line-height: 13px">';
 		foreach ($languages as $language)
 		{
 			$fieldName = 'label_'.$type.'_'.intval($id_customization_field).'_'.intval($language['id_lang']);
-			echo '<div id="'.$fieldName.'" style="display: '.(intval($language['id_lang']) == intval($defaultLanguage) ? 'block' : 'none').'; clear: left; float: left; padding-bottom: 4px;">
-					<div style="width:40px; float:left; text-align:right;">#'.intval($id_customization_field).'</div>
-					&nbsp;&nbsp;<input type="text" name="'.$fieldName.'" value="'.htmlentities($label[intval($language['id_lang'])]['name'], ENT_COMPAT, 'UTF-8').'" />
-				</div>';
+			echo '<div class="lang_'.$language['id_lang'].'" id="'.$fieldName.'" style="display: '.(intval($language['id_lang']) == intval($defaultLanguage) ? 'block' : 'none').'; clear: left; float: left; padding-bottom: 4px;">
+						<div style="margin-right: 6px; width:20px; float:left; text-align:right;">#'.intval($id_customization_field).'</div><input type="text" name="'.$fieldName.'" value="'.htmlentities($label[intval($language['id_lang'])]['name'], ENT_COMPAT, 'UTF-8').'" style="float: left" />
+					</div>';
 		}
-		echo '</div>';
-		$this->displayFlags($languages, $defaultLanguage, $fieldIds, $fieldsName);
-		echo '<div style="float: left; margin-left: 16px;"><input type="checkbox" name="require_'.$type.'_'.intval($id_customization_field).'" value="1" '.($label[intval($language['id_lang'])]['required'] ? 'checked="checked"' : '').'/> '.$this->l('required').'</div>';
+		echo '</div>
+				<div style="margin: 3px 0 0 3px; font-size: 11px">
+					<input type="checkbox" name="require_'.$type.'_'.intval($id_customization_field).'" value="1" '.($label[intval($language['id_lang'])]['required'] ? 'checked="checked"' : '').' style="float: left; margin: 0 4px"/> '.$this->l('required').'
+				</div>';
 	}
 
 	private function _displayLabelFields(&$obj, &$labels, $languages, $defaultLanguage, $type)
@@ -1315,7 +1320,6 @@ class AdminProducts extends AdminTab
 		global $currentIndex, $cookie;
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 
-		$divLangName = 'cname¤cdesc¤cdesc_short¤clink_rewrite¤cmeta_description¤cmeta_title¤cmeta_keywords¤ctags¤cavailable_now¤cavailable_later';
 		$qty_state = 'readonly';
 		$qty = Attribute::getAttributeQty($this->getFieldValue($obj, 'id_product'));
 		if ($qty === false) {
@@ -1332,29 +1336,39 @@ class AdminProducts extends AdminTab
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
+			<script type="text/javascript">
+				$(document).ready(function() {';
+		foreach ($languages AS $k => $language)
+			echo 'languages['.$k.'] = {
+						id_lang: '.(int)$language['id_lang'].', 
+						iso_code: \''.$language['iso_code'].'\', 
+						name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
+					};';
+		echo '	displayFlags(languages, '.$defaultLanguage.');
+				});
+			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
-			if (isset($obj->id))
-			{
-				echo '
-			<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
-				if (file_exists(_PS_MODULE_DIR_.'statsproduct/statsproduct.php'))
-					echo '&nbsp;-&nbsp;
-					<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
-			}
-			echo '	
+		if (isset($obj->id))
+		{
+			echo '
+		<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
+			if (file_exists(_PS_MODULE_DIR_.'statsproduct/statsproduct.php'))
+				echo '&nbsp;-&nbsp;
+				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
+		}
+		echo '	
 			<hr class="clear"/>
 			<br />
 				<table cellpadding="5" style="width:100%">
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($languages as $language)
-			echo '			<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+			echo '		<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="55" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onchange="updateCurrentText();" /><sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cname');
 		echo '<script type="text/javascript">updateCurrentText();</script>
 						</td>
 					</tr>
@@ -1363,7 +1377,7 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 							<input style="float:left;" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_on" class="t"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" style="float:left; padding:0px 5px 0px 5px;" />'.$this->l('Enabled').'</label>
-							<br style="clear:both;" />
+							<br class="clear" />
 							<input style="float:left;" type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').'</label>
 						</td>
@@ -1728,28 +1742,26 @@ class AdminProducts extends AdminTab
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Displayed text when in-stock:').'</td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cavailable_now_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="30" type="text" id="available_now_'.$language['id_lang'].'" name="available_now_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlentities($this->getFieldValue($obj, 'available_now', $language['id_lang']), ENT_COMPAT, 'UTF-8')).'" />
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cavailable_now');
 		echo '			</td>
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Displayed text when allowed to be back-ordered:').'</td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cavailable_later_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+							<div  class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="30" type="text" id="available_later_'.$language['id_lang'].'" name="available_later_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlentities($this->getFieldValue($obj, 'available_later', $language['id_lang']), ENT_COMPAT, 'UTF-8')).'" />
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cavailable_later');
 		echo '			</td>
 					</tr>
 
@@ -1807,60 +1819,56 @@ class AdminProducts extends AdminTab
 							<table>
 								<tr>
 									<td class="col-left">'.$this->l('Meta title:').'</td>
-									<td>';
+									<td class="translatable">';
 		foreach ($languages as $language)
 			echo '
-										<div id="cmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_title_'.$language['id_lang'].'" name="meta_title_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_title', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cmeta_title');
 		echo '
-										<p style="clear: both">'.$this->l('Product page title; leave blank to use product name').'</p>
+										<p class="clear">'.$this->l('Product page title; leave blank to use product name').'</p>
 									</td>
 								</tr>
 								<tr>
 									<td class="col-left">'.$this->l('Meta description:').'</td>
-									<td>';
+									<td class="translatable">';
 		foreach ($languages as $language)
 			echo '
-										<div id="cmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_description_'.$language['id_lang'].'" name="meta_description_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_description', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cmeta_description');
 		echo '
-										<p style="clear: both">'.$this->l('A single sentence for HTML header').'</p>
+										<p class="clear">'.$this->l('A single sentence for HTML header').'</p>
 									</td>
 								</tr>
 								<tr>
 									<td class="col-left">'.$this->l('Meta keywords:').'</td>
-									<td>';
+									<td class="translatable">';
 		foreach ($languages as $language)
 			echo '
-										<div id="cmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_keywords_'.$language['id_lang'].'" name="meta_keywords_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cmeta_keywords');
 		echo '
-										<p style="clear: both">'.$this->l('Keywords for HTML header, separated by a comma').'</p>
+										<p class="clear">'.$this->l('Keywords for HTML header, separated by a comma').'</p>
 									</td>
 								</tr>
 								<tr>
 									<td class="col-left">'.$this->l('Friendly URL:').'</td>
-									<td>';
+									<td class="translatable">';
 		foreach ($languages as $language)
 			echo '
-										<div id="clink_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" onkeyup="this.value = str2url(this.value); updateFriendlyURL();" /><sup> *</sup>
 											<span class="hint" name="help_box">'.$this->l('Only letters and the "less" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'clink_rewrite');
 		global $cookie;
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 		echo '
@@ -1874,40 +1882,40 @@ class AdminProducts extends AdminTab
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:764px;" /></td></tr>
 					<tr>
 						<td class="col-left">'.$this->l('Short description:').'<br /><br /><i>('.$this->l('appears in search results').')</i></td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cdesc_short_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
 								<textarea class="rte" cols="100" rows="10" id="description_short_'.$language['id_lang'].'" name="description_short_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description_short', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc_short');
 		echo '
 						</td>
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Description:').'</td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($languages as $language)
 			echo '
-							<div id="cdesc_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
 								<textarea class="rte" cols="100" rows="20" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $divLangName, 'cdesc');
 		echo '
 						</td>
 					</tr>';
-				echo '<tr><td class="col-left">'.$this->l('Tags:').'</td><td style="padding-bottom:5px;">';
+				echo '
+					<tr>
+						<td class="col-left">'.$this->l('Tags:').'</td>
+						<td style="padding-bottom:5px;" class="translatable">';
 				foreach ($languages as $language)
 				{
-					echo '<div id="ctags_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 							<input size="55" type="text" id="tags_'.$language['id_lang'].'" name="tags_'.$language['id_lang'].'"
 							value="'.htmlentities(Tools::getValue('tags_'.$language['id_lang'], $obj->getTags($language['id_lang'], true)), ENT_COMPAT, 'UTF-8').'" />
 							<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' !<>;?=+#"&deg;{}_$%<span class="hint-pointer">&nbsp;</span></span>
 						  </div>';
 				}
-				$this->displayFlags($languages, $defaultLanguage, $divLangName, 'ctags');
-				echo '<p style="clear: both">'.$this->l('Tags separated by commas (e.g., dvd, dvd player, hifi)').'</p>';
-				echo '</td>
+				echo '	<p class="clear">'.$this->l('Tags separated by commas (e.g., dvd, dvd player, hifi)').'</p>
+						</td>
 					</tr>';
 				$accessories = Product::getAccessoriesLight(intval($cookie->id_lang), $obj->id);
 				if ($postAccessories = Tools::getValue('inputAccessories'))
@@ -1942,7 +1950,7 @@ class AdminProducts extends AdminTab
 							<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
 							<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
 							<div id="ajax_choose_product" style="padding:6px; padding-top:2px; width:600px;">
-								<p style="clear: both">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
+								<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
 								<input type="text" value="" id="product_autocomplete_input" />
 								<img onclick="$(this).prev().search();" style="cursor: pointer;" src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" />
 							</div>
@@ -2042,7 +2050,7 @@ class AdminProducts extends AdminTab
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Caption:').'</td>
-						<td style="padding-bottom:5px;">';
+						<td style="padding-bottom:5px;" class="translatable">';
 						foreach ($languages as $language)
 						{
 							if (!Tools::getValue('legend_'.$language['id_lang']))
@@ -2050,15 +2058,14 @@ class AdminProducts extends AdminTab
 							else
 								$legend = Tools::getValue('legend_'.$language['id_lang']);
 							echo '
-								<div id="clegend_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float:left; width:370px;">
-									<input size="55" type="text" id="legend_'.$language['id_lang'].'" name="legend_'.$language['id_lang'].'" value="'.stripslashes(htmlentities($legend, ENT_COMPAT, 'UTF-8')).'" maxlength="128" />
-									<sup>*</sup>
-									<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<br />'.$this->l('Forbidden characters will be automatically erased.').'<span class="hint-pointer">&nbsp;</span></span>
-									<p style="clear: both">'.$this->l('Short description of the image').'</p>
-								</div>';
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float:left; width:371px;">
+								<input size="55" type="text" id="legend_'.$language['id_lang'].'" name="legend_'.$language['id_lang'].'" value="'.stripslashes(htmlentities($legend, ENT_COMPAT, 'UTF-8')).'" maxlength="128" />
+								<sup> *</sup>
+								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<br />'.$this->l('Forbidden characters will be automatically erased.').'<span class="hint-pointer">&nbsp;</span></span>
+							</div>';
 						}
-						$this->displayFlags($languages, $defaultLanguage, 'clegend', 'clegend');
 						echo '
+							<p class="clear">'.$this->l('Short description of the image').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -2523,18 +2530,17 @@ class AdminProducts extends AdminTab
 						echo '
 							</select>
 						</td>
-						<td style="width:170px">';
+						<td style="width:170px" class="translatable">';
 							$tab_customs = array();
 							if ($custom)
 								$tab_customs = FeatureValue::getFeatureValueLang($current_item);
 							foreach ($languages as $language) {
 								$custom_lang = FeatureValue::selectLang($tab_customs, $language['id_lang']);
 								echo '
-								<div id="ccustom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+								<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 									<input type="text" name="custom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" size="20" value="'.htmlentities(Tools::getValue('custom_'.$tab_features['id_feature'].'_'.$language['id_lang'], $custom_lang), ENT_COMPAT, 'UTF-8').'" />
 								</div>';
 							}
-							$this->displayFlags($languages, $defaultLanguage, $ctab, 'ccustom_'.$tab_features['id_feature']);
 							echo '
 						</td>
 					</tr>';

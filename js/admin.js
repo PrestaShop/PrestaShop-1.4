@@ -1,4 +1,5 @@
-var id_language = Number(1);
+if (!id_language)
+	var id_language = Number(1);
 
 function str2url(str,encoding,ucfirst)
 {
@@ -83,19 +84,20 @@ function updateFriendlyURL()
 	$('#friendly-url').html($('link_rewrite_' + id_language).val());
 }
 
-function	showLanguages(id)
+function toggleLanguageFlags(elt)
 {
-	$('#languages_' + id).show();
+	$(elt).parents('.displayed_flag').siblings('.language_flags').toggle();
 }
 
-function	changeLanguage(field, fieldsString, id_language_new, iso_code)
+// Kept for retrocompatibility only (out of AdminProducts & AdminCategories)
+function changeLanguage(field, fieldsString, id_language_new, iso_code)
 {
 	var fields = fieldsString.split('¤');
 	for (var i = 0; i < fields.length; i++)
 	{
 		new_elt = $('#' + fields[i] + '_' + id_language_new);
 		new_elt.siblings().each(function() {
-			if (!$(this).hasClass('display_flags') && !$(this).hasClass('clear'))
+			if (!$(this).hasClass('displayed_flag') && !$(this).hasClass('clear'))
 				$(this).hide();
 		});
 		new_elt.show();
@@ -103,6 +105,63 @@ function	changeLanguage(field, fieldsString, id_language_new, iso_code)
 	}
  	$('#languages_' + field).hide();
 	id_language = id_language_new;
+}
+
+function changeFormLanguage(elt, id_language_new, iso_code)
+{
+	$($(elt).parents()[1]).each(function() {
+		$(this).find('.lang_' + id_language_new)
+			.show()
+			.siblings('div:not(.displayed_flag):not(.clear)').hide();
+		$('.language_current').attr('src', '../img/l/' + id_language_new + '.jpg');
+	});
+	$('.language_flags').hide();
+	id_language = id_language_new;
+}
+
+function displayFlags(languages, defaultLanguage)
+{
+	$('.translatable').each(function() {
+		if (!$(this).find('.displayed_flag').length > 0) {
+			$.each(languages, function(key, language) {
+				if (language['id_lang'] == defaultLanguage)
+				{
+					defaultLang = language;
+					return false;
+				}
+			});
+			var displayFlags = $('<div></div>')
+				.addClass('displayed_flag')
+				.append($('<img>')
+					.addClass('language_current')
+					.addClass('pointer')
+					.attr('src', '../img/l/' + defaultLang['id_lang'] + '.jpg')
+					.attr('alt', defaultLang['name'])
+					.click(function() {
+						toggleLanguageFlags(this);
+					})
+				);
+			var languagesFlags = $('<div></div>')
+				.addClass('language_flags')
+				.html('Choose language:<br /><br />');
+			$.each(languages, function(key, language) {
+				var img = $('<img>')
+					.addClass('pointer')
+					.css('margin', '0 2px')
+					.attr('src', '../img/l/' + language['id_lang'] + '.jpg')
+					.attr('alt', language['name'])
+					.click(function() {
+						changeFormLanguage(this, language['id_lang'], language['iso_code']);
+					});
+				languagesFlags.append(img);
+			});
+			if ($(this).find('p:last-child').hasClass('clear'))
+				$(this).find('p:last-child').before(displayFlags).before(languagesFlags);
+			else 
+				$(this).append(displayFlags).append(languagesFlags);
+		}
+	});
+	id_language = defaultLang['id_lang'];
 }
 
 function checkAll(pForm)

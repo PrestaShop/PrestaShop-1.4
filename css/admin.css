@@ -726,18 +726,18 @@ tr.deleted td {
 	text-transform: uppercase;
 }
 
-.display_flags {
+.displayed_flag {
 	float: left;
-	margin-left: 5px;
+	margin: 4px 0 0 4px;
 }
 
 .language_flags {
-	clear: both;
 	display: none;
-	width: 100px;
-	width: 80px;
+	float: left;
 	background: #FFF;
+	margin: 4px;
 	padding: 8px;
+	width: 80px;
 	border: 1px solid #555;
 }
 

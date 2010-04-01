@@ -196,8 +196,8 @@ abstract class Module
 				return false;
 			$defaultIso = Language::getIsoById($defaultLanguage);
 			$output = '
-			<div class="display_flags">
-				<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="showLanguages(\''.$id.'\');" alt="" />
+			<div class="displayed_flag">
+				<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
 			</div>
 			<div id="languages_'.$id.'" class="language_flags">
 				'.$this->l('Choose language:').'<br /><br />';

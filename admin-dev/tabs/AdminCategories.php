@@ -123,27 +123,34 @@ class AdminCategories extends AdminTab
 		$obj = $this->loadObject(true);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		$langtags = 'cname¤cdescription¤clink_rewrite¤cmeta_title¤cmeta_keywords¤cmeta_description';
 		$active = $this->getFieldValue($obj, 'active');
 		$customer_groups = $obj->getGroups();
 		
 		echo '
 		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
+			$(document).ready(function() {
+				var languages = new Array();';
+	foreach ($languages AS $k => $language)
+		echo 'languages['.$k.'] = {
+					id_lang: '.(int)$language['id_lang'].', 
+					iso_code: \''.$language['iso_code'].'\', 
+					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
+				};';
+	echo '	displayFlags(languages, '.$defaultLanguage.');
+			});
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token!=NULL ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width2" style="width:520px;"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('Category').'</legend>
 				<label>'.$this->l('Name:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
 			echo '
-					<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" '.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cname');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Displayed:').' </label>
 				<div class="margin-form">
@@ -161,14 +168,13 @@ class AdminCategories extends AdminTab
 					</select>
 				</div>
 				<label>'.$this->l('Description:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
 			echo '
-					<div id="cdescription_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<textarea name="description_'.$language['id_lang'].'" rows="5" cols="40">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdescription');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Image:').' </label>
 				<div class="margin-form">
@@ -177,46 +183,42 @@ class AdminCategories extends AdminTab
 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)), 'left');				
 		echo'	<div class="clear"><br /></div>	
 				<label>'.$this->l('Meta title:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
 			echo '
-					<div id="cmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cmeta_title');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Meta description:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
-			echo '<div id="cmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cmeta_description');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Meta keywords:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
 			echo '
-					<div id="cmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cmeta_keywords');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Friendly URL:').' </label>
-				<div class="margin-form">';
+				<div class="margin-form translatable">';
 		foreach ($languages as $language)
-			echo '<div id="clink_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onkeyup="this.value = str2url(this.value);" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Only letters and the minus (-) character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'clink_rewrite');
-		echo '		<div class="clear"></div>
+		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Groups access:').' </label>
 				<div class="margin-form">';
@@ -253,7 +255,7 @@ class AdminCategories extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>
-		<div class="clear"></div>';
+		<p class="clear"></p>';
 	}
 
 	public function displayListHeader($token = NULL)
