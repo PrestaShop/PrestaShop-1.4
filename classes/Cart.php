@@ -93,7 +93,13 @@ class		Cart extends ObjectModel
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
 		parent::__construct($id, $id_lang);
-		$this->_taxCalculationMethod = $this->id_customer ? Group::getPriceDisplayMethod(intval($this->id_customer)) : Group::getDefaultPriceDisplayMethod();
+		if ($this->id_customer)
+		{
+			$customer = new Customer(intval($this->id_customer));
+			$this->_taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
+		}
+		else
+			$this->_taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
 	}
 
 	public function add($autodate = true, $nullValues = false)

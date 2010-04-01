@@ -67,3 +67,17 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`)
 	FROM `PREFIX_module` WHERE `name` = 'mailalerts'
 );
 
+ALTER TABLE `PREFIX_customer` ADD `id_default_group` INT(10) UNSIGNED NOT NULL AFTER `id_gender`;
+
+UPDATE `PREFIX_customer` c SET `id_default_group` = (
+	SELECT (
+	IFNULL(
+		(SELECT g.`id_group`
+		FROM `PREFIX_group` g
+		LEFT JOIN `PREFIX_customer_group` cg ON (cg.`id_group` = g.`id_group`)
+		WHERE g.`reduction` > 0 AND cg.`id_customer` = c.`id_customer`
+		ORDER BY g.`reduction`
+		LIMIT 1)
+	, 1)
+	)
+);

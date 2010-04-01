@@ -86,21 +86,19 @@ class		Group extends ObjectModel
 	
 	static public function getReduction($id_customer)
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT g.`reduction`
-		FROM `'._DB_PREFIX_.'group` g
-		LEFT JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = g.`id_group`)
-		WHERE g.`reduction` > 0 AND cg.`id_customer` = '.intval($id_customer).'
-		ORDER BY g.`reduction` DESC');
-		return $result['reduction'];
+		$customer = new Customer(intval($id_customer));
+		return Db::getInstance()->getValue('
+		SELECT `reduction`
+		FROM `'._DB_PREFIX_.'group`
+		WHERE `id_group` = '.intval($customer->id_default_group));
 	}
 
-	static public function getPriceDisplayMethod($id_customer)
+	static public function getPriceDisplayMethod($id_group)
 	{
 		return Db::getInstance()->getValue('
-		SELECT g.`price_display_method`
-		FROM `'._DB_PREFIX_.'group` g
-		LEFT JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = g.`id_group` AND cg.`id_customer` = '.intval($id_customer).')');
+		SELECT `price_display_method`
+		FROM `'._DB_PREFIX_.'group`
+		WHERE `id_group` = '.intval($id_group));
 	}
 
 	static public function getDefaultPriceDisplayMethod()

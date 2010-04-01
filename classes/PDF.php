@@ -357,7 +357,7 @@ class PDF extends PDF_PageGroup
 		self::$orderSlip = $slip;
 		self::$delivery = $delivery;
 		self::$_iso = strtoupper(Language::getIsoById(intval(self::$order->id_lang)));
-		if ((self::$_priceDisplayMethod = Group::getPriceDisplayMethod($order->id_customer)) === false)
+		if ((self::$_priceDisplayMethod = $order->getTaxCalculationMethod()) === false)
 			die(self::l('No price display method defined for the customer group'));
 
 		if (!$multiple)

@@ -414,6 +414,7 @@ class AdminCustomers extends AdminTab
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());
+		$groups = Group::getGroups($defaultLanguage, true);
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -515,9 +516,17 @@ class AdminCustomers extends AdminTab
 					<label class="t" for="optin_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Customer will receive your ads via e-mail').'</p>
 				</div>
+				<label>'.$this->l('Default group:').' </label>
+				<div class="margin-form">
+					<select name="id_default_group">';
+				foreach ($groups as $group)
+					echo '<option value="'.intval($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
+				echo '
+					</select>
+					<p>'.$this->l('The group from which apply none cumulative rules (e.g., price display method, reduction)').'</p>
+				</div>
 				<label>'.$this->l('Groups:').' </label>
 				<div class="margin-form">';
-					$groups = Group::getGroups($defaultLanguage, true);
 					if (sizeof($groups))
 					{
 						echo '

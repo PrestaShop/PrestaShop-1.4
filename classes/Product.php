@@ -133,7 +133,7 @@ class		Product extends ObjectModel
 
 	/** @var boolean Product statuts */
 	public		$active = 1;
-	
+
 	public		$indexed = 0;
 
 	/** @var string Object creation date */
@@ -144,12 +144,12 @@ class		Product extends ObjectModel
 
 	/*** @var array Tags */
 	public		$tags;
-	
+
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
 
 	private static $_incat = array();
-	
+
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
 
@@ -289,7 +289,18 @@ class		Product extends ObjectModel
 	public static function initPricesComputation()
 	{
 		global $cookie;
-		self::$_taxCalculationMethod = $cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod();
+		if ($cookie->id_customer)
+		{
+			$customer = new Customer(intval($cookie->id_customer));
+			self::$_taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
+		}
+		else
+			self::$_taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
+	}
+
+	public static function getTaxCalculationMethod()
+	{
+		return intval(self::$_taxCalculationMethod);
 	}
 
 	/**

@@ -121,6 +121,8 @@ define('_PS_BASE_URL_', $protocol.$server_host);
 
 Product::initPricesComputation();
 
+$priceDisplay = Product::getTaxCalculationMethod();
+
 if (!Configuration::get('PS_THEME_V11'))
 {
 	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
@@ -156,7 +158,7 @@ if (!Configuration::get('PS_THEME_V11'))
 		'logged' => $cookie->isLogged(),
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod()),
+		'priceDisplay' => $priceDisplay,
 		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
 		'use_taxes' => intval(Configuration::get('PS_TAX'))
 	));
@@ -196,7 +198,7 @@ else
 		'cookie' => $cookie,
 		'languages' => Language::getLanguages(),
 		'logged' => $cookie->isLogged(),
-		'priceDisplay' => intval($cookie->id_customer ? Group::getPriceDisplayMethod(intval($cookie->id_customer)) : Group::getDefaultPriceDisplayMethod()),
+		'priceDisplay' => $priceDisplay,
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),

@@ -22,12 +22,8 @@ class Pack extends Product
 		global $cookie;
 		
 		$sum = 0;
-		
-		if (intval($cookie->id_customer) != 0)
-			$price_display_method = !Group::getPriceDisplayMethod(intval($cookie->id_customer));
-		else
-			$price_display_method = !Group::getDefaultPriceDisplayMethod();
-		
+
+		$price_display_method = !self::$_taxCalculationMethod;
 		$items = self::getItems($id_product, Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($items as $item)
 			$sum += $item->getPrice($price_display_method) * $item->pack_quantity;

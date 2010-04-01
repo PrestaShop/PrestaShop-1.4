@@ -22,6 +22,9 @@ class		Customer extends ObjectModel
 	/** @var integer Gender ID */
 	public		$id_gender = 9;
 
+	/** @var integer Default group ID */
+	public		$id_default_group;
+
 	/** @var string Lastname */
 	public 		$lastname;
 
@@ -88,6 +91,7 @@ class		Customer extends ObjectModel
 			$fields['id_customer'] = intval($this->id);
 		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['id_gender'] = intval($this->id_gender);
+		$fields['id_default_group'] = intval($this->id_default_group);
 		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['birthday'] = pSQL($this->birthday);
