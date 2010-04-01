@@ -52,7 +52,7 @@ class MailAlerts extends Module
 				`id_product` int(10) unsigned NOT NULL,
 				`id_product_attribute` int(10) unsigned NOT NULL,
 				PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci')
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci')
 		)
 	 		return false;
 

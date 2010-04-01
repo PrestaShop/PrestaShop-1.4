@@ -1604,6 +1604,18 @@ class		Product extends ObjectModel
 	{
 		if (!Validate::isLoadedObject($orderDetail))
 			die(Tools::displayError());
+		
+		if (Pack::isPack(intval($orderDetail->product_id)))
+		{
+			$products_pack = Pack::getItems(intval($orderDetail->product_id), intval(Configuration::get('PS_LANG_DEFAULT')));
+			foreach($products_pack AS $product_pack)
+				Db::getInstance()->Execute('
+				UPDATE `'._DB_PREFIX_.'product'.($product_pack->id_product_attribute ? '_attribute' : '').'`
+				SET `quantity` = `quantity`+'.intval($product_pack->pack_quantity * $quantity).'
+				WHERE `id_product` = '.intval($product_pack->id).
+				($product_pack->id_product_attribute ? ' AND `id_product_attribute` = '.intval($product_pack->id_product_attribute) : ''));
+		}
+		
 		$sql = '
 		UPDATE `'._DB_PREFIX_.'product'.($orderDetail->product_attribute_id ? '_attribute' : '').'`
 		SET `quantity` = `quantity`+'.intval($quantity).'
@@ -2246,7 +2258,17 @@ class		Product extends ObjectModel
 	}
 
 	public function deleteCustomizedDatas($id_customization)
-	{
+	{if (Pack::isPack(intval($product['id_product'])))
+		{
+			$products_pack = Pack::getItems(intval($product['id_product']), intval(Configuration::get('PS_LANG_DEFAULT')));
+			foreach($products_pack AS $product_pack)
+			{
+				$tab_product_pack['id_product'] = intval($product_pack->id);
+				$tab_product_pack['id_product_attribute'] = self::getDefaultAttribute($tab_product_pack['id_product'], 1);
+				$tab_product_pack['cart_quantity'] = intval($product_pack->pack_quantity * $product['cart_quantity']);
+				self::updateQuantity($tab_product_pack);
+			}
+		}
 		if (($result = Db::getInstance()->ExecuteS('SELECT `value` FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.intval($id_customization).' AND `type` = '._CUSTOMIZE_FILE_)) === false)
 			return false;
 		foreach ($result AS $row)
