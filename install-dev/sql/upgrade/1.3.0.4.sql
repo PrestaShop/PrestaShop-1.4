@@ -61,9 +61,9 @@ ALTER TABLE `PREFIX_state` ADD INDEX (id_zone);
 ALTER TABLE `PREFIX_tab` ADD INDEX (id_parent);
 ALTER TABLE `PREFIX_cart` ADD INDEX (id_guest);
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`) 
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) 
 (
-	SELECT 'MA_LAST_QTIES', '3' 
+	SELECT 'MA_LAST_QTIES', '3', NOW(), NOW() 
 	FROM `PREFIX_module` WHERE `name` = 'mailalerts'
 );
 
