@@ -42,9 +42,9 @@ class Hipay extends PaymentModule
 		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
 		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
 		{
-		  $smarty->assign('hipay_prod', $this->prod);
-		  $smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
-		  return $this->display(__FILE__, 'payment.tpl');
+			$smarty->assign('hipay_prod', $this->prod);
+			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
+			return $this->display(__FILE__, 'payment.tpl');
 		}
 	}
 
@@ -213,6 +213,7 @@ class Hipay extends PaymentModule
 		$openssl = extension_loaded('openssl');
 		$curl = extension_loaded('curl');
 		$ping = ($allow_url_fopen AND $openssl AND $fd = fsockopen('payment.hipay.com', 443) AND fclose($fd));
+		$online = (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')) ? false : true);
 		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping)
 		{
 			echo '
@@ -221,6 +222,7 @@ class Hipay extends PaymentModule
 				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
 				'.(($allow_url_fopen AND $openssl AND !$ping) ? '<h3>'.$this->l('Cannot access payment gateway').' '.HIPAY_GATEWAY_URL.' ('.$this->l('check your firewall').')</h3>' : '').'
+				'.($online ? '' : '<h3>'.$this->l('Your shop is not online').'</h3>').'
 			</div>';
 		}
 
