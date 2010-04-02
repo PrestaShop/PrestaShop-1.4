@@ -116,6 +116,8 @@ abstract class AdminTab
 	/** @var bool Redirect or not ater a creation */
 	protected $_redirect = true;
 
+	protected	$_languages = NULL;
+	protected	$_defaultLanguage = NULL;
 	private $_includeObj = array();
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
@@ -1400,7 +1402,25 @@ abstract class AdminTab
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayForm() {	global $currentIndex; }
+	public function displayForm()
+	{
+		$this->_defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$this->_languages = Language::getLanguages();
+
+		echo '
+		<script type="text/javascript">
+			$(document).ready(function() {
+			var languages = new Array();';
+		foreach ($this->_languages AS $k => $language)
+			echo 'languages['.$k.'] = {
+						id_lang: '.(int)$language['id_lang'].', 
+						iso_code: \''.$language['iso_code'].'\', 
+						name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
+					};';
+		echo '	displayFlags(languages, '.$this->_defaultLanguage.');
+			});
+		</script>';
+	}
 
 	/**
 	 * Display object details

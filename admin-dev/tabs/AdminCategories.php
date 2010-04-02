@@ -118,6 +118,7 @@ class AdminCategories extends AdminTab
 
 	public function displayForm($token=NULL)
 	{
+		parent::displayForm();
 		global $currentIndex, $cookie;
 
 		$obj = $this->loadObject(true);
@@ -125,20 +126,8 @@ class AdminCategories extends AdminTab
 		$languages = Language::getLanguages();
 		$active = $this->getFieldValue($obj, 'active');
 		$customer_groups = $obj->getGroups();
-		
+
 		echo '
-		<script type="text/javascript">
-			$(document).ready(function() {
-				var languages = new Array();';
-	foreach ($languages AS $k => $language)
-		echo 'languages['.$k.'] = {
-					id_lang: '.(int)$language['id_lang'].', 
-					iso_code: \''.$language['iso_code'].'\', 
-					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
-				};';
-	echo '	displayFlags(languages, '.$defaultLanguage.');
-			});
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token!=NULL ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width2" style="width:520px;"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('Category').'</legend>
@@ -181,7 +170,7 @@ class AdminCategories extends AdminTab
 					<input type="file" name="image" />
 				</div>';
 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)), 'left');				
-		echo'	<div class="clear"><br /></div>	
+		echo '	<div class="clear"><br /></div>	
 				<label>'.$this->l('Meta title:').' </label>
 				<div class="margin-form translatable">';
 		foreach ($languages as $language)

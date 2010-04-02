@@ -982,6 +982,7 @@ class AdminProducts extends AdminTab
 
 	function displayForm($token = NULL)
 	{
+		parent::displayForm();
 		global $currentIndex, $link, $cookie;
 		
 		if ($id_category_back = intval(Tools::getValue('id_category')))
@@ -989,8 +990,6 @@ class AdminProducts extends AdminTab
 
 		$obj = $this->loadObject(true);
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		if ($obj->id)
 			$currentIndex .= '&id_product='.$obj->id;
@@ -1008,8 +1007,8 @@ class AdminProducts extends AdminTab
 			<input type="hidden" name="id_category" value="'.(($id_category = Tools::getValue('id_category')) ? intval($id_category) : '0').'">
 			<div class="tab-pane" id="tabPane1">';
 				/* Tabs */
-		$this->displayFormInformations($obj, $currency, $languages, $defaultLanguage);
-		$this->displayFormImages($obj, $languages, $defaultLanguage, $token);
+		$this->displayFormInformations($obj, $currency);
+		$this->displayFormImages($obj, $token);
 		if ($obj->id)
 			echo '
 			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Combinations').'</h4></div>
@@ -1188,7 +1187,7 @@ class AdminProducts extends AdminTab
 		}
 		echo '</div>
 				<div style="margin: 3px 0 0 3px; font-size: 11px">
-					<input type="checkbox" name="require_'.$type.'_'.intval($id_customization_field).'" value="1" '.($label[intval($language['id_lang'])]['required'] ? 'checked="checked"' : '').' style="float: left; margin: 0 4px"/> '.$this->l('required').'
+					<input type="checkbox" name="require_'.$type.'_'.intval($id_customization_field).'" id="require_'.$type.'_'.intval($id_customization_field).'" value="1" '.($label[intval($language['id_lang'])]['required'] ? 'checked="checked"' : '').' style="float: left; margin: 0 4px"/><label for="require_'.$type.'_'.intval($id_customization_field).'" style="float: none; font-weight: normal;"> '.$this->l('required').'</label>
 				</div>';
 	}
 
@@ -1315,8 +1314,9 @@ class AdminProducts extends AdminTab
 		<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />';
 	}
 
-	function displayFormInformations($obj, $currency, $languages, $defaultLanguage)
+	function displayFormInformations($obj, $currency)
 	{
+		parent::displayForm();
 		global $currentIndex, $cookie;
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 
@@ -1336,22 +1336,11 @@ class AdminProducts extends AdminTab
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
-			<script type="text/javascript">
-				$(document).ready(function() {';
-		foreach ($languages AS $k => $language)
-			echo 'languages['.$k.'] = {
-						id_lang: '.(int)$language['id_lang'].', 
-						iso_code: \''.$language['iso_code'].'\', 
-						name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
-					};';
-		echo '	displayFlags(languages, '.$defaultLanguage.');
-				});
-			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
 		if (isset($obj->id))
 		{
 			echo '
-		<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
+		<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $this->_defaultLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
 			if (file_exists(_PS_MODULE_DIR_.'statsproduct/statsproduct.php'))
 				echo '&nbsp;-&nbsp;
 				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
@@ -1363,8 +1352,8 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-		foreach ($languages as $language)
-			echo '		<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+		foreach ($this->_languages as $language)
+			echo '		<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="55" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onchange="updateCurrentText();" /><sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1574,12 +1563,7 @@ class AdminProducts extends AdminTab
 			var customizationTextFieldNumber = '.intval($this->getFieldValue($obj, 'text_fields')).';
 			var uploadableFileLabel = 0;
 			var textFieldLabel = 0;
-			var defaultLanguage = '.intval($defaultLanguage).';
-			var languages = new Array();';
-		$i = 0;
-		foreach ($languages AS $language)
-			echo 'languages['.$i++.'] = new Array('.intval($language['id_lang']).', \''.$language['iso_code'].'\', \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\');'."\n";
-		echo '
+			var defaultLanguage = '.intval($this->_defaultLanguage).';
 		</script>';
 	?>
 	<tr>
@@ -1743,9 +1727,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Displayed text when in-stock:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="30" type="text" id="available_now_'.$language['id_lang'].'" name="available_now_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlentities($this->getFieldValue($obj, 'available_now', $language['id_lang']), ENT_COMPAT, 'UTF-8')).'" />
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1755,9 +1739,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Displayed text when allowed to be back-ordered:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div  class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+							<div  class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 								<input size="30" type="text" id="available_later_'.$language['id_lang'].'" name="available_later_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlentities($this->getFieldValue($obj, 'available_later', $language['id_lang']), ENT_COMPAT, 'UTF-8')).'" />
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1820,9 +1804,9 @@ class AdminProducts extends AdminTab
 								<tr>
 									<td class="col-left">'.$this->l('Meta title:').'</td>
 									<td class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_title_'.$language['id_lang'].'" name="meta_title_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_title', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1834,9 +1818,9 @@ class AdminProducts extends AdminTab
 								<tr>
 									<td class="col-left">'.$this->l('Meta description:').'</td>
 									<td class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_description_'.$language['id_lang'].'" name="meta_description_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_description', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1848,9 +1832,9 @@ class AdminProducts extends AdminTab
 								<tr>
 									<td class="col-left">'.$this->l('Meta keywords:').'</td>
 									<td class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_keywords_'.$language['id_lang'].'" name="meta_keywords_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 											<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -1862,9 +1846,9 @@ class AdminProducts extends AdminTab
 								<tr>
 									<td class="col-left">'.$this->l('Friendly URL:').'</td>
 									<td class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+										<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" onkeyup="this.value = str2url(this.value); updateFriendlyURL();" /><sup> *</sup>
 											<span class="hint" name="help_box">'.$this->l('Only letters and the "less" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
@@ -1883,9 +1867,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Short description:').'<br /><br /><i>('.$this->l('appears in search results').')</i></td>
 						<td style="padding-bottom:5px;" class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').';float: left;">
 								<textarea class="rte" cols="100" rows="10" id="description_short_'.$language['id_lang'].'" name="description_short_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description_short', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		echo '
@@ -1894,9 +1878,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Description:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').';float: left;">
 								<textarea class="rte" cols="100" rows="20" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 		echo '
@@ -1906,9 +1890,9 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tags:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 				{
-					echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float: left;">
 							<input size="55" type="text" id="tags_'.$language['id_lang'].'" name="tags_'.$language['id_lang'].'"
 							value="'.htmlentities(Tools::getValue('tags_'.$language['id_lang'], $obj->getTags($language['id_lang'], true)), ENT_COMPAT, 'UTF-8').'" />
 							<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' !<>;?=+#"&deg;{}_$%<span class="hint-pointer">&nbsp;</span></span>
@@ -2027,7 +2011,7 @@ class AdminProducts extends AdminTab
 		';
 	}
 
-	function displayFormImages($obj, $languages, $defaultLanguage, $token = NULL)
+	function displayFormImages($obj, $token = NULL)
 	{
 		global $cookie, $currentIndex, $attributeJs, $images;
 
@@ -2051,14 +2035,14 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Caption:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-						foreach ($languages as $language)
+						foreach ($this->_languages as $language)
 						{
 							if (!Tools::getValue('legend_'.$language['id_lang']))
 								$legend = $this->getFieldValue($obj, 'name', $language['id_lang']);
 							else
 								$legend = Tools::getValue('legend_'.$language['id_lang']);
 							echo '
-							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float:left; width:371px;">
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultLanguage ? 'block' : 'none').'; float:left; width:371px;">
 								<input size="55" type="text" id="legend_'.$language['id_lang'].'" name="legend_'.$language['id_lang'].'" value="'.stripslashes(htmlentities($legend, ENT_COMPAT, 'UTF-8')).'" maxlength="128" />
 								<sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<br />'.$this->l('Forbidden characters will be automatically erased.').'<span class="hint-pointer">&nbsp;</span></span>
@@ -2467,7 +2451,7 @@ class AdminProducts extends AdminTab
 					echo '<b>'.$this->l('You must save this product before adding combinations').'.</b>';
 	}
 
-	function displayFormFeatures($obj, $languages, $defaultLanguage)
+	function displayFormFeatures($obj)
 	{
 		global $cookie, $currentIndex;
 
@@ -2534,7 +2518,7 @@ class AdminProducts extends AdminTab
 							$tab_customs = array();
 							if ($custom)
 								$tab_customs = FeatureValue::getFeatureValueLang($current_item);
-							foreach ($languages as $language) {
+							foreach ($this->_languages as $language) {
 								$custom_lang = FeatureValue::selectLang($tab_customs, $language['id_lang']);
 								echo '
 								<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">

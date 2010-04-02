@@ -170,7 +170,7 @@ class Editorial extends Module
 					<div id="title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
 						<input type="text" name="body_title_'.$language['id_lang'].'" id="body_title_'.$language['id_lang'].'" size="64" value="'.($xml ? stripslashes(htmlspecialchars($xml->body->{'title_'.$language['id_lang']})) : '').'" />
 					</div>';
-				 }
+				}
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'title', true);
 				
 				
