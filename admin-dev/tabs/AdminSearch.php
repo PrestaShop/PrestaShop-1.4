@@ -70,7 +70,18 @@ class AdminSearch extends AdminTab
 					'status' => array('title' => $this->l('Status')),
 					'action' => array('title' => $this->l('Actions'))
 				));
-				$this->searchCatalog(trim(strval($_POST['bo_query'])));
+
+				/* Handle product ID */
+				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				{
+					$product = new Product(intval($_POST['bo_query']));
+					if ($product->id)
+						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.intval($_POST['bo_query']).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
+					else
+						$this->_errors[] = Tools::displayError('product #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+				}
+				else
+					$this->searchCatalog(trim(strval($_POST['bo_query'])));
 			}
 
 			/* Customer */
