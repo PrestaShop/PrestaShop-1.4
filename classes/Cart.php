@@ -734,11 +734,60 @@ class		Cart extends ObjectModel
 		if ($orderTotal <= 0 AND !intval(self::getNbProducts($this->id)))
 			return $shipping_cost;
 
+		// Get id zone
+		if (isset($this->id_address_delivery) AND $this->id_address_delivery)
+			$id_zone = Address::getZoneById(intval($this->id_address_delivery));
+		else
+			$id_zone = intval($defaultCountry->id_zone);
+
 		// If no carrier, select default one
 		if (!$id_carrier)
-            $id_carrier = $this->id_carrier;
-        if (empty($id_carrier))
-            $id_carrier = Configuration::get('PS_CARRIER_DEFAULT');
+			$id_carrier = $this->id_carrier;
+		if (empty($id_carrier))
+		{
+			if ($this->id_customer)
+			{
+				$customer = new Customer(intval($this->id_customer));
+				$result = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true, false, intval($id_zone), $customer->getGroups());
+				unset($customer);
+			}
+			else
+				$result = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true, false, intval($id_zone));
+			$resultsArray = array();
+			foreach ($result AS $k => $row)
+			{
+				if (!isset(self::$_carriers[$row['id_carrier']]))
+					self::$_carriers[$row['id_carrier']] = new Carrier(intval($row['id_carrier']));
+				$carrier = self::$_carriers[$row['id_carrier']];
+
+				// Get only carriers that are compliant with shipping method
+				if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+				OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+				{
+					unset($result[$k]);
+					continue ;
+				}
+
+				// If out-of-range behavior carrier is set on "Desactivate carrier"
+				if ($row['range_behavior'])
+				{
+					// Get only carriers that have a range compatible with cart
+					if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
+					OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone))))
+						{
+							unset($result[$k]);
+							continue ;
+						}
+				}
+				$resultsArray[] = $row;
+			}
+			$idDefaultCarrier = Configuration::get('PS_CARRIER_DEFAULT');
+			foreach ($resultsArray AS $resultArray)
+				if ($resultArray['id_carrier'] == $idDefaultCarrier)
+					$id_carrier = $idDefaultCarrier;
+			if (empty($id_carrier))
+				$id_carrier = $resultsArray[0]['id_carrier'];
+		}
 		if (!isset(self::$_carriers[$id_carrier]))
 			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier));
 		$carrier = self::$_carriers[$id_carrier];
@@ -746,12 +795,6 @@ class		Cart extends ObjectModel
 			die(Tools::displayError('Hack attempt: "no default carrier"'));
         if (!$carrier->active)
 			return $shipping_cost;
-		// Get id zone
-        if (isset($this->id_address_delivery) AND $this->id_address_delivery)
-			$id_zone = Address::getZoneById(intval($this->id_address_delivery));
-		else
-			$id_zone = intval($defaultCountry->id_zone);
-		
 		// Select carrier tax
 		if ($useTax AND $carrier->id_tax)
 		{
@@ -784,10 +827,10 @@ class		Cart extends ObjectModel
 				OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
 				$shipping_cost += 0;
 			else {
-		        if (intval($configuration['PS_SHIPPING_METHOD']))
-		            $shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
-		        else
-		            $shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+				if (intval($configuration['PS_SHIPPING_METHOD']))
+					$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
+				else
+					$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 			}
 		}
 		else
