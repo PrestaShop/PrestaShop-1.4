@@ -163,7 +163,7 @@ class GAnalytics extends Module
 
 			/* Order general informations */
 			$output = '
-			<script src="'.$protocol_content.$gaJsHost.'google-analytics.com/ga.js" type="text/javascript"></script>
+			<script src="'.$protocol_content.$gaJsHost.'.google-analytics.com/ga.js" type="text/javascript"></script>
 	
 			<script type="text/javascript">
 			  var pageTracker = _gat._getTracker("'.Configuration::get('GANALYTICS_ID').'");
