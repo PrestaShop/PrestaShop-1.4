@@ -1,7 +1,6 @@
 function acceptCGV(msg)
 {
-	//if (!getE('cgv').checked)
-	if (!$('input#cgv:checked').length)
+	if ($('#cgv').length && !$('input#cgv:checked').length)
 	{
 		alert(msg);
 		return false;

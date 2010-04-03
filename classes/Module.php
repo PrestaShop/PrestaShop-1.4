@@ -192,22 +192,22 @@ abstract class Module
 	  */
 	public function displayFlags($languages, $defaultLanguage, $ids, $id, $return = false)
 	{
-			if (sizeof($languages) == 1)
-				return false;
-			$defaultIso = Language::getIsoById($defaultLanguage);
-			$output = '
-			<div class="displayed_flag">
-				<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
-			</div>
-			<div id="languages_'.$id.'" class="language_flags">
-				'.$this->l('Choose language:').'<br /><br />';
-			foreach ($languages as $language)
-				$output .= '<img src="../img/l/'.intval($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
-			$output .= '</div>';
+		if (sizeof($languages) == 1)
+			return false;
+		$defaultIso = Language::getIsoById($defaultLanguage);
+		$output = '
+		<div class="displayed_flag">
+			<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
+		</div>
+		<div id="languages_'.$id.'" class="language_flags">
+			'.$this->l('Choose language:').'<br /><br />';
+		foreach ($languages as $language)
+			$output .= '<img src="../img/l/'.intval($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+		$output .= '</div>';
 
-			if ($return)
-				return $output;
-			echo $output;
+		if ($return)
+			return $output;
+		echo $output;
 	}
 
 	/**

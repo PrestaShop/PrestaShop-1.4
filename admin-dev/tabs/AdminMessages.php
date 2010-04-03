@@ -54,43 +54,25 @@ class AdminMessages extends AdminTab
 		is_numeric($_POST['submitFilter'.$this->table]))
 			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
 
-		$sql = '
-			SELECT m.id_message, m.id_cart, m.id_employee, m.id_order, m.message, m.private, m.date_add, CONCAT( LEFT( c.`firstname` , 1 ) , \'. \', c.`lastname` ) AS customer, c.id_customer, count( m.id_message ) nb_messages, (
-				SELECT message
-				FROM '._DB_PREFIX_.'message
-				WHERE id_order = m.id_order
-				ORDER BY date_add DESC
-				LIMIT 1
-			)last_message, (
-				SELECT COUNT( m2.id_message )
-				FROM '._DB_PREFIX_.'message m2
-				WHERE 1
-				AND m2.id_customer !=0
-				AND m2.id_order = m.id_order
-				AND m2.id_message NOT
-				IN (
-					SELECT mr2.id_message
-					FROM '._DB_PREFIX_.'message_readed mr2
-					WHERE mr2.id_employee ='.(int)$cookie->id_employee.'
-				)
-				GROUP BY m2.id_order
-			)nb_messages_not_readed_by_me
-			FROM '._DB_PREFIX_.'message m
-			LEFT JOIN '._DB_PREFIX_.'orders o ON ( o.id_order = m.id_order )
-			LEFT JOIN '._DB_PREFIX_.'customer c ON ( c.id_customer = o.id_customer )
-			GROUP BY m.id_order
-			ORDER BY '.(isset($orderBy) ? pSQL($orderBy) : 'date_add') .' '.(isset($orderWay) ? pSQL($orderWay) : 'DESC')
-			.' LIMIT '.intval($start).','.intval($limit);
-		;
-		$this->_list = Db::getInstance()->ExecuteS($sql);
+		$this->_list = Db::getInstance()->ExecuteS('
+		SELECT m.id_message, m.id_cart, m.id_employee, IF(m.id_order > 0, m.id_order, \'--\') id_order, m.message, m.private, m.date_add, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS customer,
+		c.id_customer, count(m.id_message) nb_messages, (SELECT message FROM '._DB_PREFIX_.'message WHERE id_order = m.id_order ORDER BY date_add DESC LIMIT 1) last_message,
+		(SELECT COUNT(m2.id_message) FROM '._DB_PREFIX_.'message m2 WHERE 1 AND m2.id_customer != 0 AND m2.id_order = m.id_order AND m2.id_message NOT IN 
+		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.intval($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_readed_by_me
+		FROM '._DB_PREFIX_.'message m
+		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = m.id_order)
+		LEFT JOIN '._DB_PREFIX_.'customer c ON (c.id_customer = m.id_customer)
+		GROUP BY m.id_order
+		ORDER BY '.(isset($orderBy) ? pSQL($orderBy) : 'date_add') .' '.(isset($orderWay) ? pSQL($orderWay) : 'DESC').'
+		LIMIT '.intval($start).','.intval($limit));
 
  		$this->fieldsDisplay = array(
-			'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 25),
-			'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
-			'last_message' => array('title' => $this->l('Last message'), 'widthColumn' => 300, 'width' => 200),
-			'nb_messages_not_readed_by_me' => array('title' => $this->l('Unread message(s)'), 'widthColumn' => 100, 'width' => 50),
-			'nb_messages' => array('title' => $this->l('Number of messages'), 'widthColumn' => 100, 'width' => 50)
-		);
+		'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 25),
+		'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
+		'last_message' => array('title' => $this->l('Last message'), 'widthColumn' => 300, 'width' => 200),
+		'nb_messages_not_readed_by_me' => array('title' => $this->l('Unread message(s)'), 'widthColumn' => 100, 'width' => 50),
+		'nb_messages' => array('title' => $this->l('Number of messages'), 'widthColumn' => 100, 'width' => 50));
+
 		parent::__construct();
 	}
 
@@ -98,10 +80,16 @@ class AdminMessages extends AdminTab
 	{
 		global $cookie;
 
-		if (isset($_GET['view'.$this->table]))
+		if (isset($_GET['view'.$this->table]) AND !empty($_GET['id_order']) AND $_GET['id_order'] != '--')
 			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
 		else
 		{
+			if (isset($_GET['id_order']) AND (empty($_GET['id_order']) OR $_GET['id_order'] == '--'))
+			{
+				echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.
+				Tools::displayError('Cannot display this message because the customer has not finalized its order').'</p>';
+			}
+				
 			$this->displayList();
 			$this->displayOptionsList();
 		}

@@ -180,6 +180,7 @@ abstract class PaymentModule extends Module
 					{
 						$product['tax'] = 0;
 						$product['rate'] = 0;
+						$tax = 0;
 					}
 					else
 						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->id_address_delivery));
@@ -189,7 +190,6 @@ abstract class PaymentModule extends Module
 					if ($product['cart_quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['cart_quantity'])))
 						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value);
 
-					// Query
 					$query .= '('.intval($order->id).',
 						'.intval($product['id_product']).',
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',

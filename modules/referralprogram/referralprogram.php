@@ -213,6 +213,8 @@ class ReferralProgram extends Module
 
 	private function _displayForm()
 	{
+		$divLangName = 'cpara¤dd';
+		
 		$this->_html .= '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 		<fieldset>
@@ -243,10 +245,10 @@ class ReferralProgram extends Module
 			$languages = Language::getLanguages();
 			foreach ($languages as $language)
 				$this->_html .= '
-				<div id="discount_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; margin-left: 4px;">
+				<div id="dd_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; margin-left: 4px;">
 					<input type="text" name="discount_description['.$language['id_lang'].']" id="discount_description['.$language['id_lang'].']" value="'.(isset($_POST['discount_description'][intval($language['id_lang'])]) ? $_POST['discount_description'][intval($language['id_lang'])] : $this->_configuration['REFERRAL_DISCOUNT_DESCRIPTION'][intval($language['id_lang'])]).'" />
 				</div>';
-			$this->_html .= $this->displayFlags($languages, $defaultLanguage, 'discount_description', 'discount_description', true);
+			$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'dd', true);
 			$this->_html .= '
 			</p>
 			<div class="clear center"><input class="button" style="margin-top: 10px" name="submitReferralProgram" id="submitReferralProgram" value="'.$this->l('Update settings').'" type="submit" /></div>
@@ -262,7 +264,7 @@ class ReferralProgram extends Module
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
 		$iso = Language::getIsoById($defaultLanguage);
-		$divLangName = 'cpara';
+		$divLangName = 'cpara¤dd';
 
 		// xml loading
 		$xml = false;
