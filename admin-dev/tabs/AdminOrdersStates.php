@@ -118,12 +118,13 @@ class AdminOrdersStates extends AdminTab
 						</div>';							
 				$this->displayFlags($languages, $defaultLanguage, 'name¤template', 'name');
 
-		echo '		<p style="clear: both">'.$this->l('Order status (e.g., \'Pending\')').'</p>
+		echo '		<p class="clear">'.$this->l('Order status (e.g., \'Pending\')').'</p>
 				</div>
+				<div class="clear"></div>
 				<label>'.$this->l('Icon:').' </label>
 				<div class="margin-form">
 					<input type="file" name="icon" />
-					<p>'.$this->l('Upload an icon from your computer').' (.gif)</p>
+					<p>'.$this->l('Upload an icon from your computer (File type: .gif, suggested size: 16x16)').'</p>
 				</div>
 				<label>'.$this->l('Color:').' </label>
 				<div class="margin-form">
@@ -132,25 +133,25 @@ class AdminOrdersStates extends AdminTab
 				</div>
 				<div class="margin-form">
 					<p>
-						<input type="checkbox" name="logable"'.(($this->getFieldValue($obj, 'logable') == 1) ? ' checked="checked"' : '').' id="logable_on" value="1" />
+						<input type="checkbox" style="vertical-align: text-bottom;" name="logable"'.(($this->getFieldValue($obj, 'logable') == 1) ? ' checked="checked"' : '').' id="logable_on" value="1" />
 						<label class="t" for="logable_on"> '.$this->l('Consider the associated order as validated').'</label>
 					</p>
 				</div>
 				<div class="margin-form">
 					<p>
-						<input type="checkbox" name="invoice"'.(($this->getFieldValue($obj, 'invoice') == 1) ? ' checked="checked"' : '').' id="invoice_on" value="1" />
+						<input type="checkbox" style="vertical-align: text-bottom;" name="invoice"'.(($this->getFieldValue($obj, 'invoice') == 1) ? ' checked="checked"' : '').' id="invoice_on" value="1" />
 						<label class="t" for="invoice_on"> '.$this->l('Allow customer to download and view PDF version of invoice').'</label>
 					</p>
 				</div>
 				<div class="margin-form">
 					<p>
-						<input type="checkbox" name="hidden"'.(($this->getFieldValue($obj, 'hidden') == 1) ? ' checked="checked"' : '').' id="hidden_on" value="1" />
+						<input type="checkbox" style="vertical-align: text-bottom;" name="hidden"'.(($this->getFieldValue($obj, 'hidden') == 1) ? ' checked="checked"' : '').' id="hidden_on" value="1" />
 						<label class="t" for="hidden_on"> '.$this->l('Hide this state in order for customer').'</label>
 					</p>
 				</div>
 				<div class="margin-form">
 					<p>
-						<input type="checkbox" id="send_email" name="send_email" onclick="javascript:openCloseLayer(\'tpl\');"'.
+						<input type="checkbox" style="vertical-align: text-bottom;" id="send_email" name="send_email" onclick="javascript:openCloseLayer(\'tpl\');"'.
 					(($this->getFieldValue($obj, 'send_email')) ? 'checked="checked"' : '').' value="1" />
 						<label class="t" for="send_email"> '.$this->l('Send e-mail to customer when order is changed to this status').'</label>
 					</p>
