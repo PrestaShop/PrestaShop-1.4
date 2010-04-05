@@ -15,6 +15,7 @@ $_MODULE['<{hipay}prestashop>hipay_6401593f1412a6b385c8e645d1f056ac'] = 'La libr
 $_MODULE['<{hipay}prestashop>hipay_f8b94463fa8b5591e5edbbb8021e8038'] = 'OpenSSL n\'est pas activé';
 $_MODULE['<{hipay}prestashop>hipay_54457f20f1d9f9d7cf14d8e928cad1aa'] = 'Impossible d\'accéder au service de paiement';
 $_MODULE['<{hipay}prestashop>hipay_527557971b02f68ead6a278fb96ac396'] = 'vérifiez le firewall de votre serveur pour le port 443';
+$_MODULE['<{hipay}prestashop>hipay_1c5f361b20c116ab2324e28b1ac54e12'] = 'Votre boutique n\'est pas en ligne';
 $_MODULE['<{hipay}prestashop>hipay_db1ffc046733b8213810c21909f296e7'] = 'Hipay est un portefeuille électronique sécurisé qui vous offre une palette d’outils et de fonctionnalités pour facturer différents types de contenus et  de services : contenus numériques, téléchargements, biens physiques…sans avoir besoin de négocier avec une banque, ni de frais techniques.';
 $_MODULE['<{hipay}prestashop>hipay_5f93fe3bf0a19507740f488b557d3814'] = 'Facile et gratuite, l’implémentation de la solution Hipay constitue un véritable atout pour un site e-commerce qui souhaite se développer en Europe : paiements sécurisés par cartes internationales, solutions de paiement locales, virements bancaires...';
 $_MODULE['<{hipay}prestashop>hipay_f21850b58e4866b30f7d3724cc29edb1'] = 'Accédez à votre espace marchand Hipay';

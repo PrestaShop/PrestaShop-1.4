@@ -312,20 +312,20 @@ class Loyalty extends Module
 	public function hookExtraRight($params)
 	{
 		global $smarty;
-		$id_product = Tools::getValue('id_product');
-		if (is_numeric($id_product))
+
+		$id_product = intval(Tools::getValue('id_product'));
+		
+		$product = new Product(intval($id_product));
+		if (Validate::isLoadedObject($product))
 		{
-			$product = new Product(intval($id_product));
-			if (Validate::isLoadedObject($product))
-			{
-				$points = LoyaltyModule::getNbPointsByProduct($product);
-				$smarty->assign(array(
-					'points' => $points,
-					'voucher' => LoyaltyModule::getVoucherValue($points)
-				));
-				return $this->display(__FILE__, 'product.tpl');
-			}
+			$pointsBefore = intval(LoyaltyModule::getCartNbPoints($params['cart']));
+			$pointsAfter = intval(LoyaltyModule::getCartNbPoints($params['cart'], $product));
+			$points = intval($pointsAfter - $pointsBefore);
+			$smarty->assign(array('points' => intval($points), 'total_points' => intval($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));
+
+			return $this->display(__FILE__, 'product.tpl');
 		}
+
 		return false;
 	}
 
@@ -354,7 +354,7 @@ class Loyalty extends Module
 			return false;
 		
 		$totalPrice = 0;
-		$details = OrderReturn::getOrdersReturnDetail($params['orderReturn']->id);
+		$details = OrderReturn::getOrdersReturnDetail(intval($params['orderReturn']->id));
 		foreach ($details as $detail)
 		{
 			$result = Db::getInstance()->getRow('

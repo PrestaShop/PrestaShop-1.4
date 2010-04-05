@@ -67,7 +67,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)
 	FROM `PREFIX_module` WHERE `name` = 'mailalerts'
 );
 
-ALTER TABLE `PREFIX_customer` ADD `id_default_group` INT(10) UNSIGNED NOT NULL AFTER `id_gender`;
+ALTER TABLE `PREFIX_customer` ADD `id_default_group` INT UNSIGNED NOT NULL DEFAULT '1' AFTER `id_gender`;
 
 UPDATE `PREFIX_customer` c SET `id_default_group` = (
 	SELECT (

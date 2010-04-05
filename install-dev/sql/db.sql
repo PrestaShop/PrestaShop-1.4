@@ -349,7 +349,7 @@ CREATE TABLE `PREFIX_currency` (
 CREATE TABLE `PREFIX_customer` (
   `id_customer` int(10) unsigned NOT NULL auto_increment,
   `id_gender` int(10) unsigned NOT NULL,
-  `id_default_group` int(10) unsigned NOT NULL,
+  `id_default_group` int(10) unsigned NOT NULL DEFAULT '1',
   `secure_key` varchar(32) NOT NULL default '-1',
   `email` varchar(128) NOT NULL,
   `passwd` varchar(32) NOT NULL,
