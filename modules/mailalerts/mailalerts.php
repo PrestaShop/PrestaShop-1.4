@@ -255,7 +255,8 @@ class MailAlerts extends Module
 		
 		$product =  new Product(intval($id_product));
 		$templateVars = array(
-			'{product}' => strval($product->name[intval(Configuration::get('PS_LANG_DEFAULT'))])
+			'{product}' => strval($product->name[intval(Configuration::get('PS_LANG_DEFAULT'))]),
+			'{product_link}' => Link::getProductLink($product)
 		);
 		foreach ($customers as $cust)
 		{
