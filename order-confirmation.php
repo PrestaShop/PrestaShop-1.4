@@ -11,7 +11,7 @@ $id_module = intval(Tools::getValue('id_module', 0));
 $id_order = Order::getOrderByCartId(intval($id_cart));
 $secure_key = isset($_GET['key']) ? $_GET['key'] : false;
 if (!$id_order OR !$id_module OR !$secure_key OR empty($secure_key))
-	Tools::redirect('history.php');
+	Tools::redirect('history.php'.(Tools::isSubmit('slowvalidation') ? '?slowvalidation' : ''));
 $order = new Order(intval($id_order));
 if (!Validate::isLoadedObject($order) OR $order->id_customer != $cookie->id_customer OR $secure_key != $order->secure_key)
 	Tools::redirect('history.php');

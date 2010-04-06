@@ -10,6 +10,8 @@
 <h2>{l s='Order history'}</h2>
 <p>{l s='Here are the orders you have placed since the creation of your account'}.</p>
 
+{if $slowValidation}<p class="warning">{l s='If you just place an order, validating it may take time, thank you refresh the page.'}</p>{/if}
+
 <div class="block-center" id="block-history">
 	{if $orders && count($orders)}
 	<table id="order-list" class="std">

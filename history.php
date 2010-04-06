@@ -23,7 +23,8 @@ if ($orders = Order::getCustomerOrders(intval($cookie->id_customer)))
 include(dirname(__FILE__).'/header.php');
 $smarty->assign(array(
 	'orders' => $orders,
-	'invoiceAllowed' => intval(Configuration::get('PS_INVOICE'))));
+	'invoiceAllowed' => intval(Configuration::get('PS_INVOICE')),
+	'slowValidation' => Tools::isSubmit('slowvalidation')));
 $smarty->display(_PS_THEME_DIR_.'history.tpl');
 include(dirname(__FILE__).'/footer.php');
 
