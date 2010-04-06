@@ -318,9 +318,17 @@ class Loyalty extends Module
 		$product = new Product(intval($id_product));
 		if (Validate::isLoadedObject($product))
 		{
-			$pointsBefore = intval(LoyaltyModule::getCartNbPoints($params['cart']));
-			$pointsAfter = intval(LoyaltyModule::getCartNbPoints($params['cart'], $product));
-			$points = intval($pointsAfter - $pointsBefore);
+			if (Validate::isLoadedObject($params['cart']))
+			{
+				$pointsBefore = intval(LoyaltyModule::getCartNbPoints($params['cart']));
+				$pointsAfter = intval(LoyaltyModule::getCartNbPoints($params['cart'], $product));
+				$points = intval($pointsAfter - $pointsBefore);
+			}
+			else
+			{
+				$points = intval(LoyaltyModule::getNbPointsByPrice($product->getPrice()));
+				$pointsAfter = $points;
+			}
 			$smarty->assign(array('points' => intval($points), 'total_points' => intval($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));
 
 			return $this->display(__FILE__, 'product.tpl');

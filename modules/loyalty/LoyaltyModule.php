@@ -84,8 +84,8 @@ class LoyaltyModule extends ObjectModel
 				$cartProductsNew['on_sale'] = $newProduct->on_sale;
 				$cartProductsNew['price_wt'] = number_format($newProduct->getPrice(), 2, '.', '');
 				$cartProductsNew['cart_quantity'] = 1;
-				$cartProducts[] = $cartProductsNew;				
-			}		
+				$cartProducts[] = $cartProductsNew;
+			}
 			
 			foreach ($cartProducts AS $product)
 			{
@@ -105,12 +105,24 @@ class LoyaltyModule extends ObjectModel
 
 	static public function getVoucherValue($nbPoints)
 	{
-		return floatval(floatval($nbPoints) * floatval(Configuration::get('PS_LOYALTY_POINT_VALUE')));
+		global $cookie;
+		
+		return floatval(floatval($nbPoints) * floatval(Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency(intval($cookie->id_currency)))));
 	}
 
 	static public function getNbPointsByPrice($price)
 	{
+		global $cookie;
+
 		$points = 0;
+
+		if (Configuration::get('PS_CURRENCY_DEFAULT') != $cookie->id_currency)
+		{
+			$currency = new Currency(intval($cookie->id_currency));
+			if ($currency->conversion_rate)
+				$price = $price / $currency->conversion_rate;
+		}
+
 		/* Prevent division by zero */
 		if ($pointRate = floatval(Configuration::get('PS_LOYALTY_POINT_RATE')))
 			$points = floor($price / $pointRate);
