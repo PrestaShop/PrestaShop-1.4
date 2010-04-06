@@ -99,6 +99,7 @@ class AdminTabs extends AdminTab
 	
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex, $cookie;
 
 		$obj = $this->loadObject(true);

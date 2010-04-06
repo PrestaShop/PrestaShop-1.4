@@ -157,6 +157,7 @@ class AdminAttributesGroups extends AdminTab
 
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));

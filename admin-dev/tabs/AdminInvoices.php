@@ -31,6 +31,7 @@ class AdminInvoices extends AdminTab
 
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 		
 		$output = '

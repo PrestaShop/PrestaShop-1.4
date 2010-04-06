@@ -202,4 +202,7 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	die($list);
 }
 
+if (Tools::getValue('form_language_id'))
+	Configuration::updateValue('PS_FORM_DEFAULT_LANG', (int)Tools::getValue('form_language_id'));
+
 ?>

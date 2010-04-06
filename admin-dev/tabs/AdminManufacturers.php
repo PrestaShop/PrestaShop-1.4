@@ -84,6 +84,7 @@ class AdminManufacturers extends AdminTab
 
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex, $cookie;
 		$manufacturer = $this->loadObject(true);
 		$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);

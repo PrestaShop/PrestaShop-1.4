@@ -241,6 +241,7 @@ class AdminModulesPositions extends AdminTab
 
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 
 		$id_module = intval(Tools::getValue('id_module'));

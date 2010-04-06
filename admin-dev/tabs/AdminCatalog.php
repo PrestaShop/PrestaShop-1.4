@@ -98,8 +98,6 @@ class AdminCatalog extends AdminTab
 		$this->adminCategories->displayErrors();
 	}
 
-	
-	
 	public function display()
 	{
 		global $currentIndex;

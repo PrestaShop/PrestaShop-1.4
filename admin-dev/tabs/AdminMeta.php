@@ -34,6 +34,7 @@ class AdminMeta extends AdminTab
 	
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 		
 		$meta = $this->loadObject(true);

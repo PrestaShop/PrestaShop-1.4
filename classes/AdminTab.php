@@ -117,7 +117,8 @@ abstract class AdminTab
 	protected $_redirect = true;
 
 	protected	$_languages = NULL;
-	protected	$_defaultLanguage = NULL;
+	protected	$_defaultFormLanguage = NULL;
+	
 	private $_includeObj = array();
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
@@ -1129,7 +1130,7 @@ abstract class AdminTab
 		$this->displayListFooter();
 	}
 
-	public function displayListContent($token=NULL)
+	public function displayListContent($token = NULL)
 	{
 		/* Display results in a table
 		 *
@@ -1173,9 +1174,7 @@ abstract class AdminTab
 					echo '
 					<td '.(isset($params['position']) ? ' id="td_'.(isset($id_category) AND $id_category ? $id_category : 0).'_'.$id.'"' : '').' class="pointer'.((isset($params['position']) AND $this->_orderBy == 'position')? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
 					if (!isset($params['position']))
-					{
 						echo ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.($this->view? '&view' : '&update').$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'">'.(isset($params['prefix']) ? $params['prefix'] : '');
-					}
 					else
 						echo '>';
 					if (isset($params['active']) AND isset($tr[$key]))
@@ -1188,8 +1187,8 @@ abstract class AdminTab
 						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" />';
 					elseif (isset($params['position']))
 					{
-                   		if ($this->_orderBy == 'position')
-                   		{
+						if ($this->_orderBy == 'position')
+						{
 							echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1]) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&position=1'.
 									($id_category = intval(Tools::getValue('id_category')) ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'down' : 'up').'.gif"
@@ -1404,22 +1403,25 @@ abstract class AdminTab
 	 */
 	public function displayForm()
 	{
-		$this->_defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$this->_defaultFormLanguage = Configuration::get('PS_FORM_DEFAULT_LANG') ? Configuration::get('PS_FORM_DEFAULT_LANG') : Configuration::get('PS_LANG_DEFAULT');
 		$this->_languages = Language::getLanguages();
 
-		echo '
+		$output = '
 		<script type="text/javascript">
 			$(document).ready(function() {
-			var languages = new Array();';
+				var languages = new Array();';
 		foreach ($this->_languages AS $k => $language)
-			echo 'languages['.$k.'] = {
-						id_lang: '.(int)$language['id_lang'].', 
-						iso_code: \''.$language['iso_code'].'\', 
-						name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
-					};';
-		echo '	displayFlags(languages, '.$this->_defaultLanguage.');
+			$output .= '
+				languages['.$k.'] = {
+					id_lang: '.(int)$language['id_lang'].', 
+					iso_code: \''.$language['iso_code'].'\', 
+					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
+				};';
+		$output .= '
+				displayFlags(languages, '.$this->_defaultFormLanguage.');
 			});
 		</script>';
+		echo $output;
 	}
 
 	/**

@@ -1068,6 +1068,7 @@ class AdminImport extends AdminTab
 	
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 
 		if ((Tools::getValue('import')))

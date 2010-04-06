@@ -93,40 +93,36 @@ function toggleLanguageFlags(elt)
 function changeLanguage(field, fieldsString, id_language_new, iso_code)
 {
 	var fields = fieldsString.split('¤');
-	for (var i = 0; i < fields.length; i++)
+	for (var i = 0; i < fields.length; ++i)
 	{
-		new_elt = $('#' + fields[i] + '_' + id_language_new);
-		new_elt.siblings().each(function() {
-			if (!$(this).hasClass('displayed_flag') && !$(this).hasClass('clear'))
-				$(this).hide();
-		});
-		new_elt.show();
-		$('#language_current_' + fields[i]).attr('src', '../img/l/' + id_language_new + '.jpg');
+		getE(fields[i] + '_' + id_language).style.display = 'none';
+		getE(fields[i] + '_' + id_language_new).style.display = 'block';
+		getE('language_current_' + fields[i]).src = '../img/l/' + id_language_new + '.jpg';
 	}
- 	$('#languages_' + field).hide();
+ 	getE('languages_' + field).style.display = 'none';
 	id_language = id_language_new;
 }
 
-function changeFormLanguage(elt, id_language_new, iso_code)
+function changeFormLanguage(id_language_new, iso_code)
 {
-	$($(elt).parents()[1]).each(function() {
+	$('.translatable').each(function() {
 		$(this).find('.lang_' + id_language_new)
 			.show()
 			.siblings('div:not(.displayed_flag):not(.clear)').hide();
 		$('.language_current').attr('src', '../img/l/' + id_language_new + '.jpg');
 	});
 	$('.language_flags').hide();
-	id_language = id_language_new;
+	$.post("ajax.php", { form_language_id: id_language_new });
 }
 
-function displayFlags(languages, defaultLanguage)
+function displayFlags(languages, defaultLanguageID)
 {
 	$('.translatable').each(function() {
 		if (!$(this).find('.displayed_flag').length > 0) {
 			$.each(languages, function(key, language) {
-				if (language['id_lang'] == defaultLanguage)
+				if (language['id_lang'] == defaultLanguageID)
 				{
-					defaultLang = language;
+					defaultLanguage = language;
 					return false;
 				}
 			});
@@ -135,8 +131,8 @@ function displayFlags(languages, defaultLanguage)
 				.append($('<img>')
 					.addClass('language_current')
 					.addClass('pointer')
-					.attr('src', '../img/l/' + defaultLang['id_lang'] + '.jpg')
-					.attr('alt', defaultLang['name'])
+					.attr('src', '../img/l/' + defaultLanguage['id_lang'] + '.jpg')
+					.attr('alt', defaultLanguage['name'])
 					.click(function() {
 						toggleLanguageFlags(this);
 					})
@@ -151,7 +147,7 @@ function displayFlags(languages, defaultLanguage)
 					.attr('src', '../img/l/' + language['id_lang'] + '.jpg')
 					.attr('alt', language['name'])
 					.click(function() {
-						changeFormLanguage(this, language['id_lang'], language['iso_code']);
+						changeFormLanguage(language['id_lang'], language['iso_code']);
 					});
 				languagesFlags.append(img);
 			});
@@ -161,7 +157,6 @@ function displayFlags(languages, defaultLanguage)
 				$(this).append(displayFlags).append(languagesFlags);
 		}
 	});
-	id_language = defaultLang['id_lang'];
 }
 
 function checkAll(pForm)

@@ -415,6 +415,7 @@ class AdminCustomers extends AdminTab
 
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 		$obj = $this->loadObject(true);
 		if ($obj->id) $need_identifcation_number = $obj->getNeedDNI();

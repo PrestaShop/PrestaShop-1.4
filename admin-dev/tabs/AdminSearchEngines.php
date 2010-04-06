@@ -30,6 +30,7 @@ class AdminSearchEngines extends AdminTab
 	
 	public function displayForm()
 	{
+		parent::displayForm();
 		global $currentIndex;
 		
 		$obj = $this->loadObject(true);

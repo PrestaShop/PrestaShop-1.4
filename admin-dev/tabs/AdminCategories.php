@@ -63,6 +63,9 @@ class AdminCategories extends AdminTab
 	public function display($token = NULL)
 	{
 		global $currentIndex, $cookie;
+		
+		if (($categoryOrderby = Tools::getValue('categoryOrderby')) && ($categoryOrderway = Tools::getValue('categoryOrderway'))) 
+			$currentIndex .= '&categoryOrderby='.$categoryOrderby.'&categoryOrderway='.$categoryOrderway;
 
 		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'name' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
@@ -245,15 +248,5 @@ class AdminCategories extends AdminTab
 			</fieldset>
 		</form>
 		<p class="clear"></p>';
-	}
-
-	public function displayListHeader($token = NULL)
-	{
-		global $currentIndex;
-
-		$id_category = intval(Tools::getValue('id_category'));
-		if ($id_category)
-			$currentIndex .= '&id_category='.$id_category.'&token='.$this->token;
-		parent::displayListHeader($token);
 	}
 }
