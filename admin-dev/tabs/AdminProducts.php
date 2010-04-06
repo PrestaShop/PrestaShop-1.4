@@ -122,6 +122,13 @@ class AdminProducts extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $currentIndex;
+		
+		$catalog_tabs = array('category', 'product');
+		$catBarIndex = $currentIndex;
+		foreach ($catalog_tabs AS $tab)
+			if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
+				$catBarIndex .= '&'.$tab.'Orderby='.Tools::getValue($tab.'Orderby').'&'.$tab.'Orderway='.Tools::getValue($tab.'Orderway');
+		
 		/* Add a new product */
 		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay'))
 		{
@@ -180,7 +187,7 @@ class AdminProducts extends AdminTab
 						{
 							Hook::addProduct($product);
 							Search::indexation(false);
-							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=19&token='.($token ? $token : $this->token));
+							Tools::redirectAdmin($catBarIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=19&token='.($token ? $token : $this->token));
 						}
 					}
 					else
@@ -189,6 +196,54 @@ class AdminProducts extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+		}
+		/* Change object statuts (active, inactive) */
+		elseif (isset($_GET['status']) AND Tools::getValue($this->identifier))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()))
+				{
+					if ($object->toggleStatus())
+						Tools::redirectAdmin($catBarIndex.'&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
+					else
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+		}
+		/* Delete object */
+		elseif (isset($_GET['delete'.$this->table]))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
+				{
+					// check if request at least one object with noZeroObject
+					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
+					else
+					{
+						$this->deleteImage($object->id);
+						if ($this->deleted)
+						{
+							$object->deleted = 1;
+							if ($object->update())
+								Tools::redirectAdmin($catBarIndex.'&conf=1&token='.($token ? $token : $this->token));
+						}
+						elseif ($object->delete())
+							Tools::redirectAdmin($catBarIndex.'&conf=1&token='.($token ? $token : $this->token));
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 
 		/* Product images management */
@@ -498,24 +553,6 @@ class AdminProducts extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
-		}
-
-		// Delete object
-		elseif (isset($_GET['delete'.$this->table]))
-		{
-			if ($this->tabAccess['delete'] === '1')
-			{
-				if (Validate::isLoadedObject($product = new Product(intval(Tools::getValue('id_product')))))
-				{
-					if (!$this->deleteImage($product->id))
-						$this->_errors[] = Tools::displayError('an error occurred during product image deletion');
-					if ($product->delete())
-						Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=1&token='.($token ? $token : $this->token));
-					$this->_errors[] = Tools::displayError('an error occurred during product deletion');
-				}
-			}
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		else
 			parent::postProcess(true);
@@ -896,8 +933,8 @@ class AdminProducts extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		
-		if (($productOrderby = Tools::getValue('productOrderby')) && ($productOrderway = Tools::getValue('productOrderway'))) 
-			$currentIndex .= '&productOrderby='.$productOrderby.'&productOrderway='.$productOrderway;
+		if (($id_category = (int)Tools::getValue('id_category')))
+			$currentIndex .= '&id_category='.$id_category;
 
 		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'position' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
 		$id_category = intval(Tools::getValue('id_category'));
@@ -913,6 +950,8 @@ class AdminProducts extends AdminTab
 
 	public function displayList($token = NULL)
 	{
+		global $currentIndex;
+		
 		/* Display list header (filtering, pagination and column names) */
 		$this->displayListHeader($token);
 		if (!sizeof($this->_list))
@@ -1026,7 +1065,7 @@ class AdminProducts extends AdminTab
 					toload[5] = true;
 					toload[6] = true;
 					toload[7] = true;
-					function loadTab(id, show_flags) {';
+					function loadTab(id) {';
 		if ($obj->id)
 		{
 			echo ' 	if (toload[id]) {
@@ -2732,19 +2771,6 @@ class AdminProducts extends AdminTab
 			if (!Pack::addItems($product->id, $ids))
 				return false;
 		return true;
-	}
-
-	public function displayListHeader($token = NULL)
-	{
-		global $currentIndex;
-
-		$id_category = intval(Tools::getValue('id_category'));
-		if ($id_category)
-			$currentIndex .= '&id_category='.$id_category;
-		if (Tools::getValue('productOrderby') && Tools::getValue('productOrderway')) 
-			$currentIndex = preg_replace('/(&productOrderby)/Ui', '', $currentIndex);
-
-		parent::displayListHeader($token);
 	}
 }
 

@@ -48,6 +48,11 @@ class AdminCategories extends AdminTab
 
 	public function displayList($token = NULL)
 	{
+		global $currentIndex;
+		
+		if (Tools::getValue('productOrderby') && Tools::getValue('productOrderway')) 
+			$currentIndex .= '&productOrderby='.Tools::getValue('productOrderby').'&productOrderway='.Tools::getValue('productOrderway');
+		
 		/* Display list header (filtering, pagination and column names) */
 		$this->displayListHeader($token);
 		if (!sizeof($this->_list))
@@ -63,9 +68,6 @@ class AdminCategories extends AdminTab
 	public function display($token = NULL)
 	{
 		global $currentIndex, $cookie;
-		
-		if (($categoryOrderby = Tools::getValue('categoryOrderby')) && ($categoryOrderway = Tools::getValue('categoryOrderway'))) 
-			$currentIndex .= '&categoryOrderby='.$categoryOrderby.'&categoryOrderway='.$categoryOrderway;
 
 		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'name' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
@@ -75,9 +77,15 @@ class AdminCategories extends AdminTab
 		echo '</div>';
 	}
 
-	public function postProcess()
+	public function postProcess($token = NULL)
 	{
-		global $cookie;
+		global $cookie, $currentIndex;
+		
+		$catalog_tabs = array('category', 'product');
+		$catBarIndex = $currentIndex;
+		foreach ($catalog_tabs AS $tab)
+			if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
+				$catBarIndex .= '&'.$tab.'Orderby='.Tools::getValue($tab.'Orderby').'&'.$tab.'Orderway='.Tools::getValue($tab.'Orderway');
 
 		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 
@@ -103,6 +111,54 @@ class AdminCategories extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 				}
 			}
+		}
+		/* Change object statuts (active, inactive) */
+		elseif (isset($_GET['status']) AND Tools::getValue($this->identifier))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()))
+				{
+					if ($object->toggleStatus())
+						Tools::redirectAdmin($catBarIndex.'&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.Tools::getValue('token'));
+					else
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+		}
+		/* Delete object */
+		elseif (isset($_GET['delete'.$this->table]))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
+				{
+					// check if request at least one object with noZeroObject
+					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
+					else
+					{
+						$this->deleteImage($object->id);
+						if ($this->deleted)
+						{
+							$object->deleted = 1;
+							if ($object->update())
+								Tools::redirectAdmin($catBarIndex.'&conf=1&token='.Tools::getValue('token'));
+						}
+						elseif ($object->delete())
+							Tools::redirectAdmin($catBarIndex.'&conf=1&token='.Tools::getValue('token'));
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		parent::postProcess();
 	}

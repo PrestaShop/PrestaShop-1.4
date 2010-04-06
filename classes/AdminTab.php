@@ -1017,9 +1017,13 @@ abstract class AdminTab
 				<th '.(isset($params['widthColumn']) ? 'style="width: '.$params['widthColumn'].'px"' : '').'>
 					'.$params['title'];
 			if (!isset($params['orderby']) OR $params['orderby'])
+			{
+				if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
+					$currentIndex = preg_replace('/&'.$this->table.'Orderby=([a-z _]*)&'.$this->table.'Orderway=([a-z]*)/i', '', $currentIndex);
 				echo '<br />
 					<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
 					<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
+			}
 			echo '
 				</th>';
 		}
@@ -1143,6 +1147,9 @@ abstract class AdminTab
 		 */
 		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		
+		if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
+			$currentIndex .= '&'.$this->table.'Orderby='.Tools::getValue($this->table.'Orderby').'&'.$this->table.'Orderway='.Tools::getValue($this->table.'Orderway');
 
 		$_cacheLang['View'] = $this->l('View');
 		$_cacheLang['Edit'] = $this->l('Edit');
