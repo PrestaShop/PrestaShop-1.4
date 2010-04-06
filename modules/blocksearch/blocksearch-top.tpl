@@ -1,6 +1,6 @@
 <!-- Block search module TOP -->
 <div id="search_block_top">
-	<form method="get" action="{$base_dir}search.php" id="searchbox">
+	<form method="get" action="{$base_dir_ssl}search.php" id="searchbox">
 	<p>
 		<label for="search_query"><!-- image on background --></label>
 		<input type="hidden" name="orderby" value="position" />
@@ -25,7 +25,7 @@
 		
 		$('document').ready( function() {
 			$("#search_query").autocomplete(
-				'{/literal}{$base_dir}{literal}search.php', {
+				'{/literal}{$base_dir_ssl}{literal}search.php', {
 				minChars: 3,
 				max:10,
 				selectFirst:false,

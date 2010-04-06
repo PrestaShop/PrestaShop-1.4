@@ -569,6 +569,14 @@ class		Cart extends ObjectModel
 			return false;
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization));
 	}
+	
+	static public function getTotalCart($id_cart)
+	{
+		$cart = new Cart(intval($id_cart));
+		if (!Validate::isLoadedObject($cart))
+			die(Tools::displayError());
+		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
+	}
 
 	/**
 	* This function returns the total cart amount
@@ -585,14 +593,6 @@ class		Cart extends ObjectModel
 	* @param integer $type Total type
 	* @return float Order total
 	*/
-	static public function getTotalCart($id_cart)
-	{
-		$cart = new Cart(intval($id_cart));
-		if (!Validate::isLoadedObject($cart))
-			die(Tools::displayError());
-		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
-	}
-
 	public function getOrderTotal($withTaxes = true, $type = 3)
 	{
 		if (!$this->id)

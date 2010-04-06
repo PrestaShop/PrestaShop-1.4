@@ -1,7 +1,7 @@
 <!-- Block search module -->
 <div id="search_block_left" class="block exclusive">
 	<h4>{l s='Search' mod='blocksearch'}</h4>
-	<form method="get" action="{$base_dir}search.php" id="searchbox">
+	<form method="get" action="{$base_dir_ssl}search.php" id="searchbox">
 		<p class="block_content">
 			<label for="search_query">{l s='Enter a product name' mod='blocksearch'}</label>
 			<input type="hidden" name="orderby" value="position" />
@@ -26,7 +26,7 @@
 		
 		$('document').ready( function() {
 			$("#search_query").autocomplete(
-				'{/literal}{$base_dir}{literal}search.php', {
+				'{/literal}{$base_dir_ssl}{literal}search.php', {
 				minChars: 3,
 				max:10,
 				width:500,
