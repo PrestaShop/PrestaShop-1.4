@@ -203,12 +203,13 @@ class AdminAddresses extends AdminTab
 				});
 			}
 		</script>
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.(intval($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.intval($obj->id).'" />' : '').'
 		'.(($id_order = intval(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.intval($id_order).'" />' : '').'
 		'.(($address_type = intval(Tools::getValue('address_type'))) ? '<input type="hidden" name="address_type" value="'.intval($address_type).'" />' : '').'
 		'.(Tools::getValue('realedit') ? '<input type="hidden" name="realedit" value="1" />' : '').'
-			<fieldset><legend><img src="../img/admin/contact.gif" />'.$this->l('Addresses').'</legend>';
+			<fieldset class="width3">
+				<legend><img src="../img/admin/contact.gif" alt="" />'.$this->l('Addresses').'</legend>';
 		switch ($this->addressType)
 		{
 			case 'manufacturer':

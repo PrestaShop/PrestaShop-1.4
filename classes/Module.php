@@ -280,7 +280,7 @@ abstract class Module
 	  */
 	static public function getInstanceByName($moduleName)
 	{
-		if (!file_exists(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
+		if (!Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
 			return false;
 		include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
 		if (!class_exists($moduleName, false))
@@ -342,7 +342,7 @@ abstract class Module
 		$modules = scandir(_PS_MODULE_DIR_);
 		foreach ($modules AS $name)
 		{
-			if (file_exists($moduleFile = _PS_MODULE_DIR_.'/'.$name.'/'.$name.'.php'))
+			if (Tools::file_exists_cache($moduleFile = _PS_MODULE_DIR_.'/'.$name.'/'.$name.'.php'))
 			{
 				if (!Validate::isModuleName($name))
 					die(Tools::displayError().' (Module '.$name.')');
@@ -463,7 +463,7 @@ abstract class Module
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
 
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
-		if (file_exists($file) AND include_once($file))
+		if (Tools::file_exists_cache($file) AND include_once($file))
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
 		if (!is_array($_MODULES))
@@ -613,12 +613,12 @@ abstract class Module
 		$previousTemplate = $smarty->currentTemplate;
 		$smarty->currentTemplate = substr(basename($template), 0, -4);
 		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
-		if (file_exists(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template))
+		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template))
 		{
 			$smarty->assign('module_template_dir', _THEME_DIR_.'modules/'.basename($file, '.php').'/');
 			$result = $smarty->fetch(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template);
 		}
-		elseif (file_exists(dirname($file).'/'.$template))
+		elseif (Tools::file_exists_cache(dirname($file).'/'.$template))
 		{
 			$smarty->assign('module_template_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
 			$result = $smarty->fetch(dirname($file).'/'.$template);

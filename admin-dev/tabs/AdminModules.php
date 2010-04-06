@@ -236,7 +236,7 @@ class AdminModules extends AdminTab
 		echo '
 		<div class="clear">&nbsp;</div>
 		<div id="module_install" style="float: left;'.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'" class="width1">
-			<fieldset>
+			<fieldset class="width2">
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
 				<hr />

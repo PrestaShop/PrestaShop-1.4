@@ -14,6 +14,8 @@
 
 class Tools
 {
+	protected static $file_exists_cache = array();
+	
 	/**
 	* Random password generator
 	*
@@ -915,6 +917,19 @@ class Tools
 		if ($tmp2[strlen($tmp2) - 1] == 0)
 			return $value;
 		return floor($tmp) / $precisionFactor;
+	}
+	
+	/**
+	 * file_exists() wrapper with cache to speedup performance
+	 *
+	 * @param string $filename File name
+	 * @return boolean Cached result of file_exists($filename)
+	 */
+	static public function file_exists_cache($filename)
+	{
+		if (!isset(self::$file_exists_cache[$filename]))
+			self::$file_exists_cache[$filename] = file_exists($filename);
+		return self::$file_exists_cache[$filename];
 	}
 }
 

@@ -1120,7 +1120,7 @@ abstract class AdminTab
 		/* Display list header (filtering, pagination and column names) */
 		$this->displayListHeader();
 		if (!sizeof($this->_list))
-			echo '<tr><td class="center" colspan="'.sizeof($this->fieldsDisplay).'">'.$this->l('No items found').'</td></tr>';
+			echo '<tr><td class="center" colspan="'.(sizeof($this->fieldsDisplay) + 2).'">'.$this->l('No items found').'</td></tr>';
 
 		/* Show the content of the table */
 		$this->displayListContent();

@@ -320,7 +320,7 @@ class		Category extends ObjectModel
 		foreach ($result AS &$row)
 		{
 			$row['name'] = Category::hideCategoryPosition($row['name']);
-			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? $row['id_category'] : Language::getIsoById($cookie->id_lang).'-default';
+			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? intval($row['id_category']) : Language::getIsoById($cookie->id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 		return $result;

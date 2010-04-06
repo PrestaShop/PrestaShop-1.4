@@ -479,8 +479,8 @@ class		Customer extends ObjectModel
 		SELECT cg.`id_group`
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.intval($this->id));
-		foreach ($result as $group)
-			$groups[] = $group['id_group'];
+		foreach ($result AS $group)
+			$groups[] = intval($group['id_group']);
 		return $groups;
 	}
 	
@@ -496,6 +496,7 @@ class		Customer extends ObjectModel
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.intval($this->id).'
 		AND cg.`id_group` = '.intval($id_group));
+		
 		return $result['nb'];
 	}
 	

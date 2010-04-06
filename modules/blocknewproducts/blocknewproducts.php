@@ -19,11 +19,9 @@ class BlockNewProducts extends Module
 
     function install()
     {
-        if (parent::install() == false 
-				OR $this->registerHook('rightColumn') == false
-				OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
-			return false;
-		return true;
+        if (parent::install() == false OR $this->registerHook('rightColumn') == false OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
+		return false;
+	return true;
     }
 
 	public function getContent()
@@ -64,12 +62,9 @@ class BlockNewProducts extends Module
 	{
 		global $smarty;
 		
-		$currency = new Currency(intval($params['cookie']->id_currency));
 		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, intval(Configuration::get('NEW_PRODUCTS_NBR')));
+		$smarty->assign(array('new_products' => $newProducts, 'mediumSize' => Image::getSize('medium')));
 
-		$smarty->assign(array(
-			'new_products' => $newProducts,
-			'mediumSize' => Image::getSize('medium')));
 		return $this->display(__FILE__, 'blocknewproducts.tpl');
 	}
 	

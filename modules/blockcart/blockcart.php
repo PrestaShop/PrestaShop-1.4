@@ -28,6 +28,7 @@ class BlockCart extends Module
 			$currency = new Currency(intval($params['cart']->id_currency));
 		if (!Validate::isLoadedObject($currency))
 			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+
 		if ($params['cart']->id_customer)
 		{
 			$customer = new Customer(intval($params['cart']->id_customer));
@@ -38,20 +39,25 @@ class BlockCart extends Module
 		$usetax = $taxCalculationMethod == PS_TAX_EXC ? false : true;
 
 		$products = $params['cart']->getProducts(true);
+		$nbTotalProducts = 0;
+		foreach ($products AS $product)
+			$nbTotalProducts += intval($product['cart_quantity']);
 
+		$wrappingCost = floatval($params['cart']->getOrderTotal($usetax, 6));
+		
 		$smarty->assign(array(
-			'products'=> $products,
+			'products' => $products,
 			'customizedDatas' => Product::getAllCustomizedDatas(intval($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			'discounts' => $params['cart']->getDiscounts(false, $usetax),
-			'nb_total_products' =>$params['cart']->nbProducts(),
+			'nb_total_products' => intval($nbTotalProducts),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 5), $currency),
-			'show_wrapping' => floatval($params['cart']->getOrderTotal($usetax, 6)) > 0 ? true : false,
-			'wrapping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 6), $currency),
+			'show_wrapping' => $wrappingCost > 0 ? true : false,
+			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 4), $currency),
 			'total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax), $currency),
-			'id_carrier' => $params['cart']->id_carrier,
+			'id_carrier' => intval($params['cart']->id_carrier),
 			'ajax_allowed' => intval(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false
 		));
 		if (sizeof($errors))
@@ -113,8 +119,10 @@ class BlockCart extends Module
 	public function hookRightColumn($params)
 	{
 		global $smarty, $page_name;
+
 		$smarty->assign('order_page', $page_name == 'order');
 		$this->smartyAssigns($smarty, $params);
+
 		return $this->display(__FILE__, 'blockcart.tpl');
 	}
 

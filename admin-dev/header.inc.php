@@ -40,6 +40,19 @@ require_once(dirname(__FILE__).'/init.php');
 		<script type="text/javascript" src="../js/ajax.js"></script>
 		<link rel="shortcut icon" href="../img/favicon.ico" />
 		<?php echo Module::hookExec('backOfficeHeader'); ?>
+		<!--[if IE]>
+		<style type="text/css">
+		fieldset {
+			position: relative;
+			padding-top: 25px;
+		}
+		legend {
+			position: absolute;
+			top: -0.5em;
+			left: 1.1em;
+		}
+		</style>
+		<![endif]--> 
 	</head>
 	<body>
 		<div id="container">

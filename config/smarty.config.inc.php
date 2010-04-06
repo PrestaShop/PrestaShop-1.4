@@ -30,7 +30,7 @@ function smartyTranslate($params, &$smarty)
 	{
 		$iso = Language::getIsoById($cookie->id_lang);
 
-		if (file_exists(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
+		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
 		{
 			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php';
 			$modKey = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
