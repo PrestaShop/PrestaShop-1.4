@@ -162,7 +162,8 @@ class ProductComments extends Module
 				  <tr>
 				   <th style="width:30px;">'.$this->l('Actions').'</th>
 				   <th style="width:150px;">'.$this->l('Author').'</th>
-				   <th style="width:700px;">'.$this->l('Comment').'</th>
+				   <th style="width:550px;">'.$this->l('Comment').'</th>
+				   <th style="width:150px;">'.$this->l('Product name').'</th>
 				  </tr>
 				 </thead>
 				 <tbody>';
@@ -173,6 +174,7 @@ class ProductComments extends Module
 					     <a href="javascript:;" onclick="deleteComment(\''.intval($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/delete.png" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a></td>
 					 <td>'.htmlspecialchars($comment['firstname'], ENT_COMPAT, 'UTF-8').' '.htmlspecialchars(substr($comment['lastname'], 0, 1), ENT_COMPAT, 'UTF-8').'.</td>
 					 <td>'.htmlspecialchars($comment['content'], ENT_COMPAT, 'UTF-8').'</td>
+					 <td>'.$comment['id_product'].' - '.htmlspecialchars($comment['name'], ENT_COMPAT, 'UTF-8').'</td>
 					</tr>';
 				}
 				$this->_html .= '</tbody>

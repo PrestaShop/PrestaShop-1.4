@@ -168,11 +168,15 @@ class ProductComment extends ObjectModel
 	 */
 	static public function getByValidate($validate = '0')
 	{
+		global $cookie;
+
 		return (Db::getInstance()->ExecuteS('
-		SELECT pc.`id_product_comment`, c.`firstname`, c.`lastname`, pc.`content`, pc.`grade`, pc.`date_add`
-		  FROM `'._DB_PREFIX_.'product_comment` pc
-		INNER JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
+		SELECT pc.`id_product_comment`, pc.`id_product`, c.`firstname`, c.`lastname`, pc.`content`, pc.`grade`, pc.`date_add`, pl.`name`
+		FROM `'._DB_PREFIX_.'product_comment` pc
+		INNER JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = pc.`id_customer`) 
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = pc.`id_product`) 
 		WHERE pc.`validate` = '.intval($validate).'
+		AND pl.`id_lang` = '.intval($cookie->id_lang).'
 		ORDER BY pc.`date_add` DESC'));
 	}
 	
