@@ -114,7 +114,7 @@ function changeFormLanguage(id_language_new, iso_code, employee_cookie)
 	$('.language_flags').hide();
 	if (employee_cookie)
 		$.post("ajax.php", { form_language_id: id_language_new });
-	form_id_language = id_language_new;
+	id_language = id_language_new;
 }
 
 function displayFlags(languages, defaultLanguageID, employee_cookie)

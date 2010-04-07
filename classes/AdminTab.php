@@ -1420,7 +1420,7 @@ abstract class AdminTab
 		// Otherwise form_id_language has already been defined
 		if ($isMainTab)
 			$output .= '
-				form_id_language = '.$this->_defaultFormLanguage.';';
+				id_language = '.$this->_defaultFormLanguage.';';
 		$output .= '	
 				languages = new Array();';
 		foreach ($this->_languages AS $k => $language)
@@ -1431,7 +1431,7 @@ abstract class AdminTab
 					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
 				};';
 		$output .= '
-				displayFlags(languages, form_id_language, '.$allowEmployeeFormLang.');
+				displayFlags(languages, id_language, '.$allowEmployeeFormLang.');
 			});
 		</script>';
 		echo $output;
