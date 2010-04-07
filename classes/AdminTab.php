@@ -1080,7 +1080,7 @@ abstract class AdminTab
 
 					if (isset($params['filter_key']))
 					{
-						echo '<select onchange="getE(\'submitFilter'.$this->table.'\').focus();getE(\'submitFilter'.$this->table.'\').click();" name="'.$this->table.'Filter_'.$params['filter_key'].'" '.(isset($params['width']) ? 'style="width: '.$params['width'].'px"' : '').'>
+						echo '<select onchange="$(\'#submitFilter'.$this->table.'\').focus();$(\'#submitFilter'.$this->table.'\').click();" name="'.$this->table.'Filter_'.$params['filter_key'].'" '.(isset($params['width']) ? 'style="width: '.$params['width'].'px"' : '').'>
 								<option value=""'.(($value == 0 AND $value != '') ? ' selected="selected"' : '').'>--</option>';
 						if (isset($params['select']) AND is_array($params['select']))
 							foreach ($params['select'] AS $optionValue => $optionDisplay)
