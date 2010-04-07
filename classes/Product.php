@@ -1461,6 +1461,19 @@ class		Product extends ObjectModel
 		return self::getPriceStatic(intval($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
 	}
 
+	public function getIdProductAttributeMostExpsensive()
+	{
+		$row = Db::getInstance()->getRow('
+		SELECT `id_product_attribute` 
+		FROM `'._DB_PREFIX_.'product_attribute` 
+		WHERE `id_product` = '.intval($this->id).' 
+		ORDER BY `price` DESC
+		');
+		if (isset($row['id_product_attribute']) AND $row['id_product_attribute'])
+			return $row['id_product_attribute'];
+		return 0;
+	}
+
 	public function getPriceWithoutReduct($notax = false)
 	{
 		$res = Db::getInstance()->getRow('
@@ -1586,7 +1599,7 @@ class		Product extends ObjectModel
 
 		if ($result['quantity'] < $product['cart_quantity'])
 		{
-			Db::getInstance()->Execute('
+			Db::getInstance()->Execute('product
 			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
 			SET `quantity` = 0
 			WHERE `id_product` = '.intval($product['id_product']).($product['id_product_attribute'] ?

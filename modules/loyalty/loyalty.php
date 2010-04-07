@@ -326,7 +326,7 @@ class Loyalty extends Module
 			}
 			else
 			{
-				$points = intval(LoyaltyModule::getNbPointsByPrice($product->getPrice()));
+				$points = intval(LoyaltyModule::getNbPointsByPrice($product->getPrice(true, intval($product->getIdProductAttributeMostExpsensive()))));
 				$pointsAfter = $points;
 			}
 			$smarty->assign(array('points' => intval($points), 'total_points' => intval($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));

@@ -82,11 +82,10 @@ class LoyaltyModule extends ObjectModel
 				$cartProductsNew['reduction_price'] = $newProduct->reduction_price;
 				$cartProductsNew['reduction_percent'] = $newProduct->reduction_percent;
 				$cartProductsNew['on_sale'] = $newProduct->on_sale;
-				$cartProductsNew['price_wt'] = number_format($newProduct->getPrice(), 2, '.', '');
+				$cartProductsNew['price_wt'] = number_format($newProduct->getPrice(true, intval($newProduct->getIdProductAttributeMostExpsensive())), 2, '.', '');
 				$cartProductsNew['cart_quantity'] = 1;
 				$cartProducts[] = $cartProductsNew;
 			}
-			
 			foreach ($cartProducts AS $product)
 			{
 				if (!intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND ($product['reduction_from'] == $product['reduction_to'] OR 
