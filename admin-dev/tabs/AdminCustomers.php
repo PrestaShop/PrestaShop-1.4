@@ -413,7 +413,7 @@ class AdminCustomers extends AdminTab
         echo '<a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to customer list').'</a><br />';
     }
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

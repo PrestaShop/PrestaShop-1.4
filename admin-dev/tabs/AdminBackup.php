@@ -64,7 +64,7 @@ class AdminBackup extends AdminTab
 	/**
 	 * Creates a new backup, and then displays the normal menu
 	 */
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		if(is_writable(PS_ADMIN_DIR.'/backups/'))
 		{

@@ -67,7 +67,7 @@ class AdminEmployees extends AdminTab
 			$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$email;
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex, $cookie;

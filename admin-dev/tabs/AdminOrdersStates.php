@@ -92,7 +92,7 @@ class AdminOrdersStates extends AdminTab
 		return $array;
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

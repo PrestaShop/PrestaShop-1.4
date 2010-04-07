@@ -184,7 +184,7 @@ class AdminAddresses extends AdminTab
 		LIMIT '.intval($start).','.intval($limit));
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex, $cookie;

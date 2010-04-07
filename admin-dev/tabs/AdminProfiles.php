@@ -39,7 +39,7 @@ class AdminProfiles extends AdminTab
 			parent::postProcess();
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

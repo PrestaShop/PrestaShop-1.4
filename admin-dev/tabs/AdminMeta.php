@@ -32,7 +32,7 @@ class AdminMeta extends AdminTab
 		parent::__construct();
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

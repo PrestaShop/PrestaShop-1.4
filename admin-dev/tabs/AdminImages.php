@@ -65,7 +65,7 @@ class AdminImages extends AdminTab
 			$this->_errors[] = Tools::displayError('this name already exists');
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

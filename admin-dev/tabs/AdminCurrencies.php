@@ -105,7 +105,7 @@ class AdminCurrencies extends AdminTab
 		</form>';
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

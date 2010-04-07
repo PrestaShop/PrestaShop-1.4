@@ -97,7 +97,7 @@ class AdminTabs extends AdminTab
 			$this->_posTabs(stripslashes($t['name']), Tab::getTabs(intval($cookie->id_lang), $t['id_tab']));
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex, $cookie;

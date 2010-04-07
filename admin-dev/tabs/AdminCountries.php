@@ -49,7 +49,7 @@ class AdminCountries extends AdminTab
 			return parent::postProcess();
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

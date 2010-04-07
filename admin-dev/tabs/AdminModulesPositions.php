@@ -239,7 +239,7 @@ class AdminModulesPositions extends AdminTab
 		}
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

@@ -208,7 +208,7 @@ class AdminAttributeGenerator extends AdminTab
 		echo '<p><sup>*</sup> '.$this->l('tax included').'</p>';
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex, $cookie;

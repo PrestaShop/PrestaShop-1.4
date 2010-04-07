@@ -1066,7 +1066,7 @@ class AdminImport extends AdminTab
 			$this->displayForm();
 	}	
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;

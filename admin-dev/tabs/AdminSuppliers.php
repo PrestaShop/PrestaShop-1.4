@@ -109,7 +109,7 @@ class AdminSuppliers extends AdminTab
 		}
 	}
 	
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 				global $currentIndex;
 		

@@ -35,7 +35,7 @@ class AdminSubDomains extends AdminTab
 		return parent::displayList();
 	}
 
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		parent::displayForm();
 		global $currentIndex;
