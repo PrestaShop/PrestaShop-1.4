@@ -203,6 +203,10 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 }
 
 if (Tools::getValue('form_language_id'))
-	Configuration::updateValue('PS_FORM_DEFAULT_LANG', (int)Tools::getValue('form_language_id'));
+{
+	if (!($cookie->employee_form_lang = (int)Tools::getValue('form_language_id')))
+		die ('Error while updating cookie.');
+	die ('Form language updated.');
+}
 
 ?>

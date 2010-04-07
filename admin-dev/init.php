@@ -21,7 +21,10 @@ $url_redirect = '?redirect='.(empty($destination) ? 'index.php' : $destination);
 if (!class_exists('Cookie'))
 	exit();
 
-$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -10));
+// Required for BO cookie path
+$currentFileName = array_reverse(explode("/", $_SERVER['SCRIPT_NAME']));
+
+$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])));
 if (isset($_GET['logout'])) {
 	$url_redirect = '';
 	$cookie->logout();

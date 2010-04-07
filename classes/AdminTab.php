@@ -858,9 +858,9 @@ abstract class AdminTab
 			die (Tools::displayError('Table name is invalid:').' "'.$this->table.'"');
 		
 		if (empty($orderBy))
-			$orderBy = Tools::getValue($this->table.'Orderby', $this->_defaultOrderBy);
+			$orderBy = $cookie->__get($this->table.'Orderby') ? $cookie->__get($this->table.'Orderby') : $this->_defaultOrderBy;
 		if (empty($orderWay))
-			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');
+			$orderWay = $cookie->__get($this->table.'Orderway') ? $cookie->__get($this->table.'Orderway') : 'ASC';
 		
 		$limit = intval(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
@@ -889,17 +889,17 @@ abstract class AdminTab
 		
 		/* Query in order to get results with all fields */
 		$sql = 'SELECT SQL_CALC_FOUND_ROWS
-		'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
-		'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
-		FROM `'._DB_PREFIX_.$sqlTable.'` a
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`'.$this->identifier.'` = a.`'.$this->identifier.'` AND b.`id_lang` = '.intval($id_lang).')' : '').'
-		'.(isset($this->_join) ? $this->_join.' ' : '').'
-		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
-		'.(isset($this->_group) ? $this->_group.' ' : '').'
-		'.((isset($this->_filterHaving) || isset($this->_having)) ? 'HAVING ' : '').(isset($this->_filterHaving) ? ltrim($this->_filterHaving, ' AND ') : '').(isset($this->_having) ? $this->_having.' ' : '').'
-		ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
-		($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
-		LIMIT '.intval($start).','.intval($limit);
+			'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
+			'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
+			FROM `'._DB_PREFIX_.$sqlTable.'` a
+			'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`'.$this->identifier.'` = a.`'.$this->identifier.'` AND b.`id_lang` = '.intval($id_lang).')' : '').'
+			'.(isset($this->_join) ? $this->_join.' ' : '').'
+			WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').($this->deleted ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
+			'.(isset($this->_group) ? $this->_group.' ' : '').'
+			'.((isset($this->_filterHaving) || isset($this->_having)) ? 'HAVING ' : '').(isset($this->_filterHaving) ? ltrim($this->_filterHaving, ' AND ') : '').(isset($this->_having) ? $this->_having.' ' : '').'
+			ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
+			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
+			LIMIT '.intval($start).','.intval($limit);
 		
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
@@ -950,10 +950,7 @@ abstract class AdminTab
 		echo '<a name="'.$this->table.'">&nbsp;</a>';
 		echo '<form method="post" action="'.$currentIndex;
 		if (Tools::getIsset($this->table.'Orderby'))
-		{
-			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).
-			'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
-		}
+			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
 		echo '#'.$this->table.'" class="form">
 		<input type="hidden" id="submitFilter'.$this->table.'" name="submitFilter'.$this->table.'" value="0">
 		<table>
@@ -1018,6 +1015,7 @@ abstract class AdminTab
 					'.$params['title'];
 			if (!isset($params['orderby']) OR $params['orderby'])
 			{
+				// Cleaning links
 				if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
 					$currentIndex = preg_replace('/&'.$this->table.'Orderby=([a-z _]*)&'.$this->table.'Orderway=([a-z]*)/i', '', $currentIndex);
 				echo '<br />
@@ -1147,9 +1145,6 @@ abstract class AdminTab
 		 */
 		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		
-		if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
-			$currentIndex .= '&'.$this->table.'Orderby='.Tools::getValue($this->table.'Orderby').'&'.$this->table.'Orderway='.Tools::getValue($this->table.'Orderway');
 
 		$_cacheLang['View'] = $this->l('View');
 		$_cacheLang['Edit'] = $this->l('Edit');
@@ -1408,15 +1403,26 @@ abstract class AdminTab
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayForm()
+	public function displayForm($isMainTab = true)
 	{
-		$this->_defaultFormLanguage = Configuration::get('PS_FORM_DEFAULT_LANG') ? Configuration::get('PS_FORM_DEFAULT_LANG') : Configuration::get('PS_LANG_DEFAULT');
+		global $cookie;
+		
+		$allowEmployeeFormLang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
+		if ($allowEmployeeFormLang && !$cookie->employee_form_lang)
+			$cookie->employee_form_lang = Configuration::get('PS_LANG_DEFAULT');
+		$this->_defaultFormLanguage = $allowEmployeeFormLang ? $cookie->employee_form_lang : Configuration::get('PS_LANG_DEFAULT');
 		$this->_languages = Language::getLanguages();
 
 		$output = '
 		<script type="text/javascript">
-			$(document).ready(function() {
-				var languages = new Array();';
+			$(document).ready(function() {';
+		// If current tab is main/first tab
+		// Otherwise form_id_language has already been defined
+		if ($isMainTab)
+			$output .= '
+				form_id_language = '.$this->_defaultFormLanguage.';';
+		$output .= '	
+				languages = new Array();';
 		foreach ($this->_languages AS $k => $language)
 			$output .= '
 				languages['.$k.'] = {
@@ -1425,7 +1431,7 @@ abstract class AdminTab
 					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
 				};';
 		$output .= '
-				displayFlags(languages, '.$this->_defaultFormLanguage.');
+				displayFlags(languages, form_id_language, '.$allowEmployeeFormLang.');
 			});
 		</script>';
 		echo $output;

@@ -50,9 +50,6 @@ class AdminCategories extends AdminTab
 	{
 		global $currentIndex;
 		
-		if (Tools::getValue('productOrderby') && Tools::getValue('productOrderway')) 
-			$currentIndex .= '&productOrderby='.Tools::getValue('productOrderby').'&productOrderway='.Tools::getValue('productOrderway');
-		
 		/* Display list header (filtering, pagination and column names) */
 		$this->displayListHeader($token);
 		if (!sizeof($this->_list))
@@ -69,7 +66,7 @@ class AdminCategories extends AdminTab
 	{
 		global $currentIndex, $cookie;
 
-		$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'name' : NULL, !Tools::getValue($this->table.'Orderway') ? 'ASC' : NULL);
+		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'name' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
 		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCatalog&add'.$this->table.'&id_parent='.Tools::getValue('id_category').'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new subcategory').'</a>
 		<div style="margin:10px;">';
@@ -80,12 +77,6 @@ class AdminCategories extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $cookie, $currentIndex;
-		
-		$catalog_tabs = array('category', 'product');
-		$catBarIndex = $currentIndex;
-		foreach ($catalog_tabs AS $tab)
-			if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
-				$catBarIndex .= '&'.$tab.'Orderby='.Tools::getValue($tab.'Orderby').'&'.$tab.'Orderway='.Tools::getValue($tab.'Orderway');
 
 		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 
@@ -120,7 +111,7 @@ class AdminCategories extends AdminTab
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->toggleStatus())
-						Tools::redirectAdmin($catBarIndex.'&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.Tools::getValue('token'));
+						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.Tools::getValue('token'));
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
@@ -147,10 +138,10 @@ class AdminCategories extends AdminTab
 						{
 							$object->deleted = 1;
 							if ($object->update())
-								Tools::redirectAdmin($catBarIndex.'&conf=1&token='.Tools::getValue('token'));
+								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token'));
 						}
 						elseif ($object->delete())
-							Tools::redirectAdmin($catBarIndex.'&conf=1&token='.Tools::getValue('token'));
+							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token'));
 						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}

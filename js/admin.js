@@ -103,7 +103,7 @@ function changeLanguage(field, fieldsString, id_language_new, iso_code)
 	id_language = id_language_new;
 }
 
-function changeFormLanguage(id_language_new, iso_code)
+function changeFormLanguage(id_language_new, iso_code, employee_cookie)
 {
 	$('.translatable').each(function() {
 		$(this).find('.lang_' + id_language_new)
@@ -112,10 +112,12 @@ function changeFormLanguage(id_language_new, iso_code)
 		$('.language_current').attr('src', '../img/l/' + id_language_new + '.jpg');
 	});
 	$('.language_flags').hide();
-	$.post("ajax.php", { form_language_id: id_language_new });
+	if (employee_cookie)
+		$.post("ajax.php", { form_language_id: id_language_new });
+	form_id_language = id_language_new;
 }
 
-function displayFlags(languages, defaultLanguageID)
+function displayFlags(languages, defaultLanguageID, employee_cookie)
 {
 	$('.translatable').each(function() {
 		if (!$(this).find('.displayed_flag').length > 0) {
@@ -147,7 +149,7 @@ function displayFlags(languages, defaultLanguageID)
 					.attr('src', '../img/l/' + language['id_lang'] + '.jpg')
 					.attr('alt', language['name'])
 					.click(function() {
-						changeFormLanguage(language['id_lang'], language['iso_code']);
+						changeFormLanguage(language['id_lang'], language['iso_code'], employee_cookie);
 					});
 				languagesFlags.append(img);
 			});

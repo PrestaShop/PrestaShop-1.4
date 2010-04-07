@@ -136,10 +136,12 @@ class AdminCatalog extends AdminTab
 			if (!$id_category)
 				$id_category = 1;
 			$catalog_tabs = array('category', 'product');
+			// Cleaning links
 			$catBarIndex = $currentIndex;
 			foreach ($catalog_tabs AS $tab)
 				if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
-					$catBarIndex .= '&'.$tab.'Orderby='.Tools::getValue($tab.'Orderby').'&'.$tab.'Orderway='.Tools::getValue($tab.'Orderway');
+					$catBarIndex = preg_replace('/&'.$tab.'Orderby=([a-z _]*)&'.$tab.'Orderway=([a-z]*)/i', '', $currentIndex);
+			
 			echo '<div class="cat_bar"><span style="color: #3C8534;">'.$this->l('Current category').' :</span>&nbsp;&nbsp;&nbsp;'.getPath($catBarIndex, $id_category).'</div>';
 			echo '<h2>'.$this->l('Categories').'</h2>';
 			$this->adminCategories->display($this->token);
