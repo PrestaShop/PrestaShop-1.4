@@ -15,6 +15,9 @@ include_once(realpath(PS_ADMIN_DIR.'/../').'/classes/AdminTab.php');
 
 class AdminImages extends AdminTab
 {
+	private $start_time = 0;
+	private $max_execution_time = 7200;
+
 	public function __construct()
 	{
 		$this->table = 'image_type';
@@ -46,9 +49,8 @@ class AdminImages extends AdminTab
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 		 	{
-				if ($this->_regenerateThumbnails(Tools::getValue('type')))
+				if ($this->_regenerateThumbnails(Tools::getValue('type'), Tools::getValue('erase')))
 					Tools::redirectAdmin($currentIndex.'&conf=9'.'&token='.$this->token);
-				$this->_errors[] = Tools::displayError('An error occured while thumbnails\' regeneration.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
@@ -160,7 +162,7 @@ class AdminImages extends AdminTab
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-			<fieldset style="width:400px;">
+			<fieldset style="width:800px;">
 				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Regenerate thumbnails').'</legend><br />
 				<label>'.$this->l('Select image:').'</label>
 				<div class="margin-form">
@@ -192,6 +194,12 @@ class AdminImages extends AdminTab
 						$(\'.format_\' + $(elt).val()).show();
 					}
 				</script>
+				<label>'.$this->l('Erase previous images').'</label>
+				<div class="margin-form">
+					<input name="erase" type="checkbox" value="1" checked="checked" />
+					<p>'.$this->l('Uncheck this checkbox only if your server timed out and you need to resume the regeneration.').'</p>
+				</div>
+				<div class="clear">&nbsp;</div>
 				<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
 			</fieldset>
 		</form>';
@@ -200,17 +208,14 @@ class AdminImages extends AdminTab
 	/**
 	  * Delete resized image then regenerate new one with updated settings
 	  */
-
-	// Delete old images
 	private function _deleteOldImages($dir, $type, $product = false)
 	{
 		$toDel = scandir($dir);
 		foreach ($toDel AS $d)
 			foreach ($type as $imageType)
-			{
 				if (preg_match('/^[0-9]+\-'.($product ? '[0-9]+\-' : '').$imageType['name'].'\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-					unlink($dir.$d);
-			}
+					if (file_exists($dir.$d))
+						unlink($dir.$d);
 	}
 
 	// Regenerate images
@@ -228,13 +233,11 @@ class AdminImages extends AdminTab
 						$newDir = $dir;
 						if ($imageType['name'] == 'thumb_scene')
 							$newDir .= 'thumbs/';
-						if (!imageResize(
-							$dir.$image, 
-							$newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', 
-							intval($imageType['width']), 
-							intval($imageType['height'])
-						))
-							$errors = true;
+						if (!file_exists($newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg'))
+							if (!imageResize($dir.$image, $newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+								$errors = true;
+						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
+							return 'timeout';
 					}
 		}
 		else
@@ -243,13 +246,13 @@ class AdminImages extends AdminTab
 			foreach ($productsImages AS $k => $image)
 				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 					foreach ($type AS $k => $imageType)
-						if (!imageResize(
-							$dir.$image['id_product'].'-'.$image['id_image'].'.jpg', 
-							$dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', 
-							intval($imageType['width']), 
-							intval($imageType['height'])
-						))
-							$errors = true;
+					{
+						if (!file_exists($dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg'))
+							if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+								$errors = true;
+						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
+							return 'timeout';
+					}
 		}
 		return $errors;
 	}
@@ -264,13 +267,9 @@ class AdminImages extends AdminTab
 				$file = $dir.$language['iso_code'].'.jpg';
 				if (!file_exists($file))
 					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
-				if (!imageResize(
-					$file, 
-					$dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', 
-					intval($imageType['width']), 
-					intval($imageType['height'])
-				))
-					$errors = true;
+				if (!file_exists($dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg'))
+					if (!imageResize($file, $dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+						$errors = true;
 			}
 		return $errors;
 	}
@@ -290,14 +289,20 @@ class AdminImages extends AdminTab
 			foreach ($productsImages AS $k => $image)
 				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
 					foreach ($result AS $k => $module)
+					{
 						if ($moduleInstance = Module::getInstanceByName($module['name']) AND is_callable(array($moduleInstance, 'hookwatermark')))
 							call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $image['id_image'], 'id_product' => $image['id_product']));
+						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
+							return 'timeout';
+					}
 		}
 	}
 
-	private function _regenerateThumbnails($type = 'all')
+	private function _regenerateThumbnails($type = 'all', $deleteOldImages = false)
 	{
-		@ini_set('max_execution_time', 7200);
+		$this->start_time = time();
+		ini_set('max_execution_time', 10);
+		$this->max_execution_time = (int)ini_get('max_execution_time'); // ini_set may be disabled, we need the real value
 		$languages = Language::getLanguages();
 
 		$process =
@@ -322,18 +327,25 @@ class AdminImages extends AdminTab
 				$format = strval(Tools::getValue('format_'.$type));
 				if ($format != 'all')
 					foreach ($formats as $k => $form)
-					{
 						if ($form['id_image_type'] != $format)
 							unset($formats[$k]);
-					}
 			}
-			$this->_deleteOldImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false));
-			if ($this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false)))
+			
+			if ($deleteOldImages)
+				$this->_deleteOldImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false));
+			if (($return = $this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false))) === true)
 				$this->_errors[] = Tools::displayError('Cannot write ').$proc['type'].Tools::displayError(' images. Please check the folder\'s writing permissions.');
-			if ($proc['type'] == 'products')
-				$this->_regenerateWatermark($proc['dir']);
-			if ($this->_regenerateNoPictureImages($proc['dir'], $formats, $languages))
-				$this->_errors[] = Tools::displayError('Cannot write no-picture image to (').$proc['type'].Tools::displayError(') images folder. Please check the folder\'s writing permissions.');
+			elseif ($return == 'timeout')
+				$this->_errors[] = Tools::displayError('Only part of the images have been regenerated, server timed out before the end.');
+			else
+			{
+				if ($proc['type'] == 'products')
+					if ($this->_regenerateWatermark($proc['dir']) == 'timeout')
+						$this->_errors[] = Tools::displayError('Server timed out, the watermark may not have been applied on all your images.');
+				if (!count($this->_errors))
+					if ($this->_regenerateNoPictureImages($proc['dir'], $formats, $languages))
+						$this->_errors[] = Tools::displayError('Cannot write no-picture image to (').$proc['type'].Tools::displayError(') images folder. Please check the folder\'s writing permissions.');
+			}
 		}
 		return (sizeof($this->_errors) > 0 ? false : true);
 	}
