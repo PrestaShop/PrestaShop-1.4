@@ -31,8 +31,8 @@ class AdminInvoices extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
 		$output = '
 		<h2>'.$this->l('Print PDF invoices').'</h2>

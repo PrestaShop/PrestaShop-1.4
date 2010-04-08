@@ -46,18 +46,13 @@ class AdminCarriers extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$currentLanguage = intval($cookie->id_lang);
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/delivery.gif" />'.$this->l('Carriers').'</legend>
@@ -74,12 +69,12 @@ class AdminCarriers extends AdminTab
 				</div>
 				<label>'.$this->l('Transit time:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="delay_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="delay_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" size="41" maxlength="128" name="delay_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'delay', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'delay', 'delay');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'delay', 'delay');
 				echo '
 					<p style="clear: both">'.$this->l('Time taken for product delivery; displayed during checkout').'</p>
 				</div>

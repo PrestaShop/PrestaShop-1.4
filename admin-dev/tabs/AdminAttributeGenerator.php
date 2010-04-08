@@ -210,8 +210,8 @@ class AdminAttributeGenerator extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 
 		$jsAttributes = self::displayAndReturnAttributeJs();
 		$attributesGroups = AttributeGroup::getAttributesGroups(intval($cookie->id_lang));

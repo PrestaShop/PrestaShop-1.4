@@ -34,8 +34,8 @@ class AdminZones extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
 		echo '

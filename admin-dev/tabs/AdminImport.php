@@ -1068,8 +1068,8 @@ class AdminImport extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
+		global $currentIndex, $cookie;
 		parent::displayForm();
-		global $currentIndex;
 
 		if ((Tools::getValue('import')))
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
@@ -1124,13 +1124,12 @@ class AdminImport extends AdminTab
 		foreach (scandir(dirname(__FILE__).'/../import') as $filename)
 			if (!in_array($filename, array('.','..','.htaccess','index.php')))
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
-		$languages = Language::getLanguages(false);
 		echo '				</select>
 						</div>
 						<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
 						<div class="margin-form">
 							<select name="iso_lang">';
-						foreach ($languages AS $lang)
+						foreach ($this->_languages AS $lang)
 							echo '<option value="'.$lang['iso_code'].' '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').' ">'.$lang['name'].'</option>';
 						echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
 						<div class="margin-form">

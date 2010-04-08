@@ -157,42 +157,37 @@ class AdminAttributesGroups extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$obj = $this->loadObject(true);
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes group').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'name', intval($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, 'name¤public_name', 'name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤public_name', 'name');
 		echo '
 					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Public name:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="public_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="public_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="public_name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'public_name', intval($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Term or phrase displayed to the customer').'</p>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, 'name¤public_name', 'public_name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤public_name', 'public_name');
 		echo '
 					<div class="clear"></div>
 				</div>

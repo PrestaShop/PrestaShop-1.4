@@ -84,18 +84,14 @@ class AdminManufacturers extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
+		
 		$manufacturer = $this->loadObject(true);
 		$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$langtags = 'cdesc2¤cdesc¤mmeta_title¤mmeta_keywords¤mmeta_description';
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width3">
 		'.($manufacturer->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$manufacturer->id.'" />' : '').'
 			<fieldset style="width: 850px;">
@@ -108,22 +104,22 @@ class AdminManufacturers extends AdminTab
 
 		echo '<br class="clear" /><label>'.$this->l('Short description:').'</label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $defaultLanguage ? 'display:none;' : '').'">
+							<div id="cdesc2_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $this->_defaultFormLanguage ? 'display:none;' : '').'">
 								<textarea class="rte" cols="48" rows="5" id="short_description_'.$language['id_lang'].'" name="short_description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'short_description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc2');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'cdesc2');
 		echo '</div>';
 				
 		echo '<br class="clear" /><br /><br /><label>'.$this->l('Description:').'</label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-							<div id="cdesc_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $defaultLanguage ? 'display:none;' : '').'">
+							<div id="cdesc_'.$language['id_lang'].'" style="float: left;'.($language['id_lang'] != $this->_defaultFormLanguage ? 'display:none;' : '').'">
 								<textarea class="rte" cols="48" rows="10" id="description_'.$language['id_lang'].'" name="description_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($manufacturer, 'description', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'cdesc');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'cdesc');
 		echo '</div>';
 		
 		// TinyMCE
@@ -173,34 +169,34 @@ class AdminManufacturers extends AdminTab
 				</div>
 				<label>'.$this->l('Meta title:').'</label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="mmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="mmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_title');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_title');
 		echo '		<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Meta description:').'</label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
-			echo '<div id="mmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+		foreach ($this->_languages as $language)
+			echo '<div id="mmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_description');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_description');
 		echo '		<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Meta keywords:').'</label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="mmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="mmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'mmeta_keywords');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_keywords');
 		echo '		<div class="clear"></div>
 				</div>
 				<div class="margin-form">

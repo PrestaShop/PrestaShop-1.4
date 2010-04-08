@@ -186,8 +186,9 @@ class AdminAddresses extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
+		
 		$obj = $this->loadObject(true);
 
 		echo '

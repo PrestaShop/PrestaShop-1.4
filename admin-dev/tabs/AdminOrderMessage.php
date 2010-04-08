@@ -33,38 +33,33 @@ class AdminOrderMessage extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&token='.$this->token.'&submitAdd'.$this->table.'=1" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/email.gif" />'.$this->l('Order messages').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" size="53" name="name_'.$language['id_lang'].'" value="'.$this->getFieldValue($obj, 'name', intval($language['id_lang'])).'" /><sup> *</sup>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name¤message', 'name');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤message', 'name');
 				echo '</div>
 				<div class="clear"></div><br />
 				<label>'.$this->l('Message:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="message_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="message_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<textarea rows="15" cols="50" name="message_'.$language['id_lang'].'">'.$this->getFieldValue($obj, 'message', intval($language['id_lang'])).'</textarea><sup> *</sup>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name¤message', 'message');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤message', 'message');
 				echo '</div>
 				<div class="clear"></div><br />
 				<div class="margin-form">

@@ -147,17 +147,12 @@ class AdminReturn extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<input type="hidden" name="id_order" value="'.$obj->id_order.'" />

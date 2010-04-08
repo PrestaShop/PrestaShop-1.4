@@ -41,17 +41,10 @@ class AdminProfiles extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$obj = $this->loadObject(true);
-
-		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>';
 		
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
@@ -59,12 +52,12 @@ class AdminProfiles extends AdminTab
 			<fieldset><legend><img src="../img/admin/profiles.png" />'.$this->l('Profiles').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '		<div class="clear"></div>
 				</div>
 				<div class="margin-form">

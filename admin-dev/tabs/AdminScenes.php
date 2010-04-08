@@ -117,21 +117,16 @@ class AdminScenes extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
 		
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$langtags = 'name';
 		$active = $this->getFieldValue($obj, 'active');
 		
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');';
-			
-			
+		<script type="text/javascript">';
 			echo 'startingData = new Array();'."\n";
 			foreach ($obj->getProducts() as $key => $product)
 			{
@@ -156,12 +151,12 @@ class AdminScenes extends AdminTab
 		
 		echo '<label>'.$this->l('Image map name:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, $langtags, 'name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'name');
 		echo '		<div class="clear"></div>
 				</div>';
 			

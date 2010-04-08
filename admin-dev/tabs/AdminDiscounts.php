@@ -149,16 +149,13 @@ class AdminDiscounts extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
+		
 		echo '
 		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-			
 			function discountType()
 			{
 				if ($("#id_discount_type").val() == 0)
@@ -182,7 +179,6 @@ class AdminDiscounts extends AdminTab
 				$("#id_discount_type").change(function(){discountType();});
 				discountType();
 			});
-			
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" id="discount" name="discount" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -223,13 +219,13 @@ class AdminDiscounts extends AdminTab
 				</div>
 				<label>'.$this->l('Description:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
-			echo '	<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+		foreach ($this->_languages as $language)
+			echo '	<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Will appear in cart next to voucher code').'</p>
 					</div>';							
-		$this->displayFlags($languages, $defaultLanguage, 'description', 'description');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'description', 'description');
 		echo '	</div>
 				<div class="clear" / >
 				<label>'.$this->l('Categories:').' </label>

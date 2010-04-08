@@ -277,7 +277,7 @@ class AdminProducts extends AdminTab
 						if (isset($image->legend[$language['id_lang']]))
 							$_POST['legend_'.$language['id_lang']] = $image->legend[$language['id_lang']];
 					$_POST['id_image'] = $image->id;
-					$this->displayForm($token ? $token : $this->token);
+					$this->displayForm();
 				}
 
 				/* Choose product cover image */
@@ -1017,10 +1017,10 @@ class AdminProducts extends AdminTab
 		}
 	}
 
-	function displayForm($token = NULL)
+	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $link, $cookie;
+		parent::displayForm();
 		
 		if ($id_category_back = intval(Tools::getValue('id_category')))
 			$currentIndex .= '&id_category='.$id_category_back;
@@ -1039,13 +1039,13 @@ class AdminProducts extends AdminTab
 		</script>
 		<script src="../js/tabpane.js" type="text/javascript"></script>
 		<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />
-		<form action="'.$currentIndex.'&token='.($token != NULL ? $token : $this->token).'" method="post" enctype="multipart/form-data" name="product" id="product">
+		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" enctype="multipart/form-data" name="product" id="product">
 			<input type="hidden" name="tabs" id="tabs" value="0" />
 			<input type="hidden" name="id_category" value="'.(($id_category = Tools::getValue('id_category')) ? intval($id_category) : '0').'">
 			<div class="tab-pane" id="tabPane1">';
 				/* Tabs */
 		$this->displayFormInformations($obj, $currency);
-		$this->displayFormImages($obj, $token);
+		$this->displayFormImages($obj, $this->token);
 		if ($obj->id)
 			echo '
 			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Combinations').'</h4></div>
@@ -1102,7 +1102,7 @@ class AdminProducts extends AdminTab
 		{
 			$productIndex = preg_replace('/(&id_product=[0-9]*)/', '', $currentIndex);
 			echo '<br /><br />
-			<a href="'.$productIndex.($token ? '&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)) : '').'">
+			<a href="'.$productIndex.($this->token ? '&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)) : '').'">
 				<img src="../img/admin/arrow2.gif" /> '.$this->l('Back to the category').'
 			</a><br />';
 		}
@@ -2470,8 +2470,8 @@ class AdminProducts extends AdminTab
 
 	function displayFormFeatures($obj)
 	{
-		parent::displayForm(false);
 		global $cookie, $currentIndex;
+		parent::displayForm(false);
 
 		if ($obj->id)
 		{

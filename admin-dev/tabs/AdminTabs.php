@@ -99,30 +99,25 @@ class AdminTabs extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 		'.($obj->position ? '<input type="hidden" name="position" value="'.$obj->position.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/tab.gif" />'.$this->l('Tabs').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '
 				</div>
 				<div class="clear">&nbsp;</div>

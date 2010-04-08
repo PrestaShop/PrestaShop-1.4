@@ -34,28 +34,23 @@ class AdminContacts extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/contact.gif" />'.$this->l('Contacts').'</legend>
 				<label>'.$this->l('Title:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name¤description', 'name');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'name');
 		echo '		<p style="clear: both">'.$this->l('Contact name, e.g., Technical Support').'</p>
 				</div>
 				<label>'.$this->l('E-mail address:').' </label>
@@ -65,12 +60,12 @@ class AdminContacts extends AdminTab
 				</div>
 				<label>'.$this->l('Description:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<textarea name="description_'.$language['id_lang'].'" cols="36" rows="5">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name¤description', 'description');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'description');
 				echo '
 					<p style="clear: both">'.$this->l('Additional information about this contact').'</p>
 				</div>

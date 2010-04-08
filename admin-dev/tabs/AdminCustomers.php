@@ -415,14 +415,16 @@ class AdminCustomers extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
+		
 		$obj = $this->loadObject(true);
+		
 		if ($obj->id) $need_identifcation_number = $obj->getNeedDNI();
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());
-		$groups = Group::getGroups($defaultLanguage, true);
+		$groups = Group::getGroups($this->_defaultFormLanguage, true);
+		
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'

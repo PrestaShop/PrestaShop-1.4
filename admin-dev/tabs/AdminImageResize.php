@@ -44,8 +44,9 @@ class AdminImageResize extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
+		
 		$imagesTypes = ImageType::getImagesTypes();
 
 		echo '

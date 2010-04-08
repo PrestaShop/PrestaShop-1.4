@@ -36,9 +36,10 @@ class AdminAccess extends AdminTab
 	 	return (isset($_GET['profile']) AND !empty($_GET['profile']) AND is_numeric($_GET['profile'])) ? intval($_GET['profile']) : 1;
 	}
 	
-	function displayForm()
+	public function displayForm($isMainTab = true)
 	{
 		global $cookie, $currentIndex;
+		parent::displayForm();
 	 	
 	 	$currentProfile = intval($this->getCurrentProfileId());
 	 	$tabs = Tab::getTabs($cookie->id_lang);

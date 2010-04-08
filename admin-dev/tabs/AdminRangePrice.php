@@ -54,8 +54,8 @@ class AdminRangePrice extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 
 		$obj = $this->loadObject(true);
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));

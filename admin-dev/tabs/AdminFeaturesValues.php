@@ -31,37 +31,33 @@ class AdminFeaturesValues extends AdminTab
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayForm($token = NULL)
+	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex;
+		parent::displayForm();
 
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$obj = $this->loadObject(true);
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token ? $token : $this->token).'" method="post">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.Tools::getValue('token').'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_feature_value" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Value').'</legend>
 				<label>'.$this->l('Value:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="value_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="value_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="value_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'value', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, 'value', 'value');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'value', 'value');
 		echo '
 					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Feature:').' </label>
 				<div class="margin-form">
 					<select name="id_feature">';
-		$features = Feature::getFeatures($defaultLanguage);
+		$features = Feature::getFeatures($this->_defaultFormLanguage);
 		foreach ($features AS $feature)
 			echo '<option value="'.$feature['id_feature'].'"'.($this->getFieldValue($obj, 'id_feature') == $feature['id_feature']? ' selected="selected"' : '').'>'.$feature['name'].'</option>';
 		echo '

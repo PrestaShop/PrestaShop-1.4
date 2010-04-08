@@ -38,33 +38,28 @@ class AdminTaxes extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$tax_zones = $obj->getZones();
 		$zones = Zone::getZones(true);
 		$tax_states = $obj->getStates();
 		$states = State::getStates(intval($cookie->id_lang));
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/dollar.gif" />'.$this->l('Taxes').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-				$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '	<p class="clear">'.$this->l('Tax name to display in cart and on invoice, e.g., VAT').'</p>
 				</div>
 				<label>'.$this->l('Rate:').' </label>

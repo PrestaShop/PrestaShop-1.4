@@ -36,16 +36,14 @@ class AdminAttributes extends AdminTab
 	public function displayForm($token = NULL)
 	{
 		global $currentIndex;
+		parent::displayForm();
 
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$obj = $this->loadObject(true);
 		$color = ($obj->color ? $obj->color : 0);
-		$attributes_groups = AttributeGroup::getAttributesGroups($defaultLanguage);
+		$attributes_groups = AttributeGroup::getAttributesGroups($this->_defaultFormLanguage);
 		
 		echo '
 		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
 			var attributesGroups = new Array();
 		';
 		foreach ($attributes_groups AS $attribute_group)
@@ -57,13 +55,13 @@ class AdminAttributes extends AdminTab
 			<fieldset class="width3"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attribute').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'name', intval($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($languages, $defaultLanguage, 'name', 'name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '
 					<div class="clear"></div>
 				</div>

@@ -47,10 +47,10 @@ class AdminTags extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex, $cookie;
+		parent::displayForm();
+		
 		$obj = $this->loadObject(true);
-		$languages = Language::getLanguages();
 		$products1 = $obj->getProducts(true);
 		$products2 = $obj->getProducts(false);
 		
@@ -66,7 +66,7 @@ class AdminTags extends AdminTab
 				<div class="margin-form">
 					<select name="id_lang">
 						<option value="">-</option>';
-		foreach ($languages as $language)
+		foreach ($this->_languages as $language)
 			echo '		<option value="'.$language['id_lang'].'" '.($language['id_lang'] == $this->getFieldValue($obj, 'id_lang') ? 'selected="selected"' : '').'>'.$language['name'].'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>

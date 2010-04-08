@@ -94,30 +94,25 @@ class AdminOrdersStates extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		parent::displayForm();
 		global $currentIndex;
+		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 
 		echo '
-		<script type="text/javascript">
-			id_language = Number('.$defaultLanguage.');
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/time.gif" />'.$this->l('Order statues').'</legend>
 				<label>'.$this->l('Status name:').' </label>
 				<div class="margin-form">';
 
-				foreach ($languages as $language)
+				foreach ($this->_languages as $language)
 					echo '
-					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" style="width: 150px;" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters: numbers and').' !<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 						</div>';							
-				$this->displayFlags($languages, $defaultLanguage, 'name¤template', 'name');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤template', 'name');
 
 		echo '		<p class="clear">'.$this->l('Order status (e.g., \'Pending\')').'</p>
 				</div>
@@ -160,10 +155,10 @@ class AdminOrdersStates extends AdminTab
 				<div id="tpl" style="display: '.($this->getFieldValue($obj, 'send_email') ? 'block' : 'none').';">
 					<label>'.$this->l('').'Template:</label>
 					<div class="margin-form">';
-			foreach ($languages as $language)
+			foreach ($this->_languages as $language)
 			{
 				$templates = $this->getTemplates($language['iso_code']);
-				echo '	<div id="template_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">';
+				echo '	<div id="template_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">';
 				if (!$templates)
 					echo '<strong>'.$this->l('Please first copy your e-mail templates in the directory').' mails/'.$language['iso_code'].'.</strong>';
 				else
@@ -177,7 +172,7 @@ class AdminOrdersStates extends AdminTab
 								<img onclick="viewTemplates(\'template_select_'.$language['id_lang'].'\', '.$language['id_lang'].', \'../mails/'.$language['iso_code'].'/\', \'.html\');" src="../img/t/AdminFeatures.gif" class="pointer" alt="'.$this->l('Preview').'" title="'.$this->l('Preview').'" />
 						</div>';
 			}
-			$this->displayFlags($languages, $defaultLanguage, 'name¤template', 'template');
+			$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤template', 'template');
 			echo '<p style="clear: both">'.$this->l('E-mail template for both .html and .txt').'</p>
 					</div>
 				</div>
