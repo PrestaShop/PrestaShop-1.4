@@ -2498,52 +2498,47 @@ class AdminProducts extends AdminTab
 					<th style="width:170px">'.$this->l('Customized').'</td>
 				</tr>';
 			if (!$nb_feature)
-					echo '<tr><td colspan="3" style="text-align:center;">'.$this->l('No features defined').'</td></tr>';
+				echo '<tr><td colspan="3" style="text-align:center;">'.$this->l('No features defined').'</td></tr>';
 			echo '</table>';
+			
 			// Listing
-
 			if ($nb_feature)
 			{
-				echo '
-				<table cellpadding="5" style="width:600px; margin-top:10px">';
-				foreach ($feature AS $tab_features) {
+				echo '<table cellpadding="5" style="width:600px; margin-top:10px">';
+				foreach ($feature AS $tab_features)
+				{
 					$current_item = false;
-					$custom = false;
-					$product_features = $obj->getFeatures();
-					foreach ($product_features as $tab_products)
+					$custom = true;
+					foreach ($obj->getFeatures() as $tab_products)
 						if ($tab_products['id_feature'] == $tab_features['id_feature'])
 							$current_item = $tab_products['id_feature_value'];
 					echo '
 					<tr>
 						<td>'.$tab_features['name'].'</td>
 						<td style="width:220px">
-							<select name="feature_'.$tab_features['id_feature'].'_value">
-							<option value="0">---&nbsp;</option>';
+							<select id="feature_'.$tab_features['id_feature'].'_value" name="feature_'.$tab_features['id_feature'].'_value"
+								onchange="$(\'.custom_'.$tab_features['id_feature'].'_\').val(\'\');">
+								<option value="0">---&nbsp;</option>';
 					$feature_values = FeatureValue::getFeatureValuesWithLang(intval($cookie->id_lang), $tab_features['id_feature']);
-					if(sizeof($feature_values))
+					foreach ($feature_values AS $tab_values)
 					{
-						foreach ($feature_values AS $tab_values)
-							if (!$tab_values['custom'])
-								echo '<option value="'.$tab_values['id_feature_value'].'"'.(($current_item == $tab_values['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($tab_values['value'], 0, 40).(Tools::strlen($tab_values['value']) > 40 ? '...' : '').'&nbsp;</option>';
+						if ($current_item == $tab_values['id_feature_value'])
+							$custom = false;
+						echo '<option value="'.$tab_values['id_feature_value'].'"'.(($current_item == $tab_values['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($tab_values['value'], 0, 40).(Tools::strlen($tab_values['value']) > 40 ? '...' : '').'&nbsp;</option>';
 					}
-					else
-						$custom = true;
-						
-						echo '
-							</select>
+					
+					echo '	</select>
 						</td>
 						<td style="width:170px" class="translatable">';
-							$tab_customs = array();
-							if ($custom)
-								$tab_customs = FeatureValue::getFeatureValueLang($current_item);
-							foreach ($this->_languages as $language) {
-								$custom_lang = FeatureValue::selectLang($tab_customs, $language['id_lang']);
-								echo '
-								<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-									<input type="text" name="custom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" size="20" value="'.htmlentities(Tools::getValue('custom_'.$tab_features['id_feature'].'_'.$language['id_lang'], $custom_lang), ENT_COMPAT, 'UTF-8').'" />
-								</div>';
-							}
-							echo '
+					$tab_customs = ($custom ? FeatureValue::getFeatureValueLang($current_item) : array());
+					foreach ($this->_languages as $language)
+						echo '
+							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
+								<input type="text" class="custom_'.$tab_features['id_feature'].'_" name="custom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" size="20"
+									onkeyup="$(\'#feature_'.$tab_features['id_feature'].'_value\').val(0);"
+									value="'.htmlentities(Tools::getValue('custom_'.$tab_features['id_feature'].'_'.$language['id_lang'], FeatureValue::selectLang($tab_customs, $language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+							</div>';
+					echo '
 						</td>
 					</tr>';
 				}
