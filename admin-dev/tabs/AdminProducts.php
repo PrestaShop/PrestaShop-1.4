@@ -1374,6 +1374,11 @@ class AdminProducts extends AdminTab
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					updateCurrentText();
+				});
+			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
 		if (isset($obj->id))
 		{
@@ -1393,11 +1398,10 @@ class AdminProducts extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '		<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 								<input size="55" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
-								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onchange="updateCurrentText();" /><sup> *</sup>
+								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onkeyup="updateCurrentText();" onchange="updateCurrentText();" /><sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
-		echo '<script type="text/javascript">updateCurrentText();</script>
-						</td>
+		echo '		</td>
 					</tr>
 					<tr>
 						<td style="vertical-align:top">'.$this->l('Status:').'</td>
