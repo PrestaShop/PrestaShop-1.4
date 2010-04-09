@@ -93,6 +93,7 @@ class		Discount extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false, $categories = null)
 	{
+		$ret = NULL;
 		if (parent::add($autodate, $nullValues))
 			$ret = true;
 
@@ -103,6 +104,7 @@ class		Discount extends ObjectModel
 	/* Categories initialization is different between add() and update() because the addition will set all categories if none are selected (compatibility with old modules) and update won't update categories if none are selected */
 	public function update($autodate = true, $nullValues = false, $categories = false)
 	{
+		$ret = NULL;
 		if (parent::update($autodate, $nullValues))
 			$ret = true;
 

@@ -50,39 +50,34 @@ class ReferralProgramModule extends ObjectModel
 		return $fields;
 	}
 
-	public function save($nullValues=true, $autodate=true)
-	{
-		return parent::save($nullValues, $autodate);
-	}
-
 	static public function getDiscountPrefix()
 	{
 		return 'SP';
 	}
 
-	public function registerDiscountForSponsor()
+	public function registerDiscountForSponsor($id_currency)
 	{
 		if (intval($this->id_discount_sponsor) > 0)
 			return false;
-		return $this->registerDiscount($this->id_sponsor, 'sponsor');
+		return $this->registerDiscount($this->id_sponsor, 'sponsor', $id_currency);
 	}
 
-	public function registerDiscountForSponsored()
+	public function registerDiscountForSponsored($id_currency)
 	{
 		if (!intval($this->id_customer) OR intval($this->id_discount) > 0)
 			return false;
-		return $this->registerDiscount($this->id_customer, 'sponsored');
+		return $this->registerDiscount($this->id_customer, 'sponsored', $id_currency);
 	}
 
-	public function registerDiscount($id_customer, $register=false)
+	public function registerDiscount($id_customer, $register=false, $id_currency = 0)
 	{
 		$configurations = Configuration::getMultiple(array(
 			'REFERRAL_DISCOUNT_TYPE',
-			'REFERRAL_DISCOUNT_VALUE'
+			'REFERRAL_DISCOUNT_VALUE_'.intval($id_currency)
 		));
 		$discount = new Discount();
 		$discount->id_discount_type = intval($configurations['REFERRAL_DISCOUNT_TYPE']);
-		$discount->value = floatval($configurations['REFERRAL_DISCOUNT_VALUE']);
+		$discount->value = floatval($configurations['REFERRAL_DISCOUNT_VALUE_'.intval($id_currency)]);
 		$discount->quantity = 1;
 		$discount->quantity_per_user = 1;
 		$discount->date_from = date('Y-m-d H:i:s', time());
@@ -90,6 +85,7 @@ class ReferralProgramModule extends ObjectModel
 		$discount->name = $this->getDiscountPrefix().Tools::passwdGen(6);
 		$discount->description = Configuration::getInt('REFERRAL_DISCOUNT_DESCRIPTION');
 		$discount->id_customer = intval($id_customer);
+		$discount->id_currency = intval($id_currency);
 		if ($discount->add())
 		{
 			if ($register!=false)

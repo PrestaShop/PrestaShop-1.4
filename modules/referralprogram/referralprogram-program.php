@@ -19,7 +19,7 @@ $css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
 include(dirname(__FILE__).'/../../header.php');
 
 // get discount value (ready to display)
-$discount = Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE')), intval(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency));
+$discount = Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.intval($cookie->id_currency))), intval(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency));
 
 $activeTab = 'sponsor';
 $error = false;
