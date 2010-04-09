@@ -50,7 +50,7 @@ class Hipay extends PaymentModule
 
 	private function getModuleCurrency($cart)
 	{
-		$id_currency = (int)Db::getInstance()->getValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
+		$id_currency = (int)$this->MysqlGetValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
 		if (!$id_currency OR $id_currency == -2)
 			$id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
 		elseif ($id_currency == -1)
@@ -72,7 +72,7 @@ class Hipay extends PaymentModule
 		$language = new Language($cart->id_lang);
 		$customer = new Customer($cart->id_customer);
 		$carrier = new Carrier($cart->id_carrier, $cart->id_lang);
-		$id_zone = Db::getInstance()->getValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
+		$id_zone = $this->MysqlGetValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
 
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 		
@@ -370,6 +370,12 @@ class Hipay extends PaymentModule
 			}
 		}
 		return $this->arrayCategories;
+	}
+	
+	private function MysqlGetValue($query)
+	{
+		$row = Db::getInstance()->getRow($query);
+		return array_shift($row);
 	}
 }
 
