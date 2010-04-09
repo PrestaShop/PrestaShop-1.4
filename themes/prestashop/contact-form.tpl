@@ -37,7 +37,7 @@
 			 <textarea id="message" name="message" rows="7" cols="35">{if isset($smarty.post.message)}{$smarty.post.message|escape:'htmlall':'UTF-8'|stripslashes}{/if}</textarea>
 		</p>
 		<p class="submit">
-			<input type="submit" name="submitMessage" id="submitMessage" value="{l s='Send'}" class="button_large" />
+			<input type="submit" name="submitMessage" id="submitMessage" value="{l s='Send'}" class="button_large" onclick="$(this).hide();" />
 		</p>
 	</fieldset>
 </form>
