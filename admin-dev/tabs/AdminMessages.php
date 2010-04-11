@@ -35,8 +35,11 @@ class AdminMessages extends AdminTab
 
 		if (empty($orderBy))
 			$orderBy = Tools::getValue($this->table.'Orderby', $this->_defaultOrderBy);
+		elseif ($orderBy == 'id_order')
+			$orderBy = 'm.id_order';
+		
 		if (empty($orderWay))
-			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');
+			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');		
 
 		$limit = intval(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
@@ -46,6 +49,9 @@ class AdminMessages extends AdminTab
 			OR !is_numeric($start) OR !is_numeric($limit))
 			die(Tools::displayError('get list params is not valid'));
 
+		if ($orderBy == 'id_order')
+			$orderBy = 'm.id_order';
+		
 		/* Determine offset from current page */
 		if ((isset($_POST['submitFilter'.$this->table]) OR
 		isset($_POST['submitFilter'.$this->table.'_x']) OR
@@ -58,7 +64,7 @@ class AdminMessages extends AdminTab
 		SELECT m.id_message, m.id_cart, m.id_employee, IF(m.id_order > 0, m.id_order, \'--\') id_order, m.message, m.private, m.date_add, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS customer,
 		c.id_customer, count(m.id_message) nb_messages, (SELECT message FROM '._DB_PREFIX_.'message WHERE id_order = m.id_order ORDER BY date_add DESC LIMIT 1) last_message,
 		(SELECT COUNT(m2.id_message) FROM '._DB_PREFIX_.'message m2 WHERE 1 AND m2.id_customer != 0 AND m2.id_order = m.id_order AND m2.id_message NOT IN 
-		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.intval($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_readed_by_me
+		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.intval($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_read_by_me
 		FROM '._DB_PREFIX_.'message m
 		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = m.id_order)
 		LEFT JOIN '._DB_PREFIX_.'customer c ON (c.id_customer = m.id_customer)
@@ -67,11 +73,12 @@ class AdminMessages extends AdminTab
 		LIMIT '.intval($start).','.intval($limit));
 
  		$this->fieldsDisplay = array(
-		'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 25),
-		'customer' => array('title' => $this->l('Customer'), 'widthColumn' => 160, 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
-		'last_message' => array('title' => $this->l('Last message'), 'widthColumn' => 300, 'width' => 200),
-		'nb_messages_not_readed_by_me' => array('title' => $this->l('Unread message(s)'), 'widthColumn' => 100, 'width' => 50),
-		'nb_messages' => array('title' => $this->l('Number of messages'), 'widthColumn' => 100, 'width' => 50));
+		'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 30),
+		'id_customer' => array('title' => $this->l('Customer ID'), 'align' => 'center', 'width' => 30),
+		'customer' => array('title' => $this->l('Customer'), 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
+		'last_message' => array('title' => $this->l('Last message'), 'width' => 400, 'orderby' => false),
+		'nb_messages_not_read_by_me' => array('title' => $this->l('Unread message(s)'), 'width' =>30, 'align' => 'center'),
+		'nb_messages' => array('title' => $this->l('Number of messages'), 'width' => 30, 'align' => 'center'));
 
 		parent::__construct();
 	}

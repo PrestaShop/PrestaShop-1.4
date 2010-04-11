@@ -1409,8 +1409,8 @@ abstract class AdminTab
 		
 		$allowEmployeeFormLang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
 		if ($allowEmployeeFormLang && !$cookie->employee_form_lang)
-			$cookie->employee_form_lang = Configuration::get('PS_LANG_DEFAULT');
-		$this->_defaultFormLanguage = $allowEmployeeFormLang ? $cookie->employee_form_lang : Configuration::get('PS_LANG_DEFAULT');
+			$cookie->employee_form_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$this->_defaultFormLanguage = $allowEmployeeFormLang ? intval($cookie->employee_form_lang) : intval(Configuration::get('PS_LANG_DEFAULT'));
 		$this->_languages = Language::getLanguages();
 
 		$output = '

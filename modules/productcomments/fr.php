@@ -14,6 +14,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_c9cc8cce247e49bae79f15173
 $_MODULE['<{productcomments}prestashop>productcomments_06df33001c1d7187fdd81ea1f5b277aa'] = 'Actions';
 $_MODULE['<{productcomments}prestashop>productcomments_a517747c3d12f99244ae598910d979c5'] = 'Auteur';
 $_MODULE['<{productcomments}prestashop>productcomments_0be8406951cdfda82f00f79328cf4efc'] = 'Commentaire';
+$_MODULE['<{productcomments}prestashop>productcomments_df644ae155e79abf54175bd15d75f363'] = 'Nom du produit';
 $_MODULE['<{productcomments}prestashop>productcomments_c4408d335012a56ff58937d78050efad'] = 'Accepter';
 $_MODULE['<{productcomments}prestashop>productcomments_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
 $_MODULE['<{productcomments}prestashop>productcomments_0e1a03b7b26ffce9312556aa4de91a00'] = 'Aucun commentaire en attente';

@@ -1753,9 +1753,9 @@ class		Product extends ObjectModel
 	public static function getAccessoriesLight($id_lang, $id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pl.`name`
+		SELECT p.`id_product`, p.`reference`, pl.`name`
 		FROM `'._DB_PREFIX_.'accessory`
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product`= `id_product_2`
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product`= `id_product_2`)
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		WHERE `id_product_1` = '.intval($id_product));
 	}

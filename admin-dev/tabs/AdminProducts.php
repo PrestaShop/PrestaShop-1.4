@@ -1923,6 +1923,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>';
 				$accessories = Product::getAccessoriesLight(intval($cookie->id_lang), $obj->id);
+
 				if ($postAccessories = Tools::getValue('inputAccessories'))
 				{
 					$postAccessoriesTab = explode('-', Tools::getValue('inputAccessories'));
@@ -1930,13 +1931,14 @@ class AdminProducts extends AdminTab
 						if (!$this->haveThisAccessory($accessoryId, $accessories) AND $accessory = Product::getAccessoryById($accessoryId))
 							$accessories[] = $accessory;
 				}
+				
 					echo '
 					<tr>
 						<td class="col-left">'.$this->l('Accessories:').'<br /><br /><i>'.$this->l('(Do not forget to Save the product afterward)').'</i></td>
 						<td style="padding-bottom:5px;">
 							<div id="divAccessories">';
 					foreach ($accessories as $accessory)
-						echo $accessory['name'].'<span onclick="delAccessory('.$accessory['id_product'].');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />';
+						echo $accessory['name'].(!empty($accessory['reference']) ? ' ('.$accessory['reference'].')' : '').' <span onclick="delAccessory('.$accessory['id_product'].');" style="cursor: pointer;"><img src="../img/admin/delete.gif" class="middle" alt="" /></span><br />';
 					echo '</div>
 							<input type="hidden" name="inputAccessories" id="inputAccessories" value="';
 					foreach ($accessories as $accessory)
