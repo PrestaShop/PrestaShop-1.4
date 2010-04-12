@@ -43,14 +43,14 @@ class Hipay extends PaymentModule
 		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
 		{
 			$smarty->assign('hipay_prod', $this->prod);
-			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
+			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
 			return $this->display(__FILE__, 'payment.tpl');
 		}
 	}
 
 	private function getModuleCurrency($cart)
 	{
-		$id_currency = (int)$this->MysqlGetValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
+		$id_currency = (int)self::MysqlGetValue('SELECT id_currency FROM `'._DB_PREFIX_.'module_currency` WHERE id_module = '.(int)$this->id);
 		if (!$id_currency OR $id_currency == -2)
 			$id_currency = Configuration::get('PS_CURRENCY_DEFAULT');
 		elseif ($id_currency == -1)
@@ -72,7 +72,7 @@ class Hipay extends PaymentModule
 		$language = new Language($cart->id_lang);
 		$customer = new Customer($cart->id_customer);
 		$carrier = new Carrier($cart->id_carrier, $cart->id_lang);
-		$id_zone = $this->MysqlGetValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
+		$id_zone = self::MysqlGetValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
 
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 		
@@ -91,10 +91,10 @@ class Hipay extends PaymentModule
 		$paymentParams->setCurrency(strtoupper($currency->iso_code));
 		$paymentParams->setIdForMerchant($cart->id);
 		$paymentParams->setMerchantSiteId($hipaySiteId);
-		$paymentParams->setUrlCancel(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
-		$paymentParams->setUrlNok(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
-		$paymentParams->setUrlOk(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
-		$paymentParams->setUrlAck(Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php');
+		$paymentParams->setUrlCancel(self::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
+		$paymentParams->setUrlNok(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
+		$paymentParams->setUrlOk(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
+		$paymentParams->setUrlAck(self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php');
 		$paymentParams->setBackgroundColor('#FFFFFF');
 
 		if (!$paymentParams->check())
@@ -136,7 +136,7 @@ class Hipay extends PaymentModule
 			global $smarty;
 			include(dirname(__FILE__).'/../../header.php');
 			$smarty->assign('errors', array('[Hipay] '.strval($err_msg).' ('.$output.')'));
-			$_SERVER['HTTP_REFERER'] = Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3';
+			$_SERVER['HTTP_REFERER'] = self::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3';
 			$smarty->display(_PS_THEME_DIR_.'errors.tpl');
 			include(dirname(__FILE__).'/../../footer.php');
 		}
@@ -372,10 +372,22 @@ class Hipay extends PaymentModule
 		return $this->arrayCategories;
 	}
 	
-	private function MysqlGetValue($query)
+	// Retro compatibility with 1.2.5
+	static private function MysqlGetValue($query)
 	{
 		$row = Db::getInstance()->getRow($query);
 		return array_shift($row);
+	}
+	
+	// Retro compatibility with 1.2.5
+	static private function getHttpHost($http = false, $entities = false)
+	{
+		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
+		if ($entities)
+			$host = htmlspecialchars($host, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
+		return $host;
 	}
 }
 
