@@ -14,10 +14,9 @@
 
 define('PS_SEARCH_MAX_WORD_LENGTH', 15);
   
-/* Copied from Drupal search module, except for -\x{2f} in SEARCH_EXCLUDE because it's used to exclude words in a search,
-also except for \x{28}\x{29} in SEARCH_EXCLUDE in order to delete parenthesis */
+/* Copied from Drupal search module, except for \x{0}-\x{2f} that has been replaced by \x{0}-\x{2c}\x{2e}-\x{2f} in order to keep the char '-' */
 define('PREG_CLASS_SEARCH_EXCLUDE',
-'\x{0}\x{28}\x{29}\x{3a}-\x{40}\x{5b}-\x{60}\x{7b}-\x{bf}\x{d7}\x{f7}\x{2b0}-'.
+'\x{0}-\x{2c}\x{2e}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}\x{7b}-\x{bf}\x{d7}\x{f7}\x{2b0}-'.
 '\x{385}\x{387}\x{3f6}\x{482}-\x{489}\x{559}-\x{55f}\x{589}-\x{5c7}\x{5f3}-'.
 '\x{61f}\x{640}\x{64b}-\x{65e}\x{66a}-\x{66d}\x{670}\x{6d4}\x{6d6}-\x{6ed}'.
 '\x{6fd}\x{6fe}\x{700}-\x{70f}\x{711}\x{730}-\x{74a}\x{7a6}-\x{7b0}\x{901}-'.
@@ -82,18 +81,16 @@ class Search
 		$string = html_entity_decode($string, ENT_NOQUOTES, 'utf-8');
 
 		$string = preg_replace('/(['.PREG_CLASS_NUMBERS.']+)['.PREG_CLASS_PUNCTUATION.']+(?=['.PREG_CLASS_NUMBERS.'])/u', '\1', $string);
+		$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.']+/u', ' ', $string);
+		
 		if ($indexation)
-		{
 			$string = preg_replace('/[._-]+/', '', $string);
-			$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.'-\x{2f}]+/u', ' ', $string);
-		}
 		else
 		{
 			$string = preg_replace('/[._]+/', '', $string);
 			$string = ltrim(preg_replace('/([^ ])-/', '$1', ' '.$string));
 			$string = preg_replace('/[._]+/', '', $string);
 			$string = preg_replace('/[^\s]-+/', '', $string);
-			$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.']+/u', ' ', $string);
 		}
 		
 		$blacklist = Configuration::get('PS_SEARCH_BLACKLIST', $id_lang);
