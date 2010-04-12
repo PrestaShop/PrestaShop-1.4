@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocktags}prestashop>blocktags_f2568a62d4ac8d1d5b532556379772ba'] = 'Bloque etiquetas';
-$_MODULE['<{blocktags}prestashop>blocktags_b95abf236932a6bbd0f79867b9bf9308'] = 'Añada un bloque que contenga una nube de etiquetas';
+$_MODULE['<{blocktags}prestashop>blocktags_b95abf236932a6bbd0f79867b9bf9308'] = 'Añadir un bloque que contenga una nube de etiquetas';
 $_MODULE['<{blocktags}prestashop>blocktags_44c48afa1e8c0fe8bc629e2f93f3669f'] = 'Debe completar el campo \"tags mostrados\"';
 $_MODULE['<{blocktags}prestashop>blocktags_73293a024e644165e9bf48f270af63a0'] = 'Número no válido';
 $_MODULE['<{blocktags}prestashop>blocktags_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmar';

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{cheque}prestashop>cheque_3e0deb2f1df28a6a13c9c18cc0e1c755'] = 'Cheque';
-$_MODULE['<{cheque}prestashop>cheque_67061e9d57dec37dea3067df34829119'] = 'Módulo para acceptar pagos con cheques';
+$_MODULE['<{cheque}prestashop>cheque_67061e9d57dec37dea3067df34829119'] = 'Módulo para aceptar pagos con cheques';
 $_MODULE['<{cheque}prestashop>cheque_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de querer eliminar todos sus datos?';
 $_MODULE['<{cheque}prestashop>cheque_1c71e66a3588a1771042953e982a712c'] = '\'A nombre de\' y \'dirección\', deben configurarse en el pedido para usar el módulo correctamente';
 $_MODULE['<{cheque}prestashop>cheque_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda establcida para este módulo';

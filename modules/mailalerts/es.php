@@ -18,7 +18,6 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_d9b64868bb5b490c5c0627abe835acf6'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nuevo pedido:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Recibir una notificación si se recibe un nuevo pedido';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Fuera de stock';
-$_MODULE['<{mailalerts}prestashop>mailalerts_43c1063924fd0d29b5945682013c14a9'] = 'Recibir una notificación si el producto no está disponible';
 $_MODULE['<{mailalerts}prestashop>mailalerts_95ba1239ebac05e1d10d5dae049e32f5'] = 'Enviar por email:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_16a0cf0a0304df1b8ce3cb363eff0847'] = 'Una dirección email por línea';
 $_MODULE['<{mailalerts}prestashop>mailalerts_f77ed609e48d550f0166dfbafc102710'] = 'ej:';

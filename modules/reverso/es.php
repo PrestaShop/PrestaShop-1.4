@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{reverso}prestashop>reverso_86774f1550b9ad3cc207184b35afb514'] = 'ReversoForm';
-$_MODULE['<{reverso}prestashop>reverso_1e9fcdadfd0ced6424c9692da9373fbf'] = 'rellenar el formulario de autentificación con ReversoForm';
+$_MODULE['<{reverso}prestashop>reverso_1e9fcdadfd0ced6424c9692da9373fbf'] = 'Rellenar el formulario de autentificación con ReversoForm';
 $_MODULE['<{reverso}prestashop>reverso_254f642527b45bc260048e30704edb39'] = 'Configuración';
 $_MODULE['<{reverso}prestashop>reverso_3460276ef9eb483d13aa31b870077a0d'] = 'Número de serie';
 $_MODULE['<{reverso}prestashop>reverso_af53b10cb956fa2562af3c3fcd1c08f6'] = 'Dirección del sitio';

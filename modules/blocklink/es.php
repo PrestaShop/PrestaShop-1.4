@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocklink}prestashop>blocklink_fc738410141e4ec0c0319a81255a1431'] = 'Bloque de enlaces';
-$_MODULE['<{blocklink}prestashop>blocklink_3282cf44226c46a899eedd1a2127c2e5'] = 'Añada un bloque con enlaces adicionales';
+$_MODULE['<{blocklink}prestashop>blocklink_3282cf44226c46a899eedd1a2127c2e5'] = 'Añadir un bloque con enlaces adicionales';
 $_MODULE['<{blocklink}prestashop>blocklink_d98d5daaf408b77b05a2eeb6ae88d6df'] = '¿Está seguro de querer borrar todos sus enlaces?';
 $_MODULE['<{blocklink}prestashop>blocklink_fe3f38c46c80813d94b6775299e59f13'] = 'Debe rellenar todos los campos';
 $_MODULE['<{blocklink}prestashop>blocklink_9394bb34611399534ffac4f0ece96b7f'] = 'URL incorrecta';

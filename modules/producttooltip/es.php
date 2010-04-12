@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{producttooltip}prestashop>producttooltip_4776f7eb5998034f7bbc63b6457d1ff4'] = 'Ventana de información producto';
-$_MODULE['<{producttooltip}prestashop>producttooltip_f4fe2ee6c6c8e0f1b13c02d6dd2c4b99'] = 'Mostrar cuqntas personas están viendo la página del producto, así como la fecha del último producto pedido o incluido en el carrito';
+$_MODULE['<{producttooltip}prestashop>producttooltip_f4fe2ee6c6c8e0f1b13c02d6dd2c4b99'] = 'Mostrar cuántas personas están viendo la página del producto, así como la fecha del último producto pedido o incluido en el carrito';
 $_MODULE['<{producttooltip}prestashop>producttooltip_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
 $_MODULE['<{producttooltip}prestashop>producttooltip_e548d0d6a94a27306b8b31472a3e5ec3'] = '¿Mostrar el número de personas que están viendo este producto?';
 $_MODULE['<{producttooltip}prestashop>producttooltip_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';

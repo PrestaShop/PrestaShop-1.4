@@ -2,8 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_8b15fc6468c919d299f9a601b61b95fc'] = 'Cuenstas cliente';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f5426466d40fea'] = 'Mostrar la progresión de la suscripción cliente';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_8b15fc6468c919d299f9a601b61b95fc'] = 'Cuentas cliente';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f5426466d40fea'] = 'Mostrar la progresión de la suscripción de clientes';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Visitantes que no han pasado de la suscripción:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_0d298316c16a0bbdb74d50ead21590b4'] = 'Visitantes que han efectuado un pedido directamente después de suscribirse:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Total cuentas cliente:';

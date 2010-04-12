@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockrss}prestashop>blockrss_2516c13a12d3dbaf4efa88d9fce2e7da'] = 'Bloque fuentes RSS';
-$_MODULE['<{blockrss}prestashop>blockrss_be3b59f9eca89af2df840316a25e4b1d'] = 'Añada un bloque para mostrar fuentes RSS';
+$_MODULE['<{blockrss}prestashop>blockrss_be3b59f9eca89af2df840316a25e4b1d'] = 'Añadir o bloquear con un campo de búsqueda rápida';
 $_MODULE['<{blockrss}prestashop>blockrss_9680162225162baf2a085dfdc2814deb'] = 'fuentes RSS';
 $_MODULE['<{blockrss}prestashop>blockrss_6706b6d8ba45cc4f0eda0506ba1dc3c8'] = 'URL de fuente incorrecta';
 $_MODULE['<{blockrss}prestashop>blockrss_36ed65ce17306e812fd68d9f634c0c57'] = 'Título incorrecto';

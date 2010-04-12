@@ -63,10 +63,6 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_83090230d3c11aa76851030eb
 $_MODULE['<{referralprogram}prestashop>referralprogram_da61902911b89938bb847fa7b370f0d5'] = 'Integrar el sistema de programa de patrocinio en su tienda.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3c5db6c207f700f4f209b43bed966e96'] = 'No se puede eliminar este archivo:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_6c58031e7824c3cd6febc2f2107b0652'] = 'Configuración actualizada.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_5fef29eea7b07b69e4056ef7c9a27d2b'] = 'Cantidad pedido es obligatorio.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_e8a016f3e28a844aed05fb112567be71'] = 'Descuento valor es obligatorio.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_c61851decdfb9e117db22a56104ed7b7'] = 'Tipo descuento es obligatorio.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_f2df28e0986f3ddc39cc6c100f8e34a5'] = 'Número de amigos es obligatorio.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3d31dd445991f35b1ee6491eec7ac71c'] = 'No se puede escribir en el archivo XML.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_36bad0c5050aa8681926523cb705bbc0'] = 'No se puede cerrar el archivo xml.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc5269e1e'] = 'No se puede actualizar el archivo xml. Por favor, compruebe el archivo XML de los permisos de escritura.';
@@ -77,7 +73,6 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_46b8b61a5ef0bd397591fce50
 $_MODULE['<{referralprogram}prestashop>referralprogram_9ad4f790c8bb9be21a2fa388c7730353'] = 'Tipo vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_37be07209f53a5d636d5c904ca9ae64c'] = 'Porcentaje';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b2f40690858b404ed10e62bdf422c704'] = 'Cantidad';
-$_MODULE['<{referralprogram}prestashop>referralprogram_928666bdf20510dfa5c58393b77f1798'] = 'Valor vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_8465d83b5c1b569299af284c14d957bb'] = 'Descripción vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar ajustes';
 $_MODULE['<{referralprogram}prestashop>referralprogram_562ad64cf21ac2da656134355115133d'] = 'Su texto está vacio.';
