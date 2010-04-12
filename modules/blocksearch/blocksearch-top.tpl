@@ -25,7 +25,7 @@
 		
 		$('document').ready( function() {
 			$("#search_query").autocomplete(
-				'{/literal}{$base_dir_ssl}{literal}search.php', {
+				'{/literal}{if search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php', {
 				minChars: 3,
 				max:10,
 				selectFirst:false,
