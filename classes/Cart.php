@@ -745,7 +745,13 @@ class		Cart extends ObjectModel
 			$id_carrier = $this->id_carrier;
 		if (empty($id_carrier))
 		{
-			if ($this->id_customer)
+			if ((Configuration::get('PS_SHIPPING_METHOD') AND (Carrier::checkDeliveryPriceByWeight(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
+			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone))))
+				$id_carrier = intval(Configuration::get('PS_CARRIER_DEFAULT'));
+		}
+		if (empty($id_carrier))
+		{
+			if (intval($this->id_customer))
 			{
 				$customer = new Customer(intval($this->id_customer));
 				$result = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true, false, intval($id_zone), $customer->getGroups());
@@ -756,10 +762,11 @@ class		Cart extends ObjectModel
 			$resultsArray = array();
 			foreach ($result AS $k => $row)
 			{
+				if ($row['id_carrier'] == Configuration::get('PS_CARRIER_DEFAULT'))
+					continue;
 				if (!isset(self::$_carriers[$row['id_carrier']]))
 					self::$_carriers[$row['id_carrier']] = new Carrier(intval($row['id_carrier']));
 				$carrier = self::$_carriers[$row['id_carrier']];
-
 				// Get only carriers that are compliant with shipping method
 				if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
 				OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
@@ -774,20 +781,31 @@ class		Cart extends ObjectModel
 					// Get only carriers that have a range compatible with cart
 					if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
 					OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone))))
-						{
-							unset($result[$k]);
-							continue ;
-						}
+					{
+						unset($result[$k]);
+						continue ;
+					}
 				}
-				$resultsArray[] = $row;
+				if (intval(Configuration::get('PS_SHIPPING_METHOD')))
+				{
+					$shipping = $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
+					if (!isset($tmp))
+						$tmp = $shipping;
+					if ($shipping <= $tmp)
+						$id_carrier = intval($row['id_carrier']);
+				}
+				else
+				{
+					$shipping = $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+					if (!isset($tmp))
+						$tmp = $shipping;
+					if ($shipping <= $tmp)
+						$id_carrier = intval($row['id_carrier']);
+				}
 			}
-			$idDefaultCarrier = Configuration::get('PS_CARRIER_DEFAULT');
-			foreach ($resultsArray AS $resultArray)
-				if ($resultArray['id_carrier'] == $idDefaultCarrier)
-					$id_carrier = $idDefaultCarrier;
-			if (empty($id_carrier))
-				$id_carrier = $resultsArray[0]['id_carrier'];
 		}
+		if (empty($id_carrier))
+			$id_carrier = Configuration::get('PS_CARRIER_DEFAULT');
 		if (!isset(self::$_carriers[$id_carrier]))
 			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier));
 		$carrier = self::$_carriers[$id_carrier];
