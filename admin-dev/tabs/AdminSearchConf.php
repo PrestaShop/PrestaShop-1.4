@@ -54,12 +54,15 @@ class AdminSearchConf extends AdminPreferences
 	
 	public function display()
 	{
+		$currentFileName = array_reverse(explode("/", $_SERVER['SCRIPT_NAME']));
+		$cronUrl = Tools::getHttpHost(true, true).__PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])).'searchcron?full=1&token='.substr(_COOKIE_KEY_, 34, 8);
 		list($total, $indexed) = Db::getInstance()->getRow('SELECT COUNT(*) as "0", SUM(indexed) as "1" FROM '._DB_PREFIX_.'product');
 		echo '
 		<fieldset class="width3"><legend>'.$this->l('Indexation').'</legend>
 			'.$this->l('Indexed products:').' <b>'.intval($indexed).' / '.intval($total).'</b>.<br /><br />
-			-&gt; <a href="searchcron.php" class="bold">'.$this->l('Add missing products to index.').'</a><br />
-			-&gt; <a href="searchcron.php?full=1" class="bold">'.$this->l('Re-build entire index.').'</a>
+			-&gt; <a href="searchcron.php?token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Add missing products to index.').'</a><br />
+			-&gt; <a href="searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Re-build entire index.').'</a><br /><br />
+			'.$this->l('You can set a cron job that will re-build your index using the following URL:').' <a href="'.$cronUrl.'">'.$cronUrl.'</a>.
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 		$this->_displayForm('search', $this->_fieldsSearch, $this->l('Search'), 'width2', 'search');

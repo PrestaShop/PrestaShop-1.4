@@ -3,6 +3,7 @@
 include_once(dirname(__FILE__).'/../config/config.inc.php');
 $cookie = new Cookie('psAdmin');
 
+
 $module = Tools::getValue('module');
 $render = Tools::getValue('render');
 $type = Tools::getValue('type');
@@ -12,6 +13,9 @@ $width = Tools::getValue('width');
 $height = Tools::getValue('height');
 $id_employee = Tools::getValue('id_employee');
 $id_lang = Tools::getValue('id_lang');
+
+if ($cookie->id_employee != $id_employee)
+	die;
 
 require_once(dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php');
 

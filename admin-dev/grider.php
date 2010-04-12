@@ -16,6 +16,9 @@ $dir = Tools::getValue('dir', 0); // Should be a String : Either ASC or DESC
 $id_employee = intval(Tools::getValue('id_employee'));
 $id_lang = intval(Tools::getValue('id_lang'));
 
+if ($cookie->id_employee != $id_employee)
+	die;
+
 if (!Validate::isModuleName($module))
 	die(Tools::displayError());
 require_once(dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php');
