@@ -176,22 +176,34 @@ class Backup
 			{
 				$data = Db::getInstance()->ExecuteS('SELECT * FROM `' . $schema[0]['Table'] . '`', false);
 				$sizeof = DB::getInstance()->NumRows();
+				$lines = explode("\n", $schema[0]['Create Table']);
+
 				if ($data AND $sizeof > 0)
 				{
 					// Export the table data
 					fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
-
 					$i = 1;
 					while ($row = DB::getInstance()->nextRow($data))
 					{
 						$s = '(';
+						
 						foreach ($row as $field => $value)
 						{
 							$tmp = "'" . mysql_real_escape_string($value) . "',";
 							if($tmp != "'',")
 								$s .= $tmp;
 							else
-								$s .= "NULL,";
+							{
+								foreach($lines AS $line)
+									if (strpos($line, '`'.$field.'`') !== false)
+									{	
+										if (preg_match('/(.*NOT NULL.*)/Ui', $line))
+											$s .= "'',";
+										else
+											$s .= 'NULL,';
+										break;
+									}
+							}
 						}
 						$s = rtrim($s, ',');
 
