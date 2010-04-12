@@ -46,6 +46,7 @@ class Gsitemap extends Module
 
     private function _postProcess()
     {
+		Configuration::updateValue('GSITEMAP_ALL_CMS', intval(Tools::getValue('GSITEMAP_ALL_CMS')));
 		$link = new Link();
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$ruBackup = $_SERVER['REQUEST_URI'];
@@ -66,7 +67,7 @@ XML;
 		$sitemap->addChild('lastmod', date('Y-m-d'));
 		$sitemap->addChild('changefreq', 'daily');
 		
-		if (Tools::getValue('all_cms'))
+		if (Configuration::get('GSITEMAP_ALL_CMS'))
 			$sql_cms = '
 			SELECT DISTINCT cl.id_cms, cl.link_rewrite, cl.id_lang
 			FROM '._DB_PREFIX_.'cms_lang cl
@@ -217,7 +218,7 @@ XML;
         $this->_html .=
         '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<div style="margin:0 0 20px 0;">
-				<input type="checkbox" name="all_cms" id="all_cms" style="vertical-align: middle;" value="1" /> <label class="t" for="all_cms">'.$this->l('Sitemap contains all CMS pages').'</label>
+				<input type="checkbox" name="GSITEMAP_ALL_CMS" id="GSITEMAP_ALL_CMS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_CMS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_CMS">'.$this->l('Sitemap contains all CMS pages').'</label>
 				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default, only CMS pages on block CMS are included on Sitemap').'</p>
 			</div>
 			<input name="btnSubmit" class="button" type="submit"
