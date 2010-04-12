@@ -2,7 +2,7 @@
 <div id="new-products_block_right" class="block products_block">
 	<h4><a href="{$base_dir}new-products.php" title="{l s='New products' mod='blocknewproducts'}">{l s='New products' mod='blocknewproducts'}</a></h4>
 	<div class="block_content">
-	{if $new_products|@count > 0}
+	{if $new_products !== false}
 		<ul class="product_images clearfix">
 		{foreach from=$new_products item='product' name='newProducts'}
 			{if $smarty.foreach.newProducts.index < 2}
