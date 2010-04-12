@@ -98,23 +98,18 @@ class AdminImport extends AdminTab
 				
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),				
-				'active' => $this->l('Active (0/1)'),				
+				'id' => $this->l('ID'),
+				'active' => $this->l('Active (0/1)'),
 				'name' => $this->l('Name *'),
-                'parent' => $this->l('Parent category'),		
+				'parent' => $this->l('Parent category'),
 				'description' => $this->l('Description'),
 				'meta_title' => $this->l('Meta-title'),
-                'meta_keywords' => $this->l('Meta-keywords'),
-                'meta_description' => $this->l('Meta-description'),
-                'link_rewrite' => $this->l('URL rewrited'),	
-				'image' => $this->l('Image URL'),				        
-				);
+				'meta_keywords' => $this->l('Meta-keywords'),
+				'meta_description' => $this->l('Meta-description'),
+				'link_rewrite' => $this->l('URL rewrited'),
+				'image' => $this->l('Image URL'));
 				
-				self::$default_values = array(
-				'active' => '1',
-				'parent' => '1',
-				'link_rewrite' => '',		
-				);
+				self::$default_values = array('active' => '1', 'parent' => '1', 'link_rewrite' => '');
 				
 				break;
 			
@@ -125,18 +120,18 @@ class AdminImport extends AdminTab
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
 				'id' => $this->l('ID'),
-				'active' => $this->l('Active (0/1)'),				
+				'active' => $this->l('Active (0/1)'),
 				'name' => $this->l('Name *'),
-				'category' => $this->l('Categories (x,y,z...)'),					
+				'category' => $this->l('Categories (x,y,z...)'),
 				'price_tex' => $this->l('Price tax excl.'),
 				'price_tin' => $this->l('Price tax incl.'),
-				'tax_rate' => $this->l('Tax rate'),					
-				'wholesale_price' => $this->l('Wholesale price'),				
+				'tax_rate' => $this->l('Tax rate'),
+				'wholesale_price' => $this->l('Wholesale price'),
 				'on_sale' => $this->l('On sale (0/1)'),
 				'reduction_price' => $this->l('Reduction amount'),
 				'reduction_percent' => $this->l('Reduction per cent'),
 				'reduction_from' => $this->l('Reduction from (yyyy-mm-dd)'),
-				'reduction_to' => $this->l('Reduction to (yyyy-mm-dd)'),											
+				'reduction_to' => $this->l('Reduction to (yyyy-mm-dd)'),
 				'reference' => $this->l('Reference #'),
 				'supplier_reference' => $this->l('Supplier reference #'),
 				'supplier' => $this->l('Supplier'),
@@ -149,25 +144,23 @@ class AdminImport extends AdminTab
 				'description' => $this->l('Description'),
 				'tags' => $this->l('Tags (x,y,z...)'),
 				'meta_title' => $this->l('Meta-title'),
-                'meta_keywords' => $this->l('Meta-keywords'),
-                'meta_description' => $this->l('Meta-description'),
-                'link_rewrite' => $this->l('URL rewrited'),	
+				'meta_keywords' => $this->l('Meta-keywords'),
+				'meta_description' => $this->l('Meta-description'),
+				'link_rewrite' => $this->l('URL rewrited'),
 				'available_now' => $this->l('Text when in-stock'),
 				'available_later' => $this->l('Text if back-order allowed'),
 				'image' => $this->l('Image URLs (x,y,z...)'),
-				'feature' => $this->l('Feature'),								        
-				);
+				'feature' => $this->l('Feature'));
 				
 				self::$default_values = array(
-				'id_category' => array(1),				
+				'id_category' => array(1),
 				'id_category_default' => 1,
 				'active' => '1',
 				'quantity' => 0,
 				'price' => 0,
 				'id_tax' => 0,
 				'description_short' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => '')
-				);
+				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''));
 				
 				break;
 			
@@ -187,13 +180,10 @@ class AdminImport extends AdminTab
 				'lastname' => $this->l('Lastname *'),
 				'firstname' => $this->l('Firstname *'),
 				'newsletter' => $this->l('Newsletter (0/1)'),
-				'optin' => $this->l('Optin (0/1)'),									        
-				);
+				'optin' => $this->l('Optin (0/1)'));
 				
-				self::$default_values = array(
-				'active' => '1',	
-				);
-											
+				self::$default_values = array('active' => '1');
+
 			break;
 			case $this->entities[$this->l('Addresses')]: 
 			
@@ -202,7 +192,7 @@ class AdminImport extends AdminTab
 				
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),				
+				'id' => $this->l('ID'),
 				'alias' => $this->l('Alias *'),
 				'active' => $this->l('Active  (0/1)'),
 				'customer_email' => $this->l('Customer e-mail'),
@@ -216,18 +206,14 @@ class AdminImport extends AdminTab
 				'postcode' => $this->l('Postcode *'),
 				'city' => $this->l('City *'),
 				'country' => $this->l('Country *'),
-				'state' => $this->l('State'),								
+				'state' => $this->l('State'),
 				'other' => $this->l('Other'),
 				'phone' => $this->l('Phone'),
-				'phone_mobile' => $this->l('Mobile Phone'),								        
-				);
+				'phone_mobile' => $this->l('Mobile Phone'));
 				
-				self::$default_values = array(
-				'alias' => 'Alias',	
-				'postcode' => 'X'
-				);				
-								
-			break;			
+				self::$default_values = array('alias' => 'Alias', 'postcode' => 'X');
+
+			break;
 			case $this->entities[$this->l('Manufacturers')]:
 			case $this->entities[$this->l('Suppliers')]:
 			
@@ -236,10 +222,9 @@ class AdminImport extends AdminTab
 			
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),			
-				'name' => $this->l('Name *'),	
-				'description' => $this->l('Description'),
-				);
+				'id' => $this->l('ID'),
+				'name' => $this->l('Name *'),
+				'description' => $this->l('Description'));
 			break;
 		}
 		parent::__construct();
@@ -283,7 +268,7 @@ class AdminImport extends AdminTab
 		$options = '';
 		foreach ($this->available_fields AS $k => $field)
 		{			
-			$options .= '<option value="'.$k.'"';		
+			$options .= '<option value="'.$k.'"';
 			if ($k === 'price_tin')
 				++$nb_c;
 			if ($i === ($nb_c + 1) AND (!in_array($k, $noPreSelect)))
@@ -310,7 +295,7 @@ class AdminImport extends AdminTab
 				continue;
 			if ($k === 'price_tin')
 			{
-				$fields[$i-1] = $fields[$i-1].' '.$this->l('or').' '.$field;	
+				$fields[$i-1] = $fields[$i-1].' '.$this->l('or').' '.$field;
 			}
 			else
 				$fields[] = $field;
@@ -366,7 +351,7 @@ class AdminImport extends AdminTab
 		$line = fgets($handle, $lenght);
 		if ($line === false)
 			return false;
-		$tmpTab = explode($delimiter, $line);	
+		$tmpTab = explode($delimiter, $line);
 		
 		foreach ($tmpTab AS &$row)
 			if (preg_match ('/^".*"$/Uims',$row))
@@ -431,7 +416,7 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 			
 			self::setDefaultValues($info);
-			$category = new Category();		
+			$category = new Category();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $category);
 			
 			if (isset($category->parent) AND is_numeric($category->parent))
@@ -620,7 +605,7 @@ class AdminImport extends AdminTab
 						if (Category::categoryExists(intval($value)))
 							$product->id_category[] = intval($value);
 						else
-						{							
+						{
 							$categoryToCreate= new Category();
 							$categoryToCreate->id = intval($value);
 							$categoryToCreate->name = self::createMultiLangField($value);
@@ -633,7 +618,7 @@ class AdminImport extends AdminTab
 								$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
 								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
 							}
-						}	
+						}
 					}
 					elseif (is_string($value) AND !empty($value))
 					{
@@ -660,7 +645,7 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';			
+			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';
 			$link_rewrite = is_array($product->link_rewrite) ? $product->link_rewrite[$defaultLanguageId] : '';
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
 			
@@ -981,7 +966,7 @@ class AdminImport extends AdminTab
 			if (($fieldError = $address->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $address->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{				
 				if ($address->id AND $address->addressExists($address->id))
-					$res = $address->update();					
+					$res = $address->update();
 				if (!$res)
 					$res = $address->add();
 			}
@@ -1006,12 +991,12 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 			
 			self::setDefaultValues($info);
-			$manufacturer = new Manufacturer();		
+			$manufacturer = new Manufacturer();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $manufacturer);
 			
 			$res = false;				
 			if (($fieldError = $manufacturer->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
-			{								
+			{
 				if ($manufacturer->id AND $manufacturer->manufacturerExists($manufacturer->id))
 					$res = $manufacturer->update();
 				if (!$res)
@@ -1038,16 +1023,16 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 			
 			self::setDefaultValues($info);
-			$supplier = new Supplier();		
+			$supplier = new Supplier();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $supplier);
 			
 			if (($fieldError = $supplier->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $supplier->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
-			{				
-				$res = false;				
+			{
+				$res = false;
 				if ($supplier->id AND $supplier->supplierExists($supplier->id))
 					$res = $supplier->update();
 				if (!$res)
-					$res = $supplier->add();	
+					$res = $supplier->add();
 				if (!$res)
 					$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
 			}

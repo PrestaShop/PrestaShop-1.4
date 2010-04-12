@@ -14,9 +14,10 @@
 
 define('PS_SEARCH_MAX_WORD_LENGTH', 15);
   
-/* Copied from Drupal search module, except for -\x{2f} in SEARCH_EXCLUDE because it's used to exclude words in a search */
+/* Copied from Drupal search module, except for -\x{2f} in SEARCH_EXCLUDE because it's used to exclude words in a search,
+also except for \x{28}\x{29} in SEARCH_EXCLUDE in order to delete parenthesis */
 define('PREG_CLASS_SEARCH_EXCLUDE',
-'\x{0}\x{3a}-\x{40}\x{5b}-\x{60}\x{7b}-\x{bf}\x{d7}\x{f7}\x{2b0}-'.
+'\x{0}\x{28}\x{29}\x{3a}-\x{40}\x{5b}-\x{60}\x{7b}-\x{bf}\x{d7}\x{f7}\x{2b0}-'.
 '\x{385}\x{387}\x{3f6}\x{482}-\x{489}\x{559}-\x{55f}\x{589}-\x{5c7}\x{5f3}-'.
 '\x{61f}\x{640}\x{64b}-\x{65e}\x{66a}-\x{66d}\x{670}\x{6d4}\x{6d6}-\x{6ed}'.
 '\x{6fd}\x{6fe}\x{700}-\x{70f}\x{711}\x{730}-\x{74a}\x{7a6}-\x{7b0}\x{901}-'.
@@ -71,7 +72,7 @@ define('PREG_CLASS_PUNCTUATION',
 '\x{30fb}\x{fd3e}\x{fd3f}\x{fe30}-\x{fe52}\x{fe54}-\x{fe61}\x{fe63}\x{fe68}'.
 '\x{fe6a}\x{fe6b}\x{ff01}-\x{ff03}\x{ff05}-\x{ff0a}\x{ff0c}-\x{ff0f}\x{ff1a}'.
 '\x{ff1b}\x{ff1f}\x{ff20}\x{ff3b}-\x{ff3d}\x{ff3f}\x{ff5b}\x{ff5d}\x{ff5f}-'.
-'\x{ff65}');  
+'\x{ff65}');
 
 class Search
 {
@@ -94,6 +95,7 @@ class Search
 			$string = preg_replace('/[^\s]-+/', '', $string);
 			$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.']+/u', ' ', $string);
 		}
+		
 		$blacklist = Configuration::get('PS_SEARCH_BLACKLIST', $id_lang);
 		if (!empty($blacklist))
 		{
