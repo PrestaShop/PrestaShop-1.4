@@ -213,25 +213,32 @@ abstract class PaymentModule extends Module
 					$customizationQuantity = 0;
 					if (isset($customizedDatas[$product['id_product']][$product['id_product_attribute']]))
 					{
+						$customizationText = '';
+						foreach ($customizedDatas[$product['id_product']][$product['id_product_attribute']] AS $customization)
+							if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
+								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
+									$customizationText .= $text['name'].$this->l(':').' '.$text['value'].', ';
+						$customizationText = rtrim($customizationText, ', ');
+						
 						$customizationQuantity = intval($product['customizationQuantityTotal']);
 						$productsList .=
-						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
-							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').' - '.$this->l('Customized').'</strong></td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
-							<td style="padding:0.6em 0.4em; text-align:center;">'.$customizationQuantity.'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($customizationQuantity * $priceWithTax, $currency, false, false).'</td>
+						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
+							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').' - '.$this->l('Customized').(!empty($customizationText) ? ' - '.$customizationText : '').'</strong></td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: center;">'.$customizationQuantity.'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($customizationQuantity * $priceWithTax, $currency, false, false).'</td>
 						</tr>';
 					}
 
-					if (!$customizationQuantity OR intval($product['quantity']) > $customizationQuantity)
+					if (!$customizationQuantity OR intval($product['cart_quantity']) > $customizationQuantity)
 						$productsList .=
-						'<tr style="background-color:'.($key%2 ? '#DDE2E6' : '#EBECEE').';">
-							<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-							<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
-							<td style="padding:0.6em 0.4em; text-align:center;">'.(intval($product['cart_quantity']) - $customizationQuantity).'</td>
-							<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $price_wt, $currency, false, false).'</td>
+						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
+							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: center;">'.(intval($product['cart_quantity']) - $customizationQuantity).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $price_wt, $currency, false, false).'</td>
 						</tr>';
 				} // end foreach ($products)
 				$query = rtrim($query, ',');

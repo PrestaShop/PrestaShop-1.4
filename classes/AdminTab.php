@@ -141,7 +141,10 @@ abstract class AdminTab
 		19 => $this->l('Duplication successfully done'), 20 => $this->l('Translation added successfully but the language has been not created'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
-		$this->token = Tools::getAdminToken(get_class($this).intval($this->id).intval($cookie->id_employee));
+		$className = get_class($this);
+		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
+			$className = 'AdminCatalog';
+		$this->token = Tools::getAdminToken($className.intval($this->id).intval($cookie->id_employee));
 	}
 
 	protected function l($string, $class = __CLASS__, $addslashes = FALSE, $htmlentities = TRUE)
