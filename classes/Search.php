@@ -171,6 +171,24 @@ class Search
 				AND si.id_product = p.id_product
 				AND ('.implode(' OR ', $scoreArray).')
 			) as position';
+			
+		$productPool = Db::getInstance()->getValue('
+		SELECT GROUP_CONCAT(DISTINCT cp.`id_product`)
+		FROM `'._DB_PREFIX_.'category_group` cg
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON cp.`id_category` = cg.`id_category`
+		WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (
+			SELECT id_group
+			FROM '._DB_PREFIX_.'customer_group
+			WHERE id_customer = '.intval($cookie->id_customer).'
+		)'));
+		
+		if (empty($productPool))
+			return ($ajax ? array() : array('total' => 0, 'result' => array()));
+		elseif (strpos($productPool, ',') === false)
+			$productPool = ' = '.(int)$productPool.' ';
+		else
+			$productPool = ' IN ('.$productPool.') ';
+			
 		
 		if ($ajax)
 		{
@@ -184,12 +202,7 @@ class Search
 			WHERE '.implode(' AND ', $whereArray).'
 			AND p.active = 1
 			AND c.`active` = 1 
-			AND p.`id_product` IN (
-				SELECT cp.`id_product`
-				FROM `'._DB_PREFIX_.'category_group` cg
-				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-				WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
-			)
+			AND p.`id_product` '.$productPool.'
 			ORDER BY position DESC
 			LIMIT 10';
 			return Db::getInstance()->ExecuteS($queryResults);
@@ -210,12 +223,7 @@ class Search
 		WHERE '.implode(' AND ', $whereArray).'
 		AND p.active = 1
 		AND c.`active` = 1 
-		AND p.`id_product` IN (
-			SELECT cp.`id_product`
-			FROM `'._DB_PREFIX_.'category_group` cg
-			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
-		)
+		AND p.`id_product` '.$productPool.'
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
 		$result = Db::getInstance()->ExecuteS($queryResults);
