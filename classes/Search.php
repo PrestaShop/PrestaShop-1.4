@@ -357,10 +357,10 @@ class Search
 		return true;
 	}
 	
-	public function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
+	public static function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
 	{
 	 	global $link;
-		
+
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) 
 		OR !Validate::isBool($count) OR !Validate::isValidSearch($tag)
 		OR $orderBy AND !$orderWay
@@ -368,7 +368,7 @@ class Search
 		OR ($orderWay AND !Validate::isOrderBy($orderWay)))
 			die(Tools::displayError());
 
-		if ($pageNumber < 0) $pageNumber = 0;
+		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 10;
 
 		if ($count)

@@ -9,6 +9,8 @@
 	<p class="warning">
 		{if $query}
 			{l s='No results found for your search'}&nbsp;"{$query|escape:'htmlall':'UTF-8'}"
+		{elseif $tag}
+			{l s='No results found for your search'}&nbsp;"{$tag|escape:'htmlall':'UTF-8'}"
 		{else}
 			{l s='Please type a search keyword'}
 		{/if}
