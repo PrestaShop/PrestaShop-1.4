@@ -8,14 +8,23 @@
 	<link href="{$timetable_css}" rel="stylesheet" type="text/css" media="all" />
 	{literal}
 		<script>
-			$(document).ready(function() {			
-				$("input[@name=id_carrier]").click(function () {
-						toggle_visibility('shipping_pref','0');
-					});				
-			
-				$(".dejala").click(function () {
-					toggle_visibility('shipping_pref','1');
-				});
+			$(document).ready(function() {
+				$("input[@name=id_carrier]").each(function(idx, elt) {
+					if ($(this).parent().hasClass("dejala")) {
+						if ($(this).get(0).checked) {
+							toggle_visibility('shipping_pref','1');
+						}
+						$(this).click(function() {
+							toggle_visibility('shipping_pref', 1);
+						});
+					}
+					else {
+						$(this).click(function() {
+							toggle_visibility('shipping_pref', 0);
+						});
+					}
+				}) ;
+
 				var mHour = deliveryHourSelected;
 				selectDay(deliveryDateSelected);
 				selectHour(mHour);
@@ -34,7 +43,7 @@
 					<td class="carrier_action radio dejala">
 						<input type="hidden" name="dejala_id_carrier" value="{$carrier.id_carrier|intval}"/>
 						<input type="hidden" name="dejala_id_product" value="{$product.id|intval}"/>
-						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked}checked="checked"{/if} onclick="toggle_visibility('shipping_pref','1');"/>
+						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked}checked="checked"{/if}"/>
 					</td>
 					<td class="carrier_name">
 						<label for="id_carrier{$carrier.id_carrier|intval}">
@@ -49,7 +58,7 @@
 							</span>
 							{if $priceDisplay == 1} {l s='(tax excl.)' mod='dejala'}{else} {l s='(tax incl.)' mod='dejala'}{/if}
 						{else}
-							{l s='Free!'}
+							{l s='Free!' mod='dejala'}
 						{/if}
 					</td>
 				</tr>

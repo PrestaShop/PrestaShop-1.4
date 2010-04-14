@@ -1,9 +1,11 @@
 <?php
+	if (_PS_VERSION_ <= "1.3.0.3" && !class_exists("Carrier", false)) require_once(_PS_MODULE_DIR_ . "dejala/CarrierHacked.php") ;
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalaconfig.php");
-	require_once(_PS_MODULE_DIR_. "dejala/dejalautils.php");
-	require_once(_PS_MODULE_DIR_. "dejala/dejalacarrierutils.php");
-	require_once(_PS_MODULE_DIR_. "dejala/dejalacart.php");
-	require_once(_PS_MODULE_DIR_. "dejala/calendarutils.php");
+	require_once(_PS_MODULE_DIR_ . "dejala/dejalautils.php");
+	require_once(_PS_MODULE_DIR_ . "dejala/dejalacarrierutils.php");
+	require_once(_PS_MODULE_DIR_ . "dejala/dejalacart.php");
+	require_once(_PS_MODULE_DIR_ . "dejala/calendarutils.php");
+	require_once(_PS_MODULE_DIR_ . "dejala/DejalaCarrier.php");
 
 
 /**
@@ -14,15 +16,29 @@ class Dejala extends Module
 	const INSTALL_SQL_FILE = 'install.sql';
 	public $DEJALA_DEBUG = FALSE;
 	public $dejalaConfig;
+	public $id_lang ;
+	private $wday_labels ;
+	private static $INSTANCE = NULL ;
+	
+	public function getInstance() {
+		if (!self::$INSTANCE) {
+        	self::$INSTANCE = new Dejala();
+		}
+		return self::$INSTANCE; 
+	}
 
 	public function __construct()
 	{
+		global $cookie ;
+		
 		$this->name = 'dejala';
 		$this->tab = 'Tools';
 		$this->version = 1.2;
-		$this->internal_version = '1.2.3';
+		$this->internal_version = '1.2.6';
 		// Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');
+		$this->id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+		$this->wday_labels = array($this->l('Sunday'), $this->l('Monday'), $this->l('Tuesday'), $this->l('Wednesday'), $this->l('Thursday'), $this->l('Friday'), $this->l('Saturday'));
 
 		parent::__construct();
 
@@ -36,8 +52,8 @@ class Dejala extends Module
 
 	 	// The parent construct is required for translations
 		$this->page = basename(__FILE__, '.php');
-	 	$this->displayName = $this->l('Dejala.fr : le transport par coursier');
-		$this->description = $this->l('Envoie les demandes de livraisons vers dejala.fr');
+	 	$this->displayName = $this->l('Dejala.com : Courier delivery');
+		$this->description = $this->l('Lets Dejala.com handle your deliveries by courier');
 	}
 
 
@@ -46,38 +62,42 @@ class Dejala extends Module
 	*/
   public function install()
   {
-  	if (!file_exists(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
+  	if (!file_exists(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE)) {
 			return (false);
-		else if (!$sql = file_get_contents(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
+  	}
+	elseif (!$sql = file_get_contents(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE)) {
+		return (false);
+	}
+	$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
+	$sql = preg_split("/;\s*[\r\n]+/",$sql);
+	foreach ($sql as $query) {
+		if (!empty($query)) {
+			if (!Db::getInstance()->Execute(trim($query)))
 			return (false);
-		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
-		$sql = preg_split("/;\s*[\r\n]+/",$sql);
-		foreach ($sql as $query)
-		{
-			if (!empty($query)) {
-				if (!Db::getInstance()->Execute(trim($query)))
-					return (false);
-				}
-			}
-    if (parent::install() == false)
-    	return (false);
+		}
+	}
+	if (parent::install() == false) {
+		return (false);
+	}
 
-    if ($this->registerHook('updateOrderStatus') == false
-				OR $this->registerHook('extraCarrier') == false
-				OR $this->registerHook('cart') == false)
-			return (false);
+	if ($this->registerHook('updateOrderStatus') == false
+	OR $this->registerHook('extraCarrier') == false
+	OR $this->registerHook('cart') == false) {
+		return (false);
+	}
 
-		$this->dejalaConfig = new DejalaConfig();
-  	if (!$this->dejalaConfig->saveConfig())
-  		return (false);
+	$this->dejalaConfig = new DejalaConfig();
+	if (!$this->dejalaConfig->saveConfig()) {
+		return (false);
+	}
 
-  	return (true);
+	return (true);
   }
 
 	public function uninstall()
 	{
 		$this->dejalaConfig->uninstall();
-		parent::uninstall();
+		return parent::uninstall();
 	}
 
 
@@ -125,6 +145,8 @@ class Dejala extends Module
 					if ( is_null($_POST[$key]) || (0 == strlen($_POST[$key])) )
 						$_POST[$key] = 0;
 					$_POST[$key] = str_replace(',', '.', $_POST[$key]);
+					$_POST[$key] = str_replace(' ', '', $_POST[$key]);
+
 					if (!Validate::isFloat($_POST[$key]))
 					{
 						$errors[] = $value . ' ' . $this->l('is not a valid margin.');
@@ -171,14 +193,19 @@ class Dejala extends Module
 			$this->dejalaConfig->sandboxServiceURL = str_replace('.fr', '.'.$this->dejalaConfig->country, $this->dejalaConfig->sandboxServiceURL);
 			$storeAttr = array();
 			$response = $djlUtil->ping($this->dejalaConfig, 'TEST');
-			if (200 == $response['status'])
+			if ($response['status'] == 200)
 			{
 				$this->dejalaConfig->saveConfig();
 			}
 			else {
+				if ($response['status'] == 401) {
+					$errors[] = $this->l('An error occured while authenticating your account on Dejala.fr. Your credentials were not recognized');
+				}
+				else {
+					$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
+				}
 				$this->dejalaConfig->login = null;
-				$this->dejalaConfig->password = null;
-				$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
+				$this->dejalaConfig->password = null;				
 			}
 		}
 		else if ($method == 'register')
@@ -190,20 +217,24 @@ class Dejala extends Module
 			$this->dejalaConfig->country = Tools::getValue('country');
 			$this->dejalaConfig->serviceURL = str_replace('.fr', '.'.$this->dejalaConfig->country, $this->dejalaConfig->serviceURL);
 			$this->dejalaConfig->sandboxServiceURL = str_replace('.fr', '.'.$this->dejalaConfig->country, $this->dejalaConfig->sandboxServiceURL);
+			$this->dejalaConfig->storeUrl = Dejala::getHttpHost(true, true) ;
 			$response = $djlUtil->createInstantStore($this->dejalaConfig, Tools::getValue('store_name'));
 			if ($response['status'] == 201)
 			{
 				$this->dejalaConfig->saveConfig();
 			}
-			else
+			elseif ($response['status'] == 409)
 			{
-				if (409 == $response['status']) {
-					$errors[] = $this->l('Please choose another login');
-				}
-				else
-					$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
-				$this->dejalaConfig->loadConfig();
+				$errors[] = $this->l('Please choose another login');
 			}
+			elseif ($response['status'] == 403)
+			{
+				$errors[] = $this->l('Dejala Server unreachable by your Prestashop server. This is most certainly due to a limit set by your hosting provider. Please contact their technical support and ask if your server is authorized to initiate outbound HTTP connections');
+			}
+			else {
+				$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
+			}
+			$this->dejalaConfig->loadConfig();
 		}
 		else if ($method == 'location')
 		{
@@ -272,13 +303,29 @@ class Dejala extends Module
 				$this->dejalaConfig->saveConfig();
 			}
 		} else if ($method == 'switchActive') {
-				$l_active= intval(Tools::getValue('active_flag'));
-				if (($l_active == 1) || ($l_active == 0)) {
-					$this->dejalaConfig->active = $l_active;
+
+			$l_active = Tools::getValue('visibility_status');
+
+			if (($l_active == "visible") || ($l_active == "invisible")) {
+				$this->dejalaConfig->visibility_status = $l_active;
+				$this->dejalaConfig->saveConfig();
+			}
+			if ($l_active == "visible_limited") {
+				$l_active_list = Tools::getValue('visible_users_list');
+				if ($l_active_list == "") {
+					$this->dejalaConfig->visible_users_list = "";
+					$this->dejalaConfig->saveConfig();
+
+					$errors[] = $this->l('You must provide at least one email address to restrict Dejala\'s visibility');
+				}
+				else {
+					$this->dejalaConfig->visibility_status = $l_active;
+					$this->dejalaConfig->visible_users_list = $l_active_list;
 					$this->dejalaConfig->saveConfig();
 				}
 			}
-			else {
+		}
+		else {
 			$errors[] = $this->l('Impossible to process the action');
 		}
 		return ($errors);
@@ -323,6 +370,10 @@ class Dejala extends Module
 		$smarty->assign("djl_mode", $this->dejalaConfig->mode);
 		if ($this->dejalaConfig->mode == 'PROD')
 			$smarty->assign("disabled", 'disabled="disabled"');
+		if (true !== extension_loaded('curl')) {
+			$errors[] = $this->l('this module requires php extension cURL to function properly. Please install the php extension "cURL" first');
+			$smarty->assign("disabled", 'disabled="disabled"');
+		}
 
 		$registered = TRUE;
 		if ((0 == strlen($this->dejalaConfig->login)) || (0 == strlen($this->dejalaConfig->password)))
@@ -353,16 +404,18 @@ class Dejala extends Module
 		$outputMenu = $this->display(__FILE__, 'dejala_menu.tpl');
 
 		if ($currentTab==='home') {
+			$smarty->assign("login", html_entity_decode(Configuration::get('PS_SHOP_EMAIL'), ENT_COMPAT, 'UTF-8'));
 			if ($registered)
 			{
-				$smarty->assign("is_active", intval($this->dejalaConfig->active));				
+				$smarty->assign("visibility_status", $this->dejalaConfig->visibility_status);				
+				$smarty->assign("visible_users_list", $this->dejalaConfig->visible_users_list);				
+				$smarty->assign("store_login", html_entity_decode($this->dejalaConfig->login, ENT_COMPAT, 'UTF-8'));
 				$smartifyErrors = $this->smartyfyStoreAttributes();
 				if (isset($smartifyErrors) && count($smartifyErrors))
 					$errors = $smartifyErrors;
 			}
 			else
 			{
-				$smarty->assign("login", html_entity_decode(Configuration::get('PS_SHOP_EMAIL'), ENT_COMPAT, 'UTF-8'));
 				$shopName = Configuration::get('PS_SHOP_NAME');
 				if (strlen($shopName) >= 15)
 					$shopName = substr($shopName, 0, 15);
@@ -458,7 +511,7 @@ class Dejala extends Module
 						$delivery['delivery_time'] = date('H\hi', $delivery['delivery_utc']);
 					}
 				}
-				$smarty->assign('formAction', '/modules/'.$this->name.'/deliveries_csv.php');
+				$smarty->assign('formAction', __PS_BASE_URI__ . 'modules/' . $this->name . '/deliveries_csv.php');
 				$smarty->assign('defaultDateFrom', date('01/m/Y'));
 				$smarty->assign('defaultDateTo', date('d/m/Y'));
 				$smarty->assign('deliveries', $deliveries);
@@ -504,7 +557,7 @@ class Dejala extends Module
 	function smartyfyStoreAttributes() 
 	{
 		global $smarty;
-		
+
 		$errors = array();
 		$djlUtil = new DejalaUtils();
 		$storeAttrs = array();
@@ -536,11 +589,7 @@ class Dejala extends Module
 	function getOrderStates(){
 		global $cookie;
 
-		$id_lang = $cookie->id_lang;
-		if (NULL == $id_lang) {
-			$id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
-		}
-		$states = OrderState::getOrderStates($id_lang);
+		$states = OrderState::getOrderStates($this->id_lang);
 		return ($states);
 	}
 
@@ -548,15 +597,15 @@ class Dejala extends Module
 		global $smarty;
 
 		/*
-		Au moment du choix du créneau
-		Pour déterminer le créneau de départ proposé:
-		- Aller sur le prochain créneau libre
-		- Ajouter le délai de traitement de la commande
-		- Aller sur le prochain créneau libre
+		Au moment du choix du crÃ©neau
+		Pour dÃ©terminer le crÃ©neau de dÃ©part proposÃ© :
+		- Aller sur le prochain crÃ©neau libre
+		- Ajouter le dÃ©lai de traitement de la commande
+		- Aller sur le prochain crÃ©neau libre
 
 		- Le marchand configure l ouverture de sa boutique en weedkay (hStart-hStop) + exception (date fermeture) tous produits confondus
 		On fait le min au moment de l afichage des creneaux dispo
-		   => trouver une slideBar avec deux cusrseurs
+		   => trouver une slideBar avec deux curseurs
 		*/
 		$output = '';
 		$djlUtil = new DejalaUtils();
@@ -568,12 +617,11 @@ class Dejala extends Module
 				$smarty->assign('delivery_partial', $store['attributes']['delivery_partial']);
 		}
 
-		$wday_labels = array($this->l('Dimanche'), $this->l('Lundi'), $this->l('Mardi'), $this->l('Mercredi'), $this->l('Jeudi'), $this->l('Vendredi'), $this->l('Samedi'));
 		$wday_selected = array(1, 1, 1, 1, 1, 1, 1);
 
 		$smarty->assign('timetable_css', _MODULE_DIR_.$this->name.'/timetable.css');
 		$smarty->assign("timetable_js", _MODULE_DIR_.$this->name.'/timetable.js');
-		$smarty->assign("weekdayLabels", $wday_labels);
+		$smarty->assign("weekdayLabels", $this->wday_labels);
 		$smarty->assign("weekdaySelected", $wday_selected);
 
 
@@ -600,7 +648,7 @@ class Dejala extends Module
 			$this->mylog('product:');
 			$this->mylog($this->logValue($product, 1));
 
-			$orderedQuantity = intval($product['cart_quantity']);
+			$orderedQuantity = (_PS_VERSION_ < "1.3.0.1" ? intval($product['quantity']) : intval($product['cart_quantity']));
 			$productQuantity = intval($product['stock_quantity']);
 			if ( ($productQuantity < $orderedQuantity) || ($productQuantity <= 0) )
 				return (TRUE);
@@ -617,9 +665,16 @@ class Dejala extends Module
 
 		$this->hooklog("ExtraCarrier", $params);
 
-		// Dejala n'est pas actif sur la boutique
-		if ($this->dejalaConfig->active != 1)
-			return ;		
+		// Check if Dejala should be visible
+		if ($this->dejalaConfig->visibility_status == "invisible") {
+			return ;
+		}
+		if (($this->dejalaConfig->visibility_status == "visible_limited") && (intval($cookie->id_customer) > 0)) {
+			$customer = new Customer(intval($cookie->id_customer));
+			if (!in_array($customer->email, preg_split("/[\s,]+/", $this->dejalaConfig->visible_users_list))) {
+				return ;
+			}
+		}
 
 		$djlUtil = new DejalaUtils();
 		$responseGetStore = $djlUtil->getStoreAttributes($this->dejalaConfig, $store);
@@ -665,10 +720,10 @@ class Dejala extends Module
 
 		$electedProduct = NULL;
 		foreach ($products as $key=>$product) {
-		//	if (floatval($product['max_weight']) >= $totalCartWeight) {
+			if (floatval($product['max_weight']) >= $totalCartWeight) {
 				if ( is_null($electedProduct) || (intval($electedProduct['priority']) > intval($key)) )
 					$electedProduct = $product;
-		//	}
+			}
 		}
 		if (is_null($electedProduct))
 			return ;
@@ -677,9 +732,15 @@ class Dejala extends Module
 
 		$electedCarrier = DejalaCarrierUtils::getDejalaCarrier($this->dejalaConfig, $electedProduct);
 		$this->mylog("electedCarrier=" . $this->logValue($electedCarrier,1));	
-		if (null == $electedCarrier) {
-			$this->mylog("creating a new carrier");	
-			$electedCarrier = DejalaCarrierUtils::createDejalaCarrier($this->dejalaConfig, $electedProduct);
+		if ($electedCarrier == null) {
+			// Only create a new carrier if it does not exist yet
+			if (!DejalaCarrierUtils::carrierExists($this->dejalaConfig)) {
+				$this->mylog("creating a new carrier");
+				$electedCarrier = DejalaCarrierUtils::createDejalaCarrier($this->dejalaConfig, $electedProduct);
+			}
+		}
+		if ($electedCarrier == null) {
+			return null ;
 		}
 
 		// Calcul des dates dispo
@@ -710,9 +771,9 @@ class Dejala extends Module
 			}
 		}
 
-		// Calcul de la date de démarrage pour les créneaux :
+		// Calcul de la date de dÃ©marrage pour les crÃ©neaux :
 		// Avancement jusque jour dispo & ouvert
-		// Ajout du temps de préparation : 0.5 jour ou 1 nb de jours
+		// Ajout du temps de prÃ©paration : 0.5 jour ou 1 nb de jours
 		// Ajustement de l'heure sur l'ouverture ou l'heure suivante xxh00 
 		$deliveryDelay = $store['attributes']['delivery_delay'];
 		$calUtils = new CalendarUtils();
@@ -737,26 +798,26 @@ class Dejala extends Module
 		 **/
 		$today = getDate();
 		$ctime = time();
-		$wday_labels = array($this->l('Dimanche'), $this->l('Lundi'), $this->l('Mardi'), $this->l('Mercredi'), $this->l('Jeudi'), $this->l('Vendredi'), $this->l('Samedi'));
 		$nbDeliveryDates = $deliveryDelay = $store['attributes']['nb_days_displayed'];
 		$iDate = 0;
 		$dates = array();
 		$balladUtc = $dateUtc;
+		
 		do {
 			$dates[$iDate]['value'] = date("Y/m/d", $balladUtc);
 			$wd = date("w", $balladUtc);
-			$dates[$iDate]['label'] = $wday_labels[$wd] . " " . date("j", $balladUtc);
-			$dates[$iDate]['start_hour'] = $calendar[$wd]['start_hour'];
-			$dates[$iDate]['stop_hour'] = $calendar[$wd]['stop_hour'];
+			$dates[$iDate]['label'] = $this->wday_labels[$wd] . " " . date("j", $balladUtc);
+			$dates[$iDate]['start_hour'] = intval($calendar[$wd]['start_hour']);
+			$dates[$iDate]['stop_hour'] = intval($calendar[$wd]['stop_hour']);
 			$balladUtc += 3600*24;
 			$balladUtc = $calUtils->getNextDateAvailable($balladUtc, $calendar, $all_exceptions);
 			$iDate++;
 
 		} while (($iDate < $nbDeliveryDates) && ($balladUtc));
-		// impossibilité de trouver un jour dispo
+		// impossibilitÃ© de trouver un jour dispo
 		if (!isset($dates[0]))
 			return ;
-		$dates[0]['start_hour'] = date("H", $dateUtc);
+		$dates[0]['start_hour'] = intval(date("H", $dateUtc));
 
 		$this->mylog("date$=" . $this->logValue($dates,1));
 		$smarty->assign('nb_days', $nbDeliveryDates);
@@ -776,7 +837,7 @@ class Dejala extends Module
 		$mCarrier = $electedCarrier;
 		$row['id_carrier'] = intval($electedCarrier->id);
 		$row['name'] = $this->l('Dejala.fr');
-		$row['delay'] = $electedCarrier->delay[$cookie->id_lang];
+		$row['delay'] = $electedCarrier->delay[$this->id_lang];
 		$row['price'] = $cart->getOrderShippingCost($electedCarrier->id);
 		$row['price_tax_exc'] = $cart->getOrderShippingCost($electedCarrier->id, false);
 		$row['img'] = _MODULE_DIR_.$this->name.'/dejala_carrier.gif';
@@ -820,7 +881,7 @@ class Dejala extends Module
 		}
 		else
 		{
-			$smarty->assign('nostock_info', $this->l(utf8_encode('Je choisirai mon heure de livraison quand mon colis sera prêt.')));
+			$smarty->assign('nostock_info', $this->l('I\'ll select my shipping date when my product is available'));
 			$buffer = $this->display(__FILE__, 'dejala_carrier_nostock.tpl');
 		}
 		return $buffer;
@@ -844,17 +905,17 @@ class Dejala extends Module
 		{
 			$mDejalaProductID = $djlCart->id_dejala_product;
 			$mShippingDate = $djlCart->shipping_date;
-			echo utf8_encode('<h4 style="color:red;">');
+			echo '<h4 style="color:red;">';
 			if ($djlCart->mode !== 'PROD') {
 				echo 'MODE : TEST<br/>';
 			}
 			if (!empty($mShippingDate) && ($mShippingDate != 0))
 			{
-				echo utf8_encode('Livraison souhaitée le '.date('d/m/Y',$mShippingDate).' à partir de '.date('H\hi', $mShippingDate) .'<br/>');
+				echo $this->l('Shipping date selected') . ' : ' .date('d/m/Y',$mShippingDate). ', ' . $this->l('starting at') . ' : ' .date('H\hi', $mShippingDate) .'<br/>';
 			}
 			else
 			{
-				echo utf8_encode('Livraison dont la date doit être fixée avec le client' .'<br/>');
+				echo $this->l('Shipping date not yet selected by the customer') .'<br/>';
 			}
 			if ( ($djlCart->id_delivery) && Validate::isUnsignedId($djlCart->id_delivery) )
 			{
@@ -864,15 +925,14 @@ class Dejala extends Module
 				$response = $djlUtil->getDelivery($this->dejalaConfig, $l_delivery, $djlCart->mode);
 				if ($response['status'] == 200)
 				{
-					if ($l_delivery && $l_delivery['status'] && $l_delivery['status']['labels'] && $l_delivery['status']['labels']['fr'])
-						echo utf8_encode('Commande '.$l_delivery['status']['labels']['fr'].'<br/>');
+					if ($l_delivery && $l_delivery['status'] && $l_delivery['status']['labels'] && $l_delivery['status']['labels'][Language::getIsoById($this->id_lang)])
+						echo $this->l('Order') . ' ' . $l_delivery['status']['labels'][Language::getIsoById($this->id_lang)].'<br/>';
 					else
-						echo utf8_encode('Commande envoyée à Dejala.fr<br/>');
+						echo $this->l('Order sent to Dejala') . '<br/>';
 				}
 			} else
 			{
 				$_html = '';
-				//echo utf8_encode('<form Livraison souhaitée le '.date('d/m/Y',$mShippingDate).' à partir de '.date('H\hi', $mShippingDate) .'<br/>');
 				$_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
 				$_html .= '<input type="hidden" name="dejala_action" value="order">';
 				$_html .= '<input type="submit" value="Commander la course">';
@@ -880,17 +940,91 @@ class Dejala extends Module
 				echo $_html . '';
 			}
 
-			echo utf8_encode('</h4">');
+			echo '</h4>';
 
 		}
 	}
 
 	/**
 	 * Save information to enable delivery to be ordered after payment
-	*/
+	 */
 	public function hookCart($param) {
+		global $cookie ;
 		$this->hooklog("hookCart", "");
 
+		if (Tools::getIsset('ajax')) return ;
+		/**
+		 * Totally awful code duplication. Will have to clean this up !!
+		 * There's probably some unhandled cases in which the user changes his cart
+		 * and does not go back properly in the carrier selection process (order.php's steps).
+		 * He might end-up with too heavy a cart for which Dejala should not have appeared.
+		 * But this is not supposed to happen. 
+		 */
+
+		$cart = $param['cart'] ;
+		$carrier = new DejalaCarrier($cart->id_carrier, intval($this->id_lang)) ;
+		if ($carrier->name != 'dejala') return ;
+
+		$djlUtil = new DejalaUtils();
+		$responseGetStore = $djlUtil->getStoreAttributes($this->dejalaConfig, $store);
+		if ($responseGetStore['status']!='200')
+			return ;
+
+		$isCartOutOfStock = '0';
+		if ($this->isCartOutOfStock())
+			$isCartOutOfStock = '1';
+		$this->mylog('isCartOutOfStock=' . $isCartOutOfStock . '');
+
+		$acceptPartial = true;
+		if (!isset($store['attributes']) || !isset($store['attributes']['delivery_partial']) || ($store['attributes']['delivery_partial'] != '1'))
+			$acceptPartial = false;
+		if ( ($isCartOutOfStock == '1') && !$acceptPartial) {
+			return ;
+		}
+
+		$totalCartWeight = floatval($cart->getTotalWeight());
+
+		$address = new Address($cart->id_address_delivery) ;
+		// ask dejala.fr for a quotation
+		$quotation["receiver_name"] = $address->lastname;
+		$quotation["receiver_firstname"] = $address->firstname;
+		$quotation["receiver_company"] = $address->company;
+		$quotation["receiver_address"] = $address->address1;
+		$quotation["receiver_address2"] = $address->address2;
+		$quotation["receiver_zipcode"] = $address->postcode;
+		$quotation["receiver_city"] = $address->city;
+		$quotation["receiver_phone"] = $address->phone;
+		$quotation["receiver_phone_mobile"] = $address->phone_mobile;
+		$quotation["receiver_comments"] = $address->other;
+		$quotation["timelimit"] = 3;
+		$quotation["weight"] = $totalCartWeight;
+
+		$this->mylog("asking for quotation=" . $this->logValue($quotation,1));
+
+		$products = array();
+		$responseArray = $djlUtil->getStoreQuotation($this->dejalaConfig, $quotation, $products);
+		if ($responseArray['status']!='200')
+			return ;
+		$this->mylog("found quotation=" . $this->logValue($responseArray['response'],1));
+
+		$electedProduct = NULL;
+		foreach ($products as $key=>$product) {
+			if ( is_null($electedProduct) || (intval($electedProduct['priority']) > intval($key)) ) {
+				$electedProduct = $product;
+			}
+		}
+		if (is_null($electedProduct))
+			return ;
+		
+		$electedCarrier = DejalaCarrierUtils::getDejalaCarrier($this->dejalaConfig, $electedProduct);
+
+		// Should not be null at this point.
+		if ($electedCarrier == null) {
+			return null ;
+		}
+
+		
+		// Process the cart for storage in dejala_cart.
 		$errors = array();
 		$dejalaCarrierID = Tools::getValue('dejala_id_carrier');
 		$carrierID = Tools::getValue('id_carrier');
@@ -903,14 +1037,13 @@ class Dejala extends Module
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->getStoreProductByID($this->dejalaConfig, $dejalaProductID, $product);
 			if ($response['status'] != 200)
-				$errors[] = 'An error occured while getting product';
+				$errors[] = $this->l('An error occured while fetching shipping product from Dejala');
 			else
 			{
+				$timelimit = 3;
 				if (isset($product['timelimit']))
 					$timelimit = intval($product['timelimit']);
-				else
-					$timelimit = 3;
-
+				
 				/* manage shipping preferences */
 				$date_shipping = 'NULL';
 				if ( isset($_POST['shipping_day']) AND !empty($_POST['shipping_day']) AND (10 <= strlen($_POST['shipping_day'])) )
@@ -922,7 +1055,7 @@ class Dejala extends Module
 					$ship_day = intval(substr($shipping_day, 8, 2));
 					$shippingTime = mktime($shippingHour, 0, 0, $ship_month, $ship_day, $ship_year);
 					// check that delivery date is in the future (5 min delay)
-					if ($shippingTime > time() - 300)
+					if ($shippingTime > time() - 5 * 60)
 						$date_shipping = $shippingTime;
 				}
 				$djlCart = new DejalaCart($id_cart);
@@ -930,8 +1063,8 @@ class Dejala extends Module
 				$djlCart->id_dejala_product = $dejalaProductID;
 				$djlCart->id_delivery = NULL;
 				$djlCart->mode = $this->dejalaConfig->mode;
-				// MFR090202 - Fix SQL injection possibility following Rémi Gaillard remarks
-				$sqlQuery = 'REPLACE INTO ' . _DB_PREFIX_ . 'dejala_cart SET id_cart = '.intval($id_cart).', id_dejala_product = '. intval($djlCart->id_dejala_product) .', shipping_date = '. intval($djlCart->shipping_date)  . ', mode="'. pSQL($djlCart->mode) .'";';
+
+				$sqlQuery = 'REPLACE INTO ' . _DB_PREFIX_ . 'dejala_cart SET id_cart = '.intval($id_cart).', id_dejala_product = '. intval($djlCart->id_dejala_product) . ', shipping_date = '. intval($djlCart->shipping_date)  . ', mode="'. pSQL($djlCart->mode) .'";';
 				$this->mylog('cart SQLQuery='. $sqlQuery);
 				Db::getInstance()->Execute($sqlQuery);
 			}
@@ -942,7 +1075,7 @@ class Dejala extends Module
 
 
 	/**
-	 * Appelé après la modification d'une commande
+	 * AppelÃ© aprÃ¨s la modification d'une commande
 	**/
 	public function hookUpdateOrderStatus($params)
 	{
@@ -1091,7 +1224,16 @@ class Dejala extends Module
 		$this->mylog("\r\nparams" . $this->logValue($params), 1);
 	}
 
-
+	// Stolen from PS 1.3 for backwards compatibility in PS 1.2.5
+	static public function getHttpHost($http = false, $entities = false)
+	{
+		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
+		if ($entities)
+			$host = htmlspecialchars($host, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
+		return $host;
+	}
 }
 
 ?>

@@ -8,7 +8,7 @@
 }
 
 #shipping_div {
-	width:98%;
+	width:100%;
 }
 
 #shipping_dates {
@@ -19,7 +19,7 @@
 
 #shipping_dates div {
 	height:25px;
-	width:25%;
+	width:24.9%;
 	margin-top:5px;
 	float:left;
 	padding-top:10px;
@@ -34,7 +34,7 @@
 
 #shipping_hours div {
 	height:31px;
-	width:100px;
+	width:19.9%;
 	float:left;
 	padding-top:10px;
 }

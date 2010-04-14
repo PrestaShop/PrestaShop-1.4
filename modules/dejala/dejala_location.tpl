@@ -1,7 +1,7 @@
 		<form action="{$formAction}" method="post">
 			<input type="hidden" name="method" value="location"/>
 			<fieldset>
-				<h4 class="clear">{l s='Please specify the address of your stock' mod='dejala'} {if ($djl_mode=='PROD')}{l s='(readonly)' mod='dejala'}{/if}: <a href="http://maps.google.com/maps?f=q&hl=fr&geocode=&q={$address},%20{$zipcode}%20{$city}" target="_blank"><img src='/modules/dejala/google.gif'/>{l s='Locate' mod='dejala'}</a></h4>
+				<h4 class="clear">{l s='Please specify the address of your stock' mod='dejala'} {if ($djl_mode=='PROD')}{l s='(readonly)' mod='dejala'}{/if}: <a href="http://maps.google.com/maps?f=q&hl=fr&geocode=&q={$address},%20{$zipcode}%20{$city}" target="_blank"><img src='{$module_dir}google.gif'/>{l s='Locate' mod='dejala'}</a></h4>
 				<label class="clear">{l s='Company' mod='dejala'}:</label>
 				<div class="margin-form"><input size="25" type="text" name="company" value="{$company}" {$disabled}/></div>
 				<label class="clear">{l s='Address' mod='dejala'}:</label>

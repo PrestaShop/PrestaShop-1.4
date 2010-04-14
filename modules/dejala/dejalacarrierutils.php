@@ -42,7 +42,7 @@ class DejalaCarrierUtils
 		$carrier->active = true;
 		$carrier->deleted = 0;
 		$carrier->shipping_handling = false;
-		$carrier->range_behavior = 1;
+		$carrier->range_behavior = 0;
 		$carrier->is_module = 1;
 		$languages = Language::getLanguages(true);
 		foreach ($languages as $language) {
@@ -72,8 +72,8 @@ class DejalaCarrierUtils
 	}
 
 	/**
-		* gets of a dejala carrier corresponding to $dejalaProduct
-	*/
+	 * Gets a dejala carrier corresponding to $dejalaProduct
+	 */
 	public static function getDejalaCarrier($dejalaConfig, $dejalaProduct)
 	{
 		global $cookie;
@@ -103,18 +103,19 @@ class DejalaCarrierUtils
 		$electedCarrier = NULL;
 		foreach ($allCarriers as $carrier) {
 			if (($carrier['name'] == 'dejala')
-			&& ($carrier['range_behavior'])
-			&& (Configuration::get('PS_SHIPPING_METHOD'))
-			&& (Carrier::checkDeliveryPriceByWeight($carrier['id_carrier'], $totalCartWeight, $id_zone))
+//			&& ($carrier['range_behavior'])
+//			&& (Configuration::get('PS_SHIPPING_METHOD'))
+//			&& (Carrier::checkDeliveryPriceByWeight($carrier['id_carrier'], $totalCartWeight, $id_zone))
 			) {
-				$mCarrier = new Carrier($carrier['id_carrier']);
-				if ($productPrice == $mCarrier->getDeliveryPriceByWeight($totalCartWeight, $id_zone))
-				{
+				$mCarrier = new DejalaCarrier($carrier['id_carrier']);
+				$mCarrier->setDeliveryPrice($productPrice) ;
+//				if ($productPrice == $mCarrier->getDeliveryPriceByWeight($totalCartWeight, $id_zone))
+//				{
 					if ($electedCarrier == NULL)
 						$electedCarrier = $mCarrier;
 					else if ($mCarrier->id < $electedCarrier->id)
 						$electedCarrier = $mCarrier;
-				}
+//				}
 			}
 		}
 		return $electedCarrier;
@@ -132,7 +133,7 @@ class DejalaCarrierUtils
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
-	 	// MFR090202 - Fix SQL injection possibility following Rémi Gaillard remarks
+	 	// MFR090202 - Fix SQL injection possibility following Rï¿½mi Gaillard remarks
 		$sql = '
 			SELECT c.*, cl.delay
 			FROM `'._DB_PREFIX_.'carrier` c
@@ -157,6 +158,24 @@ class DejalaCarrierUtils
 			$carriers = array();
 
 		return $carriers;
+	}
+	
+	/**
+	 * Checks if a Dejala carrier already exists
+	 */
+	public static function carrierExists($dejalaConfig)
+	{
+		global $cookie;
+		$id_zone = 1;
+		$moduleCountryIsoCode = strtoupper($dejalaConfig->country);
+		$countryID = Country::getByIso($moduleCountryIsoCode);
+		if (intval($countryID))
+			$id_zone = Country::getIdZone($countryID);
+		$allCarriers = DejalaCarrierUtils::getCarriers(intval($cookie->id_lang), true, false, $id_zone, true);	
+		foreach ($allCarriers as $carrier) {
+			if (($carrier['name'] == 'dejala') && ($carrier['is_module'] == true)) return true ;
+		}
+		return false ;
 	}
 }
 

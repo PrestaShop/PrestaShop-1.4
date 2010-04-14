@@ -40,6 +40,7 @@ class DejalaUtils
 		$serviceURL = $dejalaConfig->getRootServiceURI('TEST') . '/instantstore';
 		$postargs['login']=$dejalaConfig->login;
 		$postargs['password']=$dejalaConfig->password;
+		$postargs['store_url']=$dejalaConfig->storeUrl;
 		$postargs['store_name'] = $storeName;
 		$postargs['platform'] = 'prestashop';
 		$responseArray = $this->makeRequest($dejalaConfig, $serviceURL, $postargs, 'POST', FALSE);

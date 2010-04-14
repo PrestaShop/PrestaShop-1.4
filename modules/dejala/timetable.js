@@ -25,7 +25,7 @@ function hideUnusedHours(dayIndex){
 	}
 }
 
-/* Sélectionne un des jours par son index */
+/* SÃ©lectionne un des jours par son index */
 function selectDay(dayIndex)
 {
 	var i = 0;
@@ -51,12 +51,15 @@ function selectDay(dayIndex)
 	}
 	hideUnusedHours(dayIndex);
 	
-	var cal = djl_calendar[dayIndex];
-	var calStart = 9;
-	if (cal) {
-		if (cal[2])
-			calStart = djl_calendar[dayIndex][2];
-		selectHour(calStart);
+	var currentShipHr = document.getElementById('shiphr' + deliveryHourSelected);
+	if (!currentShipHr || currentShipHr.parentNode.parentNode.style.display == 'none') {
+		var cal = djl_calendar[dayIndex];
+		var calStart = 9;
+		if (cal) {
+			if (cal[2])
+				calStart = djl_calendar[dayIndex][2];
+			selectHour(calStart);
+		}
 	}
 }
 
@@ -91,11 +94,11 @@ function selectHour(hourIndex)
 **/
 function toggle_visibility(eltId, to_which)
 {
-	var el = document.getElementById(eltId);
-	if ( (to_which == 0) && (el.style.display != 'none') ) {
-		el.style.display = 'none';
+	var elt = $('div#' + eltId) ;
+	if (to_which == 1 && elt.get(0).style.display == 'none') {
+		elt.slideDown();
 	}
-	else if (to_which == 1) {
-		el.style.display = '';
+	else if (to_which == 0 && elt.get(0).style.display != 'none') {
+		elt.slideUp();
 	}
 }

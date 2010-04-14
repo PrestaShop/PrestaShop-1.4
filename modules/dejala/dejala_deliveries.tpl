@@ -21,9 +21,9 @@
 					{foreach from=$deliveries item=delivery name=deliveryLoop}
 						<tr {if ($smarty.foreach.deliveryLoop.index % 2 == 0)}class='alt_row'{/if}>
 						{if $delivery.status.picto_id}
-							<td><img src="{if $delivery.status.picto_id < 10}/modules/dejala{else}http://module.pro.dejala.{$country}/picto{/if}/picto_{$delivery.status.picto_id}.gif"/></td>
+							<td><img src="{if $delivery.status.picto_id < 10}{$module_dir}{else}http://module.pro.dejala.{$country}/picto/{/if}picto_{$delivery.status.picto_id}.gif"/></td>
 						{else}
-							<td><img src="/modules/dejala/picto_0.gif"/></td>
+							<td><img src="{$module_dir}picto_0.gif"/></td>
 						{/if}	
 							<td>{$delivery.creation_date}</td>
 							<td>{$delivery.packet_reference}</td>
@@ -45,20 +45,23 @@
 				<form action="{$formAction}" method="post">
 					<input type="hidden" name="method" value="accounting"/>
 					<div id="calendar">
+					<script type="text/javascript" src="{$module_dir}../../js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>
+					<script type="text/javascript" src="{$module_dir}../../js/jquery/datepicker/ui/i18n/ui.datepicker-fr.js"></script>
 					{literal}
-					<script type="text/javascript" src="/js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script><script type="text/javascript" src="/js/jquery/datepicker/ui/i18n/ui.datepicker-fr.js"></script><script type="text/javascript">
-	$(function() {
-		$("#datepickerFrom").datepicker({
-			prevText:"",
-			nextText:"",
-			dateFormat:"dd/mm/yy"});
-	});
-	$(function() {
-		$("#datepickerTo").datepicker({
-			prevText:"",
-			nextText:"",
-			dateFormat:"dd/mm/yy"});
-	});</script>
+					<script type="text/javascript">
+						$(function() {
+							$("#datepickerFrom").datepicker({
+								prevText:"",
+								nextText:"",
+								dateFormat:"dd/mm/yy"});
+						});
+						$(function() {
+							$("#datepickerTo").datepicker({
+								prevText:"",
+								nextText:"",
+								dateFormat:"dd/mm/yy"});
+						});
+					</script>
 	{/literal}
 
 {l s='From' mod='dejala'}: <input type="text" name="datepickerFrom" id="datepickerFrom" value="{$defaultDateFrom}">

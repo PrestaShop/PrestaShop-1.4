@@ -2,6 +2,13 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{dejala}prestashop>dejala_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Domingo';
+$_MODULE['<{dejala}prestashop>dejala_6f8522e0610541f1ef215a22ffa66ff6'] = 'Lunes';
+$_MODULE['<{dejala}prestashop>dejala_5792315f09a5d54fb7e3d066672b507f'] = 'Martes';
+$_MODULE['<{dejala}prestashop>dejala_796c163589f295373e171842f37265d5'] = 'Miércoles';
+$_MODULE['<{dejala}prestashop>dejala_78ae6f0cd191d25147e252dc54768238'] = 'Jueves';
+$_MODULE['<{dejala}prestashop>dejala_c33b138a163847cdb6caeeb7c9a126b4'] = 'Viernes';
+$_MODULE['<{dejala}prestashop>dejala_8b7051187b9191cdcdae6ed5a10e5adc'] = 'Sábado';
 $_MODULE['<{dejala}prestashop>dejala_805dba96048db24a2357eaebc4d22342'] = 'Este módulo requiere la extensión php cURL para funcionar corectamente. Por favor instale antes la extensión php \"cURL\".';
 $_MODULE['<{dejala}prestashop>dejala_2db3a297423ac7ed05a23cc622acff74'] = 'DEJALA, servicio de entrega por mensajero';
 $_MODULE['<{dejala}prestashop>dejala_6d1373a72ff810d8ee70c1ea2fb515bb'] = 'Proponga a sus clientes el envio por mensajero y mejore sus ventas';
@@ -21,13 +28,6 @@ $_MODULE['<{dejala}prestashop>dejala_c888438d14855d7d96a2724ee9c306bd'] = 'Pará
 $_MODULE['<{dejala}prestashop>dejala_97a6cb81420f4a92a522bc6bd841a5a5'] = 'Un error ocurrió al autentificar su cuenta en DEJALA. Sus credenciales no fueron reconocidos.';
 $_MODULE['<{dejala}prestashop>dejala_15795db3d36dfc18be5a1ce77a279a77'] = 'Un error ocurrió al autentificar su cuenta en DEJALA. Esto puede ser debido a un problema momentaneo de la red o de la plataforma. Por favor vuelva a intentar mas tarde o contacte DEJALA.';
 $_MODULE['<{dejala}prestashop>dejala_5334f7fff9a36cca8d00b3372cceab59'] = 'Un error ocurrió al alcanzar la tienda, por favor vuelva a intentar mas tarde o contacte DEJALA.';
-$_MODULE['<{dejala}prestashop>dejala_aaa4996e1f6eaa5d6a0f37cc84c0e1c5'] = 'Domingo';
-$_MODULE['<{dejala}prestashop>dejala_9fc912ee29c712e08def5a5b4c3f225f'] = 'Lunes';
-$_MODULE['<{dejala}prestashop>dejala_09d99cb1a553fe636459f535c4aec418'] = 'Martes';
-$_MODULE['<{dejala}prestashop>dejala_90cfad83a7819562473330e540f88a60'] = 'Miércoles';
-$_MODULE['<{dejala}prestashop>dejala_337be52633cb4616438e65358b282799'] = 'Jueves';
-$_MODULE['<{dejala}prestashop>dejala_8f8eb0dffdda3b336fd56f2e84b6a479'] = 'Viernes';
-$_MODULE['<{dejala}prestashop>dejala_49a79a00c7747716697a3d9241c08e10'] = 'Sábado';
 $_MODULE['<{dejala}prestashop>dejala_853fe2c3719fab6d1dde555eb536f649'] = 'DEJALA';
 $_MODULE['<{dejala}prestashop>dejala_carrier_21034ae6d01a83e702839a72ba8a77b0'] = '(sin IVA)';
 $_MODULE['<{dejala}prestashop>dejala_carrier_1f87346a16cf80c372065de3c54c86d9'] = '(IVA inc.)';
@@ -108,7 +108,7 @@ $_MODULE['<{dejala}prestashop>dejala_home_051672911a3f1f05efba78a553ef6fe2'] = '
 $_MODULE['<{dejala}prestashop>dejala_home_b341a59d5636ed3d6a819137495b08a0'] = 'Contraseña :';
 $_MODULE['<{dejala}prestashop>dejala_home_e5b47edd743751a81819b7f421639303'] = 'Apúntarse';
 $_MODULE['<{dejala}prestashop>dejala_home_853fe2c3719fab6d1dde555eb536f649'] = 'DEJALA';
-$_MODULE['<{dejala}prestashop>dejala_home_e2e92cf535297f060c107b1eaa507d02'] = 'Está en modo ';
+$_MODULE['<{dejala}prestashop>dejala_home_bbb658f348426b60b3395d5357225112'] = 'Está en modo';
 $_MODULE['<{dejala}prestashop>dejala_home_c8ab370eeab3cf4011e25fa953031e77'] = 'SIMULACIÓN en la plataforma de Test';
 $_MODULE['<{dejala}prestashop>dejala_home_68279960d4eaab19115d276486e1e1d7'] = 'PRODUCCIÓN en la plataforma real';
 $_MODULE['<{dejala}prestashop>dejala_home_64baa4dba37ddc4207a777ac53565f06'] = 'Bascular al modo SIMULACIÓN';

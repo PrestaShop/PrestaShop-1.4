@@ -35,7 +35,7 @@ class MyLogUtils
 			$indent="";
 			for ($i=0; $i < $lvl; $i++)
 				$indent = $indent."\t";
-			$buffer = $mkey . "=" . get_class($mvalue) . "{\r\n";
+			$buffer = "?" . "=" . get_class($mvalue) . "{\r\n";
 			foreach ($mvalue as $akey=>$avalue) {
 				$buffer=$buffer . $indent . "\t" . $akey ."=". MyLogUtils::logValue($avalue,$lvl+1) . "\r\n";
 			}

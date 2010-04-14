@@ -13,23 +13,32 @@ class DejalaConfig
 	public $mode = 'TEST';
 	public $trigerringStatuses = '2';
 	// Faire apparaitre/disparaitre le module sur le front
-	public $active = 0;
+//	public $active = 0;
+	public $visibility_status = "invisible" ;
+	public $visible_users_list = "";
 
+	// Not stored in the local config. Only sent on shop creation
+	public $storeUrl ;
 
 	public function saveConfig()
 	{
 		if ( Configuration::updateValue('DJL_SERVICE_URL', $this->serviceURL) == false
-			OR Configuration::updateValue('DJL_SANDBOX_SERVICE_URL', $this->sandboxServiceURL) == false
-			OR Configuration::updateValue('DJL_USE_SSL', $this->useSSL) == false
-			OR Configuration::updateValue('DJL_MODE', $this->mode) == false
-			OR Configuration::updateValue('DJL_LOGIN', $this->login) == false
-			OR Configuration::updateValue('DJL_PASSWORD', $this->password) == false
-			OR Configuration::updateValue('DJL_INSTALLED', $this->installed) == false
-			OR Configuration::updateValue('DJL_TRIGERRING_STATUSES', $this->trigerringStatuses) == false
-			OR Configuration::updateValue('DJL_COUNTRY', $this->country) == false
-			OR Configuration::updateValue('DJL_ACTIVE', $this->active) == false
-			)
+		OR Configuration::updateValue('DJL_SANDBOX_SERVICE_URL', $this->sandboxServiceURL) == false
+		OR Configuration::updateValue('DJL_USE_SSL', $this->useSSL) == false
+		OR Configuration::updateValue('DJL_MODE', $this->mode) == false
+		OR Configuration::updateValue('DJL_LOGIN', $this->login) == false
+		OR Configuration::updateValue('DJL_PASSWORD', $this->password) == false
+		OR Configuration::updateValue('DJL_INSTALLED', $this->installed) == false
+		OR Configuration::updateValue('DJL_TRIGERRING_STATUSES', $this->trigerringStatuses) == false
+		OR Configuration::updateValue('DJL_COUNTRY', $this->country) == false
+		OR Configuration::updateValue('DJL_VISIBILITY_STATUS', $this->visibility_status) == false
+		OR Configuration::updateValue('DJL_VISIBLE_USERS_LIST', $this->visible_users_list) == false
+		) {
 			return (false);
+		}
+
+		// Backward compatibility. Garbage collect
+		Configuration::deleteByName('DJL_ACTIVE');
 		return (true);
 	}
 	
@@ -43,7 +52,9 @@ class DejalaConfig
 		Configuration::deleteByName('DJL_INSTALLED');
 		Configuration::deleteByName('DJL_TRIGERRING_STATUSES');
 		Configuration::deleteByName('DJL_COUNTRY');
-		Configuration::deleteByName('DJL_ACTIVE');		
+		Configuration::deleteByName('DJL_ACTIVE');
+		Configuration::deleteByName('DJL_VISIBILITY_STATUS');
+		Configuration::deleteByName('DJL_VISIBLE_USERS_LIST');	
 	}
 
 	// load configuration
@@ -62,20 +73,29 @@ class DejalaConfig
 		$this->country = html_entity_decode(Configuration::get('DJL_COUNTRY'), ENT_COMPAT, 'UTF-8');
 		if (strlen($this->country) == 0)
 			$this->country = 'fr';
-		$this->active = intval(html_entity_decode(Configuration::get('DJL_ACTIVE'), ENT_COMPAT, 'UTF-8'));
-		if ($this->active !== 1)
-			$this->active = 0;
+		$this->visibility_status = html_entity_decode(Configuration::get('DJL_VISIBILITY_STATUS'), ENT_COMPAT, 'UTF-8');
+		$this->visible_users_list = html_entity_decode(Configuration::get('DJL_VISIBLE_USERS_LIST'), ENT_COMPAT, 'UTF-8');
+
+		// Backward compatibility
+		$activeVal = html_entity_decode(Configuration::get('DJL_ACTIVE'), ENT_COMPAT, 'UTF-8') ;
+		if ($activeVal != "") {
+			$this->active = intval($activeVal);
+			$this->visibility_status = ($this->active == 0 ? "invisible" : "visible") ;
+		}
+		if ($this->visibility_status == "") {
+			$this->visibility_status = "invisible" ;
+		}
 	}
 
 	/**
-	 * Renvoie l'URI de base à utiliser
+	 * Renvoie l'URI de base Ã  utiliser
 	 * $forceMode TEST/PROD pour forcer l'utilisation d'une des 2 plateformes
 	 **/
 	public function getRootServiceURI($forceMode = NULL)
 	{
 		$l_serviceURL = NULL;
 		$useMode = $this->mode;
-		// mode forcé ?
+		// mode forcÃ© ?
 		if ($forceMode && ($forceMode == 'PROD'))
 			$useMode = 'PROD';
 		else if ($forceMode)
