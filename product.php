@@ -100,7 +100,9 @@ if ($jqZoomEnabled)
 include_once(dirname(__FILE__).'/header.php');
 
 global $errors;
-$errors = array();
+// Modules might throw errors into postProcess
+if (!isset($errors))
+	$errors = array();
 
 if (!$id_product = intval(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
 	$errors[] = Tools::displayError('product not found');
