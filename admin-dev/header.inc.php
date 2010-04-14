@@ -96,22 +96,25 @@ require_once(dirname(__FILE__).'/init.php');
 			<script type="text/javascript">$('#flagsLanguage img[class!=selected_language]').css('opacity', '0.3')</script>
 			<div style="float: right; margin: 11px 0px 0px 20px; text-align:right;">
 				<img src="../img/admin/quick.gif" style="margin-top:5px;" />&nbsp;
-				<select onchange="if (this.value == '0') return ; else if (this.value.substr(-1) == 0) document.location = this.value.substr(0, this.value.length - 1); else window.open(this.value.substr(0, this.value.length - 1), 'PrestaShop', '');" style="font-size: 1em; margin:5px 20px 0px 0px;">
+				<script type="text/javascript">
+				function quickSelect(elt)
+				{
+					var eltVal = $(elt).val();
+					if (eltVal == '0') return false;
+					else if (eltVal.substr(eltVal.length - 6) == '_blank')
+						window.open(eltVal.substr(0, eltVal.length - 6), '_blank');
+					else location.href = eltVal;
+				}
+				</script>
+				<select onchange="quickSelect(this);" style="font-size: 1em; margin:5px 20px 0px 0px;">
 					<?php
-						global $cookie;
-						$quicks = QuickAccess::getQuickAccesses(intval($cookie->id_lang));
+						$quicks = QuickAccess::getQuickAccesses(intval($cookie->id_lang)); 
 						echo '<option value="0">'.translate('Quick access').'</option>';
-						echo '<option value="0">---</option>';
-						foreach ($quicks AS $quick)
+						foreach ($quicks AS &$quick)
 						{
-							preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
-							if (isset($adminTab[1]))
-							{
-								if (strpos($adminTab[1], '&'))
-									$adminTab[1] = substr($adminTab[1], 0, strpos($adminTab[1], '&'));
-								$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee));
-							}
-							echo '<option value="'.$quick['link'].intval($quick['new_window']).'">'.Category::hideCategoryPosition($quick['name']).'</option>';
+							preg_match('/tab=(.+)&/', $quick['link'], $adminTab);
+							$quick['link'] .= ($adminTab ? '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee)) : '');
+							echo '<option value="'.$quick['link'].($quick['new_window'] ? '_blank' : '').'">&gt; '.Category::hideCategoryPosition($quick['name']).'</option>';
 						}
 					?>
 				</select>
