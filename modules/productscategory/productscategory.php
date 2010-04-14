@@ -51,6 +51,8 @@ class productsCategory extends Module
 		$sizeOfCategoryProducts = $category->getProducts(intval($cookie->id_lang), 1, 30, NULL, NULL, true);
 		$categoryProducts = $category->getProducts(intval($cookie->id_lang), 1, $sizeOfCategoryProducts);
 		
+		$middlePosition = 0;
+		
 		//remove current product from the list
 		$current_product_key = null;
 		if (is_array($categoryProducts) AND sizeof($categoryProducts))
