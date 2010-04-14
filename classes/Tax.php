@@ -205,7 +205,7 @@ class Tax extends ObjectModel
 			die(Tools::displayError());
 		return $productTax * Tax::zoneHasTax(intval($id_tax), intval($defaultCountry->id_zone));
 	}
-	
+
 	/**
 	  * Load all tax/zones relations in memory for caching
 	  */

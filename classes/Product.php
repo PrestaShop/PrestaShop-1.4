@@ -199,11 +199,11 @@ class		Product extends ObjectModel
 		parent::__construct($id_product, $id_lang);
 		if ($full AND $this->id)
 		{
+			$this->tax_name = 'deprecated'; // The applicable tax may be BOTH the product one AND the state one (moreover this variable is some deadcode)
 			$this->manufacturer_name = Manufacturer::getNameById(intval($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById(intval($this->id_supplier));
-			$tax = new Tax(intval($this->id_tax), intval($id_lang));
-			$this->tax_name = $tax->name;
-			$this->tax_rate = floatval($tax->rate);
+			$tax = new Tax(intval($this->id_tax));
+			$this->tax_rate = Tax::getApplicableTax(intval($this->id_tax), floatval($tax->rate));
 			$this->new = $this->isNew();
 		}
 		
