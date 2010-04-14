@@ -290,11 +290,11 @@ class		Carrier extends ObjectModel
 			SELECT c.`id_carrier`
 			FROM `'._DB_PREFIX_.'carrier` c
 			LEFT JOIN `'._DB_PREFIX_.'carrier_zone` cz  ON (cz.`id_carrier` = c.`id_carrier`)
-			LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.$id_zone.')
-			WHERE c.`id_carrier` = '.$id_carrier.'
+			LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.intval($id_zone).')
+			WHERE c.`id_carrier` = '.intval($id_carrier).'
 			AND c.`deleted` = 0
 			AND c.`active` = 1
-			AND cz.`id_zone` = '.$id_zone.'
+			AND cz.`id_zone` = '.intval($id_zone).'
 			AND z.`active` = 1'
 		);
 	}
@@ -395,7 +395,7 @@ class		Carrier extends ObjectModel
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'range_price` (`id_carrier`, `delimiter1`, `delimiter2`)
-			VALUES ('.$this->id.','.$val['delimiter1'].','.$val['delimiter2'].')');
+			VALUES ('.intval($this->id).','.floatval($val['delimiter1']).','.floatval($val['delimiter2']).')');
 			$maxRangePrice = Db::getInstance()->Insert_ID();
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
@@ -404,7 +404,7 @@ class		Carrier extends ObjectModel
 			foreach ($res2 as $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
-				VALUES ('.$this->id.','.intval($maxRangePrice).',NULL,'.$val2['id_zone'].','.$val2['price'].')');
+				VALUES ('.intval($this->id).','.intval($maxRangePrice).',NULL,'.intval($val2['id_zone']).','.floatval($val2['price']).')');
 		}
 
 		// Copy existing ranges weight
@@ -415,16 +415,16 @@ class		Carrier extends ObjectModel
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'range_weight` (`id_carrier`, `delimiter1`, `delimiter2`)
-			VALUES ('.$this->id.','.$val['delimiter1'].','.$val['delimiter2'].')');
+			VALUES ('.intval($this->id).','.floatval($val['delimiter1']).','.floatval($val['delimiter2']).')');
 			$maxRangeWeight = Db::getInstance()->Insert_ID();
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
 			WHERE id_carrier = '.intval($oldId).'
-			AND id_range_weight = '.$val['id_range_weight']);
+			AND id_range_weight = '.intval($val['id_range_weight']));
 			foreach ($res2 as $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
-				VALUES ('.$this->id.',NULL,'.intval($maxRangeWeight).','.$val2['id_zone'].','.$val2['price'].')');
+				VALUES ('.intval($this->id).',NULL,'.intval($maxRangeWeight).','.intval($val2['id_zone']).','.floatval($val2['price']).')');
 		}
 
 		// Copy existing zones
@@ -434,7 +434,7 @@ class		Carrier extends ObjectModel
 		foreach ($res as $val)
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier`, `id_zone`)
-			VALUES ('.$this->id.','.$val['id_zone'].')');
+			VALUES ('.intval($this->id).','.intval($val['id_zone']).')');
 
 		//Copy default carrier
 		if (intval(Configuration::get('PS_CARRIER_DEFAULT')) == $oldId)

@@ -123,7 +123,7 @@ class BlockLink extends Module
 	 	foreach ($languages AS $language)
 	 	 	if (!empty($_POST['text_'.$language['id_lang']]))
 	 	 	{
-	 	 		if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink_lang VALUES ('.intval($_POST['id']).', '.$language['id_lang'].', \''.pSQL($_POST['text_'.$language['id_lang']]).'\')'))
+	 	 		if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink_lang VALUES ('.intval($_POST['id']).', '.intval($language['id_lang']).', \''.pSQL($_POST['text_'.$language['id_lang']]).'\')'))
 	 	 			return false;
 	 	 	}
 	 	 	else

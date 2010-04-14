@@ -5,11 +5,12 @@ function show_countries($id_lang, $nb_by_line = 7)
 {
 	if (!is_numeric($id_lang) || !is_numeric($nb_by_line))
 		return ("error");
+
 	$output = '<style type="text/css">.country{cursor: pointer;} .country:hover{text-decoration: underline;}</style>
 			<script type="text/javascript">$(document).ready(_registerClickOnCountry);</script>';
 	$result = Db::getInstance()->ExecuteS('SELECT cl.`id_country`, `name`, `iso_code` FROM `'._DB_PREFIX_.'country_lang` cl 
 								LEFT JOIN `'._DB_PREFIX_.'country` c ON  c.`id_country` = cl.`id_country` 
-								WHERE `id_lang` = \''.$id_lang.'\' ORDER BY `name` ASC;');
+								WHERE `id_lang` = \''.intval($id_lang).'\' ORDER BY `name` ASC;');
 	$separator = 0;
 	foreach ($result as $index => $row)
 	{
@@ -33,7 +34,7 @@ function show_buttons($id_lang, $id_country)
 	$result = Db::getInstance()->ExecuteS('SELECT cl.`id_country`, `name`, `iso_code`, `x`, `y` FROM `'._DB_PREFIX_.'country_lang` cl 
 								LEFT JOIN `'._DB_PREFIX_.'country` c ON  c.`id_country` = cl.`id_country` 
 								LEFT JOIN `'._DB_PREFIX_.'location_coords` lc ON  c.`id_country` = lc.`id_country` 
-								WHERE `id_lang` = \''.$id_lang.'\' AND cl.`id_country`= \''.$id_country.'\';');
+								WHERE `id_lang` = \''.intval($id_lang).'\' AND cl.`id_country`= \''.intval($id_country).'\';');
 	if (isset($result[0]['id_country']))
 	{
 		$output .= $result[0]['name'].' ('.$result[0]['iso_code'].')';
@@ -55,7 +56,7 @@ function insert_coords($id_lang, $id_country, $x, $y)
 	if (!is_numeric($id_lang) || !is_numeric($id_country) || !is_numeric($x) || !is_numeric($y))
 		return ("error");
 	Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'location_coords` WHERE `id_country` = \''.$id_country.'\';');
-	if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'location_coords` (`x`, `y`, `id_country`) VALUES (\''.$x.'\', \''.$y.'\', \''.$id_country.'\');'))
+	if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'location_coords` (`x`, `y`, `id_country`) VALUES (\''.intval($x).'\', \''.intval($y).'\', \''.intval($id_country).'\');'))
 		echo("error while inserting data<br />");
 	return (show_countries($id_lang));
 }

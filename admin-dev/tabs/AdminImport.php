@@ -1191,7 +1191,7 @@ class AdminImport extends AdminTab
 	
 	private function openCsvFile()
 	{
-		$handle = fopen(dirname(__FILE__).'/../import/'.Tools::getValue('csv'), 'r');
+		 $handle = fopen(dirname(__FILE__).'/../import/'.strval(preg_replace('/\.{2,}/', '.',Tools::getValue('csv'))), 'r');
 		
 		/* No BOM allowed */
 		$bom = fread($handle, 3);

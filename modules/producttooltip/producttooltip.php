@@ -114,7 +114,7 @@ class ProductToolTip extends Module
 			SELECT COUNT(DISTINCT(id_connections)) nb
 			FROM '._DB_PREFIX_.'page p
 			LEFT JOIN '._DB_PREFIX_.'connections_page cp ON (p.id_page = cp.id_page)
-			WHERE p.id_page_type = 1 AND p.id_object = '.intval($id_product).' AND cp.time_start > \''.$date.'\'');
+			WHERE p.id_page_type = 1 AND p.id_object = '.intval($id_product).' AND cp.time_start > \''.pSQL($date).'\'');
 
 			if (isset($nbPeople['nb']) AND $nbPeople['nb'] > 0)
 				$smarty->assign('nb_people', intval($nbPeople['nb']));
@@ -130,7 +130,7 @@ class ProductToolTip extends Module
 			SELECT o.date_add
 			FROM '._DB_PREFIX_.'order_detail od
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (od.id_order = o.id_order)
-			WHERE od.product_id = '.intval($id_product).' AND o.date_add >= \''.$date.'\'');
+			WHERE od.product_id = '.intval($id_product).' AND o.date_add >= \''.pSQL($date).'\'');
 			
 			if (isset($order['date_add']))
 				$smarty->assign('date_last_order', $order['date_add']);

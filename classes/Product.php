@@ -339,8 +339,8 @@ class		Product extends ObjectModel
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'category_product`
 		SET `position`= position '.($way ? '-1' : '+1').'
-		WHERE position between '.min(array($from['position'], $to['position'])) .'
-		AND '.max(array($from['position'], $to['position'])).'
+		WHERE position between '.intval(min(array($from['position'], $to['position']))) .'
+		AND '.intval(max(array($from['position'], $to['position']))).'
 		AND `id_category`='.intval($from['id_category']))
 		AND
 		Db::getInstance()->Execute('
@@ -366,7 +366,7 @@ class		Product extends ObjectModel
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category_product`
-			SET `position` = '.($i).'
+			SET `position` = '.intval($i).'
 			WHERE `id_category` = '.intval($id_category).'
 			AND `id_product` = '.intval($result[$i]['id_product']));
 		return true;
@@ -2103,7 +2103,7 @@ class		Product extends ObjectModel
 			{
 				$query = 'INSERT INTO `'._DB_PREFIX_.'customization_field_lang` (`id_customization_field`, `id_lang`, `name`) VALUES ';
 				foreach ($customizations['labels'][$oldCustomizationFieldId] AS $customizationLabel)
-					$query .= '('.intval($customizationFieldId).', '.$customizationLabel['id_lang'].', \''.$customizationLabel['name'].'\'), ';
+					$query .= '('.intval($customizationFieldId).', '.intval($customizationLabel['id_lang']).', \''.pSQL($customizationLabel['name']).'\'), ';
 				$query = rtrim($query, ', ');			
 				if (!Db::getInstance()->Execute($query))
 					return false;
@@ -2375,7 +2375,7 @@ class		Product extends ObjectModel
 		/* Multilingual label name creation */
 		$values = '';
 		foreach ($languages AS $language)
-			$values .= '('.$id_customization_field.', '.intval($language['id_lang']).', \'\'), ';
+			$values .= '('.intval($id_customization_field).', '.intval($language['id_lang']).', \'\'), ';
 		$values = rtrim($values, ', ');
 		if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'customization_field_lang` (`id_customization_field`, `id_lang`, `name`) VALUES '.$values))
 			return false;

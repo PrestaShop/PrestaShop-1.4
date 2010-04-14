@@ -80,7 +80,7 @@ class Tab extends ObjectModel
 	 	foreach ($profiles AS $profile)
 	 	{
 	 	 	$rights = ((intval($profile['id_profile']) == 1 OR intval($profile['id_profile']) == $cookie->profile) ? 1 : 0);
-	 	 	$query .= ($profile === $profiles[0] ? '' : ', ').'('.$profile['id_profile'].', '.$id_tab.', '.$rights.', '.$rights.', '.$rights.', '.$rights.')';
+	 	 	$query .= ($profile === $profiles[0] ? '' : ', ').'('.intval($profile['id_profile']).', '.intval($id_tab).', '.$rights.', '.$rights.', '.$rights.', '.$rights.')';
 	 	}
 	 	return Db::getInstance()->Execute($query);
 	}

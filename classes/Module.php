@@ -255,7 +255,7 @@ abstract class Module
 			{
 				$result = Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
-				VALUES ('.intval($this->id).', '.intval($id_hook).', \''.strval($except).'\')');
+				VALUES ('.intval($this->id).', '.intval($id_hook).', \''.pSQL(strval($except)).'\')');
 				if (!$result)
 					return false;
 			}
@@ -435,7 +435,7 @@ abstract class Module
 		FROM `'._DB_PREFIX_.'module_country` mc
 		LEFT JOIN `'._DB_PREFIX_.'module` m ON m.`id_module` = mc.`id_module`
 		INNER JOIN `'._DB_PREFIX_.'module_group` mg ON (m.`id_module` = mg.`id_module`)
-		INNER JOIN `'._DB_PREFIX_.'customer_group` cg on (cg.`id_group` = mg.`id_group` AND cg.`id_customer` = '.$id_customer.')
+		INNER JOIN `'._DB_PREFIX_.'customer_group` cg on (cg.`id_group` = mg.`id_group` AND cg.`id_customer` = '.intval($id_customer).')
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
 		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
 		WHERE h.`name` = \'payment\'
@@ -495,7 +495,7 @@ abstract class Module
 		if (!$res = Db::getInstance()->ExecuteS('
 		SELECT hm.`id_module`, hm.`position`, hm.`id_hook` 
 		FROM `'._DB_PREFIX_.'hook_module` hm 
-		WHERE hm.`id_hook` = '.pSQL($id_hook).' 
+		WHERE hm.`id_hook` = '.intval($id_hook).' 
 		ORDER BY hm.`position` '.(intval($way) ? 'ASC' : 'DESC')))
 			return false;
 		foreach ($res AS $key => $values)
@@ -515,7 +515,7 @@ abstract class Module
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'hook_module`
 		SET `position`= position '.($way ? '-1' : '+1').'
-		WHERE position between '.min(array($from['position'], $to['position'])) .' AND '.max(array($from['position'], $to['position'])).'
+		WHERE position between '.intval(min(array($from['position'], $to['position']))) .' AND '.intval(max(array($from['position'], $to['position']))).'
 		AND `id_hook`='.intval($from['id_hook']))
 		AND
 		Db::getInstance()->Execute('
@@ -541,7 +541,7 @@ abstract class Module
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
-			SET `position` = '.($i + 1).'
+			SET `position` = '.intval($i + 1).'
 			WHERE `id_hook` = '.intval($id_hook).'
 			AND `id_module` = '.intval($result[$i]['id_module']));
 		return true;

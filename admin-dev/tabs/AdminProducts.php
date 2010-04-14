@@ -39,18 +39,19 @@ class AdminProducts extends AdminTab
 			'name' => array('title' => $this->l('Name'), 'width' => 220, 'filter_key' => 'b!name'),
 			'reference' => array('title' => $this->l('Reference'), 'align' => 'center', 'width' => 20), 
 			'price' => array('title' => $this->l('Base price'), 'width' => 70, 'price' => true, 'align' => 'right', 'filter_key' => 'a!price'),
-			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right'),
+			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right', 'havingFilter' => true),
 			'quantity' => array('title' => $this->l('Quantity'), 'width' => 30, 'align' => 'right', 'filter_key' => 'a!quantity', 'type' => 'decimal'),
-			'position' => array('title' => $this->l('Position'), 'width' => 40, 'align' => 'center', 'position' => 'position'),
+			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'cp!position', 'align' => 'center', 'position' => 'position'),
 			'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 
 		/* Join categories table */
 		$this->_category = AdminCatalog::getCurrentCategory();
 		$this->_join = '
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = a.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = a.`id_product`)';
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = a.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = a.`id_tax`)';
 		$this->_filter = 'AND cp.`id_category` = '.intval($this->_category->id);
-		$this->_select = 'cp.`position`, i.`id_image`';
+		$this->_select = 'cp.`position`, i.`id_image`, (a.`price` * ((100 + (t.`rate`))/100) - IF((DATEDIFF(a.`reduction_from`, CURDATE()) <= 0 AND DATEDIFF(a.`reduction_to`, CURDATE()) >=0) OR a.`reduction_from` = a.`reduction_to`, IF(a.`reduction_price` > 0, a.`reduction_price`, (a.`price` * ((100 + (t.`rate`))/100) * a.`reduction_percent` / 100)),0)) AS price_final';
 
 		parent::__construct();
 	}

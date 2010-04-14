@@ -245,35 +245,55 @@ class AdminTranslations extends AdminTab
 		elseif (Tools::isSubmit('submitTranslationsFront'))
 		{
 			if ($this->tabAccess['edit'] === '1')
+			{
+				if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+					die(Tools::displayError());
 				$this->writeTranslationFile('Front', _PS_THEME_DIR_.'lang/'.Tools::strtolower(Tools::getValue('lang')).'.php');
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsPDF'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
+		 	{
+				if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+					die(Tools::displayError());
 				$this->writeTranslationFile('PDF', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/pdf.php', 'PDF');
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsBack'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
+		 	{
+				if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+					die(Tools::displayError());
 				$this->writeTranslationFile('Back', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/admin.php', 'ADM');
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsErrors'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
+		 	{
+				if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+					die(Tools::displayError());
 				$this->writeTranslationFile('Errors', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/errors.php', false, 'ERRORS');
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsFields'))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
+		 	{
+				if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+					die(Tools::displayError());
 				$this->writeTranslationFile('Fields', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/fields.php', false, 'FIELDS');
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 
@@ -283,6 +303,8 @@ class AdminTranslations extends AdminTab
 		if ($this->tabAccess['edit'] === '1')
 			{
 				$lang = Tools::strtolower($_POST['lang']);
+				if (!Validate::isLanguageIsoCode($lang))
+					die(Tools::displayError());
 				if (!$modules = scandir(_PS_MODULE_DIR_))
 					$this->displayWarning(Tools::displayError('There are no modules in your copy of PrestaShop. Use the Modules tab to activate them or go to our Website to download additional Modules.'));
 				else
