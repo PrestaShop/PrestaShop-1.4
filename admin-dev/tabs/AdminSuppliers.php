@@ -68,16 +68,13 @@ class AdminSuppliers extends AdminTab
 			{
 				echo '
 				<h3><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></h3>
-				<table>
-					<tr>
-						<td colspan="2">
-		            		<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
-			                	<tr>
-				                    <th>'.$this->l('Attribute name').'</th>
-				                    <th width="80">'.$this->l('Reference').'</th>
-				                    <th width="80">'.$this->l('EAN13').'</th>
-				                   '.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="40">'.$this->l('Quantity').'</th>' : '').'
-			                	</tr>';
+				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
+	                	<tr>
+		                    <th>'.$this->l('Attribute name').'</th>
+		                    <th width="80">'.$this->l('Reference').'</th>
+		                    <th width="80">'.$this->l('EAN13').'</th>
+		                   '.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="40">'.$this->l('Quantity').'</th>' : '').'
+	                	</tr>';
 			     	/* Build attributes combinaisons */
 				$combinaisons = $product->getAttributeCombinaisons(intval($cookie->id_lang));
 				foreach ($combinaisons AS $k => $combinaison)
