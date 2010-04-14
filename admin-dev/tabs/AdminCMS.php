@@ -136,6 +136,8 @@ class AdminCMS extends AdminTab
 					media_external_list_url : "lists/media_list.js",
 					elements : "nourlconvert",
 					convert_urls : false,
+					width: "582",
+					height: "auto",
 					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 				});
 			});

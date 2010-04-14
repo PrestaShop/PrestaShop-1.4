@@ -113,7 +113,7 @@ class Editorial extends Module
 		/* Languages preliminaries */
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		$iso = Language::getIsoById($defaultLanguage);
+		$iso = Language::getIsoById(intval($cookie->id_lang));
 		$divLangName = 'title¤subheading¤cpara¤logo_subheading';
 
 		/* xml loading */
@@ -151,6 +151,8 @@ class Editorial extends Module
 					media_external_list_url : "lists/media_list.js",
 					elements : "nourlconvert",
 					convert_urls : false,
+					width: "582",
+					height: "auto",
 					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 				});
 			});
