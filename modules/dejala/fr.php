@@ -103,7 +103,6 @@ $_MODULE['<{dejala}prestashop>dejala_delivery_options_f33bfc6538f6c67fc90a882fec
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{dejala}prestashop>dejala_header_c45abd6f2b5f3b3a954c97f008ccb52c'] = 'Livrez vos clients par coursier avec ';
 $_MODULE['<{dejala}prestashop>dejala_header_20e846b603a0b7f1c00b1fc457308fb7'] = 'DEJALA';
-$_MODULE['<{dejala}prestashop>dejala_header_9e3360ac711fcd82ceea74c8eb69bda9'] = 'PRO';
 $_MODULE['<{dejala}prestashop>dejala_home_21e71170be5450c6380d7a9fc0ba51c3'] = 'Nouveau ? ';
 $_MODULE['<{dejala}prestashop>dejala_home_07965cce4ec6247bd57783dff0af1657'] = 'Nom de votre site';
 $_MODULE['<{dejala}prestashop>dejala_home_558f162b01a3d6d31865a1ca91a03d57'] = 'Dans quel pays est votre entrepôt';

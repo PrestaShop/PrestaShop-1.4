@@ -1758,6 +1758,7 @@ $_LANGADM['AdminSearchConfda0d18febbbe9cd4e54b68aa72f1d231'] = 'Indexation';
 $_LANGADM['AdminSearchConfd09de235a4115d5c3ff8d8e75f2fa45c'] = 'Produits indexés :';
 $_LANGADM['AdminSearchConf89e75b6219e4f6de0200ad94812a5655'] = 'Ajouter les produits manquant à l\'index.';
 $_LANGADM['AdminSearchConf26e424abe001fcfdcc85a2d59bacb567'] = 'Reconstruire l\'index';
+$_LANGADM['AdminSearchConf2e2ef007bbe41bc68ee187fca0387520'] = 'Vous pouvez définir une tâche cron qui va reconstruire votre index en utilisant l\'URL suivante:';
 $_LANGADM['AdminSearchConf13348442cc6a27032d2b4aa28b75a5d3'] = 'Recherche';
 $_LANGADM['AdminSearchEnginesb718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_LANGADM['AdminSearchEngines9aa1b03934893d7134a660af4204f2a9'] = 'Serveur';
