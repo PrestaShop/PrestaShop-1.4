@@ -43,18 +43,19 @@
 		<div id="page">
 
 			<!-- Header -->
-			<div>
+			<div id="header">
 				<h1 id="logo"><a href="{$base_dir}" title="{$shop_name|escape:'htmlall':'UTF-8'}"><img src="{$img_ps_dir}logo.jpg" alt="{$shop_name|escape:'htmlall':'UTF-8'}" /></a></h1>
-				<div id="header">
+				<div id="header_left">
 					{$HOOK_TOP}
 				</div>
 			</div>
 
-			<!-- Left -->
-			<div id="left_column" class="column">
-				{$HOOK_LEFT_COLUMN}
-			</div>
+			<div id="columns">
+				<!-- Left -->
+				<div id="left_column" class="column">
+					{$HOOK_LEFT_COLUMN}
+				</div>
 
-			<!-- Center -->
-			<div id="center_column">
+				<!-- Center -->
+				<div id="center_column">
 	{/if}

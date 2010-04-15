@@ -197,7 +197,7 @@ h1#logo {
 	width: 27%;
 	margin-top: 0.5em
 }
-#header {
+#header_left {
 	float: left;
 	margin-bottom: 15px;
 	width: 73%;
@@ -663,30 +663,30 @@ form#productsSortForm p label, form#productsSortForm p select { float: right }
 form#productsSortForm p select { font-size: 1em }
 
 /* Header */
-#header ul { list-style: none }
-#header form {
+#header_left ul { list-style: none }
+#header_left form {
 	border: none;
 	margin-bottom: 0!important;
 	display: inline
 }
-#header label {
+#header_left label {
 	margin: 0;
 	float: none
 }
 
 /* block top currencies */
-#header #currencies_block_top {
+#header_left #currencies_block_top {
 	margin: 0.4em 0.5em 0 0;
 	float: left;
 	width: 8em;
 	text-align: left
 }
-#header #currencies_block_top ul li {
+#header_left #currencies_block_top ul li {
 	float: left;
 	margin-right: 0.2em;
 	margin-bottom: 2px
 }
-#header #currencies_block_top ul li a {
+#header_left #currencies_block_top ul li a {
 	display: block;
 	font-size: 0.8em;
 	background-color: #f1f2f4;
@@ -698,11 +698,11 @@ form#productsSortForm p select { font-size: 1em }
 	text-align: center;
 	vertical-align: middle
 }
-#header #currencies_block_top ul li a:hover {
+#header_left #currencies_block_top ul li a:hover {
 	background-color: white;
 	color: black
 }
-#header #currencies_block_top ul li.selected a {
+#header_left #currencies_block_top ul li.selected a {
 	border: none;
 	background-color: transparent;
 	font-size: 11px;
@@ -711,14 +711,14 @@ form#productsSortForm p select { font-size: 1em }
 	color: black;
 	border: 1px solid white
 }
-#header #currencies_block_top p { clear: left }
+#header_left #currencies_block_top p { clear: left }
 
 /* block top languages */
-#header #languages_block_top {
+#header_left #languages_block_top {
 	margin: 0.4em 0.1em 0 0;
 	float: left
 }
-#header #languages_block_top p { clear: left }
+#header_left #languages_block_top p { clear: left }
 #languages_block_top {
 	width: 80px
 }
@@ -757,23 +757,23 @@ ul#header_links {
 #header_links #header_link_bookmark a { background-image: url('../img/icon/star.gif') }
 
 /* block top search */
-#header #search_block_top {
+#header_left #search_block_top {
 	float: right;
 	background: #e5e6e7 url('../img/block_search_bg.jpg') no-repeat top right;
 	margin-bottom: 11px;
 	width: 336px;
 	height: 28px
 }
-#header #search_block_top p { padding: 0.4em 0 0.4em 1em }
-#header #search_block_top label, #header #search_block_top input { float: left }
-#header #search_block_top label {
+#header_left #search_block_top p { padding: 0.4em 0 0.4em 1em }
+#header_left #search_block_top label, #header_left #search_block_top input { float: left }
+#header_left #search_block_top label {
 	background: transparent url('../img/icon/search.gif') no-repeat 0 2px;
 	float: left;
 	width: 19px;
 	height: 18px;
 	display: block
 }
-#header #search_block_top input#search_query { width: 12em }
+#header_left #search_block_top input#search_query { width: 12em }
 
 /* block left column "Quick search" */
 #search_block_left input { margin: 2px 0 0 0 }
@@ -781,7 +781,7 @@ ul#header_links {
 #search_button { display: inline }
 
 /* block top user information */
-#header #header_user {
+#header_left #header_user {
 	float: right;
 	width: 535px;
 	text-align: right;
