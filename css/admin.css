@@ -300,12 +300,14 @@ select optgroup option {
 }
 
 #image {
-	float: right;
-	padding: 4px;
+	float: none;
+	padding: 6px;
+	background: #fff;
 	border: 1px solid #DFD5C3;
 	font-size: 0.9em;
 	text-align: center;
 }
+#image img { margin: 0; padding: 0 }
 
 #product_link {
  	width: 240px;

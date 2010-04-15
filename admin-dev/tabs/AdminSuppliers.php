@@ -112,7 +112,6 @@ class AdminSuppliers extends AdminTab
 		parent::displayForm();
 		
 		$supplier = $this->loadObject(true);
-		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350);
 
 		$langtags = 'description¤smeta_title¤smeta_keywords¤smeta_description';
 		echo '
@@ -134,10 +133,12 @@ class AdminSuppliers extends AdminTab
 						<p class="clear">'.$this->l('Will appear in supplier list').'</p>
 					</div>';							
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'description');
-		echo '	</div>
+		echo '	<div class="clear"></div>
+				</div>
 				<label>'.$this->l('Logo:').' </label>
-				<div class="margin-form">
-					<input type="file" name="logo" />
+				<div class="margin-form">';
+		echo		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350);
+		echo '	<br /><input type="file" name="logo" />
 					<p>'.$this->l('Upload supplier logo from your computer').'</p>
 				</div>
 				<label>'.$this->l('Meta title:').' </label>

@@ -918,7 +918,7 @@ abstract class AdminTab
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayImage($id, $image, $size, $id_image = NULL, $token = NULL, $floatSide = 'right')
+	public function displayImage($id, $image, $size, $id_image = NULL, $token = NULL)
 	{
 		global $currentIndex;
 		
@@ -926,7 +926,7 @@ abstract class AdminTab
 			$token = $this->token;
 		if ($id AND file_exists($image))
 			echo '
-			<div style="float: '.$floatSide.'" id="image" >
+			<div id="image" >
 				'.cacheImage($image, $this->table.'_'.intval($id).'.'.$this->imageType, $size, $this->imageType).'
 				<p align="center">'.$this->l('Filesize').' '.(filesize($image) / 1000).'ko</p>
 				<a href="'.$currentIndex.'&'.$this->identifier.'='.intval($id).'&token='.$token.($id_image ? '&id_image='.intval($id_image) : '').'&deleteImage=1">

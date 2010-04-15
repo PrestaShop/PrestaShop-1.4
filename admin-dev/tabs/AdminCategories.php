@@ -214,11 +214,12 @@ class AdminCategories extends AdminTab
 		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Image:').' </label>
-				<div class="margin-form">
-					<input type="file" name="image" />
-				</div>';
-		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)), 'left');				
-		echo '	<div class="clear"><br /></div>	
+				<div class="margin-form">';
+		echo 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
+		echo '	<br /><input type="file" name="image" />
+					<p>'.$this->l('Upload category logo from your computer').'</p>
+				</div>
+				<div class="clear"><br /></div>	
 				<label>'.$this->l('Meta title:').' </label>
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)

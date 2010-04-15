@@ -88,7 +88,6 @@ class AdminManufacturers extends AdminTab
 		parent::displayForm();
 		
 		$manufacturer = $this->loadObject(true);
-		$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
 		$langtags = 'cdesc2¤cdesc¤mmeta_title¤mmeta_keywords¤mmeta_description';
 
 		echo '
@@ -165,8 +164,9 @@ class AdminManufacturers extends AdminTab
 		</script>
 		';
 		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo:').'</label>
-				<div class="margin-form">
-					<input type="file" name="logo" />
+				<div class="margin-form">';
+					$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
+		echo '	<br /><input type="file" name="logo" />
 					<p>'.$this->l('Upload manufacturer logo from your computer').'</p>
 				</div>
 				<label>'.$this->l('Meta title:').'</label>

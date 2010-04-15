@@ -266,6 +266,7 @@ $_LANGADM['AdminCategoriesb9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_LANGADM['AdminCategories66f2dd0c775eff24ac95c38347bcaf9a'] = 'Catégorie parente :';
 $_LANGADM['AdminCategoriesd0042a700e9bdf79689d63ee6846dc0e'] = 'Description :';
 $_LANGADM['AdminCategories461900b74731e07320ca79366df3e809'] = 'Image :';
+$_LANGADM['AdminCategoriesf0eaa209893a6bb5512c9876037b82be'] = 'Charger le logo de la catégorie à partir de votre ordinateur';
 $_LANGADM['AdminCategories7b250cb374c12c42a75227ba75df7779'] = 'Balise <title> :';
 $_LANGADM['AdminCategories3e053943605d9e4bf7dd7588ea19e9d2'] = 'Caractères interdits :';
 $_LANGADM['AdminCategoriesa6bb76858f8b4b61c050ad7a7ac57e06'] = 'Meta description :';
