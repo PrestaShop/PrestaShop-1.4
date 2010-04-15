@@ -144,6 +144,8 @@ class Editorial extends Module
 					theme_advanced_statusbar_location : "bottom",
 					theme_advanced_resizing : true,
 					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					width: "582",
+					height: "auto",
 					// Drop lists for link/image/media/template dialogs
 					template_external_list_url : "lists/template_list.js",
 					external_link_list_url : "lists/link_list.js",
@@ -151,8 +153,6 @@ class Editorial extends Module
 					media_external_list_url : "lists/media_list.js",
 					elements : "nourlconvert",
 					convert_urls : false,
-					width: "582",
-					height: "auto",
 					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 				});
 			});
