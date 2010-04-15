@@ -5,6 +5,253 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.4 - 2165 (2010-15-04)   #
+####################################
+
+	Added Features :
+	
+	[+] BO : allow employees to save form default language (when employee uses displayFlags tool, cookie sets the last chosen language as forms default language)
+	[+] BO : you can now delete all combinations with just one click
+	[+] BO : search "everywhere" added
+	
+	[+] MO : new stats module "catalog evaluation"
+	
+	[+] CSS : added clearfix
+	
+	Improved/changed features :
+	
+	[*] FO : Fixed bug #3987, Search wasn't working correctly with ( and )
+	[*] FO : Fixed bug #3895, big performance improvements thanks to the help of Tomasz Słomiński, added a cache for file_exists() method
+	[*] FO : fixed alt and title attributes en product-list
+	
+	[*] BO : fixed display of manufacturer/supplier/category logos
+	[*] BO : Small improvements with Customer messages and Accessories management
+	[*] BO : fixed live update of the product name (+ now listen to changeFormLanguage)
+	[*] BO : fix old php $languages and js var id_language in admin tabs (already and better defined in AdminTab class)
+	[*] BO : moved parent::displayForm after global vars
+	[*] BO : you can now resume a timed out images regeneration
+	[*] BO : renamed temp form_id_language var
+	[*] BO : improved category/product sort in Catalog tab (now using cookie)
+	[*] BO : Catalog sort order remains when chosing category, activating, deleting or duplicating category or product
+	[*] BO : form language now set as configuration value (!= admin language)
+	[*] BO : added parent::displayForm into Admin php files to allow use of js displayFlags method
+	[*] BO : Multilingual input required data internalization
+	[*] BO : allow js display of language flags + retrocompatibility
+	[*] BO : enable js display of language flags into AdminProducts and AdminCategories
+	[*] BO : enable multi-tab language management in AdminProducts
+	[*] BO : change "Out of stock" status to "On backorder"
+	[*] BO : added global for cart on validateOrder method (#4020)
+	[*] BO : Product accessories are now using with ajax load
+	[*] BO : fixed text-transform : uppercase + capitalize (customer name)
+	[*] BO : Accessories are order by name now
+	[*] BO : Added some tips regarding the free shipping section
+	[*] BO : new search engines keywords managed
+	[*] BO : added label for customization product on AdminOrders page (#3880)
+	[*] BO : added link on product on page of manufacturer
+	
+	[*] Classes : now an user can be in many groups, and not on default group
+	[*] Classes : vouchers are now applicable in one currency only (and a few other improvements)
+	[*] Classes : Now you can define a promotion for one day on a product (#3514)
+	[*] Classes : set $priceByWeight and $priceByPrice on protected
+	
+	[*] MO : new version for Dejala module
+	[*] MO : added link of product page on template mail "customer_qty" on module mailalerts
+	[*] MO : added product name on comments validation page (#4054)
+	[*] MO : Performance improvements on the blockcart module
+	[*] MO : Loyalty module now checks reduction date + time instead of date
+	[*] MO : Hipay now displays a warning if you use in in localhost
+	[*] MO : Small code improvements on Mail alerts module
+	[*] MO : Improvements regarding the Moneybookers module
+	[*] MO : Paypal show information of order now (#3946)
+	[*] MO : fixed translated string and its translation
+	[*] MO : quick display fix in products blocks (ie. lastviewed module)
+	[*] MO : added text for redirect on module PayPal
+	
+	[*] TR : added french translations
+	[*] TR : fixed translations
+	
+	[*] Mails : Fixed translation subject for "Nouveau bon de r..."
+	
+	[*] CSS : replaced style=clear:both with class=clear (required for the BO fix)
+	[*] CSS : styling accessories block + clearfixing
+	[*] CSS : old temp. css deleted (RIP blockmenutop module)
+	
+	[*] SQL : added many indexes on SQL structure
+	
+	Fixed bugs :
+	
+	[-] Project : Fixed bug #4073, Turkish and Simplified Chinese language packs links were broken
+	[-] Project : TinyMCE html descriptions are now W3C Valid (fix #3967)
+	[-] Project : fixed uppercase of lastnames
+	
+	[-] Installer : Fixed bug at install (SQL error with id_default_group in PREFIX_customer)
+	[-] Installer : fixed bug on update process
+	[-] Installer : Fixed bug #3896 - Added several SQL indexes
+	
+	[-] FO : Product page now cares for postProcess module errors (such as productcomments)
+	[-] FO : fixed bug on search tag
+	[-] FO : Product price display fixed (when a state tax applied)
+	[-] FO : Fixed bug #3871, Product names with accents wasn't displayed correctly in product lists
+	[-] FO : hide submit button when you send contact mail (#4114)
+	[-] FO : show information for slow validation of payment module (e.g. PayPal Validation) (#3998)
+	[-] FO : fixed bug on referral program module with HTTPS (#4066)
+	[-] FO : fixed search autocomplete with SSL
+	[-] FO : Fixed bug #4074 - "Price lowered" wasn't displayed anymore
+	[-] FO : Fixed bug #4063 - Even if "Sales terms" were disabled, the customer was asked to accept them
+	[-] FO : add jQuery for the check of "CGV"
+	[-] FO : fixed bug with discount and Internet explorer (#4037)
+	[-] FO : fixed issue with duplicated &amp;
+	[-] FO : added new rule on .htaccess (#4019)
+	[-] FO : Fixed bug #3982 - Position order way in categories wasn't the way selected in BO
+	[-] FO : Fixed bug #3898 - Using title instead of legend on homefeatured module
+	[-] FO : fixed small bug on address.tpl (#3994)
+	[-] FO : Downloadable product ordering fixed when stock management is OFF
+	[-] FO : clean authentication.tpl file
+	[-] FO : fixed duplicated favicon issue
+	[-] FO : change error message when not enought products on stock (#3912)
+	[-] FO : Product combination cover image fixed when several images were assigned to a single combination
+	[-] FO : fixed translated string and its translation
+	[-] FO : remove this dummy folder, it been a long time, so now it's done ! thanks to everyone :)
+	[-] FO : Fixed bug #3868, JS comment syntax error
+	[-] FO : Fixed bug #3867, Deleted a temporary image file
+	[-] FO : small fixes on Tools::getPath() and Tools::getFullPath() methods
+	[-] FO : fixed a bug on product page with taxes (#3842)
+	[-] FO : fixed summary cart when taxes are disabled
+	
+	[-] FO / BO : fix customization fields name in order (fix #3968)
+	
+	[-] BO : fixed upload of module on AdminModule page
+	[-] BO : fixed width of tinyMCE editor (now suits width of FO center column)
+	[-] BO : fixed IE bug with navigation tool
+	[-] BO : Fixed bug on AdminCatalog
+	[-] BO : fixed bug on AdminSupplier page with footer
+	[-] BO : fixed bug on AdminManufacturer with footer
+	[-] BO : Fixed bug #4138, Token was invalid while trying to delete or edit an image
+	[-] BO : Fixed bug #3817/4068, An error regarding path was displayed under IIS
+	[-] BO : Fixed bug #3799, Customizations informations are now display in order conf. email, and product were displayed twice
+	[-] BO : Fixed bug #4005, Deleted unnecessary tabs
+	[-] BO : Fixed bug #4125, Undefined PHP constant FILEINFO_MIME_TYPE
+	[-] BO : Fixed bug #4126, Bad display of accessories in the product page (Product reference was missing)
+	[-] BO : Fixed bug #4120, Bad display of customer messages under IE 8
+	[-] BO : Fixed bug #4121, Bad sort of customer messages when selecting "Order ID"
+	[-] BO : custom feature values didn't appear when pre-defs values were set
+	[-] BO : fixed Strict Standards error on BO
+	[-] BO : rewrited url is now also rewrited when using right-click context menu "Paste" option (when leaving the input or saving the product)
+	[-] BO : fix path bug when generating cookie
+	[-] BO : fix javascript error on filter dropdowns (fix #4001)
+	[-] BO : fix with form multinlingual tools (best compliancy)
+	[-] BO : Fixed bug #4056, CSS display errors under IE in the admin panel (fieldsets...)
+	[-] BO : Fixed bug #4078, There were several PHP warning while translating errors in the BO
+	[-] BO : Fixed bug #4083, Added some tips regarding the order states (suggested size = 16x16)
+	[-] BO : Fixed bug #4085, There was a missing class clear in the Order states tab
+	[-] BO : Fixed bug #4069 - Messages posted by customers who hadn't finalize their orders were not accessible
+	[-] BO : now you can enter ID product on Back Office Search and the product page opens directly
+	[-] BO : fixed format selection
+	[-] BO : fixed bug with access permissions for AdminProducts (#4035)
+	[-] BO : fixed flags display
+	[-] BO : Fixed bug #3996 - French translation modification
+	[-] BO : The friendly URL auto-generation does not fail the CSV import anymore.
+	[-] BO : fixed error message on AdminImages
+	[-] BO : delete zoom.php file on robots.txt generated on back office
+	[-] BO : fixed bug when changing translation language under different tabs
+	[-] BO : Fixed CSV import multilines
+	[-] BO : can't set 1 to quantity discount for product
+	[-] BO : boolean compared to string = cast into boolean (fixed it in admintab and added a magnifier in the order tab)
+	[-] BO : Fixed bug #3945 - Products positions are now conserved when updating a product
+	[-] BO : fixe bug #3825 (do not delete an updated product from accessories of others)
+	[-] BO : fixed encoding issue on TinyMCE
+	[-] BO : Invoices are no longer accessible if their order status does not allow PDF invoice
+	[-] BO : fixed a bug with input for link rewrite for CMS page
+	[-] BO : Fixed missing link_rewrite field on Category import #3831
+	[-] BO : fixed regeneration of scenes thumbnails
+	[-] BO : fixed links at the bottom of product edit pages
+	[-] BO : fixed display bug with alerts about non-compatible characters
+	[-] BO : Gift message display fixed (was not displaying carriage returns)
+	[-] BO : fix the toogle of help boxes (#3821)
+	[-] BO : fixed issue currency on "Total paid since registration" on AdminOrders (#3840)
+	[-] BO : fixed issue with currency on statistics
+	
+	[-] Classes : fixed DB backup (#4119)
+	[-] Classes : fixed shipping cost when no carrier selected (#4099)
+	[-] Classes : Fixed bug #4067 - PHP warning on $tax undefined variable in PaymentModule class
+	[-] Classes : Fixed bug #4048 - Multiple carriers being ignored, shipping £0
+	[-] Classes : fixed stock management when pack product are returned (#4016)
+	[-] Classes : Multi customer group assignation fixed (default group added)
+	[-] Classes : you can't add pack of products on your cart when one product is out of stock (#3977)
+	[-] Classes : fixed bug when used discount with tax disabled (#3975)
+	[-] Classes : fixed bug on strlen method (#3937)
+	[-] Classes : Fixed bug #3907 - Tax excl. discount values were wrong
+	[-] Classes : Fixed bug #3907 - Free shipping is now excluding discounts coupon from its calculation
+	[-] Classes : Product prices fixed on cart summary when a tax different from the product one (e.g., State tax) should applied and the tax display option set to tax excluded
+	[-] Classes : fixed stock management of product pack with combinations
+	[-] Classes : fixed count order on AdminCustomer page (#3859)
+	[-] Classes : fixed an issue with shipping free fees and currency (#3854)
+	[-] Classes : Credit slip does not display discount/voucher anymore
+	[-] Classes : fixed issue with currency and reduction price of product
+	[-] Classes : fixed issue with currency on gift wrapping (#3814)
+	[-] Classes : configuration cache is updated when add a new configuration
+	
+	[-] PDF : PDF invoice fixed when free order occured
+	[-] PDF : fixed PDF with wrapping cost
+	
+	[-] MO : editorial - fixed width of tinyMCE editor
+	[-] MO : fixed an error PHP on ProductCategory module
+	[-] MO : fixed a bug on block new product when you haven't new product (#4098)
+	[-] MO : save option checked for "all_cms" on module Gsitemap (#4134)
+	[-] MO : Referral module voucher generation fixed (currency support added)
+	[-] MO : fixed bug #4092 - correct the number of point with the most expensive combination
+	[-] MO : fixed loyalty module with multicurrency (#3976)
+	[-] MO : Fixed bug #4087, "classic" pages (contact, best sales...) were missing in sitemap.xml
+	[-] MO : Fixed bugs #4004/#4070, error with Smarty date format in product.tpl
+	[-] MO : Fixed bug #4086, There were several error generating sitemap.xml (PHP warnings)
+	[-] MO : Fixed bug #4076, Loyalty points were calculated product by product instead of cart total
+	[-] MO : Fixed bug #4061 - "New products" module wasn't managing accents correctly
+	[-] MO : fixed a little bug on Ganalytics module (#4052)
+	[-] MO : fixed databases structure to MyISAM for MailAlert module (#4041)
+	[-] MO : fixed Currencies restrictions for cheque and bankwire modules
+	[-] MO : small changes on mailalert
+	[-] MO : fixed the send mail for reinjecting product on mail alert module (#3177)
+	[-] MO : Partially fixed bug #3177 - Work in progress regarding mail alert module
+	[-] MO : fixed display issues into blockcart
+	[-] MO : Fixed bug #3510 - Loyalty module: Reward statuses are now translated (English, French, Spanish...)
+	[-] MO : Fixed bug #3510 - Loyalty module: Points were canceled on the whole order even if you were canceling only 1 product
+	[-] MO : Fixed bug #3510 - Loyalty module: “Transform my points” was displayed even if you didn’t have “Available” points
+	[-] MO : Fixed bug #3510 - Loyalty module: Added the “From date” regarding the validity of the discount 
+	[-] MO : fixed wrong display when adding product to wishlist
+	[-] MO : fixed conflict with blockwhislist and blockcart (#3991)
+	[-] MO : watermarks module accept only GIF image (#3988)
+	[-] MO : fixed installation of Watermark module
+	[-] MO : added wrapping cost to shipping cost on PayPal (#3984)
+	[-] MO : Fixed bug #3891 - Moneybookers eWallet logo wasn't set properly
+	[-] MO : small fix on blockcategories module
+	[-] MO : fixed inactive languages in statscheckup
+	[-] MO : cart expanded after refresh fixed (fixed #3964)
+	[-] MO : fixed bug with PayPal module with US address
+	[-] MO : Fixed bug #3934 - Cheque address now includes <br /> in e-mails
+	[-] MO : fixed error on cart quantity product on GCheckOut (#3910)
+	[-] MO : quantity fixed in statsproduct
+	[-] MO : small fix on the description length in statscheckup
+	[-] MO : fixed undisplaying product quantities in blockuserinfo.tpl
+	[-] MO : fixed php error on module productscategory
+	[-] MO : fixed bug with currency on PayPalAPI module
+	[-] MO : fixed a js bug on PayPalAPI (#3838)
+	[-] MO : stats currency fixed
+	[-] MO : fixed issue with currency for google analytics statistics
+	[-] MO : fixed issue when foreaching viewed products
+	
+	[-] TR : fixed an error on english translation
+	
+	[-] Mails : removed BOM on many files
+	[-] Mails : Removed TTC label on order confirmation mail
+	
+	[-] CSS : fix IE6
+	
+	[-] SQL : fixed spannish URL rewriting on sql installer file
+	[-] SQL : fixed mistake into configuration vars (product sorted by position but not alphabetically)
+	[-] SQL : fixed an error in sql file for upgrade
+
+
+####################################
 #   v1.3.0.3 - 1965 (2010-09-03)   #
 ####################################
 
