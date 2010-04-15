@@ -63,6 +63,13 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_83090230d3c11aa76851030eb
 $_MODULE['<{referralprogram}prestashop>referralprogram_da61902911b89938bb847fa7b370f0d5'] = 'Integrar el sistema de programa de patrocinio en su tienda.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3c5db6c207f700f4f209b43bed966e96'] = 'No se puede eliminar este archivo:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_6c58031e7824c3cd6febc2f2107b0652'] = 'Configuración actualizada.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_167579019fe14b4efed431a82985d9ad'] = 'Cantidad de pedido se necesita o no es válida.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_ceb0ce9b627fb9a962543f3271da29b1'] = 'El valor del descuento no es válido.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_c96c84a1a64878d4d742daf52e359e36'] = 'El valor del descuento para la moneda #';
+$_MODULE['<{referralprogram}prestashop>referralprogram_4218c2cb615fbc2870f6b1e8d283ab8d'] = 'está vacío.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_bb7476567f5e12e60b01436dad77a533'] = 'no es válido.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_addae886b20a06e2954461706c90cd7d'] = 'El tipo de descuento se necesita o no es válido';
+$_MODULE['<{referralprogram}prestashop>referralprogram_ac3357de2dec8d74d89dd378962ec621'] = 'el número de amigos se necesita o no es válido.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3d31dd445991f35b1ee6491eec7ac71c'] = 'No se puede escribir en el archivo XML.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_36bad0c5050aa8681926523cb705bbc0'] = 'No se puede cerrar el archivo xml.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc5269e1e'] = 'No se puede actualizar el archivo xml. Por favor, compruebe el archivo XML de los permisos de escritura.';
@@ -73,6 +80,8 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_46b8b61a5ef0bd397591fce50
 $_MODULE['<{referralprogram}prestashop>referralprogram_9ad4f790c8bb9be21a2fa388c7730353'] = 'Tipo vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_37be07209f53a5d636d5c904ca9ae64c'] = 'Porcentaje';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b2f40690858b404ed10e62bdf422c704'] = 'Cantidad';
+$_MODULE['<{referralprogram}prestashop>referralprogram_7089bb233a7d5534ac6154ff169b3764'] = 'Importe del vale en';
+$_MODULE['<{referralprogram}prestashop>referralprogram_853ae90f0351324bd73ea615e6487517'] = ':';
 $_MODULE['<{referralprogram}prestashop>referralprogram_8465d83b5c1b569299af284c14d957bb'] = 'Descripción vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar ajustes';
 $_MODULE['<{referralprogram}prestashop>referralprogram_562ad64cf21ac2da656134355115133d'] = 'Su texto está vacio.';

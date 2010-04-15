@@ -105,6 +105,7 @@ $_FIELDS['Delivery_efc19cceda447c9d6f95094e9b01ef24'] = 'id_zona';
 $_FIELDS['Delivery_78a5eb43deef9a7b5b9ce157b9d52ac4'] = 'precio';
 $_FIELDS['Discount_71581233bcc121fcc409ecce9317fbde'] = 'id_cliente';
 $_FIELDS['Discount_3b10b8231e783bc1485935367295bf25'] = 'id_tipo_descuento';
+$_FIELDS['Discount_d488c3bb8b7a06f26e44c153ce047933'] = 'id_moneda';
 $_FIELDS['Discount_b068931cc450442b63f5b3d276ea4297'] = 'nombre';
 $_FIELDS['Discount_2063c1608d6e0baf80249c42e2be5804'] = 'valor';
 $_FIELDS['Discount_221d2a4bfdae13dbd5aeff3b02adb8c1'] = 'cantidad';
