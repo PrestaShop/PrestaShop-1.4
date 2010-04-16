@@ -5,7 +5,7 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
-#   v1.3.0.4 - 2165 (2010-15-04)   #
+#   v1.3.0.4 - 2169 (2010-15-04)   #
 ####################################
 
 	Added Features :
@@ -20,6 +20,7 @@ Release Notes for PrestaShop 1.3
 	
 	Improved/changed features :
 	
+	[*] FO : improve front office template structure
 	[*] FO : Fixed bug #3987, Search wasn't working correctly with ( and )
 	[*] FO : Fixed bug #3895, big performance improvements thanks to the help of Tomasz Słomiński, added a cache for file_exists() method
 	[*] FO : fixed alt and title attributes en product-list
@@ -190,6 +191,7 @@ Release Notes for PrestaShop 1.3
 	[-] Classes : fixed issue with currency and reduction price of product
 	[-] Classes : fixed issue with currency on gift wrapping (#3814)
 	[-] Classes : configuration cache is updated when add a new configuration
+	[-] Classes : fixed bug on cart
 	
 	[-] PDF : PDF invoice fixed when free order occured
 	[-] PDF : fixed PDF with wrapping cost
