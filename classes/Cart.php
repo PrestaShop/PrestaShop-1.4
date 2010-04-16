@@ -411,7 +411,7 @@ class		Cart extends ObjectModel
 				else
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
-					SET `quantity` = '.intval($qty).'
+					SET `quantity` = '.$qty.'
 					WHERE `id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').'
 					AND `id_cart` = '.intval($this->id));
