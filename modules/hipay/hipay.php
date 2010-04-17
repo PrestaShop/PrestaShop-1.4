@@ -147,6 +147,9 @@ class Hipay extends PaymentModule
 		if (!array_key_exists('xml', $_POST))
 			return;
 
+		if (_PS_MAGIC_QUOTES_GPC_)
+			$_POST['xml'] = stripslashes($_POST['xml']);
+		
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
@@ -167,7 +170,6 @@ class Hipay extends PaymentModule
         }
         elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
         {
-			
             /* Paiement remboursé sur Hipay */
 			if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
 				die(Tools::displayError());
