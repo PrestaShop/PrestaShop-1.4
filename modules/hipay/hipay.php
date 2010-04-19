@@ -234,7 +234,7 @@ class Hipay extends PaymentModule
 			OR (Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']) AND !Configuration::get('HIPAY_CATEGORY_TEST_'.$currency['iso_code'])))
 				$categories = false;
 		}
-		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping)
+		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping OR !$categories OR !$categoryRetrieval OR !$online)
 		{
 			echo '
 			<div class="warning warn">
