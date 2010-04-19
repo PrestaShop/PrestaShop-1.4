@@ -41,9 +41,10 @@ class Hipay extends PaymentModule
 
 		$currency = new Currency($this->getModuleCurrency($cart));
 		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
-		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD') : Configuration::get('HIPAY_PASSWORD_TEST'));
-		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
-		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND Configuration::get('HIPAY_RATING') AND Configuration::get('HIPAY_CATEGORY'))
+		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD_'.$currency->iso_code) : Configuration::get('HIPAY_PASSWORD_TEST_'.$currency->iso_code));
+		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID_'.$currency->iso_code) : Configuration::get('HIPAY_SITEID_TEST_'.$currency->iso_code));
+		$hipayCategory = ($this->prod ? Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code) : Configuration::get('HIPAY_CATEGORY_TEST_'.$currency->iso_code));
+		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND $hipayCategory AND Configuration::get('HIPAY_RATING'))
 		{
 			$smarty->assign('hipay_prod', $this->prod);
 			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
@@ -80,8 +81,9 @@ class Hipay extends PaymentModule
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 		
 		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
-		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD') : Configuration::get('HIPAY_PASSWORD_TEST'));
-		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST'));
+		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD_'.$currency->iso_code) : Configuration::get('HIPAY_PASSWORD_TEST_'.$currency->iso_code));
+		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID_'.$currency->iso_code) : Configuration::get('HIPAY_SITEID_TEST_'.$currency->iso_code));
+		$hipaycategory = ($this->prod ? Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code) : Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code));
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
 		$paymentParams->setLogin($hipayAccount, $hipayPassword);
@@ -108,7 +110,7 @@ class Hipay extends PaymentModule
 		$item->setInfo('');
 		$item->setquantity(1);
 		$item->setRef($cart->id);
-		$item->setCategory(Configuration::get('HIPAY_CATEGORY'));
+		$item->setCategory($hipaycategory);
 		$item->setPrice($cart->getOrderTotal());
 		if (!$item->check())
 			return $this->l('[Hipay] Error: cannot create "Cart" Product');
@@ -116,7 +118,7 @@ class Hipay extends PaymentModule
 
 		$order = new HIPAY_MAPI_Order();
 		$order->setOrderTitle($this->l('Order total'));
-		$order->setOrderCategory(Configuration::get('HIPAY_CATEGORY'));
+		$order->setOrderCategory($hipaycategory);
 
 		if (!$order->check())
 		    return $this->l('[Hipay] Error: cannot create Order');
@@ -158,18 +160,11 @@ class Hipay extends PaymentModule
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
 
-		$orderStatus = _PS_OS_ERROR_;
-		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
-        if (trim($operation) == 'authorization' AND trim(strtolower($status)) == 'ok')
-        {
-            /* Autorisation acceptée */
-            $orderStatus = _PS_OS_PAYMENT_;
-        }
-        elseif (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
+		if (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
         {
             /* Paiement capturé sur Hipay = Paiement accepté sur Prestashop */
-            $orderStatus = _PS_OS_PAYMENT_;
-            $this->validateOrder((int)$id_cart, (int)$orderStatus, (float)$amount, $this->displayName, $orderMessage);
+			$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
+            $this->validateOrder((int)$id_cart, _PS_OS_PAYMENT_, (float)$amount, $this->displayName, $orderMessage);
         }
         elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
         {
@@ -351,14 +346,12 @@ class Hipay extends PaymentModule
 			foreach ($currencies as $currency)
 				$form .= '
 					$("#HIPAY_ACCOUNT_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");
-					$("#HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");';
+					$("#HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");
+					$("#HIPAY_PASSWORD_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");
+					$("#HIPAY_PASSWORD_TEST_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");
+					$("#HIPAY_SITEID_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");
+					$("#HIPAY_SITEID_TEST_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");';
 			$form .= '
-					$("#HIPAY_PASSWORD").css("background-color", "#FFFFFF");
-					$("#HIPAY_PASSWORD_TEST").css("background-color", "#EEEEEE");
-					
-					$("#HIPAY_SITEID").css("background-color", "#FFFFFF");
-					$("#HIPAY_SITEID_TEST").css("background-color", "#EEEEEE");
-					
 					$(".hipay_prod").css("background-color", "#AADEAA");
 					$(".hipay_test").css("background-color", "transparent");
 					$(".hipay_prod_span").css("font-weight", "700");
@@ -369,14 +362,12 @@ class Hipay extends PaymentModule
 			foreach ($currencies as $currency)
 				$form .= '
 					$("#HIPAY_ACCOUNT_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");
-					$("#HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");';
-			$form .= '
-					$("#HIPAY_PASSWORD").css("background-color", "#EEEEEE");
-					$("#HIPAY_PASSWORD_TEST").css("background-color", "#FFFFFF");
-					
-					$("#HIPAY_SITEID").css("background-color", "#EEEEEE");
-					$("#HIPAY_SITEID_TEST").css("background-color", "#FFFFFF");			
-					
+					$("#HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");
+					$("#HIPAY_PASSWORD_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");
+					$("#HIPAY_PASSWORD_TEST_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");
+					$("#HIPAY_SITEID_'.$currency['iso_code'].'").css("background-color", "#EEEEEE");
+					$("#HIPAY_SITEID_TEST_'.$currency['iso_code'].'").css("background-color", "#FFFFFF");';
+			$form .= '	
 					$(".hipay_prod").css("background-color", "transparent");
 					$(".hipay_test").css("background-color", "#AADEAA");
 					$(".hipay_prod_span").css("font-weight", "200");
