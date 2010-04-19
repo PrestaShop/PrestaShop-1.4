@@ -302,8 +302,8 @@ class AdminImages extends AdminTab
 	private function _regenerateThumbnails($type = 'all', $deleteOldImages = false)
 	{
 		$this->start_time = time();
-		ini_set('max_execution_time', 10);
-		$this->max_execution_time = (int)ini_get('max_execution_time'); // ini_set may be disabled, we need the real value
+		ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
+		$this->max_execution_time = (int)ini_get('max_execution_time');
 		$languages = Language::getLanguages();
 
 		$process =
