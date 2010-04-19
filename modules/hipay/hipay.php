@@ -199,6 +199,11 @@ class Hipay extends PaymentModule
 			
 			foreach ($currencies as $currency)
 			{
+				if (Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) != Tools::getValue('HIPAY_SITEID_'.$currency['iso_code']))
+					Configuration::updateValue('HIPAY_CATEGORY_'.$currency['iso_code'], false);
+				if (Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']) != Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code']))
+					Configuration::updateValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], false);
+			
 				Configuration::updateValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_PASSWORD_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_'.$currency['iso_code']));
@@ -296,13 +301,11 @@ class Hipay extends PaymentModule
 							<input type="text" id="HIPAY_SITEID_'.$currency['iso_code'].'" name="HIPAY_SITEID_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_SITEID_'.$currency['iso_code'], Configuration::get('HIPAY_SITEID_'.$currency['iso_code'])).'" /><br />';
 			if ($ping AND $hipaySiteId = (int)Configuration::get('HIPAY_SITEID_'.$currency['iso_code']))
 			{
-				$form .= '	<label for="HIPAY_CATEGORY_'.$currency['iso_code'].'">'.$this->l('Category').'</label>
-							<div class="margin-form">
-								<select id="HIPAY_CATEGORY_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_'.$currency['iso_code'].'">';
+				$form .= '	<label for="HIPAY_CATEGORY_'.$currency['iso_code'].'" class="hipay_label">'.$this->l('Category').'</label><br />
+							<select id="HIPAY_CATEGORY_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_'.$currency['iso_code'].'">';
 				foreach ($this->getHipayCategories(true, $hipaySiteId) as $id => $name)
-					$form.= '		<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
-				$form .= '		</select>
-							</div>';
+					$form.= '	<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+				$form .= '	</select><br />';
 			}
 			$form .= '	</td>
 						<td class="hipay_test hipay_block" style="padding-left:10px">
@@ -314,13 +317,11 @@ class Hipay extends PaymentModule
 							<input type="text" id="HIPAY_SITEID_TEST_'.$currency['iso_code'].'" name="HIPAY_SITEID_TEST_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code'])).'" /><br />';
 			if ($ping AND $hipaySiteId = (int)Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']))
 			{
-				$form .= '	<label for="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'">'.$this->l('Category').'</label>
-							<div class="margin-form">
-								<select id="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'">';
+				$form .= '	<label for="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'" class="hipay_label">'.$this->l('Category').'</label><br />
+							<select id="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'">';
 				foreach ($this->getHipayCategories(true, $hipaySiteId) as $id => $name)
-					$form.= '		<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_TEST_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
-				$form .= '		</select>
-							</div>';
+					$form.= '	<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_TEST_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+				$form .= '	</select><br />';
 			}
 			$form .= '	</td>
 					</tr>
