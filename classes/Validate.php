@@ -310,7 +310,7 @@ class Validate
 	*/
 	static public function isMessage($message)
 	{
-		return preg_match('/^([^<>#{}]|<br \/>)*$/ui', $message);
+		return preg_match('/^([^<>{}]|<br \/>)*$/ui', $message);
 	}
 
 	/**
