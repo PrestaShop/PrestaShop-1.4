@@ -89,37 +89,35 @@ class Blockrss extends Module
 		return $output;
 	}
 
-	function hookRightColumn($params)
+	function hookLeftColumn($params)
 	{
-		return $this->hookLeftColumn($params);
-	}
-
- 	function hookLeftColumn($params)
- 	{
 		global $smarty;
-
+		
 		// Conf
 		$title = strval(Configuration::get('RSS_FEED_TITLE'));
 		$url = strval(Configuration::get('RSS_FEED_URL'));
 		$nb = intval(Configuration::get('RSS_FEED_NBR'));
-
+		
 		// Getting data
-		if ($contents = @file_get_contents($url))
-		{
-			if ($url) @$src = new XML_Feed_Parser($contents);
-			$content = '';
-			for ($i = 0; isset($src) AND $i < ($nb ? $nb : 5); ++$i)
-			{
-				@$item = $src->getEntryByOffset($i);
-				$content .= '<li><a href="'.(@$item->link).'">'.Tools::htmlentitiesUTF8(@$item->title).'</a></li>';
-			}
-		}
-
+		$rss_links = array();
+		if ($url && ($contents = @file_get_contents($url)))
+			if (@$src = new XML_Feed_Parser($contents))
+				for ($i = 0; $i < ($nb ? $nb : 5); $i++)
+					if (@$item = $src->getEntryByOffset($i))
+						$rss_links[] = array('title' => $item->title, 'url' => $item->link);
+		
 		// Display smarty
-		$smarty->assign('title', ($title ? $title : $this->l('RSS feed')));
-		$smarty->assign('content', (isset($content) ? $content : ''));
+		$smarty->assign(array(
+			'title' => ($title ? $title : $this->l('RSS feed')),
+			'rss_links' => $rss_links
+		));
  	 	return $this->display(__FILE__, 'blockrss.tpl');
  	}
+
+	function hookRightColumn($params)
+	{
+		return $this->hookLeftColumn($params);
+	}
 }
 
 ?>
