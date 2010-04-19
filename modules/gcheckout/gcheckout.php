@@ -141,8 +141,11 @@ class GCheckout extends PaymentModule
 
 		$googleCart->SetMerchantPrivateData($params['cart']->id);
 
-		$smarty->assign('CheckoutButtonCode', $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'));
-		$smarty->assign('ModulePath', $this->_path);
+		$buttonText = $this->l('Pay with GoogleCheckout');
+		$smarty->assign(array(
+			'googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($buttonText, 'LARGE'),
+			'buttonText' => $buttonText
+		));
 
 		return $this->display(__FILE__, 'payment.tpl');
 	}

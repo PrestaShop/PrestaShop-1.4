@@ -465,7 +465,7 @@
       $xml_data->Pop('items');
 
       if($this->merchant_private_data != '') {
-        if (get_class($this->merchant_private_data) == 'merchantprivate') {
+        if (is_object($this->merchant_private_data) && get_class($this->merchant_private_data) == 'merchantprivate') {
           $this->merchant_private_data->AddMerchantPrivateToXML($xml_data);
         }
         else {
@@ -1090,7 +1090,7 @@
      * 
      * @return string the button's html
      */
-    function CheckoutButtonCode($paymentText = 'Pay with Google Checkout', $size="large", $variant=true, $loc="en_US",
+    function CheckoutButtonCode($size="large", $variant=true, $loc="en_US",
                                                $showtext=true, $style="trans") {
 
       switch (strtolower($size)) {
@@ -1127,14 +1127,6 @@
       if ($this->variant == "text")
 	  {
         $data .= "
-		
-		<p class=\"payment_module\">
-			<a href=\"javascript:$('#gcheckout_form').submit();\" title=\"".$paymentText."\">
-				<img src=\"modules/gcheckout/gcheckout.gif\" alt=\"".$paymentText."\" />
-				".$paymentText."
-			</a>
-		</p>
-		
 		<form id=\"gcheckout_form\" method=\"POST\" action=\"". 
                 $this->checkout_url . "\"" . ($this->googleAnalytics_id?
                 " onsubmit=\"setUrchinInputCode();\"":"") . ">
