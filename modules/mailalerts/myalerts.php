@@ -27,6 +27,13 @@ else
 
 $smarty->assign('id_customer', intval($cookie->id_customer));
 $smarty->assign('errors', $errors);
-$smarty->display(dirname(__FILE__).'/myalerts.tpl');
+
+if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl'))
+	$smarty->display(_THEME_DIR_.'modules/mailalerts/myalerts.tpl');
+elseif (Tools::file_exists_cache(dirname(__FILE__).'/mailalerts/myalerts.tpl'))
+	$smarty->display(__PS_BASE_URI__.'modules/mailalerts/myalerts.tpl');
+else
+	Tools::displayError('No template found');
+
 
 include(dirname(__FILE__).'/../../footer.php');
