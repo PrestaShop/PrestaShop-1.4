@@ -27,8 +27,11 @@ class Hipay extends PaymentModule
 	public function	install()
 	{
 		Configuration::updateValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
-		Configuration::updateValue('HIPAY_UNIQID', uniqid());
-		Configuration::updateValue('HIPAY_RATING', 'ALL');
+		if (!Configuration::get('HIPAY_UNIQID'))
+			Configuration::updateValue('HIPAY_UNIQID', uniqid());
+		if (!Configuration::get('HIPAY_RATING'))
+			Configuration::updateValue('HIPAY_RATING', 'ALL');
+		
 		return (parent::install() AND $this->registerHook('payment'));
 	}
 
@@ -159,7 +162,7 @@ class Hipay extends PaymentModule
 		$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
         if (trim($operation) == 'authorization' AND trim(strtolower($status)) == 'ok')
         {
-            /* Autorisation accepté */
+            /* Autorisation acceptée */
             $orderStatus = _PS_OS_PAYMENT_;
         }
         elseif (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
@@ -198,15 +201,14 @@ class Hipay extends PaymentModule
 			{
 				Configuration::updateValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_PASSWORD_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_SITEID_'.$currency['iso_code'], Tools::getValue('HIPAY_SITEID_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_SITEID_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_CATEGORY_'.$currency['iso_code'], Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code']));
 			}
-			Configuration::updateValue('HIPAY_PASSWORD', Tools::getValue('HIPAY_PASSWORD'));
-			Configuration::updateValue('HIPAY_PASSWORD_TEST', Tools::getValue('HIPAY_PASSWORD_TEST'));
-			Configuration::updateValue('HIPAY_SITEID', Tools::getValue('HIPAY_SITEID'));
-			Configuration::updateValue('HIPAY_SITEID_TEST', Tools::getValue('HIPAY_SITEID_TEST'));
-			
 			Configuration::updateValue('HIPAY_RATING', Tools::getValue('HIPAY_RATING'));
-			Configuration::updateValue('HIPAY_CATEGORY', Tools::getValue('HIPAY_CATEGORY'));
-
 			Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token').'&conf=4');
 		}
 		
@@ -216,6 +218,17 @@ class Hipay extends PaymentModule
 		$curl = extension_loaded('curl');
 		$ping = ($allow_url_fopen AND $openssl AND $fd = fsockopen('payment.hipay.com', 443) AND fclose($fd));
 		$online = (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')) ? false : true);
+		$categories = true;
+		$categoryRetrieval = true;
+		foreach ($currencies as $currency)
+		{
+			if (($hipaySiteId = Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) AND !count($this->getHipayCategories(true, $hipaySiteId)))
+			OR ($hipaySiteIdTest = Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']) AND !count($this->getHipayCategories(false, $hipaySiteIdTest))))
+				$categoryRetrieval = false;
+			if ((Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) AND !Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code']))
+			OR (Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']) AND !Configuration::get('HIPAY_CATEGORY_TEST_'.$currency['iso_code'])))
+				$categories = false;
+		}
 		if (!$allow_url_fopen OR !$openssl OR !$curl OR !$ping)
 		{
 			echo '
@@ -225,11 +238,21 @@ class Hipay extends PaymentModule
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
 				'.(($allow_url_fopen AND $openssl AND !$ping) ? '<h3>'.$this->l('Cannot access payment gateway').' '.HIPAY_GATEWAY_URL.' ('.$this->l('check your firewall').')</h3>' : '').'
 				'.($online ? '' : '<h3>'.$this->l('Your shop is not online').'</h3>').'
+				'.($categories ? '' : '<h3>'.$this->l('Hipay categories not set for every Site ID').'</h3>').'
+				'.($categoryRetrieval ? '' : '<h3>'.$this->l('Impossible to retrieve Hipay categories. Please refer to your error log for more details.').'</h3>').'
 			</div>';
 		}
 
 		$link = $currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token');
 		$form = '
+		<style>
+			.hipay_label {float:none;font-weight:normal;padding:0;text-align:left;width:100%;line-height:30px}
+			.hipay_help {vertical-align:middle}
+			#hipay_table {border:1px solid #383838}
+			#hipay_table td {border:1px solid #383838}
+			#hipay_table td.hipay_end {border-top:none}
+			#hipay_table td.hipay_block {border-bottom:none}
+		</style>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
 			'.$this->l('Hipay is a secure electronic wallet which provides, to the merchants, a complete service package for online business transactions: whether for digital contents, software, music, subscriptions, physical goods…without having to negotiate with a bank and without technical charges.').'<br />'.$this->l('Free & Easy, Hipay implementation is a real asset to an e-commerce website that wants to expand in Europe: secure payments by international cards, local payment solutions, bank transfers…').'
 			<br /><br />
@@ -246,51 +269,66 @@ class Hipay extends PaymentModule
 		<div class="clear">&nbsp;</div>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
 			<form action="'.$link.'" method="post">
-				<table cellspacing="0" border="0">
-					<tr style="height:40px;">
-						<td><b>'.$this->l('Account').'</b></td>
-						<td class="hipay_prod" style="width:160px;padding-left:8px">
+				<table id="hipay_table" cellspacing="0" cellpadding="0">
+					<tr style="height:40px">
+						<td style="padding-left:20px"><b>'.$this->l('Account').'</b></td>
+						<td class="hipay_prod" style="width:250px;padding-left:8px">
 							<input type="radio" name="HIPAY_PROD" value="1" '.((int)$this->prod ? 'checked="checked"' : '').'
 								onclick="switchHipayAccount(1);" />
 							<span class="hipay_prod_span">'.$this->l('real / production').'</span>
 						</td>
-						<td class="hipay_test" style="width:160px;padding-left:8px">
+						<td class="hipay_test" style="width:250px;padding-left:8px">
 							<input type="radio" name="HIPAY_PROD" value="0" '.((int)$this->prod ? '' : 'checked="checked"').'
 								onclick="switchHipayAccount(0);" />
 								<span class="hipay_test_span">'.$this->l('sandbox / test').'</span><br />
 						</td>
 					</tr>';
 		foreach ($currencies as $currency)
-			$form .= '<tr>
-						<td style="width: 250px">
-							<b>'.$this->l('Account number').' ('.$currency['name'].' '.$currency['sign'].')</b>
-							<p style="color:#7F7F7F;font-size:0.85em;">'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png" target="_blank">'.$this->l('screenshot').'</a></p>
-						</td>
-						<td class="hipay_prod" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_ACCOUNT_'.$currency['iso_code'].'" name="HIPAY_ACCOUNT_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code'])).'" /></td>
-						<td class="hipay_test" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'" name="HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'])).'" /></td>
-					</tr>';
-		$form .= '	<tr><td>&nbsp;</td><td class="hipay_prod">&nbsp;</td><td class="hipay_test">&nbsp;</td></tr>
-					<tr>
-						<td style="width: 250px">
-							<b>'.$this->l('Merchant password').'</b>
-							<p style="color:#7F7F7F;font-size:0.85em;">'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/merchantpassword.png" target="_blank">'.$this->l('screenshot').'</a></p>
-						</td>
-						<td class="hipay_prod" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_PASSWORD" name="HIPAY_PASSWORD" value="'.Tools::getValue('HIPAY_PASSWORD', Configuration::get('HIPAY_PASSWORD')).'" /></td>
-						<td class="hipay_test" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_PASSWORD_TEST" name="HIPAY_PASSWORD_TEST" value="'.Tools::getValue('HIPAY_PASSWORD_TEST', Configuration::get('HIPAY_PASSWORD_TEST')).'" /></td>
-					</tr>
-					<tr>
-						<td style="width: 250px">
-							<b>'.$this->l('Site ID').'</b>
-							<p style="color:#7F7F7F;font-size:0.85em;">'.$this->l('eg.').' <a href="../modules/'.$this->name.'/screenshots/siteid.png" target="_blank">'.$this->l('screenshot').'</a></p>
-						</td>
-						<td class="hipay_prod" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_SITEID" name="HIPAY_SITEID" value="'.Tools::getValue('HIPAY_SITEID', Configuration::get('HIPAY_SITEID')).'" /></td>
-						<td class="hipay_test" style="width:160px;padding-left:8px"><input type="text" id="HIPAY_SITEID_TEST" name="HIPAY_SITEID_TEST" value="'.Tools::getValue('HIPAY_SITEID_TEST', Configuration::get('HIPAY_SITEID_TEST')).'" /></td>
-					</tr>
-				</table>';
-		if ($ping AND $hipaySiteId = (int)($this->prod ? Configuration::get('HIPAY_SITEID') : Configuration::get('HIPAY_SITEID_TEST')))
 		{
-		    $form .= '<hr class="clear" />
-	          	<label for="HIPAY_RATING">'.$this->l('Authorized age group').'</label>
+			$form .= '<tr>
+						<td style="width:200px;padding-left:20px" class="hipay_block"><b>'.$this->l('Configuration in').' '.$currency['name'].' '.$currency['sign'].'</b></td>
+						<td class="hipay_prod hipay_block" style="padding-left:10px">
+							<label class="hipay_label" for="HIPAY_ACCOUNT_'.$currency['iso_code'].'">'.$this->l('Account number').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_ACCOUNT_'.$currency['iso_code'].'" name="HIPAY_ACCOUNT_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code'])).'" /><br />
+							<label class="hipay_label" for="HIPAY_PASSWORD_'.$currency['iso_code'].'">'.$this->l('Merchant password').' <a href="../modules/'.$this->name.'/screenshots/merchantpassword.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_PASSWORD_'.$currency['iso_code'].'" name="HIPAY_PASSWORD_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_PASSWORD_'.$currency['iso_code'], Configuration::get('HIPAY_PASSWORD_'.$currency['iso_code'])).'" /><br />
+							<label class="hipay_label" for="HIPAY_SITEID_'.$currency['iso_code'].'">'.$this->l('Site ID').' <a href="../modules/'.$this->name.'/screenshots/siteid.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_SITEID_'.$currency['iso_code'].'" name="HIPAY_SITEID_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_SITEID_'.$currency['iso_code'], Configuration::get('HIPAY_SITEID_'.$currency['iso_code'])).'" /><br />';
+			if ($ping AND $hipaySiteId = (int)Configuration::get('HIPAY_SITEID_'.$currency['iso_code']))
+			{
+				$form .= '	<label for="HIPAY_CATEGORY_'.$currency['iso_code'].'">'.$this->l('Category').'</label>
+							<div class="margin-form">
+								<select id="HIPAY_CATEGORY_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_'.$currency['iso_code'].'">';
+				foreach ($this->getHipayCategories(true, $hipaySiteId) as $id => $name)
+					$form.= '		<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+				$form .= '		</select>
+							</div>';
+			}
+			$form .= '	</td>
+						<td class="hipay_test hipay_block" style="padding-left:10px">
+							<label class="hipay_label" for="HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'">'.$this->l('Test account number').' <a href="../modules/'.$this->name.'/screenshots/accountnumber.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'" name="HIPAY_ACCOUNT_TEST_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'])).'" /><br />
+							<label class="hipay_label" for="HIPAY_PASSWORD_TEST_'.$currency['iso_code'].'">'.$this->l('Merchant password').' <a href="../modules/'.$this->name.'/screenshots/merchantpassword.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_PASSWORD_TEST_'.$currency['iso_code'].'" name="HIPAY_PASSWORD_TEST_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_PASSWORD_TEST_'.$currency['iso_code'])).'" /><br />
+							<label class="hipay_label" for="HIPAY_SITEID_TEST_'.$currency['iso_code'].'">'.$this->l('Site ID').' <a href="../modules/'.$this->name.'/screenshots/siteid.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
+							<input type="text" id="HIPAY_SITEID_TEST_'.$currency['iso_code'].'" name="HIPAY_SITEID_TEST_'.$currency['iso_code'].'" value="'.Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code'])).'" /><br />';
+			if ($ping AND $hipaySiteId = (int)Configuration::get('HIPAY_SITEID_TEST_'.$currency['iso_code']))
+			{
+				$form .= '	<label for="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'">'.$this->l('Category').'</label>
+							<div class="margin-form">
+								<select id="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_TEST_'.$currency['iso_code'].'">';
+				foreach ($this->getHipayCategories(true, $hipaySiteId) as $id => $name)
+					$form.= '		<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], Configuration::get('HIPAY_CATEGORY_TEST_'.$currency['iso_code'])) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
+				$form .= '		</select>
+							</div>';
+			}
+			$form .= '	</td>
+					</tr>
+					<tr><td class="hipay_end">&nbsp;</td><td class="hipay_prod hipay_end">&nbsp;</td><td class="hipay_test hipay_end">&nbsp;</td></tr>';
+		}
+		$form .= '</table>
+				<hr class="clear" />
+				<label for="HIPAY_RATING">'.$this->l('Authorized age group').'</label>
 				<div class="margin-form">
 					<select id="HIPAY_RATING" name="HIPAY_RATING">
 						<option value="ALL">'.$this->l('For all ages').'</option>
@@ -299,17 +337,7 @@ class Hipay extends PaymentModule
 						<option value="18+" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '18+' ? 'selected="selected"' : '').'>'.$this->l('For ages 18 and over').'</option>
 					</select>
 				</div>
-				<div class="clear">&nbsp;</div>
-	          	<label for="HIPAY_CATEGORY">'.$this->l('Main category').'</label>
-				<div class="margin-form">
-					<select id="HIPAY_CATEGORY" name="HIPAY_CATEGORY">';
-			foreach ($this->getHipayCategories($this->prod, $hipaySiteId) as $id => $name)
-				$form.= '<option value="'.(int)$id.'" '.(Tools::getValue('HIPAY_CATEGORY', Configuration::get('HIPAY_CATEGORY')) == $id ? 'selected="selected"' : '').'>'.htmlentities($name, ENT_COMPAT, 'UTF-8').'</option>';
-			$form .= '	</select>
-					'.(!count($this->getHipayCategories($this->prod, $hipaySiteId)) ? '<p style="color:red">'.$this->l('Impossible to retrieve Hipay categories. Please refer to your error log for more details.').'</p>' : '').'
-				</div>';
-		}
-		$form .= '<hr class="clear" />
+				<hr class="clear" />
 				<p>'.$this->l('Notice: please verify that the currency mode you\'ve chosen in the payment tab is compatible with your Hipay account(s).').'</p>
 				<input type="submit" name="submitHipay" value="'.$this->l('Update configuration').'" class="button" />
         	</form>
