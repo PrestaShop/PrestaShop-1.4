@@ -53,7 +53,7 @@ class sendToAFriend extends Module
 			else
 			{
 				/* Email generation */
-				$subject = ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : $this->l('A friend')).' '.$this->l('send you a link to').' '.$product->name;
+				$subject = ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : $this->l('A friend')).' '.$this->l('sent you a link to').' '.$product->name;
 				$templateVars = array(
 					'{product}' => $product->name,
 					'{product_link}' => $productLink,
