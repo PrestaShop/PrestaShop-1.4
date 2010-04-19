@@ -196,6 +196,8 @@ class		Product extends ObjectModel
 
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
+		global $cart;
+		
 		parent::__construct($id_product, $id_lang);
 		if ($full AND $this->id)
 		{
@@ -203,7 +205,10 @@ class		Product extends ObjectModel
 			$this->manufacturer_name = Manufacturer::getNameById(intval($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById(intval($this->id_supplier));
 			$tax = new Tax(intval($this->id_tax));
-			$this->tax_rate = Tax::getApplicableTax(intval($this->id_tax), floatval($tax->rate));
+			if (is_object($cart) AND $cart->id_address_delivery != NULL)
+				$this->tax_rate = Tax::getApplicableTax(intval($this->id_tax), floatval($tax->rate));
+			else
+				$this->tax_rate = floatval($tax->rate);
 			$this->new = $this->isNew();
 		}
 		

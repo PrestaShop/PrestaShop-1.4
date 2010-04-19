@@ -130,7 +130,7 @@ class AdminScenes extends AdminTab
 			echo 'startingData = new Array();'."\n";
 			foreach ($obj->getProducts() as $key => $product)
 			{
-				$productObj = new Product($product['id_product'], $full = true, $cookie->id_lang);
+				$productObj = new Product(intval($product['id_product']), true, intval($cookie->id_lang));
 				echo 'startingData['.$key.'] = new Array(\''.$productObj->name.'\', '.$product['id_product'].', '.$product['x_axis'].', '.$product['y_axis'].', '.$product['zone_width'].', '.$product['zone_height'].');';
 			}
 			
