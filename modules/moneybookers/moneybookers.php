@@ -118,6 +118,15 @@ class MoneyBookers extends PaymentModule
 		$iso_img = $lang->iso_code;
 		if ($lang->iso_code != 'fr' AND $lang->iso_code != 'en')
 			$iso_img = 'en';
+		
+		$manual_links = array(
+			'en' => 'http://www.prestashop.com/partner/Activation_Manual_Prestashop_EN.pdf',
+			'es' => 'http://www.prestashop.com/partner/Manual%20de%20Activacion%20Prestashop_ES.pdf',
+			'fr' => 'http://www.prestashop.com/partner/Manuel_Activation_Prestashop_FR.pdf'
+		);
+		$iso_manual = $lang->iso_code;
+		if (!array_key_exists($lang->iso_code, $manual_links))
+			$iso_manual = 'en';
 
 		/* Display settings form */
 		$output .= '
@@ -145,6 +154,7 @@ class MoneyBookers extends PaymentModule
 			</style>
 			<fieldset style="width: 650px;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Settings').'</legend>
+				<p><a href="'.$manual_links[$iso_manual].'" target="_blank">'.$this->l('Consult the manual for activation and configuration of Moneybookers on PrestaShop').'</a></p>
 				<label>'.$this->l('Your e-mail address:').'</label>
 				<div class="margin-form">
 					<input type="text" name="mb_pay_to_email" value="'.Configuration::get('MB_PAY_TO_EMAIL').'" />

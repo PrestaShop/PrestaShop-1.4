@@ -20,6 +20,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_b0b7f63af58ca5585787aa46a972bb8
 $_MODULE['<{moneybookers}prestashop>moneybookers_e545ce3f77ed798605ba3dc853e7e040'] = 'Moneybookers es una de los sistemas de pago en línea más importantes de Europa, propone más de 80 opciones de pago en más de 200 países en todo el mundo. Más de 60 000 comerciantes, como eBay.com, Skype et Thomas Cook utilizan ya Moneybookers. ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_04a0e2e14bfc47151f158db3c1b03661'] = 'Moneybookers fue fundado en 2001 en Londres y está regulado por la Autoridad de Servicios Financieros del Reino Unido.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
+$_MODULE['<{moneybookers}prestashop>moneybookers_dcdd329440459d191d3caa192028ebef'] = 'Consulte el manual para la activación y configuración de Moneybookers en PrestaShop';
 $_MODULE['<{moneybookers}prestashop>moneybookers_cb7a0a41ef8d2fb632ae4a56d04fbc7f'] = 'Su dirección de email:';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c5107a07a5be59f893a4184e09cecc21'] = 'Su palabra secreta:';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c3592b2bb3405f766f58dac4378306bd'] = 'Página que se muestra después del pago ok:';
