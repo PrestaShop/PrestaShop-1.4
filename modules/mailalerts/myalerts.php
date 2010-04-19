@@ -25,15 +25,16 @@ if ($cookie->isLogged())
 else
 	$errors[] = Tools::displayError('You need to be logged to manage your alerts'); 
 
-$smarty->assign('id_customer', intval($cookie->id_customer));
-$smarty->assign('errors', $errors);
+$smarty->assign(array(
+	'id_customer' => intval($cookie->id_customer),
+	'errors' => $errors
+));
 
 if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl'))
-	$smarty->display(_THEME_DIR_.'modules/mailalerts/myalerts.tpl');
-elseif (Tools::file_exists_cache(dirname(__FILE__).'/mailalerts/myalerts.tpl'))
-	$smarty->display(__PS_BASE_URI__.'modules/mailalerts/myalerts.tpl');
+	$smarty->display(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl');
+elseif (Tools::file_exists_cache(dirname(__FILE__).'/myalerts.tpl'))
+	$smarty->display(dirname(__FILE__).'/myalerts.tpl');
 else
-	Tools::displayError('No template found');
-
+	echo Tools::displayError('No template found');
 
 include(dirname(__FILE__).'/../../footer.php');
