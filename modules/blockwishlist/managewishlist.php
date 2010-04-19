@@ -70,11 +70,19 @@ if ($cookie->isLogged())
 			foreach ($products as $product)
 				if (sizeof($product['bought']))
 					$productBoughts[] = $product;
-			$smarty->assign('products', $products);
-			$smarty->assign('productsBoughts', $productBoughts);
-			$smarty->assign('id_wishlist', $id_wishlist);
-			$smarty->assign('refresh',  $refresh);
-			$smarty->display(dirname(__FILE__).'/managewishlist.tpl');
+			$smarty->assign(array(
+				'products' => $products,
+				'productsBoughts' => $productBoughts,
+				'id_wishlist' => $id_wishlist,
+				'refresh' => $refresh
+			));
+			
+			if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl'))
+				$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl');
+			elseif (Tools::file_exists_cache(dirname(__FILE__).'/managewishlist.tpl'))
+				$smarty->display(dirname(__FILE__).'/managewishlist.tpl');
+			else
+				echo Tools::displayError('No template found');
 		}
 	}
 }

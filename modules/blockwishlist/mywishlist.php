@@ -59,9 +59,17 @@ else
 	Tools::redirect('authentication.php?back=/modules/blockwishlist/mywishlist.php');
 }
 
-$smarty->assign('id_customer', intval($cookie->id_customer));
-$smarty->assign('errors', $errors);
-$smarty->display(dirname(__FILE__).'/mywishlist.tpl');
+$smarty->assign(array(
+	'id_customer' => intval($cookie->id_customer),
+	'errors' => $errors
+));
+
+if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/mywishlist.tpl'))
+	$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/mywishlist.tpl');
+elseif (Tools::file_exists_cache(dirname(__FILE__).'/mywishlist.tpl'))
+	$smarty->display(dirname(__FILE__).'/mywishlist.tpl');
+else
+	echo Tools::displayError('No template found');
 
 include(dirname(__FILE__).'/../../footer.php');
 

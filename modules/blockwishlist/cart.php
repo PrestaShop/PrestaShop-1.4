@@ -42,7 +42,13 @@ if ($cookie->isLogged())
 			WishList::removeProduct($cookie->id_wishlist, $cookie->id_customer, $id_product, $id_product_attribute);
 	}
 	$smarty->assign('products', WishList::getProductByIdCustomer($cookie->id_wishlist, $cookie->id_customer, $cookie->id_lang, null, true));
-	$smarty->display(dirname(__FILE__).'/blockwishlist-ajax.tpl');
+	
+	if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl'))
+		$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl');
+	elseif (Tools::file_exists_cache(dirname(__FILE__).'/blockwishlist-ajax.tpl'))
+		$smarty->display(dirname(__FILE__).'/blockwishlist-ajax.tpl');
+	else
+		echo Tools::displayError('No template found');
 }
 else
 	$errors[] = Tools::displayError('You need to be logged to manage your wishlist');

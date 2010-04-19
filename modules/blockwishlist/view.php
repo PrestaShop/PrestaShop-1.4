@@ -52,6 +52,11 @@ if (empty($token) === false)
 	$smarty->assign('products', $products);
 }
 
-$smarty->display(dirname(__FILE__).'/view.tpl');
+if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/view.tpl'))
+	$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/view.tpl');
+elseif (Tools::file_exists_cache(dirname(__FILE__).'/view.tpl'))
+	$smarty->display(dirname(__FILE__).'/view.tpl');
+else
+	echo Tools::displayError('No template found');
 
 require(dirname(__FILE__).'/../../footer.php');
