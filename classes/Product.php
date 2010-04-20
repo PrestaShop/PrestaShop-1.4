@@ -997,7 +997,10 @@ class		Product extends ObjectModel
 		$result2 = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
 		WHERE `id_product_attribute` = '.intval($id_product_attribute));
-		return ($result & $result2);
+		$result3 = Db::getInstance()->Execute('
+		DELETE FROM `'._DB_PREFIX_.'cart_product`
+		WHERE `id_product_attribute` = '.intval($id_product_attribute));
+		return ($result AND $result2 AND $result3);
 	}
 
 	/**
