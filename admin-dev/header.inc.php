@@ -112,8 +112,13 @@ require_once(dirname(__FILE__).'/init.php');
 						echo '<option value="0">'.translate('Quick access').'</option>';
 						foreach ($quicks AS &$quick)
 						{
-							preg_match('/tab=(.+)&/', $quick['link'], $adminTab);
-							$quick['link'] .= ($adminTab ? '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee)) : '');
+							preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
+							if (isset($adminTab[1]))
+							{
+								if (strpos($adminTab[1], '&'))
+									$adminTab[1] = substr($adminTab[1], 0, strpos($adminTab[1], '&'));
+								$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee));
+							}
 							echo '<option value="'.$quick['link'].($quick['new_window'] ? '_blank' : '').'">&gt; '.Category::hideCategoryPosition($quick['name']).'</option>';
 						}
 					?>
