@@ -18,7 +18,6 @@
 	</p>
 
 	{if $nbManufacturers > 0}
-		{include file=$tpl_dir./product-sort.tpl}
 		<ul id="manufacturers_list">
 		{foreach from=$manufacturers item=manufacturer}
 			<li>
