@@ -187,9 +187,9 @@ INSERT INTO `PREFIX_scene_products` (`id_scene`, `id_product`, `x_axis`, `y_axis
 (3, 5, 198, 47, 137, 92),(1, 1, 394, 14, 73, 168),(1, 1, 318, 14, 69, 168),(1, 1, 244, 14, 66, 169),(1, 1, 180, 13, 59, 168),(1, 1, 6, 12, 30, 175),
 (1, 1, 38, 12, 30, 170),(1, 1, 76, 14, 41, 169),(1, 1, 123, 13, 49, 169);
 
-INSERT INTO `PREFIX_attribute` (`id_attribute`, `id_attribute_group`) VALUES (1, 1),(2, 1),(8, 1),(9, 1),(10, 3),(11, 3),(12, 1),(13, 1),(14, 2);
+INSERT INTO `PREFIX_attribute` (`id_attribute`, `id_attribute_group`) VALUES (1, 1),(2, 1),(8, 1),(9, 1),(10, 3),(11, 3),(12, 1),(13, 1);
 INSERT INTO `PREFIX_attribute` (`id_attribute`, `id_attribute_group`, `color`) VALUES (3, 2, '#D2D6D5'),(4, 2, '#008CB7'),(5, 2, '#F3349E'),(6, 2, '#93D52D'),
-(7, 2, '#FD9812'),(15, 1, ''),(16, 1, ''),(17, 1, ''),(18, 2, '#7800F0'),(19, 2, '#F6EF04'),(20, 2, '#F60409');
+(7, 2, '#FD9812'),(15, 1, ''),(16, 1, ''),(17, 1, ''),(18, 2, '#7800F0'),(19, 2, '#F6EF04'),(20, 2, '#F60409'),(14, 2, '#000000');
 
 INSERT INTO `PREFIX_attribute_lang` VALUES (1, 1, '2GB'),(1, 2, '2Go'),(1, 3, '2Go'),(2, 1, '4GB'),(2, 2, '4Go'),(2, 3, '4Go'),(3, 1, 'Metal'),(3, 2, 'Metal'),(3, 3, 'Metal'),
 (4, 1, 'Blue'),(4, 2, 'Bleu'),(4, 3, 'Azul'),(5, 1, 'Pink'),(5, 2, 'Rose'),(5, 3, 'Rosa'),(6, 1, 'Green'),(6, 2, 'Vert'),(6, 3, 'Verde'),(7, 1, 'Orange'),(7, 2, 'Orange'),
