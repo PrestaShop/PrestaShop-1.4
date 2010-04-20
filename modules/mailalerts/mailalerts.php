@@ -214,6 +214,8 @@ class MailAlerts extends Module
 
 	public function hookUpdateQuantity($params)
 	{
+		global $cookie;
+		
 		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
 		if ($qty <= intval(Configuration::get('mA_last_qties')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
@@ -221,7 +223,9 @@ class MailAlerts extends Module
 				'{qty}' => $qty - $params['product']['cart_quantity'],
 				'{last_qty}' => intval(Configuration::get('mA_last_qties')),
 				'{product}' => strval($params['product']['name']));
-			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			$iso = Language::getIsoById(intval($cookie->id_lang));
+			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
+				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
 		
 		if ($this->_customer_qty AND $params['product']->quantity > 0)
@@ -247,6 +251,8 @@ class MailAlerts extends Module
 	
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
+		global $cookie;
+		
 		$customers = Db::getInstance()->ExecuteS('
 			SELECT id_customer, customer_email
 			FROM `'._DB_PREFIX_.'mailalert_customer_oos`
@@ -271,7 +277,9 @@ class MailAlerts extends Module
 				$customer_email = $cust['customer_email'];
 				$customer_id = 0;
 			}
-			Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', $this->l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			$iso = Language::getIsoById(intval($cookie->id_lang));
+			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.html'))
+				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', $this->l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			if ($customer_id)
 				$customer_email = 0;
 			self::deleteAlert(intval($customer_id), strval($customer_email), intval($id_product), intval($id_product_attribute));
