@@ -90,8 +90,12 @@ class		OrderHistory extends ObjectModel
 
 			if ($newOS->invoice AND !$order->invoice_number)
 				$order->setInvoice();
+			if (!$newOS->invoice AND $order->invoice_number)
+				$order->unsetInvoice();
 			if ($newOS->delivery AND !$order->delivery_number)
 				$order->setDelivery();
+			if (!$newOS->delivery AND $order->delivery_number)
+				$order->unsetDelivery();
 			Hook::postUpdateOrderStatus(intval($new_order_state), intval($id_order));
 		}
 	}

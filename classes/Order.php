@@ -689,7 +689,17 @@ class		Order extends ObjectModel
 		// Save
 		$this->update();
 	}
-	
+
+	public function unsetInvoice()
+	{
+		$this->invoice_number = 0;
+
+		$this->invoice_date = '0000-00-00 00:00:00';
+
+		// Save
+		$this->update();
+	}
+
 	public function setDelivery()
 	{
 		// Set delivery number
@@ -706,6 +716,17 @@ class		Order extends ObjectModel
 		$this->update();
 	}
 	
+	public function unsetDelivery()
+	{
+		$this->delivery_number = 0;
+
+		// Set delivery date
+		$this->delivery_date = '0000-00-00';
+
+		// Update object
+		$this->update();
+	}
+	
 	static public function printPDFIcons($id_order, $tr)
 	{
 		$order = new Order($id_order);
@@ -713,13 +734,13 @@ class		Order extends ObjectModel
 		if (!Validate::isLoadedObject($orderState) OR !Validate::isLoadedObject($order))
 			die(Tools::displayError('Invalid objects!'));
 		echo '<span style="width:20px; margin-right:5px;">';
-		if (($orderState->invoice OR $order->invoice_number) AND intval($tr['product_number']))
+		if (($orderState->invoice AND $order->invoice_number) AND intval($tr['product_number']))
 			echo '<a href="pdf.php?id_order='.intval($order->id).'&pdf"><img src="../img/admin/tab-invoice.gif" alt="invoice" /></a>';
 		else
 			echo '&nbsp;';
 		echo '</span>';
 		echo '<span style="width:20px;">';
-		if ($orderState->delivery OR $order->delivery_number)
+		if ($orderState->delivery AND $order->delivery_number)
 			echo '<a href="pdf.php?id_delivery='.intval($order->delivery_number).'"><img src="../img/admin/delivery.gif" alt="delivery" /></a>';
 		else
 			echo '&nbsp;';
