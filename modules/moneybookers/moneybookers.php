@@ -122,8 +122,8 @@ class MoneyBookers extends PaymentModule
 		$manual_links = array(
 			'en' => 'http://www.prestashop.com/partner/Activation_Manual_Prestashop_EN.pdf',
 			'es' => 'http://www.prestashop.com/partner/Manual%20de%20Activacion%20Prestashop_ES.pdf',
-			'fr' => 'http://www.prestashop.com/partner/Manuel_Activation_Prestashop_FR.pdf'
-		);
+			'fr' => 'http://www.prestashop.com/partner/Manuel_Activation_Prestashop_FR.pdf');
+
 		$iso_manual = $lang->iso_code;
 		if (!array_key_exists($lang->iso_code, $manual_links))
 			$iso_manual = 'en';
@@ -209,8 +209,23 @@ class MoneyBookers extends PaymentModule
 
 	public function hookPayment($params)
 	{
-		/* Display the MoneyBookers iframe */
-		return $this->display(__FILE__, 'moneybookers.tpl');
+		$flag = false;
+		$allowedCurrencies = $this->getCurrency();
+		foreach ($allowedCurrencies AS $allowedCurrency)
+			if ($allowedCurrency['id_currency'] == $params['cart']->id_currency)
+			{
+				$flag = true;
+				break;
+			}
+			
+		if (!$flag)
+		{
+			/* Uncomment the line below if you'd like to display an error message, rather than not showing the Moneybookers module */
+			// return $this->display(__FILE__, 'moneybookers-currency-error.tpl');
+		}
+		else
+			/* Display the MoneyBookers iframe */
+			return $this->display(__FILE__, 'moneybookers.tpl');
 	}
 
 	public function hookPaymentReturn($params)
