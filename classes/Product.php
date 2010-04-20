@@ -1655,6 +1655,8 @@ class		Product extends ObjectModel
 
 	public static function isAvailableWhenOutOfStock($oos)
 	{
+		if ($oos == 0)
+			return false;
 		return !Configuration::get('PS_STOCK_MANAGEMENT') ? true : (intval($oos) == 2 ? intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : intval($oos));
 	}
 

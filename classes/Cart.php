@@ -1044,10 +1044,9 @@ class		Cart extends ObjectModel
 
 	public function checkQuantities()
 	{
-		if (Configuration::get('PS_STOCK_MANAGEMENT'))
-			foreach ($this->getProducts() AS $product)
-			    if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']))
-			    	return false;
+		foreach ($this->getProducts() AS $product)
+			if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']))
+				return false;
 		return true;
 	}
 
