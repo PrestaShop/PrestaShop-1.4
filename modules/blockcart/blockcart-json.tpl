@@ -8,7 +8,7 @@
 		'link':          '{$link->getProductLink($product.id_product, $product.link_rewrite, $product.category)|addslashes}',
 		'quantity':      {$product.cart_quantity},
 		'priceByLine':   '{if $priceDisplay == $smarty.const.PS_TAX_EXC}{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.total}{else}{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.total_wt}{/if}',
-		'name':          '{$product.name|addslashes|truncate:16:'...':true|escape:'htmlall':'UTF-8'}',
+		'name':          '{$product.name|html_entity_decode:2:'UTF-8'|addslashes|truncate:15:'...':true}',
 		'price':         '{if $priceDisplay == $smarty.const.PS_TAX_EXC}{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.total}{else}{displayWtPrice|html_entity_decode:2:'UTF-8' p=$product.total_wt}{/if}',
 		'idCombination': {if isset($product.attributes_small)}{$productAttributeId}{else}0{/if},
 {if isset($product.attributes_small)}
