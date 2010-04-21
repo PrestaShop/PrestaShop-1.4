@@ -103,6 +103,12 @@ function d($var) {
 	Tools::d($var);
 }
 
+if (!defined('PHP_VERSION_ID')) 
+{
+    $version = explode('.', PHP_VERSION);
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
 /* Order states */
 define('_PS_OS_CHEQUE_',      1);
 define('_PS_OS_PAYMENT_',     2);

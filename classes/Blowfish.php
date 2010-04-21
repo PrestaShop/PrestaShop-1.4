@@ -296,8 +296,7 @@ class Crypt_Blowfish
         $datal = 0;
         $datar = 0;
 		
-		$phpVersion = phpversion();
-		if ($phpVersion == '5.2.1' OR $phpVersion == '5.2.6')
+		if (PHP_VERSION_ID == '50201' OR PHP_VERSION_ID == '50206')
 			$this->_unpackMode = PS_UNPACK_MODIFIED;
 
         for ($i = 0; $i < 18; $i++)
