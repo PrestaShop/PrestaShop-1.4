@@ -690,16 +690,6 @@ class		Order extends ObjectModel
 		$this->update();
 	}
 
-	public function unsetInvoice()
-	{
-		$this->invoice_number = 0;
-
-		$this->invoice_date = '0000-00-00 00:00:00';
-
-		// Save
-		$this->update();
-	}
-
 	public function setDelivery()
 	{
 		// Set delivery number
@@ -712,17 +702,6 @@ class		Order extends ObjectModel
 		// Set delivery date
 		$this->delivery_date = date('Y-m-d H:i:s');
 		
-		// Update object
-		$this->update();
-	}
-	
-	public function unsetDelivery()
-	{
-		$this->delivery_number = 0;
-
-		// Set delivery date
-		$this->delivery_date = '0000-00-00';
-
 		// Update object
 		$this->update();
 	}
