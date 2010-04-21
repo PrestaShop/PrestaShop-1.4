@@ -27,7 +27,6 @@ Release Notes for PrestaShop 1.3
 	[-] BO : fixed bug #4208 - fixed edit of scene on Back Office
 	
 	[-] Classes : fixed small bug on stock management (#4182)
-	[-] Classes : now when you cancelled an order, invoice remove and not generated (#3627)
 	[-] Classes : fixed bug #4211 - when you delete a product attribute, the product with this attribute on cart are deleted
 	[-] Classes : now we allow the # char on message (#4184)
 	
