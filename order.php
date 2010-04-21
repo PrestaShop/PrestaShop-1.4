@@ -408,7 +408,11 @@ function displayPayment()
 	$smarty->assign($cart->getSummaryDetails());
 
 	$cookie->checkedTOS = '1';
-	$smarty->assign(array('HOOK_PAYMENT' => Module::hookExecPayment(), 'total_price' => floatval($orderTotal)));
+	$smarty->assign(array(
+		'HOOK_PAYMENT' => Module::hookExecPayment(), 
+		'total_price' => floatval($orderTotal),
+		'taxes_enabled' => intval(Configuration::get('PS_TAX'))
+	));
 
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');

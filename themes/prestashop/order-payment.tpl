@@ -15,7 +15,7 @@
 {include file=$tpl_dir./errors.tpl}
 
 {if $HOOK_PAYMENT}
-	<h4>{l s='Please choose the payment method you want to use to pay the amount of'}&nbsp;<span class="price">{convertPrice price=$total_price}</span> {l s='(tax incl.)'}</h4><br />
+	<h4>{l s='Please choose the payment method you want to use to pay the amount of'}&nbsp;<span class="price">{convertPrice price=$total_price}</span> {if $taxes_enabled}{l s='(tax incl.)'}{/if}</h4><br />
 	{$HOOK_PAYMENT}
 {else}
 	<p class="warning">{l s='No payment modules have been installed yet.'}</p>
