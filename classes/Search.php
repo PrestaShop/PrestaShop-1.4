@@ -129,6 +129,7 @@ class Search
 	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false)
 	{
 		global $cookie;
+		$db = Db::getInstance();
 
 		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
@@ -136,7 +137,7 @@ class Search
 		
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
-			
+		
 		$whereArray = array();
 		$scoreArray = array();
 		$words = explode(' ', Search::sanitize($expr, $id_lang));
@@ -172,62 +173,53 @@ class Search
 				AND ('.implode(' OR ', $scoreArray).')
 			) as position';
 			
-		$productPool = Db::getInstance()->getValue('
-		SELECT GROUP_CONCAT(DISTINCT cp.`id_product`)
+		$eligibleProducts = $db->ExecuteS('
+		SELECT DISTINCT cp.`id_product`
 		FROM `'._DB_PREFIX_.'category_group` cg
-		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON cp.`id_category` = cg.`id_category`
-		WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (
-			SELECT id_group
-			FROM '._DB_PREFIX_.'customer_group
+		INNER JOIN `'._DB_PREFIX_.'category_product` cp ON cp.`id_category` = cg.`id_category`
+		INNER JOIN `'._DB_PREFIX_.'category` c ON cp.`id_category` = c.`id_category`
+		INNER JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
+		WHERE c.`active` = 1 AND p.`active` = 1 
+		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (
+			SELECT id_group FROM '._DB_PREFIX_.'customer_group
 			WHERE id_customer = '.intval($cookie->id_customer).'
-		)'));
+		)').'
+		AND '.implode(' AND ', $whereArray));
 		
+		$productPool = '';
+		foreach ($eligibleProducts as $product)
+			$productPool .= $product['id_product'].',';
 		if (empty($productPool))
 			return ($ajax ? array() : array('total' => 0, 'result' => array()));
-		elseif (strpos($productPool, ',') === false)
-			$productPool = ' = '.(int)$productPool.' ';
-		else
-			$productPool = ' IN ('.$productPool.') ';
-			
+		$productPool = (strpos($productPool, ',') === false ? ' = '.(int)$productPool.' ' : ' IN ('.rtrim($productPool, ',').') ');
 		
 		if ($ajax)
 		{
 			$queryResults = '
-			SELECT DISTINCT p.id_product, pl.name as pname, IF(cl.name REGEXP "^[0-9]{2}\\.", SUBSTRING(cl.name, 4), cl.name) as cname	'.$score.', cl.link_rewrite as crewrite, pl.link_rewrite as prewrite
+			SELECT DISTINCT p.id_product, pl.name as pname, IF(cl.name REGEXP "^[0-9]{2}\\.", SUBSTRING(cl.name, 4), cl.name) as cname,
+				cl.link_rewrite as crewrite, pl.link_rewrite as prewrite '.$score.'
 			FROM '._DB_PREFIX_.'product p
-			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
-			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
-			LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
-			WHERE '.implode(' AND ', $whereArray).'
-			AND p.active = 1
-			AND c.`active` = 1 
-			AND p.`id_product` '.$productPool.'
-			ORDER BY position DESC
-			LIMIT 10';
-			return Db::getInstance()->ExecuteS($queryResults);
+			INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+			INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+			WHERE p.`id_product` '.$productPool.'
+			ORDER BY position DESC LIMIT 10';
+			return $db->ExecuteS($queryResults);
 		}
 
 		$queryResults = '
-		SELECT SQL_CALC_FOUND_ROWS DISTINCT p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
-		t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name 
-		'.$score.'
+		SELECT SQL_CALC_FOUND_ROWS p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
+			t.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name '.$score.'
 		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-		LEFT OUTER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (p.`id_tax` = t.`id_tax`)
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
-		LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
-		WHERE '.implode(' AND ', $whereArray).'
-		AND p.active = 1
-		AND c.`active` = 1 
-		AND p.`id_product` '.$productPool.'
+		INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		INNER JOIN `'._DB_PREFIX_.'tax` t ON p.`id_tax` = t.`id_tax`
+		INNER JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
+		INNER JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
+		INNER JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		WHERE p.`id_product` '.$productPool.'
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
-		$result = Db::getInstance()->ExecuteS($queryResults);
-		$total = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
+		$result = $db->ExecuteS($queryResults);
+		$total = $db->getValue('SELECT FOUND_ROWS()');
 
 		Module::hookExec('search', array('expr' => $expr, 'total' => $total));
 
