@@ -55,7 +55,7 @@ class		Meta extends ObjectModel
 		'attachment', 'cart', 'order', 'my-account', 'history', 'addresses', 'address', 'identity', 'discount', 'authentication', 'search',
 		'get-file', 'order-slip', 'order-detail', 'order-follow', 'order-return', 'order-confirmation', 'pagination', 'pdf-invoice',
 		'pdf-order-return', 'pdf-order-slip', 'product-sort', 'statistics', 'zoom', 'images.inc', 'header', 'footer', 'init',
-		'category', 'product', 'cms');
+		'category', 'product', 'cms', 'password');
 		foreach ($files as $file)
 			if (preg_match('/^[a-z0-9_.-]*\.php$/i', $file) AND !in_array(str_replace('.php', '', $file), $exludePages))
 				$selectedPages[] = str_replace('.php', '', $file);
