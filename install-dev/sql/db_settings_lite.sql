@@ -175,7 +175,7 @@ INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`, `enabled`) VALUES
 (1, 'Europe', 1, 1),(2, 'US', 1, 1),(3, 'Asia', 1, 1),(4, 'Africa', 1, 1),(5, 'Oceania', 1, 1);
 
 INSERT INTO `PREFIX_country` (`id_country`, `id_zone`, `iso_code`, `active`, `contains_states`, `need_identification_number`) VALUES
-(1, 1, 'DE', 1, 0, 0),(2, 1, 'AT', 1, 0, 0),(3, 1, 'BE', 1, 0, 0),(4, 2, 'CA', 1, 0, 0),(5, 3, 'CN', 1, 0, 0),(6, 1, 'ES', 1, 0, 1),(7, 1, 'FI', 1, 0, 0),(8, 1, 'FR', 1, 0, 0),(9, 1, 'GR', 1, 0, 0),
+(1, 1, 'DE', 1, 0, 0),(2, 1, 'AT', 1, 0, 0),(3, 1, 'BE', 1, 0, 0),(4, 2, 'CA', 1, 1, 0),(5, 3, 'CN', 1, 0, 0),(6, 1, 'ES', 1, 0, 1),(7, 1, 'FI', 1, 0, 0),(8, 1, 'FR', 1, 0, 0),(9, 1, 'GR', 1, 0, 0),
 (10, 1, 'IT', 1, 0, 0),(11, 3, 'JP', 1, 0, 0),(12, 1, 'LU', 1, 0, 0),(13, 1, 'NL', 1, 0, 0),(14, 1, 'PL', 1, 0, 0),(15, 1, 'PT', 1, 0, 0),(16, 1, 'CZ', 1, 0, 0),(17, 1, 'GB', 1, 0, 0),(18, 1, 'SE', 1, 0, 0),
 (19, 1, 'CH', 1, 0, 0),(20, 1, 'DK', 1, 0, 0),(21, 2, 'US', 1, 1, 0),(22, 3, 'HK', 1, 0, 0),(23, 1, 'NO', 1, 0, 0),(24, 5, 'AU', 1, 0, 0),(25, 3, 'SG', 1, 0, 0),(26, 1, 'IE', 1, 0, 0),(27, 5, 'NZ', 1, 0, 0),
 (28, 3, 'KR', 1, 0, 0),(29, 3, 'IL', 1, 0, 0),(30, 4, 'ZA', 1, 0, 0),(31, 4, 'NG', 1, 0, 0),(32, 4, 'CI', 1, 0, 0),(33, 4, 'TG', 1, 0, 0),(34, 2, 'BO', 1, 0, 0),(35, 4, 'MU', 1, 0, 0),(36, 1, 'RO', 1, 0, 0),
@@ -329,6 +329,21 @@ INSERT INTO `PREFIX_state` (`id_state`, `id_country`, `id_zone`, `name`, `iso_co
 (44, 21, 2, 'Utah', 'UT', 1),(45, 21, 2, 'Vermont', 'VT', 1),(46, 21, 2, 'Virginia', 'VA', 1),(47, 21, 2, 'Washington', 'WA', 1),
 (48, 21, 2, 'West Virginia', 'WV', 1),(49, 21, 2, 'Wisconsin', 'WI', 1),(50, 21, 2, 'Wyoming', 'WY', 1),(51, 21, 2, 'Puerto Rico', 'PR', 1),
 (52, 21, 2, 'US Virgin Islands', 'VI', 1);
+
+INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active`) VALUES
+(4, 2, 'Ontario', 'ON', 1),
+(4, 2, 'Quebec', 'QC', 1),
+(4, 2, 'British Columbia', 'BC', 1),
+(4, 2, 'Alberta', 'AB', 1),
+(4, 2, 'Manitoba', 'MB', 1),
+(4, 2, 'Saskatchewan', 'SK', 1),
+(4, 2, 'Nova Scotia', 'NS', 1),
+(4, 2, 'New Brunswick', 'NB', 1),
+(4, 2, 'Newfoundland and Labrador', 'NL', 1),
+(4, 2, 'Prince Edward Island', 'PE', 1),
+(4, 2, 'Northwest Territories', 'NT', 1),
+(4, 2, 'Yukon', 'YT', 1),
+(4, 2, 'Nunavut', 'NU', 1);
 
 INSERT INTO `PREFIX_currency` (name, iso_code, sign, blank, conversion_rate, format, deleted) VALUES
 ('Euro', 'EUR', '€', 1, 1, 2, 0), ('Dollar', 'USD', '$', 0, 1.47, 1, 0), ('Pound', 'GBP', '£', 0, 0.8, 1, 0);
