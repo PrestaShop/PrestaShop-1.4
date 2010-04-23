@@ -75,7 +75,7 @@ class AdminMessages extends AdminTab
  		$this->fieldsDisplay = array(
 		'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 30),
 		'id_customer' => array('title' => $this->l('Customer ID'), 'align' => 'center', 'width' => 30),
-		'customer' => array('title' => $this->l('Customer'), 'width' => 140, 'filter_key' => 'customer', 'tmpTableFilter' => true),
+		'customer' => array('title' => $this->l('Customer'), 'width' => 100, 'filter_key' => 'customer', 'tmpTableFilter' => true),
 		'last_message' => array('title' => $this->l('Last message'), 'width' => 400, 'orderby' => false),
 		'nb_messages_not_read_by_me' => array('title' => $this->l('Unread message(s)'), 'width' =>30, 'align' => 'center'),
 		'nb_messages' => array('title' => $this->l('Number of messages'), 'width' => 30, 'align' => 'center'));
@@ -96,7 +96,9 @@ class AdminMessages extends AdminTab
 				echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.
 				Tools::displayError('Cannot display this message because the customer has not finalized its order').'</p>';
 			}
-				
+			foreach ($this->_list AS $k => $item)
+				if (Tools::strlen($item['last_message']) > 150 + Tools::strlen('...'))
+					$this->_list[$k]['last_message'] = Tools::substr(html_entity_decode($item['last_message'], ENT_QUOTES, 'UTF-8'), 0, 150, 'UTF-8').'...';
 			$this->displayList();
 			$this->displayOptionsList();
 		}
