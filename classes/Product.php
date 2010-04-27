@@ -1730,7 +1730,7 @@ class		Product extends ObjectModel
 		WHERE pa.`id_product` = '.intval($this->id).'
 		AND al.`id_lang` = '.intval($id_lang).'
 		AND agl.`id_lang` = '.intval($id_lang).'
-		ORDER BY agl.`name`');
+		ORDER BY al.`name`');
 	}
 
 	/**
