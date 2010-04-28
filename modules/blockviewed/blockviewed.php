@@ -74,14 +74,15 @@ class BlockViewed extends Module
 			$productIds = implode(',', $productsViewed);
 			$productsImages = Db::getInstance()->ExecuteS('
 			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite, cl.link_rewrite AS category_rewrite
-            FROM '._DB_PREFIX_.'product p
-            LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
-            LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product)
-            LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
-            LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
-            WHERE p.id_product IN ('.$productIds.')
-            AND pl.id_lang = '.intval($params['cookie']->id_lang).'
-            AND cl.id_lang = '.intval($params['cookie']->id_lang)
+			FROM '._DB_PREFIX_.'product p
+			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
+			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product)
+			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
+			WHERE p.id_product IN ('.$productIds.')
+			AND pl.id_lang = '.intval($params['cookie']->id_lang).'
+			AND cl.id_lang = '.intval($params['cookie']->id_lang).'
+			AND i.cover = 1'
 			);
 
 			$productsImagesArray = array();
