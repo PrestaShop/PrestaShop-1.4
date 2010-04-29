@@ -804,21 +804,28 @@ class Dejala extends Module
 		$balladUtc = $dateUtc;
 		
 		do {
-			$dates[$iDate]['value'] = date("Y/m/d", $balladUtc);
 			$wd = date("w", $balladUtc);
+			if (intval($calendar[$wd]['stop_hour']) < intval($calendar[$wd]['start_hour'])) continue ;
+			$dates[$iDate]['value'] = date("Y/m/d", $balladUtc);
 			$dates[$iDate]['label'] = $this->wday_labels[$wd] . " " . date("j", $balladUtc);
 			$dates[$iDate]['start_hour'] = intval($calendar[$wd]['start_hour']);
 			$dates[$iDate]['stop_hour'] = intval($calendar[$wd]['stop_hour']);
 			$balladUtc += 3600*24;
 			$balladUtc = $calUtils->getNextDateAvailable($balladUtc, $calendar, $all_exceptions);
 			$iDate++;
-
 		} while (($iDate < $nbDeliveryDates) && ($balladUtc));
 		// impossibilité de trouver un jour dispo
 		if (!isset($dates[0]))
 			return ;
-		$dates[0]['start_hour'] = intval(date("H", $dateUtc));
 
+		$now = intval(date("H", $dateUtc)) ;
+		if (intval($dates[0]['stop_hour']) > $now) {
+			$dates[0]['start_hour'] = $now ;
+		}
+		else {
+			array_shift($dates) ;
+		}
+		
 		$this->mylog("date$=" . $this->logValue($dates,1));
 		$smarty->assign('nb_days', $nbDeliveryDates);
 		$smarty->assign('dates', $dates);
