@@ -45,9 +45,10 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
 
 //old version detection
 $oldversion = false;
-if (file_exists(SETTINGS_FILE))
+if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 {
-	include_once(INSTALL_PATH.'/../config/settings.inc.php');
+	include_once(SETTINGS_FILE);
+	include_once(DEFINES_FILE);
 	$oldversion = _PS_VERSION_;
 }
 else

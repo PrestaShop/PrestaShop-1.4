@@ -8,4 +8,3 @@ SET NAMES 'utf8';
 /* 					CONTENTS					 */
 /* ##################################### */
 
-/* PHP:decode_content(); */;

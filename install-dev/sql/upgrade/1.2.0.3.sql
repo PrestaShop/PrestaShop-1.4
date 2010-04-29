@@ -31,4 +31,3 @@ INSERT INTO `PREFIX_search_engine` (`server`,`getvar`) VALUES
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 	(19, 9, 1);
 
-/* PHP:decode_content(); */;

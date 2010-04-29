@@ -64,7 +64,7 @@ if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
 
 //load new settings
-include(INSTALL_PATH.'/../config/settings.inc.php');
+include(SETTINGS_FILE);
 
 //-----------
 //import SQL data
