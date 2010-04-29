@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = '\r\nNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
+$_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
 $_MODULE['<{moneybookers}prestashop>moneybookers-form_25065e3ef9274f9b0e3088340f6d79e6'] = 'Pago con tarjeta de crédito';
 $_MODULE['<{moneybookers}prestashop>moneybookers-form_2cc66b7b26e92326afa76a021442330e'] = 'Pago por Moneybookers eWallet';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';

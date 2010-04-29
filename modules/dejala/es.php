@@ -170,7 +170,7 @@ $_MODULE['<{dejala}prestashop>dejala_products_aa83582f6ce84345c97815de714e6ebd']
 $_MODULE['<{dejala}prestashop>dejala_products_49ee3087348e8d44e1feda1917443987'] = 'Destino del envio';
 $_MODULE['<{dejala}prestashop>dejala_products_26160d42b371fb091c142cb8cfa09c34'] = 'Precio que DEJALA le factura por el envio';
 $_MODULE['<{dejala}prestashop>dejala_products_f8ca05a1d72f37501747657deecdd15c'] = 'Su margen sobre el envio  (IVA_incluido)';
-$_MODULE['<{dejala}prestashop>dejala_products_e6f254c2f6e55725e99e1e6dfd6d9caa'] = 'Costo final del envio (añadido a la cesta)';
+$_MODULE['<{dejala}prestashop>dejala_products_e6f254c2f6e55725e99e1e6dfd6d9caa'] = 'Costo final del envio (añadido a la carrito)';
 $_MODULE['<{dejala}prestashop>dejala_products_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descripción de la prestación';
 $_MODULE['<{dejala}prestashop>dejala_products_1cdad1a5f8e5d09be270415e44c0f039'] = 'Compra sin IVA';
 $_MODULE['<{dejala}prestashop>dejala_products_ecef91ba37ffc5f5294ea50efee7c6a2'] = 'Compra IVA inc.';
