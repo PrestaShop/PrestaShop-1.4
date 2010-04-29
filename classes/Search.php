@@ -188,10 +188,11 @@ class Search
 		
 		$productPool = '';
 		foreach ($eligibleProducts as $product)
-			$productPool .= $product['id_product'].',';
+			if (!empty($product['id_product']))
+				$productPool .= $product['id_product'].',';
 		if (empty($productPool))
 			return ($ajax ? array() : array('total' => 0, 'result' => array()));
-		$productPool = (strpos($productPool, ',') === false ? ' = '.(int)$productPool.' ' : ' IN ('.rtrim($productPool, ',').') ');
+		$productPool = ((strpos($productPool, ',') === false) ? (' = '.(int)$productPool.' ') : (' IN ('.rtrim($productPool, ',').') '));
 		
 		if ($ajax)
 		{
