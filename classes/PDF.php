@@ -520,7 +520,10 @@ class PDF extends PDF_PageGroup
 
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
-				$pdf->Cell($width, 0, self::l('Total').' : ', 0, 0, 'R');
+				$pdf->Cell($width, 0, self::l('Total').(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax incl.)') : self::l(' (tax excl.)')).' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithTax'] : $priceBreakDown['totalWithoutTax']), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+				$pdf->Cell($width, 0, self::l('Total').(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax excl.)') : self::l(' (tax incl.)')).' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : $priceBreakDown['totalWithTax']), self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
 			}
