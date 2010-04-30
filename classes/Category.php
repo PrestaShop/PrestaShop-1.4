@@ -690,6 +690,16 @@ class		Category extends ObjectModel
 		if ($list AND sizeof($list))
 			$this->addGroups($list);
 	}
+
+	static public function setNewGroupForHome($id_group)
+	{
+		if (!intval($id_group))
+			return false;
+		return Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'category_group` 
+		VALUES (1, '.intval($id_group).')
+		');
+	}
 }
 
 ?>

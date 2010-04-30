@@ -109,6 +109,11 @@ class		Group extends ObjectModel
 		WHERE `id_group` = 1');
 	}
 
+	public function add()
+	{
+		return parent::add() && Category::setNewGroupForHome(intval($this->id));
+	}
+
 	public function delete()
 	{
 		if (parent::delete())

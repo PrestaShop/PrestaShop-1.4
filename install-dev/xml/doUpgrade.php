@@ -22,6 +22,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'confcleaner.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'invoicenumber.php');
 // Order number in goal to add a number to each old orders
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'deliverynumber.php');
+// Set all groups for home category
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setallgroupsonhomecategory.php');
 // Set paiement module for each currency/country
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodule.php');
 // Set paiement module for each group
