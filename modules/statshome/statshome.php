@@ -83,7 +83,7 @@ class StatsHome extends Module
 			</div>
 			<div style="float:right;text-align:right;width:240px">';
 		include_once(dirname(__FILE__).'/../..'.$this->_adminPath.'/tabs/AdminStats.php');
-		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Day'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year')));
+		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Day'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'), 'From' => $this->l('From:'), 'To' => $this->l('To:'), 'Save' => $this->l('Save')));
 		$this->_html .= '<div class="space"></div>
 				<p style=" font-weight: bold ">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
 			</div>

@@ -135,10 +135,13 @@ abstract class AdminStatsTab extends AdminPreferences
 	
 	public function displayCalendar()
 	{
-		echo '<div id="calendar">';
-		echo self::displayCalendarStatic(array('Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Day' => $this->l('Day', 'AdminStatsTab'), 
-										'Month' => $this->l('Month', 'AdminStatsTab'), 'Year' => $this->l('Year', 'AdminStatsTab')));
-		echo '<div class="clear space">&nbsp;</div></div>';
+		echo '<div id="calendar">
+		'.self::displayCalendarStatic(array(
+			'Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Day' => $this->l('Day', 'AdminStatsTab'), 
+			'Month' => $this->l('Month', 'AdminStatsTab'), 'Year' => $this->l('Year', 'AdminStatsTab'),
+			'From' => $this->l('From:'), 'To' => $this->l('To:'), 'Save' => $this->l('Save')
+		)).'
+		<div class="clear space">&nbsp;</div></div>';
 	}
 	
 	public static function displayCalendarStatic($translations)
@@ -157,9 +160,9 @@ abstract class AdminStatsTab extends AdminPreferences
 					<input type="submit" name="submitDateDayPrev" class="button" value="'.$translations['Day'].'-1">
 					<input type="submit" name="submitDateMonthPrev" class="button" value="'.$translations['Month'].'-1">
 					<input type="submit" name="submitDateYearPrev" class="button" value="'.$translations['Year'].'-1">
-					<p>From: <input type="text" name="datepickerFrom" id="datepickerFrom" value="'.Tools::getValue('datepickerFrom', $employee->stats_date_from).'"></p>
-					<p>To: <input type="text" name="datepickerTo" id="datepickerTo" value="'.Tools::getValue('datepickerTo', $employee->stats_date_to).'"></p>
-					<input type="submit" name="submitDatePicker" class="button" />
+					<p>'.(isset($translations['From']) ? $translations['From'] : 'From:').' <input type="text" name="datepickerFrom" id="datepickerFrom" value="'.Tools::getValue('datepickerFrom', $employee->stats_date_from).'"></p>
+					<p>'.(isset($translations['To']) ? $translations['To'] : 'To:').' <input type="text" name="datepickerTo" id="datepickerTo" value="'.Tools::getValue('datepickerTo', $employee->stats_date_to).'"></p>
+					<input type="submit" name="submitDatePicker" class="button" value="'.(isset($translations['Save']) ? $translations['Save'] : '   Save   ').'" />
 				</form>
 			</div>
 		</fieldset>';
