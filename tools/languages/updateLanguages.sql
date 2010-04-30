@@ -316,3 +316,12 @@ INSERT IGNORE INTO `PREFIX_order_message_lang` (`id_order_message`, `id_lang`, `
             FROM `PREFIX_configuration` c
             WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_order_message`=`PREFIX_order_message`.`id_order_message`)
 	FROM `PREFIX_lang` CROSS JOIN `PREFIX_order_message`);
+
+INSERT IGNORE INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`)
+    (SELECT `id_group`, id_lang, (SELECT tl.`name`
+        FROM `PREFIX_group_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_group`=`PREFIX_group`.`id_group`)
+    FROM `PREFIX_lang` CROSS JOIN `PREFIX_group`);
+
