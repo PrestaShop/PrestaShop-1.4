@@ -68,13 +68,13 @@ class AdminOrders extends AdminTab
 				if (!$order->hasBeenShipped())
 					die(Tools::displayError('The shipping number can only be set once the order has been shipped!'));
 				$_GET['view'.$this->table] = true;
-				if (!$shipping_number = pSQL(Tools::getValue('shipping_number')))
-					$this->_errors[] = Tools::displayError('Invalid new order status!');
-				else
+				
+				$shipping_number = pSQL(Tools::getValue('shipping_number'));
+				$order->shipping_number = $shipping_number;
+				$order->update();
+				if ($shipping_number)
 				{
 					global $_LANGMAIL;
-					$order->shipping_number = $shipping_number;
-					$order->update();
 					$customer = new Customer(intval($order->id_customer));
 					$carrier = new Carrier(intval($order->id_carrier));
 					if (!Validate::isLoadedObject($customer) OR !Validate::isLoadedObject($carrier))
