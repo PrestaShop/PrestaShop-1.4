@@ -107,7 +107,6 @@ class AdminStats extends AdminStatsTab
 		<div style="float: left">';
 		$this->displayCalendar();
 		$this->displayMenu(false);
-		$this->displayEngines();
 		$this->displaySearch();
 		echo '
 		</div>
