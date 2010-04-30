@@ -67,8 +67,8 @@ class AdminImport extends AdminTab
 				self::$required_fields = array('id_product', 'options');
 				$this->available_fields = array(
 					'no' => $this->l('Ignore this column'),
-					'id_product' => $this->l('Product ID'),
-					'options' => $this->l('Options (Group:Value)'),
+					'id_product' => $this->l('Product ID').'*',
+					'options' => $this->l('Options (Group:Value)').'*',
 					'reference' => $this->l('Reference'),
 					'supplier_reference' => $this->l('Supplier reference'),
 					'ean13' => $this->l('EAN13'),
