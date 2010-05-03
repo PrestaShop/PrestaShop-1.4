@@ -2014,7 +2014,7 @@ class AdminProducts extends AdminTab
 						theme_advanced_toolbar_location : "top",
 						theme_advanced_toolbar_align : "left",
 						theme_advanced_statusbar_location : "bottom",
-						theme_advanced_resizing : true,
+						theme_advanced_resizing : false,
 						content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
 						document_base_url : "'.__PS_BASE_URI__.'",
 						width: "582",
