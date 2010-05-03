@@ -72,8 +72,7 @@ class AdminAttributeGenerator extends AdminTab
                     self::setAttributesImpacts($this->product->id, $tab);
 					$this->combinations = array_values(self::createCombinations($tab));
 					$values = array_values(array_map(array($this, 'addAttribute'), $this->combinations));
-					$this->product->deleteProductAttributes();
-					$res = $this->product->addProductAttributeMultiple($values);
+					$res = $this->product->addProductAttributeMultiple($values, (Product::getDefaultAttribute($this->product->id) ? false : true));
 					$this->product->addAttributeCombinationMultiple($res, $this->combinations);
 				}
 				else
