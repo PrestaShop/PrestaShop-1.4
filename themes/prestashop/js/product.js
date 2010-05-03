@@ -66,7 +66,7 @@ function findCombination(firstTime)
 				}
 			}
 		}
-
+		
 		if (nbAttributesEquals == choice.length)
 		{
 			//combination of the user has been found in our specifications of combinations (created in back office)
@@ -219,6 +219,17 @@ function updateDisplay()
 		}
 	}
 	
+	if (selectedCombination['reference'] || productReference)
+	{
+		if (selectedCombination['reference'])
+			$('#product_reference span').text(selectedCombination['reference']);
+		else if (productReference)
+			$('#product_reference span').text(productReference);
+		$('#product_reference:hidden').show('slow');
+	}
+	else
+		$('#product_reference:visible').hide('slow');
+	
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'])
 	{
@@ -228,14 +239,6 @@ function updateDisplay()
 
 		if (noTaxForThisProduct)
 			attribut_price_tmp /= tax;
-
-		if (selectedCombination['reference'])
-		{
-			$('#product_reference span').text(selectedCombination['reference']);
-			$('#product_reference:hidden').show();
-		}
-		else
-			$('#product_reference:visible').hide('slow');
 
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 		

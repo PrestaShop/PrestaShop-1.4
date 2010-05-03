@@ -33,6 +33,7 @@ var currentDate = '{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}';
 var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};
 var displayPrice = {$priceDisplay};
+var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';
@@ -50,15 +51,15 @@ var customizationFields = new Array();
 var img_prod_dir = '{$img_prod_dir}';
 var combinationImages = new Array();
 {foreach from=$combinationImages item='combination' key='combinationId' name='f_combinationImages'}
-combinationImages[{$combinationId}] = new Array();
-{foreach from=$combination item='image' name='f_combinationImage'}
-combinationImages[{$combinationId}][{$smarty.foreach.f_combinationImage.index}] = {$image.id_image|intval};
-{/foreach}
+	combinationImages[{$combinationId}] = new Array();
+	{foreach from=$combination item='image' name='f_combinationImage'}
+		combinationImages[{$combinationId}][{$smarty.foreach.f_combinationImage.index}] = {$image.id_image|intval};
+	{/foreach}
 {/foreach}
 
 combinationImages[0] = new Array();
 {foreach from=$images item='image' name='f_defaultImages'}
-combinationImages[0][{$smarty.foreach.f_defaultImages.index}] = {$image.id_image};
+	combinationImages[0][{$smarty.foreach.f_defaultImages.index}] = {$image.id_image};
 {/foreach}
 
 // Translations
@@ -249,7 +250,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</div>
 			{/if}
 
-			{if $product->reference}<p id="product_reference" {if isset($groups)}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>{/if}
+			<p id="product_reference" {if isset($groups)}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{if $product->reference}{$product->reference|escape}{/if}</span></p>
 
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
