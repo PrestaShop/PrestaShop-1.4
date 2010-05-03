@@ -15,11 +15,11 @@ function clearText() {
 function oosHookJsCodeMailAlert() {
 	$.ajax({
 		type: 'POST',
-		url: '{$base_dir}modules/mailalerts/mailalerts-ajax_check.php',
-		data: 'id_product={$id_product}&id_product_attribute='+$('#idCombination').val(),
+		url: '{/literal}{$base_dir}{literal}modules/mailalerts/mailalerts-ajax_check.php',
+		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val(),
 		success: function (msg) {
 			if (msg == '0') {
-				$('#mailalert_link').show().attr('href', 'modules/mailalerts/mailalerts-add.php?id_product={$id_product}&id_product_attribute='+$('#idCombination').val());
+				$('#mailalert_link').show().attr('href', 'modules/mailalerts/mailalerts-add.php?id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val());
 				$('#oos_customer_email').show();
 			}
 			else {
@@ -34,7 +34,7 @@ function  addNotification() {
 	$.ajax({
 		type: 'POST',
 		url: '{$base_dir}modules/mailalerts/mailalerts-ajax_add.php',
-		data: 'id_product={$id_product}&id_product_attribute='+$('#idCombination').val()+'&customer_email='+$('#oos_customer_email').val()+'',
+		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val()+'&customer_email='+$('#oos_customer_email').val()+'',
 		success: function (msg) {
 			if (msg == '1') {
 				$('#mailalert_link').hide();
