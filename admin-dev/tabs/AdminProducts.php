@@ -2019,6 +2019,7 @@ class AdminProducts extends AdminTab
 						document_base_url : "'.__PS_BASE_URI__.'",
 						width: "582",
 						height: "auto",
+						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
 						// Drop lists for link/image/media/template dialogs
 						template_external_list_url : "lists/template_list.js",
 						external_link_list_url : "lists/link_list.js",
