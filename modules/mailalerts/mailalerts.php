@@ -289,7 +289,9 @@ class MailAlerts extends Module
 	public function hookCustomerAccount($params)
 	{
 		global $smarty;
-		return $this->display(__FILE__, 'my-account.tpl');
+		if ($this->_customer_qty)
+			return $this->display(__FILE__, 'my-account.tpl');
+		return null;
 	}
 	
 	public function hookMyAccountBlock($params)
