@@ -3,54 +3,48 @@
 	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="{l s='your e-mail' mod='mailalerts'}" class="mailalerts_oos_email" onclick="clearText();" /><br />
 {/if}
 <a href="#" onclick="return addNotification();" id="mailalert_link">{l s='Notify me when available' mod='mailalerts'}</a>
-<script type="text/javascript">
+<script type="text/javascript">{literal}
+// <![CDATA[
 oosHookJsCodeFunctions.push('oosHookJsCodeMailAlert');
 
-function clearText()
-{ldelim}
+function clearText() {
 	if ($('#oos_customer_email').val() == 'your@email.com')
 		$('#oos_customer_email').val('');
-{rdelim}
+}
 
-function oosHookJsCodeMailAlert()
-{ldelim}
-	$.ajax({ldelim}
+function oosHookJsCodeMailAlert() {
+	$.ajax({
 		type: 'POST',
 		url: '{$base_dir}modules/mailalerts/mailalerts-ajax_check.php',
 		data: 'id_product={$id_product}&id_product_attribute='+$('#idCombination').val(),
-		success: function (msg)
-		{ldelim}
-			if (msg == '0')
-			{ldelim}
+		success: function (msg) {
+			if (msg == '0') {
 				$('#mailalert_link').show().attr('href', 'modules/mailalerts/mailalerts-add.php?id_product={$id_product}&id_product_attribute='+$('#idCombination').val());
 				$('#oos_customer_email').show();
-			{rdelim}
-			else
-			{ldelim}
+			}
+			else {
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
-			{rdelim}
-		{rdelim}
-	{rdelim});
-{rdelim}
+			}
+		}
+	});
+}
 
-function  addNotification()
-{ldelim}
-	$.ajax({ldelim}
+function  addNotification() {
+	$.ajax({
 		type: 'POST',
 		url: '{$base_dir}modules/mailalerts/mailalerts-ajax_add.php',
 		data: 'id_product={$id_product}&id_product_attribute='+$('#idCombination').val()+'&customer_email='+$('#oos_customer_email').val()+'',
-		success: function (msg)
-		{ldelim}
-			if (msg == '1')
-			{ldelim}
+		success: function (msg) {
+			if (msg == '1') {
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
 				$('#oosHook').html("{l s='Request notification registered' mod='mailalerts'}");
-			{rdelim}
-		{rdelim}
-	{rdelim});
+			}
+		}
+	});
 	return false;
-{rdelim}
+}{/literal}
+//]]>
 </script>
 <!-- END : MODULE MailAlerts -->

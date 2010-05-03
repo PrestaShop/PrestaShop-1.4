@@ -1738,6 +1738,7 @@ div.categTree {
 	cursor: pointer
 }
 #primary_block a.color_pick:hover { border: 1px solid #000 }
+#primary_block a#color_all { cursor: pointer }
 #primary_block #image-block img#bigpic.jqzoom {
 	cursor: crosshair;
 	position: relative
