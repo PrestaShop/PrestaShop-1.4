@@ -109,7 +109,7 @@ class		Group extends ObjectModel
 		WHERE `id_group` = 1');
 	}
 
-	public function add()
+	public function add($autodate = true, $nullValues = false)
 	{
 		return parent::add() && Category::setNewGroupForHome(intval($this->id));
 	}
