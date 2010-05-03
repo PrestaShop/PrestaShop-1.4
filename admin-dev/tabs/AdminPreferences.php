@@ -106,8 +106,10 @@ class AdminPreferences extends AdminTab
 		 	{
 				if ($val = Tools::getValue('PS_THEME'))
 				{
-				 	rewriteSettingsFile(NULL, $val, NULL);
-				 	Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
+					if (rewriteSettingsFile(NULL, $val, NULL))
+						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
+					else
+						$this->_errors[] = Tools::displayError('cannot access settings file');
 				}
 				else
 					$this->_errors[] = Tools::displayError('you must choose a graphical theme');
@@ -367,6 +369,9 @@ class AdminPreferences extends AdminTab
 		/* End of specific div for e-mails settings */
 		if (get_class($this) == 'Adminemails')
 			echo '<script type="text/javascript">if (getE(\'PS_MAIL_METHOD2_on\').checked) getE(\'smtp\').style.display = \'block\'; else getE(\'smtp\').style.display = \'none\';</script></div>';
+
+		if(!is_writable(PS_ADMIN_DIR.'/../config/settings.inc.php') AND $name == 'themes')
+			echo '<p><img src="../img/admin/warning.gif" alt="" /> '.$this->l('if you change theme, the settings.inc.php file must be writable (CHMOD 777)').'</p>';
 
 		echo '	<div align="center" style="margin-top: 20px;">
 					<input type="submit" value="'.$this->l('   Save   ', 'AdminPreferences').'" name="submit'.ucfirst($name).$this->table.'" class="button" />

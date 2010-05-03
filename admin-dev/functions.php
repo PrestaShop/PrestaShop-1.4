@@ -77,13 +77,13 @@ function	rewriteSettingsFile($baseUri = NULL, $theme = NULL, $arrayDB = NULL)
 	foreach ($defines as $k => $value)
 		$content .= 'define(\''.$k.'\', \''.addslashes($value).'\');'."\n";
 	$content .= "\n?>";
-	if ($fd = fopen(PS_ADMIN_DIR.'/../config/settings.inc.php', 'w'))
+	if ($fd = @fopen(PS_ADMIN_DIR.'/../config/settings.inc.php', 'w'))
 	{
 		fwrite($fd, $content);
 		fclose($fd);
+		return true;
 	}
-	else
-		Tools::displayError('cannot access settings file');
+	return false;
 }
 
 /**
