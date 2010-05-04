@@ -1,6 +1,6 @@
 <?php
 
 global $_LANG;
-$_LANG = array();d
+$_LANG = array();
 
 ?>
