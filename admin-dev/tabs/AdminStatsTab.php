@@ -139,7 +139,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		'.self::displayCalendarStatic(array(
 			'Calendar' => $this->l('Calendar', 'AdminStatsTab'), 'Day' => $this->l('Day', 'AdminStatsTab'), 
 			'Month' => $this->l('Month', 'AdminStatsTab'), 'Year' => $this->l('Year', 'AdminStatsTab'),
-			'From' => $this->l('From:'), 'To' => $this->l('To:'), 'Save' => $this->l('Save')
+			'From' => $this->l('From:', 'AdminStatsTab'), 'To' => $this->l('To:', 'AdminStatsTab'), 'Save' => $this->l('Save', 'AdminStatsTab')
 		)).'
 		<div class="clear space">&nbsp;</div></div>';
 	}

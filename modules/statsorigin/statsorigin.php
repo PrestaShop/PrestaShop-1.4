@@ -61,7 +61,7 @@ class StatsOrigin extends ModuleGraph
 	{
 		$websites = $this->getOrigins(ModuleGraph::getDateBetween());
 		
-		$this->_html = '<fieldset class="width3 center"><legend><img src="../modules/'.$this->name.'/logo.gif" /> Origin</legend>';
+		$this->_html = '<fieldset class="width3 center"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Origin').'</legend>';
 		if (sizeof($websites))
 		{
 			$this->_html .= '
