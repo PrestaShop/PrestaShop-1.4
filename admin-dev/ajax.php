@@ -150,7 +150,6 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 	$product = new Product($id_product);
 	if (Validate::isLoadedObject($product))
 	{
-		die($product->updatePosition($way, $position));
 		if (isset($position) && $product->updatePosition($way, $position))
 			die(true);
 		else

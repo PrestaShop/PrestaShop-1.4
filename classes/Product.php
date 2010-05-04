@@ -325,14 +325,10 @@ class		Product extends ObjectModel
 			return false;
 		
 		foreach ($res AS $product)
-		{
-			if (intval($product[$this->identifier]) == intval($this->id))
+			if (intval($product['id_product']) == intval($this->id))
 				$movedProduct = $product;
-			elseif (intval($product['position']) == intval($position))
-				$toPosition = $product['position'];
-		}
 		
-		if (!isset($movedProduct) || !isset($toPosition))
+		if (!isset($movedProduct) || !isset($position))
 			return false;
 		
 		// < and > statements rather than BETWEEN operator
@@ -342,12 +338,12 @@ class		Product extends ObjectModel
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position` 
 			'.($way 
-				? '> '.intval($movedProduct['position']).' AND `position` <= '.intval($toPosition)
-				: '< '.intval($movedProduct['position']).' AND `position` >= '.intval($toPosition)).'
+				? '> '.intval($movedProduct['position']).' AND `position` <= '.intval($position)
+				: '< '.intval($movedProduct['position']).' AND `position` >= '.intval($position)).'
 			AND `id_category`='.intval($movedProduct['id_category']))
 		AND Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category_product`
-			SET `position` = '.intval($toPosition).'
+			SET `position` = '.intval($position).'
 			WHERE `id_product` = '.intval($movedProduct['id_product']).'
 			AND `id_category`='.intval($movedProduct['id_category'])));
 	}
