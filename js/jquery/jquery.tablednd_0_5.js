@@ -66,7 +66,7 @@ jQuery.tableDnD = {
 			})
 		} else {
 			// For backwards compatibility, we add the event to the whole row
-	        var rows = jQuery("tr", table); // get all the rows as a wrapped set
+	        var rows = jQuery("tbody tr", table); // get all the rows as a wrapped set
 	        rows.each(function() {
 				// Iterate through each row, the row is bound to "this"
 				var row = jQuery(this);
@@ -276,7 +276,7 @@ jQuery.tableDnD = {
 	serializeTable: function(table) {
         var result = "";
         var tableId = table.id;
-        var rows = table.rows;
+        var rows = jQuery("tbody tr", table);
         for (var i=0; i<rows.length; i++) {
             if (result.length > 0) result += "&";
             var rowId = rows[i].id;

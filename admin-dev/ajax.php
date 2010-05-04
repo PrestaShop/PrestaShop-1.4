@@ -130,45 +130,34 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 }
 
 if (array_key_exists('ajaxProductsPositions', $_POST))
-{				
-		$way = intval(Tools::getValue('way'));
-		$alternate = intval(Tools::getValue('alternate'));
-		$id_product = intval(Tools::getValue('id_product'));
-		$id_category = intval(Tools::getValue('id_category'));
-		$positions = Tools::getValue(strval($id_category));
+{
+	$way = intval(Tools::getValue('way'));
+	$id_product = intval(Tools::getValue('id_product'));
+	$id_category = intval(Tools::getValue('id_category'));
+	$positions = Tools::getValue(strval($id_category));
 
-		if (is_array($positions))
+	if (is_array($positions))
+		foreach ($positions AS $key => $value)
 		{
-			foreach ($positions AS $key => $value)
+			$pos = explode('_', $value);
+			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_product))
 			{
-				$pos = explode('_', $value);
-				if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_product))
-				{
-					if ($way == 0)
-					{
-						$pos = explode('_', $positions[$key + 1]);
-						$position = $pos[3];
-					}
-					else
-					{
-						$pos = explode('_', $positions[$key - 1]);
-						$position = $pos[3];
-					}
-					break;
-				}
+				$position = $key;
+				break;
 			}
 		}
-
-		$product = new Product($id_product);
-		if (Validate::isLoadedObject($product))
-		{
-			if($product->updatePosition($alternate, $position))
-				die(true);
-			else
-				die('{\'hasError\' : true, errors : \'Can not update product position\'}');
-		}
+	
+	$product = new Product($id_product);
+	if (Validate::isLoadedObject($product))
+	{
+		die($product->updatePosition($way, $position));
+		if (isset($position) && $product->updatePosition($way, $position))
+			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'This product can not be loaded\'}');
+			die('{\'hasError\' : true, errors : \'Can not update product position\'}');
+	}
+	else
+		die('{\'hasError\' : true, errors : \'This product can not be loaded\'}');
 }
 
 if (isset($_GET['ajaxProductPackItems']))

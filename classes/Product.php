@@ -314,45 +314,42 @@ class		Product extends ObjectModel
 	 * * @param intger $position* 
 	 * return boolean Update result
 	 */
-	public function updatePosition($way, $position = NULL)
+	public function updatePosition($way, $position)
 	{
-		$id_category = intval(Tools::getValue('id_category', 1));
-		
 		if (!$res = Db::getInstance()->ExecuteS('
-		SELECT cp.`id_product`, cp.`position`, cp.`id_category` 
-		FROM `'._DB_PREFIX_.'category_product` cp
-		WHERE cp.`id_category` = '.intval($id_category).' 
-		ORDER BY cp.`position` '.(intval($way) ? 'ASC' : 'DESC')))
+			SELECT cp.`id_product`, cp.`position`, cp.`id_category` 
+			FROM `'._DB_PREFIX_.'category_product` cp
+			WHERE cp.`id_category` = '.intval(Tools::getValue('id_category', 1)).' 
+			ORDER BY cp.`position` ASC'
+		))
 			return false;
-
-		foreach ($res AS $key => $values)
-			if (intval($values[$this->identifier]) == intval($this->id))
-			{
-				$k = $key ;
-				break ;
-			}
-
-		if (!isset($k) OR !isset($res[$k]) OR !isset($res[$k + 1]))
+		
+		foreach ($res AS $product)
+		{
+			if (intval($product[$this->identifier]) == intval($this->id))
+				$movedProduct = $product;
+			elseif (intval($product['position']) == intval($position))
+				$toPosition = $product['position'];
+		}
+		
+		if (!isset($movedProduct) || !isset($toPosition))
 			return false;
-
-		$from = $res[$k];
-		$to = $res[$k + 1];
-
-		if (isset($position))
-			$to['position'] = intval($position);
-					
+		
+		// < and > statements rather than BETWEEN operator
+		// since BETWEEN is treated differently according to databases
 		return (Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'category_product`
-		SET `position`= position '.($way ? '-1' : '+1').'
-		WHERE position between '.intval(min(array($from['position'], $to['position']))) .'
-		AND '.intval(max(array($from['position'], $to['position']))).'
-		AND `id_category`='.intval($from['id_category']))
-		AND
-		Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'category_product`
-		SET `position`='.intval($to['position']).'
-		WHERE `'.pSQL($this->identifier).'` = '.intval($from[$this->identifier]).'
-		AND `id_category`='.intval($to['id_category'])));
+			UPDATE `'._DB_PREFIX_.'category_product`
+			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
+			WHERE `position` 
+			'.($way 
+				? '> '.intval($movedProduct['position']).' AND `position` <= '.intval($toPosition)
+				: '< '.intval($movedProduct['position']).' AND `position` >= '.intval($toPosition)).'
+			AND `id_category`='.intval($movedProduct['id_category']))
+		AND Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'category_product`
+			SET `position` = '.intval($toPosition).'
+			WHERE `id_product` = '.intval($movedProduct['id_product']).'
+			AND `id_category`='.intval($movedProduct['id_category'])));
 	}
 	
 	/*

@@ -1006,37 +1006,37 @@ abstract class AdminTab
 			<script type="text/javascript" src="../js/admin-dnd.js"></script>
 			';
 		}
-		echo '<table'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category', '1'))) ? $id_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_product' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0"><tr class="nodrag nodrop">
-				<th>';
+		echo '<table'.($this->identifier == 'id_product' ? ' id="'.(($id_category = intval(Tools::getValue('id_category', '1'))) ? $id_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_product' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0">
+			<thead>
+				<tr class="nodrag nodrop">
+					<th>';
 		if ($this->delete)
-			echo '<input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" />';
-		echo '</th>';
+			echo '		<input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" />';
+		echo '		</th>';
 		foreach ($this->fieldsDisplay AS $key => $params)
 		{
-			echo '
-				<th '.(isset($params['widthColumn']) ? 'style="width: '.$params['widthColumn'].'px"' : '').'>
-					'.$params['title'];
+			echo '	<th '.(isset($params['widthColumn']) ? 'style="width: '.$params['widthColumn'].'px"' : '').'>'.$params['title'];
 			if (!isset($params['orderby']) OR $params['orderby'])
 			{
 				// Cleaning links
 				if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
 					$currentIndex = preg_replace('/&'.$this->table.'Orderby=([a-z _]*)&'.$this->table.'Orderway=([a-z]*)/i', '', $currentIndex);
-				echo '<br />
-					<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
-					<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
+				echo '	<br />
+						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
+						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
 			}
-			echo '
-				</th>';
+			echo '	</th>';
 		}
 
 		/* Check if object can be modified, deleted or detailed */
 		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
-			echo '<th style="width: 52px">'.$this->l('Actions').'</th>';
-		echo '</tr><tr class="nodrag nodrop" style="height: 35px;">
-				<td class="center">';
+			echo '	<th style="width: 52px">'.$this->l('Actions').'</th>';
+		echo '	</tr>
+				<tr class="nodrag nodrop" style="height: 35px;">
+					<td class="center">';
 		if ($this->delete)
-			echo '--';
-		echo '</td>';
+			echo '		--';
+		echo '		</td>';
 
 		/* Javascript hack in order to catch ENTER keypress event */
 		$keyPress = 'onkeypress="formSubmit(event, \'submitFilterButton_'.$this->table.'\');"';
@@ -1102,7 +1102,8 @@ abstract class AdminTab
 		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
 			echo '<td class="center">--</td>';
 
-		echo '</tr>';
+		echo '</tr>
+			</thead>';
 	}
 
 	/**

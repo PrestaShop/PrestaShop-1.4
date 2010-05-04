@@ -9,13 +9,10 @@
   *
   */
 
-$(document).ready(function()
-{	
-	$('table.tableDnD').tableDnD(
-	{
-		onDragStart: function(table, row)
-		{
-			originalOrder = $.tableDnD.serialize();		
+$(document).ready(function() {
+	$('table.tableDnD').tableDnD({
+		onDragStart: function(table, row) {
+			originalOrder = $.tableDnD.serialize();
 			reOrder = ':even';
 			if ($('#' + table.tBodies[0].rows[1].id).hasClass('alt_row'))
 				reOrder = ':odd';
@@ -23,64 +20,66 @@ $(document).ready(function()
 		},
 		dragHandle: 'dragHandle',
 		onDragClass: 'myDragClass',
-		onDrop: function(table, row)
-		{
-			if (originalOrder != $.tableDnD.serialize())
-			{
-				var dest = 'ajax.php';		
-		       	var way = (originalOrder.indexOf(row.id) < $.tableDnD.serialize().indexOf(row.id))? 1 : 0;
-		       		
+		onDrop: function(table, row) {
+			if (originalOrder != $.tableDnD.serialize()) {
+				var way = (originalOrder.indexOf(row.id) < $.tableDnD.serialize().indexOf(row.id))? 1 : 0;
 
-		       	var ids = row.id.split('_');
+				var ids = row.id.split('_');
 				var tableDrag = $('#' + table.id);
 				var params = '';
-							
+				
 				if (come_from == 'AdminModulesPositions')
-			       	params = 'ajaxModulesPositions=true&way=' + way + '&id_module=' + ids[1] + '&id_hook=' + ids[0] + '&token=' + token +'&' + $.tableDnD.serialize();
-			    else if (come_from == 'product')
-			    {
-			    	var bak = alternate;
-		       		alternate = (alternate == 1 && way == 0 ? 1 : (alternate == 1 && way == 1 ? 0 : way)); // If orderWay = DESC alternate the way
-			    	params = 'ajaxProductsPositions=true&id_product=' + ids[2] + '&id_category=' + ids[1] + '&way=' + way + '&alternate=' + alternate +'&' + $.tableDnD.serialize() + '&token=' + token ;
-			    }
+					params = {
+						ajaxModulesPositions: true,
+						id_hook: ids[0],
+						id_module: ids[1],
+						way: way,
+						token: token
+					};
+				else if (come_from == 'product') {
+					params = {
+						ajaxProductsPositions: true,
+						id_category: ids[1],
+						id_product: ids[2],
+						way: way,
+						token: token
+					};
+				}
 
-		       	$.ajax(
-				{
+				$.ajax({
 					type: 'POST',
-					url: dest,
-					async: true,
+					url: 'ajax.php?' + $.tableDnD.serialize(),
 					data: params,
-					success: function(data)
-					{
-						if (come_from == 'AdminModulesPositions')
-						{
+					success: function(data) {
+						if (come_from == 'AdminModulesPositions') {
 							tableDrag.find('tr').removeClass('alt_row');
-				       		tableDrag.find('tr' + reOrder).addClass('alt_row');
-							tableDrag.find('td.positions').each(function(i)
-							{
+							tableDrag.find('tr' + reOrder).addClass('alt_row');
+							tableDrag.find('td.positions').each(function(i) {
 								$(this).html(i+1);
 							});
 							tableDrag.find('td.dragHandle a:hidden').show();
 							tableDrag.find('td.dragHandle:first a:even').hide();
 							tableDrag.find('td.dragHandle:last a:odd').hide();
 						}
-						else if (come_from == 'product')
-						{
+						else if (come_from == 'product') {
+							var reg = /_[0-9]$/g;
+							tableDrag.find('tbody tr').each(function(i) {
+								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
+							});
+							
 							tableDrag.find('tr').not('.nodrag').removeClass('alt_row');
-				       		tableDrag.find('tr:not(".nodrag"):odd').addClass('alt_row');
+							tableDrag.find('tr:not(".nodrag"):odd').addClass('alt_row');
 							tableDrag.find('tr td.dragHandle a:hidden').show();
-
-							if (bak)
-							{
+							
+							if (alternate) {
+								tableDrag.find('tr td.dragHandle:first a:odd').hide();
+								tableDrag.find('tr td.dragHandle:last a:even').hide();
+							}
+							else {
 								tableDrag.find('tr td.dragHandle:first a:even').hide();
 								tableDrag.find('tr td.dragHandle:last a:odd').hide();
 							}
-							else
-							{
-								tableDrag.find('tr td.dragHandle:first a:odd').hide();
-								tableDrag.find('tr td.dragHandle:last a:even').hide();
-							}						
-						}		
+						}
 					}
 				});
 			}
