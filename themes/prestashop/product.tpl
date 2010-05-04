@@ -250,7 +250,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</div>
 			{/if}
 
-			<p id="product_reference" {if isset($groups)}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{if $product->reference}{$product->reference|escape}{/if}</span></p>
+			{if $product->reference}<p id="product_reference" {if isset($groups)}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>{/if}
 
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
