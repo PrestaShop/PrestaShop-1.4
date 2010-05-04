@@ -153,7 +153,7 @@ class AdminOrdersStates extends AdminTab
 					</p>
 				</div>				
 				<div id="tpl" style="display: '.($this->getFieldValue($obj, 'send_email') ? 'block' : 'none').';">
-					<label>'.$this->l('').'Template:</label>
+					<label>'.$this->l('Template:').'</label>
 					<div class="margin-form">';
 			foreach ($this->_languages as $language)
 			{
