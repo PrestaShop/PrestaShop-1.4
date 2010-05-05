@@ -23,6 +23,9 @@ if (Tools::isSubmit('submitReturnMerchandise'))
 	if (!$ids_order_detail = Tools::getValue('ids_order_detail') AND !$customizationIds)
 		Tools::redirect('order-follow.php?errorDetail2');
 
+	$order = new Order(intval($id_order));
+	if ($order->id_customer != $cookie->id_customer)
+		die(Tools::displayError());
 	$orderReturn = new OrderReturn();
 	$orderReturn->id_customer = intval($cookie->id_customer);
 	$orderReturn->id_order = $id_order;

@@ -5,6 +5,73 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.7 - 2260 (2010-05-05)   #
+####################################
+
+	Added Features :
+
+	[+] Project : canadian provinces and territories added
+
+	Improved/changed features :
+
+	[*] FO : css fix (product image block)
+	[*] FO : product page now displays reference of unavailable products
+	[*] BO : add warning on AdminAppearance when settings.inc.php is'nt writable
+	[*] BO : harmonized and best-defined TinyMCE font sizes
+	[*] MO : mailalert now is W3C compliant
+	[*] Project : now define variables are on new file defines.inc.php
+	[*] MO : small fixes on DejaLa module
+	[*] PDF : Both tax included & tax excluded totals are now displayed on the invoice nomatter how the price display method is set
+	[*] MO : you can edit configuration of module when is disabled
+
+	Fixed bugs :
+
+	[-] Installer : fixed upgrade process
+
+	[-] FO : fixed bug #4372 - IE8 error JS for product w combination without picture
+	[-] FO : fixed bug #4393 - reference new pb
+	[-] FO : fixed bug #4367 - personalized field name not displayed in cart (FO for customer)
+	[-] FO : fixed a PHP error on front office (#4386)
+	[-] FO : product page now displays product reference when combination has none
+	[-] FO : fixed color picker tooltips and alt/title attributes
+	[-] FO : small fixe on prdouct page (#4277)
+	[-] FO : fixed bug #4322 - Without default group I can’t see de categories tree
+
+	[-] BO : rename "price" for a combination to "impact"
+	[-] BO : Fixed bug #4359, Missing translation in order statuses tab
+	[-] BO : fixed classic product sorting (when click on arrows)
+	[-] BO : fixed product draggable sorting (positions were going weird and somehow not saved)
+	[-] BO : fixed TinyMCE resizing (toolbars are buggy with IE)
+	[-] BO : combinations generator no more deletes existing combinations, and sets default combination only when there is none
+	[-] BO : fixed bug #4351 - Customer group not creted afrer new language installation
+	[-] BO : fixed bug #4352 - BO doctype still lang="fr"
+	[-] BO : fixed bug #4273 - error if delete track number in order
+	[-] BO : add * for required field on combinations import
+	[-] BO : remove block settigns on AdminStats page
+	[-] BO : MySQL went away when there was too many words in a description (search indexing)
+	[-] BO : fixed bug on generation of voucher when return product
+	[-] BO : fixed wrong behavior when cancelling combination modification
+	[-] BO : now we show name of label for custumonizations (#4230)
+	[-] BO : truncate long message in AdminMessage that make issue with Internet Explorer 8 (#4245)
+
+	[-] Classes : fixed bug #4250 - Product::getNewProducts total does not take groups in account
+	[-] Classes : fixed customer registration with default group
+	[-] Classes : now password.php not appear on sitemap.xml
+
+	[-] MO : fixed bug #4411 - PayPal API display bug int https pages
+	[-] MO : now when customer encounter error with PayPalAPI, the mercant receive a mail alert
+	[-] MO : now link for "My alerts" isn't show if Product availability isn't checked (#4361)
+	[-] MO : add description for module Evaluation Catalog
+	[-] MO : fixed small bug on blockcart module (#4268)
+	[-] MO : now image cover of product is showed on block Product Viewed (#4289)
+	[-] MO : fixed misspelling
+	[-] MO : fixed bug on module Feeder RSS
+
+	[-] TR : small fixes on Spannish translation
+
+	[-] PDF : Credit slip generation fixed
+
+####################################
 #   v1.3.0.6 - 2203 (2010-21-04)   #
 ####################################
 

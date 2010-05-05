@@ -16,4 +16,7 @@ $_MODULE['<{statshome}prestashop>statshome_8ff922bbcd8ad41cdfc48d3c5163b2ab'] = 
 $_MODULE['<{statshome}prestashop>statshome_03727ac48595a24daed975559c944a44'] = 'Día';
 $_MODULE['<{statshome}prestashop>statshome_7cbb885aa1164b390a0bc050a64e1812'] = 'Mes';
 $_MODULE['<{statshome}prestashop>statshome_537c66b24ef5c83b7382cdc3f34885f2'] = 'Año';
+$_MODULE['<{statshome}prestashop>statshome_1e6d57e813355689e9c77e947d73ad8f'] = 'Del:';
+$_MODULE['<{statshome}prestashop>statshome_33caa076f23f453dd4061726f3706325'] = 'Al:';
+$_MODULE['<{statshome}prestashop>statshome_c9cc8cce247e49bae79f15173ce97354'] = 'Actualizar';
 $_MODULE['<{statshome}prestashop>statshome_6799f652047c465ff8affc8c98cc4a74'] = 'Visitantes actualmente en línea:';

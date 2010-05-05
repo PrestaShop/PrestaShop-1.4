@@ -14,7 +14,7 @@ $need_identification_number = $customer->getNeedDNI();
 
 if (sizeof($_POST))
 {
- 	$exclusion = array('secure_key', 'old_passwd', 'passwd', 'active', 'date_add', 'date_upd', 'last_passwd_gen', 'newsletter_date_add');
+ 	$exclusion = array('secure_key', 'old_passwd', 'passwd', 'active', 'date_add', 'date_upd', 'last_passwd_gen', 'newsletter_date_add', 'id_default_group');
 	$fields = $customer->getFields();
 	foreach ($fields AS $key => $value)
 		if (!in_array($key, $exclusion))
@@ -42,12 +42,14 @@ if (Tools::isSubmit('submitIdentity'))
 		elseif ($need_identification_number AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
 			$errors[] = Tools::displayError('identification number is incorrect or already used');
 		else
+		{
+			$prev_id_default_group = $customer->id_default_group;
 			$errors = $customer->validateControler();
-
+		}
 		if (!sizeof($errors))
 		{
-			$customer->lastname = $customer->lastname;
-		    $customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
+			$customer->id_default_group = intval($prev_id_default_group);
+			$customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
 			if (Tools::getValue('passwd'))
 				$cookie->passwd = $customer->passwd;
 			if ($customer->update())
