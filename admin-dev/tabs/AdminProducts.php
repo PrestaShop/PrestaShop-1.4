@@ -2361,7 +2361,7 @@ class AdminProducts extends AdminTab
 					<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
 						<tr>
 							<th>'.$this->l('Attributes').'</th>
-							<th>'.$this->l('Price').'</th>
+							<th>'.$this->l('Impact').'</th>
 							<th>'.$this->l('Weight').'</th>
 							<th>'.$this->l('Reference').'</th>
 							<th>'.$this->l('EAN13').'</th>
