@@ -30,7 +30,6 @@ define('_PS_CLASS_DIR_',            _PS_ROOT_DIR_.'/classes/');
 define('_PS_TRANSLATIONS_DIR_',     _PS_ROOT_DIR_.'/translations/');
 define('_PS_DOWNLOAD_DIR_',         _PS_ROOT_DIR_.'/download/');
 define('_PS_MAIL_DIR_',             _PS_ROOT_DIR_.'/mails/');
-define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
 define('_PS_ALL_THEMES_DIR_',       _PS_ROOT_DIR_.'/themes/');
 define('_PS_THEME_DIR_',            _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/');
 define('_PS_IMG_DIR_',              _PS_ROOT_DIR_.'/img/');

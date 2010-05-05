@@ -36,6 +36,8 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
+define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
+
 /* Include all defines */
 include(dirname(__FILE__).'/defines.inc.php');
 
