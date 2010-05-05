@@ -38,6 +38,7 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 
 define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
 define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
+define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
 /* Include all defines */
 include(dirname(__FILE__).'/defines.inc.php');

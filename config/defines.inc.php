@@ -53,7 +53,6 @@ define('_PS_CSS_DIR_',              __PS_BASE_URI__.'css/');
 define('_PS_JS_DIR_',               __PS_BASE_URI__.'js/');
 
 /* settings php */
-define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 define('_PS_TRANS_PATTERN_',            '(.*[^\\\\])');
 define('_PS_MIN_TIME_GENERATE_PASSWD_', '360');
 
