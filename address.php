@@ -7,7 +7,7 @@ include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
 
 if (!$cookie->isLogged())
-    Tools::redirect('authentication.php');
+	Tools::redirect('authentication.php');
 
 //CSS ans JS file calls
 $js_files = array(
@@ -23,10 +23,10 @@ $errors = array();
 	
 if ($id_address = intval(Tools::getValue('id_address')))
 {
-    $address = new Address(intval($id_address));
-    if (Validate::isLoadedObject($address) AND Customer::customerHasAddress(intval($cookie->id_customer), intval($id_address)))
-    {
-		if (isset($_GET['delete']))
+	$address = new Address(intval($id_address));
+	if (Validate::isLoadedObject($address) AND Customer::customerHasAddress(intval($cookie->id_customer), intval($id_address)))
+	{
+		if (Tools::isSubmit('delete'))
 		{
 			if ($cart->id_address_invoice == $address->id)
 				unset($cart->id_address_invoice);
@@ -48,8 +48,8 @@ if ($id_address = intval(Tools::getValue('id_address')))
 if (Tools::isSubmit('submitAddress'))
 {
 	$address = new Address();
-	$address->id_customer = intval($cookie->id_customer);
 	$errors = $address->validateControler();
+	$address->id_customer = intval($cookie->id_customer);
 	
 	if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 		strcmp(Tools::getToken(false), Tools::getValue('token')) &&
@@ -62,7 +62,7 @@ if (Tools::isSubmit('submitAddress'))
 			$errors[] = Tools::displayError('this country require a state selection');
 
 	if (!sizeof($errors))
-    {
+	{
 		if (isset($id_address))
 		{
 			$country = new Country(intval($address->id_country));
@@ -97,7 +97,7 @@ if (Tools::isSubmit('submitAddress'))
 			Tools::redirect($back ? ($mod ? $back.'&back='.$mod : $back) : 'addresses.php');
 		}
 		$errors[] = Tools::displayError('an error occurred while updating your address');
-    }
+	}
 }
 elseif (!$id_address)
 {
@@ -109,8 +109,8 @@ elseif (!$id_address)
 	}
 }
 
-if (isset($_POST['id_country']) AND !empty($_POST['id_country']) AND is_numeric($_POST['id_country']))
-	$selectedCountry = intval($_POST['id_country']);
+if (Tools::isSubmit('id_country') AND Tools::getValue('id_country') != NULL AND is_numeric(Tools::getValue('id_country')))
+	$selectedCountry = intval(Tools::getValue('id_country'));
 elseif (isset($address) AND isset($address->id_country) AND !empty($address->id_country) AND is_numeric($address->id_country))
 	$selectedCountry = intval($address->id_country);
 elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
@@ -125,14 +125,16 @@ else
 $countries = Country::getCountries(intval($cookie->id_lang), true);
 $countriesList = '';
 foreach ($countries AS $country)
-    $countriesList .= '<option value="'.intval($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
+	$countriesList .= '<option value="'.intval($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
 include(dirname(__FILE__).'/header.php');
-$smarty->assign('countries_list', $countriesList);
-$smarty->assign('countries', $countries);
-$smarty->assign('errors', $errors);
-$smarty->assign('token', Tools::getToken(false));
-$smarty->assign('select_address', intval(Tools::getValue('select_address')));
+$smarty->assign(array(
+	'countries_list' => $countriesList,
+	'countries' => $countries,
+	'errors' => $errors,
+	'token' => Tools::getToken(false),
+	'select_address' => intval(Tools::getValue('select_address'))
+));
 Tools::safePostVars();
 $smarty->display(_PS_THEME_DIR_.'address.tpl');
 include(dirname(__FILE__).'/footer.php');

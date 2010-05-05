@@ -402,6 +402,7 @@ $_LANG['product_c6beb9157a0e29e604ad5ec484488608'] = 'Agrandir';
 $_LANG['product_2b56b60f878922093facd42284848a0c'] = 'Plus de détails';
 $_LANG['product_e54a973d0c3342dac6ee7d9e145c6f83'] = 'Contenu du pack';
 $_LANG['product_98b0a68a7e4c7b265a5ca9a0b733d96e'] = 'Choisissez un coloris :';
+$_LANG['product_ea4788705e6873b424c65e91c2846b19'] = 'Annulé';
 $_LANG['product_588907ab2d492aca0b07b5bf9c931eea'] = 'En solde';
 $_LANG['product_800e90e940e7f1fb938b0fda5137f38c'] = 'En solde !';
 $_LANG['product_901b3cbc35bc72fba17d5ccb45afbbc4'] = 'Prix réduit !';
