@@ -36,6 +36,7 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
+define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
 define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
 
 /* Include all defines */
