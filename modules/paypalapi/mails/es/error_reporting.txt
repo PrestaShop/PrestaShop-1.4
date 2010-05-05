@@ -1,9 +1,9 @@
-	Hi,
+	Hola,
 
-	Error reporting from your PayPalAPI module
+	Informe de error a partir de su módulo PayPalAPI
 
-	A client has encountered a problem with the module PayPalAPI, see the report:
+	Un cliente ha encontrado un problema con el módulo PayPalAPI:
 
 	{logs}
 
-	{shop_url} powered by PrestaShop™
+	{shop_url} lanzado por PrestaShop™
