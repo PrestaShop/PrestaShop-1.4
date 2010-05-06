@@ -1,6 +1,6 @@
 <!-- MODULE Home Featured Products -->
 <div id="featured-products_block_center" class="block products_block">
-	<h4>{l s='featured products' mod='homefeatured'}</h4>
+	<h4>{l s='Featured products' mod='homefeatured'}</h4>
 	{if isset($products) AND $products}
 		<div class="block_content">
 			{assign var='liHeight' value=342}
