@@ -102,9 +102,12 @@ class PaypalAPI extends PaymentModule
 	{
 		global $cookie, $smarty;
 
+		$send = true;
 		// Sanitinize log
 		foreach ($log as $key => $string)
-			if (substr($string, 0, 6) == 'METHOD')
+			if ($string == 'ACK -> Success')
+				$send = false;
+			elseif (substr($string, 0, 6) == 'METHOD')
 			{
 				$values = explode('&', $string);
 				foreach ($values as $key2 => $value)
@@ -122,7 +125,8 @@ class PaypalAPI extends PaymentModule
 		$smarty->assign('message', $message);
 		$smarty->assign('logs', $log);
 		$data = array('{logs}' => implode("<br />", $log));
-		Mail::Send(intval($cookie->id_lang), 'error_reporting', 'Error reporting from your PayPalAPI module', $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
+		if ($send)
+			Mail::Send(intval($cookie->id_lang), 'error_reporting', 'Error reporting from your PayPalAPI module', $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
 		echo $this->display(__FILE__, 'error.tpl');
 		include_once(dirname(__FILE__).'/../../footer.php');
 		die ;
