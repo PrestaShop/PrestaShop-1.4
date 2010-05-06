@@ -36,7 +36,7 @@
 			</select>
 		{else}
 			{l s='We accept the following currency to be sent by cheque:' mod='cheque'}&nbsp;<b>{$currencies.0.name}</b>
-			<input type="hidden" name="currency_payement" value="{$currencies.0.id_currency}">
+			<input type="hidden" name="currency_payement" value="{$currencies.0.id_currency}" />
 		{/if}
 	</p>
 	<p>
