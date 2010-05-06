@@ -142,9 +142,10 @@ class OrderDetail extends ObjectModel
 	{
 		if ($hash == '') return false;
 		$sql = 'SELECT *
-		  FROM `'._DB_PREFIX_.'order_detail` od
-		    LEFT JOIN `'._DB_PREFIX_.'product_download` pd ON (od.`product_id`=pd.`id_product`)
-		  WHERE od.`download_hash` = \''.pSQL(strval($hash)).'\'';
+		FROM `'._DB_PREFIX_.'order_detail` od
+		LEFT JOIN `'._DB_PREFIX_.'product_download` pd ON (od.`product_id`=pd.`id_product`)
+		WHERE od.`download_hash` = \''.pSQL(strval($hash)).'\'
+		AND pd.`active` = 1';
 		return Db::getInstance()->getRow($sql);
 	}
 

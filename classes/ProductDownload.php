@@ -164,7 +164,8 @@ class ProductDownload extends ObjectModel
 	{
 		$sql = 'SELECT `physically_filename`
 				FROM `'._DB_PREFIX_.'product_download`
-				WHERE `id_product` = ' . intval($id_product);
+				WHERE `id_product` = '.intval($id_product).'
+				AND `active` = 1';
 		$data = Db::getInstance()->getRow($sql);
 		return $data['physically_filename'];
 	}

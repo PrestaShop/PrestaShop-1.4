@@ -167,8 +167,7 @@ abstract class PaymentModule extends Module
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
 					$download_hash = NULL;
-					$productDownload = new ProductDownload();
-					if ($id_product_download = $productDownload->getIdFromIdProduct(intval($product['id_product'])))
+					if ($id_product_download = ProductDownload::getIdFromIdProduct(intval($product['id_product'])))
 					{
 						$productDownload = new ProductDownload(intval($id_product_download));
 						$deadline = $productDownload->getDeadLine();
