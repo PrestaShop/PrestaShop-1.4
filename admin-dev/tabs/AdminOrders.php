@@ -595,7 +595,9 @@ class AdminOrders extends AdminTab
 				'. (!empty($addressDelivery->company) ? $addressDelivery->company.'<br />' : '') .$addressDelivery->firstname.' '.$addressDelivery->lastname.'<br />
 				'.$addressDelivery->address1.'<br />'. (!empty($addressDelivery->address2) ? $addressDelivery->address2.'<br />' : '') .'
 				'.$addressDelivery->postcode.' '.$addressDelivery->city.'<br />
-				'.$addressDelivery->country.($addressDelivery->id_state ? ' - '.$deliveryState->name : '').'
+				'.$addressDelivery->country.($addressDelivery->id_state ? ' - '.$deliveryState->name : '').'<br />
+				'.(!empty($addressDelivery->phone) ? $addressDelivery->phone.'<br />' : '').'
+				'.(!empty($addressDelivery->phone_mobile) ? $addressDelivery->phone_mobile.'<br />' : '').'
 				'.(!empty($addressDelivery->other) ? '<hr />'.$addressDelivery->other.'<br />' : '').'
 			</fieldset>
 		</div>
@@ -606,7 +608,9 @@ class AdminOrders extends AdminTab
 				'. (!empty($addressInvoice->company) ? $addressInvoice->company.'<br />' : '') .$addressInvoice->firstname.' '.$addressInvoice->lastname.'<br />
 				'.$addressInvoice->address1.'<br />'. (!empty($addressInvoice->address2) ? $addressInvoice->address2.'<br />' : '') .'
 				'.$addressInvoice->postcode.' '.$addressInvoice->city.'<br />
-				'.$addressInvoice->country.($addressInvoice->id_state ? ' - '.$invoiceState->name : '').'
+				'.$addressInvoice->country.($addressInvoice->id_state ? ' - '.$invoiceState->name : '').'<br />
+				'.(!empty($addressInvoice->phone) ? $addressInvoice->phone.'<br />' : '').'
+				'.(!empty($addressInvoice->phone_mobile) ? $addressInvoice->phone_mobile.'<br />' : '').'
 				'.(!empty($addressInvoice->other) ? '<hr />'.$addressInvoice->other.'<br />' : '').'
 			</fieldset>
 		</div>
