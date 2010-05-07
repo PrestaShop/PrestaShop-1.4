@@ -42,7 +42,7 @@ class		Currency extends ObjectModel
 
  	protected 	$fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
  	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'sign' => 8);
- 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'sign' => 'isGenericName',
+ 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isStateIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
 		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool');
 
 	protected 	$table = 'currency';
