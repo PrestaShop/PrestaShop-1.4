@@ -112,8 +112,12 @@ class Hipay extends PaymentModule
 		$item->setRef($cart->id);
 		$item->setCategory($hipaycategory);
 		$item->setPrice($cart->getOrderTotal());
-		if (!$item->check())
+		try {
+			if (!$item->check())
+				return $this->l('[Hipay] Error: cannot create "Cart" Product');
+		} catch (Exception $e) {
 			return $this->l('[Hipay] Error: cannot create "Cart" Product');
+		}
 		$items = array($item);
 
 		$order = new HIPAY_MAPI_Order();
