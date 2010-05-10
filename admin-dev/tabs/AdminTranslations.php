@@ -475,7 +475,7 @@ class AdminTranslations extends AdminTab
 		return ${$var};
 	}
 
-	function displayToggleButton()
+	function displayToggleButton($closed = false)
 	{
 		echo '
 		<script type="text/javascript">
@@ -483,7 +483,7 @@ class AdminTranslations extends AdminTab
 			var closeAll = \''.html_entity_decode($this->l('Close all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
 		</script>
 		<input type="button" class="button" id="buttonall" onclick="openCloseAllDiv(\''.$_GET['type'].'_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);" />
-		<script type="text/javascript">toggleElemValue(\'buttonall\', openAll, closeAll);</script>';
+		<script type="text/javascript">toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');</script>';
 	}
 
 	function displayFormfront($lang)
@@ -521,7 +521,7 @@ class AdminTranslations extends AdminTab
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>
 		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />
 		<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
-		$this->displayToggleButton();
+		$this->displayToggleButton(sizeof($_LANG) >= $count);
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 		foreach ($files as $k => $newLang)
 			if (sizeof($newLang))
@@ -831,7 +831,8 @@ class AdminTranslations extends AdminTab
 		foreach($matches[1] as $key)
 			$tabsArray[$tab][$key] = stripslashes(key_exists($tab.md5(addslashes($key)), $_LANGPDF) ? html_entity_decode($_LANGPDF[$tab.md5(addslashes($key))], ENT_COMPAT, 'UTF-8') : '');
 		$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
-
+		$closed = sizeof($_LANGPDF) >= $count;
+		
 		echo '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>
 		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
@@ -843,7 +844,7 @@ class AdminTranslations extends AdminTab
 				<input type="hidden" name="lang" value="'.$lang.'" />
 				<input type="button" class="button" id="buttonall" onclick="openCloseAllDiv(\'pdf_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);" />
 				<script type="text/javascript">
-					toggleElemValue(\'buttonall\', openAll, closeAll);
+					toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');
 				</script>';
 		echo '<input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 		foreach ($tabsArray as $k => $newLang)

@@ -97,6 +97,6 @@
 	</fieldset>
 </form>
 {else}
-	<p class="align_center">{l s='Only registered user can post a new comment.' mod='productcomments'}</p>
+	<p class="align_center">{l s='Only registered users can post a new comment.' mod='productcomments'}</p>
 {/if}
 </div>

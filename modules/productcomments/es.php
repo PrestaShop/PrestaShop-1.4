@@ -40,5 +40,5 @@ $_MODULE['<{productcomments}prestashop>productcomments_5da618e8e4b89c66fe86e32cd
 $_MODULE['<{productcomments}prestashop>productcomments_08621d00a3a801b9159a11b8bbd69f89'] = 'No hay comentarios de clientes por ahora.';
 $_MODULE['<{productcomments}prestashop>productcomments_c3edcf2cedbd4ce230fd6d4ea8915718'] = 'Añadir un comentario';
 $_MODULE['<{productcomments}prestashop>productcomments_94966d90747b97d1f0f206c98a8b1ac3'] = 'Enviar';
-$_MODULE['<{productcomments}prestashop>productcomments_75b4e58a3954686f84e68e2eafb730d9'] = 'Solamente los usuarios registrados pueden introducir comentarios. ';
+$_MODULE['<{productcomments}prestashop>productcomments_720fae7db6e6055d2b47890240bb3598'] = 'Solamente los usuarios registrados pueden introducir comentarios.';
 $_MODULE['<{productcomments}prestashop>tab_8413c683b4b27cc3f4dbd4c90329d8ba'] = 'Comentarios';
