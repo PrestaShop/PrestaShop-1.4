@@ -110,7 +110,10 @@ else
 {
 	$product = new Product($id_product, true, intval($cookie->id_lang));
 	if (!Validate::isLoadedObject($product) OR !$product->active)
+	{
+		header('HTTP/1.1 404 page not found');
 		$errors[] = Tools::displayError('product is no longer available');
+	}
 	elseif (!$product->checkAccess(intval($cookie->id_customer)))
 		$errors[] = Tools::displayError('you do not have access to this product');
 	else

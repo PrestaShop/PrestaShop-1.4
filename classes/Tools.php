@@ -429,8 +429,9 @@ class Tools
 			{
 				$row = Db::getInstance()->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description_short`
-				FROM `'._DB_PREFIX_.'product_lang`
-				WHERE id_lang = '.intval($id_lang).' AND id_product = '.intval($id_product));
+				FROM `'._DB_PREFIX_.'product` p 
+				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`) 
+				WHERE pl.id_lang = '.intval($id_lang).' AND pl.id_product = '.intval($id_product).' AND p.active = 1');
 				if ($row)
 				{
 					if (empty($row['meta_description']))
