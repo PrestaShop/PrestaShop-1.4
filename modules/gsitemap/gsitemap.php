@@ -205,10 +205,10 @@ XML;
             $nbPages = sizeof($xml->url);
 
             $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
-            <a href="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml"><b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
+            <a href="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
-            $this->_html .= $this->l('Update:').' <b>'.strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime']).'</b><br />';
-            $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'mo</b><br />';
+            $this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime'])).'</b><br />';
+            $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'MB</b><br />';
             $this->_html .= $this->l('Indexed pages:').' <b>'.$nbPages.'</b><br /><br />';
         }
     }
@@ -229,7 +229,7 @@ XML;
 	function getContent()
 	{
 		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
-		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html" style="font-weight:bold;text-decoration:underline;">
+		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html" style="font-weight:bold;text-decoration:underline;" target="_blank">
 		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
 		if (!empty($_POST))
 		{
