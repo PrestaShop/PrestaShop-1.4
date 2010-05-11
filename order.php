@@ -315,7 +315,7 @@ function displayAddress()
 /* Carrier step */
 function displayCarrier()
 {
-	global $smarty, $cart, $cookie, $defaultCountry;
+	global $smarty, $cart, $cookie, $defaultCountry, $link;
 
 	$address = new Address(intval($cart->id_address_delivery));
 	$id_zone = Address::getZoneById(intval($address->id));
@@ -374,6 +374,12 @@ function displayCarrier()
 		if ($carrier->active AND !$carrier->deleted)
 			$checked = intval($cart->id_carrier);
 	}
+	$cms = new CMS(3, intval($cookie->id_lang));
+	$link_conditions = $link->getCMSLink($cms, $cms->link_rewrite);
+	if (!strpos($link_conditions, '?'))
+		$link_conditions .= '?content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
+	else
+		$link_conditions .= '&content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
 	if (!isset($checked) OR intval($checked) == 0)
 		$checked = intval(Configuration::get('PS_CARRIER_DEFAULT'));
 	$smarty->assign(array(
@@ -381,6 +387,7 @@ function displayCarrier()
 		'recyclablePackAllowed' => intval(Configuration::get('PS_RECYCLABLE_PACK')),
 		'giftAllowed' => intval(Configuration::get('PS_GIFT_WRAPPING')),
 		'conditions' => intval(Configuration::get('PS_CONDITIONS')),
+		'link_conditions' => $link_conditions,
 		'recyclable' => intval($cart->recyclable),
 		'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 		'carriers' => $resultsArray,
