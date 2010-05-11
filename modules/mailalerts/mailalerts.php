@@ -344,7 +344,7 @@ class MailAlerts extends Module
 					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != NULL ? intval(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
 					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
-				<label>'.$this->l('Send to this emails:').' </label>
+				<label>'.$this->l('Send to these emails:').' </label>
 				<div class="margin-form">
 					<div style="float:left; margin-right:10px;">
 						<textarea name="mA_merchant_mails" rows="10" cols="30">'.Tools::getValue('mA_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>

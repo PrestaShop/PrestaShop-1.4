@@ -21,7 +21,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_c009546071b59092716ba006f307c6af'] = 'Recibir una notificación si la cantidad del producto se encuentra por debajo del umbral de alerta';
 $_MODULE['<{mailalerts}prestashop>mailalerts_af097c4096dc45754451f6f656dd1ee0'] = 'Umbral de alerta:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_65d0578157fd293e96f55f2d9228c07b'] = 'Cantidad a partir de la cual el producto se considera fuera de stock';
-$_MODULE['<{mailalerts}prestashop>mailalerts_95ba1239ebac05e1d10d5dae049e32f5'] = 'Enviar por email:';
+$_MODULE['<{mailalerts}prestashop>mailalerts_6d219dad708e4358c90d1ae2572abcb5'] = 'Enviar por email:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_16a0cf0a0304df1b8ce3cb363eff0847'] = 'Una dirección email por línea';
 $_MODULE['<{mailalerts}prestashop>mailalerts_f77ed609e48d550f0166dfbafc102710'] = 'ej:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c1ee76f076a5b97e3b4b0c0e5703246e'] = 'No se pueden actualizar los ajustes';
