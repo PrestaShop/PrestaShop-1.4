@@ -632,7 +632,8 @@ CREATE TABLE `PREFIX_image_lang` (
   `id_image` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `legend` varchar(128) default NULL,
-  UNIQUE KEY `image_lang_index` (`id_image`,`id_lang`)
+  UNIQUE KEY `image_lang_index` (`id_image`,`id_lang`),
+  KEY `id_image` (`id_image`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_image_type` (
@@ -1015,7 +1016,8 @@ CREATE TABLE `PREFIX_product_attribute` (
   KEY `product_attribute_product` (`id_product`),
   KEY `reference` (`reference`),
   KEY `supplier_reference` (`supplier_reference`),
-  KEY `product_default` (`id_product`,`default_on`)
+  KEY `product_default` (`id_product`,`default_on`),
+  KEY `id_product_id_product_attribute` (`id_product_attribute` , `id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_attribute_combination` (
