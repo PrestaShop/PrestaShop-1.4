@@ -325,3 +325,11 @@ INSERT IGNORE INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`)
             WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_group`=`PREFIX_group`.`id_group`)
     FROM `PREFIX_lang` CROSS JOIN `PREFIX_group`);
 
+INSERT IGNORE INTO `PREFIX_scene_lang` (`id_scene`, `id_lang`, `name`)
+    (SELECT `id_scene`, id_lang, (SELECT tl.`name`
+        FROM `PREFIX_scene_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_scene`=`PREFIX_scene`.`id_scene`)
+    FROM `PREFIX_lang` CROSS JOIN `PREFIX_scene`);
+
