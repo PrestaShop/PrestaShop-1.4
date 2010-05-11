@@ -928,7 +928,7 @@ abstract class AdminTab
 			echo '
 			<div id="image" >
 				'.cacheImage($image, $this->table.'_'.intval($id).'.'.$this->imageType, $size, $this->imageType).'
-				<p align="center">'.$this->l('Filesize').' '.(filesize($image) / 1000).'ko</p>
+				<p align="center">'.$this->l('Filesize').' '.(filesize($image) / 1000).'kb</p>
 				<a href="'.$currentIndex.'&'.$this->identifier.'='.intval($id).'&token='.$token.($id_image ? '&id_image='.intval($id_image) : '').'&deleteImage=1">
 				<img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /> '.$this->l('Delete').'</a>
 			</div>';
