@@ -1,16 +1,16 @@
 <?php
 
 /**
-	* ImageType class, ImageType.php
-	* Image types management
-	* @category classes
-	*
-	* @author PrestaShop <support@prestashop.com>
-	* @copyright PrestaShop
-	* @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-	* @version 1.2
-	*
-	*/
+* ImageType class, ImageType.php
+* Image types management
+* @category classes
+*
+* @author PrestaShop <support@prestashop.com>
+* @copyright PrestaShop
+* @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+* @version 1.3
+*
+*/
 
 class		ImageType extends ObjectModel
 {
@@ -36,7 +36,7 @@ class		ImageType extends ObjectModel
 
 	/** @var integer Apply to suppliers */
 	public 		$suppliers;
-	
+
 	/** @var integer Apply to scenes */
 	public 		$scenes;
 
@@ -56,6 +56,11 @@ class		ImageType extends ObjectModel
 	protected $table = 'image_type';
 	protected $identifier = 'id_image_type';
 
+	/**
+	 * @var array Image types cache
+	 */
+	protected $images_types_cache = array();
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -71,47 +76,53 @@ class		ImageType extends ObjectModel
 	}
 
 	/**
-		* Return Image types
-		*
-		* @return array Image types
-		*/
+	* Returns image type definitions
+	*
+	* @param string|null Image type
+	* @return array Image type definitions
+	*/
 	static public function getImagesTypes($type = NULL)
 	{
-		return Db::getInstance()->ExecuteS('
-			SELECT *
-			FROM `'._DB_PREFIX_.'image_type`
-			WHERE 1
-			'.(($type == 'products') ? ' AND products = 1 ' : '').'
-			'.(($type == 'categories') ? ' AND categories = 1 ' : '').'
-			'.(($type == 'manufacturers') ? ' AND manufacturers = 1 ' : '').'
-			'.(($type == 'suppliers') ? ' AND suppliers = 1 ' : '').'
-			'.(($type == 'scenes') ? ' AND scenes = 1 ' : '').'
-			ORDER BY `name` ASC'
-		);
+		if (!isset(self::$images_types_cache[$type]))
+		{
+			if (!empty($type))
+				$where = 'WHERE ' . pSQL($type) . ' = 1 ';
+			else
+				$where = '';
+
+			$query = 'SELECT * FROM `'._DB_PREFIX_.'image_type`'.$where.'ORDER BY `name` ASC';
+			self::$images_types_cache[$type] = Db::getInstance()->ExecuteS($query);
+		}
+
+		return self::$images_types_cache[$type];
 	}
-	
+
 	/**
-		* Check if type already is already registered in database
-		*
-		* @param string $typeName Name
-		* @return integer Number of results found
-		*/
+	* Check if type already is already registered in database
+	*
+	* @param string $typeName Name
+	* @return integer Number of results found
+	*/
 	static public function typeAlreadyExists($typeName)
 	{
 		if (!Validate::isImageTypeName($typeName))
 			die(Tools::displayError());
+			
 		$result = Db::getInstance()->ExecuteS('
-			SELECT `id_image_type`
-			FROM `'._DB_PREFIX_.'image_type`
-			WHERE `name` = \''.pSQL($typeName).'\''
-		);
+		SELECT `id_image_type`
+		FROM `'._DB_PREFIX_.'image_type`
+		WHERE `name` = \''.pSQL($typeName).'\'');
+
 		return Db::getInstance()->NumRows();
 	}
 
+	/**
+	 * Finds image type definition by name and type
+	 * @param string $name
+	 * @param string $type
+	 */
 	static public function getByNameNType($name, $type)
 	{
-		if (!in_array($type, array('products', 'categories', 'manufacturers', 'suppliers', 'scenes')))
-			die(Tools::displayError());
 		return Db::getInstance()->getRow('SELECT `id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes` FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \''.pSQL($name).'\' AND `'.pSQL($type).'` = 1');
 	}
 

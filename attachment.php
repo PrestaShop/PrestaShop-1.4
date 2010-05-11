@@ -8,7 +8,7 @@ $a = new Attachment(intval(Tools::getValue('id_attachment')), intval($cookie->id
 header('Content-Transfer-Encoding: binary');
 header('Content-Type: '.$a->mime);
 header('Content-Length: '.filesize(_PS_DOWNLOAD_DIR_.$a->file));
-header('Content-Disposition: attachment; filename="'.$a->name.'"');
+header('Content-Disposition: attachment; filename="'.utf8_decode($a->name).'"');
 readfile(_PS_DOWNLOAD_DIR_.$a->file);
 exit;
 
