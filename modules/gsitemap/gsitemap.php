@@ -3,37 +3,37 @@
 
 class Gsitemap extends Module
 {
-    private $_html = '';
-    private $_postErrors = array();
+	private $_html = '';
+	private $_postErrors = array();
 
-    function __construct()
-    {
-        $this->name = 'gsitemap';
-        $this->tab = 'Tools';
-        $this->version = '1.5';
+	function __construct()
+	{
+		$this->name = 'gsitemap';
+		$this->tab = 'Tools';
+		$this->version = '1.5';
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->displayName = $this->l('Google sitemap');
-        $this->description = $this->l('Generate your Google sitemap file');
+		$this->displayName = $this->l('Google sitemap');
+		$this->description = $this->l('Generate your Google sitemap file');
 		
 		define('GSITEMAP_FILE', dirname(__FILE__).'/../../sitemap.xml');
-    }
+	}
 
-    function uninstall()
-    {
-        file_put_contents(GSITEMAP_FILE, '');
-        return parent::uninstall();
-    }
+	function uninstall()
+	{
+		file_put_contents(GSITEMAP_FILE, '');
+		return parent::uninstall();
+	}
 	
-    private function _postValidation()
-    {
-        file_put_contents(GSITEMAP_FILE, '');
+	private function _postValidation()
+	{
+		file_put_contents(GSITEMAP_FILE, '');
 		if (!($fp = fopen(GSITEMAP_FILE, 'w')))
 			$this->_postErrors[] = $this->l('Cannot create').' '.realpath(dirname(__FILE__.'/../..')).'/'.$this->l('sitemap.xml file.');
 		else
 			fclose($fp);
-    }
+	}
 	
 	private function getUrlWith($url, $key, $value)
 	{
@@ -44,9 +44,10 @@ class Gsitemap extends Module
 		return $url.'?'.$key.'='.$value;
 	}
 
-    private function _postProcess()
-    {
+	private function _postProcess()
+	{
 		Configuration::updateValue('GSITEMAP_ALL_CMS', intval(Tools::getValue('GSITEMAP_ALL_CMS')));
+		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', intval(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
 		$link = new Link();
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$ruBackup = $_SERVER['REQUEST_URI'];
@@ -84,8 +85,8 @@ XML;
 			ORDER BY cl.id_cms, cl.id_lang ASC';
 		
 		$cmss = Db::getInstance()->ExecuteS($sql_cms);
-      	foreach($cmss AS $cms)
-      	{
+		foreach($cmss AS $cms)
+		{
 			$sitemap = $xml->addChild('url');
 			$tmpLink = $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite']);
 			$_GET = array('id_cms' => intval($cms['id_cms']));
@@ -99,12 +100,12 @@ XML;
 				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
 				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
 			}
-            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
-            $sitemap->addChild('priority', '0.8');
-            $sitemap->addChild('changefreq', 'monthly');
+			$sitemap->addChild('loc', htmlspecialchars($tmpLink));
+			$sitemap->addChild('priority', '0.8');
+			$sitemap->addChild('changefreq', 'monthly');
 		}
 		
-        $categories = Db::getInstance()->ExecuteS('
+		$categories = Db::getInstance()->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
 		FROM '._DB_PREFIX_.'category c
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON c.id_category = cl.id_category
@@ -112,7 +113,7 @@ XML;
 		WHERE l.`active` = 1 AND c.`active` = 1 AND c.id_category != 1
 		ORDER BY cl.id_category, cl.id_lang ASC');
 		foreach($categories as $category)
-        {
+		{
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
 			$sitemap = $xml->addChild('url');
@@ -133,7 +134,7 @@ XML;
             $sitemap->addChild('changefreq', 'weekly');
       	}
 
-        $products = Db::getInstance()->ExecuteS('
+		$products = Db::getInstance()->ExecuteS('
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, pl.id_lang, cl.`link_rewrite` AS category, ean13, (
 			SELECT MIN(level_depth)
 			FROM '._DB_PREFIX_.'product p2
@@ -145,12 +146,13 @@ XML;
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
 		LEFT JOIN '._DB_PREFIX_.'lang l ON pl.id_lang = l.id_lang
 		WHERE l.`active` = 1 AND p.`active` = 1
+		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
 		ORDER BY pl.id_product, pl.id_lang ASC');
-        foreach($products as $product)
-        {
+		foreach($products as $product)
+		{
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
-            $sitemap = $xml->addChild('url');
+			$sitemap = $xml->addChild('url');
 			$tmpLink = $link->getProductLink(intval($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13']);
 			$_GET = array('id_product' => intval($product['id_product']));
 			if ($product['id_lang'] != $defaultLanguage)
@@ -213,10 +215,14 @@ XML;
         }
     }
 
-    private function _displayForm()
-    {
-        $this->_html .=
-        '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+	private function _displayForm()
+	{
+		$this->_html .=
+		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+			<div style="margin:0 0 20px 0;">
+				<input type="checkbox" name="GSITEMAP_ALL_PRODUCTS" id="GSITEMAP_ALL_PRODUCTS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_PRODUCTS">'.$this->l('Sitemap contains all products').'</label>
+				<p style="color:#7F7F7F;">'.$this->l('Default, only products on categories actives are included on Sitemap').'</p>
+			</div>
 			<div style="margin:0 0 20px 0;">
 				<input type="checkbox" name="GSITEMAP_ALL_CMS" id="GSITEMAP_ALL_CMS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_CMS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_CMS">'.$this->l('Sitemap contains all CMS pages').'</label>
 				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default, only CMS pages on block CMS are included on Sitemap').'</p>
