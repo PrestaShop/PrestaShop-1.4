@@ -689,6 +689,8 @@ class		Category extends ObjectModel
 		$this->cleanGroups();
 		if ($list AND sizeof($list))
 			$this->addGroups($list);
+		else
+			$this->addGroups(array(1));
 	}
 
 	static public function setNewGroupForHome($id_group)
