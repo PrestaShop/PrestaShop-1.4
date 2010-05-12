@@ -59,7 +59,7 @@ class		ImageType extends ObjectModel
 	/**
 	 * @var array Image types cache
 	 */
-	protected $images_types_cache = array();
+	protected static $images_types_cache = array();
 
 	public function getFields()
 	{
