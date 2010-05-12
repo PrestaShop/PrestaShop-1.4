@@ -1436,7 +1436,7 @@ class		Product extends ObjectModel
 			$totalQuantity = intval(Db::getInstance()->getValue('
 				SELECT SUM(`quantity`)
 				FROM `'._DB_PREFIX_.'cart_product`
-				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cookie->id_cart))
+				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($id_cart))
 			) + intval($quantity);
 		}
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
@@ -2257,14 +2257,19 @@ class		Product extends ObjectModel
 	static public function getAllCustomizedDatas($id_cart, $id_lang = null)
 	{
 		global $cookie;
-		if (!$id_lang)
+		if (!$id_lang AND $cookie->id_lang)
 			$id_lang = $cookie->id_lang;
+		else
+		{
+			$cart = new Cart(intval($id_cart));
+			$id_lang = intval($cart->id_lang);
+		}
 		
 		if (!$result = Db::getInstance()->ExecuteS('
 			SELECT cd.`id_customization`, c.`id_product`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`, cfl.`name`
 			FROM `'._DB_PREFIX_.'customized_data` cd
 			NATURAL JOIN `'._DB_PREFIX_.'customization` c
-			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.intval($cookie->id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.intval($id_lang).')
 			WHERE c.`id_cart` = '.intval($id_cart).'
 			ORDER BY `id_product`, `id_product_attribute`, `type`, `index`'))
 			return false;

@@ -93,7 +93,7 @@ class Tm4b extends Module
 	
 	private function _getTplBody($tpl_file, $vars = array())
 	{
-		$iso = Language::getIsoById(intval(Configuration::get(PS_LANG_DEFAULT)));
+		$iso = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 		$file = dirname(__FILE__).'/mails/'.$iso.'/'.$tpl_file;
 		if (!file_exists($file))
 			die($file);
@@ -114,8 +114,8 @@ class Tm4b extends Module
 		$currency = $params['currency'];
 		
 		$templateVars = array(
-		'{firstname}' => $customer->firstname,
-		'{lastname}' => $customer->lastname,
+		'{firstname}' => utf8_decode($customer->firstname),
+		'{lastname}' => utf8_decode($customer->lastname),
 		'{order_name}' => sprintf("%06d", $order->id),
 		'{shop_name}' => Configuration::get('PS_SHOP_NAME'),
 		'{payment}' => $order->payment,
