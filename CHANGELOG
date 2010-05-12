@@ -5,6 +5,53 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.8 - 2288 (2010-12-05)   #
+####################################
+
+	Added Features :
+
+	[+] MO : add new module for Cross Selling - Feature of Community day
+
+	Improved/changed features :
+
+	[*] FO : add spanish image for "On Sale" (#4430)
+
+	[*] BO : Group listing performance increased
+	[*] BO : add phone number into shipping and invoice address on Order details
+
+	[*] SQL : add new indexes in database
+
+	Fixed bugs :
+
+	[-] FO : Fixed bug #4329, Bug on attachments files with special characters! (utf-8)
+	[-] FO : fixed bug #4485 - Combination reference codes not shown on FO
+	[-] FO : fixed bug 4459 - Removing a Product does remove all data from front office or create 404
+	[-] FO : Fixed bug #4474, Bad translation in the customer reviews module
+	[-] FO : fixed bug #4482 - (read more) link is always non-friendly URL
+	[-] FO : fixed W3C errors
+
+	[-] BO : Fixed bug #4488, Improved performance on ImageType class (used in product import)
+	[-] BO : fixed bug #4480 - Localization issues
+	[-] BO : fixed bug #4477 - Bug in Adminsearch by reference
+	[-] BO : Fixed bug #4473, Bug on the "Expand all fields" in the translations tab
+	[-] BO : Fixed bug #4467, Better Slovak characters management in friendly urls
+
+	[-] Classes : fixed bug #4493 - Csv category importing set all the category group access to null
+	[-] Classes : add missing field for translations
+	[-] Classes :fixed bug #4436 - Virtual product after editing crash
+
+	[-] MO : now you can choose if only the products on actived categories are included in SiteMap
+	[-] MO : fixed bug #4478 - Sitemap module issues
+	[-] MO : fixed english translation (#4476)
+	[-] MO : fixed bug #4416 - Bloc name lowercessed
+	[-] MO : fixed little bug on PayPalAPI
+
+	[-] TR : fixed bug #4479 - SQL issues after creating a new language
+
+	[-] PDF : Credit slip prices are now preceded by a minux sign
+
+
+####################################
 #   v1.3.0.7 - 2260 (2010-05-05)   #
 ####################################
 
