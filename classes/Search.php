@@ -244,8 +244,8 @@ class Search
 		$attributes = '';
 		$attributesArray = $db->ExecuteS('
 		SELECT al.name FROM '._DB_PREFIX_.'product_attribute pa
-		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
-		LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang = '.intval($id_lang).')
+		INNER JOIN '._DB_PREFIX_.'product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
+		INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang = '.intval($id_lang).')
 		WHERE pa.id_product = '.intval($id_product));
 		foreach ($attributesArray as $attribute)
 			$attributes .= $attribute['name'].' ';
