@@ -1607,7 +1607,7 @@ class		Product extends ObjectModel
 
 		if ($result['quantity'] < $product['cart_quantity'])
 		{
-			Db::getInstance()->Execute('product
+			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
 			SET `quantity` = 0
 			WHERE `id_product` = '.intval($product['id_product']).($product['id_product_attribute'] ?

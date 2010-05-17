@@ -53,7 +53,7 @@ class CrossSelling extends Module
 			
 			foreach ($orderProducts AS &$orderProduct)
 			{
-				$orderProduct['image'] = $link->getImageLink($orderProduct['name'], intval($orderProduct['product_id']).'-'.intval($orderProduct['id_image']), 'medium');
+				$orderProduct['image'] = $link->getImageLink($orderProduct['link_rewrite'], intval($orderProduct['product_id']).'-'.intval($orderProduct['id_image']), 'medium');
 				$orderProduct['link'] = $link->getProductLink(intval($orderProduct['product_id']), $orderProduct['link_rewrite']);
 			}
 			
