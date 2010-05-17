@@ -4,13 +4,14 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../header.php');
 include(dirname(__FILE__).'/cashondelivery.php');
 
-$confirm = Tools::getValue('confirm');
+$cashOnDelivery = new CashOnDelivery();
+if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR $cart->id_carrier == 0 OR !$cashOnDelivery->active)
+	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
 /* Validate order */
-if ($confirm)
+if (Tools::getValue('confirm'))
 {
 	$customer = new Customer(intval($cart->id_customer));
-	$cashOnDelivery = new CashOnDelivery();
 	$total = $cart->getOrderTotal(true, 3);
 	$cashOnDelivery->validateOrder(intval($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName);
 	$order = new Order(intval($cashOnDelivery->currentOrder));
