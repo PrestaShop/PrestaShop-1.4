@@ -508,7 +508,7 @@ class		Product extends ObjectModel
 	*/
 	public function deleteCategories($cleanPositions = false)
 	{
-		$result = Db::getInstance()->Executes('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
+		$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
 		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.intval($this->id));
 		if ($cleanPositions === true)
 			foreach($result AS $row)
