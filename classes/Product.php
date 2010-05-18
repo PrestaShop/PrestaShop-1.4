@@ -1390,6 +1390,9 @@ class		Product extends ObjectModel
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
 
+		if (Tax::excludeTaxeOption())
+			$usetax = false;
+
 		// Caching system
 		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity;
 		if (isset(self::$_prices[$cacheId]))
@@ -1409,7 +1412,7 @@ class		Product extends ObjectModel
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address_delivery ? intval($id_address_delivery) : NULL)));
 		if ($forceAssociatedTax)
 			$tax = floatval($result['rate']);
-		if (Tax::excludeTaxeOption() OR !$tax)
+		if (!$tax)
 			$usetax = false;
 		if ($usetax)
 			$price = $price * (1 + ($tax / 100));

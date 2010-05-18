@@ -613,6 +613,8 @@ class		Cart extends ObjectModel
 
 		$products = $this->getProducts();
 		$order_total = 0;
+		if (Tax::excludeTaxeOption())
+			$withTaxes = false;
 		foreach ($products AS $product)
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
@@ -993,7 +995,7 @@ class		Cart extends ObjectModel
 		
 		$delivery = new Address(intval($this->id_address_delivery));
 		$invoice = new Address(intval($this->id_address_invoice));
-		
+
 		return array(
 			'delivery' => $delivery,
 			'delivery_state' => State::getNameById($delivery->id_state),
