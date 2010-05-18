@@ -14,7 +14,7 @@
 	{if $returnAllowed}
 		<li><a href="{$base_dir_ssl}order-follow.php" title="{l s='Merchandise returns'}"><img src="{$img_dir}icon/return.gif" alt="{l s='Merchandise returns'}" class="icon" /></a><a href="{$base_dir_ssl}order-follow.php" title="{l s='Merchandise returns'}">{l s='Merchandise returns'}</a></li>
 	{/if}
-	<li><a href="{$base_dir_ssl}order-slip.php" title="{l s='Orders'}"><img src="{$img_dir}icon/slip.gif" alt="{l s='Orders'}" class="icon" /></a><a href="{$base_dir_ssl}order-slip.php" title="{l s='Credit slips'}">{l s='Credit slips'}</a></li>
+	<li><a href="{$base_dir_ssl}order-slip.php" title="{l s='Credit slips'}"><img src="{$img_dir}icon/slip.gif" alt="{l s='Credit slips'}" class="icon" /></a><a href="{$base_dir_ssl}order-slip.php" title="{l s='Credit slips'}">{l s='Credit slips'}</a></li>
 	<li><a href="{$base_dir_ssl}addresses.php" title="{l s='Addresses'}"><img src="{$img_dir}icon/addrbook.gif" alt="{l s='Addresses'}" class="icon" /></a><a href="{$base_dir_ssl}addresses.php" title="{l s='Addresses'}">{l s='Your addresses'}</a></li>
 	<li><a href="{$base_dir_ssl}identity.php" title="{l s='Information'}"><img src="{$img_dir}icon/userinfo.gif" alt="{l s='Information'}" class="icon" /></a><a href="{$base_dir_ssl}identity.php" title="{l s='Information'}">{l s='Your personal information'}</a></li>
 	{if $voucherAllowed}
