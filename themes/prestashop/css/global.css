@@ -1411,9 +1411,14 @@ ul#product_list li {
 	background: #d0d3d8 url('../img/block_category_item_bg.jpg') repeat-x;
 	border: solid 1px #d0d3d8;
 	padding: 6px;
-	height: 130px;
+	min-height: 130px;
+	height: auto;
 	clear: both;
 	margin-bottom: 0.3em
+}
+* html ul#product_list li {
+	height: auto !important;
+	height: 130px
 }
 ul#product_list li a {
 	text-decoration: none;
@@ -1437,7 +1442,10 @@ ul#product_list li .new {
 	text-transform: uppercase;
 	vertical-align: 0.3em
 }
-ul#product_list li p.product_desc { font-size: 0.92em }
+ul#product_list li p.product_desc { 
+	margin-bottom: 0;
+	font-size: 0.92em 
+}
 ul#product_list li div.center_block {
 	float: left;
 	width: 74%
