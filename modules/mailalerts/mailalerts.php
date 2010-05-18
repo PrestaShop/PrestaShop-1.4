@@ -251,7 +251,7 @@ class MailAlerts extends Module
 	
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
-		global $cookie;
+		global $cookie, $link;
 		
 		$customers = Db::getInstance()->ExecuteS('
 			SELECT id_customer, customer_email
@@ -262,7 +262,7 @@ class MailAlerts extends Module
 		$product =  new Product(intval($id_product));
 		$templateVars = array(
 			'{product}' => strval($product->name[intval(Configuration::get('PS_LANG_DEFAULT'))]),
-			'{product_link}' => Link::getProductLink($product)
+			'{product_link}' => $link->getProductLink($product)
 		);
 		foreach ($customers as $cust)
 		{
