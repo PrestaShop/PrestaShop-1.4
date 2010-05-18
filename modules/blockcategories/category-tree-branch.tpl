@@ -4,9 +4,9 @@
 		<ul>
 		{foreach from=$node.children item=child name=categoryTreeBranch}
 			{if $smarty.foreach.categoryTreeBranch.last}
-						{include file=$tpl_dir./category-tree-branch.tpl node=$child last='true'}
+						{include file=$branche_tpl_path node=$child last='true'}
 			{else}
-						{include file=$tpl_dir./category-tree-branch.tpl node=$child last='false'}
+						{include file=$branche_tpl_path node=$child last='false'}
 			{/if}
 		{/foreach}
 		</ul>
