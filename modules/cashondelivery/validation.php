@@ -5,7 +5,7 @@ include(dirname(__FILE__).'/../../header.php');
 include(dirname(__FILE__).'/cashondelivery.php');
 
 $cashOnDelivery = new CashOnDelivery();
-if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR $cart->id_carrier == 0 OR !$cashOnDelivery->active)
+if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$cashOnDelivery->active)
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
 /* Validate order */

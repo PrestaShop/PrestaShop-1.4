@@ -6,7 +6,7 @@ include(dirname(__FILE__).'/cheque.php');
 
 $cheque = new Cheque();
 
-if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR $cart->id_carrier == 0 OR !$cheque->active)
+if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$cheque->active)
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
 $currency = new Currency(intval(isset($_POST['currency_payement']) ? $_POST['currency_payement'] : $cookie->id_currency));
