@@ -1,6 +1,7 @@
 {ldelim}
 'products': [
-{if $products}{foreach from=$products item=product}
+{if $products}
+{foreach from=$products item=product name='products'}
 {assign var='productId' value=$product.id_product}
 {assign var='productAttributeId' value=$product.id_product_attribute}
 	{ldelim}
@@ -20,33 +21,33 @@
 		'hasCustomizedDatas': {if isset($customizedDatas.$productId.$productAttributeId)}true{else}false{/if},
 
 		'customizedDatas':[
-		{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization'}{ldelim}
+		{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization' name='customizedDatas'}{ldelim}
 {* This empty line was made in purpose (product addition debug), please leave it here *}
 
 			'customizationId':	{$id_customization},
 			'quantity':			{$customization.quantity},
 			'datas': [
-{foreach from=$customization.datas key='type' item='datas'}
+				{foreach from=$customization.datas key='type' item='datas' name='customization'}
 				{ldelim}
 					'type':	{$type},
 					'datas':
 					[
-{foreach from=$datas key='index' item='data'}
-
+					{foreach from=$datas key='index' item='data' name='datas'}
 						{ldelim}
 						'index':			{$index},
 						'value':			'{$data.value|addslashes}',
 						'truncatedValue':	'{$data.value|truncate:28:'...'|addslashes}'
-						{rdelim},
+						{rdelim}{if !$smarty.foreach.datas.last},{/if}
 					{/foreach}]
-				{rdelim},
+				{rdelim}{if !$smarty.foreach.customization.last},{/if}
 				{/foreach}
 			]
-		{rdelim},{/foreach}
+		{rdelim}{if !$smarty.foreach.customizedDatas.last},{/if}
+		{/foreach}
 		]
 
 
-	{rdelim},
+	{rdelim}{if !$smarty.foreach.products.last},{/if}
 {/foreach}{/if}
 ],
 

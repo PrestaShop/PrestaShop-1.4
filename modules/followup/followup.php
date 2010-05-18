@@ -365,8 +365,11 @@ class Followup extends Module
 		$discount->cumulable = 0;
 		$discount->cumulable_reduction = 1;
 		$discount->minimal = 0;
-		$discount->description[1] = $description;
-		$discount->description[2] = $description;
+		
+		$languages = Language::getLanguages(true);
+		foreach ($languages AS $language)
+			$discount->description[intval($language['id_lang'])] = $description;
+			
 		$name = 'FLW-'.intval($id_email_type).'-'.strtoupper(Tools::passwdGen(10));
 		$discount->name = $name;
 		$discount->active = 1;
