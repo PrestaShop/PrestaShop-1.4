@@ -206,7 +206,8 @@ CREATE TABLE `PREFIX_category_group` (
   `id_category` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL,
   KEY `category_group_index` (`id_category`,`id_group`),
-  KEY `id_category` (`id_category`)
+  KEY `id_category` (`id_category`),
+  KEY `id_group` (`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_category_lang` (
@@ -818,7 +819,8 @@ CREATE TABLE `PREFIX_order_detail` (
   PRIMARY KEY  (`id_order_detail`),
   KEY `order_detail_order` (`id_order`),
   KEY `product_id` (`product_id`),
-  KEY `product_attribute_id` (`product_attribute_id`)
+  KEY `product_attribute_id` (`product_attribute_id`),
+  KEY `id_order_id_order_detail` (`id_order`, `id_order_detail`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_order_discount` (
@@ -996,7 +998,8 @@ CREATE TABLE `PREFIX_product` (
   KEY `product_manufacturer` (`id_manufacturer`),
   KEY `id_tax` (`id_tax`),
   KEY `id_category_default` (`id_category_default`),
-  KEY `id_color_default` (`id_color_default`)
+  KEY `id_color_default` (`id_color_default`),
+  KEY `date_add` (`date_add`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_product_attribute` (
