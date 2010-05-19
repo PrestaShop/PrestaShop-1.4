@@ -192,6 +192,17 @@ class		Discount extends ObjectModel
 		return $res;
 	}
 	
+	public function usedByCustomer($id_customer)
+	{
+		return Db::getInstance()->getValue('
+		SELECT COUNT(*)
+		FROM `'._DB_PREFIX_.'order_discount` od 
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (od.`id_order` = o.`id_order`) 
+		WHERE od.`id_discount` = '.intval($this->id).' 
+		AND o.`id_customer` = '.intval($id_customer)
+		);
+	}
+	
 	/**
 	  * Return discount value
 	  *
@@ -210,6 +221,8 @@ class		Discount extends ObjectModel
 		if (time() < $date_start OR time() > $date_end) return 0;
 
 		$cart = new Cart(intval($idCart));
+		if (Validate::isLoadedObject($cart) AND $this->usedByCustomer(intval($cart->id_customer)) >= $this->quantity_per_user)
+			return 0;
 		$products = $cart->getProducts();
 		$categories = Discount::getCategories(intval($this->id));
 		$in_category = false;
