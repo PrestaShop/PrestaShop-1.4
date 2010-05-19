@@ -167,7 +167,14 @@ class AdminGroups extends AdminTab
 		
 		$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
 		
-		if (isset($_GET['delete'.$this->table]))
+		if (Tools::isSubmit('submitAddgroup'))
+		{
+			if (Tools::getValue('reduction') > 100 OR Tools::getValue('reduction') < 0)
+				$this->_errors[] = Tools::displayError('reduction value is incorrect');
+			else
+				return parent::postProcess();
+		}
+		elseif (isset($_GET['delete'.$this->table]))
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{

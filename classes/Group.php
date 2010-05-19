@@ -84,13 +84,14 @@ class		Group extends ObjectModel
 		ORDER BY cg.`id_customer` ASC');
 	}
 	
-	static public function getReduction($id_customer)
+	static public function getReduction($id_customer = NULL)
 	{
-		$customer = new Customer(intval($id_customer));
+		if ($id_customer)
+			$customer = new Customer(intval($id_customer));
 		return Db::getInstance()->getValue('
 		SELECT `reduction`
 		FROM `'._DB_PREFIX_.'group`
-		WHERE `id_group` = '.intval($customer->id_default_group));
+		WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? intval($customer->id_default_group) : 1));
 	}
 
 	static public function getPriceDisplayMethod($id_group)

@@ -121,6 +121,22 @@ class AdminEmployees extends AdminTab
 			</fieldset>
 		</form>';
 	}
+	
+	public function postProcess()
+	{
+		if (Tools::isSubmit('deleteemployee') OR Tools::isSubmit('status'))
+		{
+			if (sizeof(Employee::getEmployees()) <= 1)
+			{
+				$this->_errors[] = Tools::displayError('You can\'t disable or delete the only account employee.');
+				return false;
+			}
+			else
+				return parent::postProcess();
+		}
+		else
+			return parent::postProcess();
+	}
 }
 
 ?>

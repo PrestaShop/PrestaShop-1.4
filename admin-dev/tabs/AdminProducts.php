@@ -466,6 +466,8 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = Tools::displayError('quantity is required and must be superior of 1');
 					elseif (!($value_discount = floatval(Tools::getValue('value_discount'))))
 						$this->_errors[] = Tools::displayError('value is required');
+					elseif ($value_discount > 100 AND $id_discount_type == 1)
+						$this->_errors[] = Tools::displayError('value is incorrect');
 					else
 					{
 						$qD = new QuantityDiscount();

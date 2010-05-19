@@ -132,7 +132,13 @@ class CMS extends ObjectModel
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'block_cms (id_block, id_cms) VALUES '.pSQL($list));
 			
 		return true;
-	}	
+	}
+	
+	public function delete()
+	{
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_cms` ='.intval($this->id));
+		return parent::delete();
+	}
 }
 
 ?>
