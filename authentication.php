@@ -163,7 +163,6 @@ if (Tools::isSubmit('SubmitLogin'))
 			$cookie->email = $customer->email;
 			if (Configuration::get('PS_CART_FOLLOWING') AND (empty($cookie->id_cart) OR Cart::getNbProducts($cookie->id_cart) == 0))
 				$cookie->id_cart = intval(Cart::lastNoneOrderedCart(intval($customer->id)));
-			$id_address = intval(Address::getFirstCustomerAddressId(intval($customer->id)));
 			Module::hookExec('authentication');
 			if ($back = Tools::getValue('back'))
 				Tools::redirect($back);
