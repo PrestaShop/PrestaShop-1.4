@@ -511,7 +511,7 @@ class		Customer extends ObjectModel
 	
 	public function getNeedDNI()
 	{
-		$countries = Db::getInstance()->Executes('
+		$countries = Db::getInstance()->ExecuteS('
 		SELECT `id_country` 
 		FROM `'._DB_PREFIX_.'address` 
 		WHERE `id_customer` = '.intval($this->id).' 
