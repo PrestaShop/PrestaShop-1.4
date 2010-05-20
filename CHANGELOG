@@ -5,6 +5,49 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.0.10 - 2314 (2010-20-05)   #
+####################################
+
+	Improved/changed features :
+
+	[*] FO : added clearfix and fixed cross-browser display
+	[*] FO : display of product-list item enhanced (moved availability text = more space for title and description)
+
+	Fixed bugs :
+
+	[-] FO : optimized performances of a SQL query
+	[-] FO : fixed bug with group reduction
+	[-] FO : fixed bug #4556 - Not valid JSON in blockcart module
+	[-] FO : fixed bug #4512 - Credit slips icon on my account page has wrong alt and title
+	[-] FO : fixed bug #4506 - Error text On sale spanish
+	[-] FO : Search fixed when the product did not have any image associated
+
+	[-] FO / MO : Order finalization fixed concerning cheque, bankwire and cashondelivery modules when ordering only virtual products
+
+	[-] BO : Now table ps_block_cms is cleanned when you delete a CMS page
+	[-] BO : fixed bug with multilanguage fields
+	[-] BO : you can't delete a employee account if it's the last one
+	[-] BO : fixed bug on quantity discount
+	[-] BO : fixed bug on validation of group form
+
+	[-] Classes : fixed bug with discount
+	[-] Classes : fixed bug on product page when taxes are disabled
+	[-] Classes : fixed bug #4584 - getNeedDNI() function, call to “Executes” instead of “ExecuteS”
+	[-] Classes : Product price fixed when tax disabled (the state tax was still applied)
+	[-] Classes : fixed bug #4546 - In deleteCategories function, call to “Executes” instead of “ExecuteS”
+	[-] Classes : fixed bug #4545 - Incorrect string before Mysql request in updateQuantity function of Product.php
+
+	[-] MO : fixed bug #4578 - PHP Log Error - getProductLink() on module mailalert
+	[-] MO : fixed bug #4547 - Follow up module
+	[-] MO : fixed bug #4508 - BlockCategories
+	[-] MO : fixed bug #4504 - Cross Selling Image path
+
+	[-] SQL : add new indexes
+
+	[-] PDF : fixed order slip
+
+
+####################################
 #   v1.3.0.9 - 2293 (2010-12-05)   #
 ####################################
 
