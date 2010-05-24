@@ -196,15 +196,19 @@ class Search
 		
 		if ($ajax)
 		{
-			$queryResults = '
-			SELECT DISTINCT p.id_product, pl.name as pname, IF(cl.name REGEXP "^[0-9]{2}\\.", SUBSTRING(cl.name, 4), cl.name) as cname,
-				cl.link_rewrite as crewrite, pl.link_rewrite as prewrite '.$score.'
-			FROM '._DB_PREFIX_.'product p
-			INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-			INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
-			WHERE p.`id_product` '.$productPool.'
-			ORDER BY position DESC LIMIT 10';
-			return $db->ExecuteS($queryResults);
+			if (!$result = $db->ExecuteS('
+				SELECT DISTINCT p.id_product, pl.name as pname, cl.name AS cname,
+					cl.link_rewrite as crewrite, pl.link_rewrite as prewrite '.$score.'
+				FROM '._DB_PREFIX_.'product p
+				INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+				INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+				WHERE p.`id_product` '.$productPool.'
+				ORDER BY position DESC LIMIT 10
+			'))
+				return false;
+			foreach ($result AS &$row)
+				$row['cname'] = Category::hideCategoryPosition($row['cname']);
+			return $result;
 		}
 
 		$queryResults = '
