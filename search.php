@@ -6,10 +6,11 @@ if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')) A
 {
 	include(dirname(__FILE__).'/init.php');
 	$link = new Link();
-	$search = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
-	foreach ($search as $product)
-		echo $product['id_product'].'|'.$product['pname'].'|'.$product['cname'].'|'.$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite'])."\n";
-	die;
+	$productList = array();
+	$searchResults = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
+	foreach ($searchResults AS &$product)
+		$product['product_link'] = $link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
+	die(json_encode($searchResults));
 }
 
 include(dirname(__FILE__).'/header.php');
