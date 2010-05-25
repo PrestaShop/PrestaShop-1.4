@@ -989,7 +989,7 @@ class AdminProducts extends AdminTab
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default != NULL ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default != NULL ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').($id_category_default == $id_category ? ' onchange="alert(\''.$this->l('Consider changing the default category.').'\')"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
@@ -1002,7 +1002,7 @@ class AdminProducts extends AdminTab
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key);
+					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default);
 	}
 	
 	public function displayErrors()

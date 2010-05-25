@@ -1280,6 +1280,7 @@ $_LANGADM['AdminProductsf5bf48aa40cad7891eb709fcf1fde128'] = 'producto';
 $_LANGADM['AdminProducts396b0e222e9c86056374ba077e78667b'] = 'en categoría';
 $_LANGADM['AdminProductsd144d85fc8b89f6deba2eef20d1deee7'] = 'Añadir un nuevo producto';
 $_LANGADM['AdminProducts5ece607071fe59ddc4c88dc6abfe2310'] = 'Elementos no encontrados';
+$_LANGADM['AdminProductsb61bd19699eab41bbcdabc42f83af268'] = 'Considere la posibilidad de cambiar la categoría predeterminada.';
 $_LANGADM['AdminProducts07213a0161f52846ab198be103b5ab43'] = 'errores';
 $_LANGADM['AdminProductscb5e100e5a9a3e7f6d1fd97512215282'] = 'error';
 $_LANGADM['AdminProductsa1dd23525470a5a87b159ff4e53675e9'] = 'Producto actual: ';
