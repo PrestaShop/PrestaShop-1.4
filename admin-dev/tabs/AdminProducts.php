@@ -989,7 +989,7 @@ class AdminProducts extends AdminTab
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default != NULL ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').($id_category_default == $id_category ? ' onchange="alert(\''.$this->l('Consider changing the default category.').'\')"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
@@ -1818,20 +1818,28 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('Catalog:').'</td>
 						<td>
 							<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
-							<table cellspacing="0" cellpadding="0" class="table">
+								<script type="text/javascript">
+								$(document).ready(function() {
+									$(\'div#categoryList input.id_category_default\').change(function() {
+										if ($(this).is(\':not(:checked)\'))
+											alert(\''.utf8_encode(html_entity_decode($this->l('Consider changing the default category.'))).'\');
+									});
+								});
+								</script>
+								<table cellspacing="0" cellpadding="0" class="table">
 									<tr>
 										<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
 										<th>'.$this->l('ID').'</th>
 										<th style="width: 400px">'.$this->l('Name').'</th>
 									</tr>';
-		$done = array();
-		$index = array();
-		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Product::getIndexedCategories($obj->id) : array());
-		foreach ($indexedCategories AS $k => $row)
-			$index[] = $row['id_category'];
-		$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, $obj->id_category_default);
-		echo '			</table>
-							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
+			$done = array();
+			$index = array();
+			$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Product::getIndexedCategories($obj->id) : array());
+			foreach ($indexedCategories AS $k => $row)
+				$index[] = $row['id_category'];
+			$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, $obj->id_category_default);
+			echo '				</table>
+								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
 							</div>
 						</td>
 					</tr>
