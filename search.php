@@ -6,7 +6,6 @@ if (Tools::getValue('ajaxSearch') AND $query = urldecode(Tools::getValue('q')) A
 {
 	include(dirname(__FILE__).'/init.php');
 	$link = new Link();
-	$productList = array();
 	$searchResults = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 	foreach ($searchResults AS &$product)
 		$product['product_link'] = $link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
