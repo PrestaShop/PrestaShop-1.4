@@ -1,5 +1,7 @@
 <?php
 
+define('BLOCKTAGS_MAX_LEVEL', 3);
+
 class BlockTags extends Module
 {
 	function __construct()
@@ -71,22 +73,11 @@ class BlockTags extends Module
 
 		$tags = Tag::getMainTags(intval($params['cookie']->id_lang), intval(Configuration::get('BLOCKTAGS_NBR')));
 		if (!sizeof($tags))
-			return '';
-		$maxFontSize = 18;
-		$minFontSize = 10;
-		$maxNumber = intval($tags[0]['times']);
-		$classPrefix = 'tag_level';
-		for ($i = 0; $i < sizeof($tags); ++$i)
-		{
-			$tags[$i]['fontSize'] = floor(($maxFontSize * $tags[$i]['times']) / $maxNumber);
-			if ($tags[$i]['fontSize'] < $minFontSize)
-				$tags[$i]['fontSize'] = $minFontSize;
-			// 2nd version: use CSS class
-			$tags[$i]['class'] = $classPrefix.$tags[$i]['times'];
-			if ($tags[$i]['times'] > 3)
-				$tags[$i]['class'] = $classPrefix;
-		}
+			return false;
+		foreach ($tags AS &$tag)
+			$tag['class'] = 'tag_level'.($tag['times'] > BLOCKTAGS_MAX_LEVEL ? BLOCKTAGS_MAX_LEVEL : $tag['times']);
 		$smarty->assign('tags', $tags);
+		
 		return $this->display(__FILE__, 'blocktags.tpl');
 	}
 
