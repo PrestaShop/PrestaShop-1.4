@@ -12,31 +12,41 @@
 	</form>
 </div>
 {if $ajaxsearch}
-	<script type="text/javascript">
-		{literal}
-		
-		function formatSearch(row) {
-			return row[2] + ' > ' + row[1];
-		}
-		
-		function redirectSearch(event, data, formatted) {
-			$('#search_query').val(data[1]);
-			document.location.href = data[3];
-		}
-		
+	<script type="text/javascript">{literal}
 		$('document').ready( function() {
-			$("#search_query").autocomplete(
-				'{/literal}{if $search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php', {
-				minChars: 3,
-				max:10,
-				width:500,
-				selectFirst:false,
-				scroll: false,
-				formatItem:formatSearch,
-				extraParams:{ajaxSearch:1,id_lang:{/literal}{$cookie->id_lang}{literal}}
-			}).result(redirectSearch)
-		});
-		{/literal}
+			$("#search_query")
+				.autocomplete(
+					'{/literal}{if $search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php', {
+						minChars: 3,
+						max: 10,
+						width: 500,
+						selectFirst: false,
+						scroll: false,
+						dataType: "json",
+						formatItem: function(data, i, max, value, term) {
+							return value;
+						},
+						parse: function(data) {
+							var mytab = new Array();
+							for (var i = 0; i < data.length; i++) {
+								mytab[mytab.length] = { 
+									data: data[i], 
+									value: data[i].cname + ' > ' + data[i].pname 
+								};
+							}
+							return mytab;
+						},
+						extraParams: {
+							ajaxSearch: 1,
+							id_lang: {/literal}{$cookie->id_lang}{literal}
+						}
+					}
+				)
+				.result(function(event, data, formatted) {
+					$('#search_query').val(data.pname);
+					document.location.href = data.product_link;
+				})
+		});{/literal}
 	</script>
 {/if}
 <!-- /Block search module -->
