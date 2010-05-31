@@ -621,14 +621,15 @@ class		Cart extends ObjectModel
 			{
 				// Here taxes are computed only once the quantity has been applied to the product price
 				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-				$total_price = $price * intval($product['cart_quantity']);
+				$total_price = Tools::ps_round($price, 2) * intval($product['cart_quantity']);
 				if ($withTaxes)
 					$total_price = Tools::ps_round($total_price * (1 + floatval(Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']))) / 100), 2);
 			}
 			else
 			{
 				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-				$total_price = Tools::ps_round($price * intval($product['cart_quantity']), 2);
+				$total_price = Tools::ps_round($price, 2) * intval($product['cart_quantity']);
+
 			}
 			$order_total += $total_price;
 		}
