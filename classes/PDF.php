@@ -469,7 +469,7 @@ class PDF extends PDF_PageGroup
 				$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
 				$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
 			}
-			
+
 			/*
 			 * Display price summation
 			 */
@@ -779,8 +779,8 @@ class PDF extends PDF_PageGroup
 			}
 			else
 			{
-				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::floorf($priceBreakDown['totalsProductsWithTax'][$tax_rate] / (1 + $tax_rate / 100), 2);
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $vat;
+				$priceBreakDown['totalsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
 			}
 			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithTax'][$tax_rate];
 			$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
@@ -788,7 +788,7 @@ class PDF extends PDF_PageGroup
 			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 		}
 		$priceBreakDown['taxes'] = $taxes;
-		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : 0;
+		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : self::$order->total_shipping;
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
