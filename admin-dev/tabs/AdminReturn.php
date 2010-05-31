@@ -34,7 +34,7 @@ class AdminReturn extends AdminTab
 		$this->optionTitle = $this->l('Merchandise return (RMA) options');
 		$this->_fieldsOptions = array(
 		'PS_ORDER_RETURN' => array('title' => $this->l('Enable returns:'), 'desc' => $this->l('Select whether or not to activate merchandise return for your shop'), 'cast' => 'intval', 'type' => 'bool'),
-		'PS_ORDER_RETURN_NB_DAYS' => array('title' => $this->l('Time limit of validity:'), 'desc' => $this->l('Number of days the customer can make a return after the purchase date'), 'cast' => 'intval', 'type' => 'text', 'size' => '2'),
+		'PS_ORDER_RETURN_NB_DAYS' => array('title' => $this->l('Time limit of validity:'), 'desc' => $this->l('Number of days the customer can make a return after the delivery date'), 'cast' => 'intval', 'type' => 'text', 'size' => '2'),
 		);
 		
 		parent::__construct();

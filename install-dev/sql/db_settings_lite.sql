@@ -328,7 +328,7 @@ INSERT INTO `PREFIX_state` (`id_state`, `id_country`, `id_zone`, `name`, `iso_co
 (40, 21, 2, 'South Carolina', 'SC', 1),(41, 21, 2, 'South Dakota', 'SD', 1),(42, 21, 2, 'Tennessee', 'TN', 1),(43, 21, 2, 'Texas', 'TX', 1),
 (44, 21, 2, 'Utah', 'UT', 1),(45, 21, 2, 'Vermont', 'VT', 1),(46, 21, 2, 'Virginia', 'VA', 1),(47, 21, 2, 'Washington', 'WA', 1),
 (48, 21, 2, 'West Virginia', 'WV', 1),(49, 21, 2, 'Wisconsin', 'WI', 1),(50, 21, 2, 'Wyoming', 'WY', 1),(51, 21, 2, 'Puerto Rico', 'PR', 1),
-(52, 21, 2, 'US Virgin Islands', 'VI', 1);
+(52, 21, 2, 'US Virgin Islands', 'VI', 1),(53, 21, 2, 'District of Columbia', 'DC', 1);
 
 INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active`) VALUES
 (4, 2, 'Ontario', 'ON', 1),
@@ -346,7 +346,7 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (4, 2, 'Nunavut', 'NU', 1);
 
 INSERT INTO `PREFIX_currency` (name, iso_code, sign, blank, conversion_rate, format, deleted) VALUES
-('Euro', 'EUR', '€', 1, 1, 2, 0), ('Dollar', 'USD', '$', 0, 1.47, 1, 0), ('Pound', 'GBP', '£', 0, 0.8, 1, 0);
+('Euro', 'EUR', '€', 1, 1, 2, 0), ('Dollar', 'USD', '$', 0, 1.2, 1, 0), ('Pound', 'GBP', '£', 0, 0.8, 1, 0);
 
 INSERT INTO `PREFIX_tax` (`id_tax`, `rate`) VALUES (1, 19.6),(2, 5.5),(3, 17.5);
 

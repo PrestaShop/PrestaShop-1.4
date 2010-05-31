@@ -35,5 +35,5 @@
 {/if}
 
 <ul class="footer_links">
-	<li><a href="{$productLink}" class="button_large">{l s='Back to' mod='sendtoafriend'} {$product->name}</a></li>
+	<li><a href="{$productLink}" class="button_large">{l s='Back to product page' mod='sendtoafriend'}</a></li>
 </ul>

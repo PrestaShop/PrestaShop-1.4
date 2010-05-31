@@ -136,7 +136,7 @@ class AdminCurrencies extends AdminTab
 				<label>'.$this->l('Conversion rate:').' </label>
 				<div class="margin-form">
 					<input type="text" size="3" maxlength="11" name="conversion_rate" value="'.htmlentities($this->getFieldValue($obj, 'conversion_rate')).'" /> <sup>*</sup>
-					<p class="clear">'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1€) to this currency. For example, if the default currency is euros and this currency is dollars, type \'1.52\'').' 1&euro; = $1.38</p>
+					<p class="clear">'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1€) to this currency. For example, if the default currency is euros and this currency is dollars, type \'1.20\'').' 1&euro; = $1.20</p>
 				</div>
 				<label>'.$this->l('Formatting:').' </label>
 				<div class="margin-form">
