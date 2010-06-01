@@ -6,6 +6,6 @@
 			<li>{$error}</li>
 		{/foreach}
 		</ol>
-		<p><a href="{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
+		<p><a href="{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|replace:'javascript':''}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
 	</div>
 {/if}
