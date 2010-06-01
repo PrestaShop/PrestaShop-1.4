@@ -19,7 +19,7 @@ if (!Tools::getValue('referer')):
 	echo '<p>'.Tools::historyc_l('Referer is missing', $translations).'</p>';
 	echo '<p><a href="#" onclick="tb_remove()">'.Tools::historyc_l('close', $translations).'</a></p>';
 else:
-	$referer = rawurldecode(Tools::getValue('referer'));
+	$referer = Tools::htmlentitiesUTF8(rawurldecode(Tools::getValue('referer')));
 
 ?>
 

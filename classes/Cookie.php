@@ -236,6 +236,12 @@ class	Cookie
 			/* Check if cookie has not been modified */
 			if (!isset($this->_content['checksum']) OR $this->_content['checksum'] != $checksum)
 				$this->logout();
+			
+			if (isset($this->_content['remote_addr']) AND $this->_content['remote_addr'] != ip2long($_SERVER['REMOTE_ADDR']))
+				$this->logout();
+		
+			if (!isset($this->_content['remote_addr']))
+				$this->_content['remote_addr'] = ip2long($_SERVER['REMOTE_ADDR']);
 		}
 		else
 			$this->_content['date_add'] = date('Y-m-d H:i:s');
