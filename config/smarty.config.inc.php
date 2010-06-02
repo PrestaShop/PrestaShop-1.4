@@ -115,6 +115,12 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...',
 
 $smarty->register_modifier('truncate', 'smarty_modifier_truncate');
 
+function smarty_is_intern_referer($referer,  &$smarty)
+{
+	return Validate::isInternReferer($referer['var']);
+}
+$smarty->register_function('isInternReferer', 'smarty_is_intern_referer');
+
 global $link;
 
 $link = new Link();

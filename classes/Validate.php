@@ -843,6 +843,10 @@ class Validate
 	{
 		return is_string($data);
 	}
+	static public function isInternReferer($referrer)
+	{
+		return preg_match('/^http:\/\/'.$_SERVER['SERVER_NAME'].'\/.*$/Ui', $_SERVER['HTTP_REFERER']);
+	}
 }
 
 ?>
