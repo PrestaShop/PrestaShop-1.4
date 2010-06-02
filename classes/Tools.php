@@ -78,6 +78,30 @@ class Tools
 	}
 
 	/**
+	* Get the server variable SERVER_NAME
+	*
+	* @param string $referrer URL referrer
+	*/
+	static function getServerName()
+	{
+		if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) AND $_SERVER['HTTP_X_FORWARDED_SERVER'])
+			return $_SERVER['HTTP_X_FORWARDED_SERVER'];
+		return $_SERVER['SERVER_NAME'];
+	}
+
+	/**
+	* Secure an URL referrer
+	*
+	* @param string $referrer URL referrer
+	*/
+	static public function secureReferrer($referrer)
+	{
+		if (preg_match('/^http[s]?:\/\/'.self::getServerName().'\/.*$/Ui', $referrer))
+			return $referrer;
+		return __PS_BASE_URI__;
+	}
+
+	/**
 	* Get a value from $_POST / $_GET
 	* if unavailable, take a default value
 	*

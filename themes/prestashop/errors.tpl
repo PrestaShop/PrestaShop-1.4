@@ -6,9 +6,6 @@
 			<li>{$error}</li>
 		{/foreach}
 		</ol>
-		{capture name=referrer assign=isValidReferer}
-			{isInternReferer var=$smarty.server.HTTP_REFERER}
-		{/capture}
-		<p><a href="{if $isValidReferer == 1}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'}{else}{$base_dir}{/if}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
+		<p><a href="{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
 	</div>
 {/if}
