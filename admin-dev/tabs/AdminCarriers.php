@@ -183,7 +183,7 @@ class AdminCarriers extends AdminTab
 	{
 		if ($delete)
 			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($id_carrier));
-		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'group');
+		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group`');
 		foreach ($groups as $group)
 			if (in_array($group['id_group'], $_POST['groupBox']))
 				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.intval($group['id_group']).','.intval($id_carrier).')');
