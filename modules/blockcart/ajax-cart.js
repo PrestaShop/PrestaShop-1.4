@@ -288,7 +288,7 @@ var ajaxCart = {
 						$('#' + customizationDiv).parent().addClass('strike').fadeTo('slow', 0, function(){
 							$(this).slideUp('slow');
 							$(this).remove();
-						});;
+						});
 				});
 			});
 		}
