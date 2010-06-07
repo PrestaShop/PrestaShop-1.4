@@ -59,9 +59,16 @@ class Profile extends ObjectModel
 	*
 	* @return string Profile
 	*/
-	static public function getProfile($id_profile)
+	static public function getProfile($id_profile, $id_lang = NULL)
 	{
-		return Db::getInstance()->getRow('SELECT `name` FROM `'._DB_PREFIX_.'profile` WHERE `id_profile` = '.intval($id_profile));
+		if ($id_lang == NULL)
+			$id_lang = Configuration::get('PS_LANG_DEFAULT');
+		return Db::getInstance()->getRow('
+		SELECT `name` 
+		FROM `'._DB_PREFIX_.'profile` p 
+		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile`) 
+		WHERE p.`id_profile` = '.intval($id_profile).'
+		AND pl.`id_lang` = '.intval($id_lang));
 	}
 
 	
