@@ -8,7 +8,7 @@
 	</td>
 	<td class="cart_ref">{if $product.reference}{$product.reference|escape:'htmlall':'UTF-8'}{else}--{/if}</td>
 	<td class="cart_availability">
-		{if $product.active AND ($product.allow_oosp OR $product.stock_quantity > 0)}
+		{if $product.active AND ($product.allow_oosp OR ($product.quantity <= $product.stock_quantity))}
 			<img src="{$img_dir}icon/available.gif" alt="{l s='Available'}" />
 		{else}
 			<img src="{$img_dir}icon/unavailable.gif" alt="{l s='Out of stock'}" />
