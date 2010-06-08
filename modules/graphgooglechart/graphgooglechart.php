@@ -93,7 +93,12 @@ class GraphGoogleChart extends ModuleGraphEngine
 		$url = 'bvs&chxt=x,y&chxr=1,0,'.$max_y.'&chbh='.$this->getChbh($sizeof_values).'&chg=0,12.5&chxl=0:|';
 		for ($i = 0; $i < $sizeof_values; $i++)
 			if (!isset($this->_values[0]) || !is_array($this->_values[0]))
-				$this->_values[$i] = ($this->_values[$i] * 100) / $max_y;
+			{
+				if (isset($this->_values[$i]))
+					$this->_values[$i] = ($this->_values[$i] * 100) / $max_y;
+				else
+					$this->_values[$i] = 0;
+			}
 			else
 				foreach ($this->_values as $k => $value)
 				{
