@@ -235,7 +235,7 @@ class AdminReturn extends AdminTab
 							$i = 0;
 							echo '<ul style="margin: 0px 0px 4px 0px; padding: 0px 0px 0px 6px; list-style-type: none;">';
 							foreach ($datas AS $data)
-								echo '<li>'.$this->l('Text #').++$i.$this->l(':').' '.$data['value'].'</li>';
+								echo '<li>'.($data['name'] ? $data['name'] : $this->l('Text #').++$i).$this->l(':').' '.$data['value'].'</li>';
 							echo '</ul>';
 						}
 						echo '</td>
