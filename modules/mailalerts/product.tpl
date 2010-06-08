@@ -3,6 +3,7 @@
 	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="{l s='your e-mail' mod='mailalerts'}" class="mailalerts_oos_email" onclick="clearText();" /><br />
 {/if}
 <a href="#" onclick="return addNotification();" id="mailalert_link">{l s='Notify me when available' mod='mailalerts'}</a>
+<p id="oos_customer_email_result" style="display:none;"></p>
 <script type="text/javascript">{literal}
 // <![CDATA[
 oosHookJsCodeFunctions.push('oosHookJsCodeMailAlert');
@@ -33,13 +34,18 @@ function oosHookJsCodeMailAlert() {
 function  addNotification() {
 	$.ajax({
 		type: 'POST',
-		url: '{$base_dir}modules/mailalerts/mailalerts-ajax_add.php',
+		url: '{/literal}{$base_dir}{literal}modules/mailalerts/mailalerts-ajax_add.php',
 		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val()+'&customer_email='+$('#oos_customer_email').val()+'',
 		success: function (msg) {
 			if (msg == '1') {
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
-				$('#oosHook').html("{l s='Request notification registered' mod='mailalerts'}");
+				$('#oos_customer_email_result').html("{/literal}{l s='Request notification registered' mod='mailalerts'}{literal}");
+				$('#oos_customer_email_result').css('color', 'green').show();
+			}
+			else {
+				$('#oos_customer_email_result').html("{/literal}{l s='Your e-mail address is invalid' mod='mailalerts'}{literal}");
+				$('#oos_customer_email_result').css('color', 'red').show();
 			}
 		}
 	});
