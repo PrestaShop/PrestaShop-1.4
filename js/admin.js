@@ -729,9 +729,14 @@ function stockManagementActivationAuthorization()
 	{
 		getE('PS_ORDER_OUT_OF_STOCK_on').readOnly = false;
 		getE('PS_ORDER_OUT_OF_STOCK_off').readOnly = false;
+		getE('PS_DISPLAY_QTIES_on').readOnly = false;
+		getE('PS_DISPLAY_QTIES_off').readOnly = false;
 	}
 	else
 	{
+		getE('PS_DISPLAY_QTIES_off').checked = true;
+		getE('PS_DISPLAY_QTIES_on').readOnly = true;
+		getE('PS_DISPLAY_QTIES_off').readOnly = true;
 		getE('PS_ORDER_OUT_OF_STOCK_on').checked = true;
 		getE('PS_ORDER_OUT_OF_STOCK_on').readOnly = true;
 		getE('PS_ORDER_OUT_OF_STOCK_off').readOnly = true;
