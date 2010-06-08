@@ -2078,7 +2078,8 @@ class		Product extends ObjectModel
 		if (($customizations['fields'] = Db::getInstance()->ExecuteS('
 			SELECT `id_customization_field`, `type`, `required`
 			FROM `'._DB_PREFIX_.'customization_field`
-			WHERE `id_product` = '.intval($productId))) === false)
+			WHERE `id_product` = '.intval($productId).'
+			ORDER BY `id_customization_field`')) === false)
 			return false;
 		if (empty($customizations['fields']))
 			return array();
@@ -2088,7 +2089,8 @@ class		Product extends ObjectModel
 		if (($customizationLabels = Db::getInstance()->ExecuteS('
 			SELECT `id_customization_field`, `id_lang`, `name`
 			FROM `'._DB_PREFIX_.'customization_field_lang`
-			WHERE `id_customization_field` IN ('.implode(', ', $customizationFieldIds).')')) === false)
+			WHERE `id_customization_field` IN ('.implode(', ', $customizationFieldIds).')
+			ORDER BY `id_customization_field`')) === false)
 			return false;
 		foreach ($customizationLabels AS $customizationLabel)
 			$customizations['labels'][$customizationLabel['id_customization_field']][] = $customizationLabel;
