@@ -584,7 +584,7 @@ function orderDeleteProduct(txtConfirm, txtExplain)
 			totalQty = parseInt($(this).parent().find('input#totalQty[type=hidden]').val());
 			totalQtyReturn = parseInt($(this).parent().find('input#totalQtyReturn[type=hidden]').val());
 			productName = $(this).parent().find('input#productName[type=hidden]').val();
-			totalAvailable = totalQty - totalQtyReturn;;	
+			totalAvailable = totalQty - totalQtyReturn;
 			if (totalCancel > totalAvailable)
 			{
 				alert(txtConfirm + ' : \'' + ' ' + productName + '\' ! \n\n' + txtExplain + ' ('+ totalCancel + ' > ' + totalAvailable +')' + '\n ');

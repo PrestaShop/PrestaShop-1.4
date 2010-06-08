@@ -1523,7 +1523,7 @@ class AdminProducts extends AdminTab
     <script type="text/javascript">
     // <![CDATA[
     	ThickboxI18nImage = '<?php echo $this->l('Image') ?>';
-    	ThickboxI18nOf = '<?php echo $this->l('of') ?>';;
+    	ThickboxI18nOf = '<?php echo $this->l('of') ?>';
     	ThickboxI18nClose = '<?php echo $this->l('Close') ?>';
     	ThickboxI18nOrEscKey = '<?php echo $this->l('(or "Esc")') ?>';
     	ThickboxI18nNext = '<?php echo $this->l('Next >') ?>';

@@ -64,7 +64,7 @@ class GoogleLog {
         }
       }
     }
-    $this->logLevel = $logLevel;;
+    $this->logLevel = $logLevel;
   }
   
   function LogError($log){

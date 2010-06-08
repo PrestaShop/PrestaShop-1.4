@@ -177,7 +177,7 @@
         case 'DROP_OFF':
         case 'REGULAR_PICKUP':
         case 'SPECIAL_PICKUP':
-          $this->carrier_pickup = $carrier_pickup;;
+          $this->carrier_pickup = $carrier_pickup;
           break;
         default:
           $this->carrier_pickup = 'DROP_OFF';

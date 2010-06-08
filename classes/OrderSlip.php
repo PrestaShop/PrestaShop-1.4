@@ -92,7 +92,7 @@ class OrderSlip extends ObjectModel
 			if (isset($tmp[$product['id_order_detail']]))
 			{
 				$resTab[$key] = $product;
-				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];;
+				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];
 			}
 		return $order->getProducts($resTab);
 	}

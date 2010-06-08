@@ -904,7 +904,7 @@ class Archive_Tar extends PEAR
       }
 
       // ----- Calculate the stored filename
-      $p_filename = $this->_translateWinPath($p_filename, false);;
+      $p_filename = $this->_translateWinPath($p_filename, false);
       $v_stored_filename = $p_filename;
       if (strcmp($p_filename, $p_remove_dir) == 0) {
           return true;
@@ -967,7 +967,7 @@ class Archive_Tar extends PEAR
       }
 
       // ----- Calculate the stored filename
-      $p_filename = $this->_translateWinPath($p_filename, false);;
+      $p_filename = $this->_translateWinPath($p_filename, false);
 
       if (!$this->_writeHeaderBlock($p_filename, strlen($p_string),
 	                                0, 0, "", 0, 0))

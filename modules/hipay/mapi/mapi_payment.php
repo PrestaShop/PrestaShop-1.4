@@ -287,7 +287,7 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 * @param array $tFixedCostAmount
 	 */
 	public function getTotalTaxes(&$tItemsAmount,&$tShippingAmount,&$tInsuranceAmount,&$tFixedCostAmount) {
-		$tItemsAmount=$this->getItemsTaxes();;
+		$tItemsAmount=$this->getItemsTaxes();
 		$tShippingAmount=$this->getShippingTaxes();
 		$tInsuranceAmount=$this->getInsuranceTaxes();
 		$tFixedCostAmount=$this->getFixedCostTaxes();
