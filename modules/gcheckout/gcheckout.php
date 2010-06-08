@@ -34,7 +34,8 @@ class GCheckout extends PaymentModule
 			Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND
 			Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
 			Configuration::deleteByName('GCHECKOUT_MODE') AND
-			Configuration::deleteByName('GCHECKOUT_LOGS'));
+			Configuration::deleteByName('GCHECKOUT_LOGS')
+		);
     }
 	
 	function getContent()

@@ -16,11 +16,10 @@ class BlockManufacturer extends Module
 
     function install()
     {
-        parent::install();
-        $this->registerHook('leftColumn');
 		Configuration::updateValue('MANUFACTURER_DISPLAY_TEXT', true);
 		Configuration::updateValue('MANUFACTURER_DISPLAY_TEXT_NB', 5);
 		Configuration::updateValue('MANUFACTURER_DISPLAY_FORM', true);
+        return (parent::install() AND $this->registerHook('leftColumn'));
     }
    
     function hookLeftColumn($params)

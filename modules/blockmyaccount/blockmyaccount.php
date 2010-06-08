@@ -23,7 +23,7 @@ class BlockMyAccount extends Module
 
 	public function uninstall()
 	{
-		return parent::uninstall() AND $this->removeMyAccountBlockHook();
+		return (parent::uninstall() AND $this->removeMyAccountBlockHook());
 	}
 
 	public function hookLeftColumn($params)

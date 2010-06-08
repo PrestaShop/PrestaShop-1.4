@@ -48,13 +48,14 @@ class BlockWishList extends Module
 	
 	public function uninstall()
 	{
-		return (Configuration::deleteByName('PS_BLOCK_WISHLIST_ACTIVATED') AND
-						Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist') AND
-						Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_email') AND
-						Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product') AND
-						Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product_cart') AND 
-						 parent::uninstall());
-						
+		return (
+			Configuration::deleteByName('PS_BLOCK_WISHLIST_ACTIVATED') AND
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist') AND
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_email') AND
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product') AND
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product_cart') AND 
+			parent::uninstall()
+		);
 	}
 
 	public function getContent()

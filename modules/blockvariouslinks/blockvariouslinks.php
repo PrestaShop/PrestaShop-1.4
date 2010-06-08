@@ -29,7 +29,7 @@ class BlockVariousLinks extends Module
 	public function uninstall()
 	{
 	 	Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.intval($this->id));
-    	parent::uninstall();
+    	return parent::uninstall();
   }
 	
    public function getContent()

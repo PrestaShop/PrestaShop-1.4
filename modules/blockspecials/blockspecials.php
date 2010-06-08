@@ -19,8 +19,7 @@ class BlockSpecials extends Module
 
     function install()
     {
-        parent::install();
-        $this->registerHook('rightColumn');
+        return (parent::install() AND $this->registerHook('rightColumn'));
     }
 
     function hookRightColumn($params)
