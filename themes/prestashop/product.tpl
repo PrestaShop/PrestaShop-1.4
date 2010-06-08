@@ -292,7 +292,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {if $quantity_discounts}
 <!-- quantity discount -->
 <ul class="idTabs">
-	<li><a style="cursor: pointer">{l s='Quantity discount'}</a></li>
+	<li><a style="cursor: pointer" class="selected">{l s='Quantity discount'}</a></li>
 </ul>
 <div id="quantityDiscount">
 	<table class="std">
