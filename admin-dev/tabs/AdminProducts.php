@@ -1820,8 +1820,8 @@ class AdminProducts extends AdminTab
 							<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
 								<script type="text/javascript">
 								$(document).ready(function() {
-									$(\'div#categoryList input.id_category_default\').change(function() {
-										if ($(this).is(\':not(:checked)\'))
+									$(\'div#categoryList input.categoryBox\').click(function (){
+										if ($(this).is(\':not(:checked)\') && $(\'div#categoryList input.id_category_default\').val() == $(this).val())
 											alert(\''.utf8_encode(html_entity_decode($this->l('Consider changing the default category.'))).'\');
 									});
 								});
