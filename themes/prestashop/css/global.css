@@ -1507,7 +1507,9 @@ ul#product_list li a.button { margin-top: 0.5em }
 #order div.cart_last_product a.cart_last_product_img { float:left }
 #order div.cart_last_product a.cart_last_product_img img {
 	margin:0 6px;
-	border:1px solid #D0D1D5
+	border:1px solid #D0D1D5;
+	width: 45px;
+	height: 45px
 }
 #order div.cart_last_product .cart_last_product_content { 
 	float:right; 
@@ -1544,7 +1546,11 @@ form.std p.cart_navigation span {
 }
 tr.cart_item td { padding: 0.5em 0 }
 td.cart_product a { margin: 0 0.6em }
-td.cart_product a img { border: 1px solid #d0d1d5 }
+td.cart_product a img {
+	border: 1px solid #d0d1d5;
+	width: 45px;
+	height: 45px
+}
 td.cart_product a:hover img { border: 1px solid #888 }
 td.cart_description a { text-decoration: none }
 td.cart_description a:hover { text-decoration: underline }
