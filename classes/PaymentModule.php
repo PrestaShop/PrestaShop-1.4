@@ -200,7 +200,7 @@ abstract class PaymentModule extends Module
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
 						'.(empty($product['supplier_reference']) ? 'NULL' : '\''.pSQL($product['supplier_reference']).'\'').',
-						'.floatval($product['id_product_attribute'] ? $product['weight_attribute'] + $product['weight'] : $product['weight']).',
+						'.floatval($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',
 						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
 						'.floatval($tax).',
 						'.floatval($product['ecotax']).',
