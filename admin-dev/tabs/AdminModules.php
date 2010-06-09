@@ -122,7 +122,7 @@ class AdminModules extends AdminTab
 							$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 						elseif ($key == 'configure' AND $this->tabAccess['edit'] !== '1')
 							$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
-						elseif (($echo = $module->{$method}()) AND ($key == 'configure'))
+						elseif (($echo = $module->{$method}()) AND ($key == 'configure') AND Module::isInstalled($module->name))
 						{
 							echo '
 							<p><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to modules list').'</a></p>
