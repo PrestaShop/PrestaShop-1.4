@@ -808,6 +808,7 @@ class		Product extends ObjectModel
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		Hook::updateProductAttribute($id_product_attribute);
+		$this->updateQuantityProductWithAttributeQuantity();
 		if (empty($id_images))
 			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
@@ -816,7 +817,20 @@ class		Product extends ObjectModel
 		$query = trim($query, ', ');
 		return Db::getInstance()->Execute($query);
 	}
-
+	
+	public function updateQuantityProductWithAttributeQuantity()
+	{
+		return Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'product` 
+		SET `quantity` = 
+			(
+			SELECT SUM(`quantity`)
+			FROM `'._DB_PREFIX_.'product_attribute`
+			WHERE `id_product` = '.intval($this->id).'
+			)
+		WHERE `id_product` = '.intval($this->id));
+	}
+	
 	/**
 	* Delete product attributes
 	*

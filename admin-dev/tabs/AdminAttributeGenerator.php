@@ -75,6 +75,7 @@ class AdminAttributeGenerator extends AdminTab
 					$this->product->deleteProductAttributes();
 					$res = $this->product->addProductAttributeMultiple($values);
 					$this->product->addAttributeCombinationMultiple($res, $this->combinations);
+					$this->product->updateQuantityProductWithAttributeQuantity();
 				}
 				else
 					$this->_errors[] = Tools::displayError('Unable to initialize parameters, combinations is missing or object cannot be load.');
