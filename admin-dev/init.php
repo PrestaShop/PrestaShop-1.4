@@ -58,7 +58,7 @@ if (Tools::isSubmit('adminlang'))
 		$cookie->id_lang = $id_lang;
 }
 
-$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : 1));
+$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
