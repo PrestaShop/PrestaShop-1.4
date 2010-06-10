@@ -627,9 +627,12 @@ class		Cart extends ObjectModel
 			}
 			else
 			{
-				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), $withTaxes ? 6 : 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-				$total_price = Tools::ps_round($price, 2) * intval($product['cart_quantity']);
 
+				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
+				if (!$withTaxes)
+					$total_price = Tools::ps_round($price * intval($product['cart_quantity']), 2);
+				else
+					$total_price = Tools::ps_round($price, 2) * intval($product['cart_quantity']);
 			}
 			$order_total += $total_price;
 		}

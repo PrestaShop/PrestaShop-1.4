@@ -749,18 +749,20 @@ class PDF extends PDF_PageGroup
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
 			$priceWithTaxAndReduction = $product['priceWithTax'] - $discountAmount * $ratio;
-			$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / ((floatval($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
-			$taxes[$product['tax_rate']] += $vat;
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)
 			{
+				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / ((floatval($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 			}
 			else
 			{
+				$vat = floatval($product['priceWithoutTax']) * (floatval($product['tax_rate'])  / 100) * $product['product_quantity'];
 				$priceBreakDown['totalsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
+				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 			}
+			$taxes[$product['tax_rate']] += $vat;
 		}
 		$carrier = new Carrier(self::$order->id_carrier);
 		$carrierTax = new Tax($carrier->id_tax);
@@ -778,10 +780,7 @@ class PDF extends PDF_PageGroup
 				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
 			}
 			else
-			{
-				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate] - $vat;
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
-			}
 			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsWithTax'][$tax_rate];
 			$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
 			$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
