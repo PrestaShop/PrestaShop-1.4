@@ -372,6 +372,7 @@ class AdminProducts extends AdminTab
 					{
 						$product->addAttributeCombinaison($id_product_attribute, Tools::getValue('attribute_combinaison_list'));
 						$product->checkDefaultAttributes();
+						$product->updateQuantityProductWithAttributeQuantity();
 					}
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
@@ -386,6 +387,7 @@ class AdminProducts extends AdminTab
 				{
 					$product->deleteAttributeCombinaison(intval(Tools::getValue('id_product_attribute')));
 					$product->checkDefaultAttributes();
+					$product->updateQuantityProductWithAttributeQuantity();
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
@@ -401,6 +403,7 @@ class AdminProducts extends AdminTab
 				if (($id_product = intval(Tools::getValue('id_product'))) AND Validate::isUnsignedId($id_product) AND Validate::isLoadedObject($product = new Product($id_product)))
 				{
 					$product->deleteProductAttributes();
+					$product->updateQuantityProductWithAttributeQuantity();
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else

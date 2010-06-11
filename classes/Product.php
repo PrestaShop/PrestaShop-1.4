@@ -808,7 +808,6 @@ class		Product extends ObjectModel
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		Hook::updateProductAttribute($id_product_attribute);
-		$this->updateQuantityProductWithAttributeQuantity();
 		if (empty($id_images))
 			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
@@ -1636,6 +1635,16 @@ class		Product extends ObjectModel
 		SET `quantity` = `quantity`-'.intval($product['cart_quantity']).'
 		WHERE `id_product` = '.intval($product['id_product']).
 		($product['id_product_attribute'] ? ' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
+		if ($product['id_product_attribute'])
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'product` 
+			SET `quantity` = 
+				(
+				SELECT SUM(`quantity`)
+				FROM `'._DB_PREFIX_.'product_attribute`
+				WHERE `id_product` = '.intval($product['id_product']).'
+				)
+			WHERE `id_product` = '.intval($product['id_product']));
 		return true;
 	}
 
@@ -1648,11 +1657,23 @@ class		Product extends ObjectModel
 		{
 			$products_pack = Pack::getItems(intval($orderDetail->product_id), intval(Configuration::get('PS_LANG_DEFAULT')));
 			foreach($products_pack AS $product_pack)
+			{
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'product'.($product_pack->id_product_attribute ? '_attribute' : '').'`
 				SET `quantity` = `quantity`+'.intval($product_pack->pack_quantity * $quantity).'
 				WHERE `id_product` = '.intval($product_pack->id).
 				($product_pack->id_product_attribute ? ' AND `id_product_attribute` = '.intval($product_pack->id_product_attribute) : ''));
+				if ($product_pack->id_product_attribute)
+					Db::getInstance()->Execute('
+					UPDATE `'._DB_PREFIX_.'product` 
+					SET `quantity` = 
+						(
+						SELECT SUM(`quantity`)
+						FROM `'._DB_PREFIX_.'product_attribute`
+						WHERE `id_product` = '.intval($product_pack->id).'
+						)
+					WHERE `id_product` = '.intval($product_pack->id));
+			}
 		}
 		
 		$sql = '
@@ -1660,6 +1681,16 @@ class		Product extends ObjectModel
 		SET `quantity` = `quantity`+'.intval($quantity).'
 		WHERE `id_product` = '.intval($orderDetail->product_id).
 		($orderDetail->product_attribute_id ? ' AND `id_product_attribute` = '.intval($orderDetail->product_attribute_id) : '');
+		if ($orderDetail->product_attribute_id)
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'product` 
+			SET `quantity` = 
+				(
+				SELECT SUM(`quantity`)
+				FROM `'._DB_PREFIX_.'product_attribute`
+				WHERE `id_product` = '.intval($orderDetail->product_id).'
+				)
+			WHERE `id_product` = '.intval($orderDetail->product_id));
 		if (!Db::getInstance()->Execute($sql) OR !Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'order_detail`
 			SET `product_quantity_reinjected` = `product_quantity_reinjected` + '.intval($quantity).'
