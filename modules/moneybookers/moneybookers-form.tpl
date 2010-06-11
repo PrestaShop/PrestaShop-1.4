@@ -36,7 +36,7 @@
 			<input type="hidden" name="merchant_fields" value="platform"> 
 			<input type="hidden" name="platform" value="prestashop">
 			<input type="image" src="{$base_dir}modules/moneybookers/logo-cc-{$id_logo}.gif" name="Submit" style="float: left; margin-right: 20px;" />
-			<h3 style="float: left; font-size: 11px; font-family: Verdana; color: #5D717E; font-weight: normal; margin-top: 35px;">{l s='Pay by credit card' mod='moneybookers'}</h2>
+			<h3 style="float: left; font-size: 11px; font-family: Verdana; color: #5D717E; font-weight: normal; margin-top: 35px;">{l s='Pay by credit card' mod='moneybookers'}</h3>
 			<div style="clear: both;"></div>
 		</form>
 		<form action="https://www.moneybookers.com/app/payment.pl" method="post">
