@@ -17,7 +17,7 @@ var ajaxCart = {
 		});
 	
 		//for 'delete' buttons in the cart block...
-		$('.ajax_cart_block_remove_link').unbind('click').click(function(){
+		$('#cart_block_list .ajax_cart_block_remove_link').unbind('click').click(function(){
 			// Customized product management
 			var customizationId = 0;
 			var productId = 0;

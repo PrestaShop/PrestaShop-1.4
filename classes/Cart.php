@@ -114,7 +114,6 @@ class		Cart extends ObjectModel
 		self::$_nbProducts = 0;
 		$return = parent::update();
 		Module::hookExec('cart');
-		p('CART UPDATED');
 		return $return;
 	}
 
