@@ -1,6 +1,6 @@
 <!-- MODULE MailAlerts -->
 {if $email}
-	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="{l s='your e-mail' mod='mailalerts'}" class="mailalerts_oos_email" onclick="clearText();" /><br />
+	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="your@email.com" class="mailalerts_oos_email" onclick="clearText();" /><br />
 {/if}
 <a href="#" onclick="return addNotification();" id="mailalert_link">{l s='Notify me when available' mod='mailalerts'}</a>
 <p id="oos_customer_email_result" style="display:none;"></p>
