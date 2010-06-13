@@ -166,7 +166,7 @@ class BlockWishList extends Module
 	
 	public function hookHeader($params)
 	{
-		return '<script type="text/javascript" src="'._MODULE_DIR_.'blockwishlist/js/ajax-wishlist.js"></script>';
+		return $this->display(__FILE__, 'blockwishlist-header.tpl');
 	}
 	
 	public function hookRightColumn($params)
