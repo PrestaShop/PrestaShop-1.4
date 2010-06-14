@@ -8,7 +8,7 @@ valueDni = {if isset($smarty.post.dni) && $smarty.post.dni}{$smarty.post.dni}{el
 countries = new Array();
 countriesNeedIDNumber = new Array();
 {foreach from=$countries item='country'}
-	{if isset($country.states)}
+	{if isset($country.states) && $country.contains_states}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
 			countries[{$country.id_country|intval}]['{$state.id_state|intval}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
