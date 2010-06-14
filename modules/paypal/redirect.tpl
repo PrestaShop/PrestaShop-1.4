@@ -7,13 +7,13 @@
 		<form action="{$paypal_url}" method="post" id="paypal_form" class="hidden">
 			<input type="hidden" name="upload" value="1" />
 			<input type="hidden" name="address_override" value="1" />
-			<input type="hidden" name="first_name" value="{$address->firstname}" />
-			<input type="hidden" name="last_name" value="{$address->lastname}" />
-			<input type="hidden" name="address1" value="{$address->address1}" />
+			<input type="hidden" name="first_name" value="{$address->firstname|escape:'htmlall':'UTF-8'}" />
+			<input type="hidden" name="last_name" value="{$address->lastname|escape:'htmlall':'UTF-8'}" />
+			<input type="hidden" name="address1" value="{$address->address1|escape:'htmlall':'UTF-8'}" />
 			{if $address->address2 != NULL}
-			<input type="hidden" name="address2" value="{$address->address2}" />
+			<input type="hidden" name="address2" value="{$address->address2|escape:'htmlall':'UTF-8'}" />
 			{/if}
-			<input type="hidden" name="city" value="{$address->city}" />
+			<input type="hidden" name="city" value="{$address->city|escape:'htmlall':'UTF-8'}" />
 			<input type="hidden" name="zip" value="{$address->postcode}" />
 			<input type="hidden" name="country" value="{$country->iso_code}" />
 			{if $state != NULL}
@@ -23,7 +23,7 @@
 			<input type="hidden" name="email" value="{$customer->email}" />
 			{if !$discount}
 			{foreach from=$products key=k item=product}
-			<input type="hidden" name="item_name_{$k+1}" value="{$product.name}{if isset($product.attributes)} - {$product.attributes}{/if}" />
+			<input type="hidden" name="item_name_{$k+1}" value="{$product.name|escape:'htmlall':'UTF-8'}{if isset($product.attributes)} - {$product.attributes|escape:'htmlall':'UTF-8'}{/if}" />
 			<input type="hidden" name="amount_{$k+1}" value="{$product.price_wt}" />
 			<input type="hidden" name="quantity_{$k+1}" value="{$product.cart_quantity}" />
 			{/foreach}
