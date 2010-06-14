@@ -100,6 +100,11 @@ if ($result == 'VERIFIED') {
 }
 
 if (!empty($errors) AND isset($_POST['custom']))
-	$paypal->validateOrder(intval($_POST['custom']), _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />');
+{
+	if ($_POST['payment_status'] == 'Pending')
+		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_PAYPAL_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors);
+	else
+		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />');
+}
 
 ?>
