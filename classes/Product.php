@@ -1407,7 +1407,7 @@ class		Product extends ObjectModel
 			$usetax = false;
 
 		// Caching system
-		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity;
+		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity.'-'.($id_customer ? $id_customer : '0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
 
