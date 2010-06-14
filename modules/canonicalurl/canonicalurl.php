@@ -2,7 +2,7 @@
 
 class canonicalUrl extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'canonicalurl';
 		$this->tab = 'Tools';
@@ -17,11 +17,18 @@ class canonicalUrl extends Module
 			$this->warning = $this->l('You must set the canonical URL to avoid "duplicate content" status for your Website.');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install() OR !$this->registerHook('header') OR !Configuration::updateValue('CANONICAL_URL', ''))
 			return false;
 		return true;
+	}
+
+	public function uninstall()
+	{
+		/* Delete configuration */
+		Configuration::deleteByName('CANONICAL_URL');
+		return parent::uninstall();
 	}
 
 	public function getContent()
@@ -57,7 +64,7 @@ class canonicalUrl extends Module
 		</form>';
 	}
 
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		global $smarty, $protocol, $rewrited_url;
 		
