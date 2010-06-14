@@ -550,6 +550,8 @@ class		Cart extends ObjectModel
 		if (Db::getInstance()->NumRows() AND intval($result['quantity']))
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product` SET `quantity` = '.intval($result['quantity']).' WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
 
+		/* Update cart */
+		$this->update(true);
 		/* Product deletion */
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').' AND `id_cart` = '.intval($this->id));
 	}
