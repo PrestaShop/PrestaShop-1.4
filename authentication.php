@@ -148,7 +148,7 @@ if (Tools::isSubmit('SubmitLogin'))
 	else
 	{
 		$customer = new Customer();
-		$authentication = $customer->getByemail(trim($email), trim($passwd));
+		$authentication = $customer->getByEmail(trim($email), trim($passwd));
 		/* Handle brute force attacks */
 		sleep(1);
 		if (!$authentication OR !$customer->id)
