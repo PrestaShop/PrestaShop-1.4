@@ -717,7 +717,7 @@ class		Product extends ObjectModel
 
 	public function addCombinationEntity($wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
-		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL) OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute)))
+		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location) OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		return intval($id_product_attribute);
 	}
