@@ -66,7 +66,7 @@ class		Group extends ObjectModel
 	
 	static public function getGroups($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT g.`id_group`, g.`reduction`, g.`price_display_method`, gl.`name`
 		FROM `'._DB_PREFIX_.'group` g
 		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($id_lang).')
@@ -88,7 +88,7 @@ class		Group extends ObjectModel
 	{
 		if ($id_customer)
 			$customer = new Customer(intval($id_customer));
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `reduction`
 		FROM `'._DB_PREFIX_.'group`
 		WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? intval($customer->id_default_group) : 1));
@@ -96,7 +96,7 @@ class		Group extends ObjectModel
 
 	static public function getPriceDisplayMethod($id_group)
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `price_display_method`
 		FROM `'._DB_PREFIX_.'group`
 		WHERE `id_group` = '.intval($id_group));
@@ -104,7 +104,7 @@ class		Group extends ObjectModel
 
 	static public function getDefaultPriceDisplayMethod()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `price_display_method`
 		FROM `'._DB_PREFIX_.'group`
 		WHERE `id_group` = 1');

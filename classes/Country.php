@@ -113,34 +113,34 @@ class		Country extends ObjectModel
 	  * @return integer Country ID
 	  */
 	static public function getByIso($iso_code)
-    {
-     	if (!Validate::isLanguageIsoCode($iso_code))
-     		die(Tools::displayError());
+	{
+		if (!Validate::isLanguageIsoCode($iso_code))
+			die(Tools::displayError());
 
-	    $result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_country`
 		FROM `'._DB_PREFIX_.'country`
 		WHERE `iso_code` = \''.pSQL(strtoupper($iso_code)).'\'');
 
 		return $result['id_country'];
-    }
+	}
 	
 	static public function getIdZone($id_country)
-    {		
-     	if (!Validate::isUnsignedId($id_country))
-     		die(Tools::displayError());
+	{		
+		if (!Validate::isUnsignedId($id_country))
+			die(Tools::displayError());
 			
 		if (isset(self::$_idZones[$id_country]))
 			return self::$_idZones[$id_country];
 
-	    $result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_zone`
 		FROM `'._DB_PREFIX_.'country`
 		WHERE `id_country` = '.intval($id_country));
 
 		self::$_idZones[$id_country] = $result['id_zone'];
 		return $result['id_zone'];
-    }
+	}
 
 	/**
 	* Get a country name with its ID
@@ -150,15 +150,15 @@ class		Country extends ObjectModel
 	* @return string Country name
 	*/
 	static public function getNameById($id_lang, $id_country)
-    {
-	    $result = Db::getInstance()->getRow('
+	{
+		$result = Db::getInstance()->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'country_lang`
 		WHERE `id_lang` = '.intval($id_lang).'
 		AND `id_country` = '.intval($id_country));
 
-        return $result['name'];
-    }
+		return $result['name'];
+	}
     
 	/**
 	* Get a country iso with its ID
@@ -167,14 +167,14 @@ class		Country extends ObjectModel
 	* @return string Country iso
 	*/
 	static public function getIsoById($id_country)
-    {
-	    $result = Db::getInstance()->getRow('
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `iso_code`
 		FROM `'._DB_PREFIX_.'country`
 		WHERE `id_country` = '.intval($id_country));
 
-        return $result['iso_code'];
-    }
+		return $result['iso_code'];
+	}
 	
 	/**
 	* Get a country id with its name
@@ -184,8 +184,8 @@ class		Country extends ObjectModel
 	* @return intval Country id
 	*/
 	static public function getIdByName($id_lang = NULL, $country)
-    {
-	    $sql = '
+	{
+		$sql = '
 		SELECT `id_country`
 		FROM `'._DB_PREFIX_.'country_lang`
 		WHERE `name` LIKE \''.pSQL($country).'\'';
@@ -193,20 +193,20 @@ class		Country extends ObjectModel
 			$sql .= ' AND `id_lang` = '.intval($id_lang);
 		 	
 		$result = Db::getInstance()->getRow($sql);
-        return (intval($result['id_country']));
-    }   
+
+		return (intval($result['id_country']));
+	}   
     
-    static public function getNeedIdentifcationNumber($id_country)
-    {
-    	if (!intval($id_country))
-    		return false;
-    	
-    	return Db::getInstance()->getValue('
-    	SELECT `need_identification_number` 
-    	FROM `'._DB_PREFIX_.'country` 
-    	WHERE `id_country` = '.intval($id_country)
-    	);
-    } 
+	static public function getNeedIdentifcationNumber($id_country)
+	{
+		if (!intval($id_country))
+			return false;
+
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT `need_identification_number` 
+		FROM `'._DB_PREFIX_.'country` 
+		WHERE `id_country` = '.intval($id_country));
+	} 
 }
 
 ?>

@@ -36,7 +36,7 @@ class StatsVisits extends ModuleGraph
 	
 	public function getTotalVisits()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(c.`id_connections`)
 		FROM `'._DB_PREFIX_.'connections` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
@@ -44,7 +44,7 @@ class StatsVisits extends ModuleGraph
 	
 	public function getTotalGuests()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(DISTINCT c.`id_guest`)
 		FROM `'._DB_PREFIX_.'connections` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
@@ -108,7 +108,7 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 7)');
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 7)');
 			foreach ($result AS $row)
 				$this->_values[$i][intval(substr($row['date_add'], 5, 2))] = intval($row['total']);
 		}
@@ -118,7 +118,7 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 10)');
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 10)');
 			foreach ($result AS $row)
 				$this->_values[$i][intval(substr($row['date_add'], 8, 2))] = intval($row['total']);
 		}
@@ -128,7 +128,7 @@ class StatsVisits extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 13)');
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 13)');
 			foreach ($result AS $row)
 				$this->_values[$i][intval(substr($row['date_add'], 11, 2))] = intval($row['total']);
 		}

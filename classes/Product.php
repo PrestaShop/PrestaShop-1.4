@@ -450,7 +450,7 @@ class		Product extends ObjectModel
 		if (!Validate::isReference($reference))
 			die(Tools::displayError());
 
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_product`
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE p.`reference` = \''.pSQL($reference).'\'');
@@ -556,7 +556,7 @@ class		Product extends ObjectModel
 
 	static public function getProductAttributePrice($id_product_attribute)
 	{
-		$rq = Db::getInstance()->getRow('
+		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `price`
 		FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `id_product_attribute` = '.intval($id_product_attribute));
@@ -584,7 +584,7 @@ class		Product extends ObjectModel
 		elseif ($orderBy == 'position')
 			$orderByPrefix = 'c';
 
-		$rq = Db::getInstance()->ExecuteS('
+		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.* , t.`rate` AS tax_rate, m.`name` AS manufacturer_name, s.`name` AS supplier_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
@@ -606,7 +606,7 @@ class		Product extends ObjectModel
 
 	static public function getSimpleProducts($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`, pl.`name`
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
@@ -625,7 +625,7 @@ class		Product extends ObjectModel
 		//get idLang
 		$idLang = is_null($idLang) ? _USER_ID_LANG_ : intval($idLang);
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`, pl.`description_short`, pl.`link_rewrite`, pl.`name`, i.`id_image`
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = cp.id_product)
@@ -1085,7 +1085,7 @@ class		Product extends ObjectModel
 	*/
 	public function hasAttributes()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_product_attribute`) AS nb
 		FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `id_product` = '.intval($this->id));
@@ -1117,7 +1117,7 @@ class		Product extends ObjectModel
 
 		if ($count)
 		{
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE `active` = 1
@@ -1133,7 +1133,7 @@ class		Product extends ObjectModel
 			return intval($result['nb']);
 		}
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
 			i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
 			(p.`price` * ((100 + (t.`rate`))/100) - IF((DATEDIFF(`reduction_from`, CURDATE()) <= 0 AND DATEDIFF(`reduction_to`, CURDATE()) >=0) OR `reduction_from` = `reduction_to`, IF(`reduction_price` > 0, `reduction_price`, (p.`price` * ((100 + (t.`rate`))/100) * `reduction_percent` / 100)),0)) AS orderprice 
@@ -1173,7 +1173,7 @@ class		Product extends ObjectModel
 		global	$link, $cookie;
 
 		$currentDate = date('Y-m-d H:m:i');
-		$row = Db::getInstance()->getRow('
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
 			i.`id_image`, il.`legend`, t.`rate`
 		FROM `'._DB_PREFIX_.'product` p
@@ -1244,7 +1244,7 @@ class		Product extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 				WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 			)';
-			$result = Db::getInstance()->getRow($sql);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 			return intval($result['nb']);
 		}
 		$sql = '
@@ -1269,7 +1269,7 @@ class		Product extends ObjectModel
 		)
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
 		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts);
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if($orderBy == 'price')
 		{
 			Tools::orderbyPrice($result,$orderWay);
@@ -1412,7 +1412,7 @@ class		Product extends ObjectModel
 			return self::$_prices[$cacheId];
 
 		// Getting price
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`id_tax`, t.`rate`, 
 		'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.intval($id_product).' AND default_on = 1), 0)').' AS attribute_price
 		FROM `'._DB_PREFIX_.'product` p
@@ -1449,7 +1449,7 @@ class		Product extends ObjectModel
 		if (intval($id_cart))
 		// Quantity discount
 		{
-			$totalQuantity = intval(Db::getInstance()->getValue('
+			$totalQuantity = intval(Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT SUM(`quantity`)
 				FROM `'._DB_PREFIX_.'cart_product`
 				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($id_cart))
@@ -1486,7 +1486,7 @@ class		Product extends ObjectModel
 
 	public function getIdProductAttributeMostExpsensive()
 	{
-		$row = Db::getInstance()->getRow('
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_product_attribute` 
 		FROM `'._DB_PREFIX_.'product_attribute` 
 		WHERE `id_product` = '.intval($this->id).' 
@@ -1499,7 +1499,7 @@ class		Product extends ObjectModel
 
 	public function getPriceWithoutReduct($notax = false)
 	{
-		$res = Db::getInstance()->getRow('
+		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT p.`price`, t.`rate`, t.`id_tax`
 			FROM `'._DB_PREFIX_.$this->table.'` p
 			LEFT JOIN `'._DB_PREFIX_.'tax`t ON (p.`id_tax` = t.`id_tax`)
@@ -1576,7 +1576,7 @@ class		Product extends ObjectModel
 		if (Pack::isPack(intval($id_product), intval($lang)) AND !Pack::isInStock(intval($id_product), intval($lang)))
 			return 0;
 		
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance()->getRow('
 		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` AS pa ON pa.`id_product` = p.`id_product`
@@ -1827,7 +1827,7 @@ class		Product extends ObjectModel
 	{
 		global	$link, $cookie;
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
 		i.`id_image`, il.`legend`, t.`rate`, m.`name` as manufacturer_name, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM `'._DB_PREFIX_.'accessory`
@@ -1907,7 +1907,7 @@ class		Product extends ObjectModel
 
 	static public function getFeaturesStatic($id_product)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT id_feature, id_product, id_feature_value
 		FROM `'._DB_PREFIX_.'feature_product`
 		WHERE `id_product` = '.intval($id_product));
@@ -2271,7 +2271,7 @@ class		Product extends ObjectModel
 	*/
 	static public function getFrontFeaturesStatic($id_lang, $id_product)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT name, value, pf.id_feature
 		FROM '._DB_PREFIX_.'feature_product pf
 		LEFT JOIN '._DB_PREFIX_.'feature_lang fl ON (fl.id_feature = pf.id_feature AND fl.id_lang = '.intval($id_lang).')
@@ -2286,7 +2286,7 @@ class		Product extends ObjectModel
 	
 	static public function getAttachmentsStatic($id_lang, $id_product)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'product_attachment pa
 		LEFT JOIN '._DB_PREFIX_.'attachment a ON a.id_attachment = pa.id_attachment
@@ -2555,9 +2555,9 @@ class		Product extends ObjectModel
 		if (isset(self::$_incat[md5($sql)]))
 			return self::$_incat[md5($sql)];
 
-		if (!Db::getInstance()->Execute($sql))
+		if (!Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql))
 			return false;
-		self::$_incat[md5($sql)] =  (Db::getInstance()->NumRows() > 0 ? true : false);
+		self::$_incat[md5($sql)] =  (Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows() > 0 ? true : false);
 		return self::$_incat[md5($sql)];
 	}
 	
@@ -2570,13 +2570,13 @@ class		Product extends ObjectModel
 	{
 		if (!$id_customer)
 		{
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT ctg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			WHERE cp.`id_product` = '.intval($this->id).' AND ctg.`id_group` = 1');
 		} else {
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT cg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)

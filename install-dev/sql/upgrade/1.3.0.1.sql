@@ -47,14 +47,14 @@ ALTER TABLE `PREFIX_orders` ADD `total_products_wt` DECIMAL(10, 2) NOT NULL AFTE
 
 UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
 
-UPDATE `PREFIX_configuration`
+UPDATE `PREFIX_configuration` 
 SET `value` = ROUND(value / (1 + (
 	SELECT rate FROM (
 		SELECT t.`rate`, COUNT(*) n
 		FROM `PREFIX_orders` o
-		LEFT JOIN `PREFIX_carrier` c ON (o.`id_carrier` = c.`id_carrier`)
+		LEFT JOIN `PREFIX_carrier` c ON (o.`id_carrier` = c.`id_carrier`) 
 		LEFT JOIN `PREFIX_tax` t ON (t.`id_tax` = c.`id_tax`)
-		WHERE c.`deleted` = 0
+		WHERE c.`deleted` = 0 
 		AND c.`shipping_handling` = 1
 		GROUP BY o.`id_carrier`
 		ORDER BY n DESC
@@ -90,4 +90,3 @@ INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) (SELECT id_carrier, id
 
 /* PHP */
 /* PHP:convert_product_price(); */;
-

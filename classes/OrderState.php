@@ -80,7 +80,7 @@ class		OrderState extends ObjectModel
 	*/
 	static public function getOrderStates($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_state` os
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($id_lang).')
@@ -95,7 +95,7 @@ class		OrderState extends ObjectModel
 	*/
 	static public function invoiceAvailable($id_order_state)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `invoice` AS ok
 		FROM `'._DB_PREFIX_.'order_state`
 		WHERE `id_order_state` = '.intval($id_order_state));

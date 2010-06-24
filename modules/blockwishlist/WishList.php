@@ -130,7 +130,7 @@ class		WishList extends ObjectModel
 	{
 		if (!Validate::isMessage($token))
 			die (Tools::displayError());
-		return (Db::getInstance()->getRow('
+		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT w.`id_wishlist`, w.`name`, w.`id_customer`, c.`firstname`, c.`lastname`
 		  FROM `'._DB_PREFIX_.'wishlist` w
 		INNER JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = w.`id_customer`
@@ -146,9 +146,10 @@ class		WishList extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_customer))
 			die (Tools::displayError());
+
 		return (Db::getInstance()->ExecuteS('
 		SELECT w.`id_wishlist`, w.`name`, w.`token`, w.`date_add`, w.`date_upd`, w.`counter`
-		  FROM `'._DB_PREFIX_.'wishlist` w
+		FROM `'._DB_PREFIX_.'wishlist` w
 		WHERE `id_customer` = '.intval($id_customer).'
 		ORDER BY w.`name` ASC'));
 	}
@@ -156,15 +157,14 @@ class		WishList extends ObjectModel
 	static public function refreshWishList($id_wishlist)
 	{
 		$old_carts = Db::getInstance()->ExecuteS('
-			SELECT wp.id_product, wp.id_product_attribute, wpc.id_cart, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(wpc.date_add) AS timecart
-			FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
-			JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)
-			JOIN `'._DB_PREFIX_.'cart` c ON  (c.id_cart = wpc.id_cart)
-			JOIN `'._DB_PREFIX_.'cart_product` cp ON (wpc.id_cart = cp.id_cart)
-			LEFT JOIN `'._DB_PREFIX_.'orders` o ON (o.id_cart = c.id_cart)
-			WHERE (wp.id_wishlist='.intval($id_wishlist).' AND o.id_cart IS NULL)
-			HAVING timecart  >= 3600*6
-		');
+		SELECT wp.id_product, wp.id_product_attribute, wpc.id_cart, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(wpc.date_add) AS timecart
+		FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
+		JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)
+		JOIN `'._DB_PREFIX_.'cart` c ON  (c.id_cart = wpc.id_cart)
+		JOIN `'._DB_PREFIX_.'cart_product` cp ON (wpc.id_cart = cp.id_cart)
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (o.id_cart = c.id_cart)
+		WHERE (wp.id_wishlist='.intval($id_wishlist).' AND o.id_cart IS NULL)
+		HAVING timecart  >= 3600*6');
 
 		if(isset($old_carts) AND $old_carts != false)
 			foreach ($old_carts AS $old_cart)
@@ -285,7 +285,7 @@ class		WishList extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_customer))
 			die (Tools::displayError());
-		return (Db::getInstance()->ExecuteS('
+		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT SUM(wp.`quantity`) AS nbProducts, wp.`id_wishlist`
 		  FROM `'._DB_PREFIX_.'wishlist_product` wp
 		INNER JOIN `'._DB_PREFIX_.'wishlist` w ON (w.`id_wishlist` = wp.`id_wishlist`)
@@ -402,7 +402,7 @@ class		WishList extends ObjectModel
 
 		if (!Validate::isUnsignedId($id_wishlist))
 			die (Tools::displayError());
-		return (Db::getInstance()->ExecuteS('
+		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT wp.`id_product`, wp.`id_product_attribute`, wpc.`quantity`, wpc.`date_add`, cu.`lastname`, cu.`firstname`
 		FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
 		JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)
@@ -493,7 +493,7 @@ class		WishList extends ObjectModel
 		if (!Validate::isUnsignedId($id_wishlist) OR
 			!Validate::isUnsignedId($id_customer))
 			die (Tools::displayError());
-		return (Db::getInstance()->ExecuteS('
+		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT we.`email`, we.`date_add`
 		  FROM `'._DB_PREFIX_.'wishlist_email` we
 		INNER JOIN `'._DB_PREFIX_.'wishlist` w ON w.`id_wishlist` = we.`id_wishlist`

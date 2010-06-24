@@ -32,7 +32,7 @@ class Tag extends ObjectModel
 			parent::__construct($id);
 		elseif ($name AND Validate::isGenericName($name) AND $id_lang AND Validate::isUnsignedId($id_lang))
 		{
-			$row = Db::getInstance()->getRow('
+			$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT *
 			FROM `'._DB_PREFIX_.'tag` t
 			WHERE `name` LIKE \''.pSQL($name).'\' AND `id_lang` = '.intval($id_lang));
@@ -112,7 +112,7 @@ class Tag extends ObjectModel
 	{
 		global $cookie;
 
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.name, COUNT(pt.id_tag) AS times
 		FROM `'._DB_PREFIX_.'product_tag` pt
 		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (t.id_tag = pt.id_tag)
@@ -132,7 +132,7 @@ class Tag extends ObjectModel
 	
 	static public function getProductTags($id_product)
 	{
-	 	if (!$tmp = Db::getInstance()->ExecuteS('
+	 	if (!$tmp = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.`id_lang`, t.`name` 
 		FROM '._DB_PREFIX_.'tag t 
 		LEFT JOIN '._DB_PREFIX_.'product_tag pt ON (pt.id_tag = t.id_tag) 
@@ -152,7 +152,7 @@ class Tag extends ObjectModel
 		if (!$this->id AND $associated)
 			return array();
 		
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT pl.name, pl.id_product
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.id_product = pl.id_product

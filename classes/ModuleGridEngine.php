@@ -28,7 +28,7 @@ abstract class ModuleGridEngine extends Module
 	
 	public static function getGridEngines()
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
     	SELECT m.`name`
     	FROM `'._DB_PREFIX_.'module` m
     	LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`

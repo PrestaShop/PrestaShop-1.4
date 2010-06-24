@@ -112,7 +112,7 @@ class StatsBestCustomers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT c.`id_customer`) totalCount FROM `'._DB_PREFIX_.'customer` c
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON c.id_customer = o.id_customer
 		WHERE o.valid = 1');
@@ -153,6 +153,6 @@ class StatsBestCustomers extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance()->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 	}
 }

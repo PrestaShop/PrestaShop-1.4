@@ -20,41 +20,57 @@ abstract class Db
 {
 	/** @var string Server (eg. localhost) */
 	protected $_server;
-	
+
 	/** @var string Database user (eg. root) */
 	protected $_user;
 
 	/** @var string Database password (eg. can be empty !) */
 	protected $_password;
-  
+
 	/** @var string Database type (MySQL, PgSQL) */
 	protected $_type;
-  
+
 	/** @var string Database name */
 	protected $_database;
-	
+
 	/** @var mixed Ressource link */
 	protected $_link;
-  
+
 	/** @var mixed SQL cached result */
 	protected $_result;
-	
+
 	/** @var mixed ? */
 	protected static $_db;
-  
+
 	/** @var mixed Object instance for singleton */
-	private static $_instance;
+	private static $_instance = array();
+
+	private static $_servers = array(	
+	array('server' => _DB_SERVER_, 'user' => _DB_USER_, 'password' => _DB_PASSWD_, 'database' => _DB_NAME_), /* MySQL Master server */
+	/* Add here your slave(s) server(s)*/
+	/*array('server' => '192.168.0.15', 'user' => 'rep', 'password' => '123456', 'database' => 'rep'),
+	array('server' => '192.168.0.3', 'user' => 'myuser', 'password' => 'mypassword', 'database' => 'mydatabase'),
+	*/
+	);
 
 	/**
 	 * Get Db object instance (Singleton)
 	 *
+	 * @param boolean $master Decides wether the connection to be returned by the master server or the slave server
 	 * @return object Db instance
 	 */
-	public static function getInstance()
+	public static function getInstance($master = 1)
 	{
-		if(!isset(self::$_instance))
-			self::$_instance = new MySQL();
-		return self::$_instance;
+		
+		if ($master OR ($nServers = sizeof(self::$_servers)) == 1)
+			$idServer = 0;
+		else
+			$idServer = ($nServers > 2) ? rand(1, intval($nServers)) : 1;
+		
+		if(!isset(self::$_instance[$idServer]))
+			self::$_instance[intval($idServer)] = new MySQL(self::$_servers[intval($idServer)]['server'], self::$_servers[intval($idServer)]['user'], self::$_servers[intval($idServer)]['password'], self::$_servers[intval($idServer)]['database']);
+		
+		return self::$_instance[intval($idServer)];
 	}
 
 	public function __destruct()
@@ -65,13 +81,14 @@ abstract class Db
 	/**
 	 * Build a Db object
 	 */
-	public function __construct()
+	public function __construct($server, $user, $password, $database)
 	{
-		$this->_server = _DB_SERVER_;
-		$this->_user = _DB_USER_;
-		$this->_password = _DB_PASSWD_;
+		$this->_server = $server;
+		$this->_user = $user;
+		$this->_password = $password;
 		$this->_type = _DB_TYPE_;
-		$this->_database = _DB_NAME_;
+		$this->_database = $database;
+
 		$this->connect();
 	}
 

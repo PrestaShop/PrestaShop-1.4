@@ -112,10 +112,11 @@ class Guest extends ObjectModel
 		foreach ($browserArray as $k => $value)
 			if (strstr($userAgent, $value))
 			{
-				$result = Db::getInstance()->getRow('
-					SELECT `id_web_browser`
-					FROM `'._DB_PREFIX_.'web_browser` wb
-					WHERE wb.`name` = \''.pSQL($k).'\'');
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+				SELECT `id_web_browser`
+				FROM `'._DB_PREFIX_.'web_browser` wb
+				WHERE wb.`name` = \''.pSQL($k).'\'');
+				
 				return $result['id_web_browser'];
 			}
 		return NULL;
@@ -132,10 +133,11 @@ class Guest extends ObjectModel
 		foreach ($osArray as $k => $value)
 			if (strstr($userAgent, $value))
 			{
-				$result = Db::getInstance()->getRow('
-					SELECT `id_operating_system`
-					FROM `'._DB_PREFIX_.'operating_system` os
-					WHERE os.`name` = \''.pSQL($k).'\'');
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+				SELECT `id_operating_system`
+				FROM `'._DB_PREFIX_.'operating_system` os
+				WHERE os.`name` = \''.pSQL($k).'\'');
+				
 				return $result['id_operating_system'];
 			}
 		return NULL;

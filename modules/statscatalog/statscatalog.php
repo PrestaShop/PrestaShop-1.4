@@ -34,7 +34,7 @@ class StatsCatalog extends Module
 	
 	public function getQuery1()
 	{
-		return DB::getInstance()->getRow('
+		return DB::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT p.`id_product`) AS total, SUM(p.`price`) / COUNT(`price`) AS average_price, COUNT(DISTINCT i.`id_image`) AS images
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON i.`id_product` = p.`id_product`
@@ -45,7 +45,7 @@ class StatsCatalog extends Module
 		
 	public function getTotalPageViewed()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(pv.`counter`) AS viewed
 		FROM `'._DB_PREFIX_.'product` p 
 		LEFT JOIN `'._DB_PREFIX_.'page` pa ON p.`id_product` = pa.`id_object`
@@ -58,7 +58,7 @@ class StatsCatalog extends Module
 	
 	public function getTotalProductViewed()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(DISTINCT pa.`id_object`)
 		FROM `'._DB_PREFIX_.'page_viewed` pv
 		LEFT JOIN `'._DB_PREFIX_.'page` pa ON pv.`id_page` = pa.`id_page`
@@ -72,7 +72,7 @@ class StatsCatalog extends Module
 	
 	public function getTotalBought()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(od.`product_quantity`) AS bought
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
@@ -85,7 +85,7 @@ class StatsCatalog extends Module
 	
 	public function getProductsNB($id_lang)
 	{
-		$precalc = Db::getInstance()->ExecuteS('
+		$precalc = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.`id_order` = od.`id_order`
@@ -100,7 +100,7 @@ class StatsCatalog extends Module
 		foreach ($precalc as $array)
 			$precalc2[] = intval($array['id_product']);
 		
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.name, pl.link_rewrite
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.id_lang = '.intval($id_lang).')
@@ -108,7 +108,7 @@ class StatsCatalog extends Module
 		WHERE p.`active` = 1
 		'.(sizeof($precalc2) ? 'AND p.`id_product` NOT IN ('.implode(',', $precalc2).')' : '').'
 		'.$this->_where);
-		return array('total' => Db::getInstance()->NumRows(), 'result' => $result);
+		return array('total' => Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows(), 'result' => $result);
 	}
 	
 	public function hookAdminStatsModules($params)

@@ -152,7 +152,7 @@ class		Customer extends ObjectModel
 	  */
 	static public function getCustomers()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_customer`, `email`, `firstname`, `lastname`
 		FROM `'._DB_PREFIX_.'customer`
 		ORDER BY `id_customer` ASC');
@@ -197,7 +197,7 @@ class		Customer extends ObjectModel
 	{
 	 	if (!Validate::isUnsignedId($id_customer))
 			return true;
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `id_customer` = \''.intval($id_customer).'\'
@@ -240,7 +240,7 @@ class		Customer extends ObjectModel
 	{
 	 	if (!Validate::isEmail($this->email))
 	 		die (Tools::displayError());
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) AS total
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `email` = \''.pSQL($this->email).'\' AND `id_customer` != '.intval($this->id));
@@ -293,7 +293,7 @@ class		Customer extends ObjectModel
 	  */
 	public function getConnections($nb = 10)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `ip_address`, `date`
 		FROM `'._DB_PREFIX_.'connections`
 		WHERE `id_customer` = '.intval($this->id).'
@@ -344,7 +344,7 @@ class		Customer extends ObjectModel
 	  */
 	public static function getNewsletteremails()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `email`, `firstname`, `lastname`, `newsletter`, `ip_registration_newsletter`, `newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `newsletter` = 1
@@ -358,7 +358,7 @@ class		Customer extends ObjectModel
 	  */
 	public static function getTodaysRegistration()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) as nb
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE DAYOFYEAR(`date_add`) = DAYOFYEAR(NOW())
@@ -376,7 +376,7 @@ class		Customer extends ObjectModel
 	  */
 	public static function searchByName($query)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.*
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`email` LIKE \'%'.pSQL($query).'%\'
@@ -399,13 +399,13 @@ class		Customer extends ObjectModel
 		WHERE o.`id_customer` = '.intval($this->id).'
 		AND o.valid = 1');
 
-		$result2 = Db::getInstance()->getRow('
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT MAX(c.`date_add`) AS last_visit
 		FROM `'._DB_PREFIX_.'guest` g
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
 		WHERE g.`id_customer` = '.intval($this->id));
 
-		$result3 = Db::getInstance()->getRow('
+		$result3 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT (YEAR(CURRENT_DATE)-YEAR(c.`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(c.`birthday`, 5)) AS age
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`id_customer` = '.intval($this->id));
@@ -417,7 +417,7 @@ class		Customer extends ObjectModel
 	
 	public function getLastConnections()
     {
-        return Db::getInstance()->ExecuteS('
+        return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT c.date_add, COUNT(cp.id_page) AS pages, TIMEDIFF(MAX(cp.time_end), c.date_add) as time, http_referer,INET_NTOA(ip_address) as ipaddress
         FROM `'._DB_PREFIX_.'guest` g
         LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
@@ -435,7 +435,7 @@ class		Customer extends ObjectModel
 	  */
 	public function getLastCart()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT MAX(c.`id_cart`) AS id_cart
 		FROM `'._DB_PREFIX_.'cart` c
 		WHERE c.`id_customer` = '.intval($this->id));
@@ -492,7 +492,7 @@ class		Customer extends ObjectModel
 	
 	public function isMemberOfGroup($id_group)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT count(cg.`id_group`) as nb
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.intval($this->id).'
@@ -503,7 +503,7 @@ class		Customer extends ObjectModel
 	
 	public function getBoughtProducts()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		WHERE o.valid = 1 AND o.`id_customer` = '.intval($this->id));
@@ -511,7 +511,7 @@ class		Customer extends ObjectModel
 	
 	public function getNeedDNI()
 	{
-		$countries = Db::getInstance()->ExecuteS('
+		$countries = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_country` 
 		FROM `'._DB_PREFIX_.'address` 
 		WHERE `id_customer` = '.intval($this->id).' 

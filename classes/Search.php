@@ -129,7 +129,7 @@ class Search
 	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false)
 	{
 		global $cookie;
-		$db = Db::getInstance();
+		$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 
 		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
@@ -382,7 +382,7 @@ class Search
 
 		if ($count)
 		{
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(pt.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN `'._DB_PREFIX_.'product_tag` pt ON (p.`id_product` = pt.`id_product`)
@@ -391,7 +391,7 @@ class Search
 			AND t.`name` LIKE \'%'.pSQL($tag).'%\'');
 			return isset($result['nb']) ? $result['nb'] : 0;
 		}
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description_short`, pl.`link_rewrite`, pl.`name`, tax.`rate`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, 1 as position
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')

@@ -51,7 +51,7 @@ function getTotalElements()
 	
 function getCoords()
 {
-	return (Db::getInstance()->ExecuteS('SELECT `x`, `y`, COUNT(`id_address`) AS total 
+	return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `x`, `y`, COUNT(`id_address`) AS total 
 								FROM `'._DB_PREFIX_.'address` a
 								LEFT JOIN `'._DB_PREFIX_.'location_coords` lc ON lc.`id_country`=a.`id_country`
 								WHERE deleted = 0 AND id_customer IS NOT NULL AND id_customer != 0

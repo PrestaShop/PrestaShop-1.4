@@ -55,7 +55,7 @@ class		OrderReturnState extends ObjectModel
 	*/
 	static public function getOrderReturnStates($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_return_state` ors
 		LEFT JOIN `'._DB_PREFIX_.'order_return_state_lang` orsl ON (ors.`id_order_return_state` = orsl.`id_order_return_state` AND orsl.`id_lang` = '.intval($id_lang).')

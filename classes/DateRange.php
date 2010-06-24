@@ -35,6 +35,7 @@ class DateRange extends ObjectModel
 		SELECT `id_date_range`, `time_end`
 		FROM `'._DB_PREFIX_.'date_range`
 		WHERE `time_end` = (SELECT MAX(`time_end`) FROM `'._DB_PREFIX_.'date_range`)');
+
 		if (!$result['id_date_range'] OR strtotime($result['time_end']) < strtotime(date('Y-m-d H:i:s')))
 		{
 			// The default range is set to 1 day less 1 second (in seconds)
@@ -45,9 +46,9 @@ class DateRange extends ObjectModel
 			$dateRange->add();
 			return $dateRange->id;
 		}
+
 		return $result['id_date_range'];
 	}
-	
 }
 
 ?>

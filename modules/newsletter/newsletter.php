@@ -73,7 +73,7 @@ class Newsletter extends Module
 				else
 					$result = $this->_getBlockNewsletter();
 			}
-			if (!$nb = intval(Db::getInstance()->NumRows()))
+			if (!$nb = intval(Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows()))
 				$this->_html .= $this->displayError($this->l('No customers were found with these filters !'));
 			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
 			{
@@ -96,7 +96,7 @@ class Newsletter extends Module
 
 	private function _getCustomers()
 	{
-		$rq = Db::getInstance()->ExecuteS('
+		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`, c.`ip_registration_newsletter`, c.`newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE 1
@@ -111,7 +111,7 @@ class Newsletter extends Module
 
 	private function _getBlockNewsletter()
 	{
-		$rq = Db::getInstance()->ExecuteS('
+		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'newsletter`');
 		$header = array('id_customer', 'email', 'newsletter_date_add', 'ip_address');

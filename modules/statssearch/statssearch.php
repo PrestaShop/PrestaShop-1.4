@@ -65,7 +65,7 @@ class StatsSearch extends ModuleGraph
 	
 	function hookAdminStatsModules()
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		$table = '<div style="overflow-y: scroll; height: 600px;">
@@ -97,12 +97,12 @@ class StatsSearch extends ModuleGraph
 	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first keywords');
-		$totalResult = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$totalResult = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		$total = 0;
 		$total2 = 0;
 		foreach ($totalResult as $totalRow)
 			$total += $totalRow['occurences'];
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2.' LIMIT 9');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2.' LIMIT 9');
 		foreach ($result as $row)
 		{
 			if (!$row['occurences'])

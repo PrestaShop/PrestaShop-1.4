@@ -28,7 +28,7 @@ class CrossSelling extends Module
 	{
 		global $smarty, $cookie, $link;
 		
-		$orders = Db::getInstance()->ExecuteS('
+		$orders = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT o.id_order
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON (od.id_order = o.id_order)
@@ -41,7 +41,7 @@ class CrossSelling extends Module
 		
 		if ($list != '')
 		{
-			$orderProducts = Db::getInstance()->ExecuteS('
+			$orderProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT od.product_id, pl.name, pl.link_rewrite, p.reference, i.id_image
 			FROM '._DB_PREFIX_.'order_detail od
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = od.product_id)

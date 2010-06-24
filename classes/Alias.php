@@ -31,7 +31,7 @@ class Alias extends ObjectModel
 			parent::__construct($id);
 		elseif ($alias AND Validate::isValidSearch($alias))
 		{
-			$row = Db::getInstance()->getRow('
+			$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT a.id_alias, a.search, a.alias
 			FROM `'._DB_PREFIX_.'alias` a
 			WHERE `alias` LIKE \''.pSQL($alias).'\' AND `active` = 1');
@@ -53,18 +53,20 @@ class Alias extends ObjectModel
 	static public function deleteAliases($search)
 	{
 		return Db::getInstance()->Execute('
-			DELETE
-			FROM `'._DB_PREFIX_.'alias`
-			WHERE `search` LIKE \''.pSQL($search).'\'');
+		DELETE
+		FROM `'._DB_PREFIX_.'alias`
+		WHERE `search` LIKE \''.pSQL($search).'\'');
 	}
 	
 	public function getAliases()
 	{
 		$aliases = Db::getInstance()->ExecuteS('
-			SELECT a.alias
-			FROM `'._DB_PREFIX_.'alias` a
-			WHERE `search` = \''.pSQL($this->search).'\'');
+		SELECT a.alias
+		FROM `'._DB_PREFIX_.'alias` a
+		WHERE `search` = \''.pSQL($this->search).'\'');
+
 		$aliases = array_map('implode', $aliases);
+
 		return implode(', ', $aliases);
 	}
 	

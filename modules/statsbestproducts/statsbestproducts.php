@@ -119,7 +119,7 @@ class StatsBestProducts extends ModuleGrid
 	
 	public function getTotalCount($dateBetween)
 	{
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('
 		SELECT COUNT(DISTINCT p.`id_product`) totalCount
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
@@ -167,6 +167,6 @@ class StatsBestProducts extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance()->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 	}
 }

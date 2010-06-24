@@ -203,7 +203,7 @@ class MailAlerts extends Module
 
 	public function customerHasNotification($id_customer, $id_product, $id_product_attribute)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT * 
 			FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
 			WHERE `id_customer` = '.intval($id_customer).' 
@@ -253,7 +253,7 @@ class MailAlerts extends Module
 	{
 		global $cookie, $link;
 		
-		$customers = Db::getInstance()->ExecuteS('
+		$customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT id_customer, customer_email
 			FROM `'._DB_PREFIX_.'mailalert_customer_oos`
 			WHERE `id_product` = '.intval($id_product).' 
@@ -412,7 +412,7 @@ class MailAlerts extends Module
 		)
 			die (Tools::displayError());
 
-		$products = Db::getInstance()->ExecuteS('
+		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT ma.`id_product`, p.`quantity` AS product_quantity, pl.`name`, ma.`id_product_attribute`
 			FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
 			JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
@@ -430,7 +430,7 @@ class MailAlerts extends Module
 			if (isset($products[$i]['id_product_attribute']) AND
 				Validate::isUnsignedInt($products[$i]['id_product_attribute']))
 			{
-				$result = Db::getInstance()->ExecuteS('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 					SELECT al.`name` AS attribute_name
 					FROM `'._DB_PREFIX_.'product_attribute_combination` pac
 					LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)

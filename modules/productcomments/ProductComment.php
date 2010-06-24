@@ -69,7 +69,7 @@ class ProductComment extends ObjectModel
 			$p = 1;
 		if ($n != null AND $n <= 0)
 			$n = 5;
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT pc.`id_product_comment`, c.`firstname`, c.`lastname`, pc.`content`, pc.`grade`, pc.`date_add`
 		  FROM `'._DB_PREFIX_.'product_comment` pc
 		INNER JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
@@ -90,7 +90,7 @@ class ProductComment extends ObjectModel
 			die(Tools::displayError());
 		$validate = Configuration::get('PRODUCT_COMMENTS_MODERATE');
 
-		return (Db::getInstance()->ExecuteS('
+		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT pc.`id_product_comment`, pcg.`grade`, pcc.`name`, pcc.`id_product_comment_criterion`
 		FROM `'._DB_PREFIX_.'product_comment` pc
 		INNER JOIN `'._DB_PREFIX_.'product_comment_grade` pcg ON (pcg.`id_product_comment` = pc.`id_product_comment`)
@@ -134,7 +134,7 @@ class ProductComment extends ObjectModel
 		if (!Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
 		$validate = intval(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
-		if (($result = Db::getInstance()->getRow('
+		if (($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_product_comment`) AS "nbr"
 		FROM `'._DB_PREFIX_.'product_comment` pc
 		WHERE `id_product` = '.intval($id_product).($validate == '1' ? ' AND `validate` = 1' : ''))) === false)
@@ -153,7 +153,7 @@ class ProductComment extends ObjectModel
 			die(Tools::displayError());
 		$validate = intval(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
 
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(pc.`id_product`) AS "nbr"
 		FROM `'._DB_PREFIX_.'product_comment` pc
 		WHERE `id_product` = '.intval($id_product).($validate == '1' ? ' AND `validate` = 1' : '').'

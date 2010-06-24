@@ -79,7 +79,7 @@ class CMS extends ObjectModel
 	
 	public static function getLinks($id_lang, $selection = NULL)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_cms, cl.link_rewrite, cl.meta_title
 		FROM '._DB_PREFIX_.'cms c
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
@@ -100,7 +100,7 @@ class CMS extends ObjectModel
 		if (empty($id_lang))
 			$id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_cms, l.meta_title
 		FROM  '._DB_PREFIX_.'cms c
 		JOIN '._DB_PREFIX_.'cms_lang l ON (c.id_cms = l.id_cms)
@@ -121,7 +121,7 @@ class CMS extends ObjectModel
 		
 	public static function updateCmsToBlock($cms, $id_block)
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` ='.intval($id_block));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.intval($id_block));
 
 		$list = '';
 		foreach ($cms AS $id_cms)
@@ -136,7 +136,7 @@ class CMS extends ObjectModel
 	
 	public function delete()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_cms` ='.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_cms` = '.intval($this->id));
 		return parent::delete();
 	}
 }

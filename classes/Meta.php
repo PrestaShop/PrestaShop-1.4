@@ -78,7 +78,7 @@ class		Meta extends ObjectModel
 	
 	static public function getMetas()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'meta
 		ORDER BY page ASC');
@@ -86,7 +86,7 @@ class		Meta extends ObjectModel
 	
 	static public function getMetaByPage($page, $id_lang)
 	{
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
 		FROM '._DB_PREFIX_.'meta m
 		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)

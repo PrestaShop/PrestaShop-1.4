@@ -34,7 +34,7 @@ class StatsRegistrations extends ModuleGraph
 	
 	public function getTotalRegistrations()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) as total
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `date_add` BETWEEN '.ModuleGraph::getDateBetween());
@@ -43,7 +43,7 @@ class StatsRegistrations extends ModuleGraph
 	
 	public function getBlockedVisitors()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT c.`id_guest`) as blocked
 		FROM `'._DB_PREFIX_.'page_type` pt
 		LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page_type = pt.id_page_type
@@ -58,7 +58,7 @@ class StatsRegistrations extends ModuleGraph
 	
 	public function getFirstBuyers()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT o.`id_customer`) as buyers
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON o.id_customer = g.id_customer
@@ -113,21 +113,21 @@ class StatsRegistrations extends ModuleGraph
 	
 	protected function setYearValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 5, 2))]++;
 	}
 	
 	protected function setMonthValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
 			$this->_values[intval(substr($row['date_add'], 8, 2))]++;
 	}
 
 	protected function setDayValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
 		    $this->_values[intval(substr($row['date_add'], 11, 2))]++;
 	}

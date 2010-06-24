@@ -120,7 +120,7 @@ class		Carrier extends ObjectModel
 	{
 		if (isset(self::$priceByWeight[$this->id]))
 			return self::$priceByWeight[$this->id];
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON (d.`id_range_weight` = w.`id_range_weight`)
@@ -136,7 +136,7 @@ class		Carrier extends ObjectModel
 
 	static public function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
@@ -152,7 +152,7 @@ class		Carrier extends ObjectModel
 
 	public function getMaxDeliveryPriceByWeight($id_zone)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		INNER JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
@@ -176,7 +176,7 @@ class		Carrier extends ObjectModel
 
 		if (isset(self::$priceByPrice[$this->id]))
 			return self::$priceByPrice[$this->id];
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
@@ -192,7 +192,7 @@ class		Carrier extends ObjectModel
 
 	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
@@ -208,7 +208,7 @@ class		Carrier extends ObjectModel
 
 	public function getMaxDeliveryPriceByPrice($id_zone)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		INNER JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
@@ -286,7 +286,7 @@ class		Carrier extends ObjectModel
 
 	public static function checkCarrierZone($id_carrier, $id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT c.`id_carrier`
 			FROM `'._DB_PREFIX_.'carrier` c
 			LEFT JOIN `'._DB_PREFIX_.'carrier_zone` cz  ON (cz.`id_carrier` = c.`id_carrier`)

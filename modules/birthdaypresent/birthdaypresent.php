@@ -94,7 +94,7 @@ class BirthdayPresent extends Module
 	
 	public function createTodaysVouchers()
 	{
-		$users = Db::getInstance()->ExecuteS('
+		$users = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT c.id_customer, firstname, lastname, email
 		FROM '._DB_PREFIX_.'customer c
 		LEFT JOIN '._DB_PREFIX_.'orders o ON (c.id_customer = o.id_customer)

@@ -71,7 +71,7 @@ class SEKeywords extends ModuleGraph
 	
 	function hookAdminStatsModules()
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		
 		if ($result AND sizeof($result))
@@ -109,7 +109,7 @@ class SEKeywords extends ModuleGraph
 		if (!Validate::isAbsoluteUrl($url))
 			return false;
 		$parsedUrl = parse_url($url);
-		$result = Db::getInstance()->ExecuteS('SELECT `server`, `getvar` FROM `'._DB_PREFIX_.'search_engine`');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `server`, `getvar` FROM `'._DB_PREFIX_.'search_engine`');
 		foreach ($result as $index => $row)
 		{
 			$host =& $row['server'];
@@ -117,8 +117,6 @@ class SEKeywords extends ModuleGraph
 			if (strstr($parsedUrl['host'], $host))
 			{
 				$kArray = array();
-				if (!isset($parsedUrl['query']))
-					return false;
 				preg_match('/[^a-z]'.$varname.'=.+\&'.'/U', $parsedUrl['query'], $kArray);
 				if (!isset($kArray[0]) OR empty($kArray[0]))
 					preg_match('/[^a-z]'.$varname.'=.+$'.'/', $parsedUrl['query'], $kArray);
@@ -133,12 +131,12 @@ class SEKeywords extends ModuleGraph
 	protected function getData($layers)
 	{
 		$this->_titles['main'] = $this->l('10 first keywords');
-		$totalResult = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$totalResult = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		$total = 0;
 		$total2 = 0;
 		foreach ($totalResult as $totalRow)
 			$total += $totalRow['occurences'];
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2.' LIMIT 9');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2.' LIMIT 9');
 		foreach ($result as $row)
 		{
 			$this->_legend[] = $row['keyword'];

@@ -84,7 +84,7 @@ XML;
 			WHERE l.`active` = 1
 			ORDER BY cl.id_cms, cl.id_lang ASC';
 		
-		$cmss = Db::getInstance()->ExecuteS($sql_cms);
+		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
 		foreach($cmss AS $cms)
 		{
 			$sitemap = $xml->addChild('url');
@@ -105,7 +105,7 @@ XML;
 			$sitemap->addChild('changefreq', 'monthly');
 		}
 		
-		$categories = Db::getInstance()->ExecuteS('
+		$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
 		FROM '._DB_PREFIX_.'category c
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON c.id_category = cl.id_category
@@ -134,7 +134,7 @@ XML;
             $sitemap->addChild('changefreq', 'weekly');
       	}
 
-		$products = Db::getInstance()->ExecuteS('
+		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, pl.id_lang, cl.`link_rewrite` AS category, ean13, (
 			SELECT MIN(level_depth)
 			FROM '._DB_PREFIX_.'product p2

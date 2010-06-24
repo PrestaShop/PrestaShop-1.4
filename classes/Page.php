@@ -49,7 +49,7 @@ class Page extends ObjectModel
 			FROM `'._DB_PREFIX_.'page` p
 			LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.`id_page_type` = pt.`id_page_type`
 			WHERE pt.`name` = \''.pSQL($phpSelf).'\'
-			AND p.`id_object` = \''.intval($id_object).'\'');
+			AND p.`id_object` = '.intval($id_object));
 			if ($result['id_page'])
 				return $result['id_page'];
 			else

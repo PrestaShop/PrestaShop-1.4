@@ -79,14 +79,15 @@ class StatsSales extends ModuleGraph
 
 	private function getTotals()
 	{
-		$result0 = Db::getInstance()->getRow('
+		$result0 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : ''));
-		$result1 = Db::getInstance()->getRow('
+		
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
@@ -94,7 +95,8 @@ class StatsSales extends ModuleGraph
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
-		$result2 = Db::getInstance()->getRow('
+		
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
@@ -102,6 +104,7 @@ class StatsSales extends ModuleGraph
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
+
 		return array_merge(array_merge($result0, $result1), $result2);
 	}
 	
@@ -154,7 +157,7 @@ class StatsSales extends ModuleGraph
 	
 	protected function setYearValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
@@ -166,7 +169,7 @@ class StatsSales extends ModuleGraph
 		
 		if ($this->_option == 1)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query0.$this->getDate().$this->_query2);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
 			foreach ($result AS $row)
 				$this->_values[0][intval(substr($row['invoice_date'], 5, 2))] += 1;
 		}
@@ -174,7 +177,7 @@ class StatsSales extends ModuleGraph
 	
 	protected function setMonthValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
@@ -186,7 +189,7 @@ class StatsSales extends ModuleGraph
 		
 		if ($this->_option == 1)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query0.$this->getDate().$this->_query2);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
 			foreach ($result AS $row)
 				$this->_values[0][intval(substr($row['invoice_date'], 8, 2))] += 1;
 		}
@@ -194,7 +197,7 @@ class StatsSales extends ModuleGraph
 
 	protected function setDayValues($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
@@ -206,7 +209,7 @@ class StatsSales extends ModuleGraph
 		
 		if ($this->_option == 1)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query0.$this->getDate().$this->_query2);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
 			foreach ($result AS $row)
 				$this->_values[0][intval(substr($row['invoice_date'], 11, 2))] += 1;
 		}
@@ -214,7 +217,7 @@ class StatsSales extends ModuleGraph
 	
 	private function getStatesData()
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT osl.`name`, COUNT(oh.`id_order`) as total
 		FROM `'._DB_PREFIX_.'order_state` os
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($this->getLang()).')

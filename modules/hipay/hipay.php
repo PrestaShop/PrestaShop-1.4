@@ -189,7 +189,7 @@ class Hipay extends PaymentModule
 	{
 		global $currentIndex, $cookie;
 
-		$currencies = DB::getInstance()->ExecuteS('SELECT c.iso_code, c.name, c.sign FROM '._DB_PREFIX_.'currency c');
+		$currencies = DB::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT c.iso_code, c.name, c.sign FROM '._DB_PREFIX_.'currency c');
 		
 		if (Tools::isSubmit('submitHipay'))
 		{

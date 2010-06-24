@@ -45,7 +45,7 @@ class		Zone extends ObjectModel
 	*/
 	static public function getZones($active = false)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'zone`
 		'.($active ? 'WHERE active = 1' : '').'

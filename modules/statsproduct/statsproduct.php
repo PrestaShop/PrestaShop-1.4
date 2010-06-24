@@ -27,7 +27,7 @@ class StatsProduct extends ModuleGraph
 	public function getTotalBought($id_product)
 	{
 		$dateBetween = ModuleGraph::getDateBetween();
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(od.`product_quantity`) AS total
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
@@ -40,7 +40,7 @@ class StatsProduct extends ModuleGraph
 	public function getTotalViewed($id_product)
 	{
 		$dateBetween = ModuleGraph::getDateBetween();
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(pv.`counter`) AS total
 		FROM `'._DB_PREFIX_.'page_viewed` pv
 		LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`
@@ -55,7 +55,7 @@ class StatsProduct extends ModuleGraph
 	
 	private function getProducts($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`, p.reference, pl.`name`, IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product), p.quantity) as quantity
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.`id_product` = pl.`id_product`
@@ -67,7 +67,7 @@ class StatsProduct extends ModuleGraph
 	
 	private function getSales($id_product, $id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT o.date_add, o.id_order, o.id_customer, od.product_quantity, (od.product_price * od.product_quantity) as total, od.tax_name, od.product_name
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
@@ -77,7 +77,7 @@ class StatsProduct extends ModuleGraph
 	
 	private function getCrossSales($id_product, $id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT pl.name as pname, pl.id_product, SUM(od.product_quantity) as pqty, AVG(od.product_price) as pprice
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
@@ -287,7 +287,7 @@ class StatsProduct extends ModuleGraph
 				$assocNames[$id_product_attribute] = $list;
 			}
 		
-			$result = Db::getInstance()->ExecuteS($this->_query);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 			foreach ($result as $row)
 			{
 			    $this->_values[] = $row['total'];
@@ -300,7 +300,7 @@ class StatsProduct extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i]);
 			foreach ($result AS $row)
 			    $this->_values[$i][intval(substr($row['date_add'], 5, 2))] += $row['total'];
 		}
@@ -310,7 +310,7 @@ class StatsProduct extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i]);
 			foreach ($result AS $row)
 			    $this->_values[$i][intval(substr($row['date_add'], 8, 2))] += $row['total'];
 		}
@@ -320,7 +320,7 @@ class StatsProduct extends ModuleGraph
 	{
 		for ($i = 0; $i < $layers; $i++)
 		{
-			$result = Db::getInstance()->ExecuteS($this->_query[$i]);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i]);
 			foreach ($result AS $row)
 			    $this->_values[$i][intval(substr($row['date_add'], 11, 2))] += $row['total'];
 		}

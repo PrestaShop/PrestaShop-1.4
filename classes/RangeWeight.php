@@ -40,8 +40,11 @@ class RangeWeight extends ObjectModel
 	*/
 	public static function getRanges($id_carrier)
 	{
-		$sql = 'SELECT * FROM `'._DB_PREFIX_.'range_weight` WHERE `id_carrier` = '.intval($id_carrier).' ORDER BY `delimiter1` ASC';
-		return Db::getInstance()->ExecuteS($sql);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'range_weight`
+		WHERE `id_carrier` = '.intval($id_carrier).'
+		ORDER BY `delimiter1` ASC');
 	}
 }
 

@@ -772,11 +772,10 @@ class Validate
 		if (!preg_match('/((^[A-Z]{1}[0-9]{7}[A-Z0-9]{1}$|^[T]{1}[A-Z0-9]{8}$)|^[0-9]{8}[A-Z]{1}$)/', $dni)) 
 			return 0;
 		
-		$result = Db::getInstance()->getValue('
-		SELECT COUNT(`id_customer`) AS total 
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT id_customer
 		FROM `'._DB_PREFIX_.'customer` 
-		WHERE `dni` = \''.pSQL($dni).'\'
-		');
+		WHERE `dni` = \''.pSQL($dni).'\'');
 		if($result)
 			return -1;
 		

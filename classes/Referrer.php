@@ -113,7 +113,7 @@ class Referrer extends ObjectModel
 	
 	public static function getReferrers($id_customer)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT c.date_add, r.name
 		FROM '._DB_PREFIX_.'guest g
 		LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest
@@ -134,7 +134,7 @@ class Referrer extends ObjectModel
 					  AND p.`id_object` = '.intval($id_product);
 		}
 
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT 	COUNT(DISTINCT cs.id_connections_source) AS visits,
 				COUNT(DISTINCT cs.id_connections) as visitors,
 				COUNT(DISTINCT c.id_guest) as uniqs,
@@ -161,7 +161,7 @@ class Referrer extends ObjectModel
 					  AND p.`id_object` = '.intval($id_product);
 		}
 		
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT cu.id_customer) AS registrations
 		FROM '._DB_PREFIX_.'referrer_cache rc
 		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
@@ -185,7 +185,7 @@ class Referrer extends ObjectModel
 			$where = 'AND od.product_id = '.intval($id_product);
 		}
 		
-		$result = Db::getInstance()->executeS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
 		SELECT oo.id_order
 		FROM '._DB_PREFIX_.'referrer_cache rc
 		INNER JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
@@ -205,7 +205,7 @@ class Referrer extends ObjectModel
 				$implode[] = (int)$row['id_order'];
 		
 		if ($implode)
-			return Db::getInstance()->getRow('
+			return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT 	COUNT(o.id_order) AS orders,
 					SUM(o.total_paid_real) / c.conversion_rate AS sales
 			FROM '._DB_PREFIX_.'orders o

@@ -92,11 +92,10 @@ class	Scene extends ObjectModel
 	{
 		$result = true;
 		foreach ($categories AS $category)
-			{
-				$sql = 'INSERT INTO `'._DB_PREFIX_.'scene_category` ( `id_scene` , `id_category`) VALUES ('.intval($this->id).', '.intval($category).')';
-				if (!Db::getInstance()->Execute($sql))
-					$result = false;
-			}
+		{
+			if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'scene_category` ( `id_scene` , `id_category`) VALUES ('.intval($this->id).', '.intval($category).')'))
+				$result = false;
+		}
 		return $result;
 	}
 	
@@ -157,7 +156,7 @@ class	Scene extends ObjectModel
 	{
 		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : intval($id_lang);
 
-		$scenes = Db::getInstance()->ExecuteS('
+		$scenes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'scene_category` sc
 		LEFT JOIN `'._DB_PREFIX_.'scene` s ON (sc.id_scene = s.id_scene)

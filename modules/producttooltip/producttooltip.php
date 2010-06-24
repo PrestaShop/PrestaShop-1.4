@@ -110,7 +110,7 @@ class ProductToolTip extends Module
 		{
 			$date = strftime('%Y-%m-%d %H:%M:%S' , time() - intval(Configuration::get('PS_PTOOLTIP_LIFETIME') * 60));
 			
-			$nbPeople = Db::getInstance()->getRow('
+			$nbPeople = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(DISTINCT(id_connections)) nb
 			FROM '._DB_PREFIX_.'page p
 			LEFT JOIN '._DB_PREFIX_.'connections_page cp ON (p.id_page = cp.id_page)
@@ -126,7 +126,7 @@ class ProductToolTip extends Module
 			$days = intval(Configuration::get('PS_PTOOLTIP_DAYS'));
 			$date = strftime('%Y-%m-%d' , strtotime('-'.intval($days).' day'));
 			
-			$order = Db::getInstance()->getRow('
+			$order = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT o.date_add
 			FROM '._DB_PREFIX_.'order_detail od
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (od.id_order = o.id_order)
@@ -139,7 +139,7 @@ class ProductToolTip extends Module
 				/* No sale? display last cart add instead */
 				if (Configuration::get('PS_PTOOLTIP_DATE_CART'))
 				{
-					$cart = Db::getInstance()->getRow('
+					$cart = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 					SELECT cp.date_add
 					FROM '._DB_PREFIX_.'cart_product cp
 					WHERE cp.id_product = '.intval($id_product));

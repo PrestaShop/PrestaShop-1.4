@@ -17,7 +17,7 @@ class Customization
 
 	static public function getReturnedCustomizations($id_order)
 	{
-		if (($result = Db::getInstance()->ExecuteS('
+		if (($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT ore.`id_order_return`, ord.`id_order_detail`, ord.`id_customization`, ord.`product_quantity`
 			FROM `'._DB_PREFIX_.'order_return` ore
 			INNER JOIN `'._DB_PREFIX_.'order_return_detail` ord ON (ord.`id_order_return` = ore.`id_order_return`)
@@ -31,7 +31,7 @@ class Customization
 
 	static public function getOrderedCustomizations($id_cart)
 	{
-		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_customization`, `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
+		if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_customization`, `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($id_cart)))
 			return false;
 		$customizations = array();
 		foreach ($result AS $row)
@@ -52,7 +52,7 @@ class Customization
 		if (!$id_customization || !$id_lang)
 			return false;
 
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name` 
 		FROM `'._DB_PREFIX_.'customization_field_lang` 
 		WHERE `id_customization_field` = '.intval($id_customization).' 

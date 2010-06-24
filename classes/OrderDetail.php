@@ -146,7 +146,7 @@ class OrderDetail extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_download` pd ON (od.`product_id`=pd.`id_product`)
 		WHERE od.`download_hash` = \''.pSQL(strval($hash)).'\'
 		AND pd.`active` = 1';
-		return Db::getInstance()->getRow($sql);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 	}
 
 	static public function incrementDownload($id_order_detail, $increment=1)

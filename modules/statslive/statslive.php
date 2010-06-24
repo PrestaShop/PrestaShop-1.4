@@ -31,7 +31,7 @@ class StatsLive extends Module
 	
 	private function getCustomersOnline()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT u.id_customer, u.firstname, u.lastname, pt.name as page
 		FROM `'._DB_PREFIX_.'connections` c
 		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
@@ -47,7 +47,7 @@ class StatsLive extends Module
 	
 	private function getVisitorsOnline()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
 		FROM `'._DB_PREFIX_.'connections` c
 		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections

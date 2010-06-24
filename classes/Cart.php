@@ -929,7 +929,7 @@ class		Cart extends ObjectModel
 			return Tools::displayError('this voucher has expired (usage limit attained)');
 		if ($discountObj->id_discount_type == 2 AND $this->id_currency != $discountObj->id_currency)
 			return Tools::displayError('this voucher can only be used in the following currency:').'
-				'.Db::getInstance()->getValue('SELECT `name` FROM `'._DB_PREFIX_.'currency` WHERE id_currency = '.(int)$discountObj->id_currency);
+				'.Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `name` FROM `'._DB_PREFIX_.'currency` WHERE id_currency = '.(int)$discountObj->id_currency);
 		if ($checkCartDiscount
 			AND (
 				$this->getDiscountsCustomer($discountObj->id) >= $discountObj->quantity_per_user
@@ -1036,7 +1036,7 @@ class		Cart extends ObjectModel
 		if (!Validate::isDate($dateFrom) OR !Validate::isDate($dateTo))
 			die (Tools::displayError());
 
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cart.`id_cart`, cart.`date_upd`, c.`id_customer` AS id_customer, c.`lastname` AS customer_lastname, c.`firstname` AS customer_firstname,
 		SUM(cp.`quantity`) AS nb_products,
 		COUNT(cd.`id_cart`) AS nb_discounts
@@ -1176,7 +1176,7 @@ class		Cart extends ObjectModel
 	
 	static public function getCustomerCarts($id_customer)
     {
-	 	$result = Db::getInstance()->ExecuteS('
+	 	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		 	SELECT *
 			FROM '._DB_PREFIX_.'cart c
 			WHERE c.`id_customer` = '.intval($id_customer).'

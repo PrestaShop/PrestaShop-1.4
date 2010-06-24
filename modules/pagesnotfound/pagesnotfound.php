@@ -50,7 +50,7 @@ class Pagesnotfound extends Module
 	
 	private function getPages()
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT http_referer, request_uri, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'pagenotfound` p
 		WHERE p.date_add BETWEEN '.ModuleGraph::getDateBetween().'

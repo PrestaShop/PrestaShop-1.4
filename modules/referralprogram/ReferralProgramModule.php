@@ -121,7 +121,7 @@ class ReferralProgramModule extends ObjectModel
 			elseif ($restriction == 'subscribed')
 				$query.= ' AND s.`id_customer` != 0';
 		}
-		return Db::getInstance()->ExecuteS($query);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 	}
 
 	/**

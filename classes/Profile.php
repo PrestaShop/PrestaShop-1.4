@@ -47,7 +47,7 @@ class Profile extends ObjectModel
 	*/
 	static public function getProfiles($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_profile`, `name`
 		FROM `'._DB_PREFIX_.'profile` p
 		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile` AND `id_lang` = '.intval($id_lang).')
@@ -63,7 +63,7 @@ class Profile extends ObjectModel
 	{
 		if ($id_lang == NULL)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name` 
 		FROM `'._DB_PREFIX_.'profile` p 
 		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile`) 
@@ -89,7 +89,7 @@ class Profile extends ObjectModel
 	public static function getProfileAccess($id_profile, $id_tab)
 	{
 	 	/* Accesses selection */
-	 	return Db::getInstance()->getRow('
+	 	return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `view`, `add`, `edit`, `delete`
 		FROM `'._DB_PREFIX_.'access`
 		WHERE `id_profile` = '.intval($id_profile).' AND `id_tab` = '.intval($id_tab));

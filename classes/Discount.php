@@ -134,7 +134,7 @@ class		Discount extends ObjectModel
 	  */
 	static public function getDiscountTypes($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'discount_type dt
 		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($id_lang).')');
@@ -151,7 +151,7 @@ class		Discount extends ObjectModel
 	 	if (!Validate::isDiscountName($discountName))
 	 		die(Tools::displayError());
 	 		
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_discount`
 		FROM `'._DB_PREFIX_.'discount`
 		WHERE `name` = \''.pSQL($discountName).'\'');
@@ -169,7 +169,7 @@ class		Discount extends ObjectModel
     {
 		global $cart;
 		
-    	$res = Db::getInstance()->ExecuteS('
+    	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT d.*, dtl.`name` AS `type`, dl.`description`
 		FROM `'._DB_PREFIX_.'discount` d
 		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount` AND dl.`id_lang` = '.intval($id_lang).')

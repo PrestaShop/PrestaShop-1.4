@@ -84,7 +84,7 @@ class StatsBestVouchers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance()->GetRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
 		return $result['total'];
 	}
 
@@ -108,6 +108,6 @@ class StatsBestVouchers extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance()->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 	}
 }

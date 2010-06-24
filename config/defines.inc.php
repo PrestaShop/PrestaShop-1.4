@@ -87,3 +87,8 @@ define('PS_TAX_INC', 0);
 define('PS_ROUND_UP', 0);
 define('PS_ROUND_DOWN', 1);
 define('PS_ROUND_HALF', 2);
+
+/* SQL Replication management */
+define('_PS_USE_SQL_SLAVE_', 0);
+
+?>

@@ -451,7 +451,7 @@ class Tools
 		 	/* Products specifics meta tags */
 			if ($id_product = self::getValue('id_product'))
 			{
-				$row = Db::getInstance()->getRow('
+				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description_short`
 				FROM `'._DB_PREFIX_.'product` p 
 				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`) 
@@ -467,7 +467,7 @@ class Tools
 			/* Categories specifics meta tags */
 			elseif ($id_category = self::getValue('id_category'))
 			{
-				$row = Db::getInstance()->getRow('
+				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
 				FROM `'._DB_PREFIX_.'category_lang`
 				WHERE id_lang = '.intval($id_lang).' AND id_category = '.intval($id_category));
@@ -482,7 +482,7 @@ class Tools
 			/* Manufacturers specifics meta tags */
 			elseif ($id_manufacturer = self::getValue('id_manufacturer'))
 			{
-				$row = Db::getInstance()->getRow('
+				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'manufacturer_lang`
 				WHERE id_lang = '.intval($id_lang).' AND id_manufacturer = '.intval($id_manufacturer));
@@ -498,7 +498,7 @@ class Tools
 			/* Suppliers specifics meta tags */
 			elseif ($id_supplier = self::getValue('id_supplier'))
 			{
-				$row = Db::getInstance()->getRow('
+				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'supplier_lang`
 				WHERE id_lang = '.intval($id_lang).' AND id_supplier = '.intval($id_supplier));
@@ -514,7 +514,7 @@ class Tools
 			/* CMS specifics meta tags */
 			elseif ($id_cms = self::getValue('id_cms'))
 			{
-				$row = Db::getInstance()->getRow('
+				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'cms_lang`
 				WHERE id_lang = '.intval($id_lang).' AND id_cms = '.intval($id_cms));
@@ -649,7 +649,7 @@ class Tools
 
 	static public function getCategoriesTotal()
 	{
-		$row = Db::getInstance()->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
 		return intval($row['total']);
 	}
 
@@ -661,7 +661,7 @@ class Tools
 
 	static public function getProductsTotal()
 	{
-		$row = Db::getInstance()->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
 		return intval($row['total']);
 	}
 
@@ -673,7 +673,7 @@ class Tools
 
 	static public function getCustomersTotal()
 	{
-		$row = Db::getInstance()->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
 		return intval($row['total']);
 	}
 
@@ -685,7 +685,7 @@ class Tools
 
 	static public function getOrdersTotal()
 	{
-		$row = Db::getInstance()->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
 		return intval($row['total']);
 	}
 
@@ -884,14 +884,14 @@ class Tools
 			// No cache
 			if (!$_cache)
 			{
-				$tmz = Db::getInstance()->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.intval($select));
+				$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.intval($select));
 				$_cache = $tmz['name'];
 			}
 			return $_cache;
 		}
 
 		// Multiple select
-		$tmz = Db::getInstance()->s('SELECT * FROM '._DB_PREFIX_.'timezone');
+		$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->s('SELECT * FROM '._DB_PREFIX_.'timezone');
 		$tab = array();
 		foreach ($tmz as $timezone)
 			$tab[$timezone['id_timezone']] = str_replace('_', ' ', $timezone['name']);

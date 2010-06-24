@@ -34,12 +34,12 @@ class StatsOrigin extends ModuleGraph
 	private function getOrigins($dateBetween)
 	{
 		$directLink = $this->l('Direct link');
-		$result = mysql_query('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.http_referer
 		FROM '._DB_PREFIX_.'connections c
-		WHERE c.date_add BETWEEN '.$dateBetween);
+		WHERE c.date_add BETWEEN '.$dateBetween, false);
 		$websites = array($directLink => 0);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Db::getInstance(_PS_USE_SQL_SLAVE_)->nextRow($result))
 		{
 			if (!isset($row['http_referer']) OR empty($row['http_referer']))
 				++$websites[$directLink];
@@ -52,7 +52,6 @@ class StatsOrigin extends ModuleGraph
 					++$websites[$website];
 			}
 		}
-		mysql_free_result($result);
 		arsort($websites);
 		return $websites;
 	}

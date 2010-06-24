@@ -91,7 +91,7 @@ class StatsBestCategories extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		return Db::getInstance()->getValue('SELECT COUNT(c.`id_category`) FROM `'._DB_PREFIX_.'category` c');
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(c.`id_category`) FROM `'._DB_PREFIX_.'category` c');
 	}
 		
 	public function getData()
@@ -147,6 +147,6 @@ class StatsBestCategories extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance()->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 	}
 }

@@ -83,7 +83,7 @@ class ConnectionsSource extends ObjectModel
 	
 	public static function getOrderSources($id_order)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cos.http_referer, cos.request_uri, cos.keywords, cos.date_add
 		FROM '._DB_PREFIX_.'orders o
 		INNER JOIN '._DB_PREFIX_.'guest g ON g.id_customer = o.id_customer

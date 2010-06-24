@@ -7,14 +7,14 @@ class Pack extends Product
 	
 	public static function isPack($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT COUNT(*) as items FROM '._DB_PREFIX_.'pack where id_product_pack = '.intval($id_product));
-		return $result['items'] > 0 ? true : false;
+		$result = Db::getInstance()->getRow('SELECT COUNT(*) AS items FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product));
+		return ($result['items'] > 0);
 	}
 	
 	public static function isPacked($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT COUNT(*) as packs FROM '._DB_PREFIX_.'pack where id_product_item = '.intval($id_product));
-		return $result['packs'] > 0 ? true : false;
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(*) AS packs FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.intval($id_product));
+		return ($result['packs'] > 0);
 	}
 	
 	public static function noPackPrice($id_product)
@@ -57,7 +57,7 @@ class Pack extends Product
 	
 	public static function getItemTable($id_product, $id_lang, $full = false)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.*, i.`id_image`, il.`legend`, t.`rate`, cl.`name` AS category_default, a.quantity AS pack_quantity
 		FROM `'._DB_PREFIX_.'pack` a
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = a.id_product_item
@@ -94,7 +94,7 @@ class Pack extends Product
 		';
 		if ($limit)
 			$sql .= ' LIMIT '.intval($limit);
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$full)
 			return $result;
 			

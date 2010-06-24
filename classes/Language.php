@@ -285,7 +285,7 @@ class		Language extends ObjectModel
 	  */
 	static public function getIsoIds() 
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_lang`, `iso_code`
 		FROM `'._DB_PREFIX_.'lang`');
 

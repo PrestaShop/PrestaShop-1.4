@@ -66,12 +66,12 @@ class Tax extends ObjectModel
 
 	public function getStates()
 	{
-		return Db::getInstance()->ExecuteS('SELECT `id_state`, `id_tax` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id));
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_state`, `id_tax` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id));
 	}
 
 	public function getState($id_state)
 	{
-		return Db::getInstance()->getRow('SELECT `id_state` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id).' AND `id_state` = '.intval($id_state));
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_state` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id).' AND `id_state` = '.intval($id_state));
 	}
 
 	public function addState($id_state)
@@ -91,7 +91,7 @@ class Tax extends ObjectModel
 	 */
 	public function getZones()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'tax_zone`
 			WHERE `id_tax` = '.intval($this->id));
@@ -104,7 +104,7 @@ class Tax extends ObjectModel
 	 */
 	public function getZone($id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'tax_zone`
 			WHERE `id_tax` = '.intval($this->id).'
@@ -116,7 +116,7 @@ class Tax extends ObjectModel
 	 */
 	public function addZone($id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'tax_zone` (`id_tax` , `id_zone`)
 			VALUES ('.intval($this->id).', '.intval($id_zone).')');
 	}
@@ -126,7 +126,7 @@ class Tax extends ObjectModel
 	 */
 	public function deleteZone($id_zone)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'tax_zone`
 			WHERE `id_tax` = '.intval($this->id).'
 			AND `id_zone` = '.intval($id_zone).' LIMIT 1');
@@ -139,7 +139,7 @@ class Tax extends ObjectModel
 	*/
 	static public function getTaxes($id_lang = false)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.id_tax, t.rate'.(intval($id_lang) ? ', tl.name, tl.id_lang ' : '').'
 		FROM `'._DB_PREFIX_.'tax` t
 		'.(intval($id_lang) ? 'LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
@@ -158,7 +158,7 @@ class Tax extends ObjectModel
 
 	static public function getRateByState($id_state)
 	{
-		$tax = Db::getInstance()->getRow('
+		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT ts.`id_tax`, t.`rate`
 			FROM `'._DB_PREFIX_.'tax_state` ts
 			LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = ts.`id_tax`)
@@ -212,7 +212,7 @@ class Tax extends ObjectModel
 	static public function loadTaxZones()
 	{
 		self::$_TAX_ZONES = array();
-		$result = Db::getInstance()->ExecuteS('SELECT `id_tax`, `id_zone` FROM `'._DB_PREFIX_.'tax_zone`');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_tax`, `id_zone` FROM `'._DB_PREFIX_.'tax_zone`');
 		if ($result === false)
 			die(Tools::displayError('Invalid loadTaxZones() SQL query!'));
 		foreach ($result AS $row)
@@ -221,7 +221,7 @@ class Tax extends ObjectModel
 	
 	static public function getTaxIdByRate($rate)
 	{
-		$tax = Db::getInstance()->getRow('
+		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `id_tax`
 			FROM `'._DB_PREFIX_.'tax`
 			WHERE `rate` = '.floatval($rate));

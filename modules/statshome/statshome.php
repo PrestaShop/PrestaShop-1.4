@@ -94,7 +94,7 @@ class StatsHome extends Module
 	
 	private function getVisitorsNow()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(DISTINCT cp.`id_connections`)
 		FROM `'._DB_PREFIX_.'connections_page` cp
 		WHERE TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900');
@@ -117,17 +117,17 @@ class StatsHome extends Module
 		$monthTo = $monthTo ? ((strlen($monthTo) == 1 ? '0' : '').$monthTo) : '12';
 		$dayTo = $dayTo ? ((strlen($dayTo) == 1 ? '0' : '').$dayTo) : '31';
 
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(o.`total_paid_real` / c.conversion_rate) as total_sales, COUNT(*) as total_orders
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
-		$result2 = Db::getInstance()->getRow('
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) AS total_registrations
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
-		$result3 = Db::getInstance()->getRow('
+		$result3 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(pv.`counter`) AS total_viewed
 		FROM `'._DB_PREFIX_.'page_viewed` pv
 		LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`

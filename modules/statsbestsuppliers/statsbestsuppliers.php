@@ -84,7 +84,7 @@ class StatsBestSuppliers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(DISTINCT(s.id_supplier))
 		FROM '._DB_PREFIX_.'order_detail od
 		LEFT JOIN '._DB_PREFIX_.'product p ON p.id_product = od.product_id
@@ -116,6 +116,6 @@ class StatsBestSuppliers extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance()->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
 	}
 }

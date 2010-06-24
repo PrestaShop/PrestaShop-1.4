@@ -163,7 +163,7 @@ class		Address extends ObjectModel
 		if (isset(self::$_idZones[$id_address]))
 			return self::$_idZones[$id_address];
 	
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT s.`id_zone` AS id_zone_state, c.`id_zone`
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
@@ -209,7 +209,7 @@ class		Address extends ObjectModel
 
 	static public function getManufacturerIdByAddress($id_address)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `id_manufacturer` FROM `'._DB_PREFIX_.'address`
 			WHERE `id_address` = '.intval($id_address));
 		return isset($result['id_manufacturer']) ? $result['id_manufacturer'] : false;
@@ -219,7 +219,7 @@ class		Address extends ObjectModel
 	{
 		if (isset(self::$_idCountries[$id_address]))
 			return self::$_idCountries[$id_address];
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_country`, `id_state` FROM `'._DB_PREFIX_.'address`
 		WHERE `id_address` = '.intval($id_address));
 		self::$_idCountries[$id_address] = $result;

@@ -38,7 +38,7 @@ class StatsCarrier extends ModuleGraph
 	{
 		global $cookie;
 		
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
@@ -72,7 +72,7 @@ class StatsCarrier extends ModuleGraph
 		if (intval($this->_option))
 			$stateQuery = 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval($this->_option);
 		$this->_titles['main'] = $this->l('Percentage of orders by carrier');
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.name, COUNT(DISTINCT o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'carrier` c
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.id_carrier = c.id_carrier

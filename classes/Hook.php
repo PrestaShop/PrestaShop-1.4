@@ -42,7 +42,7 @@ class			Hook extends ObjectModel
 	 	if (!Validate::isHookName($hookName))
 	 		die(Tools::displayError());
 	 	
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance()->getRow('
 		SELECT `id_hook`, `name`
 		FROM `'._DB_PREFIX_.'hook` 
 		WHERE `name` = \''.pSQL($hookName).'\'');
@@ -52,7 +52,7 @@ class			Hook extends ObjectModel
 	
 	static public function getHooks($position = false)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'hook` h
 		'.($position ? 'WHERE h.`position` = 1' : ''));

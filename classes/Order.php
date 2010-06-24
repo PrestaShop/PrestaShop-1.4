@@ -291,7 +291,7 @@ class		Order extends ObjectModel
 
 	public function getProductsDetail()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_detail` od
 		WHERE od.`id_order` = '.intval($this->id));
@@ -300,14 +300,14 @@ class		Order extends ObjectModel
 	public function getLastMessage()
 	{
 		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.intval($this->id).' ORDER BY `id_message` desc';
-		$result = Db::getInstance()->getRow($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 		return $result['message'];
 	}
 
 	public function getFirstMessage()
 	{
 		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.intval($this->id).' ORDER BY `id_message` asc';
-		$result = Db::getInstance()->getRow($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 		return $result['message'];
 	}
 
@@ -397,7 +397,7 @@ class		Order extends ObjectModel
 	 */
 	public function getDiscounts()
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_discount`
 		WHERE `id_order` = '.intval($this->id));
@@ -480,7 +480,7 @@ class		Order extends ObjectModel
     {
 		global $cookie;
 		
-    	$res = Db::getInstance()->ExecuteS('
+    	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT o.*, (
 				SELECT SUM(od.`product_quantity`)
 				FROM `'._DB_PREFIX_.'order_detail` od
@@ -496,7 +496,7 @@ class		Order extends ObjectModel
 
 		foreach ($res AS $key => $val)
 		{
-			$res2 = Db::getInstance()->ExecuteS('
+			$res2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT os.`id_order_state`, osl.`name` AS order_state, os.`invoice`
 				FROM `'._DB_PREFIX_.'order_history` oh
 				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
@@ -520,7 +520,7 @@ class		Order extends ObjectModel
 		WHERE DATE_ADD(date_upd, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND date_upd >= \''.pSQL($date_from).'\''
 		.($type ? ' AND '.pSQL(strval($type)).'_number != 0' : '')
 		.($id_customer ? ' AND id_customer = '.intval($id_customer) : '');
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
 		$orders = array();
 		foreach ($result AS $order)
@@ -530,7 +530,7 @@ class		Order extends ObjectModel
 
 	static public function getOrdersIdInvoiceByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
 	{
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_order`
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE DATE_ADD(invoice_date, INTERVAL -1 DAY) <= \''.pSQL($date_to).'\' AND invoice_date >= \''.pSQL($date_from).'\''
@@ -587,7 +587,7 @@ class		Order extends ObjectModel
 	 */
 	static public function getCustomerNbOrders($id_customer)
     {
-    	$result = Db::getInstance()->getRow('
+    	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
         SELECT COUNT(`id_order`) AS nb
         FROM `'._DB_PREFIX_.'orders`
         WHERE `id_customer` = '.intval($id_customer));
@@ -631,7 +631,7 @@ class		Order extends ObjectModel
 	 */
 	public static function getWeeklyOrders()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_order`) as nb
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE YEARWEEK(`date_add`) = YEARWEEK(NOW())');
@@ -646,7 +646,7 @@ class		Order extends ObjectModel
 	 */
 	public static function getMonthlySales()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(`total_paid`) as nb
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE MONTH(`date_add`) = MONTH(NOW())
@@ -660,7 +660,7 @@ class		Order extends ObjectModel
 		$nbReturnDays = intval(Configuration::get('PS_ORDER_RETURN_NB_DAYS'));
 		if (!$nbReturnDays)
 			return true;
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT TO_DAYS(NOW()) - TO_DAYS(`delivery_date`)  AS days FROM `'._DB_PREFIX_.'orders`
 		WHERE `id_order` = '.intval($this->id));
 		if ($result['days'] <= $nbReturnDays)
@@ -728,7 +728,7 @@ class		Order extends ObjectModel
 	
 	static public function getByDelivery($id_delivery)
 	{
-	    $res = Db::getInstance()->getRow('
+	    $res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
         SELECT id_order
         FROM `'._DB_PREFIX_.'orders`
         WHERE `delivery_number` = '.intval($id_delivery));
@@ -737,7 +737,7 @@ class		Order extends ObjectModel
 	
 	public function getTotalWeight()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(product_weight * product_quantity) weight
 		FROM '._DB_PREFIX_.'order_detail
 		WHERE id_order = '.intval($this->id));
@@ -747,7 +747,7 @@ class		Order extends ObjectModel
 
 	static public function getInvoice($id_invoice)
 	{
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `invoice_number`, `id_order`
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE invoice_number = '.intval($id_invoice));

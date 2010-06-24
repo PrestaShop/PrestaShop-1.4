@@ -161,7 +161,7 @@ class Followup extends Module
 						<th colspan="3">'.$this->l('Bad cust.').'</th>
 					</tr>';
 					
-			$stats = Db::getInstance()->ExecuteS('
+			$stats = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT DATE_FORMAT(l.date_add, \'%Y-%m-%d\') date_stat, l.id_email_type, COUNT(l.id_log_email) nb, 
 			(SELECT COUNT(l2.id_discount) 
 			FROM '._DB_PREFIX_.'log_email l2

@@ -142,7 +142,7 @@ class		Manufacturer extends ObjectModel
 	{
 		if (!intval($this->id))
 			return false;
-		$result = Db::GetInstance()->getRow('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.intval($this->id));
+		$result = Db::GetInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.intval($this->id));
 		if (!$result)
 			return false;
 		return $result['id_address'];
@@ -164,7 +164,7 @@ class		Manufacturer extends ObjectModel
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')';
 		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
-		$manufacturers = Db::getInstance()->ExecuteS($sql);
+		$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if ($manufacturers === false)
 			return false;
 		if ($getNbProducts)
@@ -181,7 +181,7 @@ class		Manufacturer extends ObjectModel
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 					)';
-				$result = Db::getInstance()->ExecuteS($sql);
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$manufacturers[$key]['nb_products'] = sizeof($result);
 			}
 		for ($i = 0; $i < sizeof($manufacturers); $i++)
@@ -197,7 +197,7 @@ class		Manufacturer extends ObjectModel
 		$sql = 'SELECT m.* FROM `'._DB_PREFIX_.'manufacturer` m
 				LEFT JOIN `'._DB_PREFIX_.'address` a ON (a.`id_manufacturer` = m.`id_manufacturer` AND a.`deleted` = 0)
 				WHERE a.`id_manufacturer` IS NULL';
-		return Db::getInstance()->ExecuteS($sql);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 	}
 	
 	/**
@@ -208,7 +208,7 @@ class		Manufacturer extends ObjectModel
 	  */
 	static public function getNameById($id_manufacturer)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'manufacturer`
 		WHERE `id_manufacturer` = '.intval($id_manufacturer));
@@ -258,7 +258,7 @@ class		Manufacturer extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 				)';
-			$result = Db::getInstance()->ExecuteS($sql);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 			return intval(sizeof($result));
 		}
 		$sql = '
@@ -280,7 +280,7 @@ class		Manufacturer extends ObjectModel
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
 		LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
 			return false;
 		if ($orderBy == 'price')

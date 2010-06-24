@@ -100,7 +100,7 @@ class BlockCategories extends Module
 		$id_customer = intval($params['cookie']->id_customer);
 		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
 		
-		if (!$result = Db::getInstance()->ExecuteS('
+		if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT c.*, cl.*
 		FROM `'._DB_PREFIX_.'category` c 
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($params['cookie']->id_lang).')

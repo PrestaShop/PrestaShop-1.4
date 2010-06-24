@@ -33,7 +33,7 @@ class		ProductSale
 	*/	
 	static public function getNbSales()
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(ps.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product_sale` ps
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ps.`id_product`
@@ -58,7 +58,7 @@ class		ProductSale
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'sales';
 		if (empty($orderWay)) $orderWay = 'DESC';
 		
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*,
 			pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`,
 			i.`id_image`, il.`legend`,
@@ -103,7 +103,7 @@ class		ProductSale
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
 		
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, cl.`link_rewrite` AS category
 		FROM `'._DB_PREFIX_.'product_sale` ps 
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`

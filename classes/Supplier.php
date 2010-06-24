@@ -97,7 +97,7 @@ class		Supplier extends ObjectModel
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
 		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')';
 		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
-		$suppliers = Db::getInstance()->ExecuteS($query);
+		$suppliers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 		if ($suppliers === false)
 			return false;
 		if ($getNbProducts)
@@ -114,7 +114,7 @@ class		Supplier extends ObjectModel
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 					)';
-				$result = Db::getInstance()->ExecuteS($sql);
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$suppliers[$key]['nb_products'] = sizeof($result);
 			}
 		for ($i = 0; $i < sizeof($suppliers); $i++)
@@ -133,7 +133,7 @@ class		Supplier extends ObjectModel
 	  */
 	static public function getNameById($id_supplier)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'supplier`
 		WHERE `id_supplier` = '.intval($id_supplier));
@@ -177,7 +177,7 @@ class		Supplier extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 				)';
-			$result = Db::getInstance()->ExecuteS($sql);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 			return intval(sizeof($result));
 		}
 
@@ -200,7 +200,7 @@ class		Supplier extends ObjectModel
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
 		LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
 			return false;
 		if ($orderBy == 'price')

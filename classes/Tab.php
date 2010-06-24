@@ -99,7 +99,7 @@ class Tab extends ObjectModel
 	 */
 	static public function getCurrentTabId()
 	{
-	 	if ($result = Db::getInstance()->getRow('SELECT `id_tab` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
+	 	if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_tab` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
 		 	return $result['id_tab'];
  		return -1;
 	}
@@ -111,7 +111,7 @@ class Tab extends ObjectModel
 	 */
 	static public function getCurrentParentId()
 	{
-	 	if ($result = Db::getInstance()->getRow('SELECT `id_parent` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
+	 	if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_parent` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
 		 	return $result['id_parent'];
  		return -1;
 	}
@@ -130,7 +130,7 @@ class Tab extends ObjectModel
 		'.($id_lang ? 'LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.intval($id_lang).')' : '').
 		($id_parent !== NULL ? ('WHERE t.`id_parent` = '.intval($id_parent)) : '').'
 		ORDER BY t.`position` ASC');
-		return Db::getInstance()->ExecuteS($sql);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 	}
 
 	/**
@@ -141,7 +141,7 @@ class Tab extends ObjectModel
 	static public function getTab($id_lang, $id_tab)
 	{
 		/* Tabs selection */
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'tab` t
 		LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.intval($id_lang).')
@@ -159,7 +159,7 @@ class Tab extends ObjectModel
 		if (isset(self::$_getIdFromClassName[$class_name]) AND self::$_getIdFromClassName[$class_name])
 			return intval(self::$_getIdFromClassName[$class_name]['id']);
 			
-		self::$_getIdFromClassName[$class_name] = Db::getInstance()->getRow('
+		self::$_getIdFromClassName[$class_name] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT id_tab AS id 
 		FROM `'._DB_PREFIX_.'tab` t 
 		WHERE LOWER(t.`class_name`) = \''.pSQL($class_name).'\'');
@@ -170,7 +170,7 @@ class Tab extends ObjectModel
 	static public function getClassNameFromID($id_tab)
 	{
 		$sql = 'SELECT class_name AS name FROM `'._DB_PREFIX_.'tab` t WHERE t.`id_tab` = \''.intval($id_tab).'\'';
-		$result = Db::getInstance()->getRow($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 		return strval($result['name']);
 	}
 

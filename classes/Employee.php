@@ -75,7 +75,7 @@ class		Employee extends ObjectModel
 	{
 		return (Db::getInstance()->ExecuteS('
 		SELECT `id_employee`, CONCAT(`firstname`, \' \', `lastname`) AS "name"
-		  FROM `'._DB_PREFIX_.'employee`
+		FROM `'._DB_PREFIX_.'employee`
 		WHERE `active` = 1
 		ORDER BY `email`'));
 	}
@@ -123,6 +123,7 @@ class		Employee extends ObjectModel
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
 		WHERE `email` = \''.pSQL($email).'\'');
+
 		return isset($result['id_employee']);
 	}
 

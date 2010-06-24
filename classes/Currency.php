@@ -160,7 +160,7 @@ class		Currency extends ObjectModel
 	
 	static public function checkPaymentCurrencies($id_module)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT mc.*
 		FROM `'._DB_PREFIX_.'module_currency` mc
 		WHERE mc.`id_module` = '.intval($id_module));
@@ -168,7 +168,7 @@ class		Currency extends ObjectModel
 
 	static public function getCurrency($id_currency)
 	{
-		return Db::getInstance()->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'currency`
 		WHERE `deleted` = 0
@@ -177,7 +177,7 @@ class		Currency extends ObjectModel
 	
 	static public function getIdByIsoCode($iso_code)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_currency`
 		FROM `'._DB_PREFIX_.'currency`
 		WHERE `deleted` = 0

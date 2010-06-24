@@ -336,10 +336,10 @@ class Tm4b extends Module
 			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		) = 1 ';
-		$result = Db::getInstance()->getRow($query.'
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query.'
 		AND o.`date_add` >= DATE_SUB(\''.date('Y-m-d').' 20:00:00\', INTERVAL 1 DAY)
 		AND o.`date_add` < \''.date('Y-m-d').' 20:00:00\'');
-		$result2 = Db::getInstance()->getRow($query.'AND o.`date_add` LIKE \''.date('Y-m').'-%\'');
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query.'AND o.`date_add` LIKE \''.date('Y-m').'-%\'');
 		
 		return date('Y-m-d')."\n".
 		$this->l('Orders:').' '.intval($result['total_orders'])."\n".

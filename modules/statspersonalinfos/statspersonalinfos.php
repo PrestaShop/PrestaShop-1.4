@@ -86,7 +86,7 @@ class StatsPersonalInfos extends ModuleGraph
 		{
 			case 'gender':
 				$this->_titles['main'] = $this->l('Gender distribution');
-				$result = Db::getInstance()->ExecuteS('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.`id_gender`, COUNT(c.`id_customer`) AS total
 				FROM `'._DB_PREFIX_.'customer` c
 				GROUP BY c.`id_gender`');
@@ -99,7 +99,7 @@ class StatsPersonalInfos extends ModuleGraph
 				break;
 			case 'age':
 				$this->_titles['main'] = $this->l('Age ranges');
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) < 18 
@@ -110,7 +110,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('0-18 years old');
 				}
 				
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) >= 18
@@ -122,7 +122,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('18-24 years old');
 				}
 
- 				$result = Db::getInstance()->getRow('
+ 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) >= 25
@@ -134,7 +134,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('25-34 years old');
 				}
 				
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) >= 35
@@ -146,7 +146,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('35-49 years old');
 				}
 				
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) >= 50
@@ -158,7 +158,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('50-59 years old');
 				}
 				
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE (YEAR(CURDATE()) - YEAR(c.`birthday`)) - (RIGHT(CURDATE(), 5) < RIGHT(c.`birthday`, 5)) >= 60
@@ -169,7 +169,7 @@ class StatsPersonalInfos extends ModuleGraph
 					$this->_legend[] = $this->l('60 years old and more');
 				}
 				
-				$result = Db::getInstance()->getRow('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT COUNT(c.`id_customer`) as total
 				FROM `'._DB_PREFIX_.'customer` c
 				WHERE c.`birthday` IS NULL');
@@ -181,7 +181,7 @@ class StatsPersonalInfos extends ModuleGraph
 				break;
 			case 'country':
 				$this->_titles['main'] = $this->l('Country distribution');
-				$result = Db::getInstance()->ExecuteS('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT cl.`name`, COUNT(c.`id_country`) AS total
 				FROM `'._DB_PREFIX_.'address` a
 				LEFT JOIN `'._DB_PREFIX_.'country` c ON a.`id_country` = c.`id_country`
@@ -196,7 +196,7 @@ class StatsPersonalInfos extends ModuleGraph
 				break;
 			case 'currency':
 				$this->_titles['main'] = $this->l('Currency distribution');
-				$result = Db::getInstance()->ExecuteS('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.`name`, COUNT(c.`id_currency`) AS total
 				FROM `'._DB_PREFIX_.'orders` o
 				LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.`id_currency` = c.`id_currency`
@@ -209,7 +209,7 @@ class StatsPersonalInfos extends ModuleGraph
 				break;
 			case 'language':
 				$this->_titles['main'] = $this->l('Language distribution');
-				$result = Db::getInstance()->ExecuteS('
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.`name`, COUNT(c.`id_lang`) AS total
 				FROM `'._DB_PREFIX_.'orders` o
 				LEFT JOIN `'._DB_PREFIX_.'lang` c ON o.`id_lang` = c.`id_lang`

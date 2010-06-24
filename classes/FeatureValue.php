@@ -56,7 +56,7 @@ class		FeatureValue extends ObjectModel
 	 */
 	static public function getFeatureValues($id_feature)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature_value`
 		WHERE `id_feature` = '.intval($id_feature));

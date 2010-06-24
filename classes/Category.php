@@ -264,7 +264,7 @@ class		Category extends ObjectModel
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
@@ -284,7 +284,7 @@ class		Category extends ObjectModel
 
 	static public function getSimpleCategories($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, cl.`name`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
@@ -305,7 +305,7 @@ class		Category extends ObjectModel
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.*, cl.id_lang, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($id_lang).')
@@ -382,7 +382,7 @@ class		Category extends ObjectModel
 		/* Return only the number of products */
 		if ($getTotal)
 		{
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(cp.`id_product`) AS total
 			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON p.`id_product` = cp.`id_product`
@@ -418,7 +418,7 @@ class		Category extends ObjectModel
 			LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
 		}
 
-		$result = Db::getInstance()->ExecuteS($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
 		if ($orderBy == 'orderprice')
 		{
@@ -466,7 +466,7 @@ class		Category extends ObjectModel
 		if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
@@ -613,7 +613,7 @@ class		Category extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($idLang).')
 				WHERE c.`id_category` = '.$idCurrent.' AND c.`id_parent` != 0
 			';
-			$result = Db::s($query);
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 
 			$categories[] = $result[0];
 			if(!$result OR $result[0]['id_parent'] == 1)
@@ -668,12 +668,12 @@ class		Category extends ObjectModel
 	{
 		if (!$id_customer)
 		{
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT ctg.`id_group`
 			FROM '._DB_PREFIX_.'category_group ctg
 			WHERE ctg.`id_category` = '.intval($this->id).' AND ctg.`id_group` = 1');
 		} else {
-			$result = Db::getInstance()->getRow('
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT ctg.`id_group`
 			FROM '._DB_PREFIX_.'category_group ctg
 			INNER JOIN '._DB_PREFIX_.'customer_group cg on (cg.`id_group` = ctg.`id_group` AND cg.`id_customer` = '.intval($id_customer).')

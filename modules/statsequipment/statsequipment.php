@@ -35,14 +35,14 @@ class StatsEquipment extends ModuleGraph
 	
 	private function getEquipment()
 	{
-		$result = mysql_query('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT g.*
 		FROM `'._DB_PREFIX_.'connections` c 
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON g.`id_guest` = c.`id_guest`
-		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween());
+		WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween(), false);
 		
 		$calcArray = array('jsOK' => 0, 'jsKO' => 0, 'javaOK' => 0, 'javaKO' => 0, 'wmpOK' => 0, 'wmpKO' => 0, 'qtOK' => 0, 'qtKO' => 0, 'realOK' => 0, 'realKO' => 0, 'flashOK' => 0, 'flashKO' => 0, 'directorOK' => 0, 'directorKO' => 0);
-		while ($row = mysql_fetch_assoc($result))
+		while ($row = Db::getInstance(_PS_USE_SQL_SLAVE_)->nextRow($result))
 		{
 			if (!$row['javascript'])
 			{
@@ -57,7 +57,7 @@ class StatsEquipment extends ModuleGraph
 			($row['sun_java']) ? ++$calcArray['javaOK'] : ++$calcArray['javaKO'];
 			($row['apple_quicktime']) ? ++$calcArray['qtOK'] : ++$calcArray['qtKO'];
 		}
-		mysql_free_result($result);
+		
 		if (!$calcArray['jsOK'])
 			return false;
 			
@@ -133,7 +133,7 @@ class StatsEquipment extends ModuleGraph
 	
 	protected function getData($layers)
 	{
-		$result = Db::getInstance()->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		$this->_values = array();
 		$i = 0;
 		foreach ($result as $row)

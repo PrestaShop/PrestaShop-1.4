@@ -296,7 +296,7 @@ abstract class Module
 	  */
 	static public function getInstanceById($id_module)
 	{
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('
 			SELECT `name`
 			FROM `'._DB_PREFIX_.'module`
 			WHERE `id_module` = '.intval($id_module));
@@ -389,7 +389,7 @@ abstract class Module
 		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
 			$hookArgs['cart'] = $cart;
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT h.`id_hook`, m.`name`, hm.`position`
 			FROM `'._DB_PREFIX_.'module` m
 			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
@@ -430,7 +430,7 @@ abstract class Module
 		$billing = new Address(intval($cart->id_address_invoice));
 		$output = '';
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT h.`id_hook`, m.`name`, hm.`position`
 		FROM `'._DB_PREFIX_.'module_country` mc
 		LEFT JOIN `'._DB_PREFIX_.'module` m ON m.`id_module` = mc.`id_module`

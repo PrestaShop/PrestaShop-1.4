@@ -53,11 +53,11 @@ class		State extends ObjectModel
 
 	public static function getStates($id_lang, $active = false)
 	{
-		return Db::getInstance()->ExecuteS('
-			SELECT `id_state`, `id_country`, `id_zone`, `iso_code`, `name`, `tax_behavior`, `active`
-			FROM `'._DB_PREFIX_.'state`
-			'.($active ? 'WHERE active = 1' : '').'
-			ORDER BY `name` ASC');
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT `id_state`, `id_country`, `id_zone`, `iso_code`, `name`, `tax_behavior`, `active`
+		FROM `'._DB_PREFIX_.'state`
+		'.($active ? 'WHERE active = 1' : '').'
+		ORDER BY `name` ASC');
 	}
 	
 	/**
@@ -67,14 +67,14 @@ class		State extends ObjectModel
 	* @return string State name
 	*/
 	static public function getNameById($id_state)
-    {
-	    $result = Db::getInstance()->getRow('
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'state`
 		WHERE `id_state` = '.intval($id_state));
 
-        return $result['name'];
-    }
+		return $result['name'];
+	}
     
 	/**
 	* Get a state id with its name

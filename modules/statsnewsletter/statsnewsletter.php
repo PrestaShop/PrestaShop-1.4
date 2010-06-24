@@ -56,11 +56,11 @@ class StatsNewsletter extends ModuleGraph
 
 	private function getTotals()
 	{
-		$result1 = Db::getInstance()->getRow('
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(*) as customers
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE c.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
-		$result2 = Db::getInstance()->getRow('
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(*) as visitors
 		FROM '._DB_PREFIX_.'newsletter n
 		WHERE n.`newsletter_date_add` BETWEEN '.ModuleGraph::getDateBetween());
@@ -87,8 +87,8 @@ class StatsNewsletter extends ModuleGraph
 	
 	protected function setYearValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 5, 2))] += 1;
 		if ($result2)
@@ -100,8 +100,8 @@ class StatsNewsletter extends ModuleGraph
 	
 	protected function setMonthValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 8, 2))] += 1;
 		if ($result2)
@@ -113,8 +113,8 @@ class StatsNewsletter extends ModuleGraph
 
 	protected function setDayValues($layers)
 	{
-		$result1 = Db::getInstance()->ExecuteS($this->_query.$this->getDate());
-		$result2 = Db::getInstance()->ExecuteS($this->_query2.$this->getDate());
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query2.$this->getDate());
 		foreach ($result1 AS $row)
 			$this->_values[0][intval(substr($row['newsletter_date_add'], 11, 2))] += 1;
 		if ($result2)
