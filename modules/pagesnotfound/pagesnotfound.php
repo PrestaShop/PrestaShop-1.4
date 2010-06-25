@@ -43,9 +43,7 @@ class Pagesnotfound extends Module
 	
     function uninstall()
     {
-        if (!parent::uninstall())
-			return false;
-		return Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'pagenotfound`');
+        return (parent::uninstall() AND Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'pagenotfound`'));
     }
 	
 	private function getPages()
@@ -73,6 +71,12 @@ class Pagesnotfound extends Module
 	
     function hookAdminStatsModules()
     {
+		if (Tools::isSubmit('submitTruncatePNF'))
+		{
+			Db::getInstance()->Execute('TRUNCATE `'._DB_PREFIX_.'pagenotfound`');
+			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" /> '.$this->l('Pages not found emptied').'</div>';
+		}
+	
         $this->_html .= '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		if (!file_exists(dirname(__FILE__).'/../../.htaccess'))
 			$this->_html .= '<div class="warning warn">'.$this->l('You <b>must</b> use a .htaccess file to redirect 404 errors to the page "404.php"').'</div>';
@@ -102,8 +106,13 @@ class Pagesnotfound extends Module
 		else
 			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" /> '.$this->l('No pages registered').'</div>';
 			
-		$this->_html .= '
-			</fieldset><br />
+		$this->_html .= '</fieldset>';
+		if (sizeof($pages))
+			$this->_html .= '<div class="clear">&nbsp;</div>
+			<fieldset class="width3"><legend><img src="../img/admin/delete.gif" /> '.$this->l('Empty database').'</legend>
+				<form action="'.Tools::htmlEntitiesUtf8($_SERVER['REQUEST_URI']).'" method="post"><input type="submit" class="button" name="submitTruncatePNF" value="'.$this->l('Empty ALL pages not found').'"></form>
+			</fieldset>';
+		$this->_html .= '<div class="clear">&nbsp;</div>
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('404 errors').'</h2>
 			<p>'.$this->l('A <i>404 error</i> is an HTTP error code which means that the file requested by the user can\'t be found. In your case it means that one of your visitors entered a wrong URL in the address bar or that you or another website has a dead link somewhere. When it is available, the referrer is shown so you can find the page which contains the dead link. If not, it means generally that it is a direct access, so maybe someone has bookmarked a link which doesn\'t exist anymore.').'</p>
