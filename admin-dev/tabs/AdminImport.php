@@ -513,10 +513,10 @@ class AdminImport extends AdminTab
 			if (array_key_exists('id', $info) AND intval($info['id']) AND Product::existsInDatabase(intval($info['id'])))
 			{
 				$product = new Product(intval($info['id']));
-				if ($product->reduction_from == '0000-00-00')
-					$product->reduction_from = date('Y-m-d');
-				if ($product->reduction_to == '0000-00-00')
-					$product->reduction_to = date('Y-m-d');
+				if ($product->reduction_from == '0000-00-00' OR $product->reduction_from == '0000-00-00 00:00:00')
+					$product->reduction_from = date('Y-m-d H:i:s');
+				if ($product->reduction_to == '0000-00-00' OR $product->reduction_to == '0000-00-00 00:00:00')
+					$product->reduction_to = date('Y-m-d H:i:s');
 				$categoryData = Product::getIndexedCategories(intval($product->id));
 				foreach ($categoryData as $tmp)
 					$product->category[] = $tmp['id_category'];

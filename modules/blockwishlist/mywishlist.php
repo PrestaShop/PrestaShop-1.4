@@ -56,7 +56,7 @@ if ($cookie->isLogged())
 }
 else
 {
-	Tools::redirect('authentication.php?back=/modules/blockwishlist/mywishlist.php');
+	Tools::redirect('authentication.php?back=modules/blockwishlist/mywishlist.php');
 }
 
 $smarty->assign(array(

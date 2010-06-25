@@ -20,6 +20,8 @@ class AdminGenerator extends AdminTab
 		$this->_path =  dirname(__FILE__).'/../../';
 		$this->_htFile = $this->_path.'.htaccess';
 		$this->_rbFile = $this->_path.'robots.txt';
+		$this->_smFile = $this->_path.'sitemap.xml';
+		$this->_smFileName = 'sitemap.xml';
 		$this->_htData = $this->_getHtaccessContent();
 		$this->_rbData = $this->_getRobotsContent();
 		return parent::__construct();
@@ -144,6 +146,13 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "# Files\n");
 					foreach ($this->_rbData['Files'] as $file)
 						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$file."\n");
+					fwrite($writeFd, "\n");
+
+					// Sitemap
+					fwrite($writeFd, "# Sitemap\n");
+					if (file_exists($this->_smFile))
+						if (filesize($this->_smFile))
+							fwrite($writeFd, 'Sitemap: '.__PS_BASE_URI__.$this->_smFileName."\n");
 					fwrite($writeFd, "\n");
 
 					fclose($writeFd);

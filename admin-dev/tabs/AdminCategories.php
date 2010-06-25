@@ -96,10 +96,15 @@ class AdminCategories extends AdminTab
 				else
 				{
 					$object = new $this->className($id_category);
-					if (Validate::isLoadedObject($object))
-						$object->updateGroup(Tools::getValue('groupBox'));
+					if (Tools::getValue('groupBox') != NULL)
+					{
+						if (Validate::isLoadedObject($object))
+							$object->updateGroup(Tools::getValue('groupBox'));
+						else
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+						$this->_errors[] = Tools::displayError('you must select at least one group');
 				}
 			}
 		}

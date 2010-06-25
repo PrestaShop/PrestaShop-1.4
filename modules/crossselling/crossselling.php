@@ -42,12 +42,12 @@ class CrossSelling extends Module
 		if ($list != '')
 		{
 			$orderProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT od.product_id, pl.name, pl.link_rewrite, p.reference, i.id_image
+			SELECT DISTINCT od.product_id, pl.name, pl.link_rewrite, p.reference, i.id_image
 			FROM '._DB_PREFIX_.'order_detail od
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = od.product_id)
 			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = od.product_id)
 			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = od.product_id)
-			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.intval($cookie->id_lang).' AND od.product_id != '.intval($params['product']->id).' AND i.cover = 1
+			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.intval($cookie->id_lang).' AND od.product_id != '.intval($params['product']->id).' AND i.cover = 1 AND p.active = 1
 			ORDER BY RAND()
 			LIMIT 10');
 			

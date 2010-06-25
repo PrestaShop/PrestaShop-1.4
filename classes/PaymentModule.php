@@ -159,6 +159,8 @@ abstract class PaymentModule extends Module
 					{
 						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
 							$outOfStock = true;
+						if (!$outOfStock)
+							$product['stock_quantity'] -= $product['cart_quantity'];
 						Hook::updateQuantity($product, $order);
 					}
 					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));

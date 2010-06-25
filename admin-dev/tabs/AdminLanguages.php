@@ -274,9 +274,9 @@ class AdminLanguages extends AdminTab
 
 		echo '
 		<script type="text/javascript">
-		var langPackOk = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('A langage pack is available for this iso code:').'";
+		var langPackOk = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('A language pack is available for this iso code:').'";
 		var langPackInfo = "'.$this->l('After creation of the language you can import the content of language pack, that you can download above, on the "Tools> Translations"').'";
-		var noLangPack = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('No langage pack available on prestashop.com for this iso code').'";
+		var noLangPack = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('No language pack available on prestashop.com for this iso code').'";
 		var download = "'.$this->l('Download').'";
 		</script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'/checkLangPack.js"></script>

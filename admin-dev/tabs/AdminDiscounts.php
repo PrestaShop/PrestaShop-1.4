@@ -73,6 +73,8 @@ class AdminDiscounts extends AdminTab
 	
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
+			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
+				$this->_errors[] = Tools::displayError('You need set a currency for this voucher');
 			/* Checking fields validity */
 			$this->validateRules();
 			if (!sizeof($this->_errors))

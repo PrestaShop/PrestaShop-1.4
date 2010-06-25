@@ -146,9 +146,9 @@ class PDF extends PDF_PageGroup
 		elseif (self::$orderSlip)
 			$this->Cell(77, 10, self::l('SLIP #').' '.sprintf('%06d', self::$orderSlip->id), 0, 1, 'R');
 		elseif (self::$delivery)
-			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery), 0, 1, 'R');
+			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang))).sprintf('%06d', self::$delivery), 0, 1, 'R');
 		elseif (self::$order->invoice_number)
-			$this->Cell(77, 10, self::l('INVOICE #').' '.Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
+			$this->Cell(77, 10, self::l('INVOICE #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang))).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
 		else
 			$this->Cell(77, 10, self::l('ORDER #').' '.sprintf('%06d', self::$order->id), 0, 1, 'R');
    }
@@ -160,7 +160,7 @@ class PDF extends PDF_PageGroup
 	{
 		$this->SetY(-33);
 		$this->SetFont(self::fontname(), '', 7);
-		$this->Cell(190, 5, ' '."\n".'P. '.$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
+		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
 
 		/*
 		 * Display a message for customer
@@ -473,18 +473,30 @@ class PDF extends PDF_PageGroup
 			/*
 			 * Display price summation
 			 */
-			$pdf->Ln(5);
-			$pdf->SetFont(self::fontname(), 'B', 8);
-			$width = 165;
-			$pdf->Cell($width, 0, self::l('Total products (tax excl.)').' : ', 0, 0, 'R');
-			$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
-			$pdf->Ln(4);
-
-			$pdf->SetFont(self::fontname(), 'B', 8);
-			$width = 165;
-			$pdf->Cell($width, 0, self::l('Total products (tax incl.)').' : ', 0, 0, 'R');
-			$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithTax'], self::$currency, true, false)), 0, 0, 'R');
-			$pdf->Ln(4);
+			if (Configuration::get('PS_TAX') OR $order->total_products_wt != $order->total_products)
+			{
+				$pdf->Ln(5);
+				$pdf->SetFont(self::fontname(), 'B', 8);
+				$width = 165;
+				$pdf->Cell($width, 0, self::l('Total products (tax excl.)').' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+	
+				$pdf->SetFont(self::fontname(), 'B', 8);
+				$width = 165;
+				$pdf->Cell($width, 0, self::l('Total products (tax incl.)').' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithTax'], self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+			}
+			else
+			{
+				$pdf->Ln(5);
+				$pdf->SetFont(self::fontname(), 'B', 8);
+				$width = 165;
+				$pdf->Cell($width, 0, self::l('Total products ').' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+			}
 
 			if (!self::$orderSlip AND self::$order->total_discounts != '0.00')
 			{
@@ -513,12 +525,21 @@ class PDF extends PDF_PageGroup
 				$pdf->Ln(4);
 			}
 
-			$pdf->Cell($width, 0, self::l('Total').' '.(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax incl.)') : self::l(' (tax excl.)')).' : ', 0, 0, 'R');
-			$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithTax'] : $priceBreakDown['totalWithoutTax']), self::$currency, true, false)), 0, 0, 'R');
-			$pdf->Ln(4);
-			$pdf->Cell($width, 0, self::l('Total').' '.(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax excl.)') : self::l(' (tax incl.)')).' : ', 0, 0, 'R');
-			$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : $priceBreakDown['totalWithTax']), self::$currency, true, false)), 0, 0, 'R');
-			$pdf->Ln(4);
+			if (Configuration::get('PS_TAX') OR $order->total_products_wt != $order->total_products)
+			{
+				$pdf->Cell($width, 0, self::l('Total').' '.(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax incl.)') : self::l(' (tax excl.)')).' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithTax'] : $priceBreakDown['totalWithoutTax']), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+				$pdf->Cell($width, 0, self::l('Total').' '.(self::$_priceDisplayMethod == PS_TAX_EXC ? self::l(' (tax excl.)') : self::l(' (tax incl.)')).' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice((self::$_priceDisplayMethod == PS_TAX_EXC ? $priceBreakDown['totalWithoutTax'] : $priceBreakDown['totalWithTax']), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+			}
+			else
+			{
+				$pdf->Cell($width, 0, self::l('Total').' : ', 0, 0, 'R');
+				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(($priceBreakDown['totalWithoutTax']), self::$currency, true, false)), 0, 0, 'R');
+				$pdf->Ln(4);
+			}
 
 			if ($ecotax != '0.00' AND !self::$orderSlip)
 			{

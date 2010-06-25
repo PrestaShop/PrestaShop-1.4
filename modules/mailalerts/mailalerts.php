@@ -220,7 +220,7 @@ class MailAlerts extends Module
 		if ($qty <= intval(Configuration::get('mA_last_qties')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
-				'{qty}' => $qty - $params['product']['cart_quantity'],
+				'{qty}' => $qty,
 				'{last_qty}' => intval(Configuration::get('mA_last_qties')),
 				'{product}' => strval($params['product']['name']));
 			$iso = Language::getIsoById(intval($cookie->id_lang));

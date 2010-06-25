@@ -181,7 +181,8 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	SELECT s.id_state, s.name
 	FROM '._DB_PREFIX_.'state s
 	LEFT JOIN '._DB_PREFIX_.'country c ON (s.`id_country` = c.`id_country`)
-	WHERE s.id_country = '.intval(Tools::getValue('id_country')).' AND s.active = 1 AND c.`contains_states` = 1');
+	WHERE s.id_country = '.intval(Tools::getValue('id_country')).' AND s.active = 1 AND c.`contains_states` = 1
+	ORDER BY s.`name` ASC');
 	
 	$list = '<option value="0">-----------</option>'."\n";
 	foreach ($states AS $state)
