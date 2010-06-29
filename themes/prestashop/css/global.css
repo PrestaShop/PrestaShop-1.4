@@ -1918,6 +1918,7 @@ div.addresses p.checkbox input {
 	margin-top: 0!important;
 	margin-top: -3px
 }
+div.addresses ul.item{clear:both;}
 ul.address {
 	background-color: white;
 	float: left;
