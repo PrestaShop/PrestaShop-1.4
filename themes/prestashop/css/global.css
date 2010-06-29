@@ -1429,7 +1429,7 @@ ul#product_list a.product_img_link {
 	float: left;
 	margin-right: 0.6em
 }
-ul#product_list a.product_img_link img { vertical-align: bottom }
+ul#product_list a.product_img_link img { vertical-align: bottom; display:block; }
 ul#product_list li h3 { margin: 0.4em 0 }
 ul#product_list li .new {
 	background: transparent url(../img/flag_new_bg.jpg) repeat-x scroll 0%;
