@@ -74,8 +74,8 @@ class Tag extends ObjectModel
 	*/
 	static public function addTags($id_lang, $id_product, $string)
 	{
-	 	if (!Validate::isUnsignedId($id_lang) OR Validate::isTagsList($string))
-	 		Tools::displayError();
+	 	if (!Validate::isUnsignedId($id_lang) OR !Validate::isTagsList($string))
+			return false;
 	 	
 	 	$tmpTab = array_unique(array_map('trim', explode(',', $string)));
 	 	$list = array();
@@ -99,9 +99,6 @@ class Tag extends ObjectModel
 		foreach ($list AS $tag)
 			$data .= '('.intval($tag).','.intval($id_product).'),';
 		$data = rtrim($data, ',');
-
-		if (!Validate::isValuesList($list))
-			Tools::displayError();
 
 		return Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_tag`, `id_product`) 

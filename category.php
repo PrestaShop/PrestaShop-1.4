@@ -64,7 +64,7 @@ else
 			'id_category_parent' => intval($category->id_parent),
 			'return_category_name' => Tools::safeOutput(Category::hideCategoryPosition($category->name)),
 			'path' => Tools::getPath(intval($category->id), $category->name),
-			'homeSize' => Image::getSize('home'),
+			'homeSize' => Image::getSize('home')
 		));
 	}
 }

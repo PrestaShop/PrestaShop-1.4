@@ -471,7 +471,7 @@ class AdminImport extends AdminTab
 			$res = false;
 			if (($fieldError = $category->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $category->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
-				$categoryAlreadyCreated = Category::searchByName($defaultLanguageId, $category->name[$defaultLanguageId], true);
+				$categoryAlreadyCreated = Category::searchByNameAndParentCategoryId($defaultLanguageId, $category->name[$defaultLanguageId], $category->id_parent);
 
 				// If category already in base, get id category back
 				if ($categoryAlreadyCreated['id_category'])
@@ -700,7 +700,15 @@ class AdminImport extends AdminTab
 					{
 						$product->tags = self::createMultiLangField($product->tags);
 						foreach($product->tags AS $key => $tags)
-							$a = $tag->addTags($key, $product->id, $tags);
+						{
+							$isTagAdded = $tag->addTags($key, $product->id, $tags);
+							if (!$isTagAdded)
+							{
+								$this->_addProductWarning($info['name'], $product->id, $this->l('Tags list').' '.$this->l('is invalid'));
+								break;
+							}
+						}
+						
 					}
 					else
 					{
@@ -711,7 +719,12 @@ class AdminImport extends AdminTab
 								$str .= $one_tag.',';
 							$str = rtrim($str, ',');
 							
-							$a = $tag->addTags($key, $product->id, $str);
+							$isTagAdded = $tag->addTags($key, $product->id, $str);
+							if (!$isTagAdded)
+							{
+								$this->_addProductWarning($info['name'], $product->id,'Invalid tag(s) ('.$str.')');
+								break;
+							}
 						}
 					}
 				}
@@ -1342,6 +1355,7 @@ class AdminImport extends AdminTab
 				break;
 			case $this->entities[$this->l('Products')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'feature_product');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_lang');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'category_product');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_tag');
@@ -1440,5 +1454,13 @@ class AdminImport extends AdminTab
 		$iso_lang  = trim(Tools::getValue('iso_lang'));
 		setlocale(LC_ALL, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 	}
+	
+	protected function _addProductWarning($product_name, $product_id = NULL, $message = '')
+	{
+		$this->_warnings[] = $product_name.(isset($product_id) ? ' (ID '.$product_id.')' : '').' '.Tools::displayError($message);
+	}
+	
 }
+
+
 ?>

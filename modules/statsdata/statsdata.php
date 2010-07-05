@@ -64,6 +64,7 @@ class StatsData extends Module
 						for (var i in plugins)
 							navinfo[i] = plugins[i];
 						navinfo.type = "navinfo";
+						navinfo.id_guest = "'.(int)$params['cookie']->id_guest.'";
 						navinfo.token = "'.$token.'";
 						$.post("'.$protocol_content.$server_host.__PS_BASE_URI__.'statistics.php", navinfo);
 					}
@@ -91,6 +92,9 @@ class StatsData extends Module
 					var time_end = new Date();
 					var pagetime = new Object;
 					pagetime.type = "pagetime";
+					pagetime.id_connections = "'.(int)$tokenArray['id_connections'].'";
+					pagetime.id_page = "'.(int)$tokenArray['id_page'].'";
+					pagetime.time_start = "'.$tokenArray['time_start'].'";
 					pagetime.token = "'.$token.'";
 					pagetime.time = time_end-time_start;
 					$.post("'.$protocol_content.$server_host.__PS_BASE_URI__.'statistics.php", pagetime);

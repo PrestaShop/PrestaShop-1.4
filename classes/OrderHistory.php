@@ -65,10 +65,10 @@ class		OrderHistory extends ObjectModel
 				{
 					/* If becoming logable => adding sale */
 					if ($newOS->logable AND (!$oldOrderStatus OR !$oldOrderStatus->logable))
-						ProductSale::addProductSale($product['id_product'], $product['quantity']);
+						ProductSale::addProductSale($product['id_product'], $product['cart_quantity']);
 					/* If becoming unlogable => removing sale */
 					elseif (!$newOS->logable AND ($oldOrderStatus AND $oldOrderStatus->logable))
-						ProductSale::removeProductSale($product['id_product'], $product['quantity']);
+						ProductSale::removeProductSale($product['id_product'], $product['cart_quantity']);
 					if (!$isValidated AND $newOS->logable AND isset($oldOrderStatus) AND $oldOrderStatus AND $oldOrderStatus->id == _PS_OS_ERROR_)
 					{
 						Product::updateQuantity($product);

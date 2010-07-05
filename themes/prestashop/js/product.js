@@ -391,8 +391,10 @@ $(document).ready(function()
 function saveCustomization()
 {
 	$('#quantityBackup').val($('#quantity_wanted').val());
+	customAction = $('#customizationForm').attr('action');
 	$('body select[@id^="group_"]').each(function() {
-		$('#customizationForm').attr('action', $('#customizationForm').attr('action') + '&' + this.id + '=' + parseInt(this.value));
+		customAction = customAction.replace(new RegExp(this.id + '=\\d+'), this.id +'='+this.value);
 	});
+	$('#customizationForm').attr('action', customAction);
 	$('#customizationForm').submit();
 }

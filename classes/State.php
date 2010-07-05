@@ -90,7 +90,55 @@ class		State extends ObjectModel
 		WHERE `name` LIKE \''.pSQL($state).'\'');
 		 	
         return (intval($result['id_state']));
-    }	
+    }
+
+	
+	/**
+	* Delete a state only if is not in use
+	*
+	* @return boolean
+	*/
+	public function delete()
+	{
+	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+	 		die(Tools::displayError());
+
+		if ($this->isUsed()) die(Tools::displayError()); 
+		
+		/* Database deletion */
+		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+		if (!$result)
+			return false;
+
+		/* Database deletion for multilingual fields related to the object */
+		if (method_exists($this, 'getTranslationsFieldsChild'))
+			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+		return $result;
+	}	
+	
+	/**
+	 * Check if a state is used
+	 *
+	 * @return boolean 
+	 */
+	public function isUsed()
+	{
+		return ($this->countUsed() > 0);
+	}
+	
+		/**
+	 * Returns the number of utilisation of a state
+	 *
+	 * @return integer count for this state
+	 */
+	public function countUsed()
+	{
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT COUNT(*) AS nb_used 
+		FROM `'._DB_PREFIX_.'address` 
+		WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));	
+		return $row['nb_used'];
+	}
 }
 
 ?>

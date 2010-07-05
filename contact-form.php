@@ -11,9 +11,11 @@ $smarty->assign('contacts', Contact::getContacts(intval($cookie->id_lang)));
 
 if (Tools::isSubmit('submitMessage'))
 {
+	$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
+
 	if (!($from = Tools::getValue('from')) OR !Validate::isEmail($from))
         $errors[] = Tools::displayError('invalid e-mail address');
-    elseif (!($message = nl2br2(Tools::getValue('message'))))
+    elseif (!($message = nl2br2($message)))
         $errors[] = Tools::displayError('message cannot be blank');
     elseif (!Validate::isMessage($message))
         $errors[] = Tools::displayError('invalid message');

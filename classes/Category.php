@@ -591,6 +591,25 @@ class		Category extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($id_lang).')
 			WHERE `name` LIKE \'%'.pSQL($query).'%\' AND c.`id_category` != 1');
 	}
+	
+	/**
+	  * Retrieve category by name and parent category id
+	  *
+	  * @param integer $id_lang Language ID
+	  * @param string  $category_name Searched category name
+	  * @param integer $id_parent_category parent category ID
+	  * @return array Corresponding category
+	  */
+	static public function searchByNameAndParentCategoryId($id_lang, $category_name, $id_parent_category)
+	{
+		return Db::getInstance()->getRow('
+		SELECT c.*, cl.*
+	    FROM `'._DB_PREFIX_.'category` c
+	    LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.intval($id_lang).') 
+	    WHERE `name`  LIKE \''.pSQL($category_name).'\' 
+		AND c.`id_category` != 1 
+		AND c.`id_parent` = '.intval($id_parent_category));
+	}
 
 	/**
 	  * Get Each parent category of this category until the root category

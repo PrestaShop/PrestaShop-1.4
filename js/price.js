@@ -97,7 +97,7 @@ function isInReductionPeriod()
 	var start  = document.getElementById('reduction_from').value;
 	var end    = document.getElementById('reduction_to').value;
 	
-	if (start == end) return true;
+	if (start == end && start != "" && start != "0000-00-00 00:00:00") return true;
 
 	var sdate  = new Date(start.replace(/-/g,'/'));	
 	var edate  = new Date(end.replace(/-/g,'/'));

@@ -33,6 +33,59 @@ class AdminStates extends AdminTab
 		parent::__construct();
 	}
 
+	public function postProcess()
+	{
+		if (!isset($this->table)) return false;
+
+		/* Delete object */
+		if (isset($_GET['delete'.$this->table]))
+		{
+			global $currentIndex;
+			
+			// set token
+			$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;	
+
+			// Sub included tab postProcessing
+			$this->includeSubTab('postProcess', array('submitAdd1', 'submitDel', 'delete', 'submitFilter', 'submitReset'));
+		
+			if ($this->tabAccess['delete'] === '1')
+			{
+				
+					if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
+					{
+							if (!$object->isUsed())
+							{
+								// check if request at least one object with noZeroObject
+								if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
+									$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
+								else
+								{
+									$this->deleteImage($object->id);
+									if ($this->deleted)
+									{
+										$object->deleted = 1;
+										if ($object->update()) Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
+									} 
+									else if ($object->delete()) 
+									{
+										Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
+									}
+									$this->_errors[] = Tools::displayError('an error occurred during deletion');
+								}
+							} else {
+								$this->_errors[] = Tools::displayError('This state is currently in use');
+							}
+					}
+					else
+						$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}	
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		} else {
+			parent::postProcess();
+		}
+	}
+	
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;

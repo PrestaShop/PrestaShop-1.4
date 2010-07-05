@@ -11,7 +11,7 @@ countriesNeedIDNumber = new Array();
 	{if isset($country.states) && $country.contains_states}
 		countries[{$country.id_country|intval}] = new Array();
 		{foreach from=$country.states item='state' name='states'}
-			countries[{$country.id_country|intval}]['{$state.id_state|intval}'] = '{$state.name|escape:'htmlall':'UTF-8'}';
+			countries[{$country.id_country|intval}].push({ldelim}'id' : '{$state.id_state}', 'name' : '{$state.name|escape:'htmlall':'UTF-8'}'{rdelim});
 		{/foreach}
 	{/if}
 	{if $country.need_identification_number}

@@ -13,12 +13,10 @@ function updateState()
 	var states = countries[$('select#id_country').val()];
 	if(typeof(states) != 'undefined')
 	{
-		for (indexState in states)
-		{
-			//ie bug fix
-			if (indexState != 'indexOf')
-				$('select#id_state').append('<option value="'+indexState+'"'+ (idSelectedCountry == indexState ? ' selected="selected' : '') + '">'+states[indexState]+'</option>');
-		}
+		$(states).each(function (key, item){
+			$('select#id_state').append('<option value="'+item.id+'"'+ (idSelectedCountry == item.id ? ' selected="selected' : '') + '">'+item.name+'</option>');
+		});
+		
 		$('p.id_state:hidden').slideDown('slow');
 	}
 	else
