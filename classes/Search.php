@@ -340,6 +340,8 @@ class Search
 			$queryArray2 = array();
 			foreach ($pArray as $word => $weight)
 			{
+				if (!$weight)
+					continue;
 				$queryArray[] = '('.intval($product['id_lang']).',\''.pSQL($word).'\')';
 				$queryArray2[] = '('.intval($product['id_product']).',(SELECT id_word FROM '._DB_PREFIX_.'search_word WHERE word = \''.pSQL($word).'\' AND id_lang = '.intval($product['id_lang']).' LIMIT 1),'.intval($weight).')';
 				// Force save every 10 words in order to avoid overloading MySQL
