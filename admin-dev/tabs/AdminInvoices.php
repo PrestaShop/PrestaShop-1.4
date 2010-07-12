@@ -31,20 +31,21 @@ class AdminInvoices extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		global $currentIndex;
-		parent::displayForm();
+		global $currentIndex, $cookie;
 		
-		$output = '
+		$statuses = OrderState::getOrderStates($cookie->id_lang);
+		
+		echo '
 		<h2>'.$this->l('Print PDF invoices').'</h2>
-		<fieldset class="width2">
-			<form action="'.$currentIndex.'&submitPrint=1&token='.$this->token.'" method="post">
-				<label>'.$this->l('From:').' </label>
-				<div class="margin-form">
+		<fieldset style="float:left;width:300px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By date').'</legend>
+			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+				<label style="width:90px">'.$this->l('From:').' </label>
+				<div class="margin-form" style="padding-left:100px">
 					<input type="text" size="4" maxlength="10" name="date_from" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Format: 2007-12-31 (inclusive)').'</p>
 				</div>
-				<label>'.$this->l('To:').' </label>
-				<div class="margin-form">
+				<label style="width:90px">'.$this->l('To:').' </label>
+				<div class="margin-form" style="padding-left:100px">
 					<input type="text" size="4" maxlength="10" name="date_to" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Format: 2008-12-31 (inclusive)').'</p>
 				</div>
@@ -53,9 +54,27 @@ class AdminInvoices extends AdminTab
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
 			</form>
-		</fieldset>';
+		</fieldset>
+		<fieldset style="float:left;width:300px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By status').'</legend>
+			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+				<label style="width:90px">'.$this->l('Status').'</label>
+				<div class="margin-form" style="padding-left:100px">
+					<select name="id_order_state">
+						<option value="0">'.$this->l('-- Please choose an order status --').'</option>';
+		foreach ($statuses as $status)
+			if ($status['invoice'])
+				echo '	<option value='.(int)$status['id_order_state'].'">'.$status['name'].'</option>';
+		echo '		</select>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint2" class="button" />
+				</div>
+				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
+			</form>
+		</fieldset>
+		<div class="clear">&nbsp;</div>';
 		
-		echo $output;
+		return parent::displayForm();
 	}
 	
 	public function display()
@@ -68,7 +87,7 @@ class AdminInvoices extends AdminTab
 	{
 		global $currentIndex;
 		
-		if(Tools::isSubmit('submitPrint'))
+		if (Tools::isSubmit('submitPrint'))
 		{
 			if (!Validate::isDate(Tools::getValue('date_from')))
 				$this->_errors[] = $this->l('Invalid from date');
@@ -80,6 +99,18 @@ class AdminInvoices extends AdminTab
 				if (sizeof($orders))
 					Tools::redirectAdmin('pdf.php?invoices&date_from='.urlencode(Tools::getValue('date_from')).'&date_to='.urlencode(Tools::getValue('date_to')).'&token='.$this->token);
 				$this->_errors[] = $this->l('No invoice found for this period');
+			}
+		}
+		elseif(Tools::isSubmit('submitPrint2'))
+		{
+			if (!($id_order_state = (int)Tools::getValue('id_order_state')) OR !($status = new OrderState($id_order_state, $cookie->id_lang)) OR !Validate::isLoadedObject($status))
+				$this->_errors[] = $this->l('Invalid order status');
+			if (!sizeof($this->_errors))
+			{
+				$orders = Order::getOrderIdsByStatus($id_order_state);
+				if (sizeof($orders))
+					Tools::redirectAdmin('pdf.php?invoices2&id_order_state='.$id_order_state.'&token='.$this->token);
+				$this->_errors[] = $this->l('No invoice found for this status');
 			}
 		}
 		elseif (Tools::isSubmit('submitOptionsinvoice'))

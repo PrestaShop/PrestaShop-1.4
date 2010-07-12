@@ -543,7 +543,27 @@ class		Order extends ObjectModel
 			$orders[] = intval($order['id_order']);
 		return $orders;
 	}
-
+	
+	static public function getOrderIdsByStatus($id_order_state)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT id_order
+		FROM '._DB_PREFIX_.'orders o
+		WHERE '.(int)$id_order_state.' = (
+			SELECT id_order_state
+			FROM '._DB_PREFIX_.'order_history oh
+			WHERE oh.id_order = o .id_order
+			ORDER BY date_add DESC, id_order_history DESC
+			LIMIT 1
+		)
+		AND invoice_number != 0
+		ORDER BY invoice_date ASC');
+		
+		$orders = array();
+		foreach ($result AS $order)
+			$orders[] = intval($order['id_order']);	
+		return $orders;
+	}
 
     /**
      * Get product total without taxes

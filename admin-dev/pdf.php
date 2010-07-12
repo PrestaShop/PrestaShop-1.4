@@ -49,9 +49,17 @@ elseif (isset($_GET['id_delivery']))
 }
 elseif (isset($_GET['invoices']))
 {
-	$invoices = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], NULL, 'invoice');
-	if (is_array($invoices))
-		PDF::multipleInvoices($invoices);
+	$orders = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], NULL, 'invoice');
+	if (!is_array($orders))
+		die (Tools::displayError('No invoices found'));
+	PDF::multipleInvoices($orders);
+}
+elseif (isset($_GET['invoices2']))
+{
+	$orders = Order::getOrderIdsByStatus((int)Tools::getValue('id_order_state'));
+	if (!is_array($orders))
+		die (Tools::displayError('No invoices found'));
+	PDF::multipleInvoices($orders);
 }
 elseif (isset($_GET['deliveryslips']))
 {
