@@ -556,7 +556,6 @@ class		Order extends ObjectModel
 			ORDER BY date_add DESC, id_order_history DESC
 			LIMIT 1
 		)
-		AND invoice_number != 0
 		ORDER BY invoice_date ASC');
 		
 		$orders = array();

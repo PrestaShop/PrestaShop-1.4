@@ -56,10 +56,11 @@ elseif (isset($_GET['invoices']))
 }
 elseif (isset($_GET['invoices2']))
 {
-	$orders = Order::getOrderIdsByStatus((int)Tools::getValue('id_order_state'));
-	if (!is_array($orders))
-		die (Tools::displayError('No invoices found'));
-	PDF::multipleInvoices($orders);
+	$allOrders = array();
+	foreach (explode('-', Tools::getValue('id_order_state')) as $id_order_state)
+		if (is_array($orders = Order::getOrderIdsByStatus((int)$id_order_state)))
+			$allOrders = array_merge($allOrders, $orders);
+	PDF::multipleInvoices($allOrders);
 }
 elseif (isset($_GET['deliveryslips']))
 {

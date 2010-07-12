@@ -34,6 +34,19 @@ class AdminInvoices extends AdminTab
 		global $currentIndex, $cookie;
 		
 		$statuses = OrderState::getOrderStates($cookie->id_lang);
+		$result = Db::getInstance()->ExecuteS('
+		SELECT COUNT(*) as nbOrders, (
+			SELECT oh.id_order_state
+			FROM '._DB_PREFIX_.'order_history oh
+			WHERE oh.id_order = o.id_order
+			ORDER BY oh.date_add DESC, oh.id_order_history DESC
+			LIMIT 1
+		) id_order_state
+		FROM '._DB_PREFIX_.'orders o			
+		GROUP BY id_order_state');
+		$statusStats = array();
+		foreach ($result as $row)
+			$statusStats[$row['id_order_state']] = $row['nbOrders'];
 		
 		echo '
 		<h2>'.$this->l('Print PDF invoices').'</h2>
@@ -55,21 +68,25 @@ class AdminInvoices extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
 			</form>
 		</fieldset>
-		<fieldset style="float:left;width:300px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By status').'</legend>
+		<fieldset style="float:left;width450px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By statuses').'</legend>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-				<label style="width:90px">'.$this->l('Status').'</label>
+				<label style="width:90px">'.$this->l('Statuses').'</label>
 				<div class="margin-form" style="padding-left:100px">
-					<select name="id_order_state">
-						<option value="0">'.$this->l('-- Please choose an order status --').'</option>';
+					<ul>';
 		foreach ($statuses as $status)
-			if ($status['invoice'])
-				echo '	<option value='.(int)$status['id_order_state'].'">'.$status['name'].'</option>';
-		echo '		</select>
+			echo '		<li>
+							<input type="checkbox" name="id_order_state[]" value="'.(int)$status['id_order_state'].'" id="id_order_state_'.(int)$status['id_order_state'].'">
+							<label for="id_order_state_'.(int)$status['id_order_state'].'" style="float:none;'.((isset($statusStats[$status['id_order_state']]) AND $statusStats[$status['id_order_state']]) ? '' : 'font-weight:normal;').'padding:0;text-align:left;width:100%;color:#000">
+								<img src="../img/admin/charged_'.($status['invoice'] ? 'ok' : 'ko').'.gif" alt="" />
+								'.$status['name'].' ('.((isset($statusStats[$status['id_order_state']]) AND $statusStats[$status['id_order_state']]) ? $statusStats[$status['id_order_state']] : '0').')
+							</label>
+						</li>';
+		echo '		</ul>
+					<p class="clear">'.$this->l('You can also export orders which have not been charged yet.').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint2" class="button" />
 				</div>
-				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
 			</form>
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
@@ -103,13 +120,13 @@ class AdminInvoices extends AdminTab
 		}
 		elseif(Tools::isSubmit('submitPrint2'))
 		{
-			if (!($id_order_state = (int)Tools::getValue('id_order_state')) OR !($status = new OrderState($id_order_state, $cookie->id_lang)) OR !Validate::isLoadedObject($status))
-				$this->_errors[] = $this->l('Invalid order status');
-			if (!sizeof($this->_errors))
+			if (!is_array($statusArray = Tools::getValue('id_order_state')) OR !count($statusArray))
+				$this->_errors[] = $this->l('Invalid order statuses');
+			else
 			{
-				$orders = Order::getOrderIdsByStatus($id_order_state);
-				if (sizeof($orders))
-					Tools::redirectAdmin('pdf.php?invoices2&id_order_state='.$id_order_state.'&token='.$this->token);
+				foreach ($statusArray as $id_order_state)
+					if (count($orders = Order::getOrderIdsByStatus((int)$id_order_state)))
+						Tools::redirectAdmin('pdf.php?invoices2&id_order_state='.implode('-',$statusArray).'&token='.$this->token);
 				$this->_errors[] = $this->l('No invoice found for this status');
 			}
 		}
