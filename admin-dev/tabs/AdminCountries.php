@@ -31,13 +31,12 @@ class AdminCountries extends AdminTab
 		'id_country' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Country'), 'width' => 130, 'filter_key' => 'b!name'),
 		'iso_code' => array('title' => $this->l('ISO code'), 'width' => 70, 'align' => 'center'),
+		'call_prefix' => array('title' => $this->l('Call prefix'), 'width' => 40, 'align' => 'center', 'callback' => 'displayCallPrefix'),
 		'zone' => array('title' => $this->l('Zone'), 'width' => 100, 'filter_key' => 'z!name'),
 		'a!active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false, 'filter_key' => 'a!active'));
 	
 		$this->optionTitle = $this->l('Countries options');
-		$this->_fieldsOptions = array(
-			'PS_COUNTRY_DEFAULT' => array('title' => $this->l('Default country:'), 'desc' => $this->l('The default country used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_country', 'list' => Country::getCountries(intval($cookie->id_lang))),
-		);
+		$this->_fieldsOptions = array('PS_COUNTRY_DEFAULT' => array('title' => $this->l('Default country:'), 'desc' => $this->l('The default country used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_country', 'list' => Country::getCountries(intval($cookie->id_lang))));
 		parent::__construct();
 	}
 	
@@ -68,9 +67,8 @@ class AdminCountries extends AdminTab
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="30" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-						</div>';							
-				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
-
+					</div>';							
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '		<p style="clear: both">'.$this->l('Name of country').'</p>
 				</div>
 				<label>'.$this->l('ISO code:').' </label>
@@ -78,16 +76,18 @@ class AdminCountries extends AdminTab
 					<input type="text" size="4" maxlength="3" name="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
 					<p>'.$this->l('2- or 3-letter ISO code, e.g., FR for France').'. <a href="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html" target="_blank">'.$this->l('Official list here').'</a>.</p>
 				</div>
+				<label>'.$this->l('Call prefix:').' </label>
+				<div class="margin-form">
+					<input type="text" size="4" maxlength="3" name="call_prefix" value="'.intval($this->getFieldValue($obj, 'call_prefix'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
+					<p>'.$this->l('International call prefix, e.g., 33 for France.').'.</p>
+				</div>
 				<label>'.$this->l('Zone:').' </label>
 				<div class="margin-form">
 					<select name="id_zone">';
-					
 		$zones = Zone::getZones();
 		foreach ($zones AS $zone)
-			echo '<option value="'.intval($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
-
-		echo '
-					</select>
+			echo '		<option value="'.intval($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
+		echo '		</select>
 					<p>'.$this->l('Geographical zone where country is located').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>

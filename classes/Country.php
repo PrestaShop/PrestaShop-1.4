@@ -22,6 +22,9 @@ class		Country extends ObjectModel
 	/** @var string 2 letters iso code */
 	public 		$iso_code;
 
+	/** @var integer international call prefix */
+	public 		$call_prefix;
+
 	/** @var string Name */
 	public 		$name;
 
@@ -40,7 +43,7 @@ class		Country extends ObjectModel
 
  	protected 	$fieldsRequired = array('id_zone', 'iso_code', 'contains_states', 'need_identification_number');
  	protected 	$fieldsSize = array('iso_code' => 3);
- 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'call_prefix' => 'isInt', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 64);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -53,6 +56,7 @@ class		Country extends ObjectModel
 		parent::validateFields();
 		$fields['id_zone'] = intval($this->id_zone);
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
+		$fields['call_prefix'] = intval($this->call_prefix);
 		$fields['active'] = intval($this->active);
 		$fields['contains_states'] = intval($this->contains_states);
 		$fields['need_identification_number'] = intval($this->need_identification_number);
@@ -206,7 +210,12 @@ class		Country extends ObjectModel
 		SELECT `need_identification_number` 
 		FROM `'._DB_PREFIX_.'country` 
 		WHERE `id_country` = '.intval($id_country));
-	} 
+	}
+	
+	public function displayCallPrefix($prefix)
+	{
+		return ((int)$prefix ? '+'.$prefix : '-');
+	}
 }
 
 ?>
