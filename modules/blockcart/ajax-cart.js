@@ -152,12 +152,12 @@ var ajaxCart = {
 		
 		//send the ajax request to the server
 		$.ajax({
-			type: 'GET',
+			type: 'POST',
 			url: baseDir + 'cart.php',
 			async: true,
 			cache: false,
 			dataType : "json",
-			data: 'add&ajax=true&qty=' + ( (quantity && quantity != null) ? quantity : '1') + '&id_product=' + idProduct + '&token=' + static_token + ( (parseInt(idCombination) && idCombination != null) ? '&ipa=' + parseInt(idCombination): ''),
+			data: 'add=1&ajax=true&qty=' + ( (quantity && quantity != null) ? quantity : '1') + '&id_product=' + idProduct + '&token=' + static_token + ( (parseInt(idCombination) && idCombination != null) ? '&ipa=' + parseInt(idCombination): ''),
 			success: function(jsonData)
 			{
 				// add appliance to whishlist module
@@ -200,12 +200,12 @@ var ajaxCart = {
 	remove : function(idProduct, idCombination, customizationId){
 		//send the ajax request to the server
 		$.ajax({
-			type: 'GET',
+			type: 'POST',
 			url: baseDir + 'cart.php',
 			async: true,
 			cache: false,
 			dataType : "json",
-			data: 'delete' + '&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
+			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
 			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) },
 			error: function() {alert('ERROR: unable to delete the product');}
 		});

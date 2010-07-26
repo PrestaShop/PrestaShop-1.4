@@ -124,7 +124,7 @@ class Tools
 	{
 	 	if (!isset($key) OR empty($key) OR !is_string($key))
 			return false;
-	 	return isset($_POST[$key]) ? true : (isset($_GET[$key]) ? true : false);
+	 	return (isset($_POST[$key]) OR isset($_GET[$key]));
 	}
 
 	/**

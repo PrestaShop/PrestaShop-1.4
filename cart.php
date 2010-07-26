@@ -19,10 +19,9 @@ if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 	$cookie->isLogged() === true)
 	$errors[] = Tools::displayError('invalid token');
 
-//update the cart...
-if ($add OR Tools::getIsset('update') OR $delete)
+// Update the cart ONLY if cookies are available, in order to avoid ghost carts created by bots
+if (($add OR Tools::getIsset('update') OR $delete) AND isset($cookie->date_add))
 {
-	//get the values
  	$idProduct = intval(Tools::getValue('id_product', NULL));
 	$idProductAttribute = intval(Tools::getValue('id_product_attribute', Tools::getValue('ipa')));
 	$customizationId = intval(Tools::getValue('id_customization', 0));
