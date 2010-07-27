@@ -5,8 +5,10 @@
 
 {include file=$tpl_dir./errors.tpl}
 
-{if isset($confirmation)}
+{if isset($confirmation) && $confirmation == 1}
 <p class="success">{l s='Your password has been successfully reset and has been sent to your e-mail address:'} {$email|escape:'htmlall':'UTF-8'}</p>
+{elseif isset($confirmation) && $confirmation == 2}
+<p class="success">{l s='A confirmation e-mail has been sent to your address:'} {$email|escape:'htmlall':'UTF-8'}</p>
 {else}
 <p>{l s='Please enter your e-mail address used to register. We will e-mail you your new password.'}</p>
 <form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
