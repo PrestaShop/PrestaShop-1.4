@@ -174,7 +174,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`, `enabled`) VALUES
 (1, 'Europe', 1, 1),(2, 'US', 1, 1),(3, 'Asia', 1, 1),(4, 'Africa', 1, 1),(5, 'Oceania', 1, 1);
 
-INSERT INTO `ps_country` (`id_country`, `id_zone`, `iso_code`, `call_prefix`, `active`, `contains_states`, `need_identification_number`) VALUES
+INSERT INTO `PREFIX_country` (`id_country`, `id_zone`, `iso_code`, `call_prefix`, `active`, `contains_states`, `need_identification_number`) VALUES
 (1, 1, 'DE', 49, 1, 0, 0),(2, 1, 'AT', 43, 1, 0, 0),(3, 1, 'BE', 32, 1, 0, 0),(4, 2, 'CA', 1, 1, 1, 0),(5, 3, 'CN', 86, 1, 0, 0),(6, 1, 'ES', 34, 1, 0, 1),
 (7, 1, 'FI', 358, 1, 0, 0),(8, 1, 'FR', 33, 1, 0, 0),(9, 1, 'GR', 30, 1, 0, 0),(10, 1, 'IT', 39, 1, 0, 0),(11, 3, 'JP', 81, 1, 0, 0),(12, 1, 'LU', 352, 1, 0, 0),
 (13, 1, 'NL', 31, 1, 0, 0),(14, 1, 'PL', 48, 1, 0, 0),(15, 1, 'PT', 351, 1, 0, 0),(16, 1, 'CZ', 420, 1, 0, 0),(17, 1, 'GB', 44, 1, 0, 0),(18, 1, 'SE', 46, 1, 0, 0),
