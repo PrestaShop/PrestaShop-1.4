@@ -742,3 +742,11 @@ function stockManagementActivationAuthorization()
 		getE('PS_ORDER_OUT_OF_STOCK_off').readOnly = true;
 	}
 }
+
+function changeCMSActivationAuthorization()
+{
+	if (getE('PS_CONDITIONS_on').checked)
+		getE('PS_CONDITIONS_CMS_ID').disabled = false;
+	else
+		getE('PS_CONDITIONS_CMS_ID').disabled = 'disabled';
+}

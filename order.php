@@ -374,7 +374,7 @@ function displayCarrier()
 		if ($carrier->active AND !$carrier->deleted)
 			$checked = intval($cart->id_carrier);
 	}
-	$cms = new CMS(3, intval($cookie->id_lang));
+	$cms = new CMS(intval(Configuration::get('PS_CONDITIONS_CMS_ID')), intval($cookie->id_lang));
 	$link_conditions = $link->getCMSLink($cms, $cms->link_rewrite);
 	if (!strpos($link_conditions, '?'))
 		$link_conditions .= '?content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
@@ -386,6 +386,7 @@ function displayCarrier()
 		'checkedTOS' => intval($cookie->checkedTOS),
 		'recyclablePackAllowed' => intval(Configuration::get('PS_RECYCLABLE_PACK')),
 		'giftAllowed' => intval(Configuration::get('PS_GIFT_WRAPPING')),
+		'cms_id' => intval(Configuration::get('PS_CONDITIONS_CMS_ID')),
 		'conditions' => intval(Configuration::get('PS_CONDITIONS')),
 		'link_conditions' => $link_conditions,
 		'recyclable' => intval($cart->recyclable),

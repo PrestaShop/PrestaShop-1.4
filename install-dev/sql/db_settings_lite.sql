@@ -118,7 +118,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (61, 'PS_SHOW_ALL_MODULES', 0, NOW(), NOW()),
 (62, 'PS_BACKUP_ALL', 0, NOW(), NOW()),
 (63, 'PS_1_3_UPDATE_DATE', NOW(), NOW(), NOW()),
-(64, 'PS_PRICE_ROUND_MODE', 2, NOW(), NOW());
+(64, 'PS_PRICE_ROUND_MODE', 2, NOW(), NOW()),
+(65, 'PS_CONDITIONS_CMS_ID', 3, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
 (38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),(46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),

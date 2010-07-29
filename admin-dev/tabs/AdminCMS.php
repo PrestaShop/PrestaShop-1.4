@@ -153,6 +153,11 @@ class AdminCMS extends AdminTab
 		global $cookie, $link;
 		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
 			Tools::redirectLink($link->getCMSLink($cms));
+		elseif (Tools::isSubmit('deletecms') AND Tools::getValue('id_cms') == Configuration::get('PS_CONDITIONS_CMS_ID'))
+		{
+			Configuration::updateValue('PS_CONDITIONS', 0);
+			Configuration::updateValue('PS_CONDITIONS_CMS_ID', 0);
+		}
 		return parent::postProcess();
 	}
 }

@@ -106,7 +106,7 @@ class	Cookie
 	}
 
 	/**
-	  * Magic method wich check if key exists in the cookie
+	  * Magic method which check if key exists in the cookie
 	  *
 	  * @param $key key wanted
 	  * @return boolean key existence

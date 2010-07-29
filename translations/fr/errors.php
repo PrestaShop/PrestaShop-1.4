@@ -17,6 +17,7 @@ $_ERRORS['075748f9bf7af31a1942a0c02ede4cbb'] = 'Une erreur est survenue pendant 
 $_ERRORS['07b8c09e490f7afbdcfa9cd5bfcfd4a9'] = 'Une erreur est survenue pendant le chargement de l\'image';
 $_ERRORS['cae0ed9711261881b8615e331be48b78'] = 'Un article de votre panier n\'est plus disponible, vous ne pouvez continuer votre commande';
 $_ERRORS['074b0ad418d91bc0b508c8867a4a012f'] = 'Une commande a déjà été passée avec ce panier';
+$_ERRORS['55cbb39213ccade618214f84d92c9cb3'] = 'Assignez une page CMS si vous voulez qu\'elle soit lue.';
 $_ERRORS['ebebd4835509742d5fd90178f4dfa09b'] = 'Le dossier de backup n\'existe pas';
 $_ERRORS['57a37356272b8ebf671b25445adceb14'] = 'Requête SQL pour les sous-domaines invalide';
 $_ERRORS['d685af1d28299d7020df2975da75f632'] = 'Mauvaise catégorie ';

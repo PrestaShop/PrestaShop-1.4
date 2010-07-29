@@ -47,6 +47,15 @@ class AdminPreferences extends AdminTab
 			)
 		);
 
+		$cms_tab = array(0 => 
+			array(
+				'id' => 0,
+				'name' => $this->l('None')
+			)
+		);
+		foreach (CMS::listCms($cookie->id_lang) as $cms_file)
+			$cms_tab[] = array('id' => $cms_file['id_cms'], 'name' => $cms_file['meta_title']);
+
 		$this->_fieldsGeneral = array(
 			'PS_BASE_URI' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 20, 'default' => '/'),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
@@ -55,7 +64,8 @@ class AdminPreferences extends AdminTab
 			'PS_TOKEN_ENABLE' => array('title' => $this->l('Increase Front Office security'), 'desc' => $this->l('Enable or disable token on the Front Office in order to improve PrestaShop security'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL:'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.intval(Tab::getIdFromClassName('AdminGenerator')).intval($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HELPBOX' => array('title' => $this->l('Back Office help boxes:'), 'desc' => $this->l('Enable yellow help boxes which are displayed under form fields in the Back Office'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'js' => array('on' => 'onchange="changeCMSActivationAuthorization()"', 'off' => 'onchange="changeCMSActivationAuthorization()"')),
+			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use CMS page'), 'desc' => $this->l('Choose the Conditions of use CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping:'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrapping price:'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
 			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax:'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
@@ -79,8 +89,12 @@ class AdminPreferences extends AdminTab
 	{
 		global $currentIndex;
 
+		//d(Tools::getValue('PS_CONDITIONS'));
+
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
+			if (Tools::getValue('PS_CONDITIONS') == true AND Tools::getValue('PS_CONDITIONS_CMS_ID') == 0)
+				$this->_errors[] = Tools::displayError('Assign a CMS page if you want it would be read.');
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsGeneral);
 			else
@@ -244,7 +258,7 @@ class AdminPreferences extends AdminTab
 	  * @params string $name Form name
 	  * @params array $fields Fields settings
 	  *
-	 * @global string $currentIndex Current URL in order to keep current Tab
+	  * @global string $currentIndex Current URL in order to keep current Tab
 	  */
 	protected function _displayForm($name, $fields, $tabname, $size, $icon)
 	{
@@ -278,7 +292,7 @@ class AdminPreferences extends AdminTab
 			{
 				case 'select':
 					echo '
-					<select name="'.$key.'"'.(isset($field['js']) === true ? ' onchange="'.$field['js'].'"' : '').(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').'>';
+					<select name="'.$key.'"'.(isset($field['js']) === true ? ' onchange="'.$field['js'].'"' : '').' id="'.$key.'">';
 					foreach ($field['list'] AS $k => $value)
 						echo '<option value="'.(isset($value['cast']) ? $value['cast']($value[$field['identifier']]) : $value[$field['identifier']]).'"'.(($val == $value[$field['identifier']]) ? ' selected="selected"' : '').'>'.$value['name'].'</option>';
 					echo '
@@ -379,6 +393,7 @@ class AdminPreferences extends AdminTab
 				'.($required ? '<div class="small"><sup>*</sup> '.$this->l('Required field', 'AdminPreferences').'</div>' : '').'
 			</fieldset>
 		</form>';
+		echo '<script type="text/javascript">changeCMSActivationAuthorization();</script>';
 	}
 }
 
