@@ -203,3 +203,7 @@ UPDATE `PREFIX_country` SET `call_prefix` = 359 WHERE `iso_code` = 'BG';
 UPDATE `PREFIX_country` SET `call_prefix` = 682 WHERE `iso_code` = 'CK';
 UPDATE `PREFIX_country` SET `call_prefix` = 594 WHERE `iso_code` = 'GF';
 UPDATE `PREFIX_country` SET `call_prefix` = 689 WHERE `iso_code` = 'PF';
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CONDITIONS_CMS_ID', IFNULL((SELECT `id_cms` FROM `PREFIX_cms` WHERE `id_cms` = 3), 0), NOW(), NOW());
+UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
+

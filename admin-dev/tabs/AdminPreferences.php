@@ -65,7 +65,7 @@ class AdminPreferences extends AdminTab
 			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL:'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.intval(Tab::getIdFromClassName('AdminGenerator')).intval($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HELPBOX' => array('title' => $this->l('Back Office help boxes:'), 'desc' => $this->l('Enable yellow help boxes which are displayed under form fields in the Back Office'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'js' => array('on' => 'onchange="changeCMSActivationAuthorization()"', 'off' => 'onchange="changeCMSActivationAuthorization()"')),
-			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use CMS page'), 'desc' => $this->l('Choose the Conditions of use CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
+			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use CMS page').':', 'desc' => $this->l('Choose the Conditions of use CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping:'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrapping price:'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
 			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax:'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
@@ -89,12 +89,12 @@ class AdminPreferences extends AdminTab
 	{
 		global $currentIndex;
 
-		//d(Tools::getValue('PS_CONDITIONS'));
-
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
-			if (Tools::getValue('PS_CONDITIONS') == true AND Tools::getValue('PS_CONDITIONS_CMS_ID') == 0)
-				$this->_errors[] = Tools::displayError('Assign a CMS page if you want it would be read.');
+			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
+			SELECT `id_cms` FROM `'._DB_PREFIX_.'cms`
+			WHERE id_cms = '.intval(Tools::getValue('PS_CONDITIONS_CMS_ID')))))
+				$this->_errors[] = Tools::displayError('Assign a valid CMS page if you want it would be read.');
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsGeneral);
 			else
