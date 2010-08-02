@@ -18,7 +18,18 @@ class AdminAccess extends AdminTab
 	public function postProcess()
 	{
 		if (Tools::isSubmit('submitAddaccess') AND $action = Tools::getValue('action') AND $id_tab = intval(Tools::getValue('id_tab')) AND $id_profile = intval(Tools::getValue('id_profile')) AND $this->tabAccess['edit'] == 1)
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.pSQL($action).'` = '.intval(Tools::getValue('perm')).' WHERE `id_tab` = '.intval($id_tab).' AND `id_profile` = '.intval($id_profile));
+		{
+			if ($id_tab == -1 AND $action == 'all' AND intval(Tools::getValue('perm')) == 0)
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `view` = '.intval(Tools::getValue('perm')).', `add` = '.intval(Tools::getValue('perm')).', `edit` = '.intval(Tools::getValue('perm')).', `delete` = '.intval(Tools::getValue('perm')).' WHERE `id_profile` = '.intval($id_profile).' AND `id_tab` != 31');
+			elseif ($id_tab == -1 AND $action == 'all')
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `view` = '.intval(Tools::getValue('perm')).', `add` = '.intval(Tools::getValue('perm')).', `edit` = '.intval(Tools::getValue('perm')).', `delete` = '.intval(Tools::getValue('perm')).' WHERE `id_profile` = '.intval($id_profile));
+			elseif ($id_tab == -1)
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.pSQL($action).'` = '.intval(Tools::getValue('perm')).' WHERE `id_profile` = '.intval($id_profile));
+			elseif ($action == 'all')
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `view` = '.intval(Tools::getValue('perm')).', `add` = '.intval(Tools::getValue('perm')).', `edit` = '.intval(Tools::getValue('perm')).', `delete` = '.intval(Tools::getValue('perm')).' WHERE `id_tab` = '.intval($id_tab).' AND `id_profile` = '.intval($id_profile));
+			else
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.pSQL($action).'` = '.intval(Tools::getValue('perm')).' WHERE `id_tab` = '.intval($id_tab).' AND `id_profile` = '.intval($id_profile));
+		}
 	}
 	
 	public function display()
@@ -58,40 +69,52 @@ class AdminAccess extends AdminTab
 		if ($profiles)
 			foreach ($profiles AS $profile)
 				echo '<option value="'.intval($profile['id_profile']).'" '.(intval($profile['id_profile']) == $currentProfile ? 'selected="selected"' : '').'>'.$profile['name'].'</option>';
+
+		$tabsize = sizeof($tabs);
+		foreach ($tabs AS $tab)
+			if ($tab['id_tab'] > $tabsize)
+				$tabsize = $tab['id_tab'];
+		
 		echo '
 					</select>
 				</th>
-				<th>'.$this->l('View').'</th>
-				<th>'.$this->l('Add').'</th>
-				<th>'.$this->l('Edit').'</th>
-				<th>'.$this->l('Delete').'</th>
+				<th class="center">'.$this->l('View').'<br /><input type="checkbox" name="1" id="viewall" onclick="ajax_power(this, \'view\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
+				<th class="center">'.$this->l('Add').'<br /><input type="checkbox" name="1" id="addall" onclick="ajax_power(this, \'add\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
+				<th class="center">'.$this->l('Edit').'<br /><input type="checkbox" name="1" id="editall" onclick="ajax_power(this, \'edit\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
+				<th class="center">'.$this->l('Delete').'<br /><input type="checkbox" name="1" id="deleteall" onclick="ajax_power(this, \'delete\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
+				<th class="center">'.$this->l('All').'<br /><input type="checkbox" name="1" id="allall" onclick="ajax_power(this, \'all\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
 			</tr>';
-			
+
 		if (!sizeof($tabs))
 			echo '<tr><td colspan="5">'.$this->l('No tab').'</td></tr>';
 		else
 			foreach ($tabs AS $tab)
 				if (!$tab['id_parent'] OR intval($tab['id_parent']) == -1)
 				{
-					$this->printTabAccess(intval($currentProfile), $tab, $accesses[$tab['id_tab']], false);
+					$this->printTabAccess(intval($currentProfile), $tab, $accesses[$tab['id_tab']], false, $tabsize, sizeof($tabs));
 					foreach ($tabs AS $child)
 						if ($child['id_parent'] === $tab['id_tab'])
-					 		$this->printTabAccess($currentProfile, $child, $accesses[$child['id_tab']], true);
+					 		$this->printTabAccess($currentProfile, $child, $accesses[$child['id_tab']], true, $tabsize, sizeof($tabs));
 				}
-
-		echo '</table>';
+		echo '</table><script type="text/javascript">
+		ajax_power(this, 0, -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\');
+		</script>';
 	}
 	
-	private function printTabAccess($currentProfile, $tab, $access, $is_child)
+	private function printTabAccess($currentProfile, $tab, $access, $is_child, $tabsize, $tabnumber)
 	{
+		$result_accesses = 0;
 		$perms = array('view', 'add', 'edit', 'delete');
 		echo '<tr><td'.($is_child ? '' : ' class="bold"').'>'.($is_child ? ' &raquo; ' : '').$tab['name'].'</td>';
 		foreach ($perms as $perm)
+		{
 			if($this->tabAccess['edit'] == 1)
-				echo '<td class="center"><input type="checkbox" name="1" onclick="ajax_power(this, \''.$perm.'\', '.intval($access['id_tab']).', '.intval($access['id_profile']).', \''.$this->token.'\')" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').'/></td>';
+				echo '<td class="center"><input type="checkbox" name="1" id=\''.$perm.intval($access['id_tab']).'\' class=\''.$perm.' '.intval($access['id_tab']).'\' onclick="ajax_power(this, \''.$perm.'\', '.intval($access['id_tab']).', '.intval($access['id_profile']).', \''.$this->token.'\', \''.$tabsize.'\', \''.$tabnumber.'\')" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').'/></td>';
 			else
 				echo '<td class="center"><input type="checkbox" name="1" disabled="disabled" '.(intval($access[$perm]) == 1 ? 'checked="checked"' : '').' /></td>';
-		echo '</tr>';
+			$result_accesses += $access[$perm];
+		}
+		echo '<td class="center"><input type="checkbox" name="1" id=\'all'.intval($access['id_tab']).'\' class=\'all '.intval($access['id_tab']).'\' onclick="ajax_power(this, \'all\', '.intval($access['id_tab']).', '.intval($access['id_profile']).', \''.$this->token.'\', \''.$tabsize.'\', \''.$tabnumber.'\')" '.($result_accesses == 4 ? 'checked="checked"' : '').'/></td></tr>';
 	 
 	}
 }
