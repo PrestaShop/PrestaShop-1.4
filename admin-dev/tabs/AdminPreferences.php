@@ -393,7 +393,9 @@ class AdminPreferences extends AdminTab
 				'.($required ? '<div class="small"><sup>*</sup> '.$this->l('Required field', 'AdminPreferences').'</div>' : '').'
 			</fieldset>
 		</form>';
-		echo '<script type="text/javascript">changeCMSActivationAuthorization();</script>';
+		
+		if (get_class($this) == 'AdminPreferences')
+			echo '<script type="text/javascript">changeCMSActivationAuthorization();</script>';
 	}
 }
 
