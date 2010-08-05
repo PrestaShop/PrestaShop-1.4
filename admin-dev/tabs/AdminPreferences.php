@@ -196,6 +196,26 @@ class AdminPreferences extends AdminTab
 						$this->_errors[] = 'an error occured during logo copy';
 					unlink($tmpName);
 				}
+				if (isset($_FILES['PS_LOGO_MAIL']['tmp_name']) AND $_FILES['PS_LOGO_MAIL']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_LOGO_MAIL'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_MAIL') OR !move_uploaded_file($_FILES['PS_LOGO_MAIL']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_mail.jpg'))
+						$this->_errors[] = 'an error occured during logo copy';
+					unlink($tmpName);
+				}
+				if (isset($_FILES['PS_LOGO_INVOICE']['tmp_name']) AND $_FILES['PS_LOGO_INVOICE']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_LOGO_INVOICE'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_INVOICE') OR !move_uploaded_file($_FILES['PS_LOGO_INVOICE']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_invoice.jpg'))
+						$this->_errors[] = 'an error occured during logo copy';
+					unlink($tmpName);
+				}		
 				$this->uploadIco('PS_FAVICON', _PS_IMG_DIR_.'favicon.ico');
 			}
 

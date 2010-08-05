@@ -136,7 +136,9 @@ class PDF extends PDF_PageGroup
 		$conf['PS_SHOP_COUNTRY'] = isset($conf['PS_SHOP_COUNTRY']) ? Tools::iconv('utf-8', self::encoding(), $conf['PS_SHOP_COUNTRY']) : 'Country';
 		$conf['PS_SHOP_STATE'] = isset($conf['PS_SHOP_STATE']) ? Tools::iconv('utf-8', self::encoding(), $conf['PS_SHOP_STATE']) : '';
 
-		if (file_exists(_PS_IMG_DIR_.'/logo.jpg'))
+		if (file_exists(_PS_IMG_DIR_.'/logo_invoice.jpg'))
+			$this->Image(_PS_IMG_DIR_.'/logo_invoice.jpg', 10, 8, 0, 15);
+		else if (file_exists(_PS_IMG_DIR_.'/logo.jpg'))
 			$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
 		$this->SetFont(self::fontname(), 'B', 15);
 		$this->Cell(115);
