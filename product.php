@@ -243,62 +243,66 @@ else
 		WHERE p.`id_product` = '.intval($product->id));
 		$tax = floatval(Tax::getApplicableTax(intval($tax_datas['id_tax']), floatval($tax_datas['rate'])));
 		/* Attributes / Groups & colors */
-		$colors = array();
-		$attributesGroups = $product->getAttributesGroups(intval($cookie->id_lang));
+		if ($product->quantity > 0 OR Product::isAvailableWhenOutOfStock($product->out_of_stock))
+		{	
+			$colors = array();
+			$attributesGroups = $product->getAttributesGroups(intval($cookie->id_lang));
 
-		if (Db::getInstance()->numRows())
-		{
-			$combinationImages = $product->getCombinationImages(intval($cookie->id_lang));
-			foreach ($attributesGroups AS $k => $row)
+			if (Db::getInstance()->numRows())
 			{
-				/* Color management */
-				if (isset($row['attribute_color']) AND $row['attribute_color'] AND $row['id_attribute_group'] == $product->id_color_default)
+				$combinationImages = $product->getCombinationImages(intval($cookie->id_lang));
+				foreach ($attributesGroups AS $k => $row)
 				{
-					$colors[$row['id_attribute']]['value'] = $row['attribute_color'];
-					$colors[$row['id_attribute']]['name'] = $row['attribute_name'];
+					/* Color management */
+					if (((isset($row['attribute_color']) AND $row['attribute_color']) OR (file_exists(_PS_COL_IMG_DIR_.$row['id_attribute'].'.jpg'))) AND $row['id_attribute_group'] == $product->id_color_default)
+					{
+						$colors[$row['id_attribute']]['value'] = $row['attribute_color'];
+						$colors[$row['id_attribute']]['name'] = $row['attribute_name'];
+					}
+
+					$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
+					$groups[$row['id_attribute_group']]['name'] = $row['public_group_name'];
+					$groups[$row['id_attribute_group']]['is_color_group'] = $row['is_color_group'];
+					if ($row['default_on'])
+						$groups[$row['id_attribute_group']]['default'] = intval($row['id_attribute']);
+					if (!isset($groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']]))
+						$groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] = 0;
+					$groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] += intval($row['quantity']);
+
+					$combinations[$row['id_product_attribute']]['attributes_values'][$row['id_attribute_group']] = $row['attribute_name'];
+					$combinations[$row['id_product_attribute']]['attributes'][] = intval($row['id_attribute']);
+					$combinations[$row['id_product_attribute']]['price'] = floatval($row['price']);
+					$combinations[$row['id_product_attribute']]['ecotax'] = floatval($row['ecotax']);
+					$combinations[$row['id_product_attribute']]['weight'] = floatval($row['weight']);
+					$combinations[$row['id_product_attribute']]['quantity'] = intval($row['quantity']);
+					$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
+					$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 				}
-
-				$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
-				$groups[$row['id_attribute_group']]['name'] = $row['public_group_name'];
-				$groups[$row['id_attribute_group']]['is_color_group'] = $row['is_color_group'];
-				if ($row['default_on'])
-					$groups[$row['id_attribute_group']]['default'] = intval($row['id_attribute']);
-				if (!isset($groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']]))
-					$groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] = 0;
-				$groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] += intval($row['quantity']);
-
-				$combinations[$row['id_product_attribute']]['attributes_values'][$row['id_attribute_group']] = $row['attribute_name'];
-				$combinations[$row['id_product_attribute']]['attributes'][] = intval($row['id_attribute']);
-				$combinations[$row['id_product_attribute']]['price'] = floatval($row['price']);
-				$combinations[$row['id_product_attribute']]['ecotax'] = floatval($row['ecotax']);
-				$combinations[$row['id_product_attribute']]['weight'] = floatval($row['weight']);
-				$combinations[$row['id_product_attribute']]['quantity'] = intval($row['quantity']);
-				$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
-				$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
+				//wash attributes list (if some attributes are unavailables and if allowed to wash it)
+				if (!Product::isAvailableWhenOutOfStock($product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
+					foreach ($groups AS &$group)
+						foreach ($group['attributes_quantity'] AS $key => &$quantity)
+							if (!$quantity)
+								unset($group['attributes'][$key]);
+				foreach($groups AS &$group)
+					natcasesort($group['attributes']);
+				foreach ($combinations AS $id_product_attribute => $comb)
+				{
+					$attributeList = '';
+					foreach ($comb['attributes'] AS $id_attribute)
+						$attributeList .= '\''.intval($id_attribute).'\',';
+					$attributeList = rtrim($attributeList, ',');
+					$combinations[$id_product_attribute]['list'] = $attributeList;
+				}
+				$smarty->assign(array(
+					'groups' => $groups,
+					'combinaisons' => $combinations, /* Kept for compatibility purpose only */
+					'combinations' => $combinations,
+					'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false,
+					'combinationImages' => $combinationImages));
 			}
-			//wash attributes list (if some attributes are unavailables and if allowed to wash it)
-			if (Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
-				foreach ($groups AS &$group)
-					foreach ($group['attributes_quantity'] AS $key => &$quantity)
-						if (!$quantity)
-							unset($group['attributes'][$key]);
-			foreach($groups AS &$group)
-				natcasesort($group['attributes']);
-			foreach ($combinations AS $id_product_attribute => $comb)
-			{
-				$attributeList = '';
-				foreach ($comb['attributes'] AS $id_attribute)
-					$attributeList .= '\''.intval($id_attribute).'\',';
-				$attributeList = rtrim($attributeList, ',');
-				$combinations[$id_product_attribute]['list'] = $attributeList;
-			}
-			$smarty->assign(array(
-				'groups' => $groups,
-				'combinaisons' => $combinations, /* Kept for compatibility purpose only */
-				'combinations' => $combinations,
-				'colors' => (sizeof($colors) AND $product->id_color_default) ? $colors : false,
-				'combinationImages' => $combinationImages));
 		}
+		
 		$smarty->assign(array(
 			'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax(intval($product->id_tax), 1),
 			'customizationFields' => $product->getCustomizationFields(intval($cookie->id_lang))

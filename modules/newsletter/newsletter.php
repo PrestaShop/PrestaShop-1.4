@@ -158,9 +158,8 @@ class Newsletter extends Module
 		foreach ($this->_fieldsExport as $key => $field)
 		{
 			$this->_html .= '
-			<label style="margin-top:15px;">'.$field['title'].' </label>
-			<div class="margin-form" style="margin-top:15px;">
-				'.$field['desc'].'<br /><br />';
+			<label style="margin-top:15px;">'.$field['title'].' :</label>
+			<div class="margin-form" style="margin-top:15px;">';
 			switch ($field['type'])
 			{
 				case 'select':
@@ -172,8 +171,8 @@ class Newsletter extends Module
 				default:
 					break;
 			}
-			if (isset($field['example']) AND !empty($field['example']))
-				$this->_html .= '<p style="clear: both;">'.$field['example'].'</p>';
+			if (isset($field['desc']) AND !empty($field['desc']))
+				$this->_html .= '<p>'.$field['desc'].'</p>';
 			$this->_html .= '
 			</div>';
 		}

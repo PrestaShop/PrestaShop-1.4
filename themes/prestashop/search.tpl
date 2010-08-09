@@ -1,15 +1,15 @@
 {capture name=path}{l s='Search'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
-<h2>{l s='Search'}&nbsp;{if $nbProducts > 0}"{if $query}{$query|escape:'htmlall':'UTF-8'}{elseif $tag}{$tag|escape:'htmlall':'UTF-8'}{elseif $ref}{$ref|escape:'htmlall':'UTF-8'}{/if}"{/if}</h2>
+<h2>{l s='Search'}&nbsp;{if $nbProducts > 0}"{if $search_query}{$search_query|escape:'htmlall':'UTF-8'}{elseif $search_tag}{$search_tag|escape:'htmlall':'UTF-8'}{elseif $ref}{$ref|escape:'htmlall':'UTF-8'}{/if}"{/if}</h2>
 
 {include file=$tpl_dir./errors.tpl}
 
 {if !$nbProducts}
 	<p class="warning">
-		{if $query}
+		{if $search_query}
 			{l s='No results found for your search'}&nbsp;"{$query|escape:'htmlall':'UTF-8'}"
-		{elseif $tag}
+		{elseif $search_tag}
 			{l s='No results found for your search'}&nbsp;"{$tag|escape:'htmlall':'UTF-8'}"
 		{else}
 			{l s='Please type a search keyword'}

@@ -374,6 +374,7 @@ class AdminImport extends AdminTab
 	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
 	{
 		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
+		$watermark_types = explode(',', Configuration::get('WATERMARK_TYPES'));
 		
 		switch($entity)
 		{
@@ -392,12 +393,15 @@ class AdminImport extends AdminTab
 			$imagesTypes = ImageType::getImagesTypes($entity);
 			foreach ($imagesTypes AS $k => $imageType)
 				imageResize($tmpfile, $path.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+			if (in_array($imageType['id_image_type'], $watermark_types))
+				Module::hookExec('watermark', array('id_image' => $id_image, 'id_product' => $id_entity));
 		}
 		else
 		{
 			unlink($tmpfile);
 			return false;
 		}
+		unlink($tmpfile);
 		return true;
 	}	
 
@@ -1362,8 +1366,12 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
+					if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) 
+								OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d) 
+								OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
+					{
 						unlink(_PS_PROD_IMG_DIR_.$d);
+					}
 				break;
 			case $this->entities[$this->l('Customers')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer');

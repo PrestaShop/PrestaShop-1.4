@@ -34,7 +34,7 @@ class AdminInvoices extends AdminTab
 		global $currentIndex, $cookie;
 		
 		$statuses = OrderState::getOrderStates($cookie->id_lang);
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT COUNT(*) as nbOrders, (
 			SELECT oh.id_order_state
 			FROM '._DB_PREFIX_.'order_history oh

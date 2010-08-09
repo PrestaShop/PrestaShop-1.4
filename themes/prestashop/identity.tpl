@@ -29,20 +29,20 @@
 				<label for="id_gender2">{l s='Ms.'}</label>
 			</p>
 			<p class="required text">
-				<label for="firstname">{l s='First name'}<sup>*</sup></label>
-				<input type="text" id="firstname" name="firstname" value="{$smarty.post.firstname}" />
+				<label for="firstname">{l s='First name'}</label>
+				<input type="text" id="firstname" name="firstname" value="{$smarty.post.firstname}" /> <sup>*</sup>
 			</p>
 			<p class="required text">
-				<label for="lastname">{l s='Last name'}<sup>*</sup></label>
-				<input type="text" name="lastname" id="lastname" value="{$smarty.post.lastname}" />
+				<label for="lastname">{l s='Last name'}</label>
+				<input type="text" name="lastname" id="lastname" value="{$smarty.post.lastname}" /> <sup>*</sup>
 			</p>
 			<p class="required text">
-				<label for="email">{l s='E-mail'}<sup>*</sup></label>
-				<input type="text" name="email" id="email" value="{$smarty.post.email}" />
+				<label for="email">{l s='E-mail'}</label>
+				<input type="text" name="email" id="email" value="{$smarty.post.email}" /> <sup>*</sup>
 			</p>
 			<p class="required text">
-				<label for="old_passwd">{l s='Current password'}<sup>*</sup></label>
-				<input type="password" name="old_passwd" id="old_passwd" />
+				<label for="old_passwd">{l s='Current password'}</label>
+				<input type="password" name="old_passwd" id="old_passwd" /> <sup>*</sup>
 			</p>
 			<p class="password">
 				<label for="passwd">{l s='Password'}</label>

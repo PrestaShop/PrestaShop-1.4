@@ -195,7 +195,10 @@ function updateDisplay()
 		if (!selectedCombination['unavailable'])
 			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning-inline');
 		else
+		{
 			$('#availability_value').text(doesntExist).addClass('warning-inline');
+			$('#oosHook').hide();
+		}
 		$('#availability_statut:hidden').show();
 
 		
@@ -245,7 +248,7 @@ function updateDisplay()
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
 			var priceReduct = 0;
 		else
-			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + (reduction_price * currencyRate);
+			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price;
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		
 		var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;

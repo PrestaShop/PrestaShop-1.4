@@ -146,7 +146,6 @@ class		WishList extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_customer))
 			die (Tools::displayError());
-
 		return (Db::getInstance()->ExecuteS('
 		SELECT w.`id_wishlist`, w.`name`, w.`token`, w.`date_add`, w.`date_upd`, w.`counter`
 		FROM `'._DB_PREFIX_.'wishlist` w
@@ -156,7 +155,7 @@ class		WishList extends ObjectModel
 
 	static public function refreshWishList($id_wishlist)
 	{
-		$old_carts = Db::getInstance()->ExecuteS('
+		$old_carts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT wp.id_product, wp.id_product_attribute, wpc.id_cart, UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(wpc.date_add) AS timecart
 		FROM `'._DB_PREFIX_.'wishlist_product_cart` wpc
 		JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)

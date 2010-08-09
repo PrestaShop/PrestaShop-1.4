@@ -146,13 +146,14 @@ abstract class PaymentModule extends Module
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
 				foreach ($products AS $key => $product)
 				{
+					$outOfStock = false;
 					$productQuantity = intval(Product::getQuantity(intval($product['id_product']), ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL)));
 					$quantityInStock = ($productQuantity - intval($product['cart_quantity']) < 0) ? $productQuantity : intval($product['cart_quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
@@ -165,7 +166,6 @@ abstract class PaymentModule extends Module
 					}
 					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
 					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
-
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
 					$download_hash = NULL;
@@ -186,6 +186,18 @@ abstract class PaymentModule extends Module
 					else
 						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->id_address_delivery));
 
+					$currentDate = date('Y-m-d H:m:i');
+					if ($product['reduction_from'] != $product['reduction_to'] AND ($currentDate > $product['reduction_to'] OR $currentDate < $product['reduction_from']))
+					{
+						$reduction_percent = 0.00;
+						$reduction_amount = 0.00;
+					}
+					else
+					{
+						$reduction_percent = floatval($product['reduction_percent']);
+						$reduction_amount = Tools::ps_round(floatval($product['reduction_price']) / (1 + floatval($tax) / 100), 6);
+					}
+
 					// Quantity discount
 					$reduc = 0.0;
 					if ($product['cart_quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['cart_quantity'])))
@@ -197,7 +209,9 @@ abstract class PaymentModule extends Module
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.intval($product['cart_quantity']).',
 						'.$quantityInStock.',
-						'.floatval($price).',
+						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery))).',
+						'.floatval($reduction_percent).',
+						'.floatval($reduction_amount).',
 						'.floatval($reduc).',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
@@ -226,9 +240,9 @@ abstract class PaymentModule extends Module
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
 							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').' - '.$this->l('Customized').(!empty($customizationText) ? ' - '.$customizationText : '').'</strong></td>
-							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? $price : $price_wt, $currency, false, false).'</td>
 							<td style="padding: 0.6em 0.4em; text-align: center;">'.$customizationQuantity.'</td>
-							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($customizationQuantity * $priceWithTax, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($customizationQuantity * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? $price : $price_wt), $currency, false, false).'</td>
 						</tr>';
 					}
 
@@ -237,9 +251,9 @@ abstract class PaymentModule extends Module
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
 							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice($price_wt, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? $price : $price_wt, $currency, false, false).'</td>
 							<td style="padding: 0.6em 0.4em; text-align: center;">'.(intval($product['cart_quantity']) - $customizationQuantity).'</td>
-							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * $price_wt, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice((intval($product['cart_quantity']) - $customizationQuantity) * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? $price : $price_wt), $currency, false, false).'</td>
 						</tr>';
 				} // end foreach ($products)
 				$query = rtrim($query, ',');
@@ -283,13 +297,6 @@ abstract class PaymentModule extends Module
 							ProductSale::addProductSale(intval($product['id_product']), intval($product['cart_quantity']));
 				}				
 
-				// Set order state in order history ONLY even if the "out of stock" status has not been yet reached
-				// So you migth have two order states
-				$new_history = new OrderHistory();
-				$new_history->id_order = intval($order->id);
-				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
-				$new_history->addWithemail(true, $extraVars);
-				
 				if (isset($outOfStock) AND $outOfStock)
 				{
 					$history = new OrderHistory();
@@ -297,6 +304,13 @@ abstract class PaymentModule extends Module
 					$history->changeIdOrderState(_PS_OS_OUTOFSTOCK_, intval($order->id));
 					$history->addWithemail();
 				}
+
+				// Set order state in order history ONLY even if the "out of stock" status has not been yet reached
+				// So you migth have two order states
+				$new_history = new OrderHistory();
+				$new_history->id_order = intval($order->id);
+				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
+				$new_history->addWithemail(true, $extraVars);
 
 				// Send an e-mail to customer
 				if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_ AND $customer->id)

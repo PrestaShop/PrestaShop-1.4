@@ -122,33 +122,35 @@ class GAnalytics extends Module
 	
 	function hookFooter($params)
 	{
-		global $step, $protocol_content;
-		
-		$gaJsHost = ($protocol_content == 'https://' ? 'ssl' : 'www'); 
+		global $step;
 
+		/* hookOrderConfirmation() already send the sats bypass this step */
+		if(strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0) return '';
+
+		/* Otherwise, create Google Analytics stats */
 		$output = '
 		<script type="text/javascript">
-			document.write(unescape("%3Cscript src=\''.$protocol_content.$gaJsHost.'.google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+			var gaJsHost = (("https:" == document.location.protocol ) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
 		</script>
 		<script type="text/javascript">
-		try
-		{
-			var pageTracker = _gat._getTracker("'.Configuration::get('GANALYTICS_ID').'");
-			pageTracker._trackPageview();
-			'.(strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? 'pageTracker._trackPageview("/order/step'.intval($step).'.html");' : '').'
+		try {
+			var pageTracker = _gat._createTracker("'.Configuration::get('GANALYTICS_ID').'");
+			pageTracker._trackPageview('.
+        (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '')
+        .');
 		}
-		catch(err)
-			{}
+		catch(err) {}
 		</script>';
 		return $output;
 	}
 	
 	function hookOrderConfirmation($params)
 	{
-		global $protocol_content;
-		
-		$gaJsHost = ($protocol_content == 'https://' ? 'ssl' : 'www'); 
 
+		/* Setting parameters */
+		$parameters = Configuration::getMultiple(array('PS_LANG_DEFAULT'));
+		
 		$order = $params['objOrder'];
 		if (Validate::isLoadedObject($order))
 		{
@@ -161,43 +163,59 @@ class GAnalytics extends Module
 				$conversion_rate = floatval($currency->conversion_rate);
 			}
 
-			/* Order general informations */
+			/* Order general information */
 			$output = '
-			<script src="'.$protocol_content.$gaJsHost.'.google-analytics.com/ga.js" type="text/javascript"></script>
-	
-			<script type="text/javascript">
-			  var pageTracker = _gat._getTracker("'.Configuration::get('GANALYTICS_ID').'");
-			  pageTracker._initData();
-			
-			  pageTracker._addTrans(
-				"'.intval($order->id).'",               	// Order ID
-				"PrestaShop",      							// Affiliation
-				"'.Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2).'",       	// Total
-				"0",               							// Tax
-				"'.Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2).'",     // Shipping
-				"'.$deliveryAddress->city.'",           	// City
-				"",         								// State
-				"'.$deliveryAddress->country.'"             // Country
-			  );';
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol ) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+      </script>
+      <script type="text/javascript">
+      try {
+        var pageTracker = _gat._createTracker("'.Configuration::get('GANALYTICS_ID').'");
+        pageTracker._trackPageview();
+        ';
 
-			/* Product informations */
+
+			/* Order information */
+			$output .= '
+        pageTracker._addTrans(
+          "'.intval($order->id).'", // Order ID
+          "PrestaShop", // Affiliation
+          "'.Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2).'", // Total
+          "0", // Tax
+          "'.Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2).'", // Shipping
+          "'.addslashes($deliveryAddress->city).'", // City
+          "", // State
+          "'.addslashes($deliveryAddress->country).'" // Country
+        );
+        ';
+
+			/* Product information */
 			$products = $order->getProducts();
 			foreach ($products AS $product)
 			{
+				$category = Db::getInstance()->getRow('
+								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
+								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
+								AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));	
 				$output .= '
-				pageTracker._addItem(
-					"'.intval($order->id).'",						// Order ID
-					"'.$product['product_reference'].'",			// SKU
-					"'.$product['product_name'].'",					// Product Name 
-					"",												// Category
-					"'.Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2).'",		// Price
-					"'.intval($product['product_quantity']).'"		// Quantity
-				);';
+					pageTracker._addItem(
+					"'.intval($order->id).'", // Order ID
+					"'.addslashes($product['product_reference']).'", // SKU
+					"'.addslashes($product['product_name']).'", // Product Name 
+					"'.addslashes($category['name']).'", // Category
+					"'.Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2).'", // Price
+					"'.addslashes(intval($product['product_quantity'])).'" // Quantity
+					);
+				';
 			}
+
+			/* Send command information */
+		$output .= '
+			pageTracker._trackTrans();
 			
-			$output .= '
-			  pageTracker._trackTrans();
-			</script>';
+		} catch(err) {}
+      </script>';
 			
 			return $output;
 		}

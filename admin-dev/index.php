@@ -11,7 +11,8 @@
   *
   */
 
-define('PS_ADMIN_DIR', getcwd());
+define('_PS_ADMIN_DIR_', getcwd());
+define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
 
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
@@ -65,19 +66,20 @@ if ($tab)
 }
 else /* Else display homepage */
 {
+	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
+	$isoUser = Language::getIsoById(intval($cookie->id_lang));
 	echo '<div id="adminHeader">
 	<img src="../img/logo.jpg" alt="Logo" title="Logo" /><br /><br />
 	<h2>'.translate('Welcome to your Back Office').'</h2>
 	'.translate('Click the tabs to navigate.').'
 	<br /><br /><br />';
-	
 	if (@ini_get('allow_url_fopen') AND $update = checkPSVersion())
 		echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.translate('New PrestaShop version avalaible').' : <a style="text-decoration: underline;" href="'.$update['link'].'">'.translate('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
     elseif (!@ini_get('allow_url_fopen'))
     {
 		echo '<p>'.translate('Update notification unavailable').'</p>';
 		echo '<p>&nbsp;</p>';
-		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="'.translate('http://www.php.net/manual/en/ref.filesystem.php').'">'.translate('more infos').'</a>]</p>';
+		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.translate('more infos').'</a>]</p>';
 		echo '<p>'.translate('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 	}
   echo '</div>';
@@ -87,8 +89,6 @@ else /* Else display homepage */
 	/* News from PrestaShop website */
 	echo '<div id="adminNews">
 	<h2>'.translate('PrestaShop live feed').'</h2>';
-	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
-	$isoUser = Language::getIsoById(intval($cookie->id_lang));
 	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="http://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe></div>';
 }
 

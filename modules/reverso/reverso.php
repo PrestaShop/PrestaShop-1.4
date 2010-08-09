@@ -16,7 +16,7 @@ class Reverso extends Module
        $this->displayName = $this->l('ReversoForm');
        $this->description = $this->l('Fill Authentication form with ReversoForm');
    }
-	
+
 	public function install()
 	{
 		// Check if hook exists

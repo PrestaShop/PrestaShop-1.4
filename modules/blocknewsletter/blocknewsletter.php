@@ -144,7 +144,7 @@ class Blocknewsletter extends Module
 			elseif ($registerStatus == -1)
 			{
 				global $cookie;
-				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', NOW(), \''.pSQL($_SERVER['REMOTE_ADDR']).'\', 
+				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', NOW(), \''.pSQL(Tools::getRemoteAddr()).'\', 
 					(SELECT c.http_referer FROM '._DB_PREFIX_.'connections c WHERE c.id_guest = '.intval($cookie->id_guest).' ORDER BY c.date_add DESC LIMIT 1))'))
 					return $this->error = $this->l('Error during subscription');
 				$this->sendVoucher(pSQL($_POST['email']));
@@ -153,7 +153,7 @@ class Blocknewsletter extends Module
 			/* If the user is a customer */
 			elseif ($registerStatus == 0)
 			{
-			 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 1, newsletter_date_add = NOW(), `ip_registration_newsletter` = \''.pSQL($_SERVER['REMOTE_ADDR']).'\' WHERE `email` = \''.pSQL($_POST['email']).'\''))
+			 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `newsletter` = 1, newsletter_date_add = NOW(), `ip_registration_newsletter` = \''.pSQL(Tools::getRemoteAddr()).'\' WHERE `email` = \''.pSQL($_POST['email']).'\''))
 	 	 			return $this->error = $this->l('Error during subscription');
 				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');

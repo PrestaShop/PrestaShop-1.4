@@ -52,7 +52,7 @@ class		Meta extends ObjectModel
 		
 		// Exclude pages forbidden
 		$exludePages = array(
-		'attachment', 'cart', 'order', 'my-account', 'history', 'addresses', 'address', 'identity', 'discount', 'authentication', 'search',
+		'404', 'attachment', 'cart', 'order', 'my-account', 'history', 'addresses', 'address', 'identity', 'discount', 'authentication', 'search',
 		'get-file', 'order-slip', 'order-detail', 'order-follow', 'order-return', 'order-confirmation', 'pagination', 'pdf-invoice',
 		'pdf-order-return', 'pdf-order-slip', 'product-sort', 'statistics', 'zoom', 'images.inc', 'header', 'footer', 'init',
 		'category', 'product', 'cms', 'password');

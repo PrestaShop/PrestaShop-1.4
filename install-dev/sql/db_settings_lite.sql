@@ -119,7 +119,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (62, 'PS_BACKUP_ALL', 0, NOW(), NOW()),
 (63, 'PS_1_3_UPDATE_DATE', NOW(), NOW(), NOW()),
 (64, 'PS_PRICE_ROUND_MODE', 2, NOW(), NOW()),
-(65, 'PS_CONDITIONS_CMS_ID', 3, NOW(), NOW());
+(65, 'PS_1_3_2_UPDATE_DATE', NOW(), NOW(), NOW()),
+(66, 'PS_CONDITIONS_CMS_ID', 3, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
 (38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),(46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),
@@ -160,7 +161,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 2, 'En attente de réapprovisionnement', 'outofstock'),
 (10, 2, 'En attente du paiement par virement bancaire', 'bankwire'),
 (11, 2, 'En attente du paiement par PayPal', ''),
-(1, 3, 'En espera de pago por cheque', 'account'),
+(1, 3, 'En espera de pago por cheque', 'cheque'),
 (2, 3, 'Pago aceptamos', 'payment'),
 (3, 3, 'Curso de preparación', 'preparation'),
 (4, 3, 'Entrega active', 'shipped'),
@@ -342,6 +343,40 @@ INSERT INTO `PREFIX_state` (`id_state`, `id_country`, `id_zone`, `name`, `iso_co
 (44, 21, 2, 'Utah', 'UT', 1),(45, 21, 2, 'Vermont', 'VT', 1),(46, 21, 2, 'Virginia', 'VA', 1),(47, 21, 2, 'Washington', 'WA', 1),
 (48, 21, 2, 'West Virginia', 'WV', 1),(49, 21, 2, 'Wisconsin', 'WI', 1),(50, 21, 2, 'Wyoming', 'WY', 1),(51, 21, 2, 'Puerto Rico', 'PR', 1),
 (52, 21, 2, 'US Virgin Islands', 'VI', 1),(53, 21, 2, 'District of Columbia', 'DC', 1);
+
+INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `tax_behavior`, `active`) VALUES
+(145, 2, 'Aguascalientes', 'AGS', 0, 1),
+(145, 2, 'Baja California', 'BCN', 0, 1),
+(145, 2, 'Baja California Sur', 'BCS', 0, 1),
+(145, 2, 'Campeche', 'CAM', 0, 1),
+(145, 2, 'Chiapas', 'CHP', 0, 1),
+(145, 2, 'Chihuahua', 'CHH', 0, 1),
+(145, 2, 'Coahuila', 'COA', 0, 1),
+(145, 2, 'Colima', 'COL', 0, 1),
+(145, 2, 'Distrito Federal', 'DIF', 0, 1),
+(145, 2, 'Durango', 'DUR', 0, 1),
+(145, 2, 'Guanajuato', 'GUA', 0, 1),
+(145, 2, 'Guerrero', 'GRO', 0, 1),
+(145, 2, 'Hidalgo', 'HID', 0, 1),
+(145, 2, 'Jalisco', 'JAL', 0, 1),
+(145, 2, 'Estado de México', 'MEX', 0, 1),
+(145, 2, 'Michoacán', 'MIC', 0, 1),
+(145, 2, 'Morelos', 'MOR', 0, 1),
+(145, 2, 'Nayarit', 'NAY', 0, 1),
+(145, 2, 'Nuevo León', 'NLE', 0, 1),
+(145, 2, 'Oaxaca', 'OAX', 0, 1),
+(145, 2, 'Puebla', 'PUE', 0, 1),
+(145, 2, 'Querétaro', 'QUE', 0, 1),
+(145, 2, 'Quintana Roo', 'ROO', 0, 1),
+(145, 2, 'San Luis Potosí', 'SLP', 0, 1),
+(145, 2, 'Sinaloa', 'SIN', 0, 1),
+(145, 2, 'Sonora', 'SON', 0, 1),
+(145, 2, 'Tabasco', 'TAB', 0, 1),
+(145, 2, 'Tamaulipas', 'TAM', 0, 1),
+(145, 2, 'Tlaxcala', 'TLA', 0, 1),
+(145, 2, 'Veracruz', 'VER', 0, 1),
+(145, 2, 'Yucatán', 'YUC', 0, 1),
+(145, 2, 'Zacatecas', 'ZAC', 0, 1);
 
 INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active`) VALUES
 (4, 2, 'Ontario', 'ON', 1),

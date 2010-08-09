@@ -104,7 +104,6 @@ class StatsSales extends ModuleGraph
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
-
 		return array_merge(array_merge($result0, $result1), $result2);
 	}
 	

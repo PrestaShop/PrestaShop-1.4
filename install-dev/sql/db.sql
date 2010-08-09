@@ -322,7 +322,7 @@ CREATE TABLE `PREFIX_country` (
   `call_prefix` int(10) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `contains_states` tinyint(1) NOT NULL default '0',
-  `need_identification_number` tinyint(1) NOT NULL,
+  `need_identification_number` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id_country`),
   KEY `country_iso_code` (`iso_code`),
   KEY `country_` (`id_zone`)
@@ -805,6 +805,8 @@ CREATE TABLE `PREFIX_order_detail` (
   `product_quantity_return` int(10) unsigned NOT NULL default '0',
   `product_quantity_reinjected` int(10) unsigned NOT NULL default 0,
   `product_price` decimal(20,6) NOT NULL default '0.000000',
+  `reduction_percent` DECIMAL(10, 2) NOT NULL default '0.00',
+  `reduction_amount` DECIMAL(20, 6) NOT NULL default '0.000000',
   `product_quantity_discount` decimal(20,6) NOT NULL default '0.000000',
   `product_ean13` varchar(13) default NULL,
   `product_reference` varchar(32) default NULL,

@@ -90,6 +90,26 @@ class Tools
 	}
 
 	/**
+	* Get the server variable REMOTE_ADDR
+	*
+	* @param string $remote_addr ip of client
+	*/
+	static function getRemoteAddr()
+	{
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND $_SERVER['HTTP_X_FORWARDED_FOR'])
+		{
+			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ','))
+			{
+				$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+				return $ips[0];
+			}
+			else
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
+		return $_SERVER['REMOTE_ADDR'];
+	}
+
+	/**
 	* Secure an URL referrer
 	*
 	* @param string $referrer URL referrer

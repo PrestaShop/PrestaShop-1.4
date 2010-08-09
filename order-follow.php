@@ -24,6 +24,7 @@ if (Tools::isSubmit('submitReturnMerchandise'))
 		Tools::redirect('order-follow.php?errorDetail2');
 
 	$order = new Order(intval($id_order));
+	if (!$order->isReturnable()) Tools::redirect('order-follow.php?errorNotReturnable');
 	if ($order->id_customer != $cookie->id_customer)
 		die(Tools::displayError());
 	$orderReturn = new OrderReturn();

@@ -73,7 +73,7 @@ if (Tools::isSubmit('submitAccount'))
 		$customer = new Customer();
 		if (Tools::isSubmit('newsletter'))
 		{
-			$customer->ip_registration_newsletter = pSQL($_SERVER['REMOTE_ADDR']);
+			$customer->ip_registration_newsletter = pSQL(Tools::getRemoteAddr());
 			$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 		}
 
@@ -124,6 +124,7 @@ if (Tools::isSubmit('submitAccount'))
 						));
 						if ($back)
 							Tools::redirect($back);
+						Tools::redirect('my-account.php');
 					}
 				}
 			}

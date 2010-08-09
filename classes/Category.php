@@ -183,7 +183,7 @@ class		Category extends ObjectModel
 	  */
 	private function recursiveDelete(&$toDelete, $id_category)
 	{
-	 	if (!is_array($toDelete))
+	 	if (!is_array($toDelete) OR !$id_category)
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance()->ExecuteS('

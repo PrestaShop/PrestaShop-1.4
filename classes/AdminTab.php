@@ -486,7 +486,20 @@ abstract class AdminTab
 						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
 					else
 					{
-						if ($object->deleteSelection($_POST[$this->table.'Box']))
+						$result = true;
+						if ($this->deleted)
+						{
+							foreach(Tools::getValue($this->table.'Box') as $id)
+							{
+								$toDelete = new $this->className($id);
+								$toDelete->deleted = 1;
+								$result = $result AND $toDelete->update();
+							}
+						}
+						else
+							$result = $object->deleteSelection(Tools::getValue($this->table.'Box'));
+						
+						if ($result)
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token);
 						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 					}

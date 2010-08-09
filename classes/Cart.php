@@ -272,14 +272,15 @@ class		Cart extends ObjectModel
 				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL)); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$row['total_wt'] = Tools::ps_round($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
+				$row['total'] = $row['price'] * intval($row['cart_quantity']);
 			}
 			else
 			{
 				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
+				$row['total'] = Tools::ps_round($row['price'] * intval($row['cart_quantity']), 2);
 			}
-			$row['total'] = Tools::ps_round($row['price'] * intval($row['cart_quantity']), 2);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
@@ -623,14 +624,13 @@ class		Cart extends ObjectModel
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
 				// Here taxes are computed only once the quantity has been applied to the product price
-				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
-				$total_price = Tools::ps_round($price, 2) * intval($product['cart_quantity']);
+				$price = Product::getPriceStatic(intval($product['id_product']), false, intval($product['id_product_attribute']), 2, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
+				$total_price = $price * intval($product['cart_quantity']);
 				if ($withTaxes)
 					$total_price = Tools::ps_round($total_price * (1 + floatval(Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']))) / 100), 2);
 			}
 			else
 			{
-
 				$price = Product::getPriceStatic(intval($product['id_product']), $withTaxes, intval($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->id_address_delivery) ? intval($this->id_address_delivery) : NULL));
 				if (!$withTaxes)
 					$total_price = Tools::ps_round($price * intval($product['cart_quantity']), 2);
@@ -958,22 +958,30 @@ class		Cart extends ObjectModel
 			return Tools::displayError('you cannot use this voucher');
 		}
 		$currentDate = date('Y-m-d');
+		$onlyProductWithDiscount = true;
 		if (!$discountObj->cumulable_reduction)
 		{
 			foreach ($products as $product)
-				if ((intval($product['reduction_price']) OR intval($product['reduction_percent'])) AND ($product['reduction_from'] == $product['reduction_to'] OR ($currentDate >= $product['reduction_from'] AND $currentDate <= $product['reduction_to']))
-					OR $product['on_sale'])
-					return Tools::displayError('this voucher isn\'t cumulative on products with reduction or marked as on sale');
+				if (!intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale'])
+					$onlyProductWithDiscount = false;
 		}
-		$products  = $this->getProducts();
+		if (!$discountObj->cumulable_reduction AND $onlyProductWithDiscount)
+			return Tools::displayError('this voucher isn\'t cumulative on products with reduction or marked as on sale');
 		$total_cart = 0;
 		$categories = Discount::getCategories($discountObj->id);
+		$returnErrorNoProductCategory = true;
 		foreach($products AS $product)
 		{
 			if(count($categories))
 				if (Product::idIsOnCategoryId($product['id_product'], $categories))
+				{
+					if ((!$discountObj->cumulable_reduction AND !intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale']) OR $discountObj->cumulable_reduction)
 						$total_cart += $product['total_wt'];
+					$returnErrorNoProductCategory = false;
+				}
 		}
+		if ($returnErrorNoProductCategory)
+			return Tools::displayError('this discount isn\'t applicable to that product category');
 		if ($total_cart < $discountObj->minimal)
 			return Tools::displayError('the total amount of your order isn\'t high enough or this voucher cannot be used with those products');
 		return false;

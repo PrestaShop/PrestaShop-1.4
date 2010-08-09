@@ -1111,7 +1111,7 @@ class		Product extends ObjectModel
 		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
-		$orderByPrefix = 'pl';
+			$orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
 
@@ -1420,7 +1420,6 @@ class		Product extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
 		WHERE p.`id_product` = '.intval($id_product));
 		$price = Tools::convertPrice(floatval($result['price']), $currency);
-
 		// Exclude tax
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address_delivery ? intval($id_address_delivery) : NULL)));
 		if ($forceAssociatedTax)
@@ -1429,22 +1428,26 @@ class		Product extends ObjectModel
 			$usetax = false;
 		if ($usetax)
 			$price = $price * (1 + ($tax / 100));
-
+		/* Keep this line */
+		// $price = Tools::ps_round($price, ($only_reduc OR $usereduc) ? 2 : $decimals);
 		// Attribute price
 		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $currency);
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		$price += $attribute_price;
 		$reduc = Tools::convertPrice($result['reduction_price'], $currency);
 		if ($only_reduc OR $usereduc)
-			$reduc = self::getReductionValue($reduc, $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], $price, $usetax, floatval($result['rate']));
-
+			$reduc = self::getReductionValue($reduc, $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], Tools::ps_round($price, 2), $usetax, floatval($result['rate']));
 		// Only reduction
 		if ($only_reduc)
 			return $reduc;
 
 		// Reduction
 		if ($usereduc)
+		{
+			if ($reduc)
+				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
+		}
 
 		if (intval($id_cart))
 		// Quantity discount
@@ -1506,9 +1509,13 @@ class		Product extends ObjectModel
 			WHERE p.`id_product` = '.intval($this->id));
 		if (!$res)
 			return false;
-		$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
-		if (!Tax::excludeTaxeOption())
-			return (Tools::convertPrice($res['price']) * (1 + $tax / 100));
+			
+		if (!$notax)
+		{
+			$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
+			if (!Tax::excludeTaxeOption())
+				return (Tools::convertPrice($res['price']) * (1 + $tax / 100));
+		}
 		return (Tools::convertPrice($res['price']));
 	}
 
@@ -1702,8 +1709,6 @@ class		Product extends ObjectModel
 
 	public static function isAvailableWhenOutOfStock($oos)
 	{
-		if ($oos == 0)
-			return false;
 		return !Configuration::get('PS_STOCK_MANAGEMENT') ? true : (intval($oos) == 2 ? intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : intval($oos));
 	}
 
@@ -2315,7 +2320,7 @@ class		Product extends ObjectModel
 		}
 		
 		if (!$result = Db::getInstance()->ExecuteS('
-			SELECT cd.`id_customization`, c.`id_product`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`, cfl.`name`
+			SELECT cd.`id_customization`, c.`id_product`, cfl.`id_customization_field`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`, cfl.`name`
 			FROM `'._DB_PREFIX_.'customized_data` cd
 			NATURAL JOIN `'._DB_PREFIX_.'customization` c
 			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.intval($id_lang).')
@@ -2337,7 +2342,8 @@ class		Product extends ObjectModel
 	}
 
 	public function deleteCustomizedDatas($id_customization)
-	{if (Pack::isPack(intval($product['id_product'])))
+	{
+		if (Pack::isPack(intval($product['id_product'])))
 		{
 			$products_pack = Pack::getItems(intval($product['id_product']), intval(Configuration::get('PS_LANG_DEFAULT')));
 			foreach($products_pack AS $product_pack)

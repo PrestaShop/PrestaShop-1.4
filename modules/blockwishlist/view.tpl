@@ -41,7 +41,7 @@
 		</li>
 		<li class="address_address1 clear">
 			<a class="button_small clear" href="{$link->getProductLink($product.id_product,  $product.link_rewrite, $product.category_rewrite)}" title="{l s='View' mod='blockwishlist'}">{l s='View' mod='blockwishlist'}</a>
-			{if $product.attribute_quantity AND $product.attribute_quantity >= 1}
+			{if isset($product.attribute_quantity) AND $product.attribute_quantity >= 1 OR !isset($product.attribute_quantity) AND $product.product_quantity >= 1}
 			{if !$ajax}
 			<form id="addtocart_{$product.id_product|intval}_{$product.id_product_attribute|intval}" action="{$base_dir}cart.php" method="post">
 			<p class="hidden">

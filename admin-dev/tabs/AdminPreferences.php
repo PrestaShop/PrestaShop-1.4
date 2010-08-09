@@ -149,7 +149,7 @@ class AdminPreferences extends AdminTab
 		/* Check required fields */
 		foreach ($fields AS $field => $values)
 			if (isset($values['required']) AND $values['required'])
-				if ($values['type'] == 'textLang')
+				if (isset($values['type']) AND $values['type'] == 'textLang')
 				{
 					foreach ($languages as $language)
 						if (($value = Tools::getValue($field.'_'.$language['id_lang'])) == false AND (string)$value != '0')
@@ -160,7 +160,7 @@ class AdminPreferences extends AdminTab
 
 		/* Check fields validity */
 		foreach ($fields AS $field => $values)
-			if ($values['type'] == 'textLang')
+			if (isset($values['type']) AND $values['type'] == 'textLang')
 			{
 				foreach ($languages as $language)
 					if (Tools::getValue($field.'_'.$language['id_lang']) AND isset($values['validation']))
@@ -225,7 +225,7 @@ class AdminPreferences extends AdminTab
 				foreach ($fields AS $field => $values)
 				{
 					unset($val);
-					if ($values['type'] == 'textLang')
+					if (isset($values['type']) AND $values['type'] == 'textLang')
 						foreach ($languages as $language)
 							$val[$language['id_lang']] = isset($values['cast']) ? $values['cast'](Tools::getValue($field.'_'.$language['id_lang'])) : Tools::getValue($field.'_'.$language['id_lang']);
 					else

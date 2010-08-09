@@ -97,63 +97,54 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle customer ID */
-				if (intval($_POST['bo_search_type']) AND intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				if (intval(Tools::getValue('bo_search_type')) AND intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
 				{
-					$customer = new Customer(intval($_POST['bo_query']));
-					if ($customer->id)
-						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.intval($_POST['bo_query']).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)));
+					if (($customer = new Customer(intval(Tools::getValue('bo_query')))) AND Validate::isLoadedObject($customer))
+						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.intval(Tools::getValue('bo_query')).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)));
 					else
-						$this->_errors[] = Tools::displayError('customer #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+						$this->_errors[] = Tools::displayError('customer #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
 				}
 				/* Search customers by name */
 				else
-					self::searchCustomer($_POST['bo_query']);
+					self::searchCustomer(Tools::getValue('bo_query'));
 			}
 
 			/* Order */
-			if (intval($_POST['bo_search_type']) == 3)
+			if (intval(Tools::getValue('bo_search_type')) == 3)
 			{
-				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
 				{
-					$order = new Order(intval($_POST['bo_query']));
+					$order = new Order(intval(Tools::getValue('bo_query')));
 					if ($order->id)
-						Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($_POST['bo_query']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+						Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval(Tools::getValue('bo_query')).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
 					else
-						$this->_errors[] = Tools::displayError('order #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+						$this->_errors[] = Tools::displayError('order #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
 				}
 				else
 					$this->_errors[] = Tools::displayError('please type an order ID');
 			}
-			
 			/* Invoices */
-			if (intval($_POST['bo_search_type']) == 4)
+			elseif (intval(Tools::getValue('bo_search_type')) == 4)
 			{
-				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
 				{
-					if ($invoice = Order::getInvoice(intval($_POST['bo_query'])))
-					{
+					if ($invoice = Order::getInvoice(intval(Tools::getValue('bo_query'))))
 						Tools::redirectAdmin('pdf.php?id_order='.intval($invoice['id_order']).'&pdf');
-					}
 					else
-						$this->_errors[] = Tools::displayError('invoice #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+						$this->_errors[] = Tools::displayError('invoice #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
 				}
 				else
 					$this->_errors[] = Tools::displayError('please type an invoice ID');
 			}
-			else
-				Tools::displayError('please fill in search form first.');
-
 			/* Cart */
-			if (intval($_POST['bo_search_type']) == 5)
+			elseif (intval(Tools::getValue('bo_search_type')) == 5)
 			{
-				if (intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
+				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
 				{
-					if ($cart = new Cart(intval($_POST['bo_query'])) AND $cart->id)
-					{
+					if ($cart = new Cart(intval(Tools::getValue('bo_query'))) AND $cart->id)
 						Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
-					}
 					else
-						$this->_errors[] = Tools::displayError('cart #').intval($_POST['bo_query']).' '.Tools::displayError('not found');
+						$this->_errors[] = Tools::displayError('cart #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
 				}
 				else
 					$this->_errors[] = Tools::displayError('please type a cart ID');

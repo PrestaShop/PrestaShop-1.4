@@ -66,7 +66,6 @@ class Alias extends ObjectModel
 		WHERE `search` = \''.pSQL($this->search).'\'');
 
 		$aliases = array_map('implode', $aliases);
-
 		return implode(', ', $aliases);
 	}
 	

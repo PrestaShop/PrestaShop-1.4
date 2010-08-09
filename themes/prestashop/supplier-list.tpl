@@ -20,10 +20,9 @@
 
 {if $nbSuppliers > 0}
 	<ul id="suppliers_list">
-	{foreach from=$suppliers item=supplier}
-		<li>
+	{foreach from=$suppliers item=supplier name=suppliers}
+		<li class="{if $smarty.foreach.suppliers.first}first_item{elseif $smarty.foreach.suppliers.last}last_item{else}item{/if}"> 
 			<div class="left_side">
-
 				<!-- logo -->
 				<div class="logo">
 				{if $supplier.nb_products > 0}

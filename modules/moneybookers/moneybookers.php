@@ -209,6 +209,8 @@ class MoneyBookers extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		global $smarty;
+		
 		$flag = false;
 		$allowedCurrencies = $this->getCurrency();
 		foreach ($allowedCurrencies AS $allowedCurrency)
@@ -224,8 +226,11 @@ class MoneyBookers extends PaymentModule
 			// return $this->display(__FILE__, 'moneybookers-currency-error.tpl');
 		}
 		else
+		{
+			$smarty->assign('url', Tools::getHttpHost(true, true));
 			/* Display the MoneyBookers iframe */
 			return $this->display(__FILE__, 'moneybookers.tpl');
+		}
 	}
 
 	public function hookPaymentReturn($params)

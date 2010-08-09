@@ -116,10 +116,23 @@ class Pack extends Product
 		foreach ($ids as $id_product_item)
 		{
 			$idQty = explode('x', $id_product_item);
-			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => intval($id_product), 'id_product_item' => intval($idQty[1]), 'quantity' => intval($idQty[0])), 'INSERT'))
+			if (!self::addItem($id_product, $idQty[1], $idQty[0]))
 				return false;
 		}
 		return true;
+	}
+	
+	/**
+	* Add an item to the pack
+	*
+	* @param integer $id_product 
+	* @param integer $id_item 
+	* @param integer $qty 
+	* @return boolean true if everything was fine
+	*/
+	public static function addItem($id_product, $id_item, $qty)
+	{
+		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => intval($id_product), 'id_product_item' => intval($id_item), 'quantity' => intval($qty)), 'INSERT');
 	}
 	
 	public static function duplicate($id_product_old, $id_product_new)

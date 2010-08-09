@@ -838,7 +838,7 @@ div.block {
 }
 div.block h4 {
 	text-transform: uppercase;
-	font-family: Helvetica, Sans-Serif;
+	font-family: Arial, Helvetica, Sans-Serif;
 	font-weight: bold;
 	font-size: 1.2em;
 	padding-left: 0.5em;
@@ -1022,7 +1022,7 @@ div.myaccount .block_content {
 	display: block;
 	width: 118px;
 	height: 50px;
-	margin-left: 2px;
+	margin-left: 2px
 }
 
 #center_column div.products_block a.product_image img {
@@ -1429,7 +1429,7 @@ ul#product_list a.product_img_link {
 	float: left;
 	margin-right: 0.6em
 }
-ul#product_list a.product_img_link img { vertical-align: bottom; display:block; }
+ul#product_list a.product_img_link img { vertical-align: bottom; display:block }
 ul#product_list li h3 { margin: 0.4em 0 }
 ul#product_list li .new {
 	background: transparent url(../img/flag_new_bg.jpg) repeat-x scroll 0%;
@@ -1674,7 +1674,7 @@ form.std p.desc_contact span.like_input {
 div.sitemap_block {
 	padding: 0;
 	float: left;
-	width: 30%
+	width: 33%
 }
 div.sitemap_block ul { text-align: left }
 div.sitemap_block h3, .categTree h3 {
@@ -1769,7 +1769,8 @@ div.categTree {
 }
 #primary_block form#buy_block p {
 	padding: 0;
-	margin-top: 0
+	margin-top: 0;
+	clear: both
 }
 #primary_block form#buy_block img.on_sale_img { float: left }
 #primary_block form#buy_block span.on_sale {
@@ -1918,7 +1919,7 @@ div.addresses p.checkbox input {
 	margin-top: 0!important;
 	margin-top: -3px
 }
-div.addresses ul.item{clear:both;}
+div.addresses ul.item { clear: both }
 ul.address {
 	background-color: white;
 	float: left;
@@ -2016,7 +2017,7 @@ p#security_informations {
 /* Printable version */
 @media print {
 	div#left_column, div#right_column, div#footer, a.button, span.button , .button, ul#usefull_link_block, div#header_user, #languages_block_top, #search_block_top, #currencies_block_top, ul#header_links, ul.idTabs, #availability_statut br {
-		display: none;
+		display: none
 	}
 	div#center_column { width: 100% }
 	input.text { border: 1px solid gray }

@@ -1,5 +1,4 @@
 <!-- Block currencies module -->
-<script type="text/javascript" src="{$module_dir}blockcurrencies.js"></script>
 <div id="currencies_block_top">
 	<form id="setCurrency" action="{$request_uri}" method="post">
 		<ul>

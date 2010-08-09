@@ -113,7 +113,9 @@ $navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get
 $smarty->assign('navigationPipe', $navigationPipe);
 
 /* Server Params */
-$server_host = Tools::getHttpHost(false, true);
+$server_host_ssl = Tools::getHttpHost(false, true);
+$server_host     = str_replace(':'._PS_SSL_PORT_, '',$server_host_ssl);
+
 $protocol = 'http://';
 $protocol_ssl = 'https://';
 $protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
@@ -129,7 +131,7 @@ if (!Configuration::get('PS_THEME_V11'))
 	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
 	$smarty->assign(array(
 		'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
-		'base_dir_ssl' => $protocol_link.$server_host.__PS_BASE_URI__,
+		'base_dir_ssl' => $protocol_link.$server_host_ssl.__PS_BASE_URI__,
 		'content_dir' => $protocol_content.$server_host.__PS_BASE_URI__,
 		'img_ps_dir' => $protocol_content.$server_host._PS_IMG_,
 		'img_cat_dir' => $protocol_content.$server_host._THEME_CAT_DIR_,
@@ -169,7 +171,7 @@ else
 	$protocol = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 	$smarty->assign(array(
 		'base_dir' => __PS_BASE_URI__,
-		'base_dir_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__,
+		'base_dir_ssl' =>  $protocol_link.$server_host_ssl.__PS_BASE_URI__,
 		'content_dir' => __PS_BASE_URI__,
 		/* If the current page need SSL encryption and the shop allow it, then active it */
 		'protocol' => $protocol,
@@ -207,7 +209,7 @@ else
 }
 
 /* Display a maintenance page if shop is closed */
-if (isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR !in_array($_SERVER['REMOTE_ADDR'], explode(',', Configuration::get('PS_MAINTENANCE_IP')))))
+if (isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP')))))
 {
 	header('HTTP/1.1 503 temporarily overloaded');
 	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');

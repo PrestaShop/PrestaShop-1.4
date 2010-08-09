@@ -20,6 +20,9 @@
 {if $errorDetail2}
 	<p class="error">{l s='Please provide quantity for product you checked.'}</p>
 {/if}
+{if $errorNotReturnable}
+	<p class="error">{l s='This order can\'t be returned.'}</p>
+{/if}
 
 <p>{l s='Here are the merchandise returns you have made since ordering'}.</p>
 <div class="block-center" id="block-history">

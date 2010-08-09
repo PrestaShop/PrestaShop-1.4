@@ -17,6 +17,8 @@ class AdminProfiles extends AdminTab
 {
 	public function __construct()
 	{
+		global $cookie;
+	
 	 	$this->table = 'profile';
 	 	$this->className = 'Profile';
 	 	$this->lang = true;
@@ -27,6 +29,14 @@ class AdminProfiles extends AdminTab
 		'id_profile' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 200));
 		$this->identifier = 'id_profile';
+		
+		$list_profile = array();
+		foreach(Profile::getProfiles($cookie->id_lang) as $profil)
+			$list_profile[] = array('value' => $profil['id_profile'], 'name' => $profil['name']);
+		
+		$this->optionTitle = $this->l('Administrator profile');
+		$this->_fieldsOptions = array(
+			'PS_ADMIN_PROFILE' => array('title' => $this->l('Select the administrator profile:'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => $list_profile));
 		
 		parent::__construct();
 	}

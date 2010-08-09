@@ -68,24 +68,22 @@ class QuantityDiscount extends ObjectModel
 		FROM '._DB_PREFIX_.'discount_quantity dq
 		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dq.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($cookie->id_lang).')
 		WHERE dq.`id_product` = '.intval($id_product).' ORDER BY dq.`quantity` ASC');
-		
 		foreach ($result AS $key => &$row)
 		{
 			$row['real_value'] = QuantityDiscount::getValue(floatval($price), intval($row['id_discount_type']), $row['value']);
 			$row['nextQuantity'] = (isset($result[$key + 1]) ? intval($result[$key + 1]['quantity']) : -1);
 		}
-		
-		return $result;
+        return $result;
 	}
 
     public static function getDiscountFromQuantity($id_product, $quantity)
     {
         $result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-	SELECT dq.`id_discount_quantity`
-	FROM '._DB_PREFIX_.'discount_quantity dq
-	WHERE dq.`quantity` <= '.intval($quantity).'
-	AND dq.`id_product` = '.intval($id_product).'
-	ORDER BY quantity DESC');
+		SELECT dq.`id_discount_quantity`
+		FROM '._DB_PREFIX_.'discount_quantity dq
+		WHERE dq.`quantity` <= '.intval($quantity).'
+		AND dq.`id_product` = '.intval($id_product).'
+        ORDER BY quantity DESC');
 
         if (!$result)
             return false;

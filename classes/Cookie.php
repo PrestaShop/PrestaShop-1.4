@@ -164,7 +164,7 @@ class	Cookie
 	function isLoggedBack()
 	{
 		/* Employee is valid only if it can be load and if cookie password is the same as database one */
-	 	if ($this->id_employee AND Validate::isUnsignedId($this->id_employee) AND Employee::checkPassword(intval($this->id_employee), $this->passwd) AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long($_SERVER['REMOTE_ADDR'])))
+	 	if ($this->id_employee AND Validate::isUnsignedId($this->id_employee) AND Employee::checkPassword(intval($this->id_employee), $this->passwd) AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr())))
 			return true;
 		return false;
 	}

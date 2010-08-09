@@ -35,7 +35,7 @@
 			<input type="hidden" name="cancel_url_target" value="2">  
 			<input type="hidden" name="merchant_fields" value="platform"> 
 			<input type="hidden" name="platform" value="prestashop">
-			<input type="image" src="{$base_dir}modules/moneybookers/logo-cc-{$id_logo}.gif" name="Submit" style="float: left; margin-right: 20px;" />
+			<input type="image" src="{$modules_dir}moneybookers/logo-cc-{$id_logo}.gif" name="Submit" style="float: left; margin-right: 20px;" />
 			<h3 style="float: left; font-size: 11px; font-family: Verdana; color: #5D717E; font-weight: normal; margin-top: 35px;">{l s='Pay by credit card' mod='moneybookers'}</h3>
 			<div style="clear: both;"></div>
 		</form>
@@ -75,7 +75,7 @@
 			<input type="hidden" name="cancel_url_target" value="2">  
 			<input type="hidden" name="merchant_fields" value="platform"> 
 			<input type="hidden" name="platform" value="prestashop">
-			<input type="image" style="float: left; margin-right: 20px;" src="{$base_dir}modules/moneybookers/logo-mb-{$id_logo_wallet}.gif" name="Submit">
+			<input type="image" style="float: left; margin-right: 20px;" src="{$modules_dir}moneybookers/logo-mb-{$id_logo_wallet}.gif" name="Submit">
 			<h3 style="float: left; font-size: 11px; font-family: Verdana; color: #5D717E; font-weight: normal; margin-top: 35px;">{l s='Pay by Moneybookers eWallet' mod='moneybookers'}</h3>
 			<div style="clear: both;"></div>
 		</form>

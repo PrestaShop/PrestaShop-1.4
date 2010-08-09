@@ -259,6 +259,9 @@ abstract class ObjectModel
 	 	elseif (!key_exists('active', $this))
 	 		die(Tools::displayError());
 
+	 	/* Update active status on object */
+	 	$this->active = intval(!$this->active);
+	 	
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('
 		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`

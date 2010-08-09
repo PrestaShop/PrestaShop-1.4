@@ -211,11 +211,18 @@ class		Order extends ObjectModel
 		$productPrice = number_format($quantity * $unitPrice, 2, '.', '');
 		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
 
+		/* Update cart */
+		$cart = new Cart($this->id_cart);
+		$cart->updateQty($quantity, $orderDetail->product_id, $orderDetail->product_attribute_id, false, 'down'); // customization are deleted in deleteCustomization
+		$cart->update();
+		
 		/* Update order */
-		$this->total_paid -= $productPrice;
-		$this->total_paid_real -= $productPrice;		
-		$this->total_products -= $productPriceWithoutTax;
+		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();		
+		$this->total_products    -= $productPriceWithoutTax;
 		$this->total_products_wt -= $productPrice;
+		$this->total_shipping     = $cart->getOrderShippingCost();
+		$this->total_paid         = $cart->getOrderTotal();
+		$this->total_paid_real   -= ($productPrice + $shippingDiff);
 		
 		/* Prevent from floating precision issues (total_products has only 2 decimals) */
 		if ($this->total_products < 0)
@@ -333,13 +340,43 @@ class		Order extends ObjectModel
 				if (!$row['product_quantity'])
 					continue ;
 			}
-			$price = $row['product_price'];
-			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$price = Tools::ps_round($price, 2);
-			$row['product_price_wt'] = Tools::ps_round($price * (1 + ($row['tax_rate'] * 0.01)), 2);
-			$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
-			$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
-
+			if (Configuration::get('PS_1_3_2_UPDATE_DATE'))
+			{
+				if ($this->_taxCalculationMethod == PS_TAX_EXC)
+					$row['product_price'] = Tools::ps_round($row['product_price'], 2);
+				if ($this->_taxCalculationMethod == PS_TAX_INC)
+					$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + ($row['tax_rate'] * 0.01)), 2);
+				else
+					$row['product_price_wt'] = $row['product_price'];
+				if ($row['reduction_percent'])
+				{
+					$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['reduction_percent'] * 0.01), 2);
+					$row['product_price'] = $row['product_price'] - $row['product_price'] * ($row['reduction_percent'] * 0.01);
+				}
+				if ($row['reduction_amount'])
+				{
+					$row['product_price'] = $row['product_price'] - $row['reduction_amount'];
+					if ($this->_taxCalculationMethod == PS_TAX_INC)
+						$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'] * (1 + ($row['tax_rate'] * 0.01)), 2);
+					else
+						$row['product_price_wt'] = $row['product_price'];
+				}
+				if (($row['reduction_percent'] OR $row['reduction_amount']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
+					$row['product_price'] = Tools::ps_round($row['product_price'], 2);
+				$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
+				$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
+			}
+			/* Retro-compatibility with anterior version of 1.3.2.2 */
+			else
+			{
+				$price = $row['product_price'];
+				if ($this->_taxCalculationMethod == PS_TAX_EXC)
+					$price = Tools::ps_round($price, 2);
+				$row['product_price_wt'] = Tools::ps_round($price * (1 + ($row['tax_rate'] * 0.01)), 2);
+				$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
+				$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
+			}
+			
 			/* Add information for virtual product */
 			if ($row['download_hash'] AND !empty($row['download_hash']))
 				$row['filename'] = ProductDownload::getFilenameFromIdProduct($row['product_id']);
@@ -503,7 +540,7 @@ class		Order extends ObjectModel
 				INNER JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($cookie->id_lang).')
 				WHERE oh.`id_order` = '.intval($val['id_order']).'
 				AND os.`hidden` != 1
-				ORDER BY oh.`date_add` DESC
+				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
 				LIMIT 1
 			');
 			if ($res2)
@@ -583,17 +620,13 @@ class		Order extends ObjectModel
 	{
 		if ($this->total_products_wt != '0.00' AND !$products)
 			return $this->total_products_wt;
-
+		/* Retro-compatibility (now set directly on the validateOrder() method) */
 		if (!$products)
 			$products = $this->getProductsDetail();
 
-		$total = 0;
+		$this->total_products_wt = 0;
 		foreach ($products AS $k => $row)
-		{
-			$qty = intval($row['product_quantity']);
-			$total += floatval($row['product_price']) * $qty * (1 + $row['tax_rate'] / 100);
-		}
-		$this->total_products_wt = round($total, 2);
+			$this->total_products_wt += Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2) * $row['product_quantity'];
 		$this->update();
 		return $this->total_products_wt;
 	}

@@ -87,8 +87,8 @@ class Pagesnotfound extends Module
 			$this->_html .= '
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>
-					<th width="150">'.$this->l('Page').'</th>
-					<th width="200">'.$this->l('Referrer').'</th>
+					<th width="200">'.$this->l('Page').'</th>
+					<th width="500">'.$this->l('Referrer').'</th>
 					<th>'.$this->l('Counter').'</th>
 				</tr>';
 			foreach ($pages as $ru => $hrs)

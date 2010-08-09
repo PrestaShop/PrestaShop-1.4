@@ -41,12 +41,12 @@ $_MODULE['<{bankwire}prestashop>payment_execution_46b9e3665f187c739c55983f757ccd
 $_MODULE['<{bankwire}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido';
 $_MODULE['<{bankwire}prestashop>payment_return_75fbf512d744977d62599cc3f0ae2bb4'] = 'está completo.';
 $_MODULE['<{bankwire}prestashop>payment_return_1552c5916ccfe019f35d91fd8955755e'] = 'por favor, háganos una transferencia por:';
-$_MODULE['<{bankwire}prestashop>payment_return_c7c0ae2912f0fbc0edf688ae887aa50f'] = 'un importe de';
+$_MODULE['<{bankwire}prestashop>payment_return_a35abd2d31d9e1da82599bc67e166506'] = 'un importe de';
 $_MODULE['<{bankwire}prestashop>payment_return_c51326a2ac458845d579a82a92f111f0'] = 'al propietario de la cuenta';
-$_MODULE['<{bankwire}prestashop>payment_return_54255f6a23aa478acc093c9f9e6fd464'] = 'con los siguientes datos';
+$_MODULE['<{bankwire}prestashop>payment_return_de6d813f05e3916a86b89bd8b1a8a489'] = 'con los siguientes datos';
 $_MODULE['<{bankwire}prestashop>payment_return_619b26a60df1af3649d2e8920a7949cd'] = 'a este banco';
 $_MODULE['<{bankwire}prestashop>payment_return_4fac1f51a5f4b3dd634800fe3d408a45'] = 'No se olvide añadir su pedido #';
-$_MODULE['<{bankwire}prestashop>payment_return_160cc5007c97764468df2ae6cb18b388'] = 'en el objeto de su transferencia';
+$_MODULE['<{bankwire}prestashop>payment_return_4460fcb45ad7a6a61c95293eb611da12'] = 'en el objeto de su transferencia';
 $_MODULE['<{bankwire}prestashop>payment_return_13f4ac6dc75b5829499cb9cf8b733071'] = 'Le hemos enviado un email con esta información.';
 $_MODULE['<{bankwire}prestashop>payment_return_c4457a9f2f20e39386008bbb2cd3a78f'] = 'Su pedido será enviado próximamente, en cuanto recibamos su pago.';
 $_MODULE['<{bankwire}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda, por favor contacte con nosotros';

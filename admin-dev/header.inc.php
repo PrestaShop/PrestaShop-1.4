@@ -32,6 +32,7 @@ require_once(dirname(__FILE__).'/init.php');
 		<script type="text/javascript">
 			var search_texts = Array('<?php echo translate('product, customer, id...'); ?>','<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('invoice id'); ?>', '<?php echo translate('cart id'); ?>');
 			var helpboxes = <?php echo Configuration::get('PS_HELPBOX'); ?>;
+			var roundMode = <?php echo Configuration::get('PS_PRICE_ROUND_MODE'); ?>;
 		</script>
 		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/jquery-1.2.6.pack.js"></script>
 		<script type="text/javascript" src="../js/admin.js"></script>
@@ -167,10 +168,15 @@ require_once(dirname(__FILE__).'/init.php');
 					 	$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($id_parent));
 						foreach ($subTabs AS $t)
 							if (checkTabRights($t['id_tab']) === true)
+							{
+								$img = '../img/t/'.$t['class_name'].'.gif';
+								if (trim($t['module']) != '')
+									$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 								echo '
 								<li>
-									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="../img/t/'.$t['class_name'].'.gif" alt="" style="width:16px;height:16px" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
+									<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'"><img src="'.$img.'" alt="" style="width:16px;height:16px" /></a> <a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">'.$t['name'].'</a>
 								</li>';
+							}
 					}
 				?>
 				</ul>

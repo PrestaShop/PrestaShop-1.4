@@ -41,9 +41,9 @@ class RangePrice extends ObjectModel
 	public static function getRanges($id_carrier)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'range_price`
-		WHERE `id_carrier` = '.intval($id_carrier).'
+		SELECT * 
+		FROM `'._DB_PREFIX_.'range_price` 
+		WHERE `id_carrier` = '.intval($id_carrier).' 
 		ORDER BY `delimiter1` ASC');
 	}
 }

@@ -4,7 +4,7 @@ require_once(dirname(__FILE__).'/../../init.php');
 
 // Get data
 $number = (intval(Tools::getValue('n')) ? intval(Tools::getValue('n')) : 10);
-$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position');
+$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 $orderWayValues = array(0 => 'ASC', 1 => 'DESC');
 $orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[intval(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
 $orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
@@ -49,7 +49,8 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		if ($cdata)
 			echo "<![CDATA[";
 		echo $product['description_short']."]]></description>\n";
-		echo "\t\t\t<link><![CDATA[".htmlspecialchars($link->getproductLink($product['id_product'], $product['link_rewrite'], Category::getLinkRewrite(intval(Tools::getValue('id_category')), $cookie->id_lang))).$affiliate."]]></link>\n";
+		
+		echo "\t\t\t<link><![CDATA[".htmlspecialchars($link->getproductLink($product['id_product'], $product['link_rewrite'], Category::getLinkRewrite(intval($product['id_category_default']), $cookie->id_lang))).$affiliate."]]></link>\n";
 		echo "\t\t</item>\n";
 	}
 ?>

@@ -39,7 +39,7 @@ class AdminProducts extends AdminTab
 			'name' => array('title' => $this->l('Name'), 'width' => 220, 'filter_key' => 'b!name'),
 			'reference' => array('title' => $this->l('Reference'), 'align' => 'center', 'width' => 20), 
 			'price' => array('title' => $this->l('Base price'), 'width' => 70, 'price' => true, 'align' => 'right', 'filter_key' => 'a!price'),
-			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right', 'havingFilter' => true),
+			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right', 'havingFilter' => true, 'orderby' => false),
 			'quantity' => array('title' => $this->l('Quantity'), 'width' => 30, 'align' => 'right', 'filter_key' => 'a!quantity', 'type' => 'decimal'),
 			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'cp!position', 'align' => 'center', 'position' => 'position'),
 			'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
@@ -1057,8 +1057,8 @@ class AdminProducts extends AdminTab
 			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Combinations').'</h4></div>
 			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Features').'</h4></div>
 			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step6""><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>
-			<div class="tab-page" id="step7""><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
+			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>
+			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
 		echo '<script type="text/javascript">
 					var toload = new Array();
 					toload[3] = true;
@@ -1383,6 +1383,23 @@ class AdminProducts extends AdminTab
 			<script type="text/javascript">
 				$(document).ready(function() {
 					updateCurrentText();
+					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductManufacturers:1},
+						function(j) {
+							var options = $("select#id_manufacturer").html();
+							for (var i = 0; i < j.length; i++)
+								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							$("select#id_manufacturer").html(options);
+						}
+					);
+					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductSuppliers:1},
+						function(j) {
+							var options = $("select#id_supplier").html();
+							for (var i = 0; i < j.length; i++)
+								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							$("select#id_supplier").html(options);
+						}
+					);
+					
 				});
 			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
@@ -1429,29 +1446,6 @@ class AdminProducts extends AdminTab
 								<option disabled="disabled">----------</option>';
 		echo '
 							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.intval(Tab::getIdFromClassName('AdminManufacturers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
-							<script type="text/javascript">
-								var ajaxManufacturersClicked = false;
-								$("select#id_manufacturer").focus(
-									function() {
-										if (ajaxManufacturersClicked == true) return; else ajaxManufacturersClicked = true;
-										$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductManufacturers:1},
-											function(j) {
-												var options = \'\';
-												for (var i = 0; i < getE("id_manufacturer").options.length; i++)
-												{
-													if (getE("id_manufacturer").options[i].innerHTML == \'----------\')
-														options += \'<option disabled="disabled">----------</option>\';
-													else
-														options += \'<option value="\' +  getE("id_manufacturer").options[i].value + \'">\' + getE("id_manufacturer").options[i].innerHTML + \'</option>\';
-												}
-												for (var i = 0; i < j.length; i++)
-													options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
-												$("select#id_manufacturer").html(options);
-											}
-										)
-									}
-								);
-							</script>
 						</td>
 					</tr>
 					<tr>
@@ -1464,29 +1458,6 @@ class AdminProducts extends AdminTab
 								<option disabled="disabled">----------</option>';
 		echo '
 							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminSuppliers&addsupplier&token='.Tools::getAdminToken('AdminSuppliers'.intval(Tab::getIdFromClassName('AdminSuppliers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
-							<script type="text/javascript">
-								var ajaxSuppliersClicked = false;
-								$("select#id_supplier").focus(
-									function() {
-										if (ajaxSuppliersClicked == true) return; else ajaxSuppliersClicked = true;
-										$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductSuppliers:1},
-											function(j) {
-												var options = \'\';
-												for (var i = 0; i < getE("id_supplier").options.length; i++)
-												{
-													if (getE("id_supplier").options[i].innerHTML == \'----------\')
-														options += \'<option disabled="disabled">----------</option>\';
-													else
-														options += \'<option value="\' +  getE("id_supplier").options[i].value + \'">\' + getE("id_supplier").options[i].innerHTML + \'</option>\';
-												}
-												for (var i = 0; i < j.length; i++)
-													options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
-												$("select#id_supplier").html(options);
-											}
-										)
-									}
-								);
-							</script>
 						</td>
 					</tr>
 					<tr>
@@ -1550,16 +1521,16 @@ class AdminProducts extends AdminTab
 		{
 			$('#virtual_good').show('slow');
 			getE('out_of_stock_1').checked = 'checked';
-			getE('out_of_stock_2').readOnly = true;
-			getE('out_of_stock_3').readOnly = true;
+			getE('out_of_stock_2').disabled = 'disabled';
+			getE('out_of_stock_3').disabled = 'disabled';
 			getE('label_out_of_stock_2').setAttribute('for', '');
 			getE('label_out_of_stock_3').setAttribute('for', '');
 		}
 		else
 		{
 			$('#virtual_good').hide('slow');
-			getE('out_of_stock_2').readOnly = false;
-			getE('out_of_stock_3').readOnly = false;
+			getE('out_of_stock_2').disabled = false;
+			getE('out_of_stock_3').disabled = false;
 			getE('label_out_of_stock_2').setAttribute('for', 'out_of_stock_2');
 			getE('label_out_of_stock_3').setAttribute('for', 'out_of_stock_3');
 		}
@@ -1762,7 +1733,8 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left"><b>'.$this->l('Final retail price:').'</b></td>
 						<td style="padding-bottom:5px;">
-							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').'
+							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax incl.').') /
+							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
@@ -1837,9 +1809,12 @@ class AdminProducts extends AdminTab
 									</tr>';
 			$done = array();
 			$index = array();
-			$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Product::getIndexedCategories($obj->id) : array());
-			foreach ($indexedCategories AS $k => $row)
-				$index[] = $row['id_category'];
+			if (Tools::isSubmit('categoryBox'))
+				foreach (Tools::getValue('categoryBox') AS $k => $row)
+					$index[] = $row;
+			elseif ($obj->id)
+				foreach (Product::getIndexedCategories($obj->id) AS $k => $row)
+					$index[] = $row['id_category'];
 			$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, $obj->id_category_default);
 			echo '				</table>
 								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
@@ -2618,112 +2593,95 @@ class AdminProducts extends AdminTab
 						echo Tools::getValue('namePackItems');
 					else
 					foreach ($packItems as $packItem)
-						echo $packItem->pack_quantity.'x '.$packItem->name.'¤';
+						echo $packItem->pack_quantity.' x '.$packItem->name.'¤';
 					echo '" />
-					<script type="text/javascript">
-						var formProduct;
-						var packItems = new Array();
-						'.$this->fillPackItems($obj).'
-						'.$this->addPackItem().'
-						'.$this->delPackItem().'
-						delPackItem(0);
-					</script>
-					<select id="selectPackItems" name="selectPackItems" style="width: 380px;" onfocus="fillPackItems();">
-						<option value="0" selected="selected">-- '.$this->l('Choose').' --</option>
-					</select>
-					<input type="text" name="quantityPackItems" id="quantityPackItems" value="1" size="1" />
+					<input type="hidden" size="2" id="curPackItemId" />
+					
+					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
+					<input type="text" size="25" id="curPackItemName" class="space" />
+					<input type="text" name="curPackItemQty" id="curPackItemQty" value="1" size="1" />
+					<script language="javascript">
+					'.$this->addPackItem().'
+					'.$this->delPackItem().'
+
+					</script>					
 					<span onclick="addPackItem();" style="cursor: pointer;"><img src="../img/admin/add.gif" alt="'.$this->l('Add an item to the pack').'" title="'.$this->l('Add an item to the pack').'" /></span>
-					<br />'.$this->l('Filter:').' <input type="text" size="25" name="filterPack" onkeyup="fillPackItems();" class="space" />
 				</td>
 			</div>
 		</tr>';
-	}
-	
-	private function fillPackItems($obj)
-	{
-		global $currentIndex, $cookie;
-		return '
-		function fillPackItems()
-		{
-			$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductPackItems:1,id_lang:'.intval($cookie->id_lang).',id_product:'.($obj->id ? intval($obj->id) : 0).'},
-				function(result) {
-					for (var i = 0; i < result.length; i++)
-						packItems[i] = new Array(result[i].value, result[i].text);
-						
-					formProduct = document.layers ? document.forms.product : document.product;
-					formProduct.selectPackItems.length = packItems.length + 1;
-					for (i = 0, j = 1; i < packItems.length; i++)
-					{
-						if (formProduct.filterPack.value)
-							if (packItems[i][1].toLowerCase().indexOf(formProduct.filterPack.value.toLowerCase()) == -1)
-								continue;
-						formProduct.selectPackItems.options[j].value = packItems[i][0];
-						formProduct.selectPackItems.options[j].text = packItems[i][1];
-						j++;
-					}
-					if (j == 1)
-					{
-						formProduct.selectPackItems.length = 2;
-						formProduct.selectPackItems.options[1].value = -1;
-						formProduct.selectPackItems.options[1].text = \''.$this->l('No match found').'\';
-						formProduct.selectPackItems.options.selectedIndex = 1;
-					}
-					else
-					{
-						formProduct.selectPackItems.length = j;
-						formProduct.selectPackItems.options.selectedIndex = (formProduct.filterPack.value == \'\' ? 0 : 1);
-					}
-				}
-			);
-		}';
-	}
-	
-	private function packItemJsInit()
-	{
-		return '
-			var reg = new RegExp(\'-\', \'g\');
-			var regx = new RegExp(\'x\', \'g\');
-			
-			var div = getE(\'divPackItems\');
-			var input = getE(\'inputPackItems\');
-			var name = getE(\'namePackItems\');
-			var select = getE(\'selectPackItems\');
-			var select_quantity = getE(\'quantityPackItems\');';
+		
+		echo '<script type="text/javascript">
+								urlToCall = null;
+								/* function autocomplete */
+								$(function() {
+									$(\'#curPackItemName\')
+										.autocomplete(\'ajax_products_list.php\', {
+											delay: 100,
+											minChars: 1,
+											autoFill: true,
+											max:20,
+											matchContains: true,
+											mustMatch:true,
+											scroll:false,
+											cacheLength:0,
+											formatItem: function(item) {
+												return item[1]+\' - \'+item[0];
+											}
+										}).result(function(event, item){
+											$(\'#curPackItemId\').val(item[1]);
+										});
+										$(\'#curPackItemName\').setOptions({
+											extraParams: {excludeIds :  getSelectedIds()}
+										});
+
+								});
+								
+								
+								function getSelectedIds()
+								{
+									// input lines QTY x ID-
+									var ids = '. $obj->id.'+\',\';
+									ids += $(\'#inputPackItems\').val().replace(/\\d+x/g, \'\').replace(/\-/g,\',\');
+									ids = ids.replace(/\,$/,\'\')
+									
+									return ids;
+									
+								}
+			</script>';
+		
 	}
 	
 	private function addPackItem()
 	{
 		return '
-		function addPackItem()
-		{
-			'.$this->packItemJsInit().'
+		
+			function addPackItem()
+			{
 
-			if (select.value == \'0\')
-				return;
-			var cut = select.value.split(reg);
-				
-			var inputCut = input.value.split(reg);
-			for (var i = 0; i < inputCut.length; ++i)
-				if (inputCut[i])
-				{
-					var inputQty = inputCut[i].split(regx);
-					if (inputQty[1] == cut[0])
-						return false;
-				}
+			if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemName\').val() == \'\') return false;
 			
-
-			for (i = 0; i < select.length; ++i)
-				if (select.options[i].selected == true)
-					select.options[i] = null;
-			select.selectedIndex = 0;
-
-			var nameStr = \'\';
-			for (i = 1; i < cut.length; ++i)
-				nameStr += select_quantity.value + \' x \' + cut[i];
-			input.value += select_quantity.value + \'x\' + cut[0] + \'-\';
-			name.value += nameStr + \'¤\';
-			div.innerHTML += nameStr + \' <span onclick="delPackItem(\' + cut[0] + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
-		}';
+			var lineDisplay = $(\'#curPackItemQty\').val()+ \'x \' +$(\'#curPackItemName\').val();
+			
+			var divContent = $(\'#divPackItems\').html();
+			divContent += lineDisplay;
+			divContent += \'<span onclick="delPackItem(\' + $(\'#curPackItemId\').val() + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
+			
+			// QTYxID-QTYxID
+			var line = $(\'#curPackItemQty\').val()+ \'x\' +$(\'#curPackItemId\').val();
+			
+			
+			$(\'#inputPackItems\').val($(\'#inputPackItems\').val() + line  + \'-\');
+			$(\'#divPackItems\').html(divContent);
+			$(\'#namePackItems\').val($(\'#namePackItems\').val() + lineDisplay + \'¤\');
+			
+			$(\'#curPackItemId\').val(\'\');
+			$(\'#curPackItemName\').val(\'\');
+			
+			$(\'#curPackItemName\').setOptions({
+				extraParams: {excludeIds :  getSelectedIds()}
+			});
+			}
+		';
 	}
 	
 	private function delPackItem()
@@ -2731,7 +2689,14 @@ class AdminProducts extends AdminTab
 		return '
 		function delPackItem(id)
 		{
-			'.$this->packItemJsInit().'
+			var reg = new RegExp(\'-\', \'g\');
+			var regx = new RegExp(\'x\', \'g\');
+
+			var div = getE(\'divPackItems\');
+			var input = getE(\'inputPackItems\');
+			var name = getE(\'namePackItems\');
+			var select = getE(\'curPackItemId\');
+			var select_quantity = getE(\'curPackItemQty\');
 			
 			var inputCut = input.value.split(reg);
 			var nameCut = name.value.split(new RegExp(\'¤\', \'g\'));
@@ -2751,15 +2716,31 @@ class AdminProducts extends AdminTab
 						div.innerHTML += nameCut[i] + \' <span onclick="delPackItem(\' + inputQty[1] + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
 					}
 				}
+				
+			$(\'#curPackItemName\').setOptions({
+				extraParams: {excludeIds :  getSelectedIds()}
+			});
 		}';
 	}
 
 	public function updatePackItems($product)
 	{
 		Pack::deleteItems($product->id);
-		if (Tools::getValue('ppack') AND $items = Tools::getValue('inputPackItems') AND sizeof($ids = array_unique(explode('-', $items))))
-			if (!Pack::addItems($product->id, $ids))
-				return false;
+		
+		// lines format: QTY x ID-QTY x ID
+		if (Tools::getValue('ppack') AND $items = Tools::getValue('inputPackItems') AND sizeof($lines = array_unique(explode('-', $items))))
+		{ 
+			foreach($lines as $line)
+			{
+				// line format QTY x ID
+				list($qty, $item_id) = explode('x', $line);
+				if ($qty > 0 && isset($item_id))
+				{
+					if (!Pack::addItem(intval($product->id), intval($item_id), intval($qty)))
+						return false;
+				}
+			}
+		}
 		return true;
 	}
 }

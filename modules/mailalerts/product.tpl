@@ -20,7 +20,7 @@ function oosHookJsCodeMailAlert() {
 		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val(),
 		success: function (msg) {
 			if (msg == '0') {
-				$('#mailalert_link').show().attr('href', 'modules/mailalerts/mailalerts-add.php?id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val());
+				$('#mailalert_link').show();
 				$('#oos_customer_email').show();
 			}
 			else {

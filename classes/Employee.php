@@ -144,6 +144,23 @@ class		Employee extends ObjectModel
 
 		return isset($result['id_employee']) ? $result['id_employee'] : false;
 	}
+	
+	static public function countProfile($id_profile, $activeOnly = false)
+	{
+		$sql = 'SELECT COUNT(*) as nb
+				FROM `'._DB_PREFIX_.'employee`  				
+				WHERE `id_profile` = '.intval($id_profile);
+		$sql .= ($activeOnly) ? ' AND `active` = 1 ' : '';
+		$result = Db::getInstance()->getValue($sql);
+		return $result['nb'];
+	}
+	
+	public function isLastAdmin()
+	{
+		return ($this->id_profile == Configuration::get('PS_ADMIN_PROFILE') 			
+			       AND Employee::countProfile($this->id_profile, true) == 1
+				   AND $this->active);
+	}
 }
 
 ?>

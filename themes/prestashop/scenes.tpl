@@ -21,7 +21,7 @@ $(function () {ldelim}
 				<div id="scene_products_cluetip_{$scene_key}_{$product_key}_{$product.id_product}" style="display:none;">
 					<h4><span class="product_name">{$product.details->name}</span>{if isset($product.details->new) AND $product.details->new}<span class="new">{l s='new'}</span>{/if}</h4>
 					<div class="prices">
-						<p class="price">{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}</p>
+						<p class="price">{if $priceDisplay}{convertPrice price=$product.details->getPrice(false, $product.details->getDefaultAttribute($product.id_product))}{else}{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}{/if}</p>
 							{if $product.details->on_sale}
 							<span class="on_sale">{l s='On sale!'}</span>
 						{elseif ($product.details->reduction_price != 0 || $product.details->reduction_percent != 0) && ($product.details->reduction_from == $product.details->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product.details->reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product.details->reduction_from))}

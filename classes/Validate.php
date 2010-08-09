@@ -561,7 +561,8 @@ class Validate
 	static public function isValuesList($list)
 	{
 		return true;
-		return preg_match('/^[0-9,\'(). NULL]+$/ui', $list);
+		/* For history reason, we keep this line */
+		// return preg_match('/^[0-9,\'(). NULL]+$/ui', $list);
 	}
 
 	/**

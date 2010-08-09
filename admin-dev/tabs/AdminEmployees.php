@@ -124,18 +124,49 @@ class AdminEmployees extends AdminTab
 	
 	public function postProcess()
 	{
+		global $cookie;
+		
 		if (Tools::isSubmit('deleteemployee') OR Tools::isSubmit('status'))
 		{
-			if (sizeof(Employee::getEmployees()) <= 1)
+			if ($cookie->id_employee == Tools::getValue('id_employee'))
 			{
-				$this->_errors[] = Tools::displayError('You can\'t disable or delete the only account employee.');
+				$this->_errors[] = Tools::displayError('You can\'t disable or delete your own account.');
 				return false;
 			}
-			else
-				return parent::postProcess();
+			
+			$employee = new Employee(Tools::getValue('id_employee'));
+			if ($employee->isLastAdmin()) 
+			{
+					$this->_errors[] = Tools::displayError('You can\'t disable or delete the last administrator account.');
+					return false;
+			}
+
 		}
-		else
-			return parent::postProcess();
+		elseif (Tools::isSubmit('submitAddemployee')) {
+			if ($cookie->id_employee == Tools::getValue('id_employee') && Tools::getvalue('active') == 0)
+			{
+				$this->_errors[] = Tools::displayError('You can\'t disable your own account.');
+				return false;
+			}
+		
+			$employee = new Employee(Tools::getValue('id_employee'));
+			if ($employee->isLastAdmin()) 
+			{
+				if  (Tools::getValue('id_profile') != Configuration::get('PS_ADMIN_PROFILE')) 
+				{
+					$this->_errors[] = Tools::displayError('You should have at least one employee in the administrator group.');
+					return false;
+				}
+				
+				if (Tools::getvalue('active') == 0)
+				{
+					$this->_errors[] = Tools::displayError('You can\'t disable or delete the last administrator account.');
+					return false;
+				}
+			}
+		}
+		
+		return parent::postProcess();
 	}
 }
 

@@ -124,7 +124,7 @@ class Cheque extends PaymentModule
 			return ;
 		
 		if (!$this->_checkCurrency($cart))
-			return ;
+			Tools::redirectLink(__PS_BASE_URI__.'order.php');
 
 		global $cookie, $smarty;
 		
@@ -184,8 +184,7 @@ class Cheque extends PaymentModule
 		$currency_order = new Currency(intval($cart->id_currency));
 		$currencies_module = $this->getCurrency();
 		$currency_default = Configuration::get('PS_CURRENCY_DEFAULT');
-		
-		
+
 		if (is_array($currencies_module))
 			foreach ($currencies_module AS $currency_module)
 				if ($currency_order->id == $currency_module['id_currency'])

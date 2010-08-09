@@ -108,7 +108,19 @@ class AdminOrders extends AdminTab
 					$history->changeIdOrderState(intval($newOrderStatusId), intval($id_order));
 					$history->id_employee = intval($cookie->id_employee);
 					$carrier = new Carrier(intval($order->id_carrier), intval($order->id_lang));
-					$templateVars = array('{followup}' => ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number) ? str_replace('@', $order->shipping_number, $carrier->url) : '');
+					if ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number)
+						$templateVars = array('{followup}' => str_replace('@', $order->shipping_number, $carrier->url));
+					elseif ($history->id_order_state == _PS_OS_CHEQUE_)
+						$templateVars = array(
+							'{cheque_name}' => (Configuration::get('CHEQUE_NAME') ? Configuration::get('CHEQUE_NAME') : ''),
+							'{cheque_address_html}' => (Configuration::get('CHEQUE_ADDRESS') ? nl2br(Configuration::get('CHEQUE_ADDRESS')) : '')
+						);
+					elseif ($history->id_order_state == _PS_OS_BANKWIRE_)
+						$templateVars = array(
+							'{bankwire_owner}' => (Configuration::get('BANK_WIRE_OWNER') ? Configuration::get('BANK_WIRE_OWNER') : ''),
+							'{bankwire_details}' => (Configuration::get('BANK_WIRE_DETAILS') ? nl2br(Configuration::get('BANK_WIRE_DETAILS')) : ''),
+							'{bankwire_address}' => (Configuration::get('BANK_WIRE_ADDRESS') ? nl2br(Configuration::get('BANK_WIRE_ADDRESS')) : '')
+						);
 					if ($history->addWithemail(true, $templateVars))
 						Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder'.'&token='.$this->token);
 					$this->_errors[] = Tools::displayError('an error occurred while changing status or was unable to send e-mail to the customer');
@@ -683,7 +695,7 @@ class AdminOrders extends AdminTab
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.intval($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price'] * (1 + ($product['tax_rate'] * 0.01)), 2) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * (intval($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 									<td align="center" class="cancelCheck">
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.intval($product['product_quantity']).'" />

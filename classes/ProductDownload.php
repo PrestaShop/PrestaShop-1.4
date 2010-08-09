@@ -162,10 +162,11 @@ class ProductDownload extends ObjectModel
 	 */
 	public static function getFilenameFromIdProduct($id_product)
 	{
-		$data = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `physically_filename`
-									FROM `'._DB_PREFIX_.'product_download`
-									WHERE `id_product` = '.intval($id_product).'
-									AND `active` = 1');
+		$data = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT `physically_filename`
+		FROM `'._DB_PREFIX_.'product_download`
+		WHERE `id_product` = '.intval($id_product).'
+		AND `active` = 1');
 		return $data['physically_filename'];
 	}
 

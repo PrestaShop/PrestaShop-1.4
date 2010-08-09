@@ -214,7 +214,7 @@ class		Country extends ObjectModel
 	
 	public function displayCallPrefix($prefix)
 	{
-		return ((int)$prefix ? '+'.$prefix : '-');
+		return (intval($prefix) ? '+'.$prefix : '-');
 	}
 }
 

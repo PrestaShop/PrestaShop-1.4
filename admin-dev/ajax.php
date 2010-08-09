@@ -13,7 +13,7 @@ if (isset($_GET['ajaxProductManufacturers']))
 	{
 		$jsonArray = array();
 		foreach ($manufacturers AS $manufacturer)
-			$jsonArray[] = '{optionValue: '.$manufacturer['id_manufacturer'].', optionDisplay: \''.addslashes($manufacturer['name']).'\'}';
+			$jsonArray[] = '{"optionValue": "'.$manufacturer['id_manufacturer'].'", "optionDisplay": "'.addslashes($manufacturer['name']).'"}';
 		die('['.implode(',', $jsonArray).']');
 	}
 }
@@ -26,7 +26,7 @@ if (isset($_GET['ajaxProductSuppliers']))
 	{
 		$jsonArray = array();
 		foreach ($suppliers AS $supplier)
-			$jsonArray[] = '{optionValue: '.$supplier['id_supplier'].', optionDisplay: \''.addslashes($supplier['name']).'\'}';
+			$jsonArray[] = '{"optionValue": "'.$supplier['id_supplier'].'", "optionDisplay": "'.addslashes($supplier['name']).'"}';
 		die('['.implode(',', $jsonArray).']');
 	}
 }
@@ -49,7 +49,7 @@ if (isset($_GET['ajaxProductAccessories']))
 	ORDER BY pl.`name`');
 	
 	foreach ($products AS $accessory)
-		$jsonArray[] = '{value: \''.intval($accessory['id_product']).'-'.addslashes($accessory['name']).'\', text:\''.intval($accessory['id_product']).' - '.addslashes($accessory['name']).'\'}';
+		$jsonArray[] = '{"value: "'.intval($accessory['id_product']).'-'.addslashes($accessory['name']).'", "text":"'.intval($accessory['id_product']).' - '.addslashes($accessory['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
 
@@ -70,7 +70,7 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	LIMIT 50');
 	
 	foreach ($customers AS $customer)
-		$jsonArray[] = '{value:'.intval($customer['id_customer']).', text:\''.addslashes($customer['name']).' ('.addslashes($customer['email']).')\'}';
+		$jsonArray[] = '{"value":"'.intval($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
 	die('['.implode(',', $jsonArray).']');
 }
 
@@ -171,7 +171,7 @@ if (isset($_GET['ajaxProductPackItems']))
 	AND p.`id_product` != '.intval(Tools::getValue('id_product')));
 	
 	foreach ($products AS $packItem)
-		$jsonArray[] = '{value: \''.intval($packItem['id_product']).'-'.addslashes($packItem['name']).'\', text:\''.intval($packItem['id_product']).' - '.addslashes($packItem['name']).'\'}';
+		$jsonArray[] = '{"value": "'.intval($packItem['id_product']).'-'.addslashes($packItem['name']).'", "text":"'.intval($packItem['id_product']).' - '.addslashes($packItem['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
 

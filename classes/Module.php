@@ -296,7 +296,7 @@ abstract class Module
 	  */
 	static public function getInstanceById($id_module)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `name`
 			FROM `'._DB_PREFIX_.'module`
 			WHERE `id_module` = '.intval($id_module));

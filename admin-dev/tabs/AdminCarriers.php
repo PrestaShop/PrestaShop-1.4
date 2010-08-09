@@ -259,8 +259,9 @@ class AdminCarriers extends AdminTab
 		}
 		else
 		{
-			if (isset($_GET['delete'.$this->table]) AND Tools::getValue('id_carrier') == Configuration::get('PS_CARRIER_DEFAULT'))
-				$this->_errors[] = $this->l('Please set another carrier as default before deleting');
+			if ((Tools::isSubmit('submitDel'.$this->table) && in_array(Configuration::get('PS_CARRIER_DEFAULT'), Tools::getValue('carrierBox')))
+				OR (isset($_GET['delete'.$this->table]) AND Tools::getValue('id_carrier') == Configuration::get('PS_CARRIER_DEFAULT')))
+					$this->_errors[] = $this->l('Please set another carrier as default before deleting');
 			else
 				parent::postProcess();
 		}

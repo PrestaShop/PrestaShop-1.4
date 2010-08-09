@@ -234,9 +234,12 @@ class AdminScenes extends AdminTab
 					$categories = Category::getCategories(intval($cookie->id_lang), false);
 					$done = array();
 					$index = array();
-					$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Scene::getIndexedCategories($obj->id) : array());
-					foreach ($indexedCategories AS $k => $row)
-						$index[] = $row['id_category'];
+					if (Tools::isSubmit('categoryBox'))
+						foreach (Tools::getValue('categoryBox') AS $k => $row)
+							$index[] = $row;
+					elseif ($obj->id)
+						foreach (Scene::getIndexedCategories($obj->id) AS $k => $row)
+							$index[] = $row['id_category'];
 					$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, null);
 			echo '</table>
 						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of the categories for which the image map is to appear.').'<sup> *</sup></p>

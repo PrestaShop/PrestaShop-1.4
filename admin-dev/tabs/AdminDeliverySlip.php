@@ -36,7 +36,7 @@ class AdminDeliverySlip extends AdminTab
 		$output = '
 		<h2>'.$this->l('Print PDF delivery slips').'</h2>
 		<fieldset class="width2">
-			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+			<form action="'.$currentIndex.'&submitPrint=1&token='.$this->token.'" method="post">
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="10" name="date_from" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
@@ -67,7 +67,7 @@ class AdminDeliverySlip extends AdminTab
 	{
 		global $currentIndex;
 		
-		if (Tools::isSubmit('submitPrint'))
+		if (Tools::getValue('submitPrint'))
 		{
 			if (!Validate::isDate($_POST['date_from']))
 				$this->_errors[] = $this->l('Invalid from date');

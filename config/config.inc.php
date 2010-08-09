@@ -4,6 +4,9 @@
 @ini_set('display_errors', 'on');
 define('_PS_DEBUG_SQL_', true);
 
+/* SSL configuration */
+define('_PS_SSL_PORT_',443);
+
 /* Improve PHP configuration to prevent issues */
 @ini_set('upload_max_filesize', '100M');
 @ini_set('default_charset', 'utf-8');

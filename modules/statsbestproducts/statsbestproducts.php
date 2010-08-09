@@ -119,7 +119,7 @@ class StatsBestProducts extends ModuleGrid
 	
 	public function getTotalCount($dateBetween)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(DISTINCT p.`id_product`) totalCount
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product

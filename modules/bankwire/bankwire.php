@@ -138,7 +138,7 @@ class BankWire extends PaymentModule
 		if (!$this->active)
 			return ;
 		if (!$this->_checkCurrency($cart))
-			return ;
+			Tools::redirectLink(__PS_BASE_URI__.'order.php');
 
 		global $cookie, $smarty;
 

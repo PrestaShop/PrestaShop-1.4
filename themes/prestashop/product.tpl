@@ -237,6 +237,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<!-- attributes -->
 			<div id="attributes">
 			{foreach from=$groups key=id_attribute_group item=group}
+			{if $group.attributes|@count}
 			<p>
 				<label for="group_{$id_attribute_group|intval}">{$group.name|escape:'htmlall':'UTF-8'} :</label>
 				{assign var='groupName' value='group_'|cat:$id_attribute_group}
@@ -246,6 +247,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					{/foreach}
 				</select>
 			</p>
+			{/if}
 			{/foreach}
 			</div>
 			{/if}

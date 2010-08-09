@@ -239,13 +239,12 @@ class		Discount extends ObjectModel
 		{
 			/* Relative value (% of the order total) */
 			case 1:
-				
-				
 				$amount = 0;
 				$percentage = $this->value / 100;
 				foreach ($products AS $product)
 						if (Product::idIsOnCategoryId($product['id_product'], $categories))
-							$amount += ($useTax ? $product['total_wt'] : $product['total']) * $percentage;
+							if ((!$this->cumulable_reduction AND !intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale']) OR $this->cumulable_reduction)
+								$amount += ($useTax ? $product['total_wt'] : $product['total']) * $percentage;
 				return $amount;
 				
 			/* Absolute value */

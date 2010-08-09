@@ -18,7 +18,8 @@ class Hipay extends PaymentModule
 
 		$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
 		// Define extracted from mapi/mapi_defs.php
-		define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
+		if (!defined('HIPAY_GATEWAY_URL')) 
+			define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
 
 		$this->displayName = $this->l('Hipay');
 		$this->description = $this->l('Accepts payments by Hipay');
@@ -83,7 +84,7 @@ class Hipay extends PaymentModule
 		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
 		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD_'.$currency->iso_code) : Configuration::get('HIPAY_PASSWORD_TEST_'.$currency->iso_code));
 		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID_'.$currency->iso_code) : Configuration::get('HIPAY_SITEID_TEST_'.$currency->iso_code));
-		$hipaycategory = ($this->prod ? Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code) : Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code));
+		$hipaycategory = ($this->prod ? Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code) : Configuration::get('HIPAY_CATEGORY_TEST_'.$currency->iso_code));
 
 		$paymentParams = new HIPAY_MAPI_PaymentParams();
 		$paymentParams->setLogin($hipayAccount, $hipayPassword);
@@ -221,7 +222,7 @@ class Hipay extends PaymentModule
 		$openssl = extension_loaded('openssl');
 		$curl = extension_loaded('curl');
 		$ping = ($allow_url_fopen AND $openssl AND $fd = fsockopen('payment.hipay.com', 443) AND fclose($fd));
-		$online = (in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1')) ? false : true);
+		$online = (in_array(Tools::getRemoteAddr(), array('127.0.0.1', '::1')) ? false : true);
 		$categories = true;
 		$categoryRetrieval = true;
 		foreach ($currencies as $currency)
@@ -332,9 +333,9 @@ class Hipay extends PaymentModule
 				<div class="margin-form">
 					<select id="HIPAY_RATING" name="HIPAY_RATING">
 						<option value="ALL">'.$this->l('For all ages').'</option>
-						<option value="12+" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '12+' ? 'selected="selected"' : '').'>'.$this->l('For ages 12 and over').'</option>
-						<option value="16+" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '16+' ? 'selected="selected"' : '').'>'.$this->l('For ages 16 and over').'</option>
-						<option value="18+" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '18+' ? 'selected="selected"' : '').'>'.$this->l('For ages 18 and over').'</option>
+						<option value="+12" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '+12' ? 'selected="selected"' : '').'>'.$this->l('For ages 12 and over').'</option>
+						<option value="+16" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '+16' ? 'selected="selected"' : '').'>'.$this->l('For ages 16 and over').'</option>
+						<option value="+18" '.(Tools::getValue('HIPAY_RATING', Configuration::get('HIPAY_RATING')) == '+18' ? 'selected="selected"' : '').'>'.$this->l('For ages 18 and over').'</option>
 					</select>
 				</div>
 				<hr class="clear" />

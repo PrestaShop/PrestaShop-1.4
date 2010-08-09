@@ -65,7 +65,7 @@ if (Tools::isSubmit('Submit'))
 			$cookie->email = $employee->email;
 			$cookie->profile = $employee->id_profile;
 			$cookie->passwd = $employee->passwd;
-			$cookie->remote_addr = ip2long($_SERVER['REMOTE_ADDR']);
+			$cookie->remote_addr = ip2long(Tools::getRemoteAddr());
 			$cookie->write();
 			/* Redirect to admin panel */
 			if (isset($_GET['redirect']))

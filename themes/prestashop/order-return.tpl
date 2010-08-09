@@ -40,7 +40,8 @@
 								{elseif $type == $smarty.const._CUSTOMIZE_TEXTFIELD_}
 								<ul class="typedText">{counter start=0 print=false}
 									{foreach from=$datas item='data'}
-										<li>{l s='Text #'}{counter}{l s=':'} {$data.value}</li>
+										{assign var='customizationFieldName' value="Text #"|cat:$data.id_customization_field}
+										<li>{$data.name|default:$customizationFieldName}{l s=':'} {$data.value}</li>
 									{/foreach}
 								</ul>
 								{/if}

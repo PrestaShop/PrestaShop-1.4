@@ -73,8 +73,8 @@ class		State extends ObjectModel
 		FROM `'._DB_PREFIX_.'state`
 		WHERE `id_state` = '.intval($id_state));
 
-		return $result['name'];
-	}
+        return $result['name'];
+    }
     
 	/**
 	* Get a state id with its name
