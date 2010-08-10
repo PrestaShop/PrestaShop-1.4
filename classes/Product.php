@@ -291,10 +291,18 @@ class		Product extends ObjectModel
 		return $fields;
 	}
 
-	public static function initPricesComputation()
+	public static function initPricesComputation($id_customer = NULL)
 	{
 		global $cookie;
-		if ($cookie->id_customer)
+		
+		if ($id_customer)
+		{
+			$customer = new Customer(intval($id_customer));
+			if (!Validate::isLoadedObject($customer))
+				die(Tools::displayError());
+			self::$_taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
+		}
+		elseif ($cookie->id_customer)
 		{
 			$customer = new Customer(intval($cookie->id_customer));
 			self::$_taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
@@ -303,8 +311,10 @@ class		Product extends ObjectModel
 			self::$_taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
 	}
 
-	public static function getTaxCalculationMethod()
+	public static function getTaxCalculationMethod($id_customer = NULL)
 	{
+		if ($id_customer)
+			self::initPricesComputation(intval($id_customer));
 		return intval(self::$_taxCalculationMethod);
 	}
 

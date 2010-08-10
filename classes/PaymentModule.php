@@ -209,7 +209,7 @@ abstract class PaymentModule extends Module
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.intval($product['cart_quantity']).',
 						'.$quantityInStock.',
-						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery))).',
+						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery))).',
 						'.floatval($reduction_percent).',
 						'.floatval($reduction_amount).',
 						'.floatval($reduc).',

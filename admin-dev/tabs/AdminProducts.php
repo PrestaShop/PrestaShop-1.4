@@ -745,6 +745,9 @@ class AdminProducts extends AdminTab
 		if (!isset($_POST['categoryBox']) OR !sizeof($_POST['categoryBox']))
 			$this->_errors[] = $this->l('product must be in at least one Category');
 
+		if (!in_array(Tools::getValue('id_category_default'), Tools::getValue('categoryBox')))
+			$this->_errors[] = $this->l('product must be in the default category');
+		
 		foreach ($languages AS $language)
 			if ($value = Tools::getValue('tags_'.$language['id_lang']))
 				if (!Validate::isTagsList($value))
