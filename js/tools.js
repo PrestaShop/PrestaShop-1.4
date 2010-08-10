@@ -1,3 +1,19 @@
+function ps_round(value, precision)
+{
+	if (typeof(roundMode) == 'undefined')
+		roundMode = 2;
+	if (typeof(precision) == 'undefined')
+		precision = 2;
+	
+	method = roundMode;
+	if (method == 0)
+		return ceilf(value, precision);
+	else if (method == 1)
+		return floorf(value, precision);
+	precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
+	return Math.round(value * precisionFactor) / precisionFactor;
+}
+
 function	autoUrl(name, dest)
 {
 	var loc;
@@ -144,4 +160,17 @@ function floorf(value, precision)
 	if (tmp2.charAt(tmp2.length - 1) == 0)
 		return value;
 	return Math.floor(tmp) / precisionFactor;
+}
+
+function setCurrency(id)
+{
+	$.ajax({
+		type: 'POST',
+		url: baseDir + 'changecurrency.php',
+		data: 'id='+id,
+		success: function(msg)
+		{
+			location.reload(true);
+		}
+	});
 }
