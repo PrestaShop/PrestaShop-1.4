@@ -201,7 +201,7 @@ abstract class PaymentModule extends Module
 					// Quantity discount
 					$reduc = 0.0;
 					if ($product['cart_quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['cart_quantity'])))
-						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value);
+						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value, new Currency(intval($order->id_currency)));
 
 					$query .= '('.intval($order->id).',
 						'.intval($product['id_product']).',

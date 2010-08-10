@@ -1470,7 +1470,7 @@ class		Product extends ObjectModel
 		}
 		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
 		{
-			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value, $usetax, floatval($result['rate']));
+			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value, $usetax, floatval($result['rate']), $currency);
 			$price -= $discount_qty_price;
 		}
 		// Group reduction

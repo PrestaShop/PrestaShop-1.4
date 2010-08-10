@@ -47,7 +47,7 @@ class QuantityDiscount extends ObjectModel
 		return $fields;
 	}
 
-    public static function getValue($product_price, $id_discount_type, $value, $usetax = true, $taxrate = 1)
+    public static function getValue($product_price, $id_discount_type, $value, $usetax = true, $taxrate = 1, $currency = NULL)
     {
 		if ($id_discount_type == 1)
 		{
@@ -55,11 +55,11 @@ class QuantityDiscount extends ObjectModel
 			return $percentage * floatval($product_price);		
 		}
 		elseif ($id_discount_type == 2)
-			return !$usetax ? ($value / (1 + ($taxrate / 100))) : $value;
+			return !$usetax ? (Tools::convertPrice($value, $currency) / (1 + ($taxrate / 100))) : Tools::convertPrice($value, $currency);
 		return 0;
     }
 
-	public static function getQuantityDiscounts($id_product, $price)
+    public static function getQuantityDiscounts($id_product, $price)
 	{
 		global $cookie;
 
