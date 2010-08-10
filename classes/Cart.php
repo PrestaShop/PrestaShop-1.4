@@ -373,6 +373,10 @@ class		Cart extends ObjectModel
 	 */
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
+		$product = new Product(intval($id_product));
+		if (!Validate::isLoadedObject($product))
+			die(Tools::displayError());
+
 		self::$_nbProducts = 0;
 		if (intval($quantity) <= 0)
 			return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
@@ -402,6 +406,8 @@ class		Cart extends ObjectModel
 				{
 					$qty = '`quantity` - '.intval($quantity);
 					$newQty = $result['quantity'] - intval($quantity);
+					if ($newQty < $product->minimal_quantity)
+						return -1;
 				}
 				else
 					return false;
@@ -409,6 +415,8 @@ class		Cart extends ObjectModel
 				/* Delete product from cart */
 				if ($newQty <= 0)
 					return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
+				elseif ($newQty < $product->minimal_quantity)
+						return -1;
 				else
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
@@ -430,6 +438,8 @@ class		Cart extends ObjectModel
 				$productQty = intval($result2['quantity']);
 				if (intval($quantity) > $productQty AND (intval($result2['out_of_stock']) == 0 OR (intval($result2['out_of_stock']) == 2 AND !Configuration::get('PS_ORDER_OUT_OF_STOCK'))))
 					return false;
+				if ($quantity < $product->minimal_quantity)
+					return -1;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
 				'id_product_attribute' => intval($id_product_attribute), 'id_cart' => intval($this->id),
 				'quantity' => intval($quantity), 'date_add' => pSql(date('Y-m-d H:i:s'))), 'INSERT'))

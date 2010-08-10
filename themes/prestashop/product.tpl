@@ -260,6 +260,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}1{/if}" size="2" maxlength="3" />
 			</p>
 
+			<!-- minimal quantity wanted -->
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity == 0} style="display:none;"{/if}>{l s='You need add '}{$product->minimal_quantity}{l s=' quantities minimum.'}</p>
+
 			<!-- availability -->
 			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now)} style="display:none;"{/if}>
 				<span id="availability_label">{l s='Availability:'}</span>

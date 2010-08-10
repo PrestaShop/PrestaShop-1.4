@@ -1747,6 +1747,13 @@ class AdminProducts extends AdminTab
 						((isset($_POST['attQty']) AND $_POST['attQty']) ? 'onclick="alert(\''.$this->l('Quantity is already defined by Attributes').'.<br />'.$this->l('Delete attributes first').'.\');" readonly="readonly" ' : '').'/><sup> *</sup> ('.$this->l('If you use combinations, you can\'t edit this information').')</td>
 					</tr>
 					<tr>
+						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 0).'" />
+							<p>'.$this->l('The minimal quantity for buy this product (set 0 for disable this feature)').'</p>
+						</td>
+					</tr>
+					<tr>
 						<td class="col-left">'.$this->l('Displayed text when in-stock:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($this->_languages as $language)

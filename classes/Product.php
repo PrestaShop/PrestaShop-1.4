@@ -56,6 +56,9 @@ class		Product extends ObjectModel
 	/** @var integer Quantity available */
 	public 		$quantity = 0;
 
+	/** @var integer Minimal quantity for add to cart */
+	public      $minimal_quantity = 0;
+
 	/** @var string available_now */
 	public 		$available_now;
 	
@@ -162,6 +165,7 @@ class		Product extends ObjectModel
 		'id_category_default' => 'isUnsignedId',
 		'id_color_default' => 'isUnsignedInt', /* unsigned integer because its value could be 0 if the feature is disabled */
 		'quantity' => 'isUnsignedInt',
+		'minimal_quantity' => 'isUnsignedInt',
 		'price' => 'isPrice',
 		'wholesale_price' => 'isPrice',
 		'reduction_price' => 'isPrice',
@@ -229,6 +233,7 @@ class		Product extends ObjectModel
 		$fields['id_category_default'] = intval($this->id_category_default);
 		$fields['id_color_default'] = intval($this->id_color_default);
 		$fields['quantity'] = intval($this->quantity);
+		$fields['minimal_quantity'] = intval($this->minimal_quantity);
 		$fields['price'] = floatval($this->price);
 		$fields['wholesale_price'] = floatval($this->wholesale_price);
 		$fields['reduction_price'] = floatval($this->reduction_price);
