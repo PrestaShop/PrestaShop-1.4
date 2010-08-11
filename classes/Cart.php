@@ -592,7 +592,7 @@ class		Cart extends ObjectModel
 		$cart = new Cart(intval($id_cart));
 		if (!Validate::isLoadedObject($cart))
 			die(Tools::displayError());
-		return Tools::displayPrice($cart->getOrderTotal(), new Currency(intval($cart->id_currency)), false, false);
+		return Tools::displayPrice($cart->getOrderTotal(), Currency::getCurrencyInstance(intval($cart->id_currency)), false, false);
 	}
 
 	/**
@@ -665,7 +665,7 @@ class		Cart extends ObjectModel
 				$wrapping_fees_tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 				$wrapping_fees *= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
 			}
-			$wrapping_fees = Tools::convertPrice(Tools::ps_round($wrapping_fees, 2), new Currency(intval($this->id_currency)));
+			$wrapping_fees = Tools::convertPrice(Tools::ps_round($wrapping_fees, 2), Currency::getCurrencyInstance(intval($this->id_currency)));
 		}
 
 		if ($type != 1)
@@ -848,7 +848,7 @@ class		Cart extends ObjectModel
 		// Free fees
 		$free_fees_price = 0;
 		if (isset($configuration['PS_SHIPPING_FREE_PRICE']))
-			$free_fees_price = Tools::convertPrice(floatval($configuration['PS_SHIPPING_FREE_PRICE']), new Currency(intval($this->id_currency)));
+			$free_fees_price = Tools::convertPrice(floatval($configuration['PS_SHIPPING_FREE_PRICE']), Currency::getCurrencyInstance(intval($this->id_currency)));
 		$orderTotalwithDiscounts = $this->getOrderTotal(true, 4);
 		if ($orderTotalwithDiscounts >= floatval($free_fees_price) AND floatval($free_fees_price) > 0)
 			return $shipping_cost;
@@ -885,7 +885,7 @@ class		Cart extends ObjectModel
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
 			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
 		
-		$shipping_cost = Tools::convertPrice($shipping_cost, new Currency(intval($this->id_currency)));
+		$shipping_cost = Tools::convertPrice($shipping_cost, Currency::getCurrencyInstance(intval($this->id_currency)));
 		
 		// Apply tax
 		if (isset($carrierTax))

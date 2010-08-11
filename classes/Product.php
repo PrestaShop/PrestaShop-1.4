@@ -1414,7 +1414,7 @@ class		Product extends ObjectModel
 			$id_currency = intval(Configuration::get('PS_CURRENCY_DEFAULT'));
 		
 		if (!isset(self::$_currencies[$id_currency]))
-			self::$_currencies[$id_currency] = new Currency($id_currency);
+			self::$_currencies[$id_currency] = Currency::getCurrencyInstance($id_currency);
 		$currency = self::$_currencies[$id_currency];
 
 		if (!$id_address_delivery)

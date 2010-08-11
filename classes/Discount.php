@@ -250,7 +250,7 @@ class		Discount extends ObjectModel
 			/* Absolute value */
 			case 2:				
 				// An "absolute" voucher is available in one currency only
-				$currency = ((int)$cart->id_currency ? new Currency($cart->id_currency) : Currency::getCurrent());
+				$currency = ((int)$cart->id_currency ? Currency::getCurrencyInstance($cart->id_currency) : Currency::getCurrent());
 				if ($this->id_currency != $currency->id)
 					return 0;
 			

@@ -52,7 +52,9 @@ class		Carrier extends ObjectModel
 	protected 	$identifier = 'id_carrier';
 
 	protected static $priceByWeight = array();
+	protected static $priceByWeight2 = array();
 	protected static $priceByPrice = array();
+	protected static $priceByPrice2 = array();
 
 	public function getFields()
 	{
@@ -118,36 +120,41 @@ class		Carrier extends ObjectModel
 	 */
 	public function getDeliveryPriceByWeight($totalWeight, $id_zone)
 	{
-		if (isset(self::$priceByWeight[$this->id]))
-			return self::$priceByWeight[$this->id];
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT d.`price`
-		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON (d.`id_range_weight` = w.`id_range_weight`)
-		WHERE d.`id_zone` = '.intval($id_zone).'
-		AND '.floatval($totalWeight).' >= w.`delimiter1`
-		AND '.floatval($totalWeight).' < w.`delimiter2`
-		AND d.`id_carrier` = '.intval($this->id).'
-		ORDER BY w.`delimiter1` ASC');
-		if (!isset($result['price']))
-			return $this->getMaxDeliveryPriceByWeight($id_zone);
-		return $result['price'];
+		if (!isset(self::$priceByWeight[$this->id]))
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT d.`price`
+			FROM `'._DB_PREFIX_.'delivery` d
+			LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON (d.`id_range_weight` = w.`id_range_weight`)
+			WHERE d.`id_zone` = '.intval($id_zone).'
+			AND '.floatval($totalWeight).' >= w.`delimiter1`
+			AND '.floatval($totalWeight).' < w.`delimiter2`
+			AND d.`id_carrier` = '.intval($this->id).'
+			ORDER BY w.`delimiter1` ASC');
+			if (!isset($result['price']))
+				self::$priceByWeight[$this->id] = $this->getMaxDeliveryPriceByWeight($id_zone);
+			else
+				self::$priceByWeight[$this->id] = $result['price'];
+		}
+		return self::$priceByWeight[$this->id];
 	}
 
 	static public function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT d.`price`
-		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
-		WHERE d.`id_zone` = '.intval($id_zone).'
-		AND '.floatval($totalWeight).' >= w.`delimiter1`
-		AND '.floatval($totalWeight).' < w.`delimiter2`
-		AND d.`id_carrier` = '.intval($id_carrier).'
-		ORDER BY w.`delimiter1` ASC');
-		if (!isset($result['price']))
-			return false;
-		return true;
+		if (!isset(self::$priceByWeight2[$id_carrier]))
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT d.`price`
+			FROM `'._DB_PREFIX_.'delivery` d
+			LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
+			WHERE d.`id_zone` = '.intval($id_zone).'
+			AND '.floatval($totalWeight).' >= w.`delimiter1`
+			AND '.floatval($totalWeight).' < w.`delimiter2`
+			AND d.`id_carrier` = '.intval($id_carrier).'
+			ORDER BY w.`delimiter1` ASC');
+			self::$priceByWeight2[$id_carrier] = (isset($result['price']));
+		}
+		return self::$priceByWeight2[$id_carrier];
 	}
 
 	public function getMaxDeliveryPriceByWeight($id_zone)
@@ -173,37 +180,41 @@ class		Carrier extends ObjectModel
 	 */
 	public function getDeliveryPriceByPrice($orderTotal, $id_zone)
 	{
-
-		if (isset(self::$priceByPrice[$this->id]))
-			return self::$priceByPrice[$this->id];
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT d.`price`
-		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
-		WHERE d.`id_zone` = '.intval($id_zone).'
-		AND '.floatval($orderTotal).' >= r.`delimiter1`
-		AND '.floatval($orderTotal).' < r.`delimiter2`
-		AND d.`id_carrier` = '.intval($this->id).'
-		ORDER BY r.`delimiter1` ASC');
-		if (!isset($result['price']))
-			return $this->getMaxDeliveryPriceByPrice($id_zone);
-		return $result['price'];
+		if (!isset(self::$priceByPrice[$this->id]))
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT d.`price`
+			FROM `'._DB_PREFIX_.'delivery` d
+			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
+			WHERE d.`id_zone` = '.intval($id_zone).'
+			AND '.floatval($orderTotal).' >= r.`delimiter1`
+			AND '.floatval($orderTotal).' < r.`delimiter2`
+			AND d.`id_carrier` = '.intval($this->id).'
+			ORDER BY r.`delimiter1` ASC');
+			if (!isset($result['price']))
+				self::$priceByPrice[$this->id] = $this->getMaxDeliveryPriceByPrice($id_zone);
+			else
+				self::$priceByPrice[$this->id] = $result['price'];
+		}
+		return self::$priceByPrice[$this->id];
 	}
 
 	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT d.`price`
-		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
-		WHERE d.`id_zone` = '.intval($id_zone).'
-		AND '.floatval($orderTotal).' >= r.`delimiter1`
-		AND '.floatval($orderTotal).' < r.`delimiter2`
-		AND d.`id_carrier` = '.intval($id_carrier).'
-		ORDER BY r.`delimiter1` ASC');
-		if (!isset($result['price']))
-			return false;
-		return true;
+		if (!isset(self::$priceByPrice2[$id_carrier]))
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT d.`price`
+			FROM `'._DB_PREFIX_.'delivery` d
+			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
+			WHERE d.`id_zone` = '.intval($id_zone).'
+			AND '.floatval($orderTotal).' >= r.`delimiter1`
+			AND '.floatval($orderTotal).' < r.`delimiter2`
+			AND d.`id_carrier` = '.intval($id_carrier).'
+			ORDER BY r.`delimiter1` ASC');
+			self::$priceByPrice2[$id_carrier] = (isset($result['price']));
+		}
+		return self::$priceByPrice2[$id_carrier];
 	}
 
 	public function getMaxDeliveryPriceByPrice($id_zone)

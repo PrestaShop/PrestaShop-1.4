@@ -135,7 +135,7 @@ class		Currency extends ObjectModel
 		ORDER BY `name` ASC');
 		if ($object)
 			foreach ($tab as $key => $currency)
-				$tab[$key] = new Currency($currency['id_currency']);
+				$tab[$key] = Currency::getCurrencyInstance($currency['id_currency']);
 		return $tab;
 	}
 	

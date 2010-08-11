@@ -207,18 +207,18 @@ class Tools
 		if (self::isSubmit('SubmitCurrency'))
 			if (isset($_POST['id_currency']) AND is_numeric($_POST['id_currency']))
 			{
-				$currency = new Currency(intval($_POST['id_currency']));
+				$currency = Currency::getCurrencyInstance(intval($_POST['id_currency']));
 				if (is_object($currency) AND $currency->id AND !$currency->deleted)
 					$cookie->id_currency = intval($currency->id);
 			}
 
 		if ($cookie->id_currency)
 		{
-			$currency = new Currency(intval($cookie->id_currency));
+			$currency = Currency::getCurrencyInstance(intval($cookie->id_currency));
 			if (is_object($currency) AND $currency->id AND intval($currency->deleted) != 1)
 				return $currency;
 		}
-		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$currency = Currency::getCurrencyInstance(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		if (is_object($currency) AND $currency->id)
 			$cookie->id_currency = intval($currency->id);
 		return $currency;
@@ -237,7 +237,7 @@ class Tools
 			$currency = Currency::getCurrent();
 		/* if you modified this function, don't forget to modify the Javascript function formatCurrency (in tools.js) */
 		if (is_int($currency))
-			$currency = new Currency(intval($currency));
+			$currency = Currency::getCurrencyInstance(intval($currency));
 		$c_char = (is_array($currency) ? $currency['sign'] : $currency->sign);
 		$c_format = (is_array($currency) ? $currency['format'] : $currency->format);
 		$c_decimals = (is_array($currency) ? intval($currency['decimals']) : intval($currency->decimals)) * _PS_PRICE_DISPLAY_PRECISION_;
@@ -277,7 +277,7 @@ class Tools
 	{
 		if (array_key_exists('currency', $params))
 		{
-			$currency = new Currency(intval($params['currency']));
+			$currency = Currency::getCurrencyInstance(intval($params['currency']));
 			if (Validate::isLoadedObject($currency))
 				return self::displayPrice($params['price'], $currency, false);
 		}

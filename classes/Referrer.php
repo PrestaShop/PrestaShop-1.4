@@ -271,7 +271,7 @@ class Referrer extends ObjectModel
 	public static function getAjaxProduct($id_referrer, $id_product, $employee = null)
 	{
 		$product = new Product($id_product, false, Configuration::get('PS_LANG_DEFAULT'));
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = Currency::getCurrencyInstance(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$referrer = new Referrer($id_referrer);
 		$statsVisits = $referrer->getStatsVisits($id_product, $employee);
 		$registrations = $referrer->getRegistrations($id_product, $employee);
