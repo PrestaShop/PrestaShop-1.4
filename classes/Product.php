@@ -1186,22 +1186,19 @@ class		Product extends ObjectModel
 	*/
 	static public function getRandomSpecial($id_lang, $beginning = false, $ending = false)
 	{
-		global	$link, $cookie;
+		global $cookie;
 
+		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
+		
 		$currentDate = date('Y-m-d H:m:i');
-		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
-			i.`id_image`, il.`legend`, t.`rate`
+		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT p.id_product
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
 		WHERE (`reduction_price` > 0 OR `reduction_percent` > 0)
-		'.((!$beginning AND !$ending) ?
-			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
-		:
-			($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
+		'.((!$beginning AND !$ending)
+			? 'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
+			: ($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')
+		).'
 		AND p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
@@ -1210,11 +1207,21 @@ class		Product extends ObjectModel
 			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
 		)
 		ORDER BY RAND()');
-
-		if ($row)
-			return Product::getProductProperties($id_lang, $row);
-
-		return $row;
+		
+		if (!$id_product)
+			return false;
+		
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
+			i.`id_image`, il.`legend`, t.`rate`
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		WHERE p.id_product = '.(int)$id_product);
+		
+		return Product::getProductProperties($id_lang, $row);
 	}
 
 	/**
