@@ -208,3 +208,20 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
 
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '0' AFTER `quantity`;
+
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (9, 'AdminInformation', '', 11);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminInformation'
+), 'Informations');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminInformation'
+), 'Informations');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminInformation'
+), 'Informations');
