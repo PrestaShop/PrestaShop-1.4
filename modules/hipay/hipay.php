@@ -15,14 +15,17 @@ class Hipay extends PaymentModule
 		$this->currencies_mode = 'radio';
 
 		parent::__construct();
-
-		$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
-		// Define extracted from mapi/mapi_defs.php
-		if (!defined('HIPAY_GATEWAY_URL')) 
-			define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
-
+		
 		$this->displayName = $this->l('Hipay');
 		$this->description = $this->l('Accepts payments by Hipay');
+
+		if ($this->id)
+		{
+			$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
+			// Define extracted from mapi/mapi_defs.php
+			if (!defined('HIPAY_GATEWAY_URL')) 
+				define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
+		}
 	}
 
 	public function	install()

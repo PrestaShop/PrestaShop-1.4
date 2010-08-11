@@ -18,9 +18,10 @@ class MailAlerts extends Module
 		$this->tab = 'Tools';
 		$this->version = '2.2';
 
-		$this->_refreshProperties();
-
 		parent::__construct();
+		
+		if ($this->id)
+			$this->_refreshProperties();
 
 		$this->displayName = $this->l('Mail alerts');
 		$this->description = $this->l('Sends e-mails notifications to customers and merchants');

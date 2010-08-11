@@ -6,13 +6,13 @@ class GAdsense extends Module
 	function __construct()
 	{
 	 	$this->name = 'gadsense';
-	 	$this->tab = 'Advertisement';
+	 	$this->tab = 'Tools';
 	 	$this->version = '1.1';
         $this->displayName = $this->l('Google Adsense');
 		
 	 	parent::__construct();
 		
-		if (!Configuration::get('GADSENSE_ID'))
+		if ($this->id AND !Configuration::get('GADSENSE_ID'))
 			$this->warning = $this->l('You have not yet set your Google Adsense code');
         $this->description = $this->l('Integrate the Google Adsense script into your shop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');

@@ -18,19 +18,22 @@ class Newsletter extends Module
 
         $this->displayName = $this->l('Newsletter');
         $this->description = $this->l('Generates a .CSV file for mass mailings');
-		$this->_file = 'export_'.Configuration::get('PS_NEWSLETTER_RAND').'.csv';
-		$this->_postValid = array();
+		
+		if ($this->id)
+		{
+			$this->_file = 'export_'.Configuration::get('PS_NEWSLETTER_RAND').'.csv';
+			$this->_postValid = array();
 
-		// Getting data...
-		$_countries = Country::getCountries(intval($cookie->id_lang));
+			// Getting data...
+			$_countries = Country::getCountries(intval($cookie->id_lang));
 
-		// ...formatting array
-		$countries[0] = $this->l('All countries');
-		foreach ($_countries as $country)
-			$countries[$country['id_country']] = $country['name'];
+			// ...formatting array
+			$countries[0] = $this->l('All countries');
+			foreach ($_countries as $country)
+				$countries[$country['id_country']] = $country['name'];
 
-		// And filling fields to show !
-		$this->_fieldsExport = array(
+			// And filling fields to show !
+			$this->_fieldsExport = array(
 			'COUNTRY' => array(
 				'title' => $this->l('Customers\' country'),
 				'desc' => $this->l('Operate a filter on customers\' country.'),
@@ -53,6 +56,7 @@ class Newsletter extends Module
 				'value_default' => 0
 				),
 			);
+		}
     }
 
 	public function install()

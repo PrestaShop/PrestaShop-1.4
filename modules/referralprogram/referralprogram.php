@@ -14,20 +14,23 @@ class ReferralProgram extends Module
 		$this->displayName = $this->l('Customer referral program');
 		$this->description = $this->l('Integrate a referral program system to your shop.');
 
-		$this->_configuration = Configuration::getMultiple(array(
-			'REFERRAL_NB_FRIENDS',
-			'REFERRAL_ORDER_QUANTITY',
-			'REFERRAL_DISCOUNT_TYPE',
-			'REFERRAL_DISCOUNT_VALUE'
-		));
-		$this->_configuration['REFERRAL_DISCOUNT_DESCRIPTION'] = Configuration::getInt('REFERRAL_DISCOUNT_DESCRIPTION');
-
 		$path = dirname(__FILE__);
 		if (strpos(__FILE__, 'Module.php') !== false)
 			$path .= '/../modules/'.$this->name;
 			
-		$this->_xmlFile = $path.'/referralprogram.xml';
-		include_once($path.'/ReferralProgramModule.php');
+		if ($this->id)
+		{
+			$this->_configuration = Configuration::getMultiple(array(
+				'REFERRAL_NB_FRIENDS',
+				'REFERRAL_ORDER_QUANTITY',
+				'REFERRAL_DISCOUNT_TYPE',
+				'REFERRAL_DISCOUNT_VALUE'
+			));
+			$this->_configuration['REFERRAL_DISCOUNT_DESCRIPTION'] = Configuration::getInt('REFERRAL_DISCOUNT_DESCRIPTION');
+			
+			$this->_xmlFile = $path.'/referralprogram.xml';
+			include_once($path.'/ReferralProgramModule.php');
+		}
 	}
 
 	public function install()

@@ -389,6 +389,7 @@ abstract class Module
 		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
 			$hookArgs['cart'] = $cart;
 
+		// Todo: must be cached (on query for every modules)
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT h.`id_hook`, m.`name`, hm.`position`
 			FROM `'._DB_PREFIX_.'module` m

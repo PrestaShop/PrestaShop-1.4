@@ -13,7 +13,7 @@ class canonicalUrl extends Module
 		$this->displayName = $this->l('Canonical URL');
 		$this->description = $this->l('Improve SEO by avoiding the "duplicate content" status for your Website.');
 		
-		if (strlen(Configuration::get('CANONICAL_URL')) == 0)
+		if ($this->id AND strlen(Configuration::get('CANONICAL_URL')) == 0)
 			$this->warning = $this->l('You must set the canonical URL to avoid "duplicate content" status for your Website.');
 	}
 

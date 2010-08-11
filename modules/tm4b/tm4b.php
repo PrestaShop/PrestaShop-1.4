@@ -35,26 +35,27 @@ class Tm4b extends Module
 	public function __construct()
 	{
 		$this->name = 'tm4b';
-		$this->displayName = 'SMS Tm4b';
-		$this->description = $this->l('Sends an SMS for each new order');
 		$this->tab = 'Tools';
 		$this->version = 1.1;
 		
-		$this->_data = array('shopname' => Configuration::get('PS_SHOP_NAME'));
-		
-		/* Get config vars */		 
-		$this->_password = Configuration::get('TM4B_PASSWORD');
-		$this->_user = Configuration::get('TM4B_USER');
-		$this->_originator = Configuration::get('TM4B_ORIGINATOR');
-		$this->_route = Configuration::get('TM4B_ROUTE');
-		$this->_simulation = Configuration::get('TM4B_SIM');
-		$this->_new_order_numbers =  Configuration::get('TM4B_NEW_ORDER_NUMBERS');
-		
-		$this->_alert_new_order_active = Configuration::get('TM4B_ALERT_NO_ACTIVE');
-		$this->_alert_update_quantity_active = Configuration::get('TM4B_ALERT_UQ_ACTIVE');
-		$this->_daily_report_active = Configuration::get('TM4B_DAILY_REPORT_ACTIVE');
-		
 		parent::__construct();
+		
+		if ($this->id)
+		{
+			$this->_data = array('shopname' => Configuration::get('PS_SHOP_NAME'));
+			
+			/* Get config vars */		 
+			$this->_password = Configuration::get('TM4B_PASSWORD');
+			$this->_user = Configuration::get('TM4B_USER');
+			$this->_originator = Configuration::get('TM4B_ORIGINATOR');
+			$this->_route = Configuration::get('TM4B_ROUTE');
+			$this->_simulation = Configuration::get('TM4B_SIM');
+			$this->_new_order_numbers =  Configuration::get('TM4B_NEW_ORDER_NUMBERS');
+			
+			$this->_alert_new_order_active = Configuration::get('TM4B_ALERT_NO_ACTIVE');
+			$this->_alert_update_quantity_active = Configuration::get('TM4B_ALERT_UQ_ACTIVE');
+			$this->_daily_report_active = Configuration::get('TM4B_DAILY_REPORT_ACTIVE');
+		}
 		
 		$this->displayName = 'SMS Tm4b';
 		$this->description = $this->l('Sends an SMS for each new order');

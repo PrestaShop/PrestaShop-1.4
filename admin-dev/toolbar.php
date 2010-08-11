@@ -50,11 +50,12 @@ function checkingTab($tab)
 function checkTabRights($id_tab)
 {
 	global $cookie;
+	static $tabAccesses = NULL;
 	
-	$tabAccess = Profile::getProfileAccess($cookie->profile, intval($id_tab));
-	if ($tabAccess['view'] === '1')
-		return (true);
-	return (false);
+	if ($tabAccesses === NULL)
+		$tabAccesses =  Profile::getProfileAccesses($cookie->profile);
+
+	return ($tabAccesses[intval($id_tab)]['view'] === '1');
 }
 
 ?>

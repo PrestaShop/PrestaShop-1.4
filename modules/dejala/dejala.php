@@ -46,9 +46,12 @@ class Dejala extends Module
 			$this->warning = $this->l('this module requires php extension cURL to function properly. Please install the php extension "cURL" first');
 		}
 
-		// load configuration
-		$this->dejalaConfig = new DejalaConfig();
-		$this->dejalaConfig->loadConfig();
+		// load configuration only if installed
+		if ($this->id)
+		{
+			$this->dejalaConfig = new DejalaConfig();
+			$this->dejalaConfig->loadConfig();
+		}
 
 	 	// The parent construct is required for translations
 		$this->page = basename(__FILE__, '.php');

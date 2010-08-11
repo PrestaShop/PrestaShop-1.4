@@ -170,7 +170,7 @@ class		Address extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'state` s ON s.`id_state` = a.`id_state`
 		WHERE a.`id_address` = '.intval($id_address));
 
-		self::$_idZones[$id_address] = (intval($result['id_zone_state']) ? $result['id_zone_state'] : $result['id_zone']);
+		self::$_idZones[$id_address] = (int)(intval($result['id_zone_state']) ? $result['id_zone_state'] : $result['id_zone']);
 		return self::$_idZones[$id_address];
 	}
 
