@@ -38,6 +38,16 @@ abstract class ModuleGrid extends Module
 	/** @var ModuleGridEngine grid engine */
 	protected $_render;
 	
+	public function install()
+	{
+		return (parent::install() AND $this->registerHook('backOfficeHeader'));
+	}
+	
+	public function hookBackOfficeHeader()
+	{
+		return '<link type="text/css" rel="stylesheet" href="../modules/gridextjs/extjs/resources/css/ext-all.css" />';
+	}
+	
 	public function setEmployee($id_employee)
 	{
 		$this->_employee = new Employee(intval($id_employee));
