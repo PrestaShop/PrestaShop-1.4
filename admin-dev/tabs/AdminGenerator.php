@@ -36,13 +36,19 @@ class AdminGenerator extends AdminTab
 		// Htaccess
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-		<fieldset class="width2"><legend><img src="../img/admin/htaccess.gif" />'.$this->l('Htaccess file generation').'</legend>
+		<fieldset><legend><img src="../img/admin/htaccess.gif" />'.$this->l('Htaccess file generation').'</legend>
 		<p><b>'.$this->l('Warning:').'</b> '.$this->l('this tool can ONLY be used if you are hosted by an Apache web server. Please ask your webhost.').'</p>
 		<p>'.$this->l('This tool will automatically generate a ".htaccess" file that will grant you the possibility to do URL rewriting and to catch 404 errors.').'</p>
 		<p>'.$this->l('If you do not have the "Friendly URL" enabled when generating the ".htaccess" file, such feature won\'t be available.').'</p>';
 		if ($this->_checkConfiguration($this->_htFile))
 			echo '
-			<p style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
+			<div class="clear">&nbsp;</div>
+			<label for="imageCacheControl">'.$this->l('Cache control directive').'</label>
+			<div class="margin-form">
+				<input type="checkbox" name="cacheControl" id="cacheControl" '.(Tools::getValue('cacheControl') ? 'checked="checked"' : '').' />
+				<p>'.$this->l('This will specify to your Customers\' browsers that the images can be cached for 1 month and the CSS and Javascript files for 1 week.').'</p>
+			</div>
+			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
 			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>
 			<p>'.$this->l('This will erase your').'<b> '.$this->l('old').'</b> '.$this->l('.htaccess file!').'</p>';
 		else
@@ -55,7 +61,7 @@ class AdminGenerator extends AdminTab
 		// Robots
 		echo '<br /><br />
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-		<fieldset class="width2"><legend><img src="../img/admin/robots.gif" />'.$this->l('Robots file generation').'</legend>
+		<fieldset><legend><img src="../img/admin/robots.gif" />'.$this->l('Robots file generation').'</legend>
 		<p><b>'.$this->l('Warning:').' </b>'.$this->l('Your file robots.txt MUST be in your website\'s root dir and nowhere else.').'</p>
 		<p>'.$this->l('eg: http://www.yoursite.com/robots.txt').'.</p>
 		<p>'.$this->l('This tool will automatically generate a "robots.txt" file that will grant you the possibility to deny access to search engines for somes pages.').'</p>';
@@ -98,15 +104,34 @@ class AdminGenerator extends AdminTab
 					// RewriteEngine
 					if (Configuration::get('PS_REWRITING_SETTINGS'))
 					{
+						fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
 						fwrite($writeFd, $this->_htData['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
 						fwrite($writeFd, $this->_htData['RewriteRule']['comment']."\n");
 						foreach ($this->_htData['RewriteRule']['content'] as $rule => $url)
 							fwrite($writeFd, 'RewriteRule '.$rule.' '.__PS_BASE_URI__.$url."\n");
-						fwrite($writeFd, "\n");
+						fwrite($writeFd, "</IfModule>\n\n");
 					}
 					
 					// ErrorDocument
 					fwrite($writeFd, $this->_htData['ErrorDocument']['comment']."\nErrorDocument ".$this->_htData['ErrorDocument']['content']."\n");
+					
+					// Cache control
+					if (Tools::getValue('cacheControl'))
+					{
+						$cacheControl = "
+<IfModule mod_headers.c>
+	<FilesMatch \"\.(gif|jpg|jpeg|png|ico)\$\">
+		Header set Cache-Control \"max-age=2592000\"
+		Header unset Last-Modified
+	</FilesMatch>
+
+	<FilesMatch \"\.(js|css)$\">
+		Header set Cache-Control \"max-age=604800\"
+		Header unset Last-Modified
+	</FilesMatch>
+</IfModule>";
+						fwrite($writeFd, $cacheControl);
+					}
 
 					fclose($writeFd);
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
@@ -165,9 +190,11 @@ class AdminGenerator extends AdminTab
 
 	public function _getHtaccessContent()
 	{
-		$tab = array();
+		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
 
 		// ErrorDocument
+		$tab['ErrorDocument']['comment'] = '# Catch 404 errors';
+		$tab['ErrorDocument']['content'] = '404 '.__PS_BASE_URI__.'404.php';
 		$tab['ErrorDocument']['comment'] = '# Catch 404 errors';
 		$tab['ErrorDocument']['content'] = '404 '.__PS_BASE_URI__.'404.php';
 
