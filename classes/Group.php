@@ -44,6 +44,9 @@ class		Group extends ObjectModel
 	protected 	$table = 'group';
 	protected 	$identifier = 'id_group';
 
+	private static $_customerReduction = array();
+	private static $_groupPriceDisplayMethod = array();
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -86,28 +89,33 @@ class		Group extends ObjectModel
 	
 	static public function getReduction($id_customer = NULL)
 	{
-		if ($id_customer)
-			$customer = new Customer(intval($id_customer));
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `reduction`
-		FROM `'._DB_PREFIX_.'group`
-		WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? intval($customer->id_default_group) : 1));
+		if ($id_customer === NULL)
+			$id_customer = 0;
+		if (!isset(self::$_customerReduction[$id_customer]))
+		{
+			if ($id_customer)
+				$customer = new Customer(intval($id_customer));
+			self::$_customerReduction[$id_customer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `reduction`
+			FROM `'._DB_PREFIX_.'group`
+			WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? intval($customer->id_default_group) : 1));
+		}
+		return self::$_customerReduction[$id_customer];
 	}
 
 	static public function getPriceDisplayMethod($id_group)
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `price_display_method`
-		FROM `'._DB_PREFIX_.'group`
-		WHERE `id_group` = '.intval($id_group));
+		if (!isset(self::$_groupPriceDisplayMethod[$id_group]))
+			self::$_groupPriceDisplayMethod[$id_group] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `price_display_method`
+			FROM `'._DB_PREFIX_.'group`
+			WHERE `id_group` = '.intval($id_group));
+		return self::$_groupPriceDisplayMethod[$id_group];
 	}
 
 	static public function getDefaultPriceDisplayMethod()
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `price_display_method`
-		FROM `'._DB_PREFIX_.'group`
-		WHERE `id_group` = 1');
+		return self::getPriceDisplayMethod(1);
 	}
 
 	public function add($autodate = true, $nullValues = false)

@@ -150,7 +150,8 @@ class		Product extends ObjectModel
 
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
-
+	private static $_pricesLevel2 = array();
+	private static $_currencies = array();
 	private static $_incat = array();
 
 	/** @var array tables */
@@ -1406,11 +1407,15 @@ class		Product extends ObjectModel
 		}
 
 		if (Validate::isLoadedObject($cart))
-			$currency = new Currency(intval($cart->id_currency));
+			$id_currency = intval($cart->id_currency);
 		elseif (isset($cookie->id_currency) AND intval($cookie->id_currency))
-			$currency = new Currency(intval($cookie->id_currency));
+			$id_currency = intval($cookie->id_currency);
 		else
-			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$id_currency = intval(Configuration::get('PS_CURRENCY_DEFAULT'));
+		
+		if (!isset(self::$_currencies[$id_currency]))
+			self::$_currencies[$id_currency] = new Currency($id_currency);
+		$currency = self::$_currencies[$id_currency];
 
 		if (!$id_address_delivery)
 			$id_address_delivery = $cart->id_address_delivery;
@@ -1425,16 +1430,23 @@ class		Product extends ObjectModel
 		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity.'-'.($id_customer ? $id_customer : '0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
-
-		// Getting price
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`id_tax`, t.`rate`, 
-		'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.intval($id_product).' AND default_on = 1), 0)').' AS attribute_price
-		FROM `'._DB_PREFIX_.'product` p
-		'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.intval($id_product_attribute) : '').'
-		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
-		WHERE p.`id_product` = '.intval($id_product));
-		$price = Tools::convertPrice(floatval($result['price']), $currency);
+			
+			
+		$cacheId2 = $id_product.'-'.$id_product_attribute;
+		if (!isset(self::$_pricesLevel2[$cacheId2]))
+		{
+			// Getting price
+			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`id_tax`, t.`rate`, 
+			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.intval($id_product).' AND default_on = 1), 0)').' AS attribute_price
+			FROM `'._DB_PREFIX_.'product` p
+			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.intval($id_product_attribute) : '').'
+			LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
+			WHERE p.`id_product` = '.intval($id_product));
+		}
+		$result = self::$_pricesLevel2[$cacheId2];
+		$price = Tools::convertPrice(floatval($price = $result['price']), $currency);
+		
 		// Exclude tax
 		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address_delivery ? intval($id_address_delivery) : NULL)));
 		if ($forceAssociatedTax)
@@ -1594,8 +1606,7 @@ class		Product extends ObjectModel
 	*/
 	public static function getQuantity($id_product, $id_product_attribute = NULL)
 	{
-		$lang = Configuration::get('PS_LANG_DEFAULT');
-		if (Pack::isPack(intval($id_product), intval($lang)) AND !Pack::isInStock(intval($id_product), intval($lang)))
+		if (Pack::isPack(intval($id_product)) AND !Pack::isInStock(intval($id_product)))
 			return 0;
 		
 		$result = Db::getInstance()->getRow('
@@ -1735,8 +1746,7 @@ class		Product extends ObjectModel
 	*/
 	public function checkQty($qty)
 	{
-		$lang = Configuration::get('PS_LANG_DEFAULT');
-		if (Pack::isPack(intval($this->id), intval($lang)) AND !Pack::isInStock(intval($this->id), intval($lang)))
+		if (Pack::isPack(intval($this->id)) AND !Pack::isInStock(intval($this->id)))
 			return false;
 		
 		if ($this->isAvailableWhenOutOfStock($this->out_of_stock))

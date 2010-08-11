@@ -31,7 +31,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('CHECKUP_SALES_LT', '1', NOW(), NOW()),
 	('CHECKUP_SALES_GT', '2', NOW(), NOW()),
 	('CHECKUP_STOCK_LT', '1', NOW(), NOW()),
-	('CHECKUP_STOCK_GT', '3', NOW(), NOW());
+	('CHECKUP_STOCK_GT', '3', NOW(), NOW()),
+	('BLOCKADVERT_LINK', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'paypal', 1),(5, 'editorial', 1),
 (6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockinfos', 1),

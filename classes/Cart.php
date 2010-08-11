@@ -59,7 +59,6 @@ class		Cart extends ObjectModel
 		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
 
-	private		$_nb_products = NULL;
 	private		$_products = NULL;
 	private		$_totalWeight = NULL;
 	private		$_taxCalculationMethod = PS_TAX_EXC;
@@ -135,35 +134,42 @@ class		Cart extends ObjectModel
 			return array();
 		if (!$lite AND !$refresh AND isset(self::$_discounts[$this->id]))
 			return self::$_discounts[$this->id];
-		if ($lite AND isset(self::$_discountsLite[$this->id]))
-			return self::$_discountsLite[$this->id];
-
-		$result = Db::getInstance()->ExecuteS('
-		SELECT d.*, `id_cart`
-		FROM `'._DB_PREFIX_.'cart_discount` c
-		LEFT JOIN `'._DB_PREFIX_.'discount` d ON c.`id_discount` = d.`id_discount`
-		WHERE `id_cart` = '.intval($this->id));
-
-		$products = $this->getProducts();
-		foreach ($result AS $k => $discount)
+		if ($lite AND !$refresh AND (isset(self::$_discountsLite[$this->id]) OR isset(self::$_discounts[$this->id])))
 		{
-			$categories = Discount::getCategories(intval($discount['id_discount']));
-			$in_category = false;
-			foreach ($products AS $product)
-				if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
-				{
-					$in_category = true;
-					break;
-				}
-			if (!$in_category)
-				unset($result[$k]);
+			if (isset(self::$_discountsLite[$this->id]))
+				return self::$_discountsLite[$this->id];
+			elseif (isset(self::$_discounts[$this->id]))
+				return self::$_discounts[$this->id];
 		}
 
-		if ($lite)
+		if (!$refresh AND !isset(self::$_discountsLite[$this->id]))
 		{
+			$result = Db::getInstance()->ExecuteS('
+			SELECT d.*, `id_cart`
+			FROM `'._DB_PREFIX_.'cart_discount` c
+			LEFT JOIN `'._DB_PREFIX_.'discount` d ON c.`id_discount` = d.`id_discount`
+			WHERE `id_cart` = '.intval($this->id));
+
+			$products = $this->getProducts();
+			foreach ($result AS $k => $discount)
+			{
+				$categories = Discount::getCategories(intval($discount['id_discount']));
+				$in_category = false;
+				foreach ($products AS $product)
+					if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
+					{
+						$in_category = true;
+						break;
+					}
+				if (!$in_category)
+					unset($result[$k]);
+			}
 			self::$_discountsLite[$this->id] = $result;
-			return $result;
+			if ($lite)
+				return $result;
 		}
+		else
+			$result = self::$_discountsLite[$this->id];
 
 		$total_products_wt = $this->getOrderTotal(true, 1);
 		$total_products = $this->getOrderTotal(false, 1);
@@ -214,7 +220,8 @@ class		Cart extends ObjectModel
 	{
 		if (!$this->id)
 			return array();
-		if ($this->_products AND !$refresh)
+		// Product cache must be strictly compared to NULL, or else an empty cart will add dozens of queries
+		if ($this->_products !== NULL AND !$refresh)
 			return $this->_products;
 		$sql = '
 		SELECT cp.`id_product_attribute`, cp.`id_product`, cp.`quantity` AS cart_quantity, pl.`name`,
@@ -254,11 +261,11 @@ class		Cart extends ObjectModel
 		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
 
+		// Reset the cache before the following return, or else an empty cart will add dozens of queries
+		$this->_products = array();
+		
 		if (empty($result))
 			return array();
-
-		/* Modify SQL results */
-		$this->_products = array();
 
 		foreach ($result AS $k => $row)
 		{
@@ -325,17 +332,13 @@ class		Cart extends ObjectModel
 	{
 		if (!$this->id)
 			return 0;
-		if (!$this->_nb_products)
-		{
-			$row = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS nb FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.intval($this->id));
-			$this->_nb_products = intval($row['nb']);
-		}
-		return $this->_nb_products;
+		return self::getNbProducts($this->id);
 	}
 
 	public static function getNbProducts($id)
 	{
-		if (self::$_nbProducts > 0)
+		// Must be strictly compared to NULL, or else an empty cart will bypass the cache and add dozens of queries
+		if (self::$_nbProducts !== NULL)
 			return self::$_nbProducts;
 		$row = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS nb FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.intval($id));
 		self::$_nbProducts = intval($row['nb']);

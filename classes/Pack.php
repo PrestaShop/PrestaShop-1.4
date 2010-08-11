@@ -2,19 +2,28 @@
 
 class Pack extends Product
 {
-	private static $cachePack = array();
 	private static $cachePackItems = array();
+	private static $cacheIsPack = array();
+	private static $cacheIsPacked = array();
 	
 	public static function isPack($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT COUNT(*) AS items FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product));
-		return ($result['items'] > 0);
+		if (!array_key_exists($id_product, self::$cacheIsPack))
+		{
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product));
+			self::$cacheIsPack[$id_product] = ($result > 0);
+		}
+		return self::$cacheIsPack[$id_product];
 	}
 	
 	public static function isPacked($id_product)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(*) AS packs FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.intval($id_product));
-		return ($result['packs'] > 0);
+		if (!array_key_exists($id_product, self::$cacheIsPacked))
+		{
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.intval($id_product));
+			self::$cacheIsPacked[$id_product] = ($result > 0);
+		}
+		return self::$cacheIsPacked[$id_product];
 	}
 	
 	public static function noPackPrice($id_product)
@@ -32,7 +41,7 @@ class Pack extends Product
 	
 	public static function getItems($id_product, $id_lang)
 	{
-		if (in_array($id_product, self::$cachePackItems))
+		if (array_key_exists($id_product, self::$cachePackItems))
 			return self::$cachePackItems[$id_product];
 		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.intval($id_product));
 		$arrayResult = array();
@@ -46,9 +55,9 @@ class Pack extends Product
 		return self::$cachePackItems[$id_product];
 	}
 	
-	public static function isInStock($id_product, $id_lang)
+	public static function isInStock($id_product)
 	{
-		$items = self::getItems(intval($id_product), intval($id_lang));
+		$items = self::getItems(intval($id_product), Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($items AS $item)
 			if ($item->quantity == 0 AND !$item->isAvailableWhenOutOfStock(intval($item->out_of_stock)))
 				return false;
