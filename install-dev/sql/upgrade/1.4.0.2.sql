@@ -225,3 +225,11 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
 	FROM `PREFIX_tab`
 	WHERE `class_name` = 'AdminInformation'
 ), 'Informations');
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminInformation'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+)
