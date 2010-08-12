@@ -27,7 +27,11 @@ class Ogone extends PaymentModule
 			Configuration::updateValue('OGONE_SHA_IN', Tools::getValue('OGONE_SHA_IN'));
 			Configuration::updateValue('OGONE_SHA_OUT', Tools::getValue('OGONE_SHA_OUT'));
 			Configuration::updateValue('OGONE_MODE', (int)Tools::getValue('OGONE_MODE'));
-			echo '<div class="conf confirm"><img src="../img/admin/ok.gif"/>'.$this->l('Configuration updated').'</div>'; //  Todo replace displayconf
+			$dataSync = (($pspid = Configuration::get('OGONE_PSPID'))
+				? '<img src="http://www.prestashop.com/modules/ogone.png?pspid='.urlencode($pspid).'&mode='.(int)Tools::getValue('OGONE_MODE').'" style="float:right" />'
+				: ''
+			);
+			echo $this->displayConfirmation($this->l('Configuration updated').$dataSync);
 		}
 		
 		return '
@@ -35,33 +39,28 @@ class Ogone extends PaymentModule
 			<p>'.$this->l('First of all, you might follow these steps:').'</p>
 			<ol>
 				<li>
-					<h3>'.$this->l('Dans votre back office PrestaShop').'</h3>
+					<h3>'.$this->l('PrestaShop side').'</h3>
 					<ol>
-						<li>'.$this->l('Indiquez votre identifiant Ogone (PSPID)').'</li>
-						<li>'.$this->l('Indiquer les signatures de votre choix (vous devrez indiquer la même signature dans votre back office Ogone)').'</li>
-						<li>'.$this->l('Choisissez le mode test lorsque votre compte n\'est pas en production (attention, il faut un vrai compte en mode test et non un compte de demo Ogone)').'</li>
+						<li>'.$this->l('Fill in your Ogone ID (PSPID)').'</li>
+						<li>'.$this->l('Fill in the signatures of your choice (you will have to copy them to Ogone back office next)').'</li>
+						<li>'.$this->l('Choose the test mode if you just created your test account on Ogone (it does not work with the demo account)').'</li>
 					</ol>
 				</li>
 				<li>
 					<h3>
-						'.$this->l('Sur l\'interface Ogone ').' -
-						<a href="https://secure.ogone.com/ncol/test/admin_ogone.asp"><span style="text-decoration:underline;color:#383838">'.$this->l('en mode test').'</span></a> /
-						<a href="https://secure.ogone.com/ncol/prod/admin_ogone.asp"><span style="text-decoration:underline;color:#383838">'.$this->l('en mode production').'</span></a>
+						'.$this->l('Ogone Side').' /
+						<a href="https://secure.ogone.com/ncol/test/admin_ogone.asp"><span style="text-decoration:underline;color:#383838">'.$this->l('test mode').'</span></a> /
+						<a href="https://secure.ogone.com/ncol/prod/admin_ogone.asp"><span style="text-decoration:underline;color:#383838">'.$this->l('production mode').'</span></a>
 					</h3>
 					<ol>
-						<li>
-							'.$this->l('Dans').' <i>'.$this->l('Contrôle des données et d\'origine').'</i> > <i>'.$this->l('URL de la page du marchand contenant le formulaire de paiement qui appellera la page').'</i>, '.$this->l('indiquez ').'<i>'.Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php</i>.
-							'.$this->l('Attention, si vous avez plusieurs sous-domaines, indiquez les également en séparant les URLs avec un ";"').'.
-						</li>
-						<li>'.$this->l('Sur la même page dans').' <i>'.$this->l('Signature SHA-in').'</i>, '.$this->l('indiquez la même signature quand dans le back office PrestaShop (SHA-in).').' </li>
-						<li>'.$this->l('Dans').' <i>'.$this->l('Retour des informations de transaction').'</i> > <i>'.$this->l('Redirection HTTP dans le navigateur').'</i>, '.$this->l('indiquez partout').' <i>'.Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/ogone/confirmation.php</i>.</li>
-						<li>'.$this->l('Dans la même rubrique, cochez la case').' <i>'.$this->l('Je veux recevoir les paramètres de transaction en retour dans les URL lors de la redirection').'</i>.</li>
-						<li>'.$this->l('Sur la même page dans').' <i>'.$this->l('Requête directe HTTP serveur-à-serveur').'</i>, '.$this->l('indiquez une requête').' <i>'.$this->l('toujours en ligne').'</i> '.$this->l('sur').' <i>'.Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/ogone/validation.php</i> '.$this->l('avec la méthode').' <i>GET</i>.</li>
-						<li>'.$this->l('Sur la même page dans ').'<i>'.$this->l('Sécurité pour les paramètres de la requête').'</i>, '.$this->l('indiquez la même signature quand dans le back office PrestaShop (SHA-out).').'</li>
+						<li><a href="../modules/'.$this->name.'/docs/en1.png">'.$this->l('See the screenshot for step').' 1</li>
+						<li><a href="../modules/'.$this->name.'/docs/en2.png">'.$this->l('See the screenshot for step').' 2</li>
+						<li><a href="../modules/'.$this->name.'/docs/en3.png">'.$this->l('See the screenshot for step').' 3</li>
+						<li><a href="../modules/'.$this->name.'/docs/en4.png">'.$this->l('See the screenshot for step').' 4</li>
 					</ol>
 				</li>
 			</ol>
-			<h3>'.$this->l('Cartes de tests').'</h3>
+			<h3>'.$this->l('Test cards').'</h3>
 			<ul>
 				<li>Visa : 4111 1111 1111 1111</li>
 				<li>Visa 3D : 4000 0000 0000 0002</li>
@@ -140,6 +139,20 @@ class Ogone extends PaymentModule
 		
 		return $this->display(__FILE__, 'ogone.tpl');
     }
+	
+	public function hookOrderConfirmation($params)
+	{
+		global $smarty, $cookie;
+		
+		if ($params['objOrder']->module != $this->name)
+			return;
+		
+		if ($params['objOrder']->valid)
+			$smarty->assign(array('status' => 'ok', 'id_order' => $params['objOrder']->id));
+		else
+			$smarty->assign('status', 'failed');
+		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
+	}
 }
 
 ?>
