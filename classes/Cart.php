@@ -52,7 +52,7 @@ class		Cart extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
-	private static $_nbProducts = -1;
+	private static $_nbProducts = NULL;
 	
 	protected	$fieldsRequired = array('id_currency', 'id_lang');
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
@@ -110,7 +110,7 @@ class		Cart extends ObjectModel
 
 	public function update($nullValues = false)
 	{
-		self::$_nbProducts = 0;
+		self::$_nbProducts = NULL;
 		$return = parent::update();
 		Module::hookExec('cart');
 		return $return;
@@ -340,9 +340,8 @@ class		Cart extends ObjectModel
 		// Must be strictly compared to NULL, or else an empty cart will bypass the cache and add dozens of queries
 		if (self::$_nbProducts !== NULL)
 			return self::$_nbProducts;
-		$row = Db::getInstance()->getRow('SELECT SUM(`quantity`) AS nb FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.intval($id));
-		self::$_nbProducts = intval($row['nb']);
-		return intval($row['nb']);
+		self::$_nbProducts = intval(Db::getInstance()->getValue('SELECT SUM(`quantity`) FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.intval($id)));
+		return self::$_nbProducts;
 	}
 
 	/**
@@ -380,7 +379,7 @@ class		Cart extends ObjectModel
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 
-		self::$_nbProducts = 0;
+		self::$_nbProducts = NULL;
 		if (intval($quantity) <= 0)
 			return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
 		else
@@ -546,7 +545,7 @@ class		Cart extends ObjectModel
 	 */
 	public	function deleteProduct($id_product, $id_product_attribute = NULL, $id_customization = NULL)
 	{
-		self::$_nbProducts = 0;
+		self::$_nbProducts = NULL;
 		if (intval($id_customization))
 		{
 			$productTotalQuantity = intval(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute)));

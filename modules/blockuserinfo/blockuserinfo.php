@@ -2,7 +2,7 @@
 
 class BlockUserInfo extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blockuserinfo';
 		$this->tab = 'Blocks';
@@ -14,7 +14,7 @@ class BlockUserInfo extends Module
 		$this->description = $this->l('Adds a block that displays information about the customer');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install())
 			return false;
@@ -29,7 +29,7 @@ class BlockUserInfo extends Module
 	* @param array $params Parameters
 	* @return string Content
 	*/
-	function hookTop($params)
+	public function hookTop($params)
 	{
 		global $smarty, $cookie, $cart;
 		$smarty->assign(array(

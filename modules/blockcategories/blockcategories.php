@@ -89,14 +89,6 @@ class BlockCategories extends Module
 	{
 		global $smarty, $cookie;
 
-		/*  ONLY FOR THEME OLDER THAN v1.0 */
-		global $link;
-		$smarty->assign(array(
-			'categories' => Category::getHomeCategories(intval($params['cookie']->id_lang), true),
-			'link' => $link
-		));
-		/* ELSE */
-		
 		$id_customer = intval($params['cookie']->id_customer);
 		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
 		
@@ -145,7 +137,6 @@ class BlockCategories extends Module
 		else
 			$smarty->assign('branche_tpl_path', _PS_MODULE_DIR_.'blockcategories/category-tree-branch.tpl');
 		$smarty->assign('isDhtml', $isDhtml);
-		/* /ONLY FOR THEME OLDER THAN v1.0 */
 		
 		return $this->display(__FILE__, 'blockcategories.tpl');
 	}
