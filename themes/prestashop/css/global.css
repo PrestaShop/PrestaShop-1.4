@@ -1800,6 +1800,10 @@ div.categTree {
 	clear: left;
 	height: 2em
 }
+#primary_block div#attributes p, #minimal_quantity_wanted_p {
+	clear: left;
+	text-align:center;
+}
 
 /* prices */
 #primary_block form#buy_block p.price {

@@ -254,14 +254,41 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
 			<p id="product_reference" {if isset($groups) OR !$product->reference}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>
 
+			{if $product->minimal_quantity > 1}
+			<!-- minimal quantity JS -->
+			<script type="text/javascript">
+				var minimal_quantity = {$product->minimal_quantity};
+				{literal}
+				function checkMinimalQuantity()
+				{
+					if ($('#quantity_wanted').val() < minimal_quantity)
+					{
+						$('#quantity_wanted').css('border', '1px solid red');
+						$('#minimal_quantity_wanted_p').css('color', 'red');
+					}
+					else
+					{
+						$('#quantity_wanted').css('border', '1px solid #BDC2C9');
+						$('#minimal_quantity_wanted_p').css('color', '#374853');
+					}
+				}
+				{/literal}
+			</script>
+			{/if}
+			
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
 				<label>{l s='Quantity :'}</label>
-				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}1{/if}" size="2" maxlength="3" />
+				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}{if $product->minimal_quantity > 1}{$product->minimal_quantity}{else}1{/if}{/if}" size="2" maxlength="3" {if $product->minimal_quantity > 1}onkeyup="checkMinimalQuantity();"{/if} />
 			</p>
 
 			<!-- minimal quantity wanted -->
-			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity == 0} style="display:none;"{/if}>{l s='You need add '}{$product->minimal_quantity}{l s=' quantities minimum.'}</p>
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' quantities minimum for buy this product.'}</p>
+			{if $product->minimal_quantity > 1}
+			<script type="text/javascript">
+				checkMinimalQuantity();
+			</script>
+			{/if}
 
 			<!-- availability -->
 			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now)} style="display:none;"{/if}>

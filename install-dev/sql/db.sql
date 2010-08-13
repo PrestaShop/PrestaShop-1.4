@@ -977,7 +977,7 @@ CREATE TABLE `PREFIX_product` (
   `ean13` varchar(13) default NULL,
   `ecotax` decimal(17,2) NOT NULL default '0.00',
   `quantity` int(10) unsigned NOT NULL default '0',
-  `minimal_quantity` int(10) unsigned NOT NULL default '0',
+  `minimal_quantity` int(10) unsigned NOT NULL default '1',
   `price` decimal(20,6) NOT NULL default '0.000000',
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
   `reduction_price` decimal(17,2) default NULL,
