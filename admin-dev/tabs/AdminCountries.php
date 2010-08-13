@@ -78,7 +78,7 @@ class AdminCountries extends AdminTab
 				</div>
 				<label>'.$this->l('Call prefix:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="3" name="call_prefix" value="'.intval($this->getFieldValue($obj, 'call_prefix'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="3" name="call_prefix" value="'.intval($this->getFieldValue($obj, 'call_prefix')).'" style="text-transform: uppercase;" /> <sup>*</sup>
 					<p>'.$this->l('International call prefix, e.g., 33 for France.').'.</p>
 				</div>
 				<label>'.$this->l('Zone:').' </label>
