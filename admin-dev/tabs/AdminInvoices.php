@@ -68,7 +68,7 @@ class AdminInvoices extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
 			</form>
 		</fieldset>
-		<fieldset style="float:left;width450px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By statuses').'</legend>
+		<fieldset style="float:left;width: 500px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By statuses').'</legend>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 				<label style="width:90px">'.$this->l('Statuses').'</label>
 				<div class="margin-form" style="padding-left:100px">
@@ -82,7 +82,7 @@ class AdminInvoices extends AdminTab
 							</label>
 						</li>';
 		echo '		</ul>
-					<p class="clear">'.$this->l('You can also export orders which have not been charged yet.').'</p>
+					<p class="clear">'.$this->l('You can also export orders which have not been charged yet.').'(<img src="../img/admin/charged_ko.gif" alt="" />)</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint2" class="button" />
