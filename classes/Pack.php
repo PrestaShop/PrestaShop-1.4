@@ -57,6 +57,7 @@ class Pack extends Product
 	
 	public static function isInStock($id_product)
 	{
+		// Not enough, the quantity must be > to the item quantity of the pack, not just > 0
 		$items = self::getItems(intval($id_product), Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($items AS $item)
 			if ($item->quantity == 0 AND !$item->isAvailableWhenOutOfStock(intval($item->out_of_stock)))
@@ -116,6 +117,7 @@ class Pack extends Product
 	
 	public static function deleteItems($id_product)
 	{
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 0 WHERE id_product = '.intval($id_product).' LIMIT 1');
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'pack` WHERE `id_product_pack` = '.intval($id_product));
 	}
 	
@@ -141,6 +143,7 @@ class Pack extends Product
 	*/
 	public static function addItem($id_product, $id_item, $qty)
 	{
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 1 WHERE id_product = '.intval($id_product).' LIMIT 1');
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => intval($id_product), 'id_product_item' => intval($id_item), 'quantity' => intval($qty)), 'INSERT');
 	}
 	

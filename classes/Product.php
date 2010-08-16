@@ -147,6 +147,9 @@ class		Product extends ObjectModel
 
 	/*** @var array Tags */
 	public		$tags;
+	
+	public $cache_is_pack;
+	public $cache_has_attachments;
 
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
@@ -185,7 +188,10 @@ class		Product extends ObjectModel
 		'uploadable_files' => 'isUnsignedInt',
 		'text_fields' => 'isUnsignedInt',
 		'active' => 'isBool',
-		'ean13' => 'isEan13'
+		'ean13' => 'isEan13',
+		'indexed' => 'isBool',
+		'cache_is_pack' => 'isBool',
+		'cache_has_attachments' => 'isBool'
 	);
 	protected $fieldsRequiredLang = array('link_rewrite', 'name');
 	/* Description short is limited to 400 chars, but without html, so it can't be generic */
@@ -243,6 +249,7 @@ class		Product extends ObjectModel
 		$fields['reduction_to'] = pSQL($this->reduction_to);
 		$fields['on_sale'] = intval($this->on_sale);
 		$fields['ecotax'] = floatval($this->ecotax);
+		$fields['ean13'] = pSQL($this->ean13);
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
@@ -254,7 +261,8 @@ class		Product extends ObjectModel
 		$fields['text_fields'] = intval($this->text_fields);
 		$fields['active'] = intval($this->active);
 		$fields['indexed'] = 0; // Reset indexation every times
-		$fields['ean13'] = pSQL($this->ean13);
+		$fields['cache_is_pack'] = intval($this->cache_is_pack);
+		$fields['cache_has_attachments'] = intval($this->cache_has_attachments);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
@@ -1612,10 +1620,7 @@ class		Product extends ObjectModel
 	* @return integer Available quantities
 	*/
 	public static function getQuantity($id_product, $id_product_attribute = NULL)
-	{
-		if (Pack::isPack(intval($id_product)) AND !Pack::isInStock(intval($id_product)))
-			return 0;
-		
+	{		
 		$result = Db::getInstance()->getRow('
 		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
 		FROM `'._DB_PREFIX_.'product` p
@@ -2282,10 +2287,14 @@ class		Product extends ObjectModel
 		$row['quantity'] = Product::getQuantity($row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic(intval($id_lang), $row['id_product']);
-		$row['attachments'] = Product::getAttachmentsStatic(intval($id_lang), $row['id_product']);
-		$row['pack'] = Pack::isPack($row['id_product']);
+		$row['attachments'] = ((!isset($row['cache_has_attachments']) OR $row['cache_has_attachments']) ? Product::getAttachmentsStatic(intval($id_lang), $row['id_product']) : array());
+		
+		// Pack management
+		$row['pack'] = (!isset($row['cache_is_pack']) ? Pack::isPack($row['id_product']) : (int)$row['cache_is_pack']);
 		$row['packItems'] = $row['pack'] ? Pack::getItemTable($row['id_product'], $id_lang) : array();
 		$row['nopackprice'] = $row['pack'] ? Pack::noPackPrice($row['id_product']) : 0;
+		if ($row['pack'] AND !Pack::isInStock($row['id_product']))
+			$row['quantity'] =  0;
 		
 		self::$producPropertiesCache[$cacheKey] = $row;
 		return self::$producPropertiesCache[$cacheKey];

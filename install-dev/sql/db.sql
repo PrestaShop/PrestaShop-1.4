@@ -995,6 +995,8 @@ CREATE TABLE `PREFIX_product` (
   `text_fields` tinyint(4) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `indexed` tinyint(1) NOT NULL default '0',
+  `cache_is_pack` tinyint(1) NOT NULL default '0',
+  `cache_has_attachments` tinyint(1) NOT NULL default '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_product`),

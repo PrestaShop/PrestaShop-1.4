@@ -208,6 +208,12 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
 
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFTER `quantity`;
+ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` tinyint(1) NOT NULL default '0' AFTER `indexed`;
+ALTER TABLE `PREFIX_product` ADD `cache_is_pack` tinyint(1) NOT NULL default '0' AFTER `indexed`;
+
+UPDATE `PREFIX_product` p SET
+cache_is_pack = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_pack` pp WHERE pp.id_product_pack = p.id_product),
+cache_has_attachments = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_product_attachment` pa WHERE pa.id_product = p.id_product);
 
 INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (9, 'AdminInformation', '', 11);
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (

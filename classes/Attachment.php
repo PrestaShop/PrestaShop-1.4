@@ -82,7 +82,8 @@ class Attachment extends ObjectModel
 			$ids = array();
 			foreach ($array as $id_attachment)
 				$ids[] = '('.intval($id_product).','.intval($id_attachment).')';
-			return $result1 & Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attachment (id_product, id_attachment) VALUES '.implode(',',$ids));
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_has_attachments = '.(count($ids) ? '1' : '0').' WHERE id_product = '.intval($id_product).' LIMIT 1');
+			return ($result1 && Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attachment (id_product, id_attachment) VALUES '.implode(',',$ids)));
 		}
 		return $result1;
 	}
