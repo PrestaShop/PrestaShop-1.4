@@ -46,15 +46,15 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
 
 //old version detection
-$oldversion = false;
-if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
-{
-	include_once(SETTINGS_FILE);
-	include_once(DEFINES_FILE);
-	$oldversion = _PS_VERSION_;
-}
-else
+if (!file_exists(SETTINGS_FILE))
 	die('<action result="fail" error="30" />'."\n");
+if (!file_exists(DEFINES_FILE))
+	die('<action result="fail" error="37" />'."\n");
+
+include_once(SETTINGS_FILE);
+include_once(DEFINES_FILE);
+$oldversion = _PS_VERSION_;
+
 $versionCompare =  version_compare(INSTALL_VERSION, _PS_VERSION_);
 if ($versionCompare == '-1')
 	die('<action result="fail" error="27" />'."\n");

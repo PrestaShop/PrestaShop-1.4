@@ -126,6 +126,7 @@ $_LANG['Tables prefix:'] = 'Préfixe des tables :';
 $_LANG['Test message - Prestashop'] = 'Installation de Prestashop - test du serveur d\'email';
 $_LANG['The PrestaShop Installer will do most of the work in just a few clicks.'] = 'L\'installeur de PrestaShop va faire tout le travail en quelques clics.';
 $_LANG['The config/settings.inc.php file was not found. Did you delete or rename this file?'] = 'Le fichier config/settings.inc.php n\'a pas été trouvé. L\'avez-vous supprimé ou renommé ?';
+$_LANG['The config/defines.inc.php file was not found. Where did you move it?'] = 'Le fichier config/defines.inc.php n\'a pas été trouvé. Ou est-il passé ?';
 $_LANG['The password is incorrect (alphanumeric string at least 8 characters).'] = 'Mot de passe incorrect (chaîne alpha-numérique d\'au moins 8 caractères)';
 $_LANG['The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'] = 'Le fichier envoyé dépasse la taille maximum autorisée.';
 $_LANG['The uploaded file exceeds the upload_max_filesize directive in php.ini'] = 'Le fichier envoyé dépasse la taille maximum autorisée.';

@@ -155,6 +155,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[34] = "<?php echo lang('Error while inserting content into the database'); ?>";
 		txtError[35] = "<?php echo lang('Unfortunately,'); ?>";
 		txtError[36] = "<?php echo lang('SQL errors have occurred.'); ?>";
+		txtError[37] = "<?php echo lang('The config/defines.inc.php file was not found. Where did you move it?'); ?>";
 
 	</script>
 	<script type="text/javascript" src="controller.js"></script>

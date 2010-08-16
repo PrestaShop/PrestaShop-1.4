@@ -48,7 +48,7 @@ class	ConfigurationTest
 
 	static function		test_gd()
 	{
-		return function_exists('imagecreatetruecolor');
+		return (function_exists('imagecreatetruecolor') AND function_exists('imagecreatefromjpeg'));
 	}
 	
 	static function		test_register_globals()
