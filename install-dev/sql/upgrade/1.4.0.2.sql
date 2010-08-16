@@ -208,8 +208,21 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
 
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFTER `quantity`;
+ALTER TABLE `PREFIX_product` ADD `cache_default_attribute` int(10) unsigned default NULL AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` tinyint(1) NOT NULL default '0' AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `cache_is_pack` tinyint(1) NOT NULL default '0' AFTER `indexed`;
+
+SET @defaultOOS = (SELECT value FROM `PREFIX_configuration` WHERE name = 'PS_ORDER_OUT_OF_STOCK');
+/* Set 0 for every non-attribute product */
+UPDATE `PREFIX_product` p SET cache_default_attribute =  0 WHERE id_product NOT IN (SELECT id_product FROM `PREFIX_product_attribute`);
+/* First default attribute in stock */
+UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 AND quantity > 0 LIMIT 1) WHERE cache_default_attribute IS NULL;
+/* Then default attribute without stock if we don't care */
+UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 LIMIT 1) WHERE cache_default_attribute IS NULL AND out_of_stock = 1 OR out_of_stock = IF(@defaultOOS = 1, 2, 1);
+/* Next, the default attribute can be any attribute with stock */
+UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND quantity > 0 LIMIT 1) WHERE cache_default_attribute IS NULL;
+/* If there is still no default attribute, then we go back to the default one */
+UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 LIMIT 1) WHERE cache_default_attribute IS NULL;
 
 UPDATE `PREFIX_product` p SET
 cache_is_pack = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_pack` pp WHERE pp.id_product_pack = p.id_product),

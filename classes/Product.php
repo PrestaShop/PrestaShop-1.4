@@ -150,6 +150,7 @@ class		Product extends ObjectModel
 	
 	public $cache_is_pack;
 	public $cache_has_attachments;
+	public $cache_default_attribute;
 
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
@@ -263,6 +264,7 @@ class		Product extends ObjectModel
 		$fields['indexed'] = 0; // Reset indexation every times
 		$fields['cache_is_pack'] = intval($this->cache_is_pack);
 		$fields['cache_has_attachments'] = intval($this->cache_has_attachments);
+		$fields['cache_default_attribute'] = intval($this->cache_default_attribute);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
@@ -399,9 +401,8 @@ class		Product extends ObjectModel
 	*
 	* @return array Attributes list
 	*/
-	static public function getDefaultAttribute($id_product, $minimumQuantity = 0)
+	public static function getDefaultAttribute($id_product, $minimumQuantity = 0)
 	{
-
 		$sql = 'SELECT `id_product_attribute`
 		FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `default_on` = 1 '.(intval($minimumQuantity) > 0 ? 'AND `quantity` >= '.intval($minimumQuantity).' ' : '').'AND `id_product` = '.intval($id_product);
@@ -415,8 +416,14 @@ class		Product extends ObjectModel
 			$result = Db::getInstance()->getRow('
 			SELECT `id_product_attribute`
 			FROM `'._DB_PREFIX_.'product_attribute`
-			WHERE `id_product` = '.intval($id_product));			
+			WHERE `id_product` = '.intval($id_product));
 		return $result['id_product_attribute'];
+	}
+	
+	public static function updateDefaultAttribute($id_product)
+	{
+		$id_product_attribute = self::getDefaultAttribute($id_product);
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_default_attribute = '.intval($id_product_attribute).' WHERE id_product = '.intval($id_product_attribute).' LIMIT 1');
 	}
 
 	public function validateFieldsLang($die = true, $errorReturn = false)
@@ -726,6 +733,7 @@ class		Product extends ObjectModel
 		'weight' => ($weight ? floatval($weight) : 0), 'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
 		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'default_on' => intval($default)),
 		'INSERT');
+		Product::updateDefaultAttribute($this->id);
 		if (!$id_product_attribute = Db::getInstance()->Insert_ID())
 			return false;
 		if (empty($id_images))
@@ -832,6 +840,7 @@ class		Product extends ObjectModel
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		Hook::updateProductAttribute($id_product_attribute);
+		Product::updateDefaultAttribute($this->id);
 		if (empty($id_images))
 			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
@@ -2253,7 +2262,10 @@ class		Product extends ObjectModel
 			return false;
 		
 		$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
-		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute']) AND $ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp']))
+		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute'])
+			AND ((isset($row['cache_default_attribute']) AND ($ipa_default = $row['cache_default_attribute']) !== NULL)
+				OR ($ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp'])))
+		)
 			$row['id_product_attribute'] = $ipa_default;
 		if (!isset($row['id_product_attribute']))
 			$row['id_product_attribute'] = 0;

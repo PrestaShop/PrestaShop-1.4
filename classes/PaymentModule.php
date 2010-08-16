@@ -163,6 +163,7 @@ abstract class PaymentModule extends Module
 						if (!$outOfStock)
 							$product['stock_quantity'] -= $product['cart_quantity'];
 						Hook::updateQuantity($product, $order);
+						Product::updateDefaultAttribute($product['id_product']);
 					}
 					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
 					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
