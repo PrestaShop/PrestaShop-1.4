@@ -48,6 +48,7 @@ $(document).ready(function() {
 
 				$.ajax({
 					type: 'POST',
+					async: false,
 					url: 'ajax.php?' + $.tableDnD.serialize(),
 					data: params,
 					success: function(data) {
