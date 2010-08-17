@@ -1056,6 +1056,7 @@ $_LANGADM['AdminModulesPositions51a8b3a61ad63d4e5df2ce86870e39b8'] = 'Greffer un
 $_LANGADM['AdminModulesPositions498f79c4c5bbde77f1bceb6c86fd0f6d'] = 'Montrer';
 $_LANGADM['AdminModulesPositions4ba24d91566786f5315acf453418dbb6'] = 'Tous les modules';
 $_LANGADM['AdminModulesPositionsc89a9e08172e8c615c6d908fd3d982b5'] = 'Afficher les points d\'accroche invisibles';
+$_LANGADM['AdminModulesPositionsfeb6f2e19409f021e5fd65c51d21d254'] = 'Dégreffer la sélection';
 $_LANGADM['AdminModulesPositions0eb9b3af2e4a00837a1b1a854c9ea18c'] = 'modules';
 $_LANGADM['AdminModulesPositions22884db148f0ffb0d830ba431102b0b5'] = 'module';
 $_LANGADM['AdminModulesPositions258f49887ef8d14ac268c92b02503aaa'] = 'Haut';

@@ -17,7 +17,7 @@ class		Category extends ObjectModel
 	public 		$id;
 
 	/** @var integer category ID */
-	public $id_category;
+	public 		$id_category;
 
 	/** @var string Name */
 	public 		$name;

@@ -10,6 +10,10 @@ body {
 	background-color: #EFEFEF;
 }
 
+.floatr {
+	float: right;
+}
+
 a img {
 	border: 0;
 }
@@ -33,6 +37,10 @@ a.link {
 }
 
 img {
+	vertical-align: middle;
+}
+
+input {
 	vertical-align: middle;
 }
 
@@ -181,7 +189,7 @@ legend {
 label {
 	float: left;
 	width: 180px;
-	padding: 0.2em 0 0 0;
+	padding: 0.2em 0.5em 0 0;
 	text-align: right;
 	font-weight: bold;
 }
@@ -266,6 +274,26 @@ select optgroup {
 select optgroup option {
 	padding: 0 9px;
 	color: #000
+}
+
+.lab_modules_positions {
+	float: none;
+	text-align: left;
+	font-weight: normal;
+	padding: 0;
+	cursor: pointer;
+	display: block;
+	width: 425px;
+}
+
+.lab_modules {
+	float: none;
+	text-align: left;
+	font-weight: normal;
+	padding-left: 10px;
+	cursor: pointer;
+	display: block;
+	width: 350px;
 }
 
 /* STRCTURE */
@@ -448,6 +476,17 @@ select optgroup option {
 	/*background: #FFEBCC url('../img/admin/warning.gif') no-repeat 5px 10px;*/
 }
 
+#unhook_button_position_bottom {
+	overflow: hidden;
+	width: 600px;
+	padding-top: 10px;
+}
+
+#unhook_button_position_top {
+	overflow: hidden;
+	width: 600px;
+}
+
 #content .conf {
 	width: 400px;
 	margin: 0 0 15px 0;
@@ -544,6 +583,7 @@ select optgroup option {
 
 .table tr td {
 	padding: 0 4px;
+	padding-left: 6px;
 	height: 23px;
 	color: #963;
 	border-bottom: 1px solid #F0EADA;

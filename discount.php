@@ -15,7 +15,10 @@ foreach ($discounts AS $discount)
 	if ($discount['quantity_for_user'])
 		$nbDiscounts++;
 
-$smarty->assign(array('nbDiscounts' => intval($nbDiscounts), 'discount' => $discounts));
+$smarty->assign(array(
+		'nbDiscounts' => intval($nbDiscounts), 
+		'discount' => $discounts)
+);
 
 include(dirname(__FILE__).'/header.php');
 $smarty->display(_PS_THEME_DIR_.'discount.tpl');

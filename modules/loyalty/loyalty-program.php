@@ -49,6 +49,11 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 	$voucher->date_to = date('Y-m-d H:i:s', $dateFrom + 31536000); // + 1 year
 	$voucher->minimal = 0;
 	$voucher->active = 1;
+	$categories = Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY');
+	if ($categories != '' AND $categories != 0)
+		$categories = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
+	else
+		die(Tools::displayError());
 	$languages = Language::getLanguages(true);
 	$default_text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval(Configuration::get('PS_LANG_DEFAULT')));
 	foreach ($languages as $language)
@@ -56,8 +61,10 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 		$text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval($language['id_lang']));
 		$voucher->description[intval($language['id_lang'])] = $text ? strval($text) : strval($default_text);
 	}
-	$voucher->save();
-
+	if (is_array($categories) AND sizeof($categories))
+		$voucher->add(true, false, $categories);
+	else
+		$voucher->add();
 	/* register order(s) which contribute to create this voucher */
 	LoyaltyModule::registerDiscount($voucher);
 
@@ -88,9 +95,33 @@ if ($ids_discount = LoyaltyModule::getDiscountByIdCustomer(intval($cookie->id_cu
 		$discounts[$key]->orders = LoyaltyModule::getOrdersByIdDiscount($discount['id_discount']);
 	}
 }
+
+$allCategories = Category::getSimpleCategories(intval($cookie->id_lang));
+$voucherCategories = Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY');
+if ($voucherCategories != '' AND $voucherCategories != 0)
+	$voucherCategories = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
+else
+	die(Tools::displayError());
+
+if (sizeof($voucherCategories) == sizeof($allCategories))
+	$categoriesNames = null;
+else
+{
+	$categoriesNames = '';
+	foreach ($voucherCategories as $voucherCategory)
+		foreach ($allCategories as $allCategory)
+			if ($voucherCategory['id_category'] == $allCategory['id_category'])
+			{
+				$categoriesNames .= $allCategory['name'].', ';
+				break;
+			}
+	$categoriesNames = rtrim($categoriesNames, ', ');
+	$categoriesNames .= '.';
+}
 $smarty->assign(array(
 	'nbDiscounts' => $nbDiscounts,
-	'discounts' => $discounts
+	'discounts' => $discounts,
+	'categories' => $categoriesNames
 ));
 
 echo Module::display(dirname(__FILE__).'/loyalty.php', 'loyalty.tpl');

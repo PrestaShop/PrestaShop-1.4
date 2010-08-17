@@ -48,6 +48,14 @@ class Loyalty extends Module
 				OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array(intval(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher'))	
 			)
 			return false;
+
+		$category_config = '';
+		$categories = Category::getSimpleCategories(intval(Configuration::get('PS_LANG_DEFAULT')));
+		foreach ($categories as $category)
+			$category_config .= $category['id_category'].',';
+		$category_config = rtrim($category_config, ',');
+		Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $category_config);
+
 		/* This hook is optional */
 		$this->registerHook('myAccountBlock');
 		if (!LoyaltyStateModule::insertDefaultData())
@@ -108,6 +116,7 @@ class Loyalty extends Module
 				OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')
 				OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
 				OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD')
+				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
 				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS')
 			)
 			return false;
@@ -130,48 +139,71 @@ class Loyalty extends Module
 			$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 			$languages = Language::getLanguages();
 			
-			Configuration::updateValue('PS_LOYALTY_POINT_VALUE', floatval(Tools::getValue('point_value')));
-			Configuration::updateValue('PS_LOYALTY_POINT_RATE', floatval(Tools::getValue('point_rate')));
-			Configuration::updateValue('PS_LOYALTY_NONE_AWARD', intval(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
-			$this->loyaltyStateValidation->id_order_state = intval(Tools::getValue('id_order_state_validation'));
-			$this->loyaltyStateCancel->id_order_state = intval(Tools::getValue('id_order_state_cancel'));
-			
-			$arrayVoucherDetails = array();
-			foreach ($languages AS $language)
+			$this->_errors = array();
+			if (!is_array(Tools::getValue('categoryBox')) OR !sizeof(Tools::getValue('categoryBox')))
+				$this->_errors[] = $this->l('You must choose at least one category for voucher\'s action');
+			if (!sizeof($this->_errors))
 			{
-				$arrayVoucherDetails[intval($language['id_lang'])] = Tools::getValue('voucher_details_'.intval($language['id_lang']));
-				$this->loyaltyStateDefault->name[intval($language['id_lang'])] = Tools::getValue('default_loyalty_state_'.intval($language['id_lang']));
-				$this->loyaltyStateValidation->name[intval($language['id_lang'])] = Tools::getValue('validation_loyalty_state_'.intval($language['id_lang']));
-				$this->loyaltyStateCancel->name[intval($language['id_lang'])] = Tools::getValue('cancel_loyalty_state_'.intval($language['id_lang']));
-				$this->loyaltyStateConvert->name[intval($language['id_lang'])] = Tools::getValue('convert_loyalty_state_'.intval($language['id_lang']));
-				$this->loyaltyStateNoneAward->name[intval($language['id_lang'])] = Tools::getValue('none_award_loyalty_state_'.intval($language['id_lang']));
-			}
-			if (empty($arrayVoucherDetails[$defaultLanguage]))
-				$arrayVoucherDetails[$defaultLanguage] = ' ';
-			Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', $arrayVoucherDetails);
+				Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $this->voucherCategories(Tools::getValue('categoryBox')));
+				Configuration::updateValue('PS_LOYALTY_POINT_VALUE', floatval(Tools::getValue('point_value')));
+				Configuration::updateValue('PS_LOYALTY_POINT_RATE', floatval(Tools::getValue('point_rate')));
+				Configuration::updateValue('PS_LOYALTY_NONE_AWARD', intval(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
+				$this->loyaltyStateValidation->id_order_state = intval(Tools::getValue('id_order_state_validation'));
+				$this->loyaltyStateCancel->id_order_state = intval(Tools::getValue('id_order_state_cancel'));
 			
-			if (empty($this->loyaltyStateDefault->name[$defaultLanguage]))
-				$this->loyaltyStateDefault->name[$defaultLanguage] = ' ';
-			$this->loyaltyStateDefault->save();
+				$arrayVoucherDetails = array();
+				foreach ($languages AS $language)
+				{
+					$arrayVoucherDetails[intval($language['id_lang'])] = Tools::getValue('voucher_details_'.intval($language['id_lang']));
+					$this->loyaltyStateDefault->name[intval($language['id_lang'])] = Tools::getValue('default_loyalty_state_'.intval($language['id_lang']));
+					$this->loyaltyStateValidation->name[intval($language['id_lang'])] = Tools::getValue('validation_loyalty_state_'.intval($language['id_lang']));
+					$this->loyaltyStateCancel->name[intval($language['id_lang'])] = Tools::getValue('cancel_loyalty_state_'.intval($language['id_lang']));
+					$this->loyaltyStateConvert->name[intval($language['id_lang'])] = Tools::getValue('convert_loyalty_state_'.intval($language['id_lang']));
+					$this->loyaltyStateNoneAward->name[intval($language['id_lang'])] = Tools::getValue('none_award_loyalty_state_'.intval($language['id_lang']));
+				}
+				if (empty($arrayVoucherDetails[$defaultLanguage]))
+					$arrayVoucherDetails[$defaultLanguage] = ' ';
+				Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', $arrayVoucherDetails);
 			
-			if (empty($this->loyaltyStateValidation->name[$defaultLanguage]))
-				$this->loyaltyStateValidation->name[$defaultLanguage] = ' ';
-			$this->loyaltyStateValidation->save();
+				if (empty($this->loyaltyStateDefault->name[$defaultLanguage]))
+					$this->loyaltyStateDefault->name[$defaultLanguage] = ' ';
+				$this->loyaltyStateDefault->save();
 			
-			if (empty($this->loyaltyStateCancel->name[$defaultLanguage]))
-				$this->loyaltyStateCancel->name[$defaultLanguage] = ' ';
-			$this->loyaltyStateCancel->save();
+				if (empty($this->loyaltyStateValidation->name[$defaultLanguage]))
+					$this->loyaltyStateValidation->name[$defaultLanguage] = ' ';
+				$this->loyaltyStateValidation->save();
 			
-			if (empty($this->loyaltyStateConvert->name[$defaultLanguage]))
-				$this->loyaltyStateConvert->name[$defaultLanguage] = ' ';
-			$this->loyaltyStateConvert->save();
+				if (empty($this->loyaltyStateCancel->name[$defaultLanguage]))
+					$this->loyaltyStateCancel->name[$defaultLanguage] = ' ';
+				$this->loyaltyStateCancel->save();
 			
-			if (empty($this->loyaltyStateNoneAward->name[$defaultLanguage]))
-				$this->loyaltyStateNoneAward->name[$defaultLanguage] = ' ';
-			$this->loyaltyStateNoneAward->save();
+				if (empty($this->loyaltyStateConvert->name[$defaultLanguage]))
+					$this->loyaltyStateConvert->name[$defaultLanguage] = ' ';
+				$this->loyaltyStateConvert->save();
+			
+				if (empty($this->loyaltyStateNoneAward->name[$defaultLanguage]))
+					$this->loyaltyStateNoneAward->name[$defaultLanguage] = ' ';
+				$this->loyaltyStateNoneAward->save();
 
-			echo $this->displayConfirmation($this->l('Settings updated.'));
+				echo $this->displayConfirmation($this->l('Settings updated.'));
+			}
+			else
+			{
+				$errors = '';
+				foreach ($this->_errors as $error)
+					$errors .= $error.'<br />';
+				echo $this->displayError($errors);
+			}
 		}
+	}
+
+	private function voucherCategories($categories)
+	{
+		$cat = '';
+		if ($categories)
+			foreach ($categories as $category)
+				$cat .= $category.',';
+		return rtrim($cat, ",");
 	}
 
 	public function getContent()
@@ -181,6 +213,7 @@ class Loyalty extends Module
 		$this->instanceDefaultStates();
 		$this->_postProcess();
 
+		$categories = Category::getCategories(intval($cookie->id_lang));
 		$order_states = OrderState::getOrderStates($cookie->id_lang);
 		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
@@ -250,6 +283,23 @@ class Loyalty extends Module
 		$html .= '</select>
 				</div>
 				<div class="clear"></div>
+				<label>'.$this->l('Vouchers created by loyalty system can be use in the following categories :').'</label>';
+
+		$html .=	'<table cellspacing="0" cellpadding="0" class="table">
+						<tr>
+							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>						
+							<th>'.$this->l('ID').'</th>
+							<th style="width: 400px">'.$this->l('Name').'</th>
+						</tr>';
+		$index = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
+		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : array();
+		foreach ($indexedCategories AS $k => $row)
+			$index[] = $row['id_category'];
+		
+		$html .= $this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, NULL);
+		$html .= '				</table>
+				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'<sup> *</sup></p>
+				<div class="clear"></div>
 				<h3 style="margin-top:20px">'.$this->l('Loyalty points progression').'</h3>
 				<label>'.$this->l('Initial').'</label>
 				<div class="margin-form">';
@@ -305,6 +355,43 @@ class Loyalty extends Module
 				</div>
 			</fieldset>
 		</form>';
+		return $html;
+	}
+
+	function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL)
+	{
+		global $done;
+		static $irow;
+		
+		$id_obj = intval(Tools::getValue($this->identifier));
+
+		if (!isset($done[$current['infos']['id_parent']]))
+			$done[$current['infos']['id_parent']] = 0;
+		$done[$current['infos']['id_parent']] += 1;
+
+		$todo = sizeof($categories[$current['infos']['id_parent']]);
+		$doneC = $done[$current['infos']['id_parent']];
+
+		$level = $current['infos']['level_depth'] + 1;
+		$img = $level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif';
+
+		$html = '
+		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+			<td>
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
+			</td>
+			<td>
+				'.$id_category.'
+			</td>
+			<td>
+				<img src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
+			</td>
+		</tr>';
+
+		if (isset($categories[$id_category]))
+			foreach ($categories[$id_category] AS $key => $row)
+				if ($key != 'infos')
+					$html .= $this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default);
 		return $html;
 	}
 

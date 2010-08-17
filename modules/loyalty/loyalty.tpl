@@ -45,6 +45,8 @@
 	{/if}
 </div>
 
+<br />{l s='Vouchers generated here are usable in the following categories : ' mod='loyalty'}
+{if $categories}{$categories}{else}{l s='All' mod='loyalty'}{/if}
 
 {if $transformation_allowed}
 <p style="text-align:center; margin-top:20px">

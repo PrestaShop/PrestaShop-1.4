@@ -743,6 +743,19 @@ function stockManagementActivationAuthorization()
 	}
 }
 
+function hookCheckboxes(id, opt, champ)
+{
+	if (opt == 1 && champ.checked == false)
+		$('#Ghook'+id).attr('checked', false);
+	else if (opt == 0)
+	{
+		if (champ.checked)
+			$('.hook'+id).attr('checked', "checked");
+		else
+			$('.hook'+id).attr('checked', false);
+	}
+}
+
 function changeCMSActivationAuthorization()
 {
 	if (getE('PS_CONDITIONS_on').checked)
