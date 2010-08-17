@@ -44,7 +44,7 @@ class	Cookie
 	  * @param $name Cookie name before encrypting
 	  * @param $path
 	  */
-	function __construct($name, $path = '', $expire = NULL)
+	public function __construct($name, $path = '', $expire = NULL)
 	{
 		$this->_content = array();
 		$this->_expire = isset($expire) ? intval($expire) : (time() + 1728000);
@@ -59,6 +59,11 @@ class	Cookie
 		$this->_domain = $this->getDomain();
 		$this->_bf = new Blowfish($this->_key, $this->_iv);
 		$this->update();
+	}
+	
+	public function __destruct()
+	{
+		$this->write();
 	}
 
 	private function getDomain()
@@ -100,7 +105,7 @@ class	Cookie
 	  * @param $key key wanted
 	  * @return string value corresponding to the key
 	  */
-	function __get($key)
+	public function __get($key)
 	{
 		return isset($this->_content[$key]) ? $this->_content[$key] : false;
 	}
@@ -111,7 +116,7 @@ class	Cookie
 	  * @param $key key wanted
 	  * @return boolean key existence
 	  */
-	function __isset($key)
+	public function __isset($key)
 	{
 		return isset($this->_content[$key]);
 	}
@@ -122,14 +127,13 @@ class	Cookie
 	  * @param $key key desired
 	  * @param $value value corresponding to the key
 	  */
-	function __set($key, $value)
+	public function __set($key, $value)
 	{
 		if (is_array($value))
 			die(Tools::displayError());
 		if (preg_match('/¤|\|/', $key) OR preg_match('/¤|\|/', $value))
 			throw new Exception('Forbidden chars in cookie');
 		$this->_content[$key] = $value;
-		$this->write();
 	}
 
 	/**
@@ -137,10 +141,9 @@ class	Cookie
 	  *
 	  * @param $key key wanted
 	  */
-	function __unset($key)
+	public function __unset($key)
 	{
 		unset($this->_content[$key]);
-		$this->write();
 	}
 
 	/**
@@ -148,7 +151,7 @@ class	Cookie
 	  *
 	  * @return boolean customer validity
 	  */
-	function isLogged()
+	public function isLogged()
 	{
 		/* Customer is valid only if it can be load and if cookie password is the same as database one */
 	 	if ($this->logged == 1 AND $this->id_customer AND Validate::isUnsignedId($this->id_customer) AND Customer::checkPassword(intval($this->id_customer), $this->passwd))
@@ -161,7 +164,7 @@ class	Cookie
 	  *
 	  * @return boolean employee validity
 	  */
-	function isLoggedBack()
+	public function isLoggedBack()
 	{
 		/* Employee is valid only if it can be load and if cookie password is the same as database one */
 	 	if ($this->id_employee AND Validate::isUnsignedId($this->id_employee) AND Employee::checkPassword(intval($this->id_employee), $this->passwd) AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr())))
@@ -172,7 +175,7 @@ class	Cookie
 	/**
 	  * Delete cookie
 	  */
-	function logout()
+	public function logout()
 	{
 		$this->_content = array();
 		$this->_setcookie();
@@ -183,7 +186,7 @@ class	Cookie
 	  * Soft logout, delete everything links to the customer
 	  * but leave there affiliate's informations
 	  */
-	function mylogout()
+	public function mylogout()
 	{
 		unset($this->_content['id_customer']);
 		unset($this->_content['id_guest']);
@@ -196,7 +199,6 @@ class	Cookie
 		unset($this->_content['id_cart']);
 		unset($this->_content['id_address_invoice']);
 		unset($this->_content['id_address_delivery']);
-		$this->write();
 	}
 	
 	function makeNewLog()
@@ -266,7 +268,7 @@ class	Cookie
 	/**
 	  * Save cookie with setcookie()
 	  */
-	function write()
+	public function write()
 	{
 		$cookie = '';
 
