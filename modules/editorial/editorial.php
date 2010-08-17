@@ -5,7 +5,7 @@ class Editorial extends Module
 	/** @var max image size */
 	protected $maxImageSize = 307200;
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'editorial';
 		$this->tab = 'Tools';
@@ -17,14 +17,14 @@ class Editorial extends Module
 		$this->description = $this->l('A text editor module for your homepage');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install())
 			return false;
 		return $this->registerHook('home');
 	}
 
-	function putContent($xml_data, $key, $field, $forbidden, $section)
+	public function putContent($xml_data, $key, $field, $forbidden, $section)
 	{
 		foreach ($forbidden AS $line)
 			if ($key == $line)
@@ -38,14 +38,29 @@ class Editorial extends Module
 		return ("\n".'		<'.$key.'>'.$field.'</'.$key.'>');
 	}
 
-	function getContent()
+	public function getContent()
 	{
+		global $cookie;
+		
 		/* display the module name */
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
 		$errors = '';
 
+		// Delete logo image
+		if (Tools::isSubmit('deleteImage'))
+		{
+			if (!file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+				$errors .= $this->displayError($this->l('You can\'t make this action'));
+			else
+			{
+				unlink(dirname(__FILE__).'/homepage_logo.jpg');
+				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee)));
+			}
+			$this->_html .= $errors;
+		}
+
 		/* update the editorial xml */
-		if (isset($_POST['submitUpdate']))
+		if (Tools::isSubmit('submitUpdate'))
 		{
 			// Forbidden key
 			$forbidden = array('submitUpdate');
@@ -212,10 +227,18 @@ class Editorial extends Module
 					<p class="clear">'.$this->l('Text of your choice; for example, explain your mission, highlight a new product, or describe a recent event').'</p>
 				</div>
 				<label>'.$this->l('Homepage\'s logo').' </label>
-				<div class="margin-form">
-					<img src="'.$this->_path.'homepage_logo.jpg" alt="" title="" style="" /><br />
-					<input type="file" name="body_homepage_logo" />
+				<div class="margin-form">';
+				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+						$this->_html .= '<div id="image" >
+							<img src="'.$this->_path.'homepage_logo.jpg?t='.time().'" />
+							<p align="center">'.$this->l('Filesize').' '.(filesize(dirname(__FILE__).'/homepage_logo.jpg') / 1000).'kb</p>
+							<a href="'.$_SERVER['REQUEST_URI'].'&deleteImage" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
+							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /> '.$this->l('Delete').'</a>
+						</div>';
+						
+				$this->_html .= '<input type="file" name="body_homepage_logo" />
 					<p style="clear: both">'.$this->l('Will appear next to the Introductory Text above').'</p>
+					
 				</div>
 				<label>'.$this->l('Homepage logo link').'</label>
 				<div class="margin-form">
@@ -244,7 +267,7 @@ class Editorial extends Module
 		</form>';
 	}
 
-	function hookHome($params)
+	public function hookHome($params)
 	{
 		if (file_exists('modules/editorial/editorial.xml'))
 		{

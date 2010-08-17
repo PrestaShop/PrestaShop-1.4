@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{editorial}prestashop>editorial_a46dcd3561c3feeb53903dfc0f796a35'] = 'Editeur de page d\'accueil';
 $_MODULE['<{editorial}prestashop>editorial_1051bed4568ad9936781f20fb0536509'] = 'Un éditeur de texte pour votre page d\'accueil';
+$_MODULE['<{editorial}prestashop>editorial_6231a55e48ab91f49ce4e12880919c18'] = 'Vous ne pouvez pas effectuer cette action';
 $_MODULE['<{editorial}prestashop>editorial_5be920293db3e38c81330fd0798336b1'] = 'Champ HTML invalide, le JavaScript est interdit';
 $_MODULE['<{editorial}prestashop>editorial_ea83e4005a3edd639f663dc2d1bff0a3'] = 'Impossible d\'écrire dans le fichier XML. Merci de vérifier les permissions en écriture.';
 $_MODULE['<{editorial}prestashop>editorial_8072bc856691062b88d30354ab28a27a'] = 'Impossible de refermer le fichier XML. Merci de vérifier les permissions en écriture.';
@@ -16,6 +17,9 @@ $_MODULE['<{editorial}prestashop>editorial_e1f46be647e598f00eeb0ab62561d695'] = 
 $_MODULE['<{editorial}prestashop>editorial_bf75f228011d1443c4ea7aca23c3cff2'] = 'Texte d\'introduction';
 $_MODULE['<{editorial}prestashop>editorial_0a9ce580a59ece76cad698332fd53887'] = 'Texte d\'introduction de votre choix ; par exemple expliquez ce que vous vendez ou mettez en avant un produit';
 $_MODULE['<{editorial}prestashop>editorial_22c2adcb89e2f2d9c5f6fe3731fad3b3'] = 'Logo de la page d\'accueil';
+$_MODULE['<{editorial}prestashop>editorial_b18c29b8470190a02813415a04a2191f'] = 'Taille de l\'image';
+$_MODULE['<{editorial}prestashop>editorial_729a51874fe901b092899e9e8b31c97a'] = 'Êtes-vous sûr ?';
+$_MODULE['<{editorial}prestashop>editorial_f2a6c498fb90ee345d997f888fce3b18'] = 'Effacer';
 $_MODULE['<{editorial}prestashop>editorial_f85e125f2a9ebcd47f420c94b535f50a'] = 'Apparaîtra à côté du texte d\'introduction';
 $_MODULE['<{editorial}prestashop>editorial_28d74ee805e3a162047d8f917b74dcb3'] = 'Lien de l\'image';
 $_MODULE['<{editorial}prestashop>editorial_62f6077d6d15a35ff4929a225205892f'] = 'Lien utilisé sur le second logo';
