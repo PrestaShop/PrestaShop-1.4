@@ -77,7 +77,7 @@ class AdminAttachments extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/t/AdminAttachments.gif" />'.$this->l('Attachment').'</legend>
-				<label>'.$this->l('Name:').' </label>
+				<label>'.$this->l('Filename:').' </label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
