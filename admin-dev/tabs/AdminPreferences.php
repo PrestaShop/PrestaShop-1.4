@@ -57,7 +57,11 @@ class AdminPreferences extends AdminTab
 			$cms_tab[] = array('id' => $cms_file['id_cms'], 'name' => $cms_file['meta_title']);
 
 		$this->_fieldsGeneral = array(
-			'PS_BASE_URI' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 20, 'default' => '/'),
+			'__PS_BASE_URI__' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
+			'_THEMES_DIR_' => array('title' => $this->l('Themes URL'), 'desc' => $this->l('Name of the themes directory on your Web server, bracketed by forward slashes (e.g., /themes/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless static content (e.g., http://static.myshop.com/themes/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _THEMES_DIR_),
+			'_PS_IMG_' => array('title' => $this->l('Images URL'), 'desc' => $this->l('Name of the images directory on your Web server, bracketed by forward slashes (e.g., /img/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless images (e.g., http://static.myshop.com/img/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_IMG_),
+			'_PS_JS_DIR_' => array('title' => $this->l('JS files URL'), 'desc' => $this->l('Name of the javascript files directory on your Web server, bracketed by forward slashes (e.g., /js/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless files (e.g., http://static.myshop.com/js/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_JS_DIR_),
+			'_PS_CSS_DIR_' => array('title' => $this->l('CSS files URL'), 'desc' => $this->l('Name of the css files directory on your Web server, bracketed by forward slashes (e.g., /css/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless files (e.g., http://static.myshop.com/css/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_CSS_DIR_),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use coma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
@@ -82,7 +86,7 @@ class AdminPreferences extends AdminTab
 
 	public function display()
 	{
-		$this->_displayForm('general', $this->_fieldsGeneral, $this->l('General'), 'width2', 'tab-preferences');
+		$this->_displayForm('general', $this->_fieldsGeneral, $this->l('General'), '', 'tab-preferences');
 	}
 
 	public function postProcess()
@@ -181,8 +185,23 @@ class AdminPreferences extends AdminTab
 		{
 			if (isset($_POST['submitGeneral'.$this->table]))
 			{
-				rewriteSettingsFile(isset($_POST['PS_BASE_URI']) ? $_POST['PS_BASE_URI'] : '', NULL, NULL);
-				unset($this->_fieldsGeneral['PS_BASE_URI']);
+				$baseUrls = array();
+				if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
+					$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
+				if ($_THEMES_DIR_ = Tools::getValue('_THEMES_DIR_'))
+					$baseUrls['_THEMES_DIR_'] = $_THEMES_DIR_;
+				if ($_PS_IMG_ = Tools::getValue('_PS_IMG_'))
+					$baseUrls['_PS_IMG_'] = $_PS_IMG_;
+				if ($_PS_JS_DIR_ = Tools::getValue('_PS_JS_DIR_'))
+					$baseUrls['_PS_JS_DIR_'] = $_PS_JS_DIR_;
+				if ($_PS_CSS_DIR_ = Tools::getValue('_PS_CSS_DIR_'))
+					$baseUrls['_PS_CSS_DIR_'] = $_PS_CSS_DIR_;
+				rewriteSettingsFile($baseUrls, NULL, NULL);
+				unset($this->_fieldsGeneral['__PS_BASE_URI__']);
+				unset($this->_fieldsGeneral['_THEMES_DIR_']);
+				unset($this->_fieldsGeneral['_PS_IMG_']);
+				unset($this->_fieldsGeneral['_PS_JS_DIR_']);
+				unset($this->_fieldsGeneral['_PS_CSS_DIR_']);
 			}
 			elseif (isset($_POST['submitAppearance'.$this->table]))
 			{
@@ -252,7 +271,11 @@ class AdminPreferences extends AdminTab
 			else
 				$tab[$key] =  Tools::getValue($key, Configuration::get($key));
 		}
-		$tab['PS_BASE_URI'] = __PS_BASE_URI__;
+		$tab['__PS_BASE_URI__'] = __PS_BASE_URI__;
+		$tab['_THEMES_DIR_'] = _THEMES_DIR_;
+		$tab['_PS_IMG_'] = _PS_IMG_;
+		$tab['_PS_JS_DIR_'] = _PS_JS_DIR_;
+		$tab['_PS_CSS_DIR_'] = _PS_CSS_DIR_;
 		$tab['PS_THEME'] = _THEME_NAME_;
 		$tab['db_type'] = _DB_TYPE_;
 		$tab['db_server'] = _DB_SERVER_;

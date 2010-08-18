@@ -8,7 +8,7 @@ if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;
 
 /* CSS ans JS files calls */
-$css_files = array(__PS_BASE_URI__.'css/jquery.cluetip.css' => 'all', _THEME_CSS_DIR_.'scenes.css' => 'all');
+$css_files = array(_PS_CSS_DIR_.'jquery.cluetip.css' => 'all', _THEME_CSS_DIR_.'scenes.css' => 'all');
 
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');

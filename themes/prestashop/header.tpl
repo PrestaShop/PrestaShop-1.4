@@ -18,7 +18,7 @@
 	<link href="{$css_uri}" rel="stylesheet" type="text/css" media="{$media}" />
 	{/foreach}
 {/if}
-		<script type="text/javascript" src="{$content_dir}js/tools.js"></script>
+		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}tools.js"></script>
 		<script type="text/javascript">
 			var baseDir = '{$content_dir}';
 			var static_token = '{$static_token}';
@@ -26,9 +26,9 @@
 			var priceDisplayPrecision = {$priceDisplayPrecision*$currency->decimals};
 			var roundMode = {$roundMode};
 		</script>
-		<script type="text/javascript" src="{$content_dir}js/jquery/jquery-1.2.6.pack.js"></script>
-		<script type="text/javascript" src="{$content_dir}js/jquery/jquery.easing.1.3.js"></script>
-		<script type="text/javascript" src="{$content_dir}js/jquery/jquery.hotkeys-0.7.8-packed.js"></script>
+		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery-1.2.6.pack.js"></script>
+		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.hotkeys-0.7.8-packed.js"></script>
 {if isset($js_files)}
 	{foreach from=$js_files item=js_uri}
 	<script type="text/javascript" src="{$js_uri}"></script>

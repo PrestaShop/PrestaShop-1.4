@@ -36,6 +36,7 @@ foreach ($data_check AS $data)
 
 // Writing data in settings file
 $oldLevel = error_reporting(E_ALL);
+$__PS_BASE_URI__ = str_replace(' ', '%20', INSTALLER__PS_BASE_URI);
 $datas = array(
 	array('_DB_SERVER_', $_GET['server']),
 	array('_DB_TYPE_', $_GET['type']),
@@ -43,7 +44,12 @@ $datas = array(
 	array('_DB_USER_', $_GET['login']),
 	array('_DB_PASSWD_', $_GET['password']),
 	array('_DB_PREFIX_', $_GET['tablePrefix']),
-	array('__PS_BASE_URI__', str_replace(' ', '%20', INSTALLER__PS_BASE_URI)),
+	array('__PS_BASE_URI__', $__PS_BASE_URI__),
+	array('__PS_BASE_URI__', $__PS_BASE_URI__),
+	array('_THEMES_DIR_', $__PS_BASE_URI__.'themes/'),
+	array('_PS_IMG_', $__PS_BASE_URI__.'img/'),
+	array('_PS_JS_DIR_', $__PS_BASE_URI__.'js/'),
+	array('_PS_CSS_DIR_', $__PS_BASE_URI__.'css/'),
 	array('_THEME_NAME_', 'prestashop'),
 	array('_COOKIE_KEY_', Tools::passwdGen(56)),
 	array('_COOKIE_IV_', Tools::passwdGen(8)),

@@ -133,21 +133,9 @@ if (!Configuration::get('PS_THEME_V11'))
 		'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
 		'base_dir_ssl' => $protocol_link.$server_host_ssl.__PS_BASE_URI__,
 		'content_dir' => $protocol_content.$server_host.__PS_BASE_URI__,
-		'img_ps_dir' => $protocol_content.$server_host._PS_IMG_,
-		'img_cat_dir' => $protocol_content.$server_host._THEME_CAT_DIR_,
-		'img_lang_dir' => $protocol_content.$server_host._THEME_LANG_DIR_,
-		'img_prod_dir' => $protocol_content.$server_host._THEME_PROD_DIR_,
-		'img_manu_dir' => $protocol_content.$server_host._THEME_MANU_DIR_,
-		'img_sup_dir' => $protocol_content.$server_host._THEME_SUP_DIR_,
-		'img_ship_dir' => $protocol_content.$server_host._THEME_SHIP_DIR_,
-		'img_col_dir' => $protocol_content.$server_host._THEME_COL_DIR_,
-		'img_dir' => $protocol_content.$server_host._THEME_IMG_DIR_,
-		'css_dir' => $protocol_content.$server_host._THEME_CSS_DIR_,
-		'js_dir' => $protocol_content.$server_host._THEME_JS_DIR_,
 		'tpl_dir' => _PS_THEME_DIR_,
 		'modules_dir' => _MODULE_DIR_,
 		'mail_dir' => _MAIL_DIR_,
-		'pic_dir' => $protocol_content.$server_host._THEME_PROD_PIC_DIR_,
 		'lang_iso' => $ps_language->iso_code,
 		'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
 		'shop_name' => Configuration::get('PS_SHOP_NAME'),
@@ -165,6 +153,23 @@ if (!Configuration::get('PS_THEME_V11'))
 		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
 		'use_taxes' => intval(Configuration::get('PS_TAX'))
 	));
+	$assignArray = array(
+		'img_ps_dir' => _PS_IMG_,
+		'img_cat_dir' => _THEME_CAT_DIR_,
+		'img_lang_dir' => _THEME_LANG_DIR_,
+		'img_prod_dir' => _THEME_PROD_DIR_,
+		'img_manu_dir' => _THEME_MANU_DIR_,
+		'img_sup_dir' => _THEME_SUP_DIR_,
+		'img_ship_dir' => _THEME_SHIP_DIR_,
+		'img_col_dir' => _THEME_COL_DIR_,
+		'img_dir' => _THEME_IMG_DIR_,
+		'css_dir' => _THEME_CSS_DIR_,
+		'js_dir' => _THEME_JS_DIR_,
+		'pic_dir' => _THEME_PROD_PIC_DIR_
+	);
+	// TODO : SSL management
+	foreach ($assignArray as $assignKey => $assignValue)
+		$smarty->assign($assignKey, (substr($assignValue, 0, 1) == '/' ? $protocol_content.$server_host.$assignValue : str_replace('http://', $protocol_content, $assignValue)));
 }
 else
 {

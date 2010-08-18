@@ -4,7 +4,7 @@
 -->
 </script>
 <script type="text/javascript" src="{$js_dir}layer.js"></script>
-<script type="text/javascript" src="{$content_dir}js/conditions.js"></script>
+<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}conditions.js"></script>
 {if !$virtual_cart && $giftAllowed && $cart->gift == 1}
 <script type="text/javascript">{literal}
 // <![CDATA[

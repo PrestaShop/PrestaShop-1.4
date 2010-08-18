@@ -2,27 +2,29 @@
 
 $currentDir = dirname(__FILE__);
 
-/* Base and themes */
-define('_THEMES_DIR_',     __PS_BASE_URI__.'themes/');
-define('_THEME_IMG_DIR_',  _THEMES_DIR_._THEME_NAME_.'/img/');
-define('_THEME_CSS_DIR_',  _THEMES_DIR_._THEME_NAME_.'/css/');
-define('_THEME_JS_DIR_',   _THEMES_DIR_._THEME_NAME_.'/js/');
-define('_THEME_CAT_DIR_',  __PS_BASE_URI__.'img/c/');
-define('_THEME_PROD_DIR_', __PS_BASE_URI__.'img/p/');
-define('_THEME_PROD_PIC_DIR_', __PS_BASE_URI__.'upload/');
-define('_THEME_MANU_DIR_', __PS_BASE_URI__.'img/m/');
-define('_THEME_SCENE_DIR_', __PS_BASE_URI__.'img/scenes/');
-define('_THEME_SCENE_THUMB_DIR_', __PS_BASE_URI__.'img/scenes/thumbs');
-define('_THEME_SUP_DIR_',  __PS_BASE_URI__.'img/su/');
-define('_THEME_SHIP_DIR_', __PS_BASE_URI__.'img/s/');
-define('_THEME_LANG_DIR_', __PS_BASE_URI__.'img/l/');
-define('_THEME_COL_DIR_',  __PS_BASE_URI__.'img/co/');
-define('_SUPP_DIR_',       __PS_BASE_URI__.'img/su/');
+/* Theme URLs */
 define('_THEME_DIR_',      _THEMES_DIR_._THEME_NAME_.'/');
-define('_MAIL_DIR_',        __PS_BASE_URI__.'mails/');
-define('_MODULE_DIR_',        __PS_BASE_URI__.'modules/');
-define('_PS_IMG_',         __PS_BASE_URI__.'img/');
-define('_PS_ADMIN_IMG_',   _PS_IMG_.'admin/');
+define('_THEME_IMG_DIR_',  _THEME_DIR_.'img/');
+define('_THEME_CSS_DIR_',  _THEME_DIR_.'css/');
+define('_THEME_JS_DIR_',   _THEME_DIR_.'js/');
+
+/* Image URLs */
+define('_PS_ADMIN_IMG_',   			_PS_IMG_.'admin/');
+define('_THEME_CAT_DIR_',  			_PS_IMG_.'c/');
+define('_THEME_PROD_DIR_', 			_PS_IMG_.'p/');
+define('_THEME_MANU_DIR_', 			_PS_IMG_.'m/');
+define('_THEME_SCENE_DIR_', 		_PS_IMG_.'scenes/');
+define('_THEME_SCENE_THUMB_DIR_', 	_PS_IMG_.'scenes/thumbs');
+define('_THEME_SUP_DIR_',  			_PS_IMG_.'su/');
+define('_THEME_SHIP_DIR_',			_PS_IMG_.'s/');
+define('_THEME_LANG_DIR_',			_PS_IMG_.'l/');
+define('_THEME_COL_DIR_', 			_PS_IMG_.'co/');
+define('_SUPP_DIR_',      			_PS_IMG_.'su/');
+
+/* Other URLs */
+define('_THEME_PROD_PIC_DIR_', 	__PS_BASE_URI__.'upload/');
+define('_MAIL_DIR_',        	__PS_BASE_URI__.'mails/');
+define('_MODULE_DIR_',        	__PS_BASE_URI__.'modules/');
 
 /* Directories */
 define('_PS_ROOT_DIR_',             realpath($currentDir.'/..'));
@@ -49,8 +51,6 @@ define('_PS_STEST_DIR_',            _PS_TOOL_DIR_.'simpletest/');
 define('_PS_SWIFT_DIR_',            _PS_TOOL_DIR_.'swift/');
 define('_PS_FPDF_PATH_',            _PS_TOOL_DIR_.'fpdf/');
 define('_PS_PEAR_XML_PARSER_PATH_', _PS_TOOL_DIR_.'pear_xml_parser/');
-define('_PS_CSS_DIR_',              __PS_BASE_URI__.'css/');
-define('_PS_JS_DIR_',               __PS_BASE_URI__.'js/');
 
 /* settings php */
 define('_PS_TRANS_PATTERN_',            '(.*[^\\\\])');

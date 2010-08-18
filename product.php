@@ -77,14 +77,14 @@ function formTargetFormat()
 
 /* CSS ans JS files calls */
 $css_files = array(
-	__PS_BASE_URI__.'css/thickbox.css' => 'screen'
+	_PS_CSS_DIR_.'thickbox.css' => 'screen'
 );
 
 $js_files = array(
-	__PS_BASE_URI__.'js/jquery/thickbox-modified.js',
-	__PS_BASE_URI__.'js/jquery/jquery.idTabs.modified.js',
-	__PS_BASE_URI__.'js/jquery/jquery.scrollto.js',
-	__PS_BASE_URI__.'js/jquery/jquery.serialScroll.js',
+	_PS_JS_DIR_.'jquery/thickbox-modified.js',
+	_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js',
+	_PS_JS_DIR_.'jquery/jquery.scrollto.js',
+	_PS_JS_DIR_.'jquery/jquery.serialScroll.js',
 	_THEME_JS_DIR_.'tools.js',
 	_THEME_JS_DIR_.'product.js'
 );
@@ -93,8 +93,8 @@ $js_files = array(
 $jqZoomEnabled = (Configuration::get('PS_DISPLAY_JQZOOM') == 1);
 if ($jqZoomEnabled)
 {
-	$js_files[] = __PS_BASE_URI__.'js/jquery/jquery.jqzoom.js';
-	$css_files[__PS_BASE_URI__.'css/jqzoom.css'] = 'screen';
+	$js_files[] = _PS_JS_DIR_.'jquery/jquery.jqzoom.js';
+	$css_files[_PS_CSS_DIR_.'jqzoom.css'] = 'screen';
 }
 
 include_once(dirname(__FILE__).'/header.php');
