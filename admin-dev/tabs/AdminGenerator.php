@@ -46,7 +46,7 @@ class AdminGenerator extends AdminTab
 			<label for="imageCacheControl">'.$this->l('Cache control directive').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="cacheControl" id="cacheControl" '.(Tools::getValue('cacheControl') ? 'checked="checked"' : '').' />
-				<p>'.$this->l('This will specify to your Customers\' browsers that the images can be cached for 1 month and the CSS and Javascript files for 1 week.').'</p>
+				<p>'.$this->l('This will specify to your Customers\' browsers that the images can be cached for 1 month and the CSS and Javascript files for 1 week (mod_expires must be enabled).').'</p>
 			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
 			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>
@@ -119,17 +119,16 @@ class AdminGenerator extends AdminTab
 					if (Tools::getValue('cacheControl'))
 					{
 						$cacheControl = "
-<IfModule mod_headers.c>
-	<FilesMatch \"\.(gif|jpg|jpeg|png|ico)\$\">
-		Header set Cache-Control \"max-age=2592000\"
-		Header unset Last-Modified
-	</FilesMatch>
-
-	<FilesMatch \"\.(js|css)$\">
-		Header set Cache-Control \"max-age=604800\"
-		Header unset Last-Modified
-	</FilesMatch>
-</IfModule>";
+<IfModule mod_expires.c>
+		ExpiresActive On
+		ExpiresByType image/gif \"access plus 1 month\"
+		ExpiresByType image/jpeg \"access plus 1 month\"
+		ExpiresByType image/png \"access plus 1 month\"
+		ExpiresByType text/css \"access plus 1 week\"
+		ExpiresByType application/javascript \"access plus 1 week\"
+		ExpiresByType image/x-icon \"access plus 1 year\"
+</IfModule>
+";
 						fwrite($writeFd, $cacheControl);
 					}
 
