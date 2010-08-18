@@ -59,7 +59,7 @@ require_once(dirname(__FILE__).'/init.php');
 			<div style="float: left; margin-top: 11px;">
 				<form action="index.php?tab=AdminSearch&token=<?php echo Tools::getAdminToken('AdminSearch'.intval(Tab::getIdFromClassName('AdminSearch')).intval($cookie->id_employee)) ?>" method="post">
 					<input type="text" name="bo_query" id="bo_query" style="width: 140px;" value="<?php echo (isset($_POST['bo_query']) ? Tools::safeOutput(Tools::stripslashes($_POST['bo_query'])) : ''); ?>" /> <?php translate('in') ?>
-					<select name="bo_search_type" id="bo_search_type" onchange="queryType();" style="font-size: 1em;">
+					<select name="bo_search_type" id="bo_search_type" style="font-size:1em">
 						<option value="0"><?php echo translate('everywhere') ?></option>
 						<option value="1"<?php echo (isset($_POST['bo_search_type']) AND
 						($_POST['bo_search_type'] == 1)) ? ' selected="selected"' : '' ?>><?php echo translate('catalog') ?></option>
@@ -73,7 +73,6 @@ require_once(dirname(__FILE__).'/init.php');
 						$_POST['bo_search_type'] == 5)) ? ' selected="selected"' : '' ?>><?php echo translate('carts') ?></option>
 					</select>&nbsp;
 					<input type="submit" name="bo_search" value="<?php echo translate('Search') ?>" class="button" />
-					<script type="text/javascript">queryType();</script>
 				</form>
 			</div>
 			<div style="float: left;margin: 11px 0px 0px 50px;" id="flagsLanguage">
