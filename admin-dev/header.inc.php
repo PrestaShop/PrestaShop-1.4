@@ -25,8 +25,8 @@ require_once(dirname(__FILE__).'/init.php');
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $iso; ?>" lang="<?php echo $iso; ?>">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<link type="text/css" rel="stylesheet" href="../js/jquery/datepicker/datepicker.css" />
-		<link type="text/css" rel="stylesheet" href="../css/admin.css" />
+		<link type="text/css" rel="stylesheet" href="<?php echo _PS_JS_DIR_ ?>jquery/datepicker/datepicker.css" />
+		<link type="text/css" rel="stylesheet" href="<?php echo _PS_CSS_DIR_ ?>admin.css" />
 		<title>PrestaShop&trade; - <?php echo translate('Administration panel') ?></title>
 		<script type="text/javascript">
 			var search_texts = Array('<?php echo translate('product, customer, id...'); ?>','<?php echo translate('product, category...'); ?>', '<?php echo translate('customer id, name, e-mail...'); ?>', '<?php echo translate('order id'); ?>', '<?php echo translate('invoice id'); ?>', '<?php echo translate('cart id'); ?>');
@@ -34,11 +34,11 @@ require_once(dirname(__FILE__).'/init.php');
 			var roundMode = <?php echo Configuration::get('PS_PRICE_ROUND_MODE'); ?>;
 		</script>
 		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/jquery-1.2.6.pack.js"></script>
-		<script type="text/javascript" src="../js/admin.js"></script>
-		<script type="text/javascript" src="../js/toggle.js"></script>
-		<script type="text/javascript" src="../js/tools.js"></script>
-		<script type="text/javascript" src="../js/ajax.js"></script>
-		<link rel="shortcut icon" href="../img/favicon.ico" />
+		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>admin.js"></script>
+		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>toggle.js"></script>
+		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>tools.js"></script>
+		<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>ajax.js"></script>
+		<link rel="shortcut icon" href="<?php echo _PS_IMG_ ?>favicon.ico" />
 		<?php echo Module::hookExec('backOfficeHeader'); ?>
 		<!--[if IE]>
 		<style type="text/css">
@@ -144,7 +144,7 @@ require_once(dirname(__FILE__).'/init.php');
 							$id_parent = $t['id_tab'];
 						if (checkTabRights($t['id_tab']) === true)
 						{
-							$img = '../img/t/'.$t['class_name'].'.gif';
+							$img = _PS_IMG_.'t/'.$t['class_name'].'.gif';
 							if (trim($t['module']) != '')
 								$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 							echo '
@@ -168,7 +168,7 @@ require_once(dirname(__FILE__).'/init.php');
 						foreach ($subTabs AS $t)
 							if (checkTabRights($t['id_tab']) === true)
 							{
-								$img = '../img/t/'.$t['class_name'].'.gif';
+								$img = _PS_IMG_.'t/'.$t['class_name'].'.gif';
 								if (trim($t['module']) != '')
 									$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 								echo '

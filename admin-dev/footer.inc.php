@@ -13,7 +13,7 @@
 
 if (!defined('_PS_VERSION_'))
 	exit();
-ob_flush();
+
 ?>
 
 				</div>
