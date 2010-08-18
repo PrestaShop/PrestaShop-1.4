@@ -1323,7 +1323,6 @@ CREATE TABLE `PREFIX_zone` (
   `id_zone` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(64) NOT NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
-  `enabled` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_zone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -212,7 +212,7 @@ class		Country extends ObjectModel
 		WHERE `id_country` = '.intval($id_country));
 	}
 	
-	public function displayCallPrefix($prefix)
+	public static function displayCallPrefix($prefix)
 	{
 		return (intval($prefix) ? '+'.$prefix : '-');
 	}
