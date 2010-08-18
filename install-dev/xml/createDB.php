@@ -45,7 +45,6 @@ $datas = array(
 	array('_DB_PASSWD_', $_GET['password']),
 	array('_DB_PREFIX_', $_GET['tablePrefix']),
 	array('__PS_BASE_URI__', $__PS_BASE_URI__),
-	array('__PS_BASE_URI__', $__PS_BASE_URI__),
 	array('_THEMES_DIR_', $__PS_BASE_URI__.'themes/'),
 	array('_PS_IMG_', $__PS_BASE_URI__.'img/'),
 	array('_PS_JS_DIR_', $__PS_BASE_URI__.'js/'),

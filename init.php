@@ -167,7 +167,6 @@ if (!Configuration::get('PS_THEME_V11'))
 		'js_dir' => _THEME_JS_DIR_,
 		'pic_dir' => _THEME_PROD_PIC_DIR_
 	);
-	// TODO : SSL management
 	foreach ($assignArray as $assignKey => $assignValue)
 		$smarty->assign($assignKey, (substr($assignValue, 0, 1) == '/' ? $protocol_content.$server_host.$assignValue : str_replace('http://', $protocol_content, $assignValue)));
 }
