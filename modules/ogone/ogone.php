@@ -53,10 +53,10 @@ class Ogone extends PaymentModule
 						<a href="https://secure.ogone.com/ncol/prod/admin_ogone.asp"><span style="text-decoration:underline;color:#383838">'.$this->l('production mode').'</span></a>
 					</h3>
 					<ol>
-						<li><a href="../modules/'.$this->name.'/docs/en1.png">'.$this->l('See the screenshot for step').' 1</li>
-						<li><a href="../modules/'.$this->name.'/docs/en2.png">'.$this->l('See the screenshot for step').' 2</li>
-						<li><a href="../modules/'.$this->name.'/docs/en3.png">'.$this->l('See the screenshot for step').' 3</li>
-						<li><a href="../modules/'.$this->name.'/docs/en4.png">'.$this->l('See the screenshot for step').' 4</li>
+						<li><a href="../modules/'.$this->name.'/docs/en1.png">'.$this->l('See the screenshot for step').' 1</a></li>
+						<li><a href="../modules/'.$this->name.'/docs/en2.png">'.$this->l('See the screenshot for step').' 2</a></li>
+						<li><a href="../modules/'.$this->name.'/docs/en3.png">'.$this->l('See the screenshot for step').' 3</a></li>
+						<li><a href="../modules/'.$this->name.'/docs/en4.png">'.$this->l('See the screenshot for step').' 4</a></li>
 					</ol>
 				</li>
 			</ol>
