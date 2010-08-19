@@ -337,6 +337,11 @@ select optgroup option {
 }
 #image img { margin: 0; padding: 0 }
 
+#id_image_attr
+{
+	list-style: none;
+}
+
 #product_link {
  	width: 240px;
 	float: right;

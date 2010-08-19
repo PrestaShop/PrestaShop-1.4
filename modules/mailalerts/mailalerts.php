@@ -36,6 +36,8 @@ class MailAlerts extends Module
 			!$this->registerHook('productOutOfStock') OR
 			!$this->registerHook('customerAccount') OR
 			!$this->registerHook('updateProduct') OR
+			!$this->registerHook('deleteProduct') OR
+			!$this->registerHook('deleteProductAttribute') OR
 			!$this->registerHook('updateProductAttribute')
 		)
 			return false;
@@ -480,6 +482,23 @@ class MailAlerts extends Module
 			AND `customer_email` = \''.pSQL($customer_email).'\'
 			AND `id_product` = '.intval($id_product).'
 			AND `id_product_attribute` = '.intval($id_product_attribute));
+	}
+	
+	public function hookDeleteProduct($params)
+	{
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
+		WHERE `id_product` = '.intval($params['product']->id));
+	}
+	
+	public function hookDeleteProductAttribute($params)
+	{
+		if ($params['deleteAllAttributes'])
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
+			WHERE `id_product` = '.intval($params['id_product']));
+		else
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
+			WHERE `id_product_attribute` = '.intval($params['id_product_attribute']).' 
+			AND `id_product` = '.intval($params['id_product']));
 	}
 }
 

@@ -870,6 +870,8 @@ class		Product extends ObjectModel
 	*/
 	public function deleteProductAttributes()
 	{
+		Module::hookExec('deleteProductAttribute', array('id_product_attribute' => 0, 'id_product' => $this->id, 'deleteAllAttributes' => true));
+
 		$result = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
 		WHERE `id_product_attribute` IN (SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.intval($this->id).')');
@@ -1028,7 +1030,9 @@ class		Product extends ObjectModel
 	{
 		if (!$id_product_attribute OR !is_numeric($id_product_attribute))
 			return false;
-
+		
+		Module::hookExec('deleteProductAttribute', array('id_product_attribute' => $id_product_attribute, 'id_product' => $this->id, 'deleteAllAttributes' => false));
+		
 		$result = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `id_product_attribute` = '.intval($id_product_attribute).'
