@@ -22,13 +22,13 @@ if ($query = Tools::getValue('search_query', Tools::getValue('ref')) AND !is_arr
 	$search = Search::find(intval($cookie->id_lang), $query, $p, $n, $orderBy, $orderWay);
 	$nbProducts = $search['total'];
 	include(dirname(__FILE__).'/pagination.php');
-	$smarty->assign(array('products' => $search['result'], 'nbProducts' => $search['total'], 'search_query' => $query));
+	$smarty->assign(array('products' => $search['result'], 'nbProducts' => $search['total'], 'search_query' => $query, 'homeSize' => Image::getSize('home')));
 }
 elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
 {
 	$nbProducts = intval(Search::searchTag(intval($cookie->id_lang), $tag, true));
 	include(dirname(__FILE__).'/pagination.php');
-	$smarty->assign(array('search_tag' => $tag, 'products' => Search::searchTag(intval($cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay), 'nbProducts' => $nbProducts));
+	$smarty->assign(array('search_tag' => $tag, 'products' => Search::searchTag(intval($cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay), 'nbProducts' => $nbProducts, 'homeSize' => Image::getSize('home')));
 }
 else
 {

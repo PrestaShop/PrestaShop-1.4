@@ -13,7 +13,7 @@
 <h3>{l s='Cheque payment' mod='cheque'}</h3>
 <form action="{$this_path_ssl}validation.php" method="post">
 	<p>
-		<img src="{$this_path}cheque.jpg" alt="{l s='cheque' mod='cheque'}" style="float:left; margin: 0px 10px 5px 0px;" />
+		<img src="{$this_path}cheque.jpg" alt="{l s='cheque' mod='cheque'}" width="86" height="49" style="float:left; margin: 0px 10px 5px 0px;" />
 		{l s='You have chosen to pay by cheque.' mod='cheque'}
 		<br/><br />
 		{l s='Here is a short summary of your order:' mod='cheque'}

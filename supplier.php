@@ -60,6 +60,7 @@ else
 	$smarty->assign(array(
 		'pages_nb' => ceil($nbProducts / intval($n)),
 		'nb'.$className.'s' => $nbProducts,
+		'mediumSize' => Image::getSize('medium'),
 		$objectType.'s' => $data
 	));
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');

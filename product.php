@@ -231,6 +231,7 @@ else
 			'cover' => $cover,
 			'imgWidth' => intval($size['width']),
 			'mediumSize' => Image::getSize('medium'),
+			'largeSize' => Image::getSize('large'),
 			'accessories' => $product->getAccessories(intval($cookie->id_lang))));
 		if (sizeof($productImages))
 			$smarty->assign('images', $productImages);
