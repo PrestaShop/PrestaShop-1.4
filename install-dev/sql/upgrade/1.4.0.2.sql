@@ -255,8 +255,8 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('deleteProductAttribute', 'Product Attribute Deletion', NULL, 0);
 
-INSERT INTO `dev_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
-((SELECT IFNULL((SELECT `id_module` FROM `dev_module` WHERE `name` = 'mailalerts'), 0)),
-(SELECT `id_hook` FROM `dev_hook` WHERE `name` = 'deleteProductAttribute'), 1)
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
+((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'mailalerts'), 0)),
+(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'deleteProductAttribute'), 1)
 
-DELETE FROM `dev_hook_module` WHERE `id_module` = 0;
+DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
