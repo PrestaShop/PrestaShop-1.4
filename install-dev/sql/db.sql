@@ -323,6 +323,8 @@ CREATE TABLE `PREFIX_country` (
   `active` tinyint(1) unsigned NOT NULL default '0',
   `contains_states` tinyint(1) NOT NULL default '0',
   `need_identification_number` tinyint(1) NOT NULL default '0',
+  `need_zip_code` tinyint(1) NOT NULL default '1',
+  `zip_code_format` varchar(12) NOT NULL default '',
   PRIMARY KEY  (`id_country`),
   KEY `country_iso_code` (`iso_code`),
   KEY `country_` (`id_zone`)

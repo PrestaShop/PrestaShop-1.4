@@ -2,9 +2,11 @@ $(document).ready(function(){
 	$('select#id_country').change(function(){
 		updateState();
 		updateNeedIDNumber();
+		updateZipCode();
 	});
 	updateState();
 	updateNeedIDNumber();
+	updateZipCode();
 });
 
 function updateState()
@@ -31,4 +33,14 @@ function updateNeedIDNumber()
 		$('fieldset.dni').slideDown('slow');
 	else
 		$('fieldset.dni').slideUp('fast');
+}
+
+function updateZipCode()
+{
+	var idCountry = parseInt($('select#id_country').val());
+	
+	if (countriesNeedZipCode[idCountry] != 0)
+		$('.postcode').slideDown('slow');
+	else
+		$('.postcode').slideUp('fast');
 }

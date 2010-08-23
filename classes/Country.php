@@ -34,6 +34,12 @@ class		Country extends ObjectModel
 	/** @var boolean Need identification number dni/nif/nie */
 	public		$need_identification_number;
 	
+	/** @var boolean Need Zip Code */
+	public		$need_zip_code;
+	
+	/** @var string Zip Code Format */
+	public		$zip_code_format;
+	
 	/** @var boolean Status for delivery */
 	public		$active = true;
 
@@ -43,7 +49,7 @@ class		Country extends ObjectModel
 
  	protected 	$fieldsRequired = array('id_zone', 'iso_code', 'contains_states', 'need_identification_number');
  	protected 	$fieldsSize = array('iso_code' => 3);
- 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'call_prefix' => 'isInt', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'call_prefix' => 'isInt', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool', 'need_zip_code' => 'isBool', 'zip_code_format' => 'isZipCodeFormat');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 64);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -60,6 +66,8 @@ class		Country extends ObjectModel
 		$fields['active'] = intval($this->active);
 		$fields['contains_states'] = intval($this->contains_states);
 		$fields['need_identification_number'] = intval($this->need_identification_number);
+		$fields['need_zip_code'] = intval($this->need_zip_code);
+		$fields['zip_code_format'] = $this->zip_code_format;
 		return $fields;
 	}
 
@@ -86,12 +94,12 @@ class		Country extends ObjectModel
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$states = Db::getInstance()->ExecuteS('
+		$states = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'state` s
 		ORDER BY s.`name` ASC');
 
-		$result = Db::getInstance()->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cl.*,c.*, cl.`name` AS country, z.`name` AS zone
 		FROM `'._DB_PREFIX_.'country` c
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.intval($id_lang).')
@@ -155,7 +163,7 @@ class		Country extends ObjectModel
 	*/
 	static public function getNameById($id_lang, $id_country)
 	{
-		$result = Db::getInstance()->getRow('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'country_lang`
 		WHERE `id_lang` = '.intval($id_lang).'
@@ -196,10 +204,10 @@ class		Country extends ObjectModel
 		if ($id_lang)
 			$sql .= ' AND `id_lang` = '.intval($id_lang);
 		 	
-		$result = Db::getInstance()->getRow($sql);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 
 		return (intval($result['id_country']));
-	}   
+	}
     
 	static public function getNeedIdentifcationNumber($id_country)
 	{
@@ -208,6 +216,28 @@ class		Country extends ObjectModel
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `need_identification_number` 
+		FROM `'._DB_PREFIX_.'country` 
+		WHERE `id_country` = '.intval($id_country));
+	}
+
+	static public function getNeedZipCode($id_country)
+	{
+		if (!intval($id_country))
+			return false;
+	
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT `need_zip_code` 
+		FROM `'._DB_PREFIX_.'country` 
+		WHERE `id_country` = '.intval($id_country));
+	}
+
+	static public function getZipCodeFormat($id_country)
+	{
+		if (!intval($id_country))
+			return false;
+
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT `zip_code_format` 
 		FROM `'._DB_PREFIX_.'country` 
 		WHERE `id_country` = '.intval($id_country));
 	}

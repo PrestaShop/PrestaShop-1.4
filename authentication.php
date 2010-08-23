@@ -51,11 +51,30 @@ if (Tools::isSubmit('submitAccount'))
 
 	if (!Validate::isEmail($email = Tools::getValue('email')))
 		$errors[] = Tools::displayError('e-mail not valid');
-	elseif (!Validate::isPasswd(Tools::getValue('passwd')))
-		$errors[] = Tools::displayError('invalid password');
 	elseif (Customer::customerExists($email))
 		$errors[] = Tools::displayError('someone has already registered with this e-mail address');
-	elseif (Tools::getValue('dni') != NULL AND $validateDni != 1)
+	if (!Validate::isPasswd(Tools::getValue('passwd')))
+		$errors[] = Tools::displayError('invalid password');
+	if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
+		$errors[] = Tools::displayError('You must register at least one phone number');
+	$zip_code_format = Country::getZipCodeFormat(intval(Tools::getValue('id_country')));
+	if (Country::getNeedZipCode(intval(Tools::getValue('id_country'))))
+	{
+		if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
+		{
+			$zip_regexp = '/^'.$zip_code_format.'$/ui';
+			$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
+			$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
+			$zip_regexp = str_replace('C', Country::getIsoById(intval(Tools::getValue('id_country'))), $zip_regexp);
+			if (!preg_match($zip_regexp, $postcode))
+				$errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+		}
+		elseif ($zip_code_format)
+			$errors[] = Tools::displayError('postcode is required.');
+		elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
+			$errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+	}
+	if (Tools::getValue('dni') != NULL AND $validateDni != 1)
 	{
 		$error = array(
 		0 => Tools::displayError('DNI isn\'t valid'),
@@ -66,9 +85,9 @@ if (Tools::isSubmit('submitAccount'))
 		);
 		$errors[] = $error[$validateDni];
 	}
-	elseif (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
+	if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
 		$errors[] = Tools::displayError('invalid birthday');
-	else
+	if (!sizeof($errors))
 	{
 		$customer = new Customer();
 		if (Tools::isSubmit('newsletter'))

@@ -763,3 +763,14 @@ function changeCMSActivationAuthorization()
 	else
 		getE('PS_CONDITIONS_CMS_ID').disabled = 'disabled';
 }
+
+function disableZipFormat()
+{
+	if ($('#need_zip_code_on').attr('checked') == false)
+	{
+		$('.zip_code_format').hide();
+		$('#zip_code_format').val('');
+	}
+	else
+		$('.zip_code_format').show();
+}

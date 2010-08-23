@@ -50,22 +50,40 @@ if (Tools::isSubmit('submitAddress'))
 	$address = new Address();
 	$errors = $address->validateControler();
 	$address->id_customer = intval($cookie->id_customer);
-	
-	if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
-		strcmp(Tools::getToken(false), Tools::getValue('token')) &&
+
+	if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
+		$errors[] = Tools::displayError('You must register at least one phone number');
+	if (!$country = new Country(intval($address->id_country)) OR !Validate::isLoadedObject($country))
+		die(Tools::displayError());
+	$zip_code_format = $country->zip_code_format;
+	if ($country->need_zip_code)
+	{
+		if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
+		{
+			$zip_regexp = '/^'.$zip_code_format.'$/ui';
+			$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
+			$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
+			$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
+			if (!preg_match($zip_regexp, $postcode))
+				$errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+		}
+		elseif ($zip_code_format)
+			$errors[] = Tools::displayError('postcode is required.');
+		elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
+			$errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+	}
+	if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
+		strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 		$cookie->isLogged() === true)
 		$errors[] = Tools::displayError('invalid token');
 
-	if (!$country = new Country($address->id_country) OR !Validate::isLoadedObject($country))
-			die(Tools::displayError());
-		if (intval($country->contains_states) AND !intval($address->id_state))
-			$errors[] = Tools::displayError('this country require a state selection');
+	if (intval($country->contains_states) AND !intval($address->id_state))
+		$errors[] = Tools::displayError('this country require a state selection');
 
 	if (!sizeof($errors))
 	{
 		if (isset($id_address))
 		{
-			$country = new Country(intval($address->id_country));
 			if (Validate::isLoadedObject($country) AND !$country->contains_states)
 				$address->id_state = false;
 			$address_old = new Address(intval($id_address));

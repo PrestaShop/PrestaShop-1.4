@@ -43,7 +43,7 @@ class AdminCountries extends AdminTab
 	public function postProcess()
 	{
 		if (isset($_GET['delete'.$this->table]) OR Tools::getValue('submitDel'.$this->table))
-			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
+			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it to be available for customers, please disable it.');
 		else
 			return parent::postProcess();
 	}
@@ -67,7 +67,7 @@ class AdminCountries extends AdminTab
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="30" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>';							
+					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '		<p style="clear: both">'.$this->l('Name of country').'</p>
 				</div>
@@ -89,6 +89,18 @@ class AdminCountries extends AdminTab
 			echo '		<option value="'.intval($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
 		echo '		</select>
 					<p>'.$this->l('Geographical zone where country is located').'</p>
+				</div>
+				<label>'.$this->l('Need zip code:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="need_zip_code" id="need_zip_code_on" value="1" onchange="disableZipFormat();" '.((!$obj->id OR $this->getFieldValue($obj, 'need_zip_code')) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="need_zip_code_on"> <img src="../img/admin/enabled.gif" alt="" title="'.$this->l('Yes').'" /></label>
+					<input type="radio" name="need_zip_code" id="need_zip_code_off" value="0" onchange="disableZipFormat();" '.((!$this->getFieldValue($obj, 'need_zip_code') AND $obj->id) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="need_zip_code_off"> <img src="../img/admin/disabled.gif" alt="" title="'.$this->l('No').'" /></label>
+				</div>
+				<label class="zip_code_format">'.$this->l('Zip code format:').' </label>
+				<div class="margin-form zip_code_format">
+					<input type="text" name="zip_code_format" id="zip_code_format" value="'.$this->getFieldValue($obj, 'zip_code_format').'" onkeyup="$(\'#zip_code_format\').val($(\'#zip_code_format\').val().toUpperCase());" /> <sup>*</sup>
+					<p>'.$this->l('National zip code (L for a letter, N for a number and C for the Iso code), e.g., NNNNN for France. No verification if undefined').'.</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
@@ -117,7 +129,8 @@ class AdminCountries extends AdminTab
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
-		</form>';
+		</form>
+		<script type="text/javascript">disableZipFormat();</script>';
 	}
 }
 

@@ -514,6 +514,19 @@ class Validate
 	{
 		return preg_match('/^[a-z 0-9-]+$/ui', $postcode);
 	}
+	
+	/**
+	* Check for zip code format validity
+	*
+	* @param string $zip_code zip code format to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isZipCodeFormat($zip_code)
+	{
+		if (!empty($zip_code))
+			return preg_match('/^[NLC -]+$/ui', $zip_code);
+		return true;
+	}
 
 	/**
 	* Check for table or identifier validity

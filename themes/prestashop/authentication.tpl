@@ -3,10 +3,10 @@
 
 <script type="text/javascript">
 // <![CDATA[
-idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}false{/if};
-valueDni = {if isset($smarty.post.dni) && $smarty.post.dni}{$smarty.post.dni}{else}false{/if};
+idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{elseif isset($address->id_state)}{$address->id_state|intval}{else}false{/if};
 countries = new Array();
 countriesNeedIDNumber = new Array();
+countriesNeedZipCode = new Array();
 {foreach from=$countries item='country'}
 	{if isset($country.states) && $country.contains_states}
 		countries[{$country.id_country|intval}] = new Array();
@@ -16,8 +16,14 @@ countriesNeedIDNumber = new Array();
 	{/if}
 	{if $country.need_identification_number}
 		countriesNeedIDNumber.push({$country.id_country|intval});
+	{/if}	
+	{if isset($country.need_zip_code)}
+		countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
 	{/if}
 {/foreach}
+$(function(){ldelim}
+	$('.id_state option[value={if isset($smarty.post.id_state)}{$smarty.post.id_state}{else}{$address->id_state|escape:'htmlall':'UTF-8'}{/if}]').attr('selected', 'selected');
+{rdelim});
 //]]>
 </script>
 
@@ -164,9 +170,9 @@ countriesNeedIDNumber = new Array();
 			<label for="address2">{l s='Address (2)'}</label>
 			<input type="text" class="text" name="address2" id="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{/if}" />
 		</p>
-		<p class="required text">
+		<p class="required postcode text">
 			<label for="postcode">{l s='Postal code / Zip code'}</label>
-			<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{/if}" />
+			<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 			<sup>*</sup>
 		</p>
 		<p class="required text">
@@ -195,6 +201,7 @@ countriesNeedIDNumber = new Array();
 			<label for="other">{l s='Additional information'}</label>
 			<textarea name="other" id="other" cols="26" rows="3">{if isset($smarty.post.other)}{$smarty.post.other}{/if}</textarea>
 		</p>
+		<p style="margin-left:50px; font-size: 0.8em">{l s='You must register at least one phone number'}</p>
 		<p class="text">
 			<label for="phone">{l s='Home phone'}</label>
 			<input type="text" class="text" name="phone" id="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone}{/if}" />
