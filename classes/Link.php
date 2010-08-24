@@ -58,15 +58,24 @@ class Link
 		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category);
 	}
 
-	public function getCMSLink($cms, $alias = null)
+	public function getCMSLink($cms, $alias = null, $ssl = false)
 	{
+		$base = _PS_BASE_URL_;
+		if ($ssl)
+			$base = Tools::getHttpHost(true);
+	
 		if (is_object($cms))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink().'content/'.intval($cms->id).'-'.$cms->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
+		{
+			if ($cms->id == intval(Configuration::get('PS_CONDITIONS_CMS_ID')))
+			return ($this->allow == 1) ? 
+				($base.__PS_BASE_URI__.$this->getLangLink().'content/'.intval($cms->id).'-'.$cms->link_rewrite) :
+				($base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
+		}
+		
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink().'content/'.intval($cms).'-'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms);
+			return ($this->allow == 1) ? ($base.__PS_BASE_URI__.$this->getLangLink().'content/'.intval($cms).'-'.$alias) :
+			($base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms));
+		return $base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms);
 	}
 
 	public function getSupplierLink($id_supplier, $alias = NULL)
