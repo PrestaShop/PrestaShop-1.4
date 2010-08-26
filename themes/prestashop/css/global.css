@@ -521,6 +521,24 @@ ul.bullet li, .block ul.bullet li {
 .price-pretax { color: gray }
 .price-ecotax { color: #488c40 }
 img.icon { margin-right: 0.5em; vertical-align: middle }
+.weight-price {
+	font-size: 0.75em;
+	text-align: right;
+	color: gray
+}
+
+.volume-price {
+	font-size: 0.75em;
+	text-align: right;
+	color: gray
+}
+
+.unity-price {
+	font-size: 0.75em;
+	text-align: right;
+	color: gray
+}
+
 .price, .price-shipping, .price-wrapping {
 	color: #da0f00;
 	font-size: 1.1em;

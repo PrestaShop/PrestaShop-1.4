@@ -263,3 +263,10 @@ DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
 
 ALTER TABLE `PREFIX_country` ADD `need_zip_code` TINYINT(1) NOT NULL DEFAULT '1';
 ALTER TABLE `PREFIX_country` ADD `zip_code_format` VARCHAR(12) NOT NULL DEFAULT '';
+
+ALTER TABLE `PREFIX_product` ADD `weight_price` DECIMAL(20,6) NOT NULL AFTER `wholesale_price` DEFAULT '0.000000';
+ALTER TABLE `PREFIX_product` ADD `volume_price` DECIMAL(20,6) NOT NULL AFTER `weight_price` DEFAULT '0.000000';
+ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL AFTER `volume_price` DEFAULT '0.000000';
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_VOLUME_UNIT', 'cl', NOW(), NOW());

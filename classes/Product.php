@@ -86,6 +86,15 @@ class		Product extends ObjectModel
 	/** @var boolean on_sale */
 	public 		$on_sale = false;
 
+	/** @var float price per weight unit */
+	public		$weight_price = 0;
+
+	/** @var float price per volume unit */
+	public		$volume_price = 0;
+	
+	/** @var float price for one unit */
+	public		$unity_price = 0;
+
 	/** @var float Ecotax */
 	public		$ecotax = 0;
 
@@ -179,6 +188,9 @@ class		Product extends ObjectModel
 		'reduction_to' => 'isDate',
 		'on_sale' => 'isBool',
 		'ecotax' => 'isPrice',
+		'weight_price' => 'isPrice',
+		'volume_price' => 'isPrice',
+		'unity_price' => 'isPrice',
 		'reference' => 'isReference',
     	'supplier_reference' => 'isReference',
 		'location' => 'isReference',
@@ -250,6 +262,9 @@ class		Product extends ObjectModel
 		$fields['reduction_to'] = pSQL($this->reduction_to);
 		$fields['on_sale'] = intval($this->on_sale);
 		$fields['ecotax'] = floatval($this->ecotax);
+		$fields['weight_price'] = floatval($this->weight_price);
+		$fields['volume_price'] = floatval($this->volume_price);
+		$fields['unity_price'] = floatval($this->unity_price);
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);

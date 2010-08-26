@@ -28,7 +28,7 @@ var reduction_price = {if $product->reduction_percent}0{else}{$product->getPrice
 var reduction_from = '{$product->reduction_from}';
 var reduction_to = '{$product->reduction_to}';
 var group_reduction = '{$group_reduction}';
-var default_eco_tax = {$product->ecotax};
+var default_eco_tax = {$ecotax};
 var currentDate = '{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}';
 var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};
@@ -229,10 +229,19 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>
 				<br class="clear" />
 			{/if}
-			{if $product->ecotax != 0}
-				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
+			{if $ecotax != 0}
+				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$ecotax}</span> {l s='for green tax'}</p>
 			{/if}
-
+			{if $weight_price != NULL && $weight_price > 0.000000}
+				<p class="weight-price">{convertPrice price=$weight_price} {l s='per'} {$weight_unit}</p>
+			{/if}
+			{if $volume_price != NULL && $volume_price > 0.000000}
+				<p class="volume-price">{convertPrice price=$volume_price} {l s='per'} {$volume_unit}</p>
+			{/if}
+			{if $unity_price != NULL && $unity_price > 0.000000}
+				<p class="unity-price">{convertPrice price=$unity_price} {l s='the unity'}</p>
+			{/if}
+			
 			{if isset($groups)}
 			<!-- attributes -->
 			<div id="attributes">

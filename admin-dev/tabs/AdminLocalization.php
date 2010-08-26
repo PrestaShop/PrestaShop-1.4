@@ -25,7 +25,8 @@ class AdminLocalization extends AdminPreferences
 		$this->table = 'configuration';
 
 		$this->_fieldsLocalization = array(
-			'PS_WEIGHT_UNIT' => array('title' => $this->l('Weight unit:'), 'desc' => $this->l('The weight unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'));
+			'PS_WEIGHT_UNIT' => array('title' => $this->l('Weight unit:'), 'desc' => $this->l('The weight unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'),
+			'PS_VOLUME_UNIT' => array('title' => $this->l('Volume unit:'), 'desc' => $this->l('The volume unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'));
 
 		parent::__construct();
 	}

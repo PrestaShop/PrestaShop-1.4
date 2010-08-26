@@ -36,7 +36,8 @@ class Link
 	  */
 	public function getProductLink($id_product, $alias = NULL, $category = NULL, $ean13 = NULL)
 	{
-		if (!isset($this->allow)) $this->allow = 0;
+		if (!isset($this->allow))
+			$this->allow = 0;
 		if (is_object($id_product))
 			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink().(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').intval($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
 			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product->id));

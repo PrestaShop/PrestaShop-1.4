@@ -121,3 +121,36 @@ function decimalTruncate(source, decimals)
 	var pos = source.indexOf('.');
 	return parseFloat(source.substr(0, pos + decimals + 1));
 }
+
+function showUnitPrices()
+{
+	if ($('#tr_weight_price').css('display') == 'none')
+	{
+		$('#tr_weight_price').show();
+		$('#tr_volume_price').show();
+		$('#tr_unity_price').show();
+	}
+	else
+	{
+		$('#tr_weight_price').hide();
+		$('#tr_volume_price').hide();
+		$('#tr_unity_price').hide();
+	}
+}
+
+function unityPriceWithTax(type)
+{
+	var tax = getTax();
+	var priceWithTax = parseFloat(document.getElementById(type+'_price').value.replace(/,/g, '.'));
+	var newPrice = priceWithTax * ((tax / 100) + 1);
+	$('#'+type+'_price_with_tax').html((isNaN(newPrice) == true || newPrice < 0) ? '0.00' : ps_round(newPrice, 2).toFixed(2));
+}
+
+function updateNewPriceAttribute()
+{
+	var total = ps_round((parseFloat($('#attribute_price').val())*parseInt($('#attribute_price_impact').val())+parseFloat($('#finalPrice').html())), 2);
+	if (isNaN(total))
+		$('#attribute_new_total_price').html('0.00');
+	else
+		$('#attribute_new_total_price').html(total);
+}
