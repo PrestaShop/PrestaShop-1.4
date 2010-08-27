@@ -43,10 +43,10 @@ class AdminGenerator extends AdminTab
 		if ($this->_checkConfiguration($this->_htFile))
 			echo '
 			<div class="clear">&nbsp;</div>
-			<label for="imageCacheControl">'.$this->l('Cache control directive').'</label>
+			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="cacheControl" id="cacheControl" '.(Tools::getValue('cacheControl') ? 'checked="checked"' : '').' />
-				<p>'.$this->l('This will specify to your Customers\' browsers that the images can be cached for 1 month and the CSS and Javascript files for 1 week (mod_expires must be enabled).').'</p>
+				<p>'.$this->l('This will add directives to your .htaccess file which should improved cache and compression.').'</p>
 			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
 			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>
@@ -125,10 +125,19 @@ class AdminGenerator extends AdminTab
 		ExpiresByType image/jpeg \"access plus 1 month\"
 		ExpiresByType image/png \"access plus 1 month\"
 		ExpiresByType text/css \"access plus 1 week\"
+		ExpiresByType text/javascript \"access plus 1 week\"
 		ExpiresByType application/javascript \"access plus 1 week\"
 		ExpiresByType application/x-javascript \"access plus 1 week\"
 		ExpiresByType image/x-icon \"access plus 1 year\"
 </IfModule>
+
+FileETag INode MTime Size
+
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/javascript
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
 ";
 						fwrite($writeFd, $cacheControl);
 					}
