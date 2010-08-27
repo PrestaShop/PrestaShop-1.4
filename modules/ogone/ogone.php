@@ -132,7 +132,12 @@ class Ogone extends PaymentModule
 		$ogoneParams['ownercty'] = $country->iso_code;
 		$ogoneParams['ownertown'] = $address->city;
 		$ogoneParams['ownertelno'] = $address->phone;
-		$ogoneParams['SHASign'] = sha1($ogoneParams['orderID'].$ogoneParams['amount'].$ogoneParams['currency'].$ogoneParams['PSPID'].Configuration::get('OGONE_SHA_IN'));
+
+		$ogoneParams['SHASign'] = 'AMOUNT='.$ogoneParams['amount'].Configuration::get('OGONE_SHA_IN');
+		$ogoneParams['SHASign'] .= 'CURRENCY='.$currency->iso_code.Configuration::get('OGONE_SHA_IN');
+		$ogoneParams['SHASign'] .= 'ORDERID='.intval($params['cart']->id).Configuration::get('OGONE_SHA_IN');
+		$ogoneParams['SHASign'] .= 'PSPID='.Configuration::get('OGONE_PSPID').Configuration::get('OGONE_SHA_IN');
+		$ogoneParams['SHASign'] = sha1($ogoneParams['SHASign']);
 		
 		$smarty->assign('ogone_params', $ogoneParams);
 		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
