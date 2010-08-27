@@ -88,33 +88,14 @@ class		Configuration extends ObjectModel
 	  */
 	static public function get($key, $id_lang = NULL)
 	{
-	 	if (!is_array(self::$_CONF) OR !is_array(self::$_CONF_LANG) OR !Validate::isConfigName($key))
+	 	if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
 
-		if ($id_lang)
-		{
-			if (key_exists(intval($id_lang), self::$_CONF_LANG) AND key_exists($key, self::$_CONF_LANG[intval($id_lang)]))
-				return self::$_CONF_LANG[intval($id_lang)][$key];
-		}
+		if ($id_lang AND isset(self::$_CONF_LANG[intval($id_lang)][$key]))
+			return self::$_CONF_LANG[intval($id_lang)][$key];
 		elseif (key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
-
-		$result = Db::getInstance()->GetRow('
-		SELECT IFNULL('.($id_lang ? 'cl' : 'c').'.`value`, c.`value`) AS value
-		FROM `'._DB_PREFIX_.'configuration` c
-		'.($id_lang ? ('LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.`id_configuration` = cl.`id_configuration` AND cl.`id_lang` = '.intval($id_lang).')') : '').'
-		WHERE `name` = \''.pSQL($key).'\'');
-		
-		if ($id_lang)
-		{
-			self::$_CONF_LANG[intval($id_lang)][$key] = ($result ? $result['value'] : false);
-			return self::$_CONF_LANG[intval($id_lang)][$key];
-		}
-		else
-		{
-			self::$_CONF[$key] = ($result ? $result['value'] : false);
-			return self::$_CONF[$key];
-		}
+		return false;
 	}
 
 	/**
