@@ -152,15 +152,23 @@ class AdminCarriers extends AdminTab
 						<option value="1"'.($this->getFieldValue($obj, 'range_behavior') ? ' selected="selected"' : '').'>'.$this->l('Disable carrier').'</option>
 					</select>
 					<p>'.$this->l('Out-of-range behavior when none is defined (e.g., when a customer\'s cart weight is superior to the highest range limit)').'</p>
-				</div>
-				<label>'.$this->l('Module:').' </label>
-				<div class="margin-form">
-					<input type="radio" name="is_module" id="active_on" value="1" '.($this->getFieldValue($obj, 'is_module') ? 'checked="checked" ' : '').'/>
-					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
-					<input type="radio" name="is_module" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'is_module') ? 'checked="checked" ' : '').'/>
-					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Mark this carrier as linked to a module').'</p>
-				</div>
+				</div>';
+				if($this->getFieldValue($obj, 'is_module'))
+				{
+					echo '<label>'.$this->l('Module:').' </label>
+						  <div class="margin-form"><p> - '.
+						  $this->l('This carrier is bind to this module ').' => '.$this->getFieldValue($obj, 'external_module_name').'</p>
+						  <input type="hidden" name="is_module" value="1">
+						  <input type="hidden" name="external_module_name" value="'.$this->getFieldValue($obj, 'external_module_name').'">';
+						  
+					if($this->getFieldValue($obj, 'shipping_external'))
+					{
+						echo '<p> - '.$this->l('The shipping costs are calculated outside of your shop').'</p>
+						<input type="hidden" name="shipping_external" value="1">';
+					}	
+					echo '</div>';
+				}
+				echo '
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>

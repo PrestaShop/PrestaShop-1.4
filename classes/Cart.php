@@ -855,31 +855,45 @@ class		Cart extends ObjectModel
 			return $shipping_cost;
 
 		// Get shipping cost using correct method
-		if ($carrier->range_behavior)
-		{
-			// Get id zone
-	        if (isset($this->id_address_delivery) AND $this->id_address_delivery)
-				$id_zone = Address::getZoneById(intval($this->id_address_delivery));
+
+		if ($carrier->shipping_external)
+		{	
+			$moduleName = $carrier->external_module_name;
+			if(file_exists(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php'))
+				include_once(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php');
 			else
-				$id_zone = intval($defaultCountry->id_zone);
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
-				OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
-				$shipping_cost += 0;
-			else {
+				die(Tools::displayError('Hack attempt: "carrier error"'));
+			$module = new $moduleName();
+			return $module->getOrderShippingCost($this); 
+		}
+		else
+		{	
+
+			if ($carrier->range_behavior)
+			{
+				// Get id zone
+		        if (isset($this->id_address_delivery) AND $this->id_address_delivery)
+					$id_zone = Address::getZoneById(intval($this->id_address_delivery));
+				else
+					$id_zone = intval($defaultCountry->id_zone);
+				if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
+						OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
+						$shipping_cost += 0;
+					else {
+						if (intval($configuration['PS_SHIPPING_METHOD']))
+							$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
+						else
+							$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+						 }
+			}
+			else
+			{
 				if (intval($configuration['PS_SHIPPING_METHOD']))
 					$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 				else
 					$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 			}
-		}
-		else
-		{
-			if (intval($configuration['PS_SHIPPING_METHOD']))
-				$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
-			else
-				$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
-		}
-		
+		}	
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
 			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);

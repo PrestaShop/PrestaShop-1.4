@@ -40,6 +40,12 @@ class		Carrier extends ObjectModel
 
 	/** @var boolean Carrier module */
 	public		$is_module;
+	
+	/** @var boolean Shipping external */
+	public		$shipping_external = 0;
+	
+	/** @var boolean Shipping external */
+	public		$external_module_name = NULL;
 
  	protected 	$fieldsRequired = array('name', 'active');
  	protected 	$fieldsSize = array('name' => 64);
@@ -67,6 +73,9 @@ class		Carrier extends ObjectModel
 		$fields['shipping_handling'] = intval($this->shipping_handling);
 		$fields['range_behavior'] = intval($this->range_behavior);
 		$fields['is_module'] = intval($this->is_module);
+		$fields['shipping_external'] = intval($this->shipping_external);
+		$fields['external_module_name'] = $this->external_module_name;
+
 		return $fields;
 	}
 
@@ -252,10 +261,16 @@ class		Carrier extends ObjectModel
 	 * Get all carriers in a given language
 	 *
 	 * @param integer $id_lang Language id
+	 * @param $modules_filters 
+	 
+		define('PS_CARRIER_ONLY',1);
+		define('CARRIER_MODULE',2);
+		define('ALL_CARRIERS',3);	
+	 	
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
 	 */
-	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, array $ids_group = NULL)
+	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, array $ids_group = NULL, $modules_filters = 1)
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -277,9 +292,22 @@ class		Carrier extends ObjectModel
 			WHERE c.`deleted` '.($delete ? '= 1' : ' = 0').
 			($active ? ' AND c.`active` = 1' : '').
 			($id_zone ? ' AND cz.`id_zone` = '.intval($id_zone).'
-			AND z.`active` = 1' : '').'
-			AND c.`is_module` = 0
-		    '.($ids_group ? 'AND c.id_carrier IN (SELECT id_carrier FROM '._DB_PREFIX_.'carrier_group WHERE id_group IN ('.$ids.')) ' : '').'
+			AND z.`active` = 1 ' : ' ');
+		switch ($modules_filters)
+		{	
+			case 1 :
+				$sql .= 'AND c.is_module = 0 ';
+			break;
+			case 2 :
+				$sql .= 'AND c.is_module = 1 ';
+			break;
+			case 3 :
+				$sql .= '';
+			break;
+		}
+		
+			//AND c.`is_module` = '.$is_module.($is_module ? ' AND c.`need_range` = '.$need_range.'' : '').
+		$sql .= ($ids_group ? ' AND c.id_carrier IN (SELECT id_carrier FROM '._DB_PREFIX_.'carrier_group WHERE id_group IN ('.$ids.')) ' : '').'
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
 

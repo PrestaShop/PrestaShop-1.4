@@ -270,3 +270,7 @@ ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL AFTER `vol
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_VOLUME_UNIT', 'cl', NOW(), NOW());
+
+
+ALTER TABLE `PREFIX_carrier` ADD `shipping_external` TINYINT( 1 ) UNSIGNED NOT NULL;
+ALTER TABLE `PREFIX_carrier` ADD `external_module_name` varchar(64) NOT NULL;

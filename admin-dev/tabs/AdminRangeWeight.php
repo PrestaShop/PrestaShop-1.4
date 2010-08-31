@@ -66,7 +66,7 @@ class AdminRangeWeight extends AdminTab
 				<label>'.$this->l('Carrier:').'</label>
 				<div class="margin-form">
 					<select name="id_carrier">';
-			$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')));
+			$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIER_ONLY);
 			$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
 			foreach ($carriers AS $carrier)
 				echo '<option value="'.intval($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
