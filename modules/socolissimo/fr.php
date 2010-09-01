@@ -59,9 +59,9 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_ccdfd8ad75276f6e24db51d02e83e361'
 $_MODULE['<{socolissimo}prestashop>socolissimo_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{socolissimo}prestashop>socolissimo_738a1d4da1b5dc5883063ec9856b637b'] = 'Configuration erreur';
 $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'] = 'Mode de livraison';
-$_MODULE['<{socolissimo}prestashop>socolissimo_26c3322326d6c253776082396d0b525a'] = 'Id du commerce de proximité';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fe0ddc6b5ddddfa1203a1931726a06b4'] = 'Commerce de proximité';
-$_MODULE['<{socolissimo}prestashop>socolissimo_943d641a55c5f1a32331d21104cd7637'] = 'Adresse du commerce de proximité';
+$_MODULE['<{socolissimo}prestashop>socolissimo_26c3322326d6c253776082396d0b525a'] = 'Id du point de retrait';
+$_MODULE['<{socolissimo}prestashop>socolissimo_fe0ddc6b5ddddfa1203a1931726a06b4'] = 'Point de retrait';
+$_MODULE['<{socolissimo}prestashop>socolissimo_943d641a55c5f1a32331d21104cd7637'] = 'Adresse du point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_carrier_21034ae6d01a83e702839a72ba8a77b0'] = 'HT';
 $_MODULE['<{socolissimo}prestashop>socolissimo_carrier_1f87346a16cf80c372065de3c54c86d9'] = 'TTC';
 $_MODULE['<{socolissimo}prestashop>socolissimo_carrier_a62b48ecbf0051dad0ff07f532d9ba6b'] = 'Gratuit';
