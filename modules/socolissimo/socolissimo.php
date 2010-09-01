@@ -435,6 +435,9 @@ class Socolissimo extends Module
 	{
 		global $cookie;
 		
+		if ($params['objOrder']->module != $this->name)
+			return;
+		
 		$order = $params['order'];
 		$order->id_address_delivery = $this->isSameAddress($order->id_address_delivery,$order->id_cart,$order->id_customer);
 		$order->update();
