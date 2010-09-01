@@ -19,9 +19,9 @@ class Socolissimo extends Module
 		'delay' => array('fr'=>'Avec La Poste, Faites-vous livrer là où vous le souhaitez en France Métropolitaine.',
 						 'en'=>'Do you deliver wherever you want in France.'),
 		'id_zone' => 1,
-		'shipping_external'=>true,
-		'external_module_name'=> 'socolissimo',
-		'need_range' => true
+		'shipping_external'=>false,
+		'external_module_name'=> '',
+		'need_range' => false
 		);
 		
 
