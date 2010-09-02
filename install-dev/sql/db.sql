@@ -122,20 +122,22 @@ CREATE TABLE `PREFIX_block_cms` (
   PRIMARY KEY  (`id_block`,`id_cms`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_carrier` (
-  `id_carrier` int(10) unsigned NOT NULL auto_increment,
-  `id_tax` int(10) unsigned default '0',
+CREATE TABLE IF NOT EXISTS `PREFIX_carrier` (
+  `id_carrier` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_tax` int(10) unsigned DEFAULT '0',
   `name` varchar(64) NOT NULL,
-  `url` varchar(255) default NULL,
-  `active` tinyint(1) unsigned NOT NULL default '0',
-  `deleted` tinyint(1) unsigned NOT NULL default '0',
-  `shipping_handling` tinyint(1) unsigned NOT NULL default '1',
-  `range_behavior` tinyint(1) unsigned NOT NULL default '0',
-  `is_module` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id_carrier`),
+  `url` varchar(255) DEFAULT NULL,
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `shipping_handling` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `range_behavior` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_module` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `shipping_external` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `external_module_name` varchar(64) NOT NULL,
+  PRIMARY KEY (`id_carrier`),
   KEY `deleted` (`deleted`,`active`),
   KEY `id_tax` (`id_tax`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 CREATE TABLE `PREFIX_carrier_lang` (
   `id_carrier` int(10) unsigned NOT NULL,
