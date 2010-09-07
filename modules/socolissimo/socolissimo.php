@@ -79,11 +79,12 @@ class Socolissimo extends Module
 		global $cookie;
 
 		if (!parent::install() OR !Configuration::updateValue('SOCOLISSIMO_ID', NULL) OR !Configuration::updateValue('SOCOLISSIMO_KEY', NULL)
-		 OR !Configuration::updateValue('SOCOLISSIMO_URL', 'http://217.108.161.163/pudo-fo/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) 
+		 OR !Configuration::updateValue('SOCOLISSIMO_URL', 'https://ws.colissimo.fr/pudo-fo/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) 
 		 OR !Configuration::updateValue('SOCOLISSIMO_OVERCOST', 3.6) OR !$this->registerHook('extraCarrier') OR !$this->registerHook('AdminOrder')
-		 OR !$this->registerHook('newOrder') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'http://217.108.161.163/supervision-pudo/supervision.jsp')
+		 OR !$this->registerHook('newOrder') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'http://ws.colissimo.fr/supervision-pudo/supervision.jsp')
 		 OR !Configuration::updateValue('SOCOLISSIMO_SUP', true))
 			return false;
+			
 			
 			
 		//creat config table in database
