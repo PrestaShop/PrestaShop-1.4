@@ -192,7 +192,7 @@ class AdminShipping extends AdminTab
 				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Fees').'</legend>
 				<b>'.$this->l('Carrier:').' </b>
 				<select name="id_carrier2" onchange="document.fees.submit();">';
-		$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$id_carrier = Tools::getValue('id_carrier') ? intval(Tools::getValue('id_carrier')) : intval($carriers[0]['id_carrier']);
 		$carrierSelected = new Carrier($id_carrier);
 		foreach ($carriers AS $carrier)

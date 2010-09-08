@@ -3,10 +3,12 @@
 abstract class ModuleCarrier extends Module
 {
 	
-/** @var boolean True if the carrier need Range */
-public $needRange = false;
-	
-abstract function getOrderShippingCost($params);	
+abstract function getOrderShippingCost($params,$shipping_cost);	
+
+
+}
+
+abstract function getOrderShippingCostExternal($params);	
 
 
 }

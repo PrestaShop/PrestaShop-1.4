@@ -89,9 +89,11 @@ define('PS_ROUND_DOWN', 1);
 define('PS_ROUND_HALF', 2);
 
 /* Carrier::getCarriers() filter*/
-define('PS_CARRIER_ONLY',1);
-define('CARRIER_MODULE',2);
-define('ALL_CARRIERS',3);
+define('PS_CARRIERS_ONLY',1);
+define('CARRIERS_MODULE',2);
+define('CARRIERS_MODULE_NEED_RANGE',3);
+define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE',4);
+define('ALL_CARRIERS',5);
 
 /* SQL Replication management */
 define('_PS_USE_SQL_SLAVE_', 0);

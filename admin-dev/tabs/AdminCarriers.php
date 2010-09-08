@@ -38,7 +38,7 @@ class AdminCarriers extends AdminTab
 
 		$this->optionTitle = $this->l('Carrier options');
 		$this->_fieldsOptions = array(
-			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers(intval($cookie->id_lang), true)),
+			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, ALL_CARRIERS)),
 		);
 
 		parent::__construct();
@@ -166,6 +166,12 @@ class AdminCarriers extends AdminTab
 						echo '<p> - '.$this->l('The shipping costs are calculated outside of your shop').'</p>
 						<input type="hidden" name="shipping_external" value="1">';
 					}	
+					if($this->getFieldValue($obj, 'need_range'))
+					{
+						echo '<p> - '.$this->l('This carrier use Prestashop range to calculate shipping cost').'</p>
+						<input type="hidden" name="need_range" value="1">';
+					}	
+
 					echo '</div>';
 				}
 				echo '

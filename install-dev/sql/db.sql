@@ -133,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_carrier` (
   `range_behavior` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_module` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `shipping_external` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `need_range` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `external_module_name` varchar(64) NOT NULL,
   PRIMARY KEY (`id_carrier`),
   KEY `deleted` (`deleted`,`active`),

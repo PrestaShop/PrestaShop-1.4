@@ -856,19 +856,6 @@ class		Cart extends ObjectModel
 
 		// Get shipping cost using correct method
 
-		if ($carrier->shipping_external)
-		{	
-			$moduleName = $carrier->external_module_name;
-			if(file_exists(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php'))
-				include_once(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php');
-			else
-				die(Tools::displayError('Hack attempt: "carrier error"'));
-			$module = new $moduleName();
-			return $module->getOrderShippingCost($this); 
-		}
-		else
-		{	
-
 			if ($carrier->range_behavior)
 			{
 				// Get id zone
@@ -893,7 +880,6 @@ class		Cart extends ObjectModel
 				else
 					$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 			}
-		}	
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
 			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
@@ -903,8 +889,21 @@ class		Cart extends ObjectModel
 		// Apply tax
 		if (isset($carrierTax))
 			 $shipping_cost *= 1 + ($carrierTax / 100);
-
-		return floatval(Tools::ps_round(floatval($shipping_cost), 2));
+		
+		if ($carrier->shipping_external)
+		{	
+			$moduleName = $carrier->external_module_name;
+			if(file_exists(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php'))
+				include_once(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php');
+			else
+				die(Tools::displayError('Hack attempt: "carrier error"'));
+			$module = new $moduleName();
+			return $module->getOrderShippingCostExternal($this);
+			if($carrier->need_range)
+				return $module->getOrderShippingCost($this,$shipping_cost);
+		}
+		else
+			return floatval(Tools::ps_round(floatval($shipping_cost), 2));
     }
 
 	/**

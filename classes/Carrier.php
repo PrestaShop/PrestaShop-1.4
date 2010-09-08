@@ -44,8 +44,11 @@ class		Carrier extends ObjectModel
 	/** @var boolean Shipping external */
 	public		$shipping_external = 0;
 	
-	/** @var boolean Shipping external */
+	/** @var string Shipping external */
 	public		$external_module_name = NULL;
+	
+	/** @var boolean Need Range */
+	public		$need_range = 0;
 
  	protected 	$fieldsRequired = array('name', 'active');
  	protected 	$fieldsSize = array('name' => 64);
@@ -75,6 +78,7 @@ class		Carrier extends ObjectModel
 		$fields['is_module'] = intval($this->is_module);
 		$fields['shipping_external'] = intval($this->shipping_external);
 		$fields['external_module_name'] = $this->external_module_name;
+		$fields['need_range'] = $this->need_range;
 
 		return $fields;
 	}
@@ -263,9 +267,11 @@ class		Carrier extends ObjectModel
 	 * @param integer $id_lang Language id
 	 * @param $modules_filters 
 	 
-		define('PS_CARRIER_ONLY',1);
-		define('CARRIER_MODULE',2);
-		define('ALL_CARRIERS',3);	
+			define('PS_CARRIERS_ONLY',1);
+			define('CARRIERS_MODULE',2);
+			define('CARRIERS_MODULE_NEED_RANGE',3);
+			define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE',4);
+			define('ALL_CARRIERS',5);
 	 	
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
@@ -302,11 +308,16 @@ class		Carrier extends ObjectModel
 				$sql .= 'AND c.is_module = 1 ';
 			break;
 			case 3 :
+				$sql .= 'AND c.is_module = 1 AND c.need_range = 1 ';
+			break;
+			case 4 :
+				$sql .= 'AND (c.is_module = 0 OR c.need_range = 1) ';
+			break;
+			case 5 :
 				$sql .= '';
 			break;
+			
 		}
-		
-			//AND c.`is_module` = '.$is_module.($is_module ? ' AND c.`need_range` = '.$need_range.'' : '').
 		$sql .= ($ids_group ? ' AND c.id_carrier IN (SELECT id_carrier FROM '._DB_PREFIX_.'carrier_group WHERE id_group IN ('.$ids.')) ' : '').'
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
@@ -319,7 +330,7 @@ class		Carrier extends ObjectModel
 		}
 		else
 			$carriers = array();
-
+		
 		return $carriers;
 	}
 
