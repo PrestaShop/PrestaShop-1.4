@@ -1,0 +1,1 @@
+<a target="_blank" href="{$rating_url}" title="Rate this shop"><img alt="Rate this shop" border="0" style="text-align:center;" src="{$module_dir}/img/apply_{$language}.gif" /></a>
