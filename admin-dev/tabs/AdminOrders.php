@@ -551,7 +551,7 @@ class AdminOrders extends AdminTab
 			/* Carrier module */
 			if ($carrier->is_module == 1)
 			{
-				$module = Module::getInstanceByName($carrier->name);
+				$module = Module::getInstanceByName($carrier->external_module_name);
 				echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);
 			}
 			

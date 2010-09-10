@@ -246,6 +246,8 @@ function processCarrier()
 	elseif (!$isVirtualCart)
 		$errors[] = Tools::displayError('invalid carrier or no carrier selected');
 
+	Module::hookExec('ProcessCarrier', array('cart' => $cart));
+
 	$cart->update();
 
 	if (sizeof($errors))

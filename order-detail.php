@@ -103,6 +103,7 @@ else
 			'customizedDatas' => $customizedDatas));
 		if ($carrier->url AND $order->shipping_number)
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
+		Module::hookExec('OrderDetail', array('carrier' => $carrier, 'order' => $order));
 	}
 	else
 		$errors[] = Tools::displayError('cannot find this order');

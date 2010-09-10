@@ -268,10 +268,13 @@ ALTER TABLE `PREFIX_product` ADD `weight_price` DECIMAL(20,6) NOT NULL DEFAULT '
 ALTER TABLE `PREFIX_product` ADD `volume_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `weight_price` ;
 ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `volume_price`;
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
-('PS_VOLUME_UNIT', 'cl', NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_VOLUME_UNIT', 'cl', NOW(), NOW());
 
 
 ALTER TABLE `PREFIX_carrier` ADD `shipping_external` TINYINT( 1 ) UNSIGNED NOT NULL;
 ALTER TABLE `PREFIX_carrier` ADD `external_module_name` varchar(64) NOT NULL;
 ALTER TABLE `PREFIX_carrier` ADD `need_range` TINYINT( 1 ) UNSIGNED NOT NULL;
+
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('processCarrier', 'Carrier Process', NULL, 0);
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('orderDetail', 'Order Detail', 'To set the follow-up in smarty when order detail is called', 0);
+
