@@ -6,7 +6,7 @@
 	</a>
 	<div style="clear:both;height:0;line-height:0">&nbsp;</div>
 </p>
-<form name="ogone_form" action="https://secure.ogone.com/ncol/{if $OGONE_MODE}prod{else}test{/if}/orderstandard.asp" method="post">
+<form name="ogone_form" action="https://secure.ogone.com/ncol/{if $OGONE_MODE}prod{else}test{/if}/orderstandard_utf8.asp" method="post">
 {foreach from=$ogone_params key=ogone_key item=ogone_value}
 	<input type="hidden" name="{$ogone_key}" value="{$ogone_value}" />
 {/foreach}

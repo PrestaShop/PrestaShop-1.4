@@ -112,38 +112,41 @@ class Ogone extends PaymentModule
 	public function hookPayment($params)
 	{
 		global $smarty;
-		
+
 		$currency = new Currency(intval($params['cart']->id_currency));
 		$lang = new Language(intval($params['cart']->id_lang));
 		$customer = new Customer(intval($params['cart']->id_customer));
 		$address = new Address(intval($params['cart']->id_address_invoice));
 		$country = new Country(intval($address->id_country), intval($params['cart']->id_lang));
-		
+
 		$ogoneParams = array();
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');
-		$ogoneParams['orderID'] = intval($params['cart']->id);
-		$ogoneParams['amount'] = number_format(Tools::convertPrice(floatval(number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '')), $currency), 2, '.', '') * 100;
-		$ogoneParams['currency'] = $currency->iso_code;
-		$ogoneParams['language'] = $lang->iso_code.'_'.strtoupper($lang->iso_code);
+		$ogoneParams['OPERATION'] = 'SAL';
+		$ogoneParams['ORDERID'] = intval($params['cart']->id);
+		$ogoneParams['AMOUNT'] = number_format(Tools::convertPrice(floatval(number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '')), $currency), 2, '.', '') * 100;
+		$ogoneParams['CURRENCY'] = $currency->iso_code;
+		$ogoneParams['LANGUAGE'] = $lang->iso_code.'_'.strtoupper($lang->iso_code);
 		$ogoneParams['CN'] = $customer->lastname;
 		$ogoneParams['EMAIL'] = $customer->email;
-		$ogoneParams['ownerZIP'] = $address->postcode;
-		$ogoneParams['owneraddress'] = $address->address1;
-		$ogoneParams['ownercty'] = $country->iso_code;
-		$ogoneParams['ownertown'] = $address->city;
-		$ogoneParams['ownertelno'] = $address->phone;
+		$ogoneParams['OWNERZIP'] = $address->postcode;
+		$ogoneParams['OWNERADDRESS'] = ($address->address1);
+		$ogoneParams['OWNERCTY'] = $country->iso_code;
+		$ogoneParams['OWNERTOWN'] = $address->city;
+		if (!empty($address->phone))
+			$ogoneParams['OWNERTELNO'] = $address->phone;
 
-		$ogoneParams['SHASign'] = 'AMOUNT='.$ogoneParams['amount'].Configuration::get('OGONE_SHA_IN');
-		$ogoneParams['SHASign'] .= 'CURRENCY='.$currency->iso_code.Configuration::get('OGONE_SHA_IN');
-		$ogoneParams['SHASign'] .= 'ORDERID='.intval($params['cart']->id).Configuration::get('OGONE_SHA_IN');
-		$ogoneParams['SHASign'] .= 'PSPID='.Configuration::get('OGONE_PSPID').Configuration::get('OGONE_SHA_IN');
-		$ogoneParams['SHASign'] = sha1($ogoneParams['SHASign']);
-		
+		ksort($ogoneParams);
+		$shasign = '';
+		foreach ($ogoneParams as $key => $value)
+			$shasign .= strtoupper($key).'='.$value.Configuration::get('OGONE_SHA_IN');
+		$ogoneParams['SHASign'] = strtoupper(sha1($shasign));
+
 		$smarty->assign('ogone_params', $ogoneParams);
 		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
-		
+
 		return $this->display(__FILE__, 'ogone.tpl');
     }
+
 	
 	public function hookOrderConfirmation($params)
 	{
