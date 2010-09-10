@@ -71,6 +71,7 @@ class Ogone extends PaymentModule
 				<li>Visa Purchasing : 4484 1200 0000 0029</li>
 				<li>American Express : 3742 9101 9071 995</li>
 			</ul>
+			<div class="clear">&nbsp;</div>
 		</fieldset>
 		<div class="clear">&nbsp;</div>
 		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
@@ -112,13 +113,13 @@ class Ogone extends PaymentModule
 	public function hookPayment($params)
 	{
 		global $smarty;
-
+		
 		$currency = new Currency(intval($params['cart']->id_currency));
 		$lang = new Language(intval($params['cart']->id_lang));
 		$customer = new Customer(intval($params['cart']->id_customer));
 		$address = new Address(intval($params['cart']->id_address_invoice));
 		$country = new Country(intval($address->id_country), intval($params['cart']->id_lang));
-
+		
 		$ogoneParams = array();
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');
 		$ogoneParams['OPERATION'] = 'SAL';
@@ -140,13 +141,12 @@ class Ogone extends PaymentModule
 		foreach ($ogoneParams as $key => $value)
 			$shasign .= strtoupper($key).'='.$value.Configuration::get('OGONE_SHA_IN');
 		$ogoneParams['SHASign'] = strtoupper(sha1($shasign));
-
+		
 		$smarty->assign('ogone_params', $ogoneParams);
 		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
-
+		
 		return $this->display(__FILE__, 'ogone.tpl');
     }
-
 	
 	public function hookOrderConfirmation($params)
 	{
