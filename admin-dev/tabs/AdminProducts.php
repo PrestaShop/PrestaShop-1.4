@@ -64,7 +64,7 @@ class AdminProducts extends AdminTab
 			return;
 			
 		/* Additional fields */
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		foreach ($languages as $language)
 			if (isset($_POST['meta_keywords_'.$language['id_lang']]))
 				$_POST['meta_keywords_'.$language['id_lang']] = preg_replace('/ *,? +,*/', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
@@ -276,7 +276,7 @@ class AdminProducts extends AdminTab
 				{
 					if ($image->cover)
 						$_POST['cover'] = 1;
-					$languages = Language::getLanguages();
+					$languages = Language::getLanguages(false);
 					foreach ($languages as $language)
 						if (isset($image->legend[$language['id_lang']]))
 							$_POST['legend_'.$language['id_lang']] = $image->legend[$language['id_lang']];
@@ -427,7 +427,7 @@ class AdminProducts extends AdminTab
 					$product->deleteFeatures();
 
 					// add new objects
-					$languages = Language::getLanguages();
+					$languages = Language::getLanguages(false);
 					foreach ($_POST AS $key => $val)
 					{
 						if (preg_match("/^feature_([0-9]+)_value/i", $key, $match))
@@ -692,7 +692,7 @@ class AdminProducts extends AdminTab
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
 		$defaultLanguage = new Language(intval(Configuration::get('PS_LANG_DEFAULT')));
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 
 		/* Check required fields */
 		foreach ($rules['required'] AS $field)
@@ -1330,7 +1330,7 @@ class AdminProducts extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		$obj = $this->loadObject(true);
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$attach1 = Attachment::getAttachments($cookie->id_lang, $obj->id, true);
 		$attach2 = Attachment::getAttachments($cookie->id_lang, $obj->id, false);
 		

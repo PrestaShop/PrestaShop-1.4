@@ -303,7 +303,7 @@ abstract class AdminTab
 			$defaultLanguage = new Language(intval(Configuration::get('PS_LANG_DEFAULT')));
 
 			/* All availables languages */
-			$languages = Language::getLanguages();
+			$languages = Language::getLanguages(false);
 		}
 
 		/* Checking for required fields */
@@ -642,7 +642,7 @@ abstract class AdminTab
 				{
 					if ($field['type'] == 'textLang')
 					{
-						$languages = Language::getLanguages();
+						$languages = Language::getLanguages(false);
 						$list = array();
 						foreach ($languages as $language)
 							$list[$language['id_lang']] = (isset($field['cast']) ? $field['cast'](Tools::getValue($key.'_'.$language['id_lang'])) : Tools::getValue($key.'_'.$language['id_lang']));
@@ -809,7 +809,7 @@ abstract class AdminTab
 		$rules = call_user_func(array(get_class($object), 'getValidationRules'), get_class($object));
 		if (sizeof($rules['validateLang']))
 		{
-			$languages = Language::getLanguages();
+			$languages = Language::getLanguages(false);
 			foreach ($languages AS $language)
 				foreach ($rules['validateLang'] AS $field => $validation)
 					if (isset($_POST[$field.'_'.intval($language['id_lang'])]))
@@ -1303,7 +1303,6 @@ abstract class AdminTab
 			return ;
 
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
 		$tab = Tab::getTab(intval($cookie->id_lang), Tab::getIdFromClassName($tab));
 		echo '<br /><br />';
 		echo (isset($this->optionTitle) ? '<h2>'.$this->optionTitle.'</h2>' : '');
@@ -1341,7 +1340,7 @@ abstract class AdminTab
 				break ;
 
 				case 'textLang':
-					foreach ($languages as $language)
+					foreach ($this->_languages as $language)
 					{
 						$val = Tools::getValue($key.'_'.$language['id_lang'], Configuration::get($key, $language['id_lang']));
 						echo '
@@ -1349,7 +1348,7 @@ abstract class AdminTab
 							<input size="'.$field['size'].'" type="text" name="'.$key.'_'.$language['id_lang'].'" value="'.$val.'" />
 						</div>';
 					}
-					$this->displayFlags($languages, $defaultLanguage, $key, $key);
+					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);
 					echo '<br style="clear:both">';
 				break ;
 				
@@ -1428,7 +1427,7 @@ abstract class AdminTab
 		if ($allowEmployeeFormLang && !$cookie->employee_form_lang)
 			$cookie->employee_form_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
 		$useLangFromCookie = false;
-		$this->_languages = Language::getLanguages();
+		$this->_languages = Language::getLanguages(false);
 		if ($allowEmployeeFormLang)
 			foreach ($this->_languages AS $lang)
 				if ($cookie->employee_form_lang == $lang['id_lang'])

@@ -35,7 +35,7 @@ class CMS extends ObjectModel
 
 		$fieldsArray = array('meta_title', 'meta_description', 'meta_keywords', 'link_rewrite');
 		$fields = array();
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($languages as $language)
 		{

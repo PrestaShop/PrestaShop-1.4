@@ -127,7 +127,7 @@ class Editorial extends Module
 		global $cookie;
 		/* Languages preliminaries */
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 		$divLangName = 'title¤subheading¤cpara¤logo_subheading';
 

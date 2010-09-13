@@ -48,7 +48,7 @@ class AdminOrdersStates extends AdminTab
 			$_POST['hidden'] = Tools::getValue('hidden');
 			if (!$_POST['send_email'])
 			{
-				$languages = Language::getLanguages();
+				$languages = Language::getLanguages(false);
 				foreach ($languages AS $language)
 					$_POST['template_'.$language['id_lang']] = '';
 			}

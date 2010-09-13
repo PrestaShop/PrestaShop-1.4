@@ -217,7 +217,7 @@ class Loyalty extends Module
 		$order_states = OrderState::getOrderStates($cookie->id_lang);
 		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$languageIds = 'voucher_details¤default_loyalty_state¤none_award_loyalty_state¤convert_loyalty_state¤validation_loyalty_state¤cancel_loyalty_state';
 
 		$html = '

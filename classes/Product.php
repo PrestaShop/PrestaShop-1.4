@@ -297,7 +297,7 @@ class		Product extends ObjectModel
 
 		$fieldsArray = array('meta_description', 'meta_keywords', 'meta_title', 'link_rewrite', 'name', 'available_now', 'available_later');
 		$fields = array();
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		foreach ($languages as $language)
 		{

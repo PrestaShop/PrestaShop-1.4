@@ -84,7 +84,7 @@ class		Manufacturer extends ObjectModel
 	{
 		$fieldsArray = array('description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description');
 		$fields = array();
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		foreach ($languages as $language)
 		{		

@@ -357,7 +357,7 @@ class AdminTranslations extends AdminTab
 			$this->{'displayForm'.$type}(Tools::strtolower(Tools::getValue('lang')));
 		else
 		{
-			$languages = Language::getLanguages();
+			$languages = Language::getLanguages(false);
 			echo '<fieldset class="width2"><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
 			$this->l('Here you can modify translations for every text input on PrestaShop.').'<br />'.
 			$this->l('First, select a section (such as Back Office or Modules), then click the flag representing the language you want to edit.').'<br /><br />

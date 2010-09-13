@@ -304,7 +304,7 @@ class AdminImages extends AdminTab
 		$this->start_time = time();
 		ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
 		$this->max_execution_time = (int)ini_get('max_execution_time');
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 
 		$process =
 			array(

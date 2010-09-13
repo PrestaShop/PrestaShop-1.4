@@ -85,7 +85,7 @@ if ($step = intval(Tools::getValue('ajaxProductTab')))
 	$catalog = new AdminCatalog();
 	$admin = new AdminProducts();
 	
-	$languages = Language::getLanguages();
+	$languages = Language::getLanguages(false);
 	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 	$product = new Product(intval(Tools::getValue('id_product')));
 	if (!Validate::isLoadedObject($product))
@@ -104,7 +104,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	require_once(dirname(__FILE__).'/tabs/AdminImport.php');
 	$import = new AdminImport();
 
-	$languages = Language::getLanguages();
+	$languages = Language::getLanguages(false);
 	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
 	$fields = $import->getAvailableFields(true);
 	foreach ($fields AS $field)

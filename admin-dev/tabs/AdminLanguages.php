@@ -34,7 +34,7 @@ class AdminLanguages extends AdminTab
 	
 		$this->optionTitle = $this->l('Languages options');
 		$this->_fieldsOptions = array(
-		'PS_LANG_DEFAULT' => array('title' => $this->l('Default language:'), 'desc' => $this->l('The default language used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_lang', 'list' => Language::getlanguages()),
+		'PS_LANG_DEFAULT' => array('title' => $this->l('Default language:'), 'desc' => $this->l('The default language used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_lang', 'list' => Language::getlanguages(false)),
 		);
 		
 		parent::__construct();

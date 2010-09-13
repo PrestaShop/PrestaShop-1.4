@@ -31,7 +31,7 @@ class AdminGenerator extends AdminTab
 	{
 		global $currentIndex;
 
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 
 		// Htaccess
 		echo '

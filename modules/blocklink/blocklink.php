@@ -220,7 +220,7 @@ class BlockLink extends Module
 	 	global $cookie;
 	 	/* Language */
 	 	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$divLangName = 'text¤title';
 		/* Title */
 	 	$title_url = Configuration::get('PS_BLOCKLINK_URL');

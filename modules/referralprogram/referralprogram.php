@@ -246,7 +246,7 @@ class ReferralProgram extends Module
 			<p>
 				 <div style="float: left"><label class="t" for="discount_description">'.$this->l('Voucher description:').'</label></div>';
 			$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-			$languages = Language::getLanguages();
+			$languages = Language::getLanguages(false);
 			foreach ($languages as $language)
 				$this->_html .= '
 				<div id="dd_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; margin-left: 4px;">

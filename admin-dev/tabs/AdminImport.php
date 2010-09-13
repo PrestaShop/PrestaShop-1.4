@@ -253,7 +253,7 @@ class AdminImport extends AdminTab
 
 	private static function createMultiLangField($field)
 	{
-		$languages = Language::getLanguages();
+		$languages = Language::getLanguages(false);
 		$res = array();
 		foreach ($languages AS $lang)
 			$res[$lang['id_lang']] = $field;
