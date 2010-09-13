@@ -1,5 +1,7 @@
 SET NAMES 'utf8';
 
+ALTER TABLE `PREFIX_employee` ADD `bo_color` varchar(32) default NULL AFTER `stats_date_to`;
+
 ALTER TABLE `PREFIX_currency` ADD `iso_code_num` varchar(3) NOT NULL default '0' AFTER `iso_code`;
 UPDATE `PREFIX_currency` SET iso_code_num = '978' WHERE iso_code LIKE 'EUR' LIMIT 1;
 UPDATE `PREFIX_currency` SET iso_code_num = '840' WHERE iso_code LIKE 'USD' LIMIT 1;

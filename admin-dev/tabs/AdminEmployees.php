@@ -78,7 +78,7 @@ class AdminEmployees extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
+			<fieldset class="width3"><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
@@ -95,6 +95,11 @@ class AdminEmployees extends AdminTab
 				<label>'.$this->l('E-mail address:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+				</div>
+				<label>'.$this->l('Back office color:').' </label>
+				<div class="margin-form">
+					<input type="text" name="bo_color" value="'.htmlentities($this->getFieldValue($obj, 'bo_color'), ENT_COMPAT, 'UTF-8').'" />
+					<p>'.$this->l('Back office background will be displayed in this color. HTML colors only (e.g.,').' "lightblue", "#CC6600")</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">

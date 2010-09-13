@@ -516,6 +516,7 @@ CREATE TABLE `PREFIX_employee` (
   `last_passwd_gen` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `stats_date_from` date default NULL,
   `stats_date_to` date default NULL,
+  `bo_color` varchar(32) default NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_employee`),
   KEY `employee_login` (`email`,`passwd`),

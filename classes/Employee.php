@@ -37,14 +37,17 @@ class		Employee extends ObjectModel
 	public $stats_date_from;
 	public $stats_date_to;
 	
+	/** @var string Display back office background in the specified color */
+	public		$bo_color;
+	
 	/** @var boolean Status */
 	public 		$active = 1;
 	
 	
  	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile');
- 	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32);
+ 	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32, 'bo_color' => 32);
  	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 
-		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt');
+		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'color' => 'isColor');
 	
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
@@ -61,6 +64,7 @@ class		Employee extends ObjectModel
 		$fields['last_passwd_gen'] = pSQL($this->last_passwd_gen);
 		$fields['stats_date_from'] = pSQL($this->stats_date_from);
 		$fields['stats_date_to'] = pSQL($this->stats_date_to);
+		$fields['bo_color'] = pSQL($this->bo_color);
 		$fields['active'] = intval($this->active);
 		
 		return $fields;
