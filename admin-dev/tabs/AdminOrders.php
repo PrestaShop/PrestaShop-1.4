@@ -445,16 +445,23 @@ class AdminOrders extends AdminTab
 
 		// display order header
 		echo '
-		<div style="float: left;">';
+		<div style="float:left" style="width:440px">';
 		echo '<h2>
 				'.$prevOrder.'
-				'.$customer->firstname.' '.$customer->lastname.' '.$this->l('#').sprintf('%06d', $order->id).
-				((($currentState->invoice OR $order->invoice_number) AND count($products)) ? ' - <a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" alt="'.$this->l('View invoice').'" title="'.$this->l('View invoice').'" /></a>' : '').
-				(($currentState->delivery OR $order->delivery_number) ? ' - <a href="pdf.php?id_delivery='.$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" title="'.$this->l('View delivery slip').'" /></a>' : '').
-				' - <a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /></a>
+				'.$customer->firstname.' '.$customer->lastname.' - '.$this->l('Order #').sprintf('%06d', $order->id).'
 				'.$nextOrder.'
-			</h2>';
-		
+			</h2>
+			<div>
+				'.((($currentState->invoice OR $order->invoice_number) AND count($products))
+					? '<a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" alt="'.$this->l('View invoice').'" /> '.$this->l('View invoice').'</a>'
+					: '<img src="../img/admin/charged_ko.gif" alt="'.$this->l('No invoice').'" /> '.$this->l('No invoice')).' -
+				'.(($currentState->delivery OR $order->delivery_number)
+					? '<a href="pdf.php?id_delivery='.$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" /> '.$this->l('View delivery slip').'</a>'
+					: '<img src="../img/admin/delivery_ko.gif" alt="'.$this->l('No delivery slip').'" /> '.$this->l('No delivery slip')).' -
+				<a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /> '.$this->l('Print page').'</a>
+			</div>
+			<div class="clear">&nbsp;</div>';
+			
 		/* Display current status */
 		echo '
 			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
@@ -530,17 +537,19 @@ class AdminOrders extends AdminTab
 		<div style="float: left; margin-left: 40px">';
 
 		/* Display invoice information */
+		echo '<fieldset style="width: 400px">';
 		if (($currentState->invoice OR $order->invoice_number) AND count($products))
-		echo '
-			<fieldset style="width: 400px">
-				<legend><a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/tab-invoice.gif" /> '.$this->l('Invoice').'</a></legend>
+			echo '<legend><a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" /> '.$this->l('Invoice').'</a></legend>
 				<a href="pdf.php?id_order='.$order->id.'&pdf">'.$this->l('Invoice #').'<b>'.Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', $order->invoice_number).'</b></a>
-				<br />'.$this->l('Created on:').' '.$order->invoice_date.'
-			</fieldset><br />';
+				<br />'.$this->l('Created on:').' '.$order->invoice_date;
+		else
+			echo '<legend><img src="../img/admin/charged_ko.gif" />'.$this->l('Invoice').'</legend>
+				'.$this->l('No invoice yet.');
+		echo '</fieldset><br />';
 		
 		/* Display shipping infos */
 		echo '
-		<fieldset style="width: 400px">
+		<fieldset style="width:400px">
 			<legend><img src="../img/admin/delivery.gif" /> '.$this->l('Shipping information').'</legend>
 			'.$this->l('Total weight:').' <b>'.number_format($order->getTotalWeight(), 3).' '.Configuration::get('PS_WEIGHT_UNIT').'</b><br />
 			'.$this->l('Carrier:').' <b>'.($carrier->name == '0' ? Configuration::get('PS_SHOP_NAME') : $carrier->name).'</b><br />
@@ -596,11 +605,8 @@ class AdminOrders extends AdminTab
 				'.(!empty($order->gift_message) ? '<div style="border: 1px dashed #999; padding: 5px; margin-top: 8px;"><b>'.$this->l('Message:').'</b><br />'.nl2br2($order->gift_message).'</div>' : '') : '<img src="../img/admin/disabled.gif" />').'
 			</div>
 		</fieldset>';
-
-		echo '
-		</div>';
-
-		echo '
+		
+		echo '</div>
 		<div class="clear">&nbsp;</div>';
 
 		/* Display adresses : delivery & invoice */
