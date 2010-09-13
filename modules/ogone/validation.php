@@ -20,18 +20,28 @@ $cart = new Cart(intval($_GET['orderID']));
 if (Validate::isLoadedObject($cart))
 {
 	/* Fist, check for a valid SHA-1 signature */
-	$sha1 = strtoupper(sha1($_GET['orderID'].$_GET['currency'].$_GET['amount'].$_GET['PM'].$_GET['ACCEPTANCE'].$_GET['STATUS'].$_GET['CARDNO'].$_GET['PAYID'].$_GET['NCERROR'].$_GET['BRAND'].Configuration::get('OGONE_SHA_OUT')));
+	$ogoneParams = array();
+	foreach ($_GET as $key => $value)
+	if (strtoupper($key) != 'SHASIGN' AND $value != '')
+		$ogoneParams[strtoupper($key)] = $value;
+
+	ksort($ogoneParams);
+	$shasign = '';
+	foreach ($ogoneParams as $key => $value)
+		$shasign .= strtoupper($key).'='.$value.Configuration::get('OGONE_SHA_OUT');
+	$sha1 = strtoupper(sha1($shasign));	
+
 	if ($sha1 == $_GET['SHASIGN'])
 	{
 		switch ($_GET['STATUS'])
 		{
 			case 1:
 				/* Real error or payment canceled */
-				$ogone->validateOrder(intval($_GET['orderID']), _PS_OS_ERROR_, 0, $ogone->displayName, $ogone->l('Error:').' '.$_GET['NCERROR'].$params);
+				$ogone->validateOrder(intval($_GET['orderID']), _PS_OS_ERROR_, 0, $ogone->displayName, $_GET['NCERROR'].$params);
 				break;
 			case 2:
 				/* Real error - authorization refused */
-				$ogone->validateOrder(intval($_GET['orderID']), _PS_OS_ERROR_, 0, $ogone->displayName, $ogone->l('Error (auth. refused):').' '.$_GET['NCERROR'].$params);
+				$ogone->validateOrder(intval($_GET['orderID']), _PS_OS_ERROR_, 0, $ogone->displayName, $ogone->l('Error (auth. refused)').'<br />'.$_GET['NCERROR'].$params);
 				break;
 			case 5:
 			case 9:
@@ -63,7 +73,7 @@ if (Validate::isLoadedObject($cart))
 	}
 	else
 	{
-		$message = $ogone->l('Invalid SHA-1 signature').'<br />'.$ogone->l('SHA-1 given:').' '.$_GET['SHASIGN'].'<br />'.$ogone->l('SHA-1 calculated:').' '.$sha1;
+		$message = $ogone->l('Invalid SHA-1 signature').'<br />'.$ogone->l('SHA-1 given:').' '.$_GET['SHASIGN'].'<br />'.$ogone->l('SHA-1 calculated:').' '.$sha1.'<br />'.$ogone->l('Plain key:').' '.$shasign;
 		$ogone->validateOrder(intval($_GET['orderID']), _PS_OS_ERROR_, 0, $ogone->displayName, $message.'<br />'.$params);
 	}
 }

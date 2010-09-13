@@ -1,4 +1,4 @@
-<p><img src="{$base_dir}img/loader.gif" /> {l s='Please wait while your order is being saved...' mod='ogone'}</p>
+<p><img src="{$base_dir}img/loader.gif" /> {l s='Please wait while your order is being processed...' mod='ogone'}</p>
 <script type="text/javascript">
 function checkwaitingorder()
 {ldelim}
