@@ -22,6 +22,9 @@ class		Currency extends ObjectModel
 	/** @var string Iso code */
 	public 		$iso_code;
 
+	/** @var string Iso code numeric */
+	public 		$iso_code_num;
+
 	/** @var string Symbol for short display */
 	public 		$sign;
 	
@@ -41,8 +44,8 @@ class		Currency extends ObjectModel
 	public		$decimals;
 
  	protected 	$fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
- 	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'sign' => 8);
- 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isStateIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
+ 	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
+ 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
 		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool');
 
 	protected 	$table = 'currency';
@@ -59,6 +62,7 @@ class		Currency extends ObjectModel
 
 		$fields['name'] = pSQL($this->name);
 		$fields['iso_code'] = pSQL($this->iso_code);
+		$fields['iso_code_num'] = pSQL($this->iso_code_num);
 		$fields['sign'] = pSQL($this->sign);
 		$fields['format'] = intval($this->format);
 		$fields['decimals'] = intval($this->decimals);

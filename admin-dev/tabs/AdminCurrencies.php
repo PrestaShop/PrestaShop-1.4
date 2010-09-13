@@ -27,6 +27,7 @@ class AdminCurrencies extends AdminTab
 		'id_currency' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Currency'), 'width' => 100),
 		'iso_code' => array('title' => $this->l('ISO code'), 'align' => 'center', 'width' => 35),
+		'iso_code_num' => array('title' => $this->l('ISO code num'), 'align' => 'center', 'width' => 35),
 		'sign' => array('title' => $this->l('Symbol'), 'width' => 20, 'align' => 'center', 'orderby' => false, 'search' => false),
 		'conversion_rate' => array('title' => $this->l('Conversion rate'), 'float' => true, 'align' => 'center', 'width' => 50, 'search' => false));
 
@@ -127,6 +128,12 @@ class AdminCurrencies extends AdminTab
 					<input type="text" size="30" maxlength="32" name="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint-pointer">&nbsp;</span>
 					<p class="clear">'.$this->l('ISO code, e.g., USD for dollar, EUR for euro').'...</p>
+				</div>
+				<label>'.$this->l('Numeric ISO code:').' </label>
+				<div class="margin-form">
+					<input type="text" size="30" maxlength="32" name="iso_code_num" value="'.htmlentities($this->getFieldValue($obj, 'iso_code_num'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<span class="hint-pointer">&nbsp;</span>
+					<p class="clear">'.$this->l('Numeric ISO code, e.g., 840 for dollar, 978 for euro').'...</p>
 				</div>
 				<label>'.$this->l('Symbol:').' </label>
 				<div class="margin-form">

@@ -257,6 +257,11 @@ class Validate
 	{
 		return preg_match('/^[a-z]{1,4}$/ui', $isoCode);
 	}
+	
+	static public function isNumericIsoCode($isoCode)
+	{
+		return preg_match('/^[0-9]{2,3}$/ui', $isoCode);
+	}
 
 	/**
 	* Check for gender code (ISO) validity

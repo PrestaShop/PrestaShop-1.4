@@ -344,6 +344,7 @@ CREATE TABLE `PREFIX_currency` (
   `id_currency` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(32) NOT NULL,
   `iso_code` varchar(3) NOT NULL default '0',
+  `iso_code_num` varchar(3) NOT NULL default '0',
   `sign` varchar(8) NOT NULL,
   `blank` tinyint(1) unsigned NOT NULL default '0',
   `format` tinyint(1) unsigned NOT NULL default '0',

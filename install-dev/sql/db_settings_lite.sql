@@ -412,8 +412,8 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (4, 2, 'Yukon', 'YT', 1),
 (4, 2, 'Nunavut', 'NU', 1);
 
-INSERT INTO `PREFIX_currency` (name, iso_code, sign, blank, conversion_rate, format, deleted) VALUES
-('Euro', 'EUR', '€', 1, 1, 2, 0), ('Dollar', 'USD', '$', 0, 1.2, 1, 0), ('Pound', 'GBP', '£', 0, 0.8, 1, 0);
+INSERT INTO `PREFIX_currency` (name, iso_code, iso_code_num, sign, blank, conversion_rate, format, deleted) VALUES
+('Euro', 'EUR', '978', '€', 1, 1, 2, 0), ('Dollar', 'USD', '840', '$', 0, 1.2, 1, 0), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0);
 
 INSERT INTO `PREFIX_tax` (`id_tax`, `rate`) VALUES
 (1, 19.6),(2, 5.5),(3, 17.5),(4, 19),(5, 22),(6, 18),(7, 19),(8, 20),(9, 24),(10, 20),
