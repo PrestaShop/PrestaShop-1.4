@@ -30,7 +30,7 @@ class Socolissimo extends Module
 		
 		$this->name = 'socolissimo';
 		$this->tab = 'Carrier';
-		$this->version = '1.0';
+		$this->version = '1.1';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;
 
