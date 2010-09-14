@@ -29,13 +29,13 @@ class	Cookie
 	/** @var array Path for setcookie() */
 	private $_path;
 
-	/** @var array Blowfish instance */
-	private $_bf;
+	/** @var array cipher tool instance */
+	private $_cipherTool;
 
-	/** @var array 56 chars Blowfish initialization key */
+	/** @var array cipher tool initialization key */
 	private $_key;
 
-	/** @var array 8 chars Blowfish initilization vector */
+	/** @var array cipher tool initilization vector */
 	private $_iv;
 
 	/**
@@ -57,7 +57,10 @@ class	Cookie
 		$this->_key = _COOKIE_KEY_;
 		$this->_iv = _COOKIE_IV_;
 		$this->_domain = $this->getDomain();
-		$this->_bf = new Blowfish($this->_key, $this->_iv);
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$this->_cipherTool = new Blowfish($this->_key, $this->_iv);
 		$this->update();
 	}
 	
@@ -216,7 +219,7 @@ class	Cookie
 		if (isset($_COOKIE[$this->_name]))
 		{
 			/* Decrypt cookie content */
-			$content = $this->_bf->decrypt($_COOKIE[$this->_name]);
+			$content = $this->_cipherTool->decrypt($_COOKIE[$this->_name]);
 
 			/* Get cookie checksum */
 			$checksum = crc32($this->_iv.substr($content, 0, strrpos($content, '¤') + 2));
@@ -250,7 +253,7 @@ class	Cookie
 	{
 		if ($cookie)
 		{
-			$content = $this->_bf->encrypt($cookie);
+			$content = $this->_cipherTool->encrypt($cookie);
 			$time = $this->_expire;
 		}
 		else

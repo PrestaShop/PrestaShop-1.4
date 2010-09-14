@@ -38,13 +38,17 @@ class StatsData extends Module
 		global $protocol_content, $server_host;
 
 		// Identification information are encrypted to prevent hacking attempts
-		$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
 		if (!isset($params['cookie']->id_guest))
 		{
 			Guest::setNewGuest($params['cookie']);
 			
 			// Ajax request sending browser information
-			$token = $blowfish->encrypt($params['cookie']->id_guest);
+			$token = $cipherTool->encrypt($params['cookie']->id_guest);
 			$this->_html = '
 			<script type="text/javascript" src="'.$protocol_content.$server_host.__PS_BASE_URI__.'js/pluginDetect.js"></script>
 			<script type="text/javascript">
@@ -78,7 +82,7 @@ class StatsData extends Module
 		Page::setPageViewed($tokenArray['id_page']);
 		
 		// Ajax request sending the time spend on the page
-		$token = $blowfish->encrypt($tokenArray['id_connections'].'|'.$tokenArray['id_page'].'|'.$tokenArray['time_start']);
+		$token = $cipherTool->encrypt($tokenArray['id_connections'].'|'.$tokenArray['id_page'].'|'.$tokenArray['time_start']);
 		$this->_html .= '
 		<script type="text/javascript">
 			var time_start;

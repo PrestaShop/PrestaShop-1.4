@@ -122,6 +122,11 @@ $datas = array(
 	array('_PS_CREATION_DATE_', defined("_PS_CREATION_DATE_") ? _PS_CREATION_DATE_ : date('Y-m-d')),
 	array('_PS_VERSION_', INSTALL_VERSION)
 );
+if (defined('_RIJNDAEL_KEY_'))
+	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_));
+if (defined('_RIJNDAEL_IV_'))
+	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_IV_', _RIJNDAEL_IV_));
+
 error_reporting($oldLevel);
 $confFile = new AddConfToFile(SETTINGS_FILE, 'w');
 if ($confFile->error)

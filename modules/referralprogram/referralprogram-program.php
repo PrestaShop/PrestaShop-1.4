@@ -70,7 +70,10 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 				{
 					if ($referralprogram->save())
 					{
-						$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+						if (Configuration::get('PS_CIPHER_ALGORITHM'))
+							$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+						else
+							$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 						$vars = array(
 							'{email}' => strval($cookie->email),
 							'{lastname}' => strval($cookie->customer_lastname),
@@ -78,7 +81,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 							'{email_friend}' => $friendEmail,
 							'{lastname_friend}' => $friendLastName,
 							'{firstname_friend}' => $friendFirstName,
-							'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($blowfish->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
+							'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
 							'{discount}' => $discount,
 						);
 						Mail::Send(intval($cookie->id_lang), 'referralprogram-invitation', 'Referral Program', $vars, $friendEmail, $friendFirstName.' '.$friendLastName, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
@@ -108,7 +111,10 @@ if (Tools::isSubmit('revive'))
 	{
 		foreach ($friendsChecked as $key => $friendChecked)
 		{
-			$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+			if (Configuration::get('PS_CIPHER_ALGORITHM'))
+				$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+			else
+				$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 			$referralprogram = new ReferralProgramModule(intval($key));
 			$vars = array(
 				'{email}' => $cookie->email,
@@ -117,7 +123,7 @@ if (Tools::isSubmit('revive'))
 				'{email_friend}' => $referralprogram->email,
 				'{lastname_friend}' => $referralprogram->lastname,
 				'{firstname_friend}' => $referralprogram->firstname,
-				'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($blowfish->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
+				'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
 				'{discount}' => $discount
 			);
 			$referralprogram->save();

@@ -214,6 +214,8 @@ UPDATE `PREFIX_country` SET `call_prefix` = 689 WHERE `iso_code` = 'PF' LIMIT 1;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CONDITIONS_CMS_ID', IFNULL((SELECT `id_cms` FROM `PREFIX_cms` WHERE `id_cms` = 3), 0), NOW(), NOW());
 UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
 
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CIPHER_ALGORITHM', 0, NOW(), NOW());
+
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFTER `quantity`;
 ALTER TABLE `PREFIX_product` ADD `cache_default_attribute` int(10) unsigned default NULL AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` tinyint(1) NOT NULL default '0' AFTER `indexed`;
@@ -257,6 +259,31 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 		SELECT `id_tab`
 		FROM `PREFIX_tab`
 		WHERE `class_name` = 'AdminInformation'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (8, 'AdminPerformance', '', 11);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminPerformance'
+), 'Performance');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminPerformance'
+), 'Performances');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminPerformance'
+), 'Rendimiento');
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminPerformance'
 	), 1, 1, 1, 1 FROM `PREFIX_profile`
 );
 

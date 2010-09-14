@@ -387,8 +387,11 @@ class ReferralProgram extends Module
 	{
 		global $smarty;
 		
-		$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-		$explodeResult = explode('|', $blowfish->decrypt(urldecode(Tools::getValue('sponsor'))));
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+		$explodeResult = explode('|', $cipherTool->decrypt(urldecode(Tools::getValue('sponsor'))));
 		if ($explodeResult AND count($explodeResult) > 1 AND list($id_referralprogram, $email) = $explodeResult AND intval($id_referralprogram) AND Validate::isEmail($email) AND $id_referralprogram == ReferralProgramModule::isEmailExists($email))
 		{
 			$referralprogram = new ReferralProgramModule($id_referralprogram);

@@ -76,6 +76,10 @@ function	rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
 	$defines['_DB_TYPE_'] = (($arrayDB AND isset($arrayDB['_DB_TYPE_'])) ? $arrayDB['_DB_TYPE_'] : _DB_TYPE_);
 	$defines['_COOKIE_KEY_'] = addslashes(_COOKIE_KEY_);
 	$defines['_COOKIE_IV_'] = addslashes(_COOKIE_IV_);
+	if (defined('_RIJNDAEL_KEY_'))
+		$defines['_RIJNDAEL_KEY_'] = addslashes(_RIJNDAEL_KEY_);
+	if (defined('_RIJNDAEL_IV_'))
+		$defines['_RIJNDAEL_IV_'] = addslashes(_RIJNDAEL_IV_);
 	$defines['_PS_VERSION_'] = addslashes(_PS_VERSION_);
 	$content = "<?php\n\n";
 	foreach ($defines as $k => $value)

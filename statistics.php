@@ -15,8 +15,11 @@ if (!isset($_POST['token']) OR !isset($_POST['type']))
 
 include(dirname(__FILE__).'/config/config.inc.php');
 
-$blowfish = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-$token = $blowfish->decrypt($_POST['token']);
+if (Configuration::get('PS_CIPHER_ALGORITHM'))
+	$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+else
+	$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+$token = $cipherTool->decrypt($_POST['token']);
 
 if ($_POST['type'] == 'navinfo')
 {
