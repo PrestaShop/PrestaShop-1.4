@@ -260,6 +260,10 @@ class AdminAddresses extends AdminTab
 					<input type="text" size="33" name="company" value="'.htmlentities($this->getFieldValue($obj, 'company'), ENT_COMPAT, 'UTF-8').'" />
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
+				echo '<label>'.$this->l('VAT number:').'</label>
+				<div class="margin-form">
+					<input type="text" size="33" name="vat_number" value="'.htmlentities($this->getFieldValue($obj, 'vat_number'), ENT_COMPAT, 'UTF-8').'" />
+				</div>';
 		}
 				echo '
 				<label>'.$this->l('Last name:').'</label>

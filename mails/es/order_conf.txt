@@ -16,6 +16,7 @@
 	Transporte: {carrier}
 	
 	Dirección de Entrega:
+	{delivery_company}
 	{delivery_firstname} {delivery_lastname}
 	{delivery_address1}
 	{delivery_address2}
@@ -23,6 +24,8 @@
 	{delivery_country}
 	
 	Direccion de Facturación:
+	{invoice_company}
+	{invoice_vat_number}
 	{invoice_firstname} {invoice_lastname}
 	{invoice_address1}
 	{invoice_address2}

@@ -166,18 +166,20 @@ class Tax extends ObjectModel
 		return $tax ? floatval($tax['rate']) : false;
 	}
 
-	static public function getApplicableTax($id_tax, $productTax, $id_address_delivery = NULL)
+	static public function getApplicableTax($id_tax, $productTax, $id_address = NULL)
 	{
 		global $cart, $cookie, $defaultCountry;
 
 		if (!is_object($cart))
 			die(Tools::displayError());
-		if (!$id_address_delivery)
-			$id_address_delivery = $cart->id_address_delivery;
+		if (!$id_address)
+			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		/* If customer has an address (implies that he is registered and logged) */
-		if ($id_address_delivery AND $address_ids = Address::getCountryAndState($id_address_delivery))
+		if ($id_address AND $address_ids = Address::getCountryAndState($id_address))
 		{
 			$id_zone_country = Country::getIdZone(intval($address_ids['id_country']));
+			if (!empty($address_ids['vat_number']) AND $address_ids['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
+				return 0;
 			/* If customer's invoice address is inside a state */
 			if ($address_ids['id_state'])
 			{
@@ -196,7 +198,7 @@ class Tax extends ObjectModel
 				die(Tools::displayError('Unknown tax behavior!'));
 			}
 			/* Else getting country zone tax */
-			if (!$id_zone = Address::getZoneById($id_address_delivery))
+			if (!$id_zone = Address::getZoneById($id_address))
 				die(Tools::displayError());
 			return $productTax * Tax::zoneHasTax(intval($id_tax), intval($id_zone));
 		}

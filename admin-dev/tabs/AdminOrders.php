@@ -631,7 +631,7 @@ class AdminOrders extends AdminTab
 			<fieldset style="width: 400px;">
 				<legend><img src="../img/admin/invoice.gif" alt="'.$this->l('Invoice address').'" />'.$this->l('Invoice address').'</legend>
 				<div style="float: right"><a href="'.$link->getUrlWith('tab', 'AdminAddresses').'&id_address='.$addressInvoice->id.'&addaddress&realedit=1&id_order='.$order->id.($addressDelivery->id == $addressInvoice->id ? '&address_type=2' : '').'&back='.urlencode($_SERVER['REQUEST_URI']).'&token='.Tools::getAdminToken('AdminAddresses'.intval(Tab::getIdFromClassName('AdminAddresses')).intval($cookie->id_employee)).'"><img src="../img/admin/edit.gif" /></a></div>
-				'. (!empty($addressInvoice->company) ? $addressInvoice->company.'<br />' : '') .$addressInvoice->firstname.' '.$addressInvoice->lastname.'<br />
+				'. (!empty($addressInvoice->company) ? $addressInvoice->company.'<br />' : '').(!empty($addressInvoice->vat_number) ? $addressInvoice->vat_number.'<br />' : '').$addressInvoice->firstname.' '.$addressInvoice->lastname.'<br />
 				'.$addressInvoice->address1.'<br />'. (!empty($addressInvoice->address2) ? $addressInvoice->address2.'<br />' : '') .'
 				'.$addressInvoice->postcode.' '.$addressInvoice->city.'<br />
 				'.$addressInvoice->country.($addressInvoice->id_state ? ' - '.$invoiceState->name : '').'<br />

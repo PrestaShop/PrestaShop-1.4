@@ -151,8 +151,8 @@ if (!Configuration::get('PS_THEME_V11'))
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 		'priceDisplay' => $priceDisplay,
 		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
-		'use_taxes' => intval(Configuration::get('PS_TAX'))
-	));
+		'use_taxes' => intval(Configuration::get('PS_TAX')),
+		'vat_management' => intval(Configuration::get('VATNUMBER_MANAGEMENT'))));
 	$assignArray = array(
 		'img_ps_dir' => _PS_IMG_,
 		'img_cat_dir' => _THEME_CAT_DIR_,
@@ -167,8 +167,10 @@ if (!Configuration::get('PS_THEME_V11'))
 		'js_dir' => _THEME_JS_DIR_,
 		'pic_dir' => _THEME_PROD_PIC_DIR_
 	);
+
 	foreach ($assignArray as $assignKey => $assignValue)
 		$smarty->assign($assignKey, (substr($assignValue, 0, 1) == '/' ? $protocol_content.$server_host.$assignValue : str_replace('http://', $protocol_content, $assignValue)));
+
 }
 else
 {
@@ -209,7 +211,8 @@ else
 		'page_name' => $page_name,
 		'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 		'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
-		'use_taxes' => intval(Configuration::get('PS_TAX'))));
+		'use_taxes' => intval(Configuration::get('PS_TAX')),
+		'vat_management' => intval(Configuration::get('VATNUMBER_MANAGEMENT'))));
 }
 
 /* Display a maintenance page if shop is closed */

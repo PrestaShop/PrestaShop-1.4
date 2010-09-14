@@ -64,6 +64,9 @@ class		Address extends ObjectModel
 
 	/** @var string Mobile phone number */
 	public 		$phone_mobile;
+	
+	/** @var string Mobile phone number */
+	public 		$vat_number;
 
 	/** @var string Object creation date */
 	public 		$date_add;
@@ -83,7 +86,7 @@ class		Address extends ObjectModel
 									'other' => 300, 'phone' => 16, 'phone_mobile' => 16);
 	protected	$fieldsValidate = array('id_customer' => 'isNullOrUnsignedId', 'id_manufacturer' => 'isNullOrUnsignedId',
 										'id_supplier' => 'isNullOrUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isNullOrUnsignedId',
-										'alias' => 'isGenericName', 'company' => 'isGenericName', 'lastname' => 'isName',
+										'alias' => 'isGenericName', 'company' => 'isGenericName', 'lastname' => 'isName','vat_number' => 'isGenericName',
 										'firstname' => 'isName', 'address1' => 'isAddress', 'address2' => 'isAddress',
 										'city' => 'isCityName', 'other' => 'isMessage', 'postcode' => 'isPostCode',
 										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool');
@@ -146,12 +149,23 @@ class		Address extends ObjectModel
 		$fields['other'] = pSQL($this->other);
 		$fields['phone'] = pSQL($this->phone);
 		$fields['phone_mobile'] = pSQL($this->phone_mobile);
+		$fields['vat_number'] = pSQL($this->vat_number);
 		$fields['deleted'] = intval($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
 	}
-
+	
+	public function validateControler($htmlentities = true)
+	{
+		$errors = parent::validateControler($htmlentities);
+		if (!Configuration::get('VATNUMBER_CHECKING'))
+			return $errors;
+		include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');
+		if (class_exists('VatNumber', false))
+			return array_merge($errors, VatNumber::WebServiceCheck($this->vat_number));
+		return $errors;
+	}
 	/**
 	 * Get zone id for a given address
 	 *
@@ -220,7 +234,7 @@ class		Address extends ObjectModel
 		if (isset(self::$_idCountries[$id_address]))
 			return self::$_idCountries[$id_address];
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `id_country`, `id_state` FROM `'._DB_PREFIX_.'address`
+		SELECT `id_country`, `id_state`, `vat_number` FROM `'._DB_PREFIX_.'address`
 		WHERE `id_address` = '.intval($id_address));
 		self::$_idCountries[$id_address] = $result;
 		return $result;

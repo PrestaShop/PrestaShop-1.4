@@ -165,8 +165,8 @@ abstract class PaymentModule extends Module
 						Hook::updateQuantity($product, $order);
 						Product::updateDefaultAttribute($product['id_product']);
 					}
-					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
-					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery));
+					$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+					$price_wt = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
 					$download_hash = NULL;
@@ -185,7 +185,7 @@ abstract class PaymentModule extends Module
 						$tax = 0;
 					}
 					else
-						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->id_address_delivery));
+						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
 					$currentDate = date('Y-m-d H:m:i');
 					if ($product['reduction_from'] != $product['reduction_to'] AND ($currentDate > $product['reduction_to'] OR $currentDate < $product['reduction_from']))
@@ -210,7 +210,7 @@ abstract class PaymentModule extends Module
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.intval($product['cart_quantity']).',
 						'.$quantityInStock.',
-						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->id_address_delivery))).',
+						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}))).',
 						'.floatval($reduction_percent).',
 						'.floatval($reduction_amount).',
 						'.floatval($reduc).',
@@ -338,6 +338,7 @@ abstract class PaymentModule extends Module
 					'{delivery_phone}' => ($delivery->phone) ? $delivery->phone : $delivery->phone_mobile, 
 					'{delivery_other}' => $delivery->other,
 					'{invoice_company}' => $invoice->company,
+					'{invoice_vat_number}' => $invoice->vat_number,
 					'{invoice_firstname}' => $invoice->firstname,
 					'{invoice_lastname}' => $invoice->lastname,
 					'{invoice_address2}' => $invoice->address2,

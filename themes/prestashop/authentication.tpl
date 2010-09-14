@@ -25,8 +25,24 @@ $(function(){ldelim}
 	$('.id_state option[value={if isset($smarty.post.id_state)}{$smarty.post.id_state}{else}{$address->id_state|escape:'htmlall':'UTF-8'}{/if}]').attr('selected', 'selected');
 {rdelim});
 //]]>
+{if $vat_management}
+	{literal}
+	$(document).ready(function() {
+		$('#company').blur(function(){
+			vat_number();
+		});
+		vat_number();
+		function vat_number()
+		{
+			if ($('#company').val() != '')
+				$('#vat_number').show();
+			else
+				$('#vat_number').hide();
+		}
+	});
+{/literal}
+{/if}
 </script>
-
 <h2>{if !isset($email_create)}{l s='Log in'}{else}{l s='Create your account'}{/if}</h2>
 
 {assign var='current_step' value='login'}
@@ -151,6 +167,12 @@ $(function(){ldelim}
 			<label for="company">{l s='Company'}</label>
 			<input type="text" class="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{/if}" />
 		</p>
+		<div id="vat_number">
+			<p class="text">
+				<label for="vat_number">{l s='VAT number'}</label>
+				<input type="text" class="text" name="vat_number" value="{if isset($smarty.post.vat_number)}{$smarty.post.vat_number}{/if}" />
+			</p>
+		</div>
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
 			<input type="text" class="text" id="firstname" name="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}" />

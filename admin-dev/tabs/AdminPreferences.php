@@ -31,7 +31,6 @@ class AdminPreferences extends AdminTab
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
 		foreach ($txs as $tax)
 			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
-		
 		$round_mode = array(
 			array(
 				'value' => PS_ROUND_UP,

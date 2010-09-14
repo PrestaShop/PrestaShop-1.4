@@ -34,6 +34,7 @@ CREATE TABLE `PREFIX_address` (
   `other` text,
   `phone` varchar(16) default NULL,
   `phone_mobile` varchar(16) default NULL,
+  `vat_number` varchar(32) default NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   `active` tinyint(1) unsigned NOT NULL default '1',

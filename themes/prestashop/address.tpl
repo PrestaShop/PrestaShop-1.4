@@ -24,6 +24,23 @@ countriesNeedZipCode = new Array();
 $(function(){ldelim}
 	$('.id_state option[value={if isset($smarty.post.id_state)}{$smarty.post.id_state}{else}{$address->id_state|escape:'htmlall':'UTF-8'}{/if}]').attr('selected', 'selected');
 {rdelim});
+{if $vat_management}
+{literal}
+	$(document).ready(function() {
+		$('#company').blur(function(){
+			vat_number();
+		});
+		vat_number();
+		function vat_number()
+		{
+			if ($('#company').val() != '')
+				$('#vat_number').show();
+			else
+				$('#vat_number').hide();
+		}
+	});
+{/literal}
+{/if}
 //]]>
 </script>
 
@@ -44,6 +61,12 @@ $(function(){ldelim}
 			<label for="company">{l s='Company'}</label>
 			<input type="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{else}{$address->company|escape:'htmlall':'UTF-8'}{/if}" />
 		</p>
+		<div id="vat_number">
+			<p class="text">
+				<label for="vat_number">{l s='VAT number'}</label>
+				<input type="text" class="text" name="vat_number" value="{if isset($smarty.post.vat_number)}{$smarty.post.vat_number}{else}{$address->vat_number|escape:'htmlall':'UTF-8'}{/if}" />
+			</p>
+		</div>
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
 			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{else}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}" />

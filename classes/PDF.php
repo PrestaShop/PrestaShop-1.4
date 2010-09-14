@@ -414,6 +414,13 @@ class PDF extends PDF_PageGroup
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $delivery_address->country.($deliveryState ? ' - '.$deliveryState->name : '')), 0, 'L');
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->country.($invoiceState ? ' - '.$invoiceState->name : '')), 0, 'L');
 		$pdf->Ln(5);
+		
+		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoice_address->vat_number))
+		{
+			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->vat_number), 0, 'L');
+			$pdf->Ln(5);
+		}
+		
 		$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
 		if($invoice_customer->dni != NULL)
 			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_customer->dni), 0, 'L');
@@ -828,7 +835,14 @@ class PDF extends PDF_PageGroup
 	{
 		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
 			die(Tools::displayError());
-
+		
+		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoiceAddress->vat_number) AND $invoiceAddress->id_country != Configuration::get('VATNUMBER_COUNTRY'))
+		{
+			$this->Ln();
+			$this->Cell(30, 0, self::l('Exempt of VAT according section 259B of the General Tax Code.'), 0, 0, 'L');
+			return;
+		}
+		
 		if (self::$order->total_paid == '0.00' OR (!intval(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
 			return ;
 

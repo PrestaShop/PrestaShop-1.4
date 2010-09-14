@@ -49,6 +49,7 @@ if (Tools::isSubmit('submitAddress'))
 {
 	$address = new Address();
 	$errors = $address->validateControler();
+
 	$address->id_customer = intval($cookie->id_customer);
 
 	if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))

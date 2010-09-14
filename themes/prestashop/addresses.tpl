@@ -19,6 +19,7 @@
 	<ul class="address {if $smarty.foreach.myLoop.last}last_item{elseif $smarty.foreach.myLoop.first}first_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
 		<li class="address_title">{$address.alias}</li>
 		{if $address.company}<li class="address_company">{$address.company}</li>{/if}
+		{if $address.vat_number}<li class="address_company">{$address.vat_number}</li>{/if}
 		<li class="address_name">{$address.firstname} {$address.lastname}</li>
 		<li class="address_address1">{$address.address1}</li>
 		{if $address.address2}<li class="address_address2">{$address.address2}</li>{/if}

@@ -29,6 +29,7 @@ Shipping
 	Billing address:
 
 	{invoice_company}
+	{invoice_vat_number}
 	{invoice_firstname} {invoice_lastname}
 	{invoice_address1}
 	{invoice_address2}

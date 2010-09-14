@@ -209,7 +209,8 @@ class AdminImport extends AdminTab
 				'state' => $this->l('State'),
 				'other' => $this->l('Other'),
 				'phone' => $this->l('Phone'),
-				'phone_mobile' => $this->l('Mobile Phone'));
+				'phone_mobile' => $this->l('Mobile Phone'),
+				'vat_number' => $this->l('VAT number'));
 				
 				self::$default_values = array('alias' => 'Alias', 'postcode' => 'X');
 

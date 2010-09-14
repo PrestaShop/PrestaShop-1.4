@@ -229,7 +229,7 @@ class		Product extends ObjectModel
 			$this->manufacturer_name = Manufacturer::getNameById(intval($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById(intval($this->id_supplier));
 			$tax = new Tax(intval($this->id_tax));
-			if (is_object($cart) AND $cart->id_address_delivery != NULL)
+			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
 				$this->tax_rate = Tax::getApplicableTax(intval($this->id_tax), floatval($tax->rate));
 			else
 				$this->tax_rate = floatval($tax->rate);
@@ -1430,7 +1430,7 @@ class		Product extends ObjectModel
 	* @param integer $divisor Useful when paying many time without fees (optional)
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address_delivery = NULL)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL)
 	{
 		global $cookie, $cart;
 
@@ -1460,8 +1460,8 @@ class		Product extends ObjectModel
 			self::$_currencies[$id_currency] = Currency::getCurrencyInstance($id_currency);
 		$currency = self::$_currencies[$id_currency];
 
-		if (!$id_address_delivery)
-			$id_address_delivery = $cart->id_address_delivery;
+		if (!$id_address)
+			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
@@ -1491,7 +1491,7 @@ class		Product extends ObjectModel
 		$price = Tools::convertPrice(floatval($price = $result['price']), $currency);
 		
 		// Exclude tax
-		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address_delivery ? intval($id_address_delivery) : NULL)));
+		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address ? intval($id_address) : NULL)));
 		if ($forceAssociatedTax)
 			$tax = floatval($result['rate']);
 		if (!$tax)
