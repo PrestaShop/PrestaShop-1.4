@@ -87,7 +87,7 @@ include('../../footer.php');
 function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 {
 
-	$deliveryMode = array('CIT' => 'Livraison en Cityssimo', 'BPR' => 'Livraison en Bureau de Poste',
+	$deliveryMode = array('DOM' => 'Livraison à domicile', 'BPR' => 'Livraison en Bureau de Poste',
 						  'A2P' => 'Livraison Commerce de proximité', 'MRL' => 'Livraison Commerce de proximité',
 						  'CIT' => 'Livraison en Cityssimo', 'ACP' => 'Agence ColiPoste', 'CDI' => 'Centre de distribution',
 						  'RDV' => 'Livraison sur Rendez-vous');

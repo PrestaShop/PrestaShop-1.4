@@ -19,12 +19,11 @@ class Socolissimo extends Module
 		'delay' => array('fr'=>'Avec La Poste, Faites-vous livrer là où vous le souhaitez en France Métropolitaine.',
 						 'en'=>'Do you deliver wherever you want in France.'),
 		'id_zone' => 1,
-		'shipping_external'=>false,
-		'external_module_name'=> '',
-		'need_range' => false
+		'shipping_external'=>true,
+		'external_module_name'=> 'socolissimo',
+		'need_range' => true
 		);
 		
-
 	function __construct()
 	{
 		global $cookie;
@@ -86,7 +85,6 @@ class Socolissimo extends Module
 			return false;
 			
 			
-			
 		//creat config table in database
 		$sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'socolissimo_delivery_info` (
 			  `id_cart` int(10) NOT NULL,
@@ -112,7 +110,21 @@ class Socolissimo extends Module
 
 		//add hidden category
 		$category = new Category();
-		$category->name = 'SoColissimo';
+		$languages = Language::getLanguages(true);
+			foreach ($languages as $language) 
+			{
+				if ($language['iso_code'] == 'fr')
+				{
+					$category->name[$language['id_lang']] = 'SoColissimo';
+					$category->link_rewrite[$language['id_lang']] = 'socolissimo';
+				}
+				if ($language['iso_code'] == 'en')
+				{
+					$category->name[$language['id_lang']] = 'SoColissimo';
+					$category->link_rewrite[$language['id_lang']] = 'socolissimo';
+				}
+			}
+
 		$category->link_rewrite = 'socolissimo';
 		$category->id_parent = 0;
 		$category->level_depth = 0;
@@ -171,11 +183,13 @@ class Socolissimo extends Module
 				if (!$soCarrier->delete())
 					return false;
 		//delete hidden category and product overcost
-		$category = new Category(Configuration::get('SOCOLISSIMO_CAT_ID'));
-		$product = new Product(Configuration::get('SOCOLISSIMO_PRODUCT_ID'));
-
-		$category->delete();
-		$product->delete();
+		if (Configuration::get('SOCOLISSIMO_CAT_ID') != '' AND Configuration::get('SOCOLISSIMO_PRODUCT_ID') != '')
+		{
+			$category = new Category(Configuration::get('SOCOLISSIMO_CAT_ID'));
+			$product = new Product(Configuration::get('SOCOLISSIMO_PRODUCT_ID'));
+			$category->delete();
+			$product->delete();
+		}
 		
 		return true;
 	}
@@ -465,6 +479,15 @@ class Socolissimo extends Module
 				die(Tools::displayError('Order creation failed'));
 			}
 		}
+		if ($deliveryInfos['delivery_mode'] == 'RDV' OR $deliveryInfos['delivery_mode'] == 'DOM')
+		{		
+			$message = new Message();
+			$texte = 'Socolissimo : ';
+			$message->message = htmlentities($texte, ENT_COMPAT, 'UTF-8');
+			$message->id_order = intval($id_order);
+			$message->private = 1;
+			$message->add();
+		}	
 	}
 	
 	public function hookAdminOrder($params)
