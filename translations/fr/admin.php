@@ -2218,6 +2218,7 @@ $_LANGADM['index13348442cc6a27032d2b4aa28b75a5d3'] = 'Recherche';
 $_LANGADM['indexb8d92e11cba57b4a2cfcea080afb07e0'] = 'Accès rapide';
 $_LANGADM['indexee11cbb19052e40b07aac0ca060c23ee'] = 'utilisateur';
 $_LANGADM['index4236a440a662cc8253d7536e5aa17942'] = 'déconnexion';
+$_LANGADM['index7286baef44d09300636a4b99c533523c'] = 'Temps de chargement :';
 $_LANGADM['indexeed2839c1e3e5f7069ed03b2f6d4c6dd'] = 'Panneau d\'administration';
 $_LANGADM['indexe643dca52321ccac85a0f9912f430f46'] = 'Bienvenue sur votre panneau d\'administration';
 $_LANGADM['index078d3aa14ffbb46642ccc6c467747ef3'] = 'Cliquez sur les onglets pour naviguer.';

@@ -571,7 +571,7 @@ class AdminTranslations extends AdminTab
 					$tabsArray[$tab][$key] = stripslashes(key_exists($tab.md5($key), $_LANGADM) ? html_entity_decode($_LANGADM[$tab.md5($key)], ENT_COMPAT, 'UTF-8') : '');
 				$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
 			}
-		foreach (array('header.inc', 'index', 'login', 'password') as $tab)
+		foreach (array('header.inc', 'footer.inc', 'index', 'login', 'password') as $tab)
 		{
 			$tab = PS_ADMIN_DIR.'/'.$tab.'.php';
 			$fd = fopen($tab, 'r');

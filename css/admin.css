@@ -307,6 +307,7 @@ select optgroup option {
 #main {
 	clear: left;
 	border: 1px solid #999;
+	border-bottom: none;
 }
 
 #content {
@@ -602,9 +603,20 @@ select optgroup option {
 /* FOOTER */
 
 #footer {
+	height: 40px;
+	/* background: #DDDDDD url(../img/admin/footer-bg.png) repeat-x top left; */
+	background: #ECEADE url("../img/admin/submenu-bg.gif") repeat-x scroll left bottom;
+	border: 1px solid #999999;
+	font-size: 12px;
 	clear: both;
 	font-size: 0.9em;
-	text-align: center;
+	color:#666666;
+}
+
+.footer_link, .footer_link:hover {
+	color: #812143;
+	font-weight: bold;
+	text-decoration: underline;
 }
 
 /* CLASS */
