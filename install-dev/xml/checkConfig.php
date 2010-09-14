@@ -28,6 +28,7 @@ $tests_op = array(
 	'fopen' => false,
 	'register_globals' => false,
 	'gz' => false,
+	'mcrypt' => false,
 );
 
 // Execute tests

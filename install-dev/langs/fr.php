@@ -437,5 +437,6 @@ $_LANG['Your configuration is valid, click next to continue!'] = 'Votre configur
 $_LANG['Your configuration is invalid. Please fix the issues below:'] = 'Votre configuration n\'est pas valide,<br />merci de corriger ces problèmes :';
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Vous devez au préalable créer une base de données (aide disponible dans le fichier readme.txt)';
 $_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Cette option peut être bloquante si votre configuration e-mail est erronée, merci de la désactiver si vous ne pouvez pas passer à l\'étape suivante.';
+$_LANG['Mcrypt is available (recommended)'] = 'Mcrypt est disponible (recommandé)';
 
 ?>

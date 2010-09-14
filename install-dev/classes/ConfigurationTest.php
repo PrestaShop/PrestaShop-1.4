@@ -149,5 +149,10 @@ class	ConfigurationTest
 	{
 		return self::test_dir($dir);
 	}
+	
+	static function		test_mcrypt()
+	{
+		return function_exists('mcrypt_encrypt');
+	}
 }
 ?>

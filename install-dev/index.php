@@ -280,6 +280,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('Open external URLs allowed')?></li>
 				<li class="optional"><?php echo lang('PHP register global option is off (recommended)')?></li>
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
+				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 			</ul>
 			
 			<p><input class="button" value="<?php echo lang('Refresh these settings')?>" type="button" id="req_bt_refresh"/></p>
@@ -815,6 +816,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('Open external URLs allowed')?></li>
 				<li class="optional"><?php echo lang('PHP register global option is off (recommended)')?></li>
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
+				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 			</ul>
 			
 			<p><input class="button" value="<?php echo lang('Refresh these settings'); ?>" type="button" id="req_bt_refresh_update"/></p>

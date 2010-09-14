@@ -163,6 +163,25 @@ if (isFormValid())
 	}
 	$sqlParams[] = 'INSERT INTO '._DB_PREFIX_.'employee (id_employee, lastname, firstname, email, passwd, last_passwd_gen, active, id_profile) VALUES (NULL, \''.pSQL(ToolsInstall::strtoupper($_GET['infosName'])).'\', \''.pSQL(ToolsInstall::ucfirst($_GET['infosFirstname'])).'\', \''.pSQL($_GET['infosEmail']).'\', \''.md5(pSQL(_COOKIE_KEY_.$_GET['infosPassword'])).'\', \''.date('Y-m-d h:i:s', strtotime('-360 minutes')).'\', 1, 1)';
 	$sqlParams[] = 'INSERT INTO '._DB_PREFIX_.'contact (id_contact, email) VALUES (NULL, \''.pSQL($_GET['infosEmail']).'\'), (NULL, \''.pSQL($_GET['infosEmail']).'\')';
+
+	if (function_exists('mcrypt_encrypt'))
+	{
+		$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
+		if (!strstr($settings, '_RIJNDAEL_KEY_'))
+		{
+			$key_size = mcrypt_get_key_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
+			$key = Tools::passwdGen($key_size);
+			$settings = preg_replace('/define\(\'_COOKIE_KEY_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_KEY_\', \'\1\');'."\n".'define(\'_RIJNDAEL_KEY_\', \''.$key.'\');', $settings);
+		}
+		if (!strstr($settings, '_RIJNDAEL_IV_'))
+		{
+			$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
+			$iv = base64_encode(mcrypt_create_iv($iv_size, MCRYPT_RAND));
+			$settings = preg_replace('/define\(\'_COOKIE_IV_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_IV_\', \'\1\');'."\n".'define(\'_RIJNDAEL_IV_\', \''.$iv.'\');', $settings);
+		}
+		if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
+			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = 1 WHERE name = \'PS_CIPHER_ALGORITHM\'';	
+	}
 	
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)

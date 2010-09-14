@@ -11,6 +11,7 @@ class Rijndael
 		$this->_iv = base64_decode($iv);
 	}
 	
+	// Base64 is not required, but it is be more compact than urlencode
 	public function encrypt($plaintext)
 	{
 		return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->_key, $plaintext, MCRYPT_MODE_ECB, $this->_iv));
