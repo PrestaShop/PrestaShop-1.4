@@ -48,7 +48,10 @@
 			and it must be a folder under the CONFIG_SYS_ROOT_PATH or the same folder
 			these two paths accept relative path only, don't use absolute path
 		*/
-		
+	//check if folder exist
+	if (!is_dir('../../../../../../img/cms'))
+		mkdir('../../../../../../img/cms');
+	
 	define('CONFIG_SYS_DEFAULT_PATH', '../../../../../../img/cms'); //accept relative path only
 	define('CONFIG_SYS_ROOT_PATH', '../../../../../../img/cms');	//accept relative path only
 	define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name 
