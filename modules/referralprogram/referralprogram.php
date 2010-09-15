@@ -279,43 +279,64 @@ class ReferralProgram extends Module
 		}
 
 		$this->_html .= '
-		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-		<script type="text/javascript">
-		function tinyMCEInit(element)
-		{
-			$().ready(function() {
-				$(element).tinymce({
-					// Location of TinyMCE script
-					script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
-					// General options
-					theme : "advanced",
-					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
-					// Theme options
-					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
-					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
-					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
-					theme_advanced_toolbar_location : "top",
-					theme_advanced_toolbar_align : "left",
-					theme_advanced_statusbar_location : "bottom",
-					theme_advanced_resizing : false,
-					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
-					width: "582",
-					height: "auto",
-					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
-					// Drop lists for link/image/media/template dialogs
-					template_external_list_url : "lists/template_list.js",
-					external_link_list_url : "lists/link_list.js",
-					external_image_list_url : "lists/image_list.js",
-					media_external_list_url : "lists/media_list.js",
-					elements : "nourlconvert",
-					convert_urls : false,
-					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
-				});
-			});
+					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+				<script type="text/javascript">
+					tinyMCE.init({
+						mode : "textareas",
+						theme : "advanced",
+						plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+						// Theme options
+						theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+						theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
+						theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
+						theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
+						theme_advanced_toolbar_location : "top",
+						theme_advanced_toolbar_align : "left",
+						theme_advanced_statusbar_location : "bottom",
+						theme_advanced_resizing : false,
+						content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+						document_base_url : "'.__PS_BASE_URI__.'",
+						width: "600",
+						height: "auto",
+						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
+						// Drop lists for link/image/media/template dialogs
+						template_external_list_url : "lists/template_list.js",
+						external_link_list_url : "lists/link_list.js",
+						external_image_list_url : "lists/image_list.js",
+						media_external_list_url : "lists/media_list.js",
+						elements : "nourlconvert,ajaxfilemanager",
+						file_browser_callback : "ajaxfilemanager",
+						convert_urls : false,
+						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
+						
+					});
+					function ajaxfilemanager(field_name, url, type, win) {
+			var ajaxfilemanagerurl = "'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php";
+			switch (type) {
+				case "image":
+					break;
+				case "media":
+					break;
+				case "flash": 
+					break;
+				case "file":
+					break;
+				default:
+					return false;
+			}
+            tinyMCE.activeEditor.windowManager.open({
+                url: "'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/plugins/ajaxfilemanager/ajaxfilemanager.php",
+                width: 782,
+                height: 440,
+                inline : "yes",
+                close_previous : "no"
+            },{
+                window : win,
+                input : field_name
+            });
+            
 		}
-		tinyMCEInit(\'textarea.rte\');
-		</script>
+	</script>
 		<script language="javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" enctype="multipart/form-data">
 			<fieldset>
