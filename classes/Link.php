@@ -67,7 +67,6 @@ class Link
 	
 		if (is_object($cms))
 		{
-			if ($cms->id == intval(Configuration::get('PS_CONDITIONS_CMS_ID')))
 			return ($this->allow == 1) ? 
 				($base.__PS_BASE_URI__.$this->getLangLink().'content/'.intval($cms->id).'-'.$cms->link_rewrite) :
 				($base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
