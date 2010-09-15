@@ -235,7 +235,7 @@ class AdminModulesPositions extends AdminTab
 				echo '<input type="checkbox" id="Ghook'.$hook['id_hook'].'" class="floatr" style="margin-right: 2px;" onclick="hookCheckboxes('.$hook['id_hook'].', 0, this)"/>';
 			if (!empty($hook['description']))
 				echo '&nbsp;<span style="font-size:0.8em; font-weight: normal">['.$hook['description'].']</span>';
-			echo ' <sub><i style="float:right;">'.$this->l('Technical name: ').$hook['name'].'</i></sub></th></tr>';
+			echo ' <sub style="color:grey;"><i>('.$this->l('Technical name: ').$hook['name'].')</i></sub></th></tr>';
 
 			// Print modules list
 		
