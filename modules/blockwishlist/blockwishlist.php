@@ -37,8 +37,7 @@ class BlockWishList extends Module
 						!$this->registerHook('cart') OR
 						!$this->registerHook('customerAccount') OR
 						!$this->registerHook('header') OR
-						!$this->registerHook('adminCustomers') OR
-						!Configuration::updateValue('PS_BLOCK_WISHLIST_ACTIVATED', 1)
+						!$this->registerHook('adminCustomers')
 					)
 			return false;
 		/* This hook is optional */
@@ -49,7 +48,6 @@ class BlockWishList extends Module
 	public function uninstall()
 	{
 		return (
-			Configuration::deleteByName('PS_BLOCK_WISHLIST_ACTIVATED') AND
 			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist') AND
 			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_email') AND
 			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product') AND
@@ -66,8 +64,6 @@ class BlockWishList extends Module
 			$activated = Tools::getValue('activated');
 			if ($activated != 0 AND $activated != 1)
 				$this->_html .= '<div class="alert error">'.$this->l('Activate module : Invalid choice.').'</div>';
-			else
-				Configuration::updateValue('PS_BLOCK_WISHLIST_ACTIVATED', intval($activated));
 			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 		$this->_displayForm();
@@ -76,29 +72,7 @@ class BlockWishList extends Module
 
 	private function _displayForm()
 	{
-		$this->_displayFormSettings();
 		$this->_displayFormView();
-	}
-
-	private function _displayFormSettings()
-	{
-		$this->_html .= '
-		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<fieldset>
-				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
-
-				<label>'.$this->l('Activate module').'</label>
-				<div class="margin-form">
-					<input type="radio" name="activated" id="activated_on" value="1" '.(Tools::getValue('activated', Configuration::get('PS_BLOCK_WISHLIST_ACTIVATED')) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="activated_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
-					<input type="radio" name="activated" id="activated_off" value="0" '.(!Tools::getValue('activated', Configuration::get('PS_BLOCK_WISHLIST_ACTIVATED')) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="activated_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p class="clear">'.$this->l('Activate module (Add blockwishlist and "Add to my wishlist" button)').'</p>
-				</div>
-
-				<center><input type="submit" name="submitSettings" value="'.$this->l('Save').'" class="button" /></center>
-			</fieldset>
-		</form>';
 	}
 	
 	private function _displayFormView()
@@ -173,8 +147,6 @@ class BlockWishList extends Module
 	{
 		global $smarty, $errors;
 
-		if (Configuration::get('PS_BLOCK_WISHLIST_ACTIVATED') == 0)
-			return (null);
 		require_once(dirname(__FILE__).'/WishList.php');
 		if ($params['cookie']->isLogged())
 		{

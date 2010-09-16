@@ -4,9 +4,11 @@
 <p>
 	{l s='Other wishlists of' mod='blockwishlist'} {$current_wishlist.firstname} {$current_wishlist.lastname}:
 	{foreach from=$wishlists item=wishlist name=i}
-	<a href="{$base_dir_ssl}modules/blockwishlist/view.php?token={$wishlist.token}">{$wishlist.name}</a>
-		{if !$smarty.foreach.i.last}
-			/
+		{if $wishlist.id_wishlist != $current_wishlist.id_wishlist}
+			<a href="{$base_dir_ssl}modules/blockwishlist/view.php?token={$wishlist.token}">{$wishlist.name}</a>
+			{if !$smarty.foreach.i.last}
+				/
+			{/if}
 		{/if}
 	{/foreach}
 </p>
@@ -28,7 +30,7 @@
 		{if isset($product.attributes_small)}
 			<br /><a href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">{$product.attributes_small|escape:'htmlall':'UTF-8'}</a>
 		{/if}
-			<br />{l s='Quantity:' mod='blockwishlist'}<input type="text" id="{$product.id_product}_{$product.id_product_attribute}" size="3" value="{$product.quantity|intval}" />
+			<br />{l s='Quantity:' mod='blockwishlist'}<input type="text" id="{$product.id_product}_{$product.id_product_attribute}" size="3" value="{$product.quantity|intval}" readonly/>
 			<br />{l s='Priority:' mod='blockwishlist'}
 			{if $product.priority eq 0}
 				<span style="color:darkred; float:right;">{l s='High' mod='blockwishlist'}</span>

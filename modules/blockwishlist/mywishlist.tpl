@@ -54,7 +54,7 @@
 						</td>
 						<td class="align_center">{$wishlists[i].counter|intval}</td>
 						<td class="align_center">{$wishlists[i].date_add|date_format:"%Y-%m-%d"}</td>
-						<td class="align_center"><a href="{$base_dir_ssl}modules/blockwishlist/view.php?token={$wishlists[i].token|escape:'htmlall':'UTF-8'}">{l s='View' mod='blockwishlist'}</a></td>
+						<td class="align_center"><a href="javascript:;" onclick="javascript:WishlistManage('block-order-detail', '{$wishlists[i].id_wishlist|intval}');">{l s='View' mod='blockwishlist'}</a></td>
 						<td class="align_center">
 							<a href="javascript:;"onclick="return (WishlistDelete('wishlist_{$wishlists[i].id_wishlist|intval}', '{$wishlists[i].id_wishlist|intval}', '{l s='Do you really want to delete this wishlist ?' mod='blockwishlist'}'));"><img src="{$content_dir}modules/blockwishlist/img/icon/delete.png" alt="{l s='Delete' mod='blockwishlist'}" /></a>
 						</td>

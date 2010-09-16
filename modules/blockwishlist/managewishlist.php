@@ -74,7 +74,8 @@ if ($cookie->isLogged())
 				'products' => $products,
 				'productsBoughts' => $productBoughts,
 				'id_wishlist' => $id_wishlist,
-				'refresh' => $refresh
+				'refresh' => $refresh,
+				'token_wish' => $wishlist->token
 			));
 			
 			if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl'))

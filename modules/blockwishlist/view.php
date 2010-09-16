@@ -45,11 +45,12 @@ if (empty($token) === false)
 	}
 	WishList::incCounter(intval($wishlist['id_wishlist']));
 	$ajax = Configuration::get('PS_BLOCK_CART_AJAX');
-	$smarty->assign('current_wishlist', $wishlist);
-	$smarty->assign('token', $token);
-	$smarty->assign('ajax', (isset($ajax) AND intval($ajax) == 1) ? '1' : '0' );
-	$smarty->assign('wishlists', WishList::getByIdCustomer(intval($wishlist['id_customer'])));
-	$smarty->assign('products', $products);
+	$smarty->assign(array (
+		'current_wishlist' => $wishlist,
+		'token' => $token,
+		'ajax' => ((isset($ajax) AND intval($ajax) == 1) ? '1' : '0'),
+		'wishlists' => WishList::getByIdCustomer(intval($wishlist['id_customer'])),
+		'products' => $products));
 }
 
 if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/view.tpl'))

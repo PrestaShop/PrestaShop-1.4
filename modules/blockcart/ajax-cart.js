@@ -161,7 +161,7 @@ var ajaxCart = {
 			success: function(jsonData)
 			{
 				// add appliance to whishlist module
-				if (whishlist && !jsonData.errors) 
+				if (whishlist && !jsonData.errors)
 					WishlistAddProductCart(whishlist[0], idProduct, idCombination, whishlist[1]);
 				//apply 'transfert' effect
 				var elementToTransfert = null;

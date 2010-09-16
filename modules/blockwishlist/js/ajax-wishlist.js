@@ -13,6 +13,13 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 		data: 'action=' + action + '&id_product=' + id_product + '&quantity=' + quantity + '&token=' + static_token + '&id_product_attribute=' + id_product_attribute,
 		success: function(data)
 		{
+			var elementToTransfert = null;
+			elementToTransfert = $('div#image-block');
+			elementToTransfert.TransferTo({
+						to: $('#wishlist_block').get(0),
+						className:'transferProduct',
+						duration: 800
+			});
 			if($('#' + id).length != 0)
 			{
 				$('#' + id).slideUp('normal');
@@ -20,7 +27,7 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 				$('#' + id).slideDown('normal');
 			}
 		}
-	});	
+	});
 }
 
 /**
@@ -56,7 +63,6 @@ function WishlistBuyProduct(token, id_product, id_product_attribute, id_quantity
 		ajaxCart.add(id_product, id_product_attribute, false, button, 1, [token, id_quantity]);
 	else
 	{
-
 		WishlistAddProductCart(token, id_product, id_product_attribute, id_quantity)
 		document.forms['addtocart' + '_' + id_product  + '_' + id_product_attribute].method='POST';
 		document.forms['addtocart' + '_' + id_product  + '_' + id_product_attribute].action=baseDir + 'cart.php';
