@@ -31,7 +31,7 @@ class AdminCarriers extends AdminTab
 
 		$this->fieldsDisplay = array(
 		'id_carrier' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'name' => array('title' => $this->l('Name'), 'width' => 100),
+		'name' => array('title' => $this->l('Name')),
 		'logo' => array('title' => $this->l('Logo'), 'align' => 'center', 'image' => 's', 'orderby' => false, 'search' => false),
 		'delay' => array('title' => $this->l('Delay'), 'width' => 300, 'orderby' => false),
 		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));

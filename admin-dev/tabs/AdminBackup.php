@@ -36,7 +36,7 @@ class AdminBackup extends AdminTab
 	 	$this->deleted = false;
 
 		$this->fieldsDisplay = array (
-			'date' => array('title' => $this->l('Date'), 'type' => 'datetime', 'width' => 120),
+			'date' => array('title' => $this->l('Date'), 'type' => 'datetime', 'width' => 120, 'align' => 'right'),
 			'age' => array('title' => $this->l('Age')),
 			'filename' => array('title' => $this->l('Filename'), 'width' => 200),
 			'filesize' => array('title' => $this->l('File size')));

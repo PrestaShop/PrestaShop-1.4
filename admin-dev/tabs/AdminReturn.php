@@ -29,7 +29,7 @@ class AdminReturn extends AdminTab
 		'id_order_return' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'id_order' => array('title' => $this->l('Order ID'), 'width' => 75, 'align' => 'center'),
 		'name' => array('title' => $this->l('Status'), 'width' => 150, 'align' => 'center'),
-		'date_add' => array('title' => $this->l('Date issued'), 'width' => 60, 'type' => 'date'));
+		'date_add' => array('title' => $this->l('Date issued'), 'width' => 60, 'type' => 'date', 'align' => 'right'));
 		
 		$this->optionTitle = $this->l('Merchandise return (RMA) options');
 		$this->_fieldsOptions = array(

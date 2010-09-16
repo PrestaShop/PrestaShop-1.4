@@ -26,7 +26,7 @@ class AdminSlip extends AdminTab
  		$this->fieldsDisplay = array(
 		'id_order_slip' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'id_order' => array('title' => $this->l('ID Order'), 'width' => 75, 'align' => 'center'),
-		'date_add' => array('title' => $this->l('Date issued'), 'width' => 60, 'type' => 'date'));
+		'date_add' => array('title' => $this->l('Date issued'), 'width' => 60, 'type' => 'date', 'align' => 'right'));
 		
 		$this->optionTitle = $this->l('Slip');
 		

@@ -26,7 +26,7 @@ class AdminOrderMessage extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_order_message' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25), 
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
-		'message' => array('title' => $this->l('Message'), 'width' => 140, 'maxlength' => 300));
+		'message' => array('title' => $this->l('Message'), 'width' => 600, 'maxlength' => 300));
 	
 		parent::__construct();
 	}

@@ -45,7 +45,7 @@ class AdminDiscounts extends AdminTab
 		'discount_type' => array('title' => $this->l('Type'), 'type' => 'select', 'select' => $typesArray, 'filter_key' => 'dt!id_discount_type'),
 		'strvalue' => array('title' => $this->l('Value'), 'width' => 50, 'align' => 'right', 'filter_key' => 'a!value'),
 		'quantity' => array('title' => $this->l('Qty'), 'width' => 40, 'align' => 'right'),
-		'date_to' => array('title' => $this->l('To'), 'width' => 60, 'type' => 'date'),
+		'date_to' => array('title' => $this->l('To'), 'width' => 60, 'type' => 'date', 'align' => 'right'),
 		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 	
 		$this->optionTitle = $this->l('Discounts options');

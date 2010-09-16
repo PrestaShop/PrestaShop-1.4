@@ -35,7 +35,7 @@ class StatsBestCategories extends ModuleGrid
 				'header' => $this->l('Name'),
 				'dataIndex' => 'name',
 				'align' => 'left',
-				'width' => 400
+				'width' => 140
 			),
 			array(
 				'id' => 'totalQuantitySold',

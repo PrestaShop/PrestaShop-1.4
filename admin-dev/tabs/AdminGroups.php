@@ -39,7 +39,7 @@ class AdminGroups extends AdminTab
 		'name' => array('title' => $this->l('Name'), 'width' => 80, 'filter_key' => 'b!name'),
 		'reduction' => array('title' => $this->l('Reduction'), 'width' => 50, 'align' => 'right'),
 		'nb' => array('title' => $this->l('Members'), 'width' => 25, 'align' => 'center'),
-		'date_add' => array('title' => $this->l('Creation date'), 'width' => 60, 'type' => 'date'));
+		'date_add' => array('title' => $this->l('Creation date'), 'width' => 60, 'type' => 'date', 'align' => 'right'));
 
 		parent::__construct();
 	}
