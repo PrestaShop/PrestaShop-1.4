@@ -158,27 +158,34 @@ class AdminCustomers extends AdminTab
 		$carts = Cart::getCustomerCarts($customer->id);
 		$groups = $customer->getGroups();
 		$referrers = Referrer::getReferrers($customer->id);
+		if ($totalCustomer = Db::getInstance()->getValue('SELECT SUM(total_paid_real) FROM '._DB_PREFIX_.'orders WHERE id_customer = '.$customer->id.' AND valid = 1'))
+		{
+			Db::getInstance()->getValue('SELECT SQL_CALC_FOUND_ROWS COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) > '.$totalCustomer);
+			$countBetterCustomers = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
+		}
+		else
+			$countBetterCustomers = '-';
 
 		echo '
-		<div style="float: left">
-		<fieldset style="width: 400px"><div style="float: right"><a href="'.$currentIndex.'&addcustomer&id_customer='.$customer->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
+		<fieldset style="width:400px;float: left"><div style="float: right"><a href="'.$currentIndex.'&addcustomer&id_customer='.$customer->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
 			<span style="font-weight: bold; font-size: 14px;">'.$customer->firstname.' '.$customer->lastname.'</span>
 			<img src="../img/admin/'.($customer->id_gender == 2 ? 'female' : ($customer->id_gender == 1 ? 'male' : 'unknown')).'.gif" style="margin-bottom: 5px" /><br />
 			<a href="mailto:'.$customer->email.'" style="text-decoration: underline; color: blue">'.$customer->email.'</a><br /><br />
 			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).($customer->dni != NULL ? ' | '.$this->l('DNI:').' '.$customer->dni : '').'<br />
 			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
-			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], intval($cookie->id_lang), true) : $this->l('never')).'
+			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], intval($cookie->id_lang), true) : $this->l('never')).'<br />
+			'.($countBetterCustomers != '-' ? $this->l('Rank: #').' '.(int)$countBetterCustomers.'<br />' : '').'
 		</fieldset>
-		</div>
-		<div style="float: left; margin-left: 50px">
-		<fieldset style="width: 300px"><div style="float: right"><a href="'.$currentIndex.'&addcustomer&id_customer='.$customer->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
+		<fieldset style="width:300px;float:left;margin-left:50px">
+			<div style="float: right">
+				<a href="'.$currentIndex.'&addcustomer&id_customer='.$customer->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a>
+			</div>
 			'.$this->l('Newsletter:').' '.($customer->newsletter ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
 			'.$this->l('Opt-in:').' '.($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
 			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, intval($cookie->id_lang)).')' : $this->l('unknown')).'<br /><br />
 			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, intval($cookie->id_lang), true).'<br />
 			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'
 		</fieldset>
-		</div>
 		<div class="clear">&nbsp;</div>';
 
 		// display hook specified to this page : AdminCustomers
@@ -209,38 +216,70 @@ class AdminCustomers extends AdminTab
 			echo '
 			</table>';
 		}
-		echo '<div class="clear">&nbsp;</div>';
-		echo '<h2>'.$this->l('Orders').' ('.sizeof($orders).')</h2>';
+		echo '
+		<div class="clear">&nbsp;</div>
+		<h2>'.$this->l('Orders').'</h2>';
 		if ($orders AND sizeof($orders))
 		{
-			echo '
-			<table cellspacing="0" cellpadding="0" class="table">
+			$totalOK = 0;
+			$ordersOK = array();
+			$ordersKO = array();
+			$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+			foreach ($orders as $order)
+			if ($order['valid'])
+			{
+				$ordersOK[] = $order;
+				$totalOK += $order['total_paid_real'];
+			}
+			else
+				$ordersKO[] = $order;
+			$orderHead = '
+			<table cellspacing="0" cellpadding="0" class="table float">
 				<tr>
 					<th class="center">'.$this->l('ID').'</th>
 					<th class="center">'.$this->l('Date').'</th>
-					<th class="center">'.$this->l('Quantity').'</th>
-					<th class="center">'.$this->l('Total').'</th>
+					<th class="center">'.$this->l('Products').'</th>
+					<th class="center">'.$this->l('Total paid').'</th>
 					<th class="center">'.$this->l('Payment').'</th>
 					<th class="center">'.$this->l('State').'</th>
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
-			foreach ($orders AS $order)
-				echo '
-				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
-					<td class="center">'.sprintf('%06d', $order['id_order']).'</td>
-					<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang), true).'</td>
-					<td align="right">'.$order['nb_products'].'</td>
-					<td align="right">'.Tools::displayPrice($order['total_paid'], new Currency(intval($order['id_currency']))).'</td>
-					<td>'.$order['payment'].'</td>
-					<td>'.$order['order_state'].'</td>
-					<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
-				</tr>';
-			echo '
-			</table>';
+				$orderFoot = '</table>';
+				if ($countOK = sizeof($ordersOK))
+				{
+					echo '<div style="float:left;margin-right:20px"><h3 style="color:green;font-weight:700">Commandes valides : '.$countOK.' pour '.Tools::displayPrice($totalOK, new Currency(1)).'</h3>'.$orderHead;
+					foreach ($ordersOK AS $order)
+						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
+						<td class="center">'.$order['id_order'].'</td>
+							<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang)).'</td>
+							<td align="right">'.$order['nb_products'].'</td>
+							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency(intval($order['id_currency']))).'</td>
+							<td>'.$order['payment'].'</td>
+							<td>'.$order['order_state'].'</td>
+							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
+						</tr>';
+					echo $orderFoot.'</div>';
+				}
+				if ($countKO = sizeof($ordersKO))
+				{
+					echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">Commandes non valides : '.$countKO.'</h3>'.$orderHead;
+					foreach ($ordersKO AS $order)
+						echo '
+						<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
+							<td class="center">'.$order['id_order'].'</td>
+							<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang)).'</td>
+							<td align="right">'.$order['nb_products'].'</td>
+							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency(intval($order['id_currency']))).'</td>
+							<td>'.$order['payment'].'</td>
+							<td>'.$order['order_state'].'</td>
+							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
+						</tr>';
+					echo $orderFoot.'</div><div class="clear">&nbsp;</div>';
+				}
 		}
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has placed no orders yet');
+			
 		if ($products AND sizeof($products))
 		{
 			echo '<div class="clear">&nbsp;</div>
@@ -336,8 +375,9 @@ class AdminCustomers extends AdminTab
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has no discount vouchers').'.';
 		echo '<div class="clear">&nbsp;</div>';
-		
-		echo '<h2>'.$this->l('Carts').' ('.sizeof($carts).')</h2>';
+		 
+		echo '<div style="float:left">
+		<h2>'.$this->l('Carts').' ('.sizeof($carts).')</h2>';
 		if ($carts AND sizeof($carts))
 		{
 			echo '
@@ -362,7 +402,7 @@ class AdminCustomers extends AdminTab
 					<td>'.Tools::displayDate($cart['date_add'], intval($cookie->id_lang), true).'</td>
 					<td align="right">'.Tools::displayPrice($summary['total_price'], $currency).'</td>
 					<td>'.$carrier->name.'</td>
-					<td align="center"><a href="?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'"><img src="../img/admin/details.gif" /></a></td>
+					<td align="center"><a href="index.php?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'"><img src="../img/admin/details.gif" /></a></td>
 				</tr>';
 			}
 			echo '
@@ -370,6 +410,28 @@ class AdminCustomers extends AdminTab
 		}
 		else
 			echo $this->l('No cart available').'.';
+		echo '</div>';
+		
+		$interested = Db::getInstance()->ExecuteS('SELECT DISTINCT id_product FROM '._DB_PREFIX_.'cart_product cp INNER JOIN '._DB_PREFIX_.'cart c on c.id_cart = cp.id_cart WHERE c.id_customer = '.(int)$customer->id.' AND cp.id_product NOT IN (
+		SELECT product_id FROM '._DB_PREFIX_.'orders o inner join '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order WHERE o.valid = 1 AND o.id_customer = '.(int)$customer->id.')');
+		if (count($interested))
+		{
+			echo '<div style="float:left;margin-left:20px">
+			<h2>'.$this->l('Products').' ('.count($interested).')</h2>
+			<table cellspacing="0" cellpadding="0" class="table">';
+			foreach ($interested as $p)
+			{
+				$product = new Product((int)$p['id_product'], false, $cookie->id_lang);
+				echo '
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'/product.php?id_product='.$product->id.'\'">
+					<td>'.(int)$product->id.'</td>
+					<td>'.Tools::htmlentitiesUTF8($product->name).'</td>
+					<td align="center"><a href="'.__PS_BASE_URI__.'product.php?id_product='.$product->id.'"><img src="../img/admin/details.gif" /></a></td>
+				</tr>';
+			}
+			echo '</table></div>';
+		}
+		
 		echo '<div class="clear">&nbsp;</div>';
 
 		/* Last connections */
