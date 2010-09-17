@@ -187,6 +187,36 @@ class AdminCustomers extends AdminTab
 			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
+		
+		echo '<fieldset class="width3" style="height:140px"><legend><img src="../img/admin/cms.gif" /> '.$this->l('Add a private note').'</legend>
+			<p>'.$this->l('This note will be displayed to every employees but not to the customer.').'</p>
+			<form action="ajax.php" method="post" onsubmit="saveCustomerNote();return false;" id="customer_note">
+				<textarea name="note" id="noteContent" style="width:600px;height:50px" onkeydown="$(\'#submitCustomerNote\').removeAttr(\'disabled\');">'.Tools::htmlentitiesUTF8($customer->note).'</textarea><br />
+				<input type="submit" id="submitCustomerNote" class="button" value="'.$this->l('   Save   ').'" style="float:left;margin-top:5px" disabled="disabled" />
+				<span id="note_feedback" style="float:left;margin:10px 0 0 10px"></span>
+			</form>
+		</fieldset>
+		<div class="clear">&nbsp;</div>
+		<script type="text/javascript">
+			function saveCustomerNote()
+			{
+				$("#note_feedback").html("<img src=\"../img/loader.gif\" />").show();
+				var noteContent = $("#noteContent").val();
+				$.post("ajax.php", {submitCustomerNote:1,id_customer:'.(int)$customer->id.',note:noteContent}, function (r) {
+					$("#note_feedback").html("").hide();
+					if (r == "ok")
+					{
+						$("#note_feedback").html("<b style=\"color:green\">'.addslashes($this->l('Your note has been saved')).'</b>").fadeIn(400);
+						$("#submitCustomerNote").attr("disabled", "disabled");
+					}
+					else if (r == "error:validation")
+						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: your note is not valid')).'</b>").fadeIn(400);
+					else if (r == "error:update")
+						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: cannot save your note')).'</b>").fadeIn(400);
+					$("#note_feedback").fadeOut(3000);
+				});
+			}
+		</script>';
 
 		// display hook specified to this page : AdminCustomers
 		if (($hook = Module::hookExec('adminCustomers', array('id_customer' => $customer->id))) !== false)

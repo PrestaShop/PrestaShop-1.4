@@ -18,6 +18,9 @@ class		Customer extends ObjectModel
 
 	/** @var string Secure key */
 	public		$secure_key;
+	
+	/** @var string private note */
+	public		$note;
 
 	/** @var integer Gender ID */
 	public		$id_gender = 9;
@@ -77,9 +80,9 @@ class		Customer extends ObjectModel
 	protected $tables = array ('customer');
 
  	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
- 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16);
+ 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16, 'note' => 65000);
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
-		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDni');
+		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDni', 'note' => 'isCleanHtml');
 
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
@@ -90,6 +93,7 @@ class		Customer extends ObjectModel
 		if (isset($this->id))
 			$fields['id_customer'] = intval($this->id);
 		$fields['secure_key'] = pSQL($this->secure_key);
+		$fields['note'] = pSQL($this->note, true);
 		$fields['id_gender'] = intval($this->id_gender);
 		$fields['id_default_group'] = intval($this->id_default_group);
 		$fields['lastname'] = pSQL($this->lastname);

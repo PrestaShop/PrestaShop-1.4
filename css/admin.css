@@ -711,6 +711,14 @@ tr.deleted td {
 	padding: 3px;
 }
 
+.button[disabled=disabled] {
+	color: #8C8C8C;
+}
+
+input.button[disabled=disabled]:hover {
+	background-color: #FFF6D3;
+}
+
 .button:hover {
 	background-color: #F0EBD6;
 }

@@ -191,6 +191,15 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	die($list);
 }
 
+if (Tools::isSubmit('submitCustomerNote') AND $id_customer = (int)Tools::getValue('id_customer') AND $note = html_entity_decode(Tools::getValue('note')))
+{
+	if (!Validate::isCleanHtml($note))
+		die ('error:validation');
+	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `note` = "'.pSQL($note, true).'" WHERE id_customer = '.(int)$id_customer.' LIMIT 1'))
+		die ('error:update');
+	die('ok');
+}
+
 if (Tools::getValue('form_language_id'))
 {
 	if (!($cookie->employee_form_lang = intval(Tools::getValue('form_language_id'))))
