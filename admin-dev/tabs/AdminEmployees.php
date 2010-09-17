@@ -75,7 +75,7 @@ class AdminEmployees extends AdminTab
 		$obj = $this->loadObject(true);
 		$profiles = Profile::getProfiles(intval($cookie->id_lang));
 
-		echo '
+		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width3"><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
@@ -98,7 +98,7 @@ class AdminEmployees extends AdminTab
 				</div>
 				<label>'.$this->l('Back office color:').' </label>
 				<div class="margin-form">
-					<input type="text" name="bo_color" value="'.htmlentities($this->getFieldValue($obj, 'bo_color'), ENT_COMPAT, 'UTF-8').'" />
+					<input type="color" data-hex="true" class="color mColorPickerInput" name="bo_color" value="'.htmlentities($this->getFieldValue($obj, 'bo_color'), ENT_COMPAT, 'UTF-8').'" />
 					<p>'.$this->l('Back office background will be displayed in this color. HTML colors only (e.g.,').' "lightblue", "#CC6600")</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
