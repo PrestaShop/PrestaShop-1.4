@@ -824,12 +824,15 @@ abstract class AdminTab
 	{
 		if ($nbErrors = sizeof($this->_errors) AND $this->_includeContainer)
 		{
-			echo '<div class="alert error"><h3>'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'</h3>
-			<ol>';
+			echo '<div class="error">
+				<img src="../img/admin/error2.png" />
+				'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'<br />
+				<ol>';
 			foreach ($this->_errors AS $error)
 				echo '<li>'.$error.'</li>';
 			echo '
-			</ol></div>';
+				</ol>
+			</div>';
 		}
 		$this->includeSubTab('displayErrors');
 	}
@@ -841,7 +844,10 @@ abstract class AdminTab
 	 */
 	public function	displayWarning($warn)
 	{
-		echo '<div class="warning warn"><h3>'.$warn.'</h3></div>';
+		echo '<div class="warn">
+			<img src="../img/admin/warn2.png" />
+			'.$warn.'
+		</div>';
 	}
 
 	/**
@@ -850,7 +856,10 @@ abstract class AdminTab
 	public function displayConf()
 	{
 		if ($conf = Tools::getValue('conf'))
-			echo '<div class="conf confirm"><img src="../img/admin/ok.gif" /> '.$this->_conf[intval($conf)].'</div>';
+			echo '<div class="conf">
+				<img src="../img/admin/ok2.png" />
+				'.$this->_conf[intval($conf)].'
+			</div>';
 	}
 
 	/**

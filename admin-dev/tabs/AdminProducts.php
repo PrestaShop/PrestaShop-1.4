@@ -1020,12 +1020,15 @@ class AdminProducts extends AdminTab
 			;
 		elseif ($nbErrors = sizeof($this->_errors))
 		{
-			echo '<div class="alert error"><h3>'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'</h3>
-			<ol style="margin-left: 30px;">';
+			echo '<div class="error">
+				<img src="../img/admin/error2.png" />
+				'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'
+				<ol>';
 			foreach ($this->_errors AS $error)
 				echo '<li>'.$error.'</li>';
 			echo '
-			</ol></div>';
+				</ol>
+			</div>';
 		}
 	}
 

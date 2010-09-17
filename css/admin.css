@@ -493,14 +493,41 @@ select optgroup option {
 	width: 600px;
 }
 
-#content .conf {
-	width: 400px;
-	margin: 0 0 15px 0;
+#content .conf, #content .warn, #content .error {
+	color:#383838;
+	font-weight:700;
+	margin: 0 0 10px 0;
 	line-height: 20px;
 	padding: 10px 15px;
-	border-top: 1px solid #019609;
-	border-bottom: 1px solid #019609;
-	background-color: #CCFFCD;
+}
+
+#content .conf {
+	border: 1px solid #72CB67;
+	background-color: #DFFAD3;
+}
+#content .conf img, #content .warn img, #content .error img {
+	margin:-4px 5px 0 0;
+}
+
+#content .error  {
+	border: 1px solid #EC9B9B;
+	background-color: #FAE2E3;
+}
+
+#content .warn  {
+	border: 1px solid #D3C200;
+	background-color: #FFFAC6;
+}
+
+#content .error ol {
+	clear: both;
+	margin-top: 5px;
+	padding-bottom: 0;
+}
+
+#content .error ol li{
+	font-weight:200;
+	margin-left:30px;
 }
 
 #content .confirm h3 {
@@ -516,10 +543,6 @@ select optgroup option {
 #content .error h3 {
 	padding: 0 0 0 20px;
 	background: url(../img/admin/warning.gif) no-repeat 0 0;
-}
-
-#content .error ol {
-	padding-bottom: 0;
 }
 
 /* CONTENT - COLUMN */
