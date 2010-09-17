@@ -80,13 +80,36 @@ class Mail
 				die (Tools::displayError('Error - No iso code for email !'));
 			$template = $iso.'/'.$template;
 
-				
-			if (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
+			$moduleName = false;
+			$overrideMail = false;
+
+			// get templatePath
+			if (preg_match('#'.__PS_BASE_URI__.'modules/#', $templatePath))
+			{
+				if (preg_match('#modules/([a-z0-9_-]+)/#ui' , $templatePath , $res))
+					$moduleName = $res[1];
+			}
+
+			if ($moduleName !== false AND (file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.txt') OR
+				file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.html')))
+				$templatePath = _PS_THEME_DIR_.'modules/'.$moduleName.'/mails/';
+			elseif (file_exists(_PS_THEME_DIR_.'mails/'.$template.'.txt') OR file_exists(_PS_THEME_DIR_.'mails/'.$template.'.html'))
+			{
+				$templatePath = _PS_THEME_DIR_.'mails/';
+				$overrideMail  = true;
+			}
+			elseif (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
 				die(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt');
 				
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8'));
-			include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
+
+			if ($overrideMail AND file_exists($templatePath.$iso.'/lang.php'))
+					include_once($templatePath.$iso.'/lang.php');
+			elseif ($moduleName AND file_exists($templatePath.$iso.'/lang.php'))
+				include_once(_PS_THEME_DIR_.'mails/'.$iso.'/lang.php');
+			else
+				include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
 
 			global $_LANGMAIL;
 			/* Create mail and attach differents parts */
@@ -151,6 +174,22 @@ class Mail
 		{
 		 $result = $e->getCode();
 		}
-		return $result;	
+		return $result;
+	}
+
+	static public function l($string)
+	{
+		global $_LANGMAIL;
+
+		$key = str_replace('\'', '\\\'', $string);
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+
+		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
+		if (file_exists($file))
+			include_once($file);
+		$str = (key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : ((key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : $string);
+		$str = htmlentities($str, ENT_QUOTES, 'utf-8');
+
+		return str_replace('"', '&quot;', addslashes($str));
 	}
 }

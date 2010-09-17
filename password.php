@@ -22,7 +22,7 @@ if (Tools::isSubmit('email'))
 				$errors[] = Tools::displayError('You can regenerate your password only each').' '.intval($min_time).' '.Tools::displayError('minute(s)');
 			else
 			{	
-				Mail::Send(intval($cookie->id_lang), 'password_query', 'Password query confirmation', 
+				Mail::Send(intval($cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
 				array('{email}' => $customer->email, 
 					  '{lastname}' => $customer->lastname, 
 					  '{firstname}' => $customer->firstname,
@@ -50,7 +50,7 @@ elseif (($token = Tools::getValue('token')) && ($id_customer = intval(Tools::get
 			$customer->last_passwd_gen = date('Y-m-d H:i:s', time());
 			if ($customer->update())
 			{
-				Mail::Send(intval($cookie->id_lang), 'password', 'Your password', 
+				Mail::Send(intval($cookie->id_lang), 'password', Mail::l('Your password'), 
 				array('{email}' => $customer->email, 
 					  '{lastname}' => $customer->lastname, 
 					  '{firstname}' => $customer->firstname, 

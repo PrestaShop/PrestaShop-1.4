@@ -47,7 +47,7 @@ if (Tools::isSubmit('submitMessage'))
 			$toName = strval(Configuration::get('PS_SHOP_NAME'));
 			$customer = new Customer(intval($cookie->id_customer));
 			if (Validate::isLoadedObject($customer))
-				Mail::Send(intval($cookie->id_lang), 'order_customer_comment', 'Message from a customer', 
+				Mail::Send(intval($cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
 				array(
 				'{lastname}' => $customer->lastname, 
 				'{firstname}' => $customer->firstname, 

@@ -375,7 +375,7 @@ abstract class PaymentModule extends Module
 						$fileAttachment = NULL;
 
 					if ($orderStatus->send_email AND Validate::isEmail($customer->email))
-						Mail::Send(intval($order->id_lang), 'order_conf', 'Order confirmation', $data, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, $fileAttachment);
+						Mail::Send(intval($order->id_lang), 'order_conf', Mail::l('Order confirmation'), $data, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, $fileAttachment);
 					$this->currentOrder = intval($order->id);
 					return true;
 				}

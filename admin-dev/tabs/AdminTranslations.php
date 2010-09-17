@@ -298,6 +298,191 @@ class AdminTranslations extends AdminTab
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 
 		}
+		elseif (Tools::isSubmit('submitTranslationsMails'))
+		{
+		 	if ($this->tabAccess['edit'] === '1' && ($id_lang = Language::getIdByIso(Tools::getValue('lang'))) > 0)
+		 	{
+		 		$content = Tools::getValue('mail');
+
+		 		//core mails
+		 		foreach($content['html'] as $filename => $file_content)
+		 		{
+					$filename = str_replace('..', '', $filename);
+					if (Validate::isCleanHTML($file_content))
+					{
+						$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
+						if ($conn)
+						{
+							fwrite($conn, $file_content);
+							fclose($conn);
+						}
+					}
+					else
+						$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+				}
+		 		foreach($content['txt'] as $filename => $file_content)
+		 		{
+					$filename = str_replace('..', '', $filename);
+					$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
+					if ($conn)
+					{
+						fwrite($conn, $file_content);
+						fclose($conn);
+					}
+				}
+
+				// module mails
+				foreach($content['modules'] as $module_dir => $versions)
+		 		{
+		 			if (!file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang')))
+		 			{
+		 				mkdir(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang'), 0777);
+		 			}
+		 			if (isset($versions['html']))
+						foreach($versions['html'] as $filename => $file_content)
+				 		{
+							$filename = str_replace('..', '', $filename);
+							if (Validate::isCleanHTML($file_content))
+							{
+								$conn = fopen(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
+								if ($conn)
+								{
+									fwrite($conn, $file_content);
+									fclose($conn);
+									@chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
+								}
+							}
+							else
+								$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+						}
+					if (isset($versions['txt']))
+				 		foreach($versions['txt'] as $filename => $file_content)
+				 		{
+							$filename = str_replace('..', '', $filename);
+							$conn = fopen(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
+							if ($conn)
+							{
+								fwrite($conn, $file_content);
+								fclose($conn);
+								@chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
+							}
+						}
+				}
+
+				// themes mail
+				foreach($content['themes'] as $theme_dir_name => $theme_dir)
+				{
+				if (isset($theme_dir['html']))
+					foreach ($theme_dir['html'] as $filename => $file_content)
+					{
+						$filename = str_replace('..', '', $filename);
+						if (Validate::isCleanHTML($file_content))
+						{
+							$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
+							if ($conn)
+							{
+								fwrite($conn, $file_content);
+								fclose($conn);
+							}
+						}
+						else
+							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+					}
+				if (isset($theme_dir['txt']))
+					foreach($content['txt'] as $filename => $file_content)
+					{
+						$filename = str_replace('..', '', $filename);
+						$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
+						if ($conn)
+						{
+							fwrite($conn, $file_content);
+							fclose($conn);
+						}
+					}
+				}
+
+				// themes modules mails
+				foreach ($content['themes_module'] as $theme_dir_name => $theme_dir)
+				foreach ($theme_dir as $theme_module_dir_name => $theme_module_dir)
+				{
+					foreach($theme_module_dir['html'] as $filename => $file_content)
+					{
+						$filename = str_replace('..', '', $filename);
+						if (Validate::isCleanHTML($file_content))
+						{
+							$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
+							if ($conn)
+							{
+								fwrite($conn, $file_content);
+								fclose($conn);
+							}
+						}
+						else
+							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+					}
+					if (isset($theme_module_dir['txt']))
+					foreach($theme_module_dir['txt'] as $filename => $file_content)
+					{
+						$filename = str_replace('..', '', $filename);
+						$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
+						if ($conn)
+						{
+							fwrite($conn, $file_content);
+							fclose($conn);
+						}
+					}
+				}
+
+				// subject mail
+				$subjecttab = Tools::getValue('subject');
+				//Tools::d($subjecttab['mails']);
+			if (isset($subjecttab))
+			{
+				foreach ($subjecttab as $key => $subjecttype)
+				{
+
+					if ($key == 'mails')
+					{
+						if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+							die(Tools::displayError());
+						$this->writeSubjectTranslationFile($subjecttype, _PS_MAIL_DIR_.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
+					}
+					elseif ($key == 'themes')
+					{
+						//Tools::d($subjecttype);
+						foreach ($subjecttype as $nametheme => $subtheme)
+						{
+						if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+							die(Tools::displayError());
+						$this->writeSubjectTranslationFile($subtheme, _PS_ALL_THEMES_DIR_.$nametheme.'/mails/'.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
+						}
+					}
+				}
+				Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
+			}
+				// end subject mail
+
+				if (count($this->_errors) == 0)
+				{
+					global $currentIndex;
+					$iso_code = array('iso_code' => Language::getIsoById($id_lang), 'id_lang' => $id_lang);
+					$iso_code['mails'] = $this->displayFormmails($iso_code['iso_code'], true);
+					$sql = '
+						UPDATE `ps_translation_info` SET
+						`nb_mail_field` = '.((int)$iso_code['mails']['total']).',
+						`nb_mail_field_filled` = '.((int)$iso_code['mails']['total']-(int)$iso_code['mails']['empty']).',
+						`date_add` = NOW()
+						WHERE `id_lang` = '.$iso_code['id_lang']
+					;
+					$this->submitExportLang($iso_code['iso_code']);
+					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
+				}
+			}
+			else
+			{
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+			}
+		}
 		elseif (Tools::isSubmit('submitTranslationsModules'))
 		{
 		if ($this->tabAccess['edit'] === '1')
@@ -351,6 +536,7 @@ class AdminTranslations extends AdminTab
 						'fields' => $this->l('Field name translations'),
 						'modules' => $this->l('Module translations'),
 						'pdf' => $this->l('PDF translations'),
+						'mails' => $this->l('Mails translations'),
 						);
 
 		if ($type = Tools::getValue('type'))
@@ -718,6 +904,456 @@ class AdminTranslations extends AdminTab
 			</fieldset><br />';
 		}
 		echo '<br /><input type="submit" name="submitTranslationsFields" value="'.$this->l('Update translations').'" class="button" /></form>';
+	}
+
+	function displayFormmails($lang, $noDisplay = false)
+	{
+		global $cookie, $currentIndex;
+		$mailTpls = array();
+		$subjectMailContent = array();
+		$mailTplsEmpty = array();
+		$moduleMailTpls = array();
+		$subjectModuleMailContent = array();
+		$moduleMailTplsEmpty = array();
+		$themeMailTpls = array();
+		$subjectThemeMailContent = array();
+		$themeMailTplsEmpty = array();
+		$themeModuleMailTpls = array();
+		$subjectThemeModuleMailContent = array();
+		$themeModuleMailTplsEmpty = array();
+
+		$langs = Language::getLanguages();
+		$langIds = array();
+		foreach ($langs as &$lang_item)
+			$langIds[] = $lang_item['iso_code'];
+		foreach (scandir(_PS_MAIL_DIR_) as $mail_lang_dir)
+			if (in_array($mail_lang_dir, $langIds))
+				foreach (scandir(_PS_MAIL_DIR_.$mail_lang_dir) as $tpl_file)
+					if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
+					{
+						if (!isset($mailTpls[$tpl_file]))
+							$mailTpls[$tpl_file] = array();
+						$content = file_get_contents(_PS_MAIL_DIR_.$mail_lang_dir.'/'.$tpl_file);
+						if ($lang == $mail_lang_dir)
+						{
+							if (Tools::strlen($content) === 0)
+								$mailTplsEmpty++;
+							$mailTpls[$tpl_file][$mail_lang_dir] = $content;
+							$subjectMailContent = self::getSubjectMailContent(_PS_MAIL_DIR_.$mail_lang_dir);
+						}
+					}
+		foreach (scandir(_PS_MODULE_DIR_) as $module_dir)
+			if ($module_dir != '.svn' && $module_dir != '.' && $module_dir != '..' && file_exists(_PS_MODULE_DIR_.$module_dir.'/mails'))
+				foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails') as $mail_lang_dir)
+				{
+					if (in_array($mail_lang_dir, $langIds))
+					{
+						foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/'.$mail_lang_dir) as $tpl_file)
+						{
+							if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
+							{
+								if (!isset($moduleMailTpls[$module_dir][$tpl_file]))
+									$moduleMailTpls[$module_dir][$tpl_file] = array();
+								$content = file_get_contents(_PS_MODULE_DIR_.$module_dir.'/mails/'.$mail_lang_dir.'/'.$tpl_file);
+								if ($lang == $mail_lang_dir)
+								{
+									if (Tools::strlen($content) === 0)
+										$moduleMailTplsEmpty++;
+									$moduleMailTpls[$module_dir][$tpl_file][$mail_lang_dir] = $content;
+									$subjectModuleMailContent = self::getSubjectMailContent(_PS_MAIL_DIR_.$mail_lang_dir);
+								}
+							}
+						}
+						if ($mail_lang_dir == $lang)
+						{
+							foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/en') as $tpl_file)
+							{
+								if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
+								{
+									if (!isset($moduleMailTpls[$module_dir][$tpl_file]))
+									{
+										$moduleMailTpls[$module_dir][$tpl_file] = array();
+									}
+									if (!isset($moduleMailTpls[$module_dir][$tpl_file][$mail_lang_dir]))
+									{
+										$moduleMailTpls[$module_dir][$tpl_file][$mail_lang_dir] = '';
+									}
+								}
+							}
+						}
+					}
+				}
+		foreach (scandir(_PS_ALL_THEMES_DIR_) as $theme_dir)
+		{
+			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails'))
+			{
+				if (in_array($mail_lang_dir, $langIds))
+					foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir) as $tpl_file)
+						if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
+						{
+							if (!isset($themeMailTpls[$tpl_file]))
+								$themeMailTpls[$theme_dir][$tpl_file] = array();
+							$content = file_get_contents(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir.'/'.$tpl_file);
+							if ($lang == $mail_lang_dir)
+							{
+								if (Tools::strlen($content) === 0)
+									$themeMailTplsEmpty++;
+								$themeMailTpls[$theme_dir][$tpl_file][$mail_lang_dir] = $content;
+								$subjectThemeMailContent[$theme_dir] = self::getSubjectMailContent(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir);
+							}
+						}
+			}
+			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules'))
+			{
+				foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules') as $theme_name_module)
+					if ($theme_name_module != '.svn' && $theme_name_module != '.' && $theme_name_module != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails'))
+						if (in_array($mail_lang_dir, $langIds))
+							foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails/'.$mail_lang_dir) as $tpl_file)
+								if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
+								{
+									if (!isset($themeModuleMailTpls[$tpl_file]))
+										$themeModuleMailTpls[$theme_dir][$theme_name_module][$tpl_file] = array();
+									$content = file_get_contents(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails/'.$mail_lang_dir.'/'.$tpl_file);
+									if ($lang == $mail_lang_dir)
+									{
+										if (Tools::strlen($content) === 0)
+											$themeModuleMailTplsEmpty++;
+										$themeModuleMailTpls[$theme_dir][$theme_name_module][$tpl_file][$mail_lang_dir] = $content;
+										$subjectThemeModuleMailContent[$theme_dir][$theme_name_module] = self::getSubjectMailContent(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir);
+									}
+								}
+			}
+		}
+		// get mail subjects
+		$subjectMail = array();
+		$subjectMail = self::getSubjectMail(_PS_ROOT_DIR_, $subjectMail);
+		// end get mail subjects
+
+		if ($noDisplay)
+		{
+			$empty = 0;
+			foreach ($mailTpls as $key => $tpl_file)
+			{
+				if (Tools::strlen($tpl_file[$lang]) == 0)
+					$empty++;
+			}
+
+			foreach ($moduleMailTpls as $key => $tpl_file)
+				foreach ($tpl_file AS $key2 => $tpl_file2)
+				{
+					if (Tools::strlen($tpl_file[$key2][$lang]) == 0)
+						$empty++;
+				}
+
+			return array('total' => count($mailTpls)+count($moduleMailTpls,COUNT_RECURSIVE), 'empty' => $empty);
+		}
+
+		// TinyMCE
+		$iso = Language::getIsoById(intval($cookie->id_lang));
+		echo '
+		<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
+		<script type="text/javascript">
+		function tinyMCEInit(element)
+		{
+			$().ready(function() {
+				$(element).tinymce({
+					// Location of TinyMCE script
+					script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
+					// General options
+					theme : "advanced",
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
+					theme_advanced_toolbar_location : "top",
+					theme_advanced_toolbar_align : "left",
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : true,
+					document_base_url : "'.__PS_BASE_URI__.'",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js",
+					elements : "nourlconvert",
+					convert_urls : false,
+					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
+				});
+			});
+		}
+		</script>
+		';
+		$mylang = new Language(Language::getIdByIso($lang));
+			echo '<!--'.$this->l('Language').'-->';
+		echo '
+		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>'.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
+
+		// display form
+		echo '
+		<form method="post" action="'.$currentIndex.'&token='.$this->token.'" class="form">';
+		$this->displayToggleButton();
+		echo '<input type="submit" name="submitTranslationsMails" value="'.$this->l('Update translations').'" class="button" /><br/><br/>';
+
+		//count nb core emails
+		$nbr = 0;
+		foreach ($mailTpls as $mailTplName => $mailTpl)
+			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
+			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
+				$nbr++;
+
+		echo'<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\'core\')">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="core">';
+
+		//core emails
+		foreach ($mailTpls as $mailTplName => $mailTpl)
+		{
+			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
+			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
+			{
+				echo '<div style="clear:both;"><br/><label>'.$mailTplName.'</label><br/><br/>';
+				echo '<div class="mail-form">';
+				if (strripos($mailTplName, '.html'))
+				{
+					echo '<br/><br/>
+
+					<div class="mail-label">
+					<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
+					<table>
+						<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($mailTplName, 0, -5)].'&nbsp=&nbsp</label></td>
+						<td style="width: 100%;"><input type="text" name="subject[mails]['.$subjectMail[substr($mailTplName, 0, -5)].']" value="'.(isset($subjectMailContent[$subjectMail[substr($mailTplName, 0, -5)]]) ? $subjectMailContent[$subjectMail[substr($mailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
+					</table></div>';
+
+					echo '<br/><br/><div><iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>
+					<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+					<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
+				}
+				else
+					echo '<br/><div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8').'</textarea></div><br/>';
+
+				echo '</div></div>';
+			}
+		}
+		echo '</div></fieldset>';
+
+		// module mails
+		echo '<br/><div id="modules">';
+		foreach ($moduleMailTpls as $key33 => $moduleMailTpls2)
+		{
+			echo '<fieldset><br/>
+			<legend style="cursor : pointer" onclick="openCloseLayer(\''.$key33.'\')">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="'.$key33.'">';
+			foreach ($moduleMailTpls2 as $mailTplName => $mailTpl)
+			{
+				if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
+				OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
+				{
+					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
+					if (strlen($mailTplName) > 30)
+						echo '<br/>';
+					if (strripos($mailTplName, '.html'))
+					{
+						echo '<br/><br/>
+
+						<div class="mail-label" style="margin-bottom:0;">
+						<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
+						<table>
+							<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($mailTplName, 0, -5)].'&nbsp=&nbsp</label></td>
+							<td style="width: 100%;"><input type="text" name="subject[mails]['.$subjectMail[substr($mailTplName, 0, -5)].']" value="'.(isset($subjectModuleMailContent[$subjectMail[substr($mailTplName, 0, -5)]]) ? $subjectModuleMailContent[$subjectMail[substr($mailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
+						</table></div>
+						<br/><div>';
+
+						if (file_exists(_PS_MODULE_DIR_.$key33.'/mails/'.$lang.'/'.$mailTplName))
+							echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'modules/'.$key33.'/mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
+						else
+							echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
+
+						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
+					}
+					else
+						echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']" style="width:560px;margin=0;">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+					echo '</div></div>';
+				}
+				else
+				{
+					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
+					echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
+				}
+			}
+			echo '</div></fieldset><br />';
+		}
+		echo '</div><br />';
+
+		// mail theme
+		foreach (scandir(_PS_ALL_THEMES_DIR_) as $theme_dir)
+		{
+			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir))
+			{
+				// count nb mail in mailtheme
+				$nb = 0;
+				foreach ($themeMailTpls[$theme_dir] as $key2 => $tab)
+					if ((strripos($key2, '.html') AND isset($subjectMail[substr($key2, 0, -5)]))
+					OR (strripos($key2, '.txt') AND isset($subjectMail[substr($key2, 0, -4)])))
+						$nb++;
+
+				echo '<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_dir.'\')">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</legend><div name="mails_div" id="'.$theme_dir.'">';
+
+				// core mail theme
+				foreach ($themeMailTpls[$theme_dir] as $themeMailTplName => $themeMailTpl)
+				{
+					if ((strripos($themeMailTplName, '.html') AND isset($subjectMail[substr($themeMailTplName, 0, -5)]))
+					OR (strripos($themeMailTplName, '.txt') AND isset($subjectMail[substr($themeMailTplName, 0, -4)])))
+					{
+						echo '<br/><div style="clear:both;"><label>'.$themeMailTplName.'</label><div class="mail-form">';
+
+						if (strripos($themeMailTplName, '.html'))
+						{
+							echo '<br/><br/>
+
+							<div class="mail-label">
+							<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
+							<table>
+							<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($themeMailTplName, 0, -5)].' =&nbsp</label></td>
+							<td style="width: 100%;"><input type="text" name="subject[themes]['.$theme_dir.']['.$subjectMail[substr($themeMailTplName, 0, -5)].']" value="'.(isset($subjectThemeMailContent[$theme_dir][$subjectMail[substr($themeMailTplName, 0, -5)]]) ? $subjectThemeMailContent[$theme_dir][$subjectMail[substr($themeMailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
+							</table></div>
+
+							<br /><br /><div>';
+
+							if (file_exists(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$lang.'/'.$themeMailTplName))
+								echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'themes/'.$theme_dir.'/mails/'.$lang.'/'.$themeMailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
+							else
+								echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
+
+							echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); 	tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+							<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][html]['.$themeMailTplName.']">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
+						}
+						else
+							echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeMailTplName.']" style="width:560px;margin=0;">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+						echo '</div></div><br/>';
+					}
+				}
+
+				// module mail theme
+				echo '<span class="style-themeModuleMail"
+				onclick="openCloseLayer(\'div'.$theme_dir.'\')">Modules - <font color="blue">'.count($themeModuleMailTpls[$theme_dir]).'</font> templates for '.$mylang->name.' :</span>';
+
+				echo '<div style="margin: 0;
+				padding: 1em;
+				border: 1px solid #DFD5C3;
+				background: #FFFFF0;"
+				id="div'.$theme_dir.'">
+				<br/>';
+
+				foreach ($themeModuleMailTpls[$theme_dir] as $themeModuleName => $themeModule)
+				{
+					echo '<span class="style-themeModuleName"
+					onclick="openCloseLayer(\''.$theme_dir.$themeModuleName.'\')">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
+					echo '<div style="margin: 0;
+					padding: 1em;
+					border: 1px solid #DFD5C3;
+					background: #FFFFF0;"
+					id="'.$theme_dir.$themeModuleName.'">';
+					foreach ($themeModule as $themeModuleMailTplName => $themeModuleMailTpl)
+					{
+						if ((strripos($themeModuleMailTplName, '.html') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -5)]))
+						OR (strripos($themeModuleMailTplName, '.txt') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -4)])))
+						{
+							echo '<div style="clear:both;"><label>'.$themeModuleMailTplName.'</label><div class="mail-form" style="margin-top:0;">';
+							if (strripos($themeModuleMailTplName, '.html'))
+							{
+								echo '<br/><br/>
+								<div class="mail-label" style="margin-left:-20px;">
+								<div class="label-subject" style="margin-left:-30px;">'.$this->l('Subject').' :&nbsp</div>
+								<table>
+								<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($themeModuleMailTplName, 0, -5)].' =&nbsp</label></td>
+								<td style="width: 100%;"><input type="text" name="subject[themes]['.$theme_dir.']['.$subjectMail[substr($themeModuleMailTplName, 0, -5)].']" value="'.(isset($subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subjectMail[substr($themeModuleMailTplName, 0, -5)]]) ? $subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subjectMail[substr($themeModuleMailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
+								</table></div>
+								<br /><br /><div>';
+
+								if (file_exists(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$themeModuleName.'/mails/'.$lang.'/'.$themeModuleMailTplName))
+									echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'themes/'.$theme_dir.'/modules/'.$themeModuleName.'/mails/'.$lang.'/'.$themeModuleMailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
+								else
+									echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
+
+								echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+								<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes_module]['.$theme_dir.']['.$themeModuleName.'][html]['.$themeModuleMailTplName.']">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
+							}
+							else
+								echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeModuleMailTplName.']" style="width:560px;margin=0;">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+							echo '</div></div><br/>';
+						}
+					}
+					echo '</div>';
+				}
+				echo '</div></div></fieldset><br/>';
+			}
+		}
+		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsMails" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+		echo '</form>';
+	}
+
+	private function getSubjectMail($directory, $subjectMail)
+	{
+		foreach (scandir($directory) as $filename)
+		{
+			if (strripos($filename, '.php') > 0 AND $filename != 'AdminTranslations.php')
+			{
+				$content = file_get_contents($directory.'/'.$filename);
+				$content = str_replace("\n", " ", $content);
+				if (preg_match_all('/Mail::Send([^;]*);/s', $content, $tab))
+				{
+					for ($i = 0 ; isset($tab[1][$i]) ; $i++)
+					{
+					$tab2 = explode(',', $tab[1][$i]);
+					$tab2[1] = trim(str_replace('\'', '', $tab2[1]));
+					if (preg_match('/Mail::l\(\'(.*)\'\)/s', $tab2[2], $tab3))
+						$tab2[2] = $tab3[1];
+					$subjectMail[$tab2[1]] = $tab2[2];
+					}
+				}
+			}
+			if ($filename != '.' AND $filename != '..' AND is_dir(($directory.'/'.$filename)))
+				 $subjectMail = self::getSubjectMail($directory.'/'.$filename, $subjectMail);
+		}
+		return $subjectMail;
+	}
+
+	private function getSubjectMailContent($directory)
+	{
+		$subjectMailContent =  array();
+		if (file_exists($directory.'/lang.php'))
+		if (($content = file_get_contents($directory.'/lang.php')))
+		{
+			$content = str_replace("\n", " ", $content);
+			$content = str_replace("\\'", "\'", $content);
+			preg_match_all('/\$_LANGMAIL\[\'([^\']*)\'\] = \'([^;]*)\';/', $content, $matches);
+			for ($i = 0; isset($matches[1][$i]); $i++)
+			{
+				if (isset($matches[2][$i]))
+					$subjectMailContent[stripslashes($matches[1][$i])] = stripslashes($matches[2][$i]);
+			}
+		}
+		return $subjectMailContent;
+	}
+
+	private function writeSubjectTranslationFile($sub, $path, $mark = false, $fullmark = false)
+	{
+		global $currentIndex;
+
+		if ($fd = fopen($path, 'w'))
+		{
+			//$tab = ($fullmark ? Tools::strtoupper($fullmark) : 'LANG').($mark ? Tools::strtoupper($mark) : '');
+			$tab = 'LANGMAIL';
+			fwrite($fd, "<?php\n\nglobal \$_".$tab.";\n\$_".$tab." = array();\n");
+
+			foreach($sub as $key => $value)
+				fwrite($fd, '$_'.$tab.'[\''.pSQL($key, true).'\'] = \''.pSQL($value, true).'\';'."\n");
+			fwrite($fd, "\n?>");
+			fclose($fd);
+
+		}
+		else
+			die('Cannot write language file');
 	}
 
 	function displayFormModules($lang)

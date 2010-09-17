@@ -171,9 +171,8 @@ class AdminOrders extends AdminTab
 							$order = new Order(intval($message->id_order));
 							if (Validate::isLoadedObject($order))
 							{
-								$title = html_entity_decode($this->l('New message regarding your order').' '.$message->id_order, ENT_NOQUOTES, 'UTF-8');
 								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
-								if (Mail::Send(intval($order->id_lang), 'order_merchant_comment', $title, $varsTpl, $customer->email, $customer->firstname.' '.$customer->lastname))
+								if (Mail::Send(intval($order->id_lang), 'order_merchant_comment', html_entity_decode(Mail::l('New message regarding your order').' '.$message->id_order, ENT_NOQUOTES, 'UTF-8'), $varsTpl, $customer->email, $customer->firstname.' '.$customer->lastname))
 									Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 							}
 						}
@@ -267,7 +266,7 @@ class AdminOrders extends AdminTab
 						else
 						{
 							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $productList, 'qtyList' => $qtyList));
-							@Mail::Send(intval($order->id_lang), 'credit_slip', html_entity_decode($this->l('New credit slip regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send(intval($order->id_lang), 'credit_slip', html_entity_decode(Mail::l('New credit slip regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
 					
@@ -281,7 +280,7 @@ class AdminOrders extends AdminTab
 							$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false, false);
 							$params['{voucher_num}'] = $voucher->name;
-							@Mail::Send(intval($order->id_lang), 'voucher', html_entity_decode($this->l('New voucher regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send(intval($order->id_lang), 'voucher', html_entity_decode(Mail::l('New voucher regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
 				}

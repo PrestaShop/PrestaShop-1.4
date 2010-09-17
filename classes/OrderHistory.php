@@ -156,8 +156,7 @@ class		OrderHistory extends ObjectModel
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);
 				$data = array_merge ($data, $tmpArray);
 				global $_LANGMAIL;
-				$subject = 'Virtual product to download';
-				Mail::Send(intval($order->id_lang), 'download_product', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
+				Mail::Send(intval($order->id_lang), 'download_product', Mail::l('Virtual product to download'), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 			}
 
 			if (Validate::isLoadedObject($order))

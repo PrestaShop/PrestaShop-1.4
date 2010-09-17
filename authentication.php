@@ -127,7 +127,7 @@ if (Tools::isSubmit('submitAccount'))
 						$errors[] = Tools::displayError('an error occurred while creating your address');
 					else
 					{
-						if (!Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
+						if (!Mail::Send(intval($cookie->id_lang), 'account', Mail::l('Welcome!'),
 						array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 							$errors[] = Tools::displayError('cannot send email');
 						$smarty->assign('confirmation', 1);
