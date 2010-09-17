@@ -277,7 +277,7 @@ class AdminCustomers extends AdminTab
 				$orderFoot = '</table>';
 				if ($countOK = sizeof($ordersOK))
 				{
-					echo '<div style="float:left;margin-right:20px"><h3 style="color:green;font-weight:700">Commandes valides : '.$countOK.' pour '.Tools::displayPrice($totalOK, new Currency(1)).'</h3>'.$orderHead;
+					echo '<div style="float:left;margin-right:20px"><h3 style="color:green;font-weight:700">'.$this->l('Valid orders:').' '.$countOK.' '.$this->l('for').' '.Tools::displayPrice($totalOK, new Currency($defaultCurrency)).'</h3>'.$orderHead;
 					foreach ($ordersOK AS $order)
 						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 						<td class="center">'.$order['id_order'].'</td>
@@ -292,7 +292,7 @@ class AdminCustomers extends AdminTab
 				}
 				if ($countKO = sizeof($ordersKO))
 				{
-					echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">Commandes non valides : '.$countKO.'</h3>'.$orderHead;
+					echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">'.$this->l('Invalid orders:').' '.$countKO.'</h3>'.$orderHead;
 					foreach ($ordersKO AS $order)
 						echo '
 						<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
