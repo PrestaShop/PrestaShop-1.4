@@ -302,7 +302,7 @@ class AdminModules extends AdminTab
 		/* Browse modules by tab type */
 		foreach ($orderModule AS $tab => $tabModule)
 		{
-			echo '<br />
+			echo '<a name="modgo_'.$tab.'"><br /></a>
 			<table cellpadding="0" cellspacing="0" class="table width3">
 				<tr>
 					<th colspan="4" class="center" style="cursor: pointer" onclick="openCloseLayer(\''.addslashes($tab).'\');"><b>'.$tab.'</b> - <span style="color: red">'.sizeof($tabModule).'</span> '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</th>
@@ -337,11 +337,11 @@ class AdminModules extends AdminTab
 						'</a>';
 					echo '
 						</td>
-						<td class="center" width="80">'.((!$module->id)
+						<td class="center" width="80"><a name="modgo_'.$module->name.'">'.((!$module->id)
 						? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
-						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'\'" />'
+						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'#modgo_'.$tab.'\'" />'
 						: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-						onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'\';" />').'</td>
+						onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'#modgo_'.$tab.'\';" />').'</a></td>
 						<td style="padding-right: 10px">
 							<input type="checkbox" name="modules" value="'.urlencode($module->name).'" '.(empty($module->confirmUninstall) ? 'rel="false"' : 'rel="'.addslashes($module->confirmUninstall).'"').' />
 						</td>
