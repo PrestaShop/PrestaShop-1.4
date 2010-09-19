@@ -19,6 +19,9 @@ class		Employee extends ObjectModel
 	/** @var string Determine employee profile */
 	public 		$id_profile;
 	
+	/** @var string employee language */
+	public 		$id_lang;
+	
 	/** @var string Lastname */
 	public 		$lastname;
 	
@@ -40,14 +43,17 @@ class		Employee extends ObjectModel
 	/** @var string Display back office background in the specified color */
 	public		$bo_color;
 	
+	/** @var string employee's chosen theme */
+	public		$bo_theme;
+	
 	/** @var boolean Status */
 	public 		$active = 1;
 	
 	
- 	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile');
- 	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32, 'bo_color' => 32);
- 	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 
-		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'bo_color' => 'isColor');
+ 	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile', 'id_lang');
+ 	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32, 'bo_color' => 32, 'bo_theme' => 32);
+ 	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'id_lang' => 'isUnsignedInt', 
+		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'bo_color' => 'isColor', 'bo_theme' => 'isGenericName');
 	
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
@@ -57,6 +63,7 @@ class		Employee extends ObjectModel
 	 	parent::validateFields();
 		
 		$fields['id_profile'] = intval($this->id_profile);
+		$fields['id_lang'] = intval($this->id_lang);
 		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL(Tools::ucfirst($this->firstname));
 		$fields['email'] = pSQL($this->email);
@@ -65,6 +72,7 @@ class		Employee extends ObjectModel
 		$fields['stats_date_from'] = pSQL($this->stats_date_from);
 		$fields['stats_date_to'] = pSQL($this->stats_date_to);
 		$fields['bo_color'] = pSQL($this->bo_color);
+		$fields['bo_theme'] = pSQL($this->bo_theme);
 		$fields['active'] = intval($this->active);
 		
 		return $fields;

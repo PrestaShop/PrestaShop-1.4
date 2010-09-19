@@ -1,18 +1,16 @@
 /* CSS Admin PrestaShop */
+* {font-family: Verdana,Arial,Helvetica,sans-serif}
 
 body {
 	margin: 0;
 	padding: 0;
-	font-family: Verdana,Arial,Helvetica,sans-serif;
 	font-size: 12px;
 	color: #000;
 	text-align: center;
-	background-color: #EFEFEF;
 }
 
-.floatr {
-	float: right;
-}
+.float {float:left}
+.floatr {float:right}
 
 a img {
 	border: 0;
@@ -109,35 +107,6 @@ h3.blue {
 	color: red;
 }
 
-.path_bar {
-	font-family : Trebuchet,Arial,Helvetica,sans-serif;
-	font-size: 13px;
-	padding:5px;
-	border: 1px solid #999999;
-	background-color:#E2EBEE;
-	margin-bottom:20px;
-}
-
-.path_bar a {
-	font-weight:bold;
-}
-
-.cat_bar {
-	font-family : Trebuchet,Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	font-size: 12px;
-	padding:5px;
-	border: 1px solid #999999;
-	background-color:#F4E8CD;
-	margin-bottom:20px;
-}
-
-.cat_bar a {
-	font-weight:bold;
-}
-
-/* FORMS */
-
 form {
 	margin: 0;
 	padding: 0;
@@ -164,26 +133,9 @@ fieldset.width1 .margin-form {
 	margin: 0 0 1em 130px;
 }
 
-fieldset {
-	margin: 0;
-	padding: 1em;
-	border: 1px solid #DFD5C3;
-	background: #FFFFF0;
-	font-size: 1.1em;
-}
-
 fieldset img {
 	padding: 0 4px 0 0;
 	vertical-align: bottom;
-}
-  
-legend {
-	margin: 0;
-	padding: 0.2em 0.5em;
-	border: 1px solid #DFD5C3;
-	background: #FFF6D3;
-	font-weight: bold;
-	text-align: left;
 }
 
 label {
@@ -233,7 +185,6 @@ label:after {
 
 input, textarea, option {
 	color: #000;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
@@ -249,7 +200,6 @@ input[type="text"], input[type="password"], input[type="file"], input[type="radi
 }
 
 select {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 	border: 1px solid #E0D0B1;
 }
 
@@ -306,13 +256,15 @@ select optgroup option {
 
 #main {
 	clear: left;
-	border: 1px solid #999;
-	border-bottom: none;
+	/*border: 1px solid #999;
+	border-bottom: none;*/
 }
 
 #content {
 	padding: 1.25em;
 	background-color: #FFF;
+	border-left:1px solid #999999;
+	border-right:1px solid #999999;
 }
 
 #news {
@@ -377,90 +329,6 @@ select optgroup option {
 #nav img {
 	vertical-align: bottom;
 }
-
-/* MENU */
-
-#menu {
-	float: left;
-	width: 100%;
-	height: 31px;
-	margin: 0;
-	padding: 0;
-	line-height : normal;
-}
-
-#menu li {
-	float: left;
-	list-style: none;
-	margin : 0 -1px 0 0;
-	padding : 0 0 0 5px;
-	background: url(../img/admin/tab_left.gif) no-repeat 0 -110px;
-}
-
-#menu img {
-	display: inline;
-	padding: 0 4px 0 0;
-	vertical-align: text-bottom;
-}
-
-#menu a {
-	float: left;
-	display: block;
-	background: url(../img/admin/tab_right.gif) no-repeat 100% -110px;
-	padding: 10px 10px 5px 3px;
-	font-family: Arial,Helvetica,sans-serif;
-	font-weight: bold;
-	font-size: 0.95em;
-}
-
-#menu li.active, #menu li.active:hover {
-	background-position: 0 0;
-}
-#menu li.active a, #menu li.active:hover a {
-	padding-bottom: 6px;
-	background-position: 100% 0;
-	color: #000;
-	text-decoration: none;
-}
-#menu li:hover {
-	background-position: 0 -220px;
-}
-#menu li:hover a {
-	background-position: 100% -220px;
-	color: #000;
-	text-decoration: none;
-}
-
-/* SUBMENU */
-
-#submenu {
-	clear: left;
-	margin: 0;
-	padding: 0.5em 1em;
-	border-bottom: 1px solid #CCC;
-	background: #ECEADE url(../img/admin/submenu-bg.gif) repeat-x bottom left;
-	color: #666;
-}
-
-#submenu li {
-	display: inline;
-	list-style: none;
-	margin: 0 5pt 0 0;
-}
-
-#submenu img {
-	vertical-align: middle;
-}
-
-#submenu a:hover {
-	color: #000;
-	text-decoration: underline;
-	/*font-weight: bold;*/
-}
-
-/* CONTENT */
-
-/* ERROR */
 
 #content .alert {
 	width: 500px;
@@ -589,45 +457,12 @@ select optgroup option {
 	font-weight: normal;
 }
 
-/* CONTENT - TABLES */
-
-.table {
-	padding: 0;
-	border: 1px solid #DFD5C3;
-}
-
-.table th a {
-	text-decoration: underline;
-}
-
-.table a:hover {
-	text-decoration: none;
-}
-
-.table tr th {
-	padding: 4px 6px;
-	background: #F4E6C9 url(../img/admin/news-bg.gif) repeat-x top left;
-}
-
-
-.table tr td {
-	padding: 0 4px;
-	padding-left: 6px;
-	height: 23px;
-	color: #963;
-	border-bottom: 1px solid #F0EADA;
-	font-size: 0.9em;
-}
-
 .table tr.last td {
 	border-bottom: none;
 }
 
-/* FOOTER */
-
 #footer {
 	height: 40px;
-	/* background: #DDDDDD url(../img/admin/footer-bg.png) repeat-x top left; */
 	background: #ECEADE url("../img/admin/submenu-bg.gif") repeat-x scroll left bottom;
 	border: 1px solid #999999;
 	font-size: 12px;
@@ -725,27 +560,6 @@ tr.deleted td {
 	text-align: right;
 }
 
-.button {
-	border: 1px solid #DFD5AF;
-	border-top: 1px solid #FFF6D3;
-	border-left: 1px solid #FFF6D3;
-	color: #268CCD;
-	background-color: #FFF6D3;
-	padding: 3px;
-}
-
-.button[disabled=disabled] {
-	color: #8C8C8C;
-}
-
-input.button[disabled=disabled]:hover {
-	background-color: #FFF6D3;
-}
-
-.button:hover {
-	background-color: #F0EBD6;
-}
-
 .hidden {
 	height: 1px;
 	border-width: 1px 0 0 0;
@@ -755,6 +569,12 @@ input.button[disabled=disabled]:hover {
 
 .clear {
 	clear: both;
+}
+
+.flatclear {
+	clear: both;
+	height:0px;
+	line-height:0px;
 }
 
 .space {
@@ -795,10 +615,6 @@ input.button[disabled=disabled]:hover {
 
 .row {
 	background: #F4E6C9 url(../img/admin/news-bg.gif) repeat-x top left;
-}
-
-.alt_row {
-	background-color: #FFF6CF;
 }
 
 .noborder {

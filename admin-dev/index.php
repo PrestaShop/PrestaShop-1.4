@@ -11,12 +11,9 @@
   *
   */
 
-define('_PS_ADMIN_DIR_', getcwd());
-define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
-
+define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
-include(PS_ADMIN_DIR.'/toolbar.php');
 include(PS_ADMIN_DIR.'/header.inc.php');
 
 if ($tab)

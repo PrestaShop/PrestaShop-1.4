@@ -76,8 +76,9 @@ class AdminEmployees extends AdminTab
 		$profiles = Profile::getProfiles(intval($cookie->id_lang));
 
 		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data" class="width2">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
+		'.((int)$this->tabAccess['view'] ? '' : '<input type="hidden" name="back" value="'.$currentIndex.'&token='.$this->token.'&updateemployee&id_employee='.(int)$obj->id.'" />').'
 			<fieldset class="width3"><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
@@ -95,12 +96,31 @@ class AdminEmployees extends AdminTab
 				<label>'.$this->l('E-mail address:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-				</div>
+				</div><div class="clear">&nbsp;</div>
 				<label>'.$this->l('Back office color:').' </label>
 				<div class="margin-form">
 					<input type="color" data-hex="true" class="color mColorPickerInput" name="bo_color" value="'.htmlentities($this->getFieldValue($obj, 'bo_color'), ENT_COMPAT, 'UTF-8').'" />
 					<p>'.$this->l('Back office background will be displayed in this color. HTML colors only (e.g.,').' "lightblue", "#CC6600")</p>
-				</div>
+				</div><div class="clear">&nbsp;</div>
+				<label>'.$this->l('Language:').' </label>
+				<div class="margin-form">
+					<select name="id_lang">';
+		foreach (Language::getLanguages() as $lang)
+			echo '		<option value="'.(int)$lang['id_lang'].'" '.($this->getFieldValue($obj, 'id_lang') == $lang['id_lang'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($lang['name']).'</option>';
+		echo '		</select> <sup>*</sup>
+				</div><div class="clear">&nbsp;</div>
+				<label>'.$this->l('Theme:').' </label>
+				<div class="margin-form">
+					<select name="bo_theme">';
+		$path = dirname(__FILE__).'/../themes/';
+		foreach (scandir($path) as $theme)
+			if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
+				echo '	<option value="'.Tools::htmlentitiesUTF8($theme).'" '.($this->getFieldValue($obj, 'bo_theme') == $theme ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($theme).'</option>';
+		echo '		</select> <sup>*</sup>
+				</div>';
+		if ((int)$this->tabAccess['edit'])
+		{
+			echo '<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
@@ -112,16 +132,16 @@ class AdminEmployees extends AdminTab
 				<label>'.$this->l('Profile:').' </label>
 				<div class="margin-form">
 					<select name="id_profile">
-						<option value="">---------</option>';
-						/* Profile display */
+						<option value="">'.$this->l('-- Choose --').'</option>';
 						foreach ($profiles AS $profile)
-						 	echo '
-						<option value="'.$profile['id_profile'].'"'.($profile['id_profile'] === $this->getFieldValue($obj, 'id_profile') ? ' selected="selected"' : '').'>'.$profile['name'].'</option>';
+						 	echo '<option value="'.$profile['id_profile'].'"'.($profile['id_profile'] === $this->getFieldValue($obj, 'id_profile') ? ' selected="selected"' : '').'>'.$profile['name'].'</option>';
 				echo '</select> <sup>*</sup>
-				</div>
-				<div class="margin-form">
+				</div>';
+		}
+		echo '<div class="clear">&nbsp;</div>
+				<div class="floatr">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
-				</div>
+				</div><div class="clear">&nbsp;</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>';
@@ -147,7 +167,8 @@ class AdminEmployees extends AdminTab
 			}
 
 		}
-		elseif (Tools::isSubmit('submitAddemployee')) {
+		elseif (Tools::isSubmit('submitAddemployee'))
+		{
 			if ($cookie->id_employee == Tools::getValue('id_employee') && Tools::getvalue('active') == 0)
 			{
 				$this->_errors[] = Tools::displayError('You can\'t disable your own account.');
@@ -155,6 +176,9 @@ class AdminEmployees extends AdminTab
 			}
 		
 			$employee = new Employee(Tools::getValue('id_employee'));
+			if (!(int)$this->tabAccess['edit'])
+				$_POST['id_profile'] = $_GET['id_profile'] = $employee->id_profile;	
+			
 			if ($employee->isLastAdmin()) 
 			{
 				if  (Tools::getValue('id_profile') != Configuration::get('PS_ADMIN_PROFILE')) 

@@ -1,6 +1,10 @@
 SET NAMES 'utf8';
 
 ALTER TABLE `PREFIX_employee` ADD `bo_color` varchar(32) default NULL AFTER `stats_date_to`;
+ALTER TABLE `PREFIX_employee` ADD `bo_theme` varchar(32) default NULL AFTER `bo_color`;
+ALTER TABLE `PREFIX_employee` ADD `id_lang` int(10) unsigned NOT NULL default 0 AFTER `id_profile`;
+
+UPDATE `PREFIX_employee` SET `id_lang` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` LIKE "PS_LANG_DEFAULT");
 
 ALTER TABLE `PREFIX_customer` ADD `note` text AFTER `secure_key`;
 

@@ -615,6 +615,11 @@ class Tools
 	{
 		return !empty($string) ? self::encrypt($string) : false;
 	}
+	static public function getAdminTokenLite($string)
+	{
+		global $cookie;
+		return Tools::getAdminToken($string.intval(Tab::getIdFromClassName($string)).intval($cookie->id_employee));
+	}
 
 	/**
 	* Get the user's journey
@@ -975,6 +980,15 @@ class Tools
 		if (!isset(self::$file_exists_cache[$filename]))
 			self::$file_exists_cache[$filename] = file_exists($filename);
 		return self::$file_exists_cache[$filename];
+	}
+
+	static public function getBrightness($hex)
+	{
+		$hex = str_replace('#', '', $hex);
+		$c_r = hexdec(substr($hex, 0, 2));
+		$c_g = hexdec(substr($hex, 2, 2));
+		$c_b = hexdec(substr($hex, 4, 2));
+		return (($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
 	}
 }
 

@@ -183,17 +183,19 @@ abstract class AdminTab
 			if ($this->tabAccess['add'] === '1')
 			{
 				$this->displayForm();
-				echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+				if ($this->tabAccess['view'])
+					echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 			}
 			else
 				echo $this->l('You do not have permission to add here');
 		}
 		elseif (isset($_GET['update'.$this->table]))
 		{
-			if ($this->tabAccess['edit'] === '1')
+			if ($this->tabAccess['edit'] === '1' OR ($this->table == 'employee' AND $cookie->id_employee == Tools::getValue('id_employee')))
 			{
 				$this->displayForm();
-				echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+				if ($this->tabAccess['view'])
+					echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 			}
 			else
 				echo $this->l('You do not have permission to edit here');
@@ -523,7 +525,7 @@ abstract class AdminTab
 				/* Object update */
 				if (isset($id) AND !empty($id))
 				{
-					if ($this->tabAccess['edit'] === '1')
+					if ($this->tabAccess['edit'] === '1' OR ($this->table == 'employee' AND $cookie->id_employee == Tools::getValue('id_employee') AND Tools::isSubmit('updateemployee')))
 					{
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
@@ -822,17 +824,19 @@ abstract class AdminTab
 	 */
 	public function displayErrors()
 	{
-		if ($nbErrors = sizeof($this->_errors) AND $this->_includeContainer)
+		if ($nbErrors = count($this->_errors) AND $this->_includeContainer)
 		{
-			echo '<div class="error">
-				<img src="../img/admin/error2.png" />
-				'.$nbErrors.' '.($nbErrors > 1 ? $this->l('errors') : $this->l('error')).'<br />
-				<ol>';
-			foreach ($this->_errors AS $error)
-				echo '<li>'.$error.'</li>';
-			echo '
-				</ol>
-			</div>';
+			echo '<div class="error"><img src="../img/admin/error2.png" />';
+			if (count($this->_errors) == 1)
+				echo $this->_errors[0];
+			else
+			{
+				echo $nbErrors.' '.$this->l('errors').'<br /><ol>';
+				foreach ($this->_errors AS $error)
+					echo '<li>'.$error.'</li>';
+				echo '</ol>';
+			}
+			echo '</div>';
 		}
 		$this->includeSubTab('displayErrors');
 	}

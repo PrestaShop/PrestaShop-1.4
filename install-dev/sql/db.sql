@@ -511,6 +511,7 @@ CREATE TABLE `PREFIX_discount_type_lang` (
 CREATE TABLE `PREFIX_employee` (
   `id_employee` int(10) unsigned NOT NULL auto_increment,
   `id_profile` int(10) unsigned NOT NULL,
+  `id_lang` int(10) unsigned NOT NULL DEFAULT 0,
   `lastname` varchar(32) NOT NULL,
   `firstname` varchar(32) NOT NULL,
   `email` varchar(128) NOT NULL,
@@ -519,6 +520,7 @@ CREATE TABLE `PREFIX_employee` (
   `stats_date_from` date default NULL,
   `stats_date_to` date default NULL,
   `bo_color` varchar(32) default NULL,
+  `bo_theme` varchar(32) default NULL,
   `active` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_employee`),
   KEY `employee_login` (`email`,`passwd`),

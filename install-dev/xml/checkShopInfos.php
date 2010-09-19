@@ -161,7 +161,7 @@ if (isFormValid())
 		$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_SMTP_ENCRYPTION', '".pSQL($_GET['smtpEnc'])."', NOW(), NOW())";
 		$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_SMTP_PORT', '".pSQL($_GET['smtpPort'])."', NOW(), NOW())";
 	}
-	$sqlParams[] = 'INSERT INTO '._DB_PREFIX_.'employee (id_employee, lastname, firstname, email, passwd, last_passwd_gen, active, id_profile) VALUES (NULL, \''.pSQL(ToolsInstall::strtoupper($_GET['infosName'])).'\', \''.pSQL(ToolsInstall::ucfirst($_GET['infosFirstname'])).'\', \''.pSQL($_GET['infosEmail']).'\', \''.md5(pSQL(_COOKIE_KEY_.$_GET['infosPassword'])).'\', \''.date('Y-m-d h:i:s', strtotime('-360 minutes')).'\', 1, 1)';
+	$sqlParams[] = 'INSERT INTO '._DB_PREFIX_.'employee (id_employee, lastname, firstname, email, passwd, last_passwd_gen, active, id_profile, id_lang) VALUES (NULL, \''.pSQL(ToolsInstall::ucfirst($_GET['infosName'])).'\', \''.pSQL(ToolsInstall::ucfirst($_GET['infosFirstname'])).'\', \''.pSQL($_GET['infosEmail']).'\', \''.md5(pSQL(_COOKIE_KEY_.$_GET['infosPassword'])).'\', \''.date('Y-m-d h:i:s', strtotime('-360 minutes')).'\', 1, 1, (SELECT `value` FROM `'._DB_PREFIX_.'configuration` WHERE `name` LIKE "PS_LANG_DEFAULT"))';
 	$sqlParams[] = 'INSERT INTO '._DB_PREFIX_.'contact (id_contact, email) VALUES (NULL, \''.pSQL($_GET['infosEmail']).'\'), (NULL, \''.pSQL($_GET['infosEmail']).'\')';
 
 	if (function_exists('mcrypt_encrypt'))

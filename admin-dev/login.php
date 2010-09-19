@@ -61,8 +61,6 @@ if (Tools::isSubmit('Submit'))
 		{
 		 	/* Creating cookie */
 			$cookie->id_employee = $employee->id;
-			$cookie->lastname = $employee->lastname;
-			$cookie->firstname = $employee->firstname;
 			$cookie->email = $employee->email;
 			$cookie->profile = $employee->id_profile;
 			$cookie->passwd = $employee->passwd;

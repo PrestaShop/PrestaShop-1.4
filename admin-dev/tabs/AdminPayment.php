@@ -199,7 +199,7 @@ class AdminPayment extends AdminTab
 		<table cellpadding="0" cellspacing="0" class="table width3">
 			<tr>
 				<th colspan="4" class="center">
-					<strong><span style="color: red">'.sizeof($this->paymentModules).'</span> '.((sizeof($this->paymentModules) > 1) ? $this->l('payment modules') : $this->l('payment module')).'</strong>
+					<strong>'.sizeof($this->paymentModules).' '.((sizeof($this->paymentModules) > 1) ? $this->l('payment modules') : $this->l('payment module')).'</strong>
 				</th>
 			</tr>';
 		$tokenModules = Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee));

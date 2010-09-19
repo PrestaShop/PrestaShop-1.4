@@ -171,4 +171,52 @@ function translate($string)
 	return str_replace('"', '&quot;', stripslashes($str));
 }
 
+function recursiveTab($id_tab)
+{
+	global $cookie, $tabs;
+	
+	$adminTab = Tab::getTab(intval($cookie->id_lang), $id_tab);
+	$tabs[]= $adminTab;
+	if ($adminTab['id_parent'] > 0)
+		recursiveTab($adminTab['id_parent']);
+}
+
+function checkingTab($tab)
+{
+	global $adminObj, $cookie;
+
+	$tab = trim($tab);
+	if (!Validate::isTabName($tab))
+		return false;
+	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
+		include_once(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php');
+	elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
+		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
+	$id_tab = Tab::getIdFromClassName($tab);
+	if (!class_exists($tab, false) OR !$id_tab)
+	{
+		echo Tools::displayError('Tab does not exist');
+		return false;
+	}
+	$adminObj = new $tab;
+	if (!$adminObj->viewAccess() AND ($adminObj->table != 'employee' OR $cookie->id_employee != Tools::getValue('id_employee') OR !Tools::isSubmit('updateemployee')))
+	{
+		$adminObj->_errors = array(Tools::displayError('access denied'));
+		echo $adminObj->displayErrors();
+		return false;
+	}
+	return ($id_tab);
+}
+
+function checkTabRights($id_tab)
+{
+	global $cookie;
+	static $tabAccesses = NULL;
+	
+	if ($tabAccesses === NULL)
+		$tabAccesses =  Profile::getProfileAccesses($cookie->profile);
+
+	return ($tabAccesses[intval($id_tab)]['view'] === '1');
+}
+
 ?>
