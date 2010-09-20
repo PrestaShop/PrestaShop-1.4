@@ -144,11 +144,16 @@ foreach ($tabs AS $t)
 echo '		</ul>'.$echoLis.'
 			<script type="text/javascript">
 				$("#menu li").hover(function(){
-					$("#submenu").html($("#tab"+parseInt(this.id.substr(7, 3))+"_subtabs").html());
+					var content = $("#tab"+parseInt(this.id.substr(7, 3))+"_subtabs").html();
+					$("#submenu").html(content);
+					if (content.length == 0)
+						$("#submenu").removeClass("withLeftBorder");
+					else
+						$("#submenu").addClass("withLeftBorder");
 					$("#menu li").removeClass("active");
 					$(this).addClass("active");
 				});
 			</script>
-			<ul id="submenu">'.$mainsubtablist.'</ul>
+			<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
 			<div id="main">
 				<div id="content">';
