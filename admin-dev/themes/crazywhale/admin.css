@@ -32,10 +32,10 @@ legend{background:#7A1DB5 url(thead.png) repeat-x top left;border:1px solid #361
 #menu img{display:inline;padding:0 4px;vertical-align:text-bottom}
 #menu li.active{background-position:0 -70px}
 #menu li.active a{color:#000}
-#submenu{background:transparent url(separator_subnav.png) no-repeat 0 5px;border-bottom:1px solid #CCC;clear:both;color:#666;margin:0;padding:5px 1em 0 1em;height:24px;}
-#submenu li{display:inline;list-style:none;margin:0 5pt 0 0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-right:8px;float:left;height:20px;}
+#submenu{background:transparent url(separator_subnav.png) no-repeat 0 5px;border-bottom:1px solid #CCC;clear:both;color:#666;margin:0;height:29px;padding:0;}
+#submenu li{display:inline;list-style:none;margin:0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-left:10px;padding-right:10px;margin-top:5px;float:left;height:20px;}
 #submenu img{vertical-align:middle}
-#submenu li a{text-decoration:underline; font-weight:bold;}
+#submenu li a{text-decoration:underline;}
 #submenu img{vertical-align:middle}
 #menu li{_height:32px;_padding-top:3px;}
 #menu li a{_display:inline;_padding:6px 5px 4px 0}
