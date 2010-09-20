@@ -118,7 +118,7 @@ foreach ($tabs AS $t)
 		if (trim($t['module']) != '')
 			$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
-		echo '<li'.($current ? ' class="active"' : '').' id="'.$t['id_tab'].'maintab">
+		echo '<li class="submenu_size '.($current ? 'active' : '').'" id="maintab'.$t['id_tab'].'">
 			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">
 				<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t['name'].'
 			</a>
@@ -133,7 +133,7 @@ foreach ($tabs AS $t)
 					$img = _MODULE_DIR_.$t2['module'].'/'.$t2['class_name'].'.gif';
 				$echoLi .= '<li>
 					<a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminToken($t2['class_name'].intval($t2['id_tab']).intval($cookie->id_employee)).'">
-						<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t2['name'].'
+						<!--<img src="'.$img.'" alt="" style="width:16px;height:16px" /> -->'.$t2['name'].'
 					</a>
 				</li>';
 			}
