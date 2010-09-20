@@ -2107,6 +2107,7 @@ $_LANGADM['AdminTranslations0c51ba6f28d50bdad074f18dbebe275d'] = 'Traductions me
 $_LANGADM['AdminTranslations282d961c3071465db42647be8f662671'] = 'Traductions nom des champs';
 $_LANGADM['AdminTranslations1db04255ad87f7fe6d5bc91c74982612'] = 'Traductions modules';
 $_LANGADM['AdminTranslations8f2a5434bb1c382919249941c915b5e3'] = 'Traductions fichiers PDF';
+$_LANGADM['AdminTranslationscc424dcda59c8207c1f20b6662bdf344'] = 'Traductions mails';
 $_LANGADM['AdminTranslations2303c057afcbe798a5d9811d36e88050'] = 'Modifier les traductions';
 $_LANGADM['AdminTranslations35743985f3a337ad06f4a2c404c370b3'] = 'Vous pouvez modifier les traductions de chacune des portions de texte de PrestaShop.';
 $_LANGADM['AdminTranslations404b4271ee96d691668bdf528724d337'] = 'Choisissez une section (comme Back Office ou Modules), ensuite cliquez sur la langue que vous souhaitez éditer';

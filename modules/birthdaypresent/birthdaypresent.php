@@ -118,7 +118,7 @@ class BirthdayPresent extends Module
 			$voucher->minimal = Configuration::get('BIRTHDAY_MINIMAL_ORDER');
 			$voucher->active = true;
 			if ($voucher->add())
-				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'birthday', $this->l('Happy birthday!'), array('{firstname}' => $user['firstname'], '{lastname}' => $user['lastname']), $user['email'], NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'birthday', Mail::l('Happy birthday!'), array('{firstname}' => $user['firstname'], '{lastname}' => $user['lastname']), $user['email'], NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			else
 				echo Db::getInstance()->getMsgError();
 		}

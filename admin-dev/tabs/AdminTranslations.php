@@ -139,7 +139,7 @@ class AdminTranslations extends AdminTab
 	public function findAndWriteTranslationsIntoFile($filename, $files, $themeName, $moduleName, $dir = false)
 	{
 		static $_cacheFile = array();
-		
+
 		if (!isset($_cacheFile[$filename]))
 		{
 			$_cacheFile[$filename] = true;
@@ -204,7 +204,7 @@ class AdminTranslations extends AdminTab
 					$content = (filesize($tpl) ? fread($readFd, filesize($tpl)) : '');
 					preg_match_all(substr($templateFile, -4) == '.tpl' ? $tplRegex : $phpRegex, $content, $matches);
 					fclose($readFd);
-	
+
 					/* Write each translation on its module file */
 					$templateName = substr(basename($templateFile), 0, -4);
 					foreach ($matches[1] as $key)
@@ -509,7 +509,7 @@ class AdminTranslations extends AdminTab
 				}
 				/* Search language tags (eg {l s='to translate'}) */
 				if ($themes = scandir(_PS_ALL_THEMES_DIR_))
-				
+
 					foreach ($themes AS $theme)
 						if ($theme{0} != '.' AND is_dir(_PS_ALL_THEMES_DIR_.$theme) AND file_exists(_PS_ALL_THEMES_DIR_.$theme.'/modules/'))
 						{
@@ -661,10 +661,13 @@ class AdminTranslations extends AdminTab
 		return ${$var};
 	}
 
-	function displayToggleButton($closed = false)
+	function displayToggleButton($closed = true)
 	{
 		echo '
 		<script type="text/javascript">
+			$(document).ready(function(){
+				openCloseAllDiv(\''.$_GET['type'].'_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);
+				});
 			var openAll = \''.html_entity_decode($this->l('Expand all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
 			var closeAll = \''.html_entity_decode($this->l('Close all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
 		</script>
@@ -1187,7 +1190,8 @@ class AdminTranslations extends AdminTab
 		// mail theme
 		foreach (scandir(_PS_ALL_THEMES_DIR_) as $theme_dir)
 		{
-			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir))
+			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir)
+				&& isset($themeMailTpls[$theme_dir]))
 			{
 				// count nb mail in mailtheme
 				$nb = 0;
@@ -1304,15 +1308,18 @@ class AdminTranslations extends AdminTab
 				{
 					for ($i = 0 ; isset($tab[1][$i]) ; $i++)
 					{
-					$tab2 = explode(',', $tab[1][$i]);
-					$tab2[1] = trim(str_replace('\'', '', $tab2[1]));
-					if (preg_match('/Mail::l\(\'(.*)\'\)/s', $tab2[2], $tab3))
-						$tab2[2] = $tab3[1];
-					$subjectMail[$tab2[1]] = $tab2[2];
+							$tab2 = explode(',', $tab[1][$i]);
+							if (is_array($tab2))
+							{
+								$tab2[1] = trim(str_replace('\'', '', $tab2[1]));
+								if (preg_match('/Mail::l\(\'(.*)\'\)/s', $tab2[2], $tab3))
+									$tab2[2] = $tab3[1];
+								$subjectMail[$tab2[1]] = $tab2[2];
+							}
 					}
 				}
 			}
-			if ($filename != '.' AND $filename != '..' AND is_dir(($directory.'/'.$filename)))
+			if ($filename != '.svn' AND $filename != '.' AND $filename != '..' AND is_dir(($directory.'/'.$filename)))
 				 $subjectMail = self::getSubjectMail($directory.'/'.$filename, $subjectMail);
 		}
 		return $subjectMail;
@@ -1376,7 +1383,7 @@ class AdminTranslations extends AdminTab
 				{
 					@include_once(_PS_MODULE_DIR_.$module.'/'.$lang.'.php');
 					self::getModuleTranslations();
-					
+
 					$content = scandir(_PS_MODULE_DIR_.$module);
 					foreach ($content as $cont)
 						if ($cont{0} != '.' AND $cont != 'img' AND $cont != 'mails' AND $cont != 'js' AND is_dir(_PS_MODULE_DIR_.$module.'/'.$cont))
@@ -1468,7 +1475,7 @@ class AdminTranslations extends AdminTab
 			$tabsArray[$tab][$key] = stripslashes(key_exists($tab.md5(addslashes($key)), $_LANGPDF) ? html_entity_decode($_LANGPDF[$tab.md5(addslashes($key))], ENT_COMPAT, 'UTF-8') : '');
 		$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
 		$closed = sizeof($_LANGPDF) >= $count;
-		
+
 		echo '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>
 		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
@@ -1524,20 +1531,20 @@ class AdminTranslations extends AdminTab
 		closedir($dir);
 		return isset($themes) ? $themes : array();
 	}
-	
+
 	private function _copyNoneFlag($id)
 	{
 		copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$id.'.jpg');
 	}
-	
+
 	private function _checkAndAddLangage($iso_code)
 	{
 		$result = Db::getInstance()->getValue('
-		SELECT COUNT(`id_lang`) AS total 
-		FROM `'._DB_PREFIX_.'lang` 
+		SELECT COUNT(`id_lang`) AS total
+		FROM `'._DB_PREFIX_.'lang`
 		WHERE `iso_code` = \''.pSQL($iso_code).'\'
 		');
-		
+
 		if ($result)
 			return true;
 		else
@@ -1545,31 +1552,31 @@ class AdminTranslations extends AdminTab
 			if(@fsockopen('www.prestashop.com', 80))
 			{
 				$lang_packs = unserialize(@file_get_contents('http://www.prestashop.com/rss/lang_exists.php'));
-				
+
 				$lang = new Language();
 				$lang->iso_code = $iso_code;
 				$lang->active = true;
-				
+
 				if ($lang_packs)
 				{
 					foreach($lang_packs AS $lang_pack)
 						if ($lang_pack['iso_code'] == $iso_code)
 							$lang->name = $lang_pack['name'];
 				}
-				
+
 				if (!$lang->name)
 					return false;
-				
+
 				if (!$lang->add())
 					return false;
-					
+
 				$insert_id = Db::getInstance()->getValue('
-				SELECT id_lang 
+				SELECT id_lang
 				FROM `'._DB_PREFIX_.'lang`
 				WHERE `iso_code` = \''.pSQL($iso_code).'\'
 				AND `name` = \''.pSQL($lang->name).'\'
 				');
-				
+
 				if ($lang_packs)
 				{
 					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
@@ -1589,15 +1596,15 @@ class AdminTranslations extends AdminTab
 				}
 				else
 					$this->_copyNoneFlag($insert_id);
-				
+
 				$url_to_dir = dirname(__FILE__).'/../../img/l/';
-				
+
 				$files_copy = array(
-					'/en.jpg', 
-					'/en-default-thickbox.jpg', 
-					'/en-default-home.jpg', 
-					'/en-default-large.jpg', 
-					'/en-default-medium.jpg', 
+					'/en.jpg',
+					'/en-default-thickbox.jpg',
+					'/en-default-home.jpg',
+					'/en-default-large.jpg',
+					'/en-default-medium.jpg',
 					'/en-default-small.jpg',
 					'/en-default-large_scene.jpg'
 				);
@@ -1607,7 +1614,7 @@ class AdminTranslations extends AdminTab
 					dirname(__FILE__).'/../../img/p',
 					dirname(__FILE__).'/../../img/su'
 				);
-				
+
 				foreach($tos AS $to)
 				{
 					foreach($files_copy AS $file)
@@ -1616,7 +1623,7 @@ class AdminTranslations extends AdminTab
 						copy($url_to_dir.$file, $to.$name);
 					}
 				}
-				
+
 				return true;
 			}
 			else

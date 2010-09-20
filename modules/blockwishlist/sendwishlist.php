@@ -25,7 +25,7 @@ if ($cookie->isLogged())
 		$toName = strval(Configuration::get('PS_SHOP_NAME'));
 		$customer = new Customer(intval($cookie->id_customer));
 		if (Validate::isLoadedObject($customer))
-			Mail::Send(intval($cookie->id_lang), 'wishlist', 'Message from '.$customer->lastname.' '.$customer->firstname, 
+			Mail::Send(intval($cookie->id_lang), 'wishlist', Mail::l('Message from ').$customer->lastname.' '.$customer->firstname,
 			array(
 			'{lastname}' => $customer->lastname, 
 			'{firstname}' => $customer->firstname, 

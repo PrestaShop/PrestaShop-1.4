@@ -126,7 +126,7 @@ class PaypalAPI extends PaymentModule
 		$smarty->assign('logs', $log);
 		$data = array('{logs}' => implode("<br />", $log));
 		if ($send)
-			Mail::Send(intval($cookie->id_lang), 'error_reporting', 'Error reporting from your PayPalAPI module', $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
+			Mail::Send(intval($cookie->id_lang), 'error_reporting', Mail::l('Error reporting from your PayPalAPI module'), $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
 		echo $this->display(__FILE__, 'error.tpl');
 		include_once(dirname(__FILE__).'/../../footer.php');
 		die ;

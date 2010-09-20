@@ -38,7 +38,7 @@ if ($cookie->isLogged())
 				srand($s * $us);
 				$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
 				$wishlist->add();
-				Mail::Send(intval($cookie->id_lang), 'wishlink', 'Your wishlist\'s link', 
+				Mail::Send(intval($cookie->id_lang), 'wishlink', Mail::l('Your wishlist\'s link'), 
 					array(
 					'{wishlist}' => $wishlist->name,
 					'{message}' => 'http://'.htmlentities($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist->token),

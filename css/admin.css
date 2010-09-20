@@ -123,6 +123,55 @@ form sup {
 	vertical-align: text-top;
 }
 
+.mail-form {
+	margin-top:-20px;
+	padding-left:200px;
+	width:auto;
+	color: #7F7F7F;
+	font-size: 0.85em;
+}
+
+.mail-form label {
+	width:auto;
+	text-align:right;
+}
+
+.label-subject {
+	padding-top:5px;
+	margin:0 0 0 0;
+	text-align:left;
+	float:left;
+}
+.mail-label {
+	margin:0 0 -20px -50px;
+}
+
+.mail-label table {
+	width:555px;
+}
+
+.style-themeModuleMail {
+	margin: 0;
+	padding: 0.2em 0.5em;
+	border: 1px solid #DFD5C3;
+	background: #FFF6D3;
+	font-weight: bold;
+	text-align: left;
+	cursor : pointer;
+	font-size: 12px;
+}
+
+.style-themeModuleName {
+	margin: 0;
+	padding: 0.2em 0.5em;
+	border: 1px solid #DFD5C3;
+	background: #FFF6D3;
+	font-weight: bold;
+	text-align: left;
+	cursor : pointer;
+	font-size: 12px;
+}
+
 .margin-form {
 	padding: 0 0 1em 190px;
 	color: #7F7F7F;

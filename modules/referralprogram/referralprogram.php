@@ -469,8 +469,8 @@ class ReferralProgram extends Module
 								'{lastname}' => $newCustomer->lastname,
 								'{voucher_num}' => $discount->name,
 								'{voucher_amount}' => Tools::displayPrice(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.intval($cookie->id_currency))), intval(Configuration::get('PS_CURRENCY_DEFAULT'))));
-							
-							Mail::Send(intval($cookie->id_lang), 'referralprogram-voucher', $this->l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+
+							Mail::Send(intval($cookie->id_lang), 'referralprogram-voucher', Mail::l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						}
 					}
 					return true;
@@ -601,7 +601,7 @@ class ReferralProgram extends Module
 				'{discount_display}' => $discount_display,
 				'{discount_name}' => $discount->name
 			);
-			Mail::Send(intval($order->id_lang), 'referralprogram-congratulations', $this->l('Congratulations!'), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			Mail::Send(intval($order->id_lang), 'referralprogram-congratulations', Mail::l('Congratulations!'), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			return true;
 		}
 		return false;
