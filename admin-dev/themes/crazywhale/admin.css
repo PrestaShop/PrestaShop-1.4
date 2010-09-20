@@ -26,16 +26,16 @@ input.button[disabled=disabled]:hover{background-color:#FFF6D3}
 .cat_bar a{font-weight:700}
 fieldset{background:#FFF;border:1px solid #8E8E8E;font-size:1.1em;margin:0;padding:1em}
 legend{background:#7A1DB5 url(thead.png) repeat-x top left;border:1px solid #36144A;font-weight:700;margin:0;padding:.2em .5em;text-align:left;color:#FFFFFF}
-#menu{float:left;height:35px;line-height:normal;margin:13px 0 0;*margin:8px 0 0;padding:0;width:100%}
+#menu{float:left;height:35px;line-height:normal;margin:12px 0 0;*margin:9px 0 0;padding:0;width:100%}
 #menu li{background:url(bg-tab.png) repeat-x 0 -35px;float:left;height:35px;list-style:none;margin:0 1px 0 0;}
 #menu li a{color:#FFF;display:block;height:35px;padding:6px 8px 4px 0}
 #menu img{display:inline;padding:0 4px;vertical-align:text-bottom}
 #menu li.active{background-position:0 -70px}
 #menu li.active a{color:#000}
-#submenu{background:#E8E8E8 url(bg-subtab.png) repeat-x bottom left;border-bottom:1px solid #CCC;clear:both;color:#666;margin:0;padding:5px 1em 0 1em;height:24px;}
-#submenu li{display:inline;list-style:none;margin:0 5pt 0 0}
+#submenu{background:transparent url(separator_subnav.png) no-repeat 0 5px;border-bottom:1px solid #CCC;clear:both;color:#666;margin:0;padding:5px 1em 0 1em;height:24px;}
+#submenu li{display:inline;list-style:none;margin:0 5pt 0 0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-right:8px;float:left;height:20px;}
 #submenu img{vertical-align:middle}
-#submenu li{display:inline;list-style:none;margin:0 5pt 0 0}
+#submenu li a{text-decoration:underline; font-weight:bold;}
 #submenu img{vertical-align:middle}
 #menu li{_height:32px;_padding-top:3px;}
 #menu li a{_display:inline;_padding:6px 5px 4px 0}
