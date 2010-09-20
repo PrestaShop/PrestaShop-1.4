@@ -109,34 +109,39 @@ if (empty($tab))
 
 $id_parent_tab_current = intval(Tab::getCurrentParentId());
 $tabs = Tab::getTabs(intval($cookie->id_lang), 0);
+$echoLis = '';
+$mainsubtablist = '';
 foreach ($tabs AS $t)
 	if (checkTabRights($t['id_tab']) === true)
 	{
 		$img = _PS_IMG_.'t/'.$t['class_name'].'.gif';
 		if (trim($t['module']) != '')
 			$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
-		echo '<li'.((($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab'])) ? ' class="active"' : '').' id="'.$t['id_tab'].'maintab">
+		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
+		echo '<li'.($current ? ' class="active"' : '').' id="'.$t['id_tab'].'maintab">
 			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">
 				<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t['name'].'
 			</a>
-		</li>
-		<div id="tab'.intval($t['id_tab']).'_subtabs" '.((($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab'])) ? 'class="mainsubtablist"' : '').' style="display:none">';
+		</li>';
+		$echoLi = '';
 		$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($t['id_tab']));
-		foreach ($subTabs AS $t)
-			if (checkTabRights($t['id_tab']) === true)
+		foreach ($subTabs AS $t2)
+			if (checkTabRights($t2['id_tab']) === true)
 			{
-				$img = _PS_IMG_.'t/'.$t['class_name'].'.gif';
-				if (trim($t['module']) != '')
-					$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
-				echo '<li>
-					<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">
-						<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t['name'].'
+				$img = _PS_IMG_.'t/'.$t2['class_name'].'.gif';
+				if (trim($t2['module']) != '')
+					$img = _MODULE_DIR_.$t2['module'].'/'.$t2['class_name'].'.gif';
+				$echoLi .= '<li>
+					<a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminToken($t2['class_name'].intval($t2['id_tab']).intval($cookie->id_employee)).'">
+						<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t2['name'].'
 					</a>
 				</li>';
 			}
-		echo '</div>';
+		if ($current)
+			$mainsubtablist = $echoLi;
+		$echoLis .= '<div id="tab'.intval($t['id_tab']).'_subtabs" style="display:none">'.$echoLi.'</div>';
 	}
-echo '		</ul>
+echo '		</ul>'.$echoLis.'
 			<script type="text/javascript">
 				$("#menu li").hover(function(){
 					$("#submenu").html($("#tab"+parseInt(this.id)+"_subtabs").html());
@@ -144,10 +149,6 @@ echo '		</ul>
 					$(this).addClass("active");
 				});
 			</script>
-			<ul id="submenu">
-				<script type="text/javascript">
-					$("#submenu").html($("div.mainsubtablist").html());
-				</script>
-			</ul>
+			<ul id="submenu">'.$mainsubtablist.'</ul>
 			<div id="main">
 				<div id="content">';

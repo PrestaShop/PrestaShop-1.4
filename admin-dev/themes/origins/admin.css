@@ -18,7 +18,7 @@ input.button[disabled=disabled]:hover{background-color:#FFF6D3}
 .table th a{text-decoration:underline}
 .table a:hover{text-decoration:none}
 .table tr th{background:#F4E6C9 url(news-bg.gif) repeat-x top left;padding:4px 6px}
-.table tr td{border-bottom:1px solid #F0EADA;color:#963;font-size:.9em;height:23px;padding:0 4px 0 6px}
+.table tr td{border-bottom:1px solid #DEDEDE;color:#963;font-size:.9em;height:23px;padding:0 4px 0 6px}
 .table tr.last td{border-bottom:none}
 .alt_row{background-color:#EFEFEF}
 .path_bar{background-color:#E2EBEE;border:1px solid #999;font-family:Trebuchet,Arial,Helvetica,sans-serif;font-size:13px;margin-bottom:20px;padding:5px}
