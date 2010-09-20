@@ -144,7 +144,7 @@ foreach ($tabs AS $t)
 echo '		</ul>'.$echoLis.'
 			<script type="text/javascript">
 				$("#menu li").hover(function(){
-					$("#submenu").html($("#tab"+parseInt(this.id)+"_subtabs").html());
+					$("#submenu").html($("#tab"+parseInt(this.id.substr(7, 3))+"_subtabs").html());
 					$("#menu li").removeClass("active");
 					$(this).addClass("active");
 				});
