@@ -21,13 +21,15 @@ class		Contact extends ObjectModel
 	
 	/** @var string e-mail */
 	public 		$email;
-	
+
 	/** @var string Detailed description */
 	public 		$description;
 	
- 	protected 	$fieldsRequired = array('email');
+	public 		$customer_service;
+	
+ 	protected 	$fieldsRequired = array();
  	protected 	$fieldsSize = array('email' => 128);
- 	protected 	$fieldsValidate = array('email' => 'isEmail');
+ 	protected 	$fieldsValidate = array('email' => 'isEmail', 'customer_service' => 'isBool');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 32);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName', 'description' => 'isCleanHtml');
@@ -39,6 +41,7 @@ class		Contact extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['email'] = pSQL($this->email);
+		$fields['customer_service'] = intval($this->customer_service);
 		return $fields;
 	}
 	

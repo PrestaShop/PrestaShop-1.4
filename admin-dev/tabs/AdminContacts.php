@@ -53,12 +53,20 @@ class AdminContacts extends AdminTab
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'name');
 		echo '		<p style="clear: both">'.$this->l('Contact name, e.g., Technical Support').'</p>
 				</div>
-				<label>'.$this->l('E-mail address:').' </label>
+				<label>'.$this->l('E-mail address:').'</label>
 				<div class="margin-form">
-					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" />
 					<p style="clear: both">'.$this->l('E-mails will be sent to this address').'</p>
 				</div>
-				<label>'.$this->l('Description:').' </label>
+				<label>'.$this->l('Save in Customer Service?').'</label>
+				<div class="margin-form">
+					<input type="radio" name="customer_service" id="customer_service_on" value="1" '.($this->getFieldValue($obj, 'customer_service') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="customer_service_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="customer_service" id="customer_service_off" value="0" '.(!$this->getFieldValue($obj, 'customer_service') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="customer_service_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+					<p>'.$this->l('The messages will be saved in the Customer Service tab').'</p>
+				</div><div class="clear">&nbsp;</div>
+				<label>'.$this->l('Description:').'</label>
 				<div class="margin-form">';
 				foreach ($this->_languages as $language)
 					echo '

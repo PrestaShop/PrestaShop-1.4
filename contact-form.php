@@ -12,7 +12,6 @@ $smarty->assign('contacts', Contact::getContacts(intval($cookie->id_lang)));
 if (Tools::isSubmit('submitMessage'))
 {
 	$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
-
 	if (!($from = Tools::getValue('from')) OR !Validate::isEmail($from))
         $errors[] = Tools::displayError('invalid e-mail address');
     elseif (!($message = nl2br2($message)))
@@ -25,10 +24,75 @@ if (Tools::isSubmit('submitMessage'))
     {
 		if (intval($cookie->id_customer))
 			$customer = new Customer(intval($cookie->id_customer));
-		if (Mail::Send(intval($cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from)))
-			$smarty->assign('confirmation', 1);
 		else
-			$errors[] = Tools::displayError('an error occurred while sending message');
+		{
+			$customer = new Customer();
+			$customer->getByEmail($from);
+		}
+		
+		$contact = new Contact($id_contact, $cookie->id_lang);
+		if (!empty($contact->email))
+		{
+			if (Mail::Send(intval($cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from)))
+				$smarty->assign('confirmation', 1);
+			else
+				$errors[] = Tools::displayError('an error occurred while sending message');
+		}
+		
+		if ($contact->customer_service)
+		{
+			if ((
+					$id_customer_thread = (int)Tools::getValue('id_customer_thread')
+					AND (int)Db::getInstance()->getValue('
+					SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
+					WHERE cm.id_customer_thread = '.(int)$id_customer_thread.' AND token = \''.pSQL(Tools::getValue('token')).'\'')
+				) OR (
+					$id_customer_thread = (int)Db::getInstance()->getValue('
+					SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
+					WHERE cm.email = \''.pSQL(Tools::getValue('from')).'\'
+					')
+				))
+			{
+				$ct = new CustomerThread($id_customer_thread);
+				$ct->status = 'open';
+				$ct->id_lang = (int)$cookie->id_lang;
+				$ct->id_contact = intval($id_contact);
+				if ($id_order = (int)Tools::getValue('id_order'))
+					$ct->id_order = $id_order;
+				$ct->update();
+			}
+			else
+			{
+				$ct = new CustomerThread();
+				if (isset($customer->id))
+					$ct->id_customer = intval($customer->id);
+				if ($id_order = (int)Tools::getValue('id_order'))
+					$ct->id_order = $id_order;
+				$ct->id_contact = intval($id_contact);
+				$ct->id_lang = (int)$cookie->id_lang;
+				$ct->email = Tools::getValue('from');
+				$ct->status = 'open';
+				$ct->token = Tools::passwdGen(12);
+				$ct->add();
+			}
+			
+			if ($ct->id)
+			{
+				$cm = new CustomerMessage();
+				$cm->id_customer_thread = $ct->id;
+				$cm->message = htmlentities($message, ENT_COMPAT, 'UTF-8');
+				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
+				$cm->user_agent = $_SERVER['HTTP_USER_AGENT'];
+				if ($cm->add())
+					$smarty->assign('confirmation', 1);
+				else
+					$errors[] = Tools::displayError('an error occurred while sending message');
+			}
+			else
+				$errors[] = Tools::displayError('an error occurred while sending message');
+		}
+		if (count($errors) > 1)
+			array_unique($errors);
     }
 }
 
@@ -37,6 +101,17 @@ $smarty->assign(array(
 	'errors' => $errors,
 	'email' => $email
 ));
+
+
+if ($id_customer_thread = (int)Tools::getValue('id_customer_thread') AND $token = Tools::getValue('token'))
+{
+	$customerThread = Db::getInstance()->getRow('
+	SELECT cm.* FROM '._DB_PREFIX_.'customer_thread cm
+	WHERE cm.id_customer_thread = '.(int)$id_customer_thread.' AND token = \''.pSQL($token).'\'');
+	$smarty->assign('customerThread', $customerThread);
+}
+
+$_POST = array_merge($_POST, $_GET);
 
 $smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
 include(dirname(__FILE__).'/footer.php');

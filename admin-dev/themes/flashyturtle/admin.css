@@ -1,5 +1,5 @@
 #top_container{background:url(bg-top.png) repeat-x 0 -60px;margin:0;padding:0}
-#header_infos{color:#FFF;float:left;font-size:10px;margin:10px 20px 4px 0;width:360px}
+#header_infos{color:#FFF;float:left;font-size:10px;margin:10px 20px 4px 0;width:360px;height:43px}
 #header_infos #header_shopname{color:#FFF;font-size:24px;font-weight:700}
 #header_infos #header_logout{color:#FFF;text-decoration:underline}
 #header_search{background:url(searchbar.png) no-repeat;float:right;height:39px;width:356px}

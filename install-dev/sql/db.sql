@@ -307,6 +307,7 @@ CREATE TABLE `PREFIX_connections_source` (
 CREATE TABLE `PREFIX_contact` (
   `id_contact` int(10) unsigned NOT NULL auto_increment,
   `email` varchar(128) NOT NULL,
+  `customer_service` tinyint(1) NOT NULL DEFAULT 0,
   `position` tinyint(2) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_contact`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -390,6 +391,32 @@ CREATE TABLE `PREFIX_customer_group` (
   INDEX customer_login(id_group),
   KEY `id_customer` (`id_customer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_customer_message` (
+  `id_customer_message` int(10) unsigned NOT NULL auto_increment,
+  `id_customer_thread` int(11) default NULL,
+  `id_employee` int(10) unsigned default NULL,
+  `message` text NOT NULL,
+  `ip_address` int(11) default NULL,
+  `user_agent` varchar(128) default NULL,
+  `date_add` datetime NOT NULL,
+  PRIMARY KEY  (`id_customer_message`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_customer_thread` (
+  `id_customer_thread` int(11) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `id_contact` int(10) unsigned NOT NULL,
+  `id_customer` int(10) unsigned default NULL,
+  `id_order` int(10) unsigned default NULL,
+  `status` enum('open','closed','pending1','pending2') NOT NULL default 'open',
+  `email` varchar(128) NOT NULL,
+  `token` varchar(12) default NULL,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY  (`id_customer_thread`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `PREFIX_customization` (
   `id_customization` int(10) unsigned NOT NULL auto_increment,

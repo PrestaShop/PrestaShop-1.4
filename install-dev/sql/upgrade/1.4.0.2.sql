@@ -8,6 +8,33 @@ UPDATE `PREFIX_employee` SET `id_lang` = (SELECT `value` FROM `PREFIX_configurat
 
 ALTER TABLE `PREFIX_customer` ADD `note` text AFTER `secure_key`;
 
+ALTER TABLE `PREFIX_contact` ADD `customer_service` tinyint(1) NOT NULL DEFAULT 0 AFTER `email`;
+
+CREATE TABLE `PREFIX_customer_thread` (
+  `id_customer_thread` int(11) unsigned NOT NULL auto_increment,
+  `id_lang` int(10) unsigned NOT NULL,
+  `id_contact` int(10) unsigned NOT NULL,
+  `id_customer` int(10) unsigned default NULL,
+  `id_order` int(10) unsigned default NULL,
+  `status` enum('open','closed','pending1','pending2') NOT NULL default 'open',
+  `email` varchar(128) NOT NULL,
+  `token` varchar(12) default NULL,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY  (`id_customer_thread`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_customer_message` (
+  `id_customer_message` int(10) unsigned NOT NULL auto_increment,
+  `id_customer_thread` int(11) default NULL,
+  `id_employee` int(10) unsigned default NULL,
+  `message` text NOT NULL,
+  `ip_address` int(11) default NULL,
+  `user_agent` varchar(128) default NULL,
+  `date_add` datetime NOT NULL,
+  PRIMARY KEY  (`id_customer_message`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 ALTER TABLE `PREFIX_currency` ADD `iso_code_num` varchar(3) NOT NULL default '0' AFTER `iso_code`;
 UPDATE `PREFIX_currency` SET iso_code_num = '978' WHERE iso_code LIKE 'EUR' LIMIT 1;
 UPDATE `PREFIX_currency` SET iso_code_num = '840' WHERE iso_code LIKE 'USD' LIMIT 1;
@@ -290,6 +317,31 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 		SELECT `id_tab`
 		FROM `PREFIX_tab`
 		WHERE `class_name` = 'AdminPerformance'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (29, 'AdminCustomerThreads', '', 4);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminCustomerThreads'
+), 'Customer Service');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminCustomerThreads'
+), 'SAV');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminCustomerThreads'
+), 'Servicio al cliente');
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminCustomerThreads'
 	), 1, 1, 1, 1 FROM `PREFIX_profile`
 );
 

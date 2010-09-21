@@ -157,6 +157,7 @@ class AdminCustomers extends AdminTab
 		$orders = Order::getCustomerOrders($customer->id);
 		$carts = Cart::getCustomerCarts($customer->id);
 		$groups = $customer->getGroups();
+		$messages = CustomerThread::getCustomerMessages($customer->id);
 		$referrers = Referrer::getReferrers($customer->id);
 		if ($totalCustomer = Db::getInstance()->getValue('SELECT SUM(total_paid_real) FROM '._DB_PREFIX_.'orders WHERE id_customer = '.$customer->id.' AND valid = 1'))
 		{
@@ -217,10 +218,34 @@ class AdminCustomers extends AdminTab
 				});
 			}
 		</script>';
+		
+		
+		echo '<h2>'.$this->l('Messages').' ('.sizeof($messages).')</h2>';
+		if (sizeof($messages))
+		{
+			echo '
+			<table cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th class="center">'.$this->l('Status').'</th>
+					<th class="center">'.$this->l('Message').'</th>
+					<th class="center">'.$this->l('Sent on').'</th>
+				</tr>';
+			foreach ($messages AS $message)
+				echo '<tr>
+					<td>'.$message['status'].'</td>
+					<td><a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.intval($message['id_customer_thread']).'&viewcustomer_thread&token='.Tools::getAdminTokenLite('AdminCustomerThreads').'">'.substr(strip_tags(html_entity_decode($message['message'], ENT_NOQUOTES, 'UTF-8')), 0, 75).'...</a></td>
+					<td>'.Tools::displayDate($message['date_add'], intval($cookie->id_lang), true).'</td>
+				</tr>';
+			echo '</table>
+			<div class="clear">&nbsp;</div>';
+		}
+		else
+			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has never contacted you.');
 
 		// display hook specified to this page : AdminCustomers
 		if (($hook = Module::hookExec('adminCustomers', array('id_customer' => $customer->id))) !== false)
 			echo '<div>'.$hook.'</div>';
+		echo '<div class="clear">&nbsp;</div>';
 
 		echo '<h2>'.$this->l('Groups').' ('.sizeof($groups).')</h2>';
 		if ($groups AND sizeof($groups))

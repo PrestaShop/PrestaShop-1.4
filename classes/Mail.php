@@ -184,10 +184,16 @@ class Mail
 		$key = str_replace('\'', '\\\'', $string);
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
 
-		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
-		if (file_exists($file))
-			include_once($file);
-		$str = (key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : ((key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : $string);
+		$file1 = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
+		$file2 = dirname(__FILE__).'/../mails/'.Language::getIsoById($id_lang).'/lang.php';
+		if (file_exists($file1))
+			include_once($file1);
+		elseif (file_exists($file2))
+			include_once($file2);
+		else
+			return str_replace('"', '&quot;', addslashes($str));
+			
+		$str = (key_exists($key, $_LANGMAIL) ? $_LANGMAIL[$key] : $string);
 		$str = htmlentities($str, ENT_QUOTES, 'utf-8');
 
 		return str_replace('"', '&quot;', addslashes($str));
