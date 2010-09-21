@@ -121,23 +121,14 @@ foreach ($tabs AS $t)
 		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
 		echo '<li class="submenu_size '.($current ? 'active' : '').'" id="maintab'.$t['id_tab'].'">
 			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">
-				<img src="'.$img.'" alt="" style="width:16px;height:16px" /> '.$t['name'].'
+				<img src="'.$img.'" alt="" /> '.$t['name'].'
 			</a>
 		</li>';
 		$echoLi = '';
 		$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($t['id_tab']));
 		foreach ($subTabs AS $t2)
 			if (checkTabRights($t2['id_tab']) === true)
-			{
-				$img = _PS_IMG_.'t/'.$t2['class_name'].'.gif';
-				if (trim($t2['module']) != '')
-					$img = _MODULE_DIR_.$t2['module'].'/'.$t2['class_name'].'.gif';
-				$echoLi .= '<li>
-					<a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminToken($t2['class_name'].intval($t2['id_tab']).intval($cookie->id_employee)).'">
-						<!--<img src="'.$img.'" alt="" style="width:16px;height:16px" /> -->'.$t2['name'].'
-					</a>
-				</li>';
-			}
+				$echoLi .= '<li><a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminTokenLite($t2['class_name']).'">'.$t2['name'].'</a></li>';
 		if ($current)
 			$mainsubtablist = $echoLi;
 		$echoLis .= '<div id="tab'.intval($t['id_tab']).'_subtabs" style="display:none">'.$echoLi.'</div>';

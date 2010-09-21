@@ -721,25 +721,19 @@ tr.deleted td {
 }
 
 /* help boxes */
-/* The hint to Hide and Show */
 .hint {
 	display: none;
 	position: relative;
 	left: 0px;
-	width: 200px;
 	margin-top: 4px;
 	margin-bottom: 2px;
-	border: 1px solid #c93;
-	padding: 6px;
-	color: #7F7F7F;
-	/* to fix IE6, I can't just declare a background-color,
-	I must do a bg image, too!  So I'm duplicating the pointer.gif
-	image, and positioning it so that it doesn't show up
-	within the box */
-	background-color: #ffc;
+	border: 1px solid #50B0EC;
+	padding: 8px 6px 8px 34px ;
+	color: #383838;
+	background: #DDE9F7 url(../img/admin/help2.png) no-repeat 6px 5px;
 }
 
-/* The pointer image is hadded by using another span */
+/* The pointer image is added by using another span */
 .hint .hint-pointer {
     position: absolute;
     left: -10px;
