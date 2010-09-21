@@ -33,6 +33,7 @@ echo '
 			var roundMode = '.Configuration::get('PS_PRICE_ROUND_MODE').';
 		</script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery-1.4.2.min.js"></script>
+		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.hoverIntent.minified.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'admin.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'toggle.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'tools.js"></script>
@@ -143,7 +144,9 @@ foreach ($tabs AS $t)
 	}
 echo '		</ul>'.$echoLis.'
 			<script type="text/javascript">
-				$("#menu li").hover(function(){
+				$("#menu li").hoverIntent({over:hoverTabs,timeout:800,out:outTabs});
+				function outTabs(){}
+				function hoverTabs() {
 					var content = $("#tab"+parseInt(this.id.substr(7, 3))+"_subtabs").html();
 					$("#submenu").html(content);
 					if (content.length == 0)
@@ -152,7 +155,7 @@ echo '		</ul>'.$echoLis.'
 						$("#submenu").addClass("withLeftBorder");
 					$("#menu li").removeClass("active");
 					$(this).addClass("active");
-				});
+				}
 			</script>
 			<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
 			<div id="main">
