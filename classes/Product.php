@@ -217,6 +217,19 @@ class		Product extends ObjectModel
 
 	protected 	$table = 'product';
 	protected 	$identifier = 'id_product';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'products',
+		'fields' => array(
+			'id_tax' => array('sqlId' => 'id_tax', 'required' => true, 'xlink_resource'=> 'taxes'),
+			'out_of_stock' => array('sqlId' => 'out_of_stock', 'required' => true),
+			'new' => array('sqlId' => 'new'),
+			'cache_default_attribute' => array('sqlId' => 'cache_default_attribute'),
+		),
+		'associations' => array(
+			'categories' => array('resource' => 'category'),
+		),
+	);
 
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
@@ -314,7 +327,10 @@ class		Product extends ObjectModel
 				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']]);
 				elseif (in_array($field, $this->fieldsRequiredLang))
-					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
+				{
+					if ($this->{$field} != '')
+						$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
+				}
 				else
 					$fields[$language['id_lang']][$field] = '';
 			}
@@ -443,6 +459,8 @@ class		Product extends ObjectModel
 
 	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
+		if (!is_array($this->description_short))
+			$this->description_short = array();
 		foreach ($this->description_short as $k => $value)
 			if (Tools::strlen(strip_tags($value)) > 400)
 			{
@@ -764,7 +782,10 @@ class		Product extends ObjectModel
 
 	public function addCombinationEntity($wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
-		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location) OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute)))
+		if (
+			!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location)
+			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute))
+		)
 			return false;
 		return intval($id_product_attribute);
 	}
@@ -2665,6 +2686,35 @@ class		Product extends ObjectModel
 		if ($result AND isset($result['id_group']) AND $result['id_group'])
 			return true;
 		return false;
+	}
+	
+	public function setWsCategories($values)
+	{
+		$ids = array();
+		foreach ($values as $value)
+			$ids[] = $value['id'];
+		if ($this->deleteCategories())
+		{
+			if ($ids)
+			{
+				$sqlValues = '';
+				$ids = array_map('intval', $ids);
+				foreach ($ids as $position => $id)
+					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.', '.(int)$position.')';
+				$result = Db::getInstance()->Execute('
+					INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
+					VALUES '.implode(',', $sqlValues)
+				);
+				return $result;
+			}
+		}
+		return false;
+	}
+	
+	public function getWsCategories()
+	{
+		$result = Db::getInstance()->executeS('SELECT id_category AS id from `'._DB_PREFIX_.'category_product` WHERE id_product = '.(int)$this->id);
+		return $result;
 	}
 }
 

@@ -54,6 +54,13 @@ class		Country extends ObjectModel
  	protected 	$fieldsSizeLang = array('name' => 64);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
 
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'countries',
+		'fields' => array(
+			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
+		)
+	);
+
 	protected 	$table = 'country';
 	protected 	$identifier = 'id_country';
 

@@ -161,7 +161,15 @@ class MySQL extends Db
 
 	public function displayMySQLError($query = false)
 	{
-		if (_PS_DEBUG_SQL_ AND mysql_errno())
+		global $webservice_call, $errors, $display_errors;
+		if ($webservice_call && mysql_errno())
+		{
+			if ($display_errors)
+				$errors[] = '[SQL Error] '.mysql_error().'. Query was : '.$query;
+			else
+				$errors[] = 'Internal error occured';
+		}
+		elseif (_PS_DEBUG_SQL_ AND mysql_errno())
 		{
 			if ($query)
 				die(Tools::displayError(mysql_error().'<br /><br /><pre>'.$query.'</pre>'));

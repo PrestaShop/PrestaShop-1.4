@@ -857,3 +857,17 @@ p.fail{
 /* TinyMCE */
 span.defaultSkin .mceToolbar { height: auto }
 span.defaultSkin table.mceLayout tr.mceFirst td { float: left }
+
+/* webservice */
+table.permissions {
+	border:1px solid #DFD5C3;
+}
+table.permissions th {
+	background:#FFF6D3;
+	text-align:center;
+	height:20px;
+}
+table.permissions td {
+	padding:5px;
+	text-align:center;
+}

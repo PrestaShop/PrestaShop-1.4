@@ -981,6 +981,16 @@ class Tools
 			self::$file_exists_cache[$filename] = file_exists($filename);
 		return self::$file_exists_cache[$filename];
 	}
+	
+	/**
+	* Translates a string with underscores into camel case (e.g. first_name -> firstName)
+	* @prototype string public static function toCamelCase(string $str[, bool $capitaliseFirstChar = false])
+	*/
+	public static function toCamelCase($str, $capitaliseFirstChar = false) {
+		if($capitaliseFirstChar)
+			$str[0] = strtoupper($str[0]);
+		return preg_replace_callback('/_([a-z])/', create_function('$c', 'return strtoupper($c[1]);'), $str);
+	}
 
 	static public function getBrightness($hex)
 	{

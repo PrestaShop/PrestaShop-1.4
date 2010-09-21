@@ -124,6 +124,27 @@ class		Order extends ObjectModel
 		'total_wrapping' => 'isPrice',
 		'shipping_number' => 'isUrl'
 	);
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'orders',
+		'objectNodeName' => 'order',
+		'fields' => array(
+			'id_address_delivery' => array('sqlId' => 'id_address_delivery', 'xlink_resource'=> 'addresses'),
+			'id_address_invoice' => array('sqlId' => 'id_address_invoice', 'xlink_resource'=> 'addresses'),
+			'id_cart' => array('sqlId' => 'id_cart', 'xlink_resource'=> 'carts'),
+			'id_currency' => array('sqlId' => 'id_currency', 'xlink_resource'=> 'currencies'),
+			'id_lang' => array('sqlId' => 'id_lang', 'xlink_resource'=> 'languages'),
+			'id_customer' => array('sqlId' => 'id_customer', 'xlink_resource'=> 'customers'),
+			'id_carrier' => array('sqlId' => 'id_carrier', 'xlink_resource'=> 'carriers'),
+			'module' => array('sqlId' => 'module'),
+			'shipping_number' => array('sqlId' => 'shipping_number'),
+			'invoice_number' => array('sqlId' => 'invoice_number'),
+			'delivery_number' => array('sqlId' => 'delivery_number'),
+			'invoice_date' => array('sqlId' => 'invoice_date'),
+			'delivery_date' => array('sqlId' => 'delivery_date'),
+			'valid' => array('sqlId' => 'valid')
+		),
+	);
 
 	/* MySQL does not allow 'order' for a table name */
 	protected 	$table = 'orders';
@@ -573,6 +594,13 @@ class		Order extends ObjectModel
 		foreach ($result AS $order)
 			$orders[] = intval($order['id_order']);
 		return $orders;
+	}
+	
+	static public function getOrders()
+	{
+		$sql = 'SELECT * FROM `'._DB_PREFIX_.'orders`';
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
+		return $result;
 	}
 
 	static public function getOrdersIdInvoiceByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)

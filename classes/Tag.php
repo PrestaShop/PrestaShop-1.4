@@ -26,6 +26,10 @@ class Tag extends ObjectModel
 	protected 	$table = 'tag';
 	protected 	$identifier = 'id_tag';
 	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'tags',
+	);
+	
 	public function __construct($id = NULL, $name = NULL, $id_lang = NULL)
 	{
 		if ($id)

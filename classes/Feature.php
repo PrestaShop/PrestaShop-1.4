@@ -23,6 +23,12 @@ class		Feature extends ObjectModel
 		
 	protected 	$table = 'feature';
 	protected 	$identifier = 'id_feature';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'product_features',
+		'objectNodeName' => 'product_feature',
+		'fields' => array(),
+	);
 
 	public function getFields()
 	{

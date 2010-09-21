@@ -41,7 +41,7 @@ class		Supplier extends ObjectModel
 	public 		$meta_keywords;
 
 	/** @var string Meta description */
-	public 		$meta_description;	
+	public 		$meta_description;
 	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
@@ -52,6 +52,14 @@ class		Supplier extends ObjectModel
 	
 	protected 	$table = 'supplier';
 	protected 	$identifier = 'id_supplier';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'suppliers',
+		'fields' => array(
+			'id_address' => array('sqlId' => 'id_address', 'xlink_resource'=> 'addresses'),
+			'link_rewrite' => array('sqlId' => 'link_rewrite'),
+		),
+	);
 	
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
@@ -87,9 +95,10 @@ class		Supplier extends ObjectModel
 	  *
 	  * @return array Suppliers
 	  */
-	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
+	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false, $all_groups = false)
 	{
-		global $cookie;
+		if (!$all_groups)
+			global $cookie;
 
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
@@ -107,13 +116,14 @@ class		Supplier extends ObjectModel
 					SELECT p.`id_product`
 					FROM `'._DB_PREFIX_.'product` p
 					LEFT JOIN `'._DB_PREFIX_.'supplier` as m ON (m.`id_supplier`= p.`id_supplier`)
-					WHERE m.`id_supplier` = '.intval($supplier['id_supplier']).'
+					WHERE m.`id_supplier` = '.intval($supplier['id_supplier']).
+					($all_groups ? '' :'
 					AND p.`id_product` IN (
 						SELECT cp.`id_product`
 						FROM `'._DB_PREFIX_.'category_group` cg
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
-					)';
+					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$suppliers[$key]['nb_products'] = sizeof($result);
 			}

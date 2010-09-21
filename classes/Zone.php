@@ -27,6 +27,10 @@ class		Zone extends ObjectModel
 		
 	protected 	$table = 'zone';
 	protected 	$identifier = 'id_zone';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'zones',
+	);
 
 	public function getFields()
 	{

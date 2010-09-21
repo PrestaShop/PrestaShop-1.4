@@ -64,6 +64,20 @@ class		Carrier extends ObjectModel
 	protected static $priceByWeight2 = array();
 	protected static $priceByPrice = array();
 	protected static $priceByPrice2 = array();
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'carriers',
+		'fields' => array(
+			'id_tax' => array('sqlId' => 'id_tax', 'xlink_resource'=> 'taxes'),
+			'url' => array('sqlId' => 'url'),
+			'delay' => array('sqlId' => 'delay'),
+			'active' => array('sqlId' => 'active', 'required' => true),
+			'deleted' => array('sqlId' => 'deleted'),
+			'shipping_handling' => array('sqlId' => 'shipping_handling'),
+			'range_behavior' => array('sqlId' => 'range_behavior'),
+			'is_module' => array('sqlId' => 'is_module'),
+		),
+	);
 
 	public function getFields()
 	{

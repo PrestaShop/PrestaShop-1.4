@@ -84,6 +84,18 @@ class		Customer extends ObjectModel
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
 		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDni', 'note' => 'isCleanHtml');
 
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'customers',
+		'fields' => array(
+			'id_default_group' => array('sqlId' => 'id_default_group'),
+			'birthday' => array('sqlId' => 'birthday'),
+			'newsletter_date_add' => array('sqlId' => 'newsletter_date_add'),
+			'ip_registration_newsletter' => array('sqlId' => 'ip_registration_newsletter'),
+			'last_passwd_gen' => array('sqlId' => 'last_passwd_gen'),
+			'deleted' => array('sqlId' => 'deleted')
+		)
+	);
+
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
 
@@ -453,7 +465,7 @@ class		Customer extends ObjectModel
 	* @param $id_customer Customer id
 	* @return boolean
 	*/	
-	public function customerIdExists($id_customer)
+	public function customerIdExists($id_customer)//FIXME : why is it not static ?
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`

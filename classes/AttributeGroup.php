@@ -29,6 +29,12 @@ class		AttributeGroup extends ObjectModel
 		
 	protected 	$table = 'attribute_group';
 	protected 	$identifier = 'id_attribute_group';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'product_options',
+		'objectNodeName' => 'product_option',
+		'fields' => array(),
+	);
 
 	public function getFields()
 	{

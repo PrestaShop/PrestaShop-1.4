@@ -293,6 +293,31 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 	), 1, 1, 1, 1 FROM `PREFIX_profile`
 );
 
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (8, 'AdminWebservice', '', 11);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminWebservice'
+), 'Web service');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminWebservice'
+), 'Service web');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminWebservice'
+), 'Web service');
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminWebservice'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('deleteProductAttribute', 'Product Attribute Deletion', NULL, 0);
 
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 

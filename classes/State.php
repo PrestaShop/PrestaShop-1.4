@@ -38,6 +38,14 @@ class		State extends ObjectModel
 
 	protected 	$table = 'state';
 	protected 	$identifier = 'id_state';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'states',
+		'fields' => array(
+			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
+			'id_country' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'countries')
+		),
+	);
 
 	public function getFields()
 	{
@@ -51,7 +59,7 @@ class		State extends ObjectModel
 		return $fields;
 	}
 
-	public static function getStates($id_lang, $active = false)
+	public static function getStates($id_lang = false, $active = false)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_state`, `id_country`, `id_zone`, `iso_code`, `name`, `tax_behavior`, `active`

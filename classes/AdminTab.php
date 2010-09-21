@@ -554,6 +554,7 @@ abstract class AdminTab
 							{
 								$this->copyFromPost($object, $this->table);
 								$result = $object->update();
+								$this->afterUpdate($object);
 							}
 							if (!$result)
 								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
@@ -595,6 +596,7 @@ abstract class AdminTab
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
 						{
 							$parent_id = intval(Tools::getValue('id_parent', 1));
+							$this->afterAdd($object);
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
 								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$token);
@@ -1496,6 +1498,10 @@ abstract class AdminTab
 	 * @return boolean
 	 */
 	protected function afterDelete($object, $oldId) { return true; }
+
+	protected function afterAdd($object) { return true; }
+	
+	protected function afterUpdate($object) { return true; }
 
 	/**
 	 * Check rights to view the current tab

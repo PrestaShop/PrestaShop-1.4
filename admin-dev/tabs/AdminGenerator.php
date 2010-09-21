@@ -48,6 +48,12 @@ class AdminGenerator extends AdminTab
 				<input type="checkbox" name="cacheControl" id="cacheControl" '.(Tools::getValue('cacheControl') ? 'checked="checked"' : '').' />
 				<p>'.$this->l('This will add directives to your .htaccess file which should improved cache and compression.').'</p>
 			</div>
+			<div class="clear">&nbsp;</div>
+			<label for="webservice">'.$this->l('Webservice').'</label>
+			<div class="margin-form">
+				<input type="checkbox" name="webservice" id="webservice" '.(Tools::getValue('webservice') ? 'checked="checked"' : '').' />
+				<p>'.$this->l('This will add directives to your .htaccess file which should allow webservice calls. Please that you have to set "friendly URL" to "Yes" in the "Preferences" tab in Back Office.').'</p>
+			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
 			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>
 			<p>'.$this->l('This will erase your').'<b> '.$this->l('old').'</b> '.$this->l('.htaccess file!').'</p>';
@@ -217,15 +223,18 @@ AddOutputFilterByType DEFLATE application/x-javascript
 		$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2.jpg [L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)(\-[_a-zA-Z0-9-]*)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/c/$1$2.jpg [L,E]';
 		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$3&isolang=$1$5 [L,E]';
-		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2&isolang=$1$4 [L,E]';
+		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2&isolang=$1$4 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'category.php?id_category=$2&isolang=$1 [QSA,L,E]';
-		$tab['RewriteRule']['content']['^([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2$4 [L,E]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$1$3 [L,E]';
+		$tab['RewriteRule']['content']['^([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2$4 [QSA,L,E]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'category.php?id_category=$1 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms=$1 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)(.*)$'] = 'supplier.php?id_supplier=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^lang-([a-z]{2})/(.*)$'] = '$2?isolang=$1 [QSA,L,E]';
+		// Webservice
+		if (Tools::getValue('webservice'))
+			$tab['RewriteRule']['content']['^api/?(.*)$'] = 'tools/webservice/dispatcher.php?url=$1 [QSA,L,E]';
 
 		return $tab;
 	}

@@ -47,6 +47,10 @@ class		Group extends ObjectModel
 	private static $_customerReduction = array();
 	private static $_groupPriceDisplayMethod = array();
 	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'groups',
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();

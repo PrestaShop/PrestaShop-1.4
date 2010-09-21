@@ -96,6 +96,17 @@ class		Address extends ObjectModel
 	protected	$_includeVars = array('addressType' => 'table');
 	protected	$_includeContainer = false;
 
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'addresses',
+		'fields' => array(
+			'id_customer' => array('sqlId' => 'id_customer', 'xlink_resource'=> 'customers'),
+			'id_manufacturer' => array('sqlId' => 'id_manufacturer', 'xlink_resource'=> 'manufacturers'),
+			'id_supplier' => array('sqlId' => 'id_supplier', 'xlink_resource'=> 'suppliers'),
+			'id_country' => array('sqlId' => 'id_country', 'xlink_resource'=> 'countries'),
+			'id_state' => array('sqlId' => 'id_state', 'xlink_resource'=> 'states'),
+		),
+	);
+
 	/**
 	 * Build an address
 	 *

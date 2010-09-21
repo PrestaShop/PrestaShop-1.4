@@ -47,7 +47,7 @@ class		Manufacturer extends ObjectModel
 	public 		$meta_keywords;
 
 	/** @var string Meta description */
-	public 		$meta_description;	
+	public 		$meta_description;
 	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
@@ -58,6 +58,14 @@ class		Manufacturer extends ObjectModel
 	
 	protected 	$table = 'manufacturer';
 	protected 	$identifier = 'id_manufacturer';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'manufacturers',
+		'fields' => array(
+			'id_address' => array('sqlId' => 'id_address', 'xlink_resource'=> 'addresses'),
+			'link_rewrite' => array('sqlId' => 'link_rewrite'),
+		),
+	);
 
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
@@ -154,9 +162,10 @@ class		Manufacturer extends ObjectModel
 	  * @param boolean $getNbProducts [optional] return products numbers for each
 	  * @return array Manufacturers
 	  */
-	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false)
+	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false, $all_group = false)
 	{
-		global $cookie;
+		if (!$all_group)
+			global $cookie;
 
 		if (!$id_lang)
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
@@ -174,13 +183,15 @@ class		Manufacturer extends ObjectModel
 					SELECT p.`id_product`
 					FROM `'._DB_PREFIX_.'product` p
 					LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
-					WHERE m.`id_manufacturer` = '.intval($manufacturer['id_manufacturer']).'
+					WHERE m.`id_manufacturer` = '.intval($manufacturer['id_manufacturer']).
+					($all_group ? '' :
+					'
 					AND p.`id_product` IN (
 						SELECT cp.`id_product`
 						FROM `'._DB_PREFIX_.'category_group` cg
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
-					)';
+					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$manufacturers[$key]['nb_products'] = sizeof($result);
 			}

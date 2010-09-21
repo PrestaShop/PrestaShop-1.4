@@ -43,6 +43,9 @@ abstract class ObjectModel
 
 	/** @var array tables */
  	protected $tables = array();
+ 	
+ 	/** @var array tables */
+ 	protected $webserviceParameters = array();
 
 	/**
 	 * Returns object validation rules (fields validity)
@@ -424,6 +427,106 @@ abstract class ObjectModel
 			}
 		}
 		return $errors;
+	}
+	
+	public function getWebserviceParameters()
+	{
+		$defaultResourceParameters = array(
+			'objectSqlId' => $this->identifier,
+			'retrieveData' => array(
+				'className' => get_class($this),
+				'retrieveMethod' => 'getWebserviceObjectList',
+				'params' => array()
+			),
+			'fields' => array(
+				'id' => array('sqlId' => $this->identifier),
+			),
+		);
+		if (!isset($this->webserviceParameters['objectNodeName']))
+			$defaultResourceParameters['objectNodeName'] = $this->table;
+		
+		if (isset($this->webserviceParameters['associations']))
+			foreach ($this->webserviceParameters['associations'] as $assocName => &$associations)
+			{
+				if (!isset($associations['setter']))
+					$associations['setter'] = Tools::toCamelCase('set_ws_'.$assocName);
+				if (!isset($associations['getter']))
+					$associations['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
+			}
+		
+		$resourceParameters = array_merge_recursive($defaultResourceParameters, $this->webserviceParameters);
+		if (isset($this->fieldsSize))
+			foreach ($this->fieldsSize as $fieldName => $maxSize)
+			{
+				if (!isset($resourceParameters['fields'][$fieldName]))
+					$resourceParameters['fields'][$fieldName] = array('required' => false);
+				$resourceParameters['fields'][$fieldName] = array_merge(
+					$resourceParameters['fields'][$fieldName],
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize)
+				);
+			}
+		if (isset($this->fieldsValidate))
+			foreach ($this->fieldsValidate as $fieldName => $validateMethod)
+			{
+				if (!isset($resourceParameters['fields'][$fieldName]))
+					$resourceParameters['fields'][$fieldName] = array('required' => false);
+				$resourceParameters['fields'][$fieldName] = array_merge(
+					$resourceParameters['fields'][$fieldName],
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod)
+				);
+			}
+		if (isset($this->fieldsRequired))
+			foreach ($this->fieldsRequired as $fieldRequired)
+			{
+				if (!isset($resourceParameters['fields'][$fieldRequired]))
+					$resourceParameters['fields'][$fieldRequired] = array();
+				$resourceParameters['fields'][$fieldRequired] = array_merge(
+					$resourceParameters['fields'][$fieldRequired],
+					$resourceParameters['fields'][$fieldRequired] = array('sqlId' => $fieldRequired, 'required' => true)
+				);
+			}
+		if (isset($this->fieldsSizeLang))
+			foreach ($this->fieldsSizeLang as $fieldName => $maxSize)
+			{
+				if (!isset($resourceParameters['fields'][$fieldName]))
+					$resourceParameters['fields'][$fieldName] = array('required' => false);
+				$resourceParameters['fields'][$fieldName] = array_merge(
+					$resourceParameters['fields'][$fieldName],
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize)
+				);
+			}
+		if (isset($this->fieldsValidateLang))
+			foreach ($this->fieldsValidateLang as $fieldName => $validateMethod)
+			{
+				if (!isset($resourceParameters['fields'][$fieldName]))
+					$resourceParameters['fields'][$fieldName] = array('required' => false);
+				$resourceParameters['fields'][$fieldName] = array_merge(
+					$resourceParameters['fields'][$fieldName],
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod)
+				);
+			}
+		if (isset($this->fieldsRequiredLang))
+			foreach ($this->fieldsRequiredLang as $field)
+			{
+				if (!isset($resourceParameters['fields'][$field]))
+					$resourceParameters['fields'][$field] = array();
+				$resourceParameters['fields'][$field] = array_merge(
+					$resourceParameters['fields'][$field],
+					$resourceParameters['fields'][$field] = array('sqlId' => $field, 'required' => true)
+				);
+			}
+		return $resourceParameters;
+	}
+	
+	public function getWebserviceObjectList($sql_filter, $sql_sort, $sql_limit)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT '.$this->identifier.' FROM `'._DB_PREFIX_.$this->table.'`
+		WHERE 1 '.$sql_filter.'
+		'.($sql_sort != '' ? $sql_sort : '').'
+		'.($sql_limit != '' ? $sql_limit : '').'
+		');
+		return $result;
 	}
 }
 

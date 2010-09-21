@@ -48,6 +48,15 @@ class		OrderState extends ObjectModel
 	protected 	$table = 'order_state';
 	protected 	$identifier = 'id_order_state';
 	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'order_states',
+		'fields' => array(
+			'unremovable' => array('sqlId' => 'unremovable'),
+			'delivery' => array('sqlId' => 'delivery'),
+			'hidden' => array('sqlId' => 'hidden'),
+		),
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();

@@ -70,6 +70,14 @@ class		Category extends ObjectModel
 
 	/** @var string id_image is the category ID when an image exists and 'default' otherwise */
 	public		$id_image = 'default';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'categories',
+		'fields' => array(
+			'id_parent' => array('sqlId' => 'id_parent', 'xlink_resource'=> 'categories'),
+			'level_depth' => array('sqlId' => 'level_depth'),
+		),
+	);
 
 	public function __construct($id_category = NULL, $id_lang = NULL)
 	{
@@ -214,10 +222,11 @@ class		Category extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.$list.')');
 
 		/* Delete categories images */
+		require_once(_PS_ROOT_DIR_.'/images.inc.php');
 		foreach ($toDelete AS $id_category)
 			deleteImage(intval($id_category));
 
-		/* Delete products which were\'t in others categories */
+		/* Delete products which were not in others categories */
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_product`
 		FROM `'._DB_PREFIX_.'product`
@@ -259,7 +268,7 @@ class		Category extends ObjectModel
 	  * @param boolean $active return only active categories
 	  * @return array Categories
 	  */
-	static public function getCategories($id_lang, $active = true, $order = true)
+	static public function getCategories($id_lang = false, $active = true, $order = true, $sql_filter = '', $sql_sort = '',$sql_limit = '')
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -268,9 +277,12 @@ class		Category extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
-		WHERE `id_lang` = '.intval($id_lang).'
+		WHERE 1 '.$sql_filter.' '.($id_lang ? 'AND `id_lang` = '.intval($id_lang) : '').'
 		'.($active ? 'AND `active` = 1' : '').'
-		ORDER BY `name` ASC');
+		'.(!$id_lang ? 'GROUP BY c.id_category' : '').'
+		'.($sql_sort != '' ? $sql_sort : 'ORDER BY `name` ASC').'
+		'.($sql_limit != '' ? $sql_limit : '')
+		);
 
 		if (!$order)
 			return $result;
@@ -721,6 +733,15 @@ class		Category extends ObjectModel
 		VALUES (1, '.intval($id_group).')
 		');
 	}
+	
+	public function replaceProductIds($products)
+	{
+		$parentCategory = new Category(intval($this->id_parent));
+		if (!$parentCategory)
+			die('parent category does not exist');
+		return $parentCategory->level_depth + 1;
+	}
+	
 }
 
 ?>

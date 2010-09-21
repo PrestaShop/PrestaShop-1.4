@@ -36,6 +36,13 @@ class		OrderHistory extends ObjectModel
 
 	protected 	$table = 'order_history';
 	protected 	$identifier = 'id_order_history';
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'order_histories',
+		'fields' => array(
+			'id_order_state' => array('sqlId' => 'id_order_state', 'required' => true, 'xlink_resource'=> 'order_states'),
+		),
+	);
 
 	public function getFields()
 	{
