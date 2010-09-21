@@ -37,6 +37,8 @@ class	Cookie
 
 	/** @var array cipher tool initilization vector */
 	private $_iv;
+	
+	private $_modified = false;
 
 	/**
 	  * Get data if the cookie exists and else initialize an new one
@@ -66,7 +68,8 @@ class	Cookie
 	
 	public function __destruct()
 	{
-		$this->write();
+		if ($this->_modified)
+			$this->write();
 	}
 
 	private function getDomain()
@@ -134,8 +137,10 @@ class	Cookie
 	{
 		if (is_array($value))
 			die(Tools::displayError());
-		if (preg_match('/¤|\|/', $key) OR preg_match('/¤|\|/', $value))
+		if (preg_match('/¤|\|/', $key.$value))
 			throw new Exception('Forbidden chars in cookie');
+		if (!$this->_modified AND (!isset($this->_content[$key]) OR (isset($this->_content[$key]) AND $this->_content[$key] != $value)))
+			$this->_modified = true;
 		$this->_content[$key] = $value;
 	}
 
