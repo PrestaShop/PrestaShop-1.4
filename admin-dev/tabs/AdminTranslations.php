@@ -1304,7 +1304,7 @@ class AdminTranslations extends AdminTab
 			{
 				$content = file_get_contents($directory.'/'.$filename);
 				$content = str_replace("\n", " ", $content);
-				if (preg_match_all('/Mail::Send([^;]*);/s', $content, $tab))
+				if (preg_match_all('/Mail::Send([^;]*);/si', $content, $tab))
 				{
 					for ($i = 0 ; isset($tab[1][$i]) ; $i++)
 					{

@@ -11,7 +11,7 @@
   * @version 1.3
   *
   */
-  
+
 include_once(_PS_SWIFT_DIR_.'Swift.php');
 include_once(_PS_SWIFT_DIR_.'Swift/Connection/SMTP.php');
 include_once(_PS_SWIFT_DIR_.'Swift/Connection/NativeMail.php');
@@ -24,15 +24,15 @@ class Mail
 		$configuration = Configuration::getMultiple(array('PS_SHOP_EMAIL', 'PS_MAIL_METHOD', 'PS_MAIL_SERVER', 'PS_MAIL_USER', 'PS_MAIL_PASSWD', 'PS_SHOP_NAME', 'PS_MAIL_SMTP_ENCRYPTION', 'PS_MAIL_SMTP_PORT', 'PS_MAIL_METHOD', 'PS_MAIL_TYPE'));
 		if(!isset($configuration['PS_MAIL_SMTP_ENCRYPTION'])) $configuration['PS_MAIL_SMTP_ENCRYPTION'] = "off";
 		if(!isset($configuration['PS_MAIL_SMTP_PORT'])) $configuration['PS_MAIL_SMTP_PORT'] = "default";
-		
+
 		if (!isset($from)) $from = $configuration['PS_SHOP_EMAIL'];
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
-		if ((!empty($from) AND !Validate::isEmail($from)) OR (!empty($fromName) AND !Validate::isMailName($fromName)) OR 
-		 (!is_array($to) AND !Validate::isEmail($to)) OR (!empty($toName) AND !Validate::isMailName($toName)) OR !is_array($templateVars) OR 
+		if ((!empty($from) AND !Validate::isEmail($from)) OR (!empty($fromName) AND !Validate::isMailName($fromName)) OR
+		 (!is_array($to) AND !Validate::isEmail($to)) OR (!empty($toName) AND !Validate::isMailName($toName)) OR !is_array($templateVars) OR
 		 !Validate::isTplName($template) OR !Validate::isMailSubject($subject))
 	 		die(Tools::displayError('Error: mail parameters are corrupted'));
-		
+
 		/* Construct multiple recipients list if needed */
 		if (is_array($to))
 		{
@@ -100,7 +100,7 @@ class Mail
 			}
 			elseif (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
 				die(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt');
-				
+
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8'));
 
@@ -129,20 +129,20 @@ class Mail
 			$swift->disconnect();
 			return $send;
 		}
-	
+
 		catch (Swift_ConnectionException $e) { return false; }
 	}
-	
+
 	static public function sendMailTest($smtpChecked, $smtpServer, $content, $subject, $type, $to, $from, $smtpLogin, $smtpPassword, $smtpPort = 25, $smtpEncryption)
 	{
 		$swift = NULL;
 		$result = NULL;
 		try
 		{
-			
+
 			if($smtpChecked)
 			{
-				
+
 				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == "off") ? Swift_Connection_SMTP::ENC_OFF : (($smtpEncryption == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_SSL));
 				$smtp->setUsername($smtpLogin);
 				$smtp->setpassword($smtpPassword);
@@ -153,9 +153,9 @@ class Mail
 			{
 				$swift = new Swift(new Swift_Connection_NativeMail());
 			}
-			
+
 			$message = new Swift_Message($subject, $content, $type);
-			
+
 			if ($swift->send($message, $to, $from))
 			{
 				$result = true;
@@ -184,16 +184,14 @@ class Mail
 		$key = str_replace('\'', '\\\'', $string);
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
 
-		$file1 = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
-		$file2 = dirname(__FILE__).'/../mails/'.Language::getIsoById($id_lang).'/lang.php';
-		if (file_exists($file1))
-			include_once($file1);
-		elseif (file_exists($file2))
-			include_once($file2);
-		else
-			return str_replace('"', '&quot;', addslashes($str));
-			
-		$str = (key_exists($key, $_LANGMAIL) ? $_LANGMAIL[$key] : $string);
+		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
+		if (file_exists($file))
+			include_once($file);
+
+		if (!is_array($_LANGMAIL))
+			return (str_replace('"', '&quot;', $string));
+
+		$str = (key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : ((key_exists($key, $_LANGMAIL)) ? $_LANGMAIL[$key] : $string);
 		$str = htmlentities($str, ENT_QUOTES, 'utf-8');
 
 		return str_replace('"', '&quot;', addslashes($str));
