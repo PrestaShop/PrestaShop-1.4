@@ -48,7 +48,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, reference
 	}
 
 	/* Reset all combination images */
-	combinationImages = $('#id_image_attr').find("input[@id^=id_image_attr_]");
+	combinationImages = $('#id_image_attr').find("input[id^=id_image_attr_]");
 	combinationImages.each(function() {
 		this.checked = false;
 	});
