@@ -29,7 +29,8 @@ class AdminCurrencies extends AdminTab
 		'iso_code' => array('title' => $this->l('ISO code'), 'align' => 'center', 'width' => 35),
 		'iso_code_num' => array('title' => $this->l('ISO code num'), 'align' => 'center', 'width' => 35),
 		'sign' => array('title' => $this->l('Symbol'), 'width' => 20, 'align' => 'center', 'orderby' => false, 'search' => false),
-		'conversion_rate' => array('title' => $this->l('Conversion rate'), 'float' => true, 'align' => 'center', 'width' => 50, 'search' => false));
+		'conversion_rate' => array('title' => $this->l('Conversion rate'), 'float' => true, 'align' => 'center', 'width' => 50, 'search' => false),
+		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 
 		$this->optionTitle = $this->l('Currencies options');
 		$this->_fieldsOptions = array(
@@ -175,6 +176,13 @@ class AdminCurrencies extends AdminTab
 					<input type="radio" name="blank" id="blank_off" value="0" '.(!$this->getFieldValue($obj, 'blank') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="blank_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Include a blank between sign and price, e.g.,').'<br />$1,240.15 -> $ 1,240.15</p>
+				</div>
+				<label>'.$this->l('Enable:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

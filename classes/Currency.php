@@ -42,11 +42,14 @@ class		Currency extends ObjectModel
 
 	/** @var int bool Display decimals on prices */
 	public		$decimals;
+	
+	/** @var int bool active */
+	public		$active;
 
  	protected 	$fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
  	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
  	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
-		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool');
+		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool', 'active' => 'isBool');
 
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
@@ -69,6 +72,7 @@ class		Currency extends ObjectModel
 		$fields['blank'] = intval($this->blank);
 		$fields['conversion_rate'] = floatval($this->conversion_rate);
 		$fields['deleted'] = intval($this->deleted);
+		$fields['active'] = intval($this->active);
 
 		return $fields;
 	}
@@ -130,12 +134,13 @@ class		Currency extends ObjectModel
 	  *
 	  * @return array Currencies
 	  */
-	static public function getCurrencies($object = false)
+	static public function getCurrencies($object = false, $active = 1)
 	{
 		$tab = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'currency`
 		WHERE `deleted` = 0
+		'.($active == 1 ? 'AND `active` = 1' : '').'
 		ORDER BY `name` ASC');
 		if ($object)
 			foreach ($tab as $key => $currency)

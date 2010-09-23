@@ -353,6 +353,7 @@ CREATE TABLE `PREFIX_currency` (
   `decimals` tinyint(1) unsigned NOT NULL default '1',
   `conversion_rate` decimal(13,6) NOT NULL,
   `deleted` tinyint(1) unsigned NOT NULL default '0',
+  `active` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`id_currency`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
