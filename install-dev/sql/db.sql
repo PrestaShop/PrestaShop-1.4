@@ -1004,6 +1004,21 @@ CREATE TABLE `PREFIX_page_viewed` (
   PRIMARY KEY  (`id_page`,`id_date_range`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_payment_cc` (
+	`id_payment_cc` INT NOT NULL,
+	`id_order` INT UNSIGNED NULL,
+	`id_currency` INT UNSIGNED NOT NULL,
+	`amount` DECIMAL(10,2) NOT NULL,
+	`transaction_id` VARCHAR(254) NULL,
+	`card_number` VARCHAR(254) NULL,
+	`card_brand` VARCHAR(254) NULL,
+	`card_expiration` DATE NULL,
+	`card_holder` VARCHAR(254) NULL,
+	`date_add` DATETIME NOT NULL,
+	PRIMARY KEY (`id_payment_cc`),
+	KEY `id_order` (`id_order`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `PREFIX_product` (
   `id_product` int(10) unsigned NOT NULL auto_increment,
   `id_supplier` int(10) unsigned default NULL,

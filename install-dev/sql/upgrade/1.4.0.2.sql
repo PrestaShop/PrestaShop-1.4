@@ -35,6 +35,21 @@ CREATE TABLE `PREFIX_customer_message` (
   PRIMARY KEY  (`id_customer_message`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_payment_cc` (
+	`id_payment_cc` INT NOT NULL,
+	`id_order` INT UNSIGNED NULL,
+	`id_currency` INT UNSIGNED NOT NULL,
+	`amount` DECIMAL(10,2) NOT NULL,
+	`transaction_id` VARCHAR(254) NULL,
+	`card_number` VARCHAR(254) NULL,
+	`card_brand` VARCHAR(254) NULL,
+	`card_expiration` DATE NULL,
+	`card_holder` VARCHAR(254) NULL,
+	`date_add` DATETIME NOT NULL,
+	PRIMARY KEY (`id_payment_cc`),
+	KEY `id_order` (`id_order`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 ALTER TABLE `PREFIX_currency` ADD `iso_code_num` varchar(3) NOT NULL default '0' AFTER `iso_code`;
 UPDATE `PREFIX_currency` SET iso_code_num = '978' WHERE iso_code LIKE 'EUR' LIMIT 1;
 UPDATE `PREFIX_currency` SET iso_code_num = '840' WHERE iso_code LIKE 'USD' LIMIT 1;

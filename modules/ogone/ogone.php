@@ -161,6 +161,26 @@ class Ogone extends PaymentModule
 			$smarty->assign('status', 'failed');
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
+	
+	public function validateOrder($id_cart, $id_order_state, $amount, $displayName, $message = '', $p1 = NULL, $p2 = NULL, $p3 = true)
+	{
+		parent::validateOrder($id_cart, $id_order_state, $amount, $displayName, $message, $p1, $p2, $p3);
+		
+		if ($amount > 0 AND class_exists('PaymentCC'))
+		{
+			$pcc = new PaymentCC();
+			$order = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$id_cart);
+			$pcc->id_order = (int)$order['id_order'];
+			$pcc->id_currency = (int)$order['id_currency'];
+			$pcc->amount = $amount;
+			$pcc->transaction_id = Tools::getValue('PAYID');
+			$pcc->card_number = Tools::getValue('CARDNO');
+			$pcc->card_brand = Tools::getValue('BRAND');
+			$pcc->card_expiration = Tools::getValue('ED');
+			$pcc->card_holder = Tools::getValue('CN');
+			$pcc->add();
+		}		
+	}
 }
 
 ?>

@@ -14,6 +14,11 @@
 
 class Validate
 {
+	static public function isAnything($data)
+	{
+		return true;
+	}
+	
  	/**
 	* Check for e-mail validity
 	*
