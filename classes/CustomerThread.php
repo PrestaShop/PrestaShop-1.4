@@ -7,6 +7,7 @@ class CustomerThread extends ObjectModel
 	public $id_contact;
 	public $id_customer;
 	public $id_order;
+	public $id_product;
 	public $status;
 	public $email;
 	public $token;
@@ -19,7 +20,7 @@ class CustomerThread extends ObjectModel
 	protected $fieldsRequired = array('id_lang', 'id_contact', 'token');
 	protected $fieldsSize = array('email' => 254);
 	protected $fieldsValidate = array('id_lang' => 'isUnsignedId', 'id_contact' => 'isUnsignedId', 'id_customer' => 'isUnsignedId',
-										'id_order' => 'isUnsignedId', 'email' => 'isEmail', 'token' => 'isGenericName');
+									'id_order' => 'isUnsignedId', 'id_product' => 'isUnsignedId', 'email' => 'isEmail', 'token' => 'isGenericName');
 
 	public	function getFields()
 	{
@@ -27,7 +28,8 @@ class CustomerThread extends ObjectModel
 		$fields['id_lang'] = intval($this->id_lang);
 		$fields['id_contact'] = intval($this->id_contact);
 		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_order'] = pSQL($this->id_order);
+		$fields['id_order'] = intval($this->id_order);
+		$fields['id_product'] = intval($this->id_product);
 		$fields['status'] = pSQL($this->status);
 		$fields['email'] = pSQL($this->email);
 		$fields['token'] = pSQL($this->token);

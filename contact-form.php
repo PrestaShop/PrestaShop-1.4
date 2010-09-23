@@ -9,6 +9,39 @@ $errors = array();
 
 $smarty->assign('contacts', Contact::getContacts(intval($cookie->id_lang)));
 
+if ($cookie->isLogged())
+{
+	$customer = new Customer(intval($cookie->id_customer));
+	if (!Validate::isLoadedObject($customer))
+		die(Tools::displayError('customer not found'));
+	$products = array();
+	$orders = array();
+	$getOrders = Db::getInstance()->ExecuteS('
+		SELECT id_order 
+		FROM '._DB_PREFIX_.'orders 
+		WHERE id_customer = '.(int)$customer->id.' AND valid = 1 ORDER BY date_add');
+	foreach ($getOrders as $row)
+	{
+		$order = new Order($row['id_order']);
+		$date = explode(' ', $order->invoice_date);
+		$orders[$row['id_order']] = Tools::displayDate($date[0], $cookie->id_lang);
+		$tmp = $order->getProducts();
+		foreach ($tmp as $key => $val)
+			$products[$val['product_id']] = $val['product_name'];
+	}
+	
+	$orderList = '';
+	foreach ($orders as $key => $val)
+		$orderList .= '<option value="'.$key.'" '.(intval(Tools::getValue('id_order')) == $key ? 'selected' : '').' >'.$key.' -- '.$val.'</option>';
+	$orderedProductList = '';
+	
+	foreach ($products as $key => $val)
+		$orderedProductList .= '<option value="'.$key.'" '.(intval(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
+	$smarty->assign('isLogged', 1);
+	$smarty->assign('orderList', $orderList);
+	$smarty->assign('orderedProductList', $orderedProductList);
+}
+
 if (Tools::isSubmit('submitMessage'))
 {
 	$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
@@ -19,7 +52,7 @@ if (Tools::isSubmit('submitMessage'))
     elseif (!Validate::isMessage($message))
         $errors[] = Tools::displayError('invalid message');
     elseif (!($id_contact = intval(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact(intval($id_contact), intval($cookie->id_lang)))))
-    	$errors[] = Tools::displayError('please select a contact in the list');
+    	$errors[] = Tools::displayError('please select a subject in the list');
     else
     {
 		if (intval($cookie->id_customer))
@@ -59,6 +92,8 @@ if (Tools::isSubmit('submitMessage'))
 				$ct->id_contact = intval($id_contact);
 				if ($id_order = (int)Tools::getValue('id_order'))
 					$ct->id_order = $id_order;
+				if ($id_product = (int)Tools::getValue('id_product'))
+					$ct->id_product = $id_product;
 				$ct->update();
 			}
 			else
@@ -68,6 +103,8 @@ if (Tools::isSubmit('submitMessage'))
 					$ct->id_customer = intval($customer->id);
 				if ($id_order = (int)Tools::getValue('id_order'))
 					$ct->id_order = $id_order;
+				if ($id_product = (int)Tools::getValue('id_product'))
+					$ct->id_product = $id_product;
 				$ct->id_contact = intval($id_contact);
 				$ct->id_lang = (int)$cookie->id_lang;
 				$ct->email = Tools::getValue('from');

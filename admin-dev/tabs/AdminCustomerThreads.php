@@ -207,6 +207,8 @@ class AdminCustomerThreads extends AdminTab
 		
 		if (!$email)
 		{
+			if (!empty($message['id_product']) AND empty($message['employee_name']))
+				$lastidorder = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'order_detail WHERE product_id = '.intval($message['id_product']).' ORDER BY id_order DESC');
 			$output = '
 			<fieldset style="'.(!empty($message['employee_name']) ? 'background: rgb(255,236,242);' : '').'width:600px;margin-top:10px">
 				<legend '.(empty($message['employee_name']) ? '' : 'style="background:rgb(255,210,225)"').'>'.(
@@ -229,7 +231,11 @@ class AdminCustomerThreads extends AdminTab
 						: ''
 					).(
 						(!empty($message['id_order']) AND empty($message['employee_name']))
-						? '<b>'.$this->l('Order #:').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($message['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_order']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('Order #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($message['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_order']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						: ''
+					).(
+						(!empty($message['id_product']) AND empty($message['employee_name']))
+						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($lastidorder).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'<br />
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
@@ -248,6 +254,7 @@ class AdminCustomerThreads extends AdminTab
 			<b>'.$this->l('Sent by:').'</b> '.(!empty($message['customer_name']) ? $message['customer_name'].' ('.$message['email'].')' : $message['email'])
 			.((!empty($message['id_customer']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Customer ID:').'</b> '.intval($message['id_customer']).'<br />' : '')
 			.((!empty($message['id_order']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Order #:').'</b> '.intval($message['id_order']).'<br />' : '')
+			.((!empty($message['id_product']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Product #:').'</b> '.intval($message['id_product']).'<br />' : '')
 			.'<br /><b>'.$this->l('Subject:').'</b> '.$message['subject'];
 		}
 		
@@ -409,7 +416,7 @@ class AdminCustomerThreads extends AdminTab
 			$products = $customer->getBoughtProducts();
 			$orders = Order::getCustomerOrders($customer->id);
 			
-			echo '<div style="float:left">';
+			echo '<div style="float:left;width:600px">';
 			if ($orders AND sizeof($orders))
 			{
 				$totalOK = 0;
@@ -423,7 +430,7 @@ class AdminCustomerThreads extends AdminTab
 					}
 				if ($countOK = sizeof($ordersOK))
 				{
-					echo '<div style="float:left;margin-right:20px">
+					echo '<div style="float:left;margin-right:20px;">
 					<h2>'.$this->l('Orders').'</h2>
 					<table cellspacing="0" cellpadding="0" class="table float">
 						<tr>
@@ -435,6 +442,7 @@ class AdminCustomerThreads extends AdminTab
 							<th class="center">'.$this->l('State').'</th>
 							<th class="center">'.$this->l('Actions').'</th>
 						</tr>';
+						$irow = 0;
 					foreach ($ordersOK AS $order)
 						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 						<td class="center">'.$order['id_order'].'</td>
@@ -462,6 +470,7 @@ class AdminCustomerThreads extends AdminTab
 						<th class="center">'.$this->l('Quantity').'</th>
 						<th class="center">'.$this->l('Actions').'</th>
 					</tr>';
+				$irow = 0;
 				$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
 				foreach ($products AS $product)
 					echo '

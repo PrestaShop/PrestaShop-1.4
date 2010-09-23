@@ -409,12 +409,13 @@ CREATE TABLE `PREFIX_customer_thread` (
   `id_contact` int(10) unsigned NOT NULL,
   `id_customer` int(10) unsigned default NULL,
   `id_order` int(10) unsigned default NULL,
+  `id_product` int(10) unsigned default NULL,
   `status` enum('open','closed','pending1','pending2') NOT NULL default 'open',
   `email` varchar(128) NOT NULL,
   `token` varchar(12) default NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
-  PRIMARY KEY  (`id_customer_thread`)
+	PRIMARY KEY (`id_customer_thread`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
