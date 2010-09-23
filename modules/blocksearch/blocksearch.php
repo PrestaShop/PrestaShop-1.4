@@ -56,6 +56,9 @@ class BlockSearch extends Module
 
 	function hookHeader($params)
 	{
+		global $smarty;
+		$instantSearch = intval(Configuration::get('PS_INSTANT_SEARCH'));
+		$smarty->assign('instantsearch', $instantSearch);
 		if (Configuration::get('PS_SEARCH_AJAX'))
 			return $this->display(__FILE__, 'header.tpl');
 	}

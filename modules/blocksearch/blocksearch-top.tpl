@@ -10,7 +10,56 @@
 	</p>
 	</form>
 </div>
-{if $ajaxsearch}
+{if $instantsearch}
+	<script type="text/javascript">{literal}
+		function tryToCloseInstantSearch() {
+			if ($('#old_center_column').length > 0)
+			{
+				$('#center_column').remove();
+				$('#old_center_column').attr('id', 'center_column');
+				return false;
+			}
+		}
+		
+		instantSearchQueries = new Array();
+		function stopInstantSearchQueries(){
+			for(i=0;i<instantSearchQueries.length;i++) {
+				instantSearchQueries[i].abort();
+			}
+			instantSearchQueries = new Array();
+		}
+		
+		$("#search_query").keyup(function(){
+			if($(this).val().length > 0){
+				stopInstantSearchQueries();
+				instantSearchQuery = $.ajax({
+				url: '{/literal}{if $search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php',
+				data: 'instantSearch=1&id_lang={/literal}{$cookie->id_lang}{literal}&q='+$(this).val(),
+				dataType: 'html',
+				success: function(data){
+					if($("#search_query").val().length > 0)
+					{
+						tryToCloseInstantSearch();
+						$('#center_column').attr('id', 'old_center_column');
+						$('#old_center_column').after('<div id="center_column">'+data+'</div>');
+						$("#instant_search_results a.close").click(function() {
+							$("#search_query").val('');
+							return tryToCloseInstantSearch();
+						});
+						return false;
+					}
+					else
+						tryToCloseInstantSearch();
+					}
+				});
+				instantSearchQueries.push(instantSearchQuery);
+			}
+			else
+				tryToCloseInstantSearch();
+		});
+		{/literal}
+	</script>
+{elseif $ajaxsearch}
 	<script type="text/javascript">{literal}
 		$('document').ready( function() {
 			$("#search_query")

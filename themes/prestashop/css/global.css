@@ -215,6 +215,23 @@ h1#logo {
 	margin: 0 0 30px 0;
 	overflow: hidden
 }
+#old_center_column {
+	display:none;
+}
+
+.ac_results_instant {
+	display:none;
+	visibility:hidden;
+}
+
+#instant_search_results a.close{
+	background:url("../img/nav-logout.gif") no-repeat scroll right 2px transparent;
+	float:right;
+	margin-right:7px;
+	padding-right:21px;
+	text-transform:none;
+}
+
 #right_column {
 	width: 191px;
 	margin-left: 21px;

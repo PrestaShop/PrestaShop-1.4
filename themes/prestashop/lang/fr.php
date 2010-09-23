@@ -454,6 +454,7 @@ $_LANG['scenes_22af645d1859cb5ca6da0c484f1f37ea'] = 'nouveau';
 $_LANG['scenes_800e90e940e7f1fb938b0fda5137f38c'] = 'En solde !';
 $_LANG['scenes_901b3cbc35bc72fba17d5ccb45afbbc4'] = 'Prix réduit !';
 $_LANG['search_13348442cc6a27032d2b4aa28b75a5d3'] = 'Recherchez';
+$_LANG['search_fc15815efcaff8f91743698cdf449f90'] = 'Retour à la page précédente';
 $_LANG['search_974056479706646f1e092ada9e3cfc2b'] = 'Aucun résultat trouvé';
 $_LANG['search_e59894bdfd0b523f5036ff21fa905474'] = 'Merci de renseigner un mot clé pour effectuer une recherche';
 $_LANG['search_374a2615c744dd856979150a5fcc285e'] = 'résultat a été trouvé.';
