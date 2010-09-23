@@ -151,6 +151,8 @@ class	Cookie
 	  */
 	public function __unset($key)
 	{
+		if (isset($this->_content[$key]))
+			$this->_modified = true;
 		unset($this->_content[$key]);
 	}
 
