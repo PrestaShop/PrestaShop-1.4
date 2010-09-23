@@ -1,5 +1,7 @@
 <?php
 
+include('EditorialClass.php');
+
 class Editorial extends Module
 {
 	/** @var max image size */
@@ -12,16 +14,59 @@ class Editorial extends Module
 		$this->version = '1.5';
 		
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Home text editor');
 		$this->description = $this->l('A text editor module for your homepage');
 	}
 
 	public function install()
 	{
-		if (!parent::install())
+		if (!parent::install() OR !$this->registerHook('home'))
 			return false;
-		return $this->registerHook('home');
+		
+		if (!Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'editorial` (
+		`id_editorial` int(10) unsigned NOT NULL auto_increment,
+		`body_home_logo_link` varchar(255) NOT NULL,
+		PRIMARY KEY (`id_editorial`))
+		ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+			return false;
+		
+		if (!Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'editorial_lang` (
+		`id_editorial` int(10) unsigned NOT NULL,
+		`id_lang` int(10) unsigned NOT NULL,
+		`body_title` varchar(255) NOT NULL,
+		`body_subheading` varchar(255) NOT NULL,
+		`body_paragraph` text NOT NULL,
+		`body_logo_subheading` varchar(255) NOT NULL,
+		PRIMARY KEY (`id_editorial`, `id_lang`))
+		ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+			return false;
+		
+		if (!Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'editorial`(`id_editorial`, `body_home_logo_link`) 
+		VALUES(1, "http://www.prestashop.com")'))
+			return false;
+		
+		if (!Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'editorial_lang`(`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`)
+		VALUES(1, 1, "Lorem ipsum dolor sit amet", "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua", "&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum&lt;/p&gt;", "Excepteur sint prestashop cupidatat non proident")'))
+			return false;
+		
+		if (!Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'editorial_lang`(`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`)
+		VALUES(1, 2, "Lorem ipsum dolor sit amet", "Excepteur sint occaecat cupidatat non proident", "&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum&lt;/p&gt;", "Lorem ipsum presta shop amet")'))
+			return false;
+		return true;
+	}
+	
+	public function uninstall()
+	{
+		if (!parent::uninstall())
+			return false;
+		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial`') AND
+				Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial_lang`'));
 	}
 
 	public function putContent($xml_data, $key, $field, $forbidden, $section)
@@ -65,41 +110,9 @@ class Editorial extends Module
 			// Forbidden key
 			$forbidden = array('submitUpdate');
 			
-			foreach ($_POST AS $key => $value)
-				if (!Validate::isString($_POST[$key]))
-				{
-					$this->_html .= $this->displayError($this->l('Invalid html field, javascript is forbidden'));
-					$this->_displayForm();
-					return $this->_html;
-				}
-
-			// Generate new XML data
-			$newXml = '<?xml version=\'1.0\' encoding=\'utf-8\' ?>'."\n";
-			$newXml .= '<editorial>'."\n";
-			$newXml .= '	<header>';
-			// Making header data
-			foreach ($_POST AS $key => $field)
-				if ($line = $this->putContent($newXml, $key, $field, $forbidden, 'header'))
-					$newXml .= $line;
-			$newXml .= "\n".'	</header>'."\n";
-			$newXml .= '	<body>';
-			// Making body data
-			foreach ($_POST AS $key => $field)
-				if ($line = $this->putContent($newXml, $key, $field, $forbidden, 'body'))
-					$newXml .= $line;
-			$newXml .= "\n".'	</body>'."\n";
-			$newXml .= '</editorial>'."\n";
-
-			/* write it into the editorial xml file */
-			if ($fd = @fopen(dirname(__FILE__).'/editorial.xml', 'w'))
-			{
-				if (!@fwrite($fd, $newXml))
-					$errors .= $this->displayError($this->l('Unable to write to the editor file.'));
-				if (!@fclose($fd))
-					$errors .= $this->displayError($this->l('Can\'t close the editor file.'));
-			}
-			else
-				$errors .= $this->displayError($this->l('Unable to update the editor file.<br />Please check the editor file\'s writing permissions.'));
+			$editorial = new EditorialClass(1);
+			$editorial->copyFromPost();
+			$editorial->update();
 
 			/* upload the image */
 			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
@@ -131,11 +144,7 @@ class Editorial extends Module
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 		$divLangName = 'title¤subheading¤cpara¤logo_subheading';
 
-		/* xml loading */
-		$xml = false;
-		if (file_exists(dirname(__FILE__).'/editorial.xml'))
-				if (!$xml = simplexml_load_file(dirname(__FILE__).'/editorial.xml'))
-					$this->_html .= $this->displayError($this->l('Your editor file is empty.'));
+		$editorial = new EditorialClass(1);
 
 		$this->_html .= '
 				<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
@@ -207,7 +216,7 @@ class Editorial extends Module
 				{
 					$this->_html .= '
 					<div id="title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<input type="text" name="body_title_'.$language['id_lang'].'" id="body_title_'.$language['id_lang'].'" size="64" value="'.($xml ? stripslashes(htmlspecialchars($xml->body->{'title_'.$language['id_lang']})) : '').'" />
+						<input type="text" name="body_title_'.$language['id_lang'].'" id="body_title_'.$language['id_lang'].'" size="64" value="'.(isset($editorial->body_title[$language['id_lang']]) ? $editorial->body_title[$language['id_lang']] : '').'" />
 					</div>';
 				}
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'title', true);
@@ -223,7 +232,7 @@ class Editorial extends Module
 				{
 					$this->_html .= '
 					<div id="subheading_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<input type="text" name="body_subheading_'.$language['id_lang'].'" id="body_subheading_'.$language['id_lang'].'" size="64" value="'.($xml ? stripslashes(htmlspecialchars($xml->body->{'subheading_'.$language['id_lang']})) : '').'" />
+						<input type="text" name="body_subheading_'.$language['id_lang'].'" id="body_subheading_'.$language['id_lang'].'" size="64" value="'.(isset($editorial->body_subheading[$language['id_lang']]) ? $editorial->body_subheading[$language['id_lang']] : '').'" />
 					</div>';
 				 }
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'subheading', true);
@@ -238,7 +247,7 @@ class Editorial extends Module
 				{
 					$this->_html .= '
 					<div id="cpara_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<textarea class="rte" cols="70" rows="30" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.($xml ? stripslashes(htmlspecialchars($xml->body->{'paragraph_'.$language['id_lang']})) : '').'</textarea>
+						<textarea class="rte" cols="70" rows="30" id="body_paragraph_'.$language['id_lang'].'" name="body_paragraph_'.$language['id_lang'].'">'.(isset($editorial->body_paragraph[$language['id_lang']]) ? $editorial->body_paragraph[$language['id_lang']] : '').'</textarea>
 					</div>';
 				 }
 				
@@ -263,7 +272,7 @@ class Editorial extends Module
 				</div>
 				<label>'.$this->l('Homepage logo link').'</label>
 				<div class="margin-form">
-					<input type="text" name="body_home_logo_link" size="64" value="'.($xml ? stripslashes(htmlspecialchars($xml->body->home_logo_link)) : '').'" />
+					<input type="text" name="body_home_logo_link" size="64" value="'.$editorial->body_home_logo_link.'" />
 					<p style="clear: both">'.$this->l('Link used on the 2nd logo').'</p>
 				</div>
 				<label>'.$this->l('Homepage logo subheading').'</label>
@@ -273,7 +282,7 @@ class Editorial extends Module
 				{
 					$this->_html .= '
 					<div id="logo_subheading_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<input type="text" name="body_logo_subheading_'.$language['id_lang'].'" id="logo_subheading_'.$language['id_lang'].'" size="64" value="'.($xml ? stripslashes(htmlspecialchars($xml->body->{'logo_subheading_'.$language['id_lang']})) : '').'" />
+						<input type="text" name="body_logo_subheading_'.$language['id_lang'].'" id="logo_subheading_'.$language['id_lang'].'" size="64" value="'.(isset($editorial->body_logo_subheading[$language['id_lang']]) ? $editorial->body_logo_subheading[$language['id_lang']] : '').'" />
 					</div>';
 				 }
 				
@@ -290,24 +299,16 @@ class Editorial extends Module
 
 	public function hookHome($params)
 	{
-		if (file_exists('modules/editorial/editorial.xml'))
-		{
-			if ($xml = simplexml_load_file('modules/editorial/editorial.xml'))
-			{
-				global $cookie, $smarty;
-				$smarty->assign(array(
-					'xml' => $xml,
-					'homepage_logo' => file_exists('modules/editorial/homepage_logo.jpg'),
-					'logo_subheading' => 'logo_subheading_'.$cookie->id_lang,
-					'title' => 'title_'.$cookie->id_lang,
-					'subheading' => 'subheading_'.$cookie->id_lang,
-					'paragraph' => 'paragraph_'.$cookie->id_lang,
-					'this_path' => $this->_path
-				));
-				return $this->display(__FILE__, 'editorial.tpl');
-			}
-		}
-		return false;
+		global $cookie, $smarty;
+		
+		$editorial = new EditorialClass(1);
+		$smarty->assign(array(
+			'editorial' => $editorial,
+			'default_lang' => Configuration::get('PS_LANG_DEFAULT'),
+			'id_lang' => $cookie->id_lang,
+			'homepage_logo' => file_exists('modules/editorial/homepage_logo.jpg'),
+			'this_path' => $this->_path
+		));
+		return $this->display(__FILE__, 'editorial.tpl');
 	}
-
 }

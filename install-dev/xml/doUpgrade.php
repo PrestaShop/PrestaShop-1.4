@@ -44,15 +44,26 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatemodulessql.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
 // Convert prices to the new 1.3 rounding system
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
+// Update editorial module to delete all xml methods
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'editorial_update.php');
 
 //old version detection
 if (!file_exists(SETTINGS_FILE))
 	die('<action result="fail" error="30" />'."\n");
 if (!file_exists(DEFINES_FILE))
 	die('<action result="fail" error="37" />'."\n");
+include_once(SETTINGS_FILE); 
 
-include_once(SETTINGS_FILE);
+if (!defined('_THEMES_DIR_'))
+	define('_THEMES_DIR_', __PS_BASE_URI__.'themes/');
+if (!defined('_PS_IMG_'))
+	define('_PS_IMG_', __PS_BASE_URI__.'img/');
+if (!defined('_PS_JS_DIR_'))
+	define('_PS_JS_DIR_', __PS_BASE_URI__.'js/');
+if (!defined('_PS_CSS_DIR_'))
+	define('_PS_CSS_DIR_', __PS_BASE_URI__.'css/');
 include_once(DEFINES_FILE);
+
 $oldversion = _PS_VERSION_;
 
 $versionCompare =  version_compare(INSTALL_VERSION, _PS_VERSION_);

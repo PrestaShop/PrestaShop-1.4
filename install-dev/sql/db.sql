@@ -1407,3 +1407,19 @@ CREATE TABLE `PREFIX_webservice_permission` (
   KEY `method` (`method`),
   KEY `id_webservice_account` (`id_webservice_account`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_editorial` (
+	`id_editorial` int(10) unsigned NOT NULL auto_increment,
+	`body_home_logo_link` varchar(255) NOT NULL,
+	PRIMARY KEY (`id_editorial`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+		
+CREATE TABLE `PREFIX_editorial_lang` (
+	`id_editorial` int(10) unsigned NOT NULL,
+	`id_lang` int(10) unsigned NOT NULL,
+	`body_title` varchar(255) NOT NULL,
+	`body_subheading` varchar(255) NOT NULL,
+	`body_paragraph` text NOT NULL,
+	`body_logo_subheading` varchar(255) NOT NULL,
+	PRIMARY KEY (`id_editorial`, `id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

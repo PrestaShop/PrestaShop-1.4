@@ -412,3 +412,6 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('
 
 ALTER TABLE `PREFIX_address` ADD `vat_number` varchar(32) NULL DEFAULT NULL AFTER `phone_mobile`;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
+
+/* PHP */
+/* PHP:editorial_update(); */;
