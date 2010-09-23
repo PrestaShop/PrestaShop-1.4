@@ -190,6 +190,7 @@ class	Cookie
 		$this->_content = array();
 		$this->_setcookie();
 		unset($_COOKIE[$this->_name]);
+		$this->_modified = true;
 	}
 
 	/**
@@ -209,6 +210,7 @@ class	Cookie
 		unset($this->_content['id_cart']);
 		unset($this->_content['id_address_invoice']);
 		unset($this->_content['id_address_delivery']);
+		$this->_modified = true;
 	}
 	
 	function makeNewLog()
@@ -216,6 +218,7 @@ class	Cookie
 		unset($this->_content['id_customer']);
 		unset($this->_content['id_guest']);
 		Guest::setNewGuest($this);
+		$this->_modified = true;
 	}
 
 	/**
