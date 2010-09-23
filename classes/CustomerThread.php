@@ -38,6 +38,14 @@ class CustomerThread extends ObjectModel
 		return $fields;
 	}
 	
+	public function delete()
+	{
+		if (!Validate::isUnsignedId($this->id))
+			return false;
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_message` WHERE `id_customer_thread` = '.intval($this->id));
+		return (parent::delete());
+	}
+	
 	public static function getCustomerMessages($id_customer)
 	{
 		return Db::getInstance()->ExecuteS('

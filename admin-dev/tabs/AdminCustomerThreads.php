@@ -13,7 +13,7 @@ class AdminCustomerThreads extends AdminTab
 	 	$this->className = 'CustomerThread';
 	 	$this->edit = false; 
 	 	$this->view = true; 
-	 	$this->delete = false;
+	 	$this->delete = true;
 		
  		$this->_select = 'CONCAT(c.firstname," ",c.lastname) as customer, cl.name as contact, l.name as language, group_concat(message) as messages, (
 			SELECT IFNULL(CONCAT(LEFT(e.firstname, 1),". ",e.lastname), "--")
@@ -48,8 +48,8 @@ class AdminCustomerThreads extends AdminTab
 			'id_customer_thread' => array('title' => $this->l('ID'), 'width' => 25),
 			'customer' => array('title' => $this->l('Customer'), 'width' => 100, 'filter_key' => 'customer', 'tmpTableFilter' => true),
 			'email' => array('title' => $this->l('E-mail'), 'width' => 100, 'filter_key' => 'a!email'),
-			'contact' => array('title' => $this->l('Type'), 'width' => 100, 'type' => 'select', 'select' => $contactArray, 'filter_key' => 'cl!id_contact', 'filter_type' => 'int'),
-			'language' => array('title' => $this->l('Language'), 'width' => 75, 'type' => 'select', 'select' => $languageArray, 'filter_key' => 'l!id_lang', 'filter_type' => 'int'),
+			'contact' => array('title' => $this->l('Type'), 'width' => 75, 'type' => 'select', 'select' => $contactArray, 'filter_key' => 'cl!id_contact', 'filter_type' => 'int'),
+			'language' => array('title' => $this->l('Language'), 'width' => 60, 'type' => 'select', 'select' => $languageArray, 'filter_key' => 'l!id_lang', 'filter_type' => 'int'),
 			'status' => array('title' => $this->l('Status'), 'width' => 50, 'type' => 'select', 'select' => $statusArray, 'filter_key' => 'a!status', 'filter_type' => 'string'),
 			'employee' => array('title' => $this->l('Employee'), 'width' => 100, 'filter_key' => 'employee', 'tmpTableFilter' => true),
 			'messages' => array('title' => $this->l('Messages'), 'width' => 50, 'filter_key' => 'messages', 'tmpTableFilter' => true, 'maxlength' => 0),
