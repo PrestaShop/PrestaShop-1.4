@@ -225,7 +225,7 @@ class		Cart extends ObjectModel
 			return $this->_products;
 		$sql = '
 		SELECT cp.`id_product_attribute`, cp.`id_product`, cp.`quantity` AS cart_quantity, pl.`name`,
-		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`,
+		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`, p.`additional_shipping_cost`,
 		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`, p.`minimal_quantity`,
 		t.`id_tax`, tl.`name` AS tax, t.`rate`, pa.`price` AS price_attribute, pa.`quantity` AS quantity_attribute, 
         pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category, CONCAT(cp.`id_product`, cp.`id_product_attribute`) AS unique_id,
@@ -831,7 +831,7 @@ class		Cart extends ObjectModel
 			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier));
 		$carrier = self::$_carriers[$id_carrier];
 		if (!Validate::isLoadedObject($carrier))
-			die(Tools::displayError('Hack attempt: "no default carrier"'));
+			die(Tools::displayError('Fatal error: "no default carrier"'));
         if (!$carrier->active)
 			return $shipping_cost;
 		// Select carrier tax
@@ -886,9 +886,14 @@ class		Cart extends ObjectModel
 		
 		$shipping_cost = Tools::convertPrice($shipping_cost, Currency::getCurrencyInstance(intval($this->id_currency)));
 		
+		// Additional Shipping Cost per product
+		foreach($products AS $product)
+			$shipping_cost += $product['additional_shipping_cost'] * $product['cart_quantity'];
+		
 		// Apply tax
 		if (isset($carrierTax))
-			 $shipping_cost *= 1 + ($carrierTax / 100);
+			$shipping_cost *= 1 + ($carrierTax / 100);
+
 		
 		if ($carrier->shipping_external)
 		{	

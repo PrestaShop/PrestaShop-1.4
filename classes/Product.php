@@ -67,6 +67,9 @@ class		Product extends ObjectModel
 
 	/** @var float Price in euros */
 	public 		$price = 0;
+	
+	/** @var float Additional shipping cost */
+	public 		$additional_shipping_cost = 0;
 
 	/** @var float Wholesale Price in euros */
 	public 		$wholesale_price = 0;
@@ -181,6 +184,7 @@ class		Product extends ObjectModel
 		'quantity' => 'isUnsignedInt',
 		'minimal_quantity' => 'isUnsignedInt',
 		'price' => 'isPrice',
+		'additional_shipping_cost' => 'isPrice',
 		'wholesale_price' => 'isPrice',
 		'reduction_price' => 'isPrice',
 		'reduction_percent' => 'isFloat',
@@ -268,6 +272,7 @@ class		Product extends ObjectModel
 		$fields['quantity'] = intval($this->quantity);
 		$fields['minimal_quantity'] = intval($this->minimal_quantity);
 		$fields['price'] = floatval($this->price);
+		$fields['additional_shipping_cost'] = floatval($this->additional_shipping_cost);
 		$fields['wholesale_price'] = floatval($this->wholesale_price);
 		$fields['reduction_price'] = floatval($this->reduction_price);
 		$fields['reduction_percent'] = floatval($this->reduction_percent);

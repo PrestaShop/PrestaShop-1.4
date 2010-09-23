@@ -1041,6 +1041,7 @@ CREATE TABLE `PREFIX_product` (
   `reduction_percent` float default NULL,
   `reduction_from` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
   `reduction_to` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
+  `additional_shipping_cost` decimal(20,2) NOT NULL,  
   `reference` varchar(32) default NULL,
   `supplier_reference` varchar(32) default NULL,
   `location` varchar(64) default NULL,

@@ -1773,6 +1773,16 @@ class AdminProducts extends AdminTab
 							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
 						</td>
 					</tr>
+					</tr>					
+					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
+					<tr>					
+					<tr>
+						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
+						<td style="padding-bottom:5px;">
+							<input type="text" name="additional_shipping_cost" value="'.($this->getFieldValue($obj, 'additional_shipping_cost')).'" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
+							<p>'.$this->l('Carrier tax will be applied.').'</p>
+						</td>
+					</tr>					
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
 						<td class="col-left">'.$this->l('Quantity:').'</td>
