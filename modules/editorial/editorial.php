@@ -1,7 +1,5 @@
 <?php
 
-include('EditorialClass.php');
-
 class Editorial extends Module
 {
 	/** @var max image size */
@@ -17,6 +15,10 @@ class Editorial extends Module
 
 		$this->displayName = $this->l('Home text editor');
 		$this->description = $this->l('A text editor module for your homepage');
+		$path = dirname(__FILE__);
+		if (strpos(__FILE__, 'Module.php') !== false)
+			$path .= '/../modules/'.$this->name;
+		include_once($path.'/EditorialClass.php');
 	}
 
 	public function install()
