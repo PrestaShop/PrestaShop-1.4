@@ -162,9 +162,9 @@ class Ogone extends PaymentModule
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 	
-	public function validateOrder($id_cart, $id_order_state, $amount, $displayName, $message = '', $p1 = NULL, $p2 = NULL, $p3 = true)
+	public function validate($id_order_state, $amount, $message = '')
 	{
-		parent::validateOrder($id_cart, $id_order_state, $amount, $displayName, $message, $p1, $p2, $p3);
+		$this->validateOrder((int)Tools::getValue('orderID'), $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true);
 		
 		if ($amount > 0 AND class_exists('PaymentCC'))
 		{
