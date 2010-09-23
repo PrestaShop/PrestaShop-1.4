@@ -164,7 +164,8 @@ class Ogone extends PaymentModule
 	
 	public function validate($id_order_state, $amount, $message = '')
 	{
-		$this->validateOrder((int)Tools::getValue('orderID'), $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true);
+		$id_cart = Tools::getValue('orderID');
+		$this->validateOrder($id_cart, $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true);
 		
 		if ($amount > 0 AND class_exists('PaymentCC'))
 		{

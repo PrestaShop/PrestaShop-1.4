@@ -1005,7 +1005,7 @@ CREATE TABLE `PREFIX_page_viewed` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_payment_cc` (
-	`id_payment_cc` INT NOT NULL,
+	`id_payment_cc` INT NOT NULL auto_increment,
 	`id_order` INT UNSIGNED NULL,
 	`id_currency` INT UNSIGNED NOT NULL,
 	`amount` DECIMAL(10,2) NOT NULL,
