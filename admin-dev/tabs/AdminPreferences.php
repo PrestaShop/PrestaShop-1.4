@@ -307,7 +307,8 @@ class AdminPreferences extends AdminTab
 		global $currentIndex;
 
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$confValues = $this->getConf($fields, $this->_languages);
+		$languages = Language::getLanguages(false);
+		$confValues = $this->getConf($fields, $languages);
 		$divLangName = $this->getDivLang($fields);
 		$required = false;
 
@@ -385,12 +386,12 @@ class AdminPreferences extends AdminTab
 					break;
 
 				case 'textLang':
-					foreach ($this->_languages as $language)
+					foreach ($languages as $language)
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="margin-bottom:8px; display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; vertical-align: top;">
 							<input type="text" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'_'.$language['id_lang'].'" value="'.htmlentities($this->getVal($confValues, $key.'_'.$language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 						</div>';
-					$this->displayFlags($this->_languages, $defaultLanguage, $divLangName, $key);
+					$this->displayFlags($languages, $defaultLanguage, $divLangName, $key);
 					break;
 
 				case 'file':
