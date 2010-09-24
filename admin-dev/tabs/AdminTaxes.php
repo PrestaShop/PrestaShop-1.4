@@ -26,7 +26,8 @@ class AdminTaxes extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_tax' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
-		'rate' => array('title' => $this->l('Rate'), 'align' => 'center', 'suffix' => '%', 'width' => 50));
+		'rate' => array('title' => $this->l('Rate'), 'align' => 'center', 'suffix' => '%', 'width' => 50),
+		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 	
 		$this->optionTitle = $this->l('Tax options');
 		$this->_fieldsOptions = array(
@@ -67,6 +68,13 @@ class AdminTaxes extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="5" name="rate" value="'.htmlentities($this->getFieldValue($obj, 'rate'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Format: XX.XX (e.g., 19.60)').'</p>
+				</div>
+				<label>'.$this->l('Enable:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
 				<label>'.$this->l('Zone:').'</label>
 				<div class="margin-form">';

@@ -417,6 +417,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NULL AFTER `reduction_to`;
 
 ALTER TABLE `PREFIX_currency` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';
+ALTER TABLE `PREFIX_tax` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';
 
 /* PHP */
 /* PHP:editorial_update(); */;

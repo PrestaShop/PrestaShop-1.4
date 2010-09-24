@@ -19,6 +19,9 @@ class Tax extends ObjectModel
 
 	/** @var float Rate (%) */
 	public 		$rate;
+	
+	/** @var bool active state */
+	public 		$active;
 
  	protected 	$fieldsRequired = array('rate');
  	protected 	$fieldsValidate = array('rate' => 'isFloat');
@@ -35,6 +38,7 @@ class Tax extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['rate'] = floatval($this->rate);
+		$fields['active'] = intval($this->active);
 		return $fields;
 	}
 	
@@ -137,12 +141,13 @@ class Tax extends ObjectModel
 	*
 	* @return array Taxes
 	*/
-	static public function getTaxes($id_lang = false)
+	static public function getTaxes($id_lang = false, $active = 1)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.id_tax, t.rate'.(intval($id_lang) ? ', tl.name, tl.id_lang ' : '').'
 		FROM `'._DB_PREFIX_.'tax` t
-		'.(intval($id_lang) ? 'LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
+		'.(intval($id_lang) ? 'LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')'
+		.($active == 1 ? 'WHERE t.`active` = 1' : '').'
 		ORDER BY `name` ASC' : ''));
 	}
 
@@ -156,13 +161,14 @@ class Tax extends ObjectModel
 		return Tax::checkTaxZone(intval($id_tax), intval($id_zone));
 	}
 
-	static public function getRateByState($id_state)
+	static public function getRateByState($id_state, $active = 1)
 	{
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT ts.`id_tax`, t.`rate`
 			FROM `'._DB_PREFIX_.'tax_state` ts
 			LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = ts.`id_tax`)
-			WHERE `id_state` = '.intval($id_state));
+			WHERE `id_state` = '.intval($id_state).
+			($active == 1 ? ' AND t.`active` = 1' : ''));
 		return $tax ? floatval($tax['rate']) : false;
 	}
 
@@ -211,22 +217,26 @@ class Tax extends ObjectModel
 	/**
 	  * Load all tax/zones relations in memory for caching
 	  */
-	static public function loadTaxZones()
+	static public function loadTaxZones($active = 1)
 	{
 		self::$_TAX_ZONES = array();
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_tax`, `id_zone` FROM `'._DB_PREFIX_.'tax_zone`');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT tz.`id_tax`, tz.`id_zone` FROM `'._DB_PREFIX_.'tax_zone` tz 
+		JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tz.`id_tax`)'.
+		($active == 1 ? ' WHERE t.`active` = 1' : ''));
 		if ($result === false)
 			die(Tools::displayError('Invalid loadTaxZones() SQL query!'));
 		foreach ($result AS $row)
 			self::$_TAX_ZONES[intval($row['id_zone'])][intval($row['id_tax'])] = true;
 	}
 	
-	static public function getTaxIdByRate($rate)
+	static public function getTaxIdByRate($rate, $active = 1)
 	{
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `id_tax`
 			FROM `'._DB_PREFIX_.'tax`
-			WHERE `rate` = '.floatval($rate));
+			WHERE `rate` = '.floatval($rate).
+			($active == 1 ? ' AND `active` = 1' : ''));
 		return $tax ? intval($tax['id_tax']) : false;
 	}
 }
