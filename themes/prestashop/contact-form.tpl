@@ -8,6 +8,11 @@
 	<ul class="footer_links">
 		<li><a href="{$base_dir}"><img class="icon" alt="" src="{$img_dir}icon/home.gif"/></a><a href="{$base_dir}">{l s='Home'}</a></li>
 	</ul>
+{elseif isset($alreadySent)}
+	<p>{l s='Your message has already been sent.'}</p>
+	<ul class="footer_links">
+		<li><a href="{$base_dir}"><img class="icon" alt="" src="{$img_dir}icon/home.gif"/></a><a href="{$base_dir}">{l s='Home'}</a></li>
+	</ul>
 {else}
 	<p class="bold">{l s='For questions about an order or for information about our products'}.</p>
 	{include file=$tpl_dir./errors.tpl}
@@ -51,7 +56,7 @@
 			<p class="text">
 				<label for="id_order">{l s='Order ID'}</label>
 				{if !isset($customerThread.id_order) && $isLogged == 1}
-					<select name="id_order" ><option value="0">-- {l s='Choose'} --</option>{$orderList}</select>
+					<select name="id_order" ><option value="0">{l s='-- Choose --'}</option>{$orderList}</select>
 				{elseif !isset($customerThread.id_order) && !isset($isLogged)}
 					<input type="text" name="id_order" id="id_order" value="{if isset($customerThread.id_order) && $customerThread.id_order > 0}{$customerThread.id_order|intval}{else}{if isset($smarty.post.id_order)}{$smarty.post.id_order|intval}{/if}{/if}" />
 				{elseif $customerThread.id_order > 0}
@@ -63,7 +68,7 @@
 			<p class="text">
 			<label for="id_product">{l s='Product'}</label>
 				{if !isset($customerThread.id_product)}
-					<select name="id_product" style="width:300px;"><option value="0">-- {l s='Choose'} --</option>{$orderedProductList}</select>
+					<select name="id_product" style="width:300px;"><option value="0">{l s='-- Choose --'}</option>{$orderedProductList}</select>
 				{elseif $customerThread.id_product > 0}
 					<input type="text" name="id_product" id="id_product" value="{$customerThread.id_product|intval}" readonly="readonly" />
 				{/if}

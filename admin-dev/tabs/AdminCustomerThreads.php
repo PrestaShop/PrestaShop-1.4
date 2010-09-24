@@ -253,8 +253,8 @@ class AdminCustomerThreads extends AdminTab
 			'.($id_employee ? '<a href="'.Tools::getHttpHost(true).$currentIndex.'&token='.Tools::getAdminToken('AdminCustomerThreads'.intval(Tab::getIdFromClassName('AdminCustomerThreads')).intval($id_employee)).'&id_customer_thread='.(int)$message['id_customer_thread'].'&viewcustomer_thread">'.$this->l('View this thread').'</a><br />' : '').'
 			<b>'.$this->l('Sent by:').'</b> '.(!empty($message['customer_name']) ? $message['customer_name'].' ('.$message['email'].')' : $message['email'])
 			.((!empty($message['id_customer']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Customer ID:').'</b> '.intval($message['id_customer']).'<br />' : '')
-			.((!empty($message['id_order']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Order #:').'</b> '.intval($message['id_order']).'<br />' : '')
-			.((!empty($message['id_product']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Product #:').'</b> '.intval($message['id_product']).'<br />' : '')
+			.((!empty($message['id_order']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Order #').':</b> '.intval($message['id_order']).'<br />' : '')
+			.((!empty($message['id_product']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Product #').':</b> '.intval($message['id_product']).'<br />' : '')
 			.'<br /><b>'.$this->l('Subject:').'</b> '.$message['subject'];
 		}
 		
