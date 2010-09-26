@@ -1625,6 +1625,16 @@ tr.cart_total_price { font-weight: bold }
 	border: 1px solid #bdc2c9;
 	padding: 0.7em
 }
+#order form#voucher fieldset #display_cart_vouchers {
+	margin-top:5px;
+	clear:both;
+	float:left;
+}
+#order form#voucher fieldset #display_cart_vouchers .voucher_name {
+	color:#DD2A81;
+	font-weight:bold;
+	cursor:pointer;
+}
 #order form#voucher h4,
  #order form#voucher p,
  #order form#voucher .button { display: inline }

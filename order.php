@@ -433,7 +433,7 @@ function displayPayment()
 /* Confirmation step */
 function displaySummary()
 {
-	global $smarty, $cart;
+	global $smarty, $cart, $cookie;
 
 	if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
 		$smarty->assign('carrierPicture', 1);
@@ -470,8 +470,10 @@ function displaySummary()
 		'customizedDatas' => $customizedDatas,
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-		'lastProductAdded' => $cart->getLastProduct()
+		'lastProductAdded' => $cart->getLastProduct(),
+		'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang)),
 		));
+
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');

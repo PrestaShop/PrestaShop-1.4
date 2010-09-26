@@ -231,6 +231,14 @@
 				<input type="text" id="discount_name" name="discount_name" value="{if $discount_name}{$discount_name}{/if}" />
 			</p>
 			<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
+		{if $displayVouchers}
+			<h4>{l s='Take advantage of our offers:'}</h4>
+			<div id="display_cart_vouchers">
+			{foreach from=$displayVouchers item=voucher}
+				<span onclick="$('#discount_name').val('{$voucher.name}');return false;" class="voucher_name">{$voucher.name}</span> - {$voucher.description} <br />
+			{/foreach}
+			</div>
+		{/if}
 		</fieldset>
 	</form>
 </div>

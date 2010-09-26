@@ -510,6 +510,7 @@ $_LANG['shopping-cart_ec211f7c20af43e742bf2570c3cb84f9'] = 'Ajouter';
 $_LANG['shopping-cart_bb2c356401c2d3c0be676d940cfddaf6'] = 'Soustraitre';
 $_LANG['shopping-cart_a82868319826fb092b73968e661b5b38'] = 'Bons de réduction';
 $_LANG['shopping-cart_bcc7582c9a66be8187578997794a9c1f'] = 'Code :';
+$_LANG['shopping-cart_f7b96335c6a33477579e43f3da368507'] = 'Profitez de nos offres :';
 $_LANG['shopping-cart_af0f5bdc5be121b9307687aeeae38c17'] = 'Adresse de livraison';
 $_LANG['shopping-cart_601d8c4b9f72fc1862013c19b677a499'] = 'Adresse de facturation';
 $_LANG['shopping-cart_f8617a92ba0a0a4eabee724eab7c9f48'] = 'Transporteur :';

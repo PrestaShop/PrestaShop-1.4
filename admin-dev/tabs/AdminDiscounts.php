@@ -338,6 +338,14 @@ class AdminDiscounts extends AdminTab
 					<input type="text" size="20" id="date_to" name="date_to" value="'.($this->getFieldValue($obj, 'date_to') ? htmlentities($this->getFieldValue($obj, 'date_to'), ENT_COMPAT, 'UTF-8') : (date('Y') + 1).date('-m-d H:i:s')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('End date/time at which voucher is no longer valid').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
 				</div>
+				<label>'.$this->l('Display the voucher in the cart summary:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="cart_display" id="cart_active_on" value="1" '.($this->getFieldValue($obj, 'cart_display') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="cart_display_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="cart_display" id="cart_active_off" value="0" '.(!$this->getFieldValue($obj, 'cart_display') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="cart_display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+				</div>
+				<div class="clear" / >
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>

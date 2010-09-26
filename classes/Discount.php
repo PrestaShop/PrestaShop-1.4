@@ -55,8 +55,17 @@ class		Discount extends ObjectModel
 	/** @var integer Minimum cart total amount required to use the discount */
 	public 		$minimal;
 	
+	/** @var integer display the discount in the summary */
+	public 		$cart_display;
+	
 	/** @var boolean Status */
 	public 		$active = true;
+	
+		/** @var string Object creation date */
+	public 		$date_add;
+
+	/** @var string Object last modification date */
+	public 		$date_upd;
 	
 	protected	$fieldsRequired = array('id_discount_type', 'name', 'value', 'quantity', 'quantity_per_user', 'date_from', 'date_to');
 	protected	$fieldsSize = array('name' => '32', 'date_from' => '32', 'date_to' => '32');
@@ -88,6 +97,9 @@ class		Discount extends ObjectModel
 		$fields['date_to'] = pSQL($this->date_to);
 		$fields['minimal'] = floatval($this->minimal);
 		$fields['active'] = intval($this->active);
+		$fields['cart_display'] = intval($this->cart_display);
+		$fields['date_add'] = pSQL($this->date_add);
+		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
 	}
 
@@ -387,6 +399,14 @@ class		Discount extends ObjectModel
 				return Tools::displayPrice($discountValue, $currency);
 		}
 		return ''; // return a string because it's a display method
+	}
+	
+	static public function getVouchersToCartDisplay($id_lang)
+	{
+		return Db::getInstance()->ExecuteS('SELECT d.name, dl.description, d.id_discount
+																				FROM '._DB_PREFIX_.'discount d
+																				LEFT JOIN '._DB_PREFIX_.'discount_lang dl ON (d.id_discount = dl.id_discount)
+																				WHERE d.active=1 AND d.date_from <=\''.pSQL(date('Y-m-d H:i:s')).'\' AND d.date_to>=\''.pSQL(date('Y-m-d H:i:s')).'\' AND dl.id_lang='.(int)$id_lang.' AND d.cart_display = 1 AND d.quantity > 0');
 	}
 
 }

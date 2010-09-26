@@ -420,5 +420,7 @@ ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NU
 ALTER TABLE `PREFIX_currency` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';
 ALTER TABLE `PREFIX_tax` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';
 
+ALTER TABLE `PREFIX_discount` ADD `cart_display` TINYINT( 4 ) NOT NULL AFTER `active` , ADD `date_add` DATETIME NOT NULL AFTER `cart_display` , ADD `date_upd` DATETIME NOT NULL AFTER `date_add` ;
+
 /* PHP */
 /* PHP:editorial_update(); */;
