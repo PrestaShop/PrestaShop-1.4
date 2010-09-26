@@ -55,7 +55,9 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (52, 'backOfficeFooter', 'Administration panel footer', NULL , 1),
 (53, 'deleteProductAttribute', 'Product Attribute Deletion', NULL, 0),
 (54, 'processCarrier', 'Carrier Process', NULL, 0),
-(55, 'orderDetail', 'Order Detail', 'To set the follow-up in smarty when order detail is called', 0);
+(55, 'orderDetail', 'Order Detail', 'To set the follow-up in smarty when order detail is called', 0),
+(56, 'beforeCarrier', 'Before carrier list', 'This hook is display before the carrier list on Front office', 1),
+(57, 'orderDetailDisplayed', 'Order detail displayed', 'Displayed on order detail on front office', 1);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

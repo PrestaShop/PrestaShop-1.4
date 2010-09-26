@@ -47,6 +47,8 @@
 	</p>
 	{/if}
 
+	{$HOOK_BEFORECARRIER}
+
 	{if $carriers && count($carriers)}
 	<div class="table_block"><br />
 		<table class="std">

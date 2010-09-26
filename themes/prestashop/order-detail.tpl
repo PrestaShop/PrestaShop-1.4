@@ -66,6 +66,7 @@
 	{if $address_delivery->phone}<li class="address_phone">{$address_delivery->phone|escape:'htmlall':'UTF-8'}</li>{/if}
 	{if $address_delivery->phone_mobile}<li class="address_phone_mobile">{$address_delivery->phone_mobile|escape:'htmlall':'UTF-8'}</li>{/if}
 </ul>
+{$HOOK_ORDERDETAILDISPLAYED}
 <form action="{$base_dir_ssl}order-follow.php" method="post">
 <div id="order-detail-content" class="table_block">
 	<table class="std">

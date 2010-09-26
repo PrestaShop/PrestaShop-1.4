@@ -387,6 +387,8 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 );
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('deleteProductAttribute', 'Product Attribute Deletion', NULL, 0);
+INSERT INTO `PREFIX_hook` (`name` ,`title` ,`description` ,`position`) VALUES ('beforeCarrier', 'Before carrier list', 'This hook is display before the carrier list on Front office', 1);
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('orderDetailDisplayed', 'Order detail displayed', 'Displayed on order detail on front office', 1);
 
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
 ((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'mailalerts'), 0)),
@@ -402,7 +404,6 @@ ALTER TABLE `PREFIX_product` ADD `volume_price` DECIMAL(20,6) NOT NULL DEFAULT '
 ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `volume_price`;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_VOLUME_UNIT', 'cl', NOW(), NOW());
-
 
 ALTER TABLE `PREFIX_carrier` ADD `shipping_external` TINYINT( 1 ) UNSIGNED NOT NULL;
 ALTER TABLE `PREFIX_carrier` ADD `external_module_name` varchar(64) NOT NULL;
