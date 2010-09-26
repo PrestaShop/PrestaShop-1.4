@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', 'On');
 class VatNumber extends Module
 {
 	public function __construct()
@@ -99,8 +99,12 @@ class VatNumber extends Module
 		
 		if (Tools::isSubmit('submitVatNumber'))
 		{
-			Configuration::updateValue('VATNUMBER_COUNTRY', intval(Tools::getValue('vatnumber_country')));
-			Configuration::updateValue('VATNUMBER_CHECKING', intval(Tools::getValue('vatnumber_checking')));
+			if (Tools::getValue('vatnumber_country'))
+				if (Configuration::updateValue('VATNUMBER_COUNTRY', intval(Tools::getValue('vatnumber_country'))))
+					echo $this->displayConfirmation($this->l('Your country has been updated.'));
+			$check = (int)Tools::getValue('vatnumber_checking');
+			if(Configuration::get('VATNUMBER_CHECKING') != $check AND Configuration::updateValue('VATNUMBER_CHECKING', $check))
+				echo ($check ? $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now enabled.')) : $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now disabled.')));
 		}
 		echo '
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
@@ -114,9 +118,10 @@ class VatNumber extends Module
 		echo '		</select>
 				</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Enable checking of the VAT number with WebService').'</label>
+				<label>'.$this->l('Enable checking of the VAT number with the WebService').'</label>
 				<div class="margin-form">
 					<input type="checkbox" name="vatnumber_checking" '.(Configuration::get('VATNUMBER_CHECKING') ? 'checked="checked"' : '').' value="1"/>
+					<p>'.$this->l('The verification by the webservice is slow. Enabling this option can slow down your shop.').'</p>
 				</div>
 				<div class="clear">&nbsp;</div>
 				<div class="margin-form">
