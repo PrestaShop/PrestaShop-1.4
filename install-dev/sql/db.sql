@@ -427,7 +427,8 @@ CREATE TABLE `PREFIX_customer_message` (
   `ip_address` int(11) default NULL,
   `user_agent` varchar(128) default NULL,
   `date_add` datetime NOT NULL,
-  PRIMARY KEY  (`id_customer_message`)
+  PRIMARY KEY  (`id_customer_message`),
+  KEY `id_customer_thread` (`id_customer_thread`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customer_thread` (

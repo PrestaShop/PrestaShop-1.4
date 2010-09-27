@@ -22,7 +22,8 @@ CREATE TABLE `PREFIX_customer_thread` (
   `token` varchar(12) default NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
-  PRIMARY KEY (`id_customer_thread`)
+  PRIMARY KEY (`id_customer_thread`),
+  KEY `id_customer_thread` (`id_customer_thread`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customer_message` (
