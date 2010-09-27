@@ -73,9 +73,9 @@ class		CMS extends ObjectModel
 		return parent::add($autodate, true); 
 	}
 	
-	public function update()
+	public function update($nullValues = false)
 	{
-		if (parent::update())
+		if (parent::update($nullValues))
 			return $this->cleanPositions($this->id_cms_category);
 		return false;
 	}
@@ -212,7 +212,5 @@ class		CMS extends ObjectModel
 		AND l.id_lang = '.intval($id_lang).'
 		ORDER BY `position`');
 	}
-
 }
-
 ?>

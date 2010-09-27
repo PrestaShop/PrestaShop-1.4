@@ -670,7 +670,7 @@ INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 1, 'Home', '', 'home', NULL, NU
 INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL);
 INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
 
-INSERT INTO `ps_cms_category` VALUES(1, 0, 0, 1, 'now()', 'now()');
+INSERT INTO `PREFIX_cms_category` VALUES(1, 0, 0, 1, 'now()', 'now()');
 
 INSERT INTO `PREFIX_block_cms` (`id_block`, `id_cms`) VALUES (23, 3),(23, 4),(12, 1),(12, 2),(12, 3),(12, 4);
 
