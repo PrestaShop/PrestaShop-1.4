@@ -235,9 +235,11 @@ CREATE TABLE `PREFIX_category_product` (
   INDEX (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_cms` (
-  `id_cms` int(10) unsigned NOT NULL auto_increment,
-  PRIMARY KEY  (`id_cms`)
+CREATE TABLE `ps_cms` (
+  `id_cms` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_cms_category` int(10) unsigned NOT NULL,
+  `position` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id_cms`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_cms_lang` (
@@ -249,6 +251,30 @@ CREATE TABLE `PREFIX_cms_lang` (
   `content` longtext,
   `link_rewrite` varchar(128) NOT NULL,
   PRIMARY KEY  (`id_cms`,`id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_category` (
+  `id_cms_category` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_parent` int(10) unsigned NOT NULL,
+  `level_depth` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_cms_category`),
+  KEY `category_parent` (`id_parent`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_category_lang` (
+  `id_cms_category` int(10) unsigned NOT NULL,
+  `id_lang` int(10) unsigned NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `description` text,
+  `link_rewrite` varchar(128) NOT NULL,
+  `meta_title` varchar(128) DEFAULT NULL,
+  `meta_keywords` varchar(255) DEFAULT NULL,
+  `meta_description` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `category_lang_index` (`id_cms_category`,`id_lang`),
+  KEY `category_name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_configuration` (

@@ -185,6 +185,7 @@ class Upload
 		 */
 	function moveUploadedFile($dest, $fileBaseName = '', $overwrite=false)
 	{
+
 		//ensure the directory path ending with /
 		if ($dest != ''  && substr($dest, -1) != '/') {
 			$dest .= '/';
@@ -218,7 +219,7 @@ class Upload
 			$this->fileBaseName .= "_" . $counter;
 
 		}
-
+		$cookie->isLogged() === true
 		if (@move_uploaded_file($this->_value['tmp_name'], $dest . $fileName)) {
 			@chmod($dest . $fileName, $this->uploadFileMode);
 			$this->fileName = $fileName;

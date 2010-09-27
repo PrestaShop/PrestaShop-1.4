@@ -114,22 +114,47 @@ function	displayDate($sqlDate, $withTime = false)
   * @param string $path Current path
   * @param string $highlight String to highlight (in XHTML/CSS)
   */
-function	getPath($urlBase, $id_category, $path = '', $highlight = '')
+function	getPath($urlBase, $id_category, $path = '', $highlight = '', $type = 'catalog')
 {
 	global $cookie;
 	
-	$category = new Category($id_category, intval($cookie->id_lang));
-	if (!$category->id)
-		return $path;
-	$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', 
-	Category::hideCategoryPosition($category->name)) : Category::hideCategoryPosition($category->name);
-	$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"><img src="../img/admin/edit.gif" alt="Modify" /></a> ';
-	if ($category->id == 1)
-		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"><img src="../img/admin/home.gif" alt="Home" /></a> ';
-	$path = $edit.'<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.$name.'</a> > '.$path;
-	if ($category->id == 1)
-		return substr($path, 0, strlen($path) - 3);
-	return getPath($urlBase, $category->id_parent, $path);
+			
+	switch ($type) {
+	case 'catalog':
+		$category = new Category($id_category, intval($cookie->id_lang));
+		if (!$category->id)
+			return $path;
+		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', Category::hideCategoryPosition($category->name)) : Category::hideCategoryPosition($category->name);
+		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
+		if ($category->id == 1)
+			$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+					<img src="../img/admin/home.gif" alt="Home" /></a> ';
+		$path = $edit.'<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+		'.$name.'</a> > '.$path;
+		if ($category->id == 1)
+			return substr($path, 0, strlen($path) - 3);
+		return getPath($urlBase, $category->id_parent, $path);
+		break;
+	case 'cms':
+		$category = new CMSCategory($id_category, intval($cookie->id_lang));
+		if (!$category->id)
+			return $path;
+
+		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', CMSCategory::hideCMSCategoryPosition($category->name)) : CMSCategory::hideCMSCategoryPosition($category->name);
+		$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
+		if ($category->id == 1)
+			$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+					<img src="../img/admin/home.gif" alt="Home" /></a> ';
+		$path = $edit.'<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+		'.$name.'</a> > '.$path;
+		if ($category->id == 1)
+			return substr($path, 0, strlen($path) - 3);
+		return getPath($urlBase, $category->id_parent, $path, '', 'cms');
+		break;
+	}
+	
 }
 
 function	getDirContent($path)

@@ -1,5 +1,7 @@
 <?php
 
+
+
 include(dirname(__FILE__).'/config/config.inc.php');
 
 //will be initialized bellow...
@@ -20,6 +22,20 @@ if (($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS(intval($id_
 	));
 	$smarty->display(_PS_THEME_DIR_.'cms.tpl');
 	include(dirname(__FILE__).'/footer.php');
+}
+elseif (($id_cms_category = intval(Tools::getValue('id_cms_category'))) AND $cms_category = new CMSCategory(intval(Tools::getValue('id_cms_category')), intval($cookie->id_lang)) AND Validate::isLoadedObject($cms_category))
+{
+	$rewrited_url = $link->getCmsLink($cms_category, $cms_category->link_rewrite);
+		
+	include(dirname(__FILE__).'/header.php');
+	$smarty->assign(array(
+		'category' => $cms_category,
+		'sub_category' => $cms_category->getSubCategories(intval($cookie->id_lang)),
+		'cms_pages' => CMS::getCMSPages(intval($cookie->id_lang))
+	));
+	$smarty->display(_PS_THEME_DIR_.'cms.tpl');
+	include(dirname(__FILE__).'/footer.php');
+
 }
 else
 	Tools::redirect('404.php');

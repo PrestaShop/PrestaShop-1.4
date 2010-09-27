@@ -2,7 +2,6 @@
 
 /**
   * CMS class, CMS.php
-  * CMS management
   * @category classes
   *
   * @author PrestaShop <support@prestashop.com>
@@ -12,13 +11,17 @@
   *
   */
 
-class CMS extends ObjectModel
+class		CMS extends ObjectModel
 {
+	
+	/** @var string Name */
 	public $meta_title;
 	public $meta_description;
 	public $meta_keywords;
 	public $content;
 	public $link_rewrite;
+	public $id_cms_category;
+	public $position;
 
  	protected $fieldsRequiredLang = array('meta_title', 'link_rewrite');
 	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255, 'meta_title' => 128, 'link_rewrite' => 128, 'content' => 3999999999999);
@@ -27,7 +30,14 @@ class CMS extends ObjectModel
 	protected $table = 'cms';
 	protected $identifier = 'id_cms';
 	
-	public function getFields() { return array('id_cms' => null); }
+	public function getFields() 
+	{ 
+		parent::validateFields();
+		$fields['id_cms'] = intval($this->id);
+		$fields['id_cms_category'] = intval($this->id_cms_category);
+		$fields['position'] = intval($this->position);
+		return $fields;	 
+	}
 	
 	public function getTranslationsFieldsChild()
 	{
@@ -57,26 +67,26 @@ class CMS extends ObjectModel
 		return $fields;
 	}
 	
-	public function add($autodate = true, $nullValues = false) { return parent::add($autodate, true); }
-	
-	public function update($nullValues = false)
-	{
-	 	$result = 1;
-	 	$fields = $this->getTranslationsFieldsChild();
-		foreach ($fields as $field)
-		{
-			foreach ($field as $key => $value)
-			 	if (!Validate::isTableOrIdentifier($key))
-	 				die(Tools::displayError());
-			$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
-			'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
-			$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') : 
-			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
-			pSQL($this->identifier).'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
-		}
-		return $result;
+	public function add($autodate = true, $nullValues = false)
+	{ 
+		$this->position = CMS::getLastPosition(intval(Tools::getValue('id_cms_category')));
+		return parent::add($autodate, true); 
 	}
 	
+	public function update()
+	{
+		if (parent::update())
+			return $this->cleanPositions($this->id_cms_category);
+		return false;
+	}
+	
+	public function delete()
+	{
+	 	if (parent::delete())
+			return $this->cleanPositions($this->id_cms_category);
+		return false;
+	}
+
 	public static function getLinks($id_lang, $selection = NULL)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -134,11 +144,75 @@ class CMS extends ObjectModel
 		return true;
 	}
 	
-	public function delete()
+	public function updatePosition($way, $position)
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_cms` = '.intval($this->id));
-		return parent::delete();
+		if (!$res = Db::getInstance()->ExecuteS('
+			SELECT cp.`id_cms`, cp.`position`, cp.`id_cms_category` 
+			FROM `'._DB_PREFIX_.'cms` cp
+			WHERE cp.`id_cms_category` = '.intval(Tools::getValue('id_cms_category', 1)).' 
+			ORDER BY cp.`position` ASC'
+		))
+			return false;
+		
+		foreach ($res AS $cms)
+			if (intval($cms['id_cms']) == intval($this->id))
+				$movedCms = $cms;
+		
+		if (!isset($movedCms) || !isset($position))
+			return false;
+		
+		// < and > statements rather than BETWEEN operator
+		// since BETWEEN is treated differently according to databases
+		return (Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cms`
+			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
+			WHERE `position` 
+			'.($way 
+				? '> '.intval($movedCms['position']).' AND `position` <= '.intval($position)
+				: '< '.intval($movedCms['position']).' AND `position` >= '.intval($position)).'
+			AND `id_cms_category`='.intval($movedCms['id_cms_category']))
+		AND Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cms`
+			SET `position` = '.intval($position).'
+			WHERE `id_cms` = '.intval($movedCms['id_cms']).'
+			AND `id_cms_category`='.intval($movedCms['id_cms_category'])));
 	}
+	
+	static public function cleanPositions($id_category)
+	{
+		$result = Db::getInstance()->ExecuteS('
+		SELECT `id_cms`
+		FROM `'._DB_PREFIX_.'cms`
+		WHERE `id_cms_category` = '.intval($id_category).'
+		ORDER BY `position`');
+		$sizeof = sizeof($result);
+		for ($i = 0; $i < $sizeof; ++$i){
+				$sql = '
+				UPDATE `'._DB_PREFIX_.'cms`
+				SET `position` = '.intval($i).'
+				WHERE `id_cms_category` = '.intval($id_category).'
+				AND `id_cms` = '.intval($result[$i]['id_cms']);
+				Db::getInstance()->Execute($sql);
+			}
+		return true;
+	}
+	
+	static public function getLastPosition($id_category)
+	{
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'cms` WHERE `id_cms_category` = '.intval($id_category)));
+	}
+	
+	static public function getCMSPages($id_lang = NULL, $id_cms_category = NULL)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'cms` c
+		JOIN `'._DB_PREFIX_.'cms_lang` l ON (c.id_cms = l.id_cms)'.
+		(isset($id_cms_category) ? 'WHERE `id_cms_category` = '.intval($id_cms_category) : '').'
+		AND l.id_lang = '.intval($id_lang).'
+		ORDER BY `position`');
+	}
+
 }
 
 ?>

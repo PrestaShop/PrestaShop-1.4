@@ -59,6 +59,17 @@ class Link
 		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category);
 	}
 
+	public function getCMSCategoryLink($id_category, $alias = NULL)
+	{
+		if (is_object(intval($id_category)))
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink().intval($id_category->id).'-'.$id_category->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category->id));
+		if ($alias)
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink().intval($id_category).'-'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category);
+	}
+
 	public function getCMSLink($cms, $alias = null, $ssl = false)
 	{
 		$base = _PS_BASE_URL_;

@@ -114,19 +114,47 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 
 if (array_key_exists('ajaxModulesPositions', $_POST))
 {				
-		$id_module = intval(Tools::getValue('id_module'));
-		$id_hook = intval(Tools::getValue('id_hook'));
-		$way = intval(Tools::getValue('way'));	
-		$positions = Tools::getValue(strval($id_hook));
-		$position = (is_array($positions)) ? array_search($id_hook.'_'.$id_module, $positions) : null;
-		$module = Module::getInstanceById($id_module);
-		if (Validate::isLoadedObject($module))
-			if ($module->updatePosition($id_hook, $way, $position))
-				die(true);
-			else
-				die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
+	$id_module = intval(Tools::getValue('id_module'));
+	$id_hook = intval(Tools::getValue('id_hook'));
+	$way = intval(Tools::getValue('way'));	
+	$positions = Tools::getValue(strval($id_hook));
+	$position = (is_array($positions)) ? array_search($id_hook.'_'.$id_module, $positions) : null;
+	$module = Module::getInstanceById($id_module);
+	if (Validate::isLoadedObject($module))
+		if ($module->updatePosition($id_hook, $way, $position))
+			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'This module can not be loaded\'}');
+			die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
+	else
+		die('{\'hasError\' : true, errors : \'This module can not be loaded\'}');
+}
+
+if (array_key_exists('ajaxCMSPositions', $_POST))
+{				
+	$id_cms = intval(Tools::getValue('id_cms'));
+	$id_category = intval(Tools::getValue('id_cms_category'));
+	$way = intval(Tools::getValue('way'));
+	$positions = Tools::getValue(strval($id_category));
+	if (is_array($positions))
+		foreach ($positions AS $key => $value)
+		{
+			$pos = explode('_', $value);
+			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_cms))
+			{
+				$position = $key;
+				break;
+			}
+		}
+	$cms = new CMS($id_cms);
+	if (Validate::isLoadedObject($cms))
+	{
+		if (isset($position) && $cms->updatePosition($way, $position))
+			die(true);
+		else
+			die('{\'hasError\' : true, errors : \'Can not update cms position\'}');
+	}
+	else
+		die('{\'hasError\' : true, errors : \'This cms can not be loaded\'}');
 }
 
 if (array_key_exists('ajaxProductsPositions', $_POST))
@@ -146,7 +174,6 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 				break;
 			}
 		}
-	
 	$product = new Product($id_product);
 	if (Validate::isLoadedObject($product))
 	{
