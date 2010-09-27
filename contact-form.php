@@ -73,20 +73,50 @@ if (Tools::isSubmit('submitMessage'))
 			) OR (
 				$id_customer_thread = (int)Db::getInstance()->getValue('
 				SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
-				WHERE cm.email = \''.pSQL(Tools::getValue('from')).'\'
-				')
+				WHERE cm.email = \''.pSQL(Tools::getValue('from')).'\' AND cm.id_order = '.intval(Tools::getValue('id_order')).'')
 			))
 		{
 			$old_message = Db::getInstance()->getValue('
 			SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
 			WHERE cm.id_customer_thread = '.intval($id_customer_thread).'
-			ORDER BY date_add DESC
-			');
+			ORDER BY date_add DESC');
 			if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
 			{
 				$smarty->assign('alreadySent', 1);
 				$contact->email = '';
 				$contact->customer_service = 0;
+			}
+		}
+		else
+		{
+			$fields = Db::getInstance()->ExecuteS('
+			SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
+			FROM '._DB_PREFIX_.'customer_thread cm');
+			$score = 0;
+			foreach ($fields as $key => $row)
+			{
+				$tmp = 0;
+				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id)
+					continue;
+				if ($customer->id AND $row['id_customer'] == $customer->id AND
+					$row['id_order'] == Tools::getValue('id_order'))
+					$tmp += 10;
+				if ($row['email'] == Tools::getValue('from') AND !(int)Tools::getValue('id_order'))
+					$tmp += 17;
+				else if ($row['email'] == Tools::getValue('from'))
+					$tmp += 13;
+				if ($row['id_order'] != 0 AND $row['id_order'] == Tools::getValue('id_order'))
+					$tmp += 15;
+				if ($row['id_product'] != 0 AND $row['id_product'] == Tools::getValue('id_product'))
+					$tmp += 4;
+				if ($row['id_contact'] == $id_contact)
+					$tmp += 4;
+				if ($tmp >= 20 AND $tmp >= $score)
+				{
+					$score = $tmp;
+					$id_customer_thread = $row['id_customer_thread'];
+				}
+				
 			}
 		}
 		if (!empty($contact->email))
