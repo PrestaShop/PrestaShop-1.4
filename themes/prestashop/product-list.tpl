@@ -18,10 +18,12 @@
 					<span class="price" style="display: inline;">{if !$priceDisplay}{convertPrice price=$product.price}{else}{convertPrice price=$product.price_tax_exc}{/if}</span><br />
 					<span class="availability">{if ($product.allow_oosp OR $product.quantity > 0)}{l s='Available'}{else}{l s='Out of stock'}{/if}</span>
 				</div>
-				{if ($product.allow_oosp OR $product.quantity > 0) && $product.customizable != 2}
-					<a class="button ajax_add_to_cart_button exclusive" rel="ajax_id_product_{$product.id_product|intval}" href="{$base_dir}cart.php?add&amp;id_product={$product.id_product|intval}&amp;token={$static_token}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>
-				{else}
-						<span class="exclusive">{l s='Add to cart'}</span>
+				{if $product.id_product_attribute == 0 OR (isset($add_prod_display) AND ($add_prod_display == 1))}
+					{if ($product.allow_oosp OR $product.quantity > 0) && $product.customizable != 2}
+						<a class="button ajax_add_to_cart_button exclusive" rel="ajax_id_product_{$product.id_product|intval}" href="{$base_dir}cart.php?add&amp;id_product={$product.id_product|intval}&amp;token={$static_token}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>
+					{else}
+							<span class="exclusive">{l s='Add to cart'}</span>
+					{/if}
 				{/if}
 				<a class="button" href="{$product.link|escape:'htmlall':'UTF-8'}" title="{l s='View'}">{l s='View'}</a>
 			</div>

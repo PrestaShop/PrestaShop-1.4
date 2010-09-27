@@ -327,6 +327,7 @@ $smarty->assign(array(
 	'weight_unit' => Configuration::get('PS_WEIGHT_UNIT'),
 	'volume_unit' => Configuration::get('PS_VOLUME_UNIT'),
 	'display_qties' => intval(Configuration::get('PS_DISPLAY_QTIES')),
+	'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 	'display_ht' => !Tax::excludeTaxeOption(),
 	'ecotax' => ($product->ecotax > 0 ? Tools::convertPrice(floatval($product->ecotax)) : 0),
 	'weight_price' => ($product->weight_price > 0 ? Tools::convertPrice(floatval($product->weight_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod(intval($cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0),

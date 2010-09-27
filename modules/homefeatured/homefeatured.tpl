@@ -17,10 +17,14 @@
 					<div>
 						<p class="price_container"><span class="price">{if !$priceDisplay}{convertPrice price=$product.price}{else}{convertPrice price=$product.price_tax_exc}{/if}</span></p>
 						<a class="button" href="{$product.link}" title="{l s='View' mod='homefeatured'}">{l s='View' mod='homefeatured'}</a>
-						{if ($product.quantity > 0 OR $product.allow_oosp) AND $product.customizable != 2}
-						<a class="exclusive ajax_add_to_cart_button" rel="ajax_id_product_{$product.id_product}" href="{$base_dir}cart.php?qty=1&amp;id_product={$product.id_product}&amp;token={$static_token}&amp;add" title="{l s='Add to cart' mod='homefeatured'}">{l s='Add to cart' mod='homefeatured'}</a>
+						{if $product.id_product_attribute == 0 OR (isset($add_prod_display) AND ($add_prod_display == 1))}
+							{if ($product.quantity > 0 OR $product.allow_oosp) AND $product.customizable != 2}
+							<a class="exclusive ajax_add_to_cart_button" rel="ajax_id_product_{$product.id_product}" href="{$base_dir}cart.php?qty=1&amp;id_product={$product.id_product}&amp;token={$static_token}&amp;add" title="{l s='Add to cart' mod='homefeatured'}">{l s='Add to cart' mod='homefeatured'}</a>
+							{else}
+							<span class="exclusive">{l s='Add to cart' mod='homefeatured'}</span>
+							{/if}
 						{else}
-						<span class="exclusive">{l s='Add to cart' mod='homefeatured'}</span>
+							<div style="height:23px;"></div>
 						{/if}
 					</div>
 				</li>

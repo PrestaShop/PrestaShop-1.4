@@ -41,6 +41,7 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 		'errors' => $errors,
 		'path' => Tools::safeOutput($object->name),
 		'id_lang' => intval($cookie->id_lang),
+		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')
 	));
 	$smarty->display(_PS_THEME_DIR_.$objectType.'.tpl');
 }
@@ -61,7 +62,8 @@ else
 		'pages_nb' => ceil($nbProducts / intval($n)),
 		'nb'.$className.'s' => $nbProducts,
 		'mediumSize' => Image::getSize('medium'),
-		$objectType.'s' => $data
+		$objectType.'s' => $data,
+		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 	));
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');
 }

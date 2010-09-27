@@ -10,6 +10,7 @@ include(dirname(__FILE__).'/pagination.php');
 
 $smarty->assign(array(
 	'products' => Product::getNewProducts(intval($cookie->id_lang), intval($p) - 1, intval($n), false, $orderBy, $orderWay),
+	'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 	'nbProducts' => intval($nbProducts)));
 
 $smarty->display(_PS_THEME_DIR_.'new-products.tpl');
