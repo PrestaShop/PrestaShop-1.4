@@ -145,6 +145,15 @@ class AdminCarriers extends AdminTab
 					<label class="t" for="shipping_handling_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Include the shipping & handling costs in carrier price').'</p>
 				</div>
+				<label>'.$this->l('Billing:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="shipping_method" id="billing_default" value="'.Carrier::SHIPPING_METHOD_DEFAULT.'" '.($this->getFieldValue($obj, 'shipping_method') == Carrier::SHIPPING_METHOD_DEFAULT ? 'checked="checked" ' : '').'/>
+					<label class="t" for="billing_default">'.$this->l('Default behavior').'</label><br />
+					<input type="radio" name="shipping_method" id="billing_price" value="'.Carrier::SHIPPING_METHOD_PRICE.'" '.($this->getFieldValue($obj, 'shipping_method') == Carrier::SHIPPING_METHOD_PRICE ? 'checked="checked" ' : '').'/>
+					<label class="t" for="billing_price">'.$this->l('According to total price').'</label><br />
+					<input type="radio" name="shipping_method" id="billing_weight" value="'.Carrier::SHIPPING_METHOD_WEIGHT.'" '.($this->getFieldValue($obj, 'shipping_method') == Carrier::SHIPPING_METHOD_WEIGHT ? 'checked="checked" ' : '').'/>
+					<label class="t" for="billing_weight">'.$this->l('According to total weight').'</label><br />
+				</div>
 				<label>'.$this->l('Out-of-range behavior:').' </label>
 				<div class="margin-form">
 					<select name="range_behavior">

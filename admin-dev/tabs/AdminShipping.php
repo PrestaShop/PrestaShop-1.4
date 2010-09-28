@@ -81,9 +81,9 @@ class AdminShipping extends AdminTab
 					if (Validate::isLoadedObject($carrier))
 					{
 					 	/* Get configuration values */
-						$shipping_method = intval(Configuration::get('PS_SHIPPING_METHOD'));
-
-						$rangeTable = $shipping_method ? 'range_weight' : 'range_price';
+						$shipping_method = $carrier->getShippingMethod();
+						$rangeTable = $carrier->getRangeTable(); 
+						
 						$carrier->deleteDeliveryPrice($rangeTable);
 
 						/* Build prices list */
@@ -92,8 +92,8 @@ class AdminShipping extends AdminTab
 							if (strstr($key, 'fees_'))
 							{
 								$tmpArray = explode('_', $key);
-								$priceList .= '('.($shipping_method == 0 ? intval($tmpArray[2]) : 'NULL').',
-								'.($shipping_method == 1 ? intval($tmpArray[2]) : 'NULL').', '.$carrier->id.',
+								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? intval($tmpArray[2]) : 'NULL').',
+								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? intval($tmpArray[2]) : 'NULL').', '.$carrier->id.',
 								'.intval($tmpArray[1]).', '.number_format(abs($value), 2, '.', '').'),';
 								unset($tmpArray);
 							}
@@ -203,13 +203,15 @@ class AdminShipping extends AdminTab
 					<tr>
 						<th>'.$this->l('Zone / Range').'</th>';
 
-				$shipping_method = intval(Configuration::get('PS_SHIPPING_METHOD'));
 				$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-				$rangeObj = $shipping_method ? new RangeWeight() : new RangePrice();
-				$rangeTable = $shipping_method ? 'range_weight' : 'range_price';
+				
+				$rangeObj = $carrierSelected->getRangeObject();
+				$rangeTable = $carrierSelected->getRangeTable();
+				$suffix = $carrierSelected->getRangeSuffix();
+				
 				$rangeIdentifier = 'id_'.$rangeTable;
 				$ranges = $rangeObj->getRanges($id_carrier);
-				$suffix = $shipping_method ? Configuration::get('PS_WEIGHT_UNIT') : $currency->sign;
+
 				$delivery = Carrier::getDeliveryPriceByRanges($rangeTable);
 				foreach ($delivery AS $deliv)
 					$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];

@@ -623,7 +623,9 @@ class		Cart extends ObjectModel
 			return 0;
 		if ($virtual AND $type == 3)
 			$type = 4;
+			
 		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost(NULL, intval($withTaxes)) : 0;
+	        		
 		if ($type == 7)
 			$type = 1;
 
@@ -699,7 +701,7 @@ class		Cart extends ObjectModel
 						$order_total -= Tools::ps_round(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, intval($withTaxes))), 2);
 			}
 		}
-
+		
 		if ($type == 5) return $shipping_fees;
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
@@ -766,9 +768,15 @@ class		Cart extends ObjectModel
 			$id_carrier = $this->id_carrier;
 		if (empty($id_carrier))
 		{
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND (Carrier::checkDeliveryPriceByWeight(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
-			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone))))
+			$carrier = new Carrier(intval(Configuration::get('PS_CARRIER_DEFAULT')));
+
+			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (Carrier::checkDeliveryPriceByWeight(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
+			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone))))
+			{
 				$id_carrier = intval(Configuration::get('PS_CARRIER_DEFAULT'));
+			}
+			
+			unset($carrier);
 		}
 		if (empty($id_carrier))
 		{
@@ -780,17 +788,21 @@ class		Cart extends ObjectModel
 			}
 			else
 				$result = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true, false, intval($id_zone));
+
 			$resultsArray = array();
 			foreach ($result AS $k => $row)
 			{
 				if ($row['id_carrier'] == Configuration::get('PS_CARRIER_DEFAULT'))
 					continue;
+
 				if (!isset(self::$_carriers[$row['id_carrier']]))
 					self::$_carriers[$row['id_carrier']] = new Carrier(intval($row['id_carrier']));
+
 				$carrier = self::$_carriers[$row['id_carrier']];
+
 				// Get only carriers that are compliant with shipping method
-				if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
-				OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
 				{
 					unset($result[$k]);
 					continue ;
@@ -800,33 +812,40 @@ class		Cart extends ObjectModel
 				if ($row['range_behavior'])
 				{
 					// Get only carriers that have a range compatible with cart
-					if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
-					OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone))))
+					if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
+					OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone))))
 					{
 						unset($result[$k]);
 						continue ;
 					}
 				}
-				if (intval(Configuration::get('PS_SHIPPING_METHOD')))
+				
+				if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 				{
 					$shipping = $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
+
 					if (!isset($tmp))
 						$tmp = $shipping;
+
 					if ($shipping <= $tmp)
 						$id_carrier = intval($row['id_carrier']);
 				}
-				else
+				else // by price
 				{
 					$shipping = $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+
 					if (!isset($tmp))
 						$tmp = $shipping;
+
 					if ($shipping <= $tmp)
 						$id_carrier = intval($row['id_carrier']);
 				}
 			}
 		}
+
 		if (empty($id_carrier))
 			$id_carrier = Configuration::get('PS_CARRIER_DEFAULT');
+
 		if (!isset(self::$_carriers[$id_carrier]))
 			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier));
 		$carrier = self::$_carriers[$id_carrier];
@@ -863,19 +882,19 @@ class		Cart extends ObjectModel
 					$id_zone = Address::getZoneById(intval($this->id_address_delivery));
 				else
 					$id_zone = intval($defaultCountry->id_zone);
-				if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
-						OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
+				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
+						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
 						$shipping_cost += 0;
 					else {
-						if (intval($configuration['PS_SHIPPING_METHOD']))
-							$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
-						else
-							$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+							if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
+								$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
+							else // by price
+								$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
 						 }
 			}
 			else
 			{
-				if (intval($configuration['PS_SHIPPING_METHOD']))
+				if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 					$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 				else
 					$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
@@ -923,7 +942,7 @@ class		Cart extends ObjectModel
 			
 		if ($this->_totalWeight)
 			return $this->_totalWeight;
-
+		
 		$result = Db::getInstance()->getRow('
 		SELECT SUM((p.`weight` + pa.`weight`) * cp.`quantity`) as nb
 		FROM `'._DB_PREFIX_.'cart_product` cp
@@ -939,6 +958,7 @@ class		Cart extends ObjectModel
 		AND cp.`id_cart` = '.intval($this->id));
 
 		$this->_totalWeight = round(floatval($result['nb']) + floatval($result2['nb']), 3);
+
 		return $this->_totalWeight;
 	}
 

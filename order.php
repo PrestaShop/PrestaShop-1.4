@@ -334,8 +334,8 @@ function displayCarrier()
 		$carrier = new Carrier(intval($row['id_carrier']));
 
 		// Get only carriers that are compliant with shipping method
-		if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
-		OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+		if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+		OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
 		{
 			unset($result[$k]);
 			continue ;
@@ -351,8 +351,8 @@ function displayCarrier()
 				$id_zone = intval($defaultCountry->id_zone);
 
 			// Get only carriers that have a range compatible with cart
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
-			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
+			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
+			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
 				{
 					unset($result[$k]);
 					continue ;
@@ -396,7 +396,6 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'default_carrier' => intval(Configuration::get('PS_CARRIER_DEFAULT')),
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
-		'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $resultsArray)),
 		'checked' => intval($checked),
 		'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency(intval($cookie->id_currency))),
 		'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency(intval($cookie->id_currency)))));
@@ -433,7 +432,7 @@ function displayPayment()
 /* Confirmation step */
 function displaySummary()
 {
-	global $smarty, $cart, $cookie;
+	global $smarty, $cart;
 
 	if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
 		$smarty->assign('carrierPicture', 1);
@@ -470,10 +469,8 @@ function displaySummary()
 		'customizedDatas' => $customizedDatas,
 		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-		'lastProductAdded' => $cart->getLastProduct(),
-		'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang)),
+		'lastProductAdded' => $cart->getLastProduct()
 		));
-
 	Tools::safePostVars();
 	include_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');

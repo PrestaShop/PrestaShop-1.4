@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_carrier` (
   `shipping_external` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `need_range` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `external_module_name` varchar(64) NOT NULL,
+  `shipping_method` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_carrier`),
   KEY `deleted` (`deleted`,`active`),
   KEY `id_tax` (`id_tax`)

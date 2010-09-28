@@ -425,5 +425,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 ALTER TABLE `PREFIX_discount` ADD `cart_display` TINYINT( 4 ) NOT NULL AFTER `active` , ADD `date_add` DATETIME NOT NULL AFTER `cart_display` , ADD `date_upd` DATETIME NOT NULL AFTER `date_add` ;
 
+ALTER TABLE `PREFIX_carrier` ADD `shipping_method` INT( 2 ) NOT NULL DEFAULT '0';
+
 /* PHP */
 /* PHP:editorial_update(); */;

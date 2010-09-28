@@ -14,6 +14,10 @@
 
 class		Carrier extends ObjectModel
 {
+	const SHIPPING_METHOD_DEFAULT = 0;
+	const SHIPPING_METHOD_WEIGHT = 1;
+	const SHIPPING_METHOD_PRICE = 2;
+
 	/** @var int Tax id (none = 0) */
 	public		$id_tax;
 
@@ -41,6 +45,9 @@ class		Carrier extends ObjectModel
 	/** @var boolean Carrier module */
 	public		$is_module;
 	
+	/** @var int shipping behavior: by weight or by price */
+	public 		$shipping_method = 0;
+	
 	/** @var boolean Shipping external */
 	public		$shipping_external = 0;
 	
@@ -52,7 +59,7 @@ class		Carrier extends ObjectModel
 
  	protected 	$fieldsRequired = array('name', 'active');
  	protected 	$fieldsSize = array('name' => 64);
- 	protected 	$fieldsValidate = array('id_tax' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_tax' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool', 'shipping_method' => 'isUnsignedInt');
  	protected 	$fieldsRequiredLang = array('delay');
  	protected 	$fieldsSizeLang = array('delay' => 128);
  	protected 	$fieldsValidateLang = array('delay' => 'isGenericName');
@@ -89,6 +96,7 @@ class		Carrier extends ObjectModel
 		$fields['deleted'] = intval($this->deleted);
 		$fields['shipping_handling'] = intval($this->shipping_handling);
 		$fields['range_behavior'] = intval($this->range_behavior);
+		$fields['shipping_method'] = intval($this->shipping_method);
 		$fields['is_module'] = intval($this->is_module);
 		$fields['shipping_external'] = intval($this->shipping_external);
 		$fields['external_module_name'] = $this->external_module_name;
@@ -99,6 +107,7 @@ class		Carrier extends ObjectModel
 
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
+
 		parent::__construct($id, $id_lang);
 		if ($this->name == '0')
 			$this->name = Configuration::get('PS_SHOP_NAME');
@@ -529,6 +538,46 @@ class		Carrier extends ObjectModel
 		$tax = new Tax($this->id_tax);
 		return round($productPrice - ($productPrice * $tax->rate / 100), 2);
 	}
+	
+	
+	public function getShippingMethod()
+	{
+		$method = intval($this->shipping_method);
+	
+		if ($this->shipping_method == Carrier::SHIPPING_METHOD_DEFAULT)
+		{
+			// backward compatibility
+			if (intval(Configuration::get('PS_SHIPPING_METHOD')))
+				$method = Carrier::SHIPPING_METHOD_WEIGHT;
+			else
+				$method = Carrier::SHIPPING_METHOD_PRICE;
+		}
+
+		return $method;
+	}
+	
+	public function getRangeTable()
+	{
+		return ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT) ? 'range_weight' : 'range_price';
+	}
+	
+	public function getRangeObject()
+	{
+		return ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT) ? new RangeWeight() : new RangePrice();
+	}
+	
+	public function getRangeSuffix()
+	{
+		$suffix = Configuration::get('PS_WEIGHT_UNIT');
+		if ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE)
+		{
+			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+			$suffix = $currency->sign;
+		}
+		return $suffix;
+	}
+
+	
 }
 
 ?>
