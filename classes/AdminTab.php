@@ -1541,7 +1541,8 @@ abstract class AdminTab
 		$token = Tools::getValue('token');
 		if (!$token OR empty($token) OR ($token != $this->token))
 		{
-			echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.Tools::displayError('Invalid security token').'</p>';
+			$this->_errors = array(Tools::displayError('Invalid security token'));
+			$this->displayErrors();
 			return false;
 		}
 		return true;
