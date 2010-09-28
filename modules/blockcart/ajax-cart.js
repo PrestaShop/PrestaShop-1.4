@@ -1,4 +1,3 @@
-
 //JS Object : update the cart by ajax actions
 var ajaxCart = {
 	
@@ -100,7 +99,7 @@ var ajaxCart = {
 			data: 'ajax=true&token=' + static_token,
 			success: function(jsonData)
 			{
-				ajaxCart.updateCart(jsonData)
+				ajaxCart.updateCart(jsonData);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				//alert("TECHNICAL ERROR: unable to refresh the cart.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
@@ -533,7 +532,7 @@ var ajaxCart = {
 			});
 		}
 	}
-}
+};
 
 //when document is loaded...
 $(document).ready(function(){

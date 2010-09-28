@@ -23,7 +23,7 @@ class Editorial extends Module
 
 	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('home'))
+		if (!parent::install() OR !$this->registerHook('home') OR !$this->registerHook('header'))
 			return false;
 		
 		if (!Db::getInstance()->Execute('
@@ -312,5 +312,10 @@ class Editorial extends Module
 			'this_path' => $this->_path
 		));
 		return $this->display(__FILE__, 'editorial.tpl');
+	}
+	
+	public function hookHeader()
+	{
+		Tools::addCSS($this->_path.'editorial.css', 'all');
 	}
 }

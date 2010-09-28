@@ -231,10 +231,11 @@ class PaypalAPI extends PaymentModule
 
 	function hookRightColumn($params)
 	{
-		global $smarty, $cookie, $js_files, $css_files;
-
-		$js_files = array(_PS_JS_DIR_.'jquery/thickbox-modified.js');
-		$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
+		global $smarty, $cookie;
+		
+		Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
+		Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+		
 		$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
 		if (!$this->_pp_integral)
 			$logo = _MODULE_DIR_.$this->name.'/img/PayPal_mark_60x38.gif';

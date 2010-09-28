@@ -7,7 +7,6 @@
 	{/foreach}
 -->
 </script>
-<script type="text/javascript" src="{$js_dir}order-address.js"></script>
 
 {capture name=path}{l s='Addresses'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}

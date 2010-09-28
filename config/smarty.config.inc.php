@@ -116,6 +116,22 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...',
 $smarty->register_modifier('truncate', 'smarty_modifier_truncate');
 $smarty->register_modifier('secureReferrer', array('Tools', 'secureReferrer'));
 
+function smartyMinifyHTML($tpl_output, &$smarty)
+{
+    $tpl_output = Tools::minifyHTML($tpl_output);
+    return $tpl_output;
+}
+if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
+	$smarty->register_outputfilter('smartyMinifyHTML');
+
+function smartyPackJSinHTML($tpl_output, &$smarty)
+{
+    $tpl_output = Tools::packJSinHTML($tpl_output);
+    return $tpl_output;
+}
+if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
+	$smarty->register_outputfilter('smartyPackJSinHTML');
+
 global $link;
 
 $link = new Link();

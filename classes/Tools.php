@@ -1,5 +1,4 @@
 <?php
-
 /**
   * Tools class, Tools.php
   * Various tools
@@ -982,6 +981,43 @@ class Tools
 		return self::$file_exists_cache[$filename];
 	}
 	
+	static public function minifyHTML ($html_content)
+	{
+		if (strlen($html_content) > 0)
+		{
+			//set an alphabetical order for args
+			$html_content = preg_replace_callback(
+				'/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/'
+				,array('Tools', 'minifyHTMLpregCallback')
+				,$html_content);
+			
+			require_once(_PS_TOOL_DIR_.'minify_html/minify_html.class.php');
+			$html_content = Minify_HTML::minify($html_content, array('xhtml', 'cssMinifier', 'jsMinifier'));
+			
+			if (Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
+			{
+				//$html_content = preg_replace('/"([^\>\s"]*)"/i', '$1', $html_content);//FIXME create a js bug
+				$html_content = preg_replace('/<!DOCTYPE \w[^\>]*dtd\">/is', '', $html_content);
+				$html_content = preg_replace('/\s\>/is', '>', $html_content);
+				$html_content = str_replace('</li>', '', $html_content);
+				$html_content = str_replace('</dt>', '', $html_content);
+				$html_content = str_replace('</dd>', '', $html_content);
+				$html_content = str_replace('</head>', '', $html_content);
+				$html_content = str_replace('<head>', '', $html_content);
+				$html_content = str_replace('</html>', '', $html_content);
+				$html_content = str_replace('</body>', '', $html_content);
+				//$html_content = str_replace('</p>', '', $html_content);//FIXME doesnt work...
+				$html_content = str_replace("</option>\n", '', $html_content);//TODO with bellow
+				$html_content = str_replace('</option>', '', $html_content);
+				$html_content = str_replace('<script type=text/javascript>', '<script>', $html_content);//Do a better expreg
+				$html_content = str_replace("<script>\n", '<script>', $html_content);//Do a better expreg
+			}
+
+			return $html_content;
+		}
+		return false;
+	}
+	
 	/**
 	* Translates a string with underscores into camel case (e.g. first_name -> firstName)
 	* @prototype string public static function toCamelCase(string $str[, bool $capitaliseFirstChar = false])
@@ -999,6 +1035,276 @@ class Tools
 		$c_g = hexdec(substr($hex, 2, 2));
 		$c_b = hexdec(substr($hex, 4, 2));
 		return (($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
+	}
+	static public function minifyHTMLpregCallback ($preg_matches)
+	{
+		$args = array();
+		preg_match_all('/[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']/is', $preg_matches[2], $args);
+		$args = $args[0];
+		sort($args);
+		$output = $preg_matches[1].' '.implode(' ', $args).'>';
+		return $output;
+	}
+	
+	static public function packJSinHTML ($html_content)
+	{
+		if (strlen($html_content) > 0)
+		{
+			$html_content = preg_replace_callback(
+				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
+				,array('Tools', 'packJSinHTMLpregCallback')
+				,$html_content);
+			return $html_content;
+		}
+		return false;
+	}
+	
+	static public function packJSinHTMLpregCallback ($preg_matches)
+	{
+		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
+		$preg_matches[2] = self::packJS($preg_matches[2], 'None');
+		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
+		unset($preg_matches[0]);
+		$output = implode('', $preg_matches);
+		return $output;
+	}
+	
+	
+	static public function packJS ($js_content, $encoding = 62)
+	{
+		if (strlen($js_content) > 0)
+		{
+			require_once(_PS_TOOL_DIR_.'javascript_packer/class.JavaScriptPacker.php');
+			$packer = new JavaScriptPacker($js_content, $encoding, true, true);
+			return $packer->pack();
+		}
+		return false;
+	}
+	
+	static public function minifyCSS ($css_content, $fileuri = false)
+	{
+		global $current_css_file;
+		$current_css_file = $fileuri;
+		
+		if (strlen($css_content) > 0)
+		{
+			
+			$css_content = preg_replace('#/\*.*?\*/#s','',$css_content);
+			
+			$css_content = preg_replace_callback('#url\(\'?([^\)\']*)\'?\)#s',array('Tools', 'replaceByAbsoluteURL'),$css_content);
+			
+			/* url('../img/sitemap-top.gif') */
+			
+			$css_content = preg_replace('#\s+#',' ',$css_content);
+			$css_content = str_replace("\t",'',$css_content);
+			$css_content = str_replace("\n",'',$css_content);
+			//$css_content = str_replace('}',"}\n",$css_content);
+			
+			$css_content = str_replace('; ',';',$css_content);
+			$css_content = str_replace(': ',':',$css_content);
+			$css_content = str_replace(' {','{',$css_content);
+			$css_content = str_replace('{ ','{',$css_content);
+			$css_content = str_replace(', ',',',$css_content);
+			$css_content = str_replace('} ','}',$css_content);
+			$css_content = str_replace(' }','}',$css_content);
+			$css_content = str_replace(';}','}',$css_content);
+			$css_content = str_replace(':0px',':0',$css_content);
+			$css_content = str_replace(' 0px',' 0',$css_content);
+			$css_content = str_replace(':0em',':0',$css_content);
+			$css_content = str_replace(' 0em',' 0',$css_content);
+			$css_content = str_replace(':0pt',':0',$css_content);
+			$css_content = str_replace(' 0pt',' 0',$css_content);
+			$css_content = str_replace(':0%',':0',$css_content);
+			$css_content = str_replace(' 0%',' 0',$css_content);
+			return trim($css_content);
+		}
+		return false;
+	}
+	
+	static public function replaceByAbsoluteURL($matches)
+		{
+			global $current_css_file, $protocol;
+			//$protocol.Tools::getMediaServer($url).$url
+			if (array_key_exists(1, $matches))
+			{
+				$tmp = dirname($current_css_file).'/'.$matches[1];
+				return 'url(\''.$protocol.Tools::getMediaServer($tmp).$tmp.'\')';
+			}
+			return false;
+		}
+	
+	static public function addJS($js_uri) {
+		global $js_files;
+		if (!is_array($js_uri))
+			$js_uri = array($js_uri);
+		$js_files = array_merge($js_files, $js_uri);
+	}
+
+	static public function addCSS($css_uri, $css_media_type = 'all') {
+		global $css_files;
+		if (!is_array($css_uri))
+			$css_uri = array($css_uri => $css_media_type);
+		$css_files = array_merge($css_files, $css_uri);
+	}
+	
+	
+	/**
+	* Combine Compress and Cache CSS (ccc) calls
+	*
+	*/
+	static public function cccCss() {
+		global $css_files, $protocol;
+		//inits
+		$css_files_by_media = array();
+		$compressed_css_files = array();
+		$compressed_css_files_not_found = array();
+		$compressed_css_files_infos = array();
+	
+		// group css files by media
+		foreach ($css_files as $filename => $media)
+		{
+			if (!array_key_exists($media, $css_files_by_media))
+				$css_files_by_media[$media] = array();
+		
+			$infos = array();
+			$infos['uri'] = $filename;
+			$url_data = parse_url($filename);
+			$infos['path'] = _PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
+			$css_files_by_media[$media]['files'][] = $infos;
+			if (!array_key_exists('date', $css_files_by_media[$media]))
+				$css_files_by_media[$media]['date'] = 0;
+			$css_files_by_media[$media]['date'] = max(
+				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
+				$css_files_by_media[$media]['date']
+			);
+		
+			if (!array_key_exists($media, $compressed_css_files_infos))
+				$compressed_css_files_infos[$media] = array('key' => '');
+			$compressed_css_files_infos[$media]['key'] .= $filename;
+		}
+	
+		// get compressed css file infos
+		foreach ($compressed_css_files_infos as $media => &$info)
+		{
+			$key = md5($info['key']);
+			$filename = _PS_THEME_DIR_.'cache/'.$key.'_'.$media.'.css';
+			$info = array(
+				'key' => $key,
+				'date' => file_exists($filename) ? filemtime($filename) : 0
+			);
+		}
+		// aggregate and compress css files content, write new caches files
+		foreach ($css_files_by_media as $media => $media_infos)
+		{
+			$cache_filename = _PS_THEME_DIR_.'cache/'.$compressed_css_files_infos[$media]['key'].'_'.$media.'.css';
+			if ($media_infos['date'] > $compressed_css_files_infos[$media]['date'])
+			{
+				$compressed_css_files[$media] = '';
+				foreach ($media_infos['files'] as $file_infos)
+				{
+					if (file_exists($file_infos['path']))
+						$compressed_css_files[$media] .= Tools::minifyCSS(file_get_contents($file_infos['path']), $file_infos['uri']);
+					else
+						$compressed_css_files_not_found[] = $file_infos['path'];
+				}
+				if (!empty($compressed_css_files_not_found))
+					$content = '/* WARNING ! file(s) not found : "'.
+						implode(',', $compressed_css_files_not_found).
+						'" */'."\n".$compressed_css_files[$media];
+				else
+					$content = $compressed_css_files[$media];
+				file_put_contents($cache_filename, $content);
+			}
+			$compressed_css_files[$media] = $cache_filename;
+		}
+	
+		// rebuild the original css_files array
+		$css_files = array();
+		foreach ($compressed_css_files as $media => $filename)
+		{
+			$url = str_replace(_PS_THEME_DIR_, _THEMES_DIR_._THEME_NAME_.'/', $filename);
+			$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
+		}
+	}
+	
+	/**
+	* Combine Compress and Cache (ccc) JS calls
+	*
+	*/
+	static public function cccJS() {
+		global $js_files, $protocol;
+		//inits
+		$compressed_js_files_not_found = array();
+		$js_files_infos = array();
+		$js_files_date = 0;
+		$compressed_js_file_date = 0;
+		$compressed_js_filename = '';
+	
+		// get js files infos
+		foreach ($js_files as $filename)
+		{
+			$infos = array();
+			$infos['uri'] = $filename;
+			$url_data = parse_url($filename);
+			$infos['path'] =_PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
+			$js_files_infos[] = $infos;
+		
+			$js_files_date = max(
+				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
+				$js_files_date
+			);
+			$compressed_js_filename .= $filename;
+		}
+	
+		// get compressed js file infos
+		$compressed_js_filename = md5($compressed_js_filename);
+	
+		$compressed_js_path = _PS_THEME_DIR_.'cache/'.$compressed_js_filename.'.js';
+		$compressed_js_file_date = file_exists($compressed_js_path) ? filemtime($compressed_js_path) : 0;
+	
+	
+		// aggregate and compress js files content, write new caches files
+		if ($js_files_date > $compressed_js_file_date)
+		{
+			$content = '';
+			foreach ($js_files_infos as $file_infos)
+			{
+				if (file_exists($file_infos['path']))
+					$content .= file_get_contents($file_infos['path']).';';
+				else
+					$compressed_js_files_not_found[] = $file_infos['path'];
+			}
+			$content = Tools::packJS($content);
+		
+			if (!empty($compressed_js_files_not_found))
+				$content = '/* WARNING ! file(s) not found : "'.
+					implode(',', $compressed_js_files_not_found).
+					'" */'."\n".$content;
+			else
+				$content = $content;
+			file_put_contents($compressed_js_path, $content);
+		}
+	
+		// rebuild the original js_files array
+		//$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
+		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
+		$js_files = array($protocol.Tools::getMediaServer($url).$url);
+	}
+	
+	static public function getMediaServer($filename)
+	{
+		$filename = mb_convert_encoding(md5(strtoupper($filename)),"UCS-4BE",'UTF-8');
+		$intvalue = 0;
+		/* TODO Replace this block */
+		for($i = 0; $i < mb_strlen($filename,"UCS-4BE"); $i++)
+		{
+			$s2 = mb_substr($filename,$i,1,"UCS-4BE");
+			$val = unpack("N",$s2);
+			$intvalue += ($val[1]+$i)*2;
+		}
+		$nb_server = ($intvalue % 3)+1;
+		/* TODO Replace this block */
+		return constant('_MEDIA_SERVER_'.$nb_server.'_');
 	}
 }
 

@@ -21,6 +21,7 @@ class BlockViewed extends Module
 	{
 		if (!parent::install()
 			OR !$this->registerHook('leftColumn')
+			OR !$this->registerHook('header')
 			OR !Configuration::updateValue('PRODUCTS_VIEWED_NBR', 2))
 			return false;
 		return true;
@@ -154,4 +155,10 @@ class BlockViewed extends Module
 		return $this->hookRightColumn($params);
 	}
 
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockviewed.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockviewed.css'] = 'all';
+	}
 }

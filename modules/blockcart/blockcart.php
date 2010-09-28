@@ -110,6 +110,7 @@ class BlockCart extends Module
 		(
 			parent::install() == false
 			OR $this->registerHook('rightColumn') == false
+			OR $this->registerHook('header') == false
 			OR Configuration::updateValue('PS_BLOCK_CART_AJAX', 1) == false
 		)
 			return false;
@@ -136,6 +137,19 @@ class BlockCart extends Module
 		global $smarty;
 		$this->smartyAssigns($smarty, $params);
 		return $this->display(__FILE__, 'blockcart-json.tpl');
+	}
+	
+	public function hookHeader()
+	{
+		global $page_name;
+		
+		if (intval(Configuration::get('PS_BLOCK_CART_AJAX')))
+		{
+			Tools::addJS(array(_PS_JS_DIR_.'jquery/iutil.prestashop-modifications.js', _PS_JS_DIR_.'jquery/ifxtransfer.js'));
+			Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcart.css', 'all');
+			if ($page_name != 'order')
+				Tools::addJS(__PS_BASE_URI__.'modules/blockcart/ajax-cart.js');
+		}
 	}
 }
 

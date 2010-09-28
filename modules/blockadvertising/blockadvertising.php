@@ -20,9 +20,9 @@ class BlockAdvertising extends Module
 		$this->adv_imgname = 'advertising_custom.jpg';
 
 		if (!file_exists(dirname(__FILE__).'/'.$this->adv_imgname))
-			$this->adv_img = _MODULE_DIR_.$this->name.'/advertising.jpg';
+			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/advertising.jpg';
 		else
-			$this->adv_img = _MODULE_DIR_.$this->name.'/'.$this->adv_imgname;
+			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname;
 		$this->adv_link = htmlentities(Configuration::get('BLOCKADVERT_LINK'), ENT_QUOTES, 'UTF-8');
 	}
 
@@ -32,7 +32,7 @@ class BlockAdvertising extends Module
 		Configuration::updateValue('BLOCKADVERT_LINK', 'http://www.prestashop.com');
 		if (!parent::install())
 			return false;
-		if (!$this->registerHook('rightColumn') OR !$this->registerHook('leftColumn'))
+		if (!$this->registerHook('leftColumn') OR !$this->registerHook('header'))
 			return false;
 		return true;
 	}
@@ -101,7 +101,7 @@ class BlockAdvertising extends Module
 	{
 		global $smarty, $protocol_content, $server_host;
 
-		$smarty->assign('image', $protocol_content.$server_host.$this->adv_img);
+		$smarty->assign('image', $protocol_content.$this->adv_img);
 		$smarty->assign('adv_link', $this->adv_link);
 
 		return $this->display(__FILE__, 'blockadvertising.tpl');
@@ -110,6 +110,13 @@ class BlockAdvertising extends Module
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockadvertising.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockadvertising.css'] = 'all';
 	}
 
 }

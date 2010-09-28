@@ -19,6 +19,8 @@ class BlockVariousLinks extends Module
 	{
 		if (!parent::install())
 			return false;
+		if (!$this->registerHook('header'))
+			return false;
 		if (!$this->registerHook('footer'))
 			return false;
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'block_cms`(`id_block`, `id_cms`) VALUES
@@ -98,6 +100,13 @@ class BlockVariousLinks extends Module
 			$id_cms[] = intval($row['id_cms']);
 		$smarty->assign('cmslinks', $id_cms ? CMS::getLinks($cookie->id_lang, $id_cms) : array());
 		return $this->display(__FILE__, 'blockvariouslinks.tpl');
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockvariouslinks.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockvariouslinks.css'] = 'all';
 	}
 
 }

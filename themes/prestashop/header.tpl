@@ -13,12 +13,6 @@
 		<meta name="robots" content="{if isset($nobots)}no{/if}index,follow" />
 		<link rel="icon" type="image/vnd.microsoft.icon" href="{$img_ps_dir}favicon.ico" />
 		<link rel="shortcut icon" type="image/x-icon" href="{$img_ps_dir}favicon.ico" />
-{if isset($css_files)}
-	{foreach from=$css_files key=css_uri item=media}
-	<link href="{$css_uri}" rel="stylesheet" type="text/css" media="{$media}" />
-	{/foreach}
-{/if}
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}tools.js"></script>
 		<script type="text/javascript">
 			var baseDir = '{$content_dir}';
 			var static_token = '{$static_token}';
@@ -26,9 +20,11 @@
 			var priceDisplayPrecision = {$priceDisplayPrecision*$currency->decimals};
 			var roundMode = {$roundMode};
 		</script>
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery-1.2.6.pack.js"></script>
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.easing.1.3.js"></script>
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.hotkeys-0.7.8-packed.js"></script>
+{if isset($css_files)}
+	{foreach from=$css_files key=css_uri item=media}
+	<link href="{$css_uri}" rel="stylesheet" type="text/css" media="{$media}" />
+	{/foreach}
+{/if}
 {if isset($js_files)}
 	{foreach from=$js_files item=js_uri}
 	<script type="text/javascript" src="{$js_uri}"></script>
@@ -44,7 +40,7 @@
 
 			<!-- Header -->
 			<div id="header">
-				<h1 id="logo"><a href="{$base_dir}" title="{$shop_name|escape:'htmlall':'UTF-8'}"><img src="{$img_ps_dir}logo.jpg" alt="{$shop_name|escape:'htmlall':'UTF-8'}" /></a></h1>
+				<h1 id="logo"><a href="{$base_dir}" title="{$shop_name|escape:'htmlall':'UTF-8'}"><img src="{$img_ps_dir}logo.jpg" alt="{$shop_name|escape:'htmlall':'UTF-8'}" /><!-- //TODO : dynamize height and width --></a></h1>
 				<div id="header_right">
 					{$HOOK_TOP}
 				</div>

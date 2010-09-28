@@ -2,7 +2,7 @@
 include(dirname(__FILE__).'/config/config.inc.php');
 
 include_once(dirname(__FILE__).'/init.php');
-
+Tools::addCSS(_THEME_CSS_DIR_.'product.css');
 //will be initialized bellow...
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;
@@ -75,26 +75,25 @@ function formTargetFormat()
 	$smarty->assign('customizationFormTarget', $customizationFormTarget);
 }
 
-/* CSS ans JS files calls */
-$css_files = array(
-	_PS_CSS_DIR_.'thickbox.css' => 'screen'
-);
+/* CSS */
+Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'screen');
 
-$js_files = array(
+/* JS */
+Tools::addJS(array(
 	_PS_JS_DIR_.'jquery/thickbox-modified.js',
 	_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js',
 	_PS_JS_DIR_.'jquery/jquery.scrollto.js',
 	_PS_JS_DIR_.'jquery/jquery.serialScroll.js',
 	_THEME_JS_DIR_.'tools.js',
 	_THEME_JS_DIR_.'product.js'
-);
+));
 
 /* jqZoom */
 $jqZoomEnabled = (Configuration::get('PS_DISPLAY_JQZOOM') == 1);
 if ($jqZoomEnabled)
 {
-	$js_files[] = _PS_JS_DIR_.'jquery/jquery.jqzoom.js';
-	$css_files[_PS_CSS_DIR_.'jqzoom.css'] = 'screen';
+	Tools::addCSS(_PS_CSS_DIR_.'jqzoom.css', 'screen');
+	Tools::addJS(_PS_JS_DIR_.'jquery/jquery.jqzoom.js');
 }
 
 include_once(dirname(__FILE__).'/header.php');

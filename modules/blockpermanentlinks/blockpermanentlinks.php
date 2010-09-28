@@ -16,11 +16,7 @@ class BlockPermanentLinks extends Module
 
 	function install()
 	{
-		if (!parent::install())
-			return false;
-		if (!$this->registerHook('top'))
-			return false;
-		return true;
+			return (parent::install() AND $this->registerHook('top') AND $this->registerHook('header'));
 	}
 
 	/**
@@ -48,6 +44,14 @@ class BlockPermanentLinks extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		
+		//$css_files[$this->_path.'blockpermanentlinks.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockpermanentlinks.css'] = 'all';
 	}
 }
 

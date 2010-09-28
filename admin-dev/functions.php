@@ -63,10 +63,9 @@ function	rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
 {
  	$defines = array();
 	$defines['__PS_BASE_URI__'] = ($baseUrls AND $baseUrls['__PS_BASE_URI__']) ? $baseUrls['__PS_BASE_URI__'] : __PS_BASE_URI__;
-	$defines['_THEMES_DIR_'] = ($baseUrls AND $baseUrls['_THEMES_DIR_']) ? $baseUrls['_THEMES_DIR_'] : _THEMES_DIR_;
-	$defines['_PS_IMG_'] = ($baseUrls AND $baseUrls['_PS_IMG_']) ? $baseUrls['_PS_IMG_'] : _PS_IMG_;
-	$defines['_PS_JS_DIR_'] = ($baseUrls AND $baseUrls['_PS_JS_DIR_']) ? $baseUrls['_PS_JS_DIR_'] : _PS_JS_DIR_;
-	$defines['_PS_CSS_DIR_'] = ($baseUrls AND $baseUrls['_PS_CSS_DIR_']) ? $baseUrls['_PS_CSS_DIR_'] : _PS_CSS_DIR_;	
+	$defines['_MEDIA_SERVER_1_'] = ($baseUrls AND $baseUrls['_MEDIA_SERVER_1_']) ? $baseUrls['_MEDIA_SERVER_1_'] : _MEDIA_SERVER_1_;
+	$defines['_MEDIA_SERVER_2_'] = ($baseUrls AND $baseUrls['_MEDIA_SERVER_2_']) ? $baseUrls['_MEDIA_SERVER_2_'] : _MEDIA_SERVER_2_;
+	$defines['_MEDIA_SERVER_3_'] = ($baseUrls AND $baseUrls['_MEDIA_SERVER_3_']) ? $baseUrls['_MEDIA_SERVER_3_'] : _MEDIA_SERVER_3_;
 	$defines['_THEME_NAME_'] = $theme ? $theme : _THEME_NAME_;
 	$defines['_DB_NAME_'] = (($arrayDB AND isset($arrayDB['_DB_NAME_'])) ? $arrayDB['_DB_NAME_'] : _DB_NAME_);
 	$defines['_DB_SERVER_'] = (($arrayDB AND isset($arrayDB['_DB_SERVER_'])) ? $arrayDB['_DB_SERVER_'] : _DB_SERVER_);

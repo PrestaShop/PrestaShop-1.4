@@ -416,6 +416,26 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('
 ALTER TABLE `PREFIX_address` ADD `vat_number` varchar(32) NULL DEFAULT NULL AFTER `phone_mobile`;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
 
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (17, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (18, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (24, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (9, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (15, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (5, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (8, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (10, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (20, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (11, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (16, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (23, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (22, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (13, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (14, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (12, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (7, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (21, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
+
+
 ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NULL AFTER `reduction_to`;
 
 ALTER TABLE `PREFIX_currency` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';

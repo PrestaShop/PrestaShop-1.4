@@ -5,6 +5,7 @@ $useSSL = true;
 
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 
 if (!$cookie->isLogged())
     Tools::redirect('authentication.php?back=addresses.php');
@@ -18,4 +19,3 @@ $smarty->assign('addresses', $customer->getAddresses(intval($cookie->id_lang)));
 $smarty->display(_PS_THEME_DIR_.'addresses.tpl');
 include(dirname(__FILE__).'/footer.php');
 
-?>

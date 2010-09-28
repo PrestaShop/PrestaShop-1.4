@@ -5,12 +5,12 @@ $useSSL = true;
 
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'history.css');
 
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=history.php');
 
-/* JS files call */
-$js_files = array(__PS_BASE_URI__.'js/jquery/jquery.scrollto.js', _THEME_JS_DIR_.'history.js');
+Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.scrollto.js', _THEME_JS_DIR_.'history.js'));
 
 if ($orders = Order::getCustomerOrders(intval($cookie->id_customer)))
 	foreach ($orders AS &$order)

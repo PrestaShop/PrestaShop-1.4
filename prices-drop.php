@@ -1,6 +1,9 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
+
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 

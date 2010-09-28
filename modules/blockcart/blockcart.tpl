@@ -3,17 +3,12 @@
 {*************************************************************************************************************************************}
 
 {if $ajax_allowed}
-<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/iutil.prestashop-modifications.js"></script>
-{* to perfectly play the tranfert animation, the script ifx.js has to be called here, but it creates a method conflict with jquery.serialScroll.js file *}
-<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/ifxtransfer.js"></script>
-<script type="text/javascript">
-var CUSTOMIZE_TEXTFIELD = {$CUSTOMIZE_TEXTFIELD};
-var customizationIdMessage = '{l s='Customization #' mod='blockcart' js=1}';
-var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' js=1}';
-</script>
-{if !$order_page}
-<script type="text/javascript" src="{$content_dir}modules/blockcart/ajax-cart.js"></script>
-{/if}
+	{* to perfectly play the tranfert animation, the script ifx.js has to be called here, but it creates a method conflict with jquery.serialScroll.js file *}
+	<script type="text/javascript">
+		var CUSTOMIZE_TEXTFIELD = {$CUSTOMIZE_TEXTFIELD};
+		var customizationIdMessage = '{l s='Customization #' mod='blockcart' js=1}';
+		var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' js=1}';
+	</script>
 {/if}
 
 <!-- MODULE Block cart -->

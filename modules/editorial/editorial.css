@@ -1,0 +1,10 @@
+/* Block editorial */
+.editorial_block { margin-bottom: 2em }
+.editorial_block .rte { background: transparent none repeat scroll 0 0 }
+.editorial_block h2 {
+	background: none;
+	padding: 0;
+	margin-bottom: 1em
+}
+.editorial_block p { padding-top: 0.4em }
+#editorial_block_center p { padding-left: 0 }

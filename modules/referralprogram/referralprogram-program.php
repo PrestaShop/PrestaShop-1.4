@@ -10,11 +10,8 @@ include_once(dirname(__FILE__).'/ReferralProgramModule.php');
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=modules/referralprogram/referralprogram-program.php');
 
-$js_files = array(
-	_PS_JS_DIR_.'jquery/thickbox-modified.js',
-	_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js'
-);
-$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
+Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
+Tools::addJS(array(_PS_JS_DIR_.'jquery/thickbox-modified.js',_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js'));
 
 include(dirname(__FILE__).'/../../header.php');
 

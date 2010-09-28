@@ -12,14 +12,8 @@ include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=modules/loyalty/loyalty-program.php');
 
-// CSS ans JS file calls
-$css_files = array(
-	_PS_CSS_DIR_.'jquery.cluetip.css' => 'all'
-);
-$js_files = array(
-	_PS_JS_DIR_.'jquery/jquery.dimensions.js',
-	_PS_JS_DIR_.'jquery/jquery.cluetip.js'
-);
+Tools::addCSS(_PS_CSS_DIR_.'jquery.cluetip.css', 'all');
+Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.dimensions.js',_PS_JS_DIR_.'jquery/jquery.cluetip.js'));
 
 $customerPoints = intval(LoyaltyModule::getPointsByCustomer(intval($cookie->id_customer)));
 

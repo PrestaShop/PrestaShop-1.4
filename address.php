@@ -9,10 +9,7 @@ include(dirname(__FILE__).'/init.php');
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php');
 
-//CSS ans JS file calls
-$js_files = array(
-	_THEME_JS_DIR_.'tools/statesManagement.js'
-);
+Tools::addJS(_THEME_JS_DIR_.'tools/statesManagement.js');
 
 if ($back = Tools::getValue('back'))
 	$smarty->assign('back', Tools::safeOutput($back));

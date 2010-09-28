@@ -20,6 +20,7 @@ class BlockTags extends Module
 	{
 		if (parent::install() == false 
 				OR $this->registerHook('leftColumn') == false
+				OR $this->registerHook('header') == false
 				OR Configuration::updateValue('BLOCKTAGS_NBR', 10) == false)
 			return false;
 		return true;
@@ -84,6 +85,14 @@ class BlockTags extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+		function hookHeader($params)
+	{
+		global $css_files;
+		
+		//$css_files[$this->_path.'blocktags.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocktags.css'] = 'all';
 	}
 
 }

@@ -60,7 +60,16 @@ class BlockSearch extends Module
 		$instantSearch = intval(Configuration::get('PS_INSTANT_SEARCH'));
 		$smarty->assign('instantsearch', $instantSearch);
 		if (Configuration::get('PS_SEARCH_AJAX'))
-			return $this->display(__FILE__, 'header.tpl');
+		{
+			Tools::addCSS(_PS_CSS_DIR_.'jquery.autocomplete.css');
+			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.autocomplete.js');
+		}
+		if ($instantSearch)
+				Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
+		global $css_files;
+		
+		//$css_files[$this->_path.'blocksearch.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksearch.css'] = 'all';
 	}
 	
 	private function _disabledSearchAjax()

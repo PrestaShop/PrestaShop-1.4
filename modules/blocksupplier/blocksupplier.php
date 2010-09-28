@@ -20,6 +20,8 @@ class BlockSupplier extends Module
 			return false;
 		if (!$this->registerHook('leftColumn'))
 			return false;
+		if (!$this->registerHook('header'))
+			return false;
 		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT', true);
 		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT_NB', 5);
 		Configuration::updateValue('SUPPLIER_DISPLAY_FORM', true);
@@ -96,6 +98,13 @@ class BlockSupplier extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blocksupplier.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksupplier.css'] = 'all';
 	}
 }
 

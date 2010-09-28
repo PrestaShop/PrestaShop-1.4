@@ -166,10 +166,19 @@ if (!Configuration::get('PS_THEME_V11'))
 		'css_dir' => _THEME_CSS_DIR_,
 		'js_dir' => _THEME_JS_DIR_,
 		'pic_dir' => _THEME_PROD_PIC_DIR_
-	);
+	);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 
 	foreach ($assignArray as $assignKey => $assignValue)
-		$smarty->assign($assignKey, (substr($assignValue, 0, 1) == '/' ? $protocol_content.$server_host.$assignValue : str_replace('http://', $protocol_content, $assignValue)));
+	{
+		if (substr($assignValue, 0, 1) == '/' OR $protocol_content == 'https://')
+		{
+			$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
+		}
+		else
+		{
+			$smarty->assign($assignKey, $assignValue);
+		}
+	}
 
 }
 else
@@ -222,3 +231,16 @@ if (isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Conf
 	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 	exit;
 }
+$css_files = array();
+$js_files = array();
+
+/* CSS */
+Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
+
+/* JS */
+Tools::addJS(array(
+	_PS_JS_DIR_.'tools.js',
+	_PS_JS_DIR_.'jquery/jquery-1.2.6.pack.js',
+	_PS_JS_DIR_.'jquery/jquery.easing.1.3.js',
+	_PS_JS_DIR_.'jquery/jquery.hotkeys-0.7.8-packed.js'
+));

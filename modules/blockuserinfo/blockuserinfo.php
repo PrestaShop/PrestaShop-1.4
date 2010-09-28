@@ -16,11 +16,7 @@ class BlockUserInfo extends Module
 
 	public function install()
 	{
-		if (!parent::install())
-			return false;
-		if (!$this->registerHook('top'))
-			return false;
-		return true;
+		return (parent::install() AND $this->registerHook('top') AND $this->registerHook('header'));
 	}
 
 	/**
@@ -41,6 +37,13 @@ class BlockUserInfo extends Module
 			'lastName' => ($cookie->logged ? $cookie->customer_lastname : false)
 		));
 		return $this->display(__FILE__, 'blockuserinfo.tpl');
+	}
+	function hookHeader($params)
+	{
+		global $css_files;
+		
+		//$css_files[$this->_path.'blockuserinfo.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockuserinfo.css'] = 'all';
 	}
 }
 

@@ -5,6 +5,7 @@ $useSSL = true;
 
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'identity.css');
 
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=identity.php');

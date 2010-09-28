@@ -19,7 +19,7 @@ class BlockNewProducts extends Module
 
     function install()
     {
-        if (parent::install() == false OR $this->registerHook('rightColumn') == false OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
+        if (parent::install() == false OR $this->registerHook('rightColumn') == false OR $this->registerHook('header') == false OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
 		return false;
 	return true;
     }
@@ -71,6 +71,12 @@ class BlockNewProducts extends Module
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
+	}
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blocknewproducts.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewproducts.css'] = 'all';
 	}
 }
 

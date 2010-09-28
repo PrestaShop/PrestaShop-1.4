@@ -139,6 +139,11 @@ class	ConfigurationTest
 	{
 		return self::test_dir($dir, true);
 	}
+	
+	static function		test_theme_cache_dir($dir)
+	{
+		return self::test_dir($dir, true);
+	}
 
 	static function		test_customizable_products_dir($dir)
 	{

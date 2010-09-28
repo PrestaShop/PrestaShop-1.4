@@ -20,6 +20,8 @@ class BlockPaymentLogo extends Module
 			return false;
 		if (!$this->registerHook('leftColumn'))
 			return false;
+		if (!$this->registerHook('header'))
+			return false;
 		return true;
 	}
 
@@ -44,6 +46,12 @@ class BlockPaymentLogo extends Module
 	function hookFooter($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockpaymentlogo.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockpaymentlogo.css'] = 'all';
 	}
 
 }

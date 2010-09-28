@@ -16,11 +16,7 @@ class BlockCurrencies extends Module
 
 	function install()
 	{
-		if (!parent::install())
-			return false;
-		if (!$this->registerHook('top'))
-			return false;
-		return true;
+		return (parent::install() AND $this->registerHook('top') AND $this->registerHook('header'));
 	}
 
 	/**
@@ -38,7 +34,14 @@ class BlockCurrencies extends Module
 		$smarty->assign('currencies', $currencies);
 		return $this->display(__FILE__, 'blockcurrencies.tpl');
 	}
-
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		
+		//$css_files[$this->_path.'blockcurrencies.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcurrencies.css'] = 'all';
+	}
 }
 
 ?>

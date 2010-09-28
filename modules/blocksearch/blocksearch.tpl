@@ -12,7 +12,9 @@
 	</form>
 </div>
 {if $ajaxsearch}
-	<script type="text/javascript">{literal}
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	{literal}
 		$('document').ready( function() {
 			$("#search_query")
 				.autocomplete(
@@ -47,6 +49,7 @@
 					document.location.href = data.product_link;
 				})
 		});{/literal}
+		/* ]]> */
 	</script>
 {/if}
 <!-- /Block search module -->

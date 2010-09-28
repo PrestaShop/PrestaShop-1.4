@@ -19,7 +19,7 @@ class BlockSpecials extends Module
 
     function install()
     {
-        return (parent::install() AND $this->registerHook('rightColumn'));
+        return (parent::install() AND $this->registerHook('rightColumn')  AND $this->registerHook('header'));
     }
 
     function hookRightColumn($params)
@@ -38,6 +38,12 @@ class BlockSpecials extends Module
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
+	}
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockspecials.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockspecials.css'] = 'all';
 	}
 }
 

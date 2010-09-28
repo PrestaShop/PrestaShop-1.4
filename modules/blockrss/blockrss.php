@@ -24,7 +24,7 @@ class Blockrss extends Module
  	{
 		Configuration::updateValue('RSS_FEED_TITLE', $this->l('RSS feed'));
 		Configuration::updateValue('RSS_FEED_NBR', 5);
- 	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false)
+ 	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false OR $this->registerHook('header') == false) 
  	 		return false;
 		return true;
   	}
@@ -117,6 +117,13 @@ class Blockrss extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockrss.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockrss.css'] = 'all';
 	}
 }
 

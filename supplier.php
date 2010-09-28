@@ -2,7 +2,7 @@
 
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
-
+Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 //will be initialized bellow...
 if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;

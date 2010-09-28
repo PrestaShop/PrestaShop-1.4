@@ -1,5 +1,3 @@
-<script type="text/javascript" src="{$js_dir}tools/treeManagement.js"></script>
-
 <!-- Block categories module -->
 <div id="categories_block_left" class="block">
 	<h4>{l s='Categories' mod='blockcategories'}</h4>

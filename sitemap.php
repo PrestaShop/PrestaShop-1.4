@@ -1,9 +1,9 @@
 <?php
 
 include(dirname(__FILE__).'/config/config.inc.php');
-
-$css_files = array();
-$js_files = array(_THEME_JS_DIR_.'tools/treeManagement.js');
+include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'sitemap.css');
+Tools::addJS(_THEME_JS_DIR_.'tools/treeManagement.js');
 
 include(dirname(__FILE__).'/header.php');
 

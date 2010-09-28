@@ -269,6 +269,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/mails</li>
 				<li class="required">/modules</li>
 				<li class="required">/themes/prestashop/lang</li>
+				<li class="required">/themes/prestashop/cache</li>
 				<li class="required">/translations</li>
 				<li class="required">/upload</li>
 				<li class="required">/download</li>
@@ -807,6 +808,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/mails</li>
 				<li class="required">/modules</li>
 				<li class="required">/themes/prestashop/lang</li>
+				<li class="required">/themes/prestashop/cache</li>
 				<li class="required">/translations</li>
 			</ul>
 			

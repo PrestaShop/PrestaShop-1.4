@@ -135,7 +135,7 @@ function checkCustomizations()
 function ceilf(value, precision)
 {
 	if (typeof(precision) == 'undefined')
-		precision = 0
+		precision = 0;
 	var precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
 	var tmp = value * precisionFactor;
 	var tmp2 = tmp.toString();
@@ -150,7 +150,7 @@ function ceilf(value, precision)
 function floorf(value, precision)
 {
 	if (typeof(precision) == 'undefined')
-		precision = 0
+		precision = 0;
 	var precisionFactor = precision == 0 ? 1 : Math.pow(10, precision);
 	var tmp = value * precisionFactor;
 	var tmp2 = tmp.toString();

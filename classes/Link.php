@@ -124,7 +124,12 @@ class Link
 
 	public function getImageLink($name, $ids, $type = null)
 	{
-		return ($this->allow == 1) ? (__PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg');
+		global $protocol;
+		if ($this->allow == 1)
+			$uri_path = __PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg';
+		else
+			$uri_path = _THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg';
+		return $protocol.Tools::getMediaServer($uri_path).$uri_path;
 	}
 
 	public function getCatImageLink($name, $id_category, $type = null)

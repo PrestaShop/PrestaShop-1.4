@@ -27,7 +27,7 @@ class Blocknewsletter extends Module
  	
  	public function install()
  	{
- 	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false)
+ 	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false OR $this->registerHook('header') == false)
  	 		return false;
  	 	return Db::getInstance()->Execute('
 		CREATE TABLE '._DB_PREFIX_.'newsletter (
@@ -213,6 +213,13 @@ class Blocknewsletter extends Module
 	public function externalNewsletter(/*$params*/)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blocknewsletter.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewsletter.css'] = 'all';
 	}
 }
 

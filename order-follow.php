@@ -9,8 +9,8 @@ include(dirname(__FILE__).'/init.php');
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=history.php');
 
-/* JS files calls */
-$js_files = array(__PS_BASE_URI__.'js/jquery/jquery.scrollto.js', _THEME_JS_DIR_.'history.js');
+Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.scrollto.js', _THEME_JS_DIR_.'history.js'));
+
 
 if (Tools::isSubmit('submitReturnMerchandise'))
 {

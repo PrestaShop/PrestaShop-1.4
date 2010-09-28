@@ -3,12 +3,15 @@
 $currentDir = dirname(__FILE__);
 
 /* Theme URLs */
+
+define('_THEMES_DIR_',     __PS_BASE_URI__.'themes/');
 define('_THEME_DIR_',      _THEMES_DIR_._THEME_NAME_.'/');
 define('_THEME_IMG_DIR_',  _THEME_DIR_.'img/');
 define('_THEME_CSS_DIR_',  _THEME_DIR_.'css/');
 define('_THEME_JS_DIR_',   _THEME_DIR_.'js/');
 
 /* Image URLs */
+define('_PS_IMG_',         __PS_BASE_URI__.'img/');
 define('_PS_ADMIN_IMG_',   			_PS_IMG_.'admin/');
 define('_THEME_CAT_DIR_',  			_PS_IMG_.'c/');
 define('_THEME_PROD_DIR_', 			_PS_IMG_.'p/');
@@ -22,6 +25,8 @@ define('_THEME_COL_DIR_', 			_PS_IMG_.'co/');
 define('_SUPP_DIR_',      			_PS_IMG_.'su/');
 
 /* Other URLs */
+define('_PS_JS_DIR_',               __PS_BASE_URI__.'js/');
+define('_PS_CSS_DIR_',              __PS_BASE_URI__.'css/');
 define('_THEME_PROD_PIC_DIR_', 	__PS_BASE_URI__.'upload/');
 define('_MAIL_DIR_',        	__PS_BASE_URI__.'mails/');
 define('_MODULE_DIR_',        	__PS_BASE_URI__.'modules/');
@@ -97,5 +102,3 @@ define('ALL_CARRIERS',5);
 
 /* SQL Replication management */
 define('_PS_USE_SQL_SLAVE_', 0);
-
-?>

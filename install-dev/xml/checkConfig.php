@@ -20,6 +20,7 @@ $tests = array(
 	'mails_dir' => INSTALL_PATH.'/../mails/',
 	'module_dir' => INSTALL_PATH.'/../modules/',
 	'theme_lang_dir' => INSTALL_PATH.'/../themes/prestashop/lang/',
+	'theme_cache_dir' => INSTALL_PATH.'/../themes/prestashop/cache/',
 	'translations_dir' => INSTALL_PATH.'/../translations/',
 	'customizable_products_dir' => INSTALL_PATH.'/../upload/',
 	'virtual_products_dir' => INSTALL_PATH.'/../download/',

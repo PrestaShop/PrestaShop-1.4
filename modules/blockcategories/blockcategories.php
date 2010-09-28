@@ -18,6 +18,7 @@ class BlockCategories extends Module
 	{
 		if (parent::install() == false
 			OR $this->registerHook('leftColumn') == false
+			OR $this->registerHook('header') == false
 			OR Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) == false
 			OR Configuration::updateValue('BLOCK_CATEG_DHTML', 1) == false)
 			return false;
@@ -144,6 +145,12 @@ class BlockCategories extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	public function hookHeader()
+	{
+		Tools::addJS(_THEME_JS_DIR_.'tools/treeManagement.js');
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcategories.css', 'all');
 	}
 }
 

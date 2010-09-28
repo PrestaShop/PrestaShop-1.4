@@ -3,10 +3,10 @@
 /* SSL Management */
 $useSSL = true;
 
-include_once(dirname(__FILE__).'/config/config.inc.php');
+require_once(dirname(__FILE__).'/config/config.inc.php');
 /* Step number is needed on some modules */
 $step = intval(Tools::getValue('step'));
-include_once(dirname(__FILE__).'/init.php');
+require_once(dirname(__FILE__).'/init.php');
 
 /* Disable some cache related bugs on the cart/order */
 header('Cache-Control: no-cache, must-revalidate');
@@ -104,7 +104,46 @@ if ($cart->nbProducts())
 			break;
 		default:
 			$smarty->assign('errors', $errors);
-			displaySummary();
+			if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
+				$smarty->assign('carrierPicture', 1);
+			$summary = $cart->getSummaryDetails();
+			$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
+			Product::addCustomizationPrice($summary['products'], $customizedDatas);
+
+			if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency(intval($cart->id_currency))))
+			{
+				$discounts = $cart->getDiscounts();
+				$total_free_ship =  $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']);
+				foreach ($discounts as $discount)
+					if ($discount['id_discount_type'] == 3)
+					{
+						$total_free_ship = 0;
+						break;
+					}
+				$smarty->assign('free_ship', $total_free_ship);
+			}
+			// for compatibility with 1.2 themes
+			foreach($summary['products'] AS $key => $product)
+				$summary['products'][$key]['quantity'] = $product['cart_quantity'];
+			$smarty->assign($summary);
+			$token = Tools::getToken(false);
+			$smarty->assign(array(
+				'token_cart' => $token,
+				'isVirtualCart' => $cart->isVirtualCart(),
+				'productNumber' => $cart->nbProducts(),
+				'voucherAllowed' => Configuration::get('PS_VOUCHERS'),
+				'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
+				'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
+				'shippingCost' => $cart->getOrderTotal(true, 5),
+				'shippingCostTaxExc' => $cart->getOrderTotal(false, 5),
+				'customizedDatas' => $customizedDatas,
+				'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
+				'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
+				'lastProductAdded' => $cart->getLastProduct()
+				));
+			Tools::safePostVars();
+			require_once(dirname(__FILE__).'/header.php');
+			$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 			break;
 	}
 }
@@ -113,7 +152,7 @@ else
 	/* Default page */
 	$smarty->assign('empty', 1);
 	Tools::safePostVars();
-	include_once(dirname(__FILE__).'/header.php');
+	require_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 }
 
@@ -207,7 +246,7 @@ function processAddress()
 			die('{\'hasError\' : true, errors : [\''.implode('\',\'', $errors).'\']}');
 		$smarty->assign('errors', $errors);
 		displayAddress();
-		include_once(dirname(__FILE__).'/footer.php');
+		require_once(dirname(__FILE__).'/footer.php');
 		exit;
 	}
 	if (Tools::getValue('ajax'))
@@ -264,6 +303,7 @@ function processCarrier()
 function displayAddress()
 {
 	global $smarty, $cookie, $cart;
+	Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 
 	if (!Customer::getAddressesTotalById(intval($cookie->id_customer)))
 		Tools::redirect('address.php?back=order.php?step=1');
@@ -310,7 +350,7 @@ function displayAddress()
 	$smarty->assign('cart', $cart);
 
 	Tools::safePostVars();
-	include_once(dirname(__FILE__).'/header.php');
+	require_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'order-address.tpl');
 }
 
@@ -400,9 +440,9 @@ function displayCarrier()
 		'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency(intval($cookie->id_currency))),
 		'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency(intval($cookie->id_currency)))));
 	Tools::safePostVars();
-	$css_files = array(__PS_BASE_URI__.'css/thickbox.css' => 'all');
-	$js_files = array(__PS_BASE_URI__.'js/jquery/thickbox-modified.js');
-	include_once(dirname(__FILE__).'/header.php');
+	Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
+	Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+	require_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'order-carrier.tpl');
 }
 
@@ -425,55 +465,8 @@ function displayPayment()
 	));
 
 	Tools::safePostVars();
-	include_once(dirname(__FILE__).'/header.php');
+	require_once(dirname(__FILE__).'/header.php');
 	$smarty->display(_PS_THEME_DIR_.'order-payment.tpl');
-}
-
-/* Confirmation step */
-function displaySummary()
-{
-	global $smarty, $cart;
-
-	if (file_exists(_PS_SHIP_IMG_DIR_.intval($cart->id_carrier).'.jpg'))
-		$smarty->assign('carrierPicture', 1);
-	$summary = $cart->getSummaryDetails();
-	$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
-	Product::addCustomizationPrice($summary['products'], $customizedDatas);
-
-	if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency(intval($cart->id_currency))))
-	{
-		$discounts = $cart->getDiscounts();
-		$total_free_ship =  $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']);
-		foreach ($discounts as $discount)
-			if ($discount['id_discount_type'] == 3)
-			{
-				$total_free_ship = 0;
-				break ;
-			}
-		$smarty->assign('free_ship', $total_free_ship);
-	}
-	// for compatibility with 1.2 themes
-	foreach($summary['products'] AS $key => $product)
-		$summary['products'][$key]['quantity'] = $product['cart_quantity'];
-	$smarty->assign($summary);
-	$token = Tools::getToken(false);
-	$smarty->assign(array(
-		'token_cart' => $token,
-		'isVirtualCart' => $cart->isVirtualCart(),
-		'productNumber' => $cart->nbProducts(),
-		'voucherAllowed' => Configuration::get('PS_VOUCHERS'),
-		'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
-		'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
-		'shippingCost' => $cart->getOrderTotal(true, 5),
-		'shippingCostTaxExc' => $cart->getOrderTotal(false, 5),
-		'customizedDatas' => $customizedDatas,
-		'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
-		'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-		'lastProductAdded' => $cart->getLastProduct()
-		));
-	Tools::safePostVars();
-	include_once(dirname(__FILE__).'/header.php');
-	$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 }
 
 ?>

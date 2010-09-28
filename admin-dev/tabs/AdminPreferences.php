@@ -57,10 +57,9 @@ class AdminPreferences extends AdminTab
 
 		$this->_fieldsGeneral = array(
 			'__PS_BASE_URI__' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
-			'_THEMES_DIR_' => array('title' => $this->l('Themes URL'), 'desc' => $this->l('Name of the themes directory on your Web server, bracketed by forward slashes (e.g., /themes/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless static content (e.g., http://static.myshop.com/themes/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _THEMES_DIR_),
-			'_PS_IMG_' => array('title' => $this->l('Images URL'), 'desc' => $this->l('Name of the images directory on your Web server, bracketed by forward slashes (e.g., /img/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless images (e.g., http://static.myshop.com/img/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_IMG_),
-			'_PS_JS_DIR_' => array('title' => $this->l('JS files URL'), 'desc' => $this->l('Name of the javascript files directory on your Web server, bracketed by forward slashes (e.g., /js/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless files (e.g., http://static.myshop.com/js/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_JS_DIR_),
-			'_PS_CSS_DIR_' => array('title' => $this->l('CSS files URL'), 'desc' => $this->l('Name of the css files directory on your Web server, bracketed by forward slashes (e.g., /css/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless files (e.g., http://static.myshop.com/css/).'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 40, 'default' => _PS_CSS_DIR_),
+			'_MEDIA_SERVER_1_' => array('title' => $this->l('Media server #1'), 'desc' => $this->l('Name of the themes directory on your Web server, bracketed by forward slashes (e.g., /themes/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless static content (e.g., http://static.myshop.com/themes/).'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_1_),
+			'_MEDIA_SERVER_2_' => array('title' => $this->l('Media server #2'), 'desc' => $this->l('Name of the images directory on your Web server, bracketed by forward slashes (e.g., /img/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless images (e.g., http://static.myshop.com/img/).'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_2_),
+			'_MEDIA_SERVER_3_' => array('title' => $this->l('Media server #3'), 'desc' => $this->l('Name of the javascript files directory on your Web server, bracketed by forward slashes (e.g., /js/)').'<br />'.$this->l('You can also put an absolute URL to another domain or subdomain in order to use cookieless files (e.g., http://static.myshop.com/js/).'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_3_),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use coma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
@@ -75,7 +74,8 @@ class AdminPreferences extends AdminTab
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging:'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode:'), 'desc' => $this->l('You can choose the rounding of prices, rounding always superior, inferior or classical rounding.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
-			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check updates to modules'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'));
+			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check updates to modules'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isUnsignedId', 'cast' => 'intval', 'type' => 'select', 'list' => $timezone, 'identifier' => 'id');
 			$this->_fieldsGeneral['PS_THEME_V11'] = array('title' => $this->l('v1.1 theme compatibility:'), 'desc' => $this->l('My shop use a PrestaShop v1.1 theme (SSL will generate warnings in customer browser)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
@@ -187,20 +187,17 @@ class AdminPreferences extends AdminTab
 				$baseUrls = array();
 				if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
 					$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
-				if ($_THEMES_DIR_ = Tools::getValue('_THEMES_DIR_'))
-					$baseUrls['_THEMES_DIR_'] = $_THEMES_DIR_;
-				if ($_PS_IMG_ = Tools::getValue('_PS_IMG_'))
-					$baseUrls['_PS_IMG_'] = $_PS_IMG_;
-				if ($_PS_JS_DIR_ = Tools::getValue('_PS_JS_DIR_'))
-					$baseUrls['_PS_JS_DIR_'] = $_PS_JS_DIR_;
-				if ($_PS_CSS_DIR_ = Tools::getValue('_PS_CSS_DIR_'))
-					$baseUrls['_PS_CSS_DIR_'] = $_PS_CSS_DIR_;
+				if ($_MEDIA_SERVER_1_ = Tools::getValue('_MEDIA_SERVER_1_'))
+					$baseUrls['_MEDIA_SERVER_1_'] = $_MEDIA_SERVER_1_;
+				if ($_MEDIA_SERVER_2_ = Tools::getValue('_MEDIA_SERVER_2_'))
+					$baseUrls['_MEDIA_SERVER_2_'] = $_MEDIA_SERVER_2_;
+				if ($_MEDIA_SERVER_3_ = Tools::getValue('_MEDIA_SERVER_3_'))
+					$baseUrls['_MEDIA_SERVER_3_'] = $_MEDIA_SERVER_3_;
 				rewriteSettingsFile($baseUrls, NULL, NULL);
 				unset($this->_fieldsGeneral['__PS_BASE_URI__']);
-				unset($this->_fieldsGeneral['_THEMES_DIR_']);
-				unset($this->_fieldsGeneral['_PS_IMG_']);
-				unset($this->_fieldsGeneral['_PS_JS_DIR_']);
-				unset($this->_fieldsGeneral['_PS_CSS_DIR_']);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
 			}
 			elseif (isset($_POST['submitAppearance'.$this->table]))
 			{
@@ -271,10 +268,9 @@ class AdminPreferences extends AdminTab
 				$tab[$key] =  Tools::getValue($key, Configuration::get($key));
 		}
 		$tab['__PS_BASE_URI__'] = __PS_BASE_URI__;
-		$tab['_THEMES_DIR_'] = _THEMES_DIR_;
-		$tab['_PS_IMG_'] = _PS_IMG_;
-		$tab['_PS_JS_DIR_'] = _PS_JS_DIR_;
-		$tab['_PS_CSS_DIR_'] = _PS_CSS_DIR_;
+		$tab['_MEDIA_SERVER_1_'] = _MEDIA_SERVER_1_;
+		$tab['_MEDIA_SERVER_2_'] = _MEDIA_SERVER_2_;
+		$tab['_MEDIA_SERVER_3_'] = _MEDIA_SERVER_3_;
 		$tab['PS_THEME'] = _THEME_NAME_;
 		$tab['db_type'] = _DB_TYPE_;
 		$tab['db_server'] = _DB_SERVER_;

@@ -21,6 +21,7 @@ class BlockBestSellers extends Module
     {
         if (!parent::install() OR
 			!$this->registerHook('rightColumn') OR
+			!$this->registerHook('header') OR
 			!$this->registerHook('updateOrderStatus') OR
 			!ProductSale::fillProductSales())
 				return false;
@@ -49,6 +50,13 @@ class BlockBestSellers extends Module
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockbestsellers.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockbestsellers.css'] = 'all';
 	}
 }
 

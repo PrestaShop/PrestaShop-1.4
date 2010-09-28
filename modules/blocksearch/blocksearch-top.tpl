@@ -11,7 +11,9 @@
 	</form>
 </div>
 {if $instantsearch}
-	<script type="text/javascript">{literal}
+	<script type="text/javascript">
+/* <![CDATA[ */
+		{literal}
 		function tryToCloseInstantSearch() {
 			if ($('#old_center_column').length > 0)
 			{
@@ -94,7 +96,9 @@
 					$('#search_query').val(data.pname);
 					document.location.href = data.product_link;
 				})
-		});{/literal}
+		});
+		{/literal}
+		/* ]]> */
 	</script>
 {/if}
 <!-- /Block search module TOP -->

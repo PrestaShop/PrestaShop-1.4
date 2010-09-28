@@ -3,6 +3,8 @@
 $useSSL = true;
 
 include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'contact-form.css');
 include(dirname(__FILE__).'/header.php');
 
 $errors = array();

@@ -5,14 +5,12 @@ $useSSL = true;
 
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
+Tools::addCSS(_THEME_CSS_DIR_.'authentication.css');
 if ($cookie->isLogged())
 	Tools::redirect('my-account.php');
 
-//CSS ans JS file calls
-$js_files = array(
-	_THEME_JS_DIR_.'tools/statesManagement.js',
-	__PS_BASE_URI__.'js/jquery/jquery-typewatch.pack.js'
-);
+Tools::addJS(array(_THEME_JS_DIR_.'tools/statesManagement.js', _PS_JS_DIR_.'jquery/jquery-typewatch.pack.js'));
+
 $errors = array();
 
 $back = Tools::getValue('back');

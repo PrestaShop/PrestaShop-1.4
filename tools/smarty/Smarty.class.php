@@ -1260,12 +1260,14 @@ class Smarty
             }
         } else {
             ob_start();
+            
             if ($this->_is_compiled($resource_name, $_smarty_compile_path)
                     || $this->_compile_resource($resource_name, $_smarty_compile_path))
             {
                 include($_smarty_compile_path);
             }
             $_smarty_results = ob_get_contents();
+            //d('die');
             ob_end_clean();
 
             foreach ((array)$this->_plugins['outputfilter'] as $_output_filter) {

@@ -18,7 +18,7 @@ class BlockInfos extends Module
 
 	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('leftColumn'))
+		if (!parent::install() OR !$this->registerHook('leftColumn') OR !$this->registerHook('header'))
 			return false;
 		Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'block_cms`(`id_block`, `id_cms`)
@@ -111,5 +111,12 @@ class BlockInfos extends Module
 	function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
+	}
+	
+	function hookHeader($params)
+	{
+		global $css_files;
+		//$css_files[$this->_path.'blockinfos.css'] = 'all';
+		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockinfos.css'] = 'all';
 	}
 }
