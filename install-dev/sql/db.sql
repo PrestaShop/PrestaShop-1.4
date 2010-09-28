@@ -425,6 +425,7 @@ CREATE TABLE `PREFIX_customer_message` (
   `id_customer_thread` int(11) default NULL,
   `id_employee` int(10) unsigned default NULL,
   `message` text NOT NULL,
+  `file_name` varchar(18) DEFAULT NULL,
   `ip_address` int(11) default NULL,
   `user_agent` varchar(128) default NULL,
   `date_add` datetime NOT NULL,

@@ -131,7 +131,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (69, 'PS_DISPLAY_JQZOOM', 0, NOW(), NOW()),
 (70, 'PS_VOLUME_UNIT', 'cl', NOW(), NOW()),
 (71, 'PS_CIPHER_ALGORITHM', 0, NOW(), NOW()),
-(72, 'PS_ATTRIBUTE_CATEGORY_DISPLAY', 1, NOW(), NOW());
+(72, 'PS_ATTRIBUTE_CATEGORY_DISPLAY', 1, NOW(), NOW()),
+(73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),

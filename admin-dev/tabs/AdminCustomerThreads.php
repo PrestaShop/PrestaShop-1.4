@@ -124,12 +124,21 @@ class AdminCustomerThreads extends AdminTab
 				$cm->id_customer_thread = $ct->id;
 				$cm->message = Tools::htmlentitiesutf8(nl2br2(Tools::getValue('reply_message')));
 				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
-				if ($cm->add())
+				if (isset($_FILES) AND !empty($_FILES['joinFile']['name']) AND $_FILES['joinFile']['error'] != 0)
+					$this->_errors[] = Tools::displayError('an error occured with the file upload');
+				else if ($cm->add())
 				{
+					$fileAttachment = NULL;
+					if (!empty($_FILES['joinFile']['name']))
+					{
+						$fileAttachment['content'] = file_get_contents($_FILES['joinFile']['tmp_name']);
+						$fileAttachment['name'] = $_FILES['joinFile']['name'];
+						$fileAttachment['mime'] = $_FILES['joinFile']['type'];
+					}
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
 					'{link}' => Tools::getHttpHost(true).__PS_BASE_URI__.'contact-form.php?id_customer_thread='.intval($ct->id).'&token='.$ct->token);
-					Mail::Send($ct->id_lang, 'reply_msg','An answer to your message is available', $params, $_POST['msg_email'], $_POST['msg_email'], NULL, NULL);
+					Mail::Send($ct->id_lang, 'reply_msg','An answer to your message is available', $params, $_POST['msg_email'], $_POST['msg_email'], NULL, NULL, $fileAttachment);
 					$ct->status = 'closed';
 					$ct->update();
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
@@ -146,7 +155,9 @@ class AdminCustomerThreads extends AdminTab
 	{
 		global $cookie;
 
-		if (isset($_GET['view'.$this->table]))
+		if (isset($_GET['filename']) AND file_exists(_PS_MODULE_DIR_.'../upload/'.$_GET['filename']))
+			self::openUploadedFile();
+		else if (isset($_GET['view'.$this->table]))
 			$this->viewcustomer_thread();
 		else
 		{
@@ -198,6 +209,36 @@ class AdminCustomerThreads extends AdminTab
 		parent::displayListHeader($token);
 	}
 	
+	private function openUploadedFile()
+	{
+		$filename = $_GET['filename'];
+		$extensions = array(
+		'.txt' => 'text/plain',
+		'.rtf' => 'application/rtf',
+		'.doc' => 'application/msword',
+		'.docx'=> 'application/msword',
+		'.pdf' => 'application/pdf',
+		'.zip' => 'multipart/x-zip',
+		'.png' => 'image/png',
+		'.jpeg' => 'image/jpeg',
+		'.gif' => 'image/gif',
+		'.jpg' => 'image/jpeg'
+		);
+		$extension = '';
+		foreach ($extensions as $key => $val)
+		{
+			if (substr($filename, -4) == $key OR substr($filename, -5) == $key)
+				$extension = $val;
+			else
+				continue;
+			break;
+		}
+		ob_end_clean();
+		header('Content-Type: '.$extension);
+		header('Content-Disposition:attachment;filename="'.$filename.'"');
+		readfile(_PS_MODULE_DIR_.'../upload/'.$filename);
+		die;
+	}
 	private function displayMsg($message, $email = false, $id_employee = null)
 	{
 		global $cookie, $currentIndex;
@@ -228,6 +269,10 @@ class AdminCustomerThreads extends AdminTab
 					<b>'.$this->l('Sent on:').'</b> '.Tools::displayDate($message['date_add'], intval($cookie->id_lang), true).'<br />'.(
 						empty($message['employee_name'])
 						? '<b>'.$this->l('Browser:').'</b> '.strip_tags($message['user_agent']).'<br />'
+						: ''
+					).(
+						(!empty($message['file_name']) AND file_exists(_PS_MODULE_DIR_.'../upload/'.$message['file_name']))
+						? '<b>'.$this->l('File attachment').'</b> <a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.$message['id_customer_thread'].'&viewcustomer_thread&token='.Tools::getAdminToken('AdminCustomerThreads'.intval(Tab::getIdFromClassName('AdminCustomerThreads')).intval($cookie->id_employee)).'&filename='.$message['file_name'].'" title="'.$this->l('View file').'"><img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(
 						(!empty($message['id_order']) AND empty($message['employee_name']))
@@ -276,7 +321,7 @@ class AdminCustomerThreads extends AdminTab
 					</button>
 				</p>
 				<div id="reply_to_'.intval($message['id_customer_message']).'" style="display: none; margin-top: 20px;"">
-					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
+					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post" enctype="multipart/form-data">
 						<p>'.$this->l('Please type your reply below:').'</p>
 						<textarea style="width: 450px; height: 175px;" name="reply_message">'.(
 								$message['firstname']
@@ -287,6 +332,9 @@ class AdminCustomerThreads extends AdminTab
 						<div style="width: 450px; text-align: right; font-style: italic; font-size: 9px; margin-top: 2px;">
 							'.$this->l('Your reply will be sent to:').' '.$message['email'].'
 						</div>
+						<div style="width: 450px; margin-top: 0px;">
+							<input type="file" name="joinFile"/>
+						<div>
 						<div style="width: 450px; text-align: center;">
 							<input type="submit" class="button" name="submitReply" value="'.$this->l('Send my reply').'" style="margin-top:20px;" />
 							<input type="hidden" name="id_customer_thread" value="'.intval($message['id_customer_thread']).'" />
@@ -314,7 +362,7 @@ class AdminCustomerThreads extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Messages').'</h2>
-		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
+		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post" enctype="multipart/form-data">
 			<p>
 				<img src="../img/admin/msg-forward.png" alt="" style="vertical-align: middle;" /> '.$this->l('Forward this discussion to an employee:').' 
 				<select name="id_employee_forward" style="vertical-align: middle;" onchange="

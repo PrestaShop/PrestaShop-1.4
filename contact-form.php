@@ -13,6 +13,7 @@ $smarty->assign('contacts', Contact::getContacts(intval($cookie->id_lang)));
 
 if ($cookie->isLogged())
 {
+	$smarty->assign('isLogged', 1);
 	$customer = new Customer(intval($cookie->id_customer));
 	if (!Validate::isLoadedObject($customer))
 		die(Tools::displayError('customer not found'));
@@ -39,13 +40,21 @@ if ($cookie->isLogged())
 	
 	foreach ($products as $key => $val)
 		$orderedProductList .= '<option value="'.$key.'" '.(intval(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
-	$smarty->assign('isLogged', 1);
 	$smarty->assign('orderList', $orderList);
 	$smarty->assign('orderedProductList', $orderedProductList);
 }
 
 if (Tools::isSubmit('submitMessage'))
 {
+	$fileAttachment = NULL;
+	if (isset($_FILES['fileUpload']['name']) AND !empty($_FILES['fileUpload']['name']) AND !empty($_FILES['fileUpload']['tmp_name']))
+	{
+		$extension = array('.txt', '.rtf', '.doc', '.docx', '.pdf', '.zip', '.png', '.jpeg', '.gif', '.jpg');
+		$filename = uniqid().substr($_FILES['fileUpload']['name'], -5);
+		$fileAttachment['content'] = file_get_contents($_FILES['fileUpload']['tmp_name']);
+		$fileAttachment['name'] = $_FILES['fileUpload']['name'];
+		$fileAttachment['mime'] = $_FILES['fileUpload']['type'];
+	}
 	$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
 	if (!($from = Tools::getValue('from')) OR !Validate::isEmail($from))
         $errors[] = Tools::displayError('invalid e-mail address');
@@ -55,6 +64,10 @@ if (Tools::isSubmit('submitMessage'))
         $errors[] = Tools::displayError('invalid message');
     elseif (!($id_contact = intval(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact(intval($id_contact), intval($cookie->id_lang)))))
     	$errors[] = Tools::displayError('please select a subject in the list');
+	elseif (!empty($_FILES['fileUpload']['name']) AND $_FILES['fileUpload']['error'] != 0)
+		$errors[] = Tools::displayError('An error occurred during the file upload');
+	elseif (!empty($_FILES['fileUpload']['name']) AND !in_array(substr($_FILES['fileUpload']['name'], -4), $extension) AND !in_array(substr($_FILES['fileUpload']['name'], -5), $extension))
+		$errors[] = Tools::displayError('Bad file extension');
     else
     {
 		if (intval($cookie->id_customer))
@@ -123,7 +136,7 @@ if (Tools::isSubmit('submitMessage'))
 		}
 		if (!empty($contact->email))
 		{
-			if (Mail::Send(intval($cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from))
+			if (Mail::Send(intval($cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from), $fileAttachment)
 				AND Mail::Send(intval($cookie->id_lang), 'contact_form', Mail::l('Your message have been correctly sent'), array('{message}' => stripslashes($message)), $from))
 				$smarty->assign('confirmation', 1);
 			else
@@ -166,6 +179,8 @@ if (Tools::isSubmit('submitMessage'))
 				$cm = new CustomerMessage();
 				$cm->id_customer_thread = $ct->id;
 				$cm->message = htmlentities($message, ENT_COMPAT, 'UTF-8');
+				if (isset($filename) AND rename($_FILES['fileUpload']['tmp_name'], _PS_MODULE_DIR_.'../upload/'.$filename))
+					$cm->file_name = $filename;
 				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
 				$cm->user_agent = $_SERVER['HTTP_USER_AGENT'];
 				if ($cm->add())
@@ -182,13 +197,14 @@ if (Tools::isSubmit('submitMessage'))
 		}
 		if (count($errors) > 1)
 			array_unique($errors);
-    }
+	}
 }
 
 $email = Tools::safeOutput(Tools::getValue('from', ((isset($cookie) AND isset($cookie->email) AND Validate::isEmail($cookie->email)) ? $cookie->email : '')));
 $smarty->assign(array(
 	'errors' => $errors,
-	'email' => $email
+	'email' => $email,
+	'fileupload' => Configuration::get('PS_CUSTOMER_SERVICE_FILE_UPLOAD')
 ));
 
 

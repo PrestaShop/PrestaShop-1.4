@@ -29,6 +29,13 @@ class AdminContacts extends AdminTab
 		'email' => array('title' => $this->l('E-mail address'), 'width' => 130),
 		'description' => array('title' => $this->l('Description'), 'width' => 150));
 	
+		$this->optionTitle = $this->l('Contact options');
+		$this->_fieldsOptions = array(
+			'PS_CUSTOMER_SERVICE_FILE_UPLOAD' => array('title' => $this->l('Allow file upload'), 'desc' => $this->l('Allow customers to upload file using contact page'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => array(
+				'0' => array('value' => 0, 'name' => $this->l('No')), 
+				'1' => array('value' => 1, 'name' => $this->l('Yes')) 
+			))
+		);
 		parent::__construct();
 	}
 	

@@ -16,7 +16,7 @@
 {else}
 	<p class="bold">{l s='For questions about an order or for information about our products'}.</p>
 	{include file=$tpl_dir./errors.tpl}
-	<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
+	<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std" enctype="multipart/form-data">
 		<fieldset>
 			<h3>{l s='Send a message'}</h3>
 			<p class="select">
@@ -72,6 +72,13 @@
 				{elseif $customerThread.id_product > 0}
 					<input type="text" name="id_product" id="id_product" value="{$customerThread.id_product|intval}" readonly="readonly" />
 				{/if}
+			</p>
+		{/if}
+		{if $fileupload == 1}
+			<p class="text">
+			<label for="fileUpload">{l s='File'}</label>
+				<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+				<input type="file" name="fileUpload" id="fileUpload" />
 			</p>
 		{/if}
 		<p class="textarea">

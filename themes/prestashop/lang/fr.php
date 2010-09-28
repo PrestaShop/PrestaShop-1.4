@@ -125,6 +125,7 @@ $_LANG['contact-form_7bc873cba11f035df692c3549366c722'] = '-- Choisir --';
 $_LANG['contact-form_8b5dd64ab8d0b8158906796b53a200e2'] = 'Votre adresse e-mail';
 $_LANG['contact-form_d79cf3f429596f77db95c65074663a54'] = 'Numéro de commande';
 $_LANG['contact-form_deb10517653c255364175796ace3553f'] = 'Produit';
+$_LANG['contact-form_0b27918290ff5323bea1e3b78a9cf04e'] = 'Fichier';
 $_LANG['contact-form_4c2a8fe7eaf24721cc7a9f0175115bd4'] = 'Message';
 $_LANG['contact-form_94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
 $_LANG['discount_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mon compte';
