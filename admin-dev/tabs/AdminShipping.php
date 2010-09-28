@@ -221,6 +221,18 @@ class AdminShipping extends AdminTab
 
 				$zones = Zone::getZones(true);
 				if (sizeof($ranges))
+				{
+					$display_all_field = false;
+					if (sizeof($zones) > 1)
+					{
+						$display_all_field = true;
+						echo '<tr>
+								<th style="height: 30px;">'.$this->l('All').'</th>';
+								foreach ($ranges AS $range)
+									echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onkeyup="spreadFees('.$range[$rangeIdentifier].')" name="fees_all_'.$range[$rangeIdentifier].'" value="" style="width: 45px;" />'.$currency->getSign('right').'</td>';							
+						echo '</tr>';
+					}
+					
 					foreach ($zones AS $zone)
 					{
 						if (!$carrierSelected->getZone($zone['id_zone']))
@@ -234,11 +246,13 @@ class AdminShipping extends AdminTab
 								$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
 							else
 								$price = '0.00';
-							echo '<td class="center">'.$currency->getSign('left').'<input type="text" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+								
+							echo '<td class="center">'.$currency->getSign('left').'<input type="text" '.($display_all_field ? 'onkeyup="clearAllFees('.$range[$rangeIdentifier].')"' : '').' class="fees_'.$range[$rangeIdentifier].'" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 						}
 						echo '
 						</tr>';
 					}
+				}
 				echo '
 					<tr>
 						<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">

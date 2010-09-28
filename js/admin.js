@@ -774,3 +774,13 @@ function disableZipFormat()
 	else
 		$('.zip_code_format').show();
 }
+
+function spreadFees(id_range)
+{
+	$('.fees_'+id_range).val($('#fees_all_'+id_range).val());
+}
+
+function clearAllFees(id_range)
+{
+	$('#fees_all_'+id_range).val('');
+}
