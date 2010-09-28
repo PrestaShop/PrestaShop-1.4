@@ -239,6 +239,7 @@ FileETag INode MTime Size
 		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'category.php?id_category=$1 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms=$1 [QSA,L,E]';
+		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms_category=$1 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)(.*)$'] = 'supplier.php?id_supplier=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^lang-([a-z]{2})/(.*)$'] = '$2?isolang=$1 [QSA,L,E]';
