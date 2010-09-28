@@ -1295,7 +1295,6 @@ class Tools
 	{
 		$filename = mb_convert_encoding(md5(strtoupper($filename)),"UCS-4BE",'UTF-8');
 		$intvalue = 0;
-		/* TODO Replace this block */
 		for($i = 0; $i < mb_strlen($filename,"UCS-4BE"); $i++)
 		{
 			$s2 = mb_substr($filename,$i,1,"UCS-4BE");
@@ -1303,8 +1302,9 @@ class Tools
 			$intvalue += ($val[1]+$i)*2;
 		}
 		$nb_server = ($intvalue % 3)+1;
-		/* TODO Replace this block */
-		return constant('_MEDIA_SERVER_'.$nb_server.'_');
+		if (($value = constant('_MEDIA_SERVER_'.$nb_server.'_')) && $value != '')
+			return $value;
+		return Tools::getHttpHost();
 	}
 }
 
