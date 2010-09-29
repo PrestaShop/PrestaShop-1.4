@@ -6,6 +6,7 @@ $useSSL = true;
 include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
 Tools::addCSS(_THEME_CSS_DIR_.'history.css');
+Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 
 if (!$cookie->isLogged())
 	Tools::redirect('authentication.php?back=history.php');

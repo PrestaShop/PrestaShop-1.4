@@ -208,7 +208,7 @@ function setNoCarrier()
  */
 function processAddress()
 {
-	global $cart, $smarty;
+	global $cart, $smarty, $css_files, $js_files;
 	$errors = array();
 
 	if (!isset($_POST['id_address_delivery']) OR !Address::isCountryActiveById(intval($_POST['id_address_delivery'])))
@@ -256,7 +256,7 @@ function processAddress()
 /* Carrier step */
 function processCarrier()
 {
-	global $cart, $smarty, $isVirtualCart, $orderTotal;
+	global $cart, $smarty, $isVirtualCart, $orderTotal, $css_files, $js_files;
 
 	$errors = array();
 
@@ -302,8 +302,9 @@ function processCarrier()
 /* Address step */
 function displayAddress()
 {
-	global $smarty, $cookie, $cart;
+	global $smarty, $cookie, $cart, $css_files, $js_files;
 	Tools::addJS(_THEME_JS_DIR_.'order-address.js');
+	Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 
 	if (!Customer::getAddressesTotalById(intval($cookie->id_customer)))
 		Tools::redirect('address.php?back=order.php?step=1');
@@ -357,7 +358,7 @@ function displayAddress()
 /* Carrier step */
 function displayCarrier()
 {
-	global $smarty, $cart, $cookie, $defaultCountry, $link;
+	global $smarty, $cart, $cookie, $defaultCountry, $link, $css_files, $js_files;
 
 	$address = new Address(intval($cart->id_address_delivery));
 	$id_zone = Address::getZoneById(intval($address->id));
@@ -449,7 +450,7 @@ function displayCarrier()
 /* Payment step */
 function displayPayment()
 {
-	global $smarty, $cart, $currency, $cookie, $orderTotal;
+	global $smarty, $cart, $currency, $cookie, $orderTotal, $css_files, $js_files;
 
 	// Redirect instead of displaying payment modules if any module are grefted on
 	Hook::backBeforePayment(strval(Tools::getValue('back')));
