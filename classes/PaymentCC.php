@@ -35,6 +35,12 @@ class PaymentCC extends ObjectModel
 		$fields['date_add'] = pSQL($this->date_add);
 		return $fields;
 	}
+	
+	public function add()
+	{
+		parent::add();
+		Module::hookExec('paymentCCAdded', array('paymentCC' => $this));
+	}
 }
 
 ?>
