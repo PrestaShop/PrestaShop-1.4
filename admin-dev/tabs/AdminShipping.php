@@ -219,12 +219,21 @@ class AdminShipping extends AdminTab
 					echo '<th style="font-size: 11px;">'.floatval($range['delimiter1']).$suffix.' '.$this->l('to').' '.floatval($range['delimiter2']).$suffix.'</th>';
 				echo '</tr>';
 
-				$zones = Zone::getZones(true);
+				$zones = $carrierSelected->getZones();
 				if (sizeof($ranges))
+				{
+					if(sizeof($zones) > 1)
+					{
+						echo '
+						<tr>
+							<th style="height: 30px;">'.$this->l('All').'</th>';
+							foreach ($ranges AS $range)
+								echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onkeyup="if ((event.keyCode||event.which) != 9){ spreadFees('.$range[$rangeIdentifier].') }" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+						echo '</tr>';
+					}
+				
 					foreach ($zones AS $zone)
 					{
-						if (!$carrierSelected->getZone($zone['id_zone']))
-							continue ;
 						echo '
 						<tr>
 							<th style="height: 30px;">'.$zone['name'].'</th>';
@@ -234,16 +243,20 @@ class AdminShipping extends AdminTab
 								$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
 							else
 								$price = '0.00';
-							echo '<td class="center">'.$currency->getSign('left').'<input type="text" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+							echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 						}
 						echo '
 						</tr>';
 					}
+				}
+					
 				echo '
 					<tr>
 						<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">
 							<input type="hidden" name="submitFees'.$this->table.'" value="1" />
 					';
+				
+				
 				if (sizeof($ranges))
 					echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
 				else
