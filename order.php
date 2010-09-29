@@ -142,6 +142,7 @@ if ($cart->nbProducts())
 				'lastProductAdded' => $cart->getLastProduct()
 				));
 			Tools::safePostVars();
+			Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 			require_once(dirname(__FILE__).'/header.php');
 			$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 			break;
@@ -150,6 +151,7 @@ if ($cart->nbProducts())
 else
 {
 	/* Default page */
+	Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 	$smarty->assign('empty', 1);
 	Tools::safePostVars();
 	require_once(dirname(__FILE__).'/header.php');
