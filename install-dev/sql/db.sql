@@ -1046,7 +1046,7 @@ CREATE TABLE `PREFIX_payment_cc` (
 	`transaction_id` VARCHAR(254) NULL,
 	`card_number` VARCHAR(254) NULL,
 	`card_brand` VARCHAR(254) NULL,
-	`card_expiration` DATE NULL,
+	`card_expiration` CHAR(7) NULL,
 	`card_holder` VARCHAR(254) NULL,
 	`date_add` DATETIME NOT NULL,
 	PRIMARY KEY (`id_payment_cc`),
