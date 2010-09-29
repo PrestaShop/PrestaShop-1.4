@@ -22,11 +22,11 @@ if ($cookie->isLogged())
 	$getOrders = Db::getInstance()->ExecuteS('
 		SELECT id_order 
 		FROM '._DB_PREFIX_.'orders 
-		WHERE id_customer = '.(int)$customer->id.' AND valid = 1 ORDER BY date_add');
+		WHERE id_customer = '.(int)$customer->id.' ORDER BY date_add');
 	foreach ($getOrders as $row)
 	{
 		$order = new Order($row['id_order']);
-		$date = explode(' ', $order->invoice_date);
+		$date = explode(' ', $order->date_add);
 		$orders[$row['id_order']] = Tools::displayDate($date[0], $cookie->id_lang);
 		$tmp = $order->getProducts();
 		foreach ($tmp as $key => $val)
@@ -80,7 +80,7 @@ if (Tools::isSubmit('submitMessage'))
 		
 		$contact = new Contact($id_contact, $cookie->id_lang);
 
-		if ((
+		if (!((
 				$id_customer_thread = (int)Tools::getValue('id_customer_thread')
 				AND (int)Db::getInstance()->getValue('
 				SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
@@ -89,20 +89,7 @@ if (Tools::isSubmit('submitMessage'))
 				$id_customer_thread = (int)Db::getInstance()->getValue('
 				SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
 				WHERE cm.email = \''.pSQL(Tools::getValue('from')).'\' AND cm.id_order = '.intval(Tools::getValue('id_order')).'')
-			))
-		{
-			$old_message = Db::getInstance()->getValue('
-			SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
-			WHERE cm.id_customer_thread = '.intval($id_customer_thread).'
-			ORDER BY date_add DESC');
-			if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
-			{
-				$smarty->assign('alreadySent', 1);
-				$contact->email = '';
-				$contact->customer_service = 0;
-			}
-		}
-		else
+			)))
 		{
 			$fields = Db::getInstance()->ExecuteS('
 			SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
@@ -131,13 +118,22 @@ if (Tools::isSubmit('submitMessage'))
 					$score = $tmp;
 					$id_customer_thread = $row['id_customer_thread'];
 				}
-				
 			}
+		}
+		$old_message = Db::getInstance()->getValue('
+			SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
+			WHERE cm.id_customer_thread = '.intval($id_customer_thread).'
+			ORDER BY date_add DESC');
+		if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
+		{
+			$smarty->assign('alreadySent', 1);
+			$contact->email = '';
+			$contact->customer_service = 0;
 		}
 		if (!empty($contact->email))
 		{
 			if (Mail::Send(intval($cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from), $fileAttachment)
-				AND Mail::Send(intval($cookie->id_lang), 'contact_form', Mail::l('Your message have been correctly sent'), array('{message}' => stripslashes($message)), $from))
+				AND Mail::Send(intval($cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
 				$smarty->assign('confirmation', 1);
 			else
 				$errors[] = Tools::displayError('an error occurred while sending message');
@@ -186,7 +182,7 @@ if (Tools::isSubmit('submitMessage'))
 				if ($cm->add())
 				{
 					if (empty($contact->email))
-						Mail::Send(intval($cookie->id_lang), 'contact_form', Mail::l('Your message have been correctly sent'), array('{message}' => stripslashes($message)), $from);
+						Mail::Send(intval($cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
 					$smarty->assign('confirmation', 1);
 				}
 				else
