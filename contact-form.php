@@ -93,27 +93,25 @@ if (Tools::isSubmit('submitMessage'))
 		{
 			$fields = Db::getInstance()->ExecuteS('
 			SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
-			FROM '._DB_PREFIX_.'customer_thread cm');
+			FROM '._DB_PREFIX_.'customer_thread cm
+			WHERE email = \''.Tools::getValue('from').'\' AND ('.
+				($customer->id ? 'id_customer = '.intval($customer->id).' OR ' : '').'
+				id_order = '.intval(Tools::getValue('id_order')).')');
 			$score = 0;
 			foreach ($fields as $key => $row)
 			{
 				$tmp = 0;
 				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id)
 					continue;
-				if ($customer->id AND $row['id_customer'] == $customer->id AND
-					$row['id_order'] == Tools::getValue('id_order'))
-					$tmp += 10;
-				if ($row['email'] == Tools::getValue('from') AND !(int)Tools::getValue('id_order'))
-					$tmp += 17;
-				else if ($row['email'] == Tools::getValue('from'))
-					$tmp += 13;
-				if ($row['id_order'] != 0 AND $row['id_order'] == Tools::getValue('id_order'))
-					$tmp += 15;
-				if ($row['id_product'] != 0 AND $row['id_product'] == Tools::getValue('id_product'))
+				if ($row['id_order'] != 0 AND Tools::getValue('id_order') != $row['id_order'])
+					continue;
+				if ($row['email'] == Tools::getValue('from'))
 					$tmp += 4;
 				if ($row['id_contact'] == $id_contact)
-					$tmp += 4;
-				if ($tmp >= 20 AND $tmp >= $score)
+					$tmp++;
+				if (Tools::getValue('id_product') != 0 AND $row['id_product'] ==  Tools::getValue('id_product'))
+					$tmp += 2;
+				if ($tmp >= 5 AND $tmp >= $score)
 				{
 					$score = $tmp;
 					$id_customer_thread = $row['id_customer_thread'];

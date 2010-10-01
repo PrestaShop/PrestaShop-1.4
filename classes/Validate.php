@@ -173,7 +173,7 @@ class Validate
 	*/
 	static public function isMailSubject($mailSubject)
 	{
-		return preg_match('/^[^<>;{}]*$/ui', $mailSubject);
+		return preg_match('/^[^<>{}]*$/ui', $mailSubject);
 	}
 
 	/**

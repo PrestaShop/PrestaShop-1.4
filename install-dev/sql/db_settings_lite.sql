@@ -133,13 +133,15 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (70, 'PS_VOLUME_UNIT', 'cl', NOW(), NOW()),
 (71, 'PS_CIPHER_ALGORITHM', 0, NOW(), NOW()),
 (72, 'PS_ATTRIBUTE_CATEGORY_DISPLAY', 1, NOW(), NOW()),
-(73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW());
+(73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW()),
+(74, 'PS_CUSTOMER_SERVICE_SIGNATURE', '', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
 (38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),
 (46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),(46, 3, 'de|los|las|lo|la|en|de|y|el|a', NOW()),
-(68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW());
+(68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW()),
+(74, 1, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),(74, 2, 'Cher client,\r\n\r\nCordialement,\r\nLe service client', NOW()),(74, 3, 'Estimado cliente,\r\n\r\nUn cordial saludo,\r\nAtención al cliente', NOW());
 
 INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`) VALUES
 (1, 'English (English)', 1, 'en'),(2, 'Français (French)', 1, 'fr'),(3, 'Español (Spanish)', 1, 'es');

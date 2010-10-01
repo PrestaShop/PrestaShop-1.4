@@ -644,7 +644,7 @@ abstract class AdminTab
 			{
 				foreach ($this->_fieldsOptions as $key => $field)
 				{
-					if ($field['type'] == 'textLang')
+					if ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
 					{
 						$languages = Language::getLanguages(false);
 						$list = array();
@@ -1318,6 +1318,7 @@ abstract class AdminTab
 			return ;
 
 		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$this->_languages = Language::getLanguages(false);
 		$tab = Tab::getTab(intval($cookie->id_lang), Tab::getIdFromClassName($tab));
 		echo '<br /><br />';
 		echo (isset($this->optionTitle) ? '<h2>'.$this->optionTitle.'</h2>' : '');
@@ -1361,6 +1362,19 @@ abstract class AdminTab
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 							<input size="'.$field['size'].'" type="text" name="'.$key.'_'.$language['id_lang'].'" value="'.$val.'" />
+						</div>';
+					}
+					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);
+					echo '<br style="clear:both">';
+				break ;
+							
+				case 'textareaLang':
+					foreach ($this->_languages as $language)
+					{
+						$val = Configuration::get($key, $language['id_lang']);
+						echo '
+						<div id="'.$key.'_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+							<textarea rows="'.intval($field['rows']).'" cols="'.intval($field['cols']).'"  name="'.$key.'_'.$language['id_lang'].'">'.str_replace('\r\n', "\n", $val).'</textarea>
 						</div>';
 					}
 					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);

@@ -323,12 +323,7 @@ class AdminCustomerThreads extends AdminTab
 				<div id="reply_to_'.intval($message['id_customer_message']).'" style="display: none; margin-top: 20px;"">
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post" enctype="multipart/form-data">
 						<p>'.$this->l('Please type your reply below:').'</p>
-						<textarea style="width: 450px; height: 175px;" name="reply_message">'.(
-								$message['firstname']
-								? $this->l('Dear').' '.$message['firstname'].','
-								: $this->l('Dear customer,')
-							)."\n\n\n".$this->l('Best regards,')."\n\n".$cookie->firstname.' '.$cookie->lastname."\n".$this->l('Customer Service').' - '.Configuration::get('PS_SHOP_NAME')
-						.'</textarea>
+						<textarea style="width: 450px; height: 175px;" name="reply_message">'.str_replace('\r\n', "\n", Configuration::get('PS_CUSTOMER_SERVICE_SIGNATURE', $message['id_lang'])).'</textarea>
 						<div style="width: 450px; text-align: right; font-style: italic; font-size: 9px; margin-top: 2px;">
 							'.$this->l('Your reply will be sent to:').' '.$message['email'].'
 						</div>
