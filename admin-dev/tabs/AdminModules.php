@@ -45,7 +45,7 @@ class AdminModules extends AdminTab
 					UPDATE `'._DB_PREFIX_.'module`
 					SET `active`= 1
 					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
-					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token);
+					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token.'&a='.Tools::getValue('a').'#'.Tools::getValue('a'));
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
@@ -62,7 +62,7 @@ class AdminModules extends AdminTab
 					UPDATE `'._DB_PREFIX_.'module`
 					SET `active`= 0
 					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
-					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token);
+					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token.'&a='.Tools::getValue('a').'#'.Tools::getValue('a'));
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
@@ -145,7 +145,7 @@ class AdminModules extends AdminTab
 				}
 			}
 			if ($return)
-				Tools::redirectAdmin($currentIndex.'&conf='.$return.'&token='.$this->token);
+				Tools::redirectAdmin($currentIndex.'&conf='.$return.'&token='.$this->token.'&a='.Tools::getValue('a').'#'.Tools::getValue('a'));
 		}
 	}
 
@@ -302,10 +302,17 @@ class AdminModules extends AdminTab
 		/* Browse modules by tab type */
 		foreach ($orderModule AS $tab => $tabModule)
 		{
-			echo '<a name="modgo_'.$tab.'"><br /></a>
-			<table cellpadding="0" cellspacing="0" class="table width3">
+			echo '<a name="modgo_'.$tab.'"><br /></a>';
+			if (Tools::getValue('a') == 'modgo_'.$tab)
+			{
+				$this->displayConf();
+				$this->displayErrors();
+			}
+			echo '<table cellpadding="0" cellspacing="0" class="table width3">
 				<tr>
-					<th colspan="4" class="center" style="cursor:pointer;border-bottom:none" onclick="openCloseLayer(\''.addslashes($tab).'\');"><b>'.$tab.'</b> - '.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</th>
+					<th colspan="4" class="center" style="cursor:pointer;border-bottom:none"
+						onclick="openCloseLayer(\''.addslashes($tab).'\');"><b>'.$tab.'</b> - '.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'
+					</th>
 				</tr>
 			</table>
 			<div id="'.$tab.'" style="width:600px;">
@@ -331,7 +338,7 @@ class AdminModules extends AdminTab
 						<td width="85">'.(($module->id AND method_exists($module, 'getContent')) ? '<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">&gt;&gt;&nbsp;'.$this->l('Configure').'</a>' : '').'</td>
 						<td class="center" width="20">';
 					if ($module->id)
-						echo '<a href="'.$currentIndex.'&token='.$this->token.'&module_name='.$module->name.'&'.($module->active ? 'desactive' : 'active').'">';
+						echo '<a href="'.$currentIndex.'&token='.$this->token.'&module_name='.$module->name.'&'.($module->active ? 'desactive' : 'active').'&a=modgo_'.$tab.'#modgo_'.$tab.'">';
 					echo $img;
 					if ($module->id)
 						'</a>';
@@ -339,9 +346,9 @@ class AdminModules extends AdminTab
 						</td>
 						<td class="center" width="80"><a name="modgo_'.$module->name.'">'.((!$module->id)
 						? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
-						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'#modgo_'.$tab.'\'" />'
+						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&a=modgo_'.$tab.'#modgo_'.$tab.'\'" />'
 						: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-						onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'#modgo_'.$tab.'\';" />').'</a></td>
+						onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&a=modgo_'.$tab.'#modgo_'.$tab.'\';" />').'</a></td>
 						<td style="padding-right: 10px">
 							<input type="checkbox" name="modules" value="'.urlencode($module->name).'" '.(empty($module->confirmUninstall) ? 'rel="false"' : 'rel="'.addslashes($module->confirmUninstall).'"').' />
 						</td>
