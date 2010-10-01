@@ -102,7 +102,7 @@ class AdminOrdersStates extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/time.gif" />'.$this->l('Order statuses').'</legend>
+			<fieldset><legend><img src="../img/admin/time.gif" />'.$this->l('Order statuses').'</legend>
 				<label>'.$this->l('Status name:').' </label>
 				<div class="margin-form">';
 

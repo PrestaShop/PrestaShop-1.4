@@ -280,7 +280,7 @@ class AdminLanguages extends AdminTab
 		var download = "'.$this->l('Download').'";
 		</script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'/checkLangPack.js"></script>
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width3">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('Languages').'</legend>
 				<label>'.$this->l('Name:').' </label>

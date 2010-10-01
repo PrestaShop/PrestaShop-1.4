@@ -64,7 +64,7 @@ class AdminPerformance extends AdminTab
 		global $currentIndex;
 		
 		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
-			<fieldset class="width6"><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
+			<fieldset><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
 				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but require PHP extension "mcrypt". If you change this configuration, every cookies will be reset.').'</p>
 				<label>'.$this->l('Algorithm').' </label>
 				<div class="margin-form">
@@ -81,7 +81,7 @@ class AdminPerformance extends AdminTab
 		</form>';
 		
 		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
-			<fieldset class="width6"><legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
+			<fieldset><legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
 				<p>'.$this->l('CCC allows you to reduce the loading time of your page, browser-side. With these settings you will gain performance without touching the code of your theme. Caution, however, that your theme is compatible PrestaShop 1.4+, CCC otherwise cause problems.').'</p>
 				<label>'.$this->l('Smart cache for CSS').' </label>
 				<div class="margin-form">

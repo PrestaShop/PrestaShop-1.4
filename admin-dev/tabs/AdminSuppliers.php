@@ -115,7 +115,7 @@ class AdminSuppliers extends AdminTab
 
 		$langtags = 'description¤smeta_title¤smeta_keywords¤smeta_description';
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width3">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($supplier->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$supplier->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/suppliers.gif" />'.$this->l('Suppliers').'</legend>
 				<label>'.$this->l('Name:').' </label>

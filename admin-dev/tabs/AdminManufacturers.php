@@ -91,7 +91,7 @@ class AdminManufacturers extends AdminTab
 		$langtags = 'cdesc2¤cdesc¤mmeta_title¤mmeta_keywords¤mmeta_description';
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data" class="width3">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($manufacturer->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$manufacturer->id.'" />' : '').'
 			<fieldset style="width: 850px;">
 				<legend><img src="../img/admin/manufacturers.gif" />'.$this->l('Manufacturers').'</legend>

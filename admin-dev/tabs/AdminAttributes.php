@@ -52,7 +52,7 @@ class AdminAttributes extends AdminTab
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_attribute" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attribute').'</legend>
+			<fieldset><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attribute').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)

@@ -544,7 +544,7 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$languages = Language::getLanguages(false);
-			echo '<fieldset class="width2"><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
+			echo '<fieldset><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
 			$this->l('Here you can modify translations for every text input on PrestaShop.').'<br />'.
 			$this->l('First, select a section (such as Back Office or Modules), then click the flag representing the language you want to edit.').'<br /><br />
 			<form method="get" action="index.php" id="typeTranslationForm">
@@ -561,7 +561,7 @@ class AdminTranslations extends AdminTab
 			echo '<input type="hidden" name="token" value="'.$this->token.'" /></form></fieldset>
 			<br /><br /><h2>'.$this->l('Translation exchange').'</h2>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-				<fieldset class="width2"><legend><img src="../img/admin/import.gif" />'.$this->l('Import a language pack').'</legend>
+				<fieldset><legend><img src="../img/admin/import.gif" />'.$this->l('Import a language pack').'</legend>
 					<p>'.$this->l('Import data from file (language pack).').'<br />'.
 					$this->l('If the name format is: isocode.gzip (eg fr.gzip) and the language corresponding to this package does not exist, it will automatically create.').'<br />'.
 					$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
@@ -579,7 +579,7 @@ class AdminTranslations extends AdminTab
 			</form>
 			<br /><br />
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-				<fieldset class="width2"><legend><img src="../img/admin/export.gif" />'.$this->l('Export a language').'</legend>
+				<fieldset><legend><img src="../img/admin/export.gif" />'.$this->l('Export a language').'</legend>
 					<p>'.$this->l('Export data from one language to a file (language pack).').'<br />'.
 					$this->l('Choose the theme from which you want to export translations.').'<br />
 					<select name="iso_code" style="margin-top:10px;">';
@@ -601,7 +601,7 @@ class AdminTranslations extends AdminTab
 			$allLanguages = Language::getLanguages(false);
 			echo '
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-				<fieldset class="width2"><legend><img src="../img/admin/copy_files.gif" />'.$this->l('Copy').'</legend>
+				<fieldset><legend><img src="../img/admin/copy_files.gif" />'.$this->l('Copy').'</legend>
 					<p>'.$this->l('Copies data from one language to another.').'<br />'.
 					$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
 					$this->l('If necessary').', <b><a href="index.php?tab=AdminLanguages&addlang&token='.Tools::getAdminToken('AdminLanguages'.intval(Tab::getIdFromClassName('AdminLanguages')).intval($cookie->id_employee)).'">'.$this->l('first create a new language').'</a></b>.</p>
@@ -892,7 +892,7 @@ class AdminTranslations extends AdminTab
 				foreach ($rules['validateLang'] AS $key => $value)
 					(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
 			echo '
-			<fieldset class="width3"><legend style="cursor : pointer" onclick="openCloseLayer(\''.$className.'\')">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
+			<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$className.'\')">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
 			<div name="fields_div" id="'.$className.'" style="display: '.($toTranslate ? 'block' : 'none').';">
 				<table cellpadding="2">';
 			if (isset($rules['validate']))

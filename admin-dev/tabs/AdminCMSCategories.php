@@ -154,7 +154,7 @@ class AdminCMSCategories extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token!=NULL ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width2" style="width:520px;"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('CMS Category').'</legend>
+			<fieldset style="width:520px"><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('CMS Category').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)

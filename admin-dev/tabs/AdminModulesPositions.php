@@ -310,7 +310,7 @@ class AdminModulesPositions extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">';
 		if ($this->displayKey)
 			echo '<input type="hidden" name="show_modules" value="'.$this->displayKey.'" />';
-		echo '<fieldset class="width3" style="width:700px;"><legend><img src="../img/t/AdminModulesPositions.gif" />'.$this->l('Transplant a module').'</legend>
+		echo '<fieldset style="width:700px"><legend><img src="../img/t/AdminModulesPositions.gif" />'.$this->l('Transplant a module').'</legend>
 				<label>'.$this->l('Module').' :</label>
 				<div class="margin-form">
 					<select name="id_module"'.(Tools::isSubmit('editGraft') ? ' disabled="disabled"' : '').'>';

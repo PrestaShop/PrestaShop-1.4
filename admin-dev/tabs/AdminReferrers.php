@@ -146,7 +146,7 @@ class AdminReferrers extends AdminTab
 			if (!Tools::isSubmit('viewreferrer'))
 				echo '
 				<div style="float: left; margin-right: 20px;">
-					<fieldset class="width3"><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
+					<fieldset><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
 						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 							<label>'.$this->l('Save direct traffic').'</label>
 							<div class="float" style="margin-left: 200px;">
@@ -215,9 +215,9 @@ class AdminReferrers extends AdminTab
 		$uri = Tools::getHttpHost(true, true).__PS_BASE_URI__;
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width4"><legend><img src="../img/admin/affiliation.png" /> '.$this->l('Affiliate').'</legend>
+			<fieldset><legend><img src="../img/admin/affiliation.png" /> '.$this->l('Affiliate').'</legend>
 				<label>'.$this->l('Name').'</label>
 				<div class="margin-form">
 					<input type="text" size="20" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
@@ -233,7 +233,7 @@ class AdminReferrers extends AdminTab
 				</p>
 			</fieldset>
 			<br class="clear" />
-			<fieldset class="width4"><legend><img src="../img/admin/money.png" /> '.$this->l('Commission plan').'</legend>
+			<fieldset><legend><img src="../img/admin/money.png" /> '.$this->l('Commission plan').'</legend>
 				<label>'.$this->l('Click fee').'</label>
 				<div class="margin-form">
 					<input type="text" size="8" name="click_fee" value="'.number_format(floatval($this->getFieldValue($obj, 'click_fee')), 2).'" />
@@ -251,7 +251,7 @@ class AdminReferrers extends AdminTab
 				</div>
 			</fieldset>
 			<br class="clear" />
-			<fieldset class="width4"><legend onclick="openCloseLayer(\'tracking_help\')" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
+			<fieldset><legend onclick="openCloseLayer(\'tracking_help\')" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
 			<div id="tracking_help" style="display: none;">
 				<p>'.$this->l('Definitions:').'</p>
 				<ul style="list-style: disc; margin-left: 20px;">
@@ -293,7 +293,7 @@ class AdminReferrers extends AdminTab
 			</div>
 			</fieldset>
 			<br class="clear" />
-			<fieldset class="width4"><legend><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Simple mode').'</legend>
+			<fieldset><legend><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Simple mode').'</legend>
 				<a style="cursor: pointer; font-style: italic;" onclick="openCloseLayer(\'tracking_help\');"><img src="../img/admin/help.png" /> '.$this->l('Get help!').'</a><br />
 				<br class="clear" />
 				<h3>'.$this->l('HTTP referrer').'</h3>
@@ -322,7 +322,7 @@ class AdminReferrers extends AdminTab
 				'.$this->l('If you know how to use MySQL regular expressions, you can use the').' <a style="cursor: pointer; font-weight: bold;" onclick="openCloseLayer(\'tracking_expert\');">'.$this->l('expert mode').'.</a>
 			</fieldset>
 			<br class="clear" />
-			<fieldset class="width4"><legend onclick="openCloseLayer(\'tracking_expert\')" style="cursor: pointer;"><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Expert mode').'</legend>
+			<fieldset><legend onclick="openCloseLayer(\'tracking_expert\')" style="cursor: pointer;"><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Expert mode').'</legend>
 			<div id="tracking_expert" style="display: none;">
 				<h3>'.$this->l('HTTP referrer').'</h3>
 				<label>'.$this->l('Include').'</label>
@@ -399,7 +399,7 @@ class AdminReferrers extends AdminTab
 				);
 			}
 		</script>
-		<fieldset class="width3" style="float: left"><legend><img src="../img/admin/tab-stats.gif" /> Statistics</legend>
+		<fieldset style="float:left"><legend><img src="../img/admin/tab-stats.gif" /> Statistics</legend>
 			<h2>'.$referrer->name.'</h2>
 			<table>';
 		foreach ($displayTab as $data => $label)

@@ -41,7 +41,7 @@ class AdminFeaturesValues extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.Tools::getValue('token').'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_feature_value" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Value').'</legend>
+			<fieldset><legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Value').'</legend>
 				<label>'.$this->l('Value:').' </label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)

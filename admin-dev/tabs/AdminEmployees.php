@@ -76,10 +76,10 @@ class AdminEmployees extends AdminTab
 		$profiles = Profile::getProfiles(intval($cookie->id_lang));
 
 		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 		'.((int)$this->tabAccess['view'] ? '' : '<input type="hidden" name="back" value="'.$currentIndex.'&token='.$this->token.'&updateemployee&id_employee='.(int)$obj->id.'" />').'
-			<fieldset class="width3"><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
+			<fieldset><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>

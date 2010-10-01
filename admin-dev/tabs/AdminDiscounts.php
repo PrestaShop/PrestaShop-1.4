@@ -184,7 +184,7 @@ class AdminDiscounts extends AdminTab
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" id="discount" name="discount" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/coupon.gif" />'.$this->l('Vouchers').'</legend>
+			<fieldset><legend><img src="../img/admin/coupon.gif" />'.$this->l('Vouchers').'</legend>
 				<label>'.$this->l('Code:').' </label>
 				<div class="margin-form">
 					<input type="text" size="30" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" id="code" />

@@ -135,7 +135,7 @@ class AdminShipping extends AdminTab
 		unset($confKeys['PS_SHIPPING_METHOD']);
 
 		echo '
-		<form action="'.$currentIndex.'&submitHandling'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitHandling'.$this->table.'=1&token='.$this->token.'" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Handling').'</legend>';
 
@@ -187,7 +187,7 @@ class AdminShipping extends AdminTab
 
 		echo '<br /><br />
 		<h2>'.$this->l('Fees by carrier, geographical zone, and ranges').'</h2>
-		<form action="'.$currentIndex.'&token='.$this->token.'" id="fees" name="fees" method="post" class="width2">
+		<form action="'.$currentIndex.'&token='.$this->token.'" id="fees" name="fees" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Fees').'</legend>
 				<b>'.$this->l('Carrier:').' </b>

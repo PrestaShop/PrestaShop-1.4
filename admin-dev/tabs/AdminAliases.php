@@ -65,9 +65,9 @@ class AdminAliases extends AdminTab
 		$obj = $this->loadObject(true);
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/search.gif" />'.$this->l('Aliases').'</legend>
+			<fieldset><legend><img src="../img/admin/search.gif" />'.$this->l('Aliases').'</legend>
 				<label>'.$this->l('Alias:').' </label>
 				<div class="margin-form">
 					<input type="text" size="40" name="alias" value="'.Tools::getValue('alias', htmlentities($obj->getAliases(), ENT_COMPAT, 'UTF-8')).'" /> <sup>*</sup>

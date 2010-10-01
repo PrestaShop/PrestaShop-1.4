@@ -210,7 +210,7 @@ class AdminAddresses extends AdminTab
 		'.(($id_order = intval(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.intval($id_order).'" />' : '').'
 		'.(($address_type = intval(Tools::getValue('address_type'))) ? '<input type="hidden" name="address_type" value="'.intval($address_type).'" />' : '').'
 		'.(Tools::getValue('realedit') ? '<input type="hidden" name="realedit" value="1" />' : '').'
-			<fieldset class="width3">
+			<fieldset>
 				<legend><img src="../img/admin/contact.gif" alt="" />'.$this->l('Addresses').'</legend>';
 		switch ($this->addressType)
 		{

@@ -165,7 +165,7 @@ class AdminAttributesGroups extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes group').'</legend>
+			<fieldset><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes group').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)

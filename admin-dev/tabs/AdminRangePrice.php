@@ -61,7 +61,7 @@ class AdminRangePrice extends AdminTab
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/t/AdminRangePrice.gif" />'.$this->l('Price ranges').'</legend>
 				<label>'.$this->l('Carrier:').'</label>

@@ -63,7 +63,7 @@ class AdminImageResize extends AdminTab
 				<input type="hidden" name="conf" value="'.(Tools::getValue('toconf')).'" />
 				<input type="hidden" name="imageresize" value="imageresize" />
 				<input type="hidden" name="id_image" value="'.Tools::getValue('id_image').'" />
-				<fieldset class="width2">
+				<fieldset>
 					<legend><img src="../img/admin/picture.gif" />'.$this->l('Image resize').'</legend>
 					'.$this->l('Using your mouse, define which area of the image is to be used for generating each type of thumbnail.').'
 					<br /><br />

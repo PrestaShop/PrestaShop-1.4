@@ -50,7 +50,7 @@ class AdminContacts extends AdminTab
 		$obj = $this->loadObject(true);
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/contact.gif" />'.$this->l('Contacts').'</legend>
 				<label>'.$this->l('Title:').' </label>

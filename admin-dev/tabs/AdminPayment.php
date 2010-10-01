@@ -107,7 +107,7 @@ class AdminPayment extends AdminTab
 		$irow = 0;
 		
 		echo '
-		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" class="width3" id="form_'.$nameId.'">
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" id="form_'.$nameId.'">
 			<fieldset>
 				<legend><img src="../img/admin/'.$icon.'.gif" />'.$title.'</legend>
 				<p>'.$desc.'<p>

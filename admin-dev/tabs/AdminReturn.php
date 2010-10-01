@@ -157,7 +157,7 @@ class AdminReturn extends AdminTab
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<input type="hidden" name="id_order" value="'.$obj->id_order.'" />
 			<input type="hidden" name="id_customer" value="'.$obj->id_customer.'" />
-			<fieldset class="width3"><legend><img src="../img/admin/return.gif" />'.$this->l('Return Merchandise Authorization (RMA)').'</legend>
+			<fieldset><legend><img src="../img/admin/return.gif" />'.$this->l('Return Merchandise Authorization (RMA)').'</legend>
 				<label>'.$this->l('Customer:').' </label>';
 				$customer = new Customer(intval($obj->id_customer));
 		echo '

@@ -55,7 +55,7 @@ class AdminCarriers extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/delivery.gif" />'.$this->l('Carriers').'</legend>
+			<fieldset><legend><img src="../img/admin/delivery.gif" />'.$this->l('Carriers').'</legend>
 				<label>'.$this->l('Company:').' </label>
 				<div class="margin-form">
 					<input type="text" size="25" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>

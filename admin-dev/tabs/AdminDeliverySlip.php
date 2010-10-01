@@ -35,7 +35,7 @@ class AdminDeliverySlip extends AdminTab
 		
 		$output = '
 		<h2>'.$this->l('Print PDF delivery slips').'</h2>
-		<fieldset class="width2">
+		<fieldset>
 			<form action="'.$currentIndex.'&submitPrint=1&token='.$this->token.'" method="post">
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">

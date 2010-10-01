@@ -96,7 +96,7 @@ class AdminStates extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/world.gif" />'.$this->l('States').'</legend>
+			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('States').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="30" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>

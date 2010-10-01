@@ -75,7 +75,7 @@ class AdminImages extends AdminTab
 		echo $obj->id ? $this->displayWarning($this->l('After modification, do not forget to regenerate thumbnails')) : '';
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width2">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/picture.gif" />'.$this->l('Images').'</legend><br />
 				<label>'.$this->l('Type name:').' </label>

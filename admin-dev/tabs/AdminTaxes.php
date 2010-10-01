@@ -52,7 +52,7 @@ class AdminTaxes extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset class="width3"><legend><img src="../img/admin/dollar.gif" />'.$this->l('Taxes').'</legend>
+			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Taxes').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';
 				foreach ($this->_languages as $language)

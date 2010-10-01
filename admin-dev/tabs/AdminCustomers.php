@@ -189,7 +189,7 @@ class AdminCustomers extends AdminTab
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 		
-		echo '<fieldset class="width3" style="height:190px"><legend><img src="../img/admin/cms.gif" /> '.$this->l('Add a private note').'</legend>
+		echo '<fieldset style="height:190px"><legend><img src="../img/admin/cms.gif" /> '.$this->l('Add a private note').'</legend>
 			<p>'.$this->l('This note will be displayed to all the employees but not to the customer.').'</p>
 			<form action="ajax.php" method="post" onsubmit="saveCustomerNote();return false;" id="customer_note">
 				<textarea name="note" id="noteContent" style="width:600px;height:100px" onkeydown="$(\'#submitCustomerNote\').removeAttr(\'disabled\');">'.Tools::htmlentitiesUTF8($customer->note).'</textarea><br />
@@ -543,7 +543,7 @@ class AdminCustomers extends AdminTab
 		$groups = Group::getGroups($this->_defaultFormLanguage, true);
 		
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" class="width3">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/tab-customers.gif" />'.$this->l('Customer').'</legend>
 				<label>'.$this->l('Gender:').' </label>
