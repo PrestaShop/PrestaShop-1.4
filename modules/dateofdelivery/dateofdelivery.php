@@ -209,7 +209,7 @@ class DateOfDelivery extends Module
 			{
 				$this->_html .= '
 				<tr>
-					<td width="30%">'.htmlentities($rule['name'], ENT_QUOTES, 'UTF-8').'</td>
+					<td width="30%">'.(!preg_match('/^0$/Ui', $rule['name']) ? htmlentities($rule['name'], ENT_QUOTES, 'UTF-8') : Configuration::get('PS_SHOP_NAME')).'</td>
 					<td width="40%" class="center"><b>'.intval($rule['minimal_time']).'</b> '.$this->l('days and').' <b>'.intval($rule['maximal_time']).'</b> '.$this->l('days').'</td>
 					<td width="10%" class="center">';
 				if ($rule['delivery_saturday'])
