@@ -33,7 +33,7 @@ legend{background:#FFF6D3;border:1px solid #DFD5C3;font-weight:700;margin:0;padd
 #menu img{display:inline;padding:0 4px;vertical-align:middle;width:20px;height:20px}
 #menu li.active{background-position:0 -38px}
 #menu li.active a{color:#000}
-#submenu{background:transparent url(separator_subnav.png) no-repeat 0 5px;clear:both;color:#666;margin:0;height:38px;padding:0}
+#submenu{clear:both;color:#666;margin:0;height:38px;padding:0}
 .withLeftBorder{background:transparent url(separator_subnav.png) no-repeat 0 5px}
 #submenu li{display:inline;list-style:none;margin:0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-left:10px;padding-right:10px;margin-top:8px;float:left;height:20px}
 #submenu li a{text-decoration:underline}
