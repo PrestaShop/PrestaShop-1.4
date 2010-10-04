@@ -1,1 +1,0 @@
-<a href="{$base_dir_ssl}modules/paypalapi/express/submit.php"><img src="{$logo}" alt="paypal" title="{l s='Pay with PayPal Express Checkout' mod='paypalapi'}" /></a>

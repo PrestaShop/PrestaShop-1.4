@@ -93,7 +93,7 @@ if ($result == 'VERIFIED') {
 		elseif (Order::getOrderByCartId(intval($_POST['custom'])))
 			$errors = $paypal->getL('order').'<br />';
 		else
-			$paypal->validateOrder($_POST['custom'], _PS_OS_PAYMENT_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id']);
+			$paypal->validateOrder($_POST['custom'], _PS_OS_PAYMENT_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']));
 	}
 } else {
 	$errors .= $paypal->getL('verified');
@@ -102,7 +102,7 @@ if ($result == 'VERIFIED') {
 if (!empty($errors) AND isset($_POST['custom']))
 {
 	if ($_POST['payment_status'] == 'Pending')
-		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_PAYPAL_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors);
+		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_PAYPAL_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']));
 	else
 		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />');
 }

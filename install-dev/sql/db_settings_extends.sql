@@ -1,9 +1,17 @@
 SET NAMES 'utf8';
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
-	('PAYPAL_BUSINESS', 'paypal@prestashop.com', NOW(), NOW()),
-	('PAYPAL_SANDBOX', 0, NOW(), NOW()),
-	('PAYPAL_CURRENCY', 'customer', NOW(), NOW()),
+	('MB_PAY_TO_EMAIL', 'testmerchant@moneybookers.com', NOW(), NOW()),
+	('MB_SECRET_WORD', 'mbtest', NOW(), NOW()),
+	('MB_HIDE_LOGIN', 1, NOW(), NOW()),
+	('MB_ID_LOGO', 1, NOW(), NOW()),
+	('MB_ID_LOGO_WALLET', 1, NOW(), NOW()),
+	('MB_PARAMETERS', 1, NOW(), NOW()),
+	('MB_PARAMETERS_2', 1, NOW(), NOW()),
+	('MB_DISPLAY_MODE', 0, NOW(), NOW()),
+	('MB_CANCEL_URL', 'http://www.yoursite.com', NOW(), NOW()),
+	('MB_LOCAL_METHODS', '2', NOW(), NOW()),
+	('MB_INTER_METHODS', '5', NOW(), NOW()),
 	('BANK_WIRE_CURRENCIES', '2,1', NOW(), NOW()),
 	('CHEQUE_CURRENCIES', '2,1', NOW(), NOW()),
 	('PRODUCTS_VIEWED_NBR', '2', NOW(), NOW()),
@@ -34,7 +42,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('CHECKUP_STOCK_GT', '3', NOW(), NOW()),
 	('BLOCKADVERT_LINK', 0, NOW(), NOW());
 
-INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'paypal', 1),(5, 'editorial', 1),
+INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'moneybookers', 1),(5, 'editorial', 1),
 (6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockinfos', 1),
 (13, 'blocklanguages', 1),(14, 'blockmanufacturer', 1),(15, 'blockmyaccount', 1),(16, 'blocknewproducts', 1),(17, 'blockpaymentlogo', 1),(18, 'blockpermanentlinks', 1),
 (19, 'blocksearch', 1),(20, 'blockspecials', 1),(21, 'blocktags', 1),(22, 'blockuserinfo', 1),(23, 'blockvariouslinks', 1),(24, 'blockviewed', 1),(25, 'statsdata', 1),
@@ -46,7 +54,7 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeat
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 	('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
 
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (3, 1, 1),(6, 1, 2),(4, 1, 3),(8, 2, 1),(3, 4, 1),(6, 4, 2),(9, 6, 1),(16, 6, 2),(8, 6, 3),
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (3, 1, 1),(6, 1, 2),(4, 1, 3),(4, 4, 3),(8, 2, 1),(3, 4, 1),(6, 4, 2),(9, 6, 1),(16, 6, 2),(8, 6, 3),
 (20, 6, 4),(15, 7, 1),(21, 7, 2),(10, 7, 3),(24, 7, 4),(14, 7, 5),(12, 7, 6),(7, 7, 7),(17, 7, 8),(5, 8, 1),(1, 8, 2),(19, 9, 1),(11, 14, 1),(13, 14, 2),(18, 14, 3),
 (19, 14, 4),(22, 14, 5),(8, 19, 1),(23, 21, 1),(25, 11, 1),(25, 21, 2),(26, 32, 1),(27, 32, 2),(28, 32, 3),(30, 32, 4),(31, 32, 5),(32, 32, 6),(33, 32, 7),(34, 33, 1),
 (35, 33, 2),(36, 33, 3),(37, 33, 4),(38, 36, 1),(39, 37, 1),(40, 32, 8),(41, 32, 9),(42, 32, 10),(43, 32, 11),(42, 14, 6),(43, 14, 7),(44, 32, 12),(45, 32, 13),(46, 32, 15),
@@ -319,7 +327,7 @@ Gracias por su comprensión.
 Saludos cordiales,');
 
 /* Currency/Country module */
-INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (3, 1),(3, 2),(3, 3),(4, -2),(6, 1),(6, 2),(6, 3);
+INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (3, 1),(3, 2),(3, 3),(4, 1),(4, 2),(4, 3),(6, 1),(6, 2),(6, 3);
 INSERT INTO `PREFIX_module_group` (`id_module`, `id_group`) VALUES (3, 1),(4, 1),(6, 1);
 
 INSERT INTO `PREFIX_module_country` (`id_module`, `id_country`) VALUES (3, 1),(3, 2),(3, 3),(3, 4),(3, 5),(3, 6),(3, 7),(3, 8),
