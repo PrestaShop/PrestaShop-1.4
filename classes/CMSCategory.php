@@ -159,14 +159,17 @@ class		CMSCategory extends ObjectModel
 		);
 	}
 
-	static public function recurseCMSCategory($categories, $current, $id_cms_category = 1, $id_selected = 1)
+	static public function recurseCMSCategory($categories, $current, $id_cms_category = 1, $id_selected = 1, $is_html = 0)
 	{
 		global $currentIndex;
-		echo '<option value="'.$id_cms_category.'"'.(($id_selected == $id_cms_category) ? ' selected="selected"' : '').'>'.
+		$html = '<option value="'.$id_cms_category.'"'.(($id_selected == $id_cms_category) ? ' selected="selected"' : '').'>'.
 		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).self::hideCMSCategoryPosition(stripslashes($current['infos']['name'])).'</option>';
+		if ($is_html == 0)
+			echo $html;
 		if (isset($categories[$id_cms_category]))
 			foreach ($categories[$id_cms_category] AS $key => $row)
-				self::recurseCMSCategory($categories, $categories[$id_cms_category][$key], $key, $id_selected);
+				$html .= self::recurseCMSCategory($categories, $categories[$id_cms_category][$key], $key, $id_selected, $is_html);
+		return $html;
 	}
 	
 	

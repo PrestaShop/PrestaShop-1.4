@@ -529,7 +529,7 @@ input.exclusive_large, input.exclusive_large_disabled, a.exclusive_large, span.e
 form p.id_state { display: none }
 
 /* generic style */
-ul.bullet li, .block ul.bullet li {
+ul.bullet li, .block ul.bullet li, li.bullet {
 	padding-left: 2em;
 	background: transparent url('../img/bullet.gif') no-repeat 6px 6px;
 	list-style-type: none
