@@ -2,27 +2,27 @@
 
 class BlockNewProducts extends Module
 {
-    private $_html = '';
-    private $_postErrors = array();
+	private $_html = '';
+	private $_postErrors = array();
 
-    function __construct()
-    {
-        $this->name = 'blocknewproducts';
-        $this->tab = 'Blocks';
-        $this->version = 0.9;
+	public function __construct()
+	{
+		$this->name = 'blocknewproducts';
+		$this->tab = 'Blocks';
+		$this->version = 0.9;
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->displayName = $this->l('New products block');
-        $this->description = $this->l('Displays a block featuring newly added products');
-    }
+		$this->displayName = $this->l('New products block');
+		$this->description = $this->l('Displays a block featuring newly added products');
+	}
 
-    function install()
-    {
-        if (parent::install() == false OR $this->registerHook('rightColumn') == false OR $this->registerHook('header') == false OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
-		return false;
-	return true;
-    }
+	public function install()
+	{
+			if (parent::install() == false OR $this->registerHook('rightColumn') == false OR $this->registerHook('header') == false OR Configuration::updateValue('NEW_PRODUCTS_NBR', 5) == false)
+					return false;
+			return true;
+	}
 
 	public function getContent()
 	{
@@ -35,6 +35,7 @@ class BlockNewProducts extends Module
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else
 			{
+				Configuration::updateValue('PS_BLOCK_NEWPRODUCTS_DISPLAY', intval(Tools::getValue('always_display')));
 				Configuration::updateValue('NEW_PRODUCTS_NBR', intval($productNbr));
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
@@ -46,36 +47,48 @@ class BlockNewProducts extends Module
 	{
 		$output = '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
+		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Products displayed').'</label>
-				<div class="margin-form">
-					<input type="text" name="productNbr" value="'.intval(Configuration::get('NEW_PRODUCTS_NBR')).'" />
-					<p class="clear">'.$this->l('Set the number of products to be displayed in this block').'</p>
-				</div>
-				<center><input type="submit" name="submitBlockNewProducts" value="'.$this->l('Save').'" class="button" /></center>
-			</fieldset>
-		</form>';
+					<div class="margin-form">
+						<input type="text" name="productNbr" value="'.intval(Configuration::get('NEW_PRODUCTS_NBR')).'" />
+						<p class="clear">'.$this->l('Set the number of products to be displayed in this block').'</p>
+					</div>
+					<label>'.$this->l('Always display block').'</label>
+					<div class="margin-form">
+						<input type="radio" name="always_display" id="display_on" value="1" '.(Tools::getValue('always_display', Configuration::get('PS_BLOCK_NEWPRODUCTS_DISPLAY')) ? 'checked="checked" ' : '').'/>
+						<label class="t" for="display_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+						<input type="radio" name="always_display" id="display_off" value="0" '.(!Tools::getValue('always_display', Configuration::get('PS_BLOCK_NEWPRODUCTS_DISPLAY')) ? 'checked="checked" ' : '').'/>
+						<label class="t" for="display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+						<p class="clear">'.$this->l('Show the block even if no product is available.').'</p>
+					</div>
+					<center><input type="submit" name="submitBlockNewProducts" value="'.$this->l('Save').'" class="button" /></center>
+				</fieldset>
+			</form>';
 		return $output;
 	}
 
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		global $smarty;
-		
+	
 		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, intval(Configuration::get('NEW_PRODUCTS_NBR')));
+		if (!$newProducts AND !Configuration::get('PS_BLOCK_NEWPRODUCTS_DISPLAY'))
+			return;
 		$smarty->assign(array('new_products' => $newProducts, 'mediumSize' => Image::getSize('medium')));
 
 		return $this->display(__FILE__, 'blocknewproducts.tpl');
 	}
 	
-	function hookLeftColumn($params)
+	public function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
 	}
-	function hookHeader($params)
+		
+	public function hookHeader($params)
 	{
 		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewproducts.css', 'all');
 	}
+
 }
 
 ?>

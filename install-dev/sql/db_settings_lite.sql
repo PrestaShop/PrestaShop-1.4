@@ -134,7 +134,11 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (71, 'PS_CIPHER_ALGORITHM', 0, NOW(), NOW()),
 (72, 'PS_ATTRIBUTE_CATEGORY_DISPLAY', 1, NOW(), NOW()),
 (73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW()),
-(74, 'PS_CUSTOMER_SERVICE_SIGNATURE', '', NOW(), NOW());
+(74, 'PS_CUSTOMER_SERVICE_SIGNATURE', '', NOW(), NOW()),
+(75, 'PS_BLOCK_BESTSELLERS_DISPLAY', 0, NOW(), NOW()),
+(76, 'PS_BLOCK_NEWPRODUCTS_DISPLAY', 0, NOW(), NOW()),
+(77, 'PS_BLOCK_SPECIALS_DISPLAY', 0, NOW(), NOW());
+
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
