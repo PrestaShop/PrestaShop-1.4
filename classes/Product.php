@@ -1562,8 +1562,7 @@ class		Product extends ObjectModel
 		// Group reduction
 		$price *= ((100 - Group::getReduction(((isset($id_customer) AND $id_customer) ? $id_customer : 0))) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
-		if ($quantity <= 1 OR !$qtyD)
-			$price = Tools::ps_round($price, $decimals);
+		$price = Tools::ps_round($price, $decimals);
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
