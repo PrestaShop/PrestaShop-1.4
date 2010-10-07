@@ -2473,7 +2473,7 @@ class		Product extends ObjectModel
 			$productAttributeId = intval(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
 			$productQuantity = intval(isset($productUpdate['cart_quantity']) ? $productUpdate['cart_quantity'] : $productUpdate['product_quantity']);
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
-			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate'])* 0.01));
+			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate']) * 0.01));
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
 				{

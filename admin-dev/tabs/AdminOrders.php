@@ -321,7 +321,7 @@ class AdminOrders extends AdminTab
 				'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityRefunded'].'</td>' : '').'
 				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
 				<td align="center" class="productQuantity"> - </td>
-				<td align="center">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
+				<td align="center">OK: '.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $product['customizationQuantityTotal'], $currency, false, false).'</td>
 				<td align="center" class="cancelCheck">--</td>
 			</tr>';
 			foreach ($customizedDatas[intval($product['product_id'])][intval($product['product_attribute_id'])] AS $customizationId => $customization)
@@ -354,7 +354,7 @@ class AdminOrders extends AdminTab
 					'.($order->hasBeenPaid() ? '<td align="center">'.$customization['quantity_refunded'].'</td>' : '').'
 					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
-					<td align="center">'.Tools::displayPrice(Tools::ps_round($product['product_price'], 2) * (1 + ($product['tax_rate'] * 0.01)) * ($customization['quantity']), $currency, false, false).'</td>
+					<td align="center">KO: '.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $customization['quantity'], $currency, false, false).'</td>
 					<td align="center" class="cancelCheck">
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.intval($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.intval($customization['quantity']).'" />
