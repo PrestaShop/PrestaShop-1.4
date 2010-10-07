@@ -140,10 +140,7 @@ class BlockWishList extends Module
 	
 	public function hookHeader($params)
 	{
-		global $css_files;
-		//$css_files[$this->_path.'blockwishlist.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockwishlist.css'] = 'all';
-		
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockwishlist.css', 'all');
 		return $this->display(__FILE__, 'blockwishlist-header.tpl');
 	}
 

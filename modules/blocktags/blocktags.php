@@ -87,12 +87,9 @@ class BlockTags extends Module
 		return $this->hookLeftColumn($params);
 	}
 	
-		function hookHeader($params)
+	function hookHeader($params)
 	{
-		global $css_files;
-		
-		//$css_files[$this->_path.'blocktags.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocktags.css'] = 'all';
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocktags.css', 'all');
 	}
 
 }

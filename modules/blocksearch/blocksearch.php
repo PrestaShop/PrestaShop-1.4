@@ -66,10 +66,7 @@ class BlockSearch extends Module
 		}
 		if ($instantSearch)
 				Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
-		global $css_files;
-		
-		//$css_files[$this->_path.'blocksearch.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksearch.css'] = 'all';
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksearch.css', 'all');
 	}
 	
 	private function _disabledSearchAjax()

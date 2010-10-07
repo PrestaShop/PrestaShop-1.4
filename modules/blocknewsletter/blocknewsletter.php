@@ -217,9 +217,7 @@ class Blocknewsletter extends Module
 	
 	function hookHeader($params)
 	{
-		global $css_files;
-		//$css_files[$this->_path.'blocknewsletter.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewsletter.css'] = 'all';
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewsletter.css', 'all');
 	}
 }
 

@@ -114,9 +114,7 @@ class BlockAdvertising extends Module
 	
 	function hookHeader($params)
 	{
-		global $css_files;
-		//$css_files[$this->_path.'blockadvertising.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockadvertising.css'] = 'all';
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockadvertising.css', 'all');
 	}
 
 }

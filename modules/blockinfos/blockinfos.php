@@ -115,8 +115,6 @@ class BlockInfos extends Module
 	
 	function hookHeader($params)
 	{
-		global $css_files;
-		//$css_files[$this->_path.'blockinfos.css'] = 'all';
-		$css_files[_THEME_CSS_DIR_.'modules/'.$this->name.'/blockinfos.css'] = 'all';
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockinfos.css', 'all');
 	}
 }
