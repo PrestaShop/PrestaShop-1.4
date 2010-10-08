@@ -69,7 +69,7 @@ class Link
 		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category);
 	}
 
-	public function getCMSLink($cms, $alias = null, $ssl = false)
+	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
 	{
 		$base = _PS_BASE_URL_;
 		if ($ssl)
