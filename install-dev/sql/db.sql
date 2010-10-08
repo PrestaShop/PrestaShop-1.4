@@ -117,12 +117,6 @@ CREATE TABLE `PREFIX_attribute_lang` (
   KEY `id_lang` (`id_lang`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_block_cms` (
-  `id_block` int(10) unsigned NOT NULL,
-  `id_cms` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id_block`,`id_cms`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 CREATE TABLE `PREFIX_carrier` (
   `id_carrier` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_tax` int(10) unsigned DEFAULT '0',
@@ -1458,4 +1452,28 @@ CREATE TABLE `PREFIX_editorial_lang` (
 	`body_paragraph` text NOT NULL,
 	`body_logo_subheading` varchar(255) NOT NULL,
 	PRIMARY KEY (`id_editorial`, `id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_block` (
+	`id_block_cms` int(10) unsigned NOT NULL auto_increment,
+	`id_cms_category` int(10) unsigned NOT NULL,
+	`name` varchar(40) NOT NULL, 
+	`location` tinyint(1) unsigned NOT NULL,
+	`position` int(10) unsigned NOT NULL default '0',
+	PRIMARY KEY (`id_block_cms`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_block_page` (
+	`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
+	`id_block_cms` int(10) unsigned NOT NULL,
+	`id_cms` int(10) unsigned NOT NULL,
+	`is_category` tinyint(1) unsigned NOT NULL,
+	PRIMARY KEY (`id_block_cms_page`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_block_lang` (
+	`id_block_cms` int(10) unsigned NOT NULL,
+	`id_lang` int(10) unsigned NOT NULL,
+	`name` varchar(40) NOT NULL default '',
+	PRIMARY KEY (`id_block_cms`, `id_lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

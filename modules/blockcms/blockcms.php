@@ -19,14 +19,20 @@ class BlockCms extends Module
 
 	public function install()
 	{
+		$languages = Language::getLanguages(false);
+		$query_lang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`) VALUES';
+		foreach ($languages as $language)
+			$query_lang .= '(1, '.intval($language['id_lang']).'),';
+	
 		if (!parent::install() OR
 		!$this->registerHook('leftColumn') OR
 		!$this->registerHook('rightColumn') OR
+		!$this->registerHook('footer') OR
+		!$this->registerHook('header') OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'cms_block`(
 		`id_block_cms` int(10) unsigned NOT NULL auto_increment,
 		`id_cms_category` int(10) unsigned NOT NULL,
-		`name` varchar(40) NOT NULL, 
 		`location` tinyint(1) unsigned NOT NULL,
 		`position` int(10) unsigned NOT NULL default \'0\',
 		PRIMARY KEY (`id_block_cms`)
@@ -34,14 +40,25 @@ class BlockCms extends Module
 		!Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES(1, 0, 0)') OR
 		!Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'cms_block_lang`(
+		`id_block_cms` int(10) unsigned NOT NULL,
+		`id_lang` int(10) unsigned NOT NULL,
+		`name` varchar(40) NOT NULL default \'\',
+		PRIMARY KEY (`id_block_cms`, `id_lang`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8') OR
+		!Db::getInstance()->Execute(rtrim($query_lang, ',')) OR
+		!Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'cms_block_page`(
 		`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
 		`id_block_cms` int(10) unsigned NOT NULL,
 		`id_cms` int(10) unsigned NOT NULL,
 		`is_category` tinyint(1) unsigned NOT NULL,
 		PRIMARY KEY (`id_block_cms_page`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8') OR
+		!Configuration::updateValue('FOOTER_CMS', '') OR
+		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1))
 			return false;
+
 		$default_cms = Db::getInstance()->ExecuteS('SELECT `id_cms` FROM `'._DB_PREFIX_.'cms` WHERE `id_cms_category` = 1');
 		$cms_query = 'INSERT INTO `'._DB_PREFIX_.'cms_block_page` (`id_block_cms`, `id_cms`, `is_category`) VALUES';
 		foreach ($default_cms as $cms)
@@ -54,18 +71,25 @@ class BlockCms extends Module
 
 	public function uninstall()
 	{
-		if (!parent::uninstall())
+		if (!parent::uninstall() OR
+		!Configuration::deleteByName('FOOTER_CMS') OR
+		!Configuration::deleteByName('FOOTER_BLOCK_ACTIVATION') OR
+		!Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'cms_block` , `'._DB_PREFIX_.'cms_block_page`, `'._DB_PREFIX_.'cms_block_lang`'))
 			return false;
-		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'cms_block`');
-		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'cms_block_page`');
 		return true;
 	}
 
 	private function getBlockCMS($id_block_cms)
 	{
 		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category`, `location`, `name` FROM `'._DB_PREFIX_.'cms_block`
+		SELECT `id_cms_category`, `location` FROM `'._DB_PREFIX_.'cms_block`
 		WHERE `id_block_cms` = '.intval($id_block_cms));
+		$cms_block_lang = Db::getInstance()->ExecuteS('
+		SELECT `id_lang`, `name` FROM `'._DB_PREFIX_.'cms_block_lang`
+		WHERE `id_block_cms` = '.intval($id_block_cms));
+		
+		foreach ($cms_block_lang as $lang)
+			$cms_block['name'][$lang['id_lang']] = $lang['name'];
 		
 		return $cms_block;
 	}
@@ -75,23 +99,62 @@ class BlockCms extends Module
 		global $cookie;
 		
 		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bc.`name` AS block_name, ccl.`name` AS category_name, bc.`position`, bc.`id_cms_category` FROM `'._DB_PREFIX_.'cms_block` bc
+		SELECT bc.`id_block_cms`, bcl.`name` AS block_name, ccl.`name` AS category_name, bc.`position`, bc.`id_cms_category` FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
+		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
 		WHERE ccl.`id_lang` = '.intval($cookie->id_lang).'
 		AND bc.`location` = '.intval($location).'
+		AND bcl.`id_lang` = '.intval($cookie->id_lang).'
 		ORDER BY bc.`position`');
 		
 		return $cms_block;
+	}
+
+	static public function getCMStitlesFooter()
+	{
+		global $cookie;
+		
+		$footer_cms = Configuration::get('FOOTER_CMS');
+		if (empty($footer_cms))
+			return array();
+		$cms_categories = explode('|', $footer_cms);
+		$display_footer = array();
+		$link = new Link();
+		foreach ($cms_categories as $cms_category)
+		{
+			$ids = explode('_', $cms_category);
+			if ($ids[0] == 1)
+			{
+				$req = Db::getInstance()->getRow('
+				SELECT `name`, `link_rewrite` FROM `'._DB_PREFIX_.'cms_category_lang`
+				WHERE `id_cms_category` = '.intval($ids[1]).'
+				AND `id_lang` = '.intval($cookie->id_lang));
+				$display_footer[$cms_category]['link'] = $link->getCMSCategoryLink(intval($ids[1]), $req['link_rewrite']);
+				$display_footer[$cms_category]['meta_title'] = $req['name'];
+			}
+			elseif ($ids[0] == 0)
+			{
+				$req = Db::getInstance()->getRow('
+				SELECT `meta_title`, `link_rewrite` FROM `'._DB_PREFIX_.'cms_lang`
+				WHERE `id_cms` = '.intval($ids[1]).'
+				AND `id_lang` = '.intval($cookie->id_lang));
+				$display_footer[$cms_category]['link'] = $link->getCMSLink(intval($ids[1]), $req['link_rewrite']);
+				$display_footer[$cms_category]['meta_title'] = $req['meta_title'];
+			}
+		}
+		return $display_footer;
 	}
 
 	static public function getCMStitles($location)
 	{
 		global $cookie;
 		$cms_categories = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bc.`id_cms_category`, ccl.`link_rewrite`, ccl.`name` AS category_name, bc.`name` AS block_name FROM `'._DB_PREFIX_.'cms_block` bc
+		SELECT bc.`id_block_cms`, bc.`id_cms_category`, ccl.`link_rewrite`, ccl.`name` AS category_name, bcl.`name` AS block_name FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
+		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
 		WHERE bc.`location` = '.intval($location).'
 		AND ccl.`id_lang` = '.intval($cookie->id_lang).'
+		AND bcl.`id_lang` = '.intval($cookie->id_lang).'
 		ORDER BY `position`');
 		$display_cms = array();
 		$link = new Link();
@@ -133,9 +196,41 @@ class BlockCms extends Module
 		return $display_cms;
 	}
 
+	private function displayRecurseCheckboxes($categories, $selected)
+	{
+		static $irow = 0;
+		
+		$img = $categories['level_depth'] == 0 ? 'lv1.gif' : 'lv'.($categories['level_depth'] + 1).'_'.((sizeof($categories['cms']) OR isset($categories['children'])) ? 'b' : 'f').'.gif';
+		
+		$this->_html .= '
+			<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
+				<td width="3%"><input type="checkbox" name="footerBox[]" class="cmsBox" id="1_'.$categories['id_cms_category'].'" value="1_'.$categories['id_cms_category'].'" '.
+				(in_array('1_'.$categories['id_cms_category'], $selected) ? ' checked="checked"' : '').' /></td>
+				<td width="3%">'.$categories['id_cms_category'].'</td>
+				<td width="94%"><img style="vertical-align:middle;" src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="1_'.$categories['id_cms_category'].'" class="t"><b>'.$categories['name'].'</b></label></td>
+			</tr>';
+		
+		if (isset($categories['children']))
+			foreach ($categories['children'] as $category)
+				$this->displayRecurseCheckboxes($category, $selected);
+		
+		$cpt = 0;
+		foreach ($categories['cms'] as $cms)
+		{
+			$img = 'lv'.($categories['level_depth'] + 2).'_'.(++$cpt != sizeof($categories['cms']) ? 'b' : 'f').'.gif';
+			$this->_html .= '
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
+					<td width="3%"><input type="checkbox" name="footerBox[]" class="cmsBox" id="0_'.$cms['id_cms'].'" value="0_'.$cms['id_cms'].'" '.
+					(in_array('0_'.$cms['id_cms'], $selected) ? ' checked="checked"' : '').' /></td>
+					<td width="3%">'.$cms['id_cms'].'</td>
+					<td width="94%"><img style="vertical-align:middle;" src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="0_'.$cms['id_cms'].'" class="t" style="margin-top:6px;">'.$cms['meta_title'].'</label></td>
+				</tr>';
+		}
+	}
+
 	private function _displayForm()
 	{
-		global $currentIndex;
+		global $currentIndex, $cookie;
 		
 		$cms_blocks_left = $this->getBlocksCMS(0);
 		$cms_blocks_right = $this->getBlocksCMS(1);
@@ -235,12 +330,32 @@ class BlockCms extends Module
 			$this->_html .= '<p style="margin-left:40px;">'.$this->l('There is no CMS block set').'</p>';
 		$this->_html .= '</div>
 			<div class="clear"></div>
-		</fieldset>';
+		</fieldset><br />
+		<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
+		<fieldset>
+			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Footer\'s various links Configuration').'</legend>
+			<input type="checkbox" name="footer_active" id="footer_active" '.(Configuration::get('FOOTER_BLOCK_ACTIVATION') ? 'checked="checked"' : '').'> <label for="footer_active" style="float:none;">'.$this->l('Display the Footer\'s various links').'</label><br /><br />
+			<table cellspacing="0" cellpadding="0" class="table" width="100%">
+				<tr>
+					<th width="3%"><input type="checkbox" name="checkme" class="noborder" onclick="checkallCMSBoxes($(this).attr(\'checked\'))" /></th>
+					<th width="3%">'.$this->l('ID').'</th>
+					<th width="94%">'.$this->l('Name').'</th>
+				</tr>';
+			self::displayRecurseCheckboxes(CMSCategory::getRecurseCategory($cookie->id_lang), explode('|', Configuration::get('FOOTER_CMS')));
+		$this->_html .= '
+			</table>
+			<p class="center"><input type="submit" class="button" name="submitFooterCMS" value="'.$this->l('Save').'" /></p>
+		</fieldset>
+		</form>';
 	}
 
 	private function _displayAddForm()
 	{
 		global $currentIndex, $cookie;
+
+		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$languages = Language::getLanguages(false);
+		$divLangName = 'name';
 
 		$block_cms = NULL;
 		if (Tools::isSubmit('editBlockCMS') AND intval(Tools::getValue('id_block_cms')))
@@ -248,6 +363,7 @@ class BlockCms extends Module
 
 		$this->_html .= '
 		<script type="text/javascript" src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/'.$this->name.'.js"></script>
+		<script type="text/javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
 		';
 		if (Tools::getValue('id_block_cms'))
@@ -261,9 +377,16 @@ class BlockCms extends Module
 			$this->_html .= '<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Edit CMS block').'</legend>';
 		
 		$this->_html .= '
-			<label for="block_name">'.$this->l('Block\'s name:').'</label>
-			<div class="margin-form">
-				<input id="block_name" name="block_name" type="text" '.(($block_cms AND $block_cms[0]['name']) ? 'value="'.$block_cms[0]['name'].'"' : '').'/>
+			<label>'.$this->l('Block\'s name:').'</label>
+			<div class="margin-form">';
+				
+				foreach ($languages as $language)
+					$this->_html .= '
+					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
+						<input type="text" name="block_name_'.$language['id_lang'].'" id="block_name_'.$language['id_lang'].'" size="30" value="'.(Tools::getValue('block_name_'.$language['id_lang']) ? Tools::getValue('block_name_'.$language['id_lang']) : $block_cms['name'][$language['id_lang']]).'" />
+					</div>';
+				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'name', true);
+		$this->_html .= '<p class="clear">'.$this->l('If your left this field empty, the block\'s name will be the category\'s name').'</p>
 			</div><br />
 			<label for="id_category">'.$this->l('Choose a CMS category:').'</label>
 			<div class="margin-form">
@@ -298,6 +421,7 @@ class BlockCms extends Module
 		$errors = array();
 		if (Tools::isSubmit('submitBlockCMS'))
 		{
+			$languages = Language::getLanguages(false);
 			$cmsBoxes = Tools::getValue('cmsBox');
 			if (!Validate::isInt(Tools::getValue('block_location')) OR (Tools::getValue('block_location') != 0 AND Tools::getValue('block_location') != 1))
 				$errors[] = $this->l('Invalid block location');
@@ -307,12 +431,21 @@ class BlockCms extends Module
 				foreach ($cmsBoxes as $cmsBox)
 					if (!preg_match("#^[01]_[0-9]+$#", $cmsBox))
 						$errors[] = $this->l('Invalid CMS page or category');
-			if (strlen(Tools::getValue('block_name')) > 40)
-				$errors[] = $this->l('Block name is too long');
+			foreach ($languages as $language)
+				if (strlen(Tools::getValue('block_name_'.$language['id_lang'])) > 40)
+					$errors[] = $this->l('Block name is too long');
 		}
 		elseif (Tools::isSubmit('deleteBlockCMS') AND !Validate::isInt(Tools::getValue('id_block_cms')))
 			$errors[] = $this->l('Invalid id_block_cms');
-		
+		elseif (Tools::isSubmit('submitFooterCMS'))
+		{
+			if (Tools::getValue('footerBox'))
+				foreach (Tools::getValue('footerBox') as $cmsBox)
+					if (!preg_match("#^[01]_[0-9]+$#", $cmsBox))
+						$errors[] = $this->l('Invalid CMS page or category');
+			if (Tools::getValue('footer_active') != 0 AND Tools::getValue('footer_active') != 1)
+				$errors[] = $this->l('Invalid activation footer');
+		}
 		if (sizeof($errors))
 		{
 			$this->_html .= $this->displayError(implode('<br />', $errors));
@@ -358,10 +491,13 @@ class BlockCms extends Module
 		if (Tools::isSubmit('submitBlockCMS'))
 		{
 			$position = Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'cms_block` WHERE location = '.intval(Tools::getValue('block_location')));
+			$languages = Language::getLanguages(false);
 			if (Tools::isSubmit('addBlockCMS'))
 			{
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `name`, `position`) VALUES('.intval(Tools::getValue('id_category')).', '.intval(Tools::getValue('block_location')).', "'.pSQL(Tools::getValue('block_name')).'", '.$position.')');
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES('.intval(Tools::getValue('id_category')).', '.intval(Tools::getValue('block_location')).', '.intval($position).')');
 				$id_block_cms = Db::getInstance()->Insert_ID();
+				foreach ($languages as $language)
+					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES('.intval($id_block_cms).', '.intval($language['id_lang']).', "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'")');
 			}
 			elseif (Tools::isSubmit('editBlockCMS'))
 			{
@@ -370,14 +506,16 @@ class BlockCms extends Module
 				$location_change = ($old_block[0]['location'] != intval(Tools::getvalue('block_location')));
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.intval($id_block_cms));
 				if ($location_change == true)
-					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.$old_block[0]['position'].' AND `location` = '.$old_block[0]['location']);
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.intval($old_block[0]['position']).' AND `location` = '.intval($old_block[0]['location']));
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'cms_block`
 				SET `location` = '.intval(Tools::getvalue('block_location')).',
-				`id_cms_category` = '.intval(Tools::getvalue('id_category')).',
-				`name` = "'.pSQL(Tools::getValue('block_name')).'"
-				'.($location_change == true ? ', `position` = '.$position : '').'
+				`id_cms_category` = '.intval(Tools::getvalue('id_category')).'
+				'.($location_change == true ? ', `position` = '.intval($position) : '').'
 				WHERE `id_block_cms` = '.intval($id_block_cms));
+				
+				foreach ($languages as $language)
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block_lang` SET `name` = "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'" WHERE `id_block_cms` = '.intval($id_block_cms).' AND `id_lang`= '.intval($language['id_lang']));
 			}
 			$cmsBoxes = Tools::getValue('cmsBox');
 			if (sizeof($cmsBoxes))
@@ -400,6 +538,16 @@ class BlockCms extends Module
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
 			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfully done'));
+		}
+		elseif (Tools::isSubmit('submitFooterCMS'))
+		{
+			$footer = '';
+			if (Tools::getValue('footerBox'))
+				foreach (Tools::getValue('footerBox') as $box)
+					$footer .= $box.'|';
+			Configuration::updateValue('FOOTER_CMS', rtrim($footer, '|'));
+			Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', Tools::getValue('footer_active'));
+			$this->_html = $this->displayConfirmation($this->l('Footer\'s CMS succesfully updated'));
 		}
 		elseif (Tools::isSubmit('addBlockCMSConfirmation'))
 			$this->_html = $this->displayConfirmation($this->l('Block CMS succesfully added'));
@@ -428,6 +576,7 @@ class BlockCms extends Module
 	
 		$cms_titles = self::getCMStitles(0);
 		$smarty->assign(array(
+			'block' => 1,
 			'cms_titles' => $cms_titles,
 			'theme_dir' => _PS_THEME_DIR_
 		));
@@ -440,10 +589,33 @@ class BlockCms extends Module
 
 		$cms_titles = self::getCMStitles(1);
 		$smarty->assign(array(
+			'block' => 1,
 			'cms_titles' => $cms_titles,
 			'theme_dir' => _PS_THEME_DIR_
 		));
 		return $this->display(__FILE__, 'blockcms.tpl');
+	}
+	
+	public function hookFooter()
+	{
+		global $smarty;
+		
+		if (Configuration::get('FOOTER_BLOCK_ACTIVATION'))
+		{
+			$cms_titles = self::getCMStitlesFooter();
+			$smarty->assign(array(
+				'block' => 0,
+				'cmslinks' => $cms_titles,
+				'theme_dir' => _PS_THEME_DIR_
+			));
+			return $this->display(__FILE__, 'blockcms.tpl');
+		}
+		return '';
+	}
+	
+	public function hookHeader($params)
+	{
+		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcms.css', 'all');
 	}
 	
 	public function getL($key)

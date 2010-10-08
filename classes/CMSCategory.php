@@ -159,6 +159,32 @@ class		CMSCategory extends ObjectModel
 		);
 	}
 
+	static public function getRecurseCategory($id_lang, $current = 1)
+	{
+		$category = Db::getInstance()->getRow('
+		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`
+		FROM `'._DB_PREFIX_.'cms_category` c
+		JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON c.`id_cms_category` = cl.`id_cms_category`
+		WHERE c.`id_cms_category` = '.intval($current).'
+		AND `id_lang` = '.intval($id_lang));
+		$result = Db::getInstance()->ExecuteS('
+		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`
+		FROM `'._DB_PREFIX_.'cms_category` c
+		JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON c.`id_cms_category` = cl.`id_cms_category`
+		WHERE c.`id_parent` = '.intval($current).'
+		AND c.`active` = 1
+		AND cl.`id_lang` = '.intval($id_lang));
+		foreach ($result as $row)
+			$category['children'][] = self::getRecurseCategory($id_lang, $row['id_cms_category']);
+		$category['cms'] = Db::getInstance()->ExecuteS('
+		SELECT c.`id_cms`, cl.`meta_title`
+		FROM `'._DB_PREFIX_.'cms` c
+		JOIN `'._DB_PREFIX_.'cms_lang` cl ON c.`id_cms` = cl.`id_cms`
+		WHERE `id_cms_category` = '.intval($current).'
+		AND cl.`id_lang` = '.intval($id_lang));
+		return $category;
+	}
+
 	static public function recurseCMSCategory($categories, $current, $id_cms_category = 1, $id_selected = 1, $is_html = 0)
 	{
 		global $currentIndex;

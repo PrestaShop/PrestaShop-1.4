@@ -40,12 +40,14 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('CHECKUP_SALES_GT', '2', NOW(), NOW()),
 	('CHECKUP_STOCK_LT', '1', NOW(), NOW()),
 	('CHECKUP_STOCK_GT', '3', NOW(), NOW()),
+	('FOOTER_CMS', '0_3|0_4', NOW(), NOW()),
+	('FOOTER_BLOCK_ACTIVATION', '0_3|0_4', NOW(), NOW()),
 	('BLOCKADVERT_LINK', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'moneybookers', 1),(5, 'editorial', 1),
-(6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockinfos', 1),
+(6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockcms', 1),
 (13, 'blocklanguages', 1),(14, 'blockmanufacturer', 1),(15, 'blockmyaccount', 1),(16, 'blocknewproducts', 1),(17, 'blockpaymentlogo', 1),(18, 'blockpermanentlinks', 1),
-(19, 'blocksearch', 1),(20, 'blockspecials', 1),(21, 'blocktags', 1),(22, 'blockuserinfo', 1),(23, 'blockvariouslinks', 1),(24, 'blockviewed', 1),(25, 'statsdata', 1),
+(19, 'blocksearch', 1),(20, 'blockspecials', 1),(21, 'blocktags', 1),(22, 'blockuserinfo', 1),(24, 'blockviewed', 1),(25, 'statsdata', 1),
 (26, 'statsvisits', 1),(27, 'statssales', 1),(28, 'statsregistrations', 1),(30, 'statspersonalinfos', 1),(31, 'statslive', 1),(32, 'statsequipment', 1),(33, 'statscatalog', 1),
 (34, 'graphvisifire', 1),(35, 'graphxmlswfcharts', 1),(36, 'graphgooglechart', 1),(37, 'graphartichow', 1),(38, 'statshome', 1),(39, 'gridextjs', 1),(40, 'statsbestcustomers', 1),
 (41, 'statsorigin', 1),(42, 'pagesnotfound', 1),(43, 'sekeywords', 1),(44, 'statsproduct', 1),(45, 'statsbestproducts', 1),(46, 'statsbestcategories', 1),
@@ -55,33 +57,33 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 	('myAccountBlock', 'My account block', 'Display extra informations inside the "my account" block', 1);
 
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (3, 1, 1),(6, 1, 2),(4, 1, 3),(4, 4, 3),(8, 2, 1),(3, 4, 1),(6, 4, 2),(9, 6, 1),(16, 6, 2),(8, 6, 3),
-(20, 6, 4),(15, 7, 1),(21, 7, 2),(10, 7, 3),(24, 7, 4),(14, 7, 5),(12, 7, 6),(7, 7, 7),(17, 7, 8),(5, 8, 1),(1, 8, 2),(19, 9, 1),(11, 14, 1),(13, 14, 2),(18, 14, 3),
-(19, 14, 4),(22, 14, 5),(8, 19, 1),(23, 21, 1),(25, 11, 1),(25, 21, 2),(26, 32, 1),(27, 32, 2),(28, 32, 3),(30, 32, 4),(31, 32, 5),(32, 32, 6),(33, 32, 7),(34, 33, 1),
+(20, 6, 4),(12, 6, 5),(15, 7, 1),(21, 7, 2),(10, 7, 3),(24, 7, 4),(14, 7, 5),(12, 7, 6),(7, 7, 7),(17, 7, 8),(5, 8, 1),(1, 8, 2),(19, 9, 1),(11, 14, 1),(13, 14, 2),(18, 14, 3),
+(19, 14, 4),(22, 14, 5),(8, 19, 1),(12, 21, 1),(25, 11, 1),(25, 21, 2),(26, 32, 1),(27, 32, 2),(28, 32, 3),(30, 32, 4),(31, 32, 5),(32, 32, 6),(33, 32, 7),(34, 33, 1),
 (35, 33, 2),(36, 33, 3),(37, 33, 4),(38, 36, 1),(39, 37, 1),(40, 32, 8),(41, 32, 9),(42, 32, 10),(43, 32, 11),(42, 14, 6),(43, 14, 7),(44, 32, 12),(45, 32, 13),(46, 32, 15),
 (47, 32, 14),(48, 32, 16),(49, 32, 17),(50, 32, 18),(51, 32, 19),(51, 45, 1),(25, 25, 1),(41, 20, 2),(52, 32, 20),(53, 32, 21),(17, 9, 2),(18, 9, 3),(24, 9, 4),(9, 9, 5),
-(15, 9, 6),(5, 9, 7),(8, 9, 8),(10, 9, 9),(20, 9, 10),(11, 9, 11),(16, 9, 12),(23, 9, 13),(22, 9, 14),(13, 9, 15),(14, 9, 16),(12, 9, 17),(7, 9, 18),(21, 9, 19);
+(15, 9, 6),(5, 9, 7),(8, 9, 8),(10, 9, 9),(20, 9, 10),(11, 9, 11),(16, 9, 12),(22, 9, 13),(13, 9, 14),(14, 9, 15),(12, 9, 16),(7, 9, 17),(21, 9, 18);
 
 CREATE TABLE `PREFIX_pagenotfound` (
-  id_pagenotfound INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  request_uri VARCHAR(256) NOT NULL,
-  http_referer VARCHAR(256) NOT NULL,
-  date_add DATETIME NOT NULL,
-  PRIMARY KEY(id_pagenotfound)
+  `id_pagenotfound` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `request_uri` VARCHAR(256) NOT NULL,
+  `http_referer` VARCHAR(256) NOT NULL,
+  `date_add` DATETIME NOT NULL,
+  PRIMARY KEY(`id_pagenotfound`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE PREFIX_statssearch (
-	id_statssearch INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	keywords VARCHAR(255) NOT NULL,
-	results INT(6) NOT NULL DEFAULT 0,
-	date_add DATETIME NOT NULL,
-	PRIMARY KEY(id_statssearch)
+CREATE TABLE `PREFIX_statssearch` (
+	`id_statssearch` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	`keywords` VARCHAR(255) NOT NULL,
+	`results` INT(6) NOT NULL DEFAULT 0,
+	`date_add` DATETIME NOT NULL,
+	PRIMARY KEY(`id_statssearch`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_sekeyword` (
-	id_sekeyword INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-	keyword VARCHAR(256) NOT NULL,
-	date_add DATETIME NOT NULL,
-	PRIMARY KEY(id_sekeyword)
+	`id_sekeyword` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+	`keyword` VARCHAR(256) NOT NULL,
+	`date_add` DATETIME NOT NULL,
+	PRIMARY KEY(`id_sekeyword`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -157,9 +159,9 @@ INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `desc
 (8, 3, '<p><strong>Características</strong></p>\r\n<ul>\r\n<li> Cuero suave resistente</li>\r\n<li>Acceso a la tecla Hold</li>\r\n<li>Cierre magnético</li>\r\n<li>Acceso al Dock Conector</li>\r\n<li>Salva pantallas</li>\r\n</ul>', '<p>Este estuche de cuero de última moda garantiza una completa protección contra los arañazos y los pequeños contratiempos de la vida diaria. Su diseño elegante y compacto te permite meter tu Ipod directamente en tu bolsillo o en tu bolso.</p>', 'funda-cuero-ipod-nano-negro-chocolate', '', '', '', 'Leather Case (iPod nano) - Negro / Chocolate', 'Disponible', ''),
 (9, 3, '<p>Los auriculares SE210, ligeros y elegantes, están basados en la tecnología de los monitores personales que los músicos profesionales utilizan en carretera y que los ingenieros de Shure han perfeccionado. También están provistos de una salida audio de gama extendida exenta de todo ruido exterior. <br /> <br /> <strong>Creado para un aislamiento sonoro</strong></p>\r\n<p>Las almohadillas provistas de un aislamiento sonoro bloquean más del 90% del ruido ambiente. Combinadas con un diseño ergonómico atractivo y un cable modular, minimizan las intrusiones del mundo exterior y te permiten concentrarte en tu música. Creados para los apasionados por la música que quieren que su aparato audio móvil evolucione, los auriculares  SE210 te permitirán llevar la tecnología allí donde tú vayas. <br /> <br /> <strong>Micro-transductor alta definición </strong><br /> Desarrollados para poder tener una audición de calidad durante los desplazamientos, los auriculares SE210 utilizan un único transductor con un armazón equilibrado para poder disfrutar de una gama audio extendida. ¿El resultado ? Un confort audio increíble que restituye cada detalle de un espectáculo en directo. <br /> <br /> <strong>El kit universal Deluxe incluye los siguientes elementos :</strong><br /> - Almohadillas para aislamiento sonoro<br /> Las almohadillas para el aislamiento sonoro tienen una doble función : bloquear el ruido ambiente y garantizar una estabilidad y un confort personalizados. Como cada oreja es diferente el kit universal Deluxe incluye tres tallas (S, M, L) de almohadillas de espuma y flexibles. Elige la talla y el estilo de almohadilla que mejor te convenga : un buen aislamiento es un factor clave tanto para optimizar el aislamiento sonoro y la respuesta de los bajos como para aumentar el confort durante una audición prolongada. <br /> <br /> - Cable modular</p>\r\n<p>Basándose en los comentarios de los numerosos usuarios, los ingenieros de Shure han creado una solución de cable separable para permitir un grado de personalización sin precedentes. El cable de 1 metro te permite adaptar el confort en función de la actividad del momento y de la aplicación. <br /> <br /> - Estuche para el transporte</p>\r\n<p>Además de las almohadillas de aislamiento sonoro y del cable modular, los auriculares SE210 están provistos de un estuche de transporte compacto y resistente para guardar los auriculares de manera práctica y sin dificultad. <br /> - Garantía límite de dos años <br /> Cada solución SE210 tiene una garantía piezas y mano de obra de dos años.</p>\r\n<p><br /> <em><strong>Características técnicas</strong></em></p>\r\n<ul>\r\n<li>Tipo de transductor : micro-transductor alta definición</li>\r\n<li>Sensibilidad (1 mW) : presión acústica de 114 dB/mW</li>\r\n<li>Impedancia : (à 1 kHz) : 26 W</li>\r\n<li>Gama de frecuencias : 25 Hz ˆ 18,5 kHz</li>\r\n<li>Longitud del cable / con alargador : 45 cm / 136 cm</li>\r\n</ul>\r\n<p><br /> <strong><em>Contenido de la caja</em></strong></p>\r\n<ul>\r\n<li>Altavoces Shure SE210</li>\r\n<li>Kit universal Deluxe (almohadillas de aislamiento sonoro, cable modular, estuche de transporte)</li>\r\n</ul>', '<p>Los auriculares con aislamiento ergonómicos y ligeros ofrecen la reproducción más fiel proveniente de fuentes audio estéreo móviles o de salón.</p>', 'auriculares-aislantes-del-sonido-shure-se210', '', '', '', 'Auriculares aislantes del sonido Shure SE210', 'Disponible', '');
 
-INSERT INTO `PREFIX_category` VALUES (2, 1, 1, 1, NOW(), NOW()),(3, 1, 1, 1, NOW(), NOW()),(4, 1, 1, 1, NOW(), NOW());
+INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`) VALUES (2, 1, 1, 1, NOW(), NOW()),(3, 1, 1, 1, NOW(), NOW()),(4, 1, 1, 1, NOW(), NOW());
 
-INSERT INTO `PREFIX_category_lang` VALUES
+INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
 (2, 1, 'iPods', 'Now that you can buy movies from the iTunes Store and sync them to your iPod, the whole world is your theater.', 'music-ipods', '', '', ''),
 (2, 2, 'iPods', 'Il est temps, pour le meilleur lecteur de musique, de remonter sur scène pour un rappel. Avec le nouvel iPod, le monde est votre scène.', 'musique-ipods', '', '', ''),
 (3, 1, 'Accessories', 'Wonderful accessories for your iPod', 'accessories-ipod', '', '', ''),
@@ -175,7 +177,7 @@ INSERT INTO `PREFIX_category_product` (`id_category`, `id_product`, `position`) 
 
 INSERT INTO `PREFIX_attribute_group` (`id_attribute_group`, `is_color_group`) VALUES (1, 0),(2, 1),(3, 0);
 
-INSERT INTO `PREFIX_attribute_group_lang` VALUES
+INSERT INTO `PREFIX_attribute_group_lang` (`id_attribute_group`, `id_lang`, `name`, `public_name`) VALUES
 (1, 1, 'Disk space', 'Disk space'),(1, 2, 'Capacité', 'Capacité'),(2, 1, 'Color', 'Color'),(2, 2, 'Couleur', 'Couleur'),(3, 1, 'ICU', 'Processor'),
 (3, 2, 'ICU', 'Processeur'),(1, 3, 'Capacidad', 'Capacidad'),(2, 3, 'Color', 'Color'),(3, 3, 'ICU', 'Procesador');
 
@@ -325,6 +327,12 @@ Uno de los elementos de su solicitud se encuentra actualmente la reposición, el
 Gracias por su comprensión.
 
 Saludos cordiales,');
+
+/* Block CMS module*/
+
+INSERT INTO `PREFIX_cms_block` (`id_block_cms`, `id_cms_category`, `name`, `location`, `position`) VALUES(1, 1, '', 0, 0);
+INSERT INTO `PREFIX_cms_block_page` (`id_block_cms_page`, `id_block_cms`, `id_cms`, `is_category`) VALUES(1, 1, 1, 0), (2, 1, 2, 0), (3, 1, 3, 0), (4, 1, 4, 0), (5, 1, 5, 0);
+INSERT INTO `PREFIX_cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES(1, 1, 'Informations'), (1, 2, 'Informations'), (1, 3, 'Informaciónes');
 
 /* Currency/Country module */
 INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (3, 1),(3, 2),(3, 3),(4, 1),(4, 2),(4, 3),(6, 1),(6, 2),(6, 3);

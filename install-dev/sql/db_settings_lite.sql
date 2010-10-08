@@ -424,7 +424,7 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (4, 2, 'Yukon', 'YT', 1),
 (4, 2, 'Nunavut', 'NU', 1);
 
-INSERT INTO `PREFIX_currency` (name, iso_code, iso_code_num, sign, blank, conversion_rate, format, deleted, active) VALUES
+INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blank`, `conversion_rate`, `format`, `deleted`, `active`) VALUES
 ('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.2, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1), ('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
 ('Lev', 'BGN', '975', 'лв', 1, 1.96, 2, 0, 0), ('Couronne', 'CZK', '203', 'Kč', 1, 24.58, 2, 0, 0), ('Couronne', 'DKK', '208', 'kr', 1, 7.45, 2, 0, 0),
 ('Couronne', 'EEK', '233', 'kr', 1, 15.65, 2, 0, 0), ('Forint', 'HUF', '348', 'Ft', 1, 279.65, 2, 0, 0), ('Litas', 'LTL', '440', 'Lt', 1, 3.45, 2, 0, 0),
@@ -597,9 +597,9 @@ INSERT INTO `PREFIX_quick_access_lang` (`id_quick_access`, `id_lang`, `name`) VA
 (4, 1, 'New product'),(4, 2, 'Nouveau produit'),(4, 3, 'Nuevo producto'),
 (5, 1, 'New voucher'),(5, 2, 'Nouveau bon de réduction'),(5, 3, 'Nuevo cupón');
 
-INSERT INTO PREFIX_order_return_state (`id_order_return_state`, `color`) VALUES (1, '#ADD8E6'),(2, '#EEDDFF'),(3, '#DDFFAA'),(4, '#FFD3D3'),(5, '#FFFFBB');
+INSERT INTO `PREFIX_order_return_state` (`id_order_return_state`, `color`) VALUES (1, '#ADD8E6'),(2, '#EEDDFF'),(3, '#DDFFAA'),(4, '#FFD3D3'),(5, '#FFFFBB');
 
-INSERT INTO PREFIX_order_return_state_lang (`id_order_return_state`, `id_lang`, `name`) VALUES
+INSERT INTO `PREFIX_order_return_state_lang` (`id_order_return_state`, `id_lang`, `name`) VALUES
 (1, 1, 'Waiting for confirmation'),(2, 1, 'Waiting for package'),(3, 1, 'Package received'),
 (4, 1, 'Return denied'),(5, 1, 'Return completed'),(1, 2, 'En attente de confirmation'),
 (2, 2, 'En attente du colis'),(3, 2, 'Colis reçu'),(4, 2, 'Retour refusé'),
@@ -654,10 +654,10 @@ VALUES  ('google','q'),('aol','q'),('yandex','text'),('ask.com','q'),('nhl.com',
 ('yam','k'),('pchome','q'),('kvasir','q'),('sesam','q'),('ozu','q'),('terra','query'),('mynet','q'),('ekolay','q'),('rambler','words');
 
 /* SubDomains */
-INSERT INTO PREFIX_subdomain (id_subdomain, name) VALUES (NULL, 'www');
+INSERT INTO `PREFIX_subdomain` (`id_subdomain`, `name`) VALUES (NULL, 'www');
 
 /* CMS */
-INSERT INTO `PREFIX_cms` VALUES (1,1,0),(2,1,1),(3,1,2),(4,1,3),(5,1,4);
+INSERT INTO `PREFIX_cms` (`id_cms`, `id_cms_category`, `position`) VALUES (1, 1, 0), (2, 1, 1), (3, 1, 2), (4, 1, 3), (5, 1, 4);
 INSERT INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `meta_title`, `meta_description`, `meta_keywords`, `content`, `link_rewrite`) VALUES
 (1, 1, 'Delivery', 'Our terms and conditions of delivery', 'conditions, delivery, delay, shipment, pack', '<h2>Shipments and returns</h2><h3>Your pack shipment</h3><p>Packages are generally dispatched within 2 days after receipt of payment and are shipped via Colissimo with tracking and drop-off without signature. If you prefer delivery by Colissimo Extra with required signature, an additional cost will be applied, so please contact us before choosing this method. Whichever shipment choice you make, we will provide you with a link to track your package online.</p><p>Shipping fees include handling and packing fees as well as postage costs. Handling fees are fixed, whereas transport fees vary according to total weight of the shipment. We advise you to group your items in one order. We cannot group two distinct orders placed separately, and shipping fees will apply to each of them. Your package will be dispatched at your own risk, but special care is taken to protect fragile objects.<br /><br />Boxes are amply sized and your items are well-protected.</p>', 'delivery'),
 (1, 2, 'Livraison', 'Nos conditions générales de livraison', 'conditions, livraison, délais, transport, colis', '<h2>Livraisons et retours</h2><h3>Le transport de votre colis</h3><p>Les colis sont g&eacute;n&eacute;ralement exp&eacute;di&eacute;s en 48h apr&egrave;s r&eacute;ception de votre paiement. Le mode d''expédition standard est le Colissimo suivi, remis sans signature. Si vous souhaitez une remise avec signature, un co&ucirc;t suppl&eacute;mentaire s''applique, merci de nous contacter. Quel que soit le mode d''expédition choisi, nous vous fournirons d&egrave;s que possible un lien qui vous permettra de suivre en ligne la livraison de votre colis.</p><p>Les frais d''exp&eacute;dition comprennent l''emballage, la manutention et les frais postaux. Ils peuvent contenir une partie fixe et une partie variable en fonction du prix ou du poids de votre commande. Nous vous conseillons de regrouper vos achats en une unique commande. Nous ne pouvons pas grouper deux commandes distinctes et vous devrez vous acquitter des frais de port pour chacune d''entre elles. Votre colis est exp&eacute;di&eacute; &agrave; vos propres risques, un soin particulier est apport&eacute; au colis contenant des produits fragiles..<br /><br />Les colis sont surdimensionn&eacute;s et prot&eacute;g&eacute;s.</p>', 'livraison'),
@@ -675,18 +675,17 @@ INSERT INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `meta_title`, `meta_descript
 (4, 3, 'Sobre', 'Conozca más sobre nosotros', 'sobre, información', '<h2>Sobre</h2>', 'sobre'),
 (5, 3, 'Pago seguro', 'Ofrecemos pago seguro', 'pago seguro, ssl, visa, mastercard, paypal', '<h2><span id="result_box"><span style="background-color: #ffffff;" title="Paiement sécurisé">Pago seguro</span></span></h2>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Notre offre de paiement sécurisé">Ofrecemos pago seguro</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Avec SSL">SSL</span></span></p>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Utilisation de Visa/Mastercard/Paypal">Utilice Visa / Mastercard / Paypal</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="A propos de ces services">Acerca de estos servicios</span></span></p>', 'pago-seguro');
 
-INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 1, 'Home', '', 'home', NULL, NULL, NULL);
-INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL);
-INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
+INSERT INTO `PREFIX_cms_category_lang` (`id_cms_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
+(1, 1, 'Home', '', 'home', NULL, NULL, NULL),
+(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),
+(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
 
-INSERT INTO `PREFIX_cms_category` VALUES(1, 0, 0, 1, 'now()', 'now()');
-
-INSERT INTO `PREFIX_block_cms` (`id_block`, `id_cms`) VALUES (23, 3),(23, 4),(12, 1),(12, 2),(12, 3),(12, 4);
+INSERT INTO `PREFIX_cms_category` (`id_cms_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`) VALUES(1, 0, 0, 1, 'now()', 'now()');
 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (1, 0, 0, 1, 0, 0),(2, 1, 'My carrier', 1, 0, 1);
 
-INSERT INTO `PREFIX_carrier_group` (id_carrier, id_group) VALUES (1, 1), (2, 1);
+INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (1, 1), (2, 1);
 
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (1, 1, 'Pick up in-store'),(1, 2, 'Retrait au magasin'),
 (1, 3, 'Recogida en la tienda'),(2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!');
@@ -783,7 +782,6 @@ INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
 
 INSERT INTO `PREFIX_editorial` (`id_editorial`, `body_home_logo_link`) VALUES (1, 'http://www.prestashop.com');
-
 INSERT INTO `PREFIX_editorial_lang` (`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`) VALUES 
 (1, 1, 'Lorem ipsum dolor sit amet', 'Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Excepteur sint prestashop cupidatat non proident'),
 (1, 2, 'Lorem ipsum dolor sit amet', 'Excepteur sint occaecat cupidatat non proident', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Lorem ipsum presta shop amet');
