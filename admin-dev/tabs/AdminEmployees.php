@@ -177,11 +177,11 @@ class AdminEmployees extends AdminTab
 		
 			$employee = new Employee(Tools::getValue('id_employee'));
 			if (!(int)$this->tabAccess['edit'])
-				$_POST['id_profile'] = $_GET['id_profile'] = $employee->id_profile;	
+				$_POST['id_profile'] = $_GET['id_profile'] = $employee->id_profile;
 			
 			if ($employee->isLastAdmin()) 
 			{
-				if  (Tools::getValue('id_profile') != Configuration::get('PS_ADMIN_PROFILE')) 
+				if  (Tools::getValue('id_profile') != intval(_PS_ADMIN_PROFILE_)) 
 				{
 					$this->_errors[] = Tools::displayError('You should have at least one employee in the administrator group.');
 					return false;

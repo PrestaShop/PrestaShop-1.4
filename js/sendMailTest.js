@@ -31,7 +31,7 @@ function verifyMail(testMsg, testSubject)
 		   		"&smtpLogin="+ $("input#PS_MAIL_USER").val()+
 		   		"&smtpPassword="+ $("input#PS_MAIL_PASSWD").val()+
 				"&smtpPort="+ $("input#PS_MAIL_SMTP_PORT").val()+
-				"&smtpEnc="+ $("input#PS_MAIL_SMTP_ENCRYPTION").val()+
+				"&smtpEnc="+ $("select#PS_MAIL_SMTP_ENCRYPTION").val()+
 				"&testMsg="+textMsg+
 				"&testSubject="+textSubject
 			,

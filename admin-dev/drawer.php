@@ -17,7 +17,10 @@ $id_lang = Tools::getValue('id_lang');
 if ($cookie->id_employee != $id_employee)
 	die;
 
-require_once(dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php');
+if (!Tools::file_exists_cache($module_path = dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php'))
+	die(Tools::displayError());
+
+require_once($module_path);
 
 $graph = new $module();
 $graph->setEmployee($id_employee);

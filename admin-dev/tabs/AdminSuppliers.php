@@ -181,10 +181,8 @@ class AdminSuppliers extends AdminTab
 		</form>';
 	}
 	
-	public function postProcess()
+	public function afterImageUpload()
 	{
-		global $currentIndex;
-		
 		/* Generate image with differents size */
 		if (($id_supplier = intval(Tools::getValue('id_supplier'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_SUPP_IMG_DIR_.$id_supplier.'.jpg'))
 		{
@@ -195,7 +193,6 @@ class AdminSuppliers extends AdminTab
 				imageResize($file, _PS_SUPP_IMG_DIR_.$id_supplier.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
 			}
 		}
-		parent::postProcess();
 	}
 }
 

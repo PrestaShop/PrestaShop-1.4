@@ -34,6 +34,8 @@ $_MODULE['<{productcomments}prestashop>productcomments_06316a7f66070d83b0be475d1
 $_MODULE['<{productcomments}prestashop>productcomments_ad4ec284804b5d44a3e6de6c851e2731'] = 'Commentaire ajouté avec succès.';
 $_MODULE['<{productcomments}prestashop>productcomments_e1549cfa9780c9c706f9ea8fdc25e441'] = 'En attente de validation du modérateur.';
 $_MODULE['<{productcomments}prestashop>productcomments_6bf852d9850445291f5e9d4740ac7b50'] = 'Un texte est nécessaire pour publier un commentaire.';
+$_MODULE['<{productcomments}prestashop>productcomments_6d28f2900adb9e500868166f6d04da92'] = 'Vous devez attendre';
+$_MODULE['<{productcomments}prestashop>productcomments_441f4c06170a0c047e62e4d8a3ea67d5'] = 'heure(s) avant de poster un nouveau commentaire.';
 $_MODULE['<{productcomments}prestashop>productcomments_7c3b0e9898b88deee7ea75aafd2e37e2'] = 'Note moyenne';
 $_MODULE['<{productcomments}prestashop>productcomments_b1897515d548a960afe49ecf66a29021'] = 'Moyenne';
 $_MODULE['<{productcomments}prestashop>productcomments_5da618e8e4b89c66fe86e32cdafde142'] = 'De';

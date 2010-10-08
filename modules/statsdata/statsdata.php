@@ -4,12 +4,15 @@
   * Statistics
   * @category stats
   *
-  * @author Damien Metzger / Epitech
-  * @copyright Epitech / PrestaShop
+  * @author PrestaShop
+  * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.2
+  * @version 1.4
   */
-  
+
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class StatsData extends Module
 {
     private $_html = '';
@@ -70,7 +73,7 @@ class StatsData extends Module
 						navinfo.type = "navinfo";
 						navinfo.id_guest = "'.(int)$params['cookie']->id_guest.'";
 						navinfo.token = "'.$token.'";
-						$.post("'.$protocol_content.$server_host.__PS_BASE_URI__.'statistics.php", navinfo);
+						$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", navinfo);
 					}
 				);
 			</script>';
@@ -101,7 +104,7 @@ class StatsData extends Module
 					pagetime.time_start = "'.$tokenArray['time_start'].'";
 					pagetime.token = "'.$token.'";
 					pagetime.time = time_end-time_start;
-					$.post("'.$protocol_content.$server_host.__PS_BASE_URI__.'statistics.php", pagetime);
+					$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", pagetime);
 				}
 			);
 		</script>';

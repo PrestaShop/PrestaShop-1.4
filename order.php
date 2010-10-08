@@ -367,7 +367,7 @@ function displayCarrier()
 	if (isset($cookie->id_customer))
 		$customer = new Customer(intval($cookie->id_customer));
 	else
-		die(Tools::displayError($this->l('Hack attempt: No customer')));
+		die(Tools::displayError($this->l('Fatal error: No customer')));
 	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $customer->getGroups());
 	if (!$result)
 		$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone));

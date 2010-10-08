@@ -1,12 +1,14 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
 
 class GAdsense extends Module
 {	
 	function __construct()
 	{
 	 	$this->name = 'gadsense';
-	 	$this->tab = 'Tools';
+	 	$this->tab = 'Advertisement';
 	 	$this->version = '1.1';
         $this->displayName = $this->l('Google Adsense');
 		

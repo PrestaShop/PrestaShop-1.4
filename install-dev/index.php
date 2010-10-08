@@ -757,10 +757,9 @@ if ($lm->getIncludeTradFilename())
 				<div id="resultEnd"></div>
 			</div>
 			<?php
-			// Check if can contact prestastore.com
-			if (@fsockopen('www.prestastore.com', 80, $errno, $errst, 3)):
+			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)):
 			?>
-			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
+			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
@@ -848,10 +847,9 @@ if ($lm->getIncludeTradFilename())
 				</a>
 			</div>
 			<?php
-			// Check if can contact prestastore.com
-			if (@fsockopen('www.prestastore.com', 80, $errno, $errst, 3)):
+			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)):
 			?>
-			<iframe src="http://www.prestastore.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
+			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php

@@ -17,6 +17,293 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.2.3 - 2887 (2010-10-01)   #
+####################################
+
+	Improved/changed features :
+	
+	[*] BO : add a label in module Module > Positions for checkbox
+	[*] BO : Pack Product list (related to bug #4804)
+	[*] BO : set new define on Back office "_PS_ADMIN_DIR_" with retro-compatibility
+	[*] BO : The last admin profile and current profile can't be disabled or deleted
+	[*] BO : You can now define the admin profile
+	
+	[*] Classes : new parameter for method getProfile() on Profile's class
+	
+	[*] MO : Added SSL support for Moneybookers module
+	[*] MO : cleaned canonicalurl module
+	[*] MO : fixed bug #5242 - now you can define a cms page for link on blockpaymentlogo module
+	[*] MO : Updated Moneybookers module (lot of improvements and some bug fixes !)
+	
+	[*] TR : several spannish translations are added
+	
+	[*] IN : Brazil/Brasil states integrated into the default installation
+	[*] IN : States of Mexico
+	
+	Fixed bugs :
+	
+	[-] Project : fixed bug #4734 - Double semicolons - 14 more instances
+	
+	[-] FO : Bad Url in add notification link (related to bug #4824)
+	[-] FO : Bug #5160 fixed : previous page don't return to default carrier anymore
+	[-] FO : Bug #5222 Fixed : pb iso-lang if change nb product by page, can’t change language
+	[-] FO : Bug fixed #3806 - Color picker with custom image
+	[-] FO : Bug fixed #4494 - Incorrect reduction price on combination when changing currency
+	[-] FO : Bug Fixed #4555 - Supplier page order by manufacturer
+	[-] FO : Bug fixed #4636 : States sort order
+	[-] FO : Bug fixed #4861 - save personalized field reset color combination
+	[-] FO : Bug fixed #4874 - Special characters in the contact form
+	[-] FO : Bug fixed #5014 - Stylesheet enhancement
+	[-] FO : Bug fixed #5014 - Stylesheet enhancement
+	[-] FO : Bug fixed #5014 - Stylesheet enhancement
+	[-] FO : Bug fixed #5079 - Personalized field name translations
+	[-] FO : Bug fixed #5080 - RMA status is not refreshed
+	[-] FO : Bug fixed #5177 - Default category in breadcrumb
+	[-] FO : Bug fixed #5273 - Bookmark = home page
+	[-] FO : Bug fixed #5284 - Bookmark https & name
+	[-] FO : Bug fixed #5286 - added delay between 2 customer comments
+	[-] FO : Bug fixed #5300 - Warning-inline
+	[-] FO : Bug fixed #5320 - Escape missing on short product description
+	[-] FO : Bug fixed #5367 - Tax disable are displayed in order history
+	[-] FO : Bug fixed #5425 - Extra carrier not displayed
+	[-] FO : bug fix on product page with quantity discount in percent
+	[-] FO : bug is fixed in order-confirmation for payment module send secure key by POST method
+	[-] FO : fixed bug #4640 - LC_TIME not set to user front office language
+	[-] FO : fixed bug #4646 - important bug when disable states
+	[-] FO : fixed bug #4680 - image categorie not center
+	[-] FO : fixed bug #4707 - Quantities Discount tab not ‘selected’ (light grey)
+	[-] FO : fixed bug #4727 - Cart Product out of stock not changed GREEN DOT to RED DOT
+	[-] FO : fixed bug #4735 - image 404 size in cart
+	[-] FO : fixed bug #4791 - Bug in cart when using customized fields
+	[-] FO : fixed bug #4801 - getByemail should be getByEmail in authentication.php
+	[-] FO : Fixed Bug #4928 - Attributes + OOS + Display unavailable product attributes 
+	[-] FO : fixed bug #4967 - detail order in FO not refresh
+	[-] FO : fixed bug #5015 - wrong font-family on global.css
+	[-] FO : fixed bug #5023 - Class first_item and last item in manufacturer-list.tpl and supplier-list.tpl
+	[-] FO : fixed bug #5039 - Incorrect message while search without input
+	[-] FO : fixed bug #5057 - discount + tax excluded = old price incorrect
+	[-] FO : fixed bug #5071 - Incorrect scene prices for non-taxed price groups
+	[-] FO : fixed bug #5108 - apostrophes and quotes part of invalid title characters
+	[-] FO : fixed bug #5110 - No redirect after account creation
+	[-] FO : fixed bug #5130 - Required * are on left side in identity.tpl
+	[-] FO : fixed bug #5156 - Inconsitent use of possessive pronouns “my” and “your”
+	[-] FO : fixed bug #5208 - Read CGV with Https
+	[-] FO : fixed bug #5276 - create account,pb copy last,first name
+	[-] FO : Fixed Bug #5488 - Full HTTPS = Errors
+	[-] FO : Fixed Bug #5489 - Search page is https
+	[-] FO : fixed bug page authentication for first name and last name
+	[-] FO : fixed bug with Hack Attempt message on account edition
+	[-] FO : fixed size of images
+	[-] FO : fixed size of images
+	[-] FO : Ghost 404 pages fixed (I hope)
+	[-] FO : maximum value for the weight in the product search indexation increased
+	[-] FO : No pack pictures
+	[-] FO : Payment modules become independant from blockcurrencies.
+	[-] FO : Prevent from recursive deletion when id_category is not set
+	[-] FO : remove including blockcurrencies.js.
+	[-] FO : set retro compatibility for 1.2 theme
+	[-] FO : SSL port value in Tools::securerReferrer
+	
+	[-] BO : #5357 / #5360 / #5331  Incorrect group management on customer creation - Disable/Delete category return to home
+	[-] BO : added QSA to every rewrite rule of the htaccess
+	[-] BO : Admin profile is now defined in config.inc
+	[-] BO : Bug #4370 Fixed, specified filename instead of name in AdminAttachments
+	[-] BO : Bug #4870 problem to reorder product Fixed
+	[-] BO : bug #5202 is fixed - can’t manual resize thumbnails
+	[-] BO : Bug fixed #2943 - Admin Catalog Pagination
+	[-] BO : Bug fixed #4422 - "Test your email configuration" is now using the PS_SHOP_EMAIL
+	[-] BO : Bug Fixed #4601 - Import Products: no truncate table “ps_feature_product” 
+	[-] BO : Bug Fixed #4666 - Problem to reorder product
+	[-] BO : Bug Fixed #4676 - Administrators can edit his privilegs
+	[-] BO : Bug fixed #4777 - Import tools: Subcategories with same name, different ID
+	[-] BO : Bug Fixed #4790 - duplicate content (lang-xx/)
+	[-] BO : Bug fixed #4839 - Sitemap location (Full url)
+	[-] BO : Bug fixed #4850 - HTTPS to HTTP :443 appended to domain
+	[-] BO : Bug Fixed #4859 + Fix on HIPAY_CATEGORY_TEST + new screenshots
+	[-] BO : Bug fixed #4878 - Shipping fee are now refreshed when a product is canceled
+	[-] BO : Bug Fixed #4879 - Underscore and other specials chars should not be allowed in tags when importing
+	[-] BO : Bug Fixed #4880 - ProductSales not updated correctly
+	[-] BO : Bug Fixed #4883 - “Order statues” instead of “Order statuses”
+	[-] BO : Bug Fixed #4891 - Hack attempt when a state in use is deleted
+	[-] BO : Bug fixed #4952 - 'Notify me' is displayed when attribute doesn't exist
+	[-] BO : Bug fixed #5017 - Missing space in private message title
+	[-] BO : Bug fixed #5046 - issue on bulk deletion 
+	[-] BO : Bug fixed #5074 - Sort by price
+	[-] BO : Bug fixed #5100 - Catalog Selection (on Product & Scene tabs) does not keep value on POST error
+	[-] BO : Bug fixed #5188 - delete product return to HOME
+	[-] BO : Bug Fixed #5283 - Address Country Filtering
+	[-] BO : Bug fixed #5308 - Not able to add Carrier Tracking URL
+	[-] BO : Bug fixed #5329 - DB error when changing image position
+	[-] BO - Bug Fixed #5350 - Link rewrite during import ' => -
+	[-] BO - Bug fixed #5384 - Error and Confirmation boxes width are different
+	[-] BO : Bug fixed #5396 - Filter box for carrier too small - range price, and range weight
+	[-] BO : bug fixed #5399 - Hash Symbol (#) not accepted in Contact Details
+	[-] BO : Bug fixed #5452 - ES language for status
+	[-] BO : Bug fixed #5455 - Back Office search placeholder no longer works
+	[-] BO : Bug fixed #5493 - ‘Save and Stay’ button missing from images page in BO
+	[-] BO : Bug fixed : Can cancel/return/refund more products than available (Related to #5214)
+	[-] BO : bug fixed on mail send for new password query
+	[-] BO : Bug fixed : Some pictures were not deleted before the import
+	[-] BO : category form description area enlarged
+	[-] BO : Default admin profile is now created during installation
+	[-] BO : Fixed bug #4543, Typo error
+	[-] BO : fixed bug #4639 - Languge id hardcoded in administration/init.php
+	[-] BO : fixed bug #4682 - personalized field name replaced by text1,2…
+	[-] BO : fixed bug #4705 - SQL Syntax error at Shipping Carriers Update when no DB Prefix
+	[-] BO : fixed bug #4718 - popup each time you change the default category in admin
+	[-] BO : fixed bug #4741 - deleting attributes and back to category link
+	[-] BO : fixed bug #4742 - product attribute generator
+	[-] BO : fixed bug #4744 - “.COM” suffix incorrected added to test email on BO
+	[-] BO : fixed bug #4762 - BO doctype still lang= hardcoded
+	[-] BO : Fixed bug #4809 - Final product price (with discount)
+	[-] BO : fixed bug #4815 - Voucher with amount doesn’t work
+	[-] BO : fixed bug #4818 - Product reductions in import don’t include time
+	[-] BO : fixed bug #4818 - you must select at least one group when you edit a category
+	[-] BO : fixed bug #4839 - AdminGenerator : robots.txt and sitemap.xml
+	[-] BO : fixed bug #4916 - Bad syntax on AdminProducts
+	[-] BO : fixed bug #4926 - change status for order paiement method not send values
+	[-] BO : fixed bug #4953 - Temporary import files / images in /img/tmp are not deleted
+	[-] BO : fixed bug #4964 - Watermark is not applied during CSV import of images
+	[-] BO : Fixed bug #4968 - Date check in order return
+	[-] BO : fixed bug #4969
+	[-] BO : fixed bug #5025 - illogical situation
+	[-] BO : fixed bug #5055 - can’t Display available quantities on product page
+	[-] BO : fixed bug #5085 - PHP Notice - undefined index - on saving stats settings
+	[-] BO : fixed bug #5105 - Icones in BO tabs
+	[-] BO : fixed bug #5126 - Total not including tax in stats module is incorrect (not including discounts)
+	[-] BO : fixed bug #5157 - Cannot configure disabled modules on the Payment tab
+	[-] BO : fixed bug #5159 - Invalid json syntax in /admin/ajax.php
+	[-] BO : fixed bug #5193 - tinyMCE including non-existent files
+	[-] BO : Fixed bug #5228 translation : [statues => statuses]
+	[-] BO : fixed bug #5239 - fix a little bug in Admintranslation
+	[-] BO : fixed bug #5243 - pb with field friendly-url and IE8
+	[-] BO : fixed bug #5258 - tax disabled but display ht and ttc in bo edit catalog
+	[-] BO : Fixed bug #5263 - php warning and product title not displayed!
+	[-] BO : fixed bug #5282 - please restore previous AdminZones.php
+	[-] BO : Fixed bug #5342 - Reduction problems if reduction_from is not equal with reduction_to
+	[-] BO : Fixed Bug #5358 - Edit product > Image > Save/Save & Stay 
+	[-] BO : Fixed bug #5385 - Tax name not used
+	[-] BO : Fixed bug in module Pagesnotfound... not really a bug but an integration fault...
+	[-] BO : fixed bug when you create a new virtual bug for the selection of "When out of stock" behaviour
+	[-] BO : Fixed bug with discount dates
+	[-] BO : fixed generation of image when you add a new supplier
+	[-] BO : fixed little JS bug
+	[-] BO : fixed PHP error in AdminProduct
+	[-] BO : fixed round problems with product uses reduction
+	[-] BO : missing "awaiting paypal payment" missing icon added
+	[-] BO : now we can't edit the configuration of a module that not installed
+	[-] BO : Profile permissions handling specific 1.3.2
+	[-] BO : search code cleaned
+	[-] BO : slow query fixed on the customer page
+	[-] BO : Sort by final price (product) is disabled (related to #5074)
+	[-] BO : Spanish default pictures
+	[-] BO : States are now ordered by name in AdminAddress
+	[-] BO : test mail encryption
+	[-] BO : When you disabled stock management, you can't change the value of this option: "Display available quantities on product page"
+	[-] BO : Bug #5530 fixed, css problem
+	[-] BO : Bug #5522 fixed
+	
+	[-] Classes : bug #5227 is fixed - Tax excluded value on PDF invoice with voucher
+	[-] Classes : fixed bug #4617 - Multi-Lingual URL rewrite
+	[-] Classes : fixed bug #4631 - price caching system doesn’t take account of customer_id
+	[-] Classes : fixed bug #4684 - Do not convert PREFIXes in PDF Class
+	[-] Classes : fixed bug #4701 - PamentModule: product_weight not calculated correctly
+	[-] Classes : fixed bug #4731 - copy product: customized field is reorder in reverse
+	[-] Classes : fixed bug #4757 - Cart Last Update Time
+	[-] Classes : fixed bug #4760 - Attributes - total quantity not updating
+	[-] Classes : fixed bug #4769 - Attributes - total ‘quantity’ not updating in products table
+	[-] Classes : fixed bug #4949 - No error message when voucher is not applicable
+	[-] Classes : fixed bug #5009 - page 404.php in sitemap.xml
+	[-] Classes : fixed bug #5011 - Meta description and title disappear when more than one maintenance IP
+	[-] Classes : fixed bug #5031 - PHP notice undefined outOfStock
+	[-] Classes : fixed bug #5047 - issue in method ObjectModel::toggleStatus
+	[-] Classes : fixed bug #5151 - fixed bug on price calculation
+	[-] Classes : fixed bug #5166 - Quantity discount currency problem
+	[-] Classes : fixed bug #5247 - Applied voucher(s) not visible in BO cart-detail if discount qty = 0
+	[-] Classes : fixed bug on discount and discount of product
+	[-] Classes : fixed bug when you create an order with a product out of stock
+	[-] Classes : fixed bug with PayPal module and Quantity discount
+	[-] Classes : fixed bug with REMOTE_ADDR value when server use a proxy system with new method on Tools class (#5087)
+	[-] Classes : fixed round problems with product uses reduction (we add retro-compatibility but please make update or make a fresh install)
+	[-] Classes : fixed use of cookie on validateOrder() method
+	[-] Classes : several bugs are fixed on RMA with products having reduction and quantity discount
+	[-] Classes: Fixed bug #5576, Search wasn't dealing properly with ' chr
+	
+	[-] MO : Bug #5236 fixed : crossselling module en language file spurious php closing tag
+	[-] MO : Bug fixed #4653 - fixed SQL Query on CrossSelling module
+	[-] MO : ganalytics : addslashes added
+	[-] MO : ganalytics : Fixed bug #4872 - Google Analytics obsolete code
+	[-] MO : advertising : Pictures not displayed on https pages
+	[-] MO : Blockadvertising + Statsdata no more use of $protocol.$server_host
+	[-] MO : Bug fixed #5272 (productscategory) - In same category is no longer displayed if the category is disabled
+	[-] MO : Bug fixed #5309 - ReferralProgram -> discount value not displayed in email preview
+	[-] MO : Feeder : Bug Fixed #5001 - RSS default category
+	[-] MO : feeder : Bug fixed relative to product order display preferences
+	[-] MO : Gcheckout, extra " removed
+	[-] MO : gcheckout : Fixed bug #4866 - HTTPS
+	[-] MO : gsitemap - controller white list
+	[-] MO : gsitemap - controller white list (related #5430, #5270)
+	[-] MO : gsitemap - Fixed Bug #5429, #5430 .php.php at the end of pages URL + problem with default language
+	[-] MO : Mailalerts - Fixed "Out of stock" mail alert 
+	[-] MO : Sitemap - indexed pages displayed not correct!
+	[-] MO : fixed bug #3552 (comment) - Total amount doesn’t change on currency change
+	[-] MO : fixed bug #4629 - Blockwishlist “product not found” error
+	[-] MO : fixed bug #4649 - fixed bug on redirection in PayPal module
+	[-] MO : fixed bug #4660 - MoneyBooker HTML tag error
+	[-] MO : fixed bug #4674 - RSS products feed v0.2 not work
+	[-] MO : fixed bug #4687 - “mailalerts” module doesn’t work in front office
+	[-] MO : fixed bug #4696 - Best Products Stats module
+	[-] MO : fixed bug #4732 - Undefined index: sekeywords module
+	[-] MO : fixed bug #4733 - fixed error PHP on module graphgooglechart
+	[-] MO : fixed bug #4771 - MoneyBooker HTML tag error
+	[-] MO : fixed bug #4776 - MailAlerts - email input box not clearing onClick
+	[-] MO : fixed bug #4778 - Cannot overwrite javascript on Module Block Wishlist
+	[-] MO : fixed bug #4782 - now PayPal module manage the Pending status
+	[-] MO : fixed bug #4834 - Error in redirect to My Wishlist page after login
+	[-] MO : fixed bug #4906 - Add to cart button in viewed.tpl is disabled when quantity >  0
+	[-] MO : fixed bug #4910 - Moneybookers 1.0 brakes SSL connection
+	[-] MO : fixed bug #4913 - Paypalapi - ‘UK’ should be ‘GB’
+	[-] MO : fixed bug #5005 - Canonical URL is http:// when SSL is enabled
+	[-] MO : fixed bug #5006 - Mailalerts problem
+	[-] MO : fixed bug #5044 - Display in Newsletter Module
+	[-] MO : fixed bug #5070 - Little issue in StatsBestCategory totals computation
+	[-] MO : fixed bug #5076 - Stats - Best Customers - too many decimal places on price column
+	[-] MO : fixed bug #5090 - mailalerts module receive wrong $params when removing a product from order
+	[-] MO : fixed bug #5114 - Empty dd tags detected with html tidy in blockbestsellers.tpl
+	[-] MO : fixed bug #5131 - Moneybookers iframe isn’t https
+	[-] MO : fixed bug #5190 - Paypal SSL issue - non secure links in redirect.tpl
+	[-] MO : fixed bug #5205 - fixed width of columns in module statsbestcategories
+	[-] MO : fixed bug #5261 - Forgot icon for module paymentlogo
+	[-] MO : hipay does not display deleted currencies anymore
+	[-] MO : stats grid modules automatically hooked on the admin header
+	[-] MO : Updated Moneybookers module (several small bug fixes)
+	[-] MO : Bug #5519 fixed : css problem in productsCategory module
+	
+	[-] PDF : fixed bug #4667 - tax disable but displayed on slips
+	[-] PDF / FO : Price fixed (round issue when price display mode set on "tax included")
+	
+	[-] SQL : fix duplicate key on installation
+	[-] SQL : fixed bug #4691 - Mysql (table without prefix) error update 1.2.4 to 1.3
+	[-] SQL : fixed bug #4958 - Bug in db_settings_lite.sql (Spanish)
+	[-] SQL : fixed bug #5269 - fix missing change in db.sql
+	[-] SQL : fixed missing columns (reduction_percent & reduction_amount)
+	[-] SQL : removed zone.`enabled` table because useless (Bug #5241 Fixed)
+	[-] SQL : set default value for need_identification_number field
+	
+	[-] TR : added missing translations
+	[-] TR : spanish
+	[-] TR : spanish
+	[-] TR : fixed bug #5060 - FR mistranslation in BO setting product
+	[-] TR : fixed bug #5092 - Typos in /modules/bankwire/payment_return.tpl
+	[-] TR : fixed bug #5132 - Back Office >> Tools >> Subdomains misspelt “Additionnal”
+	[-] TR : fixed translation key
+	[-] TR : transaltion is fixed on AdminCatalog
+	
+	[-] CSS : fixed bug #4991 - svn2418 on sale icon causes other lines to go askew
+	[-] JS : fixed bug #4730 - Line 291 of modules/blockcart/ajax-cart.js has double semicolon
+	
+
+####################################
 #   v1.3.1.1 - 2349 (2010-03-06)   #
 ####################################
 

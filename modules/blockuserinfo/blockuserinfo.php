@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class BlockUserInfo extends Module
 {
 	public function __construct()
@@ -38,7 +41,8 @@ class BlockUserInfo extends Module
 		));
 		return $this->display(__FILE__, 'blockuserinfo.tpl');
 	}
-	function hookHeader($params)
+	
+	public function hookHeader($params)
 	{
 		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockuserinfo.css', 'all');
 	}

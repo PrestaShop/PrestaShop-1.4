@@ -169,6 +169,7 @@ class AdminProducts extends AdminTab
 					unset($product->id);
 					unset($product->id_product);
 					$product->indexed = 0;
+					$product->active = 0;
 
 					if ($product->add()
 					AND Category::duplicateProductCategories($id_product_old, $product->id)
@@ -227,20 +228,68 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
 					else
 					{
+						$id_category = Tools::getValue('id_category');
+						$category_url = empty($id_category) ? '' : '&id_category='.$id_category;
+						
 						$this->deleteImage($object->id);
 						if ($this->deleted)
 						{
 							$object->deleted = 1;
 							if ($object->update())
-								Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token));
+								Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
 						}
 						elseif ($object->delete())
-							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token));
+							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
 						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
 					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		
+		/* Delete multiple objects */
+		elseif (Tools::getValue('submitDel'.$this->table))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (isset($_POST[$this->table.'Box']))
+				{
+					$object = new $this->className();
+					
+					if (isset($object->noZeroObject) AND
+						// Check if all object will be deleted
+						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
+					else
+					{
+						$result = true;
+						if ($this->deleted)
+						{
+							foreach(Tools::getValue($this->table.'Box') as $id)
+							{
+								$toDelete = new $this->className($id);
+								$toDelete->deleted = 1;
+								$result = $result AND $toDelete->update();
+							}
+						}
+						else
+							$result = $object->deleteSelection(Tools::getValue($this->table.'Box'));
+						
+						if ($result)
+						{
+							$id_category = Tools::getValue('id_category');
+							$category_url = empty($id_category) ? '' : '&id_category='.$id_category;
+							
+							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token.$category_url);
+						}
+						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -748,7 +797,7 @@ class AdminProducts extends AdminTab
 		if (!Tools::isSubmit('categoryBox') OR !sizeof(Tools::getValue('categoryBox')))
 			$this->_errors[] = $this->l('product must be in at least one Category');
 
-		if (!in_array(Tools::getValue('id_category_default'), Tools::getValue('categoryBox')))
+		if (!is_array(Tools::getValue('categoryBox')) OR !in_array(Tools::getValue('id_category_default'), Tools::getValue('categoryBox')))
 			$this->_errors[] = $this->l('product must be in the default category');
 		
 		foreach ($languages AS $language)
@@ -785,7 +834,7 @@ class AdminProducts extends AdminTab
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&edit='.strval(Tools::getValue('productCreated')).'&id_image='.$id_image.'&imageresize&toconf=4&submitAddAndStay='.((Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR Tools::getValue('productCreated') == 'on') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
 							// Save and stay on same form
-							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true))
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=4&tabs='.intval(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
 							// Default behavior (save and back)
 							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
@@ -1769,8 +1818,8 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left"><b>'.$this->l('Final retail price:').'</b></td>
 						<td style="padding-bottom:5px;">
-							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax incl.').') /
-							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
+							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').'<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'"> ('.$this->l('tax incl.').')</span>
+							<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'"> / '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')</span>
 						</td>
 					</tr>
 					</tr>					
@@ -2092,52 +2141,11 @@ class AdminProducts extends AdminTab
 		            });
             
 		}
+		toggleVirtualProduct(getE(\'is_virtual_good\'));
+		unityPriceWithTax(\'weight\');
+		unityPriceWithTax(\'volume\');
+		unityPriceWithTax(\'unity\');
 	</script>';
-		/*
-	<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/jquery.tinymce.js"></script>
-			<script type="text/javascript">
-			function tinyMCEInit(element)
-			{
-				$().ready(function() {
-					$(element).tinymce({
-						// Location of TinyMCE script
-						script_url : \''.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js\',
-						// General options
-						theme : "advanced",
-						plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
-						// Theme options
-						theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-						theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
-						theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
-						theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
-						theme_advanced_toolbar_location : "top",
-						theme_advanced_toolbar_align : "left",
-						theme_advanced_statusbar_location : "bottom",
-						theme_advanced_resizing : false,
-						content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
-						document_base_url : "'.__PS_BASE_URI__.'",
-						width: "582",
-						height: "auto",
-						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
-						// Drop lists for link/image/media/template dialogs
-						template_external_list_url : "lists/template_list.js",
-						external_link_list_url : "lists/link_list.js",
-						external_image_list_url : "lists/image_list.js",
-						media_external_list_url : "lists/media_list.js",
-						elements : "nourlconvert",
-						convert_urls : false,
-						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
-					});
-				});
-			}
-			tinyMCEInit(\'textarea.rte\');
-			toggleVirtualProduct(getE(\'is_virtual_good\'));
-			unityPriceWithTax(\'weight\');
-			unityPriceWithTax(\'volume\');
-			unityPriceWithTax(\'unity\');
-			</script>
-		';
-*/
 	}
 
 	function displayFormImages($obj, $token = NULL)
@@ -2205,7 +2213,7 @@ class AdminProducts extends AdminTab
 					
 							if (isset($obj->id) AND sizeof($images))
 							{
-								echo '<input type="submit" value="'.$this->l('   Save image   ').'" name="submitAdd'.$this->table.'" class="button" />';
+								echo '<input type="submit" value="'.$this->l('   Save image   ').'" name="submitAdd'.$this->table.'AndStay" class="button" />';
 								echo '<input type="hidden" value="on" name="productCreated" /><br /><br />';
 							}
 							echo (Tools::getValue('id_image') ? '<input type="hidden" name="id_image" value="'.intval(Tools::getValue('id_image')).'" />' : '').'
@@ -2234,13 +2242,14 @@ class AdminProducts extends AdminTab
 
 			foreach ($images AS $k => $image)
 			{
-				echo '
-				<tr>
+				echo  $this->_positionJS().
+				
+				'<tr>
 					<td style="padding: 4px;"><a href="../img/p/'.$obj->id.'-'.$image['id_image'].'.jpg" target="_blank">
 					<img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg'.(intval(Tools::getValue('image_updated')) === intval($image['id_image']) ? '?date='.time() : '').'"
 					alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></a></td>
 					<td class="center">'.intval($image['position']).'</td>
-					<td class="center">';
+					<td class="position-cell">';
 
 				if ($image['position'] == 1)
 				{
@@ -2248,16 +2257,16 @@ class AdminProducts extends AdminTab
 					if ($image['position'] == $imagesTotal)
 						echo '[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
 					else
-						echo '[ <a href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+						echo '[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
 				}
 				elseif ($image['position'] == $imagesTotal)
 					echo '
-						[ <a href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
+						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
 						[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
 				else
 					echo '
-						[ <a href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
-						[ <a href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
+						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
 				echo '
 					</td>
 					<td class="center"><a href="'.$currentIndex.'&id_image='.$image['id_image'].'&coverImage&token='.($token ? $token : $this->token).'"><img src="../img/admin/'.($image['cover'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
@@ -2838,6 +2847,19 @@ class AdminProducts extends AdminTab
 		}';
 	}
 
+	private function _positionJS()
+	{
+		
+		return '<script type="text/javascript">
+				
+				function hideLink()
+				{
+					$(".position-cell").html("<img src=\"'._PS_IMG_.'loader.gif\" alt=\"\" />");
+
+				}
+				</script>';
+	}
+	
 	public function updatePackItems($product)
 	{
 		Pack::deleteItems($product->id);

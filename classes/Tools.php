@@ -115,7 +115,7 @@ class Tools
 	*/
 	static public function secureReferrer($referrer)
 	{
-		if (preg_match('/^http[s]?:\/\/'.self::getServerName().'\/.*$/Ui', $referrer))
+		if (preg_match('/^http[s]?:\/\/'.self::getServerName().'(:'._PS_SSL_PORT_.')?\/.*$/Ui', $referrer))
 			return $referrer;
 		return __PS_BASE_URI__;
 	}
@@ -143,7 +143,7 @@ class Tools
 	{
 	 	if (!isset($key) OR empty($key) OR !is_string($key))
 			return false;
-	 	return (isset($_POST[$key]) OR isset($_GET[$key]));
+	 	return isset($_POST[$key]) ? true : (isset($_GET[$key]) ? true : false);
 	}
 
 	/**
@@ -395,11 +395,11 @@ class Tools
 	*
 	* @param integer $code Error code
 	*/
-	static public function displayError($string = 'Hack attempt', $htmlentities = true)
+	static public function displayError($string = 'Fatal error', $htmlentities = true)
 	{
 		global $_ERRORS;
 
-		//if ($string == 'Hack attempt') d(debug_backtrace());
+		//if ($string == 'Fatal error') d(debug_backtrace());
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
@@ -465,7 +465,7 @@ class Tools
 	{
 		global $maintenance;
 
-		if (!(isset($maintenance) AND (!isset($_SERVER['REMOTE_ADDR']) OR $_SERVER['REMOTE_ADDR'] != Configuration::get('PS_MAINTENANCE_IP'))))
+		if (!(isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))))
 		{
 		 	/* Products specifics meta tags */
 			if ($id_product = self::getValue('id_product'))
@@ -746,6 +746,8 @@ class Tools
 			elseif (preg_match('<[[:digit:]]|-{1}>', $char))
 				$purified .= $char;
 			elseif ($char == ' ')
+				$purified .= '-';
+			elseif ($char == '\'')
 				$purified .= '-';
 		}
 		return trim(self::strtolower($purified));

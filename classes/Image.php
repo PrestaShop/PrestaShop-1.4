@@ -245,9 +245,12 @@ class		Image extends ObjectModel
 		$position = intval($position);
 		$direction = intval($direction);
 		
+		// temporary position
+		$high_position = Image::getHighestPosition($this->id_product) + 1;
+		
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
-		SET `position` = `position`'.($direction ? '+1' : '-1').'
+		SET `position` = '.intval($high_position).'
 		WHERE `id_product` = '.intval($this->id_product).'
 		AND `position` = '.($direction ? $position - 1 : $position + 1));
 		
@@ -255,6 +258,12 @@ class		Image extends ObjectModel
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = `position`'.($direction ? '-1' : '+1').'
 		WHERE `id_image` = '.intval($this->id));
+		
+		Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'image`
+		SET `position` = '.$this->position.'
+		WHERE `id_product` = '.intval($this->id_product).'
+		AND `position` = '.intval($high_position));
 	}
 	
 	static public function getSize($type)

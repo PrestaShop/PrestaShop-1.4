@@ -21,7 +21,11 @@ if ($cookie->id_employee != $id_employee)
 
 if (!Validate::isModuleName($module))
 	die(Tools::displayError());
-require_once(dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php');
+
+if (!Tools::file_exists_cache($module_path = dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php'))
+	die(Tools::displayError());
+
+require_once($module_path);
 
 $grid = new $module();
 $grid->setEmployee($id_employee);

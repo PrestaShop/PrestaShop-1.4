@@ -18,8 +18,8 @@ include(PS_ADMIN_DIR.'/functions.php');
 
 $errors = array();
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
-$id_lang = intval($cookie->id_lang) ? intval($cookie->id_lang) : 1;
-$iso = strtolower(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
+$id_lang = intval($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT');
+$iso = strtolower(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT')));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
 
 if (isset($_POST['Submit']))

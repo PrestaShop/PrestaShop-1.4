@@ -64,7 +64,7 @@ class AdminAccess extends AdminTab
 		<div id="ajax_confirmation"></div>
 		<table class="table" cellspacing="0">
 			<tr>
-				<th>
+				<th '.($currentProfile == intval(_PS_ADMIN_PROFILE_) ? 'colspan="6"' : '').'>
 					<select name="profile" onchange="redirect(\''.Tools::getHttpHost(true, true).$currentIndex.'&token='.$this->token.'&profile=\'+this.options[this.selectedIndex].value)">';
 		if ($profiles)
 			foreach ($profiles AS $profile)
@@ -74,10 +74,12 @@ class AdminAccess extends AdminTab
 		foreach ($tabs AS $tab)
 			if ($tab['id_tab'] > $tabsize)
 				$tabsize = $tab['id_tab'];
-		
 		echo '
 					</select>
-				</th>
+				</th>';
+		
+		if ($currentProfile != intval(_PS_ADMIN_PROFILE_))
+			echo '
 				<th class="center">'.$this->l('View').'<br /><input type="checkbox" name="1" id="viewall" onclick="ajax_power(this, \'view\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
 				<th class="center">'.$this->l('Add').'<br /><input type="checkbox" name="1" id="addall" onclick="ajax_power(this, \'add\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
 				<th class="center">'.$this->l('Edit').'<br /><input type="checkbox" name="1" id="editall" onclick="ajax_power(this, \'edit\', -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\')" /></th>
@@ -87,7 +89,7 @@ class AdminAccess extends AdminTab
 
 		if (!sizeof($tabs))
 			echo '<tr><td colspan="5">'.$this->l('No tab').'</td></tr>';
-		else if ($currentProfile == Configuration::get('PS_ADMIN_PROFILE',1))
+		elseif ($currentProfile == intval(_PS_ADMIN_PROFILE_))
 			echo '<tr><td colspan="5">'.$this->l('Administrator permissions can\'t be modified.').'</td></tr>';
 		else 
 			foreach ($tabs AS $tab)
@@ -98,12 +100,7 @@ class AdminAccess extends AdminTab
 						if ($child['id_parent'] === $tab['id_tab'])
 					 		$this->printTabAccess($currentProfile, $child, $accesses[$child['id_tab']], true, $tabsize, sizeof($tabs));
 				}
-		echo '
-		</table>
-		<script type="text/javascript">
-			ajax_power(this, 0, -1, '.$currentProfile.', \''.$this->token.'\', \''.$tabsize.'\', \''.sizeof($tabs).'\');
-		</script>
-		';
+		echo '</table>';
 	}
 	
 	private function printTabAccess($currentProfile, $tab, $access, $is_child, $tabsize, $tabnumber)

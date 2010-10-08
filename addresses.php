@@ -19,3 +19,4 @@ $smarty->assign('addresses', $customer->getAddresses(intval($cookie->id_lang)));
 $smarty->display(_PS_THEME_DIR_.'addresses.tpl');
 include(dirname(__FILE__).'/footer.php');
 
+?>

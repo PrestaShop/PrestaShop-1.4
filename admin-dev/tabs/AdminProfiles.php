@@ -34,16 +34,12 @@ class AdminProfiles extends AdminTab
 		foreach(Profile::getProfiles($cookie->id_lang) as $profil)
 			$list_profile[] = array('value' => $profil['id_profile'], 'name' => $profil['name']);
 		
-		$this->optionTitle = $this->l('Administrator profile');
-		$this->_fieldsOptions = array(
-			'PS_ADMIN_PROFILE' => array('title' => $this->l('Select the administrator profile:'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => $list_profile));
-		
 		parent::__construct();
 	}
 	
 	public function postProcess()
 	{
-	 	if (isset($_GET['delete'.$this->table]) AND $_GET[$this->identifier] === '1')
+	 	if (isset($_GET['delete'.$this->table]) AND $_GET[$this->identifier] == intval(_PS_ADMIN_PROFILE_))
 			$this->_errors[] = $this->l('For security reasons, you cannot delete the Administrator profile');
 		else
 			parent::postProcess();

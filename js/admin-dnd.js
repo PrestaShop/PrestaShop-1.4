@@ -52,6 +52,7 @@ $(document).ready(function() {
 						token: token
 					};
 				}
+
 				$.ajax({
 					type: 'POST',
 					async: false,
@@ -79,7 +80,6 @@ $(document).ready(function() {
 							tableDrag.find('td.dragHandle:last a:odd').hide();
 						}
 						else if (come_from == 'product') {
-							
 							var reg = /_[0-9]$/g;
 							tableDrag.find('tbody tr').each(function(i) {
 								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));

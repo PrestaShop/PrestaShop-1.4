@@ -46,7 +46,6 @@ if (Tools::isSubmit('submitAddress'))
 {
 	$address = new Address();
 	$errors = $address->validateControler();
-
 	$address->id_customer = intval($cookie->id_customer);
 
 	if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
@@ -82,6 +81,7 @@ if (Tools::isSubmit('submitAddress'))
 	{
 		if (isset($id_address))
 		{
+			$country = new Country(intval($address->id_country));
 			if (Validate::isLoadedObject($country) AND !$country->contains_states)
 				$address->id_state = false;
 			$address_old = new Address(intval($id_address));

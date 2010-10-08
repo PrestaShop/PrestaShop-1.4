@@ -116,7 +116,19 @@ class AdminCategories extends AdminTab
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->toggleStatus())
-						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.Tools::getValue('token'));
+					{
+						$target = '';
+						if (($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product'))
+							$target = '&id_category='.intval($id_category);
+						else 
+						{
+							$referrer = Tools::secureReferrer($_SERVER['HTTP_REFERER']);
+							if (preg_match('/id_category=(\d+)/', $referrer, $matches))
+								$target = '&id_category='.intval($matches[1]);
+						}
+						
+						Tools::redirectAdmin($currentIndex.'&conf=5'.$target.'&token='.Tools::getValue('token'));
+					}
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
@@ -143,15 +155,61 @@ class AdminCategories extends AdminTab
 						{
 							$object->deleted = 1;
 							if ($object->update())
-								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token'));
+								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.intval($object->id_parent));
 						}
 						elseif ($object->delete())
-							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token'));
+							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.intval($object->id_parent));
 						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
 					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		/* Delete multiple objects */
+		elseif (Tools::getValue('submitDel'.$this->table))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (isset($_POST[$this->table.'Box']))
+				{
+					$object = new $this->className();
+					
+					if (isset($object->noZeroObject) AND
+						// Check if all object will be deleted
+						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
+					else
+					{
+						$result = true;
+						if ($this->deleted)
+						{
+							foreach(Tools::getValue($this->table.'Box') as $id)
+							{
+								$toDelete = new $this->className($id);
+								$toDelete->deleted = 1;
+								$result = $result AND $toDelete->update();
+							}
+						}
+						else
+							$result = $object->deleteSelection(Tools::getValue($this->table.'Box'));
+						
+						if ($result)
+						{
+							$target = '';
+							$referrer = Tools::secureReferrer($_SERVER['HTTP_REFERER']);
+							if (preg_match('/id_category=(\d+)/', $referrer, $matches))
+								$target = '&id_category='.$matches[1];
+
+							Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getValue('token').$target);
+						}
+						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+					}
+				}
+				else
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -258,7 +316,7 @@ class AdminCategories extends AdminTab
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)
 			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onkeyup="this.value = str2url(this.value);" /><sup> *</sup>
+						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onchange="this.value = str2url(this.value);" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Only letters and the minus (-) character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		echo '	<p class="clear"></p>

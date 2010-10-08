@@ -169,7 +169,7 @@ class		Employee extends ObjectModel
 	
 	public function isLastAdmin()
 	{
-		return ($this->id_profile == Configuration::get('PS_ADMIN_PROFILE') 			
+		return ($this->id_profile == intval(_PS_ADMIN_PROFILE_)			
 			       AND Employee::countProfile($this->id_profile, true) == 1
 				   AND $this->active);
 	}

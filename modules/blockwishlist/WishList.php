@@ -12,6 +12,9 @@
   *
   */
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+	
 class		WishList extends ObjectModel
 {
 	/** @var integer Wishlist ID */

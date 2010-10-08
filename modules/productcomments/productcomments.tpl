@@ -63,7 +63,10 @@
 {else}
 	<p class="align_center">{l s='No customer comments for the moment.' mod='productcomments'}</p>
 {/if}
-{if $logged == true}
+
+{if $too_early == true}
+	<p class="align_center">{l s='You should wait' mod='productcomments'} {$delay} {l s='hour(s) before posting a new comment' mod='productcomments'}</p>
+{elseif $logged == true}
 <p class="align_center"><input style="margin:auto;" class="button_large" type="button" id="addCommentButton" value="{l s='Add a comment' mod='productcomments'}" onclick="$('#sendComment').slideDown('slow');$(this).slideUp('slow');" /></p>
 <form action="{$action_url}" method="post" class="std" id="sendComment" style="display:none;">
 	<fieldset>

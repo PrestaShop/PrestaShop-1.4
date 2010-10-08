@@ -45,18 +45,19 @@ class AdminSearch extends AdminTab
 	function postProcess()
 	{
 		global $cookie;
+		
+		$query = trim(Tools::getValue('bo_query'));
+		$searchType = (int)Tools::getValue('bo_search_type');
+		
 		/* Handle empty search field */
-		if (!isset($_POST['bo_query']) OR empty($_POST['bo_query']) OR !isset($_POST['bo_search_type']))
-		{
-			echo '<h2>'.$this->l('Search results').'</h2>';
+		if (empty($query))
 			$this->_errors[] = Tools::displayError('please fill in search form first');
-		}
 		else
 		{
-			$_POST['bo_query'] = trim($_POST['bo_query']);
+			echo '<h2>'.$this->l('Search results').'</h2>';
 			
 			/* Product research */
-			if (!intval($_POST['bo_search_type']) OR intval($_POST['bo_search_type']) == 1)
+			if (!$searchType OR $searchType == 1)
 			{
 				$this->fieldsDisplay['catalog'] = (array(
 					'ID' => array('title' => $this->l('ID')),
@@ -72,17 +73,16 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle product ID */
-				if (intval($_POST['bo_search_type']) AND intval($_POST['bo_query']) AND Validate::isUnsignedInt(intval($_POST['bo_query'])))
-				{
-					$product = new Product(intval($_POST['bo_query']));
-					if (Validate::isLoadedObject($product))
-						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.intval($_POST['bo_query']).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
-				}
-				$this->searchCatalog(trim(strval($_POST['bo_query'])));
+				if ($searchType == 1 AND intval($query) AND Validate::isUnsignedInt(intval($query)))
+					if ($product = new Product(intval($query)) AND Validate::isLoadedObject($product))
+						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.intval($product->id).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
+
+				/* Normal catalog search */
+				$this->searchCatalog($query);
 			}
 
 			/* Customer */
-			if (!intval($_POST['bo_search_type']) OR intval($_POST['bo_search_type']) == 2)
+			if (!$searchType OR $searchType == 2)
 			{
 				$this->fieldsDisplay['customers'] = (array(
 					'ID' => array('title' => $this->l('ID')),
@@ -97,57 +97,36 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle customer ID */
-				if (intval(Tools::getValue('bo_search_type')) AND intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
-				{
-					if (($customer = new Customer(intval(Tools::getValue('bo_query')))) AND Validate::isLoadedObject($customer))
-						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.intval(Tools::getValue('bo_query')).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)));
-					else
-						$this->_errors[] = Tools::displayError('customer #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
-				}
-				/* Search customers by name */
-				else
-					self::searchCustomer(Tools::getValue('bo_query'));
+				if ($searchType AND intval($query) AND Validate::isUnsignedInt(intval($query)))
+					if ($customer = new Customer(intval($query)) AND Validate::isLoadedObject($customer))
+						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.intval($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)));
+
+				/* Normal customer search */
+				$this->searchCustomer($query);
 			}
 
 			/* Order */
-			if (intval(Tools::getValue('bo_search_type')) == 3)
+			if ($searchType == 3)
 			{
-				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
-				{
-					$order = new Order(intval(Tools::getValue('bo_query')));
-					if ($order->id)
-						Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval(Tools::getValue('bo_query')).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
-					else
-						$this->_errors[] = Tools::displayError('order #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
-				}
-				else
-					$this->_errors[] = Tools::displayError('please type an order ID');
+				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $order = new Order(intval($query)) AND Validate::isLoadedObject($order))
+					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+				$this->_errors[] = Tools::displayError('no order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
+			
 			/* Invoices */
-			elseif (intval(Tools::getValue('bo_search_type')) == 4)
+			if ($searchType == 4)
 			{
-				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
-				{
-					if ($invoice = Order::getInvoice(intval(Tools::getValue('bo_query'))))
-						Tools::redirectAdmin('pdf.php?id_order='.intval($invoice['id_order']).'&pdf');
-					else
-						$this->_errors[] = Tools::displayError('invoice #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
-				}
-				else
-					$this->_errors[] = Tools::displayError('please type an invoice ID');
+				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $invoice = Order::getInvoice(intval($query)))
+					Tools::redirectAdmin('pdf.php?id_order='.intval($invoice['id_order']).'&pdf');
+				$this->_errors[] = Tools::displayError('no invoice found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
+
 			/* Cart */
-			elseif (intval(Tools::getValue('bo_search_type')) == 5)
+			if ($searchType == 5)
 			{
-				if (intval(Tools::getValue('bo_query')) AND Validate::isUnsignedInt(intval(Tools::getValue('bo_query'))))
-				{
-					if ($cart = new Cart(intval(Tools::getValue('bo_query'))) AND $cart->id)
-						Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
-					else
-						$this->_errors[] = Tools::displayError('cart #').intval(Tools::getValue('bo_query')).' '.Tools::displayError('not found');
-				}
-				else
-					$this->_errors[] = Tools::displayError('please type a cart ID');
+				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $cart = new Cart(intval($query)) AND Validate::isLoadedObject($cart))
+					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
+				$this->_errors[] = Tools::displayError('no cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 		}
 	}
@@ -157,32 +136,30 @@ class AdminSearch extends AdminTab
 		global $cookie;
 		$currentIndex = 'index.php';
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-
-		$query = isset($_POST['bo_query']) ? trim(strval($_POST['bo_query'])) : '';
+		$query = trim(Tools::getValue('bo_query'));
+		$nbCategories = $nbProducts = $nbCustomers = 0;
+		
 		/* Display categories if any has been matching */
 		if (isset($this->_list['categories']) AND $nbCategories = sizeof($this->_list['categories']))
 		{
-			echo '<h3>'.$nbCategories.' '.($nbCategories > 1 ? $this->l('categories found with') : $this->l('category found with')).' <b>"'.Tools::safeOutput($query).'"</b></h3>';
-			echo '
-			<table cellspacing="0" cellpadding="0" class="table">';
+			echo '<h3>'.$nbCategories.' '.($nbCategories > 1 ? $this->l('categories found with') : $this->l('category found with')).' <b>"'.Tools::htmlentitiesUTF8($query).'"</b></h3>';
+			echo '<table cellspacing="0" cellpadding="0" class="table">';
 			$irow = 0;
 			foreach ($this->_list['categories'] AS $k => $category)
 				echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'"><td>'.rtrim(getPath($currentIndex.'?tab=AdminCatalog', $category['id_category'], '', $query), ' >').'</td></tr>';
-			echo '</table><br /><br />';
+			echo '</table>
+			<div class="clear">&nbsp;</div>';
 		}
-		else
-			$nbCategories = 0;
 
 		/* Display products if any has been matching */
 		if (isset($this->_list['products']) AND !empty($this->_list['products']) AND $nbProducts = sizeof($this->_list['products']))
 		{
-			echo '<h3>'.$nbProducts.' '.($nbProducts > 1 ? $this->l('products found with') : $this->l('product found with')).' <b>"'.Tools::safeOutput($query).'"</b></h3>
+			echo '<h3>'.$nbProducts.' '.($nbProducts > 1 ? $this->l('products found with') : $this->l('product found with')).' <b>"'.Tools::htmlentitiesUTF8($query).'"</b></h3>
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
 			foreach ($this->fieldsDisplay['catalog'] AS $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
-			echo '
-				</tr>';
+			echo '</tr>';
 			foreach ($this->_list['products'] AS $k => $product)
 			{
 				echo '
@@ -200,7 +177,8 @@ class AdminSearch extends AdminTab
 					<td>
 						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this product').'" /></a>&nbsp;
-						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Do you want to delete', __CLASS__, true, false).' '.addslashes($product['name']).$this->l('?', __CLASS__, true, false).'\');">
+						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"
+							onclick="return confirm(\''.$this->l('Do you want to delete this product?', __CLASS__, true, false).' ('.addslashes($product['name']).')\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" /></a>
 					</td>
 				</tr>';
@@ -208,19 +186,16 @@ class AdminSearch extends AdminTab
 			echo '</table>
 			<div class="clear">&nbsp;</div>';
 		}
-		else
-			$nbProducts = 0;
 
 		/* Display customers if any has been matching */
 		if (isset($this->_list['customers']) AND !empty($this->_list['customers']) AND $nbCustomers = sizeof($this->_list['customers']))
 		{
-			echo '<h3>'.$nbCustomers.' '.($nbCustomers > 1 ? $this->l('customers') : $this->l('customer')).' '.$this->l('found with').' <b>"'.Tools::safeOutput($query).'"</b></h3>
+			echo '<h3>'.$nbCustomers.' '.($nbCustomers > 1 ? $this->l('customers') : $this->l('customer')).' '.$this->l('found with').' <b>"'.Tools::htmlentitiesUTF8($query).'"</b></h3>
 			<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';
 			foreach ($this->fieldsDisplay['customers'] AS $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
-			echo '
-				</tr>';
+			echo '</tr>';
 			$irow = 0;
 			foreach ($this->_list['customers'] AS $k => $customer)
 			{
@@ -248,77 +223,10 @@ class AdminSearch extends AdminTab
 			echo '</table>
 			<div class="clear">&nbsp;</div>';
 		}
-		else
-			$nbCustomers = 0;
-
-		if (isset($this->_list['cart']))
-		{
-			$cart = $this->_list['cart'];
-			$products = $cart->getProducts();
-			$discounts = $cart->getDiscounts();
-			$total_discounts = $cart->getOrderTotal(false, 2);
-			$total_shipping = $cart->getOrderShippingCost($cart->id_carrier);
-			$total_wrapping = $cart->getOrderTotal(true, 6);
-			$total_products = $cart->getOrderTotal(true, 1);
-			$total_price = $cart->getOrderTotal();
-
-			echo '<h2>'.$this->l('Cart found:').' (#'.sprintf('%08d', $cart->id).')</h2>
-			<table cellspacing="0" cellpadding="0" class="table">
-				<tr>
-					<th width="75" align="center">'.$this->l('Reference').'</th>
-					<th>Product</th>
-					<th width="55" align="center">'.$this->l('Quantity').'</th>
-					<th width="88" align="right">'.$this->l('Unit price').'</th>
-					<th width="80" align="right">'.$this->l('Total price').'</th>
-				</tr>';
-			if ($products)
-				foreach ($products as $product)
-					echo '
-					<tr>
-						<td>'.$product['reference'].'</td>
-						<td>'.$product['name'].'</a></td>
-						<td align="right">'.$product['quantity'].'</td>
-						<td align="right">'.Tools::displayPrice($product['price'], $currency).'</td>
-						<td align="right">'.Tools::displayPrice($product['total_wt'], $currency).'</td>
-					</tr>';
-			if ($discounts)
-				foreach ($discounts as $discount)
-					echo '
-					<tr>
-						<td>'.$discount['name'].'</td>
-						<td>'.$discount['description'].'</td>
-						<td align="right">1</td>
-						<td align="right">-'.Tools::displayPrice($discount['value'], $currency).'</td>
-						<td align="right">-'.Tools::displayPrice($discount['value'], $currency).'</td>
-					</tr>';
-			echo '
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Products:').' </td>
-					<td>'.Tools::displayPrice($total_products, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Vouchers').' </td>
-					<td>'.Tools::displayPrice($total_discounts, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Gift-wrapping:').' </td>
-					<td>'.Tools::displayPrice($total_wrapping, $currency).'</td>
-				</tr>				
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Shipping:').' </td>
-					<td>'.Tools::displayPrice($total_shipping, $currency).'</td>
-				</tr>
-				<tr style="text-align: right; font-weight: bold;">
-					<td colspan="4">'.$this->l('Total:').' </td>
-					<td>'.Tools::displayPrice($total_price, $currency).'</td>
-				</tr>
-			</table>
-			<div class="clear">&nbsp;</div>';
-		}
 			
 		/* Display error if nothing has been matching */
-		if (!$nbCategories AND !$nbProducts AND !$nbCustomers AND !isset($this->_list['cart']))
-			echo '<h3>'.$this->l('Nothing found').'.</h3>';
+		if (!$nbCategories AND !$nbProducts AND !$nbCustomers)
+			echo '<h3>'.$this->l('Nothing found for').' "'.Tools::htmlentitiesUTF8($query).'"</h3>';
 	}
 }
 

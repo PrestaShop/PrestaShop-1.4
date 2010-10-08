@@ -47,7 +47,7 @@ class Backup
 		// Check the realpath so we can validate the backup file is under the backup directory
 		$backupfile = realpath($backupdir.'/'.$filename);
 		if ($backupfile === false OR strncmp($backupdir, $backupfile, strlen($backupdir)) != 0)
-			die (Tools::displayError('Hack attempt'));
+			die (Tools::displayError());
 
 		return $backupfile;
 	}

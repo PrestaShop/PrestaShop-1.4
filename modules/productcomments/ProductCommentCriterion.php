@@ -11,6 +11,8 @@
   * @version 1.3
   *
   */
+
+
 class ProductCommentCriterion
 {
 	/**

@@ -1,9 +1,14 @@
 <?php
+
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class Reverso extends Module
 {
 	private $_html;
 	private $_api_url = 'http://api2.reversoform.com/includes/api.controler.reverso2.php?phone_number={ARG_PHONE}&serial={ARG_SERIAL}&remoteAddress={ARG_ADDRESS}';
-	  function __construct()
+	
+  function __construct()
    {
        $this->name = 'reverso';
        $this->tab = 'Tools';

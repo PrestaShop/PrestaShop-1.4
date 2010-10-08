@@ -255,8 +255,7 @@ class AdminShipping extends AdminTab
 						<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">
 							<input type="hidden" name="submitFees'.$this->table.'" value="1" />
 					';
-				
-				
+
 				if (sizeof($ranges))
 					echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
 				else

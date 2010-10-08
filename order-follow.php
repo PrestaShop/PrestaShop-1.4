@@ -52,6 +52,8 @@ elseif (Tools::isSubmit('errorDetail1'))
 	$smarty->assign('errorDetail1', true);
 elseif (Tools::isSubmit('errorDetail2'))
 	$smarty->assign('errorDetail2', true);
+elseif (Tools::isSubmit('errorNotReturnable'))
+	$smarty->assign('errorNotReturnable',true);
 
 $smarty->assign('ordersReturn', $ordersReturn);
 include(dirname(__FILE__).'/header.php');

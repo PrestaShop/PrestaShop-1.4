@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class BlockCategories extends Module
 {
 	function __construct()
@@ -18,7 +21,7 @@ class BlockCategories extends Module
 	{
 		if (parent::install() == false
 			OR $this->registerHook('leftColumn') == false
-			OR $this->registerHook('header') == false
+			OR $this->registerHook('hookHeader') == false
 			OR Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) == false
 			OR Configuration::updateValue('BLOCK_CATEG_DHTML', 1) == false)
 			return false;

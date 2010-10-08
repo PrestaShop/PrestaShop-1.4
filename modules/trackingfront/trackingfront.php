@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class TrackingFront extends Module
 {
 	public function __construct()

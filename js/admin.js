@@ -125,46 +125,49 @@ function changeFormLanguage(id_language_new, iso_code, employee_cookie)
 
 function displayFlags(languages, defaultLanguageID, employee_cookie)
 {
-	$('.translatable').each(function() {
-		if (!$(this).find('.displayed_flag').length > 0) {
-			$.each(languages, function(key, language) {
-				if (language['id_lang'] == defaultLanguageID)
-				{
-					defaultLanguage = language;
-					return false;
-				}
-			});
-			var displayFlags = $('<div></div>')
-				.addClass('displayed_flag')
-				.append($('<img>')
-					.addClass('language_current')
-					.addClass('pointer')
-					.attr('src', '../img/l/' + defaultLanguage['id_lang'] + '.jpg')
-					.attr('alt', defaultLanguage['name'])
-					.click(function() {
-						toggleLanguageFlags(this);
-					})
-				);
-			var languagesFlags = $('<div></div>')
-				.addClass('language_flags')
-				.html('Choose language:<br /><br />');
-			$.each(languages, function(key, language) {
-				var img = $('<img>')
-					.addClass('pointer')
-					.css('margin', '0 2px')
-					.attr('src', '../img/l/' + language['id_lang'] + '.jpg')
-					.attr('alt', language['name'])
-					.click(function() {
-						changeFormLanguage(language['id_lang'], language['iso_code'], employee_cookie);
-					});
-				languagesFlags.append(img);
-			});
-			if ($(this).find('p:last-child').hasClass('clear'))
-				$(this).find('p:last-child').before(displayFlags).before(languagesFlags);
-			else 
-				$(this).append(displayFlags).append(languagesFlags);
-		}
-	});
+	if ($('.translatable'))
+	{
+		$('.translatable').each(function() {
+			if (!$(this).find('.displayed_flag').length > 0) {
+				$.each(languages, function(key, language) {
+					if (language['id_lang'] == defaultLanguageID)
+					{
+						defaultLanguage = language;
+						return false;
+					}
+				});
+				var displayFlags = $('<div></div>')
+					.addClass('displayed_flag')
+					.append($('<img>')
+						.addClass('language_current')
+						.addClass('pointer')
+						.attr('src', '../img/l/' + defaultLanguage['id_lang'] + '.jpg')
+						.attr('alt', defaultLanguage['name'])
+						.click(function() {
+							toggleLanguageFlags(this);
+						})
+					);
+				var languagesFlags = $('<div></div>')
+					.addClass('language_flags')
+					.html('Choose language:<br /><br />');
+				$.each(languages, function(key, language) {
+					var img = $('<img>')
+						.addClass('pointer')
+						.css('margin', '0 2px')
+						.attr('src', '../img/l/' + language['id_lang'] + '.jpg')
+						.attr('alt', language['name'])
+						.click(function() {
+							changeFormLanguage(language['id_lang'], language['iso_code'], employee_cookie);
+						});
+					languagesFlags.append(img);
+				});
+				if ($(this).find('p:last-child').hasClass('clear'))
+					$(this).find('p:last-child').before(displayFlags).before(languagesFlags);
+				else 
+					$(this).append(displayFlags).append(languagesFlags);
+			}
+		});
+	}
 }
 
 function checkAll(pForm)
@@ -407,12 +410,15 @@ function prepareBoQuery() {
 if (helpboxes)
 {
 	$(function(){
-		$('input').focus(function() {
-			$(this).parent().find('.hint').css('display', 'block');
-		});
-		$('input').blur(function() {
-			$(this).parent().find('.hint').css('display', 'none');
-		});
+		if ($('input'))
+		{
+			$('input').focus(function() {
+				$(this).parent().find('.hint').css('display', 'block');
+			});
+			$('input').blur(function() {
+				$(this).parent().find('.hint').css('display', 'none');
+			});
+		}
 	});
 	
 	//addLoadEvent(prepareInputsForHints);

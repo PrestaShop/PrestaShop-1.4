@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class productsCategory extends Module
 {
  	function __construct()
@@ -47,6 +50,9 @@ class productsCategory extends Module
 		if (intval($category->id_category) === 1)
 			return;
 		
+		if (!$category->active) 
+			return;
+
 		// Get infos
 		$sizeOfCategoryProducts = $category->getProducts(intval($cookie->id_lang), 1, 30, NULL, NULL, true);
 		$categoryProducts = $category->getProducts(intval($cookie->id_lang), 1, $sizeOfCategoryProducts);

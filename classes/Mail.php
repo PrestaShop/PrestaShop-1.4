@@ -28,8 +28,8 @@ class Mail
 		if (!isset($from)) $from = $configuration['PS_SHOP_EMAIL'];
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
-		if ((!empty($from) AND !Validate::isEmail($from)) OR (!empty($fromName) AND !Validate::isMailName($fromName)) OR
-		 (!is_array($to) AND !Validate::isEmail($to)) OR (!empty($toName) AND !Validate::isMailName($toName)) OR !is_array($templateVars) OR
+		if ((!empty($from) AND !Validate::isEmail($from)) OR (!empty($fromName) AND !Validate::isMailName($fromName)) OR 
+		 (!is_array($to) AND !Validate::isEmail($to)) OR (!empty($toName) AND !Validate::isMailName($toName)) OR !is_array($templateVars) OR 
 		 !Validate::isTplName($template) OR !Validate::isMailSubject($subject))
 	 		die(Tools::displayError('Error: mail parameters are corrupted'));
 

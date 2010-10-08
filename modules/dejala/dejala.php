@@ -1,4 +1,8 @@
 <?php
+
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 	if (_PS_VERSION_ <= "1.3.0.3" && !class_exists("Carrier", false)) require_once(_PS_MODULE_DIR_ . "dejala/CarrierHacked.php") ;
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalaconfig.php");
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalautils.php");

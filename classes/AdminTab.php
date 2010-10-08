@@ -713,6 +713,8 @@ abstract class AdminTab
 								$sqlFilter .= (($key == $this->identifier OR $key == '`'.$this->identifier.'`') ? 'a.' : '').pSQL($key).' = '.intval($value).' ';
 							elseif ($type == 'decimal')
 								$sqlFilter .= (($key == $this->identifier OR $key == '`'.$this->identifier.'`') ? 'a.' : '').pSQL($key).' = '.floatval($value).' ';
+							elseif ($type == 'select')
+								$sqlFilter .= (($key == $this->identifier OR $key == '`'.$this->identifier.'`') ? 'a.' : '').pSQL($key).' = '.pSQL($value).' ';
 							else
 								$sqlFilter .= (($key == $this->identifier OR $key == '`'.$this->identifier.'`') ? 'a.' : '').pSQL($key).' LIKE \'%'.pSQL($value).'%\' ';
 						}
@@ -980,6 +982,8 @@ abstract class AdminTab
 		
 		echo '<a name="'.$this->table.'">&nbsp;</a>';
 		echo '<form method="post" action="'.$currentIndex;
+		if(Tools::getIsset($this->identifier))
+			echo '&'.$this->identifier.'='.intval(Tools::getValue($this->identifier));
 		if (Tools::getIsset($this->table.'Orderby'))
 			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
 		echo '#'.$this->table.'" class="form">

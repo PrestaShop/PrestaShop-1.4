@@ -1,3 +1,4 @@
+
 //JS Object : update the cart by ajax actions
 var ajaxCart = {
 	

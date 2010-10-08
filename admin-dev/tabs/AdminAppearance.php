@@ -51,7 +51,7 @@ class AdminAppearance extends AdminPreferences
 			</script>
 			<fieldset id="prestastore-content" class="width3"></fieldset>';			
 		else
-			echo '<a href="http://www.prestastore.com/3-prestashop-themes">'.$this->l('Find new themes on PrestaStore!').'</a>';
+			echo '<a href="http://addons.prestashop.com/3-prestashop-themes">'.$this->l('Find new themes on PrestaShop Addons!').'</a>';
 	}
 	
 	/**

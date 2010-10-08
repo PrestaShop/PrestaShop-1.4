@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 include_once(_PS_CLASS_DIR_.'PEAR.php');
 include_once(_PS_PEAR_XML_PARSER_PATH_.'Parser.php');
 

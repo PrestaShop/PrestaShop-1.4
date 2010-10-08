@@ -3,7 +3,6 @@
 $currentDir = dirname(__FILE__);
 
 /* Theme URLs */
-
 define('_THEMES_DIR_',     __PS_BASE_URI__.'themes/');
 define('_THEME_DIR_',      _THEMES_DIR_._THEME_NAME_.'/');
 define('_THEME_IMG_DIR_',  _THEME_DIR_.'img/');
@@ -67,6 +66,8 @@ if (!defined('PHP_VERSION_ID'))
     define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
 }
 
+define('_CAN_LOAD_FILES_', 1);
+
 /* Order states */
 define('_PS_OS_CHEQUE_',      1);
 define('_PS_OS_PAYMENT_',     2);
@@ -102,3 +103,6 @@ define('ALL_CARRIERS',5);
 
 /* SQL Replication management */
 define('_PS_USE_SQL_SLAVE_', 0);
+
+/* PS Technical configuration */
+define('_PS_ADMIN_PROFILE_', 1);

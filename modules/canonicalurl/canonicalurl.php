@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class canonicalUrl extends Module
 {
 	public function __construct()
@@ -70,9 +73,8 @@ class canonicalUrl extends Module
 		
 		$canonicalUrl = Configuration::get('CANONICAL_URL');
 		$ps_request = str_replace(__PS_BASE_URI__, '', $_SERVER['REQUEST_URI']);
-		
 		if (strlen(Configuration::get('CANONICAL_URL')) > 0)
-			$smarty->assign('canonical_url', $protocol_link.$canonicalUrl.$_SERVER['REQUEST_URI']);
+			$smarty->assign('canonical_url', $protocol_link.$canonicalUrl.Tools::htmlentitiesUTF8(rawurldecode($_SERVER['REQUEST_URI'])));
 		return $this->display(__FILE__, 'canonicalurl.tpl');
 	}
 }

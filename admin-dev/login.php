@@ -115,7 +115,7 @@ if ($nbErrors = sizeof($errors))
 
 echo '
 			<div id="login">
-				<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
+				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
 $randomNb = rand(100, 999);
 if(file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admin'))

@@ -75,9 +75,9 @@ if (isset($_GET['ajaxDiscountCustomers']))
 }
 
 if (Tools::getValue('page') == 'prestastore')
-	readfile('http://www.prestastore.com/adminmodules.php?lang='.Language::getIsoById($cookie->id_lang));
+	readfile('http://addons.prestashop.com/adminmodules.php?lang='.Language::getIsoById($cookie->id_lang));
 if (Tools::getValue('page') == 'themes')
-	readfile('http://www.prestastore.com/adminthemes.php?lang='.Language::getIsoById($cookie->id_lang));
+	readfile('http://addons.prestashop.com/adminthemes.php?lang='.Language::getIsoById($cookie->id_lang));
 
 if ($step = intval(Tools::getValue('ajaxProductTab')))
 {
@@ -174,6 +174,7 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 				break;
 			}
 		}
+	
 	$product = new Product($id_product);
 	if (Validate::isLoadedObject($product))
 	{

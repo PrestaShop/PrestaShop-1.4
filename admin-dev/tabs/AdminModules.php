@@ -267,7 +267,7 @@ class AdminModules extends AdminTab
 			echo '
 			<div id="prestastore" style="margin-left:40px; display:none; float: left" class="width1">
 				<fieldset>
-					<legend><img src="http://www.prestastore.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />'.$this->l('Live from PrestaStore!').'</legend>
+					<legend><img src="http://addons.prestashop.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />'.$this->l('Live from PrestaShop Addons!').'</legend>
 					<div id="prestastore-content"></div>
 				</fieldset>
 			</div>';

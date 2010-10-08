@@ -41,3 +41,4 @@ $_MODULE['<{mailalerts}prestashop>myalerts_8cf04a9734132302f96da8e113e80ce5'] = 
 $_MODULE['<{mailalerts}prestashop>product_416f61a2ce16586f8289d41117a2554e'] = 'su email';
 $_MODULE['<{mailalerts}prestashop>product_546e02eaa9a986c83cc347e273269f2c'] = 'Indicarme cuando esté disponible';
 $_MODULE['<{mailalerts}prestashop>product_61172eb93737ebf095d3fa02119ce1df'] = 'Notificación de la petición registrada';
+$_MODULE['<{mailalerts}prestashop>product_900f8551b29793ecb604a545b2059cc1'] = 'Su dirección de correo electrónico no es válida.';

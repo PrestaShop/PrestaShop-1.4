@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class ReferralProgram extends Module
 {
 	public function __construct()
@@ -279,7 +282,7 @@ class ReferralProgram extends Module
 		}
 
 		$this->_html .= '
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+				<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 				<script type="text/javascript">
 					tinyMCE.init({
 						mode : "textareas",

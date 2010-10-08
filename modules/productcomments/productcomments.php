@@ -1,17 +1,22 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class ProductComments extends Module
 {
 	const INSTALL_SQL_FILE = 'install.sql';
 
     private $_html = '';
     private $_postErrors = array();
+	
+	const DELAY = 1; // hour
 
     function __construct()
     {
         $this->name = 'productcomments';
         $this->tab = 'Products';
-        $this->version = '0.2';
+        $this->version = '0.3';
 
         parent::__construct();
 
@@ -288,36 +293,42 @@ class ProductComments extends Module
 		require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
 		if (Tools::isSubmit('submitMessage') AND empty($cookie->id_customer) === false)
 		{
-			if (Tools::getValue('content'))
+			$customerComment = ProductComment::getByCustomer(intval(Tools::getValue('id_product')), intval($cookie->id_customer), true);
+			if (!$customerComment OR ($customerComment AND (strtotime($customerComment['date_add']) + self::DELAY * 3600) > time()))
 			{
-				$comment = new ProductComment();
-				$comment->content = strip_tags(Tools::getValue('content'));
-				$comment->id_product = intval($_GET['id_product']);
-				$comment->id_customer = intval($cookie->id_customer);
-				$comment->grade = 0;
-				$comment->validate = 0;
-				if (!$comment->content)
-					$errors[] = $this->l('Invalid comment text posted.');
-				else
+				if (Tools::getValue('content'))
 				{
-					$comment->save();
-					for ($i = 1, $grade = 0; isset($_POST[$i.'_grade']) === true; ++$i)
-					{
-						$cgrade = intval(Tools::getValue($i.'_grade'));
-						$grade += $cgrade;
-						$cid_product_comment_criterion = Tools::getValue('id_product_comment_criterion_'.$i);
-						ProductCommentCriterion::addGrade($comment->id, $cid_product_comment_criterion, $cgrade);
-					}
-					if (($i - 1) > 0)
-						$comment->grade = ($grade / ($i - 1));
-					if (!$comment->save())
-						$errors[] = $this->l('An error occured while saving your comment.');
+					$comment = new ProductComment();
+					$comment->content = strip_tags(Tools::getValue('content'));
+					$comment->id_product = intval($_GET['id_product']);
+					$comment->id_customer = intval($cookie->id_customer);
+					$comment->grade = 0;
+					$comment->validate = 0;
+					if (!$comment->content)
+						$errors[] = $this->l('Invalid comment text posted.');
 					else
-						$smarty->assign('confirmation', $this->l('Comment posted successfully.').(intval(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? $this->l(' Awaiting moderator validation.') : ''));
+					{
+						$comment->save();
+						for ($i = 1, $grade = 0; isset($_POST[$i.'_grade']) === true; ++$i)
+						{
+							$cgrade = intval(Tools::getValue($i.'_grade'));
+							$grade += $cgrade;
+							$cid_product_comment_criterion = Tools::getValue('id_product_comment_criterion_'.$i);
+							ProductCommentCriterion::addGrade($comment->id, $cid_product_comment_criterion, $cgrade);
+						}
+						if (($i - 1) > 0)
+							$comment->grade = ($grade / ($i - 1));
+						if (!$comment->save())
+							$errors[] = $this->l('An error occured while saving your comment.');
+						else
+							$smarty->assign('confirmation', $this->l('Comment posted successfully.').(intval(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? $this->l(' Awaiting moderator validation.') : ''));
+					}
 				}
+				else
+					$errors[] = $this->l('Comment text is required.');
 			}
-			else
-				$errors[] = $this->l('Comment text is required.');
+			else 
+				$errors[] = $this->l('You should wait').' '.self::DELAY.' '.$this->l('hour(s) before posting a new comment');
 		}
 	}
 
@@ -325,9 +336,10 @@ class ProductComments extends Module
     {
 		global $smarty, $cookie, $nbProducts;
 
-		$commentNumber = intval(ProductComment::getCommentNumber(intval($_GET['id_product'])));
-		$averages = ProductComment::getAveragesByProduct(intval($_GET['id_product']), intval($cookie->id_lang));
-
+		$commentNumber = intval(ProductComment::getCommentNumber(intval(Tools::getValue('id_product'))));
+		$averages = ProductComment::getAveragesByProduct(intval(Tools::getValue('id_product')), intval($cookie->id_lang));
+		$customerComment = ProductComment::getByCustomer(intval(Tools::getValue('id_product')), intval($cookie->id_customer), true);
+		
 		$averageTotal = 0;
 		foreach ($averages AS $average)
 			$averageTotal += floatval($average);
@@ -335,11 +347,13 @@ class ProductComments extends Module
 		$smarty->assign(array(
 			'logged' => intval($cookie->id_customer),
 			'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
-			'comments' => ProductComment::getByProduct(intval($_GET['id_product'])),
-			'criterions' => ProductCommentCriterion::getByProduct(intval($_GET['id_product']), intval($cookie->id_lang)),
+			'comments' => ProductComment::getByProduct(intval(Tools::getValue('id_product'))),
+			'criterions' => ProductCommentCriterion::getByProduct(intval(Tools::getValue('id_product')), intval($cookie->id_lang)),
 			'averages' => $averages,
 			'product_comment_path' => $this->_path,
-			'averageTotal' => $averageTotal
+			'averageTotal' => $averageTotal,
+			'too_early' => ($customerComment AND (strtotime($customerComment['date_add']) + self::DELAY * 3600) > time()),
+			'delay' => self::DELAY
 		));
 		$nbProducts = $commentNumber;
 		require_once(dirname(__FILE__).'/../../pagination.php');

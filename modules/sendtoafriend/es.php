@@ -18,4 +18,4 @@ $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_cc5fd9b9f1cad59fcff97a1f21f34
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_19d305aea0ccec77d23362111ebdb6b4'] = 'nombre del amigo:';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_7ae8a9a7a5d8fa40d4515fc52f16bb2e'] = 'Email del amigo:';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2541d938b0a58946090d7abdde0d3890'] = 'enviar';
-$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_c5f09f37e1e182ec28fa64732d9b712c'] = 'Volver';
+$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_68728c1897e5936032fe21ffb6b10c2e'] = 'Volver a la página del producto';

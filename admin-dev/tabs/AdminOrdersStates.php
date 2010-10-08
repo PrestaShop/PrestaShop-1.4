@@ -1,7 +1,7 @@
 <?php
 
 /**
-  * Order statues tab for admin panel, AdminOrdersStates.php
+  * Order statuses tab for admin panel, AdminOrdersStates.php
   * @category admin
   *
   * @author PrestaShop <support@prestashop.com>

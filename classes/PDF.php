@@ -475,7 +475,11 @@ class PDF extends PDF_PageGroup
 			}
 			if (!self::$orderSlip)
 			{
-				$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
+				$taxDiscount = self::$order->getTaxesAverageUsed();
+				if ($taxDiscount != 0)
+					$priceBreakDown['totalWithoutTax'] -= Tools::ps_round(self::$order->total_discounts / (1 + self::$order->getTaxesAverageUsed() * 0.01), 2);
+				else
+					$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
 				$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
 			}
 

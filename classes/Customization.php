@@ -61,6 +61,53 @@ class Customization
 
 		return $result['name'];
 	}
+	
+	public static function retrieveQuantitiesFromIds(array $ids_customizations)
+	{
+		$quantities = array();
+	
+		$in_values  = '';
+		foreach($ids_customizations as $key => $id_customization)
+		{
+			if ($key > 0) $in_values += ',';
+			$in_values += intval($id_customization);
+		}
+		
+		if (!empty($in_values))
+		{
+			$results =  Db::getInstance()->ExecuteS(
+							'SELECT `id_customization`, `id_product`, `quantity`, `quantity_refunded`, `quantity_returned`
+							 FROM `'._DB_PREFIX_.'customization`
+							 WHERE `id_customization` IN ('.$in_values.')');
+							 
+			foreach($results as $row)
+			{
+				$quantities[$row['id_customization']] = $row;
+			}
+		}
+		
+		return $quantities;
+	}
+	
+	public static function countQuantityByCart($id_cart)
+	{
+		$quantity = array();
+		
+		$results =  Db::getInstance()->executeS('
+					SELECT `id_product`, SUM(`quantity`) AS quantity 
+					FROM `'._DB_PREFIX_.'customization` 
+					WHERE `id_cart` = '.intval($id_cart).'
+					GROUP BY `id_cart`, `id_product`'
+					);
+					
+		foreach($results as $row)
+		{
+			$quantity[$row['id_product']] = $row['quantity'];
+		}
+		
+		return $quantity;
+	}
+
 }
 
 ?>

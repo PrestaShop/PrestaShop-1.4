@@ -48,7 +48,14 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'editorial_update.php');
 
 //old version detection
-if (!file_exists(SETTINGS_FILE))
+$oldversion = false;
+if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
+{
+	include_once(SETTINGS_FILE);
+	include_once(DEFINES_FILE);
+	$oldversion = _PS_VERSION_;
+}
+else
 	die('<action result="fail" error="30" />'."\n");
 if (!file_exists(DEFINES_FILE))
 	die('<action result="fail" error="37" />'."\n");

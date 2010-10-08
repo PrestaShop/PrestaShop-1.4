@@ -107,7 +107,6 @@ class		Carrier extends ObjectModel
 
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
-
 		parent::__construct($id, $id_lang);
 		if ($this->name == '0')
 			$this->name = Configuration::get('PS_SHOP_NAME');
@@ -288,14 +287,12 @@ class		Carrier extends ObjectModel
 	 * Get all carriers in a given language
 	 *
 	 * @param integer $id_lang Language id
-	 * @param $modules_filters 
-	 
-			define('PS_CARRIERS_ONLY',1);
-			define('CARRIERS_MODULE',2);
-			define('CARRIERS_MODULE_NEED_RANGE',3);
-			define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE',4);
-			define('ALL_CARRIERS',5);
-	 	
+	 * @param $modules_filters, possible values: 
+			PS_CARRIERS_ONLY
+			CARRIERS_MODULE
+			CARRIERS_MODULE_NEED_RANGE
+			PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE
+			ALL_CARRIERS
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
 	 */
@@ -353,7 +350,7 @@ class		Carrier extends ObjectModel
 		}
 		else
 			$carriers = array();
-		
+
 		return $carriers;
 	}
 

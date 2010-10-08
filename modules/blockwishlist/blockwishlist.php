@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class BlockWishList extends Module
 {
 	const INSTALL_SQL_FILE = 'install.sql';

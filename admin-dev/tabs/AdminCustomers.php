@@ -121,7 +121,7 @@ class AdminCustomers extends AdminTab
 							// Add Associated groups
 							$group_list = Tools::getValue('groupBox');
 							if (is_array($group_list) && sizeof($group_list) > 0)
-								$object->addGroups($group_list);
+								$object->addGroups($group_list, true);
 							$parent_id = intval(Tools::getValue('id_parent', 1));
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
@@ -271,9 +271,8 @@ class AdminCustomers extends AdminTab
 			echo '
 			</table>';
 		}
-		echo '
-		<div class="clear">&nbsp;</div>
-		<h2>'.$this->l('Orders').'</h2>';
+		echo '<div class="clear">&nbsp;</div>';
+		echo '<h2>'.$this->l('Orders').' ('.sizeof($orders).')</h2>';
 		if ($orders AND sizeof($orders))
 		{
 			$totalOK = 0;

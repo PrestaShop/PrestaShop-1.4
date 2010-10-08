@@ -43,7 +43,7 @@ class AdminCountries extends AdminTab
 	public function postProcess()
 	{
 		if (isset($_GET['delete'.$this->table]) OR Tools::getValue('submitDel'.$this->table))
-			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it to be available for customers, please disable it.');
+			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
 		else
 			return parent::postProcess();
 	}

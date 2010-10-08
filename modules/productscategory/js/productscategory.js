@@ -10,7 +10,7 @@ function pc_serialScrollFixLock(event, targeted, scrolled, items, position)
 	var leftArrow = position == 0 ? true : false;
 	var rightArrow = position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? true : false;
 	
-	$('a#productscategory_scroll_left').css('cursor', leftArrow ? 'default' : 'pointer').css('display', leftArrow ? 'none' : 'block').fadeTo(0, leftArrow ? 0 : 1);		
+	$('a#productscategory_scroll_left').css('cursor', leftArrow ? 'default' : 'pointer').fadeTo(0, leftArrow ? 0 : 1);		
 	$('a#productscategory_scroll_right').css('cursor', rightArrow ? 'default' : 'pointer').fadeTo(0, rightArrow ? 0 : 1).css('display', rightArrow ? 'none' : 'block');
 	return true;
 }

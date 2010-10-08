@@ -509,7 +509,6 @@ class AdminTranslations extends AdminTab
 				}
 				/* Search language tags (eg {l s='to translate'}) */
 				if ($themes = scandir(_PS_ALL_THEMES_DIR_))
-
 					foreach ($themes AS $theme)
 						if ($theme{0} != '.' AND is_dir(_PS_ALL_THEMES_DIR_.$theme) AND file_exists(_PS_ALL_THEMES_DIR_.$theme.'/modules/'))
 						{
@@ -661,13 +660,15 @@ class AdminTranslations extends AdminTab
 		return ${$var};
 	}
 
-	function displayToggleButton($closed = true)
+	function displayToggleButton($closed = false)
 	{
 		echo '
-		<script type="text/javascript">
-			$(document).ready(function(){
+		<script type="text/javascript">';
+		if (Tools::getValue('type') == 'mails')
+			echo '$(document).ready(function(){
 				openCloseAllDiv(\''.$_GET['type'].'_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);
-				});
+				});';
+		echo '
 			var openAll = \''.html_entity_decode($this->l('Expand all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
 			var closeAll = \''.html_entity_decode($this->l('Close all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
 		</script>
@@ -1540,8 +1541,8 @@ class AdminTranslations extends AdminTab
 	private function _checkAndAddLangage($iso_code)
 	{
 		$result = Db::getInstance()->getValue('
-		SELECT COUNT(`id_lang`) AS total
-		FROM `'._DB_PREFIX_.'lang`
+		SELECT COUNT(`id_lang`) AS total 
+		FROM `'._DB_PREFIX_.'lang` 
 		WHERE `iso_code` = \''.pSQL($iso_code).'\'
 		');
 
@@ -1571,7 +1572,7 @@ class AdminTranslations extends AdminTab
 					return false;
 
 				$insert_id = Db::getInstance()->getValue('
-				SELECT id_lang
+				SELECT id_lang 
 				FROM `'._DB_PREFIX_.'lang`
 				WHERE `iso_code` = \''.pSQL($iso_code).'\'
 				AND `name` = \''.pSQL($lang->name).'\'

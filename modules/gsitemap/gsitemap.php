@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
 
 class Gsitemap extends Module
 {
@@ -10,7 +12,7 @@ class Gsitemap extends Module
 	{
 		$this->name = 'gsitemap';
 		$this->tab = 'Tools';
-		$this->version = '1.5';
+		$this->version = '1.6';
 
 		parent::__construct();
 
@@ -49,10 +51,6 @@ class Gsitemap extends Module
 		Configuration::updateValue('GSITEMAP_ALL_CMS', intval(Tools::getValue('GSITEMAP_ALL_CMS')));
 		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', intval(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
 		$link = new Link();
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-		$ruBackup = $_SERVER['REQUEST_URI'];
-		$snBackup = $_SERVER['SCRIPT_NAME'];
-		$getBackup = $_GET;
 		
 		$xmlString = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -62,11 +60,7 @@ XML;
 		
 		$xml = new SimpleXMLElement($xmlString);
 
-		$sitemap = $xml->addChild('url');
-		$sitemap->addChild('loc', 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__);
-		$sitemap->addChild('priority', '1.00');
-		$sitemap->addChild('lastmod', date('Y-m-d'));
-		$sitemap->addChild('changefreq', 'daily');
+		$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
 		
 		if (Configuration::get('GSITEMAP_ALL_CMS'))
 			$sql_cms = '
@@ -86,26 +80,9 @@ XML;
 		
 		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
 		foreach($cmss AS $cms)
-		{
-			$sitemap = $xml->addChild('url');
-			$tmpLink = $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite']);
-			$_GET = array('id_cms' => intval($cms['id_cms']));
-			if ($cms['id_lang'] != $defaultLanguage)
-			{
-				$tmpLink = str_replace("http://", "", $tmpLink);
-				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
-				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-				
-				$link = new Link();
-				$tmpLink = $link->getLanguageLink(intval($cms['id_lang']));
-				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
-			}
-			$sitemap->addChild('loc', htmlspecialchars($tmpLink));
-			$sitemap->addChild('priority', '0.8');
-			$sitemap->addChild('changefreq', 'monthly');
-		}
+			$this->_addSitemapNode($xml, $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite'], intval($cms['id_lang'])), '0.8', 'daily');
 		
-		$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$categories = Db::getInstance()->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
 		FROM '._DB_PREFIX_.'category c
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON c.id_category = cl.id_category
@@ -116,22 +93,9 @@ XML;
 		{
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
-			$sitemap = $xml->addChild('url');
-			$tmpLink = $link->getCategoryLink(intval($category['id_category']), $category['link_rewrite']);
-			$_GET = array('id_category' => intval($category['id_category']));
-			if ($category['id_lang'] != $defaultLanguage)
-			{
-				$tmpLink = str_replace("http://", "", $tmpLink);
-				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
-				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-				$link = new Link();
-				$tmpLink = $link->getLanguageLink(intval($category['id_lang']));
-				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
-			}
-            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
-            $sitemap->addChild('priority', $priority);
-            $sitemap->addChild('lastmod', substr($category['date_upd'], 0, 10));
-            $sitemap->addChild('changefreq', 'weekly');
+			$tmpLink = $link->getCategoryLink(intval($category['id_category']), $category['link_rewrite'], intval($category['id_lang']));
+			
+			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
       	}
 
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -148,37 +112,22 @@ XML;
 		WHERE l.`active` = 1 AND p.`active` = 1
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
 		ORDER BY pl.id_product, pl.id_lang ASC');
+		
 		foreach($products as $product)
 		{
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
-			$sitemap = $xml->addChild('url');
-			$tmpLink = $link->getProductLink(intval($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13']);
-			$_GET = array('id_product' => intval($product['id_product']));
-			if ($product['id_lang'] != $defaultLanguage)
-			{
-				$tmpLink = str_replace("http://", "", $tmpLink);
-				$_SERVER['REQUEST_URI'] = substr($tmpLink, strpos($tmpLink, __PS_BASE_URI__));
-				$_SERVER['SCRIPT_NAME'] = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?'));
-				$link = new Link();
-				$tmpLink = $link->getLanguageLink(intval($product['id_lang']));
-				$tmpLink = 'http://'.Tools::getHttpHost(false, true).$tmpLink;
-			}
-            $sitemap->addChild('loc', htmlspecialchars($tmpLink));
-            $sitemap->addChild('priority', $priority);
-            $sitemap->addChild('lastmod', substr($product['date_upd'], 0, 10));
-            $sitemap->addChild('changefreq', 'weekly');
+
+			$tmpLink = $link->getProductLink(intval($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], intval($product['id_lang']));
+			
+			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
         }
 		
 		/* Add classic pages (contact, best sales, new products...) */
-		$pages = Meta::getPages();
+		$pages = array('authentication', 'best-sales', 'category', 'contact-form', 'discount', 'index', 'manufacturer', 'new-products', 'prices-drop', 'search', 'supplier');
+
 		foreach ($pages AS $page)
-		{
-			$sitemap = $xml->addChild('url');
-			$sitemap->addChild('loc', htmlspecialchars('http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.$page.'.php'));
-			$sitemap->addChild('priority', '0.5');
-			$sitemap->addChild('changefreq', 'monthly');
-		}
+			$this->_addSitemapNode($xml, htmlspecialchars('http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.$page.'.php'), '0.5', 'monthly');
 
         $xmlString = $xml->asXML();
 		
@@ -190,11 +139,16 @@ XML;
         $this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
         $this->_html .= $res ? $this->l('Sitemap file successfully generated') : $this->l('Error while creating sitemap file');
         $this->_html .= '</h3>';
-		
-		$_SERVER['REQUEST_URI'] = $ruBackup;
-		$_SERVER['SCRIPT_NAME'] = $snBackup;
-		$_GET = $getBackup;
     }
+	
+	private function _addSitemapNode($xml, $loc, $priority, $change_freq, $last_mod = NULL)
+	{
+		$sitemap = $xml->addChild('url');
+		$sitemap->addChild('loc', $loc);
+		$sitemap->addChild('priority',  $priority);
+		if ($last_mod) $sitemap->addChild('lastmod', $last_mod);
+		$sitemap->addChild('changefreq', $change_freq);
+	}
 
     private function _displaySitemap()
     {
@@ -204,6 +158,7 @@ XML;
             $fstat = fstat($fp);
             fclose($fp);
             $xml = simplexml_load_file(GSITEMAP_FILE);
+			
             $nbPages = sizeof($xml->url);
 
             $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />

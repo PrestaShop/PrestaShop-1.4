@@ -11,6 +11,10 @@
   * @version 1.3
   *
   */
+
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class ProductComment extends ObjectModel
 {
 	public 		$id;
@@ -76,6 +80,22 @@ class ProductComment extends ObjectModel
 		WHERE pc.`id_product` = '.intval($id_product).($validate == '1' ? ' AND pc.`validate` = 1' : '').'
 		ORDER BY pc.`date_add` DESC
 		'.($n ? 'LIMIT '.intval(($p - 1) * $n).', '.intval($n) : ''));
+	}
+	
+	static public function getByCustomer($id_product, $id_customer, $last = false)
+	{
+		$results = Db::getInstance()->ExecuteS('
+		SELECT * 
+		FROM `'._DB_PREFIX_.'product_comment` pc
+		WHERE pc.`id_product` = '.intval($id_product).' AND pc.`id_customer` = '.intval($id_customer).'
+		ORDER BY pc.`date_add` DESC '
+		.($last ? 'LIMIT 1' : '')
+		);
+		
+		if ($last) 
+			return array_shift($results);
+		
+		return $results;
 	}
 	
 	/**

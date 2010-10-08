@@ -28,7 +28,7 @@ var reduction_price = {if $product->reduction_percent}0{else}{$product->getPrice
 var reduction_from = '{$product->reduction_from}';
 var reduction_to = '{$product->reduction_to}';
 var group_reduction = '{$group_reduction}';
-var default_eco_tax = {$ecotax};
+var default_eco_tax = {$product->ecotax};
 var currentDate = '{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}';
 var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};
@@ -229,8 +229,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>
 				<br class="clear" />
 			{/if}
-			{if $ecotax != 0}
-				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$ecotax}</span> {l s='for green tax'}</p>
+			{if $product->ecotax != 0}
+				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
 			{/if}
 			{if $weight_price != NULL && $weight_price > 0.000000}
 				<p class="weight-price">{convertPrice price=$weight_price} {l s='per'} {$weight_unit}</p>
@@ -319,7 +319,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{$HOOK_PRODUCT_OOS}
 			</p>
 
-			<p class="warning-inline" id="last_quantities"{if ($product->quantity > $last_qties || $product->quantity == 0) || $allow_oosp} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
+			<p class="warning_inline" id="last_quantities"{if ($product->quantity > $last_qties || $product->quantity == 0) || $allow_oosp} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
 
 			<p{if !$allow_oosp && $product->quantity == 0} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
 			{if $HOOK_PRODUCT_ACTIONS}
@@ -352,7 +352,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
 				<td>
 				{if $quantity_discount.id_discount_type|intval == 1}
-					-{$quantity_discount.real_value|floatval}%
+					-{$quantity_discount.value|floatval}%
 				{else}
 					-{convertPrice price=$quantity_discount.real_value|floatval}
 				{/if}

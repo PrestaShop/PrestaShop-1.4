@@ -43,6 +43,7 @@ $_LANGPDF['PDF_invoicea3a79b28bc45b7fd393effd056b917e1'] = 'Date d\'expédition 
 $_LANGPDF['PDF_invoice115dfa9ced2cf136ae677b9a389a5e60'] = 'Emballage cadeau';
 $_LANGPDF['PDF_invoice2370a4958c4ebe6d6c8045cd49a6b392'] = 'Total produits HT';
 $_LANGPDF['PDF_invoiceebaee01719541f61281c16ba22ebbfde'] = 'Total produits TTC';
+$_LANGPDF['PDF_invoicea0eb2cd0b3deb5444102e9a82edae11e'] = 'Total produits';
 $_LANGPDF['PDF_invoicef3e545fccad720e197b9ca3b8b658440'] = 'Totals réductions TTC';
 $_LANGPDF['PDF_invoice7a5b34426b4672759796f035bbc2674e'] = 'Total emballage';
 $_LANGPDF['PDF_invoicef4e8b53a114e5a17d051ab84d326cae5'] = 'Total livraison';

@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 define('BLOCKTAGS_MAX_LEVEL', 3);
 
 class BlockTags extends Module

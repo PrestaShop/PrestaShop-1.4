@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class Tm4b extends Module
 {
 	private $_html = '';
@@ -35,6 +38,8 @@ class Tm4b extends Module
 	public function __construct()
 	{
 		$this->name = 'tm4b';
+		$this->displayName = 'SMS Tm4b';
+		$this->description = $this->l('Sends an SMS for each new order');
 		$this->tab = 'Tools';
 		$this->version = 1.1;
 		

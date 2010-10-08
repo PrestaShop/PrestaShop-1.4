@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 // <![CDATA[
-idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{elseif isset($address->id_state)}{$address->id_state|intval}{else}false{/if};
+idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}false{/if};
 countries = new Array();
 countriesNeedIDNumber = new Array();
 countriesNeedZipCode = new Array();

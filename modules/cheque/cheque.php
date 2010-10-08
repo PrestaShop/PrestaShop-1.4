@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class Cheque extends PaymentModule
 {
 	private $_html = '';

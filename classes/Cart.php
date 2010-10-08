@@ -123,6 +123,30 @@ class		Cart extends ObjectModel
 		return parent::delete();
 	}
 
+	static public function getTaxesAverageUsed($id_cart)
+	{
+		$cart = new Cart(intval($id_cart));
+		if (!Validate::isLoadedObject($cart))
+			die(Tools::displayError());
+		
+		if (!Configuration::get('PS_TAX'))
+			return 0;
+		
+		$products = $cart->getProducts();
+		$totalProducts_moy = 0;
+		$ratioTax = 0;
+		if (!sizeof($products))
+			return 0;
+		foreach ($products AS $product)
+		{
+			if ($product['rate'] == 0)
+				$product['rate'] = 1;
+			$totalProducts_moy += $product['total_wt'];
+			$ratioTax += $product['total_wt'] * $product['rate'];
+		}
+		return $ratioTax / $totalProducts_moy;
+	}
+
 	/**
 	 * Return cart discounts
 	 *
@@ -134,42 +158,35 @@ class		Cart extends ObjectModel
 			return array();
 		if (!$lite AND !$refresh AND isset(self::$_discounts[$this->id]))
 			return self::$_discounts[$this->id];
-		if ($lite AND !$refresh AND (isset(self::$_discountsLite[$this->id]) OR isset(self::$_discounts[$this->id])))
+		if ($lite AND isset(self::$_discountsLite[$this->id]))
+			return self::$_discountsLite[$this->id];
+
+		$result = Db::getInstance()->ExecuteS('
+		SELECT d.*, `id_cart`
+		FROM `'._DB_PREFIX_.'cart_discount` c
+		LEFT JOIN `'._DB_PREFIX_.'discount` d ON c.`id_discount` = d.`id_discount`
+		WHERE `id_cart` = '.intval($this->id));
+
+		$products = $this->getProducts();
+		foreach ($result AS $k => $discount)
 		{
-			if (isset(self::$_discountsLite[$this->id]))
-				return self::$_discountsLite[$this->id];
-			elseif (isset(self::$_discounts[$this->id]))
-				return self::$_discounts[$this->id];
+			$categories = Discount::getCategories(intval($discount['id_discount']));
+			$in_category = false;
+			foreach ($products AS $product)
+				if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
+				{
+					$in_category = true;
+					break;
+				}
+			if (!$in_category)
+				unset($result[$k]);
 		}
 
-		if (!$refresh AND !isset(self::$_discountsLite[$this->id]))
+		if ($lite)
 		{
-			$result = Db::getInstance()->ExecuteS('
-			SELECT d.*, `id_cart`
-			FROM `'._DB_PREFIX_.'cart_discount` c
-			LEFT JOIN `'._DB_PREFIX_.'discount` d ON c.`id_discount` = d.`id_discount`
-			WHERE `id_cart` = '.intval($this->id));
-
-			$products = $this->getProducts();
-			foreach ($result AS $k => $discount)
-			{
-				$categories = Discount::getCategories(intval($discount['id_discount']));
-				$in_category = false;
-				foreach ($products AS $product)
-					if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
-					{
-						$in_category = true;
-						break;
-					}
-				if (!$in_category)
-					unset($result[$k]);
-			}
 			self::$_discountsLite[$this->id] = $result;
-			if ($lite)
-				return $result;
+			return $result;
 		}
-		else
-			$result = self::$_discountsLite[$this->id];
 
 		$total_products_wt = $this->getOrderTotal(true, 1);
 		$total_products = $this->getOrderTotal(false, 1);
@@ -272,6 +289,8 @@ class		Cart extends ObjectModel
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
 				$row['ecotax'] = floatval($row['ecotax_attr']);
 			$row['stock_quantity'] = intval($row['quantity']);
+			// for compatibility with 1.2 themes
+			$row['quantity'] = intval($row['cart_quantity']);
 			if ($row['id_product_attribute'])
 				$row['weight'] = $row['weight_attribute'];
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
@@ -285,6 +304,8 @@ class		Cart extends ObjectModel
 			{
 				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				/* In case when you use QuantityDiscount, getPriceStatic() can be return more of 2 decimals */
+				$row['price_wt'] = Tools::ps_round($row['price_wt'], 2);
 				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
 				$row['total'] = Tools::ps_round($row['price'] * intval($row['cart_quantity']), 2);
 			}
@@ -623,9 +644,7 @@ class		Cart extends ObjectModel
 			return 0;
 		if ($virtual AND $type == 3)
 			$type = 4;
-			
 		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost(NULL, intval($withTaxes)) : 0;
-	        		
 		if ($type == 7)
 			$type = 1;
 
@@ -1152,10 +1171,19 @@ class		Cart extends ObjectModel
 
 	static public function getCartByOrderId($id_order)
 	{
+		if ($id_cart = self::getCartIdByOrderId($id_order))
+			return new Cart(intval($id_cart));
+		
+		return false;
+	}
+	
+	static public function getCartIdByOrderId($id_order)
+	{
 		$result = Db::getInstance()->getRow('SELECT `id_cart` FROM '._DB_PREFIX_.'orders WHERE `id_order` = '.intval($id_order));
 		if (!$result OR empty($result) OR !key_exists('id_cart', $result))
 			return false;
-		return new Cart(intval($result['id_cart']));
+			
+		return $result['id_cart'];
 	}
 
 	/*

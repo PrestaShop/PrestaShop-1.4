@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class MailAlerts extends Module
 {
 	private $_html = '';
@@ -217,7 +220,10 @@ class MailAlerts extends Module
 	{
 		global $cookie;
 		
-		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
+		if (is_object($params['product']))
+			$params['product'] = get_object_vars($params['product']);
+		
+		$qty = intval(isset($params['product']['quantity_attribute']) AND $params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
 		if ($qty <= intval(Configuration::get('mA_last_qties')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
@@ -226,11 +232,12 @@ class MailAlerts extends Module
 				'{product}' => strval($params['product']['name']));
 			$iso = Language::getIsoById(intval($cookie->id_lang));
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
-				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
-
-		if ($this->_customer_qty AND $params['product']->quantity > 0)
-			$this->sendCustomerAlert(intval($params['product']->id), 0);
+		
+		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
+			$this->sendCustomerAlert(intval($params['product']['id']), 0);
+		
 	}
 
 	public function hookUpdateProduct($params)
@@ -260,9 +267,9 @@ class MailAlerts extends Module
 			WHERE `id_product` = '.intval($id_product).' 
 			AND `id_product_attribute` = '.intval($id_product_attribute));
 		
-		$product =  new Product(intval($id_product));
+		$product =  new Product(intval($id_product), false, intval($cookie->id_lang));
 		$templateVars = array(
-			'{product}' => strval($product->name[intval(Configuration::get('PS_LANG_DEFAULT'))]),
+			'{product}' => (is_array($product->name) ? $product->name[intval(Configuration::get('PS_LANG_DEFAULT'))] : $product->name),
 			'{product_link}' => $link->getProductLink($product)
 		);
 		foreach ($customers as $cust)

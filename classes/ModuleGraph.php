@@ -122,7 +122,9 @@ abstract class ModuleGraph extends Module
 	
 	public function create($render, $type, $width, $height, $layers)
 	{
-		require_once(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php');
+		if (!Tools::file_exists_cache($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+			die(Tools::displayError());
+		require_once($file);
 		$this->_render = new $render($type);
 		
 		$this->getData($layers);

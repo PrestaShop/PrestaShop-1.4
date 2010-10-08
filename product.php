@@ -194,6 +194,7 @@ else
 		$smarty->assign(array(
 			'quantity_discounts' => QuantityDiscount::getQuantityDiscounts(intval($product->id), $product->getPriceWithoutReduct()),
 			'product' => $product,
+			'homeSize' => Image::getSize('home'),
 			'jqZoomEnabled' => $jqZoomEnabled,
 			'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
 			'token' => Tools::getToken(false),

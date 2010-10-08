@@ -11,7 +11,9 @@
   * @version 1.2
   *
   */
-
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+	
 class		Carrier extends ObjectModel
 {
 	/** @var int Tax id (none = 0) */

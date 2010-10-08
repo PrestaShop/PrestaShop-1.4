@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class Blocknewsletter extends Module
 {
  	public function __construct()

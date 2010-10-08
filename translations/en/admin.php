@@ -17,5 +17,6 @@ $_LANGADM['AdminProducts179848d41777c5c5bd13bff5411c1eda'] = 'Minimum quantity:'
 $_LANGADM['AdminProducts4c95c2e91f3ee35993bc3d9aacdaa501'] = 'The minimum quantity to buy this product (set to 1 to disable this feature)';
 $_LANGADM['AdminStatuses0133c7a0fa55069df27f8d9be2c6ab89'] = 'Order statuses';
 $_LANGADM['AdminStatusesdc0d0ea31daf9b78138943e8fd06e3a3'] = 'Order return statuses';
+$_LANGADM['AdminTranslations228e51fac119b96085eae54fe69644f6'] = 'Error messages translations';
 
 ?>

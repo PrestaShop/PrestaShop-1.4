@@ -197,19 +197,41 @@ class AdminOrders extends AdminTab
 				if ($productList OR $customizationList)
 				{
 					if ($productList)
+					{
+						$id_cart = Cart::getCartIdByOrderId($order->id);
+						$customization_quantities = Customization::countQuantityByCart($id_cart);
+						
 						foreach ($productList AS $key => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
 							if (!$qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('No quantity selected for product.');
+							
+							// check actionable quantity 
+							$order_detail = new OrderDetail($id_order_detail);
+							$customization_quantity = array_key_exists($order_detail->product_id, $customization_quantities) ? $customization_quantities[$order_detail->product_id] : 0;
+
+							if (($order_detail->product_quantity - $customization_quantity - $order_detail->product_quantity_refunded - $order_detail->product_quantity_return) < $qtyCancelProduct)
+								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
+							
 						}
+					}
 					if ($customizationList)
+					{
+						$customization_quantities = Customization::retrieveQuantitiesFromIds(array_keys($customizationList));
+					
 						foreach ($customizationList AS $id_customization => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
+							$customization_quantity = $customization_quantities[$id_customization];
+				
 							if (!$qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('No quantity selected for product.');
+							
+							if ($qtyCancelProduct > ($customization_quantity['quantity'] - ($customization_quantity['quantity_refunded'] + $customization_quantity['quantity_returned'])))
+								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
 						}
+					}
 
 					if (!sizeof($this->_errors) AND $productList)
 						foreach ($productList AS $key => $id_order_detail)
@@ -228,11 +250,18 @@ class AdminOrders extends AdminTab
 								{
 									$updProductAttributeID = !empty($orderDetail->product_attribute_id) ? intval($orderDetail->product_attribute_id) : NULL;
 									$newProductQty = Product::getQuantity(intval($orderDetail->product_id), $updProductAttributeID);
+									$product = get_object_vars(new Product(intval($orderDetail->product_id), false, intval($cookie->id_lang)));
 									if (!empty($orderDetail->product_attribute_id))
+									{
 										$updProduct['quantity_attribute'] = intval($newProductQty);
+										$product['quantity_attribute'] = $updProduct['quantity_attribute'];
+									}
 									else
+									{
 										$updProduct['stock_quantity'] = intval($newProductQty);
-									Hook::updateQuantity($updProduct, $order);
+										$product['stock_quantity'] = $updProduct['stock_quantity'];
+									}
+									Hook::updateQuantity($product, $order);
 								}
 							}
 
@@ -361,7 +390,7 @@ class AdminOrders extends AdminTab
 						<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 				if ((!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN')) AND intval(($customization['quantity_returned']) < intval($customization['quantity'])))
 					echo '
-						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \'_'.$customizationId.'\', 1)" '.((intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
+						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \''.$customizationId.'\', \''.$customization['quantity'].'\')" '.((intval($customization['quantity_returned'] + $customization['quantity_refunded']) >= intval($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
 				else
 					echo '--';
 				echo '
@@ -715,7 +744,7 @@ class AdminOrders extends AdminTab
 										<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 								if ((!$order->hasBeenDelivered() OR Configuration::get('PS_ORDER_RETURN')) AND intval($product['product_quantity_return']) < intval($product['product_quantity']))
 									echo '
-										<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', '.intval($product['product_quantity'] - $product['customizationQuantityTotal']).')" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
+										<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.intval($product['id_order_detail']).', '.intval($product['product_quantity_in_stock'] - $product['customizationQuantityTotal'] - $product['product_quantity_reinjected']).')" '.((intval($product['product_quantity_return'] + $product['product_quantity_refunded']) >= intval($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
 								else
 									echo '--';
 								echo '

@@ -437,7 +437,7 @@ class		Product extends ObjectModel
 	*
 	* @return array Attributes list
 	*/
-	public static function getDefaultAttribute($id_product, $minimumQuantity = 0)
+	static public function getDefaultAttribute($id_product, $minimumQuantity = 0)
 	{
 		$sql = 'SELECT `id_product_attribute`
 		FROM `'._DB_PREFIX_.'product_attribute`
@@ -1420,7 +1420,8 @@ class		Product extends ObjectModel
 		// Avoid an error with 1970-01-01
 		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
 			return 0;
-		$currentDate = date('Y-m-d H:m:i');
+		$currentDate = date('Y-m-d H:i:s');
+		
 		if ($date_from != $date_to AND ($currentDate > $date_to OR $currentDate < $date_from))
 			return 0;
 
@@ -1533,6 +1534,7 @@ class		Product extends ObjectModel
 		$reduc = Tools::convertPrice($result['reduction_price'], $currency);
 		if ($only_reduc OR $usereduc)
 			$reduc = self::getReductionValue($reduc, $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], Tools::ps_round($price, 2), $usetax, floatval($result['rate']));
+			
 		// Only reduction
 		if ($only_reduc)
 			return $reduc;
@@ -1673,7 +1675,11 @@ class		Product extends ObjectModel
 	* @return integer Available quantities
 	*/
 	public static function getQuantity($id_product, $id_product_attribute = NULL)
-	{		
+	{
+		$lang = Configuration::get('PS_LANG_DEFAULT');
+		if (Pack::isPack(intval($id_product), intval($lang)) AND !Pack::isInStock(intval($id_product), intval($lang)))
+			return 0;
+		
 		$result = Db::getInstance()->getRow('
 		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
 		FROM `'._DB_PREFIX_.'product` p

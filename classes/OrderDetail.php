@@ -48,6 +48,12 @@ class OrderDetail extends ObjectModel
 	public $product_price;
 	
 	/** @var float */
+	public $reduction_percent;
+	
+	/** @var float */
+	public $reduction_amount;
+	
+	/** @var float */
 	public $product_quantity_discount;
 	
 	/** @var float */
@@ -95,6 +101,8 @@ class OrderDetail extends ObjectModel
 	'product_quantity_refunded' => 'isUnsignedInt',
 	'product_quantity_reinjected' => 'isUnsignedInt',
 	'product_price' => 'isPrice',
+	'reduction_percent' => 'isFloat',
+	'reduction_amount' => 'isPrice',
 	'product_quantity_discount' => 'isFloat',
 	'product_ean13' => 'isEan13',
 	'product_reference' => 'isReference',
@@ -123,6 +131,8 @@ class OrderDetail extends ObjectModel
 		$fields['product_quantity_refunded'] = intval($this->product_quantity_refunded);
 		$fields['product_quantity_reinjected'] = intval($this->product_quantity_reinjected);
 		$fields['product_price'] = floatval($this->product_price);
+		$fields['reduction_percent'] = floatval($this->reduction_percent);
+		$fields['reduction_amount'] = floatval($this->reduction_amount);
 		$fields['product_quantity_discount'] = floatval($this->product_quantity_discount);
 		$fields['product_ean13'] = pSQL($this->product_ean13);
 		$fields['product_reference'] = pSQL($this->product_reference);

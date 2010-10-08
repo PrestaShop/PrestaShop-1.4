@@ -123,7 +123,7 @@ CREATE TABLE `PREFIX_block_cms` (
   PRIMARY KEY  (`id_block`,`id_cms`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_carrier` (
+CREATE TABLE `PREFIX_carrier` (
   `id_carrier` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_tax` int(10) unsigned DEFAULT '0',
   `name` varchar(64) NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_carrier` (
   PRIMARY KEY (`id_carrier`),
   KEY `deleted` (`deleted`,`active`),
   KEY `id_tax` (`id_tax`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_carrier_lang` (
   `id_carrier` int(10) unsigned NOT NULL,
@@ -698,7 +698,7 @@ CREATE TABLE `PREFIX_image` (
   `cover` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_image`),
   KEY `image_product` (`id_product`),
-  KEY `product_position` (`id_product`,`position`),
+  UNIQUE KEY `product_position` (`id_product`,`position`),
   KEY `id_product_cover` (`id_product`,`cover`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1297,7 +1297,7 @@ CREATE TABLE `PREFIX_search_engine` (
 CREATE TABLE `PREFIX_search_index` (
   `id_product` int(11) unsigned NOT NULL,
   `id_word` int(11) unsigned NOT NULL,
-  `weight` tinyint(4) NOT NULL default '1',
+  `weight` smallint(4) unsigned NOT NULL default 1,
   PRIMARY KEY  (`id_word`, `id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -11,7 +11,9 @@
   *
   */
 
-define('PS_ADMIN_DIR', getcwd());
+define('_PS_ADMIN_DIR_', getcwd());
+define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
+
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 include(PS_ADMIN_DIR.'/header.inc.php');
@@ -71,7 +73,7 @@ else /* Else display homepage */
 	'.translate('Click the tabs to navigate.').'
 	<br /><br /><br />';
 	if (@ini_get('allow_url_fopen') AND $update = checkPSVersion())
-		echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.translate('New PrestaShop version avalaible').' : <a style="text-decoration: underline;" href="'.$update['link'].'">'.translate('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
+		echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.translate('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'">'.translate('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
     elseif (!@ini_get('allow_url_fopen'))
     {
 		echo '<p>'.translate('Update notification unavailable').'</p>';

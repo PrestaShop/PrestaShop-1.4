@@ -225,16 +225,21 @@ class		Discount extends ObjectModel
 	public function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $idCart = false, $useTax = true)
 	{
 		$totalAmount = 0;
-
-		if ((!$this->cumulable AND intval($nb_discounts) > 1) OR !$this->active OR !$this->quantity)
+		
+		$cart = new Cart(intval($idCart));
+		if (!Validate::isLoadedObject($cart))
 			return 0;
+		
+		if ((!$this->cumulable AND intval($nb_discounts) > 1) OR !$this->active OR (!$this->quantity AND !$cart->OrderExists()))
+			return 0;
+		
+		if ($this->usedByCustomer(intval($cart->id_customer)) >= $this->quantity_per_user AND !$cart->OrderExists())
+			return 0;
+
 		$date_start = strtotime($this->date_from);
 		$date_end = strtotime($this->date_to);
-		if (time() < $date_start OR time() > $date_end) return 0;
+		if ((time() < $date_start OR time() > $date_end) AND !$cart->OrderExists()) return 0;
 
-		$cart = new Cart(intval($idCart));
-		if (Validate::isLoadedObject($cart) AND $this->usedByCustomer(intval($cart->id_customer)) >= $this->quantity_per_user)
-			return 0;
 		$products = $cart->getProducts();
 		$categories = Discount::getCategories(intval($this->id));
 		$in_category = false;
@@ -265,27 +270,11 @@ class		Discount extends ObjectModel
 				$currency = ((int)$cart->id_currency ? Currency::getCurrencyInstance($cart->id_currency) : Currency::getCurrent());
 				if ($this->id_currency != $currency->id)
 					return 0;
-			
-				$totalProducts_moy = 0;
-				$ratioTax = 0;
-				
-				if (Configuration::get('PS_TAX'))
-				{
-					foreach ($products AS $product)
-						if (!$useTax)
-						{
-							if ($product['rate'] == 0)
-								$product['rate'] = 1;
-							$totalProducts_moy += $product['total_wt'];
-							$ratioTax += $product['total_wt'] * $product['rate'];
-						}
-				}
 
-				if ($totalProducts_moy != 0 AND !$useTax)
-					$taxDiscount = Tools::ps_round($ratioTax / $totalProducts_moy, 2);
+				$taxDiscount = Cart::getTaxesAverageUsed(intval($cart->id));
 				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
 					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
-				
+
 				// Main return
 				foreach ($products AS $product)
 					if (Product::idIsOnCategoryId($product['id_product'], $categories))

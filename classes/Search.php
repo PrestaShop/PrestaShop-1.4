@@ -44,7 +44,6 @@ define('PREG_CLASS_SEARCH_EXCLUDE',
 '\x{fd3f}\x{fdfc}-\x{fe6b}\x{feff}-\x{ff0f}\x{ff1a}-\x{ff20}\x{ff3b}-\x{ff40}'.
 '\x{ff5b}-\x{ff65}\x{ff70}\x{ff9e}\x{ff9f}\x{ffe0}-\x{fffd}');
 
-
 define('PREG_CLASS_NUMBERS',
 '\x{30}-\x{39}\x{b2}\x{b3}\x{b9}\x{bc}-\x{be}\x{660}-\x{669}\x{6f0}-\x{6f9}'.
 '\x{966}-\x{96f}\x{9e6}-\x{9ef}\x{9f4}-\x{9f9}\x{a66}-\x{a6f}\x{ae6}-\x{aef}'.
@@ -71,7 +70,16 @@ define('PREG_CLASS_PUNCTUATION',
 '\x{30fb}\x{fd3e}\x{fd3f}\x{fe30}-\x{fe52}\x{fe54}-\x{fe61}\x{fe63}\x{fe68}'.
 '\x{fe6a}\x{fe6b}\x{ff01}-\x{ff03}\x{ff05}-\x{ff0a}\x{ff0c}-\x{ff0f}\x{ff1a}'.
 '\x{ff1b}\x{ff1f}\x{ff20}\x{ff3b}-\x{ff3d}\x{ff3f}\x{ff5b}\x{ff5d}\x{ff5f}-'.
-'\x{ff65}');
+'\x{ff65}'); 
+
+/**
+ * Matches all CJK characters that are candidates for auto-splitting
+ * (Chinese, Japanese, Korean).
+ * Contains kana and BMP ideographs.
+ */
+define('PREG_CLASS_CJK', '\x{3041}-\x{30ff}\x{31f0}-\x{31ff}\x{3400}-\x{4db5}'.
+'\x{4e00}-\x{9fbb}\x{f900}-\x{fad9}');
+
 
 class Search
 {
@@ -143,7 +151,7 @@ class Search
 		$words = explode(' ', Search::sanitize($expr, $id_lang));
 
 		foreach ($words as $key => $word)
-			if (!empty($word))
+			if (!empty($word) AND strlen($word) != 1)
 			{
 				$word = str_replace('%', '\\%', $word);
 				$word = str_replace('_', '\\_', $word);
@@ -159,6 +167,7 @@ class Search
 			}
 			else
 				unset($words[$key]);
+
 		if (!sizeof($words))
 			return ($ajax ? array() : array('total' => 0, 'result' => array()));
 			
@@ -223,6 +232,7 @@ class Search
 		WHERE p.`id_product` '.$productPool.'
 		'.($orderBy ? 'ORDER BY  '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.intval(($pageNumber - 1) * $pageSize).','.intval($pageSize);
+		
 		$result = $db->ExecuteS($queryResults);
 		$total = $db->getValue('SELECT FOUND_ROWS()');
 

@@ -230,10 +230,16 @@ class		Order extends ObjectModel
 	/* DOES delete the product */
 	private function _deleteProduct($orderDetail, $quantity)
 	{
-		$unitPrice = number_format($orderDetail->product_price * (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
-		$productPrice = number_format($quantity * $unitPrice, 2, '.', '');
+		$price = $orderDetail->product_price * (1 + $orderDetail->tax_rate * 0.01);
+		if ($orderDetail->reduction_percent != 0.00)
+			$reduction_amount = $price * $orderDetail->reduction_percent / 100;
+		elseif ($orderDetail->reduction_amount != '0.000000')
+			$reduction_amount = Tools::ps_round($orderDetail->reduction_amount * (1 + $orderDetail->tax_rate * 0.01), 2);
+		if (isset($reduction_amount) AND $reduction_amount)
+			$price = Tools::ps_round($price - $reduction_amount, 2);
+		$unitPrice = number_format($price, 2, '.', '');	
+		$productPrice = number_format($quantity * $price, 2, '.', '');
 		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
-
 		/* Update cart */
 		$cart = new Cart($this->id_cart);
 		$cart->updateQty($quantity, $orderDetail->product_id, $orderDetail->product_attribute_id, false, 'down'); // customization are deleted in deleteCustomization
@@ -241,11 +247,15 @@ class		Order extends ObjectModel
 		
 		/* Update order */
 		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();		
-		$this->total_products    -= $productPriceWithoutTax;
+		$this->total_products -= $productPriceWithoutTax;
 		$this->total_products_wt -= $productPrice;
-		$this->total_shipping     = $cart->getOrderShippingCost();
-		$this->total_paid         = $cart->getOrderTotal();
-		$this->total_paid_real   -= ($productPrice + $shippingDiff);
+		$this->total_shipping = $cart->getOrderShippingCost();
+		/* It's temporary fix for 1.3 version... */
+		if ($orderDetail->product_quantity_discount != '0.000000')
+			$this->total_paid -= ($productPrice + $shippingDiff);
+		else
+			$this->total_paid = $cart->getOrderTotal();
+		$this->total_paid_real -= ($productPrice + $shippingDiff);
 		
 		/* Prevent from floating precision issues (total_products has only 2 decimals) */
 		if ($this->total_products < 0)
@@ -416,6 +426,11 @@ class		Order extends ObjectModel
 			$resultArray[intval($row['id_order_detail'])] = $row;
 		}
 		return $resultArray;
+	}
+
+	public function getTaxesAverageUsed()
+	{
+		return Cart::getTaxesAverageUsed(intval($this->id_cart));
 	}
 
 	/**
