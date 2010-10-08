@@ -42,7 +42,7 @@ legend{background:#7AB51D url(thead.png) repeat-x top left;border:1px solid #364
 .tab-page {border:1px solid #383838;background:#F6F6F6}
 .tab-row .tab.selected {border:1px solid #383838;background:#812143}
 .tab-row .tab.selected a{color:#FDFDFD}
-.tab-row .tab {border:1px solid #FDFDFD;background:#EFEFEF}
+.tab-row .tab {border:1px solid #FDFDFD;background:#EFEFEF;width:105px;height:24px;line-height:24px;vertical-align:middle}
 hr {height: 1px;color:#DEDEDE;background-color:#DEDEDE}
 #footer {height:40px;background:#DDDDDD url("footer-bg.png") repeat-x scroll left bottom;border:1px solid #383838;font-size:12px;clear:both;font-size:0.9em;color:#666666}
 #content {background-color:#FFF;border-left:1px solid #383838;border-right:1px solid #383838}
