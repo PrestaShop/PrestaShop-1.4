@@ -157,9 +157,9 @@ abstract class AdminStatsTab extends AdminPreferences
 					<input type="submit" name="submitDateDay" class="button" value="'.$translations['Day'].'">
 					<input type="submit" name="submitDateMonth" class="button" value="'.$translations['Month'].'">
 					<input type="submit" name="submitDateYear" class="button" value="'.$translations['Year'].'"><br />
-					<input type="submit" name="submitDateDayPrev" class="button" value="'.$translations['Day'].'-1">
-					<input type="submit" name="submitDateMonthPrev" class="button" value="'.$translations['Month'].'-1">
-					<input type="submit" name="submitDateYearPrev" class="button" value="'.$translations['Year'].'-1">
+					<input type="submit" name="submitDateDayPrev" class="button" value="'.$translations['Day'].'-1" style="margin-top:2px">
+					<input type="submit" name="submitDateMonthPrev" class="button" value="'.$translations['Month'].'-1" style="margin-top:2px">
+					<input type="submit" name="submitDateYearPrev" class="button" value="'.$translations['Year'].'-1" style="margin-top:2px">
 					<p>'.(isset($translations['From']) ? $translations['From'] : 'From:').' <input type="text" name="datepickerFrom" id="datepickerFrom" value="'.Tools::getValue('datepickerFrom', $employee->stats_date_from).'"></p>
 					<p>'.(isset($translations['To']) ? $translations['To'] : 'To:').' <input type="text" name="datepickerTo" id="datepickerTo" value="'.Tools::getValue('datepickerTo', $employee->stats_date_to).'"></p>
 					<input type="submit" name="submitDatePicker" class="button" value="'.(isset($translations['Save']) ? $translations['Save'] : '   Save   ').'" />

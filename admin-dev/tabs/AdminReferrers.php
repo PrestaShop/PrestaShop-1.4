@@ -140,13 +140,13 @@ class AdminReferrers extends AdminTab
 		if ($this->enableCalendar())
 		{
 			echo '
-			<div style="float: left; margin-right: 20px;">
+			<div style="float:left;margin-right:20px">
 				'.AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'))).'
 			</div>';
 			if (!Tools::isSubmit('viewreferrer'))
 				echo '
 				<div style="float: left; margin-right: 20px;">
-					<fieldset><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
+					<fieldset style="width:630px"><legend><img src="../img/admin/tab-preferences.gif" /> '.$this->l('Settings').'</legend>
 						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 							<label>'.$this->l('Save direct traffic').'</label>
 							<div class="float" style="margin-left: 200px;">
