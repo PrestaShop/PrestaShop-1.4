@@ -67,8 +67,7 @@ class BlockSearch extends Module
 			Tools::addCSS(_PS_CSS_DIR_.'jquery.autocomplete.css');
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.autocomplete.js');
 		}
-		if ($instantSearch)
-				Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
+		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksearch.css', 'all');
 	}
 	

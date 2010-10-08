@@ -49,15 +49,7 @@ $protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_E
 define('_PS_BASE_URL_', $protocol.$server_host);
 define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
 
-/* Include appropriate language file */
-Tools::setCookieLanguage();
-if (Tools::isSubmit('adminlang'))
-{
-	Tools::switchLanguage();
-	if ($id_lang = Tools::getValue('id_lang'))
-		$cookie->id_lang = $id_lang;
-}
-
+$cookie->id_lang = Db::getInstance()->getValue('SELECT id_lang FROM '._DB_PREFIX_.'employee WHERE id_employee = '.(int)$cookie->id_employee);
 $iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
