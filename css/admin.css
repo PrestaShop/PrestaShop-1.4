@@ -48,9 +48,6 @@ p {
 
 hr {
 	border: none;
-	height: 1px;
-	color: #E0D0B1;
-	background-color: #E0D0B1;
 	padding: 0;
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -241,15 +238,10 @@ input, textarea, option {
 
 input[type="text"], input[type="password"], input[type="file"], textarea {
 	padding: 2px 4px;
-	border: 1px solid #E0D0B1;
 }
 
 input[type="text"], input[type="password"], input[type="file"], input[type="radio"], input[type="checkbox"], textarea, select, option {
 	background-color: white;
-}
-
-select {
-	border: 1px solid #E0D0B1;
 }
 
 input:focus, textarea:focus {
@@ -311,9 +303,6 @@ select optgroup option {
 
 #content {
 	padding: 1.25em;
-	background-color: #FFF;
-	border-left:1px solid #999999;
-	border-right:1px solid #999999;
 }
 
 #news {
@@ -508,16 +497,6 @@ select optgroup option {
 
 .table tr.last td {
 	border-bottom: none;
-}
-
-#footer {
-	height: 40px;
-	background: #ECEADE url("../img/admin/submenu-bg.gif") repeat-x scroll left bottom;
-	border: 1px solid #999999;
-	font-size: 12px;
-	clear: both;
-	font-size: 0.9em;
-	color:#666666;
 }
 
 .footer_link, .footer_link:hover {

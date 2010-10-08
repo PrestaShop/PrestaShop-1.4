@@ -39,3 +39,11 @@ legend{background:#FFF6D3;border:1px solid #DFD5C3;font-weight:700;margin:0;padd
 #submenu li a{text-decoration:underline}
 #menu li{_height:32px;_padding-top:3px}
 #menu li a{_display:inline;_padding:6px 5px 4px 0}
+.tab-page {border:1px solid #ccc;background:#FFFFF0}
+.tab-row .tab.selected {border:1px solid #ccc;background:#FFF6D3;margin:1px -3px -3px 0px;top:-2px}
+.tab-row .tab {background:#EFEFEF}
+hr {height: 1px;color:#E0D0B1;background-color:#E0D0B1}
+#footer {height:40px;background:#ECEADE url(footer-bg.png) repeat-x scroll left bottom;border:1px solid #999999;font-size:12px;clear:both;font-size:0.9em;color:#666666}
+#content {background-color:#FFF;border-left:1px solid #999999;border-right:1px solid #999999}
+input[type="text"],input[type="password"],input[type="file"],textarea {border:1px solid #E0D0B1}
+select {border: 1px solid #E0D0B1}
