@@ -87,8 +87,21 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <div id="primary_block" class="clearfix">
-
 	<h2>{$product->name|escape:'htmlall':'UTF-8'}</h2>
+
+	{if $adminActionDisplay}
+	<div id="admin-action">
+		<p>This product is not visible by your customers.
+		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
+		<input type="submit" value="publish" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>			
+		<input type="submit" value="back" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>			
+		</p>
+		<div class="clear" ></div>
+		<p id="admin-action-result"></p>
+		</p>
+	</div>
+	{/if}
+	
 	{if $confirmation}
 	<p class="confirmation">
 		{$confirmation}

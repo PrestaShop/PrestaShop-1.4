@@ -401,3 +401,20 @@ function saveCustomization()
 	$('#customizationForm').attr('action', customAction);
 	$('#customizationForm').submit();
 }
+
+
+function submitPublishProduct(url, redirect)
+{
+	var id_product = $('#admin-action-product-id').val();	
+
+	$.ajaxSetup({async: false});
+	$.post(url+'/ajax.php', { submitPublishProduct: '1', id_product: id_product, status: 1, redirect: redirect },
+		function(data)
+		{
+			if (data.indexOf('error') === -1)
+				document.location.href = data;				
+		}	
+	);
+	
+	return true;
+}

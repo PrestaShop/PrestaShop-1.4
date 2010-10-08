@@ -235,4 +235,41 @@ if (Tools::getValue('form_language_id'))
 	die ('Form language updated.');
 }
 
+if (Tools::getValue('submitPublishProduct'))
+{
+	global $cookie;
+
+	
+	if (Tools::getIsset('id_product'))
+	{	
+		$id_product = intval(Tools::getIsset('id_product'));
+		$id_tab_catalog = intval(Tab::getIdFromClassName('AdminCatalog'));
+		$token = Tools::getAdminToken('AdminCatalog'.intval($id_tab_catalog).intval($cookie->id_employee));
+		$bo_product_url = dirname($_SERVER['PHP_SELF']).'/index.php?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.$token;
+
+		if (Tools::getValue('redirect'))
+			die($bo_product_url);
+			
+		$profileAccess = Profile::getProfileAccess(intval($cookie->profile), $id_tab_catalog);
+		if($profileAccess['edit'])
+		{
+			$product = new Product(intval(Tools::getValue('id_product')));
+			if (!Validate::isLoadedObject($product))
+				die('error: invalid id');
+		
+			$product->active = 1;
+		
+			if ($product->save())
+				die($bo_product_url);
+			else 
+				die('error: saving');
+
+		} else {
+			die('error: permissions');
+		}
+	}
+	else 
+		die ('error: parameters');	
+}
+
 ?>

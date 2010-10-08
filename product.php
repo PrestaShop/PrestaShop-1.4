@@ -108,7 +108,9 @@ if (!$id_product = intval(Tools::getValue('id_product')) OR !Validate::isUnsigne
 else
 {
 	$product = new Product($id_product, true, intval($cookie->id_lang));
-	if (!Validate::isLoadedObject($product) OR !$product->active)
+
+	if (!Validate::isLoadedObject($product) OR (!$product->active AND (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$product->id))
+																	|| !file_exists(dirname(__FILE__).'/'.Tools::getValue('ad').'/ajax.php')))
 	{
 		header('HTTP/1.1 404 page not found');
 		$errors[] = Tools::displayError('product is no longer available');
@@ -118,6 +120,9 @@ else
 	else
 	{
 		$smarty->assign('virtual', ProductDownload::getIdFromIdProduct(intval($product->id)));
+
+		if (!$product->active)
+			$smarty->assign('adminActionDisplay', true);			
 
 		/* rewrited url set */
 		$rewrited_url = $link->getProductLink($product->id, $product->link_rewrite);

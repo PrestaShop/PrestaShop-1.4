@@ -75,7 +75,7 @@ class AdminProducts extends AdminTab
 		if ($_POST['volume_price'] != NULL) $object->volume_price = str_replace(',', '.', $_POST['volume_price']);
 		if ($_POST['unity_price'] != NULL) $object->unity_price = str_replace(',', '.', $_POST['unity_price']);
 		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
-		$object->active = (!isset($_POST['active']) OR $_POST['active']) ? true : false;
+		$object->active = isset($_POST['active']) ? $_POST['active'] : 0;
 		$object->on_sale = (!isset($_POST['on_sale']) ? false : true);
 	}
 
@@ -128,10 +128,11 @@ class AdminProducts extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $currentIndex;
-		
+
 		/* Add a new product */
-		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay'))
+		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay') OR  Tools::isSubmit('submitAddProductAndPreview'))
 		{
+		
 			if (Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1')
 				$this->submitAddproduct($token);
 			elseif ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product'))
@@ -833,9 +834,27 @@ class AdminProducts extends AdminTab
 							Search::indexation(false);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&edit='.strval(Tools::getValue('productCreated')).'&id_image='.$id_image.'&imageresize&toconf=4&submitAddAndStay='.((Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR Tools::getValue('productCreated') == 'on') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
+
+							// Save and preview							
+							if (Tools::isSubmit('submitAddProductAndPreview'))
+							{		
+								$link = new Link();
+								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), intval($cookie->id_lang))));
+								if (!$obj->active)
+								{
+									$admin_dir = dirname($_SERVER['PHP_SELF']);
+									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+									$token = Tools::encrypt('PreviewProduct'.$object->id);
+						
+									$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+								}
+
+								Tools::redirectLink($preview_url);															
+							} else if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.intval(Tools::getValue('id_category')).'&addproduct&conf=4&tabs='.intval(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
+
 							// Default behavior (save and back)
 							Tools::redirectAdmin($currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'&conf=4&token='.($token ? $token : $this->token));
 						}
@@ -1080,6 +1099,20 @@ class AdminProducts extends AdminTab
 			</div>';
 		}
 	}
+	
+	private function _displayDraftWarning($active)
+	{
+		return '<div class="warn draft" style="'.($active ? 'display:none' : '').'">
+				<p>
+				<span style="float: left">
+				<img src="../img/admin/warn2.png" />
+				'.$this->l('Your product will be saved as draft').'
+				</span>
+				<span style="float:right"><input type="submit" class="button" name="submitAddProductAndPreview" value="Save and preview" / ></span>
+				<br class="clear" />
+				</p>
+	 		</div>';
+	}
 
 	public function displayForm($isMainTab = true)
 	{
@@ -1094,7 +1127,7 @@ class AdminProducts extends AdminTab
 
 		if ($obj->id)
 			$currentIndex .= '&id_product='.$obj->id;
-
+		
 		echo '
 		<h3>'.$this->l('Current product:').' <span id="current_product" style="font-weight: normal;">'.$this->l('no name').'</span></h3>
 		<script type="text/javascript">
@@ -1104,6 +1137,8 @@ class AdminProducts extends AdminTab
 		<script src="../js/tabpane.js" type="text/javascript"></script>
 		<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" enctype="multipart/form-data" name="product" id="product">
+			'.$this->_displayDraftWarning($obj->active).'
+
 			<input type="hidden" name="tabs" id="tabs" value="0" />
 			<input type="hidden" name="id_category" value="'.(($id_category = Tools::getValue('id_category')) ? intval($id_category) : '0').'">
 			<div class="tab-pane" id="tabPane1">';
@@ -1161,7 +1196,9 @@ class AdminProducts extends AdminTab
 			</div>
 			<div class="clear"></div>
 			<input type="hidden" name="id_product_attribute" id="id_product_attribute" value="0" />
+			<br />'.$this->_displayDraftWarning($obj->active).'
 		</form>';
+
 		if (Tools::getValue('id_category') > 1)
 		{
 			$productIndex = preg_replace('/(&id_product=[0-9]*)/', '', $currentIndex);
@@ -1434,6 +1471,8 @@ class AdminProducts extends AdminTab
 		$cover = Product::getCover($obj->id);
 		$link = new Link();
 
+		
+
 		//includeDatepicker(array('reduction_from', 'reduction_to'));
 		echo '
 		<div class="tab-page" id="step1">
@@ -1461,10 +1500,24 @@ class AdminProducts extends AdminTab
 				});
 			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
+		$preview_url = '';
 		if (isset($obj->id))
 		{
+		
+			$preview_url = ($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang))));
+	
+			if (!$obj->active)
+			{
+				$admin_dir = dirname($_SERVER['PHP_SELF']);
+				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+				$token = Tools::encrypt('PreviewProduct'.$obj->id);
+						
+				$preview_url .= $obj->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+			}
+			
 			echo '
-		<a href="'.($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), intval($cookie->id_lang)))).'"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
+		<a href="'.$preview_url.'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
+
 			if (file_exists(_PS_MODULE_DIR_.'statsproduct/statsproduct.php'))
 				echo '&nbsp;-&nbsp;
 				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.intval(Tab::getIdFromClassName('AdminStatsModules')).intval($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
@@ -1487,14 +1540,15 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td style="vertical-align:top">'.$this->l('Status:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float:left;" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+							<input style="float:left;" onclick="toggleDraftWarning(false)" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_on" class="t"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" style="float:left; padding:0px 5px 0px 5px;" />'.$this->l('Enabled').'</label>
 							<br class="clear" />
-							<input style="float:left;" type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
-							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').'</label>
+							<input style="float:left;" onclick="toggleDraftWarning(true)"  type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').($obj->active ? '' : ' (<a href="'.$preview_url.'" alt="" target="_blank">'.$this->l('View product in shop').'</a>)').'</label>
 						</td>
-					</tr>
-					<tr>
+					</tr>';
+
+		echo		'<tr>
 						<td>'.$this->l('Manufacturer:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="id_manufacturer" id="id_manufacturer">
@@ -2083,7 +2137,9 @@ class AdminProducts extends AdminTab
 							&nbsp;<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" /></td>
 					</tr>
 				</table>
+			<br />		
 			</div>
+
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 				<script type="text/javascript">
 					tinyMCE.init({

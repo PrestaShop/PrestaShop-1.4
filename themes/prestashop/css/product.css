@@ -140,3 +140,14 @@
 	font-size: 0.75em;
 	text-align: right
 }
+#admin-action {
+    color: #374853; 
+    background-color: #DFFAD3; 
+    margin-bottom:10px; 
+    padding: 4px; 
+    border: 1px solid #72CB67
+}
+#admin-action input.exclusive
+{
+	float: right;
+}

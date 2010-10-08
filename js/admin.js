@@ -792,3 +792,11 @@ function clearAllFees(id_range)
 {
 	$('#fees_all_'+id_range).val('');
 }
+
+function toggleDraftWarning(show)
+{
+	if (show)
+		$('.draft').slideDown('slow');
+	else 
+		$('.draft').slideUp('slow');	
+}

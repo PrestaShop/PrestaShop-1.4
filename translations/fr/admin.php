@@ -2011,6 +2011,7 @@ $_LANGADM['AdminShipping006300efaf063e1705dd614ea0ae9e8b'] = 'Frais';
 $_LANGADM['AdminShippingf8617a92ba0a0a4eabee724eab7c9f48'] = 'Transporteur :';
 $_LANGADM['AdminShippingabed9eda0a174a7b32829098aa53ae4d'] = 'Zone / Tranche';
 $_LANGADM['AdminShipping01b6e20344b68835c5ed1ddedf20d531'] = 'à';
+$_LANGADM['AdminShippingb1c94ca2fbc3e78fc30069c8d0f01680'] = 'Toutes les zones :';
 $_LANGADM['AdminShipping8c6e9d97aa1ff2b61603508a7d25e8b7'] = 'Aucune tranche pour ce transporteur';
 $_LANGADM['AdminShipping4cec162080ec7448d70bf03224c0238e'] = 'Les prix sont en hors taxes.';
 $_LANGADM['AdminSlipb718adec73e04ce3ec720dd11a06a308'] = 'ID';
