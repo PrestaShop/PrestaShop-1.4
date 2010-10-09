@@ -800,3 +800,11 @@ function toggleDraftWarning(show)
 	else 
 		$('.draft').slideUp('slow');	
 }
+
+function showOptions(show)
+{
+	if (show)
+		$('tr#product_options').slideDown('slow');
+	else
+		$('tr#product_options').slideUp('slow');
+}

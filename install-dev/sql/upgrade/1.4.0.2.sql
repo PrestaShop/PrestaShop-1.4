@@ -271,6 +271,8 @@ ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFT
 ALTER TABLE `PREFIX_product` ADD `cache_default_attribute` int(10) unsigned default NULL AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` tinyint(1) NOT NULL default '0' AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `cache_is_pack` tinyint(1) NOT NULL default '0' AFTER `indexed`;
+ALTER TABLE `PREFIX_product` ADD `available_for_order` TINYINT(1) NOT NULL DEFAULT '1' AFTER  `active`;
+ALTER TABLE `PREFIX_product` ADD `show_price` TINYINT(1) NOT NULL DEFAULT '1' AFTER `available_for_order`;
 
 SET @defaultOOS = (SELECT value FROM `PREFIX_configuration` WHERE name = 'PS_ORDER_OUT_OF_STOCK');
 /* Set 0 for every non-attribute product */

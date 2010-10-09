@@ -120,7 +120,7 @@ function updateColorSelect(id_attribute)
 //update display of the availability of the product AND the prices of the product
 function updateDisplay()
 {
-	if (!selectedCombination['unavailable'] && quantityAvailable > 0)
+	if (!selectedCombination['unavailable'] && quantityAvailable > 0 && productAvailableForOrder == 1)
 	{
 		//show the choice of quantities
 		$('#quantity_wanted_p:hidden').show('slow');
@@ -177,9 +177,12 @@ function updateDisplay()
 	else
 	{
 		//show the hook out of stock
-		$('#oosHook').show();
-		if ($('#oosHook').length > 0 && function_exists('oosHookJsCode'))
-			oosHookJsCode();
+		if (productAvailableForOrder == 1)
+		{
+			$('#oosHook').show();
+			if ($('#oosHook').length > 0 && function_exists('oosHookJsCode'))
+				oosHookJsCode();
+		}
 		
 		//hide 'last quantities' message if it was previously visible
 		$('#last_quantities:visible').hide('slow');
@@ -203,7 +206,7 @@ function updateDisplay()
 
 		
 		//show the 'add to cart' button ONLY IF it's possible to buy when out of stock AND if it was previously invisible
-		if (allowBuyWhenOutOfStock && !selectedCombination['unavailable'])
+		if (allowBuyWhenOutOfStock && !selectedCombination['unavailable'] && productAvailableForOrder == 1)
 		{
 			$('#add_to_cart:hidden').fadeIn(600);
 
@@ -220,6 +223,9 @@ function updateDisplay()
 			$('#add_to_cart:visible').fadeOut(600);
 			$('p#availability_statut:hidden').show('slow');
 		}
+		
+		if (productAvailableForOrder == 0)
+			$('p#availability_statut:visible').hide();
 	}
 	
 	if (selectedCombination['reference'] || productReference)
@@ -234,7 +240,7 @@ function updateDisplay()
 		$('#product_reference:visible').hide('slow');
 	
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
-	if (!selectedCombination['unavailable'])
+	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
 		var attribut_price_tmp = selectedCombination['price'];
 

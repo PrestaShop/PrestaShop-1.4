@@ -194,7 +194,7 @@ else
 			$product->quantity = 0;
 
 		$group_reduction = (100 - Group::getReduction(intval($cookie->id_customer))) / 100;
-			
+		
 		/* /Quantity discount management */
 		$smarty->assign(array(
 			'quantity_discounts' => QuantityDiscount::getQuantityDiscounts(intval($product->id), $product->getPriceWithoutReduct()),

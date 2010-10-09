@@ -34,6 +34,8 @@ var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};
 var displayPrice = {$priceDisplay};
 var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
+var productAvailableForOrder = '{$product->available_for_order}';
+var productShowPrice = '{$product->show_price}';
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';
@@ -198,6 +200,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- prices -->
+			{if $product->show_price}
 			<p class="price">
 				{if $product->on_sale}
 					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
@@ -254,6 +257,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{if $unity_price != NULL && $unity_price > 0.000000}
 				<p class="unity-price">{convertPrice price=$unity_price} {l s='the unity'}</p>
 			{/if}
+			{*close if for show price*}
+			{/if}
 			
 			{if isset($groups)}
 			<!-- attributes -->
@@ -263,7 +268,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<p>
 				<label for="group_{$id_attribute_group|intval}">{$group.name|escape:'htmlall':'UTF-8'} :</label>
 				{assign var='groupName' value='group_'|cat:$id_attribute_group}
-				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $colors|@count > 0}$('#resetImages').show('slow');{/if}">
+				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $colors|@count > 0}$('#resetImages').show('slow');{/if};">
 					{foreach from=$group.attributes key=id_attribute item=group_attribute}
 						<option value="{$id_attribute|intval}"{if (isset($smarty.get.$groupName) && $smarty.get.$groupName|intval == $id_attribute) || $group.default == $id_attribute} selected="selected"{/if} title="{$group_attribute|escape:'htmlall':'UTF-8'}">{$group_attribute|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
@@ -299,13 +304,13 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/if}
 			
 			<!-- quantity wanted -->
-			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) || $virtual} style="display:none;"{/if}>
+			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) OR $virtual OR !$product->available_for_order} style="display:none;"{/if}>
 				<label>{l s='Quantity :'}</label>
 				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}{if $product->minimal_quantity > 1}{$product->minimal_quantity}{else}1{/if}{/if}" size="2" maxlength="3" {if $product->minimal_quantity > 1}onkeyup="checkMinimalQuantity();"{/if} />
 			</p>
 
 			<!-- minimal quantity wanted -->
-			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' quantities minimum for buy this product.'}</p>
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' quantities minimum for buy this product.'}</p>
 			{if $product->minimal_quantity > 1}
 			<script type="text/javascript">
 				checkMinimalQuantity();
@@ -313,7 +318,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{/if}
 
 			<!-- availability -->
-			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now)} style="display:none;"{/if}>
+			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now) OR !$product->available_for_order} style="display:none;"{/if}>
 				<span id="availability_label">{l s='Availability:'}</span>
 				<span id="availability_value"{if $product->quantity == 0} class="warning-inline"{/if}>
 					{if $product->quantity == 0}{if $allow_oosp}{$product->available_later}{else}{l s='This product is no longer in stock'}{/if}{else}{$product->available_now}{/if}
@@ -321,7 +326,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- number of item in stock -->
-			<p id="pQuantityAvailable"{if $display_qties != 1 || $product->quantity == 0} style="display:none;"{/if}>
+			<p id="pQuantityAvailable"{if $display_qties != 1 OR $product->quantity == 0 OR !$product->available_for_order} style="display:none;"{/if}>
 				<span id="quantityAvailable">{$product->quantity|intval}</span>
 				<span{if $product->quantity > 1} style="display:none;"{/if} id="quantityAvailableTxt">{l s='item in stock'}</span>
 				<span{if $product->quantity == 1} style="display:none;"{/if} id="quantityAvailableTxtMultiple">{l s='items in stock'}</span>
@@ -332,12 +337,13 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{$HOOK_PRODUCT_OOS}
 			</p>
 
-			<p class="warning_inline" id="last_quantities"{if ($product->quantity > $last_qties || $product->quantity == 0) || $allow_oosp} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
+			<p class="warning_inline" id="last_quantities"{if ($product->quantity > $last_qties OR $product->quantity == 0) OR $allow_oosp OR !$product->available_for_order} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
 
-			<p{if !$allow_oosp && $product->quantity == 0} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
+			<p{if (!$allow_oosp && $product->quantity == 0) OR !$product->available_for_order} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
 			{if $HOOK_PRODUCT_ACTIONS}
 				{$HOOK_PRODUCT_ACTIONS}
 			{/if}
+			<div class="clear"></div>
 		</form>
 		{if $HOOK_EXTRA_RIGHT}{$HOOK_EXTRA_RIGHT}{/if}
 	</div>
@@ -423,9 +429,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 								<a href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='More'}" class="product_description">{$accessory.description_short|strip_tags|truncate:100:'...'}</a>
 							</p>
 							<p class="product_accessories_price">
-								<span class="price">{displayWtPrice p=$accessory.price}</span>
+								{if $accessory.show_price}<span class="price">{displayWtPrice p=$accessory.price}</span>{/if}
 								<a class="button" href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='View'}">{l s='View'}</a>
-								<a class="exclusive button ajax_add_to_cart_button" href="{$base_dir}cart.php?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>
+								{if $accessory.available_for_order}<a class="exclusive button ajax_add_to_cart_button" href="{$base_dir}cart.php?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>{/if}
 							</p>
 						</li>
 					{/foreach}

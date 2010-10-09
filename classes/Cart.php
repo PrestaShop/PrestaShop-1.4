@@ -243,7 +243,7 @@ class		Cart extends ObjectModel
 		$sql = '
 		SELECT cp.`id_product_attribute`, cp.`id_product`, cp.`quantity` AS cart_quantity, pl.`name`,
 		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`, p.`additional_shipping_cost`,
-		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`, p.`minimal_quantity`,
+		p.`quantity`, p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`, p.`minimal_quantity`, p.`available_for_order`, 
 		t.`id_tax`, tl.`name` AS tax, t.`rate`, pa.`price` AS price_attribute, pa.`quantity` AS quantity_attribute, 
         pa.`ecotax` AS ecotax_attr, i.`id_image`, il.`legend`, pl.`link_rewrite`, cl.`link_rewrite` AS category, CONCAT(cp.`id_product`, cp.`id_product_attribute`) AS unique_id,
         IF (IFNULL(pa.`reference`, \'\') = \'\', p.`reference`, pa.`reference`) AS reference, 
@@ -403,6 +403,8 @@ class		Cart extends ObjectModel
 		self::$_nbProducts = NULL;
 		if (intval($quantity) <= 0)
 			return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
+		elseif (!$product->available_for_order)
+			return false;
 		else
 		{
 			/* Check if the product is already in the cart */
@@ -1131,7 +1133,7 @@ class		Cart extends ObjectModel
 	public function checkQuantities()
 	{
 		foreach ($this->getProducts() AS $product)
-			if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']))
+			if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']) OR !$product['available_for_order'])
 				return false;
 		return true;
 	}

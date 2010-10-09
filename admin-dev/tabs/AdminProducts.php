@@ -75,8 +75,9 @@ class AdminProducts extends AdminTab
 		if ($_POST['volume_price'] != NULL) $object->volume_price = str_replace(',', '.', $_POST['volume_price']);
 		if ($_POST['unity_price'] != NULL) $object->unity_price = str_replace(',', '.', $_POST['unity_price']);
 		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
-		$object->active = isset($_POST['active']) ? $_POST['active'] : 0;
-		$object->on_sale = (!isset($_POST['on_sale']) ? false : true);
+		$object->available_for_order = $object->active ? intval(Tools::isSubmit('available_for_order')) : 1;
+		$object->show_price = $object->active ? ($object->available_for_order ? 1 : intval(Tools::isSubmit('show_price'))) : 1;
+		$object->on_sale = !Tools::isSubmit('on_sale');
 	}
 
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
@@ -1470,9 +1471,7 @@ class AdminProducts extends AdminTab
 		}
 		$cover = Product::getCover($obj->id);
 		$link = new Link();
-
 		
-
 		//includeDatepicker(array('reduction_from', 'reduction_to'));
 		echo '
 		<div class="tab-page" id="step1">
@@ -1497,6 +1496,13 @@ class AdminProducts extends AdminTab
 						}
 					);
 					
+					if($(\'#available_for_order\').is(\':checked\')){
+						$(\'#show_price\').attr(\'checked\', \'checked\');
+						$(\'#show_price\').attr(\'disabled\', \'disabled\');
+					}
+					else {
+						$(\'#show_price\').attr(\'disabled\', \'\');
+					}
 				});
 			</script>
 			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
@@ -1540,15 +1546,26 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td style="vertical-align:top">'.$this->l('Status:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float:left;" onclick="toggleDraftWarning(false)" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+							<input style="float:left;" onclick="toggleDraftWarning(false);showOptions(true);" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_on" class="t"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" style="float:left; padding:0px 5px 0px 5px;" />'.$this->l('Enabled').'</label>
 							<br class="clear" />
-							<input style="float:left;" onclick="toggleDraftWarning(true)"  type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+							<input style="float:left;" onclick="toggleDraftWarning(true);showOptions(false);"  type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').($obj->active ? '' : ' (<a href="'.$preview_url.'" alt="" target="_blank">'.$this->l('View product in shop').'</a>)').'</label>
 						</td>
 					</tr>';
 
-		echo		'<tr>
+		echo		'
+					<tr id="product_options">
+						<td style="vertical-align:top">'.$this->l('Options:').'</td>
+						<td style="padding-bottom:5px;">
+							<input style="float:left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
+							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('Available for order').'" title="'.$this->l('Available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Available for order').'</label>
+							<br class="clear" />
+							<input style="float:left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
+							<label for="show_price" class="t"><img src="../img/admin/gold.gif" alt="'.$this->l('Display price').'" title="'.$this->l('Show price').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Show price').'</label>
+						</td>
+					</tr>
+					<tr>
 						<td>'.$this->l('Manufacturer:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="id_manufacturer" id="id_manufacturer">

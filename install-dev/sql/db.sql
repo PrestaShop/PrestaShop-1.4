@@ -1079,6 +1079,8 @@ CREATE TABLE `PREFIX_product` (
   `uploadable_files` tinyint(4) NOT NULL default '0',
   `text_fields` tinyint(4) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
+  `available_for_order` tinyint(1) NOT NULL default '1',
+  `show_price` tinyint(1) NOT NULL default '1',
   `indexed` tinyint(1) NOT NULL default '0',
   `cache_is_pack` tinyint(1) NOT NULL default '0',
   `cache_has_attachments` tinyint(1) NOT NULL default '0',

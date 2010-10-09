@@ -148,6 +148,12 @@ class		Product extends ObjectModel
 
 	/** @var boolean Product statuts */
 	public		$active = 1;
+	
+	/** @var boolean Product available for order */
+	public		$available_for_order = 1;
+	
+	/** @var boolean Show price of Product */
+	public		$show_price = 1;
 
 	public		$indexed = 0;
 
@@ -205,6 +211,8 @@ class		Product extends ObjectModel
 		'uploadable_files' => 'isUnsignedInt',
 		'text_fields' => 'isUnsignedInt',
 		'active' => 'isBool',
+		'available_for_order' => 'isBool',
+		'show_price' => 'isBool',
 		'ean13' => 'isEan13',
 		'indexed' => 'isBool',
 		'cache_is_pack' => 'isBool',
@@ -294,6 +302,8 @@ class		Product extends ObjectModel
 		$fields['uploadable_files'] = intval($this->uploadable_files);
 		$fields['text_fields'] = intval($this->text_fields);
 		$fields['active'] = intval($this->active);
+		$fields['available_for_order'] = intval($this->available_for_order);
+		$fields['show_price'] = intval($this->show_price);
 		$fields['indexed'] = 0; // Reset indexation every times
 		$fields['cache_is_pack'] = intval($this->cache_is_pack);
 		$fields['cache_has_attachments'] = intval($this->cache_has_attachments);
@@ -1317,7 +1327,8 @@ class		Product extends ObjectModel
 			$sql = '
 			SELECT COUNT(DISTINCT p.`id_product`) AS nb
 			FROM `'._DB_PREFIX_.'product` p
-			WHERE p.`active` = 1
+			WHERE p.`active` = 1 
+			AND p.`show_price` = 1 
 			AND (`reduction_price` > 0 OR `reduction_percent` > 0)
 			'.((!$beginning AND !$ending) ?
 			'	AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
@@ -1346,6 +1357,7 @@ class		Product extends ObjectModel
 		:
 			($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 		AND p.`active` = 1
+		AND p.`show_price` = 1 
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
