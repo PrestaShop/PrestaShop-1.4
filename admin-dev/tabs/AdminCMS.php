@@ -36,7 +36,7 @@ class AdminCMS extends AdminTab
 		$this->_category = AdminCMSContent::getCurrentCMSCategory();
 		$this->_join = '
 		LEFT JOIN `'._DB_PREFIX_.'cms_category` c ON (c.`id_cms_category` = a.`id_cms_category`)';
-		$this->_select = 'position ';
+		$this->_select = 'a.position ';
 		$this->_filter = 'AND c.id_cms_category = '.intval($this->_category->id);
 		
 		parent::__construct();
@@ -217,10 +217,10 @@ class AdminCMS extends AdminTab
 		$this->displayListFooter($token);
 	}
 
-
 	function postProcess()
 	{
 		global $cookie, $link, $currentIndex;
+
 		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
 				Tools::redirectLink($link->getCMSLink($cms));
 		elseif (Tools::isSubmit('deletecms'))
@@ -232,191 +232,57 @@ class AdminCMS extends AdminTab
 			}
 			$cms = new CMS(intval(Tools::getValue('id_cms')));
 			$cms->cleanPositions($cms->id_cms_category);
+			if (!$cms->delete())
+						$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+					else
+						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=1&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 		}
-		return parent::postProcess();
+		elseif (Tools::isSubmit('submitAddcms'))
+		{
+			parent::validateRules();
+			if (!sizeof($this->_errors))
+			{
+				if (!$id_cms = intval(Tools::getValue('id_cms')))
+				{
+					$cms = new CMS();
+					$this->copyFromPost($cms, 'cms');
+					if (!$cms->add())
+						$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+					else
+						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=3&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+				}
+				else
+				{
+					$cms = new CMS($id_cms);
+					$this->copyFromPost($cms, 'cms');
+					if (!$cms->update())
+						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+					else
+						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=4&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+				}
+			}
+		}
+		elseif (isset($_GET['position']))
+		{
+			if ($this->tabAccess['edit'] !== '1')
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+				$this->_errors[] = Tools::displayError('Failed to update the position.');
+			else
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=4'.(($id_category = intval(Tools::getValue('id_cms_category'))) ? ('&id_cms_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+		}
+		else
+			parent::postProcess(true);
 	}
 	
-	public function displayListHeader($token = NULL)
+	/*
+public function displayListContent($token = NULL)
 	{
-		global $currentIndex, $cookie;
 
-		if (!isset($token) OR empty($token))
-			$token = Tools::getAdminTokenLite('AdminCMSContent');
-
-		/* Determine total page number */
-		$totalPages = ceil($this->_listTotal / Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : $this->_pagination[0])));
-		if (!$totalPages) $totalPages = 1;
-		
-		echo '<a name="'.$this->table.'">&nbsp;</a>';
-		echo '<form method="post" action="'.$currentIndex;
-		if (Tools::getIsset($this->table.'Orderby'))
-			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
-		echo '#'.$this->table.'" class="form">
-		<input type="hidden" id="submitFilter'.$this->table.'" name="submitFilter'.$this->table.'" value="0">
-		<table>
-			<tr>
-				<td style="vertical-align: bottom;">
-					<span style="float: left;">';
-
-		/* Determine current page number */
-		$page = intval(Tools::getValue('submitFilter'.$this->table));
-		if (!$page) $page = 1;
-		if ($page > 1)
-			echo '
-						<input type="image" src="../img/admin/list-prev2.gif" onclick="getE(\'submitFilter'.$this->table.'\').value=1"/>
-						&nbsp; <input type="image" src="../img/admin/list-prev.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.($page - 1).'"/> ';
-		echo $this->l('Page').' <b>'.$page.'</b> / '.$totalPages;
-		if ($page < $totalPages)
-			echo '
-						<input type="image" src="../img/admin/list-next.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.($page + 1).'"/>
-						 &nbsp;<input type="image" src="../img/admin/list-next2.gif" onclick="getE(\'submitFilter'.$this->table.'\').value='.$totalPages.'"/>';
-		echo '			| '.$this->l('Display').'
-						<select name="pagination">';
-		/* Choose number of results per page */
-		$selectedPagination = Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL));
-		foreach ($this->_pagination AS $value)
-			echo '<option value="'.intval($value).'"'.($selectedPagination == $value ? ' selected="selected"' : (($selectedPagination == NULL && $value == $this->_pagination[1]) ? ' selected="selected2"' : '')).'>'.intval($value).'</option>';
-		echo '
-						</select>
-						/ '.intval($this->_listTotal).' '.$this->l('result(s)').'
-					</span>
-					<span style="float: right;">
-						<input type="submit" name="submitReset'.$this->table.'" value="'.$this->l('Reset').'" class="button" />
-						<input type="submit" id="submitFilterButton_'.$this->table.'" name="submitFilter" value="'.$this->l('Filter').'" class="button" />
-					</span>
-					<span class="clear"></span>
-				</td>
-			</tr>
-			<tr>
-				<td>';
-
-		/* Display column names and arrows for ordering (ASC, DESC) */
-		if ($this->identifier == 'id_cms' AND $this->_orderBy == 'position')
-		{
-			echo '
-			<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
-			<script type="text/javascript">
-				var token = \''.Tools::getAdminTokenLite('AdminCMSContent').'\';
-				var come_from = \''.$this->table.'\';
-				var alternate = \''.($this->_orderWay == 'DESC' ? '1' : '0' ).'\';
-			</script>
-			<script type="text/javascript" src="../js/admin-dnd.js"></script>
-			';
-		}
-		echo '<table'.($this->identifier == 'id_cms' ? ' id="'.(($id_cms_category = intval(Tools::getValue('id_cms_category', '1'))) ? $id_cms_category : '').'"' : '' ).' class="table'.($this->identifier == 'id_cms' ? ' tableDnD' : '' ).'" cellpadding="0" cellspacing="0">
-			<thead>
-				<tr class="nodrag nodrop">
-					<th>';
-		if ($this->delete)
-			echo '		<input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" />';
-		echo '		</th>';
-		foreach ($this->fieldsDisplay AS $key => $params)
-		{
-			echo '	<th '.(isset($params['widthColumn']) ? 'style="width: '.$params['widthColumn'].'px"' : '').'>'.$params['title'];
-			if (!isset($params['orderby']) OR $params['orderby'])
-			{
-				// Cleaning links
-				if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway')) 
-					$currentIndex = preg_replace('/&'.$this->table.'Orderby=([a-z _]*)&'.$this->table.'Orderway=([a-z]*)/i', '', $currentIndex);
-				echo '	<br />
-						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
-						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
-			}
-			echo '	</th>';
-		}
-
-		/* Check if object can be modified, deleted or detailed */
-		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
-			echo '	<th style="width: 52px">'.$this->l('Actions').'</th>';
-		echo '	</tr>
-				<tr class="nodrag nodrop" style="height: 35px;">
-					<td class="center">';
-		if ($this->delete)
-			echo '		--';
-		echo '		</td>';
-
-		/* Javascript hack in order to catch ENTER keypress event */
-		$keyPress = 'onkeypress="formSubmit(event, \'submitFilterButton_'.$this->table.'\');"';
-
-		/* Filters (input, select, date or bool) */
-		foreach ($this->fieldsDisplay AS $key => $params)
-		{
-			$width = (isset($params['width']) ? ' style="width: '.intval($params['width']).'px;"' : '');
-			echo '<td'.(isset($params['align']) ? ' class="'.$params['align'].'"' : '').'>';
-			if (!isset($params['type']))
-				$params['type'] = 'text';
-
-			$value = Tools::getValue('conf') ? NULL : Tools::getValue($this->table.'Filter_'.(array_key_exists('filter_key', $params) ? $params['filter_key'] : $key));
-			if (isset($params['search']) AND !$params['search'])
-			{
-				echo '--</td>';
-				continue;
-			}
-			switch ($params['type'])
-			{
-				case 'bool':
-					echo '
-					<select name="'.$this->table.'Filter_'.$key.'">
-						<option value="">--</option>
-						<option value="1"'.($value == 1 ? ' selected="selected"' : '').'>'.$this->l('Yes').'</option>
-						<option value="0"'.(($value == 0 AND $value != '') ? ' selected="selected"' : '').'>'.$this->l('No').'</option>
-					</select>';
-					break;
-
-				case 'date':
-				case 'datetime':
-					if (is_string($value))
-						$value = unserialize($value);
-					$name = $this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key);
-					$nameId = str_replace('!', '__', $name);
-					includeDatepicker(array($nameId.'_0', $nameId.'_1'));
-					echo $this->l('From').' <input type="text" id="'.$nameId.'_0" name="'.$name.'[0]" value="'.(isset($value[0]) ? $value[0] : '').'"'.$width.' '.$keyPress.' /><br />
-					'.$this->l('To').' <input type="text" id="'.$nameId.'_1" name="'.$name.'[1]" value="'.(isset($value[1]) ? $value[1] : '').'"'.$width.' '.$keyPress.' />';
-					break;
-
-				case 'select':
-
-					if (isset($params['filter_key']))
-					{
-						echo '<select onchange="$(\'#submitFilter'.$this->table.'\').focus();$(\'#submitFilter'.$this->table.'\').click();" name="'.$this->table.'Filter_'.$params['filter_key'].'" '.(isset($params['width']) ? 'style="width: '.$params['width'].'px"' : '').'>
-								<option value=""'.(($value == 0 AND $value != '') ? ' selected="selected"' : '').'>--</option>';
-						if (isset($params['select']) AND is_array($params['select']))
-							foreach ($params['select'] AS $optionValue => $optionDisplay)
-							{
-								echo '<option value="'.$optionValue.'"'.((isset($_POST[$this->table.'Filter_'.$params['filter_key']]) AND Tools::getValue($this->table.'Filter_'.$params['filter_key']) == $optionValue AND Tools::getValue($this->table.'Filter_'.$params['filter_key']) != '') ? ' selected="selected"' : '').'>'.$optionDisplay.'</option>';
-								}
-						echo '</select>';
-						break;
-					}
-
-				case 'text':
-				default:
-					echo '<input type="text" name="'.$this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key).'" value="'.htmlentities($value, ENT_COMPAT, 'UTF-8').'"'.$width.' '.$keyPress.' />';
-			}
-			echo '</td>';
-		}
-
-		if ($this->edit OR $this->delete OR ($this->view AND $this->view !== 'noActionColumn'))
-			echo '<td class="center">--</td>';
-
-		echo '</tr>
-			</thead>';
-	}
-
-	public function displayListContent($token = NULL)
-	{
-		/* Display results in a table
-		 *
-		 * align  : determine value alignment
-		 * prefix : displayed before value
-		 * suffix : displayed after value
-		 * image  : object image
-		 * icon   : icon determined by values
-		 * active : allow to toggle status
-		 */
 		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-
 		$_cacheLang['View'] = $this->l('View');
 		$_cacheLang['Edit'] = $this->l('Edit');
 		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
@@ -528,6 +394,7 @@ class AdminCMS extends AdminTab
 			}			
 		}
 	}
+*/
 	
 	
 }

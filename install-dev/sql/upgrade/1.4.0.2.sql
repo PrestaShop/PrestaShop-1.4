@@ -4,6 +4,46 @@ ALTER TABLE `PREFIX_employee` ADD `bo_color` varchar(32) default NULL AFTER `sta
 ALTER TABLE `PREFIX_employee` ADD `bo_theme` varchar(32) default NULL AFTER `bo_color`;
 ALTER TABLE `PREFIX_employee` ADD `id_lang` int(10) unsigned NOT NULL default 0 AFTER `id_profile`;
 
+ALTER TABLE `PREFIX_cms` ADD `id_cms_category` int(10) unsigned NOT NULL default '0' AFTER `id_cms`;
+ALTER TABLE `PREFIX_cms` ADD `position` int(10) unsigned NOT NULL default '0' AFTER `id_cms_category`;
+
+CREATE TABLE `PREFIX_cms_category` (
+  `id_cms_category` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_parent` int(10) unsigned NOT NULL,
+  `level_depth` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  `position` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY (`id_cms_category`),
+  KEY `category_parent` (`id_parent`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_category_lang` (
+  `id_cms_category` int(10) unsigned NOT NULL,
+  `id_lang` int(10) unsigned NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `description` text,
+  `link_rewrite` varchar(128) NOT NULL,
+  `meta_title` varchar(128) DEFAULT NULL,
+  `meta_keywords` varchar(255) DEFAULT NULL,
+  `meta_description` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `category_lang_index` (`id_cms_category`,`id_lang`),
+  KEY `category_name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 1, 'Home', '', 'home', NULL, NULL, NULL);
+INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL);
+INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
+
+INSERT INTO `PREFIX_cms_category` VALUES(1, 0, 0, 1, 'now()', 'now()',0);
+
+UPDATE `PREFIX_cms_category` SET `position` = 0;
+UPDATE `PREFIX_cms` SET `position` = 0;
+UPDATE `PREFIX_cms` SET `id_cms_category` = 0;
+
+ALTER TABLE `PREFIX_category` ADD `position` int(10) unsigned NOT NULL default '0' AFTER `date_upd`;
+
 UPDATE `PREFIX_employee` SET `id_lang` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` LIKE "PS_LANG_DEFAULT");
 
 ALTER TABLE `PREFIX_customer` ADD `note` text AFTER `secure_key`;
@@ -453,3 +493,4 @@ ALTER TABLE `PREFIX_carrier` ADD `shipping_method` INT( 2 ) NOT NULL DEFAULT '0'
 
 /* PHP */
 /* PHP:editorial_update(); */;
+/* PHP:reorderpositions(); */;

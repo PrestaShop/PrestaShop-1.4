@@ -24,6 +24,9 @@ class		Category extends ObjectModel
 
 	/** @var boolean Status for display */
 	public 		$active = 1;
+	
+	/** @var  integer category position */
+	public 		$position;
 
 	/** @var string Description */
 	public 		$description;
@@ -92,6 +95,7 @@ class		Category extends ObjectModel
 			$fields['id_category'] = intval($this->id);
 		$fields['active'] = intval($this->active);
 		$fields['id_parent'] = intval($this->id_parent);
+		$fields['position'] = intval($this->position);
 		$fields['level_depth'] = intval($this->level_depth);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
@@ -111,6 +115,7 @@ class		Category extends ObjectModel
 
 	public	function add($autodate = true, $nullValues = false)
 	{
+		$this->position = self::getLastPosition(intval(Tools::getValue('id_parent')));
 		$this->level_depth = $this->calcLevelDepth();
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
@@ -118,6 +123,7 @@ class		Category extends ObjectModel
 		$ret = parent::add($autodate);
 		$this->updateGroup(Tools::getValue('groupBox'));
 		return $ret;
+		d($this);
 	}
 
 	public	function update($nullValues = false)
@@ -126,6 +132,7 @@ class		Category extends ObjectModel
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
 				$this->name[$k] = '0'.$value;
+		$this->cleanPositions($this->id_parent);
 		return parent::update();
 	}
 
@@ -741,6 +748,64 @@ class		Category extends ObjectModel
 			die('parent category does not exist');
 		return $parentCategory->level_depth + 1;
 	}
+	
+	public function updatePosition($way, $position)
+	{
+		if (!$res = Db::getInstance()->ExecuteS('
+			SELECT cp.`id_category`, cp.`position`, cp.`id_parent` 
+			FROM `'._DB_PREFIX_.'category` cp
+			WHERE cp.`id_parent` = '.intval(Tools::getValue('id_category_parent', 1)).' 
+			ORDER BY cp.`position` ASC'
+		))
+			return false;
+		
+		foreach ($res AS $category)
+			if (intval($category['id_category']) == intval($this->id))
+				$movedCategory = $category;
+		
+		if (!isset($movedCategory) || !isset($position))
+			return false;
+		// < and > statements rather than BETWEEN operator
+		// since BETWEEN is treated differently according to databases
+		return (Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'category`
+			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
+			WHERE `position` 
+			'.($way 
+				? '> '.intval($movedCategory['position']).' AND `position` <= '.intval($position)
+				: '< '.intval($movedCategory['position']).' AND `position` >= '.intval($position)).'
+			AND `id_parent`='.intval($movedCategory['id_parent']))
+		AND Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'category`
+			SET `position` = '.intval($position).'
+			WHERE `id_parent` = '.intval($movedCategory['id_parent']).'
+			AND `id_category`='.intval($movedCategory['id_category'])));
+	}
+	
+	static public function cleanPositions($id_category_parent)
+	{
+		$result = Db::getInstance()->ExecuteS('
+		SELECT `id_category`
+		FROM `'._DB_PREFIX_.'category`
+		WHERE `id_parent` = '.intval($id_category_parent).'
+		ORDER BY `position`');
+		$sizeof = sizeof($result);
+		for ($i = 0; $i < $sizeof; ++$i){
+				$sql = '
+				UPDATE `'._DB_PREFIX_.'category`
+				SET `position` = '.intval($i).'
+				WHERE `id_parent` = '.intval($id_category_parent).'
+				AND `id_category` = '.intval($result[$i]['id_category']);
+				Db::getInstance()->Execute($sql);
+			}
+		return true;
+	}
+	
+	static public function getLastPosition($id_category_parent)
+	{
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.intval($id_category_parent)));
+	}
+	
 	
 }
 

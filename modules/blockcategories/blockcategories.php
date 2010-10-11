@@ -105,7 +105,7 @@ class BlockCategories extends Module
 		.(intval($maxdepth) != 0 ? ' AND `level_depth` <= '.intval($maxdepth) : '').'
 		AND (c.`active` = 1 OR c.`id_category`= 1)
 		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
-		ORDER BY `level_depth` ASC, cl.`name` ASC'))
+		ORDER BY `level_depth` ASC, c.`position` ASC'))
 			return;
 		$resultParents = array();
 		$resultIds = array();

@@ -197,6 +197,7 @@ CREATE TABLE `PREFIX_category` (
   `active` tinyint(1) unsigned NOT NULL default '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
+  `position` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_category`),
   KEY `category_parent` (`id_parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -255,6 +256,7 @@ CREATE TABLE `PREFIX_cms_category` (
   `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
+  `position` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY (`id_cms_category`),
   KEY `category_parent` (`id_parent`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;

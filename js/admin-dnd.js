@@ -22,12 +22,28 @@ $(document).ready(function() {
 		onDragClass: 'myDragClass',
 		onDrop: function(table, row) {
 			if (originalOrder != $.tableDnD.serialize()) {
+			
 				var way = (originalOrder.indexOf(row.id) < $.tableDnD.serialize().indexOf(row.id))? 1 : 0;
-
 				var ids = row.id.split('_');
 				var tableDrag = $('#' + table.id);
 				var params = '';
-				if (come_from == 'cms')
+				if (table.id == 'cms_category')
+					params = {
+						ajaxCMSCategoriesPositions: true,
+						id_cms_category_parent: ids[1],
+						id_cms_category_to_move: ids[2],
+						way: way,
+						token: token
+					};
+				if (table.id == 'category')
+					params = {
+						ajaxCategoriesPositions: true,
+						id_category_parent: ids[1],
+						id_category_to_move: ids[2],
+						way: way,
+						token: token
+					};
+				if (table.id == 'cms')
 					params = {
 						ajaxCMSPositions: true,
 						id_cms_category: ids[1],
@@ -35,7 +51,7 @@ $(document).ready(function() {
 						way: way,
 						token: token
 					};
-				else if (come_from == 'AdminModulesPositions')
+				if (come_from == 'AdminModulesPositions')
 					params = {
 						ajaxModulesPositions: true,
 						id_hook: ids[0],
@@ -43,7 +59,7 @@ $(document).ready(function() {
 						way: way,
 						token: token
 					};
-				else if (come_from == 'product') {
+				if (table.id == 'product') {
 					params = {
 						ajaxProductsPositions: true,
 						id_category: ids[1],
@@ -59,17 +75,7 @@ $(document).ready(function() {
 					url: 'ajax.php?' + $.tableDnD.serialize(),
 					data: params,
 					success: function(data) {
-					if (come_from == 'cms') {
-							tableDrag.find('tbody tr').removeClass('alt_row');
-							tableDrag.find('tbody tr' + reOrder).addClass('alt_row');
-							tableDrag.find('tbody td.positions').each(function(i) {
-								$(this).html(i+1);
-							});
-							tableDrag.find('tbody td.dragHandle a:hidden').show();
-							tableDrag.find('tbody td.dragHandle:first a:even').hide();
-							tableDrag.find('tbody td.dragHandle:last a:odd').hide();
-						}
-					else if (come_from == 'AdminModulesPositions') {
+					if (come_from == 'AdminModulesPositions') {
 							tableDrag.find('tr').removeClass('alt_row');
 							tableDrag.find('tr' + reOrder).addClass('alt_row');
 							tableDrag.find('td.positions').each(function(i) {
@@ -79,7 +85,36 @@ $(document).ready(function() {
 							tableDrag.find('td.dragHandle:first a:even').hide();
 							tableDrag.find('td.dragHandle:last a:odd').hide();
 						}
-						else if (come_from == 'product') {
+						else if (table.id == 'product') {
+							var reg = /_[0-9]$/g;
+							tableDrag.find('tbody tr').each(function(i) {
+								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
+								
+								// Update link position
+								var up_reg  = new RegExp('position=[-]?[0-9]+&');
+								
+								// Up links
+								$(this).find('td.dragHandle a:odd').attr('href', $(this).find('td.dragHandle a:odd').attr('href').replace(up_reg, 'position='+ (i - 1) +'&'));
+								
+								// Down links
+								$(this).find('td.dragHandle a:even').attr('href', $(this).find('td.dragHandle a:even').attr('href').replace(up_reg, 'position='+ (i + 1) +'&'));
+								
+						});
+							tableDrag.find('tr').not('.nodrag').removeClass('alt_row');
+							tableDrag.find('tr:not(".nodrag"):odd').addClass('alt_row');
+							tableDrag.find('tr td.dragHandle a:hidden').show();
+							
+							if (alternate) {
+								tableDrag.find('tr td.dragHandle:first a:odd').hide();
+								tableDrag.find('tr td.dragHandle:last a:even').hide();
+							}
+							else {
+								tableDrag.find('tr td.dragHandle:first a:even').hide();
+								tableDrag.find('tr td.dragHandle:last a:odd').hide();
+							}
+						}
+						else 
+						{
 							var reg = /_[0-9]$/g;
 							tableDrag.find('tbody tr').each(function(i) {
 								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
@@ -107,6 +142,7 @@ $(document).ready(function() {
 								tableDrag.find('tr td.dragHandle:first a:even').hide();
 								tableDrag.find('tr td.dragHandle:last a:odd').hide();
 							}
+
 						}
 					}
 				});

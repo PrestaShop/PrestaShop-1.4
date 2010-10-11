@@ -30,8 +30,7 @@ class AdminCMSContent extends AdminTab
 	public function __construct()
 	{
 		/* Get current category */
-		$id_cms_category = abs(intval(Tools::getValue('id_cms_category')));
-		if (!$id_cms_category) $id_cms_category = 1;
+		$id_cms_category = intval(Tools::getValue('id_cms_category', Tools::getValue('id_cms_category_parent', 1)));
 		self::$_category = new CMSCategory($id_cms_category);
 		if (!Validate::isLoadedObject(self::$_category))
 			die('Category cannot be loaded');
@@ -63,8 +62,10 @@ class AdminCMSContent extends AdminTab
 
 	public function postProcess()
 	{
-		$this->adminCMSCategories->postProcess();
-		$this->adminCMS->postProcess();
+		if (!Tools::getValue('id_cms') AND !Tools::isSubmit('submitAddcms'))
+			$this->adminCMSCategories->postProcess();
+		else
+			$this->adminCMS->postProcess();
 	}
 
 	public function displayErrors()
@@ -82,12 +83,14 @@ class AdminCMSContent extends AdminTab
 			$this->adminCMSCategories->displayForm($this->token);
 			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 			
-		}elseif (((Tools::isSubmit('submitAddcms') OR Tools::isSubmit('submitAddcmsAndStay')) AND sizeof($this->adminCMSCategories->_errors)) OR isset($_GET['updatecms']) OR isset($_GET['addcms']))
+		}
+		elseif (((Tools::isSubmit('submitAddcms') OR Tools::isSubmit('submitAddcmsAndStay')) AND sizeof($this->adminCMS->_errors)) OR isset($_GET['updatecms']) OR isset($_GET['addcms']))
 		{
 			$this->adminCMS->displayForm($this->token);
 			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 		
-		}else
+		}
+		else
 		{
 		$id_cms_category = intval(Tools::getValue('id_cms_category'));
 		if (!$id_cms_category)

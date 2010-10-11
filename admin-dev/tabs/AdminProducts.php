@@ -610,6 +610,17 @@ class AdminProducts extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
+		elseif (isset($_GET['position']))
+		{
+			if ($this->tabAccess['edit'] !== '1')
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+				$this->_errors[] = Tools::displayError('Failed to update the position.');
+			else
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = intval(Tools::getValue('id_category'))) ? ('&id_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
+		}
 		else
 			parent::postProcess(true);
 	}
@@ -769,7 +780,7 @@ class AdminProducts extends AdminTab
 			$saveShort = $_POST['description_short'];
 			$_POST['description_short'] = strip_tags($_POST['description_short']);
 		}
-
+		
 		/* Check description short size without html */
 		foreach ($languages AS $language)
 			if ($value = Tools::getValue('description_short_'.$language['id_lang']))

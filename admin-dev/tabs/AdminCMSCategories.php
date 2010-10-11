@@ -36,11 +36,13 @@ class AdminCMSCategories extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_cms_category' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 30),
 		'name' => array('title' => $this->l('Name'), 'width' => 100, 'callback' => 'hideCMSCategoryPosition'),
-		'description' => array('title' => $this->l('Description'), 'width' => 560, 'maxlength' => 90, 'orderby' => false),
+		'description' => array('title' => $this->l('Description'), 'width' => 500, 'maxlength' => 90, 'orderby' => false),
+		'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'position', 'align' => 'center', 'position' => 'position'),
 		'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 		
 		$this->_CMSCategory = AdminCMSContent::getCurrentCMSCategory();
 		$this->_filter = 'AND `id_parent` = '.intval($this->_CMSCategory->id);
+		$this->_select = 'position ';
 
 		parent::__construct();
 	}
@@ -63,10 +65,9 @@ class AdminCMSCategories extends AdminTab
 	public function display($token = NULL)
 	{
 		global $currentIndex, $cookie;
-		$id_cms_category = intval(Tools::getValue('id_cms_category'));
-		if (!$id_cms_category)
-			$id_cms_category = 1;
-		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'name' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
+		$id_cms_category = intval(Tools::getValue('id_cms_category', 1));
+
+		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
 		
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subCMS Category')))).' '.$this->l('in CMS Category').' "'.stripslashes(CMSCategory::hideCMSCategoryPosition($this->_CMSCategory->getName())).'"</h3>';
 		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCMSContent&add'.$this->table.'&id_parent='.Tools::getValue('id_cms_category').'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new sub CMS Category').'</a>
@@ -81,8 +82,10 @@ class AdminCMSCategories extends AdminTab
 
 		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		
+		
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
+			
 			if ($id_cms_category = intval(Tools::getValue('id_cms_category')))
 			{
 				if (!CMSCategory::checkBeforeMove($id_cms_category, intval(Tools::getValue('id_parent'))))
@@ -100,7 +103,7 @@ class AdminCMSCategories extends AdminTab
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->toggleStatus())
-						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_cms_category = intval(Tools::getValue('id_cms_category'))) AND Tools::getValue('id_product')) ? '&id_cms_category='.$id_cms_category : '').'&token='.Tools::getValue('token'));
+						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_cms_category = intval(Tools::getValue('id_cms_category')))) ? '&id_cms_category='.$id_cms_category : '').'&token='.Tools::getValue('token'));
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
@@ -140,7 +143,18 @@ class AdminCMSCategories extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
-		parent::postProcess();
+		elseif (isset($_GET['position']))
+		{
+			if ($this->tabAccess['edit'] !== '1')
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+			elseif (!Validate::isLoadedObject($object = new CMSCategory(intval(Tools::getValue($this->identifier, Tools::getValue('id_cms_category_to_move', 1))))))
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+				$this->_errors[] = Tools::displayError('Failed to update the position.');
+			else
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = intval(Tools::getValue($this->identifier, Tools::getValue('id_cms_category_parent', 1)))) ? ('&'.$this->identifier.'='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+		}
+		parent::postProcess(true);
 	}
 
 	public function displayForm($token=NULL)

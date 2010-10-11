@@ -93,7 +93,7 @@ class		CMS extends ObjectModel
 		SELECT c.id_cms, cl.link_rewrite, cl.meta_title
 		FROM '._DB_PREFIX_.'cms c
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
-		'.(($selection !== NULL) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : ''));
+		'.(($selection !== NULL) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : '').' ORDER BY c.`position` ');
 		$link = new Link();
 		$links = array();
 		if ($result)
@@ -115,7 +115,8 @@ class		CMS extends ObjectModel
 		FROM  '._DB_PREFIX_.'cms c
 		JOIN '._DB_PREFIX_.'cms_lang l ON (c.id_cms = l.id_cms)
 		'.(($id_block) ? 'JOIN '._DB_PREFIX_.'block_cms b ON (c.id_cms = b.id_cms)' : '').'
-		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '')  
+		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '').'
+		ORDER BY c.`position` '
 		);
 		return $result;
 	}
