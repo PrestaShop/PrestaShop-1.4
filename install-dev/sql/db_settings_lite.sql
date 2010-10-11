@@ -151,7 +151,7 @@ INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`) VALUES
 (1, 'English (English)', 1, 'en'),(2, 'Français (French)', 1, 'fr'),(3, 'Español (Spanish)', 1, 'es');
 
 INSERT INTO `PREFIX_category` VALUES
-(1, 0, 0, 1, NOW(), NOW());
+(1, 0, 0, 1, NOW(), NOW(),0);
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
 (1, 1, 'Home', '', 'home', NULL, NULL, NULL),(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
 

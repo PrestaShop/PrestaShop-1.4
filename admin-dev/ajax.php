@@ -129,12 +129,68 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 		die('{\'hasError\' : true, errors : \'This module can not be loaded\'}');
 }
 
+if (array_key_exists('ajaxCategoriesPositions', $_POST))
+{	
+	$id_category_to_move = intval(Tools::getValue('id_category_to_move'));
+	$id_category_parent = intval(Tools::getValue('id_category_parent'));
+	$way = intval(Tools::getValue('way'));
+	$positions = Tools::getValue('category');
+	if (is_array($positions))
+		foreach ($positions AS $key => $value)
+		{
+			$pos = explode('_', $value);
+			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category_parent AND $pos[2] == $id_category_to_move))
+			{
+				$position = $key;
+				break;
+			}
+		}
+	$category = new Category($id_category_to_move);
+	if (Validate::isLoadedObject($category))
+	{
+		if (isset($position) && $category->updatePosition($way, $position))
+			die(true);
+		else
+			die('{\'hasError\' : true, errors : \'Can not update categories position\'}');
+	}
+	else
+		die('{\'hasError\' : true, errors : \'This category can not be loaded\'}');
+}
+
+if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
+{
+	$id_cms_category_to_move = intval(Tools::getValue('id_cms_category_to_move'));
+	$id_cms_category_parent = intval(Tools::getValue('id_cms_category_parent'));
+	$way = intval(Tools::getValue('way'));
+	$positions = Tools::getValue('cms_category');
+	if (is_array($positions))
+		foreach ($positions AS $key => $value)
+		{
+			$pos = explode('_', $value);
+			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_cms_category_parent AND $pos[2] == $id_cms_category_to_move))
+			{
+				$position = $key;
+				break;
+			}
+		}
+	$cms_category = new CMSCategory($id_cms_category_to_move);
+	if (Validate::isLoadedObject($cms_category))
+	{
+		if (isset($position) && $cms_category->updatePosition($way, $position))
+			die(true);
+		else
+			die('{\'hasError\' : true, errors : \'Can not update cms categories position\'}');
+	}
+	else
+		die('{\'hasError\' : true, errors : \'This cms category can not be loaded\'}');
+}
+
 if (array_key_exists('ajaxCMSPositions', $_POST))
 {				
 	$id_cms = intval(Tools::getValue('id_cms'));
 	$id_category = intval(Tools::getValue('id_cms_category'));
 	$way = intval(Tools::getValue('way'));
-	$positions = Tools::getValue(strval($id_category));
+	$positions = Tools::getValue('cms');
 	if (is_array($positions))
 		foreach ($positions AS $key => $value)
 		{
@@ -162,7 +218,7 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 	$way = intval(Tools::getValue('way'));
 	$id_product = intval(Tools::getValue('id_product'));
 	$id_category = intval(Tools::getValue('id_category'));
-	$positions = Tools::getValue(strval($id_category));
+	$positions = Tools::getValue('product');
 
 	if (is_array($positions))
 		foreach ($positions AS $key => $value)
@@ -174,7 +230,7 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 				break;
 			}
 		}
-	
+
 	$product = new Product($id_product);
 	if (Validate::isLoadedObject($product))
 	{
@@ -239,7 +295,6 @@ if (Tools::getValue('submitPublishProduct'))
 {
 	global $cookie;
 
-	
 	if (Tools::getIsset('id_product'))
 	{	
 		$id_product = intval(Tools::getIsset('id_product'));

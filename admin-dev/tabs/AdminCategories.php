@@ -37,11 +37,13 @@ class AdminCategories extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_category' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 30),
 		'name' => array('title' => $this->l('Name'), 'width' => 100, 'callback' => 'hideCategoryPosition'),
-		'description' => array('title' => $this->l('Description'), 'width' => 560, 'maxlength' => 90, 'orderby' => false),
+		'description' => array('title' => $this->l('Description'), 'width' => 500, 'maxlength' => 90, 'orderby' => false),
+		'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'position', 'align' => 'center', 'position' => 'position'),
 		'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 		
 		$this->_category = AdminCatalog::getCurrentCategory();
 		$this->_filter = 'AND `id_parent` = '.intval($this->_category->id);
+		$this->_select = 'position ';
 
 		parent::__construct();
 	}
@@ -66,7 +68,7 @@ class AdminCategories extends AdminTab
 	{
 		global $currentIndex, $cookie;
 
-		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'name' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
+		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes(Category::hideCategoryPosition($this->_category->getName())).'"</h3>';
 		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCatalog&add'.$this->table.'&id_parent='.Tools::getValue('id_category').'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new subcategory').'</a>
 		<div style="margin:10px;">';
@@ -167,6 +169,17 @@ class AdminCategories extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+		}
+		elseif (isset($_GET['position']))
+		{
+			if ($this->tabAccess['edit'] !== '1')
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+			elseif (!Validate::isLoadedObject($object = new Category(intval(Tools::getValue($this->identifier, Tools::getValue('id_category_to_move', 1))))))
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+				$this->_errors[] = Tools::displayError('Failed to update the position.');
+			else
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = intval(Tools::getValue($this->identifier, Tools::getValue('id_category_parent', 1)))) ? ('&'.$this->identifier.'='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
 		}
 		/* Delete multiple objects */
 		elseif (Tools::getValue('submitDel'.$this->table))
