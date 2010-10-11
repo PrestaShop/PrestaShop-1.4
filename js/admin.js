@@ -808,3 +808,10 @@ function showOptions(show)
 	else
 		$('tr#product_options').slideUp('slow');
 }
+
+
+function submitAddProductAndPreview()
+{
+	$('#fakeSubmitAddProductAndPreview').attr('name','submitAddProductAndPreview');
+	$('#product').submit();
+}

@@ -1109,7 +1109,8 @@ class AdminProducts extends AdminTab
 				<img src="../img/admin/warn2.png" />
 				'.$this->l('Your product will be saved as draft').'
 				</span>
-				<span style="float:right"><input type="submit" class="button" name="submitAddProductAndPreview" value="Save and preview" / ></span>
+				<span style="float:right"><a href="#" class="button" style="display: block" onclick="submitAddProductAndPreview()" >Save and preview</a></span>
+				<input type="hidden" name="fakeSubmitAddProductAndPreview" id="fakeSubmitAddProductAndPreview" />
 				<br class="clear" />
 				</p>
 	 		</div>';
