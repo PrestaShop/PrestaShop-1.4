@@ -139,7 +139,8 @@ if ($cart->nbProducts())
 				'customizedDatas' => $customizedDatas,
 				'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 				'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-				'lastProductAdded' => $cart->getLastProduct()
+				'lastProductAdded' => $cart->getLastProduct(),
+				'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang))
 				));
 			Tools::safePostVars();
 			Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
@@ -439,6 +440,7 @@ function displayCarrier()
 		'carriers' => $resultsArray,
 		'default_carrier' => intval(Configuration::get('PS_CARRIER_DEFAULT')),
 		'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
+		'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $resultsArray)),
 		'checked' => intval($checked),
 		'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency(intval($cookie->id_currency))),
 		'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency(intval($cookie->id_currency)))));
