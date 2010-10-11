@@ -93,10 +93,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
 	{if $adminActionDisplay}
 	<div id="admin-action">
-		<p>This product is not visible by your customers.
+		<p>{l s='This product is not visible by your customers.'}
 		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
-		<input type="submit" value="publish" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>			
-		<input type="submit" value="back" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>			
+		<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>			
+		<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>			
 		</p>
 		<div class="clear" ></div>
 		<p id="admin-action-result"></p>
