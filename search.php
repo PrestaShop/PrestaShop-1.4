@@ -28,7 +28,8 @@ if ($instantSearch && !is_array($query))
 	$search = Search::find(intval($cookie->id_lang), $query, $p, $n, $orderBy, $orderWay);
 	$nbProducts = $search['total'];
 	include(dirname(__FILE__).'/pagination.php');
-	$smarty->assign(array('products' => $search['result'],
+	$smarty->assign(array(
+	'products' => $search['result'],
 	'nbProducts' => $search['total'],
 	'search_query' => $query,
 	'homeSize' => Image::getSize('home')));

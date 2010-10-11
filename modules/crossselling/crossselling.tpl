@@ -14,7 +14,15 @@
 			</a><br/>
 			<a href="{$orderProduct.link}" title="{$orderProduct.name|htmlspecialchars}">
 			{$orderProduct.name|truncate:15:'...'|escape:'htmlall':'UTF-8'}
-			</a>
+			</a><br />
+			{if $crossDisplayPrice AND $orderProduct.show_price == 1}
+				<span class="price_display">
+					<span class="price">{convertPrice price=$orderProduct.displayed_price}</span>
+				</span><br />
+			{else}
+				<br />
+			{/if}
+			<a title="Voir" href="{$orderProduct.link}" class="button_small">Voir</a><br />
 		</li>
 		{/foreach}
 	</ul>

@@ -1294,6 +1294,9 @@ ul.typedText {
 	width: 100px;
 	overflow: hidden
 }
+#productscategory_list li a{
+	margin: auto;
+}
 #productscategory_scroll_left,
  #productscategory_scroll_right {
 	background: url('../img/thumbs_left.gif') no-repeat center;
@@ -1333,6 +1336,9 @@ ul.typedText {
 	text-align: center;
 	width: 100px;
 	overflow: hidden
+}
+#crossselling_list li a{
+	margin: auto;
 }
 #crossselling_scroll_left,
  #crossselling_scroll_right {

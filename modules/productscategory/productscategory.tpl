@@ -16,7 +16,15 @@
 			</a><br/>
 			<a href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category, $categoryProduct.ean13)}" title="{$categoryProduct.name|htmlspecialchars}">
 			{$categoryProduct.name|truncate:15:'...'|escape:'htmlall':'UTF-8'}
-			</a>
+			</a><br />
+			{if $ProdDisplayPrice AND $categoryProduct.show_price == 1}
+				<span class="price_display">
+					<span class="price">{convertPrice price=$categoryProduct.displayed_price}</span>
+				</span><br />
+			{else}
+				<br />
+			{/if}
+			<a title="Voir" href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category, $categoryProduct.ean13)}" class="button_small">Voir</a><br />
 		</li>
 		{/foreach}
 	</ul>
