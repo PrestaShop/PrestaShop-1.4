@@ -89,13 +89,10 @@ class		Product extends ObjectModel
 	/** @var boolean on_sale */
 	public 		$on_sale = false;
 
-	/** @var float price per weight unit */
-	public		$weight_price = 0;
+	/** @var string unity */
+	public		$unity = NULL;
 
-	/** @var float price per volume unit */
-	public		$volume_price = 0;
-	
-	/** @var float price for one unit */
+	/** @var float price for product's unity */
 	public		$unity_price = 0;
 
 	/** @var float Ecotax */
@@ -180,7 +177,7 @@ class		Product extends ObjectModel
 	protected $tables = array ('product', 'product_lang');
 
 	protected $fieldsRequired = array('id_tax', 'quantity', 'price');
-	protected $fieldsSize = array('reference' => 32, 'supplier_reference' => 32, 'location' => 64, 'ean13' => 13);
+	protected $fieldsSize = array('reference' => 32, 'supplier_reference' => 32, 'location' => 64, 'ean13' => 13, 'unity' => 10);
 	protected $fieldsValidate = array(
 		'id_tax' => 'isUnsignedId',
 		'id_manufacturer' => 'isUnsignedId',
@@ -198,9 +195,8 @@ class		Product extends ObjectModel
 		'reduction_to' => 'isDate',
 		'on_sale' => 'isBool',
 		'ecotax' => 'isPrice',
-		'weight_price' => 'isPrice',
-		'volume_price' => 'isPrice',
 		'unity_price' => 'isPrice',
+		'unity' => 'isString',
 		'reference' => 'isReference',
     	'supplier_reference' => 'isReference',
 		'location' => 'isReference',
@@ -288,8 +284,7 @@ class		Product extends ObjectModel
 		$fields['reduction_to'] = pSQL($this->reduction_to);
 		$fields['on_sale'] = intval($this->on_sale);
 		$fields['ecotax'] = floatval($this->ecotax);
-		$fields['weight_price'] = floatval($this->weight_price);
-		$fields['volume_price'] = floatval($this->volume_price);
+		$fields['unity'] = pSQL($this->unity);
 		$fields['unity_price'] = floatval($this->unity_price);
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['reference'] = pSQL($this->reference);
@@ -772,17 +767,19 @@ class		Product extends ObjectModel
 	* @param boolean $default Is default attribute for product
 	* @return mixed $id_product_attribute or false
 	*/
-	public function addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function addProductAttribute($price, $weight, $unity_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
 		Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute',
 		array('id_product' => intval($this->id), 'price' => floatval($price), 'ecotax' => floatval($ecotax), 'quantity' => intval($quantity),
-		'weight' => ($weight ? floatval($weight) : 0), 'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
+		'weight' => ($weight ? floatval($weight) : 0), 'unity_price_impact' => ($unity_impact ? floatval($unity_impact) : 0),
+		'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
 		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'default_on' => intval($default)),
 		'INSERT');
+		$id_product_attribute = Db::getInstance()->Insert_ID();
 		Product::updateDefaultAttribute($this->id);
-		if (!$id_product_attribute = Db::getInstance()->Insert_ID())
+		if (!$id_product_attribute)
 			return false;
 		if (empty($id_images))
 			return intval($id_product_attribute);
@@ -795,10 +792,10 @@ class		Product extends ObjectModel
 		return intval($id_product_attribute);
 	}
 
-	public function addCombinationEntity($wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function addCombinationEntity($wholesale_price, $price, $weight, $unity_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
 	{
 		if (
-			!$id_product_attribute = $this->addProductAttribute($price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location)
+			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unity_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location)
 			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute))
 		)
 			return false;
@@ -1135,7 +1132,7 @@ class		Product extends ObjectModel
 	public function getAttributeCombinaisons($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT pa.*, ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, al.`name` AS attribute_name, a.`id_attribute`
+		SELECT pa.*, ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, al.`name` AS attribute_name, a.`id_attribute`, pa.`unity_price_impact`
 		FROM `'._DB_PREFIX_.'product_attribute` pa
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
@@ -1880,7 +1877,7 @@ class		Product extends ObjectModel
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, agl.`public_name` AS public_group_name, a.`id_attribute`, al.`name` AS attribute_name,
-		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`default_on`, pa.`reference`
+		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`default_on`, pa.`reference`, pa.`unity_price_impact`
 		FROM `'._DB_PREFIX_.'product_attribute` pa
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`

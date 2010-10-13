@@ -124,18 +124,10 @@ function decimalTruncate(source, decimals)
 
 function showUnitPrices()
 {
-	if ($('#tr_weight_price').css('display') == 'none')
-	{
-		$('#tr_weight_price').show();
-		$('#tr_volume_price').show();
+	if ($('#tr_unity_price').css('display') == 'none')
 		$('#tr_unity_price').show();
-	}
 	else
-	{
-		$('#tr_weight_price').hide();
-		$('#tr_volume_price').hide();
 		$('#tr_unity_price').hide();
-	}
 }
 
 function unityPriceWithTax(type)
@@ -144,6 +136,12 @@ function unityPriceWithTax(type)
 	var priceWithTax = parseFloat(document.getElementById(type+'_price').value.replace(/,/g, '.'));
 	var newPrice = priceWithTax * ((tax / 100) + 1);
 	$('#'+type+'_price_with_tax').html((isNaN(newPrice) == true || newPrice < 0) ? '0.00' : ps_round(newPrice, 2).toFixed(2));
+}
+
+function unitySecond()
+{
+	$('#unity_second').html($('#unity').val());
+	$('#unity_third').html($('#unity').val());
 }
 
 function updateNewPriceAttribute()

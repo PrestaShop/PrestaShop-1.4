@@ -24,7 +24,7 @@ function oosHookJsCode()
 }
 
 //add a combination of attributes in the global JS sytem
-function addCombination(idCombination, arrayOfIdAttributes, quantity, price, ecotax, id_image, reference)
+function addCombination(idCombination, arrayOfIdAttributes, quantity, price, ecotax, id_image, reference, unity_price)
 {
 	globalQuantity += quantity;
 
@@ -36,6 +36,7 @@ function addCombination(idCombination, arrayOfIdAttributes, quantity, price, eco
 	combination['ecotax'] = ecotax;
 	combination['image'] = id_image;
 	combination['reference'] = reference;
+	combination['unity_price'] = unity_price;
 	combinations.push(combination);
 }
 
@@ -77,6 +78,7 @@ function findCombination(firstTime)
 			//get the data of product with these attributes
 			quantityAvailable = combinations[combination]['quantity'];
 			selectedCombination['price'] = combinations[combination]['price'];
+			selectedCombination['unity_price'] = combinations[combination]['unity_price'];
 			if (combinations[combination]['ecotax'])
 				selectedCombination['ecotax'] = combinations[combination]['ecotax'];
 			else
@@ -248,17 +250,28 @@ function updateDisplay()
 
 		if (noTaxForThisProduct)
 			attribut_price_tmp /= tax;
-
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
-		
+
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
+		{
 			var priceReduct = 0;
+			var newUnityPrice = (parseFloat(productUnityPrice) + parseFloat(selectedCombination['unity_price'])) * currencyRate;
+		}
 		else
+		{
 			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price;
+			var newUnityPrice = (parseFloat(productUnityPrice) + parseFloat(selectedCombination['unity_price'])) * currencyRate * ((100 - parseFloat(reduction_percent)) / 100);
+		}
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		
-		var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
-
+		if (!noTaxForThisProduct)
+			var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
+		else
+			var productPricePretaxed = priceProduct;
+		
+		if (!noTaxForThisProduct && displayPrice != 1)
+			newUnityPrice *= tax;
+		
 		if (displayPrice == 1)
 		{
 			priceProduct = productPricePretaxed;
@@ -269,8 +282,11 @@ function updateDisplay()
 		{
 			priceProduct *= group_reduction;
 			productPricePretaxed *= group_reduction;
+			newUnityPrice *= group_reduction;
 		}
+		if (productUnityPrice)
 		
+		$('#unity_price_display').text(formatCurrency(newUnityPrice, currencyFormat, currencySign, currencyBlank));
 		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));

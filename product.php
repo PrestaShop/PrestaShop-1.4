@@ -284,6 +284,7 @@ else
 					$combinations[$row['id_product_attribute']]['weight'] = floatval($row['weight']);
 					$combinations[$row['id_product_attribute']]['quantity'] = intval($row['quantity']);
 					$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
+					$combinations[$row['id_product_attribute']]['unity_impact'] = $row['unity_price_impact'];
 					$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 				}
 				//wash attributes list (if some attributes are unavailables and if allowed to wash it)
@@ -329,15 +330,11 @@ $smarty->assign(array(
 	'categories' => Category::getHomeCategories(intval($cookie->id_lang)),
 	'have_image' => Product::getCover(intval(Tools::getValue('id_product'))),
 	'tax_enabled' => Configuration::get('PS_TAX'),
-	'weight_unit' => Configuration::get('PS_WEIGHT_UNIT'),
-	'volume_unit' => Configuration::get('PS_VOLUME_UNIT'),
 	'display_qties' => intval(Configuration::get('PS_DISPLAY_QTIES')),
 	'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 	'display_ht' => !Tax::excludeTaxeOption(),
 	'ecotax' => ($product->ecotax > 0 ? Tools::convertPrice(floatval($product->ecotax)) : 0),
-	'weight_price' => ($product->weight_price > 0 ? Tools::convertPrice(floatval($product->weight_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod(intval($cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0),
-	'volume_price' => ($product->volume_price > 0 ? Tools::convertPrice(floatval($product->volume_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod(intval($cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0),
-	'unity_price' => ($product->unity_price > 0 ? Tools::convertPrice(floatval($product->unity_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod(intval($cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0)));
+	'unity_price' => ($product->unity_price > 0 ? Tools::convertPrice(floatval($product->unity_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod(intval($cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) * ((100 - $product->reduction_percent) / 100) : 0)));
 
 if (file_exists(_PS_THEME_DIR_.'thickbox.tpl'))
 	$smarty->display(_PS_THEME_DIR_.'thickbox.tpl');

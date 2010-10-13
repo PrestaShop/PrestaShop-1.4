@@ -36,6 +36,7 @@ var displayPrice = {$priceDisplay};
 var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
 var productAvailableForOrder = '{$product->available_for_order}';
 var productShowPrice = '{$product->show_price}';
+var productUnityPrice = '{$product->unity_price}';
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';
@@ -75,7 +76,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {if isset($groups)}
 	// Combinations
 	{foreach from=$combinations key=idCombination item=combination}
-		addCombination({$idCombination|intval}, new Array({$combination.list}), {$combination.quantity}, {$combination.price}, {$combination.ecotax}, {$combination.id_image}, '{$combination.reference|addslashes}');
+		addCombination({$idCombination|intval}, new Array({$combination.list}), {$combination.quantity}, {$combination.price}, {$combination.ecotax}, {$combination.id_image}, '{$combination.reference|addslashes}', {$combination.unity_impact});
 	{/foreach}
 	// Colors
 	{if $colors|@count > 0}
@@ -248,14 +249,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{if $product->ecotax != 0}
 				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
 			{/if}
-			{if $weight_price != NULL && $weight_price > 0.000000}
-				<p class="weight-price">{convertPrice price=$weight_price} {l s='per'} {$weight_unit}</p>
-			{/if}
-			{if $volume_price != NULL && $volume_price > 0.000000}
-				<p class="volume-price">{convertPrice price=$volume_price} {l s='per'} {$volume_unit}</p>
-			{/if}
-			{if $unity_price != NULL && $unity_price > 0.000000}
-				<p class="unity-price">{convertPrice price=$unity_price} {l s='the unity'}</p>
+			{if !empty($product->unity) && $unity_price > 0.000000}
+				<p class="unity-price"><span id="unity_price_display">{convertPrice price=$unity_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
 			{/if}
 			{*close if for show price*}
 			{/if}

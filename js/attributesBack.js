@@ -1,4 +1,4 @@
-function fillCombinaison(wholesale_price, price_impact, weight_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
+function fillCombinaison(wholesale_price, price_impact, weight_impact, unity_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
 {
 	init_elems();
 	getE('attribute_quantity').value = quantity;
@@ -9,6 +9,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, reference
 	getE('attribute_wholesale_price').value = Math.abs(wholesale_price);
 	getE('attribute_price').value = Math.abs(price_impact);
 	getE('attribute_weight').value = weight_impact;
+	getE('attribute_unity').value = unity_impact;
 	getE('attribute_ecotax').value = eco_tax;
 	getE('attribute_location').value = location;
 	if (default_attribute == 1)
@@ -46,6 +47,21 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, reference
 		getE('attribute_weight_impact').options[getE('attribute_weight_impact').selectedIndex].value = 1;
 		getE('attribute_weight_impact').selectedIndex = 1;
 	}
+	if (unity_impact < 0)
+	{
+		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = -1;
+		getE('attribute_unity_impact').selectedIndex = 2;
+	}
+	else if (!unity_impact)
+	{
+		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = 0;
+		getE('attribute_unity_impact').selectedIndex = 0;
+	}
+	else if (unity_impact > 0)
+	{
+		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = 1;
+		getE('attribute_unity_impact').selectedIndex = 1;
+	}
 
 	/* Reset all combination images */
 	combinationImages = $('#id_image_attr').find("input[id^=id_image_attr_]");
@@ -60,6 +76,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, reference
 
 	check_impact();
 	check_weight_impact();
+	check_unity_impact();
 
 	var elem = getE('product_att_list');
 	for (var i = 0; i < old_attr.length; i++)
@@ -108,30 +125,35 @@ function populate_attrs()
 
 function check_impact()
 {
-	var impact = getE('attribute_price_impact');
-	var price = getE('attribute_price');
-
-	if (!impact.selectedIndex)
+	if ($('#attribute_price_impact').get(0).selectedIndex == 0)
 	{
-		getE('span_impact').style.display = 'none';
-		price.value = 0;
+		$('#attribute_price').val('0.00');
+		$('#span_impact').hide();
 	}
 	else
-		getE('span_impact').style.display = 'inline';
+		$('#span_impact').show();
 }
 
 function check_weight_impact()
 {
-	var impact = getE('attribute_weight_impact');
-	var weight = getE('attribute_weight');
-
-	if (!impact.selectedIndex)
+	if ($('#attribute_weight_impact').get(0).selectedIndex == 0)
 	{
-		getE('span_weight_impact').style.display = 'none';
-		weight.value = 0;
+		$('#span_weight_impact').hide();
+		$('#attribute_weight').val('0.00');
 	}
 	else
-		getE('span_weight_impact').style.display = 'inline';
+		$('#span_weight_impact').show();
+}
+
+function check_unity_impact()
+{
+	if ($('#attribute_unity_impact').get(0).selectedIndex == 0)
+	{
+		$('#span_unity_impact').hide();
+		$('#attribute_unity').val('0.00');
+	}
+	else
+		$('#span_unity_impact').show();
 }
 
 function init_elems()
@@ -145,6 +167,9 @@ function init_elems()
 
 	getE('attribute_price_impact').selectedIndex = 0;
 	getE('attribute_weight_impact').selectedIndex = 0;
+	getE('attribute_unity_impact').selectedIndex = 0;
+	$('#span_unity_impact').hide();
+	$('#unity_third').html($('#unity_second').html());
 	try
 	{
 		if (impact.options[impact.selectedIndex].value == 0)
