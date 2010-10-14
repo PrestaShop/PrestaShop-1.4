@@ -184,7 +184,6 @@ class		Product extends ObjectModel
 		'id_supplier' => 'isUnsignedId',
 		'id_category_default' => 'isUnsignedId',
 		'id_color_default' => 'isUnsignedInt', /* unsigned integer because its value could be 0 if the feature is disabled */
-		'quantity' => 'isUnsignedInt',
 		'minimal_quantity' => 'isUnsignedInt',
 		'price' => 'isPrice',
 		'additional_shipping_cost' => 'isPrice',
@@ -1705,10 +1704,13 @@ class		Product extends ObjectModel
 	* @param array $product Array with ordered product (quantity, id_product_attribute if applicable)
 	* @return mixed Query result
 	*/
-	public static function updateQuantity($product)
+	public static function updateQuantity($product, $id_order = NULL)
 	{
 		if (!is_array($product))
 			die (Tools::displayError());
+
+		if (!Configuration::get('PS_STOCK_MANAGEMENT'))
+			return true;
 
 		if (Pack::isPack(intval($product['id_product'])))
 		{
@@ -1721,48 +1723,23 @@ class		Product extends ObjectModel
 				self::updateQuantity($tab_product_pack);
 			}
 		}
-
-		$result = Db::getInstance()->getRow('
-		SELECT `quantity`
-		FROM `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
-		WHERE `id_product` = '.intval($product['id_product']).($product['id_product_attribute'] ?
-		' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
-
-		if (!Configuration::get('PS_STOCK_MANAGEMENT'))
-			return true;
-		if (self::isAvailableWhenOutOfStock($product['out_of_stock']) AND intval($result['quantity']) == 0)
-			return -1;
-
-		if ($result['quantity'] < $product['cart_quantity'])
-		{
-			Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.($product['id_product_attribute'] ? 'product_attribute' : 'product').'`
-			SET `quantity` = 0
-			WHERE `id_product` = '.intval($product['id_product']).($product['id_product_attribute'] ?
-			' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
-			return false;
-		}
-
-		Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'product'.($product['id_product_attribute'] ? '_attribute' : '').'`
-		SET `quantity` = `quantity`-'.intval($product['cart_quantity']).'
-		WHERE `id_product` = '.intval($product['id_product']).
-		($product['id_product_attribute'] ? ' AND `id_product_attribute` = '.intval($product['id_product_attribute']) : ''));
-		if ($product['id_product_attribute'])
-			Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'product` 
-			SET `quantity` = 
-				(
-				SELECT SUM(`quantity`)
-				FROM `'._DB_PREFIX_.'product_attribute`
-				WHERE `id_product` = '.intval($product['id_product']).'
-				)
-			WHERE `id_product` = '.intval($product['id_product']));
-		return true;
+		
+		if (!$product['id_product_attribute'])
+			$qty = Db::getInstance()->getValue('SELECT quantity
+															FROM '._DB_PREFIX_.'product
+															WHERE id_product='.(int)$product['id_product']);
+		else
+			$qty = Db::getInstance()->getValue('SELECT quantity
+															FROM '._DB_PREFIX_.'product_attribute
+															WHERE id_product_attribute='.(int)$product['id_product_attribute']);
+		$productObj = new Product((int)$product['id_product']);
+		
+		return $productObj->addStockMvt(-(int)$product['cart_quantity'], (int)_STOCK_MOVEMENT_ORDER_REASON_, $product['id_product_attribute'], $id_order, NULL);
 	}
 
 	public static function reinjectQuantities(&$orderDetail, $quantity)
 	{
+		global $cookie;
 		if (!Validate::isLoadedObject($orderDetail))
 			die(Tools::displayError());
 		
@@ -1770,45 +1747,14 @@ class		Product extends ObjectModel
 		{
 			$products_pack = Pack::getItems(intval($orderDetail->product_id), intval(Configuration::get('PS_LANG_DEFAULT')));
 			foreach($products_pack AS $product_pack)
-			{
-				Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'product'.($product_pack->id_product_attribute ? '_attribute' : '').'`
-				SET `quantity` = `quantity`+'.intval($product_pack->pack_quantity * $quantity).'
-				WHERE `id_product` = '.intval($product_pack->id).
-				($product_pack->id_product_attribute ? ' AND `id_product_attribute` = '.intval($product_pack->id_product_attribute) : ''));
-				if ($product_pack->id_product_attribute)
-					Db::getInstance()->Execute('
-					UPDATE `'._DB_PREFIX_.'product` 
-					SET `quantity` = 
-						(
-						SELECT SUM(`quantity`)
-						FROM `'._DB_PREFIX_.'product_attribute`
-						WHERE `id_product` = '.intval($product_pack->id).'
-						)
-					WHERE `id_product` = '.intval($product_pack->id));
-			}
+				if (!$product_pack->addStockMvt(intval($product_pack->pack_quantity * $quantity), _STOCK_MOVEMENT_ORDER_REASON_, (int)$product_pack->id_product_attribute, (int)$orderDetail->id_order, (int)$cookie->id_employee))
+					return false;
 		}
 		
-		$sql = '
-		UPDATE `'._DB_PREFIX_.'product'.($orderDetail->product_attribute_id ? '_attribute' : '').'`
-		SET `quantity` = `quantity`+'.intval($quantity).'
-		WHERE `id_product` = '.intval($orderDetail->product_id).
-		($orderDetail->product_attribute_id ? ' AND `id_product_attribute` = '.intval($orderDetail->product_attribute_id) : '');
-		if ($orderDetail->product_attribute_id)
-			Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'product` 
-			SET `quantity` = 
-				(
-				SELECT SUM(`quantity`)
-				FROM `'._DB_PREFIX_.'product_attribute`
-				WHERE `id_product` = '.intval($orderDetail->product_id).'
-				)
-			WHERE `id_product` = '.intval($orderDetail->product_id));
-		if (!Db::getInstance()->Execute($sql) OR !Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'order_detail`
-			SET `product_quantity_reinjected` = `product_quantity_reinjected` + '.intval($quantity).'
-			WHERE `id_order_detail` = '.intval($orderDetail->id)))
+		$product = new Product((int)$orderDetail->product_id);
+		if (!$product->addStockMvt((int)$quantity, _STOCK_MOVEMENT_ORDER_REASON_, (int)$orderDetail->product_attribute_id, (int)$orderDetail->id_order, (int)$cookie->id_employee))
 			return false;
+			
 		$orderDetail->product_quantity_reinjected += intval($quantity);
 		return true;
 	}
@@ -2707,6 +2653,31 @@ class		Product extends ObjectModel
 		return false;
 	}
 	
+	public function addStockMvt($quantity, $id_reason, $id_product_attribute = NULL, $id_order = NULL, $id_employee = NULL)
+	{
+		$stockMvt = new StockMvt();
+		$stockMvt->id_product = (int)$this->id;
+		$stockMvt->id_product_attribute = (int)$id_product_attribute;
+		$stockMvt->id_order = (int)$id_order;
+		$stockMvt->id_employee = (int)$id_employee;
+		$stockMvt->quantity = (int)$quantity;
+		$stockMvt->id_stock_mvt_reason = (int)$id_reason;
+		return $stockMvt->add();		
+	}
+	
+	public function getStockMvts($id_lang)
+	{
+		return Db::getInstance()->ExecuteS('SELECT sm.id_stock_mvt, sm.date_add, sm.quantity, sm.id_order, CONCAT(pl.name, \' \', GROUP_CONCAT(IFNULL(al.name, \'\'), \'\')) product_name, CONCAT(e.lastname, \' \', e.firstname) employee, mrl.name reason
+														FROM `'._DB_PREFIX_.'stock_mvt` sm
+														LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (sm.id_product = pl.id_product AND pl.id_lang = '.(int)$id_lang.')
+														LEFT JOIN `'._DB_PREFIX_.'stock_mvt_reason_lang` mrl ON (sm.id_stock_mvt_reason = mrl.id_stock_mvt_reason AND mrl.id_lang = '.(int)$id_lang.')
+														LEFT JOIN `'._DB_PREFIX_.'employee` e ON (e.id_employee = sm.id_employee)
+														LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pac.id_product_attribute = sm.id_product_attribute)
+														LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$id_lang.')
+														WHERE sm.id_product='.(int)$this->id.'
+														GROUP BY sm.id_stock_mvt');
+	}
+
 	public function setWsCategories($values)
 	{
 		$ids = array();
@@ -2735,6 +2706,7 @@ class		Product extends ObjectModel
 		$result = Db::getInstance()->executeS('SELECT id_category AS id from `'._DB_PREFIX_.'category_product` WHERE id_product = '.(int)$this->id);
 		return $result;
 	}
+	
 }
 
 ?>

@@ -491,6 +491,52 @@ ALTER TABLE `PREFIX_discount` ADD `cart_display` TINYINT( 4 ) NOT NULL AFTER `ac
 
 ALTER TABLE `PREFIX_carrier` ADD `shipping_method` INT( 2 ) NOT NULL DEFAULT '0';
 
+CREATE TABLE `PREFIX_stock_mvt` (
+  `id_stock_mvt` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_product` int(11) unsigned DEFAULT NULL,
+  `id_product_attribute` int(11) unsigned DEFAULT NULL,
+  `id_order` int(11) unsigned DEFAULT NULL,
+  `id_stock_mvt_reason` int(11) unsigned NOT NULL,
+  `id_employee` int(11) unsigned NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_stock_mvt`),
+  KEY `id_order` (`id_order`),
+  KEY `id_product` (`id_product`),
+  KEY `id_product_attribute` (`id_product_attribute`),
+  KEY `id_stock_mvt_reason` (`id_stock_mvt_reason`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_stock_mvt_reason` (
+  `id_stock_mvt_reason` int(11) NOT NULL AUTO_INCREMENT,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_stock_mvt_reason`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+ALTER TABLE `PREFIX_product` CHANGE `quantity` `quantity` INT( 10 ) NOT NULL DEFAULT '0';
+ALTER TABLE `PREFIX_product_attribute` CHANGE `quantity` `quantity` INT( 10 ) NOT NULL DEFAULT '0';
+
+CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
+  `id_stock_mvt_reason` int(11) NOT NULL,
+  `id_lang` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id_stock_mvt_reason`,`id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason`, `date_add`, `date_upd`) VALUES
+(1, NOW(), NOW()), (2, NOW(), NOW()), (3, NOW(), NOW());
+
+INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `name`) VALUES
+(1, 1, 'Order'),
+(1, 2, 'Commande'),
+(2, 1, 'Missing Stock Movement'),
+(2, 2, 'Mouvement de stock manquant'),
+(3, 1, 'Restocking'),
+(3, 2, 'Réassort');
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

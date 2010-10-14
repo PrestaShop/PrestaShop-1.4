@@ -106,3 +106,7 @@ define('_PS_USE_SQL_SLAVE_', 0);
 
 /* PS Technical configuration */
 define('_PS_ADMIN_PROFILE_', 1);
+
+/* Stock Movement */
+define('_STOCK_MOVEMENT_ORDER_REASON_', 1);
+define('_STOCK_MOVEMENT_MISSING_REASON_', 2);

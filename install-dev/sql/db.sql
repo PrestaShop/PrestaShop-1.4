@@ -1059,7 +1059,7 @@ CREATE TABLE `PREFIX_product` (
   `on_sale` tinyint(1) unsigned NOT NULL default '0',
   `ean13` varchar(13) default NULL,
   `ecotax` decimal(17,2) NOT NULL default '0.00',
-  `quantity` int(10) unsigned NOT NULL default '0',
+  `quantity` int(10) NOT NULL default '0',
   `minimal_quantity` int(10) unsigned NOT NULL default '1',
   `price` decimal(20,6) NOT NULL default '0.000000',
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
@@ -1421,6 +1421,40 @@ CREATE TABLE `PREFIX_carrier_group` (
   `id_group` int(10) unsigned NOT NULL,
   UNIQUE KEY `id_carrier` (`id_carrier`,`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `PREFIX_stock_mvt` (
+  `id_stock_mvt` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id_product` int(11) unsigned DEFAULT NULL,
+  `id_product_attribute` int(11) unsigned DEFAULT NULL,
+  `id_order` int(11) unsigned DEFAULT NULL,
+  `id_stock_mvt_reason` int(11) unsigned NOT NULL,
+  `id_employee` int(11) unsigned NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_stock_mvt`),
+  KEY `id_order` (`id_order`),
+  KEY `id_product` (`id_product`),
+  KEY `id_product_attribute` (`id_product_attribute`),
+  KEY `id_stock_mvt_reason` (`id_stock_mvt_reason`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_stock_mvt_reason` (
+  `id_stock_mvt_reason` int(11) NOT NULL AUTO_INCREMENT,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_stock_mvt_reason`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
+  `id_stock_mvt_reason` int(11) NOT NULL,
+  `id_lang` int(11) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`id_stock_mvt_reason`,`id_lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `PREFIX_webservice_account` (
   `id_webservice_account` int(11) NOT NULL AUTO_INCREMENT,

@@ -158,10 +158,12 @@ abstract class PaymentModule extends Module
 					$quantityInStock = ($productQuantity - intval($product['cart_quantity']) < 0) ? $productQuantity : intval($product['cart_quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
 					{
-						if ((($updateResult = Product::updateQuantity($product)) === false OR $updateResult === -1))
-							$outOfStock = true;
-						if (!$outOfStock)
+						if (Product::updateQuantity($product, (int)$order->id))
 							$product['stock_quantity'] -= $product['cart_quantity'];
+						
+						if ($product['stock_quantity'] <= 0)
+							$outOfStock = true;
+							
 						Hook::updateQuantity($product, $order);
 						Product::updateDefaultAttribute($product['id_product']);
 					}

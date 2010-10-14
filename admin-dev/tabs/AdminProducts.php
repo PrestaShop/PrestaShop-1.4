@@ -126,7 +126,7 @@ class AdminProducts extends AdminTab
 
 	public function postProcess($token = NULL)
 	{
-		global $currentIndex;
+		global $cookie, $currentIndex;
 
 		/* Add a new product */
 		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay') OR  Tools::isSubmit('submitAddProductAndPreview'))
@@ -365,8 +365,6 @@ class AdminProducts extends AdminTab
 		{
 			if (Validate::isLoadedObject($product = new Product(intval(Tools::getValue('id_product')))))
 			{
-				if (!isset($_POST['attribute_quantity']) OR $_POST['attribute_quantity'] == NULL)
-					$this->_errors[] = Tools::displayError('attribute quantity is required');
 				if (!isset($_POST['attribute_price']) OR $_POST['attribute_price'] == NULL)
 					$this->_errors[] = Tools::displayError('attribute price is required');
 				if (!isset($_POST['attribute_combinaison_list']) OR !sizeof($_POST['attribute_combinaison_list']))
@@ -388,6 +386,7 @@ class AdminProducts extends AdminTab
 							if ($product->productAttributeExists($_POST['attribute_combinaison_list'], $id_product_attribute))
 								$this->_errors[] = Tools::displayError('This attribute already exists.');
 							else
+							{
 								$product->updateProductAttribute($id_product_attribute,
 								Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'),
@@ -400,6 +399,14 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_ean13'),
 								Tools::getValue('attribute_default'),
 								Tools::getValue('attribute_location'));
+								if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
+								{
+									$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
+									if (!$product->addStockMvt($qty, intval(Tools::getValue('id_mvt_reason')), (int)$id_product_attribute, NULL, $cookie->id_employee))
+										$this->_errors[] = Tools::displayError('an error occurred while updating qty');
+								}
+
+							}
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -748,7 +755,7 @@ class AdminProducts extends AdminTab
 	 */
 	public function submitAddproduct($token = NULL)
 	{
-		global $currentIndex;
+		global $cookie, $currentIndex;
 
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
@@ -830,6 +837,12 @@ class AdminProducts extends AdminTab
 					$this->copyFromPost($object, $this->table);
 					if ($object->update())
 					{
+						if (in_array($mvt_type = Tools::getValue('mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('mvt_quantity') AND $mvt_qty != 0))
+						{
+							$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
+							if (!$object->addStockMvt($qty, (int)Tools::getValue('id_mvt_reason'), NULL, NULL, (int)$cookie->id_employee))
+								$this->_errors[] = Tools::displayError('an error occurred while updating qty');
+						}
 						$this->updateAccessories($object);
 						$this->updateDownloadProduct($object);
 						if (!$this->updatePackItems($object))
@@ -1470,7 +1483,7 @@ class AdminProducts extends AdminTab
 		parent::displayForm();
 		global $currentIndex, $cookie;
 		$iso = Language::getIsoById(intval($cookie->id_lang));
-
+		$has_attribute = false;
 		$qty_state = 'readonly';
 		$qty = Attribute::getAttributeQty($this->getFieldValue($obj, 'id_product'));
 		if ($qty === false) {
@@ -1480,6 +1493,8 @@ class AdminProducts extends AdminTab
 				$qty = 1;
 			$qty_state = '';
 		}
+		else
+			$has_attribute = true;
 		$cover = Product::getCover($obj->id);
 		$link = new Link();
 		
@@ -1833,6 +1848,7 @@ class AdminProducts extends AdminTab
 								echo '<span style="margin-left:10px; color:red;">'.$this->l('Taxes are currently disabled').'</span> (<b><a href="index.php?tab=AdminTaxes&token='.Tools::getAdminToken('AdminTaxes'.intval(Tab::getIdFromClassName('AdminTaxes')).intval($cookie->id_employee)).'">'.$this->l('Tax options').'</a></b>)';
 								echo '<input type="hidden" value="'.intval($this->getFieldValue($obj, 'id_tax')).'" name="id_tax" />';
 							}
+				
 				echo '</td>
 					</tr>
 					<tr>
@@ -1889,24 +1905,41 @@ class AdminProducts extends AdminTab
 					</tr>					
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>					
-					<tr>
-						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
-						<td style="padding-bottom:5px;">
-							<input type="text" name="additional_shipping_cost" value="'.($this->getFieldValue($obj, 'additional_shipping_cost')).'" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
-							<p>'.$this->l('Carrier tax will be applied.').'</p>
-						</td>
-					</tr>					
-					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
-					<tr>
-						<td class="col-left">'.$this->l('Quantity:').'</td>
-						<td style="padding-bottom:5px;"><input size="3" maxlength="6" '.$qty_state.' name="quantity" type="text" value="'.$qty.'" '.
-						((isset($_POST['attQty']) AND $_POST['attQty']) ? 'onclick="alert(\''.$this->l('Quantity is already defined by Attributes').'.<br />'.$this->l('Delete attributes first').'.\');" readonly="readonly" ' : '').'/><sup> *</sup> ('.$this->l('If you use combinations, you can\'t edit this information').')</td>
+					<tr>';
+					if (!$has_attribute)
+					{
+						echo '<td class="col-left">'.$this->l('Stock Movement:').'</td>
+							<td style="padding-bottom:5px;">
+								<select name="mvt_type">
+									<option value="1">'.$this->l('Add').'</option>
+									<option value="2">'.$this->l('Delete').'</option>
+								</select>
+								<select name="id_mvt_reason">';
+						$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
+						foreach ($reasons AS $reason)
+							echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
+						echo '</select>
+								<input type="text" name="mvt_quantity" size="3" maxlength="6" value="1"/>
+							</td>
+						</tr>
+						<tr>';
+					}
+				echo '<td class="col-left">'.$this->l('Quantity in stock:').'</td>
+						<td style="padding-bottom:5px;"><input size="3" maxlength="6" '.$qty_state.' name="quantity" type="text" value="'.$qty.'" readonly="readonly" />
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 							<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
+						</td>
+					</tr>
+					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
+					<tr>					
+						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
+						<td style="padding-bottom:5px;">
+							<input type="text" name="additional_shipping_cost" value="'.($this->getFieldValue($obj, 'additional_shipping_cost')).'" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
+							<p>'.$this->l('Carrier tax will be applied.').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -2501,9 +2534,24 @@ class AdminProducts extends AdminTab
 			  <td style="width:150px">'.$this->l('Eco-tax:').'</td>
 			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
 		  </tr>
+			<tr>
+				<td class="col-left">'.$this->l('Stock movement:').'</td>
+				<td style="padding-bottom:5px;">
+					<select name="attribute_mvt_type">
+						<option value="1">'.$this->l('Add').'</option>
+						<option value="2">'.$this->l('Delete').'</option>
+					</select>
+					<select name="id_mvt_reason">';
+			$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
+			foreach ($reasons AS $reason)
+				echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
+			echo '</select>
+					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="1"/>
+				</td>
+			</tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Quantity:').'</td>
-			  <td style="padding-bottom:5px;"><input type="text" size="3" name="attribute_quantity" id="attribute_quantity" value="1" /> ('.$this->l('overrides Quantity on Information tab').')</td>
+			  <td style="width:150px">'.$this->l('Quantity in stock:').'</td>
+			  <td style="padding-bottom:5px;"><input type="text" size="3" name="attribute_quantity" id="attribute_quantity" value="1" readonly="readonly" /></td>
 		  </tr>
 			<tr>
 				<td colspan="2"><sup>*</sup> '.$this->l('included tax').'</td>
