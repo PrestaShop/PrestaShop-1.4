@@ -6,14 +6,16 @@
 #header_search #bo_query{background:transparent;border:none;color:#FFF;float:left;height:16px;line-height:16px;margin:10px 0 0 30px;outline:0;vertical-align:middle;width:140px}
 #header_search #bo_search_type{background:#ECECEC;border:#000;float:left;height:21px;line-height:21px;margin-top:9px;vertical-align:middle;width:90px}
 #header_search #bo_search_submit{background:url(searchbutton.png) no-repeat;border:none;color:#FFF;cursor:pointer;float:left;font-size:10px;font-weight:700;height:24px;line-height:24px;margin:7px 0 0 2px;outline:0;padding-bottom:2px;width:79px}
-#header_search #bo_search_submit:hover{background-position:0 -24px}
+#header_search #bo_search_submit:hover{background-position:0 -25px}
+#header_search #bo_search_submit:active{background-position:0 -50px}
 #header_quick{background:url(bg-quick.png) no-repeat;float:right;height:39px;margin-right:1px;width:175px}
 #header_quick #quick_select{background:#ECECEC;border:#000;height:21px;line-height:21px;margin:8px 0 0 30px;vertical-align:middle;width:140px}
 #header_myaccount{background:url(bg-lang.png) no-repeat;display:block;float:right;height:39px;margin-right:1px;width:39px}
 .button{background:#83CA38 url(button-bg.png) repeat-x;border:1px solid #364A14;border-left:1px solid #475B25;border-top:1px solid #475B25;color:#FFF;cursor:pointer;padding:0 5px;height:25px}
 .button[disabled=disabled]{background:#E2EBEE;color:#000000}
 input.button[disabled=disabled]:hover{background-color:#FFF6D3}
-.button:hover{background-position:0 -25px}
+.button:hover{background-position:0 -27px}
+.button:active{background-position:0 -54px}
 .table{border:1px solid #416110;padding:0}
 .table th a{text-decoration:underline}
 .table a:hover{text-decoration:none}
