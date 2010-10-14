@@ -675,6 +675,36 @@ class AdminTranslations extends AdminTab
 		<input type="button" class="button" id="buttonall" onclick="openCloseAllDiv(\''.$_GET['type'].'_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);" />
 		<script type="text/javascript">toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');</script>';
 	}
+	
+	function displayAutoTranslate()
+	{
+		echo '
+		<input type="button" class="button" onclick="translateAll();" value="'.$this->l('Translate with Google').'" />
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">
+			google.load("language", "1");
+			function translateAll() {
+				$.each($(\'input[type="text"]\'), function() {
+					var tdinput = $(this);
+					if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
+						google.language.translate(tdinput.parent("td").prev().html(), "en", "'.Tools::htmlentitiesUTF8(Tools::getValue('lang')).'", function(result) {
+							if (!result.error)
+								tdinput.val(result.translation);
+						});
+					}
+				});
+				$.each($("textarea"), function() {
+					var tdtextarea = $(this);
+					if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
+						google.language.translate(tdtextarea.parent("td").prev().html(), "en", "'.Tools::htmlentitiesUTF8(Tools::getValue('lang')).'", function(result) {
+							if (!result.error)
+								tdtextarea.html(result.translation);
+						});
+					}
+				});
+			}
+		</script>';
+	}
 
 	function displayFormfront($lang)
 	{
@@ -712,6 +742,7 @@ class AdminTranslations extends AdminTab
 		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />
 		<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
 		$this->displayToggleButton(sizeof($_LANG) >= $count);
+		$this->displayAutoTranslate();
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 		foreach ($files as $k => $newLang)
 			if (sizeof($newLang))
@@ -779,6 +810,7 @@ class AdminTranslations extends AdminTab
 		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
 		<form method="post" action="'.$currentIndex.'&submitTranslationsBack=1&token='.$this->token.'" class="form">';
 		$this->displayToggleButton();
+		$this->displayAutoTranslate();
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 		foreach ($tabsArray as $k => $newLang)
 			if (sizeof($newLang))
@@ -1418,6 +1450,7 @@ class AdminTranslations extends AdminTab
 			'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />
 			<form method="post" action="'.$currentIndex.'&submitTranslationsModules=1&token='.$this->token.'" class="form">';
 			$this->displayToggleButton();
+			$this->displayAutoTranslate();
 			echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 			foreach ($allfiles AS $theme_name => $theme)
 				foreach ($theme AS $module_name => $module)
