@@ -57,9 +57,6 @@ class AdminPreferences extends AdminTab
 
 		$this->_fieldsGeneral = array(
 			'__PS_BASE_URI__' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
-			'_MEDIA_SERVER_1_' => array('title' => $this->l('Media server #1'), 'desc' => $this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_1_),
-			'_MEDIA_SERVER_2_' => array('title' => $this->l('Media server #2'), 'desc' => $this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_2_),
-			'_MEDIA_SERVER_3_' => array('title' => $this->l('Media server #3'), 'desc' => $this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_3_),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use coma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
@@ -187,17 +184,8 @@ class AdminPreferences extends AdminTab
 				$baseUrls = array();
 				if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
 					$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
-				if ($_MEDIA_SERVER_1_ = Tools::getValue('_MEDIA_SERVER_1_'))
-					$baseUrls['_MEDIA_SERVER_1_'] = $_MEDIA_SERVER_1_;
-				if ($_MEDIA_SERVER_2_ = Tools::getValue('_MEDIA_SERVER_2_'))
-					$baseUrls['_MEDIA_SERVER_2_'] = $_MEDIA_SERVER_2_;
-				if ($_MEDIA_SERVER_3_ = Tools::getValue('_MEDIA_SERVER_3_'))
-					$baseUrls['_MEDIA_SERVER_3_'] = $_MEDIA_SERVER_3_;
 				rewriteSettingsFile($baseUrls, NULL, NULL);
 				unset($this->_fieldsGeneral['__PS_BASE_URI__']);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
 			}
 			elseif (isset($_POST['submitAppearance'.$this->table]))
 			{

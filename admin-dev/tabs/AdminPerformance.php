@@ -55,6 +55,27 @@ class AdminPerformance extends AdminTab
 			else
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 		}
+		if (Tools::isSubmit('submitMediaServers'))
+		{
+			if (Tools::getValue('_MEDIA_SERVER_1_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_1_')))
+				$this->_errors[] = Tools::displayError('Media server #1 is invalid');
+			if (Tools::getValue('_MEDIA_SERVER_2_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_2_')))
+				$this->_errors[] = Tools::displayError('Media server #2 is invalid');
+			if (Tools::getValue('_MEDIA_SERVER_3_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_3_')))
+				$this->_errors[] = Tools::displayError('Media server #3 is invalid');
+			if (!sizeof($this->_errors))
+			{
+				$baseUrls = array();
+				$baseUrls['_MEDIA_SERVER_1_'] = Tools::getValue('_MEDIA_SERVER_1_');
+				$baseUrls['_MEDIA_SERVER_2_'] = Tools::getValue('_MEDIA_SERVER_2_');
+				$baseUrls['_MEDIA_SERVER_3_'] = Tools::getValue('_MEDIA_SERVER_3_');
+				rewriteSettingsFile($baseUrls, NULL, NULL);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
+				unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
+				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			}
+		}
 		
 		return parent::postProcess();
 	}
@@ -62,9 +83,53 @@ class AdminPerformance extends AdminTab
 	public function display()
 	{
 		global $currentIndex;
+		/*
+		'_MEDIA_SERVER_1_' => array('title' => $this->l('Media server #1'), 'desc' => $this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_1_),
+		'_MEDIA_SERVER_2_' => array('title' => $this->l('Media server #2'), 'desc' => $this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_2_),
+		'_MEDIA_SERVER_3_' => array('title' => $this->l('Media server #3'), 'desc' => $this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_3_),
 		
-		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
-			<fieldset><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
+		$baseUrls = array();
+		if ($_MEDIA_SERVER_1_ = Tools::getValue('_MEDIA_SERVER_1_'))
+			$baseUrls['_MEDIA_SERVER_1_'] = $_MEDIA_SERVER_1_;
+		if ($_MEDIA_SERVER_2_ = Tools::getValue('_MEDIA_SERVER_2_'))
+			$baseUrls['_MEDIA_SERVER_2_'] = $_MEDIA_SERVER_2_;
+		if ($_MEDIA_SERVER_3_ = Tools::getValue('_MEDIA_SERVER_3_'))
+			$baseUrls['_MEDIA_SERVER_3_'] = $_MEDIA_SERVER_3_;
+		rewriteSettingsFile($baseUrls, NULL, NULL);
+		unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
+		unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
+		unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
+		 */
+		echo '
+		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+			<fieldset>
+				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers').'</legend>
+				<p>'.$this->l('You have to put another domain or subdomain in order to use cookieless static content.').'</p>
+				<label for="_MEDIA_SERVER_1_">'.$this->l('Media server #1').'</label>
+				<div class="margin-form">
+					<input type="text" name="_MEDIA_SERVER_1_" id="_MEDIA_SERVER_1_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_1_', _MEDIA_SERVER_1_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'</p>
+				</div>
+				<label for="_MEDIA_SERVER_2_">'.$this->l('Media server #2').'</label>
+				<div class="margin-form">
+					<input type="text" name="_MEDIA_SERVER_2_" id="_MEDIA_SERVER_2_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_2_', _MEDIA_SERVER_2_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'</p>
+				</div>
+				<label for="_MEDIA_SERVER_3_">'.$this->l('Media server #3').'</label>
+				<div class="margin-form">
+					<input type="text" name="_MEDIA_SERVER_3_" id="_MEDIA_SERVER_3_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_3_', _MEDIA_SERVER_3_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'</p>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitMediaServers" class="button" />
+				</div>
+			</fieldset>
+		</form>';
+		
+		echo '
+		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
+			<fieldset>
+				<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
 				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but require PHP extension "mcrypt". If you change this configuration, every cookies will be reset.').'</p>
 				<label>'.$this->l('Algorithm').' </label>
 				<div class="margin-form">
@@ -80,8 +145,10 @@ class AdminPerformance extends AdminTab
 			</fieldset>
 		</form>';
 		
-		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
-			<fieldset><legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
+		echo '
+		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
+			<fieldset>
+				<legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
 				<p>'.$this->l('CCC allows you to reduce the loading time of your page, browser-side. With these settings you will gain performance without touching the code of your theme. Caution, however, that your theme is compatible PrestaShop 1.4+, CCC otherwise cause problems.').'</p>
 				<label>'.$this->l('Smart cache for CSS').' </label>
 				<div class="margin-form">
