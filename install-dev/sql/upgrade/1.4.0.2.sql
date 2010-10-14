@@ -316,19 +316,19 @@ ALTER TABLE `PREFIX_product` ADD `show_price` TINYINT(1) NOT NULL DEFAULT '1' AF
 
 SET @defaultOOS = (SELECT value FROM `PREFIX_configuration` WHERE name = 'PS_ORDER_OUT_OF_STOCK');
 /* Set 0 for every non-attribute product */
-UPDATE `PREFIX_product` p SET cache_default_attribute =  0 WHERE id_product NOT IN (SELECT id_product FROM `PREFIX_product_attribute`);
+UPDATE `PREFIX_product` p SET `cache_default_attribute` =  0 WHERE `id_product` NOT IN (SELECT `id_product` FROM `PREFIX_product_attribute`);
 /* First default attribute in stock */
-UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 AND quantity > 0 LIMIT 1) WHERE cache_default_attribute IS NULL;
+UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND default_on = 1 AND quantity > 0 LIMIT 1) WHERE `cache_default_attribute` IS NULL;
 /* Then default attribute without stock if we don't care */
-UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 LIMIT 1) WHERE cache_default_attribute IS NULL AND out_of_stock = 1 OR out_of_stock = IF(@defaultOOS = 1, 2, 1);
+UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND default_on = 1 LIMIT 1) WHERE `cache_default_attribute` IS NULL AND `out_of_stock` = 1 OR `out_of_stock` = IF(@defaultOOS = 1, 2, 1);
 /* Next, the default attribute can be any attribute with stock */
-UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND quantity > 0 LIMIT 1) WHERE cache_default_attribute IS NULL;
+UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND quantity > 0 LIMIT 1) WHERE `cache_default_attribute` IS NULL;
 /* If there is still no default attribute, then we go back to the default one */
-UPDATE `PREFIX_product` p SET cache_default_attribute = (SELECT id_product_attribute FROM `PREFIX_product_attribute` WHERE id_product = p.id_product AND default_on = 1 LIMIT 1) WHERE cache_default_attribute IS NULL;
+UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND default_on = 1 LIMIT 1) WHERE `cache_default_attribute` IS NULL;
 
 UPDATE `PREFIX_product` p SET
-cache_is_pack = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_pack` pp WHERE pp.id_product_pack = p.id_product),
-cache_has_attachments = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_product_attachment` pa WHERE pa.id_product = p.id_product);
+cache_is_pack = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_pack` pp WHERE pp.`id_product_pack` = p.`id_product`),
+cache_has_attachments = (SELECT IF(COUNT(*) > 0, 1, 0) FROM `PREFIX_product_attachment` pa WHERE pa.`id_product` = p.`id_product`);
 
 INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (9, 'AdminInformation', '', 11);
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
@@ -443,9 +443,9 @@ DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
 ALTER TABLE `PREFIX_country` ADD `need_zip_code` TINYINT(1) NOT NULL DEFAULT '1';
 ALTER TABLE `PREFIX_country` ADD `zip_code_format` VARCHAR(12) NOT NULL DEFAULT '';
 
-ALTER TABLE `PREFIX_product` ADD `weight_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `wholesale_price`;
-ALTER TABLE `PREFIX_product` ADD `volume_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `weight_price` ;
-ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `volume_price`;
+ALTER TABLE `PREFIX_product` ADD `unity_price` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' AFTER `wholesale_price`;
+ALTER TABLE `PREFIX_product` ADD `unity` VARCHAR(10) NOT NULL DEFAULT '0.000000' AFTER `unity_price` ;
+ALTER TABLE `PREFIX_product_attribute` ADD `unity_price_impact`DECIMAL(17,2) NOT NULL DEFAULT '0.00' AFTER `weight`;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_VOLUME_UNIT', 'cl', NOW(), NOW());
 
