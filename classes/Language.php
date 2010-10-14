@@ -58,7 +58,7 @@ class		Language extends ObjectModel
 		return true;
 	}
 	
-	static public function	getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
+	static public function getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
 	{
 		$copy = ($iso_to AND $theme_to) ? true : false;
 		
@@ -201,6 +201,25 @@ class		Language extends ObjectModel
 		return true;
 	}
 	
+	public static function recurseDeleteDir($dir)
+	{
+		if (!is_dir($dir))
+			return false;
+		if ($handle = @opendir($dir))
+		{
+			while (false !== ($file = readdir($handle)))
+				if ($file != '.' && $file != '..')
+				{
+					if (is_dir($dir.'/'.$file))
+						self::recurseDeleteDir($dir.'/'.$file);
+					elseif (file_exists($dir.'/'.$file))
+						@unlink($dir.'/'.$file);
+				}
+			closedir($handle);
+		}
+		rmdir($dir);
+	}
+	
 	public function delete()
 	{
 		/* Database translations deletion */
@@ -219,8 +238,13 @@ class		Language extends ObjectModel
 		/* Files deletion */
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)
 			unlink($key);
+		$modList = Module::getModulesDirOnDisk();
+		foreach ($modList as $k => $mod)
+			self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/'.$this->iso_code);
 		if (file_exists(_PS_MAIL_DIR_.$this->iso_code))
-			rmdir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
+			self::recurseDeleteDir(_PS_MAIL_DIR_.$this->iso_code);
+		if (file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
+			self::recurseDeleteDir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
 		return parent::delete();
 	}
 	

@@ -59,6 +59,7 @@ function smarty_core_rm_auto($params, &$smarty)
                 } elseif (substr($params['auto_base'] . DIRECTORY_SEPARATOR . $_filename, 0, strlen($_tname)) == $_tname) {
                     $_res &= (bool)$smarty->_unlink($params['auto_base'] . DIRECTORY_SEPARATOR . $_filename, $params['exp_time']);
                 }
+              closedir($_handle);
             }
         }
     }

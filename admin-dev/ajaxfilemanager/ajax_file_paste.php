@@ -43,7 +43,7 @@
 						$allDocs[] = getRealPath($destFolderPath . $file);
 					}
 				}
-
+				closedir($fh);
 				include_once(CLASS_FILE);
 				$file = new file();
 				//check if all files are allowed to cut or copy

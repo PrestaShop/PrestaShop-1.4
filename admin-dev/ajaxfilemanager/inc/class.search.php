@@ -167,7 +167,7 @@
 					}
 				}
 			}
-			 
+			closedir($dirHandler);
 		}
 		
 		function getFoundFiles()

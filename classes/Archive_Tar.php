@@ -879,7 +879,7 @@ class Archive_Tar extends PEAR
 												$p_remove_dir);
                 }
             }
-
+			closedir($p_hdir);
             unset($p_temp_list);
             unset($p_hdir);
             unset($p_hitem);
