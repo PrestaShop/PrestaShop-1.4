@@ -1,6 +1,7 @@
 <?php
 
 $filePrefix = 'PREFIX_';
+$engineType = 'ENGINE_TYPE';
 
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
@@ -106,22 +107,11 @@ foreach ($upgradeFiles AS $version)
 if (empty($neededUpgradeFiles))
 	die('<action result="fail" error="32" />'."\n");
 
-$sqlContent = "";
-foreach($neededUpgradeFiles AS $version)
-{
-	$file = INSTALL_PATH.'/sql/upgrade/'.$version.'.sql';
-	if (!file_exists($file))
-		die('<action result="fail" error="33" />'."\n");
-	if (!$sqlContent .= file_get_contents($file))
-		die('<action result="fail" error="33" />'."\n");
-	$sqlContent .= "\n";
-}
-$sqlContent = str_replace($filePrefix, _DB_PREFIX_, $sqlContent);
-$sqlContent = preg_split("/;\s*[\r\n]+/",$sqlContent);
 
 //refresh conf file
 include(INSTALL_PATH.'/classes/AddConfToFile.php');
 $oldLevel = error_reporting(E_ALL);
+$mysqlEngine = (defined('_MYSQL_ENGINE_') ? _MYSQL_ENGINE_ : 'MyISAM');
 $datas = array(
 	array('_DB_SERVER_', _DB_SERVER_),
 	array('_DB_TYPE_', _DB_TYPE_),
@@ -129,6 +119,7 @@ $datas = array(
 	array('_DB_USER_', _DB_USER_),
 	array('_DB_PASSWD_', _DB_PASSWD_),
 	array('_DB_PREFIX_', _DB_PREFIX_),
+	array('_MYSQL_ENGINE_', $mysqlEngine),
 	array('_MEDIA_SERVER_1_', defined('_MEDIA_SERVER_1_') ? _MEDIA_SERVER_1_ : ''),
 	array('_MEDIA_SERVER_2_', defined('_MEDIA_SERVER_2_') ? _MEDIA_SERVER_2_ : ''),
 	array('_MEDIA_SERVER_3_', defined('_MEDIA_SERVER_3_') ? _MEDIA_SERVER_3_ : ''),
@@ -143,6 +134,20 @@ if (defined('_RIJNDAEL_KEY_'))
 	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_));
 if (defined('_RIJNDAEL_IV_'))
 	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_IV_', _RIJNDAEL_IV_));
+
+$sqlContent = '';
+foreach($neededUpgradeFiles AS $version)
+{
+	$file = INSTALL_PATH.'/sql/upgrade/'.$version.'.sql';
+	if (!file_exists($file))
+		die('<action result="fail" error="33" />'."\n");
+	if (!$sqlContent .= file_get_contents($file))
+		die('<action result="fail" error="33" />'."\n");
+	$sqlContent .= "\n";
+}
+
+$sqlContent = str_replace(array($filePrefix, $engineType), array(_DB_PREFIX_, $mysqlEngine), $sqlContent);
+$sqlContent = preg_split("/;\s*[\r\n]+/",$sqlContent);
 
 error_reporting($oldLevel);
 $confFile = new AddConfToFile(SETTINGS_FILE, 'w');

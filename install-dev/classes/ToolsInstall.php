@@ -1,7 +1,7 @@
 <?php
 class ToolsInstall
 {
-	public static function checkDB ($srv, $login, $password, $name, $posted = true)
+	public static function checkDB ($srv, $login, $password, $name, $posted = true, $engine = false)
 	{
 		include_once(INSTALL_PATH.'/../classes/Validate.php');
 		include_once(INSTALL_PATH.'/../classes/Db.php');
@@ -26,20 +26,21 @@ class ToolsInstall
 					return 8;
 		}
 
-		switch(MySQL::tryToConnect($srv, $login, $password, $name))
+		switch(MySQL::tryToConnect($srv, $login, $password, $name, $engine))
 		{
 			case 0:
 				if (MySQL::tryUTF8($srv, $login, $password))
 					return true;
 				return 49;
 			break;
-			
 			case 1:
 				return 25;
 			break;
-			
 			case 2:
 				return 24;
+			break;
+			case 3:
+				return 50;
 			break;
 		}
 	}

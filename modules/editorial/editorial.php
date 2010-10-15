@@ -34,7 +34,7 @@ class Editorial extends Module
 		`id_editorial` int(10) unsigned NOT NULL auto_increment,
 		`body_home_logo_link` varchar(255) NOT NULL,
 		PRIMARY KEY (`id_editorial`))
-		ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8'))
 			return false;
 		
 		if (!Db::getInstance()->Execute('
@@ -46,7 +46,7 @@ class Editorial extends Module
 		`body_paragraph` text NOT NULL,
 		`body_logo_subheading` varchar(255) NOT NULL,
 		PRIMARY KEY (`id_editorial`, `id_lang`))
-		ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8'))
 			return false;
 		
 		if (!Db::getInstance()->Execute('

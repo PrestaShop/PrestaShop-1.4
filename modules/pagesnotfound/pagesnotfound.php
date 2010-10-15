@@ -41,7 +41,7 @@ class Pagesnotfound extends Module
 		  date_add DATETIME NOT NULL,
 		  PRIMARY KEY(id_pagenotfound),
 		  INDEX (`date_add`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8;');
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 	
     function uninstall()

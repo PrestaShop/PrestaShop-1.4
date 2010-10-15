@@ -19,7 +19,7 @@ include(INSTALL_PATH.'/../classes/Tools.php');
 
 //check db access
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
-$resultDB = ToolsInstall::checkDB($_GET['server'], $_GET['login'], $_GET['password'], $_GET['name']);
+$resultDB = ToolsInstall::checkDB($_GET['server'], $_GET['login'], $_GET['password'], $_GET['name'], true, $_GET['engine']);
 if ($resultDB !== true){
 	die("<action result='fail' error='".$resultDB."'/>\n");
 }
@@ -44,6 +44,7 @@ $datas = array(
 	array('_DB_USER_', $_GET['login']),
 	array('_DB_PASSWD_', $_GET['password']),
 	array('_DB_PREFIX_', $_GET['tablePrefix']),
+	array('_MYSQL_ENGINE_', $_GET['engine']),
 	array('__PS_BASE_URI__', $__PS_BASE_URI__),
 	array('_MEDIA_SERVER_1_', ''),
 	array('_MEDIA_SERVER_2_', ''),
@@ -76,8 +77,8 @@ include(SETTINGS_FILE);
 switch (_DB_TYPE_) {
 	case "MySQL" :
 		
-		$filePrefix = "PREFIX_";
-		
+		$filePrefix = 'PREFIX_';
+		$engineType = 'ENGINE_TYPE';
 		//send the SQL structure file requests
 		$structureFile = dirname(__FILE__)."/../sql/db.sql";
 		if(!file_exists($structureFile))
@@ -85,7 +86,7 @@ switch (_DB_TYPE_) {
 		$db_structure_settings ="";
 		if ( !$db_structure_settings .= file_get_contents($structureFile) )
 			die('<action result="fail" error="9" />'."\n");
-		$db_structure_settings = str_replace($filePrefix, $_GET['tablePrefix'], $db_structure_settings);		
+		$db_structure_settings = str_replace(array($filePrefix, $engineType), array($_GET['tablePrefix'], $_GET['engine']), $db_structure_settings);
 		$db_structure_settings = preg_split("/;\s*[\r\n]+/",$db_structure_settings);
 		foreach($db_structure_settings as $query){
 			$query = trim($query);
@@ -122,11 +123,10 @@ switch (_DB_TYPE_) {
 			$fullFile = dirname(__FILE__)."/../sql/db_settings_extends.sql";
 			if(!file_exists($fullFile))
 				die('<action result="fail" error="10" />'."\n");
-			if ( !$db_data_settings .= file_get_contents( $fullFile ) )
+			if (!$db_data_settings .= file_get_contents($fullFile))
 				die('<action result="fail" error="9" />'."\n");
 		}
-		
-		$db_data_settings = str_replace($filePrefix, $_GET['tablePrefix'], $db_data_settings);		
+		$db_data_settings = str_replace(array($filePrefix, $engineType), array($_GET['tablePrefix'], $_GET['engine']), $db_data_settings);		
 		$db_data_settings = preg_split("/;\s*[\r\n]+/",$db_data_settings);
 		/* UTF-8 support */
 		array_unshift($db_data_settings, 'SET NAMES \'utf8\';');

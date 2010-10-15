@@ -76,7 +76,7 @@ class StatsGeoLocation extends Module
 			`y` int(4) NOT NULL,
 			`id_country` INTEGER UNSIGNED NOT NULL,
 			PRIMARY KEY(`id_location_coords`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8'))
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8'))
 			return false;
 
 		$flag = 0;

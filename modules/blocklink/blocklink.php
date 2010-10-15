@@ -25,10 +25,10 @@ class BlockLink extends Module
 	{
 	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false)
 	 		return false;
-		$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink (`id_link` int(2) NOT NULL AUTO_INCREMENT, `url` varchar(255) NOT NULL, new_window TINYINT(1) NOT NULL, PRIMARY KEY(`id_link`)) ENGINE=MyISAM default CHARSET=utf8';
+		$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink (`id_link` int(2) NOT NULL AUTO_INCREMENT, `url` varchar(255) NOT NULL, new_window TINYINT(1) NOT NULL, PRIMARY KEY(`id_link`)) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8';
 	 	if (!Db::getInstance()->Execute($query))
 	 		return false;
-	 	$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink_lang (`id_link` int(2) NOT NULL, `id_lang` int(2) NOT NULL, `text` varchar(64) NOT NULL, PRIMARY KEY(`id_link`, `id_lang`)) ENGINE=MyISAM default CHARSET=utf8';
+	 	$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink_lang (`id_link` int(2) NOT NULL, `id_lang` int(2) NOT NULL, `text` varchar(64) NOT NULL, PRIMARY KEY(`id_link`, `id_lang`)) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8';
 	 	if (!Db::getInstance()->Execute($query))
 	 		return false;
 	 	return (Configuration::updateValue('PS_BLOCKLINK_TITLE', array('1' => 'Block link', '2' => 'Bloc lien')) AND Configuration::updateValue('PS_BLOCKLINK_TITLE', ''));

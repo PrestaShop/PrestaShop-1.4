@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_envoimoinscher_contenu` (
   `abrv` varchar(10) character set utf8 NOT NULL,
   `libelle` text character set utf8 NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_envoimoinscher_contenu` (`id`, `abrv`, `libelle`) VALUES
 (50450, 'outi', 'Outillage, outils, bricolage'),

@@ -143,6 +143,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[47] = "<?php echo lang('Your firstname contains some invalid characters'); ?>";
 		txtError[48] = "<?php echo lang('Your lastname contains some invalid characters'); ?>";
 		txtError[49] = "<?php echo lang('Your database server does not support the utf-8 charset.'); ?>";
+		txtError[50] = "<?php echo lang('Your MySQL server doesn\'t support this engine, please use another one like MyISAM'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";
@@ -309,6 +310,13 @@ if ($lm->getIncludeTradFilename())
 				<p>
 					<label for="dbPassword"><?php echo lang('Password:')?> </label>
 					<input class="text" autocomplete="off" size="10" type="password" id="dbPassword"/>
+				</p>
+				<p>
+					<label for="dbEngine"><?php echo lang('Database Engine:')?></label>
+					<select id="dbEngine" name="dbEngine">
+						<option value="InnoDB">InnoDB</option>
+						<option value="MyISAM">MyISAM</option>
+					</select>
 				</p>
 				<p class="aligned">
 					<input id="btTestDB" class="button" type="submit" value="<?php echo lang('Verify now!')?>"/>

@@ -29,7 +29,7 @@ class DateOfDelivery extends Module
 			`maximal_time` INT NOT NULL,
 			`delivery_saturday` TINYINT(1) NOT NULL,
 			`delivery_sunday` TINYINT(1) NOT NULL
-		) ENGINE = MYISAM ;
+		) ENGINE ='._MYSQL_ENGINE_.';
 		'))
 		
 		Configuration::updateValue('DOD_EXTRA_TIME_PRODUCT_OOS', 0);

@@ -51,7 +51,7 @@ class StatsSearch extends ModuleGraph
 			results INT(6) NOT NULL DEFAULT 0,
 			date_add DATETIME NOT NULL,
 			PRIMARY KEY(id_statssearch)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8');
 	}
 	
     function uninstall()

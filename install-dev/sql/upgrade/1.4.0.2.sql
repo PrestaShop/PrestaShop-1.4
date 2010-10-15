@@ -64,7 +64,7 @@ CREATE TABLE `PREFIX_customer_thread` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY (`id_customer_thread`),
   KEY `id_customer_thread` (`id_customer_thread`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_customer_message` (
   `id_customer_message` int(10) unsigned NOT NULL auto_increment,
@@ -76,7 +76,7 @@ CREATE TABLE `PREFIX_customer_message` (
   `user_agent` varchar(128) default NULL,
   `date_add` datetime NOT NULL,
   PRIMARY KEY  (`id_customer_message`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_payment_cc` (
 	`id_payment_cc` INT NOT NULL auto_increment,
@@ -91,7 +91,7 @@ CREATE TABLE `PREFIX_payment_cc` (
 	`date_add` DATETIME NOT NULL,
 	PRIMARY KEY (`id_payment_cc`),
 	KEY `id_order` (`id_order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 ALTER TABLE `PREFIX_currency` ADD `iso_code_num` varchar(3) NOT NULL default '0' AFTER `iso_code`;
 UPDATE `PREFIX_currency` SET iso_code_num = '978' WHERE iso_code LIKE 'EUR' LIMIT 1;
@@ -506,14 +506,14 @@ CREATE TABLE `PREFIX_stock_mvt` (
   KEY `id_product` (`id_product`),
   KEY `id_product_attribute` (`id_product_attribute`),
   KEY `id_stock_mvt_reason` (`id_stock_mvt_reason`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_stock_mvt_reason` (
   `id_stock_mvt_reason` int(11) NOT NULL AUTO_INCREMENT,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY (`id_stock_mvt_reason`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 
 ALTER TABLE `PREFIX_product` CHANGE `quantity` `quantity` INT( 10 ) NOT NULL DEFAULT '0';
@@ -524,7 +524,7 @@ CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
   `id_lang` int(11) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id_stock_mvt_reason`,`id_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason`, `date_add`, `date_upd`) VALUES
 (1, NOW(), NOW()), (2, NOW(), NOW()), (3, NOW(), NOW());

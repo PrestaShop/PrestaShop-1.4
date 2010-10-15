@@ -327,8 +327,8 @@ function verifyDbAccess ()
 			+"&server="+ $("#dbServer").val()
 			+"&login="+ $("#dbLogin").val()
 			+"&password="+encodeURIComponent($("#dbPassword").val())
-			+"&name="+ $("#dbName").val()
-		,
+			+"&engine="+$("#dbEngine option:selected").val()
+			+"&name="+ $("#dbName").val(),
 		success: function(ret)
 		{
 			ret = ret.getElementsByTagName('action')[0];
@@ -372,6 +372,7 @@ function createDB()
 		"&server="+ $("#dbServer").val()+
 		"&login="+ $("#dbLogin").val()+
 		"&password="+encodeURIComponent($("#dbPassword").val())+
+		"&engine="+$("#dbEngine option:selected").val()+
 		"&name="+ $("#dbName").val()
 	   ,
 	   success: function(ret)

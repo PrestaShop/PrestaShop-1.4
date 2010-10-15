@@ -69,7 +69,7 @@ CREATE TABLE `PREFIX_pagenotfound` (
   `http_referer` VARCHAR(256) NOT NULL,
   `date_add` DATETIME NOT NULL,
   PRIMARY KEY(`id_pagenotfound`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_statssearch` (
 	`id_statssearch` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -77,14 +77,14 @@ CREATE TABLE `PREFIX_statssearch` (
 	`results` INT(6) NOT NULL DEFAULT 0,
 	`date_add` DATETIME NOT NULL,
 	PRIMARY KEY(`id_statssearch`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_sekeyword` (
 	`id_sekeyword` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	`keyword` VARCHAR(256) NOT NULL,
 	`date_add` DATETIME NOT NULL,
 	PRIMARY KEY(`id_sekeyword`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 
 INSERT INTO `PREFIX_range_price` (`id_range_price`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);

@@ -68,7 +68,7 @@ class RatingAlert
 			`id_order` INT NOT NULL,
 			PRIMARY KEY (`id_alert`),
 			UNIQUE KEY `id_order` (`id_order`)
-		) ENGINE = MYISAM');
+		) ENGINE = '._MYSQL_ENGINE_);
 	}
 	
 	public static function dropTable()

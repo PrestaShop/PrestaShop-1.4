@@ -36,7 +36,7 @@ class Followup extends Module
 		`id_customer` INT UNSIGNED NULL ,
 		`id_cart` INT UNSIGNED NULL ,
 		`date_add` DATETIME NOT NULL
-		) ENGINE = MYISAM');
+		) ENGINE='._MYSQL_ENGINE_);
 		
 		foreach ($this->confKeys AS $key)
 			Configuration::updateValue($key, 0);

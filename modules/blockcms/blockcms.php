@@ -36,7 +36,7 @@ class BlockCms extends Module
 		`location` tinyint(1) unsigned NOT NULL,
 		`position` int(10) unsigned NOT NULL default \'0\',
 		PRIMARY KEY (`id_block_cms`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8') OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES(1, 0, 0)') OR
 		!Db::getInstance()->Execute('
@@ -45,7 +45,7 @@ class BlockCms extends Module
 		`id_lang` int(10) unsigned NOT NULL,
 		`name` varchar(40) NOT NULL default \'\',
 		PRIMARY KEY (`id_block_cms`, `id_lang`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8') OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute(rtrim($query_lang, ',')) OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'cms_block_page`(
@@ -54,7 +54,7 @@ class BlockCms extends Module
 		`id_cms` int(10) unsigned NOT NULL,
 		`is_category` tinyint(1) unsigned NOT NULL,
 		PRIMARY KEY (`id_block_cms_page`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8') OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Configuration::updateValue('FOOTER_CMS', '') OR
 		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1))
 			return false;

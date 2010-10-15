@@ -5,7 +5,4 @@ CREATE TABLE IF NOT EXISTS `PREFIX_dejala_cart` (
   `id_delivery` int(11) NULL DEFAULT NULL,
   `mode` varchar(5) NULL DEFAULT 'TEST',
   PRIMARY KEY (`id_cart`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
-
-
-
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;

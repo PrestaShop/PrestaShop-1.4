@@ -50,7 +50,7 @@ class SEKeywords extends ModuleGraph
 			keyword VARCHAR(256) NOT NULL,
 			date_add DATETIME NOT NULL,
 			PRIMARY KEY(id_sekeyword)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8');
 	}
 	
     function uninstall()

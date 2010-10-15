@@ -40,7 +40,7 @@ class Blocknewsletter extends Module
 			`ip_registration_newsletter` varchar(15) NOT NULL,
 			`http_referer` VARCHAR(255) NULL,
 			PRIMARY KEY(`id`)
-		) ENGINE=MyISAM default CHARSET=utf8');
+		) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8');
  	}
  	
  	public function uninstall()

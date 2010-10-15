@@ -99,7 +99,7 @@ class Socolissimo extends Module
 			  `przipcode` int(5) NOT NULL,
 			  `prtown` varchar(64) NOT NULL,
 			  PRIMARY KEY  (`id_cart`,`id_customer`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8';
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 		
 		if(!Db::getInstance()->Execute($sql))
 			return false;

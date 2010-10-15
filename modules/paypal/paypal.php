@@ -62,7 +62,7 @@ class PayPal extends PaymentModule
 		  `payment_status` varchar(255) NOT NULL,
 		  `capture` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`id_order`)
-		) ENGINE=MyISAM  DEFAULT CHARSET=utf8;'))
+		) ENGINE='._MYSQL_ENGINE_.'  DEFAULT CHARSET=utf8;'))
 			return false;
 		
 		/* Set configuration */
@@ -1131,7 +1131,7 @@ class PayPal extends PaymentModule
 			`id_order` int(10) unsigned NOT NULL auto_increment,
 			`id_transaction` varchar(255) NOT NULL,
 			PRIMARY KEY (`id_order`)
-			) ENGINE=MyISAM  DEFAULT CHARSET=utf8
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8
 			'))
 				$ok = false;
 			if (!Db::getInstance()->Execute('

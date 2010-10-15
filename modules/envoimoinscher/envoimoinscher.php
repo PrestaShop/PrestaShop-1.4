@@ -57,7 +57,7 @@ class Envoimoinscher extends Module
 			return false;
 		elseif (!$sql = file_get_contents(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
 			return false;
-		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
+		$sql = str_replace(array('PREFIX_', 'ENGINE_TYPE'), array(_DB_PREFIX_, _MYSQL_ENGINE_), $sql);
 		$sql = preg_split("/;\s*[\r\n]+/", $sql);
 		foreach ($sql AS $query)
 			if ($query AND sizeof($query) AND !Db::getInstance()->Execute(trim($query)))
@@ -68,7 +68,7 @@ class Envoimoinscher extends Module
 					$this->_errors[] = $this->l('Please manually copy ') .dirname(__FILE__).'/AdminEnvoiMoinsCher.gif'.' in the '._PS_IMG_DIR_.'/t/AdminEnvoiMoinsCher.gif folder located in your admin directory.';
 		}
 		if (!parent::install() OR  !Configuration::updateValue('EMC_EMAILS', 1) OR !$this->registerHook('AdminOrder') OR !self::adminInstall()
-		OR !Db::getInstance()->Execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'envoimoinscher` (`id_order` int(10) unsigned NOT NULL, `shipping_number` varchar(30) NOT NULL ) ENGINE=MyISAM DEFAULT CHARSET=latin1;'))
+		OR !Db::getInstance()->Execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'envoimoinscher` (`id_order` int(10) unsigned NOT NULL, `shipping_number` varchar(30) NOT NULL ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=latin1;'))
 			return false;
 		return true; 					
 	}

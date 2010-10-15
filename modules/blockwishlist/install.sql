@@ -7,13 +7,13 @@ CREATE TABLE IF NOT EXISTS `PREFIX_wishlist` (
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_wishlist`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_wishlist_email` (
   `id_wishlist` int(10) unsigned NOT NULL,
   `email` varchar(128) character set utf8 NOT NULL,
   `date_add` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_wishlist_product` (
   `id_wishlist_product` int(10) NOT NULL auto_increment,
@@ -23,11 +23,11 @@ CREATE TABLE IF NOT EXISTS `PREFIX_wishlist_product` (
   `quantity` int(10) unsigned NOT NULL,
   `priority` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_wishlist_product`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_wishlist_product_cart` (
   `id_wishlist_product` int(10) unsigned NOT NULL,
   `id_cart` int(10) unsigned NOT NULL,
   `quantity` int(10) unsigned NOT NULL,
   `date_add` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
