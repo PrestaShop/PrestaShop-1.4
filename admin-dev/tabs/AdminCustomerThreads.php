@@ -44,13 +44,20 @@ class AdminCustomerThreads extends AdminTab
 			'pending2' => $this->l('Pending 2')
 		);
 		
+		$imagesArray = array(
+			'open' => 'status_green.gif',
+			'closed' => 'status_red.gif',
+			'pending1' => 'status_orange.gif',
+			'pending2' => 'status_orange.gif'
+		);
+		
 		$this->fieldsDisplay = array(
 			'id_customer_thread' => array('title' => $this->l('ID'), 'width' => 25),
 			'customer' => array('title' => $this->l('Customer'), 'width' => 100, 'filter_key' => 'customer', 'tmpTableFilter' => true),
 			'email' => array('title' => $this->l('E-mail'), 'width' => 100, 'filter_key' => 'a!email'),
 			'contact' => array('title' => $this->l('Type'), 'width' => 75, 'type' => 'select', 'select' => $contactArray, 'filter_key' => 'cl!id_contact', 'filter_type' => 'int'),
 			'language' => array('title' => $this->l('Language'), 'width' => 60, 'type' => 'select', 'select' => $languageArray, 'filter_key' => 'l!id_lang', 'filter_type' => 'int'),
-			'status' => array('title' => $this->l('Status'), 'width' => 50, 'type' => 'select', 'select' => $statusArray, 'filter_key' => 'a!status', 'filter_type' => 'string'),
+			'status' => array('title' => $this->l('Status'), 'width' => 50, 'type' => 'select', 'select' => $statusArray, 'icon' => $imagesArray, 'align' => 'center', 'filter_key' => 'a!status', 'filter_type' => 'string'),
 			'employee' => array('title' => $this->l('Employee'), 'width' => 100, 'filter_key' => 'employee', 'tmpTableFilter' => true),
 			'messages' => array('title' => $this->l('Messages'), 'width' => 50, 'filter_key' => 'messages', 'tmpTableFilter' => true, 'maxlength' => 0),
 			'date_upd' => array('title' => $this->l('Last message'), 'width' => 90)
@@ -174,38 +181,62 @@ class AdminCustomerThreads extends AdminTab
 		global $currentIndex, $cookie;
 
 		$contacts = Db::getInstance()->ExecuteS('
-		SELECT cl.*, COUNT(*) as total, (
-			SELECT id_customer_thread
-			FROM '._DB_PREFIX_.'customer_thread ct2
-			WHERE status = "open" AND ct.id_contact = ct2.id_contact
-			ORDER BY date_upd ASC
-			LIMIT 1			
-		) as id_customer_thread
-		FROM '._DB_PREFIX_.'customer_thread ct
-		LEFT JOIN '._DB_PREFIX_.'contact_lang cl ON (cl.id_contact = ct.id_contact AND cl.id_lang = '.$cookie->id_lang.')
-		WHERE ct.status = "open"
-		GROUP BY ct.id_contact HAVING COUNT(*) > 0');
-		$rollup = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status = "open"');
+			SELECT cl.*, COUNT(*) as total, (
+				SELECT id_customer_thread
+				FROM '._DB_PREFIX_.'customer_thread ct2
+				WHERE status = "open" AND ct.id_contact = ct2.id_contact
+				ORDER BY date_upd ASC
+				LIMIT 1			
+			) as id_customer_thread
+			FROM '._DB_PREFIX_.'customer_thread ct
+			LEFT JOIN '._DB_PREFIX_.'contact_lang cl ON (cl.id_contact = ct.id_contact AND cl.id_lang = '.$cookie->id_lang.')
+			WHERE ct.status = "open"
+			GROUP BY ct.id_contact HAVING COUNT(*) > 0');
+		$categories = Db::getInstance()->ExecuteS('
+			SELECT cl.*
+			FROM '._DB_PREFIX_.'contact ct
+			LEFT JOIN '._DB_PREFIX_.'contact_lang cl ON (cl.id_contact = ct.id_contact AND cl.id_lang = '.$cookie->id_lang.')
+			WHERE ct.customer_service = 1
+			');
+		$dim = count($categories);
 
-		$i = 0;
-		echo '<table class="table" cellpadding="5" style="float:left">';
-		foreach ($contacts as $contact)
+		echo '<div style="float:left;border:0;width:640px;">';
+		foreach ($categories as $key => $val)
 		{
-			echo '<tr>
-				<td>'.$contact['name'].'</td>
-				<td>'.$contact['total'].' '.($contact['total'] > 1 ? $this->l('messages') : $this->l('message')).'</td>
-				<td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&id_customer_thread='.$contact['id_customer_thread'].'&viewcustomer_thread">'.$this->l('View the first open thread').'</a></td>';
-			if (!$i++)
-				echo '<td rowspan="'.count($contacts).'" style="border-left:1px solid #F0EADA;text-align:center">'.(int)$rollup.'<br />'.($rollup > 1 ? $this->l('messages') : $this->l('message')).'</td>';
-			echo '</tr>';
+			$totalThread = 0;
+			$id_customer_thread = 0;
+			foreach ($contacts as $tmp => $tmp2)
+				if ($val['id_contact'] == $tmp2['id_contact'])
+				{
+					$totalThread = $tmp2['total'];
+					$id_customer_thread = $tmp2['id_customer_thread'];
+					break; 
+				}
+			echo '<div style="background-color:#EFEFEF;float:left;margin:0 10px 10px 0;width:'.($dim > 6 ? '200' : '300').'px;border:1px solid #CFCFCF" >
+					<h3 style="overflow:hidden;line-height:25px;color:#812143;height:25px;margin:0;">&nbsp;'.$val['name'].'</h3>'.
+					($dim > 6 ? '' : '<p style="overflow:hidden;line-height:15px;height:45px;margin:0;padding:0 5px;">'.$val['description'].'</p>').
+					($totalThread == 0 ? '<h3 style="padding:0 5px;margin:0;height:23px;line-height:23px;background-color:#DEDEDE">'.$this->l('No new message').'</h3>' 
+					: '<a href="'.$currentIndex.'&token='.Tools::getValue('token').'&id_customer_thread='.$id_customer_thread.'&viewcustomer_thread" style="padding:0 5px;display:block;height:23px;line-height:23px;border:0;" class="button">'.$totalThread.' '.($totalThread > 1 ? $this->l('new messages'): $this->l('new message')).'</a>').'
+				</div>';
 		}
-		echo '</table>
-		<div style="float:left;margin-left:10px;border:1px solid #005500;width:200px;height:35px;padding:10px;background:#EFE">
-			<p style="text-align:center;font-size:15px;font-weight:bold">
-				<a href="'.$currentIndex.'&token='.Tools::getValue('token').'&submitFiltercustomer_thread&customer_threadFilter_a!status=open">'.$this->l('View new threads only').'</a>
-			</p>
-		</div>
-		<div class="clear">&nbsp;</div>';
+		echo '</div>';
+		
+		$params = array(
+			$this->l('Total thread') => $all = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread'),
+			$this->l('Thread pending') => $pending = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status LIKE "%pending%"'),
+			$this->l('Total customer messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee = 0'),
+			$this->l('Total employee messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee != 0'),
+			$this->l('Thread unread') => $unread = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status = "open"'),
+			$this->l('Thread closed') => $all - ($unread + $pending)
+			);
+		echo '<div style="float:right;padding 0px;border:1px solid #CFCFCF;width:280px;">
+				<h3 class="button" style="margin:0;line-height:23px;height:23px;border:0;padding:0 5px;">'.$this->l('Customer service').' : '.$this->l('Statistics').'</h3>
+				<table cellspacing="1" class="table" style="border-collapse:separate;width:280px;border:0">';
+		$count = 0;
+		foreach ($params as $key => $val)
+			echo '<tr '.(++$count % 2 == 0 ? 'class="alt_row"' : '').'><td>'.$key.'</td><td>'.$val.'</td></tr>';
+		echo '	</table>
+			</div><p class="clear">&nbsp;</p>';
 		parent::displayListHeader($token);
 	}
 	

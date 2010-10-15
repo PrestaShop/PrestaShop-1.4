@@ -101,7 +101,7 @@ if (Tools::isSubmit('submitMessage'))
 			foreach ($fields as $key => $row)
 			{
 				$tmp = 0;
-				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id)
+				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id AND $row['email'] != Tools::getValue('from'))
 					continue;
 				if ($row['id_order'] != 0 AND Tools::getValue('id_order') != $row['id_order'])
 					continue;

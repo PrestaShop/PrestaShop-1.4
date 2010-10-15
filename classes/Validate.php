@@ -14,6 +14,11 @@
 
 class Validate
 {
+	static public function isIp2Long($ip)
+	{
+		return preg_match('#^-?[0-9]+$#', (string)$ip);
+	}
+
 	static public function isAnything($data)
 	{
 		return true;
@@ -618,7 +623,7 @@ class Validate
 	*/
 	static public function isUnsignedInt($value)
 	{
-		return (self::isInt($value) AND $value < 4294967296 AND $value >= 0);
+		return (preg_match('#^[0-9]+$#', (string)$value) AND $value < 4294967296 AND $value >= 0);
 	}
 
 	/**

@@ -177,11 +177,11 @@ abstract class ModuleGraph extends Module
 			$employee = new Employee(intval($cookie->id_employee));
 		}
 		
-		if (empty($employee->stats_date_from) OR empty($employee->stats_date_to))
+		if (empty($employee->stats_date_from) OR empty($employee->stats_date_to) OR $employee->stats_date_from == '0000-00-00' OR $employee->stats_date_to == '0000-00-00')
 		{
-			if (empty($employee->stats_date_from))
+			if (empty($employee->stats_date_from) OR $employee->stats_date_from == '0000-00-00')
 				$employee->stats_date_from = date('Y').'-01-01';
-			if (empty($employee->stats_date_to))
+			if (empty($employee->stats_date_to)  OR $employee->stats_date_to == '0000-00-00')
 				$employee->stats_date_to = date('Y').'-12-31';
 			$employee->update();
 		}

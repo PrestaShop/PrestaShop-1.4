@@ -16,7 +16,7 @@ class CustomerMessage extends ObjectModel
 	
 	protected $fieldsRequired = array('message');
 	protected $fieldsSize = array('message' => 65000);
-	protected $fieldsValidate = array('message' => 'isCleanHtml', 'id_employee' => 'isUnsignedId', 'ip_address' => 'isInt');
+	protected $fieldsValidate = array('message' => 'isCleanHtml', 'id_employee' => 'isUnsignedId', 'ip_address' => 'isIp2Long');
 
 	public	function getFields()
 	{
