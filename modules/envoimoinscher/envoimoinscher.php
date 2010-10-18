@@ -123,16 +123,16 @@ class Envoimoinscher extends Module
 	private function _displayForm()
 	{
 		global $cookie;
-		$genderTab = array(1 => 'M.', 2 => 'Mme', 9 => '');
+		$genderTab = array(1 => 'M.', 2 => 'Mme', 9 => '', 0 => '');
 		$features = Feature::getFeatures($cookie->id_lang);
 		$order_states = OrderState::getOrderStates($cookie->id_lang);
 		$carriers = Carrier::getCarriers($cookie->id_lang);
 		$countries = Country::getCountries($cookie->id_lang);
-		$confs = Configuration::getMultiple(array('PS_SHOP_NAME', 'EMC_LOGIN', 'EMC_GENDER', 'EMC_LAST_NAME', 'EMC_FIRST_NAME', 'EMC_ADDRESS', 'EMC_ZIP_CODE', 'EMC_CITY', 'EMC_COUNTRY', 'EMC_PHONE', 'EMC_EMAIL', ));
-				
+		$confs = Configuration::getMultiple(array('PS_SHOP_NAME', 'EMC_LOGIN', 'EMC_GENDER', 'EMC_LAST_NAME', 'EMC_FIRST_NAME', 'EMC_ADDRESS', 'EMC_ZIP_CODE', 'EMC_CITY', 'EMC_COUNTRY',
+											 'EMC_PHONE', 'EMC_EMAIL'));
 		$link = '<a href="http://www.envoimoinscher.com/inscription.html?tracking=prestashop_module_v1
 		&login='.(isset($confs['EMC_LOGIN']) ? htmlspecialchars($confs['EMC_LOGIN'], ENT_COMPAT, 'UTF-8') : '' ).'
-		&facturation.contact_civ='.(isset($genderTab[intval($confs['EMC_GENDER'])]) ? htmlspecialchars($genderTab[intval($confs['EMC_GENDER'])], ENT_COMPAT, 'UTF-8') : '' ).'
+		&facturation.contact_civ='.(isset($genderTab[intval(Configuration::get('EMC_GENDER'))]) ? htmlspecialchars($genderTab[intval(Configuration::get('EMC_GENDER'))], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_ste='.(isset($confs['PS_SHOP_NAME']) ? htmlspecialchars($confs['PS_SHOP_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_nom='.(isset($confs['EMC_LAST_NAME']) ? htmlspecialchars($confs['EMC_LAST_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_prenom='.(isset($confs['EMC_FIRST_NAME']) ? htmlspecialchars($confs['EMC_FIRST_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
@@ -462,7 +462,11 @@ class Envoimoinscher extends Module
 			AND Configuration::updateValue('EMC_SEND_STATE', Tools::getValue('EMC_SEND_STATE')) AND Configuration::updateValue('EMC_EMAILS', Tools::getValue('EMC_EMAILS'))
 			AND Configuration::updateValue('EMC_LOGIN', Tools::getValue('EMC_LOGIN')) AND Configuration::updateValue('EMC_CONTENT', Tools::getValue('type_objet_'))
 			AND Configuration::updateValue('EMC_DELIVERY_STATE', Tools::getValue('EMC_DELIVERY_STATE')))
-			$this->_html .= '<div class="conf confirm"><img src="' . _PS_IMG_ . 'admin/enabled.gif" alt="ok" />&nbsp;'.$this->l('Settings updated').'</div>';
+		{
+			$dataSync = (($emc_login = Configuration::get('EMC_LOGIN'))
+				? '<img src="http://www.prestashop.com/modules/envoimoinscher.png?ps_id='.urlencode($emc_login).'" style="float:right" />' : '');
+			$this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);
+		}
 		else
 			$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('Settings faild').'</div>';			
 	}
