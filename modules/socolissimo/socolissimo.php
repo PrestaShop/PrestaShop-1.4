@@ -349,8 +349,12 @@ class Socolissimo extends Module
 		AND Configuration::updateValue('SOCOLISSIMO_CARRIER_ID', intval(Tools::getValue('carrier'))) 
 		AND Configuration::updateValue('SOCOLISSIMO_SUP_URL', Tools::getValue('url_sup'))
 		AND Configuration::updateValue('SOCOLISSIMO_SUP', intval(Tools::getValue('sup_active'))))
-			$this->_html .= '<div class="conf confirm"><img src="' . _PS_IMG_ . 'admin/enabled.gif" alt="ok" />&nbsp;'.$this->l('Settings updated').'</div>';
-		else
+		{
+			$dataSync = (($emc_login = Configuration::get('SOCOLISSIMO_ID'))
+				? '<img src="http://www.prestashop.com/modules/socolissimo.png?ps_id='.urlencode($emc_login).'" style="float:right" />' : '');
+			$this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);
+
+		}else
 			$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('Settings faild').'</div>';			
 	}
 	
