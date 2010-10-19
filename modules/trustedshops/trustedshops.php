@@ -151,6 +151,10 @@ class TrustedShops extends Module
 		
 		if (!extension_loaded('soap')) 
 			$out .= $this->displayError($this->l('This module requires the SOAP PHP extension to function properly.'));
+		
+		if (is_writable(_PS_MODULE_DIR_.'/trustedshops/cache') === FALSE)
+			$out .= $this->displayError($this->l('This module requires write and read permissions on the module cache directory.'));
+			
 		elseif (Tools::isSubmit('submitTrustedShops')) 
 		{
 			$errors = $this->_validateForm();

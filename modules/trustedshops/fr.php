@@ -6,6 +6,7 @@ $_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be
 $_MODULE['<{trustedshops}prestashop>trustedshops_9a983837b32d42343dc0c62d35b1f955'] = 'Trusted Shops Système d’évaluation client';
 $_MODULE['<{trustedshops}prestashop>trustedshops_91816f89fa71ac42db2b5d5a3a122afa'] = 'Boostez la confiance de vos clients et transformez vos visiteurs en acheteurs.';
 $_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Etes-vous sûr de vouloir supprimer votre configuration?';
+$_MODULE['<{trustedshops}prestashop>trustedshops_b20a16afda98421bbf7457ccfa50e311'] = 'Ce module nécessite les droits de lecture et d\'écriture sur le répertoire cache du module.';
 $_MODULE['<{trustedshops}prestashop>trustedshops_1097e2b0ee70e248749f0d0a9292df56'] = 'Trusted Shops ID non valide';
 $_MODULE['<{trustedshops}prestashop>trustedshops_24bbca53f91f119c930d147557a4e997'] = 'Veuillez vous enregistrer';
 $_MODULE['<{trustedshops}prestashop>trustedshops_6c92285fa6d3e827b198d120ea3ac674'] = 'ici';
