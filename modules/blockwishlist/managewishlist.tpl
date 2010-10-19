@@ -1,14 +1,14 @@
 {if $products}
 {if !$refresh}
 	<br />
-	<a href="javascript:;" id="hideBoughtProducts" class="button_account"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Hide products' mod='blockwishlist'}</a>
-	<a href="javascript:;" id="showBoughtProducts" class="button_account"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts');">{l s='Show products' mod='blockwishlist'}</a>
+	<a href="#" id="hideBoughtProducts" class="button_account"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts'); return false;">{l s='Hide products' mod='blockwishlist'}</a>
+	<a href="#" id="showBoughtProducts" class="button_account"  onclick="WishlistVisibility('wlp_bought', 'BoughtProducts'); return false;">{l s='Show products' mod='blockwishlist'}</a>
 	{if count($productsBoughts)}
-	<a href="javascript:;" id="hideBoughtProductsInfos" class="button_account" onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos');">{l s='Hide bought product\'s infos' mod='blockwishlist'}</a>
-	<a href="javascript:;" id="showBoughtProductsInfos" class="button_account"  onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos');">{l s='Show bought product\'s infos' mod='blockwishlist'}</a>
+	<a href="#" id="hideBoughtProductsInfos" class="button_account" onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos'); return false;">{l s='Hide bought product\'s infos' mod='blockwishlist'}</a>
+	<a href="#" id="showBoughtProductsInfos" class="button_account"  onclick="WishlistVisibility('wlp_bought_infos', 'BoughtProductsInfos'); return false;">{l s='Show bought product\'s infos' mod='blockwishlist'}</a>
 	{/if}
-	<a href="javascript:;" id="showSendWishlist" class="button_account" onclick="WishlistVisibility('wl_send', 'SendWishlist');">{l s='Send this wishlist' mod='blockwishlist'}</a>
-	<a href="javascript:;" id="hideSendWishlist" class="button_account" onclick="WishlistVisibility('wl_send', 'SendWishlist');">{l s='Close send this wishlist' mod='blockwishlist'}</a>
+	<a href="#" id="showSendWishlist" class="button_account" onclick="WishlistVisibility('wl_send', 'SendWishlist'); return false;">{l s='Send this wishlist' mod='blockwishlist'}</a>
+	<a href="#" id="hideSendWishlist" class="button_account" onclick="WishlistVisibility('wl_send', 'SendWishlist'); return false;">{l s='Close send this wishlist' mod='blockwishlist'}</a>
 	<span class="clear"></span>
 	<br />
 	Permalink :<br/><input type="text" value="{$base_dir_ssl}modules/blockwishlist/view.php?token={$token_wish|escape:'htmlall':'UTF-8'}" style="width:540px;" readonly/>
