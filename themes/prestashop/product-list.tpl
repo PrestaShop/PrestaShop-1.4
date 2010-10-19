@@ -28,6 +28,9 @@
 					{/if}
 				{/if}
 				<a class="button" href="{$product.link|escape:'htmlall':'UTF-8'}" title="{l s='View'}">{l s='View'}</a>
+				{if $comparator_max_item}
+					<p><input type="checkbox" onclick="checkForComparison({$comparator_max_item})" class="comparator" id="comparator_item_{$product.id_product}" value="{$product.id_product}" /><label for="comparator_item_{$product.id_product}">{l s='Select to compare'}</label></p>
+				{/if}				
 			</div>
 		</li>
 	{/foreach}

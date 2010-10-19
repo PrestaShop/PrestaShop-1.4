@@ -537,6 +537,8 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `n
 (3, 1, 'Restocking'),
 (3, 2, 'Réassort');
 
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW());
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

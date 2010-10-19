@@ -166,5 +166,27 @@ class		Feature extends ObjectModel
 		$feature->add();
 		return $feature->id;
 	}
+	
+	public static function getFeaturesForComparison($list_ids_product, $id_lang)
+	{
+		$ids = '';
+		foreach($list_ids_product as $id)
+			$ids .= intval($id).',';
+			
+		$ids = rtrim($ids, ',');
+	
+		if (empty($ids))
+			return false;
+			
+		return Db::getInstance()->ExecuteS('
+		SELECT * , COUNT(*) as nb
+		FROM `'._DB_PREFIX_.'feature` f
+		LEFT JOIN `'._DB_PREFIX_.'feature_product` fp ON f.`id_feature` = fp.`id_feature`
+		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON f.`id_feature` = fl.`id_feature`
+		WHERE fp.`id_product` IN ('.$ids.')
+		AND `id_lang` = '.intval($id_lang).'
+		GROUP BY f.`id_feature`
+		ORDER BY nb DESC');
+	}
 }
 ?>

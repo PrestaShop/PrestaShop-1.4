@@ -43,4 +43,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_08621d00a3a801b9159a11b8b
 $_MODULE['<{productcomments}prestashop>productcomments_c3edcf2cedbd4ce230fd6d4ea8915718'] = 'Ajouter un commentaire';
 $_MODULE['<{productcomments}prestashop>productcomments_94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
 $_MODULE['<{productcomments}prestashop>productcomments_720fae7db6e6055d2b47890240bb3598'] = 'Seuls les utilisateurs enregistrés peuvent poster des commentaires.';
+$_MODULE['<{productcomments}prestashop>products-comparison_8413c683b4b27cc3f4dbd4c90329d8ba'] = 'Commentaires';
+$_MODULE['<{productcomments}prestashop>products-comparison_b1897515d548a960afe49ecf66a29021'] = 'Moyenne';
+$_MODULE['<{productcomments}prestashop>products-comparison_bc976f6c3405523cde61f63a7cbe224b'] = 'Voir les avis';
 $_MODULE['<{productcomments}prestashop>tab_8413c683b4b27cc3f4dbd4c90329d8ba'] = 'Commentaires';

@@ -14,6 +14,8 @@ Tools::addCSS(array(
 	_THEME_CSS_DIR_.'product_list.css' => 'all'
 ));
 
+Tools::addJS(_THEME_JS_DIR_.'/products-comparison.js');
+
 include(dirname(__FILE__).'/header.php');
 include(dirname(__FILE__).'/product-sort.php');
 
@@ -76,6 +78,7 @@ else
 
 $smarty->assign(array(
 	'allow_oosp' => intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')),
+	'comparator_max_item' => intval(Configuration::get('PS_COMPARATOR_MAX_ITEM')),
 	'suppliers' => Supplier::getSuppliers(),
 	'errors' => $errors));
 

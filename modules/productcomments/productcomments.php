@@ -37,6 +37,7 @@ class ProductComments extends Module
 				return (false);
         if (parent::install() == false 
 				OR $this->registerHook('productTab') == false
+				OR $this->registerHook('extraProductComparison') == false
 				OR $this->registerHook('productTabContent') == false
 				OR $this->registerHook('header') == false
 				OR Configuration::updateValue('PRODUCT_COMMENTS_MODERATE', 1) == false)
@@ -363,6 +364,50 @@ class ProductComments extends Module
 	public function hookHeader()
 	{
 		$this->_frontOfficePostProcess();
+	}
+	
+	public function hookExtraProductComparison($params)
+	{
+		global $smarty, $cookie;
+	
+		$list_grades = array();
+		$list_product_grades = array();
+		$list_product_average = array();
+		$list_product_comment = array();
+		
+		foreach ($params['list_ids_product'] AS $id_product)
+		{
+			$grades = ProductComment::getAveragesByProduct(intval($id_product), intval($cookie->id_lang));
+			$criterions = ProductCommentCriterion::getByProduct(intval($id_product), intval($cookie->id_lang));
+			$grade_total = 0;			
+			if (sizeof($grades) > 0)
+			{
+				foreach ($criterions AS $criterion)
+				{					
+					$list_product_grades[$criterion['id_product_comment_criterion']][$id_product] = $grades[$criterion['id_product_comment_criterion']];
+					$grade_total += floatval($grades[$criterion['id_product_comment_criterion']]);
+					
+					if (!array_key_exists($criterion['id_product_comment_criterion'], $list_grades))
+						$list_grades[$criterion['id_product_comment_criterion']] = $criterion['name'];
+				}
+				
+				$list_product_average[$id_product] = $grade_total / sizeof($criterion);
+				$list_product_comment[$id_product] = ProductComment::getByProduct($id_product, 0, 3);
+			}
+		}				
+		
+		if (sizeof($list_grades) < 1) 
+			return false;
+			
+		$smarty->assign(array(
+					'grades' => $list_grades,
+					'product_grades' => $list_product_grades,
+					'list_ids_product' => $params['list_ids_product'],
+					'list_product_average' => $list_product_average,
+					'product_comments' => $list_product_comment,
+				));
+		
+		return $this->display(__FILE__,'/products-comparison.tpl');
 	}
 }
 
