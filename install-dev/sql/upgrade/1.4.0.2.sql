@@ -456,6 +456,7 @@ ALTER TABLE `PREFIX_carrier` ADD `need_range` TINYINT( 1 ) UNSIGNED NOT NULL;
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('processCarrier', 'Carrier Process', NULL, 0);
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('orderDetail', 'Order Detail', 'To set the follow-up in smarty when order detail is called', 0);
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('paymentCCAdded', 'Payment CC added', 'Payment CC added', '0');
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('extraProductComparison', 'Extra Product Comparison', 'Extra Product Comparison', '0');
 
 ALTER TABLE `PREFIX_address` ADD `vat_number` varchar(32) NULL DEFAULT NULL AFTER `phone_mobile`;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());

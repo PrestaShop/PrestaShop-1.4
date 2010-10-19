@@ -1,0 +1,90 @@
+<script type="text/javascript" src="{$module_dir}js/products-comparison.js"></script>
+<script type="text/javascript" src="{$module_dir}js/jquery.rating.pack.js"></script>
+<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.cluetip.js"></script>
+<script type="text/javascript">
+	$(function(){literal}{{/literal} $('input[@type=radio].star').rating(); {literal}}{/literal});
+	$(function(){literal}{{/literal}
+		$('.auto-submit-star').rating({literal}{{/literal}
+			callback: function(value, link){literal}{{/literal}
+			{literal}}{/literal}
+		{literal}}{/literal});
+	{literal}}{/literal});
+	
+	//close  comment form
+	function closeCommentForm(){ldelim}
+		$('#sendComment').slideUp('fast');
+		$('input#addCommentButton').fadeIn('slow');
+	{rdelim}
+</script>
+
+<tr class="comparison_header">
+	<td>
+		{l s='Comments' mod='productcomments'}
+	</td>
+	{section loop=$list_ids_product|count step=1 start=0 name=td}
+		<td></td>
+	{/section}
+</tr>
+
+{foreach from=$grades item=grade key=grade_id}
+<tr>		
+	{cycle values='comparison_feature_odd,comparison_feature_even' assign='classname'}
+	<td class="{$classname}">
+		{$grade}
+	</td>
+
+	{foreach from=$list_ids_product item=id_product}
+		{assign var='tab_grade' value=$product_grades[$grade_id]}
+		<td  width="{$width}%" class="{$classname} comparison_infos ajax_block_product" align="center">
+		{if $tab_grade[$id_product]}
+			{section loop=6 step=1 start=1 name=average}
+				<input class="auto-submit-star" disabled="disabled" type="radio" name="{$grade_id}_{$product_id}_{$smarty.section.average.index}" {if $tab_grade[$id_product]|round neq 0 and $smarty.section.average.index eq $tab_grade[$id_product]|round}checked="checked"{/if} />
+			{/section}	
+		{else}
+			-
+		{/if}		
+		</td>
+	{/foreach}		
+</tr>				
+{/foreach}
+
+	{cycle values='comparison_feature_odd,comparison_feature_even' assign='classname'}
+<tr>
+	<td  class="{$classname} comparison_infos">{l s='Average' mod='productcomments'}</td>
+{foreach from=$list_ids_product item=id_product}
+	<td  width="{$width}%" class="{$classname} comparison_infos" align="center" >
+	{if $list_product_average[$id_product]}
+		{section loop=6 step=1 start=1 name=average}
+			<input class="auto-submit-star" disabled="disabled" type="radio" name="average_{$id_product}" {if $list_product_average[$id_product]|round neq 0 and $smarty.section.average.index eq $list_product_average[$id_product]|round}checked="checked"{/if} />
+		{/section}	
+	{else}
+		-
+	{/if}
+	</td>	
+{/foreach}
+</tr>
+
+<tr>
+	<td  class="{$classname} comparison_infos">&nbsp;</td>
+	{foreach from=$list_ids_product item=id_product}
+	<td  width="{$width}%" class="{$classname} comparison_infos" align="center" >
+			{if $product_comments[$id_product]}
+		<a href="#" rel="#comments_{$id_product}" class="cluetip">{l s='view comments' mod='productcomments'}</a>
+		<div style="display:none" id="comments_{$id_product}"> 
+		{foreach from=$product_comments[$id_product] item=comment}	
+			<div class="comment">
+				<div class="customer_name">
+				{dateFormat date=$comment.date_add|escape:'html':'UTF-8' full=0}
+				{$comment.firstname|escape:'html':'UTF-8'} {$comment.lastname|truncate:30:'...'|escape:'htmlall':'UTF-8'}.
+				</div> 
+				{$comment.content|escape:'html':'UTF-8'|nl2br}
+			</div>
+			<br />
+		{/foreach}
+		</div>
+	{else}
+		-
+	{/if}
+	</td>	
+{/foreach}
+</tr>
