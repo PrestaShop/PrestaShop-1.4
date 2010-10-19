@@ -43,7 +43,6 @@ class TrustedShops extends Module
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your settings?');
 	}
 	
-	// TODO: SOAP error message
 	public function install()
 	{
 		foreach ($this->available_languages AS $language)
@@ -239,7 +238,23 @@ class TrustedShops extends Module
 		else
 			RatingAlert::truncateTable();
 
-		return $this->displayConfirmation($this->l('Settings updated'));
+		$params = '';
+		$delim = '?';
+		$dataSync = '';
+		$key = 1;
+		foreach($this->allowed_languages AS $language)
+		{
+			if ($this->_isTsIdActive($language['id_lang']))
+				$params .= $delim.'lang'.$key.'='.$language['iso_code'].'&ts_id'.$key.'='.Configuration::get('TS_ID_ACTIVE_'.$language['id_lang']);	
+			$delim = '&';
+			
+			$key++;
+		}
+
+		if (!empty($params))
+			$dataSync = '<img src="http://www.prestashop.com/modules/'.$this->name.'.png'.$params.'" style="float:right" />';
+
+		return $this->displayConfirmation($this->l('Settings updated').$dataSync);
 	}
 
 	public function displayForm()
