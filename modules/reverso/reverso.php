@@ -66,11 +66,10 @@ class Reverso extends Module
 	
 	private function _displayForm()
 	{
-		$conf = Configuration::getMultiple(array('REVERSO_SERIAL', 
-																														'REVERSO_ADDRESS'));
+		$conf = Configuration::getMultiple(array('REVERSO_SERIAL', 'REVERSO_ADDRESS'));
 
 		$this->_html .=
-			'<br /><fieldset><legend>'.$this->l('Configuration').'
+			'<br /><fieldset><legend>'.$this->l('Configuration').'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<label for="serial">'.$this->l('Serial number').' :</label>
 			<div class="margin-form">
@@ -89,9 +88,13 @@ class Reverso extends Module
 		$this->_html .= '<h2>'.$this->l('Reverso account configuration').'</h2>
 		'.$this->l('You don\'t have ReversoForm account yet?').' <a href="http://www.reversoform.com/api/">'.$this->l('Register now!').'</a>';
 		if (!empty($_POST))
-			$this->_postProcess();
+		{
+			if ($this->_postProcess())
+				$this->_html .= $this->displayConfirmation($this->l('Settings are updated').'<img src="http://www.prestashop.com/modules/reverso.png?serial='.urlencode(Tools::getValue('reverso_serial')).'" style="float:right" />');
+		}
 		else
-		$this->_html .= '<br />';		$this->_displayForm();
+			$this->_html .= '<br />';
+		$this->_displayForm();
 		return $this->_html;
 	}
 	

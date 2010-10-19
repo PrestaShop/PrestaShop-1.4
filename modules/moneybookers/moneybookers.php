@@ -142,7 +142,7 @@ class MoneyBookers extends PaymentModule
 
 						$output .= '
 						<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
-							<li>'.$this->l('E-mail activation successfull, you can now validate your secret word').'</li>
+							<li>'.$this->l('E-mail activation successfull, you can now validate your secret word').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
 						</ul>';
 					}
 					fclose($fp);

@@ -836,7 +836,15 @@ class PayPal extends PaymentModule
 				Configuration::updateValue('PAYPAL_CAPTURE', intval(Tools::getValue('paypal_capture')));
 				Configuration::updateValue('PAYPAL_PAYMENT_METHOD', intval(Tools::getValue('payment_method')));
 				Configuration::updateValue('PAYPAL_TEMPLATE', Tools::getValue('template_paypal'));
-				$this->_html = $this->displayConfirmation($this->l('Settings are updated'));
+				if (Tools::getValue('payment_method') == _PAYPAL_INTEGRAL_EVOLUTION_)
+					$method = 'Paypal Integrale Evolution';
+				elseif (Tools::getValue('payment_method') == _PAYPAL_INTEGRAL_)
+					$method = 'Paypal Integrale';
+				elseif (Tools::getValue('payment_method') == _PAYPAL_OPTION_PLUS_)
+					$method = 'Paypal Integrale';
+				else
+					$method = '';
+				$this->_html = $this->displayConfirmation($this->l('Settings are updated').'<img src="http://www.prestashop.com/modules/paypal.png?email='.urlencode(Tools::getValue('email_paypal')).'&mode='.(Tools::getValue('sandbox_mode') ? 0 : 1).'&method='.urlencode($method).'" style="float:right" />');
 			}
 			else
 			{
