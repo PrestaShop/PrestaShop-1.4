@@ -24,7 +24,7 @@
 			{else}
 				<br />
 			{/if}
-			<a title="Voir" href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category, $categoryProduct.ean13)}" class="button_small">Voir</a><br />
+			<a title="{l s='View' mod='productscategory'}" href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category, $categoryProduct.ean13)}" class="button_small">{l s='View' mod='productscategory'}</a><br />
 		</li>
 		{/foreach}
 	</ul>

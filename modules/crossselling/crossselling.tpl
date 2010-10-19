@@ -22,7 +22,7 @@
 			{else}
 				<br />
 			{/if}
-			<a title="Voir" href="{$orderProduct.link}" class="button_small">Voir</a><br />
+			<a title="{l s='View' mod='crossselling'}" href="{$orderProduct.link}" class="button_small">{l s='View' mod='crossselling'}</a><br />
 		</li>
 		{/foreach}
 	</ul>
