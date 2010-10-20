@@ -121,6 +121,13 @@ class AdminEmployees extends AdminTab
 		if ((int)$this->tabAccess['edit'])
 		{
 			echo '<div class="clear">&nbsp;</div>
+				<label>'.$this->l('UI mode:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="bo_uimode" id="uimode_on" value="1" '.($this->getFieldValue($obj, 'bo_uimode') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="uimode_on">'.$this->l('Hover on tabs').'</label>
+					<input type="radio" name="bo_uimode" id="uimode_off" value="0" '.(!$this->getFieldValue($obj, 'bo_uimode') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="uimode_off">'.$this->l('Click on tabs').'</label>
+				</div><div class="clear">&nbsp;</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>

@@ -133,8 +133,9 @@ foreach ($tabs AS $t)
 			$mainsubtablist = $echoLi;
 		$echoLis .= '<div id="tab'.intval($t['id_tab']).'_subtabs" style="display:none">'.$echoLi.'</div>';
 	}
-echo '		</ul>'.$echoLis.'
-			<script type="text/javascript">
+echo '		</ul>'.$echoLis;
+if ($employee->bo_uimode == 'hover')
+	echo '	<script type="text/javascript">
 				$("#menu li").hoverIntent({over:hoverTabs,timeout:800,out:outTabs});
 				function outTabs(){}
 				function hoverTabs() {
@@ -147,7 +148,7 @@ echo '		</ul>'.$echoLis.'
 					$("#menu li").removeClass("active");
 					$(this).addClass("active");
 				}
-			</script>
-			<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
+			</script>';
+echo '		<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
 			<div id="main">
 				<div id="content">';
