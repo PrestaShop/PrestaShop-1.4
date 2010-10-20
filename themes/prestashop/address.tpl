@@ -112,7 +112,7 @@ $(function(){ldelim}
 			<label for="other">{l s='Additional information'}</label>
 			<textarea id="other" name="other" cols="26" rows="3">{if isset($smarty.post.other)}{$smarty.post.other}{else}{$address->other|escape:'htmlall':'UTF-8'}{/if}</textarea>
 		</p>
-		<p style="margin-left:50px; font-size: 0.8em">{l s='You must register at least one phone number'}</p>
+		<p style="margin-left:50px;">{l s='You must register at least one phone number'} <sup style="color:red;">*</sup></p>
 		<p class="text">
 			<label for="phone">{l s='Home phone'}</label>
 			<input type="text" id="phone" name="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone}{else}{$address->phone|escape:'htmlall':'UTF-8'}{/if}" />
