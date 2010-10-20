@@ -37,12 +37,12 @@ class AdminProducts extends AdminTab
 			'id_product' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 20),
 			'image' => array('title' => $this->l('Photo'), 'align' => 'center', 'image' => 'p', 'width' => 45, 'orderby' => false, 'filter' => false, 'search' => false),
 			'name' => array('title' => $this->l('Name'), 'width' => 220, 'filter_key' => 'b!name'),
-			'reference' => array('title' => $this->l('Reference'), 'align' => 'center', 'width' => 20), 
+			'reference' => array('title' => $this->l('Reference'), 'align' => 'center', 'width' => 20),
 			'price' => array('title' => $this->l('Base price'), 'width' => 70, 'price' => true, 'align' => 'right', 'filter_key' => 'a!price'),
 			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right', 'havingFilter' => true, 'orderby' => false),
 			'quantity' => array('title' => $this->l('Quantity'), 'width' => 30, 'align' => 'right', 'filter_key' => 'a!quantity', 'type' => 'decimal'),
 			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'cp!position', 'align' => 'center', 'position' => 'position'),
-			'a!active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
+			'a!active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'filter_key' => 'a!active', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 
 		/* Join categories table */
 		$this->_category = AdminCatalog::getCurrentCategory();
@@ -62,7 +62,7 @@ class AdminProducts extends AdminTab
 
 		if (get_class($object) != 'Product')
 			return;
-			
+
 		/* Additional fields */
 		$languages = Language::getLanguages(false);
 		foreach ($languages as $language)
@@ -1071,11 +1071,10 @@ class AdminProducts extends AdminTab
 	 * @param array $current Current category
 	 * @param integer $id_category Current category id
 	 */
-	function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL)
+	public static function recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL, $has_suite = array())
 	{
 		global $done;
 		static $irow;
-		$id_obj = intval(Tools::getValue($this->identifier));
 
 		if (!isset($done[$current['infos']['id_parent']]))
 			$done[$current['infos']['id_parent']] = 0;
@@ -1085,7 +1084,6 @@ class AdminProducts extends AdminTab
 		$doneC = $done[$current['infos']['id_parent']];
 
 		$level = $current['infos']['level_depth'] + 1;
-		$img = $level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif';
 
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
@@ -1095,15 +1093,19 @@ class AdminProducts extends AdminTab
 			<td>
 				'.$id_category.'
 			</td>
-			<td>
-				<img src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
-			</td>
+			<td>';
+			for ($i = 2; $i < $level; $i++)
+				echo '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" />';
+			echo '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" alt="" /> &nbsp;
+			<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label></td>
 		</tr>';
 
+		if ($level > 1)
+			$has_suite[] = ($todo == $doneC ? 0 : 1);
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default);
+					self::recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default, $has_suite);
 	}
 	
 	public function displayErrors()
@@ -1979,47 +1981,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
-					<tr>
-						<td class="col-left"><label for="id_category_default" class="t">'.$this->l('Default category').'</label></td>
-						<td>
-							<select id="id_category_default" name="id_category_default" onchange="checkDefaultCategory(this.value);">';
-		$categories = Category::getCategories(intval($cookie->id_lang), false);
-		Category::recurseCategory($categories, $categories[0][1], 1, ($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)));
-		echo '			</select>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left">'.$this->l('Catalog:').'</td>
-						<td>
-							<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
-								<script type="text/javascript">
-								$(document).ready(function() {
-									$(\'div#categoryList input.categoryBox\').click(function (){
-										if ($(this).is(\':not(:checked)\') && $(\'div#categoryList input.id_category_default\').val() == $(this).val())
-											alert(\''.utf8_encode(html_entity_decode($this->l('Consider changing the default category.'))).'\');
-									});
-								});
-								</script>
-								<table cellspacing="0" cellpadding="0" class="table">
-									<tr>
-										<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
-										<th>'.$this->l('ID').'</th>
-										<th style="width: 400px">'.$this->l('Name').'</th>
-									</tr>';
-			$done = array();
-			$index = array();
-			if (Tools::isSubmit('categoryBox'))
-				foreach (Tools::getValue('categoryBox') AS $k => $row)
-					$index[] = $row;
-			elseif ($obj->id)
-				foreach (Product::getIndexedCategories($obj->id) AS $k => $row)
-					$index[] = $row['id_category'];
-			$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, $obj->id_category_default);
-			echo '				</table>
-								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
-							</div>
-						</td>
-					</tr>
+					<tr id="tr_categories"></tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr><td colspan="2">
 						<span onclick="javascript:openCloseLayer(\'seo\');" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('SEO').'" title="'.$this->l('SEO').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to improve product\'s rank in search engines (SEO)').'</span><br />
@@ -2242,7 +2204,17 @@ class AdminProducts extends AdminTab
 		}
 		toggleVirtualProduct(getE(\'is_virtual_good\'));
 		unityPriceWithTax(\'unity\');
-	</script>';
+		$(function() {
+		$.ajax({
+			type: "POST",
+			url: \'ajax_category_list.php\',
+			data: \'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.intval(Tools::getValue('id_category')).'\',
+			async : true,
+			success: function(msg)
+				{
+					$(\'#tr_categories\').replaceWith(msg);
+				}
+		});});</script>';
 	}
 
 	function displayFormImages($obj, $token = NULL)
@@ -3003,6 +2975,19 @@ class AdminProducts extends AdminTab
 			}
 		}
 		return true;
+	}
+	
+	public function getL($key)
+	{
+		$trad = array(
+			'Default category:' => $this->l('Default category:'),
+			'Catalog:' => $this->l('Catalog:'),
+			'Consider changing the default category.' => $this->l('Consider changing the default category.'),
+			'ID' => $this->l('ID'),
+			'Name' => $this->l('Name'),
+			'Mark all checkbox(es) of categories in which product is to appear' => $this->l('Mark all checkbox(es) of categories in which product is to appear')
+		);
+		return $trad[$key];
 	}
 }
 

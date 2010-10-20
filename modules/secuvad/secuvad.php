@@ -634,13 +634,13 @@ class Secuvad extends Module
 			
 			$this->_html .= '
 			<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
-				<fieldset style="width:430px;margin-right:10px;margin-bottom:10px;">
+				<fieldset style="width:900px;margin-right:10px;margin-bottom:10px;">
 					<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad categories').'</legend>
 					
 					<table class="table" style="width:100%;" cellspacing="0" cellpadding="0">
 						<tr>
-							<th style="width:50%;">'.$this->l('Name').'</th>
-							<th style="width:50%;">'.$this->l('Secuvad Category').'</th>
+							<th style="width:70%;">'.$this->l('Name').'</th>
+							<th style="width:30%;">'.$this->l('Secuvad Category').'</th>
 						</tr>
 			';
 			$this->recurseCategoryForInclude($categories, $categories[1]);
@@ -732,7 +732,7 @@ class Secuvad extends Module
 		}
 	}
 	
-	private function recurseCategoryForInclude($categories, $current, $id_category = 1)
+	private function recurseCategoryForInclude($categories, $current, $id_category = 1, $has_suite = array())
 	{
 		global $done, $cookie;
 		static $irow;
@@ -741,14 +741,16 @@ class Secuvad extends Module
 			$done[$current['infos']['id_parent']] = 0;
 		$done[$current['infos']['id_parent']] += 1;
 		
-		$todo = 0;
+		$todo = sizeof($categories[$current['infos']['id_parent']]);
 		$doneC = $done[$current['infos']['id_parent']];
 
-		$level = $current['infos']['level_depth'] + 1;
-		$img = ($level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif');		
+		$level = $current['infos']['level_depth'] + 1;	
 		$this->_html .= '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-				<td>
-					<img src="../img/admin/'.$img.'" style="vertical-align:middle" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
+				<td>';
+		for ($i = 2; $i < $level; $i++)
+				$this->_html .= '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" style="vertical-align: middle;"/>';
+		$this->_html .= '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" style="vertical-align:middle" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>';
+		$this->_html .= '
 				</td>
 				<td>
 					<select name="secuvad_cat_'.$id_category.'">
@@ -760,12 +762,12 @@ class Secuvad extends Module
 				</td>
 			</tr>
 		';
-		
+		if ($level > 1)
+			$has_suite[] = ($todo == $doneC ? 0 : 1);
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$this->recurseCategoryForInclude($categories, $categories[$id_category][$key], $key);
-
+					$this->recurseCategoryForInclude($categories, $categories[$id_category][$key], $key, $has_suite);
 	}
 	
 	private function _setFormRegister($lock = false)

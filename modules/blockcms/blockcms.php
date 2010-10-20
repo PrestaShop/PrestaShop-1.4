@@ -196,7 +196,7 @@ class BlockCms extends Module
 		return $display_cms;
 	}
 
-	private function displayRecurseCheckboxes($categories, $selected)
+	private function displayRecurseCheckboxes($categories, $selected, $has_suite = array())
 	{
 		static $irow = 0;
 		
@@ -207,23 +207,34 @@ class BlockCms extends Module
 				<td width="3%"><input type="checkbox" name="footerBox[]" class="cmsBox" id="1_'.$categories['id_cms_category'].'" value="1_'.$categories['id_cms_category'].'" '.
 				(in_array('1_'.$categories['id_cms_category'], $selected) ? ' checked="checked"' : '').' /></td>
 				<td width="3%">'.$categories['id_cms_category'].'</td>
-				<td width="94%"><img style="vertical-align:middle;" src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="1_'.$categories['id_cms_category'].'" class="t"><b>'.$categories['name'].'</b></label></td>
+				<td width="94%">';
+		for ($i = 1; $i < $categories['level_depth']; $i++)
+			$this->_html .=	'<img style="vertical-align:middle;" src="../img/admin/lvl_'.$has_suite[$i - 1].'.gif" alt="" />';
+		$this->_html .= '<img style="vertical-align:middle;" src="../img/admin/'.($categories['level_depth'] == 0 ? 'lv1' : 'lv2_'.(($has_suite[$categories['level_depth'] - 1]) ? 'b' : 'f')).'.gif" alt="" /> &nbsp;
+				<label for="1_'.$categories['id_cms_category'].'" class="t"><b>'.$categories['name'].'</b></label></td>
 			</tr>';
-		
 		if (isset($categories['children']))
-			foreach ($categories['children'] as $category)
-				$this->displayRecurseCheckboxes($category, $selected);
+			foreach ($categories['children'] as $key => $category)
+			{
+				$has_suite[$categories['level_depth']] = 1;
+				if (sizeof($categories['children']) == $key + 1 AND !sizeof($categories['cms']))
+					$has_suite[$categories['level_depth']] = 0;
+				$this->displayRecurseCheckboxes($category, $selected, $has_suite, 0);
+			}
 		
 		$cpt = 0;
 		foreach ($categories['cms'] as $cms)
 		{
-			$img = 'lv'.($categories['level_depth'] + 2).'_'.(++$cpt != sizeof($categories['cms']) ? 'b' : 'f').'.gif';
 			$this->_html .= '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
 					<td width="3%"><input type="checkbox" name="footerBox[]" class="cmsBox" id="0_'.$cms['id_cms'].'" value="0_'.$cms['id_cms'].'" '.
 					(in_array('0_'.$cms['id_cms'], $selected) ? ' checked="checked"' : '').' /></td>
 					<td width="3%">'.$cms['id_cms'].'</td>
-					<td width="94%"><img style="vertical-align:middle;" src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="0_'.$cms['id_cms'].'" class="t" style="margin-top:6px;">'.$cms['meta_title'].'</label></td>
+					<td width="94%">';
+			for ($i = 0; $i < $categories['level_depth']; $i++)
+				$this->_html .=	'<img style="vertical-align:middle;" src="../img/admin/lvl_'.$has_suite[$i].'.gif" alt="" />';
+			$this->_html .= '<img style="vertical-align:middle;" src="../img/admin/lv2_'.(++$cpt == sizeof($categories['cms']) ? 'f' : 'b').'.gif" alt="" /> &nbsp;
+			<label for="0_'.$cms['id_cms'].'" class="t" style="margin-top:6px;">'.$cms['meta_title'].'</label></td>
 				</tr>';
 		}
 	}

@@ -232,7 +232,7 @@ class AdminDiscounts extends AdminTab
 				<div class="clear" / >
 				<label>'.$this->l('Categories:').' </label>
 					<div class="margin-form">
-							<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+							<table cellspacing="0" cellpadding="0" class="table" style="width: 600px;">
 									<tr>
 										<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
 										<th>'.$this->l('ID').'</th>
@@ -244,7 +244,7 @@ class AdminDiscounts extends AdminTab
 		$categories = Category::getCategories(intval($cookie->id_lang), false);
 		foreach ($indexedCategories AS $k => $row)
 			$index[] = $row['id_category'];
-		$this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, $obj->id);
+		$this->recurseCategoryForInclude(intval(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
 		echo '
 							</table>
 							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applicated').'<sup> *</sup></p>
@@ -369,11 +369,11 @@ class AdminDiscounts extends AdminTab
 	 * @param array $current Current category
 	 * @param integer $id_category Current category id
 	 */
-	function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL)
+	public static function recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL, $has_suite = array())
 	{
 		global $done;
 		static $irow;
-		$id_obj = intval(Tools::getValue($this->identifier));
+
 		if (!isset($done[$current['infos']['id_parent']]))
 			$done[$current['infos']['id_parent']] = 0;
 		$done[$current['infos']['id_parent']] += 1;
@@ -382,25 +382,28 @@ class AdminDiscounts extends AdminTab
 		$doneC = $done[$current['infos']['id_parent']];
 
 		$level = $current['infos']['level_depth'] + 1;
-		$img = $level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif';
 
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default != NULL ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.(((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) OR Tools::getIsset('adddiscount')) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj)) OR Tools::getIsset('adddiscount')) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
 			</td>
-			<td>
-				<img src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
-			</td>
+			<td>';
+			for ($i = 2; $i < $level; $i++)
+				echo '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" style="vertical-align: middle;"/>';
+			echo '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" alt="" style="vertical-align: middle;"/> &nbsp;
+			<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label></td>
 		</tr>';
 
+		if ($level > 1)
+			$has_suite[] = ($todo == $doneC ? 0 : 1);
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key);
+					self::recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default, $has_suite);
 	}
 }
 

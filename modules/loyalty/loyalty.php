@@ -299,7 +299,7 @@ class Loyalty extends Module
 		foreach ($indexedCategories AS $k => $row)
 			$index[] = $row['id_category'];
 		
-		$html .= $this->recurseCategoryForInclude($index, $categories, $categories[0][1], 1, NULL);
+		$html .= $this->recurseCategoryForInclude(intval(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
 		$html .= '				</table>
 				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'<sup> *</sup></p>
 				<div class="clear"></div>
@@ -361,12 +361,11 @@ class Loyalty extends Module
 		return $html;
 	}
 
-	function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL)
+	public static function recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL, $has_suite = array())
 	{
 		global $done;
 		static $irow;
-		
-		$id_obj = intval(Tools::getValue($this->identifier));
+		$html = '';
 
 		if (!isset($done[$current['infos']['id_parent']]))
 			$done[$current['infos']['id_parent']] = 0;
@@ -376,9 +375,8 @@ class Loyalty extends Module
 		$doneC = $done[$current['infos']['id_parent']];
 
 		$level = $current['infos']['level_depth'] + 1;
-		$img = $level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif';
 
-		$html = '
+		$html .= '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
 				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
@@ -386,15 +384,19 @@ class Loyalty extends Module
 			<td>
 				'.$id_category.'
 			</td>
-			<td>
-				<img src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
-			</td>
+			<td>';
+			for ($i = 2; $i < $level; $i++)
+				$html .= '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" style="vertical-align: middle;"/>';
+			$html .= '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" alt="" style="vertical-align: middle;"/> &nbsp;
+			<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label></td>
 		</tr>';
 
+		if ($level > 1)
+			$has_suite[] = ($todo == $doneC ? 0 : 1);
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$html .= $this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default);
+					$html .= self::recurseCategoryForInclude($id_obj, $indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default, $has_suite);
 		return $html;
 	}
 

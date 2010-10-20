@@ -79,10 +79,11 @@ class AdminScenes extends AdminTab
 	 * @param array $current Current category
 	 * @param integer $id_category Current category id
 	 */
-	function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL)
+	public function recurseCategoryForInclude($indexedCategories, $categories, $current, $id_category = 1, $id_category_default = NULL, $has_suite = array())
 	{
 		global $done;
 		static $irow;
+		
 		$id_obj = intval(Tools::getValue($this->id));
 
 		if (!isset($done[$current['infos']['id_parent']]))
@@ -93,25 +94,28 @@ class AdminScenes extends AdminTab
 		$doneC = $done[$current['infos']['id_parent']];
 
 		$level = $current['infos']['level_depth'] + 1;
-		$img = $level == 1 ? 'lv1.gif' : 'lv'.$level.'_'.($todo == $doneC ? 'f' : 'b').'.gif';
 
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				'.($id_category == 1 ? '&nbsp;' : '<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default != NULL ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />').'
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
 			</td>
-			<td>
-				<img src="../img/admin/'.$img.'" alt="" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>
-			</td>
+			<td>';
+			for ($i = 2; $i < $level; $i++)
+				echo '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" style="vertical-align: middle;"/>';
+			echo '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" alt="" style="vertical-align: middle;"/> &nbsp;
+			<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label></td>
 		</tr>';
 
+		if ($level > 1)
+			$has_suite[] = ($todo == $doneC ? 0 : 1);
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				if ($key != 'infos')
-					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key);
+					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default, $has_suite);
 	}
 	
 	
@@ -225,7 +229,7 @@ class AdminScenes extends AdminTab
 		echo '<label>'.$this->l('Category:').' </label>
 				<div class="margin-form">
 					<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
-						<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
+						<table cellspacing="0" cellpadding="0" class="table" style="width: 600px;">
 								<tr>
 									<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
 									<th>'.$this->l('ID').'</th>
