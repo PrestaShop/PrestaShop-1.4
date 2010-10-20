@@ -202,7 +202,7 @@ class Hipay extends PaymentModule
 		{
 			Configuration::updateValue('HIPAY_PROD', Tools::getValue('HIPAY_PROD'));
 			$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
-			
+			$accounts = array();
 			foreach ($currencies as $currency)
 			{
 				if (Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) != Tools::getValue('HIPAY_SITEID_'.$currency['iso_code']))
@@ -211,16 +211,27 @@ class Hipay extends PaymentModule
 					Configuration::updateValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], false);
 			
 				Configuration::updateValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']));
-				Configuration::updateValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_PASSWORD_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_'.$currency['iso_code']));
-				Configuration::updateValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_SITEID_'.$currency['iso_code'], Tools::getValue('HIPAY_SITEID_'.$currency['iso_code']));
-				Configuration::updateValue('HIPAY_SITEID_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_CATEGORY_'.$currency['iso_code'], Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code']));
+				if ($this->prod AND Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']))
+					$accounts[Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code'])] = 1;
+					
+				Configuration::updateValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_PASSWORD_TEST_'.$currency['iso_code']));
+				Configuration::updateValue('HIPAY_SITEID_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_SITEID_TEST_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code'], Tools::getValue('HIPAY_CATEGORY_TEST_'.$currency['iso_code']));
+				if (!$this->prod AND Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code']))
+					$accounts[Tools::getValue('HIPAY_ACCOUNT_TEST_'.$currency['iso_code'])] = 1;
+				
+				
 			}
+			$i = 1;
+			$dataSync = 'http://www.prestashop.com/modules/hipay.png?mode='.($this->prod ? 'prod' : 'test');
+			foreach ($accounts as $account => $null)
+				$dataSync .= '&account'.($i++).'='.urlencode($account);
 			Configuration::updateValue('HIPAY_RATING', Tools::getValue('HIPAY_RATING'));
-			Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getValue('token').'&conf=4');
+			echo $this->displayConfirmation($this->l('Configuration updated').'<img src="'.$dataSync.'" style="float:right" />');
 		}
 		
 		// Check configuration
