@@ -13,10 +13,7 @@
 	$adminProducts = new AdminProducts();
 
 	global $cookie;
-	
-	/*TEST*/
-/*	echo '<table><tr>';*/
-	/*!TEST*/
+
 	echo '			<tr>
 						<td class="col-left"><label for="id_category_default" class="t">'.$adminProducts->getL('Default category:').'</label></td>
 						<td>
@@ -57,7 +54,4 @@
 								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$adminProducts->getL('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
 							</div>
 					</tr>';
-	/*TEST*/
-/*	echo '</tr></table>';*/
-	/*!TEST*/
 ?>
