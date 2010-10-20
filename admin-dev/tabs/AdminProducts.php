@@ -1692,6 +1692,7 @@ class AdminProducts extends AdminTab
 			getE('label_out_of_stock_3').setAttribute('for', 'out_of_stock_3');
 		}
 	}
+	
 	function uploadFile()
 	{
 		$.ajaxFileUpload (
@@ -2205,16 +2206,17 @@ class AdminProducts extends AdminTab
 		toggleVirtualProduct(getE(\'is_virtual_good\'));
 		unityPriceWithTax(\'unity\');
 		$(function() {
-		$.ajax({
-			type: "POST",
-			url: \'ajax_category_list.php\',
-			data: \'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.intval(Tools::getValue('id_category')).'\',
-			async : true,
-			success: function(msg)
-				{
-					$(\'#tr_categories\').replaceWith(msg);
-				}
-		});});</script>';
+			$.ajax({
+				type: "POST",
+				url: \'ajax_category_list.php\',
+				data: \'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.intval(Tools::getValue('id_category')).'&token='.$this->token.'\',
+				async : true,
+				success: function(msg)
+					{
+						$(\'#tr_categories\').replaceWith(msg);
+					}
+			});
+		});</script>';
 	}
 
 	function displayFormImages($obj, $token = NULL)

@@ -6,6 +6,9 @@
 	include_once('../config/config.inc.php');
 	include_once('init.php');
 	
+	if (Tools::getValue('token') != Tools::getAdminTokenLite('AdminCatalog'))
+		die(1);
+
 	$catalog = new AdminCatalog();
 	$adminProducts = new AdminProducts();
 
