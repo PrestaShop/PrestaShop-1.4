@@ -233,11 +233,11 @@ class AdminAttributeGenerator extends AdminTab
         echo '
                 <div style="padding-top:10px; float: left; width: 570px;">
                     <div style="float:left;">
-						<label>'.$this->l('Quantity:').'</label>
+						<label>'.$this->l('Quantity').'</label>
 						<div class="margin-form">
 							<input type="text" size="20" name="quantity" value="1"/>
 						</div>
-						<label>'.$this->l('Reference:').'</label>
+						<label>'.$this->l('Reference').'</label>
 						<div class="margin-form">
 							<input type="text" size="20" name="reference" value="'.$this->product->reference.'"/>
 						</div>

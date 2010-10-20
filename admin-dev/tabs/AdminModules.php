@@ -241,7 +241,7 @@ class AdminModules extends AdminTab
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
 				<hr />
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-					<label style="width: 100px">'.$this->l('Module URL:').'</label>
+					<label style="width: 100px">'.$this->l('Module URL').'</label>
 					<div class="margin-form" style="padding-left: 140px">
 						<input type="text" name="url" style="width: 200px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
 						<p>'.$this->l('Download the module directly from a website.').'</p>
@@ -252,7 +252,7 @@ class AdminModules extends AdminTab
 				</form>
 				<hr />
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-					<label style="width: 100px">'.$this->l('Module file:').'</label>
+					<label style="width: 100px">'.$this->l('Module file').'</label>
 					<div class="margin-form" style="padding-left: 140px">
 						<input type="file" name="file" />
 						<p>'.$this->l('Upload the module from your computer.').'</p>

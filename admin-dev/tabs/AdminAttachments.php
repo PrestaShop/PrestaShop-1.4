@@ -95,7 +95,7 @@ class AdminAttachments extends AdminTab
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'cname¤cdescription', 'cdescription');
 		echo '	</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('File:').'</label>
+				<label>'.$this->l('File').'</label>
 				<div class="margin-form">
 					<p><input type="file" name="file" /></p>
 					<p>'.$this->l('Upload file from your computer').'</p>

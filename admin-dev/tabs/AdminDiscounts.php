@@ -205,7 +205,7 @@ class AdminDiscounts extends AdminTab
 				</div>
 				<div class="clear">&nbsp;</div>
 				<div id="value-div" style="display:none">
-					<label>'.$this->l('Value:').'</label>
+					<label>'.$this->l('Value').'</label>
 					<div class="margin-form">
 						<input style="float:left;width:80px" type="text" name="value" id="discount_value" value="'.floatval($this->getFieldValue($obj, 'value')).'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
 						<select id="id_currency" name="id_currency" style="float:left;margin-left:10px;width:50px;display:none">

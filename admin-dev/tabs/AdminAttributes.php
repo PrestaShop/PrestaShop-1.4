@@ -75,7 +75,7 @@ class AdminAttributes extends AdminTab
 					</select><sup> *</sup>
 				</div>
 				<div id="colorAttributeProperties" style="'.((Validate::isLoadedObject($obj) AND $obj->isColorAttribute()) ? 'display: block;' : 'display: none;').'">
-					<label>'.$this->l('Color:').'</label>
+					<label>'.$this->l('Color').'</label>
 					<div class="margin-form">
 						<input type="text" size="33" name="color" value="'.(Tools::getValue('color', $color) ? htmlentities(Tools::getValue('color', $color)) : '#000000').'" /> <sup>*</sup>
 						<p class="clear">'.$this->l('HTML colors only (e.g.,').' "lightblue", "#CC6600")</p>

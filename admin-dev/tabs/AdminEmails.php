@@ -72,7 +72,7 @@ class AdminEmails extends AdminPreferences
 			</script>
 			<script type="text/javascript" src="'._PS_JS_DIR_.'/sendMailTest.js"></script>
 			<div style="clear: both; padding-top:15px;">
-				<label>'.$this->l('Send a mail test at:').'</label>
+				<label>'.$this->l('Send a mail test at').'</label>
 				<div class="margin-form">
 					<input type="text" name="testEmail" id="testEmail" value="'.Configuration::get('PS_SHOP_EMAIL').'" style="width:210px;margin-bottom:4px;" /><br />
 					<input type="hidden" id="PS_MAIL_METHOD" name="PS_MAIL_METHOD" value="'.Configuration::get('PS_MAIL_METHOD').'" />

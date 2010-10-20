@@ -1980,7 +1980,7 @@ class AdminProducts extends AdminTab
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
-						<td class="col-left"><label for="id_category_default" class="t">'.$this->l('Default category:').'</label></td>
+						<td class="col-left"><label for="id_category_default" class="t">'.$this->l('Default category').'</label></td>
 						<td>
 							<select id="id_category_default" name="id_category_default" onchange="checkDefaultCategory(this.value);">';
 		$categories = Category::getCategories(intval($cookie->id_lang), false);

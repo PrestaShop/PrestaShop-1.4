@@ -83,7 +83,7 @@ class AdminCarriers extends AdminTab
 					<input type="text" size="40" name="url" value="'.htmlentities($this->getFieldValue($obj, 'url'), ENT_COMPAT, 'UTF-8').'" />
 					<p class="clear">'.$this->l('URL for the tracking number; type \'@\' where the tracking number will appear').'</p>
 				</div>
-				<label>'.$this->l('Tax:').'</label>
+				<label>'.$this->l('Tax').'</label>
 				<div class="margin-form">
 					<select name="id_tax">
 						<option value="0"'.(($obj->id AND $obj->id_tax == 0) ? ' selected="selected"' : '').'>'.$this->l('No tax').'</option>';
@@ -93,7 +93,7 @@ class AdminCarriers extends AdminTab
 					echo '</select>
 					<p>'.$this->l('Include tax on carrier, e.g., VAT').'</p>
 				</div>
-				<label>'.$this->l('Zone:').'</label>
+				<label>'.$this->l('Zone').'</label>
 				<div class="margin-form">';
 					$carrier_zones = $obj->getZones();
 					$zones = Zone::getZones(true);
@@ -101,7 +101,7 @@ class AdminCarriers extends AdminTab
 						echo '<input type="checkbox" id="zone_'.$zone['id_zone'].'" name="zone_'.$zone['id_zone'].'" value="true" '.(Tools::getValue('zone_'.$zone['id_zone'], (is_array($carrier_zones) AND in_array(array('id_carrier' => $obj->id, 'id_zone' => $zone['id_zone'], 'name' => $zone['name'], 'active' => $zone['active']), $carrier_zones))) ? ' checked="checked"' : '').'><label class="t" for="zone_'.$zone['id_zone'].'">&nbsp;<b>'.$zone['name'].'</b></label><br />';
 				echo '<p>'.$this->l('The zone in which this carrier is to be used').'</p>
 	</div>
-				<label>'.$this->l('Group access:').'</label>
+				<label>'.$this->l('Group access').'</label>
 				<div class="margin-form">';
 					$groups = Group::getGroups(intval($cookie->id_lang));
 					if (sizeof($groups))

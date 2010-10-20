@@ -131,14 +131,14 @@ class AdminTabs extends AdminTab
 					<input type="text" name="module" value="'.htmlentities($this->getFieldValue($obj, 'module'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Icon:').'</label>
+				<label>'.$this->l('Icon').'</label>
 				<div class="margin-form">
 					'.($obj->id ? '<img src="../img/t/'.$obj->class_name.'.gif" />&nbsp;/img/t/'.$obj->class_name.'.gif' : '').'
 					<p><input type="file" name="icon" /></p>
 					<p>'.$this->l('Upload logo from your computer').' (.gif, .jpg, .jpeg '.$this->l('or').' .png)</p>
 				</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Parent:').'</label>
+				<label>'.$this->l('Parent').'</label>
 				<div class="margin-form">
 					<select name="id_parent">
 						<option value="-1" '.(($this->getFieldValue($obj, 'id_parent') == -1) ? 'selected="selected"' : '').'>'.$this->l('None').'</option>

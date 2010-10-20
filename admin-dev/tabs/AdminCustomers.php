@@ -613,7 +613,7 @@ class AdminCustomers extends AdminTab
 					echo '</select>
 				</div>';
 				if (isset($need_identifcation_number) AND $need_identifcation_number) 
-					echo '<label for="dni">'.$this->l('Identification Number:').'</label>
+					echo '<label for="dni">'.$this->l('Identification Number').'</label>
 				<div class="margin-form">
 					<input type="text" name="dni" id="dni" value="'.htmlentities($this->getFieldValue($obj, 'dni'), ENT_COMPAT, 'UTF-8').'" />
 					<p>'.$this->l('DNI / NIF / NIE').'</p>

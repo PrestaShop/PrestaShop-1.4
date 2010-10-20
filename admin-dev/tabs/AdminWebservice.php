@@ -55,7 +55,7 @@ class AdminWebservice extends AdminTab
 			echo '
 			<form style="margin-top:15px;overflow:auto;" class="width6" method="post" name="Tests" id="Tests" action="'.$currentIndex.'&token='.$this->token.'#Tests">
 				<fieldset><legend><img src="../img/admin/enabled.gif">Webservice tests</legend>
-					<label>'.$this->l('Authentication key:').'</label>
+					<label>'.$this->l('Authentication key').'</label>
 					<div class="margin-form">
 						<select name="auth_key">
 						<option value="">'.$this->l('Select a key').'</option>';
@@ -68,7 +68,7 @@ class AdminWebservice extends AdminTab
 					</div>';
 	$resources = $this->getResources();
 	echo '
-					<label>'.$this->l('Select resource(s):').'</label>
+					<label>'.$this->l('Select resource(s)').'</label>
 					<div class="margin-form">
 						<select name="resource">
 						<option value="">'.$this->l('All resources').'</option>';
@@ -78,7 +78,7 @@ class AdminWebservice extends AdminTab
 						</select>
 					</div>';
 	$cases = $this->getCases();
-	echo ' <label>'.$this->l('Select case(s):').'</label>
+	echo ' <label>'.$this->l('Select case(s)').'</label>
 					<div class="margin-form">
 						<select name="case">
 						<option value="">'.$this->l('Select a case').'</option>';
@@ -134,7 +134,7 @@ class AdminWebservice extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/access.png" />'.$this->l('Webservice Accounts').'</legend>
-				<label>'.$this->l('Key:').'</label>
+				<label>'.$this->l('Key').'</label>
 				<div class="margin-form">
 					<input type="text" size="38" name="key" id="code" value="'.htmlentities(Tools::getValue('key', $obj->key), ENT_COMPAT, 'UTF-8').'" />
 					<input type="button" value="'.$this->l('   Generate!   ').'" class="button" onclick="gencode(32)" />

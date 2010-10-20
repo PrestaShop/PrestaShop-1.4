@@ -76,13 +76,13 @@ class AdminTaxes extends AdminTab
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
-				<label>'.$this->l('Zone:').'</label>
+				<label>'.$this->l('Zone').'</label>
 				<div class="margin-form">';
 		foreach ($zones AS $zone)
 			echo '<input type="checkbox" id="zone_'.$zone['id_zone'].'" name="zone_'.$zone['id_zone'].'" value="true" '.(Tools::getValue('zone_'.$zone['id_zone'], (is_array($tax_zones) AND in_array(array('id_tax' => $obj->id, 'id_zone' => $zone['id_zone']), $tax_zones))) ? ' checked="checked"' : '').'><label class="t" for="zone_'.$zone['id_zone'].'">&nbsp;<b>'.$zone['name'].'</b></label><br />';
 		echo '	<p>'.$this->l('Zone in which this tax is activated').'</p>
 				</div>
-				<label>'.$this->l('States:').'</label>
+				<label>'.$this->l('States').'</label>
 				<div class="margin-form">';
 		if ($states)
 			foreach ($states AS $state)

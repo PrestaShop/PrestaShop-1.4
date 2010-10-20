@@ -54,7 +54,7 @@ class AdminGenerator extends AdminTab
 				<input type="checkbox" name="webservice" id="webservice" '.(Tools::getValue('webservice') ? 'checked="checked"' : '').' />
 				<p>'.$this->l('This will add directives to your .htaccess file which should allow webservice calls. Please that you have to set "friendly URL" to "Yes" in the "Preferences" tab in Back Office.').'</p>
 			</div>
-			<label for="specific_configuration">'.$this->l('Specific configuration:').'</label>
+			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>
 			<div class="margin-form">
 				<textarea rows="10" class="width3" id="specific_configuration" name="ps_htaccess_specific">'.Configuration::get('PS_HTACCESS_SPECIFIC').'</textarea>
 				<p>'.$this->l('Add here the specifical directives of your hosting (SetEnv PHP_VER 5, AddType x-mapp-php5 .php...).').'</p>

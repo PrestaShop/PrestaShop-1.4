@@ -64,7 +64,7 @@ class AdminRangePrice extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/t/AdminRangePrice.gif" />'.$this->l('Price ranges').'</legend>
-				<label>'.$this->l('Carrier:').'</label>
+				<label>'.$this->l('Carrier').'</label>
 				<div class="margin-form">
 					<select name="id_carrier">';
 			$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true, false, false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);

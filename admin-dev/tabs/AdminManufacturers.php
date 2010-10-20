@@ -95,13 +95,13 @@ class AdminManufacturers extends AdminTab
 		'.($manufacturer->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$manufacturer->id.'" />' : '').'
 			<fieldset style="width: 850px;">
 				<legend><img src="../img/admin/manufacturers.gif" />'.$this->l('Manufacturers').'</legend>
-				<label>'.$this->l('Name:').'</label>
+				<label>'.$this->l('Name').'</label>
 				<div class="margin-form">
 					<input type="text" size="40" name="name" value="'.htmlentities(Tools::getValue('name', $manufacturer->name), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 
-		echo '<br class="clear" /><label>'.$this->l('Short description:').'</label>
+		echo '<br class="clear" /><label>'.$this->l('Short description').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '
@@ -111,7 +111,7 @@ class AdminManufacturers extends AdminTab
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'cdesc2');
 		echo '</div>';
 				
-		echo '<br class="clear" /><br /><br /><label>'.$this->l('Description:').'</label>
+		echo '<br class="clear" /><br /><br /><label>'.$this->l('Description').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '
@@ -182,13 +182,13 @@ class AdminManufacturers extends AdminTab
 		            });
 		}
 	</script>';
-		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo:').'</label>
+		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo').'</label>
 				<div class="margin-form">';
 					$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
 		echo '	<br /><input type="file" name="logo" />
 					<p>'.$this->l('Upload manufacturer logo from your computer').'</p>
 				</div>
-				<label>'.$this->l('Meta title:').'</label>
+				<label>'.$this->l('Meta title').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '
@@ -199,7 +199,7 @@ class AdminManufacturers extends AdminTab
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_title');
 		echo '		<div class="clear"></div>
 				</div>
-				<label>'.$this->l('Meta description:').'</label>
+				<label>'.$this->l('Meta description').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '<div id="mmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
@@ -209,7 +209,7 @@ class AdminManufacturers extends AdminTab
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_description');
 		echo '		<div class="clear"></div>
 				</div>
-				<label>'.$this->l('Meta keywords:').'</label>
+				<label>'.$this->l('Meta keywords').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '

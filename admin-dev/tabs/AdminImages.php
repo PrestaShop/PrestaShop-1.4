@@ -165,7 +165,7 @@ class AdminImages extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 			<fieldset style="width:800px;">
 				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Regenerate thumbnails').'</legend><br />
-				<label>'.$this->l('Select image:').'</label>
+				<label>'.$this->l('Select image').'</label>
 				<div class="margin-form">
 					<select name="type" onchange="changeFormat(this)">
 						<option value="all">'.$this->l('All').'</option>';
@@ -179,7 +179,7 @@ class AdminImages extends AdminTab
 			{
 				$formats = ImageType::getImagesTypes($k);
 				echo '
-				<label class="second-select format_'.$k.'" style="display:none;">'.$this->l('Select format:').'</label>
+				<label class="second-select format_'.$k.'" style="display:none;">'.$this->l('Select format').'</label>
 				<div class="second-select margin-form format_'.$k.'" style="display:none;">
 				<select class="second-select format_'.$k.'" name="format_'.$k.'">
 					<option value="all">'.$this->l('All').'</option>';

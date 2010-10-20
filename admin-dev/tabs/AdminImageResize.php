@@ -68,7 +68,7 @@ class AdminImageResize extends AdminTab
 					'.$this->l('Using your mouse, define which area of the image is to be used for generating each type of thumbnail.').'
 					<br /><br />
 					<img src="../img/p/'.Tools::getValue('id_product').'-'.Tools::getValue('id_image').'.jpg" id="testImage">
-					<label for="imageChoice">'.$this->l('Thumbnails format:').'</label>
+					<label for="imageChoice">'.$this->l('Thumbnails format').'</label>
 					<div class="margin-form"">
 						<select name="imageChoice" id="imageChoice">';
 							foreach ($imagesTypes as $type)

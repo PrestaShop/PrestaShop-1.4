@@ -96,7 +96,7 @@ class AdminCurrencies extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 			<fieldset>
 			<legend><img src="../img/admin/exchangesrate.gif" />'.$this->l('Currency rates').'</legend>
-			<label>'.$this->l('Update currencies rates:').'</label>
+			<label>'.$this->l('Update currencies rates').'</label>
 				<div class="margin-form">
 					<p>'.$this->l('Update your currencies exchanges rates with a real-time tool').'</p>
 				</div>

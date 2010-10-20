@@ -215,7 +215,7 @@ class AdminAddresses extends AdminTab
 		switch ($this->addressType)
 		{
 			case 'manufacturer':
-				echo '<label>'.$this->l('Choose manufacturer:').'</label>
+				echo '<label>'.$this->l('Choose manufacturer').'</label>
 				<div class="margin-form">';
 				$manufacturers = Manufacturer::getManufacturers();
 				echo '<select name="id_manufacturer">';
@@ -234,19 +234,19 @@ class AdminAddresses extends AdminTab
 					$customer = new Customer($obj->id_customer);
 					$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
 					echo '
-					<label>'.$this->l('Customer:').'</label>
+					<label>'.$this->l('Customer').'</label>
 					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>
 					<input type="hidden" name="id_customer" value="'.$customer->id.'" />';
 				}
 				else
 				{
 					echo
-					'<label>'.$this->l('Customer e-mail:').'</label>
+					'<label>'.$this->l('Customer e-mail').'</label>
 					<div class="margin-form">
 						<input type="text" size="33" name="email" value="'.htmlentities(Tools::getValue('email'), ENT_COMPAT, 'UTF-8').'" style="text-transform: lowercase;" /> <sup>*</sup>
 					</div>';
 				}
-				echo '<label>'.$this->l('Alias:').'</label>
+				echo '<label>'.$this->l('Alias').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="alias" value="'.htmlentities($this->getFieldValue($obj, 'alias'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -255,28 +255,28 @@ class AdminAddresses extends AdminTab
 		}
 		if ($this->addressType != 'manufacturer')
 		{
-				echo '<label>'.$this->l('Company:').'</label>
+				echo '<label>'.$this->l('Company').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="company" value="'.htmlentities($this->getFieldValue($obj, 'company'), ENT_COMPAT, 'UTF-8').'" />
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
-				echo '<label>'.$this->l('VAT number:').'</label>
+				echo '<label>'.$this->l('VAT number').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="vat_number" value="'.htmlentities($this->getFieldValue($obj, 'vat_number'), ENT_COMPAT, 'UTF-8').'" />
 				</div>';
 		}
 				echo '
-				<label>'.$this->l('Last name:').'</label>
+				<label>'.$this->l('Last name').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 				</div>
-				<label>'.$this->l('First name:').'</label>
+				<label>'.$this->l('First name').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 				</div>
-				<label>'.$this->l('Address:').'</label>
+				<label>'.$this->l('Address').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="address1" value="'.htmlentities($this->getFieldValue($obj, 'address1'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
@@ -284,15 +284,15 @@ class AdminAddresses extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="33" name="address2" value="'.htmlentities($this->getFieldValue($obj, 'address2'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
-				<label>'.$this->l('Post/Zip code:').'</label>
+				<label>'.$this->l('Post/Zip code').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
-				<label>'.$this->l('City:').'</label>
+				<label>'.$this->l('City').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="city" value="'.htmlentities($this->getFieldValue($obj, 'city'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
 				</div>
-				<label>'.$this->l('Country:').'</label>
+				<label>'.$this->l('Country').'</label>
 				<div class="margin-form">
 					<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.intval($this->getFieldValue($obj, 'id_state')).');" />';
 		$selectedCountry = $this->getFieldValue($obj, 'id_country');
@@ -303,20 +303,20 @@ class AdminAddresses extends AdminTab
 				<script type="text/javascript">
 					populateStates('.intval($this->getFieldValue($obj, 'id_country')).', '.intval($this->getFieldValue($obj, 'id_state')).');
 				</script>
-				<label>'.$this->l('State:').'</label>
+				<label>'.$this->l('State').'</label>
 				<div class="margin-form">
 					<select name="id_state" id="id_state">
 					</select>
 				</div>
-				<label>'.$this->l('Home phone:').'</label>
+				<label>'.$this->l('Home phone').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="phone" value="'.htmlentities($this->getFieldValue($obj, 'phone'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
-				<label>'.$this->l('Mobile phone:').'</label>
+				<label>'.$this->l('Mobile phone').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="phone_mobile" value="'.htmlentities($this->getFieldValue($obj, 'phone_mobile'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
-				<label>'.$this->l('Other:').'</label>
+				<label>'.$this->l('Other').'</label>
 				<div class="margin-form">
 					<textarea name="other" cols="36" rows="4">'.htmlentities($this->getFieldValue($obj, 'other'), ENT_COMPAT, 'UTF-8').'</textarea>
 					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>

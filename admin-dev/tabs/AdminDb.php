@@ -101,7 +101,7 @@ class AdminDb extends AdminPreferences
 						<td class="noborder"><input type="checkbox" name="tablesBox[]" value="'.$table['Name'].'"/></td><td>'.$table['Name'].'</td><td>'.$table['Engine'].'</td>
 					</tr>';
 		echo '</table><br />
-		<label for="dbEngine">'.$this->l('Change Engine to:').'</label>
+		<label for="dbEngine">'.$this->l('Change Engine to').'</label>
 		<div class="margin-form">
 			<select name="engineType">';
 			foreach ($engines AS $engine)
