@@ -30,14 +30,25 @@ class StatsProduct extends ModuleGraph
 	public function getTotalBought($id_product)
 	{
 		$dateBetween = ModuleGraph::getDateBetween();
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT SUM(od.`product_quantity`) AS total
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
 		WHERE od.`product_id` = '.intval($id_product).'
 		AND o.valid = 1
 		AND o.`date_add` BETWEEN '.$dateBetween.'');
-		return isset($result['total']) ? $result['total'] : 0;
+	}
+	
+	public function getTotalSales($id_product)
+	{
+		$dateBetween = ModuleGraph::getDateBetween();
+		return (float)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT SUM(od.`product_quantity` * od.`product_price`) AS total
+		FROM `'._DB_PREFIX_.'order_detail` od
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = od.`id_order`
+		WHERE od.`product_id` = '.intval($id_product).'
+		AND o.valid = 1
+		AND o.`date_add` BETWEEN '.$dateBetween.'');
 	}
 	
 	public function getTotalViewed($id_product)
@@ -111,9 +122,11 @@ class StatsProduct extends ModuleGraph
 		{
 			$product = new Product($id_product, false, intval($cookie->id_lang));
 			$totalBought = $this->getTotalBought($product->id);
+			$totalSales = $this->getTotalSales($product->id);
 			$totalViewed = $this->getTotalViewed($product->id);
 			$this->_html .= '<h3>'.$product->name.' - '.$this->l('Details').'</h3>
 			<p>'.$this->l('Total bought:').' '.$totalBought.'</p>
+			<p>'.$this->l('Sales (-Tx):').' '.Tools::displayprice($totalSales, $currency).'</p>
 			<p>'.$this->l('Total viewed:').' '.$totalViewed.'</p>
 			<p>'.$this->l('Conversion rate:').' '.number_format($totalViewed ? $totalBought / $totalViewed : 0, 2).'</p>
 			<center>'.ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => '1-'.$id_product)).'</center>';

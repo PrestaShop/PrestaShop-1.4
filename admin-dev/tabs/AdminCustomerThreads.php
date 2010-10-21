@@ -423,7 +423,7 @@ class AdminCustomerThreads extends AdminTab
 		LEFT JOIN '._DB_PREFIX_.'customer_message cm ON (ct.id_customer_thread = cm.id_customer_thread)
 		LEFT JOIN '._DB_PREFIX_.'contact_lang cl ON (cl.id_contact = ct.id_contact AND cl.id_lang = '.(int)$cookie->id_lang.')
 		LEFT JOIN '._DB_PREFIX_.'employee e ON e.id_employee = cm.id_employee
-		LEFT JOIN '._DB_PREFIX_.'customer c ON (c.email = ct.email OR ct.id_customer = c.id_customer)
+		LEFT JOIN '._DB_PREFIX_.'customer c ON (IFNULL(ct.id_customer, ct.email) = IFNULL(c.id_customer, c.email))
 		WHERE ct.id_customer_thread = '.(int)Tools::getValue('id_customer_thread').'
 		ORDER BY cm.date_add DESC');
 
