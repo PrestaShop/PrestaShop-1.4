@@ -30,7 +30,7 @@ class Socolissimo extends Module
 		
 		$this->name = 'socolissimo';
 		$this->tab = 'Carrier';
-		$this->version = '1.1';
+		$this->version = '1.2';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;
 
@@ -51,14 +51,17 @@ class Socolissimo extends Module
 			if (!in_array(intval(Configuration::get('SOCOLISSIMO_CARRIER_ID')),$ids))
 				$warning[] .= $this->l('\'Carrier correspondence\'').' ';
 			$soCarrier = new Carrier(Configuration::get('SOCOLISSIMO_CARRIER_ID'));
-			if (!$this->checkZone($soCarrier->id))
-				$warning[] .= $this->l('\'Carrier Zone(s)\'').' ';
-			if (!$this->checkGroup($soCarrier->id))
-				$warning[] .= $this->l('\'Carrier Group\'').' ';
-			if (!$this->checkRange($soCarrier->id))
-				$warning[] .= $this->l('\'Carrier Rage(s)\'').' ';	
-			if (!$this->checkDelivery($soCarrier->id))
-				$warning[] .= $this->l('\'Carrier price delivery\'').' ';	
+			if (Validate::isLoadedObject($soCarrier))
+			{
+				if (!$this->checkZone($soCarrier->id))
+					$warning[] .= $this->l('\'Carrier Zone(s)\'').' ';
+				if (!$this->checkGroup($soCarrier->id))
+					$warning[] .= $this->l('\'Carrier Group\'').' ';
+				if (!$this->checkRange($soCarrier->id))
+					$warning[] .= $this->l('\'Carrier Rage(s)\'').' ';	
+				if (!$this->checkDelivery($soCarrier->id))
+					$warning[] .= $this->l('\'Carrier price delivery\'').' ';
+			}	
 
 			//Check config and display warning
 			if (!Configuration::get('SOCOLISSIMO_ID'))
@@ -87,19 +90,23 @@ class Socolissimo extends Module
 			
 		//creat config table in database
 		$sql = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'socolissimo_delivery_info` (
-			  `id_cart` int(10) NOT NULL,
-			  `id_customer` int(10) NOT NULL,
-			  `delivery_mode` varchar(3) NOT NULL,
-			  `prid` int(5) NOT NULL,
-			  `prname` varchar(64) NOT NULL,
-			  `prfirstname` varchar(64) NOT NULL,
-			  `prcompladress` text NOT NULL,
-			  `pradress1` text NOT NULL,
-			  `pradress2` text NOT NULL,
-			  `przipcode` int(5) NOT NULL,
-			  `prtown` varchar(64) NOT NULL,
-			  PRIMARY KEY  (`id_cart`,`id_customer`)
-			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+				  `id_cart` int(10) NOT NULL,
+				  `id_customer` int(10) NOT NULL,
+				  `delivery_mode` varchar(3) NOT NULL,
+				  `prid` int(5) NOT NULL,
+				  `prname` varchar(64) NOT NULL,
+				  `prfirstname` varchar(64) NOT NULL,
+				  `prcompladress` text NOT NULL,
+				  `pradress1` text NOT NULL,
+				  `pradress2` text NOT NULL,
+				  `przipcode` int(5) NOT NULL,
+				  `prtown` varchar(64) NOT NULL,
+				  `cephonenumber` varchar(10) NOT NULL,
+				  `ceemail` varchar(64) NOT NULL,
+				  `cecompanyname` varchar(64) NOT NULL,
+				  `cedeliveryinformation` int(11) NOT NULL,
+				  PRIMARY KEY  (`id_cart`,`id_customer`)
+				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 		
 		if(!Db::getInstance()->Execute($sql))
 			return false;
@@ -161,7 +168,7 @@ class Socolissimo extends Module
 	public function uninstall()
 	{
 		global $cookie;
-		
+				
 		if (!parent::uninstall() OR !Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'socolissimo_delivery_info`')
 		    OR !$this->unregisterHook('extraCarrier') OR !$this->unregisterHook('payment') OR !$this->unregisterHook('AdminOrder') 
 		    OR !Configuration::deleteByName('SOCOLISSIMO_ID') OR !$this->unregisterHook('newOrder')
@@ -228,7 +235,7 @@ class Socolissimo extends Module
 		<li>'.$this->l('In their merchant').'.</li>
 		</ul>
 		<p>'.$this->l('This module is free and allows you to activate this offer on your store.').'</p>
-		<p><a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/'.$this->name.'/Intergation_socolissimo.pdf">
+		<p><a href="http://www.prestashop.com/download/partner_modules/docs/Intergation_socolissimo.pdf">
 		>'.$this->l('Documentation').'<</a></p>
 		</fieldset>
 		<div class="clear">&nbsp;</div>
@@ -395,7 +402,7 @@ class Socolissimo extends Module
 							'CEFIRSTNAME' => substr($this->lower($params['address']->firstname),0,29),
 							'CECOMPANYNAME' => substr($this->upper($params['address']->company),0,38),
 							'CEEMAIL' => $params['cookie']->email,
-							'CEPHONENUMBER' => $params['address']->phone_mobile,
+							'CEPHONENUMBER' => str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$params['address']->phone_mobile),
 							'CEADRESS3'  => substr($this->upper($params['address']->address1),0,38),
 							'CEADRESS4' => substr($this->upper($params['address']->address2),0,38),
 							'CEZIPCODE' => $params['address']->postcode,
@@ -409,28 +416,13 @@ class Socolissimo extends Module
 							'TRRETURNURLOK' => htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'));
 			
 			$row['id_carrier'] = intval($carrierSo->id);
-			/*
-			$row['name'] = htmlentities($carrierSo->name,ENT_NOQUOTES, 'UTF-8');
-			$row['delay'] = $carrierSo->delay[intval($params['cookie']->id_lang)];
-			$row['price'] = floatval($params['cart']->getOrderShippingCost(intval($carrierSo->id)));
-			$row['price_tax_exc'] = floatval($params['cart']->getOrderShippingCost($carrierSo->id, true));
-			$row['img'] = __PS_BASE_URI__.'img/s/'.intval($carrierSo->id).'.jpg';
-*/
 
-			
-		/*
-	$smarty->assign(array(
-								  'id_carrier' => $row['id_carrier'], 'name' => $row['name'],
-								  'delay' => $row['delay'], 'price' => $row['price'], 'price_tax_exc' => $row['price_tax_exc'],
-								  'img' => $row['img'], 'inputs' => $inputs)
-							);
-*/
 			$smarty->assign(array('urlSo' => Configuration::get('SOCOLISSIMO_URL').'?trReturnUrlKo='.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),'id_carrier' => $row['id_carrier'],
 								  'inputs' => $inputs)
 							);				
 			
 			$country = new Country($params['address']->id_country);
-			
+						
 			if (($country->iso_code == 'FR') AND (Configuration::Get('SOCOLISSIMO_ID') != NULL) AND (Configuration::get('SOCOLISSIMO_KEY') != NULL) 
 				 AND $this->checkAvailibility())
 				{
@@ -440,27 +432,16 @@ class Socolissimo extends Module
 					return $this->display(__FILE__, 'socolissimo_error.tpl');
 		}		
 	}
-		
-/*
-	public function hookOrderConfirmation($params)
-	{
-		$order = $params['objOrder'];
-		$order->id_address_delivery = $this->isSameAddress($order->id_address_delivery,$order->id_cart,$order->id_customer);
-		$order->update();
-	}
-*/
-	
+
 	public function hooknewOrder($params)
 	{
 		global $cookie;
 		
-		if ($params['objOrder']->module != $this->name)
+		if ($params['order']->id_carrier != Configuration::get('SOCOLISSIMO_CARRIER_ID'))
 			return;
-		
 		$order = $params['order'];
 		$order->id_address_delivery = $this->isSameAddress($order->id_address_delivery,$order->id_cart,$order->id_customer);
 		$order->update();
-		
 		$cart = new Cart(intval($params['cart']->id));
 		$products = $cart->getProducts(false);
 		foreach($products as $product)
@@ -497,7 +478,7 @@ class Socolissimo extends Module
 	public function hookAdminOrder($params)
 	{	
 	
-	$deliveryMode = array('CIT' => 'Livraison en Cityssimo', 'BPR' => 'Livraison en Bureau de Poste',
+	$deliveryMode = array('DOM' => 'Livraison à domicile', 'BPR' => 'Livraison en Bureau de Poste',
 						  'A2P' => 'Livraison Commerce de proximité', 'MRL' => 'Livraison Commerce de proximité',
 						  'CIT' => 'Livraison en Cityssimo', 'ACP' => 'Agence ColiPoste', 'CDI' => 'Centre de distribution',
 						  'RDV' => 'Livraison sur Rendez-vous');
@@ -544,123 +525,20 @@ class Socolissimo extends Module
 				  '<b>'.$this->l('Pic up point adresse').' : </b><br/>'.
 				 $deliveryInfos['pradress1'].'<br/>'.
 				 (($deliveryInfos['pradress2'] != '') ? $deliveryInfos['pradress2'].'<br/>' : '' ).
-				 $deliveryInfos['przipcode'].'<br/>'.
-				 $deliveryInfos['prtown'].
-				 $deliveryInfos['prcompladress'].'<br/>';
+				 $deliveryInfos['przipcode'].' '.$deliveryInfos['prtown'].'<br/>';
+				 	 
 				 break;
 			}		
+			$html .= (($deliveryInfos['prcompladress'] != '') ? '<b>'.$this->l('Complement').' : </b>'.$deliveryInfos['prcompladress'].'<br/>' : '' ).
+					 (($deliveryInfos['cecompanyname'] != '') ? '<b>'.$this->l('Societe').' : </b>'.$deliveryInfos['cecompanyname'].'<br/>' : '' ).
+					 (($deliveryInfos['ceemail'] != '') ? '<b>'.$this->l('Email').' : </b>'.$deliveryInfos['ceemail'].'<br/>' : '' ).
+					 (($deliveryInfos['cephonenumber'] != '') ? '<b>'.$this->l('Tel').' : </b>'.$deliveryInfos['cephonenumber'].'<br/>' : '' );			
 			$html .= '</fieldset>';
 			return $html;
 		}
 
 	}	
-	
-	/*
-public function getOrderShippingCost($cart)
-	{
-		global $defaultCountry, $cookie;
-
-		// Checking discounts in cart
-		$products = $cart->getProducts();
-		$discounts = $cart->getDiscounts(true);
-		if ($discounts)
-			foreach ($discounts AS $id_discount)
-				if ($id_discount['id_discount_type'] == 3)
-				{				
-					if ($id_discount['minimal'] > 0)
-					{
-						$total_cart = 0;
-
-						$categories = Discount::getCategories(intval($id_discount['id_discount']));
-						if (sizeof($categories))
-							foreach($products AS $product)
-								if (Product::idIsOnCategoryId(intval($product['id_product']), $categories))
-									$total_cart += $product['total_wt'];
-						
-						if ($total_cart >= $id_discount['minimal'])
-							return 0;
-					}
-					else
-						return 0;
-				}
-
-		// Order total without fees
-		$orderTotal = $cart->getOrderTotal(true, 7);	
-
-		// Start with shipping cost at 0
-        $shipping_cost = 0;
 		
-		// If no product added, return 0
-		if ($orderTotal <= 0 AND !intval(self::getNbProducts($cart->id)))
-			return $shipping_cost;
-		
-		// Get id zone
-		if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
-			$id_zone = Address::getZoneById(intval($cart->id_address_delivery));
-		else
-			$id_zone = intval($defaultCountry->id_zone);
-		$carrierSo = $this->getSoCarrier($cookie->id_lang);
-		$carrier = new Carrier(intval($carrierSo['id_carrier']));
-        if (!$carrier->active)
-			return $shipping_cost;
-
-		$configuration = Configuration::getMultiple(array('PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
-		// Free fees
-		$free_fees_price = 0;
-		if (isset($configuration['PS_SHIPPING_FREE_PRICE']))
-			$free_fees_price = Tools::convertPrice(floatval($configuration['PS_SHIPPING_FREE_PRICE']), new Currency(intval($cart->id_currency)));
-		$orderTotalwithDiscounts = $cart->getOrderTotal(true, 4);
-		if ($orderTotalwithDiscounts >= floatval($free_fees_price) AND floatval($free_fees_price) > 0)
-			return $shipping_cost;
-		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $cart->getTotalWeight() >= floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) AND floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
-			return $shipping_cost;
-			
-		// Get shipping cost using correct method
-		if ($carrier->range_behavior)
-		{
-			// Get id zone
-	        if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
-				$id_zone = Address::getZoneById(intval($cart->id_address_delivery));
-			else
-				$id_zone = intval($defaultCountry->id_zone);
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $cart->getTotalWeight(), $id_zone)))
-					OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $cart->getOrderTotal(true, 4), $id_zone))))
-					$shipping_cost += 0;
-				else {
-					if (intval($configuration['PS_SHIPPING_METHOD']))
-						$shipping_cost += $carrier->getDeliveryPriceByWeight($cart->getTotalWeight(), $id_zone);
-					else
-						$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
-					 }
-		}
-		else
-		{
-			if (intval($configuration['PS_SHIPPING_METHOD']))
-				$shipping_cost += $carrier->getDeliveryPriceByWeight($cart->getTotalWeight(), $id_zone);
-			else
-				$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
-		}
-		// Adding handling charges
-		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
-			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
-		
-		$shipping_cost = Tools::convertPrice($shipping_cost, new Currency(intval($cart->id_currency)));
-		
-		// Apply tax
-		if (isset($carrierTax))
-			 $shipping_cost *= 1 + ($carrierTax / 100);
-
-		//get over cost if delivery type == RDV
-		$deliveryInfos = $this->getDeliveryInfos($cart->id,$cart->id_customer);
-		if(isset($deliveryInfos) AND $deliveryInfos != NULL)
-			if($deliveryInfos['delivery_mode'] == 'delivery_mode')
-				$shippingCost += Configuration::get('SOCOLISSIMO_OVERCOST');
-			
-		return floatval(Tools::ps_round(floatval($shipping_cost), 2));		
-
-	}
-*/
-	
 	public function make_key($ceName, $dyPraparationTime, $dyForwardingCharges, $trClientNumber, $orderId)
 	{
 		$strPs = Configuration::get('SOCOLISSIMO_ID').$ceName.$dyPraparationTime.$dyForwardingCharges.$trClientNumber.self::formatOrderId($orderId).Configuration::get('SOCOLISSIMO_KEY');
@@ -839,13 +717,18 @@ public function getOrderShippingCost($cart)
 	{
 		if (Configuration::get('SOCOLISSIMO_SUP'))
 		{
-			$return = file_get_contents(Configuration::get('SOCOLISSIMO_SUP_URL'));
-			preg_match('[OK]',$return, $matches);
-			if ($matches[0]=='OK')
-				return true;
-			else
-				return false;
-		}else 
+			$ctx = stream_context_create(array('http' => array('timeout' => 1))); 
+			$return = @file_get_contents(Configuration::get('SOCOLISSIMO_SUP_URL'), 0, $ctx);
+			if (!empty($return))
+			{
+				preg_match('[OK]',$return, $matches);
+				if ($matches[0]=='OK')
+					return true;
+				else
+					return false;
+			}
+		}
+		else 
 		return true;
 	}
 
