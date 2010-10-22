@@ -56,7 +56,7 @@ if (Tools::isSubmit('submitMessage'))
 		$fileAttachment['mime'] = $_FILES['fileUpload']['type'];
 	}
 	$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
-	if (!($from = Tools::getValue('from')) OR !Validate::isEmail($from))
+	if (!($from = trim(Tools::getValue('from'))) OR !Validate::isEmail($from))
         $errors[] = Tools::displayError('invalid e-mail address');
     elseif (!($message = nl2br2($message)))
         $errors[] = Tools::displayError('message cannot be blank');
@@ -88,24 +88,24 @@ if (Tools::isSubmit('submitMessage'))
 			) OR (
 				$id_customer_thread = (int)Db::getInstance()->getValue('
 				SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
-				WHERE cm.email = \''.pSQL(Tools::getValue('from')).'\' AND cm.id_order = '.intval(Tools::getValue('id_order')).'')
+				WHERE cm.email = \''.pSQL($from).'\' AND cm.id_order = '.intval(Tools::getValue('id_order')).'')
 			)))
 		{
 			$fields = Db::getInstance()->ExecuteS('
 			SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
 			FROM '._DB_PREFIX_.'customer_thread cm
-			WHERE email = \''.Tools::getValue('from').'\' AND ('.
+			WHERE email = \''.pSQL($from).'\' AND ('.
 				($customer->id ? 'id_customer = '.intval($customer->id).' OR ' : '').'
 				id_order = '.intval(Tools::getValue('id_order')).')');
 			$score = 0;
 			foreach ($fields as $key => $row)
 			{
 				$tmp = 0;
-				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id AND $row['email'] != Tools::getValue('from'))
+				if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id AND $row['email'] != $from)
 					continue;
 				if ($row['id_order'] != 0 AND Tools::getValue('id_order') != $row['id_order'])
 					continue;
-				if ($row['email'] == Tools::getValue('from'))
+				if ($row['email'] == $from)
 					$tmp += 4;
 				if ($row['id_contact'] == $id_contact)
 					$tmp++;
@@ -162,7 +162,7 @@ if (Tools::isSubmit('submitMessage'))
 					$ct->id_product = $id_product;
 				$ct->id_contact = intval($id_contact);
 				$ct->id_lang = (int)$cookie->id_lang;
-				$ct->email = Tools::getValue('from');
+				$ct->email = $from;
 				$ct->status = 'open';
 				$ct->token = Tools::passwdGen(12);
 				$ct->add();
