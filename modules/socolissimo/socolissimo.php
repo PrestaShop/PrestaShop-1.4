@@ -106,7 +106,7 @@ class Socolissimo extends Module
 				  `cecompanyname` varchar(64) NOT NULL,
 				  `cedeliveryinformation` int(11) NOT NULL,
 				  PRIMARY KEY  (`id_cart`,`id_customer`)
-				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+				) DEFAULT CHARSET=utf8;';
 		
 		if(!Db::getInstance()->Execute($sql))
 			return false;
@@ -432,7 +432,7 @@ class Socolissimo extends Module
 					return $this->display(__FILE__, 'socolissimo_error.tpl');
 		}		
 	}
-
+	
 	public function hooknewOrder($params)
 	{
 		global $cookie;
@@ -577,7 +577,7 @@ class Socolissimo extends Module
 				$groups = Group::getgroups(true);
 				foreach ($groups as $group)
 				{
-					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group VALUE (\''.$carrier->id.'\',\''.$group['id_group'].'\')');
+					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group VALUE (\''.intval($carrier->id).'\',\''.intval($group['id_group']).'\')');
 				}
 				$rangePrice = new RangePrice();
 				$rangePrice->id_carrier = $carrier->id;
@@ -594,9 +594,9 @@ class Socolissimo extends Module
 				$zones = Zone::getZones(true);
 				foreach ($zones as $zone)
 				{
-					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_zone VALUE (\''.$carrier->id.'\',\''.$zone['id_zone'].'\')');
-					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.$carrier->id.'\',\''.$rangePrice->id.'\',NULL,\''.$zone['id_zone'].'\',\'1\')');
-					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.$carrier->id.'\',NULL,\''.$rangeWeight->id.'\',\''.$zone['id_zone'].'\',\'1\')');
+					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_zone VALUE (\''.intval($carrier->id).'\',\''.intval($zone['id_zone']).'\')');
+					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.intval($carrier->id).'\',\''.intval($rangePrice->id).'\',NULL,\''.intval($zone['id_zone']).'\',\'1\')');
+					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.intval($carrier->id).'\',NULL,\''.intval($rangeWeight->id).'\',\''.intval($zone['id_zone']).'\',\'1\')');
 				}
 				//copy logo
 				if (!copy(dirname(__FILE__).'/socolissimo.jpg',_PS_SHIP_IMG_DIR_.'/'.$carrier->id.'.jpg'))
@@ -620,7 +620,7 @@ class Socolissimo extends Module
 		$psAddress = new Address(intval($idAddress));
 		$newAddress = new Address();
 		
-			if ($this->upper($psAddress->lastname) != $this->upper($return['prname']) || $this->upper($psAddress->firstname) != $this->upper($return['prfirstname']) || $this->upper($psAddress->address1) != $this->upper($return['pradress1']) || $this->upper($psAddress->address2) != $this->upper($return['pradress2']) || $this->upper($psAddress->postcode) != $this->upper($return['przipcode']) || $this->upper($psAddress->city) != $this->upper($return['prtown']) || $this->upper($psAddress->phone_mobile) != $this->upper($return['cephonenumber']))
+			if ($this->upper($psAddress->lastname) != $this->upper($return['prname']) || $this->upper($psAddress->firstname) != $this->upper($return['prfirstname']) || $this->upper($psAddress->address1) != $this->upper($return['pradress1']) || $this->upper($psAddress->address2) != $this->upper($return['pradress2']) || $this->upper($psAddress->postcode) != $this->upper($return['przipcode']) || $this->upper($psAddress->city) != $this->upper($return['prtown']) || str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$psAddress->phone_mobile) != $return['cephonenumber'])
 			{
 				if (!in_array($return['delivery_mode'], array('DOM','RDV')))
 				{
@@ -637,9 +637,7 @@ class Socolissimo extends Module
 					$newAddress->id_country = Country::getIdByName(null, 'france');
 					$newAddress->alias = 'So Colissimo - '.date('d-m-Y');
 					$newAddress->add();
-					
 					return intval($newAddress->id);
-				
 			}
 			else
 			return intval($psAddress->id);
@@ -668,10 +666,10 @@ class Socolissimo extends Module
 		switch (Configuration::get('PS_SHIPPING_METHOD'))
 		{
 			case '0' :
-				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_price WHERE id_carrier = '.$id_carrier;
+				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_price WHERE id_carrier = '.intval($id_carrier);
 				break;
 			case '1' :
-				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_weight WHERE id_carrier = '.$id_carrier;
+				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_weight WHERE id_carrier = '.intval($id_carrier;
 				break;
 		}
 		$result = Db::getInstance()->getRow($sql);
@@ -683,7 +681,7 @@ class Socolissimo extends Module
 	
 	public function checkDelivery($id_carrier)
 	{
-		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'delivery WHERE id_carrier = '.$id_carrier);
+		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'delivery WHERE id_carrier = '.intval($id_carrier));
 		if ($result)
 			return true;
 		else
