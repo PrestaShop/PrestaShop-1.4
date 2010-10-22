@@ -669,7 +669,7 @@ class Socolissimo extends Module
 				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_price WHERE id_carrier = '.intval($id_carrier);
 				break;
 			case '1' :
-				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_weight WHERE id_carrier = '.intval($id_carrier;
+				$sql = 'SELECT * FROM '._DB_PREFIX_.'range_weight WHERE id_carrier = '.intval($id_carrier);
 				break;
 		}
 		$result = Db::getInstance()->getRow($sql);
