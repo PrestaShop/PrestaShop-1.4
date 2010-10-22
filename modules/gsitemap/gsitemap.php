@@ -62,7 +62,7 @@ XML;
 
 		$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
 		
-		if (Configuration::get('GSITEMAP_ALL_CMS'))
+		if (Configuration::get('GSITEMAP_ALL_CMS') OR !Module::isInstalled('blockcms'))
 			$sql_cms = '
 			SELECT DISTINCT cl.id_cms, cl.link_rewrite, cl.id_lang
 			FROM '._DB_PREFIX_.'cms_lang cl
@@ -72,7 +72,7 @@ XML;
 		else
 			$sql_cms = '
 			SELECT DISTINCT b.id_cms, cl.link_rewrite, cl.id_lang
-			FROM '._DB_PREFIX_.'block_cms b
+			FROM '._DB_PREFIX_.'cms_block b
 			LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 			WHERE l.`active` = 1
