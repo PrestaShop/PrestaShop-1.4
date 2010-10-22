@@ -7,6 +7,7 @@ body {
 	font-size: 12px;
 	color: #000;
 	text-align: center;
+	behavior: url(csshover.htc);
 }
 
 .float {float:left}
@@ -186,7 +187,7 @@ fieldset img {
 
 label {
 	float: left;
-	width: 180px;
+	width: 200px;
 	padding: 0.2em 0.5em 0 0;
 	text-align: right;
 	font-weight: bold;
@@ -205,7 +206,7 @@ label.t {
 	clear: none;
 	padding: 0px;
 	margin: 0px;
-	font-weight: normal;
+	font-weight: bold;
 	font-size: 12px;
 }
 label.std {
@@ -850,3 +851,22 @@ table.permissions td {
 	padding:5px;
 	text-align:center;
 }
+
+/*  */
+.path_bar{
+	background-color:#EFEFEF;
+	font-family:Arial;
+	font-size:13px;
+	margin-bottom:20px;
+	padding:5px;
+}
+
+.path_bar a{
+	font-weight:700;
+}
+.adminHeader h1{
+	font-family:Arial;
+	color:#812143;
+	font-size:18pt;
+}
+/*  */

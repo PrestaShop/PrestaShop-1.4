@@ -11,11 +11,11 @@
 #header_quick{background:url(bg-quick.png) no-repeat;float:right;height:39px;margin-right:1px;width:175px}
 #header_quick #quick_select{background:#ECECEC;border:#000;height:21px;line-height:21px;margin:8px 0 0 30px;vertical-align:middle;width:140px}
 #header_myaccount{background:url(bg-lang.png) no-repeat;display:block;float:right;height:39px;margin-right:1px;width:39px}
-.button{background:#83CA38 url(button-bg.png) repeat-x;border:1px solid #364A14;border-left:1px solid #475B25;border-top:1px solid #475B25;color:#FFF;cursor:pointer;padding:0 5px;height:25px}
+.button{background:#83CA38 url(center_btn_filter.png) repeat-x 0px -1px;border:1px solid #364A14;border-left:1px solid #475B25;border-top:1px solid #475B25;color:#FFF;cursor:pointer;padding:0 5px;height:24px}
 .button[disabled=disabled]{background:#E2EBEE;color:#000000}
 input.button[disabled=disabled]:hover{background-color:#FFF6D3}
 .button:hover{background-position:0 -27px}
-.button:active{background-position:0 -54px}
+a.button{padding:3px 15px;color:white;}
 .table{border:1px solid #416110;padding:0}
 .table th a{text-decoration:underline}
 .table a:hover{text-decoration:none}
@@ -44,7 +44,7 @@ legend{background:#7AB51D url(thead.png) repeat-x top left;border:1px solid #364
 .tab-page {border:1px solid #383838;background:#F6F6F6}
 .tab-row .tab.selected {border:1px solid #383838;background:#812143}
 .tab-row .tab.selected a{color:#FDFDFD}
-.tab-row .tab {border:1px solid #FDFDFD;background:#EFEFEF;width:105px;height:24px;line-height:24px;vertical-align:middle}
+.tab-row .tab {border:1px solid #FDFDFD;background:#EFEFEF;height:24px;line-height:24px;vertical-align:middle}
 hr {height: 1px;color:#DEDEDE;background-color:#DEDEDE}
 #footer {height:40px;background:#DDDDDD url("footer-bg.png") repeat-x scroll left bottom;border:1px solid #383838;font-size:12px;clear:both;font-size:0.9em;color:#666666}
 #content {background-color:#FFF;border-left:1px solid #383838;border-right:1px solid #383838}

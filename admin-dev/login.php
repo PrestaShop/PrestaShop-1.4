@@ -115,6 +115,7 @@ if ($nbErrors = sizeof($errors))
 
 echo '
 			<div id="login">
+				<h1>PrestaShop</h1>
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
 $randomNb = rand(100, 999);
@@ -129,7 +130,7 @@ else
 {
 	echo '			<label>'.translate('E-mail address:').'</label><br />
 					<input type="text" id="email" name="email" value="'.Tools::safeOutput(Tools::getValue('email')).'" class="input"/>
-					<div style="margin: 0.5em 0 0 0;">
+					<div style="margin: 1.8em 0 0 0;">
 						<label>'.translate('Password:').'</label><br />
 						<input type="password" name="passwd" class="input" value=""/>
 					</div>
@@ -149,6 +150,7 @@ if (document.getElementById('email')) document.getElementById('email').focus();
 echo '
 				</form>
 			</div>
+			<h2><a href="http://www.prestashop.com">&copy; Copyright by PrestaShop. all rights reserved.</a></h2>
 		</div>
 	</body>
 </html>';

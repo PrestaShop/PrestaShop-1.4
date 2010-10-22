@@ -1253,21 +1253,21 @@ class AdminProducts extends AdminTab
 			<hr style="width:100%;" /><br />
 			<table cellpadding="5" style="width:100%">
 				<tr>
-					<td style="width:150" valign="top">'.$this->l('Product quantity:').'</td>
+					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Product quantity:').'</td>
 					<td>
 						<input type="text" name="quantity_discount" size="10" />
 						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Minimum product quantity for discount').'</p>
 					</td>
 				</tr>
 				<tr>
-					<td style="width:150" valign="top">'.$this->l('Discount value:').'</td>
+					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Discount value:').'</td>
 					<td>
 						<input type="text" name="value_discount" size="10" />
 						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('The discount value (% or amount)').'</p>
 					</td>
 				</tr>
 				<tr>
-					<td style="width:150" valign="top">'.$this->l('Discount type:').'</td>
+					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Discount type:').'</td>
 					<td>
 						<select name="id_discount_type">
 							<option value="1">'.$this->l('By %').'</option>
@@ -1386,14 +1386,14 @@ class AdminProducts extends AdminTab
 			<hr style="width:100%;" /><br />
 			<table cellpadding="5" style="width:100%">
 				<tr>
-					<td style="width:150px" valign="top">'.$this->l('File fields:').'</td>
+					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('File fields:').'</td>
 					<td style="padding-bottom:5px;">
 						<input type="text" name="uploadable_files" id="uploadable_files" size="4" value="'.(intval($this->getFieldValue($obj, 'uploadable_files')) ? intval($this->getFieldValue($obj, 'uploadable_files')) : '0').'" />
 						<p>'.$this->l('Number of upload file fields displayed').'</p>
 					</td>
 				</tr>
 				<tr>
-					<td style="width:150px" valign="top">'.$this->l('Text fields:').'</td>
+					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Text fields:').'</td>
 					<td style="padding-bottom:5px;">
 						<input type="text" name="text_fields" id="text_fields" size="4" value="'.(intval($this->getFieldValue($obj, 'text_fields')) ? intval($this->getFieldValue($obj, 'text_fields')) : '0').'" />
 						<p>'.$this->l('Number of text fields displayed').'</p>
@@ -1575,7 +1575,7 @@ class AdminProducts extends AdminTab
 		echo '		</td>
 					</tr>
 					<tr>
-						<td style="vertical-align:top">'.$this->l('Status:').'</td>
+						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Status:').'</td>
 						<td style="padding-bottom:5px;">
 							<input style="float:left;" onclick="toggleDraftWarning(false);showOptions(true);" type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_on" class="t"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" style="float:left; padding:0px 5px 0px 5px;" />'.$this->l('Enabled').'</label>
@@ -1587,7 +1587,7 @@ class AdminProducts extends AdminTab
 
 		echo		'
 					<tr id="product_options">
-						<td style="vertical-align:top">'.$this->l('Options:').'</td>
+						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
 							<input style="float:left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
 							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('Available for order').'" title="'.$this->l('Available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Available for order').'</label>
@@ -1597,7 +1597,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr>
-						<td>'.$this->l('Manufacturer:').'</td>
+						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Manufacturer:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="id_manufacturer" id="id_manufacturer">
 								<option value="0">-- '.$this->l('Choose (optional)').' --</option>';
@@ -1609,7 +1609,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr>
-						<td>'.$this->l('Supplier:').'</td>
+						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Supplier:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="id_supplier" id="id_supplier">
 								<option value="0">-- '.$this->l('Choose (optional)').' --</option>';
@@ -2424,7 +2424,7 @@ class AdminProducts extends AdminTab
 			<hr style="width:100%;" /><br />
 			<table cellpadding="5" style="width:100%">
 			<tr>
-			  <td style="width:150px" valign="top">'.$this->l('Group:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" valign="top">'.$this->l('Group:').'</td>
 			  <td style="padding-bottom:5px;"><select name="attribute_group" id="attribute_group" style="width: 200px;" onchange="populate_attrs();">';
 				if (isset($attributes_groups))
 					foreach ($attributes_groups AS $k => $attribute_group)
@@ -2436,7 +2436,7 @@ class AdminProducts extends AdminTab
 				</select></td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px" valign="top">'.$this->l('Attribute:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" valign="top">'.$this->l('Attribute:').'</td>
 			  <td style="padding-bottom:5px;"><select name="attribute" id="attribute" style="width: 200px;">
 			  <option value="0">---</option>
 			  </select>
@@ -2444,7 +2444,7 @@ class AdminProducts extends AdminTab
 			  </td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px" valign="top">
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" valign="top">
 			  <input style="width: 140px; margin-bottom: 10px;" type="button" value="'.$this->l('Add').'" class="button" onclick="add_attr();"/><br />
 			  <input style="width: 140px;" type="button" value="'.$this->l('Delete').'" class="button" onclick="del_attr()"/></td>
 			  <td align="left">
@@ -2453,7 +2453,7 @@ class AdminProducts extends AdminTab
 		  </tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Reference:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Reference:').'</td>
 			  <td style="padding-bottom:5px;">
 				<input size="55" type="text" id="attribute_reference" name="attribute_reference" value="" style="width: 130px; margin-right: 44px;" />
 				'.$this->l('EAN13:').'<input size="55" maxlength="13" type="text" id="attribute_ean13" name="attribute_ean13" value="" style="width: 110px; margin-left: 10px;" />
@@ -2461,7 +2461,7 @@ class AdminProducts extends AdminTab
 			  </td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Supplier Reference:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Supplier Reference:').'</td>
 			  <td style="padding-bottom:5px;">
 				<input size="55" type="text" id="attribute_supplier_reference" name="attribute_supplier_reference" value="" style="width: 130px; margin-right: 44px;" />
 				'.$this->l('Location:').'<input size="55" type="text" id="attribute_location" name="attribute_location" value="" style="width: 101px; margin-left: 10px;" />
@@ -2470,11 +2470,11 @@ class AdminProducts extends AdminTab
 		  </tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Wholesale price:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Wholesale price:').'</td>
 			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="6"  name="attribute_wholesale_price" id="attribute_wholesale_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Wholesale price on Information tab').')</td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Impact on price:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Impact on price:').'</td>
 			  <td colspan="2" style="padding-bottom:5px;">
 				<select name="attribute_price_impact" id="attribute_price_impact" style="width: 140px;" onchange="check_impact(); updateNewPriceAttribute();">
 				  <option value="0">'.$this->l('None').'</option>
@@ -2487,7 +2487,7 @@ class AdminProducts extends AdminTab
 			</td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Impact on weight:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Impact on weight:').'</td>
 			  <td colspan="2" style="padding-bottom:5px;"><select name="attribute_weight_impact" id="attribute_weight_impact" style="width: 140px;" onchange="check_weight_impact();">
 			  <option value="0">'.$this->l('None').'</option>
 			  <option value="1">'.$this->l('Increase').'</option>
@@ -2497,7 +2497,7 @@ class AdminProducts extends AdminTab
 				<input type="text" size="6" name="attribute_weight" id="attribute_weight" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_WEIGHT_UNIT').'</span></td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Impact on unity:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Impact on unity:').'</td>
 			  <td colspan="2" style="padding-bottom:5px;"><select name="attribute_unity_impact" id="attribute_unity_impact" style="width: 140px;" onchange="check_unity_impact();">
 			  <option value="0">'.$this->l('None').'</option>
 			  <option value="1">'.$this->l('Increase').'</option>
@@ -2508,7 +2508,7 @@ class AdminProducts extends AdminTab
 			</span></td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px">'.$this->l('Eco-tax:').'</td>
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
 			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
 		  </tr>
 			<tr>
