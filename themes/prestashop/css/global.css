@@ -442,7 +442,7 @@ input.exclusive_mini_disabled, input.exclusive_small_disabled, input.exclusive_d
 a.button_mini, a.button_small, a.button, a.button_large,
 a.exclusive_mini, a.exclusive_small, a.exclusive, a.exclusive_large,
 span.button_mini, span.button_small, span.button, span.button_large,
-span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large {
+span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large, span.exclusive_large_disabled {
 	background-repeat: no-repeat;
 	background-position: top left;
 	border: none;
@@ -469,7 +469,7 @@ input.exclusive_mini_disabled, input.exclusive_small_disabled, input.exclusive_d
 input.button_mini_disabled, input.button_small_disabled, input.button_disabled, input.button_large_disabled,
 input.exclusive_mini_disabled, input.exclusive_small_disabled, input.exclusive_disabled, input.exclusive_large_disabled,
 span.button_mini, span.button_small, span.button, span.button_large,
-span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large {
+span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large, span.exclusive_large_disabled {
 	background-position: left -36px;
 	cursor: default;
 	color: #888!important
@@ -479,7 +479,7 @@ span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large 
 input.exclusive_mini, input.exclusive_small, input.exclusive, input.exclusive_large,
 input.exclusive_mini_disabled, input.exclusive_small_disabled, input.exclusive_disabled, input.exclusive_large_disabled,
 a.exclusive_mini, a.exclusive_small, a.exclusive, a.exclusive_large,
-span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large {
+span.exclusive_mini, span.exclusive_small, span.exclusive, span.exclusive_large, span.exclusive_large_disabled {
 	color: white!important
 }
 
@@ -514,7 +514,7 @@ input.button, input.button_disabled, input.exclusive, input.exclusive_disabled, 
 	width: 120px;
 	background-image: url('../img/button-medium.png')
 }
-input.button_large, input.button_large_disabled, input.exclusive_large, input.exclusive_large_disabled, a.button_large, a.exclusive_large, span.button_large, span.exclusive_large {
+input.button_large, input.button_large_disabled, input.exclusive_large, input.exclusive_large_disabled, a.button_large, a.exclusive_large, span.button_large, span.exclusive_large, span.exclusive_large_disabled {
 	width: 180px;
 	background-image: url('../img/button-large.png')
 }
@@ -523,7 +523,7 @@ input.button_large, input.button_large_disabled, input.exclusive_large, input.ex
 input.exclusive, input.exclusive_disabled, a.exclusive, span.exclusive { background-image: url('../img/button-medium_exclusive.png') }
 input.exclusive_mini, input.exclusive_mini_disabled, a.exclusive_mini, span.exclusive_mini { background-image: url('../img/button-mini_exclusive.gif') }
 input.exclusive_small, input.exclusive_small_disabled, a.exclusive_small, span.exclusive_small { background-image: url('../img/button-small_exclusive.gif') }
-input.exclusive_large, input.exclusive_large_disabled, a.exclusive_large, span.exclusive_large { background-image: url('../img/button-large_exclusive.gif') }
+input.exclusive_large, input.exclusive_large_disabled, a.exclusive_large, span.exclusive_large, span.exclusive_large_disabled { background-image: url('../img/button-large_exclusive.gif') }
 
 /* id_state field in managed via JS and is firstly hidden */
 form p.id_state { display: none }
@@ -990,7 +990,8 @@ p.cart_navigation { padding: 1em 0!important }
 p.cart_navigation .button,
  p.cart_navigation .button_large { float: left }
 p.cart_navigation .exclusive,
- p.cart_navigation .exclusive_large { float: right }
+ p.cart_navigation .exclusive_large,
+ p.cart_navigation .exclusive_large_disabled { float: right }
 p.cart_navigation_extra {
 	text-align: center;
 	width: auto
@@ -1039,6 +1040,7 @@ td.cart_quantity .icon { margin-top: 0.6em }
 td.cart_quantity a.cart_quantity_up,
  td.cart_quantity a.cart_quantity_down { display: block }
 tr.cart_free_shipping { white-space: normal }
+tr.cart_total_price { font-weight: bold }
 #order tfoot p {
 	margin: 0;
 	float: left;
@@ -1049,7 +1051,6 @@ tr.cart_free_shipping { white-space: normal }
 	width: 15%;
 	display: block
 }
-tr.cart_total_price { font-weight: bold }
 #order #voucher fieldset {
 	border: 1px solid #bdc2c9;
 	padding: 0.7em
@@ -1086,6 +1087,57 @@ tr.cart_total_price { font-weight: bold }
 #order #order_carrier span { margin: 0 0.2em }
 #order #gift_div { display: none }
 #order #gift_div label, #order #gift_div textarea {
+	display: block;
+	width: 100%;
+	margin: 1em 0
+}
+
+#order-opc tfoot p {
+	margin: 0;
+	float: left;
+	width: 85%
+}
+#order-opc tfoot span {
+	float: right;
+	width: 15%;
+	display: block
+}
+#order-opc #voucher fieldset {
+	border: 1px solid #bdc2c9;
+	padding: 0.7em
+}
+#order-opc form#voucher fieldset #display_cart_vouchers {
+	margin-top:5px;
+	clear:both;
+	float:left;
+}
+#order-opc form#voucher fieldset #display_cart_vouchers .voucher_name {
+	color:#DD2A81;
+	font-weight:bold;
+	cursor:pointer;
+}
+#order-opc form#voucher h4,
+ #order-opc form#voucher p,
+ #order-opc form#voucher .button { display: inline }
+#order-opc form#voucher h4 {
+	float: left;
+	line-height: 1.5em;
+	margin-right: 6em
+}
+#order-opc #order_carrier {
+	clear: both;
+	margin-top: 1em;
+	border: 1px solid #bdc2c9;
+	padding: 0.5em
+}
+#order-opc #order_carrier h4 {
+	width: 50%;
+	display: inline
+}
+#order-opc #order_carrier img { vertical-align: middle }
+#order-opc #order_carrier span { margin: 0 0.2em }
+#order-opc #gift_div { display: none }
+#order-opc #gift_div label, #order #gift_div textarea {
 	display: block;
 	width: 100%;
 	margin: 1em 0

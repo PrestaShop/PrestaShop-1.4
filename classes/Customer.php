@@ -465,7 +465,13 @@ class		Customer extends ObjectModel
 	* @param $id_customer Customer id
 	* @return boolean
 	*/	
-	public function customerIdExists($id_customer)//FIXME : why is it not static ?
+	// DEPRECATED
+	public function customerIdExists($id_customer)
+	{
+		return self::customerIdExistsStatic(intval($id_customer));
+	}
+	
+	static public function customerIdExistsStatic($id_customer)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`

@@ -20,7 +20,8 @@ if (!empty($key))
 if (!empty($back))
 	$smarty->assign('back', Tools::safeOutput($back));
 
-
+$smarty->assign('opc', intval(Configuration::get('PS_ORDER_PROCESS_TYPE')));
+	
 if (Tools::getValue('create_account'))
 {
 	$create_account = 1;

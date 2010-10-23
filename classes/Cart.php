@@ -1081,6 +1081,10 @@ class		Cart extends ObjectModel
 		
 		$delivery = new Address(intval($this->id_address_delivery));
 		$invoice = new Address(intval($this->id_address_invoice));
+		
+		$total_tax = $this->getOrderTotal() - $this->getOrderTotal(false);
+		if ($total_tax < 0)
+			$total_tax = 0;
 
 		return array(
 			'delivery' => $delivery,
@@ -1099,7 +1103,7 @@ class		Cart extends ObjectModel
 			'total_products_wt' => $this->getOrderTotal(true, 1),
 			'total_products' => $this->getOrderTotal(false, 1),
 			'total_price' => $this->getOrderTotal(),
-			'total_tax' => $this->getOrderTotal() - $this->getOrderTotal(false),
+			'total_tax' => $total_tax,
 			'total_price_without_tax' => $this->getOrderTotal(false));
 	}
 

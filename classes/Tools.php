@@ -1308,6 +1308,54 @@ class Tools
 			return $value;
 		return Tools::getHttpHost();
 	}
+	
+	static public function jsonEncode($json)
+	{
+		if (function_exists('json_encode'))
+			return json_encode($json);
+		else
+		{
+			if (is_null($json)) return 'null';
+			if ($json === false) return 'false';
+			if ($json === true) return 'true';
+			if (is_scalar($json))
+			{
+			  if (is_float($json))
+			  {
+			    // Always use "." for floats.
+			    return floatval(str_replace(",", ".", strval($json)));
+			  }
+			
+			  if (is_string($json))
+			  {
+			    static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
+			    return '"' . str_replace($jsonReplaces[0], $jsonReplaces[1], $json) . '"';
+			  }
+			  else
+			    return $json;
+			}
+			$isList = true;
+			for ($i = 0, reset($json); $i < count($json); $i++, next($json))
+			{
+			  if (key($json) !== $i)
+			  {
+			    $isList = false;
+			    break;
+			  }
+			}
+			$result = array();
+			if ($isList)
+			{
+			  foreach ($json as $v) $result[] = self::jsonEncode($v);
+			  return '[' . join(',', $result) . ']';
+			}
+			else
+			{
+			  foreach ($json as $k => $v) $result[] = self::jsonEncode($k).':'.self::jsonEncode($v);
+			  return '{' . join(',', $result) . '}';
+			}
+		}
+	}
 }
 
 /**

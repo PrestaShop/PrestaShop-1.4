@@ -307,6 +307,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CIPHER_ALGORITHM', 0, NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW());
 
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFTER `quantity`;
 ALTER TABLE `PREFIX_product` ADD `cache_default_attribute` int(10) unsigned default NULL AFTER `indexed`;

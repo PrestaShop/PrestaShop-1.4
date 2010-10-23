@@ -15,7 +15,7 @@
 		{/if}
 	</td>
 	<td class="cart_unit">
-		<span class="price">
+		<span class="price" id="product_price_{$product.id_product}_{$product.id_product_attribute}">
 			{if !$priceDisplay}{convertPrice price=$product.price_wt}{else}{convertPrice price=$product.price}{/if}
 		</span>
 	</td>
@@ -33,7 +33,7 @@
 		{/if}
 	</td>
 	<td class="cart_total">
-		<span class="price">
+		<span class="price" id="total_product_price_{$product.id_product}_{$product.id_product_attribute}">
 			{if $quantityDisplayed == 0 AND isset($customizedDatas.$productId.$productAttributeId)}
 				{if !$priceDisplay}{displayPrice price=$product.total_customization_wt}{else}{displayPrice price=$product.total_customization}{/if}
 			{else}

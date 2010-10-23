@@ -26,7 +26,7 @@ class		Address extends ObjectModel
 	/** @var integer Country id */
 	public		$id_country;
 
-	/** @var integer Country id */
+	/** @var integer State id */
 	public		$id_state;
 
 	/** @var string Country name */

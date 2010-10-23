@@ -31,8 +31,13 @@ function updateAddressesDisplay(first_view)
 	}
 	
 	if(!first_view)
-		updateAddresses();
-		
+	{
+		if (orderProcess == 'order')
+			updateAddresses();
+		else if (orderProcess == 'order-opc')
+			updateAddressesAndCarriersList(); // defined on order-opc.js file
+	}
+	
 	return true;
 }
 

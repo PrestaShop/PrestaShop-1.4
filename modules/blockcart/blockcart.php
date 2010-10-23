@@ -61,6 +61,7 @@ class BlockCart extends Module
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 4), $currency),
 			'total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax), $currency),
 			'id_carrier' => intval($params['cart']->id_carrier),
+			'order_process' => Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'order',
 			'ajax_allowed' => intval(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false
 		));
 		if (sizeof($errors))

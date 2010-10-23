@@ -83,7 +83,7 @@ if (Tools::isSubmit('submitAddress'))
 		{
 			$country = new Country(intval($address->id_country));
 			if (Validate::isLoadedObject($country) AND !$country->contains_states)
-				$address->id_state = false;
+				$address->id_state = 0;
 			$address_old = new Address(intval($id_address));
 			if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress(intval($cookie->id_customer), intval($address_old->id)))
 			{

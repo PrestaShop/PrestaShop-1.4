@@ -38,8 +38,12 @@ class PaymentCC extends ObjectModel
 	
 	public function add()
 	{
-		parent::add();
-		Module::hookExec('paymentCCAdded', array('paymentCC' => $this));
+		if (parent::add())
+		{
+			Module::hookExec('paymentCCAdded', array('paymentCC' => $this));
+			return true;
+		}
+		return false;
 	}
 }
 

@@ -8,6 +8,9 @@ require_once(dirname(__FILE__).'/config/config.inc.php');
 $step = intval(Tools::getValue('step'));
 require_once(dirname(__FILE__).'/init.php');
 
+if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+	Tools::redirect('order-opc.php');
+
 /* Disable some cache related bugs on the cart/order */
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -52,7 +55,7 @@ if ($cart->nbProducts())
 		else
 		{
 			$discount = new Discount(intval(Discount::getIdByName($discountName)));
-			if (is_object($discount) AND $discount->id)
+			if (Validate::isLoadedObject($discount))
 			{
 				if ($tmpError = $cart->checkDiscountValidity($discount, $cart->getDiscounts(), $cart->getOrderTotal(), $cart->getProducts(), true))
 					$errors[] = $tmpError;
@@ -64,13 +67,11 @@ if ($cart->nbProducts())
 				$cart->addDiscount(intval($discount->id));
 				Tools::redirect('order.php');
 			}
-			else
-			{
-				$smarty->assign(array(
-					'errors' => $errors,
-					'discount_name' => Tools::safeOutput($discountName)));
-			}
 		}
+		$smarty->assign(array(
+			'errors' => $errors,
+			'discount_name' => Tools::safeOutput($discountName)
+		));
 	}
 	elseif (isset($_GET['deleteDiscount']) AND Validate::isUnsignedId($_GET['deleteDiscount']))
 	{
@@ -215,7 +216,7 @@ function processAddress()
 	$errors = array();
 
 	if (!isset($_POST['id_address_delivery']) OR !Address::isCountryActiveById(intval($_POST['id_address_delivery'])))
-		$errors[] = 'this address is not in a valid area';
+		$errors[] = Tools::displayError('this address is not in a valid area');
 	else
 	{
 		$cart->id_address_delivery = intval(Tools::getValue('id_address_delivery'));
@@ -368,7 +369,7 @@ function displayCarrier()
 	if (isset($cookie->id_customer))
 		$customer = new Customer(intval($cookie->id_customer));
 	else
-		die(Tools::displayError($this->l('Fatal error: No customer')));
+		die(Tools::displayError('Fatal error: No customer'));
 	$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $customer->getGroups());
 	if (!$result)
 		$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone));

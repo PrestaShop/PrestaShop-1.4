@@ -46,7 +46,7 @@ $(function(){ldelim}
 <h2>{if !isset($email_create)}{l s='Log in'}{else}{l s='Create your account'}{/if}</h2>
 
 {assign var='current_step' value='login'}
-{include file=$tpl_dir./order-steps.tpl}
+{if $opc}{include file=$tpl_dir./order-steps.tpl}{/if}
 
 {include file=$tpl_dir./errors.tpl}
 

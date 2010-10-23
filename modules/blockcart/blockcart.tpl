@@ -19,7 +19,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 <!-- MODULE Block cart -->
 <div id="cart_block" class="block exclusive">
 	<h4>
-		<a href="{$base_dir_ssl}order.php">{l s='Cart' mod='blockcart'}</a>
+		<a href="{$base_dir_ssl}{$order_process}.php">{l s='Cart' mod='blockcart'}</a>
 		{if $ajax_allowed}
 		<span id="block_cart_expand" {if $colapseExpandStatus eq 'expanded'}class="hidden"{/if}>&nbsp;</span>
 		<span id="block_cart_collapse" {if $colapseExpandStatus eq 'collapsed' || !isset($colapseExpandStatus)}class="hidden"{/if}>&nbsp;</span>
@@ -82,7 +82,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 				<tr id="bloc_cart_voucher_{$discount.id_discount}">
 					<td class="name" title="{$discount.description}">{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...'|escape:'htmlall':'UTF-8'}</td>
 					<td class="price">-{if $discount.value_real != '!'}{if $priceDisplay == 1}{convertPrice price=$discount.value_tax_exc}{else}{convertPrice price=$discount.value_real}{/if}{/if}</td>
-					<td class="delete"><a href="{$base_dir_ssl}order.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
+					<td class="delete"><a href="{$base_dir_ssl}{$order_process}.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
 				</tr>
 			{/foreach}
 			</tbody>
@@ -112,8 +112,8 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			</p>
 		{/if}
 		<p id="cart-buttons">
-			<a href="{$base_dir_ssl}order.php" class="button_small" title="{l s='Cart' mod='blockcart'}">{l s='Cart' mod='blockcart'}</a>
-			<a href="{$base_dir_ssl}order.php?step=1" id="button_order_cart" class="exclusive" title="{l s='Check out' mod='blockcart'}">{l s='Check out' mod='blockcart'}</a>
+			{if $order_process == 'order'}<a href="{$base_dir_ssl}{$order_process}.php" class="button_small" title="{l s='Cart' mod='blockcart'}">{l s='Cart' mod='blockcart'}</a>{/if}
+			<a href="{$base_dir_ssl}{$order_process}.php{if $order_process == 'order'}?step=1{/if}" id="button_order_cart" class="exclusive{if $order_process == 'order-opc'}_large{/if}" title="{l s='Check out' mod='blockcart'}">{l s='Check out' mod='blockcart'}</a>
 		</p>
 	</div>
 	</div>

@@ -380,7 +380,7 @@ class		Carrier extends ObjectModel
 			SELECT *
 			FROM `'._DB_PREFIX_.'carrier_zone` cz
 			LEFT JOIN `'._DB_PREFIX_.'zone` z ON cz.`id_zone` = z.`id_zone`
-			WHERE `id_carrier` = '. intval($this->id));
+			WHERE cz.`id_carrier` = '. intval($this->id));
 	}
 
 	/**
