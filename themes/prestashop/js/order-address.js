@@ -42,7 +42,10 @@ function updateAddressesDisplay(first_view)
 }
 
 function updateAddressDisplay(addressType)
-{
+{	
+	if (addresses.length <= 0)
+		return false;
+	
 	var idAddress = $('select#id_address_' + addressType + '').val();
 	$('ul#address_' + addressType + ' li.address_company').html(addresses[idAddress][0]);
 	if(addresses[idAddress][0] == '')

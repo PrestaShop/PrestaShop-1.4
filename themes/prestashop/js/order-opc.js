@@ -116,11 +116,16 @@ function updateAddressesAndCarriersList()
 								itemType = itemType + 'alternate_item';
 							else
 								itemType = itemType + 'item';
+							console.log(jsonData.carriers);
 							
+							var name = jsonData.carriers[i].name;
+							if (jsonData.carriers[i].img != '')
+								name = '<img src="'+jsonData.carriers[i].img+'" alt="" />';
+								
 							html = html + 
 							'<tr class="'+itemType+'">'+
 								'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+jsonData.carriers[i].id_carrier+'" id="id_carrier'+jsonData.carriers[i].id_carrier+'" onclick="updateCarrierSelectionAndGift();" /></td>'+
-    							'<td class="carrier_name"><label for="id_carrier'+jsonData.carriers[i].id_carrier+'">'+jsonData.carriers[i].name+'</label></td>'+
+    							'<td class="carrier_name"><label for="id_carrier'+jsonData.carriers[i].id_carrier+'">'+name+'</label></td>'+
     							'<td class="carrier_infos">'+jsonData.carriers[i].delay+'</td>'+
     							'<td class="carrier_price"><span class="price">'+formatCurrency(jsonData.carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
     						if (taxEnabled && displayPrice == 0)

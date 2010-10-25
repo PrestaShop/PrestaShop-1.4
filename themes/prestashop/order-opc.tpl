@@ -1,25 +1,27 @@
+<script type="text/javascript">
+	// <![CDATA[
+	var baseDir = '{$base_dir_ssl}';
+	var imgDir = '{$img_dir}';
+	var orderProcess = 'order-opc';
+	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
+	var currencyRate = '{$currencyRate|floatval}';
+	var currencyFormat = '{$currencyFormat|intval}';
+	var currencyBlank = '{$currencyBlank|intval}';
+	var displayPrice = {$priceDisplay};
+	var taxEnabled = {$use_taxes};
+	
+	var txtWithTax = "{l s='(tax incl.)'}";
+	var txtWithoutTax = "{l s='(tax excl.)'}";
+	var txtHasBeenSelected = "{l s='has been selected'}";
+	var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
+	var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
+	var txtTOSIsNotAccepted = "{l s='Terms of service isn\'t accepted'}";
+
+	var addresses = new Array();
+	//]]>
+</script>
+{include file=$tpl_dir./thickbox.tpl}
 {if $productNumber}
-	<script type="text/javascript">
-		// <![CDATA[
-		var baseDir = '{$base_dir_ssl}';
-		var imgDir = '{$img_dir}';
-		var orderProcess = 'order-opc';
-		var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
-		var currencyRate = '{$currencyRate|floatval}';
-		var currencyFormat = '{$currencyFormat|intval}';
-		var currencyBlank = '{$currencyBlank|intval}';
-		var displayPrice = {$priceDisplay};
-		var taxEnabled = {$use_taxes};
-		
-		var txtWithTax = "{l s='(tax incl.)'}";
-		var txtWithoutTax = "{l s='(tax excl.)'}";
-		var txtHasBeenSelected = "{l s='has been selected'}";
-		var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
-		var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
-		var txtTOSIsNotAccepted = "{l s='Terms of service isn\'t accepted'}";
-		//]]>
-	</script>
-	{include file=$tpl_dir./thickbox.tpl}
 	<h2>{l s='Your shopping cart'} <span style="float:right;margin-right:10px;">{l s='contains'} {$productNumber} {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
 	<div id="order-detail-content" class="table_block">
 		<table id="cart_summary" class="std">
@@ -225,12 +227,11 @@
 		<h2 id="order-opc_address" class="order-opc_block"><img src="{$img_dir}icon/more.gif" alt="" class="order-opc_block-status" /> {l s='Addresses'}</h2>
 		<div id="order-opc_block-address" class="addresses order-opc_block-content">
 			<script type="text/javascript">
-			<!--
-				var addresses = new Array();
+			 // <![CDATA[
 				{foreach from=$addresses key=k item=address}
 					addresses[{$address.id_address|intval}] = new Array('{$address.company|addslashes}', '{$address.firstname|addslashes}', '{$address.lastname|addslashes}', '{$address.address1|addslashes}', '{$address.address2|addslashes}', '{$address.postcode|addslashes}', '{$address.city|addslashes}', '{$address.country|addslashes}', '{$address.state|default:''|addslashes}');
 				{/foreach}
-			-->
+			//]]>
 			</script>
 			<p class="address_delivery select">
 				<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
@@ -353,7 +354,7 @@
 				    $(function(){
 				    	  $('#gift_div').toggle('slow');
 				    });
-				//]]>
+				 //]]>
 				{/literal}</script>
 				{/if}
 				<h3 class="gift_title">{l s='Gift'}</h3>
