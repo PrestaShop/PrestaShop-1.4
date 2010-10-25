@@ -18,7 +18,7 @@
 		$('document').ready( function() {
 			$("#search_query")
 				.autocomplete(
-					'{/literal}{if $search_ssl == 1}{$link->getPageLink(\'search.php\', true)}{else}{$link->getPageLink(\'search.php\')}{/if}{literal}', {
+					'{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}', {
 						minChars: 3,
 						max: 10,
 						width: 500,
