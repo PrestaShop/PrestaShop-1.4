@@ -30,7 +30,8 @@ class CrossSelling extends Module
 
 	public function uninstall()
 	{
-		if (!Configuration::deleteByName('CROSSSELLING_DISPLAY_PRICE'))
+		if (!parent::uninstall() OR 
+			!Configuration::deleteByName('CROSSSELLING_DISPLAY_PRICE'))
 			return false;
 		return true;
 	}
