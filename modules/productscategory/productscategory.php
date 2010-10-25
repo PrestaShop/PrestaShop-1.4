@@ -11,7 +11,7 @@ class productsCategory extends Module
  	{
  	 	$this->name = 'productscategory';
  	 	$this->version = '1.2.1';
- 	 	$this->tab = 'Products';
+ 	 	$this->tab = 'front_office_features';
 		
 		parent::__construct();
 		

@@ -22,7 +22,7 @@ class AdminPayment extends AdminTab
 		/* Get all modules then select only payment ones*/
 		$modules = Module::getModulesOnDisk();
 		foreach ($modules AS $module)
-			if ($module->tab == 'Payment')
+			if ($module->tab == 'payments_gateways')
 			{
 				if($module->id)
 				{
@@ -81,15 +81,20 @@ class AdminPayment extends AdminTab
 	{
 		global $cookie;
 		
-		foreach ($this->paymentModules AS $module)
+		/*
+foreach ($this->paymentModules AS $module)
 			if ($module->active AND $module->warning)
 				$this->displayWarning($module->displayName.' - '.stripslashes(pSQL($module->warning)));
+*/
 		
 		$currencies = Currency::getCurrencies();
 		$countries = Country::getCountries(intval($cookie->id_lang));
 		$groups = Group::getGroups(intval($cookie->id_lang));
 		
-		$this->displayModules();
+		$tokenModules = Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee));
+		echo '<h2 class="space">'.$this->l('Payment modules list').'</h2>';
+		echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" />';
+		
 		echo '<br /><h2 class="space">'.$this->l('Payment module restrictions').'</h2>';
 		$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies in which you want the payment module(s) available.');
 		$textCountries = $this->l('Please mark the checkbox(es) for the country or countries in which you want the payment module(s) available.');
@@ -189,53 +194,6 @@ class AdminPayment extends AdminTab
 		</form>';
 	}
 	
-	public function displayModules()
-	{
-		global $cookie;
-		$irow = 0;
-
-		echo '
-		<h2 class="space">'.$this->l('Payment modules list').'</h2>
-		<table cellpadding="0" cellspacing="0" class="table width3">
-			<tr>
-				<th colspan="4" class="center">
-					<strong><span style="color: red">'.sizeof($this->paymentModules).'</span> '.((sizeof($this->paymentModules) > 1) ? $this->l('payment modules') : $this->l('payment module')).'</strong>
-				</th>
-			</tr>';
-		$tokenModules = Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee));
-		/* Display payment modules */
-		foreach ($this->paymentModules as $module)
-			{
-				if ($module->id)
-				{
-					$img = '<img src="../img/admin/enabled.gif" alt="disabled" title="'.$this->l('Module enabled').'" />';
-					if ($module->warning)
-						$img = '<img src="../img/admin/warning.gif" alt="disabled" title="'.$this->l('Module installed but with warnings').'" />';
-					if (!$module->active)
-						$img = '<img src="../img/admin/disabled.gif" alt="disabled" title="'.$this->l('Module disabled').'" />';
-				} else
-					$img = '<img src="../img/admin/cog.gif" alt="install" title="'.$this->l('Module no installed').'" />';
-				echo '
-				<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' style="height: 42px;">
-					<td style="padding-left: 10px;"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <strong>'.stripslashes($module->displayName).'</strong>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').'<br />'.$module->description.'</td>
-					<td width="85">'.(($module->id AND method_exists($module, 'getContent')) ? '<a href="index.php?tab=AdminModules&configure='.urlencode($module->name).'&token='.$tokenModules.'">'.$this->l('>> Configure').'</a>' : '').'</td>
-					<td class="center" width="20">';
-				if ($module->id)
-					echo '<a href="index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$module->name.'&'.($module->active ? 'desactive' : 'active').'">';
-				echo $img;
-				if ($module->id)
-					'</a>';
-				echo '
-					</td>
-					<td class="center" width="80">'.((!$module->id)
-					? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
-					onclick="javascript:document.location.href=\'index.php?tab=AdminModules&install='.urlencode($module->name).'&token='.$tokenModules.'\'" />'
-					: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-					onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\'index.php?tab=AdminModules&uninstall='.urlencode($module->name).'&token='.$tokenModules.'\';" />').'</td>
-				</tr>';
-			}
-		echo '</table>';
-	}
 }
 
 ?>

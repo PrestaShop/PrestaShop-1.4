@@ -15,7 +15,7 @@ class BankWire extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'bankwire';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = '0.5';
 		
 		$this->currencies = true;

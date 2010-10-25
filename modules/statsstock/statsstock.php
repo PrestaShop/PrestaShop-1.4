@@ -5,7 +5,7 @@ class StatsStock extends Module
     function __construct()
     {
         $this->name = 'statsstock';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 
         parent::__construct();

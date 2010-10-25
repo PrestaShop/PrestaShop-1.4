@@ -11,7 +11,7 @@ class BlockViewed extends Module
 	function __construct()
 	{
 		$this->name = 'blockviewed';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 0.9;
 
 		parent::__construct();

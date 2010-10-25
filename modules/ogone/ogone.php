@@ -5,7 +5,7 @@ class Ogone extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'ogone';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = '2.0';
 
         parent::__construct();

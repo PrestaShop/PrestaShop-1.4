@@ -10,7 +10,7 @@ class BlockTags extends Module
 	function __construct()
 	{
 		$this->name = 'blocktags';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 1.0;
 
 		parent::__construct();

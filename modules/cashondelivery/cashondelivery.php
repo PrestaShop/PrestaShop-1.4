@@ -8,7 +8,7 @@ class CashOnDelivery extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'cashondelivery';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = '0.3';
 		
 		$this->currencies = false;

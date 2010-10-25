@@ -25,7 +25,7 @@ class StatsBestSuppliers extends ModuleGrid
 	function __construct()
 	{
 		$this->name = 'statsbestsuppliers';
-		$this->tab = 'Stats';
+		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
 		
 		$this->_defaultSortColumn = 'sales';

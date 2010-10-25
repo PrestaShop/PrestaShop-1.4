@@ -19,7 +19,7 @@ class Watermark extends Module
 	public function __construct()
 	{
 		$this->name = 'watermark';
-		$this->tab = 'Tools';
+		$this->tab = 'administration';
 		$this->version = 0.1;
 		
 		parent::__construct();

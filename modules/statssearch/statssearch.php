@@ -22,7 +22,7 @@ class StatsSearch extends ModuleGraph
     function __construct()
     {
         $this->name = 'statssearch';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 		
 		$this->_query = '

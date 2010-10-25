@@ -11,7 +11,7 @@ class Hipay extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'hipay';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = 1.0;
 
 		$this->currencies = true;

@@ -36,7 +36,7 @@ class GraphVisifire extends ModuleGraphEngine
 		else
 		{
 	        $this->name = 'graphvisifire';
-	        $this->tab = 'Stats Engines';
+	        $this->tab = 'administration';
 	        $this->version = 1.0;
 
 	        Module::__construct();

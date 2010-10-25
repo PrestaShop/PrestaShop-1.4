@@ -5,6 +5,38 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 /* Getting cookie or logout */
 require_once(dirname(__FILE__).'/init.php');
 
+if (isset($_GET['changeParentUrl']))
+	echo '<script type="text/javascript">parent.parent.document.location.href = "'.addslashes(urldecode(Tools::getValue('changeParentUrl'))).'";</script>';
+if (isset($_GET['installBoughtModule']))
+{
+	if (!class_exists('ZipArchive', false))
+		die(displayJavascriptAlert('Host does not handle Zip files'));
+	$zip = new ZipArchive();
+	$file = false;
+	while ($file === false OR file_exists(_PS_MODULE_DIR_.$file))
+		$file = uniqid();
+	$file = _PS_MODULE_DIR_.$file.'.zip';
+	if (!copy('http://addons.prestashop.com/iframe/getboughtfile.php?id_order_detail='.Tools::getValue('id_order_detail').'&token='.Tools::getValue('token'), $file))
+		die(displayJavascriptAlert('Cannot copy file'));
+	$first6 = fread($fd = fopen($file, 'r'), 6);
+	if (!strncmp($first6, 'Error:', 6))
+	{
+		fclose($fd);
+		unlink($file);
+		die(displayJavascriptAlert(fread($fd, 1024)));
+	}
+	fclose($fd);
+	if ($zip->open($file) !== true OR !$zip->extractTo(_PS_MODULE_DIR_) OR !$zip->close())
+	{
+		unlink($file);
+		die(displayJavascriptAlert('Cannot unzip file'));
+	}
+	unlink($file);
+	die(displayJavascriptAlert('Module copied to disk'));
+}
+
+function displayJavascriptAlert($s){echo '<script type="text/javascript">alert(\''.addslashes($s).'\');</script>';}
+
 if (isset($_GET['ajaxProductManufacturers']))
 {
 	$currentIndex = 'index.php?tab=AdminCatalog';

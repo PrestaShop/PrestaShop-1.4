@@ -8,7 +8,7 @@ class BlockCategories extends Module
 	function __construct()
 	{
 		$this->name = 'blockcategories';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 1.0;
 
 		parent::__construct();

@@ -8,7 +8,7 @@ class TrackingFront extends Module
 	public function __construct()
 	{
 		$this->name = 'trackingfront';
-		$this->tab = 'Stats';
+		$this->tab = 'shipping_logistics';
 		$this->version = 1.0;
 
 		parent::__construct();

@@ -8,7 +8,7 @@ class BlockSearch extends Module
 	function __construct()
 	{
 		$this->name = 'blocksearch';
-		$this->tab = 'Blocks';
+		$this->tab = 'search_filter';
 		$this->version = 1.0;
 
 		parent::__construct();

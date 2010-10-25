@@ -11,7 +11,7 @@ class BlockCart extends Module
 	public function __construct()
 	{
 		$this->name = 'blockcart';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = '1.2';
 
 		parent::__construct();

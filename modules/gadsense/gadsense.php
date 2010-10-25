@@ -8,7 +8,7 @@ class GAdsense extends Module
 	function __construct()
 	{
 	 	$this->name = 'gadsense';
-	 	$this->tab = 'Advertisement';
+	 	$this->tab = 'advertising_marketing';
 	 	$this->version = '1.1';
         $this->displayName = $this->l('Google Adsense');
 		

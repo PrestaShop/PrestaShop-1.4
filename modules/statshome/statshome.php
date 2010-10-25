@@ -21,7 +21,7 @@ class StatsHome extends Module
     function __construct()
     {
         $this->name = 'statshome';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 		
 		

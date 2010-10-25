@@ -13,7 +13,7 @@ class BlockWishList extends Module
 	public function __construct()
 	{
 		$this->name = 'blockwishlist';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 0.2;
 		
 		parent::__construct();

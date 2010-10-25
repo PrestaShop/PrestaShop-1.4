@@ -8,7 +8,7 @@ class BlockUserInfo extends Module
 	public function __construct()
 	{
 		$this->name = 'blockuserinfo';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 0.1;
 
 		parent::__construct();

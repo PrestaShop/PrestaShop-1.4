@@ -8,7 +8,7 @@ class BlockMyAccount extends Module
 	public function __construct()
 	{
 		$this->name = 'blockmyaccount';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = '1.2';
 
 		parent::__construct();

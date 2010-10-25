@@ -11,7 +11,7 @@ class Editorial extends Module
 	public function __construct()
 	{
 		$this->name = 'editorial';
-		$this->tab = 'Tools';
+		$this->tab = 'front_office_features';
 		$this->version = '1.5';
 		
 		parent::__construct();

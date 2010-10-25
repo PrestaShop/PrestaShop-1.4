@@ -1,18 +1,15 @@
 <?php
 
-if (!defined('_CAN_LOAD_FILES_'))
-	exit;
-
 class BlockSpecials extends Module
 {
 	private $_html = '';
 	private $_postErrors = array();
 
-	public function __construct()
-	{
-		$this->name = 'blockspecials';
-		$this->tab = 'Blocks';
-		$this->version = 0.8;
+    function __construct()
+    {
+        $this->name = 'blockspecials';
+        $this->tab = 'pricing_promotion';
+        $this->version = 0.8;
 
 		parent::__construct();
 

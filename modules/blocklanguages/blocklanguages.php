@@ -8,7 +8,7 @@ class BlockLanguages extends Module
 	function __construct()
 	{
 		$this->name = 'blocklanguages';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 0.1;
 
 		parent::__construct();

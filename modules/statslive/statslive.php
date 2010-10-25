@@ -18,7 +18,7 @@ class StatsLive extends Module
     function __construct()
     {
         $this->name = 'statslive';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 		
         parent::__construct();

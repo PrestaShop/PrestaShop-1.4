@@ -8,7 +8,7 @@ class MoneyBookers extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'moneybookers';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = '1.1';
 
 		parent::__construct();

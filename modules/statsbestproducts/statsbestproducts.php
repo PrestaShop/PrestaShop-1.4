@@ -25,7 +25,7 @@ class StatsBestProducts extends ModuleGrid
 	function __construct()
 	{
 		$this->name = 'statsbestproducts';
-		$this->tab = 'Stats';
+		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
 		
 		$this->_defaultSortColumn = 'totalPriceSold';

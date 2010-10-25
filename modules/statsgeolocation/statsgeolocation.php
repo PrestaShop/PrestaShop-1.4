@@ -21,7 +21,7 @@ class StatsGeoLocation extends Module
 	function __construct()
 	{
 		$this->name = 'statsgeolocation';
-		$this->tab = 'Stats';
+		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
 		
 		parent::__construct();

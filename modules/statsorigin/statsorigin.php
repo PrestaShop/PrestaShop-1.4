@@ -20,7 +20,7 @@ class StatsOrigin extends ModuleGraph
     function __construct()
     {
         $this->name = 'statsorigin';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 		
         parent::__construct();

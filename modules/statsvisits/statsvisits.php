@@ -23,7 +23,7 @@ class StatsVisits extends ModuleGraph
     function __construct()
     {
         $this->name = 'statsvisits';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 			
 		parent::__construct();

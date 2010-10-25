@@ -12,7 +12,7 @@ class BlockAdvertising extends Module
 	function __construct()
 	{
 		$this->name = 'blockadvertising';
-		$this->tab = 'Blocks';
+		$this->tab = 'advertising_marketing';
 		$this->version = 0.1;
 
 		parent::__construct();

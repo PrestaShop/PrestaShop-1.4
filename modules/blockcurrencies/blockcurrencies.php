@@ -8,7 +8,7 @@ class BlockCurrencies extends Module
 	function __construct()
 	{
 		$this->name = 'blockcurrencies';
-		$this->tab = 'Blocks';
+		$this->tab = 'front_office_features';
 		$this->version = 0.1;
 
 		parent::__construct();

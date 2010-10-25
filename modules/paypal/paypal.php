@@ -11,7 +11,7 @@ class PayPal extends PaymentModule
 	public function __construct()
 	{
 		$this->name = 'paypal';
-		$this->tab = 'Payment';
+		$this->tab = 'payments_gateways';
 		$this->version = '2.0';
 		
 		$this->currencies = true;

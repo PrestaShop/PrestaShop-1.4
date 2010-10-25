@@ -11,7 +11,7 @@ class HomeFeatured extends Module
 	function __construct()
 	{
 		$this->name = 'homefeatured';
-		$this->tab = 'Tools';
+		$this->tab = 'front_office_features';
 		$this->version = '0.9';
 
 		parent::__construct();

@@ -11,7 +11,7 @@ class Blockrss extends Module
  	function __construct()
  	{
  	 	$this->name = 'blockrss';
- 	 	$this->tab = 'Blocks';
+ 	 	$this->tab = 'front_office_features';
 
 		parent::__construct();
 

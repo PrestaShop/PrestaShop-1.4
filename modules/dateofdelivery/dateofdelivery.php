@@ -7,7 +7,7 @@ class DateOfDelivery extends Module
 	public function __construct()
 	{
 		$this->name = 'dateofdelivery';
-		$this->tab = 'Carrier';
+		$this->tab = 'shipping_logistics';
 		$this->version = '1.0';
 		
 		parent::__construct();

@@ -11,7 +11,7 @@ class BlockBestSellers extends Module
 	public function __construct()
 	{
 			$this->name = 'blockbestsellers';
-			$this->tab = 'Blocks';
+			$this->tab = 'front_office_features';
 			$this->version = '1.1';
 			parent::__construct();
 

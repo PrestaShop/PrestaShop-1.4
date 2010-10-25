@@ -32,7 +32,7 @@ class GraphArtichow extends ModuleGraphEngine
 		else
 		{
 	        $this->name = 'graphartichow';
-	        $this->tab = 'Stats Engines';
+	        $this->tab = 'administration';
 	        $this->version = 1.0;
 			
 	        Module::__construct();

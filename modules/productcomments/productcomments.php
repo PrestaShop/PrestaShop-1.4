@@ -15,7 +15,7 @@ class ProductComments extends Module
     function __construct()
     {
         $this->name = 'productcomments';
-        $this->tab = 'Products';
+        $this->tab = 'front_office_features';
         $this->version = '0.3';
 
         parent::__construct();

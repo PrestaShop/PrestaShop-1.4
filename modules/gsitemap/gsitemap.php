@@ -11,7 +11,7 @@ class Gsitemap extends Module
 	function __construct()
 	{
 		$this->name = 'gsitemap';
-		$this->tab = 'Tools';
+		$this->tab = 'seo';
 		$this->version = '1.6';
 
 		parent::__construct();

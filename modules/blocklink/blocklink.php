@@ -11,7 +11,7 @@ class BlockLink extends Module
 	public function __construct()
 	{
 	 	$this->name = 'blocklink';
-	 	$this->tab = 'Blocks';
+	 	$this->tab = 'front_office_features';
 	 	$this->version = '1.4';
 
 	 	parent::__construct();

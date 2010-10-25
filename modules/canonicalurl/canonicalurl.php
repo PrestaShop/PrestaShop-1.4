@@ -8,7 +8,7 @@ class canonicalUrl extends Module
 	public function __construct()
 	{
 		$this->name = 'canonicalurl';
-		$this->tab = 'Tools';
+		$this->tab = 'seo';
 		$this->version = 1.3;
 
 		parent::__construct();

@@ -29,7 +29,7 @@ class Socolissimo extends Module
 		global $cookie;
 		
 		$this->name = 'socolissimo';
-		$this->tab = 'Carrier';
+		$this->tab = 'shipping_logistics';
 		$this->version = '1.2';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;

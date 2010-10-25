@@ -36,7 +36,7 @@ class Dejala extends Module
 		global $cookie ;
 		
 		$this->name = 'dejala';
-		$this->tab = 'Tools';
+		$this->tab = 'shipping_logistics';
 		$this->version = 1.2;
 		$this->internal_version = '1.2.6';
 		// Iso code of countries where the module can be used, if none module available for all countries
