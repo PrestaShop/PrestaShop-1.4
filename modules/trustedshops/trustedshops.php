@@ -148,13 +148,10 @@ class TrustedShops extends Module
 	
 		$out = '<h2>'.$this->displayName.'</h2>';
 		
-		if (!extension_loaded('soap')) 
-			$out .= $this->displayError($this->l('This module requires the SOAP PHP extension to function properly.'));
-		
 		if (is_writable(_PS_MODULE_DIR_.'/trustedshops/cache') === FALSE)
-			$out .= $this->displayError($this->l('This module requires write and read permissions on the module cache directory.'));
+			$out .= $this->displayError($this->l('This module requires write and read permissions on the module cache directory.'));			
 			
-		elseif (Tools::isSubmit('submitTrustedShops')) 
+		if (Tools::isSubmit('submitTrustedShops')) 
 		{
 			$errors = $this->_validateForm();
 
@@ -174,6 +171,9 @@ class TrustedShops extends Module
 	{
 		$errors = '';
 
+		if (!extension_loaded('soap')) 
+			return $this->displayError($this->l('This module requires the SOAP PHP extension to function properly.'));		
+
 		foreach ($this->allowed_languages AS $language)
 		{
 			$ts_id = Tools::getValue('trusted_shops_id_'.intval($language['id_lang']));
@@ -181,7 +181,7 @@ class TrustedShops extends Module
 			if (!empty($ts_id))
 			{
 				if (!preg_match('/^[[:alnum:]]{33}$/', $ts_id))
-					$errors .= $this->displayError('Invalid Trusted Shops Id ['.$language['iso_code'].']');
+					$errors .= $this->displayError($this->l('Invalid Trusted Shops ID').' ['.$language['iso_code'].']');
 				elseif (!$this->_isTsIdActive(intval($language['id_lang']), $ts_id))
 					$errors .= $this->_validateTrustedShopId($ts_id, intval($language['id_lang']));
 			} 
