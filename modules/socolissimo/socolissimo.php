@@ -106,7 +106,7 @@ class Socolissimo extends Module
 				  `cecompanyname` varchar(64) NOT NULL,
 				  `cedeliveryinformation` int(11) NOT NULL,
 				  PRIMARY KEY  (`id_cart`,`id_customer`)
-				) DEFAULT CHARSET=utf8;';
+				) ENGINE='.ENGINE_TYPE.' DEFAULT CHARSET=utf8;';
 		
 		if(!Db::getInstance()->Execute($sql))
 			return false;
