@@ -2,10 +2,10 @@
 
 $useSSL = true;
 
-include(dirname(__FILE__).'/config/config.inc.php');
-include(dirname(__FILE__).'/init.php');
+require_once(dirname(__FILE__).'/config/config.inc.php');
+require_once(dirname(__FILE__).'/init.php');
 Tools::addCSS(_THEME_CSS_DIR_.'contact-form.css');
-include(dirname(__FILE__).'/header.php');
+require_once(dirname(__FILE__).'/header.php');
 
 $errors = array();
 
@@ -213,6 +213,6 @@ if ($id_customer_thread = (int)Tools::getValue('id_customer_thread') AND $token 
 $_POST = array_merge($_POST, $_GET);
 
 $smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
-include(dirname(__FILE__).'/footer.php');
+require_once(dirname(__FILE__).'/footer.php');
 
 ?>

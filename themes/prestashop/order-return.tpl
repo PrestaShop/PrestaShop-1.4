@@ -71,7 +71,7 @@
 	<br />- {l s='The package should be to the correct address'} (<a href="{$base_dir}pdf-order-return.php?id_order_return={$orderRet->id|intval}">{l s='see PDF document'}</a>)
 	<br /><br />
 	{l s='Upon receiving your package, we will inform you by e-mail and will then begin processing the reimbursement of your order total.'}
-	<br /><br /><a href="{$base_dir_ssl}contact-form.php">{l s='Let us know if you have any questions.'}</a>
+	<br /><br /><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Let us know if you have any questions.'}</a>
 	<br />
 	<p class="bold">{l s='If the conditions of return listed above are not respected, we reserve the right to refuse your package and/or reimbursement.'}</p>
 </div>

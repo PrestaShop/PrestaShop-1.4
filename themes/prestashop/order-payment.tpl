@@ -21,4 +21,4 @@
 	<p class="warning">{l s='No payment modules have been installed yet.'}</p>
 {/if}
 
-<p class="cart_navigation"><a href="{$base_dir_ssl}order.php?step=2" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a></p>
+<p class="cart_navigation"><a href="{$link->getPageLink('order.php', true)}?step=2" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a></p>

@@ -1,6 +1,6 @@
 <!-- Block manufacturers module -->
 <div id="manufacturers_block_left" class="block blockmanufacturer">
-	<h4><a href="{$base_dir}manufacturer.php" title="{l s='Manufacturers' mod='blockmanufacturer'}">{l s='Manufacturers' mod='blockmanufacturer'}</a></h4>
+	<h4><a href="{$link->getPageLink('manufacturer.php')}" title="{l s='Manufacturers' mod='blockmanufacturer'}">{l s='Manufacturers' mod='blockmanufacturer'}</a></h4>
 	<div class="block_content">
 {if $manufacturers}
 	{if $text_list}

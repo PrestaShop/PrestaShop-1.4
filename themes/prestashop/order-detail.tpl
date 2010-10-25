@@ -67,7 +67,7 @@
 	{if $address_delivery->phone_mobile}<li class="address_phone_mobile">{$address_delivery->phone_mobile|escape:'htmlall':'UTF-8'}</li>{/if}
 </ul>
 {$HOOK_ORDERDETAILDISPLAYED}
-<form action="{$base_dir_ssl}order-follow.php" method="post">
+<form action="{$link->getPageLink('order-follow.php', true)}" method="post">
 <div id="order-detail-content" class="table_block">
 	<table class="std">
 		<thead>
@@ -260,7 +260,7 @@
 		</ol>
 	</div>
 {/if}
-<form action="{$base_dir}order-detail.php" method="post" class="std" id="sendOrderMessage">
+<form action="{$link->getPageLink('order-detail.php', true)}" method="post" class="std" id="sendOrderMessage">
 	<p class="bold">{l s='Add a message:'}</p>
 	<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
 	<p class="textarea">

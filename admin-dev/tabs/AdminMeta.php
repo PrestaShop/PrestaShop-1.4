@@ -27,6 +27,7 @@ class AdminMeta extends AdminTab
 			'id_meta' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 			'page' => array('title' => $this->l('Page'), 'width' => 120, 'suffix' => '.php'),
 			'title' => array('title' => $this->l('Title'), 'width' => 120),
+			'url_rewrite' => array('title' => $this->l('Friendly URL'), 'width' => 120)
 		);
 	
 		parent::__construct();
@@ -73,7 +74,7 @@ class AdminMeta extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Title of this page').'</p>
 					</div>';
-				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords', 'title');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords¤url_rewrite', 'title');
 		echo '	</div>
 				<div style="clear:both;">&nbsp;</div>
 				<label>'.$this->l('Meta description:').' </label>
@@ -85,7 +86,7 @@ class AdminMeta extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('A short description').'</p>
 					</div>';
-				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords', 'description');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords¤url_rewrite', 'description');
 		echo '	</div>
 				<div style="clear:both;">&nbsp;</div>
 				<label>'.$this->l('Meta keywords:').' </label>
@@ -97,7 +98,19 @@ class AdminMeta extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('List of keywords').'</p>
 					</div>';
-				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords', 'keywords');
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords¤url_rewrite', 'keywords');
+		echo '	</div>
+				<div style="clear:both;">&nbsp;</div>
+				<label>'.$this->l('Rewrited URL:').' </label>
+				<div class="margin-form">';
+				foreach ($this->_languages as $language)
+					echo '
+					<div id="url_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
+						<input size="50" type="text" name="url_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'url_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
+						<p class="clear">'.$this->l('Example : "contacts" for http://mysite.com/shop/contacts to redirect to http://mysite.com/shop/contact-form.php').'</p>
+					</div>';
+				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords¤url_rewrite', 'url_rewrite');
 		echo '	</div>
 				<div style="clear:both;">&nbsp;</div>
 				<div class="margin-form">

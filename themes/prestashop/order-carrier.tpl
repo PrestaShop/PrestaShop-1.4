@@ -26,7 +26,7 @@
 
 {include file=$tpl_dir./errors.tpl}
 
-<form id="form" action="{$base_dir_ssl}order.php" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
+<form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
 
 {if $conditions AND $cms_id}
 	<h3 class="condition_title">{l s='Terms of service'}</h3>
@@ -118,7 +118,7 @@
 	<p class="cart_navigation submit">
 		<input type="hidden" name="step" value="3" />
 		<input type="hidden" name="back" value="{$back}" />
-		<a href="{$base_dir_ssl}order.php?step=1{if $back}&back={$back}{/if}" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
+		<a href="{$link->getPageLink('order.php', true)}?step=1{if $back}&back={$back}{/if}" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
 		<input type="submit" name="processCarrier" value="{l s='Next'} &raquo;" class="exclusive" />
 	</p>
 </form>

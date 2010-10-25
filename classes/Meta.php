@@ -20,14 +20,15 @@ class		Meta extends ObjectModel
 	public 		$title;
 	public 		$description;
 	public 		$keywords;
+	public 		$url_rewrite;
 	
  	protected 	$fieldsRequired = array('page');
  	protected 	$fieldsSize = array('page' => 64);
  	protected 	$fieldsValidate = array('page' => 'isFileName');
 	
 	protected	$fieldsRequiredLang = array();
-	protected	$fieldsSizeLang = array('title' => 128, 'description' => 255, 'keywords' => 255);
-	protected	$fieldsValidateLang = array('title' => 'isGenericName', 'description' => 'isGenericName', 'keywords' => 'isGenericName');
+	protected	$fieldsSizeLang = array('title' => 128, 'description' => 255, 'keywords' => 255, 'url_rewrite' => 255);
+	protected	$fieldsValidateLang = array('title' => 'isGenericName', 'description' => 'isGenericName', 'keywords' => 'isGenericName', 'url_rewrite' => 'isLinkRewrite');
 	
 	protected 	$table = 'meta';
 	protected 	$identifier = 'id_meta';
@@ -41,7 +42,7 @@ class		Meta extends ObjectModel
 	public function getTranslationsFieldsChild()
 	{
 		parent::validateFieldsLang();
-		return parent::getTranslationsFields(array('title', 'description', 'keywords'));
+		return parent::getTranslationsFields(array('title', 'description', 'keywords', 'url_rewrite'));
 	}
 	
 	static public function getPages($excludeFilled = false, $addPage = false)
@@ -52,8 +53,10 @@ class		Meta extends ObjectModel
 		
 		// Exclude pages forbidden
 		$exludePages = array(
-		'404', 'attachment', 'cart', 'order', 'my-account', 'history', 'addresses', 'address', 'identity', 'discount', 'authentication', 'search',
-		'get-file', 'order-slip', 'order-detail', 'order-follow', 'order-return', 'order-confirmation', 'pagination', 'pdf-invoice',
+		
+		
+		'404', 'attachment',
+		'get-file', 'order-return', 'order-confirmation', 'pagination', 'pdf-invoice', 'changecurrency', 'order-detail',
 		'pdf-order-return', 'pdf-order-slip', 'product-sort', 'statistics', 'zoom', 'images.inc', 'header', 'footer', 'init',
 		'category', 'product', 'cms', 'password');
 		foreach ($files as $file)
@@ -83,6 +86,17 @@ class		Meta extends ObjectModel
 		FROM '._DB_PREFIX_.'meta
 		ORDER BY page ASC');
 	}
+
+	static public function getMetasByIdLang($id_lang)
+	{
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'meta` m
+		LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON m.`id_meta` = ml.`id_meta`
+		WHERE ml.`id_lang` = '.intval($id_lang).' 
+		ORDER BY page ASC');
+		
+	}
 	
 	static public function getMetaByPage($page, $id_lang)
 	{
@@ -91,6 +105,31 @@ class		Meta extends ObjectModel
 		FROM '._DB_PREFIX_.'meta m
 		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)
 		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.intval($id_lang));
+	}
+
+	public function update($nullValues = false)
+	{
+		if (!parent::update($nullValues))
+			return false;			
+									
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									Configuration::get('PS_HTACCESS_SPECIFIC')
+									);
+	}
+	
+	static public function getEquivalentUrlRewrite($new_id_lang, $id_lang, $url_rewrite)
+	{
+		return Db::getInstance()->getValue('
+		SELECT url_rewrite
+		FROM `'._DB_PREFIX_.'meta_lang`
+		WHERE id_meta = (
+			SELECT id_meta
+			FROM `'._DB_PREFIX_.'meta_lang`
+			WHERE url_rewrite = \''.pSQL($url_rewrite).'\' AND id_lang = '.intval($id_lang).'
+		)
+		AND id_lang = '.intval($new_id_lang));
 	}
 }
 ?>

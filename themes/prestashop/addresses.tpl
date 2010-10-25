@@ -4,7 +4,7 @@
 -->
 </script>
 
-{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My addresses'}{/capture}
+{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My addresses'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='My addresses'}</h2>
@@ -27,19 +27,19 @@
 		<li class="address_country">{$address.country}{if isset($address.state)} ({$address.state}){/if}</li>
 		{if $address.phone}<li class="address_phone">{$address.phone}</li>{/if}
 		{if $address.phone_mobile}<li class="address_phone_mobile">{$address.phone_mobile}</li>{/if}
-		<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
-		<li class="address_delete"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
+		<li class="address_update"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
+		<li class="address_delete"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
 	</ul>
 	{/foreach}
 	<p class="clear" />
 </div>
 {else}
-	<p class="warning">{l s='No addresses available.'}&nbsp;<a href="{$base_dir_ssl}address.php">{l s='add a new one!'}</a></p>
+	<p class="warning">{l s='No addresses available.'}&nbsp;<a href="{$link->getPageLink('address.php', true)}">{l s='add a new one!'}</a></p>
 {/if}
 
-<div class="clear address_add"><a href="{$base_dir_ssl}address.php" title="{l s='Add an address'}" class="button_large">{l s='Add an address'}</a></div>
+<div class="clear address_add"><a href="{$link->getPageLink('address.php', true)}" title="{l s='Add an address'}" class="button_large">{l s='Add an address'}</a></div>
 
 <ul class="footer_links">
-	<li><a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$base_dir_ssl}my-account.php">{l s='Back to Your Account'}</a></li>
+	<li><a href="{$link->getPageLink('my-account.php', true)}"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$link->getPageLink('my-account.php', true)}">{l s='Back to Your Account'}</a></li>
 	<li><a href="{$base_dir}"><img src="{$img_dir}icon/home.gif" alt="" class="icon" /></a><a href="{$base_dir}">{l s='Home'}</a></li>
 </ul>

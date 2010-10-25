@@ -24,5 +24,5 @@
 </form>
 {/if}
 <p class="clear">
-	<a href="{$base_dir_ssl}authentication.php" title="{l s='Back to Login'}"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Back to Login'}" class="icon" /></a><a href="{$base_dir}authentication.php" title="{l s='Back to Login'}">{l s='Back to Login'}</a>
+	<a href="{$link->getPageLink('authentication.php', true)}" title="{l s='Back to Login'}"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Back to Login'}" class="icon" /></a><a href="{$link->getPageLink('authentication.php')}" title="{l s='Back to Login'}">{l s='Back to Login'}</a>
 </p>

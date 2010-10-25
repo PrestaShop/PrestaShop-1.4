@@ -3,7 +3,7 @@
 $_LANG['A mail has been sended!'] = 'A mail has been sent';
 $_LANG['An error occured while sending mail, please verify your parameters.'] = 'An error occurred while sending mail. Please verify your parameters.';
 $_LANG['And now, discover your new store and Back Office'] = 'Take me to my new Front Office (online store) or Back Office (admin tool)';
-$_LANG['Before continuing, you have to backup your data. Please backup the database and backup the files of the application.'] = 'Before continuing, you have to backup your data. Please backup the database and backup the application files.';
+$_LANG['Before continuing, you have to backup your data. Please backup the database and backup the files of the application.'] = 'Before continuing, you have to backup your data. Please backup the database and backup the application files. If you have manually edited the hidden file ".htaccess" at the root of your store, please make sure you saved it too.';
 $_LANG['By default, the PHP \'mail()\' function is used'] = 'By default, the PHP \'mail()\' function is used. For more functionality, manual SMTP configuration is recommended.';
 $_LANG['Can\'t find the sql upgrade files. Please verify that the /install/sql/upgrade folder is not empty)'] = 'Can\'t find the SQL upgrade files. Please verify that the /install/sql/upgrade folder is not empty.';
 $_LANG['Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.'] = 'Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.';

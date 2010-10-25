@@ -785,6 +785,7 @@ CREATE TABLE `PREFIX_meta_lang` (
   `title` varchar(128) default NULL,
   `description` varchar(255) default NULL,
   `keywords` varchar(255) default NULL,
+  `url_rewrite` varchar(254) NOT NULL,
   PRIMARY KEY  (`id_meta`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

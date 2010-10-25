@@ -542,6 +542,68 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `n
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW());
 
+ALTER TABLE `ps_meta_lang` ADD `url_rewrite` VARCHAR( 255 ) NOT NULL , ADD INDEX ( `url_rewrite` );
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('address');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'address'), 'Address', 'address'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'address'), 'Adresse', 'adresse'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'address'), 'Dirección', 'direccion');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('addresses');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Addresses', 'address'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Adresses', 'adresse'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Direcciones', 'direcciones');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('authentication');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Authentication', 'authentication'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Authentification', 'autentification'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Autenticación', 'autenticacion');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('cart');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'cart'), 'Cart', 'cart'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'cart'), 'Panier', 'panier'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'cart'), 'Carro de la compra', 'carro-de-la-compra');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('discount');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'discount'), 'Discount', 'discount'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'discount'), 'Bons de réduction', 'bons-de-reduction'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'discount'), 'Descuento', 'descuento');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('history');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'history'), 'Order history', 'order-history'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'history'), 'Historique des commandes', 'historique-des-commandes'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'history'), 'Historial de pedidos', 'historial-de-pedidos');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('identity');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'identity'), 'Identity', 'identity'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'identity'), 'Identité', 'identite'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'identity'), 'Identidad', 'identidad');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('my-account');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'my-account'), 'My account', 'my-account'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'my-account'), 'Mon compte', 'mon-compte'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'my-account'), 'Mi Cuenta', 'mi-cuenta');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('order-follow');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-follow'), 'Order follow', 'order-follow'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-follow'), 'Détails de la commande', 'details-de-la-commande'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-follow'), 'Devolución de productos', 'devolucion-de-productos');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('order-slip');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-slip'), 'Order slip', 'order-slip'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-slip'), 'Avoirs', 'avoirs'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order-slip'), 'Vales', 'vales');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('order');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order'), 'Order', 'order'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order'), 'Commande', 'commande'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'order'), 'Carrito', 'carrito');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('search');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Search', 'search'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Recherche', 'recherche'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Buscar', 'buscar');
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

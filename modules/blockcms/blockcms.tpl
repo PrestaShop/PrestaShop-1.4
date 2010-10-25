@@ -19,10 +19,10 @@
 {else}
 	<!-- MODULE Block footer -->
 	<ul class="block_various_links" id="block_various_links_footer">
-		<li class="first_item"><a href="{$base_dir}prices-drop.php" title="">{l s='Specials' mod='blockcms'}</a></li>
-		<li class="item"><a href="{$base_dir}new-products.php" title="">{l s='New products' mod='blockcms'}</a></li>
-		<li class="item"><a href="{$base_dir}best-sales.php" title="">{l s='Top sellers' mod='blockcms'}</a></li>
-		<li class="item"><a href="{$base_dir_ssl}contact-form.php" title="">{l s='Contact us' mod='blockcms'}</a></li>
+		<li class="first_item"><a href="{$link->getPageLink('prices-drop.php')}" title="">{l s='Specials' mod='blockcms'}</a></li>
+		<li class="item"><a href="{$link->getPageLink('new-products.php')}" title="">{l s='New products' mod='blockcms'}</a></li>
+		<li class="item"><a href="{$link->getPageLink('best-sales.php')}" title="">{l s='Top sellers' mod='blockcms'}</a></li>
+		<li class="item"><a href="{$link->getPageLink('contact-form.php', true)}" title="">{l s='Contact us' mod='blockcms'}</a></li>
 		{foreach from=$cmslinks item=cmslink}
 			<li class="item"><a href="{$cmslink.link|addslashes}" title="{$cmslink.meta_title|escape:'htmlall':'UTF-8'}">{$cmslink.meta_title|escape:'htmlall':'UTF-8'}</a></li>
 		{/foreach}

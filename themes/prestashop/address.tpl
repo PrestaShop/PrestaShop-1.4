@@ -53,7 +53,7 @@ $(function(){ldelim}
 
 {include file=$tpl_dir./errors.tpl}
 
-<form action="{$base_dir_ssl}address.php" method="post" class="std">
+<form action="{$link->getPageLink('address.php', true)}" method="post" class="std">
 	<fieldset>
 		<h3>{if isset($id_address)}{l s='Your address'}{else}{l s='New address'}{/if}</h3>
 		<p class="text">

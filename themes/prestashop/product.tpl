@@ -190,7 +190,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		{/if}
 
 		<!-- add to cart form-->
-		<form id="buy_block" action="{$base_dir}cart.php" method="post">
+		<form id="buy_block" action="{$link->getPageLink('cart.php')}" method="post">
 
 			<!-- hidden datas -->
 			<p class="hidden">
@@ -426,7 +426,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 							<p class="product_accessories_price">
 								{if $accessory.show_price}<span class="price">{displayWtPrice p=$accessory.price}</span>{/if}
 								<a class="button" href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='View'}">{l s='View'}</a>
-								{if $accessory.available_for_order}<a class="exclusive button ajax_add_to_cart_button" href="{$base_dir}cart.php?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>{/if}
+								{if $accessory.available_for_order}<a class="exclusive button ajax_add_to_cart_button" href="{$link->getPageLink('cart.php')}?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>{/if}
 							</p>
 						</li>
 					{/foreach}

@@ -1,6 +1,6 @@
 <!-- Block suppliers module -->
 <div id="suppliers_block_left" class="block blocksupplier">
-	<h4><a href="{$base_dir}supplier.php" title="{l s='Suppliers' mod='blocksupplier'}">{l s='Suppliers' mod='blocksupplier'}</a></h4>
+	<h4><a href="{$link->getPageLink('supplier.php')}" title="{l s='Suppliers' mod='blocksupplier'}">{l s='Suppliers' mod='blocksupplier'}</a></h4>
 	<div class="block_content">
 {if $suppliers}
 	{if $text_list}

@@ -4,7 +4,7 @@
 -->
 </script>
 
-{capture name=path}<a href="{$base_dir_ssl}my-account.php">{l s='My account' mod='loyalty'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My loyalty points' mod='loyalty'}{/capture}
+{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account' mod='loyalty'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My loyalty points' mod='loyalty'}{/capture}
 {include file=$tpl_dir./breadcrumb.tpl}
 
 <h2>{l s='My loyalty points' mod='loyalty'}</h2>
@@ -118,6 +118,6 @@ $(document).ready(function()
 {/if}
 
 <ul class="footer_links">
-	<li><a href="{$base_dir_ssl}my-account.php"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$base_dir_ssl}my-account.php">{l s='Back to Your Account' mod='loyalty'}</a></li>
+	<li><a href="{$link->getPageLink('my-account.php', true)}"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$link->getPageLink('my-account.php', true)}">{l s='Back to Your Account' mod='loyalty'}</a></li>
 	<li><a href="{$base_dir}"><img src="{$img_dir}icon/home.gif" alt="" class="icon" /></a><a href="{$base_dir}">{l s='Home' mod='loyalty'}</a></li>
 </ul>

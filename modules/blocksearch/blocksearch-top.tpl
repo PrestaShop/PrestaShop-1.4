@@ -1,6 +1,6 @@
 <!-- Block search module TOP -->
 <div id="search_block_top">
-	<form method="get" action="{$base_dir}search.php" id="searchbox">
+	<form method="get" action="{$link->getPageLink('search.php')}" id="searchbox">
 	<p>
 		<label for="search_query"><!-- image on background --></label>
 		<input type="hidden" name="orderby" value="position" />
@@ -35,7 +35,7 @@
 			if($(this).val().length > 0){
 				stopInstantSearchQueries();
 				instantSearchQuery = $.ajax({
-				url: '{/literal}{if $search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php',
+				url: '{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}',
 				data: 'instantSearch=1&id_lang={/literal}{$cookie->id_lang}{literal}&q='+$(this).val(),
 				dataType: 'html',
 				success: function(data){
@@ -66,7 +66,7 @@
 		$('document').ready( function() {
 			$("#search_query")
 				.autocomplete(
-					'{/literal}{if $search_ssl == 1}{$base_dir_ssl}{else}{$base_dir}{/if}{literal}search.php', {
+					'{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}', {
 						minChars: 3,
 						max: 10,
 						width: 500,

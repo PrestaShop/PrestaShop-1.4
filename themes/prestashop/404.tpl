@@ -7,7 +7,7 @@
 
 <h3>{l s='To find a product, please type its name in the field below'}</h3>
 
-<form action="{$base_dir}search.php" method="post" class="std">
+<form action="{$link->getPageLink('search.php')}" method="post" class="std">
 	<fieldset>
 		<p>
 			<label for="search">{l s='Search our product catalog:'}</label>

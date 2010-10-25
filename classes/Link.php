@@ -130,6 +130,28 @@ class Link
 			$uri_path = _THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg';
 		return $protocol.Tools::getMediaServer($uri_path).$uri_path;
 	}
+	
+	public function getPageLink($filename, $ssl = false)
+	{
+		global $iso, $cookie;
+		$base = _PS_BASE_URL_;
+		if ($ssl)
+			$base = Tools::getHttpHost(true);
+		if ($this->allow == 1 && file_exists($filename))
+		{
+			$pagename = substr($filename, 0, -4);
+			$url_rewrite = Db::getInstance()->getValue('
+				SELECT url_rewrite
+				FROM `'._DB_PREFIX_.'meta` m
+				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+				WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'
+			');
+			$uri_path = $url_rewrite ? 'lang-'.$iso.'/'.$url_rewrite : $filename;
+		}
+		else
+			$uri_path = $filename;
+		return $base.__PS_BASE_URI__.$uri_path;
+	}
 
 	public function getCatImageLink($name, $id_category, $type = null)
 	{
@@ -145,8 +167,18 @@ class Link
 	  */
 	public function getLanguageLink($id_lang)
 	{
+		$matches = array();
+		$request = $_SERVER['REQUEST_URI'];
+		preg_match('#/lang-([a-z]{2})/([^\?]*).*$#', $request, $matches);
+		if ($matches)
+		{
+			$current_iso = $matches[1];
+			$rewrite = $matches[2];
+			$url_rewrite = Meta::getEquivalentUrlRewrite($id_lang, Language::getIdByIso($current_iso), $rewrite);
+			$request = str_replace($rewrite, $url_rewrite, $request);
+		}
 		if ($this->allow == 1)
-			return __PS_BASE_URI__.'lang-'.Language::getIsoById($id_lang).'/'.substr(preg_replace('#/lang-([a-z]{2})/#', '/', $_SERVER['REQUEST_URI']), strlen(__PS_BASE_URI__));
+			return __PS_BASE_URI__.'lang-'.Language::getIsoById($id_lang).'/'.substr(preg_replace('#/lang-([a-z]{2})/#', '/', $request), strlen(__PS_BASE_URI__));
 		else
 			return $this->getUrlWith('id_lang', intval($id_lang));
 	}

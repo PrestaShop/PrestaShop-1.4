@@ -6,7 +6,7 @@
 	<div class="sitemap_block">
 		<h3>{l s='Information'}</h3>
 		<ul>
-			<li><a href="{$base_dir_ssl}contact-form.php">{l s='Contact'}</a></li>
+			<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
 			{foreach from=$cmslinks item=cmslink}
 				<li><a href="{$cmslink.link}" title="{$cmslink.meta_title}">{$cmslink.meta_title}</a></li>
 			{/foreach}
@@ -15,21 +15,21 @@
 	<div class="sitemap_block">
 		<h3>{l s='Our offers'}</h3>
 		<ul>
-			<li><a href="{$base_dir}new-products.php">{l s='New products'}</a></li>
-			<li><a href="{$base_dir}best-sales.php">{l s='Top sellers'}</a></li>
-			<li><a href="{$base_dir}prices-drop.php">{l s='Specials'}</a></li>
-			<li><a href="{$base_dir}manufacturer.php">{l s='Manufacturers'}</a></li>
-			<li><a href="{$base_dir}supplier.php">{l s='Suppliers'}</a></li>
+			<li><a href="{$link->getPageLink('new-products.php')}">{l s='New products'}</a></li>
+			<li><a href="{$link->getPageLink('best-sales.php')}">{l s='Top sellers'}</a></li>
+			<li><a href="{$link->getPageLink('prices-drop.php')}">{l s='Specials'}</a></li>
+			<li><a href="{$link->getPageLink('manufacturer.php')}">{l s='Manufacturers'}</a></li>
+			<li><a href="{$link->getPageLink('supplier.php')}">{l s='Suppliers'}</a></li>
 		</ul>
 	</div>
 	<div class="sitemap_block">
 		<h3>{l s='Your Account'}</h3>
 		<ul>
-			<li><a href="{$base_dir_ssl}my-account.php">{l s='Your Account'}</a></li>
-			<li><a href="{$base_dir_ssl}identity.php">{l s='Personal information'}</a></li>
-			<li><a href="{$base_dir_ssl}addresses.php">{l s='Addresses'}</a></li>
-			{if $voucherAllowed}<li><a href="{$base_dir_ssl}discount.php">{l s='Discount'}</a></li>{/if}
-			<li><a href="{$base_dir_ssl}history.php">{l s='Orders history'}</a></li>
+			<li><a href="{$link->getPageLink('my-account.php', true)}">{l s='Your Account'}</a></li>
+			<li><a href="{$link->getPageLink('identity.php', true)}">{l s='Personal information'}</a></li>
+			<li><a href="{$link->getPageLink('addresses.php', true)}">{l s='Addresses'}</a></li>
+			{if $voucherAllowed}<li><a href="{$link->getPageLink('discount.php', true)}">{l s='Discount'}</a></li>{/if}
+			<li><a href="{$link->getPageLink('history.php', true)}">{l s='Orders history'}</a></li>
 		</ul>
 	</div>
 	<br class="clear" />

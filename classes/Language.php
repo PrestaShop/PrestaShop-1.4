@@ -178,7 +178,11 @@ class		Language extends ObjectModel
 	{
 		if (!parent::add($autodate))
 			return false;
-		return $this->loadUpdateSQL();
+		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+			intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+			intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			Configuration::get('PS_HTACCESS_SPECIFIC')
+		));
 	}
 	
 	public function loadUpdateSQL()
@@ -355,6 +359,18 @@ class		Language extends ObjectModel
 		foreach ($result AS $row)
 			self::$_LANGUAGES[intval($row['id_lang'])] = array('id_lang' => intval($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => intval($row['active']));
 	}
+		
+	public function update($nullValues = false)
+	{
+		if (!parent::update($nullValues))
+			return false;
+			
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+							intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+							intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+							Configuration::get('PS_HTACCESS_SPECIFIC')
+							);
+	}	
 }
 
 ?>

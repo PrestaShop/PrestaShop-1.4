@@ -58,7 +58,16 @@ class		Country extends ObjectModel
 		'objectsNodeName' => 'countries',
 		'fields' => array(
 			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
-		)
+		),
+		'linked_tables' => array(//TODO this should be native...
+			'i18n' => array(
+				'table' => 'country_lang',
+				'fields' => array(
+					'id_lang' => array('sqlId' => 'id_lang', 'xlink_resource'=> 'languages'),
+					'name' => array('sqlId' => 'name'),
+				),
+			),
+		),
 	);
 
 	protected 	$table = 'country';

@@ -29,7 +29,7 @@ if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 		die('Error: \'install\' directory is missing');
 	Tools::redirect('install', $dir);
 }
-include(dirname(__FILE__).'/settings.inc.php');
+require_once(dirname(__FILE__).'/settings.inc.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
@@ -40,7 +40,7 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 }
 
 /* Include all defines */
-include(dirname(__FILE__).'/defines.inc.php');
+require_once(dirname(__FILE__).'/defines.inc.php');
 /* Defines are not in defines.inc.php file for no conflicts in installer */
 define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
 define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
@@ -84,4 +84,4 @@ if (function_exists('date_default_timezone_set'))
 }
 
 /* Smarty */
-include(dirname(__FILE__).'/smarty.config.inc.php');
+require_once(dirname(__FILE__).'/smarty.config.inc.php');
