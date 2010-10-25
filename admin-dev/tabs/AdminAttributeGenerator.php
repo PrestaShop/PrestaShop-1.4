@@ -227,7 +227,7 @@ class AdminAttributeGenerator extends AdminTab
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
 			<form enctype="multipart/form-data" method="post" id="generator" action=""'.$currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'token='.Tools::getValue('token').'">
 				<fieldset style="margin-bottom: 35px;"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes generator').'</legend>'.
-				$this->l('Add or modify attributes for this product:').'
+				$this->l('Add or modify attributes for product:').' <b>'.$this->product->name[$cookie->id_lang].'</b>
 					<br /><br />
                     ';
         echo '
@@ -261,6 +261,7 @@ class AdminAttributeGenerator extends AdminTab
                     <input class="button" type="button" style="margin-left: 20px;" value="'.$this->l('Delete').'" class="button" onclick="del_attr_multiple();" />
 				</div>
 			</div>
+			<div class="center"><input type="submit" class="button" name="back" value="'.$this->l('Back to product').'" /></div>
 			<br />
 			</fieldset>
 		</form>';

@@ -851,6 +851,15 @@ class		Product extends ObjectModel
 		SET `default_on` = 0
 		WHERE `id_product` = '.intval($this->id));
 	}
+	
+	public function setDefaultAttribute($id_product_attribute)
+	{
+		return Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'product_attribute`
+		SET `default_on` = 1
+		WHERE `id_product` = '.intval($this->id).'
+		AND `id_product_attribute` = '.intval($id_product_attribute));
+	}
 
 	/**
 	* Update a product attribute
