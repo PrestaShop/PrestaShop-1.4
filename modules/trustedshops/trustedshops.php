@@ -245,10 +245,11 @@ class TrustedShops extends Module
 		foreach($this->allowed_languages AS $language)
 		{
 			if ($this->_isTsIdActive($language['id_lang']))
-				$params .= $delim.'lang'.$key.'='.$language['iso_code'].'&ts_id'.$key.'='.Configuration::get('TS_ID_ACTIVE_'.$language['id_lang']);	
-			$delim = '&';
-			
-			$key++;
+			{
+				$params .= $delim.'lang'.$key.'='.$language['iso_code'].'&ts_id'.$key.'='.Configuration::get('TS_ID_ACTIVE_'.$language['id_lang']);
+				$key++;
+				$delim = '&';
+			}	
 		}
 
 		if (!empty($params))
