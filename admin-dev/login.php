@@ -115,7 +115,7 @@ if ($nbErrors = sizeof($errors))
 
 echo '
 			<div id="login">
-				<h1>PrestaShop</h1>
+				<h1>'.Configuration::get('PS_SHOP_NAME').'</h1>
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
 $randomNb = rand(100, 999);
