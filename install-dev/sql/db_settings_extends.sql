@@ -115,16 +115,16 @@ INSERT INTO `PREFIX_order_detail` (`id_order_detail`, `id_order`, `product_id`, 
 	VALUES (2, 1, 9, 0, 'Écouteurs à isolation sonore Shure SE210', 1, 0, '124.581900', '0.000000', NULL, NULL, NULL, 0, 'TVA 19.6%', '19.60', '0.00', '', 0, '0000-00-00 00:00:00');
 INSERT INTO `PREFIX_order_history` (`id_order_history`, `id_employee`, `id_order`, `id_order_state`, `date_add`) VALUES (1, 0, 1, 1, NOW());
 
-INSERT INTO `PREFIX_manufacturer` (`id_manufacturer`, `name`, `date_add`, `date_upd`) VALUES (1, 'Apple Computer, Inc', NOW(), NOW());
-INSERT INTO `PREFIX_manufacturer` (`id_manufacturer`, `name`, `date_add`, `date_upd`) VALUES(2, 'Shure Incorporated', NOW(), NOW());
+INSERT INTO `PREFIX_manufacturer` (`id_manufacturer`, `name`, `date_add`, `date_upd`, `active`) VALUES (1, 'Apple Computer, Inc', NOW(), NOW(), 1);
+INSERT INTO `PREFIX_manufacturer` (`id_manufacturer`, `name`, `date_add`, `date_upd`, `active`) VALUES(2, 'Shure Incorporated', NOW(), NOW(), 1);
 
 INSERT INTO `PREFIX_address` (`id_address`, `id_country`, `id_state`, `id_customer`, `id_manufacturer`, `id_supplier`, `alias`, `lastname`, `firstname`, `address1`, `postcode`, `city`, `phone`, `date_add`, `date_upd`, `active`, `deleted`)
 	VALUES (1, 21, 5, 0, 1, 0, 'manufacturer', 'JOBS', 'STEVE', '1 Infinite Loop', '95014', 'Cupertino', '(800) 275-2273', NOW(), NOW(), 1, 0);
 INSERT INTO `PREFIX_address` (`id_address`, `id_country`, `id_state`, `id_customer`, `id_manufacturer`, `id_supplier`, `alias`, `company`, `lastname`, `firstname`, `address1`, `address2`, `postcode`, `city`, `phone`, `date_add`, `date_upd`, `active`, `deleted`)
 	VALUES (2, 8, 0, 1, 0, 0, 'Mon adresse', 'My Company', 'DOE', 'John', '16, Main street', '2nd floor', '75000', 'Paris ', '0102030405', NOW(), NOW(), 1, 0);
 
-INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`) VALUES (1, 'AppleStore', NOW(), NOW());
-INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`) VALUES (2, 'Shure Online Store', NOW(), NOW());
+INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`, `active`) VALUES (1, 'AppleStore', NOW(), NOW(), 1);
+INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`, `active`) VALUES (2, 'Shure Online Store', NOW(), NOW(), 1);
 
 INSERT INTO `PREFIX_product` (`id_product`, `indexed`, `id_supplier`, `id_manufacturer`, `id_tax`, `id_category_default`, `id_color_default`, `on_sale`, `ean13`, `ecotax`, `quantity`, `price`, `wholesale_price`, `reduction_price`, `reduction_percent`, `reduction_from`, `reduction_to`, `reference`, `supplier_reference`, `weight`, `out_of_stock`, `quantity_discount`, `customizable`, `uploadable_files`, `text_fields`, `active`, `date_add`, `date_upd`) VALUES
 (1, 1, 1, 1, 1, 2, 2, 0, '0', 0.00, 800, 124.581940, 70.000000, 0.00, 5, NOW(), NOW(), '', '', 0.5, 2, 0, 0, 0, 0, 1, NOW(), NOW()),

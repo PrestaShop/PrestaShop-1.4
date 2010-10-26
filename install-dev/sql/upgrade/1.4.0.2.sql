@@ -604,6 +604,11 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VA
 (2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Recherche', 'recherche'),
 (3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Buscar', 'buscar');
 
+ALTER TABLE `PREFIX_manufacturer` ADD `active` tinyint(1) NOT NULL default 0;
+ALTER TABLE `PREFIX_supplier` ADD `active` tinyint(1) NOT NULL default 0;
+UPDATE `PREFIX_manufacturer` SET `active` = 1;
+UPDATE `PREFIX_supplier` SET `active` = 1;
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

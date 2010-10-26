@@ -735,6 +735,7 @@ CREATE TABLE `PREFIX_manufacturer` (
   `name` varchar(64) NOT NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
+  `active` tinyint(1) NOT NULL default 0,
   PRIMARY KEY  (`id_manufacturer`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -1333,6 +1334,7 @@ CREATE TABLE `PREFIX_supplier` (
   `name` varchar(64) NOT NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
+  `active` tinyint(1) NOT NULL default 0,
   PRIMARY KEY  (`id_supplier`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

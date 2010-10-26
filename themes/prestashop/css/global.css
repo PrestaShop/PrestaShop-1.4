@@ -1294,6 +1294,8 @@ ul.shop_info li {
 .customization_block_input { vertical-align: inherit }
 img.customization_delete_icon { margin: 2px }
 li.customizationUploadLine {
+	text-align: right;
+	margin-right: 40px;
 	clear: left;
 	padding: 4px;
 	display: block

@@ -68,12 +68,19 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 include(dirname(__FILE__).'/../../header.php');
 
 $orders = LoyaltyModule::getAllByIdCustomer(intval($cookie->id_customer), intval($cookie->id_lang));
+$displayorders = LoyaltyModule::getAllByIdCustomer(intval($cookie->id_customer), intval($cookie->id_lang), false, true, (intval(Tools::getValue('n')) > 0 ? intval(Tools::getValue('n')) : 10), (intval(Tools::getValue('p')) > 0 ? intval(Tools::getValue('p')) : 1));
 $smarty->assign(array(
 	'orders' => $orders,
+	'displayorders' => $displayorders,
+	'pagination_link' => __PS_BASE_URI__.'modules/loyalty/loyalty-program.php',
 	'totalPoints' => $customerPoints,
 	'voucher' => LoyaltyModule::getVoucherValue($customerPoints, intval($cookie->id_currency)),
 	'validation_id' => LoyaltyStateModule::getValidationId(),
-	'transformation_allowed' => $customerPoints > 0
+	'transformation_allowed' => $customerPoints > 0,
+	'page' => (intval(Tools::getValue('p')) > 0 ? intval(Tools::getValue('p')) : 1),
+	'nbpagination' => (intval(Tools::getValue('n') > 0) ? intval(Tools::getValue('n')) : 10),
+	'nArray' => array(10, 20, 50),
+	'max_page' => floor(sizeof($orders) / (intval(Tools::getValue('n') > 0) ? intval(Tools::getValue('n')) : 10))
 ));
 
 /* Discounts */

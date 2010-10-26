@@ -142,7 +142,7 @@ class LoyaltyModule extends ObjectModel
 		return intval($return['points']);
 	}
 
-	static public function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate=false)
+	static public function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate = false, $pagination = false, $nb = 10, $page = 1)
 	{
 		$query = '
 		SELECT f.id_order AS id, f.date_add AS date, (o.total_paid - o.total_shipping) AS total_without_shipping, f.points AS points, f.id_loyalty AS id_loyalty, f.id_loyalty_state AS id_loyalty_state, fsl.name AS state
@@ -151,8 +151,9 @@ class LoyaltyModule extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (f.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.intval($id_lang).')
 		WHERE f.id_customer = '.intval($id_customer);
 		if ($onlyValidate === true)
-			$query.= ' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getValidationId());
-		$query .= ' GROUP BY f.id_loyalty';
+			$query .= ' AND f.id_loyalty_state = '.intval(LoyaltyStateModule::getValidationId());
+		$query .= ' GROUP BY f.id_loyalty '.
+		($pagination ? 'LIMIT '.((intval($page) - 1) * intval($nb)).', '.intval($nb) : '');
 
 		return Db::getInstance()->ExecuteS($query);
 	}

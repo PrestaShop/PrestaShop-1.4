@@ -61,7 +61,8 @@ class AdminManufacturers extends AdminTab
 			'name' => array('title' => $this->l('Name'), 'width' => 200),
 			'logo' => array('title' => $this->l('Logo'), 'align' => 'center', 'image' => 'm', 'orderby' => false, 'search' => false),
 			'addresses' => array('title' => $this->l('Addresses'), 'align' => 'right', 'tmpTableFilter' => true, 'width' => 20),
-			'products' => array('title' => $this->l('Products'), 'align' => 'right', 'tmpTableFilter' => true, 'width' => 20)
+			'products' => array('title' => $this->l('Products'), 'align' => 'right', 'tmpTableFilter' => true, 'width' => 20),
+			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 		);
 
 		$countries = Country::getCountries(intval($cookie->id_lang));
@@ -219,6 +220,13 @@ class AdminManufacturers extends AdminTab
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_keywords');
 		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Enable:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($manufacturer, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($manufacturer, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

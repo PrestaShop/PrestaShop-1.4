@@ -17,7 +17,7 @@ class		Manufacturer extends ObjectModel
 	public 		$id;
 	
 	/** @var integer manufacturer ID */
-	public $id_manufacturer;	
+	public		$id_manufacturer;	
 	
 	/** @var string Name */
 	public 		$name;
@@ -48,6 +48,9 @@ class		Manufacturer extends ObjectModel
 
 	/** @var string Meta description */
 	public 		$meta_description;
+	
+	/** @var boolean active */
+	public		$active;
 	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
@@ -85,6 +88,7 @@ class		Manufacturer extends ObjectModel
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
+		$fields['active'] = intval($this->active);
 		return $fields;
 	}
 	
@@ -162,7 +166,7 @@ class		Manufacturer extends ObjectModel
 	  * @param boolean $getNbProducts [optional] return products numbers for each
 	  * @return array Manufacturers
 	  */
-	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false, $all_group = false)
+	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_group = false)
 	{
 		if (!$all_group)
 			global $cookie;
@@ -171,7 +175,8 @@ class		Manufacturer extends ObjectModel
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$sql = 'SELECT m.*, ml.`description`';
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')';
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')
+		'.($active ? 'WHERE m.`active` = 1' : '');
 		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if ($manufacturers === false)
@@ -222,7 +227,8 @@ class		Manufacturer extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'manufacturer`
-		WHERE `id_manufacturer` = '.intval($id_manufacturer));
+		WHERE `id_manufacturer` = '.intval($id_manufacturer).'
+		AND `active` = 1');
 		if (isset($result['name']))
 			return $result['name'];
 		return false;

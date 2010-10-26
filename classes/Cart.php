@@ -1219,8 +1219,10 @@ class		Cart extends ObjectModel
 	public function addTextFieldToProduct($id_product, $index, $textValue)
 	{
 		global $cookie;
-
-		$cookie->{'textFields_'.intval($id_product).'_'.intval($index)} = pSQL($textValue);
+		$textValue = str_replace(array("\n", "\r"), '', nl2br($textValue));
+		$textValue = str_replace('\\', '\\\\', $textValue);
+		$textValue = str_replace('\'', '\\\'', $textValue);		
+		$cookie->{'textFields_'.intval($id_product).'_'.intval($index)} = $textValue;
 		return true;
 	}
 

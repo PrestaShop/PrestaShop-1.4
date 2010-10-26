@@ -34,7 +34,8 @@ class AdminSuppliers extends AdminTab
 			'id_supplier' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 			'name' => array('title' => $this->l('Name'), 'width' => 120),
 			'logo' => array('title' => $this->l('Logo'), 'align' => 'center', 'image' => 'su', 'orderby' => false, 'search' => false),
-			'products' => array('title' => $this->l('Number of products'), 'align' => 'right', 'filter_type' => 'int', 'tmpTableFilter' => true)
+			'products' => array('title' => $this->l('Number of products'), 'align' => 'right', 'filter_type' => 'int', 'tmpTableFilter' => true),
+			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 		);
 	
 		parent::__construct();
@@ -172,6 +173,13 @@ class AdminSuppliers extends AdminTab
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'smeta_keywords');
 		echo '		<div class="clear"></div>
+				</div>
+				<label>'.$this->l('Enable:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($supplier, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($supplier, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

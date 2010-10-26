@@ -43,6 +43,9 @@ class		Supplier extends ObjectModel
 	/** @var string Meta description */
 	public 		$meta_description;
 	
+	/** @var boolean active */
+	public		$active;
+	
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
@@ -80,7 +83,8 @@ class		Supplier extends ObjectModel
 			$fields['id_supplier'] = intval($this->id);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
-		$fields['date_upd'] = pSQL($this->date_upd); 
+		$fields['date_upd'] = pSQL($this->date_upd);
+		$fields['active'] = intval($this->active);
 		return $fields;
 	}
 	
@@ -95,7 +99,7 @@ class		Supplier extends ObjectModel
 	  *
 	  * @return array Suppliers
 	  */
-	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = false, $p = false, $n = false, $all_groups = false)
+	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_groups = false)
 	{
 		if (!$all_groups)
 			global $cookie;
@@ -104,7 +108,8 @@ class		Supplier extends ObjectModel
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$query = 'SELECT s.*, sl.`description`';
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
-		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')';
+		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')
+		'.($active ? ' WHERE s.`active` = 1 ' : '');
 		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
 		$suppliers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 		if ($suppliers === false)

@@ -29,7 +29,7 @@
 			</tr>
 		</tfoot>
 		<tbody>
-		{foreach from=$orders item='order'}
+		{foreach from=$displayorders item='order'}
 			<tr class="alternate_item">
 				<td class="history_link bold">{l s='#' mod='loyalty'}{$order.id|string_format:"%06d"}</td>
 				<td class="history_date">{dateFormat date=$order.date full=1}</td>
@@ -44,6 +44,59 @@
 		<p class="warning">{l s='You have not placed any orders.'}</p>
 	{/if}
 </div>
+<div id="pagination" class="pagination">
+	{if $nbpagination < $orders|@count}
+		<ul class="pagination">
+		{if $page != 1}
+			{assign var='p_previous' value=$page-1}
+			<li id="pagination_previous"><a href="{$pagination_link}?p={$p_previous}&n={$nbpagination}">&laquo;&nbsp;{l s='Previous'}</a></li>
+		{else}
+			<li id="pagination_previous" class="disabled"><span>&laquo;&nbsp;{l s='Previous'}</span></li>
+		{/if}
+		{if $page > 2}
+			<li><a href="{$pagination_link}?p=1&n={$nbpagination}">1</a></li>
+			{if $page > 3}
+				<li class="truncate">...</li>
+			{/if}
+		{/if}
+		{section name=pagination start=$page-1 loop=$page+2 step=1}
+			{if $page == $smarty.section.pagination.index}
+				<li class="current"><span>{$page|escape:'htmlall':'UTF-8'}</span></li>
+			{elseif $smarty.section.pagination.index > 0 && $orders|@count+$nbpagination > ($smarty.section.pagination.index)*($nbpagination)}
+				<li><a href="{$pagination_link}?p={$smarty.section.pagination.index}&n={$nbpagination}">{$smarty.section.pagination.index|escape:'htmlall':'UTF-8'}</a></li>
+			{/if}
+		{/section}
+		{if $max_page-$page > 1}
+			{if $max_page-$page > 2}
+				<li class="truncate">...</li>
+			{/if}
+			<li><a href="{$pagination_link}?p={$max_page}&n={$nbpagination}">{$max_page}</a></li>
+		{/if}
+		{if $orders|@count > $page * $nbpagination}
+			{assign var='p_next' value=$page+1}
+			<li id="pagination_next"><a href="{$pagination_link}?p={$p_next}&n={$nbpagination}">{l s='Next'}&nbsp;&raquo;</a></li>
+		{else}
+			<li id="pagination_next" class="disabled"><span>{l s='Next'}&nbsp;&raquo;</span></li>
+		{/if}
+		</ul>
+	{/if}
+	{if $orders|@count > 10}
+		<form action="{$pagination_link}" method="get" class="pagination">
+			<p>
+				<input type="submit" class="button_mini" value="{l s='OK'}" />
+				<label for="nb_item">{l s='items:'}</label>
+				<select name="n" id="nb_item">
+				{foreach from=$nArray item=nValue}
+					{if $nValue <= $orders|@count}
+						<option value="{$nValue|escape:'htmlall':'UTF-8'}" {if $nbpagination == $nValue}selected="selected"{/if}>{$nValue|escape:'htmlall':'UTF-8'}</option>
+					{/if}
+				{/foreach}
+				</select>
+				<input type="hidden" name="p" value="1" />
+			</p>
+		</form>
+	{/if}
+	</div>
 
 <br />{l s='Vouchers generated here are usable in the following categories : ' mod='loyalty'}
 {if $categories}{$categories}{else}{l s='All' mod='loyalty'}{/if}

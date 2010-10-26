@@ -443,7 +443,7 @@ var ajaxCart = {
 					$(this.datas).each(function(){
 						if (this['index'] == 0)
 						{
-							content += this.truncatedValue;
+							content += this.truncatedValue.replace(/<br \/>/g, ' ');
 							done = 1;
 							return false;
 						}
@@ -455,7 +455,6 @@ var ajaxCart = {
 			if (!done)
 				content += customizationIdMessage + customizationId;
 			if (!hasAlreadyCustomizations) content += '</li>';
-
 			// Field cleaning
 			if (customizationId)
 			{

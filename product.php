@@ -141,6 +141,8 @@ else
 
 		$files = $cookie->getFamily('pictures_'.intval($product->id));
 		$textFields = $cookie->getFamily('textFields_'.intval($product->id));
+		foreach ($textFields as $key => $textField)
+			$textFields[$key] = str_replace('<br />', "\n", $textField);
 		$smarty->assign(array(
 			'pictures' => $files,
 			'textFields' => $textFields));

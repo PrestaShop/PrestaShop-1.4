@@ -16,10 +16,18 @@ $errors = array();
 if ($id = intval(Tools::getValue('id_'.$objectType)))
 {
 	include(dirname(__FILE__).'/product-sort.php');
+	include(dirname(__FILE__).'/header.php');
 	
 	$object = new $className(intval($id), $cookie->id_lang);
-	if (!Validate::isLoadedObject($object))
-		$errors[] = Tools::displayError('object does not exist');
+	if (!Validate::isLoadedObject($object) OR !$object->active)
+	{
+		if ($objectType == 'supplier')
+			$errors[] = Tools::displayError('supplier does not exist');
+		elseif ($objectType == 'manufacturer')
+			$errors[] = Tools::displayError('manufacturer does not exist');
+		else
+			$errors[] = Tools::displayError('object does not exist');
+	}
 	else
 	{
 		/* rewrited url set */
@@ -27,7 +35,6 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 			$rewrited_url = $link->getSupplierLink($object->id, $object->link_rewrite);
 		elseif ($objectType == 'manufacturer')
 			$rewrited_url = $link->getManufacturerLink($object->id, $object->link_rewrite);
-		include(dirname(__FILE__).'/header.php');
 		
 		$nbProducts = $object->getProducts($id, NULL, NULL, NULL, $orderBy, $orderWay, true);
 		include(dirname(__FILE__).'/pagination.php');
@@ -39,7 +46,7 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 	
 	$smarty->assign(array(
 		'errors' => $errors,
-		'path' => Tools::safeOutput($object->name),
+		'path' => ($object->active ? Tools::safeOutput($object->name) : ''),
 		'id_lang' => intval($cookie->id_lang),
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')
 	));

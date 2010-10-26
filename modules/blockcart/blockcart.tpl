@@ -59,7 +59,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 					{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization' name='customizations'}
 						<li name="customization">
 							<div class="deleteCustomizableProduct" id="deleteCustomizableProduct_{$id_customization|intval}_{$product.id_product|intval}_{$product.id_product_attribute|intval}"><a class="ajax_cart_block_remove_link" href="{$link->getPageLink('cart.php')}?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$static_token}"> </a></div>
-							<span class="quantity-formated"><span class="quantity">{$customization.quantity}</span>x</span>{if isset($customization.datas.$CUSTOMIZE_TEXTFIELD.0)}{t text=$customization.datas.$CUSTOMIZE_TEXTFIELD.0.value length='28' encode='true'}
+							<span class="quantity-formated"><span class="quantity">{$customization.quantity}</span>x</span>{if isset($customization.datas.$CUSTOMIZE_TEXTFIELD.0)}{t text=$customization.datas.$CUSTOMIZE_TEXTFIELD.0.value|replace:"<br />":" " length='28' encode='true'}
 							{else}
 							{l s='Customization #' mod='blockcart'}{$id_customization|intval}{l s=':' mod='blockcart'}
 							{/if}

@@ -75,7 +75,7 @@ class AdminProducts extends AdminTab
 		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
 		$object->available_for_order = $object->active ? intval(Tools::isSubmit('available_for_order')) : 1;
 		$object->show_price = $object->active ? ($object->available_for_order ? 1 : intval(Tools::isSubmit('show_price'))) : 1;
-		$object->on_sale = !Tools::isSubmit('on_sale');
+		$object->on_sale = Tools::isSubmit('on_sale');
 	}
 
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
@@ -2725,11 +2725,11 @@ class AdminProducts extends AdminTab
 			// Header
 			$nb_feature = Feature::nbFeatures(intval($cookie->id_lang));
 			echo '
-			<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:600px;">
+			<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:900px;">
 				<tr>
 					<th>'.$this->l('Features').'</td>
-					<th style="width:220px">'.$this->l('Value').'</td>
-					<th style="width:170px">'.$this->l('Customized').'</td>
+					<th style="width:30%">'.$this->l('Value').'</td>
+					<th style="width:40%">'.$this->l('Customized').'</td>
 				</tr>';
 			if (!$nb_feature)
 				echo '<tr><td colspan="3" style="text-align:center;">'.$this->l('No features defined').'</td></tr>';
@@ -2738,7 +2738,7 @@ class AdminProducts extends AdminTab
 			// Listing
 			if ($nb_feature)
 			{
-				echo '<table cellpadding="5" style="width:600px; margin-top:10px">';
+				echo '<table cellpadding="5" style="width:900px; margin-top:10px">';
 				foreach ($feature AS $tab_features)
 				{
 					$current_item = false;
@@ -2749,7 +2749,7 @@ class AdminProducts extends AdminTab
 					echo '
 					<tr>
 						<td>'.$tab_features['name'].'</td>
-						<td style="width:220px">
+						<td style="width:30%">
 							<select id="feature_'.$tab_features['id_feature'].'_value" name="feature_'.$tab_features['id_feature'].'_value"
 								onchange="$(\'.custom_'.$tab_features['id_feature'].'_\').val(\'\');">
 								<option value="0">---&nbsp;</option>';
@@ -2763,14 +2763,13 @@ class AdminProducts extends AdminTab
 					
 					echo '	</select>
 						</td>
-						<td style="width:170px" class="translatable">';
+						<td style="width:40%" class="translatable">';
 					$tab_customs = ($custom ? FeatureValue::getFeatureValueLang($current_item) : array());
 					foreach ($this->_languages as $language)
 						echo '
 							<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-								<input type="text" class="custom_'.$tab_features['id_feature'].'_" name="custom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" size="20"
-									onkeyup="$(\'#feature_'.$tab_features['id_feature'].'_value\').val(0);"
-									value="'.htmlentities(Tools::getValue('custom_'.$tab_features['id_feature'].'_'.$language['id_lang'], FeatureValue::selectLang($tab_customs, $language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+								<textarea class="custom_'.$tab_features['id_feature'].'_" name="custom_'.$tab_features['id_feature'].'_'.$language['id_lang'].'" cols="40" rows="1"
+									onkeyup="$(\'#feature_'.$tab_features['id_feature'].'_value\').val(0);" >'.htmlentities(Tools::getValue('custom_'.$tab_features['id_feature'].'_'.$language['id_lang'], FeatureValue::selectLang($tab_customs, $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 							</div>';
 					echo '
 						</td>
