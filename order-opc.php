@@ -154,6 +154,29 @@ if ($cart->nbProducts() AND $isLogged)
 						die(true);
 					}
 					break;
+				case 'getCarrierList':
+					$address_delivery = new Address($cart->id_address_delivery);
+					if ($cookie->id_customer)
+					{
+						$customer = new Customer(intval($cookie->id_customer));
+						$groups = $customer->getGroups();
+					}
+					else
+						$groups = array(1);
+					if (!Address::isCountryActiveById(intval($cart->id_address_delivery)))
+						$errors[] = Tools::displayError('this address is not in a valid area');
+					elseif (!Validate::isLoadedObject($address_delivery) OR $address_delivery->deleted)
+						$errors[] = Tools::displayError('this address is not valid');
+					else
+					{
+						$cart->id_carrier = 0;
+						$cart->update();
+						$result = array('carriers' => getCarriers($address_delivery->id_country, $groups));
+						die (Tools::jsonEncode($result));
+					}
+					if (sizeof($errors))
+						die('{\'hasError\' : true, errors : [\''.implode('\',\'', $errors).'\']}');
+					break;
 				case 'getPaymentModule':
 					if ($cart->OrderExists())
 						die('<p class="warning">'.Tools::displayError('Error: this order is already validated').'</p>');
@@ -274,6 +297,8 @@ if ($cart->nbProducts() AND $isLogged)
 	}
 	
 }
+elseif (Tools::isSubmit('ajax'))
+	exit;
 
 // SHOPPING CART
 $summary = $cart->getSummaryDetails();

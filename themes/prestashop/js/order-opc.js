@@ -1,3 +1,55 @@
+function updateCarrierList(carriers)
+{
+	/* contains all carrier available for this address */
+	if (carriers.length == 0)
+	{
+		$('input[name=id_carrier]:checked').attr('checked', false);
+		$('#noCarrierWarning').show();
+		$('#extra_carrier').hide();
+		$('#recyclable_block').hide();
+		$('table#carrierTable:visible').hide();
+	}
+	else
+	{
+		var html = '';
+		for (i=0;i<carriers.length; i++)
+		{
+			var itemType = '';
+			
+			if (i == 0)
+				itemType = 'first_item ';
+			else if (i == carriers.length-1)
+				itemType = 'last_item ';
+			if (i % 2)
+				itemType = itemType + 'alternate_item';
+			else
+				itemType = itemType + 'item';
+			
+			var name = carriers[i].name;
+			if (carriers[i].img != '')
+				name = '<img src="'+carriers[i].img+'" alt="" />';
+				
+			html = html + 
+			'<tr class="'+itemType+'">'+
+				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'" onclick="updateCarrierSelectionAndGift();" /></td>'+
+				'<td class="carrier_name"><label for="id_carrier'+carriers[i].id_carrier+'">'+name+'</label></td>'+
+				'<td class="carrier_infos">'+carriers[i].delay+'</td>'+
+				'<td class="carrier_price"><span class="price">'+formatCurrency(carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
+			if (taxEnabled && displayPrice == 0)
+				html = html + ' ' + txtWithTax;
+			else
+				html = html + ' ' + txtWithoutTax;
+			html = html + '</td>'+
+			'</tr>';
+		}
+		$('#noCarrierWarning:visible').hide();
+		$('#extra_carrier:hidden').show();
+		$('table#carrierTable tbody').html(html);
+		$('table#carrierTable:hidden').show();
+		$('#recyclable_block:hidden').show();
+	}
+}
+
 function updateAddressesStatus()
 {
 	var nameAddress_delivery = $('select#id_address_delivery option:selected').html();
@@ -67,6 +119,35 @@ function closeAccordion()
 	$('.first_next_button').slideDown('fast');
 }
 
+function getCarrierListAndUpdate()
+{
+	$.ajax({
+        type: 'POST',
+        url: baseDir + 'order-opc.php',
+        async: true,
+        cache: false,
+        dataType : "json",
+        data: 'ajax=true&method=getCarrierList&token=' + static_token,
+        success: function(jsonData)
+        {
+				if (jsonData.hasError)
+				{
+					var errors = '';
+					for(error in jsonData.errors)
+						//IE6 bug fix
+						if(error != 'indexOf')
+							errors += jsonData.errors[error] + "\n";
+					alert(errors);
+				}
+				else
+					updateCarrierList(jsonData.carriers);
+        		updateCarrierStatus();
+			}
+	});
+	
+	resetPaymentModuleList();
+}
+
 function updateAddressesAndCarriersList()
 {
 	var idAddress_delivery = $('select#id_address_delivery').val();
@@ -92,59 +173,11 @@ function updateAddressesAndCarriersList()
 				}
 				else
 				{
-					/* contains all carrier available for this address */
-					if (jsonData.carriers.length == 0)
-					{
-						$('input[name=id_carrier]:checked').attr('checked', false);
-						$('#noCarrierWarning').show();
-						$('#extra_carrier').hide();
-						$('#recyclable_block').hide();
-						$('table#carrierTable:visible').hide();
-					}
-					else
-					{
-						var html = '';
-						for (i=0;i<jsonData.carriers.length; i++)
-						{
-							var itemType = '';
-							
-							if (i == 0)
-								itemType = 'first_item ';
-							else if (i == jsonData.carriers.length-1)
-								itemType = 'last_item ';
-							if (i % 2)
-								itemType = itemType + 'alternate_item';
-							else
-								itemType = itemType + 'item';
-							console.log(jsonData.carriers);
-							
-							var name = jsonData.carriers[i].name;
-							if (jsonData.carriers[i].img != '')
-								name = '<img src="'+jsonData.carriers[i].img+'" alt="" />';
-								
-							html = html + 
-							'<tr class="'+itemType+'">'+
-								'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+jsonData.carriers[i].id_carrier+'" id="id_carrier'+jsonData.carriers[i].id_carrier+'" onclick="updateCarrierSelectionAndGift();" /></td>'+
-    							'<td class="carrier_name"><label for="id_carrier'+jsonData.carriers[i].id_carrier+'">'+name+'</label></td>'+
-    							'<td class="carrier_infos">'+jsonData.carriers[i].delay+'</td>'+
-    							'<td class="carrier_price"><span class="price">'+formatCurrency(jsonData.carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
-    						if (taxEnabled && displayPrice == 0)
-    							html = html + ' ' + txtWithTax;
-    						else
-    							html = html + ' ' + txtWithoutTax;
-    						html = html + '</td>'+
-    						'</tr>';
-						}
-						$('#noCarrierWarning:visible').hide();
-						$('#extra_carrier:hidden').show();
-						$('table#carrierTable tbody').html(html);
-						$('table#carrierTable:hidden').show();
-						$('#recyclable_block:hidden').show();
-					}
+					updateCarrierList(jsonData.carriers);
 					updateCartSummary(jsonData.summary);
 					updateAddressesStatus();
-					updateCarrierStatus();
 				}
+           		updateCarrierStatus();
 			},
            error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
 	});
