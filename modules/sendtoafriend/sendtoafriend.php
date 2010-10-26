@@ -9,7 +9,7 @@ class sendToAFriend extends Module
  	{
  	 	$this->name = 'sendtoafriend';
  	 	$this->version = '1.1';
- 	 	$this->tab = 'Products';
+ 	 	$this->tab = 'front_office_features';
 		
 		parent::__construct();
 		

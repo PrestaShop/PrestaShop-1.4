@@ -18,7 +18,7 @@ class MailAlerts extends Module
 	public function __construct()
 	{
 		$this->name = 'mailalerts';
-		$this->tab = 'Tools';
+		$this->tab = 'administration';
 		$this->version = '2.2';
 
 		parent::__construct();

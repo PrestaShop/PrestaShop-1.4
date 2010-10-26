@@ -11,7 +11,7 @@ class Reverso extends Module
   function __construct()
    {
        $this->name = 'reverso';
-       $this->tab = 'Tools';
+       $this->tab = 'front_office_features';
        $this->version = '1.0';
 	   // Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');

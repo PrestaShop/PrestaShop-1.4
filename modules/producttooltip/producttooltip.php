@@ -8,7 +8,7 @@ class ProductToolTip extends Module
 	public function __construct()
 	{
 		$this->name = 'producttooltip';
-		$this->tab = 'Products';
+		$this->tab = 'front_office_features';
 		$this->version = '1.0';
 
 		parent::__construct();

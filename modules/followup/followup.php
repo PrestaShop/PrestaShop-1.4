@@ -8,7 +8,7 @@ class Followup extends Module
 	function __construct()
 	{
 		$this->name = 'followup';
-		$this->tab = 'Tools';
+		$this->tab = 'advertising_marketing';
 		$this->version = '1.0';
 
 		$this->confKeys = array(

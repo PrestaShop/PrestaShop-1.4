@@ -5,7 +5,7 @@ class iAdvize extends Module
 	function __construct()
 	{
 		$this->name = 'iadvize';
-		$this->tab = 'Customers';
+		$this->tab = 'front_office_features';
 		$this->version = '1.0';
 		$this->displayName = 'iAdvize';
 		

@@ -40,7 +40,7 @@ class Tm4b extends Module
 		$this->name = 'tm4b';
 		$this->displayName = 'SMS Tm4b';
 		$this->description = $this->l('Sends an SMS for each new order');
-		$this->tab = 'Tools';
+		$this->tab = 'administration';
 		$this->version = 1.1;
 		
 		parent::__construct();

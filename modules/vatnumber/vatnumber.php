@@ -5,7 +5,7 @@ class VatNumber extends Module
 	public function __construct()
 	{
 		$this->name = 'vatnumber';
-		$this->tab = 'Tools';
+		$this->tab = 'billing_invoicing';
 		$this->version = 1.0;
 		
 		parent::__construct();
@@ -31,7 +31,7 @@ class VatNumber extends Module
 			'DK'=>'DK',	//Denmark
 			'FI'=>'FI',	//Finland
 			'FR'=>'FR',	//France
-			'FX'=>'FR',	//France métropolitaine
+			'FX'=>'FR',	//France mï¿½tropolitaine
 			'DE'=>'DE',	//Germany
 			'GR'=>'EL',	//Greece
 			'IE'=>'IE',	//Irland

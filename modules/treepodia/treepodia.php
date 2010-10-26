@@ -18,7 +18,7 @@ class Treepodia extends Module
 	function __construct()
 	{
 	 	$this->name = 'treepodia';
-	 	$this->tab = 'Videos';
+	 	$this->tab = 'front_office_features';
 	 	$this->version = '1.0';
 		$this->displayName = 'Treepodia';
 		

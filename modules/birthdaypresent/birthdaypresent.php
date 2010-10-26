@@ -18,7 +18,7 @@ class BirthdayPresent extends Module
     function __construct()
     {
         $this->name = 'birthdaypresent';
-        $this->tab = 'Tools';
+        $this->tab = 'pricing_promotion';
         $this->version = 1.0;
 		
 		parent::__construct();

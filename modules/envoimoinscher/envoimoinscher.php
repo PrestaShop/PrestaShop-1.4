@@ -12,7 +12,7 @@ class Envoimoinscher extends Module
 		global $cookie;
 		
 		$this->name = 'envoimoinscher';
-		$this->tab = 'Carrier';
+		$this->tab = 'billing_invoicing';
 		$this->version = '1.0';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;

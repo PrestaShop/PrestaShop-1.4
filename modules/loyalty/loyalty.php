@@ -8,7 +8,7 @@ class Loyalty extends Module
 	function __construct()
 	{
 		$this->name = 'loyalty';
-		$this->tab = 'Tools';
+		$this->tab = 'pricing_promotion';
 		$this->version = '1.7';
 
 		parent::__construct();

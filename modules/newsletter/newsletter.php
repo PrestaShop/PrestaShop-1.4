@@ -14,7 +14,7 @@ class Newsletter extends Module
 		global $cookie;
 
         $this->name = 'newsletter';
-        $this->tab = 'Tools';
+        $this->tab = 'administration';
         $this->version = 2.0;
 
         parent::__construct();

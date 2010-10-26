@@ -10,7 +10,7 @@ class CrossSelling extends Module
 	public function __construct()
 	{
 		$this->name = 'crossselling';
-		$this->tab = 'Products';
+		$this->tab = 'front_office_features';
 		$this->version = 0.1;
 
 		parent::__construct();

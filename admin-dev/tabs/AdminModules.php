@@ -38,16 +38,16 @@ class AdminModules extends AdminTab
 		 'search_filter'=> $this->l('Search & Filter'), 'seo'=> $this->l('SEO'), 'shipping_logistics'=> $this->l('Shipping & Logistics'), 'slideshows'=> $this->l('Slideshows'),
 		 'smart_shopping'=> $this->l('Smart shopping'), 'social_networks'=> $this->l('Social Networks'), 'others'=> $this->l('Others Modules'));
 		 
-		 $this->listNativeModules = array('bankwire', 'birthdaypresent', 'blockadvertising', 'blockbestsellers', 'blockcart', 'blockcategories', 'blockcurrencies', 'blockinfos',
+		 $this->listNativeModules = array('bankwire', 'birthdaypresent', 'blockadvertising', 'blockbestsellers', 'blockcart', 'blockcategories', 'blockcms', 'blockcurrencies', 'blockinfos',
 		  'blocklanguages', 'blocklink', 'blockmanufacturer', 'blockmyaccount', 'blocknewproducts', 'blocknewsletter', 'blockpaymentlogo', 'blockpermanentlinks', 'blockrss', 'blocksearch',
-		  'blockspecials', 'blocksupplier', 'blocktags', 'blockuserinfo', 'blockvariouslinks', 'blockviewed', 'blockwishlist', 'canonicalurl', 'cashondelivery', 'cheque', 'crossselling',
+		  'blockspecials', 'blocksupplier', 'blocktags', 'blockuserinfo', 'blockvariouslinks', 'blockviewed', 'blockwishlist', 'canonicalurl', 'cashondelivery', 'cheque', 'crossselling', 'dateofdelivery',
 		  'editorial', 'feeder', 'followup', 'gadsense', 'ganalytics', 'gcheckout', 'graphartichow', 'graphgooglechart', 'graphvisifire', 'graphxmlswfcharts', 'gridextjs', 'gsitemap', 'homefeatured',
-		  'loyalty', 'mailalerts', 'newsletter', 'pagesnotfound', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram', 'reverso', 'sekeywords', 'sendtoafriend',
+		  'loyalty', 'mailalerts', 'newsletter', 'pagesnotfound', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram', 'sekeywords', 'sendtoafriend',
 		  'statsbestcategories', 'statsbestcustomers', 'statsbestproducts', 'statsbestsuppliers', 'statsbestvouchers', 'statscarrier', 'statscatalog', 'statscheckup', 'statsdata', 'statsequipment',
 		  'statsgeolocation', 'statshome', 'statslive', 'statsnewsletter', 'statsorigin', 'statspersonalinfos', 'statsproduct', 'statsregistrations', 'statssales', 'statssearch', 'statsstock',
 		  'statsvisits', 'tm4b', 'trackingfront', 'vatnumber', 'watermark');
 		 
-		 $this->listPartnerModules = array('dejala', 'envoimoinscher', 'hipay', 'moneybookers', 'ogone', 'paypal', 'paypalapi', 'socolissimo', 'treepodia', 'trustedshops');
+		 $this->listPartnerModules = array('dejala', 'envoimoinscher', 'hipay', 'moneybookers', 'ogone', 'paypal', 'paypalapi', 'socolissimo', 'treepodia', 'trustedshops', 'secuvad', 'reverso', 'iadvize');
 	}
 	
 	public function postProcess()

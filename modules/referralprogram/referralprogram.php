@@ -8,7 +8,7 @@ class ReferralProgram extends Module
 	public function __construct()
 	{
 		$this->name = 'referralprogram';
-		$this->tab = 'Tools';
+		$this->tab = 'advertising_marketing';
 		$this->version = '1.4';
 
 		parent::__construct();
