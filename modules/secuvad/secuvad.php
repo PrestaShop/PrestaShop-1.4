@@ -15,7 +15,7 @@ class Secuvad extends Module
 	{
   		$this->name = 'secuvad';
   		$this->tab = 'Payment';
-  		$this->version = '2.0';
+  		$this->version = '2.0.1';
   		$this->currencies = NULL;
   		$this->currencies_mode = NULL;
 		
@@ -220,7 +220,7 @@ class Secuvad extends Module
 		if ($this->check_assoc() != '')
 			return '
 			<br />
-			<fieldset>
+			<fieldset style="width:400px;">
 				<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad').'</legend>
 				<p style="color:red;font-weight:bold;">'.$this->l('In order to use Secuvad protection, please configure your module.').'</p>
 			</fieldset>
@@ -240,7 +240,7 @@ class Secuvad extends Module
 			
 			return '
 			<br />
-			<fieldset>
+			<fieldset style="width:400px;">
 				<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad').'</legend>
 				<p>
 					<b>'.$this->l('Secuvad status:').'</b> '.$this->_getSecuvadStatusHtml(intval($secuvad_order['secuvad_status'])).'
