@@ -20,6 +20,8 @@ $errors = array();
 /* Class FreeOrder to use PaymentModule (abstract class, cannot be instancied) */
 class	FreeOrder extends PaymentModule {}
 
+global $currency;
+
 /* If some products have disappear */
 if (!$cart->checkQuantities())
 {
@@ -141,10 +143,16 @@ if ($cart->nbProducts())
 				'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 				'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 				'lastProductAdded' => $cart->getLastProduct(),
-				'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang))
+				'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang)),
+				'currencySign' => $currency->sign,
+				'currencyRate' => $currency->conversion_rate,
+				'currencyFormat' => $currency->format,
+				'currencyBlank' => $currency->blank
 				));
 			Tools::safePostVars();
 			Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
+			Tools::addJS(_THEME_JS_DIR_.'tools.js');
+			Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 			require_once(dirname(__FILE__).'/header.php');
 			$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 			break;

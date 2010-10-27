@@ -13,52 +13,6 @@ if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 0)
 /* Class FreeOrder to use PaymentModule (abstract class, cannot be instancied) */
 class	FreeOrder extends PaymentModule {}
 
-/* functions */
-function getCarriers($id_country, $groups = NULL)
-{
-	global $cookie, $cart;
-	
-	$id_zone = Country::getIdZone(intval($id_country));
-	if (is_array($groups) AND !empty($groups))
-		$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $groups);
-	else
-		$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), array(1));
-	$resultsArray = array();
-	foreach ($result AS $k => $row)
-	{
-		$carrier = new Carrier(intval($row['id_carrier']));
-		// Get only carriers that are compliant with shipping method
-		if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
-		OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
-		{
-			unset($result[$k]);
-			continue ;
-		}
-		
-		// If out-of-range behavior carrier is set on "Desactivate carrier"
-		if ($row['range_behavior'])
-		{
-			// Get id zone
-	        if (!$id_zone)
-				$id_zone = intval($defaultCountry->id_zone);
-	
-			// Get only carriers that have a range compatible with cart
-			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
-			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
-				{
-					unset($result[$k]);
-					continue ;
-				}
-		}
-		$row['name'] = (strval($row['name']) != '0' ? $row['name'] : Configuration::get('PS_SHOP_NAME'));
-		$row['price'] = $cart->getOrderShippingCost(intval($row['id_carrier']));
-		$row['price_tax_exc'] = $cart->getOrderShippingCost(intval($row['id_carrier']), false);
-		$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.intval($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.intval($row['id_carrier']).'.jpg' : '';
-		$resultsArray[] = $row;
-	}
-	return $resultsArray;
-}
-
 /* Disable some cache related bugs on the cart/order */
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
@@ -171,7 +125,7 @@ if ($cart->nbProducts() AND $isLogged)
 					{
 						$cart->id_carrier = 0;
 						$cart->update();
-						$result = array('carriers' => getCarriers($address_delivery->id_country, $groups));
+						$result = array('carriers' => Carrier::getCarriersOpc(intval($address_delivery->id_country), $groups));
 						die (Tools::jsonEncode($result));
 					}
 					if (sizeof($errors))
@@ -252,7 +206,7 @@ if ($cart->nbProducts() AND $isLogged)
 						$groups = array(1);
 					$address = new Address(intval($cart->id_address_delivery));
 					$result = array(
-						'carriers' => getCarriers($address->id_country, $groups),
+						'carriers' => Carrier::getCarriersOpc(intval($address_delivery->id_country), $groups),
 						'summary' => $cart->getSummaryDetails()
 					);
 					die(Tools::jsonEncode($result));
@@ -384,7 +338,8 @@ if (intval($cookie->id_customer) AND Customer::customerIdExistsStatic(intval($co
 		$smarty->assign('oldMessage', $oldMessage['message']);
 	
 	// CARRIER
-	$carriers = getCarriers(intval($deliveryAddress->id_country), $customer->getGroups());
+	
+	$carriers = Carrier::getCarriersOpc(intval($deliveryAddress->id_country), $customer->getGroups());
 	
 	// Wrapping fees
 	$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
@@ -432,6 +387,7 @@ Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
 Tools::addJS(_THEME_JS_DIR_.'tools.js');
 Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 Tools::addJS(_THEME_JS_DIR_.'order-opc.js');
+Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
 include(dirname(__FILE__).'/header.php');
 $smarty->display(_PS_THEME_DIR_.'errors.tpl');

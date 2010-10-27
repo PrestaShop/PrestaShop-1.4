@@ -354,6 +354,51 @@ class		Carrier extends ObjectModel
 		return $carriers;
 	}
 
+	public static function getCarriersOpc($id_country, $groups = NULL)
+	{
+		global $cookie, $cart;
+		
+		$id_zone = Country::getIdZone(intval($id_country));
+		if (is_array($groups) AND !empty($groups))
+			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $groups);
+		else
+			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), array(1));
+		$resultsArray = array();
+		foreach ($result AS $k => $row)
+		{
+			$carrier = new Carrier(intval($row['id_carrier']));
+			// Get only carriers that are compliant with shipping method
+			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+			{
+				unset($result[$k]);
+				continue ;
+			}
+			
+			// If out-of-range behavior carrier is set on "Desactivate carrier"
+			if ($row['range_behavior'])
+			{
+				// Get id zone
+		        if (!$id_zone)
+					$id_zone = intval($defaultCountry->id_zone);
+		
+				// Get only carriers that have a range compatible with cart
+				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
+				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
+					{
+						unset($result[$k]);
+						continue ;
+					}
+			}
+			$row['name'] = (strval($row['name']) != '0' ? $row['name'] : Configuration::get('PS_SHOP_NAME'));
+			$row['price'] = $cart->getOrderShippingCost(intval($row['id_carrier']));
+			$row['price_tax_exc'] = $cart->getOrderShippingCost(intval($row['id_carrier']), false);
+			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.intval($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.intval($row['id_carrier']).'.jpg' : '';
+			$resultsArray[] = $row;
+		}
+		return $resultsArray;
+	}
+	
 	public static function checkCarrierZone($id_carrier, $id_zone)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('

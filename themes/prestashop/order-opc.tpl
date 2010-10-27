@@ -21,8 +21,11 @@
 	//]]>
 </script>
 {include file=$tpl_dir./thickbox.tpl}
+{capture name=path}{l s='Your shopping cart'}{/capture}
+{include file=$tpl_dir./breadcrumb.tpl}
 {if $productNumber}
-	<h2>{l s='Your shopping cart'} <span style="float:right;margin-right:10px;">{l s='contains'} {$productNumber} {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
+	<h2 id="cart_title">{l s='Your shopping cart'} <span id="summary_products_label" style="float:right;margin-right:10px;">{l s='contains'}<span id="summary_products_quantity">{$productNumber}</span> {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
+	<p style="display:none" id="emptyCartWarning" class="warning">Votre panier est vide</p>
 	<div id="order-detail-content" class="table_block">
 		<table id="cart_summary" class="std">
 			<thead>
@@ -166,10 +169,10 @@
 								{/foreach}
 							</td>
 							<td class="cart_quantity">
-								<a class="cart_quantity_delete" href="{$base_dir_ssl}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" title="{l s='Delete this customization'}" class="icon" /></a>
-								<p>{$customization.quantity}</p>
-								<a class="cart_quantity_up" href="{$base_dir_ssl}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}" title="{l s='Add'}"><img src="{$img_dir}icon/quantity_up.gif" alt="{l s='Add'}" /></a><br />
-								<a class="cart_quantity_down" href="{$base_dir_ssl}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;op=down&amp;token={$token_cart}" title="{l s='Substract'}"><img src="{$img_dir}icon/quantity_down.gif" alt="{l s='Substract'}" /></a>
+								<a class="cart_quantity_delete" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" title="{l s='Delete this customization'}" class="icon" /></a>
+								<input size="2" type="text" value="{$customization.quantity}"  name="quantity_{$product.id_product}_{$product.id_product_attribute}"/>
+								<a class="cart_quantity_up" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}" title="{l s='Add'}"><img src="{$img_dir}icon/quantity_up.gif" alt="{l s='Add'}" /></a><br />
+								<a class="cart_quantity_down" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;op=down&amp;token={$token_cart}" title="{l s='Substract'}"><img src="{$img_dir}icon/quantity_down.gif" alt="{l s='Substract'}" /></a>
 							</td>
 							<td class="cart_total"></td>
 						</tr>

@@ -275,7 +275,7 @@ class		Cart extends ObjectModel
 		'.($id_product ? ' AND cp.`id_product` = '.intval($id_product) : '').'
 		AND p.`id_product` IS NOT NULL
 		GROUP BY unique_id
-		ORDER BY cp.date_add ASC';
+		ORDER BY cp.date_add ASC';		
 		$result = Db::getInstance()->ExecuteS($sql);
 
 		// Reset the cache before the following return, or else an empty cart will add dozens of queries
@@ -399,7 +399,6 @@ class		Cart extends ObjectModel
 		$product = new Product(intval($id_product));
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
-
 		self::$_nbProducts = NULL;
 		if (intval($quantity) <= 0)
 			return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
@@ -436,7 +435,7 @@ class		Cart extends ObjectModel
 				}
 				else
 					return false;
-
+				
 				/* Delete product from cart */
 				if ($newQty <= 0)
 					return $this->deleteProduct(intval($id_product), intval($id_product_attribute), intval($id_customization));
@@ -471,6 +470,8 @@ class		Cart extends ObjectModel
 					return false;
 			}
 		}
+		// refresh cache of self::_products
+		$this->_products = $this->getProducts(true);
 		$this->update(true);
 		return $this->_updateCustomizationQuantity(intval($quantity), intval($id_customization), intval($id_product), intval($id_product_attribute), $operator);
 	}
@@ -500,6 +501,9 @@ class		Cart extends ObjectModel
 				return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.intval($id_customization));
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` '.($operator == 'up' ? '+ ' : '- ').intval($quantity).' WHERE `id_customization` = '.intval($id_customization));
 		}
+		// refresh cache of self::_products
+		$this->_products = $this->getProducts(true);
+		$this->update(true);
 		return true;
 	}
 
@@ -585,11 +589,16 @@ class		Cart extends ObjectModel
 		/* If the product still possesses customization it does not have to be deleted */
 		if (Db::getInstance()->NumRows() AND intval($result['quantity']))
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product` SET `quantity` = '.intval($result['quantity']).' WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
-
-		/* Update cart */
-		$this->update(true);
+		
 		/* Product deletion */
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').' AND `id_cart` = '.intval($this->id));
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.intval($id_product).($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : '').' AND `id_cart` = '.intval($this->id)))
+		{
+			// refresh cache of self::_products
+			$this->_products = $this->getProducts(true);
+			/* Update cart */
+			return $this->update(true);
+		}
+		return false;
 	}
 
 	/**

@@ -230,48 +230,6 @@ function updateCarrierSelectionAndGift()
 	resetPaymentModuleList();
 }
 
-function updateCartSummary(json)
-{
-	// update products prices + discount
-	var i;
-	for (i=0;i<json.products.length;i++)
-	{
-		key_for_blockcart = json.products[i].id_product+'_'+json.products[i].id_product_attribute;
-		if (json.products[i].id_product_attribute == 0)
-			key_for_blockcart = json.products[i].id_product;
-		$('#cart_block_product_'+key_for_blockcart+' span.price').html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
-		$('#product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price_wt, currencyFormat, currencySign, currencyBlank));
-		$('#total_product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
-	}
-	for (i=0;i<json.discounts.length;i++)
-	{
-		$('#discount_price_'+json.discounts[i].id_discount).html(formatCurrency(json.discounts[i].value_real * -1, currencyFormat, currencySign, currencyBlank));
-		$('#bloc_cart_voucher_'+json.discounts[i].id_discount+' td.price').html(formatCurrency(json.discounts[i].value_real * -1, currencyFormat, currencySign, currencyBlank));
-	}
-	// Block cart
-	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
-	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
-	$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
-
-	// cart summary
-	$('#total_product').html(formatCurrency(json.total_products_wt, currencyFormat, currencySign, currencyBlank));
-	$('#total_price').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
-	$('#total_price_without_tax').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
-	$('#total_tax').html(formatCurrency(json.total_tax, currencyFormat, currencySign, currencyBlank));
-	$('#total_discount').html(formatCurrency(json.total_discounts, currencyFormat, currencySign, currencyBlank));
-	$('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
-	if (json.total_wrapping > 0)
-	{
-		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
-		$('#total_wrapping').parent().show();
-	}
-	else
-	{
-		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
-		$('#total_wrapping').parent().hide();
-	}
-}
-
 $(function() {
 	// update status
 	updateAddressesStatus();

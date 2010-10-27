@@ -21,13 +21,12 @@ if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 
 // Update the cart ONLY if cookies are available, in order to avoid ghost carts created by bots
 if (($add OR Tools::getIsset('update') OR $delete) AND isset($cookie->date_add))
-{
+{	
 	//get the values
  	$idProduct = intval(Tools::getValue('id_product', NULL));
 	$idProductAttribute = intval(Tools::getValue('id_product_attribute', Tools::getValue('ipa')));
 	$customizationId = intval(Tools::getValue('id_customization', 0));
 	$qty = intval(abs(Tools::getValue('qty', 1)));
-
 	if ($qty == 0)
 		$errors[] = Tools::displayError('null quantity');
 	elseif (!$idProduct)
@@ -80,14 +79,20 @@ if (($add OR Tools::getIsset('update') OR $delete) AND isset($cookie->date_add))
 					if (!sizeof($errors))
 					{
 						$updateQuantity = $cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
+
 						if ($updateQuantity < 0)
 							$errors[] = Tools::displayError('you need add').' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum')
 								.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 								Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
 						elseif (!$updateQuantity)
-							$errors[] = Tools::displayError('you already have the maximum quantity available for this product')
+						{
+							if (Tools::getValue('ajax') == 'true')
+								die('{\'hasError\' : true, errors : [\''.Tools::displayError('you already have the maximum quantity available for this product').'\']}');
+							else
+								$errors[] = Tools::displayError('you already have the maximum quantity available for this product')
 								.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 								Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
+						}
 					}
 				}
 				elseif ($delete)
@@ -133,7 +138,27 @@ if (($add OR Tools::getIsset('update') OR $delete) AND isset($cookie->date_add))
 
 //if cart.php is called by ajax
 if (Tools::getValue('ajax') == 'true')
-	require_once(_PS_MODULE_DIR_.'/blockcart/blockcart-ajax.php');
+{
+	if (Tools::getIsset('summary'))
+	{
+		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+		{
+			if ($cookie->id_customer)
+			{
+				$customer = new Customer(intval($cookie->id_customer));
+				$groups = $customer->getGroups();
+			}
+			else
+				$groups = array(1);
+			$address_delivery = new Address(intval($cart->id_address_delivery));
+			$result = array('carriers' => Carrier::getCarriersOpc($address_delivery->id_country, $groups));
+		}
+		$result['summary'] = $cart->getSummaryDetails();
+		die(Tools::jsonEncode($result));
+	}
+	else
+		require_once(_PS_MODULE_DIR_.'/blockcart/blockcart-ajax.php');
+}
 else
 {
 	if (sizeof($errors))
