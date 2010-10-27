@@ -252,7 +252,6 @@ function updateDisplay()
 			attribut_price_tmp /= tax;
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 
-<<<<<<< .working
 		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
 		{
 			var priceReduct = 0;
@@ -261,11 +260,6 @@ function updateDisplay()
 		else
 		{
 			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price;
-=======
-		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
-
-		var priceReduct = (reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
->>>>>>> .merge-right.r3052
 			var newUnityPrice = (parseFloat(productUnityPrice) + parseFloat(selectedCombination['unity_price'])) * currencyRate * ((100 - parseFloat(reduction_percent)) / 100);
 		}
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;

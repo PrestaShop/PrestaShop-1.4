@@ -11,11 +11,7 @@
 			<div class="right_block">
 				{if $product.on_sale && $product.show_price}
 					<span class="on_sale">{l s='On sale!'}</span>
-<<<<<<< .working
 				{elseif ($product.reduction_price != 0 || $product.reduction_percent != 0) && ($product.reduction_from == $product.reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product.reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product.reduction_from)) && $product.show_price}
-=======
-				{elseif $product.reduction}
->>>>>>> .merge-right.r3052
 					<span class="discount">{l s='Price lowered!'}</span>
 				{/if}
 				{if $product.show_price OR $product.available_for_order}

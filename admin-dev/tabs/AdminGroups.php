@@ -46,13 +46,11 @@ class AdminGroups extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex;
 		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$groupReductions = $obj->id ? GroupReduction::getGroupReductions($obj->id, intval($cookie->id_lang)) : array();
-		$categories = Category::getSimpleCategories(intval($cookie->id_lang));
-
+		
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -74,34 +72,8 @@ class AdminGroups extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="5" name="reduction" value="'.($reduction ? $reduction : '0').'" /> '.$this->l('%').'
 					<p>'.$this->l('Will automatically apply this value as a reduction on ALL shop\'s products for this group\'s members').'</p>
-				</div>';
-		if ($obj->id)
-		{
-			echo '
-				<label>'.$this->l('Current category reduction:').'</label>
-				<div class="margin-form">';
-			if ($groupReductions)
-			{
-				echo '<table>
-						<tr>
-							<th>'.$this->l('Category').'</th>
-							<th>'.$this->l('Value').'</th>
-							<th>'.$this->l('Action').'</th>
-						</tr>';
-				foreach ($groupReductions AS $groupReduction)
-						echo '
-						<tr>
-							<td>'.Tools::htmlentitiesUTF8($groupReduction['category_name']).'</td>
-							<td><input type="hidden" name="gr_id_group_reduction[]" value="'.intval($groupReduction['id_group_reduction']).'" /><input type="text" name="gr_reduction[]" value="'.($groupReduction['reduction'] * 100).'" /></td>
-							<td><a href="'.$currentIndex.'&deleteGroupReduction&id_group_reduction='.intval($groupReduction['id_group_reduction']).'&id_group='.intval($obj->id).'&token='.$this->token.'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
-						</tr>';
-				echo '</table>';
-			}
-			else
-				echo $this->l('No reduction');
-			echo '	</div>';
-		}
-		echo '
+				</div>
+				<div class="clear">&nbsp;</div>
 				<label>'.$this->l('Price display method:').' </label>
 				<div class="margin-form">
 					<select name="price_display_method">
@@ -117,31 +89,6 @@ class AdminGroups extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>';
-		if ($obj->id)
-		{
-			echo '
-		<form action="'.$currentIndex.'&update'.$this->table.'&id_group='.$obj->id.'&token='.$this->token.'" method="post" class="width3">
-			<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />
-			<fieldset><legend><img src="../img/admin/tab-groups.gif" />'.$this->l('New group reduction').'</legend>
-				<label>'.$this->l('Category:').' </label>
-				<div class="margin-form">
-					<select name="id_category">';
-			foreach ($categories AS $category)
-				echo '	<option value="'.intval($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
-			echo '	</select><sup>*</sup>
-				</div>
-				<label>'.$this->l('Reduction (in %):').' </label>
-				<div class="margin-form">
-					<input type="text" name="reduction" value="" /><sup>*</sup>
-				</div>
-				<div class="clear">&nbsp;</div>
-				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Add   ').'" name="submitAddGroupReduction" class="button" />
-				</div>
-				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
-			</fieldset>
-		</form>';
-		}
 	}
 
 	public function viewgroup()
@@ -219,75 +166,13 @@ class AdminGroups extends AdminTab
 		global $currentIndex;
 		
 		$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
-
-		if (Tools::isSubmit('deleteGroupReduction'))
-		{
-			if ($this->tabAccess['delete'] === '1')
-			{
-				if (!$id_group_reduction = Tools::getValue('id_group_reduction'))
-					$this->_errors[] = Tools::displayError('Invalid group reduction ID');
-				else
-				{
-					$groupReduction = new GroupReduction(intval($id_group_reduction));
-					if (!$groupReduction->delete())
-						$this->_errors[] = Tools::displayError('An error occured while deleting the group reduction');
-					else
-						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.intval(Tools::getValue('id_group')).'&conf=1&token='.$token);
-				}
-			}
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
-		}
-		if (Tools::isSubmit('submitAddGroupReduction'))
-		{
-			if ($this->tabAccess['add'] === '1')
-			{
-				$obj = $this->loadObject();
-				$groupReduction = new GroupReduction();
-				if (!$id_category = Tools::getValue('id_category') OR !Validate::isUnsignedId($id_category))
-					$this->_errors[] = Tools::displayError('Wrong category ID');
-				elseif (!$reduction = Tools::getValue('reduction') OR !Validate::isPrice($reduction))
-					$this->_errors[] = Tools::displayError('Invalid reduction (must be a percentage)');
-				else
-				{
-					$groupReduction->id_category = intval($id_category);
-					$groupReduction->id_group = intval($obj->id);
-					$groupReduction->reduction = floatval($reduction) / 100;
-					if (!$groupReduction->add())
-						$this->_errors[] = Tools::displayError('An error occured while adding a category group reduction');
-					else
-						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.intval(Tools::getValue('id_group')).'&conf=3&token='.$this->token);
-				}
-			}
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
-		}
+		
 		if (Tools::isSubmit('submitAddgroup'))
 		{
-			if ($this->tabAccess['add'] === '1')
-			{
-				if (Tools::getValue('reduction') > 100 OR Tools::getValue('reduction') < 0)
-					$this->_errors[] = Tools::displayError('reduction value is incorrect');
-				else
-				{
-					$id_group_reductions = Tools::getValue('gr_id_group_reduction');
-					$reductions = Tools::getValue('gr_reduction');
-					foreach ($id_group_reductions AS $key => $id_group_reduction)
-						if (!Validate::isUnsignedId($id_group_reductions[$key]) OR !Validate::isPrice($reductions[$key]))
-							$this->_errors[] = Tools::displayError();
-						else
-						{
-							$groupReduction = new GroupReduction(intval($id_group_reductions[$key]));
-							$groupReduction->reduction = $reductions[$key] / 100;
-							if (!$groupReduction->update())
-								$this->errors[] = Tools::displayError('Impossible to update group reductions');
-						}
-					if (!sizeof($this->_errors))
-						parent::postProcess();
-				}
-			}
+			if (Tools::getValue('reduction') > 100 OR Tools::getValue('reduction') < 0)
+				$this->_errors[] = Tools::displayError('reduction value is incorrect');
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				return parent::postProcess();
 		}
 		elseif (isset($_GET['delete'.$this->table]))
 		{

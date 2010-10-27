@@ -105,7 +105,6 @@ define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE',4);
 define('ALL_CARRIERS',5);
 
 /* SQL Replication management */
-<<<<<<< .working
 define('_PS_USE_SQL_SLAVE_', 0);
 
 /* PS Technical configuration */
@@ -114,7 +113,3 @@ define('_PS_ADMIN_PROFILE_', 1);
 /* Stock Movement */
 define('_STOCK_MOVEMENT_ORDER_REASON_', 1);
 define('_STOCK_MOVEMENT_MISSING_REASON_', 2);
-=======
-define('_PS_USE_SQL_SLAVE_', 0);
-
-define('_PS_DEFAULT_CUSTOMER_GROUP_', 1);>>>>>>> .merge-right.r3052

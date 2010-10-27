@@ -96,14 +96,6 @@ abstract class PaymentModule extends Module
 			$order->id_currency = ($currency_special ? intval($currency_special) : intval($cart->id_currency));
 			$order->id_lang = intval($cart->id_lang);
 			$order->id_cart = intval($cart->id);
-
-
-/*$product = array('id_product' => 11, 'id_product_attribute' => NULL);
-$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), &$debug);
-p($debug);
-d('Price3: '.$price);*/
-
-
 			$customer = new Customer(intval($order->id_customer));
 			$order->secure_key = pSQL($customer->secure_key);
 			$order->payment = Tools::substr($paymentMethod, 0, 32);
@@ -197,16 +189,33 @@ d('Price3: '.$price);*/
 					else
 						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
+					$currentDate = date('Y-m-d H:m:i');
+					if ($product['reduction_from'] != $product['reduction_to'] AND ($currentDate > $product['reduction_to'] OR $currentDate < $product['reduction_from']))
+					{
+						$reduction_percent = 0.00;
+						$reduction_amount = 0.00;
+					}
+					else
+					{
+						$reduction_percent = floatval($product['reduction_percent']);
+						$reduction_amount = Tools::ps_round(floatval($product['reduction_price']) / (1 + floatval($tax) / 100), 6);
+					}
+
+					// Quantity discount
+					$reduc = 0.0;
+					if ($product['cart_quantity'] > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($product['id_product'], $product['cart_quantity'])))
+						$reduc = QuantityDiscount::getValue($price_wt, $qtyD->id_discount_type, $qtyD->value, new Currency(intval($order->id_currency)));
+
 					$query .= '('.intval($order->id).',
 						'.intval($product['id_product']).',
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.intval($product['cart_quantity']).',
 						'.$quantityInStock.',
-						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice)).',
-						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
-						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
-						'.floatval(Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, true, true, $product['cart_quantity'], false, $order->id_customer, $order->id_cart)).',
+						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}))).',
+						'.floatval($reduction_percent).',
+						'.floatval($reduction_amount).',
+						'.floatval($reduc).',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
 						'.(empty($product['supplier_reference']) ? 'NULL' : '\''.pSQL($product['supplier_reference']).'\'').',
@@ -214,7 +223,7 @@ d('Price3: '.$price);*/
 						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
 						'.floatval($tax).',
 						'.floatval($product['ecotax']).',
-						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',
+						'.(int)QuantityDiscount::getDiscountFromQuantity(intval($product['id_product']), intval($product['cart_quantity'])).',
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 

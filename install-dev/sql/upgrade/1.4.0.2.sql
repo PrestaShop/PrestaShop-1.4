@@ -94,75 +94,6 @@ CREATE TABLE `PREFIX_payment_cc` (
 	KEY `id_order` (`id_order`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-<<<<<<< .working
-=======
-CREATE TABLE `PREFIX_specific_price` (
-	`id_specific_price` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`id_product` INT UNSIGNED NOT NULL,
-	`id_shop` TINYINT UNSIGNED NOT NULL,
-	`id_currency` INT UNSIGNED NOT NULL,
-	`id_country` INT UNSIGNED NOT NULL,
-	`id_group` INT UNSIGNED NOT NULL,
-	`priority` SMALLINT UNSIGNED NOT NULL,
-	`price` DECIMAL(20, 6) NOT NULL,
-	`from_quantity` SMALLINT UNSIGNED NOT NULL,
-	`reduction` DECIMAL(20, 6) NOT NULL,
-	`reduction_type` ENUM('amount', 'percentage') NOT NULL,
-	`from` DATETIME NOT NULL,
-	`to` DATETIME NOT NULL,
-	PRIMARY KEY(`id_specific_price`),
-	KEY (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `from_quantity`, `from`, `to`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
->>>>>>> .merge-right.r3052
-INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_group`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`)
-	(	SELECT dq.`id_product`, 1, 1, 1, 0.00, dq.`quantity`, IF(dq.`id_discount_type` = 2, (dq.`value` / (1 + t.`rate` / 100)), dq.`value` / 100), IF (dq.`id_discount_type` = 2, 'amount', 'percentage'), '0000-00-00 00:00:00', '0000-00-00 00:00:00'
-		FROM `PREFIX_discount_quantity` dq
-		INNER JOIN `PREFIX_product` p ON (p.`id_product` = dq.`id_product`)
-		INNER JOIN `PREFIX_tax` t ON (t.`id_tax` = p.`id_tax`)
-	);
-DROP TABLE `PREFIX_discount_quantity`;
-
-INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_group`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) (
-	SELECT
-		p.`id_product`,
-		1,
-		1,
-		1,
-		0.00,
-		1,
-		IF(p.`reduction_price` > 0, (p.`reduction_price` / (1 + t.`rate` / 100)), p.`reduction_percent` / 100),
-		IF(p.`reduction_price` > 0, 'amount', 'percentage'),
-		IF (p.`reduction_from` = p.`reduction_to`, '0000-00-00 00:00:00', p.`reduction_from`),
-		IF (p.`reduction_from` = p.`reduction_to`, '0000-00-00 00:00:00', p.`reduction_to`)
-	FROM `PREFIX_product` p
-	INNER JOIN `PREFIX_tax` t ON (t.`id_tax` = p.`id_tax`)
-	WHERE p.`reduction_price` OR p.`reduction_percent`
-);
-ALTER TABLE `PREFIX_product`
-	DROP `reduction_price`,
-	DROP `reduction_percent`,
-	DROP `reduction_from`,
-	DROP `reduction_to`;
-
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW());
-
-CREATE TABLE `PREFIX_group_reduction` (
-	`id_group_reduction` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-	`id_group` INT(10) UNSIGNED NOT NULL,
-	`id_category` INT(10) UNSIGNED NOT NULL,
-	`reduction` DECIMAL(4, 3) NOT NULL,
-	PRIMARY KEY(`id_group_reduction`),
-	UNIQUE KEY(`id_group`, `id_category`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-CREATE TABLE `PREFIX_product_group_reduction_cache` (
-	`id_product` INT UNSIGNED NOT NULL,
-	`id_group` INT UNSIGNED NOT NULL,
-	`reduction` DECIMAL(4, 3) NOT NULL,
-	PRIMARY KEY(`id_product`, `id_group`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 ALTER TABLE `PREFIX_currency` ADD `iso_code_num` varchar(3) NOT NULL default '0' AFTER `iso_code`;
 UPDATE `PREFIX_currency` SET iso_code_num = '978' WHERE iso_code LIKE 'EUR' LIMIT 1;
 UPDATE `PREFIX_currency` SET iso_code_num = '840' WHERE iso_code LIKE 'USD' LIMIT 1;
@@ -552,7 +483,7 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (7,
 INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (21, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
 
 
-ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NULL AFTER `unity_price`;
+ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NULL AFTER `reduction_to`;
 
 ALTER TABLE `PREFIX_currency` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';
 ALTER TABLE `PREFIX_tax` ADD `active` TINYINT(1) NOT NULL DEFAULT '1';

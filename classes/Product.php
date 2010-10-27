@@ -74,6 +74,18 @@ class		Product extends ObjectModel
 	/** @var float Wholesale Price in euros */
 	public 		$wholesale_price = 0;
 
+	/** @var float Reduction price in euros */
+	public 		$reduction_price = 0;
+
+	/** @var float Reduction percentile */
+	public 		$reduction_percent = 0;
+
+	/** @var string Reduction beginning */
+	public		$reduction_from = '1942-01-01';
+
+	/** @var string Reduction end */
+	public		$reduction_to = '1942-01-01';
+
 	/** @var boolean on_sale */
 	public 		$on_sale = false;
 
@@ -158,7 +170,7 @@ class		Product extends ObjectModel
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	private static $_prices = array();
 	private static $_pricesLevel2 = array();
-	private static $_pricesLevel3 = array();
+	private static $_currencies = array();
 	private static $_incat = array();
 
 	/** @var array tables */
@@ -176,6 +188,10 @@ class		Product extends ObjectModel
 		'price' => 'isPrice',
 		'additional_shipping_cost' => 'isPrice',
 		'wholesale_price' => 'isPrice',
+		'reduction_price' => 'isPrice',
+		'reduction_percent' => 'isFloat',
+		'reduction_from' => 'isDate',
+		'reduction_to' => 'isDate',
 		'on_sale' => 'isBool',
 		'ecotax' => 'isPrice',
 		'unity_price' => 'isPrice',
@@ -238,7 +254,6 @@ class		Product extends ObjectModel
 			else
 				$this->tax_rate = floatval($tax->rate);
 			$this->new = $this->isNew();
-			$this->price = Product::getPriceStatic(intval($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
 		}
 		
 		if ($this->id_category_default)
@@ -262,6 +277,10 @@ class		Product extends ObjectModel
 		$fields['price'] = floatval($this->price);
 		$fields['additional_shipping_cost'] = floatval($this->additional_shipping_cost);
 		$fields['wholesale_price'] = floatval($this->wholesale_price);
+		$fields['reduction_price'] = floatval($this->reduction_price);
+		$fields['reduction_percent'] = floatval($this->reduction_percent);
+		$fields['reduction_from'] = pSQL($this->reduction_from);
+		$fields['reduction_to'] = pSQL($this->reduction_to);
 		$fields['on_sale'] = intval($this->on_sale);
 		$fields['ecotax'] = floatval($this->ecotax);
 		$fields['unity'] = pSQL($this->unity);
@@ -473,7 +492,7 @@ class		Product extends ObjectModel
         	!$this->deleteAttributesImpacts() OR
 			!$this->deleteAttachments() OR
 			!$this->deleteCustomization() OR
-			!SpecificPrice::deleteByProductId(intval($this->id)) OR
+			!$this->deleteQuantityDiscounts() OR
 			!$this->deletePack() OR
 			!$this->deleteProductSale() OR
 			!$this->deleteSceneProducts() OR
@@ -970,6 +989,16 @@ class		Product extends ObjectModel
 	}
 	
 	/**
+	* Delete product quantity discounts
+	*
+	* @return array Deletion result
+	*/
+	public function deleteQuantityDiscounts()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_quantity` WHERE `id_product` = '.intval($this->id));
+	}
+	
+	/**
 	* Delete product pack details
 	*
 	* @return array Deletion result
@@ -1200,7 +1229,7 @@ class		Product extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
 			i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
-			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice 
+			(p.`price` * ((100 + (t.`rate`))/100) - IF((DATEDIFF(`reduction_from`, CURDATE()) <= 0 AND DATEDIFF(`reduction_to`, CURDATE()) >=0) OR `reduction_from` = `reduction_to`, IF(`reduction_price` > 0, `reduction_price`, (p.`price` * ((100 + (t.`rate`))/100) * `reduction_percent` / 100)),0)) AS orderprice 
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
@@ -1226,17 +1255,6 @@ class		Product extends ObjectModel
 		return Product::getProductsProperties(intval($id_lang), $result);
 	}
 
-	static private function _getProductIdByDate($beginning, $ending)
-	{
-		global $cookie, $cart;
-
-		$id_group = $cookie->id_customer ? intval(Customer::getDefaultGroupId(intval($cookie->id_customer))) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-		$ids = Address::getCountryAndState($id_address);
-		$id_country = intval($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
-		return SpecificPrice::getProductIdByDate(intval(Shop::getCurrentShop()), intval($cookie->id_currency), $id_country, $id_group, $beginning, $ending);
-	}
-
 	/**
 	* Get a random special
 	*
@@ -1247,17 +1265,18 @@ class		Product extends ObjectModel
 	{
 		global $cookie;
 
-		if (!$beginning)
-			$ids_product = self::_getProductIdByDate($beginning, $ending);
-
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
+		
 		$currentDate = date('Y-m-d H:m:i');
 		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT p.id_product
 		FROM `'._DB_PREFIX_.'product` p
-		WHERE 1
+		WHERE (`reduction_price` > 0 OR `reduction_percent` > 0)
+		'.((!$beginning AND !$ending)
+			? 'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
+			: ($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')
+		).'
 		AND p.`active` = 1
-		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN ('.implode(', ', $ids_product).')' : '').'
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
@@ -1299,7 +1318,7 @@ class		Product extends ObjectModel
 
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
-		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'price';
+		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'myprice';
 		if (empty($orderWay)) $orderWay = 'DESC';
 		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
 			$orderByPrefix = 'p';
@@ -1307,9 +1326,6 @@ class		Product extends ObjectModel
             $orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-		if (!$beginning)
-			$ids_product = self::_getProductIdByDate($beginning, $ending);
-
 		$currentDate = date('Y-m-d H:m:i');
 		if ($count)
 		{
@@ -1318,7 +1334,11 @@ class		Product extends ObjectModel
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE p.`active` = 1 
 			AND p.`show_price` = 1 
-			'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.implode(', ', $ids_product).')' : '').'
+			AND (`reduction_price` > 0 OR `reduction_percent` > 0)
+			'.((!$beginning AND !$ending) ?
+			'	AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
+			:
+				($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
@@ -1329,20 +1349,20 @@ class		Product extends ObjectModel
 			return intval($result['nb']);
 		}
 		$sql = '
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, i.`id_image`, il.`legend`, t.`rate`, (p.`reduction_price` + (p.`reduction_percent` * p.`price`)) AS myprice, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
-		WHERE 1
+		WHERE (`reduction_price` > 0 OR `reduction_percent` > 0)
+		'.((!$beginning AND !$ending) ?
+			'AND (`reduction_from` = `reduction_to` OR (`reduction_from` <= \''.pSQL($currentDate).'\' AND `reduction_to` >= \''.pSQL($currentDate).'\'))'
+		:
+			($beginning ? 'AND `reduction_from` <= \''.pSQL($beginning).'\'' : '').($ending ? 'AND `reduction_to` >= \''.pSQL($ending).'\'' : '')).'
 		AND p.`active` = 1
-<<<<<<< .working
 		AND p.`show_price` = 1 
-=======
-		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.implode(', ', $ids_product).')' : '').'
->>>>>>> .merge-right.r3052
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
@@ -1353,7 +1373,9 @@ class		Product extends ObjectModel
 		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if($orderBy == 'price')
+		{
 			Tools::orderbyPrice($result,$orderWay);
+		}
 		if (!$result)
 			return false;
 		return Product::getProductsProperties($id_lang, $result);
@@ -1405,16 +1427,11 @@ class		Product extends ObjectModel
 
 	/**
 	* Get reduction value for a given product
-	* *****************************************
-	* ** Kept for retro-compatibility issues **
-	* *****************************************
-	* You should use getPriceStatic() instead (with the parameter $only_reduc set to true)
 	*
 	* @param array $result SQL result with reduction informations
 	* @param boolean $wt With taxes or not (optional)
 	* @return float Reduction value in euros
 	*/
-	/*  */
 	public static function getReductionValue($reduction_price, $reduction_percent, $date_from, $date_to, $product_price, $usetax, $taxrate)
 	{
 		// Avoid an error with 1970-01-01
@@ -1457,16 +1474,14 @@ class		Product extends ObjectModel
 	* @param integer $divisor Useful when paying many time without fees (optional)
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL)
 	{
 		global $cookie, $cart;
 
-		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
-			die(Tools::displayError());
-		// Initializations
+		// Get id_customer if exists
 		if (!$id_customer)
-			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : NULL);
-		$id_group = $id_customer ? intval(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
+			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : null);
+
 		if (!is_object($cart))
 		{
 			/*
@@ -1477,68 +1492,70 @@ class		Product extends ObjectModel
 				die(Tools::displayError());
 			$cart = $id_cart ? new Cart(intval($id_cart)) : new Cart(intval($cookie->id_cart));
 		}
-		if (intval($id_cart))
-			$cart_quantity = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-				SELECT SUM(`quantity`)
-				FROM `'._DB_PREFIX_.'cart_product`
-				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($id_cart)
-			);
-		$quantity = ($id_cart AND $cart_quantity) ? $cart_quantity : $quantity;
-		$id_currency = intval(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND intval($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
+
+		if (Validate::isLoadedObject($cart))
+			$id_currency = intval($cart->id_currency);
+		elseif (isset($cookie->id_currency) AND intval($cookie->id_currency))
+			$id_currency = intval($cookie->id_currency);
+		else
+			$id_currency = intval(Configuration::get('PS_CURRENCY_DEFAULT'));
+		
+		if (!isset(self::$_currencies[$id_currency]))
+			self::$_currencies[$id_currency] = Currency::getCurrencyInstance($id_currency);
+		$currency = self::$_currencies[$id_currency];
+
 		if (!$id_address)
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+
+		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
+			die(Tools::displayError());
+
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
-		$ids = Address::getCountryAndState($id_address);
-		$id_country = intval($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
-		$id_shop = intval(Shop::getCurrentShop());
-		// END Initialization
 
-		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.$id_product_attribute.'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
+		// Caching system
+		$cacheId = $id_product.'-'.($usetax?'1':'0').'-'.$id_product_attribute.'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0').'-'.$quantity.'-'.($id_customer ? $id_customer : '0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
+			
+			
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
+		{
+			// Getting price
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT p.`price`, p.`id_tax`, t.`rate`, 
+			SELECT p.`price`, p.`reduction_price`, p.`reduction_percent`, p.`reduction_from`, p.`reduction_to`, p.`id_tax`, t.`rate`, 
 			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.intval($id_product).' AND default_on = 1), 0)').' AS attribute_price
 			FROM `'._DB_PREFIX_.'product` p
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.intval($id_product_attribute) : '').'
 			LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
 			WHERE p.`id_product` = '.intval($id_product));
+		}
 		$result = self::$_pricesLevel2[$cacheId2];
-		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
-
-		if (!isset(self::$_pricesLevel3[$cacheId3]))
-			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice(intval($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
-		$price = floatval((!self::$_pricesLevel3[$cacheId3] OR floatval(self::$_pricesLevel3[$cacheId3]['reduction'])) ? $result['price'] : self::$_pricesLevel3[$cacheId3]['price']);
-		if (!self::$_pricesLevel3[$cacheId3] OR (floatval(self::$_pricesLevel3[$cacheId3]['price'])) AND !self::$_pricesLevel3[$cacheId3]['id_currency'])
-			$price = Tools::convertPrice($price, $id_currency);
-		$specificPriceOutput = self::$_pricesLevel3[$cacheId3];
+		$price = Tools::convertPrice(floatval($price = $result['price']), $currency);
+		
 		// Exclude tax
-		if (!$tax = floatval($forceAssociatedTax ? $result['rate'] : Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address ? intval($id_address) : NULL))))
+		$tax = floatval(Tax::getApplicableTax(intval($result['id_tax']), floatval($result['rate']), ($id_address ? intval($id_address) : NULL)));
+		if ($forceAssociatedTax)
+			$tax = floatval($result['rate']);
+		if (!$tax)
 			$usetax = false;
 		if ($usetax)
 			$price = $price * (1 + ($tax / 100));
 		/* Keep this line */
 		// $price = Tools::ps_round($price, ($only_reduc OR $usereduc) ? 2 : $decimals);
 		// Attribute price
-		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $id_currency);
+		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $currency);
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		$price += $attribute_price;
-<<<<<<< .working
 		$reduc = Tools::convertPrice($result['reduction_price'], $currency);
 		if ($only_reduc OR $usereduc)
 			$reduc = self::getReductionValue($reduc, $result['reduction_percent'], $result['reduction_from'], $result['reduction_to'], Tools::ps_round($price, 2), $usetax, floatval($result['rate']));
 			
 		// Only reduction
-=======
-		$reduc = 0;
-		if (($only_reduc OR $usereduc) AND self::$_pricesLevel3[$cacheId3])
-			$reduc = self::$_pricesLevel3[$cacheId3]['reduction_type'] == 'amount' ? self::$_pricesLevel3[$cacheId3]['reduction'] : ($price * self::$_pricesLevel3[$cacheId3]['reduction']);
->>>>>>> .merge-right.r3052
 		if ($only_reduc)
 			return $reduc;
+
 		// Reduction
 		if ($usereduc)
 		{
@@ -1546,33 +1563,27 @@ class		Product extends ObjectModel
 				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
 		}
+
+		if (intval($id_cart))
+		// Quantity discount
+		{
+			$totalQuantity = intval(Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+				SELECT SUM(`quantity`)
+				FROM `'._DB_PREFIX_.'cart_product`
+				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($id_cart))
+			) + intval($quantity);
+		}
+		if ($quantity > 1 AND ($qtyD = QuantityDiscount::getDiscountFromQuantity($id_product, $quantity)))
+		{
+			$discount_qty_price = QuantityDiscount::getValue($price, $qtyD->id_discount_type, $qtyD->value, $usetax, floatval($result['rate']), $currency);
+			$price -= $discount_qty_price;
+		}
 		// Group reduction
-		if ($reductionFromCategory = floatval(GroupReduction::getValueForProduct($id_product, $id_group)))
-			$price -= $price * $reductionFromCategory;
-		$price *= ((100 - Group::getReduction($id_customer)) / 100);
+		$price *= ((100 - Group::getReduction(((isset($id_customer) AND $id_customer) ? $id_customer : 0))) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
-	}
-
-	static public function isDiscounted($id_product, $quantity = 1)
-	{
-		global $cookie, $cart;
-
-		$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : NULL);
-		$id_group = $id_customer ? intval(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		$cart_quantity = !$cart ? 0 : Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT SUM(`quantity`)
-			FROM `'._DB_PREFIX_.'cart_product`
-			WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($cart->id)
-		);
-		$quantity = $cart_quantity ? $cart_quantity : $quantity;
-		$id_currency = intval(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND intval($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
-		$ids = Address::getCountryAndState(intval($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
-		$id_country = intval($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
-		$id_shop = intval(Shop::getCurrentShop());
-		return (bool)SpecificPrice::getSpecificPrice(intval($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
 	}
 
 	/**
@@ -2105,6 +2116,23 @@ class		Product extends ObjectModel
 		return Db::getInstance()->Execute($query);
 	}
 
+	static public function duplicateQuantityDiscount($id_product_old, $id_product_new)
+	{
+		$return = true;
+
+		$result = Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'discount_quantity`
+		WHERE `id_product` = '.intval($id_product_old));
+		foreach ($result as $row)
+		{
+			$row['id_product'] = intval($id_product_new);
+			unset($row['id_discount_quantity']);
+			$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'discount_quantity', $row, 'INSERT');
+		}
+		return $return;
+	}
+
 	/**
 	* Duplicate features when duplicating a product
 	*
@@ -2179,17 +2207,6 @@ class		Product extends ObjectModel
 		return $customizations;
 	}
 
-	static public function duplicateSpecificPrices($oldProductId, $productId)
-	{
-		foreach (SpecificPrice::getIdsByProductId(intval($oldProductId)) as $data)
-		{
-			$specificPrice = new SpecificPrice(intval($data['id_specific_price']));
-			if (!$specificPrice->duplicate(intval($productId)))
-				return false;
-		}
-		return true;
-	}
-
 	static public function duplicateCustomizationFields($oldProductId, $productId)
 	{
 		if (($customizations = self::_getCustomizationFieldsNLabels($oldProductId)) === false)
@@ -2202,14 +2219,16 @@ class		Product extends ObjectModel
 			$customizationField['id_product'] = intval($productId);
 			$oldCustomizationFieldId = intval($customizationField['id_customization_field']);
 			unset($customizationField['id_customization_field']);
-			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'customization_field', $customizationField, 'INSERT') OR !$customizationFieldId = Db::getInstance()->Insert_ID())
+			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'customization_field', $customizationField, 'INSERT'))
+				return false;
+			if (!$customizationFieldId = Db::getInstance()->Insert_ID())
 				return false;
 			if (isset($customizations['labels']))
 			{
 				$query = 'INSERT INTO `'._DB_PREFIX_.'customization_field_lang` (`id_customization_field`, `id_lang`, `name`) VALUES ';
 				foreach ($customizations['labels'][$oldCustomizationFieldId] AS $customizationLabel)
 					$query .= '('.intval($customizationFieldId).', '.intval($customizationLabel['id_lang']).', \''.pSQL($customizationLabel['name']).'\'), ';
-				$query = rtrim($query, ', ');
+				$query = rtrim($query, ', ');			
 				if (!Db::getInstance()->Execute($query))
 					return false;
 			}
@@ -2289,7 +2308,7 @@ class		Product extends ObjectModel
 		else
 			$row['price'] = Tools::ps_round(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6), 2);
 			
-		$row['reduction'] = Product::getPriceStatic(intval($row['id_product']), (bool)$usetax, intval($row['id_product_attribute']), 6, NULL, true, true, 1, true);
+		$row['reduction'] = self::getReductionValue($row['reduction_price'], $row['reduction_percent'], $row['reduction_from'], $row['reduction_to'], $row['price'], $usetax, floatval($row['rate']));
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		if ($row['id_product_attribute'])
 			$row['quantity'] = Product::getQuantity($row['id_product']);
