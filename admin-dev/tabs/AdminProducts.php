@@ -1746,6 +1746,7 @@ class AdminProducts extends AdminTab
 	</script>
 	<?php
 		echo '
+		<script type="text/javascript" src="../js/price.js"></script>
 		<script type="text/javascript">
 			var newLabel = \''.$this->l('New label').'\';
 			var choose_language = \''.$this->l('Choose language:').'\';
@@ -1982,7 +1983,6 @@ class AdminProducts extends AdminTab
 		echo '			</td>
 					</tr>
 
-					<script type="text/javascript" src="../js/price.js"></script>
 					<script type="text/javascript">
 						calcPriceTI();
 					</script>
