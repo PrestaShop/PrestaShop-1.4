@@ -51,7 +51,7 @@ class AdminCMS extends AdminTab
 				<img src="../img/admin/warn2.png" />
 				'.$this->l('Your CMS page will be saved as draft').'
 				</span>
-				<span style="float:right"><input type="submit" class="button" style="display: block" name="submitAddcmsAndPreview" id="submitAddcmsAndPreview" value="'.$this->l('Save and preview').'" /></span>
+				<span style="float:right"><a href="#" class="button" style="display: block" onclick="submitAddcmsAndPreview()" >'.$this->l('Save and preview').'</a></span>
 				<input type="hidden" name="fakeSubmitAddcmsAndPreview" id="fakeSubmitAddcmsAndPreview" />
 				<br class="clear" />
 				</p>

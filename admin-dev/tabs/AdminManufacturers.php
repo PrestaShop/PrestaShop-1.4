@@ -282,6 +282,10 @@ class AdminManufacturers extends AdminTab
 			if (!$product->hasAttributes())
 			{
 				echo '
+				<div style="float:right;">
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
+				</div>
 				<table border="0" cellpadding="0" cellspacing="0" class="table width3">
 					<tr>
 						<th>'.$product->name.'</th>
@@ -294,6 +298,10 @@ class AdminManufacturers extends AdminTab
 			else
 			{
 				echo '
+				<div style="float:right;">
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
+				</div>
 				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.$product->name.'</a></h3>
 				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
 					<tr>
