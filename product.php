@@ -221,7 +221,6 @@ else
 		$smarty->assign(array(
 			'quantity_discounts' => formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts(intval($product->id), intval(Shop::getCurrentShop()), intval($cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, NULL), floatval($tax_data['rate'])),
 			'product' => $product,
-			'productPrice' => $productPriceWithTax,
 			'homeSize' => Image::getSize('home'),
 			'jqZoomEnabled' => $jqZoomEnabled,
 			'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
