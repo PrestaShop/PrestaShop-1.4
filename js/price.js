@@ -124,13 +124,13 @@ function decimalTruncate(source, decimals)
 
 function showUnitPrices()
 {
-	if ($('#tr_unity_price').css('display') == 'none')
-		$('#tr_unity_price').show();
+	if ($('#tr_unit_price').css('display') == 'none')
+		$('#tr_unit_price').show();
 	else
-		$('#tr_unity_price').hide();
+		$('#tr_unit_price').hide();
 }
 
-function unityPriceWithTax(type)
+function unitPriceWithTax(type)
 {
 	var tax = getTax();
 	var priceWithTax = parseFloat(document.getElementById(type+'_price').value.replace(/,/g, '.'));

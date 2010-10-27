@@ -31,7 +31,7 @@
 					{/if}
 					</div>
 					
-					<p class="comparison_unity_price">{if !empty($product->unity) && $product->unity_price > 0.000000}{convertPrice price=$product->unity_price} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}{else}&nbsp;{/if}</p>
+					<p class="comparison_unit_price">{if !empty($product->unity) && $product->unit_price > 0.000000}{convertPrice price=$product->unit_price} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}{else}&nbsp;{/if}</p>
 					
 				<!-- availability -->
 				<p class="comparison_availability_statut">

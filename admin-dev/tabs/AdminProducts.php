@@ -71,7 +71,7 @@ class AdminProducts extends AdminTab
 		$_POST['weight'] = empty($_POST['weight']) ? '0' : str_replace(',', '.', $_POST['weight']);
 		if ($_POST['reduction_price'] != NULL) $object->reduction_price = str_replace(',', '.', $_POST['reduction_price']);
 		if ($_POST['reduction_percent'] != NULL) $object->reduction_percent = str_replace(',', '.', $_POST['reduction_percent']);
-		if ($_POST['unity_price'] != NULL) $object->unity_price = str_replace(',', '.', $_POST['unity_price']);
+		if ($_POST['unit_price'] != NULL) $object->unit_price = str_replace(',', '.', $_POST['unit_price']);
 		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
 		$object->available_for_order = $object->active ? intval(Tools::isSubmit('available_for_order')) : 1;
 		$object->show_price = $object->active ? ($object->available_for_order ? 1 : intval(Tools::isSubmit('show_price'))) : 1;
@@ -421,7 +421,7 @@ class AdminProducts extends AdminTab
 							else
 								$id_product_attribute = $product->addCombinationEntity(Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'), Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
-								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unity_impact'),
+								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
                                 Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'), 
                                 Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'));
 						}
@@ -1853,7 +1853,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tax:').'</td>
 						<td style="padding-bottom:5px;">
-							<select onChange="javascript:calcPriceTI(); unityPriceWithTax(\'unity\');" name="id_tax" id="id_tax" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
+							<select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax" id="id_tax" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
 								<option value="0"'.(($this->getFieldValue($obj, 'id_tax') == 0) ? ' selected="selected"' : '').'>'.$this->l('No tax').'</option>';
 							foreach ($taxes AS $k => $tax)
 								echo '
@@ -1876,11 +1876,11 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr><td colspan=2><span onclick="showUnitPrices();" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('Units prices').'" title="'.$this->l('Units prices').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to edit the units prices').'</span><br /><br /></td></tr>
-					<tr id="tr_unity_price" style="display:none;">
-						<td class="col-left">'.$this->l('Unity price without tax:').'</td>
+					<tr id="tr_unit_price" style="display:none;">
+						<td class="col-left">'.$this->l('Unit price without tax:').'</td>
 						<td style="padding-bottom:5px;">
-							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unity_price" name="unity_price" type="text" value="'.$this->getFieldValue($obj, 'unity_price').'" onkeyup="unityPriceWithTax(\'unity\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();"/>'.
-							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format == 1 ? ' '.$currency->sign : '').'<span id="unity_price_with_tax">0.00</span>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
+							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.$this->getFieldValue($obj, 'unit_price').'" onkeyup="unitPriceWithTax(\'unit\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();"/>'.
+							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format == 1 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
 							<span style="margin-left:10px">
 						</td>
 					</tr>
@@ -2218,7 +2218,7 @@ class AdminProducts extends AdminTab
             
 		}
 		toggleVirtualProduct(getE(\'is_virtual_good\'));
-		unityPriceWithTax(\'unity\');
+		unitPriceWithTax(\'unit\');
 		$(function() {
 			$.ajax({
 				type: "POST",
@@ -2508,13 +2508,13 @@ class AdminProducts extends AdminTab
 				<input type="text" size="6" name="attribute_weight" id="attribute_weight" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_WEIGHT_UNIT').'</span></td>
 		  </tr>
 		  <tr>
-			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Impact on unity:').'</td>
-			  <td colspan="2" style="padding-bottom:5px;"><select name="attribute_unity_impact" id="attribute_unity_impact" style="width: 140px;" onchange="check_unity_impact();">
+			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Unit Impact :').'</td>
+			  <td colspan="2" style="padding-bottom:5px;"><select name="attribute_unit_impact" id="attribute_unit_impact" style="width: 140px;" onchange="check_unit_impact();">
 			  <option value="0">'.$this->l('None').'</option>
 			  <option value="1">'.$this->l('Increase').'</option>
 			  <option value="-1">'.$this->l('Reduction').'</option>
 			  </select>
-			  <span id="span_unity_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
+			  <span id="span_unit_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
 				<input type="text" size="6" name="attribute_unity" id="attribute_unity" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' / <span id="unity_third">'.$this->getFieldValue($obj, 'unity').'</span>
 			</span></td>
 		  </tr>
@@ -2604,7 +2604,7 @@ class AdminProducts extends AdminTab
 						$combArray[$combinaison['id_product_attribute']]['wholesale_price'] = $combinaison['wholesale_price'];
 						$combArray[$combinaison['id_product_attribute']]['price'] = $combinaison['price'];
 						$combArray[$combinaison['id_product_attribute']]['weight'] = $combinaison['weight'];
-						$combArray[$combinaison['id_product_attribute']]['unity_impact'] = $combinaison['unity_price_impact'];
+						$combArray[$combinaison['id_product_attribute']]['unit_impact'] = $combinaison['unit_price_impact'];
 						$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];
                         $combArray[$combinaison['id_product_attribute']]['supplier_reference'] = $combinaison['supplier_reference'];
                         $combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
@@ -2644,7 +2644,7 @@ class AdminProducts extends AdminTab
 							<td class="center">
 							<a style="cursor: pointer;">
 							<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this combination').'"
-							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['unity_impact'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
+							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['unit_impact'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
 							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\'); updateNewPriceAttribute();" /></a>&nbsp;
 							'.(!$product_attribute['default_on'] ? '<a href="'.$currentIndex.'&defaultProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.intval(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
 							<img src="../img/admin/asterisk.gif" alt="'.$this->l('Make this combination the default one').'" title="'.$this->l('Make this combination the default one').'"></a>' : '').'
