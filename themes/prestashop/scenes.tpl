@@ -24,7 +24,7 @@ $(function () {ldelim}
 						<p class="price">{if $priceDisplay}{convertPrice price=$product.details->getPrice(false, $product.details->getDefaultAttribute($product.id_product))}{else}{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}{/if}</p>
 							{if $product.details->on_sale}
 							<span class="on_sale">{l s='On sale!'}</span>
-						{elseif ($product.details->reduction_price != 0 || $product.details->reduction_percent != 0) && ($product.details->reduction_from == $product.details->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product.details->reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product.details->reduction_from))}
+						{elseif $product.reduction}
 							<span class="discount">{l s='Price lowered!'}</span>
 						{/if}
 					</div>

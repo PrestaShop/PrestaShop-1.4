@@ -80,19 +80,13 @@ class LoyaltyModule extends ObjectModel
 			
 			if (isset($newProduct) AND !empty($newProduct))
 			{
-				$cartProductsNew['reduction_from'] = $newProduct->reduction_from;
-				$cartProductsNew['reduction_to'] = $newProduct->reduction_to;
-				$cartProductsNew['reduction_price'] = $newProduct->reduction_price;
-				$cartProductsNew['reduction_percent'] = $newProduct->reduction_percent;
-				$cartProductsNew['on_sale'] = $newProduct->on_sale;
 				$cartProductsNew['price_wt'] = number_format($newProduct->getPrice(true, intval($newProduct->getIdProductAttributeMostExpsensive())), 2, '.', '');
 				$cartProductsNew['cart_quantity'] = 1;
 				$cartProducts[] = $cartProductsNew;
 			}
 			foreach ($cartProducts AS $product)
 			{
-				if (!intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND ($product['reduction_from'] == $product['reduction_to'] OR 
-				date('Y-m-d H:i:s') <= $product['reduction_to'] AND date('Y-m-d H:i:s') >= $product['reduction_from'] AND ($product['reduction_price'] > 0 OR $product['reduction_percent'] > 0 OR $product['on_sale'])))
+				if (!intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted($product['id_product']))
 					continue;
 				
 				$total += $product['price_wt'] * intval($product['cart_quantity']);

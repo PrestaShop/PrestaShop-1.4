@@ -293,6 +293,8 @@ class Tools
 	{
 		if ($currency === NULL)
 			$currency = Currency::getCurrent();
+		elseif (is_numeric($currency))
+			$currency = Currency::getCurrencyInstance($currency);
 		$c_id = (is_array($currency) ? $currency['id_currency'] : $currency->id);
 		$c_rate = (is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate);
 		if ($c_id != intval(Configuration::get('PS_CURRENCY_DEFAULT')))

@@ -135,6 +135,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (70, 'PS_VOLUME_UNIT', 'cl', NOW(), NOW()),
 (71, 'PS_CIPHER_ALGORITHM', 0, NOW(), NOW()),
 (72, 'PS_ATTRIBUTE_CATEGORY_DISPLAY', 1, NOW(), NOW()),
+<<<<<<< .working
 (73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW()),
 (74, 'PS_CUSTOMER_SERVICE_SIGNATURE', '', NOW(), NOW()),
 (75, 'PS_BLOCK_BESTSELLERS_DISPLAY', 0, NOW(), NOW()),
@@ -143,6 +144,10 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (78, 'PS_STOCK_MVT_REASON_DEFAULT', 3, NOW(), NOW()),
 (79, 'PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW()),
 (80, 'PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW());
+=======
+(73, 'PS_CUSTOMER_SERVICE_FILE_UPLOAD', 1, NOW(), NOW()),
+(74, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW());
+>>>>>>> .merge-right.r3052
 
 
 
