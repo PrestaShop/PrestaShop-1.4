@@ -136,7 +136,7 @@ else
 		$smarty->assign('virtual', ProductDownload::getIdFromIdProduct(intval($product->id)));
 
 		if (!$product->active)
-			$smarty->assign('adminActionDisplay', true);			
+			$smarty->assign('adminActionDisplay', true);
 
 		/* rewrited url set */
 		$rewrited_url = $link->getProductLink($product->id, $product->link_rewrite);
@@ -221,6 +221,7 @@ else
 		$smarty->assign(array(
 			'quantity_discounts' => formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts(intval($product->id), intval(Shop::getCurrentShop()), intval($cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, NULL), floatval($tax_data['rate'])),
 			'product' => $product,
+			'productPrice' => $productPriceWithTax,
 			'homeSize' => Image::getSize('home'),
 			'jqZoomEnabled' => $jqZoomEnabled,
 			'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
@@ -265,13 +266,6 @@ else
 		if (sizeof($productImages))
 			$smarty->assign('images', $productImages);
 
-		// Tax
-		$tax_datas = Db::getInstance()->getRow('
-		SELECT p.`id_tax`, t.`rate`
-		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
-		WHERE p.`id_product` = '.intval($product->id));
-		$tax = floatval(Tax::getApplicableTax(intval($tax_datas['id_tax']), floatval($tax_datas['rate'])));
 		/* Attributes / Groups & colors */
 		if ($product->quantity > 0 OR Product::isAvailableWhenOutOfStock($product->out_of_stock))
 		{	

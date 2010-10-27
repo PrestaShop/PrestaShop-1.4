@@ -1616,21 +1616,7 @@ class		Product extends ObjectModel
 
 	public function getPriceWithoutReduct($notax = false)
 	{
-		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT p.`price`, t.`rate`, t.`id_tax`
-			FROM `'._DB_PREFIX_.$this->table.'` p
-			LEFT JOIN `'._DB_PREFIX_.'tax`t ON (p.`id_tax` = t.`id_tax`)
-			WHERE p.`id_product` = '.intval($this->id));
-		if (!$res)
-			return false;
-			
-		if (!$notax)
-		{
-			$tax = floatval(Tax::getApplicableTax(intval($res['id_tax']), floatval($res['rate'])));
-			if (!Tax::excludeTaxeOption())
-				return (Tools::convertPrice($res['price']) * (1 + $tax / 100));
-		}
-		return (Tools::convertPrice($res['price']));
+		return self::getPriceStatic(intval($this->id), !$notax, NULL, 6, NULL, false, false);
 	}
 
 	/**

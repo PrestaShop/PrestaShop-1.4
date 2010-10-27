@@ -252,7 +252,7 @@ function updateDisplay()
 			attribut_price_tmp /= tax;
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 
-		var priceReduct = (reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
+		var priceReduct = !(reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
 		var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unity_price'])) * currencyRate * (1 - parseFloat(reduction_percent));
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		
