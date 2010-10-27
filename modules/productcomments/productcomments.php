@@ -29,9 +29,10 @@ class ProductComments extends Module
 		if (!file_exists(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
 			return (false);
 		else if (!$sql = file_get_contents(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
-			return (false);
-		$sql = str_replace(array('PREFIX_', 'ENGINE_TYPE'), array(_DB_PREFIX_, _MYSQL_ENGINE_), $sql);
-		$sql = preg_split("/;\s*[\r\n]+/",$sql);
+			return (false);			
+		$sql = str_replace(array('PREFIX_', 'ENGINE_TYPE'), array(_DB_PREFIX_, _MYSQL_ENGINE_), $sql);		
+		$sql = preg_split("/;\s*[\r\n]+/", trim($sql));
+
 		foreach ($sql as $query)
 			if (!Db::getInstance()->Execute(trim($query)))
 				return (false);
