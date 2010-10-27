@@ -528,7 +528,7 @@ class AdminCustomerThreads extends AdminTab
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
 						</tr>';
 					echo '</table>
-					<h3 style="color:green;font-weight:700;margin-top:10px">Commandes valides : '.$countOK.' pour '.Tools::displayPrice($totalOK, new Currency(1)).'</h3>
+					<h3 style="color:green;font-weight:700;margin-top:10px">'.$this->l('Validated Orders:').' '.$countOK.' '.$this->l('for').' '.Tools::displayPrice($totalOK, new Currency(1)).'</h3>
 					</div>';
 				}
 			}
