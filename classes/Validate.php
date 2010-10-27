@@ -871,6 +871,28 @@ class Validate
 	{
 		return is_string($data);
 	}
+
+	/**
+	* Check if the data is a reduction type (amout or percentage)
+	*
+	* @param string $data Data to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isReductionType($data)
+	{
+		return ($data === 'amount' || $data === 'percentage');
+	}
+
+	/**
+	* Check for date format
+	*
+	* @param string $date Date to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isDateFormat($date)
+	{
+		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches);
+	}
 }
 
 ?>

@@ -23,10 +23,8 @@ var allowBuyWhenOutOfStock = {if $allow_oosp == 1}true{else}false{/if};
 var availableNowValue = '{$product->available_now|escape:'quotes':'UTF-8'}';
 var availableLaterValue = '{$product->available_later|escape:'quotes':'UTF-8'}';
 var productPriceWithoutReduction = {$product->getPriceWithoutReduct()|default:'null'};
-var reduction_percent = {if $product->reduction_percent}{$product->reduction_percent}{else}0{/if};
-var reduction_price = {if $product->reduction_percent}0{else}{$product->getPrice(true, $smarty.const.NULL, 2, $smarty.const.NULL, true)}{/if};
-var reduction_from = '{$product->reduction_from}';
-var reduction_to = '{$product->reduction_to}';
+var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{/if};
+var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{/if};
 var group_reduction = '{$group_reduction}';
 var default_eco_tax = {$product->ecotax};
 var currentDate = '{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}';
@@ -206,7 +204,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{if $product->on_sale}
 					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
 					<span class="on_sale">{l s='On sale!'}</span>
-				{elseif ($product->reduction_price != 0 || $product->reduction_percent != 0) && ($product->reduction_from == $product->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product->reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product->reduction_from))}
+				{elseif $product->specificPrice AND $product->specificPrice.reduction}
 					<span class="discount">{l s='Price lowered!'}</span>
 				{/if}
 				<br />
@@ -226,7 +224,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{/if}
 				<br />
 			</p>
-			{if ($product->reduction_price != 0 || $product->reduction_percent != 0) && ($product->reduction_from == $product->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product->reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product->reduction_from))}
+			{if $product->specificPrice AND $product->specificPrice.reduction}
 				<p id="old_price"><span class="bold">
 				{if !$priceDisplay || $priceDisplay == 2}
 					<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct()}</span>
@@ -239,8 +237,8 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				</span>
 				</p>
 			{/if}
-			{if $product->reduction_percent != 0 && ($product->reduction_from == $product->reduction_to OR ($smarty.now|date_format:'%Y-%m-%d %H:%M:%S' <= $product->reduction_to && $smarty.now|date_format:'%Y-%m-%d %H:%M:%S' >= $product->reduction_from))}
-				<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->reduction_percent|floatval}</span> %{l s=')'}</p>
+			{if $product->specificPrice AND $product->specificPrice.reduction_type == 'percentage'}
+				<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->specificPrice.reduction*100}</span> %{l s=')'}</p>
 			{/if}
 			{if $packItems|@count}
 				<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>

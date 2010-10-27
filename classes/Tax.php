@@ -239,4 +239,13 @@ class Tax extends ObjectModel
 			($active == 1 ? ' AND `active` = 1' : ''));
 		return $tax ? intval($tax['id_tax']) : false;
 	}
+
+	static public function getDataByProductId($id_product)
+	{
+		return Db::getInstance()->getRow('
+		SELECT p.`id_tax`, t.`rate`
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
+		WHERE p.`id_product` = '.intval($id_product));
+	}
 }

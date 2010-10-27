@@ -75,6 +75,20 @@ function formTargetFormat()
 	$smarty->assign('customizationFormTarget', $customizationFormTarget);
 }
 
+function formatQuantityDiscounts($specificPrices, $price, $taxRate)
+{
+	foreach ($specificPrices AS $key => &$row)
+	{
+		$row['quantity'] = &$row['from_quantity'];
+		if (!floatval($row['reduction'])) // The price may be directly set
+			$row['real_value'] = $price - (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
+		else
+			$row['real_value'] = $row['reduction_type'] == 'amount' ? $row['reduction'] : ($price * $row['reduction']);
+		$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? intval($specificPrices[$key + 1]['quantity']) : -1);
+	}
+	return $specificPrices;
+}
+
 /* CSS */
 Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'screen');
 
@@ -196,10 +210,16 @@ else
 			$product->quantity = 0;
 
 		$group_reduction = (100 - Group::getReduction(intval($cookie->id_customer))) / 100;
-		
+		$id_customer = (isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : 0;
+		$id_group = $id_customer ? intval(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
+		$id_country = intval($id_customer ? Customer::getCurrentCountry($id_customer) : Configuration::get('PS_COUNTRY_DEFAULT'));
+
+		// Tax
+		$tax_data = Tax::getDataByProductId(intval($product->id));
+		$tax = floatval(Tax::getApplicableTax(intval($tax_data['id_tax']), floatval($tax_data['rate'])));
 		/* /Quantity discount management */
 		$smarty->assign(array(
-			'quantity_discounts' => QuantityDiscount::getQuantityDiscounts(intval($product->id), $product->getPriceWithoutReduct()),
+			'quantity_discounts' => formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts(intval($product->id), intval(Shop::getCurrentShop()), intval($cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, NULL), floatval($tax_data['rate'])),
 			'product' => $product,
 			'homeSize' => Image::getSize('home'),
 			'jqZoomEnabled' => $jqZoomEnabled,

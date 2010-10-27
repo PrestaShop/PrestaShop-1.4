@@ -541,19 +541,6 @@ CREATE TABLE `PREFIX_discount_lang` (
   PRIMARY KEY  (`id_discount`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_discount_quantity` (
-  `id_discount_quantity` int(10) unsigned NOT NULL auto_increment,
-  `id_discount_type` int(10) unsigned NOT NULL,
-  `id_product` int(10) unsigned NOT NULL,
-  `id_product_attribute` int(10) unsigned default NULL,
-  `quantity` int(10) unsigned NOT NULL,
-  `value` decimal(17,2) unsigned NOT NULL,
-  PRIMARY KEY  (`id_discount_quantity`),
-  KEY `id_discount_type` (`id_discount_type`),
-  KEY `id_product` (`id_product`),
-  KEY `id_product_attribute` (`id_product_attribute`)
-) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
 CREATE TABLE `PREFIX_discount_type` (
   `id_discount_type` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id_discount_type`)
@@ -1069,10 +1056,6 @@ CREATE TABLE `PREFIX_product` (
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
   `unity` varchar(255) default NULL,
   `unit_price` decimal(20,6) NOT NULL default '0.000000',
-  `reduction_price` decimal(17,2) default NULL,
-  `reduction_percent` float default NULL,
-  `reduction_from` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
-  `reduction_to` DATETIME NOT NULL DEFAULT '1970-01-01 00:00:00',
   `additional_shipping_cost` decimal(20,2) NOT NULL,  
   `reference` varchar(32) default NULL,
   `supplier_reference` varchar(32) default NULL,
@@ -1310,6 +1293,24 @@ CREATE TABLE `PREFIX_search_word` (
   PRIMARY KEY  (`id_word`),
   UNIQUE KEY `id_lang` (`id_lang`,`word`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_specific_price` (
+	`id_specific_price` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id_product` INT UNSIGNED NOT NULL,
+	`id_shop` TINYINT UNSIGNED NOT NULL,
+	`id_currency` INT UNSIGNED NOT NULL,
+	`id_country` INT UNSIGNED NOT NULL,
+	`id_group` INT UNSIGNED NOT NULL,
+	`priority` SMALLINT UNSIGNED NOT NULL,
+	`price` DECIMAL(20, 6) NOT NULL,
+	`from_quantity` SMALLINT UNSIGNED NOT NULL,
+	`reduction` DECIMAL(20, 6) NOT NULL,
+	`reduction_type` ENUM('amount', 'percentage') NOT NULL,
+	`from` DATETIME NOT NULL,
+	`to` DATETIME NOT NULL,
+	PRIMARY KEY(`id_specific_price`),
+	KEY (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `from_quantity`, `from`, `to`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_state` (
   `id_state` int(10) unsigned NOT NULL auto_increment,

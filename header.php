@@ -5,7 +5,6 @@ header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 require_once(dirname(__FILE__).'/init.php');
 
-
 /* Hooks are volontary out the initialize array (need those variables already assigned) */
 $smarty->assign(array(
 	'HOOK_HEADER' => Module::hookExec('header'),
@@ -16,7 +15,6 @@ $smarty->assign(array(
 	'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
 	'content_only' => intval(Tools::getValue('content_only'))
 ));
-
 
 if (is_writable(_PS_THEME_DIR_.'cache'))
 {

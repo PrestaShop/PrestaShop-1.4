@@ -545,6 +545,23 @@ class		Customer extends ObjectModel
 				return true;
 		return false;
 	}
+
+	static public function getDefaultGroupId($id_customer)
+	{
+		return Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.intval($id_customer));
+	}
+
+	static public function getCurrentCountry($id_customer)
+	{
+		global $cart;
+
+		if (!$cart OR !$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
+			$id_address = intval(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.intval($id_customer).' AND `deleted` = 0 ORDER BY `id`'));
+		else
+			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+		$ids = Address::getCountryAndState($id_address);
+		return intval($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+	}
 }
 
 ?>

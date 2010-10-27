@@ -252,16 +252,8 @@ function updateDisplay()
 			attribut_price_tmp /= tax;
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 
-		if (reduction_from != reduction_to && (currentDate > reduction_to || currentDate < reduction_from))
-		{
-			var priceReduct = 0;
-			var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate;
-		}
-		else
-		{
-			var priceReduct = productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price;
-			var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate * ((100 - parseFloat(reduction_percent)) / 100);
-		}
+		var priceReduct = (reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
+		var newUnitPrice = (parseFloat(productUnityPrice) + parseFloat(selectedCombination['unity_price'])) * currencyRate * (1 - parseFloat(reduction_percent));
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 		
 		if (!noTaxForThisProduct)

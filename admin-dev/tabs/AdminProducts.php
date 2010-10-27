@@ -51,7 +51,7 @@ class AdminProducts extends AdminTab
 		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = a.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = a.`id_tax`)';
 		$this->_filter = 'AND cp.`id_category` = '.intval($this->_category->id);
-		$this->_select = 'cp.`position`, i.`id_image`, (a.`price` * ((100 + (t.`rate`))/100) - IF((DATEDIFF(a.`reduction_from`, CURDATE()) <= 0 AND DATEDIFF(a.`reduction_to`, CURDATE()) >=0) OR a.`reduction_from` = a.`reduction_to`, IF(a.`reduction_price` > 0, a.`reduction_price`, (a.`price` * ((100 + (t.`rate`))/100) * a.`reduction_percent` / 100)),0)) AS price_final';
+		$this->_select = 'cp.`position`, i.`id_image`, (a.`price` * ((100 + (t.`rate`))/100)) AS price_final';
 
 		parent::__construct();
 	}
@@ -69,8 +69,6 @@ class AdminProducts extends AdminTab
 			if (isset($_POST['meta_keywords_'.$language['id_lang']]))
 				$_POST['meta_keywords_'.$language['id_lang']] = preg_replace('/ *,? +,*/', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
 		$_POST['weight'] = empty($_POST['weight']) ? '0' : str_replace(',', '.', $_POST['weight']);
-		if ($_POST['reduction_price'] != NULL) $object->reduction_price = str_replace(',', '.', $_POST['reduction_price']);
-		if ($_POST['reduction_percent'] != NULL) $object->reduction_percent = str_replace(',', '.', $_POST['reduction_percent']);
 		if ($_POST['unit_price'] != NULL) $object->unit_price = str_replace(',', '.', $_POST['unit_price']);
 		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
 		$object->available_for_order = $object->active ? intval(Tools::isSubmit('available_for_order')) : 1;
@@ -176,7 +174,7 @@ class AdminProducts extends AdminTab
 					AND ($combinationImages = Product::duplicateAttributes($id_product_old, $product->id)) !== false
 					AND Product::duplicateAccessories($id_product_old, $product->id)
 					AND Product::duplicateFeatures($id_product_old, $product->id)
-					AND Product::duplicateQuantityDiscount($id_product_old, $product->id)
+					AND Product::duplicateSpecificPrices($id_product_old, $product->id)
 					AND Pack::duplicate($id_product_old, $product->id)
 					AND Product::duplicateCustomizationFields($id_product_old, $product->id)
 					AND Product::duplicateTags($id_product_old, $product->id)
@@ -518,70 +516,127 @@ class AdminProducts extends AdminTab
 						}
 					}
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=4&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('product must be created before adding features');
 			}
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
-
-		/* Product quantity discount management */
-		elseif (Tools::isSubmit('submitQuantityDiscount'))
+		/* Product specific prices management */
+		elseif (Tools::isSubmit('submitPricesModification'))
 		{
 			$_POST['tabs'] = 5;
-			if ($this->tabAccess['add'] === '1')
+			if ($this->tabAccess['edit'] === '1')
 			{
-				if (Validate::isLoadedObject($product = new Product(intval(Tools::getValue('id_product')))))
-				{
-					if (!($id_discount_type = intval(Tools::getValue('id_discount_type'))))
-						$this->_errors[] = Tools::displayError('discount type not selected');
-					elseif (!($quantity_discount = intval(Tools::getValue('quantity_discount'))) OR $quantity_discount <= 1)
-						$this->_errors[] = Tools::displayError('quantity is required and must be superior of 1');
-					elseif (!($value_discount = floatval(Tools::getValue('value_discount'))))
-						$this->_errors[] = Tools::displayError('value is required');
-					elseif ($value_discount > 100 AND $id_discount_type == 1)
-						$this->_errors[] = Tools::displayError('value is incorrect');
-					else
+				$id_specific_prices = Tools::getValue('spm_id_specific_price');
+				$id_shops = Tools::getValue('spm_id_shop');
+				$id_currencies = Tools::getValue('spm_id_currency');
+				$id_countries = Tools::getValue('spm_id_country');
+				$id_groups = Tools::getValue('spm_id_group');
+				$prices = Tools::getValue('spm_price');
+				$from_quantities = Tools::getValue('spm_from_quantity');
+				$reductions = Tools::getValue('spm_reduction');
+				$reduction_types = Tools::getValue('spm_reduction_type');
+				$froms = Tools::getValue('spm_from');
+				$tos = Tools::getValue('spm_to');
+
+				foreach ($id_specific_prices as $key => $id_specific_price)
+					if ($this->_validateSpecificPrice($id_shops[$key], $id_currencies[$key], $id_countries[$key], $id_groups[$key], $prices[$key], $from_quantities[$key], $reductions[$key], $reduction_types[$key], $froms[$key], $tos[$key]))
 					{
-						$qD = new QuantityDiscount();
-						$qD->id_product = $product->id;
-						$qD->id_discount_type = $id_discount_type;
-						$qD->quantity = $quantity_discount;
-						$qD->value = $value_discount;
-						if ($qD->add() AND !sizeof($this->_errors) AND $qD->validateFields())
-							Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&conf=3&token='.($token ? $token : $this->token));
-						$this->_errors[] = Tools::displayError('an error occurred while creating object');
+						$specificPrice = new SpecificPrice(intval($id_specific_price));
+						$specificPrice->id_shop = intval($id_shops[$key]);
+						$specificPrice->id_currency = intval($id_currencies[$key]);
+						$specificPrice->id_country = intval($id_countries[$key]);
+						$specificPrice->id_group = intval($id_groups[$key]);
+						$specificPrice->price = floatval($prices[$key]);
+						$specificPrice->from_quantity = intval($from_quantities[$key]);
+						$specificPrice->reduction = floatval($reduction_types[$key] == 'percentage' ? ($reductions[$key] / 100) : $reductions[$key]);
+						$specificPrice->reduction_type = !$reductions[$key] ? 'amount' : $reduction_types[$key];
+						$specificPrice->from = !$froms[$key] ? '0000-00-00 00:00:00' : $froms[$key];
+						$specificPrice->to = !$tos[$key] ? '0000-00-00 00:00:00' : $tos[$key];
+						if (!$specificPrice->update())
+							$this->_errors = Tools::displayError('An error occured while updating the specific price');
 					}
-				}
-				else
-					$this->_errors[] = Tools::displayError('product must be created before adding quantity discounts');
+				if (!sizeof($this->_errors))
+					Tools::redirectAdmin($currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&id_category='.intval(Tools::getValue('id_category')).'&update'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
-		elseif (isset($_GET['deleteQuantityDiscount']))
+		elseif (Tools::isSubmit('submitPriceAddition'))
+		{
+			if ($this->tabAccess['add'] === '1')
+			{
+				$id_product = intval(Tools::getValue('id_product'));
+				$id_shop = Tools::getValue('sp_id_shop');
+				$id_currency = Tools::getValue('sp_id_currency');
+				$id_country = Tools::getValue('sp_id_country');
+				$id_group = Tools::getValue('sp_id_group');
+				$price = Tools::getValue('sp_price');
+				$from_quantity = Tools::getValue('sp_from_quantity');
+				$reduction = floatval(Tools::getValue('sp_reduction'));
+				$reduction_type = !$reduction ? 'amount' : Tools::getValue('sp_reduction_type');
+				$from = Tools::getValue('sp_from');
+				$to = Tools::getValue('sp_to');
+				if ($this->_validateSpecificPrice($id_shop, $id_currency, $id_country, $id_group, $price, $from_quantity, $reduction, $reduction_type, $from, $to))
+				{
+					$specificPrice = new SpecificPrice();
+					$specificPrice->id_product = $id_product;
+					$specificPrice->id_shop = intval($id_shop);
+					$specificPrice->id_currency = intval($id_currency);
+					$specificPrice->id_country = intval($id_country);
+					$specificPrice->id_group = intval($id_group);
+					$specificPrice->price = floatval($price);
+					$specificPrice->from_quantity = intval($from_quantity);
+					$specificPrice->reduction = floatval($reduction_type == 'percentage' ? $reduction / 100 : $reduction);
+					$specificPrice->reduction_type = $reduction_type;
+					$specificPrice->from = !$from ? '0000-00-00 00:00:00' : $from;
+					$specificPrice->to = !$to ? '0000-00-00 00:00:00' : $to;
+					if (!$specificPrice->add())
+						$this->_errors = Tools::displayError('An error occured while updating the specific price');
+				}
+				Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+		}
+		elseif (Tools::isSubmit('deleteSpecificPrice'))
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
-				if (Validate::isLoadedObject($product = new Product(intval(Tools::getValue('id_product')))))
+				$obj = $this->loadObject();
+				if (!$id_specific_price = Tools::getValue('id_specific_price') OR !Validate::isUnsignedId($id_specific_price))
+					$this->_errors[] = Tools::displayError('Invalid specific price ID');
+				else
 				{
-					if (Validate::isLoadedObject($qD = new QuantityDiscount(intval(Tools::getValue('id_quantity_discount')))))
-					{
-						$qD->delete();
-						if (!sizeof($this->_errors))
-							Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&conf=1&token='.($token ? $token : $this->token));
-					}
+					$specificPrice = new SpecificPrice(intval($id_specific_price));
+					if (!$specificPrice->delete())
+						$this->_errors[] = Tools::displayError('An error occured while deleting the specific price');
 					else
-						$this->_errors[] = Tools::displayError('not a valid quantity discount');
-				} else
-					$this->_errors[] = Tools::displayError('product must be created before delete quantity discounts');
-				$qD = new QuantityDiscount();
+						Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
+				}
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
-
+		elseif (Tools::isSubmit('submitSpecificPricePriorities'))
+		{
+			$obj = $this->loadObject();
+			if (!$priorities = Tools::getValue('specificPricePriority'))
+				$this->_errors[] = Tools::displayError('Please specify priorities');
+			elseif (Tools::isSubmit('specificPricePriorityToAll'))
+			{
+				if (!SpecificPrice::setPriorities($priorities))
+					$this->_errors[] = Tools::displayError('An error occured while updating priorities.');
+				else
+					Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
+			}
+			elseif (!SpecificPrice::setSpecificPriorities(intval($obj->id), $priorities))
+				$this->_errors[] = Tools::displayError('An error occured while setting priorities.');
+			else
+				Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
+		}
 		/* Customization management */
 		elseif (Tools::isSubmit('submitCustomizationConfiguration'))
 		{
@@ -599,7 +654,7 @@ class AdminProducts extends AdminTab
 					if (!sizeof($this->_errors) AND !$product->update())
 						$this->_errors[] = Tools::displayError('an error occured while updating customization configuration');
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=4&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('product must be created before adding customization possibilities');
@@ -619,7 +674,7 @@ class AdminProducts extends AdminTab
 					if (!sizeof($this->_errors) AND !$product->updateLabels())
 						$this->_errors[] = Tools::displayError('an error occured while updating customization');
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=4&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('product must be created before adding customization possibilities');
@@ -640,6 +695,23 @@ class AdminProducts extends AdminTab
 		}
 		else
 			parent::postProcess(true);
+	}
+
+	protected function _validateSpecificPrice($id_shop, $id_currency, $id_country, $id_group, $price, $from_quantity, $reduction, $reduction_type, $from, $to)
+	{
+		if (!Validate::isUnsignedId($id_shop) OR !Validate::isUnsignedId($id_currency) OR !Validate::isUnsignedId($id_country) OR !Validate::isUnsignedId($id_group))
+			$this->_errors[] = Tools::displayError('Wrong ids!');
+		elseif (!Validate::isPrice($price) OR !Validate::isPrice($reduction))
+			$this->_errors[] = Tools::displayError('Invalid price/reduction amount');
+		elseif (!Validate::isUnsignedInt($from_quantity))
+			$this->_errors[] = Tools::displayError('Invalid quantity');
+		elseif ($reduction AND !Validate::isReductionType($reduction_type))
+			$this->_errors[] = Tools::displayError('Please select a reduction type (amount or percentage)');
+		elseif ($from AND $to AND (!Validate::isDateFormat($from) OR !Validate::isDateFormat($to)))
+			$this->_errors[] = Tools::displayError('Wrong from/to date');
+		else
+			return true;
+		return false;
 	}
 
 	// Checking customs feature
@@ -1185,10 +1257,10 @@ class AdminProducts extends AdminTab
 		$this->displayFormImages($obj, $this->token);
 		if ($obj->id)
 			echo '
-			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Combinations').'</h4></div>
-			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Features').'</h4></div>
-			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Discounts').'</h4></div>
+			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Prices').'</h4></div>
+			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Combinations').'</h4></div>
+			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Features').'</h4></div>
+			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Customization').'</h4></div>
 			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
 		echo '<script type="text/javascript">
 					var toload = new Array();
@@ -1247,89 +1319,209 @@ class AdminProducts extends AdminTab
 		}
 	}
 
-	function displayFormQuantityDiscount($obj, $languages, $defaultLanguage)
+	function displayFormPrices($obj, $languages, $defaultLanguage)
 	{
 		global $cookie, $currentIndex;
 
 		if ($obj->id)
 		{
-			$quantityDiscounts = QuantityDiscount::getQuantityDiscounts($obj->id, false);
-			$defaultCurrency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-			echo '
-			<table cellpadding="5">
-				<tr>
-					<td colspan="2"><b>'.$this->l('Add quantity discount to this product').'</b></td>
-				</tr>
-			</table>
-			<hr style="width:100%;" /><br />
-			<table cellpadding="5" style="width:100%">
-				<tr>
-					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Product quantity:').'</td>
-					<td>
-						<input type="text" name="quantity_discount" size="10" />
-						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Minimum product quantity for discount').'</p>
-					</td>
-				</tr>
-				<tr>
-					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Discount value:').'</td>
-					<td>
-						<input type="text" name="value_discount" size="10" />
-						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('The discount value (% or amount)').'</p>
-					</td>
-				</tr>
-				<tr>
-					<td style="width:150px;text-align:right;padding-right:10px;font-weight:bold;vertical-align:top;" valign="top">'.$this->l('Discount type:').'</td>
-					<td>
-						<select name="id_discount_type">
-							<option value="1">'.$this->l('By %').'</option>
-							<option value="2">'.$this->l('By amount').'</option>
-						</select>
-						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Will be applied on final product price').'</p>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" style="text-align:center;">
-						<input type="submit" name="submitQuantityDiscount" id="submitQuantityDiscount" value="'.$this->l('Add quantity discount').'" class="button" onclick="this.form.action += \'&addproduct&tabs=5\';" />
-					</td>
-				</tr>
-				<tr><td colspan="2"><hr style="width:100%;" /></td></tr>
-				<tr>
-					<td colspan="2"  style="text-align:center;">
-						<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:270px; margin:auto;">
-							<tr>
-								<th style="width:20px">'.$this->l('ID').'</td>
-								<th style="width:100px">'.$this->l('# products').'</td>
-								<th style="width:100px">'.$this->l('Discount').'</td>
-								<th style="width:50px">'.$this->l('Action').'</td>
-							</tr>';
-			// Listing
-			$irow = 0;
-			if (is_array($quantityDiscounts) AND sizeof($quantityDiscounts))
-			{
-				foreach ($quantityDiscounts as $qD)
-					echo '
-							<tr '.($irow++ % 2 ? ' class="alt_row"' : '').'>
-								<td style="width:25px" style="text-align:center;">'.$qD['id_discount_quantity'].'</td>
-								<td style="width:100px">&nbsp;'.$qD['quantity'].'</td>
-								<td style="width:100px">'.($qD['id_discount_type'] == 1 ? $qD['value'].'%' : Tools::displayPrice($qD['value'], $defaultCurrency)).'</td>
-								<td style="width:50px" style="text-align:center;">
-									<a href="index.php?tab=AdminCatalog&id_category='.Tools::getValue('id_category').'&id_product='.Tools::getValue('id_product').'&token='.Tools::getValue('token').'&deleteQuantityDiscount&id_quantity_discount='.$qD['id_discount_quantity'].'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
-										<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this discount').'" />
-									</a>
-								</td>
-							</tr>';
-			}
-			else
-				echo '
-							<tr><td colspan="4" style="text-align:center;">'.$this->l('No quantity discount defined').'</td></tr>';
-			echo '
-						</table>
-					</td>
-				</tr>
-			</table>';
+			$shops = Shop::getShops();
+			$currencies = Currency::getCurrencies();
+			$countries = Country::getCountries(intval($cookie->id_lang));
+			$groups = Group::getGroups(intval($cookie->id_lang));
+			$this->_displaySpecificPriceModificationForm($shops, $currencies, $countries, $groups);
+			$this->_displaySpecificPriceAdditionForm($shops, $currencies, $countries, $groups);
 		}
 		else
-			echo '<b>'.$this->l('You must save this product before adding quantity discounts').'.</b>';
+			echo '<b>'.$this->l('You must save this product before adding specific prices').'.</b>';
+	}
+
+	private function _getFinalPrice($specificPrice, $productPrice)
+	{
+		if (!$specificPrice['reduction'])
+			return floatval($specificPrice['price']);
+		$price = $specificPrice['price'] ? $specificPrice['price'] : $productPrice;
+		return $specificPrice['reduction_type'] == 'amout' ? $price - $specificPrice['reduction'] : $price - $price * $specificPrice['reduction'];
+	}
+
+	protected function _displaySpecificPriceModificationForm($shops, $currencies, $countries, $groups)
+	{
+		global $currentIndex;
+
+		$obj = $this->loadObject();
+		$specificPrices = SpecificPrice::getByProductId(intval($obj->id));
+		$specificPricePriorities = Tools::getValue('specificPricePriority', explode(';', Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES')));
+
+		echo '
+		<h4>'.$this->l('Current specific prices').'</h4>
+		<div>
+			'.$this->l('Priorities:').' 
+			<select name="specificPricePriority[]">
+				<option value="id_shop"'.($specificPricePriorities[0] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
+				<option value="id_currency"'.($specificPricePriorities[0] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
+				<option value="id_country"'.($specificPricePriorities[0] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
+				<option value="id_group"'.($specificPricePriorities[0] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
+			</select>
+			&gt;
+			<select name="specificPricePriority[]">
+				<option value="id_shop"'.($specificPricePriorities[1] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
+				<option value="id_currency"'.($specificPricePriorities[1] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
+				<option value="id_country"'.($specificPricePriorities[1] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
+				<option value="id_group"'.($specificPricePriorities[1] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
+			</select>
+			&gt;
+			<select name="specificPricePriority[]">
+				<option value="id_shop"'.($specificPricePriorities[2] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
+				<option value="id_currency"'.($specificPricePriorities[2] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
+				<option value="id_country"'.($specificPricePriorities[2] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
+				<option value="id_group"'.($specificPricePriorities[2] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
+			</select>
+			&gt;
+			<select name="specificPricePriority[]">
+				<option value="id_shop"'.($specificPricePriorities[3] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
+				<option value="id_currency"'.($specificPricePriorities[3] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
+				<option value="id_country"'.($specificPricePriorities[3] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
+				<option value="id_group"'.($specificPricePriorities[3] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
+			</select>
+			<input type="checkbox" name="specificPricePriorityToAll" /> '.$this->l('To all products').'
+			<input type="submit" name="submitSpecificPricePriorities" value="'.$this->l('Apply').'" />
+		</div>
+		<table style="border: 1px solid black; text-align: center" cellspacing="0">
+			<tr>
+				<th class="cell border"></th>
+				<th class="cell border">'.$this->l('Shop').'</th>
+				<th class="cell border">'.$this->l('Currency').'</th>
+				<th class="cell border">'.$this->l('Country').'</th>
+				<th class="cell border">'.$this->l('Group').'</th>
+				<th class="cell border" style="width: 220px">'.$this->l('Price').'</th>
+				<th class="cell border">'.$this->l('From (quantity)').'</th>
+				<th class="cell border">'.$this->l('Final price').'</th>
+				<th class="cell border">'.$this->l('Action').'</th>
+			</tr>';
+		$index = 0;
+		foreach ($specificPrices as $specificPrice)
+		{
+			$id_specific_price = intval($specificPrice['id_specific_price']);
+			echo '
+			<tr>
+				<td class="cell bpriority" rowspan="2">'.($specificPrice['priority'] ? intval($specificPrice['priority']) : ++$index).'.<input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'></td>
+				<td class="cell bl br btt">
+					<select name="spm_id_shop[]">
+						<option value="0">All shops</option>';
+			foreach ($shops as $shop)
+				echo '	<option value="'.intval($shop['id_shop']).'"'.($shop['id_shop'] == $specificPrice['id_shop'] ? ' selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($shop['name']).'</option>
+					</select>
+				</td>
+				<td class="cell br btt">
+					<select name="spm_id_currency[]">
+						<option value="0">'.$this->l('All currencies').'</option>';
+			foreach ($currencies as $currency)
+				echo '<option value="'.intval($currency['id_currency']).'" '.($currency['id_currency'] == $specificPrice['id_currency'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+			echo '
+					</select>
+				</td>
+				<td class="cell br btt">
+					<select name="spm_id_country[]">
+						<option value="0">'.$this->l('All countries').'</option>';
+			foreach ($countries as $country)
+				echo '<option value="'.intval($country['id_country']).'" '.($country['id_country'] == $specificPrice['id_country'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($country['name']).'</option>';
+			echo '
+					</select>
+				</td>
+				<td class="cell br btt">
+					<select name="spm_id_group[]">
+						<option value="0">'.$this->l('All groups').'</option>';
+			foreach ($groups as $group)
+				echo '	<option value="'.intval($group['id_group']).'" '.($group['id_group'] == $specificPrice['id_group'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($group['name']).'</option>';
+			echo '	
+					</select>
+				</td>
+				<td class="cell br btt"><input type="text" name="spm_price[]" value="'.floatval($specificPrice['price']).'" class="table_input" style="text-align: right" /> €</td>
+				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.intval($specificPrice['from_quantity']).'" class="table_input" style="text-align: right" /></td>
+				<td rowspan="2" class="br btt bb">'.floatval($this->_getFinalPrice($specificPrice, floatval($obj->price))).' €</td>
+				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.intval($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
+			</tr>
+			<tr>
+				<td colspan="6" class="bl bt br bb">
+					'.$this->l('Reduction:').'
+					<input type="text" name="spm_reduction[]" value="'.floatval($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" class="table_input" style="text-align: right" />
+					<select name="spm_reduction_type[]">
+						<option value="">'.$this->l('Type?').'</option>
+						<option value="amount"'.($specificPrice['reduction_type'] == 'amount' ? ' selected="selected"' : '').'>'.$this->l('Amount').'</option>
+						<option value="percentage"'.($specificPrice['reduction_type'] == 'percentage' ? ' selected="selected"' : '').'>'.$this->l('Percentage').'</option>
+					</select>
+					'.$this->l('From').' <input type="text" name="spm_from[]" value="'.$specificPrice['from'].'" class="table_input" style="text-align: center" />
+					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.$specificPrice['to'].'" class="table_input" style="text-align: center" />
+				</td>
+			</tr>';
+		}
+		echo '
+		</table>
+		<input type="submit" name="submitPricesModification" value="'.$this->l('Apply').'" />
+		';
+	}
+
+	protected function _displaySpecificPriceAdditionForm($shops, $currencies, $countries, $groups)
+	{
+		$product = $this->loadObject();
+		echo '
+		<h4>'.$this->l('Add a new specific price').'</h4>
+		<table style="text-align: center" cellspacing="0">
+			<tr>
+				<td rowspan="2" class="cell2" style="width: 17px">4.</td>
+				<td class="cell2">
+					<select name="sp_id_shop">
+						<option value="0">'.$this->l('All shops').'</option>';
+			foreach ($shops as $shop)
+				echo '	<option value="'.intval($shop['id_shop']).'">'.Tools::htmlentitiesUTF8($shop['name']).'</option>
+					</select>
+				</td>
+				<td class="cell2">
+					<select name="sp_id_currency">
+						<option value="0">'.$this->l('All currencies').'</option>';
+			foreach ($currencies as $currency)
+				echo '<option value="'.intval($currency['id_currency']).'">'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+			echo '
+					</select>
+				</td>
+				<td class="cell2">
+					<select name="sp_id_country">
+						<option value="0">'.$this->l('All countries').'</option>';
+			foreach ($countries as $country)
+				echo '<option value="'.intval($country['id_country']).'">'.Tools::htmlentitiesUTF8($country['name']).'</option>';
+			echo '
+					</select>
+				</td>
+				<td class="cell2">
+					<select name="sp_id_group">
+						<option value="0">'.$this->l('All groups').'</option>';
+			foreach ($groups as $group)
+				echo '	<option value="'.intval($group['id_group']).'">'.Tools::htmlentitiesUTF8($group['name']).'</option>';
+			echo '	
+					</select>
+				</td>
+				<td class="cell2" style="width: 220px"><input type="text" name="sp_price" value="'.floatval($product->price).'" class="table_input" style="text-align: right" /> €</td>
+				<td class="cell2"><input type="text" name="sp_from_quantity" value="1" class="table_input" style="text-align: right" /></td>
+				<td rowspan="2">0.00 €</td>
+			</tr>
+			<tr>
+				<td colspan="6">
+					'.$this->l('Reduction:').'
+					<input type="text" name="sp_reduction" value="0.00" class="table_input" style="text-align: right" />
+					<select name="sp_reduction_type">
+						<option value="" selected="selected">'.$this->l('Type?').'</option>
+						<option value="amount">'.$this->l('Amount').'</option>
+						<option value="percentage">'.$this->l('Percentage').'</option>
+					</select>
+					'.$this->l('From').' <input type="text" name="sp_from" value="" class="table_input" style="text-align: center" />
+					'.$this->l('To').' <input type="text" name="sp_to" value="" class="table_input" style="text-align: center" />
+				</td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: left"><input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" /></td>
+			</tr>
+		</table>
+		';
 	}
 
 	private function _getCustomizationFieldIds($labels, $alreadyGenerated, $obj)
@@ -1412,7 +1604,7 @@ class AdminProducts extends AdminTab
 				</tr>
 				<tr>
 					<td colspan="2" style="text-align:center;">
-						<input type="submit" name="submitCustomizationConfiguration" value="'.$this->l('Update settings').'" class="button" onclick="this.form.action += \'&addproduct&tabs=4\';" />
+						<input type="submit" name="submitCustomizationConfiguration" value="'.$this->l('Update settings').'" class="button" onclick="this.form.action += \'&addproduct&tabs=5\';" />
 					</td>
 				</tr>';
 				
@@ -1446,7 +1638,7 @@ class AdminProducts extends AdminTab
 				<tr>
 					<td colspan="2" style="text-align:center;">';
 				if ($hasFileLabels OR $hasTextLabels)
-					echo '<input type="submit" name="submitProductCustomization" id="submitProductCustomization" value="'.$this->l('Save labels').'" class="button" onclick="this.form.action += \'&addproduct&tabs=4\';" style="margin-top: 9px" />';
+					echo '<input type="submit" name="submitProductCustomization" id="submitProductCustomization" value="'.$this->l('Save labels').'" class="button" onclick="this.form.action += \'&addproduct&tabs=5\';" style="margin-top: 9px" />';
 				echo '
 					</td>
 				</tr>
@@ -1511,7 +1703,6 @@ class AdminProducts extends AdminTab
 		$cover = Product::getCover($obj->id);
 		$link = new Link();
 		
-		//includeDatepicker(array('reduction_from', 'reduction_to'));
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
@@ -1890,21 +2081,6 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
 							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left">'.$this->l('Reduction amount:').'</td>
-						<td style="padding-bottom:5px;">
-							'.($currency->format == 1 ? ' '.$currency->sign.' ' : '').'<input size="11" maxlength="14" type="text" name="reduction_price" id="reduction_price" value="'.$this->getFieldValue($obj, 'reduction_price').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); var key = window.event ? window.event.keyCode : event.which; if (key != 9) reductionPrice();" /> '.($currency->format == 2 ? ' '.$currency->sign : '').'
-							<span style="padding-right: 15px; padding-left: 15px; font-weight: bold">'.$this->l('OR').'</span>
-							<input size="10" maxlength="14" type="text" name="reduction_percent" id="reduction_percent" value="'.$this->getFieldValue($obj, 'reduction_percent').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); var key = window.event ? window.event.keyCode : event.which; if (key != 9) reductionPercent();" /> %
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left">&nbsp;</td>
-						<td>'.$this->l('available from').' <input onchange="calcReduction()" type="text" id="reduction_from" name="reduction_from" value="'.(($from = $this->getFieldValue($obj, 'reduction_from') AND $from != '0000-00-00' AND $from != '0000-00-00 00:00:00' AND $from != '1942-01-01' AND $from != '1942-01-01 00:00:00') ? $from : date('Y-m-d H:i:s')).'" />
-							'.$this->l('to').' <input onchange="calcReduction()" type="text" id="reduction_to" name="reduction_to" value="'.(($to = $this->getFieldValue($obj, 'reduction_to') AND $to != '0000-00-00' AND $to != '0000-00-00 00:00:00'  AND $to != '1942-01-01' AND $to != '1942-01-01 00:00:00') ? $to : date('Y-m-d H:i:s')).'" />
-							<p>'.$this->l('Leave same dates for undefined duration').'</p>
 						</td>
 					</tr>
 					<tr>

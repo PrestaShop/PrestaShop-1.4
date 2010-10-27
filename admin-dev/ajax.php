@@ -123,7 +123,7 @@ if ($step = intval(Tools::getValue('ajaxProductTab')))
 	if (!Validate::isLoadedObject($product))
 		die (Tools::displayError('product cannot be loaded'));
 	
-	$switchArray = array(3 => 'displayFormAttributes', 4 => 'displayFormFeatures', 5 => 'displayFormCustomization', 6 => 'displayFormQuantityDiscount', 7 => 'displayFormAttachments');
+	$switchArray = array(3 => 'displayFormPrices', 4 => 'displayFormAttributes', 5 => 'displayFormFeatures', 6 => 'displayFormCustomization', 7 => 'displayFormAttachments');
 	$currentIndex = 'index.php?tab=AdminCatalog';
 	if (key_exists($step, $switchArray))
 		$admin->{$switchArray[$step]}($product, $languages, $defaultLanguage);
