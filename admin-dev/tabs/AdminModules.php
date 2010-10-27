@@ -188,7 +188,7 @@ class AdminModules extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
-		if (Tools::isSubmit('delete'))
+		if (Tools::isSubmit('deleteModule'))
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 			{
@@ -625,7 +625,7 @@ class AdminModules extends AdminTab
 		if (intval($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
-		$return .= '<a onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&delete='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		$return .= '<a onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
 		return $return;
 	}
 	
