@@ -8,10 +8,13 @@ if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 
 include(dirname(__FILE__).'/init.php');
 
-if (($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS(intval($id_cms), intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
+if (($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS(intval($id_cms), intval($cookie->id_lang)) AND Validate::isLoadedObject($cms) AND
+	($cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$cms->id) AND file_exists(dirname(__FILE__).'/'.Tools::getValue('ad').'/ajax.php'))))
 {
 	/* rewrited url set */
 	$rewrited_url = $link->getCmsLink($cms, $cms->link_rewrite);
+	Tools::AddJS(_THEME_JS_DIR_.'cms.js');
+	Tools::AddCSS(_THEME_CSS_DIR_.'cms.css');
 	
 	include(dirname(__FILE__).'/header.php');
 	$smarty->assign(array(

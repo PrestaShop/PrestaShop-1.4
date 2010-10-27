@@ -3,6 +3,19 @@
 		{capture name=path}{l s=$cms->meta_title}{/capture}
 		{include file=$tpl_dir./breadcrumb.tpl}
 	{/if}
+	{if !$cms->active}
+		<br />
+		<div id="admin-action-cms">
+			<p>{l s='This CMS page is not visible by your customers.'}
+			<input type="hidden" id="admin-action-cms-id" value="{$cms->id}" />
+			<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 0)"/>			
+			<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 1)"/>			
+			</p>
+			<div class="clear" ></div>
+			<p id="admin-action-result"></p>
+			</p>
+		</div>
+	{/if}
 	<div class="rte{if $content_only} content_only{/if}">
 		{$cms->content}
 	</div>

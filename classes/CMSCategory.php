@@ -165,7 +165,7 @@ class		CMSCategory extends ObjectModel
 		);
 	}
 
-	static public function getRecurseCategory($id_lang, $current = 1)
+	static public function getRecurseCategory($id_lang, $current = 1, $active = 1)
 	{
 		$category = Db::getInstance()->getRow('
 		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`
@@ -181,13 +181,13 @@ class		CMSCategory extends ObjectModel
 		AND c.`active` = 1
 		AND cl.`id_lang` = '.intval($id_lang));
 		foreach ($result as $row)
-			$category['children'][] = self::getRecurseCategory($id_lang, $row['id_cms_category']);
+			$category['children'][] = self::getRecurseCategory($id_lang, $row['id_cms_category'], $active);
 		$category['cms'] = Db::getInstance()->ExecuteS('
 		SELECT c.`id_cms`, cl.`meta_title`
 		FROM `'._DB_PREFIX_.'cms` c
 		JOIN `'._DB_PREFIX_.'cms_lang` cl ON c.`id_cms` = cl.`id_cms`
 		WHERE `id_cms_category` = '.intval($current).'
-		AND cl.`id_lang` = '.intval($id_lang));
+		AND cl.`id_lang` = '.intval($id_lang).($active ? ' AND c.`active` = 1' : ''));
 		return $category;
 	}
 

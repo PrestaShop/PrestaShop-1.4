@@ -329,7 +329,7 @@ if (Tools::getValue('submitPublishProduct'))
 
 	if (Tools::getIsset('id_product'))
 	{	
-		$id_product = intval(Tools::getIsset('id_product'));
+		$id_product = intval(Tools::getValue('id_product'));
 		$id_tab_catalog = intval(Tab::getIdFromClassName('AdminCatalog'));
 		$token = Tools::getAdminToken('AdminCatalog'.intval($id_tab_catalog).intval($cookie->id_employee));
 		$bo_product_url = dirname($_SERVER['PHP_SELF']).'/index.php?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.$token;
@@ -348,6 +348,42 @@ if (Tools::getValue('submitPublishProduct'))
 		
 			if ($product->save())
 				die($bo_product_url);
+			else 
+				die('error: saving');
+
+		} else {
+			die('error: permissions');
+		}
+	}
+	else 
+		die ('error: parameters');	
+}
+
+if (Tools::getValue('submitPublishCMS'))
+{
+	global $cookie;
+
+	if (Tools::getIsset('id_cms'))
+	{	
+		$id_cms = intval(Tools::getValue('id_cms'));
+		$id_tab_cms = intval(Tab::getIdFromClassName('AdminCMSContent'));
+		$token = Tools::getAdminToken('AdminCMSContent'.intval($id_tab_cms).intval($cookie->id_employee));
+		$bo_cms_url = dirname($_SERVER['PHP_SELF']).'/index.php?tab=AdminCMSContent&id_cms='.$id_cms.'&updatecms&token='.$token;
+
+		if (Tools::getValue('redirect'))
+			die($bo_cms_url);
+			
+		$profileAccess = Profile::getProfileAccess(intval($cookie->profile), $id_tab_cms);
+		if($profileAccess['edit'])
+		{
+			$cms = new CMS(intval(Tools::getValue('id_cms')));
+			if (!Validate::isLoadedObject($cms))
+				die('error: invalid id');
+		
+			$cms->active = 1;
+		
+			if ($cms->save())
+				die($bo_cms_url);
 			else 
 				die('error: saving');
 

@@ -162,11 +162,14 @@ class BlockCms extends Module
 		{
 			$key = $cms_category['id_block_cms'];
 			$display_cms[$key]['cms'] = Db::getInstance()->ExecuteS('
-			SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_block_page` bcp 
+			SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
+			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
 			INNER JOIN `'._DB_PREFIX_.'cms_lang` cl ON (bcp.`id_cms` = cl.`id_cms`)
+			INNER JOIN `'._DB_PREFIX_.'cms` c ON (bcp.`id_cms` = c.`id_cms`)
 			WHERE bcp.`id_block_cms` = '.intval($cms_category['id_block_cms']).'
 			AND cl.`id_lang` = '.intval($cookie->id_lang).'
-			AND bcp.`is_category` = 0');
+			AND bcp.`is_category` = 0
+			AND c.`active` = 1');
 			$links = array();
 			if (sizeof($display_cms[$key]['cms']))
 				foreach ($display_cms[$key]['cms'] as $row)

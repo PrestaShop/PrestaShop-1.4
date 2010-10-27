@@ -30,7 +30,8 @@ class AdminCMS extends AdminTab
 			'id_cms' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 			'link_rewrite' => array('title' => $this->l('URL'), 'width' => 200),
 			'meta_title' => array('title' => $this->l('Title'), 'width' => 300),
-			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'position', 'align' => 'center', 'position' => 'position')
+			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'position', 'align' => 'center', 'position' => 'position'),
+			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 			);
 			
 		$this->_category = AdminCMSContent::getCurrentCMSCategory();
@@ -40,6 +41,21 @@ class AdminCMS extends AdminTab
 		$this->_filter = 'AND c.id_cms_category = '.intval($this->_category->id);
 		
 		parent::__construct();
+	}
+	
+	private function _displayDraftWarning($active)
+	{
+		return '<div class="warn draft" style="'.($active ? 'display:none' : '').'">
+				<p>
+				<span style="float: left">
+				<img src="../img/admin/warn2.png" />
+				'.$this->l('Your CMS page will be saved as draft').'
+				</span>
+				<span style="float:right"><input type="submit" class="button" style="display: block" name="submitAddcmsAndPreview" id="submitAddcmsAndPreview" value="'.$this->l('Save and preview').'" /></span>
+				<input type="hidden" name="fakeSubmitAddcmsAndPreview" id="fakeSubmitAddcmsAndPreview" />
+				<br class="clear" />
+				</p>
+	 		</div>';
 	}
 	
 	public function displayForm($isMainTab = true)
@@ -52,8 +68,9 @@ class AdminCMS extends AdminTab
 		$divLangName = 'meta_title¤meta_description¤meta_keywords¤ccontent¤link_rewrite';
 
 		echo '
-		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.Tools::getAdminTokenLite('AdminCMSContent').'" method="post">
+		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.Tools::getAdminTokenLite('AdminCMSContent').'" method="post" name="cms" id="cms">
 			'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
+			'.$this->_displayDraftWarning($obj->active).'
 			<fieldset><legend><img src="../img/admin/cms.gif" />'.$this->l('CMS page').'</legend>';
 			
 		// META TITLE
@@ -113,14 +130,22 @@ class AdminCMS extends AdminTab
 						<textarea class="rte" cols="80" rows="30" id="content_'.$language['id_lang'].'" name="content_'.$language['id_lang'].'">'.htmlentities(stripslashes($this->getFieldValue($obj, 'content', $language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $divLangName, 'ccontent');
-		echo '	</div><div class="clear space">&nbsp;</div>';
+		echo '	</div><div class="clear space">&nbsp;</div>
+				<label>'.$this->l('Enable:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" onclick="toggleDraftWarning(false);" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" onclick="toggleDraftWarning(true);" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+				</div>';
 		
 		// SUBMIT
 		echo '	<div class="margin-form space">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
-			</fieldset>
+			</fieldset><br />
+			'.$this->_displayDraftWarning($obj->active).'
 		</form>';
 		
 		// TinyMCE
@@ -201,6 +226,7 @@ class AdminCMS extends AdminTab
 		$this->displayList($token);
 		echo '</div>';
 	}
+	
 	public function displayList($token = NULL)
 	{
 		global $currentIndex;
@@ -222,7 +248,16 @@ class AdminCMS extends AdminTab
 		global $cookie, $link, $currentIndex;
 
 		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
-				Tools::redirectLink($link->getCMSLink($cms));
+		{
+			$redir = $link->getCMSLink($cms);
+			if (!$cms->active)
+			{
+				$admin_dir = dirname($_SERVER['PHP_SELF']);
+				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+				$redir .= '&adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
+			}
+			Tools::redirectLink($redir);
+		}
 		elseif (Tools::isSubmit('deletecms'))
 		{
 			if (Tools::getValue('id_cms') == Configuration::get('PS_CONDITIONS_CMS_ID'))
@@ -237,7 +272,7 @@ class AdminCMS extends AdminTab
 					else
 						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=1&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 		}
-		elseif (Tools::isSubmit('submitAddcms'))
+		elseif (Tools::isSubmit('submitAddcms') OR Tools::isSubmit('submitAddcmsAndPreview'))
 		{
 			parent::validateRules();
 			if (!sizeof($this->_errors))
@@ -248,6 +283,20 @@ class AdminCMS extends AdminTab
 					$this->copyFromPost($cms, 'cms');
 					if (!$cms->add())
 						$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
+					{
+						$link = new Link();
+						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
+						if (!$cms->active)
+						{
+							$admin_dir = dirname($_SERVER['PHP_SELF']);
+							$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+							$token = Tools::encrypt('PreviewCMS'.$cms->id);
+	
+							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+						}
+						Tools::redirectLink($preview_url);
+					}
 					else
 						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=3&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 				}
@@ -257,6 +306,20 @@ class AdminCMS extends AdminTab
 					$this->copyFromPost($cms, 'cms');
 					if (!$cms->update())
 						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
+					{
+						$link = new Link();
+						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
+						if (!$cms->active)
+						{
+							$admin_dir = dirname($_SERVER['PHP_SELF']);
+							$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+							$token = Tools::encrypt('PreviewCMS'.$cms->id);
+	
+							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+						}
+						Tools::redirectLink($preview_url);
+					}
 					else
 						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=4&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 				}
@@ -275,6 +338,20 @@ class AdminCMS extends AdminTab
 		}
 		else
 			parent::postProcess(true);
+		if (Tools::isSubmit('submitAddcmsAndPreview'))
+		{
+			$link = new Link();
+			$preview_url = $link->getCMSLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
+			if (!$obj->active)
+			{
+				$admin_dir = dirname($_SERVER['PHP_SELF']);
+				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+				$token = Tools::encrypt('PreviewProduct'.$object->id);
+	
+				$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+			}
+			Tools::redirectLink($preview_url);
+		}
 	}
 }
 

@@ -608,6 +608,8 @@ ALTER TABLE `PREFIX_manufacturer` ADD `active` tinyint(1) NOT NULL default 0;
 ALTER TABLE `PREFIX_supplier` ADD `active` tinyint(1) NOT NULL default 0;
 UPDATE `PREFIX_manufacturer` SET `active` = 1;
 UPDATE `PREFIX_supplier` SET `active` = 1;
+ALTER TABLE `PREFIX_cms` ADD `active` tinyint(1) unsigned NOT NULL default 0;
+UPDATE `PREFIX_cms` SET `active` = 1;
 
 /* PHP */
 /* PHP:editorial_update(); */;

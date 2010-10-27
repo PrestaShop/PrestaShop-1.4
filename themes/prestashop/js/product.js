@@ -424,7 +424,6 @@ function saveCustomization()
 	$('#customizationForm').submit();
 }
 
-
 function submitPublishProduct(url, redirect)
 {
 	var id_product = $('#admin-action-product-id').val();	

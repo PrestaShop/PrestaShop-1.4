@@ -23,6 +23,7 @@ if (Tools::getValue('action') == 'getCms')
 	SELECT cl.`meta_title`, c.`id_cms` FROM `'._DB_PREFIX_.'cms` c
 	JOIN `'._DB_PREFIX_.'cms_lang` cl ON (c.`id_cms` = cl.`id_cms`)
 	WHERE c.`id_cms_category` = '.intval(Tools::getValue('id_cms_category')).'
+	AND c.`active` = 1 
 	AND cl.`id_lang` = '.intval($cookie->id_lang).'
 	ORDER BY c.`id_cms`');
 	if (Tools::getValue('id_block_cms'))

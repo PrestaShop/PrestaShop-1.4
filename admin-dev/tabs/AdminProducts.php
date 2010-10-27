@@ -884,7 +884,7 @@ class AdminProducts extends AdminTab
 									$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
 								}
 
-								Tools::redirectLink($preview_url);															
+								Tools::redirectLink($preview_url);
 							} else if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))

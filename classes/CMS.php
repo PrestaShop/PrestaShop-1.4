@@ -22,6 +22,7 @@ class		CMS extends ObjectModel
 	public $link_rewrite;
 	public $id_cms_category;
 	public $position;
+	public $active;
 
  	protected $fieldsRequiredLang = array('meta_title', 'link_rewrite');
 	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255, 'meta_title' => 128, 'link_rewrite' => 128, 'content' => 3999999999999);
@@ -36,6 +37,7 @@ class		CMS extends ObjectModel
 		$fields['id_cms'] = intval($this->id);
 		$fields['id_cms_category'] = intval($this->id_cms_category);
 		$fields['position'] = intval($this->position);
+		$fields['active'] = intval($this->active);
 		return $fields;	 
 	}
 	
@@ -87,13 +89,16 @@ class		CMS extends ObjectModel
 		return false;
 	}
 
-	public static function getLinks($id_lang, $selection = NULL)
+	public static function getLinks($id_lang, $selection = NULL, $active = true)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_cms, cl.link_rewrite, cl.meta_title
 		FROM '._DB_PREFIX_.'cms c
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
-		'.(($selection !== NULL) ? 'WHERE c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : '').' ORDER BY c.`position` ');
+		WHERE 1
+		'.(($selection !== NULL) ? ' AND c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : '').
+		($active ? ' AND c.`active` = 1' : '').
+		'ORDER BY c.`position`');
 		$link = new Link();
 		$links = array();
 		if ($result)
@@ -105,7 +110,7 @@ class		CMS extends ObjectModel
 		return $links;
 	}
 	
-	public static function listCms($id_lang = NULL, $id_block = false)
+	public static function listCms($id_lang = NULL, $id_block = false, $active = true)
 	{
 		if (empty($id_lang))
 			$id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
@@ -115,7 +120,7 @@ class		CMS extends ObjectModel
 		FROM  '._DB_PREFIX_.'cms c
 		JOIN '._DB_PREFIX_.'cms_lang l ON (c.id_cms = l.id_cms)
 		'.(($id_block) ? 'JOIN '._DB_PREFIX_.'block_cms b ON (c.id_cms = b.id_cms)' : '').'
-		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '').'
+		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '').($active ? ' AND c.`active` = 1' : '').'
 		ORDER BY c.`position` '
 		);
 		return $result;
@@ -203,13 +208,14 @@ class		CMS extends ObjectModel
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'cms` WHERE `id_cms_category` = '.intval($id_category)));
 	}
 	
-	static public function getCMSPages($id_lang = NULL, $id_cms_category = NULL)
+	static public function getCMSPages($id_lang = NULL, $id_cms_category = NULL, $active = true)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'cms` c
 		JOIN `'._DB_PREFIX_.'cms_lang` l ON (c.id_cms = l.id_cms)'.
-		(isset($id_cms_category) ? 'WHERE `id_cms_category` = '.intval($id_cms_category) : '').'
+		(isset($id_cms_category) ? 'WHERE `id_cms_category` = '.intval($id_cms_category) : '').
+		($active ? ' AND c.`active` = 1 ' : '').'
 		AND l.id_lang = '.intval($id_lang).'
 		ORDER BY `position`');
 	}
