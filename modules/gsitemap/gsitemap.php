@@ -69,10 +69,10 @@ XML;
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 			WHERE l.`active` = 1
 			ORDER BY cl.id_cms, cl.id_lang ASC';
-		else
+		elseif (Module::isInstalled('blockcms'))
 			$sql_cms = '
-			SELECT DISTINCT b.id_cms, cl.link_rewrite, cl.id_lang
-			FROM '._DB_PREFIX_.'cms_block b
+			SELECT DISTINCT cl.id_cms, cl.link_rewrite, cl.id_lang
+			FROM '._DB_PREFIX_.'cms_block_page b
 			LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 			WHERE l.`active` = 1
