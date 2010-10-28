@@ -97,7 +97,7 @@ class		CMS extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (c.id_cms = cl.id_cms AND cl.id_lang = '.intval($id_lang).')
 		WHERE 1
 		'.(($selection !== NULL) ? ' AND c.id_cms IN ('.implode(',', array_map('intval', $selection)).')' : '').
-		($active ? ' AND c.`active` = 1' : '').
+		($active ? ' AND c.`active` = 1 ' : '').
 		'ORDER BY c.`position`');
 		$link = new Link();
 		$links = array();
@@ -120,7 +120,7 @@ class		CMS extends ObjectModel
 		FROM  '._DB_PREFIX_.'cms c
 		JOIN '._DB_PREFIX_.'cms_lang l ON (c.id_cms = l.id_cms)
 		'.(($id_block) ? 'JOIN '._DB_PREFIX_.'block_cms b ON (c.id_cms = b.id_cms)' : '').'
-		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '').($active ? ' AND c.`active` = 1' : '').'
+		WHERE l.id_lang = '.intval($id_lang).(($id_block) ? ' AND b.id_block = '.intval($id_block) : '').($active ? ' AND c.`active` = 1 ' : '').'
 		ORDER BY c.`position` '
 		);
 		return $result;
