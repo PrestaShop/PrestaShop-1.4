@@ -1028,9 +1028,10 @@ td.cart_availability, td.cart_ref { text-align: center }
 td.cart_total .price { font-weight: bold }
 tr.cart_item td.cart_unit { padding-right: 1em }
 td.cart_quantity {
-	width: 5.5em;
+	width: 7.5em;
 	text-align: right
 }
+.cart_quantity_input{float:right;margin-right:10px}
 td.cart_quantity p, td.cart_quantity a {
 	float: left;
 	display: inline
