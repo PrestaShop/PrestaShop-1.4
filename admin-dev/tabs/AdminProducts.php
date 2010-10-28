@@ -1407,7 +1407,7 @@ class AdminProducts extends AdminTab
 				<td class="cell bpriority" rowspan="2">'.($specificPrice['priority'] ? intval($specificPrice['priority']) : ++$index).'.<input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'></td>
 				<td class="cell bl br btt">
 					<select name="spm_id_shop[]">
-						<option value="0">All shops</option>';
+						<option value="0">'.$this->l('All shops').'</option>';
 			foreach ($shops as $shop)
 				echo '	<option value="'.intval($shop['id_shop']).'"'.($shop['id_shop'] == $specificPrice['id_shop'] ? ' selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($shop['name']).'</option>
 					</select>
