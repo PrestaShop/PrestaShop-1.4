@@ -562,7 +562,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 34, 'Suppliers'),(1, 35, 'Tabs'),(1, 36, 'Features'),(1, 37, 'Quick Accesses'),(1, 38, 'Appearance'),(1, 39, 'Contact'),(1, 40, 'Aliases'),
 (1, 41, 'Import'),(1, 42, 'Invoices'),(1, 43, 'Search'),(1, 44, 'Localization'),(1, 46, 'States'),(1, 47, 'Merchandise return'),(1, 48, 'PDF'),
 (1, 49, 'Credit slips'),(1, 50, 'Modules'),(1, 51, 'Settings'),(1, 52, 'Subdomains'),(1, 53, 'DB backup'),(1, 54, 'Order Messages'),
-(1, 55, 'Delivery slips'),(1, 56, 'Meta-Tags'),(1, 57, 'CMS'),(1, 58, 'Image mapping'),(1, 59, 'Customer messages'),(1, 60, 'Tracking'),
+(1, 55, 'Delivery slips'),(1, 56, 'SEO'),(1, 57, 'CMS'),(1, 58, 'Image mapping'),(1, 59, 'Customer messages'),(1, 60, 'Tracking'),
 (1, 61, 'Search engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
 (1, 68, 'Attachments'),(1, 69, 'Informations'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
 (1, 80, 'Modules & themes catalog'),(1, 81, 'My Account');
@@ -576,7 +576,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 36, 'Caractéristiques'),(2, 37, 'Accès rapide'),(2, 38, 'Apparence'),(2, 39, 'Coordonnées'),(2, 40, 'Alias'),(2, 41, 'Import'),(2, 42, 'Factures'),
 (2, 43, 'Recherche'),(2, 44, 'Localisation'),(2, 46, 'Etats'),(2, 47, 'Retours produits'),(2, 48, 'PDF'),(2, 49, 'Avoirs'),(2, 50, 'Modules'),
 (2, 51, 'Configuration'),(2, 52, 'Sous domaines'),(2, 53, 'Sauvegarde BDD'),(2, 54, 'Messages prédéfinis'),(2, 55, 'Bons de livraison'),
-(2, 56, 'Méta-Tags'),(2, 57, 'CMS'),(2, 58, 'Scènes'),(2, 59, 'Messages clients'),(2, 60, 'Suivi'),(2, 61, 'Moteurs de recherche'),
+(2, 56, 'SEO'),(2, 57, 'CMS'),(2, 58, 'Scènes'),(2, 59, 'Messages clients'),(2, 60, 'Suivi'),(2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),(2, 63, 'Groupes'),(2, 64, 'Générateurs'),(2, 65, 'Paniers'),(2, 66, 'Tags'),(2, 67, 'Recherche'),
 (2, 68, 'Documents joints'),(2, 69, 'Informations'),(2, 70, 'Performances'),(2, 71, 'SAV'),(2, 72, 'Service web'),(2, 73, 'Mouvements de Stock'),
 (2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte');
@@ -590,7 +590,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 34, 'Proovedores'),(3, 35, 'Pestañas'),(3, 36, 'Características'),(3, 37, 'Acceso rápido'),(3, 38, 'Aspecto'),(3, 39, 'Datos'),(3, 40, 'Alias'),
 (3, 41, 'Importar'),(3, 42, 'Facturas'),(3, 43, 'Búsqueda'),(3, 44, 'Ubicación'),(3, 46, 'Estados'),(3, 47, 'Devolución productos'),(3, 48, 'PDF'),
 (3, 49, 'Vales'),(3, 50, 'Módulos'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
-(3, 55, 'Albaranes de entrega'),(3, 56, 'Meta-Tags'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
+(3, 55, 'Albaranes de entrega'),(3, 56, 'SEO'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
 (3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente');
 

@@ -677,6 +677,9 @@ UPDATE `PREFIX_supplier` SET `active` = 1;
 ALTER TABLE `PREFIX_cms` ADD `active` tinyint(1) unsigned NOT NULL default 0;
 UPDATE `PREFIX_cms` SET `active` = 1;
 
+
+UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;
