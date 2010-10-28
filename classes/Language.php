@@ -195,7 +195,7 @@ class		Language extends ObjectModel
 			return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
 								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-								Configuration::get('PS_HTACCESS_SPECIFIC'),
+								Configuration::get('PS_HTACCESS_SPECIFIC')
 								);
 	}
 	
@@ -291,7 +291,7 @@ class		Language extends ObjectModel
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
 								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-								Configuration::get('PS_HTACCESS_SPECIFIC'),
+								Configuration::get('PS_HTACCESS_SPECIFIC')
 							);	
 		
 		return $result;

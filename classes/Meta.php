@@ -126,7 +126,7 @@ class		Meta extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
 									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									Configuration::get('PS_HTACCESS_SPECIFIC')
 									);
 	}
 	
