@@ -1332,7 +1332,7 @@ class		Product extends ObjectModel
 			die (Tools::displayError());
 		if (!$beginning)
 			$ids_product = self::_getProductIdByDate($beginning, $ending);
-
+		
 		$currentDate = date('Y-m-d H:m:i');
 		if ($count)
 		{
@@ -1341,7 +1341,7 @@ class		Product extends ObjectModel
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE p.`active` = 1
 			AND p.`show_price` = 1
-			'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.implode(', ', $ids_product).')' : '').'
+			'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', $ids_product) : 0).')' : '').'
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
@@ -1362,7 +1362,7 @@ class		Product extends ObjectModel
 		WHERE 1
 		AND p.`active` = 1
 		AND p.`show_price` = 1
-		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.implode(', ', $ids_product).')' : '').'
+		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', $ids_product) : 0).')' : '').'
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
