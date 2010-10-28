@@ -12,7 +12,7 @@
   *
   */
 
-class		AttributeGroup extends ObjectModel
+class AttributeGroupCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

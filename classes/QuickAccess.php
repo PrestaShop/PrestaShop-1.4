@@ -12,7 +12,7 @@
   *
   */
 
-class QuickAccess extends ObjectModel
+class QuickAccessCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

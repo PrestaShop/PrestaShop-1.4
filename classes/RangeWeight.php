@@ -12,7 +12,7 @@
   *
   */
 
-class RangeWeight extends ObjectModel
+class RangeWeightCore extends ObjectModel
 {
 	public		$id_carrier;
 	public 		$delimiter1;

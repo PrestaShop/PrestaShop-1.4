@@ -12,7 +12,7 @@
   *
   */
 
-class		ProductSale
+class ProductSaleCore
 {
 	/*
 	** Fill the `product_sale` SQL table with data from `order_detail`

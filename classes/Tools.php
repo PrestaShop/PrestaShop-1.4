@@ -11,7 +11,7 @@
   *
   */
 
-class Tools
+class ToolsCore
 {
 	protected static $file_exists_cache = array();
 	

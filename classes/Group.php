@@ -12,7 +12,7 @@
   *
   */
 
-class		Group extends ObjectModel
+class GroupCore extends ObjectModel
 {
 	public 		$id;
 

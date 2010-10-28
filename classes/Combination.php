@@ -12,7 +12,7 @@
   *
   */
 
-class Combination extends ObjectModel
+class CombinationCore extends ObjectModel
 {
 	public $id_product;
 

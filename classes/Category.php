@@ -12,7 +12,7 @@
   *
   */
 
-class		Category extends ObjectModel
+class CategoryCore extends ObjectModel
 {
 	public 		$id;
 

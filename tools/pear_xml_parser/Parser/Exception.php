@@ -24,7 +24,7 @@
 /**
  * We are extending PEAR_Exception
  */
-//require_once 'PEAR/Exception.php';
+require_once(dirname(__FILE__).'/../../pear/PEAR.php');
 
 /**
  * XML_Feed_Parser_Exception is a simple extension of PEAR_Exception, existing

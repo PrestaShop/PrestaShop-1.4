@@ -12,7 +12,7 @@
   *
   */
 
-class		Country extends ObjectModel
+class CountryCore extends ObjectModel
 {
 	public 		$id;
 

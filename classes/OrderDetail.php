@@ -12,7 +12,7 @@
   *
   */
 
-class OrderDetail extends ObjectModel
+class OrderDetailCore extends ObjectModel
 {
 	/** @var integer */
 	public $id_order_detail;

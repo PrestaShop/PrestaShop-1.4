@@ -12,7 +12,7 @@
   *
   */
 
-abstract class Module
+abstract class ModuleCore
 {
 	/** @var integer Module ID */
 	public $id = NULL;

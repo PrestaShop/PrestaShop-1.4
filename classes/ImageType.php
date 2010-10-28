@@ -12,7 +12,7 @@
 *
 */
 
-class		ImageType extends ObjectModel
+class ImageTypeCore extends ObjectModel
 {
 	public		$id;
 

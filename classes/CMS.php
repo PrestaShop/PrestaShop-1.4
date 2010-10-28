@@ -11,7 +11,7 @@
   *
   */
 
-class		CMS extends ObjectModel
+class CMSCore extends ObjectModel
 {
 	
 	/** @var string Name */

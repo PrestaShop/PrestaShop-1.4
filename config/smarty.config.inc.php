@@ -1,6 +1,7 @@
 <?php
 
 require_once(_PS_SMARTY_DIR_.'Smarty.class.php');
+global $smarty;
 $smarty = new Smarty();
 $smarty->template_dir 	= _PS_THEME_DIR_.'tpl';
 $smarty->compile_dir 	= _PS_SMARTY_DIR_.'compile';

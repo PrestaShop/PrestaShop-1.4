@@ -12,7 +12,7 @@
   *
   */
 
-class		Manufacturer extends ObjectModel
+class ManufacturerCore extends ObjectModel
 {
 	public 		$id;
 	

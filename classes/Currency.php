@@ -12,7 +12,7 @@
   *
   */
 
-class		Currency extends ObjectModel
+class CurrencyCore extends ObjectModel
 {
 	public 		$id;
 

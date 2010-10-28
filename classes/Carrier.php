@@ -12,7 +12,7 @@
   *
   */
 
-class		Carrier extends ObjectModel
+class CarrierCore extends ObjectModel
 {
 	const SHIPPING_METHOD_DEFAULT = 0;
 	const SHIPPING_METHOD_WEIGHT = 1;

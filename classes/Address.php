@@ -12,7 +12,7 @@
   *
   */
 
-class		Address extends ObjectModel
+class AddressCore extends ObjectModel
 {
 	/** @var integer Customer id which address belongs */
 	public		$id_customer = NULL;

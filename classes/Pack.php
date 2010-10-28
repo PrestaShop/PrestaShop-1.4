@@ -1,6 +1,6 @@
 <?php
 
-class Pack extends Product
+class PackCore extends Product
 {
 	private static $cachePackItems = array();
 	private static $cacheIsPack = array();

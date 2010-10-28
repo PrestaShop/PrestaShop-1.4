@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-class Connection extends ObjectModel
+class ConnectionCore extends ObjectModel
 {	
 	/** @var integer */
 	public $id_guest;

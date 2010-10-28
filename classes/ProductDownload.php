@@ -12,7 +12,7 @@
   *
   */
 
-class ProductDownload extends ObjectModel
+class ProductDownloadCore extends ObjectModel
 {
 	/** @var integer Product id which download belongs */
 	public $id_product;

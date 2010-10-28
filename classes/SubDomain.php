@@ -12,7 +12,7 @@
   *
   */
 
-class SubDomain extends ObjectModel
+class SubDomainCore extends ObjectModel
 {
 	public $name;
 

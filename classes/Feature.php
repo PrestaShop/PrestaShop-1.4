@@ -12,7 +12,7 @@
   *
   */
 
-class		Feature extends ObjectModel
+class FeatureCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

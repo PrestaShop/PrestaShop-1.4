@@ -12,7 +12,7 @@
   *
   */
 
-class		Supplier extends ObjectModel
+class SupplierCore extends ObjectModel
 {
 	public 		$id;
 	

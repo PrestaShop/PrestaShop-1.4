@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-class Guest extends ObjectModel
+class GuestCore extends ObjectModel
 {
 	public $id_operating_system;
 	public $id_web_browser;

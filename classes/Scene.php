@@ -12,7 +12,7 @@
   *
   */
 
-class	Scene extends ObjectModel
+class SceneCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

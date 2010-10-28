@@ -47,6 +47,7 @@ $iso = strtolower(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lan
 @include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 $_MODULES = array();
 
+global $currency;
 $currency = Tools::setCurrency();
 
 if (intval($cookie->id_cart))
@@ -116,6 +117,10 @@ $smarty->assign('navigationPipe', $navigationPipe);
 $server_host_ssl = Tools::getHttpHost(false, true);
 $server_host     = str_replace(':'._PS_SSL_PORT_, '',$server_host_ssl);
 
+global $protocol;
+global $protocol_ssl;
+global $protocol_link;
+global $protocol_content;
 $protocol = 'http://';
 $protocol_ssl = 'https://';
 $protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
@@ -231,6 +236,9 @@ if (isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Conf
 	$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 	exit;
 }
+
+global $css_files;
+global $js_files;
 $css_files = array();
 $js_files = array();
 

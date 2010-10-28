@@ -12,7 +12,7 @@
   *
   */
 
-class		Meta extends ObjectModel
+class MetaCore extends ObjectModel
 {
 	/** @var string Name */
 	public 		$page;

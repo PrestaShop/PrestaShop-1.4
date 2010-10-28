@@ -12,7 +12,7 @@
   *
   */
 
-class Attachment extends ObjectModel
+class AttachmentCore extends ObjectModel
 {
 	public		$file;
 	public		$name;

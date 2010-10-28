@@ -12,7 +12,7 @@
   *
   */
 
-class		Webservice extends ObjectModel
+class WebserviceCore extends ObjectModel
 {
  	/** @var string Key */
 	public 		$key;

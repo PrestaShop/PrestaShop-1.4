@@ -14,7 +14,7 @@
 
 include_once(dirname(__FILE__).'/../config/config.inc.php');
 
-abstract class PaymentModule extends Module
+abstract class PaymentModuleCore extends Module
 {
 	/** @var integer Current order's id */
 	public	$currentOrder;

@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-abstract class ModuleGridEngine extends Module
+abstract class ModuleGridEngineCore extends Module
 {
 	protected	$_type;
 

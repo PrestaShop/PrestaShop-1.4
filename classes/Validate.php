@@ -12,7 +12,7 @@
   *
   */
 
-class Validate
+class ValidateCore
 {
 	static public function isIp2Long($ip)
 	{

@@ -1,6 +1,6 @@
 <?php
 
-class Rijndael
+class RijndaelCore
 {
 	private $_key;
 	private $_iv;

@@ -14,7 +14,7 @@
 
 include_once(_PS_FPDF_PATH_.'fpdf.php');
 
-class PDF_PageGroup extends FPDF
+class PDF_PageGroupCore extends FPDF
 {
 	var $NewPageGroup;   // variable indicating whether a new group was requested
 	var $PageGroups;	 // variable containing the number of pages of the groups
@@ -68,7 +68,7 @@ class PDF_PageGroup extends FPDF
 	}
 }
 
-class PDF extends PDF_PageGroup
+class PDFCore extends PDF_PageGroup
 {
 	private static $order = NULL;
 	private static $orderReturn = NULL;

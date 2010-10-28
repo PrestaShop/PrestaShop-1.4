@@ -12,7 +12,7 @@
   *
   */
 
-class	Cookie
+class	CookieCore
 {
 	/** @var array Contain cookie content in a key => value format */
 	private $_content;

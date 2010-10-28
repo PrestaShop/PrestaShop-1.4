@@ -12,7 +12,7 @@
   *
   */
 
-class		OrderHistory extends ObjectModel
+class OrderHistoryCore extends ObjectModel
 {
 	/** @var integer Order id */
 	public 		$id_order;

@@ -81,7 +81,7 @@ define('PREG_CLASS_CJK', '\x{3041}-\x{30ff}\x{31f0}-\x{31ff}\x{3400}-\x{4db5}'.
 '\x{4e00}-\x{9fbb}\x{f900}-\x{fad9}');
 
 
-class Search
+class SearchCore
 {
 	public static function sanitize($string, $id_lang, $indexation = false)
 	{

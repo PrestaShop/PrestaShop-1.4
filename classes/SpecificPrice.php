@@ -12,7 +12,7 @@
   *
   */
 
-class		SpecificPrice extends ObjectModel
+class SpecificPriceCore extends ObjectModel
 {
 	public	$id_product;
 	public	$id_shop;

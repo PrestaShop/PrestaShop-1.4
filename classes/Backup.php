@@ -12,7 +12,7 @@
   *
   */
 
-class Backup
+class BackupCore
 {
 	/** @var integer Object id */
 	public $id;

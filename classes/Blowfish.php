@@ -408,7 +408,7 @@ class Crypt_Blowfish
 	} 
 }
 
-class Blowfish extends Crypt_Blowfish
+class BlowfishCore extends Crypt_Blowfish
 {
 	function encrypt($plaintext)
 	{

@@ -12,7 +12,7 @@
   *
   */
   
-class		OrderMessage extends ObjectModel
+class OrderMessageCore extends ObjectModel
 {
 	/** @var string name name */
 	public 		$name;

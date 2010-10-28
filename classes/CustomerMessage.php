@@ -1,6 +1,6 @@
 <?php
 
-class CustomerMessage extends ObjectModel
+class CustomerMessageCore extends ObjectModel
 {
 	public $id;
 	public $id_customer_thread;

@@ -12,7 +12,7 @@
   *
   */
 
-class Tax extends ObjectModel
+class TaxCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

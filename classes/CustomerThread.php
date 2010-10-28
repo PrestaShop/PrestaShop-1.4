@@ -1,6 +1,6 @@
 <?php
 
-class CustomerThread extends ObjectModel
+class CustomerThreadCore extends ObjectModel
 {
 	public $id;
 	public $id_lang;

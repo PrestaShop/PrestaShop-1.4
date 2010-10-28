@@ -1,6 +1,6 @@
 <?php
 
-class PaymentCC extends ObjectModel
+class PaymentCCCore extends ObjectModel
 {
 	public $id_order;
 	public $id_currency;

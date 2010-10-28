@@ -12,7 +12,7 @@
   *
   */
 
-class		Shop extends ObjectModel
+class ShopCore extends ObjectModel
 {
 	static public function getShops()
 	{

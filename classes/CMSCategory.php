@@ -12,7 +12,7 @@
   *
   */
 
-class		CMSCategory extends ObjectModel
+class CMSCategoryCore extends ObjectModel
 {
 	public 		$id;
 

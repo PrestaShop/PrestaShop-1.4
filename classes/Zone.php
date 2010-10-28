@@ -12,7 +12,7 @@
   *
   */
 
-class		Zone extends ObjectModel
+class ZoneCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

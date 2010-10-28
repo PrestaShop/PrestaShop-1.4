@@ -15,7 +15,7 @@
 define('_CUSTOMIZE_FILE_', 0);
 define('_CUSTOMIZE_TEXTFIELD_', 1);
 
-class		Product extends ObjectModel
+class ProductCore extends ObjectModel
 {
 	/** @var integer Tax id */
 	public		$id_tax;

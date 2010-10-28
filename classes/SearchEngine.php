@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-class SearchEngine extends ObjectModel
+class SearchEngineCore extends ObjectModel
 {	
 	public $server;
 	public $getvar;

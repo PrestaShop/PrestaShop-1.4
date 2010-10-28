@@ -1,6 +1,6 @@
 <?php
 
-class	StockMvtReason extends ObjectModel
+class StockMvtReasonCore extends ObjectModel
 {
 	public		$id;
 	public		$name;

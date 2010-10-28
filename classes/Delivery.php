@@ -12,7 +12,7 @@
   *
   */
 
-class Delivery extends ObjectModel
+class DeliveryCore extends ObjectModel
 {
 	/** @var integer */
 	public $id_delivery;

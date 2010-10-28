@@ -12,7 +12,7 @@
   *
   */
 
-class Customization
+class CustomizationCore
 {
 
 	static public function getReturnedCustomizations($id_order)

@@ -12,7 +12,7 @@
   *
   */
 
-class		Cart extends ObjectModel
+class CartCore extends ObjectModel
 {
 	public		$id;
 

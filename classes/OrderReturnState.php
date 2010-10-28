@@ -12,7 +12,7 @@
   *
   */
 
-class		OrderReturnState extends ObjectModel
+class OrderReturnStateCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

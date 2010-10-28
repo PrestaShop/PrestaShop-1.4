@@ -17,7 +17,7 @@ include_once(_PS_SWIFT_DIR_.'Swift/Connection/SMTP.php');
 include_once(_PS_SWIFT_DIR_.'Swift/Connection/NativeMail.php');
 include_once(_PS_SWIFT_DIR_.'Swift/Plugin/Decorator.php');
 
-class Mail
+class MailCore
 {
 	static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_)
 	{

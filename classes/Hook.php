@@ -12,7 +12,7 @@
   *
   */
   
-class			Hook extends ObjectModel
+class HookCore extends ObjectModel
 {
 	/** @var string Name */
 	public 		$name;

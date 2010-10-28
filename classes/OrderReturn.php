@@ -12,7 +12,7 @@
   *
   */
 
-class OrderReturn extends ObjectModel
+class OrderReturnCore extends ObjectModel
 {
 	/** @var integer */
 	public		$id;

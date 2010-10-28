@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-abstract class ModuleGrid extends Module
+abstract class ModuleGridCore extends Module
 {
 	protected $_employee;
 	

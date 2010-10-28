@@ -12,7 +12,7 @@
   *
   */
 
-class		State extends ObjectModel
+class StateCore extends ObjectModel
 {
 	/** @var integer Country id which state belongs */
 	public 		$id_country;

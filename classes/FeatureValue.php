@@ -12,7 +12,7 @@
   *
   */
 
-class		FeatureValue extends ObjectModel
+class FeatureValueCore extends ObjectModel
 {
 	/** @var integer Group id which attribute belongs */
 	public		$id_feature;

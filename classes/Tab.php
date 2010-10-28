@@ -12,7 +12,7 @@
   *
   */
 
-class Tab extends ObjectModel
+class TabCore extends ObjectModel
 {
 	/** @var string Displayed name*/
 	public		$name;

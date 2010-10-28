@@ -12,7 +12,7 @@
   *
   */
 
-class		Configuration extends ObjectModel
+class ConfigurationCore extends ObjectModel
 {
 	public 		$id;
 

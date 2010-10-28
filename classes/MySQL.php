@@ -12,7 +12,7 @@
   *
   */
 
-class MySQL extends Db
+class MySQLCore extends Db
 {
 	public function	connect()
 	{

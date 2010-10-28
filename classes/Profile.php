@@ -12,7 +12,7 @@
   *
   */
 
-class Profile extends ObjectModel
+class ProfileCore extends ObjectModel
 {
  	/** @var string Name */
 	public 		$name;

@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-abstract class ModuleGraph extends Module
+abstract class ModuleGraphCore extends Module
 {
 	protected $_employee;
 	

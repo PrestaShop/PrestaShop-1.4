@@ -12,7 +12,7 @@
   *
   */
 
-class Alias extends ObjectModel
+class AliasCore extends ObjectModel
 {
 	public $alias;
 	public $search;

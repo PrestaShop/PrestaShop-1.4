@@ -12,7 +12,7 @@
   *
   */
 
-abstract class ObjectModel
+abstract class ObjectModelCore
 {
 	/** @var integer Object id */
 	public $id;

@@ -69,7 +69,7 @@ class canonicalUrl extends Module
 
 	public function hookHeader($params)
 	{
-		global $smarty, $protocol_link, $rewrited_url;
+		global $smarty, $protocol_link;
 		
 		$canonicalUrl = Configuration::get('CANONICAL_URL');
 		$ps_request = str_replace(__PS_BASE_URI__, '', $_SERVER['REQUEST_URI']);

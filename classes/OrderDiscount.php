@@ -11,7 +11,7 @@
   *
   */
 
-class OrderDiscount extends ObjectModel
+class OrderDiscountCore extends ObjectModel
 {
 	/** @var integer */
 	public $id_order_discount;

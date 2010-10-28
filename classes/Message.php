@@ -12,7 +12,7 @@
   *
   */
   
-class		Message extends ObjectModel
+class MessageCore extends ObjectModel
 {
 	public 		$id;
 	

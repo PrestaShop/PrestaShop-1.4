@@ -12,7 +12,7 @@
   *
   */
 
-class RangePrice extends ObjectModel
+class RangePriceCore extends ObjectModel
 {
 	public		$id_carrier;
 	public 		$delimiter1;

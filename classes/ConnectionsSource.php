@@ -12,7 +12,7 @@
   *
   */
 
-class ConnectionsSource extends ObjectModel
+class ConnectionsSourceCore extends ObjectModel
 {
 	public $id_connections;
 	public $http_referer;

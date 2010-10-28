@@ -12,7 +12,7 @@
   *
   */
 
-class		Employee extends ObjectModel
+class EmployeeCore extends ObjectModel
 {
 	public 		$id;
 	

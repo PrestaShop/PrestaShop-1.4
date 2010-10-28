@@ -14,9 +14,9 @@
 
 if (file_exists(dirname(__FILE__).'/../config/settings.inc.php'))
 	include_once(dirname(__FILE__).'/../config/settings.inc.php');
-include_once(dirname(__FILE__).'/../classes/MySQL.php');
+//include_once(dirname(__FILE__).'/../classes/MySQL.php');
 
-abstract class Db
+abstract class DbCore
 {
 	/** @var string Server (eg. localhost) */
 	protected $_server;

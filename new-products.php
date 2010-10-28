@@ -1,23 +1,5 @@
 <?php
 
-include(dirname(__FILE__).'/config/config.inc.php');
-include(dirname(__FILE__).'/init.php');
-Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
-
-include(dirname(__FILE__).'/header.php');
-
-include(dirname(__FILE__).'/product-sort.php');
-
-$nbProducts = intval(Product::getNewProducts(intval($cookie->id_lang), isset($p) ? intval($p) - 1 : NULL, isset($n) ? intval($n) : NULL, true));
-include(dirname(__FILE__).'/pagination.php');
-
-$smarty->assign(array(
-	'products' => Product::getNewProducts(intval($cookie->id_lang), intval($p) - 1, intval($n), false, $orderBy, $orderWay),
-	'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
-	'nbProducts' => intval($nbProducts)));
-
-$smarty->display(_PS_THEME_DIR_.'new-products.tpl');
-
-include(dirname(__FILE__).'/footer.php');
-
-?>
+require(dirname(__FILE__).'/config/config.inc.php');
+$controller = ControllerFactory::getController('NewProductsController');
+$controller->run();

@@ -12,7 +12,7 @@
   *
   */
 
-class		Customer extends ObjectModel
+class CustomerCore extends ObjectModel
 {
 	public 		$id;
 

@@ -12,7 +12,7 @@
   *
   */
 
-class Referrer extends ObjectModel
+class ReferrerCore extends ObjectModel
 {
 	public $name;
 	public $passwd;

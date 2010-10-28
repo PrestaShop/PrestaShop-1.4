@@ -12,7 +12,7 @@
   *
   */
   
-class		Discount extends ObjectModel
+class DiscountCore extends ObjectModel
 {
 	public		$id;
 	

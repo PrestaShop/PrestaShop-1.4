@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-abstract class ModuleGraphEngine extends Module
+abstract class ModuleGraphEngineCore extends Module
 {
 	protected	$_type;
 

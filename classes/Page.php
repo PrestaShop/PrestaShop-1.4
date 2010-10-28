@@ -10,7 +10,7 @@
   * @version 1.2
   */
   
-class Page extends ObjectModel
+class PageCore extends ObjectModel
 {
 	public $id_page_type;
 	public $id_object;

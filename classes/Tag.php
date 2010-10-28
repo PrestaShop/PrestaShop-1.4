@@ -12,7 +12,7 @@
   *
   */
 
-class Tag extends ObjectModel
+class TagCore extends ObjectModel
 {
  	/** @var integer Language id */
 	public 		$id_lang;

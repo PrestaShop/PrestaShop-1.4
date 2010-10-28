@@ -12,7 +12,7 @@
   *
   */
 
-class OrderSlip extends ObjectModel
+class OrderSlipCore extends ObjectModel
 {
 	/** @var integer */
 	public		$id;

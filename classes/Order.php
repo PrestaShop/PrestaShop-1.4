@@ -12,7 +12,7 @@
   *
   */
 
-class		Order extends ObjectModel
+class OrderCore extends ObjectModel
 {
 	/** @var integer Delivery address id */
 	public 		$id_address_delivery;

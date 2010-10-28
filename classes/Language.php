@@ -12,7 +12,7 @@
   *
   */
 
-class		Language extends ObjectModel
+class LanguageCore extends ObjectModel
 {
 	public 		$id;
 	

@@ -12,7 +12,7 @@
   *
   */
 
-abstract class AdminTab
+abstract class AdminTabCore
 {
 	/** @var integer Tab id */
 	public $id = -1;

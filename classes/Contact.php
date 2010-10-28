@@ -12,7 +12,7 @@
   *
   */
   
-class		Contact extends ObjectModel
+class ContactCore extends ObjectModel
 {
 	public 		$id;
 	
