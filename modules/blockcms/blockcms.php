@@ -79,7 +79,7 @@ class BlockCms extends Module
 		return true;
 	}
 
-	private function getBlockCMS($id_block_cms)
+	public function getBlockCMS($id_block_cms)
 	{
 		$cms_block = Db::getInstance()->ExecuteS('
 		SELECT `id_cms_category`, `location` FROM `'._DB_PREFIX_.'cms_block`
@@ -108,6 +108,13 @@ class BlockCms extends Module
 		ORDER BY bc.`position`');
 		
 		return $cms_block;
+	}
+	
+	public function getAllBlocksCMS()
+	{
+		$block = array();
+		$block = array_merge($this->getBlocksCMS(0), $this->getBlocksCMS(1));
+		return $block;
 	}
 
 	static public function getCMStitlesFooter()
@@ -197,6 +204,28 @@ class BlockCms extends Module
 			$display_cms[$key]['category_name'] = $cms_category['category_name'];
 		}
 		return $display_cms;
+	}
+	
+	public function getAllCMSTitles()
+	{
+		$titles = array();
+		foreach(self::getCMStitles(0) as $key => $title)
+		{
+			unset($title['categories']);
+			unset($title['name']);
+			unset($title['category_link']);
+			unset($title['category_name']);
+			$titles[$key] = $title;
+		}
+		foreach(self::getCMStitles(1) as $key => $title)
+		{
+			unset($title['categories']);
+			unset($title['name']);
+			unset($title['category_link']);
+			unset($title['category_name']);
+			$titles[$key] = $title;
+		}		
+		return $titles;
 	}
 
 	private function displayRecurseCheckboxes($categories, $selected, $has_suite = array())

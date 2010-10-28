@@ -39,6 +39,22 @@ $smarty->assign('categoriesTree', $categTree);
 /* /ONLY FOR THEME OLDER THAN v1.0 */
 
 $cms = CMS::listCms(intval($cookie->id_lang));
+
+if (Module::isInstalled('blockcms'))
+{
+	$smarty->assign('blockCMSInstalled', true);
+	$cms_module = Module::getInstanceByName('blockcms');
+	$smarty->assign('blocks', $cms_module->getAllBlocksCMS());
+	$smarty->assign('pages', $cms_module->getAllCMStitles());
+	//d($cms_module->getAllCMStitles());
+}
+else
+{
+	$smarty->assign('blockcms', false);
+	$cms = CMS::listCms(intval($cookie->id_lang));
+}
+
+
 $id_cms = array();
 foreach($cms AS $row)
 	$id_cms[] = intval($row['id_cms']);

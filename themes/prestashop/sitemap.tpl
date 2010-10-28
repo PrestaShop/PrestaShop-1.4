@@ -3,15 +3,31 @@
 
 <h2>{l s='Sitemap'}</h2>
 <div id="sitemap_content">
-	<div class="sitemap_block">
-		<h3>{l s='Information'}</h3>
-		<ul>
-			<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
-			{foreach from=$cmslinks item=cmslink}
-				<li><a href="{$cmslink.link}" title="{$cmslink.meta_title}">{$cmslink.meta_title}</a></li>
-			{/foreach}
-		</ul>
-	</div>
+	{if $blockCMSInstalled}
+	{foreach from=$blocks item=block}
+		<div class="sitemap_block">
+			<h3>{$block.block_name}{$block.id_block_cms}</h3>
+			{assign var='id_block_cms' value=$block.id_block_cms}
+			<ul>
+				{foreach from=$pages[$id_block_cms] item=page}
+					{foreach from=$page item=p}
+						<li><a href="{$p.link}" title="{$p.meta_title}">{$p.meta_title}</a></li>
+					{/foreach}
+				{/foreach}
+			</ul>
+		</div>
+	{/foreach}
+	{else}
+		<div class="sitemap_block">
+			<h3>{l s='Information'}</h3>
+			<ul>
+				<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
+				{foreach from=$cmslinks item=cmslink}
+					<li><a href="{$cmslink.link}" title="{$cmslink.meta_title}">{$cmslink.meta_title}</a></li>
+				{/foreach}
+			</ul>
+		</div>
+	{/if}
 	<div class="sitemap_block">
 		<h3>{l s='Our offers'}</h3>
 		<ul>
