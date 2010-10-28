@@ -43,9 +43,9 @@ function calcPriceTE()
 
 function calcReduction()
 {
-	if (parseFloat(document.getElementById('reduction_price').value) > 0)
+	if (parseFloat($('#reduction_price').val()) > 0)
 		reductionPrice();
-	else if (parseFloat(document.getElementById('reduction_percent').value) > 0)
+	else if (parseFloat($('#reduction_percent').val()) > 0)
 		reductionPercent();
 }
 

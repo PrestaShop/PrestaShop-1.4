@@ -1,4 +1,4 @@
-function fillCombinaison(wholesale_price, price_impact, weight_impact, unity_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
+function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
 {
 	init_elems();
 	getE('attribute_quantity').value = quantity;
@@ -9,7 +9,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unity_imp
 	getE('attribute_wholesale_price').value = Math.abs(wholesale_price);
 	getE('attribute_price').value = Math.abs(price_impact);
 	getE('attribute_weight').value = weight_impact;
-	getE('attribute_unity').value = unity_impact;
+	getE('attribute_unity').value = unit_impact;
 	getE('attribute_ecotax').value = eco_tax;
 	getE('attribute_location').value = location;
 	if (default_attribute == 1)
@@ -47,20 +47,20 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unity_imp
 		getE('attribute_weight_impact').options[getE('attribute_weight_impact').selectedIndex].value = 1;
 		getE('attribute_weight_impact').selectedIndex = 1;
 	}
-	if (unity_impact < 0)
+	if (unit_impact < 0)
 	{
-		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = -1;
-		getE('attribute_unity_impact').selectedIndex = 2;
+		getE('attribute_unit_impact').options[getE('attribute_unit_impact').selectedIndex].value = -1;
+		getE('attribute_unit_impact').selectedIndex = 2;
 	}
-	else if (!unity_impact)
+	else if (!unit_impact)
 	{
-		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = 0;
-		getE('attribute_unity_impact').selectedIndex = 0;
+		getE('attribute_unit_impact').options[getE('attribute_unit_impact').selectedIndex].value = 0;
+		getE('attribute_unit_impact').selectedIndex = 0;
 	}
-	else if (unity_impact > 0)
+	else if (unit_impact > 0)
 	{
-		getE('attribute_unity_impact').options[getE('attribute_unity_impact').selectedIndex].value = 1;
-		getE('attribute_unity_impact').selectedIndex = 1;
+		getE('attribute_unit_impact').options[getE('attribute_unit_impact').selectedIndex].value = 1;
+		getE('attribute_unit_impact').selectedIndex = 1;
 	}
 
 	/* Reset all combination images */
@@ -76,7 +76,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unity_imp
 
 	check_impact();
 	check_weight_impact();
-	check_unity_impact();
+	check_unit_impact();
 
 	var elem = getE('product_att_list');
 	for (var i = 0; i < old_attr.length; i++)
@@ -145,15 +145,15 @@ function check_weight_impact()
 		$('#span_weight_impact').show();
 }
 
-function check_unity_impact()
+function check_unit_impact()
 {
-	if ($('#attribute_unity_impact').get(0).selectedIndex == 0)
+	if ($('#attribute_unit_impact').get(0).selectedIndex == 0)
 	{
-		$('#span_unity_impact').hide();
+		$('#span_unit_impact').hide();
 		$('#attribute_unity').val('0.00');
 	}
 	else
-		$('#span_unity_impact').show();
+		$('#span_unit_impact').show();
 }
 
 function init_elems()
@@ -167,8 +167,8 @@ function init_elems()
 
 	getE('attribute_price_impact').selectedIndex = 0;
 	getE('attribute_weight_impact').selectedIndex = 0;
-	getE('attribute_unity_impact').selectedIndex = 0;
-	$('#span_unity_impact').hide();
+	getE('attribute_unit_impact').selectedIndex = 0;
+	$('#span_unit_impact').hide();
 	$('#unity_third').html($('#unity_second').html());
 	try
 	{
