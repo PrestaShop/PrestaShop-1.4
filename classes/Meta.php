@@ -118,7 +118,48 @@ class		Meta extends ObjectModel
 									Configuration::get('PS_HTACCESS_SPECIFIC')
 									);
 	}
+
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (!parent::add($autodate, $nullValues));
+		
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									);
+	}
 	
+	public function delete()
+	{
+		if (!parent::delete())
+			return false;
+		
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								Configuration::get('PS_HTACCESS_SPECIFIC')
+								);
+	}
+	
+	public function deleteSelection($selection)
+	{
+		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+			die(Tools::displayError());
+		$result = true;
+		foreach ($selection AS $id)
+		{
+			$this->id = intval($id);
+			$result = $result AND $this->delete();
+		}
+		
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									Configuration::get('PS_HTACCESS_SPECIFIC')
+									);
+	}
+
 	static public function getEquivalentUrlRewrite($new_id_lang, $id_lang, $url_rewrite)
 	{
 		return Db::getInstance()->getValue('

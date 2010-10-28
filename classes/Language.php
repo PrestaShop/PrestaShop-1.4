@@ -60,6 +60,9 @@ class		Language extends ObjectModel
 	
 	static public function getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
 	{
+		if (empty($iso_from))
+			die(Tools::displayError());
+		
 		$copy = ($iso_to AND $theme_to) ? true : false;
 		
 		$lPath_from = _PS_TRANSLATIONS_DIR_.strval($iso_from).'/';
@@ -178,11 +181,22 @@ class		Language extends ObjectModel
 	{
 		if (!parent::add($autodate))
 			return false;
+		
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			intval(Configuration::get('PS_REWRITING_SETTINGS')),		
 			intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 			Configuration::get('PS_HTACCESS_SPECIFIC')
 		));
+	}
+
+	public function toggleStatus()
+	{
+		if (parent::toggleStatus())
+			return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								Configuration::get('PS_HTACCESS_SPECIFIC'),
+								);
 	}
 	
 	public function loadUpdateSQL()
@@ -226,6 +240,9 @@ class		Language extends ObjectModel
 	
 	public function delete()
 	{
+		if (empty($this->iso_code)) 
+			$this->iso_code = self::getIsoById($this->id);		
+		
 		/* Database translations deletion */
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
@@ -249,7 +266,35 @@ class		Language extends ObjectModel
 			self::recurseDeleteDir(_PS_MAIL_DIR_.$this->iso_code);
 		if (file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
 			self::recurseDeleteDir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
-		return parent::delete();
+		if (!parent::delete())
+			return false;
+		
+		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									Configuration::get('PS_HTACCESS_SPECIFIC')
+								);		
+	}
+	
+	
+	public function deleteSelection($selection)
+	{
+		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+			die(Tools::displayError());
+		$result = true;
+		foreach ($selection AS $id)
+		{
+			$this->id = intval($id);
+			$result = $result AND $this->delete();
+		}
+		
+		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
+								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								Configuration::get('PS_HTACCESS_SPECIFIC'),
+							);	
+		
+		return $result;
 	}
 	
 	/**

@@ -1313,6 +1313,9 @@ class Tools
 
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
 	{
+		if (!file_exists($path) || !is_writable($path)) // do nothing
+			return true; 
+
 		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
 
 		// ErrorDocument
@@ -1341,14 +1344,18 @@ class Tools
 		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)(.*)$'] = 'supplier.php?id_supplier=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L,E]';
 		
-		Language::loadLanguages();
+		Language::loadLanguages();		
+		$default_meta = Meta::getMetasByIdLang(intval(Configuration::get('PS_LANG_DEFAULT')));
+
 		foreach (Language::getLanguages() AS $language)
 		{													
-			foreach (Meta::getMetasByIdLang($language['id_lang']) AS $meta)
+			foreach (Meta::getMetasByIdLang($language['id_lang']) AS $key => $meta)
 			{
 				//RewriteRule ^lang-es/contacto$ contact-form.php [QSA,L,E]
 				if (!empty($meta['url_rewrite']))
 					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'];
+				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
+					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'];					
 			}
 		}						
 		
