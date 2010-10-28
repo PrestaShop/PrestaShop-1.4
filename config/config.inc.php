@@ -4,6 +4,9 @@
 @ini_set('display_errors', 'on');
 define('_PS_DEBUG_SQL_', true);
 
+/* Compatibility warning */
+define('_PS_DISPLAY_COMPATIBILITY_WARNING_', true);
+
 /* SSL configuration */
 define('_PS_SSL_PORT_',443);
 

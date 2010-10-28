@@ -1460,6 +1460,19 @@ FileETag INode MTime Size
 			}
 		}
 	}
+	
+	/**
+	 * Display a warning message indicating that the method is deprecated
+	 */
+	function displayAsDeprecated() 
+	{
+		if (_PS_DISPLAY_COMPATIBILITY_WARNING_)
+		{
+			$callee = next(debug_backtrace());
+	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong>', E_USER_WARNING);
+		}
+	}
+	
 }
 
 /**
