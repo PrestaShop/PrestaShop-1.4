@@ -2105,6 +2105,7 @@ class AdminProducts extends AdminTab
 						echo '<td class="col-left">'.$this->l('Stock Movement:').'</td>
 							<td style="padding-bottom:5px;">
 								<select name="mvt_type">
+									<option value="--">--</option>
 									<option value="1">'.$this->l('Add').'</option>
 									<option value="2">'.$this->l('Delete').'</option>
 								</select>
@@ -2702,6 +2703,7 @@ class AdminProducts extends AdminTab
 				<td class="col-left">'.$this->l('Stock movement:').'</td>
 				<td style="padding-bottom:5px;">
 					<select name="attribute_mvt_type">
+						<option value="--">--</option>
 						<option value="1">'.$this->l('Add').'</option>
 						<option value="2">'.$this->l('Delete').'</option>
 					</select>
