@@ -61,7 +61,6 @@ class AdminModules extends AdminTab
 				Configuration::updateValue('PS_SHOW_PARTNERS_MODULES', 0);
 				Configuration::updateValue('PS_SHOW_OTHERS_MODULES', 0);
 				Configuration::updateValue('PS_SHOW_COUNTRY_MODULES', 0);
-
 			switch (Tools::getValue('filter'))
 			{
 				case 'all_modules':
@@ -336,6 +335,8 @@ class AdminModules extends AdminTab
 		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES');
 		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES');
 		$showUninstalledModules = Configuration::get('PS_SHOW_UNINSTALLED_MODULES');
+		$nameCountryDefault = Country::getNameById($cookie->id_lang, Configuration::get('PS_COUNTRY_DEFAULT'));
+		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
 		$serialModules = '';
 		$modules = Module::getModulesOnDisk();
@@ -362,6 +363,8 @@ class AdminModules extends AdminTab
 			if ($showUninstalledModules)
 				if ($module->id)
 					unset($modules[$key]);
+			if ((isset($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)))
+				unset($modules[$key]);
 		}
 	
 		$this->displayJavascript();
@@ -427,9 +430,6 @@ class AdminModules extends AdminTab
 			foreach ($tabModule AS $module)
 				if ($module->active AND $module->warning)
 					$this->displayWarning('<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning)));
-		$nameCountryDefault = Country::getNameById($cookie->id_lang, Configuration::get('PS_COUNTRY_DEFAULT'));
-		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
-		
 		
 		echo '<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
 				<tr>
@@ -464,6 +464,7 @@ class AdminModules extends AdminTab
 			  	<td colspan="5" style="height:40px;border-bottom:solid 1px;background-color:#EEEEEE">
 			  		<form method="POST" id="form_all_module" action="">
 			  			<input type="hidden" name="filter" value="country_modules">
+			  			<input type="hidden" name="filterModules1">
 						<input type="checkbox" name="country_module_value" style="vertical-align: middle;" id="all_module" '.(Configuration::get('PS_SHOW_COUNTRY_MODULES') ? 'checked="checked"' : '').' onclick="document.getElementById(\'form_all_module\').submit();" />&nbsp;&nbsp;
 						<label class="t" for="all_module">'.$this->l('Show only modules that can be used in my country').'</label> ('.$this->l('Current country:').' <a href="index.php?tab=AdminCountries&token='.Tools::getAdminToken('AdminCountries'.intval(Tab::getIdFromClassName('AdminCountries')).intval($cookie->id_employee)).'">'.$nameCountryDefault.'</a>)
 					</form>
