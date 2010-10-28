@@ -248,6 +248,8 @@ class AdminGroups extends AdminTab
 					$this->_errors[] = Tools::displayError('Wrong category ID');
 				elseif (!$reduction = Tools::getValue('reduction') OR !Validate::isPrice($reduction))
 					$this->_errors[] = Tools::displayError('Invalid reduction (must be a percentage)');
+				elseif (GroupReduction::doesExist(intval($obj->id), $id_category))
+					$this->_errors[] = Tools::displayError('A reduction already exists for this category.');
 				else
 				{
 					$groupReduction->id_category = intval($id_category);

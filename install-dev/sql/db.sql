@@ -625,6 +625,22 @@ CREATE TABLE `PREFIX_group_lang` (
   UNIQUE KEY `attribute_lang_index` (`id_group`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_group_reduction` (
+	`id_group_reduction` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`id_group` INT(10) UNSIGNED NOT NULL,
+	`id_category` INT(10) UNSIGNED NOT NULL,
+	`reduction` DECIMAL(4, 3) NOT NULL,
+	PRIMARY KEY(`id_group_reduction`),
+	UNIQUE KEY(`id_group`, `id_category`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_product_group_reduction_cache` (
+	`id_product` INT UNSIGNED NOT NULL,
+	`id_group` INT UNSIGNED NOT NULL,
+	`reduction` DECIMAL(4, 3) NOT NULL,
+	PRIMARY KEY(`id_product`, `id_group`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
 CREATE TABLE `PREFIX_guest` (
   `id_guest` int(10) unsigned NOT NULL auto_increment,
   `id_operating_system` int(10) unsigned default NULL,

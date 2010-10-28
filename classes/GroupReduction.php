@@ -71,6 +71,11 @@ class		GroupReduction extends ObjectModel
 	{
 		return Db::getInstance()->getValue('SELECT `reduction` FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_product` = '.intval($id_product).' AND `id_group` = '.intval($id_group));
 	}
+
+	static public function doesExist($id_group, $id_category)
+	{
+		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `id_group` FROM `'._DB_PREFIX_.'group_reduction` WHERE `id_group` = '.intval($id_group).' AND `id_category` = '.intval($id_category));
+	}
 }
 
 ?>

@@ -148,7 +148,6 @@ abstract class ObjectModel
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'INSERT');
 		if (!$result)
 			return false;
-
 		/* Get object id in database */
 		$this->id = Db::getInstance()->Insert_ID();
 		/* Database insertion for multilingual fields related to the object */
