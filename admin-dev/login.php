@@ -135,7 +135,7 @@ else
 						<input type="password" name="passwd" class="input" value=""/>
 					</div>
 					<div>
-						<div id="submit"><input type="submit" name="Submit" value="'.translate('Connection').'" class="button" /></div>
+						<div id="submit"><input type="submit" name="Submit" value="'.translate('Log in').'" class="button" /></div>
 						<div id="lost"><a href="password.php">'.translate('Lost password?').'</a></div>
 					</div>
 	';

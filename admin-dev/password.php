@@ -77,7 +77,8 @@ if (sizeof($errors))
 }		
 echo '
 	<div id="login">
-		<form action="" method="post">
+		<h1>'.Configuration::get('PS_SHOP_NAME').'</h1>
+		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<div class="page-title center">'.translate('Forgot your password?').'</div><br />';
 if (isset($confirmation))
 	echo '	<br />
@@ -93,6 +94,7 @@ else
 			</div>
 		</form>
 	</div>
+	<h2><a href="http://www.prestashop.com">&copy; Copyright by PrestaShop. all rights reserved.</a></h2>
 </div></body></html>';
 
 ?>
