@@ -170,6 +170,10 @@ function init_elems()
 	getE('attribute_unit_impact').selectedIndex = 0;
 	$('#span_unit_impact').hide();
 	$('#unity_third').html($('#unity_second').html());
+	if ($('#unity').get(0).value.length > 0)
+		$('#tr_unit_impact').show();
+	else
+		$('#tr_unit_impact').hide();
 	try
 	{
 		if (impact.options[impact.selectedIndex].value == 0)

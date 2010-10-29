@@ -141,7 +141,13 @@ function unitPriceWithTax(type)
 function unitySecond()
 {
 	$('#unity_second').html($('#unity').val());
-	$('#unity_third').html($('#unity').val());
+	if ($('#unity').get(0).value.length > 0)
+	{
+		$('#unity_third').html($('#unity').val());
+		$('#tr_unit_impact').show();
+	}
+	else
+		$('#tr_unit_impact').hide();
 }
 
 function updateNewPriceAttribute()
