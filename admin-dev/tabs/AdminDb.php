@@ -96,9 +96,13 @@ class AdminDb extends AdminPreferences
 				<tr><th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th><th>'.$this->l('Table').'</th><th>'.$this->l('Table Engine').'</th></tr>';
 		$tables_status = $this->_getTablesStatus();
 		foreach ($tables_status AS $table)
+		{
+			if (!preg_match('/^'._DB_PREFIX_.'.*/Ui', $table['Name']))
+				continue;
 			echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 						<td class="noborder"><input type="checkbox" name="tablesBox[]" value="'.$table['Name'].'"/></td><td>'.$table['Name'].'</td><td>'.$table['Engine'].'</td>
 					</tr>';
+		}
 		echo '</table><br />
 		<label for="dbEngine">'.$this->l('Change Engine to').'</label>
 		<div class="margin-form">
