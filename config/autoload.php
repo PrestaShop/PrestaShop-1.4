@@ -5,8 +5,8 @@ function __autoload($className)
 	if (!class_exists($className, false))
 	{
 		require_once(dirname(__FILE__).'/../classes/'.$className.'.php');
-		if (file_exists(dirname(__FILE__).'/../override/'.$className.'.php'))
-			require_once(dirname(__FILE__).'/../override/'.$className.'.php');
+		if (file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php'))
+			require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
 		else
 		{
 			$coreClass = new ReflectionClass($className.'Core');
