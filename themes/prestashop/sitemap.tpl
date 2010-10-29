@@ -6,7 +6,7 @@
 	{if $blockCMSInstalled}
 	{foreach from=$blocks item=block}
 		<div class="sitemap_block">
-			<h3>{$block.block_name}{$block.id_block_cms}</h3>
+			<h3>{$block.block_name}</h3>
 			{assign var='id_block_cms' value=$block.id_block_cms}
 			<ul>
 				{foreach from=$pages[$id_block_cms] item=page}
