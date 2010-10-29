@@ -100,12 +100,15 @@ class OrderControllerCore extends FrontController
 		parent::setMedia();
 		
 		Tools::addJS(_THEME_JS_DIR_.'tools.js');
-		Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
-		Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
 		Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
 		
 		if ($this->step == 1)
 			Tools::addJS(_THEME_JS_DIR_.'order-address.js');
+		if ($this->step == 2)
+		{
+			Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
+			Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+		}
 		if (!in_array($this->step, array(1, 2, 3)))
 			Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 	}
