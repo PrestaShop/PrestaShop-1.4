@@ -79,7 +79,7 @@ class ReferralProgram extends Module
 			`date_upd` DATETIME NOT NULL,
 			PRIMARY KEY (`id_referralprogram`),
 			UNIQUE KEY `index_unique_referralprogram_email` (`email`)
-		) DEFAULT CHARSET=utf8 ;');
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 ;');
 	}
 
 	public function uninstall()
