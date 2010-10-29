@@ -49,7 +49,7 @@
 				<tr>
 					<td style="vertical-align: top">
 						{dateFormat date=$comment.date_add|escape:'html':'UTF-8' full=0}
-						{$comment.firstname|escape:'html':'UTF-8'} {$comment.lastname|truncate:1:'...'|escape:'htmlall':'UTF-8'}.
+						{$comment.customer_name|escape:'html':'UTF-8'}.
 					</td>
 					<td style="vertical-align: top">
 						{$comment.content|escape:'html':'UTF-8'|nl2br}
@@ -66,7 +66,7 @@
 
 {if $too_early == true}
 	<p class="align_center">{l s='You should wait' mod='productcomments'} {$delay} {l s='hour(s) before posting a new comment' mod='productcomments'}</p>
-{elseif $logged == true}
+{elseif $logged == true || $allow_guests == true}
 <p class="align_center"><input style="margin:auto;" class="button_large" type="button" id="addCommentButton" value="{l s='Add a comment' mod='productcomments'}" onclick="$('#sendComment').slideDown('slow');$(this).slideUp('slow');" /></p>
 <form action="{$action_url}" method="post" class="std" id="sendComment" style="display:none;">
 	<fieldset>
@@ -93,6 +93,7 @@
 		{/section}
 		</table>
 		{/if}
+		{if $allow_guests == true && $logged == false}<p>{l s='Your name'}<input type="text" name="customer_name" /></p>{/if}
 		<p><textarea cols="50" rows="5" name="content" id="content"></textarea></p>
 		<p class="submit">
 			<input class="button" name="submitMessage" value="{l s='Send' mod='productcomments'}" type="submit" />

@@ -24,6 +24,13 @@ class ProductComment extends ObjectModel
 	
 	/** @var integer Customer's id */
 	public 		$id_customer;
+
+	/** @var integer Guest's id */
+	public 		$id_guest;
+	
+	
+	/** @var integer Customer name */
+	public 		$customer_name;
 	
 	/** @var string Content */
 	public 		$content;
@@ -33,6 +40,8 @@ class ProductComment extends ObjectModel
 	
 	/** @var boolean Validate */
 	public 		$validate = 0;
+	
+	public 		$deleted = 0;
 	
 	/** @var string Object creation date */
 	public 		$date_add;
@@ -50,9 +59,12 @@ class ProductComment extends ObjectModel
 	 	parent::validateFields(false);
 		$fields['id_product'] = intval($this->id_product);
 		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_guest'] = intval($this->id_guest);
+		$fields['customer_name'] = pSQL($this->customer_name);
 		$fields['content'] = pSQL($this->content);
 		$fields['grade'] = floatval($this->grade);
 		$fields['validate'] = intval($this->validate);
+		$fields['deleted'] = intval($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);
 		return ($fields);
 	}
@@ -74,20 +86,20 @@ class ProductComment extends ObjectModel
 		if ($n != null AND $n <= 0)
 			$n = 5;
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT pc.`id_product_comment`, c.`firstname`, c.`lastname`, pc.`content`, pc.`grade`, pc.`date_add`
+		SELECT pc.`id_product_comment`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  LEFT(c.`lastname`, 1)), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`
 		  FROM `'._DB_PREFIX_.'product_comment` pc
-		INNER JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
 		WHERE pc.`id_product` = '.intval($id_product).($validate == '1' ? ' AND pc.`validate` = 1' : '').'
 		ORDER BY pc.`date_add` DESC
 		'.($n ? 'LIMIT '.intval(($p - 1) * $n).', '.intval($n) : ''));
 	}
 	
-	static public function getByCustomer($id_product, $id_customer, $last = false)
+	static public function getByCustomer($id_product, $id_customer, $last = false, $id_guest = false)
 	{
 		$results = Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		WHERE pc.`id_product` = '.intval($id_product).' AND pc.`id_customer` = '.intval($id_customer).'
+		WHERE pc.`id_product` = '.intval($id_product).' AND '.(!$id_guest ? 'pc.`id_customer` = '.intval($id_customer) : 'pc.`id_guest` = '.intval($id_guest)).'
 		ORDER BY pc.`date_add` DESC '
 		.($last ? 'LIMIT 1' : '')
 		);
@@ -111,13 +123,13 @@ class ProductComment extends ObjectModel
 		$validate = Configuration::get('PRODUCT_COMMENTS_MODERATE');
 
 		return (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT pc.`id_product_comment`, pcg.`grade`, pcc.`name`, pcc.`id_product_comment_criterion`
+		SELECT pc.`id_product_comment`, pcg.`grade`, pccl.`name`, pcc.`id_product_comment_criterion`
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		INNER JOIN `'._DB_PREFIX_.'product_comment_grade` pcg ON (pcg.`id_product_comment` = pc.`id_product_comment`)
-		INNER JOIN `'._DB_PREFIX_.'product_comment_criterion` pcc ON (pcc.`id_product_comment_criterion` = pcg.`id_product_comment_criterion`)
+		LEFT JOIN `'._DB_PREFIX_.'product_comment_grade` pcg ON (pcg.`id_product_comment` = pc.`id_product_comment`)
+		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion` pcc ON (pcc.`id_product_comment_criterion` = pcg.`id_product_comment_criterion`)
+		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_lang` pccl ON (pccl.`id_product_comment_criterion` = pcg.`id_product_comment_criterion`)
 		WHERE pc.`id_product` = '.intval($id_product).'
-		AND pcg.`grade` > 0
-		AND pcc.`id_lang` = '.intval($id_lang).
+		AND pccl.`id_lang` = '.intval($id_lang).
 		($validate == '1' ? ' AND pc.`validate` = 1' : '')));
 	}
 
@@ -174,7 +186,7 @@ class ProductComment extends ObjectModel
 		$validate = intval(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(pc.`id_product`) AS "nbr"
+		SELECT COUNT(pc.`id_product`) AS nbr
 		FROM `'._DB_PREFIX_.'product_comment` pc
 		WHERE `id_product` = '.intval($id_product).($validate == '1' ? ' AND `validate` = 1' : '').'
 		AND `grade` > 0');
@@ -186,14 +198,14 @@ class ProductComment extends ObjectModel
 	 *
 	 * @return array Comments
 	 */
-	static public function getByValidate($validate = '0')
+	static public function getByValidate($validate = '0', $deleted = false)
 	{
 		global $cookie;
 
 		return (Db::getInstance()->ExecuteS('
-		SELECT pc.`id_product_comment`, pc.`id_product`, c.`firstname`, c.`lastname`, pc.`content`, pc.`grade`, pc.`date_add`, pl.`name`
+		SELECT pc.`id_product_comment`, pc.`id_product`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  c.`lastname`), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`, pl.`name`
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		INNER JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = pc.`id_customer`) 
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = pc.`id_customer`) 
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = pc.`id_product`) 
 		WHERE pc.`validate` = '.intval($validate).'
 		AND pl.`id_lang` = '.intval($cookie->id_lang).'

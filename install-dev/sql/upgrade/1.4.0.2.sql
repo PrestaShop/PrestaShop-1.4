@@ -683,3 +683,4 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;
+/* PHP:updateproductcomments(); */;

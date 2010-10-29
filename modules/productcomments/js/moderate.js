@@ -9,15 +9,18 @@ function getCommentForm()
 function acceptComment(id)
 {
 	var form = getCommentForm();
-	form.elements['id_product_comment'].value = id;
+	if (id)
+		form.elements['id_product_comment'].value = id;
 	form.elements['action'].value = 'accept';
 	form.submit();
 }
 
+
 function deleteComment(id)
 {
 	var form = getCommentForm();
-	form.elements['id_product_comment'].value = id;
+	if (id)
+		form.elements['id_product_comment'].value = id;
 	form.elements['action'].value = 'delete';
 	form.submit();
 }
