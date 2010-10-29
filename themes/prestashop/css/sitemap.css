@@ -3,7 +3,9 @@
 div.sitemap_block {
 	padding: 0;
 	float: left;
-	width: 33%
+	width: 33%;
+	min-height: 120px;
+	_height:120px;
 }
 div.sitemap_block ul { text-align: left }
 div.sitemap_block h3, .categTree h3 {
