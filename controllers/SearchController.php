@@ -61,6 +61,7 @@ class SearchControllerCore extends FrontController
 		{
 			$nbProducts = intval(Search::searchTag(intval($this->cookie->id_lang), $tag, true));
 			include(dirname(__FILE__).'/../pagination.php');
+			global $p, $n, $orderBy, $orderWay;
 			$this->smarty->assign(array(
 			'search_tag' => $tag,
 			'products' => Search::searchTag(intval($this->cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay),

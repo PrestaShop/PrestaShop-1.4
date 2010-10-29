@@ -15,6 +15,7 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 define('INSTALL_VERSION', '1.4.0.2');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
+require(dirname(__FILE__).'/../config/autoload.php');
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 
 /* Prevent from bad URI parsing when using index.php */

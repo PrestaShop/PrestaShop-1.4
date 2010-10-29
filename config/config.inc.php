@@ -18,23 +18,7 @@ define('_PS_SSL_PORT_',443);
 header('Content-Type: text/html; charset=utf-8');
 
 /* Autoload */
-function __autoload($className)
-{
-	if (!class_exists($className, false))
-	{
-		require_once(dirname(__FILE__).'/../classes/'.$className.'.php');
-		if (file_exists(dirname(__FILE__).'/../override/'.$className.'.php'))
-			require_once(dirname(__FILE__).'/../override/'.$className.'.php');
-		else
-		{
-			$coreClass = new ReflectionClass($className.'Core');
-			if ($coreClass->isAbstract())
-				eval('abstract class '.$className.' extends '.$className.'Core {}');
-			else
-				eval('class '.$className.' extends '.$className.'Core {}');
-		}
-	}
-}
+require(dirname(__FILE__).'/autoload.php');
 
 /* No settings file? goto installer...*/
 if (!file_exists(dirname(__FILE__).'/settings.inc.php'))

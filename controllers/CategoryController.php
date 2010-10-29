@@ -67,10 +67,10 @@ class CategoryControllerCore extends FrontController
 				}
 				if ($category->id != 1)
 				{
-					global $orderBy, $orderWay;
+					global $p, $n, $orderBy, $orderWay;
 					$nbProducts = $category->getProducts(NULL, NULL, NULL, $orderBy, $orderWay, true);
 					include(dirname(__FILE__).'/../pagination.php');
-					$smarty->assign('nb_products', $nbProducts);
+					$this->smarty->assign('nb_products', $nbProducts);
 					$cat_products = $category->getProducts(intval($this->cookie->id_lang), intval($p), intval($n), $orderBy, $orderWay);
 				}
 				$this->smarty->assign(array(
