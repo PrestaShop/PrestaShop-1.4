@@ -87,6 +87,51 @@ CREATE TABLE `PREFIX_sekeyword` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE `PREFIX_cms_block` (
+	`id_block_cms` int(10) unsigned NOT NULL auto_increment,
+	`id_cms_category` int(10) unsigned NOT NULL,
+	`name` varchar(40) NOT NULL, 
+	`location` tinyint(1) unsigned NOT NULL,
+	`position` int(10) unsigned NOT NULL default '0',
+	PRIMARY KEY (`id_block_cms`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_block_page` (
+	`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
+	`id_block_cms` int(10) unsigned NOT NULL,
+	`id_cms` int(10) unsigned NOT NULL,
+	`is_category` tinyint(1) unsigned NOT NULL,
+	PRIMARY KEY (`id_block_cms_page`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_cms_block_lang` (
+	`id_block_cms` int(10) unsigned NOT NULL,
+	`id_lang` int(10) unsigned NOT NULL,
+	`name` varchar(40) NOT NULL default '',
+	PRIMARY KEY (`id_block_cms`, `id_lang`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_editorial` (
+	`id_editorial` int(10) unsigned NOT NULL auto_increment,
+	`body_home_logo_link` varchar(255) NOT NULL,
+	PRIMARY KEY (`id_editorial`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+		
+CREATE TABLE `PREFIX_editorial_lang` (
+	`id_editorial` int(10) unsigned NOT NULL,
+	`id_lang` int(10) unsigned NOT NULL,
+	`body_title` varchar(255) NOT NULL,
+	`body_subheading` varchar(255) NOT NULL,
+	`body_paragraph` text NOT NULL,
+	`body_logo_subheading` varchar(255) NOT NULL,
+	PRIMARY KEY (`id_editorial`, `id_lang`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+INSERT INTO `PREFIX_editorial` (`id_editorial`, `body_home_logo_link`) VALUES (1, 'http://www.prestashop.com');
+INSERT INTO `PREFIX_editorial_lang` (`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`) VALUES 
+(1, 1, 'Lorem ipsum dolor sit amet', 'Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Excepteur sint prestashop cupidatat non proident'),
+(1, 2, 'Lorem ipsum dolor sit amet', 'Excepteur sint occaecat cupidatat non proident', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Lorem ipsum presta shop amet');
+
 INSERT INTO `PREFIX_range_price` (`id_range_price`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
 INSERT INTO `PREFIX_range_weight` (`id_range_weight`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
 INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES 

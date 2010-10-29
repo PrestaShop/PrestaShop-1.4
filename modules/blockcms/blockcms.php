@@ -30,7 +30,7 @@ class BlockCms extends Module
 		!$this->registerHook('footer') OR
 		!$this->registerHook('header') OR
 		!Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'cms_block`(
+		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block`(
 		`id_block_cms` int(10) unsigned NOT NULL auto_increment,
 		`id_cms_category` int(10) unsigned NOT NULL,
 		`location` tinyint(1) unsigned NOT NULL,
@@ -40,7 +40,7 @@ class BlockCms extends Module
 		!Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES(1, 0, 0)') OR
 		!Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'cms_block_lang`(
+		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_lang`(
 		`id_block_cms` int(10) unsigned NOT NULL,
 		`id_lang` int(10) unsigned NOT NULL,
 		`name` varchar(40) NOT NULL default \'\',
@@ -48,7 +48,7 @@ class BlockCms extends Module
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute(rtrim($query_lang, ',')) OR
 		!Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'cms_block_page`(
+		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_page`(
 		`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
 		`id_block_cms` int(10) unsigned NOT NULL,
 		`id_cms` int(10) unsigned NOT NULL,
@@ -57,14 +57,6 @@ class BlockCms extends Module
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Configuration::updateValue('FOOTER_CMS', '') OR
 		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1))
-			return false;
-
-		$default_cms = Db::getInstance()->ExecuteS('SELECT `id_cms` FROM `'._DB_PREFIX_.'cms` WHERE `id_cms_category` = 1');
-		$cms_query = 'INSERT INTO `'._DB_PREFIX_.'cms_block_page` (`id_block_cms`, `id_cms`, `is_category`) VALUES';
-		foreach ($default_cms as $cms)
-			$cms_query .= '(1, '.intval($cms['id_cms']).', 0),';
-		$cms_query = rtrim($cms_query, ',');
-		if (!Db::getInstance()->Execute($cms_query))
 			return false;
 		return true;
 	}
@@ -577,10 +569,15 @@ class BlockCms extends Module
 		elseif (Tools::isSubmit('deleteBlockCMS') AND Tools::getValue('id_block_cms'))
 		{
 			$old_block = Db::getInstance()->ExecuteS('SELECT `location`, `position` FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.Tools::getvalue('id_block_cms'));
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.$old_block[0]['position'].' AND `location` = '.$old_block[0]['location']);
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
-			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfully done'));
+			if (sizeof($old_block))
+			{
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.$old_block[0]['position'].' AND `location` = '.$old_block[0]['location']);
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
+				Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMSConfirmation');
+			}
+			else
+				$this->_html .= $this->displayError($this->l('Trying to delete a non-existent block cms'));
 		}
 		elseif (Tools::isSubmit('submitFooterCMS'))
 		{
@@ -596,6 +593,8 @@ class BlockCms extends Module
 			$this->_html = $this->displayConfirmation($this->l('Block CMS succesfully added'));
 		elseif (Tools::isSubmit('editBlockCMSConfirmation'))
 			$this->_html = $this->displayConfirmation($this->l('Block CMS succesfully edited'));
+		elseif (Tools::isSubmit('deleteBlockCMSConfirmation'))
+			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfully done'));
 		elseif (Tools::isSubmit('id_block_cms') AND Tools::isSubmit('way') AND Tools::isSubmit('position') AND Tools::isSubmit('location'))
 			$this->changePosition();
 	}
