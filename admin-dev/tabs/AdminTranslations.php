@@ -846,6 +846,9 @@ class AdminTranslations extends AdminTab
 		$stringToTranslate = array();
 		$dirToParse = array(PS_ADMIN_DIR.'/../',
 							PS_ADMIN_DIR.'/../classes/',
+							PS_ADMIN_DIR.'/../controllers/',
+							PS_ADMIN_DIR.'/../override/classes/',
+							PS_ADMIN_DIR.'/../override/controllers/',
 							PS_ADMIN_DIR.'/',
 							PS_ADMIN_DIR.'/tabs/');
 		if (!file_exists(_PS_MODULE_DIR_))
