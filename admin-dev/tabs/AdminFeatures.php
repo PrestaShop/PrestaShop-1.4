@@ -11,7 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include_once(PS_ADMIN_DIR.'/tabs/AdminFeaturesValues.php');
 
 class AdminFeatures extends AdminTab

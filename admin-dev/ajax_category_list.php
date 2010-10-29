@@ -1,9 +1,9 @@
 <?php
 
 	define('PS_ADMIN_DIR', getcwd());
+	include_once('../config/config.inc.php');
 	include_once('tabs/AdminCatalog.php');
 	include_once('tabs/AdminProducts.php');
-	include_once('../config/config.inc.php');
 	include_once('init.php');
 	
 	if (Tools::getValue('token') != Tools::getAdminTokenLite('AdminCatalog'))

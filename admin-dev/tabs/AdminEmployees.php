@@ -11,8 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-
 class AdminEmployees extends AdminTab
 {
  	/** @var array profiles list */

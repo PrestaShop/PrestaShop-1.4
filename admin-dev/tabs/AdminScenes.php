@@ -11,8 +11,6 @@
   *
   */
 
-include_once(dirname(__FILE__).'/../../classes/AdminTab.php');
-
 class AdminScenes extends AdminTab
 {
 	protected $maxImageSize = 1000000;

@@ -1,5 +1,5 @@
 <?php
 
 require(dirname(__FILE__).'/config/config.inc.php');
-$controller = ControllerFactory::getController('MyAccountController', true, true);
+$controller = ControllerFactory::getController('MyAccountController');
 $controller->run();

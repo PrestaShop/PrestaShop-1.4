@@ -2,6 +2,12 @@
 
 class AuthControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->ssl = true;
+	
+		parent::__construct();
+	}
 	public function preProcess()
 	{
 		parent::preProcess();

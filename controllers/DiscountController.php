@@ -2,6 +2,15 @@
 
 class DiscountControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->auth = true;
+		$this->authRedirection = 'discount.php';
+		$this->ssl = true;
+	
+		parent::__construct();
+	}
+	
 	public function process()
 	{
 		parent::process();

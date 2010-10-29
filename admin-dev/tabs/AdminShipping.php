@@ -11,8 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-
 class AdminShipping extends AdminTab
 {
 	private $_fieldsHandling;

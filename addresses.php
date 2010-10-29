@@ -1,5 +1,5 @@
 <?php
 
 require(dirname(__FILE__).'/config/config.inc.php');
-$controller = ControllerFactory::getController('AddressesController', true, true);
+$controller = ControllerFactory::getController('AddressesController');
 $controller->run();

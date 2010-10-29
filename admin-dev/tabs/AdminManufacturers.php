@@ -11,8 +11,6 @@
   *
   */
 
-include_once(realpath(PS_ADMIN_DIR.'/../').'/classes/AdminTab.php');
-
 class AdminManufacturers extends AdminTab
 {
 	protected $maxImageSize = 200000;

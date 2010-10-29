@@ -2,6 +2,14 @@
 
 class AddressControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->auth = true;
+		$this->authRedirection = 'addresses.php';
+		$this->ssl = true;
+	
+		parent::__construct();
+	}
 	public function preProcess()
 	{
 		parent::preProcess();

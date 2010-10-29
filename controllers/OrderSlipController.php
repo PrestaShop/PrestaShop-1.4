@@ -2,6 +2,15 @@
 
 class OrderSlipControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->auth = true;
+		$this->authRedirection = 'order-slip.php';
+		$this->ssl = true;
+	
+		parent::__construct();
+	}
+	
 	public function setMedia()
 	{
 		parent::setMedia();

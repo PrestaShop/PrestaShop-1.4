@@ -13,13 +13,17 @@ class FrontControllerCore
 	public $p;
 	public $n;
 	
+	public $auth = false;
+	public $authRedirection = false;
+	public $ssl = false;
+	
 	public $initialized = false;
 	
-	public function __construct($auth = false, $ssl = false)
+	public function __construct()
 	{
 		global $smarty, $cookie, $link, $cart, $useSSL;
 
-		$useSSL = $ssl;
+		$useSSL = $this->ssl;
 		$this->init();
 		
 		$this->smarty = &$smarty;
@@ -27,8 +31,8 @@ class FrontControllerCore
 		$this->link = &$link;
 		$this->cart = &$cart;
 
-		if ($auth AND !$this->cookie->isLogged())
-			Tools::redirect('authentication.php');
+		if ($this->auth AND !$this->cookie->isLogged())
+			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 	}
 	
 	public function run()

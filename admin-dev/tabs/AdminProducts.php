@@ -10,7 +10,6 @@
   * @version 1.2
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include_once(PS_ADMIN_DIR.'/tabs/AdminProfiles.php');
 
 class AdminProducts extends AdminTab

@@ -11,8 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-
 class AdminModules extends AdminTab
 {
 	/** @var array map with $_GET keywords and their callback */

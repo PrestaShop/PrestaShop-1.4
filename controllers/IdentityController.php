@@ -2,6 +2,15 @@
 
 class IdentityControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->auth = true;
+		$this->authRedirection = 'identity.php';
+		$this->ssl = true;
+	
+		parent::__construct();
+	}
+	
 	public function preProcess()
 	{
 		parent::preProcess();

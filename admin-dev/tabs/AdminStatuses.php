@@ -12,7 +12,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include(PS_ADMIN_DIR.'/tabs/AdminOrdersStates.php');
 include(PS_ADMIN_DIR.'/tabs/AdminReturnStates.php');
 

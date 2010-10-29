@@ -11,8 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-
 class AdminPayment extends AdminTab
 {
 	public $paymentModules = array();

@@ -11,8 +11,6 @@
   *
   */
 
-include_once(realpath(PS_ADMIN_DIR.'/../').'/classes/AdminTab.php');
-
 class AdminImages extends AdminTab
 {
 	private $start_time = 0;

@@ -12,8 +12,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-
 class AdminCategories extends AdminTab
 {
 	protected $maxImageSize = 300000;

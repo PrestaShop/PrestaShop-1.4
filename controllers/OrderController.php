@@ -8,9 +8,9 @@ class OrderControllerCore extends FrontController
 	public $step;
 	public $nbProducts;
 
-	public function __construct($auth = false, $ssl = false)
+	public function __construct()
 	{
-		parent::__construct($auth, $ssl);
+		parent::__construct();
 
 		/* Disable some cache related bugs on the cart/order */
 		header('Cache-Control: no-cache, must-revalidate');

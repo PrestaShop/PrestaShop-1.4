@@ -11,7 +11,6 @@
   *
   */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
 define('MAX_LINE_SIZE', 4096);
