@@ -13,10 +13,12 @@ if (!isset($objectType))
 $className = ucfirst($objectType);
 $errors = array();
 	
+$controller = new FrontController();
+
 if ($id = intval(Tools::getValue('id_'.$objectType)))
 {
-	include(dirname(__FILE__).'/product-sort.php');
-	include(dirname(__FILE__).'/header.php');
+	$controller->productSort();
+	$controller->displayHeader();
 	
 	$object = new $className(intval($id), $cookie->id_lang);
 	if (!Validate::isLoadedObject($object) OR !$object->active)
@@ -36,11 +38,11 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 		elseif ($objectType == 'manufacturer')
 			$rewrited_url = $link->getManufacturerLink($object->id, $object->link_rewrite);
 		
-		$nbProducts = $object->getProducts($id, NULL, NULL, NULL, $orderBy, $orderWay, true);
+		$nbProducts = $object->getProducts($id, NULL, NULL, NULL, $controller->orderBy, $controller->orderWay, true);
 		include(dirname(__FILE__).'/pagination.php');
 		$smarty->assign(array(
 			'nb_products' => $nbProducts,
-			'products' => $object->getProducts($id, intval($cookie->id_lang), intval($p), intval($n), $orderBy, $orderWay),
+			'products' => $object->getProducts($id, intval($cookie->id_lang), intval($controller->p), intval($controller->n), $controller->orderBy, $controller->orderWay),
 			$objectType => $object));
 	}
 	
@@ -54,19 +56,19 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 }
 else
 {
-	include(dirname(__FILE__).'/header.php');
+	$controller->displayHeader();
 	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang), true);
 	$nbProducts = sizeof($data);
-	include(dirname(__FILE__).'/pagination.php');
+	$controller->pagination();
 
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), true, $p, $n);
+	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), true, $controller->p, $controller->n);
 	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
 	foreach ($data AS &$item)
 		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
 			Language::getIsoById(intval($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
 
 	$smarty->assign(array(
-		'pages_nb' => ceil($nbProducts / intval($n)),
+		'pages_nb' => ceil($nbProducts / intval($controller->n)),
 		'nb'.$className.'s' => $nbProducts,
 		'mediumSize' => Image::getSize('medium'),
 		$objectType.'s' => $data,

@@ -17,7 +17,7 @@ class CategoryControllerCore extends FrontController
 	public function displayHeader()
 	{
 		parent::displayHeader();
-		include(dirname(__FILE__).'/../product-sort.php');
+		$this->productSort();
 	}
 
 	public function process()
@@ -67,11 +67,10 @@ class CategoryControllerCore extends FrontController
 				}
 				if ($category->id != 1)
 				{
-					global $p, $n, $orderBy, $orderWay;
-					$nbProducts = $category->getProducts(NULL, NULL, NULL, $orderBy, $orderWay, true);
-					include(dirname(__FILE__).'/../pagination.php');
+					$nbProducts = $category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+					$this->pagination();
 					$this->smarty->assign('nb_products', $nbProducts);
-					$cat_products = $category->getProducts(intval($this->cookie->id_lang), intval($p), intval($n), $orderBy, $orderWay);
+					$cat_products = $category->getProducts(intval($this->cookie->id_lang), intval($this->p), intval($this->n), $this->orderBy, $this->orderWay);
 				}
 				$this->smarty->assign(array(
 					'products' => (isset($cat_products) AND $cat_products) ? $cat_products : NULL,

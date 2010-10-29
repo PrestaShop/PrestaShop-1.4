@@ -6,6 +6,12 @@ class FrontControllerCore
 	public $smarty;
 	public $cookie;
 	public $link;
+	public $cart;
+	
+	public $orderBy;
+	public $orderWay;
+	public $p;
+	public $n;
 	
 	public function __construct($auth = false, $ssl = false)
 	{
@@ -97,54 +103,53 @@ class FrontControllerCore
 	
 	public function productSort()
 	{
-		global $orderBy, $orderWay;
 		$stock_management = intval(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
 		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 		$orderWayValues = array(0 => 'ASC', 1 => 'DESC');
-		$orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[intval(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
-		$orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
-		if (!in_array($orderBy, $orderByValues))
-			$orderBy = $orderByValues[0];
-		if (!in_array($orderWay, $orderWayValues))
-			$orderWay = $orderWayValues[0];
+		$this->orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[intval(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
+		$this->orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
+		if (!in_array($this->orderBy, $orderByValues))
+			$this->orderBy = $orderByValues[0];
+		if (!in_array($this->orderWay, $orderWayValues))
+			$this->orderWay = $orderWayValues[0];
 
 		$this->smarty->assign(array(
-			'orderby' => $orderBy,
-			'orderway' => $orderWay,
+			'orderby' => $this->orderBy,
+			'orderway' => $this->orderWay,
 			'orderwayposition' => $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
 			'stock_management' => intval($stock_management)));
 	}
 	
 	public function pagination()
 	{
-		global $p, $n, $nbProducts;
+		global $nbProducts;
 		$nArray = intval(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array(intval(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
-		$n = abs(intval(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : intval(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
-		$p = abs(intval(Tools::getValue('p', 1)));
+		$this->n = abs(intval(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : intval(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
+		$this->p = abs(intval(Tools::getValue('p', 1)));
 		$range = 2; /* how many pages around page selected */
 
-		if ($p < 0)
-			$p = 0;
+		if ($this->p < 0)
+			$this->p = 0;
 
-		if (isset($this->cookie->nb_item_per_page) AND $n != $this->cookie->nb_item_per_page AND in_array($n, $nArray))
-			$this->cookie->nb_item_per_page = $n;
+		if (isset($this->cookie->nb_item_per_page) AND $this->n != $this->cookie->nb_item_per_page AND in_array($this->n, $nArray))
+			$this->cookie->nb_item_per_page = $this->n;
 			
-		if ($p > ($nbProducts / $n))
-			$p = ceil($nbProducts / $n);
-		$pages_nb = ceil($nbProducts / intval($n));
+		if ($this->p > ($nbProducts / $this->n))
+			$this->p = ceil($nbProducts / $this->n);
+		$pages_nb = ceil($nbProducts / intval($this->n));
 
-		$start = intval($p - $range);
+		$start = intval($this->p - $range);
 		if ($start < 1)
 			$start = 1;
-		$stop = intval($p + $range);
+		$stop = intval($this->p + $range);
 		if ($stop > $pages_nb)
 			$stop = intval($pages_nb);
 		$this->smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
 					'pages_nb' => intval($pages_nb),
-					'p' => intval($p),
-					'n' => intval($n),
+					'p' => intval($this->p),
+					'n' => intval($this->n),
 					'nArray' => $nArray,
 					'range' => intval($range),
 					'start' => intval($start),

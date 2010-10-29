@@ -28,13 +28,12 @@ class SearchControllerCore extends FrontController
 		
 		if ($this->instantSearch && !is_array($query))
 		{
-			include(dirname(__FILE__).'/../product-sort.php');
-			global $orderBy, $orderWay;
-			$n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
-			$p = abs(intval(Tools::getValue('p', 1)));
-			$search = Search::find(intval($this->cookie->id_lang), $query, $p, $n, $orderBy, $orderWay);
+			$this->productSort();
+			$this->n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
+			$this->p = abs(intval(Tools::getValue('p', 1)));
+			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
-			include(dirname(__FILE__).'/../pagination.php');
+			$this->pagination();
 			$this->smarty->assign(array(
 			'products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -44,13 +43,12 @@ class SearchControllerCore extends FrontController
 		}
 		elseif ($query = Tools::getValue('search_query', Tools::getValue('ref')) AND !is_array($query))
 		{
-			include(dirname(__FILE__).'/../product-sort.php');
-			global $orderBy, $orderWay;
-			$n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
-			$p = abs(intval(Tools::getValue('p', 1)));
-			$search = Search::find(intval($this->cookie->id_lang), $query, $p, $n, $orderBy, $orderWay);
+			$this->productSort();
+			$this->n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
+			$this->p = abs(intval(Tools::getValue('p', 1)));
+			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
-			include(dirname(__FILE__).'/../pagination.php');
+			$this->pagination();
 			$this->smarty->assign(array(
 			'products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -60,11 +58,10 @@ class SearchControllerCore extends FrontController
 		elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
 		{
 			$nbProducts = intval(Search::searchTag(intval($this->cookie->id_lang), $tag, true));
-			include(dirname(__FILE__).'/../pagination.php');
-			global $p, $n, $orderBy, $orderWay;
+			$this->pagination();
 			$this->smarty->assign(array(
 			'search_tag' => $tag,
-			'products' => Search::searchTag(intval($this->cookie->id_lang), $tag, false, $p, $n, $orderBy, $orderWay),
+			'products' => Search::searchTag(intval($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay),
 			'nbProducts' => $nbProducts,
 			'homeSize' => Image::getSize('home')));
 		}

@@ -4,11 +4,11 @@ class BestSalesControllerCore extends FrontController
 {
 	public function preProcess()
 	{
-		include(dirname(__FILE__).'/../product-sort.php');
+		$this->productSort();
 		
 		$nbProducts = intval(ProductSale::getNbSales());
 		
-		include(dirname(__FILE__).'/../pagination.php');
+		$this->pagination();
 		
 		global $orderBy, $orderWay, $p, $n;
 		$this->smarty->assign(array(
