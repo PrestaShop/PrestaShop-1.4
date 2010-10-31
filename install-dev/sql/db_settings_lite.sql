@@ -143,9 +143,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (78, 'PS_STOCK_MVT_REASON_DEFAULT', 3, NOW(), NOW()),
 (79, 'PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW()),
 (80, 'PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW()),
-(81, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW());
-
-
+(81, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
+(82, 'PS_TAX_DISPLAY', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
@@ -753,7 +752,7 @@ INSERT INTO `PREFIX_cms_category_lang` (`id_cms_category`, `id_lang`, `name`, `d
 (1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),
 (1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
 
-INSERT INTO `PREFIX_cms_category` (`id_cms_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`) VALUES(1, 0, 0, 1, 'now()', 'now()');
+INSERT INTO `PREFIX_cms_category` (`id_cms_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`) VALUES(1, 0, 0, 1, NOW(), NOW());
 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (1, 0, 0, 1, 0, 0),(2, 1, 'My carrier', 1, 0, 1);

@@ -58,9 +58,9 @@
 	color: white;
 	float: none
 }
-#cart_block_wrapping_cost,
- #cart_block_shipping_cost,
-  #cart_block_total { padding-right: 1.3em }
+
+#cart_block_wrapping_cost, #cart_block_shipping_cost, #cart_block_tax_cost, #cart_block_total { padding-right: 1.3em }
+
 #cart_block table#vouchers {
 	margin-top: 0.5em;
 	border-top: 1px solid white;
@@ -72,9 +72,9 @@
  #cart_block p#cart-prices {
 	clear: both;
 	margin-top: 8px;
-	margin-bottom: 0.5em;
+	margin-bottom: 2em;
+	display: block;
 	padding-top: 0.4em;
-	height: 3em;
 	border-top: 1px solid white
 }
 #cart_block table#vouchers td {

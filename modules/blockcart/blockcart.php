@@ -39,27 +39,36 @@ class BlockCart extends Module
 		}
 		else
 			$taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
-		$usetax = $taxCalculationMethod == PS_TAX_EXC ? false : true;
+		
+		$useTax = $taxCalculationMethod == PS_TAX_EXC ? false : true;
 
 		$products = $params['cart']->getProducts(true);
 		$nbTotalProducts = 0;
 		foreach ($products AS $product)
 			$nbTotalProducts += intval($product['cart_quantity']);
 
-		$wrappingCost = floatval($params['cart']->getOrderTotal($usetax, 6));
+		$wrappingCost = floatval($params['cart']->getOrderTotal($useTax, 6));
+		$totalToPay = $params['cart']->getOrderTotal($useTax);
+		
+		if ($useTax AND Configuration::get('PS_TAX_DISPLAY') == 1)
+		{
+			$totalToPayWithoutTaxes = $params['cart']->getOrderTotal(false);
+			$smarty->assign('tax_cost', Tools::displayPrice($totalToPay - $totalToPayWithoutTaxes, $currency));
+		}
 		
 		$smarty->assign(array(
 			'products' => $products,
 			'customizedDatas' => Product::getAllCustomizedDatas(intval($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-			'discounts' => $params['cart']->getDiscounts(false, $usetax),
+			'discounts' => $params['cart']->getDiscounts(false, $useTax),
 			'nb_total_products' => intval($nbTotalProducts),
-			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 5), $currency),
+			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 5), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
+			'show_tax' => intval(Configuration::get('PS_TAX_DISPLAY')) == 1 ? true : false,
 			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
-			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax, 4), $currency),
-			'total' => Tools::displayPrice($params['cart']->getOrderTotal($usetax), $currency),
+			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 4), $currency),
+			'total' => Tools::displayPrice($totalToPay, $currency),
 			'id_carrier' => intval($params['cart']->id_carrier),
 			'order_process' => Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'order',
 			'ajax_allowed' => intval(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false

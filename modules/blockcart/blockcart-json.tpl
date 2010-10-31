@@ -66,6 +66,7 @@
 ],
 
 'shippingCost': '{$shipping_cost|html_entity_decode:2:'UTF-8'}',
+'taxCost': '{$tax_cost|html_entity_decode:2:'UTF-8'}',
 'wrappingCost': '{$wrapping_cost|html_entity_decode:2:'UTF-8'}',
 'nbTotalProducts': '{$nb_total_products}',
 'total': '{$total|html_entity_decode:2:'UTF-8'}',

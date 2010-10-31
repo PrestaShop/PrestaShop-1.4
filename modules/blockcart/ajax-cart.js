@@ -504,6 +504,7 @@ var ajaxCart = {
 	updateCartEverywhere : function(jsonData) {
 		$('.ajax_cart_total').text(jsonData.productTotal);
 		$('.ajax_cart_shipping_cost').text(jsonData.shippingCost);
+		$('.ajax_cart_tax_cost').text(jsonData.taxCost);
 		$('.cart_block_wrapping_cost').text(jsonData.wrappingCost);
 		$('.ajax_block_cart_total').text(jsonData.total);
 		if(jsonData.nbTotalProducts > 0)

@@ -114,31 +114,32 @@ class AdminGroups extends AdminTab
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
-		</form>';
+		</form><br />';
+
 		if ($obj->id)
 		{
 			echo '
-		<form action="'.$currentIndex.'&update'.$this->table.'&id_group='.$obj->id.'&token='.$this->token.'" method="post" class="width3">
-			<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />
-			<fieldset><legend><img src="../img/admin/tab-groups.gif" />'.$this->l('New group reduction').'</legend>
-				<label>'.$this->l('Category:').' </label>
-				<div class="margin-form">
-					<select name="id_category">';
-			foreach ($categories AS $category)
-				echo '	<option value="'.intval($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
-			echo '	</select><sup>*</sup>
-				</div>
-				<label>'.$this->l('Reduction (in %):').' </label>
-				<div class="margin-form">
-					<input type="text" name="reduction" value="" /><sup>*</sup>
-				</div>
-				<div class="clear">&nbsp;</div>
-				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Add   ').'" name="submitAddGroupReduction" class="button" />
-				</div>
-				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
-			</fieldset>
-		</form>';
+			<form action="'.$currentIndex.'&update'.$this->table.'&id_group='.$obj->id.'&token='.$this->token.'" method="post" class="width3">
+				<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />
+				<fieldset><legend><img src="../img/admin/tab-groups.gif" />'.$this->l('New group reduction').'</legend>
+					<label>'.$this->l('Category:').' </label>
+					<div class="margin-form">
+						<select name="id_category">';
+				foreach ($categories AS $category)
+					echo '	<option value="'.intval($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
+				echo '	</select><sup>*</sup>
+					</div>
+					<label>'.$this->l('Reduction (in %):').' </label>
+					<div class="margin-form">
+						<input type="text" name="reduction" value="" /><sup>*</sup>
+					</div>
+					<div class="clear">&nbsp;</div>
+					<div class="margin-form">
+						<input type="submit" value="'.$this->l('   Add   ').'" name="submitAddGroupReduction" class="button" />
+					</div>
+					<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
+				</fieldset>
+			</form>';
 		}
 	}
 

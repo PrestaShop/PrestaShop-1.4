@@ -98,6 +98,11 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 				<span id="cart_block_wrapping_cost" class="price cart_block_wrapping_cost">{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false, 6)}{else}{convertPrice price=$cart->getOrderTotal(true, 6)}{/if}</span>
 				<br/>
 			{/if}
+			{if $show_tax}
+				<span>{l s='Tax' mod='blockcart'}</span>
+				<span id="cart_block_tax_cost" class="price ajax_cart_tax_cost">{$tax_cost}</span>
+				<br/>
+			{/if}
 			<span>{l s='Total' mod='blockcart'}</span>
 			<span id="cart_block_total" class="price ajax_block_cart_total">{$total}</span>
 		</p>

@@ -37,7 +37,7 @@ INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 1, 'Home', '', 'home', NULL, NU
 INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL);
 INSERT INTO `PREFIX_cms_category_lang` VALUES(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
 
-INSERT INTO `PREFIX_cms_category` VALUES(1, 0, 0, 1, 'now()', 'now()',0);
+INSERT INTO `PREFIX_cms_category` VALUES(1, 0, 0, 1, NOW(), NOW(),0);
 
 UPDATE `PREFIX_cms_category` SET `position` = 0;
 UPDATE `PREFIX_cms` SET `position` = 0;
@@ -142,7 +142,9 @@ ALTER TABLE `PREFIX_product`
 	DROP `reduction_from`,
 	DROP `reduction_to`;
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES 
+('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
+('PS_TAX_DISPLAY', 0, NOW(), NOW());
 
 CREATE TABLE `PREFIX_group_reduction` (
 	`id_group_reduction` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
