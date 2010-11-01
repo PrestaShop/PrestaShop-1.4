@@ -68,7 +68,7 @@ class PDF_PageGroupCore extends FPDF
 	}
 }
 
-class PDFCore extends PDF_PageGroup
+class PDFCore extends PDF_PageGroupCore
 {
 	private static $order = NULL;
 	private static $orderReturn = NULL;
