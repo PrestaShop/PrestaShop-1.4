@@ -29,7 +29,7 @@ class OrderConfirmationControllerCore extends FrontController
 	public function process()
 	{
 		parent::process();
-		$smarty->assign(array(
+		$this->smarty->assign(array(
 			'HOOK_ORDER_CONFIRMATION' => Hook::orderConfirmation(intval($this->id_order)),
 			'HOOK_PAYMENT_RETURN' => Hook::paymentReturn(intval($this->id_order), intval($this->id_module))
 		));

@@ -18,7 +18,7 @@ class NewProductsControllerCore extends FrontController
 		
 		$this->pagination();
 
-		$smarty->assign(array(
+		$this->smarty->assign(array(
 			'products' => Product::getNewProducts(intval($this->cookie->id_lang), intval($p) - 1, intval($n), false, $orderBy, $orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'nbProducts' => intval($nbProducts)
