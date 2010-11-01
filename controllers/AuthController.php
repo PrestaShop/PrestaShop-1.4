@@ -222,7 +222,8 @@ class AuthControllerCore extends FrontController
 				'days' => $days,
 				'sl_day' => (isset($selectedDays) ? $selectedDays : 0),
 				'countries' => $countries,
-				'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0)
+				'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
+				'vat_management' => Configuration::get('VATNUMBER_MANAGEMENT')
 			));
 
 			/* Call a hook to display more information on form */

@@ -40,7 +40,7 @@ $(function(){ldelim}
 				$('#vat_number').hide();
 		}
 	});
-{/literal}
+	{/literal}
 {/if}
 </script>
 <h2>{if !isset($email_create)}{l s='Log in'}{else}{l s='Create your account'}{/if}</h2>
@@ -167,7 +167,7 @@ $(function(){ldelim}
 			<label for="company">{l s='Company'}</label>
 			<input type="text" class="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{/if}" />
 		</p>
-		<div id="vat_number">
+		<div id="vat_number" style="display:none;">
 			<p class="text">
 				<label for="vat_number">{l s='VAT number'}</label>
 				<input type="text" class="text" name="vat_number" value="{if isset($smarty.post.vat_number)}{$smarty.post.vat_number}{/if}" />
