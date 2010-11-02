@@ -52,7 +52,8 @@ class AdminImport extends AdminTab
 		'link_rewrite' => array('AdminImport', 'createMultiLangField'),
 		'available_now' => array('AdminImport', 'createMultiLangField'),
 		'available_later' => array('AdminImport', 'createMultiLangField'),
-		'category' => array('AdminImport', 'split'),	
+		'category' => array('AdminImport', 'split'),
+		'online_only' => array('AdminImport', 'getBoolean')
 		);
 		
 	public function __construct()
@@ -152,7 +153,8 @@ class AdminImport extends AdminTab
 				'available_now' => $this->l('Text when in-stock'),
 				'available_later' => $this->l('Text if back-order allowed'),
 				'image' => $this->l('Image URLs (x,y,z...)'),
-				'feature' => $this->l('Feature'));
+				'feature' => $this->l('Feature'),
+				'online_only' => $this->l('Only available online'));
 				
 				self::$default_values = array(
 				'id_category' => array(1),
@@ -162,7 +164,8 @@ class AdminImport extends AdminTab
 				'price' => 0,
 				'id_tax' => 0,
 				'description_short' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''));
+				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
+				'online_only' => 0);
 				
 				break;
 			
@@ -520,10 +523,6 @@ class AdminImport extends AdminTab
 			if (array_key_exists('id', $info) AND intval($info['id']) AND Product::existsInDatabase(intval($info['id'])))
 			{
 				$product = new Product(intval($info['id']));
-				if ($product->reduction_from == '0000-00-00' OR $product->reduction_from == '0000-00-00 00:00:00')
-					$product->reduction_from = date('Y-m-d H:i:s');
-				if ($product->reduction_to == '0000-00-00' OR $product->reduction_to == '0000-00-00 00:00:00')
-					$product->reduction_to = date('Y-m-d H:i:s');
 				$categoryData = Product::getIndexedCategories(intval($product->id));
 				foreach ($categoryData as $tmp)
 					$product->category[] = $tmp['id_category'];
@@ -697,6 +696,26 @@ class AdminImport extends AdminTab
 			}
 			else
 			{
+				// SpecificPrice (only the basic reduction feature is supported by the import)
+				if (isset($info['reduction_price']) OR isset($info['reduction_percent']))
+				{
+					$specificPrice = new SpecificPrice();
+					$specificPrice->id_product = intval($product->id);
+					$specificPrice->id_shop = intval(Shop::getCurrentShop());
+					$specificPrice->id_currency = 0;
+					$specificPrice->id_country = 0;
+					$specificPrice->id_group = 0;
+					$specificPrice->priority = 0;
+					$specificPrice->price = 0.00;
+					$specificPrice->from_quantity = 1;
+					$specificPrice->reduction = (isset($info['reduction_price']) AND $info['reduction_price']) ? $info['reduction_price'] : $info['reduction_percent'] / 100;
+					$specificPrice->reduction_type = (isset($info['reduction_price']) AND $info['reduction_price']) ? 'amount' : 'percentage';
+					$specificPrice->from = isset($info['reduction_from']) ? $info['reduction_from'] : '0000-00-00 00:00:00';
+					$specificPrice->to = isset($info['reduction_to']) ? $info['reduction_to'] : '0000-00-00 00:00:00';
+					if (!$specificPrice->add())
+						$this->_addProductWarning($info['name'], $product->id, $this->l('Reduction is invalid'));
+				}
+
 				if (isset($product->tags) AND !empty($product->tags))
 				{
 					// Delete tags for this id product, for no duplicating error
