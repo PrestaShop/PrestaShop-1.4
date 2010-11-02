@@ -121,7 +121,7 @@ class LinkCore
 		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom);
 	}
 
-	public function getImageLink($name, $ids, $type = null)
+	public function getImageLink($name, $ids, $type = NULL)
 	{
 		global $protocol;
 		if ($this->allow == 1)

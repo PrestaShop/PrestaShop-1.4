@@ -305,6 +305,7 @@ class SearchCore
 			'pname' => Configuration::get('PS_SEARCH_WEIGHT_PNAME'),
 			'reference' => Configuration::get('PS_SEARCH_WEIGHT_REF'),
 			'ean13' => Configuration::get('PS_SEARCH_WEIGHT_REF'),
+			'upc' => Configuration::get('PS_SEARCH_WEIGHT_REF'),
 			'description_short' => Configuration::get('PS_SEARCH_WEIGHT_SHORTDESC'),
 			'description' => Configuration::get('PS_SEARCH_WEIGHT_DESC'),
 			'cname' => Configuration::get('PS_SEARCH_WEIGHT_CNAME'),
@@ -315,7 +316,7 @@ class SearchCore
 		);
 		
 		$products = $db->ExecuteS('
-		SELECT p.id_product, pl.id_lang, pl.name as pname, p.reference, p.ean13, pl.description_short, pl.description, cl.name as cname, m.name as mname
+		SELECT p.id_product, pl.id_lang, pl.name as pname, p.reference, p.ean13, p.upc, pl.description_short, pl.description, cl.name as cname, m.name as mname
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON p.id_product = pl.id_product
 		LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default AND pl.id_lang = cl.id_lang)

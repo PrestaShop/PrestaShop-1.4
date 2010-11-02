@@ -50,13 +50,7 @@ ul#product_list li div.right_block {
 	margin-left: 1em;
 	margin-top: 0
 }
-ul#product_list li .discount {
-	color: #da0f00;
-	text-transform: uppercase;
-	font-weight: bold;
-	display: block
-}
-ul#product_list li .on_sale {
+ul#product_list li .discount, ul#product_list li .on_sale, ul#product_list li .online_only {
 	color: #da0f00;
 	text-transform: uppercase;
 	font-weight: bold;

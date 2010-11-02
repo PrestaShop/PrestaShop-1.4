@@ -56,8 +56,11 @@ class OrderDetailCore extends ObjectModel
 	/** @var float */
 	public $product_quantity_discount;
 	
-	/** @var float */
+	/** @var string */
 	public $product_ean13;
+	
+	/** @var string */
+	public $product_upc;
 	
 	/** @var string */
 	public $product_reference;
@@ -105,6 +108,7 @@ class OrderDetailCore extends ObjectModel
 	'reduction_amount' => 'isPrice',
 	'product_quantity_discount' => 'isFloat',
 	'product_ean13' => 'isEan13',
+	'product_upc' => 'isUpc',
 	'product_reference' => 'isReference',
 	'product_supplier_reference' => 'isReference',
 	'product_weight' => 'isFloat',
@@ -135,6 +139,7 @@ class OrderDetailCore extends ObjectModel
 		$fields['reduction_amount'] = floatval($this->reduction_amount);
 		$fields['product_quantity_discount'] = floatval($this->product_quantity_discount);
 		$fields['product_ean13'] = pSQL($this->product_ean13);
+		$fields['product_upc'] = pSQL($this->product_upc);
 		$fields['product_reference'] = pSQL($this->product_reference);
 		$fields['product_supplier_reference'] = pSQL($this->product_reference);
 		$fields['product_weight'] = floatval($this->product_weight);

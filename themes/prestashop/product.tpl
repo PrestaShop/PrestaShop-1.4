@@ -332,6 +332,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
 			<p class="warning_inline" id="last_quantities"{if ($product->quantity > $last_qties OR $product->quantity == 0) OR $allow_oosp OR !$product->available_for_order} style="display:none;"{/if} >{l s='Warning: Last items in stock!'}</p>
 
+			{if $product->online_only}
+				<p>{l s='Online only'}</p>
+			{/if}
+			
 			<p{if (!$allow_oosp && $product->quantity == 0) OR !$product->available_for_order} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
 			{if $HOOK_PRODUCT_ACTIONS}
 				{$HOOK_PRODUCT_ACTIONS}

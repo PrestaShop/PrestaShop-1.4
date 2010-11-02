@@ -643,6 +643,7 @@ echo '
 						'supplier_reference' => '#'.strtoupper(AdminWebservice::randname(2).'_'.AdminWebservice::randname(5)),
 						'location' => AdminWebservice::randname(15),
 						'ean13' => '1234567890123',
+						'upc' => '123456789012',
 						'wholesale_price' => rand(1,100),
 						'price' => rand(1,1000)/10,
 						'ecotax' => rand(1,1000)/10,

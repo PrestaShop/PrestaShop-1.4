@@ -379,10 +379,15 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 ALTER TABLE `PREFIX_product` ADD `minimal_quantity` INT NOT NULL DEFAULT '1' AFTER `quantity`;
 ALTER TABLE `PREFIX_product` ADD `cache_default_attribute` int(10) unsigned default NULL AFTER `indexed`;
-ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` tinyint(1) NOT NULL default '0' AFTER `indexed`;
-ALTER TABLE `PREFIX_product` ADD `cache_is_pack` tinyint(1) NOT NULL default '0' AFTER `indexed`;
+ALTER TABLE `PREFIX_product` ADD `cache_has_attachments` TINYINT(1) NOT NULL default '0' AFTER `indexed`;
+ALTER TABLE `PREFIX_product` ADD `cache_is_pack` TINYINT(1) NOT NULL default '0' AFTER `indexed`;
 ALTER TABLE `PREFIX_product` ADD `available_for_order` TINYINT(1) NOT NULL DEFAULT '1' AFTER  `active`;
 ALTER TABLE `PREFIX_product` ADD `show_price` TINYINT(1) NOT NULL DEFAULT '1' AFTER `available_for_order`;
+ALTER TABLE `PREFIX_product` ADD `online_only` TINYINT(1) NOT NULL DEFAULT '0' AFTER `on_sale`;
+ALTER TABLE `PREFIX_product` ADD `condition` ENUM('new', 'used', 'refurbished') NOT NULL DEFAULT 'new' AFTER `available_for_order`;
+ALTER TABLE `PREFIX_product` ADD `upc` VARCHAR( 12 ) NULL AFTER `ean13`;
+
+ALTER TABLE `pstest_product_attribute` ADD `upc` VARCHAR( 12 ) NULL AFTER `ean13`;
 
 SET @defaultOOS = (SELECT value FROM `PREFIX_configuration` WHERE name = 'PS_ORDER_OUT_OF_STOCK');
 /* Set 0 for every non-attribute product */
@@ -678,7 +683,6 @@ UPDATE `PREFIX_manufacturer` SET `active` = 1;
 UPDATE `PREFIX_supplier` SET `active` = 1;
 ALTER TABLE `PREFIX_cms` ADD `active` tinyint(1) unsigned NOT NULL default 0;
 UPDATE `PREFIX_cms` SET `active` = 1;
-
 
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 

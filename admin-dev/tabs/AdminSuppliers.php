@@ -59,6 +59,7 @@ class AdminSuppliers extends AdminTab
 						<th><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></th>
 						'.(!empty($product->reference) ? '<th width="150">'.$this->l('Ref:').' '.$product->reference.'</th>' : '').'
 						'.(!empty($product->ean13) ? '<th width="120">'.$this->l('EAN13:').' '.$product->ean13.'</th>' : '').'
+						'.(!empty($product->upc) ? '<th width="120">'.$this->l('UPC:').' '.$product->upc.'</th>' : '').'
 						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="50">'.$this->l('Qty:').' '.$product->quantity.'</th>' : '').'
 					</tr>
 				</table>';
@@ -72,6 +73,7 @@ class AdminSuppliers extends AdminTab
 		                    <th>'.$this->l('Attribute name').'</th>
 		                    <th width="80">'.$this->l('Reference').'</th>
 		                    <th width="80">'.$this->l('EAN13').'</th>
+							<th width="80">'.$this->l('UPC').'</th>
 		                   '.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="40">'.$this->l('Quantity').'</th>' : '').'
 	                	</tr>';
 			     	/* Build attributes combinaisons */
@@ -80,6 +82,7 @@ class AdminSuppliers extends AdminTab
 				{
 					$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];
 					$combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
+					$combArray[$combinaison['id_product_attribute']]['upc'] = $combinaison['upc'];
 					$combArray[$combinaison['id_product_attribute']]['quantity'] = $combinaison['quantity'];
 					$combArray[$combinaison['id_product_attribute']]['attributes'][] = array($combinaison['group_name'], $combinaison['attribute_name'], $combinaison['id_attribute']);
 				}
@@ -94,7 +97,7 @@ class AdminSuppliers extends AdminTab
 					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' >
 						<td>'.stripslashes($list).'</td>
 						<td>'.$product_attribute['reference'].'</td>
-						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<td>'.$product_attribute['ean13'].'</td>' : '').'
+						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<td>'.$product_attribute['ean13'].'</td><td>'.$product_attribute['upc'].'</td>' : '').'
 						<td class="right">'.$product_attribute['quantity'].'</td>
 					</tr>';
 				}

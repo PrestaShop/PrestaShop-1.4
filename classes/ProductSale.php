@@ -94,7 +94,7 @@ class ProductSaleCore
 	** @param integer $id_lang Language id
 	** @param integer $pageNumber Start from (optional)
 	** @param integer $nbProducts Number of products to return (optional)
-	** @return array keys : id_product, link_rewrite, name, id_image, legend, sales, ean13 , link
+	** @return array keys : id_product, link_rewrite, name, id_image, legend, sales, ean13, upc, link
 	*/
 	static public function getBestSalesLight($id_lang, $pageNumber = 0, $nbProducts = 10)
 	{
@@ -104,7 +104,7 @@ class ProductSaleCore
 		if ($nbProducts < 1) $nbProducts = 10;
 		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, cl.`link_rewrite` AS category
+		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, p.`upc`, cl.`link_rewrite` AS category
 		FROM `'._DB_PREFIX_.'product_sale` ps 
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')

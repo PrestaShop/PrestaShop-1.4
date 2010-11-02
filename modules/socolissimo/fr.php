@@ -15,8 +15,8 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'doivent être renseignés pour fonctionner correctement';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f9bb2808d4b756fec1de88a30a83f4ba'] = 'So Colissimo est un service proposé par La Poste, qui vous permet d\'offrir à vos acheteurs 5 modes de livraison :';
-$_MODULE['<{socolissimo}prestashop>socolissimo_b744007f56f155926b4584feb2570e14'] = 'Livraison à Domicile';
-$_MODULE['<{socolissimo}prestashop>socolissimo_af34585e0c846008761f29c785cb3b6e'] = 'Livraison à Domicile sur Rendez-vous le soir entre 17h et 21h30';
+$_MODULE['<{socolissimo}prestashop>socolissimo_b744007f56f155926b4584feb2570e14'] = 'Livraison à domicile';
+$_MODULE['<{socolissimo}prestashop>socolissimo_af34585e0c846008761f29c785cb3b6e'] = 'Livraison à domicile sur rendez-vous le soir entre 17h et 21h30';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6dabb6e301597ccf0ba5abda94748b05'] = 'Livraison dans l\'un des 31 espaces Cityssimo, 7j/7 et 24h/24';
 $_MODULE['<{socolissimo}prestashop>socolissimo_45fb6b9ed318ed9f9c44a41026565f53'] = 'Livraison dans l\'un des 10.000 Bureaux de Poste de leur choix';
 $_MODULE['<{socolissimo}prestashop>socolissimo_495b9fc0ac8760876f3738055e5c377e'] = 'Livraison dans l\'un des nombreux point de retrait du réseau partenaire La Poste';
@@ -60,7 +60,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_0bf6a620e5f22d8b46e3903a993f7741'
 $_MODULE['<{socolissimo}prestashop>socolissimo_b1da6deb76f499bdcdbb9f1e28223ff6'] = 'Temps de préparation invalide';
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b1ea9a874e8e67af093b45ad34be1bd'] = 'Surcoût non spécifié';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ccdfd8ad75276f6e24db51d02e83e361'] = 'Surcoût invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
+$_MODULE['<{socolissimo}prestashop>socolissimo_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration mise à jour';
 $_MODULE['<{socolissimo}prestashop>socolissimo_738a1d4da1b5dc5883063ec9856b637b'] = 'Configuration erreur';
 $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'] = 'Mode de livraison';
 $_MODULE['<{socolissimo}prestashop>socolissimo_26c3322326d6c253776082396d0b525a'] = 'Id du point de retrait';

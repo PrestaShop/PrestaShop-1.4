@@ -10,6 +10,7 @@ $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay]
 $_MODULE['<{hipay}prestashop>hipay_ac2e397ffc0808f909e9712ca575c121'] = 'Total commande';
 $_MODULE['<{hipay}prestashop>hipay_0f750bac4745ff32a0c4a4c663ae6b9f'] = '[Hipay] Erreur : impossible de créer la commande';
 $_MODULE['<{hipay}prestashop>hipay_8eafa453be20eba610cc8f5a8170681c'] = '[Hipay] Erreur :';
+$_MODULE['<{hipay}prestashop>hipay_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration mise à jour';
 $_MODULE['<{hipay}prestashop>hipay_7497e14da8b704f9542872558d62b325'] = 'La directive allow_url_fopen est désactivée';
 $_MODULE['<{hipay}prestashop>hipay_6401593f1412a6b385c8e645d1f056ac'] = 'La librairie cURL n\'est pas activée';
 $_MODULE['<{hipay}prestashop>hipay_f8b94463fa8b5591e5edbbb8021e8038'] = 'OpenSSL n\'est pas activé';

@@ -71,6 +71,7 @@ class AdminImport extends AdminTab
 					'reference' => $this->l('Reference'),
 					'supplier_reference' => $this->l('Supplier reference'),
 					'ean13' => $this->l('EAN13'),
+					'upc' => $this->l('UPC'),
 					'wholesale_price' => $this->l('Wholesale price'),
 					'price' => $this->l('Price'),
 					'ecotax' => $this->l('Ecotax'),
@@ -83,6 +84,7 @@ class AdminImport extends AdminTab
 					'reference' => '',
 					'supplier_reference' => '',
 					'ean13' => '',
+					'upc' => '',
 					'wholesale_price' => 0,
 					'price' => 0,
 					'ecotax' => 0,
@@ -136,6 +138,7 @@ class AdminImport extends AdminTab
 				'supplier' => $this->l('Supplier'),
 				'manufacturer' => $this->l('Manufacturer'),
 				'ean13' => $this->l('EAN13'),
+				'upc' => $this->l('UPC'),
 				'ecotax' => $this->l('Ecotax'),
 				'weight' => $this->l('Weight'),
 				'quantity' => $this->l('Quantity'),
@@ -796,7 +799,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$product = new Product(intval($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), intval($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), intval($info['default_on']));
+			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), intval($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), intval($info['default_on']), strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));

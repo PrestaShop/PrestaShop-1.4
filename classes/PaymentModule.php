@@ -154,7 +154,7 @@ d('Price3: '.$price);*/
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `product_quantity_discount`, `product_ean13`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `product_quantity_discount`, `product_ean13`, `product_upc`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
@@ -208,6 +208,7 @@ d('Price3: '.$price);*/
 						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
 						'.floatval(Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, true, true, $product['cart_quantity'], false, $order->id_customer, $order->id_cart)).',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
+						'.(empty($product['upc']) ? 'NULL' : '\''.pSQL($product['upc']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
 						'.(empty($product['supplier_reference']) ? 'NULL' : '\''.pSQL($product['supplier_reference']).'\'').',
 						'.floatval($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',

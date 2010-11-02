@@ -518,6 +518,17 @@ class ValidateCore
 	{
 		return !$ean13 OR preg_match('/^[0-9]{0,13}$/ui', $ean13);
 	}
+	
+	/**
+	* Check for barcode validity (UPC)
+	*
+	* @param string $upc Barcode to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isUpc($upc)
+	{
+		return !$upc OR preg_match('/^[0-9]{0,12}$/ui', $upc);
+	}
 
 	/**
 	* Check for postal code validity

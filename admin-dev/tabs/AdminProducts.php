@@ -68,11 +68,14 @@ class AdminProducts extends AdminTab
 			if (isset($_POST['meta_keywords_'.$language['id_lang']]))
 				$_POST['meta_keywords_'.$language['id_lang']] = preg_replace('/ *,? +,*/', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
 		$_POST['weight'] = empty($_POST['weight']) ? '0' : str_replace(',', '.', $_POST['weight']);
-		if ($_POST['unit_price'] != NULL) $object->unit_price = str_replace(',', '.', $_POST['unit_price']);
-		if ($_POST['ecotax'] != NULL) $object->ecotax = str_replace(',', '.', $_POST['ecotax']);
+		if ($_POST['unit_price'] != NULL)
+			$object->unit_price = str_replace(',', '.', $_POST['unit_price']);
+		if ($_POST['ecotax'] != NULL)
+			$object->ecotax = str_replace(',', '.', $_POST['ecotax']);
 		$object->available_for_order = $object->active ? intval(Tools::isSubmit('available_for_order')) : 1;
 		$object->show_price = $object->active ? ($object->available_for_order ? 1 : intval(Tools::isSubmit('show_price'))) : 1;
 		$object->on_sale = Tools::isSubmit('on_sale');
+		$object->online_only = Tools::isSubmit('online_only');
 	}
 
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
@@ -395,7 +398,8 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_supplier_reference'),
 								Tools::getValue('attribute_ean13'),
 								Tools::getValue('attribute_default'),
-								Tools::getValue('attribute_location'));
+								Tools::getValue('attribute_location'),
+								Tools::getValue('attribute_upc'));
 								if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
 								{
 									$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
@@ -420,7 +424,7 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'), Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
                                 Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'), 
-                                Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'));
+                                Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('edit something here.');
@@ -1763,18 +1767,58 @@ class AdminProducts extends AdminTab
 		echo '	
 			<hr class="clear"/>
 			<br />
-				<table cellpadding="5" style="width:100%">
+				<table cellpadding="5" style="width: 450px; float: left; margin-right: 20px; border-right: 1px solid #E0D0B1;">
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
 		foreach ($this->_languages as $language)
 			echo '		<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-								<input size="55" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
+								<input size="43" type="text" id="name_'.$language['id_lang'].'" name="name_'.$language['id_lang'].'"
 								value="'.stripslashes(htmlspecialchars($this->getFieldValue($obj, 'name', $language['id_lang']))).'"'.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' onkeyup="updateCurrentText();" onchange="updateCurrentText();" /><sup> *</sup>
 								<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
 		echo '		</td>
 					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Reference:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="55" type="text" name="reference" value="'.htmlentities($this->getFieldValue($obj, 'reference'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />							
+							<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#\<span class="hint-pointer">&nbsp;</span></span>
+						</td>
+					</tr>
+                	<tr>
+						<td class="col-left">'.$this->l('Supplier Reference:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="55" type="text" name="supplier_reference" value="'.htmlentities($this->getFieldValue($obj, 'supplier_reference'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
+							<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#\<span class="hint-pointer">&nbsp;</span></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('EAN13 or JAN:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="55" maxlength="13" type="text" name="ean13" value="'.htmlentities($this->getFieldValue($obj, 'ean13'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 5px;" /> <span class="small">'.$this->l('(Europe, Japan)').'</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('UPC:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="55" maxlength="12" type="text" name="upc" value="'.htmlentities($this->getFieldValue($obj, 'upc'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 5px;" /> <span class="small">'.$this->l('(US, Canada)').'</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Location (warehouse):').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="55" type="text" name="location" value="'.htmlentities($this->getFieldValue($obj, 'location'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Weight:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="6" maxlength="6" name="weight" type="text" value="'.htmlentities($this->getFieldValue($obj, 'weight'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_WEIGHT_UNIT').'
+						</td>
+					</tr>
+				</table>
+				<table cellpadding="5" style="width: 426px; float: left; margin-left: 10px;">
 					<tr>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Status:').'</td>
 						<td style="padding-bottom:5px;">
@@ -1784,17 +1828,28 @@ class AdminProducts extends AdminTab
 							<input style="float:left;" onclick="toggleDraftWarning(true);showOptions(false);"  type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').($obj->active ? '' : ' (<a href="'.$preview_url.'" alt="" target="_blank">'.$this->l('View product in shop').'</a>)').'</label>
 						</td>
-					</tr>';
-
-		echo		'
+					</tr>
 					<tr id="product_options">
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float:left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
-							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('Available for order').'" title="'.$this->l('Available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Available for order').'</label>
+							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
+							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('available for order').'" title="'.$this->l('available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('available for order').'</label>
 							<br class="clear" />
-							<input style="float:left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
-							<label for="show_price" class="t"><img src="../img/admin/gold.gif" alt="'.$this->l('Display price').'" title="'.$this->l('Show price').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Show price').'</label>
+							<input style="float: left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
+							<label for="show_price" class="t"><img src="../img/admin/gold.gif" alt="'.$this->l('display price').'" title="'.$this->l('show price').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('show price').'</label>
+							<br class="clear" />
+							<input style="float: left;" type="checkbox" name="online_only" id="online_only" value="1" '.($this->getFieldValue($obj, 'online_only') ? 'checked="checked" ' : '').' />
+							<label for="online_only" class="t"><img src="../img/admin/basket_error.png" alt="'.$this->l('online only').'" title="'.$this->l('online only').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('online only (not sold in store)').'</label>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Condition:').'</td>
+						<td style="padding-bottom:5px;">
+							<select name="condition" id="condition">
+								<option value="new">'.$this->l('New').'</option>
+								<option value="used">'.$this->l('Used').'</option>
+								<option value="refurbished">'.$this->l('Refurbished').'</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -1808,7 +1863,7 @@ class AdminProducts extends AdminTab
 		echo '
 							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.intval(Tab::getIdFromClassName('AdminManufacturers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
 						</td>
-					</tr>
+					</tr>					
 					<tr>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Supplier:').'</td>
 						<td style="padding-bottom:5px;">
@@ -1821,28 +1876,9 @@ class AdminProducts extends AdminTab
 							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminSuppliers&addsupplier&token='.Tools::getAdminToken('AdminSuppliers'.intval(Tab::getIdFromClassName('AdminSuppliers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
 						</td>
 					</tr>
-					<tr>
-						<td class="col-left">'.$this->l('Reference:').'</td>
-						<td style="padding-bottom:5px;">
-							<input size="55" type="text" name="reference" value="'.htmlentities($this->getFieldValue($obj, 'reference'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
-							'.$this->l('EAN13:').'<input size="55" maxlength="13" type="text" name="ean13" value="'.$this->getFieldValue($obj, 'ean13').'" style="width: 110px; margin-left: 10px;" />
-							<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#\<span class="hint-pointer">&nbsp;</span></span>
-						</td>
-					</tr>
-                	<tr>
-						<td class="col-left">'.$this->l('Supplier Reference:').'</td>
-						<td style="padding-bottom:5px;">
-							<input size="55" type="text" name="supplier_reference" value="'.htmlentities($this->getFieldValue($obj, 'supplier_reference'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
-							'.$this->l('Location:').'<input size="55" type="text" name="location" value="'.$this->getFieldValue($obj, 'location').'" style="width: 101px; margin-left: 10px;" />
-							<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#\<span class="hint-pointer">&nbsp;</span></span>
-						</td>
-					</tr>					
-					<tr>
-						<td class="col-left">'.$this->l('Weight:').'</td>
-						<td style="padding-bottom:5px;">
-							<input size="6" maxlength="6" name="weight" type="text" value="'.htmlentities($this->getFieldValue($obj, 'weight'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_WEIGHT_UNIT').'
-						</td>
-					</tr>
+				</table>
+				<div class="clear"></div>
+				<table cellpadding="5" style="width: 100%;">
 					<tr><td colspan="2"><hr style="width:100%;" /></td></tr>';
 					$this->displayPack($obj);
 		echo '		<tr><td colspan="2"><hr style="width:100%;" /></td></tr>';
@@ -2643,7 +2679,8 @@ class AdminProducts extends AdminTab
 			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Reference:').'</td>
 			  <td style="padding-bottom:5px;">
 				<input size="55" type="text" id="attribute_reference" name="attribute_reference" value="" style="width: 130px; margin-right: 44px;" />
-				'.$this->l('EAN13:').'<input size="55" maxlength="13" type="text" id="attribute_ean13" name="attribute_ean13" value="" style="width: 110px; margin-left: 10px;" />
+				'.$this->l('EAN13:').'<input size="55" maxlength="13" type="text" id="attribute_ean13" name="attribute_ean13" value="" style="width: 110px; margin-left: 10px; margin-right: 44px;" />
+				'.$this->l('UPC:').'<input size="55" maxlength="12" type="text" id="attribute_upc" name="attribute_upc" value="" style="width: 110px; margin-left: 10px;" />
 				<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#<span class="hint-pointer">&nbsp;</span></span>
 			  </td>
 		  </tr>
@@ -2748,7 +2785,7 @@ class AdminProducts extends AdminTab
 		  <tr>
 			  <td style="width:150px">&nbsp;</td>
 			  <td style="padding-bottom:5px;">
-				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this combination').'" class="button" onclick="attr_selectall(); this.form.action += \'&addproduct&tabs=2\';" /> </span>
+				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this combination').'" class="button" onclick="attr_selectall(); this.form.action += \'&addproduct&tabs=3\';" /> </span>
 				<span id="ResetSpan" style="float: left; margin-left: 8px; display: none;">
 				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="init_elems(); getE(\'submitProductAttribute\').value = \''.$this->l('Add this attributes group', __CLASS__, true).'\';
 				  getE(\'id_product_attribute\').value = -1; openCloseLayer(\'ResetSpan\');" class="button" value="'.$this->l('Cancel modification').'" /></span><span class="clear"></span>
@@ -2758,13 +2795,14 @@ class AdminProducts extends AdminTab
 		  <tr>
 			  <td colspan="2">
 					<br />
-					<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
+					<table border="0" cellpadding="0" cellspacing="0" class="table">
 						<tr>
 							<th>'.$this->l('Attributes').'</th>
 							<th>'.$this->l('Impact').'</th>
 							<th>'.$this->l('Weight').'</th>
 							<th>'.$this->l('Reference').'</th>
 							<th>'.$this->l('EAN13').'</th>
+							<th>'.$this->l('UPC').'</th>
 							<th class="center">'.$this->l('Quantity').'</th>
 							<th class="center">'.$this->l('Actions').'</th>
 						</tr>';
@@ -2785,6 +2823,7 @@ class AdminProducts extends AdminTab
 						$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];
                         $combArray[$combinaison['id_product_attribute']]['supplier_reference'] = $combinaison['supplier_reference'];
                         $combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
+						$combArray[$combinaison['id_product_attribute']]['upc'] = $combinaison['upc'];
 						$combArray[$combinaison['id_product_attribute']]['location'] = $combinaison['location'];
 						$combArray[$combinaison['id_product_attribute']]['quantity'] = $combinaison['quantity'];
 						$combArray[$combinaison['id_product_attribute']]['id_image'] = isset($combinationImages[$combinaison['id_product_attribute']][0]['id_image']) ? $combinationImages[$combinaison['id_product_attribute']][0]['id_image'] : 0;
@@ -2817,12 +2856,13 @@ class AdminProducts extends AdminTab
 							<td class="right">'.$product_attribute['weight'].Configuration::get('PS_WEIGHT_UNIT').'</td>
 							<td class="right">'.$product_attribute['reference'].'</td>
 							<td class="right">'.$product_attribute['ean13'].'</td>
+							<td class="right">'.$product_attribute['upc'].'</td>
 							<td class="center">'.$product_attribute['quantity'].'</td>
 							<td class="center">
 							<a style="cursor: pointer;">
 							<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this combination').'"
 							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['unit_impact'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
-							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\'); updateNewPriceAttribute();" /></a>&nbsp;
+							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\', \''.$product_attribute['upc'].'\'); updateNewPriceAttribute();" /></a>&nbsp;
 							'.(!$product_attribute['default_on'] ? '<a href="'.$currentIndex.'&defaultProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.intval(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
 							<img src="../img/admin/asterisk.gif" alt="'.$this->l('Make this combination the default one').'" title="'.$this->l('Make this combination the default one').'"></a>' : '').'
 							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.intval(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">

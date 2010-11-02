@@ -88,6 +88,9 @@ class ProductCore extends ObjectModel
 
 	/** @var boolean on_sale */
 	public 		$on_sale = false;
+	
+	/** @var boolean online_only */
+	public 		$online_only = false;
 
 	/** @var string unity */
 	public		$unity = NULL;
@@ -112,6 +115,9 @@ class ProductCore extends ObjectModel
 
 	/** @var string Ean-13 barcode */
 	public 		$ean13;
+	
+	/** @var string Upc barcode */
+	public 		$upc;
 
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
@@ -149,6 +155,9 @@ class ProductCore extends ObjectModel
 	/** @var boolean Product available for order */
 	public		$available_for_order = 1;
 	
+	/** @var enum Product condition (new, used, refurbished) */
+	public		$condition;
+	
 	/** @var boolean Show price of Product */
 	public		$show_price = 1;
 
@@ -178,7 +187,7 @@ class ProductCore extends ObjectModel
 	protected $tables = array ('product', 'product_lang');
 
 	protected $fieldsRequired = array('id_tax', 'quantity', 'price');
-	protected $fieldsSize = array('reference' => 32, 'supplier_reference' => 32, 'location' => 64, 'ean13' => 13, 'unity' => 10);
+	protected $fieldsSize = array('reference' => 32, 'supplier_reference' => 32, 'location' => 64, 'ean13' => 13, 'upc' => 12, 'unity' => 10);
 	protected $fieldsValidate = array(
 		'id_tax' => 'isUnsignedId',
 		'id_manufacturer' => 'isUnsignedId',
@@ -190,6 +199,7 @@ class ProductCore extends ObjectModel
 		'additional_shipping_cost' => 'isPrice',
 		'wholesale_price' => 'isPrice',
 		'on_sale' => 'isBool',
+		'online_only' => 'isBool',
 		'ecotax' => 'isPrice',
 		'unit_price' => 'isPrice',
 		'unity' => 'isString',
@@ -204,8 +214,10 @@ class ProductCore extends ObjectModel
 		'text_fields' => 'isUnsignedInt',
 		'active' => 'isBool',
 		'available_for_order' => 'isBool',
+		'condition' => 'isGenericName',
 		'show_price' => 'isBool',
 		'ean13' => 'isEan13',
+		'upc' => 'isUpc',
 		'indexed' => 'isBool',
 		'cache_is_pack' => 'isBool',
 		'cache_has_attachments' => 'isBool'
@@ -276,10 +288,12 @@ class ProductCore extends ObjectModel
 		$fields['additional_shipping_cost'] = floatval($this->additional_shipping_cost);
 		$fields['wholesale_price'] = floatval($this->wholesale_price);
 		$fields['on_sale'] = intval($this->on_sale);
+		$fields['online_only'] = intval($this->online_only);
 		$fields['ecotax'] = floatval($this->ecotax);
 		$fields['unity'] = pSQL($this->unity);
 		$fields['unit_price'] = floatval($this->unit_price);
 		$fields['ean13'] = pSQL($this->ean13);
+		$fields['upc'] = pSQL($this->upc);
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
@@ -291,6 +305,7 @@ class ProductCore extends ObjectModel
 		$fields['text_fields'] = intval($this->text_fields);
 		$fields['active'] = intval($this->active);
 		$fields['available_for_order'] = intval($this->available_for_order);
+		$fields['condition'] = pSQL($this->condition);
 		$fields['show_price'] = intval($this->show_price);
 		$fields['indexed'] = 0; // Reset indexation every times
 		$fields['cache_is_pack'] = intval($this->cache_is_pack);
@@ -760,7 +775,7 @@ class ProductCore extends ObjectModel
 	* @param boolean $default Is default attribute for product
 	* @return mixed $id_product_attribute or false
 	*/
-	public function addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
 	{
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
@@ -768,7 +783,7 @@ class ProductCore extends ObjectModel
 		array('id_product' => intval($this->id), 'price' => floatval($price), 'ecotax' => floatval($ecotax), 'quantity' => intval($quantity),
 		'weight' => ($weight ? floatval($weight) : 0), 'unit_price_impact' => ($unit_impact ? floatval($unit_impact) : 0),
 		'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference), 
-		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'default_on' => intval($default)),
+		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'upc' => pSQL($upc), 'default_on' => intval($default)),
 		'INSERT');
 		$id_product_attribute = Db::getInstance()->Insert_ID();
 		Product::updateDefaultAttribute($this->id);
@@ -785,10 +800,10 @@ class ProductCore extends ObjectModel
 		return intval($id_product_attribute);
 	}
 
-	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
 	{
 		if (
-			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location)
+			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc)
 			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.intval($id_product_attribute))
 		)
 			return false;
@@ -866,9 +881,10 @@ class ProductCore extends ObjectModel
 	* @param integer $id_image Image id
 	* @param string $reference Reference
 	* @param string $ean13 Ean-13 barcode
+	* @param string $upc Upc barcode
 	* @return array Update result
 	*/
-	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL)
+	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
 	{
 		Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
@@ -886,6 +902,7 @@ class ProductCore extends ObjectModel
 		'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location),
 		'ean13' => pSQL($ean13),
+		'upc' => pSQL($upc),
 		'default_on' => intval($default));
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
@@ -1221,7 +1238,7 @@ class ProductCore extends ObjectModel
 		}
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, p.`upc`,
 			i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
 			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice 
 		FROM `'._DB_PREFIX_.'product` p
@@ -1293,7 +1310,7 @@ class ProductCore extends ObjectModel
 			return false;
 		
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,  p.`upc`,
 			i.`id_image`, il.`legend`, t.`rate`
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
@@ -1352,7 +1369,8 @@ class ProductCore extends ObjectModel
 			return intval($result['nb']);
 		}
 		$sql = '
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, 
+		pl.`name`, p.`ean13`, p.`upc`, i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
@@ -1879,8 +1897,9 @@ class ProductCore extends ObjectModel
 		global	$link, $cookie;
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`,
-		i.`id_image`, il.`legend`, t.`rate`, m.`name` as manufacturer_name, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, p.`upc`,
+		i.`id_image`, il.`legend`, t.`rate`, m.`name` as manufacturer_name, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), 
+		INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM `'._DB_PREFIX_.'accessory`
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = `id_product_2`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')

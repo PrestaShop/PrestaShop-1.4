@@ -23,6 +23,8 @@ class CombinationCore extends ObjectModel
 	public $location;
 
 	public $ean13;
+	
+	public $upc;
 
 	public $wholesale_price;
 
@@ -44,6 +46,7 @@ class CombinationCore extends ObjectModel
 		'supplier_reference' => 32,
 		'location' => 64,
 		'ean13' => 13,
+		'upc' => 12,
 		'wholesale_price' => 27,
 		'price' => 20,
 		'ecotax' => 20,
@@ -53,6 +56,7 @@ class CombinationCore extends ObjectModel
 		'id_product' => 'isUnsignedId',
 		'location' => 'isGenericName',
 		'ean13' => 'isEan13',
+		'upc' => 'isUpc',
 		'wholesale_price' => 'isPrice',
 		'price' => 'isPrice',
 		'ecotax' => 'isPrice',
@@ -83,6 +87,7 @@ class CombinationCore extends ObjectModel
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
 		$fields['ean13'] = pSQL($this->ean13);
+		$fields['upc'] = pSQL($this->upc);
 		$fields['wholesale_price'] = pSQL($this->wholesale_price);
 		$fields['price'] = pSQL($this->price);
 		$fields['ecotax'] = pSQL($this->ecotax);

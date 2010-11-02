@@ -1,10 +1,11 @@
-function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location)
+function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location, upc)
 {
 	init_elems();
 	getE('attribute_quantity').value = quantity;
 	getE('attribute_reference').value = reference;
 	getE('attribute_supplier_reference').value = supplier_reference;
 	getE('attribute_ean13').value = ean;
+	getE('attribute_upc').value = upc;
 	getE('submitProductAttribute').value = modifyattributegroup;
 	getE('attribute_wholesale_price').value = Math.abs(wholesale_price);
 	getE('attribute_price').value = Math.abs(price_impact);

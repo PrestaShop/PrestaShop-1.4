@@ -14,6 +14,9 @@
 				{elseif $product.reduction && $product.show_price}
 					<span class="discount">{l s='Price lowered!'}</span>
 				{/if}
+				{if $product.online_only}
+					<span class="online_only">{l s='Online only!'}</span>
+				{/if}
 				{if $product.show_price OR $product.available_for_order}
 				<div>
 					{if $product.show_price}<span class="price" style="display: inline;">{if !$priceDisplay}{convertPrice price=$product.price}{else}{convertPrice price=$product.price_tax_exc}{/if}</span><br />{/if}
