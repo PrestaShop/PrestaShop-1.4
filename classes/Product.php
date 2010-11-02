@@ -1477,7 +1477,7 @@ class ProductCore extends ObjectModel
 	*
 	* @param integer $id_product Product id
 	* @param boolean $usetax With taxes or not (optional)
-	* @param integer $id_product_attribute Product attribute id (optional)
+	* @param integer $id_product_attribute Product attribute id (optional). If set to false, do not apply the combination price impact. NULL does apply the default combination price impact.
 	* @param integer $decimals Number of decimals (optional)
 	* @param integer $divisor Useful when paying many time without fees (optional)
 	* @param boolean $only_reduc Returns only the reduction amount
@@ -1558,7 +1558,8 @@ class ProductCore extends ObjectModel
 		// Attribute price
 		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $id_currency);
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
-		$price += $attribute_price;
+		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
+			$price += $attribute_price;
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND self::$_pricesLevel3[$cacheId3])
 			$reduc = self::$_pricesLevel3[$cacheId3]['reduction_type'] == 'amount' ? self::$_pricesLevel3[$cacheId3]['reduction'] : ($price * self::$_pricesLevel3[$cacheId3]['reduction']);
@@ -1630,7 +1631,7 @@ class ProductCore extends ObjectModel
 
 	public function getPriceWithoutReduct($notax = false)
 	{
-		return self::getPriceStatic(intval($this->id), !$notax, NULL, 6, NULL, false, false);
+		return self::getPriceStatic(intval($this->id), !$notax, false, 6, NULL, false, false);
 	}
 
 	/**

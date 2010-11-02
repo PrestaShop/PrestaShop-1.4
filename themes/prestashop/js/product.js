@@ -245,7 +245,6 @@ function updateDisplay()
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
 		var attribut_price_tmp = selectedCombination['price'];
-
 		var tax = (taxRate / 100) + 1;
 
 		if (noTaxForThisProduct)
@@ -255,7 +254,7 @@ function updateDisplay()
 		var priceReduct = !(reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
 		var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate * (1 - parseFloat(reduction_percent));
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
-		
+
 		if (!noTaxForThisProduct)
 			var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
 		else
