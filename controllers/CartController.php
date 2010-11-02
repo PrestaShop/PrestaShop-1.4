@@ -71,7 +71,7 @@ class CartControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('product not found');
 			else
 			{
-				$producToAdd = new Product(intval($idProduct), false, intval($this->cookie->id_lang));
+				$producToAdd = new Product(intval($idProduct), true, intval($this->cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 					$this->errors[] = Tools::displayError('product is no longer available');
 				else
