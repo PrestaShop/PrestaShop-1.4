@@ -99,7 +99,7 @@ XML;
 			$infos->addChild('lang', $language['iso_code']);
 		
 		$sqlProducts = Db::getInstance()->ExecuteS('
-		SELECT p.id_product, p.reference, p.weight, m.name manufacturer, s.name supplier, p.on_sale, p.reduction_percent, p.reduction_price, p.id_manufacturer, pd.id_product_download
+		SELECT p.id_product, p.reference, p.weight, m.name manufacturer, s.name supplier, p.on_sale, p.id_manufacturer, pd.id_product_download
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		LEFT JOIN '._DB_PREFIX_.'supplier s ON (s.id_supplier = p.id_supplier)
@@ -164,11 +164,11 @@ XML;
 			$price->addChild('retail-price-with-tax', Product::getPriceStatic(intval($sqlProduct['id_product']), true, NULL, 6, NULL, false, false));
 			$price->addChild('retail-price-without-tax', Product::getPriceStatic(intval($sqlProduct['id_product']), false, NULL, 6, NULL, false, false));
 			$price->addChild('final-retail-price-with-tax', Product::getPriceStatic(intval($sqlProduct['id_product']), true));
-			$price->addChild('final-retail-price-without-tax', Product::getPriceStatic(intval($sqlProduct['id_product']), false));
-			$price->addChild('reduction_percent', floatval($sqlProduct['reduction_percent']));
-			$price->addChild('reduction_price', floatval($sqlProduct['reduction_price']));
+			$price->addChild('final-retail-price-without-tax', Product::getPriceStatic(intval($sqlProduct['id_product']), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $specificPrice));
+			$price->addChild('reduction_percent', ($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00);
+			$price->addChild('reduction_price', ($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? floatval($specificPrice['reduction']) : 0.00);
 			$price->addChild('display-on-sale', intval($sqlProduct['on_sale']));
-			
+
 			$product->addChild('downloadable', $sqlProduct['id_product_download'] >= 1 ? 1 : 0);
 			
 			$pack = Db::getInstance()->ExecuteS('
@@ -237,17 +237,14 @@ XML;
 				}
 			}
 			
-			$quantityDiscounts = Db::getInstance()->ExecuteS('
-			SELECT dq.quantity, dq.value, dq.id_discount_type
-			FROM '._DB_PREFIX_.'discount_quantity dq
-			WHERE dq.id_product = '.intval($sqlProduct['id_product']));
+			$quantityDiscounts = SpecificPrice::getQuantityDiscounts(intval($sqlProduct['id_product']), intval(Shop::getCurrentShop()), 0, 0, 0);
 			
 			foreach ($quantityDiscounts AS $quantityDiscount)
 			{
 				$discount = $product->addChild('discount');
-				$discount->addChild('discount-quantity', intval($quantityDiscount['quantity']));
-				$discount->addChild('discount-value', floatval($quantityDiscount['value']));
-				$discount->addChild('discount-type', ($quantityDiscount['id_discount_type'] == 1 ? $defaultCurrencyIsoCode : '%'));
+				$discount->addChild('discount-quantity', intval($quantityDiscount['from_quantity']));
+				$discount->addChild('discount-value', (floatval($quantityDiscount['price']) AND $quantityDiscount['reduction_type'] == 'amount') ? floatval($quantityDiscount['price']) : $quantityDiscount['reduction'] * 100);
+				$discount->addChild('discount-type', ($quantityDiscount['reduction_type'] == 'amount' ? $defaultCurrencyIsoCode : '%'));
 			}
 
 			$categories = Db::getInstance()->ExecuteS('
