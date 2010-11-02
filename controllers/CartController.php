@@ -93,7 +93,7 @@ class CartControllerCore extends FrontController
 					elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
 						$this->errors[] = Tools::displayError('there is not enough product in stock');
 					/* Check vouchers compatibility */
-					if ($add AND (intval($producToAdd->reduction_price) OR intval($producToAdd->reduction_percent) OR $producToAdd->on_sale))
+					if ($add AND (($producToAdd->specificPrice AND floatval($producToAdd->specificPrice['reduction'])) $producToAdd->on_sale))
 					{
 						$discounts = $this->cart->getDiscounts();
 						foreach($discounts as $discount)

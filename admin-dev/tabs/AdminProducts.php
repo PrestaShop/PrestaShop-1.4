@@ -1453,8 +1453,8 @@ class AdminProducts extends AdminTab
 						<option value="amount"'.($specificPrice['reduction_type'] == 'amount' ? ' selected="selected"' : '').'>'.$this->l('Amount').'</option>
 						<option value="percentage"'.($specificPrice['reduction_type'] == 'percentage' ? ' selected="selected"' : '').'>'.$this->l('Percentage').'</option>
 					</select>
-					'.$this->l('From').' <input type="text" name="spm_from[]" value="'.$specificPrice['from'].'" class="table_input" style="text-align: center" />
-					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.$specificPrice['to'].'" class="table_input" style="text-align: center" />
+					'.$this->l('From').' <input type="text" name="spm_from[]" value="'.($specificPrice['from'] != '0000-00-00 00:00:00' ? $specificPrice['from'] : '').'" class="table_input" style="text-align: center" />
+					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.($specificPrice['to'] != '0000-00-00 00:00:00' ? $specificPrice['to'] : '').'" class="table_input" style="text-align: center" />
 				</td>
 			</tr>';
 		}

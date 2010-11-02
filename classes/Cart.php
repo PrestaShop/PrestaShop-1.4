@@ -296,20 +296,21 @@ class CartCore extends ObjectModel
 				$row['weight'] = $row['weight_attribute'];
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
-				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL)); // Here taxes are computed only once the quantity has been applied to the product price
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, isset($row['id_product_attribute']) ? intval($row['id_product_attribute']) : NULL, 2, NULL, false, true, intval($row['cart_quantity']), false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				$row['total_wt'] = Tools::ps_round($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
 				$row['total'] = $row['price'] * intval($row['cart_quantity']);
 			}
 			else
 			{
-				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				$row['price'] = Product::getPriceStatic(intval($row['id_product']), false, intval($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput);
 				$row['price_wt'] = Product::getPriceStatic(intval($row['id_product']), true, intval($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, (intval($this->id_customer) ? intval($this->id_customer) : NULL), intval($this->id), (intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? intval($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				/* In case when you use QuantityDiscount, getPriceStatic() can be return more of 2 decimals */
 				$row['price_wt'] = Tools::ps_round($row['price_wt'], 2);
 				$row['total_wt'] = $row['price_wt'] * intval($row['cart_quantity']);
 				$row['total'] = Tools::ps_round($row['price'] * intval($row['cart_quantity']), 2);
 			}
+			$row['reduction_applies'] = $specificPriceOutput AND floatval($specificPriceOutput['reduction']);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic(intval($row['id_product']));
@@ -1043,7 +1044,7 @@ class CartCore extends ObjectModel
 		if (!$discountObj->cumulable_reduction)
 		{
 			foreach ($products as $product)
-				if (!intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale'])
+				if (!$product['reduction_applies'] AND !$product['on_sale'])
 					$onlyProductWithDiscount = false;
 		}
 		if (!$discountObj->cumulable_reduction AND $onlyProductWithDiscount)
@@ -1056,7 +1057,7 @@ class CartCore extends ObjectModel
 			if(count($categories))
 				if (Product::idIsOnCategoryId($product['id_product'], $categories))
 				{
-					if ((!$discountObj->cumulable_reduction AND !intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale']) OR $discountObj->cumulable_reduction)
+					if ((!$discountObj->cumulable_reduction AND !$product['reduction_applies'] AND !$product['on_sale']) OR $discountObj->cumulable_reduction)
 						$total_cart += $product['total_wt'];
 					$returnErrorNoProductCategory = false;
 				}

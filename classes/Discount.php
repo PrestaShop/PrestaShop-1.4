@@ -260,7 +260,7 @@ class DiscountCore extends ObjectModel
 				$percentage = $this->value / 100;
 				foreach ($products AS $product)
 						if (Product::idIsOnCategoryId($product['id_product'], $categories))
-							if ((!$this->cumulable_reduction AND !intval($product['reduction_price']) AND !intval($product['reduction_percent']) AND !$product['on_sale']) OR $this->cumulable_reduction)
+							if ((!$this->cumulable_reduction AND !$product['reduction_applies'] AND !$product['on_sale']) OR $this->cumulable_reduction)
 								$amount += ($useTax ? $product['total_wt'] : $product['total']) * $percentage;
 				return $amount;
 				

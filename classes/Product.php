@@ -74,18 +74,6 @@ class ProductCore extends ObjectModel
 	/** @var float Wholesale Price in euros */
 	public 		$wholesale_price = 0;
 
-	/** @var float Reduction price in euros */
-	public 		$reduction_price = 0;
-
-	/** @var float Reduction percentile */
-	public 		$reduction_percent = 0;
-
-	/** @var string Reduction beginning */
-	public		$reduction_from = '1942-01-01';
-
-	/** @var string Reduction end */
-	public		$reduction_to = '1942-01-01';
-
 	/** @var boolean on_sale */
 	public 		$on_sale = false;
 	
