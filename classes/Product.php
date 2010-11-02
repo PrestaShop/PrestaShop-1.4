@@ -1476,10 +1476,18 @@ class ProductCore extends ObjectModel
 	* Get product price
 	*
 	* @param integer $id_product Product id
-	* @param boolean $tax With taxes or not (optional)
+	* @param boolean $usetax With taxes or not (optional)
 	* @param integer $id_product_attribute Product attribute id (optional)
 	* @param integer $decimals Number of decimals (optional)
 	* @param integer $divisor Useful when paying many time without fees (optional)
+	* @param boolean $only_reduc Returns only the reduction amount
+	* @param boolean $usereduc Set if the returned amount will include reduction
+	* @param integer $quantity Required for quantity discount application (default value: 1)
+	* @param boolean $forceAssociatedTax Force to apply the associated tax. Only works when the parameter $usetax is true
+	* @param integer $id_customer Customer ID (for customer group reduction)
+	* @param integer $id_cart Cart ID. Required when the cookie is not accessible (e.g., inside a payment module, a cron task...)
+	* @param integer $id_address Customer address ID. Required for price (tax included) calculation regarding the guest localization
+	* @param variable_reference $specificPriceOutput. If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
 	* @return float Product price
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL)
