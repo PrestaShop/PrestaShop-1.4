@@ -17,7 +17,7 @@ class FrontControllerCore
 	public $authRedirection = false;
 	public $ssl = false;
 	
-	public $initialized = false;
+	public static $initialized = false;
 	
 	public function __construct()
 	{
@@ -47,9 +47,9 @@ class FrontControllerCore
 	
 	public function init()
 	{
-		if ($this->initialized)
+		if (self::$initialized)
 			return;
-		$this->initialized = true;
+		self::$initialized = true;
 			
 		global $_CONF, $cookie, $smarty, $cart;
 		if (!isset($smarty))
@@ -167,10 +167,7 @@ class FrontControllerCore
 		$server_host_ssl = Tools::getHttpHost(false, true);
 		$server_host     = str_replace(':'._PS_SSL_PORT_, '',$server_host_ssl);
 
-		global $protocol;
-		global $protocol_ssl;
-		global $protocol_link;
-		global $protocol_content;
+		global $protocol, $protocol_ssl, $protocol_link, $protocol_content;
 		$protocol = 'http://';
 		$protocol_ssl = 'https://';
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
