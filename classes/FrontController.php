@@ -280,6 +280,14 @@ class FrontControllerCore
 		global $css_files, $js_files;
 		$css_files = array();
 		$js_files = array();
+		
+		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
+		Tools::addJS(array(
+			_PS_JS_DIR_.'tools.js',
+			_PS_JS_DIR_.'jquery/jquery-1.2.6.pack.js',
+			_PS_JS_DIR_.'jquery/jquery.easing.1.3.js',
+			_PS_JS_DIR_.'jquery/jquery.hotkeys-0.7.8-packed.js'
+		));
 	}
 
 	public function preProcess()
@@ -288,13 +296,7 @@ class FrontControllerCore
 	
 	public function setMedia()
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
-		Tools::addJS(array(
-			_PS_JS_DIR_.'tools.js',
-			_PS_JS_DIR_.'jquery/jquery-1.2.6.pack.js',
-			_PS_JS_DIR_.'jquery/jquery.easing.1.3.js',
-			_PS_JS_DIR_.'jquery/jquery.hotkeys-0.7.8-packed.js'
-		));
+
 	}
 	
 	public function process()
