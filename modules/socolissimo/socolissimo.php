@@ -6,6 +6,7 @@ class Socolissimo extends Module
 	private $_postErrors = array();
 	private $url = '';
 	public $_errors = array();
+	public $errorMessage = array();
 	
 	private $_config = array(
 		'name' => 'La Poste - So Colissimo',
@@ -29,8 +30,8 @@ class Socolissimo extends Module
 		global $cookie;
 		
 		$this->name = 'socolissimo';
-		$this->tab = 'shipping_logistics';
-		$this->version = '1.2';
+		$this->tab = 'Carriers';
+		$this->version = '1.3';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;
 
@@ -74,6 +75,12 @@ class Socolissimo extends Module
 			if (count($warning))
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
 		}
+			$this->errorMessage = array('998' => $this->l('Invalide key'), '999' => $this->l('an error occurred during shipping step'), '001' => $this->l('Login FO missing'),
+			 '002' => $this->l('Lofin FO incorrect '), '003' => $this->l('Customer unauthorized'),'004' => $this->l('Required field missing'), '006' => $this->l('Missing signature'),
+			  '007' => $this->l('Invalid signature'), '008' => $this->l('Zip Code invalid'), '009' => $this->l('Incorrect url format return validation'), '010' => $this->l('Incorrect url format return error'),
+			   '011' => $this->l('Numéro de transaction non valide'), '012' => $this->l('Format incorrect shipping costs'), '015' => $this->l('Socolissimo server unavailable'),
+			    '016' => $this->l('Socolissimo server unavailable'), '004' => $this->l('Required field missing'), '004' => $this->l('Required field missing'));
+
 	}
 	
 	public function install()
@@ -99,12 +106,16 @@ class Socolissimo extends Module
 				  `prcompladress` text NOT NULL,
 				  `pradress1` text NOT NULL,
 				  `pradress2` text NOT NULL,
+				  `pradress3` text NOT NULL,
+				  `pradress4` text NOT NULL,
 				  `przipcode` int(5) NOT NULL,
 				  `prtown` varchar(64) NOT NULL,
 				  `cephonenumber` varchar(10) NOT NULL,
 				  `ceemail` varchar(64) NOT NULL,
 				  `cecompanyname` varchar(64) NOT NULL,
 				  `cedeliveryinformation` int(11) NOT NULL,
+				  `cedoorcode1` varchar(10) NOT NULL,
+				  `cedoorcode2` varchar(10) NOT NULL,
 				  PRIMARY KEY  (`id_cart`,`id_customer`)
 				) ENGINE='.ENGINE_TYPE.' DEFAULT CHARSET=utf8;';
 		
@@ -253,7 +264,7 @@ class Socolissimo extends Module
 
 		<label>'.$this->l('Key').' : </label>
 		<div class="margin-form">
-		<input type="text" name="key" value="'.Tools::getValue('key',Configuration::get('SOCOLISSIMO_KEY')).'" />
+		<input type="text" name="key" value="'.Tools::getValue('key',intval(Configuration::get('SOCOLISSIMO_KEY'))).'" />
 		<p>'.$this->l('Secure key for back office SoColissimo.').'</p>
 		</div>
 
@@ -282,7 +293,7 @@ class Socolissimo extends Module
 		}
 		$this->_html .= '</select>
 		<p>' . $this->l('Choose in carriers list the SoColissimo one.') . '</p>
-		'.(!in_array(Configuration::get('SOCOLISSIMO_CARRIER_ID'), $ids) ? '<div class="warning">'.$this->l('Carrier is not set').'</div>' : '').'
+		'.(!in_array(intval(Configuration::get('SOCOLISSIMO_CARRIER_ID')), $ids) ? '<div class="warning">'.$this->l('Carrier is not set').'</div>' : '').'
 		</div>
 		<div class="margin-form">
 		<p>--------------------------------------------------------------------------------------------------------</p>	
@@ -370,11 +381,11 @@ class Socolissimo extends Module
 		global $smarty;
 		
 		//delete overcost product if exist
-		$cart = new Cart($params['cart']->id);
+		$cart = new Cart(intval($params['cart']->id));
 		$products = $cart->getProducts(false);
 		$ids = array();
 		foreach($products as $product)
-			$ids[] .= $product['id_product'];
+			$ids[] .= intval($product['id_product']);
 		if (in_array(Configuration::get('SOCOLISSIMO_PRODUCT_ID'),$ids))
 			$cart->deleteProduct(Configuration::get('SOCOLISSIMO_PRODUCT_ID'));
 		$cart->update();
@@ -393,11 +404,11 @@ class Socolissimo extends Module
 						 number_format(floatval($params['cart']->getOrderShippingCost($carrierSo->id, true)), 2, ',', ''),
 						 intval($params['address']->id_customer),intval($params['address']->id));
 
-			$orderId = $this->formatOrderId($params['address']->id);
+			$orderId = $this->formatOrderId(intval($params['address']->id));
 			$inputs = array('PUDOFOID' => Configuration::get('SOCOLISSIMO_ID'),
 							'ORDERID' => $orderId,
 							'CENAME' => substr($params['address']->lastname,0, 34),
-							'TRCLIENTNUMBER' => $this->upper($params['address']->id_customer),
+							'TRCLIENTNUMBER' => $this->upper(intval($params['address']->id_customer)),
 							'CECIVILITY' => $cecivility,
 							'CEFIRSTNAME' => substr($this->lower($params['address']->firstname),0,29),
 							'CECOMPANYNAME' => substr($this->upper($params['address']->company),0,38),
@@ -417,11 +428,11 @@ class Socolissimo extends Module
 			
 			$row['id_carrier'] = intval($carrierSo->id);
 
-			$smarty->assign(array('urlSo' => Configuration::get('SOCOLISSIMO_URL').'?trReturnUrlKo='.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),'id_carrier' => $row['id_carrier'],
+			$smarty->assign(array('urlSo' => Configuration::get('SOCOLISSIMO_URL').'?trReturnUrlKo='.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),'id_carrier' => intval($row['id_carrier']),
 								  'inputs' => $inputs)
 							);				
 			
-			$country = new Country($params['address']->id_country);
+			$country = new Country(intval($params['address']->id_country));
 						
 			if (($country->iso_code == 'FR') AND (Configuration::Get('SOCOLISSIMO_ID') != NULL) AND (Configuration::get('SOCOLISSIMO_KEY') != NULL) 
 				 AND $this->checkAvailibility())
@@ -440,7 +451,7 @@ class Socolissimo extends Module
 		if ($params['order']->id_carrier != Configuration::get('SOCOLISSIMO_CARRIER_ID'))
 			return;
 		$order = $params['order'];
-		$order->id_address_delivery = $this->isSameAddress($order->id_address_delivery,$order->id_cart,$order->id_customer);
+		$order->id_address_delivery = $this->isSameAddress(intval($order->id_address_delivery), intval($order->id_cart), intval($order->id_customer));
 		$order->update();
 		$cart = new Cart(intval($params['cart']->id));
 		$products = $cart->getProducts(false);
@@ -454,24 +465,15 @@ class Socolissimo extends Module
 		$product = new Product(intval(Configuration::get('SOCOLISSIMO_PRODUCT_ID')));
 		$product->quantity += 1;
 		$product->update();
-			if (!in_array(intval(Configuration::get('SOCOLISSIMO_PRODUCT_ID')),$ids))
-			{	
-				$history = new OrderHistory();
-				$history->id_order = intval($params['order']->id);
-				$history->changeIdOrderState(_PS_OS_ERROR_, intval($history->id_order));
-				$history->id_employee = intval($cookie->id_employee);
-				$history->addWithemail();
-				die(Tools::displayError('Order creation failed'));
-			}
+		if (!in_array(intval(Configuration::get('SOCOLISSIMO_PRODUCT_ID')),$ids))
+		{	
+			$history = new OrderHistory();
+			$history->id_order = intval($params['order']->id);
+			$history->changeIdOrderState(_PS_OS_ERROR_, intval($history->id_order));
+			$history->id_employee = intval($cookie->id_employee);
+			$history->addWithemail();
+			die(Tools::displayError('Order creation failed'));
 		}
-		if ($deliveryInfos['delivery_mode'] == 'RDV' OR $deliveryInfos['delivery_mode'] == 'DOM')
-		{		
-			$message = new Message();
-			$texte = 'Socolissimo : ';
-			$message->message = htmlentities($texte, ENT_COMPAT, 'UTF-8');
-			$message->id_order = intval($id_order);
-			$message->private = 1;
-			$message->add();
 		}	
 	}
 	
@@ -493,46 +495,40 @@ class Socolissimo extends Module
 		{
 			$html = '<br><br><fieldset style="width:400px;"><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('So Colissimo').'</legend>';
 			$html .= '<b>'.$this->l('Delivery mode').' : </b>';
-			
 			switch ($deliveryInfos['delivery_mode'])
 			{
 				case 'DOM':
-				$html .= $deliveryMode['DOM'];
-				$html .=  '<div>'.(!empty($addressDelivery->company) ? $addressDelivery->company.'<br />' : '') .$addressDelivery->firstname.' '.$addressDelivery->lastname.'<br />
-						  '.$addressDelivery->address1.'<br />'. (!empty($addressDelivery->address2) ? $addressDelivery->address2.'<br />' : '') .'
-						  '.$addressDelivery->postcode.' '.$addressDelivery->city.'<br />
-						  '.$addressDelivery->country.($addressDelivery->id_state ? ' - '.$deliveryState->name : '').'<br />
-						  '.(!empty($addressDelivery->phone) ? $addressDelivery->phone.'<br />' : '').'
-						  '.(!empty($addressDelivery->phone_mobile) ? $addressDelivery->phone_mobile.'<br />' : '').'
-						  '.(!empty($addressDelivery->other) ? '<hr />'.$addressDelivery->other.'<br />' : '').'</div>';
-				break;
 				case 'RDV':
-				$html .= $deliveryMode['RDV'];
-				$html .=  '<div>'.(!empty($addressDelivery->company) ? $addressDelivery->company.'<br />' : '') .$addressDelivery->firstname.' '.$addressDelivery->lastname.'<br />
-						  '.$addressDelivery->address1.'<br />'. (!empty($addressDelivery->address2) ? $addressDelivery->address2.'<br />' : '') .'
-						  '.$addressDelivery->postcode.' '.$addressDelivery->city.'<br />
-						  '.$addressDelivery->country.($addressDelivery->id_state ? ' - '.$deliveryState->name : '').'<br />
-						  '.(!empty($addressDelivery->phone) ? $addressDelivery->phone.'<br />' : '').'
-						  '.(!empty($addressDelivery->phone_mobile) ? $addressDelivery->phone_mobile.'<br />' : '').'
-						  '.(!empty($addressDelivery->other) ? '<hr />'.$addressDelivery->other.'<br />' : '').'</div>';
+				$html .= $deliveryMode[$deliveryInfos['delivery_mode']].'<br /><br />';
+				$html .='<b>'.$this->l('Customer').' : </b>'.Tools::htmlentitiesUTF8($addressDelivery->firstname).' '.Tools::htmlentitiesUTF8($addressDelivery->lastname).'<br />'.
+						(!empty($deliveryInfos['cecompanyname']) ? '<b>'.$this->l('Societe').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cecompanyname']).'<br/>' : '' ).
+						(!empty($deliveryInfos['ceemail']) ? '<b>'.$this->l('Email').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['ceemail']).'<br/>' : '' ).
+						(!empty($deliveryInfos['cephonenumber']) ? '<b>'.$this->l('Tel').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cephonenumber']).'<br/><br/>' : '' ).
+						'<b>'.$this->l('Customer adresse').' : </b><br/>'
+						.(Tools::htmlentitiesUTF8($addressDelivery->address1) ? Tools::htmlentitiesUTF8($addressDelivery->address1).'<br />' : '')
+						.(!empty($addressDelivery->address2) ? Tools::htmlentitiesUTF8($addressDelivery->address2).'<br />' : '')
+						.(!empty($addressDelivery->postcode) ? Tools::htmlentitiesUTF8($addressDelivery->postcode).'<br />' : '')
+						.(!empty($addressDelivery->city) ? Tools::htmlentitiesUTF8($addressDelivery->city).'<br />' : '')
+						.(!empty($addressDelivery->country) ? Tools::htmlentitiesUTF8($addressDelivery->country).'<br />' : '')
+						.(!empty($addressDelivery->other) ? '<hr><b>'.$this->l('Other').' : </b>'.Tools::htmlentitiesUTF8($addressDelivery->other).'<br /><br />' : '')
+						.(!empty($deliveryInfos['cedoorcode1']) ? '<b>'.$this->l('Door code').' 1 : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedoorcode1']).'<br/>' : '' )
+						.(!empty($deliveryInfos['cedoorcode2']) ? '<b>'.$this->l('Door code').' 2 : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedoorcode2']).'<br/>' : '' )
+						.(!empty($deliveryInfos['cedeliveryinformation']) ? '<b>'.$this->l('Delivery informations').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedeliveryinformation']).'<br/><br/>' : '' );
 				break;
 				default:
-				$html .=  str_replace('+',' ',$deliveryMode[$deliveryInfos['delivery_mode']]).'<br/>'.
-				 '<b>'.$this->l('Pic up point id').' : </b>'.
-				 $deliveryInfos['prid'].'<br/>'.
-				  '<b>'.$this->l('Pic up point').' : </b>'.
-				 $deliveryInfos['prname'].'<br/>'.
-				  '<b>'.$this->l('Pic up point adresse').' : </b><br/>'.
-				 $deliveryInfos['pradress1'].'<br/>'.
-				 (($deliveryInfos['pradress2'] != '') ? $deliveryInfos['pradress2'].'<br/>' : '' ).
-				 $deliveryInfos['przipcode'].' '.$deliveryInfos['prtown'].'<br/>';
-				 	 
+				$html .=  str_replace('+',' ',$deliveryMode[$deliveryInfos['delivery_mode']]).'<br/>'
+				.(!empty($deliveryInfos['prid']) ? '<b>'.$this->l('Pic up point id').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prid']).'<br/>' : '' )
+				.(!empty($deliveryInfos['prname']) ? '<b>'.$this->l('Pic up point').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prname']).'<br/>' : '' )
+				.'<b>'.$this->l('Pic up point adresse').' : </b><br/>'
+				.(!empty($deliveryInfos['pradress1']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress1']).'<br/>' : '' )
+				.(!empty($deliveryInfos['pradress2']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress2']).'<br/>' : '' )
+				.(!empty($deliveryInfos['pradress3']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress3']).'<br/>' : '' )
+				.(!empty($deliveryInfos['pradress4']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress4']).'<br/>' : '' )
+				.(!empty($deliveryInfos['przipcode']) ? Tools::htmlentitiesUTF8($deliveryInfos['przipcode']).'<br/>' : '' )
+				.(!empty($deliveryInfos['prtown']) ? Tools::htmlentitiesUTF8($deliveryInfos['prtown']).'<br/>' : '' );
+
 				 break;
 			}		
-			$html .= (($deliveryInfos['prcompladress'] != '') ? '<b>'.$this->l('Complement').' : </b>'.$deliveryInfos['prcompladress'].'<br/>' : '' ).
-					 (($deliveryInfos['cecompanyname'] != '') ? '<b>'.$this->l('Societe').' : </b>'.$deliveryInfos['cecompanyname'].'<br/>' : '' ).
-					 (($deliveryInfos['ceemail'] != '') ? '<b>'.$this->l('Email').' : </b>'.$deliveryInfos['ceemail'].'<br/>' : '' ).
-					 (($deliveryInfos['cephonenumber'] != '') ? '<b>'.$this->l('Tel').' : </b>'.$deliveryInfos['cephonenumber'].'<br/>' : '' );			
 			$html .= '</fieldset>';
 			return $html;
 		}
@@ -610,34 +606,47 @@ class Socolissimo extends Module
 	public function getDeliveryInfos($idCart,$idCustomer)
 	{
 
-		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart = '.$idCart.' AND id_customer = '.$idCustomer);
+		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart = '.intval($idCart).' AND id_customer = '.intval($idCustomer));
 		return $result;
 	}
 	
 	public function isSameAddress($idAddress,$idCart,$idCustomer)
 	{
-		$return = Db::getInstance()->GetRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.$idCart.'\' AND id_customer =\''.$idCustomer.'\'');
+		$return = Db::getInstance()->GetRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.intval($idCart).'\' AND id_customer =\''.intval($idCustomer).'\'');
 		$psAddress = new Address(intval($idAddress));
 		$newAddress = new Address();
 		
-			if ($this->upper($psAddress->lastname) != $this->upper($return['prname']) || $this->upper($psAddress->firstname) != $this->upper($return['prfirstname']) || $this->upper($psAddress->address1) != $this->upper($return['pradress1']) || $this->upper($psAddress->address2) != $this->upper($return['pradress2']) || $this->upper($psAddress->postcode) != $this->upper($return['przipcode']) || $this->upper($psAddress->city) != $this->upper($return['prtown']) || str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$psAddress->phone_mobile) != $return['cephonenumber'])
+			if ($this->upper($psAddress->lastname) != $this->upper($return['prname']) || $this->upper($psAddress->firstname) != $this->upper($return['prfirstname']) || $this->upper($psAddress->address1) != $this->upper($return['pradress3']) || $this->upper($psAddress->address2) != $this->upper($return['pradress2']) || $this->upper($psAddress->postcode) != $this->upper($return['przipcode']) || $this->upper($psAddress->city) != $this->upper($return['prtown']) || str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$psAddress->phone_mobile) != $return['cephonenumber'])
 			{
+				
+				$newAddress->id_customer = intval($idCustomer);
+				$newAddress->lastname = substr($return['prname'],0,32);
+				$newAddress->firstname = substr($return['prfirstname'],0,32);
+				$newAddress->postcode = $return['przipcode'];
+				$newAddress->city = $return['prtown'];
+				$newAddress->id_country = Country::getIdByName(null, 'france');
+				$newAddress->alias = 'So Colissimo - '.date('d-m-Y');
+				
 				if (!in_array($return['delivery_mode'], array('DOM','RDV')))
 				{
 					$newAddress->active = 1;
 					$newAddress->deleted = 1;
-				}
-					$newAddress->id_customer = intval($idCustomer);
-					$newAddress->lastname = substr($return['prname'],0,32);
-					$newAddress->firstname = substr($return['prfirstname'],0,32);
 					$newAddress->address1 = $return['pradress1'];
+					$newAddress->add();
+				}
+				else
+				{
+					$newAddress->address1 = $return['pradress3'];
 					((isset($return['pradress2'])) ? $newAddress->address2 = $return['pradress2'] : $newAddress->address2 = '');
+					((isset($return['pradress1'])) ? $newAddress->other .= $return['pradress1'] : $newAddress->other = '');
+					((isset($return['pradress4'])) ? $newAddress->other .= ' '.$return['pradress4'] : $newAddress->other = '');
 					$newAddress->postcode = $return['przipcode'];
 					$newAddress->city = $return['prtown'];
 					$newAddress->id_country = Country::getIdByName(null, 'france');
 					$newAddress->alias = 'So Colissimo - '.date('d-m-Y');
 					$newAddress->add();
-					return intval($newAddress->id);
+				}
+				return intval($newAddress->id);
 			}
 			else
 			return intval($psAddress->id);
@@ -645,7 +654,7 @@ class Socolissimo extends Module
 	
 	public function checkZone($id_carrier)
 	{
-		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'carrier_zone WHERE id_carrier = '.$id_carrier);
+		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'carrier_zone WHERE id_carrier = '.intval($id_carrier));
 		if ($result)
 			return true;
 		else
@@ -654,7 +663,7 @@ class Socolissimo extends Module
 
 	public function checkGroup($id_carrier)
 	{
-		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.$id_carrier);
+		$result = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.intval($id_carrier));
 		if ($result)
 			return true;
 		else
@@ -728,6 +737,11 @@ class Socolissimo extends Module
 		}
 		else 
 		return true;
+	}
+	
+	public function displaySoError($key)
+	{
+		return $this->errorMessage[$key];
 	}
 
 }

@@ -21,7 +21,7 @@ class Envoimoinscher extends Module
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Envoimoinscher');
-		$this->description = $this->l('Trouvez le meilleur prix pour votre envoi. Comparez et commandez les offres des transporteurs, à des tarifs négociés.');
+		$this->description = $this->l('Find the best price for your shipment. Compare and order offerings of carriers, negotiated rates.');
 
 		if (self::isInstalled($this->name))
 		{

@@ -2,8 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{envoimoinscher}prestashop>AdminEnvoiMoinsCher_30601e382c183178fb63c7a4ca4d2c16'] = '';
 $_MODULE['<{envoimoinscher}prestashop>AdminEnvoiMoinsCher_2345e28c9b93f368968be4781ed70f5c'] = 'Modifier la configuration';
 $_MODULE['<{envoimoinscher}prestashop>AdminEnvoiMoinsCher_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
+$_MODULE['<{envoimoinscher}prestashop>AdminEnvoiMoinsCher_1a812d0994ff5fa37fef813d3dd5ca6f'] = '';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e0b8a2c577580cb773bda0486acc4bf8'] = 'Envoimoinscher';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_416119891d1be4adf191fc454e3b76fa'] = 'Trouvez le meilleur prix pour votre envoi. Comparez et commandez les offres des transporteurs, à des tarifs négociés.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cc89336eed19f4c3bef8ae484eb43109'] = '\'Largeur\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_fab811cb477e7794389f16624ac9aff9'] = '\'Hauteur\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_7854da902d5f2ad746fe1b6f950da08e'] = '\'Profondeur\'';
@@ -13,6 +17,7 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_1a3ade81b4ddac3ff0fe9f98f93
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_070d4ccfe53bdbc791cbd6119b872f34'] = 'Statut commande envoyée';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_c98d7be3b0acc53f7d2142cc3a3ab444'] = 'Statut commande livrée';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour utiliser ce module correctement';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_9d766be2c89b5af0010ac0c11dcddae7'] = 'S\'il vous plaît copier manuellement';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_6357d3551190ec7e79371a8570121d3a'] = 'Il y a';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Il y a';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_07213a0161f52846ab198be103b5ab43'] = 'Erreurs';
@@ -94,6 +99,7 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_ae21c3189ecc1e32d10e8f3b264
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_829d5874145d3477d778cdff96671448'] = 'Téléphone non renseignée';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_f27197620f6a454f296ae591ab936b52'] = 'Email non renseignée';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_18f54b7a823f3349d841804a9fbc5aa3'] = 'Login Envoimoinscher';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration mise à jour';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_738a1d4da1b5dc5883063ec9856b637b'] = 'Configuration échoué';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e2cc287ebf9f23e6880c56ed6c41a4ec'] = 'Informations de transporteur';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_fad2b83dc128dfb793fa8ee944dd9931'] = 'Suivre le colis';

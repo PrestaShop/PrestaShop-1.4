@@ -8,14 +8,12 @@ require_once(_PS_MODULE_DIR_ . 'socolissimo/socolissimo.php');
 
 $validReturn = array('PUDOFOID','CECIVILITY','CENAME','CEFIRSTNAME', 'CECOMPANYNAME','CEEMAIL','CEPHONENUMBER', 'DELIVERYMODE','CEADRESS1','CEADRESS2','CEADRESS3','CEADRESS4',
 				'CEZIPCODE','CEDOORCODE1','CEDOORCODE2','CEENTRYPHONE','DYPREPARATIONTIME','DYFORWARDINGCHARGES','ORDERID', 'SIGNATURE','ERRORCODE','TRPARAMPLUS','TRCLIENTNUMBER','PRID','PRNAME',
-				'PRCOMPLADRESS','PRADRESS1','PRADRESS2','PRZIPCODE', 'PRTOWN','CETOWN','TRADERCOMPANYNAME', 'CEDELIVERYINFORMATION');
-
-$errorMessage = array('001' => 'Identifiant FO manquant', '002' => 'Identifiant FO incorrect', '003' => 'Client non autorise', '004' => 'Champs obligatoire manquant', '006' => 'Signature manquante', 
-'007' => 'Signature invalide', '008' => 'Code postal invalide', '009' => 'Format url retour Validation incorrect', '010' => 'Format url retour Echec incorrect', '011' => 'Numéro de transaction non valide', 
-'012' => 'Format des frais d’expédition incorrect', '015' => 'Serveur Socolissimo non disponible', '016' => 'Serveur Socolissimo non disponible', '004' => 'Champs obligatoire manquant', '004' => 'Champs obligatoire manquant', );
+				'PRCOMPLADRESS','PRADRESS1','PRADRESS2','PRZIPCODE', 'PRTOWN','CETOWN','TRADERCOMPANYNAME', 'CEDELIVERYINFORMATION', 'CEDOORCODE1', 'CEDOORCODE2');
 			
 //list of non-blocking error	
 $nonBlockingError = array(133, 131, 517, 516, 515, 514, 513, 512, 511, 510, 509, 508, 507, 506, 505, 504, 503, 502, 501);
+
+$so = new Socolissimo();
 
 $return = array();
 foreach ($_POST AS $key => $val)
@@ -51,28 +49,28 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 							$cart->updateQty(1, $product->id);
 						}
 					}
-					$cart->update();
 					
+					$cart->update();
 					Tools::redirect('order.php?step=3');
 				}
 				else
-					echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;an error occurred
+					echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').'
 						 <p><br/><a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 			}
 			else
-				echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;an error occurred
+				echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').'
 						 <p><br/><a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 		}
 		else
 		{
-			echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;invalide key
+			echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('998').'
 				  <p><br/><a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 		}
 	}
 	else
 	{
-		echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;an error occurred during shipping step : '
-			 .str_replace('+',',',$errorMessage[$return['ERRORCODE']]).'
+		echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').': '
+			 .str_replace('+',',',$so->displaySoError($return['ERRORCODE'])).'
 			 <p><br/>
 			 <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour
 			 </a></p></div>';
@@ -97,8 +95,8 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 	if ($numRows == 0)
 	{	
 		$sql = 'INSERT INTO '._DB_PREFIX_.'socolissimo_delivery_info
-										( `id_cart` ,`id_customer` ,`delivery_mode` ,`prid` ,`prname` ,`prfirstname`,`prcompladress` ,
-										`pradress1` ,`pradress2` ,`przipcode` ,`prtown`, `cephonenumber`, `ceemail` , `cecompanyname`, `cedeliveryinformation`) 
+										( `id_cart`, `id_customer`, `delivery_mode`, `prid`, `prname`, `prfirstname`, `prcompladress`, 
+										`pradress1`, `pradress2`, `pradress3`, `pradress4`, `przipcode`, `prtown`, `cephonenumber`, `ceemail` , `cecompanyname`, `cedeliveryinformation`, `cedoorcode1`, `cedoorcode2`) 
 										VALUES ('.intval($idCart).','.intval($idCustomer).',';
 		if ($soParams['DELIVERYMODE'] != 'DOM' AND $soParams['DELIVERYMODE'] != 'RDV')
 			$sql .= '\''.pSQL($soParams['DELIVERYMODE']).'\''.',
@@ -108,17 +106,23 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					'.(isset($soParams['PRCOMPLADRESS']) ? '\''.pSQL($soParams['PRCOMPLADRESS']).'\'' : '\'\'').',
 					'.(isset($soParams['PRADRESS1']) ? '\''.pSQL($soParams['PRADRESS1']).'\'' : '\'\'').',
 					'.(isset($soParams['PRADRESS2']) ? '\''.pSQL($soParams['PRADRESS2']).'\'' : '\'\'').',
+					'.(isset($soParams['PRADRESS3']) ? '\''.pSQL($soParams['PRADRESS3']).'\'' : '\'\'').',
+					'.(isset($soParams['PRADRESS4']) ? '\''.pSQL($soParams['PRADRESS4']).'\'' : '\'\'').',
 					'.(isset($soParams['PRZIPCODE']) ? '\''.pSQL($soParams['PRZIPCODE']).'\'' : '\'\'').',
 					'.(isset($soParams['PRTOWN']) ? '\''.pSQL($soParams['PRTOWN']).'\'' : '\'\'').',
 					'.(isset($soParams['CEPHONENUMBER']) ? '\''.pSQL($soParams['CEPHONENUMBER']).'\'' : '\'\'').',
 					'.(isset($soParams['CEEMAIL']) ? '\''.pSQL($soParams['CEEMAIL']).'\'' : '\'\'').',
 					'.(isset($soParams['TRADERCOMPANYNAME']) ? '\''.pSQL($soParams['TRADERCOMPANYNAME']).'\'' : '\'\'').',
-					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').')';
+					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').',
+					'.(isset($soParams['CEDOORCODE1']) ? '\''.pSQL($soParams['CEDOORCODE1']).'\'' : '\'\'').',
+					'.(isset($soParams['CEDOORCODE2']) ? '\''.pSQL($soParams['CEDOORCODE2']).'\'' : '\'\'').')';
 		else
 			$sql .= '\''.pSQL($soParams['DELIVERYMODE']).'\',\'\',
 					'.(isset($soParams['CENAME']) ? '\''.ucfirst(pSQL($soParams['CENAME'])).'\'' : '').',
 					'.(isset($soParams['CEFIRSTNAME']) ? '\''.ucfirst(pSQL($soParams['CEFIRSTNAME'])).'\'' : '').',
 					'.(isset($soParams['CECOMPLADRESS']) ? '\''.pSQL($soParams['CECOMPLADRESS']).'\'' : '\'\'').',
+					'.(isset($soParams['CEADRESS1']) ? '\''.pSQL($soParams['CEADRESS1']).'\'' : '\'\'').',
+					'.(isset($soParams['CEADRESS2']) ? '\''.pSQL($soParams['CEADRESS2']).'\'' : '\'\'').',
 					'.(isset($soParams['CEADRESS3']) ? '\''.pSQL($soParams['CEADRESS3']).'\'' : '\'\'').',
 					'.(isset($soParams['CEADRESS4']) ? '\''.pSQL($soParams['CEADRESS4']).'\'' : '\'\'').',
 					'.(isset($soParams['CEZIPCODE']) ? '\''.pSQL($soParams['CEZIPCODE']).'\'' : '\'\'').',
@@ -126,7 +130,9 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					'.(isset($soParams['CEPHONENUMBER']) ? '\''.pSQL($soParams['CEPHONENUMBER']).'\'' : '\'\'').',
 					'.(isset($soParams['CEEMAIL']) ? '\''.pSQL($soParams['CEEMAIL']).'\'' : '\'\'').',
 					'.(isset($soParams['TRADERCOMPANYNAME']) ? '\''.pSQL($soParams['TRADERCOMPANYNAME']).'\'' : '\'\'').',
-					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').')';
+					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').',
+					'.(isset($soParams['CEDOORCODE1']) ? '\''.pSQL($soParams['CEDOORCODE1']).'\'' : '\'\'').',
+					'.(isset($soParams['CEDOORCODE2']) ? '\''.pSQL($soParams['CEDOORCODE2']).'\'' : '\'\'').')';
 
 	if (Db::getInstance()->Execute($sql))	
 		return true;
@@ -140,24 +146,32 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					(isset($soParams['PRCOMPLADRESS']) ? ' `prcompladress` =\''.pSQL($soParams['PRCOMPLADRESS']).'\' , ' : '').
 					(isset($soParams['PRADRESS1']) ? ' `pradress1` =\''.pSQL($soParams['PRADRESS1']).'\' , ' : '').
 					(isset($soParams['PRADRESS2']) ? ' `pradress2` =\''.pSQL($soParams['PRADRESS2']).'\' , ' : '').
+					(isset($soParams['PRADRESS3']) ? ' `pradress3` =\''.pSQL($soParams['PRADRESS3']).'\' , ' : '').
+					(isset($soParams['PRADRESS4']) ? ' `pradress4` =\''.pSQL($soParams['PRADRESS4']).'\' , ' : '').
 					(isset($soParams['PRZIPCODE']) ? ' `przipcode` =\''.pSQL($soParams['PRZIPCODE']).'\' , ' : '').
 					(isset($soParams['CETOWN']) ? ' `prtown` =\''.pSQL($soParams['CETOWN']).'\' , ' : '').
 					(isset($soParams['CEPHONENUMBER']) ? ' `cephonenumber` =\''.pSQL($soParams['CEPHONENUMBER']).'\' , ' : '').
 					(isset($soParams['CEEMAIL']) ? ' `ceemail` =\''.pSQL($soParams['CEEMAIL']).'\' , ' : '').
 					(isset($soParams['CEDELIVERYINFORMATION']) ? ' `cedeliveryinformation` =\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\' , ' : '').
-					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cephonenumber` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
+					(isset($soParams['CEDOORCODE1']) ? ' `cedoorcode1` =\''.pSQL($soParams['CEDOORCODE1']).'\' , ' : '').
+					(isset($soParams['CEDOORCODE2']) ? ' `cedoorcode2` =\''.pSQL($soParams['CEDOORCODE2']).'\' , ' : '').
+					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cecompanyname` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
 		else
 			$sql .= ','.(isset($soParams['CENAME']) ? ' `prname` =\''.ucfirst(pSQL($soParams['CENAME'])).'\' , ' : '').
 					(isset($soParams['CEFIRSTNAME']) ? ' `prfirstname` =\''.ucfirst(pSQL($soParams['CEFIRSTNAME'])).'\' , ' : '').
 					(isset($soParams['CECOMPLADRESS']) ? ' `prcompladress` =\''.pSQL($soParams['CECOMPLADRESS']).'\' , ' : '').
-					(isset($soParams['CEADRESS3']) ? ' `pradress1` =\''.pSQL($soParams['CEADRESS3']).'\' , ' : '').
-					(isset($soParams['CEADRESS']) ? ' `pradress2` =\''.pSQL($soParams['CEADRESS']).'\' , ' : '').
+					(isset($soParams['CEADRESS1']) ? ' `pradress1` =\''.pSQL($soParams['CEADRESS1']).'\' , ' : '').
+					(isset($soParams['CEADRESS2']) ? ' `pradress2` =\''.pSQL($soParams['CEADRESS2']).'\' , ' : '').
+					(isset($soParams['CEADRESS3']) ? ' `pradress3` =\''.pSQL($soParams['CEADRESS3']).'\' , ' : '').
+					(isset($soParams['CEADRESS4']) ? ' `pradress4` =\''.pSQL($soParams['CEADRESS4']).'\' , ' : '').
 					(isset($soParams['CEZIPCODE']) ? ' `przipcode` =\''.pSQL($soParams['CEZIPCODE']).'\' , ' : '').
 					(isset($soParams['PRTOWN']) ? ' `prtown` =\''.pSQL($soParams['PRTOWN']).'\' , ' : '').
 					(isset($soParams['CEEMAIL']) ? ' `ceemail` =\''.pSQL($soParams['CEEMAIL']).'\' , ' : '').
 					(isset($soParams['CEPHONENUMBER']) ? ' `cephonenumber` =\''.pSQL($soParams['CEPHONENUMBER']).'\' , ' : '').
 					(isset($soParams['CEDELIVERYINFORMATION']) ? ' `cedeliveryinformation` =\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\' , ' : '').
-					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cephonenumber` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
+					(isset($soParams['CEDOORCODE1']) ? ' `cedoorcode1` =\''.pSQL($soParams['CEDOORCODE1']).'\' , ' : '').
+					(isset($soParams['CEDOORCODE2']) ? ' `cedoorcode2` =\''.pSQL($soParams['CEDOORCODE2']).'\' , ' : '').
+					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cecompanyname` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
 	
 		$sql .= ' WHERE `id_cart` =\''.intval($idCart).'\' AND `id_customer` =\''.intval($idCustomer).'\'';
 
