@@ -141,7 +141,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (76, 'PS_BLOCK_NEWPRODUCTS_DISPLAY', 0, NOW(), NOW()),
 (77, 'PS_BLOCK_SPECIALS_DISPLAY', 0, NOW(), NOW()),
 (78, 'PS_STOCK_MVT_REASON_DEFAULT', 3, NOW(), NOW()),
-(79, 'PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW()),
+(79, 'PS_COMPARATOR_MAX_ITEM', 3, NOW(), NOW()),
 (80, 'PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW()),
 (81, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
 (82, 'PS_TAX_DISPLAY', 0, NOW(), NOW());
