@@ -10,7 +10,7 @@ class CmsControllerCore extends FrontController
 		parent::preProcess();
 
 		if (($id_cms = intval(Tools::getValue('id_cms'))) AND $this->cms = new CMS(intval($id_cms), intval($this->cookie->id_lang)) AND Validate::isLoadedObject($this->cms) AND
-			($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) AND file_exists(dirname(__FILE__).'/'.Tools::getValue('ad').'/ajax.php'))))
+			($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) AND file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php'))))
 			$this->assignCase = 1;
 		elseif (($id_cms_category = intval(Tools::getValue('id_cms_category'))) AND $cms_category = new CMSCategory(intval(Tools::getValue('id_cms_category')), intval($this->cookie->id_lang)) AND Validate::isLoadedObject($cms_category))
 			$this->assignCase = 2;

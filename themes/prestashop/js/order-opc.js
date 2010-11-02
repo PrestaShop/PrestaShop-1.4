@@ -225,7 +225,7 @@ function updateCarrierSelectionAndGift()
     			updateCartSummary(jsonData);
     		updateCarrierStatus();
     	},
-       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save carrier \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
    });
 	resetPaymentModuleList();
 }

@@ -36,7 +36,7 @@ class ProductControllerCore extends FrontController
 			$product = new Product($id_product, true, intval($this->cookie->id_lang));
 
 			if (!Validate::isLoadedObject($product) OR (!$product->active AND (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$product->id))
-																			|| !file_exists(dirname(__FILE__).'/'.Tools::getValue('ad').'/ajax.php')))
+																			|| !file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php')))
 			{
 				header('HTTP/1.1 404 page not found');
 				$this->errors[] = Tools::displayError('product is no longer available');
