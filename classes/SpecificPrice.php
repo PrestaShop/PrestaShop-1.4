@@ -19,7 +19,7 @@ class SpecificPriceCore extends ObjectModel
 	public	$id_currency;
 	public	$id_country;
 	public	$id_group;
-	public	$priority; /////////////////////////
+	public	$priority;
 	public	$price;
 	public	$from_quantity;
 	public	$reduction;
@@ -135,7 +135,6 @@ class SpecificPriceCore extends ObjectModel
 
 	static public function getProductIdByDate($id_shop, $id_currency, $id_country, $id_group, $beginning, $ending)
 	{
-		$now = date('Y-m-d H:i:s');
 		$resource = Db::getInstance()->ExecuteS('
 			SELECT `id_product`
 			FROM `'._DB_PREFIX_.'specific_price`
@@ -144,7 +143,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_country` IN(0, '.intval($id_country).') AND
 					`id_group` IN(0, '.intval($id_group).') AND
 					`from_quantity` = 1 AND
-					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`)) AND
+					(`from` = \'0000-00-00 00:00:00\' OR (\''.$beginning.'\' >= `from` AND \''.$ending.'\' <= `to`)) AND
 					`reduction` > 0
 		', false);
 		$ids_product = array();
