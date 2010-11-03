@@ -2,7 +2,7 @@ SET NAMES 'utf8';
 
 ALTER TABLE `PREFIX_employee` ADD `bo_color` varchar(32) default NULL AFTER `stats_date_to`;
 ALTER TABLE `PREFIX_employee` ADD `bo_theme` varchar(32) default NULL AFTER `bo_color`;
-ALTER TABLE `PREFIX_employee` ADD `bo_uimode` ENUM('hover','click') default 'hover' AFTER `bo_theme`;
+ALTER TABLE `PREFIX_employee` ADD `bo_uimode` ENUM('hover','click') default 'click' AFTER `bo_theme`;
 ALTER TABLE `PREFIX_employee` ADD `id_lang` int(10) unsigned NOT NULL default 0 AFTER `id_profile`;
 
 ALTER TABLE `PREFIX_cms` ADD `id_cms_category` int(10) unsigned NOT NULL default '0' AFTER `id_cms`;

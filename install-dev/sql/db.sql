@@ -566,7 +566,7 @@ CREATE TABLE `PREFIX_employee` (
   `stats_date_to` date default NULL,
   `bo_color` varchar(32) default NULL,
   `bo_theme` varchar(32) default NULL,
-  `bo_uimode` ENUM('hover','click') default 'hover',
+  `bo_uimode` ENUM('hover','click') default 'click',
   `active` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_employee`),
   KEY `employee_login` (`email`,`passwd`),
