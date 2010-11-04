@@ -150,7 +150,7 @@ abstract class AdminTabCore
 		$this->token = Tools::getAdminToken($className.intval($this->id).intval($cookie->id_employee));
 	}
 
-	protected function l($string, $class = __CLASS__, $addslashes = FALSE, $htmlentities = TRUE)
+	protected function l($string, $class = 'AdminTab', $addslashes = FALSE, $htmlentities = TRUE)
 	{
 		global $_LANGADM;
 		
