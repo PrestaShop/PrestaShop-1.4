@@ -53,7 +53,7 @@ class StatsData extends Module
 			// Ajax request sending browser information
 			$token = $cipherTool->encrypt($params['cookie']->id_guest);
 			$this->_html = '
-			<script type="text/javascript" src="'.$protocol_content.$server_host._PS_JS_DIR_.'pluginDetect.js"></script>
+			<script type="text/javascript" src="'._PS_JS_DIR_.'pluginDetect.js"></script>
 			<script type="text/javascript">
 				plugins = new Object;
 				
