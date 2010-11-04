@@ -144,7 +144,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (79, 'PS_COMPARATOR_MAX_ITEM', 3, NOW(), NOW()),
 (80, 'PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW()),
 (81, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
-(82, 'PS_TAX_DISPLAY', 0, NOW(), NOW());
+(82, 'PS_TAX_DISPLAY', 0, NOW(), NOW()),
+(83, 'PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),

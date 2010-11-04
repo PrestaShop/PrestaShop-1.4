@@ -76,6 +76,11 @@ class AdminPerformance extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 		}
+		if (Tools::isSubmit('submitSmartyConfig'))
+		{
+			Configuration::updateValue('PS_SMARTY_FORCE_COMPILE', Tools::getValue('smarty_force_compile', 0));
+			Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+		}
 		
 		return parent::postProcess();
 	}
@@ -83,23 +88,7 @@ class AdminPerformance extends AdminTab
 	public function display()
 	{
 		global $currentIndex;
-		/*
-		'_MEDIA_SERVER_1_' => array('title' => $this->l('Media server #1'), 'desc' => $this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_1_),
-		'_MEDIA_SERVER_2_' => array('title' => $this->l('Media server #2'), 'desc' => $this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_2_),
-		'_MEDIA_SERVER_3_' => array('title' => $this->l('Media server #3'), 'desc' => $this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'<br />'.$this->l('You have to put another domain or subdomain in order to use cookieless static content'), 'validation' => 'isFileName', 'type' => 'text', 'size' => 40, 'default' => _MEDIA_SERVER_3_),
-		
-		$baseUrls = array();
-		if ($_MEDIA_SERVER_1_ = Tools::getValue('_MEDIA_SERVER_1_'))
-			$baseUrls['_MEDIA_SERVER_1_'] = $_MEDIA_SERVER_1_;
-		if ($_MEDIA_SERVER_2_ = Tools::getValue('_MEDIA_SERVER_2_'))
-			$baseUrls['_MEDIA_SERVER_2_'] = $_MEDIA_SERVER_2_;
-		if ($_MEDIA_SERVER_3_ = Tools::getValue('_MEDIA_SERVER_3_'))
-			$baseUrls['_MEDIA_SERVER_3_'] = $_MEDIA_SERVER_3_;
-		rewriteSettingsFile($baseUrls, NULL, NULL);
-		unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
-		unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
-		unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
-		 */
+
 		echo '
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 			<fieldset>
@@ -197,6 +186,24 @@ class AdminPerformance extends AdminTab
 				
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitCCC" class="button" />
+				</div>
+			</fieldset>
+		</form>';
+		
+		echo '
+		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
+			<fieldset>
+				<legend><img src="../img/admin/prefs.gif" /> '.$this->l('Smarty').'</legend>
+				
+				<label>'.$this->l('Force compile:').'</label>
+				<div class="margin-form">
+					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_1" value="1" '.(Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
+					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_0" value="0" '.(!Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
+					<p>'.$this->l('This forces Smarty to (re)compile templates on every invocation. This is handy for development and debugging. It should never be used in a production environment.').'</p>
+				</div>
+				
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitSmartyConfig" class="button" />
 				</div>
 			</fieldset>
 		</form>';

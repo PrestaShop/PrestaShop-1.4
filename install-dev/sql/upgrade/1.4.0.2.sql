@@ -144,7 +144,8 @@ ALTER TABLE `PREFIX_product`
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES 
 ('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
-('PS_TAX_DISPLAY', 0, NOW(), NOW());
+('PS_TAX_DISPLAY', 0, NOW(), NOW()),
+('PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW());
 
 CREATE TABLE `PREFIX_group_reduction` (
 	`id_group_reduction` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
