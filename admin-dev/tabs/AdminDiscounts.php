@@ -73,6 +73,14 @@ class AdminDiscounts extends AdminTab
 		{
 			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
 				$this->_errors[] = Tools::displayError('You need set a currency for this voucher');
+			if (!Validate::isBool_Id(Tools::getValue('id_target')))
+				$this->_errors[] = Tools::displayError('Invalid customer or group id field');
+			else
+			{
+				$rules = explode('_', Tools::getValue('id_target'));
+				/* In form, there is one field for two differents fields in object*/
+				$_POST[($rules[0] ? 'id_group' : 'id_customer')] = $rules[1];
+			}
 			/* Checking fields validity */
 			$this->validateRules();
 			if (!sizeof($this->_errors))
@@ -276,48 +284,90 @@ class AdminDiscounts extends AdminTab
 					</p>
 				</div>
 				<label>'.$this->l('To be used by:').' </label>
-								<div class="margin-form">				
-					<select name="id_customer" id="id_customer">
-						<option value="0">-- '.$this->l('All customers').' --</option>
+								<div class="margin-form">
+					<input type="hidden" name="id_customer" value="0">
+					<input type="hidden" name="id_group" value="0">
+					<select name="id_target" id="id_target">
+					<option value="0_0">-- '.$this->l('All customers').' --</option>
+						<optgroup label="'.$this->l('Groups').'" id="id_target_group">
+						</optgroup>
+						<optgroup label="'.$this->l('Customers').'" id="id_target_customers">
+						</optgroup>
 					</select><br />'.$this->l('Filter:').' <input type="text" size="25" name="filter" id="filter" onkeyup="fillCustomersAjax();" class="space" value="" />
 					<script type="text/javascript">
 						var formDiscount = document.layers ? document.forms.discount : document.discount;	
 						function fillCustomersAjax()
 						{
-							var filterValue = \''.(($value = intval($this->getFieldValue($obj, 'id_customer'))) ? $value : '').'\';
+							var filterValue = \''.(($value = intval($this->getFieldValue($obj, 'id_customer'))) ? '0_'.$value : (($value = intval($this->getFieldValue($obj, 'id_group'))) ? '1_'.$value : '')).'\';
 							if ($(\'#filter\').val())
 								filterValue = $(\'#filter\').val();
 							
 							$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxDiscountCustomers:1,filter:filterValue},
-								function(customers) {
-									if (customers.length == 0)
+								function(obj) {
+									var groups_length = obj.groups.length;
+									if (obj.groups.length == 0)
+										groups_length = 1;
+									var customers_length = obj.customers.length;
+									if (obj.customers.length == 0)
+										customers_length = 1;
+									formDiscount.id_target.length = 1 + customers_length + groups_length;
+									
+									if (obj.groups.length == 0)
 									{
-										formDiscount.id_customer.length = 2;
-										formDiscount.id_customer.options[1].value = -1;
-										formDiscount.id_customer.options[1].text = \''.$this->l('No match found').'\';
-										formDiscount.id_customer.options.selectedIndex = 1;
+										formDiscount.id_target.options[1].value = -1;
+										formDiscount.id_target.options[1].text = \''.$this->l('No match found').'\';
+										formDiscount.id_target.options[1].className = "groups_filtered";
+									}
+									else
+									{
+										for (i = 0; i < obj.groups.length && i < 50; i++)
+										{
+											formDiscount.id_target.options[i+1].value = obj.groups[i]["value"];
+											formDiscount.id_target.options[i+1].text = obj.groups[i]["text"];
+											formDiscount.id_target.options[i+1].className = "groups_filtered";
+										}
+										if (obj.groups.length >= 50)
+										{
+											formDiscount.id_target.options[50].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
+											formDiscount.id_target.options[50].value = "_";
+											formDiscount.id_target.options[50].className = "groups_filtered";
+										}
+									}
+									
+									if (obj.customers.length == 0)
+									{
+										formDiscount.id_target.options[groups_length+1].value = -1;
+										formDiscount.id_target.options[groups_length+1].text = \''.$this->l('No match found').'\';
+										formDiscount.id_target.options[groups_length+1].className = "customers_filtered";
 									}										
 									else
 									{
-										formDiscount.id_customer.length = customers.length + 1;
-										for (i = 0; i < customers.length && i < 50; i++)
+										for (i = 0; i < obj.customers.length && i < 50; i++)
 										{
-											formDiscount.id_customer.options[i+1].value = customers[i]["value"];
-											formDiscount.id_customer.options[i+1].text = customers[i]["text"];
+											formDiscount.id_target.options[groups_length+1+i].value = obj.customers[i]["value"];
+											formDiscount.id_target.options[groups_length+1+i].text = obj.customers[i]["text"];
+											formDiscount.id_target.options[groups_length+1+i].className = "customers_filtered";
 										}
-										if (customers.length >= 50)
+										if (obj.customers.length >= 50)
 										{
-											formDiscount.id_customer.options[50].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
-											formDiscount.id_customer.options[50].value = "_";	
+											formDiscount.id_target.options[groups_length+50+i].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
+											formDiscount.id_target.options[groups_length+50+i].value = "_";
+											formDiscount.id_target.options[groups_length+50+i].className = "customers_filtered";
 										}
-										
-										if ($(\'#filter\').val())
-											formDiscount.id_customer.options.selectedIndex = 1;
-										else if(filterValue)
-											for (i = 0; i < customers.length; i++)
-												if (formDiscount.id_customer.options[i+1].value == filterValue)
-													formDiscount.id_customer.options.selectedIndex = i + 1;
 									}
+									$(".groups_filtered").appendTo($("#id_target_group"));
+									$(".customers_filtered").appendTo($("#id_target_customers"));
+									if ($(\'#filter\').val())
+									{
+										if (formDiscount.id_target.options[1].value != -1)
+											formDiscount.id_target.options.selectedIndex = 1;
+										else
+											formDiscount.id_target.options.selectedIndex = 2;
+									}
+									else if(filterValue)
+										for (i = 0; i < (customers_length + groups_length); i++)
+											if (formDiscount.id_target.options[i+1].value == filterValue)
+												formDiscount.id_target.options.selectedIndex = i + 1;
 								}
 							);
 						}

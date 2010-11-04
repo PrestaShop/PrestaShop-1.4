@@ -87,23 +87,44 @@ if (isset($_GET['ajaxProductAccessories']))
 
 if (isset($_GET['ajaxDiscountCustomers']))
 {
+	global $cookie;
+
 	$currentIndex = 'index.php?tab=AdminDiscounts';
 	$jsonArray = array();
 	$filter = Tools::getValue('filter');
+	
+	if (Validate::isBool_Id($filter))
+		$filterArray = explode('_', $filter); 
 	
 	$customers = Db::getInstance()->ExecuteS('
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
 	WHERE email LIKE "%'.pSQL($filter).'%"
-	'.(intval($filter) ? 'OR id_customer = '.intval($filter) : '').'
+	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.intval($filterArray[1]) : '').'
 	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
 	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%"
 	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
 	LIMIT 50');
 	
+	$groups = Db::getInstance()->ExecuteS('
+	SELECT g.`id_group`, gl.`name`
+	FROM `'._DB_PREFIX_.'group` g
+	LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($cookie->id_lang).')
+	WHERE gl.`name` LIKE "%'.pSQL($filter).'%"
+	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 1) ? 'OR g.`id_group` = '.intval($filterArray[1]) : '').'
+	ORDER BY gl.`name` ASC
+	LIMIT 50');
+	
+	$json = '{"customers" : ';
 	foreach ($customers AS $customer)
-		$jsonArray[] = '{"value":"'.intval($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
-	die('['.implode(',', $jsonArray).']');
+		$jsonArray[] = '{"value":"0_'.intval($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
+	$json .= '['.implode(',', $jsonArray).'],
+		"groups" : ';
+	$jsonArray = array();
+	foreach ($groups AS $group)
+		$jsonArray[] = '{"value":"1_'.intval($group['id_group']).'", "text":"'.addslashes($group['name']).'"}';
+	$json .= '['.implode(',', $jsonArray).']}';
+	die($json);
 }
 
 if (Tools::getValue('page') == 'prestastore')

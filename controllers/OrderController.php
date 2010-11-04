@@ -184,7 +184,7 @@ class OrderControllerCore extends FrontController
 					'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 					'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 					'lastProductAdded' => $this->cart->getLastProduct(),
-					'displayVouchers' => Discount::getVouchersToCartDisplay(intval($this->cookie->id_lang)),
+					'displayVouchers' => Discount::getVouchersToCartDisplay(intval($this->cookie->id_lang), (isset($this->cookie->id_customer) ? intval($this->cookie->id_customer) : 0)),
 					'currencySign' => $currency->sign,
 					'currencyRate' => $currency->conversion_rate,
 					'currencyFormat' => $currency->format,

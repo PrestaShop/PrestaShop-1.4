@@ -293,7 +293,7 @@ $smarty->assign(array(
 	'currencyRate' => $currency->conversion_rate,
 	'currencyFormat' => $currency->format,
 	'currencyBlank' => $currency->blank,
-	'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang))
+	'displayVouchers' => Discount::getVouchersToCartDisplay(intval($cookie->id_lang), (isset($cookie->id_customer) ? intval($cookie->id_customer) : 0))
 ));
 
 if (intval($cookie->id_customer) AND Customer::customerIdExistsStatic(intval($cookie->id_customer)))

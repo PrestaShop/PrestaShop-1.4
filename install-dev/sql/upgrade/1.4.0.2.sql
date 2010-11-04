@@ -686,6 +686,8 @@ UPDATE `PREFIX_cms` SET `active` = 1;
 
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 
+ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

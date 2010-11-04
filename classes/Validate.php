@@ -904,6 +904,17 @@ class ValidateCore
 	{
 		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches);
 	}
+	
+	/**
+	* Check for bool_id
+	*
+	* @param string $ids
+	* @return boolean Validity is ok or not
+	*/
+	static public function isBool_Id($ids)
+	{
+		return (bool)preg_match('#^[01]_[0-9]+$#', $ids);
+	}
 }
 
 ?>

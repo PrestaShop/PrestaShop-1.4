@@ -1033,7 +1033,9 @@ class CartCore extends ObjectModel
 		}
 		if (is_array($discounts) AND in_array($discountObj->id, $discounts))
 			return Tools::displayError('this voucher is already in your cart');
-		if ($discountObj->id_customer AND $this->id_customer != $discountObj->id_customer)
+		$groups = Customer::getGroupsStatic($this->id_customer);
+
+		if (($discountObj->id_customer OR $discountObj->id_group) AND ($this->id_customer != $discountObj->id_customer AND !in_array($discountObj->id_group, $groups)))
 		{
 			if (!$cookie->isLogged())
 				return Tools::displayError('you cannot use this voucher').' - '.Tools::displayError('try to log in if you own it');

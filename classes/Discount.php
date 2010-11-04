@@ -19,6 +19,9 @@ class DiscountCore extends ObjectModel
 	/** @var integer Customer id only if discount is reserved */
 	public		$id_customer;
 	
+	/** @var integer Group id only if discount is reserved */
+	public		$id_group;
+	
 	/** @var integer Currency ID only if the discount type is 2 */
 	public		$id_currency;
 	
@@ -61,7 +64,7 @@ class DiscountCore extends ObjectModel
 	/** @var boolean Status */
 	public 		$active = true;
 	
-		/** @var string Object creation date */
+	/** @var string Object creation date */
 	public 		$date_add;
 
 	/** @var string Object last modification date */
@@ -69,7 +72,7 @@ class DiscountCore extends ObjectModel
 	
 	protected	$fieldsRequired = array('id_discount_type', 'name', 'value', 'quantity', 'quantity_per_user', 'date_from', 'date_to');
 	protected	$fieldsSize = array('name' => '32', 'date_from' => '32', 'date_to' => '32');
-	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_discount_type' => 'isUnsignedId', 'id_currency' => 'isUnsignedId',
+	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'id_discount_type' => 'isUnsignedId', 'id_currency' => 'isUnsignedId',
 		'name' => 'isDiscountName', 'value' => 'isPrice', 'quantity' => 'isUnsignedInt', 'quantity_per_user' => 'isUnsignedInt',
 		'cumulable' => 'isBool', 'cumulable_reduction' => 'isBool', 'date_from' => 'isDate',
 		'date_to' => 'isDate', 'minimal' => 'isFloat', 'active' => 'isBool');
@@ -85,6 +88,7 @@ class DiscountCore extends ObjectModel
 		parent::validateFields();
 		
 		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_group'] = intval($this->id_group);
 		$fields['id_currency'] = intval($this->id_currency);
 		$fields['id_discount_type'] = intval($this->id_discount_type);
 		$fields['name'] = pSQL($this->name);
@@ -180,14 +184,16 @@ class DiscountCore extends ObjectModel
 	static public function getCustomerDiscounts($id_lang, $id_customer, $active = false, $includeGenericOnes = true, $stock = false)
     {
 		global $cart;
-		
-    	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+
+		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT d.*, dtl.`name` AS `type`, dl.`description`
 		FROM `'._DB_PREFIX_.'discount` d
 		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount` AND dl.`id_lang` = '.intval($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'discount_type` dt ON dt.`id_discount_type` = d.`id_discount_type`
 		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($id_lang).')
-		WHERE (`id_customer` = '.intval($id_customer).($includeGenericOnes ? ' OR `id_customer` = 0' : '').')
+		WHERE (`id_customer` = '.intval($id_customer).'
+		OR `id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($id_customer).')'.
+		($includeGenericOnes ? ' OR (`id_customer` = 0 AND `id_group` = 0)' : '').')
 		'.($active ? ' AND d.`active` = 1' : '').'
 		'.($stock ? ' AND d.`quantity` != 0' : ''));
 		
@@ -378,7 +384,7 @@ class DiscountCore extends ObjectModel
 		return $voucher;
 	}
 
-	static public function display($discountValue, $discountType, $currency=false)
+	static public function display($discountValue, $discountType, $currency = false)
 	{
 		if (floatval($discountValue) AND intval($discountType))
 		{
@@ -390,12 +396,18 @@ class DiscountCore extends ObjectModel
 		return ''; // return a string because it's a display method
 	}
 	
-	static public function getVouchersToCartDisplay($id_lang)
+	static public function getVouchersToCartDisplay($id_lang, $id_customer)
 	{
-		return Db::getInstance()->ExecuteS('SELECT d.name, dl.description, d.id_discount
-																				FROM '._DB_PREFIX_.'discount d
-																				LEFT JOIN '._DB_PREFIX_.'discount_lang dl ON (d.id_discount = dl.id_discount)
-																				WHERE d.active=1 AND d.date_from <=\''.pSQL(date('Y-m-d H:i:s')).'\' AND d.date_to>=\''.pSQL(date('Y-m-d H:i:s')).'\' AND dl.id_lang='.(int)$id_lang.' AND d.cart_display = 1 AND d.quantity > 0');
+		return Db::getInstance()->ExecuteS('
+		SELECT d.`name`, dl.`description`, d.`id_discount`
+		FROM `'._DB_PREFIX_.'discount` d
+		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount`)
+		WHERE d.`active` = 1
+		AND d.`date_from` <= \''.pSQL(date('Y-m-d H:i:s')).'\' AND d.`date_to` >= \''.pSQL(date('Y-m-d H:i:s')).'\'
+		AND dl.`id_lang` = '.intval($id_lang).'
+		AND d.`cart_display` = 1 AND d.`quantity` > 0
+		AND ((d.`id_customer` = 0 AND d.`id_group` = 0) '.($id_customer ? 'OR (d.`id_customer` = '.$id_customer.'
+		OR d.`id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($id_customer).')))' : 'OR d.`id_group` = 1)'));
 	}
 
 }

@@ -495,16 +495,21 @@ class CustomerCore extends ObjectModel
 		}
 	}
 	
-	public function getGroups()
+	public static function getGroupsStatic($id_customer)
 	{
 		$groups = array();
 		$result = Db::getInstance()->ExecuteS('
 		SELECT cg.`id_group`
 		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.intval($this->id));
+		WHERE cg.`id_customer` = '.intval($id_customer));
 		foreach ($result AS $group)
 			$groups[] = intval($group['id_group']);
 		return $groups;
+	}
+	
+	public function getGroups()
+	{
+		return self::getGroupsStatic(intval($this->id));
 	}
 	
 	public function isUsed()
