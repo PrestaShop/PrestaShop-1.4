@@ -123,7 +123,6 @@ class CategoryCore extends ObjectModel
 		$ret = parent::add($autodate);
 		$this->updateGroup(Tools::getValue('groupBox'));
 		return $ret;
-		d($this);
 	}
 
 	public	function update($nullValues = false)
