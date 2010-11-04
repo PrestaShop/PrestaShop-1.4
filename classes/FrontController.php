@@ -7,6 +7,7 @@ class FrontControllerCore
 	public $cookie;
 	public $link;
 	public $cart;
+	public $iso;
 	
 	public $orderBy;
 	public $orderWay;
@@ -21,7 +22,7 @@ class FrontControllerCore
 	
 	public function __construct()
 	{
-		global $smarty, $cookie, $link, $cart, $useSSL;
+		global $smarty, $cookie, $link, $cart, $useSSL, $iso;
 
 		$useSSL = $this->ssl;
 		$this->init();
@@ -30,6 +31,7 @@ class FrontControllerCore
 		$this->cookie = &$cookie;
 		$this->link = &$link;
 		$this->cart = &$cart;
+		$this->iso = &$iso;
 
 		if ($this->auth AND !$this->cookie->isLogged())
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
@@ -51,7 +53,7 @@ class FrontControllerCore
 			return;
 		self::$initialized = true;
 			
-		global $_CONF, $cookie, $smarty, $cart;
+		global $_CONF, $cookie, $smarty, $cart, $iso;
 		if (!isset($smarty))
 			exit;
 
