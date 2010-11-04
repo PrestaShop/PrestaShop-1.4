@@ -1085,7 +1085,7 @@ abstract class AdminTabCore
 			if (!isset($params['type']))
 				$params['type'] = 'text';
 
-			$value = Tools::getValue('conf') ? NULL : Tools::getValue($this->table.'Filter_'.(array_key_exists('filter_key', $params) ? $params['filter_key'] : $key));
+			$value = Tools::getValue($this->table.'Filter_'.(array_key_exists('filter_key', $params) ? $params['filter_key'] : $key));
 			if (isset($params['search']) AND !$params['search'])
 			{
 				echo '--</td>';
