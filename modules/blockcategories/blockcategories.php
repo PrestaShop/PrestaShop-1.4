@@ -19,11 +19,20 @@ class BlockCategories extends Module
 
 	function install()
 	{
-		if (parent::install() == false
-			OR $this->registerHook('leftColumn') == false
-			OR $this->registerHook('hookHeader') == false
-			OR Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) == false
-			OR Configuration::updateValue('BLOCK_CATEG_DHTML', 1) == false)
+		if (!parent::install() OR
+			!$this->registerHook('leftColumn') OR
+			!$this->registerHook('header') OR
+			!Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) OR
+			!Configuration::updateValue('BLOCK_CATEG_DHTML', 1))
+			return false;
+		return true;
+	}
+	
+	function uninstall()
+	{
+		if (!parent::uninstall() OR
+			!Configuration::deleteByName('BLOCK_CATEG_MAX_DEPTH') OR
+			!Configuration::deleteByName('BLOCK_CATEG_DHTML'))
 			return false;
 		return true;
 	}
