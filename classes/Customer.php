@@ -158,6 +158,7 @@ class CustomerCore extends ObjectModel
 			$obj = new Address(intval($address['id_address']));
 			$obj->delete();
 		}
+		Discount::deleteByIdCustomer(intval($this->id));
 		return parent::delete();
 	}
 

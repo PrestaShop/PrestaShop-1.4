@@ -99,10 +99,11 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	$customers = Db::getInstance()->ExecuteS('
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
-	WHERE email LIKE "%'.pSQL($filter).'%"
+	WHERE `deleted` = 0
+	AND (`email` LIKE "%'.pSQL($filter).'%"
 	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.intval($filterArray[1]) : '').'
 	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
-	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%"
+	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%")
 	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
 	LIMIT 50');
 	

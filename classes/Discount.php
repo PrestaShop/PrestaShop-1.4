@@ -409,7 +409,30 @@ class DiscountCore extends ObjectModel
 		AND ((d.`id_customer` = 0 AND d.`id_group` = 0) '.($id_customer ? 'OR (d.`id_customer` = '.$id_customer.'
 		OR d.`id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($id_customer).')))' : 'OR d.`id_group` = 1)'));
 	}
-
+	
+	static public function deleteByIdCustomer($id_customer)
+	{
+		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_customer` = '.intval($id_customer));
+		foreach ($discounts as $discount)
+		{
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.intval($discount['id_discount']));
+		}
+		return true;
+	}
+	
+	static public function deleteByIdGroup($id_group)
+	{
+		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_group` = '.intval($id_group));
+		foreach ($discounts as $discount)
+		{
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.intval($discount['id_discount']));
+		}
+		return true;
+	}
 }
 
 ?>

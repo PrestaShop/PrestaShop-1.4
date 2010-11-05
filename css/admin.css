@@ -870,3 +870,11 @@ table.permissions td {
 	font-size:18pt;
 }
 /*  */
+
+a.blue {
+	color:blue;
+}
+
+a.blue:hover {
+	color:#0000AA;
+}

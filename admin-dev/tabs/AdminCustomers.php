@@ -136,6 +136,11 @@ class AdminCustomers extends AdminTab
 				}
 			}
 		}
+		elseif (Tools::isSubmit('delete'.$this->table) AND $this->tabAccess['delete'] === '1')
+			Discount::deleteByIdCustomer(intval(Tools::getValue('id_customer')));
+		elseif (Tools::isSubmit('submitDel'.$this->table) AND $this->tabAccess['delete'] === '1')
+			foreach (Tools::getValue('customerBox') as $id_customer)
+				Discount::deleteByIdCustomer(intval($id_customer));
 		return parent::postProcess();
 	}
 
