@@ -23,26 +23,36 @@ class BlockLink extends Module
 	
 	public function install()
 	{
-	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false)
+	 	if (!parent::install() OR
+	 		!$this->registerHook('leftColumn') OR
+	 		!Db::getInstance()->Execute('
+	 		CREATE TABLE '._DB_PREFIX_.'blocklink (
+	 		`id_link` int(2) NOT NULL AUTO_INCREMENT, 
+	 		`url` varchar(255) NOT NULL,
+	 		`new_window` TINYINT(1) NOT NULL,
+	 		PRIMARY KEY(`id_link`))
+	 		ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8') OR
+	 		!Db::getInstance()->Execute('
+	 		CREATE TABLE '._DB_PREFIX_.'blocklink_lang (
+	 		`id_link` int(2) NOT NULL,
+	 		`id_lang` int(2) NOT NULL,
+	 		`text` varchar(64) NOT NULL,
+	 		PRIMARY KEY(`id_link`, `id_lang`))
+	 		ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8') OR
+		 	!Configuration::updateValue('PS_BLOCKLINK_TITLE', array('1' => 'Block link', '2' => 'Bloc lien')))
 	 		return false;
-		$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink (`id_link` int(2) NOT NULL AUTO_INCREMENT, `url` varchar(255) NOT NULL, new_window TINYINT(1) NOT NULL, PRIMARY KEY(`id_link`)) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8';
-	 	if (!Db::getInstance()->Execute($query))
-	 		return false;
-	 	$query = 'CREATE TABLE '._DB_PREFIX_.'blocklink_lang (`id_link` int(2) NOT NULL, `id_lang` int(2) NOT NULL, `text` varchar(64) NOT NULL, PRIMARY KEY(`id_link`, `id_lang`)) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8';
-	 	if (!Db::getInstance()->Execute($query))
-	 		return false;
-	 	return (Configuration::updateValue('PS_BLOCKLINK_TITLE', array('1' => 'Block link', '2' => 'Bloc lien')) AND Configuration::updateValue('PS_BLOCKLINK_TITLE', ''));
+	 	return true;
 	}
 	
 	public function uninstall()
 	{
-	 	if (parent::uninstall() == false)
+	 	if (!parent::uninstall() OR
+	 		!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'blocklink') OR
+	 		!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'blocklink_lang') OR
+	 		!Configuration::deleteByName('PS_BLOCKLINK_TITLE') OR
+	 		!Configuration::deleteByName('PS_BLOCKLINK_URL'))
 	 		return false;
-	 	if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'blocklink'))
-	 		return false;
-	 	if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'blocklink_lang'))
-	 		return false;
-	 	return (Configuration::deleteByName('PS_BLOCKLINK_TITLE') AND Configuration::deleteByName('PS_BLOCKLINK_URL'));
+	 	return true;
 	}
 	
 	public function hookLeftColumn($params)
