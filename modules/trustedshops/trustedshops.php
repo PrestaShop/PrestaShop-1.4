@@ -376,17 +376,27 @@ class TrustedShops extends Module
 	{
 		global $cookie;
 		
-		$language = Language::getIsoById(intval($cookie->id_lang));
-		$base_url = $this->rating_url_base[$language].Configuration::get('TS_ID_'.intval($cookie->id_lang)).'.html';
+		$buyer_email = '';
 		
 		if ($cookie->isLogged()) 
 		{
 			if (empty($id_order) && !empty($cookie->id_customer))
 				$id_order = $this->_getLastOrderId($cookie->id_customer);
-			
-			$base_url .= '&buyerEmail='.urlencode(base64_encode($cookie->email)).($id_order ? '&orderID='.urlencode(base64_encode(intval($id_order))) : '');
+		
+			$buyer_email = $cookie->email;
 		}
 				
+		return $this->getRatingUrlWithBuyerEmail(intval($cookie->id_lang), $id_order, $buyer_email);
+	}
+	
+	public function getRatingUrlWithBuyerEmail($id_lang, $id_order = '', $buyer_email = '')
+	{
+		$language = Language::getIsoById(intval($id_lang));
+		$base_url = $this->rating_url_base[$language].Configuration::get('TS_ID_'.intval($id_lang)).'.html';
+		
+		if (!empty($buyer_email))
+			$base_url .= '&buyerEmail='.urlencode(base64_encode($buyer_email)).($id_order ? '&orderID='.urlencode(base64_encode(intval($id_order))) : '');
+		
 		return $base_url;
 	}
 	

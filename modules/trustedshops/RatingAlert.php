@@ -46,7 +46,7 @@ class RatingAlert
 			$subject = $ts_module->getL('title_part_1').' '.Configuration::get('PS_SHOP_NAME').$ts_module->getL('title_part_2');
 			$template_vars = array('{ts_id}' => Configuration::get('TS_ID_'.intval($infos['id_lang'])), 
 								   '{button_url}' => TrustedShops::getHttpHost(true, true)._MODULE_DIR_.$ts_module->name.'/img',
-								   '{rating_url}' => $ts_module->getRatingUrl($infos['id_order']));
+								   '{rating_url}' => $ts_module->getRatingUrlWithBuyerEmail($infos['id_lang'], $infos['id_order'], $infos['email']));
 
 			$result = Mail::Send(intval($infos['id_lang']), self::MAIL_TEMPLATE, $subject, $template_vars, $infos['email'], NULL, Configuration::get('PS_SHOP_EMAIL'), Configuration::get('PS_SHOP_NAME'), NULL, NULL, dirname(__FILE__).'/mails/');
 
