@@ -34,6 +34,7 @@ class StatsData extends Module
 		// Everything is done in the footer (and not in the header because a page can redirect to another) except for identifying a guest as a customer
 		if (!parent::install() OR !$this->registerHook('footer') OR !$this->registerHook('authentication') OR !$this->registerHook('createAccount'))
 			return false;
+		return true;
 	}
     
 	function hookFooter($params)
