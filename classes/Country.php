@@ -144,7 +144,6 @@ class CountryCore extends ObjectModel
 	{
 		if (!Validate::isLanguageIsoCode($iso_code))
 			die(Tools::displayError());
-
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_country`
 		FROM `'._DB_PREFIX_.'country`

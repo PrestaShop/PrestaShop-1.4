@@ -100,6 +100,20 @@ class StateCore extends ObjectModel
         return (intval($result['id_state']));
     }
 
+	/**
+	* Get a state id with its iso code
+	*
+	* @param string $iso_code Iso code
+	* @return integer state id
+	*/
+	static public function getIdByIso($iso_code)
+    {
+	  	return Db::getInstance()->getValue('
+			SELECT `id_state`
+			FROM `'._DB_PREFIX_.'state`
+			WHERE `iso_code` = \''.pSQL($iso_code).'\''
+		);
+    }
 	
 	/**
 	* Delete a state only if is not in use

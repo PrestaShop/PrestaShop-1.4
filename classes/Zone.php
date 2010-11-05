@@ -55,6 +55,20 @@ class ZoneCore extends ObjectModel
 		'.($active ? 'WHERE active = 1' : '').'
 		ORDER BY `name` ASC');
 	}
+
+	/**
+	* Get a zone ID from its default language name
+	*
+	* @return integer id_zone
+	*/
+	static public function getIdByName($name)
+	{
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `id_zone`
+			FROM `'._DB_PREFIX_.'zone`
+			WHERE `name` = \''.pSQL($name).'\''
+		);
+	}
 }
 
 ?>

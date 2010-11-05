@@ -416,6 +416,83 @@ class LanguageCore extends ObjectModel
 							Configuration::get('PS_HTACCESS_SPECIFIC')
 							);
 	}	
+
+	static public function checkAndAddLanguage($iso_code)
+	{
+		if (Language::getIdByIso($iso_code))
+			return true;
+		else
+		{
+			if(@fsockopen('www.prestashop.com', 80))
+			{
+				$lang = new Language();
+				$lang->iso_code = $iso_code;
+				$lang->active = true;
+
+				if ($lang_packs = unserialize(@file_get_contents('http://www.prestashop.com/rss/lang_exists.php')))
+					foreach ($lang_packs AS $lang_pack)
+						if ($lang_pack['iso_code'] == $iso_code)
+							$lang->name = $lang_pack['name'];
+				
+				if (!$lang->name OR !$lang->add())
+					return false;
+				$insert_id = intval($lang->id);
+				
+				if ($lang_packs)
+				{
+					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
+					if ($flag != NULL && !preg_match('/<body>/', $flag))
+					{
+						$file = fopen(dirname(__FILE__).'/../img/l/'.$insert_id.'.jpg', 'w');
+						if ($file)
+						{
+							fwrite($file, $flag);
+							fclose($file);
+						}
+						else
+							self::_copyNoneFlag($insert_id);
+					}
+					else
+						self::_copyNoneFlag($insert_id);
+				}
+				else
+					self::_copyNoneFlag($insert_id);
+				
+				$url_to_dir = dirname(__FILE__).'/../img/l/';
+				
+				$files_copy = array(
+					'/en.jpg', 
+					'/en-default-thickbox.jpg', 
+					'/en-default-home.jpg', 
+					'/en-default-large.jpg', 
+					'/en-default-medium.jpg', 
+					'/en-default-small.jpg',
+					'/en-default-large_scene.jpg'
+				);
+				$tos = array(
+					dirname(__FILE__).'/../img/c',
+					dirname(__FILE__).'/../img/m',
+					dirname(__FILE__).'/../img/p',
+					dirname(__FILE__).'/../img/su'
+				);
+				
+				foreach($tos AS $to)
+					foreach($files_copy AS $file)
+					{
+						$name = str_replace('/en', '/'.$iso_code, $file);
+						copy($url_to_dir.$file, $to.$name);
+					}
+				return true;
+			}
+			else
+				return false;
+		}
+	}
+
+	static private function _copyNoneFlag($id)
+	{
+		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
+	}
 }
 
 ?>

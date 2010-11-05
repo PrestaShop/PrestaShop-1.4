@@ -915,6 +915,17 @@ class ValidateCore
 	{
 		return (bool)preg_match('#^[01]_[0-9]+$#', $ids);
 	}
+
+	/**
+	* Check the localization pack part selected
+	*
+	* @param string $date Date to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isLocalizationPackSelection($data)
+	{
+		return ($data === 'states' OR $data === 'taxes' OR $data === 'currencies' OR $data === 'languages' OR $data === 'units');
+	}
 }
 
 ?>

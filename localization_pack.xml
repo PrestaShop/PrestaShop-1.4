@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<localizationPack name="France" version="1.0">
+	<currencies>
+		<currency name="Franc" iso_code="fr" iso_code_num="17" sign="F" blank="0" conversion_rate="1.0" format="2" decimals="1" />
+	</currencies>
+	<languages>
+		<language iso_code="fi" file="fi.gzip" />
+	</languages>
+	<taxes>
+		<tax name="VAT" rate="9.6666">
+			<applications>
+				<application type="state" id="PAR" />
+				<application type="zone" id="Europe" />
+			</applications>
+		</tax>
+	</taxes>
+	<states>
+		<state name="Paris" iso_code="PAR" country="FR" zone="Europe" tax_behavior="1" />
+	</states>
+</localizationPack>

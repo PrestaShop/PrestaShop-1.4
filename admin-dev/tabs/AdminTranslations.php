@@ -124,10 +124,10 @@ class AdminTranslations extends AdminTab
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
 			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 			{
-				if(preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/', $_FILES['file']['name']))
+				if (preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/', $_FILES['file']['name']))
 				{
 					$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
-					if(!$this->_checkAndAddLangage($iso_code))
+					if (!Language::checkAndAddLanguage($iso_code))
 						$conf = 20;
 				}
 				Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
@@ -1567,105 +1567,6 @@ class AdminTranslations extends AdminTab
 				$themes[$folder]['name'] = $folder;
 		closedir($dir);
 		return isset($themes) ? $themes : array();
-	}
-
-	private function _copyNoneFlag($id)
-	{
-		copy(dirname(__FILE__).'/../../img/l/none.jpg', dirname(__FILE__).'/../../img/l/'.$id.'.jpg');
-	}
-
-	private function _checkAndAddLangage($iso_code)
-	{
-		$result = Db::getInstance()->getValue('
-		SELECT COUNT(`id_lang`) AS total 
-		FROM `'._DB_PREFIX_.'lang` 
-		WHERE `iso_code` = \''.pSQL($iso_code).'\'
-		');
-
-		if ($result)
-			return true;
-		else
-		{
-			if(@fsockopen('www.prestashop.com', 80))
-			{
-				$lang_packs = unserialize(@file_get_contents('http://www.prestashop.com/rss/lang_exists.php'));
-
-				$lang = new Language();
-				$lang->iso_code = $iso_code;
-				$lang->active = true;
-
-				if ($lang_packs)
-				{
-					foreach($lang_packs AS $lang_pack)
-						if ($lang_pack['iso_code'] == $iso_code)
-							$lang->name = $lang_pack['name'];
-				}
-
-				if (!$lang->name)
-					return false;
-
-				if (!$lang->add())
-					return false;
-
-				$insert_id = Db::getInstance()->getValue('
-				SELECT id_lang 
-				FROM `'._DB_PREFIX_.'lang`
-				WHERE `iso_code` = \''.pSQL($iso_code).'\'
-				AND `name` = \''.pSQL($lang->name).'\'
-				');
-
-				if ($lang_packs)
-				{
-					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
-					if ($flag != NULL && !preg_match('/<body>/', $flag))
-					{
-						$file = @fopen(dirname(__FILE__).'/../../img/l/'.$insert_id.'.jpg', 'w');
-						if ($file)
-						{
-							fwrite($file, $flag);
-							fclose($file);
-						}
-						else
-							$this->_copyNoneFlag($insert_id);
-					}
-					else
-						$this->_copyNoneFlag($insert_id);
-				}
-				else
-					$this->_copyNoneFlag($insert_id);
-
-				$url_to_dir = dirname(__FILE__).'/../../img/l/';
-
-				$files_copy = array(
-					'/en.jpg',
-					'/en-default-thickbox.jpg',
-					'/en-default-home.jpg',
-					'/en-default-large.jpg',
-					'/en-default-medium.jpg',
-					'/en-default-small.jpg',
-					'/en-default-large_scene.jpg'
-				);
-				$tos = array(
-					dirname(__FILE__).'/../../img/c',
-					dirname(__FILE__).'/../../img/m',
-					dirname(__FILE__).'/../../img/p',
-					dirname(__FILE__).'/../../img/su'
-				);
-
-				foreach($tos AS $to)
-				{
-					foreach($files_copy AS $file)
-					{
-						$name = str_replace('/en', '/'.$iso_code, $file);
-						copy($url_to_dir.$file, $to.$name);
-					}
-				}
-
-				return true;
-			}
-			else
-				return false;
-		}
 	}
 }
 ?>

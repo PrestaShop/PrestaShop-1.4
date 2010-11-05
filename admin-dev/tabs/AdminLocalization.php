@@ -32,6 +32,8 @@ class AdminLocalization extends AdminPreferences
 
 	public function postProcess()
 	{
+		global $currentIndex;
+
 		if (isset($_POST['submitLocalization'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
@@ -39,11 +41,54 @@ class AdminLocalization extends AdminPreferences
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
+		elseif (Tools::isSubmit('submitLocalizationPack'))
+		{
+			if ($_FILES['file']['error'] == 4)
+				$this->_errors[] = Tools::displayError('Please select a localization pack archive.');
+			elseif (!$selection = Tools::getValue('selection'))
+				$this->_errors[] = Tools::displayError('Please select at least one content to import.');
+			else
+			{
+				foreach ($selection as $selected)
+					if (!Validate::isLocalizationPackSelection($selected))
+					{
+						$this->_errors[] = Tools::displayError('Invalid selection!');
+						return ;
+					}
+				$localizationPack = new LocalizationPack();
+				if (!$localizationPack->importFile($_FILES['file']['tmp_name'], $selection))
+					$this->_errors = array_merge($this->_errors, $localizationPack->getErrors());
+				else
+					Tools::redirectAdmin($currentIndex.'&conf=23&token='.$this->token);
+			}
+		}
 	}	
 
 	public function display()
 	{
+		global $currentIndex;
+
 		$this->_displayForm('localization', $this->_fieldsLocalization, $this->l('Localization'), 'width2', 'localization');
+		echo '<br />
+		<form method="post" action="'.$currentIndex.'&token='.$this->token.'" class="width2" enctype="multipart/form-data">
+		<fieldset>
+			<legend><img src="../img/admin/localization.gif" />'.$this->l('Localization pack import').'</legend>
+			<div style="clear: both; padding-top: 15px;">
+				<label>'.$this->l('Archive:').'</label>
+				<div class="margin-form" style="padding-top: 5px;"><input type="file" name="file" /></div>
+				<label>'.$this->l('Content to import:').'</label>
+				<div class="margin-form" style="padding-top: 5px;">
+					<input type="checkbox" name="selection[]" value="states" /> '.$this->l('States').'<br />
+					<input type="checkbox" name="selection[]" value="taxes" /> '.$this->l('Taxes').'<br />
+					<input type="checkbox" name="selection[]" value="currencies" /> '.$this->l('Currencies').'<br />
+					<input type="checkbox" name="selection[]" value="languages" /> '.$this->l('Languages').'<br />
+					<input type="checkbox" name="selection[]" value="units" /> '.$this->l('Units (e.g., weight, volume)').'
+				</div>
+				<div align="center" style="margin-top: 20px;">
+					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Save   ').'" />
+				</div>
+			</div>
+		</fieldset>';
 	}
 }
 

@@ -141,7 +141,8 @@ abstract class AdminTabCore
 		15 => $this->l('Translations successfully added'), 16 => $this->l('Module transplanted successfully to hook'),
 		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
 		19 => $this->l('Duplication successfully done'), 20 => $this->l('Translation added successfully but the language has been not created'),
-		21 => $this->l('Module reset successfully'), 22 => $this->l('Module delete successfully'));
+		21 => $this->l('Module reset successfully'), 22 => $this->l('Module delete successfully'),
+		23 => $this->l('Configuration pack imported successfully'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
 		$className = get_class($this);
@@ -153,14 +154,6 @@ abstract class AdminTabCore
 	protected function l($string, $class = 'AdminTab', $addslashes = FALSE, $htmlentities = TRUE)
 	{
 		global $_LANGADM;
-		
-		/* Disabled in 1.3a1 version for performance issues, however that case must not appen
-		
-		if (!is_array($_LANGADM))
-		{
-			return str_replace('"', '&quot;', $string);
-		}
-		*/
 		
 		$key = md5(str_replace('\'', '\\\'', $string));
 		$str = (key_exists(get_class($this).$key, $_LANGADM)) ? $_LANGADM[get_class($this).$key] : ((key_exists($class.$key, $_LANGADM)) ? $_LANGADM[$class.$key] : $string);

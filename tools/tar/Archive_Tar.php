@@ -20,7 +20,7 @@
 
 define ('ARCHIVE_TAR_ATT_SEPARATOR', 90001);
 
-require_once(dirname(__FILE__).'/../tools/pear/PEAR.php');
+require_once(_PS_TOOL_DIR_.'pear/PEAR.php');
 
 /**
 * Creates a (compressed) Tar archive
@@ -29,7 +29,7 @@ require_once(dirname(__FILE__).'/../tools/pear/PEAR.php');
 * @version  $Revision: 1.29 $
 * @package  Archive
 */
-class Archive_TarCore extends PEAR
+class Archive_Tar extends PEAR
 {
     /**
     * @var string Name of the Tar
