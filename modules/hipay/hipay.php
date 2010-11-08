@@ -33,6 +33,7 @@ class Hipay extends PaymentModule
 
 	public function	install()
 	{
+		Configuration::updateValue('HIPAY_SALT', uniqid());
 		Configuration::updateValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
 		if (!Configuration::get('HIPAY_UNIQID'))
 			Configuration::updateValue('HIPAY_UNIQID', uniqid());
@@ -106,7 +107,7 @@ class Hipay extends PaymentModule
 		$paymentParams->setUrlCancel(self::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
 		$paymentParams->setUrlNok(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
 		$paymentParams->setUrlOk(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
-		$paymentParams->setUrlAck(self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php');
+		$paymentParams->setUrlAck(self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php?token='.sha1($cart->id.Configuration::get('HIPAY_SALT')));
 		$paymentParams->setBackgroundColor('#FFFFFF');
 
 		if (!$paymentParams->check())
@@ -168,28 +169,33 @@ class Hipay extends PaymentModule
 		
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 
+		
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
-			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] '.$_POST['xml']."\n", FILE_APPEND);
-
-		if (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
-        {
-            /* Paiement capturé sur Hipay = Paiement accepté sur Prestashop */
-			$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
-            $this->validateOrder((int)$id_cart, _PS_OS_PAYMENT_, (float)$amount, $this->displayName, $orderMessage);
-        }
-        elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
-        {
-            /* Paiement remboursé sur Hipay */
-			if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
-				die(Tools::displayError());
-            $order = new Order(intval($id_order));
-            if (!$order->valid OR $order->getCurrentState() === _PS_OS_REFUND_)
-				die(Tools::displayError());
-			$orderHistory = new OrderHistory();
-			$orderHistory->id_order = intval($order->id);
-			$orderHistory->changeIdOrderState(intval(_PS_OS_REFUND_), intval($id_order));
-			$orderHistory->addWithemail();
-        }
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.$_POST['xml']."\n", FILE_APPEND);
+		elseif (sha1($id_cart.Configuration::get('HIPAY_SALT')) == Tools::getValue('token'))
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.$_POST['xml']."\n", FILE_APPEND);
+		else
+		{
+			if (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
+			{
+				/* Paiement capturé sur Hipay = Paiement accepté sur Prestashop */
+				$orderMessage = $operation.': '.$status."\n".'date: '.$date.' '.$time."\n".'transaction: '.$transid."\n".'amount: '.(float)$amount.' '.$currency."\n".'id_cart: '.(int)$id_cart;
+				$this->validateOrder((int)$id_cart, _PS_OS_PAYMENT_, (float)$amount, $this->displayName, $orderMessage);
+			}
+			elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
+			{
+				/* Paiement remboursé sur Hipay */
+				if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
+					die(Tools::displayError());
+				$order = new Order(intval($id_order));
+				if (!$order->valid OR $order->getCurrentState() === _PS_OS_REFUND_)
+					die(Tools::displayError());
+				$orderHistory = new OrderHistory();
+				$orderHistory->id_order = intval($order->id);
+				$orderHistory->changeIdOrderState(intval(_PS_OS_REFUND_), intval($id_order));
+				$orderHistory->addWithemail();
+			}
+		}
 	}
 
 	public function getContent()

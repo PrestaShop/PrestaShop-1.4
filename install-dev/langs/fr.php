@@ -439,5 +439,25 @@ $_LANG['You have to create a database, help available in readme_en.txt'] = 'Vous
 $_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Cette option peut être bloquante si votre configuration e-mail est erronée, merci de la désactiver si vous ne pouvez pas passer à l\'étape suivante.';
 $_LANG['Mcrypt is available (recommended)'] = 'Mcrypt est disponible (recommandé)';
 $_LANG['Your MySQL server doesn\'t support this engine, please use another one like MyISAM'] = 'Le support de ce moteur de base de donnée n\'est pas supporté, veuillez en choisir un autre tel que MyISAM';
+$_LANG['Adult'] = 'Adulte et lingerie';
+$_LANG['Animals and Pets'] = 'Animaux';
+$_LANG['Art and Culture'] = 'Culture et divertissements';
+$_LANG['Babies'] = 'Articles pour bébé';
+$_LANG['Beauty and Personal Care'] = 'Santé et beauté';
+$_LANG['Cars'] = 'Auto et moto';
+$_LANG['Computer Hardware and Software'] = 'Informatique et logiciels';
+$_LANG['Download'] = 'Téléchargement';
+$_LANG['Fashion and accessories'] = 'Vêtements et accessoires';
+$_LANG['Flowers, Gifts and Crafts'] = 'Fleurs et cadeaux';
+$_LANG['Food and beverage'] = 'Alimentation et gastronomie';
+$_LANG['HiFi, Photo and Video'] = 'Hifi, photo et videos';
+$_LANG['Home and Garden'] = 'Maison et jardin';
+$_LANG['Home Appliances'] = 'Electroménager';
+$_LANG['Jewelry'] = 'Bijouterie';
+$_LANG['Mobile and Telecom'] = 'Téléphonie et communication';
+$_LANG['Services'] = 'Services';
+$_LANG['Shoes and accessories'] = 'Chaussures et accessoires';
+$_LANG['Sport and Entertainment'] = 'Sport et loisirs';
+$_LANG['Travel'] = 'Voyage et tourisme';
 
 ?>

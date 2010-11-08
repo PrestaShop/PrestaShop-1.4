@@ -592,6 +592,7 @@ function verifyShopInfos()
 	   data:
 		"method=checkShopInfos"+
 		"&isoCode="+isoCodeLocalLanguage+
+		"&infosActivity="+ encodeURIComponent($("select#infosActivity").val())+
 		"&infosCountry="+ encodeURIComponent($("select#infosCountry").val())+
 		"&infosShop="+ encodeURIComponent($("input#infosShop").val())+
 		"&infosFirstname="+ encodeURIComponent($("input#infosFirstname").val())+

@@ -395,6 +395,32 @@ if ($lm->getIncludeTradFilename())
 					<span id="resultInfosShop" class="result aligned"></span>
 				</div>
 				<div class="field">
+					<label for="infosActivity" class="aligned"><?php echo lang('Main activity:'); ?></label>
+					<select id="infosActivity" style="border:1px solid #D41958">
+						<option value="0"><?php echo lang('-- Please choose your main activity --'); ?></option>
+						<option value="1"><?php echo lang('Adult'); ?></option>
+						<option value="2"><?php echo lang('Animals and Pets'); ?></option>
+						<option value="3"><?php echo lang('Art and Culture'); ?></option>
+						<option value="4"><?php echo lang('Babies'); ?></option>
+						<option value="5"><?php echo lang('Beauty and Personal Care'); ?></option>
+						<option value="6"><?php echo lang('Cars'); ?></option>
+						<option value="7"><?php echo lang('Computer Hardware and Software'); ?></option>
+						<option value="8"><?php echo lang('Download'); ?></option>
+						<option value="9"><?php echo lang('Fashion and accessories'); ?></option>
+						<option value="10"><?php echo lang('Flowers, Gifts and Crafts'); ?></option>
+						<option value="11"><?php echo lang('Food and beverage'); ?></option>
+						<option value="12"><?php echo lang('HiFi, Photo and Video'); ?></option>
+						<option value="13"><?php echo lang('Home and Garden'); ?></option>
+						<option value="14"><?php echo lang('Home Appliances'); ?></option>
+						<option value="15"><?php echo lang('Jewelry'); ?></option>
+						<option value="16"><?php echo lang('Mobile and Telecom'); ?></option>
+						<option value="17"><?php echo lang('Services'); ?></option>
+						<option value="18"><?php echo lang('Shoes and accessories'); ?></option>
+						<option value="19"><?php echo lang('Sport and Entertainment'); ?></option>
+						<option value="20"><?php echo lang('Travel'); ?></option>
+					</select>
+				</div>
+				<div class="field">
 					<label for="infosCountry" class="aligned"><?php echo lang('Default country:'); ?></label>
 					<select id="infosCountry" style="width:175px;border:1px solid #D41958">
 						<option value="231"><?php echo lang('Afghanistan'); ?></option>

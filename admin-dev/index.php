@@ -89,7 +89,7 @@ else /* Else display homepage */
 	echo '<div id="adminNews">
 	<h2>'.translate('PrestaShop live feed').'</h2>';
 	$protocol = (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
-	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="'.$protocol.'://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe></div>';
+	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="'.$protocol.'://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'&activity='.(int)Configuration::get('PS_SHOP_ACTIVITY').'"></iframe></div>';
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
