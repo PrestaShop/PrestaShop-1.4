@@ -14,12 +14,12 @@ class NewProductsControllerCore extends FrontController
 		
 		$this->productSort();
 
-		$nbProducts = intval(Product::getNewProducts(intval($this->cookie->id_lang), isset($p) ? intval($p) - 1 : NULL, isset($n) ? intval($n) : NULL, true));
+		$nbProducts = intval(Product::getNewProducts(intval($this->cookie->id_lang), isset($this->p) ? intval($this->p) - 1 : NULL, isset($this->n) ? intval($this->n) : NULL, true));
 		
 		$this->pagination();
 
 		$this->smarty->assign(array(
-			'products' => Product::getNewProducts(intval($this->cookie->id_lang), intval($p) - 1, intval($n), false, $orderBy, $orderWay),
+			'products' => Product::getNewProducts(intval($this->cookie->id_lang), intval($this->p) - 1, intval($this->n), false, $this->orderBy, $this->orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'nbProducts' => intval($nbProducts)
 		));
