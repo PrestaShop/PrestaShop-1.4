@@ -23,6 +23,7 @@ class CartControllerCore extends FrontController
 					$result = array('carriers' => Carrier::getCarriersOpc($address_delivery->id_country, $groups));
 				}
 				$result['summary'] = $this->cart->getSummaryDetails();
+				$result['customizedDatas'] = Product::getAllCustomizedDatas(intval($this->cart->id));
 				die(Tools::jsonEncode($result));
 			}
 			else
@@ -73,14 +74,17 @@ class CartControllerCore extends FrontController
 			{
 				$producToAdd = new Product(intval($idProduct), true, intval($this->cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
-					$this->errors[] = Tools::displayError('product is no longer available');
+					$this->errors[] = Tools::displayError('product is no longer available', false);
 				else
 				{
 					/* Check the quantity availability */
 					if ($idProductAttribute AND is_numeric($idProductAttribute))
 					{
 						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
-							$this->errors[] = Tools::displayError('there is not enough product in stock');
+							if (Tools::getValue('ajax') == 'true')
+								die('{\'hasError\' : true, errors : [\''.Tools::displayError('there is not enough product in stock', false).'\']}');
+							else
+								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
 					elseif ($producToAdd->hasAttributes() AND !$delete)
 					{
@@ -88,10 +92,16 @@ class CartControllerCore extends FrontController
 						if (!$idProductAttribute)
 							Tools::redirectAdmin($link->getProductLink($producToAdd));
 						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
-							$this->errors[] = Tools::displayError('there is not enough product in stock');
+							if (Tools::getValue('ajax') == 'true')
+								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
+							else	
+								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
 					elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
-						$this->errors[] = Tools::displayError('there is not enough product in stock');
+						if (Tools::getValue('ajax') == 'true')
+								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock')).'\']}');
+							else	
+								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					/* Check vouchers compatibility */
 					if ($add AND (($producToAdd->specificPrice AND floatval($producToAdd->specificPrice['reduction'])) OR $producToAdd->on_sale))
 					{
@@ -100,7 +110,6 @@ class CartControllerCore extends FrontController
 							if (!$discount['cumulable_reduction'])
 								$this->errors[] = Tools::displayError('cannot add this product because current voucher doesn\'t allow additional discounts');
 					}
-
 					if (!sizeof($this->errors))
 					{
 						if ($add AND $qty >= 0)
@@ -117,15 +126,18 @@ class CartControllerCore extends FrontController
 							if (!sizeof($this->errors))
 							{
 								$updateQuantity = $this->cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
-
+																
 								if ($updateQuantity < 0)
+									if (Tools::getValue('ajax') == 'true')
+										die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('you need add', false).' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum', false)).'\']}');
+									else
 									$this->errors[] = Tools::displayError('you need add').' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum')
 										.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 										Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
 								elseif (!$updateQuantity)
 								{
 									if (Tools::getValue('ajax') == 'true')
-										die('{\'hasError\' : true, errors : [\''.Tools::displayError('you already have the maximum quantity available for this product').'\']}');
+										die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('you already have the maximum quantity available for this product', false)).'\']}');
 									else
 										$this->errors[] = Tools::displayError('you already have the maximum quantity available for this product')
 										.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
@@ -147,7 +159,7 @@ class CartControllerCore extends FrontController
 										$this->cart->deleteDiscount(intval($discount['id_discount']));
 								}
 							}
-							$this->cart->deleteProduct(intval($idProduct), intval($idProductAttribute), $customizationId);
+							$this->cart->deleteProduct(intval($idProduct), intval($idProductAttribute), intval($customizationId));
 							if (!Cart::getNbProducts(intval($this->cart->id)))
 							{
 								$this->cart->id_carrier = 0;
@@ -173,6 +185,7 @@ class CartControllerCore extends FrontController
 				}
 				if (Tools::getValue('ajax') != 'true' AND !sizeof($this->errors))
 					Tools::redirect('order.php?'.(isset($idProduct) ? 'ipa='.intval($idProduct) : ''));
+					
 			}
 		}
 	}

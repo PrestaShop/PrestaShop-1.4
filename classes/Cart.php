@@ -241,7 +241,7 @@ class CartCore extends ObjectModel
 		if ($this->_products !== NULL AND !$refresh)
 			return $this->_products;
 		$sql = '
-		SELECT cp.`id_product_attribute`, cp.`id_product`, cp.`quantity` AS cart_quantity, pl.`name`,
+		SELECT cp.`id_product_attribute`, cp.`id_product`, cu.`id_customization`, cp.`quantity` AS cart_quantity, cu.`quantity` AS customization_quantity, pl.`name`,
 		pl.`description_short`, pl.`available_now`, pl.`available_later`, p.`id_product`, p.`id_category_default`, p.`id_supplier`, p.`id_manufacturer`, p.`id_tax`, p.`on_sale`, p.`ecotax`, p.`additional_shipping_cost`, p.`available_for_order`,
 		p.`quantity`, p.`price`, p.`weight`, p.`out_of_stock`, p.`active`, p.`date_add`, p.`date_upd`, p.`minimal_quantity`,
 		t.`id_tax`, tl.`name` AS tax, t.`rate`, pa.`price` AS price_attribute, pa.`quantity` AS quantity_attribute, 
@@ -257,6 +257,7 @@ class CartCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = cp.`id_product_attribute`)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($this->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'customization` cu ON (p.`id_product` = cu.`id_product`)
 
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_image` pai ON (pai.`id_product_attribute` = pa.`id_product_attribute`)
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (IF(pai.`id_image`,
@@ -272,19 +273,17 @@ class CartCore extends ObjectModel
 
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($this->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($this->id_lang).')
-		WHERE `id_cart` = '.intval($this->id).'
+		WHERE cp.`id_cart` = '.intval($this->id).'
 		'.($id_product ? ' AND cp.`id_product` = '.intval($id_product) : '').'
 		AND p.`id_product` IS NOT NULL
 		GROUP BY unique_id
 		ORDER BY cp.date_add ASC';		
 		$result = Db::getInstance()->ExecuteS($sql);
-
 		// Reset the cache before the following return, or else an empty cart will add dozens of queries
-		$this->_products = array();
 		
+		$this->_products = array();
 		if (empty($result))
 			return array();
-
 		foreach ($result AS $k => $row)
 		{
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
@@ -581,6 +580,8 @@ class CartCore extends ObjectModel
 			$customizationQuantity = intval(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.intval($this->id).' AND `id_product` = '.intval($id_product).' AND `id_product_attribute` = '.intval($id_product_attribute)));
 			if (!$this->_deleteCustomization(intval($id_customization), intval($id_product), intval($id_product_attribute)))
 				return false;
+			// refresh cache of self::_products
+			$this->_products = $this->getProducts(true);
 			return ($customizationQuantity == $productTotalQuantity AND $this->deleteProduct(intval($id_product), $id_product_attribute, NULL));
 		}
 

@@ -119,6 +119,7 @@ class FrontControllerCore
 
 		if (!isset($cart) OR !$cart->id)
 		{
+			//p('NEW CART');
 			$cart = new Cart();
 			$cart->id_lang = intval($cookie->id_lang);
 			$cart->id_currency = intval($cookie->id_currency);
@@ -137,7 +138,7 @@ class FrontControllerCore
 		}
 		if (!$cart->nbProducts())
 			$cart->id_carrier = NULL;
-
+//d($cookie);
 		$ps_language = new Language(intval($cookie->id_lang));
 		setlocale(LC_COLLATE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
 		setlocale(LC_CTYPE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
@@ -168,7 +169,7 @@ class FrontControllerCore
 		/* Server Params */
 		$server_host_ssl = Tools::getHttpHost(false, true);
 		$server_host     = str_replace(':'._PS_SSL_PORT_, '',$server_host_ssl);
-
+		
 		global $protocol, $protocol_ssl, $protocol_link, $protocol_content;
 		$protocol = 'http://';
 		$protocol_ssl = 'https://';

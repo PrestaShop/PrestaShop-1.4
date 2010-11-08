@@ -389,6 +389,7 @@ Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 Tools::addJS(_THEME_JS_DIR_.'order-opc.js');
 Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+Tools::addJS(_PS_JS_DIR_.'jquery/jquery-typewatch.pack.js');
 include(dirname(__FILE__).'/header.php');
 $smarty->display(_PS_THEME_DIR_.'errors.tpl');
 $smarty->display(_PS_THEME_DIR_.'order-opc.tpl');

@@ -150,6 +150,7 @@ var ajaxCart = {
 		else
 			$('.ajax_add_to_cart_button').attr('disabled', 'disabled');
 		
+		
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
@@ -206,7 +207,11 @@ var ajaxCart = {
 			cache: false,
 			dataType : "json",
 			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
-			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) },
+			success: function(jsonData)	{ 
+				ajaxCart.updateCart(jsonData);
+				if ($('body').attr('id') == 'order')
+					deletProductFromSummary(idProduct+'_'+idCombination);
+			},
 			error: function() {alert('ERROR: unable to delete the product');}
 		});
 	},
@@ -321,8 +326,10 @@ var ajaxCart = {
 					$('#bloc_cart_voucher_' + this.id + ' td.price').text(this.price);
 			}
 		});
-		if (jsonData.discounts.length == 0)
-			$('#vouchers').remove();
+		/*
+if (jsonData.discounts.length == 0)
+				$('#vouchers').remove();
+*/
 	},
 
 	// Update product quantity
@@ -484,20 +491,23 @@ var ajaxCart = {
 					errors += jsonData.errors[error] + "\n";
 			alert(errors);
 		}
-		ajaxCart.expand();
-		ajaxCart.updateCartEverywhere(jsonData);
-		ajaxCart.hideOldProducts(jsonData);
-		ajaxCart.displayNewProducts(jsonData);
-		ajaxCart.refreshVouchers(jsonData);
-		
-		//update 'first' and 'last' item classes
-		$('#cart_block dl.products dt').removeClass('first_item').removeClass('last_item').removeClass('item');
-		$('#cart_block dl.products dt:first').addClass('first_item');
-		$('#cart_block dl.products dt:not(:first,:last)').addClass('item');
-		$('#cart_block dl.products dt:last').addClass('last_item');
-		
-		//reset the onlick events in relation to the cart block (it allow to bind the onclick event to the new 'delete' buttons added)
-		ajaxCart.overrideButtonsInThePage();
+		else
+		{
+			ajaxCart.expand();
+			ajaxCart.updateCartEverywhere(jsonData);
+			ajaxCart.hideOldProducts(jsonData);
+			ajaxCart.displayNewProducts(jsonData);
+			ajaxCart.refreshVouchers(jsonData);
+			
+			//update 'first' and 'last' item classes
+			$('#cart_block dl.products dt').removeClass('first_item').removeClass('last_item').removeClass('item');
+			$('#cart_block dl.products dt:first').addClass('first_item');
+			$('#cart_block dl.products dt:not(:first,:last)').addClass('item');
+			$('#cart_block dl.products dt:last').addClass('last_item');
+			
+			//reset the onlick events in relation to the cart block (it allow to bind the onclick event to the new 'delete' buttons added)
+			ajaxCart.overrideButtonsInThePage();
+		}
 	},
 	
 	//update general cart informations everywere in the page

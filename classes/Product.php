@@ -670,7 +670,6 @@ class ProductCore extends ObjectModel
 		);
 		if($orderBy == 'price')
 			Tools::orderbyPrice($rq,$orderWay);
-
 		return ($rq);
 	}
 

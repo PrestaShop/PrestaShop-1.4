@@ -28,6 +28,7 @@ class ProductControllerCore extends FrontController
 	public function process()
 	{
 		parent::process();
+		global $cart;
 		
 		if (!$id_product = intval(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
 			$this->errors[] = Tools::displayError('product not found');
@@ -56,6 +57,7 @@ class ProductControllerCore extends FrontController
 				/* Product pictures management */
 				require_once('images.inc.php');
 				$this->smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
+				
 				if (Tools::isSubmit('submitCustomizedDatas'))
 				{
 					$this->pictureUpload($product, $cart);

@@ -30,7 +30,7 @@ class Socolissimo extends Module
 		global $cookie;
 		
 		$this->name = 'socolissimo';
-		$this->tab = 'Carriers';
+		$this->tab = 'shipping_logistics';
 		$this->version = '1.3';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;
@@ -726,18 +726,24 @@ class Socolissimo extends Module
 		{
 			$ctx = stream_context_create(array('http' => array('timeout' => 1))); 
 			$return = @file_get_contents(Configuration::get('SOCOLISSIMO_SUP_URL'), 0, $ctx);
-			if (!empty($return))
+			
+			if(ini_get('allow_url_fopen') == 0)
+				return true;
+			else
 			{
-				preg_match('[OK]',$return, $matches);
-				if ($matches[0]=='OK')
-					return true;
-				else
-					return false;
+				if (!empty($return))
+				{
+					preg_match('[OK]',$return, $matches);
+					if ($matches[0]=='OK')
+						return true;
+					else
+						return false;
+				}
 			}
 		}
 		else 
 		return true;
-	}
+	}	
 	
 	public function displaySoError($key)
 	{

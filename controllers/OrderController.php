@@ -111,6 +111,7 @@ class OrderControllerCore extends FrontController
 		}
 		if (!in_array($this->step, array(1, 2, 3)))
 			Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
+			Tools::addJS(_PS_JS_DIR_.'jquery/jquery-typewatch.pack.js');
 	}
 	
 	public function displayHeader()
