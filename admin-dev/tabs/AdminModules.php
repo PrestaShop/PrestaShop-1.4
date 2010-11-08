@@ -45,7 +45,7 @@ class AdminModules extends AdminTab
 		  'statsgeolocation', 'statshome', 'statslive', 'statsnewsletter', 'statsorigin', 'statspersonalinfos', 'statsproduct', 'statsregistrations', 'statssales', 'statssearch', 'statsstock',
 		  'statsvisits', 'tm4b', 'trackingfront', 'vatnumber', 'watermark');
 		 
-		 $this->listPartnerModules = array('dejala', 'envoimoinscher', 'hipay', 'moneybookers', 'ogone', 'paypal', 'paypalapi', 'socolissimo', 'treepodia', 'trustedshops', 'secuvad', 'reverso', 'iadvize');
+		 $this->listPartnerModules = array('dejala', 'envoimoinscher', 'hipay', 'moneybookers', 'ogone', 'paypal', 'paypalapi', 'socolissimo', 'treepodia', 'trustedshops', 'secuvad', 'reverso', 'iadvize', 'fianetfraud', 'fianetsceau');
 	}
 	
 	public function postProcess()
