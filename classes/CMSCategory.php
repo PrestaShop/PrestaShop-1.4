@@ -242,6 +242,8 @@ class CMSCategoryCore extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_category` WHERE `id_cms_category` IN ('.$list.')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_category_lang` WHERE `id_cms_category` IN ('.$list.')');
 
+		self::cleanPositions($this->id_parent);
+		
 		/* Delete pages which are in categories to delete */
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_cms`
@@ -254,6 +256,22 @@ class CMSCategoryCore extends ObjectModel
 				$product->delete();
 		}
 		return true;
+	}
+	
+	/**
+	 * Delete several categories from database
+	 *
+	 * return boolean Deletion result
+	 */
+	public function deleteSelection($categories)
+	{
+		$return = 1;
+		foreach ($categories AS $id_category_cms)
+		{
+			$category_cms = new CMSCategory(intval($id_category_cms));
+			$return &= $category_cms->delete();
+		}
+		return $return;
 	}
 
 	/**

@@ -228,6 +228,8 @@ class CategoryCore extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.$list.')');
 
+		self::cleanPositions($this->id_parent);
+		
 		/* Delete categories images */
 		require_once(_PS_ROOT_DIR_.'/images.inc.php');
 		foreach ($toDelete AS $id_category)
@@ -253,6 +255,22 @@ class CategoryCore extends ObjectModel
 		NOT IN (SELECT `id_category` FROM `'._DB_PREFIX_.'category`)');
 
 		return true;
+	}
+	
+	/**
+	 * Delete several categories from database
+	 *
+	 * return boolean Deletion result
+	 */
+	public function deleteSelection($categories)
+	{
+		$return = 1;
+		foreach ($categories AS $id_category)
+		{
+			$category = new Category(intval($id_category));
+			$return &= $category->delete();
+		}
+		return $return;
 	}
 
 	/**
