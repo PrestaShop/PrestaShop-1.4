@@ -1353,9 +1353,9 @@ class ToolsCore
 			{
 				//RewriteRule ^lang-es/contacto$ contact-form.php [QSA,L,E]
 				if (!empty($meta['url_rewrite']))
-					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'];
+					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
-					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'];					
+					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';					
 			}
 		}						
 		
