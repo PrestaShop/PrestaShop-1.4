@@ -223,34 +223,34 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					<span id="pretaxe_price"><span id="pretaxe_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>&nbsp;{l s='tax excl.'}</span>
 				{/if}
 				<br />
-			</p>
-			{if $product->specificPrice AND $product->specificPrice.reduction}
-				<p id="old_price"><span class="bold">
-				{if !$priceDisplay || $priceDisplay == 2}
-					<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct()}</span>
-						{if $tax_enabled}{l s='tax incl.'}{/if}
-				{/if}
-				{if $priceDisplay == 1}
-					<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct(true)}</span>
-						{if $tax_enabled}{l s='tax excl.'}{/if}
-				{/if}
-				</span>
 				</p>
-			{/if}
-			{if $product->specificPrice AND $product->specificPrice.reduction_type == 'percentage'}
-				<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->specificPrice.reduction*100}</span> %{l s=')'}</p>
-			{/if}
-			{if $packItems|@count}
-				<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>
-				<br class="clear" />
-			{/if}
-			{if $product->ecotax != 0}
-				<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
-			{/if}
-			{if !empty($product->unity) && $unit_price > 0.000000}
-				<p class="unit-price"><span id="unit_price_display">{convertPrice price=$unit_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
-			{/if}
-			{*close if for show price*}
+				{if $product->specificPrice AND $product->specificPrice.reduction}
+					<p id="old_price"><span class="bold">
+					{if !$priceDisplay || $priceDisplay == 2}
+						<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct()}</span>
+							{if $tax_enabled}{l s='tax incl.'}{/if}
+					{/if}
+					{if $priceDisplay == 1}
+						<span id="old_price_display">{convertPrice price=$product->getPriceWithoutReduct(true)}</span>
+							{if $tax_enabled}{l s='tax excl.'}{/if}
+					{/if}
+					</span>
+					</p>
+				{/if}
+				{if $product->specificPrice AND $product->specificPrice.reduction_type == 'percentage'}
+					<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->specificPrice.reduction*100}</span> %{l s=')'}</p>
+				{/if}
+				{if $packItems|@count}
+					<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>
+					<br class="clear" />
+				{/if}
+				{if $product->ecotax != 0}
+					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
+				{/if}
+				{if !empty($product->unity) && $unit_price > 0.000000}
+					<p class="unit-price"><span id="unit_price_display">{convertPrice price=$unit_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
+				{/if}
+				{*close if for show price*}
 			{/if}
 			
 			{if isset($groups)}

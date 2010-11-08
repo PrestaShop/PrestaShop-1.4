@@ -871,7 +871,7 @@ class ProductCore extends ObjectModel
 	* @param string $upc Upc barcode
 	* @return array Update result
 	*/
-	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
+	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $unit, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
 	{
 		Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
@@ -885,6 +885,7 @@ class ProductCore extends ObjectModel
 		'ecotax' => floatval($ecotax),
 		'quantity' => intval($quantity),
 		'weight' => ($weight ? floatval($weight) : 0),
+		'unit_price_impact' => ($unit ? floatval($unit) : 0),
 		'reference' => pSQL($reference), 
 		'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location),
@@ -2705,10 +2706,14 @@ class ProductCore extends ObjectModel
 	
 	public function getWsCategories()
 	{
-		$result = Db::getInstance()->executeS('SELECT id_category AS id from `'._DB_PREFIX_.'category_product` WHERE id_product = '.(int)$this->id);
+		$result = Db::getInstance()->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
 		return $result;
 	}
 	
+	public function getBasicPrice()
+	{
+		return Db::getInstance()->getValue('SELECT `price` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.intval($this->id));
+	}
 }
 
 ?>

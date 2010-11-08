@@ -252,7 +252,7 @@ function updateDisplay()
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 
 		var priceReduct = !(reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
-		var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate * (1 - parseFloat(reduction_percent));
+		var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate;
 		var priceProduct = productPriceWithoutReduction2 - priceReduct;
 
 		if (!noTaxForThisProduct)
@@ -275,9 +275,11 @@ function updateDisplay()
 			productPricePretaxed *= group_reduction;
 			newUnitPrice *= group_reduction;
 		}
-		if (productUnitPrice)
+		if (productPriceWithoutReduction2 && priceProduct)
+			newUnitPrice *= parseFloat(priceProduct) / parseFloat(productPriceWithoutReduction2);
 		
-		$('#unit_price_display').text(formatCurrency(newUnitPrice, currencyFormat, currencySign, currencyBlank));
+		if (productUnitPrice)
+			$('#unit_price_display').text(formatCurrency(newUnitPrice, currencyFormat, currencySign, currencyBlank));
 		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));

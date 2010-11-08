@@ -9,8 +9,8 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impa
 	getE('submitProductAttribute').value = modifyattributegroup;
 	getE('attribute_wholesale_price').value = Math.abs(wholesale_price);
 	getE('attribute_price').value = Math.abs(price_impact);
-	getE('attribute_weight').value = weight_impact;
-	getE('attribute_unity').value = unit_impact;
+	getE('attribute_weight').value = Math.abs(weight_impact);
+	getE('attribute_unity').value = Math.abs(unit_impact);
 	getE('attribute_ecotax').value = eco_tax;
 	getE('attribute_location').value = location;
 	if (default_attribute == 1)

@@ -391,6 +391,7 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'),
 								Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
+								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
 								Tools::getValue('attribute_ecotax'),
 								Tools::getValue('attribute_quantity'),
 								Tools::getValue('id_image_attr'),
