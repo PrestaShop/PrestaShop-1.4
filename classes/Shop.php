@@ -14,6 +14,11 @@
 
 class ShopCore extends ObjectModel
 {
+	public function __construct()
+	{
+	
+	}
+	
 	static public function getShops()
 	{
 		/*return Db::getInstance()->ExecuteS('
