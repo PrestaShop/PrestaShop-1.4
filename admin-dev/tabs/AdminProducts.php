@@ -599,8 +599,9 @@ class AdminProducts extends AdminTab
 					$specificPrice->to = !$to ? '0000-00-00 00:00:00' : $to;
 					if (!$specificPrice->add())
 						$this->_errors = Tools::displayError('An error occured while updating the specific price');
+					else
+						Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 				}
-				Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -705,7 +706,7 @@ class AdminProducts extends AdminTab
 	{
 		if (!Validate::isUnsignedId($id_shop) OR !Validate::isUnsignedId($id_currency) OR !Validate::isUnsignedId($id_country) OR !Validate::isUnsignedId($id_group))
 			$this->_errors[] = Tools::displayError('Wrong ids!');
-		elseif (!Validate::isPrice($price) OR !Validate::isPrice($reduction))
+		elseif ((empty($price) AND empty($reduction)) OR (!empty($price) AND !Validate::isPrice($price)) OR (!empty($reduction) AND !Validate::isPrice($reduction)))
 			$this->_errors[] = Tools::displayError('Invalid price/reduction amount');
 		elseif (!Validate::isUnsignedInt($from_quantity))
 			$this->_errors[] = Tools::displayError('Invalid quantity');
@@ -1342,10 +1343,10 @@ class AdminProducts extends AdminTab
 
 	private function _getFinalPrice($specificPrice, $productPrice)
 	{
-		if (!$specificPrice['reduction'])
+		$price = floatval($specificPrice['price']) ? $specificPrice['price'] : $productPrice;
+		if (!floatval($specificPrice['reduction']))
 			return floatval($specificPrice['price']);
-		$price = $specificPrice['price'] ? $specificPrice['price'] : $productPrice;
-		return $specificPrice['reduction_type'] == 'amout' ? $price - $specificPrice['reduction'] : $price - $price * $specificPrice['reduction'];
+		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction']) : ($price - $price * $specificPrice['reduction']);
 	}
 
 	protected function _displaySpecificPriceModificationForm($shops, $currencies, $countries, $groups)
