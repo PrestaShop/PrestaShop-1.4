@@ -608,28 +608,6 @@ abstract class ModuleCore
 		return (array_key_exists(intval($id_hook).'-'.intval($this->id), self::$exceptionsCache) ? self::$exceptionsCache[intval($id_hook).'-'.intval($this->id)] : array());
 	}
 
-	public static function display($file, $template)
-	{
-		global $smarty;
-		$previousTemplate = $smarty->currentTemplate;
-		$smarty->currentTemplate = substr(basename($template), 0, -4);
-		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
-		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template))
-		{
-			$smarty->assign('module_template_dir', _THEME_DIR_.'modules/'.basename($file, '.php').'/');
-			$result = $smarty->fetch(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template);
-		}
-		elseif (Tools::file_exists_cache(dirname($file).'/'.$template))
-		{
-			$smarty->assign('module_template_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
-			$result = $smarty->fetch(dirname($file).'/'.$template);
-		}
-		else
-			$result = Tools::displayError('No template found');
-		$smarty->currentTemplate = $previousTemplate;
-		return $result;
-	}
-
 	public static function isInstalled($moduleName)
 	{
 		Db::getInstance()->Execute('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
@@ -648,5 +626,58 @@ abstract class ModuleCore
 		WHERE h.`name` = \''.pSQL($hook).'\'
 		AND hm.`id_module` = '.intval($this->id)
 		);
+	}
+
+	/*
+	** Template management (display, overload, cache)
+	*/
+	protected static function _isTemplateOverloadedStatic($moduleName, $template)
+	{
+		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
+			return true;
+		elseif (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+			return false;
+		return NULL;
+	}
+
+	protected function _isTemplateOverloaded($template)
+	{
+		return self::_isTemplateOverloadedStatic($this->name, $template);
+	}
+
+	public static function display($file, $template, $cacheId = NULL, $compileId = NULL)
+	{
+		global $smarty;
+		$previousTemplate = $smarty->currentTemplate;
+		$smarty->currentTemplate = substr(basename($template), 0, -4);
+		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
+		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === NULL)
+			$result = Tools::displayError('No template found');
+		else
+		{
+			$smarty->assign('module_template_dir', ($overloaded ? _THEME_DIR_ : __PS_BASE_URI__).'modules/'.basename($file, '.php').'/'.$template);
+			$result = $smarty->fetch(($overloaded ? _PS_THEME_DIR_.'modules/'.basename($file, '.php') : _PS_MODULE_DIR_.basename($file, '.php')).'/'.$template, $cacheId, $compileId);
+		}
+		$smarty->currentTemplate = $previousTemplate;
+		return $result;
+	}
+
+	protected function _getApplicableTemplateDir($template)
+	{
+		return $this->_isTemplateOverloaded($template) ? _PS_THEME_DIR_ : _PS_MODULE_DIR_.$this->name.'/';
+	}
+
+	public function isCached($template, $cacheId = NULL, $compileId = NULL)
+	{
+		global $smarty;
+
+		return $smarty->is_cached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
+	}
+
+	protected function _clearCache($template, $cacheId = NULL, $compileId = NULL)
+	{
+		global $smarty;
+
+		return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 	}
 }

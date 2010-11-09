@@ -689,6 +689,21 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN
 
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
 
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
+('categoryAddition', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
+('categoryUpdate', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
+('categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0);
+
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
+((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
+(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryAddition'), 1),
+((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
+(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryUpdate'), 1),
+((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
+(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryDeletion'), 1);
+
+DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;

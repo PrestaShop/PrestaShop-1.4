@@ -14,6 +14,8 @@
 class ToolsCore
 {
 	protected static $file_exists_cache = array();
+	protected static $_forceCompile;
+	protected static $_caching;
 	
 	/**
 	* Random password generator
@@ -1479,7 +1481,26 @@ FileETag INode MTime Size
 	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong>', E_USER_WARNING);
 		}
 	}
-	
+
+	public static function forceCache($level = 1)
+	{
+		global $smarty;
+
+		if ($smarty->force_compile == 0 AND $smarty->caching == $level)
+			return ;
+		self::$_forceCompile = intval($smarty->force_compile);
+		self::$_caching = intval($smarty->caching);
+		$smarty->force_compile = 0;
+		$smarty->caching = intval($level);
+	}
+
+	public static function restoreCacheSettings()
+	{
+		global $smarty;
+
+		$smarty->force_compile = intval(self::$_forceCompile);
+		$smarty->caching = intval(self::$_caching);
+	}
 }
 
 /**

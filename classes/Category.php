@@ -122,8 +122,8 @@ class CategoryCore extends ObjectModel
 				$this->name[$k] = '0'.$value;
 		$ret = parent::add($autodate);
 		$this->updateGroup(Tools::getValue('groupBox'));
+		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return $ret;
-		d($this);
 	}
 
 	public	function update($nullValues = false)
@@ -133,7 +133,9 @@ class CategoryCore extends ObjectModel
 			if (preg_match('/^[1-9]\./', $value))
 				$this->name[$k] = '0'.$value;
 		$this->cleanPositions($this->id_parent);
-		return parent::update();
+		$ret = parent::update();
+		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
+		return $ret;
 	}
 
 	/**
@@ -254,6 +256,7 @@ class CategoryCore extends ObjectModel
 		WHERE `id_category_default`
 		NOT IN (SELECT `id_category` FROM `'._DB_PREFIX_.'category`)');
 
+		Module::hookExec('categoryDeletion'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return true;
 	}
 	
