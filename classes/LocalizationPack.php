@@ -171,7 +171,7 @@ class LocalizationPackCore
 
 	private function _installUnits($xml)
 	{
-		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT');
+		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_SHORT_DISTANCE_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_LONG_DISTANCE_UNIT');
 		if (isset($xml->units->unit))
 			foreach ($xml->units->unit as $data)
 			{
