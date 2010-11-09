@@ -100,10 +100,11 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
 	WHERE `deleted` = 0
-	AND (`email` LIKE "%'.pSQL($filter).'%"
+	AND '.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.intval($filter) : '(`email` LIKE "%'.pSQL($filter).'%"
 	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.intval($filterArray[1]) : '').'
+	'.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.intval($filter) : '').'
 	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
-	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%")
+	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%")').'
 	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
 	LIMIT 50');
 	
@@ -111,8 +112,8 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	SELECT g.`id_group`, gl.`name`
 	FROM `'._DB_PREFIX_.'group` g
 	LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($cookie->id_lang).')
-	WHERE gl.`name` LIKE "%'.pSQL($filter).'%"
-	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 1) ? 'OR g.`id_group` = '.intval($filterArray[1]) : '').'
+	WHERE '.(Validate::isUnsignedInt($filter) ? 'g.`id_group` = '.intval($filter) : 'gl.`name` LIKE "%'.pSQL($filter).'%"
+	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 1) ? 'OR g.`id_group` = '.intval($filterArray[1]) : '')).'
 	ORDER BY gl.`name` ASC
 	LIMIT 50');
 	
