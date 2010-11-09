@@ -616,10 +616,10 @@ class ToolsCore
 	{
 		return !empty($string) ? self::encrypt($string) : false;
 	}
-	static public function getAdminTokenLite($string)
+	static public function getAdminTokenLite($tab)
 	{
 		global $cookie;
-		return Tools::getAdminToken($string.intval(Tab::getIdFromClassName($string)).intval($cookie->id_employee));
+		return Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee));
 	}
 
 	/**

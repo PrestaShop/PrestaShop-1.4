@@ -296,6 +296,7 @@ class AdminModules extends AdminTab
 
 		echo '
 		<script type="text/javascript">
+			function getPrestaStore(){if (getE("prestastore").style.display!=\'block\')return;$.post("'.dirname($currentIndex).'/ajax.php",{page:"prestastore"},function(a){getE("prestastore-content").innerHTML=a;})}
 			function modules_management(action)
 			{
 				var modules = document.getElementsByName(\'modules\');
@@ -314,11 +315,7 @@ class AdminModules extends AdminTab
 					}
 				}
 				document.location.href=\''.$currentIndex.'&token='.$this->token.'&\'+action+\'=\'+module_list.substring(1, module_list.length);
-			}
-			 $(document).ready(function() {
-				
-			});
-			
+			}			
 		</script>';
 	}
 		
@@ -367,14 +364,15 @@ class AdminModules extends AdminTab
 	
 		$this->displayJavascript();
 			
-		$linkToSettings = 'index.php?tab=AdminPreferences&token='.Tools::getAdminToken('AdminPreferences'.intval(Tab::getIdFromClassName('AdminPreferences')).intval($cookie->id_employee));
-		echo '<span onclick="openCloseLayer(\'module_install\', 0);" style="cursor: pointer;font-weight: 700; float: left;"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</span>';
-		if (Configuration::get('PRESTASTORE_LIVE') AND @ini_get('allow_url_fopen'))
-			echo '<script type="text/javascript">
-				function getPrestaStore(){if (getE("prestastore").style.display!=\'block\')return;$.post("'.dirname($currentIndex).'/ajax.php",{page:"prestastore"},function(a){getE("prestastore-content").innerHTML=a;})}
-			</script>
-			<span onclick="openCloseLayer(\'prestastore\', 0); getPrestaStore();" style="cursor: pointer;font-weight: 700; float: left;margin-left:20px;"><img src="../img/admin/prestastore.gif" class="middle" /> '.$this->l('PrestaStore').'</span>&nbsp;(<a href="'.$linkToSettings.'">'.$this->l('disable').'</a>)';
 		echo '
+		<span onclick="openCloseLayer(\'module_install\', 0);" style="cursor:pointer"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" />
+			'.$this->l('Add a module from my computer').'
+		</span>
+		&nbsp;|&nbsp;
+		<a href="index.php?tab=AdminAddonsMyAccount&token='.Tools::getAdminTokenLite('AdminAddonsMyAccount').'">
+			<img src="http://addons.prestashop.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />
+			'.$this->l('Add a module from PrestaShop Addons').'
+		</a>
 		<div class="clear">&nbsp;</div>
 		<div id="module_install" style="float: left;'.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'" class="width1">
 			<fieldset>
@@ -407,10 +405,6 @@ class AdminModules extends AdminTab
 		if (Configuration::get('PRESTASTORE_LIVE'))
 			echo '
 			<div id="prestastore" style="margin-left:40px; display:none; float: left" class="width1">
-				<fieldset>
-					<legend><img src="http://addons.prestashop.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />'.$this->l('Live from PrestaShop Addons!').'</legend>
-					<div id="prestastore-content"></div>
-				</fieldset>
 			</div>';
 		echo '<div class="clear">&nbsp;</div>';
 
