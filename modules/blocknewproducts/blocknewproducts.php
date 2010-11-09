@@ -89,7 +89,7 @@ class BlockNewProducts extends Module
 		
 	public function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocknewproducts.css', 'all');
+		Tools::addCSS(($this->_path).'blocknewproducts.css', 'all');
 	}
 
 }

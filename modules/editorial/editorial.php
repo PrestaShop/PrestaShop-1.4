@@ -319,6 +319,6 @@ class Editorial extends Module
 	
 	public function hookHeader()
 	{
-		Tools::addCSS($this->_path.'editorial.css', 'all');
+		Tools::addCSS(($this->_path).'editorial.css', 'all');
 	}
 }

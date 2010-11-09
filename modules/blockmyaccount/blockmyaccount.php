@@ -59,7 +59,7 @@ class BlockMyAccount extends Module
 	}
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockmyaccount.css', 'all');
+		Tools::addCSS(($this->_path).'blockmyaccount.css', 'all');
 	}
 }
 

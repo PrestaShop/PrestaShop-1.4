@@ -44,7 +44,7 @@ class BlockUserInfo extends Module
 	
 	public function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockuserinfo.css', 'all');
+		Tools::addCSS(($this->_path).'blockuserinfo.css', 'all');
 	}
 }
 

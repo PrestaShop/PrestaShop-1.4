@@ -40,7 +40,7 @@ class BlockCurrencies extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcurrencies.css', 'all');
+		Tools::addCSS(($this->_path).'blockcurrencies.css', 'all');
 	}
 }
 

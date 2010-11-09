@@ -117,7 +117,7 @@ class BlockAdvertising extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockadvertising.css', 'all');
+		Tools::addCSS(($this->_path).'blockadvertising.css', 'all');
 	}
 
 }

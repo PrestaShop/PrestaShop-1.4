@@ -105,7 +105,7 @@ class BlockSupplier extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocksupplier.css', 'all');
+		Tools::addCSS(($this->_path).'blocksupplier.css', 'all');
 	}
 }
 

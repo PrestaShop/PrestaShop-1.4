@@ -87,7 +87,7 @@ class BlockBestSellers extends Module
 
 	public function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockbestsellers.css', 'all');
+		Tools::addCSS(($this->_path).'blockbestsellers.css', 'all');
 	}
 
 }

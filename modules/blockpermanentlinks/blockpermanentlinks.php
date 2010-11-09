@@ -51,7 +51,7 @@ class BlockPermanentLinks extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockpermanentlinks.css', 'all');
+		Tools::addCSS(($this->_path).'blockpermanentlinks.css', 'all');
 	}
 }
 

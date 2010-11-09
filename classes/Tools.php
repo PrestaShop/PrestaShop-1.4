@@ -1141,16 +1141,48 @@ class ToolsCore
 	
 	static public function addJS($js_uri) {
 		global $js_files;
+
+		// avoid useless opération...
+		if (in_array($js_uri, $js_files))
+			return true;
+
+		//overriding of modules js files
+		$different = 0;
+		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $js_uri, $different);
+		if ($different && file_exists($override_path))
+			$js_uri = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $js_uri, $different);
+
+		// detect mass add
 		if (!is_array($js_uri))
 			$js_uri = array($js_uri);
+
+		// adding file to the big array...
 		$js_files = array_merge($js_files, $js_uri);
+
+		return true;
 	}
 
 	static public function addCSS($css_uri, $css_media_type = 'all') {
 		global $css_files;
+		
+		// avoid useless opération...
+		if (array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
+			return true;
+
+		//overriding of modules css files
+		$different = 0;
+		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
+		if ($different && file_exists($override_path))
+			$css_uri = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
+
+		// detect mass add
 		if (!is_array($css_uri))
 			$css_uri = array($css_uri => $css_media_type);
+
+		// adding file to the big array...
 		$css_files = array_merge($css_files, $css_uri);
+
+		return true;
 	}
 	
 	

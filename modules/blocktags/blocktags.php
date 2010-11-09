@@ -92,7 +92,7 @@ class BlockTags extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blocktags.css', 'all');
+		Tools::addCSS(($this->_path).'blocktags.css', 'all');
 	}
 
 }

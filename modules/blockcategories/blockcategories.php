@@ -181,7 +181,7 @@ class BlockCategories extends Module
 	public function hookHeader()
 	{
 		Tools::addJS(_THEME_JS_DIR_.'tools/treeManagement.js');
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockcategories.css', 'all');
+		Tools::addCSS(($this->_path).'blockcategories.css', 'all');
 	}
 
 	private function _clearBlockcategoriesCache()

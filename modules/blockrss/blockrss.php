@@ -124,7 +124,7 @@ class Blockrss extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockrss.css', 'all');
+		Tools::addCSS(($this->_path).'blockrss.css', 'all');
 	}
 }
 

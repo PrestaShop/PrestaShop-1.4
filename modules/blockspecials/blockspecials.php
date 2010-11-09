@@ -71,7 +71,7 @@ class BlockSpecials extends Module
 		
 	public function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockspecials.css', 'all');
+		Tools::addCSS(($this->_path).'blockspecials.css', 'all');
 	}
 }
 
