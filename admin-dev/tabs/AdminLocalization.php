@@ -85,7 +85,7 @@ class AdminLocalization extends AdminPreferences
 					<input type="checkbox" name="selection[]" value="units" /> '.$this->l('Units (e.g., weight, volume)').'
 				</div>
 				<div align="center" style="margin-top: 20px;">
-					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Save   ').'" />
+					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Import   ').'" />
 				</div>
 			</div>
 		</fieldset>';
