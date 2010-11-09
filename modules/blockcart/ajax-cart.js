@@ -164,10 +164,7 @@ var ajaxCart = {
 				if (whishlist && !jsonData.errors)
 					WishlistAddProductCart(whishlist[0], idProduct, idCombination, whishlist[1]);
 					
-					
-					
 				//apply 'transfert' effect
-				console.log('dd');
 				var elementToTransfert = null;
 				if (callerElement && callerElement != null)
 					$(callerElement).parents().each( function() {

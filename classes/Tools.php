@@ -1166,8 +1166,8 @@ class ToolsCore
 		global $css_files;
 		
 		// avoid useless opération...
-		if (array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
-			return true;
+		//if (is_array($css_files) && array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
+		//	return true;
 
 		//overriding of modules css files
 		$different = 0;
