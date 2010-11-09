@@ -17,7 +17,7 @@ body {
 	font-size: 11px;
 	font-family: Verdana, Arial, Helvetica, Sans-Serif;
 	color: #5d717e;
-	text-align: center;
+	text-align: center
 }
 
 /* Useful */
@@ -41,7 +41,7 @@ br.clear {
 	font-size: 0;
 	height: 0
 }
-noscript ul {list-style-type: none; background: black; color: white; padding: 10px; border: 1px solid gray }
+noscript ul { list-style-type: none; background: black; color: white; padding: 10px; border: 1px solid gray }
 /* new clearfix */
 .clearfix:after { 
 	clear: both; 
@@ -215,21 +215,18 @@ h1#logo {
 	margin: 0 0 30px 0;
 	overflow: hidden
 }
-#old_center_column {
-	display:none;
-}
+#old_center_column { display: none }
 
 .ac_results_instant {
-	display:none;
-	visibility:hidden;
+	display: none;
+	visibility: hidden
 }
-
-#instant_search_results a.close{
-	background:url("../img/nav-logout.gif") no-repeat scroll right 2px transparent;
-	float:right;
-	margin-right:7px;
-	padding-right:21px;
-	text-transform:none;
+#instant_search_results a.close {
+	background: url("../img/nav-logout.gif") no-repeat scroll right 2px transparent;
+	float: right;
+	margin-right: 7px;
+	padding-right: 21px;
+	text-transform: none
 }
 
 #right_column {
@@ -266,7 +263,7 @@ body.mceContentBody {
 	margin: 0.75em 0 0.3em 0;
 	color: #374853
 }
-.rte h1, 
+.rte h1,
  .mceContentBody h1 {
 	font-size: 25px;
 	font-weight: bold
@@ -1031,7 +1028,7 @@ td.cart_quantity {
 	width: 7.5em;
 	text-align: right
 }
-.cart_quantity_input{float:right;margin-right:10px}
+.cart_quantity_input { float: right; margin-right: 10px }
 td.cart_quantity p, td.cart_quantity a {
 	float: left;
 	display: inline
@@ -1349,7 +1346,7 @@ ul.typedText {
 	width: 100px;
 	overflow: hidden
 }
-#productscategory_list li a{
+#productscategory_list li a {
 	margin: auto;
 }
 #productscategory_scroll_left,
@@ -1392,9 +1389,7 @@ ul.typedText {
 	width: 100px;
 	overflow: hidden
 }
-#crossselling_list li a{
-	margin: auto;
-}
+#crossselling_list li a { margin: auto }
 #crossselling_scroll_left,
  #crossselling_scroll_right {
 	background: url('../img/thumbs_left.gif') no-repeat center;
@@ -1436,9 +1431,7 @@ ul.typedText {
 #mywishlist #hideBoughtProductsInfos,
 #mywishlist #hideSendWishlist { display: none }
 #mywishlist #showBoughtProductsInfos,
-#mywishlist #hideBoughtProductsInfos {
-	margin-left: 5px;
-}
+#mywishlist #hideBoughtProductsInfos { margin-left: 5px }
 #mywishlist #showSendWishlist,
 #mywishlist #hideSendWishlist,
 #mywishlist div#block-order-detail ul li a.exclusive {
