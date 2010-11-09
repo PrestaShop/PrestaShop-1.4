@@ -17,6 +17,7 @@ class LinkCore
 	/** @var boolean Rewriting activation */
 	private $allow;
 	private $url;
+	private $cache = array('page' => array());
 
 	/**
 	  * Constructor (initialization only)
@@ -134,21 +135,26 @@ class LinkCore
 	public function getPageLink($filename, $ssl = false)
 	{
 		global $iso, $cookie;
-		$base = _PS_BASE_URL_;
-		if ($ssl)
-			$base = Tools::getHttpHost(true);
-		if ($this->allow == 1 && file_exists($filename))
-		{
-			$pagename = substr($filename, 0, -4);
-			$url_rewrite = Db::getInstance()->getValue('
-			SELECT url_rewrite
-			FROM `'._DB_PREFIX_.'meta` m
-			LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-			WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-			$uri_path = $url_rewrite ? 'lang-'.$iso.'/'.$url_rewrite : $filename;
-		}
+		$base = $ssl ? _PS_BASE_URL_ : Tools::getHttpHost(true);
+		
+		if (array_key_exists($filename, $this->cache['page']))
+			$uri_path = $this->cache['page'][$filename];
 		else
-			$uri_path = $filename;
+		{
+			if ($this->allow == 1 && file_exists($filename))
+			{
+				$pagename = substr($filename, 0, -4);
+				$url_rewrite = Db::getInstance()->getValue('
+				SELECT url_rewrite
+				FROM `'._DB_PREFIX_.'meta` m
+				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+				WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'');
+				$uri_path = $url_rewrite ? 'lang-'.$iso.'/'.$url_rewrite : $filename;
+			}
+			else
+				$uri_path = $filename;
+			$this->cache['page'][$filename] = $uri_path;
+		}
 		return $base.__PS_BASE_URI__.$uri_path;
 	}
 
