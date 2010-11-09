@@ -24,7 +24,7 @@ class AdminModules extends AdminTab
 	private $listTabModules ;
 	private $listPartnerModules ;
 	private $listNativeModules ;
-	
+
 	function __construct()
 	{
 		parent::__construct ();
@@ -51,52 +51,20 @@ class AdminModules extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex, $cookie;
-
-		if (Tools::isSubmit('filterModules1'))
-		{
-				Configuration::updateValue('PS_SHOW_ALL_MODULES', 0);
-				Configuration::updateValue('PS_SHOW_NATIVE_MODULES', 0);
-				Configuration::updateValue('PS_SHOW_PARTNERS_MODULES', 0);
-				Configuration::updateValue('PS_SHOW_OTHERS_MODULES', 0);
-				Configuration::updateValue('PS_SHOW_COUNTRY_MODULES', 0);
-			switch (Tools::getValue('filter'))
-			{
-				case 'all_modules':
-				Configuration::updateValue('PS_SHOW_ALL_MODULES', 1);
-				Configuration::updateValue('PS_SHOW_INSTALLED_MODULES', 0);
-				Configuration::updateValue('PS_SHOW_UNINSTALLED_MODULES', 0);
-				break;
-				case 'native_modules':
-				Configuration::updateValue('PS_SHOW_NATIVE_MODULES', 1);
-				break;
-				case 'partners_modules':
-				Configuration::updateValue('PS_SHOW_PARTNERS_MODULES', 1);
-				break;
-				case 'others_modules':
-				Configuration::updateValue('PS_SHOW_OTHERS_MODULES', 1);
-				break;
-				case 'country_modules':
-				if(Tools::getValue('country_module_value'))
-					Configuration::updateValue('PS_SHOW_COUNTRY_MODULES', 1);
-				else
-					Configuration::updateValue('PS_SHOW_ALL_MODULES', 1);
-				break;
-			}
-		}
-		elseif (Tools::isSubmit('filterModules2'))
-		{
-			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES', 0);
-			Configuration::updateValue('PS_SHOW_UNINSTALLED_MODULES', 0);
 			
-			switch (Tools::getValue('filter'))
-			{
-			case 'installed_modules':
-				Configuration::updateValue('PS_SHOW_INSTALLED_MODULES', 1);
-				break;
-			case 'uninstalled_modules':
-				Configuration::updateValue('PS_SHOW_UNINSTALLED_MODULES', 1);
-				break;
-			}
+		if (Tools::isSubmit('filterModules'))
+		{
+			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_type'));
+			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee), Tools::getValue('country_module_value'));
+			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_install'));
+			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_status'));
+		}
+		elseif (Tools::isSubmit('resetFilterModules'))
+		{
+			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee), 'allModules');
+			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee), 0);
+			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee), 'installedUninstalled');
+			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee), 'enabledDisabled');
 		}
 		if (Tools::isSubmit('active'))
 		{
@@ -323,13 +291,11 @@ class AdminModules extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		
-		$showAllModules = Configuration::get('PS_SHOW_ALL_MODULES');
-		$showNativeModules = Configuration::get('PS_SHOW_NATIVE_MODULES');
-		$showPartnerModules = Configuration::get('PS_SHOW_PARTNERS_MODULES');
-		$showOthersModules = Configuration::get('PS_SHOW_OTHERS_MODULES');
-		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES');
-		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES');
-		$showUninstalledModules = Configuration::get('PS_SHOW_UNINSTALLED_MODULES');
+		$showTypeModules = Configuration::get('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee));
+		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee));
+		$showEnabledModules = Configuration::get('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee));
+		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee));
+
 		$nameCountryDefault = Country::getNameById($cookie->id_lang, Configuration::get('PS_COUNTRY_DEFAULT'));
 		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
@@ -342,25 +308,50 @@ class AdminModules extends AdminTab
 		//filter module list
 		foreach($modules as $key => $module)
 		{
-		if (!$showAllModules)
-			if ($showNativeModules)
-				if (!in_array($module->name, $this->listNativeModules))
+			switch ($showTypeModules)
+			{
+				case 'nativeModules':
+					if (!in_array($module->name, $this->listNativeModules))
+						unset($modules[$key]);
+				break;
+				case 'partnerModules':
+					if (!in_array($module->name, $this->listPartnerModules))
+						unset($modules[$key]);
+				break;
+				case 'otherModules':
+					if (in_array($module->name, $this->listPartnerModules) OR in_array($module->name, $this->listNativeModules))
+						unset($modules[$key]);
+				break;
+			}
+					
+			switch ($showInstalledModules)
+			{
+				case 'installed':
+					if (!$module->id)
+						unset($modules[$key]);
+				break;
+				case 'unistalled':
+					if ($module->id)
+						unset($modules[$key]);
+				break;
+			}
+			
+			switch ($showEnabledModules)
+			{
+				case 'enabled':
+					if (!$module->active)
+						unset($modules[$key]);
+				break;
+				case 'disabled':
+					if ($module->active)
+						unset($modules[$key]);
+				break;
+			}		
+			if ($showCountryModules)		
+				if ((isset($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)))
 					unset($modules[$key]);
-			if ($showPartnerModules)
-				if (!in_array($module->name, $this->listPartnerModules))
-					unset($modules[$key]);
-			if ($showOthersModules)
-				if (in_array($module->name, $this->listPartnerModules) OR in_array($module->name, $this->listNativeModules))
-					unset($modules[$key]);
-			if ($showInstalledModules)
-				if (!$module->id)
-					unset($modules[$key]);
-			if ($showUninstalledModules)
-				if ($module->id)
-					unset($modules[$key]);
-			if ((isset($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)))
-				unset($modules[$key]);
 		}
+
 	
 		$this->displayJavascript();
 			
@@ -417,59 +408,57 @@ class AdminModules extends AdminTab
 			$orderModule[(isset($module->tab) AND !empty($module->tab) AND array_key_exists($module->tab, $this->listTabModules)) ? $module->tab : 'others' ][] = $module;
 		}					
 		asort($orderModule);
-
+		
+		$concatWarning = array();
 		foreach ($orderModule AS $tabModule)
 			foreach ($tabModule AS $module)
 				if ($module->active AND $module->warning)
-					$this->displayWarning('<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning)));
-		
-		echo '<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
+					$concatWarning[] ='<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning));
+		$this->displayWarning($concatWarning);
+		echo '<form method="POST">
+			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
 				<tr>
 					<th colspan="3">
-						<div style="height:30px;padding-top:5px;">
-							<span style="border-bottom: none;padding-right:5px;border-right:solid 1px gray">
-								<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules1&filter=all_modules" value="'.$this->l('All Modules').'" name="all_module" class="button big" '.($showAllModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-							</span>
-							<span style="border-bottom: none;padding-left:10px;">
-								<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules1&filter=native_modules" value="'.$this->l('Native Modules').'" name="native_module" class="button big" '.($showNativeModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-							</span>
-							<span style="border-bottom: none">
-								<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules1&filter=partners_modules" value="'.$this->l('Partners Modules').'" name="partner_module" class="button big" '.($showPartnerModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-							</span>
-							<span style="border-bottom: none">
-								<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules1&filter=others_modules" value="'.$this->l('Others Modules').'" name="other_module" class="button big" '.($showOthersModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-							</span>
-						</div>
+						<select name="module_type">
+							<option value="allModules" '.($showTypeModules == 'allModules' ? 'selected="selected"' : '').'>'.$this->l('All Modules').'</option>
+							<option value="nativeModules" '.($showTypeModules == 'nativeModules' ? 'selected="selected"' : '').'>'.$this->l('Native Modules').'</option>
+							<option value="partnerModules" '.($showTypeModules == 'partnerModules' ? 'selected="selected"' : '').'>'.$this->l('Partners Modules').'</option>
+							<option value="otherModules" '.($showTypeModules == 'otherModules' ? 'selected="selected"' : '').'>'.$this->l('Others Modules').'</option>
+						</select>
+						&nbsp;
+						<select name="module_install">
+							<option value="installedUninstalled" '.($showInstalledModules == 'installedUninstalled' ? 'selected="selected"' : '').'>'.$this->l('Installed & Uninstalled').'</option>
+							<option value="installed" '.($showInstalledModules == 'installed' ? 'selected="selected"' : '').'>'.$this->l('Installed Modules').'</option>
+							<option value="unistalled" '.($showInstalledModules == 'unistalled' ? 'selected="selected"' : '').'>'.$this->l('Uninstalled Modules').'</option>
+						</select>
+						&nbsp;
+						<select name="module_status">
+							<option value="enabledDisabled" '.($showEnabledModules == 'enabledDisabled' ? 'selected="selected"' : '').'>'.$this->l('Enabled & Disabled').'</option>
+							<option value="enabled" '.($showEnabledModules == 'enabled' ? 'selected="selected"' : '').'>'.$this->l('Enabled Modules').'</option>
+							<option value="disabled" '.($showEnabledModules == 'disabled' ? 'selected="selected"' : '').'>'.$this->l('Disabled Modules').'</option>
+						</select>
+						&nbsp;
+						<select name="country_module_value">
+							<option value="0" >'.$this->l('All country').'</option>
+							<option value="1" '.($showCountryModules == 1 ? 'selected="selected"' : '').'>'.$this->l('Current country:').' '.$nameCountryDefault.'</option>
+						</select>
 					</th>
 					<th colspan="2">
-						<div style="height:30px;padding-top:5px;">						
-							<span style="border-bottom: solid 1px">
-								<div style="float:right">
-									<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules2&filter=installed_modules" value="'.$this->l('Installed Modules').'" name="installed_module" class="button big" '.($showInstalledModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-									<input type="button" onclick=javascript:document.location.href="'.$currentIndex.'&token='.$this->token.'&filterModules2&filter=uninstalled_modules" value="'.$this->l('Uninstalled Modules').'" name="uninstalled_module" class="button big" '.($showUninstalledModules ? 'style="background-position:0 -25px;border-color:#CCCCCC"' : '').'>
-								</div>
-							</span>
+						<div style="float:right">
+							<input type="submit" class="button" name="resetFilterModules" value="'.$this->l('Reset').'">
+							<input type="submit" class="button" name="filterModules" value="'.$this->l('Filter').'">
 						</div>
 					</th>
-			  </tr>
-			  <tr>
-			  	<td colspan="5" style="height:40px;border-bottom:solid 1px;background-color:#EEEEEE">
-			  		<form method="POST" id="form_all_module" action="">
-			  			<input type="hidden" name="filter" value="country_modules">
-			  			<input type="hidden" name="filterModules1">
-						<input type="checkbox" name="country_module_value" style="vertical-align: middle;" id="all_module" '.(Configuration::get('PS_SHOW_COUNTRY_MODULES') ? 'checked="checked"' : '').' onclick="document.getElementById(\'form_all_module\').submit();" />&nbsp;&nbsp;
-						<label class="t" for="all_module">'.$this->l('Show only modules that can be used in my country').'</label> ('.$this->l('Current country:').' <a href="index.php?tab=AdminCountries&token='.Tools::getAdminToken('AdminCountries'.intval(Tab::getIdFromClassName('AdminCountries')).intval($cookie->id_employee)).'">'.$nameCountryDefault.'</a>)
-					</form>
-			  	</td>
-			  </tr>
+			  	</tr>
 				<tr style="height:35px;background-color:#EEEEEE">
-						<td><strong>'.$this->l('Icon legend').' : </strong></td>
-						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
-						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
-						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but some warnings').'</td>
-						<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
-					</tr>
-				</table>';
+					<td><strong>'.$this->l('Icon legend').' : </strong></td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but some warnings').'</td>
+					<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
+				</tr>
+			</table>
+			</form>';
 		
 		if ($tab_module = Tools::getValue('tab_module'))
 			if (array_key_exists($tab_module, $this->listTabModules))
@@ -484,13 +473,13 @@ class AdminModules extends AdminTab
 		<script>
 		 $(document).ready(function() {
 			 		$( "#accordion" ).accordion({
-					autoHeight: false,
-					navigation: false,
-					active: \'.active\',
-					active: \'.active\',
-			        selectedClass: \'.active\',
-			        header: "h4"
-				});
+						autoHeight: false,
+						navigation: false,
+						active: \'.active\',
+						active: \'.active\',
+				        selectedClass: \'.active\',
+				        header: "h4"
+					});
 					$("#accordion").accordion("activate", '.$goto.');
 					'.($goto != '0' ? '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 1000 , 
 						{onAfter:function(){
@@ -504,7 +493,6 @@ class AdminModules extends AdminTab
 										)}
 									)}
 								});' : '').'
-
 			});
 			
 		 </script>';
@@ -611,9 +599,6 @@ class AdminModules extends AdminTab
 		
 		if (intval($module->id) AND $module->active)
 			$return .= '<a class="action_module" href="'.$currentIndex.'&token='.$this->token.'&module_name='.urlencode($module->name).'&reset&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Reset').'</a>&nbsp;&nbsp;';
-		
-		if (intval($module->id))
-			$return .= '<a href="'.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Uninstall').'</a>&nbsp;&nbsp;';
 		
 		if (intval($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
