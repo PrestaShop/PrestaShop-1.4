@@ -459,5 +459,7 @@ $_LANG['Services'] = 'Services';
 $_LANG['Shoes and accessories'] = 'Chaussures et accessoires';
 $_LANG['Sport and Entertainment'] = 'Sport et loisirs';
 $_LANG['Travel'] = 'Voyage et tourisme';
+$_LANG['Main activity:'] = 'Activité principale';
+$_LANG['-- Please choose your main activity --'] = '-- Choisissez une activité --';
 
 ?>
