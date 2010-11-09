@@ -435,7 +435,8 @@ class AdminCustomerThreads extends AdminTab
 			ORDER BY date_add DESC LIMIT 1
 		)
 		'.($cookie->{'customer_threadFilter_cl!id_contact'} ? 'AND ct.id_contact = '.(int)$cookie->{'customer_threadFilter_cl!id_contact'} : '').'
-		'.($cookie->{'customer_threadFilter_l!id_lang'} ? 'AND ct.id_lang = '.(int)$cookie->{'customer_threadFilter_l!id_lang'} : ''));
+		'.($cookie->{'customer_threadFilter_l!id_lang'} ? 'AND ct.id_lang = '.(int)$cookie->{'customer_threadFilter_l!id_lang'} : '').
+		' ORDER BY ct.date_upd ASC');
 		if ($nextThread)
 			echo $this->displayButton('
 			<a href="'.$currentIndex.'&id_customer_thread='.(int)$nextThread.'&viewcustomer_thread&token='.$this->token.'">
