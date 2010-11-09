@@ -26,6 +26,9 @@ abstract class ObjectModelCore
 	/** @var array Required fields for admin panel forms */
  	protected $fieldsRequired = array();
 
+	/** @var array Required fields for admin panel forms */
+	protected $fieldsRequiredDatabase = array();	
+	
  	/** @var array Maximum fields size for admin panel forms */
  	protected $fieldsSize = array();
 
@@ -113,6 +116,11 @@ abstract class ObjectModelCore
 								$this->{$key}[$row['id_lang']] = stripslashes($value);
 			}
 		}
+		
+		$fields = $this->getfieldsRequiredDatabase();
+		if ($fields)
+			foreach ($fields AS $row)
+				$this->fieldsRequiredDatabase[(int)$row['id_required_field']] = pSQL($row['field_name']);
 	}
 
 	/**
@@ -314,7 +322,8 @@ abstract class ObjectModelCore
 	 */
 	public function validateFields($die = true, $errorReturn = false)
 	{
-		foreach ($this->fieldsRequired as $field)
+		$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+		foreach ($fieldsRequired as $field)
 			if (Tools::isEmpty($this->{$field}) AND (!is_numeric($this->{$field})))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' is empty)');
@@ -394,7 +403,8 @@ abstract class ObjectModelCore
 		$errors = array();
 
 		/* Checking for required fields */
-		foreach ($this->fieldsRequired AS $field)
+		$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+		foreach ($fieldsRequired AS $field)
 		if (($value = Tools::getValue($field, $this->{$field})) == false AND (string)$value != '0')
 			if (!$this->id OR $field != 'passwd')
 				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is required');
@@ -475,7 +485,9 @@ abstract class ObjectModelCore
 				);
 			}
 		if (isset($this->fieldsRequired))
-			foreach ($this->fieldsRequired as $fieldRequired)
+		{
+			$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+			foreach ($fieldsRequired as $fieldRequired)
 			{
 				if (!isset($resourceParameters['fields'][$fieldRequired]))
 					$resourceParameters['fields'][$fieldRequired] = array();
@@ -484,6 +496,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldRequired] = array('sqlId' => $fieldRequired, 'required' => true)
 				);
 			}
+		}
 		if (isset($this->fieldsSizeLang))
 			foreach ($this->fieldsSizeLang as $fieldName => $maxSize)
 			{
@@ -516,7 +529,7 @@ abstract class ObjectModelCore
 			}
 		return $resourceParameters;
 	}
-	
+		
 	public function getWebserviceObjectList($sql_filter, $sql_sort, $sql_limit)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -526,6 +539,29 @@ abstract class ObjectModelCore
 		'.($sql_limit != '' ? $sql_limit : '').'
 		');
 		return $result;
+	}
+	
+	public function getFieldsRequiredDatabase()
+	{
+		return Db::getInstance()->ExecuteS('SELECT id_required_field, object_name, field_name
+														FROM '._DB_PREFIX_.'required_field
+														WHERE object_name=\''.pSQL(get_class($this)).'\'');
+	}
+	
+	public function addFieldsRequiredDatabase($fields)
+	{
+		if (!is_array($fields))
+			return false;
+
+		if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'required_field WHERE object_name=\''.pSQL(get_class($this)).'\''))
+			return false;
+
+		foreach ($fields AS $field)
+			if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'required_field (id_required_field, object_name, field_name)
+																VALUES(\'\', \''.pSQL(get_class($this)).'\', \''.pSQL($field).'\')'))
+				return false;
+
+		return true;
 	}
 }
 

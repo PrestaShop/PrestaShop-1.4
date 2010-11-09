@@ -691,6 +691,7 @@ UPDATE `PREFIX_cms` SET `active` = 1;
 
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 
+
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
 
 CREATE TABLE `PREFIX_store` (
@@ -729,6 +730,13 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 (SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryDeletion'), 1);
 
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
+
+CREATE TABLE `PREFIX_required_field` (
+  `id_required_field` int(11) NOT NULL AUTO_INCREMENT,
+  `object_name` varchar(32) NOT NULL,
+  `field_name` varchar(32) NOT NULL,
+  PRIMARY KEY (`id_required_field`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=ut8;
 
 /* PHP */
 /* PHP:editorial_update(); */;

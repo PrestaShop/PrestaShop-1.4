@@ -46,6 +46,9 @@ abstract class AdminTabCore
 
 	/** @var boolean Tab Automatically displays duplicate icon if true */
 	public $duplicate = false;
+	
+	/** @var boolean select other required fields */
+	public $requiredDatabase = true;
 
 	/** @var boolean Tab Automatically displays '$color' as background color on listing if true */
 	public $colorOnBackground = false;
@@ -204,10 +207,57 @@ abstract class AdminTabCore
 			$this->getList(intval($cookie->id_lang));
 			$this->displayList();
 			$this->displayOptionsList();
+			$this->displayRequiredFields();
 			$this->includeSubTab('display');
 		}
 	}
+	
+	public function displayRequiredFields()
+	{
+		global $currentIndex;
+		if (!$this->tabAccess['add'] OR !$this->tabAccess['delete'] === '1' OR !$this->requiredDatabase)
+			return;
+		$rules = call_user_func_array(array($this->className, 'getValidationRules'), array($this->className));
+		$required_class_fields = array($this->identifier);
+		foreach ($rules['required'] AS $required)
+			$required_class_fields[] = $required;
+		
+		
+		echo '<br />
+						<fieldset class="width1"><legend>'.$this->l('Required Fields').'</legend><form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
+						<p><b>'.$this->l('Select the fields you want required.').'<br />
+						'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
+						<table cellspacing="0" cellpadding="0" class="table width1 clear">
+						<tr>
+							<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th>
+							<th>'.$this->l('Field Name').'</th>
+						</tr>';
 
+		$object = new $this->className();
+		$res = $object->getFieldsRequiredDatabase();
+
+		$required_fields = array();
+		if ($res)
+			foreach ($res AS $row)
+				$required_fields[(int)$row['id_required_field']] = $row['field_name'];
+				
+		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
+		$irow = 0;
+		foreach ($table_fields AS $field)
+		{
+			if (in_array($field['Field'], $required_class_fields))
+				continue;
+			echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+						<td class="noborder"><input type="checkbox" name="fieldsBox[]" value="'.$field['Field'].'" '.(in_array($field['Field'], $required_fields) ? 'checked="checked"' : '').' /></td>
+						<td>'.$field['Field'].'</td>
+					</tr>';
+		}
+		echo '</table><br />
+				<input style="margin-left:15px;" class="button" type="submit" value="'.$this->l('Submit').'" name="submitFields" />
+				<br />
+		</fieldset>';
+	}
+	
 	public function includeSubTab($methodname, $actions = array())
 	{
 		if (!isset($this->_includeTab) OR !is_array($this->_includeTab))
@@ -718,6 +768,17 @@ abstract class AdminTabCore
 					}
 				}
 			}
+		}
+		elseif(Tools::isSubmit('submitFields') AND $this->requiredDatabase AND $this->tabAccess['add'] === '1' AND $this->tabAccess['delete'] === '1')
+		{
+			if (!is_array($fields = Tools::getValue('fieldsBox')))
+				$fields = array();
+
+			$object = new $this->className();
+			if (!$object->addFieldsRequiredDatabase($fields))
+				$this->_errors[] = Tools::displayError('Error in updating required fields');
+			else
+				Tools::redirectAdmin($currentIndex.'&conf=4&token='.$token);
 		}
 	}
 

@@ -1524,3 +1524,11 @@ CREATE TABLE `PREFIX_webservice_permission` (
   KEY `method` (`method`),
   KEY `id_webservice_account` (`id_webservice_account`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_required_field` (
+  `id_required_field` int(11) NOT NULL AUTO_INCREMENT,
+  `object_name` varchar(32) NOT NULL,
+  `field_name` varchar(32) NOT NULL,
+  PRIMARY KEY (`id_required_field`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=ut8;
+
