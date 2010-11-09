@@ -29,7 +29,7 @@ class TrustedShops extends Module
 	{
 		$this->name = 'trustedshops';
 		$this->tab = 'front_office_features';
-		$this->version = 1.0;
+		$this->version = 1.1;
 		
 		$this->limited_countries = $this->available_languages;
 		
