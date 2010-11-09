@@ -32,7 +32,7 @@ class ValidateCore
 	*/
 	static public function isEmail($email)
     {
-    	return preg_match('/^[a-z0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z0-9]+[._a-z0-9-]*\.[a-z0-9]+$/ui', $email);
+    	return empty($email) OR preg_match('/^[a-z0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z0-9]+[._a-z0-9-]*\.[a-z0-9]+$/ui', $email);
     }
 
     /**
@@ -726,6 +726,11 @@ class ValidateCore
 	{
 		return preg_match('/^[[:alpha:]]{1,3}$/ui', $unit);
 	}
+	
+	static public function isDistanceUnit($unit)
+	{
+		return preg_match('/^[[:alpha:]]{1,2}$/ui', $unit);
+	}
 
 	static public function isProtocol($protocol)
 	{
@@ -919,12 +924,34 @@ class ValidateCore
 	/**
 	* Check the localization pack part selected
 	*
-	* @param string $date Date to validate
+	* @param string $data Localization pack to check
 	* @return boolean Validity is ok or not
 	*/
 	static public function isLocalizationPackSelection($data)
 	{
 		return ($data === 'states' OR $data === 'taxes' OR $data === 'currencies' OR $data === 'languages' OR $data === 'units');
+	}
+	
+	/**
+	* Check for PHP serialized data
+	*
+	* @param string $data Serialized data to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isSerializedArray($data)
+	{
+		return ($data == NULL) OR (bool)(is_string($data) AND preg_match('/^a:[0-9]+:{.*;}$/s', $data));
+	}
+	
+	/**
+	* Check for Latitude/Longitude
+	*
+	* @param string $data Coordinate to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isCoordinate($data)
+	{
+		return ($data == NULL) OR (bool)(preg_match('/^\-?[0-9]{1,6}\.[0-9]{1,6}$/s', $data));
 	}
 }
 

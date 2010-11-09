@@ -29,6 +29,9 @@ $_MODULE['<{productcomments}prestashop>productcomments_4d3d769b812b6faa6b76e1a8a
 $_MODULE['<{productcomments}prestashop>productcomments_549f9fb7be6d7edda6c5560f4ec30be4'] = 'Créez un nouveau critère de notation pour vos produits.';
 $_MODULE['<{productcomments}prestashop>productcomments_dd33a09f24a2e9e889b7f1f1a0255c22'] = 'Une fois créé, vous devez l\'activer pour les produits désirés à partir du formulaire ci-dessous.';
 $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc880988b'] = 'Critère';
+$_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
+$_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Etat';
+$_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
 $_MODULE['<{productcomments}prestashop>productcomments_92c8811185c56998dfbcbdd30ad649d3'] = 'Critères de notation';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';

@@ -620,6 +620,7 @@ class BlockCms extends Module
 		$smarty->assign(array(
 			'block' => 1,
 			'cms_titles' => $cms_titles,
+			'display_stores_block' => Configuration::get('PS_STORES_DISPLAY_CMS'),
 			'theme_dir' => _PS_THEME_DIR_
 		));
 		return $this->display(__FILE__, 'blockcms.tpl');
@@ -633,6 +634,7 @@ class BlockCms extends Module
 		$smarty->assign(array(
 			'block' => 1,
 			'cms_titles' => $cms_titles,
+			'display_stores_block' => Configuration::get('PS_STORES_DISPLAY_CMS'),
 			'theme_dir' => _PS_THEME_DIR_
 		));
 		return $this->display(__FILE__, 'blockcms.tpl');
@@ -648,7 +650,8 @@ class BlockCms extends Module
 			$smarty->assign(array(
 				'block' => 0,
 				'cmslinks' => $cms_titles,
-				'theme_dir' => _PS_THEME_DIR_
+				'theme_dir' => _PS_THEME_DIR_,
+				'display_stores_footer' => Configuration::get('PS_STORES_DISPLAY_FOOTER')
 			));
 			return $this->display(__FILE__, 'blockcms.tpl');
 		}

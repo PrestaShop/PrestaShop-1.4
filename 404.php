@@ -14,3 +14,5 @@ if (in_array(substr($_SERVER['REQUEST_URI'], -3), array('png', 'jpg', 'gif')))
 require_once(dirname(__FILE__).'/config/config.inc.php');
 $controller = ControllerFactory::getController('PageNotFoundController');
 $controller->run();
+
+?>

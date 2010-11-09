@@ -119,7 +119,6 @@ class FrontControllerCore
 
 		if (!isset($cart) OR !$cart->id)
 		{
-			//p('NEW CART');
 			$cart = new Cart();
 			$cart->id_lang = intval($cookie->id_lang);
 			$cart->id_currency = intval($cookie->id_currency);
@@ -138,7 +137,7 @@ class FrontControllerCore
 		}
 		if (!$cart->nbProducts())
 			$cart->id_carrier = NULL;
-//d($cookie);
+
 		$ps_language = new Language(intval($cookie->id_lang));
 		setlocale(LC_COLLATE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
 		setlocale(LC_CTYPE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
@@ -216,6 +215,7 @@ class FrontControllerCore
 				'img_manu_dir' => _THEME_MANU_DIR_,
 				'img_sup_dir' => _THEME_SUP_DIR_,
 				'img_ship_dir' => _THEME_SHIP_DIR_,
+				'img_store_dir' => _THEME_STORE_DIR_,
 				'img_col_dir' => _THEME_COL_DIR_,
 				'img_dir' => _THEME_IMG_DIR_,
 				'css_dir' => _THEME_CSS_DIR_,
@@ -245,6 +245,7 @@ class FrontControllerCore
 				'img_manu_dir' => _THEME_MANU_DIR_,
 				'img_sup_dir' => _THEME_SUP_DIR_,
 				'img_ship_dir' => _THEME_SHIP_DIR_,
+				'img_store_dir' => _THEME_STORE_DIR_,
 				'img_col_dir' => _THEME_COL_DIR_,
 				'img_dir' => _THEME_IMG_DIR_,
 				'css_dir' => _THEME_CSS_DIR_,

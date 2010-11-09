@@ -512,3 +512,5 @@ class OrderControllerCore extends FrontController
 		));
 	}
 }
+
+?>

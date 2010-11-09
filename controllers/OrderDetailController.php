@@ -133,3 +133,5 @@ class OrderDetailControllerCore extends FrontController
 			parent::displayFooter();
 	}
 }
+
+?>

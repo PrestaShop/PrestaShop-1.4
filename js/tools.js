@@ -162,12 +162,12 @@ function floorf(value, precision)
 	return Math.floor(tmp) / precisionFactor;
 }
 
-function setCurrency(id)
+function setCurrency(id_currency)
 {
 	$.ajax({
 		type: 'POST',
 		url: baseDir + 'changecurrency.php',
-		data: 'id='+id,
+		data: 'id_currency='+parseInt(id_currency),
 		success: function(msg)
 		{
 			location.reload(true);

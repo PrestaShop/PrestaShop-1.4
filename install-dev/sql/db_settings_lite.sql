@@ -148,7 +148,11 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (80, 'PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW()),
 (81, 'PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
 (82, 'PS_TAX_DISPLAY', 0, NOW(), NOW()),
-(83, 'PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW());
+(83, 'PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW()),
+(84, 'PS_DISTANCE_UNIT', 'km', NOW(), NOW()),
+(85, 'PS_STORES_DISPLAY_CMS', 1, NOW(), NOW()),
+(86, 'PS_STORES_DISPLAY_FOOTER', 1, NOW(), NOW()),
+(87, 'PS_STORES_SIMPLIFIED', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
@@ -540,7 +544,7 @@ INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES (1, 1
 
 INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES (1, 'AdminCatalog', 0, 1),(2, 'AdminCustomers', 0, 2),(3, 'AdminOrders', 0, 3),
 (4, 'AdminPayment', 0, 4),(5, 'AdminShipping', 0, 5),(6, 'AdminStats', 0, 6),(7, 'AdminModules', 0, 7),(29, 'AdminEmployees', 0, 8),(8, 'AdminPreferences', 0, 9),
-(9, 'AdminTools', 0, 10),(60, 'AdminTracking', 1, 1),(10, 'AdminManufacturers', 1, 2),(34, 'AdminSuppliers', 1, 3),(11, 'AdminAttributesGroups', 1, 4),
+(9, 'AdminTools', 0, 10),(82, 'AdminStores', 0, 11),(60, 'AdminTracking', 1, 1),(10, 'AdminManufacturers', 1, 2),(34, 'AdminSuppliers', 1, 3),(11, 'AdminAttributesGroups', 1, 4),
 (36, 'AdminFeatures', 1, 5),(58, 'AdminScenes', 1, 6),(66, 'AdminTags', 1, 7),(68, 'AdminAttachments', 1, 7),(12, 'AdminAddresses', 2, 1),(63, 'AdminGroups', 2, 2),
 (65, 'AdminCarts', 2, 3),(42, 'AdminInvoices', 3, 1),(55, 'AdminDeliverySlip', 3, 2),(47, 'AdminReturn', 3, 3),(49, 'AdminSlip', 3, 4),(59, 'AdminMessages', 3, 5),
 (13, 'AdminStatuses', 3, 6),(54, 'AdminOrderMessage', 3, 7),(14, 'AdminDiscounts', 4, 3),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),
@@ -568,7 +572,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 55, 'Delivery slips'),(1, 56, 'SEO'),(1, 57, 'CMS'),(1, 58, 'Image mapping'),(1, 59, 'Customer messages'),(1, 60, 'Tracking'),
 (1, 61, 'Search engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
 (1, 68, 'Attachments'),(1, 69, 'Informations'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
-(1, 80, 'Modules & themes catalog'),(1, 81, 'My Account');
+(1, 80, 'Modules & themes catalog'),(1, 81, 'My Account'),(1, 82, 'Stores');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 1, 'Catalogue'),(2, 2, 'Clients'),(2, 3, 'Commandes'),(2, 4, 'Paiement'),(2, 5, 'Transport'),
@@ -582,7 +586,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 56, 'SEO'),(2, 57, 'CMS'),(2, 58, 'Scènes'),(2, 59, 'Messages clients'),(2, 60, 'Suivi'),(2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),(2, 63, 'Groupes'),(2, 64, 'Générateurs'),(2, 65, 'Paniers'),(2, 66, 'Tags'),(2, 67, 'Recherche'),
 (2, 68, 'Documents joints'),(2, 69, 'Informations'),(2, 70, 'Performances'),(2, 71, 'SAV'),(2, 72, 'Service web'),(2, 73, 'Mouvements de Stock'),
-(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte');
+(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 1, 'Catálogo'),(3, 2, 'Clientes'),(3, 3, 'Pedidos'),(3, 4, 'Pago'),(3, 5, 'Transporte'),
@@ -595,7 +599,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 49, 'Vales'),(3, 50, 'Módulos'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
-(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente');
+(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`

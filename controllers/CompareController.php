@@ -70,3 +70,5 @@ class CompareControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'products-comparison.tpl');
 	}
 }
+
+?>

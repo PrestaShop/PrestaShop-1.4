@@ -1395,6 +1395,10 @@ abstract class AdminTabCore
 				default:
 					echo '<input type="text" name="'.$key.'" value="'.$val.'" size="'.$field['size'].'" />'.(isset($field['suffix']) ? $field['suffix'] : '');
 			}
+			
+			if (isset($field['required']) AND $field['required'])
+				echo ' <sup>*</sup>';
+			
 			echo (isset($field['desc']) ? '<p>'.$field['desc'].'</p>' : '');
 			echo '</div>';
 		}

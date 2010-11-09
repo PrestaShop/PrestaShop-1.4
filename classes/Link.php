@@ -141,11 +141,10 @@ class LinkCore
 		{
 			$pagename = substr($filename, 0, -4);
 			$url_rewrite = Db::getInstance()->getValue('
-				SELECT url_rewrite
-				FROM `'._DB_PREFIX_.'meta` m
-				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'
-			');
+			SELECT url_rewrite
+			FROM `'._DB_PREFIX_.'meta` m
+			LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+			WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'');
 			$uri_path = $url_rewrite ? 'lang-'.$iso.'/'.$url_rewrite : $filename;
 		}
 		else

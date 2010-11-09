@@ -361,3 +361,5 @@ class ProductControllerCore extends FrontController
 		return $specificPrices;
 	}
 }
+
+?>

@@ -54,7 +54,7 @@ class Treepodia extends Module
 	{
 		$protocol = 'http://';
 		$protocol_ssl = 'https://';
-                $protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
+		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
 
 		return $protocol_link.$_SERVER['HTTP_HOST'].__PS_BASE_URI__;
 	}

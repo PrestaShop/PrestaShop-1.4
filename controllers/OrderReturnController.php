@@ -70,3 +70,5 @@ class OrderReturnControllerCore extends FrontController
 			parent::displayFooter();
 	}
 }
+
+?>

@@ -44,6 +44,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_99d619f5e241798571be9e64f1716ae5'] = '�
 $_MODULE['<{blockcms}prestashop>blockcms_b30bb947efc48b2b38993417c289cedf'] = 'Suppression réussie';
 $_MODULE['<{blockcms}prestashop>blockcms_be58fccb15fb119b8c3d485e3a8561c4'] = 'Configuration du bloc CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_78edb384f1a71576034e00ed6844bcc2'] = 'Il n\'y a aucun CMS dans cette catégorie CMS';
+$_MODULE['<{blockcms}prestashop>blockcms_34c869c542dee932ef8cd96d2f91cae6'] = 'Nos magasins';
 $_MODULE['<{blockcms}prestashop>blockcms_d1aa22a3126f04664e0fe3f598994014'] = 'Promotions';
 $_MODULE['<{blockcms}prestashop>blockcms_9ff0635f5737513b1a6f559ac2bff745'] = 'Nouveaux produits';
 $_MODULE['<{blockcms}prestashop>blockcms_3cb29f0ccc5fd220a97df89dafe46290'] = 'Meilleures ventes';

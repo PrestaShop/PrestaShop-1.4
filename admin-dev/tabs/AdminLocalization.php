@@ -24,7 +24,8 @@ class AdminLocalization extends AdminPreferences
 		$this->table = 'configuration';
 
 		$this->_fieldsLocalization = array(
-			'PS_WEIGHT_UNIT' => array('title' => $this->l('Weight unit:'), 'desc' => $this->l('The weight unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'),
+			'PS_WEIGHT_UNIT' => array('title' => $this->l('Weight unit:'), 'desc' => $this->l('The weight unit of your shop (eg. kg or lbs)'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'),
+			'PS_DISTANCE_UNIT' => array('title' => $this->l('Distance unit:'), 'desc' => $this->l('The distance unit of your shop (eg. km or mi)'), 'validation' => 'isDistanceUnit', 'required' => true, 'type' => 'text'),
 			'PS_VOLUME_UNIT' => array('title' => $this->l('Volume unit:'), 'desc' => $this->l('The volume unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'));
 
 		parent::__construct();
@@ -82,7 +83,7 @@ class AdminLocalization extends AdminPreferences
 					<input type="checkbox" name="selection[]" value="taxes" /> '.$this->l('Taxes').'<br />
 					<input type="checkbox" name="selection[]" value="currencies" /> '.$this->l('Currencies').'<br />
 					<input type="checkbox" name="selection[]" value="languages" /> '.$this->l('Languages').'<br />
-					<input type="checkbox" name="selection[]" value="units" /> '.$this->l('Units (e.g., weight, volume)').'
+					<input type="checkbox" name="selection[]" value="units" /> '.$this->l('Units (e.g., weight, volume, distance)').'
 				</div>
 				<div align="center" style="margin-top: 20px;">
 					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Import   ').'" />

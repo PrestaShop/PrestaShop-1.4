@@ -145,7 +145,11 @@ ALTER TABLE `PREFIX_product`
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES 
 ('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
 ('PS_TAX_DISPLAY', 0, NOW(), NOW()),
-('PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW());
+('PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW()),
+('PS_DISTANCE_UNIT', 'km', NOW(), NOW()),
+('PS_STORES_DISPLAY_CMS', 0, NOW(), NOW()),
+('PS_STORES_DISPLAY_FOOTER', 0, NOW(), NOW()),
+('PS_STORES_SIMPLIFIED', 0, NOW(), NOW());
 
 CREATE TABLE `PREFIX_group_reduction` (
 	`id_group_reduction` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -688,6 +692,28 @@ UPDATE `PREFIX_cms` SET `active` = 1;
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
+
+CREATE TABLE `PREFIX_store` (
+  `id_store` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_country` int(10) unsigned NOT NULL,
+  `id_state` int(10) unsigned DEFAULT NULL,
+  `name` varchar(128) NOT NULL,
+  `address1` varchar(128) NOT NULL,
+  `address2` varchar(128) DEFAULT NULL,
+  `city` varchar(64) NOT NULL,
+  `postcode` varchar(12) NOT NULL,
+  `latitude` float(10,6) DEFAULT NULL,
+  `longitude` float(10,6) DEFAULT NULL,
+  `hours` varchar(254) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `fax` varchar(16) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `note` text,
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_store`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('categoryAddition', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),

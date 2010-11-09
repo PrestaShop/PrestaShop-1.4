@@ -1483,6 +1483,27 @@ CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
   PRIMARY KEY (`id_stock_mvt_reason`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_store` (
+  `id_store` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_country` int(10) unsigned NOT NULL,
+  `id_state` int(10) unsigned DEFAULT NULL,
+  `name` varchar(128) NOT NULL,
+  `address1` varchar(128) NOT NULL,
+  `address2` varchar(128) DEFAULT NULL,
+  `city` varchar(64) NOT NULL,
+  `postcode` varchar(12) NOT NULL,
+  `latitude` float(10,6) DEFAULT NULL,
+  `longitude` float(10,6) DEFAULT NULL,
+  `hours` varchar(254) DEFAULT NULL,
+  `phone` varchar(16) DEFAULT NULL,
+  `fax` varchar(16) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `note` text,
+  `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_store`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_webservice_account` (
   `id_webservice_account` int(11) NOT NULL AUTO_INCREMENT,

@@ -17,7 +17,7 @@ class ZoneCore extends ObjectModel
  	/** @var string Name */
 	public 		$name;
 	
-	/** @var boolean Zone statuts */
+	/** @var boolean Zone status */
 	public 		$active = true;
 	public 		$eu_zone = false; /* Obsolete; to remove */
 	

@@ -2,3 +2,5 @@
 
 $controller = new FrontController();
 $controller->init();
+
+?>

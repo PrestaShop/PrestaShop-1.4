@@ -1,13 +1,15 @@
 <?php
-include ('config/config.inc.php');
-include ('init.php');
 
-$new_currency = intval(Tools::getValue('id'));
-if ($new_currency AND Currency::getCurrency($new_currency))
+include(dirname(__FILE__).'/config/config.inc.php');
+include(dirname(__FILE__).'/init.php');
+
+$currency = new Currency(intval(Tools::getValue('id_currency')));
+if (Validate::isLoadedObject($currency) AND !$currency->deleted)
 {
-	$cookie->id_currency = $new_currency;
-	die(1);
+	$cookie->id_currency = intval($currency->id);
+	die('1');
 }
 else
-	die(0);
+	die('0');
+
 ?>

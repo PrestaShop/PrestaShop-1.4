@@ -123,14 +123,12 @@ class TabCore extends ObjectModel
 	 */
 	static public function getTabs($id_lang = false, $id_parent = NULL)
 	{
-		/* Tabs selection */
-		$sql = ('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'tab` t
 		'.($id_lang ? 'LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.intval($id_lang).')' : '').
 		($id_parent !== NULL ? ('WHERE t.`id_parent` = '.intval($id_parent)) : '').'
 		ORDER BY t.`position` ASC');
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 	}
 
 	/**

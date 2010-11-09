@@ -27,7 +27,7 @@ if ($tab)
 		$tabs = array_reverse($tabs);
 		echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>';
 		foreach ($tabs AS $key => $item)
-			echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" /><a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'" '.((sizeof($tabs) - 1 == $key) ? 'class="blue" style="font-color:blue;"' : '').'>'.$item['name'].'</a>';
+			echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" /><img src="'.((trim($item['module']) != '') ? _MODULE_DIR_.$item['module'].'/'.$item['class_name'].'.gif' : '../img/t/'.$item['class_name'].'.gif').'" style="margin-right:5px" /><a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'" '.((sizeof($tabs) - 1 == $key) ? 'class="blue" style="font-color:blue;"' : '').'>'.$item['name'].'</a>';
 		echo '</div>';
 
 		if (Validate::isLoadedObject($adminObj))

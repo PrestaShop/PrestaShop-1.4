@@ -93,3 +93,5 @@ class SearchControllerCore extends FrontController
 			parent::displayFooter();
 	}
 }
+
+?>

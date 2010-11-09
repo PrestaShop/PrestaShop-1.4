@@ -19,6 +19,7 @@ define('_THEME_SCENE_DIR_', 		_PS_IMG_.'scenes/');
 define('_THEME_SCENE_THUMB_DIR_', 	_PS_IMG_.'scenes/thumbs');
 define('_THEME_SUP_DIR_',  			_PS_IMG_.'su/');
 define('_THEME_SHIP_DIR_',			_PS_IMG_.'s/');
+define('_THEME_STORE_DIR_',			_PS_IMG_.'st/');
 define('_THEME_LANG_DIR_',			_PS_IMG_.'l/');
 define('_THEME_COL_DIR_', 			_PS_IMG_.'co/');
 define('_SUPP_DIR_',      			_PS_IMG_.'su/');
@@ -40,6 +41,7 @@ define('_PS_ALL_THEMES_DIR_',       _PS_ROOT_DIR_.'/themes/');
 define('_PS_THEME_DIR_',            _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/');
 define('_PS_IMG_DIR_',              _PS_ROOT_DIR_.'/img/');
 define('_PS_CAT_IMG_DIR_',          _PS_IMG_DIR_.'c/');
+define('_PS_STORE_IMG_DIR_',		_PS_IMG_DIR_.'st/');
 define('_PS_PROD_IMG_DIR_',         _PS_IMG_DIR_.'p/');
 define('_PS_SCENE_IMG_DIR_',        _PS_IMG_DIR_.'scenes/');
 define('_PS_SCENE_THUMB_IMG_DIR_',  _PS_IMG_DIR_.'scenes/thumbs/');
@@ -116,3 +118,5 @@ define('_STOCK_MOVEMENT_ORDER_REASON_', 1);
 define('_STOCK_MOVEMENT_MISSING_REASON_', 2);
 
 define('_PS_DEFAULT_CUSTOMER_GROUP_', 1);
+
+?>
