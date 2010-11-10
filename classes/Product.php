@@ -1500,7 +1500,7 @@ class ProductCore extends ObjectModel
 		if (!$id_customer)
 			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? intval($cookie->id_customer) : NULL);
 		$id_group = $id_customer ? intval(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		if (!is_object($cart))
+		if (!is_object($cart) OR (Validate::isUnsignedInt($id_cart) AND $id_cart))
 		{
 			/*
 			* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
