@@ -321,7 +321,7 @@ class Editorial extends Module
 			'image_height' => Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
 			'id_lang' => $cookie->id_lang,
 			'homepage_logo' => file_exists('modules/editorial/homepage_logo.jpg'),
-			'this_path' => $this->_path
+			'image_path' => $this->_path.'homepage_logo.jpg'
 		));
 		return $this->display(__FILE__, 'editorial.tpl');
 	}

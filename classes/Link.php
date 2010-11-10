@@ -131,6 +131,12 @@ class LinkCore
 		return $protocol.Tools::getMediaServer($uri_path).$uri_path;
 	}
 	
+	public function getMediaLink($filepath)
+	{
+		global $protocol;
+		return $protocol.Tools::getMediaServer($filepath).$filepath;
+	}
+	
 	public function getPageLink($filename, $ssl = false)
 	{
 		global $iso, $cookie;
