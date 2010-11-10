@@ -1390,7 +1390,12 @@ class AdminProducts extends AdminTab
 		<div class="margin-form">
 			<input class="button" type="submit" name="submitSpecificPricePriorities" value="'.$this->l('Apply').'" />
 		</div>
+		';
 		
+		if (!$specificPrices)
+			return ;
+		
+		echo '
 		<hr />
 		<h4>'.$this->l('Current specific prices').'</h4>
 		
