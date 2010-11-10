@@ -26,8 +26,8 @@ abstract class ObjectModelCore
 	/** @var array Required fields for admin panel forms */
  	protected $fieldsRequired = array();
 
-	/** @var array Required fields for admin panel forms */
-	protected $fieldsRequiredDatabase = array();	
+	/** @var fieldsRequiredDatabase */
+	protected static $fieldsRequiredDatabase = NULL;
 	
  	/** @var array Maximum fields size for admin panel forms */
  	protected $fieldsSize = array();
@@ -50,6 +50,7 @@ abstract class ObjectModelCore
  	/** @var array tables */
  	protected $webserviceParameters = array();
 
+	
 	/**
 	 * Returns object validation rules (fields validity)
 	 *
@@ -117,10 +118,13 @@ abstract class ObjectModelCore
 			}
 		}
 		
-		$fields = $this->getfieldsRequiredDatabase();
-		if ($fields)
-			foreach ($fields AS $row)
-				$this->fieldsRequiredDatabase[(int)$row['id_required_field']] = pSQL($row['field_name']);
+		if (!is_array(self::$fieldsRequiredDatabase))
+		{
+			$fields = $this->getfieldsRequiredDatabase(true);
+			if ($fields)
+				foreach ($fields AS $row)
+					self::$fieldsRequiredDatabase[$row['object_name']][(int)$row['id_required_field']] = pSQL($row['field_name']);
+		}
 	}
 
 	/**
@@ -322,7 +326,7 @@ abstract class ObjectModelCore
 	 */
 	public function validateFields($die = true, $errorReturn = false)
 	{
-		$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+		$fieldsRequired = array_merge($this->fieldsRequired, (isset(self::$fieldsRequiredDatabase[get_class($this)]) ? self::$fieldsRequiredDatabase[get_class($this)] : array()));
 		foreach ($fieldsRequired as $field)
 			if (Tools::isEmpty($this->{$field}) AND (!is_numeric($this->{$field})))
 			{
@@ -403,7 +407,7 @@ abstract class ObjectModelCore
 		$errors = array();
 
 		/* Checking for required fields */
-		$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+		$fieldsRequired = array_merge($this->fieldsRequired, (isset(self::$fieldsRequiredDatabase[get_class($this)]) ? self::$fieldsRequiredDatabase[get_class($this)] : array()));
 		foreach ($fieldsRequired AS $field)
 		if (($value = Tools::getValue($field, $this->{$field})) == false AND (string)$value != '0')
 			if (!$this->id OR $field != 'passwd')
@@ -486,7 +490,7 @@ abstract class ObjectModelCore
 			}
 		if (isset($this->fieldsRequired))
 		{
-			$fieldsRequired = array_merge($this->fieldsRequired, $this->fieldsRequiredDatabase);
+			$fieldsRequired = array_merge($this->fieldsRequired, (isset(self::$fieldsRequiredDatabase[get_class($this)]) ? self::$fieldsRequiredDatabase[get_class($this)] : array()));
 			foreach ($fieldsRequired as $fieldRequired)
 			{
 				if (!isset($resourceParameters['fields'][$fieldRequired]))
@@ -543,11 +547,11 @@ abstract class ObjectModelCore
 		return $result;
 	}
 	
-	public function getFieldsRequiredDatabase()
+	public function getFieldsRequiredDatabase($all = false)
 	{
 		return Db::getInstance()->ExecuteS('SELECT id_required_field, object_name, field_name
 														FROM '._DB_PREFIX_.'required_field
-														WHERE object_name=\''.pSQL(get_class($this)).'\'');
+														WHERE 1 '.(!$all ? ' AND object_name=\''.pSQL(get_class($this)).'\'' : ''));
 	}
 	
 	public function addFieldsRequiredDatabase($fields)

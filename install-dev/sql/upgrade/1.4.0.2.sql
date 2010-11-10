@@ -811,7 +811,8 @@ CREATE TABLE `PREFIX_required_field` (
   `id_required_field` int(11) NOT NULL AUTO_INCREMENT,
   `object_name` varchar(32) NOT NULL,
   `field_name` varchar(32) NOT NULL,
-  PRIMARY KEY (`id_required_field`)
+  PRIMARY KEY (`id_required_field`),
+  KEY `object_name` (`object_name`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_memcached_servers` (
