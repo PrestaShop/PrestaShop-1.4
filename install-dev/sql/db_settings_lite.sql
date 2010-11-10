@@ -156,7 +156,11 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (88, 'SHOP_LOGO_WIDTH', 224, NOW(), NOW()),
 (89, 'SHOP_LOGO_HEIGHT', 73, NOW(), NOW()),
 (90, 'EDITORIAL_IMAGE_WIDTH', 530, NOW(), NOW()),
-(91, 'EDITORIAL_IMAGE_HEIGHT', 228, NOW(), NOW());
+(91, 'EDITORIAL_IMAGE_HEIGHT', 228, NOW(), NOW()),
+(92, 'PS_STATSDATA_CUSTOMER_PAGESVIEWS', 0, NOW(), NOW()),
+(93, 'PS_STATSDATA_PAGESVIEWS', 0, NOW(), NOW()),
+(94, 'PS_STATSDATA_PLUGINS', 0, NOW(), NOW())
+;
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),

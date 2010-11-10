@@ -15,9 +15,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class StatsData extends Module
 {
-    private $_html = '';
-
-    function __construct()
+    public function __construct()
     {
         $this->name = 'statsdata';
         $this->tab = 'analytics_stats';
@@ -29,96 +27,144 @@ class StatsData extends Module
         $this->description = $this->l('This module must be enabled if you want to use Statistics');
     }
 
-	function install()
+	public function install()
 	{
-		// Everything is done in the footer (and not in the header because a page can redirect to another) except for identifying a guest as a customer
-		if (!parent::install() OR !$this->registerHook('footer') OR !$this->registerHook('authentication') OR !$this->registerHook('createAccount'))
-			return false;
-		return true;
+		return (parent::install() AND $this->registerHook('footer') AND $this->registerHook('authentication') AND $this->registerHook('createAccount'));
 	}
-    
-	function hookFooter($params)
+	
+	public function getContent()
 	{
-		global $protocol_content, $server_host;
-
+		if (Tools::isSubmit('submitStatsData'))
+		{
+			Configuration::updateValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS', (int)Tools::getValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS'));
+			Configuration::updateValue('PS_STATSDATA_PAGESVIEWS', (int)Tools::getValue('PS_STATSDATA_PAGESVIEWS'));
+			Configuration::updateValue('PS_STATSDATA_PLUGINS', (int)Tools::getValue('PS_STATSDATA_PLUGINS'));
+		}
+	
+		return '<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
+		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Settings').'</legend>
+			<label>'.$this->l('Save pages views for each customer').'</label>
+			<div class="margin-form">
+				<input type="radio" name="PS_STATSDATA_CUSTOMER_PAGESVIEWS" id="PS_STATSDATA_CUSTOMER_PAGESVIEWS_on" value="1" '.(Tools::getValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS', Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS')) ? 'checked="checked"' : '').' />
+				<label class="t" for="PS_STATSDATA_CUSTOMER_PAGESVIEWS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
+				<input type="radio" name="PS_STATSDATA_CUSTOMER_PAGESVIEWS" id="PS_STATSDATA_CUSTOMER_PAGESVIEWS_off" value="0" '.(Tools::getValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS', Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS')) ? '' : 'checked="checked"').' />
+				<label class="t" for="PS_STATSDATA_CUSTOMER_PAGESVIEWS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
+				<p>'.$this->l('Customer pages views uses a lot of CPU resources and database space.').'</p>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<label>'.$this->l('Save global pages views').'</label>
+			<div class="margin-form">
+				<input type="radio" name="PS_STATSDATA_PAGESVIEWS" id="PS_STATSDATA_PAGESVIEWS_on" value="1" '.(Tools::getValue('PS_STATSDATA_PAGESVIEWS', Configuration::get('PS_STATSDATA_PAGESVIEWS')) ? 'checked="checked"' : '').' />
+				<label class="t" for="PS_STATSDATA_PAGESVIEWS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
+				<input type="radio" name="PS_STATSDATA_PAGESVIEWS" id="PS_STATSDATA_PAGESVIEWS_off" value="0" '.(Tools::getValue('PS_STATSDATA_PAGESVIEWS', Configuration::get('PS_STATSDATA_PAGESVIEWS')) ? '' : 'checked="checked"').' />
+				<label class="t" for="PS_STATSDATA_PAGESVIEWS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
+				<p>'.$this->l('Global pages views uses less resources than customer\'s, but uses resources nonetheless').'</p>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<label>'.$this->l('Plug-ins detection').'</label>
+			<div class="margin-form">
+				<input type="radio" name="PS_STATSDATA_PLUGINS" id="PS_STATSDATA_PLUGINS_on" value="1" '.(Tools::getValue('PS_STATSDATA_PLUGINS', Configuration::get('PS_STATSDATA_PLUGINS')) ? 'checked="checked"' : '').' />
+				<label class="t" for="PS_STATSDATA_PLUGINS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
+				<input type="radio" name="PS_STATSDATA_PLUGINS" id="PS_STATSDATA_PLUGINS_off" value="0" '.(Tools::getValue('PS_STATSDATA_PLUGINS', Configuration::get('PS_STATSDATA_PLUGINS')) ? '' : 'checked="checked"').' />
+				<label class="t" for="PS_STATSDATA_PLUGINS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
+				<p>'.$this->l('Plug-ins detection loads an extra 20ko javascript file for new visitors.').'</p>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<input type="submit" class="button" name="submitStatsData" value="'.$this->l('Update').'" />
+		</fieldset>';
+	}
+	
+	private function getCipherTool()
+	{
 		// Identification information are encrypted to prevent hacking attempts
 		if (Configuration::get('PS_CIPHER_ALGORITHM'))
-			$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+			return new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
 		else
-			$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-
+			return new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+	}
+    
+	public function hookFooter($params)
+	{
+		$html = '';
 		if (!isset($params['cookie']->id_guest))
 		{
 			Guest::setNewGuest($params['cookie']);
 			
-			// Ajax request sending browser information
-			$token = $cipherTool->encrypt($params['cookie']->id_guest);
-			$this->_html = '
-			<script type="text/javascript" src="'._PS_JS_DIR_.'pluginDetect.js"></script>
-			<script type="text/javascript">
-				plugins = new Object;
-				
-				plugins.adobe_director = (PluginDetect.getVersion("Shockwave") != null) ? 1 : 0;
-				plugins.adobe_flash = (PluginDetect.getVersion("Flash") != null) ? 1 : 0;
-				plugins.apple_quicktime = (PluginDetect.getVersion("QuickTime") != null) ? 1 : 0;
-				plugins.windows_media = (PluginDetect.getVersion("WindowsMediaPlayer") != null) ? 1 : 0;
-				plugins.sun_java = (PluginDetect.getVersion("java") != null) ? 1 : 0;
-				plugins.real_player = (PluginDetect.getVersion("RealPlayer") != null) ? 1 : 0;
-				
-				$(document).ready(
-					function() {
-						navinfo = new Object;
-						navinfo = { screen_resolution_x: screen.width, screen_resolution_y: screen.height, screen_color:screen.colorDepth};
-						for (var i in plugins)
-							navinfo[i] = plugins[i];
-						navinfo.type = "navinfo";
-						navinfo.id_guest = "'.(int)$params['cookie']->id_guest.'";
-						navinfo.token = "'.$token.'";
-						$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", navinfo);
-					}
-				);
-			</script>';
+			if (Configuration::get('PS_STATSDATA_PLUGINS'))
+			{
+				// Ajax request sending browser information
+				$token = $this->getCipherTool()->encrypt($params['cookie']->id_guest);
+				$html .= '
+				<script type="text/javascript" src="'._PS_JS_DIR_.'pluginDetect.js"></script>
+				<script type="text/javascript">
+					plugins = new Object;
+					
+					plugins.adobe_director = (PluginDetect.getVersion("Shockwave") != null) ? 1 : 0;
+					plugins.adobe_flash = (PluginDetect.getVersion("Flash") != null) ? 1 : 0;
+					plugins.apple_quicktime = (PluginDetect.getVersion("QuickTime") != null) ? 1 : 0;
+					plugins.windows_media = (PluginDetect.getVersion("WindowsMediaPlayer") != null) ? 1 : 0;
+					plugins.sun_java = (PluginDetect.getVersion("java") != null) ? 1 : 0;
+					plugins.real_player = (PluginDetect.getVersion("RealPlayer") != null) ? 1 : 0;
+					
+					$(document).ready(
+						function() {
+							navinfo = new Object;
+							navinfo = { screen_resolution_x: screen.width, screen_resolution_y: screen.height, screen_color:screen.colorDepth};
+							for (var i in plugins)
+								navinfo[i] = plugins[i];
+							navinfo.type = "navinfo";
+							navinfo.id_guest = "'.(int)$params['cookie']->id_guest.'";
+							navinfo.token = "'.$token.'";
+							$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", navinfo);
+						}
+					);
+				</script>';
+			}
 		}
 		
 		// Record the guest path then increment the visit counter of the page
 		$tokenArray = Connection::setPageConnection($params['cookie']);
 		ConnectionsSource::logHttpReferer();
-		Page::setPageViewed($tokenArray['id_page']);
+		if (Configuration::get('PS_STATSDATA_PAGESVIEWS'))
+			Page::setPageViewed($tokenArray['id_page']);
 		
-		// Ajax request sending the time spend on the page
-		$token = $cipherTool->encrypt($tokenArray['id_connections'].'|'.$tokenArray['id_page'].'|'.$tokenArray['time_start']);
-		$this->_html .= '
-		<script type="text/javascript">
-			var time_start;
-			$(window).load(
-				function() {
-					time_start = new Date();
-				}
-			);
-			$(window).unload(
-				function() {
-					var time_end = new Date();
-					var pagetime = new Object;
-					pagetime.type = "pagetime";
-					pagetime.id_connections = "'.(int)$tokenArray['id_connections'].'";
-					pagetime.id_page = "'.(int)$tokenArray['id_page'].'";
-					pagetime.time_start = "'.$tokenArray['time_start'].'";
-					pagetime.token = "'.$token.'";
-					pagetime.time = time_end-time_start;
-					$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", pagetime);
-				}
-			);
-		</script>';
+		if (Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
+		{
+			// Ajax request sending the time spend on the page
+			$token = $this->getCipherTool()->encrypt($tokenArray['id_connections'].'|'.$tokenArray['id_page'].'|'.$tokenArray['time_start']);
+			$html .= '
+			<script type="text/javascript">
+				var time_start;
+				$(window).load(
+					function() {
+						time_start = new Date();
+					}
+				);
+				$(window).unload(
+					function() {
+						var time_end = new Date();
+						var pagetime = new Object;
+						pagetime.type = "pagetime";
+						pagetime.id_connections = "'.(int)$tokenArray['id_connections'].'";
+						pagetime.id_page = "'.(int)$tokenArray['id_page'].'";
+						pagetime.time_start = "'.$tokenArray['time_start'].'";
+						pagetime.token = "'.$token.'";
+						pagetime.time = time_end-time_start;
+						$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", pagetime);
+					}
+				);
+			</script>';
+		}
 
-		return $this->_html;
+		return $html;
 	}
 	
-	function hookCreateAccount($params)
+	public function hookCreateAccount($params)
 	{
 		return $this->hookAuthentication($params);
 	}
 	
-	function hookAuthentication($params)
+	public function hookAuthentication($params)
 	{
 		// Update or merge the guest with the customer id (login and account creation)
 		$guest = new Guest($params['cookie']->id_guest);

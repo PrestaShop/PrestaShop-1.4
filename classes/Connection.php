@@ -47,13 +47,15 @@ class ConnectionCore extends ObjectModel
 		return $fields;
 	}
 	
-	public static function setPageConnection($cookie)
+	public static function setPageConnection($cookie, $full = true)
 	{
 		// The connection is created if it does not exist yet and we get the current page id
 		if (!isset($cookie->id_connections) OR !strstr(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '', Tools::getHttpHost(false, false)))	
 			$id_page = Connection::setNewConnection($cookie);
 		if (!isset($id_page) OR !$id_page)
 			$id_page = Page::getCurrentId();
+		if (!Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
+			return array('id_page' => $id_page);
 		
 		// The ending time will be updated by an ajax request when the guest will close the page
 		$time_start = date('Y-m-d H:i:s');
@@ -67,20 +69,19 @@ class ConnectionCore extends ObjectModel
 	}
 	
 	public static function setNewConnection($cookie)
-	{
-		// The old connections details are removed from the database in order to spare some memory
-		Connection::cleanConnectionsPages();
-		
+	{		
 		// A new connection is created if the guest made no actions during 30 minutes
 		$result = Db::getInstance()->getRow('
 		SELECT c.`id_guest`
 		FROM `'._DB_PREFIX_.'connections` c
-		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.`id_connections` = cp.`id_connections`
 		WHERE c.`id_guest` = '.intval($cookie->id_guest).'
-		AND DATE_ADD(cp.`time_start`, INTERVAL 30 MINUTE) > \''.pSQL(date('Y-m-d H:i:s')).'\'
-		ORDER BY cp.`time_start` DESC');
+		AND DATE_ADD(c.`date_add`, INTERVAL 30 MINUTE) > \''.pSQL(date('Y-m-d H:i:00')).'\'
+		ORDER BY c.`date_add` DESC');
 		if (!$result['id_guest'] AND intval($cookie->id_guest))
 		{
+			// The old connections details are removed from the database in order to spare some memory
+			Connection::cleanConnectionsPages();
+		
 			$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 			$arrayUrl = parse_url($referer);
 			if (!isset($arrayUrl['host']) OR preg_replace('/^www./', '', $arrayUrl['host']) == preg_replace('/^www./', '', Tools::getHttpHost(false, false)))
