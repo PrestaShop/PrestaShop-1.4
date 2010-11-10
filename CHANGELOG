@@ -5,6 +5,371 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.2 - 3261 (2010-11-10)   #
+####################################
+
+	Added Features:
+
+	[+] Project : Add VAT support
+	[+] Project : Add InnoDB support
+	[+] Project : Added UPC barcodes (US/Canada) management (both on product and combinations)
+	[+] Project : You can now override classes and front office controllers without any core modification
+	[+] Project : DisplayAsDeprecated function
+	
+	[+] FO : Added file upload in contact form and customer service
+	[+] FO : Added Shop logo and editorial image dimensions + corrected shop name bug on installer
+	[+] FO : Added some demo stores for the Store locator
+	[+] FO : Added the "Store locator" feature! using the latest Google Maps API (V3)
+	[+] FO : Added verification for zip code depends on country selected. 
+	[+] FO : adding cache system for the getPageLink method
+	[+] FO : Adding One Page Checkout feature
+	[+] FO : ajax cart summary
+	[+] FO : Display units price if enabled 
+	[+] FO : you can now specify an alternative domain or subdomain for your static content
+	[+] FO : Products comparison
+	
+	[+] FO / BO : Adding CCC (Combine Compile and Cache) and other frontend performance features, these feature was started with Olivier Bonningues from Oleacorner, Guillaume David and Mickael Surren from Croissance-Net. This was a frontend development training day with Lucas CHERIFI
+	[+] FO / BO : new options availables on AdminProduct, you can now show or not the price of product and define if this product is available for order
+	
+	[+] BO : Added activation to CMS pages
+	[+] BO : Added an activation to manufacturers and suppliers
+	[+] BO : Added an "Online only" flag (for products not sold in store)
+	[+] BO : Added an option in Preferences -> Products to undisplay the button "add to cart" when the product got attributes so customers must go see the product detail.
+	[+] BO : Added an option in preferences to choose the "Condition of use" CMS page
+	[+] BO : Added a WorkFlow to CMS pages
+	[+] BO : Added cache-control directive to the htaccess generator and some apache module checks
+	[+] BO : Added category in cms tab, position for cms pages
+	[+] BO : Added enable row to taxes
+	[+] BO : Added fields 'Need zip code' and 'Zip code format'
+	[+] BO : Added possibility to delete a product from his detail page (for a search in catalog)
+	[+] BO : added shipping external for modules
+	[+] BO : Added the condition of a product (new, used, refurbished)
+	[+] BO : Added the theme installer module
+	[+] BO : Added translation for CMS Tab
+	[+] BO : Added units price (weight, volume, unity) to configure on products pages
+	[+] BO : Added utility to implant a different logo for shop, mail and PDF.
+	[+] BO : Additional shipping cost by product
+	[+] BO : Add Memcached and FileSystem cache
+	[+] BO : Add stock movement management
+	[+] BO : AdminModulesPositions : new checkboxes in order to unhook many modules in one click.
+	[+] BO : An easy way to define fees by carriers for each zone
+	[+] BO : Automatic translations possible with Google Translate 
+	[+] BO : Carrier behavior (by price/by weight) is now defined by Carrier
+	[+] BO : Carrier behavior (by range or by price) is now specific to each Carrier
+	[+] BO : Change category position in catalog 
+	[+] BO : class added (ModuleCarrier) for shipping external
+	[+] BO : Disabled product can be previewed in front office
+	[+] BO : external shipping and range
+	[+] BO : Fix update script to change category name without number position
+	[+] BO : international call prefixes are now included in prestashop's countries
+	[+] BO : It's now possible to edit and translate your mail templates from BackOffice
+	[+] BO : Localisation, you can now choose between miles and kilometers
+	[+] BO : Meta-tags => SEO
+	[+] BO : New back end themes (but you don't know about it)
+	[+] BO : new buttons 'next' and 'previous' on order detail
+	[+] BO : new Customer Service included in the back office (an alternative to e-mails)
+	[+] BO : New module pages !
+	[+] BO : new tab in Tools, this page give you many informations about your server configuration
+	[+] BO : now you can define a minimal quantity on product for command
+	[+] BO : payment modules can now log payment data in a common table
+	[+] BO : Predefined message when responding in customer service in now configurable (and bug with special characters in mail subject is fixed)
+	[+] BO : Upload your own store icon (for Google Maps, store locator)
+	[+] BO : you can now add a private note on the customer page
+	[+] BO : You can now add a voucher for a customer's group
+	[+] BO : You can now add others required fields in objects
+	[+] BO : you can now choose the background color of your back office
+	[+] BO : you can now cipher/decipher with Rijndael using mcrypt instead of blowfish (amazingly faster)
+	[+] BO : you can now export your invoices filtered by statuses
+	
+	[+] Classes : Localization pack support added
+	[+] Classes: Smarty cache support added
+	[+] Classes : Specific price support added to the PrestaShop 1.4 serie
+
+	[+] MO : add a new module, date of delivery
+	[+] MO : Added a category restriction on the loyalty voucher's use on loyalty module
+	[+] MO : Added a pagination to loyalty module
+	[+] MO : adding a new partner module iAdvize
+	[+] MO : adding a new partner module: MondialRelay
+	[+] MO : adding a new partner module: Secuvad
+	[+] MO : Added possibility to display tax on a distinct line in the cart block
+	[+] MO : productcomments : A new hook on the product comparison page
+	[+] MO : added module envoimoinscher
+	[+] MO : new module socolissimo
+	[+] MO : Paysafecard + Cashticket
+	[+] MO : TrustedShops
+	[+] MO : Treepodia
+	[+] MO : TrustedShops : Check permissions on the /cache directory
+	[+] MO : modules css stylesheets and javascripts scripts are now overridable and overriden in the theme
+	[+] MO : new module Fia-Net SAC (France only)
+	[+] MO : new module Fia-Net Sceau de confiance (France only)
+	[+] MO : new module "stock stats"
+	[+] MO : new payment module "Ogone" (some translations are still missing and it needs a few more tests)
+	[+] MO : you can now empty 404 pages
+	
+	[+] SQL : Added row active to ps_currencies and added many currencies when installation
+	[+] SQL : Added zip/post Code for each countries and all linked to it
+	
+	[+] IN : States of Mexico
+	
+	[+] WS : Adding a RESTFul webservice for PrestaShop
+	
+	Improved/changed features :
+	
+	[*] Project : cookie is no more encrypted every time but in the destructor, at the end. You can still force setcookie by using Cookie::write()
+	[*] Project : Added {$img_store_dir} and _THEME_STORE_DIR_ and _PS_STORE_IMG_DIR_
+	[*] Project : Cleaned some debug code in FrontController.php
+	[*] Project : Front controllers are now classes
+	
+	[*] FO : add an instant search feature for the block search on top, realized with Arnaud Iliadis from Web67 while PrestaShop training
+	[*] FO : Added a cookie to remember the "number of item per page" for a client
+	[*] FO : added css for sitemap
+	[*] FO : Added one hook in order-detail.php and one hook processCarrier in order.php.
+	[*] FO : added product ID to the contact form
+	[*] FO : added SQL caches to attachments and packs in order to reduce the number of queries speed up the front office
+	[*] FO : add new Javascript method for One Page Checkout
+	[*] FO : Add the "completely rewritten url" feature
+	[*] FO : Ajax cart summary input update qty
+	[*] FO : changed filter in adminModules
+	[*] FO : Confirmation mail sent before password regeneration
+	[*] FO : Corrected some sentences and listing all orders on the contact form
+	[*] FO : Creation of a SQL cache for the default attribute of a product, avoiding 1 to 3 queries for each product displayed on the FO
+	[*] FO : Customization field is now a textarea and handle \n
+	[*] FO : encrypt cookie only if a change has been made
+	[*] FO : get the quantity of the default attribute only if the product has attributes...
+	[*] FO : Improve performances for url rewriting links load
+	[*] FO : I really like optimizations :] (no less than 60 queries avoided on the cart summary, among other things)
+	[*] FO : New version of socolissimo 1.4
+	[*] FO : Optimizations, optimizations and optimizations (mainly SQL queries dropped)
+	[*] FO : query for random specials optimized (RAND() is awful)
+	[*] FO : The cart summary now display available vouchers
+	[*] FO : Undisplay the button when set in BO.
+	
+	[*] FO / BO : improved feature minimal quantity for buy a product
+	
+	[*] BO : Added a button to make an attribute combination the default one easier
+	[*] BO : Added "all" blocks in permission page.
+	[*] BO : Added enable state for currencies
+	[*] BO : added multiple translation
+	[*] BO : added timer to back office tabs
+	[*] BO : added total sales -tx in statsproduct module
+	[*] BO : adding new tinyMC 3.3.9
+	[*] BO : changed filter module
+	[*] BO : check if cms folder img exists
+	[*] BO : Customer page improved
+	[*] BO : Delete of message as well as threads in customer service
+	[*] BO : Developers can now specify if a field is required or not in Option fields
+	[*] BO : Display hook technical name in module positions tab
+	[*] BO : Display hook technical name in module positions tab
+	[*] BO : Features fields are now textareas to write more details on products
+	[*] BO : Fixed a bug with the tab navigation when UI mode is on hover
+	[*] BO : fixed bug in tinyMCE
+	[*] BO : .htaccess generation on Lang & Meta CRUD
+	[*] BO : Icons in navigation path bar
+	[*] BO : img/admin/delete.gif now different from disabled.gif
+	[*] BO : Improved unity price system : Unity editable by product
+	[*] BO : Improve Flashyturtle back office theme and back office login page.
+	[*] BO : move media server parameters in AdminPerformance tabs
+	[*] BO : New design for top of the first tab in the product page
+	[*] BO : new footer
+	[*] BO : New reduction support added to the import
+	[*] BO : new skin for errors, warnings and confirmations
+	[*] BO : now you can edit smarty config into AdminPerformance tab
+	[*] BO : Numeric ISO code now available for currencies
+	[*] BO : Optimised the category recurse tab + no limitation to 5 subcategories anymore + ajax_call on AdminProduct page to optimize it at the loading.
+	[*] BO : optimization (30% less queries on every entity listing, then 50% less queries on the module page and again a few less on the order detail and customer pages)
+	[*] BO : order details display improvements
+	[*] BO : Print pdf by statuses (explaination + fixed width)
+	[*] BO : remove old tinyMCE
+	[*] BO : Sending a confirmation mail to the customer when he sends a message to the customer service
+	[*] BO : Thread message merge algorithm has been improved on customer service
+	[*] BO : Tracking displays out of stock attributes
+	[*] BO : Transformed the last element of the path_bar in BO to a link (blue)
+	[*] BO : weights equal to zero are not taken into account anymore in the search indexation
+	[*] BO : Width switched from 960px to 1050px (only 15% of PS users are still using 1024x768)
+	[*] BO : You can now add your specifical configuration for your hosting on AdminGenerator
+	[*] BO : You can now disable the "hover on tabs" feature
+	[*] BO : You can now edit or delete a product from AdminManufacturer page
+	[*] BO : you can now export invoices filtered by several status IDs
+	[*] BO : you can now translate everything in the languages which are disabled
+	
+	[*] Classes : added CarrierModule.php
+	[*] Classes : added hook Paymant CC added
+	[*] Classes : Distance unit support added to localization pack
+	[*] Classes : remove ModuleCarrier.php
+	[*] Classes : Configuration::get Optimization
+	
+	[*] MO : add category on many modules
+	[*] MO : Added possibility to delete the logo frontpage image in editorial module
+	[*] MO : blockcategories module cached
+	[*] MO : Blockinfos and Blockvariouslinks replaced by Blockcms module
+	[*] MO : Display of Promotions / New Products / Best Sellers can be disabled when there are nothing
+	[*] MO : change category
+	[*] MO : added socolissimo translations
+	[*] MO : Cleaned the wishlist module and added mail send when creating a wishlist
+	[*] MO : update Socolissimo for expeditor inet
+	[*] MO : Editorial module don't stock in an xml file anymore, in case of updating : the xml file will be imported in database and delete
+	[*] MO : mailalerts are now deleted from the DB when products linked to this mailalert are removed
+	[*] MO : New blockCms module. (new blockinfos) who work with new recents modifications of CMS pages.
+	[*] MO : new options for stats datamining
+	[*] MO : new PayPal and Moneybookers modules added
+	[*] MO : New reduction & quantity discount support added to the treepodia module
+	[*] MO: Some improvements on Product Comments (Allow guests to post, create criterion for all catalog/categories...)
+	[*] MO : You can now display the price on the crossselling and the productscategory module's block (Feature 26 mantis resolved)
+	
+	[*] IN : mcrypt is automatically chosen if available
+	
+	[*] SQL : Added two hooks in database. 
+	[*] SQL : Added VAT (taxes) values for many countries
+	[*] SQL : Updated zones (Us becomes North america, central america and South america, etc...)
+	[*] SQL : When installing, only default country's tax is enable else disabled.
+	
+	[*] WS : add i18n support for webservice
+	
+	Fixed bugs :
+	
+	[-] Installer : Bug fixed #5325 - SQL error 
+	[-] Installer : fixed sql create table
+	[-] Installer : Installation fixed (condition field was missing)
+	[-] Installer : ps_ changed to PREFIX_
+	[-] Installer : Fixed a crash issue during install process (additional_shipping_cost had no default value)
+	
+	[-] FO : "add to cart" is now protected against bots
+	[-] FO : ajax "add to cart" now uses a POST request instead of GET
+	[-] FO : Best error gestion for suppliers (HTML broken before)
+	[-] FO : bug #5638 is fixed : Incorrect css file name
+	[-] FO : bug #5871 is fixed - this-> missing
+	[-] FO : Bug fixed #5208 - HTTPS CGV
+	[-] FO : Bug fixed #5468 - Phone number in new order email
+	[-] FO : bug fixed on One page checkout
+	[-] FO : bug is fixed on Vat number field
+	[-] FO : css typos (thank you Melinda)
+	[-] FO : Debug on the displaying "Add to cart" button on search page.
+	[-] FO : Discounted product retrieval fixed
+	[-] FO : fixed ajax cart summary when block cart not ajax 
+	[-] FO : fixed ajax cart summary when block cart not ajax for order opc
+	[-] FO : Fixed and rewritten changecurrency.php (blank page previously), lighter and faster
+	[-] FO : fixed bug for category page. The images get now their size even if the image is missing.
+	[-] FO : Fixed bug for page addresses when one of the address goes right instead of clearing left
+	[-] FO : fixed bug on sitemap
+	[-] FO : fixed css position for cart summary
+	[-] FO : Fixed SQL error on sitemap.php
+	[-] FO : Global iso added for urlrewriting
+	[-] FO : Missing parameters, new products not displayed
+	[-] FO : onkeydown -> onkeyup in authentification.tpl Bug #5378 fixed
+	[-] FO : Phone number advertisement more visible
+	[-] FO : Product price display fixed (when changing the combination and specific price applied)
+	[-] FO : Product price fixed (retro-compatibility issue)
+	[-] FO : Product price fixed (rounding issue) when quantity discount applied
+	[-] FO : SQL query fixed on prices-drop.php
+	[-] FO : Updated an error message.
+	[-] FO : Url rewriting - Added flags [QSA, L] in controllers rules
+	[-] FO : fixed bug for ajax cart summary
+	[-] FO : Deleted useless css files (blockinfos and blockvariouslinks modules) Bug #5823 fixed
+	
+	[-] BO : active filter is now usable without SQL error. Bug #5666 fixed
+	[-] BO : Added a complementary security on ajax_category_list call
+	[-] BO : added RewriteRule for cms catégories
+	[-] BO : AdminDB now list only PrestaShop prefixed tables #5873
+	[-] BO : AdminTab traductions restored
+	[-] BO : ajax call for categories on product page.
+	[-] BO : Better anchor management in module tab
+	[-] BO : Bug #4870 problem to reorder product Fixed
+	[-] BO : Bug #5965 fixed : When passing an argument id_cart to getPriceStatic , new cart replace global cart.
+	[-] BO : Bug fix #5199 - Country creation: Wrong parameter count 
+	[-] BO : bug fixed #5346 - Not accounting for alternate theme
+	[-] BO : Bug fixed #5454 - Bad EN translations on product page
+	[-] BO : Bug fixed #5798 - Stock movement default
+	[-] BO : bug fixed #5819 - translation fix for AdminCustomerThreads.php 
+	[-] BO : bug fixed #5840 - Minor issues in new login page
+	[-] BO : Bug fixed #5844 - page not found csshover.htc
+	[-] BO : bug fixed #5860 - delete attribute, confirm message say attribute number!
+	[-] BO : Bug fixed #5868 - Import tools - Default language not selected
+	[-] BO : bug is fixed on Carrier edition, no zones are selected on form on edition
+	[-] BO : Category debug. Add a category is possible now (before no)
+	[-] BO : Customized product price fixed on order detail
+	[-] BO : Debugued product and Cms staging caused by controllers.
+	[-] BO : default spanish image updated
+	[-] BO : default spanish pictures
+	[-] BO : Delete translations directories when deleting a language
+	[-] BO : Filters stay after an action like unactive or delete for tabs generated by AdminTab
+	[-] BO : fix bug on import / export for languages pack
+	[-] BO : fixed a JS error on adminProduct page
+	[-] BO : Fixed bug #4370
+	[-] BO : fixed bug #5115 - getE("PS_CONDITIONS_on") is null
+	[-] BO : Fixed bug #5217 - Live feed non https
+	[-] BO : fixed bug #5255 - can’t enable/disable zone
+	[-] BO : fixed bug #5862 limited countries checkbox
+	[-] BO : fixed bug in adminModules
+	[-] BO : Fixed bug sql for CMS
+	[-] BO : fixed display warning
+	[-] BO : fixed sql install
+	[-] BO : fixed upload picture tinymce
+	[-] BO : Group reduction fixed (table creation was missing)
+	[-] BO : hover on tabs configuration fixed
+	[-] BO : i18n staging 
+	[-] BO : improve specific price feature
+	[-] BO : Integration bugs #5411 and #5482 fixed
+	[-] BO : move ajaxfilemanager for tinymce
+	[-] BO : No more Js errors on AdminProduct page for combinations
+	[-] BO : No multipart encoding needed for AdminZones
+	[-] BO : Product final price display fixed on the product page, when using specific prices
+	[-] BO : Product page default action when the user hit enter is "Save"
+	[-] BO : Refresh position after deletion
+	[-] BO : remove ajaxfilemanager for tinymce
+	[-] BO : removed a useless CSS file (moved to ModuleGrid in fact)
+	[-] BO : Specific price addition fixed when setting a reduction without using the price overload field
+	[-] BO : Fixed SQL error when filtering by profiles on AdminEmployees page
+	[-] BO : The impact on unit price isn't show when no unity is set + trad updated
+	[-] BO : Thread navigation when clicking on "Answer to the next new message" fixed
+	[-] BO : unit_price's bugs fixed (attribute update, reduction of a negative number) + compatibility with Specific price class
+	[-] BO : Validating the CMS form with "enter button" work again
+	[-] BO : When deleting a customer, vouchers assigned to him are deleted
+	[-] BO : When no URL for a carrier but a tracking number, the tracking number appear but not the link.
+	[-] BO : you haven't to scroll down in the module list anymore when you install/uninstall a module
+	
+	[-] Classes : bug #58721 is fixed - Fatal error on PDF invoice
+	[-] Classes : fixed bug on method getNbProducts() method on Cart.php file
+	[-] Classes : New reduction support fixed concerning voucher application
+	[-] Classes : Fixed isEmail() method in Validate.php, there was an error when the field was empty (even if not required)
+	
+	[-] MO : Blockcategories installation repaired
+	[-] MO : Blocklink installation repaired
+	[-] MO : bug is fixed #5788 - “voir” on cross selling graphic
+	[-] MO : CSS for Blockcms module added.
+	[-] MO : Debugued the crossselling module to uninstall correctly
+	[-] MO : fixed bug in Socolissimo
+	[-] MO : productcomments: Query is empty
+	[-] MO : fixed bug hooknewOrder
+	[-] MO : fixed bug in validation.php
+	[-] MO : fixed bug while uninstall module
+	[-] MO : fixed bug while uninstall module
+	[-] MO : new version socolissimo and added translation for EMC
+	[-] MO : update configuration
+	[-] MO : trustedshops : If the form is submitted and the SOAP extension not activated, it display an error message
+	[-] MO : Trustedshops : Wrong email in rating link
+	[-] MO : EditorialClass include is absolute.
+	[-] MO : fixed a bug on Secuvad module
+	[-] MO : fixed Gsitemap module bug caused by CMS update Bug #5787 fixed
+	[-] MO : Fixed little CSS bug in blockwishlist module
+	[-] MO : Fixed SQL error when reloading the page after deleting a block
+	[-] MO : No blocks cms are set when installing the blockcms module normally
+	[-] MO : Ogone SHA-IN calculation updated
+	[-] MO : optimizing modules for ccc feature
+	[-] MO : Paypal installation debuggued (when reseting Paypal SQL error banning the access to AdminModules)
+	[-] MO : small bug is fixed on Dateofdelivery module
+	[-] MO : statsdata installation repaired
+	[-] MO : Updated Gsitemap Module for cms' updates
+	
+	[-] SQL : Added PS_CONDITIONS_CMS_ID in the installation utility for uptate
+	[-] SQL : Blockcms's and editorial's tables are not set anymore when installing Prestashop lite
+	[-] SQL : database modification for carrier modules
+	[-] SQL : fixed missing request for upgrade
+	[-] SQL : Removed useless table zone.`enabled`
+	[-] SQL : sql prefix are fixed
+	[-] SQL : Upgrade updated : `unity_price` : `unit_price`
+	[-] SQL : Fixed SQL on #5942 #5888 #5792
+
+####################################
 #   v1.4.0.1 - 2403 (2010-06-22)   #
 ####################################
 

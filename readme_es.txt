@@ -1,7 +1,7 @@
 PrestaShop <contact@prestashop.com>
 Open-source licence 3.0 (http://www.opensource.org/licenses/osl-3.0.php)
 
-VERSIÓN: Prestashop 1.4 alpha 1
+VERSIÓN: Prestashop 1.4 alpha 2
 
 PREPARACIÓN
 ===========
