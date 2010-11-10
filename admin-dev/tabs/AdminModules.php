@@ -21,13 +21,20 @@ class AdminModules extends AdminTab
 		'delete' => 'delete'
 	);
 	
-	private $listTabModules ;
-	private $listPartnerModules ;
-	private $listNativeModules ;
+	private $listTabModules;
+	private $listPartnerModules = array();
+	private $listNativeModules = array();
+	private $_moduleCacheFile;
 
 	function __construct()
 	{
 		parent::__construct ();
+		
+		$this->_moduleCacheFile = _PS_ROOT_DIR_.'/config/modules_list.xml';
+		
+		if (!$this->isFresh()) 
+			$this->refresh();
+		
 		$this->listTabModules = array('administration'=> $this->l('Administration'), 'advertising_marketing'=> $this->l('Advertising & Marketing'),
 		 'analytics_stats'=> $this->l('Analytics & Stats'), 'billing_invoicing'=> $this->l('Billing & Invoicing'), 'checkout'=> $this->l('Checkout'),
 		 'content_management'=> $this->l('Content Management'), 'export'=> $this->l('Export'), 'front_office_features'=> $this->l('Front office features'),
@@ -36,16 +43,19 @@ class AdminModules extends AdminTab
 		 'search_filter'=> $this->l('Search & Filter'), 'seo'=> $this->l('SEO'), 'shipping_logistics'=> $this->l('Shipping & Logistics'), 'slideshows'=> $this->l('Slideshows'),
 		 'smart_shopping'=> $this->l('Smart shopping'), 'social_networks'=> $this->l('Social Networks'), 'others'=> $this->l('Others Modules'));
 		 
-		 $this->listNativeModules = array('bankwire', 'birthdaypresent', 'blockadvertising', 'blockbestsellers', 'blockcart', 'blockcategories', 'blockcms', 'blockcurrencies', 'blockinfos',
-		  'blocklanguages', 'blocklink', 'blockmanufacturer', 'blockmyaccount', 'blocknewproducts', 'blocknewsletter', 'blockpaymentlogo', 'blockpermanentlinks', 'blockrss', 'blocksearch',
-		  'blockspecials', 'blocksupplier', 'blocktags', 'blockuserinfo', 'blockvariouslinks', 'blockviewed', 'blockwishlist', 'canonicalurl', 'cashondelivery', 'cheque', 'crossselling', 'dateofdelivery',
-		  'editorial', 'feeder', 'followup', 'gadsense', 'ganalytics', 'gcheckout', 'graphartichow', 'graphgooglechart', 'graphvisifire', 'graphxmlswfcharts', 'gridextjs', 'gsitemap', 'homefeatured',
-		  'loyalty', 'mailalerts', 'newsletter', 'pagesnotfound', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram', 'sekeywords', 'sendtoafriend',
-		  'statsbestcategories', 'statsbestcustomers', 'statsbestproducts', 'statsbestsuppliers', 'statsbestvouchers', 'statscarrier', 'statscatalog', 'statscheckup', 'statsdata', 'statsequipment',
-		  'statsgeolocation', 'statshome', 'statslive', 'statsnewsletter', 'statsorigin', 'statspersonalinfos', 'statsproduct', 'statsregistrations', 'statssales', 'statssearch', 'statsstock',
-		  'statsvisits', 'tm4b', 'trackingfront', 'vatnumber', 'watermark');
-		 
-		 $this->listPartnerModules = array('dejala', 'envoimoinscher', 'hipay', 'moneybookers', 'ogone', 'paypal', 'paypalapi', 'socolissimo', 'treepodia', 'trustedshops', 'secuvad', 'reverso', 'iadvize', 'fianetfraud', 'fianetsceau');
+		 $xmlModules = @simplexml_load_file($this->_moduleCacheFile);
+
+		 foreach($xmlModules->children() as $xmlModule)
+		 	if ($xmlModule->attributes() == 'native')
+		 		foreach($xmlModule->children() as $module)
+		 			foreach($module->attributes() as $key => $value)
+		 			if ($key == 'name')
+		 				$this->listNativeModules[] = (string)$value;
+		 	if ($xmlModule->attributes() == 'partner')
+		 		foreach($xmlModule->children() as $module)
+		 			foreach($module->attributes() as $key => $value)
+		 			if ($key == 'name')
+		 				$this->listPartnerModules[] = (string)$value;
 	}
 	
 	public function postProcess()
@@ -605,6 +615,20 @@ class AdminModules extends AdminTab
 			
 		$return .= '<a onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
 		return $return;
+	}
+	
+	
+	public function isFresh($timeout = 604800000)
+	{
+		if (file_exists($this->_moduleCacheFile))
+			return ((mktime() - filemtime($this->_moduleCacheFile)) < $timeout);
+		else
+			return false;
+	}
+	
+	public function refresh()
+	{
+		return file_put_contents($this->_moduleCacheFile, file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
 	}
 	
 }
