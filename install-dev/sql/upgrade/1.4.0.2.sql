@@ -766,7 +766,7 @@ UPDATE `PREFIX_cms` SET `active` = 1;
 
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 
-UPDATE `PREFIX_cart` ADD `secure_key` varchar(32) NOT NULL default '-1' AFTER `id_guest`;
+ALTER TABLE `PREFIX_cart` ADD `secure_key` varchar(32) NOT NULL default '-1' AFTER `id_guest`;
 
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
 
