@@ -103,23 +103,27 @@ class AdminWebservice extends AdminTab
 	public function displayList()
 	{
 		global $cookie, $currentIndex;
+		$warnings = array();
+		
 		if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false)
-			$this->displayWarning($this->l('To avoid operating problems, please use an Apache server.'));
+			$warnings[] = $this->l('To avoid operating problems, please use an Apache server.');
 		{
 			$apache_modules = apache_get_modules();
 			if (!in_array('mod_auth_basic', $apache_modules))
-				$this->displayWarning($this->l('Please activate the Apache module \'mod_auth_basic\' to allow authentication of PrestaShop webservice.'));
+				$warnings[] = $this->l('Please activate the Apache module \'mod_auth_basic\' to allow authentication of PrestaShop webservice.');
 			if (!in_array('mod_rewrite', $apache_modules))
-				$this->displayWarning($this->l('Please activate the Apache module \'mod_rewrite\' to allow using of PrestaShop webservice.'));
+				$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using of PrestaShop webservice.');
 		}
 		if (!extension_loaded('curl'))
-			$this->displayWarning($this->l('Please activate the PHP extension \'curl\' to allow testing of PrestaShop webservice.'));
+			$warnings[] = $this->l('Please activate the PHP extension \'curl\' to allow testing of PrestaShop webservice.');
 		if (!extension_loaded('SimpleXML'))
-			$this->displayWarning($this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.'));
+			$warnings[] = $this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.');
 		if (!configuration::get('PS_SSL_ENABLED'))
-			$this->displayWarning($this->l('if you have the possibility, it is preferable to use the SSL (https) for webservice calls, it avoids the security issues of type "man in the middle".'));
+			$warnings[] = $this->l('if you have the possibility, it is preferable to use the SSL (https) for webservice calls, it avoids the security issues of type "man in the middle".');
 		
-		$this->displayWarning($this->l('Be careful !! When you run the tests, some of your data will be deleted from your database, on the other hand, new dummy data will be added in this one. Other data will be replaced with dummy content.'));
+		$warnings[] = $this->l('Be careful !! When you run the tests, some of your data will be deleted from your database, on the other hand, new dummy data will be added in this one. Other data will be replaced with dummy content.');
+		
+		$this->displayWarning($warnings);
 		
 		parent::displayList();
 	}
