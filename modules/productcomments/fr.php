@@ -12,6 +12,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_254f642527b45bc260048e307
 $_MODULE['<{productcomments}prestashop>productcomments_519532ca486f468a9dd44232e7b0cafa'] = 'Validation nécessaire';
 $_MODULE['<{productcomments}prestashop>productcomments_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_MODULE['<{productcomments}prestashop>productcomments_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
+$_MODULE['<{productcomments}prestashop>productcomments_b615f9999e25a9811b1492366bd31780'] = 'Autoriser les invités';
 $_MODULE['<{productcomments}prestashop>productcomments_18d52ddfed043367596350023ea0f1e8'] = 'Délai minimum entre 2 commentaires';
 $_MODULE['<{productcomments}prestashop>productcomments_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{productcomments}prestashop>productcomments_0a36c5f3ea6825804e6b4314c4084a12'] = 'Modérer les commentaires';
@@ -25,6 +26,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_8bf0c707232d63bf83b4b2467
 $_MODULE['<{productcomments}prestashop>productcomments_0e1a03b7b26ffce9312556aa4de91a00'] = 'Aucun commentaire en attente';
 $_MODULE['<{productcomments}prestashop>productcomments_0048bfb5ec7540fce6a8262321abb68b'] = 'Critères';
 $_MODULE['<{productcomments}prestashop>productcomments_5425e30a4f2d17eebb3ccbc8d9e4b879'] = 'Critère';
+$_MODULE['<{productcomments}prestashop>productcomments_d3f2a59c82bae60060aef6e938a08893'] = 'Application à';
 $_MODULE['<{productcomments}prestashop>productcomments_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Actif';
 $_MODULE['<{productcomments}prestashop>productcomments_549f9fb7be6d7edda6c5560f4ec30be4'] = 'Créez un nouveau critère de notation pour vos produits.';
 $_MODULE['<{productcomments}prestashop>productcomments_dd33a09f24a2e9e889b7f1f1a0255c22'] = 'Une fois créé, vous devez l\'activer pour les produits désirés à partir du formulaire ci-dessous.';
@@ -32,6 +34,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc
 $_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Etat';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
+$_MODULE['<{productcomments}prestashop>productcomments_463f56f3147de6617801e57bebd3f53e'] = 'Critères d\'application';
 $_MODULE['<{productcomments}prestashop>productcomments_92c8811185c56998dfbcbdd30ad649d3'] = 'Critères de notation';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
