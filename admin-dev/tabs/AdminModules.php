@@ -617,11 +617,10 @@ class AdminModules extends AdminTab
 		return $return;
 	}
 	
-	
 	public function isFresh($timeout = 604800000)
 	{
 		if (file_exists($this->_moduleCacheFile))
-			return ((mktime() - filemtime($this->_moduleCacheFile)) < $timeout);
+			return ((time() - filemtime($this->_moduleCacheFile)) < $timeout);
 		else
 			return false;
 	}

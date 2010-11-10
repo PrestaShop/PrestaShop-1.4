@@ -152,7 +152,11 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (84, 'PS_DISTANCE_UNIT', 'km', NOW(), NOW()),
 (85, 'PS_STORES_DISPLAY_CMS', 1, NOW(), NOW()),
 (86, 'PS_STORES_DISPLAY_FOOTER', 1, NOW(), NOW()),
-(87, 'PS_STORES_SIMPLIFIED', 0, NOW(), NOW());
+(87, 'PS_STORES_SIMPLIFIED', 0, NOW(), NOW()),
+(88, 'SHOP_LOGO_WIDTH', 224, NOW(), NOW()),
+(89, 'SHOP_LOGO_HEIGHT', 73, NOW(), NOW()),
+(90, 'EDITORIAL_IMAGE_WIDTH', 530, NOW(), NOW()),
+(91, 'EDITORIAL_IMAGE_HEIGHT', 228, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),

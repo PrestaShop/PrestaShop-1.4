@@ -336,6 +336,8 @@ class FrontControllerCore
 			'HOOK_TOP' => Module::hookExec('top'),
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
+			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
+			'logo_image_height' => Configuration::get('SHOP_LOGO_HEIGHT'),
 			'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
 			'content_only' => intval(Tools::getValue('content_only'))
 		));

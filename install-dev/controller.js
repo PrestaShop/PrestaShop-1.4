@@ -617,6 +617,7 @@ function verifyShopInfos()
 			fieldsList = ret.getElementsByTagName('shopConfig')[0].getElementsByTagName('field');
 			validShopInfos = true;
 			if (!ajaxRefreshField(0, "resultInfosShop", fieldsList, "infosShop")) validShopInfos = false;
+			else if (!ajaxRefreshField(4, "resultInfosShop", fieldsList, "validateShop")) validShopInfos = false;
 			else if (!ajaxRefreshField(1, "resultInfosFirstname", fieldsList, "infosFirstname")) validShopInfos = false;
 			else if (!ajaxRefreshField(2, "resultInfosName", fieldsList, "infosName")) validShopInfos = false;
 			else if (!ajaxRefreshField(3, "resultInfosEmail", fieldsList, "infosEmail")) validShopInfos = false;

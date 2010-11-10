@@ -194,6 +194,12 @@ if (isFormValid())
 			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = 1 WHERE name = \'PS_CIPHER_ALGORITHM\'';	
 	}
 	
+	if (file_exists(realpath(INSTALL_PATH.'/../img').'/logo.jpg'))
+	{
+		list($width, $height, $type, $attr) = getimagesize(realpath(INSTALL_PATH.'/../img').'/logo.jpg');
+		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.(int)round($width).' WHERE name = \'SHOP_LOGO_WIDTH\'';
+		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.(int)round($height).' WHERE name = \'SHOP_LOGO_HEIGHT\'';
+	}
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)
 		if(!$dbInstance->Execute($query))

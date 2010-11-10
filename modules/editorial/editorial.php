@@ -129,9 +129,16 @@ class Editorial extends Module
 					return false;
 				elseif (!imageResize($tmpName, dirname(__FILE__).'/homepage_logo.jpg'))
 					$errors .= $this->displayError($this->l('An error occurred during the image upload.'));
-				unlink($tmpName);
+				if (isset($tmpName))
+					unlink($tmpName);
 			}
 			$this->_html .= $errors == '' ? $this->displayConfirmation('Settings updated successfully') : $errors;
+			if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+			{
+				list($width, $height, $type, $attr) = getimagesize(dirname(__FILE__).'/homepage_logo.jpg');
+				Configuration::updateValue('EDITORIAL_IMAGE_WIDTH', (int)round($width));
+				Configuration::updateValue('EDITORIAL_IMAGE_HEIGHT', (int)round($height));
+			}
 		}
 
 		/* display the editorial's form */
@@ -310,6 +317,8 @@ class Editorial extends Module
 		$smarty->assign(array(
 			'editorial' => $editorial,
 			'default_lang' => Configuration::get('PS_LANG_DEFAULT'),
+			'image_width' => Configuration::get('EDITORIAL_IMAGE_WIDTH'),
+			'image_height' => Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
 			'id_lang' => $cookie->id_lang,
 			'homepage_logo' => file_exists('modules/editorial/homepage_logo.jpg'),
 			'this_path' => $this->_path

@@ -27,6 +27,12 @@ class AdminThemes extends AdminPreferences
 	{
 		global $currentIndex;
 		
+		if (file_exists(_PS_IMG_DIR_.'logo.jpg'))
+		{
+			list($width, $height, $type, $attr) = getimagesize(_PS_IMG_DIR_.'logo.jpg');
+			Configuration::updateValue('SHOP_LOGO_WIDTH', (int)round($width));
+			Configuration::updateValue('SHOP_LOGO_HEIGHT', (int)round($height));
+		}
 		// No cache for auto-refresh uploaded logo
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');

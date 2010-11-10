@@ -6,12 +6,6 @@ $engineType = 'ENGINE_TYPE';
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
-/* Autoload (very usefull on the case where upgrade file call a static object method) */
-function __autoload($className)
-{
-	include_once(INSTALL_PATH.'/../classes/'.$className.'.php');
-}
-
 define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
 
@@ -47,6 +41,10 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
 // Update editorial module to delete all xml methods
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'editorial_update.php');
+// Update logo and editorial image size
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_image_size_in_db.php');
+// Update product comments
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updateproductcomments.php');
 
 //old version detection
 $oldversion = false;

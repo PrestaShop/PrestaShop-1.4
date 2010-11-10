@@ -813,4 +813,5 @@ CREATE TABLE `PREFIX_required_field` (
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;
+/* PHP:update_image_size_in_db(); */;
 /* PHP:updateproductcomments(); */;
