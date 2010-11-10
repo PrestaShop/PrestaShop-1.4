@@ -11,13 +11,12 @@
   * @version 1.4
   *
   */
-
 class LinkCore
 {
 	/** @var boolean Rewriting activation */
 	private $allow;
 	private $url;
-	private $cache = array('page' => array());
+	static $cache = array('page' => array());
 
 	/**
 	  * Constructor (initialization only)
@@ -136,9 +135,8 @@ class LinkCore
 	{
 		global $iso, $cookie;
 		$base = $ssl ? _PS_BASE_URL_ : Tools::getHttpHost(true);
-		
-		if (array_key_exists($filename, $this->cache['page']))
-			$uri_path = $this->cache['page'][$filename];
+		if (array_key_exists($filename, self::$cache['page']))
+			$uri_path = self::$cache['page'][$filename];
 		else
 		{
 			if ($this->allow == 1 && file_exists($filename))
@@ -153,7 +151,7 @@ class LinkCore
 			}
 			else
 				$uri_path = $filename;
-			$this->cache['page'][$filename] = $uri_path;
+			self::$cache['page'][$filename] = $uri_path;
 		}
 		return $base.__PS_BASE_URI__.$uri_path;
 	}

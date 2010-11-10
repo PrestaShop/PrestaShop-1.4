@@ -133,9 +133,4 @@ function smartyPackJSinHTML($tpl_output, &$smarty)
 if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
 	$smarty->register_outputfilter('smartyPackJSinHTML');
 
-global $link;
-
-$link = new Link();
-$smarty->assign('link', $link);
-
 ?>

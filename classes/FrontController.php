@@ -72,6 +72,11 @@ class FrontControllerCore
 
 		// Init Cookie
 		$cookie = new Cookie('ps');
+		
+		// Init rewrited links
+		global $link;
+		$link = new Link();
+		$smarty->assign('link', $link);
 
 		// Switch language if needed and init cookie language
 		if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = intval(Language::getIdByIso($iso))))
@@ -281,7 +286,7 @@ class FrontControllerCore
 			exit;
 		}
 
-		global $css_files, $js_files;
+		global $css_files, $js_files, $iso;
 		$css_files = array();
 		$js_files = array();
 		
@@ -292,6 +297,15 @@ class FrontControllerCore
 			_PS_JS_DIR_.'jquery/jquery.easing.1.3.js',
 			_PS_JS_DIR_.'jquery/jquery.hotkeys-0.7.8-packed.js'
 		));
+		
+		// Load each links once, for better performances...
+		$specific_pages = Db::getInstance()->ExecuteS('
+				SELECT url_rewrite, page
+				FROM `'._DB_PREFIX_.'meta` m
+				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+				WHERE id_lang = '.intval($cookie->id_lang));
+		foreach ($specific_pages as $specific_page)
+			Link::$cache['page'][$specific_page['page'].'.php'] = 'lang-'.$iso.'/'.$specific_page['url_rewrite'];
 	}
 
 	public function preProcess()
