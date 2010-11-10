@@ -768,6 +768,8 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN
 
 ALTER TABLE `PREFIX_cart` ADD `secure_key` varchar(32) NOT NULL default '-1' AFTER `id_guest`;
 
+ALTER TABLE `PREFIX_order_detail` ADD `product_upc` varchar(12) default NULL AFTER `product_ean13`;
+
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
 
 CREATE TABLE `PREFIX_store` (
@@ -822,8 +824,12 @@ CREATE TABLE `PREFIX_memcached_servers` (
 `weight` INT(11) UNSIGNED NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
+
+
+
 /* PHP */
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;
 /* PHP:update_image_size_in_db(); */;
 /* PHP:updateproductcomments(); */;
+/* PHP:update_order_details(); */;

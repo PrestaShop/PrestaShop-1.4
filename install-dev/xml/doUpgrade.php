@@ -45,6 +45,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'editorial_update.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_image_size_in_db.php');
 // Update product comments
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updateproductcomments.php');
+// Update order details
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_details.php');
 
 //old version detection
 $oldversion = false;
