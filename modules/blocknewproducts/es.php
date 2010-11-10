@@ -11,6 +11,10 @@ $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c888438d14855d7d96a2724
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_e451e6943bb539d1bd804d2ede6474b5'] = 'Productos mostrados';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc4bbebd6a8d2fb633a1dd8ceda3fc8d'] = 'Seleccione el número de productos a mostrar en este bloque';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_530c88f8210e022b39128e3f0409bbcf'] = 'Mostrar siempre este bloque';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_a8a670d89a6d2f3fa59942fc591011ef'] = 'Mostrar este bloque aunque no haya productos disponibles';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Novedades';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Todas las novedades';

@@ -11,5 +11,6 @@ $_MODULE['<{reverso}prestashop>reverso_06933067aafd48425d67bcb01bba5cb6'] = 'Act
 $_MODULE['<{reverso}prestashop>reverso_a67fe5b600cc617a0cc6f782b2b466e1'] = 'Configuración de la cuenta ReversoForm';
 $_MODULE['<{reverso}prestashop>reverso_945ef080522eaee1f20529606281d2bf'] = '¿No tiene cuenta Reverso?';
 $_MODULE['<{reverso}prestashop>reverso_15e80d88e64872dffe151e5ba783270b'] = 'Regístrese ahora';
+$_MODULE['<{reverso}prestashop>reverso_7ccf58c950043c9fbfed668df13ce608'] = 'Parámetros actualizados';
 $_MODULE['<{reverso}prestashop>reverso_88d543504a205e581ff03188b6abdc0b'] = 'Imposible encontrar el número';
 $_MODULE['<{reverso}prestashop>reverso_87094afb0ee64892a41b1f6acab60b02'] = 'Completar el formulario automáticamente con su número de teléfono';

@@ -25,6 +25,7 @@ $_MODULE['<{blockcart}prestashop>blockcart_09dc02ecbb078868a3a86dded030076d'] = 
 $_MODULE['<{blockcart}prestashop>blockcart_f2a6c498fb90ee345d997f888fce3b18'] = 'Borrar';
 $_MODULE['<{blockcart}prestashop>blockcart_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 'Transporte';
 $_MODULE['<{blockcart}prestashop>blockcart_ba794350deb07c0c96fe73bd12239059'] = 'Embalaje';
+$_MODULE['<{blockcart}prestashop>blockcart_4b78ac8eb158840e9638a3aeb26c4a9d'] = 'Impuestos';
 $_MODULE['<{blockcart}prestashop>blockcart_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{blockcart}prestashop>blockcart_0d11c2b75cf03522c8d97938490466b2'] = 'Estos precios se entienden IVA incluído';
 $_MODULE['<{blockcart}prestashop>blockcart_41202aa6b8cf7ae885644717dab1e8b4'] = 'Estos precios se entienden sin IVA';

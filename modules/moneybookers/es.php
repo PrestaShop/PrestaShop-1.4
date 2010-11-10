@@ -9,9 +9,12 @@ $_MODULE['<{moneybookers}prestashop>confirmation_0db71da7150c27142eef9d22b843b4a
 $_MODULE['<{moneybookers}prestashop>confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = ' ';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nos hemos dado cuenta de un problema con su pedido.  Si usted piensa que esto es un error, puede contactar con nuestro';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
+$_MODULE['<{moneybookers}prestashop>moneybookers-form_25065e3ef9274f9b0e3088340f6d79e6'] = 'Pagar con tarjeta de crédito';
+$_MODULE['<{moneybookers}prestashop>moneybookers-form_2cc66b7b26e92326afa76a021442330e'] = 'Pagar con el monedero electrónico MoneyBookers (eWallet)';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_07bf11ff6eaf27b8aa91f42d7fb4200c'] = 'Acepta pagos por Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de que quiere eliminar sus datos?';
+$_MODULE['<{moneybookers}prestashop>moneybookers_2d2eca55f12f72b2e1d753b7deadd9f5'] = 'Actualmente utiliza la dirección por defecto del módulo Moneybookers. Debe utilizar sus parámetros.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_bd65b912e0152f62629b6afeaa8398f4'] = 'Imposible contactar con el servidor de activación, por favor inténtelo más tarde';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c9f3e0397a1b070092ab4f0bf046fd4a'] = 'Error durante la validación de la cuenta, su correo electrónico podría estar equivocado';
 $_MODULE['<{moneybookers}prestashop>moneybookers_74b8a559fcedbb491aba11dd10610b5f'] = 'E-mail activado con éxito, ahora puede validar su palabra secreta';

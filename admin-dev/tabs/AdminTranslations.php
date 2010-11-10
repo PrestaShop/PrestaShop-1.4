@@ -12,6 +12,8 @@
   */
 
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
+include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
+include_once(PS_ADMIN_DIR.'/../tools/pear/PEAR.php');
 define ('TEXTAREA_SIZED', 70);
 
 class AdminTranslations extends AdminTab
@@ -871,7 +873,7 @@ class AdminTranslations extends AdminTab
 				{
 					if (!filesize($fn))
 						continue;
-					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, true)?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
+					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, (true|false))?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
 					foreach($matches[1] as $key)
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}

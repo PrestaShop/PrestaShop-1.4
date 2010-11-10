@@ -13,12 +13,6 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_567f9c44ac5cb5d3cd85d4b4ac610
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_5ef2d617096ae7b47a83f3d4de9c84bd'] = 'Módulo activado: opción no válida';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_bd864e0c8e29723996ec98f396cf2282'] = 'Activar el módulo';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Disponible';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_b9f5c797ebbf55adccdd8539a65a0241'] = 'No disponible';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_2ed28c3cec2385594e0f337c2c39c8b6'] = 'Activar el modulo (Agregar el bloque wishlist y \\\"Agragar el boton a mi wishlist\\\")';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_56ee3495a32081ccb6d2376eab391bfa'] = 'Listado';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_e6d0e1c8fc6a4fcf47869df87e04cd88'] = 'Clientes';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_e0fd9b310aba555f96e76738ff192ac3'] = 'Wishlist';

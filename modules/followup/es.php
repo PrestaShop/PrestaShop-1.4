@@ -40,7 +40,6 @@ $_MODULE['<{followup}prestashop>followup_5dbc98dcc983a70728bd082d1a47546e'] = 'E
 $_MODULE['<{followup}prestashop>followup_4c614360da93c0a041b22e537de151eb'] = 'U';
 $_MODULE['<{followup}prestashop>followup_24022906388921e2fbb52a2ce48b355f'] = 'Ningún dato registrado por el momento';
 $_MODULE['<{followup}prestashop>followup_edf9feeab43a7623f6afc152d1ede515'] = 'Vale de descuento para su carrito abandonado';
-$_MODULE['<{followup}prestashop>followup_5ea310319c1993ad9eda034b64c8ec54'] = 'Su carrito y su vale de descuento';
 $_MODULE['<{followup}prestashop>followup_6fa185d82236807d3605f880f46925fd'] = 'Gracias por su pedido';
 $_MODULE['<{followup}prestashop>followup_70bd66db710f1a8c278fcf8abe932a1a'] = 'Es usted uno de nuestros mejores clientes';
 $_MODULE['<{followup}prestashop>followup_c2cd40403c2680fc62c2689140ff46f0'] = 'le echamos de menos';
