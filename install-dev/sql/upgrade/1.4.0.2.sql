@@ -510,6 +510,78 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 	), 1, 1, 1, 1 FROM `PREFIX_profile`
 );
 
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (7, 'AdminAddonsCatalog', '', 1);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsCatalog'
+), 'Modules & themes catalog');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsCatalog'
+), 'Catalogue de modules & thèmes');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsCatalog'
+), 'Modules & themes catalog');
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminAddonsCatalog'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (7, 'AdminAddonsMyAccount', '', 2);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsMyAccount'
+), 'My Account');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsMyAccount'
+), 'Mon compte');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminAddonsMyAccount'
+), 'My Account');
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminAddonsMyAccount'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
+INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (7, 'AdminThemes', '', 3);
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminThemes'
+), 'Themes');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminThemes'
+), 'Thèmes');
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
+	SELECT `id_tab`
+	FROM `PREFIX_tab`
+	WHERE `class_name` = 'AdminThemes'
+), 'Temas');
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
+	SELECT `id_profile`, (
+		SELECT `id_tab`
+		FROM `PREFIX_tab`
+		WHERE `class_name` = 'AdminThemes'
+	), 1, 1, 1, 1 FROM `PREFIX_profile`
+);
+
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('deleteProductAttribute', 'Product Attribute Deletion', NULL, 0);
 INSERT INTO `PREFIX_hook` (`name` ,`title` ,`description` ,`position`) VALUES ('beforeCarrier', 'Before carrier list', 'This hook is display before the carrier list on Front office', 1);
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('orderDetailDisplayed', 'Order detail displayed', 'Displayed on order detail on front office', 1);
