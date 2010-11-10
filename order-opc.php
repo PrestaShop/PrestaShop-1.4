@@ -387,7 +387,8 @@ Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
 Tools::addJS(_THEME_JS_DIR_.'tools.js');
 Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 Tools::addJS(_THEME_JS_DIR_.'order-opc.js');
-Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
+if (intval(Configuration::get('PS_BLOCK_CART_AJAX')))
+	Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
 Tools::addJS(_PS_JS_DIR_.'jquery/jquery-typewatch.pack.js');
 include(dirname(__FILE__).'/header.php');
