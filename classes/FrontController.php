@@ -299,13 +299,7 @@ class FrontControllerCore
 		));
 		
 		// Load each links once, for better performances...
-		$specific_pages = Db::getInstance()->ExecuteS('
-				SELECT url_rewrite, page
-				FROM `'._DB_PREFIX_.'meta` m
-				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.intval($cookie->id_lang));
-		foreach ($specific_pages as $specific_page)
-			Link::$cache['page'][$specific_page['page'].'.php'] = 'lang-'.$iso.'/'.$specific_page['url_rewrite'];
+		$link->preloadPageLinks();
 	}
 
 	public function preProcess()

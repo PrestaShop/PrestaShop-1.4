@@ -258,6 +258,21 @@ class LinkCore
 			return NULL;
 		return 'lang-'.Language::getIsoById(intval($id_lang)).'/';
 	}
+	
+		public function preloadPageLinks()
+		{
+			global $cookie, $iso;
+			if ($this->allow)
+			{
+				$specific_pages = Db::getInstance()->ExecuteS('
+					SELECT url_rewrite, page
+					FROM `'._DB_PREFIX_.'meta` m
+					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+					WHERE id_lang = '.intval($cookie->id_lang));
+				foreach ($specific_pages as $specific_page)
+					self::$cache['page'][$specific_page['page'].'.php'] = 'lang-'.$iso.'/'.$specific_page['url_rewrite'];
+			}
+		}
 }
 
 ?>
