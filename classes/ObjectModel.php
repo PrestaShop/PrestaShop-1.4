@@ -124,6 +124,8 @@ abstract class ObjectModelCore
 			if ($fields)
 				foreach ($fields AS $row)
 					self::$fieldsRequiredDatabase[$row['object_name']][(int)$row['id_required_field']] = pSQL($row['field_name']);
+			else
+				self::$fieldsRequiredDatabase = array();
 		}
 	}
 
