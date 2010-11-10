@@ -1530,5 +1530,5 @@ CREATE TABLE `PREFIX_required_field` (
   `object_name` varchar(32) NOT NULL,
   `field_name` varchar(32) NOT NULL,
   PRIMARY KEY (`id_required_field`)
-) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=ut8;
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
