@@ -7,7 +7,7 @@
   * @author PrestaShop <support@prestashop.com>
   * @copyright PrestaShop
   * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.4
+  * @version 1.3
   *
   */
 
@@ -121,9 +121,9 @@ class AdminEmployees extends AdminTab
 			echo '<div class="clear">&nbsp;</div>
 				<label>'.$this->l('UI mode:').' </label>
 				<div class="margin-form">
-					<input type="radio" name="bo_uimode" id="uimode_on" value="1" '.($this->getFieldValue($obj, 'bo_uimode') ? 'checked="checked" ' : '').'/>
+					<input type="radio" name="bo_uimode" id="uimode_on" value="hover" '.($this->getFieldValue($obj, 'bo_uimode') == 'hover' ? 'checked="checked" ' : '').'/>
 					<label class="t" for="uimode_on">'.$this->l('Hover on tabs').'</label>
-					<input type="radio" name="bo_uimode" id="uimode_off" value="0" '.(!$this->getFieldValue($obj, 'bo_uimode') ? 'checked="checked" ' : '').'/>
+					<input type="radio" name="bo_uimode" id="uimode_off" value="click" '.($this->getFieldValue($obj, 'bo_uimode') == 'click' ? 'checked="checked" ' : '').'/>
 					<label class="t" for="uimode_off">'.$this->l('Click on tabs').'</label>
 				</div><div class="clear">&nbsp;</div>
 				<label>'.$this->l('Status:').' </label>
