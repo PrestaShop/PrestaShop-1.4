@@ -423,8 +423,8 @@ class AdminModules extends AdminTab
 		foreach ($orderModule AS $tabModule)
 			foreach ($tabModule AS $module)
 				if ($module->active AND $module->warning)
-					$concatWarning[] ='<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning));
-		$this->displayWarning($concatWarning);
+					$warnings[] ='<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning));
+		$this->displayWarning($warnings);
 		echo '<form method="POST">
 			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
 				<tr>

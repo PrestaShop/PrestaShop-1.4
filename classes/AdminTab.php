@@ -932,19 +932,19 @@ abstract class AdminTabCore
 					});
 				});
 			  </script>
-		<div class="warn"><img src="../img/admin/warn2.png" /><span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span>';
-		
+		<div class="warn"><img src="../img/admin/warn2.png" />';
 		if (!is_array($warn))
 			echo $warn;
 		else
-			echo (count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
+		{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span>'.
+			(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
 			.'<span style="margin-left:20px;" id="labelSeeMore">
 			<a id="linkSeeMore" href="" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
 			<a id="linkHide" href="" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
 			foreach($warn as $val)
 				echo '<li>'.$val.'</li>';
 			echo '</ul>';
-			
+		}	
 		echo '</div>';		
 	}
 
