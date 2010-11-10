@@ -28,6 +28,7 @@ class AdminInformation extends AdminTab
 			'mysql_support' => false,
 			'config_dir' => PS_ADMIN_DIR.'/../config/',
 			'tools_dir' => PS_ADMIN_DIR.'/../tools/smarty/compile',
+			'cache_dir' => PS_ADMIN_DIR.'/../tools/smarty/cache/',
 			'sitemap' => PS_ADMIN_DIR.'/../sitemap.xml',
 			'img_dir' => PS_ADMIN_DIR.'/../img/',
 			'mails_dir' => PS_ADMIN_DIR.'/../mails/',
@@ -52,6 +53,7 @@ class AdminInformation extends AdminTab
 			'mysql_support' => $this->l('Active the MySQL support on your server'),
 			'config_dir' => $this->l('Set write permissions on config folder'),
 			'tools_dir' => $this->l('Set write permissions on tools folder'),
+			'cache_dir' => $this->l('Set write permissions on cache folder'),
 			'sitemap' => $this->l('Set write permissions on sitemap.xml file'),
 			'img_dir' => $this->l('Set write permissions on img folder and subfolders/recursively'),
 			'mails_dir' => $this->l('Set write permissions on mails folder and subfolders/recursively'),
@@ -316,6 +318,11 @@ class AdminInformation extends AdminTab
 	}
 	
 	static private function		test_tools_dir($dir)
+	{
+		return self::test_dir($dir);
+	}
+	
+	static function		test_cache_dir($dir)
 	{
 		return self::test_dir($dir);
 	}

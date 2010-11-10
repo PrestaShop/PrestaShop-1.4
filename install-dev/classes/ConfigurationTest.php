@@ -120,6 +120,11 @@ class	ConfigurationTest
 		return self::test_dir($dir);
 	}
 	
+	static function		test_cache_dir($dir)
+	{
+		return self::test_dir($dir);
+	}
+	
 	static function		test_download_dir($dir)
 	{
 		return self::test_dir($dir);
