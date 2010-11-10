@@ -27,7 +27,7 @@ class PayPal extends PaymentModule
 		if (Configuration::get('PAYPAL_BUSINESS') == 'paypal@prestashop.com')
 			$this->warning = $this->l('You are currently using the default PayPal email address, you need to use your own email address');
 		$this->_checkAndUpdateFromOldVersion();
-		if (file_exists(dirname(__FILE__).'/../paypalapi/paypalapi.php') AND $this->active)
+		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
 			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove PayPalAPI module');
 	}
 	
@@ -46,12 +46,11 @@ class PayPal extends PaymentModule
 			OR !$this->registerHook('adminOrder'))
 			return false;
 		
-		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php'))
+		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND !Configuration::get('PAYPAL_NEW'))
 		{
 			include_once(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php');
 			$paypalapi = new PaypalAPI();
-			if ($paypalapi->active)
-				return $this->_checkAndUpdateFromOldVersion(true);
+			return $this->_checkAndUpdateFromOldVersion(true);
 		}
 		
 		/* Set database */
@@ -62,7 +61,7 @@ class PayPal extends PaymentModule
 		  `payment_status` varchar(255) NOT NULL,
 		  `capture` int(10) unsigned NOT NULL,
 		  PRIMARY KEY (`id_order`)
-		) ENGINE='._MYSQL_ENGINE_.'  DEFAULT CHARSET=utf8;'))
+		) ENGINE='._MYSQL_ENGINE_.'  DEFAULT CHARSET=utf8'))
 			return false;
 		
 		/* Set configuration */
@@ -114,7 +113,6 @@ class PayPal extends PaymentModule
 		Configuration::deleteByName('PAYPAL_PAYMENT_METHOD');
 		Configuration::deleteByName('PAYPAL_TEMPLATE');
 		Configuration::deleteByName('PAYPAL_CAPTURE');
-		Configuration::deleteByName('PAYPAL_NEW');
 		Configuration::deleteByName('PAYPAL_OS_AUTHORIZATION');
 		
 		return parent::uninstall();
