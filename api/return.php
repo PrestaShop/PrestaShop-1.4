@@ -9,7 +9,14 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 	foreach ($resourceParameters['fields'] as $key => $field)
 		if ($key != 'id')
 		{
-			if (!is_array($object->$key))
+			if (is_array($object->$key))
+			{
+				$ret .= '<'.$field['sqlId'].'>'."\n";
+				foreach ($object->$key as $idLang => $value)
+					$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+				$ret .= '</'.$field['sqlId'].'>'."\n";
+			}
+			else
 			{
 				$ret .= '<'.$field['sqlId'].(array_key_exists('xlink_resource', $field) ? ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.$object->$key.'"' : '').'><![CDATA['.$object->$key.']]></'.$field['sqlId'].'>'."\n";
 			}
@@ -32,6 +39,7 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 						$ret .= '<'.$resourceParameters['associations'][$assocName]['resource'].' xlink:href="'.$ws_url.$assocName.'/'.$associationRessource['id'].'">'."\n";
 						foreach ($associationRessource as $fieldName => $fieldValue)
 						{
+							if ($fieldName == 'id')
 								$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
 						}
 						$ret .= '</'.$resourceParameters['associations'][$assocName]['resource'].'>'."\n";
@@ -39,21 +47,12 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 			}
 			$ret .= '</'.$assocName.'>'."\n";
 		}
-		$ret .= '<i18n>'."\n";
-		foreach ($resourceParameters['fields'] as $key => $field)
-			  if (is_array($object->$key))
-			  {
-				  $ret .= '<'.$field['sqlId'].'>'."\n";
-				  foreach ($object->$key as $idLang => $value)
-					  $ret .= '<language_'.$idLang.' id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language_'.$idLang.'>'."\n";
-				  $ret .= '</'.$field['sqlId'].'>'."\n";
-			  }
-		$ret .= '</i18n>'."\n";
 		$ret .= '</associations>'."\n";
 	}
 	$ret .= '</p:'.$resourceParameters['objectNodeName'].'>'."\n";
 	return $ret;
 }
+
 
 header($return_code);
 restore_error_handler();
@@ -88,10 +87,10 @@ if ($output)
 							elseif ($fieldsToDisplay == 'full')
 								foreach ($objects as $object)
 									echo getXmlStringViewOfObject($resourceParameters, $object);
-							else
+							/*else
 							{
 								die('todo : display specific fields');//TODO[id,lastname]
-							}
+							}*/
 						}
 						else
 						{
