@@ -145,7 +145,6 @@ class AdminPerformance extends AdminTab
 	{
 		global $currentIndex;
 
-		echo '
 echo '<script type="text/javascript">
 						$(document).ready(function() {
 							showMemcached();

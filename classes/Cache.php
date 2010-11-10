@@ -1,6 +1,6 @@
 <?php
 
-abstract class Cache {
+abstract class CacheCore {
 	
 	private static $_instance;
 	protected $_keysCached;

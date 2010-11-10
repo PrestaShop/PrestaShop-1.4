@@ -1,6 +1,6 @@
 <?php
 
-class Memcached extends Cache {
+class MemcachedCore extends Cache {
 	
 	private $_memcacheObj;
 	private $_isConnected = false;

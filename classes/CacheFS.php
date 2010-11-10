@@ -1,6 +1,6 @@
 <?php
 
-class CacheFS extends Cache {
+class CacheFSCore extends Cache {
 	
 	private static $_cacheDirectory;
 	
