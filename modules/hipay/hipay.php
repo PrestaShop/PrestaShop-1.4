@@ -174,7 +174,7 @@ class Hipay extends PaymentModule
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.$_POST['xml']."\n", FILE_APPEND);
 		return false;
 		$cart = new Cart((int)$id_cart);
-		elseif ($cart->secure_key != Tools::getValue('token'))
+		if ($cart->secure_key != Tools::getValue('token'))
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.$_POST['xml']."\n", FILE_APPEND);
 		else
 		{
