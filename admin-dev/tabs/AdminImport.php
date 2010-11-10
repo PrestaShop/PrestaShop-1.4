@@ -1154,7 +1154,7 @@ class AdminImport extends AdminTab
 						<div class="margin-form">
 							<select name="iso_lang">';
 						foreach ($this->_languages AS $lang)
-							echo '<option value="'.$lang['iso_code'].' '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').' ">'.$lang['name'].'</option>';
+							echo '<option value="'.$lang['iso_code'].'" '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').' >'.$lang['name'].'</option>';
 						echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
 						<div class="margin-form">
 							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
