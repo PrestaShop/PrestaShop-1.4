@@ -392,7 +392,7 @@ ALTER TABLE `PREFIX_product` ADD `online_only` TINYINT(1) NOT NULL DEFAULT '0' A
 ALTER TABLE `PREFIX_product` ADD `condition` ENUM('new', 'used', 'refurbished') NOT NULL DEFAULT 'new' AFTER `available_for_order`;
 ALTER TABLE `PREFIX_product` ADD `upc` VARCHAR( 12 ) NULL AFTER `ean13`;
 
-ALTER TABLE `pstest_product_attribute` ADD `upc` VARCHAR( 12 ) NULL AFTER `ean13`;
+ALTER TABLE `PREFIX_product_attribute` ADD `upc` VARCHAR( 12 ) NULL AFTER `ean13`;
 
 SET @defaultOOS = (SELECT value FROM `PREFIX_configuration` WHERE name = 'PS_ORDER_OUT_OF_STOCK');
 /* Set 0 for every non-attribute product */
