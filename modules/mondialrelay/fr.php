@@ -19,7 +19,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_b9a85d87ae6dd77f2107734a4cd0bb1
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_2cd86c170d0c2fcdeed38cb9f8729bc7'] = 'Mise à jour accomplie';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_07213a0161f52846ab198be103b5ab43'] = 'erreurs';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cb5e100e5a9a3e7f6d1fd97512215282'] = 'erreur';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_350c1cc4343826a89f08a33bb49c6d98'] = 'Configuration du Module Rate Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_350c1cc4343826a89f08a33bb49c6d98'] = 'Configuration du Module Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d21a9f93917604d5490ad529a7cf1ff9'] = 'Pour créer un transporteur Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3038c0d69fda0702393c0a7675648dc2'] = 'Enregistrez vos Paramètres de compte Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_abfc836cd1df9d6d2bdfd2fc98e6fa93'] = 'Créez un transporteur';
