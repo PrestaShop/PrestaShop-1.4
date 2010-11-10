@@ -1,0 +1,7 @@
+<?php
+
+///////////////////////////////////////
+// get the list of states of America //
+///////////////////////////////////////
+
+echo '<h3>Get the list of states of America</h3>';

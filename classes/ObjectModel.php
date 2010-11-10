@@ -448,7 +448,7 @@ abstract class ObjectModelCore
 				'params' => array()
 			),
 			'fields' => array(
-				'id' => array('sqlId' => $this->identifier),
+				'id' => array('sqlId' => $this->identifier, 'i18n' => false),
 			),
 		);
 		if (!isset($this->webserviceParameters['objectNodeName']))
@@ -471,7 +471,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize)
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize, 'i18n' => false)
 				);
 			}
 		if (isset($this->fieldsValidate))
@@ -481,7 +481,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod)
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod, 'i18n' => false)
 				);
 			}
 		if (isset($this->fieldsRequired))
@@ -493,7 +493,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldRequired] = array();
 				$resourceParameters['fields'][$fieldRequired] = array_merge(
 					$resourceParameters['fields'][$fieldRequired],
-					$resourceParameters['fields'][$fieldRequired] = array('sqlId' => $fieldRequired, 'required' => true)
+					$resourceParameters['fields'][$fieldRequired] = array('sqlId' => $fieldRequired, 'required' => true, 'i18n' => false)
 				);
 			}
 		}
@@ -504,7 +504,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize)
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'maxSize' => $maxSize, 'i18n' => true)
 				);
 			}
 		if (isset($this->fieldsValidateLang))
@@ -514,7 +514,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod)
+					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod, 'i18n' => true)
 				);
 			}
 		if (isset($this->fieldsRequiredLang))
@@ -524,20 +524,22 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$field] = array();
 				$resourceParameters['fields'][$field] = array_merge(
 					$resourceParameters['fields'][$field],
-					$resourceParameters['fields'][$field] = array('sqlId' => $field, 'required' => true)
+					$resourceParameters['fields'][$field] = array('sqlId' => $field, 'required' => true, 'i18n' => true)
 				);
 			}
 		return $resourceParameters;
 	}
 		
-	public function getWebserviceObjectList($sql_filter, $sql_sort, $sql_limit)
+	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT '.$this->identifier.' FROM `'._DB_PREFIX_.$this->table.'`
+		$query = '
+		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
+		'.$sql_join.'
 		WHERE 1 '.$sql_filter.'
 		'.($sql_sort != '' ? $sql_sort : '').'
 		'.($sql_limit != '' ? $sql_limit : '').'
-		');
+		';
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 		return $result;
 	}
 	

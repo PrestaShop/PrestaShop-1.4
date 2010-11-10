@@ -2,6 +2,7 @@
 /////////////////////
 // initializations //
 /////////////////////
+
 function psErrorHandler($errno, $errstr, $errfile, $errline)
 {
 	global $errors, $display_errors;
@@ -59,10 +60,9 @@ function psErrorHandler($errno, $errstr, $errfile, $errline)
 	return true;
 }
 $errors = array();
-$display_errors = strtolower(ini_get('display_errors')) != 'off';
 $webservice_call = true;
 $old_error_handler = set_error_handler("psErrorHandler");
-include(dirname(__FILE__).'/../../config/config.inc.php');
+require_once(dirname(__FILE__).'/../config/config.inc.php');
 $display_errors = strtolower(ini_get('display_errors')) != 'off';
 ini_set('html_errors', 'off');
 $output = true;

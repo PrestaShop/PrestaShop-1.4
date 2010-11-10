@@ -1,0 +1,4 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteRule ^/?(.*)$ dispatcher.php?url=$1 [QSA,L,E]
+</IfModule>

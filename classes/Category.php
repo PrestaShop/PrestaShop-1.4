@@ -80,6 +80,15 @@ class CategoryCore extends ObjectModel
 			'id_parent' => array('sqlId' => 'id_parent', 'xlink_resource'=> 'categories'),
 			'level_depth' => array('sqlId' => 'level_depth'),
 		),
+		'linked_tables' => array(//TODO this should be native...
+			'i18n' => array(
+				'table' => 'category_lang',
+				'fields' => array(
+					'id_lang' => array('sqlId' => 'id_lang', 'xlink_resource'=> 'languages'),
+					'name' => array('sqlId' => 'name'),
+				),
+			),
+		),
 	);
 
 	public function __construct($id_category = NULL, $id_lang = NULL)

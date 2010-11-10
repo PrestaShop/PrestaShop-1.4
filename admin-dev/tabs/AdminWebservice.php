@@ -31,7 +31,7 @@ class AdminWebservice extends AdminTab
 		
 		$this->optionTitle = $this->l('Configuration');
 		$this->_fieldsOptions = array(
-		'PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('active Friendly URL\'s (tab "Preferences" in Back Office)').'</li><li>'.$this->l('regenerate the .htaccess via the Prestashop Back Office having taken care to check the "use webservice" option').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT and DELETE are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'),
+		'PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT and DELETE are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'),
 		);
 	
 		parent::__construct();
@@ -55,7 +55,7 @@ class AdminWebservice extends AdminTab
 			echo '
 			<form style="margin-top:15px;overflow:auto;" class="width6" method="post" name="Tests" id="Tests" action="'.$currentIndex.'&token='.$this->token.'#Tests">
 				<fieldset><legend><img src="../img/admin/enabled.gif">Webservice tests</legend>
-					<label>'.$this->l('Authentication key').'</label>
+					<label>'.$this->l('Authentication key:').'</label>
 					<div class="margin-form">
 						<select name="auth_key">
 						<option value="">'.$this->l('Select a key').'</option>';
@@ -68,7 +68,7 @@ class AdminWebservice extends AdminTab
 					</div>';
 	$resources = $this->getResources();
 	echo '
-					<label>'.$this->l('Select resource(s)').'</label>
+					<label>'.$this->l('Select resource(s):').'</label>
 					<div class="margin-form">
 						<select name="resource">
 						<option value="">'.$this->l('All resources').'</option>';
@@ -78,7 +78,7 @@ class AdminWebservice extends AdminTab
 						</select>
 					</div>';
 	$cases = $this->getCases();
-	echo ' <label>'.$this->l('Select case(s)').'</label>
+	echo ' <label>'.$this->l('Select case(s):').'</label>
 					<div class="margin-form">
 						<select name="case">
 						<option value="">'.$this->l('Select a case').'</option>';
@@ -134,7 +134,7 @@ class AdminWebservice extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/access.png" />'.$this->l('Webservice Accounts').'</legend>
-				<label>'.$this->l('Key').'</label>
+				<label>'.$this->l('Key:').'</label>
 				<div class="margin-form">
 					<input type="text" size="38" name="key" id="code" value="'.htmlentities(Tools::getValue('key', $obj->key), ENT_COMPAT, 'UTF-8').'" />
 					<input type="button" value="'.$this->l('   Generate!   ').'" class="button" onclick="gencode(32)" />
@@ -269,8 +269,17 @@ echo '
 
 	public static function formatFieldsAsXML($fields)
 	{
+		p($fields);
 		libxml_use_internal_errors(true);
-		$xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><fields><attributes/><associations/></fields>");
+		
+		$xml = simplexml_load_string("
+		<?xml version='1.0' encoding='utf-8'?>
+		<!DOCTYPE prestashop PUBLIC \"-//PRESTASHOP//DTD REST_WEBSERVICE 1.4.0.2//EN\"
+		\"http://localhost/ps/v1/trunk/tools/webservice/psws.dtd\">
+		<p:prestashop xmlns:p=\"http://prestashop.com/docs/1.4/webservice\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
+		<p:state><associations/></p:state>
+		</p:prestashop>
+		");
 		if ($xml)
 		{
 			foreach($fields['attributes'] as $key => $value)
@@ -293,6 +302,7 @@ echo '
 						foreach ($association as $key => $value)
 							$xml->associations->{$type}->addChild($key , htmlentities($value));
 				}
+		d(htmlentities($xml->asXML()));
 		return $xml->asXML();
 		}
 		else
@@ -300,6 +310,21 @@ echo '
 	}
 	
 	public static function config_case($caseName, $resourceName, $resource) {
+		/*
+		GET THE LIST
+		GET THE LAST ONE
+		GET FROM 5 TO 15
+		GET WHERE "A" IN THE NAME
+		GET WHERE "A" IN THE TRANSLATED NAME
+		ADD ONE
+		EDIT THE NAME OF ONE
+		DELETE THE LAST
+		GET A NOT EXISTING
+		EDIT THE TRANSLATED NAME OF THE LAST ONE
+		EDIT THE ASSOCIATIONS OF THE LAST ONE
+		DUPLICATE THE LAST ONE
+		*/
+		
 		switch ($caseName)
 		{
 			case 'get_all_resources':

@@ -227,8 +227,8 @@ class ProductCore extends ObjectModel
 		'fields' => array(
 			'id_tax' => array('sqlId' => 'id_tax', 'required' => true, 'xlink_resource'=> 'taxes'),
 			'out_of_stock' => array('sqlId' => 'out_of_stock', 'required' => true),
-			'new' => array('sqlId' => 'new'),
-			'cache_default_attribute' => array('sqlId' => 'cache_default_attribute'),
+			'new' => array('sqlId' => 'new', 'i18n' => false),
+			'cache_default_attribute' => array('sqlId' => 'cache_default_attribute', 'i18n' => false),
 		),
 		'associations' => array(
 			'categories' => array('resource' => 'category'),
