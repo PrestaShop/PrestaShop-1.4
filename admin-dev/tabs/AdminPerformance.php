@@ -5,7 +5,63 @@ class AdminPerformance extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex;
-
+		
+		if (Tools::isSubmit('submitCaching'))
+		{
+			$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
+			if (!Tools::getValue('active'))
+				$cache_active = 0;
+			else	
+				$cache_active = 1;
+			if (!$caching_system = Tools::getValue('caching_system'))
+				$this->_errors[] = Tools::displayError('Caching system is missing');
+			else
+				$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
+			
+			if($caching_system == 'CacheFS')
+			{
+				if (!($depth = Tools::getValue('ps_cache_fs_directory_depth')))
+					$this->_errors[] = Tools::displayError('Please set a directory depth');
+				if (!sizeof($this->_errors))
+				{	
+					CacheFS::deleteCacheDirectory();
+					CacheFS::createCacheDirectories((int)$depth);
+					Configuration::updateValue('PS_CACHEFS_DIRECTORY_DEPTH', (int)$depth);
+				}
+			}
+			if (!sizeof($this->_errors))
+			{
+				$settings = preg_replace('/define\(\'_PS_CACHE_ENABLED_\', \'([0-9])\'\);/Ui', 'define(\'_PS_CACHE_ENABLED_\', \''.(int)$cache_active.'\');', $settings);
+				if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				else
+					$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
+			}
+		}
+		if (Tools::isSubmit('submitAddServer'))
+		{
+			if (!Tools::getValue('memcachedIp'))
+				$this->_errors[] = Tools::displayError('Memcached IP is missing');
+			if (!Tools::getValue('memcachedPort'))
+				$this->_errors[] = Tools::displayError('Memcached port is missing');
+			if (!Tools::getValue('memcachedWeight'))
+				$this->_errors[] = Tools::displayError('Memcached weight is missing');
+			if (!sizeof($this->_errors))
+			{
+				if (Memcached::addServer(pSQL(Tools::getValue('memcachedIp')), (int)Tools::getValue('memcachedPort'), (int)Tools::getValue('memcachedWeight')))
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				else
+					$this->_errors[] = Tools::displayError('Can\'t add Memcached server');
+			}
+		}
+		if (Tools::getValue('deleteMemcachedServer'))
+		{
+			if (Memcached::deleteServer((int)Tools::getValue('deleteMemcachedServer')))
+				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			else
+				$this->_errors[] = Tools::displayError('Error in deleting Memcached server');
+		}
+		
 		if (Tools::isSubmit('submitCiphering') AND Configuration::get('PS_CIPHER_ALGORITHM') != (int)Tools::getValue('PS_CIPHER_ALGORITHM'))
 		{
 			$algo = (int)Tools::getValue('PS_CIPHER_ALGORITHM');
@@ -90,6 +146,31 @@ class AdminPerformance extends AdminTab
 		global $currentIndex;
 
 		echo '
+echo '<script type="text/javascript">
+						$(document).ready(function() {
+							showMemcached();
+							$(\'#caching_system\').change(function() {
+								showMemcached();
+							});
+							function showMemcached()
+							{
+								if ($(\'#caching_system option:selected\').val() == \'Memcached\')
+								{
+									$(\'#memcachedServers\').show();
+									$(\'#directory_depth\').hide();
+								}
+								else
+								{
+									$(\'#memcachedServers\').hide();
+									$(\'#directory_depth\').show();
+								}
+							}
+							$(\'#addMemcachedServer\').click(function() {
+								$(\'#formMemcachedServer\').show();
+								return false;
+							});
+						});
+		</script>';
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers').'</legend>
@@ -207,6 +288,72 @@ class AdminPerformance extends AdminTab
 				</div>
 			</fieldset>
 		</form>';
+
+		$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
+		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" style="margin-top: 10px;" method="post">
+			<fieldset><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Caching').'</legend>
+				<label>'.$this->l('Use cache:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="active" id="active_on" value="1" '.(_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="active" id="active_off" value="0" '.(!_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+					<p>'.$this->l('Enable or disable caching system').'</p>
+				</div>
+				<label>'.$this->l('Caching system:').' </label>
+				<div class="margin-form">
+					<select name="caching_system" id="caching_system">
+						<option value="Memcached" '.(_PS_CACHING_SYSTEM_ == 'Memcached' ? 'selected="selected"' : '' ).'>'.$this->l('Memcached').'</option>
+						<option value="CacheFS" '.(_PS_CACHING_SYSTEM_ == 'CacheFS' ? 'selected="selected"' : '' ).'>'.$this->l('File System').'</option>	
+						</option>
+					</select>
+				</div>
+				<div id="directory_depth">
+					<label>'.$this->l('Directory depth:').' </label>
+					<div class="margin-form">
+						<input type="text" name="ps_cache_fs_directory_depth" value="'.($depth ? $depth : 1).'" />
+					</div>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitCaching" class="button" />
+				</div>
+				</form>
+				<div id="memcachedServers">
+					<div class="margin-form">
+						<a id="addMemcachedServer" href="#" ><img src="../img/admin/add.gif" />'.$this->l('Add server').'</a>
+					</div>
+					<form id="formMemcachedServer" action="'.$currentIndex.'&token='.Tools::getValue('token').'" style="margin-top: 10px; display:none;" method="post">
+						<label>'.$this->l('IP Address:').' </label>
+						<div class="margin-form">
+							<input type="text" name="memcachedIp" />
+						</div>
+						<label>'.$this->l('Port:').' </label>
+						<div class="margin-form">
+							<input type="text" name="memcachedPort" value="11211" />
+						</div>
+						<label>'.$this->l('Weight:').' </label>
+						<div class="margin-form">
+							<input type="text" name="memcachedWeight" value="1" />
+						</div>
+						<div class="margin-form">
+							<input type="submit" value="'.$this->l('   Add Server   ').'" name="submitAddServer" class="button" />
+						</div>
+					</form>
+				<div class="margin-form">
+				<table style="width: 320px;" cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th style="width: 20px; text-align: center">'.$this->l('Id').'</th>
+					<th style="width: 200px; text-align: center">'.$this->l('Ip').'</th>
+					<th style="width: 50px; text-align: center">'.$this->l('Port').'</th>
+					<th style="width: 30px; text-align: right; font-weight:bold;">'.$this->l('Weight').'</th>
+					<th style="width: 20px; text-align: right;">&nbsp;</th>
+				</tr>';
+		$servers = Memcached::getMemcachedServers();
+		if ($servers)
+			foreach($servers AS $server)
+				echo '<tr><td>'.$server['id_memcached_server'].'</td><td>'.$server['ip'].'</td><td>'.$server['port'].'</td><td>'.$server['weight'].'</td>
+									<td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&deleteMemcachedServer='.(int)$server['id_memcached_server'].'" ><img src="../img/admin/delete.gif" /></a></td></tr>';
+		echo '</table></div></div></fieldset>';
 	}
 }
 

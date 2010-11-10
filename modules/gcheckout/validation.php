@@ -64,11 +64,10 @@ if(!$status)
     }
     case "new-order-notification": {
 		$gcheckout = new GCheckout();
-		$id_cart = intval($data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
-		$cart = new Cart($id_cart);
+		$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
+		$cart = new Cart((int)$secure_cart[0]);
 		$orderTotal = floatval($data[$root]['order-total']['VALUE']);
-		$gcheckout->validateOrder($id_cart, _PS_OS_PAYMENT_, $cart->getOrderTotal(), $gcheckout->displayName);
-		
+		$gcheckout->validateOrder($id_cart, _PS_OS_PAYMENT_, (float)$orderTotal, $gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
 		$Gresponse->SendAck();
 		break;
     }

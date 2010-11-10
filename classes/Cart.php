@@ -48,7 +48,10 @@ class CartCore extends ObjectModel
 
 	/** @var string Object creation date */
 	public 		$date_add;
-
+	
+	/** @var string secure_key */
+	public		$secure_key;
+	
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
@@ -82,6 +85,7 @@ class CartCore extends ObjectModel
 		$fields['id_carrier'] = intval($this->id_carrier);
 		$fields['recyclable'] = intval($this->recyclable);
 		$fields['gift'] = intval($this->gift);
+		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['gift_message'] = pSQL($this->gift_message);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
@@ -96,6 +100,11 @@ class CartCore extends ObjectModel
 		{
 			$customer = new Customer(intval($this->id_customer));
 			$this->_taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
+			if (!$this->secure_key AND $customer->secure_key)
+			{
+				$this->secure_key = $customer->secure_key;
+				$this->save();
+			}
 		}
 		else
 			$this->_taxCalculationMethod = Group::getDefaultPriceDisplayMethod();

@@ -264,9 +264,15 @@ function verifyAndSetRequire()
 			}
 			
 			if(configIsOk)
+			{
 				$('h3#resultConfig'+isUpdate).html(txtConfigIsOk).slideDown('slow');
+				$('h3#resultConfigHelper').hide();
+			}
 			else
+			{
 				$('h3#resultConfig'+isUpdate).html(txtConfigIsNotOk).slideDown('slow');
+				$('h3#resultConfigHelper').show();
+			}
 			
 			$("div#sheet_require"+isUpdate+" > ul").slideDown("1500");
 			

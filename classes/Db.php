@@ -208,16 +208,16 @@ abstract class DbCore
 	/**
 	 * Delete
 	 */
-	abstract public function delete ($table, $where = false, $limit = false);
+	abstract public function delete ($table, $where = false, $limit = false, $use_cache = 1);
 	/**
 	 * Fetches a row from a result set
 	 */
-	abstract public function Execute ($query);
+	abstract public function Execute ($query, $use_cache = 1);
 
 	/**
 	 * Fetches an array containing all of the rows from a result set
 	 */
-	abstract public function ExecuteS($query, $array = true);
+	abstract public function ExecuteS($query, $array = true, $use_cache = 1);
 	
 	/*
 	 * Get next row for a query which doesn't return an array 
@@ -230,29 +230,29 @@ abstract class DbCore
 		 * @acces string query The query to execute
 		 * @return array Array of line returned by MySQL
 		 */
-	static public function s($query)
+	static public function s($query, $use_cache = 1)
 	{
-		return Db::getInstance()->ExecuteS($query);
+		return Db::getInstance()->ExecuteS($query, true, $use_cache);
 	}
 	
-	static public function ps($query)
+	static public function ps($query, $use_cache = 1)
 	{
-		$ret = Db::s($query);
+		$ret = Db::s($query, $use_cache);
 		p($ret);
 		return $ret;
 	}
 	
-	static public function ds($query)
+	static public function ds($query, $use_cache = 1)
 	{
-		Db::s($query);
+		Db::s($query, $use_cache);
 		die();
 	}
 
 	/**
 	 * Get Row and get value
 	 */
-	abstract public function getRow($query);
-	abstract public function getValue($query);
+	abstract public function getRow($query, $use_cache = 1);
+	abstract public function getValue($query, $use_cache = 1);
 
 	/**
 	 * Returns the text of the error message from previous database operation

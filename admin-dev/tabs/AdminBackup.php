@@ -32,9 +32,11 @@ class AdminBackup extends AdminTab
 	 	$this->edit = false;
 	 	$this->delete = true;
 	 	$this->view = true;
-
+		
 	 	$this->deleted = false;
-
+		
+		$this->requiredDatabase = false;
+		
 		$this->fieldsDisplay = array (
 			'date' => array('title' => $this->l('Date'), 'type' => 'datetime', 'width' => 120, 'align' => 'right'),
 			'age' => array('title' => $this->l('Age')),

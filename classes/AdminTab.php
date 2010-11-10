@@ -48,7 +48,7 @@ abstract class AdminTabCore
 	public $duplicate = false;
 	
 	/** @var boolean select other required fields */
-	public $requiredDatabase = true;
+	public $requiredDatabase = false;
 
 	/** @var boolean Tab Automatically displays '$color' as background color on listing if true */
 	public $colorOnBackground = false;

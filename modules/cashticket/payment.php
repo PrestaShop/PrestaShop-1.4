@@ -62,7 +62,7 @@ if ($state != _PS_OS_ERROR_)
 }
 
 
-$module->validateOrder(intval($cart->id), $state, floatval($cart->getOrderTotal(true, 3)), $module->displayName, $message, NULL, intval($currency->id)); 
+$module->validateOrder(intval($cart->id), $state, floatval($cart->getOrderTotal(true, 3)), $module->displayName, $message, NULL, intval($currency->id), false, $cart->secure_key);
 
 if ($state == _PS_OS_ERROR_) 
 {

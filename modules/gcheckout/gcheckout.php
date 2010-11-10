@@ -143,7 +143,7 @@ class GCheckout extends PaymentModule
 		$googleCart->SetContinueShoppingUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php');
 		$googleCart->SetRequestBuyerPhone(false);
 
-		$googleCart->SetMerchantPrivateData($params['cart']->id);
+		$googleCart->SetMerchantPrivateData($params['cart']->id.'|'.$params['cart']->secure_key);
 
 		$buttonText = $this->l('Pay with GoogleCheckout');
 		$smarty->assign(array(

@@ -15,6 +15,20 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 define('INSTALL_VERSION', '1.4.0.2');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
+if (version_compare(phpversion(), '5.0.0', '<'))
+{
+	echo '<html xmlns="http://www.w3.org/1999/xhtml" >
+			<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+			<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
+			</head>
+			<body>
+				<p id="php5_nok">PrestaShop requires <b>PHP5 or later</b>, you are currently running: <b>'.phpversion().'</b><br />
+				If you don\'t know how to enable it, you can use our hosted PrestaShop service on <a href="http://www.prestabox.com">http://www.prestabox.com</a>.</p>
+	</body></html>';
+	die;
+}
+
 require(dirname(__FILE__).'/../config/autoload.php');
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 
@@ -286,7 +300,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
 				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 			</ul>
-			
+			<h3 style="display:none;" id="resultConfigHelper"><?php echo lang('If you don\'t know how to fix these issues,<br />you can use our hosted PrestaShop service on');?> <a href="http://www.prestabox.com">http://www.prestabox.com</a></h3>
 			<p><input class="button" value="<?php echo lang('Refresh these settings')?>" type="button" id="req_bt_refresh"/></p>
 			
 		</div>

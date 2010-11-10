@@ -763,6 +763,7 @@ UPDATE `PREFIX_cms` SET `active` = 1;
 
 UPDATE `PREFIX_tab_lang` SET `name` = 'SEO' WHERE `id_tab` = 56 AND `id_lang` IN(1,2,3);
 
+UPDATE `PREFIX_cart` ADD `secure_key` varchar(32) NOT NULL default '-1' AFTER `id_guest`;
 
 ALTER TABLE `PREFIX_discount` ADD `id_group` int(10) unsigned NOT NULL default 0;
 
@@ -808,7 +809,14 @@ CREATE TABLE `PREFIX_required_field` (
   `object_name` varchar(32) NOT NULL,
   `field_name` varchar(32) NOT NULL,
   PRIMARY KEY (`id_required_field`)
-) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=ut8;
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_memcached_servers` (
+`id_memcached_server` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`ip` VARCHAR( 254 ) NOT NULL ,
+`port` INT(11) UNSIGNED NOT NULL ,
+`weight` INT(11) UNSIGNED NOT NULL
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 /* PHP */
 /* PHP:editorial_update(); */;

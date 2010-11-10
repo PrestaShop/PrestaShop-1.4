@@ -461,5 +461,6 @@ $_LANG['Sport and Entertainment'] = 'Sport et loisirs';
 $_LANG['Travel'] = 'Voyage et tourisme';
 $_LANG['Main activity:'] = 'Activité principale';
 $_LANG['-- Please choose your main activity --'] = '-- Choisissez une activité --';
+$_LANG['If you don\'t know how to fix these issues,<br />you can use our hosted PrestaShop service on'] = 'Si vous ne savez pas comment corriger ces problèmes,<br/>vous pouvez utiliser notre service PrestaShop hébergé sur';
 
 ?>

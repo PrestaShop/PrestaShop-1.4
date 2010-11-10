@@ -123,7 +123,7 @@ class Ogone extends PaymentModule
 		$ogoneParams = array();
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');
 		$ogoneParams['OPERATION'] = 'SAL';
-		$ogoneParams['ORDERID'] = intval($params['cart']->id);
+		$ogoneParams['ORDERID'] = pSQL($params['cart']->id.'_'.$params['cart']->secure_key);
 		$ogoneParams['AMOUNT'] = number_format(Tools::convertPrice(floatval(number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '')), $currency), 2, '.', '') * 100;
 		$ogoneParams['CURRENCY'] = $currency->iso_code;
 		$ogoneParams['LANGUAGE'] = $lang->iso_code.'_'.strtoupper($lang->iso_code);
@@ -164,13 +164,13 @@ class Ogone extends PaymentModule
 	
 	public function validate($id_order_state, $amount, $message = '')
 	{
-		$id_cart = Tools::getValue('orderID');
-		$this->validateOrder($id_cart, $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true);
+		$secure_cart = explode('_', Tools::getValue('orderID'));
+		$this->validateOrder((int)$secure_cart[0], $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true, pSQL($secure_cart[1]));
 		
 		if ($amount > 0 AND class_exists('PaymentCC'))
 		{
 			$pcc = new PaymentCC();
-			$order = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$id_cart);
+			$order = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$secure_cart[0]);
 			$pcc->id_order = (int)$order['id_order'];
 			$pcc->id_currency = (int)$order['id_currency'];
 			$pcc->amount = $amount;

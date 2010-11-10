@@ -158,6 +158,7 @@ CREATE TABLE `PREFIX_cart` (
   `id_currency` int(10) unsigned NOT NULL,
   `id_customer` int(10) unsigned NOT NULL,
   `id_guest` int(10) unsigned NOT NULL,
+  `secure_key` varchar(32) NOT NULL default '-1',
   `recyclable` tinyint(1) unsigned NOT NULL default '1',
   `gift` tinyint(1) unsigned NOT NULL default '0',
   `gift_message` text,
@@ -1531,4 +1532,11 @@ CREATE TABLE `PREFIX_required_field` (
   `field_name` varchar(32) NOT NULL,
   PRIMARY KEY (`id_required_field`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_memcached_servers` (
+`id_memcached_server` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`ip` VARCHAR( 254 ) NOT NULL ,
+`port` INT(11) UNSIGNED NOT NULL ,
+`weight` INT(11) UNSIGNED NOT NULL
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

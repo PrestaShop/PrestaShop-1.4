@@ -71,6 +71,11 @@ elseif (($fp = @fsockopen('ssl://' . $paypalServer, 443, $errno, $errstr, 30)) |
 else
 	$errors = $paypal->getL('connect').$paypal->getL('nomethod');
 
+if (isset($_POST['custom']))
+	$cart_secure = explode('_', $_POST['custom']);
+else
+	$cart_secure = array();
+
 // Printing errors...
 if ($result == 'VERIFIED') {
 	if (!isset($_POST['mc_gross']))
@@ -87,13 +92,13 @@ if ($result == 'VERIFIED') {
 		$errors .= $paypal->getL('mc_currency').'<br />';
 	if (empty($errors))
 	{
-		$cart = new Cart(intval($_POST['custom']));
+		$cart = new Cart(intval($cart_secure[0]));
 		if (!$cart->id)
 			$errors = $paypal->getL('cart').'<br />';
-		elseif (Order::getOrderByCartId(intval($_POST['custom'])))
+		elseif (Order::getOrderByCartId(intval($cart_secure[0])))
 			$errors = $paypal->getL('order').'<br />';
 		else
-			$paypal->validateOrder($_POST['custom'], _PS_OS_PAYMENT_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']));
+			$paypal->validateOrder((int)$cart_secure[0], _PS_OS_PAYMENT_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	}
 } else {
 	$errors .= $paypal->getL('verified');
@@ -102,9 +107,9 @@ if ($result == 'VERIFIED') {
 if (!empty($errors) AND isset($_POST['custom']))
 {
 	if ($_POST['payment_status'] == 'Pending')
-		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_PAYPAL_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']));
+		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_PAYPAL_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	else
-		$paypal->validateOrder(intval($_POST['custom']), _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />');
+		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />', array(), NULL, false, $cart_secure[1]);
 }
 
 ?>

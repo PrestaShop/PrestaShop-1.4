@@ -45,30 +45,44 @@ class MySQLCore extends Db
 		$this->_link = false;
 	}
 	
-	public function	getRow($query)
+	public function	getRow($query, $use_cache = 1)
 	{
 		$this->_result = false;
+		if($use_cache AND _PS_CACHE_ENABLED_)
+			if ($result = Cache::getInstance()->get(md5($query)))
+				return $result;
 		if ($this->_link)
 			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
 			{
 				if (_PS_DEBUG_SQL_)
 					$this->displayMySQLError($query);
-				return mysql_fetch_assoc($this->_result);
+				$result = mysql_fetch_assoc($this->_result);
+				if ($use_cache = 1 AND _PS_CACHE_ENABLED_)
+					Cache::getInstance()->setQuery($query, $result);
+				return $result;
 			}
 		if (_PS_DEBUG_SQL_)
 			$this->displayMySQLError($query);
 		return false;
 	}
 
-	public function	getValue($query)
+	public function	getValue($query, $use_cache = 1)
 	{
 		$this->_result = false;
+		if ($use_cache AND _PS_CACHE_ENABLED_)
+			if ($result = Cache::getInstance()->get(md5($query)))
+				return $result;
 		if ($this->_link AND $this->_result = mysql_query($query.' LIMIT 1', $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
-			return array_shift($tmpArray);
+		{ 
+			$result =  array_shift($tmpArray);
+			if($use_cache AND _PS_CACHE_ENABLED_)
+				Cache::getInstance()->setQuery($query, $result);
+			return $result;
+		}
 		return false;
 	}
 	
-	public function	Execute($query)
+	public function	Execute($query, $use_cache = 1)
 	{
 		$this->_result = false;
 		if ($this->_link)
@@ -76,6 +90,8 @@ class MySQLCore extends Db
 			$this->_result = mysql_query($query, $this->_link);
 			if (_PS_DEBUG_SQL_)
 				$this->displayMySQLError($query);
+			if ($use_cache AND _PS_CACHE_ENABLED_)
+				Cache::getInstance()->deleteQuery($query);
 			return $this->_result;
 		}
 		if (_PS_DEBUG_SQL_)
@@ -83,9 +99,12 @@ class MySQLCore extends Db
 		return false;
 	}
 	
-	public function	ExecuteS($query, $array = true)
+	public function	ExecuteS($query, $array = true, $use_cache = 1)
 	{
 		$this->_result = false;
+		if ($use_cache AND _PS_CACHE_ENABLED_)
+			if ($array AND ($result = Cache::getInstance()->get(md5($query))))
+				return $result;
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
 			if (_PS_DEBUG_SQL_)
@@ -95,6 +114,8 @@ class MySQLCore extends Db
 			$resultArray = array();
 			while ($row = mysql_fetch_assoc($this->_result))
 				$resultArray[] = $row;
+			if ($use_cache AND _PS_CACHE_ENABLED_)	
+				Cache::getInstance()->setQuery($query, $resultArray);
 			return $resultArray;
 		}
 		if (_PS_DEBUG_SQL_)
@@ -107,11 +128,18 @@ class MySQLCore extends Db
 		return mysql_fetch_assoc($result ? $result : $this->_result);
 	}
 	
-	public function	delete($table, $where = false, $limit = false)
+	public function	delete($table, $where = false, $limit = false, $use_cache = 1)
 	{
 		$this->_result = false;
 		if ($this->_link)
-			return mysql_query('DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.intval($limit) : ''), $this->_link);
+		{
+			$query  = 'DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.intval($limit) : '');
+			$res =  mysql_query($query, $this->_link);
+			if ($use_cache AND _PS_CACHE_ENABLED_)
+				Cache::getInstance()->deleteQuery($query);
+			return $res;
+		}
+			
 		return false;
 	}
 	
@@ -135,11 +163,16 @@ class MySQLCore extends Db
 		return false;
 	}
 
-	protected function q($query)
+	protected function q($query, $use_cache = 1)
 	{
 		$this->_result = false;
 		if ($this->_link)
-			return mysql_query($query, $this->_link);
+		{
+			$result =  mysql_query($query, $this->_link);
+			if ($use_cache AND _PS_CACHE_ENABLED_)
+				Cache::getInstance()->deleteQuery($query);
+			return $result;
+		}
 		return false;
 	}
 	

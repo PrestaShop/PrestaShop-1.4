@@ -27,6 +27,7 @@ class AdminAddresses extends AdminTab
 	 	$this->lang = false;
 	 	$this->edit = true;
 	 	$this->delete = true;
+		$this->requiredDatabase = true;
 		$this->addressType = 'customer';
 		
 		if (!Tools::getValue('realedit'))

@@ -69,7 +69,7 @@ $smarty->assign(array(
 	'discount' => $cart->getOrderTotal(true, 2),
 	'business' => $business,
 	'currency_module' => $currency_module,
-	'cart_id' => intval($cart->id),
+	'cart_id' => intval($cart->id).'_'.pSQL($cart->secure_key),
 	'products' => $cart->getProducts(),
 	'paypal_id' => intval($paypal->id),
 	'header' => $header,

@@ -22,7 +22,8 @@ class AdminCustomers extends AdminTab
 	 	$this->view = true;
 	 	$this->delete = true;
 		$this->deleted = true;
-
+		$this->requiredDatabase = true;
+		
 		$this->_select = '(YEAR(CURRENT_DATE)-YEAR(`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(`birthday`, 5)) as age, (
 			SELECT c.date_add FROM '._DB_PREFIX_.'guest g
 			LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest

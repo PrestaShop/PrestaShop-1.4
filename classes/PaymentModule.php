@@ -76,12 +76,15 @@ abstract class PaymentModuleCore extends Module
 	* @param string $message Message to attach to order
 	*/
 
-	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false)
+	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
 	{
 		global $cart;
 
 		$cart = new Cart(intval($id_cart));
-
+		
+		if ($secure_key !== false AND $secure_key != $cart->secure_key)
+			die(Tools::displayError());
+		
 		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
 		{
@@ -96,16 +99,8 @@ abstract class PaymentModuleCore extends Module
 			$order->id_currency = ($currency_special ? intval($currency_special) : intval($cart->id_currency));
 			$order->id_lang = intval($cart->id_lang);
 			$order->id_cart = intval($cart->id);
-
-
-/*$product = array('id_product' => 11, 'id_product_attribute' => NULL);
-$price = Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), &$debug);
-p($debug);
-d('Price3: '.$price);*/
-
-
 			$customer = new Customer(intval($order->id_customer));
-			$order->secure_key = pSQL($customer->secure_key);
+			$order->secure_key = ($secure_key ? pSQL($secure_key) : pSQL($customer->secure_key));
 			$order->payment = Tools::substr($paymentMethod, 0, 32);
 			if (isset($this->name))
 				$order->module = $this->name;
@@ -136,6 +131,8 @@ d('Price3: '.$price);*/
 			// Next !
 			if ($result AND isset($order->id))
 			{
+				if (!$secure_key)
+					$message .= $this->l('Warning : the secure key is empty, check your payment account before validation');
 				// Optional message to attach to this order 
 				if (isset($message) AND !empty($message))
 				{
