@@ -29,7 +29,7 @@ class AdminSubDomains extends AdminTab
 	
 	public function displayList()
 	{
-		echo '<fieldset>'.$this->l('Cookies are different on each subdomain of your Website. If you want to use the same cookie, please add here the subdomains used by your shop. The most common is "www".').'</fieldset>';
+		$this->displayWarning($this->l('Cookies are different on each subdomain of your Website. If you want to use the same cookie, please add here the subdomains used by your shop. The most common is "www".'));
 		return parent::displayList();
 	}
 
