@@ -136,7 +136,7 @@ foreach ($tabs AS $t)
 echo '		</ul>'.$echoLis;
 if ($employee->bo_uimode == 'hover')
 	echo '	<script type="text/javascript">
-				$("#menu li").hoverIntent({over:hoverTabs,timeout:800,out:outTabs});
+				$("#menu li").hoverIntent({over:hoverTabs,timeout:100,out:outTabs});
 				function outTabs(){}
 				function hoverTabs() {
 					var content = $("#tab"+parseInt(this.id.substr(7, 3))+"_subtabs").html();
