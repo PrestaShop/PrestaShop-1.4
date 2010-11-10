@@ -1334,8 +1334,9 @@ class AdminProducts extends AdminTab
 			$currencies = Currency::getCurrencies();
 			$countries = Country::getCountries(intval($cookie->id_lang));
 			$groups = Group::getGroups(intval($cookie->id_lang));
-			$this->_displaySpecificPriceModificationForm($shops, $currencies, $countries, $groups);
-			$this->_displaySpecificPriceAdditionForm($shops, $currencies, $countries, $groups);
+			$defaultCurrency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$this->_displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups);
+			$this->_displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 		}
 		else
 			echo '<b>'.$this->l('You must save this product before adding specific prices').'.</b>';
@@ -1349,7 +1350,7 @@ class AdminProducts extends AdminTab
 		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction']) : ($price - $price * $specificPrice['reduction']);
 	}
 
-	protected function _displaySpecificPriceModificationForm($shops, $currencies, $countries, $groups)
+	protected function _displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups)
 	{
 		global $currentIndex;
 
@@ -1358,64 +1359,61 @@ class AdminProducts extends AdminTab
 		$specificPricePriorities = Tools::getValue('specificPricePriority', explode(';', Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES')));
 
 		echo '
-		<h4>'.$this->l('Current specific prices').'</h4>
-		<div>
-			'.$this->l('Priorities:').' 
+		<h4>'.$this->l('Priorities management').'</h4>
+		
+		<label>'.$this->l('Priorities:').'</label>
+		<div class="margin-form">
+			<input type="hidden" name="specificPricePriority[]" value="id_shop" />
 			<select name="specificPricePriority[]">
-				<option value="id_shop"'.($specificPricePriorities[0] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
-				<option value="id_currency"'.($specificPricePriorities[0] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
-				<option value="id_country"'.($specificPricePriorities[0] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
-				<option value="id_group"'.($specificPricePriorities[0] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
-			</select>
-			&gt;
-			<select name="specificPricePriority[]">
-				<option value="id_shop"'.($specificPricePriorities[1] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
 				<option value="id_currency"'.($specificPricePriorities[1] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
 				<option value="id_country"'.($specificPricePriorities[1] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
 				<option value="id_group"'.($specificPricePriorities[1] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
 			</select>
 			&gt;
 			<select name="specificPricePriority[]">
-				<option value="id_shop"'.($specificPricePriorities[2] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
 				<option value="id_currency"'.($specificPricePriorities[2] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
 				<option value="id_country"'.($specificPricePriorities[2] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
 				<option value="id_group"'.($specificPricePriorities[2] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
 			</select>
 			&gt;
 			<select name="specificPricePriority[]">
-				<option value="id_shop"'.($specificPricePriorities[3] == 'id_shop' ? ' selected="selected"' : '').'>'.$this->l('Shop').'</option>
 				<option value="id_currency"'.($specificPricePriorities[3] == 'id_currency' ? ' selected="selected"' : '').'>'.$this->l('Currency').'</option>
 				<option value="id_country"'.($specificPricePriorities[3] == 'id_country' ? ' selected="selected"' : '').'>'.$this->l('Country').'</option>
 				<option value="id_group"'.($specificPricePriorities[3] == 'id_group' ? ' selected="selected"' : '').'>'.$this->l('Group').'</option>
 			</select>
-			<input type="checkbox" name="specificPricePriorityToAll" /> '.$this->l('To all products').'
-			<input type="submit" name="submitSpecificPricePriorities" value="'.$this->l('Apply').'" />
 		</div>
-		<table style="border: 1px solid black; text-align: center" cellspacing="0">
+		
+		<div class="margin-form">
+			<input type="checkbox" name="specificPricePriorityToAll" id="specificPricePriorityToAll" /> <label class="t" for="specificPricePriorityToAll">'.$this->l('Apply to all products').'</label>
+		</div>
+		
+		<div class="margin-form">
+			<input class="button" type="submit" name="submitSpecificPricePriorities" value="'.$this->l('Apply').'" />
+		</div>
+		
+		<hr />
+		<h4>'.$this->l('Current specific prices').'</h4>
+		
+		<table style="text-align: center;width:100%">
 			<tr>
 				<th class="cell border"></th>
-				<th class="cell border">'.$this->l('Shop').'</th>
 				<th class="cell border">'.$this->l('Currency').'</th>
 				<th class="cell border">'.$this->l('Country').'</th>
 				<th class="cell border">'.$this->l('Group').'</th>
-				<th class="cell border" style="width: 220px">'.$this->l('Price').'</th>
+				<th class="cell border">'.$this->l('Price (tax excl.)').'</th>
 				<th class="cell border">'.$this->l('From (quantity)').'</th>
-				<th class="cell border">'.$this->l('Final price').'</th>
+				<th class="cell border">'.$this->l('Final price (tax excl.)').'</th>
 				<th class="cell border">'.$this->l('Action').'</th>
 			</tr>';
-		$index = 0;
+		$index = 1;
 		foreach ($specificPrices as $specificPrice)
 		{
 			$id_specific_price = intval($specificPrice['id_specific_price']);
 			echo '
 			<tr>
-				<td class="cell bpriority" rowspan="2">'.($specificPrice['priority'] ? intval($specificPrice['priority']) : ++$index).'.<input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'></td>
-				<td class="cell bl br btt">
-					<select name="spm_id_shop[]">
-						<option value="0">'.$this->l('All shops').'</option>';
-			foreach ($shops as $shop)
-				echo '	<option value="'.intval($shop['id_shop']).'"'.($shop['id_shop'] == $specificPrice['id_shop'] ? ' selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($shop['name']).'</option>
-					</select>
+				<td class="cell bpriority" rowspan="2" valign="top">
+					<b>'.($specificPrice['priority'] ? intval($specificPrice['priority']) : $index++).'</b><input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'>
+					<input type="hidden" name="spm_id_shop[]" value="0" />
 				</td>
 				<td class="cell br btt">
 					<select name="spm_id_currency[]">
@@ -1441,91 +1439,111 @@ class AdminProducts extends AdminTab
 			echo '	
 					</select>
 				</td>
-				<td class="cell br btt"><input type="text" name="spm_price[]" value="'.floatval($specificPrice['price']).'" class="table_input" style="text-align: right" /> €</td>
-				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.intval($specificPrice['from_quantity']).'" class="table_input" style="text-align: right" /></td>
-				<td rowspan="2" class="br btt bb">'.floatval($this->_getFinalPrice($specificPrice, floatval($obj->price))).' €</td>
-				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.intval($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
+				<td class="cell br btt">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="spm_price[]" value="'.floatval($specificPrice['price']).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.intval($specificPrice['from_quantity']).'" size="3" /></td>
+				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round(floatval($this->_getFinalPrice($specificPrice, floatval($obj->price))), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.intval($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 			</tr>
 			<tr>
-				<td colspan="6" class="bl bt br bb">
+				<td colspan="6" class="bl bt br bb" style="border-bottom: 1px dashed black;height:40px;">
 					'.$this->l('Reduction:').'
-					<input type="text" name="spm_reduction[]" value="'.floatval($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" class="table_input" style="text-align: right" />
+					<input type="text" name="spm_reduction[]" value="'.floatval($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" size="11" />
 					<select name="spm_reduction_type[]">
-						<option value="">'.$this->l('Type?').'</option>
+						<option value="">---</option>
 						<option value="amount"'.($specificPrice['reduction_type'] == 'amount' ? ' selected="selected"' : '').'>'.$this->l('Amount').'</option>
 						<option value="percentage"'.($specificPrice['reduction_type'] == 'percentage' ? ' selected="selected"' : '').'>'.$this->l('Percentage').'</option>
 					</select>
-					'.$this->l('From').' <input type="text" name="spm_from[]" value="'.($specificPrice['from'] != '0000-00-00 00:00:00' ? $specificPrice['from'] : '').'" class="table_input" style="text-align: center" />
-					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.($specificPrice['to'] != '0000-00-00 00:00:00' ? $specificPrice['to'] : '').'" class="table_input" style="text-align: center" />
+					'.$this->l('From').' <input type="text" name="spm_from[]" value="'.($specificPrice['from'] != '0000-00-00 00:00:00' ? $specificPrice['from'] : '0000-00-00 00:00:00').'" class="table_input" style="text-align: center" />
+					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.($specificPrice['to'] != '0000-00-00 00:00:00' ? $specificPrice['to'] : '0000-00-00 00:00:00').'" class="table_input" style="text-align: center" />
 				</td>
 			</tr>';
 		}
 		echo '
 		</table>
-		<input type="submit" name="submitPricesModification" value="'.$this->l('Apply').'" />
+		<p class="center">
+			<input class="button" type="submit" name="submitPricesModification" value="'.$this->l('Apply').'" />
+		</p>
 		';
 	}
 
-	protected function _displaySpecificPriceAdditionForm($shops, $currencies, $countries, $groups)
+	protected function _displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups)
 	{
 		$product = $this->loadObject();
 		echo '
+		<hr />
 		<h4>'.$this->l('Add a new specific price').'</h4>
-		<table style="text-align: center" cellspacing="0">
-			<tr>
-				<td rowspan="2" class="cell2" style="width: 17px">4.</td>
-				<td class="cell2">
-					<select name="sp_id_shop">
-						<option value="0">'.$this->l('All shops').'</option>';
-			foreach ($shops as $shop)
-				echo '	<option value="'.intval($shop['id_shop']).'">'.Tools::htmlentitiesUTF8($shop['name']).'</option>
-					</select>
-				</td>
-				<td class="cell2">
-					<select name="sp_id_currency">
-						<option value="0">'.$this->l('All currencies').'</option>';
+		
+		<input type="hidden" name="sp_id_shop" value="0" />
+		<label>'.$this->l('Currency:').'</label>
+		<div class="margin-form">
+			<select name="sp_id_currency">
+				<option value="0">'.$this->l('All currencies').'</option>';
 			foreach ($currencies as $currency)
 				echo '<option value="'.intval($currency['id_currency']).'">'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 			echo '
-					</select>
-				</td>
-				<td class="cell2">
-					<select name="sp_id_country">
-						<option value="0">'.$this->l('All countries').'</option>';
+			</select>
+		</div>
+		
+		<label>'.$this->l('Country:').'</label>
+		<div class="margin-form">
+			<select name="sp_id_country">
+				<option value="0">'.$this->l('All countries').'</option>';
 			foreach ($countries as $country)
 				echo '<option value="'.intval($country['id_country']).'">'.Tools::htmlentitiesUTF8($country['name']).'</option>';
 			echo '
-					</select>
-				</td>
-				<td class="cell2">
-					<select name="sp_id_group">
-						<option value="0">'.$this->l('All groups').'</option>';
+			</select>
+		</div>
+		
+		<label>'.$this->l('Group:').'</label>
+		<div class="margin-form">
+			<select name="sp_id_group">
+				<option value="0">'.$this->l('All groups').'</option>';
 			foreach ($groups as $group)
 				echo '	<option value="'.intval($group['id_group']).'">'.Tools::htmlentitiesUTF8($group['name']).'</option>';
 			echo '	
-					</select>
-				</td>
-				<td class="cell2" style="width: 220px"><input type="text" name="sp_price" value="'.floatval($product->price).'" class="table_input" style="text-align: right" /> €</td>
-				<td class="cell2"><input type="text" name="sp_from_quantity" value="1" class="table_input" style="text-align: right" /></td>
-				<td rowspan="2">0.00 €</td>
-			</tr>
-			<tr>
-				<td colspan="6">
-					'.$this->l('Reduction:').'
-					<input type="text" name="sp_reduction" value="0.00" class="table_input" style="text-align: right" />
-					<select name="sp_reduction_type">
-						<option value="" selected="selected">'.$this->l('Type?').'</option>
-						<option value="amount">'.$this->l('Amount').'</option>
-						<option value="percentage">'.$this->l('Percentage').'</option>
-					</select>
-					'.$this->l('From').' <input type="text" name="sp_from" value="" class="table_input" style="text-align: center" />
-					'.$this->l('To').' <input type="text" name="sp_to" value="" class="table_input" style="text-align: center" />
-				</td>
-			</tr>
-			<tr>
-				<td colspan="8" style="text-align: left"><input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" /></td>
-			</tr>
-		</table>
+			</select>
+		</div>
+		
+		<label>'.$this->l('Price (tax excl.):').'</label>
+		<div class="margin-form">
+			'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="sp_price" value="'.floatval($product->price).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'
+			<div class="hint clear" style="display:block;">
+				'.$this->l('You can set this value at 0 in order to apply the default price').'
+			</div>
+		</div>
+		
+		<label>'.$this->l('Quantity:').'</label>
+		<div class="margin-form">
+			<input type="text" name="sp_from_quantity" value="1" size="3" />
+		</div>
+		
+		<label>'.$this->l('Reduction type:').'</label>
+		<div class="margin-form">
+			<select name="sp_reduction_type">
+				<option selected="selected">---</option>
+				<option value="amount">'.$this->l('Amount').'</option>
+				<option value="percentage">'.$this->l('Percentage').'</option>
+			</select>
+		</div>
+		
+		<label>'.$this->l('Reduction value:').'</label>
+		<div class="margin-form">
+			<input type="text" name="sp_reduction" value="0.00" size="11" />
+		</div>
+		
+		';
+		include_once('functions.php');
+		includeDatepicker(array('sp_from', 'sp_to'), true);
+		echo '
+		<label>'.$this->l('Available from:').'</label>
+		<div class="margin-form">
+			<input type="text" name="sp_from" value="" style="text-align: center" id="sp_from" /> '.$this->l('to').' 
+			<input type="text" name="sp_to" value="" style="text-align: center" id="sp_to" />
+		</div>
+		
+		<div class="margin-form">
+			<input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" class="button" />
+		</div>
 		';
 	}
 
@@ -2124,6 +2142,12 @@ class AdminProducts extends AdminTab
 						<td class="col-left">&nbsp;</td>
 						<td style="padding-bottom:5px;">
 							<input type="checkbox" name="on_sale" id="on_sale" style="padding-top: 5px;" '.($this->getFieldValue($obj, 'on_sale') ? 'checked="checked"' : '').'value="1" />&nbsp;<label for="on_sale" class="t">'.$this->l('Display "on sale" icon on product page and text on product listing').'</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">&nbsp;</td>
+						<td style="padding-bottom:5px;">
+							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules into Prices tab').'</p>
 						</td>
 					</tr>
 					<tr>

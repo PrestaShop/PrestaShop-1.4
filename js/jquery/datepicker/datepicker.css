@@ -698,6 +698,7 @@ padding:5px;
 .ui-datepicker {
 padding:0.2em 0.2em 0;
 width:17em;
+z-index:99;
 }
 .ui-datepicker-header {
 padding:0.2em 0;
