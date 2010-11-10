@@ -251,6 +251,9 @@ class	CookieCore
 			/* Check if cookie has not been modified */
 			if (!isset($this->_content['checksum']) OR $this->_content['checksum'] != $checksum)
 				$this->logout();
+			
+			if (!isset($this->_content['date_add']))
+				$this->_content['date_add'] = date('Y-m-d H:i:s');
 		}
 		else
 			$this->_content['date_add'] = date('Y-m-d H:i:s');
