@@ -169,7 +169,7 @@ echo '<script type="text/javascript">
 								return false;
 							});
 						});
-		</script>';
+		</script>
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers').'</legend>
