@@ -40,3 +40,4 @@ $_MODULE['<{ogone}prestashop>validation_a04830387e55082ed6096ab698ac8238'] = 'Si
 $_MODULE['<{ogone}prestashop>validation_7eaab6a852dfe4707acde8847dba7ce9'] = 'SHA-1 fourni';
 $_MODULE['<{ogone}prestashop>validation_8fbed6331a34a844224bfee15145e00f'] = 'SHA-1 calculé';
 $_MODULE['<{ogone}prestashop>validation_671c1f78cd9a17103c43a10d19157678'] = 'Clé simple :';
+$_MODULE['<{ogone}prestashop>waiting_1fe3bb016fa11dd93fb1929f118fd492'] = 'Merci de patienter pendant que votre commande se valide...';
