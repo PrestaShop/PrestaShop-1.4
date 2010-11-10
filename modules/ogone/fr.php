@@ -39,3 +39,4 @@ $_MODULE['<{ogone}prestashop>validation_6b4fcb57371df22836b78f67bc444213'] = 'St
 $_MODULE['<{ogone}prestashop>validation_a04830387e55082ed6096ab698ac8238'] = 'Signature SHA-1 invalide';
 $_MODULE['<{ogone}prestashop>validation_7eaab6a852dfe4707acde8847dba7ce9'] = 'SHA-1 fourni';
 $_MODULE['<{ogone}prestashop>validation_8fbed6331a34a844224bfee15145e00f'] = 'SHA-1 calculé';
+$_MODULE['<{ogone}prestashop>validation_671c1f78cd9a17103c43a10d19157678'] = 'Clé simple :';
