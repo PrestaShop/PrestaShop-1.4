@@ -31,7 +31,7 @@ function searchLocations()
 		if (status == google.maps.GeocoderStatus.OK)
 			searchLocationsNear(results[0].geometry.location);
 		else
-			alert(address+translation_6);
+			alert(address+' '+translation_6);
 		$('#stores_loader').hide();
 	});
 }

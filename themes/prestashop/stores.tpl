@@ -23,7 +23,6 @@
 {else}
 	<script type="text/javascript">
 		// <![CDATA[
-		
 		var map;
 		var markers = [];
 		var infoWindow;
@@ -34,14 +33,12 @@
 		var translation_3 = '{l s='stores found - see all results:' js=1}';
 		var translation_4 = '{l s='Phone:' js=1}';
 		var translation_5 = '{l s='Get Directions' js=1}';
-		var translation_6 = '{l s=' not found' js=1}';
-		
+		var translation_6 = '{l s='not found' js=1}';
 		
 		var hasStoreIcon = '{$hasStoreIcon}';
 		var distance_unit = '{$distance_unit}';
 		var img_store_dir = '{$img_store_dir}';
 		var img_ps_dir = '{$img_ps_dir}';
-		
 		//]]>
 	</script>
 
