@@ -86,7 +86,7 @@ class AdminCustomers extends AdminTab
 									$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
 							}
 							
-							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND !Validate::isDni(Tools::getValue('dni')))
+							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND Validate::isDni(Tools::getValue('dni')) <= 0)
 								$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
 							
 							if (!is_array($groupList) OR sizeof($groupList) == 0)

@@ -865,6 +865,17 @@ class ValidateCore
 		
 		return 0;
 	}
+	
+	/**
+	* Check for Dni validity
+	*
+	* @param string $dni to validate
+	* @return bool
+	*/
+	static public function isDniBool($dni)
+	{
+		return (self::isDni > 0 ? 1 : 0); 
+	}
 
 	/**
 	* Check if $data is a PrestaShop cookie object

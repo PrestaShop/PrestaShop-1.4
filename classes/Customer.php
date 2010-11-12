@@ -82,7 +82,7 @@ class CustomerCore extends ObjectModel
  	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
  	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16, 'note' => 65000);
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
-		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDni', 'note' => 'isCleanHtml');
+		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDniBool', 'note' => 'isCleanHtml');
 
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'customers',
