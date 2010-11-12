@@ -245,7 +245,7 @@ class MoneyBookers extends PaymentModule
 		$output .= '
 		<b>'.$this->l('About Moneybookers').'</b><br /><br /><p style="font-size: 11px;">'.
 		$this->l('Moneybookers is one of Europe\'s largest online payments systems and among the world\'s leading eWallet providers, with over 14 million account holders. The simple eWallet enables any customer to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by simply using an email address.').'<br /><br />'.
-		$this->l('Moneybookers. worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use Moneybookers. payments service, including global partners such as eBay, Skype and Thomas Cook').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'</p>
+		$this->l('Moneybookers worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use Moneybookers payments service, including global partners such as eBay, Skype and Thomas Cook').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'</p>
                 <div style="clear: both;"></div>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-opening">

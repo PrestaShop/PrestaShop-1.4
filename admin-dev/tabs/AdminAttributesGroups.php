@@ -43,7 +43,7 @@ class AdminAttributesGroups extends AdminTab
 			OR isset($_GET['updateattribute']) OR isset($_GET['addattribute']))
 		{
 			$this->adminAttributes->displayForm($this->token);
-			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow.gif" /> '.$this->l('Back to list').'</a><br />';
+			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 		}
 		else
 			parent::display();
