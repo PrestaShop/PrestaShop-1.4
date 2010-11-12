@@ -13,7 +13,7 @@ class OrderConfirmationControllerCore extends FrontController
 		
 		$this->id_cart = intval(Tools::getValue('id_cart', 0));
 		$this->id_module = intval(Tools::getValue('id_module', 0));
-		$this->id_order = Order::getOrderByCartId(intval($id_cart));
+		$this->id_order = Order::getOrderByCartId(intval($this->id_cart));
 		$this->secure_key = Tools::getValue('key', false);
 		if (!$this->id_order OR !$this->id_module OR !$this->secure_key OR empty($this->secure_key))
 			Tools::redirect('history.php'.(Tools::isSubmit('slowvalidation') ? '?slowvalidation' : ''));
