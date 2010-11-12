@@ -24,7 +24,10 @@ class ThemeInstallator extends Module
 	{
 		$this->name = 'themeinstallator';
 		$this->version = '1.0';
-		$this->tab = 'Theme';
+		if (version_compare(_PS_VERSION_, 1.4) >= 0)
+			$this->tab = 'administration';
+		else
+			$this->tab = 'Theme';
 		parent::__construct();
 		$this->displayName = $this->l('Import/export a theme');
 		$this->description = $this->l('Export or Install a theme and its modules on your shop');
