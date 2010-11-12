@@ -11,6 +11,9 @@
   *
   */
 
+include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
+
+
 class AdminModules extends AdminTab
 {
 	/** @var array map with $_GET keywords and their callback */
