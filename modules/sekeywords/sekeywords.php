@@ -28,11 +28,12 @@ class SEKeywords extends ModuleGraph
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'sekeyword` sek
-		WHERE sek.`date_add` BETWEEN ';
+		WHERE '.(Configuration::get('SEK_FILTER_KW') == '' ? '1' : 'sek.`keyword` REGEXP \''.pSQL(Configuration::get('SEK_FILTER_KW')).'\'').'
+		AND sek.`date_add` BETWEEN ';
 		$this->_query2 = '
 		GROUP BY TRIM(sek.`keyword`)
-		HAVING occurences > 1
-		ORDER BY COUNT(sek.`keyword`) DESC';
+		HAVING occurences > '.(int)Configuration::get('SEK_MIN_OCCURENCES').'
+		ORDER BY occurences DESC';
 
         parent::__construct();
 		
@@ -44,6 +45,8 @@ class SEKeywords extends ModuleGraph
 	{
 		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('AdminStatsModules'))
 			return false;
+		Configuration::updateValue('SEK_MIN_OCCURENCES', 1);
+		Configuration::updateValue('SEK_FILTER_KW', '');
 		return Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'sekeyword` (
 			id_sekeyword INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -69,17 +72,25 @@ class SEKeywords extends ModuleGraph
 		if ($keywords = $this->getKeywords($_SERVER['HTTP_REFERER']))
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'sekeyword` (`keyword`,`date_add`)
-			VALUES (\''.pSQL(trim($keywords)).'\',\''.pSQL(date('Y-m-d H:i:s')).'\')');
+			VALUES (\''.pSQL(Tools::strtolower(trim($keywords))).'\',\''.pSQL(date('Y-m-d H:i:s')).'\')');
 	}
 	
 	function hookAdminStatsModules()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
-		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
-		
-		if ($result AND sizeof($result))
+		if (Tools::isSubmit('submitSEK'))
 		{
-			$table = '<div style="overflow-y: scroll; height: 600px;">
+			Configuration::updateValue('SEK_FILTER_KW', Tools::getValue('SEK_FILTER_KW'));
+			Configuration::updateValue('SEK_MIN_OCCURENCES', (int)Tools::getValue('SEK_MIN_OCCURENCES'));
+			Tools::redirectAdmin('index.php?tab=AdminStatsModules&token='.Tools::getValue('token').'&module='.$this->name);
+		}
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
+		$total = count($result);
+		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
+		'.$total.' '.($total == 1 ? $this->l('keyword') : $this->l('keywords')).' '.$this->l('matches your query.').'<div class="clear">&nbsp;</div>';
+		if ($result AND count($result))
+		{
+			$table = '
+			<div style="overflow-y: scroll; height: 600px;">
 			<table class="table" border="0" cellspacing="0" cellspacing="0">
 			<thead>
 				<tr><th style="width:400px;">'.$this->l('Keywords').'</th>
@@ -92,10 +103,17 @@ class SEKeywords extends ModuleGraph
 				$table .= '<tr><td>'.$keyword.'</td><td style="text-align: right">'.$occurences.'</td></tr>';
 			}
 			$table .= '</tbody></table></div>';
-			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
+			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center>
+			<br class="clear" />
+			<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
+				'.$this->l('Filter by keyword').' <input type="text" name="SEK_FILTER_KW" value="'.Tools::htmlentitiesUTF8(Configuration::get('SEK_FILTER_KW')).'" />
+				'.$this->l('and min occurences').' <input type="text" name="SEK_MIN_OCCURENCES" value="'.intval(Configuration::get('SEK_MIN_OCCURENCES')).'" />
+				<input type="submit" class"button" name="submitSEK" value="'.$this->l('Apply').'" />
+			</form>
+			<br class="clear" />'.$table;
 		}
 		else
-			$this->_html .= '<p><strong>'.$this->l('No keyword searched for more than once found').'</strong></p>';
+			$this->_html .= '<p><strong>'.$this->l('No keywords').'</strong></p>';
 
 		$this->_html .= '</fieldset><br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
