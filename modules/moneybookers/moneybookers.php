@@ -452,6 +452,15 @@ class MoneyBookers extends PaymentModule
 
 	public function hookPaymentReturn($params)
 	{
+		if (!$this->active)
+			return ;
+
+		global $smarty;
+		$state = $params['objOrder']->getCurrentState();
+		if ($state != _PS_OS_ERROR_)
+			$smarty->assign('status', 'ok');
+		else
+			$smarty->assign('status', 'failed');
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
 }
