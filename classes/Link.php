@@ -140,7 +140,8 @@ class LinkCore
 	public function getPageLink($filename, $ssl = false)
 	{
 		global $iso, $cookie;
-		$base = $ssl ? _PS_BASE_URL_ : Tools::getHttpHost(true);
+
+		$base = $ssl ? Tools::getHttpHost(true) : _PS_BASE_URL_ ;
 		if (array_key_exists($filename, self::$cache['page']))
 			$uri_path = self::$cache['page'][$filename];
 		else
