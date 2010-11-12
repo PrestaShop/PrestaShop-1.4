@@ -117,7 +117,7 @@ class Socolissimo extends Module
 				  `cedoorcode1` varchar(10) NOT NULL,
 				  `cedoorcode2` varchar(10) NOT NULL,
 				  PRIMARY KEY  (`id_cart`,`id_customer`)
-				) ENGINE='.ENGINE_TYPE.' DEFAULT CHARSET=utf8;';
+				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 		
 		if(!Db::getInstance()->Execute($sql))
 			return false;
