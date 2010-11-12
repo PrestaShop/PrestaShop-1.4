@@ -74,7 +74,7 @@ class MondialRelay extends Module
 			foreach ($languages AS $language)
 		    	Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'tab_lang (id_lang,id_tab,name) VALUES("'.intval($language['id_lang']).'", "'.intval($id_tab).'", "Mondial Relay")');
 
-			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT');
+			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($profiles as $profile)
 				Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'access (`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
 											VALUES('.$profile['id_profile'].', '.intval($id_tab).', 1, 1, 1, 1)');
