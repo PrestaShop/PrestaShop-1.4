@@ -11,7 +11,7 @@ class CategoryControllerCore extends FrontController
 			_THEME_CSS_DIR_.'category.css' => 'all',
 			_THEME_CSS_DIR_.'product_list.css' => 'all'
 		));
-		Tools::addJS(_THEME_JS_DIR_.'/products-comparison.js');
+		Tools::addJS(_THEME_JS_DIR_.'products-comparison.js');
 	}
 	
 	public function displayHeader()
