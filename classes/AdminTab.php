@@ -932,11 +932,11 @@ abstract class AdminTabCore
 					});
 				});
 			  </script>
-		<div class="warn"><img src="../img/admin/warn2.png" />';
+		<div class="warn">';
 		if (!is_array($warn))
-			echo $warn;
+			echo '<img src="../img/admin/warn2.png" />'.$warn;
 		else
-		{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span>'.
+		{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/warn2.png" />'.
 			(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
 			.'<span style="margin-left:20px;" id="labelSeeMore">
 			<a id="linkSeeMore" href="" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>

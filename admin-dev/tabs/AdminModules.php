@@ -375,7 +375,7 @@ class AdminModules extends AdminTab
 			'.$this->l('Add a module from PrestaShop Addons').'
 		</a>
 		<div class="clear">&nbsp;</div>
-		<div id="module_install" style="float: left;'.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'" class="width1">
+		<div id="module_install" style="float: left;width:450px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
