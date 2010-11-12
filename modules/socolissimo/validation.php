@@ -76,7 +76,7 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 			 	echo $so->displaySoError($error);	
 		echo '<p><br/>
 			 <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour
-			 </a></p></div>';
+			 </a></p></div>';	
 	}
 }
 else
