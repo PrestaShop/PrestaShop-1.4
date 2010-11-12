@@ -79,14 +79,14 @@ class SEKeywords extends ModuleGraph
 	{
 		if (Tools::isSubmit('submitSEK'))
 		{
-			Configuration::updateValue('SEK_FILTER_KW', Tools::getValue('SEK_FILTER_KW'));
+			Configuration::updateValue('SEK_FILTER_KW', trim(Tools::getValue('SEK_FILTER_KW')));
 			Configuration::updateValue('SEK_MIN_OCCURENCES', (int)Tools::getValue('SEK_MIN_OCCURENCES'));
 			Tools::redirectAdmin('index.php?tab=AdminStatsModules&token='.Tools::getValue('token').'&module='.$this->name);
 		}
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$total = count($result);
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-		'.$total.' '.($total == 1 ? $this->l('keyword') : $this->l('keywords')).' '.$this->l('matches your query.').'<div class="clear">&nbsp;</div>';
+		'.$total.' '.($total == 1 ? $this->l('keyword matches your query.') : $this->l('keywords match your query.')).'<div class="clear">&nbsp;</div>';
 		if ($result AND count($result))
 		{
 			$table = '
@@ -108,7 +108,7 @@ class SEKeywords extends ModuleGraph
 			<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 				'.$this->l('Filter by keyword').' <input type="text" name="SEK_FILTER_KW" value="'.Tools::htmlentitiesUTF8(Configuration::get('SEK_FILTER_KW')).'" />
 				'.$this->l('and min occurences').' <input type="text" name="SEK_MIN_OCCURENCES" value="'.intval(Configuration::get('SEK_MIN_OCCURENCES')).'" />
-				<input type="submit" class"button" name="submitSEK" value="'.$this->l('Apply').'" />
+				<input type="submit" class="button" name="submitSEK" value="'.$this->l('   Apply   ').'" />
 			</form>
 			<br class="clear" />'.$table;
 		}
