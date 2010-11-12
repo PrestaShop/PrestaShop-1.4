@@ -575,7 +575,7 @@ class MondialRelay extends Module
 			return false;
 
 		$uri = explode('&', $_SERVER['REQUEST_URI']);
-		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'</div>';
+		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
 		return true;
 	}
 
