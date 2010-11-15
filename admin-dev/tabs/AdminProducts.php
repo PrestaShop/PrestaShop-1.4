@@ -843,7 +843,7 @@ class AdminProducts extends AdminTab
 	 */
 	public function submitAddproduct($token = NULL)
 	{
-		global $cookie, $currentIndex;
+		global $cookie, $currentIndex, $link;
 
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
@@ -950,7 +950,6 @@ class AdminProducts extends AdminTab
 							// Save and preview							
 							if (Tools::isSubmit('submitAddProductAndPreview'))
 							{		
-								$link = new Link();
 								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), intval($cookie->id_lang))));
 								if (!$obj->active)
 								{
@@ -1714,7 +1713,7 @@ class AdminProducts extends AdminTab
 	function displayFormInformations($obj, $currency)
 	{
 		parent::displayForm();
-		global $currentIndex, $cookie;
+		global $currentIndex, $cookie, $link;
 		$iso = Language::getIsoById(intval($cookie->id_lang));
 		$has_attribute = false;
 		$qty_state = 'readonly';
@@ -1729,7 +1728,6 @@ class AdminProducts extends AdminTab
 		else
 			$has_attribute = true;
 		$cover = Product::getCover($obj->id);
-		$link = new Link();
 		
 		echo '
 		<div class="tab-page" id="step1">

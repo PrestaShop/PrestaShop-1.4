@@ -34,6 +34,10 @@ if (isset($_GET['logout'])) {
 if (!$cookie->isLoggedBack())
 	Tools::redirectLink('login.php'.$url_redirect);
 
+/* link */
+$link = new Link();
+
+
 /* Current tab and current URL */
 $tab = Tools::getValue('tab');
 $currentIndex = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__)).($tab ? '?tab='.$tab : '');

@@ -285,7 +285,6 @@ class AdminCMS extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
-						$link = new Link();
 						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
 						if (!$cms->active)
 						{
@@ -308,7 +307,6 @@ class AdminCMS extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
-						$link = new Link();
 						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
 						if (!$cms->active)
 						{
@@ -340,7 +338,6 @@ class AdminCMS extends AdminTab
 			parent::postProcess(true);
 		if (Tools::isSubmit('submitAddcmsAndPreview'))
 		{
-			$link = new Link();
 			$preview_url = $link->getCMSLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
 			if (!$obj->active)
 			{

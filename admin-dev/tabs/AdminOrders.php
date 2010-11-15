@@ -422,7 +422,7 @@ class AdminOrders extends AdminTab
 
 	public function viewDetails()
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex, $cookie, $link;
 		$irow = 0;
 		$order = $this->loadObject();
 
@@ -447,7 +447,6 @@ class AdminOrders extends AdminTab
 		$currentState = OrderHistory::getLastOrderState($order->id);
 		$sources = ConnectionsSource::getOrderSources($order->id);
 		$cart = Cart::getCartByOrderId($order->id);
-		$link = new Link();
 
 		$row = array_shift($history);
 
