@@ -5,6 +5,7 @@
  *	
  *  Copyright(c) 2007 Denny Ferrassoli - DennyDotNet.com
  *  Coprright(c) 2008 Charles Christolini - BinaryPie.com
+ *  Modified by Lucas CHERIFI @ PrestaShop : now this plugin works with the Dean Edward's JS Packer
  *  
  *  Dual licensed under the MIT and GPL licenses:
  *  http://www.opensource.org/licenses/mit-license.php
@@ -65,7 +66,7 @@
 					
 					var timerCallbackFx = function()
 					{
-						checkElement(timer, overrideBool)
+						checkElement(timer, overrideBool);
 					}
 					
 					// Clear timer					
