@@ -19,136 +19,170 @@ class AdminPerformance extends AdminTab
 		
 		if (Tools::isSubmit('submitCaching'))
 		{
-			$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
-			if (!Tools::getValue('active'))
-				$cache_active = 0;
-			else	
-				$cache_active = 1;
-			if (!$caching_system = Tools::getValue('caching_system'))
-				$this->_errors[] = Tools::displayError('Caching system is missing');
-			else
-				$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
-			
-			if($caching_system == 'CacheFS')
+			if ($this->tabAccess['edit'] === '1')
 			{
-				if (!($depth = Tools::getValue('ps_cache_fs_directory_depth')))
-					$this->_errors[] = Tools::displayError('Please set a directory depth');
+				$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
+				if (!Tools::getValue('active'))
+					$cache_active = 0;
+				else	
+					$cache_active = 1;
+				if (!$caching_system = Tools::getValue('caching_system'))
+					$this->_errors[] = Tools::displayError('Caching system is missing');
+				else
+					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
+			
+				if($caching_system == 'CacheFS')
+				{
+					if (!($depth = Tools::getValue('ps_cache_fs_directory_depth')))
+						$this->_errors[] = Tools::displayError('Please set a directory depth');
+					if (!sizeof($this->_errors))
+					{	
+						CacheFS::deleteCacheDirectory();
+						CacheFS::createCacheDirectories((int)$depth);
+						Configuration::updateValue('PS_CACHEFS_DIRECTORY_DEPTH', (int)$depth);
+					}
+				}
 				if (!sizeof($this->_errors))
-				{	
-					CacheFS::deleteCacheDirectory();
-					CacheFS::createCacheDirectories((int)$depth);
-					Configuration::updateValue('PS_CACHEFS_DIRECTORY_DEPTH', (int)$depth);
+				{
+					$settings = preg_replace('/define\(\'_PS_CACHE_ENABLED_\', \'([0-9])\'\);/Ui', 'define(\'_PS_CACHE_ENABLED_\', \''.(int)$cache_active.'\');', $settings);
+					if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
+						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+					else
+						$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
 				}
 			}
-			if (!sizeof($this->_errors))
-			{
-				$settings = preg_replace('/define\(\'_PS_CACHE_ENABLED_\', \'([0-9])\'\);/Ui', 'define(\'_PS_CACHE_ENABLED_\', \''.(int)$cache_active.'\');', $settings);
-				if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
-					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
-				else
-					$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
-			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitAddServer'))
 		{
-			if (!Tools::getValue('memcachedIp'))
-				$this->_errors[] = Tools::displayError('Memcached IP is missing');
-			if (!Tools::getValue('memcachedPort'))
-				$this->_errors[] = Tools::displayError('Memcached port is missing');
-			if (!Tools::getValue('memcachedWeight'))
-				$this->_errors[] = Tools::displayError('Memcached weight is missing');
-			if (!sizeof($this->_errors))
+			if ($this->tabAccess['add'] === '1')
 			{
-				if (Memcached::addServer(pSQL(Tools::getValue('memcachedIp')), (int)Tools::getValue('memcachedPort'), (int)Tools::getValue('memcachedWeight')))
-					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
-				else
-					$this->_errors[] = Tools::displayError('Can\'t add Memcached server');
+				if (!Tools::getValue('memcachedIp'))
+					$this->_errors[] = Tools::displayError('Memcached IP is missing');
+				if (!Tools::getValue('memcachedPort'))
+					$this->_errors[] = Tools::displayError('Memcached port is missing');
+				if (!Tools::getValue('memcachedWeight'))
+					$this->_errors[] = Tools::displayError('Memcached weight is missing');
+				if (!sizeof($this->_errors))
+				{
+					if (Memcached::addServer(pSQL(Tools::getValue('memcachedIp')), (int)Tools::getValue('memcachedPort'), (int)Tools::getValue('memcachedWeight')))
+						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+					else
+						$this->_errors[] = Tools::displayError('Can\'t add Memcached server');
+				}
 			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		if (Tools::getValue('deleteMemcachedServer'))
 		{
-			if (Memcached::deleteServer((int)Tools::getValue('deleteMemcachedServer')))
-				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			if ($this->tabAccess['add'] === '1')
+			{
+				if (Memcached::deleteServer((int)Tools::getValue('deleteMemcachedServer')))
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				else
+					$this->_errors[] = Tools::displayError('Error in deleting Memcached server');
+			}
 			else
-				$this->_errors[] = Tools::displayError('Error in deleting Memcached server');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
 		}
 		
 		if (Tools::isSubmit('submitCiphering') AND Configuration::get('PS_CIPHER_ALGORITHM') != (int)Tools::getValue('PS_CIPHER_ALGORITHM'))
 		{
-			$algo = (int)Tools::getValue('PS_CIPHER_ALGORITHM');
-			$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
-			if ($algo)
+			if ($this->tabAccess['edit'] === '1')
 			{
-				if (!function_exists('mcrypt_encrypt'))
-					$this->_errors[] = Tools::displayError('mcrypt is not activated on this server');
-				else
+				$algo = (int)Tools::getValue('PS_CIPHER_ALGORITHM');
+				$settings = file_get_contents(dirname(__FILE__).'/../../config/settings.inc.php');
+				if ($algo)
 				{
-					if (!strstr($settings, '_RIJNDAEL_KEY_'))
+					if (!function_exists('mcrypt_encrypt'))
+						$this->_errors[] = Tools::displayError('mcrypt is not activated on this server');
+					else
 					{
-						$key_size = mcrypt_get_key_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
-						$key = Tools::passwdGen($key_size);
-						$settings = preg_replace('/define\(\'_COOKIE_KEY_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_KEY_\', \'\1\');'."\n".'define(\'_RIJNDAEL_KEY_\', \''.$key.'\');', $settings);
-					}
-					if (!strstr($settings, '_RIJNDAEL_IV_'))
-					{
-						$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
-						$iv = base64_encode(mcrypt_create_iv($iv_size, MCRYPT_RAND));
-						$settings = preg_replace('/define\(\'_COOKIE_IV_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_IV_\', \'\1\');'."\n".'define(\'_RIJNDAEL_IV_\', \''.$iv.'\');', $settings);
+						if (!strstr($settings, '_RIJNDAEL_KEY_'))
+						{
+							$key_size = mcrypt_get_key_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
+							$key = Tools::passwdGen($key_size);
+							$settings = preg_replace('/define\(\'_COOKIE_KEY_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_KEY_\', \'\1\');'."\n".'define(\'_RIJNDAEL_KEY_\', \''.$key.'\');', $settings);
+						}
+						if (!strstr($settings, '_RIJNDAEL_IV_'))
+						{
+							$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB);
+							$iv = base64_encode(mcrypt_create_iv($iv_size, MCRYPT_RAND));
+							$settings = preg_replace('/define\(\'_COOKIE_IV_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_IV_\', \'\1\');'."\n".'define(\'_RIJNDAEL_IV_\', \''.$iv.'\');', $settings);
+						}
 					}
 				}
-			}
-			if (!count($this->_errors))
-			{
-				if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
+				if (!count($this->_errors))
 				{
-					Configuration::updateValue('PS_CIPHER_ALGORITHM', $algo);
-					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+					if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
+					{
+						Configuration::updateValue('PS_CIPHER_ALGORITHM', $algo);
+						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+					}
+					else
+						$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
 				}
-				else
-					$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
 			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		
 		if (Tools::isSubmit('submitCCC'))
 		{
-			if (
-				!Configuration::updateValue('PS_CSS_THEME_CACHE', (int)Tools::getValue('PS_CSS_THEME_CACHE')) OR
-				!Configuration::updateValue('PS_JS_THEME_CACHE', (int)Tools::getValue('PS_JS_THEME_CACHE')) OR
-				!Configuration::updateValue('PS_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_HTML_THEME_COMPRESSION')) OR
-				!Configuration::updateValue('PS_JS_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_JS_HTML_THEME_COMPRESSION')) OR
-				!Configuration::updateValue('PS_HIGH_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_HIGH_HTML_THEME_COMPRESSION'))
-			)
-				$this->_errors[] = Tools::displayError('Unknown error.');
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (
+					!Configuration::updateValue('PS_CSS_THEME_CACHE', (int)Tools::getValue('PS_CSS_THEME_CACHE')) OR
+					!Configuration::updateValue('PS_JS_THEME_CACHE', (int)Tools::getValue('PS_JS_THEME_CACHE')) OR
+					!Configuration::updateValue('PS_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_HTML_THEME_COMPRESSION')) OR
+					!Configuration::updateValue('PS_JS_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_JS_HTML_THEME_COMPRESSION')) OR
+					!Configuration::updateValue('PS_HIGH_HTML_THEME_COMPRESSION', (int)Tools::getValue('PS_HIGH_HTML_THEME_COMPRESSION'))
+				)
+					$this->_errors[] = Tools::displayError('Unknown error.');
+				else
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			}
 			else
-				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitMediaServers'))
 		{
-			if (Tools::getValue('_MEDIA_SERVER_1_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_1_')))
-				$this->_errors[] = Tools::displayError('Media server #1 is invalid');
-			if (Tools::getValue('_MEDIA_SERVER_2_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_2_')))
-				$this->_errors[] = Tools::displayError('Media server #2 is invalid');
-			if (Tools::getValue('_MEDIA_SERVER_3_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_3_')))
-				$this->_errors[] = Tools::displayError('Media server #3 is invalid');
-			if (!sizeof($this->_errors))
+			if ($this->tabAccess['edit'] === '1')
 			{
-				$baseUrls = array();
-				$baseUrls['_MEDIA_SERVER_1_'] = Tools::getValue('_MEDIA_SERVER_1_');
-				$baseUrls['_MEDIA_SERVER_2_'] = Tools::getValue('_MEDIA_SERVER_2_');
-				$baseUrls['_MEDIA_SERVER_3_'] = Tools::getValue('_MEDIA_SERVER_3_');
-				rewriteSettingsFile($baseUrls, NULL, NULL);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
-				unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
-				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				if (Tools::getValue('_MEDIA_SERVER_1_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_1_')))
+					$this->_errors[] = Tools::displayError('Media server #1 is invalid');
+				if (Tools::getValue('_MEDIA_SERVER_2_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_2_')))
+					$this->_errors[] = Tools::displayError('Media server #2 is invalid');
+				if (Tools::getValue('_MEDIA_SERVER_3_') != NULL AND !Validate::isFileName(Tools::getValue('_MEDIA_SERVER_3_')))
+					$this->_errors[] = Tools::displayError('Media server #3 is invalid');
+				if (!sizeof($this->_errors))
+				{
+					$baseUrls = array();
+					$baseUrls['_MEDIA_SERVER_1_'] = Tools::getValue('_MEDIA_SERVER_1_');
+					$baseUrls['_MEDIA_SERVER_2_'] = Tools::getValue('_MEDIA_SERVER_2_');
+					$baseUrls['_MEDIA_SERVER_3_'] = Tools::getValue('_MEDIA_SERVER_3_');
+					rewriteSettingsFile($baseUrls, NULL, NULL);
+					unset($this->_fieldsGeneral['_MEDIA_SERVER_1_']);
+					unset($this->_fieldsGeneral['_MEDIA_SERVER_2_']);
+					unset($this->_fieldsGeneral['_MEDIA_SERVER_3_']);
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+				}
 			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitSmartyConfig'))
 		{
-			Configuration::updateValue('PS_SMARTY_FORCE_COMPILE', Tools::getValue('smarty_force_compile', 0));
-			Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			if ($this->tabAccess['edit'] === '1')
+			{
+				Configuration::updateValue('PS_SMARTY_FORCE_COMPILE', Tools::getValue('smarty_force_compile', 0));
+				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
-		
 		return parent::postProcess();
 	}
 
