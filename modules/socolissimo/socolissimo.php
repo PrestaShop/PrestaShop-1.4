@@ -804,11 +804,11 @@ class Socolissimo extends Module
 	
 	private function checkSoCarrierAvailable($id_carrier)
 	{
-		global $cart;
+		global $cart, $defaultCountry;
 		$carrier = new Carrier(intval($id_carrier));
 		$address = new Address(intval($cart->id_address_delivery));
 		$id_zone = Address::getZoneById(intval($address->id));
-		
+
 		// Get only carriers that are compliant with shipping method
 		if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
 		OR (!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
@@ -817,7 +817,7 @@ class Socolissimo extends Module
 		}
 		
 		// If out-of-range behavior carrier is set on "Desactivate carrier"
-		if ($row['range_behavior'])
+		if ($carrier->range_behavior)
 		{
 			// Get id zone
 	        if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
@@ -826,8 +826,8 @@ class Socolissimo extends Module
 				$id_zone = intval($defaultCountry->id_zone);
 
 			// Get only carriers that have a range compatible with cart
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
-			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
+			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight(intval($carrier->id), $cart->getTotalWeight(), $id_zone)))
+			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice(intval($carrier->id), $cart->getOrderTotal(true, 4), $id_zone))))
 				{
 					return false;
 				}
