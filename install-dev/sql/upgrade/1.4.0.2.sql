@@ -695,7 +695,7 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `n
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_COMPARATOR_MAX_ITEM', 0, NOW(), NOW());
 
-ALTER TABLE `ps_meta_lang` ADD `url_rewrite` VARCHAR( 255 ) NOT NULL , ADD INDEX ( `url_rewrite` );
+ALTER TABLE `PREFIX_meta_lang` ADD `url_rewrite` VARCHAR( 255 ) NOT NULL , ADD INDEX ( `url_rewrite` );
 INSERT INTO `PREFIX_meta` (`page`) VALUES ('address');
 INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
 (1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'address'), 'Address', 'address'),
