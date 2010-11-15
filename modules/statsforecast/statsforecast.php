@@ -15,7 +15,7 @@ class StatsForecast extends Module
     public function __construct()
     {
         $this->name = 'statsforecast';
-        $this->tab = 'Stats';
+        $this->tab = 'analytics_stats';
         $this->version = 1.0;
 		
         parent::__construct();
@@ -27,6 +27,11 @@ class StatsForecast extends Module
 	public function install()
 	{
 		return (parent::install() && $this->registerHook('AdminStatsModules'));
+	}
+	
+	public function getContent()
+	{
+		Tools::redirectAdmin('index.php?tab=AdminStats&module=statsforecast&token='.Tools::getAdminTokenLite('AdminStats'));
 	}
 	
 	public function hookAdminStatsModules()
@@ -93,10 +98,10 @@ class StatsForecast extends Module
 		
 		$this->_html .= '<div style="float:left;width:750px">
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<p style="float:left">Toutes les sommes sont exprimées HT.</p>
+			<p style="float:left">'.$this->l('All amounts are without taxes.').'</p>
 			<form id="granularity" action="'.$ru.'#granularity" method="post" style="float:right">
 				<input type="hidden" name="submitGranularity" value="1" />
-				Mode : <select name="stats_granularity" onchange="this.form.submit();" style="width:100px">
+				'.$this->l('Mode:').' <select name="stats_granularity" onchange="this.form.submit();" style="width:100px">
 					<option value="10">'.$this->l('Day').'</option>
 					<option value="42" '.($cookie->stats_granularity == '42' ? 'selected="selected"' : '').'>'.$this->l('Week').'</option>
 					<option value="7" '.($cookie->stats_granularity == '7' ? 'selected="selected"' : '').'>'.$this->l('Month').'</option>

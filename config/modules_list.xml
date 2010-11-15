@@ -69,6 +69,7 @@
 		<module name="statscheckup"/>
 		<module name="statsdata"/>
 		<module name="statsequipment"/>
+		<module name="statsforecast"/>
 		<module name="statsgeolocation"/>
 		<module name="statshome"/>
 		<module name="statslive"/>
@@ -79,10 +80,12 @@
 		<module name="statsregistrations"/>
 		<module name="statssales"/>
 		<module name="statssearch"/>
-		<module name="themeinstallator"/>
+		<module name="statsstock"/>
 		<module name="statsvisits"/>
+		<module name="themeinstallator"/>
 		<module name="tm4b"/>
 		<module name="trackingfront"/>
+		<module name="vatnumber"/>
 		<module name="watermark"/>
 	</modules>
 	<modules type="partner">
@@ -101,5 +104,7 @@
 		<module name="iadvize"/>
 		<module name="fianetfraud"/>
 		<module name="fianetsceau"/>
+		<module name="paysafecard"/>
+		<module name="cashticket"/>
 	</modules>
 </modules_list>

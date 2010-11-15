@@ -177,33 +177,29 @@ abstract class AdminStatsTab extends AdminPreferences
 		</fieldset>';
 	}
 	
-	private function getModules($limit = false, $auto = true)
+	private function getModules()
 	{
-		$function = $limit ? 'getRow' : 'ExecuteS';
-		return Db::getInstance()->{$function}('
+		return Db::getInstance()->ExecuteS('
 		SELECT h.`name` AS hook, m.`name`
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
 		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
-		'.($auto ? 'WHERE h.`name` = \''.pSQL(Tools::getValue('tab')).'\'' : 'WHERE h.`name` LIKE \'AdminStats%\'').'
+		WHERE h.`name` LIKE \'AdminStatsModules\'
 		AND m.`active` = 1
 		ORDER BY hm.`position`');
 	}
 	
-	public function displayMenu($auto = true)
+	public function displayMenu()
 	{
 		global $currentIndex, $cookie;
-		$modules = $auto ? $this->getModules() : $this->getModules(false, false);
+		$modules = $this->getModules();
 
 		echo '<fieldset style="width: 200px"><legend><img src="../img/admin/navigation.png" /> '.$this->l('Navigation', 'AdminStatsTab').'</legend>';
 		if (sizeof($modules))
+		{
 			foreach ($modules AS $module)
-	    	{
-				$moduleInstance = Module::getInstanceByName($module['name']);
-				if (!$moduleInstance)
-					continue;
-				echo '
-				<h4><img src="../modules/'.$module['name'].'/logo.gif" /> <a href="index.php?tab='.$module['hook'].'&token='.Tools::getAdminToken($module['hook'].intval(Tab::getIdFromClassName($module['hook'])).intval($cookie->id_employee)).'&module='.$module['name'].'">'.$moduleInstance->displayName.'</a></h4>';
+				if ($moduleInstance = Module::getInstanceByName($module['name']))
+					echo '<h4><img src="../modules/'.$module['name'].'/logo.gif" /><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&module='.$module['name'].'">'.$moduleInstance->displayName.'</a></h4>';
 		}
 		else
 			echo $this->l('No module installed', 'AdminStatsTab');
@@ -220,24 +216,21 @@ abstract class AdminStatsTab extends AdminPreferences
 		echo '</div>
 		<div style="float:left; margin-left:20px;">';
 		
-		if (!($moduleName = Tools::getValue('module')))
-		{
-			$module = $this->getModules(true);
-			if (isset($module['name']))
-				$moduleName = $module['name'];
-			else
-				echo Tools::displayError('No module available');
-		}
+		if (!($moduleName = Tools::getValue('module')) AND $moduleInstance = Module::getInstanceByName('statsforecast') AND $moduleInstance->active)
+			$moduleName = 'statsforecast';
 		if ($moduleName)
 		{
 			// Needed for the graphics display when this is the default module
 			$_GET['module'] = $moduleName;
-			$moduleInstance = Module::getInstanceByName($moduleName);
+			if (!isset($moduleInstance))
+				$moduleInstance = Module::getInstanceByName($moduleName);
 			if ($moduleInstance AND $moduleInstance->active)
-				echo Module::hookExec(Tools::getValue('tab'), NULL, $moduleInstance->id);
+				echo Module::hookExec('AdminStatsModules', NULL, $moduleInstance->id);
 			else
 				echo $this->l('Module not found', 'AdminStatsTab');
 		}
+		else
+			echo '<h3 class="space">'.$this->l('Please select a module in the left column.').'</h3>';
 		echo '</div><div class="clear"></div>';
 	}
 }
