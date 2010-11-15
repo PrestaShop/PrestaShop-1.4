@@ -746,7 +746,7 @@ class PDFCore extends PDF_PageGroupCore
 		$priceBreakDown['totalWithTax'] = 0;
 		$priceBreakDown['totalProductsWithoutTax'] = 0;
 		$priceBreakDown['totalProductsWithTax'] = 0;
-		if (self::$order->total_paid == '0.00')
+		if (self::$order->total_paid == '0.00' AND self::$order->total_discounts == 0)
 			return ;
 
 		// Setting products tax
