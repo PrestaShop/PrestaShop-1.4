@@ -437,7 +437,7 @@ class AdminProducts extends AdminTab
 						$product->updateQuantityProductWithAttributeQuantity();
 					}
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
 				}
 			}
 		}

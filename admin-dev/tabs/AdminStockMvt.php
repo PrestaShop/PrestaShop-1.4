@@ -101,14 +101,18 @@ class AdminStockMvt extends AdminTab
 		if (!isset($_GET['addstock_mvt_reason']) AND (Tools::isSubmit('submitAddstock_mvt_reason') OR !Tools::getValue('id_stock_mvt_reason')))
 		{
 			$old_post = $_POST;
+			echo '<h2>'.$this->l('Stock mouvement history').'</h2>';
 			parent::display();
 			if (!isset($_GET['view'.$this->table]))
-				echo '<fieldset>
-						<form method="post" action="'.$currentIndex.'&token='.$this->token.'&rebuildMvt=1">
+				echo '
+				<fieldset>
+					<form method="post" action="'.$currentIndex.'&token='.$this->token.'&rebuildMvt=1">
 						<label for="stock_rebuild">'.$this->l('Calculate the movement of inventory missing').'</label>
-						<input class="button" type="submit" name="rebuildStock" value="'.$this->l('Submit').'" />
-						</form>
-				</fieldset>';
+						<div class="margin-form">
+							<input class="button" type="submit" name="rebuildStock" value="'.$this->l('Submit').'" />
+						</div>
+					</form>
+				</fieldset><br />';
 		}
 		if (isset($_GET['view'.$this->table]))
 			return;
@@ -138,6 +142,8 @@ class AdminStockMvt extends AdminTab
 												'identifier' => 'id_stock_mvt_reason'));
 		
 		unset($this->_select, $this->_join, $this->_group, $this->_filterHaving, $this->_filter);
+		
+		echo '<h2>'.$this->l('Stock mouvement reason').'</h2>';
 		$this->postProcess();
 		return parent::display();
 	}

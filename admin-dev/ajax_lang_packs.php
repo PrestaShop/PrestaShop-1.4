@@ -18,7 +18,7 @@ if(@fsockopen('www.prestashop.com', 80))
 		$lang_packs = unserialize($lang_packs);
 		foreach($lang_packs as $lang_pack)
 		{
-			if($lang_pack['iso_code'] == $_GET['iso'])
+			if($lang_pack['iso_code'] == strtolower($_GET['iso']))
 				die('ok');
 		}
 		die('fail:1');

@@ -1,7 +1,7 @@
 <?php
 
 /**
-  * Customers tab for admin panel, AdminContacts.php
+  * Groups tab for admin panel, AdminGroups.php
   * @category admin
   *
   * @author PrestaShop <support@prestashop.com>
