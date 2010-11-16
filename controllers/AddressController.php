@@ -58,11 +58,13 @@ class AddressControllerCore extends FrontController
 				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
 				{
 					$zip_regexp = '/^'.$zip_code_format.'$/ui';
+					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
+					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
 					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed like following :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
 					$this->errors[] = Tools::displayError('postcode is required.');

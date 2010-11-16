@@ -166,8 +166,7 @@ class CategoryCore extends ObjectModel
 
 		//recursivity for subcategories
 		$children = array();
-		$subcats = $this->getSubCategories($idLang, true);
-		if (sizeof($subcats) AND ($maxDepth == 0 OR $currentDepth < $maxDepth))
+		if (($maxDepth == 0 OR $currentDepth < $maxDepth) AND $subcats = $this->getSubCategories($idLang, true) AND sizeof($subcats))
 			foreach ($subcats as &$subcat)
 			{
 				if (!$subcat['id_category'])

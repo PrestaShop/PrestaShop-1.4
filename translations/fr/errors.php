@@ -125,6 +125,7 @@ $_ERRORS['be9fddade234ff9b16a1d92d62963b8e'] = 'Propriété d\'Etat invalide.';
 $_ERRORS['37c73343e4118943bc088bb4ad94a56c'] = 'Propriété de taxe invalide.';
 $_ERRORS['90d8a44a1fba13198035d86caeeb2d4d'] = 'Liste de voeux invalide';
 $_ERRORS['7cff73659ca47fea5d29644da84f35e2'] = 'Token de liste de voeux invalide';
+$_ERRORS['4698df9e9ebf050b3485b306f75f9b7a'] = 'Il doit être typé comme suivi :';
 $_ERRORS['ab57fd0432e25d5b3013133a1c910d56'] = 'Ko';
 $_ERRORS['49bd922182bd3518641589e3077eacd3'] = 'Impossible de se connecter à la base de données.';
 $_ERRORS['bc54287d97c88a98f594dc488a334e89'] = 'Taille max. :';
