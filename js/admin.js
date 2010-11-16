@@ -306,9 +306,10 @@ function dontChange(srcText)
 {
 	if (srcText == '')
 		return false;
-	for (var i in search_texts)
-		if (srcText == search_texts[i])
-			return false;
+	if (window.search_texts)
+		for (var i in search_texts)
+			if (srcText == search_texts[i])
+				return false;
 	return true;
 }
 
@@ -406,7 +407,7 @@ function prepareBoQuery() {
 		// when the cursor moves away from the field, hide the hint
 		inputs[i].onblur = function ()
 		{
-			if($(this).attr('id') == 'bo_query' && $(this).val().length < 1)
+			if($(this).attr('id') == 'bo_query' && $(this).val().length < 1 && window.search_texts)
 				$(this).val(search_texts[$('select#bo_search_type').val() - 1]);
 		}
 	}
