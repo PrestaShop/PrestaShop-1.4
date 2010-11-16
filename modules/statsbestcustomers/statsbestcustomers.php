@@ -133,9 +133,8 @@ class StatsBestCustomers extends ModuleGrid
 		SELECT	c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
 			COUNT(DISTINCT co.`id_connections`) AS totalVisits,
 			COUNT(cop.`id_page`) AS totalPageViewed, (
-				SELECT ROUND(SUM(IFNULL(o.`total_paid_real`, 0) / cu.conversion_rate), 2) 
+				SELECT ROUND(SUM(IFNULL(o.`total_paid_real`, 0) / o.conversion_rate), 2) 
 				FROM `'._DB_PREFIX_.'orders` o
-				LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 				WHERE o.id_customer = c.id_customer
 				AND o.invoice_date BETWEEN '.$this->getDate().'
 				AND o.valid

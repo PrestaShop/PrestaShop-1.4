@@ -108,6 +108,7 @@ abstract class PaymentModuleCore extends Module
 			$order->gift = intval($cart->gift);
 			$order->gift_message = $cart->gift_message;
 			$currency = new Currency($order->id_currency);
+			$order->conversion_rate = $currency->conversion_rate;
 			$amountPaid = !$dont_touch_amount ? Tools::ps_round(floatval($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
 			$order->total_products = floatval($cart->getOrderTotal(false, 1));

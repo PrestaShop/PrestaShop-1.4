@@ -44,6 +44,9 @@ class OrderCore extends ObjectModel
 	/** @var string Payment module */
 	public 		$module;
 
+	/** @var float Currency conversion rate */
+	public 		$conversion_rate;
+
 	/** @var boolean Customer is ok for a recyclable package */
 	public		$recyclable = 1;
 
@@ -100,7 +103,7 @@ class OrderCore extends ObjectModel
 
 	protected $tables = array ('orders');
 
-	protected	$fieldsRequired = array('id_address_delivery', 'id_address_invoice', 'id_cart', 'id_currency', 'id_lang', 'id_customer', 'id_carrier', 'payment', 'total_paid', 'total_paid_real', 'total_products', 'total_products_wt');
+	protected	$fieldsRequired = array('conversion_rate', 'id_address_delivery', 'id_address_invoice', 'id_cart', 'id_currency', 'id_lang', 'id_customer', 'id_carrier', 'payment', 'total_paid', 'total_paid_real', 'total_products', 'total_products_wt');
 	protected	$fieldsSize = array('payment' => 32);
 	protected	$fieldsValidate = array(
 		'id_address_delivery' => 'isUnsignedId',
@@ -122,7 +125,8 @@ class OrderCore extends ObjectModel
 		'total_products_wt' => 'isPrice',
 		'total_shipping' => 'isPrice',
 		'total_wrapping' => 'isPrice',
-		'shipping_number' => 'isUrl'
+		'shipping_number' => 'isUrl',
+		'conversion_rate' => 'isFloat'
 	);
 	
 	protected	$webserviceParameters = array(
@@ -167,6 +171,7 @@ class OrderCore extends ObjectModel
 		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['payment'] = pSQL($this->payment);
 		$fields['module'] = pSQL($this->module);
+		$fields['conversion_rate'] = floatval($this->conversion_rate);
 		$fields['recyclable'] = intval($this->recyclable);
 		$fields['gift'] = intval($this->gift);
 		$fields['gift_message'] = pSQL($this->gift_message);

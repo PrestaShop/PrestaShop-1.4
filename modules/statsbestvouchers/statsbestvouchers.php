@@ -95,10 +95,9 @@ class StatsBestVouchers extends ModuleGrid
 	{	
 		$this->_totalCount = $this->getTotalCount();
 		$this->_query = '
-		SELECT od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / c.conversion_rate as ca
+		SELECT od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / o.conversion_rate as ca
 		FROM '._DB_PREFIX_.'order_discount od
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.invoice_date BETWEEN '.$this->getDate().'
 		GROUP BY od.id_discount';

@@ -86,9 +86,8 @@ class StatsForecast extends Module
 			'.$dateFromGInvoice.' as fix_date,
 			COUNT(DISTINCT o.id_order) as countOrders,
 			SUM(od.product_quantity) as countProducts,
-			SUM(o.total_products / c.conversion_rate) as totalGross
+			SUM(o.total_products / o.conversion_rate) as totalGross
 		FROM '._DB_PREFIX_.'orders o
-		INNER JOIN '._DB_PREFIX_.'currency c ON c.id_currency = o.id_currency
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
 		INNER JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
 		WHERE o.valid = 1
@@ -405,9 +404,8 @@ class StatsForecast extends Module
 		$ca = array();
 		
 		$ca['cat'] = Db::getInstance()->ExecuteS('
-		SELECT SUM(od.`product_price` * od.`product_quantity` / c.conversion_rate) as orderSum, COUNT(*) AS orderQty, cl.name, AVG(od.`product_price` / c.conversion_rate) as priveAvg
+		SELECT SUM(od.`product_price` * od.`product_quantity` / o.conversion_rate) as orderSum, COUNT(*) AS orderQty, cl.name, AVG(od.`product_price` / o.conversion_rate) as priveAvg
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = od.product_id
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.id_category_default = cl.id_category AND cl.id_lang = '.intval($cookie->id_lang).')
@@ -421,13 +419,12 @@ class StatsForecast extends Module
 		$langValues = '';
 		$languages = Db::getInstance()->ExecuteS('SELECT id_lang, iso_code FROM `'._DB_PREFIX_.'lang` WHERE active = 1');
 		foreach ($languages as $language)
-			$langValues .= 'SUM(IF(o.id_lang = '.(int)$language['id_lang'].', total_products / c.conversion_rate, 0)) as '.pSQL($language['iso_code']).',';
+			$langValues .= 'SUM(IF(o.id_lang = '.(int)$language['id_lang'].', total_products / o.conversion_rate, 0)) as '.pSQL($language['iso_code']).',';
 		$langValues = rtrim($langValues, ',');
 		
 		$ca['lang'] = Db::getInstance()->getRow('
 		SELECT '.$langValues.'
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		arsort($ca['lang']);
@@ -435,14 +432,12 @@ class StatsForecast extends Module
 		$ca['langprev'] = Db::getInstance()->getRow('
 		SELECT '.$langValues.'
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND ADDDATE(o.`invoice_date`, interval 30 day) BETWEEN \''.$employee->stats_date_from.' 00:00:00\' AND \''.min(date('Y-m-d H:i:s'), $employee->stats_date_to.' 23:59:59').'\'');
 		
 		$ca['payment'] = Db::getInstance()->ExecuteS('
-		SELECT module, SUM(total_products / c.conversion_rate) as total, COUNT(*) as nb, AVG(total_products / c.conversion_rate) as cart
+		SELECT module, SUM(total_products / o.conversion_rate) as total, COUNT(*) as nb, AVG(total_products / o.conversion_rate) as cart
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.((int)$cookie->stats_id_zone ? $join : '').'
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
@@ -451,9 +446,8 @@ class StatsForecast extends Module
 		ORDER BY total DESC');
 		
 		$ca['zones'] = Db::getInstance()->ExecuteS('
-		SELECT z.name, SUM(o.total_products / cu.conversion_rate) as total, COUNT(*) as nb
+		SELECT z.name, SUM(o.total_products / o.conversion_rate) as total, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 		LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_invoice = a.id_address
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.id_country = a.id_country
 		LEFT JOIN `'._DB_PREFIX_.'zone` z ON z.id_zone = c.id_zone
@@ -463,7 +457,7 @@ class StatsForecast extends Module
 		ORDER BY total DESC');
 		
 		$ca['currencies'] = Db::getInstance()->ExecuteS('
-		SELECT cu.name, SUM(o.total_products / cu.conversion_rate) as total, COUNT(*) as nb
+		SELECT cu.name, SUM(o.total_products / o.conversion_rate) as total, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 		'.((int)$cookie->stats_id_zone ? $join : '').'
@@ -474,9 +468,8 @@ class StatsForecast extends Module
 		ORDER BY total DESC');
 		
 		$ca['ventil'] = Db::getInstance()->getRow('
-		SELECT SUM(total_products / c.conversion_rate) as total, COUNT(*) AS nb
+		SELECT SUM(total_products / o.conversion_rate) as total, COUNT(*) AS nb
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		

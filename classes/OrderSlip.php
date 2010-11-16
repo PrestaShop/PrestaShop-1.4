@@ -23,6 +23,9 @@ class OrderSlipCore extends ObjectModel
 	/** @var integer */
 	public 		$id_order;
 	
+	/** @var float */
+	public		$conversion_rate;
+	
 	/** @var integer */
 	public		$shipping_cost;
 	
@@ -34,8 +37,8 @@ class OrderSlipCore extends ObjectModel
 
 	protected $tables = array ('order_slip');
 
-	protected	$fieldsRequired = array ('id_customer', 'id_order');
-	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_order' => 'isUnsignedId');
+	protected	$fieldsRequired = array ('id_customer', 'id_order', 'conversion_rate');
+	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_order' => 'isUnsignedId', 'conversion_rate' => 'isFloat');
 
 	protected 	$table = 'order_slip';
 	protected 	$identifier = 'id_order_slip';
@@ -46,6 +49,7 @@ class OrderSlipCore extends ObjectModel
 
 		$fields['id_customer'] = intval($this->id_customer);
 		$fields['id_order'] = intval($this->id_order);
+		$fields['conversion_rate'] = floatval($this->conversion_rate);
 		$fields['shipping_cost'] = intval($this->shipping_cost);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
@@ -99,17 +103,16 @@ class OrderSlipCore extends ObjectModel
 	
 	static public function createOrderSlip($order, $productList, $qtyList, $shipping_cost = false)
 	{
-		// create orderSlip
+		$currency = new Currency($order->id_currency);
 		$orderSlip =  new OrderSlip();
 		$orderSlip->id_customer = intval($order->id_customer);
 		$orderSlip->id_order = intval($order->id);
 		$orderSlip->shipping_cost = intval($shipping_cost);
+		$orderSlip->conversion_rate = $currency->conversion_rate;
 		if (!$orderSlip->add())
 			return false;
-		
-		// add details
+
 		$orderSlip->addSlipDetail($productList, $qtyList);
-		
 		return true;
 	}
 }

@@ -121,9 +121,8 @@ class StatsHome extends Module
 		$dayTo = $dayTo ? ((strlen($dayTo) == 1 ? '0' : '').$dayTo) : '31';
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT SUM(o.`total_paid_real` / c.conversion_rate) as total_sales, COUNT(*) as total_orders
+		SELECT SUM(o.`total_paid_real` / o.conversion_rate) as total_sales, COUNT(*) as total_orders
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('

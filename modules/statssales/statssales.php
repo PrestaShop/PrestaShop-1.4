@@ -83,17 +83,15 @@ class StatsSales extends ModuleGraph
 	private function getTotals()
 	{
 		$result0 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
+		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real` / o.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : ''));
 		
 		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / c.conversion_rate) as orderSum
+		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / o.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
@@ -137,17 +135,15 @@ class StatsSales extends ModuleGraph
 			return $this->getStatesData();
 			
 		$this->_query0 = '
-			SELECT o.`invoice_date`, o.`total_paid_real` / c.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
+			SELECT o.`invoice_date`, o.`total_paid_real` / o.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			'.(intval($this->id_country) ? 'WHERE a.id_country = '.intval($this->id_country).' AND ' : 'WHERE ').'
 			o.`invoice_date` BETWEEN ';
 		$this->_query = '
-			SELECT o.`invoice_date`, o.`total_paid_real` / c.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
+			SELECT o.`invoice_date`, o.`total_paid_real` / o.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON o.id_currency = c.id_currency
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1

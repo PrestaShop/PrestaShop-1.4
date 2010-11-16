@@ -139,11 +139,11 @@ class StatsBestProducts extends ModuleGrid
 		$this->_totalCount = $this->getTotalCount($dateBetween);
 
 		$this->_query = '
-		SELECT p.reference, p.id_product, pl.name, ROUND(AVG(od.product_price / c.conversion_rate), 2) as avgPriceSold, 
+		SELECT p.reference, p.id_product, pl.name, ROUND(AVG(od.product_price / o.conversion_rate), 2) as avgPriceSold, 
 			IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), p.quantity) as quantity,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
 			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (1 + LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
-			ROUND(IFNULL(SUM((od.product_price * od.product_quantity) / c.conversion_rate), 0), 2) AS totalPriceSold,
+			ROUND(IFNULL(SUM((od.product_price * od.product_quantity) / o.conversion_rate), 0), 2) AS totalPriceSold,
 			(
 				SELECT IFNULL(SUM(pv.counter), 0)
 				FROM '._DB_PREFIX_.'page pa
@@ -157,7 +157,6 @@ class StatsBestProducts extends ModuleGrid
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product AND pl.id_lang = '.intval($this->getLang()).')
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
 		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
-		LEFT JOIN '._DB_PREFIX_.'currency c ON o.id_currency = c.id_currency
 		WHERE p.active = 1 AND o.valid = 1
 		AND o.invoice_date BETWEEN '.$dateBetween.'
 		GROUP BY od.product_id';

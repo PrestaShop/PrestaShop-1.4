@@ -102,11 +102,10 @@ class StatsBestSuppliers extends ModuleGrid
 		$this->_totalCount = $this->getTotalCount();
 
 		$this->_query = '
-		SELECT s.name, SUM(od.product_quantity) as quantity, ROUND(SUM(od.product_quantity * od.product_price) / c.conversion_rate, 2) as sales
+		SELECT s.name, SUM(od.product_quantity) as quantity, ROUND(SUM(od.product_quantity * od.product_price) / o.conversion_rate, 2) as sales
 		FROM '._DB_PREFIX_.'order_detail od
 		LEFT JOIN '._DB_PREFIX_.'product p ON p.id_product = od.product_id
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
-		LEFT JOIN '._DB_PREFIX_.'currency c ON c.id_currency = o.id_currency
 		LEFT JOIN '._DB_PREFIX_.'supplier s ON s.id_supplier = p.id_supplier
 		WHERE o.invoice_date BETWEEN '.$this->getDate().' AND o.valid = 1
 		AND s.id_supplier IS NOT NULL
