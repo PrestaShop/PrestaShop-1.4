@@ -394,13 +394,13 @@ class MoneyBookers extends PaymentModule
 		}
 		else
 		{
-			$local = explode('|', Configuration::get('MB_LOCAL_METHODS'));
-			$inter = explode('|', Configuration::get('MB_INTER_METHODS'));
+			$localMethods = Configuration::get('MB_LOCAL_METHODS');
+			$interMethods = Configuration::get('MB_INTER_METHODS');
 			
 			$smarty->assign(array(
 			'display_mode' => intval(Configuration::get('MB_DISPLAY_MODE')),
-			'local' => $local,
-			'inter' => $inter,
+			'local' => $localMethods ? explode('|', $localMethods) : array(),
+			'inter' => $interMethods ? explode('|', $interMethods) : array(),
 			'local_logos' => $this->_localPaymentMethods,
 			'inter_logos' => $this->_internationalPaymentMethods));
 
