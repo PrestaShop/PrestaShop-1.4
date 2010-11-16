@@ -1279,7 +1279,7 @@ class ProductCore extends ObjectModel
 			$ids_product = self::_getProductIdByDate($beginning, $ending);
 
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
-		$currentDate = date('Y-m-d H:m:i');
+		$currentDate = date('Y-m-d H:i:s');
 		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT p.id_product
 		FROM `'._DB_PREFIX_.'product` p
@@ -1338,7 +1338,7 @@ class ProductCore extends ObjectModel
 		if (!$beginning)
 			$ids_product = self::_getProductIdByDate($beginning, $ending);
 		
-		$currentDate = date('Y-m-d H:m:i');
+		$currentDate = date('Y-m-d H:i:s');
 		if ($count)
 		{
 			$sql = '
@@ -1447,7 +1447,7 @@ class ProductCore extends ObjectModel
 		// Avoid an error with 1970-01-01
 		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
 			return 0;
-		$currentDate = date('Y-m-d H:m:i');
+		$currentDate = date('Y-m-d H:i:s');
 		if ($date_from != $date_to AND ($currentDate > $date_to OR $currentDate < $date_from))
 			return 0;
 
