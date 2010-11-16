@@ -62,14 +62,15 @@ class AdminCMSContent extends AdminTab
 
 	public function postProcess()
 	{
-		if (!Tools::getValue('id_cms') AND !Tools::isSubmit('submitAddcms'))
+		if(Tools::isSubmit('submitDelcms_category') OR Tools::isSubmit('submitAddcms_categoryAndBackToParent') OR Tools::isSubmit('submitAddcms_category') OR isset($_GET['deletecms_category']))
 			$this->adminCMSCategories->postProcess();
-		else
+		if (Tools::isSubmit('submitDelcms') OR Tools::isSubmit('fakeSubmitAddcmsAndPreview') OR Tools::isSubmit('submitAddcms') OR isset($_GET['deletecms']))
 			$this->adminCMS->postProcess();
 	}
 
 	public function displayErrors()
 	{
+		parent::displayErrors();
 		$this->adminCMS->displayErrors();
 		$this->adminCMSCategories->displayErrors();
 	}

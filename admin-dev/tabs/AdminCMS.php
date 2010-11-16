@@ -246,7 +246,7 @@ class AdminCMS extends AdminTab
 	function postProcess()
 	{
 		global $cookie, $link, $currentIndex;
-
+		
 		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
 		{
 			$redir = $link->getCMSLink($cms);
@@ -271,10 +271,34 @@ class AdminCMS extends AdminTab
 				$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 			else
 				Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=1&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+		}/* Delete multiple objects */
+		elseif (Tools::getValue('submitDel'.$this->table))
+		{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (isset($_POST[$this->table.'Box']))
+				{
+					$cms = new CMS();
+					$result = true;
+					$result = $cms->deleteSelection(Tools::getValue($this->table.'Box'));
+					if ($result)
+					{
+						$cms->cleanPositions(intval(Tools::getValue('id_cms_category')));
+						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCMSContent').'&id_category='.intval(Tools::getValue('id_cms_category')));
+					}
+					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+
+				}
+				else
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		elseif (Tools::isSubmit('submitAddcms') OR Tools::isSubmit('submitAddcmsAndPreview'))
 		{
 			parent::validateRules();
+
 			if (!sizeof($this->_errors))
 			{
 				if (!$id_cms = intval(Tools::getValue('id_cms')))
@@ -336,19 +360,6 @@ class AdminCMS extends AdminTab
 		}
 		else
 			parent::postProcess(true);
-		if (Tools::isSubmit('submitAddcmsAndPreview'))
-		{
-			$preview_url = $link->getCMSLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
-			if (!$obj->active)
-			{
-				$admin_dir = dirname($_SERVER['PHP_SELF']);
-				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
-				$token = Tools::encrypt('PreviewProduct'.$object->id);
-	
-				$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
-			}
-			Tools::redirectLink($preview_url);
-		}
 	}
 }
 

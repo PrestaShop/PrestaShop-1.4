@@ -556,7 +556,7 @@ class ProductCore extends ObjectModel
 			foreach ($oldPositions AS $position)
 				$positions[$position['id_category']] = $position;
 		}
-		$this->deleteCategories();
+		$this->deleteCategories(true);
         $productCats = array();
 		foreach ($categories AS &$categorie)
 			$categorie = intval($categorie);

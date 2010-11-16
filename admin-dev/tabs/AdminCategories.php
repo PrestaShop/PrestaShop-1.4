@@ -186,38 +186,16 @@ class AdminCategories extends AdminTab
 			{
 				if (isset($_POST[$this->table.'Box']))
 				{
-					$object = new $this->className();
-					
-					if (isset($object->noZeroObject) AND
-						// Check if all object will be deleted
-						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
-						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
-					else
+					$category = new Category();
+					$result = true;
+					$result = $category->deleteSelection(Tools::getValue($this->table.'Box'));
+					if ($result)
 					{
-						$result = true;
-						if ($this->deleted)
-						{
-							foreach(Tools::getValue($this->table.'Box') as $id)
-							{
-								$toDelete = new $this->className($id);
-								$toDelete->deleted = 1;
-								$result = $result AND $toDelete->update();
-							}
-						}
-						else
-							$result = $object->deleteSelection(Tools::getValue($this->table.'Box'));
-						
-						if ($result)
-						{
-							$target = '';
-							$referrer = Tools::secureReferrer($_SERVER['HTTP_REFERER']);
-							if (preg_match('/id_category=(\d+)/', $referrer, $matches))
-								$target = '&id_category='.$matches[1];
-
-							Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getValue('token').$target);
-						}
-						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+						$category->cleanPositions(intval(Tools::getValue('id_category')));
+						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCatalog').'&id_category='.intval(Tools::getValue('id_category')));
 					}
+					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+
 				}
 				else
 					$this->_errors[] = Tools::displayError('you must select at least one element to delete');

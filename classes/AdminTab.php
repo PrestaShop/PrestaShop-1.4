@@ -888,7 +888,17 @@ abstract class AdminTabCore
 	{
 		if ($nbErrors = count($this->_errors) AND $this->_includeContainer)
 		{
-			echo '<div class="error"><img src="../img/admin/error2.png" />';
+			echo '<script type="text/javascript">
+				$(document).ready(function() {
+					$(\'#hideError\').unbind(\'click\').click(function(){
+						$(\'.error\').hide(\'slow\', function (){
+							$(\'.error\').remove();
+						});
+						return false;
+					});
+				});
+			  </script>
+			<div class="error"><span style="float:right"><a id="hideError" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/error2.png" />';
 			if (count($this->_errors) == 1)
 				echo $this->_errors[0];
 			else

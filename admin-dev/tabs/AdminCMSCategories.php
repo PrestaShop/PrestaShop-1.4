@@ -160,28 +160,17 @@ class AdminCMSCategories extends AdminTab
 			if ($this->tabAccess['delete'] === '1')
 			{
 				if (isset($_POST[$this->table.'Box']))
-				{										
-					$object = new $this->className();
-					
-					if (isset($object->noZeroObject) AND
-						// Check if all object will be deleted
-						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
-						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b>'.Tools::displayError(', you cannot delete all of them');
-					else
-					{		
-						$result = $object->deleteSelection(Tools::getValue($this->table.'Box'));
-						
-						if ($result)
-						{
-							$target = '';
-							$referrer = Tools::secureReferrer($_SERVER['HTTP_REFERER']);
-							if (preg_match('/id_cms_category=(\d+)/', $referrer, $matches))
-								$target = '&id_cms_category='.$matches[1];
-
-							Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getValue('token').$target);
-						}
-						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+				{
+					$cms_category = new CMSCategory();
+					$result = true;
+					$result = $cms_category->deleteSelection(Tools::getValue($this->table.'Box'));
+					if ($result)
+					{
+						$cms_category->cleanPositions(intval(Tools::getValue('id_cms_category')));
+						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCMSContent').'&id_category='.intval(Tools::getValue('id_cms_category')));
 					}
+					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+
 				}
 				else
 					$this->_errors[] = Tools::displayError('you must select at least one element to delete');

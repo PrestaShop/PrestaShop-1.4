@@ -94,6 +94,7 @@ class AdminCatalog extends AdminTab
 
 	public function displayErrors()
 	{
+		parent::displayErrors();
 		$this->adminProducts->displayErrors();
 		$this->adminCategories->displayErrors();
 	}
