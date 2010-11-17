@@ -426,6 +426,7 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
                                 Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'), 
                                 Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
+                                
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('edit something here.');
@@ -434,7 +435,12 @@ class AdminProducts extends AdminTab
 					{
 						$product->addAttributeCombinaison($id_product_attribute, Tools::getValue('attribute_combinaison_list'));
 						$product->checkDefaultAttributes();
-						$product->updateQuantityProductWithAttributeQuantity();
+						if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
+						{
+							$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
+							if (!$product->addStockMvt($qty, intval(Tools::getValue('id_mvt_reason')), (int)$id_product_attribute, NULL, $cookie->id_employee))
+								$this->_errors[] = Tools::displayError('an error occurred while updating qty');
+						}
 					}
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.intval(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
