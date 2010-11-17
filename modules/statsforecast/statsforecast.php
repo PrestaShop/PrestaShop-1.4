@@ -86,14 +86,25 @@ class StatsForecast extends Module
 			'.$dateFromGInvoice.' as fix_date,
 			COUNT(DISTINCT o.id_order) as countOrders,
 			SUM(od.product_quantity) as countProducts,
-			SUM(o.total_products / o.conversion_rate) as totalGross
+			SUM(od.product_price * od.product_quantity / o.conversion_rate) as totalProducts
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
-		INNER JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
+		LEFT JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
 		WHERE o.valid = 1
 		AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY '.$dateFromGInvoice.'
-		ORDER BY fix_date');
+		ORDER BY fix_date', false);
+
+		$dataTable = array();
+		if ($cookie->stats_granularity == 10)
+		{
+			$dateEnd = strtotime($employee->stats_date_to.' 23:59:59');
+			$dateToday = time();
+			for ($i = strtotime($employee->stats_date_from.' 00:00:00'); $i <= $dateEnd AND $i <= $dateToday; $i += 86400)
+				$dataTable[$i] = array('fix_date' => date('Y-m-d', $i), 'countOrders' => 0, 'countProducts' => 0, 'totalProducts' => 0);
+		}
+		while ($row = $db->nextRow($result))
+			$dataTable[strtotime($row['fix_date'])] = $row;
 		
 		$this->_html .= '<div style="float:left;width:750px">
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
@@ -117,8 +128,8 @@ class StatsForecast extends Module
 					<th style="text-align:center">'.$this->l('Items').'</th>
 					<th style="text-align:center">'.$this->l('% Reg.').'</th>
 					<th style="text-align:center">'.$this->l('% Orders').'</th>
-					<th style="width:80px;text-align:center">'.$this->l('Discounts').'</th>
-					<th style="width:100px;text-align:center">'.$this->l('Sales').'</th>
+					<th style="width:80px;text-align:center">'.$this->l('Coupons').'</th>
+					<th style="width:100px;text-align:center">'.$this->l('Products Sales').'</th>
 				</tr>';
 		
 		$visitArray = array();
@@ -138,32 +149,35 @@ class StatsForecast extends Module
 		while ($row = $db->nextRow($discounts))
 			$discountArray[$row['fix_date']] = $row['total'];
 		$today = date('Y-m-d');
-		foreach ($result as $row)
+		foreach ($dataTable as $row)
 		{
+			$discountToday = (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);
+			$visitsToday = intval(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
+			
 			$dateFromGReg = ($cookie->stats_granularity != 42
 				? 'LIKE \''.$row['fix_date'].'%\''
 				: 'BETWEEN \''.substr($row['fix_date'], 0, 10).' 00:00:00\' AND DATE_ADD(\''.substr($row['fix_date'], 0, 8).substr($row['fix_date'], 8, 2).' 23:59:59\', INTERVAL 7 DAY)');
 			$row['registrations'] = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer WHERE date_add BETWEEN '.ModuleGraph::getDateBetween().' AND date_add '.$dateFromGReg);
-			$totalHT = $row['totalGross'] - (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);
+			$totalHT = $row['totalProducts'] - $discountToday;
 
 			$this->_html .= '
 			<tr>
 				<td>'.$row['fix_date'].'</td>
-				<td align="center">'.intval(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0).'</td>
+				<td align="center">'.$visitsToday.'</td>
 				<td align="center">'.intval($row['registrations']).'</td>
 				<td align="center">'.intval($row['countOrders']).'</td>
 				<td align="center">'.intval($row['countProducts']).'</td>
-				<td align="center">'.(isset($visitArray[$row['fix_date']]) ? round(100 * intval($row['registrations']) / $visitArray[$row['fix_date']], 2).' %' : '-').'</td>
-				<td align="center">'.(isset($visitArray[$row['fix_date']]) ? round(100 * intval($row['countOrders']) / $visitArray[$row['fix_date']], 2).' %' : '-').'</td>
-				<td align="right">'.Tools::displayPrice($discountArray[$row['fix_date']], $currency).'</td>
+				<td align="center">'.($visitsToday ? round(100 * intval($row['registrations']) / $visitsToday, 2).' %' : '-').'</td>
+				<td align="center">'.($visitsToday ? round(100 * intval($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
+				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
 				<td align="right" >'.Tools::displayPrice($totalHT, $currency).'</td>
 			</tr>';
 			
-			$this->t1 += intval(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
+			$this->t1 += $visitsToday;
 			$this->t2 += intval($row['registrations']);
 			$this->t3 += intval($row['countOrders']);
 			$this->t4 += intval($row['countProducts']);
-			$this->t7 += (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);
+			$this->t7 += $discountToday;
 			$this->t8 += $totalHT;
 		}
 
@@ -176,8 +190,8 @@ class StatsForecast extends Module
 					<th style="text-align:center">'.$this->l('Items').'</th>
 					<th style="text-align:center">'.$this->l('% Reg.').'</th>
 					<th style="text-align:center">'.$this->l('% Orders').'</th>
-					<th style="width:80px;text-align:center">'.$this->l('Discounts').'</th>
-					<th style="width:100px;text-align:center">'.$this->l('Sales').'</th>
+					<th style="width:80px;text-align:center">'.$this->l('Coupons').'</th>
+					<th style="width:100px;text-align:center">'.$this->l('Products Sales').'</th>
 				</tr>
 				<tr>
 					<th>'.$this->l('Total').'</th>
