@@ -304,6 +304,9 @@ abstract class PaymentModuleCore extends Module
 				$new_history->id_order = intval($order->id);
 				$new_history->changeIdOrderState(intval($id_order_state), intval($order->id));
 				$new_history->addWithemail(true, $extraVars);
+				
+				// Order is reloaded because the status just changed
+				$order = new Order($order->id);
 
 				// Send an e-mail to customer
 				if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_ AND $customer->id)

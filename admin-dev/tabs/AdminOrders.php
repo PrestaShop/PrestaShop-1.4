@@ -103,8 +103,9 @@ class AdminOrders extends AdminTab
 				{
 					$history = new OrderHistory();
 					$history->id_order = $id_order;
-					$history->changeIdOrderState(intval($newOrderStatusId), intval($id_order));
 					$history->id_employee = intval($cookie->id_employee);
+					$history->changeIdOrderState(intval($newOrderStatusId), intval($id_order));
+					$order = new Order($order->id);
 					$carrier = new Carrier(intval($order->id_carrier), intval($order->id_lang));
 					if ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number)
 						$templateVars = array('{followup}' => str_replace('@', $order->shipping_number, $carrier->url));
