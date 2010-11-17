@@ -205,6 +205,10 @@ class AdminModules extends AdminTab
 							$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 						elseif ($key == 'configure' AND $this->tabAccess['edit'] !== '1')
 							$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+						elseif ($key == 'install' AND Module::isInstalled($module->name))
+							$this->_errors[] = Tools::displayError('This module is already installed : ').$module->name;
+						elseif ($key == 'uninstall' AND !Module::isInstalled($module->name))
+							$this->_errors[] = Tools::displayError('This module is already uninstalled : ').$module->name;
 						elseif (($echo = $module->{$method}()) AND ($key == 'configure') AND Module::isInstalled($module->name))
 						{
 							echo '
