@@ -43,12 +43,17 @@ class FrontController extends FrontControllerCore
 		parent::displayFooter();
 		
 		echo '<br /><br />
-		<h3><big>'.round(memory_get_usage()/1048576, 1).' Mb</big> of RAM used for this request</h3>
+		<h3><big>'.round(memory_get_usage()/1048576, 2).' Mb</big> of RAM used for this page</h3>
 		<br /><br />';
 		
-		
-		echo '<br /><br />
-		<h1 '.$this->getTotalColor(Db::getInstance()->count).'>'.Db::getInstance()->count.' queries</h1>
+		$countByTypes = '';
+		foreach (Db::getInstance()->countTypes as $type => $count)
+			if ($count)
+				$countByTypes .= $count.' x '.$type.' | ';
+		$countByTypes = rtrim($countByTypes, ' |');
+			
+		echo '
+		<h1 '.$this->getTotalColor(Db::getInstance()->count).'>'.Db::getInstance()->count.' queries<br /><span style="font-size:0.6em">('.$countByTypes.')</span></h1>
 		<br /><br />
 		<h3><a href="#stopwatch">Go to Stopwatch</a></h3>
 		<h3><a href="#doubles">Go to Doubles</a></h3>
