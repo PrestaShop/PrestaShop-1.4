@@ -41,7 +41,7 @@
 		<module name="graphgooglechart"/>
 		<module name="graphvisifire"/>
 		<module name="graphxmlswfcharts"/>
-		<module name="gridextjs"/>
+		<module name="gridhtml"/>
 		<module name="gsitemap"/>
 		<module name="hipay"/>
 		<module name="homefeatured"/>
