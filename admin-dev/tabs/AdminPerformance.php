@@ -30,8 +30,12 @@ class AdminPerformance extends AdminTab
 					$this->_errors[] = Tools::displayError('Caching system is missing');
 				else
 					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
-			
-				if($caching_system == 'CacheFS')
+				if ($cache_active AND $caching_system == 'Memcached' AND !extension_loaded('memcache'))
+					$this->_errors[] = Tools::displayError('To use Memcached, you need to install the Memcache PECL extension on your server:').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+				elseif ($cache_active AND $caching_system == 'CacheFS' AND !is_writable(_PS_CACHEFS_DIRECTORY_))
+					$this->_errors[] = Tools::displayError('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.Tools::displayError('must be writable');
+
+				if ($caching_system == 'CacheFS')
 				{
 					if (!($depth = Tools::getValue('ps_cache_fs_directory_depth')))
 						$this->_errors[] = Tools::displayError('Please set a directory depth');
@@ -190,7 +194,16 @@ class AdminPerformance extends AdminTab
 	{
 		global $currentIndex;
 
-echo '<script type="text/javascript">
+		$warnings = array();
+		if (!extension_loaded('memcache'))
+			$warnings[] = $this->l('To use Memcached, you need to install the Memcache PECL extension on your server:').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+		if(!is_writable(_PS_CACHEFS_DIRECTORY_))
+			$warnings[] = $this->l('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.$this->l('must be writable');
+	
+		if ($warnings)
+			$this->displayWarning($warnings);
+	
+		echo '<script type="text/javascript">
 						$(document).ready(function() {
 							showMemcached();
 							$(\'#caching_system\').change(function() {
@@ -334,33 +347,33 @@ echo '<script type="text/javascript">
 		</form>';
 
 		$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" style="margin-top: 10px;" method="post">
-			<fieldset><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Caching').'</legend>
-				<label>'.$this->l('Use cache:').' </label>
-				<div class="margin-form">
-					<input type="radio" name="active" id="active_on" value="1" '.(_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
-					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
-					<input type="radio" name="active" id="active_off" value="0" '.(!_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
-					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Enable or disable caching system').'</p>
-				</div>
-				<label>'.$this->l('Caching system:').' </label>
-				<div class="margin-form">
-					<select name="caching_system" id="caching_system">
-						<option value="Memcached" '.(_PS_CACHING_SYSTEM_ == 'Memcached' ? 'selected="selected"' : '' ).'>'.$this->l('Memcached').'</option>
-						<option value="CacheFS" '.(_PS_CACHING_SYSTEM_ == 'CacheFS' ? 'selected="selected"' : '' ).'>'.$this->l('File System').'</option>	
-						</option>
-					</select>
-				</div>
-				<div id="directory_depth">
-					<label>'.$this->l('Directory depth:').' </label>
+		echo '<fieldset style="margin-top: 10px;"><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Caching').'</legend>
+				<form action="'.$currentIndex.'&token='.Tools::getValue('token').'"  method="post">
+					<label>'.$this->l('Use cache:').' </label>
 					<div class="margin-form">
-						<input type="text" name="ps_cache_fs_directory_depth" value="'.($depth ? $depth : 1).'" />
+						<input type="radio" name="active" id="active_on" value="1" '.(_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
+						<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+						<input type="radio" name="active" id="active_off" value="0" '.(!_PS_CACHE_ENABLED_ ? 'checked="checked" ' : '').'/>
+						<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+						<p>'.$this->l('Enable or disable caching system').'</p>
 					</div>
-				</div>
-				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Save   ').'" name="submitCaching" class="button" />
-				</div>
+					<label>'.$this->l('Caching system:').' </label>
+					<div class="margin-form">
+						<select name="caching_system" id="caching_system">
+							<option value="Memcached" '.(_PS_CACHING_SYSTEM_ == 'Memcached' ? 'selected="selected"' : '' ).'>'.$this->l('Memcached').'</option>
+							<option value="CacheFS" '.(_PS_CACHING_SYSTEM_ == 'CacheFS' ? 'selected="selected"' : '' ).'>'.$this->l('File System').'</option>	
+							</option>
+						</select>
+					</div>
+					<div id="directory_depth">
+						<label>'.$this->l('Directory depth:').' </label>
+						<div class="margin-form">
+							<input type="text" name="ps_cache_fs_directory_depth" value="'.($depth ? $depth : 1).'" />
+						</div>
+					</div>
+					<div class="margin-form">
+						<input type="submit" value="'.$this->l('   Save   ').'" name="submitCaching" class="button" />
+					</div>
 				</form>
 				<div id="memcachedServers">
 					<div class="margin-form">
@@ -382,22 +395,25 @@ echo '<script type="text/javascript">
 						<div class="margin-form">
 							<input type="submit" value="'.$this->l('   Add Server   ').'" name="submitAddServer" class="button" />
 						</div>
-					</form>
-				<div class="margin-form">
-				<table style="width: 320px;" cellspacing="0" cellpadding="0" class="table">
-				<tr>
-					<th style="width: 20px; text-align: center">'.$this->l('Id').'</th>
-					<th style="width: 200px; text-align: center">'.$this->l('Ip').'</th>
-					<th style="width: 50px; text-align: center">'.$this->l('Port').'</th>
-					<th style="width: 30px; text-align: right; font-weight:bold;">'.$this->l('Weight').'</th>
-					<th style="width: 20px; text-align: right;">&nbsp;</th>
-				</tr>';
-		$servers = Memcached::getMemcachedServers();
-		if ($servers)
-			foreach($servers AS $server)
-				echo '<tr><td>'.$server['id_memcached_server'].'</td><td>'.$server['ip'].'</td><td>'.$server['port'].'</td><td>'.$server['weight'].'</td>
-									<td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&deleteMemcachedServer='.(int)$server['id_memcached_server'].'" ><img src="../img/admin/delete.gif" /></a></td></tr>';
-		echo '</table></div></div></fieldset>';
+					</form>';
+					$servers = Memcached::getMemcachedServers();
+					if ($servers)					
+					{
+					echo '<div class="margin-form">
+					<table style="width: 320px;" cellspacing="0" cellpadding="0" class="table">
+					<tr>
+						<th style="width: 20px; text-align: center">'.$this->l('Id').'</th>
+						<th style="width: 200px; text-align: center">'.$this->l('Ip').'</th>
+						<th style="width: 50px; text-align: center">'.$this->l('Port').'</th>
+						<th style="width: 30px; text-align: right; font-weight:bold;">'.$this->l('Weight').'</th>
+						<th style="width: 20px; text-align: right;">&nbsp;</th>
+					</tr>';
+					foreach($servers AS $server)
+						echo '<tr><td>'.$server['id_memcached_server'].'</td><td>'.$server['ip'].'</td><td>'.$server['port'].'</td><td>'.$server['weight'].'</td>
+											<td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&deleteMemcachedServer='.(int)$server['id_memcached_server'].'" ><img src="../img/admin/delete.gif" /></a></td></tr>';
+					echo '</table></div>';
+				}
+				echo '</div></fieldset>';
 	}
 }
 

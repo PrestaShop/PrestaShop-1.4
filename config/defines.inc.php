@@ -119,4 +119,6 @@ define('_STOCK_MOVEMENT_MISSING_REASON_', 2);
 
 define('_PS_DEFAULT_CUSTOMER_GROUP_', 1);
 
+define('_PS_CACHEFS_DIRECTORY_', dirname(__FILE__).'/../cache/cachefs/');
+
 ?>
