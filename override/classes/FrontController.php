@@ -2,6 +2,18 @@
 
 class FrontController extends FrontControllerCore
 {
+	public $memory = array();
+	
+	private function displayMemoryColor($n)
+	{
+		$n /= 1048576;
+		if ($n > 3)
+			return '<span style="color:red">'.round($n, 2).' Mb</span>';
+		if ($n > 1)
+			return '<span style="color:orange">'.round($n, 2).' Mb</span>';
+		return '<span style="color:green">'.round($n, 2).' Mb</span>';
+	}
+	
 	private function getTotalColor($n)
 	{
 		if ($n > 150)
@@ -38,12 +50,48 @@ class FrontController extends FrontControllerCore
 		return 'style="color:green"';
 	}
 	
+	public function __construct()
+	{
+		$this->_memory[-2] = memory_get_usage();
+		parent::__construct();
+		$this->_memory[-1] = memory_get_usage();
+	}
+	
+	public function run()
+	{
+		$this->_memory[0] = memory_get_usage();
+		$this->preProcess();
+		$this->_memory[1] = memory_get_usage();
+		$this->setMedia();
+		$this->_memory[2] = memory_get_usage();
+		$this->displayHeader();
+		$this->_memory[3] = memory_get_usage();
+		$this->process();
+		$this->_memory[4] = memory_get_usage();
+		$this->displayContent();
+		$this->_memory[5] = memory_get_usage();
+		$this->displayFooter();
+	}
+	
+	
 	public function displayFooter()
 	{
 		parent::displayFooter();
 		
+		$this->_memory[6] = memory_get_usage();
+		
 		echo '<br /><br />
-		<h3><big>'.round(memory_get_usage()/1048576, 2).' Mb</big> of RAM used for this page</h3>
+		<h3>
+			<big>'.$this->displayMemoryColor($this->_memory[6]).'</big> of RAM used for this page<br />
+			Config: '.$this->displayMemoryColor($this->_memory[-1]).' Mb<br />
+			Constructor: '.$this->displayMemoryColor(($this->_memory[-1] - $this->_memory[-2])).' Mb<br />
+			preProcess: '.$this->displayMemoryColor(($this->_memory[1] - $this->_memory[0])).' Mb<br />
+			setMedia: '.$this->displayMemoryColor(($this->_memory[2] - $this->_memory[1])).' Mb<br />
+			displayHeader: '.$this->displayMemoryColor(($this->_memory[3] - $this->_memory[2])).' Mb<br />
+			process: '.$this->displayMemoryColor(($this->_memory[4] - $this->_memory[3])).' Mb<br />
+			displayContent: '.$this->displayMemoryColor(($this->_memory[5] - $this->_memory[4])).' Mb<br />
+			displayFooter: '.$this->displayMemoryColor(($this->_memory[6] - $this->_memory[5])).' Mb
+		</h3>
 		<br /><br />';
 		
 		$countByTypes = '';
