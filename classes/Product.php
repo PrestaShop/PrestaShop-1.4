@@ -883,7 +883,6 @@ class ProductCore extends ObjectModel
 		'wholesale_price' => floatval($wholesale_price),
 		'price' => floatval($price),
 		'ecotax' => floatval($ecotax),
-		'quantity' => intval($quantity),
 		'weight' => ($weight ? floatval($weight) : 0),
 		'unit_price_impact' => ($unit ? floatval($unit) : 0),
 		'reference' => pSQL($reference), 
@@ -892,6 +891,8 @@ class ProductCore extends ObjectModel
 		'ean13' => pSQL($ean13),
 		'upc' => pSQL($upc),
 		'default_on' => intval($default));
+		if ($quantity)
+			$data['quantity'] =  (int)$quantity;
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.intval($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.intval($id_product_attribute)))
 			return false;
 		Hook::updateProductAttribute($id_product_attribute);

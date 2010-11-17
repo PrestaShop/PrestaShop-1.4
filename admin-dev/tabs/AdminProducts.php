@@ -393,7 +393,7 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
 								Tools::getValue('attribute_ecotax'),
-								Tools::getValue('attribute_quantity'),
+								false,
 								Tools::getValue('id_image_attr'),
 								Tools::getValue('attribute_reference'),
 								Tools::getValue('attribute_supplier_reference'),
@@ -2178,13 +2178,13 @@ class AdminProducts extends AdminTab
 						foreach ($reasons AS $reason)
 							echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 						echo '</select>
-								<input type="text" name="mvt_quantity" size="3" maxlength="6" value="1"/>
+								<input type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>
 							</td>
 						</tr>
 						<tr>';
 					}
 				echo '<td class="col-left">'.$this->l('Quantity in stock:').'</td>
-						<td style="padding-bottom:5px;"><input size="3" maxlength="6" '.$qty_state.' name="quantity" type="text" value="'.$qty.'" readonly="readonly" />
+						<td style="padding-bottom:5px;"><b>'.$qty.'</b>
 					</tr>
 					<tr>
 						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
@@ -2777,12 +2777,12 @@ class AdminProducts extends AdminTab
 			foreach ($reasons AS $reason)
 				echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 			echo '</select>
-					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="1"/>
+					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="0"/>
 				</td>
 			</tr>
 		  <tr>
 			  <td style="width:150px">'.$this->l('Quantity in stock:').'</td>
-			  <td style="padding-bottom:5px;"><input type="text" size="3" name="attribute_quantity" id="attribute_quantity" value="1" readonly="readonly" /></td>
+			  <td style="padding-bottom:5px;"><b><span style="display:none;" id="attribute_quantity"></span></b></td>
 		  </tr>
 			<tr>
 				<td colspan="2"><sup>*</sup> '.$this->l('included tax').'</td>
