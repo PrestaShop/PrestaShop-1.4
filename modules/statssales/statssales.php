@@ -58,10 +58,9 @@ class StatsSales extends ModuleGraph
 			<p><center><img src="../img/admin/down.gif" />
 				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
 			</center></p>
-			<p>'.$this->l('Total orders placed:').' '.intval($totals['allOrderCount']).'</p>
-			<p>'.$this->l('Total orders placed (valid):').' '.intval($totals['orderCount']).'</p>
-			<p>'.$this->l('Total products ordered (valid):').' '.intval($totals['products']).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.intval(Tools::getValue('id_country')), 'layers' => 3)).'</center>
+			<p>'.$this->l('Orders placed:').' '.intval($totals['orderCount']).'</p>
+			<p>'.$this->l('Products bought:').' '.intval($totals['products']).'</p>
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.intval(Tools::getValue('id_country')), 'layers' => 2)).'</center>
 			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.intval(Tools::getValue('id_country')))).'<br /><br />
 			<p class="space"><img src="../img/admin/down.gif" />
@@ -82,13 +81,6 @@ class StatsSales extends ModuleGraph
 
 	private function getTotals()
 	{
-		$result0 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(o.`id_order`) as allOrderCount, SUM(o.`total_paid_real` / o.conversion_rate) as orderSum
-		FROM `'._DB_PREFIX_.'orders` o
-		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
-		WHERE o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
-		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : ''));
-		
 		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / o.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
@@ -105,7 +97,7 @@ class StatsSales extends ModuleGraph
 		WHERE o.valid = 1
 		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
-		return array_merge(array_merge($result0, $result1), $result2);
+		return array_merge($result1, $result2);
 	}
 	
 	public function setOption($options, $layers = 1)
@@ -114,10 +106,9 @@ class StatsSales extends ModuleGraph
 		switch ($this->_option)
 		{
 			case 1:
-				$this->_titles['main'][0] = $this->l('Number of orders and products ordered');
+				$this->_titles['main'][0] = $this->l('Products and orders');
 				$this->_titles['main'][1] = $this->l('Orders');
-				$this->_titles['main'][2] = $this->l('Orders (valid)');
-				$this->_titles['main'][3] = $this->l('Products (valid)');
+				$this->_titles['main'][2] = $this->l('Products');
 				break;
 			case 2:
 				$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
@@ -133,14 +124,7 @@ class StatsSales extends ModuleGraph
 	{
 		if ($this->_option == 3)
 			return $this->getStatesData();
-			
-		$this->_query0 = '
-			SELECT o.`invoice_date`, o.`total_paid_real` / o.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
-			FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
-			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
-			'.(intval($this->id_country) ? 'WHERE a.id_country = '.intval($this->id_country).' AND ' : 'WHERE ').'
-			o.`invoice_date` BETWEEN ';
+
 		$this->_query = '
 			SELECT o.`invoice_date`, o.`total_paid_real` / o.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
@@ -159,18 +143,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[1][intval(substr($row['invoice_date'], 5, 2))] += 1;
-				$this->_values[2][intval(substr($row['invoice_date'], 5, 2))] += $row['product_quantity'];
+				$this->_values[0][intval(substr($row['invoice_date'], 5, 2))] += 1;
+				$this->_values[1][intval(substr($row['invoice_date'], 5, 2))] += $row['product_quantity'];
 			}
 			else
 				$this->_values[intval(substr($row['invoice_date'], 5, 2))] += $row['total_paid_real'];
-		
-		if ($this->_option == 1)
-		{
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
-			foreach ($result AS $row)
-				$this->_values[0][intval(substr($row['invoice_date'], 5, 2))] += 1;
-		}
 	}
 	
 	protected function setMonthValues($layers)
@@ -179,18 +156,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[1][intval(substr($row['invoice_date'], 8, 2))] += 1;
-				$this->_values[2][intval(substr($row['invoice_date'], 8, 2))] += $row['product_quantity'];
+				$this->_values[0][intval(substr($row['invoice_date'], 8, 2))] += 1;
+				$this->_values[1][intval(substr($row['invoice_date'], 8, 2))] += $row['product_quantity'];
 			}
 			else
 				$this->_values[intval(substr($row['invoice_date'], 8, 2))] += $row['total_paid_real'];
-		
-		if ($this->_option == 1)
-		{
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
-			foreach ($result AS $row)
-				$this->_values[0][intval(substr($row['invoice_date'], 8, 2))] += 1;
-		}
 	}
 
 	protected function setDayValues($layers)
@@ -199,18 +169,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[1][intval(substr($row['invoice_date'], 11, 2))] += 1;
-				$this->_values[2][intval(substr($row['invoice_date'], 11, 2))] += $row['product_quantity'];
+				$this->_values[0][intval(substr($row['invoice_date'], 11, 2))] += 1;
+				$this->_values[1][intval(substr($row['invoice_date'], 11, 2))] += $row['product_quantity'];
 			}
 			else
 				$this->_values[intval(substr($row['invoice_date'], 11, 2))] += $row['total_paid_real'];
-		
-		if ($this->_option == 1)
-		{
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query0.$this->getDate().$this->_query2);
-			foreach ($result AS $row)
-				$this->_values[0][intval(substr($row['invoice_date'], 11, 2))] += 1;
-		}
 	}
 	
 	private function getStatesData()
