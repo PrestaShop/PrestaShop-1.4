@@ -113,6 +113,8 @@ class FeatureCore extends ObjectModel
 	
 	public function update($nullValues = false)
 	{
+	 	$this->clearCache();
+	 	
 	 	$result = 1;
 	 	$fields = $this->getTranslationsFieldsChild();
 		foreach ($fields as $field)

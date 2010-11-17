@@ -50,6 +50,7 @@ abstract class ObjectModelCore
  	/** @var array tables */
  	protected $webserviceParameters = array();
 
+	protected static $_cache = array();
 	
 	/**
 	 * Returns object validation rules (fields validity)
@@ -93,11 +94,14 @@ abstract class ObjectModelCore
 		/* Load object from database if object id is present */
 		if ($id)
 		{
-			$result = Db::getInstance()->getRow('
-			SELECT *
-			FROM `'._DB_PREFIX_.$this->table.'` a '.
-			($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.intval($id_lang).')' : '')
-			.' WHERE a.`'.$this->identifier.'` = '.intval($id));
+			if (!isset(self::$_cache[$this->table][intval($id)]))
+				self::$_cache[$this->table][intval($id)] = Db::getInstance()->getRow('
+				SELECT *
+				FROM `'._DB_PREFIX_.$this->table.'` a '.
+				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.intval($id_lang).')' : '')
+				.' WHERE a.`'.$this->identifier.'` = '.intval($id));
+
+			$result = self::$_cache[$this->table][intval($id)];
 			if (!$result) return false;
 			$this->id = intval($id);
 			foreach ($result AS $key => $value)
@@ -107,8 +111,7 @@ abstract class ObjectModelCore
 			/* Join multilingual tables */
 			if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
 			{
-				$sql = 'SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.intval($id);
-				$result = Db::getInstance()->ExecuteS($sql);
+				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.intval($id));
 				$defaultLang = intval(Configuration::get('PS_LANG_DEFAULT'));
 				if ($result)
 					foreach ($result as $row)
@@ -149,6 +152,8 @@ abstract class ObjectModelCore
 	 	if (!Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
+		$this->clearCache();
+		
 		/* Automatically fill dates */
 		if ($autodate AND key_exists('date_add', $this))
 			$this->date_add = date('Y-m-d H:i:s');
@@ -191,6 +196,8 @@ abstract class ObjectModelCore
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
+		$this->clearCache();
+		
 		/* Automatically fill dates */
 		if (key_exists('date_upd', $this))
 			$this->date_upd = date('Y-m-d H:i:s');
@@ -232,6 +239,8 @@ abstract class ObjectModelCore
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 	 		die(Tools::displayError());
 
+		$this->clearCache();
+		
 		/* Database deletion */
 		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
 		if (!$result)
@@ -570,6 +579,14 @@ abstract class ObjectModelCore
 				return false;
 
 		return true;
+	}
+	
+	public function clearCache($all = false)
+	{
+		if ($all AND isset(self::$_cache[$this->table]))
+			unset(self::$_cache[$this->table]);
+		elseif (isset(self::$_cache[$this->table][intval($this->id)]))
+			unset(self::$_cache[$this->table][$this->id]);
 	}
 }
 

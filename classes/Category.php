@@ -226,6 +226,8 @@ class CategoryCore extends ObjectModel
 	{
 		if (intval($this->id) === 0 OR intval($this->id) === 1) return false;
 
+		$this->clearCache();
+
 		/* Get childs categories */
 		$toDelete = array(intval($this->id));
 		$this->recursiveDelete($toDelete, intval($this->id));

@@ -230,6 +230,8 @@ class CMSCategoryCore extends ObjectModel
 	public function delete()
 	{
 		if ($this->id == 1) return false;
+		
+		$this->clearCache();
 
 		/* Get childs categories */
 		$toDelete = array(intval($this->id));

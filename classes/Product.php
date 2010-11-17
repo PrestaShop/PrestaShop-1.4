@@ -170,6 +170,7 @@ class ProductCore extends ObjectModel
 	private static $_pricesLevel3 = array();
 	private static $_currencies = array();
 	private static $_incat = array();
+	private static $_cart_quantity = array();
 
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
@@ -1512,12 +1513,17 @@ class ProductCore extends ObjectModel
 				die(Tools::displayError());
 			$cart = $id_cart ? new Cart(intval($id_cart)) : new Cart(intval($cookie->id_cart));
 		}
+		
 		if (intval($id_cart))
-			$cart_quantity = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		{
+			if (!isset(self::$_cart_quantity[intval($id_cart).'_'.intval($id_product)]))
+				self::$_cart_quantity[intval($id_cart).'_'.intval($id_product)] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT SUM(`quantity`)
 				FROM `'._DB_PREFIX_.'cart_product`
 				WHERE `id_product` = '.intval($id_product).' AND `id_cart` = '.intval($id_cart)
 			);
+			$cart_quantity = self::$_cart_quantity[intval($id_cart).'_'.intval($id_product)];
+		}
 		$quantity = ($id_cart AND $cart_quantity) ? $cart_quantity : $quantity;
 		$id_currency = intval(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND intval($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 		if (!$id_address)

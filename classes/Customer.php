@@ -99,6 +99,8 @@ class CustomerCore extends ObjectModel
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
 
+	private static $_defaultGroupId = array();
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -553,7 +555,9 @@ class CustomerCore extends ObjectModel
 
 	static public function getDefaultGroupId($id_customer)
 	{
-		return Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.intval($id_customer));
+		if (!isset(self::$_defaultGroupId[intval($id_customer)]))
+			self::$_defaultGroupId[intval($id_customer)] = Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.intval($id_customer));
+		return self::$_defaultGroupId[intval($id_customer)];
 	}
 
 	static public function getCurrentCountry($id_customer)
