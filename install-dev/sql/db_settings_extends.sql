@@ -94,7 +94,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('PS_TOKEN_ENABLE', '1', NOW(), NOW()),
 	('PS_STATS_RENDER', 'graphxmlswfcharts', NOW(), NOW()),
 	('PS_STATS_OLD_CONNECT_AUTO_CLEAN', 'never', NOW(), NOW()),
-	('PS_STATS_GRID_RENDER', 'gridextjs', NOW(), NOW()),
+	('PS_STATS_GRID_RENDER', 'gridhtml', NOW(), NOW()),
 	('BLOCKTAGS_NBR', '10', NOW(), NOW()),
 	('CHECKUP_DESCRIPTIONS_LT', '100', NOW(), NOW()),
 	('CHECKUP_DESCRIPTIONS_GT', '400', NOW(), NOW()),
@@ -113,7 +113,7 @@ INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeat
 (13, 'blocklanguages', 1),(14, 'blockmanufacturer', 1),(15, 'blockmyaccount', 1),(16, 'blocknewproducts', 1),(17, 'blockpaymentlogo', 1),(18, 'blockpermanentlinks', 1),
 (19, 'blocksearch', 1),(20, 'blockspecials', 1),(21, 'blocktags', 1),(22, 'blockuserinfo', 1),(24, 'blockviewed', 1),(25, 'statsdata', 1),
 (26, 'statsvisits', 1),(27, 'statssales', 1),(28, 'statsregistrations', 1),(30, 'statspersonalinfos', 1),(31, 'statslive', 1),(32, 'statsequipment', 1),(33, 'statscatalog', 1),
-(34, 'graphvisifire', 1),(35, 'graphxmlswfcharts', 1),(36, 'graphgooglechart', 1),(37, 'graphartichow', 1),(38, 'statshome', 1),(39, 'gridextjs', 1),(40, 'statsbestcustomers', 1),
+(34, 'graphvisifire', 1),(35, 'graphxmlswfcharts', 1),(36, 'graphgooglechart', 1),(37, 'graphartichow', 1),(38, 'statshome', 1),(39, 'gridhtml', 1),(40, 'statsbestcustomers', 1),
 (41, 'statsorigin', 1),(42, 'pagesnotfound', 1),(43, 'sekeywords', 1),(44, 'statsproduct', 1),(45, 'statsbestproducts', 1),(46, 'statsbestcategories', 1),
 (47, 'statsbestvouchers', 1),(48, 'statsbestsuppliers', 1),(49, 'statscarrier', 1),(50, 'statsnewsletter', 1),(51, 'statssearch', 1),(52, 'statscheckup', 1),(53, 'statsstock', 1),
 (54, 'blockstore', 1),(55, 'statsforecast', 1);
