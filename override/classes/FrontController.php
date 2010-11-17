@@ -43,6 +43,11 @@ class FrontController extends FrontControllerCore
 		parent::displayFooter();
 		
 		echo '<br /><br />
+		<h3><big>'.round(memory_get_usage()/1048576, 1).' Mb</big> of RAM used for this request</h3>
+		<br /><br />';
+		
+		
+		echo '<br /><br />
 		<h1 '.$this->getTotalColor(Db::getInstance()->count).'>'.Db::getInstance()->count.' queries</h1>
 		<br /><br />
 		<h3><a href="#stopwatch">Go to Stopwatch</a></h3>
