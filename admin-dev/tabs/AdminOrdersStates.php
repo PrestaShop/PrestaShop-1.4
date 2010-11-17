@@ -38,6 +38,8 @@ class AdminOrdersStates extends AdminTab
 	
 	public function postProcess()
 	{
+		global $cookie;
+		
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
 			$_POST['invoice'] = Tools::getValue('invoice');
@@ -54,7 +56,7 @@ class AdminOrdersStates extends AdminTab
 		}
 		elseif (isset($_GET['delete'.$this->table]))
 		{
-		 	$orderState = new OrderState(intval($_GET['id_order_state']));
+		 	$orderState = new OrderState(intval($_GET['id_order_state']), $cookie->id_lang);
 		 	if (!$orderState->isRemovable())
 		 		$this->_errors[] = $this->l('For security reasons, you cannot delete default order statuses.');
 		 	else
@@ -64,7 +66,7 @@ class AdminOrdersStates extends AdminTab
 		{
 		 	foreach ($_POST[$this->table.'Box'] AS $selection)
 		 	{
-			 	$orderState = new OrderState(intval($selection));
+			 	$orderState = new OrderState(intval($selection), $cookie->id_lang);
 			 	if (!$orderState->isRemovable())
 			 	{
 			 		$this->_errors[] = $this->l('For security reasons, you cannot delete default order statuses.');

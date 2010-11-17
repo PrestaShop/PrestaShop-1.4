@@ -425,7 +425,7 @@ class OrderControllerCore extends FrontController
 		$resultsArray = array();
 		foreach ($result AS $k => $row)
 		{
-			$carrier = new Carrier(intval($row['id_carrier']));
+			$carrier = new Carrier(intval($row['id_carrier']), Configuration::get('PS_LANG_DEFAULT'));
 
 			// Get only carriers that are compliant with shipping method
 			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)

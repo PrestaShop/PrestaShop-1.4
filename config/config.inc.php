@@ -69,7 +69,7 @@ Language::loadLanguages();
 Tax::loadTaxZones();
 
 /* Loading default country */
-$defaultCountry = new Country(intval(Configuration::get('PS_COUNTRY_DEFAULT')));
+$defaultCountry = new Country(intval(Configuration::get('PS_COUNTRY_DEFAULT')), Configuration::get('PS_LANG_DEFAULT'));
 
 
 /*

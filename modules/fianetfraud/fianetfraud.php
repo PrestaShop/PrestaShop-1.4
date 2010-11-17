@@ -118,10 +118,10 @@ class Fianetfraud extends Module
 
 	public function uninstall()
 	{
-		$orderState = new OrderState(intval(Configuration::get('SAC_ID_FRAUD')));
+		$orderState = new OrderState(intval(Configuration::get('SAC_ID_FRAUD')), Configuration::get('PS_LANG_DEFAULT'));
 		if (!$orderState->delete())
 			return false;
-		$orderState = new OrderState(intval(Configuration::get('SAC_ID_WAITING')));
+		$orderState = new OrderState(intval(Configuration::get('SAC_ID_WAITING')), Configuration::get('PS_LANG_DEFAULT'));
 		if (!$orderState->delete())
 			return false;
 

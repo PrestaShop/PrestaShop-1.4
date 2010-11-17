@@ -61,9 +61,10 @@ class OrderHistoryCore extends ObjectModel
 		if ($new_order_state != NULL)
 		{
 			Hook::updateOrderStatus(intval($new_order_state), intval($id_order));
+			$order = new Order(intval($id_order));
 			
 			/* Best sellers */
-			$newOS = new OrderState(intval($new_order_state));
+			$newOS = new OrderState(intval($new_order_state), $order->id_lang);
 			$oldOrderStatus = OrderHistory::getLastOrderState(intval($id_order));
 			$cart = Cart::getCartByOrderId($id_order);
 			$isValidated = $this->isValidated();
@@ -86,8 +87,6 @@ class OrderHistoryCore extends ObjectModel
 			$this->id_order_state = intval($new_order_state);
 			
 			/* Change invoice number of order ? */
-			$newOS = new OrderState(intval($new_order_state));
-			$order = new Order(intval($id_order));
 			if (!Validate::isLoadedObject($newOS) OR !Validate::isLoadedObject($order))
 				die(Tools::displayError('Invalid new order state'));
 			
@@ -112,7 +111,7 @@ class OrderHistoryCore extends ObjectModel
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
 		if (!$result OR empty($result) OR !key_exists('id_order_state', $result))
 			return false;
-		return new OrderState(intval($result['id_order_state']));
+		return new OrderState(intval($result['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
 	}
 
 	public function addWithemail($autodate = true, $templateVars = false)

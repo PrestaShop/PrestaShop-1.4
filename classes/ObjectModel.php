@@ -112,7 +112,6 @@ abstract class ObjectModelCore
 			if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
 			{
 				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.intval($id));
-				$defaultLang = intval(Configuration::get('PS_LANG_DEFAULT'));
 				if ($result)
 					foreach ($result as $row)
 						foreach ($row AS $key => $value)

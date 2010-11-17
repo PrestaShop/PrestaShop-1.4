@@ -406,7 +406,7 @@ class MoneyBookers extends PaymentModule
 
 			/* Load objects */
 			$address = new Address(intval($params['cart']->id_address_delivery));
-			$countryObj = new Country(intval($address->id_country));
+			$countryObj = new Country(intval($address->id_country), Configuration::get('PS_LANG_DEFAULT'));
 			$customer = new Customer(intval($params['cart']->id_customer));
 			$currency = new Currency(intval($params['cart']->id_currency));
 			$lang = new Language(intval($cookie->id_lang));

@@ -136,7 +136,7 @@ class ProductControllerCore extends FrontController
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts(intval($product->id), intval(Shop::getCurrentShop()), intval($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, NULL), floatval($tax_data['rate'])),
 					'product' => $product,
 					'homeSize' => Image::getSize('home'),
-					'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer)),
+					'product_manufacturer' => new Manufacturer(intval($product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),
 					'token' => Tools::getToken(false),
 					'productPriceWithoutEcoTax' => floatval($productPriceWithoutEcoTax),
 					'features' => $features,

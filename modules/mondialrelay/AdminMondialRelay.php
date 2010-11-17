@@ -260,7 +260,7 @@ class AdminMondialRelay extends AdminTab
 
 		include_once(dirname(__FILE__).'/mondialrelay.php');
 		$mondialrelay = new MondialRelay();
-		$order_state = new OrderState(intval(Configuration::get('MONDIAL_RELAY_ORDER_STATE')));
+		$order_state = new OrderState(intval(Configuration::get('MONDIAL_RELAY_ORDER_STATE')), $cookie->id_lang);
 		$mr_weight_coef = intval(Configuration::get('MR_WEIGHT_COEF'));
 		
 		$html = '
@@ -300,7 +300,7 @@ class AdminMondialRelay extends AdminTab
 			$html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$mondialrelay->getL('Settings updated succesfull').'</div>';
 		
 		$html .= $mondialrelay->getL('To generate sticks, you must have register a correct address of your store on').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.intval(Tab::getIdFromClassName('AdminContact')).intval($cookie->id_employee)).'" class="green">'.$mondialrelay->getL('The contact page').'</a>';
-		$html .= '<p>'.$mondialrelay->getL('All orders which have the state').' "<b>'.$order_state->name[$cookie->id_lang].'</b>"';
+		$html .= '<p>'.$mondialrelay->getL('All orders which have the state').' "<b>'.$order_state->name.'</b>"';
 		$html .= '.&nbsp;<a href="index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee)).'" class="green">' . $mondialrelay->getL('Change configuration') . '</a></p>';
 
 		$orders = MondialRelayClass::getOrders();

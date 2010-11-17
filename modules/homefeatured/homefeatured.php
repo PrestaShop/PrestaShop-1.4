@@ -67,7 +67,7 @@ class HomeFeatured extends Module
 	{
 		global $smarty;
 
-		$category = new Category(1);
+		$category = new Category(1, Configuration::get('PS_LANG_DEFAULT'));
 		$nb = intval(Configuration::get('HOME_FEATURED_NBR'));
 		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10));
 		$smarty->assign(array(

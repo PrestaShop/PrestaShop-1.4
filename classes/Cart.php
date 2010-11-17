@@ -406,7 +406,7 @@ class CartCore extends ObjectModel
 	 */
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
-		$product = new Product(intval($id_product));
+		$product = new Product(intval($id_product), false, Configuration::get('PS_LANG_DEFAULT'));
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 		self::$_nbProducts = NULL;
@@ -810,7 +810,7 @@ class CartCore extends ObjectModel
 			$id_carrier = $this->id_carrier;
 		if (empty($id_carrier))
 		{
-			$carrier = new Carrier(intval(Configuration::get('PS_CARRIER_DEFAULT')));
+			$carrier = new Carrier(intval(Configuration::get('PS_CARRIER_DEFAULT')), Configuration::get('PS_LANG_DEFAULT'));
 
 			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (Carrier::checkDeliveryPriceByWeight(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
 			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone))))
@@ -889,7 +889,7 @@ class CartCore extends ObjectModel
 			$id_carrier = Configuration::get('PS_CARRIER_DEFAULT');
 
 		if (!isset(self::$_carriers[$id_carrier]))
-			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier));
+			self::$_carriers[$id_carrier] = new Carrier(intval($id_carrier), Configuration::get('PS_LANG_DEFAULT'));
 		$carrier = self::$_carriers[$id_carrier];
 		if (!Validate::isLoadedObject($carrier))
 			die(Tools::displayError('Fatal error: "no default carrier"'));
@@ -899,7 +899,7 @@ class CartCore extends ObjectModel
 		if ($useTax AND $carrier->id_tax)
 		{
 			if (!isset(self::$_taxes[$carrier->id_tax]))
-				self::$_taxes[$carrier->id_tax] = new Tax(intval($carrier->id_tax));
+				self::$_taxes[$carrier->id_tax] = new Tax(intval($carrier->id_tax), Configuration::get('PS_LANG_DEFAULT'));
 			$tax = self::$_taxes[$carrier->id_tax];
 			if (Validate::isLoadedObject($tax) AND Tax::zoneHasTax(intval($tax->id), intval($id_zone)) AND !Tax::excludeTaxeOption())
 				$carrierTax = $tax->rate;

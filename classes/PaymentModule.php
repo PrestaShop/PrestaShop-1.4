@@ -281,7 +281,7 @@ abstract class PaymentModuleCore extends Module
 				}
 
 				// Hook new order
-				$orderStatus = new OrderState(intval($id_order_state));
+				$orderStatus = new OrderState(intval($id_order_state), $order->id_lang);
 				if (Validate::isLoadedObject($orderStatus))
 				{
 					Hook::newOrder($cart, $order, $customer, $currency, $orderStatus);
@@ -313,7 +313,7 @@ abstract class PaymentModuleCore extends Module
 				{
 					$invoice = new Address(intval($order->id_address_invoice));
 					$delivery = new Address(intval($order->id_address_delivery));
-					$carrier = new Carrier(intval($order->id_carrier));
+					$carrier = new Carrier(intval($order->id_carrier), $order->id_lang);
 					$delivery_state = $delivery->id_state ? new State(intval($delivery->id_state)) : false;
 					$invoice_state = $invoice->id_state ? new State(intval($invoice->id_state)) : false;
 

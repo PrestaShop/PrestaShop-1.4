@@ -88,8 +88,8 @@ class HookCore extends ObjectModel
 
 	static public function updateOrderStatus($newOrderStatusId, $id_order)
 	{
-		$newOS = new OrderState(intval($newOrderStatusId));
 		$order = new Order(intval($id_order));
+		$newOS = new OrderState(intval($newOrderStatusId), $order->id_lang);
 
 		$return = (intval($newOS->id) == _PS_OS_PAYMENT_) ? Module::hookExec('paymentConfirm', array('id_order' => intval($order->id))) : true;
 		$return = Module::hookExec('updateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => intval($order->id))) AND $return;
@@ -98,8 +98,8 @@ class HookCore extends ObjectModel
 	
 	static public function postUpdateOrderStatus($newOrderStatusId, $id_order)
 	{
-		$newOS = new OrderState(intval($newOrderStatusId));
 		$order = new Order(intval($id_order));
+		$newOS = new OrderState(intval($newOrderStatusId), $order->id_lang);
 		$return = Module::hookExec('postUpdateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => intval($order->id)));
 		return $return;
 	}

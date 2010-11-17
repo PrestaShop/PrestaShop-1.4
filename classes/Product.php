@@ -246,7 +246,7 @@ class ProductCore extends ObjectModel
 			$this->tax_name = 'deprecated'; // The applicable tax may be BOTH the product one AND the state one (moreover this variable is some deadcode)
 			$this->manufacturer_name = Manufacturer::getNameById(intval($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById(intval($this->id_supplier));
-			$tax = new Tax(intval($this->id_tax));
+			$tax = new Tax(intval($this->id_tax), Configuration::get('PS_LANG_DEFAULT'));
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
 				$this->tax_rate = Tax::getApplicableTax(intval($this->id_tax), floatval($tax->rate));
 			else
@@ -1750,7 +1750,7 @@ class ProductCore extends ObjectModel
 			$qty = Db::getInstance()->getValue('SELECT quantity
 															FROM '._DB_PREFIX_.'product_attribute
 															WHERE id_product_attribute='.(int)$product['id_product_attribute']);
-		$productObj = new Product((int)$product['id_product']);
+		$productObj = new Product((int)$product['id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
 		
 		return $productObj->addStockMvt(-(int)$product['cart_quantity'], (int)_STOCK_MOVEMENT_ORDER_REASON_, $product['id_product_attribute'], $id_order, NULL);
 	}
