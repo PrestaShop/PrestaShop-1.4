@@ -1252,6 +1252,7 @@ class ToolsCore
 				else
 					$content = $compressed_css_files[$media];
 				file_put_contents($cache_filename, $content);
+				chmod($cache_filename, 0777);
 			}
 			$compressed_css_files[$media] = $cache_filename;
 		}
@@ -1321,6 +1322,7 @@ class ToolsCore
 			else
 				$content = $content;
 			file_put_contents($compressed_js_path, $content);
+			chmod($compressed_js_path, 0777);
 		}
 	
 		// rebuild the original js_files array
