@@ -59,7 +59,7 @@ class AdminMessages extends AdminTab
 			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
 
 		$this->_list = Db::getInstance()->ExecuteS('
-		SELECT m.id_message, m.id_cart, m.id_employee, IF(m.id_order > 0, m.id_order, \'--\') id_order, m.message, m.private, m.date_add, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS customer,
+		SELECT SQL_CALC_FOUND_ROWS m.id_message, m.id_cart, m.id_employee, IF(m.id_order > 0, m.id_order, \'--\') id_order, m.message, m.private, m.date_add, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS customer,
 		c.id_customer, count(m.id_message) nb_messages, (SELECT message FROM '._DB_PREFIX_.'message WHERE id_order = m.id_order ORDER BY date_add DESC LIMIT 1) last_message,
 		(SELECT COUNT(m2.id_message) FROM '._DB_PREFIX_.'message m2 WHERE 1 AND m2.id_customer != 0 AND m2.id_order = m.id_order AND m2.id_message NOT IN 
 		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.intval($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_read_by_me
@@ -69,6 +69,7 @@ class AdminMessages extends AdminTab
 		GROUP BY m.id_order
 		ORDER BY '.(isset($orderBy) ? pSQL($orderBy) : 'date_add') .' '.(isset($orderWay) ? pSQL($orderWay) : 'DESC').'
 		LIMIT '.intval($start).','.intval($limit));
+		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 
  		$this->fieldsDisplay = array(
 		'id_order' => array('title' => $this->l('Order ID'), 'align' => 'center', 'width' => 30),
