@@ -81,19 +81,7 @@ class MondialRelay extends Module
 			
 			@copy(_PS_MODULE_DIR_.'mondialrelay/AdminMondialRelay.gif', _PS_IMG_DIR_.'t/AdminMondialRelay.gif');
 		}	
-		/*tab install*/
 
-		$dir_admin = PS_ADMIN_DIR;
-		$dir_module = _PS_MODULE_DIR_;
-		$dir_base = str_replace("/modules/" , "", $dir_module);
-		$dir_archive = $dir_module.'mondialrelay/archive';
-	
-		if (!is_dir($dir_archive))
-			mkdir($dir_archive);
-		if (!is_dir($dir_archive.'/tabs'))
-			mkdir($dir_archive.'/tabs');
-		if (!is_dir($dir_archive.'/classes'))
-			mkdir($dir_archive.'/classes');
 		Configuration::updateValue('MONDIAL_RELAY_INSTALL_UPDATE_1', 1);
 		Configuration::updateValue('MR_GOOGLE_MAP', '1');
 		Configuration::updateValue('MR_ENSEIGNE_WEBSERVICE', '');
@@ -121,29 +109,14 @@ class MondialRelay extends Module
 			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.intval($id_tab));
 			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.intval($id_tab));
 		}
-		/*tab uninstall	*/
 
-	
 		if (!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') OR
 			!Configuration::deleteByName('MR_GOOGLE_MAP') OR
 			!Db::getInstance()->Execute('UPDATE  '._DB_PREFIX_ .'carrier  set `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"') OR
 			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
-				return false;
-	
-		$dir_admin = PS_ADMIN_DIR;
-		$dir_module = _PS_MODULE_DIR_;
-		$dir_base = str_replace("/modules/" , "", $dir_module);
-		$dir_archive = $dir_module.'mondialrelay/archive';	
-
-		if (!is_dir($dir_archive))
-			mkdir($dir_archive);
-		if (!is_dir($dir_archive.'/tabs'))
-			mkdir($dir_archive.'/tabs');
-		if (!is_dir($dir_archive.'/classes'))
-			mkdir($dir_archive.'/classes');
-
+			return false;
 		return true;
 	}
 	
