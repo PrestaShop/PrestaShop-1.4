@@ -167,7 +167,7 @@ abstract class PaymentModuleCore extends Module
 						if (Product::updateQuantity($product, (int)$order->id))
 							$product['stock_quantity'] -= $product['cart_quantity'];
 						
-						if ($product['stock_quantity'] <= 0)
+						if ($product['stock_quantity'] < 0)
 							$outOfStock = true;
 							
 						Hook::updateQuantity($product, $order);
