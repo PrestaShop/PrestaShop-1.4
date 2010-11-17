@@ -1,5 +1,18 @@
 SET NAMES 'utf8';
 
+/* Carrier */
+INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
+
+INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (2, 1);
+
+INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!');
+
+INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2);
+
+UPDATE `PREFIX_configuration` SET `value` = '2' WHERE `name` = 'PS_CARRIER_DEFAULT';
+
+/* Taxes */
+
 INSERT INTO `PREFIX_tax` (`id_tax`, `rate`, `active`) VALUES
 (1, 19.6, 0),(2, 5.5, 0),(3, 17.5, 0),(4, 19, 0),(5, 22, 0),(6, 18, 0),(7, 19, 0),(8, 20, 0),(9, 24, 0),(10, 20, 0),
 (11, 25, 0),(12, 21, 0),(13, 25, 0),(14, 20, 0),(15, 19, 0),(16, 25, 0),(17, 21, 0),(18, 21, 0),(19, 20, 0),(20, 20, 0),
