@@ -108,6 +108,8 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impa
 function populate_attrs()
 {
 	var attr_group = getE('attribute_group');
+	if (!attr_group)
+		return;
 	var attr_name = getE('attribute');
 	var number = attr_group.options.length ? attr_group.options[attr_group.selectedIndex].value : 0;
 
