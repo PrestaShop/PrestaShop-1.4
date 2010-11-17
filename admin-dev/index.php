@@ -12,7 +12,7 @@
   */
 
 define('_PS_ADMIN_DIR_', getcwd());
-define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
+define('PS_ADMIN_DIR', _PS_ADMIN_DIR_);
 
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
