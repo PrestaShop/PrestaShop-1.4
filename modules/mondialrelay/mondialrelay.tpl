@@ -47,8 +47,8 @@
 				<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if ($nbcarriers+$smarty.foreach.myLoop.index) % 2}alternate_item{else}item{/if}">
 					<td colspan="4" align="center">
 						<div style="display:none;" id="form_mondialrelay_{$carrier.id_carrier|intval}"></div>
-						{if ($google_api_key != '')}
-						<iframe style="display:none;" id="all_mondialrelay_map_{$carrier.id_carrier|intval}" width="517px" height="317px" frameborder="0" scrolling="no" src="{$base_dir}modules/mondialrelay/googlemap.php?googlekey={$google_api_key}&relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}&address={$address_map}"></iframe>
+						{if ($google_api_key)}
+						<iframe style="display:none;" id="all_mondialrelay_map_{$carrier.id_carrier|intval}" width="517px" height="317px" frameborder="0" scrolling="no" src="{$base_dir}modules/mondialrelay/googlemap.php?relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}&address={$address_map}"></iframe>
 						{/if}
 						<img src="{$base_dir}modules/mondialrelay/kit_mondialrelay/loading.gif" style="display:none;" id="loading_mr"/>
 						<div style="display:none;" id="mondialrelay_{$carrier.id_carrier|intval}"></div>		 

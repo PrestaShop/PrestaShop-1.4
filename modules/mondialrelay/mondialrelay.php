@@ -95,7 +95,7 @@ class MondialRelay extends Module
 		if (!is_dir($dir_archive.'/classes'))
 			mkdir($dir_archive.'/classes');
 		Configuration::updateValue('MONDIAL_RELAY_INSTALL_UPDATE_1', 1);
-		Configuration::updateValue('MR_GOOGLE_API_KEY', '');
+		Configuration::updateValue('MR_GOOGLE_MAP', '1');
 		Configuration::updateValue('MR_ENSEIGNE_WEBSERVICE', '');
 		Configuration::updateValue('MR_CODE_MARQUE', '');
 		Configuration::updateValue('MR_KEY_WEBSERVICE', '');
@@ -127,7 +127,7 @@ class MondialRelay extends Module
 		if (!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') OR
-			!Configuration::deleteByName('MR_GOOGLE_API_KEY') OR
+			!Configuration::deleteByName('MR_GOOGLE_MAP') OR
 			!Db::getInstance()->Execute('UPDATE  '._DB_PREFIX_ .'carrier  set `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"') OR
 			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
 				return false;
@@ -178,11 +178,12 @@ class MondialRelay extends Module
 			if (!Tools::getValue('mr_Pays_list'))
 				$this->_postErrors[] = $this->l('You must choose at least one delivery country');
 		}
-		elseif (Tools::isSubmit('submitGoogle'))
+		elseif (Tools::isSubmit('submit_order_state'))
 		{
-			$google_key = Tools::getValue('mr_google_key');
-			if (!empty($google_key) AND !preg_match("#^[0-9A-Za-z_-]+$#", $google_key))
+			if (!Validate::isBool(Tools::getValue('mr_google_key')))
 				$this->_postErrors[] = $this->l('Invalid google key');
+			if (!Validate::isUnsignedInt(Tools::getValue('id_order_state')))
+				$this->_postErrors[] = $this->l('Invalid order state');
 		}
 	}
 
@@ -203,11 +204,11 @@ class MondialRelay extends Module
 		elseif (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
 		elseif (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
-			self::mrUpdate('settingsorderstate', $setArray, $keyArray);
-		elseif (isset($_POST['submitGoogle']) AND $_POST['submitGoogle'])
 		{
-			Configuration::updateValue('MR_GOOGLE_API_KEY', Tools::getValue('mr_google_key'));
-			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'</div>';
+			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
+			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
+			if (!Tools::isSubmit('updatesuccess'))
+				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'</div>';
 		}
 	}
 	
@@ -426,7 +427,7 @@ class MondialRelay extends Module
 							'input_poids'  => Configuration::get('MR_WEIGHT_COEF') * $cart->getTotalWeight(),
 							'nbcarriers' => $nbcarriers,
 							'checked' => intval($checked),
-							'google_api_key' => Configuration::get('MR_GOOGLE_API_KEY'),
+							'google_api_key' => Configuration::get('MR_GOOGLE_MAP'),
 							'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
@@ -496,8 +497,6 @@ class MondialRelay extends Module
 			Configuration::updateValue('MR_LANGUAGE', $array[3]);
 			Configuration::updateValue('MR_WEIGHT_COEF', $array[4]);
 		}
-		elseif ($type == 'settingsorderstate')
-			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', $_POST['id_order_state']);
 		elseif ($type == 'shipping')
 		{
 			array_pop($array);
@@ -711,26 +710,6 @@ class MondialRelay extends Module
 				</ol>
 			</fieldset>
 		</form><br />
-
-
-		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
-			<fieldset class="shippingList">
-				<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Configure Google map').'</legend>
-				<ol>
-					<li>
-						<label for="mr_google_key" class="shipLabel">'.$this->l('Google API key').'<sup>*</sup></label>
-						<input type="text" id="mr_google_key" style="width:500px;" name="mr_google_key" value="'.Configuration::get('MR_GOOGLE_API_KEY').'" />
-					</li>
-					<li>
-						'.$this->l('You can add a google map to your Mondial Relay module by getting an API key in this page :').'
-						<a href="http://code.google.com/intl/fr/apis/maps/signup.html">http://code.google.com/intl/fr/apis/maps/signup.html</a>
-					</li>
-					<li class="mrSubmit">
-						<input type="submit" name="submitGoogle" value="' . $this->l('Update setting') . '" class="button" />
-					</li> 
-				</ol>
-			</fieldset>
-		</form>
 		';
 
 		return $output;	
@@ -755,11 +734,20 @@ class MondialRelay extends Module
 			$output  .= '>' . $order_state['name'] . '</option>';
 		}
 		$output .= '</select>';
-		$output .= "<p>" . $this->l('Choose the order state for sticks. You can administrate the sticks on').' ';
+		$output .= '<p>' . $this->l('Choose the order state for sticks. You can administrate the sticks on').' ';
 		$output .= '<a href="index.php?tab=AdminMondialRelay&token='.Tools::getAdminToken('AdminMondialRelay'.intval(Tab::getIdFromClassName('AdminMondialRelay')).intval($cookie->id_employee)).'" class="green">'.
 		$this->l('the Mondial Relay administration page').'</a></p>';
-		$output .= '</div>';
-		$output .= '<div class="margin-form"><input type="submit" name="submit_order_state"  value="' . $this->l('Save') . '" class="button" /></div class="margin-form">';
+		$output .= '</div>
+		<div class="clear"></div>
+		<label>'.$this->l('Google map').' </label>
+		<div class="margin-form">
+			<input type="radio" name="mr_google_key" id="mr_google_key_on" value="1" '.(Configuration::get('MR_GOOGLE_MAP') ? 'checked="checked" ' : '').'/>
+			<label class="t" for="mr_google_key_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
+			<input type="radio" name="mr_google_key" id="mr_google_key_off" value="0" '.(!Configuration::get('MR_GOOGLE_MAP') ? 'checked="checked" ' : '').'/>
+			<label class="t" for="mr_google_key_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
+			<p>'.$this->l('Display a google map on your Mondial Relay carrier, it may make carrier page loading slower').'</p>
+		</div>';
+		$output .= '<div class="margin-form"><input type="submit" name="submit_order_state"  value="' . $this->l('Save') . '" class="button" /></div>';
 		$output .= '</fieldset></form><br>';
 		
 		return $output;
@@ -776,23 +764,23 @@ class MondialRelay extends Module
 					<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>
 					<ol>
 						<li>
-							<label for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('mr_Enseigne_WebService:') . '<sup>*</sup></label>
-							<input id="mr_Enseigne_WebService" class="mrInput" type="text" name="mr_Enseigne_WebService" value="' .
+							<label style="float:none;" for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('mr_Enseigne_WebService:') . '<sup>*</sup></label>
+							<input style="float:right;" id="mr_Enseigne_WebService" class="mrInput" type="text" name="mr_Enseigne_WebService" value="' .
 							(Tools::getValue('mr_Enseigne_WebService') ? Tools::getValue('mr_Enseigne_WebService') : Configuration::get('MR_ENSEIGNE_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label for="mr_code_marque" class="mrLabel">' . $this->l('mr_code_marque:') . '<sup>*</sup></label>
-							<input id="mr_code_marque" class="mrInput" type="text" name="mr_code_marque" value="' .
+							<label style="float:none;" for="mr_code_marque" class="mrLabel">' . $this->l('mr_code_marque:') . '<sup>*</sup></label>
+							<input style="float:right;" id="mr_code_marque" class="mrInput" type="text" name="mr_code_marque" value="' .
 							(Tools::getValue('mr_code_marque') ? Tools::getValue('mr_code_marque') : Configuration::get('MR_CODE_MARQUE')) . '"/>
 						</li>
 						<li>
-							<label for="mr_Key_WebService" class="mrLabel">' . $this->l('mr_Key_WebService:') . '<sup>*</sup></label>
-							<input id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
+							<label style="float:none;" for="mr_Key_WebService" class="mrLabel">' . $this->l('mr_Key_WebService:') . '<sup>*</sup></label>
+							<input style="float:right;" id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
 							(Tools::getValue('mr_Key_WebService') ? Tools::getValue('mr_Key_WebService') : Configuration::get('MR_KEY_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label for="mr_Langage" class="mrLabel">' . $this->l('mr_Langage:') . '<sup>*</sup></label>
-							<select id="mr_Langage" name="mr_Langage" value="'.
+							<label style="float:none;" for="mr_Langage" class="mrLabel">' . $this->l('mr_Langage:') . '<sup>*</sup></label>
+							<select style="float:right;" id="mr_Langage" name="mr_Langage" value="'.
 							(Tools::getValue('mr_Langage') ? Tools::getValue('mr_Langage') : Configuration::get('MR_LANGUAGE')).'" >';
 		$languages = Language::getLanguages();
 		foreach ($languages as $language)
@@ -801,7 +789,7 @@ class MondialRelay extends Module
 				$output .= '</select>
 						</li>
 						<li>
-							<label for="mr_weight_coef" class="mrLabel">' . $this->l('mr_weight_coef:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_weight_coef" class="mrLabel">' . $this->l('mr_weight_coef:') . '<sup>*</sup></label>
 							<input id="mr_weight_coef" class="mrInput" type="text" name="mr_weight_coef" value="' . 
 							(Tools::getValue('mr_weight_coef') ? Tools::getValue('mr_weight_coef') : Configuration::get('MR_WEIGHT_COEF')) . '"  style="width:45px;"/> ' . 
 							$this->l('grammes = 1 ') . Configuration::get('PS_WEIGHT_UNIT').'

@@ -3,34 +3,64 @@
 <script type="text/javascript" src="../../js/jquery/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="../../js/jquery/jquery.hotkeys-0.7.8-packed.js"></script>
 <script type="text/javascript" src="../../js/jquery/jquery.autocomplete.js"></script>
-<?php echo '<script type="text/javascript" src="http://www.google.com/jsapi?key='.$_GET['googlekey'].'"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript">
 
-function add_address_google_map(address, address_google)
-{
-		function createMarker(latlng)
-		{
-			var baseIcon = new GIcon(G_DEFAULT_ICON);
-		    var letter = String.fromCharCode("M".charCodeAt(0));
-			var letteredIcon = new GIcon(baseIcon);
-   		 	letteredIcon.image = "http://www.google.com/mapfiles/markerM.png";
-    		markerOptions = { icon:letteredIcon };
+var geocoder;
+var map;
+var infowindow = new google.maps.InfoWindow();
+var markers = [];
 
-	    	var marker = new GMarker(latlng, markerOptions);
-    	
-	    	GEvent.addListener(marker, "click", function() {
-	       		google_map_general.openInfoWindowHtml(latlng, \'<img src="'.$_GET['relativ_base_dir'].'modules/mondialrelay/kit_mondialrelay/MR_small.gif">\'+ \'  \' + address);
-	      	});
-    	  	return marker;
+function google_map_init() {
+	geocoder = new google.maps.Geocoder();
+	var latlng = new google.maps.LatLng(-34.397, 150.644);
+	var myOptions = {
+	  zoom: 11,
+	  center: latlng,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+	map = new google.maps.Map(document.getElementById("map"), myOptions);
+	
+	geocoder.geocode( {'address': "<?php echo $_GET['address']; ?>"}, function(results, status)
+	{
+	  if (status == google.maps.GeocoderStatus.OK)
+	  {
+		map.setCenter(results[0].geometry.location);
+		var marker = new google.maps.Marker({
+			map: map, 
+			position: results[0].geometry.location
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			infowindow.setContent("<?php echo $_GET['address']; ?>");
+			infowindow.open(map,marker);
+		});
+	  }
+	  else
+		alert("Geocode was not successful for the following reason: " + status);
+	});
+}
+
+function codeAddress(address, address_google)
+{
+	geocoder.geocode( {'address': address_google}, function(results, status)
+	{
+ 		 if (status == google.maps.GeocoderStatus.OK)
+		 {
+		 	var image = new google.maps.MarkerImage('<?php echo $_GET['relativ_base_dir']; ?>modules/mondialrelay/kit_mondialrelay/marker.gif');
+			var marker = new google.maps.Marker({
+				map: map, 
+				position: results[0].geometry.location,
+				icon : image
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent('<img src="<?php echo $_GET['relativ_base_dir']; ?>modules/mondialrelay/kit_mondialrelay/MR_small.gif" />' + ' ' + address);
+				infowindow.open(map,marker);
+			});
 		}
-		
-		geocoder.getLatLng(address_google,
-			function(point)
-			{
-				if (point)
-					google_map_general.addOverlay(createMarker(point));
-			}
-		);
+		 else
+			alert("Geocode was not successful for the following reason: " + status);
+	});
+			
 }
 
 function recherche_MR(args)
@@ -40,9 +70,9 @@ function recherche_MR(args)
 	{
 		$.ajax({
 			type: "POST",
-			url: \'kit_mondialrelay/RecherchePointRelais_ajax.php\',
+			url: 'kit_mondialrelay/RecherchePointRelais_ajax.php',
 			data: args ,
-			dataType: \'json\',
+			dataType: 'json',
 			async : false,
 			success: function(obj)
 				{
@@ -52,38 +82,19 @@ function recherche_MR(args)
 	}
 	else
 	{
-		alert(\'Formulaire incomplet\');
+		alert('Formulaire incomplet');
 		return false;
 	}
 }
 
-function google_map_init()
-{
-	google_map_general = new google.maps.Map2(document.getElementById("map"));
-	geocoder = new GClientGeocoder();
-	geocoder.getLatLng(\''.$_GET['address'].'\',
-			function(point)
-			{
-				if (point)
-				{
-					google_map_general.setCenter(point, 11);
-					var marker = new GMarker(point);
-					google_map_general.addOverlay(marker);
-					marker.openInfoWindowHtml(\''.$_GET['address'].'\');
-				}
-			}
-	);
-	google_map_general.addControl(new GSmallMapControl());
-}
 </script>
 
 <div id="map" style="height:300px; width:500px; border:1px;" ></div>
 
-<script type="text/javascript">
+<?php echo '<script type="text/javascript">
 var json_addresses;
 recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
 
-	google.load("maps", "2.x");
 	window.onload = function()
 		{
 			var cpt = 0;
@@ -92,10 +103,10 @@ recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays
 			{
 				address_google = json_addresses.addresses[cpt].address3+\' \'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
 				address = json_addresses.addresses[cpt].address1+\'<br />\'+json_addresses.addresses[cpt].address2+\' \'+json_addresses.addresses[cpt].address3+\'<br />\'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
-				add_address_google_map(address, address_google);
+				codeAddress(address, address_google);
 				cpt++;
 			}
 		}
-</script>'
+</script>';
 
 ?>
