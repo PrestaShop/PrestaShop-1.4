@@ -139,7 +139,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		{if count($images) > 3}<a id="view_scroll_right" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Next'}</a>{/if}
 		</div>
 		{/if}
-		{if count($images) > 1}<p class="align_center clear"><a id="resetImages" href="{$link->getProductLink($product)}" style="display:none;" onclick="$('a#resetImages').hide('slow');return (false);">{l s='Display all pictures'}</a></p>{/if}
+		{if count($images) > 1}<p class="align_center clear"><span id="wrapResetImages" style="display:none;"><img src="{$img_dir}icon/cancel_16x18.gif" alt="{l s='Cancel'}" width="16" height="18"/> <a id="resetImages" href="{$link->getProductLink($product)}" onclick="$('span#wrapResetImages').hide('slow');return (false);">{l s='Display all pictures'}</a></span></p>{/if}
 		<!-- usefull links-->
 		<ul id="usefull_link_block">
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
