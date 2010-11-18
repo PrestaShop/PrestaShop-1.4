@@ -76,8 +76,7 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 			 	echo $so->displaySoError($error);	
 		echo '<p><br/>
 			 <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour
-			 </a></p></div>';	
-	}
+			 </a></p></div>';	}
 }
 else
 	Tools::redirect();
@@ -141,45 +140,53 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 		return true;
 	}
 	else
-		$sql = 'UPDATE `'._DB_PREFIX_.'socolissimo_delivery_info` SET `delivery_mode` =\''.pSQL($soParams['DELIVERYMODE']).'\' ';
-		if (!in_array($soParams['DELIVERYMODE'], array('DOM', 'RDV')))
-			$sql .= ' , '.(isset($soParams['PRID']) ? ' `prid` =\''.pSQL($soParams['PRID']).'\' , ' : '').
-					(isset($soParams['PRNAME']) ? ' `prname` =\''.ucfirst(pSQL($soParams['PRNAME'])).'\' , ' : '').
-					' `prfirstname` ='.(isset($deliveryMode['DELIVERYMODE']) ? '\''.$deliveryMode[$soParams['DELIVERYMODE']].'\'' : '\'So Colissimo').'\', '.
-					(isset($soParams['PRCOMPLADRESS']) ? ' `prcompladress` =\''.pSQL($soParams['PRCOMPLADRESS']).'\' , ' : '').
-					(isset($soParams['PRADRESS1']) ? ' `pradress1` =\''.pSQL($soParams['PRADRESS1']).'\' , ' : '').
-					(isset($soParams['PRADRESS2']) ? ' `pradress2` =\''.pSQL($soParams['PRADRESS2']).'\' , ' : '').
-					(isset($soParams['PRADRESS3']) ? ' `pradress3` =\''.pSQL($soParams['PRADRESS3']).'\' , ' : '').
-					(isset($soParams['PRADRESS4']) ? ' `pradress4` =\''.pSQL($soParams['PRADRESS4']).'\' , ' : '').
-					(isset($soParams['PRZIPCODE']) ? ' `przipcode` =\''.pSQL($soParams['PRZIPCODE']).'\' , ' : '').
-					(isset($soParams['CETOWN']) ? ' `prtown` =\''.pSQL($soParams['CETOWN']).'\' , ' : '').
-					(isset($soParams['CEPHONENUMBER']) ? ' `cephonenumber` =\''.pSQL($soParams['CEPHONENUMBER']).'\' , ' : '').
-					(isset($soParams['CEEMAIL']) ? ' `ceemail` =\''.pSQL($soParams['CEEMAIL']).'\' , ' : '').
-					(isset($soParams['CEDELIVERYINFORMATION']) ? ' `cedeliveryinformation` =\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\' , ' : '').
-					(isset($soParams['CEDOORCODE1']) ? ' `cedoorcode1` =\''.pSQL($soParams['CEDOORCODE1']).'\' , ' : '').
-					(isset($soParams['CEDOORCODE2']) ? ' `cedoorcode2` =\''.pSQL($soParams['CEDOORCODE2']).'\' , ' : '').
-					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cecompanyname` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
-		else
-			$sql .= ','.(isset($soParams['CENAME']) ? ' `prname` =\''.ucfirst(pSQL($soParams['CENAME'])).'\' , ' : '').
-					(isset($soParams['CEFIRSTNAME']) ? ' `prfirstname` =\''.ucfirst(pSQL($soParams['CEFIRSTNAME'])).'\' , ' : '').
-					(isset($soParams['CECOMPLADRESS']) ? ' `prcompladress` =\''.pSQL($soParams['CECOMPLADRESS']).'\' , ' : '').
-					(isset($soParams['CEADRESS1']) ? ' `pradress1` =\''.pSQL($soParams['CEADRESS1']).'\' , ' : '').
-					(isset($soParams['CEADRESS2']) ? ' `pradress2` =\''.pSQL($soParams['CEADRESS2']).'\' , ' : '').
-					(isset($soParams['CEADRESS3']) ? ' `pradress3` =\''.pSQL($soParams['CEADRESS3']).'\' , ' : '').
-					(isset($soParams['CEADRESS4']) ? ' `pradress4` =\''.pSQL($soParams['CEADRESS4']).'\' , ' : '').
-					(isset($soParams['CEZIPCODE']) ? ' `przipcode` =\''.pSQL($soParams['CEZIPCODE']).'\' , ' : '').
-					(isset($soParams['PRTOWN']) ? ' `prtown` =\''.pSQL($soParams['PRTOWN']).'\' , ' : '').
-					(isset($soParams['CEEMAIL']) ? ' `ceemail` =\''.pSQL($soParams['CEEMAIL']).'\' , ' : '').
-					(isset($soParams['CEPHONENUMBER']) ? ' `cephonenumber` =\''.pSQL($soParams['CEPHONENUMBER']).'\' , ' : '').
-					(isset($soParams['CEDELIVERYINFORMATION']) ? ' `cedeliveryinformation` =\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\' , ' : '').
-					(isset($soParams['CEDOORCODE1']) ? ' `cedoorcode1` =\''.pSQL($soParams['CEDOORCODE1']).'\' , ' : '').
-					(isset($soParams['CEDOORCODE2']) ? ' `cedoorcode2` =\''.pSQL($soParams['CEDOORCODE2']).'\' , ' : '').
-					(isset($soParams['TRADERCOMPANYNAME']) ? ' `cecompanyname` =\''.pSQL($soParams['TRADERCOMPANYNAME']).'\' ' : '');
-	
-		$sql .= ' WHERE `id_cart` =\''.intval($idCart).'\' AND `id_customer` =\''.intval($idCustomer).'\'';
+	{	
+		$table = _DB_PREFIX_.'socolissimo_delivery_info';
+		$values = array();
+		$values['delivery_mode'] = pSQL($soParams['DELIVERYMODE']);
 
-		if (Db::getInstance()->Execute($sql))
+		if (!in_array($soParams['DELIVERYMODE'], array('DOM', 'RDV')))
+		{
+			        (isset($soParams['PRID']) ? $values['prid'] = pSQL($soParams['PRID']) : '');
+					(isset($soParams['PRNAME']) ? $values['prname'] = ucfirst(pSQL($soParams['PRNAME'])) : '');
+					(isset($deliveryMode['DELIVERYMODE']) ? $values['prfirstname'] = $deliveryMode[$soParams['DELIVERYMODE']] : $values['prfirstname'] = 'So Colissimo');
+					(isset($soParams['PRCOMPLADRESS']) ? $values['prcompladress'] = pSQL($soParams['PRCOMPLADRESS']) : '');
+					(isset($soParams['PRADRESS1']) ? $values['pradress1'] = pSQL($soParams['PRADRESS1']) : '');
+					(isset($soParams['PRADRESS2']) ? $values['pradress2'] = pSQL($soParams['PRADRESS2']) : '');
+					(isset($soParams['PRADRESS3']) ? $values['pradress3'] = pSQL($soParams['PRADRESS3']) : '');
+					(isset($soParams['PRADRESS4']) ? $values['pradress4'] = pSQL($soParams['PRADRESS4']) : '');
+					(isset($soParams['PRZIPCODE']) ? $values['przipcode'] = pSQL($soParams['PRZIPCODE']) : '');
+					(isset($soParams['CETOWN']) ? $values['prtown'] = pSQL($soParams['CETOWN']) : '');
+					(isset($soParams['CEPHONENUMBER']) ? $values['cephonenumber'] = pSQL($soParams['CEPHONENUMBER']) : '');
+					(isset($soParams['CEEMAIL']) ? $values['ceemail'] = pSQL($soParams['CEEMAIL']) : '');
+					(isset($soParams['CEDELIVERYINFORMATION']) ? $values['cedeliveryinformation'] = pSQL($soParams['CEDELIVERYINFORMATION']) : '');
+					(isset($soParams['CEDOORCODE1']) ? $values['cedoorcode1'] = pSQL($soParams['CEDOORCODE1']) : '');
+					(isset($soParams['CEDOORCODE2']) ? $values['cedoorcode2'] = pSQL($soParams['CEDOORCODE2']) : '');
+					(isset($soParams['TRADERCOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['TRADERCOMPANYNAME']) : '');
+		}
+		else
+		{
+					(isset($soParams['CENAME']) ? $values['prname'] = ucfirst(pSQL($soParams['CENAME'])) : '');
+					(isset($soParams['CEFIRSTNAME']) ? $values['prfirstname'] = ucfirst(pSQL($soParams['CEFIRSTNAME'])) : '');
+					(isset($soParams['CECOMPLADRESS']) ? $values['prcompladress'] = pSQL($soParams['CECOMPLADRESS']) : '');
+					(isset($soParams['CEADRESS1']) ? $values['pradress1'] = pSQL($soParams['CEADRESS1']) : '');
+					(isset($soParams['CEADRESS2']) ? $values['pradress2'] = pSQL($soParams['CEADRESS2']) : '');
+					(isset($soParams['CEADRESS3']) ? $values['pradress3'] = pSQL($soParams['CEADRESS3']) : '');
+					(isset($soParams['CEADRESS4']) ? $values['pradress4'] = pSQL($soParams['CEADRESS4']) : '');
+					(isset($soParams['CEZIPCODE']) ? $values['przipcode'] = pSQL($soParams['CEZIPCODE']) : '');
+					(isset($soParams['PRTOWN']) ? $values['prtown'] = pSQL($soParams['PRTOWN']) : '') ;
+					(isset($soParams['CEEMAIL']) ? $values['ceemail'] = pSQL($soParams['CEEMAIL']) : '');
+					(isset($soParams['CEPHONENUMBER']) ? $values['cephonenumber'] = pSQL($soParams['CEPHONENUMBER']) : '');
+					(isset($soParams['CEDELIVERYINFORMATION']) ? $values['cedeliveryinformation'] = pSQL($soParams['CEDELIVERYINFORMATION']) : '');
+					(isset($soParams['CEDOORCODE1']) ? $values['cedoorcode1'] = pSQL($soParams['CEDOORCODE1']) : '');
+					(isset($soParams['CEDOORCODE2']) ? $values['cedoorcode2'] = pSQL($soParams['CEDOORCODE2']) : '');
+					(isset($soParams['TRADERCOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['TRADERCOMPANYNAME']) : '');
+		}
+		$where = ' `id_cart` =\''.intval($idCart).'\' AND `id_customer` =\''.intval($idCustomer).'\'';
+				
+		if (Db::getInstance()->autoExecute($table, $values, 'UPDATE', $where))
 			return true;
+	}
 }
 
 
