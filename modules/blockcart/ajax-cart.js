@@ -318,7 +318,6 @@ var ajaxCart = {
 
 	//refresh display of vouchers (needed for vouchers in % of the total)
 	refreshVouchers : function (jsonData) {
-	console.log(jsonData);
 		$(jsonData.discounts).each(function(){
 			//fix ie6 bug (one more item 'undefined' in IE6)
 			if (this.id != undefined && $('#bloc_cart_voucher_' + this.id).length == 1)

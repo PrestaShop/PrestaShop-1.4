@@ -104,7 +104,6 @@ function deletProductFromSummary(id){
 						});
 				}
 				ajaxCart.refresh();
-				console.log(jsonData);
 				updateCartSummary(jsonData.summary);
 				updateCustomizedDatas(jsonData.customizedDatas);
 				if (jsonData.carriers != null)

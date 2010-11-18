@@ -31,7 +31,7 @@ class Socolissimo extends Module
 		
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.4';
+		$this->version = '1.5';
 		$this->limited_countries = array('fr');
 		$this->needRange = true;
 
