@@ -114,6 +114,10 @@ class MondialRelay extends Module
 			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') OR
 			!Configuration::deleteByName('MR_GOOGLE_MAP') OR
+			!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') OR
+			!Configuration::deleteByName('MR_CODE_MARQUE') OR
+			!Configuration::deleteByName('MR_KEY_WEBSERVICE') OR
+			!Configuration::deleteByName('MR_WEIGHT_COEF') OR
 			!Db::getInstance()->Execute('UPDATE  '._DB_PREFIX_ .'carrier  set `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"') OR
 			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
 			return false;
@@ -516,14 +520,16 @@ class MondialRelay extends Module
 						$checkD[] = $value;
 			}
 
-			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (id_tax, url, name, active, is_module, shipping_external, need_range, external_module_name)
+			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax`, `url`, `name`, `active`, `is_module`, `shipping_external`, `need_range`, `external_module_name`)
 									VALUES("1", NULL, "'.pSQL($array[0]).'", "1", "1", "0", "1", "mondialrelay")');
 
-			$get   = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'carrier WHERE id_carrier = "' . mysql_insert_id() . '"');
-			Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'mr_method SET id_carrier = "' . intval($get['id_carrier']) . '" WHERE id_mr_method = "' . pSQL($mainInsert) . '"');
-
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'range_weight` (id_carrier, delimiter1, delimiter2) VALUES ('.intval($get['id_carrier']).', 0.000000, 10000.000000)');
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'range_price` (id_carrier, delimiter1, delimiter2) VALUES ('.intval($get['id_carrier']).', 0.000000, 10000.000000)');
+			$get   = Db::getInstance()->getRow('SELECT * FROM `' . _DB_PREFIX_ . 'carrier` WHERE `id_carrier` = "' . mysql_insert_id() . '"');
+			Db::getInstance()->Execute('UPDATE `' . _DB_PREFIX_ . 'mr_method` SET `id_carrier` = "' . intval($get['id_carrier']) . '" WHERE `id_mr_method` = "' . pSQL($mainInsert) . '"');
+			$weight_coef = Configuration::get('MR_WEIGHT_COEF');
+			$range_weight = array('24R' => array(0, 20000 / $weight_coef), 'DRI' => array(20000 / $weight_coef, 130000 / $weight_coef), 'LD1' => array(0, 60000 / $weight_coef), 'LDS' => array(30000 / $weight_coef, 130000 / $weight_coef));
+			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'range_weight` (`id_carrier`, `delimiter1`, `delimiter2`)
+										VALUES ('.intval($get['id_carrier']).', '.$range_weight[$array[2]][0].', '.$range_weight[$array[2]][1].')');
+			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'range_price` (`id_carrier`, `delimiter1`, `delimiter2`) VALUES ('.intval($get['id_carrier']).', 0.000000, 10000.000000)');
 			$groups = Group::getGroups(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($groups as $group)
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'carrier_group` (id_carrier, id_group) VALUES('.intval($get['id_carrier']).', '.intval($group['id_group']).')');
