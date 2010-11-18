@@ -1446,6 +1446,8 @@ class ProductCore extends ObjectModel
 	/*  */
 	public static function getReductionValue($reduction_price, $reduction_percent, $date_from, $date_to, $product_price, $usetax, $taxrate)
 	{
+		Tools::displayAsDeprecated();
+		
 		// Avoid an error with 1970-01-01
 		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
 			return 0;
