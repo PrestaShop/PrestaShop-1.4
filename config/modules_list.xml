@@ -7,6 +7,7 @@
 		<module name="blockbestsellers"/>
 		<module name="blockcart"/>
 		<module name="blockcategories"/>
+		<module name="blockcms"/>
 		<module name="blockcurrencies"/>
 		<module name="blockinfos"/>
 		<module name="blocklanguages"/>
@@ -20,6 +21,7 @@
 		<module name="blockrss"/>
 		<module name="blocksearch"/>
 		<module name="blockspecials"/>
+		<module name="blockstore"/>
 		<module name="blocksupplier"/>
 		<module name="blocktags"/>
 		<module name="blockuserinfo"/>
@@ -30,6 +32,7 @@
 		<module name="cashondelivery"/>
 		<module name="cheque"/>
 		<module name="crossselling"/>
+		<module name="dateofdelivery"/>
 		<module name="dejala"/>
 		<module name="editorial"/>
 		<module name="feeder"/>
@@ -93,6 +96,7 @@
 		<module name="envoimoinscher"/>
 		<module name="hipay"/>
 		<module name="moneybookers"/>
+		<module name="mondialrelay"/>
 		<module name="ogone"/>
 		<module name="paypal"/>
 		<module name="paypalapi"/>
