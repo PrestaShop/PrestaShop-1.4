@@ -222,16 +222,13 @@ class ManufacturerCore extends ObjectModel
 	  * @param integer $id_manufacturer Manufacturer ID
 	  * @return string name
 	  */
+	static private $cacheName = array();
 	static public function getNameById($id_manufacturer)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `name`
-		FROM `'._DB_PREFIX_.'manufacturer`
-		WHERE `id_manufacturer` = '.intval($id_manufacturer).'
-		AND `active` = 1');
-		if (isset($result['name']))
-			return $result['name'];
-		return false;
+		if (!isset(self::$cacheName[$id_manufacturer]))
+			self::$cacheName[$id_manufacturer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `name` FROM `'._DB_PREFIX_.'manufacturer` WHERE `id_manufacturer` = '.intval($id_manufacturer).' AND `active` = 1');
+		return self::$cacheName[$id_manufacturer];
 	}
 	
 	static public function getIdByName($name)
