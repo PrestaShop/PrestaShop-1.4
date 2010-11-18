@@ -69,16 +69,16 @@ function isPicture($file, $types = NULL)
 	if (!$types)
 		$types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 
-	if (function_exists('finfo_open'))
+	if (Tools::isCallable('finfo_open'))
 	{
 		$const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 		$finfo = finfo_open($const);
 		$mime_type = finfo_file($finfo, $file['tmp_name']);
 		finfo_close($finfo);
 	}
-	elseif (function_exists('mime_content_type'))
+	elseif (Tools::isCallable('mime_content_type'))
 		$mime_type = mime_content_type($file['tmp_name']);
-	elseif (function_exists('exec'))
+	elseif (Tools::isCallable('exec'))
 		$mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
 	if (empty($mime_type) || $mime_type == 'regular file')
 		$mime_type = $file['type'];

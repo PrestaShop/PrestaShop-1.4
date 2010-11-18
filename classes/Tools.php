@@ -1535,6 +1535,12 @@ FileETag INode MTime Size
 		$smarty->force_compile = intval(self::$_forceCompile);
 		$smarty->caching = intval(self::$_caching);
 	}
+	
+	public static function isCallable($function)
+	{
+		$disabled = explode(',', ini_get('disable_functions'));
+		return (!in_array($function, $disabled) AND is_callable($function));
+	}
 }
 
 /**
