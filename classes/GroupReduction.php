@@ -24,6 +24,8 @@ class GroupReductionCore extends ObjectModel
 	protected 	$table = 'group_reduction';
 	protected 	$identifier = 'id_group_reduction';
 
+	private static $reductionCache = array();
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -69,7 +71,9 @@ class GroupReductionCore extends ObjectModel
 
 	static public function getValueForProduct($id_product, $id_group)
 	{
-		return Db::getInstance()->getValue('SELECT `reduction` FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_product` = '.intval($id_product).' AND `id_group` = '.intval($id_group));
+		if (!isset(self::$reductionCache[$id_product.'-'.$id_group]))
+			self::$reductionCache[$id_product.'-'.$id_group] = Db::getInstance()->getValue('SELECT `reduction` FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_product` = '.intval($id_product).' AND `id_group` = '.intval($id_group));
+		return self::$reductionCache[$id_product.'-'.$id_group];
 	}
 
 	static public function doesExist($id_group, $id_category)
