@@ -60,7 +60,8 @@ abstract class ModuleCore
 	 *
 	 * @param string $name Module unique name
 	 */
-	private static $modulesCache = NULL;
+	private static $modulesCache;
+	private static $hookModulesCache;
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -382,39 +383,48 @@ abstract class ModuleCore
 			die(Tools::displayError());
 
 		global $cart, $cookie;
-		$altern = 0;
 
 		if (!isset($hookArgs['cookie']) OR !$hookArgs['cookie'])
 			$hookArgs['cookie'] = $cookie;
 		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
 			$hookArgs['cart'] = $cart;
 
-		// Todo: must be cached (on query for every modules)
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT h.`id_hook`, m.`name`, hm.`position`
+		if (!isset(self::$hookModulesCache))
+		{
+			$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
+			$result = $db->ExecuteS('
+			SELECT h.`name` as hook, m.`id_module`, h.`id_hook`, m.`name` as module
 			FROM `'._DB_PREFIX_.'module` m
 			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
 			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
-			WHERE h.`name` = \''.pSQL($hook_name).'\'
 			AND m.`active` = 1
-			'.($id_module ? 'AND m.`id_module` = '.intval($id_module) : '').'
-			ORDER BY hm.`position`, m.`name` DESC');
-		if (!$result)
-			return false;
+			ORDER BY hm.`position`', false);
+			self::$hookModulesCache = array();
+			while ($row = $db->nextRow())
+			{
+				if (!isset(self::$hookModulesCache[$row['hook']]))
+					self::$hookModulesCache[$row['hook']] = array();
+				self::$hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
+			}
+		}
+
+		if (!isset(self::$hookModulesCache[$hook_name]))
+			return;
+		$altern = 0;
 		$output = '';
-		foreach ($result AS $k => $module)
+		foreach (self::$hookModulesCache[$hook_name] AS $array)
     	{
-			$moduleInstance = Module::getInstanceByName($module['name']);
-			if (!$moduleInstance)
+			if ($id_module AND $id_module != $array['id_module'])
 				continue;
-			$exceptions = $moduleInstance->getExceptions(intval($module['id_hook']), intval($moduleInstance->id));
-			$fileindex = basename($_SERVER['PHP_SELF']);
-			$show = true;
-			if (!empty($exceptions) AND is_array($exceptions))
-				foreach ($exceptions as $exception)
-					if ($fileindex == $exception['file_name'])
-						$show = false;
-			if (is_callable(array($moduleInstance, 'hook'.$hook_name)) AND $show)
+			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
+				continue;
+			
+			$exceptions = $moduleInstance->getExceptions(intval($array['id_hook']), $array['id_module']);
+			$phpSelf = basename($_SERVER['PHP_SELF']);
+			foreach ($exceptions as $exception)
+				if ($phpSelf == $exception['file_name'])
+					continue 2;
+			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
 			 {
 				$hookArgs['altern'] = ++$altern;
 				$output .= call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
