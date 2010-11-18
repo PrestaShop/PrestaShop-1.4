@@ -150,5 +150,9 @@ if ($employee->bo_uimode == 'hover')
 				}
 			</script>';
 echo '		<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
-			<div id="main">
+			<div id="main">'
+			.(file_exists(PS_ADMIN_DIR.'/../install') ? '<div style="background-color: #FFEBCC;border-bottom: 1px solid #F90;border-top: 1px solid #F90;line-height: 20px;margin: 10px 0px 10px;padding: 10px 20px;">'
+				.translate('For security reasons, you have to:').' '.
+				translate('deleted the /install folder').
+				'</div>' : '').'
 				<div id="content">';
