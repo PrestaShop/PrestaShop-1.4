@@ -789,14 +789,15 @@ class CartCore extends ObjectModel
 						return 0;
 				}
 
-		// Order total without fees
-		$orderTotal = $this->getOrderTotal(true, 7);	
+		// Order total in default currency without fees
+		$currency = Currency::getCurrencyInstance(intval($this->id_currency));
+		$order_total_dc = $this->getOrderTotal(true, 7) / $currency->conversion_rate;
 		
 		// Start with shipping cost at 0
         $shipping_cost = 0;
 		
 		// If no product added, return 0
-		if ($orderTotal <= 0 AND !intval(self::getNbProducts($this->id)))
+		if ($order_total_dc <= 0 AND !intval(self::getNbProducts($this->id)))
 			return $shipping_cost;
 
 		// Get id zone
@@ -820,6 +821,7 @@ class CartCore extends ObjectModel
 			
 			unset($carrier);
 		}
+	
 		if (empty($id_carrier))
 		{
 			if (intval($this->id_customer))
@@ -874,7 +876,7 @@ class CartCore extends ObjectModel
 				}
 				else // by price
 				{
-					$shipping = $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+					$shipping = $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
 
 					if (!isset($tmp))
 						$tmp = $shipping;
@@ -931,7 +933,7 @@ class CartCore extends ObjectModel
 							if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 								$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 							else // by price
-								$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+								$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
 						 }
 			}
 			else
@@ -939,7 +941,8 @@ class CartCore extends ObjectModel
 				if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 					$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 				else
-					$shipping_cost += $carrier->getDeliveryPriceByPrice($orderTotal, $id_zone);
+					$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
+					
 			}
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
