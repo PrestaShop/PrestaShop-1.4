@@ -25,3 +25,5 @@ UPDATE `PREFIX_order_slip` os SET os.`conversion_rate` = (
 
 UPDATE `PREFIX_configuration` SET `value` = "gridhtml" WHERE `name` = "PS_STATS_GRID_RENDER" LIMIT 1;
 UPDATE `PREFIX_module` SET `name` = "gridhtml" WHERE `name` = "gridextjs" LIMIT 1;
+
+UPDATE `PREFIX_tab` SET `class_name` = "AdminCMSContent" WHERE `class_name` = "AdminCMS" LIMIT 1;
