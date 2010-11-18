@@ -155,7 +155,8 @@ class CarrierCore extends ObjectModel
 	 */
 	public function getDeliveryPriceByWeight($totalWeight, $id_zone)
 	{
-		if (!isset(self::$priceByWeight[$this->id]))
+		$cache_key = $this->id.'_'.$totalWeight.'_'.$id_zone;
+		if (!isset(self::$priceByWeight[$cache_key]))
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
@@ -167,16 +168,17 @@ class CarrierCore extends ObjectModel
 			AND d.`id_carrier` = '.intval($this->id).'
 			ORDER BY w.`delimiter1` ASC');
 			if (!isset($result['price']))
-				self::$priceByWeight[$this->id] = $this->getMaxDeliveryPriceByWeight($id_zone);
+				self::$priceByWeight[$cache_key] = $this->getMaxDeliveryPriceByWeight($id_zone);
 			else
-				self::$priceByWeight[$this->id] = $result['price'];
+				self::$priceByWeight[$cache_key] = $result['price'];
 		}
-		return self::$priceByWeight[$this->id];
+		return self::$priceByWeight[$cache_key];
 	}
 
 	static public function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
 	{
-		if (!isset(self::$priceByWeight2[$id_carrier]))
+		$cache_key = $id_carrier.'_'.$totalWeight.'_'.$id_zone;
+		if (!isset(self::$priceByWeight2[$cache_key]))
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
@@ -187,9 +189,9 @@ class CarrierCore extends ObjectModel
 			AND '.floatval($totalWeight).' < w.`delimiter2`
 			AND d.`id_carrier` = '.intval($id_carrier).'
 			ORDER BY w.`delimiter1` ASC');
-			self::$priceByWeight2[$id_carrier] = (isset($result['price']));
+			self::$priceByWeight2[$cache_key] = (isset($result['price']));
 		}
-		return self::$priceByWeight2[$id_carrier];
+		return self::$priceByWeight2[$cache_key];
 	}
 
 	public function getMaxDeliveryPriceByWeight($id_zone)
@@ -215,7 +217,8 @@ class CarrierCore extends ObjectModel
 	 */
 	public function getDeliveryPriceByPrice($orderTotal, $id_zone)
 	{
-		if (!isset(self::$priceByPrice[$this->id]))
+		$cache_key = $this->id.'_'.$orderTotal.'_'.$id_zone;
+		if (!isset(self::$priceByPrice[$cache_key]))
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
@@ -227,16 +230,17 @@ class CarrierCore extends ObjectModel
 			AND d.`id_carrier` = '.intval($this->id).'
 			ORDER BY r.`delimiter1` ASC');
 			if (!isset($result['price']))
-				self::$priceByPrice[$this->id] = $this->getMaxDeliveryPriceByPrice($id_zone);
+				self::$priceByPrice[$cache_key] = $this->getMaxDeliveryPriceByPrice($id_zone);
 			else
-				self::$priceByPrice[$this->id] = $result['price'];
+				self::$priceByPrice[$cache_key] = $result['price'];
 		}
-		return self::$priceByPrice[$this->id];
+		return self::$priceByPrice[$cache_key];
 	}
 
 	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone)
 	{
-		if (!isset(self::$priceByPrice2[$id_carrier]))
+		$cache_key = $id_carrier.'_'.$orderTotal.'_'.$id_zone;
+		if (!isset(self::$priceByPrice2[$cache_key]))
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
@@ -247,9 +251,9 @@ class CarrierCore extends ObjectModel
 			AND '.floatval($orderTotal).' < r.`delimiter2`
 			AND d.`id_carrier` = '.intval($id_carrier).'
 			ORDER BY r.`delimiter1` ASC');
-			self::$priceByPrice2[$id_carrier] = (isset($result['price']));
+			self::$priceByPrice2[$cache_key] = (isset($result['price']));
 		}
-		return self::$priceByPrice2[$id_carrier];
+		return self::$priceByPrice2[$cache_key];
 	}
 
 	public function getMaxDeliveryPriceByPrice($id_zone)
