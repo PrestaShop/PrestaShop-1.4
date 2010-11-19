@@ -96,26 +96,24 @@
 				    	<td id="total_wrapping" class="price-discount">{displayPrice price=$total_wrapping_tax_exc}</td>
 				    </tr>
 				{/if}
-				{if $shippingCost > 0}
-					{if $use_taxes}
-						{if $priceDisplay}
-							<tr class="cart_total_delivery">
-								<td colspan="6">{l s='Total shipping (tax excl.):'}</td>
-								<td id="total_shipping" class="price">{displayPrice price=$shippingCostTaxExc}</td>
-							</tr>
-						{else}
-							<tr class="cart_total_delivery">
-								<td colspan="6">{l s='Total shipping (tax incl.):'}</td>
-								<td id="total_shipping" class="price">{displayPrice price=$shippingCost}</td>
-							</tr>
-						{/if}
+				{if $use_taxes}
+					{if $priceDisplay}
+						<tr class="cart_total_delivery" {if $shippingCost <= 0} style="display:none;"{/if}>
+							<td colspan="6">{l s='Total shipping (tax excl.):'}</td>
+							<td class="price" id="total_shipping">{displayPrice price=$shippingCostTaxExc}</td>
+						</tr>
 					{else}
-						<tr class="cart_total_delivery">
-							<td colspan="6">{l s='Total shipping:'}</td>
-							<td id="total_shipping" class="price">{displayPrice price=$shippingCostTaxExc}</td>
+						<tr class="cart_total_delivery"{if $shippingCost <= 0} style="display:none;"{/if}>
+							<td colspan="6">{l s='Total shipping (tax incl.):'}</td>
+							<td class="price" id="total_shipping" >{displayPrice price=$shippingCost}</td>
 						</tr>
 					{/if}
-				{/if}
+				{else}
+					<tr class="cart_total_delivery"{if $shippingCost <= 0} style="display:none;"{/if}>
+						<td colspan="6">{l s='Total shipping:'}</td>
+						<td class="price" id="total_shipping" >{displayPrice price=$shippingCostTaxExc}</td>
+					</tr>
+				{/if}			
 				{if $use_taxes}
 				<tr class="cart_total_price">
 					<td colspan="6">{l s='Total (tax excl.):'}</td>
@@ -135,12 +133,10 @@
 					<td id="total_price" class="price">{displayPrice price=$total_price_without_tax}</td>
 				</tr>
 				{/if}
-				{if $free_ship > 0 AND !$isVirtualCart}
-				<tr class="cart_free_shipping">
+				<tr class="cart_free_shipping" {if $free_ship < 0 || $isVirtualCart} style="display: none;" {/if}>
 					<td colspan="6" style="white-space: normal;">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
-					<td class="price">{displayPrice price=$free_ship}</td>
+					<td id="free_shipping" class="price">{displayPrice price=$free_ship}</td>
 				</tr>
-				{/if}
 			</tfoot>
 			<tbody>
 			{foreach from=$products item=product name=productLoop}

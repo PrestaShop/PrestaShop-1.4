@@ -275,7 +275,23 @@ function updateCartSummary(json)
 	$('#total_price_without_tax').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
 	$('#total_tax').html(formatCurrency(json.total_tax, currencyFormat, currencySign, currencyBlank));
 	$('#total_discount').html(formatCurrency(json.total_discounts, currencyFormat, currencySign, currencyBlank));
-	$('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
+	
+	if (json.total_shipping <= 0)
+		$('.cart_total_delivery').fadeOut();
+	else
+	{
+		$('.cart_total_delivery').fadeIn();
+		$('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));	
+	}
+
+	if (json.free_ship <= 0)
+		$('.cart_free_shipping').fadeOut();
+	else
+	{
+		$('.cart_free_shipping').fadeIn();
+		$('#free_shipping').html(formatCurrency(json.free_ship, currencyFormat, currencySign, currencyBlank));
+	}
+	
 	if (json.total_wrapping > 0)
 	{
 		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
@@ -285,7 +301,7 @@ function updateCartSummary(json)
 	{
 		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
 		$('#total_wrapping').parent().hide();
-	}
+	}	
 }
 
 function updateCustomizedDatas(json)

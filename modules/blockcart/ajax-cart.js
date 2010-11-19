@@ -208,7 +208,7 @@ var ajaxCart = {
 			dataType : "json",
 			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
 			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) 
-				if ($('body').attr('id') == 'order')
+				if ($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc')
 					deletProductFromSummary(idProduct+'_'+idCombination);
 			},
 			error: function() {alert('ERROR: unable to delete the product');}

@@ -272,6 +272,8 @@ if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FR
     	}
     $smarty->assign('free_ship', $total_free_ship);
 }
+
+
 // for compatibility with 1.2 themes
 foreach($summary['products'] AS $key => $product)
     $summary['products'][$key]['quantity'] = $product['cart_quantity'];
