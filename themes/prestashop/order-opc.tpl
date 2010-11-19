@@ -25,7 +25,7 @@
 {include file=$tpl_dir./breadcrumb.tpl}
 {if $productNumber}
 	<h2 id="cart_title">{l s='Your shopping cart'} <span id="summary_products_label" style="float:right;margin-right:10px;">{l s='contains'}<span id="summary_products_quantity">{$productNumber}</span> {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
-	<p style="display:none" id="emptyCartWarning" class="warning">Votre panier est vide</p>
+	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your cart is empty'}</p>
 	<div id="order-detail-content" class="table_block">
 		<table id="cart_summary" class="std">
 			<thead>
