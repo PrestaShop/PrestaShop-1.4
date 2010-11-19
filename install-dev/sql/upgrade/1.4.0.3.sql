@@ -23,7 +23,7 @@ UPDATE `PREFIX_order_slip` os SET os.`conversion_rate` = (
 	LIMIT 1
 );
 
-UPDATE `PREFIX_configuration` SET `value` = 'gridhtml' WHERE `name` = 'PS_STATS_GRID_RENDER' LIMIT 1;
+UPDATE `PREFIX_configuration` SET `value` = "gridhtml" WHERE `name` = "PS_STATS_GRID_RENDER" LIMIT 1;UPDATE `PREFIX_module` SET `name` = "gridhtml" WHERE `name` = "gridextjs" LIMIT 1;UPDATE `PREFIX_configuration` SET `value` = 'gridhtml' WHERE `name` = 'PS_STATS_GRID_RENDER' LIMIT 1;
 UPDATE `PREFIX_module` SET `name` = 'gridhtml' WHERE `name` = 'gridextjs' LIMIT 1;
 
 ALTER TABLE `PREFIX_attachments` MODIFY `mime` varchar(64) NOT NULL;
@@ -34,3 +34,6 @@ UPDATE `PREFIX_attachment` a SET `file_name` = (
 		);
 
 UPDATE `PREFIX_tab` SET `class_name` = 'AdminCMSContent' WHERE `class_name` = 'AdminCMS' LIMIT 1;
+
+SET @id_timezone = (SELECT `name` FROM `PREFIX_timezone` WHERE `id_timezone` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_TIMEZONE' LIMIT 1) LIMIT 1);
+UPDATE `PREFIX_configuration` SET `value` = @id_timezone WHERE `name` = "PS_TIMEZONE" LIMIT 1;

@@ -915,6 +915,10 @@ class ToolsCore
 		return $field === '' OR $field === NULL;
 	}
 
+	/**
+	* DEPRECATED FUNCTION
+	* DO NOT USE IT
+	**/
 	static public function getTimezones($select = false)
 	{
 		static $_cache = 0;

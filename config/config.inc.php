@@ -56,9 +56,6 @@ function d($var) {
 global $_MODULES;
 $_MODULES = array();
 
-/* Globals */
-global $defaultCountry;
-
 /* Load all configuration keys */
 Configuration::loadConfiguration();
 
@@ -69,18 +66,12 @@ Language::loadLanguages();
 Tax::loadTaxZones();
 
 /* Loading default country */
+global $defaultCountry;
 $defaultCountry = new Country(intval(Configuration::get('PS_COUNTRY_DEFAULT')), Configuration::get('PS_LANG_DEFAULT'));
 
-
-/*
- * It is not safe to rely on the system's timezone settings, but we can\'t easily determine the user timezone and the use of this function cause trouble for some configurations.
- * This will generate a PHP Strict Standards notice. To fix it up, uncomment the following line.
- */
+/* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
-{
-	$timezone = Tools::getTimezones(Configuration::get('PS_TIMEZONE'));
-	date_default_timezone_set($timezone);
-}
+	date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');

@@ -122,7 +122,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (54, 'PS_SEARCH_WEIGHT_ATTRIBUTE', '2', NOW(), NOW()),
 (55, 'PS_SEARCH_WEIGHT_FEATURE', '2', NOW(), NOW()),
 (56, 'PS_SEARCH_AJAX', '1', NOW(), NOW()),
-(57, 'PS_TIMEZONE', '374', NOW(), NOW()),
+(57, 'PS_TIMEZONE', 'Europe/Paris', NOW(), NOW()),
 (58, 'PS_THEME_V11', 0, NOW(), NOW()),
 (59, 'PRESTASTORE_LIVE', 1, NOW(), NOW()),
 (60, 'PS_TIN_ACTIVE', 0, NOW(), NOW()),

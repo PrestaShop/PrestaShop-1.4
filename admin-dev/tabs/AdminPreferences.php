@@ -15,19 +15,14 @@ class AdminPreferences extends AdminTab
 {
 	public function __construct()
 	{
-
 		global $cookie;
 
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
-
-		$tmz = Tools::getTimezones();
-		$txs = Tax::getTaxes(intval($cookie->id_lang));
-		$timezone = array();
-		foreach ($tmz as $id => $name)
-			$timezone[] = array('id' => $id, 'name' => $name);
+		
+		$timezones = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT name FROM '._DB_PREFIX_.'timezone');
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
-		foreach ($txs as $tax)
+		foreach (Tax::getTaxes(intval($cookie->id_lang)) as $tax)
 			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
 		
 		$order_process_type = array(
@@ -85,7 +80,7 @@ class AdminPreferences extends AdminTab
 			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check updates to modules'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			);
 			if (function_exists('date_default_timezone_set'))
-				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isUnsignedId', 'cast' => 'intval', 'type' => 'select', 'list' => $timezone, 'identifier' => 'id');
+				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
 			$this->_fieldsGeneral['PS_THEME_V11'] = array('title' => $this->l('v1.1 theme compatibility:'), 'desc' => $this->l('My shop use a PrestaShop v1.1 theme (SSL will generate warnings in customer browser)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
 
 		parent::__construct();
