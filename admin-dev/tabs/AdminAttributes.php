@@ -98,7 +98,10 @@ class AdminAttributes extends AdminTab
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
-		</form>';
+		</form>
+		<script>
+			showAttributeColorGroup(\'id_attribute_group\', \'colorAttributeProperties\');
+		</script>';
 	}
 
 	/**
