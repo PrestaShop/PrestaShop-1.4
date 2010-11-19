@@ -59,7 +59,8 @@ CREATE TABLE `PREFIX_alias` (
 CREATE TABLE `PREFIX_attachment` (
   `id_attachment` int(10) unsigned NOT NULL auto_increment,
   `file` varchar(40) NOT NULL,
-  `mime` varchar(32) NOT NULL,
+  `file_name` varchar(128) NOT NULL,
+  `mime` varchar(64) NOT NULL,
   PRIMARY KEY  (`id_attachment`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

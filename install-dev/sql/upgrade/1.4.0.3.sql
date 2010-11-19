@@ -23,7 +23,14 @@ UPDATE `PREFIX_order_slip` os SET os.`conversion_rate` = (
 	LIMIT 1
 );
 
-UPDATE `PREFIX_configuration` SET `value` = "gridhtml" WHERE `name` = "PS_STATS_GRID_RENDER" LIMIT 1;
-UPDATE `PREFIX_module` SET `name` = "gridhtml" WHERE `name` = "gridextjs" LIMIT 1;
+UPDATE `PREFIX_configuration` SET `value` = 'gridhtml' WHERE `name` = 'PS_STATS_GRID_RENDER' LIMIT 1;
+UPDATE `PREFIX_module` SET `name` = 'gridhtml' WHERE `name` = 'gridextjs' LIMIT 1;
 
-UPDATE `PREFIX_tab` SET `class_name` = "AdminCMSContent" WHERE `class_name` = "AdminCMS" LIMIT 1;
+ALTER TABLE `PREFIX_attachments` MODIFY `mime` varchar(64) NOT NULL;
+ALTER TABLE `PREFIX_attachments` ADD `file_name` varchar(128) NOT NULL default '' AFTER `file`;
+UPDATE `PREFIX_attachment` a SET `file_name` = (
+		SELECT `name` FROM `PREFIX_attachment_lang` al WHERE al.`id_attachment` = a.`id_attachment` AND al.`id_lang` = (
+				SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_LANG_DEFAULT')
+		);
+
+UPDATE `PREFIX_tab` SET `class_name` = 'AdminCMSContent' WHERE `class_name` = 'AdminCMS' LIMIT 1;

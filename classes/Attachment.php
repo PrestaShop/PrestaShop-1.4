@@ -15,6 +15,7 @@
 class AttachmentCore extends ObjectModel
 {
 	public		$file;
+	public		$file_name;
 	public		$name;
 	public		$mime;
 	public		$description;
@@ -23,8 +24,8 @@ class AttachmentCore extends ObjectModel
 	public		$position;
 
 	protected	$fieldsRequired = array('file', 'mime');
-	protected	$fieldsSize = array('file' => 40, 'mime' => 32);
-	protected	$fieldsValidate = array('file' => 'isGenericName', 'mime' => 'isCleanHtml');
+	protected	$fieldsSize = array('file' => 40, 'mime' => 64, 'file_name' => 128);
+	protected	$fieldsValidate = array('file' => 'isGenericName', 'mime' => 'isCleanHtml', 'file_name' => 'isGenericName');
 
 	protected	$fieldsRequiredLang = array('name');
 	protected	$fieldsSizeLang = array('name' => 32);
@@ -36,6 +37,7 @@ class AttachmentCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
+		$fields['file_name'] = pSQL($this->file_name);
 		$fields['file'] = pSQL($this->file);
 		$fields['mime'] = pSQL($this->mime);
 		return $fields;

@@ -150,6 +150,64 @@ class AdminProducts extends AdminTab
 		}
 		
 		/* Update attachments */
+		elseif (Tools::isSubmit('submitAddAttachments'))
+		{
+			if ($this->tabAccess['add'] === '1')
+			{
+				$languages = Language::getLanguages(false);
+				foreach ($languages AS $language)
+				{
+					if (!Validate::isGenericName(Tools::getValue('attachment_name_'.intval($language['id_lang']))))
+						$this->_errors[] = Tools::displayError('Invalid Name');
+					elseif (strlen(Tools::getValue('attachment_name_'.intval($language['id_lang']))) > 32)
+						$this->_errors[] = Tools::displayError('Name too long');
+					if (!Validate::isCleanHtml(Tools::getValue('attachment_description_'.intval($language['id_lang']))))
+						$this->_errors[] = Tools::displayError('Invalid description');
+				}
+				if (!sizeof($this->_errors))
+				{
+					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
+					{
+						if ($_FILES['attachment_file']['size'] > $this->maxFileSize)
+							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.($this->maxFileSize/1000).' '.$this->l('kb');
+						else
+						{
+							$uploadDir = dirname(__FILE__).'/../../download/';
+							do $uniqid = sha1(microtime());	while (file_exists($uploadDir.$uniqid));
+							if (!copy($_FILES['attachment_file']['tmp_name'], $uploadDir.$uniqid))
+								$this->_errors[] = $this->l('File copy failed');
+							@unlink($_FILES['attachment_file']['tmp_name']);
+						}
+					}
+					$attachment = new Attachment();
+					foreach ($languages AS $language)
+					{
+						if (isset($_POST['attachment_name_'.intval($language['id_lang'])]))
+							$attachment->name[intval($language['id_lang'])] = pSQL($_POST['attachment_name_'.intval($language['id_lang'])]);
+						if (isset($_POST['attachment_description_'.intval($language['id_lang'])]))
+							$attachment->description[intval($language['id_lang'])] = pSQL($_POST['attachment_description_'.intval($language['id_lang'])]);
+					}
+					$attachment->file = $uniqid;
+					$attachment->mime = $_FILES['attachment_file']['type'];
+					$attachment->file_name = pSQL($_FILES['attachment_file']['name']);
+					if (empty($attachment->mime) OR strlen($attachment->mime) > 64)
+						$this->_errors[] = Tools::displayError('Invalid file extension');
+					if (!Validate::isGenericName($attachment->file_name))
+						$this->_errors[] = Tools::displayError('Invalid file name');
+					if (strlen($attachment->file_name) > 128)
+						$this->_errors[] = Tools::displayError('File name too long');
+					if (!sizeof($this->_errors))
+					{
+						$attachment->add();
+						Tools::redirectAdmin($currentIndex.'&id_product='.intval(Tools::getValue($this->identifier)).'&addproduct&conf=4&tabs=6&token='.($token ? $token : $this->token));
+					}
+					else
+						$this->_errors[] = Tools::displayError('Invalid file');
+				}
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+		}
 		elseif (Tools::isSubmit('submitAttachments'))
 		{
 			if ($this->tabAccess['edit'] === '1')
@@ -1686,10 +1744,38 @@ class AdminProducts extends AdminTab
 		$attach1 = Attachment::getAttachments($cookie->id_lang, $obj->id, true);
 		$attach2 = Attachment::getAttachments($cookie->id_lang, $obj->id, false);
 		
-		echo '
-		<a href="index.php?tab=AdminAttachments&addattachment&token='.Tools::getAdminToken('AdminAttachments'.intval(Tab::getIdFromClassName('AdminAttachments')).intval($cookie->id_employee)).'">
-			<img src="../img/admin/add.gif" alt="new" title="'.$this->l('Upload new attachment').'" />&nbsp;'.$this->l('Upload new attachment').'
-		</a>
+				echo '
+		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
+			<fieldset><legend><img src="../img/t/AdminAttachments.gif" />'.$this->l('Attachment').'</legend>
+				<label>'.$this->l('Filename:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '	<div id="attachment_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<input size="33" type="text" name="attachment_name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'attachment_name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+					</div>';							
+		$this->displayFlags($languages, $defaultLanguage, 'attachment_name¤attachment_description', 'attachment_name');
+		echo '	</div>
+				<div class="clear">&nbsp;</div>
+				<label>'.$this->l('Description:').' </label>
+				<div class="margin-form">';
+		foreach ($languages as $language)
+			echo '	<div id="attachment_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
+						<textarea name="attachment_description_'.$language['id_lang'].'">'.htmlentities($this->getFieldValue($obj, 'attachment_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+					</div>';							
+		$this->displayFlags($languages, $defaultLanguage, 'attachment_name¤attachment_description', 'attachment_description');
+		echo '	</div>
+				<div class="clear">&nbsp;</div>
+				<label>'.$this->l('File').'</label>
+				<div class="margin-form">
+					<p><input type="file" name="attachment_file" /></p>
+					<p>'.$this->l('Upload file from your computer').'</p>
+				</div>
+				<div class="clear">&nbsp;</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('Add a new attachment file').'" name="submitAddAttachments" class="button" />
+				</div>
+				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
+			</fieldset>
 		<div class="clear">&nbsp;</div>
 		<table><tr>
 			<td>
