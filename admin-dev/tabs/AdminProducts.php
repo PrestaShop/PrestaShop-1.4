@@ -514,7 +514,7 @@ class AdminProducts extends AdminTab
 					$product->deleteAttributeCombinaison(intval(Tools::getValue('id_product_attribute')));
 					$product->checkDefaultAttributes();
 					$product->updateQuantityProductWithAttributeQuantity();
-					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
+					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('impossible to delete attribute');
@@ -530,7 +530,7 @@ class AdminProducts extends AdminTab
 				{
 					$product->deleteProductAttributes();
 					$product->updateQuantityProductWithAttributeQuantity();
-					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
+					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('impossible to delete attributes');
@@ -544,7 +544,7 @@ class AdminProducts extends AdminTab
 			{
 				$product->deleteDefaultAttributes();
 				$product->setDefaultAttribute(intval(Tools::getValue('id_product_attribute')));
-				Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=2&id_product='.$product->id.'&token='.($token ? $token : $this->token));
+				Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.intval(Tools::getValue('id_category')).'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 			}
 			else
 				$this->_errors[] = Tools::displayError('impossible to make default attribute');
