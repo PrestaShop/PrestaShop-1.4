@@ -1830,16 +1830,18 @@ class AdminProducts extends AdminTab
 					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductManufacturers:1},
 						function(j) {
 							var options = $("select#id_manufacturer").html();
-							for (var i = 0; i < j.length; i++)
-								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							if (j)
+								for (var i = 0; i < j.length; i++)
+									options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_manufacturer").html(options);
 						}
 					);
 					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductSuppliers:1},
 						function(j) {
 							var options = $("select#id_supplier").html();
-							for (var i = 0; i < j.length; i++)
-								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							if (j)
+								for (var i = 0; i < j.length; i++)
+									options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_supplier").html(options);
 						}
 					);
