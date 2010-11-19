@@ -282,7 +282,14 @@ class AdminCustomerThreads extends AdminTab
 		if (!$email)
 		{
 			if (!empty($message['id_product']) AND empty($message['employee_name']))
-				$lastidorder = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'order_detail WHERE product_id = '.intval($message['id_product']).' ORDER BY id_order DESC');
+				$id_order_product = Db::getInstance()->getValue('
+				SELECT o.id_order
+				FROM '._DB_PREFIX_.'orders o
+				LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
+				WHERE o.id_customer = '.intval($message['id_customer']).'
+				AND od.product_id = '.intval($message['id_product']).'
+				ORDER BY o.date_add DESC');
+			
 			$output = '
 			<fieldset style="'.(!empty($message['employee_name']) ? 'background: rgb(255,236,242);' : '').'width:600px;margin-top:10px">
 				<legend '.(empty($message['employee_name']) ? '' : 'style="background:rgb(255,210,225)"').'>'.(
@@ -313,7 +320,7 @@ class AdminCustomerThreads extends AdminTab
 						: ''
 					).(
 						(!empty($message['id_product']) AND empty($message['employee_name']))
-						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($lastidorder).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($id_order_product).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'<br />
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
