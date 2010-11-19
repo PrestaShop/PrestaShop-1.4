@@ -94,14 +94,14 @@ abstract class ObjectModelCore
 		/* Load object from database if object id is present */
 		if ($id)
 		{
-			if (!isset(self::$_cache[$this->table][intval($id)]))
-				self::$_cache[$this->table][intval($id)] = Db::getInstance()->getRow('
+			if (!isset(self::$_cache[$this->table][intval($id)][intval($id_lang)]))
+				self::$_cache[$this->table][intval($id)][intval($id_lang)] = Db::getInstance()->getRow('
 				SELECT *
 				FROM `'._DB_PREFIX_.$this->table.'` a '.
 				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.intval($id_lang).')' : '')
 				.' WHERE a.`'.$this->identifier.'` = '.intval($id));
 
-			$result = self::$_cache[$this->table][intval($id)];
+			$result = self::$_cache[$this->table][intval($id)][intval($id_lang)];
 			if (!$result) return false;
 			$this->id = intval($id);
 			foreach ($result AS $key => $value)
