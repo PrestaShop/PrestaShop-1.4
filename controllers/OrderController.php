@@ -353,7 +353,7 @@ class OrderControllerCore extends FrontController
 		if (sizeof($this->errors))
 		{
 			$this->smarty->assign('errors', $this->errors);
-			$this->displayCarrier();
+			$this->assignCarrier();
 			include(dirname(__FILE__).'/../footer.php');
 			exit;
 		}
