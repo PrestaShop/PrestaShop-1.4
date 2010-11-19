@@ -273,16 +273,17 @@ class AdminGroups extends AdminTab
 				{
 					$id_group_reductions = Tools::getValue('gr_id_group_reduction');
 					$reductions = Tools::getValue('gr_reduction');
-					foreach ($id_group_reductions AS $key => $id_group_reduction)
-						if (!Validate::isUnsignedId($id_group_reductions[$key]) OR !Validate::isPrice($reductions[$key]))
-							$this->_errors[] = Tools::displayError();
-						else
-						{
-							$groupReduction = new GroupReduction(intval($id_group_reductions[$key]));
-							$groupReduction->reduction = $reductions[$key] / 100;
-							if (!$groupReduction->update())
-								$this->errors[] = Tools::displayError('Impossible to update group reductions');
-						}
+					if ($id_group_reductions)
+						foreach ($id_group_reductions AS $key => $id_group_reduction)
+							if (!Validate::isUnsignedId($id_group_reductions[$key]) OR !Validate::isPrice($reductions[$key]))
+								$this->_errors[] = Tools::displayError();
+							else
+							{
+								$groupReduction = new GroupReduction(intval($id_group_reductions[$key]));
+								$groupReduction->reduction = $reductions[$key] / 100;
+								if (!$groupReduction->update())
+									$this->errors[] = Tools::displayError('Impossible to update group reductions');
+							}
 					if (!sizeof($this->_errors))
 						parent::postProcess();
 				}
