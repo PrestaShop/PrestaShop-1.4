@@ -290,19 +290,30 @@ class ToolsCore
 	*
 	* @param float $price Product price
 	* @param object $currency Current currency object
+	* @param boolean $to_currency convert to currency or from currency to default currency
 	*/
-	static public function convertPrice($price, $currency = NULL)
+	static public function convertPrice($price, $currency = NULL, $to_currency = true)
 	{
 		if ($currency === NULL)
 			$currency = Currency::getCurrent();
 		elseif (is_numeric($currency))
 			$currency = Currency::getCurrencyInstance($currency);
+			
 		$c_id = (is_array($currency) ? $currency['id_currency'] : $currency->id);
 		$c_rate = (is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate);
+		
 		if ($c_id != intval(Configuration::get('PS_CURRENCY_DEFAULT')))
-			$price *= $c_rate;
+		{
+			if ($to_currency)
+				$price *= $c_rate;
+			else 
+				$price /= $c_rate;
+		}
+		
 		return $price;
 	}
+	
+	
 
 	/**
 	* Display date regarding to language preferences

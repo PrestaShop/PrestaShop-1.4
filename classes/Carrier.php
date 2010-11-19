@@ -215,11 +215,14 @@ class CarrierCore extends ObjectModel
 	 * @param integer $id_zone Zone id (for customer delivery address)
 	 * @return float Delivery price
 	 */
-	public function getDeliveryPriceByPrice($orderTotal, $id_zone)
+	public function getDeliveryPriceByPrice($orderTotal, $id_zone, $id_currency = NULL)
 	{
-		$cache_key = $this->id.'_'.$orderTotal.'_'.$id_zone;
+		$cache_key = $this->id.'_'.$orderTotal.'_'.$id_zone.'_'.$id_currency;
 		if (!isset(self::$priceByPrice[$cache_key]))
-		{
+		{			
+			if (!empty($id_currency))
+				$orderTotal = Tools::convertPrice($orderTotal, $id_currency, false);			
+			
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
 			FROM `'._DB_PREFIX_.'delivery` d
@@ -237,11 +240,23 @@ class CarrierCore extends ObjectModel
 		return self::$priceByPrice[$cache_key];
 	}
 
-	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone)
+	/**
+	 * Check delivery prices for a given order
+	 *
+	 * @param id_carrier 
+	 * @param floatval $orderTotal Order total to pay
+	 * @param integer $id_zone Zone id (for customer delivery address)
+	 * @param integer $id_currency 
+	 * @return float Delivery price
+	 */
+	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone, $id_currency = NULL)
 	{
-		$cache_key = $id_carrier.'_'.$orderTotal.'_'.$id_zone;
+		$cache_key = $id_carrier.'_'.$orderTotal.'_'.$id_zone.'_'.$id_currency;
 		if (!isset(self::$priceByPrice2[$cache_key]))
 		{
+			if (!empty($id_currency))
+				$orderTotal = Tools::convertPrice($orderTotal, $id_currency, false);			
+			
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
 			FROM `'._DB_PREFIX_.'delivery` d
@@ -388,7 +403,7 @@ class CarrierCore extends ObjectModel
 		
 				// Get only carriers that have a range compatible with cart
 				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
-				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone))))
+				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, 4), $id_zone, $cart->id_currency))))
 					{
 						unset($result[$k]);
 						continue ;

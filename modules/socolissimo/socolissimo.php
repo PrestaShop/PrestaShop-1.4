@@ -827,7 +827,7 @@ class Socolissimo extends Module
 
 			// Get only carriers that have a range compatible with cart
 			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight(intval($carrier->id), $cart->getTotalWeight(), $id_zone)))
-			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice(intval($carrier->id), $cart->getOrderTotal(true, 4), $id_zone))))
+			OR (!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice(intval($carrier->id), $cart->getOrderTotal(true, 4), $id_zone, $cart->id_currency))))
 				{
 					return false;
 				}

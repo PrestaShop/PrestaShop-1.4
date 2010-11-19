@@ -446,7 +446,7 @@ class OrderControllerCore extends FrontController
 
 				// Get only carriers that have a range compatible with cart
 				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->cart->getTotalWeight(), $id_zone)))
-				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->cart->getOrderTotal(true, 4), $id_zone))))
+				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->cart->getOrderTotal(true, 4), $id_zone, $this->cart->id_currency))))
 					{
 						unset($result[$k]);
 						continue ;

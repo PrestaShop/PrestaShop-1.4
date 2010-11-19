@@ -790,14 +790,13 @@ class CartCore extends ObjectModel
 				}
 
 		// Order total in default currency without fees
-		$currency = Currency::getCurrencyInstance(intval($this->id_currency));
-		$order_total_dc = $this->getOrderTotal(true, 7) / $currency->conversion_rate;
+		$order_total = $this->getOrderTotal(true, 7);
 		
 		// Start with shipping cost at 0
         $shipping_cost = 0;
 		
 		// If no product added, return 0
-		if ($order_total_dc <= 0 AND !intval(self::getNbProducts($this->id)))
+		if ($order_total <= 0 AND !intval(self::getNbProducts($this->id)))
 			return $shipping_cost;
 
 		// Get id zone
@@ -814,7 +813,7 @@ class CartCore extends ObjectModel
 			$carrier = new Carrier(intval(Configuration::get('PS_CARRIER_DEFAULT')), Configuration::get('PS_LANG_DEFAULT'));
 
 			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (Carrier::checkDeliveryPriceByWeight(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
-			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone))))
+			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice(intval(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone, intval($this->id_currency)))))
 			{
 				$id_carrier = intval(Configuration::get('PS_CARRIER_DEFAULT'));
 			}
@@ -857,7 +856,7 @@ class CartCore extends ObjectModel
 				{
 					// Get only carriers that have a range compatible with cart
 					if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
-					OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone))))
+					OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone, intval($this->id_currency)))))
 					{
 						unset($result[$k]);
 						continue ;
@@ -876,7 +875,7 @@ class CartCore extends ObjectModel
 				}
 				else // by price
 				{
-					$shipping = $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
+					$shipping = $carrier->getDeliveryPriceByPrice($order_total, $id_zone, intval($this->id_currency));
 
 					if (!isset($tmp))
 						$tmp = $shipping;
@@ -927,13 +926,13 @@ class CartCore extends ObjectModel
 				else
 					$id_zone = intval($defaultCountry->id_zone);
 				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
-						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone))))
+						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone, intval($this->id_currency)))))
 						$shipping_cost += 0;
 					else {
 							if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 								$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 							else // by price
-								$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
+								$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total, $id_zone, intval($this->id_currency));
 						 }
 			}
 			else
@@ -941,7 +940,7 @@ class CartCore extends ObjectModel
 				if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
 					$shipping_cost += $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 				else
-					$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total_dc, $id_zone);
+					$shipping_cost += $carrier->getDeliveryPriceByPrice($order_total, $id_zone, intval($this->id_currency));
 					
 			}
 		// Adding handling charges
