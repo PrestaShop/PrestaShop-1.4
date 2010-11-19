@@ -276,14 +276,14 @@ class CarrierCore extends ObjectModel
 	 * @param string $rangeTable Table name (price or weight)
 	 * @return array Delivery prices
 	 */
-	public static function getDeliveryPriceByRanges($rangeTable)
+	public static function getDeliveryPriceByRanges($rangeTable, $id_carrier)
 	{
 		$rangeTable = pSQL($rangeTable);
 		return Db::getInstance()->ExecuteS('
 		SELECT d.`id_'.$rangeTable.'`, d.`id_carrier`, d.`id_zone`, d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
 		LEFT JOIN `'._DB_PREFIX_.$rangeTable.'` r ON r.`id_'.$rangeTable.'` = d.`id_'.$rangeTable.'`
-		WHERE (d.`id_'.$rangeTable.'` IS NOT NULL AND d.`id_'.$rangeTable.'` != 0)
+		WHERE (d.`id_'.$rangeTable.'` IS NOT NULL AND d.`id_'.$rangeTable.'` != 0 AND d.`id_carrier` = '.intval($id_carrier).')
 		ORDER BY r.`delimiter1` ASC');
 	}
 

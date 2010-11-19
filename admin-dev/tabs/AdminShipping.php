@@ -206,11 +206,10 @@ class AdminShipping extends AdminTab
 				$rangeObj = $carrierSelected->getRangeObject();
 				$rangeTable = $carrierSelected->getRangeTable();
 				$suffix = $carrierSelected->getRangeSuffix();
-				
+
 				$rangeIdentifier = 'id_'.$rangeTable;
 				$ranges = $rangeObj->getRanges($id_carrier);
-
-				$delivery = Carrier::getDeliveryPriceByRanges($rangeTable);
+				$delivery = Carrier::getDeliveryPriceByRanges($rangeTable, $id_carrier);
 				foreach ($delivery AS $deliv)
 					$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];
 				foreach ($ranges AS $range)
