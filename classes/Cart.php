@@ -231,7 +231,7 @@ class CartCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'cart_product`
 			WHERE `id_cart` = '.intval($this->id).'
 			ORDER BY `date_add` DESC';
-		$result = Db::getInstance()->GetRow($sql);
+		$result = Db::getInstance()->getRow($sql);
 		if ($result AND isset($result['id_product']) AND $result['id_product'])
 			return $result;
 		return false;

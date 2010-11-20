@@ -248,7 +248,7 @@ class MailAlerts extends Module
 
 	public function hookUpdateProductAttribute($params)
 	{
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance()->getRow('
 			SELECT `id_product`, `quantity` 
 			FROM `'._DB_PREFIX_.'product_attribute` 
 			WHERE `id_product_attribute` = '.intval($params['id_product_attribute']));

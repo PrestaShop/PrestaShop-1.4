@@ -189,7 +189,7 @@ class CustomerCore extends ObjectModel
 	 	if (!Validate::isEmail($email) OR ($passwd AND !Validate::isPasswd($passwd)))
 	 		die (Tools::displayError());
 
-		$result = Db::getInstance()->GetRow('
+		$result = Db::getInstance()->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_	.'customer`
 		WHERE `active` = 1

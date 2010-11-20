@@ -664,7 +664,7 @@ class Socolissimo extends Module
 	
 	public function isSameAddress($idAddress,$idCart,$idCustomer)
 	{
-		$return = Db::getInstance()->GetRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.intval($idCart).'\' AND id_customer =\''.intval($idCustomer).'\'');
+		$return = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.intval($idCart).'\' AND id_customer =\''.intval($idCustomer).'\'');
 		$psAddress = new Address(intval($idAddress));
 		$newAddress = new Address();
 		

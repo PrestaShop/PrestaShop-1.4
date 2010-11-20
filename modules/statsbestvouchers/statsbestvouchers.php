@@ -87,7 +87,7 @@ class StatsBestVouchers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->GetRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
 		return $result['total'];
 	}
 

@@ -69,7 +69,7 @@ class HookCore extends ObjectModel
 	
 	static public function getModuleFromHook($id_hook, $id_module)
 	{
-		return Db::getInstance()->GetRow('
+		return Db::getInstance()->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
