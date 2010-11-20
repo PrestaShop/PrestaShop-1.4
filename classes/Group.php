@@ -129,6 +129,8 @@ class GroupCore extends ObjectModel
 
 	public function delete()
 	{
+		if ($this->id == _PS_DEFAULT_CUSTOMER_GROUP_)
+			return false;
 		if (parent::delete())
 		{
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.intval($this->id));
