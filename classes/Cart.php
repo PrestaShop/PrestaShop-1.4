@@ -153,7 +153,9 @@ class CartCore extends ObjectModel
 			$totalProducts_moy += $product['total_wt'];
 			$ratioTax += $product['total_wt'] * $product['rate'];
 		}
-		return $ratioTax / $totalProducts_moy;
+		if ($totalProducts_moy > 0)
+			return $ratioTax / $totalProducts_moy;
+		return 0;
 	}
 
 	/**
