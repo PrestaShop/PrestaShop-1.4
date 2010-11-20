@@ -37,7 +37,8 @@ class BlockUserInfo extends Module
 			'logged' => $cookie->isLogged(),
 			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 			'firstName' => ($cookie->logged ? $cookie->customer_firstname : false),
-			'lastName' => ($cookie->logged ? $cookie->customer_lastname : false)
+			'lastName' => ($cookie->logged ? $cookie->customer_lastname : false),
+			'order_process' => Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'order'
 		));
 		return $this->display(__FILE__, 'blockuserinfo.tpl');
 	}
