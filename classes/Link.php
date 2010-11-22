@@ -137,28 +137,31 @@ class LinkCore
 		return $protocol.Tools::getMediaServer($filepath).$filepath;
 	}
 	
-	public function getPageLink($filename, $ssl = false)
+	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
 	{
-		global $iso, $cookie;
-
+		if($id_lang == NULL)
+		{
+			global $cookie;
+			$id_lang = intval($cookie->id_lang);
+		}
 		$base = $ssl ? Tools::getHttpHost(true) : _PS_BASE_URL_ ;
-		if (array_key_exists($filename, self::$cache['page']))
-			$uri_path = self::$cache['page'][$filename];
+		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']))
+			$uri_path = self::$cache['page'][$filename.'_'.$id_lang];
 		else
 		{
-			if ($this->allow == 1 && file_exists($filename))
+			if ($this->allow == 1)
 			{
 				$pagename = substr($filename, 0, -4);
 				$url_rewrite = Db::getInstance()->getValue('
 				SELECT url_rewrite
 				FROM `'._DB_PREFIX_.'meta` m
 				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.intval($cookie->id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-				$uri_path = $url_rewrite ? 'lang-'.$iso.'/'.$url_rewrite : $filename;
+				WHERE id_lang = '.intval($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
+				$uri_path = $url_rewrite ? $this->getLangLink(intval($id_lang)).$url_rewrite : $filename;
 			}
 			else
 				$uri_path = $filename;
-			self::$cache['page'][$filename] = $uri_path;
+			self::$cache['page'][$filename.'_'.$id_lang] = $uri_path;
 		}
 		return $base.__PS_BASE_URI__.$uri_path;
 	}
@@ -261,7 +264,7 @@ class LinkCore
 			$id_lang = intval($cookie->id_lang);
 		}
 		
-		if (!$this->allow OR $id_lang == Configuration::get('PS_LANG_DEFAULT'))
+		if (!$this->allow)
 			return NULL;
 		return 'lang-'.Language::getIsoById(intval($id_lang)).'/';
 	}

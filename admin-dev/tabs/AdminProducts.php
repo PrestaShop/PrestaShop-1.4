@@ -2275,18 +2275,19 @@ class AdminProducts extends AdminTab
 								<input type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>
 							</td>
 						</tr>
-						<tr>';
+						<tr>
+						<tr>
+						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
+							<td style="padding-bottom:5px;">
+								<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
+								<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
+							</td>
+						</tr>';
 					}
 				echo '<td class="col-left">'.$this->l('Quantity in stock:').'</td>
 						<td style="padding-bottom:5px;"><b>'.$qty.'</b>
 					</tr>
-					<tr>
-						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
-						<td style="padding-bottom:5px;">
-							<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
-							<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
-						</td>
-					</tr>
+					
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>					
 						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
@@ -2872,6 +2873,13 @@ class AdminProducts extends AdminTab
 				echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 			echo '</select>
 					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="0"/>
+				</td>
+			</tr>
+			<tr>
+			<td class="col-left">'.$this->l('Minimal quantity:').'</td>
+				<td style="padding-bottom:5px;">
+					<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
+					<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
 				</td>
 			</tr>
 		  <tr>

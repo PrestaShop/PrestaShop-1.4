@@ -51,7 +51,8 @@ class Gsitemap extends Module
 		Configuration::updateValue('GSITEMAP_ALL_CMS', intval(Tools::getValue('GSITEMAP_ALL_CMS')));
 		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', intval(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
 		$link = new Link();
-		
+		$langs = Language::getLanguages();
+				
 		$xmlString = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -81,7 +82,7 @@ XML;
 		
 		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
 		foreach($cmss AS $cms)
-			$this->_addSitemapNode($xml, $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite'], intval($cms['id_lang'])), '0.8', 'daily');
+			$this->_addSitemapNode($xml, $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite'], false, intval($cms['id_lang'])), '0.8', 'daily');
 		
 		$categories = Db::getInstance()->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
@@ -122,17 +123,27 @@ XML;
 				$priority = 0.1;
 
 			$tmpLink = $link->getProductLink(intval($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], intval($product['id_lang']));
-			
 			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
 			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
-					
         }
 		
 		/* Add classic pages (contact, best sales, new products...) */
-		$pages = array('authentication', 'best-sales', 'category', 'contact-form', 'discount', 'index', 'manufacturer', 'new-products', 'prices-drop', 'search', 'supplier');
+		$pages = array(
+			'authentication' => true, 
+			'best-sales' => false, 
+			'contact-form' => true, 
+			'discount' => false, 
+			'index' => false, 
+			'manufacturer' => false, 
+			'new-products' => false, 
+			'prices-drop' => false, 
+			'search' => false, 
+			'supplier' => false, 
+			'store' => false);
 
-		foreach ($pages AS $page)
-			$this->_addSitemapNode($xml, htmlspecialchars('http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.$page.'.php'), '0.5', 'monthly');
+		foreach ($pages AS $page => $ssl)
+			foreach($langs as $lang)
+				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');
 
         $xmlString = $xml->asXML();
 		

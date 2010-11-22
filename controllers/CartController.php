@@ -82,7 +82,7 @@ class CartControllerCore extends FrontController
 					{
 						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
 							if (Tools::getValue('ajax') == 'true')
-								die('{\'hasError\' : true, errors : [\''.Tools::displayError('there is not enough product in stock', false).'\']}');
+								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
 							else
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
