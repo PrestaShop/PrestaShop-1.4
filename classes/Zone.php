@@ -29,7 +29,6 @@ class ZoneCore extends ObjectModel
 	protected 	$identifier = 'id_zone';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'zones',
 	);
 
 	public function getFields()

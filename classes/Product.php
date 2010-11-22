@@ -224,7 +224,6 @@ class ProductCore extends ObjectModel
 	protected 	$identifier = 'id_product';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'products',
 		'fields' => array(
 			'id_tax' => array('sqlId' => 'id_tax', 'required' => true, 'xlink_resource'=> 'taxes'),
 			'out_of_stock' => array('sqlId' => 'out_of_stock', 'required' => true),

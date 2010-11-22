@@ -85,7 +85,6 @@ class CustomerCore extends ObjectModel
 		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDniBool', 'note' => 'isCleanHtml');
 
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'customers',
 		'fields' => array(
 			'id_default_group' => array('sqlId' => 'id_default_group'),
 			'birthday' => array('sqlId' => 'birthday'),

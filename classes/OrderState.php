@@ -49,7 +49,6 @@ class OrderStateCore extends ObjectModel
 	protected 	$identifier = 'id_order_state';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'order_states',
 		'fields' => array(
 			'unremovable' => array('sqlId' => 'unremovable'),
 			'delivery' => array('sqlId' => 'delivery'),

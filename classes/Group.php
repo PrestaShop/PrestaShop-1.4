@@ -48,7 +48,6 @@ class GroupCore extends ObjectModel
 	private static $_groupPriceDisplayMethod = array();
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'groups',
 	);
 	
 	public function getFields()

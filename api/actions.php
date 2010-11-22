@@ -277,7 +277,7 @@ if (!$errors)
 				$output = false;
 			break;
 
-			//add a new entry
+			// modify a specified entry
 			case 'PUT':
 					$object = new $resourceParameters['retrieveData']['className']($url[1]);
 					$i18n = false;

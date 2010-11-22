@@ -75,7 +75,6 @@ class StoreCore extends ObjectModel
 	protected 	$identifier = 'id_store';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'stores',
 		'fields' => array(
 			'id_country' => array('sqlId' => 'id_country', 'xlink_resource'=> 'countries'),
 			'id_state' => array('sqlId' => 'id_state', 'xlink_resource'=> 'states'),

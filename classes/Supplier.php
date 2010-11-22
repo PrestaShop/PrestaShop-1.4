@@ -57,7 +57,6 @@ class SupplierCore extends ObjectModel
 	protected 	$identifier = 'id_supplier';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'suppliers',
 		'fields' => array(
 			'id_address' => array('sqlId' => 'id_address', 'xlink_resource'=> 'addresses'),
 			'link_rewrite' => array('sqlId' => 'link_rewrite'),

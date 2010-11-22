@@ -69,7 +69,6 @@ class CombinationCore extends ObjectModel
 	protected $identifier = 'id_product_attribute';
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'combinations',
 		'objectNodeName' => 'combination',
 		'fields' => array(
 			'id_product' => array('sqlId' => 'id_product', 'required' => true, 'xlink_resource'=> 'products'),

@@ -73,7 +73,6 @@ class CarrierCore extends ObjectModel
 	protected static $priceByPrice2 = array();
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'carriers',
 		'fields' => array(
 			'id_tax' => array('sqlId' => 'id_tax', 'xlink_resource'=> 'taxes'),
 			'url' => array('sqlId' => 'url'),

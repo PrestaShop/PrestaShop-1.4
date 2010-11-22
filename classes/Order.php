@@ -130,7 +130,6 @@ class OrderCore extends ObjectModel
 	);
 	
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'orders',
 		'objectNodeName' => 'order',
 		'fields' => array(
 			'id_address_delivery' => array('sqlId' => 'id_address_delivery', 'xlink_resource'=> 'addresses'),

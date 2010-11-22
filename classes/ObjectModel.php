@@ -467,6 +467,8 @@ abstract class ObjectModelCore
 		);
 		if (!isset($this->webserviceParameters['objectNodeName']))
 			$defaultResourceParameters['objectNodeName'] = $this->table;
+		if (!isset($this->webserviceParameters['objectsNodeName']))
+			$defaultResourceParameters['objectsNodeName'] = $this->table.'s';
 		
 		if (isset($this->webserviceParameters['associations']))
 			foreach ($this->webserviceParameters['associations'] as $assocName => &$associations)

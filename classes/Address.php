@@ -97,7 +97,6 @@ class AddressCore extends ObjectModel
 	protected	$_includeContainer = false;
 
 	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'addresses',
 		'fields' => array(
 			'id_customer' => array('sqlId' => 'id_customer', 'xlink_resource'=> 'customers'),
 			'id_manufacturer' => array('sqlId' => 'id_manufacturer', 'xlink_resource'=> 'manufacturers'),
