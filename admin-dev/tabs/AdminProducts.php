@@ -2527,7 +2527,7 @@ class AdminProducts extends AdminTab
 						
 					});
 					function ajaxfilemanager(field_name, url, type, win) {
-						var ajaxfilemanagerurl = "'.__PS_BASE_URI__.'admin-dev/ajaxfilemanager/ajaxfilemanager.php";
+						var ajaxfilemanagerurl = "'.dirname($_SERVER["PHP_SELF"]).'/ajaxfilemanager/ajaxfilemanager.php";
 						switch (type) {
 							case "image":
 								break;
@@ -2541,7 +2541,7 @@ class AdminProducts extends AdminTab
 								return false;
 					}
 		            tinyMCE.activeEditor.windowManager.open({
-		                url: "'.__PS_BASE_URI__.'admin-dev/ajaxfilemanager/ajaxfilemanager.php",
+		                url: "'.dirname($_SERVER["PHP_SELF"]).'/ajaxfilemanager/ajaxfilemanager.php",
 		                width: 782,
 		                height: 440,
 		                inline : "yes",
