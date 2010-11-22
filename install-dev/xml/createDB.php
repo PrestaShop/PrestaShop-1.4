@@ -154,5 +154,25 @@ switch (_DB_TYPE_) {
 		}
 	break;
 }
-die('<action result="ok" error="" />'."\n");
+$xml = '<result><action result="ok" error="" />'."\n";
+
+$countries = Db::getInstance()->ExecuteS('
+SELECT c.`id_country`, cl.`name` FROM `'.$_GET['tablePrefix'].'country` c
+INNER JOIN `'.$_GET['tablePrefix'].'country_lang` cl ON (c.`id_country` = cl.`id_country`)
+WHERE cl.`id_lang` = '.intval($_GET['language'] + 1).'
+ORDER BY cl.`name`');
+
+$timezones = Db::getInstance()->ExecuteS('
+SELECT * FROM `'.$_GET['tablePrefix'].'timezone`
+ORDER BY `name`');
+
+$xml .= '<countries>'."\n";
+foreach ($countries as $country)
+	$xml .= "\t".'<country value="'.$country['id_country'].'" name="'.$country['name'].'" />'."\n";
+$xml .= '</countries>'."\n".'<timezones>'."\n";
+foreach ($timezones as $timezone)
+	$xml .= "\t".'<timezone value="'.$timezone['name'].'" name="'.$timezone['name'].'" />'."\n";
+$xml .= '</timezones></result>'."\n";
+
+die($xml);
 ?>

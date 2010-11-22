@@ -379,18 +379,39 @@ function createDB()
 		"&login="+ $("#dbLogin").val()+
 		"&password="+encodeURIComponent($("#dbPassword").val())+
 		"&engine="+$("#dbEngine option:selected").val()+
-		"&name="+ $("#dbName").val()
+		"&name="+ $("#dbName").val()+
+		"&language="+ id_lang
 	   ,
 	   success: function(ret)
 	   {
-			ret = ret.getElementsByTagName('action')[0];
-			if (ret.getAttribute("result") == "ok")
+			var action_ret = ret.getElementsByTagName('action')[0];
+			if (action_ret.getAttribute("result") == "ok")
 			{
+				var countries_ret = ret.getElementsByTagName('country');
+				var timezone_ret = ret.getElementsByTagName('timezone');
+				var html = '';
+				for (i = 0; countries_ret[i]; i=i+1)
+				{
+					html = html + '<option value="'+countries_ret[i].getAttribute("value")+'" ';
+					if (countries_ret[i].getAttribute("value") == 8)
+						html = html + ' selected="selected" ';
+					html = html + ' >'+countries_ret[i].getAttribute("name")+'</option>';
+				}
+				$('#infosCountry').html(html);
+				html = '';
+				for (i = 0; timezone_ret[i]; i=i+1)
+				{
+					html = html + '<option value="'+timezone_ret[i].getAttribute("value")+'" ';
+					if (timezone_ret[i].getAttribute("value") == "Europe/Paris")
+						html = html + ' selected="selected" ';
+					html = html + ' >'+timezone_ret[i].getAttribute("name")+'</option>';
+				}
+				$('#infosTimezone').html(html);
 				showStep(step+1);
 			}
 			else
 			{
-				if(ret.getAttribute("error") == "11")
+				if(action_ret.getAttribute("error") == "11")
 				{
 					$("#dbCreateResultCheck")
 						.addClass("fail")
@@ -398,8 +419,8 @@ function createDB()
 						.removeClass('userInfos')
 						.html(
 							txtError[11]+ "<br />\'"+
-							ret.getAttribute("sqlQuery") + "\'<br/>"+
-							ret.getAttribute("sqlMsgError") + "(" + txtError[18] + " : " + ret.getAttribute("sqlNumberError") +")"
+							action_ret.getAttribute("sqlQuery") + "\'<br/>"+
+							action_ret.getAttribute("sqlMsgError") + "(" + txtError[18] + " : " + action_ret.getAttribute("sqlNumberError") +")"
 						)
 						.show();
 				}
@@ -409,7 +430,7 @@ function createDB()
 						.addClass("fail")
 						.removeClass("ok")
 						.removeClass('userInfos')
-						.html(txtError[parseInt(ret.getAttribute("error"))])
+						.html(txtError[parseInt(action_ret.getAttribute("error"))])
 						.show();
 				}
 			}
@@ -600,6 +621,7 @@ function verifyShopInfos()
 		"&isoCode="+isoCodeLocalLanguage+
 		"&infosActivity="+ encodeURIComponent($("select#infosActivity").val())+
 		"&infosCountry="+ encodeURIComponent($("select#infosCountry").val())+
+		"&infosTimezone="+ encodeURIComponent($("select#infosTimezone").val())+
 		"&infosShop="+ encodeURIComponent($("input#infosShop").val())+
 		"&infosFirstname="+ encodeURIComponent($("input#infosFirstname").val())+
 		"&infosName="+ encodeURIComponent($("input#infosName").val())+

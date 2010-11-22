@@ -152,6 +152,7 @@ if (isFormValid())
 	if (intval($_GET['infosCountry']) != 0)
 	{
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.intval($_GET['infosCountry']).' WHERE name = \'PS_COUNTRY_DEFAULT\'';
+		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = "'.pSQL($_GET['infosTimezone']).'" WHERE name = \'PS_TIMEZONE\'';
 		$sql_isocode = Db::getInstance()->getValue('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.intval($_GET['infosCountry']));
 		$taxes = Db::getInstance()->ExecuteS('SELECT tl.`name`, t.`id_tax` FROM `'._DB_PREFIX_.'tax` t
 											  LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax`)
