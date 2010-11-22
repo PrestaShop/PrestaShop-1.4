@@ -502,7 +502,7 @@ class OrderControllerCore extends FrontController
 		global $orderTotal;
 
 		// Redirect instead of displaying payment modules if any module are grefted on
-		Hook::backBeforePayment(strval(Tools::getValue('back')));
+		Hook::backBeforePayment('order.php?step=3');
 
 		/* We may need to display an order summary */
 		$this->smarty->assign($this->cart->getSummaryDetails());
