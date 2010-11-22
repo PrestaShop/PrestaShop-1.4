@@ -53,7 +53,6 @@ class CategoryControllerCore extends FrontController
 					$this->smarty->assign('largeSceneImageType', isset($largeSceneImageType) ? $largeSceneImageType : NULL);
 				}
 				
-				$category->name = Category::hideCategoryPosition($category->name);
 				$category->description = nl2br2($category->description);
 				$subCategories = $category->getSubCategories(intval($this->cookie->id_lang));
 				$this->smarty->assign('category', $category);
@@ -76,7 +75,7 @@ class CategoryControllerCore extends FrontController
 					'products' => (isset($cat_products) AND $cat_products) ? $cat_products : NULL,
 					'id_category' => intval($category->id),
 					'id_category_parent' => intval($category->id_parent),
-					'return_category_name' => Tools::safeOutput(Category::hideCategoryPosition($category->name)),
+					'return_category_name' => Tools::safeOutput($category->name),
 					'path' => Tools::getPath(intval($category->id), $category->name),
 					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 					'homeSize' => Image::getSize('home')

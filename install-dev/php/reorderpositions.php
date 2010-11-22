@@ -37,7 +37,7 @@ function reorderpositions()
 			foreach($language as $lang)
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` c 
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)  
-				SET `name` = \''.Category::hideCategoryPosition($categ['name']).'\' 
+				SET `name` = \''.preg_replace('/^[0-9]+\./', '',$categ['name']).'\' 
 				WHERE c.id_category = '.intval($categ['id_category']).' AND id_lang = \''.intval($lang['id_lang']).'\'');
 		}
 	}

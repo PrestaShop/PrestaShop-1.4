@@ -215,8 +215,7 @@ class SearchCore
 				ORDER BY position DESC LIMIT 10
 			'))
 				return false;
-			foreach ($result AS &$row)
-				$row['cname'] = Category::hideCategoryPosition($row['cname']);
+
 			return $result;
 		}
 
@@ -333,18 +332,16 @@ class SearchCore
 			foreach ($product as $key => $value)
 				if (strncmp($key, 'id_', 3))
 				{
-					if ($key == 'cname')
-						$value = Category::hideCategoryPosition($value);
-					$words = explode(' ', self::sanitize($value, $product['id_lang'], true));
-					foreach ($words as $word)
-						if (!empty($word))
-						{
-							$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
-							if (!isset($pArray[$word]))
-								$pArray[$word] = $weightArray[$key];
-							else
-								$pArray[$word] += $weightArray[$key];
-						}
+				$words = explode(' ', self::sanitize($value, $product['id_lang'], true));
+				foreach ($words as $word)
+					if (!empty($word))
+					{
+						$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
+						if (!isset($pArray[$word]))
+							$pArray[$word] = $weightArray[$key];
+						else
+							$pArray[$word] += $weightArray[$key];
+					}
 				}
 			
 			$count = 0;

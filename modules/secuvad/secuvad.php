@@ -749,7 +749,7 @@ class Secuvad extends Module
 				<td>';
 		for ($i = 2; $i < $level; $i++)
 				$this->_html .= '<img src="../img/admin/lvl_'.$has_suite[$i - 2].'.gif" alt="" style="vertical-align: middle;"/>';
-		$this->_html .= '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" style="vertical-align:middle" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes(Category::hideCategoryPosition($current['infos']['name'])).'</label>';
+		$this->_html .= '<img src="../img/admin/'.($level == 1 ? 'lv1.gif' : 'lv2_'.($todo == $doneC ? 'f' : 'b').'.gif').'" style="vertical-align:middle" /> &nbsp;<label for="categoryBox_'.$id_category.'" class="t">'.stripslashes($current['infos']['name']).'</label>';
 		$this->_html .= '
 				</td>
 				<td>

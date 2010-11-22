@@ -467,7 +467,7 @@ class AdminImport extends AdminTab
 			$bak = $category->link_rewrite[$defaultLanguageId];
 			if ((isset($category->link_rewrite) AND empty($category->link_rewrite[$defaultLanguageId])) OR !$valid_link)
 			{
-				$category->link_rewrite = Tools::link_rewrite(Category::hideCategoryPosition($category->name[$defaultLanguageId]));
+				$category->link_rewrite = Tools::link_rewrite($category->name[$defaultLanguageId]);
 				if ($category->link_rewrite == '')
 				{
 					$category->link_rewrite = 'friendly-url-autogeneration-failed';

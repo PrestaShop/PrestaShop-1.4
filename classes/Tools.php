@@ -509,7 +509,7 @@ class ToolsCore
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['description']);
-					return self::completeMetaTags($row, Category::hideCategoryPosition($row['name']));
+					return self::completeMetaTags($row, $row['name']);
 				}
 			}
 
@@ -650,7 +650,7 @@ class ToolsCore
 		if ($category->id == 1)
 			return '<span class="navigation_end">'.$path.'</span>';
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
-		$category_name = Category::hideCategoryPosition($category->name);
+		$category_name = $category->name;
 		// htmlentitiezed because this method generates some view
 		if ($path != $category_name)
 		{
@@ -677,7 +677,7 @@ class ToolsCore
 			die(self::displayError());
 		if ($id_category == 1)
 			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
-		return self::getPath($id_category, Category::hideCategoryPosition($category->name), true).'<span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
+		return self::getPath($id_category, $category->name, true).'<span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
 	}
 
 	/**

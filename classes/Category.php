@@ -126,9 +126,6 @@ class CategoryCore extends ObjectModel
 	{
 		$this->position = self::getLastPosition(intval(Tools::getValue('id_parent')));
 		$this->level_depth = $this->calcLevelDepth();
-		foreach ($this->name AS $k => $value)
-			if (preg_match('/^[1-9]\./', $value))
-				$this->name[$k] = '0'.$value;
 		$ret = parent::add($autodate);
 		$this->updateGroup(Tools::getValue('groupBox'));
 		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
@@ -138,9 +135,6 @@ class CategoryCore extends ObjectModel
 	public	function update($nullValues = false)
 	{
 		$this->level_depth = $this->calcLevelDepth();
-		foreach ($this->name AS $k => $value)
-			if (preg_match('/^[1-9]\./', $value))
-				$this->name[$k] = '0'.$value;
 		$this->cleanPositions($this->id_parent);
 		$ret = parent::update();
 		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
@@ -174,7 +168,6 @@ class CategoryCore extends ObjectModel
 				elseif ( !is_array($excludedIdsArray) || !in_array($subcat['id_category'], $excludedIdsArray) )
 				{
 					$categ = new Category($subcat['id_category'] ,$idLang);
-					$categ->name = Category::hideCategoryPosition($categ->name);
 					$children[] = $categ->recurseLiteCategTree($maxDepth, $currentDepth + 1, $idLang, $excludedIdsArray);
 				}
 			}
@@ -193,7 +186,7 @@ class CategoryCore extends ObjectModel
 	{
 		global $currentIndex;
 		echo '<option value="'.$id_category.'"'.(($id_selected == $id_category) ? ' selected="selected"' : '').'>'.
-		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).self::hideCategoryPosition(stripslashes($current['infos']['name'])).'</option>';
+		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).stripslashes($current['infos']['name']).'</option>';
 		if (isset($categories[$id_category]))
 			foreach ($categories[$id_category] AS $key => $row)
 				self::recurseCategory($categories, $categories[$id_category][$key], $key, $id_selected);
@@ -369,7 +362,6 @@ class CategoryCore extends ObjectModel
 		/* Modify SQL result */
 		foreach ($result AS &$row)
 		{
-			$row['name'] = Category::hideCategoryPosition($row['name']);
 			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? intval($row['id_category']) : Language::getIsoById($cookie->id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
@@ -489,6 +481,7 @@ class CategoryCore extends ObjectModel
 	  */
 	static public function hideCategoryPosition($name)
 	{
+		Tools::displayAsDeprecated();
 		return preg_replace('/^[0-9]+\./', '', $name);
 	}
 
@@ -525,14 +518,7 @@ class CategoryCore extends ObjectModel
 		'.($active ? 'AND `active` = 1' : '').'
 		ORDER BY `name` ASC');
 
-		/* Modify SQL result */
-		$resultsArray = array();
-		foreach ($result AS $row)
-		{
-			$row['name'] = Category::hideCategoryPosition($row['name']);
-			$resultsArray[] = $row;
-		}
-		return $resultsArray;
+		return $result;
 	}
 
 	/**

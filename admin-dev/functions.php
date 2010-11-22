@@ -126,7 +126,7 @@ function	getPath($urlBase, $id_category, $path = '', $highlight = '', $type = 'c
 		$category = new Category($id_category, intval($cookie->id_lang));
 		if (!$category->id)
 			return $path;
-		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', Category::hideCategoryPosition($category->name)) : Category::hideCategoryPosition($category->name);
+		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', $category->name) : $category->name;
 		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
 				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
 		if ($category->id == 1)

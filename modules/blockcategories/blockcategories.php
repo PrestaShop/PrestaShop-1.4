@@ -98,7 +98,7 @@ class BlockCategories extends Module
 		if (!isset($resultIds[$id_category]))
 			return false;
 		return array('id' => $id_category, 'link' => $link->getCategoryLink($id_category, $resultIds[$id_category]['link_rewrite']),
-					 'name' => Category::hideCategoryPosition($resultIds[$id_category]['name']), 'desc'=> $resultIds[$id_category]['description'],
+					 'name' => $resultIds[$id_category]['name'], 'desc'=> $resultIds[$id_category]['description'],
 					 'children' => $children);
 	}
 
@@ -135,7 +135,6 @@ class BlockCategories extends Module
 
 			foreach ($result as &$row)
 			{
-				$row['name'] = Category::hideCategoryPosition($row['name']);
 				$resultParents[$row['id_parent']][] = &$row;
 				$resultIds[$row['id_category']] = &$row;
 			}

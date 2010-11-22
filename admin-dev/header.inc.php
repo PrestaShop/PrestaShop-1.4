@@ -95,7 +95,7 @@ foreach (QuickAccess::getQuickAccesses(intval($cookie->id_lang)) AS $quick)
 			$adminTab[1] = substr($adminTab[1], 0, strpos($adminTab[1], '&'));
 		$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee));
 	}
-	echo '<option value="'.$quick['link'].($quick['new_window'] ? '_blank' : '').'">&gt; '.Category::hideCategoryPosition($quick['name']).'</option>';
+	echo '<option value="'.$quick['link'].($quick['new_window'] ? '_blank' : '').'">&gt; '.$quick['name'].'</option>';
 }
 echo '			</select>
 			</div>

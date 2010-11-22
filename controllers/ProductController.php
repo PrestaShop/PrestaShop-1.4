@@ -111,7 +111,7 @@ class ProductControllerCore extends FrontController
 					'subCategories' => $category->getSubCategories(intval($this->cookie->id_lang), true),
 					'id_category_current' => intval($category->id),
 					'id_category_parent' => intval($category->id_parent),
-					'return_category_name' => Tools::safeOutput(Category::hideCategoryPosition($category->name))));
+					'return_category_name' => Tools::safeOutput($category->name)));
 				}
 
 				$this->smarty->assign(array(
