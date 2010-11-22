@@ -3,6 +3,7 @@
 /* Debug only */
 @ini_set('display_errors', 'on');
 define('_PS_DEBUG_SQL_', true);
+$start_time = microtime(true);
 
 /* Compatibility warning */
 define('_PS_DISPLAY_COMPATIBILITY_WARNING_', true);

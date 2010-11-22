@@ -76,11 +76,13 @@ class FrontController extends FrontControllerCore
 	
 	public function displayFooter()
 	{
+		global $start_time;
 		parent::displayFooter();
 		
 		$this->_memory[6] = memory_get_usage();
 		
 		echo '<br /><br />
+		<h3>(<big>'.round((microtime(true) - $start_time)*1000).' µs</big>, <big>'.round(memory_get_usage()/1048576, 1).' Mb</big> of RAM)</h3>
 		<h3>
 			<big>'.$this->displayMemoryColor($this->_memory[6]).'</big> of RAM used for this page<br />
 			Config: '.$this->displayMemoryColor($this->_memory[-1]).' Mb<br />
