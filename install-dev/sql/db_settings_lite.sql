@@ -594,7 +594,8 @@ INSERT INTO `PREFIX_meta` (`id_meta`, `page`) VALUES
 (19, 'order-follow'),
 (20, 'order-slip'),
 (21, 'order'),
-(22, 'search');
+(22, 'search'),
+(23, 'stores');
 
 
 
@@ -664,7 +665,10 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (21, 3, 'Carrito', '', '', 'carrito'),
 (22, 1, 'Search', '', '', 'search'),
 (22, 2, 'Recherche', '', '', 'recherche'),
-(22, 3, 'Buscar', '', '', 'buscar');
+(22, 3, 'Buscar', '', '', 'buscar'),
+(23, 1, 'Stores', '', '', 'stores'),
+(23, 2, 'Magasins', '', '', 'magasins'),
+(23, 3, 'Tiendas', '', '', 'tiendas');
 
 /* Stats */
 INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');

@@ -756,6 +756,11 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VA
 (1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Search', 'search'),
 (2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Recherche', 'recherche'),
 (3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'search'), 'Buscar', 'buscar');
+INSERT INTO `PREFIX_meta` (`page`) VALUES ('stores');
+INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'stores'), 'Stores', 'stores'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'stores'), 'Magagins', 'magasins'),
+(3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'stores'), 'Tiendas', 'tiendas');
 
 ALTER TABLE `PREFIX_manufacturer` ADD `active` tinyint(1) NOT NULL default 0;
 ALTER TABLE `PREFIX_supplier` ADD `active` tinyint(1) NOT NULL default 0;
