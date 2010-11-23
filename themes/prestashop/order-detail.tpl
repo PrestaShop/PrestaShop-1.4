@@ -196,7 +196,7 @@
 				<td>{l s='Voucher:'} {$discount.name|escape:'htmlall':'UTF-8'}</td>
 				<td><span class="order_qte_span editable">1</span></td>
 				<td>&nbsp;</td>
-				<td>{l s='-'}{convertPriceWithCurrency price=$discount.value currency=$currency convert=0}</td>
+				<td>{if $discount.value != 0.00}{l s='-'}{/if}{convertPriceWithCurrency price=$discount.value currency=$currency convert=0}</td>
 				{if $return_allowed}
 				<td>&nbsp;</td>
 				{/if}

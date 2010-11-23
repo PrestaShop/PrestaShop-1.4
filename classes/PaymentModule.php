@@ -268,7 +268,7 @@ abstract class PaymentModuleCore extends Module
 					$discountsList .=
 					'<tr style="background-color:#EBECEE;">
 							<td colspan="4" style="padding: 0.6em 0.4em; text-align: right;">'.$this->l('Voucher code:').' '.$objDiscount->name.'</td>
-							<td style="padding: 0.6em 0.4em; text-align: right;">-'.Tools::displayPrice($value, $currency, false, false).'</td>
+							<td style="padding: 0.6em 0.4em; text-align: right;">'.($value != 0.00 ? '-' : '').Tools::displayPrice($value, $currency, false, false).'</td>
 					</tr>';
 				}
 

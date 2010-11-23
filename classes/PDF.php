@@ -726,7 +726,7 @@ class PDFCore extends PDF_PageGroupCore
 			$this->Cell($w[2], 6, '', 'B');
 			$this->Cell($w[3], 6, '', 'B', 0, 'R');
 			$this->Cell($w[4], 6, '1', 'B', 0, 'C');
-			$this->Cell($w[5], 6, (!self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($discount['value'], self::$currency, true, false)), 'B', 0, 'R');
+			$this->Cell($w[5], 6, ((!self::$orderSlip AND $discount['value'] != 0.00) ? '-' : '').self::convertSign(Tools::displayPrice($discount['value'], self::$currency, true, false)), 'B', 0, 'R');
 			$this->Ln();
 		}
 

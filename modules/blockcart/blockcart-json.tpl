@@ -59,7 +59,7 @@
 		"description":     "{$discount.description|addslashes}",
 		"nameDescription": "{$discount.name|cat:' : '|cat:$discount.description|truncate:18:'...'}",
 		"link":            "{$link->getPageLink('order.php', true)}?deleteDiscount={$discount.id_discount}",
-		"price":           "-{if $priceDisplay == 1}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_tax_exc}{else}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_real}{/if}"
+		"price":           "-{if $discount.value_real != '!'}{if $priceDisplay == 1}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_tax_exc}{else}{convertPrice|html_entity_decode:2:'UTF-8' price=$discount.value_real}{/if}{/if}"
 	{rdelim}
 	{if !$smarty.foreach.discounts.last},{/if}
 {/foreach}{/if}

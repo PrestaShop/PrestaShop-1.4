@@ -774,7 +774,7 @@ class AdminOrders extends AdminTab
 							echo '
 						<tr>
 							<td>'.$discount['name'].'</td>
-							<td align="center">- '.Tools::displayPrice($discount['value'], $currency, false).'</td>
+							<td align="center">'.($discount['value'] != 0.00 ? '- ' : '').Tools::displayPrice($discount['value'], $currency, false).'</td>
 						</tr>';
 						echo '
 					</table></div>';
