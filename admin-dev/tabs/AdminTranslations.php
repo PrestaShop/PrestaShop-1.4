@@ -126,7 +126,7 @@ class AdminTranslations extends AdminTab
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
 			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 			{
-				if (preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/', $_FILES['file']['name']))
+				if (Validate::isLanguageFileName($_FILES['file']['name']))
 				{
 					$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
 					if (!Language::checkAndAddLanguage($iso_code))
@@ -136,6 +136,43 @@ class AdminTranslations extends AdminTab
 			}
 			$this->_errors[] = Tools::displayError('archive cannot be extracted');
 		}
+	}
+	
+	public function submitAddLang()
+	{
+		global $currentIndex;
+
+		if (Validate::isLangIsoCode(Tools::getValue('iso_import_language')))
+		{
+			if (@fsockopen('www.prestashop.com', 80))
+			{
+				if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.Tools::getValue('iso_import_language').'.gzip'))
+				{
+					$file = _PS_TRANSLATIONS_DIR_.Tools::getValue('iso_import_language').'.gzip';
+					if (file_put_contents($file, $content))
+					{
+						$gz = new Archive_Tar($file, true);
+						if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+						{
+							if (!Language::checkAndAddLanguage(Tools::getValue('iso_import_language')))
+								$conf = 20;
+							unlink($file);
+							Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
+						}
+						$this->_errors[] = Tools::displayError('archive cannot be extracted');
+						unlink($file);
+					}
+					else
+						$this->_errors[] = Tools::displayError('Server don\'t have permissions for writing');
+				}
+				else
+					$this->_errors[] = Tools::displayError('language not found');
+			}
+			else
+				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
+		}
+		else
+			$this->_errors[] = Tools::displayError('Invalid parameter');
 	}
 
 	public function findAndWriteTranslationsIntoFile($filename, $files, $themeName, $moduleName, $dir = false)
@@ -241,6 +278,13 @@ class AdminTranslations extends AdminTab
 		{
 		 	if ($this->tabAccess['add'] === '1')
 				$this->submitImportLang();
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+		}
+		elseif (Tools::isSubmit('submitAddLanguage'))
+		{
+			if ($this->tabAccess['add'] === '1')
+				$this->submitAddLang();
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
@@ -560,21 +604,53 @@ class AdminTranslations extends AdminTab
 						<img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" />
 					</a>';
 			echo '<input type="hidden" name="token" value="'.$this->token.'" /></form></fieldset>
-			<br /><br /><h2>'.$this->l('Translation exchange').'</h2>
-			<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-				<fieldset><legend><img src="../img/admin/import.gif" />'.$this->l('Import a language pack').'</legend>
-					<p>'.$this->l('Import data from file (language pack).').'<br />'.
-					$this->l('If the name format is: isocode.gzip (eg fr.gzip) and the language corresponding to this package does not exist, it will automatically create.').'<br />'.
-					$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
-					$this->l('Browse your computer for the language file to be imported:').'</p>
-					<div style="float:left;">
-						<p>
-							<div style="width:75px; font-weight:bold; float:left;">'.$this->l('From:').'</div>
-							<input type="file" name="file" />
-						</p>
+			<br /><br /><h2>'.$this->l('Translation exchange').'</h2>';
+			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<legend onclick="$(\'#submitAddLangContent\').slideDown(\'slow\'); $(\'#submitImportContent\').slideUp(\'slow\');" style="cursor:pointer;">
+					<img src="../img/admin/import.gif" />'.$this->l('Add a language').'
+				</legend>
+				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
+					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').'
+						<select id="iso_import_language" name="iso_import_language">';
+			// Get all iso code available
+			$lang_packs = file_get_contents('http://www.prestashop.com/rss/lang_exists.php');
+			if ($lang_packs)
+			{
+				$lang_packs = unserialize($lang_packs);
+				foreach($lang_packs as $lang_pack)
+					if (!Language::isInstalled($lang_pack['iso_code']))
+						echo '<option value="'.$lang_pack['iso_code'].'">'.$lang_pack['name'].'</option>';
+			}
+			else
+				echo '		<option value="0">'.$this->l('Cannot connect to prestashop.com').'</option>';
+			echo 		'</select>
 					</div>
 					<div style="float:left;">
-						<input type="submit" value="'.$this->l('Import').'" name="submitImport" class="button" style="margin:10px 0px 0px 25px;" />
+						<input type="submit" value="'.$this->l('Add the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
+					</div>
+				</div>
+			</fieldset>
+			</form><br />';
+			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
+				<fieldset>
+					<legend onclick="$(\'#submitImportContent\').slideDown(\'slow\'); $(\'#submitAddLangContent\').slideUp(\'slow\');" style="cursor:pointer;">
+						<img src="../img/admin/import.gif" />'.$this->l('Import a language pack manually').'
+					</legend>
+					<div id="submitImportContent" style="display:none;">
+						<p>'.$this->l('Import data from file (language pack).').'<br />'.
+						$this->l('If the name format is: isocode.gzip (eg fr.gzip) and the language corresponding to this package does not exist, it will automatically create.').'<br />'.
+						$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
+						$this->l('Browse your computer for the language file to be imported:').'</p>
+						<div style="float:left;">
+							<p>
+								<div style="width:75px; font-weight:bold; float:left;">'.$this->l('From:').'</div>
+								<input type="file" name="file" />
+							</p>
+						</div>
+						<div style="float:left;">
+							<input type="submit" value="'.$this->l('Import').'" name="submitImport" class="button" style="margin:10px 0px 0px 25px;" />
+						</div>
 					</div>
 				</fieldset>
 			</form>

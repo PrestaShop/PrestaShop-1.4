@@ -964,6 +964,28 @@ class ValidateCore
 	{
 		return ($data == NULL) OR (bool)(preg_match('/^\-?[0-9]{1,6}\.[0-9]{1,6}$/s', $data));
 	}
+	
+	/**
+	* Check for Language Iso Code
+	*
+	* @param string $iso_code
+	* @return boolean Validity is ok or not
+	*/
+	static public function isLangIsoCode($iso_code)
+	{
+		return (bool)(preg_match('/^[a-zA-Z]{2,3}$/s', $iso_code));
+	}
+	
+	/**
+	* Check for Language File Name
+	*
+	* @param string $file_name
+	* @return boolean Validity is ok or not
+	*/
+	static public function isLanguageFileName($file_name)
+	{
+		return (bool)(preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/s', $data));
+	}
 }
 
 ?>

@@ -493,6 +493,11 @@ class LanguageCore extends ObjectModel
 	{
 		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
 	}
+	
+	static public function isInstalled($iso_code)
+	{
+		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = "'.pSQL($iso_code).'"');
+	}
 }
 
 ?>
