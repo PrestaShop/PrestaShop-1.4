@@ -378,9 +378,9 @@ class CarrierCore extends ObjectModel
 		
 		$id_zone = Country::getIdZone(intval($id_country));
 		if (is_array($groups) AND !empty($groups))
-			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $groups);
+			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		else
-			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), array(1));
+			$result = Carrier::getCarriers(intval($cookie->id_lang), true, false, intval($id_zone), array(1), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$resultsArray = array();
 		foreach ($result AS $k => $row)
 		{
