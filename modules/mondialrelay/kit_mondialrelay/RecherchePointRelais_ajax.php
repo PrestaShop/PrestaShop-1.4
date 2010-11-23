@@ -78,13 +78,13 @@ else
 		{
 			if ($key != 'STAT')
 			{
-				echo '{"address1" : "'.$val['LgAdr1'].'", 
-					"address2" : "'.$val['LgAdr2'].'", 
-					"address3" : "'.$val['LgAdr3'].'", 
-					"address4" : "'.$val['LgAdr4'].'", 
-					"postcode" : "'.$val['CP'].'", 
-					"city" : "'.$val['Ville'].'", 
-					"iso_country" : "'.$val['Pays'].'", 
+				echo '{"address1" : "'.addslashes($val['LgAdr1']).'", 
+					"address2" : "'.addslashes($val['LgAdr2']).'", 
+					"address3" : "'.addslashes($val['LgAdr3']).'", 
+					"address4" : "'.addslashes($val['LgAdr4']).'", 
+					"postcode" : "'.addslashes($val['CP']).'", 
+					"city" : "'.addslashes($val['Ville']).'", 
+					"iso_country" : "'.addslashes($val['Pays']).'", 
 					"num" : "'.$val['Num'].'",
 					"checked" : '.($val['Num'] == $id_cart_address ? 1 : 0).'}, ';
 			}
