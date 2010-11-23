@@ -435,8 +435,10 @@ class CartCore extends ObjectModel
 					$productQty = intval($result2['quantity']);
 					$newQty = $result['quantity'] + intval($quantity);
 					$qty = '`quantity` + '.intval($quantity);
-					if ((intval($result2['out_of_stock']) == 0 OR ((intval($result2['out_of_stock']) == 2 AND !Configuration::get('PS_ORDER_OUT_OF_STOCK')))) AND $newQty > $productQty)
-						return false;
+					
+					if (!Product::isAvailableWhenOutOfStock(intval($result2['out_of_stock'])))
+						if (intval($quantity) > $productQty)
+							return false;
 				}
 				elseif ($operator == 'down')
 				{
@@ -472,8 +474,11 @@ class CartCore extends ObjectModel
 					WHERE p.`id_product` = '.intval($id_product).
 					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.intval($id_product_attribute) : ''));
 				$productQty = intval($result2['quantity']);
-				if (intval($quantity) > $productQty AND (intval($result2['out_of_stock']) == 0 OR (intval($result2['out_of_stock']) == 2 AND !Configuration::get('PS_ORDER_OUT_OF_STOCK'))))
-					return false;
+				
+				if (!Product::isAvailableWhenOutOfStock(intval($result2['out_of_stock'])))
+						if (intval($quantity) > $productQty)
+							return false;
+				
 				if ($quantity < $product->minimal_quantity)
 					return -1;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => intval($id_product),
