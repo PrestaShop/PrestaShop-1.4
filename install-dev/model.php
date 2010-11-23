@@ -11,6 +11,7 @@ $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
 define('INSTALL_VERSION', '1.4.0.3');
 define('INSTALL_PATH', dirname(__FILE__));
+define('PS_INSTALLATION_IN_PROGRESS', true);
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 define('SETTINGS_FILE', INSTALL_PATH.'/../config/settings.inc.php');
 define('DEFINES_FILE', INSTALL_PATH.'/../config/defines.inc.php');

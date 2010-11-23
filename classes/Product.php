@@ -1569,9 +1569,10 @@ class ProductCore extends ObjectModel
 		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
+		$price = Tools::ps_round($price, $decimals);
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND self::$_pricesLevel3[$cacheId3])
-			$reduc = self::$_pricesLevel3[$cacheId3]['reduction_type'] == 'amount' ? self::$_pricesLevel3[$cacheId3]['reduction'] : ($price * self::$_pricesLevel3[$cacheId3]['reduction']);
+			$reduc = Tools::ps_round(self::$_pricesLevel3[$cacheId3]['reduction_type'] == 'amount' ? self::$_pricesLevel3[$cacheId3]['reduction'] : ($price * self::$_pricesLevel3[$cacheId3]['reduction']), 2);
 		if ($only_reduc)
 			return $reduc;
 		// Reduction
@@ -1584,7 +1585,8 @@ class ProductCore extends ObjectModel
 		// Group reduction
 		if ($reductionFromCategory = floatval(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
-		$price *= ((100 - Group::getReduction($id_customer)) / 100);
+		if ($usereduc)
+			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
 		self::$_prices[$cacheId] = $price;
@@ -2302,7 +2304,7 @@ class ProductCore extends ObjectModel
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], intval($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['attribute_price'] = (isset($row['id_product_attribute']) AND $row['id_product_attribute']) ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
-		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 6);
+		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), (self::$_taxCalculationMethod == PS_TAX_EXC ? 2 : 6));
 		if (self::$_taxCalculationMethod == PS_TAX_EXC)
 		{
 			$row['price_tax_exc'] = Tools::ps_round($row['price_tax_exc'], 2);

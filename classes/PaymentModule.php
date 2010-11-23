@@ -152,7 +152,7 @@ abstract class PaymentModuleCore extends Module
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `product_quantity_discount`, `product_ean13`, `product_upc`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `group_reduction`, `product_quantity_discount`, `product_ean13`, `product_upc`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
@@ -204,6 +204,7 @@ abstract class PaymentModuleCore extends Module
 						'.floatval(Product::getPriceStatic(intval($product['id_product']), false, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, intval($order->id_customer), intval($order->id_cart), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice)).',
 						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
 						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
+						'.floatval(Group::getReduction(intval($order->id_customer))).',
 						'.floatval(Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, true, true, $product['cart_quantity'], false, $order->id_customer, $order->id_cart)).',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['upc']) ? 'NULL' : '\''.pSQL($product['upc']).'\'').',

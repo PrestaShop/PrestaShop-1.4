@@ -202,7 +202,7 @@ class MySQLCore extends Db
 			else
 				$errors[] = 'Internal error occured';
 		}
-		elseif (_PS_DEBUG_SQL_ AND mysql_errno())
+		elseif (_PS_DEBUG_SQL_ AND mysql_errno() AND !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{
 			if ($query)
 				die(Tools::displayError(mysql_error().'<br /><br /><pre>'.$query.'</pre>'));

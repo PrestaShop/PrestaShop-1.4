@@ -385,7 +385,7 @@ class OrderCore extends ObjectModel
 				if (!$row['product_quantity'])
 					continue ;
 			}
-			if (Configuration::get('PS_1_3_2_UPDATE_DATE'))
+			if (Configuration::get('PS_1_3_2_UPDATE_DATE')) // PS >= 1.3.2 (update or fresh install)
 			{
 				if ($this->_taxCalculationMethod == PS_TAX_EXC)
 					$row['product_price'] = Tools::ps_round($row['product_price'], 2);
@@ -406,7 +406,12 @@ class OrderCore extends ObjectModel
 					else
 						$row['product_price_wt'] = $row['product_price'];
 				}
-				if (($row['reduction_percent'] OR $row['reduction_amount']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
+				if ($row['group_reduction'])
+				{
+					$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['group_reduction'] * 0.01), 2);
+					$row['product_price'] = $row['product_price'] - $row['product_price'] * ($row['group_reduction'] * 0.01);
+				}
+				if (($row['reduction_percent'] OR $row['reduction_amount'] OR $row['group_reduction']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
 					$row['product_price'] = Tools::ps_round($row['product_price'], 2);
 				$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 				$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
@@ -574,7 +579,6 @@ class OrderCore extends ObjectModel
 				WHERE od.`id_order` = o.`id_order`)
 				AS nb_products
         FROM `'._DB_PREFIX_.'orders` o
-        LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON (od.`id_order` = o.`id_order`)
         WHERE o.`id_customer` = '.intval($id_customer).'
         GROUP BY o.`id_order`
         ORDER BY o.`date_add` DESC');
@@ -683,7 +687,16 @@ class OrderCore extends ObjectModel
 
 		$this->total_products_wt = 0;
 		foreach ($products AS $k => $row)
-			$this->total_products_wt += Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2) * $row['product_quantity'];
+		{
+			$price = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
+			if ($row['reduction_percent'])
+				$price -= $price * ($row['reduction_percent'] * 0.01);
+			if ($row['reduction_amount'])
+				$price -= $row['reduction_amount'] * (1 + ($row['tax_rate'] * 0.01));
+			if ($row['group_reduction'])
+				$price -= $price * ($row['group_reduction'] * 0.01);
+			$this->total_products_wt += Tools::ps_round($price, 2) * $row['product_quantity'];
+		}
 		$this->update();
 		return $this->total_products_wt;
 	}
