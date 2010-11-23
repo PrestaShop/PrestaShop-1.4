@@ -959,12 +959,8 @@ class CartCore extends ObjectModel
 		// Additional Shipping Cost per product
 		foreach($products AS $product)
 			$shipping_cost += $product['additional_shipping_cost'] * $product['cart_quantity'];
-		
-		// Apply tax
-		if (isset($carrierTax))
-			$shipping_cost *= 1 + ($carrierTax / 100);
-
-		
+			
+		//get external shipping cost from module
 		if ($carrier->shipping_external)
 		{	
 			$moduleName = $carrier->external_module_name;
@@ -974,12 +970,16 @@ class CartCore extends ObjectModel
 				die(Tools::displayError('Hack attempt: "carrier error"'));
 			$module = new $moduleName();
 			if($carrier->need_range)
-				return $module->getOrderShippingCost($this, $shipping_cost);
+				$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 			else
-				return $module->getOrderShippingCostExternal($this);
+				$shipping_cost = $module->getOrderShippingCostExternal($this);
 		}
-		else
-			return floatval(Tools::ps_round(floatval($shipping_cost), 2));
+		
+		// Apply tax
+		if (isset($carrierTax))
+			$shipping_cost *= 1 + ($carrierTax / 100);
+		
+		return floatval(Tools::ps_round(floatval($shipping_cost), 2));
     }
 
 	/**
