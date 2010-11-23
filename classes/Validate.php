@@ -984,7 +984,7 @@ class ValidateCore
 	*/
 	static public function isLanguageFileName($file_name)
 	{
-		return (bool)(preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/s', $data));
+		return (bool)(preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/s', $file_name));
 	}
 }
 
