@@ -137,7 +137,6 @@ XML;
 			'manufacturer' => false, 
 			'new-products' => false, 
 			'prices-drop' => false, 
-			'search' => false, 
 			'supplier' => false, 
 			'store' => false);
 
