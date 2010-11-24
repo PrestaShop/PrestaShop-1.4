@@ -13,8 +13,7 @@ try
 			'iso_code' => 'PSL', 'tax_behavior' => 0
 	));
 	$xml = $ws->add(array('resource' => 'states', 'postArgs' => $postArgs));
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->state;
+	$object = $xml->children()->state;
 	$fields = $object->children();
 	displayResource($fields);
 }

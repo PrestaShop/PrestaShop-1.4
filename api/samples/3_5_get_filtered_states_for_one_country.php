@@ -8,7 +8,7 @@ try
 {
 	$xml = $ws->get(array('resource' => 'states', 'filter' => array('id_country' => 21)));
 	$namespaces = $xml->getNameSpaces(true);
-	$resources = $xml->children($namespaces['p'])->states[0];
+	$resources = $xml->children()->states[0];
 	displayResources($resources, $namespaces);
 }
 catch (PrestaShopWebserviceException $e)

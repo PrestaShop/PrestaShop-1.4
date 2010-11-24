@@ -19,8 +19,7 @@ try
 			'id' => 1
 			)
 	);
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->product;
+	$object = $xml->children()->product;
 	//displayResource($object);
 	
 	
@@ -47,8 +46,7 @@ $parent->{$element->getName()} = 'The new english stranslation';
 try
 {
 	$xml = $ws->edit(array('resource' => 'products', 'id' => 1, 'putXml' => $xml->asXml()));
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->product;
+	$object = $xml->children()->product;
 	displayResource($object);
 }
 catch (PrestaShopWebserviceException $e)

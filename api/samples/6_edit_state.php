@@ -10,8 +10,7 @@ $object->active = true;
 try
 {
 	$xml = $ws->edit(array('resource' => 'states', 'id' => $id, 'putXml' => $xml->asXml()));
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->state;
+	$object = $xml->children()->state;
 	$fields = $object->children();
 	displayResource($fields);
 }

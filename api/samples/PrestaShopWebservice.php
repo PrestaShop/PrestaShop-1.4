@@ -34,8 +34,9 @@ class PrestaShopWebservice
 	{
 		$ressource_url = isset($full_url) ? $full_url : $ws_url.'/api/'.$resource.($id ? '/'.$id : '').(isset($url_params) ? '?'.http_build_query($url_params) : '');
 		$defaultParams = array(
-			CURLOPT_HEADER => 0,
+			CURLOPT_HEADER => TRUE,
 			CURLOPT_RETURNTRANSFER => TRUE,
+			CURLINFO_HEADER_OUT => TRUE,
 			/*CURLOPT_TIMEOUT => 4,
 			CURLOPT_FORBID_REUSE => 1,
 			CURLOPT_FRESH_CONNECT => 1,*/
@@ -43,12 +44,19 @@ class PrestaShopWebservice
 			CURLOPT_USERPWD => $key.':',
 		);
 		
-		if ($debug)
-			echo '<div style="display:table;background:#CCC;font-size:8pt;padding:7px"><h6 style="font-size:9pt;margin:0">REQUEST</h6><pre>'.$params[CURLOPT_CUSTOMREQUEST].' '.urldecode($ressource_url).'</pre></div>';
-		
 		$session = curl_init($ressource_url);
 		curl_setopt_array($session, $defaultParams + $params);
 		$response = curl_exec($session);
+		$response = explode("\r\n\r\n", $response);
+		
+		$header = $response[0];
+		$response = $response[1];
+
+		if ($debug)
+		{
+			echo '<div style="display:table;background:#CCC;font-size:8pt;padding:7px"><h6 style="font-size:9pt;margin:0">REQUEST</h6><pre>'.curl_getinfo($session, CURLINFO_HEADER_OUT).'</pre></div>';
+			echo '<div style="display:table;background:#CCC;font-size:8pt;padding:7px"><h6 style="font-size:9pt;margin:0">RETURN</h6><pre>'.$header.'</pre></div>';
+		}
 		$status_code = curl_getinfo($session, CURLINFO_HTTP_CODE);
 		if ($status_code === 0)
 			throw new PrestaShopWebserviceException('CURL Error: '.curl_error($session));
@@ -70,7 +78,7 @@ class PrestaShopWebservice
 			libxml_use_internal_errors(true);
 			$xml = simplexml_load_string($response);
 			if (libxml_get_errors())
-				throw new PrestaShopWebserviceException('HTTP XML response is not parsable');
+				throw new PrestaShopWebserviceException('HTTP XML response is not parsable : '.var_export(libxml_get_errors(), true));
 			return $xml;
 		}
 		else

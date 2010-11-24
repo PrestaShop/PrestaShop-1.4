@@ -11,8 +11,7 @@ $entity = $xpaths[0]->attributes($namespaces['xlink']);
 try
 {
 	$xml = $ws->get(array('url' => (string)$entity['href']));
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->state;
+	$object = $xml->children()->state;
 	$fields = $object->children();
 	displayResource($fields);
 }

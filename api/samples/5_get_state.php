@@ -9,8 +9,7 @@ $id = (string)$fields->id;
 try
 {
 	$xml = $ws->get(array('resource' => 'states', 'id' => $id));
-	$namespaces = $xml->getNameSpaces(true);
-	$object = $xml->children($namespaces['p'])->state;
+	$object = $xml->children()->state;
 	$fields = $object->children();
 	displayResource($fields);
 }

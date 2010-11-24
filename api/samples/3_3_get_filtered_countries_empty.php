@@ -18,7 +18,7 @@ try
 		)
 	);
 	$namespaces = $xml->getNameSpaces(true);
-	$resources = $xml->children($namespaces['p'])->countries[0];
+	$resources = $xml->children()->countries[0];
 	displayResources($resources, $namespaces);
 }
 catch (PrestaShopWebserviceException $e)
