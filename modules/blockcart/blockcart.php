@@ -40,7 +40,7 @@ class BlockCart extends Module
 		else
 			$taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
 		
-		$useTax = $taxCalculationMethod == PS_TAX_EXC ? false : true;
+		$useTax = !($taxCalculationMethod == PS_TAX_EXC);
 
 		$products = $params['cart']->getProducts(true);
 		$nbTotalProducts = 0;
@@ -61,7 +61,7 @@ class BlockCart extends Module
 			'customizedDatas' => Product::getAllCustomizedDatas((int)($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
-			'discounts' => $params['cart']->getDiscounts(false, $useTax),
+			'discounts' => $params['cart']->getDiscounts(false, Tools::isSubmit('id_product')),
 			'nb_total_products' => (int)($nbTotalProducts),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 5), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
