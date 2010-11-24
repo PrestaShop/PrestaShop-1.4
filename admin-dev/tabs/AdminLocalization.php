@@ -89,7 +89,8 @@ class AdminLocalization extends AdminPreferences
 					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Import   ').'" />
 				</div>
 			</div>
-		</fieldset>';
+		</fieldset>
+		</form>';
 	}
 }
 
