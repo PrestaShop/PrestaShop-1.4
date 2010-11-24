@@ -195,6 +195,10 @@ abstract class PaymentModuleCore extends Module
 					else
 						$tax = Tax::getApplicableTax(intval($product['id_tax']), floatval($product['rate']), intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
+					$quantityDiscount = SpecificPrice::getQuantityDiscount(intval($product['id_product']), Shop::getCurrentShop(), intval($cart->id_currency), intval($vat_address->id_country), intval($customer->id_default_group), intval($product['cart_quantity']));
+					$unitPrice = Product::getPriceStatic(intval($product['id_product']), true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, 1, false, intval($order->id_customer), NULL, intval($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+					$quantityDiscountValue = $quantityDiscount ? ((Product::getTaxCalculationMethod(intval($order->id_customer)) == PS_TAX_EXC ? Tools::ps_round($unitPrice, 2) : $unitPrice) - $quantityDiscount['price'] * (1 + $tax / 100)) : 0.00;
+
 					$query .= '('.intval($order->id).',
 						'.intval($product['id_product']).',
 						'.(isset($product['id_product_attribute']) ? intval($product['id_product_attribute']) : 'NULL').',
@@ -205,7 +209,7 @@ abstract class PaymentModuleCore extends Module
 						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
 						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
 						'.floatval(Group::getReduction(intval($order->id_customer))).',
-						'.floatval(Product::getPriceStatic($product['id_product'], true, $product['id_product_attribute'], 6, NULL, true, true, $product['cart_quantity'], false, $order->id_customer, $order->id_cart)).',
+						'.$quantityDiscountValue.',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['upc']) ? 'NULL' : '\''.pSQL($product['upc']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',

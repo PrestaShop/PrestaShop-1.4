@@ -133,6 +133,23 @@ class SpecificPriceCore extends ObjectModel
 		');
 	}
 
+	static public function getQuantityDiscount($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
+	{
+		$now = date('Y-m-d H:i:s');
+		return Db::getInstance()->getRow('
+			SELECT *
+			FROM `'._DB_PREFIX_.'specific_price`
+			WHERE	`id_product` IN(0, '.intval($id_product).') AND
+					`id_shop` IN(0, '.intval($id_shop).') AND
+					`id_currency` IN(0, '.intval($id_currency).') AND
+					`id_country` IN(0, '.intval($id_country).') AND
+					`id_group` IN(0, '.intval($id_group).') AND
+					`from_quantity` >= '.intval($quantity).' AND
+					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
+					ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
+		');
+	}
+
 	static public function getProductIdByDate($id_shop, $id_currency, $id_country, $id_group, $beginning, $ending)
 	{
 		$resource = Db::getInstance()->ExecuteS('
