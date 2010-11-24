@@ -362,10 +362,11 @@ class MondialRelay extends Module
 					}
 			}
 
-			$row['col'] = self::get_carrier('col',intval($row['id_carrier']));
-			$row['liv'] = self::get_carrier('liv',intval($row['id_carrier']));
-			$row['ass'] = self::get_carrier('ass',intval($row['id_carrier']));
-			$row['name'] = self::get_carrier('name',intval($row['id_carrier']));
+			$settings = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'mr_method WHERE id_carrier=\''.intval($id_carrier).'\' ; ');
+			$row['name'] = $settings[0]['mr_Name'];
+			$row['col'] = $settings[0]['mr_ModeCol'];
+			$row['liv'] = $settings[0]['mr_ModeLiv'];
+			$row['ass'] = $settings[0]['mr_ModeAss'];
 			$row['price'] = $cart->getOrderShippingCost(intval($row['id_carrier']));
 			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.intval($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.intval($row['id_carrier']).'.jpg' : '';
 
@@ -532,6 +533,7 @@ class MondialRelay extends Module
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'range_price` (`id_carrier`, `delimiter1`, `delimiter2`) VALUES ('.intval($get['id_carrier']).', 0.000000, 10000.000000)');
 			$groups = Group::getGroups(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($groups as $group)
+
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'carrier_group` (id_carrier, id_group) VALUES('.intval($get['id_carrier']).', '.intval($group['id_group']).')');
 			
 			$zones = Zone::getZones();
@@ -830,20 +832,6 @@ class MondialRelay extends Module
 		return Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'mr_method SET '.pSQL($key).'="'.pSQL($value).'" WHERE id_carrier=\''.intval($id_carrier).'\' ; ');
 	}
 
-	
-	public function get_carrier($key, $id_carrier)
-	{
-		$settings = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'mr_method WHERE id_carrier=\''.intval($id_carrier).'\' ; ');
-
-		$MR_meth = array(
-			'name' => $settings[0]['mr_Name'] ,
-			'col' => $settings[0]['mr_ModeCol'] ,
-			'liv' => $settings[0]['mr_ModeLiv'] ,
-			'ass' => $settings[0]['mr_ModeAss'] ,
-		);
-		return $MR_meth[$key];
-	}
-	
 	public function getL($key)
 	{
 		$trad = array(

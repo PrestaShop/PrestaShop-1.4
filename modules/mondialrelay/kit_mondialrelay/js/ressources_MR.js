@@ -14,7 +14,7 @@ var json_addresses = null;
 
 function affiche_mydiv_mr(id_carrier, args)
 {
-	if ($('#id_carrier' + id_carrier).attr("checked") == true)
+	if ($('#id_carrier_mr' + id_carrier).attr("checked") == true)
 	{
 		if ($('#mondialrelay_' + id_carrier).css('display') == 'none')
 		{

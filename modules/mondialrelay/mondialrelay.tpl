@@ -21,12 +21,12 @@
 	<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if ($nbcarriers+$smarty.foreach.myLoop.index) % 2}alternate_item{else}item{/if}">
 
 					<td class="carrier_action radio">
-						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" onchange="affiche_mydiv_mr({$carrier.id_carrier|intval}, 
+						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier_mr{$carrier.id_carrier|intval}" onchange="affiche_mydiv_mr({$carrier.id_carrier|intval}, 
    'relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}'
 						);" {if ($carrier.id_carrier == $checked)} checked="checked" {/if} {if $one_page_checkout}onclick="updateCarrierSelectionAndGift();" {/if} />{$carrierextra}
 					</td>
 					<td class="carrier_name">
-						<label for="id_carrier{$carrier.id_carrier|intval}">
+						<label for="id_carrier_mr{$carrier.id_carrier|intval}">
 						{if $carrier.img}<img src="{$carrier.img|escape:'htmlall':'UTF-8'}" alt="{$carrier.name|escape:'htmlall':'UTF-8'}">{else}{$carrier.name|escape:'htmlall':'UTF-8'}{/if}
 							
 						</label>
@@ -54,6 +54,7 @@
 						<div style="display:none;" id="mondialrelay_{$carrier.id_carrier|intval}"></div>		 
 					</td>
 				</tr>
+			<script type="text/javascript" > $("#id_carrier{$carrier.id_carrier|intval}").parent().parent().remove();</script>
 	{/if}
 	<script type="text/javascript" >
 	include_mondialrelay({$carrier.id_carrier|intval});
