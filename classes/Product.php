@@ -1540,7 +1540,7 @@ class ProductCore extends ObjectModel
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT p.`price`, p.`id_tax`, t.`rate`, 
+			SELECT p.`price`, p.`id_tax`, p.`ecotax`, t.`rate`, 
 			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.(int)($id_product).' AND default_on = 1), 0)').' AS attribute_price
 			FROM `'._DB_PREFIX_.'product` p
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
@@ -1552,6 +1552,8 @@ class ProductCore extends ObjectModel
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
 		$price = floatval((!self::$_pricesLevel3[$cacheId3] OR floatval(self::$_pricesLevel3[$cacheId3]['reduction'])) ? $result['price'] : self::$_pricesLevel3[$cacheId3]['price']);
+		if ($result['ecotax'])
+			$price -= $result['ecotax'];
 		if (!self::$_pricesLevel3[$cacheId3] OR (floatval(self::$_pricesLevel3[$cacheId3]['price'])) AND !self::$_pricesLevel3[$cacheId3]['id_currency'])
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = self::$_pricesLevel3[$cacheId3];
@@ -1587,6 +1589,8 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
+		if ($result['ecotax'])
+			$price += $usetax ? ($result['ecotax'] * (1 + PS_FRENCH_ECOTAX_RATE)) : $result['ecotax']; // Ecotax french implementation
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}

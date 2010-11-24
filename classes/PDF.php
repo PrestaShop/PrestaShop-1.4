@@ -644,7 +644,7 @@ class PDFCore extends PDF_PageGroupCore
 				$counter = $counter + ($lineSize / 5) ;
 
 				$i = -1;
-				$ecotax += $product['ecotax'] * (int)($product['product_quantity']);
+				$ecotax += $product['ecotax'] * (1 + PS_FRENCH_ECOTAX_RATE) * $product['product_quantity'];
 
 				// Unit vars
 				$unit_without_tax = $product['product_price'];
