@@ -55,8 +55,8 @@ class BlockSpecials extends Module
 	public function hookRightColumn($params)
 	{
 		global $smarty;
-		$date_today = date('Y-m-d H:i:s', time());
-		if (!$special = Product::getRandomSpecial(intval($params['cookie']->id_lang),$date_today,$date_today) AND !Configuration::get('PS_BLOCK_SPECIALS_DISPLAY'))
+		$date_now = date('Y-m-d H:i:s', time());
+		if (!$special = Product::getRandomSpecial(intval($params['cookie']->id_lang),$date_now,$date_now) AND !Configuration::get('PS_BLOCK_SPECIALS_DISPLAY'))
 			return;
 		$smarty->assign(array('special' => $special,
 													'priceWithoutReduction_tax_excl' => Tools::ps_round($special['price_without_reduction'] / (1 + $special['rate'] / 100), 2),
