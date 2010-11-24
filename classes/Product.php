@@ -1275,18 +1275,16 @@ class ProductCore extends ObjectModel
 	static public function getRandomSpecial($id_lang, $beginning = false, $ending = false)
 	{
 		global $cookie;
-
-		if (!$beginning)
-			$ids_product = self::_getProductIdByDate($beginning, $ending);
-
+        $currentDate = date('Y-m-d H:i:s');
+		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
+			
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
-		$currentDate = date('Y-m-d H:i:s');
 		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT p.id_product
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE 1
 		AND p.`active` = 1
-		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN ('.implode(', ', $ids_product).')' : '').'
+		'.($ids_product ? ' AND p.`id_product` IN ('.implode(', ', $ids_product).')' : '').'
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
@@ -1336,10 +1334,9 @@ class ProductCore extends ObjectModel
             $orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-		if (!$beginning)
-			$ids_product = self::_getProductIdByDate($beginning, $ending);
-		
 		$currentDate = date('Y-m-d H:i:s');
+		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
+		
 		if ($count)
 		{
 			$sql = '
