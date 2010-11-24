@@ -35,7 +35,8 @@ function constructSqlFilter($sqlId, $filterValue, $tableAlias = 'main.')
 		elseif ($matches[1] == '' && $matches[3] == '')
 		{
 			preg_match('/^(\d+)(\|(\d+))+$/', $matches[2], $matches2);
-			if (count($matches2) > 0)
+			preg_match('/^(\d+)$/', $matches[2], $matches4);
+			if (count($matches2) > 0 || count($matches4) > 1)
 			{
 				$values = explode('|', $matches[2]);
 				$ret .= ' AND (';
