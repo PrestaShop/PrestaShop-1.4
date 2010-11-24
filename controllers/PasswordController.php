@@ -20,11 +20,11 @@ class PasswordControllerCore extends FrontController
 					$this->errors[] = Tools::displayError('there is no account registered to this e-mail address');
 				else
 				{
-					if ((strtotime($customer->last_passwd_gen.'+'.intval($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
-						$this->errors[] = Tools::displayError('You can regenerate your password only each').' '.intval($min_time).' '.Tools::displayError('minute(s)');
+					if ((strtotime($customer->last_passwd_gen.'+'.(int)($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
+						$this->errors[] = Tools::displayError('You can regenerate your password only each').' '.(int)($min_time).' '.Tools::displayError('minute(s)');
 					else
 					{	
-						Mail::Send(intval($this->cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
+						Mail::Send((int)($this->cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname,
@@ -37,22 +37,22 @@ class PasswordControllerCore extends FrontController
 				}
 			}
 		}
-		elseif (($token = Tools::getValue('token')) && ($id_customer = intval(Tools::getValue('id'))))
+		elseif (($token = Tools::getValue('token')) && ($id_customer = (int)(Tools::getValue('id'))))
 		{
-			$email = Db::getInstance()->getValue('SELECT `email` FROM '._DB_PREFIX_.'customer c WHERE c.`secure_key` = "'.pSQL($token).'" AND c.id_customer='.intval($id_customer));
+			$email = Db::getInstance()->getValue('SELECT `email` FROM '._DB_PREFIX_.'customer c WHERE c.`secure_key` = "'.pSQL($token).'" AND c.id_customer='.(int)($id_customer));
 			if ($email)
 			{
 				$customer = new Customer();
 				$customer->getByemail($email);
-				if ((strtotime($customer->last_passwd_gen.'+'.intval($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
+				if ((strtotime($customer->last_passwd_gen.'+'.(int)($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
 					Tools::redirect('authentication.php?error_regen_pwd');
 				else
 				{
-					$customer->passwd = Tools::encrypt($password = Tools::passwdGen(intval(MIN_PASSWD_LENGTH)));
+					$customer->passwd = Tools::encrypt($password = Tools::passwdGen((int)(MIN_PASSWD_LENGTH)));
 					$customer->last_passwd_gen = date('Y-m-d H:i:s', time());
 					if ($customer->update())
 					{
-						Mail::Send(intval($this->cookie->id_lang), 'password', Mail::l('Your password'), 
+						Mail::Send((int)($this->cookie->id_lang), 'password', Mail::l('Your password'), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname, 

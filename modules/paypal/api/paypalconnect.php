@@ -86,7 +86,7 @@ class PayPalConnect extends Paypal
 		$header =	'POST '.strval($script).' HTTP/1.0'."\r\n" .
 					'Host: '.strval($host)."\r\n".
 					'Content-Type: application/x-www-form-urlencoded'."\r\n".
-					'Content-Length: '.intval($lenght)."\r\n".
+					'Content-Length: '.(int)($lenght)."\r\n".
 					'Connection: close'."\r\n\r\n";
 		return $header;
 	}

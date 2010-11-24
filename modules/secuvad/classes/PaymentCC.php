@@ -24,8 +24,8 @@ class PaymentCC extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_order'] = intval($this->file);
-		$fields['id_currency'] = intval($this->file);
+		$fields['id_order'] = (int)($this->file);
+		$fields['id_currency'] = (int)($this->file);
 		$fields['amount'] = floatval($this->amount);
 		$fields['transaction_id'] = pSQL($this->transaction_id);
 		$fields['card_number'] = pSQL($this->card_number);

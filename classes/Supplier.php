@@ -79,11 +79,11 @@ class SupplierCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_supplier'] = intval($this->id);
+			$fields['id_supplier'] = (int)($this->id);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 	
@@ -107,9 +107,9 @@ class SupplierCore extends ObjectModel
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$query = 'SELECT s.*, sl.`description`';
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
-		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.(int)($id_lang).')
 		'.($active ? ' WHERE s.`active` = 1 ' : '');
-		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
+		$query .= ' ORDER BY s.`name` ASC'.($p ? ' LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n) : '');
 		$suppliers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 		if ($suppliers === false)
 			return false;
@@ -120,19 +120,19 @@ class SupplierCore extends ObjectModel
 					SELECT p.`id_product`
 					FROM `'._DB_PREFIX_.'product` p
 					LEFT JOIN `'._DB_PREFIX_.'supplier` as m ON (m.`id_supplier`= p.`id_supplier`)
-					WHERE m.`id_supplier` = '.intval($supplier['id_supplier']).
+					WHERE m.`id_supplier` = '.(int)($supplier['id_supplier']).
 					($all_groups ? '' :'
 					AND p.`id_product` IN (
 						SELECT cp.`id_product`
 						FROM `'._DB_PREFIX_.'category_group` cg
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$suppliers[$key]['nb_products'] = sizeof($result);
 			}
 		for ($i = 0; $i < sizeof($suppliers); $i++)
-			if (intval(Configuration::get('PS_REWRITING_SETTINGS')))
+			if ((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 				$suppliers[$i]['link_rewrite'] = Tools::link_rewrite($suppliers[$i]['name'], false);
 			else
 				$suppliers[$i]['link_rewrite'] = 0;
@@ -150,7 +150,7 @@ class SupplierCore extends ObjectModel
 	{
 		if (!isset(self::$cacheName[$id_supplier]))
 			self::$cacheName[$id_supplier] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `name` FROM `'._DB_PREFIX_.'supplier` WHERE `id_supplier` = '.intval($id_supplier));
+			SELECT `name` FROM `'._DB_PREFIX_.'supplier` WHERE `id_supplier` = '.(int)($id_supplier));
 		return self::$cacheName[$id_supplier];
 	}
 	static public function getIdByName($name)
@@ -160,7 +160,7 @@ class SupplierCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'supplier`
 		WHERE `name` = \''.pSQL($name).'\'');
 		if (isset($result['id_supplier']))
-			return intval($result['id_supplier']);
+			return (int)($result['id_supplier']);
 		return false;
  	}
 
@@ -181,38 +181,38 @@ class SupplierCore extends ObjectModel
 			$sql = '
 				SELECT p.`id_product`
 				FROM `'._DB_PREFIX_.'product` p
-				WHERE p.id_supplier = '.intval($id_supplier)
+				WHERE p.id_supplier = '.(int)($id_supplier)
 				.($active ? ' AND p.`active` = 1' : '').'
 				AND p.`id_product` IN (
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)';
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
-			return intval(sizeof($result));
+			return (int)(sizeof($result));
 		}
 
 		$sql = '
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, s.`name` AS supplier_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
 			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice, m.`name` AS manufacturer_name 
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
-		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON s.`id_supplier` = p.`id_supplier`
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
-		WHERE p.`id_supplier` = '.intval($id_supplier).($active ? ' AND p.`active` = 1' : '').'
+		WHERE p.`id_supplier` = '.(int)($id_supplier).($active ? ' AND p.`active` = 1' : '').'
 		AND p.`id_product` IN (
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
-		LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
+		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
 			return false;
@@ -226,8 +226,8 @@ class SupplierCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT p.`id_product`,  pl.`name`
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-		WHERE p.`id_supplier` = '.intval($this->id));
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
+		WHERE p.`id_supplier` = '.(int)($this->id));
 	}
 	/*
 	* Specify if a supplier already in base
@@ -240,7 +240,7 @@ class SupplierCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_supplier`
 		FROM '._DB_PREFIX_.'supplier s
-		WHERE s.`id_supplier` = '.intval($id_supplier));
+		WHERE s.`id_supplier` = '.(int)($id_supplier));
 		
 		return isset($row['id_supplier']);
 	}

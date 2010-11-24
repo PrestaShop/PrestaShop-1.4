@@ -22,21 +22,21 @@ class OrderReturnControllerCore extends FrontController
 			$this->errors[] = Tools::displayError('order ID is required');
 		else
 		{
-			$orderRet = new OrderReturn(intval($_GET['id_order_return']));
+			$orderRet = new OrderReturn((int)($_GET['id_order_return']));
 			if (Validate::isLoadedObject($orderRet) AND $orderRet->id_customer == $this->cookie->id_customer)
 			{
-				$order = new Order(intval($orderRet->id_order));
+				$order = new Order((int)($orderRet->id_order));
 				if (Validate::isLoadedObject($order))
 				{
-					$state = new OrderReturnState(intval($orderRet->state));
+					$state = new OrderReturnState((int)($orderRet->state));
 					$this->smarty->assign(array(
 						'orderRet' => $orderRet,
 						'order' => $order,
-						'state_name' => $state->name[intval($this->cookie->id_lang)],
+						'state_name' => $state->name[(int)($this->cookie->id_lang)],
 						'return_allowed' => false,
-						'products' => OrderReturn::getOrdersReturnProducts(intval($orderRet->id), $order),
-						'returnedCustomizations' => OrderReturn::getReturnedCustomizedProducts(intval($orderRet->id_order)),
-						'customizedDatas' => Product::getAllCustomizedDatas(intval($order->id_cart))
+						'products' => OrderReturn::getOrdersReturnProducts((int)($orderRet->id), $order),
+						'returnedCustomizations' => OrderReturn::getReturnedCustomizedProducts((int)($orderRet->id_order)),
+						'customizedDatas' => Product::getAllCustomizedDatas((int)($order->id_cart))
 					));
 				}
 				else
@@ -48,7 +48,7 @@ class OrderReturnControllerCore extends FrontController
 
 		$this->smarty->assign(array(
 			'errors' => $this->errors,
-			'nbdaysreturn' => intval(Configuration::get('PS_ORDER_RETURN_NB_DAYS'))
+			'nbdaysreturn' => (int)(Configuration::get('PS_ORDER_RETURN_NB_DAYS'))
 		));
 	}
 	

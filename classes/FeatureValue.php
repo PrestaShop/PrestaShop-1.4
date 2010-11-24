@@ -40,7 +40,7 @@ class FeatureValueCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_feature'] = intval($this->id_feature);
+		$fields['id_feature'] = (int)($this->id_feature);
 		return $fields;
 	}
 	
@@ -67,7 +67,7 @@ class FeatureValueCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature_value`
-		WHERE `id_feature` = '.intval($id_feature));
+		WHERE `id_feature` = '.(int)($id_feature));
 	}
 	
 	/**
@@ -83,8 +83,8 @@ class FeatureValueCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature_value` v
-		LEFT JOIN `'._DB_PREFIX_.'feature_value_lang` vl ON (v.`id_feature_value` = vl.`id_feature_value` AND vl.`id_lang` = '.intval($id_lang).')
-		WHERE v.`id_feature` = '.intval($id_feature).' AND (v.`custom` IS NULL OR v.`custom` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'feature_value_lang` vl ON (v.`id_feature_value` = vl.`id_feature_value` AND vl.`id_lang` = '.(int)($id_lang).')
+		WHERE v.`id_feature` = '.(int)($id_feature).' AND (v.`custom` IS NULL OR v.`custom` = 0)
 		ORDER BY vl.`value` ASC');
 	}
 
@@ -100,7 +100,7 @@ class FeatureValueCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature_value_lang`
-		WHERE `id_feature_value` = '.intval($id_feature_value).'
+		WHERE `id_feature_value` = '.(int)($id_feature_value).'
 		ORDER BY `id_lang`');
 	}
 	
@@ -126,9 +126,9 @@ class FeatureValueCore extends ObjectModel
 			FROM '._DB_PREFIX_.'feature_value fv
 			LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.`id_feature_value` = fv.`id_feature_value`)
 			WHERE `value` = \''.pSQL($name).'\'
-			AND fv.`id_feature` = '.intval($id_feature).'
+			AND fv.`id_feature` = '.(int)($id_feature).'
 			GROUP BY fv.`id_feature_value` LIMIT 1');
-		if (!isset($rq[0]['id_feature_value']) OR !$id_feature_value = intval($rq[0]['id_feature_value']))
+		if (!isset($rq[0]['id_feature_value']) OR !$id_feature_value = (int)($rq[0]['id_feature_value']))
 		{
 			// Feature doesn't exist, create it
 			$featureValue = new FeatureValue();
@@ -146,7 +146,7 @@ class FeatureValueCore extends ObjectModel
 	public function delete()
 	{
 		/* Also delete related products */
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature_value` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature_value` = '.(int)($this->id));
 		return parent::delete();
 	}
 }

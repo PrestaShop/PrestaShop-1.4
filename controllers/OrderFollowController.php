@@ -17,7 +17,7 @@ class OrderFollowControllerCore extends FrontController
 		
 		if (Tools::isSubmit('submitReturnMerchandise'))
 		{
-			if (!$id_order = intval(Tools::getValue('id_order')))
+			if (!$id_order = (int)(Tools::getValue('id_order')))
 				Tools::redirect('history.php');
 			if (!$order_qte_input = Tools::getValue('order_qte_input'))
 				Tools::redirect('order-follow.php?errorDetail1');
@@ -26,12 +26,12 @@ class OrderFollowControllerCore extends FrontController
 			if (!$ids_order_detail = Tools::getValue('ids_order_detail') AND !$customizationIds)
 				Tools::redirect('order-follow.php?errorDetail2');
 
-			$order = new Order(intval($id_order));
+			$order = new Order((int)($id_order));
 			if (!$order->isReturnable()) Tools::redirect('order-follow.php?errorNotReturnable');
 			if ($order->id_customer != $this->cookie->id_customer)
 				die(Tools::displayError());
 			$orderReturn = new OrderReturn();
-			$orderReturn->id_customer = intval($this->cookie->id_customer);
+			$orderReturn->id_customer = (int)($this->cookie->id_customer);
 			$orderReturn->id_order = $id_order;
 			$orderReturn->question = strval(Tools::getValue('returnText'));
 			if (empty($orderReturn->question))
@@ -46,7 +46,7 @@ class OrderFollowControllerCore extends FrontController
 			Tools::redirect('order-follow.php');
 		}
 
-		$ordersReturn = OrderReturn::getOrdersReturn(intval($this->cookie->id_customer));
+		$ordersReturn = OrderReturn::getOrdersReturn((int)($this->cookie->id_customer));
 		if (Tools::isSubmit('errorQuantity'))
 			$this->smarty->assign('errorQuantity', true);
 		elseif (Tools::isSubmit('errorMsg'))

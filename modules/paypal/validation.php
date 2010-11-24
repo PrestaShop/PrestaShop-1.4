@@ -92,10 +92,10 @@ if ($result == 'VERIFIED') {
 		$errors .= $paypal->getL('mc_currency').'<br />';
 	if (empty($errors))
 	{
-		$cart = new Cart(intval($cart_secure[0]));
+		$cart = new Cart((int)($cart_secure[0]));
 		if (!$cart->id)
 			$errors = $paypal->getL('cart').'<br />';
-		elseif (Order::getOrderByCartId(intval($cart_secure[0])))
+		elseif (Order::getOrderByCartId((int)($cart_secure[0])))
 			$errors = $paypal->getL('order').'<br />';
 		else
 			$paypal->validateOrder((int)$cart_secure[0], _PS_OS_PAYMENT_, floatval($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);

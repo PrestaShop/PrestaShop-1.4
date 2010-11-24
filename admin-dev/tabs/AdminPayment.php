@@ -25,17 +25,17 @@ class AdminPayment extends AdminTab
 				if($module->id)
 				{
 					$module->country = array();
-					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.intval($module->id));
+					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
 					foreach ($countries as $country)
 						$module->country[] = $country['id_country'];
 						
 					$module->currency = array();
-					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.intval($module->id));
+					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.(int)($module->id));
 					foreach ($currencies as $currency)
 						$module->currency[] = $currency['id_currency'];
 						
 					$module->group = array();
-					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.intval($module->id));
+					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.(int)($module->id));
 					foreach ($groups as $group)
 						$module->group[] = $group['id_group'];
 				}
@@ -70,7 +70,7 @@ class AdminPayment extends AdminTab
 		foreach ($this->paymentModules as $module)
 			if ($module->active AND isset($_POST[$module->name.'_'.$type.'']))
 				foreach ($_POST[$module->name.'_'.$type.''] as $selected)
-					$values[] = '('.intval($module->id).', '.intval($selected).')';
+					$values[] = '('.(int)($module->id).', '.(int)($selected).')';
 		Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_'.$type.' (`id_module`, `id_'.$type.'`) VALUES '.implode(',', $values));
 		Tools::redirectAdmin($currentIndex.'&conf=4'.'&token='.$this->token);
 	}
@@ -86,10 +86,10 @@ foreach ($this->paymentModules AS $module)
 */
 		
 		$currencies = Currency::getCurrencies();
-		$countries = Country::getCountries(intval($cookie->id_lang));
-		$groups = Group::getGroups(intval($cookie->id_lang));
+		$countries = Country::getCountries((int)($cookie->id_lang));
+		$groups = Group::getGroups((int)($cookie->id_lang));
 		
-		$tokenModules = Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee));
+		$tokenModules = Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee));
 		echo '<h2 class="space">'.$this->l('Payment modules list').'</h2>';
 		echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" />';
 		

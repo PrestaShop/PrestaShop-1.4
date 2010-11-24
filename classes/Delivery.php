@@ -44,10 +44,10 @@ class DeliveryCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['id_carrier'] = intval($this->id_carrier);
-		$fields['id_range_price'] = intval($this->id_range_price);
-		$fields['id_range_weight'] = intval($this->id_range_weight);
-		$fields['id_zone'] = intval($this->id_zone);
+		$fields['id_carrier'] = (int)($this->id_carrier);
+		$fields['id_range_price'] = (int)($this->id_range_price);
+		$fields['id_range_weight'] = (int)($this->id_range_weight);
+		$fields['id_zone'] = (int)($this->id_zone);
 		$fields['price'] = floatval($this->price);
 		
 		return $fields;

@@ -48,12 +48,12 @@ class Loyalty extends Module
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
 				OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
-				OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array(intval(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher'))	
+				OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array((int)(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher'))	
 			)
 			return false;
 
 		$category_config = '';
-		$categories = Category::getSimpleCategories(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$categories = Category::getSimpleCategories((int)(Configuration::get('PS_LANG_DEFAULT')));
 		foreach ($categories as $category)
 			$category_config .= $category['id_category'].',';
 		$category_config = rtrim($category_config, ',');
@@ -139,7 +139,7 @@ class Loyalty extends Module
 	{
 		if (Tools::isSubmit('submitLoyalty'))
 		{
-			$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+			$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 			$languages = Language::getLanguages();
 			
 			$this->_errors = array();
@@ -150,19 +150,19 @@ class Loyalty extends Module
 				Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $this->voucherCategories(Tools::getValue('categoryBox')));
 				Configuration::updateValue('PS_LOYALTY_POINT_VALUE', floatval(Tools::getValue('point_value')));
 				Configuration::updateValue('PS_LOYALTY_POINT_RATE', floatval(Tools::getValue('point_rate')));
-				Configuration::updateValue('PS_LOYALTY_NONE_AWARD', intval(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
-				$this->loyaltyStateValidation->id_order_state = intval(Tools::getValue('id_order_state_validation'));
-				$this->loyaltyStateCancel->id_order_state = intval(Tools::getValue('id_order_state_cancel'));
+				Configuration::updateValue('PS_LOYALTY_NONE_AWARD', (int)(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
+				$this->loyaltyStateValidation->id_order_state = (int)(Tools::getValue('id_order_state_validation'));
+				$this->loyaltyStateCancel->id_order_state = (int)(Tools::getValue('id_order_state_cancel'));
 			
 				$arrayVoucherDetails = array();
 				foreach ($languages AS $language)
 				{
-					$arrayVoucherDetails[intval($language['id_lang'])] = Tools::getValue('voucher_details_'.intval($language['id_lang']));
-					$this->loyaltyStateDefault->name[intval($language['id_lang'])] = Tools::getValue('default_loyalty_state_'.intval($language['id_lang']));
-					$this->loyaltyStateValidation->name[intval($language['id_lang'])] = Tools::getValue('validation_loyalty_state_'.intval($language['id_lang']));
-					$this->loyaltyStateCancel->name[intval($language['id_lang'])] = Tools::getValue('cancel_loyalty_state_'.intval($language['id_lang']));
-					$this->loyaltyStateConvert->name[intval($language['id_lang'])] = Tools::getValue('convert_loyalty_state_'.intval($language['id_lang']));
-					$this->loyaltyStateNoneAward->name[intval($language['id_lang'])] = Tools::getValue('none_award_loyalty_state_'.intval($language['id_lang']));
+					$arrayVoucherDetails[(int)($language['id_lang'])] = Tools::getValue('voucher_details_'.(int)($language['id_lang']));
+					$this->loyaltyStateDefault->name[(int)($language['id_lang'])] = Tools::getValue('default_loyalty_state_'.(int)($language['id_lang']));
+					$this->loyaltyStateValidation->name[(int)($language['id_lang'])] = Tools::getValue('validation_loyalty_state_'.(int)($language['id_lang']));
+					$this->loyaltyStateCancel->name[(int)($language['id_lang'])] = Tools::getValue('cancel_loyalty_state_'.(int)($language['id_lang']));
+					$this->loyaltyStateConvert->name[(int)($language['id_lang'])] = Tools::getValue('convert_loyalty_state_'.(int)($language['id_lang']));
+					$this->loyaltyStateNoneAward->name[(int)($language['id_lang'])] = Tools::getValue('none_award_loyalty_state_'.(int)($language['id_lang']));
 				}
 				if (empty($arrayVoucherDetails[$defaultLanguage]))
 					$arrayVoucherDetails[$defaultLanguage] = ' ';
@@ -216,10 +216,10 @@ class Loyalty extends Module
 		$this->instanceDefaultStates();
 		$this->_postProcess();
 
-		$categories = Category::getCategories(intval($cookie->id_lang));
+		$categories = Category::getCategories((int)($cookie->id_lang));
 		$order_states = OrderState::getOrderStates($cookie->id_lang);
-		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages(false);
 		$languageIds = 'voucher_details¤default_loyalty_state¤none_award_loyalty_state¤convert_loyalty_state¤validation_loyalty_state¤cancel_loyalty_state';
 
@@ -247,7 +247,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="voucher_details_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="voucher_details_'.$language['id_lang'].'" value="'.Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', intval($language['id_lang'])).'" />
+						<input size="33" type="text" name="voucher_details_'.$language['id_lang'].'" value="'.Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', (int)($language['id_lang'])).'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'voucher_details', true);
 		$html .= '	</div>
@@ -266,7 +266,7 @@ class Loyalty extends Module
 		foreach ($order_states as $order_state)
 		{
 			$html .= '<option value="' . $order_state['id_order_state'] . '" style="background-color:' . $order_state['color'] . ';"';
-			if (intval($this->loyaltyStateValidation->id_order_state) == $order_state['id_order_state'] )
+			if ((int)($this->loyaltyStateValidation->id_order_state) == $order_state['id_order_state'] )
 				$html .= ' selected="selected"';
 			$html .= '>' . $order_state['name'] . '</option>';
 		}
@@ -279,7 +279,7 @@ class Loyalty extends Module
 		foreach ($order_states as $order_state)
 		{
 			$html .= '<option value="' . $order_state['id_order_state'] . '" style="background-color:' . $order_state['color'] . ';"';
-			if (intval($this->loyaltyStateCancel->id_order_state) == $order_state['id_order_state'] )
+			if ((int)($this->loyaltyStateCancel->id_order_state) == $order_state['id_order_state'] )
 				$html .= ' selected="selected"';
 			$html .= '>' . $order_state['name'] . '</option>';
 		}
@@ -299,7 +299,7 @@ class Loyalty extends Module
 		foreach ($indexedCategories AS $k => $row)
 			$index[] = $row['id_category'];
 		
-		$html .= $this->recurseCategoryForInclude(intval(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
+		$html .= $this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
 		$html .= '				</table>
 				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'<sup> *</sup></p>
 				<div class="clear"></div>
@@ -309,7 +309,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="default_loyalty_state_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="default_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateDefault->name[intval($language['id_lang'])].'" />
+						<input size="33" type="text" name="default_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateDefault->name[(int)($language['id_lang'])].'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'default_loyalty_state', true);
 		$html .= '	</div>
@@ -319,7 +319,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="none_award_loyalty_state_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="none_award_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateNoneAward->name[intval($language['id_lang'])].'" />
+						<input size="33" type="text" name="none_award_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateNoneAward->name[(int)($language['id_lang'])].'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'none_award_loyalty_state', true);
 		$html .= '	</div>
@@ -329,7 +329,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="convert_loyalty_state_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="convert_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateConvert->name[intval($language['id_lang'])].'" />
+						<input size="33" type="text" name="convert_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateConvert->name[(int)($language['id_lang'])].'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'convert_loyalty_state', true);
 		$html .= '	</div>
@@ -339,7 +339,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="validation_loyalty_state_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="validation_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateValidation->name[intval($language['id_lang'])].'" />
+						<input size="33" type="text" name="validation_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateValidation->name[(int)($language['id_lang'])].'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'validation_loyalty_state', true);
 		$html .= '	</div>
@@ -349,7 +349,7 @@ class Loyalty extends Module
 		foreach ($languages as $language)
 			$html .= '
 					<div id="cancel_loyalty_state_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="cancel_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateCancel->name[intval($language['id_lang'])].'" />
+						<input size="33" type="text" name="cancel_loyalty_state_'.$language['id_lang'].'" value="'.$this->loyaltyStateCancel->name[(int)($language['id_lang'])].'" />
 					</div>';
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'cancel_loyalty_state', true);
 		$html .= '	</div>
@@ -379,7 +379,7 @@ class Loyalty extends Module
 		$html .= '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR ((int)(Tools::getValue('id_category')) == $id_category AND !(int)($id_obj))) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
@@ -405,23 +405,23 @@ class Loyalty extends Module
 	{
 		global $smarty;
 
-		$id_product = intval(Tools::getValue('id_product'));
+		$id_product = (int)(Tools::getValue('id_product'));
 		
-		$product = new Product(intval($id_product));
+		$product = new Product((int)($id_product));
 		if (Validate::isLoadedObject($product))
 		{
 			if (Validate::isLoadedObject($params['cart']))
 			{
-				$pointsBefore = intval(LoyaltyModule::getCartNbPoints($params['cart']));
-				$pointsAfter = intval(LoyaltyModule::getCartNbPoints($params['cart'], $product));
-				$points = intval($pointsAfter - $pointsBefore);
+				$pointsBefore = (int)(LoyaltyModule::getCartNbPoints($params['cart']));
+				$pointsAfter = (int)(LoyaltyModule::getCartNbPoints($params['cart'], $product));
+				$points = (int)($pointsAfter - $pointsBefore);
 			}
 			else
 			{
-				$points = intval(LoyaltyModule::getNbPointsByPrice($product->getPrice(true, intval($product->getIdProductAttributeMostExpsensive()))));
+				$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(true, (int)($product->getIdProductAttributeMostExpsensive()))));
 				$pointsAfter = $points;
 			}
-			$smarty->assign(array('points' => intval($points), 'total_points' => intval($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));
+			$smarty->assign(array('points' => (int)($points), 'total_points' => (int)($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));
 
 			return $this->display(__FILE__, 'product.tpl');
 		}
@@ -447,20 +447,20 @@ class Loyalty extends Module
 		$result = Db::getInstance()->getRow('
 		SELECT f.id_loyalty
 		FROM `'._DB_PREFIX_.'loyalty` f
-		WHERE f.id_customer = '.intval($params['orderReturn']->id_customer).'
-		AND f.id_order = '.intval($params['orderReturn']->id_order));
-		$loyalty = new LoyaltyModule(intval($result['id_loyalty']));
+		WHERE f.id_customer = '.(int)($params['orderReturn']->id_customer).'
+		AND f.id_order = '.(int)($params['orderReturn']->id_order));
+		$loyalty = new LoyaltyModule((int)($result['id_loyalty']));
 		if (!Validate::isLoadedObject($loyalty))
 			return false;
 		
 		$totalPrice = 0;
-		$details = OrderReturn::getOrdersReturnDetail(intval($params['orderReturn']->id));
+		$details = OrderReturn::getOrdersReturnDetail((int)($params['orderReturn']->id));
 		foreach ($details as $detail)
 		{
 			$result = Db::getInstance()->getRow('
 			SELECT product_price * (1 + (tax_rate / 100)) AS ttc
 			FROM '._DB_PREFIX_.'order_detail od
-			WHERE id_order_detail = '.intval($detail['id_order_detail']));
+			WHERE id_order_detail = '.(int)($detail['id_order_detail']));
 			$totalPrice += $result['ttc'] * $detail['product_quantity'];
 		}
 		
@@ -470,12 +470,12 @@ class Loyalty extends Module
 				
 		Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'loyalty_history` (`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
-		VALUES ('.intval($loyalty->id).', '.intval(LoyaltyStateModule::getCancelId()).', -'.intval($canceledTotal).', NOW())');
+		VALUES ('.(int)($loyalty->id).', '.(int)(LoyaltyStateModule::getCancelId()).', -'.(int)($canceledTotal).', NOW())');
 		$loyalty->points -= $canceledTotal;
 		$loyalty->update();
 		Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'loyalty_history` (`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
-		VALUES ('.intval($loyalty->id).', '.intval(LoyaltyStateModule::getValidationId()).', '.intval($loyalty->points).', NOW())');
+		VALUES ('.(int)($loyalty->id).', '.(int)(LoyaltyStateModule::getValidationId()).', '.(int)($loyalty->points).', NOW())');
 	}
 
 	/* Hook display on shopping cart summary */
@@ -501,7 +501,7 @@ class Loyalty extends Module
 		$loyalty->id_customer = $params['customer']->id;
 		$loyalty->id_order = $params['order']->id;
 		$loyalty->points = LoyaltyModule::getOrderNbPoints($params['order']);
-		if (intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND intval($loyalty->points) == 0)
+		if ((int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND (int)($loyalty->points) == 0)
 			$loyalty->id_loyalty_state = LoyaltyStateModule::getNoneAwardId();
 		else
 			$loyalty->id_loyalty_state = LoyaltyStateModule::getDefaultId();
@@ -514,7 +514,7 @@ class Loyalty extends Module
 		if (!Validate::isLoadedObject($params['newOrderStatus']))
 			die (Tools::displayError('Some parameters are missing.'));
 		$newOrder = $params['newOrderStatus'];
-		$order = new Order(intval($params['id_order']));
+		$order = new Order((int)($params['id_order']));
 		if ($order AND !Validate::isLoadedObject($order))
 			die (Tools::displayError('Incorrect object Order.'));
 		$this->instanceDefaultStates();
@@ -523,19 +523,19 @@ class Loyalty extends Module
 		{
 			if (!Validate::isLoadedObject($loyalty = new LoyaltyModule(LoyaltyModule::getByOrderId($order->id))))
 				return false;
-			if (intval(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND $loyalty->id_loyalty_state == LoyaltyStateModule::getNoneAwardId())
+			if ((int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND $loyalty->id_loyalty_state == LoyaltyStateModule::getNoneAwardId())
 				return true;
 
 			if ($newOrder->id == $this->loyaltyStateValidation->id_order_state)
 			{
 				$loyalty->id_loyalty_state = LoyaltyStateModule::getValidationId();
-				if (intval($loyalty->points) < 0)
-					$loyalty->points = abs(intval($loyalty->points));
+				if ((int)($loyalty->points) < 0)
+					$loyalty->points = abs((int)($loyalty->points));
 			}
 			else if ($newOrder->id == $this->loyaltyStateCancel->id_order_state)
 			{
 				$loyalty->id_loyalty_state = LoyaltyStateModule::getCancelId();
-				$loyalty->points = 0;//-abs(intval($loyalty->points));
+				$loyalty->points = 0;//-abs((int)($loyalty->points));
 			}
 			return $loyalty->save();
 		}
@@ -545,12 +545,12 @@ class Loyalty extends Module
 	/* Hook display in tab AdminCustomers on BO */
 	public function hookAdminCustomers($params)
 	{
-		$customer = new Customer(intval($params['id_customer']));
+		$customer = new Customer((int)($params['id_customer']));
 		if ($customer AND !Validate::isLoadedObject($customer))
 			die (Tools::displayError('Incorrect object Customer.'));
 
-		$fidelities = LoyaltyModule::getAllByIdCustomer(intval($params['id_customer']), intval($params['cookie']->id_lang));
-		$points = intval(LoyaltyModule::getPointsByCustomer(intval($params['id_customer'])));
+		$fidelities = LoyaltyModule::getAllByIdCustomer((int)($params['id_customer']), (int)($params['cookie']->id_lang));
+		$points = (int)(LoyaltyModule::getPointsByCustomer((int)($params['id_customer'])));
 
 		$html = '<h2>'.$this->l('Loyalty points').'</h2>
 		<table cellspacing="0" cellpadding="0" class="table">
@@ -565,9 +565,9 @@ class Loyalty extends Module
 		{
 			$html.= '
 			<tr style="background-color: '.($key%2!=0 ? '#FFF6CF' : '#FFFFFF').';">
-				<td>'.(intval($loyalty['id']) > 0 ? '<a style="color: #268CCD; font-weight: bold; text-decoration: underline;" href="index.php?tab=AdminOrders&id_order='.$loyalty['id'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($params['cookie']->id_employee)).'">'.$this->l('#').sprintf('%06d', $loyalty['id']).'</a>' : '--').'</td>
-				<td>'.Tools::displayDate($loyalty['date'], intval($params['cookie']->id_lang)).'</td>
-				<td>'.(intval($loyalty['id']) > 0 ? $loyalty['total_without_shipping'] : '--').'</td>
+				<td>'.((int)($loyalty['id']) > 0 ? '<a style="color: #268CCD; font-weight: bold; text-decoration: underline;" href="index.php?tab=AdminOrders&id_order='.$loyalty['id'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($params['cookie']->id_employee)).'">'.$this->l('#').sprintf('%06d', $loyalty['id']).'</a>' : '--').'</td>
+				<td>'.Tools::displayDate($loyalty['date'], (int)($params['cookie']->id_lang)).'</td>
+				<td>'.((int)($loyalty['id']) > 0 ? $loyalty['total_without_shipping'] : '--').'</td>
 				<td>'.$loyalty['points'].'</td>
 				<td>'.$loyalty['state'].'</td>
 			</tr>';
@@ -585,19 +585,19 @@ class Loyalty extends Module
 	
 	public function hookCancelProduct($params)
 	{
-		if (!Validate::isLoadedObject($params['order']) OR !Validate::isLoadedObject($orderDetail = new OrderDetail(intval($params['id_order_detail']))))
+		if (!Validate::isLoadedObject($params['order']) OR !Validate::isLoadedObject($orderDetail = new OrderDetail((int)($params['id_order_detail']))))
 			return false;
-		if (!Validate::isLoadedObject($loyalty = new LoyaltyModule(intval(LoyaltyModule::getByOrderId(intval($params['order']->id))))))
+		if (!Validate::isLoadedObject($loyalty = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))))))
 			return false;
 
 		$loyalty->points = $loyalty->points - LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
 		$loyalty->save();
 		
-		$loyaltyNew = new LoyaltyModule(intval(LoyaltyModule::getByOrderId(intval($params['order']->id))));
+		$loyaltyNew = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))));
 		$loyaltyNew->points = LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
 		$loyaltyNew->id_loyalty_state = LoyaltyStateModule::getCancelId();
-		$loyaltyNew->id_order = intval($params['order']->id);
-		$loyaltyNew->id_customer = intval($loyalty->id_customer);
+		$loyaltyNew->id_order = (int)($params['order']->id);
+		$loyaltyNew->id_customer = (int)($loyalty->id_customer);
 		$loyaltyNew->add();
 		
 		return;

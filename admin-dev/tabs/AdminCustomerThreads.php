@@ -104,7 +104,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send(intval($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
+					Mail::Send((int)($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
 						$employee->email, $employee->firstname.' '.$employee->lastname,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
 					$cm->message = $this->l('Message forwarded to').' '.$employee->firstname.' '.$employee->lastname."\n".$this->l('Comment:').' '.$_POST['message_forward'];
@@ -116,7 +116,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send(intval($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
+					Mail::Send((int)($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
 						$email, NULL,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
 					$cm->message = $this->l('Message forwarded to').' '.$email."\n".$this->l('Comment:').' '.$_POST['message_forward'];
@@ -146,7 +146,7 @@ class AdminCustomerThreads extends AdminTab
 					}
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
-					'{link}' => Tools::getHttpHost(true).__PS_BASE_URI__.'contact-form.php?id_customer_thread='.intval($ct->id).'&token='.$ct->token);
+					'{link}' => Tools::getHttpHost(true).__PS_BASE_URI__.'contact-form.php?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
 					Mail::Send($ct->id_lang, 'reply_msg','An answer to your message is available', $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
 					$ct->status = 'closed';
 					$ct->update();
@@ -170,7 +170,7 @@ class AdminCustomerThreads extends AdminTab
 			$this->viewcustomer_thread();
 		else
 		{
-			$this->getList(intval($cookie->id_lang),
+			$this->getList((int)($cookie->id_lang),
 				!Tools::getValue($this->table.'Orderby') ? 'date_upd' : NULL,
 				!Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL
 			);
@@ -276,7 +276,7 @@ class AdminCustomerThreads extends AdminTab
 	{
 		global $cookie, $currentIndex;
 
-		$customersToken = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
+		$customersToken = Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee));
 		$contacts = Contact::getContacts($cookie->id_lang);
 		
 		if (!$email)
@@ -286,8 +286,8 @@ class AdminCustomerThreads extends AdminTab
 				SELECT o.id_order
 				FROM '._DB_PREFIX_.'orders o
 				LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
-				WHERE o.id_customer = '.intval($message['id_customer']).'
-				AND od.product_id = '.intval($message['id_product']).'
+				WHERE o.id_customer = '.(int)($message['id_customer']).'
+				AND od.product_id = '.(int)($message['id_product']).'
 				ORDER BY o.date_add DESC');
 			
 			$output = '
@@ -297,30 +297,30 @@ class AdminCustomerThreads extends AdminTab
 					? '<img src="../img/t/AdminCustomers.gif" alt="'.Configuration::get('PS_SHOP_NAME').'" /> '.Configuration::get('PS_SHOP_NAME').' - '.$message['employee_name']
 					: '<img src="'.__PS_BASE_URI__.'img/admin/tab-customers.gif" alt="'.Configuration::get('PS_SHOP_NAME').'" /> '.(
 						!empty($message['id_customer'])
-						? '<a href="index.php?tab=AdminCustomers&id_customer='.intval($message['id_customer']).'&viewcustomer&token='.$customersToken.'" title="'.$this->l('View customer').'">'.$message['customer_name'].'</a>'
+						? '<a href="index.php?tab=AdminCustomers&id_customer='.(int)($message['id_customer']).'&viewcustomer&token='.$customersToken.'" title="'.$this->l('View customer').'">'.$message['customer_name'].'</a>'
 						: $message['email']
 					)
 				).'</legend>
 				<div style="font-size:11px">'.(
 						(!empty($message['id_customer']) AND empty($message['employee_name']))
-						? '<b>'.$this->l('Customer ID:').'</b> <a href="index.php?tab=AdminCustomers&id_customer='.intval($message['id_customer']).'&viewcustomer&token='.$customersToken.'" title="'.$this->l('View customer').'">'.intval($message['id_customer']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('Customer ID:').'</b> <a href="index.php?tab=AdminCustomers&id_customer='.(int)($message['id_customer']).'&viewcustomer&token='.$customersToken.'" title="'.$this->l('View customer').'">'.(int)($message['id_customer']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'
-					<b>'.$this->l('Sent on:').'</b> '.Tools::displayDate($message['date_add'], intval($cookie->id_lang), true).'<br />'.(
+					<b>'.$this->l('Sent on:').'</b> '.Tools::displayDate($message['date_add'], (int)($cookie->id_lang), true).'<br />'.(
 						empty($message['employee_name'])
 						? '<b>'.$this->l('Browser:').'</b> '.strip_tags($message['user_agent']).'<br />'
 						: ''
 					).(
 						(!empty($message['file_name']) AND file_exists(_PS_MODULE_DIR_.'../upload/'.$message['file_name']))
-						? '<b>'.$this->l('File attachment').'</b> <a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.$message['id_customer_thread'].'&viewcustomer_thread&token='.Tools::getAdminToken('AdminCustomerThreads'.intval(Tab::getIdFromClassName('AdminCustomerThreads')).intval($cookie->id_employee)).'&filename='.$message['file_name'].'" title="'.$this->l('View file').'"><img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('File attachment').'</b> <a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.$message['id_customer_thread'].'&viewcustomer_thread&token='.Tools::getAdminToken('AdminCustomerThreads'.(int)(Tab::getIdFromClassName('AdminCustomerThreads')).(int)($cookie->id_employee)).'&filename='.$message['file_name'].'" title="'.$this->l('View file').'"><img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(
 						(!empty($message['id_order']) AND empty($message['employee_name']))
-						? '<b>'.$this->l('Order #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($message['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_order']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('Order #').'</b> <a href="index.php?tab=AdminOrders&id_order='.(int)($message['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'" title="'.$this->l('View order').'">'.(int)($message['id_order']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(
 						(!empty($message['id_product']) AND empty($message['employee_name']))
-						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.intval($id_order_product).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'" title="'.$this->l('View order').'">'.intval($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
+						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.(int)($id_order_product).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'" title="'.$this->l('View order').'">'.(int)($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'<br />
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
@@ -335,11 +335,11 @@ class AdminCustomerThreads extends AdminTab
 		else
 		{
 			$output = '<div style="font-size:11px">
-			'.($id_employee ? '<a href="'.Tools::getHttpHost(true).$currentIndex.'&token='.Tools::getAdminToken('AdminCustomerThreads'.intval(Tab::getIdFromClassName('AdminCustomerThreads')).intval($id_employee)).'&id_customer_thread='.(int)$message['id_customer_thread'].'&viewcustomer_thread">'.$this->l('View this thread').'</a><br />' : '').'
+			'.($id_employee ? '<a href="'.Tools::getHttpHost(true).$currentIndex.'&token='.Tools::getAdminToken('AdminCustomerThreads'.(int)(Tab::getIdFromClassName('AdminCustomerThreads')).(int)($id_employee)).'&id_customer_thread='.(int)$message['id_customer_thread'].'&viewcustomer_thread">'.$this->l('View this thread').'</a><br />' : '').'
 			<b>'.$this->l('Sent by:').'</b> '.(!empty($message['customer_name']) ? $message['customer_name'].' ('.$message['email'].')' : $message['email'])
-			.((!empty($message['id_customer']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Customer ID:').'</b> '.intval($message['id_customer']).'<br />' : '')
-			.((!empty($message['id_order']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Order #').':</b> '.intval($message['id_order']).'<br />' : '')
-			.((!empty($message['id_product']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Product #').':</b> '.intval($message['id_product']).'<br />' : '')
+			.((!empty($message['id_customer']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Customer ID:').'</b> '.(int)($message['id_customer']).'<br />' : '')
+			.((!empty($message['id_order']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Order #').':</b> '.(int)($message['id_order']).'<br />' : '')
+			.((!empty($message['id_product']) AND empty($message['employee_name'])) ? '<br /><b>'.$this->l('Product #').':</b> '.(int)($message['id_product']).'<br />' : '')
 			.'<br /><b>'.$this->l('Subject:').'</b> '.$message['subject'];
 		}
 		
@@ -356,11 +356,11 @@ class AdminCustomerThreads extends AdminTab
 			if (empty($message['employee_name']))
 				$output .= '
 				<p style="text-align:right">
-					<button style="font-family: Verdana; font-size: 11px; font-weight:bold; height: 65px; width: 120px;" onclick="$(\'#reply_to_'.intval($message['id_customer_message']).'\').show(500); $(this).hide();">
+					<button style="font-family: Verdana; font-size: 11px; font-weight:bold; height: 65px; width: 120px;" onclick="$(\'#reply_to_'.(int)($message['id_customer_message']).'\').show(500); $(this).hide();">
 						<img src="'.__PS_BASE_URI__.'img/admin/contact.gif" alt="" style="margin-bottom: 5px;" /><br />'.$this->l('Reply to this message').'
 					</button>
 				</p>
-				<div id="reply_to_'.intval($message['id_customer_message']).'" style="display: none; margin-top: 20px;"">
+				<div id="reply_to_'.(int)($message['id_customer_message']).'" style="display: none; margin-top: 20px;"">
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post" enctype="multipart/form-data">
 						<p>'.$this->l('Please type your reply below:').'</p>
 						<textarea style="width: 450px; height: 175px;" name="reply_message">'.str_replace('\r\n', "\n", Configuration::get('PS_CUSTOMER_SERVICE_SIGNATURE', $message['id_lang'])).'</textarea>
@@ -372,7 +372,7 @@ class AdminCustomerThreads extends AdminTab
 						<div>
 						<div style="width: 450px; text-align: center;">
 							<input type="submit" class="button" name="submitReply" value="'.$this->l('Send my reply').'" style="margin-top:20px;" />
-							<input type="hidden" name="id_customer_thread" value="'.intval($message['id_customer_thread']).'" />
+							<input type="hidden" name="id_customer_thread" value="'.(int)($message['id_customer_thread']).'" />
 							<input type="hidden" name="msg_email" value="'.$message['email'].'" />
 						</div>					
 					</form>
@@ -413,7 +413,7 @@ class AdminCustomerThreads extends AdminTab
 					<option value="-1">'.$this->l('-- Choose --').'</option>
 					<option value="0">'.$this->l('Someone else').'</option>';
 		foreach ($employees AS $employee)
-			echo '	<option value="'.intval($employee['id_employee']).'">'.substr($employee['firstname'], 0, 1).'. '.$employee['lastname'].'</option>';
+			echo '	<option value="'.(int)($employee['id_employee']).'">'.substr($employee['firstname'], 0, 1).'. '.$employee['lastname'].'</option>';
 		echo '	</select>
 				<div id="message_forward_email" style="display:none">
 					<b>'.$this->l('E-mail').'</b> <input type="text" name="email" />
@@ -505,7 +505,7 @@ class AdminCustomerThreads extends AdminTab
 			{
 				$totalOK = 0;
 				$ordersOK = array();
-				$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+				$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
 				foreach ($orders as $order)
 					if ($order['valid'])
 					{
@@ -530,9 +530,9 @@ class AdminCustomerThreads extends AdminTab
 					foreach ($ordersOK AS $order)
 						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 						<td class="center">'.$order['id_order'].'</td>
-							<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang)).'</td>
+							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
 							<td align="right">'.$order['nb_products'].'</td>
-							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency(intval($order['id_currency']))).'</td>
+							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency((int)($order['id_currency']))).'</td>
 							<td>'.$order['payment'].'</td>
 							<td>'.$order['order_state'].'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
@@ -555,11 +555,11 @@ class AdminCustomerThreads extends AdminTab
 						<th class="center">'.$this->l('Actions').'</th>
 					</tr>';
 				$irow = 0;
-				$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+				$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
 				foreach ($products AS $product)
 					echo '
 					<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'\'">
-						<td>'.Tools::displayDate($product['date_add'], intval($cookie->id_lang), true).'</td>
+						<td>'.Tools::displayDate($product['date_add'], (int)($cookie->id_lang), true).'</td>
 						<td>'.$product['product_id'].'</td>
 						<td>'.$product['product_name'].'</td>
 						<td align="right">'.$product['product_quantity'].'</td>

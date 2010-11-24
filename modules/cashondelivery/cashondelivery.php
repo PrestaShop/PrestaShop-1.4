@@ -36,7 +36,7 @@ class CashOnDelivery extends PaymentModule
 		// Check if cart has product download
 		foreach ($params['cart']->getProducts() AS $product)
 		{
-			$pd = ProductDownload::getIdFromIdProduct(intval($product['id_product']));
+			$pd = ProductDownload::getIdFromIdProduct((int)($product['id_product']));
 			if ($pd AND Validate::isUnsignedInt($pd))
 				return false;
 		}

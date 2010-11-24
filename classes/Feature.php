@@ -59,8 +59,8 @@ class FeatureCore extends ObjectModel
 		return Db::getInstance()->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature` f
-		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON ( f.`id_feature` = fl.`id_feature` AND fl.`id_lang` = '.intval($id_lang).')
-		WHERE f.`id_feature` = '.intval($id_feature));
+		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON ( f.`id_feature` = fl.`id_feature` AND fl.`id_lang` = '.(int)($id_lang).')
+		WHERE f.`id_feature` = '.(int)($id_feature));
 	}
 	
 	/**
@@ -75,7 +75,7 @@ class FeatureCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'feature` f
-		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON (f.`id_feature` = fl.`id_feature` AND fl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON (f.`id_feature` = fl.`id_feature` AND fl.`id_lang` = '.(int)($id_lang).')
 		ORDER BY fl.`name` ASC');
 	}
 	
@@ -104,10 +104,10 @@ class FeatureCore extends ObjectModel
 	public function delete()
 	{
 	 	/* Also delete related attributes */
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value_lang` WHERE `id_feature_value` IN (SELECT id_feature_value FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.intval($this->id).')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value_lang` WHERE `id_feature_value` IN (SELECT id_feature_value FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.(int)($this->id).')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.(int)($this->id));
 		/* Also delete related products */
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature` = '.(int)($this->id));
 		return parent::delete();
 	}
 	
@@ -123,10 +123,10 @@ class FeatureCore extends ObjectModel
 			 	if (!Validate::isTableOrIdentifier($key))
 	 				die(Tools::displayError());
 			$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
-			'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
+			'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 			$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') : 
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
-			pSQL($this->identifier).'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
+			pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 		}
 		return $result;
 	}
@@ -143,7 +143,7 @@ class FeatureCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(ag.`id_feature`) as nb
 		FROM `'._DB_PREFIX_.'feature` ag
-		LEFT JOIN `'._DB_PREFIX_.'feature_lang` agl ON (ag.`id_feature` = agl.`id_feature` AND `id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'feature_lang` agl ON (ag.`id_feature` = agl.`id_feature` AND `id_lang` = '.(int)($id_lang).')
 		ORDER BY `name` ASC');
 		return ($result['nb']);
 	}
@@ -159,7 +159,7 @@ class FeatureCore extends ObjectModel
 	{
 		$rq = Db::getInstance()->getRow('SELECT `id_feature` FROM '._DB_PREFIX_.'feature_lang WHERE `name` = \''.pSQL($name).'\' GROUP BY `id_feature`');
 		if (!empty($rq))
-			return intval($rq['id_feature']);
+			return (int)($rq['id_feature']);
 		// Feature doesn't exist, create it
 		$feature = new Feature();
 		$languages = Language::getLanguages();
@@ -173,7 +173,7 @@ class FeatureCore extends ObjectModel
 	{
 		$ids = '';
 		foreach($list_ids_product as $id)
-			$ids .= intval($id).',';
+			$ids .= (int)($id).',';
 			
 		$ids = rtrim($ids, ',');
 	
@@ -186,7 +186,7 @@ class FeatureCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'feature_product` fp ON f.`id_feature` = fp.`id_feature`
 		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON f.`id_feature` = fl.`id_feature`
 		WHERE fp.`id_product` IN ('.$ids.')
-		AND `id_lang` = '.intval($id_lang).'
+		AND `id_lang` = '.(int)($id_lang).'
 		GROUP BY f.`id_feature`
 		ORDER BY nb DESC');
 	}

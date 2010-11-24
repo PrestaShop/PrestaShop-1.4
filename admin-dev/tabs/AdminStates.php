@@ -108,9 +108,9 @@ class AdminStates extends AdminTab
 				<label>'.$this->l('Country:').' </label>
 				<div class="margin-form">
 					<select name="id_country">';
-				$countries = Country::getCountries(intval($cookie->id_lang), false, true);
+				$countries = Country::getCountries((int)($cookie->id_lang), false, true);
 				foreach ($countries AS $country)
-					echo '<option value="'.intval($country['id_country']).'"'.(($this->getFieldValue($obj, 'id_country') == $country['id_country']) ? ' selected="selected"' : '').'>'.$country['name'].'</option>';
+					echo '<option value="'.(int)($country['id_country']).'"'.(($this->getFieldValue($obj, 'id_country') == $country['id_country']) ? ' selected="selected"' : '').'>'.$country['name'].'</option>';
 				echo '
 					</select>
 					<p>'.$this->l('Country where state, region or city is located').'</p>
@@ -121,7 +121,7 @@ class AdminStates extends AdminTab
 
 		$zones = Zone::getZones();
 		foreach ($zones AS $zone)
-			echo '<option value="'.intval($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
+			echo '<option value="'.(int)($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
 
 		echo '
 					</select>

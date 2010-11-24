@@ -110,14 +110,14 @@ class Reverso extends Module
 																																			
 		$phone = str_replace(array(' '), '', $phone);
 		if (strlen($phone) < 10)
-			return intval($conf['REVERSO_BAD_NUMBER']);
+			return (int)($conf['REVERSO_BAD_NUMBER']);
 		
 		$url_to_call = str_replace(array('{ARG_PHONE}', '{ARG_SERIAL}', '{ARG_ADDRESS}'), array($phone, $conf['REVERSO_SERIAL'], $conf['REVERSO_ADDRESS']), $this->_api_url);
 		$reverso = file_get_contents($url_to_call);
 
 		$address = json_decode($reverso, true);
 		if ($address == 'NULL')
-			return intval($conf['REVERSO_BAD_NUMBER']);
+			return (int)($conf['REVERSO_BAD_NUMBER']);
 	
 		$fields = array('last_name' => 'lastname',
 														'first_name' => 'firstname',

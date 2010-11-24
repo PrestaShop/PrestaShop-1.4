@@ -45,7 +45,7 @@ class AdminOrderMessage extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" size="53" name="name_'.$language['id_lang'].'" value="'.$this->getFieldValue($obj, 'name', intval($language['id_lang'])).'" /><sup> *</sup>
+						<input type="text" size="53" name="name_'.$language['id_lang'].'" value="'.$this->getFieldValue($obj, 'name', (int)($language['id_lang'])).'" /><sup> *</sup>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤message', 'name');
 				echo '</div>
@@ -55,7 +55,7 @@ class AdminOrderMessage extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="message_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<textarea rows="15" cols="50" name="message_'.$language['id_lang'].'">'.$this->getFieldValue($obj, 'message', intval($language['id_lang'])).'</textarea><sup> *</sup>
+						<textarea rows="15" cols="50" name="message_'.$language['id_lang'].'">'.$this->getFieldValue($obj, 'message', (int)($language['id_lang'])).'</textarea><sup> *</sup>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤message', 'message');
 				echo '</div>

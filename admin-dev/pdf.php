@@ -24,15 +24,15 @@ if (isset($_GET['pdf']))
 {
 	if (!isset($_GET['id_order']))
 		die (Tools::displayError('order ID is missing'));
-	$order = new Order(intval($_GET['id_order']));
+	$order = new Order((int)($_GET['id_order']));
 	if (!Validate::isLoadedObject($order))
 		die(Tools::displayError('cannot find order in database'));
 	PDF::invoice($order);
 }
 elseif (isset($_GET['id_order_slip']))
 {
-	$orderSlip = new OrderSlip(intval($_GET['id_order_slip']));
-	$order = new Order(intval($orderSlip->id_order));
+	$orderSlip = new OrderSlip((int)($_GET['id_order_slip']));
+	$order = new Order((int)($orderSlip->id_order));
 	if (!Validate::isLoadedObject($order))
 		die(Tools::displayError('cannot find order in database'));
 	$order->products = OrderSlip::getOrdersSlipProducts($orderSlip->id, $order);
@@ -41,7 +41,7 @@ elseif (isset($_GET['id_order_slip']))
 }
 elseif (isset($_GET['id_delivery']))
 {
-	$order = Order::getByDelivery(intval($_GET['id_delivery']));
+	$order = Order::getByDelivery((int)($_GET['id_delivery']));
 	if (!Validate::isLoadedObject($order))
 		die(Tools::displayError('cannot find order in database'));
 	$tmp = NULL;

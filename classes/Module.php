@@ -120,18 +120,18 @@ abstract class ModuleCore
 		$result = Db::getInstance()->ExecuteS('
 				SELECT `id_hook`
 				FROM `'._DB_PREFIX_.'hook_module` hm
-				WHERE `id_module` = '.intval($this->id));
+				WHERE `id_module` = '.(int)($this->id));
 		foreach	($result AS $row)
 		{
 			Db::getInstance()->Execute('
 					DELETE FROM `'._DB_PREFIX_.'hook_module`
-					WHERE `id_module` = '.intval($this->id).'
-					AND `id_hook` = '.intval($row['id_hook']));
+					WHERE `id_module` = '.(int)($this->id).'
+					AND `id_hook` = '.(int)($row['id_hook']));
 			$this->cleanPositions($row['id_hook']);
 		}
 		return Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'module`
-				WHERE `id_module` = '.intval($this->id));
+				WHERE `id_module` = '.(int)($this->id));
 	}
 
 	/**
@@ -150,7 +150,7 @@ abstract class ModuleCore
 		// Check if already register
 		$result = Db::getInstance()->getRow('
 		SELECT hm.`id_module` FROM `'._DB_PREFIX_.'hook_module` hm, `'._DB_PREFIX_.'hook` h
-		WHERE hm.`id_module` = '.intval($this->id).'
+		WHERE hm.`id_module` = '.(int)($this->id).'
 		AND h.`name` = \''.pSQL($hook_name).'\'
 		AND h.`id_hook` = hm.`id_hook`');
 		if ($result)
@@ -168,16 +168,16 @@ abstract class ModuleCore
 		$result2 = Db::getInstance()->getRow('
 		SELECT MAX(`position`) AS position
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_hook` = '.intval($result['id_hook']));
+		WHERE `id_hook` = '.(int)($result['id_hook']));
 		if (!$result2)
 			return false;
 
 		// Register module in hook
 		$return = Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
-		VALUES ('.intval($this->id).', '.intval($result['id_hook']).', '.intval($result2['position'] + 1).')');
+		VALUES ('.(int)($this->id).', '.(int)($result['id_hook']).', '.(int)($result2['position'] + 1).')');
 
-		$this->cleanPositions(intval($result['id_hook']));
+		$this->cleanPositions((int)($result['id_hook']));
 
 		return $return;
 	}
@@ -203,7 +203,7 @@ abstract class ModuleCore
 		<div id="languages_'.$id.'" class="language_flags">
 			'.$this->l('Choose language:').'<br /><br />';
 		foreach ($languages as $language)
-			$output .= '<img src="../img/l/'.intval($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+			$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 		$output .= '</div>';
 
 		if ($return)
@@ -222,8 +222,8 @@ abstract class ModuleCore
 		return Db::getInstance()->Execute('
 		DELETE
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_module` = '.intval($this->id).'
-		AND `id_hook` = '.intval($hook_id));
+		WHERE `id_module` = '.(int)($this->id).'
+		AND `id_hook` = '.(int)($hook_id));
 	}
 
 	/**
@@ -237,8 +237,8 @@ abstract class ModuleCore
 		return Db::getInstance()->Execute('
 		DELETE
 		FROM `'._DB_PREFIX_.'hook_module_exceptions`
-		WHERE `id_module` = '.intval($this->id).'
-		AND `id_hook` = '.intval($hook_id));
+		WHERE `id_module` = '.(int)($this->id).'
+		AND `id_hook` = '.(int)($hook_id));
 	}
 
 	/**
@@ -256,7 +256,7 @@ abstract class ModuleCore
 			{
 				$result = Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
-				VALUES ('.intval($this->id).', '.intval($id_hook).', \''.pSQL(strval($except)).'\')');
+				VALUES ('.(int)($this->id).', '.(int)($id_hook).', \''.pSQL(strval($except)).'\')');
 				if (!$result)
 					return false;
 			}
@@ -269,7 +269,7 @@ abstract class ModuleCore
 		// Cleaning...
 		Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions` 
-				WHERE `id_module` = '.intval($this->id).' AND `id_hook` ='.intval($id_hook));
+				WHERE `id_module` = '.(int)($this->id).' AND `id_hook` ='.(int)($id_hook));
 		return $this->registerExceptions($id_hook, $excepts);
 	}
 
@@ -300,7 +300,7 @@ abstract class ModuleCore
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `name`
 			FROM `'._DB_PREFIX_.'module`
-			WHERE `id_module` = '.intval($id_module));
+			WHERE `id_module` = '.(int)($id_module));
 		return ($result ? Module::getInstanceByName($result['name']) : false);
 	}
 
@@ -419,7 +419,7 @@ abstract class ModuleCore
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
 				continue;
 			
-			$exceptions = $moduleInstance->getExceptions(intval($array['id_hook']), $array['id_module']);
+			$exceptions = $moduleInstance->getExceptions((int)($array['id_hook']), $array['id_module']);
 			$phpSelf = basename($_SERVER['PHP_SELF']);
 			foreach ($exceptions as $exception)
 				if ($phpSelf == $exception['file_name'])
@@ -437,8 +437,8 @@ abstract class ModuleCore
 	{
 		global $cart, $cookie;
 		$hookArgs = array('cookie' => $cookie, 'cart' => $cart);
-		$id_customer = intval($cookie->id_customer);
-		$billing = new Address(intval($cart->id_address_invoice));
+		$id_customer = (int)($cookie->id_customer);
+		$billing = new Address((int)($cart->id_address_invoice));
 		$output = '';
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -446,11 +446,11 @@ abstract class ModuleCore
 		FROM `'._DB_PREFIX_.'module_country` mc
 		LEFT JOIN `'._DB_PREFIX_.'module` m ON m.`id_module` = mc.`id_module`
 		INNER JOIN `'._DB_PREFIX_.'module_group` mg ON (m.`id_module` = mg.`id_module`)
-		INNER JOIN `'._DB_PREFIX_.'customer_group` cg on (cg.`id_group` = mg.`id_group` AND cg.`id_customer` = '.intval($id_customer).')
+		INNER JOIN `'._DB_PREFIX_.'customer_group` cg on (cg.`id_group` = mg.`id_group` AND cg.`id_customer` = '.(int)($id_customer).')
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
 		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
 		WHERE h.`name` = \'payment\'
-		AND mc.id_country = '.intval($billing->id_country).'
+		AND mc.id_country = '.(int)($billing->id_country).'
 		AND m.`active` = 1
 		ORDER BY hm.`position`, m.`name` DESC');
 		if ($result)
@@ -471,7 +471,7 @@ abstract class ModuleCore
 	{
 		global $_MODULES, $_MODULE, $cookie;
 		
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
 
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 		if (Tools::file_exists_cache($file) AND include_once($file))
@@ -506,11 +506,11 @@ abstract class ModuleCore
 		if (!$res = Db::getInstance()->ExecuteS('
 		SELECT hm.`id_module`, hm.`position`, hm.`id_hook` 
 		FROM `'._DB_PREFIX_.'hook_module` hm 
-		WHERE hm.`id_hook` = '.intval($id_hook).' 
-		ORDER BY hm.`position` '.(intval($way) ? 'ASC' : 'DESC')))
+		WHERE hm.`id_hook` = '.(int)($id_hook).' 
+		ORDER BY hm.`position` '.((int)($way) ? 'ASC' : 'DESC')))
 			return false;
 		foreach ($res AS $key => $values)
-			if (intval($values[$this->identifier]) == intval($this->id))
+			if ((int)($values[$this->identifier]) == (int)($this->id))
 			{
 				$k = $key ;
 				break ;
@@ -521,18 +521,18 @@ abstract class ModuleCore
 		$to = $res[$k + 1];
 
 		if (isset($position) and !empty($position))
-			$to['position'] = intval($position);
+			$to['position'] = (int)($position);
 		
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'hook_module`
 		SET `position`= position '.($way ? '-1' : '+1').'
-		WHERE position between '.intval(min(array($from['position'], $to['position']))) .' AND '.intval(max(array($from['position'], $to['position']))).'
-		AND `id_hook`='.intval($from['id_hook']))
+		WHERE position between '.(int)(min(array($from['position'], $to['position']))) .' AND '.(int)(max(array($from['position'], $to['position']))).'
+		AND `id_hook`='.(int)($from['id_hook']))
 		AND
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'hook_module`
-		SET `position`='.intval($to['position']).'
-		WHERE `'.pSQL($this->identifier).'` = '.intval($from[$this->identifier]).' AND `id_hook`='.intval($to['id_hook']))
+		SET `position`='.(int)($to['position']).'
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($from[$this->identifier]).' AND `id_hook`='.(int)($to['id_hook']))
 		);
 	}
 
@@ -546,15 +546,15 @@ abstract class ModuleCore
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_module`
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_hook` = '.intval($id_hook).'
+		WHERE `id_hook` = '.(int)($id_hook).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
-			SET `position` = '.intval($i + 1).'
-			WHERE `id_hook` = '.intval($id_hook).'
-			AND `id_module` = '.intval($result[$i]['id_module']));
+			SET `position` = '.(int)($i + 1).'
+			WHERE `id_hook` = '.(int)($id_hook).'
+			AND `id_module` = '.(int)($result[$i]['id_module']));
 		return true;
 	}
 
@@ -569,8 +569,8 @@ abstract class ModuleCore
 		$result = Db::getInstance()->getRow('
 			SELECT `position`
 			FROM `'._DB_PREFIX_.'hook_module`
-			WHERE `id_hook` = '.intval($id_hook).'
-			AND `id_module` = '.intval($this->id));
+			WHERE `id_hook` = '.(int)($id_hook).'
+			AND `id_module` = '.(int)($this->id));
 		return $result['position'];
 	}
 
@@ -615,7 +615,7 @@ abstract class ModuleCore
 				self::$exceptionsCache[$row['key']][] = array('file_name' => $row['value']);
 			}
 		}
-		return (array_key_exists(intval($id_hook).'-'.intval($this->id), self::$exceptionsCache) ? self::$exceptionsCache[intval($id_hook).'-'.intval($this->id)] : array());
+		return (array_key_exists((int)($id_hook).'-'.(int)($this->id), self::$exceptionsCache) ? self::$exceptionsCache[(int)($id_hook).'-'.(int)($this->id)] : array());
 	}
 
 	public static function isInstalled($moduleName)
@@ -634,7 +634,7 @@ abstract class ModuleCore
 		FROM `'._DB_PREFIX_.'hook_module` hm
 		LEFT JOIN `'._DB_PREFIX_.'hook` h ON (h.`id_hook` = hm.`id_hook`) 
 		WHERE h.`name` = \''.pSQL($hook).'\'
-		AND hm.`id_module` = '.intval($this->id)
+		AND hm.`id_module` = '.(int)($this->id)
 		);
 	}
 

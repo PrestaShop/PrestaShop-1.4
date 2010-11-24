@@ -113,7 +113,7 @@ class StatsVisits extends ModuleGraph
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 7)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 5, 2))] = intval($row['total']);
+				$this->_values[$i][(int)(substr($row['date_add'], 5, 2))] = (int)($row['total']);
 		}
 	}
 	
@@ -123,7 +123,7 @@ class StatsVisits extends ModuleGraph
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 10)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 8, 2))] = intval($row['total']);
+				$this->_values[$i][(int)(substr($row['date_add'], 8, 2))] = (int)($row['total']);
 		}
 	}
 
@@ -133,7 +133,7 @@ class StatsVisits extends ModuleGraph
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 13)');
 			foreach ($result AS $row)
-				$this->_values[$i][intval(substr($row['date_add'], 11, 2))] = intval($row['total']);
+				$this->_values[$i][(int)(substr($row['date_add'], 11, 2))] = (int)($row['total']);
 		}
 	}
 }

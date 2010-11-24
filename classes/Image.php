@@ -47,9 +47,9 @@ class ImageCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = intval($this->id_product);
-		$fields['position'] = intval($this->position);
-		$fields['cover'] = intval($this->cover);
+		$fields['id_product'] = (int)($this->id_product);
+		$fields['position'] = (int)($this->position);
+		$fields['cover'] = (int)($this->cover);
 		return $fields;
 	}
 	
@@ -65,14 +65,14 @@ class ImageCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.intval($this->id_product).'
+		WHERE `id_product` = '.(int)($this->id_product).'
 		ORDER BY `position`');
 		$i = 1;
 		
 		foreach ($result as $row)
 		{
 			$row['position'] = $i++;
-			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.intval($row['id_image']), 1);
+			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.(int)($row['id_image']), 1);
 		}
 	}
 		
@@ -89,8 +89,8 @@ class ImageCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'image` i
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON i.`id_image` = il.`id_image`
-		WHERE i.`id_product` = '.intval($id_product).'
-		AND il.`id_lang` = '.intval($id_lang).'
+		WHERE i.`id_product` = '.(int)($id_product).'
+		AND il.`id_lang` = '.(int)($id_lang).'
 		ORDER BY `position` ASC');
 	}
 	
@@ -118,7 +118,7 @@ class ImageCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_image`) AS total
 		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.intval($id_product));
+		WHERE `id_product` = '.(int)($id_product));
 		return $result['total'];
 	}
 	
@@ -133,7 +133,7 @@ class ImageCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT MAX(`position`) AS max
 		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.intval($id_product));
+		WHERE `id_product` = '.(int)($id_product));
 		return $result['max'];
 	}
 	
@@ -153,7 +153,7 @@ class ImageCore extends ObjectModel
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image` 
 		SET `cover` = 0 
-		WHERE `id_product` = '.intval($id_product));
+		WHERE `id_product` = '.(int)($id_product));
 	}
 	
 	/**
@@ -166,7 +166,7 @@ class ImageCore extends ObjectModel
 	{
 		return Db::getInstance()->getRow('
 		SELECT * FROM `'._DB_PREFIX_.'image` 
-		WHERE `id_product` = '.intval($id_product).'
+		WHERE `id_product` = '.(int)($id_product).'
 		AND `cover`= 1');
 	}
 	
@@ -182,24 +182,24 @@ class ImageCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_image`
 		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.intval($id_product_old));
+		WHERE `id_product` = '.(int)($id_product_old));
 		foreach ($result as $row)
 		{
 			$image = new Image($row['id_image']);
 			$saved_id = $image->id_image;
 			unset($image->id);
 			unset($image->id_image);
-			$image->id_product = intval($id_product_new);
+			$image->id_product = (int)($id_product_new);
 			if ($image->add())
             {
 				foreach ($imagesTypes AS $k => $imageType)
-					if (file_exists(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'-'.$imageType['name'].'.jpg'))
-						copy(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'-'.$imageType['name'].'.jpg', _PS_PROD_IMG_DIR_.
-						intval($id_product_new).'-'.intval($image->id).'-'.$imageType['name'].'.jpg');
-                if (file_exists(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'.jpg'))
-                    copy(_PS_PROD_IMG_DIR_.intval($id_product_old).'-'.intval($row['id_image']).'.jpg',
-                            _PS_PROD_IMG_DIR_.intval($id_product_new).'-'.intval($image->id).'.jpg');
-				self::replaceAttributeImageAssociationId($combinationImages, intval($saved_id), intval($image->id));
+					if (file_exists(_PS_PROD_IMG_DIR_.(int)($id_product_old).'-'.(int)($row['id_image']).'-'.$imageType['name'].'.jpg'))
+						copy(_PS_PROD_IMG_DIR_.(int)($id_product_old).'-'.(int)($row['id_image']).'-'.$imageType['name'].'.jpg', _PS_PROD_IMG_DIR_.
+						(int)($id_product_new).'-'.(int)($image->id).'-'.$imageType['name'].'.jpg');
+                if (file_exists(_PS_PROD_IMG_DIR_.(int)($id_product_old).'-'.(int)($row['id_image']).'.jpg'))
+                    copy(_PS_PROD_IMG_DIR_.(int)($id_product_old).'-'.(int)($row['id_image']).'.jpg',
+                            _PS_PROD_IMG_DIR_.(int)($id_product_new).'-'.(int)($image->id).'.jpg');
+				self::replaceAttributeImageAssociationId($combinationImages, (int)($saved_id), (int)($image->id));
             }
 			else
 				return false;
@@ -213,8 +213,8 @@ class ImageCore extends ObjectModel
 			return ;
 		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
 			foreach ($imageIds AS $key => $imageId)
-				if (intval($imageId) == intval($saved_id))
-					$combinationImages['new'][$id_product_attribute][$key] = intval($id_image);
+				if ((int)($imageId) == (int)($saved_id))
+					$combinationImages['new'][$id_product_attribute][$key] = (int)($id_image);
 	}
 
 	/**
@@ -229,7 +229,7 @@ class ImageCore extends ObjectModel
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
 		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
 			foreach ($imageIds AS $imageId)
-				$query .= '('.intval($id_product_attribute).', '.intval($imageId).'), ';
+				$query .= '('.(int)($id_product_attribute).', '.(int)($imageId).'), ';
 		$query = rtrim($query, ', ');
 		return DB::getInstance()->Execute($query);
 	}
@@ -242,28 +242,28 @@ class ImageCore extends ObjectModel
 	  */
 	public function	positionImage($position, $direction)
 	{
-		$position = intval($position);
-		$direction = intval($direction);
+		$position = (int)($position);
+		$direction = (int)($direction);
 		
 		// temporary position
 		$high_position = Image::getHighestPosition($this->id_product) + 1;
 		
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
-		SET `position` = '.intval($high_position).'
-		WHERE `id_product` = '.intval($this->id_product).'
+		SET `position` = '.(int)($high_position).'
+		WHERE `id_product` = '.(int)($this->id_product).'
 		AND `position` = '.($direction ? $position - 1 : $position + 1));
 		
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = `position`'.($direction ? '-1' : '+1').'
-		WHERE `id_image` = '.intval($this->id));
+		WHERE `id_image` = '.(int)($this->id));
 		
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = '.$this->position.'
-		WHERE `id_product` = '.intval($this->id_product).'
-		AND `position` = '.intval($high_position));
+		WHERE `id_product` = '.(int)($this->id_product).'
+		AND `position` = '.(int)($high_position));
 	}
 	
 	static public function getSize($type)

@@ -29,7 +29,7 @@ foreach ($expeditions as $expedition)
 {
 	if ($expedition['id_order'] == NULL)
 		continue;
-	if (OrderHistory::getLastOrderState(intval($expedition['id_order']))->id == _PS_OS_DELIVERED_)
+	if (OrderHistory::getLastOrderState((int)($expedition['id_order']))->id == _PS_OS_DELIVERED_)
 		continue;
 	$params['Expedition'] = $expedition['exp_number'];
 	$params['Security'] = strtoupper(md5($params['Enseigne'].$params['Expedition'].'FR'.Configuration::get('MR_KEY_WEBSERVICE')));
@@ -44,8 +44,8 @@ foreach ($expeditions as $expedition)
 	if ($is_delivered == 1)
 	{
 		$history = new OrderHistory();
-		$history->id_order = intval($expedition['id_order']);
-		$history->changeIdOrderState(intval(_PS_OS_DELIVERED_), intval($expedition['id_order']));
+		$history->id_order = (int)($expedition['id_order']);
+		$history->changeIdOrderState((int)(_PS_OS_DELIVERED_), (int)($expedition['id_order']));
 		$history->addWithemail();
 	}
 }

@@ -66,7 +66,7 @@ class Watermark extends Module
 	{
 		$yalign = Tools::getValue('yalign');
 		$xalign = Tools::getValue('xalign');
-		$transparency = intval(Tools::getValue('transparency'));
+		$transparency = (int)(Tools::getValue('transparency'));
 		$image_types = Tools::getValue('image_types');
 		
 		if (empty($transparency))
@@ -206,7 +206,7 @@ class Watermark extends Module
 		foreach($this->imageTypes as $imageType)
 		{
 		    $newFile = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-'.stripslashes($imageType['name']).'.jpg';
-		    if (!imageResize($file, $newFile, intval($imageType['width']), intval($imageType['height'])))
+		    if (!imageResize($file, $newFile, (int)($imageType['width']), (int)($imageType['height'])))
 				$return = false;    
 		}
 		return $return;

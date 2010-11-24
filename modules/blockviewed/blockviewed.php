@@ -37,11 +37,11 @@ class BlockViewed extends Module
 		{
 			if (!$productNbr = Tools::getValue('productNbr') OR empty($productNbr))
 				$output .= '<div class="alert error">'.$this->l('You must fill in the \'Products displayed\' field').'</div>';
-			elseif (intval($productNbr) == 0)
+			elseif ((int)($productNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else
 			{
-				Configuration::updateValue('PRODUCTS_VIEWED_NBR', intval($productNbr));
+				Configuration::updateValue('PRODUCTS_VIEWED_NBR', (int)($productNbr));
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
 		}
@@ -68,7 +68,7 @@ class BlockViewed extends Module
 	{
 		global $link, $smarty, $cookie;
 
-		$id_product = intval(Tools::getValue('id_product'));
+		$id_product = (int)(Tools::getValue('id_product'));
 		$productsViewed = (isset($params['cookie']->viewed) AND !empty($params['cookie']->viewed)) ? array_slice(explode(',', $params['cookie']->viewed), 0, Configuration::get('PRODUCTS_VIEWED_NBR')) : array();
 
 		if (sizeof($productsViewed))
@@ -84,8 +84,8 @@ class BlockViewed extends Module
 			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
 			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
 			WHERE p.id_product IN ('.$productIds.')
-			AND pl.id_lang = '.intval($params['cookie']->id_lang).'
-			AND cl.id_lang = '.intval($params['cookie']->id_lang).'
+			AND pl.id_lang = '.(int)($params['cookie']->id_lang).'
+			AND cl.id_lang = '.(int)($params['cookie']->id_lang).'
 			AND i.cover = 1'
 			);
 
@@ -101,8 +101,8 @@ class BlockViewed extends Module
 					continue;
 				else
 				{
-					$obj->id = intval($productsImagesArray[$productViewed]['id_product']);
-					$obj->cover = intval($productsImagesArray[$productViewed]['id_product']).'-'.intval($productsImagesArray[$productViewed]['id_image']);
+					$obj->id = (int)($productsImagesArray[$productViewed]['id_product']);
+					$obj->cover = (int)($productsImagesArray[$productViewed]['id_product']).'-'.(int)($productsImagesArray[$productViewed]['id_image']);
 					$obj->legend = $productsImagesArray[$productViewed]['legend'];
 					$obj->name = $productsImagesArray[$productViewed]['name'];
 					$obj->description_short = $productsImagesArray[$productViewed]['description_short'];
@@ -127,8 +127,8 @@ class BlockViewed extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = cp.`id_category`)
 				LEFT JOIN `'._DB_PREFIX_.'customer_group` cug ON (cug.`id_group` = cg.`id_group`)
-				WHERE p.`id_product` = '.intval($id_product).'
-				'.($cookie->id_customer ? 'AND cug.`id_customer` = '.intval($cookie->id_customer) : 
+				WHERE p.`id_product` = '.(int)($id_product).'
+				'.($cookie->id_customer ? 'AND cug.`id_customer` = '.(int)($cookie->id_customer) : 
 				'AND cg.`id_group` = 1')
 				);
 				if ($result['total'])
@@ -136,7 +136,7 @@ class BlockViewed extends Module
 			}
 			$viewed = '';
 			foreach ($productsViewed AS $id_product_viewed)
-				$viewed .= intval($id_product_viewed).',';
+				$viewed .= (int)($id_product_viewed).',';
 			$params['cookie']->viewed = rtrim($viewed, ',');
 
 			if (!sizeof($productsViewedObj))
@@ -149,7 +149,7 @@ class BlockViewed extends Module
 			return $this->display(__FILE__, 'blockviewed.tpl');
 		}
 		elseif ($id_product)
-			$params['cookie']->viewed = intval($id_product);
+			$params['cookie']->viewed = (int)($id_product);
 		return ;
 	}
 

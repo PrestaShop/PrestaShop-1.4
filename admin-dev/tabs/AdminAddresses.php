@@ -34,9 +34,9 @@ class AdminAddresses extends AdminTab
 			$this->deleted = true;
 		$this->_select = 'cl.`name` as country';
 		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON 
-		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($cookie->id_lang).')';
+		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')';
 		
-		$countries = Country::getCountries(intval($cookie->id_lang));
+		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 
@@ -70,7 +70,7 @@ class AdminAddresses extends AdminTab
 				}
 				elseif ($id_customer = Tools::getValue('id_customer'))
 				{
-					$customer = new Customer(intval($id_customer));
+					$customer = new Customer((int)($id_customer));
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
@@ -83,23 +83,23 @@ class AdminAddresses extends AdminTab
 			// Check manufacturer selected
 			if ($this->addressType == 'manufacturer')
 			{
-				$manufacturer = new Manufacturer(intval(Tools::getValue('id_manufacturer')));
+				$manufacturer = new Manufacturer((int)(Tools::getValue('id_manufacturer')));
 				if (!Validate::isLoadedObject($manufacturer))
 					$this->_errors[] = Tools::displayError('manufacturer selected is not valid');
 			}
 
 			/* If the selected country does not contain states */
-			$id_state = intval(Tools::getValue('id_state'));
-			if ($id_country = Tools::getValue('id_country') AND $country = new Country(intval($id_country)) AND !intval($country->contains_states) AND $id_state)
+			$id_state = (int)(Tools::getValue('id_state'));
+			if ($id_country = Tools::getValue('id_country') AND $country = new Country((int)($id_country)) AND !(int)($country->contains_states) AND $id_state)
 				$this->_errors[] = Tools::displayError('you have selected a state for a country that does not contain states');
 
 			/* If the selected country contains states, then a state have to be selected */
-			if (intval($country->contains_states) AND !$id_state)
+			if ((int)($country->contains_states) AND !$id_state)
 				$this->_errors[] = Tools::displayError('an address which is located in a country containing states must have a state selected');
 
 			/* If this address come from order's edition and is the same as the other one (invoice or delivery one)
 			** we delete its id_address to force the creation of a new one */
-			if (intval(Tools::getValue('id_order')))
+			if ((int)(Tools::getValue('id_order')))
 			{
 				$this->_redirect = false;
 				if (isset($_POST['address_type']))
@@ -110,8 +110,8 @@ class AdminAddresses extends AdminTab
 			parent::postProcess();
 
 		/* Reassignation of the order's new (invoice or delivery) address */
-		$address_type = (intval(Tools::getValue('address_type')) == 2 ? 'invoice' : (intval(Tools::getValue('address_type')) == 1 ? 'delivery' : ''));
-		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = intval(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
+		$address_type = ((int)(Tools::getValue('address_type')) == 2 ? 'invoice' : ((int)(Tools::getValue('address_type')) == 1 ? 'delivery' : ''));
+		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = (int)(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
 		{
 			if(!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET `id_address_'.$address_type.'` = '.Db::getInstance()->Insert_ID().' WHERE `id_order` = '.$id_order))
 				$this->_errors[] = Tools::displayError('an error occurred while linking this address to its order');
@@ -136,7 +136,7 @@ class AdminAddresses extends AdminTab
 			$orderBy = Tools::getValue($this->table.'Orderby', 'id_'.$this->table);
 	 	if (empty($orderWay))
 			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');
-		$limit = intval(Tools::getValue('pagination', $limit));
+		$limit = (int)(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
 		
 		/* Check params validity */
@@ -151,10 +151,10 @@ class AdminAddresses extends AdminTab
 		isset($_POST['submitFilter'.$this->table.'_y'])) AND 
 		!empty($_POST['submitFilter'.$this->table]) AND 
 		is_numeric($_POST['submitFilter'.$this->table]))
-			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
+			$start = (int)($_POST['submitFilter'.$this->table] - 1) * $limit;
 
 		/* Cache */
-		$this->_lang = intval($id_lang);
+		$this->_lang = (int)($id_lang);
 		$this->_orderBy = $orderBy;
 		$this->_orderWay = Tools::strtoupper($orderWay);
 		
@@ -165,24 +165,24 @@ class AdminAddresses extends AdminTab
 		$queryTotal = Db::getInstance()->getRow('
 		SELECT COUNT(a.`id_'.$this->table.'`) AS total
 		FROM `'._DB_PREFIX_.$sqlTable.'` a
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.intval($id_lang).')' : '').' 
+		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').' 
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.' 
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
 		'.(isset($this->addressType) ? 'AND a.id_'.strval($this->addressType).' != 0' : ''));
-		$this->_listTotal = intval($queryTotal['total']);
+		$this->_listTotal = (int)($queryTotal['total']);
 
 		/* Query in order to get results with all fields */
 		$this->_list = Db::getInstance()->ExecuteS('
 		SELECT a.*'.($this->lang ? ', b.*' : '').(isset($this->_select) ? ', '.$this->_select.' ' : '').' 
 		FROM `'._DB_PREFIX_.$sqlTable.'` a 
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.intval($id_lang).')' : '').' 
+		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').' 
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
 		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.' 
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
 		'.(isset($this->addressType) ? 'AND a.id_'.strval($this->addressType).' != 0' : '').'
 		ORDER BY '.(($orderBy == 'id_'.$this->table) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
-		LIMIT '.intval($start).','.intval($limit));
+		LIMIT '.(int)($start).','.(int)($limit));
 	}
 	
 	public function displayForm($isMainTab = true)
@@ -207,9 +207,9 @@ class AdminAddresses extends AdminTab
 			}
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
-		'.(intval($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.intval($obj->id).'" />' : '').'
-		'.(($id_order = intval(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.intval($id_order).'" />' : '').'
-		'.(($address_type = intval(Tools::getValue('address_type'))) ? '<input type="hidden" name="address_type" value="'.intval($address_type).'" />' : '').'
+		'.((int)($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.(int)($obj->id).'" />' : '').'
+		'.(($id_order = (int)(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.(int)($id_order).'" />' : '').'
+		'.(($address_type = (int)(Tools::getValue('address_type'))) ? '<input type="hidden" name="address_type" value="'.(int)($address_type).'" />' : '').'
 		'.(Tools::getValue('realedit') ? '<input type="hidden" name="realedit" value="1" />' : '').'
 			<fieldset>
 				<legend><img src="../img/admin/contact.gif" alt="" />'.$this->l('Addresses').'</legend>';
@@ -223,7 +223,7 @@ class AdminAddresses extends AdminTab
 				if (!sizeof($manufacturers))
 					echo '<option value="0">'.$this->l('No manufacturer available').'&nbsp</option>';
 				foreach ($manufacturers as $manufacturer)
-					echo '<option value="'.intval($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp</option>';
+					echo '<option value="'.(int)($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp</option>';
 				echo	'</select>';
 				echo '</div>';
 				echo '<input type="hidden" name="alias" value="manufacturer">';
@@ -233,7 +233,7 @@ class AdminAddresses extends AdminTab
 				if ($obj->id)
 				{
 					$customer = new Customer($obj->id_customer);
-					$tokenCustomer = Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee));
+					$tokenCustomer = Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee));
 					echo '
 					<label>'.$this->l('Customer').'</label>
 					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>
@@ -295,14 +295,14 @@ class AdminAddresses extends AdminTab
 				</div>
 				<label>'.$this->l('Country').'</label>
 				<div class="margin-form">
-					<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.intval($this->getFieldValue($obj, 'id_state')).');" />';
+					<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');" />';
 		$selectedCountry = $this->getFieldValue($obj, 'id_country');
 		foreach ($this->countriesArray AS $id_country => $name)
 			echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>
 				<script type="text/javascript">
-					populateStates('.intval($this->getFieldValue($obj, 'id_country')).', '.intval($this->getFieldValue($obj, 'id_state')).');
+					populateStates('.(int)($this->getFieldValue($obj, 'id_country')).', '.(int)($this->getFieldValue($obj, 'id_state')).');
 				</script>
 				<label>'.$this->l('State').'</label>
 				<div class="margin-form">

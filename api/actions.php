@@ -277,7 +277,7 @@ if (!$errors)
 						}
 						else
 						{
-							$sql_limit .= ' LIMIT '.intval($limitArgs[0]).(isset($limitArgs[1]) ? ', '.intval($limitArgs[1]) : '')."\n";// LIMIT X|X, Y
+							$sql_limit .= ' LIMIT '.(int)($limitArgs[0]).(isset($limitArgs[1]) ? ', '.(int)($limitArgs[1]) : '')."\n";// LIMIT X|X, Y
 						}
 					}
 			

@@ -36,7 +36,7 @@ class AdminCatalog extends AdminTab
 	public function __construct()
 	{
 		/* Get current category */
-		$id_category = abs(intval(Tools::getValue('id_category')));
+		$id_category = abs((int)(Tools::getValue('id_category')));
 		if (!$id_category) $id_category = 1;
 		self::$_category = new Category($id_category);
 		if (!Validate::isLoadedObject(self::$_category))
@@ -136,7 +136,7 @@ class AdminCatalog extends AdminTab
 		}
 		elseif (!isset($_GET['editImage']))
 		{
-			$id_category = intval(Tools::getValue('id_category'));
+			$id_category = (int)(Tools::getValue('id_category'));
 			if (!$id_category)
 				$id_category = 1;
 			$catalog_tabs = array('category', 'product');

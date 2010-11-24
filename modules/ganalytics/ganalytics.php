@@ -140,7 +140,7 @@ class GAnalytics extends Module
 		try {
 			var pageTracker = _gat._createTracker("'.Configuration::get('GANALYTICS_ID').'");
 			pageTracker._trackPageview('.
-        (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '')
+        (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.(int)($step).'.html"' : '')
         .');
 		}
 		catch(err) {}
@@ -157,12 +157,12 @@ class GAnalytics extends Module
 		$order = $params['objOrder'];
 		if (Validate::isLoadedObject($order))
 		{
-			$deliveryAddress = new Address(intval($order->id_address_delivery));
+			$deliveryAddress = new Address((int)($order->id_address_delivery));
 
 			$conversion_rate = 1;
 			if ($order->id_currency != Configuration::get('PS_CURRENCY_DEFAULT'))
 			{
-				$currency = new Currency(intval($order->id_currency));
+				$currency = new Currency((int)($order->id_currency));
 				$conversion_rate = floatval($currency->conversion_rate);
 			}
 
@@ -182,7 +182,7 @@ class GAnalytics extends Module
 			/* Order information */
 			$output .= '
         pageTracker._addTrans(
-          "'.intval($order->id).'", // Order ID
+          "'.(int)($order->id).'", // Order ID
           "PrestaShop", // Affiliation
           "'.Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2).'", // Total
           "0", // Tax
@@ -199,16 +199,16 @@ class GAnalytics extends Module
 			{
 				$category = Db::getInstance()->getRow('
 								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
-								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
-								AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));	
+								WHERE `id_product` = '.(int)($product['product_id']).' AND `id_category_default` = `id_category` 
+								AND `id_lang` = '.(int)($parameters['PS_LANG_DEFAULT']));	
 				$output .= '
 					pageTracker._addItem(
-					"'.intval($order->id).'", // Order ID
+					"'.(int)($order->id).'", // Order ID
 					"'.addslashes($product['product_reference']).'", // SKU
 					"'.addslashes($product['product_name']).'", // Product Name 
 					"'.addslashes($category['name']).'", // Category
 					"'.Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2).'", // Price
-					"'.addslashes(intval($product['product_quantity'])).'" // Quantity
+					"'.addslashes((int)($product['product_quantity'])).'" // Quantity
 					);
 				';
 			}

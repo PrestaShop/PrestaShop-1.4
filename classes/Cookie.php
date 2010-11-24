@@ -49,7 +49,7 @@ class	CookieCore
 	public function __construct($name, $path = '', $expire = NULL)
 	{
 		$this->_content = array();
-		$this->_expire = isset($expire) ? intval($expire) : (time() + 1728000);
+		$this->_expire = isset($expire) ? (int)($expire) : (time() + 1728000);
 		$this->_name = md5($name._COOKIE_KEY_);
 		$this->_path = trim(__PS_BASE_URI__.$path, '/\\').'/';
 		if ($this->_path{0} != '/') $this->_path = '/'.$this->_path;
@@ -102,7 +102,7 @@ class	CookieCore
 	  */
 	function setExpire($expire)
 	{
-		$this->_expire = intval($expire);
+		$this->_expire = (int)($expire);
 	}
 
 	/**
@@ -164,7 +164,7 @@ class	CookieCore
 	public function isLogged()
 	{
 		/* Customer is valid only if it can be load and if cookie password is the same as database one */
-	 	if ($this->logged == 1 AND $this->id_customer AND Validate::isUnsignedId($this->id_customer) AND Customer::checkPassword(intval($this->id_customer), $this->passwd))
+	 	if ($this->logged == 1 AND $this->id_customer AND Validate::isUnsignedId($this->id_customer) AND Customer::checkPassword((int)($this->id_customer), $this->passwd))
         	return true;
         return false;
 	}
@@ -177,7 +177,7 @@ class	CookieCore
 	public function isLoggedBack()
 	{
 		/* Employee is valid only if it can be load and if cookie password is the same as database one */
-	 	if ($this->id_employee AND Validate::isUnsignedId($this->id_employee) AND Employee::checkPassword(intval($this->id_employee), $this->passwd) AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr())))
+	 	if ($this->id_employee AND Validate::isUnsignedId($this->id_employee) AND Employee::checkPassword((int)($this->id_employee), $this->passwd) AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr())))
 			return true;
 		return false;
 	}
@@ -246,7 +246,7 @@ class	CookieCore
 
 			/* Blowfish fix */
 			if (isset($this->_content['checksum']))
-				$this->_content['checksum'] = intval($this->_content['checksum']);
+				$this->_content['checksum'] = (int)($this->_content['checksum']);
 
 			/* Check if cookie has not been modified */
 			if (!isset($this->_content['checksum']) OR $this->_content['checksum'] != $checksum)

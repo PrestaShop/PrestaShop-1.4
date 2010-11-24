@@ -85,7 +85,7 @@ class BlockWishList extends Module
 		$customers = Customer::getCustomers();
 		if (!sizeof($customers))
 			return;
-		$id_customer = intval(Tools::getValue('id_customer'));
+		$id_customer = (int)(Tools::getValue('id_customer'));
 		if (!$id_customer)
 			$id_customer = $customers[0]['id_customer'];
 		$this->_html .= '<br />
@@ -98,7 +98,7 @@ class BlockWishList extends Module
 					<select name="id_customer" onchange="$(\'#listing\').submit();">';
 		foreach ($customers as $customer)
 		{
-			$this->_html .= '<option value="'.intval($customer['id_customer']).'"';
+			$this->_html .= '<option value="'.(int)($customer['id_customer']).'"';
 			if ($customer['id_customer'] == $id_customer)
 				$this->_html .= ' selected="selected"';
 			$this->_html .= '>'.htmlentities($customer['firstname'], ENT_COMPAT, 'UTF-8').' '.htmlentities($customer['lastname'], ENT_COMPAT, 'UTF-8').'</option>';
@@ -114,7 +114,7 @@ class BlockWishList extends Module
 		foreach ($wishlists AS $row)
 			if ($row['id_wishlist'] == Tools::getValue('id_wishlist'))
 			{
-				$id_wishlist = intval(Tools::getValue('id_wishlist'));
+				$id_wishlist = (int)(Tools::getValue('id_wishlist'));
 				break;
 			}
 		if (!$id_wishlist)
@@ -125,7 +125,7 @@ class BlockWishList extends Module
 					<select name="id_wishlist" onchange="$(\'#listing\').submit();">';
 		foreach ($wishlists as $wishlist)
 		{
-			$this->_html .= '<option value="'.intval($wishlist['id_wishlist']).'"';
+			$this->_html .= '<option value="'.(int)($wishlist['id_wishlist']).'"';
 			if ($wishlist['id_wishlist'] == $id_wishlist)
 			{
 				$this->_html .= ' selected="selected"';
@@ -136,7 +136,7 @@ class BlockWishList extends Module
 		$this->_html .= '
 					</select>
 				</div>';
-		$this->_displayProducts(intval($id_wishlist));
+		$this->_displayProducts((int)($id_wishlist));
 		$this->_html .= 	'</fieldset>
 		</form>';
 	}
@@ -162,8 +162,8 @@ class BlockWishList extends Module
 					$id_wishlist = false;
 				else
 				{
-					$id_wishlist = intval($wishlists[0]['id_wishlist']);
-					$params['cookie']->id_wishlist = intval($id_wishlist);
+					$id_wishlist = (int)($wishlists[0]['id_wishlist']);
+					$params['cookie']->id_wishlist = (int)($id_wishlist);
 				}
 			}
 			else
@@ -189,7 +189,7 @@ class BlockWishList extends Module
 	{
 		global $smarty;
 		
-		$smarty->assign('id_product', intval(Tools::getValue('id_product')));
+		$smarty->assign('id_product', (int)(Tools::getValue('id_product')));
 		return ($this->display(__FILE__, 'blockwishlist-extra.tpl'));
 	}
 	
@@ -209,16 +209,16 @@ class BlockWishList extends Module
 		global $cookie;
 		include_once(dirname(__FILE__).'/WishList.php');
 		
-		$wishlist = new WishList(intval($id_wishlist));
-		$products = WishList::getProductByIdCustomer(intval($id_wishlist), intval($wishlist->id_customer), intval($cookie->id_lang));
+		$wishlist = new WishList((int)($id_wishlist));
+		$products = WishList::getProductByIdCustomer((int)($id_wishlist), (int)($wishlist->id_customer), (int)($cookie->id_lang));
 		for ($i = 0; $i < sizeof($products); ++$i)
 		{
-			$obj = new Product(intval($products[$i]['id_product']), false, intval($cookie->id_lang));
+			$obj = new Product((int)($products[$i]['id_product']), false, (int)($cookie->id_lang));
 			if (!Validate::isLoadedObject($obj))
 				continue;
 			else
 			{
-				$images = $obj->getImages(intval($cookie->id_lang));
+				$images = $obj->getImages((int)($cookie->id_lang));
 				foreach ($images AS $k => $image)
 				{
 					if ($image['cover'])
@@ -228,7 +228,7 @@ class BlockWishList extends Module
 					}
 				}
 				if (!isset($products[$i]['cover']))
-					$products[$i]['cover'] = Language::getIsoById(intval($cookie->id_lang)).'-default';
+					$products[$i]['cover'] = Language::getIsoById((int)($cookie->id_lang)).'-default';
 			}
 		}
 		$this->_html .= '
@@ -253,8 +253,8 @@ class BlockWishList extends Module
 					$this->_html .= '<br /><i>'.htmlentities($product['attributes_small'], ENT_COMPAT, 'UTF-8').'</i>';
 				$this->_html .= '
 					</td>
-					<td class="item" style="text-align:center;">'.intval($product['quantity']).'</td>
-					<td class="item" style="text-align:center;">'.$priority[intval($product['priority']) % 3].'</td>
+					<td class="item" style="text-align:center;">'.(int)($product['quantity']).'</td>
+					<td class="item" style="text-align:center;">'.$priority[(int)($product['priority']) % 3].'</td>
 				</tr>';
 			}
 		$this->_html .= '</tbody></table>';
@@ -264,27 +264,27 @@ class BlockWishList extends Module
 	{
 		require_once(dirname(__FILE__).'/WishList.php');
 		
-		$customer = new Customer(intval($params['id_customer']));
+		$customer = new Customer((int)($params['id_customer']));
 		if (!Validate::isLoadedObject($customer))
 			die (Tools::displayError());
 
 		$this->_html = '<h2>'.$this->l('Wishlists').'</h2>';
 		
-		$wishlists = WishList::getByIdCustomer(intval($customer->id));
+		$wishlists = WishList::getByIdCustomer((int)($customer->id));
 		if (!sizeof($wishlists))
 			$this->_html .= $customer->lastname.' '.$customer->firstname.' '.$this->l('had no wishlist');
 		else
 		{
 			$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" id="listing">';
 	
-			$id_wishlist = intval(Tools::getValue('id_wishlist'));
+			$id_wishlist = (int)(Tools::getValue('id_wishlist'));
 			if (!$id_wishlist)
 					$id_wishlist = $wishlists[0]['id_wishlist'];
 			
 			$this->_html .= '<span>'.$this->l('Wishlist').': </span> <select name="id_wishlist" onchange="$(\'#listing\').submit();">';
 			foreach ($wishlists as $wishlist)
 			{
-				$this->_html .= '<option value="'.intval($wishlist['id_wishlist']).'"';
+				$this->_html .= '<option value="'.(int)($wishlist['id_wishlist']).'"';
 				if ($wishlist['id_wishlist'] == $id_wishlist)
 				{
 					$this->_html .= ' selected="selected"';
@@ -294,7 +294,7 @@ class BlockWishList extends Module
 			}		
 			$this->_html .= '</select>';
 			
-			$this->_displayProducts(intval($id_wishlist));
+			$this->_displayProducts((int)($id_wishlist));
 						
 			$this->_html .= '</form><br />';
 			

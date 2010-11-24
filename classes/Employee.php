@@ -65,8 +65,8 @@ class EmployeeCore extends ObjectModel
 	{
 	 	parent::validateFields();
 		
-		$fields['id_profile'] = intval($this->id_profile);
-		$fields['id_lang'] = intval($this->id_lang);
+		$fields['id_profile'] = (int)($this->id_profile);
+		$fields['id_lang'] = (int)($this->id_lang);
 		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL(Tools::ucfirst($this->firstname));
 		$fields['email'] = pSQL($this->email);
@@ -77,7 +77,7 @@ class EmployeeCore extends ObjectModel
 		$fields['bo_color'] = pSQL($this->bo_color);
 		$fields['bo_theme'] = pSQL($this->bo_theme);
 		$fields['bo_uimode'] = pSQL($this->bo_uimode);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		
 		return $fields;
 	}
@@ -156,7 +156,7 @@ class EmployeeCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
-		WHERE `id_employee` = '.intval($id_employee).' AND `passwd` = \''.pSQL($passwd).'\'');
+		WHERE `id_employee` = '.(int)($id_employee).' AND `passwd` = \''.pSQL($passwd).'\'');
 
 		return isset($result['id_employee']) ? $result['id_employee'] : false;
 	}
@@ -165,7 +165,7 @@ class EmployeeCore extends ObjectModel
 	{
 		$sql = 'SELECT COUNT(*) as nb
 				FROM `'._DB_PREFIX_.'employee`  				
-				WHERE `id_profile` = '.intval($id_profile);
+				WHERE `id_profile` = '.(int)($id_profile);
 		$sql .= ($activeOnly) ? ' AND `active` = 1 ' : '';
 		$result = Db::getInstance()->getValue($sql);
 		return $result['nb'];
@@ -173,7 +173,7 @@ class EmployeeCore extends ObjectModel
 	
 	public function isLastAdmin()
 	{
-		return ($this->id_profile == intval(_PS_ADMIN_PROFILE_)			
+		return ($this->id_profile == (int)(_PS_ADMIN_PROFILE_)			
 			       AND Employee::countProfile($this->id_profile, true) == 1
 				   AND $this->active);
 	}

@@ -18,10 +18,10 @@ if (Tools::getValue('hash') != md5(Configuration::get($module->prefix.'SALT') + 
 
 	
 
-$result = $module->getDispositionState(intval($cart->id));
+$result = $module->getDispositionState((int)($cart->id));
 $state = _PS_OS_ERROR_;
 
-$disposition = Disposition::getByCartId(intval($cart->id));
+$disposition = Disposition::getByCartId((int)($cart->id));
 
 $message = 'Transaction ID #'.$disposition['mtid'].': '.$disposition['amount'].$disposition['currency'].'<br />'. date('Y-m-d').' ';
 if ($result[0] == 0)
@@ -41,12 +41,12 @@ if ($result[0] == 0)
 
 if ($state != _PS_OS_ERROR_)
 {
-	$state = intval(Configuration::get($module->prefix.'ORDER_STATE_ID'));
+	$state = (int)(Configuration::get($module->prefix.'ORDER_STATE_ID'));
 
 	if (Configuration::get($module->prefix.'IMMEDIAT_PAYMENT'))
 	{
 		$message .= '<br />'.date('Y-m-d').' ';
-		$result = $module->executeDebit(intval($cart->id));
+		$result = $module->executeDebit((int)($cart->id));
 		
 		if ($result[0] != 0)
 		{
@@ -62,7 +62,7 @@ if ($state != _PS_OS_ERROR_)
 }
 
 
-$module->validateOrder(intval($cart->id), $state, floatval($cart->getOrderTotal(true, 3)), $module->displayName, $message, NULL, intval($currency->id), false, $cart->secure_key);
+$module->validateOrder((int)($cart->id), $state, floatval($cart->getOrderTotal(true, 3)), $module->displayName, $message, NULL, (int)($currency->id), false, $cart->secure_key);
 
 if ($state == _PS_OS_ERROR_) 
 {
@@ -73,7 +73,7 @@ if ($state == _PS_OS_ERROR_)
 else 
 {
 	$order = new Order($module->currentOrder);
-	Tools::redirect('order-confirmation.php?id_cart='.intval($cart->id).'&id_module='.intval($module->id).'&id_order='.intval($module->currentOrder).'&key='.$order->secure_key);
+	Tools::redirect('order-confirmation.php?id_cart='.(int)($cart->id).'&id_module='.(int)($module->id).'&id_order='.(int)($module->currentOrder).'&key='.$order->secure_key);
 }
 
 

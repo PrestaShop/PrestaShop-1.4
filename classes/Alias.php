@@ -38,7 +38,7 @@ class AliasCore extends ObjectModel
 
 			if ($row)
 			{
-			 	$this->id = intval($row['id_alias']);
+			 	$this->id = (int)($row['id_alias']);
 			 	$this->search = $search ? trim($search) : $row['search'];
 				$this->alias = $row['alias'];
 			}
@@ -75,7 +75,7 @@ class AliasCore extends ObjectModel
 		
 		$fields['alias'] = pSQL($this->alias);
 		$fields['search'] = pSQL($this->search);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 }

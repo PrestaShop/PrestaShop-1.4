@@ -67,12 +67,12 @@ class CurrencyCore extends ObjectModel
 		$fields['iso_code'] = pSQL($this->iso_code);
 		$fields['iso_code_num'] = pSQL($this->iso_code_num);
 		$fields['sign'] = pSQL($this->sign);
-		$fields['format'] = intval($this->format);
-		$fields['decimals'] = intval($this->decimals);
-		$fields['blank'] = intval($this->blank);
+		$fields['format'] = (int)($this->format);
+		$fields['decimals'] = (int)($this->decimals);
+		$fields['blank'] = (int)($this->blank);
 		$fields['conversion_rate'] = floatval($this->conversion_rate);
-		$fields['deleted'] = intval($this->deleted);
-		$fields['active'] = intval($this->active);
+		$fields['deleted'] = (int)($this->deleted);
+		$fields['active'] = (int)($this->active);
 
 		return $fields;
 	}
@@ -84,7 +84,7 @@ class CurrencyCore extends ObjectModel
 		$result = true;
 		foreach ($selection AS $id)
 		{
-			$obj = new Currency(intval($id));
+			$obj = new Currency((int)($id));
 			$res[$id] = $obj->delete();
 		}
 		foreach ($res AS $value)
@@ -97,7 +97,7 @@ class CurrencyCore extends ObjectModel
 	{
 		if ($this->id == Configuration::get('PS_CURRENCY_DEFAULT'))
 		{
-			$result = Db::getInstance()->getRow('SELECT `id_currency` FROM '._DB_PREFIX_.'currency WHERE `id_currency` != '.intval($this->id).' AND `deleted` = 0');
+			$result = Db::getInstance()->getRow('SELECT `id_currency` FROM '._DB_PREFIX_.'currency WHERE `id_currency` != '.(int)($this->id).' AND `deleted` = 0');
 			if (!$result['id_currency'])
 				return false;
 			Configuration::updateValue('PS_CURRENCY_DEFAULT', $result['id_currency']);
@@ -153,7 +153,7 @@ class CurrencyCore extends ObjectModel
 		return Db::getInstance()->getRow('
 		SELECT mc.*
 		FROM `'._DB_PREFIX_.'module_currency` mc
-		WHERE mc.`id_module` = '.intval($id_module));
+		WHERE mc.`id_module` = '.(int)($id_module));
 	}
 	
 	static public function getPaymentCurrencies($id_module)
@@ -163,7 +163,7 @@ class CurrencyCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'module_currency` mc
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON c.`id_currency` = mc.`id_currency`
 		WHERE c.`deleted` = 0
-		AND mc.`id_module` = '.intval($id_module).'
+		AND mc.`id_module` = '.(int)($id_module).'
 		ORDER BY c.`name` ASC');
 	}
 	
@@ -172,7 +172,7 @@ class CurrencyCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT mc.*
 		FROM `'._DB_PREFIX_.'module_currency` mc
-		WHERE mc.`id_module` = '.intval($id_module));
+		WHERE mc.`id_module` = '.(int)($id_module));
 	}
 
 	static public function getCurrency($id_currency)
@@ -181,7 +181,7 @@ class CurrencyCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'currency`
 		WHERE `deleted` = 0
-		AND `id_currency` = '.intval($id_currency));
+		AND `id_currency` = '.(int)($id_currency));
 	}
 	
 	static public function getIdByIsoCode($iso_code)
@@ -227,7 +227,7 @@ class CurrencyCore extends ObjectModel
 	{
 		if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
 			return Tools::displayError('Cannot parse feed!');
-		if (!$defaultCurrency = intval(Configuration::get('PS_CURRENCY_DEFAULT')))
+		if (!$defaultCurrency = (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
 			return Tools::displayError('No default currency!');
 		$isoCodeSource = strval($feed->source['iso_code']);
 		$currencies = self::getCurrencies(true);
@@ -244,9 +244,9 @@ class CurrencyCore extends ObjectModel
 		if (!self::$current)
 		{
 			if (isset($cookie->id_currency) AND $cookie->id_currency)
-				self::$current = new Currency(intval($cookie->id_currency));
+				self::$current = new Currency((int)($cookie->id_currency));
 			else
-				self::$current = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+				self::$current = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		}
 		return self::$current;
 	}
@@ -254,8 +254,8 @@ class CurrencyCore extends ObjectModel
 	static public function getCurrencyInstance($id)
 	{
 		if (!array_key_exists($id, self::$currencies))
-			self::$currencies[intval($id)] = new Currency(intval($id));
-		return self::$currencies[intval($id)];
+			self::$currencies[(int)($id)] = new Currency((int)($id));
+		return self::$currencies[(int)($id)];
 	}
 }
 

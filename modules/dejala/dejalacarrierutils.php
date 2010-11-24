@@ -14,7 +14,7 @@ class DejalaCarrierUtils
 		$id_zone = 1;
 		$moduleCountryIsoCode = strtoupper($dejalaConfig->country);
 		$countryID = Country::getByIso($moduleCountryIsoCode);
-		if (intval($countryID))
+		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
 		
 		$vatRate = floatval($dejalaProduct['vat']);
@@ -32,7 +32,7 @@ class DejalaCarrierUtils
 		if (!Tax::zoneHasTax($id_tax, $id_zone))
 		{
 			// MFR : direct call because $tax->addZone($id_zone) causes errors when called
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_zone` (`id_tax` , `id_zone`) VALUES ('.intval($id_tax).', '.intval($id_zone).')');			
+			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_zone` (`id_tax` , `id_zone`) VALUES ('.(int)($id_tax).', '.(int)($id_zone).')');			
 		}
 				
 		$carrier = new Carrier();
@@ -55,7 +55,7 @@ class DejalaCarrierUtils
 		}
 		$carrier->add();
 		
-		$sql = 'INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`) VALUES ('.intval($carrier->id).', ' . intval($id_zone) . ')';
+		$sql = 'INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`) VALUES ('.(int)($carrier->id).', ' . (int)($id_zone) . ')';
 		Db::getInstance()->Execute($sql);
 
 		$rangeW = new RangeWeight();
@@ -96,10 +96,10 @@ class DejalaCarrierUtils
 		$id_zone = 1;
 		$moduleCountryIsoCode = strtoupper($dejalaConfig->country);
 		$countryID = Country::getByIso($moduleCountryIsoCode);
-		if (intval($countryID))
+		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
 		
-		$allCarriers = DejalaCarrierUtils::getCarriers(intval($cookie->id_lang), true, false, $id_zone, true);
+		$allCarriers = DejalaCarrierUtils::getCarriers((int)($cookie->id_lang), true, false, $id_zone, true);
 		$electedCarrier = NULL;
 		foreach ($allCarriers as $carrier) {
 			if (($carrier['name'] == 'dejala')
@@ -137,12 +137,12 @@ class DejalaCarrierUtils
 		$sql = '
 			SELECT c.*, cl.delay
 			FROM `'._DB_PREFIX_.'carrier` c
-			LEFT JOIN `'._DB_PREFIX_.'carrier_lang` cl ON (c.`id_carrier` = cl.`id_carrier` AND cl.`id_lang` = '.intval($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'carrier_lang` cl ON (c.`id_carrier` = cl.`id_carrier` AND cl.`id_lang` = '.(int)($id_lang).')
 			LEFT JOIN `'._DB_PREFIX_.'carrier_zone` cz  ON (cz.`id_carrier` = c.`id_carrier`)'.
-			($id_zone ? 'LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.intval($id_zone).')' : '').'
+			($id_zone ? 'LEFT JOIN `'._DB_PREFIX_.'zone` z  ON (z.`id_zone` = '.(int)($id_zone).')' : '').'
 			WHERE c.`deleted` '.($delete ? '= 1' : ' = 0').
 			($active ? ' AND c.`active` = 1' : '').
-			($id_zone ? ' AND cz.`id_zone` = '.intval($id_zone).'
+			($id_zone ? ' AND cz.`id_zone` = '.(int)($id_zone).'
 			AND z.`active` = 1' : '').'
 			'.($all ? NULL : 'AND c.`is_module` = 0').'
 			GROUP BY c.`id_carrier`';
@@ -169,9 +169,9 @@ class DejalaCarrierUtils
 		$id_zone = 1;
 		$moduleCountryIsoCode = strtoupper($dejalaConfig->country);
 		$countryID = Country::getByIso($moduleCountryIsoCode);
-		if (intval($countryID))
+		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
-		$allCarriers = DejalaCarrierUtils::getCarriers(intval($cookie->id_lang), true, false, $id_zone, true);	
+		$allCarriers = DejalaCarrierUtils::getCarriers((int)($cookie->id_lang), true, false, $id_zone, true);	
 		foreach ($allCarriers as $carrier) {
 			if (($carrier['name'] == 'dejala') && ($carrier['is_module'] == true)) return true ;
 		}

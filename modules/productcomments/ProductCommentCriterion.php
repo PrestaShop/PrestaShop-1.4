@@ -117,9 +117,9 @@ class ProductCommentCriterion extends ObjectModel
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_comment_grade`
 		(`id_product_comment`, `id_product_comment_criterion`, `grade`) VALUES(
-		'.intval($id_product_comment).',
+		'.(int)($id_product_comment).',
 		'.(int)$this->id.',
-		'.intval($grade).')'));
+		'.(int)($grade).')'));
 	}
 	
 	/**
@@ -139,7 +139,7 @@ class ProductCommentCriterion extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_product` pccp ON (pcc.`id_product_comment_criterion` = pccp.`id_product_comment_criterion` AND pccp.`id_product` = '.(int)$id_product.')
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_category` pccc ON (pcc.`id_product_comment_criterion` = pccc.`id_product_comment_criterion`)
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_category_default = pccc.id_category AND p.id_product = '.(int)$id_product.')
-		WHERE pccl.`id_lang` = '.intval($id_lang).' AND (pccp.id_product IS NOT NULL OR p.id_product IS NOT NULL OR pcc.id_product_comment_criterion_type = 1) AND pcc.active=1
+		WHERE pccl.`id_lang` = '.(int)($id_lang).' AND (pccp.id_product IS NOT NULL OR p.id_product IS NOT NULL OR pcc.id_product_comment_criterion_type = 1) AND pcc.active=1
 		GROUP BY pcc.id_product_comment_criterion');
 	}
 	

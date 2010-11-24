@@ -191,7 +191,7 @@ class MoneyBookers extends PaymentModule
 				$_POST['mb_hide_login'] = 0;
 
 			Configuration::updateValue('MB_CANCEL_URL', $_POST['mb_cancel_url']);
-			Configuration::updateValue('MB_HIDE_LOGIN', intval($_POST['mb_hide_login']));
+			Configuration::updateValue('MB_HIDE_LOGIN', (int)($_POST['mb_hide_login']));
 
 			$local = '';
 			$inter = '';
@@ -215,7 +215,7 @@ class MoneyBookers extends PaymentModule
 
 			Configuration::updateValue('MB_LOCAL_METHODS', $local);
 			Configuration::updateValue('MB_INTER_METHODS', $inter);
-			Configuration::updateValue('MB_DISPLAY_MODE', intval($_POST['mb_display_mode']));
+			Configuration::updateValue('MB_DISPLAY_MODE', (int)($_POST['mb_display_mode']));
 		}
 
 		/* Display errors */
@@ -227,7 +227,7 @@ class MoneyBookers extends PaymentModule
 			$output .= '</ul>';
 		}
 
-		$lang = new Language(intval($cookie->id_lang));
+		$lang = new Language((int)($cookie->id_lang));
 		$iso_img = $lang->iso_code;
 		if ($lang->iso_code != 'fr' AND $lang->iso_code != 'en')
 			$iso_img = 'en';
@@ -301,21 +301,21 @@ class MoneyBookers extends PaymentModule
 				<div style="width: 200px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 0; $i != 3; $i++)
-					$output .= '<input type="checkbox" name="mb_inter_'.intval($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_inter_'.(int)($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
 				<div style="width: 250px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 3; $i != 6; $i++)
-					$output .= '<input type="checkbox" name="mb_inter_'.intval($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_inter_'.(int)($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
 				<div style="width: 200px; float: left; line-height: 75px;">';
 
 				for ($i = 6; $i != sizeof($this->_internationalPaymentMethods); $i++)
-					$output .= '<input type="checkbox" name="mb_inter_'.intval($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_inter_'.(int)($i).'" value="1"'.(in_array($i, $interActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/international/'.$this->_internationalPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
@@ -325,21 +325,21 @@ class MoneyBookers extends PaymentModule
 				<div style="width: 200px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 0; $i != 7; $i++)
-					$output .= '<input type="checkbox" name="mb_local_'.intval($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_local_'.(int)($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
 				<div style="width: 250px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 8; $i != 15; $i++)
-					$output .= '<input type="checkbox" name="mb_local_'.intval($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_local_'.(int)($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
 				<div style="width: 200px; float: left; line-height: 75px;">';
 
 				for ($i = 16; $i != sizeof($this->_localPaymentMethods); $i++)
-					$output .= '<input type="checkbox" name="mb_local_'.intval($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
+					$output .= '<input type="checkbox" name="mb_local_'.(int)($i).'" value="1"'.(in_array($i, $localActivated) ? ' checked="checked"' : '').' /> <img src="'.__PS_BASE_URI__.'modules/moneybookers/logos/local/'.$this->_localPaymentMethods[$i]['file'].'.gif" alt="" style="vertical-align: middle;" /><br />';
 
 				$output .= '
 				</div>
@@ -398,27 +398,27 @@ class MoneyBookers extends PaymentModule
 			$interMethods = Configuration::get('MB_INTER_METHODS');
 			
 			$smarty->assign(array(
-			'display_mode' => intval(Configuration::get('MB_DISPLAY_MODE')),
+			'display_mode' => (int)(Configuration::get('MB_DISPLAY_MODE')),
 			'local' => $localMethods ? explode('|', $localMethods) : array(),
 			'inter' => $interMethods ? explode('|', $interMethods) : array(),
 			'local_logos' => $this->_localPaymentMethods,
 			'inter_logos' => $this->_internationalPaymentMethods));
 
 			/* Load objects */
-			$address = new Address(intval($params['cart']->id_address_delivery));
-			$countryObj = new Country(intval($address->id_country), Configuration::get('PS_LANG_DEFAULT'));
-			$customer = new Customer(intval($params['cart']->id_customer));
-			$currency = new Currency(intval($params['cart']->id_currency));
-			$lang = new Language(intval($cookie->id_lang));
+			$address = new Address((int)($params['cart']->id_address_delivery));
+			$countryObj = new Country((int)($address->id_country), Configuration::get('PS_LANG_DEFAULT'));
+			$customer = new Customer((int)($params['cart']->id_customer));
+			$currency = new Currency((int)($params['cart']->id_currency));
+			$lang = new Language((int)($cookie->id_lang));
 
 			$mbParams = array();
 
 			/* About the merchant */
 			$mbParams['pay_to_email'] = Configuration::get('MB_PAY_TO_EMAIL');
 			$mbParams['recipient_description'] = Configuration::get('PS_SHOP_NAME');
-			$mbParams['hide_login'] = intval(Configuration::get('MB_HIDE_LOGIN'));
-			$mbParams['id_logo'] = intval(Configuration::get('MB_ID_LOGO'));
-			$mbParams['return_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order-confirmation.php?id_cart='.intval($params['cart']->id).'&id_module='.intval($this->id).'&key='.$customer->secure_key;
+			$mbParams['hide_login'] = (int)(Configuration::get('MB_HIDE_LOGIN'));
+			$mbParams['id_logo'] = (int)(Configuration::get('MB_ID_LOGO'));
+			$mbParams['return_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)($params['cart']->id).'&id_module='.(int)($this->id).'&key='.$customer->secure_key;
 			$mbParams['cancel_url'] = Configuration::get('MB_CANCEL_URL');
 
 			/* About the customer */
@@ -435,7 +435,7 @@ class MoneyBookers extends PaymentModule
 			$mbParams['date_of_birth'] = substr($customer->birthday, 5, 2).substr($customer->birthday, 8, 2).substr($customer->birthday, 0, 4);
 
 			/* About the cart */
-			$mbParams['transaction_id'] = intval($params['cart']->id).'_'.date('YmdHis').'_'.$params['cart']->secure_key;
+			$mbParams['transaction_id'] = (int)($params['cart']->id).'_'.date('YmdHis').'_'.$params['cart']->secure_key;
 			$mbParams['currency'] = $currency->iso_code;
 			$mbParams['amount'] = number_format($params['cart']->getOrderTotal(), 2, '.', '');
 

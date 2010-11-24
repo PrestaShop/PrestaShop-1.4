@@ -79,11 +79,11 @@ class ReferrerCore extends ObjectModel
 		$fields['base_fee'] = number_format($this->base_fee, 2, '.', '');
 		$fields['percent_fee'] = number_format($this->percent_fee, 2, '.', '');
 		$fields['click_fee'] = number_format($this->click_fee, 2, '.', '');
-		$fields['cache_visitors'] = intval($this->cache_visitors);
-		$fields['cache_visits'] = intval($this->cache_visits);
-		$fields['cache_pages'] = intval($this->cache_pages);
-		$fields['cache_registrations'] = intval($this->cache_registrations);
-		$fields['cache_orders'] = intval($this->cache_orders);
+		$fields['cache_visitors'] = (int)($this->cache_visitors);
+		$fields['cache_visits'] = (int)($this->cache_visits);
+		$fields['cache_pages'] = (int)($this->cache_pages);
+		$fields['cache_registrations'] = (int)($this->cache_registrations);
+		$fields['cache_orders'] = (int)($this->cache_orders);
 		$fields['cache_sales'] = number_format($this->cache_sales, 2, '.', '');
 		$fields['cache_reg_rate'] = $this->cache_reg_rate > 1 ? 1 : number_format(floatval($this->cache_reg_rate), 4, '.', '');
 		$fields['cache_order_rate'] = $this->cache_order_rate > 1 ? 1 : number_format(floatval($this->cache_order_rate), 4, '.', '');
@@ -107,7 +107,7 @@ class ReferrerCore extends ObjectModel
 			SELECT id_referrer, id_connections_source
 			FROM '._DB_PREFIX_.'referrer r
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-			WHERE id_connections_source = '.intval($id_connections_source).'
+			WHERE id_connections_source = '.(int)($id_connections_source).'
 		)');
 	}
 	
@@ -119,19 +119,19 @@ class ReferrerCore extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'connections c ON c.id_guest = g.id_guest
 		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON c.id_connections = cs.id_connections
 		LEFT JOIN '._DB_PREFIX_.'referrer r ON ('.self::$_join.')
-		WHERE g.id_customer = '.intval($id_customer).'
+		WHERE g.id_customer = '.(int)($id_customer).'
 		AND r.name IS NOT NULL');
 	}
 	
 	public function getStatsVisits($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (intval($id_product))
+		if ((int)($id_product))
 		{
 			$join = 'LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
 			$where = 'AND pt.`name` = \'product.php\'
-					  AND p.`id_object` = '.intval($id_product);
+					  AND p.`id_object` = '.(int)($id_product);
 		}
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -145,20 +145,20 @@ class ReferrerCore extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 		'.$join.'
 		WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		AND rc.id_referrer = '.intval($this->id).'
+		AND rc.id_referrer = '.(int)($this->id).'
 		'.$where);
 	}
 	
 	public function getRegistrations($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (intval($id_product))
+		if ((int)($id_product))
 		{
 			$join = 'LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 					 LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
 			$where = 'AND pt.`name` = \'product.php\'
-					  AND p.`id_object` = '.intval($id_product);
+					  AND p.`id_object` = '.(int)($id_product);
 		}
 		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -171,7 +171,7 @@ class ReferrerCore extends ObjectModel
 		'.$join.'
 		WHERE cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		AND cu.date_add > cs.date_add
-		AND rc.id_referrer = '.intval($this->id).'
+		AND rc.id_referrer = '.(int)($this->id).'
 		'.$where);
 		return $result['registrations'];
 	}
@@ -179,10 +179,10 @@ class ReferrerCore extends ObjectModel
 	public function getStatsSales($id_product = null, $employee = null)
 	{
 		list($join, $where) = array('','');
-		if (intval($id_product))
+		if ((int)($id_product))
 		{
 			$join =	'LEFT JOIN '._DB_PREFIX_.'order_detail od ON oo.id_order = od.id_order';
-			$where = 'AND od.product_id = '.intval($id_product);
+			$where = 'AND od.product_id = '.(int)($id_product);
 		}
 		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
@@ -195,7 +195,7 @@ class ReferrerCore extends ObjectModel
 		'.$join.'
 		WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
 		AND oo.date_add > cs.date_add
-		AND rc.id_referrer = '.intval($this->id).'
+		AND rc.id_referrer = '.(int)($this->id).'
 		AND oo.valid = 1
 		'.$where);
 		
@@ -220,18 +220,18 @@ class ReferrerCore extends ObjectModel
 			$referrers = Db::getInstance()->ExecuteS('SELECT id_referrer FROM '._DB_PREFIX_.'referrer');
 		foreach ($referrers as $row)
 		{
-			$referrer = new Referrer(intval($row['id_referrer']));
+			$referrer = new Referrer((int)($row['id_referrer']));
 			$statsVisits = $referrer->getStatsVisits(null, $employee);
 			$referrer->cache_visitors = $statsVisits['uniqs'];
 			$referrer->cache_visits = $statsVisits['visits'];
 			$referrer->cache_pages = $statsVisits['pages'];
 			$registrations = $referrer->getRegistrations(null, $employee);
-			$referrer->cache_registrations = intval($registrations);
+			$referrer->cache_registrations = (int)($registrations);
 			$statsSales = $referrer->getStatsSales(null, $employee);
-			$referrer->cache_orders = intval($statsSales['orders']);
+			$referrer->cache_orders = (int)($statsSales['orders']);
 			$referrer->cache_sales = number_format($statsSales['sales'], 2, '.', '');
-			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? intval($registrations) / $statsVisits['uniqs'] : 0;
-			$referrer->cache_order_rate = $statsVisits['uniqs'] ? intval($statsSales['orders']) / $statsVisits['uniqs'] : 0;
+			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? (int)($registrations) / $statsVisits['uniqs'] : 0;
+			$referrer->cache_order_rate = $statsVisits['uniqs'] ? (int)($statsSales['orders']) / $statsVisits['uniqs'] : 0;
 			if (!$referrer->update())
 				Tools::dieObject(mysql_error());
 			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateBetween($employee));
@@ -255,13 +255,13 @@ class ReferrerCore extends ObjectModel
 		else
 			foreach ($referrers as $row)
 			{
-				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.intval($row['id_referrer']));
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.(int)($row['id_referrer']));
 				Db::getInstance()->Execute('
 				INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
 					SELECT id_referrer, id_connections_source
 					FROM '._DB_PREFIX_.'referrer r
 					LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-					WHERE id_referrer = '.intval($row['id_referrer']).'
+					WHERE id_referrer = '.(int)($row['id_referrer']).'
 				)');
 			}
 	}
@@ -276,23 +276,23 @@ class ReferrerCore extends ObjectModel
 		$statsSales = $referrer->getStatsSales($id_product, $employee);
 
 		// If it's a product and it has no visits nor orders
-		if (intval($id_product) AND !$statsVisits['visits'] AND !$statsSales['orders'])
+		if ((int)($id_product) AND !$statsVisits['visits'] AND !$statsSales['orders'])
 			exit;
 		
 		$jsonArray = array();
-		$jsonArray[] = 'id_product:\''.intval($product->id).'\'';
+		$jsonArray[] = 'id_product:\''.(int)($product->id).'\'';
 		$jsonArray[] = 'product_name:\''.addslashes($product->name).'\'';
-		$jsonArray[] = 'uniqs:\''.intval($statsVisits['uniqs']).'\'';
-		$jsonArray[] = 'visitors:\''.intval($statsVisits['visitors']).'\'';
-		$jsonArray[] = 'visits:\''.intval($statsVisits['visits']).'\'';
-		$jsonArray[] = 'pages:\''.intval($statsVisits['pages']).'\'';
-		$jsonArray[] = 'registrations:\''.intval($registrations).'\'';
-		$jsonArray[] = 'orders:\''.intval($statsSales['orders']).'\'';
+		$jsonArray[] = 'uniqs:\''.(int)($statsVisits['uniqs']).'\'';
+		$jsonArray[] = 'visitors:\''.(int)($statsVisits['visitors']).'\'';
+		$jsonArray[] = 'visits:\''.(int)($statsVisits['visits']).'\'';
+		$jsonArray[] = 'pages:\''.(int)($statsVisits['pages']).'\'';
+		$jsonArray[] = 'registrations:\''.(int)($registrations).'\'';
+		$jsonArray[] = 'orders:\''.(int)($statsSales['orders']).'\'';
 		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
-		$jsonArray[] = 'cart:\''.Tools::displayPrice((intval($statsSales['orders']) ? $statsSales['sales'] / intval($statsSales['orders']) : 0), $currency).'\'';
-		$jsonArray[] = 'reg_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($registrations) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
-		$jsonArray[] = 'order_rate:\''.number_format(intval($statsVisits['uniqs']) ? intval($statsSales['orders']) / intval($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
-		$jsonArray[] = 'click_fee:\''.Tools::displayPrice(intval($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
+		$jsonArray[] = 'cart:\''.Tools::displayPrice(((int)($statsSales['orders']) ? $statsSales['sales'] / (int)($statsSales['orders']) : 0), $currency).'\'';
+		$jsonArray[] = 'reg_rate:\''.number_format((int)($statsVisits['uniqs']) ? (int)($registrations) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
+		$jsonArray[] = 'order_rate:\''.number_format((int)($statsVisits['uniqs']) ? (int)($statsSales['orders']) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
+		$jsonArray[] = 'click_fee:\''.Tools::displayPrice((int)($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
 		$jsonArray[] = 'base_fee:\''.Tools::displayPrice($statsSales['orders'] * $referrer->base_fee, $currency).'\'';
 		$jsonArray[] = 'percent_fee:\''.Tools::displayPrice($statsSales['sales'] * $referrer->percent_fee / 100, $currency).'\'';
 		die ('[{'.implode(',', $jsonArray).'}]');

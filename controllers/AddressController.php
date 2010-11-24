@@ -19,10 +19,10 @@ class AddressControllerCore extends FrontController
 		if ($mod = Tools::getValue('mod'))
 			$this->smarty->assign('mod', Tools::safeOutput($mod));
 			
-		if ($id_address = intval(Tools::getValue('id_address')))
+		if ($id_address = (int)(Tools::getValue('id_address')))
 		{
-			$address = new Address(intval($id_address));
-			if (Validate::isLoadedObject($address) AND Customer::customerHasAddress(intval($this->cookie->id_customer), intval($id_address)))
+			$address = new Address((int)($id_address));
+			if (Validate::isLoadedObject($address) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($id_address)))
 			{
 				if (Tools::isSubmit('delete'))
 				{
@@ -36,7 +36,7 @@ class AddressControllerCore extends FrontController
 				}
 				$this->smarty->assign(array(
 					'address' => $address,
-					'id_address' => intval($id_address)
+					'id_address' => (int)($id_address)
 				));
 			}
 			else
@@ -46,11 +46,11 @@ class AddressControllerCore extends FrontController
 		{
 			$address = new Address();
 			$this->errors = $address->validateControler();
-			$address->id_customer = intval($this->cookie->id_customer);
+			$address->id_customer = (int)($this->cookie->id_customer);
 
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
-			if (!$country = new Country(intval($address->id_country)) OR !Validate::isLoadedObject($country))
+			if (!$country = new Country((int)($address->id_country)) OR !Validate::isLoadedObject($country))
 				die(Tools::displayError());
 			$zip_code_format = $country->zip_code_format;
 			if ($country->need_zip_code)
@@ -76,18 +76,18 @@ class AddressControllerCore extends FrontController
 				$this->cookie->isLogged() === true)
 				$this->errors[] = Tools::displayError('invalid token');
 
-			if (intval($country->contains_states) AND !intval($address->id_state))
+			if ((int)($country->contains_states) AND !(int)($address->id_state))
 				$this->errors[] = Tools::displayError('this country require a state selection');
 
 			if (!sizeof($this->errors))
 			{
 				if (isset($id_address))
 				{
-					$country = new Country(intval($address->id_country));
+					$country = new Country((int)($address->id_country));
 					if (Validate::isLoadedObject($country) AND !$country->contains_states)
 						$address->id_state = 0;
-					$address_old = new Address(intval($id_address));
-					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress(intval($this->cookie->id_customer), intval($address_old->id)))
+					$address_old = new Address((int)($id_address));
+					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($address_old->id)))
 					{
 						if ($cart->id_address_invoice == $address_old->id)
 							unset($cart->id_address_invoice);
@@ -98,7 +98,7 @@ class AddressControllerCore extends FrontController
 							$address_old->delete();
 						else
 						{
-							$address->id = intval($address_old->id);
+							$address->id = (int)($address_old->id);
 							$address->date_add = $address_old->date_add;
 						}
 					}
@@ -109,7 +109,7 @@ class AddressControllerCore extends FrontController
 					if ((bool)(Tools::getValue('select_address', false)) == true)
 					{
 						/* This new adress is for invoice_adress, select it */
-						$cart->id_address_invoice = intval($address->id);
+						$cart->id_address_invoice = (int)($address->id);
 						$cart->update();
 					}
 					Tools::redirect($back ? ($mod ? $back.'&back='.$mod : $back) : 'addresses.php');
@@ -119,7 +119,7 @@ class AddressControllerCore extends FrontController
 		}
 		elseif (!$id_address)
 		{
-			$customer = new Customer(intval($this->cookie->id_customer));
+			$customer = new Customer((int)($this->cookie->id_customer));
 			if (Validate::isLoadedObject($customer))
 			{
 				$_POST['firstname'] = $customer->firstname;
@@ -140,29 +140,29 @@ class AddressControllerCore extends FrontController
 		parent::process();
 
 		if (Tools::isSubmit('id_country') AND Tools::getValue('id_country') != NULL AND is_numeric(Tools::getValue('id_country')))
-			$selectedCountry = intval(Tools::getValue('id_country'));
+			$selectedCountry = (int)(Tools::getValue('id_country'));
 		elseif (isset($address) AND isset($address->id_country) AND !empty($address->id_country) AND is_numeric($address->id_country))
-			$selectedCountry = intval($address->id_country);
+			$selectedCountry = (int)($address->id_country);
 		elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
 			$array = preg_split('/,|-/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 			if (!Validate::isLanguageIsoCode($array[0]) OR !($selectedCountry = Country::getByIso($array[0])))
-				$selectedCountry = intval(Configuration::get('PS_COUNTRY_DEFAULT'));
+				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 		}
 		else
-			$selectedCountry = intval(Configuration::get('PS_COUNTRY_DEFAULT'));
+			$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 
-		$countries = Country::getCountries(intval($this->cookie->id_lang), true);
+		$countries = Country::getCountries((int)($this->cookie->id_lang), true);
 		$countriesList = '';
 		foreach ($countries AS $country)
-			$countriesList .= '<option value="'.intval($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
+			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
 		$this->smarty->assign(array(
 			'countries_list' => $countriesList,
 			'countries' => $countries,
 			'errors' => $this->errors,
 			'token' => Tools::getToken(false),
-			'select_address' => intval(Tools::getValue('select_address'))
+			'select_address' => (int)(Tools::getValue('select_address'))
 		));
 	}
 	

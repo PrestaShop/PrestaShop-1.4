@@ -22,7 +22,7 @@ $errors = array();
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
 if (!isset($cookie->id_lang))
 	$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
-$iso = strtolower(Language::getIsoById(intval($cookie->id_lang)));
+$iso = strtolower(Language::getIsoById((int)($cookie->id_lang)));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
 
 /* Cookie creation and redirection */

@@ -26,7 +26,7 @@ class ProductCommentCriterion
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_comment_criterion`
 		(`id_lang`, `name`) VALUES(
-		'.intval($id_lang).',
+		'.(int)($id_lang).',
 		\''.pSQL($name).'\')'));
 	}
 	
@@ -43,8 +43,8 @@ class ProductCommentCriterion
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_comment_criterion_product`
 		(`id_product_comment_criterion`, `id_product`) VALUES(
-		'.intval($id_product_comment_criterion).',
-		'.intval($id_product).')'));
+		'.(int)($id_product_comment_criterion).',
+		'.(int)($id_product).')'));
 	}
 	
 	/**
@@ -64,9 +64,9 @@ class ProductCommentCriterion
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'product_comment_grade`
 		(`id_product_comment`, `id_product_comment_criterion`, `grade`) VALUES(
-		'.intval($id_product_comment).',
-		'.intval($id_product_comment_criterion).',
-		'.intval($grade).')'));
+		'.(int)($id_product_comment).',
+		'.(int)($id_product_comment_criterion).',
+		'.(int)($grade).')'));
 	}
 	
 	/**
@@ -83,8 +83,8 @@ class ProductCommentCriterion
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product_comment_criterion` SET
 		`name` = \''.pSQL($name).'\'
-		WHERE `id_product_comment_criterion` = '.intval($id_product_comment_criterion).' AND
-		`id_lang` = '.intval($id_lang)));
+		WHERE `id_product_comment_criterion` = '.(int)($id_product_comment_criterion).' AND
+		`id_lang` = '.(int)($id_lang)));
 	}
 	
 	/**
@@ -101,8 +101,8 @@ class ProductCommentCriterion
 		SELECT pcc.`id_product_comment_criterion`, pcc.`name`
 		FROM `'._DB_PREFIX_.'product_comment_criterion` pcc
 		INNER JOIN `'._DB_PREFIX_.'product_comment_criterion_product` pccp ON pcc.`id_product_comment_criterion` = pccp.`id_product_comment_criterion`
-		WHERE pccp.`id_product` = '.intval($id_product).' AND 
-		pcc.`id_lang` = '.intval($id_lang)));
+		WHERE pccp.`id_product` = '.(int)($id_product).' AND 
+		pcc.`id_lang` = '.(int)($id_lang)));
 	}
 	
 	/**
@@ -117,7 +117,7 @@ class ProductCommentCriterion
 		return (Db::getInstance()->ExecuteS('
 		SELECT pcc.`id_product_comment_criterion`, pcc.`name`
 		  FROM `'._DB_PREFIX_.'product_comment_criterion` pcc
-		WHERE pcc.`id_lang` = '.intval($id_lang).'
+		WHERE pcc.`id_lang` = '.(int)($id_lang).'
 		ORDER BY pcc.`name` ASC'));
 	}
 	
@@ -132,7 +132,7 @@ class ProductCommentCriterion
 			die(Tools::displayError());
 		return (Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_product`
-		WHERE `id_product` = '.intval($id_product)));
+		WHERE `id_product` = '.(int)($id_product)));
 	}
 	
 	/**
@@ -146,16 +146,16 @@ class ProductCommentCriterion
 			die(Tools::displayError());
 		$result = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_comment_grade`
-		WHERE `id_product_comment_criterion` = '.intval($id_product_comment_criterion));
+		WHERE `id_product_comment_criterion` = '.(int)($id_product_comment_criterion));
 		if ($result === false)
 			return ($result);
 		$result = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_product`
-		WHERE `id_product_comment_criterion` = '.intval($id_product_comment_criterion));
+		WHERE `id_product_comment_criterion` = '.(int)($id_product_comment_criterion));
 		if ($result === false)
 			return ($result);
 		return (Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_comment_criterion`
-		WHERE `id_product_comment_criterion` = '.intval($id_product_comment_criterion)));
+		WHERE `id_product_comment_criterion` = '.(int)($id_product_comment_criterion)));
 	}
 };

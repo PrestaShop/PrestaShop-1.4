@@ -34,10 +34,10 @@ class SceneCore extends ObjectModel
  	
  	public function __construct($id = NULL, $id_lang = NULL, $liteResult = true, $hideScenePosition = false)
 	{
-		parent::__construct(intval($id), intval($id_lang));
+		parent::__construct((int)($id), (int)($id_lang));
 		
 		if (!$liteResult)
-			$this->products = $this->getProducts(true, intval($id_lang), false);		
+			$this->products = $this->getProducts(true, (int)($id_lang), false);		
 		if ($hideScenePosition)
 			$this->name = Scene::hideScenePosition($this->name);
 	}
@@ -45,7 +45,7 @@ class SceneCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 	
@@ -93,7 +93,7 @@ class SceneCore extends ObjectModel
 		$result = true;
 		foreach ($categories AS $category)
 		{
-			if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'scene_category` ( `id_scene` , `id_category`) VALUES ('.intval($this->id).', '.intval($category).')'))
+			if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'scene_category` ( `id_scene` , `id_category`) VALUES ('.(int)($this->id).', '.(int)($category).')'))
 				$result = false;
 		}
 		return $result;
@@ -103,7 +103,7 @@ class SceneCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'scene_category` 
-		WHERE `id_scene` = '.intval($this->id));
+		WHERE `id_scene` = '.(int)($this->id));
 	}
 	
 	public function updateCategories()
@@ -123,7 +123,7 @@ class SceneCore extends ObjectModel
 		foreach ($zones AS $zone)
 		{
 			$sql = 'INSERT INTO `'._DB_PREFIX_.'scene_products` ( `id_scene` , `id_product` , `x_axis` , `y_axis` , `zone_width` , `zone_height`) VALUES
-				 ('.intval($this->id).', '.intval($zone['id_product']).', '.intval($zone['x1']).', '.intval($zone['y1']).', '.intval($zone['width']).', '.intval($zone['height']).')';
+				 ('.(int)($this->id).', '.(int)($zone['id_product']).', '.(int)($zone['x1']).', '.(int)($zone['y1']).', '.(int)($zone['width']).', '.(int)($zone['height']).')';
 			if (!Db::getInstance()->Execute($sql))
 				$result = false;
 		}
@@ -134,7 +134,7 @@ class SceneCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'scene_products`
-		WHERE `id_scene` = '.intval($this->id));
+		WHERE `id_scene` = '.(int)($this->id));
 	}
 	
 	public function updateZoneProducts()
@@ -154,19 +154,19 @@ class SceneCore extends ObjectModel
 	*/
 	static public function getScenes($id_category, $id_lang = NULL, $onlyActive = true, $liteResult = true, $hideScenePosition = true)
 	{
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : intval($id_lang);
+		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
 
 		$scenes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'scene_category` sc
 		LEFT JOIN `'._DB_PREFIX_.'scene` s ON (sc.id_scene = s.id_scene)
 		LEFT JOIN `'._DB_PREFIX_.'scene_lang` sl ON (sl.id_scene = s.id_scene)
-		WHERE sc.id_category = '.intval($id_category).'	AND sl.id_lang = '.intval($id_lang).($onlyActive ? ' AND s.active = 1' : '').'
+		WHERE sc.id_category = '.(int)($id_category).'	AND sl.id_lang = '.(int)($id_lang).($onlyActive ? ' AND s.active = 1' : '').'
 		ORDER BY sl.name ASC');
 		
 		if (!$liteResult AND $scenes)
 			foreach($scenes AS &$scene)
-				$scene = new Scene(intval($scene['id_scene']), intval($id_lang), false, $hideScenePosition);
+				$scene = new Scene((int)($scene['id_scene']), (int)($id_lang), false, $hideScenePosition);
 		return $scenes;
 	}
 	
@@ -179,20 +179,20 @@ class SceneCore extends ObjectModel
 	{
 		global $link;
 		
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : intval($id_lang);
+		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
 		
 		$products = Db::getInstance()->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'scene_products` s
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = s.id_product)
-		WHERE s.id_scene = '.intval($this->id).($onlyActive ? ' AND p.active = 1' : ''));
+		WHERE s.id_scene = '.(int)($this->id).($onlyActive ? ' AND p.active = 1' : ''));
 		
 		if (!$liteResult AND $products)
 			foreach ($products AS &$product)
 			{
-				$product['details'] = new Product(intval($product['id_product']), !$liteResult, intval($id_lang));
-				$product['link'] = $link->getProductLink(intval($product['details']->id), $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
-				$cover = Product::getCover(intval($product['details']->id));
+				$product['details'] = new Product((int)($product['id_product']), !$liteResult, (int)($id_lang));
+				$product['link'] = $link->getProductLink((int)($product['details']->id), $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
+				$cover = Product::getCover((int)($product['details']->id));
 				if(is_array($cover))
 					$product = array_merge($cover, $product);
 			}
@@ -211,7 +211,7 @@ class SceneCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'scene_category`
-		WHERE `id_scene` = '.intval($id_scene));
+		WHERE `id_scene` = '.(int)($id_scene));
 	}
 	
 	/**

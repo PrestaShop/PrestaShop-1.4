@@ -25,11 +25,11 @@ class CustomerThreadCore extends ObjectModel
 	public	function getFields()
 	{
 	 	parent::validateFields();
-		$fields['id_lang'] = intval($this->id_lang);
-		$fields['id_contact'] = intval($this->id_contact);
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_order'] = intval($this->id_order);
-		$fields['id_product'] = intval($this->id_product);
+		$fields['id_lang'] = (int)($this->id_lang);
+		$fields['id_contact'] = (int)($this->id_contact);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['id_product'] = (int)($this->id_product);
 		$fields['status'] = pSQL($this->status);
 		$fields['email'] = pSQL($this->email);
 		$fields['token'] = pSQL($this->token);
@@ -42,7 +42,7 @@ class CustomerThreadCore extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($this->id))
 			return false;
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_message` WHERE `id_customer_thread` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_message` WHERE `id_customer_thread` = '.(int)($this->id));
 		return (parent::delete());
 	}
 	
@@ -51,7 +51,7 @@ class CustomerThreadCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT * FROM '._DB_PREFIX_.'customer_thread ct
 		LEFT JOIN '._DB_PREFIX_.'customer_message cm ON ct.id_customer_thread = cm.id_customer_thread
-		WHERE id_customer = '.intval($id_customer));
+		WHERE id_customer = '.(int)($id_customer));
 	}	
 }
 

@@ -67,17 +67,17 @@ class AdminModules extends AdminTab
 			
 		if (Tools::isSubmit('filterModules'))
 		{
-			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_type'));
-			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee), Tools::getValue('country_module_value'));
-			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_install'));
-			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee), Tools::getValue('module_status'));
+			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_type'));
+			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), Tools::getValue('country_module_value'));
+			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_install'));
+			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_status'));
 		}
 		elseif (Tools::isSubmit('resetFilterModules'))
 		{
-			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee), 'allModules');
-			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee), 0);
-			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee), 'installedUninstalled');
-			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee), 'enabledDisabled');
+			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), 'allModules');
+			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), 0);
+			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), 'installedUninstalled');
+			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), 'enabledDisabled');
 		}
 		if (Tools::isSubmit('active'))
 		{
@@ -221,7 +221,7 @@ class AdminModules extends AdminTab
 						elseif ($echo === false)
 							$module_errors[] = $name;
 						if ($key != 'configure' AND isset($_GET['bpay']))
-							Tools::redirectAdmin('index.php?tab=AdminPayment&token='.Tools::getAdminToken('AdminPayment'.intval(Tab::getIdFromClassName('AdminPayment')).intval($cookie->id_employee)));
+							Tools::redirectAdmin('index.php?tab=AdminPayment&token='.Tools::getAdminToken('AdminPayment'.(int)(Tab::getIdFromClassName('AdminPayment')).(int)($cookie->id_employee)));
 					}
 				if (sizeof($module_errors))
 				{
@@ -308,10 +308,10 @@ class AdminModules extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		
-		$showTypeModules = Configuration::get('PS_SHOW_TYPE_MODULES_'.intval($cookie->id_employee));
-		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES_'.intval($cookie->id_employee));
-		$showEnabledModules = Configuration::get('PS_SHOW_ENABLED_MODULES_'.intval($cookie->id_employee));
-		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES_'.intval($cookie->id_employee));
+		$showTypeModules = Configuration::get('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee));
+		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee));
+		$showEnabledModules = Configuration::get('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee));
+		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee));
 
 		$nameCountryDefault = Country::getNameById($cookie->id_lang, Configuration::get('PS_COUNTRY_DEFAULT'));
 		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
@@ -611,13 +611,13 @@ class AdminModules extends AdminTab
 		global $currentIndex;
 		$return = '';
 		
-		if (intval($module->id))
+		if ((int)($module->id))
 			$return .= '<a class="action_module" href="'.$currentIndex.'&token='.$this->token.'&module_name='.urlencode($module->name).'&'.($module->active ? 'desactive' : 'active').'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.($module->active ? $this->l('Disable') : $this->l('Enable')).'</a>&nbsp;&nbsp;';
 		
-		if (intval($module->id) AND $module->active)
+		if ((int)($module->id) AND $module->active)
 			$return .= '<a class="action_module" href="'.$currentIndex.'&token='.$this->token.'&module_name='.urlencode($module->name).'&reset&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Reset').'</a>&nbsp;&nbsp;';
 		
-		if (intval($module->id) AND method_exists($module, 'getContent'))
+		if ((int)($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
 		$return .= '<a onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';

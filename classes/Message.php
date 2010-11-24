@@ -51,11 +51,11 @@ class MessageCore extends ObjectModel
 		parent::validateFields();
 
 		$fields['message'] = pSQL($this->message, true);
-		$fields['id_cart'] = intval($this->id_cart);
-		$fields['id_order'] = intval($this->id_order);
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_employee'] = intval($this->id_employee);
-		$fields['private'] = intval($this->private);
+		$fields['id_cart'] = (int)($this->id_cart);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_employee'] = (int)($this->id_employee);
+		$fields['private'] = (int)($this->private);
 		$fields['date_add'] = pSQL($this->date_add);
 
 		return $fields;
@@ -73,7 +73,7 @@ class MessageCore extends ObjectModel
 		$result = $db->getRow('
 		SELECT *
 		FROM `'._DB_PREFIX_.'message`
-		WHERE `id_cart` = '.intval($id_cart));
+		WHERE `id_cart` = '.(int)($id_cart));
 		
 		return $result;
 	}
@@ -95,9 +95,9 @@ class MessageCore extends ObjectModel
 			SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
 			FROM `'._DB_PREFIX_.'message` m
 			LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
-			LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.intval($cookie->id_employee).')
+			LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)($cookie->id_employee).')
 			LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
-			WHERE id_order = '.intval($id_order).'
+			WHERE id_order = '.(int)($id_order).'
 			'.(!$private ? ' AND m.`private` = 0' : '').'
 			GROUP BY m.id_message
 			ORDER BY m.date_add DESC
@@ -118,7 +118,7 @@ class MessageCore extends ObjectModel
 
 		$result = Db::getInstance()->Execute('
 		INSERT INTO '._DB_PREFIX_.'message_readed (id_message , id_employee , date_add) VALUES
-		('.intval($id_message).', '.intval($id_employee).', NOW());
+		('.(int)($id_message).', '.(int)($id_employee).', NOW());
 		');
 		return $result;
 	}

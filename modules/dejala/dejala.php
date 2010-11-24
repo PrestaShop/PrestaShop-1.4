@@ -41,7 +41,7 @@ class Dejala extends Module
 		$this->internal_version = '1.2.6';
 		// Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');
-		$this->id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+		$this->id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
 		$this->wday_labels = array($this->l('Sunday'), $this->l('Monday'), $this->l('Tuesday'), $this->l('Wednesday'), $this->l('Thursday'), $this->l('Friday'), $this->l('Saturday'));
 
 		parent::__construct();
@@ -148,7 +148,7 @@ class Dejala extends Module
 				if (0 === strpos($key, 'margin_'))
 				{
 					$this->mylog( "key=" . substr($key, 7) );
-					$productID = intval(substr($key, 7));
+					$productID = (int)(substr($key, 7));
 					if ( is_null($_POST[$key]) || (0 == strlen($_POST[$key])) )
 						$_POST[$key] = 0;
 					$_POST[$key] = str_replace(',', '.', $_POST[$key]);
@@ -502,7 +502,7 @@ class Dejala extends Module
 					if (isset($delivery['shipping_start_utc'])) {
 						$delivery['shipping_date'] = date('d/m/Y', $delivery['shipping_start_utc']);
 						$delivery['shipping_start'] = date('H\hi', $delivery['shipping_start_utc']);
-						$delivery['shipping_stop'] = date('H\hi', intval($delivery['shipping_start_utc']) + 3600*intval($delivery['timelimit']) );
+						$delivery['shipping_stop'] = date('H\hi', (int)($delivery['shipping_start_utc']) + 3600*(int)($delivery['timelimit']) );
 					}
 					else {
 						$delivery['shipping_date'] = '';
@@ -653,8 +653,8 @@ class Dejala extends Module
 			$this->mylog('product:');
 			$this->mylog($this->logValue($product, 1));
 
-			$orderedQuantity = (_PS_VERSION_ < "1.3.0.1" ? intval($product['quantity']) : intval($product['cart_quantity']));
-			$productQuantity = intval($product['stock_quantity']);
+			$orderedQuantity = (_PS_VERSION_ < "1.3.0.1" ? (int)($product['quantity']) : (int)($product['cart_quantity']));
+			$productQuantity = (int)($product['stock_quantity']);
 			if ( ($productQuantity < $orderedQuantity) || ($productQuantity <= 0) )
 				return (TRUE);
 		}
@@ -674,8 +674,8 @@ class Dejala extends Module
 		if ($this->dejalaConfig->visibility_status == "invisible") {
 			return ;
 		}
-		if (($this->dejalaConfig->visibility_status == "visible_limited") && (intval($cookie->id_customer) > 0)) {
-			$customer = new Customer(intval($cookie->id_customer));
+		if (($this->dejalaConfig->visibility_status == "visible_limited") && ((int)($cookie->id_customer) > 0)) {
+			$customer = new Customer((int)($cookie->id_customer));
 			if (!in_array($customer->email, preg_split("/[\s,]+/", $this->dejalaConfig->visible_users_list))) {
 				return ;
 			}
@@ -726,7 +726,7 @@ class Dejala extends Module
 		$electedProduct = NULL;
 		foreach ($products as $key=>$product) {
 			if (floatval($product['max_weight']) >= $totalCartWeight) {
-				if ( is_null($electedProduct) || (intval($electedProduct['priority']) > intval($key)) )
+				if ( is_null($electedProduct) || ((int)($electedProduct['priority']) > (int)($key)) )
 					$electedProduct = $product;
 			}
 		}
@@ -752,7 +752,7 @@ class Dejala extends Module
 		$productCalendar = $electedProduct['calendar']['entries'];
 		// MFR090831 - add picking time : the store is open to (stop_hour - picking time), it is more natural to merchants to set opening hours instead of dejala delivery time
 		if ($electedProduct['pickingtime'])
-			$pickingtime = intval($electedProduct['pickingtime']);
+			$pickingtime = (int)($electedProduct['pickingtime']);
 		else
 			$pickingtime = $electedProduct['timelimit'];
 		$djlUtil = new DejalaUtils();
@@ -766,9 +766,9 @@ class Dejala extends Module
 			foreach ($storeCalendar['entries'] as $weekday=>$calEntry) {
 				if (isset($productCalendar[$weekday])) {
 					$calendar[$weekday]["weekday"] = $weekday;
-					$calendar[$weekday]["start_hour"] = max(intval($productCalendar[$weekday]["start_hour"]), intval($calEntry["start_hour"]));
+					$calendar[$weekday]["start_hour"] = max((int)($productCalendar[$weekday]["start_hour"]), (int)($calEntry["start_hour"]));
 					// MFR090831 - manage picking time : the store is open to (stop_hour - picking time)
-					$calendar[$weekday]["stop_hour"] = min(intval($productCalendar[$weekday]["stop_hour"]-1), intval($calEntry["stop_hour"] - $pickingtime));
+					$calendar[$weekday]["stop_hour"] = min((int)($productCalendar[$weekday]["stop_hour"]-1), (int)($calEntry["stop_hour"] - $pickingtime));
 					if ($calendar[$weekday]["stop_hour"] < $calendar[$weekday]["start_hour"]) {
 						unset($calendar[$weekday]);
 					}
@@ -810,11 +810,11 @@ class Dejala extends Module
 		
 		do {
 			$wd = date("w", $balladUtc);
-			if (intval($calendar[$wd]['stop_hour']) < intval($calendar[$wd]['start_hour'])) continue ;
+			if ((int)($calendar[$wd]['stop_hour']) < (int)($calendar[$wd]['start_hour'])) continue ;
 			$dates[$iDate]['value'] = date("Y/m/d", $balladUtc);
 			$dates[$iDate]['label'] = $this->wday_labels[$wd] . " " . date("j", $balladUtc);
-			$dates[$iDate]['start_hour'] = intval($calendar[$wd]['start_hour']);
-			$dates[$iDate]['stop_hour'] = intval($calendar[$wd]['stop_hour']);
+			$dates[$iDate]['start_hour'] = (int)($calendar[$wd]['start_hour']);
+			$dates[$iDate]['stop_hour'] = (int)($calendar[$wd]['stop_hour']);
 			$balladUtc += 3600*24;
 			$balladUtc = $calUtils->getNextDateAvailable($balladUtc, $calendar, $all_exceptions);
 			$iDate++;
@@ -823,8 +823,8 @@ class Dejala extends Module
 		if (!isset($dates[0]))
 			return ;
 
-		$now = intval(date("H", $dateUtc)) ;
-		if (intval($dates[0]['stop_hour']) > $now) {
+		$now = (int)(date("H", $dateUtc)) ;
+		if ((int)($dates[0]['stop_hour']) > $now) {
 			$dates[0]['start_hour'] = $now ;
 		}
 		else {
@@ -847,7 +847,7 @@ class Dejala extends Module
 
 		$this->mylog("electedCarrier->id=" . $this->logValue($electedCarrier->id));
 		$mCarrier = $electedCarrier;
-		$row['id_carrier'] = intval($electedCarrier->id);
+		$row['id_carrier'] = (int)($electedCarrier->id);
 		$row['name'] = $this->l('Dejala.fr');
 		$row['delay'] = $electedCarrier->delay[$this->id_lang];
 		$row['price'] = $cart->getOrderShippingCost($electedCarrier->id);
@@ -883,7 +883,7 @@ class Dejala extends Module
 		if ($setDefaultDate) {
 			$smarty->assign("deliveryDateIndexSelected", 0);
 			$smarty->assign("deliveryDateSelected", date("Y/m/d", $dateUtc));
-			$smarty->assign("deliveryHourSelected", intval(date("H", $dateUtc)));
+			$smarty->assign("deliveryHourSelected", (int)(date("H", $dateUtc)));
 		}
 
 		$smarty->assign("isCartOutOfStock", $isCartOutOfStock);
@@ -974,7 +974,7 @@ class Dejala extends Module
 		 */
 
 		$cart = $param['cart'] ;
-		$carrier = new DejalaCarrier($cart->id_carrier, intval($this->id_lang)) ;
+		$carrier = new DejalaCarrier($cart->id_carrier, (int)($this->id_lang)) ;
 		if ($carrier->name != 'dejala') return ;
 
 		$djlUtil = new DejalaUtils();
@@ -1021,7 +1021,7 @@ class Dejala extends Module
 
 		$electedProduct = NULL;
 		foreach ($products as $key=>$product) {
-			if ( is_null($electedProduct) || (intval($electedProduct['priority']) > intval($key)) ) {
+			if ( is_null($electedProduct) || ((int)($electedProduct['priority']) > (int)($key)) ) {
 				$electedProduct = $product;
 			}
 		}
@@ -1041,9 +1041,9 @@ class Dejala extends Module
 		$dejalaCarrierID = Tools::getValue('dejala_id_carrier');
 		$carrierID = Tools::getValue('id_carrier');
 		$dejalaProductID = Tools::getValue('dejala_id_product');
-		if ( !empty($dejalaCarrierID) && !empty($carrierID) && (intval($dejalaCarrierID) == intval($carrierID)) )
+		if ( !empty($dejalaCarrierID) && !empty($carrierID) && ((int)($dejalaCarrierID) == (int)($carrierID)) )
 		{
-			$id_cart = intval($param['cart']->id);
+			$id_cart = (int)($param['cart']->id);
 
 			$product = array();
 			$djlUtil = new DejalaUtils();
@@ -1054,17 +1054,17 @@ class Dejala extends Module
 			{
 				$timelimit = 3;
 				if (isset($product['timelimit']))
-					$timelimit = intval($product['timelimit']);
+					$timelimit = (int)($product['timelimit']);
 				
 				/* manage shipping preferences */
 				$date_shipping = 'NULL';
 				if ( isset($_POST['shipping_day']) AND !empty($_POST['shipping_day']) AND (10 <= strlen($_POST['shipping_day'])) )
 				{
-					$shippingHour = intval($_POST['shipping_hour']);
+					$shippingHour = (int)($_POST['shipping_hour']);
 					$shipping_day = $_POST['shipping_day'];
-					$ship_year = intval(substr($shipping_day, 0, 4));
-					$ship_month = intval(substr($shipping_day, 5, 2));
-					$ship_day = intval(substr($shipping_day, 8, 2));
+					$ship_year = (int)(substr($shipping_day, 0, 4));
+					$ship_month = (int)(substr($shipping_day, 5, 2));
+					$ship_day = (int)(substr($shipping_day, 8, 2));
 					$shippingTime = mktime($shippingHour, 0, 0, $ship_month, $ship_day, $ship_year);
 					// check that delivery date is in the future (5 min delay)
 					if ($shippingTime > time() - 5 * 60)
@@ -1076,7 +1076,7 @@ class Dejala extends Module
 				$djlCart->id_delivery = NULL;
 				$djlCart->mode = $this->dejalaConfig->mode;
 
-				$sqlQuery = 'REPLACE INTO ' . _DB_PREFIX_ . 'dejala_cart SET id_cart = '.intval($id_cart).', id_dejala_product = '. intval($djlCart->id_dejala_product) . ', shipping_date = '. intval($djlCart->shipping_date)  . ', mode="'. pSQL($djlCart->mode) .'";';
+				$sqlQuery = 'REPLACE INTO ' . _DB_PREFIX_ . 'dejala_cart SET id_cart = '.(int)($id_cart).', id_dejala_product = '. (int)($djlCart->id_dejala_product) . ', shipping_date = '. (int)($djlCart->shipping_date)  . ', mode="'. pSQL($djlCart->mode) .'";';
 				$this->mylog('cart SQLQuery='. $sqlQuery);
 				Db::getInstance()->Execute($sqlQuery);
 			}
@@ -1200,7 +1200,7 @@ class Dejala extends Module
 			if (!is_null($djlCart) && !is_null($djlCart->id))
 			{
 				$mDejalaProductID = $djlCart->id_dejala_product;
-				$delivery["product_id"] = intval($mDejalaProductID);
+				$delivery["product_id"] = (int)($mDejalaProductID);
 				$mShippingDate = $djlCart->shipping_date;
 				if ( is_null($mShippingDate) || empty($mShippingDate) ) {
 					$mShippingDate = 0;

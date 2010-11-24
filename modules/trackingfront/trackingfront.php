@@ -29,9 +29,9 @@ class TrackingFront extends Module
 			$result = Db::getInstance()->getRow('
 			SELECT `id_referrer`
 			FROM `'._DB_PREFIX_.'referrer`
-			WHERE `id_referrer` = '.intval(Tools::getValue('id_referrer')).' AND `passwd` = \''.pSQL(Tools::getValue('token')).'\'');
+			WHERE `id_referrer` = '.(int)(Tools::getValue('id_referrer')).' AND `passwd` = \''.pSQL(Tools::getValue('token')).'\'');
 			if (isset($result['id_referrer']) ? $result['id_referrer'] : false)
-				Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')), $fakeEmployee);
+				Referrer::getAjaxProduct((int)(Tools::getValue('id_referrer')), (int)(Tools::getValue('id_product')), $fakeEmployee);
 		}
 		elseif (Tools::isSubmit('logout_tracking'))
 		{
@@ -59,7 +59,7 @@ class TrackingFront extends Module
 				SELECT `id_referrer`
 				FROM `'._DB_PREFIX_.'referrer`
 				WHERE `name` = \''.pSQL($login).'\' AND `passwd` = \''.pSQL($passwd).'\'');
-				if (!isset($result['id_referrer']) OR !($tracking_id = intval($result['id_referrer'])))
+				if (!isset($result['id_referrer']) OR !($tracking_id = (int)($result['id_referrer'])))
 					$errors[] = $this->l('authentication failed');
 				else
 				{
@@ -119,7 +119,7 @@ class TrackingFront extends Module
 		$result = Db::getInstance()->getRow('
 		SELECT `id_referrer`
 		FROM `'._DB_PREFIX_.'referrer`
-		WHERE `id_referrer` = '.intval($cookie->tracking_id).' AND `passwd` = \''.pSQL($cookie->tracking_passwd).'\'');
+		WHERE `id_referrer` = '.(int)($cookie->tracking_id).' AND `passwd` = \''.pSQL($cookie->tracking_passwd).'\'');
 		return isset($result['id_referrer']) ? $result['id_referrer'] : false;
 	}
 		
@@ -139,9 +139,9 @@ class TrackingFront extends Module
 		$fakeEmployee = new Employee();
 		$fakeEmployee->stats_date_from = $cookie->stats_date_from;
 		$fakeEmployee->stats_date_to = $cookie->stats_date_to;
-		Referrer::refreshCache(array(array('id_referrer' => intval($cookie->tracking_id))), $fakeEmployee);
+		Referrer::refreshCache(array(array('id_referrer' => (int)($cookie->tracking_id))), $fakeEmployee);
 		
-		$referrer = new Referrer(intval($cookie->tracking_id));
+		$referrer = new Referrer((int)($cookie->tracking_id));
 		$smarty->assign('referrer', $referrer);
 		$smarty->assign('datepickerFrom', $fakeEmployee->stats_date_from);
 		$smarty->assign('datepickerTo', $fakeEmployee->stats_date_to);
@@ -162,13 +162,13 @@ class TrackingFront extends Module
 			'order_rate' => $this->l('Order rate'));
 		$smarty->assign('displayTab', $displayTab);
 		
-		$products = Product::getSimpleProducts(intval($cookie->id_lang));
+		$products = Product::getSimpleProducts((int)($cookie->id_lang));
 		$productsArray = array();
 		foreach ($products as $product)
 			$productsArray[] = $product['id_product'];
 		
 		$echo = '
-		<script type="text/javascript" src="../../js/jquery/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang)).'.js"></script>
+		<script type="text/javascript" src="../../js/jquery/datepicker/ui/i18n/ui.datepicker-'.Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.(int)($cookie->id_lang)).'.js"></script>
 		<script type="text/javascript">
 			$("#datepickerFrom").datepicker({
 				prevText:"",

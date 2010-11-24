@@ -22,8 +22,8 @@
 	$to = Tools::getValue('datepickerTo');
 	if (!is_null($from) && !is_null($to) && (strlen($from) == 10) && (strlen($to) == 10) )
 	{
-				$dateFrom = mktime(0, 0, 1, intval(substr($from, 3, 2)), intval(substr($from, 0, 2)), intval(substr($from, 6, 4)));
-				$dateTo = mktime(23, 59, 59, intval(substr($to, 3, 2)), intval(substr($to, 0, 2)), intval(substr($to, 6, 4)));
+				$dateFrom = mktime(0, 0, 1, (int)(substr($from, 3, 2)), (int)(substr($from, 0, 2)), (int)(substr($from, 6, 4)));
+				$dateTo = mktime(23, 59, 59, (int)(substr($to, 3, 2)), (int)(substr($to, 0, 2)), (int)(substr($to, 6, 4)));
 				if ($dateFrom > $dateTo) {
 					$tmp = $dateTo;
 					$dateTo = $dateFrom;
@@ -47,7 +47,7 @@
 						if (isset($delivery['shipping_start_utc'])) { 
 							$l_delivery['shipping_date'] = date('d/m/Y', $delivery['shipping_start_utc']);
 							$l_delivery['shipping_start'] = date('H\hi', $delivery['shipping_start_utc']);
-							$l_delivery['shipping_stop'] = date('H\hi', intval($delivery['shipping_start_utc']) + 3600*intval($delivery['timelimit']) );
+							$l_delivery['shipping_stop'] = date('H\hi', (int)($delivery['shipping_start_utc']) + 3600*(int)($delivery['timelimit']) );
 						}
 						else {
 							$delivery['shipping_date'] = '';

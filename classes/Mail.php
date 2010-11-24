@@ -56,7 +56,7 @@ class MailCore
 		}
 		try {
 			/* Connect with the appropriate configuration */
-			if (intval($configuration['PS_MAIL_METHOD']) == 2)
+			if ((int)($configuration['PS_MAIL_METHOD']) == 2)
 			{
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'], ($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "ssl") ? Swift_Connection_SMTP::ENC_SSL : (($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
 				$connection->setTimeout(4);
@@ -75,7 +75,7 @@ class MailCore
 				return false;
 			$swift = new Swift($connection);
 			/* Get templates content */
-			$iso = Language::getIsoById(intval($id_lang));
+			$iso = Language::getIsoById((int)($id_lang));
 			if (!$iso)
 				die (Tools::displayError('Error - No iso code for email !'));
 			$template = $iso.'/'.$template;
@@ -182,7 +182,7 @@ class MailCore
 		global $_LANGMAIL;
 
 		$key = str_replace('\'', '\\\'', $string);
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? intval(Configuration::get('PS_LANG_DEFAULT')) : intval($cookie->id_lang);
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
 
 		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
 		if (file_exists($file))

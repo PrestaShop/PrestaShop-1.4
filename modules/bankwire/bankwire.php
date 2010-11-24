@@ -150,7 +150,7 @@ class BankWire extends PaymentModule
 			'cust_currency' => $cookie->id_currency,
 			'currencies' => $this->getCurrency(),
 			'total' => $cart->getOrderTotal(true, 3),
-			'isoCode' => Language::getIsoById(intval($cookie->id_lang)),
+			'isoCode' => Language::getIsoById((int)($cookie->id_lang)),
 			'bankwireDetails' => nl2br2($this->details),
 			'bankwireAddress' => nl2br2($this->address),
 			'bankwireOwner' => $this->owner,
@@ -200,7 +200,7 @@ class BankWire extends PaymentModule
 	
 	private function _checkCurrency($cart)
 	{
-		$currency_order = new Currency(intval($cart->id_currency));
+		$currency_order = new Currency((int)($cart->id_currency));
 		$currencies_module = $this->getCurrency();
 		$currency_default = Configuration::get('PS_CURRENCY_DEFAULT');
 		

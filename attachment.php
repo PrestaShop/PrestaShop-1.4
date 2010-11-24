@@ -3,7 +3,7 @@
 require(dirname(__FILE__).'/config/config.inc.php');
 require(dirname(__FILE__).'/init.php');
 
-$a = new Attachment(intval(Tools::getValue('id_attachment')), intval($cookie->id_lang));
+$a = new Attachment((int)(Tools::getValue('id_attachment')), (int)($cookie->id_lang));
 
 header('Content-Transfer-Encoding: binary');
 header('Content-Type: '.$a->mime);

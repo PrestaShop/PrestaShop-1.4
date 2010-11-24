@@ -87,7 +87,7 @@ class DejalaUtils
 			if ($nodeList->length > 0) {
 				foreach ($nodeList as $element) {
 					$calendarNode = $this->getNodeValue($element);
-					$calendar['entries'][intval($calendarNode['weekday'])] = $calendarNode;
+					$calendar['entries'][(int)($calendarNode['weekday'])] = $calendarNode;
 				}
 			}
 			$nodeList = $doc->getElementsByTagName('exception');

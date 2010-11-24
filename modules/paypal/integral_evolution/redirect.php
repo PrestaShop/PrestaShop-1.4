@@ -5,14 +5,14 @@ include(dirname(__FILE__).'/../../../init.php');
 include(dirname(__FILE__).'/../paypal.php');
 
 $paypal = new Paypal();
-$cart = new Cart(intval($cookie->id_cart));
+$cart = new Cart((int)($cookie->id_cart));
 
 // Billing address
-$billingAddress = new Address(intval($cart->id_address_invoice));
-$billingCountry = new Country(intval($billingAddress->id_country));
+$billingAddress = new Address((int)($cart->id_address_invoice));
+$billingCountry = new Country((int)($billingAddress->id_country));
 $billingState = NULL;
 if ($billingAddress->id_state)
-	$billingState = new State(intval($billingAddress->id_state));
+	$billingState = new State((int)($billingAddress->id_state));
 
 // Shipping address
 if ($cart->id_address_delivery == $cart->id_address_invoice)
@@ -23,17 +23,17 @@ if ($cart->id_address_delivery == $cart->id_address_invoice)
 }
 else
 {
-	$shippingAddress = new Address(intval($cart->id_address_delivery));
-	$shippingCountry = new Country(intval($shippingAddress->id_country));
+	$shippingAddress = new Address((int)($cart->id_address_delivery));
+	$shippingCountry = new Country((int)($shippingAddress->id_country));
 	$shippingState = NULL;
 	if ($shippingAddress->id_state)
-		$shippingState = new State(intval($shippingAddress->id_state));
+		$shippingState = new State((int)($shippingAddress->id_state));
 }
 
-$customer = new Customer(intval($cart->id_customer));
+$customer = new Customer((int)($cart->id_customer));
 $business = Configuration::get('PAYPAL_BUSINESS');
 $header = Configuration::get('PAYPAL_HEADER');
-$currency_order = new Currency(intval($cart->id_currency));
+$currency_order = new Currency((int)($cart->id_currency));
 $currency_module = $paypal->getCurrency();
 
 if (!Validate::isEmail($business))
@@ -69,9 +69,9 @@ $smarty->assign(array(
 	'discount' => $cart->getOrderTotal(true, 2),
 	'business' => $business,
 	'currency_module' => $currency_module,
-	'cart_id' => intval($cart->id).'_'.pSQL($cart->secure_key),
+	'cart_id' => (int)($cart->id).'_'.pSQL($cart->secure_key),
 	'products' => $cart->getProducts(),
-	'paypal_id' => intval($paypal->id),
+	'paypal_id' => (int)($paypal->id),
 	'header' => $header,
 	'template' => 'Template'.Configuration::get('PAYPAL_TEMPLATE'),
 	'url' => Tools::getHttpHost(false, true).__PS_BASE_URI__,

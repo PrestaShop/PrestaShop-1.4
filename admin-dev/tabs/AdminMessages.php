@@ -39,7 +39,7 @@ class AdminMessages extends AdminTab
 		if (empty($orderWay))
 			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');		
 
-		$limit = intval(Tools::getValue('pagination', $limit));
+		$limit = (int)(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
 
 		/* Check params validity */
@@ -56,19 +56,19 @@ class AdminMessages extends AdminTab
 		isset($_POST['submitFilter'.$this->table.'_y'])) AND
 		!empty($_POST['submitFilter'.$this->table]) AND
 		is_numeric($_POST['submitFilter'.$this->table]))
-			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
+			$start = (int)($_POST['submitFilter'.$this->table] - 1) * $limit;
 
 		$this->_list = Db::getInstance()->ExecuteS('
 		SELECT SQL_CALC_FOUND_ROWS m.id_message, m.id_cart, m.id_employee, IF(m.id_order > 0, m.id_order, \'--\') id_order, m.message, m.private, m.date_add, CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS customer,
 		c.id_customer, count(m.id_message) nb_messages, (SELECT message FROM '._DB_PREFIX_.'message WHERE id_order = m.id_order ORDER BY date_add DESC LIMIT 1) last_message,
 		(SELECT COUNT(m2.id_message) FROM '._DB_PREFIX_.'message m2 WHERE 1 AND m2.id_customer != 0 AND m2.id_order = m.id_order AND m2.id_message NOT IN 
-		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.intval($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_read_by_me
+		(SELECT mr2.id_message FROM '._DB_PREFIX_.'message_readed mr2 WHERE mr2.id_employee = '.(int)($cookie->id_employee).') GROUP BY m2.id_order) nb_messages_not_read_by_me
 		FROM '._DB_PREFIX_.'message m
 		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = m.id_order)
 		LEFT JOIN '._DB_PREFIX_.'customer c ON (c.id_customer = m.id_customer)
 		GROUP BY m.id_order
 		ORDER BY '.(isset($orderBy) ? pSQL($orderBy) : 'date_add') .' '.(isset($orderWay) ? pSQL($orderWay) : 'DESC').'
-		LIMIT '.intval($start).','.intval($limit));
+		LIMIT '.(int)($start).','.(int)($limit));
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS()');
 
  		$this->fieldsDisplay = array(
@@ -87,7 +87,7 @@ class AdminMessages extends AdminTab
 		global $cookie;
 
 		if (isset($_GET['view'.$this->table]) AND !empty($_GET['id_order']) AND $_GET['id_order'] != '--')
-			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 		else
 		{
 			if (isset($_GET['id_order']) AND (empty($_GET['id_order']) OR $_GET['id_order'] == '--'))

@@ -27,7 +27,7 @@ class RangeWeightCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_carrier'] = intval($this->id_carrier);
+		$fields['id_carrier'] = (int)($this->id_carrier);
 		$fields['delimiter1'] = floatval($this->delimiter1);
 		$fields['delimiter2'] = floatval($this->delimiter2);
 		return $fields;
@@ -43,7 +43,7 @@ class RangeWeightCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'range_weight`
-		WHERE `id_carrier` = '.intval($id_carrier).'
+		WHERE `id_carrier` = '.(int)($id_carrier).'
 		ORDER BY `delimiter1` ASC');
 	}
 }

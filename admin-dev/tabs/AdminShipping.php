@@ -73,7 +73,7 @@ class AdminShipping extends AdminTab
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 			{
-				if (($id_carrier = intval(Tools::getValue('id_carrier'))) AND $id_carrier == ($id_carrier2 = intval(Tools::getValue('id_carrier2'))))
+				if (($id_carrier = (int)(Tools::getValue('id_carrier'))) AND $id_carrier == ($id_carrier2 = (int)(Tools::getValue('id_carrier2'))))
 				{
 					$carrier = new Carrier($id_carrier);
 					if (Validate::isLoadedObject($carrier))
@@ -90,9 +90,9 @@ class AdminShipping extends AdminTab
 							if (strstr($key, 'fees_'))
 							{
 								$tmpArray = explode('_', $key);
-								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? intval($tmpArray[2]) : 'NULL').',
-								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? intval($tmpArray[2]) : 'NULL').', '.$carrier->id.',
-								'.intval($tmpArray[1]).', '.number_format(abs($value), 2, '.', '').'),';
+								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? (int)($tmpArray[2]) : 'NULL').',
+								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)($tmpArray[2]) : 'NULL').', '.$carrier->id.',
+								'.(int)($tmpArray[1]).', '.number_format(abs($value), 2, '.', '').'),';
 								unset($tmpArray);
 							}
 						$priceList = rtrim($priceList, ',');
@@ -190,11 +190,11 @@ class AdminShipping extends AdminTab
 				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Fees').'</legend>
 				<b>'.$this->l('Carrier:').' </b>
 				<select name="id_carrier2" onchange="document.fees.submit();">';
-		$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
-		$id_carrier = Tools::getValue('id_carrier') ? intval(Tools::getValue('id_carrier')) : intval($carriers[0]['id_carrier']);
+		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+		$id_carrier = Tools::getValue('id_carrier') ? (int)(Tools::getValue('id_carrier')) : (int)($carriers[0]['id_carrier']);
 		$carrierSelected = new Carrier($id_carrier);
 		foreach ($carriers AS $carrier)
-			echo '<option value="'.intval($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>';
+			echo '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>';
 		echo '
 				</select><br />
 				<table class="table space" cellpadding="0" cellspacing="0">

@@ -16,8 +16,8 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 {	
 	$id_order = str_replace(str_replace('.','_',str_replace('www.','',$_SERVER['HTTP_HOST'])).'_','',$return['infoexterne']);
 	
-	$order = new Order(intval($id_order));
-	$customer = new Customer(intval($order->id_customer));
+	$order = new Order((int)($id_order));
+	$customer = new Customer((int)($order->id_customer));
 	$confs = Configuration::getMultiple(array('EMC_SEND_STATE', 'EMC_ORDER_PAST_STATE', 'EMC_DELIVERY_STATE'));
 	
 	if ($customer->secure_key != $return['token'])
@@ -29,30 +29,30 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 			//commande passŽe
 			case 'CMD' :
 				$history = new OrderHistory();
-				$history->id_order = intval($id_order);
-				$history->changeIdOrderState(intval($confs['EMC_ORDER_PAST_STATE']), intval($history->id_order));
-				$history->id_employee = intval($cookie->id_employee);
+				$history->id_order = (int)($id_order);
+				$history->changeIdOrderState((int)($confs['EMC_ORDER_PAST_STATE']), (int)($history->id_order));
+				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 				
 				$db = Db::getInstance();
-				$db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'envoimoinscher WHERE id_order = '.intval($id_order));
-				$numRows = intval($db->NumRows());
+				$db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'envoimoinscher WHERE id_order = '.(int)($id_order));
+				$numRows = (int)($db->NumRows());
 				if ($numRows == 0)
 				{
-					if (Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'envoimoinscher VALUES (\''.intval($id_order).'\', \''.$return['envoi'].'\');'));
+					if (Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'envoimoinscher VALUES (\''.(int)($id_order).'\', \''.$return['envoi'].'\');'));
 				}
 				else
 				{
-					if (Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'envoimoinscher SET shipping_number=\''.$return['envoi'].'\' WHERE id_order=\''.intval($id_order).'\' '));	
+					if (Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'envoimoinscher SET shipping_number=\''.$return['envoi'].'\' WHERE id_order=\''.(int)($id_order).'\' '));	
 				}
 			
 			break;
 			//colis (ou autre objet) envoyŽ
 			case 'ENV' :
 				$history = new OrderHistory();
-				$history->id_order = intval($id_order);
-				$history->changeIdOrderState(intval($confs['EMC_SEND_STATE']), intval($history->id_order));
-				$history->id_employee = intval($cookie->id_employee);
+				$history->id_order = (int)($id_order);
+				$history->changeIdOrderState((int)($confs['EMC_SEND_STATE']), (int)($history->id_order));
+				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 			break;
 			//envoi annulŽ
@@ -60,16 +60,16 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				$message = new Message();
 				$texte = 'Envoi Moins cher : envoi annulŽ';
 				$message->message = htmlentities($texte, ENT_COMPAT, 'UTF-8');
-				$message->id_order = intval($id_order);
+				$message->id_order = (int)($id_order);
 				$message->private = 1;
 				$message->add();
 			break;
 			//objet livrŽ (pas gŽrŽ actuellement)
 				case 'LIV' :
 				$history = new OrderHistory();
-				$history->id_order = intval($id_order);
-				$history->changeIdOrderState(intval($confs['EMC_DELIVERY_STATE']), intval($history->id_order));
-				$history->id_employee = intval($cookie->id_employee);
+				$history->id_order = (int)($id_order);
+				$history->changeIdOrderState((int)($confs['EMC_DELIVERY_STATE']), (int)($history->id_order));
+				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 			break;
 	

@@ -59,7 +59,7 @@ class AdminSearchConf extends AdminPreferences
 		list($total, $indexed) = Db::getInstance()->getRow('SELECT COUNT(*) as "0", SUM(indexed) as "1" FROM '._DB_PREFIX_.'product');
 		echo '
 		<fieldset><legend>'.$this->l('Indexation').'</legend>
-			'.$this->l('Indexed products:').' <b>'.intval($indexed).' / '.intval($total).'</b>.<br /><br />
+			'.$this->l('Indexed products:').' <b>'.(int)($indexed).' / '.(int)($total).'</b>.<br /><br />
 			-&gt; <a href="searchcron.php?token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Add missing products to index.').'</a><br />
 			-&gt; <a href="searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Re-build entire index.').'</a><br /><br />
 			'.$this->l('You can set a cron job that will re-build your index using the following URL:').' <a href="'.$cronUrl.'">'.$cronUrl.'</a>.

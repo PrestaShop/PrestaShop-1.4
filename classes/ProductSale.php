@@ -38,7 +38,7 @@ class ProductSaleCore
 			FROM `'._DB_PREFIX_.'product_sale` ps
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ps.`id_product`
 			WHERE p.`active` = 1');
-		return intval($result['nb']);
+		return (int)($result['nb']);
 	}
 	
 	/*
@@ -66,19 +66,19 @@ class ProductSaleCore
 			DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM `'._DB_PREFIX_.'product_sale` ps 
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
 		WHERE p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 		)
 		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
-		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
+		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 
 		if($orderBy == 'price')
 		{	
@@ -108,20 +108,20 @@ class ProductSaleCore
 		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, p.`upc`, cl.`link_rewrite` AS category
 		FROM `'._DB_PREFIX_.'product_sale` ps 
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (cl.`id_category` = p.`id_category_default` AND cl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (cl.`id_category` = p.`id_category_default` AND cl.`id_lang` = '.(int)($id_lang).')
 		WHERE p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 		)
 		GROUP BY p.`id_product`
 		ORDER BY sales DESC
-		LIMIT '.intval($pageNumber * $nbProducts).', '.intval($nbProducts));
+		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 		if (!$result)
 			return $result;
 		
@@ -138,25 +138,25 @@ class ProductSaleCore
 		return Db::getInstance()->Execute('
 			INSERT INTO '._DB_PREFIX_.'product_sale
 			(`id_product`, `quantity`, `sale_nbr`, `date_upd`)
-			VALUES ('.intval($product_id).', '.intval($qty).', 1, NOW())
-			ON DUPLICATE KEY UPDATE `quantity` = `quantity` + '.intval($qty).', `sale_nbr` = `sale_nbr` + 1, `date_upd` = NOW()');
+			VALUES ('.(int)($product_id).', '.(int)($qty).', 1, NOW())
+			ON DUPLICATE KEY UPDATE `quantity` = `quantity` + '.(int)($qty).', `sale_nbr` = `sale_nbr` + 1, `date_upd` = NOW()');
 	}
 
 	static public function getNbrSales($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT `sale_nbr` FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.intval($id_product));
+		$result = Db::getInstance()->getRow('SELECT `sale_nbr` FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
 		if (!$result OR empty($result) OR !key_exists('sale_nbr', $result))
 			return -1;
-		return intval($result['sale_nbr']);
+		return (int)($result['sale_nbr']);
 	}
 
 	static public function removeProductSale($id_product, $qty = 1)
 	{
 		$nbrSales = self::getNbrSales($id_product);
 		if ($nbrSales > 1)
-			return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product_sale SET `quantity` = `quantity` - '.intval($qty).', `sale_nbr` = `sale_nbr` - 1, `date_upd` = NOW() WHERE `id_product` = '.intval($id_product));
+			return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product_sale SET `quantity` = `quantity` - '.(int)($qty).', `sale_nbr` = `sale_nbr` - 1, `date_upd` = NOW() WHERE `id_product` = '.(int)($id_product));
 		elseif ($nbrSales == 1)
-			return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.intval($id_product));
+			return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
 		return true;
 	}
 }	

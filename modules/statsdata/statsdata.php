@@ -171,9 +171,9 @@ class StatsData extends Module
 		$result = Db::getInstance()->getRow('
 		SELECT `id_guest`
 		FROM `'._DB_PREFIX_.'guest`
-		WHERE `id_customer` = '.intval($params['cookie']->id_customer));
+		WHERE `id_customer` = '.(int)($params['cookie']->id_customer));
 
-		if (intval($result['id_guest']))
+		if ((int)($result['id_guest']))
 		{
 			// The new guest is merged with the old one when it's connecting to an account
 			$guest->mergeWithCustomer($result['id_guest'], $params['cookie']->id_customer);

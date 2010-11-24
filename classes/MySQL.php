@@ -133,7 +133,7 @@ class MySQLCore extends Db
 		$this->_result = false;
 		if ($this->_link)
 		{
-			$query  = 'DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.intval($limit) : '');
+			$query  = 'DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.(int)($limit) : '');
 			$res =  mysql_query($query, $this->_link);
 			if ($use_cache AND _PS_CACHE_ENABLED_)
 				Cache::getInstance()->deleteQuery($query);

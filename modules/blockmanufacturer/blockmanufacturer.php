@@ -49,9 +49,9 @@ class BlockManufacturer extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockManufacturers'))
 		{
-			$text_list = intval(Tools::getValue('text_list'));
-			$text_nb = intval(Tools::getValue('text_nb'));
-			$form_list = intval(Tools::getValue('form_list'));
+			$text_list = (int)(Tools::getValue('text_list'));
+			$text_nb = (int)(Tools::getValue('text_nb'));
+			$form_list = (int)(Tools::getValue('form_list'));
 			if ($text_list AND !Validate::isUnsignedInt($text_nb))
 				$errors[] = $this->l('Invalid number of elements');
 			elseif (!$text_list AND !$form_list)
@@ -81,7 +81,7 @@ class BlockManufacturer extends Module
 					<label class="t" for="text_list_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="text_list" id="text_list_off" value="0" '.(!Tools::getValue('text_list', Configuration::get('MANUFACTURER_DISPLAY_TEXT')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="text_list_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					&nbsp;&nbsp;&nbsp;'.$this->l('Display').' <input type="text" size="2" name="text_nb" value="'.intval(Tools::getValue('text_nb', Configuration::get('MANUFACTURER_DISPLAY_TEXT_NB'))).'" /> '.$this->l('elements').'
+					&nbsp;&nbsp;&nbsp;'.$this->l('Display').' <input type="text" size="2" name="text_nb" value="'.(int)(Tools::getValue('text_nb', Configuration::get('MANUFACTURER_DISPLAY_TEXT_NB'))).'" /> '.$this->l('elements').'
 					<p class="clear">'.$this->l('To display manufacturers in a plain-text list').'</p>
 				</div>
 				<label>'.$this->l('Use a drop-down list').'</label>

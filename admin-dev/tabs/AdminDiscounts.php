@@ -29,10 +29,10 @@ class AdminDiscounts extends AdminTab
 		"--")) as strvalue';
 	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'currency` c ON (c.`id_currency` = a.`id_currency`)
 						LEFT JOIN `'._DB_PREFIX_.'discount_type` dt ON (dt.`id_discount_type` = a.`id_discount_type`)
-						LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($cookie->id_lang).')';
+						LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.(int)($cookie->id_lang).')';
 		
 		$typesArray = array();
-		$types = Discount::getDiscountTypes(intval($cookie->id_lang));
+		$types = Discount::getDiscountTypes((int)($cookie->id_lang));
 		foreach ($types AS $type)
 			$typesArray[$type['id_discount_type']] = $type['name'];
 			
@@ -85,7 +85,7 @@ class AdminDiscounts extends AdminTab
 			$this->validateRules();
 			if (!sizeof($this->_errors))
 			{
-				$id = intval(Tools::getValue($this->identifier));
+				$id = (int)(Tools::getValue($this->identifier));
 
 				/* Object update */
 				if (isset($id) AND !empty($id))
@@ -203,9 +203,9 @@ class AdminDiscounts extends AdminTab
 				<div class="margin-form">
 					<select name="id_discount_type" id="id_discount_type" onchange="free_shipping()">
 						<option value="0">'.$this->l('-- Choose --').'</option>';
-		$discountTypes = Discount::getDiscountTypes(intval($cookie->id_lang));
+		$discountTypes = Discount::getDiscountTypes((int)($cookie->id_lang));
 		foreach ($discountTypes AS $discountType)
-			echo '<option value="'.intval($discountType['id_discount_type']).'"'.
+			echo '<option value="'.(int)($discountType['id_discount_type']).'"'.
 			(($this->getFieldValue($obj, 'id_discount_type') == $discountType['id_discount_type']) ? ' selected="selected"' : '').'>'.$discountType['name'].'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>
@@ -229,7 +229,7 @@ class AdminDiscounts extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Will appear in cart next to voucher code').'</p>
 					</div>';							
@@ -247,10 +247,10 @@ class AdminDiscounts extends AdminTab
 		$done = array();
 		$index = array();
 		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Discount::getCategories($obj->id) : array());
-		$categories = Category::getCategories(intval($cookie->id_lang), false);
+		$categories = Category::getCategories((int)($cookie->id_lang), false);
 		foreach ($indexedCategories AS $k => $row)
 			$index[] = $row['id_category'];
-		$this->recurseCategoryForInclude(intval(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
+		$this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
 		echo '
 							</table>
 							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applicated').'<sup> *</sup></p>
@@ -258,12 +258,12 @@ class AdminDiscounts extends AdminTab
 				<div class="clear" / >
 				<label>'.$this->l('Total quantity:').' </label>
 				<div class="margin-form">
-					<input type="text" size="15" name="quantity" value="'.intval($this->getFieldValue($obj, 'quantity')).'" /> <sup>*</sup>
+					<input type="text" size="15" name="quantity" value="'.(int)($this->getFieldValue($obj, 'quantity')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Total quantity available (mainly for vouchers open to everyone)').'</p>
 				</div>
 				<label>'.$this->l('Qty per each user:').' </label>
 				<div class="margin-form">
-					<input type="text" size="15" name="quantity_per_user" value="'.intval($this->getFieldValue($obj, 'quantity_per_user')).'" /> <sup>*</sup>
+					<input type="text" size="15" name="quantity_per_user" value="'.(int)($this->getFieldValue($obj, 'quantity_per_user')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Number of times a single customer can use this voucher').'</p>
 				</div>
 				<label>'.$this->l('Minimum amount').'</label>
@@ -298,7 +298,7 @@ class AdminDiscounts extends AdminTab
 						var formDiscount = document.layers ? document.forms.discount : document.discount;	
 						function fillCustomersAjax()
 						{
-							var filterValue = \''.(($value = intval($this->getFieldValue($obj, 'id_customer'))) ? '0_'.$value : (($value = intval($this->getFieldValue($obj, 'id_group'))) ? '1_'.$value : '')).'\';
+							var filterValue = \''.(($value = (int)($this->getFieldValue($obj, 'id_customer'))) ? '0_'.$value : (($value = (int)($this->getFieldValue($obj, 'id_group'))) ? '1_'.$value : '')).'\';
 							if ($(\'#filter\').val())
 								filterValue = $(\'#filter\').val();
 							
@@ -434,7 +434,7 @@ class AdminDiscounts extends AdminTab
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj)) OR Tools::getIsset('adddiscount')) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR ((int)(Tools::getValue('id_category')) == $id_category AND !(int)($id_obj)) OR Tools::getIsset('adddiscount')) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'

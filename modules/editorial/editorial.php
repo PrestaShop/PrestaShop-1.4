@@ -104,7 +104,7 @@ class Editorial extends Module
 			else
 			{
 				unlink(dirname(__FILE__).'/homepage_logo.jpg');
-				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee)));
+				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)));
 			}
 			$this->_html .= $errors;
 		}
@@ -151,9 +151,9 @@ class Editorial extends Module
 	{
 		global $cookie;
 		/* Languages preliminaries */
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages(false);
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$divLangName = 'title¤subheading¤cpara¤logo_subheading';
 
 		$editorial = new EditorialClass(1);

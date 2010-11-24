@@ -99,7 +99,7 @@ class Tm4b extends Module
 	
 	private function _getTplBody($tpl_file, $vars = array())
 	{
-		$iso = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$iso = Language::getIsoById((int)(Configuration::get('PS_LANG_DEFAULT')));
 		$file = dirname(__FILE__).'/mails/'.$iso.'/'.$tpl_file;
 		if (!file_exists($file))
 			die($file);
@@ -112,7 +112,7 @@ class Tm4b extends Module
 	{
 		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
 		
-		if ( !intval($this->_alert_new_order_active) OR empty($this->_user) OR empty($this->_password)
+		if ( !(int)($this->_alert_new_order_active) OR empty($this->_user) OR empty($this->_password)
 			OR empty($this->_new_order_numbers))
 			return ;
 		$order = $params['order'];
@@ -141,17 +141,17 @@ class Tm4b extends Module
 
 	public function hookUpdateQuantity($params)
 	{
-		if (!intval($this->_alert_update_quantity_active) OR empty($this->_new_order_numbers))
+		if (!(int)($this->_alert_update_quantity_active) OR empty($this->_new_order_numbers))
 			return ;
 	
 		$product = $params['product'];
 		$order = $params['order'];
 		
-		$qty = intval($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - intval($params['product']['quantity']);
-		if ($qty <= intval(Configuration::get('PS_LAST_QTIES')))
+		$qty = (int)($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - (int)($params['product']['quantity']);
+		if ($qty <= (int)(Configuration::get('PS_LAST_QTIES')))
 		{
 			$templateVars = array(
-			'{last_qty}' => intval(Configuration::get('PS_LAST_QTIES')),
+			'{last_qty}' => (int)(Configuration::get('PS_LAST_QTIES')),
 			'{qty}' => $qty,
 			'{product}' => strval($params['product']['name']));
 
@@ -348,7 +348,7 @@ class Tm4b extends Module
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query.'AND o.`date_add` LIKE \''.date('Y-m').'-%\'');
 		
 		return date('Y-m-d')."\n".
-		$this->l('Orders:').' '.intval($result['total_orders'])."\n".
+		$this->l('Orders:').' '.(int)($result['total_orders'])."\n".
 		$this->l('Sales:').' '.Tools::displayPrice($result['total_sales'], $currency, true)."\n".
 		'('.$this->l('Month:').' '.Tools::displayPrice($result2['total_sales'], $currency, true).')';
 	}

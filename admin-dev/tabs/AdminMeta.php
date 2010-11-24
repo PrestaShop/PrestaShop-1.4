@@ -68,7 +68,7 @@ class AdminMeta extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="33" type="text" name="title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Title of this page').'</p>
 					</div>';
@@ -80,7 +80,7 @@ class AdminMeta extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="50" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="50" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('A short description').'</p>
 					</div>';
@@ -92,7 +92,7 @@ class AdminMeta extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="50" type="text" name="keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="50" type="text" name="keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('List of keywords').'</p>
 					</div>';
@@ -104,7 +104,7 @@ class AdminMeta extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="url_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="50" type="text" name="url_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'url_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="50" type="text" name="url_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($meta, 'url_rewrite', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Example : "contacts" for http://mysite.com/shop/contacts to redirect to http://mysite.com/shop/contact-form.php').'</p>
 					</div>';

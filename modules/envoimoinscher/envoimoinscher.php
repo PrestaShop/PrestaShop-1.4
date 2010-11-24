@@ -79,7 +79,7 @@ class Envoimoinscher extends Module
 		$tab->class_name = 'AdminEnvoiMoinsCher';
 		$tab->id_parent = 3;
 		$tab->module = 'envoimoinscher';
-		$tab->name[intval(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Envoimoinscher');
+		$tab->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Envoimoinscher');
 		return $tab->add();
 	}
 	
@@ -132,7 +132,7 @@ class Envoimoinscher extends Module
 											 'EMC_PHONE', 'EMC_EMAIL'));
 		$link = '<a href="http://www.envoimoinscher.com/inscription.html?tracking=prestashop_module_v1
 		&login='.(isset($confs['EMC_LOGIN']) ? htmlspecialchars($confs['EMC_LOGIN'], ENT_COMPAT, 'UTF-8') : '' ).'
-		&facturation.contact_civ='.(isset($genderTab[intval(Configuration::get('EMC_GENDER'))]) ? htmlspecialchars($genderTab[intval(Configuration::get('EMC_GENDER'))], ENT_COMPAT, 'UTF-8') : '' ).'
+		&facturation.contact_civ='.(isset($genderTab[(int)(Configuration::get('EMC_GENDER'))]) ? htmlspecialchars($genderTab[(int)(Configuration::get('EMC_GENDER'))], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_ste='.(isset($confs['PS_SHOP_NAME']) ? htmlspecialchars($confs['PS_SHOP_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_nom='.(isset($confs['EMC_LAST_NAME']) ? htmlspecialchars($confs['EMC_LAST_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_prenom='.(isset($confs['EMC_FIRST_NAME']) ? htmlspecialchars($confs['EMC_FIRST_NAME'], ENT_COMPAT, 'UTF-8') : '' ).'
@@ -166,7 +166,7 @@ class Envoimoinscher extends Module
 				<option value="O">'.$this->l('Choose a feature ...').'</option>';
 			foreach($features as $feature)
 			{
-				$this->_html .= '<option value="'.intval($feature['id_feature']).'" '.(intval(Tools::getValue('EMC_WIDTH', intval(Configuration::get('EMC_WIDTH')))) == intval($feature['id_feature']) ? ' selected="selected" ' : '').' >
+				$this->_html .= '<option value="'.(int)($feature['id_feature']).'" '.((int)(Tools::getValue('EMC_WIDTH', (int)(Configuration::get('EMC_WIDTH')))) == (int)($feature['id_feature']) ? ' selected="selected" ' : '').' >
 				'.htmlspecialchars($feature['name'], ENT_COMPAT, 'UTF-8').'</option>';
 			}
 		$this->_html .= '</select>
@@ -182,7 +182,7 @@ class Envoimoinscher extends Module
 				
 			foreach($features as $feature)
 			{
-				$this->_html .= '<option value="'.intval($feature['id_feature']).'" '.(intval(Tools::getValue('EMC_HEIGHT', intval(Configuration::get('EMC_HEIGHT')))) == intval($feature['id_feature']) ? ' selected="selected" ' : '').' >
+				$this->_html .= '<option value="'.(int)($feature['id_feature']).'" '.((int)(Tools::getValue('EMC_HEIGHT', (int)(Configuration::get('EMC_HEIGHT')))) == (int)($feature['id_feature']) ? ' selected="selected" ' : '').' >
 				'.htmlspecialchars($feature['name'], ENT_COMPAT, 'UTF-8').'</option>';
 			}
 		$this->_html .= '</select>
@@ -197,7 +197,7 @@ class Envoimoinscher extends Module
 				<option value="O">'.$this->l('Choose a feature ...').'</option>';
 			foreach($features as $feature)
 			{
-				$this->_html .= '<option value="'.intval($feature['id_feature']).'" '.(intval(Tools::getValue('EMC_DEPTH', intval(Configuration::get('EMC_DEPTH')))) == intval($feature['id_feature']) ? ' selected="selected" ' : '').' >
+				$this->_html .= '<option value="'.(int)($feature['id_feature']).'" '.((int)(Tools::getValue('EMC_DEPTH', (int)(Configuration::get('EMC_DEPTH')))) == (int)($feature['id_feature']) ? ' selected="selected" ' : '').' >
 				'.htmlspecialchars($feature['name'], ENT_COMPAT, 'UTF-8').'</option>';
 			}
 		$this->_html .= '</select>
@@ -230,8 +230,8 @@ class Envoimoinscher extends Module
 				<option value="O">'.$this->l('Choose a state ...').'</option>';
 		foreach ( $order_states as $state)
 		{
-			$this->_html .= '<option value="'.intval($state['id_order_state']). '" style="background-color:' .$state['color'].';"';
-			if (Tools::getValue('EMC_ORDER_STATE', Configuration::get('EMC_ORDER_STATE')) == intval($state['id_order_state'])) 
+			$this->_html .= '<option value="'.(int)($state['id_order_state']). '" style="background-color:' .$state['color'].';"';
+			if (Tools::getValue('EMC_ORDER_STATE', Configuration::get('EMC_ORDER_STATE')) == (int)($state['id_order_state'])) 
 				$this->_html .= ' selected="selected"';
 			$this->_html .= '>'.htmlspecialchars($state['name'], ENT_COMPAT, 'UTF-8').'</option>';
 		}
@@ -246,7 +246,7 @@ class Envoimoinscher extends Module
 			<select name="EMC_CARRIER">
 				<option value="O">'.$this->l('Choose a carrier ...').'</option>';
 			foreach($carriers as $carrier)
-				$this->_html .= '<option value="'.intval($carrier['id_carrier']).'" '.(Tools::getValue('EMC_CARRIER', Configuration::get('EMC_CARRIER')) == $carrier['id_carrier'] ? ' selected="selected" ' : '').' >
+				$this->_html .= '<option value="'.(int)($carrier['id_carrier']).'" '.(Tools::getValue('EMC_CARRIER', Configuration::get('EMC_CARRIER')) == $carrier['id_carrier'] ? ' selected="selected" ' : '').' >
 				'.htmlspecialchars($carrier['name'], ENT_COMPAT, 'UTF-8').'</option>';
 		$this->_html .= '</select>
 		<sup> *</sup>
@@ -260,7 +260,7 @@ class Envoimoinscher extends Module
 				<option value="O">'.$this->l('Choose a state ...').'</option>';
 		foreach ( $order_states as $state)
 		{
-			$this->_html .= '<option value="'.intval($state['id_order_state']).'" style="background-color:'.$state['color'] . ';"';
+			$this->_html .= '<option value="'.(int)($state['id_order_state']).'" style="background-color:'.$state['color'] . ';"';
 			if (Tools::getValue('EMC_ORDER_PAST_STATE', Configuration::get('EMC_ORDER_PAST_STATE')) == $state['id_order_state'] ) $this->_html .= ' selected="selected"';
 			$this->_html .= '>'.htmlspecialchars($state['name'], ENT_COMPAT, 'UTF-8'). '</option>';
 		}
@@ -293,8 +293,8 @@ class Envoimoinscher extends Module
 				<option value="O">'.$this->l('Choose a state ...').'</option>';
 		foreach ( $order_states as $state)
 		{
-			$this->_html .= '<option value="'.intval($state['id_order_state']).'" style="background-color:'.$state['color'].';"';
-			if (Tools::getValue('EMC_DELIVERY_STATE', intval(Configuration::get('EMC_DELIVERY_STATE'))) == intval($state['id_order_state'])) $this->_html .= ' selected="selected"';
+			$this->_html .= '<option value="'.(int)($state['id_order_state']).'" style="background-color:'.$state['color'].';"';
+			if (Tools::getValue('EMC_DELIVERY_STATE', (int)(Configuration::get('EMC_DELIVERY_STATE'))) == (int)($state['id_order_state'])) $this->_html .= ' selected="selected"';
 			$this->_html .= '>'.htmlspecialchars($state['name'], ENT_COMPAT, 'UTF-8').'</option>';
 		}
 		$this->_html .= '</select>
@@ -451,9 +451,9 @@ class Envoimoinscher extends Module
 	
 	private function _postProcess()
 	{	
-		if (Configuration::updateValue('EMC_WIDTH', intval(Tools::getValue('EMC_WIDTH'))) AND Configuration::updateValue('EMC_HEIGHT', intval(Tools::getValue('EMC_HEIGHT'))) AND 
-			Configuration::updateValue('EMC_DEPTH', intval(Tools::getValue('EMC_DEPTH'))) AND Configuration::updateValue('EMC_ORDER_STATE', intval(Tools::getValue('EMC_ORDER_STATE'))) AND 
-			Configuration::updateValue('EMC_CARRIER', intval(Tools::getValue('EMC_CARRIER'))) AND Configuration::updateValue('EMC_PACKAGING_DEFAULT', Tools::getValue('EMC_PACKAGING_DEFAULT'))
+		if (Configuration::updateValue('EMC_WIDTH', (int)(Tools::getValue('EMC_WIDTH'))) AND Configuration::updateValue('EMC_HEIGHT', (int)(Tools::getValue('EMC_HEIGHT'))) AND 
+			Configuration::updateValue('EMC_DEPTH', (int)(Tools::getValue('EMC_DEPTH'))) AND Configuration::updateValue('EMC_ORDER_STATE', (int)(Tools::getValue('EMC_ORDER_STATE'))) AND 
+			Configuration::updateValue('EMC_CARRIER', (int)(Tools::getValue('EMC_CARRIER'))) AND Configuration::updateValue('EMC_PACKAGING_DEFAULT', Tools::getValue('EMC_PACKAGING_DEFAULT'))
 			AND Configuration::updateValue('EMC_GENDER', Tools::getValue('EMC_GENDER')) AND Configuration::updateValue('EMC_LAST_NAME', Tools::getValue('EMC_LAST_NAME'))
 			AND Configuration::updateValue('EMC_FIRST_NAME', Tools::getValue('EMC_FIRST_NAME')) AND Configuration::updateValue('EMC_ADDRESS', Tools::getValue('EMC_ADDRESS'))
 			AND Configuration::updateValue('EMC_ZIP_CODE', Tools::getValue('EMC_ZIP_CODE')) AND Configuration::updateValue('EMC_CITY', Tools::getValue('EMC_CITY'))
@@ -488,7 +488,7 @@ class Envoimoinscher extends Module
 				
 				$select .= '</optgroup><optgroup label="'.htmlspecialchars($groups[$optgroup], ENT_COMPAT, 'UTF-8').'">';
 			}
-			$select .= '<option '.($selected == $result['id'] ? 'selected="selected"' : '').' value="'.intval($result['id']).'" >'.htmlspecialchars($result['libelle'], ENT_COMPAT, 'UTF-8').'</option>';
+			$select .= '<option '.($selected == $result['id'] ? 'selected="selected"' : '').' value="'.(int)($result['id']).'" >'.htmlspecialchars($result['libelle'], ENT_COMPAT, 'UTF-8').'</option>';
 		}
 		$select .= '</select>';
 		return $select;	
@@ -500,7 +500,7 @@ class Envoimoinscher extends Module
 		$order = new Order($params['id_order']);
 		if ($order->id_carrier == Configuration::get('EMC_CARRIER'))
 		{
-			$return = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'envoimoinscher WHERE id_order = \''.intval($order->id).'\' LIMIT 1');
+			$return = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'envoimoinscher WHERE id_order = \''.(int)($order->id).'\' LIMIT 1');
 			if (isset($return[0]['shipping_number']))
 			{
 				$html = '<br><br><fieldset style="width: 400px;"><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Envoimoinscher').'</legend>';

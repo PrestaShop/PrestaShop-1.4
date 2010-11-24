@@ -18,10 +18,10 @@ class StoresControllerCore extends FrontController
 			FROM '._DB_PREFIX_.'store s
 			LEFT JOIN '._DB_PREFIX_.'country_lang cl ON (cl.id_country = s.id_country)
 			LEFT JOIN '._DB_PREFIX_.'state st ON (st.id_state = s.id_state)
-			WHERE s.active = 1 AND cl.id_lang = '.intval($cookie->id_lang));
+			WHERE s.active = 1 AND cl.id_lang = '.(int)($cookie->id_lang));
 			
 			foreach ($stores AS &$store)
-				$store['has_picture'] = file_exists(_PS_STORE_IMG_DIR_.intval($store['id_store']).'.jpg');
+				$store['has_picture'] = file_exists(_PS_STORE_IMG_DIR_.(int)($store['id_store']).'.jpg');
 		}
 		else
 		{		
@@ -32,21 +32,21 @@ class StoresControllerCore extends FrontController
 				FROM '._DB_PREFIX_.'store s
 				LEFT JOIN '._DB_PREFIX_.'country_lang cl ON (cl.id_country = s.id_country)
 				LEFT JOIN '._DB_PREFIX_.'state st ON (st.id_state = s.id_state)
-				WHERE s.active = 1 AND cl.id_lang = '.intval($cookie->id_lang));
+				WHERE s.active = 1 AND cl.id_lang = '.(int)($cookie->id_lang));
 			}
 			else
 			{
-				$distance = intval(Tools::getValue('radius', 100));
+				$distance = (int)(Tools::getValue('radius', 100));
 				$multiplicator = ($distanceUnit == 'km' ? 6371 : 3959);
 					
 				$stores = Db::getInstance()->ExecuteS('
 				SELECT s.*, cl.name country, st.iso_code state,
-				('.intval($multiplicator).' * acos(cos(radians('.floatval(Tools::getValue('latitude')).')) * cos(radians(latitude)) * cos(radians(longitude) - radians('.floatval(Tools::getValue('longitude')).')) + sin(radians('.floatval(Tools::getValue('latitude')).')) * sin(radians(latitude)))) distance
+				('.(int)($multiplicator).' * acos(cos(radians('.floatval(Tools::getValue('latitude')).')) * cos(radians(latitude)) * cos(radians(longitude) - radians('.floatval(Tools::getValue('longitude')).')) + sin(radians('.floatval(Tools::getValue('latitude')).')) * sin(radians(latitude)))) distance
 				FROM '._DB_PREFIX_.'store s
 				LEFT JOIN '._DB_PREFIX_.'country_lang cl ON (cl.id_country = s.id_country)
 				LEFT JOIN '._DB_PREFIX_.'state st ON (st.id_state = s.id_state)
-				WHERE s.active = 1 AND cl.id_lang = '.intval($cookie->id_lang).'
-				HAVING distance < '.intval($distance).'
+				WHERE s.active = 1 AND cl.id_lang = '.(int)($cookie->id_lang).'
+				HAVING distance < '.(int)($distance).'
 				ORDER BY distance ASC
 				LIMIT 0,20');
 			}
@@ -78,7 +78,7 @@ class StoresControllerCore extends FrontController
 						$other .= '<br /><br /><span style="font-weight: bold; text-decoration: underline; width: 80px; height: 15px; display: block;">Hours:</span>
 						<table style="font-size: 9px;">';
 						for ($i = 1; $i < 8; $i++)
-							$other .= '<tr><td style="width: 70px;">'.$days[$i].'</td><td>'.$hours[intval($i) - 1].'</td></tr>';
+							$other .= '<tr><td style="width: 70px;">'.$days[$i].'</td><td>'.$hours[(int)($i) - 1].'</td></tr>';
 						$other .= '
 						</table>';
 					}
@@ -87,13 +87,13 @@ class StoresControllerCore extends FrontController
 					$newnode->setAttribute('address', $address);
 					$newnode->setAttribute('other', $other);
 					$newnode->setAttribute('phone', $store['phone']);
-					$newnode->setAttribute('id_store', intval($store['id_store']));
-					$newnode->setAttribute('has_store_picture', file_exists(_PS_STORE_IMG_DIR_.intval($store['id_store']).'.jpg'));
+					$newnode->setAttribute('id_store', (int)($store['id_store']));
+					$newnode->setAttribute('has_store_picture', file_exists(_PS_STORE_IMG_DIR_.(int)($store['id_store']).'.jpg'));
 					$newnode->setAttribute('lat', floatval($store['latitude']));
 					$newnode->setAttribute('lng', floatval($store['longitude']));
 					
 					if (isset($store['distance']))
-						$newnode->setAttribute('distance', intval($store['distance']));
+						$newnode->setAttribute('distance', (int)($store['distance']));
 				}
 				
 				header('Content-type: text/xml');

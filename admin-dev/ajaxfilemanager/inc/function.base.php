@@ -351,8 +351,8 @@ function addNoCacheHeaders() {
 	function getThumbWidthHeight( $originaleImageWidth, $originalImageHeight, $thumbnailWidth, $thumbnailHeight)
 	{
 		$outputs = array( "width"=>0, "height"=>0);
-		$thumbnailWidth	= intval($thumbnailWidth);
-		$thumbnailHeight = intval($thumbnailHeight);
+		$thumbnailWidth	= (int)($thumbnailWidth);
+		$thumbnailHeight = (int)($thumbnailHeight);
 		if(!empty($originaleImageWidth) && !empty($originalImageHeight))
 		{
 			//start to get the thumbnail width & height
@@ -637,19 +637,19 @@ function getRootPath() {
   function getMemoryLimit()
   {
     $output = @ini_get('memory_limit') or $output = -1 ;
-    if(intval($output) < 0)
+    if((int)($output) < 0)
     {//unlimited
     	$output = 999999999999999999;
     }
     elseif(strpos('g', strtolower($output)) !== false)
     {
-    	$output = intval($output) * 1024 * 1024 * 1024;
+    	$output = (int)($output) * 1024 * 1024 * 1024;
     }elseif(strpos('k', strtolower($output)) !== false)
     {
-    	$output = intval($output) * 1024 ;
+    	$output = (int)($output) * 1024 ;
     }else
     {
-    	$output = intval($output) * 1024 * 1024;
+    	$output = (int)($output) * 1024 * 1024;
     }
     
     return $output;  	

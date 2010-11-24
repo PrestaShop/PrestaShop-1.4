@@ -20,7 +20,7 @@ class SearchControllerCore extends FrontController
 		if ($this->ajaxSearch)
 		{
 			$this->link = new Link();
-			$searchResults = Search::find(intval(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
+			$searchResults = Search::find((int)(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 			foreach ($searchResults AS &$product)
 				$product['product_link'] = $this->link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
 			die(json_encode($searchResults));
@@ -29,9 +29,9 @@ class SearchControllerCore extends FrontController
 		if ($this->instantSearch && !is_array($query))
 		{
 			$this->productSort();
-			$this->n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
-			$this->p = abs(intval(Tools::getValue('p', 1)));
-			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
+			$this->p = abs((int)(Tools::getValue('p', 1)));
+			$search = Search::find((int)($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
@@ -44,9 +44,9 @@ class SearchControllerCore extends FrontController
 		elseif ($query = Tools::getValue('search_query', Tools::getValue('ref')) AND !is_array($query))
 		{
 			$this->productSort();
-			$this->n = abs(intval(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
-			$this->p = abs(intval(Tools::getValue('p', 1)));
-			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
+			$this->p = abs((int)(Tools::getValue('p', 1)));
+			$search = Search::find((int)($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
@@ -57,11 +57,11 @@ class SearchControllerCore extends FrontController
 		}
 		elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
 		{
-			$nbProducts = intval(Search::searchTag(intval($this->cookie->id_lang), $tag, true));
+			$nbProducts = (int)(Search::searchTag((int)($this->cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
 			'search_tag' => $tag,
-			'products' => Search::searchTag(intval($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay),
+			'products' => Search::searchTag((int)($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay),
 			'nbProducts' => $nbProducts,
 			'homeSize' => Image::getSize('home')));
 		}

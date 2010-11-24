@@ -21,19 +21,19 @@ class AdminModulesPositions extends AdminTab
 
 		// Getting key value for display
 		if (Tools::getValue('show_modules') AND strval(Tools::getValue('show_modules')) != 'all')
-			$this->displayKey = intval(Tools::getValue('show_modules'));
+			$this->displayKey = (int)(Tools::getValue('show_modules'));
 
 		// Change position in hook
 		if (array_key_exists('changePosition', $_GET))
 		{
 			if ($this->tabAccess['edit'] === '1')
 		 	{
-				$id_module = intval(Tools::getValue('id_module'));
-				$id_hook = intval(Tools::getValue('id_hook'));
+				$id_module = (int)(Tools::getValue('id_module'));
+				$id_hook = (int)(Tools::getValue('id_hook'));
 				$module = Module::getInstanceById($id_module);
 				if (Validate::isLoadedObject($module))
 				{
-					$module->updatePosition($id_hook, intval(Tools::getValue('direction')));
+					$module->updatePosition($id_hook, (int)(Tools::getValue('direction')));
 					Tools::redirectAdmin($currentIndex.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token);
 				}
 				else
@@ -49,9 +49,9 @@ class AdminModulesPositions extends AdminTab
 		 	if ($this->tabAccess['add'] === '1')
 			{
 				// Getting vars...
-				$id_module = intval(Tools::getValue('id_module'));
+				$id_module = (int)(Tools::getValue('id_module'));
 				$module = Module::getInstanceById($id_module);
-				$id_hook = intval(Tools::getValue('id_hook'));
+				$id_hook = (int)(Tools::getValue('id_hook'));
 				$hook = new Hook($id_hook);
 				$excepts = explode(',', str_replace(' ', '', Tools::getValue('exceptions')));
 
@@ -84,9 +84,9 @@ class AdminModulesPositions extends AdminTab
 		 	if ($this->tabAccess['add'] === '1')
 			{
 				// Getting vars...
-				$id_module = intval(Tools::getValue('id_module'));
+				$id_module = (int)(Tools::getValue('id_module'));
 				$module = Module::getInstanceById($id_module);
-				$id_hook = intval(Tools::getValue('id_hook'));
+				$id_hook = (int)(Tools::getValue('id_hook'));
 				$hook = new Hook($id_hook);
 				$excepts = explode(',', str_replace(' ', '', Tools::getValue('exceptions')));
 
@@ -114,9 +114,9 @@ class AdminModulesPositions extends AdminTab
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 		 	{
-				$id_module = intval(Tools::getValue('id_module'));
+				$id_module = (int)(Tools::getValue('id_module'));
 				$module = Module::getInstanceById($id_module);
-				$id_hook = intval(Tools::getValue('id_hook'));
+				$id_hook = (int)(Tools::getValue('id_hook'));
 				$hook = new Hook($id_hook);
 				if (!Validate::isLoadedObject($module))
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
@@ -148,19 +148,19 @@ class AdminModulesPositions extends AdminTab
 					$explode = explode('_', $unhook);
 					$id_hook = $explode[0];
 					$id_module = $explode[1];
-					$module = Module::getInstanceById(intval($id_module));
-					$hook = new Hook(intval($id_hook));
+					$module = Module::getInstanceById((int)($id_module));
+					$hook = new Hook((int)($id_hook));
 					if (!Validate::isLoadedObject($module))
 						$this->_errors[] = Tools::displayError('module cannot be loaded');
 					elseif (!$id_hook OR !Validate::isLoadedObject($hook))
 						$this->_errors[] = Tools::displayError('hook cannot be loaded');
 					else
 					{
-						$position = Db::getInstance()->getValue('SELECT `position` FROM `'._DB_PREFIX_.'hook_module` hm WHERE hm.`id_hook` = '.intval($id_hook).' AND hm.`id_module` = '.intval($id_module));
-						if (!$module->unregisterHook(intval($id_hook)) OR !$module->unregisterExceptions(intval($id_hook)))
+						$position = Db::getInstance()->getValue('SELECT `position` FROM `'._DB_PREFIX_.'hook_module` hm WHERE hm.`id_hook` = '.(int)($id_hook).' AND hm.`id_module` = '.(int)($id_module));
+						if (!$module->unregisterHook((int)($id_hook)) OR !$module->unregisterExceptions((int)($id_hook)))
 							$this->_errors[] = Tools::displayError('an error occurred while deleting module from hook');
 						else
-							$this->placeCorrectlyOtherModules(intval($id_hook), intval($position));
+							$this->placeCorrectlyOtherModules((int)($id_hook), (int)($position));
 					}
 				}
 				if (!sizeof($this->_errors))
@@ -201,21 +201,21 @@ class AdminModulesPositions extends AdminTab
 				$modules = Module::getModulesInstalled();
 
 				foreach ($modules AS $module)
-					if ($tmpInstance = Module::getInstanceById(intval($module['id_module'])))
+					if ($tmpInstance = Module::getInstanceById((int)($module['id_module'])))
 						$cm[$tmpInstance->displayName] = $tmpInstance;
 				ksort($cm);
 				foreach ($cm AS $module)
 					echo '
-					<option value="'.intval($module->id).'" '.($this->displayKey == $module->id ? 'selected="selected" ' : '').'>'.$module->displayName.'</option>';
+					<option value="'.(int)($module->id).'" '.($this->displayKey == $module->id ? 'selected="selected" ' : '').'>'.$module->displayName.'</option>';
 			echo '
 			</select><br /><br />
-			<input type="checkbox" id="hook_position" onclick="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.intval(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;<label class="t" for="hook_position">'.$this->l('Display non-positionnable hook').'</label>
+			<input type="checkbox" id="hook_position" onclick="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.(int)(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;<label class="t" for="hook_position">'.$this->l('Display non-positionnable hook').'</label>
 		</form>';
 
 		// Print hook list
 		echo '<form method="post" action="'.$currentIndex.'&token='.$this->token.'">';
 		$irow = 0;
-		$hooks = Hook::getHooks(!intval(Tools::getValue('hook_position')));
+		$hooks = Hook::getHooks(!(int)(Tools::getValue('hook_position')));
 		echo '<div id="unhook_button_position_top"><input class="button floatr" type="submit" name="unhookform" value="'.$this->l('Unhook the selection').'"/></div>';
 		foreach ($hooks AS $hook)
 		{
@@ -241,7 +241,7 @@ class AdminModulesPositions extends AdminTab
 			{
 				$instances = array();
 				foreach ($modules AS $module)
-					if ($tmpInstance = Module::getInstanceById(intval($module['id_module'])))
+					if ($tmpInstance = Module::getInstanceById((int)($module['id_module'])))
 						$instances[$tmpInstance->getPosition($hook['id_hook'])] = $tmpInstance;
 				ksort($instances);
 				foreach ($instances AS $position => $instance)
@@ -251,7 +251,7 @@ class AdminModulesPositions extends AdminTab
 					if (!$this->displayKey)
 					{
 						echo '
-						<td class="positions" width="40">'.intval($position).'</td>
+						<td class="positions" width="40">'.(int)($position).'</td>
 						<td'.($nbModules >= 2? ' class="dragHandle"' : '').' id="td_'.$hook['id_hook'].'_'.$instance->id.'" width="40">
 						<a'.($position == 1 ? ' style="display: none;"' : '' ).' href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=0&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a><br />
 							<a '.($position == sizeof($instances) ? ' style="display: none;"' : '').'href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&direction=1&token='.$this->token.'&changePosition='.rand().'#'.$hook['name'].'"><img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>
@@ -263,7 +263,7 @@ class AdminModulesPositions extends AdminTab
 						echo '<td style="padding-left: 10px;" colspan="3"><label class="lab_modules_positions" for="'.$hook['id_hook'].'_'.$instance->id.'">';
 					echo '
 					<img src="../modules/'.$instance->name.'/logo.gif" alt="'.stripslashes($instance->name).'" /> <strong>'.stripslashes($instance->displayName).'</strong>
-						'.($instance->version ? ' v'.(intval($instance->version) == $instance->version? sprintf('%.1f', $instance->version) : floatval($instance->version)) : '').'<br />'.$instance->description.'
+						'.($instance->version ? ' v'.((int)($instance->version) == $instance->version? sprintf('%.1f', $instance->version) : floatval($instance->version)) : '').'<br />'.$instance->description.'
 					</label></td>
 						<td width="60">
 							<a href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&editGraft'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token.'"><img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>
@@ -284,8 +284,8 @@ class AdminModulesPositions extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 
-		$id_module = intval(Tools::getValue('id_module'));
-		$id_hook = intval(Tools::getValue('id_hook'));
+		$id_module = (int)(Tools::getValue('id_module'));
+		$id_hook = (int)(Tools::getValue('id_hook'));
 		if ($id_module AND $id_hook AND Tools::isSubmit('editGraft'))
 		{
 			$slModule = Module::getInstanceById($id_module);
@@ -353,7 +353,7 @@ class AdminModulesPositions extends AdminTab
 
 	private function placeCorrectlyOtherModules($id_hook, $position)
 	{
-		return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'hook_module` hm SET hm.`position`= hm.`position` - 1 WHERE hm.`id_hook` = '.intval($id_hook).' AND hm.`position` > '.intval($position));
+		return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'hook_module` hm SET hm.`position`= hm.`position` - 1 WHERE hm.`id_hook` = '.(int)($id_hook).' AND hm.`position` > '.(int)($position));
 	}
 }
 

@@ -11,7 +11,7 @@ if (!$transaction_id = strval(Tools::getValue('txn_id')))
 if (!$id_order = $pp->getOrder($transaction_id))
 	die('No order');
 
-$order = new Order(intval($id_order));
+$order = new Order((int)($id_order));
 if (!Validate::isLoadedObject($order) OR !$order->id)
 	die('Invalid order');
 if (!$amount = floatval(Tools::getValue('mc_gross')) OR $amount != $order->total_paid)
@@ -50,6 +50,6 @@ if ($order->getCurrentState() == $id_order_state)
 
 // Set order state in order history
 $history = new OrderHistory();
-$history->id_order = intval($order->id);
-$history->changeIdOrderState(intval($id_order_state), intval($order->id));
+$history->id_order = (int)($order->id);
+$history->changeIdOrderState((int)($id_order_state), (int)($order->id));
 $history->addWithemail(true, $extraVars);

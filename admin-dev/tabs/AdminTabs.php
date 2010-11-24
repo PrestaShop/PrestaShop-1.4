@@ -22,13 +22,13 @@ class AdminTabs extends AdminTab
 	 	$this->lang = true;
 	 	$this->edit = true;
 	 	$this->delete = true;
-		$this->_select = '(SELECT stl.`name` FROM `'._DB_PREFIX_.'tab_lang` stl WHERE stl.`id_tab` = a.`id_parent` AND stl.`id_lang` = '.intval($cookie->id_lang).' LIMIT 1) AS parent';
+		$this->_select = '(SELECT stl.`name` FROM `'._DB_PREFIX_.'tab_lang` stl WHERE stl.`id_tab` = a.`id_parent` AND stl.`id_lang` = '.(int)($cookie->id_lang).' LIMIT 1) AS parent';
 		
 		$this->fieldImageSettings = array('name' => 'icon', 'dir' => 't');
 		$this->imageType = 'gif';
 		
 		$tabs = array(0 => $this->l('Home'));
-		foreach (Tab::getTabs(intval($cookie->id_lang), 0) AS $tab)
+		foreach (Tab::getTabs((int)($cookie->id_lang), 0) AS $tab)
 			$tabs[$tab['id_tab']] = $tab['name'];
 		$this->fieldsDisplay = array(
 		'id_tab' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -42,7 +42,7 @@ class AdminTabs extends AdminTab
 
 	public function postProcess()
 	{
-		if (($id_tab = intval(Tools::getValue('id_tab'))) AND ($direction = Tools::getValue('move')) AND Validate::isLoadedObject($tab = new Tab($id_tab)))
+		if (($id_tab = (int)(Tools::getValue('id_tab'))) AND ($direction = Tools::getValue('move')) AND Validate::isLoadedObject($tab = new Tab($id_tab)))
 		{
 			global $currentIndex;
 			if ($tab->move($direction))
@@ -86,13 +86,13 @@ class AdminTabs extends AdminTab
 		
 		parent::displayList();
 		
-		$tabs = Tab::getTabs(intval($cookie->id_lang), 0);
+		$tabs = Tab::getTabs((int)($cookie->id_lang), 0);
 		echo '<br /><h2>'.$this->l('Positions').'</h2>
 		<h3>'.$this->l('Level').' 1</h3>';
 		$this->_posTabs($this->l('Main'), $tabs);
 		echo '<h3>'.$this->l('Level').' 2</h3>';
 		foreach ($tabs AS $t)
-			$this->_posTabs(stripslashes($t['name']), Tab::getTabs(intval($cookie->id_lang), $t['id_tab']));
+			$this->_posTabs(stripslashes($t['name']), Tab::getTabs((int)($cookie->id_lang), $t['id_tab']));
 	}
 	
 	public function displayForm($isMainTab = true)
@@ -112,7 +112,7 @@ class AdminTabs extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
@@ -141,7 +141,7 @@ class AdminTabs extends AdminTab
 					<select name="id_parent">
 						<option value="-1" '.(($this->getFieldValue($obj, 'id_parent') == -1) ? 'selected="selected"' : '').'>'.$this->l('None').'</option>
 						<option value="0" '.(($this->getFieldValue($obj, 'id_parent') == 0) ? 'selected="selected"' : '').'>'.$this->l('Home').'</option>';
-		foreach (Tab::getTabs(intval($cookie->id_lang), 0) AS $tab)
+		foreach (Tab::getTabs((int)($cookie->id_lang), 0) AS $tab)
 			echo '		<option value="'.$tab['id_tab'].'" '.($tab['id_tab'] == $this->getFieldValue($obj, 'id_parent') ? 'selected="selected"' : '').'>'.$tab['name'].'</option>';
 		echo '		</select>
 				</div>

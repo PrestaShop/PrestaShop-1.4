@@ -39,7 +39,7 @@ class AdminAttachments extends AdminTab
 	{
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
-			if ($id = intval(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
+			if ($id = (int)(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
 			{
 				$_POST['file'] = $a->file;
 				$_POST['mime'] = $a->mime;
@@ -81,7 +81,7 @@ class AdminAttachments extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="cname_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';							
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'cname¤cdescription', 'cname');
 		echo '	</div>
@@ -90,7 +90,7 @@ class AdminAttachments extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="cdescription_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<textarea name="description_'.$language['id_lang'].'">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+						<textarea name="description_'.$language['id_lang'].'">'.htmlentities($this->getFieldValue($obj, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';							
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'cname¤cdescription', 'cdescription');
 		echo '	</div>

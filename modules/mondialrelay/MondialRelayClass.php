@@ -42,17 +42,17 @@ class MondialRelayClass extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id_mr_selected))
-		$fields['id_mr_selected'] = intval($this->id_mr_selected);
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_method'] = intval($this->id_method);
-		$fields['id_cart'] = intval($this->id_cart);
-		$fields['id_order'] = is_null($this->id_order) ? 0 : intval($this->id_order);
+		$fields['id_mr_selected'] = (int)($this->id_mr_selected);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_method'] = (int)($this->id_method);
+		$fields['id_cart'] = (int)($this->id_cart);
+		$fields['id_order'] = is_null($this->id_order) ? 0 : (int)($this->id_order);
 		$fields['MR_Selected_Num'] = pSQL($this->MR_Selected_Num);
 		$fields['MR_Selected_LgAdr1'] = pSQL($this->MR_Selected_LgAdr1);
 		$fields['MR_Selected_LgAdr2'] = pSQL($this->MR_Selected_LgAdr2);
 		$fields['MR_Selected_LgAdr3'] = pSQL($this->MR_Selected_LgAdr3);
 		$fields['MR_Selected_LgAdr4'] = pSQL($this->MR_Selected_LgAdr4);
-		$fields['MR_Selected_CP'] = intval($this->MR_Selected_CP);
+		$fields['MR_Selected_CP'] = (int)($this->MR_Selected_CP);
 		$fields['MR_Selected_Ville'] = pSQL($this->MR_Selected_Ville);
 		$fields['MR_Selected_Pays'] = pSQL($this->MR_Selected_Pays);
 		$fields['url_suivi'] = is_null($this->url_suivi) ? 0 : pSQL($this->url_suivi) ;
@@ -81,7 +81,7 @@ class MondialRelayClass extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs ON (mrs.`id_cart` = o.`id_cart`)
 				LEFT JOIN `'._DB_PREFIX_.'mr_method` mr ON (mr.`id_carrier` = ca.`id_carrier`)
 				LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = o.`id_customer`)
-			WHERE (SELECT moh.`id_order_state` FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = o.`id_order` ORDER BY moh.`date_add` DESC LIMIT 1) = '.intval($id_order_state).' 
+			WHERE (SELECT moh.`id_order_state` FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = o.`id_order` ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).' 
 			AND ca.`external_module_name` = "mondialrelay"
 			GROUP BY o.`id_order`
 			ORDER BY o.`date_add` ASC';

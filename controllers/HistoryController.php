@@ -23,16 +23,16 @@ class HistoryControllerCore extends FrontController
 	{
 		parent::process();
 		
-		if ($orders = Order::getCustomerOrders(intval($this->cookie->id_customer)))
+		if ($orders = Order::getCustomerOrders((int)($this->cookie->id_customer)))
 			foreach ($orders AS &$order)
 			{
-				$myOrder = new Order(intval($order['id_order']));
+				$myOrder = new Order((int)($order['id_order']));
 				if (Validate::isLoadedObject($myOrder))
 					$order['virtual'] = $myOrder->isVirtual(false);
 			}
 		$this->smarty->assign(array(
 			'orders' => $orders,
-			'invoiceAllowed' => intval(Configuration::get('PS_INVOICE')),
+			'invoiceAllowed' => (int)(Configuration::get('PS_INVOICE')),
 			'slowValidation' => Tools::isSubmit('slowvalidation')
 		));
 	}

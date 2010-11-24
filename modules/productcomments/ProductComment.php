@@ -57,14 +57,14 @@ class ProductComment extends ObjectModel
 	public	function getFields()
 	{
 	 	parent::validateFields(false);
-		$fields['id_product'] = intval($this->id_product);
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_guest'] = intval($this->id_guest);
+		$fields['id_product'] = (int)($this->id_product);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_guest'] = (int)($this->id_guest);
 		$fields['customer_name'] = pSQL($this->customer_name);
 		$fields['content'] = pSQL($this->content);
 		$fields['grade'] = floatval($this->grade);
-		$fields['validate'] = intval($this->validate);
-		$fields['deleted'] = intval($this->deleted);
+		$fields['validate'] = (int)($this->validate);
+		$fields['deleted'] = (int)($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);
 		return ($fields);
 	}
@@ -79,8 +79,8 @@ class ProductComment extends ObjectModel
 		if (!Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
 		$validate = Configuration::get('PRODUCT_COMMENTS_MODERATE');
-		$p = intval($p);
-		$n = intval($n);
+		$p = (int)($p);
+		$n = (int)($n);
 		if ($p <= 1)
 			$p = 1;
 		if ($n != null AND $n <= 0)
@@ -89,9 +89,9 @@ class ProductComment extends ObjectModel
 		SELECT pc.`id_product_comment`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  LEFT(c.`lastname`, 1)), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`
 		  FROM `'._DB_PREFIX_.'product_comment` pc
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
-		WHERE pc.`id_product` = '.intval($id_product).($validate == '1' ? ' AND pc.`validate` = 1' : '').'
+		WHERE pc.`id_product` = '.(int)($id_product).($validate == '1' ? ' AND pc.`validate` = 1' : '').'
 		ORDER BY pc.`date_add` DESC
-		'.($n ? 'LIMIT '.intval(($p - 1) * $n).', '.intval($n) : ''));
+		'.($n ? 'LIMIT '.(int)(($p - 1) * $n).', '.(int)($n) : ''));
 	}
 	
 	static public function getByCustomer($id_product, $id_customer, $last = false, $id_guest = false)
@@ -99,7 +99,7 @@ class ProductComment extends ObjectModel
 		$results = Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		WHERE pc.`id_product` = '.intval($id_product).' AND '.(!$id_guest ? 'pc.`id_customer` = '.intval($id_customer) : 'pc.`id_guest` = '.intval($id_guest)).'
+		WHERE pc.`id_product` = '.(int)($id_product).' AND '.(!$id_guest ? 'pc.`id_customer` = '.(int)($id_customer) : 'pc.`id_guest` = '.(int)($id_guest)).'
 		ORDER BY pc.`date_add` DESC '
 		.($last ? 'LIMIT 1' : '')
 		);
@@ -128,16 +128,16 @@ class ProductComment extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_grade` pcg ON (pcg.`id_product_comment` = pc.`id_product_comment`)
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion` pcc ON (pcc.`id_product_comment_criterion` = pcg.`id_product_comment_criterion`)
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_lang` pccl ON (pccl.`id_product_comment_criterion` = pcg.`id_product_comment_criterion`)
-		WHERE pc.`id_product` = '.intval($id_product).'
-		AND pccl.`id_lang` = '.intval($id_lang).
+		WHERE pc.`id_product` = '.(int)($id_product).'
+		AND pccl.`id_lang` = '.(int)($id_lang).
 		($validate == '1' ? ' AND pc.`validate` = 1' : '')));
 	}
 
 	static public function getAveragesByProduct($id_product, $id_lang)
 	{
 		/* Get all grades */
-		$grades = ProductComment::getGradeByProduct(intval($id_product), intval($id_lang));
-		$total = ProductComment::getGradedCommentNumber(intval($id_product));
+		$grades = ProductComment::getGradeByProduct((int)($id_product), (int)($id_lang));
+		$total = ProductComment::getGradedCommentNumber((int)($id_product));
 		if (!sizeof($grades) OR (!$total))
 			return array();
 
@@ -145,14 +145,14 @@ class ProductComment extends ObjectModel
 		$criterionsGradeTotal = array();
 		for ($i = 0; $i < count($grades); ++$i)
 			if (array_key_exists($grades[$i]['id_product_comment_criterion'], $criterionsGradeTotal) === false)
-				$criterionsGradeTotal[$grades[$i]['id_product_comment_criterion']] = intval($grades[$i]['grade']);
+				$criterionsGradeTotal[$grades[$i]['id_product_comment_criterion']] = (int)($grades[$i]['grade']);
 			else
-				$criterionsGradeTotal[$grades[$i]['id_product_comment_criterion']] += intval($grades[$i]['grade']);
+				$criterionsGradeTotal[$grades[$i]['id_product_comment_criterion']] += (int)($grades[$i]['grade']);
 
 		/* Finally compute the averages */
 		$averages = array();
 		foreach ($criterionsGradeTotal AS $key => $criterionGradeTotal)
-			$averages[intval($key)] = intval($total) ? (intval($criterionGradeTotal) / intval($total)) : 0;
+			$averages[(int)($key)] = (int)($total) ? ((int)($criterionGradeTotal) / (int)($total)) : 0;
 		return $averages;
 	}
 
@@ -165,13 +165,13 @@ class ProductComment extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
-		$validate = intval(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
+		$validate = (int)(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
 		if (($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_product_comment`) AS "nbr"
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		WHERE `id_product` = '.intval($id_product).($validate == '1' ? ' AND `validate` = 1' : ''))) === false)
+		WHERE `id_product` = '.(int)($id_product).($validate == '1' ? ' AND `validate` = 1' : ''))) === false)
 			return false;
-		return intval($result['nbr']);
+		return (int)($result['nbr']);
 	}
 
 	/**
@@ -183,14 +183,14 @@ class ProductComment extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
-		$validate = intval(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
+		$validate = (int)(Configuration::get('PRODUCT_COMMENTS_MODERATE'));
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(pc.`id_product`) AS nbr
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		WHERE `id_product` = '.intval($id_product).($validate == '1' ? ' AND `validate` = 1' : '').'
+		WHERE `id_product` = '.(int)($id_product).($validate == '1' ? ' AND `validate` = 1' : '').'
 		AND `grade` > 0');
-		return intval($result['nbr']);
+		return (int)($result['nbr']);
 	}
 
 	/**
@@ -207,8 +207,8 @@ class ProductComment extends ObjectModel
 		FROM `'._DB_PREFIX_.'product_comment` pc
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = pc.`id_customer`) 
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = pc.`id_product`) 
-		WHERE pc.`validate` = '.intval($validate).'
-		AND pl.`id_lang` = '.intval($cookie->id_lang).'
+		WHERE pc.`validate` = '.(int)($validate).'
+		AND pl.`id_lang` = '.(int)($cookie->id_lang).'
 		ORDER BY pc.`date_add` DESC'));
 	}
 	
@@ -223,8 +223,8 @@ class ProductComment extends ObjectModel
 			die(Tools::displayError());
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product_comment` SET
-		`validate` = '.intval($validate).'
-		WHERE `id_product_comment` = '.intval($this->id)));
+		`validate` = '.(int)($validate).'
+		WHERE `id_product_comment` = '.(int)($this->id)));
 	}
 	
 	/**
@@ -238,6 +238,6 @@ class ProductComment extends ObjectModel
 			die(Tools::displayError());
 		return (Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_comment_grade`
-		WHERE `id_product_comment` = '.intval($id_product_comment)));
+		WHERE `id_product_comment` = '.(int)($id_product_comment)));
 	}
 };

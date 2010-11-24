@@ -33,7 +33,7 @@ class CompareControllerCore extends FrontController
 			
 				foreach ($ids AS $id)
 				{			
-					$curProduct = new Product(intval($id), true, intval($this->cookie->id_lang));
+					$curProduct = new Product((int)($id), true, (int)($this->cookie->id_lang));
 					if (!Validate::isLoadedObject($curProduct))
 						continue;
 						

@@ -21,7 +21,7 @@ class AdminReturn extends AdminTab
 	 	$this->className = 'OrderReturn';
 		$this->colorOnBackground = true;
 		$this->_select = 'orsl.`name`';
-		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'order_return_state_lang orsl ON (orsl.`id_order_return_state` = a.`state` AND orsl.`id_lang` = '.intval($cookie->id_lang).')';
+		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'order_return_state_lang orsl ON (orsl.`id_order_return_state` = a.`state` AND orsl.`id_lang` = '.(int)($cookie->id_lang).')';
 
  		$this->fieldsDisplay = array(
 		'id_order_return' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -46,16 +46,16 @@ class AdminReturn extends AdminTab
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
-				if (($id_order_detail = intval(Tools::getValue('id_order_detail'))) AND Validate::isUnsignedId($id_order_detail))
+				if (($id_order_detail = (int)(Tools::getValue('id_order_detail'))) AND Validate::isUnsignedId($id_order_detail))
 				{
-					if (($id_order_return = intval(Tools::getValue('id_order_return'))) AND Validate::isUnsignedId($id_order_return))
+					if (($id_order_return = (int)(Tools::getValue('id_order_return'))) AND Validate::isUnsignedId($id_order_return))
 					{
 						$orderReturn = new OrderReturn($id_order_return);
 						if (!Validate::isLoadedObject($orderReturn))
 							die(Tools::displayError());
-						if (intval($orderReturn->countProduct()) > 1)
+						if ((int)($orderReturn->countProduct()) > 1)
 						{
-							if (OrderReturn::deleteOrderReturnDetail($id_order_return, $id_order_detail, intval(Tools::getValue('id_customization', 0))))
+							if (OrderReturn::deleteOrderReturnDetail($id_order_return, $id_order_detail, (int)(Tools::getValue('id_customization', 0))))
 								Tools::redirectAdmin($currentIndex.'&conf=4token='.$this->token);
 							else
 								$this->_errors[] = Tools::displayError('an error occured while deleting an order return detail');
@@ -76,11 +76,11 @@ class AdminReturn extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{
-				if (($id_order_return = intval(Tools::getValue('id_order_return'))) AND Validate::isUnsignedId($id_order_return))
+				if (($id_order_return = (int)(Tools::getValue('id_order_return'))) AND Validate::isUnsignedId($id_order_return))
 				{
 					$orderReturn = new OrderReturn($id_order_return);
 					$customer = new Customer($orderReturn->id_customer);
-					$orderReturn->state = intval(Tools::getValue('state'));
+					$orderReturn->state = (int)(Tools::getValue('state'));
 					if ($orderReturn->save())
 					{
 						$orderReturnState = new OrderReturnState($orderReturn->state);
@@ -88,8 +88,8 @@ class AdminReturn extends AdminTab
 						'{lastname}' => $customer->lastname,
 						'{firstname}' => $customer->firstname,
 						'{id_order_return}' => $id_order_return,
-						'{state_order_return}' => $orderReturnState->name[intval(Configuration::get('PS_LANG_DEFAULT'))]);
-						Mail::Send(intval($cookie->id_lang), 'order_return_state', html_entity_decode(Mail::l('Your order return state has changed'), ENT_NOQUOTES, 'UTF-8'), $vars, $customer->email, $customer->firstname.' '.$customer->lastname);
+						'{state_order_return}' => $orderReturnState->name[(int)(Configuration::get('PS_LANG_DEFAULT'))]);
+						Mail::Send((int)($cookie->id_lang), 'order_return_state', html_entity_decode(Mail::l('Your order return state has changed'), ENT_NOQUOTES, 'UTF-8'), $vars, $customer->email, $customer->firstname.' '.$customer->lastname);
 						Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 					}
 				}
@@ -119,7 +119,7 @@ class AdminReturn extends AdminTab
 		}
 		else
 		{
-			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+			$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
 			$this->displayOptionsList();
 			$this->includeSubTab('display');
@@ -157,15 +157,15 @@ class AdminReturn extends AdminTab
 			<input type="hidden" name="id_customer" value="'.$obj->id_customer.'" />
 			<fieldset><legend><img src="../img/admin/return.gif" />'.$this->l('Return Merchandise Authorization (RMA)').'</legend>
 				<label>'.$this->l('Customer:').' </label>';
-				$customer = new Customer(intval($obj->id_customer));
+				$customer = new Customer((int)($obj->id_customer));
 		echo '
 				<div class="margin-form">'.$customer->firstname.' '.$customer->lastname.'
-				<p style="clear: both"><a href="index.php?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">'.$this->l('View details on customer page').'</a></p>
+				<p style="clear: both"><a href="index.php?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">'.$this->l('View details on customer page').'</a></p>
 				</div>
 				<label>'.$this->l('Order:').' </label>';
-				$order = new Order(intval($obj->id_order));
+				$order = new Order((int)($obj->id_order));
 		echo '		<div class="margin-form">'.$this->l('Order #').sprintf('%06d', $order->id).' '.$this->l('from').' '.Tools::displayDate($order->date_upd, $order->id_lang).'
-				<p style="clear: both"><a href="index.php?tab=AdminOrders&id_order='.$order->id.'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'">'.$this->l('View details on order page').'</a></p>
+				<p style="clear: both"><a href="index.php?tab=AdminOrders&id_order='.$order->id.'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">'.$this->l('View details on order page').'</a></p>
 				</div>
 				<label>'.$this->l('Customer explanation:').' </label>
 				<div class="margin-form">'.$obj->question.'</div>
@@ -182,7 +182,7 @@ class AdminReturn extends AdminTab
 		if ($obj->state >= 3)
 			echo '	<label>'.$this->l('Slip:').' </label>
 				<div class="margin-form">'.$this->l('Generate a new slip from the customer order').'
-				<p style="clear: both"><a href="index.php?tab=AdminOrders&id_order='.$order->id.'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'#products">'.$this->l('More information on order page').'</a></p>
+				<p style="clear: both"><a href="index.php?tab=AdminOrders&id_order='.$order->id.'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'#products">'.$this->l('More information on order page').'</a></p>
 				</div>';
 		echo '	<label>'.$this->l('Products:').' </label>
 				<div class="margin-form">';
@@ -198,22 +198,22 @@ class AdminReturn extends AdminTab
 								<th>'.$this->l('Action').'</th>
 							</tr>';
 
-			$order = new Order(intval($obj->id_order));
+			$order = new Order((int)($obj->id_order));
 			$quantityDisplayed = array();
 			/* Customized products */
-			if ($returnedCustomizations = OrderReturn::getReturnedCustomizedProducts(intval($obj->id_order)))
+			if ($returnedCustomizations = OrderReturn::getReturnedCustomizedProducts((int)($obj->id_order)))
 			{
-				$allCustomizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+				$allCustomizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				foreach ($returnedCustomizations AS $returnedCustomization)
 				{
 					echo '
 					<tr>
 						<td>'.$returnedCustomization['reference'].'</td>
 						<td class="center">'.$returnedCustomization['name'].'</td>
-						<td class="center">'.intval($returnedCustomization['product_quantity']).'</td>
+						<td class="center">'.(int)($returnedCustomization['product_quantity']).'</td>
 						<td class="center"><a href="'.$currentIndex.'&deleteorder_return_detail&id_order_detail='.$returnedCustomization['id_order_detail'].'&id_customization='.$returnedCustomization['id_customization'].'&id_order_return='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/delete.gif"></a></td>
 					</tr>';
-					$customizationDatas = &$allCustomizedDatas[intval($returnedCustomization['product_id'])][intval($returnedCustomization['product_attribute_id'])][intval($returnedCustomization['id_customization'])]['datas'];
+					$customizationDatas = &$allCustomizedDatas[(int)($returnedCustomization['product_id'])][(int)($returnedCustomization['product_attribute_id'])][(int)($returnedCustomization['id_customization'])]['datas'];
 					foreach ($customizationDatas AS $type => $datas)
 					{
 						echo '<tr>
@@ -224,7 +224,7 @@ class AdminReturn extends AdminTab
 							echo '<ul style="margin: 4px 0px 4px 0px; padding: 0px; list-style-type: none;">';
 							foreach ($datas AS $data)
 								echo '<li style="display: inline; margin: 2px;">
-										<a href="displayImage.php?img='.$data['value'].'&name='.intval($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
+										<a href="displayImage.php?img='.$data['value'].'&name='.(int)($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
 									</li>';
 							echo '</ul>';
 						}
@@ -239,14 +239,14 @@ class AdminReturn extends AdminTab
 						echo '</td>
 						</tr>';
 					}
-					$quantityDisplayed[intval($returnedCustomization['id_order_detail'])] = isset($quantityDisplayed[intval($returnedCustomization['id_order_detail'])]) ? $quantityDisplayed[intval($returnedCustomization['id_order_detail'])] + intval($returnedCustomization['product_quantity']) : intval($returnedCustomization['product_quantity']);
+					$quantityDisplayed[(int)($returnedCustomization['id_order_detail'])] = isset($quantityDisplayed[(int)($returnedCustomization['id_order_detail'])]) ? $quantityDisplayed[(int)($returnedCustomization['id_order_detail'])] + (int)($returnedCustomization['product_quantity']) : (int)($returnedCustomization['product_quantity']);
 				}
 			}
 
 			/* Classic products */
 			$products = OrderReturn::getOrdersReturnProducts($obj->id, $order);
 			foreach ($products AS $k => $product)
-				if (!isset($quantityDisplayed[intval($product['id_order_detail'])]) OR intval($product['product_quantity']) > intval($quantityDisplayed[intval($product['id_order_detail'])]))
+				if (!isset($quantityDisplayed[(int)($product['id_order_detail'])]) OR (int)($product['product_quantity']) > (int)($quantityDisplayed[(int)($product['id_order_detail'])]))
 					echo '
 					<tr>
 						<td>'.$product['product_reference'].'</td>

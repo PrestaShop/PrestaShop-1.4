@@ -38,7 +38,7 @@ class AdminCarriers extends AdminTab
 
 		$this->optionTitle = $this->l('Carrier options');
 		$this->_fieldsOptions = array(
-			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, ALL_CARRIERS)),
+			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, ALL_CARRIERS)),
 		);
 
 		parent::__construct();
@@ -50,7 +50,7 @@ class AdminCarriers extends AdminTab
 		parent::displayForm();
 
 		$obj = $this->loadObject(true);
-		$currentLanguage = intval($cookie->id_lang);
+		$currentLanguage = (int)($cookie->id_lang);
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
@@ -72,7 +72,7 @@ class AdminCarriers extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="delay_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" size="41" maxlength="128" name="delay_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'delay', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+						<input type="text" size="41" maxlength="128" name="delay_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'delay', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'delay', 'delay');
 				echo '
@@ -103,7 +103,7 @@ class AdminCarriers extends AdminTab
 	</div>
 				<label>'.$this->l('Group access').'</label>
 				<div class="margin-form">';
-					$groups = Group::getGroups(intval($cookie->id_lang));
+					$groups = Group::getGroups((int)($cookie->id_lang));
 					if (sizeof($groups))
 					{
 						echo '
@@ -117,7 +117,7 @@ class AdminCarriers extends AdminTab
 						foreach ($groups as $group)
 							echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.((Db::getInstance()->getValue('SELECT id_group FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($obj->id).' AND id_group='.intval($group['id_group'])) OR (!isset($obj->id))) ? 'checked="checked" ' : '').'/></td>
+								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.((Db::getInstance()->getValue('SELECT id_group FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.(int)($obj->id).' AND id_group='.(int)($group['id_group'])) OR (!isset($obj->id))) ? 'checked="checked" ' : '').'/></td>
 								<td>'.$group['id_group'].'</td>
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';
@@ -199,17 +199,17 @@ class AdminCarriers extends AdminTab
 
 	public function afterDelete($object, $oldId)
 	{
-		$object->copyCarrierData(intval($oldId));
+		$object->copyCarrierData((int)($oldId));
 	}
 
 	private function changeGroups($id_carrier, $delete = true)
 	{
 		if ($delete)
-			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($id_carrier));
+			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.(int)($id_carrier));
 		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group`');
 		foreach ($groups as $group)
 			if (in_array($group['id_group'], $_POST['groupBox']))
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.intval($group['id_group']).','.intval($id_carrier).')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.(int)($group['id_group']).','.(int)($id_carrier).')');
 	}
 
 	public function postProcess()
@@ -222,7 +222,7 @@ class AdminCarriers extends AdminTab
 			$this->validateRules();
 			if (!sizeof($this->_errors))
 			{
-				$id = intval(Tools::getValue('id_'.$this->table));
+				$id = (int)(Tools::getValue('id_'.$this->table));
 
 				/* Object update */
 				if (isset($id) AND !empty($id))
@@ -232,7 +232,7 @@ class AdminCarriers extends AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-							Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.intval($id));
+							Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.(int)($id));
 							$object->deleted = 1;
 							$object->update();
 							$objectNew = new $this->className();
@@ -241,7 +241,7 @@ class AdminCarriers extends AdminTab
 							if (Validate::isLoadedObject($objectNew))
 							{
 								$this->afterDelete($objectNew, $object->id);
-								Hook::updateCarrier(intval($object->id), $objectNew);
+								Hook::updateCarrier((int)($object->id), $objectNew);
 							}
 							$this->changeGroups($objectNew->id);
 							if (!$result)

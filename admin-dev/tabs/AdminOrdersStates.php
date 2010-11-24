@@ -56,7 +56,7 @@ class AdminOrdersStates extends AdminTab
 		}
 		elseif (isset($_GET['delete'.$this->table]))
 		{
-		 	$orderState = new OrderState(intval($_GET['id_order_state']), $cookie->id_lang);
+		 	$orderState = new OrderState((int)($_GET['id_order_state']), $cookie->id_lang);
 		 	if (!$orderState->isRemovable())
 		 		$this->_errors[] = $this->l('For security reasons, you cannot delete default order statuses.');
 		 	else
@@ -66,7 +66,7 @@ class AdminOrdersStates extends AdminTab
 		{
 		 	foreach ($_POST[$this->table.'Box'] AS $selection)
 		 	{
-			 	$orderState = new OrderState(intval($selection), $cookie->id_lang);
+			 	$orderState = new OrderState((int)($selection), $cookie->id_lang);
 			 	if (!$orderState->isRemovable())
 			 	{
 			 		$this->_errors[] = $this->l('For security reasons, you cannot delete default order statuses.');
@@ -109,7 +109,7 @@ class AdminOrdersStates extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" style="width: 150px;" /><sup> *</sup>
+						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" style="width: 150px;" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters: numbers and').' !<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 						</div>';							
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤template', 'name');
@@ -165,7 +165,7 @@ class AdminOrdersStates extends AdminTab
 				{
 					echo '		<select	name="template_'.$language['id_lang'].'" id="template_select_'.$language['id_lang'].'">';
 					foreach ($templates AS $template)
-						echo '		<option value="'.$template.'" '.(($this->getFieldValue($obj, 'template', intval($language['id_lang'])) == $template) ? 'selected="selected"' : '').'>'.$template.'</option>';
+						echo '		<option value="'.$template.'" '.(($this->getFieldValue($obj, 'template', (int)($language['id_lang'])) == $template) ? 'selected="selected"' : '').'>'.$template.'</option>';
 					echo '		</select>';
 				}
 				echo '			<span class="hint" name="help_box">'.$this->l('Only letters, number and -_ are allowed').'<span class="hint-pointer">&nbsp;</span></span>

@@ -8,22 +8,22 @@ class Disposition
 	{
 		return Db::getInstance()->Execute(
 		'INSERT INTO `'._DB_PREFIX_.self::TABLE_NAME.'` (`id_cart`, `mtid`, `amount`, `currency`)
-		 VALUES ('.intval($id_cart).',\''.pSQL($mtid).'\','.floatval($amount).',\''.pSQL($currency).'\')');
+		 VALUES ('.(int)($id_cart).',\''.pSQL($mtid).'\','.floatval($amount).',\''.pSQL($currency).'\')');
 	}
 	
 	public static function delete($id)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_disposition` = '.intval($id));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_disposition` = '.(int)($id));
 	}
 	
 	public static function deleteByCartId($id_cart)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_cart` = '.intval($id_cart));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_cart` = '.(int)($id_cart));
 	}
 	
 	public static function getByCartId($id_cart)
 	{
-		return Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_cart` = '.intval($id_cart));
+		return Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.self::TABLE_NAME.'` WHERE `id_cart` = '.(int)($id_cart));
 	}
 	
 	public static function createTable()
@@ -48,7 +48,7 @@ class Disposition
 	public static function updateAmount($id_disposition, $amount)
 	{
 		return Db::getInstance()->Execute(
-		'UPDATE `'._DB_PREFIX_.self::TABLE_NAME.'` SET `amount` = `amount` - '.floatval($amount).' WHERE `id_disposition` = '.intval($id_disposition));
+		'UPDATE `'._DB_PREFIX_.self::TABLE_NAME.'` SET `amount` = `amount` - '.floatval($amount).' WHERE `id_disposition` = '.(int)($id_disposition));
 	}
 	 
 

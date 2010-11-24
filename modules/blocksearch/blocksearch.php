@@ -31,7 +31,7 @@ class BlockSearch extends Module
 		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
 		// check if library javascript load in header hook
 		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
+		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
 
@@ -42,7 +42,7 @@ class BlockSearch extends Module
 		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
 		// check if library javascript load in header hook
 		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
+		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
 
@@ -53,14 +53,14 @@ class BlockSearch extends Module
 		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
 		// check if library javascript load in header hook
 		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', intval(Configuration::get('PS_SEARCH_AJAX')));
+		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
 		return $this->display(__FILE__, 'blocksearch-top.tpl');
 	}
 
 	function hookHeader($params)
 	{
 		global $smarty;
-		$instantSearch = intval(Configuration::get('PS_INSTANT_SEARCH'));
+		$instantSearch = (int)(Configuration::get('PS_INSTANT_SEARCH'));
 		$smarty->assign('instantsearch', $instantSearch);
 		if (Configuration::get('PS_SEARCH_AJAX'))
 		{

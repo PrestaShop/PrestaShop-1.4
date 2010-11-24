@@ -49,7 +49,7 @@ class StatsForecast extends Module
 			$cookie->stats_granularity = Tools::getValue('stats_granularity');
 		
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		$employee = new Employee(intval($cookie->id_employee));
+		$employee = new Employee((int)($cookie->id_employee));
 		
 		$result = $db->getRow('SELECT UNIX_TIMESTAMP(\'2009-06-05 00:00:00\') as t1, UNIX_TIMESTAMP(\''.$employee->stats_date_from.' 00:00:00\') as t2');
 		$from = max($result['t1'], $result['t2']);
@@ -152,7 +152,7 @@ class StatsForecast extends Module
 		foreach ($dataTable as $row)
 		{
 			$discountToday = (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);
-			$visitsToday = intval(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
+			$visitsToday = (int)(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
 			
 			$dateFromGReg = ($cookie->stats_granularity != 42
 				? 'LIKE \''.$row['fix_date'].'%\''
@@ -164,19 +164,19 @@ class StatsForecast extends Module
 			<tr>
 				<td>'.$row['fix_date'].'</td>
 				<td align="center">'.$visitsToday.'</td>
-				<td align="center">'.intval($row['registrations']).'</td>
-				<td align="center">'.intval($row['countOrders']).'</td>
-				<td align="center">'.intval($row['countProducts']).'</td>
-				<td align="center">'.($visitsToday ? round(100 * intval($row['registrations']) / $visitsToday, 2).' %' : '-').'</td>
-				<td align="center">'.($visitsToday ? round(100 * intval($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
+				<td align="center">'.(int)($row['registrations']).'</td>
+				<td align="center">'.(int)($row['countOrders']).'</td>
+				<td align="center">'.(int)($row['countProducts']).'</td>
+				<td align="center">'.($visitsToday ? round(100 * (int)($row['registrations']) / $visitsToday, 2).' %' : '-').'</td>
+				<td align="center">'.($visitsToday ? round(100 * (int)($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
 				<td align="right" >'.Tools::displayPrice($totalHT, $currency).'</td>
 			</tr>';
 			
 			$this->t1 += $visitsToday;
-			$this->t2 += intval($row['registrations']);
-			$this->t3 += intval($row['countOrders']);
-			$this->t4 += intval($row['countProducts']);
+			$this->t2 += (int)($row['registrations']);
+			$this->t3 += (int)($row['countOrders']);
+			$this->t4 += (int)($row['countProducts']);
 			$this->t7 += $discountToday;
 			$this->t8 += $totalHT;
 		}
@@ -195,10 +195,10 @@ class StatsForecast extends Module
 				</tr>
 				<tr>
 					<th>'.$this->l('Total').'</th>
-					<td style="font-weight: 700" align="center">'.intval($this->t1).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t2).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t3).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t4).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t1).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t2).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t3).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t4).'</td>
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7, $currency).'</td>
@@ -206,10 +206,10 @@ class StatsForecast extends Module
 				</tr>
 				<tr>
 					<th>'.$this->l('Average').'</th>
-					<td style="font-weight: 700" align="center">'.intval($this->t1 / $intervalAvg).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t2 / $intervalAvg).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t3 / $intervalAvg).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t4 / $intervalAvg).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t1 / $intervalAvg).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t2 / $intervalAvg).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t3 / $intervalAvg).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t4 / $intervalAvg).'</td>
 					<td style="font-weight: 700" align="center">'.($this->t1 ? round(100 * $this->t2 / $this->t1, 2) .' %' : '-').'</td>
 					<td style="font-weight: 700" align="center">'.($this->t1 ? round(100 * $this->t3 / $this->t1, 2) .' %' : '-').'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7 / $intervalAvg, $currency).'</td>
@@ -217,10 +217,10 @@ class StatsForecast extends Module
 				</tr>
 				<tr>
 					<th>'.$this->l('Forecast').'</th>
-					<td style="font-weight: 700" align="center">'.intval($this->t1 * $prop30).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t2 * $prop30).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t3 * $prop30).'</td>
-					<td style="font-weight: 700" align="center">'.intval($this->t4 * $prop30).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t1 * $prop30).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t2 * $prop30).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t3 * $prop30).'</td>
+					<td style="font-weight: 700" align="center">'.(int)($this->t4 * $prop30).'</td>
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7 * $prop30, $currency).'</td>
@@ -295,7 +295,7 @@ class StatsForecast extends Module
 				$this->_html .= '
 					<tr>
 						<td>'.$payment['module'].'</td>
-						<td style="text-align:center;padding:4px">'.intval($payment['nb']).'<br />'.number_format((100 * $payment['nb'] / $ca['ventil']['nb']), 1, '.', ' ').' %</td>
+						<td style="text-align:center;padding:4px">'.(int)($payment['nb']).'<br />'.number_format((100 * $payment['nb'] / $ca['ventil']['nb']), 1, '.', ' ').' %</td>
 						<td style="text-align:center;padding:4px">'.Tools::displayPrice($payment['total'], $currency).'<br />'.number_format((100 * $payment['total'] / $ca['ventil']['total']), 1, '.', ' ').' %</td>
 						<td style="text-align:center;padding:4px">'.Tools::displayPrice($payment['cart'], $currency).'</td>
 					</tr>';
@@ -333,7 +333,7 @@ class StatsForecast extends Module
 				<tr><th>'.$this->l('Customers').'</th><th>'.$this->l('Sales').'</th><th>'.$this->l('%').'</th><th colspan="2">'.$this->l('Growth').'</th></tr>';
 		foreach ($ca['lang'] as $ophone => $amount)
 		{
-			$percent = intval($ca['langprev'][$ophone]) ? number_format((100 * $amount / $ca['langprev'][$ophone]) - 100, 1, '.', ' ') : '&#x221e;';
+			$percent = (int)($ca['langprev'][$ophone]) ? number_format((100 * $amount / $ca['langprev'][$ophone]) - 100, 1, '.', ' ') : '&#x221e;';
 			$this->_html .= '
 				<tr '.(($percent < 0) ? 'class="alt_row"' : '').'>
 					<td>'.$ophone.'</td>
@@ -354,7 +354,7 @@ class StatsForecast extends Module
 			$this->_html .= '
 				<tr>
 					<td>'.(isset($zone['name']) ? $zone['name'] : $this->l('Undefined')).'</td>
-					<td align="right">'.intval($zone['nb']).'</td>
+					<td align="right">'.(int)($zone['nb']).'</td>
 					<td align="right">'.Tools::displayPrice($zone['total'], $currency).'</td>
 					<td align="right">'.number_format((100 * $zone['nb'] / $ca['ventil']['nb']), 1, '.', ' ').'%</td>
 					<td align="right">'.number_format((100 * $zone['total'] / $ca['ventil']['total']), 1, '.', ' ').'%</td>
@@ -378,7 +378,7 @@ class StatsForecast extends Module
 				$this->_html .= '
 					<tr>
 						<td>'.$currencyRow['name'].'</td>
-						<td align="right">'.intval($currencyRow['nb']).'</td>
+						<td align="right">'.(int)($currencyRow['nb']).'</td>
 						<td align="right">'.Tools::displayPrice($currencyRow['total'], $currency).'</td>
 						<td align="right">'.number_format((100 * $currencyRow['nb'] / $ca['ventil']['nb']), 1, '.', ' ').'%</td>
 						<td align="right">'.number_format((100 * $currencyRow['total'] / $ca['ventil']['total']), 1, '.', ' ').'%</td>
@@ -395,7 +395,7 @@ class StatsForecast extends Module
 				<tr>
 					<td>'.$attribut['gname'].'</td>
 					<td>'.$attribut['aname'].'</td>
-					<td align="right">'.intval($attribut['total']).'</td>
+					<td align="right">'.(int)($attribut['total']).'</td>
 				</tr>';
 		$this->_html .= '</table>
 		</fieldset>
@@ -422,7 +422,7 @@ class StatsForecast extends Module
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = od.product_id
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.id_category_default = cl.id_category AND cl.id_lang = '.intval($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.id_category_default = cl.id_category AND cl.id_lang = '.(int)($cookie->id_lang).')
 		'.((int)$cookie->stats_id_zone ? $join : '').'
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
@@ -493,8 +493,8 @@ class StatsForecast extends Module
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
 		INNER JOIN '._DB_PREFIX_.'product_attribute_combination pac ON od.product_attribute_id = pac.id_product_attribute
 		INNER JOIN '._DB_PREFIX_.'attribute a ON pac.id_attribute = a.id_attribute
-		INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang = '.intval($cookie->id_lang).')
-		INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (a.id_attribute = al.id_attribute AND al.id_lang = '.intval($cookie->id_lang).')
+		INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang = '.(int)($cookie->id_lang).')
+		INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (a.id_attribute = al.id_attribute AND al.id_lang = '.(int)($cookie->id_lang).')
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY pac.id_attribute');

@@ -23,7 +23,7 @@ class LinkCore
 	  */
 	public function __construct()
 	{
-		$this->allow = intval(Configuration::get('PS_REWRITING_SETTINGS'));
+		$this->allow = (int)(Configuration::get('PS_REWRITING_SETTINGS'));
 		$this->url = $_SERVER['SCRIPT_NAME'];
 	}
 
@@ -38,35 +38,35 @@ class LinkCore
 	{
 		if (!isset($this->allow)) $this->allow = 0;
 		if (is_object($id_product))
-			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').intval($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product->id));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').(int)($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product->id));
 		elseif ($alias)
-			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).(($category AND $category != 'home') ? ($category.'/') : '').intval($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(($category AND $category != 'home') ? ($category.'/') : '').(int)($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product));
 		else
-			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.intval($id_product);
+			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product);
 	}
 
 	public function getCategoryLink($id_category, $alias = NULL, $id_lang = NULL)
 	{
 		if (is_object($id_category))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_category->id).'-'.$id_category->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_category->id).'-'.$id_category->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.(int)($id_category->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_category).'-'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.intval($id_category);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_category).'-'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.(int)($id_category));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.(int)($id_category);
 	}
 
 	public function getCMSCategoryLink($id_category, $alias = NULL, $id_lang = NULL)
 	{
-		if (is_object(intval($id_category)))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink(intval($id_lang)).intval($id_category->id).'-'.$id_category->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category->id));
+		if (is_object((int)($id_category)))
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink((int)($id_lang)).(int)($id_category->id).'-'.$id_category->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink(intval($id_lang)).intval($id_category).'-'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.intval($id_category);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.'content/category/'.$this->getLangLink((int)($id_lang)).(int)($id_category).'-'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category);
 	}
 
 	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
@@ -78,47 +78,47 @@ class LinkCore
 		if (is_object($cms))
 		{
 			return ($this->allow == 1) ? 
-				($base.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).'content/'.intval($cms->id).'-'.$cms->link_rewrite) :
-				($base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms->id));
+				($base.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/'.(int)($cms->id).'-'.$cms->link_rewrite) :
+				($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms->id));
 		}
 		
 		if ($alias)
-			return ($this->allow == 1) ? ($base.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).'content/'.intval($cms).'-'.$alias) :
-			($base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms));
-		return $base.__PS_BASE_URI__.'cms.php?id_cms='.intval($cms);
+			return ($this->allow == 1) ? ($base.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/'.(int)($cms).'-'.$alias) :
+			($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms));
+		return $base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms);
 	}
 
 	public function getSupplierLink($id_supplier, $alias = NULL, $id_lang = NULL)
 	{
 		if (is_object($id_supplier))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_supplier->id).'__'.$id_supplier->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_supplier->id).'__'.$id_supplier->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_supplier).'__'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.intval($id_supplier);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_supplier).'__'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier);
 	}
 
 	public function getManufacturerLink($id_manufacturer, $alias = NULL, $id_lang = NULL)
 	{
 		if (is_object($id_manufacturer))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_manufacturer->id).'_'.$id_manufacturer->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_manufacturer->id).'_'.$id_manufacturer->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_manufacturer).'_'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.intval($id_manufacturer);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_manufacturer).'_'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer));
+		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer);
 	}
 
 	public function getCustomLink($id_custom, $page, $prefix = '~', $alias = NULL, $id_lang = NULL)
 	{
 		if (is_object($id_custom))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_custom->id).$prefix.$id_custom->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_custom->id).$prefix.$id_custom->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink(intval($id_lang)).intval($id_custom).$prefix.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom));
-		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.intval($id_custom);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_custom).$prefix.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom));
+		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom);
 	}
 
 	public function getImageLink($name, $ids, $type = NULL)
@@ -142,7 +142,7 @@ class LinkCore
 		if($id_lang == NULL)
 		{
 			global $cookie;
-			$id_lang = intval($cookie->id_lang);
+			$id_lang = (int)($cookie->id_lang);
 		}
 		$base = $ssl ? Tools::getHttpHost(true) : _PS_BASE_URL_ ;
 		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']))
@@ -156,8 +156,8 @@ class LinkCore
 				SELECT url_rewrite
 				FROM `'._DB_PREFIX_.'meta` m
 				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.intval($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-				$uri_path = $url_rewrite ? $this->getLangLink(intval($id_lang)).$url_rewrite : $filename;
+				WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
+				$uri_path = $url_rewrite ? $this->getLangLink((int)($id_lang)).$url_rewrite : $filename;
 			}
 			else
 				$uri_path = $filename;
@@ -193,12 +193,12 @@ class LinkCore
 		if ($this->allow == 1)
 			return __PS_BASE_URI__.'lang-'.Language::getIsoById($id_lang).'/'.substr(preg_replace('#/lang-([a-z]{2})/#', '/', $request), strlen(__PS_BASE_URI__));
 		else
-			return $this->getUrlWith('id_lang', intval($id_lang));
+			return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
 
 	public function getLanguageLinkAdmin($id_lang)
 	{
-		return $this->getUrlWith('id_lang', intval($id_lang));
+		return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
 
 	public function getUrlWith($key, $val)
@@ -217,7 +217,7 @@ class LinkCore
 
 	public function goPage($url, $p)
 	{
-		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.intval($p));
+		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.(int)($p));
 	}
 
 	public function getPaginationLink($type, $id_object, $nb = FALSE, $sort = FALSE, $pagination = FALSE, $array = FALSE)
@@ -247,7 +247,7 @@ class LinkCore
 			return $url.$vars;
 		$vars['requestUrl'] = $url;
 		if ($type AND $id_object)
-			$vars['id_'.$type] = (is_object($id_object) ? intval($id_object->id) : intval($id_object));
+			$vars['id_'.$type] = (is_object($id_object) ? (int)($id_object->id) : (int)($id_object));
 		return $vars;
 	}
 
@@ -261,12 +261,12 @@ class LinkCore
 		if (!$id_lang)
 		{
 			global $cookie;
-			$id_lang = intval($cookie->id_lang);
+			$id_lang = (int)($cookie->id_lang);
 		}
 		
 		if (!$this->allow)
 			return NULL;
-		return 'lang-'.Language::getIsoById(intval($id_lang)).'/';
+		return 'lang-'.Language::getIsoById((int)($id_lang)).'/';
 	}
 	
 		public function preloadPageLinks()
@@ -278,7 +278,7 @@ class LinkCore
 					SELECT url_rewrite, page
 					FROM `'._DB_PREFIX_.'meta` m
 					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-					WHERE id_lang = '.intval($cookie->id_lang));
+					WHERE id_lang = '.(int)($cookie->id_lang));
 				foreach ($specific_pages as $specific_page)
 					self::$cache['page'][$specific_page['page'].'.php'] = 'lang-'.$iso.'/'.$specific_page['url_rewrite'];
 			}

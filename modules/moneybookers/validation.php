@@ -34,24 +34,24 @@ foreach ($errors AS $error)
 	$message .= $error."\n";
 $message = nl2br(strip_tags($message));
 
-$id_cart = intval(substr($_POST['transaction_id'], 0, strpos($_POST['transaction_id'], '_')));
+$id_cart = (int)(substr($_POST['transaction_id'], 0, strpos($_POST['transaction_id'], '_')));
 $secure_cart = explode('_', $_POST['transaction_id']);
-$status = intval($_POST['status']);
+$status = (int)($_POST['status']);
 switch ($status)
 {	
 	/* Bankwire */
 	case 0:
-		$moneyBookers->validateOrder(intval($secure_cart[0]), _PS_OS_BANKWIRE_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_BANKWIRE_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Payment OK */
 	case 2:
-		$moneyBookers->validateOrder(intval($secure_cart[0]), _PS_OS_PAYMENT_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_PAYMENT_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Unknown or error */
 	default:
-		$moneyBookers->validateOrder(intval($secure_cart[0]), _PS_OS_ERROR_, 0, $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_ERROR_, 0, $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 }
 

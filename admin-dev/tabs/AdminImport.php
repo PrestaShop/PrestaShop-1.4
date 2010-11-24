@@ -60,7 +60,7 @@ class AdminImport extends AdminTab
 	{
 		$this->entities = array_flip(array($this->l('Categories'), $this->l('Products'), $this->l('Attributes'), $this->l('Customers'), $this->l('Addresses'), $this->l('Manufacturers'), $this->l('Suppliers')));
 					
-		switch (intval(Tools::getValue('entity')))
+		switch ((int)(Tools::getValue('entity')))
 		{
 			case $this->entities[$this->l('Attributes')]:
 
@@ -163,8 +163,8 @@ class AdminImport extends AdminTab
 				'quantity' => 0,
 				'price' => 0,
 				'id_tax' => 0,
-				'description_short' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'link_rewrite' => array(intval(Configuration::get('PS_LANG_DEFAULT')) => ''),
+				'description_short' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
+				'link_rewrite' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'online_only' => 0);
 				
 				break;
@@ -386,10 +386,10 @@ class AdminImport extends AdminTab
 		{
 			default:
 			case 'products':
-				$path = _PS_PROD_IMG_DIR_.intval($id_entity).'-'.intval($id_image);
+				$path = _PS_PROD_IMG_DIR_.(int)($id_entity).'-'.(int)($id_image);
 			break;
 			case 'categories':
-				$path = _PS_CAT_IMG_DIR_.intval($id_entity);
+				$path = _PS_CAT_IMG_DIR_.(int)($id_entity);
 			break;
 		}
 
@@ -417,7 +417,7 @@ class AdminImport extends AdminTab
 	
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguageId = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		self::setLocale();
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
@@ -439,7 +439,7 @@ class AdminImport extends AdminTab
 			{
 				$categoryParent = Category::searchByName($defaultLanguageId, $category->parent, true);
 				if ($categoryParent['id_category'])
-					$category->id_parent =	intval($categoryParent['id_category']);
+					$category->id_parent =	(int)($categoryParent['id_category']);
 				else
 				{
 					$categoryToCreate= new Category();
@@ -486,8 +486,8 @@ class AdminImport extends AdminTab
 				// If category already in base, get id category back
 				if ($categoryAlreadyCreated['id_category'])
 				{
-					$catMoved[$category->id] = intval($categoryAlreadyCreated['id_category']);
-					$category->id =	intval($categoryAlreadyCreated['id_category']);
+					$catMoved[$category->id] = (int)($categoryAlreadyCreated['id_category']);
+					$category->id =	(int)($categoryAlreadyCreated['id_category']);
 				}
 
 				// If id category AND id category already in base, trying to update
@@ -513,17 +513,17 @@ class AdminImport extends AdminTab
 		global $cookie;
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguageId = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		self::setLocale();
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-			if (array_key_exists('id', $info) AND intval($info['id']) AND Product::existsInDatabase(intval($info['id'])))
+			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id'])))
 			{
-				$product = new Product(intval($info['id']));
-				$categoryData = Product::getIndexedCategories(intval($product->id));
+				$product = new Product((int)($info['id']));
+				$categoryData = Product::getIndexedCategories((int)($product->id));
 				foreach ($categoryData as $tmp)
 					$product->category[] = $tmp['id_category'];
 			}
@@ -533,14 +533,14 @@ class AdminImport extends AdminTab
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
-				$product->id_tax = intval(Tax::getTaxIdByRate(floatval($product->tax_rate)));
+				$product->id_tax = (int)(Tax::getTaxIdByRate(floatval($product->tax_rate)));
 			if (isset($product->tax_rate) AND !$product->id_tax)
 			{
 				$tax = new Tax();
 				$tax->rate = floatval($product->tax_rate);
 				$tax->name = self::createMultiLangField(strval($product->tax_rate));
 				if (($fieldError = $tax->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $tax->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $tax->add())
-					$product->id_tax = intval($tax->id);
+					$product->id_tax = (int)($tax->id);
 				else
 				{
 					$this->_errors[] = 'TAX '.$tax->name[$defaultLanguageId].' '.Tools::displayError('cannot be saved');
@@ -548,18 +548,18 @@ class AdminImport extends AdminTab
 				}
 			}
 			
-			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists(intval($product->manufacturer)))
-				$product->id_manufacturer = intval($product->manufacturer);
+			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists((int)($product->manufacturer)))
+				$product->id_manufacturer = (int)($product->manufacturer);
 			elseif (isset($product->manufacturer) AND is_string($product->manufacturer) AND !empty($product->manufacturer))
 			{
 				if ($manufacturer = Manufacturer::getIdByName($product->manufacturer))
-					$product->id_manufacturer = intval($manufacturer);
+					$product->id_manufacturer = (int)($manufacturer);
 				else
 				{
 					$manufacturer = new Manufacturer();
 					$manufacturer->name = $product->manufacturer;
 					if (($fieldError = $manufacturer->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $manufacturer->add())
-						$product->id_manufacturer = intval($manufacturer->id);
+						$product->id_manufacturer = (int)($manufacturer->id);
 					else
 					{
 						$this->_errors[] = $manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -568,18 +568,18 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			if (isset($product->supplier) AND is_numeric($product->supplier) AND Supplier::supplierExists(intval($product->supplier)))
-				$product->id_supplier = intval($product->supplier);
+			if (isset($product->supplier) AND is_numeric($product->supplier) AND Supplier::supplierExists((int)($product->supplier)))
+				$product->id_supplier = (int)($product->supplier);
 			elseif (isset($product->supplier) AND is_string($product->supplier) AND !empty($product->supplier))
 			{			
 				if ($supplier = Supplier::getIdByName($product->supplier))
-					$product->id_supplier = intval($supplier);
+					$product->id_supplier = (int)($supplier);
 				else
 				{
 					$supplier = new Supplier();
 					$supplier->name = $product->supplier;
 					if (($fieldError = $supplier->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $supplier->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $supplier->add())
-						$product->id_supplier = intval($supplier->id);
+						$product->id_supplier = (int)($supplier->id);
 					else
 					{
 						$this->_errors[] = $supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -608,17 +608,17 @@ class AdminImport extends AdminTab
 				{
 					if (is_numeric($value))
 					{
-						if (Category::categoryExists(intval($value)))
-							$product->id_category[] = intval($value);
+						if (Category::categoryExists((int)($value)))
+							$product->id_category[] = (int)($value);
 						else
 						{
 							$categoryToCreate= new Category();
-							$categoryToCreate->id = intval($value);
+							$categoryToCreate->id = (int)($value);
 							$categoryToCreate->name = self::createMultiLangField($value);
 							$categoryToCreate->active = 1;
 							$categoryToCreate->id_parent = 1; // Default parent is home for unknown category to create
 							if (($fieldError = $categoryToCreate->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $categoryToCreate->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $categoryToCreate->add())
-								$product->id_category[] = intval($categoryToCreate->id);
+								$product->id_category[] = (int)($categoryToCreate->id);
 							else
 							{
 								$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -631,7 +631,7 @@ class AdminImport extends AdminTab
 						$category = Category::searchByName($defaultLanguageId, $value, true);
 						if ($category['id_category'])
 						{
-							$product->id_category[] =	intval($category['id_category']);
+							$product->id_category[] =	(int)($category['id_category']);
 						}
 						else
 						{
@@ -640,7 +640,7 @@ class AdminImport extends AdminTab
 							$categoryToCreate->active = 1;
 							$categoryToCreate->id_parent = 1; // Default parent is home for unknown category to create
 							if (($fieldError = $categoryToCreate->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $categoryToCreate->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $categoryToCreate->add())
-								$product->id_category[] = intval($categoryToCreate->id);
+								$product->id_category[] = (int)($categoryToCreate->id);
 							else
 							{
 								$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -651,7 +651,7 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			$product->id_category_default = isset($product->id_category[0]) ? intval($product->id_category[0]) : '';
+			$product->id_category_default = isset($product->id_category[0]) ? (int)($product->id_category[0]) : '';
 			$link_rewrite = is_array($product->link_rewrite) ? $product->link_rewrite[$defaultLanguageId] : '';
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
 			
@@ -676,10 +676,10 @@ class AdminImport extends AdminTab
 				if ($product->quantity == NULL)
 					$product->quantity = 0; 
 				// If id product AND id product already in base, trying to update
-				if ($product->id AND Product::existsInDatabase(intval($product->id)))
+				if ($product->id AND Product::existsInDatabase((int)($product->id)))
 				{
 				
-					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.intval($product->id));
+					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)($product->id));
 					$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
 				}
@@ -700,8 +700,8 @@ class AdminImport extends AdminTab
 				if (isset($info['reduction_price']) OR isset($info['reduction_percent']))
 				{
 					$specificPrice = new SpecificPrice();
-					$specificPrice->id_product = intval($product->id);
-					$specificPrice->id_shop = intval(Shop::getCurrentShop());
+					$specificPrice->id_product = (int)($product->id);
+					$specificPrice->id_shop = (int)(Shop::getCurrentShop());
 					$specificPrice->id_currency = 0;
 					$specificPrice->id_country = 0;
 					$specificPrice->id_group = 0;
@@ -757,12 +757,12 @@ class AdminImport extends AdminTab
 
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
 				{
-					$productHasImages = (bool)Image::getImages(intval($cookie->id_lang), intval($product->id));
+					$productHasImages = (bool)Image::getImages((int)($cookie->id_lang), (int)($product->id));
 					foreach ($product->image AS $key => $url)
 						if (!empty($url))
 						{
 							$image = new Image();
-							$image->id_product = intval($product->id);
+							$image->id_product = (int)($product->id);
 							$image->position = Image::getHighestPosition($product->id) + 1;
 							$image->cover = (!$key AND !$productHasImages) ? true : false;
 							$image->legend = self::createMultiLangField($product->name[$defaultLanguageId]);
@@ -800,10 +800,10 @@ class AdminImport extends AdminTab
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		$groups = array();
 		foreach (AttributeGroup::getAttributesGroups($defaultLanguage) AS $group)
-			$groups[$group['name']] = intval($group['id_attribute_group']);
+			$groups[$group['name']] = (int)($group['id_attribute_group']);
 		$attributes = array();
 		foreach (Attribute::getAttributes($defaultLanguage) AS $attribute)
-			$attributes[$attribute['attribute_group'].'_'.$attribute['name']] = intval($attribute['id_attribute']);
+			$attributes[$attribute['attribute_group'].'_'.$attribute['name']] = (int)($attribute['id_attribute']);
 		
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
@@ -817,8 +817,8 @@ class AdminImport extends AdminTab
 			$info = array_map('trim', $info);
 			
 			self::setDefaultValues($info);
-			$product = new Product(intval($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), intval($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), intval($info['default_on']), strval($info['upc']));
+			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
+			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
@@ -849,7 +849,7 @@ class AdminImport extends AdminTab
 					else
 						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '');
 				}
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.intval($attributes[$group.'_'.$attribute]).','.intval($id_product_attribute).')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.(int)($attributes[$group.'_'.$attribute]).','.(int)($id_product_attribute).')');
 			}
 		}
 		$this->closeCsvFile($handle);
@@ -909,13 +909,13 @@ class AdminImport extends AdminTab
 			
 			if (isset($address->country) AND is_numeric($address->country))
 			{
-				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), intval($address->country)))
-					$address->id_country = intval($address->country);
+				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), (int)($address->country)))
+					$address->id_country = (int)($address->country);
 			}
 			elseif(isset($address->country) AND is_string($address->country) AND !empty($address->country))
 			{
 				if ($id_country = Country::getIdByName(NULL, $address->country))
-					$address->id_country = intval($id_country);
+					$address->id_country = (int)($id_country);
 				else
 				{
 					$country = new Country();
@@ -925,7 +925,7 @@ class AdminImport extends AdminTab
 					$country->iso_code = strtoupper(substr($address->country, 0, 2)); // Default iso for country to create
 					$country->contains_states = 0; // Default value for country to create
 					if (($fieldError = $country->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $country->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $country->add())
-						$address->id_country = intval($country->id);
+						$address->id_country = (int)($country->id);
 					else
 					{
 						$this->_errors[] = $country->name[$defaultLanguageId].' '.Tools::displayError('cannot be saved');
@@ -936,24 +936,24 @@ class AdminImport extends AdminTab
 					
 			if (isset($address->state) AND is_numeric($address->state))
 			{
-				if (State::getNameById(intval($address->state)))
-					$address->id_state = intval($address->state);
+				if (State::getNameById((int)($address->state)))
+					$address->id_state = (int)($address->state);
 			}
 			elseif(isset($address->state) AND is_string($address->state) AND !empty($address->state))
 			{
 				if ($id_state = State::getIdByName($address->state))
-					$address->id_state = intval($id_state);
+					$address->id_state = (int)($id_state);
 				else
 				{
 					$state = new State();
 					$state->active = 1;
 					$state->name = $address->state;
-					$state->id_country = isset($country->id) ? intval($country->id) : 0;
+					$state->id_country = isset($country->id) ? (int)($country->id) : 0;
 					$state->id_zone = 0; // Default zone for state to create
 					$state->iso_code = strtoupper(substr($address->state, 0, 2)); // Default iso for state to create
 					$state->tax_behavior = 0;
 					if (($fieldError = $state->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $state->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $state->add())
-						$address->id_state = intval($state->id);
+						$address->id_state = (int)($state->id);
 					else
 					{
 						$this->_errors[] = $state->name.' '.Tools::displayError('cannot be saved');
@@ -966,19 +966,19 @@ class AdminImport extends AdminTab
 			{
 				$customer = Customer::customerExists($address->customer_email, true);
 				if ($customer)
-					$address->id_customer = intval($customer);
+					$address->id_customer = (int)($customer);
 				else
 					$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in base').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('cannot be saved');
 			}
 
-			if (isset($address->manufacturer) AND is_numeric($address->manufacturer) AND Manufacturer::manufacturerExists(intval($address->manufacturer)))
-				$address->id_manufacturer = intval($address->manufacturer);
+			if (isset($address->manufacturer) AND is_numeric($address->manufacturer) AND Manufacturer::manufacturerExists((int)($address->manufacturer)))
+				$address->id_manufacturer = (int)($address->manufacturer);
 			elseif (isset($address->manufacturer) AND is_string($address->manufacturer) AND !empty($address->manufacturer))
 			{
 				$manufacturer = new Manufacturer();
 				$manufacturer->name = $address->manufacturer;
 				if (($fieldError = $manufacturer->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $manufacturer->add())
-					$address->id_manufacturer = intval($manufacturer->id);
+					$address->id_manufacturer = (int)($manufacturer->id);
 				else
 				{
 					$this->_errors[] = mysql_error().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -986,14 +986,14 @@ class AdminImport extends AdminTab
 				}
 			}
 			
-			if (isset($address->supplier) AND is_numeric($address->supplier) AND Supplier::supplierExists(intval($address->supplier)))
-				$address->id_supplier = intval($address->supplier);
+			if (isset($address->supplier) AND is_numeric($address->supplier) AND Supplier::supplierExists((int)($address->supplier)))
+				$address->id_supplier = (int)($address->supplier);
 			elseif (isset($address->supplier) AND is_string($address->supplier) AND !empty($address->supplier))
 			{
 				$supplier = new Supplier();
 				$supplier->name = $address->supplier;
 				if (($fieldError = $supplier->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $supplier->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $supplier->add())
-					$address->id_supplier = intval($supplier->id);
+					$address->id_supplier = (int)($supplier->id);
 				else
 				{
 					$this->_errors[] = mysql_error().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('cannot be saved');
@@ -1240,7 +1240,7 @@ class AdminImport extends AdminTab
 		if (!$handle)
 			die(Tools::displayError('Cannot read the csv file'));
 			
-		for ($i = 0; $i < intval(Tools::getValue('skip')); ++$i)
+		for ($i = 0; $i < (int)(Tools::getValue('skip')); ++$i)
 			$line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator', ';'));
 		return $handle;
 	}
@@ -1258,7 +1258,7 @@ class AdminImport extends AdminTab
 
 		// Header
 		for ($i = 0; $i < $nb_column; $i++)
-			if (MAX_COLUMNS * intval($current_table) <= $i AND intval($i) < MAX_COLUMNS * (intval($current_table) + 1))
+			if (MAX_COLUMNS * (int)($current_table) <= $i AND (int)($i) < MAX_COLUMNS * ((int)($current_table) + 1))
 				echo '
 				<th style="width: '.(750 / MAX_COLUMNS).'px; vertical-align: top; padding: 4px">
 					<select onchange="askFeatureName(this, '.$i.');" style="width: '.(750 / MAX_COLUMNS).'px;" id="type_value['.$i.']" name="type_value['.$i.']">
@@ -1280,7 +1280,7 @@ class AdminImport extends AdminTab
 				$this->utf8_encode_array($line);
 			echo '<tr id="table_'.$current_table.'_line_'.$current_line.'" style="padding: 4px">';
 			foreach ($line AS $nb_c => $column)
-				if ((MAX_COLUMNS * intval($current_table) <= $nb_c) AND (intval($nb_c) < MAX_COLUMNS * (intval($current_table) + 1)))
+				if ((MAX_COLUMNS * (int)($current_table) <= $nb_c) AND ((int)($nb_c) < MAX_COLUMNS * ((int)($current_table) + 1)))
 					echo '<td>'.substr($column, 0, 200).'</td>';
 			echo '</tr>';
 		}
@@ -1317,7 +1317,7 @@ class AdminImport extends AdminTab
 			'.$this->l('Skip').' <input type="text" size="2" name="skip" value="0" /> '.$this->l('lines').'.
 			<input type="hidden" name="csv" value="'.Tools::getValue('csv').'" />
 			<input type="hidden" name="convert" value="'.Tools::getValue('convert').'" />
-			<input type="hidden" name="entity" value="'.intval(Tools::getValue('entity')).'" />
+			<input type="hidden" name="entity" value="'.(int)(Tools::getValue('entity')).'" />
 			<input type="hidden" name="iso_lang" value="'.Tools::getValue('iso_lang').'" />';
 		if (Tools::getValue('truncate'))
 			echo '<input type="hidden" name="truncate" value="1" />';
@@ -1369,7 +1369,7 @@ class AdminImport extends AdminTab
 	
 	private function truncateTables($case)
 	{
-		switch (intval($case))
+		switch ((int)($case))
 		{
 			case $this->entities[$this->l('Categories')]:
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE id_category != 1');
@@ -1446,9 +1446,9 @@ class AdminImport extends AdminTab
 		elseif (Tools::getValue('import'))
 		{
 			if (Tools::getValue('truncate'))
-				$this->truncateTables(intval(Tools::getValue('entity')));
+				$this->truncateTables((int)(Tools::getValue('entity')));
 
-			switch (intval(Tools::getValue('entity')))
+			switch ((int)(Tools::getValue('entity')))
 			{
 				case $this->entities[$this->l('Categories')]:
 					$this->categoryImport();

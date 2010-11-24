@@ -66,38 +66,38 @@ class Secuvad extends Module
 			if ($lang['iso_code'] == 'fr')
 			{
 				$query .= '
-				(1, \'Informatique et Logiciels\', 101,'.intval($lang['id_lang']).'),
-				(2,\'Téléphonie, Télécommunications\',102,'.intval($lang['id_lang']).'),
-				(3,\'Matériels HiFi, Vidéo, Photo\',103,'.intval($lang['id_lang']).'),
-				(4,\'Voyages, Tourisme\',104,'.intval($lang['id_lang']).'),
-				(5,\'Vêtements, accessoires de mode\',105,'.intval($lang['id_lang']).'),
-				(6,\'Sport\',106,'.intval($lang['id_lang']).'),
-				(7,\'Electroménager\',107,'.intval($lang['id_lang']).'),
-				(8,\'Cadeaux, fleurs\',108,'.intval($lang['id_lang']).'),
-				(9,\'Accessoires de maison et jardin\',109,'.intval($lang['id_lang']).'),
-				(10,\'Auto, moto et accessoires\',110,'.intval($lang['id_lang']).'),
-				(11,\'Alimentation\',111,'.intval($lang['id_lang']).'),
-				(12,\'Culture, divertissements\',112,'.intval($lang['id_lang']).'),
-				(13,\'Beauté, santé\',113,'.intval($lang['id_lang']).'),
-				(14,\'Services\',114,'.intval($lang['id_lang']).'),';
+				(1, \'Informatique et Logiciels\', 101,'.(int)($lang['id_lang']).'),
+				(2,\'Téléphonie, Télécommunications\',102,'.(int)($lang['id_lang']).'),
+				(3,\'Matériels HiFi, Vidéo, Photo\',103,'.(int)($lang['id_lang']).'),
+				(4,\'Voyages, Tourisme\',104,'.(int)($lang['id_lang']).'),
+				(5,\'Vêtements, accessoires de mode\',105,'.(int)($lang['id_lang']).'),
+				(6,\'Sport\',106,'.(int)($lang['id_lang']).'),
+				(7,\'Electroménager\',107,'.(int)($lang['id_lang']).'),
+				(8,\'Cadeaux, fleurs\',108,'.(int)($lang['id_lang']).'),
+				(9,\'Accessoires de maison et jardin\',109,'.(int)($lang['id_lang']).'),
+				(10,\'Auto, moto et accessoires\',110,'.(int)($lang['id_lang']).'),
+				(11,\'Alimentation\',111,'.(int)($lang['id_lang']).'),
+				(12,\'Culture, divertissements\',112,'.(int)($lang['id_lang']).'),
+				(13,\'Beauté, santé\',113,'.(int)($lang['id_lang']).'),
+				(14,\'Services\',114,'.(int)($lang['id_lang']).'),';
 			}
 			else
 			{
 				$query .= '
-				(1,\'Computing and Softwares\',1,'.intval($lang['id_lang']).'),
-				(2,\'Phones, Telecommunications\',2,'.intval($lang['id_lang']).'),
-				(3,\'HiFi, Video, Photo\',3,'.intval($lang['id_lang']).'),
-				(4,\'Travels, Tourism\',4,'.intval($lang['id_lang']).'),
-				(5,\'Clothes, fashion accessories\',5,'.intval($lang['id_lang']).'),
-				(6,\'Sport\',6,'.intval($lang['id_lang']).'),
-				(7,\'Domestic appliances\',7,'.intval($lang['id_lang']).'),
-				(8,\'Gifts, flowers\',8,'.intval($lang['id_lang']).'),
-				(9,\'Home and garden goods\',9,'.intval($lang['id_lang']).'),
-				(10,\'Cars, motorbikes and accessories\',10,'.intval($lang['id_lang']).'),
-				(11,\'Food\',11,'.intval($lang['id_lang']).'),
-				(12,\'Culture, entertainement\',12,'.intval($lang['id_lang']).'),
-				(13,\'Beauty, healthcare\',13,'.intval($lang['id_lang']).'),
-				(14,\'Services\',14,'.intval($lang['id_lang']).'),';
+				(1,\'Computing and Softwares\',1,'.(int)($lang['id_lang']).'),
+				(2,\'Phones, Telecommunications\',2,'.(int)($lang['id_lang']).'),
+				(3,\'HiFi, Video, Photo\',3,'.(int)($lang['id_lang']).'),
+				(4,\'Travels, Tourism\',4,'.(int)($lang['id_lang']).'),
+				(5,\'Clothes, fashion accessories\',5,'.(int)($lang['id_lang']).'),
+				(6,\'Sport\',6,'.(int)($lang['id_lang']).'),
+				(7,\'Domestic appliances\',7,'.(int)($lang['id_lang']).'),
+				(8,\'Gifts, flowers\',8,'.(int)($lang['id_lang']).'),
+				(9,\'Home and garden goods\',9,'.(int)($lang['id_lang']).'),
+				(10,\'Cars, motorbikes and accessories\',10,'.(int)($lang['id_lang']).'),
+				(11,\'Food\',11,'.(int)($lang['id_lang']).'),
+				(12,\'Culture, entertainement\',12,'.(int)($lang['id_lang']).'),
+				(13,\'Beauty, healthcare\',13,'.(int)($lang['id_lang']).'),
+				(14,\'Services\',14,'.(int)($lang['id_lang']).'),';
 			}
 		$query = rtrim($query, ',');
 		Db::getInstance()->Execute($query);
@@ -109,22 +109,22 @@ class Secuvad extends Module
 			if ($lang['iso_code'] == 'fr')
 			{
 				$query .= '
-				(\'carte\',\'Carte bancaire\','.intval($lang['id_lang']).'),
-				(\'cheque\',\'Chèque\','.intval($lang['id_lang']).'),
-				(\'virement\',\'Virement\','.intval($lang['id_lang']).'),
-				(\'paypal\',\'Tiers de paiement\','.intval($lang['id_lang']).'),
-				(\'cb en n fois\',\'Carte bancaire en plusieurs fois\','.intval($lang['id_lang']).'),
-				(\'contre-remboursement\',\'Contre-Remboursement\','.intval($lang['id_lang']).'),';
+				(\'carte\',\'Carte bancaire\','.(int)($lang['id_lang']).'),
+				(\'cheque\',\'Chèque\','.(int)($lang['id_lang']).'),
+				(\'virement\',\'Virement\','.(int)($lang['id_lang']).'),
+				(\'paypal\',\'Tiers de paiement\','.(int)($lang['id_lang']).'),
+				(\'cb en n fois\',\'Carte bancaire en plusieurs fois\','.(int)($lang['id_lang']).'),
+				(\'contre-remboursement\',\'Contre-Remboursement\','.(int)($lang['id_lang']).'),';
 			}
 			else
 			{
 				$query .= '
-				(\'carte\',\'Credit card\','.intval($lang['id_lang']).'),
-				(\'cheque\',\'Check\','.intval($lang['id_lang']).'),
-				(\'virement\',\'Transfer\','.intval($lang['id_lang']).'),
-				(\'paypal\',\'Third-party payment\','.intval($lang['id_lang']).'),
-				(\'cb en n fois\',\'Credit Card (n times)\','.intval($lang['id_lang']).'),
-				(\'contre-remboursement\',\'On delivery\','.intval($lang['id_lang']).'),';
+				(\'carte\',\'Credit card\','.(int)($lang['id_lang']).'),
+				(\'cheque\',\'Check\','.(int)($lang['id_lang']).'),
+				(\'virement\',\'Transfer\','.(int)($lang['id_lang']).'),
+				(\'paypal\',\'Third-party payment\','.(int)($lang['id_lang']).'),
+				(\'cb en n fois\',\'Credit Card (n times)\','.(int)($lang['id_lang']).'),
+				(\'contre-remboursement\',\'On delivery\','.(int)($lang['id_lang']).'),';
 			}
 		$query = rtrim($query, ',');
 		Db::getInstance()->Execute($query);
@@ -136,22 +136,22 @@ class Secuvad extends Module
 			if ($lang['iso_code'] == 'fr')
 			{
 				$query .= '
-				(1,\'Retrait chez le commerçant\','.intval($lang['id_lang']).'),
-				(2,\'Retrait dans un point de retrait tiers\','.intval($lang['id_lang']).'),
-				(3,\'Coliposte\','.intval($lang['id_lang']).'),
-				(4,\'Chronopost\','.intval($lang['id_lang']).'),
-				(5,\'Envoi remis sans signature\','.intval($lang['id_lang']).'),
-				(6,\'Bien/service immatériel\','.intval($lang['id_lang']).'),';
+				(1,\'Retrait chez le commerçant\','.(int)($lang['id_lang']).'),
+				(2,\'Retrait dans un point de retrait tiers\','.(int)($lang['id_lang']).'),
+				(3,\'Coliposte\','.(int)($lang['id_lang']).'),
+				(4,\'Chronopost\','.(int)($lang['id_lang']).'),
+				(5,\'Envoi remis sans signature\','.(int)($lang['id_lang']).'),
+				(6,\'Bien/service immatériel\','.(int)($lang['id_lang']).'),';
 			}
 			else
 			{
 				$query .= '
-				(1,\'Merchant Warehouse\','.intval($lang['id_lang']).'),
-				(2,\'Other withdrawal\','.intval($lang['id_lang']).'),
-				(3,\'Public conveyor with signature\','.intval($lang['id_lang']).'),
-				(4,\'Private conveyor with signature\','.intval($lang['id_lang']).'),
-				(5,\'Public conveyor without signature\','.intval($lang['id_lang']).'),
-				(6,\'Immaterial Good/Service\','.intval($lang['id_lang']).'),';
+				(1,\'Merchant Warehouse\','.(int)($lang['id_lang']).'),
+				(2,\'Other withdrawal\','.(int)($lang['id_lang']).'),
+				(3,\'Public conveyor with signature\','.(int)($lang['id_lang']).'),
+				(4,\'Private conveyor with signature\','.(int)($lang['id_lang']).'),
+				(5,\'Public conveyor without signature\','.(int)($lang['id_lang']).'),
+				(6,\'Immaterial Good/Service\','.(int)($lang['id_lang']).'),';
 			}
 		$query = rtrim($query, ',');
 		Db::getInstance()->Execute($query);		
@@ -161,8 +161,8 @@ class Secuvad extends Module
 		VALUES ';
 		foreach ($langs as $lang)
 			$query .= '
-			(1,\'express\','.intval($lang['id_lang']).'),
-			(2,\'standard\','.intval($lang['id_lang']).'),';
+			(1,\'express\','.(int)($lang['id_lang']).'),
+			(2,\'standard\','.(int)($lang['id_lang']).'),';
 		$query = rtrim($query, ',');
 		Db::getInstance()->Execute($query);
 		
@@ -229,7 +229,7 @@ class Secuvad extends Module
 		$secuvad_order = Db::getInstance()->getRow('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_order` 
-		WHERE `id_secuvad_order` = '.intval($params['id_order']).'
+		WHERE `id_secuvad_order` = '.(int)($params['id_order']).'
 		');
 		if (is_array($secuvad_order) AND sizeof($secuvad_order))
 		{
@@ -243,13 +243,13 @@ class Secuvad extends Module
 			<fieldset style="width:400px;">
 				<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad').'</legend>
 				<p>
-					<b>'.$this->l('Secuvad status:').'</b> '.$this->_getSecuvadStatusHtml(intval($secuvad_order['secuvad_status'])).'
-					'.($secuvad_order['is_fraud'] ? '<br /><b>'.$this->l('Unpaid transmitted:').'</b> '.$this->_getFraudStatusHtml(intval($secuvad_order['is_fraud'])) : '').'
+					<b>'.$this->l('Secuvad status:').'</b> '.$this->_getSecuvadStatusHtml((int)($secuvad_order['secuvad_status'])).'
+					'.($secuvad_order['is_fraud'] ? '<br /><b>'.$this->l('Unpaid transmitted:').'</b> '.$this->_getFraudStatusHtml((int)($secuvad_order['is_fraud'])) : '').'
 				</p>
 				
-				<form method="POST" action="'.$currentIndex.'&id_order='.Tools::getValue('id_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'">
+				<form method="POST" action="'.$currentIndex.'&id_order='.Tools::getValue('id_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">
 					<p class="center">
-						<input type="hidden" name="id_secuvad_order" value="'.intval($params['id_order']).'" />
+						<input type="hidden" name="id_secuvad_order" value="'.(int)($params['id_order']).'" />
 						<input type="submit" class="button" name="send_to_secuvad" value="'.$this->l('Update Secuvad status').'"> 
 						<input type="submit" class="button" name="report_fraud" value="'.$this->l('Transmit an unpaid transaction').'" onclick="if(!confirm(\''.$this->l('Please note, by delivery of such unpaid SECUVAD, you certify that your claim is certain, liquid and payable, and that you entrust to SECUVAD EXCLUSIVE recovery. Would you continue?').'\')) return false;">
 					</p>
@@ -261,16 +261,16 @@ class Secuvad extends Module
 	
 	public function hookPaymentConfirm($params)
 	{
-		$id_order = intval($params['id_order']);
+		$id_order = (int)($params['id_order']);
 		$exists = Db::getInstance()->getValue('
 		SELECT COUNT(*) 
 		FROM `'._DB_PREFIX_.'secuvad_order` 
-		WHERE `id_secuvad_order` = '.intval($id_order));
+		WHERE `id_secuvad_order` = '.(int)($id_order));
 		if (!$exists)
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'secuvad_order`(`id_secuvad_order`, `ip`, `ip_time`) 
-			VALUES ('.intval($id_order).', \''.pSQL($this->getRemoteIPaddress()).'\', \''.pSQL(date("Y-m-d H:i:s")).'\')
+			VALUES ('.(int)($id_order).', \''.pSQL($this->getRemoteIPaddress()).'\', \''.pSQL(date("Y-m-d H:i:s")).'\')
 			');		
 			if ($this->check_assoc() == '' AND Configuration::get('SECUVAD_ACTIVATION') == 1)
 			{
@@ -278,7 +278,7 @@ class Secuvad extends Module
 				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
 				
 				$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'),Configuration::get('SECUVAD_XML_ENCODING'));
-				$flux_xml = $xml_obj->get_flux_xml(intval($id_order));
+				$flux_xml = $xml_obj->get_flux_xml((int)($id_order));
 				
 				if (Configuration::get('SECUVAD_MODE') == 'TEST')
 					$url = 'https://'.Configuration::get('SECUVAD_LOGIN').':'.Configuration::get('SECUVAD_MDP').'@'.Configuration::get('SECUVAD_URL_TEST');
@@ -293,16 +293,16 @@ class Secuvad extends Module
 	
 	public function hookPaymentCCAdded($params)
 	{
-		$id_order = intval($params['paymentCC']->id_order);
+		$id_order = (int)($params['paymentCC']->id_order);
 		$exists = Db::getInstance()->getValue('
 		SELECT COUNT(*) 
 		FROM `'._DB_PREFIX_.'secuvad_order` 
-		WHERE `id_secuvad_order` = '.intval($id_order));
+		WHERE `id_secuvad_order` = '.(int)($id_order));
 		if (!$exists)
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'secuvad_order`(`id_secuvad_order`, `ip`, `ip_time`) 
-			VALUES ('.intval($id_order).', \''.pSQL($this->getRemoteIPaddress()).'\', \''.pSQL(date("Y-m-d H:i:s")).'\')
+			VALUES ('.(int)($id_order).', \''.pSQL($this->getRemoteIPaddress()).'\', \''.pSQL(date("Y-m-d H:i:s")).'\')
 			');		
 			if ($this->check_assoc() == '' AND Configuration::get('SECUVAD_ACTIVATION') == 1)
 			{
@@ -310,7 +310,7 @@ class Secuvad extends Module
 				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
 				
 				$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'), Configuration::get('SECUVAD_XML_ENCODING'));
-				$flux_xml = $xml_obj->get_flux_xml(intval($id_order));
+				$flux_xml = $xml_obj->get_flux_xml((int)($id_order));
 				if (Configuration::get('SECUVAD_MODE') == 'TEST')
 					$url = 'https://'.Configuration::get('SECUVAD_LOGIN').':'.Configuration::get('SECUVAD_MDP').'@'.Configuration::get('SECUVAD_URL_TEST');
 				else
@@ -370,7 +370,7 @@ class Secuvad extends Module
 		return Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_category` sc
-		WHERE sc.`id_lang` = '.intval($cookie->id_lang));
+		WHERE sc.`id_lang` = '.(int)($cookie->id_lang));
 	}
 	
 	private function _getSecuvadCategoryAssoc()
@@ -396,7 +396,7 @@ class Secuvad extends Module
 		SELECT IF(sp.name IS NULL, "Unknown", sp.name) AS `secuvad_name`, sp.`code`, m.`id_module`, m.`name` AS `module_name` 
 		FROM `'._DB_PREFIX_.'secuvad_assoc_payment` sac
 		JOIN `'._DB_PREFIX_.'module` m ON (m.`id_module` = sac.`id_module`)
-	 	LEFT JOIN `'._DB_PREFIX_.'secuvad_payment` sp ON (sp.`code` = sac.`code` AND sp.`id_lang` = '.intval($cookie->id_lang).')');
+	 	LEFT JOIN `'._DB_PREFIX_.'secuvad_payment` sp ON (sp.`code` = sac.`code` AND sp.`id_lang` = '.(int)($cookie->id_lang).')');
 	}
 	
 	private function _getSecuvadCodePayment()
@@ -406,7 +406,7 @@ class Secuvad extends Module
 		return Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_payment` 
-		WHERE `id_lang` = '.intval($cookie->id_lang)
+		WHERE `id_lang` = '.(int)($cookie->id_lang)
 		);
 	}
 	
@@ -418,8 +418,8 @@ class Secuvad extends Module
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_assoc_transport` sat
 		JOIN '._DB_PREFIX_.'carrier c ON (c.id_carrier = sat.id_carrier)
-	 	LEFT JOIN '._DB_PREFIX_.'secuvad_transport st ON st.transport_id = sat.transport_id AND st.id_lang='.intval($cookie->id_lang).'
-		LEFT JOIN '._DB_PREFIX_.'secuvad_transport_delay std ON std.transport_delay_id = sat.transport_delay_id AND std.id_lang='.intval($cookie->id_lang)
+	 	LEFT JOIN '._DB_PREFIX_.'secuvad_transport st ON st.transport_id = sat.transport_id AND st.id_lang='.(int)($cookie->id_lang).'
+		LEFT JOIN '._DB_PREFIX_.'secuvad_transport_delay std ON std.transport_delay_id = sat.transport_delay_id AND std.id_lang='.(int)($cookie->id_lang)
 		);
 	}
 	
@@ -430,7 +430,7 @@ class Secuvad extends Module
 		return Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_transport` 
-		WHERE `id_lang` = '.intval($cookie->id_lang)
+		WHERE `id_lang` = '.(int)($cookie->id_lang)
 		);
 	}
 	
@@ -441,7 +441,7 @@ class Secuvad extends Module
 		return Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'secuvad_transport_delay` 
-		WHERE `id_lang` = '.intval($cookie->id_lang)
+		WHERE `id_lang` = '.(int)($cookie->id_lang)
 		);
 	}
 	
@@ -537,7 +537,7 @@ class Secuvad extends Module
 				if (preg_match('/secuvad_cat_([0-9]+)$/Ui', $k, $result))
 				{
 					$id_category = $result[1];
-					$sql .= '(NULL, '.intval($id_category).', '.intval($category_id).'),';
+					$sql .= '(NULL, '.(int)($id_category).', '.(int)($category_id).'),';
 				}
 			$sql = rtrim($sql, ',');
 			if (Db::getInstance()->Execute($sql))
@@ -556,7 +556,7 @@ class Secuvad extends Module
 				if (preg_match('/secuvad_payment_([0-9]+)$/Ui', $k, $result))
 				{
 					$id_module = $result[1];
-					$sql .= '(NULL, '.intval($id_module).', \''.pSQL($code).'\'),';
+					$sql .= '(NULL, '.(int)($id_module).', \''.pSQL($code).'\'),';
 				}
 			$sql = rtrim($sql, ',');
 			if (Db::getInstance()->Execute($sql))
@@ -575,7 +575,7 @@ class Secuvad extends Module
 				if (preg_match('/secuvad_carrier_type_([0-9]+)$/Ui', $k, $result))
 				{
 					$id_carrier = $result[1];
-					$sql .= '(NULL, '.intval($id_carrier).', '.intval($value).', '.intval($_POST['secuvad_carrier_delay_'.intval($id_carrier)]).'),';
+					$sql .= '(NULL, '.(int)($id_carrier).', '.(int)($value).', '.(int)($_POST['secuvad_carrier_delay_'.(int)($id_carrier)]).'),';
 				}
 			$sql = rtrim($sql, ',');
 			if (Db::getInstance()->Execute($sql))
@@ -629,7 +629,7 @@ class Secuvad extends Module
 		
 		if (Configuration::get('SECUVAD_ACTIVATION'))
 		{
-			$categories = Category::getCategories(intval($cookie->id_lang), false);
+			$categories = Category::getCategories((int)($cookie->id_lang), false);
 			$categories[1]['infos'] = array('name' => $this->l('Home'), 'id_parent' => 0, 'level_depth' => 0);
 			
 			$this->_html .= '
@@ -669,7 +669,7 @@ class Secuvad extends Module
 					<tr>
 						<td>'.htmlentities($payment['module_name'], ENT_QUOTES, 'UTF-8').'</td>
 						<td>
-						<select name="secuvad_payment_'.intval($payment['id_module']).'">
+						<select name="secuvad_payment_'.(int)($payment['id_module']).'">
 							<option>'.$this->l('Unknow').'</option>';
 				foreach ($this->_secuvad_code_payment as $code)
 					$this->_html .= '<option value="'.htmlentities($code['code'], ENT_QUOTES, 'UTF-8').'" '.(strtolower($payment['code']) == strtolower($code['code']) ? 'selected="selected"' : '').'>'.htmlentities($code['name'], ENT_QUOTES, 'UTF-8').'</option>';
@@ -705,18 +705,18 @@ class Secuvad extends Module
 					<tr>
 						<td>'.(!preg_match('/^0$/Ui', $carrier['name']) ? htmlentities($carrier['name'], ENT_QUOTES, 'UTF-8') : Configuration::get('PS_SHOP_NAME')).'</td>
 						<td>
-						<select name="secuvad_carrier_type_'.intval($carrier['id_carrier']).'">
+						<select name="secuvad_carrier_type_'.(int)($carrier['id_carrier']).'">
 							<option>---</option>';
 				foreach ($this->_secuvad_carrier_type as $carrier_type)
-					$this->_html .= '<option value="'.intval($carrier_type['transport_id']).'" '.($carrier['transport_id'] == $carrier_type['transport_id'] ? 'selected="selected"' : '').'>'.htmlentities($carrier_type['transport_name'], ENT_QUOTES, 'UTF-8').'</option>';
+					$this->_html .= '<option value="'.(int)($carrier_type['transport_id']).'" '.($carrier['transport_id'] == $carrier_type['transport_id'] ? 'selected="selected"' : '').'>'.htmlentities($carrier_type['transport_name'], ENT_QUOTES, 'UTF-8').'</option>';
 				$this->_html .= '
 						</select>
 						</td>
 						<td>
-						<select name="secuvad_carrier_delay_'.intval($carrier['id_carrier']).'">
+						<select name="secuvad_carrier_delay_'.(int)($carrier['id_carrier']).'">
 							<option>---</option>';
 				foreach ($this->_secuvad_carrier_delay as $carrier_delay)
-					$this->_html .= '<option value="'.intval($carrier_delay['transport_delay_id']).'" '.($carrier['transport_delay_id'] == $carrier_delay['transport_delay_id'] ? 'selected="selected"' : '').'>'.htmlentities($carrier_delay['transport_delay_name'], ENT_QUOTES, 'UTF-8').'</option>';
+					$this->_html .= '<option value="'.(int)($carrier_delay['transport_delay_id']).'" '.($carrier['transport_delay_id'] == $carrier_delay['transport_delay_id'] ? 'selected="selected"' : '').'>'.htmlentities($carrier_delay['transport_delay_name'], ENT_QUOTES, 'UTF-8').'</option>';
 				$this->_html .= '
 						</select>
 						</td>
@@ -856,8 +856,8 @@ class Secuvad extends Module
 			foreach ($this->_getSecuvadCategories() as $category)
 				$this->_html .= '
 				<li>
-					<input type="checkbox" name="'.($lock ? '' : 'categories[]').'" id="cat'.intval($category['category_id']).'" value="'.intval($category['category_id']).'" '.((is_array(Tools::getValue('categories')) AND in_array(intval($category['category_id']), Tools::getValue('categories'))) ? 'checked="checked"' : '').' '.($lock ? 'disabled="disabled"' : '').'/> <label for="cat'.intval($category['category_id']).'" class="t">'.htmlentities($category['category_name'], ENT_QUOTES, 'UTF-8').'</label>
-					'.(($lock AND is_array(Tools::getValue('categories')) AND in_array(intval($category['category_id']), Tools::getValue('categories'))) ? '<input type="hidden" name="categories[]" id="cat'.intval($category['category_id']).'" value="'.intval($category['category_id']).'"': '' ).'
+					<input type="checkbox" name="'.($lock ? '' : 'categories[]').'" id="cat'.(int)($category['category_id']).'" value="'.(int)($category['category_id']).'" '.((is_array(Tools::getValue('categories')) AND in_array((int)($category['category_id']), Tools::getValue('categories'))) ? 'checked="checked"' : '').' '.($lock ? 'disabled="disabled"' : '').'/> <label for="cat'.(int)($category['category_id']).'" class="t">'.htmlentities($category['category_name'], ENT_QUOTES, 'UTF-8').'</label>
+					'.(($lock AND is_array(Tools::getValue('categories')) AND in_array((int)($category['category_id']), Tools::getValue('categories'))) ? '<input type="hidden" name="categories[]" id="cat'.(int)($category['category_id']).'" value="'.(int)($category['category_id']).'"': '' ).'
 				</li>';
 			$this->_html .= '
 					</ul>
@@ -918,7 +918,7 @@ class Secuvad extends Module
 		$tab->name = $tabName;
 		$tab->class_name = $tabClass;
 		$tab->module = $this->name;
-		$tab->id_parent = intval($idTabParent);
+		$tab->id_parent = (int)($idTabParent);
 		if(!$tab->save())
 		return false;
 		return true;
@@ -963,7 +963,7 @@ class Secuvad extends Module
 		SELECT `message`, `date` 
 		FROM `'._DB_PREFIX_.'secuvad_logs` 
 		ORDER BY `date` DESC 
-		LIMIT '.intval($this->get_secuvad_nb_log_reportred()));
+		LIMIT '.(int)($this->get_secuvad_nb_log_reportred()));
 		foreach($res as $msg)
 			$report .= $msg['date']." : ".$msg['message']."\n\n";
 		mail($this->get_secuvad_contact(), $this->l('Error report').' idsecuvad='.$this->get_secuvad_id(), $report);
@@ -974,7 +974,7 @@ class Secuvad extends Module
 		$secuvad_status = Db::getInstance()->getValue('
 		SELECT `secuvad_status` 
 		FROM `'._DB_PREFIX_.'secuvad_order` 
-		WHERE `id_secuvad_order` = '.intval($id_secuvad_order));
+		WHERE `id_secuvad_order` = '.(int)($id_secuvad_order));
 		
 		if($secuvad_status == 0)
 			return false;
@@ -1068,8 +1068,8 @@ class Secuvad extends Module
 		SELECT c.`name`, c.`id_carrier` 
 		FROM `'._DB_PREFIX_.'carrier` c 
 		JOIN `'._DB_PREFIX_.'secuvad_assoc_transport` sat ON (sat.`id_carrier` = c.`id_carrier`) 
-		LEFT JOIN `'._DB_PREFIX_.'secuvad_transport` st ON (st.`transport_id` = sat.`transport_id` AND st.`id_lang` = '.intval($cookie->id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'secuvad_transport_delay` std ON (std.`transport_delay_id` = sat.`transport_delay_id` AND std.`id_lang`='.intval($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'secuvad_transport` st ON (st.`transport_id` = sat.`transport_id` AND st.`id_lang` = '.(int)($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'secuvad_transport_delay` std ON (std.`transport_delay_id` = sat.`transport_delay_id` AND std.`id_lang`='.(int)($cookie->id_lang).')
 		WHERE (st.`transport_id` IS NULL OR std.`transport_delay_id` IS NULL)
 		AND c.`deleted` = 0
 		AND c.`active` = 1
@@ -1116,7 +1116,7 @@ class Secuvad extends Module
 		JOIN `'._DB_PREFIX_.'category_lang` cl ON (cl.`id_category` = c.`id_category`) 
 		JOIN `'._DB_PREFIX_.'lang` l ON (l.`id_lang` = cl.`id_lang` AND l.`iso_code` = \'en\') 
 		JOIN `'._DB_PREFIX_.'secuvad_assoc_category` sac ON (sac.`id_category` = c.`id_category`)
-		LEFT JOIN `'._DB_PREFIX_.'secuvad_category` sc ON (sc.`category_id` = sac.`category_id` AND sc.`id_lang` = '.intval($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'secuvad_category` sc ON (sc.`category_id` = sac.`category_id` AND sc.`id_lang` = '.(int)($cookie->id_lang).')
 		WHERE sc.`category_id` IS NULL
 		');
 		if(count($module_not_assoc)>0)
@@ -1152,7 +1152,7 @@ class Secuvad extends Module
 				$url = 'https://'.Configuration::get('SECUVAD_LOGIN').':'.Configuration::get('SECUVAD_MDP').'@'.Configuration::get('SECUVAD_URL_PROD');			
 			$connection_obj = new Secuvad_connection($flux_xml, Configuration::get('SECUVAD_ID'),$url, $this);
 			$connection_obj->send_transaction();
-			Tools::redirectAdmin('index.php?tab=AdminOrders&confirm=1&id_order='.Tools::getValue('id_secuvad_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+			Tools::redirectAdmin('index.php?tab=AdminOrders&confirm=1&id_order='.Tools::getValue('id_secuvad_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 		}
 	}
 	
@@ -1192,7 +1192,7 @@ class Secuvad extends Module
 			$result = $connection_obj->report_fraud('impaye','impaye_report');
 			
 			if ($result == "true")
-				Tools::redirectAdmin('index.php?tab=AdminOrders&confirm=2&id_order='.Tools::getValue('id_secuvad_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+				Tools::redirectAdmin('index.php?tab=AdminOrders&confirm=2&id_order='.Tools::getValue('id_secuvad_order').'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 			else
 			{
 				if ($result == "Erreur de connexion")
@@ -1215,7 +1215,7 @@ class Secuvad extends Module
 			Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'secuvad_logs` 
 			ORDER BY `date` 
-			LIMIT '.intval($this->get_secuvad_log_size()));
+			LIMIT '.(int)($this->get_secuvad_log_size()));
 		Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'secuvad_logs` (`message`) 
 		VALUES (\''.pSQL($message).'\')

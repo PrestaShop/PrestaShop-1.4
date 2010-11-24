@@ -14,22 +14,22 @@ if (empty($token) === false)
 	if (empty($result) === true || $result === false)
 		$errors[] = Tools::displayError('Invalid wishlist token');
 	WishList::refreshWishList($wishlist['id_wishlist']);
-	$products = WishList::getProductByIdCustomer(intval($wishlist['id_wishlist']), intval($wishlist['id_customer']), intval($cookie->id_lang), null, true);
+	$products = WishList::getProductByIdCustomer((int)($wishlist['id_wishlist']), (int)($wishlist['id_customer']), (int)($cookie->id_lang), null, true);
 	for ($i = 0; $i < sizeof($products); ++$i)
 	{
-		$obj = new Product(intval($products[$i]['id_product']), false, intval($cookie->id_lang));
+		$obj = new Product((int)($products[$i]['id_product']), false, (int)($cookie->id_lang));
 		if (!Validate::isLoadedObject($obj))
 			continue;
 		else
 		{
 			if ($products[$i]['id_product_attribute'] != 0)
 			{
-				$combination_imgs = $obj->getCombinationImages(intval($cookie->id_lang));
+				$combination_imgs = $obj->getCombinationImages((int)($cookie->id_lang));
 				$products[$i]['cover'] = $obj->id.'-'.$combination_imgs[$products[$i]['id_product_attribute']][0]['id_image'];
 			}
 			else
 			{
-				$images = $obj->getImages(intval($cookie->id_lang));
+				$images = $obj->getImages((int)($cookie->id_lang));
 				foreach ($images AS $k => $image)
 				{
 					if ($image['cover'])
@@ -39,17 +39,17 @@ if (empty($token) === false)
 					}
 				}
 				if (!isset($products[$i]['cover']))
-					$products[$i]['cover'] = Language::getIsoById(intval($cookie->id_lang)).'-default';
+					$products[$i]['cover'] = Language::getIsoById((int)($cookie->id_lang)).'-default';
 			}
 		}
 	}
-	WishList::incCounter(intval($wishlist['id_wishlist']));
+	WishList::incCounter((int)($wishlist['id_wishlist']));
 	$ajax = Configuration::get('PS_BLOCK_CART_AJAX');
 	$smarty->assign(array (
 		'current_wishlist' => $wishlist,
 		'token' => $token,
-		'ajax' => ((isset($ajax) AND intval($ajax) == 1) ? '1' : '0'),
-		'wishlists' => WishList::getByIdCustomer(intval($wishlist['id_customer'])),
+		'ajax' => ((isset($ajax) AND (int)($ajax) == 1) ? '1' : '0'),
+		'wishlists' => WishList::getByIdCustomer((int)($wishlist['id_customer'])),
 		'products' => $products));
 }
 

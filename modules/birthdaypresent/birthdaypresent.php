@@ -33,8 +33,8 @@ class BirthdayPresent extends Module
 		
 		if (Tools::isSubmit('submitBirthday'))
 		{
-			Configuration::updateValue('BIRTHDAY_ACTIVE', intval(Tools::getValue('bp_active')));
-			Configuration::updateValue('BIRTHDAY_DISCOUNT_TYPE', intval(Tools::getValue('id_discount_type')));
+			Configuration::updateValue('BIRTHDAY_ACTIVE', (int)(Tools::getValue('bp_active')));
+			Configuration::updateValue('BIRTHDAY_DISCOUNT_TYPE', (int)(Tools::getValue('id_discount_type')));
 			Configuration::updateValue('BIRTHDAY_DISCOUNT_VALUE', floatval(Tools::getValue('discount_value')));
 			Configuration::updateValue('BIRTHDAY_MINIMAL_ORDER', floatval(Tools::getValue('minimal_order')));
 			Tools::redirectAdmin($currentIndex.'&configure=birthdaypresent&token='.Tools::getValue('token').'&conf=4');
@@ -53,9 +53,9 @@ class BirthdayPresent extends Module
 				<label>'.$this->l('Type').'</label>
 				<div class="margin-form">
 					<select name="id_discount_type">';
-		$discountTypes = Discount::getDiscountTypes(intval($cookie->id_lang));
+		$discountTypes = Discount::getDiscountTypes((int)($cookie->id_lang));
 		foreach ($discountTypes AS $discountType)
-			$this->_html .= '<option value="'.intval($discountType['id_discount_type']).'"'.((Configuration::get('BIRTHDAY_DISCOUNT_TYPE') == $discountType['id_discount_type']) ? ' selected="selected"' : '').'>'.$discountType['name'].'</option>';
+			$this->_html .= '<option value="'.(int)($discountType['id_discount_type']).'"'.((Configuration::get('BIRTHDAY_DISCOUNT_TYPE') == $discountType['id_discount_type']) ? ' selected="selected"' : '').'>'.$discountType['name'].'</option>';
 		$this->_html .= '
 					</select>
 				</div>
@@ -105,10 +105,10 @@ class BirthdayPresent extends Module
 		foreach ($users as $user)
 		{
 			$voucher = new Discount();
-			$voucher->id_customer = intval($user['id_customer']);
-			$voucher->id_discount_type = intval(Configuration::get('BIRTHDAY_DISCOUNT_TYPE'));
-			$voucher->name = 'BIRTHDAY-'.intval($voucher->id_customer).'-'.date('Y');
-			$voucher->description[intval(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Your birthday present !');
+			$voucher->id_customer = (int)($user['id_customer']);
+			$voucher->id_discount_type = (int)(Configuration::get('BIRTHDAY_DISCOUNT_TYPE'));
+			$voucher->name = 'BIRTHDAY-'.(int)($voucher->id_customer).'-'.date('Y');
+			$voucher->description[(int)(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Your birthday present !');
 			$voucher->value = Configuration::get('BIRTHDAY_DISCOUNT_VALUE');
 			$voucher->quantity = 1;
 			$voucher->quantity_per_user = 1;
@@ -119,7 +119,7 @@ class BirthdayPresent extends Module
 			$voucher->minimal = Configuration::get('BIRTHDAY_MINIMAL_ORDER');
 			$voucher->active = true;
 			if ($voucher->add())
-				Mail::Send(intval(Configuration::get('PS_LANG_DEFAULT')), 'birthday', Mail::l('Happy birthday!'), array('{firstname}' => $user['firstname'], '{lastname}' => $user['lastname']), $user['email'], NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				Mail::Send((int)(Configuration::get('PS_LANG_DEFAULT')), 'birthday', Mail::l('Happy birthday!'), array('{firstname}' => $user['firstname'], '{lastname}' => $user['lastname']), $user['email'], NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			else
 				echo Db::getInstance()->getMsgError();
 		}

@@ -85,10 +85,10 @@ class AdminTracking extends AdminTab
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
 				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
-				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($cookie->id_lang).')
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($cookie->id_lang).')
 				LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = pa.`id_product`)
-				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang`  = '.intval($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang`  = '.(int)($cookie->id_lang).')
 				LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (p.`id_manufacturer` = m.`id_manufacturer`)
 				WHERE pa.quantity <= 0
 				ORDER BY pa.`id_product_attribute`
@@ -151,25 +151,25 @@ class AdminTracking extends AdminTab
 				</tr>';
 			foreach ($this->_list['obj'] AS $k => $prod)
 			{
-				$product = new Product(intval($prod['id_product']));
-				$product->name = $product->name[intval($cookie->id_lang)];
-				$tax = new Tax(intval($product->id_tax));
+				$product = new Product((int)($prod['id_product']));
+				$product->name = $product->name[(int)($cookie->id_lang)];
+				$tax = new Tax((int)($product->id_tax));
 		
 				echo '
 				<tr>
 					<td>'.$product->id.'</td>
 					<td align="center">'.($product->manufacturer_name != NULL ? stripslashes($product->manufacturer_name) : '--').'</td>
 					<td>'.$product->reference.'</td>
-					<td><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.stripslashes($product->name).'</a></td>
+					<td><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($product->name).'</a></td>
 					<td>'.Tools::displayPrice($product->getPrice(), $currency).'</td>
-					<td>'.stripslashes($tax->name[intval($cookie->id_lang)]).'</td>
+					<td>'.stripslashes($tax->name[(int)($cookie->id_lang)]).'</td>
 					<td align="center">'.$product->quantity.'</td>
 					<td align="center">'.$product->weight.' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
-					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&status&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"><img src="../img/admin/'.($product->active ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
+					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'"><img src="../img/admin/'.($product->active ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
 					<td>
-						<a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+						<a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this product').'" /></a>&nbsp;
-						<a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Do you want to delete').' '.$product->name).' ?\');">
+						<a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Do you want to delete').' '.$product->name).' ?\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" /></a>
 					</td>
 				</tr>';
@@ -226,25 +226,25 @@ class AdminTracking extends AdminTab
 			foreach ($attributes AS $prod)
 			{
 				/*
-				$product = new Product(intval($prod['id_product']));
-				$product->name = $product->name[intval($cookie->id_lang)];*/
-				$tax = new Tax(intval($prod['id_tax']));
+				$product = new Product((int)($prod['id_product']));
+				$product->name = $product->name[(int)($cookie->id_lang)];*/
+				$tax = new Tax((int)($prod['id_tax']));
 		
 				echo '
 				<tr>
 					<td>'.$prod['id_product'].'</td>
 					<td align="center">'.($prod['manufacturer_name'] != NULL ? stripslashes($prod['manufacturer_name']) : '--').'</td>
 					<td>'.$prod['reference'].'</td>
-					<td><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.stripslashes($prod['name']).' ('.$prod['combination_name'].')'.'</a></td>
-					<td>'.Tools::displayPrice(Product::getPriceStatic(intval($prod['id_product']), true, $prod['id_product_attribute']), $currency).'</td>
-					<td>'.stripslashes($tax->name[intval($cookie->id_lang)]).'</td>
+					<td><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($prod['name']).' ('.$prod['combination_name'].')'.'</a></td>
+					<td>'.Tools::displayPrice(Product::getPriceStatic((int)($prod['id_product']), true, $prod['id_product_attribute']), $currency).'</td>
+					<td>'.stripslashes($tax->name[(int)($cookie->id_lang)]).'</td>
 					<td align="center">'.$prod['quantity'].'</td>
 					<td align="center">'.($prod['weight'] + $prod['product_weight']).' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
-					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"><img src="../img/admin/'.($prod['active'] ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
+					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'"><img src="../img/admin/'.($prod['active'] ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
 					<td>
-						<a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+						<a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this product').'" /></a>&nbsp;
-						<a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Do you want to delete').' '.$prod['name']).' ?\');">
+						<a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.addslashes($this->l('Do you want to delete').' '.$prod['name']).' ?\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" /></a>
 					</td>
 				</tr>';

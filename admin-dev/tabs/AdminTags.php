@@ -40,7 +40,7 @@ class AdminTags extends AdminTab
 	public function postProcess()
 	{		
 		if ($this->tabAccess['edit'] === '1' AND Tools::getValue('submitAdd'.$this->table))
-			if ($id = intval(Tools::getValue($this->identifier)) AND $obj = new $this->className($id) AND Validate::isLoadedObject($obj))
+			if ($id = (int)(Tools::getValue($this->identifier)) AND $obj = new $this->className($id) AND Validate::isLoadedObject($obj))
 				$obj->setProducts($_POST['products']);
 		return parent::postProcess();
 	}

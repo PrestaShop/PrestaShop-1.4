@@ -17,7 +17,7 @@ function set_payment_module_group()
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'module_group` (id_module, id_group)
-			SELECT '.intval($module['id_module']).', id_group FROM `'._DB_PREFIX_.'group`');
+			SELECT '.(int)($module['id_module']).', id_group FROM `'._DB_PREFIX_.'group`');
 		}
 		fclose($fd);
 	}

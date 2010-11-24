@@ -56,9 +56,9 @@ class Blocknewsletter extends Module
 
 		if (Tools::isSubmit('submitUpdate'))
 		{
-			if (isset($_POST['new_page']) AND Validate::isBool(intval($_POST['new_page'])))
+			if (isset($_POST['new_page']) AND Validate::isBool((int)($_POST['new_page'])))
 				Configuration::updateValue('NW_CONFIRMATION_NEW_PAGE', $_POST['new_page']);
-			if (isset($_POST['conf_email']) AND VAlidate::isBool(intval($_POST['conf_email'])))
+			if (isset($_POST['conf_email']) AND VAlidate::isBool((int)($_POST['conf_email'])))
 				Configuration::updateValue('NW_CONFIRMATION_EMAIL', pSQL($_POST['conf_email']));
 			if (!empty($_POST['voucher']) AND !Validate::isDiscountName($_POST['voucher']))
 				$this->_html .= '<div class="alert">'.$this->l('Voucher code is invalid').'</div>';
@@ -148,7 +148,7 @@ class Blocknewsletter extends Module
 			{
 				global $cookie;
 				if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'newsletter VALUES (\'\', \''.pSQL($_POST['email']).'\', NOW(), \''.pSQL(Tools::getRemoteAddr()).'\', 
-					(SELECT c.http_referer FROM '._DB_PREFIX_.'connections c WHERE c.id_guest = '.intval($cookie->id_guest).' ORDER BY c.date_add DESC LIMIT 1))'))
+					(SELECT c.http_referer FROM '._DB_PREFIX_.'connections c WHERE c.id_guest = '.(int)($cookie->id_guest).' ORDER BY c.date_add DESC LIMIT 1))'))
 					return $this->error = $this->l('Error during subscription');
 				$this->sendVoucher(pSQL($_POST['email']));
 				return $this->valid = $this->l('Subscription successful');
@@ -169,7 +169,7 @@ class Blocknewsletter extends Module
 		global $cookie;
 
 		if ($discount = Configuration::get('NW_VOUCHER_CODE'))
-			return Mail::Send(intval($cookie->id_lang), 'newsletter_voucher', Mail::l('Newsletter voucher'), array('{discount}' => $discount), $email, NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+			return Mail::Send((int)($cookie->id_lang), 'newsletter_voucher', Mail::l('Newsletter voucher'), array('{discount}' => $discount), $email, NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
 		return false;
 	}
 
@@ -195,8 +195,8 @@ class Blocknewsletter extends Module
 			}
 			elseif ($this->valid)
 			{
-				if (Configuration::get('NW_CONFIRMATION_EMAIL') AND isset($_POST['action']) AND intval($_POST['action']) == 0)
-					Mail::Send(intval($params['cookie']->id_lang), 'newsletter_conf', Mail::l('Newsletter confirmation'), array(), pSQL($_POST['email']), NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+				if (Configuration::get('NW_CONFIRMATION_EMAIL') AND isset($_POST['action']) AND (int)($_POST['action']) == 0)
+					Mail::Send((int)($params['cookie']->id_lang), 'newsletter_conf', Mail::l('Newsletter confirmation'), array(), pSQL($_POST['email']), NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
 				$smarty->assign(array('color' => 'green',
 										'msg' => $this->valid,
 										'nw_error' => false));

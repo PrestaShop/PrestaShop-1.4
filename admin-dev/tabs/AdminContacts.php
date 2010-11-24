@@ -58,7 +58,7 @@ class AdminContacts extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'name');
 		echo '		<p style="clear: both">'.$this->l('Contact name, e.g., Technical Support').'</p>
@@ -81,7 +81,7 @@ class AdminContacts extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<textarea name="description_'.$language['id_lang'].'" cols="36" rows="5">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+						<textarea name="description_'.$language['id_lang'].'" cols="36" rows="5">'.htmlentities($this->getFieldValue($obj, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'description');
 				echo '

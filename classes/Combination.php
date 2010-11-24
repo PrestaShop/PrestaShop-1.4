@@ -81,7 +81,7 @@ class CombinationCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = intval($this->id_product);
+		$fields['id_product'] = (int)($this->id_product);
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
@@ -90,9 +90,9 @@ class CombinationCore extends ObjectModel
 		$fields['wholesale_price'] = pSQL($this->wholesale_price);
 		$fields['price'] = pSQL($this->price);
 		$fields['ecotax'] = pSQL($this->ecotax);
-		$fields['quantity'] = intval($this->quantity);
+		$fields['quantity'] = (int)($this->quantity);
 		$fields['weight'] = pSQL($this->weight);
-		$fields['default_on'] = intval($this->default_on);
+		$fields['default_on'] = (int)($this->default_on);
 		return $fields;
 	}
 	
@@ -108,11 +108,11 @@ class CombinationCore extends ObjectModel
 		if (
 			Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
-				WHERE `id_product_attribute` = '.intval($this->id)) === false
+				WHERE `id_product_attribute` = '.(int)($this->id)) === false
 			||
 			Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'product_attribute_image`
-				WHERE `id_product_attribute` = '.intval($this->id)) === false
+				WHERE `id_product_attribute` = '.(int)($this->id)) === false
 			)
 			return false;
 		return true;

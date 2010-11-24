@@ -86,14 +86,14 @@ echo '
 				</script>
 				<select onchange="quickSelect(this);" id="quick_select">
 					<option value="0">'.translate('Quick access').'</option>';
-foreach (QuickAccess::getQuickAccesses(intval($cookie->id_lang)) AS $quick)
+foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) AS $quick)
 {
 	preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
 	if (isset($adminTab[1]))
 	{
 		if (strpos($adminTab[1], '&'))
 			$adminTab[1] = substr($adminTab[1], 0, strpos($adminTab[1], '&'));
-		$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].intval(Tab::getIdFromClassName($adminTab[1])).intval($cookie->id_employee));
+		$quick['link'] .= '&token='.Tools::getAdminToken($adminTab[1].(int)(Tab::getIdFromClassName($adminTab[1])).(int)($cookie->id_employee));
 	}
 	echo '<option value="'.$quick['link'].($quick['new_window'] ? '_blank' : '').'">&gt; '.$quick['name'].'</option>';
 }
@@ -108,8 +108,8 @@ echo '			</select>
 if (empty($tab))
 	echo '<div class="mainsubtablist" style="display:none"></div>';
 
-$id_parent_tab_current = intval(Tab::getCurrentParentId());
-$tabs = Tab::getTabs(intval($cookie->id_lang), 0);
+$id_parent_tab_current = (int)(Tab::getCurrentParentId());
+$tabs = Tab::getTabs((int)($cookie->id_lang), 0);
 $echoLis = '';
 $mainsubtablist = '';
 foreach ($tabs AS $t)
@@ -120,18 +120,18 @@ foreach ($tabs AS $t)
 			$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
 		echo '<li class="submenu_size '.($current ? 'active' : '').'" id="maintab'.$t['id_tab'].'">
-			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].intval($t['id_tab']).intval($cookie->id_employee)).'">
+			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].(int)($t['id_tab']).(int)($cookie->id_employee)).'">
 				<img src="'.$img.'" alt="" /> '.$t['name'].'
 			</a>
 		</li>';
 		$echoLi = '';
-		$subTabs = Tab::getTabs(intval($cookie->id_lang), intval($t['id_tab']));
+		$subTabs = Tab::getTabs((int)($cookie->id_lang), (int)($t['id_tab']));
 		foreach ($subTabs AS $t2)
 			if (checkTabRights($t2['id_tab']) === true)
 				$echoLi .= '<li><a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminTokenLite($t2['class_name']).'">'.$t2['name'].'</a></li>';
 		if ($current)
 			$mainsubtablist = $echoLi;
-		$echoLis .= '<div id="tab'.intval($t['id_tab']).'_subtabs" style="display:none">'.$echoLi.'</div>';
+		$echoLis .= '<div id="tab'.(int)($t['id_tab']).'_subtabs" style="display:none">'.$echoLi.'</div>';
 	}
 echo '		</ul>'.$echoLis;
 if ($employee->bo_uimode == 'hover')

@@ -20,7 +20,7 @@ class OrderSlipControllerCore extends FrontController
 	public function process()
 	{
 		parent::process();
-		$this->smarty->assign('ordersSlip', OrderSlip::getOrdersSlip(intval($this->cookie->id_customer)));
+		$this->smarty->assign('ordersSlip', OrderSlip::getOrdersSlip((int)($this->cookie->id_customer)));
 	}
 	
 	public function displayContent()

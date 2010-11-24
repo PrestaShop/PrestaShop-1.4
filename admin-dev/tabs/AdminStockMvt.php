@@ -52,7 +52,7 @@ class AdminStockMvt extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $dl, 'name');
 		echo '</div><div class="clear space">&nbsp;</div>';
@@ -86,7 +86,7 @@ class AdminStockMvt extends AdminTab
 					<td>'.$mvt['reason'].'</td>
 					<td>'.$mvt['employee'].'</td>
 					<td>#'.$mvt['id_order'].'</td>
-					<td>'.Tools::displayDate($mvt['date_add'], intval($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($mvt['date_add'], (int)($cookie->id_lang)).'</td>
 				</tr>';
 			}
 			echo '</table>';

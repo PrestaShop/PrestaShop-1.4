@@ -28,7 +28,7 @@ class Newsletter extends Module
 			$this->_postValid = array();
 
 			// Getting data...
-			$_countries = Country::getCountries(intval($cookie->id_lang));
+			$_countries = Country::getCountries((int)($cookie->id_lang));
 
 			// ...formatting array
 			$countries[0] = $this->l('All countries');
@@ -80,7 +80,7 @@ class Newsletter extends Module
 				else
 					$result = $this->_getBlockNewsletter();
 			}
-			if (!$nb = intval(Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows()))
+			if (!$nb = (int)(Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows()))
 				$this->_html .= $this->displayError($this->l('No customers were found with these filters !'));
 			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
 			{
@@ -107,9 +107,9 @@ class Newsletter extends Module
 		SELECT c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`, c.`ip_registration_newsletter`, c.`newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer` c
 		WHERE 1
-		'.((isset($_POST['SUSCRIBERS']) AND intval($_POST['SUSCRIBERS']) != 0) ? 'AND c.`newsletter` = '.intval($_POST['SUSCRIBERS'] - 1) : '').'
-		'.((isset($_POST['OPTIN']) AND intval($_POST['OPTIN']) != 0) ? 'AND c.`optin` = '.intval($_POST['OPTIN'] - 1) : '').'
-		'.((isset($_POST['COUNTRY']) AND intval($_POST['COUNTRY']) != 0) ? 'AND (SELECT COUNT(a.`id_address`) as nb_country FROM `'._DB_PREFIX_.'address` a WHERE a.`id_customer` = c.`id_customer` AND a.`id_country` = '.intval($_POST['COUNTRY']).') >= 1' : '').'
+		'.((isset($_POST['SUSCRIBERS']) AND (int)($_POST['SUSCRIBERS']) != 0) ? 'AND c.`newsletter` = '.(int)($_POST['SUSCRIBERS'] - 1) : '').'
+		'.((isset($_POST['OPTIN']) AND (int)($_POST['OPTIN']) != 0) ? 'AND c.`optin` = '.(int)($_POST['OPTIN'] - 1) : '').'
+		'.((isset($_POST['COUNTRY']) AND (int)($_POST['COUNTRY']) != 0) ? 'AND (SELECT COUNT(a.`id_address`) as nb_country FROM `'._DB_PREFIX_.'address` a WHERE a.`id_customer` = c.`id_customer` AND a.`id_country` = '.(int)($_POST['COUNTRY']).') >= 1' : '').'
 		GROUP BY c.`id_customer`');
 		$header = array('id_customer', 'lastname', 'firstname', 'email', 'ip_address', 'newsletter_date_add');
 		$result = (is_array($rq) ? array_merge(array($header), $rq) : $header);

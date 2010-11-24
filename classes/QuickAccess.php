@@ -37,7 +37,7 @@ class QuickAccessCore extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['link'] = pSQL($this->link);
-		$fields['new_window'] = intval($this->new_window);
+		$fields['new_window'] = (int)($this->new_window);
 		return $fields;
 	}
 	
@@ -62,7 +62,7 @@ class QuickAccessCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'quick_access` qa
-		LEFT JOIN `'._DB_PREFIX_.'quick_access_lang` qal ON (qa.`id_quick_access` = qal.`id_quick_access` AND qal.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'quick_access_lang` qal ON (qa.`id_quick_access` = qal.`id_quick_access` AND qal.`id_lang` = '.(int)($id_lang).')
 		ORDER BY `name` ASC');
 	}
 }

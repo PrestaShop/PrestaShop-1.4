@@ -101,12 +101,12 @@ class StatsCatalog extends Module
 			
 		$precalc2 = array();
 		foreach ($precalc as $array)
-			$precalc2[] = intval($array['id_product']);
+			$precalc2[] = (int)($array['id_product']);
 		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.name, pl.link_rewrite
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.id_lang = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.id_lang = '.(int)($id_lang).')
 		'.$this->_join.'
 		WHERE p.`active` = 1
 		'.(sizeof($precalc2) ? 'AND p.`id_product` NOT IN ('.implode(',', $precalc2).')' : '').'
@@ -117,13 +117,13 @@ class StatsCatalog extends Module
 	public function hookAdminStatsModules($params)
 	{
 		global $cookie;
-		$categories = Category::getCategories(intval($cookie->id_lang), true, false);
-		$productToken = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
+		$categories = Category::getCategories((int)($cookie->id_lang), true, false);
+		$productToken = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 		$currency = Currency::getCurrency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$link = new Link();
 		$irow = 0;
 		
-		if ($id_category = intval(Tools::getValue('id_category')))
+		if ($id_category = (int)(Tools::getValue('id_category')))
 		{
 			$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)';
 			$this->_where = 'AND cp.`id_category` = '.$id_category;
@@ -135,7 +135,7 @@ class StatsCatalog extends Module
 		$totalPictures = $result1['images'];
 		$averagePictures = $total ? $totalPictures / $total : 0;
 		
-		$neverBought = $this->getProductsNB(intval($cookie->id_lang));
+		$neverBought = $this->getProductsNB((int)($cookie->id_lang));
 		$totalNB = $neverBought['total'];
 		$productsNB = $neverBought['result'];
 		
@@ -168,16 +168,16 @@ class StatsCatalog extends Module
 			</div>
 			<div class="clear space"></div>
 			<table>
-				'.$this->returnLine($this->l('Products available:'), intval($total)).'
+				'.$this->returnLine($this->l('Products available:'), (int)($total)).'
 				'.$this->returnLine($this->l('Average price (base price):'), Tools::displayPrice($averagePrice, $currency)).'
-				'.$this->returnLine($this->l('Product pages viewed:'), intval($totalPageViewed)).'
-				'.$this->returnLine($this->l('Products bought:'), intval($totalBought)).'
+				'.$this->returnLine($this->l('Product pages viewed:'), (int)($totalPageViewed)).'
+				'.$this->returnLine($this->l('Products bought:'), (int)($totalBought)).'
 				'.$this->returnLine($this->l('Average number of page visits:'), number_format(floatval($averageViewed), 2, '.', '')).'
 				'.$this->returnLine($this->l('Average number of purchases:'), number_format(floatval($averagePurchase), 2, '.', '')).'
-				'.$this->returnLine($this->l('Images available:'), intval($totalPictures)).'
+				'.$this->returnLine($this->l('Images available:'), (int)($totalPictures)).'
 				'.$this->returnLine($this->l('Average number of images:'), number_format(floatval($averagePictures), 2, '.', '')).'
-				'.$this->returnLine($this->l('Products never viewed:'), intval($totalNV).' / '.intval($total)).'
-				'.$this->returnLine('<a style="cursor : pointer" onclick="openCloseLayer(\'pnb\')">'.$this->l('Products never bought:').'</a>', intval($totalNB).' / '.intval($total)).'
+				'.$this->returnLine($this->l('Products never viewed:'), (int)($totalNV).' / '.(int)($total)).'
+				'.$this->returnLine('<a style="cursor : pointer" onclick="openCloseLayer(\'pnb\')">'.$this->l('Products never bought:').'</a>', (int)($totalNB).' / '.(int)($total)).'
 				'.$this->returnLine($this->l('Conversion rate*:'), $conversion).'
 			</table>
 			<div style="margin-top: 20px;">

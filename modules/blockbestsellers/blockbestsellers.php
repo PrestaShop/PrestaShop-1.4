@@ -35,7 +35,7 @@ class BlockBestSellers extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBestSellers'))
 		{
-			Configuration::updateValue('PS_BLOCK_BESTSELLERS_DISPLAY', intval(Tools::getValue('always_display')));
+			Configuration::updateValue('PS_BLOCK_BESTSELLERS_DISPLAY', (int)(Tools::getValue('always_display')));
 			$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 		return $output.$this->displayForm();
@@ -63,14 +63,14 @@ class BlockBestSellers extends Module
 	public function hookRightColumn($params)
 	{
 		global $smarty;
-		$currency = new Currency(intval($params['cookie']->id_currency));
-		$bestsellers = ProductSale::getBestSalesLight(intval($params['cookie']->id_lang), 0, 5);
+		$currency = new Currency((int)($params['cookie']->id_currency));
+		$bestsellers = ProductSale::getBestSalesLight((int)($params['cookie']->id_lang), 0, 5);
 		if (!$bestsellers AND !Configuration::get('PS_BLOCK_BESTSELLERS_DISPLAY'))
 			return;
 		$best_sellers = array();
 		foreach ($bestsellers AS $bestseller)
 		{
-			$bestseller['price'] = Tools::displayPrice(Product::getPriceStatic(intval($bestseller['id_product'])), $currency);
+			$bestseller['price'] = Tools::displayPrice(Product::getPriceStatic((int)($bestseller['id_product'])), $currency);
 			$best_sellers[] = $bestseller;
 		}
 		$smarty->assign(array(

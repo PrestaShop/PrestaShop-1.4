@@ -187,14 +187,14 @@ class Hipay extends PaymentModule
 			elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
 			{
 				/* Paiement remboursé sur Hipay */
-				if (!($id_order = Order::getOrderByCartId(intval($id_cart))))
+				if (!($id_order = Order::getOrderByCartId((int)($id_cart))))
 					die(Tools::displayError());
-				$order = new Order(intval($id_order));
+				$order = new Order((int)($id_order));
 				if (!$order->valid OR $order->getCurrentState() === _PS_OS_REFUND_)
 					die(Tools::displayError());
 				$orderHistory = new OrderHistory();
-				$orderHistory->id_order = intval($order->id);
-				$orderHistory->changeIdOrderState(intval(_PS_OS_REFUND_), intval($id_order));
+				$orderHistory->id_order = (int)($order->id);
+				$orderHistory->changeIdOrderState((int)(_PS_OS_REFUND_), (int)($id_order));
 				$orderHistory->addWithemail();
 			}
 		}

@@ -107,7 +107,7 @@ class SEKeywords extends ModuleGraph
 			<br class="clear" />
 			<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 				'.$this->l('Filter by keyword').' <input type="text" name="SEK_FILTER_KW" value="'.Tools::htmlentitiesUTF8(Configuration::get('SEK_FILTER_KW')).'" />
-				'.$this->l('and min occurences').' <input type="text" name="SEK_MIN_OCCURENCES" value="'.intval(Configuration::get('SEK_MIN_OCCURENCES')).'" />
+				'.$this->l('and min occurences').' <input type="text" name="SEK_MIN_OCCURENCES" value="'.(int)(Configuration::get('SEK_MIN_OCCURENCES')).'" />
 				<input type="submit" class="button" name="submitSEK" value="'.$this->l('   Apply   ').'" />
 			</form>
 			<br class="clear" />'.$table;

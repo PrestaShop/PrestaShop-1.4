@@ -83,11 +83,11 @@ class ManufacturerCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_manufacturer'] = intval($this->id);
+			$fields['id_manufacturer'] = (int)($this->id);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 	
@@ -100,7 +100,7 @@ class ManufacturerCore extends ObjectModel
 		foreach ($languages as $language)
 		{		
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
-			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
+			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
 			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
 			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
 			
@@ -142,7 +142,7 @@ class ManufacturerCore extends ObjectModel
 		$result = true;
 		foreach ($selection AS $id)
 		{
-			$this->id = intval($id);
+			$this->id = (int)($id);
 			$this->id_address = self::getManufacturerAddress();
 			$result = $result AND $this->delete();
 		}
@@ -151,9 +151,9 @@ class ManufacturerCore extends ObjectModel
 
 	protected function getManufacturerAddress()
 	{
-		if (!intval($this->id))
+		if (!(int)($this->id))
 			return false;
-		$result = Db::GetInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.intval($this->id));
+		$result = Db::GetInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.(int)($this->id));
 		if (!$result)
 			return false;
 		return $result['id_address'];
@@ -174,9 +174,9 @@ class ManufacturerCore extends ObjectModel
 			$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$sql = 'SELECT m.*, ml.`description`';
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.(int)($id_lang).')
 		'.($active ? 'WHERE m.`active` = 1' : '');
-		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n) : '');
+		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n) : '');
 		$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if ($manufacturers === false)
 			return false;
@@ -187,20 +187,20 @@ class ManufacturerCore extends ObjectModel
 					SELECT p.`id_product`
 					FROM `'._DB_PREFIX_.'product` p
 					LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
-					WHERE m.`id_manufacturer` = '.intval($manufacturer['id_manufacturer']).
+					WHERE m.`id_manufacturer` = '.(int)($manufacturer['id_manufacturer']).
 					($all_group ? '' :
 					'
 					AND p.`id_product` IN (
 						SELECT cp.`id_product`
 						FROM `'._DB_PREFIX_.'category_group` cg
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$manufacturers[$key]['nb_products'] = sizeof($result);
 			}
 		for ($i = 0; $i < sizeof($manufacturers); $i++)
-			if (intval(Configuration::get('PS_REWRITING_SETTINGS')))
+			if ((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 				$manufacturers[$i]['link_rewrite'] = Tools::link_rewrite($manufacturers[$i]['name'], false);
 			else
 				$manufacturers[$i]['link_rewrite'] = 0;
@@ -226,7 +226,7 @@ class ManufacturerCore extends ObjectModel
 	{
 		if (!isset(self::$cacheName[$id_manufacturer]))
 			self::$cacheName[$id_manufacturer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `name` FROM `'._DB_PREFIX_.'manufacturer` WHERE `id_manufacturer` = '.intval($id_manufacturer).' AND `active` = 1');
+			SELECT `name` FROM `'._DB_PREFIX_.'manufacturer` WHERE `id_manufacturer` = '.(int)($id_manufacturer).' AND `active` = 1');
 		return self::$cacheName[$id_manufacturer];
 	}
 	
@@ -237,7 +237,7 @@ class ManufacturerCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'manufacturer`
 		WHERE `name` = \''.pSQL($name).'\'');
 		if (isset($result['id_manufacturer']))
-			return intval($result['id_manufacturer']);
+			return (int)($result['id_manufacturer']);
 		return false;
 	}
 	
@@ -263,36 +263,36 @@ class ManufacturerCore extends ObjectModel
 			$sql = '
 				SELECT p.`id_product`
 				FROM `'._DB_PREFIX_.'product` p
-				WHERE p.id_manufacturer = '.intval($id_manufacturer)
+				WHERE p.id_manufacturer = '.(int)($id_manufacturer)
 				.($active ? ' AND p.`active` = 1' : '').'
 				AND p.`id_product` IN (
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)';
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
-			return intval(sizeof($result));
+			return (int)(sizeof($result));
 		}
 		$sql = '
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
 			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice 
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
-		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
-		WHERE p.`id_manufacturer` = '.intval($id_manufacturer).($active ? ' AND p.`active` = 1' : '').'
+		WHERE p.`id_manufacturer` = '.(int)($id_manufacturer).($active ? ' AND p.`active` = 1' : '').'
 		AND p.`id_product` IN (
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.intval($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
-		LIMIT '.((intval($p) - 1) * intval($n)).','.intval($n);
+		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
 			return false;
@@ -306,8 +306,8 @@ class ManufacturerCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT p.`id_product`,  pl.`name`
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.intval($id_lang).')
-		WHERE p.`id_manufacturer` = '.intval($this->id));
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
+		WHERE p.`id_manufacturer` = '.(int)($this->id));
 	}
 	/*
 	* Specify if a manufacturer already in base
@@ -320,7 +320,7 @@ class ManufacturerCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_manufacturer`
 		FROM '._DB_PREFIX_.'manufacturer m
-		WHERE m.`id_manufacturer` = '.intval($id_manufacturer));
+		WHERE m.`id_manufacturer` = '.(int)($id_manufacturer));
 		
 		return isset($row['id_manufacturer']);
 	}
@@ -330,9 +330,9 @@ class ManufacturerCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT a.*, cl.name AS `country`, s.name AS `state`
 		FROM `'._DB_PREFIX_.'address` AS a
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` AS cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` AS cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'state` AS s ON (s.`id_state` = a.`id_state`)
-		WHERE `id_manufacturer` = '.intval($this->id).'
+		WHERE `id_manufacturer` = '.(int)($this->id).'
 		AND a.`deleted` = 0');
 	}
 }

@@ -11,7 +11,7 @@ if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 
 if ($cookie->isLogged())
 {
-	$id_wishlist = intval(Tools::getValue('id_wishlist'));
+	$id_wishlist = (int)(Tools::getValue('id_wishlist'));
 	if (empty($id_wishlist) === true)
 		exit(Tools::displayError('Invalid wishlist'));
 	for ($i = 1; empty($_POST['email'.strval($i)]) === false; ++$i)
@@ -23,9 +23,9 @@ if ($cookie->isLogged())
 		if (WishList::addEmail($id_wishlist, $to) === false)
 			exit(Tools::displayError('Wishlist send error'));
 		$toName = strval(Configuration::get('PS_SHOP_NAME'));
-		$customer = new Customer(intval($cookie->id_customer));
+		$customer = new Customer((int)($cookie->id_customer));
 		if (Validate::isLoadedObject($customer))
-			Mail::Send(intval($cookie->id_lang), 'wishlist', Mail::l('Message from ').$customer->lastname.' '.$customer->firstname,
+			Mail::Send((int)($cookie->id_lang), 'wishlist', Mail::l('Message from ').$customer->lastname.' '.$customer->firstname,
 			array(
 			'{lastname}' => $customer->lastname, 
 			'{firstname}' => $customer->firstname, 

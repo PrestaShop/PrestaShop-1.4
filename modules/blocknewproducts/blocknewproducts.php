@@ -34,12 +34,12 @@ class BlockNewProducts extends Module
 		{
 			if (!$productNbr = Tools::getValue('productNbr') OR empty($productNbr))
 				$output .= '<div class="alert error">'.$this->l('You should fill the "products displayed" field').'</div>';
-			elseif (intval($productNbr) == 0)
+			elseif ((int)($productNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else
 			{
-				Configuration::updateValue('PS_BLOCK_NEWPRODUCTS_DISPLAY', intval(Tools::getValue('always_display')));
-				Configuration::updateValue('NEW_PRODUCTS_NBR', intval($productNbr));
+				Configuration::updateValue('PS_BLOCK_NEWPRODUCTS_DISPLAY', (int)(Tools::getValue('always_display')));
+				Configuration::updateValue('NEW_PRODUCTS_NBR', (int)($productNbr));
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
 		}
@@ -53,7 +53,7 @@ class BlockNewProducts extends Module
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Products displayed').'</label>
 					<div class="margin-form">
-						<input type="text" name="productNbr" value="'.intval(Configuration::get('NEW_PRODUCTS_NBR')).'" />
+						<input type="text" name="productNbr" value="'.(int)(Configuration::get('NEW_PRODUCTS_NBR')).'" />
 						<p class="clear">'.$this->l('Set the number of products to be displayed in this block').'</p>
 					</div>
 					<label>'.$this->l('Always display block').'</label>
@@ -74,7 +74,7 @@ class BlockNewProducts extends Module
 	{
 		global $smarty;
 	
-		$newProducts = Product::getNewProducts(intval($params['cookie']->id_lang), 0, intval(Configuration::get('NEW_PRODUCTS_NBR')));
+		$newProducts = Product::getNewProducts((int)($params['cookie']->id_lang), 0, (int)(Configuration::get('NEW_PRODUCTS_NBR')));
 		if (!$newProducts AND !Configuration::get('PS_BLOCK_NEWPRODUCTS_DISPLAY'))
 			return;
 		$smarty->assign(array('new_products' => $newProducts, 'mediumSize' => Image::getSize('medium')));

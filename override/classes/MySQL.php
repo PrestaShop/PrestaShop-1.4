@@ -126,7 +126,7 @@ class MySQL extends MySQLCore
 		$this->_result = false;
 		if ($this->_link)
 		{
-			$query  = 'DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.intval($limit) : '');
+			$query  = 'DELETE FROM `'.pSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.(int)($limit) : '');
 
 			$this->count++;
 			$this->countTypes['delete']++;

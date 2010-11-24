@@ -65,7 +65,7 @@ class AdminCustomers extends AdminTab
 			$this->validateRules();
 			if (!sizeof($this->_errors))
 			{
-				$id = intval(Tools::getValue('id_'.$this->table));
+				$id = (int)(Tools::getValue('id_'.$this->table));
 				if (isset($id) AND !empty($id))
 				{
 					if ($this->tabAccess['edit'] !== '1')
@@ -121,7 +121,7 @@ class AdminCustomers extends AdminTab
 							$group_list = Tools::getValue('groupBox');
 							if (is_array($group_list) && sizeof($group_list) > 0)
 								$object->addGroups($group_list, true);
-							$parent_id = intval(Tools::getValue('id_parent', 1));
+							$parent_id = (int)(Tools::getValue('id_parent', 1));
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
 								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$this->token);
@@ -138,10 +138,10 @@ class AdminCustomers extends AdminTab
 			}
 		}
 		elseif (Tools::isSubmit('delete'.$this->table) AND $this->tabAccess['delete'] === '1')
-			Discount::deleteByIdCustomer(intval(Tools::getValue('id_customer')));
+			Discount::deleteByIdCustomer((int)(Tools::getValue('id_customer')));
 		elseif (Tools::isSubmit('submitDel'.$this->table) AND $this->tabAccess['delete'] === '1')
 			foreach (Tools::getValue('customerBox') as $id_customer)
-				Discount::deleteByIdCustomer(intval($id_customer));
+				Discount::deleteByIdCustomer((int)($id_customer));
 		return parent::postProcess();
 	}
 
@@ -151,8 +151,8 @@ class AdminCustomers extends AdminTab
 
 		$irow = 0;
 		$configurations = Configuration::getMultiple(array('PS_LANG_DEFAULT', 'PS_CURRENCY_DEFAULT'));
-		$defaultLanguage = intval($configurations['PS_LANG_DEFAULT']);
-		$defaultCurrency = intval($configurations['PS_CURRENCY_DEFAULT']);
+		$defaultLanguage = (int)($configurations['PS_LANG_DEFAULT']);
+		$defaultCurrency = (int)($configurations['PS_CURRENCY_DEFAULT']);
 		$customer = $this->loadObject();
 		$customerStats = $customer->getStats();
 		$addresses = $customer->getAddresses($defaultLanguage);
@@ -177,8 +177,8 @@ class AdminCustomers extends AdminTab
 			<img src="../img/admin/'.($customer->id_gender == 2 ? 'female' : ($customer->id_gender == 1 ? 'male' : 'unknown')).'.gif" style="margin-bottom: 5px" /><br />
 			<a href="mailto:'.$customer->email.'" style="text-decoration: underline; color: blue">'.$customer->email.'</a><br /><br />
 			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).($customer->dni != NULL ? ' | '.$this->l('DNI:').' '.$customer->dni : '').'<br />
-			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
-			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], intval($cookie->id_lang), true) : $this->l('never')).'<br />
+			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
+			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], (int)($cookie->id_lang), true) : $this->l('never')).'<br />
 			'.($countBetterCustomers != '-' ? $this->l('Rank: #').' '.(int)$countBetterCustomers.'<br />' : '').'
 		</fieldset>
 		<fieldset style="width:300px;float:left;margin-left:50px">
@@ -187,8 +187,8 @@ class AdminCustomers extends AdminTab
 			</div>
 			'.$this->l('Newsletter:').' '.($customer->newsletter ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
 			'.$this->l('Opt-in:').' '.($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
-			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, intval($cookie->id_lang)).')' : $this->l('unknown')).'<br /><br />
-			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, intval($cookie->id_lang), true).'<br />
+			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, (int)($cookie->id_lang)).')' : $this->l('unknown')).'<br /><br />
+			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, (int)($cookie->id_lang), true).'<br />
 			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
@@ -237,8 +237,8 @@ class AdminCustomers extends AdminTab
 			foreach ($messages AS $message)
 				echo '<tr>
 					<td>'.$message['status'].'</td>
-					<td><a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.intval($message['id_customer_thread']).'&viewcustomer_thread&token='.Tools::getAdminTokenLite('AdminCustomerThreads').'">'.substr(strip_tags(html_entity_decode($message['message'], ENT_NOQUOTES, 'UTF-8')), 0, 75).'...</a></td>
-					<td>'.Tools::displayDate($message['date_add'], intval($cookie->id_lang), true).'</td>
+					<td><a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.(int)($message['id_customer_thread']).'&viewcustomer_thread&token='.Tools::getAdminTokenLite('AdminCustomerThreads').'">'.substr(strip_tags(html_entity_decode($message['message'], ENT_NOQUOTES, 'UTF-8')), 0, 75).'...</a></td>
+					<td>'.Tools::displayDate($message['date_add'], (int)($cookie->id_lang), true).'</td>
 				</tr>';
 			echo '</table>
 			<div class="clear">&nbsp;</div>';
@@ -261,7 +261,7 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Name').'</th>
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenGroups = Tools::getAdminToken('AdminGroups'.intval(Tab::getIdFromClassName('AdminGroups')).intval($cookie->id_employee));
+			$tokenGroups = Tools::getAdminToken('AdminGroups'.(int)(Tab::getIdFromClassName('AdminGroups')).(int)($cookie->id_employee));
 			foreach ($groups AS $group)
 			{
 				$objGroup = new Group($group);
@@ -282,7 +282,7 @@ class AdminCustomers extends AdminTab
 			$totalOK = 0;
 			$ordersOK = array();
 			$ordersKO = array();
-			$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
 			foreach ($orders as $order)
 			if ($order['valid'])
 			{
@@ -309,9 +309,9 @@ class AdminCustomers extends AdminTab
 					foreach ($ordersOK AS $order)
 						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 						<td class="center">'.$order['id_order'].'</td>
-							<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang)).'</td>
+							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
 							<td align="right">'.$order['nb_products'].'</td>
-							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency(intval($order['id_currency']))).'</td>
+							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency((int)($order['id_currency']))).'</td>
 							<td>'.$order['payment'].'</td>
 							<td>'.$order['order_state'].'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
@@ -325,9 +325,9 @@ class AdminCustomers extends AdminTab
 						echo '
 						<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 							<td class="center">'.$order['id_order'].'</td>
-							<td>'.Tools::displayDate($order['date_add'], intval($cookie->id_lang)).'</td>
+							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
 							<td align="right">'.$order['nb_products'].'</td>
-							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency(intval($order['id_currency']))).'</td>
+							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency((int)($order['id_currency']))).'</td>
 							<td>'.$order['payment'].'</td>
 							<td>'.$order['order_state'].'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
@@ -349,11 +349,11 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Quantity').'</th>
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenOrders = Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee));
+			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
 			foreach ($products AS $product)
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'\'">
-					<td>'.Tools::displayDate($product['date_add'], intval($cookie->id_lang), true).'</td>
+					<td>'.Tools::displayDate($product['date_add'], (int)($cookie->id_lang), true).'</td>
 					<td>'.$product['product_name'].'</td>
 					<td align="right">'.$product['product_quantity'].'</td>
 					<td align="center"><a href="?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
@@ -375,7 +375,7 @@ class AdminCustomers extends AdminTab
 					<th>'.$this->l('Phone number(s)').'</th>
 					<th>'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenAddresses = Tools::getAdminToken('AdminAddresses'.intval(Tab::getIdFromClassName('AdminAddresses')).intval($cookie->id_employee));
+			$tokenAddresses = Tools::getAdminToken('AdminAddresses'.(int)(Tab::getIdFromClassName('AdminAddresses')).(int)($cookie->id_employee));
 			foreach ($addresses AS $address)
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
@@ -409,7 +409,7 @@ class AdminCustomers extends AdminTab
 					<th>'.$this->l('Status').'</th>
 					<th>'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenDiscounts = Tools::getAdminToken('AdminDiscounts'.intval(Tab::getIdFromClassName('AdminDiscounts')).intval($cookie->id_employee));
+			$tokenDiscounts = Tools::getAdminToken('AdminDiscounts'.(int)(Tab::getIdFromClassName('AdminDiscounts')).(int)($cookie->id_employee));
 			foreach ($discounts AS $discount)
 			{
 				echo '
@@ -447,17 +447,17 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Carrier').'</th>
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-			$tokenCarts = Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee));
+			$tokenCarts = Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee));
 			foreach ($carts AS $cart)
 			{
-				$cartI = new Cart(intval($cart['id_cart']));
+				$cartI = new Cart((int)($cart['id_cart']));
 				$summary = $cartI->getSummaryDetails();
-				$currency = new Currency(intval($cart['id_currency']));
-				$carrier = new Carrier(intval($cart['id_carrier']));
+				$currency = new Currency((int)($cart['id_currency']));
+				$carrier = new Carrier((int)($cart['id_carrier']));
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'\'">
 					<td class="center">'.sprintf('%06d', $cart['id_cart']).'</td>
-					<td>'.Tools::displayDate($cart['date_add'], intval($cookie->id_lang), true).'</td>
+					<td>'.Tools::displayDate($cart['date_add'], (int)($cookie->id_lang), true).'</td>
 					<td align="right">'.Tools::displayPrice($summary['total_price'], $currency).'</td>
 					<td>'.$carrier->name.'</td>
 					<td align="center"><a href="index.php?tab=AdminCarts&id_cart='.$cart['id_cart'].'&viewcart&token='.$tokenCarts.'"><img src="../img/admin/details.gif" /></a></td>
@@ -507,8 +507,8 @@ class AdminCustomers extends AdminTab
                 </tr>';
             foreach ($connections as $connection)
                 echo '<tr>
-                        <td>'.Tools::displayDate($connection['date_add'], intval($cookie->id_lang), true).'</td>
-                        <td>'.intval($connection['pages']).'</td>
+                        <td>'.Tools::displayDate($connection['date_add'], (int)($cookie->id_lang), true).'</td>
+                        <td>'.(int)($connection['pages']).'</td>
                         <td>'.$connection['time'].'</td>
                         <td>'.($connection['http_referer'] ? preg_replace('/^www./', '', parse_url($connection['http_referer'], PHP_URL_HOST)) : $this->l('Direct link')).'</td>
                         <td>'.$connection['ipaddress'].'</td>
@@ -525,7 +525,7 @@ class AdminCustomers extends AdminTab
                 </tr>';
             foreach ($referrers as $referrer)
                 echo '<tr>
-                        <td>'.Tools::displayDate($referrer['date_add'], intval($cookie->id_lang), true).'</td>
+                        <td>'.Tools::displayDate($referrer['date_add'], (int)($cookie->id_lang), true).'</td>
                         <td>'.$referrer['name'].'</td>
                     </tr>';
             echo '</table><div class="clear">&nbsp;</div>';
@@ -650,7 +650,7 @@ class AdminCustomers extends AdminTab
 				<div class="margin-form">
 					<select name="id_default_group" onchange="checkDefaultGroup(this.value);">';
 				foreach ($groups as $group)
-					echo '<option value="'.intval($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
+					echo '<option value="'.(int)($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
 				echo '
 					</select>
 					<p>'.$this->l('The group from which apply none cumulative rules (e.g., price display method, reduction)').'</p>
@@ -695,7 +695,7 @@ class AdminCustomers extends AdminTab
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
 	{
 		global $cookie;
-		return parent::getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+		return parent::getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 	}
 	
 	public function beforeDelete($object)

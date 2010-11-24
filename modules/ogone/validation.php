@@ -16,7 +16,7 @@ foreach ($neededVars AS $k)
 		$params .= $k.' : '.$_GET[$k].'<br />';
 
 /* Then, load the customer cart and perform some checks */
-$cart = new Cart(intval($_GET['orderID']));
+$cart = new Cart((int)($_GET['orderID']));
 if (Validate::isLoadedObject($cart))
 {
 	/* Fist, check for a valid SHA-1 signature */
@@ -52,7 +52,7 @@ if (Validate::isLoadedObject($cart))
 			case 7:
 			case 8:
 				// Payment canceled later
-				if ($id_order = intval(Order::getOrderByCartId(intval($_GET['orderID']))))
+				if ($id_order = (int)(Order::getOrderByCartId((int)($_GET['orderID']))))
 				{
 					// Update the amount really paid
 					$order = new Order($id_order);

@@ -65,12 +65,12 @@ abstract class DbCore
 		if ($master OR ($nServers = sizeof(self::$_servers)) == 1)
 			$idServer = 0;
 		else
-			$idServer = ($nServers > 2) ? rand(1, intval($nServers)) : 1;
+			$idServer = ($nServers > 2) ? rand(1, (int)($nServers)) : 1;
 		
 		if(!isset(self::$_instance[$idServer]))
-			self::$_instance[intval($idServer)] = new MySQL(self::$_servers[intval($idServer)]['server'], self::$_servers[intval($idServer)]['user'], self::$_servers[intval($idServer)]['password'], self::$_servers[intval($idServer)]['database']);
+			self::$_instance[(int)($idServer)] = new MySQL(self::$_servers[(int)($idServer)]['server'], self::$_servers[(int)($idServer)]['user'], self::$_servers[(int)($idServer)]['password'], self::$_servers[(int)($idServer)]['database']);
 		
-		return self::$_instance[intval($idServer)];
+		return self::$_instance[(int)($idServer)];
 	}
 
 	public function __destruct()
@@ -117,7 +117,7 @@ abstract class DbCore
 				$query .= '\''.$value.'\',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
-				$query .= ' LIMIT '.intval($limit);
+				$query .= ' LIMIT '.(int)($limit);
 			return $this->q($query);
 		}
 		elseif (strtoupper($type) == 'UPDATE')
@@ -129,7 +129,7 @@ abstract class DbCore
 			if ($where)
 				$query .= ' WHERE '.$where;
 			if ($limit)
-				$query .= ' LIMIT '.intval($limit);
+				$query .= ' LIMIT '.(int)($limit);
 			return $this->q($query);
 		}
 		
@@ -162,7 +162,7 @@ abstract class DbCore
 				$query .= (($value === '' OR $value === NULL) ? 'NULL' : '\''.$value.'\'').',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
-				$query .= ' LIMIT '.intval($limit);
+				$query .= ' LIMIT '.(int)($limit);
 			return $this->q($query);
 		}
 		elseif (strtoupper($type) == 'UPDATE')
@@ -174,7 +174,7 @@ abstract class DbCore
 			if ($where)
 				$query .= ' WHERE '.$where;
 			if ($limit)
-				$query .= ' LIMIT '.intval($limit);
+				$query .= ' LIMIT '.(int)($limit);
 			return $this->q($query);
 		}
 		

@@ -78,7 +78,7 @@ class StatsLive extends Module
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Customers online').'</legend>';
 		if ($totalCustomers)
 		{
-			echo $this->l('Total:').' '.intval($totalCustomers).'
+			echo $this->l('Total:').' '.(int)($totalCustomers).'
 			<table cellpadding="0" cellspacing="0" class="table space">
 				<tr><th>'.$this->l('ID').'</th><th>'.$this->l('Name').'</th><th>'.$this->l('Current Page').'</th><th>'.$this->l('View').'</th></tr>';
 			foreach ($customers as $customer)
@@ -88,7 +88,7 @@ class StatsLive extends Module
 					<td style="width: 200px;">'.$customer['firstname'].' '.$customer['lastname'].'</td>
 					<td style="width: 200px;">'.$customer['page'].'</td>
 					<td style="text-align: right; width: 25px;">
-						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" target="_blank">
+						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'" target="_blank">
 							<img src="../modules/'.$this->name.'/logo.gif" />
 						</a>
 					</td>
@@ -101,7 +101,7 @@ class StatsLive extends Module
 		<fieldset class="width3 space"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Visitors online').'</legend>';
 		if ($totalVisitors)
 		{
-			echo $this->l('Total:').' '.intval($totalVisitors).'
+			echo $this->l('Total:').' '.(int)($totalVisitors).'
 			<div style="overflow-y: scroll; height: 600px;">
 			<table cellpadding="0" cellspacing="0" class="table space">
 				<tr><th>'.$this->l('Guest').'</th><th>'.$this->l('IP').'</th><th>'.$this->l('Since').'</th><th>'.$this->l('Current page').'</th><th>'.$this->l('Referrer').'</th></tr>';

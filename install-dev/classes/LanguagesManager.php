@@ -65,13 +65,13 @@ class LanguageManager {
 	
 	private function setLanguage(){
 		if( isset($_GET['language']) AND Validate::isInt($_GET['language'])){
-			$id_lang = intval($_GET['language']);
+			$id_lang = (int)($_GET['language']);
 		}
 		if (!isset($id_lang)) {
 			$id_lang = ($this->getIdByHAL());
 		}
 		
-		$this->lang = $this->xml_file->lang[intval($id_lang)];
+		$this->lang = $this->xml_file->lang[(int)($id_lang)];
 		
 		
 	}

@@ -94,16 +94,16 @@ abstract class ObjectModelCore
 		/* Load object from database if object id is present */
 		if ($id)
 		{
-			if (!isset(self::$_cache[$this->table][intval($id)][intval($id_lang)]))
-				self::$_cache[$this->table][intval($id)][intval($id_lang)] = Db::getInstance()->getRow('
+			if (!isset(self::$_cache[$this->table][(int)($id)][(int)($id_lang)]))
+				self::$_cache[$this->table][(int)($id)][(int)($id_lang)] = Db::getInstance()->getRow('
 				SELECT *
 				FROM `'._DB_PREFIX_.$this->table.'` a '.
-				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.intval($id_lang).')' : '')
-				.' WHERE a.`'.$this->identifier.'` = '.intval($id));
+				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.(int)($id_lang).')' : '')
+				.' WHERE a.`'.$this->identifier.'` = '.(int)($id));
 
-			$result = self::$_cache[$this->table][intval($id)][intval($id_lang)];
+			$result = self::$_cache[$this->table][(int)($id)][(int)($id_lang)];
 			if (!$result) return false;
-			$this->id = intval($id);
+			$this->id = (int)($id);
 			foreach ($result AS $key => $value)
 				if (key_exists($key, $this))
 					$this->{$key} = stripslashes($value);
@@ -111,7 +111,7 @@ abstract class ObjectModelCore
 			/* Join multilingual tables */
 			if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
 			{
-				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.intval($id));
+				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.(int)($id));
 				if ($result)
 					foreach ($result as $row)
 						foreach ($row AS $key => $value)
@@ -138,7 +138,7 @@ abstract class ObjectModelCore
 	 */
 	public function save($nullValues = false, $autodate = true)
 	{
-		return intval($this->id) > 0 ? $this->update($nullValues) : $this->add($autodate, $nullValues);
+		return (int)($this->id) > 0 ? $this->update($nullValues) : $this->add($autodate, $nullValues);
 	}
 
 	/**
@@ -178,7 +178,7 @@ abstract class ObjectModelCore
 					foreach ($field AS $key => $value)
 					 	if (!Validate::isTableOrIdentifier($key))
 			 				die(Tools::displayError());
-					$field[$this->identifier] = intval($this->id);
+					$field[$this->identifier] = (int)($this->id);
 					$result = Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') && $result;
 				}
 		}
@@ -203,9 +203,9 @@ abstract class ObjectModelCore
 
 		/* Database update */
 		if ($nullValues)
-			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.intval($this->id));
+			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
 		else
-			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.intval($this->id));
+			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
 			return false;
 
@@ -219,10 +219,10 @@ abstract class ObjectModelCore
 				 	if (!Validate::isTableOrIdentifier($key))
 		 				die(Tools::displayError());
 				$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
-				'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
+				'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 				$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') :
 				Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
-				pSQL($this->identifier).'` = '.intval($this->id).' AND `id_lang` = '.intval($field['id_lang']));
+				pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 			}
 		}
 		return $result;
@@ -241,13 +241,13 @@ abstract class ObjectModelCore
 		$this->clearCache();
 		
 		/* Database deletion */
-		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
 			return false;
 
 		/* Database deletion for multilingual fields related to the object */
 		if (method_exists($this, 'getTranslationsFieldsChild'))
-			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		return $result;
 	}
 
@@ -263,7 +263,7 @@ abstract class ObjectModelCore
 		$result = true;
 		foreach ($selection AS $id)
 		{
-			$this->id = intval($id);
+			$this->id = (int)($id);
 			$result = $result AND $this->delete();
 		}
 		return $result;
@@ -284,13 +284,13 @@ abstract class ObjectModelCore
 	 		die(Tools::displayError());
 
 	 	/* Update active status on object */
-	 	$this->active = intval(!$this->active);
+	 	$this->active = (int)(!$this->active);
 	 	
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('
 		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
 		SET `active` = !`active`
-		WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 
 	/**
@@ -311,7 +311,7 @@ abstract class ObjectModelCore
 		foreach ($languages as $language)
 		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
-			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
+			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
 			foreach ($fieldsArray as $field)
 			{
 	 			/* Check fields validity */
@@ -366,7 +366,7 @@ abstract class ObjectModelCore
 	 */
 	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($this->fieldsRequiredLang as $fieldArray)
 		{
 			if (!is_array($this->{$fieldArray}))
@@ -586,7 +586,7 @@ abstract class ObjectModelCore
 	{
 		if ($all AND isset(self::$_cache[$this->table]))
 			unset(self::$_cache[$this->table]);
-		elseif (isset(self::$_cache[$this->table][intval($this->id)]))
+		elseif (isset(self::$_cache[$this->table][(int)($this->id)]))
 			unset(self::$_cache[$this->table][$this->id]);
 	}
 }

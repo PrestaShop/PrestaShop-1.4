@@ -104,32 +104,32 @@ class CustomerCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_customer'] = intval($this->id);
+			$fields['id_customer'] = (int)($this->id);
 		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['note'] = pSQL($this->note, true);
-		$fields['id_gender'] = intval($this->id_gender);
-		$fields['id_default_group'] = intval($this->id_default_group);
+		$fields['id_gender'] = (int)($this->id_gender);
+		$fields['id_default_group'] = (int)($this->id_default_group);
 		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['birthday'] = pSQL($this->birthday);
 		$fields['email'] = pSQL($this->email);
 		$fields['dni'] = pSQL($this->dni);
-		$fields['newsletter'] = intval($this->newsletter);
+		$fields['newsletter'] = (int)($this->newsletter);
 		$fields['newsletter_date_add'] = pSQL($this->newsletter_date_add);
 		$fields['ip_registration_newsletter'] = pSQL($this->ip_registration_newsletter);
-		$fields['optin'] = intval($this->optin);
+		$fields['optin'] = (int)($this->optin);
 		$fields['passwd'] = pSQL($this->passwd);
 		$fields['last_passwd_gen'] = pSQL($this->last_passwd_gen);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
-		$fields['deleted'] = intval($this->deleted);
+		$fields['deleted'] = (int)($this->deleted);
 		return $fields;
 	}
 
 	public function add($autodate = true, $nullValues = true)
 	{
-		$this->birthday = (empty($this->years) ? $this->birthday : intval($this->years).'-'.intval($this->months).'-'.intval($this->days));
+		$this->birthday = (empty($this->years) ? $this->birthday : (int)($this->years).'-'.(int)($this->months).'-'.(int)($this->days));
 		$this->secure_key = md5(uniqid(rand(), true));
 		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT').'minutes'));
 		$this->id_default_group = 1;
@@ -137,13 +137,13 @@ class CustomerCore extends ObjectModel
 		if (!$res)
 			return false;
 
-		$row = array('id_customer' => intval($this->id), 'id_group' => 1);
+		$row = array('id_customer' => (int)($this->id), 'id_group' => 1);
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 	}
 
 	public function update($nullValues = false)
 	{
-		$this->birthday = (empty($this->years) ? $this->birthday : intval($this->years).'-'.intval($this->months).'-'.intval($this->days));
+		$this->birthday = (empty($this->years) ? $this->birthday : (int)($this->years).'-'.(int)($this->months).'-'.(int)($this->days));
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
 		if ($this->dni === 0)
@@ -153,13 +153,13 @@ class CustomerCore extends ObjectModel
 	
 	public function delete()
 	{
-		$addresses = $this->getAddresses(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$addresses = $this->getAddresses((int)(Configuration::get('PS_LANG_DEFAULT')));
 		foreach ($addresses AS $address)
 		{
-			$obj = new Address(intval($address['id_address']));
+			$obj = new Address((int)($address['id_address']));
 			$obj->delete();
 		}
-		Discount::deleteByIdCustomer(intval($this->id));
+		Discount::deleteByIdCustomer((int)($this->id));
 		return parent::delete();
 	}
 
@@ -218,7 +218,7 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `id_customer` = \''.intval($id_customer).'\'
+		WHERE `id_customer` = \''.(int)($id_customer).'\'
 		AND active = 1
 		AND `deleted` = 0');
 		if (isset($result['id_customer']))
@@ -244,7 +244,7 @@ class CustomerCore extends ObjectModel
 		WHERE `email` = \''.pSQL($email).'\'');
 		
 		if ($return_id)
-			return intval($result['id_customer']);
+			return (int)($result['id_customer']);
 		else
 			return isset($result['id_customer']);
 	}
@@ -261,7 +261,7 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) AS total
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `email` = \''.pSQL($this->email).'\' AND `id_customer` != '.intval($this->id));
+		WHERE `email` = \''.pSQL($this->email).'\' AND `id_customer` != '.(int)($this->id));
 
 		return $result['total'];
 	}
@@ -278,8 +278,8 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_address`) AS ok
 		FROM `'._DB_PREFIX_.'address`
-		WHERE `id_customer` = '.intval($id_customer).'
-		AND `id_address` = '.intval($id_address).'
+		WHERE `id_customer` = '.(int)($id_customer).'
+		AND `id_address` = '.(int)($id_address).'
 		AND `deleted` = 0');
 
 		return $result['ok'];
@@ -299,7 +299,7 @@ class CustomerCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON (a.`id_country` = c.`id_country`)
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
 		LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = a.`id_state`)
-		WHERE `id_lang` = '.intval($id_lang).' AND `id_customer` = '.intval($this->id).' AND a.`deleted` = 0');
+		WHERE `id_lang` = '.(int)($id_lang).' AND `id_customer` = '.(int)($this->id).' AND a.`deleted` = 0');
 	}
 
 
@@ -314,9 +314,9 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `ip_address`, `date`
 		FROM `'._DB_PREFIX_.'connections`
-		WHERE `id_customer` = '.intval($this->id).'
+		WHERE `id_customer` = '.(int)($this->id).'
 		ORDER BY `date` DESC
-		LIMIT 0,'.intval($nb));
+		LIMIT 0,'.(int)($nb));
 	}
 
 	/**
@@ -330,7 +330,7 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(a.`id_address`) AS total
 		FROM `'._DB_PREFIX_.'address` a
-		WHERE a.`id_customer` = '.intval($id_customer).'
+		WHERE a.`id_customer` = '.(int)($id_customer).'
 		AND a.`deleted` = 0');
 
 		return $result['total'];
@@ -350,7 +350,7 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `id_customer` = '.intval($id_customer).' AND `passwd` = \''.pSQL($passwd).'\'');
+		WHERE `id_customer` = '.(int)($id_customer).' AND `passwd` = \''.pSQL($passwd).'\'');
 
 		return isset($result['id_customer']) ? $result['id_customer'] : false;
 	}
@@ -413,19 +413,19 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / o.`conversion_rate`) AS total_orders
 		FROM `'._DB_PREFIX_.'orders` o 
-		WHERE o.`id_customer` = '.intval($this->id).'
+		WHERE o.`id_customer` = '.(int)($this->id).'
 		AND o.valid = 1');
 
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT MAX(c.`date_add`) AS last_visit
 		FROM `'._DB_PREFIX_.'guest` g
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
-		WHERE g.`id_customer` = '.intval($this->id));
+		WHERE g.`id_customer` = '.(int)($this->id));
 
 		$result3 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT (YEAR(CURRENT_DATE)-YEAR(c.`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(c.`birthday`, 5)) AS age
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`id_customer` = '.intval($this->id));
+		WHERE c.`id_customer` = '.(int)($this->id));
 
 		$result['last_visit'] = $result2['last_visit'];
 		$result['age'] = $result3['age'] != date('Y') ? $result3['age'] : '--';
@@ -439,7 +439,7 @@ class CustomerCore extends ObjectModel
         FROM `'._DB_PREFIX_.'guest` g
         LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
         LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
-        WHERE g.`id_customer` = '.intval($this->id).'
+        WHERE g.`id_customer` = '.(int)($this->id).'
         GROUP BY c.`id_connections`
         ORDER BY c.date_add DESC
         LIMIT 10');
@@ -455,7 +455,7 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT MAX(c.`id_cart`) AS id_cart
 		FROM `'._DB_PREFIX_.'cart` c
-		WHERE c.`id_customer` = '.intval($this->id));
+		WHERE c.`id_customer` = '.(int)($this->id));
 		if (isset($result['id_cart']))
 			return $result['id_cart'];
 		return false;
@@ -469,7 +469,7 @@ class CustomerCore extends ObjectModel
 	// DEPRECATED
 	public function customerIdExists($id_customer)
 	{
-		return self::customerIdExistsStatic(intval($id_customer));
+		return self::customerIdExistsStatic((int)($id_customer));
 	}
 	
 	static public function customerIdExistsStatic($id_customer)
@@ -477,21 +477,21 @@ class CustomerCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM '._DB_PREFIX_.'customer c
-		WHERE c.`id_customer` = '.intval($id_customer));
+		WHERE c.`id_customer` = '.(int)($id_customer));
 		
 		return isset($row['id_customer']);
 	}
 	
 	public function cleanGroups()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($this->id));
 	}
 	
 	public function addGroups($groups)
 	{
 		foreach ($groups as $group)
 		{
-			$row = array('id_customer' => intval($this->id), 'id_group' => intval($group));
+			$row = array('id_customer' => (int)($this->id), 'id_group' => (int)($group));
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 		}
 	}
@@ -502,15 +502,15 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT cg.`id_group`
 		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.intval($id_customer));
+		WHERE cg.`id_customer` = '.(int)($id_customer));
 		foreach ($result AS $group)
-			$groups[] = intval($group['id_group']);
+			$groups[] = (int)($group['id_group']);
 		return $groups;
 	}
 	
 	public function getGroups()
 	{
-		return self::getGroupsStatic(intval($this->id));
+		return self::getGroupsStatic((int)($this->id));
 	}
 	
 	public function isUsed()
@@ -523,8 +523,8 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT count(cg.`id_group`) as nb
 		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.intval($this->id).'
-		AND cg.`id_group` = '.intval($id_group));
+		WHERE cg.`id_customer` = '.(int)($this->id).'
+		AND cg.`id_group` = '.(int)($id_group));
 		
 		return $result['nb'];
 	}
@@ -534,7 +534,7 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
-		WHERE o.valid = 1 AND o.`id_customer` = '.intval($this->id));
+		WHERE o.valid = 1 AND o.`id_customer` = '.(int)($this->id));
 	}
 	
 	public function getNeedDNI()
@@ -542,21 +542,21 @@ class CustomerCore extends ObjectModel
 		$countries = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_country` 
 		FROM `'._DB_PREFIX_.'address` 
-		WHERE `id_customer` = '.intval($this->id).' 
+		WHERE `id_customer` = '.(int)($this->id).' 
 		AND `deleted` = 0
 		');
 		
 		foreach($countries AS $country)
-			if (Country::getNeedIdentifcationNumber(intval($country['id_country'])))
+			if (Country::getNeedIdentifcationNumber((int)($country['id_country'])))
 				return true;
 		return false;
 	}
 
 	static public function getDefaultGroupId($id_customer)
 	{
-		if (!isset(self::$_defaultGroupId[intval($id_customer)]))
-			self::$_defaultGroupId[intval($id_customer)] = Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.intval($id_customer));
-		return self::$_defaultGroupId[intval($id_customer)];
+		if (!isset(self::$_defaultGroupId[(int)($id_customer)]))
+			self::$_defaultGroupId[(int)($id_customer)] = Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.(int)($id_customer));
+		return self::$_defaultGroupId[(int)($id_customer)];
 	}
 
 	static public function getCurrentCountry($id_customer)
@@ -564,11 +564,11 @@ class CustomerCore extends ObjectModel
 		global $cart;
 
 		if (!$cart OR !$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
-			$id_address = intval(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.intval($id_customer).' AND `deleted` = 0 ORDER BY `id`'));
+			$id_address = (int)(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.(int)($id_customer).' AND `deleted` = 0 ORDER BY `id`'));
 		else
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		$ids = Address::getCountryAndState($id_address);
-		return intval($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
 	}
 }
 

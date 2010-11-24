@@ -45,7 +45,7 @@ class AdminTaxes extends AdminTab
 		$tax_zones = $obj->getZones();
 		$zones = Zone::getZones(true);
 		$tax_states = $obj->getStates();
-		$states = State::getStates(intval($cookie->id_lang));
+		$states = State::getStates((int)($cookie->id_lang));
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
@@ -56,7 +56,7 @@ class AdminTaxes extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
@@ -105,7 +105,7 @@ class AdminTaxes extends AdminTab
 			$this->validateRules();
 			if (!sizeof($this->_errors))
 			{
-				$id = intval(Tools::getValue('id_'.$this->table));
+				$id = (int)(Tools::getValue('id_'.$this->table));
 
 				/* Object update */
 				if (isset($id) AND !empty($id))
@@ -182,7 +182,7 @@ class AdminTaxes extends AdminTab
 		$tax = new $this->className($id);
 		if (!Validate::isLoadedObject($tax))
 			die (Tools::displayError('object cannot be loaded'));
-		$states = State::getStates(intval($cookie->id_lang), true);
+		$states = State::getStates((int)($cookie->id_lang), true);
 		foreach ($states as $state)
 			if ($tax->getState($state['id_state']))
 			{

@@ -19,7 +19,7 @@ class LoyaltyStateModule extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_order_state'] = intval($this->id_order_state);
+		$fields['id_order_state'] = (int)($this->id_order_state);
 		return $fields;
 	}
 
@@ -43,7 +43,7 @@ class LoyaltyStateModule extends ObjectModel
 	static public function insertDefaultData()
 	{
 		$loyaltyModule = new Loyalty();
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		
 		$default = new LoyaltyStateModule(LoyaltyStateModule::getDefaultId());
 		$default->name[$defaultLanguage] = $loyaltyModule->getL('Awaiting validation');

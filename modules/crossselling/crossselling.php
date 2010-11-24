@@ -74,11 +74,11 @@ class CrossSelling extends Module
 		SELECT o.id_order
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON (od.id_order = o.id_order)
-		WHERE o.valid = 1 AND od.product_id = '.intval($params['product']->id));
+		WHERE o.valid = 1 AND od.product_id = '.(int)($params['product']->id));
 
 		$list = '';
 		foreach ($orders AS $order)
-			$list .= intval($order['id_order']).',';
+			$list .= (int)($order['id_order']).',';
 		$list = rtrim($list, ',');
 		
 		if ($list != '')
@@ -89,19 +89,19 @@ class CrossSelling extends Module
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = od.product_id)
 			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = od.product_id)
 			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = od.product_id)
-			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.intval($cookie->id_lang).' AND od.product_id != '.intval($params['product']->id).' AND i.cover = 1 AND p.active = 1
+			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.(int)($cookie->id_lang).' AND od.product_id != '.(int)($params['product']->id).' AND i.cover = 1 AND p.active = 1
 			ORDER BY RAND()
 			LIMIT 10');
 			
 			$taxes_calc = Product::getTaxCalculationMethod();
 			foreach ($orderProducts AS &$orderProduct)
 			{
-				$orderProduct['image'] = $link->getImageLink($orderProduct['link_rewrite'], intval($orderProduct['product_id']).'-'.intval($orderProduct['id_image']), 'medium');
-				$orderProduct['link'] = $link->getProductLink(intval($orderProduct['product_id']), $orderProduct['link_rewrite']);
+				$orderProduct['image'] = $link->getImageLink($orderProduct['link_rewrite'], (int)($orderProduct['product_id']).'-'.(int)($orderProduct['id_image']), 'medium');
+				$orderProduct['link'] = $link->getProductLink((int)($orderProduct['product_id']), $orderProduct['link_rewrite']);
 				if (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND ($taxes_calc == 0 OR $taxes_calc == 2))
-					$orderProduct['displayed_price'] = Product::getPriceStatic(intval($orderProduct['product_id']), true, NULL);
+					$orderProduct['displayed_price'] = Product::getPriceStatic((int)($orderProduct['product_id']), true, NULL);
 				elseif (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND $taxes_calc == 1)
-					$orderProduct['displayed_price'] = Product::getPriceStatic(intval($orderProduct['product_id']), false, NULL);
+					$orderProduct['displayed_price'] = Product::getPriceStatic((int)($orderProduct['product_id']), false, NULL);
 			}
 			
 			$smarty->assign(array(

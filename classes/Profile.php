@@ -50,7 +50,7 @@ class ProfileCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_profile`, `name`
 		FROM `'._DB_PREFIX_.'profile` p
-		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile` AND `id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile` AND `id_lang` = '.(int)($id_lang).')
 		ORDER BY `name` ASC');
 	}
 
@@ -67,22 +67,22 @@ class ProfileCore extends ObjectModel
 		SELECT `name` 
 		FROM `'._DB_PREFIX_.'profile` p 
 		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (p.`id_profile` = pl.`id_profile`) 
-		WHERE p.`id_profile` = '.intval($id_profile).'
-		AND pl.`id_lang` = '.intval($id_lang));
+		WHERE p.`id_profile` = '.(int)($id_profile).'
+		AND pl.`id_lang` = '.(int)($id_lang));
 	}
 
 	
 	public function add($autodate = true, $nullValues = false)
 	{
 	 	if (parent::add($autodate, true))
-			return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'access (SELECT '.intval($this->id).', id_tab, 0, 0, 0, 0 FROM '._DB_PREFIX_.'tab)');
+			return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'access (SELECT '.(int)($this->id).', id_tab, 0, 0, 0, 0 FROM '._DB_PREFIX_.'tab)');
 		return false;
 	}
 	
 	public function delete()
 	{
 	 	if (parent::delete())
-	 	 	return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'access` WHERE `id_profile` = '.intval($this->id));
+	 	 	return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'access` WHERE `id_profile` = '.(int)($this->id));
 		return false;
 	}
 
@@ -92,7 +92,7 @@ class ProfileCore extends ObjectModel
 	 	return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `view`, `add`, `edit`, `delete`
 		FROM `'._DB_PREFIX_.'access`
-		WHERE `id_profile` = '.intval($id_profile).' AND `id_tab` = '.intval($id_tab));
+		WHERE `id_profile` = '.(int)($id_profile).' AND `id_tab` = '.(int)($id_tab));
 	}
 
 	public static function getProfileAccesses($id_profile)
@@ -101,7 +101,7 @@ class ProfileCore extends ObjectModel
 	 	$accesses = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'access`
-		WHERE `id_profile` = '.intval($id_profile));
+		WHERE `id_profile` = '.(int)($id_profile));
 
 	 	$result = array();
 		foreach($accesses AS $access) {

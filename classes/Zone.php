@@ -36,7 +36,7 @@ class ZoneCore extends ObjectModel
 		parent::validateFields();
 		
 		$fields['name'] = pSQL($this->name);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		
 		return $fields;
 	}

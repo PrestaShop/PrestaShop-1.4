@@ -31,9 +31,9 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 			if (isset($cookie) OR is_object($cookie))
 			{
 			
-				if (saveOrderShippingDetails(intval($cookie->id_cart),intval($return['TRCLIENTNUMBER']),$return))
+				if (saveOrderShippingDetails((int)($cookie->id_cart),(int)($return['TRCLIENTNUMBER']),$return))
 				{	
-					$cart->id_carrier = intval($_POST['TRPARAMPLUS']);
+					$cart->id_carrier = (int)($_POST['TRPARAMPLUS']);
 					if($return['DELIVERYMODE'] == 'RDV')
 					{
 						$products = $cart->getProducts(false);
@@ -92,14 +92,14 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 						  'RDV' => 'Livraison sur Rendez-vous');
 				  
 	$db = Db::getInstance();
-	$db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart = '.intval($idCart).' AND id_customer ='.intval($idCustomer));
-	$numRows = intval($db->NumRows());
+	$db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart = '.(int)($idCart).' AND id_customer ='.(int)($idCustomer));
+	$numRows = (int)($db->NumRows());
 	if ($numRows == 0)
 	{	
 		$sql = 'INSERT INTO '._DB_PREFIX_.'socolissimo_delivery_info
 										( `id_cart`, `id_customer`, `delivery_mode`, `prid`, `prname`, `prfirstname`, `prcompladress`, 
 										`pradress1`, `pradress2`, `pradress3`, `pradress4`, `przipcode`, `prtown`, `cephonenumber`, `ceemail` , `cecompanyname`, `cedeliveryinformation`, `cedoorcode1`, `cedoorcode2`) 
-										VALUES ('.intval($idCart).','.intval($idCustomer).',';
+										VALUES ('.(int)($idCart).','.(int)($idCustomer).',';
 		if ($soParams['DELIVERYMODE'] != 'DOM' AND $soParams['DELIVERYMODE'] != 'RDV')
 			$sql .= '\''.pSQL($soParams['DELIVERYMODE']).'\''.',
 					'.(isset($soParams['PRID']) ? '\''.pSQL($soParams['PRID']).'\'' : '').',
@@ -182,7 +182,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					(isset($soParams['CEDOORCODE2']) ? $values['cedoorcode2'] = pSQL($soParams['CEDOORCODE2']) : '');
 					(isset($soParams['TRADERCOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['TRADERCOMPANYNAME']) : '');
 		}
-		$where = ' `id_cart` =\''.intval($idCart).'\' AND `id_customer` =\''.intval($idCustomer).'\'';
+		$where = ' `id_cart` =\''.(int)($idCart).'\' AND `id_customer` =\''.(int)($idCustomer).'\'';
 				
 		if (Db::getInstance()->autoExecute($table, $values, 'UPDATE', $where))
 			return true;

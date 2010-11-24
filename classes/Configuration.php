@@ -91,8 +91,8 @@ class ConfigurationCore extends ObjectModel
 	 	if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
 
-		if ($id_lang AND isset(self::$_CONF_LANG[intval($id_lang)][$key]))
-			return self::$_CONF_LANG[intval($id_lang)][$key];
+		if ($id_lang AND isset(self::$_CONF_LANG[(int)($id_lang)][$key]))
+			return self::$_CONF_LANG[(int)($id_lang)][$key];
 		elseif (key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
 		return false;
@@ -116,7 +116,7 @@ class ConfigurationCore extends ObjectModel
 		else
 			/* Add multilingual values */
 			foreach ($values as $k => $value)
-				self::$_CONF_LANG[intval($k)][$key] = $value;
+				self::$_CONF_LANG[(int)($k)][$key] = $value;
 	}
 
 	/**
@@ -155,8 +155,8 @@ class ConfigurationCore extends ObjectModel
 		}
 		elseif (key_exists($id_lang, self::$_CONF_LANG))
 			foreach ($keys AS $key)
-				if (key_exists($key, self::$_CONF_LANG[intval($id_lang)]))
-					$resTab[$key] = self::$_CONF_LANG[intval($id_lang)][$key];
+				if (key_exists($key, self::$_CONF_LANG[(int)($id_lang)]))
+					$resTab[$key] = self::$_CONF_LANG[(int)($id_lang)][$key];
 		return $resTab;
 	}
 
@@ -238,14 +238,14 @@ class ConfigurationCore extends ObjectModel
 				$conf = $db->getRow('SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
 			}
 			/* ... then add multilingual values into configuration_lang table */
-			if (!array_key_exists('id_configuration', $conf) OR !intval($conf['id_configuration']))
+			if (!array_key_exists('id_configuration', $conf) OR !(int)($conf['id_configuration']))
 				return false;
 			foreach ($values as $id_lang => $value)
 			{
 				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`)
-										VALUES ('.$conf['id_configuration'].', '.intval($id_lang).', \''.pSQL($value, $html).'\', NOW())
+										VALUES ('.$conf['id_configuration'].', '.(int)($id_lang).', \''.pSQL($value, $html).'\', NOW())
 										ON DUPLICATE KEY UPDATE `value` = \''.pSQL($value, $html).'\', `date_upd` = NOW()');
-				self::$_CONF_LANG[intval($id_lang)][$key] = $value;
+				self::$_CONF_LANG[(int)($id_lang)][$key] = $value;
 			}
 		}
 		return $result;
@@ -269,7 +269,7 @@ class ConfigurationCore extends ObjectModel
 		if ($result === false)
 			die(Tools::displayError('Invalid loadConfiguration() SQL query!'));
 		foreach ($result AS $row)
-			self::$_CONF_LANG[intval($row['id_lang'])][$row['name']] = $row['value'];
+			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = $row['value'];
 	}
 }
 

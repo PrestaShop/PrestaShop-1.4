@@ -45,18 +45,18 @@ class AdminSuppliers extends AdminTab
 		$supplier = $this->loadObject();		
 		echo '<h2>'.$supplier->name.'</h2>';
 		
-		$products = $supplier->getProductsLite(intval($cookie->id_lang));
+		$products = $supplier->getProductsLite((int)($cookie->id_lang));
 		echo '<h3>'.$this->l('Total products:').' '.sizeof($products).'</h3>';
 		foreach ($products AS $product)
 		{
-			$product = new Product($product['id_product'], false, intval($cookie->id_lang));
+			$product = new Product($product['id_product'], false, (int)($cookie->id_lang));
 			echo '<hr />';
 			if (!$product->hasAttributes())
 			{
 				echo '
 				<table border="0" cellpadding="0" cellspacing="0" class="table width3">
 					<tr>
-						<th><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></th>
+						<th><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></th>
 						'.(!empty($product->reference) ? '<th width="150">'.$this->l('Ref:').' '.$product->reference.'</th>' : '').'
 						'.(!empty($product->ean13) ? '<th width="120">'.$this->l('EAN13:').' '.$product->ean13.'</th>' : '').'
 						'.(!empty($product->upc) ? '<th width="120">'.$this->l('UPC:').' '.$product->upc.'</th>' : '').'
@@ -67,7 +67,7 @@ class AdminSuppliers extends AdminTab
 			else
 			{
 				echo '
-				<h3><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></h3>
+				<h3><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" target="_blank">'.$product->name.'</a></h3>
 				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
 	                	<tr>
 		                    <th>'.$this->l('Attribute name').'</th>
@@ -77,7 +77,7 @@ class AdminSuppliers extends AdminTab
 		                   '.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="40">'.$this->l('Quantity').'</th>' : '').'
 	                	</tr>';
 			     	/* Build attributes combinaisons */
-				$combinaisons = $product->getAttributeCombinaisons(intval($cookie->id_lang));
+				$combinaisons = $product->getAttributeCombinaisons((int)($cookie->id_lang));
 				foreach ($combinaisons AS $k => $combinaison)
 				{
 					$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];
@@ -130,7 +130,7 @@ class AdminSuppliers extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p class="clear">'.$this->l('Will appear in supplier list').'</p>
 					</div>';							
@@ -148,7 +148,7 @@ class AdminSuppliers extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="smeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'smeta_title');
@@ -158,7 +158,7 @@ class AdminSuppliers extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '<div id="smeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'smeta_description');
@@ -169,7 +169,7 @@ class AdminSuppliers extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="smeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($supplier, 'meta_keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'smeta_keywords');
@@ -193,13 +193,13 @@ class AdminSuppliers extends AdminTab
 	public function afterImageUpload()
 	{
 		/* Generate image with differents size */
-		if (($id_supplier = intval(Tools::getValue('id_supplier'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_SUPP_IMG_DIR_.$id_supplier.'.jpg'))
+		if (($id_supplier = (int)(Tools::getValue('id_supplier'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_SUPP_IMG_DIR_.$id_supplier.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('suppliers');
 			foreach ($imagesTypes AS $k => $imageType)
 			{
 				$file = _PS_SUPP_IMG_DIR_.$id_supplier.'.jpg';
-				imageResize($file, _PS_SUPP_IMG_DIR_.$id_supplier.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+				imageResize($file, _PS_SUPP_IMG_DIR_.$id_supplier.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 			}
 		}
 	}

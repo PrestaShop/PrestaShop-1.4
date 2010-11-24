@@ -83,12 +83,12 @@ class AdminImages extends AdminTab
 				</div>
 				<label>'.$this->l('Width:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="5" name="width" value="'.intval($this->getFieldValue($obj, 'width')).'" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="5" name="width" value="'.(int)($this->getFieldValue($obj, 'width')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Maximum image width in pixels').'</p>
 				</div>
 				<label>'.$this->l('Height:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="5" name="height" value="'.intval($this->getFieldValue($obj, 'height')).'" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="5" name="height" value="'.(int)($this->getFieldValue($obj, 'height')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Maximum image height in pixels').'</p>
 				</div>
 				<label>'.$this->l('Products:').' </label>
@@ -233,7 +233,7 @@ class AdminImages extends AdminTab
 						if ($imageType['name'] == 'thumb_scene')
 							$newDir .= 'thumbs/';
 						if (!file_exists($newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg'))
-							if (!imageResize($dir.$image, $newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+							if (!imageResize($dir.$image, $newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 								$errors = true;
 						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
 							return 'timeout';
@@ -247,7 +247,7 @@ class AdminImages extends AdminTab
 					foreach ($type AS $k => $imageType)
 					{
 						if (!file_exists($dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg'))
-							if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+							if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 								$errors = true;
 						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
 							return 'timeout';
@@ -265,9 +265,9 @@ class AdminImages extends AdminTab
 			{
 				$file = $dir.$language['iso_code'].'.jpg';
 				if (!file_exists($file))
-					$file = _PS_PROD_IMG_DIR_.Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
+					$file = _PS_PROD_IMG_DIR_.Language::getIsoById((int)(Configuration::get('PS_LANG_DEFAULT'))).'.jpg';
 				if (!file_exists($dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg'))
-					if (!imageResize($file, $dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height'])))
+					if (!imageResize($file, $dir.$language['iso_code'].'-default-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 						$errors = true;
 			}
 		return $errors;

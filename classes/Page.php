@@ -26,8 +26,8 @@ class PageCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_page_type'] = intval($this->id_page_type);
-		$fields['id_object'] = intval($this->id_object);
+		$fields['id_page_type'] = (int)($this->id_page_type);
+		$fields['id_object'] = (int)($this->id_object);
 		return $fields;
 	}
 	
@@ -49,7 +49,7 @@ class PageCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'page` p
 			LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.`id_page_type` = pt.`id_page_type`
 			WHERE pt.`name` = \''.pSQL($phpSelf).'\'
-			AND p.`id_object` = '.intval($id_object));
+			AND p.`id_object` = '.(int)($id_object));
 			if ($result['id_page'])
 				return $result['id_page'];
 			else
@@ -57,7 +57,7 @@ class PageCore extends ObjectModel
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'page` (`id_page_type`,`id_object`)
 				VALUES ((SELECT pt.`id_page_type` FROM `'._DB_PREFIX_.'page_type` pt WHERE pt.`name` = \''.pSQL($phpSelf).'\'),
-						'.intval($id_object).')');
+						'.(int)($id_object).')');
 				return Db::getInstance()->Insert_ID();
 			}
 		}
@@ -77,7 +77,7 @@ class PageCore extends ObjectModel
 				VALUES (\''.pSQL($phpSelf).'\')');
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'page` (`id_page_type`)
-				VALUES ('.intval(Db::getInstance()->Insert_ID()).')');
+				VALUES ('.(int)(Db::getInstance()->Insert_ID()).')');
 				return Db::getInstance()->Insert_ID();
 			}
 		}
@@ -91,14 +91,14 @@ class PageCore extends ObjectModel
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'page_viewed`
 		SET `counter` = `counter` + 1
-		WHERE `id_date_range` = '.intval($id_date_range).'
-		AND `id_page` = '.intval($id_page));
+		WHERE `id_date_range` = '.(int)($id_date_range).'
+		AND `id_page` = '.(int)($id_page));
 		
 		// If no one has seen the page in this date range, it is added
 		if (Db::getInstance()->Affected_Rows() == 0)
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'page_viewed` (`id_date_range`,`id_page`,`counter`)
-			VALUES ('.intval($id_date_range).','.intval($id_page).',1)');
+			VALUES ('.(int)($id_date_range).','.(int)($id_page).',1)');
 	}
 }
 

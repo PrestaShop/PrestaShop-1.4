@@ -49,15 +49,15 @@ class AuthControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('invalid password');
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
-			$zip_code_format = Country::getZipCodeFormat(intval(Tools::getValue('id_country')));
-			if (Country::getNeedZipCode(intval(Tools::getValue('id_country'))))
+			$zip_code_format = Country::getZipCodeFormat((int)(Tools::getValue('id_country')));
+			if (Country::getNeedZipCode((int)(Tools::getValue('id_country'))))
 			{
 				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
 				{
 					$zip_regexp = '/^'.$zip_code_format.'$/ui';
 					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-					$zip_regexp = str_replace('C', Country::getIsoById(intval(Tools::getValue('id_country'))), $zip_regexp);
+					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
 						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
 				}
@@ -88,7 +88,7 @@ class AuthControllerCore extends FrontController
 					$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 				}
 
-				$customer->birthday = (empty($_POST['years']) ? '' : intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']));
+				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
 				/* Customer and address, same fields, caching data */
 				$addrLastname = isset($_POST['lastname']) ? $_POST['lastname'] : $_POST['customer_lastname'];
@@ -105,7 +105,7 @@ class AuthControllerCore extends FrontController
 				{
 					if (!$country = new Country($address->id_country, Configuration::get('PS_LANG_DEFAULT')) OR !Validate::isLoadedObject($country))
 						die(Tools::displayError());
-					if (intval($country->contains_states) AND !intval($address->id_state))
+					if ((int)($country->contains_states) AND !(int)($address->id_state))
 						$this->errors[] = Tools::displayError('this country require a state selection');
 					else
 					{
@@ -114,16 +114,16 @@ class AuthControllerCore extends FrontController
 							$this->errors[] = Tools::displayError('an error occurred while creating your account');
 						else
 						{
-							$address->id_customer = intval($customer->id);
+							$address->id_customer = (int)($customer->id);
 							if (!$address->add())
 								$this->errors[] = Tools::displayError('an error occurred while creating your address');
 							else
 							{
-								if (!Mail::Send(intval($this->cookie->id_lang), 'account', Mail::l('Welcome!'),
+								if (!Mail::Send((int)($this->cookie->id_lang), 'account', Mail::l('Welcome!'),
 								array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 									$this->errors[] = Tools::displayError('cannot send email');
 								$this->smarty->assign('confirmation', 1);
-								$this->cookie->id_customer = intval($customer->id);
+								$this->cookie->id_customer = (int)($customer->id);
 								$this->cookie->customer_lastname = $customer->lastname;
 								$this->cookie->customer_firstname = $customer->firstname;
 								$this->cookie->passwd = $customer->passwd;
@@ -167,14 +167,14 @@ class AuthControllerCore extends FrontController
 					$this->errors[] = Tools::displayError('authentication failed');
 				else
 				{
-					$this->cookie->id_customer = intval($customer->id);
+					$this->cookie->id_customer = (int)($customer->id);
 					$this->cookie->customer_lastname = $customer->lastname;
 					$this->cookie->customer_firstname = $customer->firstname;
 					$this->cookie->logged = 1;
 					$this->cookie->passwd = $customer->passwd;
 					$this->cookie->email = $customer->email;
 					if (Configuration::get('PS_CART_FOLLOWING') AND (empty($this->cookie->id_cart) OR Cart::getNbProducts($this->cookie->id_cart) == 0))
-						$this->cookie->id_cart = intval(Cart::lastNoneOrderedCart(intval($customer->id)));
+						$this->cookie->id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id)));
 					Module::hookExec('authentication');
 					if ($back = Tools::getValue('back'))
 						Tools::redirect($back);
@@ -187,19 +187,19 @@ class AuthControllerCore extends FrontController
 		{
 			/* Generate years, months and days */
 			if (isset($_POST['years']) AND is_numeric($_POST['years']))
-				$selectedYears = intval($_POST['years']);
+				$selectedYears = (int)($_POST['years']);
 			$years = Tools::dateYears();
 			if (isset($_POST['months']) AND is_numeric($_POST['months']))
-				$selectedMonths = intval($_POST['months']);
+				$selectedMonths = (int)($_POST['months']);
 			$months = Tools::dateMonths();
 
 			if (isset($_POST['days']) AND is_numeric($_POST['days']))
-				$selectedDays = intval($_POST['days']);
+				$selectedDays = (int)($_POST['days']);
 			$days = Tools::dateDays();
 
 			/* Select the most appropriate country */
 			if (isset($_POST['id_country']) AND is_numeric($_POST['id_country']))
-				$selectedCountry = intval($_POST['id_country']);
+				$selectedCountry = (int)($_POST['id_country']);
 			elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 			{
 				$array = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -207,12 +207,12 @@ class AuthControllerCore extends FrontController
 				{
 					$selectedCountry = Country::getByIso($array[0]);
 					if (!$selectedCountry)
-						$selectedCountry = intval(Configuration::get('PS_COUNTRY_DEFAULT'));
+						$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 				}
 			}
 			if (!isset($selectedCountry))
-				$selectedCountry = intval(Configuration::get('PS_COUNTRY_DEFAULT'));
-			$countries = Country::getCountries(intval($this->cookie->id_lang), true);
+				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+			$countries = Country::getCountries((int)($this->cookie->id_lang), true);
 
 			$this->smarty->assign(array(
 				'years' => $years,
@@ -244,7 +244,7 @@ class AuthControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$this->smarty->assign('opc', intval(Configuration::get('PS_ORDER_PROCESS_TYPE')));
+		$this->smarty->assign('opc', (int)(Configuration::get('PS_ORDER_PROCESS_TYPE')));
 		
 		$back = Tools::getValue('back');
 		$key = Tools::safeOutput(Tools::getValue('key'));

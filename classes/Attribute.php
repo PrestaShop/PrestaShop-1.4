@@ -45,7 +45,7 @@ class AttributeCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['id_attribute_group'] = intval($this->id_attribute_group);
+		$fields['id_attribute_group'] = (int)($this->id_attribute_group);
 		$fields['color'] = pSQL($this->color);
 
 		return $fields;
@@ -64,14 +64,14 @@ class AttributeCore extends ObjectModel
 
 	public function delete()
 	{
-		if (($result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.intval($this->id))) === false)
+		if (($result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.(int)($this->id))) === false)
 			return false;
 		$combinationIds = array();
 		if (Db::getInstance()->numRows())
 		{
 			foreach ($result AS $row)
-				$combinationIds[] = intval($row['id_product_attribute']);
-			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.intval($this->id)) === false)
+				$combinationIds[] = (int)($row['id_product_attribute']);
+			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.(int)($this->id)) === false)
 				return false;
 			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $combinationIds).')') === false)
 				return false;
@@ -91,9 +91,9 @@ class AttributeCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT ag.*, agl.*, a.`id_attribute`, al.`name`, agl.`name` AS `attribute_group`
 		FROM `'._DB_PREFIX_.'attribute_group` ag
-		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute_group` = ag.`id_attribute_group`
-		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($id_lang).')
 		'.($notNull ? 'WHERE a.`id_attribute` IS NOT NULL AND al.`name` IS NOT NULL' : '').'
 		ORDER BY agl.`name` ASC, al.`name` ASC');
 	}
@@ -111,7 +111,7 @@ class AttributeCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `quantity`
 		FROM `'._DB_PREFIX_.'product_attribute`
-		WHERE `id_product_attribute` = '.intval($id_product_attribute));
+		WHERE `id_product_attribute` = '.(int)($id_product_attribute));
 
 		return ($result AND ($qty <= $result['quantity']));
 	}
@@ -128,10 +128,10 @@ class AttributeCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT SUM(quantity) as quantity
 		FROM `'._DB_PREFIX_.'product_attribute` 
-		WHERE `id_product` = '.intval($id_product));
+		WHERE `id_product` = '.(int)($id_product));
 		
 		if ($row['quantity'] !== NULL)
-			return intval($row['quantity']);
+			return (int)($row['quantity']);
 		return false;
 	}
 
@@ -144,12 +144,12 @@ class AttributeCore extends ObjectModel
 	 */
 	static public function updateQtyProduct(&$arr)
 	{
-		$id_product = intval($arr['id_product']);
+		$id_product = (int)($arr['id_product']);
 		$qty = self::getAttributeQty($id_product);
 		
 		if ($qty !== false)
 		{
-			$arr['quantity'] = intval($qty);
+			$arr['quantity'] = (int)($qty);
 			return true;
 		}
 		return false;
@@ -159,7 +159,7 @@ class AttributeCore extends ObjectModel
 	{
 		if (!Db::getInstance()->getRow('
 			SELECT `is_color_group` FROM `'._DB_PREFIX_.'attribute_group` WHERE `id_attribute_group` = (
-				SELECT `id_attribute_group` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute` = '.intval($this->id).')
+				SELECT `id_attribute_group` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute` = '.(int)($this->id).')
 				AND is_color_group = 1'))
 			return false;
 		return Db::getInstance()->NumRows();

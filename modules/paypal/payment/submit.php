@@ -48,8 +48,8 @@ function displayConfirm()
 
 	if ($cart->id_currency != $ppPayment->getCurrency()->id)
 	{
-		$cart->id_currency = intval($ppPayment->getCurrency()->id);
-		$cookie->id_currency = intval($cart->id_currency);
+		$cart->id_currency = (int)($ppPayment->getCurrency()->id);
+		$cookie->id_currency = (int)($cart->id_currency);
 		$cart->update();
 		Tools::redirect('modules/'.$ppPayment->name.'/payment/submit.php');
 	}
@@ -77,14 +77,14 @@ function submitConfirm()
 
 	if (!$cookie->isLogged())
 		die('Not logged');
-	elseif (!$id_currency = intval(Tools::getValue('currency_payement')))
+	elseif (!$id_currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
 	elseif (!$cart->getOrderTotal(true, 3))
 		die('Empty cart');
-	$currency = new Currency(intval($id_currency));
+	$currency = new Currency((int)($id_currency));
 	if (!Validate::isLoadedObject($currency))
 		die('Invalid currency');
-	$cookie->id_currency = intval($id_currency);
+	$cookie->id_currency = (int)($id_currency);
 	getAuthorization();
 }
 

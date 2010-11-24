@@ -54,11 +54,11 @@ class		EditorialClass extends ObjectModel
 		$fieldsArray = array('body_title', 'body_subheading', 'body_paragraph', 'body_logo_subheading');
 		$fields = array();
 		$languages = Language::getLanguages(false);
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($languages as $language)
 		{
-			$fields[$language['id_lang']]['id_lang'] = intval($language['id_lang']);
-			$fields[$language['id_lang']][$this->identifier] = intval($this->id);
+			$fields[$language['id_lang']]['id_lang'] = (int)($language['id_lang']);
+			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
 			foreach ($fieldsArray as $field)
 			{
 				if (!Validate::isTableOrIdentifier($field))
@@ -87,15 +87,15 @@ class		EditorialClass extends ObjectModel
 			$languages = Language::getLanguages(false);
 			foreach ($languages AS $language)
 				foreach ($this->fieldsValidateLang AS $field => $validation)
-					if (isset($_POST[$field.'_'.intval($language['id_lang'])]))
-						$this->{$field}[intval($language['id_lang'])] = $_POST[$field.'_'.intval($language['id_lang'])];
+					if (isset($_POST[$field.'_'.(int)($language['id_lang'])]))
+						$this->{$field}[(int)($language['id_lang'])] = $_POST[$field.'_'.(int)($language['id_lang'])];
 		}
 	}
 	
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_editorial'] = intval($this->id);
+		$fields['id_editorial'] = (int)($this->id);
 		$fields['body_home_logo_link'] = pSQL($this->body_home_logo_link);
 		return $fields;
 	}

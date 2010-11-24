@@ -49,9 +49,9 @@ class BlockSupplier extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockSuppliers'))
 		{
-			$text_list = intval(Tools::getValue('text_list'));
-			$text_nb = intval(Tools::getValue('text_nb'));
-			$form_list = intval(Tools::getValue('form_list'));
+			$text_list = (int)(Tools::getValue('text_list'));
+			$text_nb = (int)(Tools::getValue('text_nb'));
+			$form_list = (int)(Tools::getValue('form_list'));
 			if ($text_list AND !Validate::isUnsignedInt($text_nb))
 				$errors[] = $this->l('Invalid number of elements');
 			elseif (!$text_list AND !$form_list)

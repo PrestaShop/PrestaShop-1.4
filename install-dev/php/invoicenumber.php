@@ -12,20 +12,20 @@ function invoice_number_set()
 	ORDER BY id_order');
 	foreach ($result as $row)
 	{
-		$order = new Order(intval($row['id_order']));
+		$order = new Order((int)($row['id_order']));
 		$history = $order->getHistory(false);
 		foreach ($history as $row2)
 		{
-			$oS = new OrderState(intval($row2['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
+			$oS = new OrderState((int)($row2['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
 			if ($oS->invoice)
 			{
-				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET invoice_number = '.intval($number++).', `invoice_date` = `date_add` WHERE id_order = '.intval($order->id));
+				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET invoice_number = '.(int)($number++).', `invoice_date` = `date_add` WHERE id_order = '.(int)($order->id));
 				break ;
 			}
 		}
 	}
 	// Add configuration var
-	Configuration::updateValue('PS_INVOICE_NUMBER', intval($number));
+	Configuration::updateValue('PS_INVOICE_NUMBER', (int)($number));
 }
 
 ?>

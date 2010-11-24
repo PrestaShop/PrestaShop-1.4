@@ -87,21 +87,21 @@ class DiscountCore extends ObjectModel
 	{
 		parent::validateFields();
 		
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_group'] = intval($this->id_group);
-		$fields['id_currency'] = intval($this->id_currency);
-		$fields['id_discount_type'] = intval($this->id_discount_type);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_group'] = (int)($this->id_group);
+		$fields['id_currency'] = (int)($this->id_currency);
+		$fields['id_discount_type'] = (int)($this->id_discount_type);
 		$fields['name'] = pSQL($this->name);
 		$fields['value'] = floatval($this->value);
-		$fields['quantity'] = intval($this->quantity);
-		$fields['quantity_per_user'] = intval($this->quantity_per_user);
-		$fields['cumulable'] = intval($this->cumulable);
-		$fields['cumulable_reduction'] = intval($this->cumulable_reduction);
+		$fields['quantity'] = (int)($this->quantity);
+		$fields['quantity_per_user'] = (int)($this->quantity_per_user);
+		$fields['cumulable'] = (int)($this->cumulable);
+		$fields['cumulable_reduction'] = (int)($this->cumulable_reduction);
 		$fields['date_from'] = pSQL($this->date_from);
 		$fields['date_to'] = pSQL($this->date_to);
 		$fields['minimal'] = floatval($this->minimal);
-		$fields['active'] = intval($this->active);
-		$fields['cart_display'] = intval($this->cart_display);
+		$fields['active'] = (int)($this->active);
+		$fields['cart_display'] = (int)($this->cart_display);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -132,8 +132,8 @@ class DiscountCore extends ObjectModel
 	{
 		if (!parent::delete())
 			return false;
-		return (Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.intval($this->id)) 
-								AND Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'discount_category WHERE id_discount = '.intval($this->id)));
+		return (Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'cart_discount WHERE id_discount = '.(int)($this->id)) 
+								AND Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'discount_category WHERE id_discount = '.(int)($this->id)));
 	}
 	
 	public function getTranslationsFieldsChild()
@@ -153,7 +153,7 @@ class DiscountCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'discount_type dt
-		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($id_lang).')');
+		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.(int)($id_lang).')');
 	}
     
 	/**
@@ -188,11 +188,11 @@ class DiscountCore extends ObjectModel
 		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT d.*, dtl.`name` AS `type`, dl.`description`
 		FROM `'._DB_PREFIX_.'discount` d
-		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount` AND dl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount` AND dl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'discount_type` dt ON dt.`id_discount_type` = d.`id_discount_type`
-		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.intval($id_lang).')
-		WHERE (`id_customer` = '.intval($id_customer).'
-		OR `id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($id_customer).')'.
+		LEFT JOIN `'._DB_PREFIX_.'discount_type_lang` dtl ON (dt.`id_discount_type` = dtl.`id_discount_type` AND dtl.`id_lang` = '.(int)($id_lang).')
+		WHERE (`id_customer` = '.(int)($id_customer).'
+		OR `id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($id_customer).')'.
 		($includeGenericOnes ? ' OR (`id_customer` = 0 AND `id_group` = 0)' : '').')
 		'.($active ? ' AND d.`active` = 1' : '').'
 		'.($stock ? ' AND d.`quantity` != 0' : ''));
@@ -200,9 +200,9 @@ class DiscountCore extends ObjectModel
 		foreach ($res as &$discount)
 			if ($discount['quantity_per_user'])
 			{
-				$quantity_used = Order::getDiscountsCustomer(intval($id_customer), intval($discount['id_discount']));
+				$quantity_used = Order::getDiscountsCustomer((int)($id_customer), (int)($discount['id_discount']));
 				if (isset($cart) AND isset($cart->id))
-					$quantity_used += $cart->getDiscountsCustomer(intval($discount['id_discount']));
+					$quantity_used += $cart->getDiscountsCustomer((int)($discount['id_discount']));
 				$discount['quantity_for_user'] = $discount['quantity_per_user'] - $quantity_used;
 			}
 			else
@@ -216,8 +216,8 @@ class DiscountCore extends ObjectModel
 		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'order_discount` od 
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (od.`id_order` = o.`id_order`) 
-		WHERE od.`id_discount` = '.intval($this->id).' 
-		AND o.`id_customer` = '.intval($id_customer)
+		WHERE od.`id_discount` = '.(int)($this->id).' 
+		AND o.`id_customer` = '.(int)($id_customer)
 		);
 	}
 	
@@ -232,14 +232,14 @@ class DiscountCore extends ObjectModel
 	{
 		$totalAmount = 0;
 		
-		$cart = new Cart(intval($idCart));
+		$cart = new Cart((int)($idCart));
 		if (!Validate::isLoadedObject($cart))
 			return 0;
 		
-		if ((!$this->cumulable AND intval($nb_discounts) > 1) OR !$this->active OR (!$this->quantity AND !$cart->OrderExists()))
+		if ((!$this->cumulable AND (int)($nb_discounts) > 1) OR !$this->active OR (!$this->quantity AND !$cart->OrderExists()))
 			return 0;
 		
-		if ($this->usedByCustomer(intval($cart->id_customer)) >= $this->quantity_per_user AND !$cart->OrderExists())
+		if ($this->usedByCustomer((int)($cart->id_customer)) >= $this->quantity_per_user AND !$cart->OrderExists())
 			return 0;
 
 		$date_start = strtotime($this->date_from);
@@ -247,7 +247,7 @@ class DiscountCore extends ObjectModel
 		if ((time() < $date_start OR time() > $date_end) AND !$cart->OrderExists()) return 0;
 
 		$products = $cart->getProducts();
-		$categories = Discount::getCategories(intval($this->id));
+		$categories = Discount::getCategories((int)($this->id));
 		$in_category = false;
 
 		foreach ($products AS $product)
@@ -277,7 +277,7 @@ class DiscountCore extends ObjectModel
 				if ($this->id_currency != $currency->id)
 					return 0;
 
-				$taxDiscount = Cart::getTaxesAverageUsed(intval($cart->id));
+				$taxDiscount = Cart::getTaxesAverageUsed((int)($cart->id));
 				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
 					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
 
@@ -298,7 +298,7 @@ class DiscountCore extends ObjectModel
 
   static public function isParentCategoryProductDiscount($id_category_product, $id_category_discount)
   {
-		$category = new Category(intval($id_category_product));
+		$category = new Category((int)($id_category_product));
 		$parentCategories = $category->getParentsCategories();
 		foreach($parentCategories AS $parentCategory)
 			if($id_category_discount == $parentCategory['id_category'])
@@ -311,7 +311,7 @@ class DiscountCore extends ObjectModel
   	return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'discount_category`
-		WHERE `id_discount` = '.intval($id_discount));
+		WHERE `id_discount` = '.(int)($id_discount));
   }
   
 	public function updateCategories($categories)
@@ -329,21 +329,21 @@ class DiscountCore extends ObjectModel
 		}
 		elseif (!is_array($categories) OR !sizeof($categories))
 			return false;
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount`='.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount`='.(int)($this->id));
 		foreach($categories AS $category)
 		{
 			Db::getInstance()->Execute('
 			SELECT `id_discount` 
 			FROM `'._DB_PREFIX_.'discount_category`
-			WHERE `id_discount`='.intval($this->id).' AND `id_category`='.intval($category));
+			WHERE `id_discount`='.(int)($this->id).' AND `id_category`='.(int)($category));
 			if (Db::getInstance()->NumRows() == 0)
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'discount_category` (`id_discount`, `id_category`) VALUES('.intval($this->id).','.intval($category).')');
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'discount_category` (`id_discount`, `id_category`) VALUES('.(int)($this->id).','.(int)($category).')');
 		}
 	}
 
 	static public function discountExists($discountName, $id_discount = 0)
 	{
-		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.pSQL($discountName).'\' AND `id_discount` != '.intval($id_discount));
+		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.pSQL($discountName).'\' AND `id_discount` != '.(int)($id_discount));
 	}
 
 	static public function createOrderDiscount($order, $productList, $qtyList, $name, $shipping_cost = false, $id_category = 0, $subcategory = 0)
@@ -360,11 +360,11 @@ class DiscountCore extends ObjectModel
 		$voucher = new Discount();
 		$voucher->id_discount_type = 2;
 		foreach ($languages as $language)
-			$voucher->description[$language['id_lang']] = strval($name).intval($order->id);
+			$voucher->description[$language['id_lang']] = strval($name).(int)($order->id);
 		$voucher->value = floatval($total);
-		$voucher->name = 'V0C'.intval($order->id_customer).'O'.intval($order->id);
-		$voucher->id_customer = intval($order->id_customer);
-		$voucher->id_currency = intval($order->id_currency);
+		$voucher->name = 'V0C'.(int)($order->id_customer).'O'.(int)($order->id);
+		$voucher->id_customer = (int)($order->id_customer);
+		$voucher->id_currency = (int)($order->id_currency);
 		$voucher->quantity = 1;
 		$voucher->quantity_per_user = 1;
 		$voucher->cumulable = 1;
@@ -377,7 +377,7 @@ class DiscountCore extends ObjectModel
 		if (!$voucher->validateFieldsLang(false) OR !$voucher->add())
 			return false;
 		// set correct name
-		$voucher->name = 'V'.intval($voucher->id).'C'.intval($order->id_customer).'O'.$order->id;
+		$voucher->name = 'V'.(int)($voucher->id).'C'.(int)($order->id_customer).'O'.$order->id;
 		if (!$voucher->update())
 			return false;
 		
@@ -386,7 +386,7 @@ class DiscountCore extends ObjectModel
 
 	static public function display($discountValue, $discountType, $currency = false)
 	{
-		if (floatval($discountValue) AND intval($discountType))
+		if (floatval($discountValue) AND (int)($discountType))
 		{
 			if ($discountType == 1)
 				return $discountValue.chr(37); // ASCII #37 --> % (percent)
@@ -404,32 +404,32 @@ class DiscountCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'discount_lang` dl ON (d.`id_discount` = dl.`id_discount`)
 		WHERE d.`active` = 1
 		AND d.`date_from` <= \''.pSQL(date('Y-m-d H:i:s')).'\' AND d.`date_to` >= \''.pSQL(date('Y-m-d H:i:s')).'\'
-		AND dl.`id_lang` = '.intval($id_lang).'
+		AND dl.`id_lang` = '.(int)($id_lang).'
 		AND d.`cart_display` = 1 AND d.`quantity` > 0
 		AND ((d.`id_customer` = 0 AND d.`id_group` = 0) '.($id_customer ? 'OR (d.`id_customer` = '.$id_customer.'
-		OR d.`id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.intval($id_customer).')))' : 'OR d.`id_group` = 1)'));
+		OR d.`id_group` IN (SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($id_customer).')))' : 'OR d.`id_group` = 1)'));
 	}
 	
 	static public function deleteByIdCustomer($id_customer)
 	{
-		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_customer` = '.intval($id_customer));
+		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_customer` = '.(int)($id_customer));
 		foreach ($discounts as $discount)
 		{
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.intval($discount['id_discount']));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.intval($discount['id_discount']));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.(int)($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.(int)($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.(int)($discount['id_discount']));
 		}
 		return true;
 	}
 	
 	static public function deleteByIdGroup($id_group)
 	{
-		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_group` = '.intval($id_group));
+		$discounts = Db::getInstance()->ExecuteS('SELECT `id_discount` FROM `'._DB_PREFIX_.'discount` WHERE `id_group` = '.(int)($id_group));
 		foreach ($discounts as $discount)
 		{
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.intval($discount['id_discount']));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.intval($discount['id_discount']));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.intval($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.(int)($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount` = '.(int)($discount['id_discount']));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.(int)($discount['id_discount']));
 		}
 		return true;
 	}

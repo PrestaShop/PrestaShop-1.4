@@ -81,7 +81,7 @@ if ($lm->getIncludeTradFilename())
 		//php to js vars
 		var isoCodeLocalLanguage = "<?php echo $lm->getIsoCodeSelectedLang(); ?>";
 		var ps_base_uri = "<?php echo PS_BASE_URI; ?>";
-		var id_lang = "<?php echo (isset($_GET['language']) ? intval($_GET['language']) : 0); ?>";
+		var id_lang = "<?php echo (isset($_GET['language']) ? (int)($_GET['language']) : 0); ?>";
 		
 		//localWords
 		var Step1Title = "<?php echo lang('Welcome').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";

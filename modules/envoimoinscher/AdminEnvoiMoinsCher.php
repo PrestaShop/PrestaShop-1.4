@@ -22,7 +22,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 			{
 				foreach($idsOrdersToExport as $id)
 				{
-					$orderToExport[] = self::getOrderDetails(intval($id));
+					$orderToExport[] = self::getOrderDetails((int)($id));
 				}
 				echo '<form action="http://www.envoimoinscher.com/index.html" method="POST">
 						<input type="hidden" name="url_renvoi" value="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">
@@ -57,14 +57,14 @@ class AdminEnvoiMoinsCher extends AdminTab
 			else
 			echo '<h2 style="color:red">'.$this->l('Merci de configurer le module pour pouvoir l\'utiliser').'</h2>';
 		}
-		echo '<br><p><a href="index.php?tab=AdminModules&configure=envoimoinscher&token='.Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee)).'" class="button">
+		echo '<br><p><a href="index.php?tab=AdminModules&configure=envoimoinscher&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'" class="button">
 			 ' . $this->l('Change configuration') . '</a></p>';
 	}
 	
 	private function getOrders()
 	{
-		$id_order_state = intval(Configuration::get('EMC_ORDER_STATE'));
-		$id_carrier = intval(Configuration::get('EMC_CARRIER'));
+		$id_order_state = (int)(Configuration::get('EMC_ORDER_STATE'));
+		$id_carrier = (int)(Configuration::get('EMC_CARRIER'));
 
 		$sql = '
 			SELECT o.id_order as id_order, o.`id_customer` as id_customer,
@@ -104,16 +104,16 @@ class AdminEnvoiMoinsCher extends AdminTab
 		{
 			foreach($orders as $order)
 			{
-				$customer = new Customer(intval($order['id_customer']));
+				$customer = new Customer((int)($order['id_customer']));
 					echo   '<tr>
 							  <td align="center">
-								<input type="checkbox" name="ordersBox[]" class="ordersBox" value="'.intval($order['id_order']).'" />
+								<input type="checkbox" name="ordersBox[]" class="ordersBox" value="'.(int)($order['id_order']).'" />
 							  </td>
-							  <td align="center">'.intval($order['id_order']).'</td>
+							  <td align="center">'.(int)($order['id_order']).'</td>
 							  <td>'.htmlentities($customer->lastname, ENT_COMPAT, 'UTF-8').' '.htmlentities($customer->firstname, ENT_COMPAT, 'UTF-8').'</td>
-							  <td align="center">'.Tools::displayPrice($order['total'], new Currency(intval($order['id_currency']))).'</td>
-							  <td align="center">'.Tools::displayPrice($order['shipping'], new Currency(intval($order['id_currency']))).'</td>
-							  <td align="center">'.Tools::displayDate($order['date'], intval($order['id_lang'])).'</td>
+							  <td align="center">'.Tools::displayPrice($order['total'], new Currency((int)($order['id_currency']))).'</td>
+							  <td align="center">'.Tools::displayPrice($order['shipping'], new Currency((int)($order['id_currency']))).'</td>
+							  <td align="center">'.Tools::displayDate($order['date'], (int)($order['id_lang'])).'</td>
 							  <td align="center">
 							  	<select name="packaging_'.$order['id_order'].'">';
 							  		foreach($this->packaging as $package => $value)
@@ -121,8 +121,8 @@ class AdminEnvoiMoinsCher extends AdminTab
 										'.htmlentities($package, ENT_COMPAT, 'UTF-8').'</option>';
 							  	echo '</select>
 							  </td>
-							  <td>'.envoimoinscher::selectNature(Configuration::get('EMC_CONTENT'),intval($order['id_order'])).'</td>
-							  <td align="center"><a href="index.php?tab=AdminOrders&id_order='.intval($order['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'">
+							  <td>'.envoimoinscher::selectNature(Configuration::get('EMC_CONTENT'),(int)($order['id_order'])).'</td>
+							  <td align="center"><a href="index.php?tab=AdminOrders&id_order='.(int)($order['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">
 					<img border="0" title="'.$this->l('View').'" alt="'.$this->l('View').'" src="'._PS_IMG_.'admin/details.gif"/></a></td>
 						  </tr>';
 			}
@@ -139,26 +139,26 @@ class AdminEnvoiMoinsCher extends AdminTab
 		$confs = Configuration::getMultiple(array('EMC_LOGIN', 'PS_SHOP_NAME', 'EMC_GENDER', 'EMC_FIRST_NAME', 'EMC_LAST_NAME', 'EMC_ADDRESS',
 												  'EMC_ZIP_CODE', 'EMC_CITY', 'EMC_COUNTRY', 'EMC_PHONE', 'EMC_EMAIL', 'EMC_EMAILS'));
 		$orderDetails = array();
-		$order = new Order(intval($id_order));
-		$customer = new Customer(intval($order->id_customer));
-		$adresseDelivery = new Address(intval($order->id_address_delivery));
+		$order = new Order((int)($id_order));
+		$customer = new Customer((int)($order->id_customer));
+		$adresseDelivery = new Address((int)($order->id_address_delivery));
 		
 		$genderTab = array(1 => 'M.', 2 => 'Mme', 9 => '');
 		$orderDetails['url_suivi'] = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/envoimoinscher/tracking.php?token='.$customer->secure_key;
-		$orderDetails['infoexterne'] = str_replace('.','_',str_replace('www.','',$_SERVER['HTTP_HOST'])).'_'.intval($id_order);
-		$orderDetails['packaging'] =  Tools::getValue('packaging_'.intval($id_order));
-		$orderDetails['type_objet'] =  Tools::getValue('type_objet_'.intval($id_order));
-		$orderDetails['envoi_emailsconf'] = intval($confs['EMC_EMAILS']);
+		$orderDetails['infoexterne'] = str_replace('.','_',str_replace('www.','',$_SERVER['HTTP_HOST'])).'_'.(int)($id_order);
+		$orderDetails['packaging'] =  Tools::getValue('packaging_'.(int)($id_order));
+		$orderDetails['type_objet'] =  Tools::getValue('type_objet_'.(int)($id_order));
+		$orderDetails['envoi_emailsconf'] = (int)($confs['EMC_EMAILS']);
 		
 		//products infos
 		$productsDetails = $order->getProductsDetail();
 		$tabDetails = array();
 		foreach($productsDetails as $details)
 		{
-			$features = self::getFeatures(intval($details['product_id']));
+			$features = self::getFeatures((int)($details['product_id']));
 			$tabDetailsProduct = array();
-			$tabDetailsProduct['id'] = intval($details['product_id']);
-			$tabDetailsProduct['nb'] = intval($details['product_quantity']);
+			$tabDetailsProduct['id'] = (int)($details['product_id']);
+			$tabDetailsProduct['nb'] = (int)($details['product_quantity']);
 			$tabDetailsProduct['poids'] = floatval($details['product_weight']);
 			$tabDetailsProduct['description'] = htmlspecialchars($details['product_name'], ENT_COMPAT, 'UTF-8');
 				foreach($features as $key => $value)
@@ -183,7 +183,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 		$orderDetails['expediteur'] = $orderExpediteur;
 				
 		//delivery infos
-		$orderDelivery['civilite'] = $genderTab[intval($customer->id_gender)];
+		$orderDelivery['civilite'] = $genderTab[(int)($customer->id_gender)];
 		if (isset($adresseDelivery->company))
 		$orderDelivery['collecte_type'] = 'particulier';
 			$orderDelivery['societe'] = htmlspecialchars($adresseDelivery->company, ENT_COMPAT, 'UTF-8');
@@ -192,7 +192,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 		$orderDelivery['adresse'] = htmlspecialchars($adresseDelivery->address1, ENT_COMPAT, 'UTF-8');
 		$orderDelivery['codepostal'] = htmlspecialchars($adresseDelivery->postcode, ENT_COMPAT, 'UTF-8');
 		$orderDelivery['ville'] = htmlspecialchars($adresseDelivery->city, ENT_COMPAT, 'UTF-8');
-		$orderDelivery['pz_id'] = Country::getIsoById(Country::getIdByName(intval($cookie->id_lang),$adresseDelivery->country));
+		$orderDelivery['pz_id'] = Country::getIsoById(Country::getIdByName((int)($cookie->id_lang),$adresseDelivery->country));
 		if (isset($adresseDelivery->phone))
 			$orderDelivery['tel'] = htmlspecialchars($adresseDelivery->phone, ENT_COMPAT, 'UTF-8');
 		else
@@ -209,22 +209,22 @@ class AdminEnvoiMoinsCher extends AdminTab
 		global $cookie;
 		$featuresTab = array();
 		$confs = Configuration::getMultiple(array('EMC_WIDTH', 'EMC_HEIGHT', 'EMC_DEPTH'));
-		$features = Product::getFeaturesStatic(intval($id));
+		$features = Product::getFeaturesStatic((int)($id));
 		foreach($features as $feature)
 		{
 			switch ($feature['id_feature'])
 			{
 				case $confs['EMC_WIDTH'] :
-					$featureValue = new FeatureValue(intval($feature['id_feature_value']));
-					$featuresTab['largeur'] = $featureValue->value[intval($cookie->id_lang)];
+					$featureValue = new FeatureValue((int)($feature['id_feature_value']));
+					$featuresTab['largeur'] = $featureValue->value[(int)($cookie->id_lang)];
 					break;
 				case $confs['EMC_HEIGHT'] :
-					$featureValue = new FeatureValue(intval($feature['id_feature_value']));
-					$featuresTab['hauteur'] = $featureValue->value[intval($cookie->id_lang)];
+					$featureValue = new FeatureValue((int)($feature['id_feature_value']));
+					$featuresTab['hauteur'] = $featureValue->value[(int)($cookie->id_lang)];
 					break;
 				case $confs['EMC_DEPTH'] :
-					$featureValue = new FeatureValue(intval($feature['id_feature_value']));
-					$featuresTab['longueur'] = $featureValue->value[intval($cookie->id_lang)];
+					$featureValue = new FeatureValue((int)($feature['id_feature_value']));
+					$featuresTab['longueur'] = $featureValue->value[(int)($cookie->id_lang)];
 					break;
 			}
 		}
@@ -271,7 +271,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 				elseif ($detail == 'infoexterne')
 					echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.infoexterne" value="'.htmlentities($values, ENT_COMPAT, 'UTF-8').'">';
 				elseif ($detail == 'envoi_emailsconf')
-					echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.envoi_emailsconf" value="'.intval($values).'">';
+					echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.envoi_emailsconf" value="'.(int)($values).'">';
 				elseif ($detail == 'type_objet')
 					echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.type_objet" value="'.htmlentities($values, ENT_COMPAT, 'UTF-8').'">';   
 				else

@@ -21,10 +21,10 @@ class AddressesControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$customer = new Customer(intval($this->cookie->id_customer));
+		$customer = new Customer((int)($this->cookie->id_customer));
 		if (!Validate::isLoadedObject($customer))
 			die(Tools::displayError('customer not found'));
-		$this->smarty->assign('addresses', $customer->getAddresses(intval($this->cookie->id_lang)));
+		$this->smarty->assign('addresses', $customer->getAddresses((int)($this->cookie->id_lang)));
 	}
 	
 	public function displayContent()

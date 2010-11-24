@@ -135,22 +135,22 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 	}
 	else
 	{
-		if (intval(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR (intval(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
+		if ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
 		{
 			$nextHeight = $destHeight;
-			$nextWidth = intval(($sourceWidth * $nextHeight) / $sourceHeight);
-			$destWidth = (intval(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
+			$nextWidth = (int)(($sourceWidth * $nextHeight) / $sourceHeight);
+			$destWidth = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
 		}
 		else
 		{
 			$nextWidth = $destWidth;
-			$nextHeight = intval($sourceHeight * $destWidth / $sourceWidth);
-			$destHeight = (intval(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
+			$nextHeight = (int)($sourceHeight * $destWidth / $sourceWidth);
+			$destHeight = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
 		}
 	}
 	
-	$borderWidth = intval(($destWidth - $nextWidth) / 2);
-	$borderHeight = intval(($destHeight - $nextHeight) / 2);
+	$borderWidth = (int)(($destWidth - $nextWidth) / 2);
+	$borderHeight = (int)(($destHeight - $nextHeight) / 2);
 	
 	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 

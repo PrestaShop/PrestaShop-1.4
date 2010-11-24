@@ -32,7 +32,7 @@ class iAdvize extends Module
 	{
 		global $cookie;
 
-		$lang = new Language(intval($cookie->id_lang));
+		$lang = new Language((int)($cookie->id_lang));
 		if (!in_array($lang->iso_code, array('fr', 'en', 'es')))
 			$lang->iso_code = 'en';
 		
@@ -40,9 +40,9 @@ class iAdvize extends Module
 
 		if (Tools::isSubmit('submitiAdvize'))
 		{
-			Configuration::updateValue('IADVIZE_SID', intval(Tools::getValue('iadvize_sid')));
-			Configuration::updateValue('IADVIZE_BID', intval(Tools::getValue('iadvize_bid')));
-			Configuration::updateValue('IADVIZE_BUTTON', intval(Tools::getValue('iadvize_button')));
+			Configuration::updateValue('IADVIZE_SID', (int)(Tools::getValue('iadvize_sid')));
+			Configuration::updateValue('IADVIZE_BID', (int)(Tools::getValue('iadvize_bid')));
+			Configuration::updateValue('IADVIZE_BUTTON', (int)(Tools::getValue('iadvize_button')));
 			
 			$output .= '
 			<div class="conf confirm">
@@ -63,12 +63,12 @@ class iAdvize extends Module
 					<legend><img src="../img/admin/cog.gif" alt="" class="middle" />'.$this->l('Settings').'</legend>
 					<label>'.$this->l('iAdvize merchant ID:').'</label>
 					<div class="margin-form">
-						<input type="text" name="iadvize_sid" value="'.intval(Tools::getValue('iadvize_sid', Configuration::get('IADVIZE_SID'))).'" /> <sup>*</sup>
+						<input type="text" name="iadvize_sid" value="'.(int)(Tools::getValue('iadvize_sid', Configuration::get('IADVIZE_SID'))).'" /> <sup>*</sup>
 					</div>
 					<hr size="1" style="margin-bottom: 20px;" noshade />
 					<label>'.$this->l('iAdvize "Call button" ID:').'</label>
 					<div class="margin-form">
-						<input type="text" name="iadvize_bid" value="'.intval(Tools::getValue('iadvize_bid', Configuration::get('IADVIZE_BID'))).'" />
+						<input type="text" name="iadvize_bid" value="'.(int)(Tools::getValue('iadvize_bid', Configuration::get('IADVIZE_BID'))).'" />
 						<p class="clear">'.$this->l('Leave empty if you don\'t want to enable this feature').'</p>
 					</div>
 					<label style="vertical-align: middle;">'.$this->l('"Call button" location:').'</label>
@@ -100,7 +100,7 @@ class iAdvize extends Module
 		<div style="margin: 20px 0;">
 		<script type="text/javascript">
 			var iAdvize = ((\'https:\' == document.location.protocol) ? \'https://\' : \'http://\');
-			document.write(unescape(\'%3Cscript src="\' + iAdvize + \'livechat.iadvize.com/chat_button.js?bid='.intval(Configuration::get('IADVIZE_BID')).'" type="text/javascript"%3E%3C/script%3E\'));
+			document.write(unescape(\'%3Cscript src="\' + iAdvize + \'livechat.iadvize.com/chat_button.js?bid='.(int)(Configuration::get('IADVIZE_BID')).'" type="text/javascript"%3E%3C/script%3E\'));
 		</script>
 		</div>
 		<!-- /End - iAdvize - Call button -->'."\n";
@@ -123,9 +123,9 @@ class iAdvize extends Module
 		return "\n".'
 		<!-- iAdvize - Live chat -->
 		<script type="text/javascript">
-			'.(isset($params['cookie']->id_customer) ? 'var idzCustomData = {\'extID\':\''.intval($params['cookie']->id_customer).'\'};' : '').'
+			'.(isset($params['cookie']->id_customer) ? 'var idzCustomData = {\'extID\':\''.(int)($params['cookie']->id_customer).'\'};' : '').'
 			var iAdvize = ((\'https:\' == document.location.protocol) ? \'https://\' : \'http://\');
-			document.write(unescape(\'%3Cscript src="\' + iAdvize + \'livechat.iadvize.com/chat_init.js?sid='.intval(Configuration::get('IADVIZE_SID')).'" type="text/javascript"%3E%3C/script%3E\'));
+			document.write(unescape(\'%3Cscript src="\' + iAdvize + \'livechat.iadvize.com/chat_init.js?sid='.(int)(Configuration::get('IADVIZE_SID')).'" type="text/javascript"%3E%3C/script%3E\'));
 			
 		</script>
 		<!-- /End - iAdvize - Live chat -->'."\n";

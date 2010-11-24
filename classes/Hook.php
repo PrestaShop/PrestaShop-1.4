@@ -64,7 +64,7 @@ class HookCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
-		WHERE hm.id_hook = '.intval($id_hook));
+		WHERE hm.id_hook = '.(int)($id_hook));
 	}
 	
 	static public function getModuleFromHook($id_hook, $id_module)
@@ -73,7 +73,7 @@ class HookCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
-		WHERE hm.id_hook = '.intval($id_hook).' AND m.id_module = '.intval($id_module));
+		WHERE hm.id_hook = '.(int)($id_hook).' AND m.id_module = '.(int)($id_module));
 	}
 	
 	static public function newOrder($cart, $order, $customer, $currency, $orderStatus)
@@ -88,19 +88,19 @@ class HookCore extends ObjectModel
 
 	static public function updateOrderStatus($newOrderStatusId, $id_order)
 	{
-		$order = new Order(intval($id_order));
-		$newOS = new OrderState(intval($newOrderStatusId), $order->id_lang);
+		$order = new Order((int)($id_order));
+		$newOS = new OrderState((int)($newOrderStatusId), $order->id_lang);
 
-		$return = (intval($newOS->id) == _PS_OS_PAYMENT_) ? Module::hookExec('paymentConfirm', array('id_order' => intval($order->id))) : true;
-		$return = Module::hookExec('updateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => intval($order->id))) AND $return;
+		$return = ((int)($newOS->id) == _PS_OS_PAYMENT_) ? Module::hookExec('paymentConfirm', array('id_order' => (int)($order->id))) : true;
+		$return = Module::hookExec('updateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => (int)($order->id))) AND $return;
 		return $return;
 	}
 	
 	static public function postUpdateOrderStatus($newOrderStatusId, $id_order)
 	{
-		$order = new Order(intval($id_order));
-		$newOS = new OrderState(intval($newOrderStatusId), $order->id_lang);
-		$return = Module::hookExec('postUpdateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => intval($order->id)));
+		$order = new Order((int)($id_order));
+		$newOS = new OrderState((int)($newOrderStatusId), $order->id_lang);
+		$return = Module::hookExec('postUpdateOrderStatus', array('newOrderStatus' => $newOS, 'id_order' => (int)($order->id)));
 		return $return;
 	}
 
@@ -144,8 +144,8 @@ class HookCore extends ObjectModel
 	    if (Validate::isUnsignedId($id_order))
 	    {
 			$params = array();
-			$order = new Order(intval($id_order));
-			$currency = new Currency(intval($order->id_currency));
+			$order = new Order((int)($id_order));
+			$currency = new Currency((int)($order->id_currency));
 	    
 	    	if (Validate::isLoadedObject($order))
 	    	{
@@ -165,8 +165,8 @@ class HookCore extends ObjectModel
 	    if (Validate::isUnsignedId($id_order) AND Validate::isUnsignedId($id_module))
 	    {
 			$params = array();
-			$order = new Order(intval($id_order));
-			$currency = new Currency(intval($order->id_currency));
+			$order = new Order((int)($id_order));
+			$currency = new Currency((int)($order->id_currency));
 	    
 	    	if (Validate::isLoadedObject($order))
 	    	{
@@ -175,7 +175,7 @@ class HookCore extends ObjectModel
 				$params['objOrder'] = $order;
 				$params['currencyObj'] = $currency;
 				
-				return Module::hookExec('paymentReturn', $params, intval($id_module));
+				return Module::hookExec('paymentReturn', $params, (int)($id_module));
 			}
 	    }
 	    return false;

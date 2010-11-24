@@ -47,8 +47,8 @@ class TrustedShops extends Module
 	{
 		foreach ($this->available_languages AS $language)
 		{	
-			Configuration::updateValue('TS_ID_'.intval(Language::getIdByIso($language)), '');
-			Configuration::updateValue('TS_ID_ACTIVE_'.intval(Language::getIdByIso($language)), '');
+			Configuration::updateValue('TS_ID_'.(int)(Language::getIdByIso($language)), '');
+			Configuration::updateValue('TS_ID_ACTIVE_'.(int)(Language::getIdByIso($language)), '');
 		}
 
 		Configuration::updateValue('TS_DISPLAY_IN_SHOP', '');
@@ -67,8 +67,8 @@ class TrustedShops extends Module
 	{
 		foreach ($this->available_languages AS $language)
 		{	
-			Configuration::deleteByName('TS_ID_'.intval(Language::getIdByIso($language)));
-			Configuration::deleteByName('TS_ID_ACTIVE_'.intval(Language::getIdByIso($language)));
+			Configuration::deleteByName('TS_ID_'.(int)(Language::getIdByIso($language)));
+			Configuration::deleteByName('TS_ID_ACTIVE_'.(int)(Language::getIdByIso($language)));
 		}
 
 		Configuration::deleteByName('TS_DISPLAY_IN_SHOP');
@@ -110,7 +110,7 @@ class TrustedShops extends Module
 	private function _isTsIdActive($id_lang, $ts_id = NULL)
 	{
 		if (is_null($ts_id))
-			$ts_id = Configuration::get('TS_ID_'.intval($id_lang));
+			$ts_id = Configuration::get('TS_ID_'.(int)($id_lang));
 			
 		return (!empty($ts_id) AND ($ts_id == Configuration::get('TS_ID_ACTIVE_'.$id_lang)));
 	}
@@ -127,10 +127,10 @@ class TrustedShops extends Module
 	
 	private function _getLastOrderId($id_customer)
 	{
-		return intval(Db::getInstance()->getValue('
+		return (int)(Db::getInstance()->getValue('
 		SELECT `id_order`
 		FROM `'._DB_PREFIX_.'orders`
-		WHERE `id_customer` = '.intval($id_customer).'
+		WHERE `id_customer` = '.(int)($id_customer).'
 		ORDER BY `date_add` DESC'));
 	}
 	
@@ -176,14 +176,14 @@ class TrustedShops extends Module
 
 		foreach ($this->allowed_languages AS $language)
 		{
-			$ts_id = Tools::getValue('trusted_shops_id_'.intval($language['id_lang']));
+			$ts_id = Tools::getValue('trusted_shops_id_'.(int)($language['id_lang']));
 
 			if (!empty($ts_id))
 			{
 				if (!preg_match('/^[[:alnum:]]{33}$/', $ts_id))
 					$errors .= $this->displayError($this->l('Invalid Trusted Shops ID').' ['.$language['iso_code'].']');
-				elseif (!$this->_isTsIdActive(intval($language['id_lang']), $ts_id))
-					$errors .= $this->_validateTrustedShopId($ts_id, intval($language['id_lang']));
+				elseif (!$this->_isTsIdActive((int)($language['id_lang']), $ts_id))
+					$errors .= $this->_validateTrustedShopId($ts_id, (int)($language['id_lang']));
 			} 
 		}
 		
@@ -219,22 +219,22 @@ class TrustedShops extends Module
 	
 	private function _postProcess()
 	{
-		Configuration::updateValue('TS_DISPLAY_IN_SHOP', intval(Tools::getValue('display_in_shop')));
-		Configuration::updateValue('TS_DISPLAY_RATING_FRONT_END', intval(Tools::getValue('display_rating_front_end')));
-		Configuration::updateValue('TS_DISPLAY_RATING_OC', intval(Tools::getValue('display_rating_order_confirmation')));
-		Configuration::updateValue('TS_SEND_RATING', intval(Tools::getValue('send_rating')));
-		Configuration::updateValue('TS_SEND_SEPERATE_MAIL', intval(Tools::getValue('send_seperate_mail')));
+		Configuration::updateValue('TS_DISPLAY_IN_SHOP', (int)(Tools::getValue('display_in_shop')));
+		Configuration::updateValue('TS_DISPLAY_RATING_FRONT_END', (int)(Tools::getValue('display_rating_front_end')));
+		Configuration::updateValue('TS_DISPLAY_RATING_OC', (int)(Tools::getValue('display_rating_order_confirmation')));
+		Configuration::updateValue('TS_SEND_RATING', (int)(Tools::getValue('send_rating')));
+		Configuration::updateValue('TS_SEND_SEPERATE_MAIL', (int)(Tools::getValue('send_seperate_mail')));
 		
 		foreach ($this->allowed_languages AS $language)
 		{
-			$ts_id = Tools::getValue('trusted_shops_id_'.intval($language['id_lang']));
-			Configuration::updateValue('TS_ID_'.intval($language['id_lang']), $ts_id);
+			$ts_id = Tools::getValue('trusted_shops_id_'.(int)($language['id_lang']));
+			Configuration::updateValue('TS_ID_'.(int)($language['id_lang']), $ts_id);
 			if (!empty($ts_id)) 
-				Configuration::updateValue('TS_ID_ACTIVE_'.intval($language['id_lang']), $ts_id);
+				Configuration::updateValue('TS_ID_ACTIVE_'.(int)($language['id_lang']), $ts_id);
 		}
 
 		if (Configuration::get('TS_SEND_SEPERATE_MAIL'))
-			Configuration::updateValue('TS_SEND_SEPERATE_MAIL_DELAY', intval(Tools::getValue('send_seperate_mail_delay')));
+			Configuration::updateValue('TS_SEND_SEPERATE_MAIL_DELAY', (int)(Tools::getValue('send_seperate_mail_delay')));
 		else
 			RatingAlert::truncateTable();
 
@@ -265,10 +265,10 @@ class TrustedShops extends Module
 		foreach ($this->allowed_languages AS $key => $language)
 		{
 			$i18n_ts_id_fields .= '
-				<div id="trusted_shops_id_'.intval($language['id_lang']).'">
+				<div id="trusted_shops_id_'.(int)($language['id_lang']).'">
 					<p style="line-height: 25px;">
-						<img src="'._PS_IMG_.'/l/'.intval($language['id_lang']).'.jpg" style="vertical-align: middle;" alt="" />'.strtoupper($language['iso_code']).'
-						<input type="text" name="trusted_shops_id_'.intval($language['id_lang']).'" id="trusted_shops_id_'.intval($language['id_lang']).'" style="width: 270px;" value="'.Configuration::get('TS_ID_'.intval($language['id_lang'])).'" /> <span style="font-size: 10px;">'.($this->_isTsIdActive($language['id_lang']) ? $this->l('Active') : $this->l('Inactive unless you haven\'t specified your Trusted Shops ID')).'</span>
+						<img src="'._PS_IMG_.'/l/'.(int)($language['id_lang']).'.jpg" style="vertical-align: middle;" alt="" />'.strtoupper($language['iso_code']).'
+						<input type="text" name="trusted_shops_id_'.(int)($language['id_lang']).'" id="trusted_shops_id_'.(int)($language['id_lang']).'" style="width: 270px;" value="'.Configuration::get('TS_ID_'.(int)($language['id_lang'])).'" /> <span style="font-size: 10px;">'.($this->_isTsIdActive($language['id_lang']) ? $this->l('Active') : $this->l('Inactive unless you haven\'t specified your Trusted Shops ID')).'</span>
 					</p>
 				</div>';
 		}
@@ -321,7 +321,7 @@ class TrustedShops extends Module
 							<div class="margin-form">
 								<input onclick="toggleSendMailInfos()" type="checkbox" name="send_seperate_mail" value="1" '.(Configuration::get('TS_SEND_SEPERATE_MAIL') ? 'checked' : '').'/> <br />
 								<div id="send_seperate_mail_infos">'.
-								$this->l('Send the email after').'<input size="2" type="text" name="send_seperate_mail_delay" value="'.intval(Configuration::get('TS_SEND_SEPERATE_MAIL_DELAY')).'" />'.$this->l('days').'.<br />
+								$this->l('Send the email after').'<input size="2" type="text" name="send_seperate_mail_delay" value="'.(int)(Configuration::get('TS_SEND_SEPERATE_MAIL_DELAY')).'" />'.$this->l('days').'.<br />
 								<span style="color: #CC0000; font-weight: bold;">'.$this->l('IMPORTANT:').'</span> '.$this->l('Put this URL in crontab or call it manually daily:').'<br />'
 								.self::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('PS_TS_SECURE_KEY').
 								'</div>
@@ -368,7 +368,7 @@ class TrustedShops extends Module
 		
 		return $this->apply_url_base[$lang].'?partnerPackage='.self::PARTNER_PACKAGE.'&shopsw='.self::SHOP_SW.'&website='.
 		urlencode(_PS_BASE_URL_.__PS_BASE_URI__).'&firstName='.urlencode($cookie->firstname).'&lastName='.
-		urlencode($cookie->lastname).'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&language='.strtoupper(Language::getIsoById(intval($cookie->id_lang))).
+		urlencode($cookie->lastname).'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&language='.strtoupper(Language::getIsoById((int)($cookie->id_lang))).
 		'&ratingProduct=RATING_PRO'.$this->apply_url_tracker[$lang];
 	}
 	
@@ -386,16 +386,16 @@ class TrustedShops extends Module
 			$buyer_email = $cookie->email;
 		}
 				
-		return $this->getRatingUrlWithBuyerEmail(intval($cookie->id_lang), $id_order, $buyer_email);
+		return $this->getRatingUrlWithBuyerEmail((int)($cookie->id_lang), $id_order, $buyer_email);
 	}
 	
 	public function getRatingUrlWithBuyerEmail($id_lang, $id_order = '', $buyer_email = '')
 	{
-		$language = Language::getIsoById(intval($id_lang));
-		$base_url = $this->rating_url_base[$language].Configuration::get('TS_ID_'.intval($id_lang)).'.html';
+		$language = Language::getIsoById((int)($id_lang));
+		$base_url = $this->rating_url_base[$language].Configuration::get('TS_ID_'.(int)($id_lang)).'.html';
 		
 		if (!empty($buyer_email))
-			$base_url .= '&buyerEmail='.urlencode(base64_encode($buyer_email)).($id_order ? '&orderID='.urlencode(base64_encode(intval($id_order))) : '');
+			$base_url .= '&buyerEmail='.urlencode(base64_encode($buyer_email)).($id_order ? '&orderID='.urlencode(base64_encode((int)($id_order))) : '');
 		
 		return $base_url;
 	}
@@ -404,23 +404,23 @@ class TrustedShops extends Module
 	{
 		global $smarty, $cookie;
 
-		if (!$this->_isTsIdActive(intval($cookie->id_lang))) return false;
+		if (!$this->_isTsIdActive((int)($cookie->id_lang))) return false;
 
 		$smarty->assign('display_widget', Configuration::get('TS_DISPLAY_IN_SHOP'));
 		if (Configuration::get('TS_DISPLAY_IN_SHOP'))
 		{
-			$filename = $this->getWidgetFilename(intval($cookie->id_lang));
-			$cache = new WidgetCache(_PS_MODULE_DIR_.$filename, Configuration::get('TS_ID_'.intval($cookie->id_lang)));
+			$filename = $this->getWidgetFilename((int)($cookie->id_lang));
+			$cache = new WidgetCache(_PS_MODULE_DIR_.$filename, Configuration::get('TS_ID_'.(int)($cookie->id_lang)));
 
 			if (!$cache->isFresh()) 
 				$cache->refresh();
 
-			$smarty->assign(array('ts_id' => Configuration::get('TS_ID_'.intval($cookie->id_lang)), 'filename' => _MODULE_DIR_.$filename));
+			$smarty->assign(array('ts_id' => Configuration::get('TS_ID_'.(int)($cookie->id_lang)), 'filename' => _MODULE_DIR_.$filename));
 		}
 		
-		$smarty->assign('display_rating_link', intval(Configuration::get('TS_DISPLAY_RATING_FRONT_END')));
+		$smarty->assign('display_rating_link', (int)(Configuration::get('TS_DISPLAY_RATING_FRONT_END')));
 		if (Configuration::get('TS_DISPLAY_RATING_FRONT_END'))
-			$smarty->assign(array('rating_url' => $this->getRatingUrl(), 'language' => Language::getIsoById(intval($cookie->id_lang))));
+			$smarty->assign(array('rating_url' => $this->getRatingUrl(), 'language' => Language::getIsoById((int)($cookie->id_lang))));
 		
 		return $this->display(__FILE__, 'widget.tpl');
 	}
@@ -434,7 +434,7 @@ class TrustedShops extends Module
 	{
 		global $cookie;
 
-		return $this->name.'/cache/'.Configuration::get('TS_ID_'.intval($cookie->id_lang)).'.gif';
+		return $this->name.'/cache/'.Configuration::get('TS_ID_'.(int)($cookie->id_lang)).'.gif';
 	}
 
 	public function hookOrderConfirmation($params)
@@ -444,10 +444,10 @@ class TrustedShops extends Module
 	
 		global $smarty, $cookie;
 		
-		if (!$this->_isTsIdActive(intval($cookie->id_lang)))
+		if (!$this->_isTsIdActive((int)($cookie->id_lang)))
 			return false;
 		
-		$smarty->assign(array('rating_url' => $this->getRatingUrl(intval($params['objOrder']->id)), 'language' => Language::getIsoById(intval($cookie->id_lang))));
+		$smarty->assign(array('rating_url' => $this->getRatingUrl((int)($params['objOrder']->id)), 'language' => Language::getIsoById((int)($cookie->id_lang))));
 		
 		return $this->display(__FILE__, 'order-confirmation.tpl');
 	}
@@ -455,10 +455,10 @@ class TrustedShops extends Module
 
 	public function hookNewOrder($params)
 	{
-		if (!Configuration::get('TS_SEND_SEPERATE_MAIL') OR !$this->_isTsIdActive(intval($params['order']->id_lang)))
+		if (!Configuration::get('TS_SEND_SEPERATE_MAIL') OR !$this->_isTsIdActive((int)($params['order']->id_lang)))
 			return false;
 		
-		RatingAlert::save(intval($params['order']->id));
+		RatingAlert::save((int)($params['order']->id));
 	}
 	
 	public function getL($key)

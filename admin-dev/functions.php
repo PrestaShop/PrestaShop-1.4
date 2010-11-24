@@ -40,7 +40,7 @@ function includeDatepicker($id, $time = false)
 {
 	global $cookie;
 	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>';
-	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.intval($cookie->id_lang));
+	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.(int)($cookie->id_lang));
 	if ($iso != 'en')
 		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';
 	echo '<script type="text/javascript">';
@@ -123,33 +123,33 @@ function	getPath($urlBase, $id_category, $path = '', $highlight = '', $type = 'c
 			
 	switch ($type) {
 	case 'catalog':
-		$category = new Category($id_category, intval($cookie->id_lang));
+		$category = new Category($id_category, (int)($cookie->id_lang));
 		if (!$category->id)
 			return $path;
 		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', $category->name) : $category->name;
-		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
 		if ($category->id == 1)
-			$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+			$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 					<img src="../img/admin/home.gif" alt="Home" /></a> ';
-		$path = $edit.'<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+		$path = $edit.'<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 		'.$name.'</a> > '.$path;
 		if ($category->id == 1)
 			return substr($path, 0, strlen($path) - 3);
 		return getPath($urlBase, $category->id_parent, $path);
 		break;
 	case 'cms':
-		$category = new CMSCategory($id_category, intval($cookie->id_lang));
+		$category = new CMSCategory($id_category, (int)($cookie->id_lang));
 		if (!$category->id)
 			return $path;
 
 		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', CMSCategory::hideCMSCategoryPosition($category->name)) : CMSCategory::hideCMSCategoryPosition($category->name);
-		$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+		$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCMSContent'.(int)(Tab::getIdFromClassName('AdminCMSContent')).(int)($cookie->id_employee)).'">
 				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
 		if ($category->id == 1)
-			$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+			$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.(int)(Tab::getIdFromClassName('AdminCMSContent')).(int)($cookie->id_employee)).'">
 					<img src="../img/admin/home.gif" alt="Home" /></a> ';
-		$path = $edit.'<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.intval(Tab::getIdFromClassName('AdminCMSContent')).intval($cookie->id_employee)).'">
+		$path = $edit.'<a href="'.$urlBase.'&id_cms_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCMSContent'.(int)(Tab::getIdFromClassName('AdminCMSContent')).(int)($cookie->id_employee)).'">
 		'.$name.'</a> > '.$path;
 		if ($category->id == 1)
 			return substr($path, 0, strlen($path) - 3);
@@ -202,7 +202,7 @@ function recursiveTab($id_tab)
 {
 	global $cookie, $tabs;
 	
-	$adminTab = Tab::getTab(intval($cookie->id_lang), $id_tab);
+	$adminTab = Tab::getTab((int)($cookie->id_lang), $id_tab);
 	$tabs[]= $adminTab;
 	if ($adminTab['id_parent'] > 0)
 		recursiveTab($adminTab['id_parent']);
@@ -243,7 +243,7 @@ function checkTabRights($id_tab)
 	if ($tabAccesses === NULL)
 		$tabAccesses =  Profile::getProfileAccesses($cookie->profile);
 
-	return ($tabAccesses[intval($id_tab)]['view'] === '1');
+	return ($tabAccesses[(int)($id_tab)]['view'] === '1');
 }
 
 ?>

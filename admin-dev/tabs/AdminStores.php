@@ -32,10 +32,10 @@ class AdminStores extends AdminTab
 		
 		$this->_select = 'cl.`name` country, st.`name` state';
 		$this->_join = '
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'state` st ON (st.`id_state` = a.`id_state`)';
 		
-		$countries = Country::getCountries(intval($cookie->id_lang));
+		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 				
@@ -63,11 +63,11 @@ class AdminStores extends AdminTab
 	protected function postImage($id)
 	{
 		$ret = parent::postImage($id);
-		if (($id_store = intval(Tools::getValue('id_store'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_STORE_IMG_DIR_.$id_store.'.jpg'))
+		if (($id_store = (int)(Tools::getValue('id_store'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_STORE_IMG_DIR_.$id_store.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
-				imageResize(_PS_STORE_IMG_DIR_.$id_store.'.jpg', _PS_STORE_IMG_DIR_.$id_store.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+				imageResize(_PS_STORE_IMG_DIR_.$id_store.'.jpg', _PS_STORE_IMG_DIR_.$id_store.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 		}
 		return $ret;
 	}
@@ -84,18 +84,18 @@ class AdminStores extends AdminTab
 		if (isset($_POST['submitAdd'.$this->table]))
 		{
 			/* If the selected country does not contain states */
-			$id_state = intval(Tools::getValue('id_state'));
-			if ($id_country = Tools::getValue('id_country') AND $country = new Country(intval($id_country)) AND !intval($country->contains_states) AND $id_state)
+			$id_state = (int)(Tools::getValue('id_state'));
+			if ($id_country = Tools::getValue('id_country') AND $country = new Country((int)($id_country)) AND !(int)($country->contains_states) AND $id_state)
 				$this->_errors[] = Tools::displayError('you have selected a state for a country that does not contain states');
 
 			/* If the selected country contains states, then a state have to be selected */
-			if (intval($country->contains_states) AND !$id_state)
+			if ((int)($country->contains_states) AND !$id_state)
 				$this->_errors[] = Tools::displayError('an address which is located in a country containing states must have a state selected');
 				
 			/* Store hours */
 			$_POST['hours'] = array();
 			for ($i = 1; $i < 8; $i++)
-				$_POST['hours'][] .= Tools::getValue('hours_'.intval($i));
+				$_POST['hours'][] .= Tools::getValue('hours_'.(int)($i));
 			$_POST['hours'] = serialize($_POST['hours']);
 		}
 
@@ -152,14 +152,14 @@ class AdminStores extends AdminTab
 					</div>
 					<label>'.$this->l('Country:').'</label>
 					<div class="margin-form">
-						<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.intval($this->getFieldValue($obj, 'id_state')).');" />';
+						<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');" />';
 			$selectedCountry = $this->getFieldValue($obj, 'id_country');
 			foreach ($this->countriesArray AS $id_country => $name)
 				echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 			echo '		</select> <sup>*</sup>
 					</div>
 					<script type="text/javascript">
-						populateStates('.intval($this->getFieldValue($obj, 'id_country')).', '.intval($this->getFieldValue($obj, 'id_state')).');
+						populateStates('.(int)($this->getFieldValue($obj, 'id_country')).', '.(int)($this->getFieldValue($obj, 'id_state')).');
 					</script>
 					<label>'.$this->l('State:').'</label>
 					<div class="margin-form">
@@ -202,7 +202,7 @@ class AdminStores extends AdminTab
 						<input type="file" name="image" />
 						<p class="clear">'.$this->l('Store devanture picture').'</p>';
 
-				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.intval(Tab::getIdFromClassName('AdminStores')).intval($cookie->id_employee)));
+				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.(int)(Tab::getIdFromClassName('AdminStores')).(int)($cookie->id_employee)));
 				
 				echo '</div>
 					<table cellpadding="2" cellspacing="2" style="padding: 10px; margin-top: 15px; border: 1px solid #BBB;">
@@ -230,8 +230,8 @@ class AdminStores extends AdminTab
 						for ($i = 1; $i < 8; $i++)
 							echo '
 							<tr style="color: #7F7F7F; font-size: 0.85em;">
-								<td>'.$days[intval($i)].'</td>
-								<td><input type="text" size="25" name="hours_'.intval($i).'" value="'.(isset($hoursUnserialized) ? htmlentities($hoursUnserialized[$i - 1], ENT_COMPAT, 'UTF-8') : '').'" /><br /></td>
+								<td>'.$days[(int)($i)].'</td>
+								<td><input type="text" size="25" name="hours_'.(int)($i).'" value="'.(isset($hoursUnserialized) ? htmlentities($hoursUnserialized[$i - 1], ENT_COMPAT, 'UTF-8') : '').'" /><br /></td>
 							</tr>';
 			echo '
 					</table>

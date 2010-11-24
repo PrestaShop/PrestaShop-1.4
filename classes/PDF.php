@@ -94,7 +94,7 @@ class PDFCore extends PDF_PageGroupCore
 		global $cookie;
 
 		if (!isset($cookie) OR !is_object($cookie))
-			$cookie->id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
+			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		self::$_iso = strtoupper(Language::getIsoById($cookie->id_lang));
 		FPDF::FPDF($orientation, $unit, $format);
 		$this->_initPDFFonts();
@@ -148,9 +148,9 @@ class PDFCore extends PDF_PageGroupCore
 		elseif (self::$orderSlip)
 			$this->Cell(77, 10, self::l('SLIP #').' '.sprintf('%06d', self::$orderSlip->id), 0, 1, 'R');
 		elseif (self::$delivery)
-			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang))).sprintf('%06d', self::$delivery), 0, 1, 'R');
+			$this->Cell(77, 10, self::l('DELIVERY SLIP #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang))).sprintf('%06d', self::$delivery), 0, 1, 'R');
 		elseif (self::$order->invoice_number)
-			$this->Cell(77, 10, self::l('INVOICE #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang))).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
+			$this->Cell(77, 10, self::l('INVOICE #').' '.Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang))).sprintf('%06d', self::$order->invoice_number), 0, 1, 'R');
 		else
 			$this->Cell(77, 10, self::l('ORDER #').' '.sprintf('%06d', self::$order->id), 0, 1, 'R');
    }
@@ -204,7 +204,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf = new PDF('P', 'mm', 'A4');
 		foreach ($invoices AS $id_order)
 		{
-			$orderObj = new Order(intval($id_order));
+			$orderObj = new Order((int)($id_order));
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf);
 		}
@@ -216,7 +216,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf = new PDF('P', 'mm', 'A4');
 		foreach ($slips AS $id_order)
 		{
-			$orderObj = new Order(intval($id_order));
+			$orderObj = new Order((int)($id_order));
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf, false, $orderObj->delivery_number);
 		}
@@ -235,7 +235,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->AddPage();
 
 		/* Display address information */
-		$delivery_address = new Address(intval($order->id_address_delivery));
+		$delivery_address = new Address((int)($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 		$shop_country = Configuration::get('PS_SHOP_COUNTRY');
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
@@ -358,7 +358,7 @@ class PDFCore extends PDF_PageGroupCore
 		self::$order = $order;
 		self::$orderSlip = $slip;
 		self::$delivery = $delivery;
-		self::$_iso = strtoupper(Language::getIsoById(intval(self::$order->id_lang)));
+		self::$_iso = strtoupper(Language::getIsoById((int)(self::$order->id_lang)));
 		if ((self::$_priceDisplayMethod = $order->getTaxCalculationMethod()) === false)
 			die(self::l('No price display method defined for the customer group'));
 
@@ -368,17 +368,17 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetAutoPageBreak(true, 35);
 		$pdf->StartPageGroup();
 
-		self::$currency = Currency::getCurrencyInstance(intval(self::$order->id_currency));
+		self::$currency = Currency::getCurrencyInstance((int)(self::$order->id_currency));
 
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 		/* Display address information */
-		$invoice_address = new Address(intval($order->id_address_invoice));
+		$invoice_address = new Address((int)($order->id_address_invoice));
 		$invoiceState = $invoice_address->id_state ? new State($invoice_address->id_state) : false;
-		$delivery_address = new Address(intval($order->id_address_delivery));
+		$delivery_address = new Address((int)($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 		$shop_country = Configuration::get('PS_SHOP_COUNTRY');
-		$invoice_customer = new Customer(intval($invoice_address->id_customer));
+		$invoice_customer = new Customer((int)($invoice_address->id_customer));
 
 		$width = 100;
 
@@ -447,9 +447,9 @@ class PDFCore extends PDF_PageGroupCore
 		if (self::$orderSlip)
 			$pdf->Cell(0, 6, self::l('SLIP #').sprintf('%06d', self::$orderSlip->id).' '.self::l('from') . ' ' .Tools::displayDate(self::$orderSlip->date_upd, self::$order->id_lang), 1, 2, 'L', 1);
 		elseif (self::$delivery)
-			$pdf->Cell(0, 6, self::l('DELIVERY SLIP #').Configuration::get('PS_DELIVERY_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$delivery).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->delivery_date, self::$order->id_lang), 1, 2, 'L', 1);
+			$pdf->Cell(0, 6, self::l('DELIVERY SLIP #').Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', self::$delivery).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->delivery_date, self::$order->id_lang), 1, 2, 'L', 1);
 		else
-			$pdf->Cell(0, 6, self::l('INVOICE #').Configuration::get('PS_INVOICE_PREFIX', intval($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->invoice_date, self::$order->id_lang), 1, 2, 'L', 1);
+			$pdf->Cell(0, 6, self::l('INVOICE #').Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->invoice_date, self::$order->id_lang), 1, 2, 'L', 1);
 		$pdf->Cell(55, 6, self::l('Order #').sprintf('%06d', self::$order->id), 'L', 0);
 		$pdf->Cell(70, 6, self::l('Carrier:').($order->gift ? ' '.Tools::iconv('utf-8', self::encoding(), $carrier->name) : ''), 'L');
 		$pdf->Cell(0, 6, self::l('Payment method:'), 'LR');
@@ -618,7 +618,7 @@ class PDFCore extends PDF_PageGroupCore
 		else
 			$products = self::$order->getProducts();
 		$ecotax = 0;
-		$customizedDatas = Product::getAllCustomizedDatas(intval(self::$order->id_cart));
+		$customizedDatas = Product::getAllCustomizedDatas((int)(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 
 		$counter = 0;
@@ -629,7 +629,7 @@ class PDFCore extends PDF_PageGroupCore
 		$isInPreparation = self::$order->isInPreparation();
 
 		foreach($products AS $product)
-			if (!$delivery OR (intval($product['product_quantity']) - intval($product['product_quantity_refunded']) > 0))
+			if (!$delivery OR ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded']) > 0))
 			{
 				if($counter >= $lines)
 				{
@@ -644,7 +644,7 @@ class PDFCore extends PDF_PageGroupCore
 				$counter = $counter + ($lineSize / 5) ;
 
 				$i = -1;
-				$ecotax += $product['ecotax'] * intval($product['product_quantity']);
+				$ecotax += $product['ecotax'] * (int)($product['product_quantity']);
 
 				// Unit vars
 				$unit_without_tax = $product['product_price'];
@@ -653,7 +653,7 @@ class PDFCore extends PDF_PageGroupCore
 					$unit_price = &$unit_without_tax;
 				else
 					$unit_price = &$unit_with_tax;
-				$productQuantity = $delivery ? (intval($product['product_quantity']) - intval($product['product_quantity_refunded'])) : intval($product['product_quantity']);
+				$productQuantity = $delivery ? ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded'])) : (int)($product['product_quantity']);
 
 				if ($productQuantity <= 0)
 					continue ;
@@ -670,7 +670,7 @@ class PDFCore extends PDF_PageGroupCore
 
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
-					$productQuantity = intval($product['product_quantity']) - intval($product['customizationQuantityTotal']);
+					$productQuantity = (int)($product['product_quantity']) - (int)($product['customizationQuantityTotal']);
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
@@ -680,9 +680,9 @@ class PDFCore extends PDF_PageGroupCore
 					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
 					if (!$delivery)
 						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price, self::$currency, true, false)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, intval($product['customizationQuantityTotal']), 'B', 0, 'C');
+					$this->Cell($w[++$i], $lineSize, (int)($product['customizationQuantityTotal']), 'B', 0, 'C');
 					if (!$delivery)
-						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * intval($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
+						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true, false)), 'B', 0, 'R');
 					$this->Ln();
 					$i = -1;
 					$total_with_tax = $unit_with_tax * $productQuantity;
@@ -736,7 +736,7 @@ class PDFCore extends PDF_PageGroupCore
 
 	public function priceBreakDownCalculation(array &$priceBreakDown)
 	{
-		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
+		if (!$id_zone = Address::getZoneById((int)(self::$order->id_address_invoice)))
 			die(Tools::displayError());
 		$priceBreakDown['totalsWithoutTax'] = array();
 		$priceBreakDown['totalsWithTax'] = array();
@@ -766,10 +766,10 @@ class PDFCore extends PDF_PageGroupCore
 			if (!isset($taxes[$product['tax_rate']]))
 				$taxes[$product['tax_rate']] = 0;
 			/* Without tax */
-			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ps_round(floatval($product['product_price']), 2) : floatval($product['product_price'])) * intval($product['product_quantity']);
+			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ps_round(floatval($product['product_price']), 2) : floatval($product['product_price'])) * (int)($product['product_quantity']);
 			$amountWithoutTax += $product['priceWithoutTax'];
 			/* With tax */
-			$product['priceWithTax'] = floatval($product['product_price_wt']) * intval($product['product_quantity']);
+			$product['priceWithTax'] = floatval($product['product_price_wt']) * (int)($product['product_quantity']);
 		}
 
 		$priceBreakDown['totalsProductsWithoutTax'] = $priceBreakDown['totalsWithoutTax'];
@@ -824,7 +824,7 @@ class PDFCore extends PDF_PageGroupCore
 			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 		}
 		$priceBreakDown['taxes'] = $taxes;
-		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : self::$order->total_shipping;
+		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : self::$order->total_shipping;
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
@@ -837,7 +837,7 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public function TaxTab(array &$priceBreakDown)
 	{
-		if (!$id_zone = Address::getZoneById(intval(self::$order->id_address_invoice)))
+		if (!$id_zone = Address::getZoneById((int)(self::$order->id_address_invoice)))
 			die(Tools::displayError());
 		
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoiceAddress->vat_number) AND $invoiceAddress->id_country != Configuration::get('VATNUMBER_COUNTRY'))
@@ -847,7 +847,7 @@ class PDFCore extends PDF_PageGroupCore
 			return;
 		}
 		
-		if (self::$order->total_paid == '0.00' OR (!intval(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
+		if (self::$order->total_paid == '0.00' OR (!(int)(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
 			return ;
 
 		// Setting products tax
@@ -892,7 +892,7 @@ class PDFCore extends PDF_PageGroupCore
 		}
 
 		// Display carrier tax
-		if ($carrierTax->rate AND $carrierTax->rate != '0.00' AND ((self::$order->total_shipping != '0.00' AND !self::$orderSlip) OR (self::$orderSlip AND self::$orderSlip->shipping_cost)) AND Tax::zoneHasTax(intval($carrier->id_tax), intval($id_zone)))
+		if ($carrierTax->rate AND $carrierTax->rate != '0.00' AND ((self::$order->total_shipping != '0.00' AND !self::$orderSlip) OR (self::$orderSlip AND self::$orderSlip->shipping_cost)) AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone)))
 		{
 			$nb_tax++;
 			$before = $this->GetY();
@@ -909,7 +909,7 @@ class PDFCore extends PDF_PageGroupCore
 		// Display wrapping tax
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
-			$tax = new Tax(intval(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+			$tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 			$taxRate = $tax->rate;
 			
 			$nb_tax++;

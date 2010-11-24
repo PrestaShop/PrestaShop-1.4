@@ -10,7 +10,7 @@ function add_required_customization_field_flag()
 	{
 		$productIds = array();
 		foreach ($result AS $row)
-			$productIds[] = intval($row['id_product']);
+			$productIds[] = (int)($row['id_product']);
 		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `customizable` = '._CONTAINS_REQUIRED_FIELD_.' WHERE `id_product` IN ('.implode(', ', $productIds).')'))
 			return false;
 	}

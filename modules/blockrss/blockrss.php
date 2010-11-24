@@ -39,7 +39,7 @@ class Blockrss extends Module
 		{
 			$urlfeed = strval(Tools::getValue('urlfeed'));
 			$title = strval(Tools::getValue('title'));
-			$nbr = intval(Tools::getValue('nbr'));
+			$nbr = (int)(Tools::getValue('nbr'));
 			if ($urlfeed AND !Validate::isUrl($urlfeed))
 				$errors[] = $this->l('Invalid feed URL');
 			elseif (!$title OR empty($title) OR !Validate::isGenericName($title))
@@ -99,7 +99,7 @@ class Blockrss extends Module
 		// Conf
 		$title = strval(Configuration::get('RSS_FEED_TITLE'));
 		$url = strval(Configuration::get('RSS_FEED_URL'));
-		$nb = intval(Configuration::get('RSS_FEED_NBR'));
+		$nb = (int)(Configuration::get('RSS_FEED_NBR'));
 		
 		// Getting data
 		$rss_links = array();

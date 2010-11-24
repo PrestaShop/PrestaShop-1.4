@@ -16,7 +16,7 @@ Tools::addJS(array(_PS_JS_DIR_.'jquery/thickbox-modified.js',_PS_JS_DIR_.'jquery
 include(dirname(__FILE__).'/../../header.php');
 
 // get discount value (ready to display)
-$discount = Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.intval($cookie->id_currency))), intval(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency));
+$discount = Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.(int)($cookie->id_currency))), (int)(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency));
 
 $activeTab = 'sponsor';
 $error = false;
@@ -57,7 +57,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 			else
 			{
 				$referralprogram = new ReferralProgramModule();
-				$referralprogram->id_sponsor = intval($cookie->id_customer);
+				$referralprogram->id_sponsor = (int)($cookie->id_customer);
 				$referralprogram->firstname = $friendFirstName;
 				$referralprogram->lastname = $friendLastName;
 				$referralprogram->email = $friendEmail;
@@ -81,7 +81,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 							'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
 							'{discount}' => $discount,
 						);
-						Mail::Send(intval($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $friendEmail, $friendFirstName.' '.$friendLastName, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+						Mail::Send((int)($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $friendEmail, $friendFirstName.' '.$friendLastName, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						$invitation_sent = true;
 						$nbInvitation++;
 						$activeTab = 'pending';
@@ -112,7 +112,7 @@ if (Tools::isSubmit('revive'))
 				$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
 			else
 				$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-			$referralprogram = new ReferralProgramModule(intval($key));
+			$referralprogram = new ReferralProgramModule((int)($key));
 			$vars = array(
 				'{email}' => $cookie->email,
 				'{lastname}' => $cookie->customer_lastname,
@@ -124,7 +124,7 @@ if (Tools::isSubmit('revive'))
 				'{discount}' => $discount
 			);
 			$referralprogram->save();
-			Mail::Send(intval($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $referralprogram->email, $referralprogram->firstname.' '.$referralprogram->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			Mail::Send((int)($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $referralprogram->email, $referralprogram->firstname.' '.$referralprogram->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			$revive_sent = true;
 			$nbRevive++;
 		}
@@ -133,12 +133,12 @@ if (Tools::isSubmit('revive'))
 		$error = 'no revive checked';
 }
 
-$customer = new Customer(intval($cookie->id_customer));
+$customer = new Customer((int)($cookie->id_customer));
 $stats = $customer->getStats();
 
-$orderQuantity = intval(Configuration::get('REFERRAL_ORDER_QUANTITY'));
+$orderQuantity = (int)(Configuration::get('REFERRAL_ORDER_QUANTITY'));
 $canSendInvitations = false;
-if (intval($stats['nb_orders']) >= $orderQuantity)
+if ((int)($stats['nb_orders']) >= $orderQuantity)
 	$canSendInvitations = true;
 
 // Smarty display
@@ -147,14 +147,14 @@ $smarty->assign(array(
 	'discount' => $discount,
 	'orderQuantity' => $orderQuantity,
 	'canSendInvitations' => $canSendInvitations,
-	'nbFriends' => intval(Configuration::get('REFERRAL_NB_FRIENDS')),
+	'nbFriends' => (int)(Configuration::get('REFERRAL_NB_FRIENDS')),
 	'error' => $error,
 	'invitation_sent' => $invitation_sent,
 	'nbInvitation' => $nbInvitation,
-	'pendingFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'pending'),
+	'pendingFriends' => ReferralProgramModule::getSponsorFriend((int)($cookie->id_customer), 'pending'),
 	'revive_sent' => $revive_sent,
 	'nbRevive' => $nbRevive,
-	'subscribeFriends' => ReferralProgramModule::getSponsorFriend(intval($cookie->id_customer), 'subscribed'),
+	'subscribeFriends' => ReferralProgramModule::getSponsorFriend((int)($cookie->id_customer), 'subscribed'),
 	'mails_exists' => (isset($mails_exists) ? $mails_exists : array())
 ));
 

@@ -114,11 +114,11 @@ class Ogone extends PaymentModule
 	{
 		global $smarty;
 		
-		$currency = new Currency(intval($params['cart']->id_currency));
-		$lang = new Language(intval($params['cart']->id_lang));
-		$customer = new Customer(intval($params['cart']->id_customer));
-		$address = new Address(intval($params['cart']->id_address_invoice));
-		$country = new Country(intval($address->id_country), intval($params['cart']->id_lang));
+		$currency = new Currency((int)($params['cart']->id_currency));
+		$lang = new Language((int)($params['cart']->id_lang));
+		$customer = new Customer((int)($params['cart']->id_customer));
+		$address = new Address((int)($params['cart']->id_address_invoice));
+		$country = new Country((int)($address->id_country), (int)($params['cart']->id_lang));
 		
 		$ogoneParams = array();
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');

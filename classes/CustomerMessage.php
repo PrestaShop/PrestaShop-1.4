@@ -21,11 +21,11 @@ class CustomerMessageCore extends ObjectModel
 	public	function getFields()
 	{
 	 	parent::validateFields();
-		$fields['id_customer_thread'] = intval($this->id_customer_thread);
-		$fields['id_employee'] = intval($this->id_employee);
+		$fields['id_customer_thread'] = (int)($this->id_customer_thread);
+		$fields['id_employee'] = (int)($this->id_employee);
 		$fields['message'] = pSQL($this->message);
 		$fields['file_name'] = pSQL($this->file_name);
-		$fields['ip_address'] = intval($this->ip_address);
+		$fields['ip_address'] = (int)($this->ip_address);
 		$fields['user_agent'] = pSQL($this->user_agent);
 		$fields['date_add'] = pSQL($this->date_add);
 		return $fields;

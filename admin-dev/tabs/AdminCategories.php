@@ -40,7 +40,7 @@ class AdminCategories extends AdminTab
 		'active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 		
 		$this->_category = AdminCatalog::getCurrentCategory();
-		$this->_filter = 'AND `id_parent` = '.intval($this->_category->id);
+		$this->_filter = 'AND `id_parent` = '.(int)($this->_category->id);
 		$this->_select = 'position ';
 
 		parent::__construct();
@@ -66,7 +66,7 @@ class AdminCategories extends AdminTab
 	{
 		global $currentIndex, $cookie;
 
-		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
+		$this->getList((int)($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subcategory')))).' '.$this->l('in category').' "'.stripslashes($this->_category->getName()).'"</h3>';
 		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCatalog&add'.$this->table.'&id_parent='.Tools::getValue('id_category').'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new subcategory').'</a>
 		<div style="margin:10px;">';
@@ -82,9 +82,9 @@ class AdminCategories extends AdminTab
 
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
-			if ($id_category = intval(Tools::getValue('id_category')))
+			if ($id_category = (int)(Tools::getValue('id_category')))
 			{
-				if (!Category::checkBeforeMove($id_category, intval(Tools::getValue('id_parent'))))
+				if (!Category::checkBeforeMove($id_category, (int)(Tools::getValue('id_parent'))))
 				{
 					$this->_errors[] = Tools::displayError('category cannot be moved here');
 					return false;
@@ -118,13 +118,13 @@ class AdminCategories extends AdminTab
 					if ($object->toggleStatus())
 					{
 						$target = '';
-						if (($id_category = intval(Tools::getValue('id_category'))) AND Tools::getValue('id_product'))
-							$target = '&id_category='.intval($id_category);
+						if (($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product'))
+							$target = '&id_category='.(int)($id_category);
 						else 
 						{
 							$referrer = Tools::secureReferrer($_SERVER['HTTP_REFERER']);
 							if (preg_match('/id_category=(\d+)/', $referrer, $matches))
-								$target = '&id_category='.intval($matches[1]);
+								$target = '&id_category='.(int)($matches[1]);
 						}
 						
 						Tools::redirectAdmin($currentIndex.'&conf=5'.$target.'&token='.Tools::getValue('token'));
@@ -155,10 +155,10 @@ class AdminCategories extends AdminTab
 						{
 							$object->deleted = 1;
 							if ($object->update())
-								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.intval($object->id_parent));
+								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.(int)($object->id_parent));
 						}
 						elseif ($object->delete())
-							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.intval($object->id_parent));
+							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.(int)($object->id_parent));
 						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
@@ -172,12 +172,12 @@ class AdminCategories extends AdminTab
 		{
 			if ($this->tabAccess['edit'] !== '1')
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
-			elseif (!Validate::isLoadedObject($object = new Category(intval(Tools::getValue($this->identifier, Tools::getValue('id_category_to_move', 1))))))
+			elseif (!Validate::isLoadedObject($object = new Category((int)(Tools::getValue($this->identifier, Tools::getValue('id_category_to_move', 1))))))
 				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
-				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = intval(Tools::getValue($this->identifier, Tools::getValue('id_category_parent', 1)))) ? ('&'.$this->identifier.'='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (int)(Tools::getValue($this->identifier, Tools::getValue('id_category_parent', 1)))) ? ('&'.$this->identifier.'='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
 		}
 		/* Delete multiple objects */
 		elseif (Tools::getValue('submitDel'.$this->table))
@@ -191,8 +191,8 @@ class AdminCategories extends AdminTab
 					$result = $category->deleteSelection(Tools::getValue($this->table.'Box'));
 					if ($result)
 					{
-						$category->cleanPositions(intval(Tools::getValue('id_category')));
-						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCatalog').'&id_category='.intval(Tools::getValue('id_category')));
+						$category->cleanPositions((int)(Tools::getValue('id_category')));
+						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCatalog').'&id_category='.(int)(Tools::getValue('id_category')));
 					}
 					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 
@@ -209,11 +209,11 @@ class AdminCategories extends AdminTab
 	protected function postImage($id)
 	{
 		$ret = parent::postImage($id);
-		if (($id_category = intval(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
+		if (($id_category = (int)(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
-				imageResize(_PS_CAT_IMG_DIR_.$id_category.'.jpg', _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+				imageResize(_PS_CAT_IMG_DIR_.$id_category.'.jpg', _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 		}
 		return $ret;
 	}
@@ -236,7 +236,7 @@ class AdminCategories extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" '.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' /><sup> *</sup>
+						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" '.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		echo '	<p class="clear"></p>
@@ -251,7 +251,7 @@ class AdminCategories extends AdminTab
 				<label>'.$this->l('Parent category:').' </label>
 				<div class="margin-form">
 					<select name="id_parent">';
-		$categories = Category::getCategories(intval($cookie->id_lang), false);
+		$categories = Category::getCategories((int)($cookie->id_lang), false);
 		Category::recurseCategory($categories, $categories[0][1], 1, $this->getFieldValue($obj, 'id_parent'));
 		echo '
 					</select>
@@ -261,13 +261,13 @@ class AdminCategories extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<textarea name="description_'.$language['id_lang'].'" rows="5" cols="40">'.htmlentities($this->getFieldValue($obj, 'description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
+						<textarea name="description_'.$language['id_lang'].'" rows="5" cols="40">'.htmlentities($this->getFieldValue($obj, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
 					</div>';
 		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Image:').' </label>
 				<div class="margin-form">';
-		echo 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
+		echo 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
 		echo '	<br /><input type="file" name="image" />
 					<p>'.$this->l('Upload category logo from your computer').'</p>
 				</div>
@@ -277,7 +277,7 @@ class AdminCategories extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		echo '	<p class="clear"></p>
@@ -286,7 +286,7 @@ class AdminCategories extends AdminTab
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)
 			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 		echo '	<p class="clear"></p>
@@ -296,7 +296,7 @@ class AdminCategories extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		echo '	<p class="clear"></p>
@@ -305,14 +305,14 @@ class AdminCategories extends AdminTab
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)
 			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onchange="this.value = str2url(this.value);" /><sup> *</sup>
+						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onchange="this.value = str2url(this.value);" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Only letters and the minus (-) character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		echo '	<p class="clear"></p>
 				</div>
 				<label>'.$this->l('Groups access:').' </label>
 				<div class="margin-form">';
-					$groups = Group::getGroups(intval($cookie->id_lang));
+					$groups = Group::getGroups((int)($cookie->id_lang));
 					if (sizeof($groups))
 					{
 						echo '

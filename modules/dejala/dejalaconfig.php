@@ -61,7 +61,7 @@ class DejalaConfig
 	public function loadConfig()
 	{
 		$this->installed = html_entity_decode(Configuration::get('DJL_INSTALLED'), ENT_COMPAT, 'UTF-8');
-		$this->useSSL = intval(html_entity_decode(Configuration::get('DJL_USE_SSL'), ENT_COMPAT, 'UTF-8'));
+		$this->useSSL = (int)(html_entity_decode(Configuration::get('DJL_USE_SSL'), ENT_COMPAT, 'UTF-8'));
 		$this->serviceURL = html_entity_decode(Configuration::get('DJL_SERVICE_URL'), ENT_COMPAT, 'UTF-8');
 		$this->sandboxServiceURL = html_entity_decode(Configuration::get('DJL_SANDBOX_SERVICE_URL'), ENT_COMPAT, 'UTF-8');
 		$this->mode = html_entity_decode(Configuration::get('DJL_MODE'), ENT_COMPAT, 'UTF-8');
@@ -79,7 +79,7 @@ class DejalaConfig
 		// Backward compatibility
 		$activeVal = html_entity_decode(Configuration::get('DJL_ACTIVE'), ENT_COMPAT, 'UTF-8') ;
 		if ($activeVal != "") {
-			$this->active = intval($activeVal);
+			$this->active = (int)($activeVal);
 			$this->visibility_status = ($this->active == 0 ? "invisible" : "visible") ;
 		}
 		if ($this->visibility_status == "") {

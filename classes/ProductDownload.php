@@ -88,14 +88,14 @@ class ProductDownloadCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['id_product'] = intval($this->id_product);
+		$fields['id_product'] = (int)($this->id_product);
 		$fields['display_filename'] = pSQL($this->display_filename);
 		$fields['physically_filename'] = pSQL($this->physically_filename);
 		$fields['date_deposit'] = pSQL($this->date_deposit);
 		$fields['date_expiration'] = pSQL($this->date_expiration);
-		$fields['nb_days_accessible'] = intval($this->nb_days_accessible);
-		$fields['nb_downloadable'] = intval($this->nb_downloadable);
-		$fields['active'] = intval($this->active);
+		$fields['nb_days_accessible'] = (int)($this->nb_days_accessible);
+		$fields['nb_downloadable'] = (int)($this->nb_downloadable);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 
@@ -147,9 +147,9 @@ class ProductDownloadCore extends ObjectModel
 		$data = Db::getInstance()->getRow('
 		SELECT `id_product_download`
 		FROM `'._DB_PREFIX_.'product_download`
-		WHERE `id_product` = '.intval($id_product).' AND `active` = 1');
+		WHERE `id_product` = '.(int)($id_product).' AND `active` = 1');
 		
-		self::$_productIds[$id_product] = isset($data['id_product_download']) ? intval($data['id_product_download']) : false;
+		self::$_productIds[$id_product] = isset($data['id_product_download']) ? (int)($data['id_product_download']) : false;
 		
 		return self::$_productIds[$id_product];
 	}
@@ -165,7 +165,7 @@ class ProductDownloadCore extends ObjectModel
 		$data = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `physically_filename`
 		FROM `'._DB_PREFIX_.'product_download`
-		WHERE `id_product` = '.intval($id_product).'
+		WHERE `id_product` = '.(int)($id_product).'
 		AND `active` = 1');
 		return $data['physically_filename'];
 	}
@@ -225,9 +225,9 @@ class ProductDownloadCore extends ObjectModel
 	public function getDeadline()
 	{
 		// TODO check if deadline is inferior than date_expiration
-		if (!intval($this->nb_days_accessible))
+		if (!(int)($this->nb_days_accessible))
 			return '0000-00-00 00:00:00';
-		$timestamp = strtotime('+'.intval($this->nb_days_accessible).' day');
+		$timestamp = strtotime('+'.(int)($this->nb_days_accessible).' day');
 		return date('Y-m-d H:i:s', $timestamp);
 	}
 

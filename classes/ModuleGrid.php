@@ -50,7 +50,7 @@ abstract class ModuleGridCore extends Module
 	
 	public function setEmployee($id_employee)
 	{
-		$this->_employee = new Employee(intval($id_employee));
+		$this->_employee = new Employee((int)($id_employee));
 	}
 	public function setLang($id_lang)
 	{
@@ -92,8 +92,8 @@ abstract class ModuleGridCore extends Module
 		$grider = 'grider.php?render='.$render.'&module='.Tools::getValue('module');
 		
 		global $cookie;
-		$grider .= '&id_employee='.intval($cookie->id_employee);
-		$grider .= '&id_lang='.intval($cookie->id_lang);
+		$grider .= '&id_employee='.(int)($cookie->id_employee);
+		$grider .= '&id_lang='.(int)($cookie->id_lang);
 		
 		if (!isset($params['width']) OR !Validate::IsUnsignedInt($params['width']))
 			$params['width'] = 600;

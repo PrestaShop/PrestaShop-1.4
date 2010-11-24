@@ -48,8 +48,8 @@ class Gsitemap extends Module
 
 	private function _postProcess()
 	{
-		Configuration::updateValue('GSITEMAP_ALL_CMS', intval(Tools::getValue('GSITEMAP_ALL_CMS')));
-		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', intval(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
+		Configuration::updateValue('GSITEMAP_ALL_CMS', (int)(Tools::getValue('GSITEMAP_ALL_CMS')));
+		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', (int)(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
 		$link = new Link();
 		$langs = Language::getLanguages();
 				
@@ -82,7 +82,7 @@ XML;
 		
 		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
 		foreach($cmss AS $cms)
-			$this->_addSitemapNode($xml, $link->getCMSLink(intval($cms['id_cms']), $cms['link_rewrite'], false, intval($cms['id_lang'])), '0.8', 'daily');
+			$this->_addSitemapNode($xml, $link->getCMSLink((int)($cms['id_cms']), $cms['link_rewrite'], false, (int)($cms['id_lang'])), '0.8', 'daily');
 		
 		$categories = Db::getInstance()->ExecuteS('
 		SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
@@ -95,7 +95,7 @@ XML;
 		{
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
-			$tmpLink = $link->getCategoryLink(intval($category['id_category']), $category['link_rewrite'], intval($category['id_lang']));
+			$tmpLink = $link->getCategoryLink((int)($category['id_category']), $category['link_rewrite'], (int)($category['id_lang']));
 			
 			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
       	}
@@ -122,7 +122,7 @@ XML;
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
 
-			$tmpLink = $link->getProductLink(intval($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], intval($product['id_lang']));
+			$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
 			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
 			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
         }

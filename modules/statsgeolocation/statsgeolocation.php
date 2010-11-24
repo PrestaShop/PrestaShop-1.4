@@ -138,7 +138,7 @@ class StatsGeoLocation extends Module
 
 		$map_size;
 		$cross_size;
-		$id_lang = (isset($cookie->id_lang) ? intval($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT'));
+		$id_lang = (isset($cookie->id_lang) ? (int)($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT'));
 		$wait = $this->l('Please wait...');
 
 		if ((file_exists('../modules/'.$this->name.'/'.$this->_map_path) == FALSE) || 

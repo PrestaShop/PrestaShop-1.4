@@ -81,7 +81,7 @@ class Session
         $fp = @fopen($this->gcCounterFile, 'a+');
         if($fp)
         {
-        	$count = intval(fgets($fp, 999999)) + 1;
+        	$count = (int)(fgets($fp, 999999)) + 1;
         	if($count > $this->gcCounter || rand(0, 23) == date('h'))
         	{
         		$this->_gc();

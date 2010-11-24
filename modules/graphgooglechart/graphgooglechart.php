@@ -167,7 +167,7 @@ class GraphGoogleChart extends ModuleGraphEngine
 			}
 		}
 		
-		$url .= '&chs='.intval($this->_width).'x'.intval($this->_height);
+		$url .= '&chs='.(int)($this->_width).'x'.(int)($this->_height);
 		if (!isset($this->_values[0]) || !is_array($this->_values[0]))
 			$url .= (isset($this->_titles['main'])) ? '&chtt='.urlencode($this->_titles['main']) : '';
 		else

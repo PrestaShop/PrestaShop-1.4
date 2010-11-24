@@ -17,7 +17,7 @@ function convert_product_price()
 			{
 				$newPrice = floatval(number_format($price, 6, '.', ''));
 				$newPrice = Tools::floorf($newPrice / (1 + $taxRates[$row['id_tax']]), 6);
-				DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `price` = '.$newPrice.' WHERE `id_product` = '.intval($row['id_product']));
+				DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `price` = '.$newPrice.' WHERE `id_product` = '.(int)($row['id_product']));
 			}
 		}
 }

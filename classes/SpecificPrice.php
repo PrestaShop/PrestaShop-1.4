@@ -36,14 +36,14 @@ class SpecificPriceCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = intval($this->id_product);
-		$fields['id_shop'] = intval($this->id_shop);
-		$fields['id_currency'] = intval($this->id_currency);
-		$fields['id_country'] = intval($this->id_country);
-		$fields['id_group'] = intval($this->id_group);
-		$fields['priority'] = intval($this->priority);
+		$fields['id_product'] = (int)($this->id_product);
+		$fields['id_shop'] = (int)($this->id_shop);
+		$fields['id_currency'] = (int)($this->id_currency);
+		$fields['id_country'] = (int)($this->id_country);
+		$fields['id_group'] = (int)($this->id_group);
+		$fields['priority'] = (int)($this->priority);
 		$fields['price'] = floatval($this->price);
-		$fields['from_quantity'] = intval($this->from_quantity);
+		$fields['from_quantity'] = (int)($this->from_quantity);
 		$fields['reduction'] = floatval($this->reduction);
 		$fields['reduction_type'] = pSQL($this->reduction_type);
 		$fields['from'] = pSQL($this->from);
@@ -53,7 +53,7 @@ class SpecificPriceCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false)
 	{
-		$maxPriority = intval(DB::getInstance()->getValue('SELECT MAX(`priority`) FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.intval($this->id_product)));
+		$maxPriority = (int)(DB::getInstance()->getValue('SELECT MAX(`priority`) FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($this->id_product)));
 		$this->priority = $maxPriority == 0 ? 0 : $maxPriority + 1;
 		return parent::add($autodate, $nullValues);
 	}
@@ -61,14 +61,14 @@ class SpecificPriceCore extends ObjectModel
 	static public function getByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.intval($id_product).' ORDER BY `priority`
+			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).' ORDER BY `priority`
 		');
 	}
 
 	static public function getIdsByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.intval($id_product).'
+			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).'
 		');
 	}
 
@@ -78,12 +78,12 @@ class SpecificPriceCore extends ObjectModel
 		return Db::getInstance()->getRow('
 			SELECT *
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.intval($id_product).') AND
-					`id_shop` IN(0, '.intval($id_shop).') AND
-					`id_currency` IN(0, '.intval($id_currency).') AND
-					`id_country` IN(0, '.intval($id_country).') AND
-					`id_group` IN(0, '.intval($id_group).') AND
-					`from_quantity` <= '.intval($quantity).' AND
+			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
+					`id_shop` IN(0, '.(int)($id_shop).') AND
+					`id_currency` IN(0, '.(int)($id_currency).') AND
+					`id_country` IN(0, '.(int)($id_country).') AND
+					`id_group` IN(0, '.(int)($id_group).') AND
+					`from_quantity` <= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
 			ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
 		');
@@ -108,10 +108,10 @@ class SpecificPriceCore extends ObjectModel
 		$fields = '';
 		foreach ($priorities as $priority)
 			$fields .= '`'.pSQL($priority).'` DESC, ';
-		$result = DB::getInstance()->ExecuteS('SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.intval($id_product).' ORDER BY '.rtrim($fields, ', DESC'));
+		$result = DB::getInstance()->ExecuteS('SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).' ORDER BY '.rtrim($fields, ', DESC'));
 		$position = 0;
 		foreach ($result AS $row)
-			if (!DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'specific_price` SET `priority` = '.++$position.' WHERE `id_specific_price` = '.intval($row['id_specific_price'])))
+			if (!DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'specific_price` SET `priority` = '.++$position.' WHERE `id_specific_price` = '.(int)($row['id_specific_price'])))
 				return false;
 		return true;
 	}
@@ -122,11 +122,11 @@ class SpecificPriceCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.intval($id_product).') AND
-					`id_shop` IN(0, '.intval($id_shop).') AND
-					`id_currency` IN(0, '.intval($id_currency).') AND
-					`id_country` IN(0, '.intval($id_country).') AND
-					`id_group` IN(0, '.intval($id_group).') AND
+			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
+					`id_shop` IN(0, '.(int)($id_shop).') AND
+					`id_currency` IN(0, '.(int)($id_currency).') AND
+					`id_country` IN(0, '.(int)($id_country).') AND
+					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` > 1 AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
 					ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
@@ -139,12 +139,12 @@ class SpecificPriceCore extends ObjectModel
 		return Db::getInstance()->getRow('
 			SELECT *
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.intval($id_product).') AND
-					`id_shop` IN(0, '.intval($id_shop).') AND
-					`id_currency` IN(0, '.intval($id_currency).') AND
-					`id_country` IN(0, '.intval($id_country).') AND
-					`id_group` IN(0, '.intval($id_group).') AND
-					`from_quantity` >= '.intval($quantity).' AND
+			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
+					`id_shop` IN(0, '.(int)($id_shop).') AND
+					`id_currency` IN(0, '.(int)($id_currency).') AND
+					`id_country` IN(0, '.(int)($id_country).') AND
+					`id_group` IN(0, '.(int)($id_group).') AND
+					`from_quantity` >= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
 					ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
 		');
@@ -155,29 +155,29 @@ class SpecificPriceCore extends ObjectModel
 		$resource = Db::getInstance()->ExecuteS('
 			SELECT `id_product`
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_shop` IN(0, '.intval($id_shop).') AND
-					`id_currency` IN(0, '.intval($id_currency).') AND
-					`id_country` IN(0, '.intval($id_country).') AND
-					`id_group` IN(0, '.intval($id_group).') AND
+			WHERE	`id_shop` IN(0, '.(int)($id_shop).') AND
+					`id_currency` IN(0, '.(int)($id_currency).') AND
+					`id_country` IN(0, '.(int)($id_country).') AND
+					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` = 1 AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$beginning.'\' >= `from` AND \''.$ending.'\' <= `to`)) AND
 					`reduction` > 0
 		', false);
 		$ids_product = array();
 		while ($row = DB::getInstance()->nextRow($resource))
-			$ids_product[] = intval($row['id_product']);
+			$ids_product[] = (int)($row['id_product']);
 		return $ids_product;
 	}
 
 	static public function deleteByProductId($id_product)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.intval($id_product));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product));
 	}
 
 	public function duplicate($id_product = false)
 	{
 		if ($id_product)
-			$this->id_product = intval($id_product);
+			$this->id_product = (int)($id_product);
 		return $this->add();
 	}
 }

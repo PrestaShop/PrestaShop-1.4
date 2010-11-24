@@ -59,13 +59,13 @@ class OrderStateCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['send_email'] = intval($this->send_email);
-		$fields['invoice'] = intval($this->invoice);
+		$fields['send_email'] = (int)($this->send_email);
+		$fields['invoice'] = (int)($this->invoice);
 		$fields['color'] = pSQL($this->color);
-		$fields['unremovable'] = intval($this->unremovable);
-		$fields['logable'] = intval($this->logable);
-		$fields['delivery'] = intval($this->delivery);
-		$fields['hidden'] = intval($this->hidden);
+		$fields['unremovable'] = (int)($this->unremovable);
+		$fields['logable'] = (int)($this->logable);
+		$fields['delivery'] = (int)($this->delivery);
+		$fields['hidden'] = (int)($this->hidden);
 		return $fields;
 	}
 	
@@ -91,7 +91,7 @@ class OrderStateCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_state` os
-		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($id_lang).')
 		ORDER BY `name` ASC');
 	}
 
@@ -106,7 +106,7 @@ class OrderStateCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `invoice` AS ok
 		FROM `'._DB_PREFIX_.'order_state`
-		WHERE `id_order_state` = '.intval($id_order_state));
+		WHERE `id_order_state` = '.(int)($id_order_state));
 		return $result['ok'];
 	}
 	

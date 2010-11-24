@@ -5,17 +5,17 @@ include(dirname(__FILE__).'/../../../init.php');
 include(dirname(__FILE__).'/../paypal.php');
 
 $paypal = new Paypal();
-$cart = new Cart(intval($cookie->id_cart));
+$cart = new Cart((int)($cookie->id_cart));
 
-$address = new Address(intval($cart->id_address_invoice));
-$country = new Country(intval($address->id_country));
+$address = new Address((int)($cart->id_address_invoice));
+$country = new Country((int)($address->id_country));
 $state = NULL;
 if ($address->id_state)
-	$state = new State(intval($address->id_state));
-$customer = new Customer(intval($cart->id_customer));
+	$state = new State((int)($address->id_state));
+$customer = new Customer((int)($cart->id_customer));
 $business = Configuration::get('PAYPAL_BUSINESS');
 $header = Configuration::get('PAYPAL_HEADER');
-$currency_order = new Currency(intval($cart->id_currency));
+$currency_order = new Currency((int)($cart->id_currency));
 $currency_module = $paypal->getCurrency();
 
 if (!Validate::isEmail($business))
@@ -48,9 +48,9 @@ $smarty->assign(array(
 	'discount' => $cart->getOrderTotal(true, 2),
 	'business' => $business,
 	'currency_module' => $currency_module,
-	'cart_id' => intval($cart->id).'_'.pSQL($cart->secure_key),
+	'cart_id' => (int)($cart->id).'_'.pSQL($cart->secure_key),
 	'products' => $cart->getProducts(),
-	'paypal_id' => intval($paypal->id),
+	'paypal_id' => (int)($paypal->id),
 	'header' => $header,
 	'url' => Tools::getHttpHost(false, true).__PS_BASE_URI__
 ));

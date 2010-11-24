@@ -43,8 +43,8 @@ class LocalizationPackCore
 				$state->name = strval($attributes['name']);
 				$state->iso_code = strval($attributes['iso_code']);
 				$state->id_country = Country::getByIso(strval($attributes['country']));
-				$state->id_zone = intval(Zone::getIdByName(strval($attributes['zone'])));
-				$state->tax_behavior = intval($attributes['tax_behavior']);
+				$state->id_zone = (int)(Zone::getIdByName(strval($attributes['zone'])));
+				$state->tax_behavior = (int)($attributes['tax_behavior']);
 				if (!$state->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid state properties.');
@@ -73,7 +73,7 @@ class LocalizationPackCore
 			{
 				$attributes = $taxData->attributes();
 				$tax = new Tax();
-				$tax->name[intval(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
+				$tax->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
 				$tax->rate = floatval($attributes['rate']);
 				if (!$tax->validateFields())
 				{
@@ -113,7 +113,7 @@ class LocalizationPackCore
 				$this->_errors[] = Tools::displayError('Cannot parse feed!');
 				return false;
 			}
-			if (!$defaultCurrency = intval(Configuration::get('PS_CURRENCY_DEFAULT')))
+			if (!$defaultCurrency = (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
 			{
 				$this->_errors[] = Tools::displayError('Cannot parse feed!');
 				return false;
@@ -126,12 +126,12 @@ class LocalizationPackCore
 				$currency = new Currency();
 				$currency->name = strval($attributes['name']);
 				$currency->iso_code = strval($attributes['iso_code']);
-				$currency->iso_code_num = intval($attributes['iso_code_num']);
+				$currency->iso_code_num = (int)($attributes['iso_code_num']);
 				$currency->sign = strval($attributes['sign']);
-				$currency->blank = intval($attributes['blank']);
+				$currency->blank = (int)($attributes['blank']);
 				$currency->conversion_rate = 1; // This value will be updated if the store is online
-				$currency->format = intval($attributes['format']);
-				$currency->decimals = intval($attributes['decimals']);
+				$currency->format = (int)($attributes['format']);
+				$currency->decimals = (int)($attributes['decimals']);
 				if (!$currency->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid currency properties.');

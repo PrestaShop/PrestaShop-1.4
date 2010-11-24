@@ -38,7 +38,7 @@ class TaxCore extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['rate'] = floatval($this->rate);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 	
@@ -58,34 +58,34 @@ class TaxCore extends ObjectModel
 
 	public function delete()
 	{
-		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id)))
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)($this->id)))
 			return false;
 		return parent::delete();
 	}
 
 	public static function checkTaxZone($id_tax, $id_zone)
 	{
-		return isset(self::$_TAX_ZONES[intval($id_zone)][intval($id_tax)]);
+		return isset(self::$_TAX_ZONES[(int)($id_zone)][(int)($id_tax)]);
 	}
 
 	public function getStates()
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_state`, `id_tax` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id));
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_state`, `id_tax` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)($this->id));
 	}
 
 	public function getState($id_state)
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_state` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id).' AND `id_state` = '.intval($id_state));
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_state` FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)($this->id).' AND `id_state` = '.(int)($id_state));
 	}
 
 	public function addState($id_state)
 	{
-		return Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_state` (`id_tax`, `id_state`) VALUES ('.intval($this->id).', '.intval($id_state).')');
+		return Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_state` (`id_tax`, `id_state`) VALUES ('.(int)($this->id).', '.(int)($id_state).')');
 	}
 
 	public function deleteState($id_state)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.intval($this->id).' AND `id_state` = '.intval($id_state));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)($this->id).' AND `id_state` = '.(int)($id_state));
 	}
 
 	/**
@@ -98,7 +98,7 @@ class TaxCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'tax_zone`
-			WHERE `id_tax` = '.intval($this->id));
+			WHERE `id_tax` = '.(int)($this->id));
 	}
 
 	/**
@@ -111,8 +111,8 @@ class TaxCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT *
 			FROM `'._DB_PREFIX_.'tax_zone`
-			WHERE `id_tax` = '.intval($this->id).'
-			AND `id_zone` = '.intval($id_zone));
+			WHERE `id_tax` = '.(int)($this->id).'
+			AND `id_zone` = '.(int)($id_zone));
 	}
 
 	/**
@@ -122,7 +122,7 @@ class TaxCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'tax_zone` (`id_tax` , `id_zone`)
-			VALUES ('.intval($this->id).', '.intval($id_zone).')');
+			VALUES ('.(int)($this->id).', '.(int)($id_zone).')');
 	}
 
 	/**
@@ -132,8 +132,8 @@ class TaxCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'tax_zone`
-			WHERE `id_tax` = '.intval($this->id).'
-			AND `id_zone` = '.intval($id_zone).' LIMIT 1');
+			WHERE `id_tax` = '.(int)($this->id).'
+			AND `id_zone` = '.(int)($id_zone).' LIMIT 1');
 	}
 
 	/**
@@ -144,9 +144,9 @@ class TaxCore extends ObjectModel
 	static public function getTaxes($id_lang = false, $active = 1)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT t.id_tax, t.rate'.(intval($id_lang) ? ', tl.name, tl.id_lang ' : '').'
+		SELECT t.id_tax, t.rate'.((int)($id_lang) ? ', tl.name, tl.id_lang ' : '').'
 		FROM `'._DB_PREFIX_.'tax` t
-		'.(intval($id_lang) ? 'LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.intval($id_lang).')'
+		'.((int)($id_lang) ? 'LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')'
 		.($active == 1 ? 'WHERE t.`active` = 1' : '').'
 		ORDER BY `name` ASC' : ''));
 	}
@@ -158,7 +158,7 @@ class TaxCore extends ObjectModel
 
 	static public function zoneHasTax($id_tax, $id_zone)
 	{
-		return Tax::checkTaxZone(intval($id_tax), intval($id_zone));
+		return Tax::checkTaxZone((int)($id_tax), (int)($id_zone));
 	}
 
 	static public function getRateByState($id_state, $active = 1)
@@ -167,7 +167,7 @@ class TaxCore extends ObjectModel
 			SELECT ts.`id_tax`, t.`rate`
 			FROM `'._DB_PREFIX_.'tax_state` ts
 			LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = ts.`id_tax`)
-			WHERE `id_state` = '.intval($id_state).
+			WHERE `id_state` = '.(int)($id_state).
 			($active == 1 ? ' AND t.`active` = 1' : ''));
 		return $tax ? floatval($tax['rate']) : false;
 	}
@@ -183,35 +183,35 @@ class TaxCore extends ObjectModel
 		/* If customer has an address (implies that he is registered and logged) */
 		if ($id_address AND $address_ids = Address::getCountryAndState($id_address))
 		{
-			$id_zone_country = Country::getIdZone(intval($address_ids['id_country']));
+			$id_zone_country = Country::getIdZone((int)($address_ids['id_country']));
 			if (!empty($address_ids['vat_number']) AND $address_ids['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
 				return 0;
 			/* If customer's invoice address is inside a state */
 			if ($address_ids['id_state'])
 			{
-				$state = new State(intval($address_ids['id_state']));
+				$state = new State((int)($address_ids['id_state']));
 				if (!Validate::isLoadedObject($state))
 					die(Tools::displayError());
 				/* Return tax value depending to the tax behavior */
-				$tax_behavior = intval($state->tax_behavior);
+				$tax_behavior = (int)($state->tax_behavior);
 				if ($tax_behavior == PS_PRODUCT_TAX)
-					return $productTax * Tax::zoneHasTax(intval($id_tax), intval($id_zone_country));
+					return $productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone_country));
 				if ($tax_behavior == PS_STATE_TAX)
-					return Tax::getRateByState(intval($address_ids['id_state']));
+					return Tax::getRateByState((int)($address_ids['id_state']));
 				if ($tax_behavior == PS_BOTH_TAX)
-					return ($productTax * Tax::zoneHasTax(intval($id_tax), intval($id_zone_country))) + Tax::getRateByState(intval($address_ids['id_state']));
+					return ($productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone_country))) + Tax::getRateByState((int)($address_ids['id_state']));
 				/* Unknown behavior */
 				die(Tools::displayError('Unknown tax behavior!'));
 			}
 			/* Else getting country zone tax */
 			if (!$id_zone = Address::getZoneById($id_address))
 				die(Tools::displayError());
-			return $productTax * Tax::zoneHasTax(intval($id_tax), intval($id_zone));
+			return $productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone));
 		}
 		/* Default tax application */
 		if (!Validate::isLoadedObject($defaultCountry))
 			die(Tools::displayError());
-		return $productTax * Tax::zoneHasTax(intval($id_tax), intval($defaultCountry->id_zone));
+		return $productTax * Tax::zoneHasTax((int)($id_tax), (int)($defaultCountry->id_zone));
 	}
 
 	/**
@@ -227,7 +227,7 @@ class TaxCore extends ObjectModel
 		if ($result === false)
 			die(Tools::displayError('Invalid loadTaxZones() SQL query!'));
 		foreach ($result AS $row)
-			self::$_TAX_ZONES[intval($row['id_zone'])][intval($row['id_tax'])] = true;
+			self::$_TAX_ZONES[(int)($row['id_zone'])][(int)($row['id_tax'])] = true;
 	}
 	
 	static public function getTaxIdByRate($rate, $active = 1)
@@ -237,7 +237,7 @@ class TaxCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'tax`
 			WHERE `rate` = '.floatval($rate).
 			($active == 1 ? ' AND `active` = 1' : ''));
-		return $tax ? intval($tax['id_tax']) : false;
+		return $tax ? (int)($tax['id_tax']) : false;
 	}
 
 	static public function getDataByProductId($id_product)
@@ -246,6 +246,6 @@ class TaxCore extends ObjectModel
 		SELECT p.`id_tax`, t.`rate`
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
-		WHERE p.`id_product` = '.intval($id_product));
+		WHERE p.`id_product` = '.(int)($id_product));
 	}
 }

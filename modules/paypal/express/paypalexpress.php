@@ -9,10 +9,10 @@ class PaypalExpress extends Paypal
 		global $cookie;
 
 		// Getting cart informations
-		$cart = new Cart(intval($cookie->id_cart));
+		$cart = new Cart((int)($cookie->id_cart));
 		if (!Validate::isLoadedObject($cart))
 			$this->_logs[] = $this->l('Not a valid cart');
-		$currency = new Currency(intval($cart->id_currency));
+		$currency = new Currency((int)($cart->id_currency));
 		if (!Validate::isLoadedObject($currency))
 			$this->_logs[] = $this->l('Not a valid currency');
 

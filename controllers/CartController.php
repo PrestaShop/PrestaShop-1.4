@@ -14,16 +14,16 @@ class CartControllerCore extends FrontController
 				{
 					if ($this->cookie->id_customer)
 					{
-						$customer = new Customer(intval($this->cookie->id_customer));
+						$customer = new Customer((int)($this->cookie->id_customer));
 						$groups = $customer->getGroups();
 					}
 					else
 						$groups = array(1);
-					$address_delivery = new Address(intval($this->cart->id_address_delivery));
+					$address_delivery = new Address((int)($this->cart->id_address_delivery));
 					$result = array('carriers' => Carrier::getCarriersOpc($address_delivery->id_country, $groups));
 				}
 				$result['summary'] = $this->cart->getSummaryDetails();
-				$result['customizedDatas'] = Product::getAllCustomizedDatas(intval($this->cart->id));
+				$result['customizedDatas'] = Product::getAllCustomizedDatas((int)($this->cart->id));
 				die(Tools::jsonEncode($result));
 			}
 			else
@@ -47,8 +47,8 @@ class CartControllerCore extends FrontController
 
 		$this->cartDiscounts = $this->cart->getDiscounts();
 		foreach ($this->cartDiscounts AS $k => $this->cartDiscount)
-			if ($error = $this->cart->checkDiscountValidity(new Discount(intval($this->cartDiscount['id_discount'])), $this->cartDiscounts, $orderTotal, $this->cart->getProducts()))
-				$this->cart->deleteDiscount(intval($this->cartDiscount['id_discount']));
+			if ($error = $this->cart->checkDiscountValidity(new Discount((int)($this->cartDiscount['id_discount'])), $this->cartDiscounts, $orderTotal, $this->cart->getProducts()))
+				$this->cart->deleteDiscount((int)($this->cartDiscount['id_discount']));
 
 		$add = Tools::getIsset('add') ? 1 : 0;
 		$delete = Tools::getIsset('delete') ? 1 : 0;
@@ -62,17 +62,17 @@ class CartControllerCore extends FrontController
 		if (($add OR Tools::getIsset('update') OR $delete) AND isset($this->cookie->date_add))
 		{
 			//get the values
-			$idProduct = intval(Tools::getValue('id_product', NULL));
-			$idProductAttribute = intval(Tools::getValue('id_product_attribute', Tools::getValue('ipa')));
-			$customizationId = intval(Tools::getValue('id_customization', 0));
-			$qty = intval(abs(Tools::getValue('qty', 1)));
+			$idProduct = (int)(Tools::getValue('id_product', NULL));
+			$idProductAttribute = (int)(Tools::getValue('id_product_attribute', Tools::getValue('ipa')));
+			$customizationId = (int)(Tools::getValue('id_customization', 0));
+			$qty = (int)(abs(Tools::getValue('qty', 1)));
 			if ($qty == 0)
 				$this->errors[] = Tools::displayError('null quantity');
 			elseif (!$idProduct)
 				$this->errors[] = Tools::displayError('product not found');
 			else
 			{
-				$producToAdd = new Product(intval($idProduct), true, intval($this->cookie->id_lang));
+				$producToAdd = new Product((int)($idProduct), true, (int)($this->cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 					$this->errors[] = Tools::displayError('product is no longer available', false);
 				else
@@ -80,7 +80,7 @@ class CartControllerCore extends FrontController
 					/* Check the quantity availability */
 					if ($idProductAttribute AND is_numeric($idProductAttribute))
 					{
-						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
+						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
 							if (Tools::getValue('ajax') == 'true')
 								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
 							else
@@ -88,16 +88,16 @@ class CartControllerCore extends FrontController
 					}
 					elseif ($producToAdd->hasAttributes() AND !$delete)
 					{
-						$idProductAttribute = Product::getDefaultAttribute(intval($producToAdd->id), intval($producToAdd->out_of_stock) == 2 ? !intval(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : !intval($producToAdd->out_of_stock));
+						$idProductAttribute = Product::getDefaultAttribute((int)($producToAdd->id), (int)($producToAdd->out_of_stock) == 2 ? !(int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : !(int)($producToAdd->out_of_stock));
 						if (!$idProductAttribute)
 							Tools::redirectAdmin($link->getProductLink($producToAdd));
-						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty(intval($idProductAttribute), intval($qty)))
+						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
 							if (Tools::getValue('ajax') == 'true')
 								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
 							else	
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
-					elseif (!$delete AND !$producToAdd->checkQty(intval($qty)))
+					elseif (!$delete AND !$producToAdd->checkQty((int)($qty)))
 						if (Tools::getValue('ajax') == 'true')
 								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock')).'\']}');
 							else	
@@ -119,13 +119,13 @@ class CartControllerCore extends FrontController
 							{
 								$this->cart->add();
 								if ($this->cart->id)
-									$this->cookie->id_cart = intval($this->cart->id);
+									$this->cookie->id_cart = (int)($this->cart->id);
 							}
 							if ($add AND !$producToAdd->hasAllRequiredCustomizableFields() AND !$customizationId)
 								$this->errors[] = Tools::displayError('Please fill all required fields, then save the customization.');
 							if (!sizeof($this->errors))
 							{
-								$updateQuantity = $this->cart->updateQty(intval($qty), intval($idProduct), intval($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
+								$updateQuantity = $this->cart->updateQty((int)($qty), (int)($idProduct), (int)($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
 																
 								if ($updateQuantity < 0)
 									if (Tools::getValue('ajax') == 'true')
@@ -147,8 +147,8 @@ class CartControllerCore extends FrontController
 						}
 						elseif ($delete)
 						{
-							$this->cart->deleteProduct(intval($idProduct), intval($idProductAttribute), intval($customizationId));
-							if (!Cart::getNbProducts(intval($this->cart->id)))
+							$this->cart->deleteProduct((int)($idProduct), (int)($idProductAttribute), (int)($customizationId));
+							if (!Cart::getNbProducts((int)($this->cart->id)))
 							{
 								$this->cart->id_carrier = 0;
 								$this->cart->gift = 0;
@@ -160,10 +160,10 @@ class CartControllerCore extends FrontController
 					$discounts = $this->cart->getDiscounts();
 					foreach($discounts AS $discount)
 					{
-						$discountObj = new Discount(intval($discount['id_discount']), intval($this->cookie->id_lang));
+						$discountObj = new Discount((int)($discount['id_discount']), (int)($this->cookie->id_lang));
 						if ($error = $this->cart->checkDiscountValidity($discountObj, $discounts, $this->cart->getOrderTotal(true, 1), $this->cart->getProducts()))
 						{
-							$this->cart->deleteDiscount(intval($discount['id_discount']));
+							$this->cart->deleteDiscount((int)($discount['id_discount']));
 							$this->cart->update();
 							$errors[] = $error;
 						}
@@ -183,7 +183,7 @@ class CartControllerCore extends FrontController
 					}
 				}
 				if (Tools::getValue('ajax') != 'true' AND !sizeof($this->errors))
-					Tools::redirect('order.php?'.(isset($idProduct) ? 'ipa='.intval($idProduct) : ''));
+					Tools::redirect('order.php?'.(isset($idProduct) ? 'ipa='.(int)($idProduct) : ''));
 					
 			}
 		}

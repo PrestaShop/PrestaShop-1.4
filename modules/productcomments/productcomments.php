@@ -94,7 +94,7 @@ class ProductComments extends Module
 	{
 		$action = Tools::getValue('action');
 		if (empty($action) === false &&
-			intval(Configuration::get('PRODUCT_COMMENTS_MODERATE')))
+			(int)(Configuration::get('PRODUCT_COMMENTS_MODERATE')))
 		{
 			$product_comments = Tools::getValue('id_product_comment');
 			if (sizeof($product_comments))
@@ -265,8 +265,8 @@ class ProductComments extends Module
 						 <td>'.htmlspecialchars($comment['customer_name'], ENT_COMPAT, 'UTF-8').'.</td>
 						 <td>'.htmlspecialchars($comment['content'], ENT_COMPAT, 'UTF-8').'</td>
 						 <td>'.$comment['id_product'].' - '.htmlspecialchars($comment['name'], ENT_COMPAT, 'UTF-8').'</td>
-						<td><a href="javascript:;" onclick="acceptComment(\''.intval($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/accept.png" alt="'.$this->l('Accept').'" title="'.$this->l('Accept').'" /></a>
-							  <a href="javascript:;" onclick="deleteComment(\''.intval($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/delete.png" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a></td>
+						<td><a href="javascript:;" onclick="acceptComment(\''.(int)($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/accept.png" alt="'.$this->l('Accept').'" title="'.$this->l('Accept').'" /></a>
+							  <a href="javascript:;" onclick="deleteComment(\''.(int)($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/delete.png" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a></td>
 						</tr>';
 						$this->_html .= '<tr><td colspan="4" style="font-weight:bold;text-align:right">'.$this->l('Selection:').'</td>
 													<td><a href="javascript:;" onclick="acceptComment(0);"><img src="'.$this->_path.'img/accept.png" alt="'.$this->l('Accept').'" title="'.$this->l('Accept').'" /></a>
@@ -384,7 +384,7 @@ class ProductComments extends Module
 					<select name="id_product_comment_criterion" id="id_product_comment_criterion" onchange="window.location=\''.$this->_baseUrl.'&updateCriterion=\'+$(\'#id_product_comment_criterion option:selected\').val()">
 						<option value="--">--</option>';
 		foreach ($criterions AS $foo)
-			$this->_html .= '<option value="'.intval($foo['id_product_comment_criterion']).'" '.($foo['id_product_comment_criterion'] == $id_criterion ? 'selected="selected"' : '').'>'.$foo['name'].'</option>';
+			$this->_html .= '<option value="'.(int)($foo['id_product_comment_criterion']).'" '.($foo['id_product_comment_criterion'] == $id_criterion ? 'selected="selected"' : '').'>'.$foo['name'].'</option>';
 			
 		$this->_html .= '</select></div></form>';
 		if ($id_criterion AND $criterion->id_product_comment_criterion_type != 1)
@@ -432,9 +432,9 @@ class ProductComments extends Module
 		
 		$smarty->assign(array(
 			'allow_guests' => (int)Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS'),
-			'comments' => ProductComment::getByProduct(intval($_GET['id_product'])),
-			'criterions' => ProductCommentCriterion::getByProduct(intval($_GET['id_product']), intval($cookie->id_lang)),
-			'nbComments' => intval(ProductComment::getCommentNumber(intval($_GET['id_product'])))
+			'comments' => ProductComment::getByProduct((int)($_GET['id_product'])),
+			'criterions' => ProductCommentCriterion::getByProduct((int)($_GET['id_product']), (int)($cookie->id_lang)),
+			'nbComments' => (int)(ProductComment::getCommentNumber((int)($_GET['id_product'])))
 		));
 		return ($this->display(__FILE__, '/tab.tpl'));
 	}
@@ -450,7 +450,7 @@ class ProductComments extends Module
 		if (Tools::isSubmit('submitMessage') AND (empty($cookie->id_customer) === false OR ($cookie->id_guest AND $allow_guests)))
 		{
 			$id_guest = (!$id_customer = (int)$cookie->id_customer) ? (int)$cookie->id_guest : false;
-			$customerComment = ProductComment::getByCustomer(intval(Tools::getValue('id_product')), (int)$cookie->id_customer, true, (int)$id_guest);
+			$customerComment = ProductComment::getByCustomer((int)(Tools::getValue('id_product')), (int)$cookie->id_customer, true, (int)$id_guest);
 			if (!$customerComment OR ($customerComment AND (strtotime($customerComment['date_add']) +  Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME') * 36) > time()))
 			{
 				$customer_name = false;
@@ -460,7 +460,7 @@ class ProductComments extends Module
 				{
 					$comment = new ProductComment();
 					$comment->content = strip_tags(Tools::getValue('content'));
-					$comment->id_product = intval($_GET['id_product']);
+					$comment->id_product = (int)($_GET['id_product']);
 					$comment->id_customer = (int)$cookie->id_customer;
 					$comment->id_guest = (int)$id_guest;
 					$comment->customer_name = pSQL($customer_name);
@@ -484,7 +484,7 @@ class ProductComments extends Module
 						if (!$comment->save())
 							$errors[] = $this->l('An error occured while saving your comment.');
 						else
-							$smarty->assign('confirmation', $this->l('Comment posted successfully.').(intval(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? $this->l(' Awaiting moderator validation.') : ''));
+							$smarty->assign('confirmation', $this->l('Comment posted successfully.').((int)(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? $this->l(' Awaiting moderator validation.') : ''));
 					}
 				}
 				else
@@ -499,12 +499,12 @@ class ProductComments extends Module
     {
 		global $smarty, $cookie, $nbProducts;
 
-		$commentNumber = intval(ProductComment::getCommentNumber(intval(Tools::getValue('id_product'))));
+		$commentNumber = (int)(ProductComment::getCommentNumber((int)(Tools::getValue('id_product'))));
 
 		$averages = ProductComment::getAveragesByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang);
 
 		$id_guest = (!$id_customer = (int)$cookie->id_customer) ? (int)$cookie->id_guest : false;
-		$customerComment = ProductComment::getByCustomer(intval(Tools::getValue('id_product')), intval($cookie->id_customer), true, (int)$id_guest);
+		$customerComment = ProductComment::getByCustomer((int)(Tools::getValue('id_product')), (int)($cookie->id_customer), true, (int)$id_guest);
 		
 		$averageTotal = 0;
 		foreach ($averages AS $average)
@@ -512,10 +512,10 @@ class ProductComments extends Module
 		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
 		
 		$smarty->assign(array(
-			'logged' => intval($cookie->id_customer),
+			'logged' => (int)($cookie->id_customer),
 			'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
-			'comments' => ProductComment::getByProduct(intval(Tools::getValue('id_product'))),
-			'criterions' => ProductCommentCriterion::getByProduct(intval(Tools::getValue('id_product')), intval($cookie->id_lang)),
+			'comments' => ProductComment::getByProduct((int)(Tools::getValue('id_product'))),
+			'criterions' => ProductCommentCriterion::getByProduct((int)(Tools::getValue('id_product')), (int)($cookie->id_lang)),
 			'averages' => $averages,
 			'product_comment_path' => $this->_path,
 			'averageTotal' => $averageTotal,
@@ -544,9 +544,9 @@ class ProductComments extends Module
 		foreach ($params['list_ids_product'] AS $id_product)
 		{
 			
-			$grades = ProductComment::getAveragesByProduct(intval($id_product), intval($cookie->id_lang));
+			$grades = ProductComment::getAveragesByProduct((int)($id_product), (int)($cookie->id_lang));
 			
-			$criterions = ProductCommentCriterion::getByProduct(intval($id_product), intval($cookie->id_lang));
+			$criterions = ProductCommentCriterion::getByProduct((int)($id_product), (int)($cookie->id_lang));
 			$grade_total = 0;			
 			if (sizeof($grades) > 0)
 			{

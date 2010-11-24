@@ -72,16 +72,16 @@ if (isset($_GET['ajaxProductAccessories']))
 	SELECT p.`id_product`, pl.`name`
 	FROM `'._DB_PREFIX_.'product` p
 	NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-	WHERE pl.`id_lang` = '.intval(Tools::getValue('id_lang')).'
-	AND p.`id_product` != '.intval(Tools::getValue('id_product')).'
+	WHERE pl.`id_lang` = '.(int)(Tools::getValue('id_lang')).'
+	AND p.`id_product` != '.(int)(Tools::getValue('id_product')).'
 	AND p.`id_product` NOT IN (
 		SELECT a.`id_product_2`
 		FROM `'._DB_PREFIX_.'accessory` a
-		WHERE a.`id_product_1` = '.intval(Tools::getValue('id_product')).')
+		WHERE a.`id_product_1` = '.(int)(Tools::getValue('id_product')).')
 	ORDER BY pl.`name`');
 	
 	foreach ($products AS $accessory)
-		$jsonArray[] = '{"value: "'.intval($accessory['id_product']).'-'.addslashes($accessory['name']).'", "text":"'.intval($accessory['id_product']).' - '.addslashes($accessory['name']).'"}';
+		$jsonArray[] = '{"value: "'.(int)($accessory['id_product']).'-'.addslashes($accessory['name']).'", "text":"'.(int)($accessory['id_product']).' - '.addslashes($accessory['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
 
@@ -100,9 +100,9 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
 	WHERE `deleted` = 0
-	AND '.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.intval($filter) : '(`email` LIKE "%'.pSQL($filter).'%"
-	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.intval($filterArray[1]) : '').'
-	'.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.intval($filter) : '').'
+	AND '.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '(`email` LIKE "%'.pSQL($filter).'%"
+	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.(int)($filterArray[1]) : '').'
+	'.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '').'
 	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
 	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%")').'
 	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
@@ -111,20 +111,20 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	$groups = Db::getInstance()->ExecuteS('
 	SELECT g.`id_group`, gl.`name`
 	FROM `'._DB_PREFIX_.'group` g
-	LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($cookie->id_lang).')
-	WHERE '.(Validate::isUnsignedInt($filter) ? 'g.`id_group` = '.intval($filter) : 'gl.`name` LIKE "%'.pSQL($filter).'%"
-	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 1) ? 'OR g.`id_group` = '.intval($filterArray[1]) : '')).'
+	LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.(int)($cookie->id_lang).')
+	WHERE '.(Validate::isUnsignedInt($filter) ? 'g.`id_group` = '.(int)($filter) : 'gl.`name` LIKE "%'.pSQL($filter).'%"
+	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 1) ? 'OR g.`id_group` = '.(int)($filterArray[1]) : '')).'
 	ORDER BY gl.`name` ASC
 	LIMIT 50');
 	
 	$json = '{"customers" : ';
 	foreach ($customers AS $customer)
-		$jsonArray[] = '{"value":"0_'.intval($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
+		$jsonArray[] = '{"value":"0_'.(int)($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
 	$json .= '['.implode(',', $jsonArray).'],
 		"groups" : ';
 	$jsonArray = array();
 	foreach ($groups AS $group)
-		$jsonArray[] = '{"value":"1_'.intval($group['id_group']).'", "text":"'.addslashes($group['name']).'"}';
+		$jsonArray[] = '{"value":"1_'.(int)($group['id_group']).'", "text":"'.addslashes($group['name']).'"}';
 	$json .= '['.implode(',', $jsonArray).']}';
 	die($json);
 }
@@ -134,15 +134,15 @@ if (Tools::getValue('page') == 'prestastore')
 if (Tools::getValue('page') == 'themes')
 	readfile('http://addons.prestashop.com/adminthemes.php?lang='.Language::getIsoById($cookie->id_lang));
 
-if ($step = intval(Tools::getValue('ajaxProductTab')))
+if ($step = (int)(Tools::getValue('ajaxProductTab')))
 {
 	require_once(dirname(__FILE__).'/tabs/AdminCatalog.php');
 	$catalog = new AdminCatalog();
 	$admin = new AdminProducts();
 	
 	$languages = Language::getLanguages(false);
-	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
-	$product = new Product(intval(Tools::getValue('id_product')));
+	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+	$product = new Product((int)(Tools::getValue('id_product')));
 	if (!Validate::isLoadedObject($product))
 		die (Tools::displayError('product cannot be loaded'));
 	
@@ -160,7 +160,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	$import = new AdminImport();
 
 	$languages = Language::getLanguages(false);
-	$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 	$fields = $import->getAvailableFields(true);
 	foreach ($fields AS $field)
 		$jsonArray[] = '{field: \''.addslashes($field).'\'}';
@@ -169,9 +169,9 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 
 if (array_key_exists('ajaxModulesPositions', $_POST))
 {				
-	$id_module = intval(Tools::getValue('id_module'));
-	$id_hook = intval(Tools::getValue('id_hook'));
-	$way = intval(Tools::getValue('way'));	
+	$id_module = (int)(Tools::getValue('id_module'));
+	$id_hook = (int)(Tools::getValue('id_hook'));
+	$way = (int)(Tools::getValue('way'));	
 	$positions = Tools::getValue(strval($id_hook));
 	$position = (is_array($positions)) ? array_search($id_hook.'_'.$id_module, $positions) : null;
 	$module = Module::getInstanceById($id_module);
@@ -186,9 +186,9 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 
 if (array_key_exists('ajaxCategoriesPositions', $_POST))
 {	
-	$id_category_to_move = intval(Tools::getValue('id_category_to_move'));
-	$id_category_parent = intval(Tools::getValue('id_category_parent'));
-	$way = intval(Tools::getValue('way'));
+	$id_category_to_move = (int)(Tools::getValue('id_category_to_move'));
+	$id_category_parent = (int)(Tools::getValue('id_category_parent'));
+	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('category');
 	if (is_array($positions))
 		foreach ($positions AS $key => $value)
@@ -214,9 +214,9 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
 {
-	$id_cms_category_to_move = intval(Tools::getValue('id_cms_category_to_move'));
-	$id_cms_category_parent = intval(Tools::getValue('id_cms_category_parent'));
-	$way = intval(Tools::getValue('way'));
+	$id_cms_category_to_move = (int)(Tools::getValue('id_cms_category_to_move'));
+	$id_cms_category_parent = (int)(Tools::getValue('id_cms_category_parent'));
+	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('cms_category');
 	if (is_array($positions))
 		foreach ($positions AS $key => $value)
@@ -242,9 +242,9 @@ if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
 
 if (array_key_exists('ajaxCMSPositions', $_POST))
 {				
-	$id_cms = intval(Tools::getValue('id_cms'));
-	$id_category = intval(Tools::getValue('id_cms_category'));
-	$way = intval(Tools::getValue('way'));
+	$id_cms = (int)(Tools::getValue('id_cms'));
+	$id_category = (int)(Tools::getValue('id_cms_category'));
+	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('cms');
 	if (is_array($positions))
 		foreach ($positions AS $key => $value)
@@ -270,9 +270,9 @@ if (array_key_exists('ajaxCMSPositions', $_POST))
 
 if (array_key_exists('ajaxProductsPositions', $_POST))
 {
-	$way = intval(Tools::getValue('way'));
-	$id_product = intval(Tools::getValue('id_product'));
-	$id_category = intval(Tools::getValue('id_category'));
+	$way = (int)(Tools::getValue('way'));
+	$id_product = (int)(Tools::getValue('id_product'));
+	$id_category = (int)(Tools::getValue('id_category'));
 	$positions = Tools::getValue('product');
 
 	if (is_array($positions))
@@ -305,12 +305,12 @@ if (isset($_GET['ajaxProductPackItems']))
 	SELECT p.`id_product`, pl.`name`
 	FROM `'._DB_PREFIX_.'product` p
 	NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
-	WHERE pl.`id_lang` = '.intval(Tools::getValue('id_lang')).'
+	WHERE pl.`id_lang` = '.(int)(Tools::getValue('id_lang')).'
 	AND p.`id_product` NOT IN (SELECT DISTINCT id_product_pack FROM `'._DB_PREFIX_.'pack`)
-	AND p.`id_product` != '.intval(Tools::getValue('id_product')));
+	AND p.`id_product` != '.(int)(Tools::getValue('id_product')));
 	
 	foreach ($products AS $packItem)
-		$jsonArray[] = '{"value": "'.intval($packItem['id_product']).'-'.addslashes($packItem['name']).'", "text":"'.intval($packItem['id_product']).' - '.addslashes($packItem['name']).'"}';
+		$jsonArray[] = '{"value": "'.(int)($packItem['id_product']).'-'.addslashes($packItem['name']).'", "text":"'.(int)($packItem['id_product']).' - '.addslashes($packItem['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
 
@@ -320,12 +320,12 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	SELECT s.id_state, s.name
 	FROM '._DB_PREFIX_.'state s
 	LEFT JOIN '._DB_PREFIX_.'country c ON (s.`id_country` = c.`id_country`)
-	WHERE s.id_country = '.intval(Tools::getValue('id_country')).' AND s.active = 1 AND c.`contains_states` = 1
+	WHERE s.id_country = '.(int)(Tools::getValue('id_country')).' AND s.active = 1 AND c.`contains_states` = 1
 	ORDER BY s.`name` ASC');
 	
 	$list = '<option value="0">-----------</option>'."\n";
 	foreach ($states AS $state)
-		$list .= '<option value="'.intval($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
+		$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
 		
 	die($list);
 }
@@ -341,7 +341,7 @@ if (Tools::isSubmit('submitCustomerNote') AND $id_customer = (int)Tools::getValu
 
 if (Tools::getValue('form_language_id'))
 {
-	if (!($cookie->employee_form_lang = intval(Tools::getValue('form_language_id'))))
+	if (!($cookie->employee_form_lang = (int)(Tools::getValue('form_language_id'))))
 		die ('Error while updating cookie.');
 	die ('Form language updated.');
 }
@@ -352,18 +352,18 @@ if (Tools::getValue('submitPublishProduct'))
 
 	if (Tools::getIsset('id_product'))
 	{	
-		$id_product = intval(Tools::getValue('id_product'));
-		$id_tab_catalog = intval(Tab::getIdFromClassName('AdminCatalog'));
-		$token = Tools::getAdminToken('AdminCatalog'.intval($id_tab_catalog).intval($cookie->id_employee));
+		$id_product = (int)(Tools::getValue('id_product'));
+		$id_tab_catalog = (int)(Tab::getIdFromClassName('AdminCatalog'));
+		$token = Tools::getAdminToken('AdminCatalog'.(int)($id_tab_catalog).(int)($cookie->id_employee));
 		$bo_product_url = dirname($_SERVER['PHP_SELF']).'/index.php?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.$token;
 
 		if (Tools::getValue('redirect'))
 			die($bo_product_url);
 			
-		$profileAccess = Profile::getProfileAccess(intval($cookie->profile), $id_tab_catalog);
+		$profileAccess = Profile::getProfileAccess((int)($cookie->profile), $id_tab_catalog);
 		if($profileAccess['edit'])
 		{
-			$product = new Product(intval(Tools::getValue('id_product')));
+			$product = new Product((int)(Tools::getValue('id_product')));
 			if (!Validate::isLoadedObject($product))
 				die('error: invalid id');
 		
@@ -388,18 +388,18 @@ if (Tools::getValue('submitPublishCMS'))
 
 	if (Tools::getIsset('id_cms'))
 	{	
-		$id_cms = intval(Tools::getValue('id_cms'));
-		$id_tab_cms = intval(Tab::getIdFromClassName('AdminCMSContent'));
-		$token = Tools::getAdminToken('AdminCMSContent'.intval($id_tab_cms).intval($cookie->id_employee));
+		$id_cms = (int)(Tools::getValue('id_cms'));
+		$id_tab_cms = (int)(Tab::getIdFromClassName('AdminCMSContent'));
+		$token = Tools::getAdminToken('AdminCMSContent'.(int)($id_tab_cms).(int)($cookie->id_employee));
 		$bo_cms_url = dirname($_SERVER['PHP_SELF']).'/index.php?tab=AdminCMSContent&id_cms='.$id_cms.'&updatecms&token='.$token;
 
 		if (Tools::getValue('redirect'))
 			die($bo_cms_url);
 			
-		$profileAccess = Profile::getProfileAccess(intval($cookie->profile), $id_tab_cms);
+		$profileAccess = Profile::getProfileAccess((int)($cookie->profile), $id_tab_cms);
 		if($profileAccess['edit'])
 		{
-			$cms = new CMS(intval(Tools::getValue('id_cms')));
+			$cms = new CMS((int)(Tools::getValue('id_cms')));
 			if (!Validate::isLoadedObject($cms))
 				die('error: invalid id');
 		

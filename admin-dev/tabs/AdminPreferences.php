@@ -22,7 +22,7 @@ class AdminPreferences extends AdminTab
 		
 		$timezones = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT name FROM '._DB_PREFIX_.'timezone');
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
-		foreach (Tax::getTaxes(intval($cookie->id_lang)) as $tax)
+		foreach (Tax::getTaxes((int)($cookie->id_lang)) as $tax)
 			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
 		
 		$order_process_type = array(
@@ -66,7 +66,7 @@ class AdminPreferences extends AdminTab
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use coma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_TOKEN_ENABLE' => array('title' => $this->l('Increase Front Office security'), 'desc' => $this->l('Enable or disable token on the Front Office in order to improve PrestaShop security'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
-			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL:'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.intval(Tab::getIdFromClassName('AdminGenerator')).intval($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL:'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.(int)(Tab::getIdFromClassName('AdminGenerator')).(int)($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HELPBOX' => array('title' => $this->l('Back Office help boxes:'), 'desc' => $this->l('Enable yellow help boxes which are displayed under form fields in the Back Office'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_ORDER_PROCESS_TYPE' => array('title' => $this->l('Order process type:'), 'desc' => $this->l('You can choose the order process type, standard (5 steps) or One Page Checkout.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $order_process_type, 'identifier' => 'value'),
 			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'js' => array('on' => 'onchange="changeCMSActivationAuthorization()"', 'off' => 'onchange="changeCMSActivationAuthorization()"')),
@@ -99,7 +99,7 @@ class AdminPreferences extends AdminTab
 		{
 			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
 			SELECT `id_cms` FROM `'._DB_PREFIX_.'cms`
-			WHERE id_cms = '.intval(Tools::getValue('PS_CONDITIONS_CMS_ID')))))
+			WHERE id_cms = '.(int)(Tools::getValue('PS_CONDITIONS_CMS_ID')))))
 				$this->_errors[] = Tools::displayError('Assign a valid CMS page if you want it would be read.');
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsGeneral);
@@ -306,7 +306,7 @@ class AdminPreferences extends AdminTab
 	{
 		global $currentIndex;
 
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages(false);
 		$confValues = $this->getConf($fields, $languages);
 		$divLangName = $this->getDivLang($fields);
@@ -352,7 +352,7 @@ class AdminPreferences extends AdminTab
 
 				case 'radio':
 					foreach ($field['choices'] AS $cValue => $cKey)
-						echo '<input type="radio" name="'.$key.'" id="'.$key.$cValue.'_on" value="'.intval($cValue).'"'.(($cValue == $val) ? ' checked="checked"' : '').(isset($field['js'][$cValue]) ? ' '.$field['js'][$cValue] : '').' /><label class="t" for="'.$key.$cValue.'_on"> '.$cKey.'</label><br />';
+						echo '<input type="radio" name="'.$key.'" id="'.$key.$cValue.'_on" value="'.(int)($cValue).'"'.(($cValue == $val) ? ' checked="checked"' : '').(isset($field['js'][$cValue]) ? ' '.$field['js'][$cValue] : '').' /><label class="t" for="'.$key.$cValue.'_on"> '.$cKey.'</label><br />';
 					echo '<br />';
 					break;
 
@@ -381,15 +381,15 @@ class AdminPreferences extends AdminTab
 					break;
 
 				case 'price':
-					$default_currency = new Currency(intval(Configuration::get("PS_CURRENCY_DEFAULT")));
-					echo $default_currency->getSign('left').'<input type="'.$field['type'].'" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.$default_currency->getSign('right').' '.$this->l('(tax excl.)');
+					$default_currency = new Currency((int)(Configuration::get("PS_CURRENCY_DEFAULT")));
+					echo $default_currency->getSign('left').'<input type="'.$field['type'].'" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.$default_currency->getSign('right').' '.$this->l('(tax excl.)');
 					break;
 
 				case 'textLang':
 					foreach ($languages as $language)
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="margin-bottom:8px; display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; vertical-align: top;">
-							<input type="text" size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'_'.$language['id_lang'].'" value="'.htmlentities($this->getVal($confValues, $key.'_'.$language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
+							<input type="text" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'_'.$language['id_lang'].'" value="'.htmlentities($this->getVal($confValues, $key.'_'.$language['id_lang']), ENT_COMPAT, 'UTF-8').'" />
 						</div>';
 					$this->displayFlags($languages, $defaultLanguage, $divLangName, $key);
 					break;
@@ -414,7 +414,7 @@ class AdminPreferences extends AdminTab
 
 				case 'text':
 				default:
-					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? intval($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '');
+					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '');
 			}
 			echo ((isset($field['required']) AND $field['required'] AND !in_array($field['type'], array('image', 'radio')))  ? ' <sup>*</sup>' : '');
 			echo (isset($field['desc']) ? '<p style="clear:both">'.((isset($field['thumb']) AND $field['thumb'] AND $field['thumb']['pos'] == 'after') ? '<img src="'.$field['thumb']['file'].'" alt="'.$field['title'].'" title="'.$field['title'].'" style="float:left;" />' : '' ).$field['desc'].'</p>' : '');

@@ -234,7 +234,7 @@
         }else 
         {
         	$this->_imgInfoFinal['size'] = @filesize($filename);
-        	@chmod($filename, intval($this->chmod, 8));
+        	@chmod($filename, (int)($this->chmod, 8));
         }
 
         return true;
@@ -353,8 +353,8 @@
 			return false;
 		}		
 		
-		$new_x = intval($new_x);
-		$new_y = intval($new_y);
+		$new_x = (int)($new_x);
+		$new_y = (int)($new_y);
 		if($new_x <=0 || $new_y <= 0)
 		{
 			$this->_debug('either of new width or height can be zeor or less.');
@@ -712,7 +712,7 @@
 	}
 	  function rotate($angle, $bgColor=0)
     {
-    	$angle = intval($angle) -360;
+    	$angle = (int)($angle) -360;
     		while($angle <0)
     		{
     			$angle += 360;

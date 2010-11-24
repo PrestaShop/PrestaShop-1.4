@@ -465,7 +465,7 @@ class ValidateCore
 	{
 		if (!preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches))
 			return false;
-		return checkdate(intval($matches[2]), intval($matches[5]), intval($matches[0]));
+		return checkdate((int)($matches[2]), (int)($matches[5]), (int)($matches[0]));
 	}
 
 	/**

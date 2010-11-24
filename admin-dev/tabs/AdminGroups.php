@@ -48,8 +48,8 @@ class AdminGroups extends AdminTab
 		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$groupReductions = $obj->id ? GroupReduction::getGroupReductions($obj->id, intval($cookie->id_lang)) : array();
-		$categories = Category::getSimpleCategories(intval($cookie->id_lang));
+		$groupReductions = $obj->id ? GroupReduction::getGroupReductions($obj->id, (int)($cookie->id_lang)) : array();
+		$categories = Category::getSimpleCategories((int)($cookie->id_lang));
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
@@ -60,7 +60,7 @@ class AdminGroups extends AdminTab
 				foreach ($this->_languages as $language)
 					echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
@@ -90,8 +90,8 @@ class AdminGroups extends AdminTab
 						echo '
 						<tr>
 							<td>'.Tools::htmlentitiesUTF8($groupReduction['category_name']).'</td>
-							<td><input type="hidden" name="gr_id_group_reduction[]" value="'.intval($groupReduction['id_group_reduction']).'" /><input type="text" name="gr_reduction[]" value="'.($groupReduction['reduction'] * 100).'" /></td>
-							<td><a href="'.$currentIndex.'&deleteGroupReduction&id_group_reduction='.intval($groupReduction['id_group_reduction']).'&id_group='.intval($obj->id).'&token='.$this->token.'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
+							<td><input type="hidden" name="gr_id_group_reduction[]" value="'.(int)($groupReduction['id_group_reduction']).'" /><input type="text" name="gr_reduction[]" value="'.($groupReduction['reduction'] * 100).'" /></td>
+							<td><a href="'.$currentIndex.'&deleteGroupReduction&id_group_reduction='.(int)($groupReduction['id_group_reduction']).'&id_group='.(int)($obj->id).'&token='.$this->token.'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
 						</tr>';
 				echo '</table>';
 			}
@@ -103,8 +103,8 @@ class AdminGroups extends AdminTab
 				<label>'.$this->l('Price display method:').' </label>
 				<div class="margin-form">
 					<select name="price_display_method">
-						<option value="'.PS_TAX_EXC.'"'.(intval($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_EXC ? ' selected="selected"' : '').'>'.$this->l('Tax excluded').'</option>
-						<option value="'.PS_TAX_INC.'"'.(intval($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_INC ? ' selected="selected"' : '').'>'.$this->l('Tax included').'</option>
+						<option value="'.PS_TAX_EXC.'"'.((int)($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_EXC ? ' selected="selected"' : '').'>'.$this->l('Tax excluded').'</option>
+						<option value="'.PS_TAX_INC.'"'.((int)($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_INC ? ' selected="selected"' : '').'>'.$this->l('Tax included').'</option>
 					</select>
 					<p>'.$this->l('How the prices are displayed on order summary for this customer group (tax included or excluded).').'</p>
 				</div>
@@ -126,7 +126,7 @@ class AdminGroups extends AdminTab
 					<div class="margin-form">
 						<select name="id_category">';
 				foreach ($categories AS $category)
-					echo '	<option value="'.intval($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
+					echo '	<option value="'.(int)($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
 				echo '	</select><sup>*</sup>
 					</div>
 					<label>'.$this->l('Reduction (in %):').' </label>
@@ -149,13 +149,13 @@ class AdminGroups extends AdminTab
 		
 		$currentIndex = 'index.php?tab=AdminGroups';
 		$obj = $this->loadObject(true);
-		$group = new Group(intval($obj->id));
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$group = new Group((int)($obj->id));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		
 		echo '
 		<fieldset style="width: 400px">
 			<div style="float: right"><a href="'.$currentIndex.'&updategroup&id_group='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
-			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[intval($cookie->id_lang)]).'</span>
+			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[(int)($cookie->id_lang)]).'</span>
 			<div class="clear">&nbsp;</div>
 			'.$this->l('Reduction:').' '.floatval($obj->reduction).$this->l('%').'
 		</fieldset>
@@ -193,16 +193,16 @@ class AdminGroups extends AdminTab
 					<td class="center">'.$imgGender.'</td>
 					<td>'.stripslashes($customer['lastname']).' '.stripslashes($customer['firstname']).'</td>
 					<td>'.stripslashes($customer['email']).'<a href="mailto:'.stripslashes($customer['email']).'"> <img src="../img/admin/email_edit.gif" alt="'.$this->l('Write to this customer').'" /></a></td>
-					<td>'.Tools::displayDate($customer['birthday'], intval($cookie->id_lang)).'</td>
-					<td>'.Tools::displayDate($customer['date_add'], intval($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($customer['birthday'], (int)($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($customer['date_add'], (int)($cookie->id_lang)).'</td>
 					<td>'.Order::getCustomerNbOrders($customer['id_customer']).'</td>
 					<td class="center"><img src="../img/admin/'.($customer['active'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></td>
 					<td class="center" width="60px">
-						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/details.gif" alt="'.$this->l('View orders').'" /></a>
-						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this customer').'" /></a>
-						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
+						<a href="index.php?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this customer').'" /></a>
 					</td>
 				</tr>';
@@ -227,11 +227,11 @@ class AdminGroups extends AdminTab
 					$this->_errors[] = Tools::displayError('Invalid group reduction ID');
 				else
 				{
-					$groupReduction = new GroupReduction(intval($id_group_reduction));
+					$groupReduction = new GroupReduction((int)($id_group_reduction));
 					if (!$groupReduction->delete())
 						$this->_errors[] = Tools::displayError('An error occured while deleting the group reduction');
 					else
-						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.intval(Tools::getValue('id_group')).'&conf=1&token='.$token);
+						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.(int)(Tools::getValue('id_group')).'&conf=1&token='.$token);
 				}
 			}
 			else
@@ -247,17 +247,17 @@ class AdminGroups extends AdminTab
 					$this->_errors[] = Tools::displayError('Wrong category ID');
 				elseif (!$reduction = Tools::getValue('reduction') OR !Validate::isPrice($reduction))
 					$this->_errors[] = Tools::displayError('Invalid reduction (must be a percentage)');
-				elseif (GroupReduction::doesExist(intval($obj->id), $id_category))
+				elseif (GroupReduction::doesExist((int)($obj->id), $id_category))
 					$this->_errors[] = Tools::displayError('A reduction already exists for this category.');
 				else
 				{
-					$groupReduction->id_category = intval($id_category);
-					$groupReduction->id_group = intval($obj->id);
+					$groupReduction->id_category = (int)($id_category);
+					$groupReduction->id_group = (int)($obj->id);
 					$groupReduction->reduction = floatval($reduction) / 100;
 					if (!$groupReduction->add())
 						$this->_errors[] = Tools::displayError('An error occured while adding a category group reduction');
 					else
-						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.intval(Tools::getValue('id_group')).'&conf=3&token='.$this->token);
+						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.(int)(Tools::getValue('id_group')).'&conf=3&token='.$this->token);
 				}
 			}
 			else
@@ -279,7 +279,7 @@ class AdminGroups extends AdminTab
 								$this->_errors[] = Tools::displayError();
 							else
 							{
-								$groupReduction = new GroupReduction(intval($id_group_reductions[$key]));
+								$groupReduction = new GroupReduction((int)($id_group_reductions[$key]));
 								$groupReduction->reduction = $reductions[$key] / 100;
 								if (!$groupReduction->update())
 									$this->errors[] = Tools::displayError('Impossible to update group reductions');

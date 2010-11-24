@@ -93,7 +93,7 @@ class MetaCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'meta` m
 		LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON m.`id_meta` = ml.`id_meta`
-		WHERE ml.`id_lang` = '.intval($id_lang).' 
+		WHERE ml.`id_lang` = '.(int)($id_lang).' 
 		ORDER BY page ASC');
 		
 	}
@@ -104,7 +104,7 @@ class MetaCore extends ObjectModel
 		SELECT *
 		FROM '._DB_PREFIX_.'meta m
 		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)
-		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.intval($id_lang));
+		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.(int)($id_lang));
 	}
 
 	public function update($nullValues = false)
@@ -113,8 +113,8 @@ class MetaCore extends ObjectModel
 			return false;			
 									
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC')
 									);
 	}
@@ -124,8 +124,8 @@ class MetaCore extends ObjectModel
 		if (!parent::add($autodate, $nullValues));
 		
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC')
 									);
 	}
@@ -136,8 +136,8 @@ class MetaCore extends ObjectModel
 			return false;
 		
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 								Configuration::get('PS_HTACCESS_SPECIFIC')
 								);
 	}
@@ -149,13 +149,13 @@ class MetaCore extends ObjectModel
 		$result = true;
 		foreach ($selection AS $id)
 		{
-			$this->id = intval($id);
+			$this->id = (int)($id);
 			$result = $result AND $this->delete();
 		}
 		
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC')
 									);
 	}
@@ -168,9 +168,9 @@ class MetaCore extends ObjectModel
 		WHERE id_meta = (
 			SELECT id_meta
 			FROM `'._DB_PREFIX_.'meta_lang`
-			WHERE url_rewrite = \''.pSQL($url_rewrite).'\' AND id_lang = '.intval($id_lang).'
+			WHERE url_rewrite = \''.pSQL($url_rewrite).'\' AND id_lang = '.(int)($id_lang).'
 		)
-		AND id_lang = '.intval($new_id_lang));
+		AND id_lang = '.(int)($new_id_lang));
 	}
 }
 ?>

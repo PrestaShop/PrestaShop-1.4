@@ -23,17 +23,17 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		foreach ($arr AS $attr)
 		{
-			$price += floatval($_POST['price_impact'][intval($attr)]);
-			$weight += floatval($_POST['weight_impact'][intval($attr)]);
+			$price += floatval($_POST['price_impact'][(int)($attr)]);
+			$weight += floatval($_POST['weight_impact'][(int)($attr)]);
 		}
 		if ($this->product->id)
 		{
 			return (array(
-					'id_product' => intval($this->product->id),
+					'id_product' => (int)($this->product->id),
 					'price' => floatval($price),
 					'weight' => floatval($weight),
 					'ecotax' => 0,
-					'quantity' => intval($_POST['quantity']),
+					'quantity' => (int)($_POST['quantity']),
 					'reference' => pSQL($_POST['reference']),
 					'default_on' => 0));
 		}
@@ -59,7 +59,7 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		global $currentIndex;
 
-		$this->product = new Product(intval(Tools::getValue('id_product')));
+		$this->product = new Product((int)(Tools::getValue('id_product')));
 		if (isset($_POST['generate']))
 		{
 			if (!is_array(Tools::getValue('options')))
@@ -82,7 +82,7 @@ class AdminAttributeGenerator extends AdminTab
 			}
 		}
 		elseif (isset($_POST['back']))
-			Tools::redirectAdmin($currentIndex.'&id_product='.intval(Tools::getValue('id_product')).'&id_category='.intval(Tools::getValue('id_category')).'&addproduct'.'&tabs=2&token='.Tools::getValue('token'));
+			Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(int)(Tools::getValue('id_category')).'&addproduct'.'&tabs=2&token='.Tools::getValue('token'));
 		parent::postProcess();
 	}
 
@@ -90,7 +90,7 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		global $cookie;
 
-		$attributes = Attribute::getAttributes(intval($cookie->id_lang), true);
+		$attributes = Attribute::getAttributes((int)($cookie->id_lang), true);
 		$attributeJs = array();
 		foreach ($attributes AS $k => $attribute)
 			$attributeJs[$attribute['id_attribute_group']][$attribute['id_attribute']] = $attribute['name'];
@@ -139,7 +139,7 @@ class AdminAttributeGenerator extends AdminTab
         $attributes = array();
         foreach ($tab AS $group)
             foreach ($group AS $attribute)
-                $attributes[] = '('.intval($id_product).', '.intval($attribute).', '.floatval($_POST['price_impact'][intval($attribute)]).', '.floatval($_POST['weight_impact'][intval($attribute)]).')';
+                $attributes[] = '('.(int)($id_product).', '.(int)($attribute).', '.floatval($_POST['price_impact'][(int)($attribute)]).', '.floatval($_POST['weight_impact'][(int)($attribute)]).')';
         return Db::getInstance()->Execute(
         'INSERT INTO `'._DB_PREFIX_.'attribute_impact` (`id_product`, `id_attribute`, `price`, `weight`)
         VALUES '.implode(',', $attributes).'
@@ -153,7 +153,7 @@ class AdminAttributeGenerator extends AdminTab
         $result = Db::getInstance()->ExecuteS(
         'SELECT ai.`id_attribute`, ai.`price`, ai.`weight`
 		FROM `'._DB_PREFIX_.'attribute_impact` ai
-		WHERE ai.`id_product` = '.intval($id_product));
+		WHERE ai.`id_product` = '.(int)($id_product));
         if (!$result)
             return array();
         foreach ($result AS $impact)
@@ -169,7 +169,7 @@ class AdminAttributeGenerator extends AdminTab
 		global $cookie;
 
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		$combinationsGroups = $this->product->getAttributesGroups(intval($cookie->id_lang));
+		$combinationsGroups = $this->product->getAttributesGroups((int)($cookie->id_lang));
 		$attributes = array();
         $impacts = self::getAttributesImpacts($this->product->id);
 		foreach ($combinationsGroups AS &$combination)
@@ -215,8 +215,8 @@ class AdminAttributeGenerator extends AdminTab
 		parent::displayForm();
 
 		$jsAttributes = self::displayAndReturnAttributeJs();
-		$attributesGroups = AttributeGroup::getAttributesGroups(intval($cookie->id_lang));
-		$this->product = new Product(intval(Tools::getValue('id_product')));
+		$attributesGroups = AttributeGroup::getAttributesGroups((int)($cookie->id_lang));
+		$this->product = new Product((int)(Tools::getValue('id_product')));
 		if (isset($_POST['generate']) AND !sizeof($this->_errors))
 			echo '
 			<div class="module_confirmation conf confirm">
@@ -225,7 +225,7 @@ class AdminAttributeGenerator extends AdminTab
 			</div>';
 		echo '
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
-			<form enctype="multipart/form-data" method="post" id="generator" action=""'.$currentIndex.'&id_category='.intval(Tools::getValue('id_category')).'token='.Tools::getValue('token').'">
+			<form enctype="multipart/form-data" method="post" id="generator" action=""'.$currentIndex.'&id_category='.(int)(Tools::getValue('id_category')).'token='.Tools::getValue('token').'">
 				<fieldset style="margin-bottom: 35px;"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes generator').'</legend>'.
 				$this->l('Add or modify attributes for product:').' <b>'.$this->product->name[$cookie->id_lang].'</b>
 					<br /><br />

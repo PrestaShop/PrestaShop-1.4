@@ -44,7 +44,7 @@ class StatsCheckUp extends Module
 			$cookie->checkup_order = 1;
 		
 		$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
-		$employee = new Employee(intval($cookie->id_employee));
+		$employee = new Employee((int)($cookie->id_employee));
 		$prop30 = ((strtotime($employee->stats_date_to.' 23:59:59') - strtotime($employee->stats_date_from.' 00:00:00')) / 60 / 60 / 24) / 30;
 		$languages = $db->ExecuteS('SELECT * FROM '._DB_PREFIX_.'lang');
 		$arrayColors = array(
@@ -52,7 +52,7 @@ class StatsCheckUp extends Module
 			1 => '<img src="../modules/'.$this->name.'/orange.png" alt="'.$this->l('average').'" />',
 			2 => '<img src="../modules/'.$this->name.'/green.png" alt="'.$this->l('good').'" />'
 		);
-		$tokenProducts = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
+		$tokenProducts = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 		$divisor = 4;
 		$totals = array('products' => 0, 'active' => 0, 'images' => 0, 'sales' => 0, 'stock' => 0);
 		foreach ($languages as $language)

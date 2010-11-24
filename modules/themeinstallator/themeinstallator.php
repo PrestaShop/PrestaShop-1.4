@@ -368,7 +368,7 @@ class ThemeInstallator extends Module
 	private function updateImages()
 	{
 		$foo = '';
-		$type = intval(Tools::getValue('imagesConfig'));
+		$type = (int)(Tools::getValue('imagesConfig'));
 		
 		foreach ($this->xml->images->image as $row)
 		{
@@ -380,8 +380,8 @@ class ThemeInstallator extends Module
 			if ($foo)
 				Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'image_type` i
-					SET `width` = '.intval($row['width']).',
-					`height` = '.intval($row['height']).',
+					SET `width` = '.(int)($row['width']).',
+					`height` = '.(int)($row['height']).',
 					`products` = '.($row['products'] == 'true' ? 1 : 0).',
 					`categories` = '.($row['categories'] == 'true' ? 1 : 0).',
 					`manufacturers` = '.($row['manufacturers'] == 'true' ? 1 : 0).',
@@ -393,8 +393,8 @@ class ThemeInstallator extends Module
 					INSERT INTO `'._DB_PREFIX_.'image_type` (`name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`)
 					VALUES (
 						\''.pSQL($row['name']).'\',
-						'.intval($row['width']).',
-						'.intval($row['height']).',
+						'.(int)($row['width']).',
+						'.(int)($row['height']).',
 						'.($row['products'] == 'true' ? 1 : 0).',
 						'.($row['categories'] == 'true' ? 1 : 0).',
 						'.($row['manufacturers'] == 'true' ? 1 : 0).',
@@ -451,7 +451,7 @@ class ThemeInstallator extends Module
 							INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
 							VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
 			}
-		if (($val = intval(Tools::getValue('nativeModules'))) != 1)
+		if (($val = (int)(Tools::getValue('nativeModules'))) != 1)
 		{
 			$flag = 0;
 			// Disable native modules
@@ -495,7 +495,7 @@ class ThemeInstallator extends Module
 							VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
 			}
 		}
-		if (intval(Tools::getValue('imagesConfig')) != 3)
+		if ((int)(Tools::getValue('imagesConfig')) != 3)
 		{
 			$msg .= '<br /><b>'.$this->l('Images have been correctly updated in database').'</b><br />';
 			self::updateImages();
@@ -581,7 +581,7 @@ class ThemeInstallator extends Module
 	{
 		global			$cookie;
 
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$xml = simplexml_load_file(_IMPORT_FOLDER_.XMLFILENAME);
 		$this->xml = $xml;
 		$res = $xml->xpath('/theme/descriptions/description[@iso="'.$iso.'"]');
@@ -956,7 +956,7 @@ class ThemeInstallator extends Module
 		$count = 0;
 		while (Tools::isSubmit('myvar_'.++$count))
 		{
-			if (intval(Tools::getValue('myvar_'.$count)) == -1)
+			if ((int)(Tools::getValue('myvar_'.$count)) == -1)
 				continue ;
 			$name = Tools::getValue('themevariationname_'.$count);
 			$dir = Tools::getValue('myvar_'.$count);
@@ -1035,7 +1035,7 @@ class ThemeInstallator extends Module
 			$this->_html .= parent::displayError($this->l('Please enter a valid theme name'));
 		while ($this->error === false AND Tools::isSubmit('myvar_'.++$count))
 		{
-			if (intval(Tools::getValue('myvar_'.$count)) == -1)
+			if ((int)(Tools::getValue('myvar_'.$count)) == -1)
 				continue ;
 			$name = Tools::getValue('themevariationname_'.$count);
 			if (!$name OR !Validate::isGenericName($name) OR strlen($name) > MAX_NAME_LENGTH)
@@ -1057,7 +1057,7 @@ class ThemeInstallator extends Module
 			$this->_html .= parent::displayError($this->l('Syntax error on version field. Only digits and points are allowed and the compatibility should be increasing or equal.'));
 		while ($this->error === false AND Tools::isSubmit('myvar_'.++$count))
 		{
-			if (intval(Tools::getValue('myvar_'.$count)) == -1)
+			if ((int)(Tools::getValue('myvar_'.$count)) == -1)
 				continue ;
 			$from = Tools::getValue('compafrom_'.$count);
 			$to = Tools::getValue('compato_'.$count);
@@ -1117,9 +1117,9 @@ class ThemeInstallator extends Module
 	{
 		global			$cookie;
 		
-		$defaultLanguage = intval(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages();
-		$iso = Language::getIsoById(intval($cookie->id_lang));				
+		$iso = Language::getIsoById((int)($cookie->id_lang));				
 		$divLangName = 'title';
 		$val = Tools::getValue('theme_name') ? Tools::getValue('theme_name') : Tools::getValue('mainTheme');
 

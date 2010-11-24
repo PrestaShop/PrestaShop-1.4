@@ -96,12 +96,12 @@ class AdminGenerator extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{		
-				Configuration::updateValue('PS_HTACCESS_CACHE_CONTROL', intval(Tools::getValue('cacheControl')));						
+				Configuration::updateValue('PS_HTACCESS_CACHE_CONTROL', (int)(Tools::getValue('cacheControl')));						
 				Configuration::updateValue('PS_HTACCESS_SPECIFIC',  Tools::getValue('ps_htaccess_specific'));
 
 				if (!Tools::generateHtaccess($this->_htFile, 
-											 intval(Configuration::get('PS_REWRITING_SETTINGS')),
-											 intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
+											 (int)(Configuration::get('PS_REWRITING_SETTINGS')),
+											 (int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 											 Configuration::get('PS_HTACCESS_SPECIFIC')
 											 ))
 						die ($this->l('Cannot write into file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.'));

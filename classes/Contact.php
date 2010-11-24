@@ -41,7 +41,7 @@ class ContactCore extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['email'] = pSQL($this->email);
-		$fields['customer_service'] = intval($this->customer_service);
+		$fields['customer_service'] = (int)($this->customer_service);
 		return $fields;
 	}
 	
@@ -68,7 +68,7 @@ class ContactCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'contact` c
 		LEFT JOIN `'._DB_PREFIX_.'contact_lang` cl ON c.`id_contact` = cl.`id_contact`
-		WHERE cl.`id_lang` = '.intval($id_lang).'
+		WHERE cl.`id_lang` = '.(int)($id_lang).'
 		ORDER BY `name` ASC');
 	}
 }

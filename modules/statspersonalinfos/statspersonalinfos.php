@@ -188,7 +188,7 @@ class StatsPersonalInfos extends ModuleGraph
 				SELECT cl.`name`, COUNT(c.`id_country`) AS total
 				FROM `'._DB_PREFIX_.'address` a
 				LEFT JOIN `'._DB_PREFIX_.'country` c ON a.`id_country` = c.`id_country`
-				LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.intval($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')
 				WHERE a.id_customer != 0
 				GROUP BY c.`id_country`');
 				foreach ($result as $row)

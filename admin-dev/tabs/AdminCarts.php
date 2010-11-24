@@ -48,13 +48,13 @@ class AdminCarts extends AdminTab
 		$customer = new Customer($cart->id_customer);
 		$customerStats = $customer->getStats();
 		$products = $cart->getProducts();
-		$customizedDatas = Product::getAllCustomizedDatas(intval($cart->id));
+		$customizedDatas = Product::getAllCustomizedDatas((int)($cart->id));
 		Product::addCustomizationPrice($products, $customizedDatas);
 		$summary = $cart->getSummaryDetails();
 		$discounts = $cart->getDiscounts();
 
 		$currency = new Currency($cart->id_currency);
-		$currentLanguage = new Language(intval($cookie->id_lang));
+		$currentLanguage = new Language((int)($cookie->id_lang));
 
 		// display cart header
 		echo '<h2>'.(($customer->id) ? $customer->firstname.' '.$customer->lastname : $this->l('Guest')).' - '.$this->l('Cart #').sprintf('%06d', $cart->id).' '.$this->l('from').' '.$cart->date_upd.'</h2>';
@@ -68,9 +68,9 @@ class AdminCarts extends AdminTab
 			<span style="font-weight: bold; font-size: 14px;">';
 			if ($customer->id)
 				echo '
-			<a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
+			<a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
-			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, intval($cookie->id_lang), true).'<br />
+			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
 			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />';
 			else
@@ -81,7 +81,7 @@ class AdminCarts extends AdminTab
 		<div style="float: left; margin-left: 40px">';
 		
 		/* Display order information */
-		$id_order = intval(Order::getOrderByCartId($cart->id));
+		$id_order = (int)(Order::getOrderByCartId($cart->id));
 		$order = new Order($id_order);
 		echo '
 		<fieldset style="width: 400px">
@@ -89,7 +89,7 @@ class AdminCarts extends AdminTab
 			<span style="font-weight: bold; font-size: 14px;">';
 			if ($order->id)
 				echo '
-			<a href="?tab=AdminOrders&id_order='.intval($order->id).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'"> '.$this->l('Order #').sprintf('%06d', $order->id).'</a></span>
+			<a href="?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'"> '.$this->l('Order #').sprintf('%06d', $order->id).'</a></span>
 			<br /><br />
 			'.$this->l('Made on:').' '.$order->date_add.'<br /><br /><br /><br />';
 			else
@@ -113,46 +113,46 @@ class AdminCarts extends AdminTab
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
 							<th style="width: 90px; text-align: right; font-weight:bold;">'.$this->l('Total').'</th>
 						</tr>';
-						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee));
+						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 						foreach ($products as $k => $product)
 						{
 							$image = array();
-							if (isset($product['id_product_attribute']) AND intval($product['id_product_attribute']))
+							if (isset($product['id_product_attribute']) AND (int)($product['id_product_attribute']))
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
 								FROM '._DB_PREFIX_.'product_attribute_image
-								WHERE id_product_attribute = '.intval($product['id_product_attribute']));
+								WHERE id_product_attribute = '.(int)($product['id_product_attribute']));
 						 	if (!isset($image['id_image']))
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
 								FROM '._DB_PREFIX_.'image
-								WHERE id_product = '.intval($product['id_product']).' AND cover = 1');
+								WHERE id_product = '.(int)($product['id_product']).' AND cover = 1');
 						 	$stock = Db::getInstance()->getRow('
 							SELECT '.($product['id_product_attribute'] ? 'pa' : 'p').'.quantity
 							FROM '._DB_PREFIX_.'product p
 							'.($product['id_product_attribute'] ? 'LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON p.id_product = pa.id_product' : '').'
-							WHERE p.id_product = '.intval($product['id_product']).'
-							'.($product['id_product_attribute'] ? 'AND pa.id_product_attribute = '.intval($product['id_product_attribute']) : ''));
+							WHERE p.id_product = '.(int)($product['id_product']).'
+							'.($product['id_product_attribute'] ? 'AND pa.id_product_attribute = '.(int)($product['id_product_attribute']) : ''));
 							/* Customization display */
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
 							if ($product['cart_quantity'] > $product['customizationQuantityTotal'])
 								echo '
 								<tr>
-									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['id_product']).'-'.intval($image['id_image']).'.jpg',
-									'product_mini_'.intval($product['id_product']).(isset($product['id_product_attribute']) ? '_'.intval($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
+									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['id_product']).'-'.(int)($image['id_image']).'.jpg',
+									'product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 									<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
 										<span class="productName">'.$product['name'].'</span><br />
 										'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
 										.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 										.'</a></td>
 									<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
-									<td align="center" class="productQuantity">'.(intval($product['cart_quantity']) - $product['customizationQuantityTotal']).'</td>
-									<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
+									<td align="center" class="productQuantity">'.((int)($product['cart_quantity']) - $product['customizationQuantityTotal']).'</td>
+									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
 									<td align="right">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 								</tr>';
 							if (isset($image['id_image']))
 							{
-								$target = '../img/tmp/product_mini_'.intval($product['id_product']).(isset($product['id_product_attribute']) ? '_'.intval($product['id_product_attribute']) : '').'.jpg';
+								$target = '../img/tmp/product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg';
 								if (file_exists($target))
 									$products[$k]['image_size'] = getimagesize($target);
 							}
@@ -199,7 +199,7 @@ class AdminCarts extends AdminTab
 				foreach ($discounts as $discount)
 					echo '
 				<tr>
-					<td><a href="?tab=AdminDiscounts&id_discount='.$discount['id_discount'].'&updatediscount&token='.Tools::getAdminToken('AdminDiscounts'.intval(Tab::getIdFromClassName('AdminDiscounts')).intval($cookie->id_employee)).'">'.$discount['name'].'</a></td>
+					<td><a href="?tab=AdminDiscounts&id_discount='.$discount['id_discount'].'&updatediscount&token='.Tools::getAdminToken('AdminDiscounts'.(int)(Tab::getIdFromClassName('AdminDiscounts')).(int)($cookie->id_employee)).'">'.$discount['name'].'</a></td>
 					<td align="center">- '.Tools::displayPrice($discount['value_real'], $currency, false).'</td>
 				</tr>';
 				echo '
@@ -218,12 +218,12 @@ class AdminCarts extends AdminTab
 	{
 		$order = $this->loadObject();
 
-		if (is_array($customizedDatas) AND isset($customizedDatas[intval($product['id_product'])][intval($product['id_product_attribute'])]))
+		if (is_array($customizedDatas) AND isset($customizedDatas[(int)($product['id_product'])][(int)($product['id_product_attribute'])]))
 		{
 			echo '
 			<tr>
-				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.intval($product['id_product']).'-'.intval($image['id_image']).'.jpg',
-				'product_mini_'.intval($product['id_product']).(isset($product['id_product_attribute']) ? '_'.intval($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
+				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['id_product']).'-'.(int)($image['id_image']).'.jpg',
+				'product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
 					<span class="productName">'.$product['name'].'</span><br />
 					'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
@@ -231,10 +231,10 @@ class AdminCarts extends AdminTab
 					.'</a></td>
 				<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
-				<td align="center" class="productQuantity">'.intval($stock['quantity']).'</td>
+				<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
 				<td align="right">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
 			</tr>';
-			foreach ($customizedDatas[intval($product['id_product'])][intval($product['id_product_attribute'])] AS $customization)
+			foreach ($customizedDatas[(int)($product['id_product'])][(int)($product['id_product_attribute'])] AS $customization)
 			{
 				echo '
 				<tr>
@@ -246,7 +246,7 @@ class AdminCarts extends AdminTab
 						echo '<ul style="margin: 4px 0px 4px 0px; padding: 0px; list-style-type: none;">';
 						foreach ($datas AS $data)
 							echo '<li style="display: inline; margin: 2px;">
-									<a href="displayImage.php?img='.$data['value'].'&name='.intval($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
+									<a href="displayImage.php?img='.$data['value'].'&name='.(int)($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
 								</li>';
 						echo '</ul>';
 					}
@@ -276,7 +276,7 @@ class AdminCarts extends AdminTab
 			$this->viewDetails();
 		else
 		{
-			$this->getList(intval($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
+			$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
 		}
 	}

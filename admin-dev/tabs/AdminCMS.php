@@ -38,7 +38,7 @@ class AdminCMS extends AdminTab
 		$this->_join = '
 		LEFT JOIN `'._DB_PREFIX_.'cms_category` c ON (c.`id_cms_category` = a.`id_cms_category`)';
 		$this->_select = 'a.position ';
-		$this->_filter = 'AND c.id_cms_category = '.intval($this->_category->id);
+		$this->_filter = 'AND c.id_cms_category = '.(int)($this->_category->id);
 		
 		parent::__construct();
 	}
@@ -64,7 +64,7 @@ class AdminCMS extends AdminTab
 		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$divLangName = 'meta_title¤meta_description¤meta_keywords¤ccontent¤link_rewrite';
 
 		echo '
@@ -77,7 +77,7 @@ class AdminCMS extends AdminTab
 		echo '<label>'.$this->l('CMS Category:').' </label>
 				<div class="margin-form">
 					<select name="id_cms_category">';
-		$categories = CMSCategory::getCategories(intval($cookie->id_lang), false);
+		$categories = CMSCategory::getCategories((int)($cookie->id_lang), false);
 		CMSCategory::recurseCMSCategory($categories, $categories[0][1], 1, $this->getFieldValue($obj, 'id_cms_category'));
 		echo '
 					</select>
@@ -86,7 +86,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="meta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="40" type="text" onkeyup="copyMeta2friendlyURL();" id="name_'.$language['id_lang'].'" name="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="40" type="text" onkeyup="copyMeta2friendlyURL();" id="name_'.$language['id_lang'].'" name="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $divLangName, 'meta_title');
@@ -97,7 +97,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="meta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="50" type="text" name="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="50" type="text" name="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $divLangName, 'meta_description');
 		echo '	</div><div class="clear space">&nbsp;</div>';
@@ -107,7 +107,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="meta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="50" type="text" name="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input size="50" type="text" name="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $divLangName, 'meta_keywords');
 		echo '	</div><div class="clear space">&nbsp;</div>';
@@ -117,7 +117,7 @@ class AdminCMS extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '	<div id="link_rewrite_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="30" type="text" id="input_link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'" onkeyup="this.value = str2url(this.value); updateFriendlyURL();" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="30" type="text" id="input_link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'" onkeyup="this.value = str2url(this.value); updateFriendlyURL();" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $divLangName, 'link_rewrite');
 		echo '	</div><div class="clear space">&nbsp;</div>';
@@ -214,8 +214,8 @@ class AdminCMS extends AdminTab
 		
 		if (($id_cms_category = (int)Tools::getValue('id_cms_category')))
 			$currentIndex .= '&id_cms_category='.$id_cms_category;
-		$this->getList(intval($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
-		//$this->getList(intval($cookie->id_lang));
+		$this->getList((int)($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : NULL, !$cookie->__get($this->table.'Orderway') ? 'ASC' : NULL);
+		//$this->getList((int)($cookie->id_lang));
 		if (!$id_cms_category)
 			$id_cms_category = 1;
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('No pages found')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('pages') : $this->l('page')))).' '.
@@ -246,7 +246,7 @@ class AdminCMS extends AdminTab
 	{
 		global $cookie, $link, $currentIndex;
 		
-		if (Tools::isSubmit('viewcms') AND ($id_cms = intval(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, intval($cookie->id_lang)) AND Validate::isLoadedObject($cms))
+		if (Tools::isSubmit('viewcms') AND ($id_cms = (int)(Tools::getValue('id_cms'))) AND $cms = new CMS($id_cms, (int)($cookie->id_lang)) AND Validate::isLoadedObject($cms))
 		{
 			$redir = $link->getCMSLink($cms);
 			if (!$cms->active)
@@ -264,7 +264,7 @@ class AdminCMS extends AdminTab
 				Configuration::updateValue('PS_CONDITIONS', 0);
 				Configuration::updateValue('PS_CONDITIONS_CMS_ID', 0);
 			}
-			$cms = new CMS(intval(Tools::getValue('id_cms')));
+			$cms = new CMS((int)(Tools::getValue('id_cms')));
 			$cms->cleanPositions($cms->id_cms_category);
 			if (!$cms->delete())
 				$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.' ('.mysql_error().')</b>';
@@ -282,8 +282,8 @@ class AdminCMS extends AdminTab
 					$result = $cms->deleteSelection(Tools::getValue($this->table.'Box'));
 					if ($result)
 					{
-						$cms->cleanPositions(intval(Tools::getValue('id_cms_category')));
-						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCMSContent').'&id_category='.intval(Tools::getValue('id_cms_category')));
+						$cms->cleanPositions((int)(Tools::getValue('id_cms_category')));
+						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCMSContent').'&id_category='.(int)(Tools::getValue('id_cms_category')));
 					}
 					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 
@@ -300,7 +300,7 @@ class AdminCMS extends AdminTab
 
 			if (!sizeof($this->_errors))
 			{
-				if (!$id_cms = intval(Tools::getValue('id_cms')))
+				if (!$id_cms = (int)(Tools::getValue('id_cms')))
 				{
 					$cms = new CMS();
 					$this->copyFromPost($cms, 'cms');
@@ -308,7 +308,7 @@ class AdminCMS extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
-						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
+						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
 						if (!$cms->active)
 						{
 							$admin_dir = dirname($_SERVER['PHP_SELF']);
@@ -330,7 +330,7 @@ class AdminCMS extends AdminTab
 						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
-						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), intval($cookie->id_lang));
+						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
 						if (!$cms->active)
 						{
 							$admin_dir = dirname($_SERVER['PHP_SELF']);
@@ -352,10 +352,10 @@ class AdminCMS extends AdminTab
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
 				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-			if (!$object->updatePosition(intval(Tools::getValue('way')), intval(Tools::getValue('position'))))
+			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
-				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=4'.(($id_category = intval(Tools::getValue('id_cms_category'))) ? ('&id_cms_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=4'.(($id_category = (int)(Tools::getValue('id_cms_category'))) ? ('&id_cms_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 		}
 		else
 			parent::postProcess(true);

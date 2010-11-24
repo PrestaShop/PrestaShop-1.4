@@ -60,7 +60,7 @@ class FrontControllerCore
 		/* Theme is missing or maintenance */
 		if (!is_dir(dirname(__FILE__).'/../themes/'._THEME_NAME_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
-		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !intval(Configuration::get('PS_SHOP_ENABLE')))
+		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
 			$maintenance = true;
 
 		ob_start();
@@ -79,16 +79,16 @@ class FrontControllerCore
 		$smarty->assign('link', $link);
 
 		// Switch language if needed and init cookie language
-		if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = intval(Language::getIdByIso($iso))))
+		if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = (int)(Language::getIdByIso($iso))))
 			$_GET['id_lang'] = $id_lang;
 
 		Tools::switchLanguage();
 		Tools::setCookieLanguage();
 
 		/* attribute id_lang is often needed, so we create a constant for performance reasons */
-		define('_USER_ID_LANG_', intval($cookie->id_lang));
+		define('_USER_ID_LANG_', (int)($cookie->id_lang));
 
-		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned(intval($cookie->id_customer))))
+		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)($cookie->id_customer))))
 		{
 			$cookie->logout();
 			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
@@ -99,7 +99,7 @@ class FrontControllerCore
 			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
 		}
 
-		$iso = strtolower(Language::getIsoById($cookie->id_lang ? intval($cookie->id_lang) : 1));
+		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)($cookie->id_lang) : 1));
 		@include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 		@include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		$_MODULES = array();
@@ -107,17 +107,17 @@ class FrontControllerCore
 		global $currency;
 		$currency = Tools::setCurrency();
 
-		if (intval($cookie->id_cart))
+		if ((int)($cookie->id_cart))
 		{
-			$cart = new Cart(intval($cookie->id_cart));
+			$cart = new Cart((int)($cookie->id_cart));
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart);
 			elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)
 			{
 				if ($cookie->id_customer)
-					$cart->id_customer = intval($cookie->id_customer);
-				$cart->id_lang = intval($cookie->id_lang);
-				$cart->id_currency = intval($cookie->id_currency);
+					$cart->id_customer = (int)($cookie->id_customer);
+				$cart->id_lang = (int)($cookie->id_lang);
+				$cart->id_currency = (int)($cookie->id_currency);
 				$cart->update();
 			}
 		}
@@ -125,13 +125,13 @@ class FrontControllerCore
 		if (!isset($cart) OR !$cart->id)
 		{
 			$cart = new Cart();
-			$cart->id_lang = intval($cookie->id_lang);
-			$cart->id_currency = intval($cookie->id_currency);
-			$cart->id_guest = intval($cookie->id_guest);
+			$cart->id_lang = (int)($cookie->id_lang);
+			$cart->id_currency = (int)($cookie->id_currency);
+			$cart->id_guest = (int)($cookie->id_guest);
 			if ($cookie->id_customer)
 			{
-				$cart->id_customer = intval($cookie->id_customer);
-				$cart->id_address_delivery = intval(Address::getFirstCustomerAddressId($cart->id_customer));
+				$cart->id_customer = (int)($cookie->id_customer);
+				$cart->id_address_delivery = (int)(Address::getFirstCustomerAddressId($cart->id_customer));
 				$cart->id_address_invoice = $cart->id_address_delivery;
 			}
 			else
@@ -143,7 +143,7 @@ class FrontControllerCore
 		if (!$cart->nbProducts())
 			$cart->id_carrier = NULL;
 
-		$ps_language = new Language(intval($cookie->id_lang));
+		$ps_language = new Language((int)($cookie->id_lang));
 		setlocale(LC_COLLATE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
 		setlocale(LC_CTYPE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
 		setlocale(LC_TIME, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
@@ -163,7 +163,7 @@ class FrontControllerCore
 		$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 		$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
 
-		$smarty->assign(Tools::getMetaTags(intval($cookie->id_lang)));
+		$smarty->assign(Tools::getMetaTags((int)($cookie->id_lang)));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
 
 		/* Breadcrumb */
@@ -198,10 +198,10 @@ class FrontControllerCore
 				'lang_iso' => $ps_language->iso_code,
 				'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
 				'shop_name' => Configuration::get('PS_SHOP_NAME'),
-				'cart_qties' => intval($cart->nbProducts()),
+				'cart_qties' => (int)($cart->nbProducts()),
 				'cart' => $cart,
 				'currencies' => Currency::getCurrencies(),
-				'id_currency_cookie' => intval($currency->id),
+				'id_currency_cookie' => (int)($currency->id),
 				'currency' => $currency,
 				'cookie' => $cookie,
 				'languages' => Language::getLanguages(),
@@ -209,9 +209,9 @@ class FrontControllerCore
 				'page_name' => $page_name,
 				'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 				'priceDisplay' => $priceDisplay,
-				'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
-				'use_taxes' => intval(Configuration::get('PS_TAX')),
-				'vat_management' => intval(Configuration::get('VATNUMBER_MANAGEMENT'))));
+				'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
+				'use_taxes' => (int)(Configuration::get('PS_TAX')),
+				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
 			$assignArray = array(
 				'img_ps_dir' => _PS_IMG_,
 				'img_cat_dir' => _THEME_CAT_DIR_,
@@ -262,10 +262,10 @@ class FrontControllerCore
 				'lang_iso' => $ps_language->iso_code,
 				'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
 				'shop_name' => Configuration::get('PS_SHOP_NAME'),
-				'cart_qties' => intval($cart->nbProducts()),
+				'cart_qties' => (int)($cart->nbProducts()),
 				'cart' => $cart,
 				'currencies' => Currency::getCurrencies(),
-				'id_currency_cookie' => intval($currency->id),
+				'id_currency_cookie' => (int)($currency->id),
 				'currency' => $currency,
 				'cookie' => $cookie,
 				'languages' => Language::getLanguages(),
@@ -273,9 +273,9 @@ class FrontControllerCore
 				'priceDisplay' => $priceDisplay,
 				'page_name' => $page_name,
 				'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-				'roundMode' => intval(Configuration::get('PS_PRICE_ROUND_MODE')),
-				'use_taxes' => intval(Configuration::get('PS_TAX')),
-				'vat_management' => intval(Configuration::get('VATNUMBER_MANAGEMENT'))));
+				'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
+				'use_taxes' => (int)(Configuration::get('PS_TAX')),
+				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
 		}
 
 		/* Display a maintenance page if shop is closed */
@@ -339,7 +339,7 @@ class FrontControllerCore
 			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
 			'logo_image_height' => Configuration::get('SHOP_LOGO_HEIGHT'),
 			'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
-			'content_only' => intval(Tools::getValue('content_only'))
+			'content_only' => (int)(Tools::getValue('content_only'))
 		));
 
 		if (is_writable(_PS_THEME_DIR_.'cache'))
@@ -363,17 +363,17 @@ class FrontControllerCore
 		$this->smarty->assign(array(
 			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn'),
 			'HOOK_FOOTER' => Module::hookExec('footer'),
-			'content_only' => intval(Tools::getValue('content_only'))));
+			'content_only' => (int)(Tools::getValue('content_only'))));
 		$this->smarty->display(_PS_THEME_DIR_.'footer.tpl');
 	}
 	
 	public function productSort()
 	{
-		$stock_management = intval(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
+		$stock_management = (int)(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
 		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 		$orderWayValues = array(0 => 'asc', 1 => 'desc');
-		$this->orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[intval(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
-		$this->orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
+		$this->orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
+		$this->orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
 		if (!in_array($this->orderBy, $orderByValues))
 			$this->orderBy = $orderByValues[0];
 		if (!in_array($this->orderWay, $orderWayValues))
@@ -382,16 +382,16 @@ class FrontControllerCore
 		$this->smarty->assign(array(
 			'orderby' => $this->orderBy,
 			'orderway' => $this->orderWay,
-			'orderwayposition' => $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
-			'stock_management' => intval($stock_management)));
+			'orderwayposition' => $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
+			'stock_management' => (int)($stock_management)));
 	}
 	
 	public function pagination($nbProducts)
 	{
-		$nArray = intval(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array(intval(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
+		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
-		$this->n = abs(intval(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : intval(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
-		$this->p = abs(intval(Tools::getValue('p', 1)));
+		$this->n = abs((int)(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
+		$this->p = abs((int)(Tools::getValue('p', 1)));
 		$range = 2; /* how many pages around page selected */
 
 		if ($this->p < 0)
@@ -402,23 +402,23 @@ class FrontControllerCore
 			
 		if ($this->p > ($nbProducts / $this->n))
 			$this->p = ceil($nbProducts / $this->n);
-		$pages_nb = ceil($nbProducts / intval($this->n));
+		$pages_nb = ceil($nbProducts / (int)($this->n));
 
-		$start = intval($this->p - $range);
+		$start = (int)($this->p - $range);
 		if ($start < 1)
 			$start = 1;
-		$stop = intval($this->p + $range);
+		$stop = (int)($this->p + $range);
 		if ($stop > $pages_nb)
-			$stop = intval($pages_nb);
+			$stop = (int)($pages_nb);
 		$this->smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
-					'pages_nb' => intval($pages_nb),
-					'p' => intval($this->p),
-					'n' => intval($this->n),
+					'pages_nb' => (int)($pages_nb),
+					'p' => (int)($this->p),
+					'n' => (int)($this->n),
 					'nArray' => $nArray,
-					'range' => intval($range),
-					'start' => intval($start),
-					'stop' => intval($stop));
+					'range' => (int)($range),
+					'start' => (int)($start),
+					'stop' => (int)($stop));
 		$this->smarty->assign($pagination_infos);
 	}
 }

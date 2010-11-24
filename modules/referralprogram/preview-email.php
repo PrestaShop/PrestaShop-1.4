@@ -8,7 +8,7 @@ if (!$cookie->isLogged())
 */
 $shop_name = htmlentities(Configuration::get('PS_SHOP_NAME'), NULL, 'utf-8');
 $shop_url = 'http://'.Tools::getHttpHost(false, true);
-$customer = new Customer(intval($cookie->id_customer));
+$customer = new Customer((int)($cookie->id_customer));
 
 if (!preg_match("#.*\.html$#Ui", Tools::getValue('mail')) OR !preg_match("#.*\.html$#Ui", Tools::getValue('mail')))
 	die(Tools::displayError());
@@ -24,7 +24,7 @@ $file = str_replace('{email}', $customer->email, $file);
 $file = str_replace('{firstname_friend}', 'XXXXX', $file);
 $file = str_replace('{lastname_friend}', 'xxxxxx', $file);
 $file = str_replace('{link}', 'authentication.php?create_account=1', $file);
-$file = str_replace('{discount}', Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_' . $cookie->id_currency)), intval(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency)), $file);
+$file = str_replace('{discount}', Discount::display(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_' . $cookie->id_currency)), (int)(Configuration::get('REFERRAL_DISCOUNT_TYPE')), new Currency($cookie->id_currency)), $file);
 
 echo $file;
 

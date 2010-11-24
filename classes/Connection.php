@@ -38,9 +38,9 @@ class ConnectionCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_guest'] = intval($this->id_guest);
-		$fields['id_page'] = intval($this->id_page);
-		$fields['ip_address'] = intval($this->ip_address);
+		$fields['id_guest'] = (int)($this->id_guest);
+		$fields['id_page'] = (int)($this->id_page);
+		$fields['ip_address'] = (int)($this->ip_address);
 		if (Validate::isAbsoluteUrl($this->http_referer))
 			$fields['http_referer'] = pSQL($this->http_referer);
 		$fields['date_add'] = pSQL($this->date_add);
@@ -59,12 +59,12 @@ class ConnectionCore extends ObjectModel
 		
 		// The ending time will be updated by an ajax request when the guest will close the page
 		$time_start = date('Y-m-d H:i:s');
-		Db::getInstance()->AutoExecute(_DB_PREFIX_.'connections_page', array('id_connections' => intval($cookie->id_connections), 'id_page' => intval($id_page), 'time_start' => $time_start), 'INSERT');
+		Db::getInstance()->AutoExecute(_DB_PREFIX_.'connections_page', array('id_connections' => (int)($cookie->id_connections), 'id_page' => (int)($id_page), 'time_start' => $time_start), 'INSERT');
 		
 		// This array is serialized and used by the ajax request to identify the page
 		return array(
-			'id_connections' => intval($cookie->id_connections),
-			'id_page' => intval($id_page),
+			'id_connections' => (int)($cookie->id_connections),
+			'id_page' => (int)($id_page),
 			'time_start' => $time_start);
 	}
 	
@@ -89,10 +89,10 @@ class ConnectionCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT c.`id_guest`
 		FROM `'._DB_PREFIX_.'connections` c
-		WHERE c.`id_guest` = '.intval($cookie->id_guest).'
+		WHERE c.`id_guest` = '.(int)($cookie->id_guest).'
 		AND DATE_ADD(c.`date_add`, INTERVAL 30 MINUTE) > \''.pSQL(date('Y-m-d H:i:00')).'\'
 		ORDER BY c.`date_add` DESC');
-		if (!$result['id_guest'] AND intval($cookie->id_guest))
+		if (!$result['id_guest'] AND (int)($cookie->id_guest))
 		{
 			// The old connections details are removed from the database in order to spare some memory
 			Connection::cleanConnectionsPages();
@@ -102,7 +102,7 @@ class ConnectionCore extends ObjectModel
 			if (!isset($arrayUrl['host']) OR preg_replace('/^www./', '', $arrayUrl['host']) == preg_replace('/^www./', '', Tools::getHttpHost(false, false)))
 				$referer = '';
 			$connection = new Connection();
-			$connection->id_guest = intval($cookie->id_guest);
+			$connection->id_guest = (int)($cookie->id_guest);
 			$connection->id_page = Page::getCurrentId();
 			$connection->ip_address = Tools::getRemoteAddr() ? ip2long(Tools::getRemoteAddr()) : '';
 			if (Validate::isAbsoluteUrl($referer))
@@ -125,9 +125,9 @@ class ConnectionCore extends ObjectModel
 			$time = 300000;
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'connections_page`
-		SET `time_end` = `time_start` + INTERVAL '.intval($time / 1000).' SECOND
-		WHERE `id_connections` = '.intval($id_connections).'
-		AND `id_page` = '.intval($id_page).'
+		SET `time_end` = `time_start` + INTERVAL '.(int)($time / 1000).' SECOND
+		WHERE `id_connections` = '.(int)($id_connections).'
+		AND `id_page` = '.(int)($id_page).'
 		AND `time_start` = \''.pSQL($time_start).'\'');
 	}
 	

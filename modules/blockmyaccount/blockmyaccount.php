@@ -36,8 +36,8 @@ class BlockMyAccount extends Module
 		if (!$params['cookie']->isLogged())
 			return false;
 		$smarty->assign(array(
-			'voucherAllowed' => intval(Configuration::get('PS_VOUCHERS')),
-			'returnAllowed' => intval(Configuration::get('PS_ORDER_RETURN')),
+			'voucherAllowed' => (int)(Configuration::get('PS_VOUCHERS')),
+			'returnAllowed' => (int)(Configuration::get('PS_ORDER_RETURN')),
 			'HOOK_BLOCK_MY_ACCOUNT' => Module::hookExec('myAccountBlock')
 		));
 		return $this->display(__FILE__, $this->name.'.tpl');

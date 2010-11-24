@@ -38,7 +38,7 @@ if ($cookie->isLogged())
 				srand($s * $us);
 				$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
 				$wishlist->add();
-				Mail::Send(intval($cookie->id_lang), 'wishlink', Mail::l('Your wishlist\'s link'), 
+				Mail::Send((int)($cookie->id_lang), 'wishlink', Mail::l('Your wishlist\'s link'), 
 					array(
 					'{wishlist}' => $wishlist->name,
 					'{message}' => 'http://'.htmlentities($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist->token),
@@ -47,17 +47,17 @@ if ($cookie->isLogged())
 		}
 	}
 	else if ($add)
-		WishList::addCardToWishlist(intval($cookie->id_customer), intval(Tools::getValue('id_wishlist')), intval($cookie->id_lang));
+		WishList::addCardToWishlist((int)($cookie->id_customer), (int)(Tools::getValue('id_wishlist')), (int)($cookie->id_lang));
 	else if ($delete AND empty($id_wishlist) === false)
 	{
-		$wishlist = new WishList(intval($id_wishlist));
+		$wishlist = new WishList((int)($id_wishlist));
 		if (Validate::isLoadedObject($wishlist))
 			$wishlist->delete();
 		else
 			$errors[] = Tools::displayError('can`t delete this whislist');
 	}
-	$smarty->assign('wishlists', WishList::getByIdCustomer(intval($cookie->id_customer)));
-	$smarty->assign('nbProducts', WishList::getInfosByIdCustomer(intval($cookie->id_customer)));
+	$smarty->assign('wishlists', WishList::getByIdCustomer((int)($cookie->id_customer)));
+	$smarty->assign('nbProducts', WishList::getInfosByIdCustomer((int)($cookie->id_customer)));
 }
 else
 {
@@ -65,7 +65,7 @@ else
 }
 
 $smarty->assign(array(
-	'id_customer' => intval($cookie->id_customer),
+	'id_customer' => (int)($cookie->id_customer),
 	'errors' => $errors
 ));
 

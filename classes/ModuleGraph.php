@@ -30,7 +30,7 @@ abstract class ModuleGraphCore extends Module
 	
 	public function setEmployee($id_employee)
 	{
-		$this->_employee = new Employee(intval($id_employee));
+		$this->_employee = new Employee((int)($id_employee));
 	}
 	public function setLang($id_lang)
 	{
@@ -147,8 +147,8 @@ abstract class ModuleGraphCore extends Module
 			return Tools::displayError('Graph engine selected unavailable');
 			
 		global $cookie;
-		$id_employee = intval($cookie->id_employee);
-		$id_lang = intval($cookie->id_lang);
+		$id_employee = (int)($cookie->id_employee);
+		$id_lang = (int)($cookie->id_lang);
 
 		if (!isset($params['layers']))
 			$params['layers'] = 1;
@@ -160,7 +160,7 @@ abstract class ModuleGraphCore extends Module
 			$params['height'] = 270;
 		
 		global $cookie;
-		$id_employee = intval($cookie->id_employee);
+		$id_employee = (int)($cookie->id_employee);
 		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'].'&id_employee='.$id_employee.'&id_lang='.$id_lang;
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
@@ -174,7 +174,7 @@ abstract class ModuleGraphCore extends Module
 		if (!$employee)
 		{
 			global $cookie;
-			$employee = new Employee(intval($cookie->id_employee));
+			$employee = new Employee((int)($cookie->id_employee));
 		}
 		
 		if (empty($employee->stats_date_from) OR empty($employee->stats_date_to) OR $employee->stats_date_from == '0000-00-00' OR $employee->stats_date_to == '0000-00-00')

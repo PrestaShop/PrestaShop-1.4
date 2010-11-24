@@ -157,13 +157,13 @@ class AdminBackup extends AdminTab
 		}
 		if (empty($limit))
 			$limit = ((!isset($cookie->{$this->table.'_pagination'})) ? $this->_pagination[0] : $limit = $cookie->{$this->table.'_pagination'});
-		$limit = intval(Tools::getValue('pagination', $limit));
+		$limit = (int)(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
 
 		/* Determine offset from current page */
 		if (!empty($_POST['submitFilter'.$this->table]) AND	is_numeric($_POST['submitFilter'.$this->table]))
-			$start = intval($_POST['submitFilter'.$this->table] - 1) * $limit;
-		$this->_lang = intval($id_lang);
+			$start = (int)($_POST['submitFilter'.$this->table] - 1) * $limit;
+		$this->_lang = (int)($id_lang);
 		$this->_orderBy = $orderBy;	
 		$this->_orderWay = strtoupper($orderWay);
 		$this->_list = array();
@@ -179,7 +179,7 @@ class AdminBackup extends AdminTab
 		{
 			if (preg_match('/^([\d]+-[a-z\d]+)\.sql(\.gz|\.bz2)?$/', $file, $matches) == 0)
 				continue;
-			$timestamp = intval($matches[1]);
+			$timestamp = (int)($matches[1]);
 			$date = date('Y-m-d h:i:s', $timestamp);
 			$age = time() - $timestamp;
 			if ($age < 3600)

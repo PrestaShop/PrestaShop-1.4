@@ -681,7 +681,7 @@ class AdminTranslations extends AdminTab
 				<fieldset><legend><img src="../img/admin/copy_files.gif" />'.$this->l('Copy').'</legend>
 					<p>'.$this->l('Copies data from one language to another.').'<br />'.
 					$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
-					$this->l('If necessary').', <b><a href="index.php?tab=AdminLanguages&addlang&token='.Tools::getAdminToken('AdminLanguages'.intval(Tab::getIdFromClassName('AdminLanguages')).intval($cookie->id_employee)).'">'.$this->l('first create a new language').'</a></b>.</p>
+					$this->l('If necessary').', <b><a href="index.php?tab=AdminLanguages&addlang&token='.Tools::getAdminToken('AdminLanguages'.(int)(Tab::getIdFromClassName('AdminLanguages')).(int)($cookie->id_employee)).'">'.$this->l('first create a new language').'</a></b>.</p>
 					<div style="float:left;">
 						<p>
 							<div style="width:75px; font-weight:bold; float:left;">'.$this->l('From:').'</div>
@@ -837,7 +837,7 @@ class AdminTranslations extends AdminTab
 					if (strlen($key) < TEXTAREA_SIZED)
 						echo '<input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
 					else
-						echo '<textarea rows="'.intval(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+						echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
 				}
 				echo '
 						</table>
@@ -905,7 +905,7 @@ class AdminTranslations extends AdminTab
 					if (strlen($key) < TEXTAREA_SIZED)
 						echo '<input type="text" style="width: 450px" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" /></td></tr>';
 					else
-						echo '<textarea rows="'.intval(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'</textarea></td></tr>';
+						echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'</textarea></td></tr>';
 				}
 				echo '
 						</table>
@@ -1166,7 +1166,7 @@ class AdminTranslations extends AdminTab
 		}
 
 		// TinyMCE
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		echo ' <script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 				<script type="text/javascript">
 					tinyMCE.init({
@@ -1548,7 +1548,7 @@ class AdminTranslations extends AdminTab
 								if (strlen($key) < TEXTAREA_SIZED)
 									echo '<input type="text" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
 								else
-									echo '<textarea rows="'.intval(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+									echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
 							}
 							echo '
 									</table>

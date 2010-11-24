@@ -54,9 +54,9 @@ class GroupCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_group'] = intval($this->id);
+			$fields['id_group'] = (int)($this->id);
 		$fields['reduction'] = floatval($this->reduction);
-		$fields['price_display_method'] = intval($this->price_display_method);
+		$fields['price_display_method'] = (int)($this->price_display_method);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 
@@ -75,7 +75,7 @@ class GroupCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT g.`id_group`, g.`reduction`, g.`price_display_method`, gl.`name`
 		FROM `'._DB_PREFIX_.'group` g
-		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.(int)($id_lang).')
 		ORDER BY g.`id_group` ASC');
 	}
 	
@@ -85,7 +85,7 @@ class GroupCore extends ObjectModel
 		SELECT cg.`id_customer`, c.*
 		FROM `'._DB_PREFIX_.'customer_group` cg
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
-		WHERE cg.`id_group` = '.intval($this->id).' 
+		WHERE cg.`id_group` = '.(int)($this->id).' 
 		AND c.`deleted` != 1 
 		ORDER BY cg.`id_customer` ASC');
 	}
@@ -97,11 +97,11 @@ class GroupCore extends ObjectModel
 		if (!isset(self::$_customerReduction[$id_customer]))
 		{
 			if ($id_customer)
-				$customer = new Customer(intval($id_customer));
+				$customer = new Customer((int)($id_customer));
 			self::$_customerReduction[$id_customer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `reduction`
 			FROM `'._DB_PREFIX_.'group`
-			WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? intval($customer->id_default_group) : 1));
+			WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? (int)($customer->id_default_group) : 1));
 		}
 		return self::$_customerReduction[$id_customer];
 	}
@@ -112,7 +112,7 @@ class GroupCore extends ObjectModel
 			self::$_groupPriceDisplayMethod[$id_group] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `price_display_method`
 			FROM `'._DB_PREFIX_.'group`
-			WHERE `id_group` = '.intval($id_group));
+			WHERE `id_group` = '.(int)($id_group));
 		return self::$_groupPriceDisplayMethod[$id_group];
 	}
 
@@ -123,7 +123,7 @@ class GroupCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false)
 	{
-		return parent::add() && Category::setNewGroupForHome(intval($this->id));
+		return parent::add() && Category::setNewGroupForHome((int)($this->id));
 	}
 
 	public function delete()
@@ -132,9 +132,9 @@ class GroupCore extends ObjectModel
 			return false;
 		if (parent::delete())
 		{
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.intval($this->id));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.intval($this->id));
-			Discount::deleteByIdGroup(intval($this->id));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.(int)($this->id));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.(int)($this->id));
+			Discount::deleteByIdGroup((int)($this->id));
 			return true;
 		}
 		return false;

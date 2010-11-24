@@ -132,7 +132,7 @@ class AdminInvoices extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitOptionsinvoice'))
 		{
-			if (intval(Tools::getValue('PS_INVOICE_NUMBER')) == 0)
+			if ((int)(Tools::getValue('PS_INVOICE_NUMBER')) == 0)
 				$this->_errors[] = $this->l('Invalid invoice number');
 			else
 				parent::postProcess();

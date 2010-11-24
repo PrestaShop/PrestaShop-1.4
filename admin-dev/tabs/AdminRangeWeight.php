@@ -64,10 +64,10 @@ class AdminRangeWeight extends AdminTab
 				<label>'.$this->l('Carrier').'</label>
 				<div class="margin-form">
 					<select name="id_carrier">';
-			$carriers = Carrier::getCarriers(intval(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 			$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
 			foreach ($carriers AS $carrier)
-				echo '<option value="'.intval($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
+				echo '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
 			echo '
 					</select>
 					<p class="clear">'.$this->l('Carrier to which this range will be applied').'</p>

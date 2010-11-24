@@ -33,17 +33,17 @@ class Feeder extends Module
 	{
 		global $smarty, $cookie;
 		
-		$id_category = intval(Tools::getValue('id_category'));
+		$id_category = (int)(Tools::getValue('id_category'));
 		if (!$id_category)
 		{
 			if (isset($_SERVER['HTTP_REFERER']) AND preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
 			{
 				if (isset($regs[2]) AND is_numeric($regs[2]))
-					$id_category = intval($regs[2]);
+					$id_category = (int)($regs[2]);
 				elseif (isset($regs[5]) AND is_numeric($regs[5]))
-					$id_category = intval($regs[5]);
+					$id_category = (int)($regs[5]);
 			}
-			elseif ($id_product = intval(Tools::getValue('id_product')))
+			elseif ($id_product = (int)(Tools::getValue('id_product')))
 			{
 				$product = new Product($id_product);
 				$id_category = $product->id_category_default;
@@ -52,8 +52,8 @@ class Feeder extends Module
 		$category = new Category($id_category);
 		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 		$orderWayValues = array(0 => 'ASC', 1 => 'DESC');
-		$orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[intval(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
-		$orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[intval(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
+		$orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
+		$orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
 		if (!in_array($orderBy, $orderByValues))
 			$orderBy = $orderByValues[0];
 		if (!in_array($orderWay, $orderWayValues))

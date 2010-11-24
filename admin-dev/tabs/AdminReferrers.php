@@ -15,20 +15,20 @@ if (!defined('PS_ADMIN_DIR')) define('PS_ADMIN_DIR', getcwd().'/..');
 include_once(PS_ADMIN_DIR.'/../config/config.inc.php');
 include_once(PS_ADMIN_DIR.'/init.php');
 
-if (Tools::getValue('token') == Tools::getAdminToken('AdminReferrers'.intval(Tab::getIdFromClassName('AdminReferrers')).intval(Tools::getValue('id_employee'))))
+if (Tools::getValue('token') == Tools::getAdminToken('AdminReferrers'.(int)(Tab::getIdFromClassName('AdminReferrers')).(int)(Tools::getValue('id_employee'))))
 {
 	if (Tools::isSubmit('ajaxProductFilter'))
-		Referrer::getAjaxProduct(intval(Tools::getValue('id_referrer')), intval(Tools::getValue('id_product')), new Employee(intval(Tools::getValue('id_employee'))));
+		Referrer::getAjaxProduct((int)(Tools::getValue('id_referrer')), (int)(Tools::getValue('id_product')), new Employee((int)(Tools::getValue('id_employee'))));
 	else if (Tools::isSubmit('ajaxFillProducts'))
 	{
 		$jsonArray = array();
 		$result = Db::getInstance()->ExecuteS('
 		SELECT p.id_product, pl.name
 		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product AND pl.id_lang = '.intval(Tools::getValue('id_lang')).')
+		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product AND pl.id_lang = '.(int)(Tools::getValue('id_lang')).')
 		'.(Tools::getValue('filter') != 'undefined' ? 'WHERE name LIKE "%'.pSQL(Tools::getValue('filter')).'%"' : ''));
 		foreach ($result as $row)
-			$jsonArray[] = '{id_product:'.intval($row['id_product']).',name:\''.addslashes($row['name']).'\'}';
+			$jsonArray[] = '{id_product:'.(int)($row['id_product']).',name:\''.addslashes($row['name']).'\'}';
 		die ('['.implode(',', $jsonArray).']');
 	}
 }
@@ -74,7 +74,7 @@ class AdminReferrers extends AdminTab
 	{
 		global $cookie, $currentIndex;
 		
-		$products = Product::getSimpleProducts(intval($cookie->id_lang));
+		$products = Product::getSimpleProducts((int)($cookie->id_lang));
 		$productsArray = array();
 		foreach ($products as $product)
 			$productsArray[] = $product['id_product'];
@@ -113,7 +113,7 @@ class AdminReferrers extends AdminTab
 					{
 						referrerStatus[id_referrer] = true;
 						for (var i = 0; i < productIds.length; ++i)
-							$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
+							$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
 								function(result) {
 									var newLine = newProductLine(id_referrer, result[0]);
 									$(newLine).hide().insertAfter(getE(\'trid_\'+id_referrer)).fadeIn();
@@ -151,10 +151,10 @@ class AdminReferrers extends AdminTab
 							<label>'.$this->l('Save direct traffic').'</label>
 							<div class="float" style="margin-left: 200px;">
 								<label class="t" for="tracking_dt_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
-								<input type="radio" name="tracking_dt" id="tracking_dt_on" value="1" '.(intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').' />
+								<input type="radio" name="tracking_dt" id="tracking_dt_on" value="1" '.((int)(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').' />
 								<label class="t" for="tracking_dt_on"> '.$this->l('Yes').'</label>
 								<label class="t" for="tracking_dt_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" /></label>
-								<input type="radio" name="tracking_dt" id="tracking_dt_off" value="0" '.(!intval(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').'/>
+								<input type="radio" name="tracking_dt" id="tracking_dt_off" value="0" '.(!(int)(Tools::getValue('tracking_dt', Configuration::get('TRACKING_DIRECT_TRAFFIC'))) ? 'checked="checked"' : '').'/>
 								<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
 							</div>
 							<br class="clear" />
@@ -193,7 +193,7 @@ class AdminReferrers extends AdminTab
 
 		if (Tools::isSubmit('submitSettings'))
 			if ($this->tabAccess['edit'] === '1')
-				if (Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', intval(Tools::getValue('tracking_dt'))))
+				if (Configuration::updateValue('TRACKING_DIRECT_TRAFFIC', (int)(Tools::getValue('tracking_dt'))))
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.Tools::getValue('token'));
 
 		if (ModuleGraph::getDateBetween() != Configuration::get('PS_REFERRERS_CACHE_LIKE') OR Tools::isSubmit('submitRefreshCache'))
@@ -354,7 +354,7 @@ class AdminReferrers extends AdminTab
 	public function viewreferrer()
 	{
 		global $cookie, $currentIndex;
-		$referrer = new Referrer(intval(Tools::getValue('id_referrer')));
+		$referrer = new Referrer((int)(Tools::getValue('id_referrer')));
 
 		$displayTab = array(
 			'uniqs' => $this->l('Unique visitors'),
@@ -373,7 +373,7 @@ class AdminReferrers extends AdminTab
 		<script type="text/javascript">
 			function updateConversionRate(id_product)
 			{
-				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:'.$referrer->id.',id_product:id_product},
+				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:'.$referrer->id.',id_product:id_product},
 					function(j) {';
 		foreach ($displayTab as $key => $value)
 			echo '$("#'.$key.'").html(j[0].'.$key.');';
@@ -386,7 +386,7 @@ class AdminReferrers extends AdminTab
 				var form = document.layers ? document.forms.product : document.product;
 				var filter = form.filterProduct.value;
 				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",
-					{ajaxFillProducts:1,id_employee:'.intval($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_lang:'.intval($cookie->id_lang).',filter:filter},
+					{ajaxFillProducts:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_lang:'.(int)($cookie->id_lang).',filter:filter},
 					function(j) {
 						
 						form.selectProduct.length = j.length + 1;

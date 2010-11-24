@@ -136,7 +136,7 @@ class Cheque extends PaymentModule
 			'cust_currency' => $cart->id_currency,
 			'currencies' => $this->getCurrency(),
 			'total' => $cart->getOrderTotal(true, 3),
-			'isoCode' => Language::getIsoById(intval($cookie->id_lang)),
+			'isoCode' => Language::getIsoById((int)($cookie->id_lang)),
 			'chequeName' => $this->chequeName,
 			'chequeAddress' => nl2br2($this->address),
 			'this_path' => $this->_path,
@@ -184,7 +184,7 @@ class Cheque extends PaymentModule
 	
 	private function _checkCurrency($cart)
 	{
-		$currency_order = new Currency(intval($cart->id_currency));
+		$currency_order = new Currency((int)($cart->id_currency));
 		$currencies_module = $this->getCurrency();
 		$currency_default = Configuration::get('PS_CURRENCY_DEFAULT');
 

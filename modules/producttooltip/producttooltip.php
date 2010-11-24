@@ -49,11 +49,11 @@ class ProductToolTip extends Module
 		/* Update values in DB */
 		if (Tools::isSubmit('SubmitToolTip'))
 		{
-			Configuration::updateValue('PS_PTOOLTIP_PEOPLE', intval(Tools::getValue('ps_ptooltip_people')));
-			Configuration::updateValue('PS_PTOOLTIP_DATE_CART', intval(Tools::getValue('ps_ptooltip_date_cart')));
-			Configuration::updateValue('PS_PTOOLTIP_DATE_ORDER', intval(Tools::getValue('ps_ptooltip_date_order')));
-			Configuration::updateValue('PS_PTOOLTIP_DAYS', intval(Tools::getValue('ps_ptooltip_days')));
-			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', intval(Tools::getValue('ps_ptooltip_lifetime')));
+			Configuration::updateValue('PS_PTOOLTIP_PEOPLE', (int)(Tools::getValue('ps_ptooltip_people')));
+			Configuration::updateValue('PS_PTOOLTIP_DATE_CART', (int)(Tools::getValue('ps_ptooltip_date_cart')));
+			Configuration::updateValue('PS_PTOOLTIP_DATE_ORDER', (int)(Tools::getValue('ps_ptooltip_date_order')));
+			Configuration::updateValue('PS_PTOOLTIP_DAYS', (int)(Tools::getValue('ps_ptooltip_days')));
+			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', (int)(Tools::getValue('ps_ptooltip_lifetime')));
 			
 			echo $this->displayConfirmation($this->l('Settings updated'));
 		}
@@ -71,7 +71,7 @@ class ProductToolTip extends Module
 			</p>
 			<p>
 				'.$this->l('Lifetime:').'
-				<input type="text" name="ps_ptooltip_lifetime" style="width: 30px;" value="'.intval(Configuration::get('PS_PTOOLTIP_LIFETIME')).'" /> '.$this->l('minutes').'<br />
+				<input type="text" name="ps_ptooltip_lifetime" style="width: 30px;" value="'.(int)(Configuration::get('PS_PTOOLTIP_LIFETIME')).'" /> '.$this->l('minutes').'<br />
 			</p>
 			<hr size="1" noshade />			
 			<p>
@@ -87,7 +87,7 @@ class ProductToolTip extends Module
 			</p>
 			<p>
 				'.$this->l('Do not display events older than:').'
-				<input type="text" name="ps_ptooltip_days" style="width: 30px;" value="'.intval(Configuration::get('PS_PTOOLTIP_DAYS')).'" /> '.$this->l('days').'<br />
+				<input type="text" name="ps_ptooltip_days" style="width: 30px;" value="'.(int)(Configuration::get('PS_PTOOLTIP_DAYS')).'" /> '.$this->l('days').'<br />
 			</p>
 			<hr size="1" noshade />
 			<center><input type="submit" name="SubmitToolTip" class="button" value="'.$this->l('Update settings').'" style="margin-top: 10px;"  /></center>
@@ -106,34 +106,34 @@ class ProductToolTip extends Module
 	{
 		global $smarty, $cookie;
 		
-		$id_product = intval($params['product']->id);
+		$id_product = (int)($params['product']->id);
 		
 		/* First we try to display the number of people who are currently watching this product page */
 		if (Configuration::get('PS_PTOOLTIP_PEOPLE'))
 		{
-			$date = strftime('%Y-%m-%d %H:%M:%S' , time() - intval(Configuration::get('PS_PTOOLTIP_LIFETIME') * 60));
+			$date = strftime('%Y-%m-%d %H:%M:%S' , time() - (int)(Configuration::get('PS_PTOOLTIP_LIFETIME') * 60));
 			
 			$nbPeople = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(DISTINCT(id_connections)) nb
 			FROM '._DB_PREFIX_.'page p
 			LEFT JOIN '._DB_PREFIX_.'connections_page cp ON (p.id_page = cp.id_page)
-			WHERE p.id_page_type = 1 AND p.id_object = '.intval($id_product).' AND cp.time_start > \''.pSQL($date).'\'');
+			WHERE p.id_page_type = 1 AND p.id_object = '.(int)($id_product).' AND cp.time_start > \''.pSQL($date).'\'');
 
 			if (isset($nbPeople['nb']) AND $nbPeople['nb'] > 0)
-				$smarty->assign('nb_people', intval($nbPeople['nb']));
+				$smarty->assign('nb_people', (int)($nbPeople['nb']));
 		}
 		
 		/* Then, we try to display last sale */
 		if (Configuration::get('PS_PTOOLTIP_DATE_ORDER'))
 		{
-			$days = intval(Configuration::get('PS_PTOOLTIP_DAYS'));
-			$date = strftime('%Y-%m-%d' , strtotime('-'.intval($days).' day'));
+			$days = (int)(Configuration::get('PS_PTOOLTIP_DAYS'));
+			$date = strftime('%Y-%m-%d' , strtotime('-'.(int)($days).' day'));
 			
 			$order = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT o.date_add
 			FROM '._DB_PREFIX_.'order_detail od
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (od.id_order = o.id_order)
-			WHERE od.product_id = '.intval($id_product).' AND o.date_add >= \''.pSQL($date).'\'');
+			WHERE od.product_id = '.(int)($id_product).' AND o.date_add >= \''.pSQL($date).'\'');
 			
 			if (isset($order['date_add']))
 				$smarty->assign('date_last_order', $order['date_add']);
@@ -145,7 +145,7 @@ class ProductToolTip extends Module
 					$cart = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 					SELECT cp.date_add
 					FROM '._DB_PREFIX_.'cart_product cp
-					WHERE cp.id_product = '.intval($id_product));
+					WHERE cp.id_product = '.(int)($id_product));
 			
 					if (isset($cart['date_add']))
 						$smarty->assign('date_last_cart', $cart['date_add']);

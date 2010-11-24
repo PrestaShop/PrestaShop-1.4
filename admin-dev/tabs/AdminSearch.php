@@ -22,12 +22,12 @@ class AdminSearch extends AdminTab
 	{
 		global $cookie;
 		
-		$this->_list['products'] = Product::searchByName(intval($cookie->id_lang), $query);
+		$this->_list['products'] = Product::searchByName((int)($cookie->id_lang), $query);
 		if (!empty($this->_list['products']))
 			for ($i = 0; $i < count($this->_list['products']); $i++)
 				$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.$query.'</span>', $this->_list['products'][$i]['name']);
 
-		$this->_list['categories'] = Category::searchByName(intval($cookie->id_lang), $query);
+		$this->_list['categories'] = Category::searchByName((int)($cookie->id_lang), $query);
 	}
 
 	/**
@@ -71,9 +71,9 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle product ID */
-				if ($searchType == 1 AND intval($query) AND Validate::isUnsignedInt(intval($query)))
-					if ($product = new Product(intval($query)) AND Validate::isLoadedObject($product))
-						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.intval($product->id).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)));
+				if ($searchType == 1 AND (int)($query) AND Validate::isUnsignedInt((int)($query)))
+					if ($product = new Product((int)($query)) AND Validate::isLoadedObject($product))
+						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.(int)($product->id).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
 
 				/* Normal catalog search */
 				$this->searchCatalog($query);
@@ -95,9 +95,9 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle customer ID */
-				if ($searchType AND intval($query) AND Validate::isUnsignedInt(intval($query)))
-					if ($customer = new Customer(intval($query)) AND Validate::isLoadedObject($customer))
-						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.intval($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)));
+				if ($searchType AND (int)($query) AND Validate::isUnsignedInt((int)($query)))
+					if ($customer = new Customer((int)($query)) AND Validate::isLoadedObject($customer))
+						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)));
 
 				/* Normal customer search */
 				$this->searchCustomer($query);
@@ -106,24 +106,24 @@ class AdminSearch extends AdminTab
 			/* Order */
 			if ($searchType == 3)
 			{
-				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $order = new Order(intval($query)) AND Validate::isLoadedObject($order))
-					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.intval($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)));
+				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $order = new Order((int)($query)) AND Validate::isLoadedObject($order))
+					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('no order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 			
 			/* Invoices */
 			if ($searchType == 4)
 			{
-				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $invoice = Order::getInvoice(intval($query)))
-					Tools::redirectAdmin('pdf.php?id_order='.intval($invoice['id_order']).'&pdf');
+				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $invoice = Order::getInvoice((int)($query)))
+					Tools::redirectAdmin('pdf.php?id_order='.(int)($invoice['id_order']).'&pdf');
 				$this->_errors[] = Tools::displayError('no invoice found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 
 			/* Cart */
 			if ($searchType == 5)
 			{
-				if (intval($query) AND Validate::isUnsignedInt(intval($query)) AND $cart = new Cart(intval($query)) AND Validate::isLoadedObject($cart))
-					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.intval($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.intval(Tab::getIdFromClassName('AdminCarts')).intval($cookie->id_employee)));
+				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $cart = new Cart((int)($query)) AND Validate::isLoadedObject($cart))
+					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.(int)($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('no cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 		}
@@ -165,17 +165,17 @@ class AdminSearch extends AdminTab
 					<td>'.$product['id_product'].'</td>
 					<td align="center">'.($product['manufacturer_name'] != NULL ? stripslashes($product['manufacturer_name']) : '--').'</td>
 					<td>'.$product['reference'].'</td>
-					<td><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.stripslashes($product['nameh']).'</a></td>
+					<td><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($product['nameh']).'</a></td>
 					<td>'.Tools::displayPrice($product['price'], $currency).'</td>
 					<td>'.stripslashes($product['tax_name']).'</td>
 					<td align="center">'.$product['quantity'].'</td>
 					<td align="center">'.$product['weight'].' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
-					<td align="center"><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+					<td align="center"><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 					<img src="../img/admin/'.($product['active'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
 					<td>
-						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">
+						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this product').'" /></a>&nbsp;
-						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'"
+						<a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'"
 							onclick="return confirm(\''.$this->l('Do you want to delete this product?', __CLASS__, true, false).' ('.addslashes($product['name']).')\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" /></a>
 					</td>
@@ -204,16 +204,16 @@ class AdminSearch extends AdminTab
 					<td class="center">'.$imgGender.'</td>
 					<td>'.stripslashes($customer['lastname']).' '.stripslashes($customer['firstname']).'</td>
 					<td>'.stripslashes($customer['email']).'<a href="mailto:'.stripslashes($customer['email']).'"> <img src="../img/admin/email_edit.gif" alt="'.$this->l('Write to this customer').'" /></a></td>
-					<td>'.Tools::displayDate($customer['birthday'], intval($cookie->id_lang)).'</td>
-					<td>'.Tools::displayDate($customer['date_add'], intval($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($customer['birthday'], (int)($cookie->id_lang)).'</td>
+					<td>'.Tools::displayDate($customer['date_add'], (int)($cookie->id_lang)).'</td>
 					<td>'.Order::getCustomerNbOrders($customer['id_customer']).'</td>
 					<td class="center"><img src="../img/admin/'.($customer['active'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></td>
 					<td class="center" width="60px">
-						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/details.gif" alt="'.$this->l('View orders').'" /></a>
-						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'">
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&addcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">
 						<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this customer').'" /></a>
-						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.intval(Tab::getIdFromClassName('AdminCustomers')).intval($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
+						<a href="'.$currentIndex.'?tab=AdminCustomers&id_customer='.$customer['id_customer'].'&deletecustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 						<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this customer').'" /></a>
 					</td>
 				</tr>';

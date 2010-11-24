@@ -46,7 +46,7 @@ class BlockCategories extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockCategories'))
 		{
-			$maxDepth = intval(Tools::getValue('maxDepth'));
+			$maxDepth = (int)(Tools::getValue('maxDepth'));
 			$dhtml = Tools::getValue('dhtml');
 			if ($maxDepth < 0)
 				$output .= '<div class="alert error">'.$this->l('Maximum depth: Invalid number.').'</div>';
@@ -54,8 +54,8 @@ class BlockCategories extends Module
 				$output .= '<div class="alert error">'.$this->l('Dynamic HTML: Invalid choice.').'</div>';
 			else
 			{
-				Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', intval($maxDepth));
-				Configuration::updateValue('BLOCK_CATEG_DHTML', intval($dhtml));
+				Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', (int)($maxDepth));
+				Configuration::updateValue('BLOCK_CATEG_DHTML', (int)($dhtml));
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
 		}
@@ -106,11 +106,11 @@ class BlockCategories extends Module
 	{
 		global $smarty, $cookie;
 
-		$id_customer = intval($params['cookie']->id_customer);
+		$id_customer = (int)($params['cookie']->id_customer);
 		$id_group = $id_customer ? Customer::getDefaultGroupId($id_customer) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		$id_product = intval(Tools::getValue('id_product', 0));
-		$id_category = intval(Tools::getValue('id_category', 0));
-		$id_lang = intval($params['cookie']->id_lang);
+		$id_product = (int)(Tools::getValue('id_product', 0));
+		$id_category = (int)(Tools::getValue('id_category', 0));
+		$id_lang = (int)($params['cookie']->id_lang);
 		$smartyCacheId = 'blockcategories|'.$id_group.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
 		Tools::forceCache(2);
 
@@ -124,7 +124,7 @@ class BlockCategories extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.$id_lang.')
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 				WHERE 1'
-				.(intval($maxdepth) != 0 ? ' AND `level_depth` <= '.intval($maxdepth) : '').'
+				.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
 				AND (c.`active` = 1 OR c.`id_category`= 1)
 				AND cg.`id_group` = '.$id_group.'
 				ORDER BY `level_depth` ASC, c.`position` ASC')
@@ -154,9 +154,9 @@ class BlockCategories extends Module
 				{
 					$product = new Product($id_product);
 					if (isset($product) AND Validate::isLoadedObject($product))
-						$cookie->last_visited_category = intval($product->id_category_default);
+						$cookie->last_visited_category = (int)($product->id_category_default);
 				}
-				$smarty->assign('currentCategoryId', intval($cookie->last_visited_category));
+				$smarty->assign('currentCategoryId', (int)($cookie->last_visited_category));
 			}	
 			$smarty->assign('blockCategTree', $blockCategTree);
 			

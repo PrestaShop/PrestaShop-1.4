@@ -51,10 +51,10 @@ class StatsHome extends Module
 		global $cookie;
 		
 		$this->_postProcess();
-		$currency = Currency::getCurrency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$currency = Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$results = $this->getResults();
 
-		$employee = new Employee(intval($cookie->id_employee));
+		$employee = new Employee((int)($cookie->id_employee));
 		$id_tab_stats = Tab::getIdFromClassName('AdminStats');
 		$access = Profile::getProfileAccess($employee->id_profile, $id_tab_stats);
 		if (!$access['view'])
@@ -69,17 +69,17 @@ class StatsHome extends Module
 					</p></center>
 					<p>'.$this->l('of sales').'</p>
 					<center><p style="font-weight:bold;height:80px;width:100px;text-align:center;background-image:url(\''.__PS_BASE_URI__.'modules/statshome/square3.gif\')">
-						<br /><br />'.intval($results['total_registrations']).'
+						<br /><br />'.(int)($results['total_registrations']).'
 					</p></center>
 					<p>'.(($results['total_registrations'] != 1) ? $this->l('registrations') : $this->l('registration')).'</p>
 				</div>
 				<div style="float:left;width:120px;text-align:center">
 					<center><p style="font-weight:bold;height:80px;width:100px;text-align:center;background-image:url(\''.__PS_BASE_URI__.'modules/statshome/square2.gif\')">
-						<br /><br />'.intval($results['total_orders']).'
+						<br /><br />'.(int)($results['total_orders']).'
 					</p></center>
 					<p>'.(($results['total_orders'] != 1) ? $this->l('orders placed') : $this->l('order placed')).'</p>
 					<center><p style="font-weight:bold;height:80px;width:100px;text-align:center;background-image:url(\''.__PS_BASE_URI__.'modules/statshome/square4.gif\')">
-						<br /><br />'.intval($results['total_viewed']).'
+						<br /><br />'.(int)($results['total_viewed']).'
 					</p></center>
 					<p>'.(($results['total_viewed'] != 1) ? $this->l('product pages viewed') : $this->l('product page viewed')).'</p>
 				</div>
@@ -88,7 +88,7 @@ class StatsHome extends Module
 		include_once(dirname(__FILE__).'/../..'.$this->_adminPath.'/tabs/AdminStats.php');
 		$this->_html .= AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Day'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'), 'From' => $this->l('From:'), 'To' => $this->l('To:'), 'Save' => $this->l('Save')));
 		$this->_html .= '<div class="space"></div>
-				<p style=" font-weight: bold ">'.$this->l('Visitors online now:').' '.intval($this->getVisitorsNow()).'</p>
+				<p style=" font-weight: bold ">'.$this->l('Visitors online now:').' '.(int)($this->getVisitorsNow()).'</p>
 			</div>
 		</fieldset>
 		<div class="clear space"><br /><br /></div>';
@@ -105,12 +105,12 @@ class StatsHome extends Module
 	
 	private function getResults()
 	{
-		$yearFrom = intval(Configuration::get('STATSHOME_YEAR_FROM'));
-		$monthFrom = intval(Configuration::get('STATSHOME_MONTH_FROM'));
-		$dayFrom = intval(Configuration::get('STATSHOME_DAY_FROM'));
-		$yearTo = intval(Configuration::get('STATSHOME_YEAR_TO'));
-		$monthTo = intval(Configuration::get('STATSHOME_MONTH_TO'));
-		$dayTo = intval(Configuration::get('STATSHOME_DAY_TO'));
+		$yearFrom = (int)(Configuration::get('STATSHOME_YEAR_FROM'));
+		$monthFrom = (int)(Configuration::get('STATSHOME_MONTH_FROM'));
+		$dayFrom = (int)(Configuration::get('STATSHOME_DAY_FROM'));
+		$yearTo = (int)(Configuration::get('STATSHOME_YEAR_TO'));
+		$monthTo = (int)(Configuration::get('STATSHOME_MONTH_TO'));
+		$dayTo = (int)(Configuration::get('STATSHOME_DAY_TO'));
 		if (!$yearFrom)
 			Configuration::updateValue('STATSHOME_YEAR_FROM', $yearFrom = date('Y'));
 		if (!$yearFrom)

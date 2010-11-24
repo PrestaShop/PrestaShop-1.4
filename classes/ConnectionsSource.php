@@ -31,7 +31,7 @@ class ConnectionsSourceCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_connections'] = intval($this->id_connections);
+		$fields['id_connections'] = (int)($this->id_connections);
 		$fields['http_referer'] = pSQL($this->http_referer);
 		$fields['request_uri'] = pSQL($this->request_uri);
 		$fields['keywords'] = pSQL($this->keywords);
@@ -70,7 +70,7 @@ class ConnectionsSourceCore extends ObjectModel
 			}
 		}
 		
-		$source->id_connections = intval($cookie->id_connections);
+		$source->id_connections = (int)($cookie->id_connections);
 		$source->request_uri = Tools::getHttpHost(false, false);
 		if (isset($_SERVER['REDIRECT_URL']))
 			$source->request_uri .= strval($_SERVER['REDIRECT_URL']);
@@ -89,7 +89,7 @@ class ConnectionsSourceCore extends ObjectModel
 		INNER JOIN '._DB_PREFIX_.'guest g ON g.id_customer = o.id_customer
 		INNER JOIN '._DB_PREFIX_.'connections co  ON co.id_guest = g.id_guest
 		INNER JOIN '._DB_PREFIX_.'connections_source cos ON cos.id_connections = co.id_connections
-		WHERE id_order = '.intval($id_order).'
+		WHERE id_order = '.(int)($id_order).'
 		ORDER BY cos.date_add DESC');
 	}
 }

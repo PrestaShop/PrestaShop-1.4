@@ -58,15 +58,15 @@ class StatsSales extends ModuleGraph
 			<p><center><img src="../img/admin/down.gif" />
 				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
 			</center></p>
-			<p>'.$this->l('Orders placed:').' '.intval($totals['orderCount']).'</p>
-			<p>'.$this->l('Products bought:').' '.intval($totals['products']).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.intval(Tools::getValue('id_country')), 'layers' => 2)).'</center>
+			<p>'.$this->l('Orders placed:').' '.(int)($totals['orderCount']).'</p>
+			<p>'.$this->l('Products bought:').' '.(int)($totals['products']).'</p>
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.(int)(Tools::getValue('id_country')), 'layers' => 2)).'</center>
 			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.intval(Tools::getValue('id_country')))).'<br /><br />
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.(int)(Tools::getValue('id_country')))).'<br /><br />
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.intval(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
+			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
@@ -84,18 +84,18 @@ class StatsSales extends ModuleGraph
 		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(o.`id_order`) as orderCount, SUM(o.`total_paid_real` / o.conversion_rate) as orderSum
 		FROM `'._DB_PREFIX_.'orders` o
-		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
+		'.((int)(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
-		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
+		'.((int)(Tools::getValue('id_country')) ? 'AND a.id_country = '.(int)(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(od.product_quantity) as products
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
-		'.(intval(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
+		'.((int)(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
-		'.(intval(Tools::getValue('id_country')) ? 'AND a.id_country = '.intval(Tools::getValue('id_country')) : '').'
+		'.((int)(Tools::getValue('id_country')) ? 'AND a.id_country = '.(int)(Tools::getValue('id_country')) : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		return array_merge($result1, $result2);
 	}
@@ -129,9 +129,9 @@ class StatsSales extends ModuleGraph
 			SELECT o.`invoice_date`, o.`total_paid_real` / o.conversion_rate AS total_paid_real, SUM(od.product_quantity) as product_quantity
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
-			'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
+			'.((int)($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1
-			'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
+			'.((int)($this->id_country) ? 'AND a.id_country = '.(int)($this->id_country) : '').'
 			AND o.`invoice_date` BETWEEN ';
 		$this->_query2 = ' GROUP BY o.id_order';
 		$this->setDateGraph($layers, true);
@@ -143,11 +143,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[0][intval(substr($row['invoice_date'], 5, 2))] += 1;
-				$this->_values[1][intval(substr($row['invoice_date'], 5, 2))] += $row['product_quantity'];
+				$this->_values[0][(int)(substr($row['invoice_date'], 5, 2))] += 1;
+				$this->_values[1][(int)(substr($row['invoice_date'], 5, 2))] += $row['product_quantity'];
 			}
 			else
-				$this->_values[intval(substr($row['invoice_date'], 5, 2))] += $row['total_paid_real'];
+				$this->_values[(int)(substr($row['invoice_date'], 5, 2))] += $row['total_paid_real'];
 	}
 	
 	protected function setMonthValues($layers)
@@ -156,11 +156,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[0][intval(substr($row['invoice_date'], 8, 2))] += 1;
-				$this->_values[1][intval(substr($row['invoice_date'], 8, 2))] += $row['product_quantity'];
+				$this->_values[0][(int)(substr($row['invoice_date'], 8, 2))] += 1;
+				$this->_values[1][(int)(substr($row['invoice_date'], 8, 2))] += $row['product_quantity'];
 			}
 			else
-				$this->_values[intval(substr($row['invoice_date'], 8, 2))] += $row['total_paid_real'];
+				$this->_values[(int)(substr($row['invoice_date'], 8, 2))] += $row['total_paid_real'];
 	}
 
 	protected function setDayValues($layers)
@@ -169,11 +169,11 @@ class StatsSales extends ModuleGraph
 		foreach ($result AS $row)
 			if ($this->_option == 1)
 			{
-				$this->_values[0][intval(substr($row['invoice_date'], 11, 2))] += 1;
-				$this->_values[1][intval(substr($row['invoice_date'], 11, 2))] += $row['product_quantity'];
+				$this->_values[0][(int)(substr($row['invoice_date'], 11, 2))] += 1;
+				$this->_values[1][(int)(substr($row['invoice_date'], 11, 2))] += $row['product_quantity'];
 			}
 			else
-				$this->_values[intval(substr($row['invoice_date'], 11, 2))] += $row['total_paid_real'];
+				$this->_values[(int)(substr($row['invoice_date'], 11, 2))] += $row['total_paid_real'];
 	}
 	
 	private function getStatesData()
@@ -181,10 +181,10 @@ class StatsSales extends ModuleGraph
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT osl.`name`, COUNT(oh.`id_order`) as total
 		FROM `'._DB_PREFIX_.'order_state` os
-		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.intval($this->getLang()).')
+		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($this->getLang()).')
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON os.`id_order_state` = oh.`id_order_state`
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON o.`id_order` = oh.`id_order`
-		'.(intval($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
+		'.((int)($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE oh.`id_order_history` = (
 			SELECT ios.`id_order_history`
 			FROM `'._DB_PREFIX_.'order_history` ios
@@ -192,7 +192,7 @@ class StatsSales extends ModuleGraph
 			ORDER BY ios.`date_add` DESC, oh.`id_order_history` DESC
 			LIMIT 1
 		)
-		'.(intval($this->id_country) ? 'AND a.id_country = '.intval($this->id_country) : '').'
+		'.((int)($this->id_country) ? 'AND a.id_country = '.(int)($this->id_country) : '').'
 		AND o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY oh.`id_order_state`');
 		foreach ($result as $row)

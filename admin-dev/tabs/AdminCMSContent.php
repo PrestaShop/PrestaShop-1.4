@@ -30,7 +30,7 @@ class AdminCMSContent extends AdminTab
 	public function __construct()
 	{
 		/* Get current category */
-		$id_cms_category = intval(Tools::getValue('id_cms_category', Tools::getValue('id_cms_category_parent', 1)));
+		$id_cms_category = (int)(Tools::getValue('id_cms_category', Tools::getValue('id_cms_category_parent', 1)));
 		self::$_category = new CMSCategory($id_cms_category);
 		if (!Validate::isLoadedObject(self::$_category))
 			die('Category cannot be loaded');
@@ -93,7 +93,7 @@ class AdminCMSContent extends AdminTab
 		}
 		else
 		{
-		$id_cms_category = intval(Tools::getValue('id_cms_category'));
+		$id_cms_category = (int)(Tools::getValue('id_cms_category'));
 		if (!$id_cms_category)
 			$id_cms_category = 1;
 		$cms_tabs = array('cms_category', 'cms');

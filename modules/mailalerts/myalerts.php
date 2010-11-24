@@ -13,20 +13,20 @@ if ($cookie->isLogged())
 {
 	if (Tools::getValue('action') == 'delete')
 	{
-		$id_customer = intval($cookie->id_customer);
-		if (!$id_product = intval(Tools::getValue('id_product')))
+		$id_customer = (int)($cookie->id_customer);
+		if (!$id_product = (int)(Tools::getValue('id_product')))
 			$errors[] = Tools::displayError('You need a product to delete an alert'); 
-		$id_product_attribute = intval(Tools::getValue('id_product_attribute'));
-		$customer = new Customer(intval($id_customer));
-		MailAlerts::deleteAlert(intval($id_customer), 0, intval($id_product), intval($id_product_attribute));
+		$id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
+		$customer = new Customer((int)($id_customer));
+		MailAlerts::deleteAlert((int)($id_customer), 0, (int)($id_product), (int)($id_product_attribute));
 	}
-	$smarty->assign('alerts', MailAlerts::getProductsAlerts(intval($cookie->id_customer), intval($cookie->id_lang)));
+	$smarty->assign('alerts', MailAlerts::getProductsAlerts((int)($cookie->id_customer), (int)($cookie->id_lang)));
 }
 else
 	$errors[] = Tools::displayError('You need to be logged to manage your alerts'); 
 
 $smarty->assign(array(
-	'id_customer' => intval($cookie->id_customer),
+	'id_customer' => (int)($cookie->id_customer),
 	'errors' => $errors
 ));
 

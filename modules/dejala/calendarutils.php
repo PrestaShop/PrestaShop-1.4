@@ -11,10 +11,10 @@ class CalendarUtils
 	**/
 	public function adjustHour($dateUtc, $calendar) {
 		$wd = date('w', $dateUtc);
-		$startHour = intval($calendar[$wd]['start_hour']);
-		$stopHour = intval($calendar[$wd]['stop_hour']);
-		$currentHour = intval(date('H', $dateUtc));
-		$currentMin = intval(date('i', $dateUtc));
+		$startHour = (int)($calendar[$wd]['start_hour']);
+		$stopHour = (int)($calendar[$wd]['stop_hour']);
+		$currentHour = (int)(date('H', $dateUtc));
+		$currentMin = (int)(date('i', $dateUtc));
 
 		// arrondi à l'heure juste d'après
 		if ($currentMin > 0) {
@@ -39,7 +39,7 @@ class CalendarUtils
 			return (null);
 			
 		if ($delay == '0.5') {
-			$hour = intval(date('H', $dateUtc));
+			$hour = (int)(date('H', $dateUtc));
 			if ($hour < 12) {
 				$dateUtc = mktime('14', 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 			} else {
@@ -51,7 +51,7 @@ class CalendarUtils
 			return ($dateUtc);
 		}
 		
-		$deliveryDelay = intval($delay);
+		$deliveryDelay = (int)($delay);
 		while ($deliveryDelay--)
 		{
 			$dateUtc += 3600 * 24;
@@ -102,9 +102,9 @@ class CalendarUtils
 			return (false);
 			
 		// on arrondit à l'heure suivante & on regarde si on est avant la fermeture
-		$stopHour = intval($calendar[$wd]['stop_hour']);
-		$currentHour = intval(date('H', $dateUtc));
-		$currentMin = intval(date('i', $dateUtc));		
+		$stopHour = (int)($calendar[$wd]['stop_hour']);
+		$currentHour = (int)(date('H', $dateUtc));
+		$currentMin = (int)(date('i', $dateUtc));		
 		if ($currentMin > 0)
 			$currentHour = $currentHour + 1;
 		// avant l'heure de fermeture ?

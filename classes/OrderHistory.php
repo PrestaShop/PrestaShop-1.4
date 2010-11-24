@@ -48,9 +48,9 @@ class OrderHistoryCore extends ObjectModel
 	{
 		parent::validateFields();
 		
-		$fields['id_order'] = intval($this->id_order);
-		$fields['id_order_state'] = intval($this->id_order_state);
-		$fields['id_employee'] = intval($this->id_employee);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['id_order_state'] = (int)($this->id_order_state);
+		$fields['id_employee'] = (int)($this->id_employee);
 		$fields['date_add'] = pSQL($this->date_add);
 				
 		return $fields;
@@ -60,12 +60,12 @@ class OrderHistoryCore extends ObjectModel
 	{
 		if ($new_order_state != NULL)
 		{
-			Hook::updateOrderStatus(intval($new_order_state), intval($id_order));
-			$order = new Order(intval($id_order));
+			Hook::updateOrderStatus((int)($new_order_state), (int)($id_order));
+			$order = new Order((int)($id_order));
 			
 			/* Best sellers */
-			$newOS = new OrderState(intval($new_order_state), $order->id_lang);
-			$oldOrderStatus = OrderHistory::getLastOrderState(intval($id_order));
+			$newOS = new OrderState((int)($new_order_state), $order->id_lang);
+			$oldOrderStatus = OrderHistory::getLastOrderState((int)($id_order));
 			$cart = Cart::getCartByOrderId($id_order);
 			$isValidated = $this->isValidated();
 			if (Validate::isLoadedObject($cart))
@@ -84,7 +84,7 @@ class OrderHistoryCore extends ObjectModel
 					}
 				}
 			
-			$this->id_order_state = intval($new_order_state);
+			$this->id_order_state = (int)($new_order_state);
 			
 			/* Change invoice number of order ? */
 			if (!Validate::isLoadedObject($newOS) OR !Validate::isLoadedObject($order))
@@ -98,7 +98,7 @@ class OrderHistoryCore extends ObjectModel
 				$order->setInvoice();
 			if ($newOS->delivery AND !$order->delivery_number)
 				$order->setDelivery();
-			Hook::postUpdateOrderStatus(intval($new_order_state), intval($id_order));
+			Hook::postUpdateOrderStatus((int)($new_order_state), (int)($id_order));
 		}
 	}
 
@@ -107,11 +107,11 @@ class OrderHistoryCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_order_state`
 		FROM `'._DB_PREFIX_.'order_history`
-		WHERE `id_order` = '.intval($id_order).'
+		WHERE `id_order` = '.(int)($id_order).'
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
 		if (!$result OR empty($result) OR !key_exists('id_order_state', $result))
 			return false;
-		return new OrderState(intval($result['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
+		return new OrderState((int)($result['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
 	}
 
 	public function addWithemail($autodate = true, $templateVars = false)
@@ -128,17 +128,17 @@ class OrderHistoryCore extends ObjectModel
 				LEFT JOIN `'._DB_PREFIX_.'customer` c ON o.`id_customer` = c.`id_customer`
 				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON oh.`id_order_state` = os.`id_order_state`
 				LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = o.`id_lang`)
-			WHERE oh.`id_order_history` = '.intval($this->id).'
+			WHERE oh.`id_order_history` = '.(int)($this->id).'
 				AND os.`send_email` = 1');
 
 		if (isset($result['template']) AND Validate::isEmail($result['email']))
 		{
 			$topic = $result['osname'];
-			$data = array('{lastname}' => $result['lastname'], '{firstname}' => $result['firstname'], '{id_order}' => intval($this->id_order));
+			$data = array('{lastname}' => $result['lastname'], '{firstname}' => $result['firstname'], '{id_order}' => (int)($this->id_order));
 			if ($templateVars) $data = array_merge($data, $templateVars);
-			$order = new Order(intval($this->id_order));
-			$data['{total_paid}'] = Tools::displayPrice(floatval($order->total_paid), new Currency(intval($order->id_currency)), false, false);
-			$data['{order_name}'] = sprintf("#%06d", intval($order->id));
+			$order = new Order((int)($this->id_order));
+			$data['{total_paid}'] = Tools::displayPrice(floatval($order->total_paid), new Currency((int)($order->id_currency)), false, false);
+			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
 			// additionnal links for download virtual product
 			if ($virtualProducts = $order->getVirtualProducts() AND $this->id_order_state==_PS_OS_PAYMENT_)
 			{
@@ -157,20 +157,20 @@ class OrderHistoryCore extends ObjectModel
 						$assign[$key]['downloadable'] = $product_download->nb_downloadable;
 				}
 				$smarty->assign('virtualProducts', $assign);
-				$iso = Language::getIsoById(intval($order->id_lang));
+				$iso = Language::getIsoById((int)($order->id_lang));
 				$links = $smarty->fetch(_PS_MAIL_DIR_.$iso.'/download-product.tpl');
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);
 				$data = array_merge ($data, $tmpArray);
 				global $_LANGMAIL;
-				Mail::Send(intval($order->id_lang), 'download_product', Mail::l('Virtual product to download'), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
+				Mail::Send((int)($order->id_lang), 'download_product', Mail::l('Virtual product to download'), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 			}
 
 			if (Validate::isLoadedObject($order))
-				Mail::Send(intval($order->id_lang), $result['template'], $topic, $data, $result['email'], $result['firstname'].' '.$result['lastname']);
+				Mail::Send((int)($order->id_lang), $result['template'], $topic, $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 		}
 		
 		if ($lastOrderState->id !== $this->id_order_state)
-			Hook::postUpdateOrderStatus($this->id_order_state, intval($this->id_order));
+			Hook::postUpdateOrderStatus($this->id_order_state, (int)($this->id_order));
 		return true;
 	}
 	
@@ -180,7 +180,7 @@ class OrderHistoryCore extends ObjectModel
 		SELECT COUNT(oh.`id_order_history`) AS nb
 		FROM `'._DB_PREFIX_.'order_state` os 
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (os.`id_order_state` = oh.`id_order_state`) 
-		WHERE oh.`id_order` = '.intval($this->id_order).'
+		WHERE oh.`id_order` = '.(int)($this->id_order).'
 		AND os.`logable` = 1
 		');
 	}

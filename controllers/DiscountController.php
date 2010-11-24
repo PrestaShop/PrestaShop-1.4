@@ -15,14 +15,14 @@ class DiscountControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$discounts = Discount::getCustomerDiscounts(intval($this->cookie->id_lang), intval($this->cookie->id_customer), true, false);
+		$discounts = Discount::getCustomerDiscounts((int)($this->cookie->id_lang), (int)($this->cookie->id_customer), true, false);
 		$nbDiscounts = 0;
 		foreach ($discounts AS $discount)
 			if ($discount['quantity_for_user'])
 				$nbDiscounts++;
 
 		$this->smarty->assign(array(
-				'nbDiscounts' => intval($nbDiscounts), 
+				'nbDiscounts' => (int)($nbDiscounts), 
 				'discount' => $discounts)
 		);
 	}

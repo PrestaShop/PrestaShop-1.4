@@ -13,11 +13,11 @@ class PricesDropControllerCore extends FrontController
 		parent::process();
 		
 		$this->productSort();
-		$nbProducts = Product::getPricesDrop(intval($this->cookie->id_lang), NULL, NULL, true);
+		$nbProducts = Product::getPricesDrop((int)($this->cookie->id_lang), NULL, NULL, true);
 		$this->pagination($nbProducts);
 		
 		$this->smarty->assign(array(
-			'products' => Product::getPricesDrop(intval($this->cookie->id_lang), intval($this->p) - 1, intval($this->n), false, $this->orderBy, $this->orderWay),
+			'products' => Product::getPricesDrop((int)($this->cookie->id_lang), (int)($this->p) - 1, (int)($this->n), false, $this->orderBy, $this->orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'nbProducts' => $nbProducts));
 	}

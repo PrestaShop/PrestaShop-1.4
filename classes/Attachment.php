@@ -52,7 +52,7 @@ class AttachmentCore extends ObjectModel
 	public function delete()
 	{
 		@unlink(_PS_DOWNLOAD_DIR_.$this->file);
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_attachment = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_attachment = '.(int)($this->id));
 		return parent::delete();
 	}
 	
@@ -61,7 +61,7 @@ class AttachmentCore extends ObjectModel
 		$return = 1;
 		foreach ($attachments AS $id_attachment)
 		{
-			$attachment = new Attachment(intval($id_attachment));
+			$attachment = new Attachment((int)($id_attachment));
 			$return &= $attachment->delete();
 		}
 		return $return;
@@ -72,19 +72,19 @@ class AttachmentCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'attachment a
-		LEFT JOIN '._DB_PREFIX_.'attachment_lang al ON (a.id_attachment = al.id_attachment AND al.id_lang = '.intval($id_lang).')
-		WHERE a.id_attachment '.($include ? 'IN' : 'NOT IN').' (SELECT pa.id_attachment FROM '._DB_PREFIX_.'product_attachment pa WHERE id_product = '.intval($id_product).')');
+		LEFT JOIN '._DB_PREFIX_.'attachment_lang al ON (a.id_attachment = al.id_attachment AND al.id_lang = '.(int)($id_lang).')
+		WHERE a.id_attachment '.($include ? 'IN' : 'NOT IN').' (SELECT pa.id_attachment FROM '._DB_PREFIX_.'product_attachment pa WHERE id_product = '.(int)($id_product).')');
 	}
 	
 	public static function attachToProduct($id_product, $array)
 	{
-		$result1 = Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.intval($id_product));
+		$result1 = Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.(int)($id_product));
 		if (is_array($array))
 		{
 			$ids = array();
 			foreach ($array as $id_attachment)
-				$ids[] = '('.intval($id_product).','.intval($id_attachment).')';
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_has_attachments = '.(count($ids) ? '1' : '0').' WHERE id_product = '.intval($id_product).' LIMIT 1');
+				$ids[] = '('.(int)($id_product).','.(int)($id_attachment).')';
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_has_attachments = '.(count($ids) ? '1' : '0').' WHERE id_product = '.(int)($id_product).' LIMIT 1');
 			return ($result1 && Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attachment (id_product, id_attachment) VALUES '.implode(',',$ids)));
 		}
 		return $result1;

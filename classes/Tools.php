@@ -158,7 +158,7 @@ class ToolsCore
 		/* If language does not exist or is disabled, erase it */
 		if ($cookie->id_lang)
 		{
-			$lang = new Language(intval($cookie->id_lang));
+			$lang = new Language((int)($cookie->id_lang));
 			if (!Validate::isLoadedObject($lang) OR !$lang->active)
 				$cookie->id_lang = NULL;
 		}
@@ -176,17 +176,17 @@ class ToolsCore
 				$string = $array[0];
 			if (Validate::isLanguageIsoCode($string))
 			{
-				$lang = new Language(intval(Language::getIdByIso($string)));
+				$lang = new Language((int)(Language::getIdByIso($string)));
 				if (Validate::isLoadedObject($lang) AND $lang->active)
-					$cookie->id_lang = intval($lang->id);
+					$cookie->id_lang = (int)($lang->id);
 			}
 		}
 
 		/* If language file not present, you must use default language file */
 		if (!$cookie->id_lang OR !Validate::isUnsignedId($cookie->id_lang))
-			$cookie->id_lang = intval(Configuration::get('PS_LANG_DEFAULT'));
+			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
 
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
@@ -197,7 +197,7 @@ class ToolsCore
 	{
 		global $cookie;
 
-		if ($id_lang = intval(self::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
+		if ($id_lang = (int)(self::getValue('id_lang')) AND Validate::isUnsignedId($id_lang))
 			$cookie->id_lang = $id_lang;
 	}
 
@@ -208,20 +208,20 @@ class ToolsCore
 		if (self::isSubmit('SubmitCurrency'))
 			if (isset($_POST['id_currency']) AND is_numeric($_POST['id_currency']))
 			{
-				$currency = Currency::getCurrencyInstance(intval($_POST['id_currency']));
+				$currency = Currency::getCurrencyInstance((int)($_POST['id_currency']));
 				if (is_object($currency) AND $currency->id AND !$currency->deleted)
-					$cookie->id_currency = intval($currency->id);
+					$cookie->id_currency = (int)($currency->id);
 			}
 
 		if ($cookie->id_currency)
 		{
-			$currency = Currency::getCurrencyInstance(intval($cookie->id_currency));
-			if (is_object($currency) AND $currency->id AND intval($currency->deleted) != 1)
+			$currency = Currency::getCurrencyInstance((int)($cookie->id_currency));
+			if (is_object($currency) AND $currency->id AND (int)($currency->deleted) != 1)
 				return $currency;
 		}
-		$currency = Currency::getCurrencyInstance(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$currency = Currency::getCurrencyInstance((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		if (is_object($currency) AND $currency->id)
-			$cookie->id_currency = intval($currency->id);
+			$cookie->id_currency = (int)($currency->id);
 		return $currency;
 	}
 
@@ -238,10 +238,10 @@ class ToolsCore
 			$currency = Currency::getCurrent();
 		/* if you modified this function, don't forget to modify the Javascript function formatCurrency (in tools.js) */
 		if (is_int($currency))
-			$currency = Currency::getCurrencyInstance(intval($currency));
+			$currency = Currency::getCurrencyInstance((int)($currency));
 		$c_char = (is_array($currency) ? $currency['sign'] : $currency->sign);
 		$c_format = (is_array($currency) ? $currency['format'] : $currency->format);
-		$c_decimals = (is_array($currency) ? intval($currency['decimals']) : intval($currency->decimals)) * _PS_PRICE_DISPLAY_PRECISION_;
+		$c_decimals = (is_array($currency) ? (int)($currency['decimals']) : (int)($currency->decimals)) * _PS_PRICE_DISPLAY_PRECISION_;
 		$c_blank = (is_array($currency) ? $currency['blank'] : $currency->blank);
 		$blank = ($c_blank ? ' ' : '');
 		$ret = 0;
@@ -278,7 +278,7 @@ class ToolsCore
 	{
 		if (array_key_exists('currency', $params))
 		{
-			$currency = Currency::getCurrencyInstance(intval($params['currency']));
+			$currency = Currency::getCurrencyInstance((int)($params['currency']));
 			if (Validate::isLoadedObject($currency))
 				return self::displayPrice($params['price'], $currency, false);
 		}
@@ -302,7 +302,7 @@ class ToolsCore
 		$c_id = (is_array($currency) ? $currency['id_currency'] : $currency->id);
 		$c_rate = (is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate);
 		
-		if ($c_id != intval(Configuration::get('PS_CURRENCY_DEFAULT')))
+		if ($c_id != (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
 		{
 			if ($to_currency)
 				$price *= $c_rate;
@@ -344,7 +344,7 @@ class ToolsCore
 	 	$tmpTab = explode($separator, substr($date, 0, 10));
 	 	$hour = ' '.substr($date, -8);
 
-		$language = Language::getLanguage(intval($id_lang));
+		$language = Language::getLanguage((int)($id_lang));
 	 	if ($language AND strtolower($language['iso_code']) == 'fr')
 	 		return ($tmpTab[2].'-'.$tmpTab[1].'-'.$tmpTab[0].($full ? $hour : ''));
 	 	else
@@ -489,7 +489,7 @@ class ToolsCore
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description_short`
 				FROM `'._DB_PREFIX_.'product` p 
 				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`) 
-				WHERE pl.id_lang = '.intval($id_lang).' AND pl.id_product = '.intval($id_product).' AND p.active = 1');
+				WHERE pl.id_lang = '.(int)($id_lang).' AND pl.id_product = '.(int)($id_product).' AND p.active = 1');
 				if ($row)
 				{
 					if (empty($row['meta_description']))
@@ -504,7 +504,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
 				FROM `'._DB_PREFIX_.'category_lang`
-				WHERE id_lang = '.intval($id_lang).' AND id_category = '.intval($id_category));
+				WHERE id_lang = '.(int)($id_lang).' AND id_category = '.(int)($id_category));
 				if ($row)
 				{
 					if (empty($row['meta_description']))
@@ -519,7 +519,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'manufacturer_lang`
-				WHERE id_lang = '.intval($id_lang).' AND id_manufacturer = '.intval($id_manufacturer));
+				WHERE id_lang = '.(int)($id_lang).' AND id_manufacturer = '.(int)($id_manufacturer));
 				if ($row)
 				{
 					if (empty($row['meta_description']))
@@ -535,7 +535,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'supplier_lang`
-				WHERE id_lang = '.intval($id_lang).' AND id_supplier = '.intval($id_supplier));
+				WHERE id_lang = '.(int)($id_lang).' AND id_supplier = '.(int)($id_supplier));
 				if ($row)
 				{
 					if (empty($row['meta_description']))
@@ -551,7 +551,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'cms_lang`
-				WHERE id_lang = '.intval($id_lang).' AND id_cms = '.intval($id_cms));
+				WHERE id_lang = '.(int)($id_lang).' AND id_cms = '.(int)($id_cms));
 				if ($row)
 				{
 					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
@@ -590,9 +590,9 @@ class ToolsCore
 		if ($metaTags['meta_title'] == NULL)
 			$metaTags['meta_title'] = $defaultValue.' - '.Configuration::get('PS_SHOP_NAME');
 		if ($metaTags['meta_description'] == NULL)
-			$metaTags['meta_description'] = Configuration::get('PS_META_DESCRIPTION', intval($cookie->id_lang)) ? Configuration::get('PS_META_DESCRIPTION', intval($cookie->id_lang)) : '';
+			$metaTags['meta_description'] = Configuration::get('PS_META_DESCRIPTION', (int)($cookie->id_lang)) ? Configuration::get('PS_META_DESCRIPTION', (int)($cookie->id_lang)) : '';
 		if ($metaTags['meta_keywords'] == NULL)
-			$metaTags['meta_keywords'] = Configuration::get('PS_META_KEYWORDS', intval($cookie->id_lang)) ? Configuration::get('PS_META_KEYWORDS', intval($cookie->id_lang)) : '';
+			$metaTags['meta_keywords'] = Configuration::get('PS_META_KEYWORDS', (int)($cookie->id_lang)) ? Configuration::get('PS_META_KEYWORDS', (int)($cookie->id_lang)) : '';
 		return $metaTags;
 	}
 
@@ -632,7 +632,7 @@ class ToolsCore
 	static public function getAdminTokenLite($tab)
 	{
 		global $cookie;
-		return Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee));
+		return Tools::getAdminToken($tab.(int)(Tab::getIdFromClassName($tab)).(int)($cookie->id_employee));
 	}
 
 	/**
@@ -644,7 +644,7 @@ class ToolsCore
 	static public function getPath($id_category, $path = '', $linkOntheLastItem = false)
 	{
 		global $link, $cookie;
-		$category = new Category(intval($id_category), intval($cookie->id_lang));
+		$category = new Category((int)($id_category), (int)($cookie->id_lang));
 		if (!Validate::isLoadedObject($category))
 			die (self::displayError());
 		if ($category->id == 1)
@@ -664,7 +664,7 @@ class ToolsCore
 		}
 		else
 			$displayedPath = ($linkOntheLastItem ? '<a href="'.self::safeOutput($link->getCategoryLink($category)).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
-		return self::getPath(intval($category->id_parent), $displayedPath);
+		return self::getPath((int)($category->id_parent), $displayedPath);
 	}
 
 	static public function getFullPath($id_category, $end)
@@ -672,7 +672,7 @@ class ToolsCore
 		global $cookie;
 
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
-		$category = new Category(intval($id_category), intval($cookie->id_lang));
+		$category = new Category((int)($id_category), (int)($cookie->id_lang));
 		if (!Validate::isLoadedObject($category))
 			die(self::displayError());
 		if ($id_category == 1)
@@ -689,7 +689,7 @@ class ToolsCore
 	static public function getCategoriesTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
-		return intval($row['total']);
+		return (int)($row['total']);
 	}
 
 	/**
@@ -701,7 +701,7 @@ class ToolsCore
 	static public function getProductsTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
-		return intval($row['total']);
+		return (int)($row['total']);
 	}
 
 	/**
@@ -713,7 +713,7 @@ class ToolsCore
 	static public function getCustomersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
-		return intval($row['total']);
+		return (int)($row['total']);
 	}
 
 	/**
@@ -725,7 +725,7 @@ class ToolsCore
 	static public function getOrdersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
-		return intval($row['total']);
+		return (int)($row['total']);
 	}
 
 	/*
@@ -882,8 +882,8 @@ class ToolsCore
 		if (is_array($str))
 			return false;
 		if (function_exists('mb_substr'))
-			return mb_substr($str, intval($start), ($length === false ? self::strlen($str) : intval($length)), $encoding);
-		return substr($str, $start, ($length === false ? strlen($str) : intval($length)));
+			return mb_substr($str, (int)($start), ($length === false ? self::strlen($str) : (int)($length)), $encoding);
+		return substr($str, $start, ($length === false ? strlen($str) : (int)($length)));
 	}
 
 	static function ucfirst($str)
@@ -894,7 +894,7 @@ class ToolsCore
 	static public function orderbyPrice(&$array, $orderWay)
 	{
 		foreach($array as &$row)
-			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? intval($row['id_product_attribute']) : NULL), 2);
+			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2);
 		if(strtolower($orderWay) == 'desc')
 			uasort($array, 'cmpPriceDesc');
 		else
@@ -929,7 +929,7 @@ class ToolsCore
 			// No cache
 			if (!$_cache)
 			{
-				$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.intval($select));
+				$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.(int)($select));
 				$_cache = $tmz['name'];
 			}
 			return $_cache;
@@ -955,7 +955,7 @@ class ToolsCore
 
 	static public function ps_round($value, $precision = 0)
 	{
-		$method = intval(Configuration::get('PS_PRICE_ROUND_MODE'));
+		$method = (int)(Configuration::get('PS_PRICE_ROUND_MODE'));
 		if ($method == PS_ROUND_UP)
 			return Tools::ceilf($value, $precision);
 		elseif ($method == PS_ROUND_DOWN)
@@ -1396,7 +1396,7 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L,E]';
 		
 		Language::loadLanguages();		
-		$default_meta = Meta::getMetasByIdLang(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$default_meta = Meta::getMetasByIdLang((int)(Configuration::get('PS_LANG_DEFAULT')));
 
 		foreach (Language::getLanguages() AS $language)
 		{													
@@ -1537,18 +1537,18 @@ FileETag INode MTime Size
 
 		if ($smarty->force_compile == 0 AND $smarty->caching == $level)
 			return ;
-		self::$_forceCompile = intval($smarty->force_compile);
-		self::$_caching = intval($smarty->caching);
+		self::$_forceCompile = (int)($smarty->force_compile);
+		self::$_caching = (int)($smarty->caching);
 		$smarty->force_compile = 0;
-		$smarty->caching = intval($level);
+		$smarty->caching = (int)($level);
 	}
 
 	public static function restoreCacheSettings()
 	{
 		global $smarty;
 
-		$smarty->force_compile = intval(self::$_forceCompile);
-		$smarty->caching = intval(self::$_caching);
+		$smarty->force_compile = (int)(self::$_forceCompile);
+		$smarty->caching = (int)(self::$_caching);
 	}
 	
 	public static function isCallable($function)

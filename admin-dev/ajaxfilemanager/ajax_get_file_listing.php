@@ -63,7 +63,7 @@
 		$pagination->setPreviousText(PAGINATION_PREVIOUS);
 		$pagination->setNextText(PAGINATION_NEXT);
 		$pagination->setLastText(PAGINATION_LAST);
-		$pagination->setLimit(!empty($_GET['limit'])?intval($_GET['limit']):CONFIG_DEFAULT_PAGINATION_LIMIT);
+		$pagination->setLimit(!empty($_GET['limit'])?(int)($_GET['limit']):CONFIG_DEFAULT_PAGINATION_LIMIT);
 		echo $pagination->getPaginationHTML();
 		echo "<script type=\"text/javascript\">\n";
 		

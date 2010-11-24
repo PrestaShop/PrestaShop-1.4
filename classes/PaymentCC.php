@@ -24,8 +24,8 @@ class PaymentCCCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_order'] = intval($this->id_order);
-		$fields['id_currency'] = intval($this->id_currency);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['id_currency'] = (int)($this->id_currency);
 		$fields['amount'] = floatval($this->amount);
 		$fields['transaction_id'] = pSQL($this->transaction_id);
 		$fields['card_number'] = pSQL($this->card_number);

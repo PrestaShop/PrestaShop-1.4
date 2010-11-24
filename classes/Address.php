@@ -119,8 +119,8 @@ class AddressCore extends ObjectModel
 		if ($this->id)
 		{
 			$result = Db::getInstance()->getRow('SELECT `name` FROM `'._DB_PREFIX_.'country_lang`
-												WHERE `id_country` = '.intval($this->id_country).'
-												AND `id_lang` = '.($id_lang ? intval($id_lang) : Configuration::get('PS_LANG_DEFAULT')));
+												WHERE `id_country` = '.(int)($this->id_country).'
+												AND `id_lang` = '.($id_lang ? (int)($id_lang) : Configuration::get('PS_LANG_DEFAULT')));
 			$this->country = $result['name'];
 		}
 	}
@@ -142,12 +142,12 @@ class AddressCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_address'] = intval($this->id);
-		$fields['id_customer'] = is_null($this->id_customer) ? 0 : intval($this->id_customer);
-		$fields['id_manufacturer'] = is_null($this->id_manufacturer) ? 0 : intval($this->id_manufacturer);
-		$fields['id_supplier'] = is_null($this->id_supplier) ? 0 : intval($this->id_supplier);
-		$fields['id_country'] = intval($this->id_country);
-		$fields['id_state'] = intval($this->id_state);
+			$fields['id_address'] = (int)($this->id);
+		$fields['id_customer'] = is_null($this->id_customer) ? 0 : (int)($this->id_customer);
+		$fields['id_manufacturer'] = is_null($this->id_manufacturer) ? 0 : (int)($this->id_manufacturer);
+		$fields['id_supplier'] = is_null($this->id_supplier) ? 0 : (int)($this->id_supplier);
+		$fields['id_country'] = (int)($this->id_country);
+		$fields['id_state'] = (int)($this->id_state);
 		$fields['alias'] = pSQL($this->alias);
 		$fields['company'] = pSQL($this->company);
 		$fields['lastname'] = pSQL($this->lastname);
@@ -160,7 +160,7 @@ class AddressCore extends ObjectModel
 		$fields['phone'] = pSQL($this->phone);
 		$fields['phone_mobile'] = pSQL($this->phone_mobile);
 		$fields['vat_number'] = pSQL($this->vat_number);
-		$fields['deleted'] = intval($this->deleted);
+		$fields['deleted'] = (int)($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -192,9 +192,9 @@ class AddressCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
 		LEFT JOIN `'._DB_PREFIX_.'state` s ON s.`id_state` = a.`id_state`
-		WHERE a.`id_address` = '.intval($id_address));
+		WHERE a.`id_address` = '.(int)($id_address));
 
-		self::$_idZones[$id_address] = (int)(intval($result['id_zone_state']) ? $result['id_zone_state'] : $result['id_zone']);
+		self::$_idZones[$id_address] = (int)((int)($result['id_zone_state']) ? $result['id_zone_state'] : $result['id_zone']);
 		return self::$_idZones[$id_address];
 	}
 
@@ -210,7 +210,7 @@ class AddressCore extends ObjectModel
 		SELECT c.`active`
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
-		WHERE a.`id_address` = '.intval($id_address)))
+		WHERE a.`id_address` = '.(int)($id_address)))
 			return false;
 		return ($result['active']);
 	}
@@ -225,8 +225,8 @@ class AddressCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) AS used
 		FROM `'._DB_PREFIX_.'orders`
-		WHERE `id_address_delivery` = '.intval($this->id).'
-		OR `id_address_invoice` = '.intval($this->id));
+		WHERE `id_address_delivery` = '.(int)($this->id).'
+		OR `id_address_invoice` = '.(int)($this->id));
 
 		return isset($result['used']) ? $result['used'] : false;
 	}
@@ -235,7 +235,7 @@ class AddressCore extends ObjectModel
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `id_manufacturer` FROM `'._DB_PREFIX_.'address`
-			WHERE `id_address` = '.intval($id_address));
+			WHERE `id_address` = '.(int)($id_address));
 		return isset($result['id_manufacturer']) ? $result['id_manufacturer'] : false;
 	}
 	
@@ -245,7 +245,7 @@ class AddressCore extends ObjectModel
 			return self::$_idCountries[$id_address];
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_country`, `id_state`, `vat_number` FROM `'._DB_PREFIX_.'address`
-		WHERE `id_address` = '.intval($id_address));
+		WHERE `id_address` = '.(int)($id_address));
 		self::$_idCountries[$id_address] = $result;
 		return $result;
 	}
@@ -261,7 +261,7 @@ class AddressCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_address`
 		FROM '._DB_PREFIX_.'address a
-		WHERE a.`id_address` = '.intval($id_address));
+		WHERE a.`id_address` = '.(int)($id_address));
 		
 		return isset($row['id_address']);
 	}
@@ -271,7 +271,7 @@ class AddressCore extends ObjectModel
 		return Db::getInstance()->getValue('
 			SELECT `id_address`
 			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.intval($id_customer).' AND `deleted` = 0'.($active ? ' AND `active` = 1' : '')
+			WHERE `id_customer` = '.(int)($id_customer).' AND `deleted` = 0'.($active ? ' AND `active` = 1' : '')
 		);
 	}
 }

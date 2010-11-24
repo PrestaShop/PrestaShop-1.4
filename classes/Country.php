@@ -76,13 +76,13 @@ class CountryCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_zone'] = intval($this->id_zone);
+		$fields['id_zone'] = (int)($this->id_zone);
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
-		$fields['call_prefix'] = intval($this->call_prefix);
-		$fields['active'] = intval($this->active);
-		$fields['contains_states'] = intval($this->contains_states);
-		$fields['need_identification_number'] = intval($this->need_identification_number);
-		$fields['need_zip_code'] = intval($this->need_zip_code);
+		$fields['call_prefix'] = (int)($this->call_prefix);
+		$fields['active'] = (int)($this->active);
+		$fields['contains_states'] = (int)($this->contains_states);
+		$fields['need_identification_number'] = (int)($this->need_identification_number);
+		$fields['need_zip_code'] = (int)($this->need_zip_code);
 		$fields['zip_code_format'] = $this->zip_code_format;
 		return $fields;
 	}
@@ -118,11 +118,11 @@ class CountryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cl.*,c.*, cl.`name` AS country, z.`name` AS zone
 		FROM `'._DB_PREFIX_.'country` c
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'zone` z ON z.`id_zone` = c.`id_zone`
 		WHERE 1
 		'.($active ? 'AND c.active = 1' : '').'
-		'.(!is_null($containStates) ? 'AND c.`contains_states` = '.intval($containStates) : '').'
+		'.(!is_null($containStates) ? 'AND c.`contains_states` = '.(int)($containStates) : '').'
 		ORDER BY cl.name ASC');
 		$countries = array();
 		foreach ($result AS &$country)
@@ -163,7 +163,7 @@ class CountryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_zone`
 		FROM `'._DB_PREFIX_.'country`
-		WHERE `id_country` = '.intval($id_country));
+		WHERE `id_country` = '.(int)($id_country));
 
 		self::$_idZones[$id_country] = $result['id_zone'];
 		return $result['id_zone'];
@@ -181,8 +181,8 @@ class CountryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'country_lang`
-		WHERE `id_lang` = '.intval($id_lang).'
-		AND `id_country` = '.intval($id_country));
+		WHERE `id_lang` = '.(int)($id_lang).'
+		AND `id_country` = '.(int)($id_country));
 
 		return $result['name'];
 	}
@@ -198,7 +198,7 @@ class CountryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `iso_code`
 		FROM `'._DB_PREFIX_.'country`
-		WHERE `id_country` = '.intval($id_country));
+		WHERE `id_country` = '.(int)($id_country));
 
 		return $result['iso_code'];
 	}
@@ -217,49 +217,49 @@ class CountryCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'country_lang`
 		WHERE `name` LIKE \''.pSQL($country).'\'';
 		if ($id_lang)
-			$sql .= ' AND `id_lang` = '.intval($id_lang);
+			$sql .= ' AND `id_lang` = '.(int)($id_lang);
 		 	
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 
-		return (intval($result['id_country']));
+		return ((int)($result['id_country']));
 	}
     
 	static public function getNeedIdentifcationNumber($id_country)
 	{
-		if (!intval($id_country))
+		if (!(int)($id_country))
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `need_identification_number` 
 		FROM `'._DB_PREFIX_.'country` 
-		WHERE `id_country` = '.intval($id_country));
+		WHERE `id_country` = '.(int)($id_country));
 	}
 
 	static public function getNeedZipCode($id_country)
 	{
-		if (!intval($id_country))
+		if (!(int)($id_country))
 			return false;
 	
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `need_zip_code` 
 		FROM `'._DB_PREFIX_.'country` 
-		WHERE `id_country` = '.intval($id_country));
+		WHERE `id_country` = '.(int)($id_country));
 	}
 
 	static public function getZipCodeFormat($id_country)
 	{
-		if (!intval($id_country))
+		if (!(int)($id_country))
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `zip_code_format` 
 		FROM `'._DB_PREFIX_.'country` 
-		WHERE `id_country` = '.intval($id_country));
+		WHERE `id_country` = '.(int)($id_country));
 	}
 	
 	public static function displayCallPrefix($prefix)
 	{
-		return (intval($prefix) ? '+'.$prefix : '-');
+		return ((int)($prefix) ? '+'.$prefix : '-');
 	}
 }
 

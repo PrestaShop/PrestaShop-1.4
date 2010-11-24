@@ -9,10 +9,10 @@ $errors = array();
 $action = Tools::getValue('action');
 $add = (!strcmp($action, 'add') ? 1 : 0);
 $delete = (!strcmp($action, 'delete') ? 1 : 0);
-$id_wishlist = intval(Tools::getValue('id_wishlist'));
-$id_product = intval(Tools::getValue('id_product'));
-$quantity = intval(Tools::getValue('quantity'));
-$id_product_attribute = intval(Tools::getValue('id_product_attribute'));
+$id_wishlist = (int)(Tools::getValue('id_wishlist'));
+$id_product = (int)(Tools::getValue('id_product'));
+$quantity = (int)(Tools::getValue('quantity'));
+$id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 	strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 	$cookie->isLogged() === true)
@@ -20,7 +20,7 @@ if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 if ($cookie->isLogged())
 {
 	if ($id_wishlist AND WishList::exists($id_wishlist, $cookie->id_customer) === true)
-		$cookie->id_wishlist = intval($id_wishlist);
+		$cookie->id_wishlist = (int)($id_wishlist);
 	if (empty($cookie->id_wishlist) === true OR $cookie->id_wishlist == false)
 		$smarty->assign('error', true);
 	if (($add OR $delete) AND empty($id_product) === false)
@@ -29,12 +29,12 @@ if ($cookie->isLogged())
 		{
 			$wishlist = new WishList();
 			$wishlist->name = 'My WishList';
-			$wishlist->id_customer = intval($cookie->id_customer);
+			$wishlist->id_customer = (int)($cookie->id_customer);
 			list($us, $s) = explode(' ', microtime());
 			srand($s * $us);
 			$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
 			$wishlist->add();
-			$cookie->id_wishlist = intval($wishlist->id);
+			$cookie->id_wishlist = (int)($wishlist->id);
 		}
 		if ($add AND $quantity)
 			WishList::addProduct($cookie->id_wishlist, $cookie->id_customer, $id_product, $id_product_attribute, $quantity);

@@ -23,19 +23,19 @@ $token = $cipherTool->decrypt($_POST['token']);
 
 if ($_POST['type'] == 'navinfo')
 {
-	if (!Validate::isUnsignedId(intval($token)))
+	if (!Validate::isUnsignedId((int)($token)))
 		exit;
 	$guest = new Guest($token);
 	$guest->javascript = true;
-	$guest->screen_resolution_x = intval($_POST['screen_resolution_x']);
-	$guest->screen_resolution_y = intval($_POST['screen_resolution_y']);
-	$guest->screen_color = intval($_POST['screen_color']);
-	$guest->sun_java = intval($_POST['sun_java']);
-	$guest->adobe_flash = intval($_POST['adobe_flash']);
-	$guest->adobe_director = intval($_POST['adobe_director']);
-	$guest->apple_quicktime = intval($_POST['apple_quicktime']);
-	$guest->real_player = intval($_POST['real_player']);
-	$guest->windows_media = intval($_POST['windows_media']);
+	$guest->screen_resolution_x = (int)($_POST['screen_resolution_x']);
+	$guest->screen_resolution_y = (int)($_POST['screen_resolution_y']);
+	$guest->screen_color = (int)($_POST['screen_color']);
+	$guest->sun_java = (int)($_POST['sun_java']);
+	$guest->adobe_flash = (int)($_POST['adobe_flash']);
+	$guest->adobe_director = (int)($_POST['adobe_director']);
+	$guest->apple_quicktime = (int)($_POST['apple_quicktime']);
+	$guest->real_player = (int)($_POST['real_player']);
+	$guest->windows_media = (int)($_POST['windows_media']);
 	$guest->update();
 }
 elseif ($_POST['type'] == 'pagetime')
@@ -43,7 +43,7 @@ elseif ($_POST['type'] == 'pagetime')
 	if (!Validate::isInt($_POST['time']) OR $_POST['time'] <= 0)
 		exit;
 	$tokenArray = explode('|', $token);
-	Connection::setPageTime($tokenArray[0], $tokenArray[1], substr($tokenArray[2], 0, 19), intval($_POST['time']));
+	Connection::setPageTime($tokenArray[0], $tokenArray[1], substr($tokenArray[2], 0, 19), (int)($_POST['time']));
 }
 
 ?>

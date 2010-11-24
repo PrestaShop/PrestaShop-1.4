@@ -15,7 +15,7 @@ class IdentityControllerCore extends FrontController
 	{
 		parent::preProcess();
 		
-		$customer = new Customer(intval($this->cookie->id_customer));
+		$customer = new Customer((int)($this->cookie->id_customer));
 		$need_identification_number = $customer->getNeedDNI();
 
 		if (sizeof($_POST))
@@ -28,7 +28,7 @@ class IdentityControllerCore extends FrontController
 		}
 
 		if (isset($_POST['years']) AND isset($_POST['months']) AND isset($_POST['days']))
-			$customer->birthday = intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']);
+			$customer->birthday = (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']);
 
 		if (Tools::isSubmit('submitIdentity'))
 		{
@@ -37,7 +37,7 @@ class IdentityControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('invalid birthday');
 			else
 			{
-				$customer->birthday = (empty($_POST['years']) ? '' : intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']));
+				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
 				$_POST['old_passwd'] = trim($_POST['old_passwd']);
 				if (empty($_POST['old_passwd']) OR (Tools::encrypt($_POST['old_passwd']) != $this->cookie->passwd))
@@ -53,7 +53,7 @@ class IdentityControllerCore extends FrontController
 				}
 				if (!sizeof($this->errors))
 				{
-					$customer->id_default_group = intval($prev_id_default_group);
+					$customer->id_default_group = (int)($prev_id_default_group);
 					$customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
 					if (Tools::getValue('passwd'))
 						$this->cookie->passwd = $customer->passwd;

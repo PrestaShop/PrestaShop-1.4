@@ -80,8 +80,8 @@ class StatsRegistrations extends ModuleGraph
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p>
-				'.$this->l('Visitors who have stopped at the registering step:').' '.intval($totalBlocked).($totalRegistrations ? ' ('.number_format(100*$totalBlocked/($totalRegistrations+$totalBlocked), 2).'%)' : '').'<br />
-				'.$this->l('Visitors who have placed an order directly after the registration:').' '.intval($totalBuyers).($totalRegistrations ? ' ('.number_format(100*$totalBuyers/($totalRegistrations), 2).'%)' : '').'
+				'.$this->l('Visitors who have stopped at the registering step:').' '.(int)($totalBlocked).($totalRegistrations ? ' ('.number_format(100*$totalBlocked/($totalRegistrations+$totalBlocked), 2).'%)' : '').'<br />
+				'.$this->l('Visitors who have placed an order directly after the registration:').' '.(int)($totalBuyers).($totalRegistrations ? ' ('.number_format(100*$totalBuyers/($totalRegistrations), 2).'%)' : '').'
 			</p>
 			<p>'.$this->l('Total customer accounts:').' '.$totalRegistrations.'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line')).'</center>
@@ -118,21 +118,21 @@ class StatsRegistrations extends ModuleGraph
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 5, 2))]++;
+		    $this->_values[(int)(substr($row['date_add'], 5, 2))]++;
 	}
 	
 	protected function setMonthValues($layers)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-			$this->_values[intval(substr($row['date_add'], 8, 2))]++;
+			$this->_values[(int)(substr($row['date_add'], 8, 2))]++;
 	}
 
 	protected function setDayValues($layers)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-		    $this->_values[intval(substr($row['date_add'], 11, 2))]++;
+		    $this->_values[(int)(substr($row['date_add'], 11, 2))]++;
 	}
 }
 

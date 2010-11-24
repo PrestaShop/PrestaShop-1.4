@@ -78,7 +78,7 @@
 						break;
 					case "rotate":
 						
-						if(!$image->rotate(intval($_POST['angle'])))
+						if(!$image->rotate((int)($_POST['angle'])))
 						{
 							$error = IMG_SAVE_ROTATE_FAILED;
 						}

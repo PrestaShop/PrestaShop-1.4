@@ -32,11 +32,11 @@ class HomeFeatured extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitHomeFeatured'))
 		{
-			$nbr = intval(Tools::getValue('nbr'));
+			$nbr = (int)(Tools::getValue('nbr'));
 			if (!$nbr OR $nbr <= 0 OR !Validate::isInt($nbr))
 				$errors[] = $this->l('Invalid number of product');
 			else
-				Configuration::updateValue('HOME_FEATURED_NBR', intval($nbr));
+				Configuration::updateValue('HOME_FEATURED_NBR', (int)($nbr));
 			if (isset($errors) AND sizeof($errors))
 				$output .= $this->displayError(implode('<br />', $errors));
 			else
@@ -53,7 +53,7 @@ class HomeFeatured extends Module
 				<p>'.$this->l('In order to add products to your homepage, just add them to the "home" category.').'</p><br />
 				<label>'.$this->l('Number of product displayed').'</label>
 				<div class="margin-form">
-					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', intval(Configuration::get('HOME_FEATURED_NBR'))).'" />
+					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', (int)(Configuration::get('HOME_FEATURED_NBR'))).'" />
 					<p class="clear">'.$this->l('The number of products displayed on homepage (default: 10)').'</p>
 					
 				</div>
@@ -68,8 +68,8 @@ class HomeFeatured extends Module
 		global $smarty;
 
 		$category = new Category(1, Configuration::get('PS_LANG_DEFAULT'));
-		$nb = intval(Configuration::get('HOME_FEATURED_NBR'));
-		$products = $category->getProducts(intval($params['cookie']->id_lang), 1, ($nb ? $nb : 10));
+		$nb = (int)(Configuration::get('HOME_FEATURED_NBR'));
+		$products = $category->getProducts((int)($params['cookie']->id_lang), 1, ($nb ? $nb : 10));
 		$smarty->assign(array(
 		'products' => $products,
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),

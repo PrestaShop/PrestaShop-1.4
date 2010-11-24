@@ -300,9 +300,9 @@ class Upload
 		}
 		// 0 means keep original size
 		if ($this->img_x > $this->img_y)
-		$new_y = intval($new_y/$this->img_x*$this->img_y);
+		$new_y = (int)($new_y/$this->img_x*$this->img_y);
 		else if ($this->img_y > $this->img_x)
-		$new_x = intval($new_x/$this->img_y*$this->img_x);
+		$new_x = (int)($new_x/$this->img_y*$this->img_x);
 		// Now do the library specific resizing.
 		return $this->_resize($filePath,$new_x, $new_y);
 	} // End resize
@@ -433,8 +433,8 @@ class Upload
 	function getThumbInfo($originalImageName, $originaleImageWidth, $originalImageHeight, $thumbnailSuffix, $thumbnailWidth, $thumbnailHeight)
 	{
 		$outputs = array("name"=>"", "width"=>0, "height"=>0);
-		$thumbnailWidth	= intval($thumbnailWidth);
-		$thumbnailHeight = intval($thumbnailHeight);
+		$thumbnailWidth	= (int)($thumbnailWidth);
+		$thumbnailHeight = (int)($thumbnailHeight);
 		if(!empty($originalImageName) && !empty($originaleImageWidth) && !empty($originalImageHeight))
 		{
 			$dotIndex = strrpos($originalImageName, '.');

@@ -25,17 +25,17 @@ class BlockCart extends Module
 		global $errors, $cookie;
 
 		// Set currency
-		if (!intval($params['cart']->id_currency))
-			$currency = new Currency(intval($params['cookie']->id_currency));
+		if (!(int)($params['cart']->id_currency))
+			$currency = new Currency((int)($params['cookie']->id_currency));
 		else
-			$currency = new Currency(intval($params['cart']->id_currency));
+			$currency = new Currency((int)($params['cart']->id_currency));
 		if (!Validate::isLoadedObject($currency))
-			$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		if ($params['cart']->id_customer)
 		{
-			$customer = new Customer(intval($params['cart']->id_customer));
-			$taxCalculationMethod = Group::getPriceDisplayMethod(intval($customer->id_default_group));
+			$customer = new Customer((int)($params['cart']->id_customer));
+			$taxCalculationMethod = Group::getPriceDisplayMethod((int)($customer->id_default_group));
 		}
 		else
 			$taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
@@ -45,7 +45,7 @@ class BlockCart extends Module
 		$products = $params['cart']->getProducts(true);
 		$nbTotalProducts = 0;
 		foreach ($products AS $product)
-			$nbTotalProducts += intval($product['cart_quantity']);
+			$nbTotalProducts += (int)($product['cart_quantity']);
 
 		$wrappingCost = floatval($params['cart']->getOrderTotal($useTax, 6));
 		$totalToPay = $params['cart']->getOrderTotal($useTax);
@@ -58,20 +58,20 @@ class BlockCart extends Module
 		
 		$smarty->assign(array(
 			'products' => $products,
-			'customizedDatas' => Product::getAllCustomizedDatas(intval($params['cart']->id)),
+			'customizedDatas' => Product::getAllCustomizedDatas((int)($params['cart']->id)),
 			'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			'discounts' => $params['cart']->getDiscounts(false, $useTax),
-			'nb_total_products' => intval($nbTotalProducts),
+			'nb_total_products' => (int)($nbTotalProducts),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 5), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
-			'show_tax' => intval(Configuration::get('PS_TAX_DISPLAY')) == 1 ? true : false,
+			'show_tax' => (int)(Configuration::get('PS_TAX_DISPLAY')) == 1 ? true : false,
 			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 4), $currency),
 			'total' => Tools::displayPrice($totalToPay, $currency),
-			'id_carrier' => intval($params['cart']->id_carrier),
+			'id_carrier' => (int)($params['cart']->id_carrier),
 			'order_process' => Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'order',
-			'ajax_allowed' => intval(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false
+			'ajax_allowed' => (int)(Configuration::get('PS_BLOCK_CART_AJAX')) == 1 ? true : false
 		));
 		if (sizeof($errors))
 			$smarty->assign('errors', $errors);
@@ -89,7 +89,7 @@ class BlockCart extends Module
 				$output .= '<div class="alert error">'.$this->l('Ajax : Invalid choice.').'</div>';
 			else
 			{
-				Configuration::updateValue('PS_BLOCK_CART_AJAX', intval($ajax));
+				Configuration::updateValue('PS_BLOCK_CART_AJAX', (int)($ajax));
 			}
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
@@ -155,7 +155,7 @@ class BlockCart extends Module
 	public function hookHeader()
 	{
 		Tools::addCSS(($this->_path).'blockcart.css', 'all');
-		if (intval(Configuration::get('PS_BLOCK_CART_AJAX')))
+		if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')))
 		{
 			Tools::addJS(array(_PS_JS_DIR_.'jquery/iutil.prestashop-modifications.js', _PS_JS_DIR_.'jquery/ifxtransfer.js'));
 			Tools::addJS(($this->_path).'ajax-cart.js');

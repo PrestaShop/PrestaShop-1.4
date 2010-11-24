@@ -15,7 +15,7 @@ class ContactControllerCore extends FrontController
 		if ($this->cookie->isLogged())
 		{
 			$this->smarty->assign('isLogged', 1);
-			$customer = new Customer(intval($this->cookie->id_customer));
+			$customer = new Customer((int)($this->cookie->id_customer));
 			if (!Validate::isLoadedObject($customer))
 				die(Tools::displayError('customer not found'));
 			$products = array();
@@ -36,11 +36,11 @@ class ContactControllerCore extends FrontController
 			
 			$orderList = '';
 			foreach ($orders as $key => $val)
-				$orderList .= '<option value="'.$key.'" '.(intval(Tools::getValue('id_order')) == $key ? 'selected' : '').' >'.$key.' -- '.$val.'</option>';
+				$orderList .= '<option value="'.$key.'" '.((int)(Tools::getValue('id_order')) == $key ? 'selected' : '').' >'.$key.' -- '.$val.'</option>';
 			$orderedProductList = '';
 			
 			foreach ($products as $key => $val)
-				$orderedProductList .= '<option value="'.$key.'" '.(intval(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
+				$orderedProductList .= '<option value="'.$key.'" '.((int)(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
 			$this->smarty->assign('orderList', $orderList);
 			$this->smarty->assign('orderedProductList', $orderedProductList);
 		}
@@ -63,7 +63,7 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('message cannot be blank');
 			elseif (!Validate::isMessage($message))
 				$this->errors[] = Tools::displayError('invalid message');
-			elseif (!($id_contact = intval(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact(intval($id_contact), intval($this->cookie->id_lang)))))
+			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)($this->cookie->id_lang)))))
 				$this->errors[] = Tools::displayError('please select a subject in the list');
 			elseif (!empty($_FILES['fileUpload']['name']) AND $_FILES['fileUpload']['error'] != 0)
 				$this->errors[] = Tools::displayError('An error occurred during the file upload');
@@ -71,8 +71,8 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Bad file extension');
 			else
 			{
-				if (intval($this->cookie->id_customer))
-					$customer = new Customer(intval($this->cookie->id_customer));
+				if ((int)($this->cookie->id_customer))
+					$customer = new Customer((int)($this->cookie->id_customer));
 				else
 				{
 					$customer = new Customer();
@@ -89,15 +89,15 @@ class ContactControllerCore extends FrontController
 					) OR (
 						$id_customer_thread = (int)Db::getInstance()->getValue('
 						SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
-						WHERE cm.email = \''.pSQL($from).'\' AND cm.id_order = '.intval(Tools::getValue('id_order')).'')
+						WHERE cm.email = \''.pSQL($from).'\' AND cm.id_order = '.(int)(Tools::getValue('id_order')).'')
 					)))
 				{
 					$fields = Db::getInstance()->ExecuteS('
 					SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
 					FROM '._DB_PREFIX_.'customer_thread cm
 					WHERE email = \''.pSQL($from).'\' AND ('.
-						($customer->id ? 'id_customer = '.intval($customer->id).' OR ' : '').'
-						id_order = '.intval(Tools::getValue('id_order')).')');
+						($customer->id ? 'id_customer = '.(int)($customer->id).' OR ' : '').'
+						id_order = '.(int)(Tools::getValue('id_order')).')');
 					$score = 0;
 					foreach ($fields as $key => $row)
 					{
@@ -121,7 +121,7 @@ class ContactControllerCore extends FrontController
 				}
 				$old_message = Db::getInstance()->getValue('
 					SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
-					WHERE cm.id_customer_thread = '.intval($id_customer_thread).'
+					WHERE cm.id_customer_thread = '.(int)($id_customer_thread).'
 					ORDER BY date_add DESC');
 				if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
 				{
@@ -131,8 +131,8 @@ class ContactControllerCore extends FrontController
 				}
 				if (!empty($contact->email))
 				{
-					if (Mail::Send(intval($this->cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, (intval($this->cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from), $fileAttachment)
-						AND Mail::Send(intval($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
+					if (Mail::Send((int)($this->cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)($this->cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from), $fileAttachment)
+						AND Mail::Send((int)($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
 						$this->smarty->assign('confirmation', 1);
 					else
 						$this->errors[] = Tools::displayError('an error occurred while sending message');
@@ -145,7 +145,7 @@ class ContactControllerCore extends FrontController
 						$ct = new CustomerThread($id_customer_thread);
 						$ct->status = 'open';
 						$ct->id_lang = (int)$this->cookie->id_lang;
-						$ct->id_contact = intval($id_contact);
+						$ct->id_contact = (int)($id_contact);
 						if ($id_order = (int)Tools::getValue('id_order'))
 							$ct->id_order = $id_order;
 						if ($id_product = (int)Tools::getValue('id_product'))
@@ -156,12 +156,12 @@ class ContactControllerCore extends FrontController
 					{
 						$ct = new CustomerThread();
 						if (isset($customer->id))
-							$ct->id_customer = intval($customer->id);
+							$ct->id_customer = (int)($customer->id);
 						if ($id_order = (int)Tools::getValue('id_order'))
 							$ct->id_order = $id_order;
 						if ($id_product = (int)Tools::getValue('id_product'))
 							$ct->id_product = $id_product;
-						$ct->id_contact = intval($id_contact);
+						$ct->id_contact = (int)($id_contact);
 						$ct->id_lang = (int)$this->cookie->id_lang;
 						$ct->email = $from;
 						$ct->status = 'open';
@@ -181,7 +181,7 @@ class ContactControllerCore extends FrontController
 						if ($cm->add())
 						{
 							if (empty($contact->email))
-								Mail::Send(intval($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
+								Mail::Send((int)($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
 							$this->smarty->assign('confirmation', 1);
 						}
 						else
@@ -222,7 +222,7 @@ class ContactControllerCore extends FrontController
 			$this->smarty->assign('customerThread', $customerThread);
 		}
 		
-		$this->smarty->assign('contacts', Contact::getContacts(intval($this->cookie->id_lang)));
+		$this->smarty->assign('contacts', Contact::getContacts((int)($this->cookie->id_lang)));
 	}
 	
 	public function displayContent()

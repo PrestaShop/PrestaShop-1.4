@@ -64,7 +64,7 @@ class AdminFeatures extends AdminTab
 					$irow = 0;
 		foreach ($this->_list AS $tr)
 		{
-			$id = intval($tr['id_'.$this->table]);
+			$id = (int)($tr['id_'.$this->table]);
 		 	echo '
 			<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center"><input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" /></td>
@@ -77,7 +77,7 @@ class AdminFeatures extends AdminTab
 							<th width="100%">'.$this->l('Value').'</th>
 							<th>'.$this->l('Actions').'</th>
 						</tr>';
-			$features = FeatureValue::getFeatureValuesWithLang(intval(Configuration::get('PS_LANG_DEFAULT')), $id);
+			$features = FeatureValue::getFeatureValuesWithLang((int)(Configuration::get('PS_LANG_DEFAULT')), $id);
 			foreach ($features AS $feature)
 			{
 				echo '
@@ -133,7 +133,7 @@ class AdminFeatures extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');

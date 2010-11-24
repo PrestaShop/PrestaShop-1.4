@@ -53,14 +53,14 @@ class AdminScenes extends AdminTab
 			foreach ($imagesTypes AS $k => $imageType)
 			{
 				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']))
-					imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+					imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				elseif ($imageType['name'] == 'thumb_scene')
 					{
 					if (isset($_FILES['thumb'])  AND !$_FILES['thumb']['error'])
 						$tmpName = $_FILES['thumb']['tmp_name'];
 					else
 						$tmpName = $_FILES['image']['tmp_name'];
-					imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+					imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 					}
 			}
 		}
@@ -82,7 +82,7 @@ class AdminScenes extends AdminTab
 		global $done;
 		static $irow;
 		
-		$id_obj = intval(Tools::getValue($this->id));
+		$id_obj = (int)(Tools::getValue($this->id));
 
 		if (!isset($done[$current['infos']['id_parent']]))
 			$done[$current['infos']['id_parent']] = 0;
@@ -96,7 +96,7 @@ class AdminScenes extends AdminTab
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR (intval(Tools::getValue('id_category')) == $id_category AND !intval($id_obj))) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR ((int)(Tools::getValue('id_category')) == $id_category AND !(int)($id_obj))) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
@@ -132,7 +132,7 @@ class AdminScenes extends AdminTab
 			echo 'startingData = new Array();'."\n";
 			foreach ($obj->getProducts() as $key => $product)
 			{
-				$productObj = new Product(intval($product['id_product']), true, intval($cookie->id_lang));
+				$productObj = new Product((int)($product['id_product']), true, (int)($cookie->id_lang));
 				echo 'startingData['.$key.'] = new Array(\''.$productObj->name.'\', '.$product['id_product'].', '.$product['x_axis'].', '.$product['y_axis'].', '.$product['zone_width'].', '.$product['zone_height'].');';
 			}
 			
@@ -156,7 +156,7 @@ class AdminScenes extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'name');
 		echo '		<div class="clear"></div>
@@ -233,7 +233,7 @@ class AdminScenes extends AdminTab
 									<th>'.$this->l('ID').'</th>
 									<th>'.$this->l('Image map name:').'</th>
 								</tr>';
-					$categories = Category::getCategories(intval($cookie->id_lang), false);
+					$categories = Category::getCategories((int)($cookie->id_lang), false);
 					$done = array();
 					$index = array();
 					if (Tools::isSubmit('categoryBox'))

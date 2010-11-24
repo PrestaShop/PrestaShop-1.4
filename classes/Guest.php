@@ -52,19 +52,19 @@ class GuestCore extends ObjectModel
 	{
 		parent::validateFields();
 		
-		$fields['id_operating_system'] = intval($this->id_operating_system);
-		$fields['id_web_browser'] = intval($this->id_web_browser);
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['javascript'] = intval($this->javascript);
-		$fields['screen_resolution_x'] = intval($this->screen_resolution_x);
-		$fields['screen_resolution_y'] = intval($this->screen_resolution_y);
-		$fields['screen_color'] = intval($this->screen_color);
-		$fields['sun_java'] = intval($this->sun_java);
-		$fields['adobe_flash'] = intval($this->adobe_flash);
-		$fields['adobe_director'] = intval($this->adobe_director);
-		$fields['apple_quicktime'] = intval($this->apple_quicktime);
-		$fields['real_player'] = intval($this->real_player);
-		$fields['windows_media'] = intval($this->windows_media);
+		$fields['id_operating_system'] = (int)($this->id_operating_system);
+		$fields['id_web_browser'] = (int)($this->id_web_browser);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['javascript'] = (int)($this->javascript);
+		$fields['screen_resolution_x'] = (int)($this->screen_resolution_x);
+		$fields['screen_resolution_y'] = (int)($this->screen_resolution_y);
+		$fields['screen_color'] = (int)($this->screen_color);
+		$fields['sun_java'] = (int)($this->sun_java);
+		$fields['adobe_flash'] = (int)($this->adobe_flash);
+		$fields['adobe_director'] = (int)($this->adobe_director);
+		$fields['apple_quicktime'] = (int)($this->apple_quicktime);
+		$fields['real_player'] = (int)($this->real_player);
+		$fields['windows_media'] = (int)($this->windows_media);
 		$fields['accept_language'] = pSQL($this->accept_language);
 		
 		return $fields;
@@ -150,7 +150,7 @@ class GuestCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_guest`
 		FROM `'._DB_PREFIX_.'guest`
-		WHERE `id_customer` = '.intval($id_customer));
+		WHERE `id_customer` = '.(int)($id_customer));
 		return $result['id_guest'];
 	}
 	
@@ -159,15 +159,15 @@ class GuestCore extends ObjectModel
 		// Since the guests are merged, the guest id in the connections table must be changed too
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'connections` c
-		SET c.`id_guest` = '.intval($id_guest).'
-		WHERE c.`id_guest` = '.intval($this->id));
+		SET c.`id_guest` = '.(int)($id_guest).'
+		WHERE c.`id_guest` = '.(int)($this->id));
 		
 		// The current guest is removed from the database
 		$this->delete();
 		
 		// $this is still filled with values, so it's id is changed for the old guest
-		$this->id = intval($id_guest);
-		$this->id_customer = intval($id_customer);
+		$this->id = (int)($id_guest);
+		$this->id_customer = (int)($id_customer);
 		
 		// $this is now the old guest but filled with the most up to date values
 		$this->update();
@@ -175,12 +175,12 @@ class GuestCore extends ObjectModel
 	
 	public static function setNewGuest($cookie)
 	{
-		$guest = new Guest(isset($cookie->id_customer) ? Guest::getFromCustomer(intval($cookie->id_customer)) : NULL);
+		$guest = new Guest(isset($cookie->id_customer) ? Guest::getFromCustomer((int)($cookie->id_customer)) : NULL);
 		$guest->userAgent();
 		if ($guest->id_operating_system OR $guest->id_web_browser)
 		{
 			$guest->save();
-			$cookie->id_guest = intval($guest->id);
+			$cookie->id_guest = (int)($guest->id);
 		}
 	}
 }

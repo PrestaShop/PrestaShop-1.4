@@ -36,11 +36,11 @@ class BlockTags extends Module
 		{
 			if (!$tagsNbr = Tools::getValue('tagsNbr') OR empty($tagsNbr))
 				$output .= '<div class="alert error">'.$this->l('You should fill the "tags displayed" field').'</div>';
-			elseif (intval($tagsNbr) == 0)
+			elseif ((int)($tagsNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else
 			{
-				Configuration::updateValue('BLOCKTAGS_NBR', intval($tagsNbr));
+				Configuration::updateValue('BLOCKTAGS_NBR', (int)($tagsNbr));
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
 		}
@@ -54,7 +54,7 @@ class BlockTags extends Module
 			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Tags displayed').'</label>
 				<div class="margin-form">
-					<input type="text" name="tagsNbr" value="'.intval(Configuration::get('BLOCKTAGS_NBR')).'" />
+					<input type="text" name="tagsNbr" value="'.(int)(Configuration::get('BLOCKTAGS_NBR')).'" />
 					<p class="clear">'.$this->l('Set the number of tags to be displayed in this block').'</p>
 				</div>
 				<center><input type="submit" name="submitBlockTags" value="'.$this->l('Save').'" class="button" /></center>
@@ -75,7 +75,7 @@ class BlockTags extends Module
 	{
 		global $smarty;
 
-		$tags = Tag::getMainTags(intval($params['cookie']->id_lang), intval(Configuration::get('BLOCKTAGS_NBR')));
+		$tags = Tag::getMainTags((int)($params['cookie']->id_lang), (int)(Configuration::get('BLOCKTAGS_NBR')));
 		if (!sizeof($tags))
 			return false;
 		foreach ($tags AS &$tag)

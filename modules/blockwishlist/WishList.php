@@ -45,7 +45,7 @@ class		WishList extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_customer'] = intval($this->id_customer);
+		$fields['id_customer'] = (int)($this->id_customer);
 		$fields['token'] = pSQL($this->token);
 		$fields['name'] = pSQL($this->name);
 		$fields['date_add'] = pSQL($this->date_add);
@@ -57,8 +57,8 @@ class		WishList extends ObjectModel
 	{
 		global $cookie;
 		
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_email` WHERE `id_wishlist` = '.intval($this->id));
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product` WHERE `id_wishlist` = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_email` WHERE `id_wishlist` = '.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product` WHERE `id_wishlist` = '.(int)($this->id));
 		if (isset($cookie->id_wishlist))
 			unset($cookie->id_wishlist);
 		
@@ -77,13 +77,13 @@ class		WishList extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `counter`
 		  FROM `'._DB_PREFIX_.'wishlist`
-		WHERE `id_wishlist` = '.intval($id_wishlist));
+		WHERE `id_wishlist` = '.(int)($id_wishlist));
 		if ($result == false OR !sizeof($result) OR empty($result) === true)
 			return (false);
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'wishlist` SET
-		`counter` = '.intval($result['counter'] + 1).'
-		WHERE `id_wishlist` = '.intval($id_wishlist)));
+		`counter` = '.(int)($result['counter'] + 1).'
+		WHERE `id_wishlist` = '.(int)($id_wishlist)));
 	}
 
 	
@@ -95,7 +95,7 @@ class		WishList extends ObjectModel
 		SELECT COUNT(*) AS total
 		FROM `'._DB_PREFIX_.'wishlist` 
 		WHERE `name` = \''.pSQL($name).'\'
-		AND `id_customer` = '.intval($cookie->id_customer)
+		AND `id_customer` = '.(int)($cookie->id_customer)
 		);
 	}
 	
@@ -112,8 +112,8 @@ class		WishList extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_wishlist`, `name`, `token`
 		  FROM `'._DB_PREFIX_.'wishlist`
-		WHERE `id_wishlist` = '.intval($id_wishlist).'
-		AND `id_customer` = '.intval($id_customer));
+		WHERE `id_wishlist` = '.(int)($id_wishlist).'
+		AND `id_customer` = '.(int)($id_customer));
 		if (empty($result) === false AND $result != false AND sizeof($result))
 		{
 			if ($return === false)
@@ -152,7 +152,7 @@ class		WishList extends ObjectModel
 		return (Db::getInstance()->ExecuteS('
 		SELECT w.`id_wishlist`, w.`name`, w.`token`, w.`date_add`, w.`date_upd`, w.`counter`
 		FROM `'._DB_PREFIX_.'wishlist` w
-		WHERE `id_customer` = '.intval($id_customer).'
+		WHERE `id_customer` = '.(int)($id_customer).'
 		ORDER BY w.`name` ASC'));
 	}
 
@@ -165,14 +165,14 @@ class		WishList extends ObjectModel
 		JOIN `'._DB_PREFIX_.'cart` c ON  (c.id_cart = wpc.id_cart)
 		JOIN `'._DB_PREFIX_.'cart_product` cp ON (wpc.id_cart = cp.id_cart)
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (o.id_cart = c.id_cart)
-		WHERE (wp.id_wishlist='.intval($id_wishlist).' AND o.id_cart IS NULL)
+		WHERE (wp.id_wishlist='.(int)($id_wishlist).' AND o.id_cart IS NULL)
 		HAVING timecart  >= 3600*6');
 
 		if(isset($old_carts) AND $old_carts != false)
 			foreach ($old_carts AS $old_cart)
 				Db::getInstance()->Execute('
 					DELETE FROM `'._DB_PREFIX_.'cart_product`
-					WHERE id_cart='.intval($old_cart['id_cart']).' AND id_product='.intval($old_cart['id_product']).' AND id_product_attribute='.intval($old_cart['id_product_attribute'])
+					WHERE id_cart='.(int)($old_cart['id_cart']).' AND id_product='.(int)($old_cart['id_product']).' AND id_product_attribute='.(int)($old_cart['id_product_attribute'])
 				);
 
 		$freshwish = Db::getInstance()->ExecuteS('
@@ -181,7 +181,7 @@ class		WishList extends ObjectModel
 			JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wpc.id_wishlist_product = wp.id_wishlist_product)
 			JOIN `'._DB_PREFIX_.'cart` c ON (c.id_cart = wpc.id_cart)
 			LEFT JOIN `'._DB_PREFIX_.'cart_product` cp ON (cp.id_cart = wpc.id_cart AND cp.id_product = wp.id_product AND cp.id_product_attribute = wp.id_product_attribute)
-			WHERE (wp.id_wishlist = '.intval($id_wishlist).' AND ((cp.id_product IS NULL AND cp.id_product_attribute IS NULL)))
+			WHERE (wp.id_wishlist = '.(int)($id_wishlist).' AND ((cp.id_product IS NULL AND cp.id_product_attribute IS NULL)))
 			');
 		$res = Db::getInstance()->ExecuteS('
 			SELECT wp.id_wishlist_product, cp.quantity AS cart_quantity, wpc.quantity AS wish_quantity, wpc.id_cart
@@ -189,7 +189,7 @@ class		WishList extends ObjectModel
 			JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)
 			JOIN `'._DB_PREFIX_.'cart` c ON (c.id_cart = wpc.id_cart)
 			JOIN `'._DB_PREFIX_.'cart_product` cp ON (cp.id_cart = wpc.id_cart AND cp.id_product = wp.id_product AND cp.id_product_attribute = wp.id_product_attribute)
-			WHERE wp.id_wishlist='.intval($id_wishlist)
+			WHERE wp.id_wishlist='.(int)($id_wishlist)
 		);
 
 		if(isset($res) AND $res != false)
@@ -198,13 +198,13 @@ class		WishList extends ObjectModel
 				{
 					Db::getInstance()->Execute('
 						UPDATE `'._DB_PREFIX_.'wishlist_product`
-						SET `quantity`= `quantity` + '.(intval($refresh['wish_quantity']) - intval($refresh['cart_quantity'])).'
-						WHERE id_wishlist_product='.intval($refresh['id_wishlist_product'])
+						SET `quantity`= `quantity` + '.((int)($refresh['wish_quantity']) - (int)($refresh['cart_quantity'])).'
+						WHERE id_wishlist_product='.(int)($refresh['id_wishlist_product'])
 					);
 					Db::getInstance()->Execute('
 						UPDATE `'._DB_PREFIX_.'wishlist_product_cart`
-						SET `quantity`='.intval($refresh['cart_quantity']).'
-						WHERE id_wishlist_product='.intval($refresh['id_wishlist_product']).' AND id_cart='.intval($refresh['id_cart'])
+						SET `quantity`='.(int)($refresh['cart_quantity']).'
+						WHERE id_wishlist_product='.(int)($refresh['id_wishlist_product']).' AND id_cart='.(int)($refresh['id_cart'])
 					);
 				}
 		if(isset($freshwish) AND $freshwish != false)
@@ -214,13 +214,13 @@ class		WishList extends ObjectModel
 					UPDATE `'._DB_PREFIX_.'wishlist_product` SET `quantity`=`quantity` +
 					(
 						SELECT `quantity` FROM `'._DB_PREFIX_.'wishlist_product_cart`
-						WHERE `id_wishlist_product`='.intval($prodcustomer['id_wishlist_product']).' AND `id_cart`='.intval($prodcustomer['id_cart']).'
+						WHERE `id_wishlist_product`='.(int)($prodcustomer['id_wishlist_product']).' AND `id_cart`='.(int)($prodcustomer['id_cart']).'
 					)
-					WHERE `id_wishlist_product`='.intval($prodcustomer['id_wishlist_product']).' AND `id_wishlist`='.intval($id_wishlist)
+					WHERE `id_wishlist_product`='.(int)($prodcustomer['id_wishlist_product']).' AND `id_wishlist`='.(int)($id_wishlist)
 					);
 				Db::getInstance()->Execute('
 					DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart`
-					WHERE `id_wishlist_product`='.intval($prodcustomer['id_wishlist_product']).' AND `id_cart`='.intval($prodcustomer['id_cart'])
+					WHERE `id_wishlist_product`='.(int)($prodcustomer['id_wishlist_product']).' AND `id_cart`='.(int)($prodcustomer['id_cart'])
 					);
 			}
 	}
@@ -243,10 +243,10 @@ class		WishList extends ObjectModel
 		JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = wp.`id_product`
 		JOIN `'._DB_PREFIX_.'wishlist` w ON w.`id_wishlist` = wp.`id_wishlist`
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON cl.`id_category` = p.`id_category_default` AND cl.id_lang='.(int)$id_lang.'
-		WHERE w.`id_customer` = '.intval($id_customer).'
-		AND pl.`id_lang` = '.intval($id_lang).'
-		AND wp.`id_wishlist` = '.intval($id_wishlist).
-		(empty($id_product) === false ? ' AND wp.`id_product` = '.intval($id_product) : '').
+		WHERE w.`id_customer` = '.(int)($id_customer).'
+		AND pl.`id_lang` = '.(int)($id_lang).'
+		AND wp.`id_wishlist` = '.(int)($id_wishlist).
+		(empty($id_product) === false ? ' AND wp.`id_product` = '.(int)($id_product) : '').
 		($quantity == true ? ' AND wp.`quantity` != 0': ''));
 		if (empty($products) === true OR !sizeof($products))
 			return array();
@@ -260,10 +260,10 @@ class		WishList extends ObjectModel
 				  FROM `'._DB_PREFIX_.'product_attribute_combination` pac
 				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)
 				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON (ag.`id_attribute_group` = a.`id_attribute_group`)
-				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($id_lang).')
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.intval($id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($id_lang).')
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pac.`id_product_attribute` = pa.`id_product_attribute`)
-				WHERE pac.`id_product_attribute` = '.intval($products[$i]['id_product_attribute']));
+				WHERE pac.`id_product_attribute` = '.(int)($products[$i]['id_product_attribute']));
 				$products[$i]['attributes_small'] = '';
 				if ($result)
 					foreach ($result AS $k => $row)
@@ -291,7 +291,7 @@ class		WishList extends ObjectModel
 		SELECT SUM(wp.`quantity`) AS nbProducts, wp.`id_wishlist`
 		  FROM `'._DB_PREFIX_.'wishlist_product` wp
 		INNER JOIN `'._DB_PREFIX_.'wishlist` w ON (w.`id_wishlist` = wp.`id_wishlist`)
-		WHERE w.`id_customer` = '.intval($id_customer).'
+		WHERE w.`id_customer` = '.(int)($id_customer).'
 		GROUP BY w.`id_wishlist`
 		ORDER BY w.`name` ASC'));
 	}
@@ -312,10 +312,10 @@ class		WishList extends ObjectModel
 		SELECT wp.`quantity`
 		  FROM `'._DB_PREFIX_.'wishlist_product` wp
 		JOIN `'._DB_PREFIX_.'wishlist` w ON (w.`id_wishlist` = wp.`id_wishlist`)
-		WHERE wp.`id_wishlist` = '.intval($id_wishlist).'
-		AND w.`id_customer` = '.intval($id_customer).'
-		AND wp.`id_product` = '.intval($id_product).'
-		AND wp.`id_product_attribute` = '.intval($id_product_attribute));
+		WHERE wp.`id_wishlist` = '.(int)($id_wishlist).'
+		AND w.`id_customer` = '.(int)($id_customer).'
+		AND wp.`id_product` = '.(int)($id_product).'
+		AND wp.`id_product_attribute` = '.(int)($id_product_attribute));
 		if (empty($result) === false AND sizeof($result))
 		{
 			if (($result['quantity'] + $quantity) <= 0)
@@ -323,18 +323,18 @@ class		WishList extends ObjectModel
 			else
 				return (Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'wishlist_product` SET
-				`quantity` = '.intval($quantity + $result['quantity']).'
-				WHERE `id_wishlist` = '.intval($id_wishlist).'
-				AND `id_product` = '.intval($id_product).'
-				AND `id_product_attribute` = '.intval($id_product_attribute)));
+				`quantity` = '.(int)($quantity + $result['quantity']).'
+				WHERE `id_wishlist` = '.(int)($id_wishlist).'
+				AND `id_product` = '.(int)($id_product).'
+				AND `id_product_attribute` = '.(int)($id_product_attribute)));
 		}
 		else
 			return (Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'wishlist_product` (`id_wishlist`, `id_product`, `id_product_attribute`, `quantity`, `priority`) VALUES(
-			'.intval($id_wishlist).',
-			'.intval($id_product).',
-			'.intval($id_product_attribute).',
-			'.intval($quantity).', 1)'));
+			'.(int)($id_wishlist).',
+			'.(int)($id_product).',
+			'.(int)($id_product_attribute).',
+			'.(int)($quantity).', 1)'));
 
 	}
 
@@ -352,11 +352,11 @@ class		WishList extends ObjectModel
 			die (Tools::displayError());
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'wishlist_product` SET
-		`priority` = '.intval($priority).',
-		`quantity` = '.intval($quantity).'
-		WHERE `id_wishlist` = '.intval($id_wishlist).'
-		AND `id_product` = '.intval($id_product).'
-		AND `id_product_attribute` = '.intval($id_product_attribute)));
+		`priority` = '.(int)($priority).',
+		`quantity` = '.(int)($quantity).'
+		WHERE `id_wishlist` = '.(int)($id_wishlist).'
+		AND `id_product` = '.(int)($id_product).'
+		AND `id_product_attribute` = '.(int)($id_product_attribute)));
 	}
 
 	/**
@@ -374,8 +374,8 @@ class		WishList extends ObjectModel
 		SELECT w.`id_wishlist`, wp.`id_wishlist_product`
 		FROM `'._DB_PREFIX_.'wishlist` w
 		LEFT JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.`id_wishlist` = w.`id_wishlist`)
-		WHERE `id_customer` = '.intval($id_customer).'
-		AND w.`id_wishlist` = '.intval($id_wishlist));
+		WHERE `id_customer` = '.(int)($id_customer).'
+		AND w.`id_wishlist` = '.(int)($id_wishlist));
 		if (empty($result) === true OR
 			$result === false OR
 			!sizeof($result) OR
@@ -384,13 +384,13 @@ class		WishList extends ObjectModel
 		// Delete product in wishlist_product_cart
 		Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'wishlist_product_cart`
-		WHERE `id_wishlist_product` = '.intval($result['id_wishlist_product'])
+		WHERE `id_wishlist_product` = '.(int)($result['id_wishlist_product'])
 		);
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'wishlist_product`
-		WHERE `id_wishlist` = '.intval($id_wishlist).'
-		AND `id_product` = '.intval($id_product).'
-		AND `id_product_attribute` = '.intval($id_product_attribute)
+		WHERE `id_wishlist` = '.(int)($id_wishlist).'
+		AND `id_product` = '.(int)($id_product).'
+		AND `id_product_attribute` = '.(int)($id_product_attribute)
 		);
 	}
 
@@ -410,7 +410,7 @@ class		WishList extends ObjectModel
 		JOIN `'._DB_PREFIX_.'wishlist_product` wp ON (wp.id_wishlist_product = wpc.id_wishlist_product)
 		JOIN `'._DB_PREFIX_.'cart` ca ON (ca.id_cart = wpc.id_cart)
 		JOIN `'._DB_PREFIX_.'customer` cu ON (cu.`id_customer` = ca.`id_customer`)
-		WHERE wp.`id_wishlist` = '.intval($id_wishlist)));
+		WHERE wp.`id_wishlist` = '.(int)($id_wishlist)));
 	}
 
 	/**
@@ -427,9 +427,9 @@ class		WishList extends ObjectModel
 		$result = Db::getInstance()->getRow('
 			SELECT `quantity`, `id_wishlist_product`
 		  FROM `'._DB_PREFIX_.'wishlist_product` wp
-			WHERE `id_wishlist` = '.intval($id_wishlist).'
-			AND `id_product` = '.intval($id_product).'
-			AND `id_product_attribute` = '.intval($id_product_attribute));
+			WHERE `id_wishlist` = '.(int)($id_wishlist).'
+			AND `id_product` = '.(int)($id_product).'
+			AND `id_product_attribute` = '.(int)($id_product_attribute));
 
 		if (!sizeof($result) OR
 			($result['quantity'] - $quantity) < 0 OR
@@ -439,33 +439,33 @@ class		WishList extends ObjectModel
 			Db::getInstance()->Execute('
 			SELECT *
 			FROM `'._DB_PREFIX_.'wishlist_product_cart`
-			WHERE `id_wishlist_product`='.intval($result['id_wishlist_product']).' AND `id_cart`='.intval($id_cart)
+			WHERE `id_wishlist_product`='.(int)($result['id_wishlist_product']).' AND `id_cart`='.(int)($id_cart)
 			);
 
 		if (Db::getInstance()->NumRows() > 0)
 			$result2= Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'wishlist_product_cart`
-				SET `quantity`=`quantity` + '.intval($quantity).'
-				WHERE `id_wishlist_product`='.intval($result['id_wishlist_product']).' AND `id_cart`='.intval($id_cart)
+				SET `quantity`=`quantity` + '.(int)($quantity).'
+				WHERE `id_wishlist_product`='.(int)($result['id_wishlist_product']).' AND `id_cart`='.(int)($id_cart)
 				);
 
 		else
 			$result2 = Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'wishlist_product_cart`
 				(`id_wishlist_product`, `id_cart`, `quantity`, `date_add`) VALUES(
-				'.intval($result['id_wishlist_product']).',
-				'.intval($id_cart).',
-				'.intval($quantity).',
+				'.(int)($result['id_wishlist_product']).',
+				'.(int)($id_cart).',
+				'.(int)($quantity).',
 				\''.pSQL(date('Y-m-d H:i:s')).'\')');
 
 		if ($result2 === false)
 			return (false);
 		return (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'wishlist_product` SET
-			`quantity` = '.intval($result['quantity'] - $quantity).'
-			WHERE `id_wishlist` = '.intval($id_wishlist).'
-			AND `id_product` = '.intval($id_product).'
-			AND `id_product_attribute` = '.intval($id_product_attribute)));
+			`quantity` = '.(int)($result['quantity'] - $quantity).'
+			WHERE `id_wishlist` = '.(int)($id_wishlist).'
+			AND `id_product` = '.(int)($id_product).'
+			AND `id_product_attribute` = '.(int)($id_product_attribute)));
 	}
 
 	/**
@@ -480,7 +480,7 @@ class		WishList extends ObjectModel
 			die (Tools::displayError());
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'wishlist_email` (`id_wishlist`, `email`, `date_add`) VALUES(
-		'.intval($id_wishlist).',
+		'.(int)($id_wishlist).',
 		\''.pSQL($email).'\',
 		\''.pSQL(date('Y-m-d H:i:s')).'\')'));
 	}
@@ -499,7 +499,7 @@ class		WishList extends ObjectModel
 		SELECT we.`email`, we.`date_add`
 		  FROM `'._DB_PREFIX_.'wishlist_email` we
 		INNER JOIN `'._DB_PREFIX_.'wishlist` w ON w.`id_wishlist` = we.`id_wishlist`
-		WHERE we.`id_wishlist` = '.intval($id_wishlist).'
-		AND w.`id_customer` = '.intval($id_customer)));
+		WHERE we.`id_wishlist` = '.(int)($id_wishlist).'
+		AND w.`id_customer` = '.(int)($id_customer)));
 	}
 };

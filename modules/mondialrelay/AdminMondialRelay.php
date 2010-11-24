@@ -72,7 +72,7 @@ class AdminMondialRelay extends AdminTab
 		if (isset($_POST['history']))
 			foreach($_POST['history'] as $field)
 				if (isset($field['selected']) AND $field['selected'] == '1')
-					$query = Db::getInstance()->Execute("DELETE FROM `" . _DB_PREFIX_ ."mr_historique` WHERE id='".intval($field['id'])."';");
+					$query = Db::getInstance()->Execute("DELETE FROM `" . _DB_PREFIX_ ."mr_historique` WHERE id='".(int)($field['id'])."';");
 	}
 
 	private function _generateetiquettes()
@@ -100,7 +100,7 @@ class AdminMondialRelay extends AdminTab
 												FROM `'._DB_PREFIX_.'country` c
 												JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
 												WHERE cl.`name` = "'.pSQL(Configuration::get('PS_SHOP_COUNTRY')).'"
-												AND cl.`id_lang` = '.intval(Configuration::get('PS_LANG_DEFAULT')));
+												AND cl.`id_lang` = '.(int)(Configuration::get('PS_LANG_DEFAULT')));
 		$mr_Tel1 = Configuration::get('PS_SHOP_PHONE');
 		$mr_Tel2 = '';
 		$mr_Mail = Configuration::get('PS_SHOP_EMAIL');
@@ -114,9 +114,9 @@ class AdminMondialRelay extends AdminTab
 			{
 				if (is_numeric($field['weight']) AND $field['weight'] > 0 AND isset($field['selected']) AND $field['selected'] == '1')
 				{
-					$customer = new Customer(intval($field['id_customer']));
-					$addressliv = new Address(intval($field['id_address_delivery']));
-					$country = new Country(intval($addressliv->id_country));
+					$customer = new Customer((int)($field['id_customer']));
+					$addressliv = new Address((int)($field['id_address_delivery']));
+					$country = new Country((int)($addressliv->id_country));
 					$params = 'mr_Enseigne_WebService='.urlencode(free_MR_chaine($mr_Enseigne_WebService));
 					$params .= '&mr_code_marque='.urlencode(free_MR_chaine($mr_code_marque));
 					$params .= '&mr_Key_WebService='.urlencode(free_MR_chaine($mr_Key_WebService));
@@ -190,7 +190,7 @@ class AdminMondialRelay extends AdminTab
 						$concatener_id_order .= $field['id'].';';
 					    $concatener_exp_num .= $result[1].';';
 				
-						$order = new Order(intval($field['id']));
+						$order = new Order((int)($field['id']));
 						$order->shipping_number = $field['id_mr_selected'];
 						$order->update();
 				
@@ -198,9 +198,9 @@ class AdminMondialRelay extends AdminTab
 						$templateVars = array('{followup}' => $result[3]);
 					
 						$history = new OrderHistory();
-						$history->id_order = intval($field['id']);
-						$history->changeIdOrderState(_PS_OS_SHIPPING_, intval($field['id'])); 
-						$history->id_employee = intval($cookie->id_employee);
+						$history->id_order = (int)($field['id']);
+						$history->changeIdOrderState(_PS_OS_SHIPPING_, (int)($field['id'])); 
+						$history->id_employee = (int)($cookie->id_employee);
 						$history->addWithemail(true, $templateVars);	
 				
 						echo '<li>' . $mondialrelay->getL('Order number') . ':&nbsp;' . $field['id'];
@@ -260,8 +260,8 @@ class AdminMondialRelay extends AdminTab
 
 		include_once(dirname(__FILE__).'/mondialrelay.php');
 		$mondialrelay = new MondialRelay();
-		$order_state = new OrderState(intval(Configuration::get('MONDIAL_RELAY_ORDER_STATE')), $cookie->id_lang);
-		$mr_weight_coef = intval(Configuration::get('MR_WEIGHT_COEF'));
+		$order_state = new OrderState((int)(Configuration::get('MONDIAL_RELAY_ORDER_STATE')), $cookie->id_lang);
+		$mr_weight_coef = (int)(Configuration::get('MR_WEIGHT_COEF'));
 		
 		$html = '
 		<script type="text/javascript">
@@ -299,9 +299,9 @@ class AdminMondialRelay extends AdminTab
 		if (Tools::isSubmit('updatesuccess'))
 			$html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$mondialrelay->getL('Settings updated succesfull').'</div>';
 		
-		$html .= $mondialrelay->getL('To generate sticks, you must have register a correct address of your store on').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.intval(Tab::getIdFromClassName('AdminContact')).intval($cookie->id_employee)).'" class="green">'.$mondialrelay->getL('The contact page').'</a>';
+		$html .= $mondialrelay->getL('To generate sticks, you must have register a correct address of your store on').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$mondialrelay->getL('The contact page').'</a>';
 		$html .= '<p>'.$mondialrelay->getL('All orders which have the state').' "<b>'.$order_state->name.'</b>"';
-		$html .= '.&nbsp;<a href="index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.intval(Tab::getIdFromClassName('AdminModules')).intval($cookie->id_employee)).'" class="green">' . $mondialrelay->getL('Change configuration') . '</a></p>';
+		$html .= '.&nbsp;<a href="index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'" class="green">' . $mondialrelay->getL('Change configuration') . '</a></p>';
 
 		$orders = MondialRelayClass::getOrders();
 		if (empty($orders))
@@ -333,7 +333,7 @@ class AdminMondialRelay extends AdminTab
 					$result_weight = Db::getInstance()->getRow('
 					SELECT SUM(product_weight*product_quantity) as weight
 					FROM '._DB_PREFIX_.'order_detail
-					WHERE id_order = '.intval($order['id_order']));
+					WHERE id_order = '.(int)($order['id_order']));
 					$order['weight']=round($mr_weight_coef*$result_weight['weight']);
 				}
 
@@ -366,7 +366,7 @@ class AdminMondialRelay extends AdminTab
 				<input type="hidden" name="order[' . $order['id_order'] . '][exp_number]" id="id_customer_' . $order['id_order'] . '" value="' . $order['exp_number'] . '" /></td>'; 
 							 
 				$html .= '<td class="center">
-					<a href="index.php?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.intval(Tab::getIdFromClassName('AdminOrders')).intval($cookie->id_employee)).'">
+					<a href="index.php?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">
 					<img border="0" title="'.$mondialrelay->getL('View').'" alt="'.$mondialrelay->getL('View').'" src="'._PS_IMG_.'admin/details.gif"/></a>
 				</td>';
 				$html .= '</tr>';

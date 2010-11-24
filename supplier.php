@@ -4,7 +4,7 @@ include(dirname(__FILE__).'/config/config.inc.php');
 include(dirname(__FILE__).'/init.php');
 Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 //will be initialized bellow...
-if(intval(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
+if((int)(Configuration::get('PS_REWRITING_SETTINGS')) === 1)
 	$rewrited_url = null;
 
 if (!isset($objectType))
@@ -15,12 +15,12 @@ $errors = array();
 	
 $controller = new FrontController();
 
-if ($id = intval(Tools::getValue('id_'.$objectType)))
+if ($id = (int)(Tools::getValue('id_'.$objectType)))
 {
 	$controller->productSort();
 	$controller->displayHeader();
 	
-	$object = new $className(intval($id), $cookie->id_lang);
+	$object = new $className((int)($id), $cookie->id_lang);
 	if (!Validate::isLoadedObject($object) OR !$object->active)
 	{
 		if ($objectType == 'supplier')
@@ -42,14 +42,14 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 		include(dirname(__FILE__).'/pagination.php');
 		$smarty->assign(array(
 			'nb_products' => $nbProducts,
-			'products' => $object->getProducts($id, intval($cookie->id_lang), intval($controller->p), intval($controller->n), $controller->orderBy, $controller->orderWay),
+			'products' => $object->getProducts($id, (int)($cookie->id_lang), (int)($controller->p), (int)($controller->n), $controller->orderBy, $controller->orderWay),
 			$objectType => $object));
 	}
 	
 	$smarty->assign(array(
 		'errors' => $errors,
 		'path' => ($object->active ? Tools::safeOutput($object->name) : ''),
-		'id_lang' => intval($cookie->id_lang),
+		'id_lang' => (int)($cookie->id_lang),
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')
 	));
 	$smarty->display(_PS_THEME_DIR_.$objectType.'.tpl');
@@ -57,18 +57,18 @@ if ($id = intval(Tools::getValue('id_'.$objectType)))
 else
 {
 	$controller->displayHeader();
-	$data = call_user_func(array($className, 'get'.$className.'s'), false, intval($cookie->id_lang), true);
+	$data = call_user_func(array($className, 'get'.$className.'s'), false, (int)($cookie->id_lang), true);
 	$nbProducts = sizeof($data);
 	$controller->pagination();
 
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, intval($cookie->id_lang), true, $controller->p, $controller->n);
+	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
 	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
 	foreach ($data AS &$item)
 		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
-			Language::getIsoById(intval($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
+			Language::getIsoById((int)($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
 
 	$smarty->assign(array(
-		'pages_nb' => ceil($nbProducts / intval($controller->n)),
+		'pages_nb' => ceil($nbProducts / (int)($controller->n)),
 		'nb'.$className.'s' => $nbProducts,
 		'mediumSize' => Image::getSize('medium'),
 		$objectType.'s' => $data,

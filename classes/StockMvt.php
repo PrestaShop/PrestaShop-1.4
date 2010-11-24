@@ -26,12 +26,12 @@ class StockMvtCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = intval($this->id_product);
-		$fields['id_product_attribute'] = intval($this->id_product_attribute);
-		$fields['id_order'] = intval($this->id_order);
-		$fields['id_employee'] = intval($this->id_employee);
-		$fields['id_stock_mvt_reason'] = intval($this->id_stock_mvt_reason);
-		$fields['quantity'] = intval($this->quantity);
+		$fields['id_product'] = (int)($this->id_product);
+		$fields['id_product_attribute'] = (int)($this->id_product_attribute);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['id_employee'] = (int)($this->id_employee);
+		$fields['id_stock_mvt_reason'] = (int)($this->id_stock_mvt_reason);
+		$fields['quantity'] = (int)($this->quantity);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -46,7 +46,7 @@ class StockMvtCore extends ObjectModel
 
 		if ($this->id_product_attribute)
 		{
-			$product = new Product(intval($this->id_product), false, Configuration::get('PS_LANG_DEFAULT'));
+			$product = new Product((int)($this->id_product), false, Configuration::get('PS_LANG_DEFAULT'));
 			return (Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product_attribute SET quantity=quantity+'.(int)$this->quantity.'
 															WHERE id_product='.(int)$product->id.' AND id_product_attribute='.(int)$this->id_product_attribute) AND $product->updateQuantityProductWithAttributeQuantity());
 		}

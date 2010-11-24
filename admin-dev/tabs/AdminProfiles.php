@@ -37,7 +37,7 @@ class AdminProfiles extends AdminTab
 	
 	public function postProcess()
 	{
-	 	if (isset($_GET['delete'.$this->table]) AND $_GET[$this->identifier] == intval(_PS_ADMIN_PROFILE_))
+	 	if (isset($_GET['delete'.$this->table]) AND $_GET[$this->identifier] == (int)(_PS_ADMIN_PROFILE_))
 			$this->_errors[] = $this->l('For security reasons, you cannot delete the Administrator profile');
 		else
 			parent::postProcess();
@@ -59,7 +59,7 @@ class AdminProfiles extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
+						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
 		echo '		<div class="clear"></div>

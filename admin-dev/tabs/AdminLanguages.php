@@ -107,7 +107,7 @@ class AdminLanguages extends AdminTab
 						$this->_errors[] = $this->l('you cannot delete the default language');
 					elseif ($object->id == $cookie->id_lang)
 						$this->_errors[] = $this->l('you cannot delete the language currently in use, please change languages before deleting');
-					elseif ($this->deleteNoPictureImages(intval(Tools::getValue('id_lang'))) AND $object->delete())
+					elseif ($this->deleteNoPictureImages((int)(Tools::getValue('id_lang'))) AND $object->delete())
 						Tools::redirectLink($currentIndex.'&conf=1'.'&token='.$this->token);
 				}
 				else
@@ -137,7 +137,7 @@ class AdminLanguages extends AdminTab
 		elseif (Tools::isSubmit('submitAddlang'))
 		{
 			/* New language */
-			if (intval(Tools::getValue('id_'.$this->table)) == 0)
+			if ((int)(Tools::getValue('id_'.$this->table)) == 0)
 			{
 				if ($this->tabAccess['add'] === '1')
 				{
@@ -166,7 +166,7 @@ class AdminLanguages extends AdminTab
 						$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
 					if (!Validate::isLoadedObject($object = $this->loadObject()))
 						die(Tools::displayError());
-					if (intval($object->id) == intval(Configuration::get('PS_LANG_DEFAULT')) AND intval($_POST['active']) != intval($object->active))
+					if ((int)($object->id) == (int)(Configuration::get('PS_LANG_DEFAULT')) AND (int)($_POST['active']) != (int)($object->active))
 						$this->_errors[] = Tools::displayError('You cannot change the status of the default language.');
 					else
 						parent::postProcess();
@@ -182,7 +182,7 @@ class AdminLanguages extends AdminTab
 			{
 				if (!Validate::isLoadedObject($object = $this->loadObject()))
 					die(Tools::displayError());
-				if (intval($object->id) == intval(Configuration::get('PS_LANG_DEFAULT')))
+				if ((int)($object->id) == (int)(Configuration::get('PS_LANG_DEFAULT')))
 					$this->_errors[] = Tools::displayError('You cannot change the status of the default language.');
 				else
 					return parent::postProcess();
@@ -239,7 +239,7 @@ class AdminLanguages extends AdminTab
 					if (isset($params['active']) AND isset($tr[$key]))
 						echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$params['active'].'&token='.($token != NULL ? $token : $this->token).'"><img src="../img/admin/'.$active['img'].'.gif" alt="active" title="'.$active['title'].'" /></a>';
 					elseif (isset($params['image']))
-						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$id.(isset($tr['id_image']) ? '-'.intval($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$id.'.'.$this->imageType, 45, $this->imageType);
+						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$id.(isset($tr['id_image']) ? '-'.(int)($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$id.'.'.$this->imageType, 45, $this->imageType);
 					elseif (isset($tr[$key]))
 						echo $tr[$key];
 					else

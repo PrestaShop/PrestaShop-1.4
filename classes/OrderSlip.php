@@ -47,10 +47,10 @@ class OrderSlipCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['id_customer'] = intval($this->id_customer);
-		$fields['id_order'] = intval($this->id_order);
+		$fields['id_customer'] = (int)($this->id_customer);
+		$fields['id_order'] = (int)($this->id_order);
 		$fields['conversion_rate'] = floatval($this->conversion_rate);
-		$fields['shipping_cost'] = intval($this->shipping_cost);
+		$fields['shipping_cost'] = (int)($this->shipping_cost);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -59,8 +59,8 @@ class OrderSlipCore extends ObjectModel
 	public function addSlipDetail($orderDetailList, $productQtyList)
 	{
 		foreach ($orderDetailList as $key => $orderDetail)
-			if ($qty = intval($productQtyList[$key]))
-				Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_slip_detail', array('id_order_slip' => intval($this->id), 'id_order_detail' => intval($orderDetail), 'product_quantity' => $qty), 'INSERT');
+			if ($qty = (int)($productQtyList[$key]))
+				Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_slip_detail', array('id_order_slip' => (int)($this->id), 'id_order_detail' => (int)($orderDetail), 'product_quantity' => $qty), 'INSERT');
 	}
 	
 	static public function getOrdersSlip($customer_id, $order_id = false)
@@ -70,8 +70,8 @@ class OrderSlipCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_slip`
-		WHERE `id_customer` = '.intval($customer_id).
-		($order_id ? ' AND `id_order` = '.intval($order_id) : '').'
+		WHERE `id_customer` = '.(int)($customer_id).
+		($order_id ? ' AND `id_order` = '.(int)($order_id) : '').'
 		ORDER BY `date_add` DESC');
 	}
 	
@@ -80,8 +80,8 @@ class OrderSlipCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS(
 		($id_order_detail ? 'SELECT SUM(`product_quantity`) AS `total`' : 'SELECT *').
 		'FROM `'._DB_PREFIX_.'order_slip_detail`'
-		.($id_order_slip ? ' WHERE `id_order_slip` = '.intval($id_order_slip) : '')
-		.($id_order_detail ? ' WHERE `id_order_detail` = '.intval($id_order_detail) : ''));
+		.($id_order_slip ? ' WHERE `id_order_slip` = '.(int)($id_order_slip) : '')
+		.($id_order_detail ? ' WHERE `id_order_detail` = '.(int)($id_order_detail) : ''));
 	}
 	
 	static public function getOrdersSlipProducts($orderSlipId, $order)
@@ -105,9 +105,9 @@ class OrderSlipCore extends ObjectModel
 	{
 		$currency = new Currency($order->id_currency);
 		$orderSlip =  new OrderSlip();
-		$orderSlip->id_customer = intval($order->id_customer);
-		$orderSlip->id_order = intval($order->id);
-		$orderSlip->shipping_cost = intval($shipping_cost);
+		$orderSlip->id_customer = (int)($order->id_customer);
+		$orderSlip->id_order = (int)($order->id);
+		$orderSlip->shipping_cost = (int)($shipping_cost);
 		$orderSlip->conversion_rate = $currency->conversion_rate;
 		if (!$orderSlip->add())
 			return false;

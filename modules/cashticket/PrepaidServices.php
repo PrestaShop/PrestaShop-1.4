@@ -93,11 +93,11 @@ abstract class PrepaidServices extends PaymentModule
 	
 	private function _deleteOrderState()
 	{
-		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state` WHERE `id_order_state` = '.intval(Configuration::get($this->prefix.'ORDER_STATE_ID')));
-		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state_lang` WHERE `id_order_state` = '.intval(Configuration::get($this->prefix.'ORDER_STATE_ID')));
+		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state` WHERE `id_order_state` = '.(int)(Configuration::get($this->prefix.'ORDER_STATE_ID')));
+		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state_lang` WHERE `id_order_state` = '.(int)(Configuration::get($this->prefix.'ORDER_STATE_ID')));
 
-		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state` WHERE `id_order_state` = '.intval(Configuration::get($this->prefix.'ORDER_STATE_PART_ID')));
-		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state_lang` WHERE `id_order_state` = '.intval(Configuration::get($this->prefix.'ORDER_STATE_PART_ID')));
+		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state` WHERE `id_order_state` = '.(int)(Configuration::get($this->prefix.'ORDER_STATE_PART_ID')));
+		DB::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_state_lang` WHERE `id_order_state` = '.(int)(Configuration::get($this->prefix.'ORDER_STATE_PART_ID')));
 		
 		return true;
 	}
@@ -109,7 +109,7 @@ abstract class PrepaidServices extends PaymentModule
 	
 	private function _getSupportedLanguageIsoById($id_lang)
 	{
-		$lang = Language::getIsoById(intval($id_lang));
+		$lang = Language::getIsoById((int)($id_lang));
 		
 		return in_array($lang, $this->supported_languages) ? $lang : $this->default_language;
 	}
@@ -136,8 +136,8 @@ abstract class PrepaidServices extends PaymentModule
 	{
 		global $cookie;
 		
-		$currency = new Currency(intval($cart->id_currency));
-		$language = $this->_getSupportedLanguageIsoById(intval($cookie->id_lang));
+		$currency = new Currency((int)($cart->id_currency));
+		$language = $this->_getSupportedLanguageIsoById((int)($cookie->id_lang));
 		$mid = Configuration::get($this->prefix.'MERCHANT_ID_'.$currency->iso_code);
 		$mtid = $cart->id.'-'.time();
 		$amount = number_format(floatval($cart->getOrderTotal(true, 3)), 2, '.',''); 
@@ -154,8 +154,8 @@ abstract class PrepaidServices extends PaymentModule
 		
 		if ($return_code == 0) 
 		{
-			Disposition::deleteByCartId(intval($cart->id)); // Avoid duplicate disposition (canceled orders in CT for example)
-			Disposition::create(intval($cart->id), $mtid, $amount, $currency_iso);
+			Disposition::deleteByCartId((int)($cart->id)); // Avoid duplicate disposition (canceled orders in CT for example)
+			Disposition::create((int)($cart->id), $mtid, $amount, $currency_iso);
 			$message = $this->getPaymentUrlBase().'?currency='.$currency->iso_code.'&mid='.$mid.'&mtid='.$mtid.'&amount='.$amount.'&language='.$language;
 		}
 
@@ -164,7 +164,7 @@ abstract class PrepaidServices extends PaymentModule
 
 	public function getDispositionState($id_cart)
 	{
-		$disposition = Disposition::getByCartId(intval($id_cart));
+		$disposition = Disposition::getByCartId((int)($id_cart));
 		
 		if (!array_key_exists('id_disposition', $disposition))
 			die(Tools::displayError());
@@ -174,7 +174,7 @@ abstract class PrepaidServices extends PaymentModule
 	
 	public function executeDebit($id_cart, $amount = NULL, $close_flag = 1)
 	{
-		$disposition = Disposition::getByCartId(intval($id_cart));
+		$disposition = Disposition::getByCartId((int)($id_cart));
 		if (!array_key_exists('id_disposition', $disposition)) 
 			die(Tools::displayError());
 
@@ -186,9 +186,9 @@ abstract class PrepaidServices extends PaymentModule
 		if ($result[0] == 0)
 		{
 			if ($amount == $disposition['amount'] || $close_flag)
-				Disposition::delete(intval($disposition['id_disposition']));
+				Disposition::delete((int)($disposition['id_disposition']));
 			else 
-				Disposition::updateAmount(intval($disposition['id_disposition']), floatval($amount));				
+				Disposition::updateAmount((int)($disposition['id_disposition']), floatval($amount));				
 		}
 			
 		return $result;
@@ -391,7 +391,7 @@ abstract class PrepaidServices extends PaymentModule
 			$amount = $disposition['amount'];
 			
 		$amount = number_format($amount, 2, '.', '');
-		$close_flag = intval($amount == $disposition['amount']);
+		$close_flag = (int)($amount == $disposition['amount']);
 	
 		list($resultcode, $errorcode, $errormessage) = $this->executeDebit($disposition['id_cart'], $amount, $close_flag);
 
@@ -406,7 +406,7 @@ abstract class PrepaidServices extends PaymentModule
 		
 		$msg = new Message();
 		$msg->message = $message;
-		$msg->id_order = intval($order->id);
+		$msg->id_order = (int)($order->id);
 		$msg->private = 1;
 		$msg->add();
 
@@ -422,8 +422,8 @@ abstract class PrepaidServices extends PaymentModule
 				$os = Configuration::get($this->prefix.'ORDER_STATE_PART_ID');
 			
 			$history = new OrderHistory();
-			$history->id_order = intval($order->id);
-			$history->changeIdOrderState($os, intval($order->id));
+			$history->id_order = (int)($order->id);
+			$history->changeIdOrderState($os, (int)($order->id));
 			$history->save();	
 			
 			$order->save();
@@ -450,7 +450,7 @@ abstract class PrepaidServices extends PaymentModule
 		
 		$msg = new Message();
 		$msg->message = $message;
-		$msg->id_order = intval($order->id);
+		$msg->id_order = (int)($order->id);
 		$msg->private = 1;
 		$msg->add();
 
@@ -501,7 +501,7 @@ abstract class PrepaidServices extends PaymentModule
 		global $smarty;
 
 		// check currency
-		$currency = new Currency(intval($params['cart']->id_currency));
+		$currency = new Currency((int)($params['cart']->id_currency));
 
 		if (!$this->isCurrencyActive($currency->iso_code))
 			return false;
@@ -513,7 +513,7 @@ abstract class PrepaidServices extends PaymentModule
 		if ($currency->id != $id_currency_max)
 		{
 			$amount = $amount / $currency->conversion_rate;
-			$amount = Tools::convertPrice($amount, new Currency(intval($id_currency_max)));
+			$amount = Tools::convertPrice($amount, new Currency((int)($id_currency_max)));
 		}
 
 		if ($amount > $this->max_amount)
@@ -543,7 +543,7 @@ abstract class PrepaidServices extends PaymentModule
 	{
 		global $smarty, $cookie;
 		$error = 0;
-		$order = new Order(intval($params['id_order']));
+		$order = new Order((int)($params['id_order']));
 		
 		if (!Validate::isLoadedObject($order))
 			die(Tools::displayError());
@@ -551,7 +551,7 @@ abstract class PrepaidServices extends PaymentModule
 		if ($order->module != $this->name)
 			return false;
 		
-		$disposition = Disposition::getByCartId(intval($order->id_cart));
+		$disposition = Disposition::getByCartId((int)($order->id_cart));
 		if (!$disposition) // No disposition = Order paid
 			return false;
 		
@@ -577,13 +577,13 @@ abstract class PrepaidServices extends PaymentModule
 			else 
 				$error = 2; 
 			
-			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', intval($error)) : self::removeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error');
+			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', (int)($error)) : self::removeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error');
 			Tools::redirectAdmin(Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$query_string);
 		} else if (Tools::isSubmit('releasePayment')) {
 			if (!$this->_releasePayment($order, $disposition))
 				$error = 1;
 			
-			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', intval($error)) : $_SERVER['QUERY_STRING'];
+			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', (int)($error)) : $_SERVER['QUERY_STRING'];
 			Tools::redirectAdmin(Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$query_string);
 		}			
 		

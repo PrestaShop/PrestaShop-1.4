@@ -29,7 +29,7 @@ class AdminManufacturers extends AdminTab
 	 	$this->delete = true;
 
 		// Sub tab addresses
-		$countries = Country::getCountries(intval($cookie->id_lang));
+		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 		$this->fieldsDisplayAddresses = array(
@@ -42,7 +42,7 @@ class AdminManufacturers extends AdminTab
 		'country' => array('title' => $this->l('Country'), 'width' => 100, 'type' => 'select', 'select' => $this->countriesArray, 'filter_key' => 'cl!id_country'));
 		$this->_includeTabTitle = array($this->l('Manufacturers addresses'));
 		$this->_joinAddresses = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON 
-		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.intval($cookie->id_lang).') ';
+		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).') ';
 	 	$this->_joinAddresses .= 'LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (a.`id_manufacturer` = m.`id_manufacturer`)';
 		$this->_selectAddresses = 'cl.`name` as country, m.`name` AS manufacturer_name';
 		$this->_includeTab = array('Addresses' => array('addressType' => 'manufacturer', 'fieldsDisplay' => $this->fieldsDisplayAddresses, '_join' => $this->_joinAddresses, '_select' => $this->_selectAddresses));
@@ -63,7 +63,7 @@ class AdminManufacturers extends AdminTab
 			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 		);
 
-		$countries = Country::getCountries(intval($cookie->id_lang));
+		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 
@@ -73,11 +73,11 @@ class AdminManufacturers extends AdminTab
 	public function afterImageUpload()
 	{
 		/* Generate image with differents size */
-		if (($id_manufacturer = intval(Tools::getValue('id_manufacturer'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg'))
+		if (($id_manufacturer = (int)(Tools::getValue('id_manufacturer'))) AND isset($_FILES) AND count($_FILES) AND file_exists(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('manufacturers');
 			foreach ($imagesTypes AS $k => $imageType)
-				imageResize(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg', _PS_MANU_IMG_DIR_.$id_manufacturer.'-'.stripslashes($imageType['name']).'.jpg', intval($imageType['width']), intval($imageType['height']));
+				imageResize(_PS_MANU_IMG_DIR_.$id_manufacturer.'.jpg', _PS_MANU_IMG_DIR_.$id_manufacturer.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 		}
 	}
 
@@ -122,7 +122,7 @@ class AdminManufacturers extends AdminTab
 		
 		// TinyMCE
 		global $cookie;
-		$iso = Language::getIsoById(intval($cookie->id_lang));
+		$iso = Language::getIsoById((int)($cookie->id_lang));
 		echo '
 					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 				<script type="text/javascript">
@@ -192,7 +192,7 @@ class AdminManufacturers extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="mmeta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_title', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_title');
@@ -202,7 +202,7 @@ class AdminManufacturers extends AdminTab
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '<div id="mmeta_description_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_description', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_description');
@@ -213,7 +213,7 @@ class AdminManufacturers extends AdminTab
 		foreach ($this->_languages as $language)
 			echo '
 					<div id="mmeta_keywords_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_keywords', intval($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($manufacturer, 'meta_keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $langtags, 'mmeta_keywords');
@@ -240,8 +240,8 @@ class AdminManufacturers extends AdminTab
 		$manufacturer = $this->loadObject();
 		echo '<h2>'.$manufacturer->name.'</h2>';
 
-		$products = $manufacturer->getProductsLite(intval($cookie->id_lang));
-		$addresses = $manufacturer->getAddresses(intval($cookie->id_lang));
+		$products = $manufacturer->getProductsLite((int)($cookie->id_lang));
+		$addresses = $manufacturer->getAddresses((int)($cookie->id_lang));
 		
 		echo '<h3>'.$this->l('Total addresses:').' '.sizeof($addresses).'</h3>';
 		echo '<hr />';
@@ -275,14 +275,14 @@ class AdminManufacturers extends AdminTab
 		echo '<h3>'.$this->l('Total products:').' '.sizeof($products).'</h3>';
 		foreach ($products AS $product)
 		{
-			$product = new Product($product['id_product'], false, intval($cookie->id_lang));
+			$product = new Product($product['id_product'], false, (int)($cookie->id_lang));
 			echo '<hr />';
 			if (!$product->hasAttributes())
 			{
 				echo '
 				<div style="float:right;">
-					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
-					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
 				</div>
 				<table border="0" cellpadding="0" cellspacing="0" class="table width3">
 					<tr>
@@ -298,10 +298,10 @@ class AdminManufacturers extends AdminTab
 			{
 				echo '
 				<div style="float:right;">
-					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
-					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
+					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
 				</div>
-				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.intval(Tab::getIdFromClassName('AdminCatalog')).intval($cookie->id_employee)).'">'.$product->name.'</a></h3>
+				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.$product->name.'</a></h3>
 				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
 					<tr>
 	                    <th>'.$this->l('Attribute name').'</th>
@@ -311,7 +311,7 @@ class AdminManufacturers extends AdminTab
 	                   '.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<th class="right" width="40">'.$this->l('Quantity').'</th>' : '').'
                 	</tr>';
 			     	/* Build attributes combinaisons */
-				$combinaisons = $product->getAttributeCombinaisons(intval($cookie->id_lang));
+				$combinaisons = $product->getAttributeCombinaisons((int)($cookie->id_lang));
 				foreach ($combinaisons AS $k => $combinaison)
 				{
 					$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];

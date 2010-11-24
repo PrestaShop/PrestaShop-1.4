@@ -20,7 +20,7 @@ class OrderDetailControllerCore extends FrontController
 
 		if (Tools::isSubmit('submitMessage'))
 		{
-			$idOrder = intval(Tools::getValue('id_order'));
+			$idOrder = (int)(Tools::getValue('id_order'));
 			$msgText = htmlentities(Tools::getValue('msgText'), ENT_COMPAT, 'UTF-8');
 
 			if (!$idOrder OR !Validate::isUnsignedId($idOrder))
@@ -31,34 +31,34 @@ class OrderDetailControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('message is not valid (HTML is not allowed)');
 			if(!sizeof($this->errors))
 			{
-				$order = new Order(intval($idOrder));
+				$order = new Order((int)($idOrder));
 				if (Validate::isLoadedObject($order) AND $order->id_customer == $this->cookie->id_customer)
 				{
 					$message = new Message();
-					$message->id_customer = intval($this->cookie->id_customer);
+					$message->id_customer = (int)($this->cookie->id_customer);
 					$message->message = $msgText;
-					$message->id_order = intval($idOrder);
+					$message->id_order = (int)($idOrder);
 					$message->private = false;
 					$message->add();
 					if (!Configuration::get('PS_MAIL_EMAIL_MESSAGE'))
 						$to = strval(Configuration::get('PS_SHOP_EMAIL'));
 					else
 					{
-						$to = new Contact(intval(Configuration::get('PS_MAIL_EMAIL_MESSAGE')));
+						$to = new Contact((int)(Configuration::get('PS_MAIL_EMAIL_MESSAGE')));
 						$to = strval($to->email);
 					}
 					$toName = strval(Configuration::get('PS_SHOP_NAME'));
-					$customer = new Customer(intval($this->cookie->id_customer));
+					$customer = new Customer((int)($this->cookie->id_customer));
 					if (Validate::isLoadedObject($customer))
-						Mail::Send(intval($this->cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
+						Mail::Send((int)($this->cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
 						array(
 						'{lastname}' => $customer->lastname, 
 						'{firstname}' => $customer->firstname, 
-						'{id_order}' => intval($message->id_order), 
+						'{id_order}' => (int)($message->id_order), 
 						'{message}' => $message->message),
 						$to, $toName, $customer->email, $customer->firstname.' '.$customer->lastname);
 					if (Tools::getValue('ajax') != 'true')
-						Tools::redirect('order-detail.php?id_order='.intval($idOrder));
+						Tools::redirect('order-detail.php?id_order='.(int)($idOrder));
 				}
 				else
 				{
@@ -67,40 +67,40 @@ class OrderDetailControllerCore extends FrontController
 			}
 		}
 
-		if (!$id_order = intval(Tools::getValue('id_order')) OR !Validate::isUnsignedId($id_order))
+		if (!$id_order = (int)(Tools::getValue('id_order')) OR !Validate::isUnsignedId($id_order))
 			$this->errors[] = Tools::displayError('order ID is required');
 		else
 		{
 			$order = new Order($id_order);
 			if (Validate::isLoadedObject($order) AND $order->id_customer == $this->cookie->id_customer)
 			{
-				$id_order_state = intval($order->getCurrentState());
-				$carrier = new Carrier(intval($order->id_carrier), intval($order->id_lang));
-				$addressInvoice = new Address(intval($order->id_address_invoice));
-				$addressDelivery = new Address(intval($order->id_address_delivery));
+				$id_order_state = (int)($order->getCurrentState());
+				$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
+				$addressInvoice = new Address((int)($order->id_address_invoice));
+				$addressDelivery = new Address((int)($order->id_address_delivery));
 				if ($order->total_discounts > 0)
 					$this->smarty->assign('total_old', floatval($order->total_paid - $order->total_discounts));
 				$products = $order->getProducts();
-				$customizedDatas = Product::getAllCustomizedDatas(intval($order->id_cart));
+				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
 
 				$this->smarty->assign(array(
 					'shop_name' => strval(Configuration::get('PS_SHOP_NAME')),
 					'order' => $order,
-					'return_allowed' => intval($order->isReturnable()),
+					'return_allowed' => (int)($order->isReturnable()),
 					'currency' => new Currency($order->id_currency),
-					'order_state' => intval($id_order_state),
-					'invoiceAllowed' => intval(Configuration::get('PS_INVOICE')),
-					'invoice' => (OrderState::invoiceAvailable(intval($id_order_state)) AND $order->invoice_number),
-					'order_history' => $order->getHistory(intval($this->cookie->id_lang), false, true),
+					'order_state' => (int)($id_order_state),
+					'invoiceAllowed' => (int)(Configuration::get('PS_INVOICE')),
+					'invoice' => (OrderState::invoiceAvailable((int)($id_order_state)) AND $order->invoice_number),
+					'order_history' => $order->getHistory((int)($this->cookie->id_lang), false, true),
 					'products' => $products,
 					'discounts' => $order->getDiscounts(),
 					'carrier' => $carrier,
 					'address_invoice' => $addressInvoice,
-					'invoiceState' => (Validate::isLoadedObject($addressInvoice) AND $addressInvoice->id_state) ? new State(intval($addressInvoice->id_state)) : false,
+					'invoiceState' => (Validate::isLoadedObject($addressInvoice) AND $addressInvoice->id_state) ? new State((int)($addressInvoice->id_state)) : false,
 					'address_delivery' => $addressDelivery,
-					'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State(intval($addressDelivery->id_state)) : false,
-					'messages' => Message::getMessagesByOrderId(intval($order->id)),
+					'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State((int)($addressDelivery->id_state)) : false,
+					'messages' => Message::getMessagesByOrderId((int)($order->id)),
 					'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 					'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 					'use_tax' => Configuration::get('PS_TAX'),

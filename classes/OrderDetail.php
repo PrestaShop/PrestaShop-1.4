@@ -125,15 +125,15 @@ class OrderDetailCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['id_order'] = intval($this->id_order);
-		$fields['product_id'] = intval($this->product_id);
-		$fields['product_attribute_id'] = intval($this->product_attribute_id);
+		$fields['id_order'] = (int)($this->id_order);
+		$fields['product_id'] = (int)($this->product_id);
+		$fields['product_attribute_id'] = (int)($this->product_attribute_id);
 		$fields['product_name'] = pSQL($this->product_name);
-		$fields['product_quantity'] = intval($this->product_quantity);
-		$fields['product_quantity_in_stock'] = intval($this->product_quantity_in_stock);
-		$fields['product_quantity_return'] = intval($this->product_quantity_return);
-		$fields['product_quantity_refunded'] = intval($this->product_quantity_refunded);
-		$fields['product_quantity_reinjected'] = intval($this->product_quantity_reinjected);
+		$fields['product_quantity'] = (int)($this->product_quantity);
+		$fields['product_quantity_in_stock'] = (int)($this->product_quantity_in_stock);
+		$fields['product_quantity_return'] = (int)($this->product_quantity_return);
+		$fields['product_quantity_refunded'] = (int)($this->product_quantity_refunded);
+		$fields['product_quantity_reinjected'] = (int)($this->product_quantity_reinjected);
 		$fields['product_price'] = floatval($this->product_price);
 		$fields['reduction_percent'] = floatval($this->reduction_percent);
 		$fields['reduction_amount'] = floatval($this->reduction_amount);
@@ -147,7 +147,7 @@ class OrderDetailCore extends ObjectModel
 		$fields['tax_rate'] = floatval($this->tax_rate);
 		$fields['ecotax'] = floatval($this->ecotax);
 		$fields['download_hash'] = pSQL($this->download_hash);
-		$fields['download_nb'] = intval($this->download_nb);
+		$fields['download_nb'] = (int)($this->download_nb);
 		$fields['download_deadline'] = pSQL($this->download_deadline);
 		
 		return $fields;
@@ -167,8 +167,8 @@ class OrderDetailCore extends ObjectModel
 	static public function incrementDownload($id_order_detail, $increment=1)
 	{
 		$sql = 'UPDATE `'._DB_PREFIX_.'order_detail`
-			SET `download_nb` = `download_nb` + '.intval($increment).'
-			WHERE `id_order_detail`= '.intval($id_order_detail).'
+			SET `download_nb` = `download_nb` + '.(int)($increment).'
+			WHERE `id_order_detail`= '.(int)($id_order_detail).'
 			LIMIT 1';
 		return Db::getInstance()->Execute($sql);
 	}

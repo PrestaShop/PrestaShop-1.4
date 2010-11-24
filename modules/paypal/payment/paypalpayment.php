@@ -9,7 +9,7 @@ class PaypalPayment extends Paypal
 		global $cookie, $cart;
 
 		// Getting cart informations
-		$currency = new Currency(intval($cart->id_currency));
+		$currency = new Currency((int)($cart->id_currency));
 		if (!Validate::isLoadedObject($currency))
 			$this->_logs[] = $this->l('Not a valid currency');
 		if (sizeof($this->_logs))

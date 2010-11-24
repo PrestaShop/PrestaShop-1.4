@@ -4,12 +4,12 @@ include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
 
 /* Load objects */
-$cart = new Cart(intval($cookie->id_cart));
-$address = new Address(intval($cart->id_address_delivery));
-$countryObj = new Country(intval($address->id_country));
-$customer = new Customer(intval($cart->id_customer));
-$currency = new Currency(intval($cart->id_currency));
-$lang = new Language(intval($cookie->id_lang));
+$cart = new Cart((int)($cookie->id_cart));
+$address = new Address((int)($cart->id_address_delivery));
+$countryObj = new Country((int)($address->id_country));
+$customer = new Customer((int)($cart->id_customer));
+$currency = new Currency((int)($cart->id_currency));
+$lang = new Language((int)($cookie->id_lang));
 
 $mbParams = array();
 
@@ -258,11 +258,11 @@ $country['ZW'] = 'ZWE';
 /* About the merchant */
 $mbParams['pay_to_email'] = Configuration::get('MB_PAY_TO_EMAIL');
 $mbParams['recipient_description'] = Configuration::get('PS_SHOP_NAME');
-$mbParams['hide_login'] = intval(Configuration::get('MB_HIDE_LOGIN'));
-$mbParams['id_logo'] = intval(Configuration::get('MB_ID_LOGO'));
+$mbParams['hide_login'] = (int)(Configuration::get('MB_HIDE_LOGIN'));
+$mbParams['id_logo'] = (int)(Configuration::get('MB_ID_LOGO'));
 if ($mbParams['id_logo'] === 0)
 	$mbParams['id_logo'] = 1;
-$mbParams['id_logo_wallet'] = intval(Configuration::get('MB_ID_LOGO_WALLET'));
+$mbParams['id_logo_wallet'] = (int)(Configuration::get('MB_ID_LOGO_WALLET'));
 if ($mbParams['id_logo_wallet'] === 0)
 	$mbParams['id_logo_wallet'] = 1;
 $mbParams['return_url'] = Configuration::get('MB_RETURN_URL');
@@ -282,7 +282,7 @@ $mbParams['language'] = strtoupper($lang->iso_code);
 $mbParams['date_of_birth'] = substr($customer->birthday, 5, 2).substr($customer->birthday, 8, 2).substr($customer->birthday, 0, 4);
 
 /* About the cart */
-$mbParams['transaction_id'] = intval($cart->id).'_'.date('YmdHis');
+$mbParams['transaction_id'] = (int)($cart->id).'_'.date('YmdHis');
 $mbParams['currency'] = $currency->iso_code;
 $mbParams['amount'] = number_format($cart->getOrderTotal(), 2, '.', '');
 

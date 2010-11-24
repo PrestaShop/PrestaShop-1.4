@@ -18,8 +18,8 @@
 						<td class="col-left"><label for="id_category_default" class="t">'.$adminProducts->getL('Default category:').'</label></td>
 						<td>
 							<select id="id_category_default" name="id_category_default" onchange="checkDefaultCategory(this.value);">';
-		$categories = Category::getCategories(intval($cookie->id_lang), false);
-		Category::recurseCategory($categories, $categories[0][1], 1, intval(Tools::getValue('id_category_default')));
+		$categories = Category::getCategories((int)($cookie->id_lang), false);
+		Category::recurseCategory($categories, $categories[0][1], 1, (int)(Tools::getValue('id_category_default')));
 		echo '			</select>
 						</td>
 					</tr>
@@ -46,10 +46,10 @@
 			if (Tools::isSubmit('categoryBox'))
 				foreach (Tools::getValue('categoryBox') AS $k => $row)
 					$index[] = $row;
-			elseif (intval(Tools::getValue('id_product')))
-				foreach (Product::getIndexedCategories(intval(Tools::getValue('id_product'))) AS $k => $row)
+			elseif ((int)(Tools::getValue('id_product')))
+				foreach (Product::getIndexedCategories((int)(Tools::getValue('id_product'))) AS $k => $row)
 					$index[] = $row['id_category'];
-			$adminProducts->recurseCategoryForInclude(intval(Tools::getValue('id_product')), $index, $categories, $categories[0][1], 1, intval(Tools::getValue('id_category_default')));
+			$adminProducts->recurseCategoryForInclude((int)(Tools::getValue('id_product')), $index, $categories, $categories[0][1], 1, (int)(Tools::getValue('id_category_default')));
 			echo '				</table>
 								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$adminProducts->getL('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
 							</div>

@@ -10,7 +10,7 @@ class PackCore extends Product
 	{
 		if (!array_key_exists($id_product, self::$cacheIsPack))
 		{
-			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product));
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.(int)($id_product));
 			self::$cacheIsPack[$id_product] = ($result > 0);
 		}
 		return self::$cacheIsPack[$id_product];
@@ -20,7 +20,7 @@ class PackCore extends Product
 	{
 		if (!array_key_exists($id_product, self::$cacheIsPacked))
 		{
-			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.intval($id_product));
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.(int)($id_product));
 			self::$cacheIsPacked[$id_product] = ($result > 0);
 		}
 		return self::$cacheIsPacked[$id_product];
@@ -43,11 +43,11 @@ class PackCore extends Product
 	{
 		if (array_key_exists($id_product, self::$cachePackItems))
 			return self::$cachePackItems[$id_product];
-		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.intval($id_product));
+		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.(int)($id_product));
 		$arrayResult = array();
 		foreach ($result AS $row)
 		{
-			$p = new Product($row['id_product_item'], false, intval($id_lang));
+			$p = new Product($row['id_product_item'], false, (int)($id_lang));
 			$p->pack_quantity = $row['quantity'];
 			$arrayResult[] = $p;
 		}
@@ -58,9 +58,9 @@ class PackCore extends Product
 	public static function isInStock($id_product)
 	{
 		// Not enough, the quantity must be > to the item quantity of the pack, not just > 0
-		$items = self::getItems(intval($id_product), Configuration::get('PS_LANG_DEFAULT'));
+		$items = self::getItems((int)($id_product), Configuration::get('PS_LANG_DEFAULT'));
 		foreach ($items AS $item)
-			if ($item->quantity == 0 AND !$item->isAvailableWhenOutOfStock(intval($item->out_of_stock)))
+			if ($item->quantity == 0 AND !$item->isAvailableWhenOutOfStock((int)($item->out_of_stock)))
 				return false;
 		return true;
 	}
@@ -71,12 +71,12 @@ class PackCore extends Product
 		SELECT p.*, pl.*, i.`id_image`, il.`legend`, t.`rate`, cl.`name` AS category_default, a.quantity AS pack_quantity
 		FROM `'._DB_PREFIX_.'pack` a
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = a.id_product_item
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.id_product = pl.id_product AND pl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.id_product = pl.id_product AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
-		WHERE a.`id_product_pack` = '.intval($id_product));
+		WHERE a.`id_product_pack` = '.(int)($id_product));
 		if (!$full)
 			return $result;
 			
@@ -94,16 +94,16 @@ class PackCore extends Product
 		FROM `'._DB_PREFIX_.'product` p
 		NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
-		WHERE pl.`id_lang` = '.intval($id_lang).'
+		WHERE pl.`id_lang` = '.(int)($id_lang).'
 		AND p.`id_product` IN (
 			SELECT a.`id_product_pack`
 			FROM `'._DB_PREFIX_.'pack` a
-			WHERE a.`id_product_item` = '.intval($id_product).')
+			WHERE a.`id_product_item` = '.(int)($id_product).')
 		';
 		if ($limit)
-			$sql .= ' LIMIT '.intval($limit);
+			$sql .= ' LIMIT '.(int)($limit);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$full)
 			return $result;
@@ -117,8 +117,8 @@ class PackCore extends Product
 	
 	public static function deleteItems($id_product)
 	{
-		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 0 WHERE id_product = '.intval($id_product).' LIMIT 1');
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'pack` WHERE `id_product_pack` = '.intval($id_product));
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 0 WHERE id_product = '.(int)($id_product).' LIMIT 1');
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'pack` WHERE `id_product_pack` = '.(int)($id_product));
 	}
 	
 	public static function addItems($id_product, $ids)
@@ -143,14 +143,14 @@ class PackCore extends Product
 	*/
 	public static function addItem($id_product, $id_item, $qty)
 	{
-		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 1 WHERE id_product = '.intval($id_product).' LIMIT 1');
-		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => intval($id_product), 'id_product_item' => intval($id_item), 'quantity' => intval($qty)), 'INSERT');
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_is_pack = 1 WHERE id_product = '.(int)($id_product).' LIMIT 1');
+		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'pack', array('id_product_pack' => (int)($id_product), 'id_product_item' => (int)($id_item), 'quantity' => (int)($qty)), 'INSERT');
 	}
 	
 	public static function duplicate($id_product_old, $id_product_new)
 	{
 		Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'pack (id_product_pack, id_product_item, quantity)
-		(SELECT '.intval($id_product_new).', id_product_item, quantity FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.intval($id_product_old).')');
+		(SELECT '.(int)($id_product_new).', id_product_item, quantity FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.(int)($id_product_old).')');
 		
 		// If return query result, a non-pack product will return false
 		return true;

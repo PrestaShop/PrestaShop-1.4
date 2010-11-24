@@ -27,7 +27,7 @@ class BlockSpecials extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitSpecials'))
 		{
-			Configuration::updateValue('PS_BLOCK_SPECIALS_DISPLAY', intval(Tools::getValue('always_display')));
+			Configuration::updateValue('PS_BLOCK_SPECIALS_DISPLAY', (int)(Tools::getValue('always_display')));
 			$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 		return $output.$this->displayForm();
@@ -55,7 +55,7 @@ class BlockSpecials extends Module
 	public function hookRightColumn($params)
 	{
 		global $smarty;
-		if (!$special = Product::getRandomSpecial(intval($params['cookie']->id_lang)) AND !Configuration::get('PS_BLOCK_SPECIALS_DISPLAY'))
+		if (!$special = Product::getRandomSpecial((int)($params['cookie']->id_lang)) AND !Configuration::get('PS_BLOCK_SPECIALS_DISPLAY'))
 			return;
 		$smarty->assign(array('special' => $special,
 													'priceWithoutReduction_tax_excl' => Tools::ps_round($special['price_without_reduction'] / (1 + $special['rate'] / 100), 2),

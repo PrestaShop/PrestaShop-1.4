@@ -7,8 +7,8 @@ require_once(dirname(__FILE__).'/WishList.php');
 $error = '';
 
 $token = Tools::getValue('token');
-$id_product = intval(Tools::getValue('id_product'));
-$id_product_attribute = intval(Tools::getValue('id_product_attribute'));
+$id_product = (int)(Tools::getValue('id_product'));
+$id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 strcmp(Tools::getToken(false), Tools::getValue('static_token')))
 	$error = Tools::displayError('invalid token');

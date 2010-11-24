@@ -100,7 +100,7 @@ class StatsBestCategories extends ModuleGrid
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
-		$id_lang = intval($this->getLang());
+		$id_lang = (int)($this->getLang());
 	
 		$this->_totalCount = $this->getTotalCount();
 

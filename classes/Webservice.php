@@ -32,7 +32,7 @@ class WebserviceCore extends ObjectModel
 		parent::validateFields();
 		
 		$fields['key'] = pSQL($this->key);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		
 		return $fields;
 	}
@@ -91,11 +91,11 @@ class WebserviceCore extends ObjectModel
 		if (
 			Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'webservice_permission`
-				WHERE `id_webservice_account` = '.intval($this->id)) === false
+				WHERE `id_webservice_account` = '.(int)($this->id)) === false
 			||
 			Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'webservice_permission`
-				WHERE `id_webservice_account` = '.intval($this->id)) === false
+				WHERE `id_webservice_account` = '.(int)($this->id)) === false
 			)
 			return false;
 		return true;

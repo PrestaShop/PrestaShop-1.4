@@ -172,7 +172,7 @@ class LanguageCore extends ObjectModel
 		
 		$fields['name'] = pSQL($this->name);
 		$fields['iso_code'] = pSQL(strtolower($this->iso_code));
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		
 		return $fields;
 	}
@@ -183,8 +183,8 @@ class LanguageCore extends ObjectModel
 			return false;
 		
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-			intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-			intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 			Configuration::get('PS_HTACCESS_SPECIFIC')
 		));
 	}
@@ -193,8 +193,8 @@ class LanguageCore extends ObjectModel
 	{
 		if (parent::toggleStatus())
 			return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 								Configuration::get('PS_HTACCESS_SPECIFIC')
 								);
 	}
@@ -247,14 +247,14 @@ class LanguageCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
 			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]))
-				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.intval($this->id)))
+				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($this->id)))
 					return false;
 					
 		/* Delete tags */
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tag WHERE id_lang = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tag WHERE id_lang = '.(int)($this->id));
 		
 		/* Delete search words */
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_lang = '.intval($this->id));
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_lang = '.(int)($this->id));
 
 		/* Files deletion */
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)
@@ -270,8 +270,8 @@ class LanguageCore extends ObjectModel
 			return false;
 		
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-									intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-									intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC')
 								);		
 	}
@@ -284,13 +284,13 @@ class LanguageCore extends ObjectModel
 		$result = true;
 		foreach ($selection AS $id)
 		{
-			$this->id = intval($id);
+			$this->id = (int)($id);
 			$result = $result AND $this->delete();
 		}
 		
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-								intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-								intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 								Configuration::get('PS_HTACCESS_SPECIFIC')
 							);	
 		
@@ -306,16 +306,16 @@ class LanguageCore extends ObjectModel
 	{
 		$languages = array();
 		foreach (self::$_LANGUAGES AS $language)
-			if (!$active OR ($active AND intval($language['active'])))
+			if (!$active OR ($active AND (int)($language['active'])))
 				$languages[] = $language;
 		return $languages;
 	}
 
 	static public function getLanguage($id_lang)
 	{
-		if (!array_key_exists(intval($id_lang), self::$_LANGUAGES))
+		if (!array_key_exists((int)($id_lang), self::$_LANGUAGES))
 			return false;
-		return self::$_LANGUAGES[intval($id_lang)];
+		return self::$_LANGUAGES[(int)($id_lang)];
 	}
 
 	/**
@@ -326,8 +326,8 @@ class LanguageCore extends ObjectModel
 	  */
 	static public function getIsoById($id_lang)
 	{
-		if (isset(self::$_LANGUAGES[intval($id_lang)]['iso_code']))
-			return self::$_LANGUAGES[intval($id_lang)]['iso_code'];
+		if (isset(self::$_LANGUAGES[(int)($id_lang)]['iso_code']))
+			return self::$_LANGUAGES[(int)($id_lang)]['iso_code'];
 		return false;
 	}
 	
@@ -347,7 +347,7 @@ class LanguageCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'lang`
 		WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
 		if (isset($result['id_lang']))
-			return intval($result['id_lang']);
+			return (int)($result['id_lang']);
 	}
 
 	/**
@@ -371,10 +371,10 @@ class LanguageCore extends ObjectModel
 		foreach ($result AS $row)
 			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]) AND $row['Tables_in_'._DB_NAME_] != _DB_PREFIX_.'lang')
 			{
-				$result2 = Db::getInstance()->ExecuteS('SELECT * FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.intval($from));
+				$result2 = Db::getInstance()->ExecuteS('SELECT * FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($from));
 				if (!sizeof($result2))
 					continue;
-				Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.intval($to));
+				Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($to));
 				$query = 'INSERT INTO `'.$row['Tables_in_'._DB_NAME_].'` VALUES ';
 				foreach ($result2 AS $row2)
 				{
@@ -402,7 +402,7 @@ class LanguageCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'lang`');
 		
 		foreach ($result AS $row)
-			self::$_LANGUAGES[intval($row['id_lang'])] = array('id_lang' => intval($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => intval($row['active']));
+			self::$_LANGUAGES[(int)($row['id_lang'])] = array('id_lang' => (int)($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => (int)($row['active']));
 	}
 		
 	public function update($nullValues = false)
@@ -411,8 +411,8 @@ class LanguageCore extends ObjectModel
 			return false;
 			
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-							intval(Configuration::get('PS_REWRITING_SETTINGS')),		
-							intval(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+							(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+							(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 							Configuration::get('PS_HTACCESS_SPECIFIC')
 							);
 	}	
@@ -436,7 +436,7 @@ class LanguageCore extends ObjectModel
 				
 				if (!$lang->name OR !$lang->add())
 					return false;
-				$insert_id = intval($lang->id);
+				$insert_id = (int)($lang->id);
 				
 				if ($lang_packs)
 				{

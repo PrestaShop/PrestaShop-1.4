@@ -40,7 +40,7 @@ class AttributeGroupCore extends ObjectModel
 	{
 		parent::validateFields();
 
-		$fields['is_color_group'] = intval($this->is_color_group);
+		$fields['is_color_group'] = (int)($this->is_color_group);
 
 		return $fields;
 	}
@@ -66,8 +66,8 @@ class AttributeGroupCore extends ObjectModel
 		$attributeCombinations = Db::getInstance()->ExecuteS('SELECT pac.`id_attribute`, pa.`id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` pa LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pa.`id_product_attribute` = pac.`id_product_attribute`)');
 		$toRemove = array();
 		foreach ($attributeCombinations AS $attributeCombination)
-			if (intval($attributeCombination['id_attribute']) == 0)
-				$toRemove[] = intval($attributeCombination['id_product_attribute']);
+			if ((int)($attributeCombination['id_attribute']) == 0)
+				$toRemove[] = (int)($attributeCombination['id_product_attribute']);
 		if (!empty($toRemove) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $toRemove).')') === false)
 			return false;
 		return true;
@@ -76,20 +76,20 @@ class AttributeGroupCore extends ObjectModel
 	public function delete()
 	{
 		/* Select children in order to find linked combinations */
-		$attributeIds = Db::getInstance()->ExecuteS('SELECT `id_attribute` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.intval($this->id));
+		$attributeIds = Db::getInstance()->ExecuteS('SELECT `id_attribute` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.(int)($this->id));
 		if ($attributeIds === false)
 			return false;
 		/* Removing attributes to the found combinations */
 		$toRemove = array();
 		foreach ($attributeIds AS $attribute)
-			$toRemove[] = intval($attribute['id_attribute']);
+			$toRemove[] = (int)($attribute['id_attribute']);
 		if (!empty($toRemove) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `id_attribute` IN ('.implode(', ', $toRemove).')') === false)
 			return false;
 		/* Remove combinations if they do not possess attributes anymore */
 		if (!self::cleanDeadCombinations())
 			return false;
 	 	/* Also delete related attributes */
-		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_lang` WHERE `id_attribute` IN (SELECT id_attribute FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.intval($this->id).')') === false OR Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.intval($this->id)) === false)
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_lang` WHERE `id_attribute` IN (SELECT id_attribute FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.(int)($this->id).')') === false OR Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute_group` = '.(int)($this->id)) === false)
 			return false;
 		return parent::delete();
 	}
@@ -106,8 +106,8 @@ class AttributeGroupCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'attribute` a
-		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.intval($id_lang).')
-		WHERE a.`id_attribute_group` = '.intval($id_attribute_group).'
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($id_lang).')
+		WHERE a.`id_attribute_group` = '.(int)($id_attribute_group).'
 		ORDER BY `name`');
 	}
 	
@@ -122,7 +122,7 @@ class AttributeGroupCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'attribute_group` ag
-		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND `id_lang` = '.intval($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND `id_lang` = '.(int)($id_lang).')
 		ORDER BY `name` ASC');
 	}
 	

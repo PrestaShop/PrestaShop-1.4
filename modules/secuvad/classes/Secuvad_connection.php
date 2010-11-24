@@ -21,7 +21,7 @@ class Secuvad_connection
 		$toReturn = 'false';
 		$url = $this->url;
 		if ($key == 'bulk_transactions')
-			$post = 'siteid='.intval(Configuration::get('SECUVAD_ID')).'&bulk_transactions='.$this->data;
+			$post = 'siteid='.(int)(Configuration::get('SECUVAD_ID')).'&bulk_transactions='.$this->data;
 		else
 			$post = $key.'='.$this->data;
 		$ci = curl_init($url);
@@ -68,18 +68,18 @@ class Secuvad_connection
     		if ($feedback == 'OK' AND ($balise == 'fraude_report' OR $balise == 'impaye_report'))
     		{
     			if ($balise == 'fraude_report')
-    				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Fraud: '.intval($idtransaction).'/'.$feedback);
+    				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Fraud: '.(int)($idtransaction).'/'.$feedback);
     			elseif ($balise == 'impaye_report')
-    				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Unpaid: '.intval($idtransaction).'/'.$feedback);
+    				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Unpaid: '.(int)($idtransaction).'/'.$feedback);
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'secuvad_order` 
 				SET `is_fraud` = 1 
-				WHERE `id_secuvad_order` = '.intval($idtransaction));
+				WHERE `id_secuvad_order` = '.(int)($idtransaction));
 				return 'true';
     		}
     		else
     		{
-   				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Error: '.intval($idtransaction).'/'.$feedback);
+   				$this->secuvad_h->secuvad_log('secuvad_connection.php::report_fraud() '."\n\t".' Error: '.(int)($idtransaction).'/'.$feedback);
     			return $feedback;
     		}
     	}
@@ -112,16 +112,16 @@ class Secuvad_connection
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'secuvad_order` 
 				SET `secuvad_status` = 4, `error` = \''.pSQL($erreur).'\' 
-				WHERE `id_secuvad_order` = '.intval($idtransaction)); 
+				WHERE `id_secuvad_order` = '.(int)($idtransaction)); 
     		}
     		else
     		{
-    			$this->secuvad_h->secuvad_log('secuvad_connection.php::send_transaction() '."\n\t".' Response: '.intval($idtransaction).'/'.intval($score).'/'.$advice);    				    				  
+    			$this->secuvad_h->secuvad_log('secuvad_connection.php::send_transaction() '."\n\t".' Response: '.(int)($idtransaction).'/'.(int)($score).'/'.$advice);    				    				  
     			if(preg_match('/[0-9]+/', $score))
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'secuvad_order` 
-					SET `secuvad_status` = 5, `score` = '.intval($score).', error = \'\' 
-					WHERE `id_secuvad_order` = '.intval($idtransaction));   
+					SET `secuvad_status` = 5, `score` = '.(int)($score).', error = \'\' 
+					WHERE `id_secuvad_order` = '.(int)($idtransaction));   
     			else
     			{
     				if (strtoupper($advice) == 'INVALIDE')
@@ -138,8 +138,8 @@ class Secuvad_connection
 						$secuvad_status	= 4;
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'secuvad_order` 
-					SET `advice` = \''.pSQL($advice).'\', `error` = \'\', `secuvad_status` = '.intval($secuvad_status).' 
-					WHERE `id_secuvad_order` = '.intval($idtransaction));
+					SET `advice` = \''.pSQL($advice).'\', `error` = \'\', `secuvad_status` = '.(int)($secuvad_status).' 
+					WHERE `id_secuvad_order` = '.(int)($idtransaction));
     			}		
     		}	
     	}

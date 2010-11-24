@@ -45,8 +45,8 @@ class StatsCarrier extends ModuleGraph
 		SELECT COUNT(o.`id_order`) as total
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
-		'.(intval(Tools::getValue('id_order_state')) ? 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval(Tools::getValue('id_order_state')) : ''));
-		$states = OrderState::getOrderStates(intval($cookie->id_lang));
+		'.((int)(Tools::getValue('id_order_state')) ? 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.(int)(Tools::getValue('id_order_state')) : ''));
+		$states = OrderState::getOrderStates((int)($cookie->id_lang));
 	
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
@@ -66,14 +66,14 @@ class StatsCarrier extends ModuleGraph
 	
 	public function setOption($option, $layers = 1)
 	{
-		$this->_option = intval($option);
+		$this->_option = (int)($option);
 	}
 	
 	protected function getData($layers)
 	{
 		$stateQuery = '';
-		if (intval($this->_option))
-			$stateQuery = 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.intval($this->_option);
+		if ((int)($this->_option))
+			$stateQuery = 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.(int)($this->_option);
 		$this->_titles['main'] = $this->l('Percentage of orders by carrier');
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.name, COUNT(DISTINCT o.`id_order`) as total

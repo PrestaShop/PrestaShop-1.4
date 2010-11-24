@@ -76,25 +76,25 @@ class productsCategory extends Module
 	{
 		global $smarty, $cookie;
 		
-		$idProduct = intval(Tools::getValue('id_product'));
-		$product = new Product(intval($idProduct));
+		$idProduct = (int)(Tools::getValue('id_product'));
+		$product = new Product((int)($idProduct));
 		
 		$category = new Category(1);
 		if (isset($params['category']->id_category))
 			$category = $params['category'];
 		if ($category->id_category == 1 AND isset($product->id_category_default) AND $product->id_category_default > 1)
-			$category = New Category(intval($product->id_category_default));
+			$category = New Category((int)($product->id_category_default));
 		if (!Validate::isLoadedObject($category))
 			Tools::displayError('Bad category!');
-		if (intval($category->id_category) === 1)
+		if ((int)($category->id_category) === 1)
 			return;
 		
 		if (!$category->active) 
 			return;
 
 		// Get infos
-		$sizeOfCategoryProducts = $category->getProducts(intval($cookie->id_lang), 1, 30, NULL, NULL, true);
-		$categoryProducts = $category->getProducts(intval($cookie->id_lang), 1, $sizeOfCategoryProducts);
+		$sizeOfCategoryProducts = $category->getProducts((int)($cookie->id_lang), 1, 30, NULL, NULL, true);
+		$categoryProducts = $category->getProducts((int)($cookie->id_lang), 1, $sizeOfCategoryProducts);
 		
 		$middlePosition = 0;
 		

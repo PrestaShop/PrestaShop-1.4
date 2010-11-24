@@ -49,12 +49,12 @@ class StateCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_country'] = intval($this->id_country);
-		$fields['id_zone'] = intval($this->id_zone);
+		$fields['id_country'] = (int)($this->id_country);
+		$fields['id_zone'] = (int)($this->id_zone);
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
 		$fields['name'] = pSQL($this->name);
-		$fields['tax_behavior'] = intval($this->tax_behavior);
-		$fields['active'] = intval($this->active);
+		$fields['tax_behavior'] = (int)($this->tax_behavior);
+		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
 
@@ -78,7 +78,7 @@ class StateCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'state`
-		WHERE `id_state` = '.intval($id_state));
+		WHERE `id_state` = '.(int)($id_state));
 
         return $result['name'];
     }
@@ -96,7 +96,7 @@ class StateCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'state`
 		WHERE `name` LIKE \''.pSQL($state).'\'');
 		 	
-        return (intval($result['id_state']));
+        return ((int)($result['id_state']));
     }
 
 	/**
@@ -127,13 +127,13 @@ class StateCore extends ObjectModel
 		if ($this->isUsed()) die(Tools::displayError()); 
 		
 		/* Database deletion */
-		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
 			return false;
 
 		/* Database deletion for multilingual fields related to the object */
 		if (method_exists($this, 'getTranslationsFieldsChild'))
-			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));
+			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		return $result;
 	}	
 	
@@ -157,7 +157,7 @@ class StateCore extends ObjectModel
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(*) AS nb_used 
 		FROM `'._DB_PREFIX_.'address` 
-		WHERE `'.pSQL($this->identifier).'` = '.intval($this->id));	
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));	
 		return $row['nb_used'];
 	}
 }

@@ -16,20 +16,20 @@ if (Tools::getValue('action') == 'getCms')
 	$cms_categories = Db::getInstance()->ExecuteS('
 	SELECT * FROM `'._DB_PREFIX_.'cms_category` c
 	JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (c.`id_cms_category` = cl.`id_cms_category`)
-	WHERE c.`id_parent` = '.intval(Tools::getValue('id_cms_category')).'
-	AND cl.`id_lang` = '.intval($cookie->id_lang).'
+	WHERE c.`id_parent` = '.(int)(Tools::getValue('id_cms_category')).'
+	AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 	ORDER BY c.`id_cms_category`');
 	$cms_pages = Db::getInstance()->ExecuteS('
 	SELECT cl.`meta_title`, c.`id_cms` FROM `'._DB_PREFIX_.'cms` c
 	JOIN `'._DB_PREFIX_.'cms_lang` cl ON (c.`id_cms` = cl.`id_cms`)
-	WHERE c.`id_cms_category` = '.intval(Tools::getValue('id_cms_category')).'
+	WHERE c.`id_cms_category` = '.(int)(Tools::getValue('id_cms_category')).'
 	AND c.`active` = 1 
-	AND cl.`id_lang` = '.intval($cookie->id_lang).'
+	AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 	ORDER BY c.`id_cms`');
 	if (Tools::getValue('id_block_cms'))
 		$cms_selected = Db::getInstance()->ExecuteS('
 		SELECT `is_category`, `id_cms` FROM `'._DB_PREFIX_.'cms_block_page`
-		WHERE `id_block_cms` = '.intval(Tools::getValue('id_block_cms')));
+		WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
 	$html = '';
 
 	if (sizeof($cms_categories) OR sizeof($cms_pages))
@@ -78,7 +78,7 @@ elseif (Tools::getValue('action') == 'dnd')
 		foreach ($table as $key =>$row)
 		{
 			$ids = explode('_', $row);
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = '.intval($pos).' WHERE `id_block_cms` = '.intval($ids[2]));
+			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = '.(int)($pos).' WHERE `id_block_cms` = '.(int)($ids[2]));
 			$pos++;
 		}
 	}

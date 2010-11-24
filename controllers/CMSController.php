@@ -9,10 +9,10 @@ class CmsControllerCore extends FrontController
 	{
 		parent::preProcess();
 
-		if (($id_cms = intval(Tools::getValue('id_cms'))) AND $this->cms = new CMS(intval($id_cms), intval($this->cookie->id_lang)) AND Validate::isLoadedObject($this->cms) AND
+		if (($id_cms = (int)(Tools::getValue('id_cms'))) AND $this->cms = new CMS((int)($id_cms), (int)($this->cookie->id_lang)) AND Validate::isLoadedObject($this->cms) AND
 			($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) AND file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php'))))
 			$this->assignCase = 1;
-		elseif (($id_cms_category = intval(Tools::getValue('id_cms_category'))) AND $cms_category = new CMSCategory(intval(Tools::getValue('id_cms_category')), intval($this->cookie->id_lang)) AND Validate::isLoadedObject($cms_category))
+		elseif (($id_cms_category = (int)(Tools::getValue('id_cms_category'))) AND $cms_category = new CMSCategory((int)(Tools::getValue('id_cms_category')), (int)($this->cookie->id_lang)) AND Validate::isLoadedObject($cms_category))
 			$this->assignCase = 2;
 		else
 			Tools::redirect('404.php');
@@ -37,15 +37,15 @@ class CmsControllerCore extends FrontController
 		{
 			$this->smarty->assign(array(
 				'cms' => $this->cms,
-				'content_only' => intval(Tools::getValue('content_only'))
+				'content_only' => (int)(Tools::getValue('content_only'))
 			));
 		}
 		elseif ($this->assignCase == 1)
 		{
 			$this->smarty->assign(array(
 				'category' => $cms_category,
-				'sub_category' => $cms_category->getSubCategories(intval($this->cookie->id_lang)),
-				'cms_pages' => CMS::getCMSPages(intval($this->cookie->id_lang))
+				'sub_category' => $cms_category->getSubCategories((int)($this->cookie->id_lang)),
+				'cms_pages' => CMS::getCMSPages((int)($this->cookie->id_lang))
 			));
 		}
 	}

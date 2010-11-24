@@ -70,7 +70,7 @@ class Followup extends Module
 		foreach ($this->confKeys AS $k)
 			if (!isset($conf[$k]))
 				$conf[$k] = '';
-		$currency = new Currency(intval(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		$n1 = $this->cancelledCart(true);
 		$n2 = $this->reOrder(true);
@@ -93,7 +93,7 @@ class Followup extends Module
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_AMOUNT_1" value="'.$conf['PS_FOLLOW_UP_AMOUNT_1'].'" size="6" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> %</div>
 				<label>'.$this->l('Discount validity').'</label>
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_DAYS_1" value="'.$conf['PS_FOLLOW_UP_DAYS_1'].'" size="6" /> '.$this->l('day(s)').'</div>
-				<p>'.$this->l('Next process will send:').' <b>'.intval($n1).' '.($n1 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
+				<p>'.$this->l('Next process will send:').' <b>'.(int)($n1).' '.($n1 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
 				<hr size="1" />
 				<p><b>2. '.$this->l('Re-order').'</b><br /><br />'.$this->l('For each validated order, generate a discount and send it to the customer').'</p>
 				<label>'.$this->l('Enable').'</label>
@@ -102,7 +102,7 @@ class Followup extends Module
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_AMOUNT_2" value="'.$conf['PS_FOLLOW_UP_AMOUNT_2'].'" size="6" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> %</div>
 				<label>'.$this->l('Discount validity').'</label>
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_DAYS_2" value="'.$conf['PS_FOLLOW_UP_DAYS_2'].'" size="6" /> '.$this->l('day(s)').'</div>
-				<p>'.$this->l('Next process will send:').' <b>'.intval($n2).' '.($n2 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
+				<p>'.$this->l('Next process will send:').' <b>'.(int)($n2).' '.($n2 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
 				<hr size="1" />
 				<p><b>3. '.$this->l('Best customers').'</b><br /><br />'.$this->l('For each customer raising a threshold, generate a discount and send it to the customer').'</p>
 				<label>'.$this->l('Enable').'</label>
@@ -113,7 +113,7 @@ class Followup extends Module
 				<div class="margin-form">'.($currency->format == 1 ? ' '.$currency->sign.' ' : '').'<input type="text" name="PS_FOLLOW_UP_THRESHOLD_3" value="'.$conf['PS_FOLLOW_UP_THRESHOLD_3'].'" size="6" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.($currency->format == 2 ? ' '.$currency->sign : '').'</div>
 				<label>'.$this->l('Discount validity').'</label>
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_DAYS_3" value="'.$conf['PS_FOLLOW_UP_DAYS_3'].'" size="6" /> '.$this->l('day(s)').'</div>
-				<p>'.$this->l('Next process will send:').' <b>'.intval($n3).' '.($n3 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
+				<p>'.$this->l('Next process will send:').' <b>'.(int)($n3).' '.($n3 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
 				<hr size="1" />
 				<p><b>4. '.$this->l('Bad customers').'</b><br /><br />'.$this->l('For each customer who has already passed at least one order and with no orders since a given duration, generate a discount and send it to the customer').'</p>
 				<label>'.$this->l('Enable').'</label>
@@ -124,7 +124,7 @@ class Followup extends Module
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_DAYS_THRESHOLD_4" value="'.$conf['PS_FOLLOW_UP_DAYS_THRESHOLD_4'].'" size="6" /> '.$this->l('day(s)').'</div>
 				<label>'.$this->l('Discount validity').'</label>
 				<div class="margin-form"><input type="text" name="PS_FOLLOW_UP_DAYS_4" value="'.$conf['PS_FOLLOW_UP_DAYS_4'].'" size="6" /> '.$this->l('day(s)').'</div>
-				<p>'.$this->l('Next process will send:').' <b>'.intval($n4).' '.($n4 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
+				<p>'.$this->l('Next process will send:').' <b>'.(int)($n4).' '.($n4 > 1 ? $this->l('emails') : $this->l('email')).'</b></p>
 				<hr size="1" />
 				<input type="checkbox" style="vertical-align: middle;" name="PS_FOLLOW_UP_CLEAN_DB" value="1" '.($conf['PS_FOLLOW_UP_CLEAN_DB'] == 1 ? 'checked="checked"' : '').' /> '.$this->l('Delete outdated discounts during each launch to clean database').'
 				<hr size="1" />
@@ -178,8 +178,8 @@ class Followup extends Module
 			$statsArray = array();
 			foreach ($stats AS $stat)
 			{
-				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb'] = intval($stat['nb']);
-				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb_used'] = intval($stat['nb_used']);
+				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb'] = (int)($stat['nb']);
+				$statsArray[$stat['date_stat']][$stat['id_email_type']]['nb_used'] = (int)($stat['nb_used']);
 			}
 			
 			echo '
@@ -214,8 +214,8 @@ class Followup extends Module
 				for ($i = 1; $i != 5; $i++)
 				{
 					echo '
-					<td>'.(isset($statsArray[$date_stat][$i]['nb']) ? intval($statsArray[$date_stat][$i]['nb']) : 0).'</td>
-					<td>'.(isset($statsArray[$date_stat][$i]['nb_used']) ? intval($statsArray[$date_stat][$i]['nb_used']) : 0).'</td>
+					<td>'.(isset($statsArray[$date_stat][$i]['nb']) ? (int)($statsArray[$date_stat][$i]['nb']) : 0).'</td>
+					<td>'.(isset($statsArray[$date_stat][$i]['nb_used']) ? (int)($statsArray[$date_stat][$i]['nb_used']) : 0).'</td>
 					<td>'.(isset($rates[$i]) ? '<b>'.$rates[$i].'</b>' : '0.00').'</td>';
 				}
 
@@ -233,11 +233,11 @@ class Followup extends Module
 	/* Log each sent e-mail */
 	private function logEmail($id_email_type, $id_discount, $id_customer = NULL, $id_cart = NULL)
 	{
-		$values = array('id_email_type' => intval($id_email_type), 'id_discount' => intval($id_discount), 'date_add' => date('Y-m-d H:i:s'));
+		$values = array('id_email_type' => (int)($id_email_type), 'id_discount' => (int)($id_discount), 'date_add' => date('Y-m-d H:i:s'));
 		if (!empty($id_cart))
-			$values['id_cart'] = intval($id_cart);
+			$values['id_cart'] = (int)($id_cart);
 		if (!empty($id_customer))
-			$values['id_customer'] = intval($id_customer);
+			$values['id_customer'] = (int)($id_customer);
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'log_email', $values, 'INSERT');
 	}
 
@@ -258,12 +258,12 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_1', 'PS_FOLLOW_UP_DAYS_1'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(1, floatval($conf['PS_FOLLOW_UP_AMOUNT_1']), intval($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.intval($conf['PS_FOLLOW_UP_DAYS_1']).' day')), $this->l('Discount for your cancelled cart'));				
+				$voucher = $this->createDiscount(1, floatval($conf['PS_FOLLOW_UP_AMOUNT_1']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_1']).' day')), $this->l('Discount for your cancelled cart'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_1'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_1'], '{voucher_num}' => $voucher->name);
-					$result = Mail::Send(intval($email['id_lang']), 'followup_1', Mail::l('Your cart and your discount'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
-					$this->logEmail(1, intval($voucher->id), intval($email['id_customer']), intval($email['id_cart']));
+					$result = Mail::Send((int)($email['id_lang']), 'followup_1', Mail::l('Your cart and your discount'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					$this->logEmail(1, (int)($voucher->id), (int)($email['id_customer']), (int)($email['id_cart']));
 				}
 		}
 	}
@@ -285,12 +285,12 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_2', 'PS_FOLLOW_UP_DAYS_2'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(2, floatval($conf['PS_FOLLOW_UP_AMOUNT_2']), intval($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.intval($conf['PS_FOLLOW_UP_DAYS_2']).' day')), $this->l('Thanks for your order'));				
+				$voucher = $this->createDiscount(2, floatval($conf['PS_FOLLOW_UP_AMOUNT_2']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_2']).' day')), $this->l('Thanks for your order'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_2'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_2'], '{voucher_num}' => $voucher->name);
-					$result = Mail::Send(intval($email['id_lang']), 'followup_2', Mail::l('Thanks for your order'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
-					$this->logEmail(2, intval($voucher->id), intval($email['id_customer']), intval($email['id_cart']));
+					$result = Mail::Send((int)($email['id_lang']), 'followup_2', Mail::l('Thanks for your order'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					$this->logEmail(2, (int)($voucher->id), (int)($email['id_customer']), (int)($email['id_cart']));
 				}
 		}
 	}
@@ -314,12 +314,12 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_3', 'PS_FOLLOW_UP_DAYS_3'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(3, floatval($conf['PS_FOLLOW_UP_AMOUNT_3']), intval($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.intval($conf['PS_FOLLOW_UP_DAYS_3']).' day')), $this->l('You are one of our best customers'));				
+				$voucher = $this->createDiscount(3, floatval($conf['PS_FOLLOW_UP_AMOUNT_3']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_3']).' day')), $this->l('You are one of our best customers'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_3'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_3'], '{voucher_num}' => $voucher->name);
-					$result = Mail::Send(intval($email['id_lang']), 'followup_3', Mail::l('You are one of our best customers'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
-					$this->logEmail(3, intval($voucher->id), intval($email['id_customer']), intval($email['id_cart']));
+					$result = Mail::Send((int)($email['id_lang']), 'followup_3', Mail::l('You are one of our best customers'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					$this->logEmail(3, (int)($voucher->id), (int)($email['id_customer']), (int)($email['id_cart']));
 				}
 		}
 	}
@@ -333,9 +333,9 @@ class Followup extends Module
 		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_customer = cu.id_customer)
 		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
 		WHERE cu.id_customer NOT IN
-		(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.intval(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
+		(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
 		AND cu.id_customer NOT IN
-		(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 4 AND date_add >= DATE_SUB(date_add,INTERVAL '.intval(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY))
+		(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 4 AND date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY))
 		GROUP BY cu.id_customer
 		HAVING nb_orders >= 1');
 	
@@ -345,12 +345,12 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_4', 'PS_FOLLOW_UP_DAYS_4'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(4, floatval($conf['PS_FOLLOW_UP_AMOUNT_4']), intval($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.intval($conf['PS_FOLLOW_UP_DAYS_4']).' day')), $this->l('We miss you'));				
+				$voucher = $this->createDiscount(4, floatval($conf['PS_FOLLOW_UP_AMOUNT_4']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_4']).' day')), $this->l('We miss you'));				
 				if ($voucher !== false)
 				{
-					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_4'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_4'], '{days_threshold}' => intval(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')), '{voucher_num}' => $voucher->name);
-					$result = Mail::Send(intval($email['id_lang']), 'followup_4', Mail::l('We miss you'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
-					$this->logEmail(4, intval($voucher->id), intval($email['id_customer']), intval($email['id_cart']));
+					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_4'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_4'], '{days_threshold}' => (int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')), '{voucher_num}' => $voucher->name);
+					$result = Mail::Send((int)($email['id_lang']), 'followup_4', Mail::l('We miss you'), $templateVars, $email['email'], $email['firstname'].' '.$email['lastname'], NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					$this->logEmail(4, (int)($voucher->id), (int)($email['id_customer']), (int)($email['id_cart']));
 				}
 		}
 	}
@@ -360,7 +360,7 @@ class Followup extends Module
 		$discount = new Discount();
 		$discount->id_discount_type = 1;
 		$discount->value = floatval($amount);
-		$discount->id_customer = intval($id_customer);
+		$discount->id_customer = (int)($id_customer);
 		$discount->date_to = $dateValidity;
 		$discount->date_from = date('Y-m-d H:i:s');
 		$discount->quantity = 1;
@@ -371,9 +371,9 @@ class Followup extends Module
 		
 		$languages = Language::getLanguages(true);
 		foreach ($languages AS $language)
-			$discount->description[intval($language['id_lang'])] = $description;
+			$discount->description[(int)($language['id_lang'])] = $description;
 			
-		$name = 'FLW-'.intval($id_email_type).'-'.strtoupper(Tools::passwdGen(10));
+		$name = 'FLW-'.(int)($id_email_type).'-'.strtoupper(Tools::passwdGen(10));
 		$discount->name = $name;
 		$discount->active = 1;
 		$result = $discount->add();
@@ -402,7 +402,7 @@ class Followup extends Module
 			$outdatedDiscounts = Db::getInstance()->ExecuteS('SELECT id_discount FROM '._DB_PREFIX_.'discount WHERE date_to < NOW()');
 			foreach ($outdatedDiscounts AS $outdatedDiscount)
 			{
-				$discount = new Discount(intval($outdatedDiscount['id_discount']));
+				$discount = new Discount((int)($outdatedDiscount['id_discount']));
 				if (Validate::isLoadedObject($discount))
 					$discount->delete();
 			}

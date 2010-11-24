@@ -100,7 +100,7 @@ function submitConfirm()
 
 	if (!$cookie->isLogged())
 		die('Not logged');
-	elseif (!$currency = intval(Tools::getValue('currency_payement')))
+	elseif (!$currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
 	elseif (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID'))))
 		die('No payer ID');
@@ -130,7 +130,7 @@ function submitAccount()
 			$customer->ip_registration_newsletter = pSQL(Tools::getRemoteAddr());
 			$customer->newsletter_date_add = pSQL(date('Y-m-d h:i:s'));
 		}
-		$customer->birthday = (empty($_POST['years']) ? '' : intval($_POST['years']).'-'.intval($_POST['months']).'-'.intval($_POST['days']));
+		$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 		/* Customer and address, same fields, caching data */
 		$errors = $customer->validateControler();
 		$address = new Address();
@@ -143,15 +143,15 @@ function submitAccount()
 				$errors[] = Tools::displayError('an error occurred while creating your account');
 			else
 			{
-				$address->id_customer = intval($customer->id);
+				$address->id_customer = (int)($customer->id);
 				if (!$address->add())
 					$errors[] = Tools::displayError('an error occurred while creating your address');
 				else
 				{
-					if (Mail::Send(intval($cookie->id_lang), 'account', 'Welcome!', 
+					if (Mail::Send((int)($cookie->id_lang), 'account', 'Welcome!', 
 					array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 						$smarty->assign('confirmation', 1);
-					$cookie->id_customer = intval($customer->id);
+					$cookie->id_customer = (int)($customer->id);
 					$cookie->customer_lastname = $customer->lastname;
 					$cookie->customer_firstname = $customer->firstname;
 					$cookie->passwd = $customer->passwd;
@@ -197,7 +197,7 @@ function submitLogin()
 			$errors[] = Tools::displayError('authentication failed');
 		else
 		{
-			$cookie->id_customer = intval($customer->id);
+			$cookie->id_customer = (int)($customer->id);
 			$cookie->customer_lastname = $customer->lastname;
 			$cookie->customer_firstname = $customer->firstname;
 			$cookie->logged = 1;
@@ -253,21 +253,21 @@ function displayAccount()
 
 	// Generate years, months and days
 	if (isset($_POST['years']) AND is_numeric($_POST['years']))
-		$selectedYears = intval($_POST['years']);
+		$selectedYears = (int)($_POST['years']);
 	$years = Tools::dateYears();
 	if (isset($_POST['months']) AND is_numeric($_POST['months']))
-		$selectedMonths = intval($_POST['months']);
+		$selectedMonths = (int)($_POST['months']);
 	$months = Tools::dateMonths();
 	if (isset($_POST['days']) AND is_numeric($_POST['days']))
-		$selectedDays = intval($_POST['days']);
+		$selectedDays = (int)($_POST['days']);
 	$days = Tools::dateDays();
 
 	// Select the most appropriate country
 	if (Tools::getValue('id_country'))
-		$selectedCountry = intval(Tools::getValue('id_country'));
+		$selectedCountry = (int)(Tools::getValue('id_country'));
 	else
 		$selectedCountry = Country::getByIso(strval($result['COUNTRYCODE']));
-	$countries = Country::getCountries(intval($cookie->id_lang), true);
+	$countries = Country::getCountries((int)($cookie->id_lang), true);
 
 	// Smarty assigns
 	$smarty->assign(array(
@@ -306,7 +306,7 @@ if (!isset($cookie->paypal_token) OR !$cookie->paypal_token)
 else
 {
 	// We have token, we need to confirm user informations (login or signup)
-	if (intval(Tools::getValue('confirm')))
+	if ((int)(Tools::getValue('confirm')))
 		displayConfirm();
 	elseif (Tools::isSubmit('submitAccount'))
 		submitAccount();

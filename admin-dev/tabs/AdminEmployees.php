@@ -27,9 +27,9 @@ class AdminEmployees extends AdminTab
 	 	$this->delete = true;		
  		$this->_select = 'pl.`name` AS profile';
 		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'profile` p ON a.`id_profile` = p.`id_profile` 
-		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (pl.`id_profile` = p.`id_profile` AND pl.`id_lang` = '.intval($cookie->id_lang).')';
+		LEFT JOIN `'._DB_PREFIX_.'profile_lang` pl ON (pl.`id_profile` = p.`id_profile` AND pl.`id_lang` = '.(int)($cookie->id_lang).')';
 		
-		$profiles = Profile::getProfiles(intval($cookie->id_lang));
+		$profiles = Profile::getProfiles((int)($cookie->id_lang));
 		if (!$profiles)
 			$this->_errors[] = Tools::displayError('No profile');
 		else
@@ -71,7 +71,7 @@ class AdminEmployees extends AdminTab
 		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-		$profiles = Profile::getProfiles(intval($cookie->id_lang));
+		$profiles = Profile::getProfiles((int)($cookie->id_lang));
 
 		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data">
@@ -186,7 +186,7 @@ class AdminEmployees extends AdminTab
 			
 			if ($employee->isLastAdmin()) 
 			{
-				if  (Tools::getValue('id_profile') != intval(_PS_ADMIN_PROFILE_)) 
+				if  (Tools::getValue('id_profile') != (int)(_PS_ADMIN_PROFILE_)) 
 				{
 					$this->_errors[] = Tools::displayError('You should have at least one employee in the administrator group.');
 					return false;

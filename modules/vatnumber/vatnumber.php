@@ -100,7 +100,7 @@ class VatNumber extends Module
 		if (Tools::isSubmit('submitVatNumber'))
 		{
 			if (Tools::getValue('vatnumber_country'))
-				if (Configuration::updateValue('VATNUMBER_COUNTRY', intval(Tools::getValue('vatnumber_country'))))
+				if (Configuration::updateValue('VATNUMBER_COUNTRY', (int)(Tools::getValue('vatnumber_country'))))
 					echo $this->displayConfirmation($this->l('Your country has been updated.'));
 			$check = (int)Tools::getValue('vatnumber_checking');
 			if(Configuration::get('VATNUMBER_CHECKING') != $check AND Configuration::updateValue('VATNUMBER_CHECKING', $check))
@@ -113,7 +113,7 @@ class VatNumber extends Module
 				<div class="margin-form">
 					<select name="vatnumber_country">
 						<option value="0">'.$this->l('-- Choose a country --').'</option>';
-		foreach (Country::getCountries(intval($cookie->id_lang)) as $country)
+		foreach (Country::getCountries((int)($cookie->id_lang)) as $country)
 			echo '		<option value="'.$country['id_country'].'" '.(Tools::getValue('VATNUMBER_COUNTRY', Configuration::get('VATNUMBER_COUNTRY')) == $country['id_country'] ? 'selected="selected"' : '').'>'.$country['name'].'</option>';
 		echo '		</select>
 				</div>

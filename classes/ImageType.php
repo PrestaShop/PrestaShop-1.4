@@ -65,13 +65,13 @@ class ImageTypeCore extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['name'] = pSQL($this->name);
-		$fields['width'] = intval($this->width);
-		$fields['height'] = intval($this->height);
-		$fields['products'] = intval($this->products);
-		$fields['categories'] = intval($this->categories);
-		$fields['manufacturers'] = intval($this->manufacturers);
-		$fields['suppliers'] = intval($this->suppliers);
-		$fields['scenes'] = intval($this->scenes);
+		$fields['width'] = (int)($this->width);
+		$fields['height'] = (int)($this->height);
+		$fields['products'] = (int)($this->products);
+		$fields['categories'] = (int)($this->categories);
+		$fields['manufacturers'] = (int)($this->manufacturers);
+		$fields['suppliers'] = (int)($this->suppliers);
+		$fields['scenes'] = (int)($this->scenes);
 		return $fields;
 	}
 

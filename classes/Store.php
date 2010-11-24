@@ -85,8 +85,8 @@ class StoreCore extends ObjectModel
 	{
 		parent::validateFields();
 		
-		$fields['id_country'] = intval($this->id_country);
-		$fields['id_state'] = intval($this->id_state);
+		$fields['id_country'] = (int)($this->id_country);
+		$fields['id_state'] = (int)($this->id_state);
 		$fields['name'] = pSQL($this->name);
 		$fields['address1'] = pSQL($this->address1);
 		$fields['address2'] = pSQL($this->address2);
@@ -101,7 +101,7 @@ class StoreCore extends ObjectModel
 		$fields['email'] = pSQL($this->email);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
-		$fields['active'] = intval($this->active);
+		$fields['active'] = (int)($this->active);
 		
 		return $fields;
 	}

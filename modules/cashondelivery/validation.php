@@ -11,11 +11,11 @@ if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_addr
 /* Validate order */
 if (Tools::getValue('confirm'))
 {
-	$customer = new Customer(intval($cart->id_customer));
+	$customer = new Customer((int)($cart->id_customer));
 	$total = $cart->getOrderTotal(true, 3);
-	$cashOnDelivery->validateOrder(intval($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName);
-	$order = new Order(intval($cashOnDelivery->currentOrder));
-	Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.intval($cart->id).'&id_module='.intval($cashOnDelivery->id).'&id_order='.intval($cashOnDelivery->currentOrder));
+	$cashOnDelivery->validateOrder((int)($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName);
+	$order = new Order((int)($cashOnDelivery->currentOrder));
+	Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)($cashOnDelivery->id).'&id_order='.(int)($cashOnDelivery->currentOrder));
 }
 else
 {
