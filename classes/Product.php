@@ -1536,9 +1536,10 @@ class ProductCore extends ObjectModel
 		$id_shop = intval(Shop::getCurrentShop());
 		// END Initialization
 
-		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.$id_product_attribute.'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
+		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.($id_product_attribute === NULL ? 'NULL' : ($id_product_attribute === false ? 'false' : $id_product_attribute)).'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
+
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
