@@ -1137,7 +1137,7 @@ class CartCore extends ObjectModel
 			'invoice_state' => State::getNameById($invoice->id_state),
 			'carrier' => new Carrier(intval($this->id_carrier), $cookie->id_lang),
 			'products' => $this->getProducts(false),
-			'discounts' => $this->getDiscounts(),
+			'discounts' => $this->getDiscounts(false, true),
 			'total_discounts' => $this->getOrderTotal(true, 2),
 			'total_discounts_tax_exc' => $this->getOrderTotal(false, 2),
 			'total_wrapping' => $this->getOrderTotal(true, 6),

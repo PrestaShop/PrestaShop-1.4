@@ -103,7 +103,6 @@ function deletProductFromSummary(id){
 							$(this).remove();
 						});
 				}
-				ajaxCart.refresh();
 				updateCartSummary(jsonData.summary);
 				updateCustomizedDatas(jsonData.customizedDatas);
 				if (jsonData.carriers != null)
@@ -252,13 +251,33 @@ function updateCartSummary(json)
 			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',0.3);
 		else
 			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',1);
-
-
 	}
-	for (i=0;i<json.discounts.length;i++)
+	
+	//update discounts
+	if (json.discounts.length == 0)
+		$('#vouchers').remove();
+	else
 	{
-		$('#discount_price_'+json.discounts[i].id_discount).html(formatCurrency(json.discounts[i].value_real * -1, currencyFormat, currencySign, currencyBlank));
-		$('#bloc_cart_voucher_'+json.discounts[i].id_discount+' td.price').html(formatCurrency(json.discounts[i].value_real * -1, currencyFormat, currencySign, currencyBlank));
+		$('.cart_discount').each(function(){
+			var idElmt = $(this).attr('id').replace('cart_discount_','');
+			var toDelete = true;
+
+			for (i=0;i<json.discounts.length;i++)
+			{
+				if (json.discounts[i].id_discount == idElmt)
+				{
+					if (json.discounts[i].value_real != '!')
+						$('#cart_discount_' + idElmt + ' td.cart_discount_price span.price-discount').text(json.discounts[i].value_real);
+					toDelete = false;
+				}
+			}
+			if (toDelete)
+			{
+				$('#cart_discount_' + idElmt).fadeTo('fast', 0, function(){
+						$(this).remove();
+				});
+			}
+		});
 	}
 	
 	// Block cart
@@ -283,7 +302,7 @@ function updateCartSummary(json)
 		$('.cart_total_delivery').fadeIn();
 		$('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));	
 	}
-
+	
 	if (json.free_ship <= 0)
 		$('.cart_free_shipping').fadeOut();
 	else
@@ -301,7 +320,8 @@ function updateCartSummary(json)
 	{
 		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
 		$('#total_wrapping').parent().hide();
-	}	
+	}
+	ajaxCart.refresh();
 }
 
 function updateCustomizedDatas(json)

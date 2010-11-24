@@ -147,18 +147,6 @@ class CartControllerCore extends FrontController
 						}
 						elseif ($delete)
 						{
-							if (Cart::getNbProducts($this->cart->id) == 1)
-							{
-								$discounts = $this->cart->getDiscounts();
-								foreach($discounts as $discount)
-								{
-									$discountObj = new Discount(intval($discount['id_discount']), intval($this->cookie->id_lang));
-									if ($tmpError = $this->cart->checkDiscountValidity($discountObj, $discounts, $this->cart->getOrderTotal(true, 1), $this->cart->getProducts()))
-										$this->errors[] = $tmpError;
-									else
-										$this->cart->deleteDiscount(intval($discount['id_discount']));
-								}
-							}
 							$this->cart->deleteProduct(intval($idProduct), intval($idProductAttribute), intval($customizationId));
 							if (!Cart::getNbProducts(intval($this->cart->id)))
 							{
@@ -167,6 +155,17 @@ class CartControllerCore extends FrontController
 								$this->cart->gift_message = '';
 								$this->cart->update();
 							}
+						}
+					}
+					$discounts = $this->cart->getDiscounts();
+					foreach($discounts AS $discount)
+					{
+						$discountObj = new Discount(intval($discount['id_discount']), intval($this->cookie->id_lang));
+						if ($error = $this->cart->checkDiscountValidity($discountObj, $discounts, $this->cart->getOrderTotal(true, 1), $this->cart->getProducts()))
+						{
+							$this->cart->deleteDiscount(intval($discount['id_discount']));
+							$this->cart->update();
+							$errors[] = $error;
 						}
 					}
 					if (!sizeof($this->errors))

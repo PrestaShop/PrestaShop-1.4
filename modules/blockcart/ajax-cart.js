@@ -172,19 +172,19 @@ var ajaxCart = {
 					});
 				else
 					elementToTransfert = $(addedFromProductPage ? 'div#image-block' : ('.ajax_block_product_id_' + idProduct) );
-				elementToTransfert.TransferTo({
-							to: $('#cart_block').get(0),
-							className:'transferProduct',
-							duration: 800,
-							complete: function () {
-								ajaxCart.updateCart(jsonData);
-								//reactive the button when adding has finished
-								if (addedFromProductPage)
-									$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
-								else
-									$('.ajax_add_to_cart_button').removeAttr('disabled');
-							}
-				});
+					elementToTransfert.TransferTo({
+								to: $('#cart_block').get(0),
+								className:'transferProduct',
+								duration: 800,
+								complete: function () {
+									ajaxCart.updateCart(jsonData);
+									//reactive the button when adding has finished
+									if (addedFromProductPage)
+										$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
+									else
+										$('.ajax_add_to_cart_button').removeAttr('disabled');
+								}
+					});
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
 				alert("TECHNICAL ERROR: unable to add the product.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
@@ -207,7 +207,8 @@ var ajaxCart = {
 			cache: false,
 			dataType : "json",
 			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
-			success: function(jsonData)	{ ajaxCart.updateCart(jsonData) 
+			success: function(jsonData)	{ 
+				ajaxCart.updateCart(jsonData);
 				if ($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc')
 					deletProductFromSummary(idProduct+'_'+idCombination);
 			},
@@ -318,15 +319,31 @@ var ajaxCart = {
 
 	//refresh display of vouchers (needed for vouchers in % of the total)
 	refreshVouchers : function (jsonData) {
-		$(jsonData.discounts).each(function(){
-			//fix ie6 bug (one more item 'undefined' in IE6)
-			if (this.id != undefined && $('#bloc_cart_voucher_' + this.id).length == 1)
-			{
-					$('#bloc_cart_voucher_' + this.id + ' td.price').text(this.price);
-			}
-		});
 		if (jsonData.discounts.length == 0)
 			$('#vouchers').remove();
+		else
+		{
+			$('.bloc_cart_voucher').each(function(){
+				var idElmt = $(this).attr('id').replace('bloc_cart_voucher_','');
+				var toDelete = true;
+				for (i=0;i<jsonData.discounts.length;i++)
+				{
+					if (jsonData.discounts[i].id == idElmt)
+					{
+						$('#bloc_cart_voucher_' + idElmt + ' td.price').text(jsonData.discounts[i].price);
+						toDelete = false;
+					}
+				}
+				if (toDelete)
+				{
+					$('#bloc_cart_voucher_' + idElmt).fadeTo('fast', 0, function(){
+							$(this).remove();
+					});
+				}
+			});
+		}
+		
+		
 	},
 
 	// Update product quantity
