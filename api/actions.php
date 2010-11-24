@@ -66,6 +66,97 @@ function constructSqlFilter($sqlId, $filterValue, $tableAlias = 'main.')
 	return $ret;
 }
 
+function saveObjectFromXmlInput($xmlString, $object, $successReturnCode, $resourceParameters, $errors)
+{
+  $xml = new SimpleXMLElement($xmlString);
+	$namespaces = $xml->getNameSpaces(true);
+	$attributes = $xml->children($namespaces['p'])->{$resourceParameters['objectNodeName']}->children();
+	
+	// attributes
+	foreach ($resourceParameters['fields'] as $fieldName => $fieldProperties)
+	{
+		$sqlId = $fieldProperties['sqlId'];
+		if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && !$fieldProperties['i18n'])
+		{
+				$object->$sqlId = (string)$attributes->$fieldName;
+		}
+		elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])
+		{
+			$errors[] = 'parameter "'.$fieldName.'" required';
+			$return_code = 'HTTP/1.1 400 Bad Request';
+		}
+		elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
+			$object->$sqlId = null;
+	}
+	
+	if (isset($attributes->associations))
+	  foreach ($attributes->associations->children() as $association)
+	  {
+      // translated attributes
+      if ($association->getName() == 'i18n')
+      {
+        $i18n = true;
+        $fields = $association->children();
+			  foreach ($fields as $field)
+			  {
+				  $fieldName = $field->getName();
+				  $langs = array();
+				  foreach ($field->children() as $translation)
+			    {
+				    $langs[(string)$translation['id']] = (string)$translation;
+				  }
+				  $object->$fieldName = $langs;
+			  }
+      }
+	  }
+	if (!$errors)
+	{
+		if ($i18n && ($retValidateFieldsLang = $object->validateFieldsLang(false, true)) !== true)
+		{
+			$errors[] = $display_errors ? 'Validation error: "'.$retValidateFieldsLang.'"' : 'Internal error';
+			$return_code = 'HTTP/1.1 400 Bad Request';
+		}
+		elseif (($retValidateFields = $object->validateFields(false, true)) !== true)
+		{
+			$errors[] = $display_errors ? 'Validation error: "'.$retValidateFields.'"' : 'Internal error';
+			$return_code = 'HTTP/1.1 400 Bad Request';
+		}
+		else
+		{
+			if($object->save())
+			{
+				if (isset($attributes->associations))
+	        foreach ($attributes->associations->children() as $association)
+	        {
+            // associations
+            if (isset($resourceParameters['associations'][$association->getName()]))
+            {
+              $assocItems = $association->children();
+              foreach ($assocItems as $assocItem)
+              {
+                $fields = $assocItem->children();
+                $values = array();
+                foreach ($fields as $field)
+                  $values[] = (string)$field;
+                $setter = $resourceParameters['associations'][$association->getName()]['setter'];
+                $object->$setter($values);
+              }
+            }
+            elseif ($association->getName() != 'i18n')
+            {
+              $errors[] = $display_errors ? 'The association "'.$association->getName().'" does not exists' : 'Internal error';
+				      $return_code = 'HTTP/1.1 400 Bad Request';
+            }
+	        }
+				if (!$errors)
+				  $return_code = $successReturnCode;
+			}
+			else
+				$return_code = 'HTTP/1.1 500 Internal Server Error';
+		}
+	}
+}
+
 if (!$errors)
 {
 	// check this method is allowed for this auth key
@@ -225,48 +316,9 @@ if (!$errors)
 			//add a new entry
 			case 'POST':
 				$object = new $resourceParameters['retrieveData']['className']();
-				//attributes
-				foreach ($resourceParameters['fields'] as $fieldName => $fieldProperties)
-				{
-					$sqlId = $fieldProperties['sqlId'];
-					if (isset($_POST['attributes'][$fieldName]) && isset($fieldProperties['sqlId']))
-						$object->$sqlId = $_POST['attributes'][$fieldName];
-					elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && ( $fieldName == 'id' ? !isset($object->id) : !isset($object->$sqlId) ))
-					{
-						$errors[] = 'parameter "'.$fieldName.'" required';
-						$return_code = 'HTTP/1.1 400 Bad Request';
-					}
-				}
-				if ($errors)
-					$return_code = 'HTTP/1.1 400 Bad Request';
-				elseif (!$object->save())
-					$return_code = 'HTTP/1.1 400 Bad Request';
-				
-				//associations
-				if (isset($_POST['associations']) && is_array($_POST['associations']))
-					foreach ($_POST['associations'] as $assocName => $values)
-					{
-						if (!$errors && in_array($assocName, array_keys($resourceParameters['associations'])))
-						{
-							$setter = $resourceParameters['associations'][$assocName]['setter'];
-							if (!method_exists($object, $setter))
-							{
-								$errors[] = 'No association implemented for the resources of type "'.$assocName.'"';
-								$return_code = 'HTTP/1.1 400 Bad Request';
-							}
-							
-							elseif (!$object->$setter($values))
-							{
-								$errors[] = 'error occured for association "'.$assocName.'"';
-								$return_code = 'HTTP/1.1 400 Bad Request';
-							}
-						}
-					}
-				
-				if ($errors)
-					$return_code = 'HTTP/1.1 400 Bad Request';
-				else
-					$return_code = 'HTTP/1.1 201 Created';
+				$i18n = false;
+				$xmlString = $_POST['xml'];
+				saveObjectFromXmlInput($xmlString, $object, 'HTTP/1.1 201 Created', $resourceParameters, $errors);
 			break;
 
 			//get the matching resource(s)
@@ -284,62 +336,12 @@ if (!$errors)
 					
 					if ($object->id)
 					{
-						$xmlstring = '';
+						$xmlString = '';
 						$putresource = fopen("php://input", "r");
 						while ($putData = fread($putresource, 1024))
-							$xmlstring .= $putData;
+							$xmlString .= $putData;
 						fclose($putresource);
-						$xml = new SimpleXMLElement($xmlstring);
-						$namespaces = $xml->getNameSpaces(true);
-						$attributes = $xml->children($namespaces['p'])->{$resourceParameters['objectNodeName']}->children();
-						
-						foreach ($resourceParameters['fields'] as $fieldName => $fieldProperties)
-						{
-							$sqlId = $fieldProperties['sqlId'];
-							if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']))
-							{
-								if (isset($attributes->$fieldName->language))
-								{
-									$i18n = true;
-									$langs = array();
-									foreach ($attributes->$fieldName->language as $language)
-									{
-										if (isset($language['id']))
-											$langs[(string)$language['id']] = (string)$language[0];
-									}
-									$object->$sqlId = $langs;
-								}
-								else
-									$object->$sqlId = (string)$attributes->$fieldName;
-							}
-							elseif (isset($fieldProperties['required']) && $fieldProperties['required'])
-							{
-								$errors[] = 'parameter "'.$fieldName.'" required';
-								$return_code = 'HTTP/1.1 400 Bad Request';
-							}
-							elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
-								$object->$sqlId = null;
-						}
-						if (!$errors)
-						{
-							if ($i18n && ($retValidateFieldsLang = $object->validateFieldsLang(false, true)) !== true)
-							{
-								$errors[] = $display_errors ? 'Validation error: "'.$retValidateFieldsLang.'"' : 'Internal error';
-								$return_code = 'HTTP/1.1 400 Bad Request';
-							}
-							elseif (($retValidateFields = $object->validateFields(false, true)) !== true)
-							{
-								$errors[] = $display_errors ? 'Validation error: "'.$retValidateFields.'"' : 'Internal error';
-								$return_code = 'HTTP/1.1 400 Bad Request';
-							}
-							else
-							{
-								if($object->save())
-									$return_code = 'HTTP/1.1 200 OK';
-								else
-									$return_code = 'HTTP/1.1 500 Internal Server Error';
-							}
-						}
+						saveObjectFromXmlInput($xmlString, $object, 'HTTP/1.1 200 OK', $resourceParameters, $errors);
 					}
 					else
 					{
