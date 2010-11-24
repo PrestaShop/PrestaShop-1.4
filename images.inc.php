@@ -16,15 +16,20 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
 			$imageGd = ($imageType == 'gif' ? imagecreatefromgif($image) : imagecreatefromjpeg($image));
 			$x = imagesx($imageGd);
 			$y = imagesy($imageGd);
-			
+			$max_x = ((int)$size)*3;
 			/* Size is already ok */
-			if ($y < $size) 
+			if ($y < $size && $x <= $max_x ) 
 				copy($image, _PS_TMP_IMG_DIR_.$cacheImage);
 
 			/* We need to resize */
 			else
 			{
 				$ratioX = $x / ($y / $size);
+				if($ratioX > $max_x)
+				{
+				    $ratioX = $max_x;
+				    $size = $y / ($x / $max_x);
+				}
 				$newImage = ($imageType == 'gif' ? imagecreate($ratioX, $size) : imagecreatetruecolor($ratioX, $size));
 				
 				/* Allow to keep nice look even if resized */
