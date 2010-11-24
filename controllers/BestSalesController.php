@@ -5,10 +5,8 @@ class BestSalesControllerCore extends FrontController
 	public function preProcess()
 	{
 		$this->productSort();
-		
 		$nbProducts = intval(ProductSale::getNbSales());
-		
-		$this->pagination();
+		$this->pagination($nbProducts);
 		
 		global $orderBy, $orderWay, $p, $n;
 		$this->smarty->assign(array(

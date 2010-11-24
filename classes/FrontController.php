@@ -386,9 +386,8 @@ class FrontControllerCore
 			'stock_management' => intval($stock_management)));
 	}
 	
-	public function pagination()
+	public function pagination($nbProducts)
 	{
-		global $nbProducts;
 		$nArray = intval(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array(intval(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
 		$this->n = abs(intval(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : intval(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));

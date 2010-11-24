@@ -33,7 +33,7 @@ class SearchControllerCore extends FrontController
 			$this->p = abs(intval(Tools::getValue('p', 1)));
 			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
-			$this->pagination();
+			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
 			'products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -48,7 +48,7 @@ class SearchControllerCore extends FrontController
 			$this->p = abs(intval(Tools::getValue('p', 1)));
 			$search = Search::find(intval($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
-			$this->pagination();
+			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
 			'products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -58,7 +58,7 @@ class SearchControllerCore extends FrontController
 		elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
 		{
 			$nbProducts = intval(Search::searchTag(intval($this->cookie->id_lang), $tag, true));
-			$this->pagination();
+			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
 			'search_tag' => $tag,
 			'products' => Search::searchTag(intval($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay),

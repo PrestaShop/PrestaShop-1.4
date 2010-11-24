@@ -67,7 +67,7 @@ class CategoryControllerCore extends FrontController
 				if ($category->id != 1)
 				{
 					$nbProducts = $category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
-					$this->pagination();
+					$this->pagination($nbProducts);
 					$this->smarty->assign('nb_products', $nbProducts);
 					$cat_products = $category->getProducts(intval($this->cookie->id_lang), intval($this->p), intval($this->n), $this->orderBy, $this->orderWay);
 				}

@@ -14,7 +14,7 @@ class PricesDropControllerCore extends FrontController
 		
 		$this->productSort();
 		$nbProducts = Product::getPricesDrop(intval($this->cookie->id_lang), NULL, NULL, true);
-		$this->pagination();
+		$this->pagination($nbProducts);
 		
 		$this->smarty->assign(array(
 			'products' => Product::getPricesDrop(intval($this->cookie->id_lang), intval($this->p) - 1, intval($this->n), false, $this->orderBy, $this->orderWay),
