@@ -34,7 +34,6 @@
 		<h4>{l s='List of pages in '}{$category->name} : </h4>
 			<ul class="bullet">
 				{foreach from=$cms_pages item=cmspages}
-				{if $cmspages.id_cms_category == $category->id_cms_category}
 					<li>
 						<a href="{$link->getCMSLink($cmspages.id_cms, $cmspages.link_rewrite)|escape:'htmlall':'UTF-8'}">{$cmspages.meta_title|escape:'htmlall':'UTF-8'}</a>
 					</li>
