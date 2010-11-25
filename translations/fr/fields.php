@@ -95,6 +95,7 @@ $_FIELDS['Contact_b9037d95e03e549cefb51b512cfc5a24'] = 'Service après-vente';
 $_FIELDS['Contact_b068931cc450442b63f5b3d276ea4297'] = 'nom';
 $_FIELDS['Contact_67daf92c833c41c95db874e18fcb2786'] = 'description';
 $_FIELDS['Country_efc19cceda447c9d6f95094e9b01ef24'] = 'ID de la zone';
+$_FIELDS['Country_d488c3bb8b7a06f26e44c153ce047933'] = 'ID de la devise';
 $_FIELDS['Country_3011322530410f26aa0f8066e68c7070'] = 'Prefix d\'appel international';
 $_FIELDS['Country_213ecf1210f43736b6d4997fcfa27954'] = 'code ISO';
 $_FIELDS['Country_c76a5e84e4bdee527e274ea30c680d79'] = 'actif';
