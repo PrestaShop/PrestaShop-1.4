@@ -54,11 +54,12 @@
 						<div style="display:none;" id="mondialrelay_{$carrier.id_carrier|intval}"></div>		 
 					</td>
 				</tr>
-			<script type="text/javascript" > $("#id_carrier{$carrier.id_carrier|intval}").parent().parent().remove();</script>
 	{/if}
 	<script type="text/javascript" >
-	include_mondialrelay({$carrier.id_carrier|intval});
-	affiche_mydiv_mr({$carrier.id_carrier|intval}, 'relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}');
-
+		if ($("#id_carrier{$carrier.id_carrier|intval}").attr('checked') == true)
+			$("#id_carrier_mr{$carrier.id_carrier|intval}").attr('checked', "checked");
+		$("#id_carrier{$carrier.id_carrier|intval}").parent().parent().remove();
+		include_mondialrelay({$carrier.id_carrier|intval});
+		affiche_mydiv_mr({$carrier.id_carrier|intval}, 'relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}');
 	</script>
 {/foreach}

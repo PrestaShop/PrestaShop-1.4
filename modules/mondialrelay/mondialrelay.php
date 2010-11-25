@@ -370,26 +370,8 @@ class MondialRelay extends Module
 			$row['price'] = $cart->getOrderShippingCost((int)($row['id_carrier']));
 			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.(int)($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.(int)($row['id_carrier']).'.jpg' : '';
 
-			if ($row['liv'] == '24R' && $totalweight <= 20000)
-			{
-				$resultsArray[] = $row;
-				$i++;
-			}
-			elseif ($row['liv'] == 'DRI' && $totalweight >= 20000 && $totalweight <= 130000)
-			{
-				$resultsArray[] = $row;
-				$i++;
-			}
-			elseif ($row['liv'] == 'LD1' && $totalweight <= 60000)
-			{
-				$resultsArray[] = $row;
-				$i++;
-			}	
-			elseif ($row['liv'] == 'LDS' && $totalweight >= 30000 && $totalweight <= 130000)
-			{
-				$resultsArray[] = $row;
-				$i++;
-			}
+			$resultsArray[] = $row;
+			$i++;
 	 	}
 
 		if ($i > 0)
@@ -434,8 +416,8 @@ class MondialRelay extends Module
 			}
 		}
 		
-		if (isset($_GET['delete']) && !empty($_GET['delete']))
-			self::mrDelete(pSQL($_GET['delete']));
+		if (isset($_GET['delete_mr']) && !empty($_GET['delete_mr']))
+			self::mrDelete((int)($_GET['delete_mr']));
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>'.
 		'<style> . "\n" . ' . file_get_contents(_MR_CSS_) . "\n" . '</style>
@@ -455,10 +437,7 @@ class MondialRelay extends Module
 	public function mrDelete($id)
 	{
 		$id = Db::getInstance()->getValue('SELECT `id_carrier` FROM `'._DB_PREFIX_ .'mr_method` WHERE `id_mr_method` = "'.(int)($id).'"');
-		if (Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_ .'carrier` SET `active` = 0, `deleted` = 1 WHERE `id_carrier` = "'.(int)($id).'"'))
-		{
-			$uri = explode('&', $_SERVER['REQUEST_URI']);
-		}
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_ .'carrier` SET `active` = 0, `deleted` = 1 WHERE `id_carrier` = "'.(int)($id).'"');
 		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Delete succesfull').'</div>';
 	}
 	
@@ -520,8 +499,8 @@ class MondialRelay extends Module
 						$checkD[] = $value;
 			}
 
-			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax`, `url`, `name`, `active`, `is_module`, `shipping_external`, `need_range`, `external_module_name`)
-									VALUES("1", NULL, "'.pSQL($array[0]).'", "1", "1", "0", "1", "mondialrelay")');
+			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
+									VALUES("1", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
 
 			$get   = Db::getInstance()->getRow('SELECT * FROM `' . _DB_PREFIX_ . 'carrier` WHERE `id_carrier` = "' . mysql_insert_id() . '"');
 			Db::getInstance()->Execute('UPDATE `' . _DB_PREFIX_ . 'mr_method` SET `id_carrier` = "' . (int)($get['id_carrier']) . '" WHERE `id_mr_method` = "' . pSQL($mainInsert) . '"');
@@ -553,7 +532,6 @@ class MondialRelay extends Module
 		else 
 			return false;
 
-		$uri = explode('&', $_SERVER['REQUEST_URI']);
 		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
 		return true;
 	}
@@ -681,7 +659,7 @@ class MondialRelay extends Module
 		{
 			$output .= '
 					<li>
-						<a href="' . 'index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'&delete=' . $Options['id_mr_method'] . '"><img src="../img/admin/disabled.gif" alt="Delete" title="Delete" /></a>' . str_replace('_', ' ', $Options['mr_Name']) . ' (' . $Options['mr_ModeCol'] . '-' . $Options['mr_ModeLiv'] . ' - ' . $Options['mr_ModeAss'] . ' : '.$Options['mr_Pays_list'].') 
+						<a href="' . 'index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'&delete_mr=' . $Options['id_mr_method'] . '"><img src="../img/admin/disabled.gif" alt="Delete" title="Delete" /></a>' . str_replace('_', ' ', $Options['mr_Name']) . ' (' . $Options['mr_ModeCol'] . '-' . $Options['mr_ModeLiv'] . ' - ' . $Options['mr_ModeAss'] . ' : '.$Options['mr_Pays_list'].') 
 						<a href="index.php?tab=AdminCarriers&id_carrier=' . (int)($Options['id_carrier']) . '&updatecarrier&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'">'.$this->l('Config Shipping.').'</a>	
 					</li>';
 		}
