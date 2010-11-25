@@ -56,6 +56,7 @@ class BlockCategories extends Module
 			{
 				Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', (int)($maxDepth));
 				Configuration::updateValue('BLOCK_CATEG_DHTML', (int)($dhtml));
+				$this->_clearBlockcategoriesCache();
 				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 			}
 		}
