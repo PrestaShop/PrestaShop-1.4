@@ -49,6 +49,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updateproductcomments.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_details.php');
 // Update database structure (use algorithms requiring PHP)
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'database_structure.php');
+// Update cms block 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'cms_block.php');
 
 //old version detection
 $oldversion = false;
