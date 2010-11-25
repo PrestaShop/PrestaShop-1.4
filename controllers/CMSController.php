@@ -46,7 +46,7 @@ class CmsControllerCore extends FrontController
 			$this->smarty->assign(array(
 				'category' => $this->cms_category,
 				'sub_category' => $this->cms_category->getSubCategories((int)($this->cookie->id_lang)),
-				'cms_pages' => CMS::getCMSPages((int)($this->cookie->id_lang)),
+				'cms_pages' => CMS::getCMSPages((int)($this->cookie->id_lang), (int)($this->cms_category->id) ),
 				'path' => Tools::getPath((int)($this->cms_category->id), $this->cms_category->name, false, 'CMS'),
 			));
 		}
