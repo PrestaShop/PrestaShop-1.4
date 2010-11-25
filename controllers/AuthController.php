@@ -129,6 +129,10 @@ class AuthControllerCore extends FrontController
 								$this->cookie->passwd = $customer->passwd;
 								$this->cookie->logged = 1;
 								$this->cookie->email = $customer->email;
+								/* Update cart address */
+								$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
+								$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+								$this->cart->update();
 								Module::hookExec('createAccount', array(
 									'_POST' => $_POST,
 									'newCustomer' => $customer
@@ -175,6 +179,10 @@ class AuthControllerCore extends FrontController
 					$this->cookie->email = $customer->email;
 					if (Configuration::get('PS_CART_FOLLOWING') AND (empty($this->cookie->id_cart) OR Cart::getNbProducts($this->cookie->id_cart) == 0))
 						$this->cookie->id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id)));
+					/* Update cart address */
+					$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
+					$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+					$this->cart->update();
 					Module::hookExec('authentication');
 					if ($back = Tools::getValue('back'))
 						Tools::redirect($back);
