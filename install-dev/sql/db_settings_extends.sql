@@ -171,6 +171,7 @@ CREATE TABLE `PREFIX_cms_block` (
 	`name` varchar(40) NOT NULL, 
 	`location` tinyint(1) unsigned NOT NULL,
 	`position` int(10) unsigned NOT NULL default '0',
+	`display_store` tinyint(1) NOT NULL DEFAULT '1',
 	PRIMARY KEY (`id_block_cms`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
