@@ -895,7 +895,8 @@ class ProductCore extends ObjectModel
 			$data['quantity'] =  (int)$quantity;
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.(int)($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.(int)($id_product_attribute)))
 			return false;
-		Hook::updateProductAttribute($id_product_attribute);
+		if ($quantity)
+			Hook::updateProductAttribute($id_product_attribute);
 		Product::updateDefaultAttribute($this->id);
 		if (empty($id_images))
 			return true;
