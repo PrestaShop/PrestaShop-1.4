@@ -418,7 +418,7 @@ class BlockCms extends Module
 				foreach ($languages as $language)
 					$this->_html .= '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<input type="text" name="block_name_'.$language['id_lang'].'" id="block_name_'.$language['id_lang'].'" size="30" value="'.(Tools::getValue('block_name_'.$language['id_lang']) ? Tools::getValue('block_name_'.$language['id_lang']) : $block_cms['name'][$language['id_lang']]).'" />
+						<input type="text" name="block_name_'.$language['id_lang'].'" id="block_name_'.$language['id_lang'].'" size="30" value="'.(Tools::getValue('block_name_'.$language['id_lang']) ? Tools::getValue('block_name_'.$language['id_lang']) : (isset($block_cms['name'][$language['id_lang']]) ? $block_cms['name'][$language['id_lang']] : '')).'" />
 					</div>';
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'name', true);
 		$this->_html .= '<p class="clear">'.$this->l('If your left this field empty, the block\'s name will be the category\'s name').'</p>
