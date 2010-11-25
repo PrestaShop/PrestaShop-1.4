@@ -255,7 +255,7 @@ class MondialRelay extends Module
 	public function hookProcessCarrier($params)
 	{
 		$cart = $params['cart'];
-		$result_MR = Db::getInstance()->ExecuteS("SELECT * FROM "._DB_PREFIX_."mr_method WHERE id_carrier='".(int)($cart->id_carrier)."' ;");
+		$result_MR = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($cart->id_carrier));
 		if (count($result_MR) > 0) 
 		{
 			$mr_mode_liv = $result_MR[0]['mr_ModeLiv'];
@@ -362,14 +362,13 @@ class MondialRelay extends Module
 					}
 			}
 
-			$settings = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'mr_method WHERE id_carrier=\''.(int)($id_carrier).'\' ; ');
+			$settings = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($row['id_carrier']));
 			$row['name'] = $settings[0]['mr_Name'];
 			$row['col'] = $settings[0]['mr_ModeCol'];
 			$row['liv'] = $settings[0]['mr_ModeLiv'];
 			$row['ass'] = $settings[0]['mr_ModeAss'];
 			$row['price'] = $cart->getOrderShippingCost((int)($row['id_carrier']));
 			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.(int)($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.(int)($row['id_carrier']).'.jpg' : '';
-
 
 			if ($row['liv'] == '24R' && $totalweight <= 20000)
 			{
