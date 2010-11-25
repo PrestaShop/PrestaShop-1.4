@@ -128,6 +128,7 @@ class CountryCore extends ObjectModel
 	{
 		/* Clean associations */
 		self::cleanAssociatedTaxes((int)$this->id);
+		self::cleanProductCountryTaxes((int)$this->id);
 		return parent::delete();
 	}
 	

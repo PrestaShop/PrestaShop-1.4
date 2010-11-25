@@ -205,7 +205,7 @@ abstract class PaymentModuleCore extends Module
 						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), (int)($id_country), (int)($product['id_tax']), floatval($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 					}
 
-					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTax((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
+					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTaxRate((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
 
 					$quantityDiscount = SpecificPrice::getQuantityDiscount((int)$product['id_product'], Shop::getCurrentShop(), (int)$cart->id_currency, (int)$vat_address->id_country, (int)$customer->id_default_group, (int)$product['cart_quantity']);
 					$unitPrice = Product::getPriceStatic((int)$product['id_product'], true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, 1, false, (int)$order->id_customer, NULL, (int)$order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});

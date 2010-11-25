@@ -144,14 +144,24 @@ class CartCore extends ObjectModel
 		$products = $cart->getProducts();
 		$totalProducts_moy = 0;
 		$ratioTax = 0;
+		
 		if (!sizeof($products))
 			return 0;
+			
+		$country_id = null;
+		$id_address = (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+		if (!empty($id_address))
+		{
+				$address_infos = Address::getCountryAndState($id_address);
+				$country_id = (int)$address_infos['id_country'];
+		}
+					
 		foreach ($products AS $product)
 		{
 			if ($product['rate'] == 0)
 				$product['rate'] = 1;
 			$totalProducts_moy += $product['total_wt'];
-			$ratioTax += $product['total_wt'] * $product['rate'];
+			$ratioTax += $product['total_wt'] * Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], floatval($product['rate']));
 		}
 		if ($totalProducts_moy > 0)
 			return $ratioTax / $totalProducts_moy;

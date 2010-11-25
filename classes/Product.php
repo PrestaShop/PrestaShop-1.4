@@ -1478,7 +1478,7 @@ class ProductCore extends ObjectModel
 	{
 		if ($ecotax AND $usetax)
 		{
-			if ($tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')) AND $taxRate = Tax::getApplicableTax((int)$tax->id, (float)$tax->rate, $id_address))
+			if ($tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')) AND $taxRate = Tax::getApplicableTaxRate((int)$tax->id, (float)$tax->rate, $id_address))
 				$price += $ecotax * (1 + $taxRate / 100);
 			else
 				$price += $ecotax;
