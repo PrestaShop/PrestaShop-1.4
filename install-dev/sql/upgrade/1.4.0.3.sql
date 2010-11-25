@@ -85,5 +85,6 @@ UPDATE `PREFIX_configuration` SET `value` = @id_timezone WHERE `name` = "PS_TIME
 
 ALTER TABLE `PREFIX_cms_block` ADD `display_store` TINYINT NOT NULL DEFAULT '1';
 
-/* PHP:group_reduction_column_fix(); */
-/* PHP:ecotax_tax_application_fix(); */
+/* PHP */
+/* PHP:group_reduction_column_fix(); */;
+/* PHP:ecotax_tax_application_fix(); */;
