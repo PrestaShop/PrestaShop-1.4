@@ -37,7 +37,6 @@
 					<li>
 						<a href="{$link->getCMSLink($cmspages.id_cms, $cmspages.link_rewrite)|escape:'htmlall':'UTF-8'}">{$cmspages.meta_title|escape:'htmlall':'UTF-8'}</a>
 					</li>
-				{/if}
 				{/foreach}
 			</ul>
 		{/if}
