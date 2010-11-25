@@ -74,7 +74,7 @@ class BlockCms extends Module
 	public function getBlockCMS($id_block_cms)
 	{
 		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category`, `location` FROM `'._DB_PREFIX_.'cms_block`
+		SELECT `id_cms_category`, `location`, `display_store` FROM `'._DB_PREFIX_.'cms_block`
 		WHERE `id_block_cms` = '.(int)($id_block_cms));
 		$cms_block_lang = Db::getInstance()->ExecuteS('
 		SELECT `id_lang`, `name` FROM `'._DB_PREFIX_.'cms_block_lang`
@@ -91,7 +91,8 @@ class BlockCms extends Module
 		global $cookie;
 		
 		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bcl.`name` AS block_name, ccl.`name` AS category_name, bc.`position`, bc.`id_cms_category` FROM `'._DB_PREFIX_.'cms_block` bc
+		SELECT bc.`id_block_cms`, bcl.`name` AS block_name, ccl.`name` AS category_name, bc.`position`, bc.`id_cms_category`, bc.`display_store`
+		FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
 		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
 		WHERE ccl.`id_lang` = '.(int)($cookie->id_lang).'
@@ -148,7 +149,7 @@ class BlockCms extends Module
 	{
 		global $cookie;
 		$cms_categories = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bc.`id_cms_category`, ccl.`link_rewrite`, ccl.`name` AS category_name, bcl.`name` AS block_name FROM `'._DB_PREFIX_.'cms_block` bc
+		SELECT bc.`id_block_cms`, bc.`id_cms_category`, bc.`display_store`, ccl.`link_rewrite`, ccl.`name` AS category_name, bcl.`name` AS block_name FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
 		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
 		WHERE bc.`location` = '.(int)($location).'
@@ -160,6 +161,7 @@ class BlockCms extends Module
 		foreach ($cms_categories as $cms_category)
 		{
 			$key = $cms_category['id_block_cms'];
+			$display_cms[$key]['display_store'] = $cms_category['display_store'];
 			$display_cms[$key]['cms'] = Db::getInstance()->ExecuteS('
 			SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
 			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
@@ -438,10 +440,23 @@ class BlockCms extends Module
 					<option value="0" '.(($block_cms AND $block_cms[0]['location'] == 0) ? 'selected="selected"' : '').'>'.$this->l('Left').'</option>
 					<option value="1" '.(($block_cms AND $block_cms[0]['location'] == 1) ? 'selected="selected"' : '').'>'.$this->l('Right').'</option>
 				</select>
-			</div>
-			<div id="cms_subcategories"></div>
-			<p class="center"><input type="submit" class="button" name="submitBlockCMS" value="'.$this->l('Save').'" /></p>
-			<p class="center"><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a></p>
+			</div>';
+		$this->_html .=	'
+			<label for="PS_STORES_DISPLAY_CMS_on">'.$this->l('Display Stores:').'</label>
+			<div class="margin-form">
+				<img src="../img/admin/enabled.gif" alt="Yes" title="Yes" />
+		        <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_on" '.(($block_cms AND ( isset($block_cms[0]['display_store']) && $block_cms[0]['display_store'] == 0)) ? '' : 'checked="checked" ').'value="1" />
+			    <label class="t" for="PS_STORES_DISPLAY_CMS_on">'.$this->l('Yes').'</label>
+			    <img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;" />
+			    <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_off" '.(($block_cms AND ( isset($block_cms[0]['display_store']) && $block_cms[0]['display_store'] == 0)) ? 'checked="checked" ' : '').'value="0" />
+			    <label  class="t" for="PS_STORES_DISPLAY_CMS_off">'.$this->l('No').'</label><br />'
+				.$this->l('Display "our stores" at the end of the block')
+			.'</div>';
+		$this->_html .=	'<div id="cms_subcategories"></div>
+			<p class="center">
+				<input type="submit" class="button" name="submitBlockCMS" value="'.$this->l('Save').'" />
+				<a class="button" style="position:relative; padding:3px 3px 4px 3px; top:1px" href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a>
+			</p>
 		';
 		
 		$this->_html .= '
@@ -458,6 +473,8 @@ class BlockCms extends Module
 		{
 			$languages = Language::getLanguages(false);
 			$cmsBoxes = Tools::getValue('cmsBox');
+			if (!Validate::isInt(Tools::getValue('PS_STORES_DISPLAY_CMS')) OR (Tools::getValue('PS_STORES_DISPLAY_CMS') != 0 AND Tools::getValue('PS_STORES_DISPLAY_CMS') != 1))
+			    $errors[] = $this->l('Invalid store displaying');
 			if (!Validate::isInt(Tools::getValue('block_location')) OR (Tools::getValue('block_location') != 0 AND Tools::getValue('block_location') != 1))
 				$errors[] = $this->l('Invalid block location');
 			if (!is_array($cmsBoxes))
@@ -529,7 +546,7 @@ class BlockCms extends Module
 			$languages = Language::getLanguages(false);
 			if (Tools::isSubmit('addBlockCMS'))
 			{
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES('.(int)(Tools::getValue('id_category')).', '.(int)(Tools::getValue('block_location')).', '.(int)($position).')');
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`, `display_store`) VALUES('.(int)(Tools::getValue('id_category')).', '.(int)(Tools::getValue('block_location')).', '.(int)($position).', '.(int)(Tools::getValue('PS_STORES_DISPLAY_CMS')).')');
 				$id_block_cms = Db::getInstance()->Insert_ID();
 				foreach ($languages as $language)
 					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES('.(int)($id_block_cms).', '.(int)($language['id_lang']).', "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'")');
@@ -546,7 +563,9 @@ class BlockCms extends Module
 				UPDATE `'._DB_PREFIX_.'cms_block`
 				SET `location` = '.(int)(Tools::getvalue('block_location')).',
 				`id_cms_category` = '.(int)(Tools::getvalue('id_category')).'
-				'.($location_change == true ? ', `position` = '.(int)($position) : '').'
+				'.($location_change == true ? ',
+				`position` = '.(int)($position) : '').',
+				`display_store` = '.(int)(Tools::getValue('PS_STORES_DISPLAY_CMS')).'
 				WHERE `id_block_cms` = '.(int)($id_block_cms));
 				
 				foreach ($languages as $language)
@@ -620,7 +639,6 @@ class BlockCms extends Module
 		$smarty->assign(array(
 			'block' => 1,
 			'cms_titles' => $cms_titles,
-			'display_stores_block' => Configuration::get('PS_STORES_DISPLAY_CMS'),
 			'theme_dir' => _PS_THEME_DIR_
 		));
 		return $this->display(__FILE__, 'blockcms.tpl');
@@ -634,7 +652,6 @@ class BlockCms extends Module
 		$smarty->assign(array(
 			'block' => 1,
 			'cms_titles' => $cms_titles,
-			'display_stores_block' => Configuration::get('PS_STORES_DISPLAY_CMS'),
 			'theme_dir' => _PS_THEME_DIR_
 		));
 		return $this->display(__FILE__, 'blockcms.tpl');
