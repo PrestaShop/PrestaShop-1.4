@@ -135,9 +135,9 @@ $datas = array(
 	array('_PS_VERSION_', INSTALL_VERSION)
 );
 if (defined('_RIJNDAEL_KEY_'))
-	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_));
+	$datas[] = array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_);
 if (defined('_RIJNDAEL_IV_'))
-	$datas[0] = array_merge($datas[0], array('_RIJNDAEL_IV_', _RIJNDAEL_IV_));
+	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
 if(!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
 	
