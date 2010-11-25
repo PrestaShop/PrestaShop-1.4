@@ -1482,7 +1482,9 @@ class AdminImport extends AdminTab
 	public static function setLocale()
 	{
 		$iso_lang  = trim(Tools::getValue('iso_lang'));
-		setlocale(LC_ALL, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
+		setlocale(LC_COLLATE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
+		setlocale(LC_CTYPE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
+		
 	}
 	
 	protected function _addProductWarning($product_name, $product_id = NULL, $message = '')
