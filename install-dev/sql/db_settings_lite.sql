@@ -159,7 +159,10 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (91, 'EDITORIAL_IMAGE_HEIGHT', 228, NOW(), NOW()),
 (92, 'PS_STATSDATA_CUSTOMER_PAGESVIEWS', 0, NOW(), NOW()),
 (93, 'PS_STATSDATA_PAGESVIEWS', 0, NOW(), NOW()),
-(94, 'PS_STATSDATA_PLUGINS', 0, NOW(), NOW())
+(94, 'PS_STATSDATA_PLUGINS', 0, NOW(), NOW()),
+(95, 'PS_GEOLOCALIZATION_ENABLED', '0', NOW(), NOW()),
+(96, 'PS_ALLOWED_COUNTRIES', 'AF;ZA;AX;AL;DZ;DE;AD;AO;AI;AQ;AG;AN;SA;AR;AM;AW;AU;AT;AZ;BS;BH;BD;BB;BY;BE;BZ;BJ;BM;BT;BO;BA;BW;BV;BR;BN;BG;BF;MM;BI;KY;KH;CM;CA;CV;CF;CL;CN;CX;CY;CC;CO;KM;CG;CD;CK;KR;KP;CR;CI;HR;CU;DK;DJ;DM;EG;IE;SV;AE;EC;ER;ES;EE;ET;FK;FO;FJ;FI;FR;GA;GM;GE;GS;GH;GI;GR;GD;GL;GP;GU;GT;GG;GN;GQ;GW;GY;GF;HT;HM;HN;HK;HU;IM;MU;VG;VI;IN;ID;IR;IQ;IS;IL;IT;JM;JP;JE;JO;KZ;KE;KG;KI;KW;LA;LS;LV;LB;LR;LY;LI;LT;LU;MO;MK;MG;MY;MW;MV;ML;MT;MP;MA;MH;MQ;MR;YT;MX;FM;MD;MC;MN;ME;MS;MZ;NA;NR;NP;NI;NE;NG;NU;NF;NO;NC;NZ;IO;OM;UG;UZ;PK;PW;PS;PA;PG;PY;NL;PE;PH;PN;PL;PF;PR;PT;QA;DO;CZ;RE;RO;UK;RU;RW;EH;BL;KN;SM;MF;PM;VA;VC;LC;SB;WS;AS;ST;SN;RS;SC;SL;SG;SK;SI;SO;SD;LK;SE;CH;SR;SJ;SZ;SY;TJ;TW;TZ;TD;TF;TH;TL;TG;TK;TO;TT;TN;TM;TC;TR;TV;UA;UY;US;VU;VE;VN;WF;YE;ZM;ZW', NOW(), NOW()),
+(97, 'PS_GEOLOCALIZATION_BEHAVIOR', '0', NOW(), NOW())
 ;
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
@@ -500,7 +503,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (35, 'AdminTabs', 9, 3),(37, 'AdminQuickAccesses', 9, 4),(40, 'AdminAliases', 9, 5),(41, 'AdminImport', 9, 6),(52, 'AdminSubDomains', 9, 7),
 (53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 11),
 (70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
-(80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3);
+(80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocalization', 8, 12);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
@@ -516,7 +519,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 55, 'Delivery slips'),(1, 56, 'SEO'),(1, 57, 'CMS'),(1, 58, 'Image mapping'),(1, 59, 'Customer messages'),(1, 60, 'Tracking'),
 (1, 61, 'Search engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
 (1, 68, 'Attachments'),(1, 69, 'Informations'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
-(1, 80, 'Modules & themes catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes');
+(1, 80, 'Modules & themes catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocalization');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 1, 'Catalogue'),(2, 2, 'Clients'),(2, 3, 'Commandes'),(2, 4, 'Paiement'),(2, 5, 'Transport'),
@@ -530,7 +533,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 56, 'SEO'),(2, 57, 'CMS'),(2, 58, 'Scènes'),(2, 59, 'Messages clients'),(2, 60, 'Suivi'),(2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),(2, 63, 'Groupes'),(2, 64, 'Générateurs'),(2, 65, 'Paniers'),(2, 66, 'Tags'),(2, 67, 'Recherche'),
 (2, 68, 'Documents joints'),(2, 69, 'Informations'),(2, 70, 'Performances'),(2, 71, 'SAV'),(2, 72, 'Service web'),(2, 73, 'Mouvements de Stock'),
-(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins'),(2, 83, 'Thèmes');
+(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins'),(2, 83, 'Thèmes'),(2, 84, 'Géolocalisation');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 1, 'Catálogo'),(3, 2, 'Clientes'),(3, 3, 'Pedidos'),(3, 4, 'Pago'),(3, 5, 'Transporte'),
@@ -543,7 +546,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 49, 'Vales'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
-(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas');
+(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`

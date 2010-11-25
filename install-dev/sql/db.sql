@@ -349,6 +349,7 @@ CREATE TABLE `PREFIX_contact_lang` (
 CREATE TABLE `PREFIX_country` (
   `id_country` int(10) unsigned NOT NULL auto_increment,
   `id_zone` int(10) unsigned NOT NULL,
+  `id_currency` int(10) unsigned NOT NULL,
   `iso_code` varchar(3) NOT NULL,
   `call_prefix` int(10) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
@@ -366,6 +367,13 @@ CREATE TABLE `PREFIX_country_lang` (
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(64) NOT NULL,
   UNIQUE KEY `country_lang_index` (`id_country`,`id_lang`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_country_tax` (
+  `id_country_tax` int(11) NOT NULL AUTO_INCREMENT,
+  `id_country` int(11) NOT NULL,
+  `id_tax` int(11) NOT NULL,
+  PRIMARY KEY (`id_country_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_currency` (
@@ -1543,4 +1551,11 @@ CREATE TABLE `PREFIX_memcached_servers` (
 `ip` VARCHAR( 254 ) NOT NULL ,
 `port` INT(11) UNSIGNED NOT NULL ,
 `weight` INT(11) UNSIGNED NOT NULL
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
+  `id_product` int(11) NOT NULL,
+  `id_country` int(11) NOT NULL,
+  `id_tax` int(11) NOT NULL,
+  UNIQUE KEY `id_product` (`id_product`,`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;

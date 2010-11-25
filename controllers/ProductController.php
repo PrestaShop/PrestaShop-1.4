@@ -130,7 +130,9 @@ class ProductControllerCore extends FrontController
 
 				// Tax
 				$tax_data = Tax::getDataByProductId((int)($product->id));
-				$tax = floatval(Tax::getApplicableTax((int)($tax_data['id_tax']), floatval($tax_data['rate'])));
+				$tax = floatval(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), floatval($tax_data['rate'])));
+				$this->smarty->assign('tax_rate', $tax);
+								
 				/* /Quantity discount management */
 				$this->smarty->assign(array(
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), floatval($tax_data['rate'])),
@@ -241,7 +243,7 @@ class ProductControllerCore extends FrontController
 				}
 				
 				$this->smarty->assign(array(
-					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getApplicableTax((int)($product->id_tax), 1),
+					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$product->id, (int)$id_country, (int)$product->id_tax, 1),
 					'customizationFields' => $product->getCustomizationFields((int)($this->cookie->id_lang))
 				));
 

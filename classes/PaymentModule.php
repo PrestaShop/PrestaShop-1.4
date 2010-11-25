@@ -190,10 +190,20 @@ abstract class PaymentModuleCore extends Module
 					{
 						$product['tax'] = 0;
 						$product['rate'] = 0;
-						$tax = 0;
+						$tax_rate = 0;
 					}
 					else
-						$tax = Tax::getApplicableTax((int)($product['id_tax']), floatval($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+					{
+						$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+						$address_infos = Address::getCountryAndState($id_address);
+				
+						if ($address_infos['id_country'])
+							$id_country = (int)($address_infos['id_country']);
+						else
+							$id_country = Country::getDefaultCountryId();
+					
+						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), (int)($id_country), (int)($product['id_tax']), floatval($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+					}
 
 					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTax((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
 
@@ -216,8 +226,8 @@ abstract class PaymentModuleCore extends Module
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
 						'.(empty($product['supplier_reference']) ? 'NULL' : '\''.pSQL($product['supplier_reference']).'\'').',
 						'.floatval($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',
-						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
-						'.floatval($tax).',
+						\''.(empty($tax_rate) ? '' : pSQL($product['tax'])).'\',
+						'.floatval($tax_rate).',
 						'.floatval($product['ecotax']).',
 						'.(float)$ecotaxRate.',
 						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',

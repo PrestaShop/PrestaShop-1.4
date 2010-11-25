@@ -418,4 +418,18 @@ if (Tools::getValue('submitPublishCMS'))
 		die ('error: parameters');	
 }
 
+if (Tools::isSubmit('getCountryTaxes'))
+{
+	$id_country = (int)Tools::getValue('id_country');
+	if (empty($id_country))
+		die(Tools::displayError());
+
+	$id_taxes = Country::getIdsOfAssociatedTaxes($id_country);	
+	$taxes = array();
+	foreach ($id_taxes AS $id_tax) 
+		$taxes[] = new Tax($id_tax, 1);
+	
+	die(Tools::jsonEncode($taxes));
+}
+
 ?>

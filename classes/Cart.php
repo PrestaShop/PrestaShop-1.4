@@ -678,6 +678,14 @@ class CartCore extends ObjectModel
 		if ($type == 7)
 			$type = 1;
 
+		$country_id = null;
+		$id_address = (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+		if (!empty($id_address))
+		{
+				$address_infos = Address::getCountryAndState($id_address);
+				$country_id = (int)$address_infos['id_country'];
+		}
+
 		$products = $this->getProducts();
 		$order_total = 0;
 		if (Tax::excludeTaxeOption())
@@ -686,14 +694,13 @@ class CartCore extends ObjectModel
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
-				// Here taxes are computed only once the quantity has been applied to the product price
-				$price = Product::getPriceStatic((int)($product['id_product']), false, (int)($product['id_product_attribute']), 2, NULL, false, true, $product['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				// Here taxes are computed only once the quantity has been applied to the product price			
+				$price = Product::getPriceStatic((int)$product['id_product'], false, (int)$product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity'], false, (int)$this->id_customer ? (int)$this->id_customer : NULL, (int)$this->id, $id_address);
 				$total_price = $price * (int)($product['cart_quantity']);
 				if ($withTaxes)
-				{
-					$total_price = Tools::ps_round($total_price * (1 + floatval(Tax::getApplicableTax((int)($product['id_tax']), floatval($product['rate']))) / 100), 2);
-					Product::applyEcotax($total_price, $product['ecotax'], true, ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
-				}
+					$total_price = Tools::ps_round($total_price * (1 + floatval(
+						Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], floatval($product['rate']))
+						) / 100), 2);		
 			}
 			else
 			{

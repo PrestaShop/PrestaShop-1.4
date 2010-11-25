@@ -8,7 +8,7 @@ var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
 var currencyRate = '{$currencyRate|floatval}';
 var currencyFormat = '{$currencyFormat|intval}';
 var currencyBlank = '{$currencyBlank|intval}';
-var taxRate = {$product->tax_rate|floatval};
+var taxRate = {$tax_rate|floatval};
 var jqZoomEnabled = {if $jqZoomEnabled}true{else}false{/if};
 
 //JS Hook
@@ -32,7 +32,7 @@ var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};
 var displayPrice = {$priceDisplay};
 var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
-var productAvailableForOrder = '{$product->available_for_order}';
+var productAvailableForOrder = {if isset($restricted_country_mode) AND $restricted_country_mode}'0'{else}'{$product->available_for_order}'{/if};
 var productShowPrice = '{$product->show_price}';
 var productUnitPrice = '{$product->unit_price}';
 
@@ -199,7 +199,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- prices -->
-			{if $product->show_price}
+			{if $product->show_price AND !isset($restricted_country_mode)}
 			<p class="price">
 				{if $product->on_sale}
 					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
@@ -336,7 +336,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<p>{l s='Online only'}</p>
 			{/if}
 			
-			<p{if (!$allow_oosp && $product->quantity == 0) OR !$product->available_for_order} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
+			<p{if (!$allow_oosp && $product->quantity == 0) OR !$product->available_for_order OR (isset($restricted_country_mode) AND $restricted_country_mode)} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
 			{if $HOOK_PRODUCT_ACTIONS}
 				{$HOOK_PRODUCT_ACTIONS}
 			{/if}
@@ -426,9 +426,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 								<a href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='More'}" class="product_description">{$accessory.description_short|strip_tags|truncate:100:'...'}</a>
 							</p>
 							<p class="product_accessories_price">
-								{if $accessory.show_price}<span class="price">{displayWtPrice p=$accessory.price}</span>{/if}
+								{if $accessory.show_price AND !isset($restricted_country_mode)}<span class="price">{displayWtPrice p=$accessory.price}</span>{/if}
 								<a class="button" href="{$accessoryLink|escape:'htmlall':'UTF-8'}" title="{l s='View'}">{l s='View'}</a>
-								{if $accessory.available_for_order}<a class="exclusive button ajax_add_to_cart_button" href="{$link->getPageLink('cart.php')}?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>{/if}
+								{if $accessory.available_for_order AND !isset($restricted_country_mode)}<a class="exclusive button ajax_add_to_cart_button" href="{$link->getPageLink('cart.php')}?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>{/if}
 							</p>
 						</li>
 					{/foreach}

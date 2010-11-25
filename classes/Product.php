@@ -247,7 +247,7 @@ class ProductCore extends ObjectModel
 			$this->supplier_name = Supplier::getNameById((int)($this->id_supplier));
 			$tax = new Tax((int)($this->id_tax), Configuration::get('PS_LANG_DEFAULT'));
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
-				$this->tax_rate = Tax::getApplicableTax((int)($this->id_tax), floatval($tax->rate));
+				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL, (int)($this->id_tax), (float)($tax->rate));
 			else
 				$this->tax_rate = floatval($tax->rate);
 			$this->new = $this->isNew();
@@ -1540,15 +1540,21 @@ class ProductCore extends ObjectModel
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
-		$ids = Address::getCountryAndState($id_address);
-		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+
+		$address_infos = Address::getCountryAndState($id_address);
+		if ($address_infos['id_country'])
+			$id_country = (int)($address_infos['id_country']);
+		else
+			$id_country = Country::getDefaultCountryId();
+
 		$id_shop = (int)(Shop::getCurrentShop());
 		// END Initialization
 
 		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.($id_product_attribute === NULL ? 'NULL' : ($id_product_attribute === false ? 'false' : $id_product_attribute)).'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
-
+			
+		// fetch price & attribute price
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -1563,37 +1569,40 @@ class ProductCore extends ObjectModel
 
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
-		$price = floatval((!self::$_pricesLevel3[$cacheId3] OR floatval(self::$_pricesLevel3[$cacheId3]['reduction'])) ? $result['price'] : self::$_pricesLevel3[$cacheId3]['price']);
-		if ($result['ecotax'])
-			$price -= $result['ecotax'];
-		if (!self::$_pricesLevel3[$cacheId3] OR (floatval(self::$_pricesLevel3[$cacheId3]['price'])) AND !self::$_pricesLevel3[$cacheId3]['id_currency'])
+		
+		$specific_price = self::$_pricesLevel3[$cacheId3];
+			
+		$price = floatval((!$specific_price OR floatval($specific_price['reduction'])) ? $result['price'] : $specific_price['price']);
+		if (!$specific_price OR (floatval($specific_price['price'])) AND !$specific_price['id_currency'])
 			$price = Tools::convertPrice($price, $id_currency);
-		$specificPriceOutput = self::$_pricesLevel3[$cacheId3];
+		$specificPriceOutput = $specific_price;
+		
 		// Exclude tax
-		if (!$tax = floatval($forceAssociatedTax ? $result['rate'] : Tax::getApplicableTax((int)($result['id_tax']), floatval($result['rate']), ($id_address ? (int)($id_address) : NULL))))
+		if (!$tax_rate = (float)($forceAssociatedTax ? $result['rate'] : Tax::getProductTaxRate((int)($id_product), (int)($id_country), (int)($result['id_tax']), (float)($result['rate']), ($id_address ? (int)($id_address) : NULL))))
 			$usetax = false;
 		if ($usetax)
-			$price = $price * (1 + ($tax / 100));
-		/* Keep this line */
-		// $price = Tools::ps_round($price, ($only_reduc OR $usereduc) ? 2 : $decimals);
+			$price = $price * (1 + ($tax_rate / 100));
+
 		// Attribute price
 		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $id_currency);
-		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + (($tax ? $tax : $result['rate']) / 100)));
+		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + ($tax_rate / 100)));
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
 		$price = Tools::ps_round($price, $decimals);
+		// Reduction
 		$reduc = 0;
-		if (($only_reduc OR $usereduc) AND self::$_pricesLevel3[$cacheId3])
-			$reduc = Tools::ps_round(self::$_pricesLevel3[$cacheId3]['reduction_type'] == 'amount' ? self::$_pricesLevel3[$cacheId3]['reduction'] : ($price * self::$_pricesLevel3[$cacheId3]['reduction']), 2);
+		if (($only_reduc OR $usereduc) AND $specific_price)
+			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? $specific_price['reduction'] : ($price * $specific_price['reduction']), 2);
 		if ($only_reduc)
 			return $reduc;
-		// Reduction
+
 		if ($usereduc)
 		{
 			if ($reduc)
 				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
 		}
+
 		// Group reduction
 		if ($reductionFromCategory = floatval(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
@@ -2304,7 +2313,7 @@ class ProductCore extends ObjectModel
 		
 		// Tax
 		$usetax = true;
-		$tax = floatval(Tax::getApplicableTax((int)($row['id_tax']), floatval($row['rate'])));
+		$tax = Tax::getProductTaxRate((int)($row['id_product']), NULL, (int)($row['id_tax']), floatval($row['rate']));		
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
 		

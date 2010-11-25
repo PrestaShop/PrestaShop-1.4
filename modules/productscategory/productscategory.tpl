@@ -17,7 +17,7 @@
 			<a href="{$link->getProductLink($categoryProduct.id_product, $categoryProduct.link_rewrite, $categoryProduct.category, $categoryProduct.ean13)}" title="{$categoryProduct.name|htmlspecialchars}">
 			{$categoryProduct.name|truncate:15:'...'|escape:'htmlall':'UTF-8'}
 			</a><br />
-			{if $ProdDisplayPrice AND $categoryProduct.show_price == 1}
+			{if $ProdDisplayPrice AND $categoryProduct.show_price == 1 AND !isset($restricted_country_mode)}
 				<span class="price_display">
 					<span class="price">{convertPrice price=$categoryProduct.displayed_price}</span>
 				</span><br />

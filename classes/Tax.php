@@ -31,6 +31,8 @@ class TaxCore extends ObjectModel
 
 	protected 	$table = 'tax';
 	protected 	$identifier = 'id_tax';
+	
+	protected static $_product_country_tax = array();
 
 	public		$noZeroObject = 'getTaxes';
 
@@ -58,14 +60,20 @@ class TaxCore extends ObjectModel
 
 	public function delete()
 	{
-		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)($this->id)))
+		/* Clean associations */
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tax_state` WHERE `id_tax` = '.(int)$this->id))
 			return false;
+		self::cleanAssociatedCountries((int)$this->id);
 		return parent::delete();
 	}
 
+	/**
+	 * @deprecated use Tax::zoneHasTax() instead
+	 */
 	public static function checkTaxZone($id_tax, $id_zone)
 	{
-		return isset(self::$_TAX_ZONES[(int)($id_zone)][(int)($id_tax)]);
+		Tools::displayAsDeprecated();
+		return isset(self::$_TAX_ZONES[intval($id_zone)][intval($id_tax)]);
 	}
 
 	public function getStates()
@@ -158,7 +166,7 @@ class TaxCore extends ObjectModel
 
 	static public function zoneHasTax($id_tax, $id_zone)
 	{
-		return Tax::checkTaxZone((int)($id_tax), (int)($id_zone));
+		return isset(self::$_TAX_ZONES[intval($id_zone)][intval($id_tax)]);
 	}
 
 	static public function getRateByState($id_state, $active = 1)
@@ -172,42 +180,73 @@ class TaxCore extends ObjectModel
 		return $tax ? floatval($tax['rate']) : false;
 	}
 
+	/**
+	 *  Return the applicable tax rate depending of the country and state
+	 * @deprecated use getApplicableTaxRate
+	 * @param integer $id_tax
+	 * @param float $productTax
+	 * @param integer $id_address
+	 * 
+	 * @return float taxe_rate
+	 */
 	static public function getApplicableTax($id_tax, $productTax, $id_address = NULL)
+	{
+		Tools::displayAsDeprecated();
+		return Tax::getApplicableTaxRate($id_tax, $productTax, $id_address);
+	}
+	
+	/**
+	 *  Return the applicable tax rate depending of the country and state
+	 *
+	 * @param integer $id_tax
+	 * @param float $productTax
+	 * @param integer $id_address
+	 *
+	 * @return float taxe_rate
+	 */
+	public static function getApplicableTaxRate($id_tax, $productTax, $id_address = NULL)
 	{
 		global $cart, $cookie, $defaultCountry;
 
 		if (!is_object($cart))
 			die(Tools::displayError());
+			
 		if (!$id_address)
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+			
 		/* If customer has an address (implies that he is registered and logged) */
-		if ($id_address AND $address_ids = Address::getCountryAndState($id_address))
+		if ($id_address AND $address_infos = Address::getCountryAndState($id_address))
 		{
-			$id_zone_country = Country::getIdZone((int)($address_ids['id_country']));
-			if (!empty($address_ids['vat_number']) AND $address_ids['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
+			if (!empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
 				return 0;
+				
 			/* If customer's invoice address is inside a state */
-			if ($address_ids['id_state'])
+			if ($address_infos['id_state'])
 			{
-				$state = new State((int)($address_ids['id_state']));
+				$id_zone_country = Country::getIdZone(intval($address_infos['id_country']));				
+				$state = new State(intval($address_infos['id_state']));				
 				if (!Validate::isLoadedObject($state))
 					die(Tools::displayError());
+					
 				/* Return tax value depending to the tax behavior */
 				$tax_behavior = (int)($state->tax_behavior);
 				if ($tax_behavior == PS_PRODUCT_TAX)
 					return $productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone_country));
 				if ($tax_behavior == PS_STATE_TAX)
-					return Tax::getRateByState((int)($address_ids['id_state']));
+					return Tax::getRateByState((int)($address_infos['id_state']));
 				if ($tax_behavior == PS_BOTH_TAX)
-					return ($productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone_country))) + Tax::getRateByState((int)($address_ids['id_state']));
+					return ($productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone_country))) + Tax::getRateByState((int)($address_infos['id_state']));
 				/* Unknown behavior */
 				die(Tools::displayError('Unknown tax behavior!'));
 			}
+			
 			/* Else getting country zone tax */
 			if (!$id_zone = Address::getZoneById($id_address))
 				die(Tools::displayError());
+			
 			return $productTax * Tax::zoneHasTax((int)($id_tax), (int)($id_zone));
 		}
+
 		/* Default tax application */
 		if (!Validate::isLoadedObject($defaultCountry))
 			die(Tools::displayError());
@@ -247,5 +286,106 @@ class TaxCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
 		WHERE p.`id_product` = '.(int)($id_product));
+	}
+	
+	/**
+	 * Return the product country tax
+	 *
+	 * @param integer $id_product
+	 * @param integer $id_country
+	 * @return Tax
+	 */		
+	public static function getProductTaxRate($id_product, $id_country, $id_tax, $product_tax, $id_address = NULL)
+	{		
+		$rate = Tax::getProductCountryTaxRate((int)($id_product), intval($id_country));
+
+		if (!$rate)
+			$rate = Tax::getApplicableTaxRate((int)($id_tax), floatval($product_tax), (int)($id_address));
+	
+		return $rate;
+	}
+
+	/**
+	 * Return the product country tax rate
+	 *
+	 * @param integer $id_product
+	 * @param integer $id_country
+	 * @return float
+	 */		
+	public static function getProductCountryTaxRate($id_product, $id_country)
+	{
+		$tax = Tax::getProductCountryTax($id_product, $id_country);		
+		return $tax ? $tax->rate : 0;
+	}
+	
+	/**
+	 * Return the product country tax
+	 *
+	 * @param integer $id_product
+	 * @param integer $id_country
+	 * @return Tax
+	 */		
+	public static function getProductCountryTax($id_product, $id_country)
+	{		
+	
+		if (!isset(self::$_product_country_tax[$id_product.'-'.$id_country]))
+		{		
+			$id_tax = Db::getInstance()->getValue('
+				SELECT `id_tax`
+				FROM `'._DB_PREFIX_.'product_country_tax`
+				WHERE `id_product` = '.(int)$id_product.'
+				AND `id_country` = '.(int)$id_country.'
+				ORDER BY `id_country` DESC, `id_product` DESC'
+			);		
+		
+
+			self::$_product_country_tax[$id_product.'-'.$id_country] = (!empty($id_tax) ? new Tax((int)$id_tax) : false);
+		}
+
+		return self::$_product_country_tax[$id_product.'-'.$id_country];
+	}		
+	
+	
+	public static function getProductCountryTaxes($id_product, $id_lang)
+	{
+		return 	Db::getInstance()->ExecuteS('
+		SELECT c.`id_country`, c.`name` AS country, t.`rate`
+		FROM `'._DB_PREFIX_.'product_country_tax` pct
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = pct.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` c ON (c.`id_country` = pct.`id_country`)
+		WHERE pct.`id_product` = '.intval($id_product).'
+		AND c.`id_lang` = '.(int)($id_lang)		
+		);
+	}
+	
+	
+	public static function deleteProductCountryTax($id_product, $id_country)
+	{
+		return Db::getInstance()->Execute('
+			DELETE FROM `'._DB_PREFIX_.'product_country_tax`
+			WHERE `id_product` = '.(int)$id_product.'
+			AND `id_country` = '.(int)$id_country
+		);	
+	}
+	
+	/**
+	 * Create a product tax
+	 *
+	 * @param integer $id_product
+	 * @param integer $id_country
+	 * @param integer $id_tax 
+	 * @return boolean
+	 */
+	public static function setProductCountryTax($id_product, $id_country, $id_tax)
+	{
+		return Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'product_country_tax`(`id_product`, `id_country`, `id_tax`)
+			VALUES ('.(int)($id_product).','.(int)($id_country).','.(int)($id_tax).')
+		');
+	}
+	
+	static public function cleanAssociatedCountries($id_tax)
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'country_tax` WHERE `id_tax` = '.(int)$id_tax);
 	}
 }

@@ -36,6 +36,11 @@
 	<body {if $page_name}id="{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
 	{if !$content_only}
 		<noscript><ul><li>{l s='This shop requires JavaScript to run correctly. Please activate JavaScript in your browser.'}</li></ul></noscript>
+		{if isset($restricted_country_mode) && $restricted_country_mode}
+		<div id="restricted-country">
+			<p>{l s='You can\'t make a new order from your country:'} <span class="bold">{$geolocalization_country}</span></p>
+		</div>
+		{/if}
 		<div id="page">
 
 			<!-- Header -->

@@ -18,6 +18,9 @@ class CountryCore extends ObjectModel
 
 	/** @var integer Zone id which country belongs */
 	public 		$id_zone;
+	
+	/** @var integer Currency id which country belongs */
+	public 		$id_currency;
 
 	/** @var string 2 letters iso code */
 	public 		$iso_code;
@@ -47,9 +50,9 @@ class CountryCore extends ObjectModel
 
 	protected 	$tables = array ('country', 'country_lang');
 
- 	protected 	$fieldsRequired = array('id_zone', 'iso_code', 'contains_states', 'need_identification_number');
+ 	protected 	$fieldsRequired = array('id_zone', 'id_currency', 'iso_code', 'contains_states', 'need_identification_number');
  	protected 	$fieldsSize = array('iso_code' => 3);
- 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'call_prefix' => 'isInt', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool', 'need_zip_code' => 'isBool', 'zip_code_format' => 'isZipCodeFormat');
+ 	protected 	$fieldsValidate = array('id_zone' => 'isUnsignedId', 'id_currency' => 'isUnsignedId', 'call_prefix' => 'isInt', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool', 'contains_states' => 'isBool', 'need_identification_number' => 'isBool', 'need_zip_code' => 'isBool', 'zip_code_format' => 'isZipCodeFormat');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 64);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -58,6 +61,7 @@ class CountryCore extends ObjectModel
 		'objectsNodeName' => 'countries',
 		'fields' => array(
 			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
+			'id_currency' => array('sqlId' => 'id_currency', 'xlink_resource'=> 'currencies'),
 		),
 		'linked_tables' => array(//TODO this should be native...
 			'i18n' => array(
@@ -77,6 +81,7 @@ class CountryCore extends ObjectModel
 	{
 		parent::validateFields();
 		$fields['id_zone'] = (int)($this->id_zone);
+		$fields['id_currency'] = (int)($this->id_currency);
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
 		$fields['call_prefix'] = (int)($this->call_prefix);
 		$fields['active'] = (int)($this->active);
@@ -98,6 +103,34 @@ class CountryCore extends ObjectModel
 		return parent::getTranslationsFields(array('name'));
 	}
 
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (!parent::add($autodate, $nullValues))
+			return false;
+		return self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
+	}
+	
+	public function update($nullValues = false)
+	{
+		if (!parent::update($nullValues))
+			return false;
+		self::cleanAssociatedTaxes((int)$this->id);
+		self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
+		return  self::cleanProductCountryTaxes((int)$this->id);
+	}
+	
+	/**
+	  * Delete country
+	  *
+	  * @return bool
+	  */
+	public function delete()
+	{
+		/* Clean associations */
+		self::cleanAssociatedTaxes((int)$this->id);
+		return parent::delete();
+	}
+	
 	/**
 	  * Return available countries
 	  *
@@ -260,6 +293,91 @@ class CountryCore extends ObjectModel
 	public static function displayCallPrefix($prefix)
 	{
 		return ((int)($prefix) ? '+'.$prefix : '-');
+	}
+
+	/**
+	 * Returns the default country Id
+	 * 
+	 * @return integer default country id
+	 */
+	public static function getDefaultCountryId()
+	{
+		global $cookie;
+
+		if (Configuration::get('PS_GEOLOCALIZATION_ENABLED'))
+			$id_country = (int)(Country::getByIso($cookie->iso_code_country));
+		else
+			$id_country = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		
+		return $id_country;
+	}
+	
+	/**
+	 * Return a list of countries for which no tax has been define for the specified
+	 * product
+	 *
+	 * @param integer $id_product
+	 * @param integer $id_lang
+	 */
+	public static function getCountriesWithoutTaxByProductId($id_product, $id_lang = NULL)
+	{
+		return Db::getInstance()->ExecuteS('
+			SELECT * 
+			FROM `'._DB_PREFIX_.'country` c 
+			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
+			WHERE c.`id_country` IN (SELECT `id_country`
+								   FROM `'._DB_PREFIX_.'country_tax`)
+			AND c.`id_country` NOT IN (SELECT `id_country`								 
+								 	  FROM `'._DB_PREFIX_.'product_country_tax`
+								 	  WHERE `id_product` = '.(int)($id_product).'
+								 	  )'.
+			((!empty($id_lang)) ? ' AND cl.`id_lang` = '.(int)($id_lang) : '')
+		);
+	}
+
+	
+	static public function addAssociatedTaxes($id_country, $taxes)
+	{
+		if (!Validate::isInt($id_country))
+			return false;
+		if (is_array($taxes))
+		{
+			$sql = 'INSERT INTO `'._DB_PREFIX_.'country_tax` VALUES';
+			foreach ($taxes as $id_tax)
+				$sql .= '(NULL, '.(int)$id_country.', '.(int)$id_tax.'),';
+			$sql = rtrim($sql, ',');
+			return Db::getInstance()->Execute($sql);
+		}
+		return true;
+	}
+	
+	static public function getIdsOfAssociatedTaxes($id_country)
+	{
+		$return = array();
+		
+		$taxes =  Db::getInstance()->ExecuteS('
+		SELECT `id_tax` 
+		FROM `'._DB_PREFIX_.'country_tax` 
+		WHERE `id_country` = '.(int)$id_country);
+		
+		foreach ($taxes as $tax)
+			$return[] = $tax['id_tax'];
+		return $return;
+	}
+	
+	static public function cleanAssociatedTaxes($id_country)
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'country_tax` WHERE `id_country` = '.(int)$id_country);
+	}
+	
+	public static function cleanProductCountryTaxes($id_country)
+	{
+		return Db::getInstance()->Execute('
+		DELETE FROM `'._DB_PREFIX_.'product_country_tax`
+		WHERE `id_country` = '.(int)$id_country.'
+		AND `id_tax` NOT IN (SELECT `id_tax`
+							 FROM `'._DB_PREFIX_.'country_tax`
+							 WHERE `id_country` = '.(int)$id_country.')');
 	}
 }
 

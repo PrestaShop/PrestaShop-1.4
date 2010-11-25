@@ -53,6 +53,7 @@ define('_PS_TMP_IMG_DIR_',          _PS_IMG_DIR_.'tmp/');
 define('_PS_PROD_PIC_DIR_',			_PS_ROOT_DIR_.'/upload/');
 define('_PS_TMP_DIR_',				_PS_ROOT_DIR_.'/upload/');
 define('_PS_TOOL_DIR_',             _PS_ROOT_DIR_.'/tools/');
+define('_PS_GEOIP_DIR_',           _PS_TOOL_DIR_.'geoip/');
 define('_PS_SMARTY_DIR_',           _PS_TOOL_DIR_.'smarty/');
 define('_PS_STEST_DIR_',            _PS_TOOL_DIR_.'simpletest/');
 define('_PS_SWIFT_DIR_',            _PS_TOOL_DIR_.'swift/');
@@ -120,5 +121,9 @@ define('_STOCK_MOVEMENT_MISSING_REASON_', 2);
 define('_PS_DEFAULT_CUSTOMER_GROUP_', 1);
 
 define('_PS_CACHEFS_DIRECTORY_', dirname(__FILE__).'/../cache/cachefs/');
+
+/* Geolocalization */
+define('_PS_GEOLOCALIZATION_NO_CATALOG_', 0);
+define('_PS_GEOLOCALIZATION_NO_ORDER_', 1);
 
 ?>

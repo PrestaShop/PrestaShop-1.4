@@ -53,15 +53,60 @@ class FrontControllerCore
 			return;
 		self::$initialized = true;
 			
-		global $_CONF, $cookie, $smarty, $cart, $iso;
+		global $_CONF, $cookie, $smarty, $cart, $iso, $defaultCountry;
 		if (!isset($smarty))
 			exit;
+
+		// Init Cookie
+		$cookie = new Cookie('ps');
 
 		/* Theme is missing or maintenance */
 		if (!is_dir(dirname(__FILE__).'/../themes/'._THEME_NAME_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
 			$maintenance = true;
+		elseif (intval(Configuration::get('PS_GEOLOCALIZATION_ENABLED')) AND $_SERVER['SERVER_NAME'] != 'localhost' AND $_SERVER['SERVER_NAME'] != '127.0.0.1')
+		{
+			/* Check if Maxmind Database exists */
+			if (file_exists(_PS_GEOIP_DIR_.'GeoLiteCity.dat'))
+			{
+				if (!isset($cookie->iso_code_country) OR (isset($cookie->iso_code_country) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
+				{
+					include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
+					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
+					
+					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
+					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
+					
+					if (!in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))))
+					{
+						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+							$restricted_country = true;
+						elseif (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+							$smarty->assign(array(
+								'restricted_country_mode' => true,
+								'geolocalization_country' => $record->country_name
+							));
+					}
+					else
+					{
+						$cookie->iso_code_country = strtoupper($record->country_code);
+						$hasBeenSet = true;
+					}
+				}
+				
+				if (intval($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				{
+					/* Update defaultCountry */
+					$defaultCountry = new Country($id_country);
+					if (isset($hasBeenSet) AND $hasBeenSet)
+						$cookie->id_currency = intval(Currency::getCurrencyInstance($defaultCountry->id_currency ? intval($defaultCountry->id_currency) : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
+				}
+			}
+			/* If not exists we disabled the geolocalization feature */
+			else
+				Configuration::updateValue('PS_GEOLOCALIZATION_ENABLED', 0);
+		}
 
 		ob_start();
 
@@ -111,6 +156,9 @@ class FrontControllerCore
 		{
 			$cart = new Cart((int)($cookie->id_cart));
 			if ($cart->OrderExists())
+				unset($cookie->id_cart, $cart);
+			/* Delete product of cart, if user can't make an order form his country */
+			elseif (intval(Configuration::get('PS_GEOLOCALIZATION_ENABLED')) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND $cart->nbProducts())
 				unset($cookie->id_cart, $cart);
 			elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)
 			{
@@ -283,6 +331,12 @@ class FrontControllerCore
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
 			$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
+			exit;
+		}
+		elseif (isset($restricted_country) AND $restricted_country)
+		{
+			header('HTTP/1.1 503 temporarily overloaded');
+			$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
 			exit;
 		}
 
