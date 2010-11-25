@@ -37,7 +37,8 @@ class CmsControllerCore extends FrontController
 		{
 			$this->smarty->assign(array(
 				'cms' => $this->cms,
-				'content_only' => (int)(Tools::getValue('content_only'))
+				'content_only' => (int)(Tools::getValue('content_only')),
+				'path' => ((isset($this->cms->id_cms_category) AND $this->cms->id_cms_category) ? Tools::getFullPath((int)($this->cms->id_cms_category), $this->cms->meta_title, 'CMS') : Tools::getFullPath(1, $this->cms->meta_title, 'CMS'))
 			));
 		}
 		elseif ($this->assignCase == 2)
@@ -45,7 +46,8 @@ class CmsControllerCore extends FrontController
 			$this->smarty->assign(array(
 				'category' => $this->cms_category,
 				'sub_category' => $this->cms_category->getSubCategories((int)($this->cookie->id_lang)),
-				'cms_pages' => CMS::getCMSPages((int)($this->cookie->id_lang))
+				'cms_pages' => CMS::getCMSPages((int)($this->cookie->id_lang)),
+				'path' => Tools::getPath((int)($this->cms_category->id), $this->cms_category->name, false, 'CMS'),
 			));
 		}
 	}
