@@ -50,11 +50,15 @@ class AdminCountries extends AdminTab
 	
 	public function displayForm($isMainTab = true)
 	{
-		global $currentIndex;
+		global $currentIndex, $cookie;
 		parent::displayForm();
 		
 		$obj = $this->loadObject(true);
-
+		if ((int)$obj->id)
+			$associatedTaxes = Country::getIdsOfAssociatedTaxes($obj->id);
+		else
+			$associatedTaxes = array();
+		
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -80,6 +84,39 @@ class AdminCountries extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="3" name="call_prefix" value="'.(int)($this->getFieldValue($obj, 'call_prefix')).'" style="text-transform: uppercase;" /> <sup>*</sup>
 					<p>'.$this->l('International call prefix, e.g., 33 for France.').'.</p>
+				</div>
+				<label>'.$this->l('Default currency:').' </label>
+				<div class="margin-form">
+					<select name="id_currency">
+						<option value="0" '.(Tools::getValue('id_currency', $obj->id_currency) == 0 ? 'selected' : '').'>'.$this->l('Default store currency').'</option>
+		';
+		$currencies = Currency::getCurrencies();
+		foreach ($currencies AS $currency)
+			echo '<option value="'.intval($currency['id_currency']).'" '.(Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+		echo '
+					</select>
+				</div>
+				<label>'.$this->l('Taxes to apply for this country:').' </label>
+				<div class="margin-form">
+					<table class="table" cellspacing="0">
+						<thead>
+							<tr>
+								<th>&nbsp;</th>
+								<th>'.$this->l('Tax').'</th>
+							</tr>
+						</thead>
+						<tbody>';
+		$taxes = Tax::getTaxes(intval($cookie->id_lang));
+		foreach ($taxes as $tax)
+			echo '
+			<tr>
+				<td><input type="checkbox" name="country_taxes[]" value="'.intval($tax['id_tax']).'" '.(in_array($tax['id_tax'], $associatedTaxes) ? 'checked="checked"' : '').'/></td>
+				<td>'.Tools::htmlentitiesUTF8($tax['name']).'</td>
+			</tr>
+			';
+		echo '
+						</tbody>
+					</table>
 				</div>
 				<label>'.$this->l('Zone:').' </label>
 				<div class="margin-form">
