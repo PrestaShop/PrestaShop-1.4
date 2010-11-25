@@ -74,7 +74,10 @@ class CartControllerCore extends FrontController
 			{
 				$producToAdd = new Product((int)($idProduct), true, (int)($this->cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
-					$this->errors[] = Tools::displayError('product is no longer available', false);
+					if (Tools::getValue('ajax') == 'true')
+						die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('product is no longer available', false)).'\']}');
+					else
+						$this->errors[] = Tools::displayError('product is no longer available', false);
 				else
 				{
 					/* Check the quantity availability */
