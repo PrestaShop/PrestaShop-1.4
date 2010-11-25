@@ -5,6 +5,200 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.3 - 3508 (2010-11-25)   #
+####################################
+
+	Added Features:
+	
+	[+] Project: Add new feature: Geolocalization
+	[+] Project: now you can define specific country taxes for a product
+	
+	[+] Installer : Added timezone choice in the installer
+	
+	[+] FO : Display the current RAM usage in the debug informations :-) Very nice....
+	
+	[+] BO : You can now install language's pack with two clicks on AdminTranslation Page
+	[+] BO : the currencu conversion rate is now stored in the tables orders and order_slip in order to provide a more accurate calculation of the sales statistics
+	
+	[+] MO : new module stats dashboard
+	
+	Improved/changed features:
+	
+	[*] Project : intval() replaced by (int), optimization.
+	[*] Project : improve url rewrite for static page
+	
+	[*] FO : Special breadcrump for CMS Pages.
+	[*] FO : Allow to choose if "our store" link is displayed at the end of the block, each block is distinguish.
+	[*] FO : Add a parameter in both Tools::getPath() and Tools::getFullPath() method to distinguish what type of category is used for getting the path.
+	[*] FO : removed useless query by changing timezone storage
+	[*] FO : a bunch of useless SQL queries removed
+	[*] FO : fixed bug in order confirmation
+	[*] FO : set the breadcrumb in cms page and in cms categories pages.
+	
+	[*] BO : add 'display_store' column in cms_block table
+	[*] BO : add 'display_store' column in cms_block table
+	[*] BO : add 'display_store' column in cms_block table
+	[*] BO : delete the displaying option for block cms in the AdminStore tab. The option is moved on the module block CMS.
+	[*] BO : For each admin list (products for example), set a max width for a the tmp thumbnail.
+	[*] BO : You can now add an attachment from the AdminProduct page without going to AdminAttachments.
+	[*] BO : new stats homepage
+	[*] BO :  choose the tab according to prestashop version
+	[*] BO : fixed bug css
+	
+	[*] Classes : SQL optimization perfomances with adding cache object into ObjectModel
+	
+	[*] MO : When creating a carrier with Mondial Relay, Weight range are automatically set to the minimum and maximum authorized by Mondial Relay
+	[*] MO : Mondial Relay module don't need a google api key to work anymore. Updated to googlemaps JS v3.
+	[*] MO : new version of socolissimo fixed bug
+	[*] MO : fixed bug in socolissimo //new version 1.4
+	[*] MO : search engine keywords improvements 
+	
+	[*] WS : added full HTTP header in debug mode inside library of web service
+	[*] WS : simplify the classes ws parameters synthax
+	
+	Fixed bugs:
+	
+	[-] Project : Use of deprecated functions
+	[-] Project : Invoice PDF was never sent by mail
+	[-] Project : now this plugin works with the Dean Edwards JS Packer
+	
+	[-] Installer : alter table cms_block
+	[-] Installer : Fix buf on upgrade with _RIJNDAEL_KEY_
+	[-] Installer : Countries' select is now filled with countries in database replacing hardcoded countries.
+	[-] Installer : fixed bug CMS upgrade
+	
+	[-] FO : fixed bug on authentification
+	[-] FO : bug #6143 - delete the button home in the bottom of cms pages. 
+	[-] FO : fixed bug in cart summary
+	[-] FO : delete a condition according with bad getter in CMScontroller, now is more efficient.
+	[-] FO : fixed bug in adminModule
+	[-] FO : fixed bug #6130 //now modue don't use jquery plugin accordion but "presta made" accordion
+	[-] FO : bug #6143 - delete the button home in the bottom of cms pages. [*] FO : set the breadcrumb in cms page and in cms categories pages.
+	[-] FO : correct a bug in LinkCore::getCMSCategoryLink() method, to test if category is an object, we cast it to an int !! Not really a good way !
+	[-] FO : related to bug #6143 - Set $cms_category as an attribut of the controller for get it in different method, it appears that it due to an oversight.
+	[-] FO : fixed bug in cart summary (voucher)
+	[-] FO : related to bugs #5871 and #6127 - on  FrontControllerCore::pagination() method, $nbProducts is added as a parameter rather than a global var. Each controller which use this method has been upgrade.
+	[-] FO : fixed bug #5769
+	[-] FO : Quantity discount display fixed on the product page (when using combinations)
+	[-] FO : fixed bug #6096
+	[-] FO : fixed bug #5806
+	[-] FO : adding time calculation on debug
+	[-] FO : Translate the store meta data
+	[-] FO : Bug fixed #6054 - displayCarrier() => assignCarrier()
+	[-] FO : Hardcoded french translation in order-opc.tpl changed. Bug #6082 fixed
+	[-] FO : fixed bug on order opc and refresh remaining amount to obtain free shipping
+	[-] FO : In product.tpl in the color picker block, the cancel button has been deleted. Indeed the button behavior was not according to his name. It displayed all pictures when a user already choosed a color declination. The icon is moved on the side of the button "display all pictures".
+	[-] FO : removed useless queries by caching manufacturers and suppliers names
+	[-] FO : removed useless queries by caching group reductions
+	[-] FO : removed useless queries by caching hook/module association
+	[-] FO : Optimized SQL requests in Category and CMSCategory
+	[-] FO : Postcode can be with or without ' ' or '-' when needed + error more explicit when postcode failure. Bug #6039 fixed
+	[-] FO : When a product is new, it is display everytime product-list is displayed. Bug #5654 fixed
+	[-] FO : javascript link typos
+	[-] FO : ASC => asc for google referencement compatibility. Bug #5850 fixed
+	[-] FO : https not used when SSL is enabled
+	
+	[-] BO / FO : Invoices works perfectly with a 100% voucher and a total paid price of 0.00. Bug #5984 fixed
+	
+	[-] BO: Fixed monetary local on import #5701
+	[-] BO: Fix stock movement duplicate qty #6073
+	[-] BO : fixed bug in adminCMS
+	[-] BO: Fixed vat number on pdf invoice #6108
+	[-] BO : Change the value of the name field, if they are no value in a specific language, method set empty value, don't search in $block_cms array (Since value isn't set, a Notice error occured)
+	[-] BO : report #6129 - Set the end tag </form> on the AdminLocalization::display() method.
+	[-] BO : AdminTranslations on import lang behaviour, the method ValidateCore::IsLanguageFileName($file_name) used wrong var for the preg_match function. Consequently import a language don't worked.
+	[-] BO : Js errors on adminProduct. Bug #5640 fixed
+	[-] BO : product link in customer thread wasn't always good
+	[-] BO : Php error fixed in AdminGroups. Bug #6087 fixed
+	[-] BO : You can now configure carriers' price for disabled zones. Bug #6074 fixed
+	[-] BO : Attribute tab redirections cleaned (with the add of specificprice tab). Bug #6078 fixed
+	[-] BO : If default attribute group is coloris attribute group, options colors weren't displayed. Now yes.
+	[-] BO : fixed bug #5793
+	[-] BO : fixed bug #5677
+	[-] BO : You can't install a module two times by "installing the selection" anymore
+	[-] BO : Removed js error form AdminProduct on Prices tab
+	[-] BO: You can now add stock movement on combination creation
+	[-] BO : Number of messages was always 0 in Customer messages
+	[-] BO: Improve display of stock movement / fix movements with attributes
+	[-] BO : fixed bug #5906 : the order was set as "On backorder" when there was one item available for the order
+	[-] BO : fixed bug quantity display on product page
+	[-] BO : fixed bug #5262 clean position when update categories
+	[-] BO : fixed bug no display token invalid in adminCatalog and adminContent
+	[-] BO : fixed bug #6006 - Track The Order link to new page
+	[-] BO : Removed js errors from search field in BO. Bug #6032 fixed
+	[-] BO : FriendlyURL filled automatically by filling meta-title field. Bug #6019 fixed
+	[-] BO : Permissions set for AdminPerformance. Bug #6022 fixed
+	[-] BO :  fixed bug #6016
+	[-] BO : fix mailalert fatal error after adding product image
+	[-] BO :  upload tar module Bug #5919 fixed
+	[-] BO : customer service email fixed
+	[-] BO : Validation of dni was false (return negative value to ObjectModel), Bug #5932 fixed
+	[-] BO: isPicture function works now fine even if functions are disabled like exec
+	
+	[-] Classes : Ecotax tax application fixes (does apply the tax regarding the customer location)
+	[-] Classes : French ecotax fixed (was working only without reduction and with a product tax of 19.6%)
+	[-] Classes : Ordered product's quantity discount fixed (storage error since the specific price implementation)
+	[-] Classes : fixed bug when shipping cost are external
+	[-] Classes : Free shipping voucher display fixed
+	[-] Classes : Product price fixed (when using customer group reduction)
+	[-] Classes : fixed bug for external shipping cost
+	[-] Classes : fixed bug #5990
+	[-] Classes : fixed bug #5735 - Deletion of group id=1 should not be allowed
+	[-] Classes : fixed bug #6079 - Fatal error on pdf invoice
+	[-] Classes : fixed bug in ObjectModel cache system 
+	[-] Classes : Carrier getDeliveryPriceByPrice() & checkDeliveryPriceByPrice() now convert to default currency
+	[-] Classes : Bug fixed #5959 Incorrect shipping cost by price 
+	[-] Classes : Cache key in getBy"Range" was incorrect 
+	[-] Classes : fixed bug #6001 - W3C validation of search result page, error in Link.php
+	[-] Classes : date('Y-m-d H:m:i') became date('Y-m-d H:i:s'), bug #6033 fixed
+	[-] Classes : fixed bug for external shipping
+	
+	[-] MO : Mondial Relay more stable
+	[-] MO : Mondial relay Bug fixed.
+	[-] MO : blockcategories configuration does clear its display cache
+	[-] MO : fixed a little bug into blockcart module
+	[-] MO : Removed 3 useless DB search in Mondial Relay module. And updated for new modifications on carriers module.
+	[-] MO : bug #6124 if param $begining and ending are false, method used current date for method Product::getPricesDrop() and Product::getRandomSpecial()
+	[-] MO : bug #6124 In BlockSpecials::hookRightColumn() delete precedent update (see log) // the problem needed more change in other files
+	[-] MO : In BlockSpecials::hookRightColumn() method - name var $date_today to $date_now
+	[-] MO : #6124 In BlockSpecials::hookRightColumn() add dates params into Product::getRandomSpecial() method.
+	[-] MO : MondialRelay Module work now with adresses containing '"'
+	[-] MO : fixed bug #5571 - Customer Qty Email on mailalert module
+	[-] MO : fixed bug #6080 - User info block cart button hardcoded to order.php
+	[-] MO : fixed bug in socolissimo
+	[-] MO : fixed bug in blockcart 
+	[-] MO : Mondial Relay Module don't create useless archive directory anymore
+	[-] MO : Sales & Orders Stats Module fixed
+	[-] MO : Cashondelivery Module work again on FO. Bug #6025 fixed
+	[-] MO : fixed bug #6008 - Moneybookers error when no local cards
+	[-] MO : Updating the updater for merchants who forget to copy their editorial.xml before updating...
+	[-] MO : Removing parse error from mondial relay
+	[-] MO : Deleted warning mondial relay + corrected minor bugs (#5465 and #5795)
+	[-] MO : search engine bots do not create hundreds of connections anymore (may not be stable)
+	
+	[-] CSS : fixed bug #6018 - CSS is repeated in themes/prestashop/css/modules/blockcms/blockcms.css
+	
+	[-] SQL : Updates bug resolved (PHP:ecotax_tax_application_fix())
+	[-] SQL : No more errors while updating
+	[-] SQL : Only one carrier is installed when installing Prestashop lite.
+	[-] SQL : ps_meta_lang : PREFIX_meta_lang
+	[-] SQL : Taxes are now installed in database when complete installation (not lite)
+	[-] SQL : States' iso code can be numericals
+	
+	[-] PDF : Ecotax display fixed
+	
+	[-] WS : add ws tables when upgrading
+	[-] WS : namespace prestashop is now deleted
+	[-] WS : examples are corrected due to new namespace deletion
+	[-] WS : now we are able to filter get result with an array of only one value
+	
+	Deprecated methods:
+	
+	[~] Deprecated : Category:: hideCategoryPosition()
+	[~] Deprecated : Tools::getTimezones()
+	[~] Deprecated : Product::getReductionValue()
+
+####################################
 #   v1.4.0.2 - 3261 (2010-11-10)   #
 ####################################
 
@@ -113,7 +307,7 @@ Release Notes for PrestaShop 1.4
 	
 	[+] WS : Adding a RESTFul webservice for PrestaShop
 	
-	Improved/changed features :
+	Improved/changed features:
 	
 	[*] Project : cookie is no more encrypted every time but in the destructor, at the end. You can still force setcookie by using Cookie::write()
 	[*] Project : Added {$img_store_dir} and _THEME_STORE_DIR_ and _PS_STORE_IMG_DIR_
