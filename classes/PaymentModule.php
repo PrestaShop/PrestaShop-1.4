@@ -152,7 +152,7 @@ abstract class PaymentModuleCore extends Module
 				$productsList = '';
 				$db = Db::getInstance();
 				$query = 'INSERT INTO `'._DB_PREFIX_.'order_detail`
-					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `group_reduction`, `product_quantity_discount`, `product_ean13`, `product_upc`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
+					(`id_order`, `product_id`, `product_attribute_id`, `product_name`, `product_quantity`, `product_quantity_in_stock`, `product_price`, `reduction_percent`, `reduction_amount`, `group_reduction`, `product_quantity_discount`, `product_ean13`, `product_upc`, `product_reference`, `product_supplier_reference`, `product_weight`, `tax_name`, `tax_rate`, `ecotax`, `ecotax_tax_rate`, `discount_quantity_applied`, `download_deadline`, `download_hash`)
 				VALUES ';
 
 				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
@@ -195,6 +195,8 @@ abstract class PaymentModuleCore extends Module
 					else
 						$tax = Tax::getApplicableTax((int)($product['id_tax']), floatval($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
+					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTax((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
+
 					$quantityDiscount = SpecificPrice::getQuantityDiscount((int)$product['id_product'], Shop::getCurrentShop(), (int)$cart->id_currency, (int)$vat_address->id_country, (int)$customer->id_default_group, (int)$product['cart_quantity']);
 					$unitPrice = Product::getPriceStatic((int)$product['id_product'], true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, 1, false, (int)$order->id_customer, NULL, (int)$order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 					$quantityDiscountValue = $quantityDiscount ? ((Product::getTaxCalculationMethod((int)$order->id_customer) == PS_TAX_EXC ? Tools::ps_round($unitPrice, 2) : $unitPrice) - $quantityDiscount['price'] * (1 + $tax / 100)) : 0.00;
@@ -217,6 +219,7 @@ abstract class PaymentModuleCore extends Module
 						\''.(!$tax ? '' : pSQL($product['tax'])).'\',
 						'.floatval($tax).',
 						'.floatval($product['ecotax']).',
+						'.(float)$ecotaxRate.',
 						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';

@@ -690,7 +690,10 @@ class CartCore extends ObjectModel
 				$price = Product::getPriceStatic((int)($product['id_product']), false, (int)($product['id_product_attribute']), 2, NULL, false, true, $product['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				$total_price = $price * (int)($product['cart_quantity']);
 				if ($withTaxes)
+				{
 					$total_price = Tools::ps_round($total_price * (1 + floatval(Tax::getApplicableTax((int)($product['id_tax']), floatval($product['rate']))) / 100), 2);
+					Product::applyEcotax($total_price, $product['ecotax'], true, ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				}
 			}
 			else
 			{

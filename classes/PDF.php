@@ -315,8 +315,6 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public function ProdReturnTab()
 	{
-		global $ecotax;
-
 		$header = array(
 			array(self::l('Description'), 'L'),
 			array(self::l('Reference'), 'L'),
@@ -351,7 +349,7 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public static function invoice($order, $mode = 'D', $multiple = false, &$pdf = NULL, $slip = false, $delivery = false)
 	{
-	 	global $cookie, $ecotax;
+	 	global $cookie;
 
 		if (!Validate::isLoadedObject($order) OR (!$cookie->id_employee AND (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->invoice_number)))
 			die('Invalid order or invalid order state');
@@ -554,13 +552,6 @@ class PDFCore extends PDF_PageGroupCore
 				$pdf->Ln(4);
 			}
 
-			if ($ecotax != '0.00' AND !self::$orderSlip)
-			{
-				$pdf->Cell($width, 0, self::l('Eco-participation').' : ', 0, 0, 'R');
-				$pdf->Cell(0, 0, self::convertSign(Tools::displayPrice($ecotax, self::$currency, true, false)), 0, 0, 'R');
-				$pdf->Ln(5);
-			}
-
 			$pdf->TaxTab($priceBreakDown);
 		}
 		Hook::PDFInvoice($pdf, self::$order->id);
@@ -606,8 +597,6 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public function ProdTab($delivery = false)
 	{
-		global $ecotax;
-
 		if (!$delivery)
 			$w = array(100, 15, 30, 15, 30);
 		else
@@ -617,7 +606,6 @@ class PDFCore extends PDF_PageGroupCore
 			$products = self::$order->products;
 		else
 			$products = self::$order->getProducts();
-		$ecotax = 0;
 		$customizedDatas = Product::getAllCustomizedDatas((int)(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 
@@ -644,7 +632,6 @@ class PDFCore extends PDF_PageGroupCore
 				$counter = $counter + ($lineSize / 5) ;
 
 				$i = -1;
-				$ecotax += $product['ecotax'] * (1 + PS_FRENCH_ECOTAX_RATE) * $product['product_quantity'];
 
 				// Unit vars
 				$unit_without_tax = $product['product_price'];
@@ -740,12 +727,14 @@ class PDFCore extends PDF_PageGroupCore
 			die(Tools::displayError());
 		$priceBreakDown['totalsWithoutTax'] = array();
 		$priceBreakDown['totalsWithTax'] = array();
+		$priceBreakDown['totalsEcotax'] = array();
 		$priceBreakDown['wrappingCostWithoutTax'] = 0;
 		$priceBreakDown['shippingCostWithoutTax'] = 0;
 		$priceBreakDown['totalWithoutTax'] = 0;
 		$priceBreakDown['totalWithTax'] = 0;
 		$priceBreakDown['totalProductsWithoutTax'] = 0;
 		$priceBreakDown['totalProductsWithTax'] = 0;
+		$priceBreakDown['hasEcotax'] = 0;
 		if (self::$order->total_paid == '0.00' AND self::$order->total_discounts == 0)
 			return ;
 
@@ -759,17 +748,20 @@ class PDFCore extends PDF_PageGroupCore
 		/* Firstly calculate all prices */
 		foreach ($products AS &$product)
 		{
-			if (!isset($totalWithTax[$product['tax_rate']]))
+			if (!isset($priceBreakDown['totalsWithTax'][$product['tax_rate']]))
 				$priceBreakDown['totalsWithTax'][$product['tax_rate']] = 0;
-			if (!isset($totalWithoutTax[$product['tax_rate']]))
+			if (!isset($priceBreakDown['totalsEcotax'][$product['tax_rate']]))
+				$priceBreakDown['totalsEcotax'][$product['tax_rate']] = 0;
+			if (!isset($priceBreakDown['totalsWithoutTax'][$product['tax_rate']]))
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] = 0;
 			if (!isset($taxes[$product['tax_rate']]))
 				$taxes[$product['tax_rate']] = 0;
 			/* Without tax */
-			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ps_round(floatval($product['product_price']), 2) : floatval($product['product_price'])) * (int)($product['product_quantity']);
+			$product['priceWithoutTax'] = Tools::ps_round(self::$_priceDisplayMethod == PS_TAX_EXC ? floatval($product['product_price']) : $product['product_price_wt_but_ecotax'] / (1 + $product['tax_rate'] / 100), 2) * (int)($product['product_quantity']);
 			$amountWithoutTax += $product['priceWithoutTax'];
 			/* With tax */
 			$product['priceWithTax'] = floatval($product['product_price_wt']) * (int)($product['product_quantity']);
+			$product['priceEcotax'] = $product['ecotax'] * (1 + $product['ecotax_tax_rate'] / 100);
 		}
 
 		$priceBreakDown['totalsProductsWithoutTax'] = $priceBreakDown['totalsWithoutTax'];
@@ -796,6 +788,9 @@ class PDFCore extends PDF_PageGroupCore
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 			}
+			$priceBreakDown['totalsEcotax'][$product['tax_rate']] += $product['priceEcotax'];
+			if ($priceBreakDown['totalsEcotax'][$product['tax_rate']])
+				$priceBreakDown['hasEcotax'] = 1;
 			$taxes[$product['tax_rate']] += $vat;
 		}
 		$carrier = new Carrier(self::$order->id_carrier);
@@ -810,8 +805,8 @@ class PDFCore extends PDF_PageGroupCore
 			{
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
-				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
-				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
+				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2) + $priceBreakDown['totalsEcotax'][$tax_rate];
+				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2) + $priceBreakDown['totalsEcotax'][$tax_rate];
 			}
 			else
 			{
@@ -862,8 +857,16 @@ class PDFCore extends PDF_PageGroupCore
 			return ;
 
 		// Displaying header tax
-		$header = array(self::l('Tax detail'), self::l('Tax %'), self::l('Pre-Tax Total'), self::l('Total Tax'), self::l('Total with Tax'));
-		$w = array(60, 30, 40, 30, 30);
+		if ($priceBreakDown['hasEcotax'])
+		{
+			$header = array(self::l('Tax detail'), self::l('Tax'), self::l('Pre-Tax Total'), self::l('Total Tax'), self::l('Ecotax'), self::l('Total with Tax'));
+			$w = array(60, 30, 40, 20, 20, 20);
+		}
+		else
+		{
+			$header = array(self::l('Tax detail'), self::l('Tax'), self::l('Pre-Tax Total'), self::l('Total Tax'), self::l('Total with Tax'));
+			$w = array(60, 30, 40, 30, 30);
+		}
 		$this->SetFont(self::fontname(), 'B', 8);
 		for($i = 0; $i < sizeof($header); $i++)
 			$this->Cell($w[$i], 5, $header[$i], 0, 0, 'R');
@@ -883,10 +886,12 @@ class PDFCore extends PDF_PageGroupCore
 				$lineSize = $this->GetY() - $before;
 				$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 				$this->Cell($w[0], $lineSize, self::l('Products'), 0, 0, 'R');
-				$this->Cell($w[1], $lineSize, number_format($tax_rate, 3, ',', ' '), 0, 0, 'R');
+				$this->Cell($w[1], $lineSize, number_format($tax_rate, 3, ',', ' ').' %', 0, 0, 'R');
 				$this->Cell($w[2], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
-				$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsProductsWithoutTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
-				$this->Cell($w[4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
+				$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate] - $priceBreakDown['totalsProductsWithoutTax'][$tax_rate] - $priceBreakDown['totalsEcotax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
+				if ($priceBreakDown['hasEcotax'])
+					$this->Cell($w[4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsEcotax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
+				$this->Cell($w[$priceBreakDown['hasEcotax'] ? 5 : 4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalsProductsWithTax'][$tax_rate], self::$currency, true, false)), 0, 0, 'R');
 				$this->Ln();
 			}
 		}
@@ -899,10 +904,12 @@ class PDFCore extends PDF_PageGroupCore
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Carrier'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($carrierTax->rate, 3, ',', ' '), 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($carrierTax->rate, 3, ',', ' ').' %', 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_shipping - $priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
-			$this->Cell($w[4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
+			if ($priceBreakDown['hasEcotax'])
+				$this->Cell($w[4], $lineSize, (self::$orderSlip ? '-' : '').'', 0, 0, 'R');
+			$this->Cell($w[$priceBreakDown['hasEcotax'] ? 5 : 4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true, false)), 0, 0, 'R');
 			$this->Ln();
 		}
 
@@ -917,7 +924,7 @@ class PDFCore extends PDF_PageGroupCore
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Wrapping'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($taxRate, 3, ',', ' '), 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($taxRate, 3, ',', ' ').' %', 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[4], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_wrapping, self::$currency, true, false)), 0, 0, 'R');

@@ -39,4 +39,6 @@ SET @id_timezone = (SELECT `name` FROM `PREFIX_timezone` WHERE `id_timezone` = (
 UPDATE `PREFIX_configuration` SET `value` = @id_timezone WHERE `name` = "PS_TIMEZONE" LIMIT 1;
 
 ALTER TABLE `ps_cms_block` ADD `display_store` TINYINT NOT NULL DEFAULT '1'
+
 /* PHP:group_reduction_column_fix(); */
+/* PHP:ecotax_tax_application_fix(); */

@@ -15,6 +15,7 @@ class AdminTaxes extends AdminTab
 {
 	public function __construct()
 	{
+		global $cookie;
 	 	$this->table = 'tax';
 	 	$this->className = 'Tax';
 	 	$this->lang = true;
@@ -31,7 +32,9 @@ class AdminTaxes extends AdminTab
 		$this->_fieldsOptions = array(
 		'PS_TAX' => array('title' => $this->l('Enable tax:'), 'desc' => $this->l('Select whether or not to include tax on purchases'), 'cast' => 'intval', 'type' => 'bool'),
 		'PS_TAX_DISPLAY' => array('title' => $this->l('Display tax in cart:'), 'desc' => $this->l('Select whether or not to display tax on a distinct line in the cart'), 'cast' => 'intval', 'type' => 'bool'),
-		'PS_TAX_ADDRESS_TYPE' => array('title' => $this->l('Base on:'), 'cast' => 'pSQL', 'type' => 'select', 'list' => array(array('name' => $this->l('Invoice Address'), 'id' => 'id_address_invoice'), array('name' => $this->l('Delivery Address'), 'id' => 'id_address_delivery')), 'identifier' => 'id'));
+		'PS_TAX_ADDRESS_TYPE' => array('title' => $this->l('Base on:'), 'cast' => 'pSQL', 'type' => 'select', 'list' => array(array('name' => $this->l('Invoice Address'), 'id' => 'id_address_invoice'), array('name' => $this->l('Delivery Address'), 'id' => 'id_address_delivery')), 'identifier' => 'id'),
+		'PS_ECOTAX_TAX_ID' => array('title' => $this->l('Ecotax:'), 'desc' => $this->l('The tax to apply on the ecotax (e.g., French ecotax: 19.6%).'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_tax', 'list' => array_merge(array(array('id_tax' => '0', 'name' => $this->l('---'))), Tax::getTaxes((int)$cookie->id_lang)))
+		);
 		
 		parent::__construct();
 	}

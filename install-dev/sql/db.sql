@@ -896,6 +896,7 @@ CREATE TABLE `PREFIX_order_detail` (
   `tax_name` varchar(16) NOT NULL,
   `tax_rate` DECIMAL(10, 3) NOT NULL DEFAULT '0.000',
   `ecotax` decimal(17,2) NOT NULL default '0.00',
+  `ecotax_tax_rate` DECIMAL(5, 3) NOT NULL,
   `discount_quantity_applied` TINYINT(1) NOT NULL DEFAULT 0,
   `download_hash` varchar(255) default NULL,
   `download_nb` int(10) unsigned default '0',

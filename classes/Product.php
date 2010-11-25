@@ -1473,6 +1473,17 @@ class ProductCore extends ObjectModel
 		return isset($ret) ? $ret : 0;
 	}
 
+	static public function applyEcotax(&$price, $ecotax, $usetax, $id_address)
+	{
+		if ($ecotax AND $usetax)
+		{
+			if ($tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')) AND $taxRate = Tax::getApplicableTax((int)$tax->id, (float)$tax->rate, $id_address))
+				$price += $ecotax * (1 + $taxRate / 100);
+			else
+				$price += $ecotax;
+		}
+	}
+
 	/**
 	* Get product price
 	*
@@ -1589,8 +1600,7 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
-		if ($result['ecotax'])
-			$price += $usetax ? ($result['ecotax'] * (1 + PS_FRENCH_ECOTAX_RATE)) : $result['ecotax']; // Ecotax french implementation
+		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL);
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
