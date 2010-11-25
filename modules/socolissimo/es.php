@@ -90,6 +90,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_71736f329d8ecb6bdb8ab29875ed7d27'
 $_MODULE['<{socolissimo}prestashop>socolissimo_26c3322326d6c253776082396d0b525a'] = 'id del punto de recogida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_fe0ddc6b5ddddfa1203a1931726a06b4'] = 'Punto de recogida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_943d641a55c5f1a32331d21104cd7637'] = 'Dirección del punto de recogida';
-$_MODULE['<{socolissimo}prestashop>socolissimo_carrier_21034ae6d01a83e702839a72ba8a77b0'] = 'sin IVA';
-$_MODULE['<{socolissimo}prestashop>socolissimo_carrier_1f87346a16cf80c372065de3c54c86d9'] = 'IVA incluido';
-$_MODULE['<{socolissimo}prestashop>socolissimo_carrier_a62b48ecbf0051dad0ff07f532d9ba6b'] = '¡Gratis!';

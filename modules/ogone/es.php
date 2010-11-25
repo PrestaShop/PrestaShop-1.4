@@ -39,4 +39,5 @@ $_MODULE['<{ogone}prestashop>validation_6b4fcb57371df22836b78f67bc444213'] = 'Es
 $_MODULE['<{ogone}prestashop>validation_a04830387e55082ed6096ab698ac8238'] = 'Firma SHA-1 no válida';
 $_MODULE['<{ogone}prestashop>validation_7eaab6a852dfe4707acde8847dba7ce9'] = 'SHA-1 incluido';
 $_MODULE['<{ogone}prestashop>validation_8fbed6331a34a844224bfee15145e00f'] = 'SHA-1 calculado';
+$_MODULE['<{ogone}prestashop>validation_671c1f78cd9a17103c43a10d19157678'] = 'Clave simple';
 $_MODULE['<{ogone}prestashop>waiting_1fe3bb016fa11dd93fb1929f118fd492'] = 'Por favor, espere mientras se procesa su pedido';

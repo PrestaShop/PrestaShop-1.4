@@ -25,9 +25,9 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_7d2d842e3d3628e5fedb1899e710fb4
 $_MODULE['<{moneybookers}prestashop>moneybookers_c193f11bec44b77c0f60ddf50bc30cc8'] = 'El campo palabra secreta es obligatorio';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a28'] = 'Sobre Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6b9a842511dd894375882f964ee626e8'] = 'Moneybookers es uno de los sistemas de pago en línea más grandes de Europa  y se sitúa entre los principales proveedores del mundo de eWallet, con más de 14 millones de titulares de cuentas. El sencillo eWallet permite a cualquier cliente pagar en línea de manera cómoda y segura sin revelar datos financieros personales, y también le permite enviar y recibir transferencias de dinero de forma rentable, usando simplemente una dirección de correo electrónico. ';
-$_MODULE['<{moneybookers}prestashop>moneybookers_e545ce3f77ed798605ba3dc853e7e040'] = 'Moneybookers es una de los sistemas de pago en línea más importantes de Europa, propone más de 80 opciones de pago en más de 200 países en todo el mundo. Más de 60 000 comerciantes, como eBay.com, Skype et Thomas Cook utilizan ya Moneybookers. ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_e7b1131d3aa46eff3167113b15065702'] = 'Moneybookers es uno de los sistemas de pago en línea más importantes de Europa. Propone más de 80 opciones de pago en más de 200 países en todo el mundo. Actualmente más de 60 000 sitios utilizan esta solución, entre otros eBay.com, Skype y Thomas Cook';
 $_MODULE['<{moneybookers}prestashop>moneybookers_04a0e2e14bfc47151f158db3c1b03661'] = 'Moneybookers fue fundado en 2001 en Londres y está regulado por la Autoridad de Servicios Financieros del Reino Unido.';
-$_MODULE['<{moneybookers}prestashop>moneybookers_bf31254706bb3f750e7f46cabea4e73a'] = 'Apertura de cuenta';
+$_MODULE['<{moneybookers}prestashop>moneybookers_bf31254706bb3f750e7f46cabea4e73a'] = 'Abrir una cuenta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_41992c760318e60740f7a9b2819af191'] = 'Comience por abrir';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c0302a6fbca061af831bc12f06cadb2f'] = 'una cuenta gratis';
 $_MODULE['<{moneybookers}prestashop>moneybookers_d5ac14a97f40e4aadd7eb202f7c124b1'] = 'con Moneybookers:';

@@ -54,6 +54,7 @@ $_LANGPDF['PDF_invoice7d3548c5b974fa710296c1b3f5564753'] = 'Ecotasa';
 $_LANGPDF['PDF_invoiceafd42dfebce46ec93972b2e0cbb8b83f'] = 'Precio Un.';
 $_LANGPDF['PDF_invoicec2808546f3e14d267d798f4e0e6f102e'] = 'Personalizado';
 $_LANGPDF['PDF_invoicea1e7379abfdbc3b8e03506e5489c6110'] = 'Descuento:';
+$_LANGPDF['PDF_invoicee7bbf027179f23c92bec649fa6ae78e4'] = 'Exento de IVA según el artículo 259B del Código General de los Impuestos.';
 $_LANGPDF['PDF_invoice42c26bf38ece1dcd27aca8c6f8c076ed'] = 'Desglose IVA';
 $_LANGPDF['PDF_invoicea7fa76ae71664800f8994ad52581e3c2'] = '% IVA';
 $_LANGPDF['PDF_invoicecd6576cc33506a6c44e2debbde5c14d9'] = 'Total sin IVA';

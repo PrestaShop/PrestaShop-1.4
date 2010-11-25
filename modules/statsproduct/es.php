@@ -6,6 +6,7 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_78e454064a7d3a7755a011a3b79f31a
 $_MODULE['<{statsproduct}prestashop>statsproduct_e495fcaeee4bc7645b9c2c539a429e14'] = 'Conseguir las estadísticas detalladas para cada producto';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3ec365dd533ddb7ef3d1c111186ce872'] = 'Detalles';
 $_MODULE['<{statsproduct}prestashop>statsproduct_981a6013008c8f4b75836b0f415b05b8'] = 'Total de compras:';
+$_MODULE['<{statsproduct}prestashop>statsproduct_6780a9268e38d2ddd4f6c4a8ccf83d24'] = 'Volumen de ventas (sin IVA)';
 $_MODULE['<{statsproduct}prestashop>statsproduct_b262bbde88b3b8dca3b27d730aca69bf'] = 'total visto:';
 $_MODULE['<{statsproduct}prestashop>statsproduct_bebbab2c1ac732ccef4181f51ed52967'] = 'Índice de conversión';
 $_MODULE['<{statsproduct}prestashop>statsproduct_c90b9dca2d3f5bb6e0d0bdceac8a631d'] = 'Distribuir las ventas por cualidades';

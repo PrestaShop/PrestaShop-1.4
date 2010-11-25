@@ -11,6 +11,7 @@ $_MODULE['<{paysafecard}prestashop>paysafecard-accept-payment_e9b3579d8e877bcd29
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido en';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'ha sido registrado.';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_91675397c13245179e4bc959514fc2ca'] = 'Ha elegido pagar con';
+$_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_2c987f462c2ab7fc63e061e871e6a97d'] = 'método.';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_e6dc7945b557a1cd949bea92dd58963e'] = 'Su pedido será enviado rápidamente';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier pregunta o información suplementaria, póngase en contacto con nuestro';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'servicio clientela';

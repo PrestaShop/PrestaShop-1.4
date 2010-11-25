@@ -10,8 +10,9 @@ $_MODULE['<{productcomments}prestashop>productcomments_1bb54e382f7dbdb260f0aa6b4
 $_MODULE['<{productcomments}prestashop>productcomments_21b0922096daf5c742cc98986d857cc1'] = 'Criterio actualizado';
 $_MODULE['<{productcomments}prestashop>productcomments_254f642527b45bc260048e30704edb39'] = 'Configuración';
 $_MODULE['<{productcomments}prestashop>productcomments_519532ca486f468a9dd44232e7b0cafa'] = 'Se necesita validación';
-$_MODULE['<{productcomments}prestashop>productcomments_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Autorizado';
-$_MODULE['<{productcomments}prestashop>productcomments_b9f5c797ebbf55adccdd8539a65a0241'] = 'No autorizado';
+$_MODULE['<{productcomments}prestashop>productcomments_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
+$_MODULE['<{productcomments}prestashop>productcomments_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
+$_MODULE['<{productcomments}prestashop>productcomments_b615f9999e25a9811b1492366bd31780'] = 'Autorizar los invitados';
 $_MODULE['<{productcomments}prestashop>productcomments_18d52ddfed043367596350023ea0f1e8'] = 'Plazo mínimo entre dos comentarios';
 $_MODULE['<{productcomments}prestashop>productcomments_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{productcomments}prestashop>productcomments_0a36c5f3ea6825804e6b4314c4084a12'] = 'Moderar Comentarios';
