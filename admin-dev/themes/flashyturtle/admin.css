@@ -43,10 +43,15 @@ legend{background:#7AB51D url(thead.png) repeat-x top left;border:1px solid #364
 #menu li a{_display:inline;_padding:6px 6px 4px}
 .tab-page {border:1px solid #383838;background:#F6F6F6}
 .tab-row .tab.selected {border:1px solid #383838;background:#812143}
-.tab-row .tab.selected a{color:#FDFDFD}
+.tab-row .tab.selected a{color:black}
 .tab-row .tab {border:1px solid #FDFDFD;background:#EFEFEF;height:24px;line-height:24px;vertical-align:middle}
 hr {height: 1px;color:#DEDEDE;background-color:#DEDEDE}
 #footer {height:40px;background:#DDDDDD url("footer-bg.png") repeat-x scroll left bottom;border:1px solid #383838;font-size:12px;clear:both;font-size:0.9em;color:#666666}
 #content {background-color:#FFF;border-left:1px solid #383838;border-right:1px solid #383838}
 input[type="text"],input[type="password"],input[type="file"],textarea {border:1px solid #416110}
 select {border: 1px solid #416110}
+.header_module{background:url(header_module.png);padding-left: 0.5em;padding-top: 0.8em;height:20px;color: #812143;border:solid 1px #CCC;}
+a.action_module{color: #488C40;text-decoration: underline;}
+a.header_module_toggle{font-weight: bold;color: #812143;display:block;}
+a.module_toggle_all{color:#FFF;text-decoration:none;display:inherit;}
+.nbr_module{float:right;margin-right:10px;font-style:italic;font-size:12px;color: #812143;}

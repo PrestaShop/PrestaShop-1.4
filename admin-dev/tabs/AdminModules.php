@@ -414,7 +414,6 @@ class AdminModules extends AdminTab
 			echo '
 			<div id="prestastore" style="margin-left:40px; display:none; float: left" class="width1">
 			</div>';
-		echo '<div class="clear">&nbsp;</div>';
 
 		/* Scan modules directories and load modules classes */
 		$warnings = array();
@@ -433,9 +432,25 @@ class AdminModules extends AdminTab
 					$warnings[] ='<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning));
 		$this->displayWarning($warnings);
 		echo '<form method="POST">
-			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
+			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;;margin-bottom:5px;">
 				<tr>
-					<th colspan="3">
+					<th style="border-right:solid 1px;border:inherit">
+						<span class="button" style="padding:0.4em;">
+							<a id="all_open" class="module_toggle_all" style="display:inherit;text-decoration:none;" href="#">
+								<span style="padding-right:0.5em">
+									<img src="../img/admin/more.png" alt="" />
+								</span>
+								<span id="all_open">'.$this->l('Open all tab').'</span>
+							</a>
+							<a id="all_close" class="module_toggle_all" style="display:none;text-decoration:none;" href="#">
+								<span style="padding-right:0.5em">
+									<img src="../img/admin/less.png" alt="" />
+								</span>
+								<span id="all_open">'.$this->l('Close all tab').'</span>
+							</a>
+						</span>
+					</th>
+					<th colspan="3" style="border:inherit">
 						<select name="module_type">
 							<option value="allModules" '.($showTypeModules == 'allModules' ? 'selected="selected"' : '').'>'.$this->l('All Modules').'</option>
 							<option value="nativeModules" '.($showTypeModules == 'nativeModules' ? 'selected="selected"' : '').'>'.$this->l('Native Modules').'</option>
@@ -460,70 +475,91 @@ class AdminModules extends AdminTab
 							<option value="1" '.($showCountryModules == 1 ? 'selected="selected"' : '').'>'.$this->l('Current country:').' '.$nameCountryDefault.'</option>
 						</select>
 					</th>
-					<th colspan="2">
+					<th style="border:inherit">
 						<div style="float:right">
 							<input type="submit" class="button" name="resetFilterModules" value="'.$this->l('Reset').'">
 							<input type="submit" class="button" name="filterModules" value="'.$this->l('Filter').'">
 						</div>
 					</th>
 			  	</tr>
-				<tr style="height:35px;background-color:#EEEEEE">
-					<td><strong>'.$this->l('Icon legend').' : </strong></td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but some warnings').'</td>
-					<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
-				</tr>
 			</table>
 			</form>';
 		
 		if ($tab_module = Tools::getValue('tab_module'))
 			if (array_key_exists($tab_module, $this->listTabModules))
-				$goto = '$("#'.$tab_module.'")';
+				$goto = $tab_module;
 			else
-				$goto = '$("#others")';
+				$goto = 'others';
 		else
-			$goto = '0';
-		echo '  <br>
-  		<script src="'.__PS_BASE_URI__.'js/jquery/accordion/accordion.ui.js"></script>
+			$goto = false;
+		echo '
   		<script src="'.__PS_BASE_URI__.'js/jquery/jquery.scrollto.js"></script>
 		<script>
 		 $(document).ready(function() {
-			 		$( "#accordion" ).accordion({
-						autoHeight: false,
-						navigation: false,
-						active: \'.active\',
-						active: \'.active\',
-				        selectedClass: \'.active\',
-				        header: "h4"
+		 
+		 '.(!$goto ? '': '$(\'#'.$goto.'_content\').slideToggle();').'
+		 
+		 $(\'.header_module_toggle, .module_toggle_all\').unbind(\'click\').click(function(){
+		 	var id = $(this).attr(\'id\');
+			if (id == \'all_open\')
+				$(\'.tab_module_content\').each(function(){
+					$(this).slideDown();
+					$(\'#all_open\').hide();
+					$(\'#all_close\').show();
+					$(\'.header_module_img\').each(function(){
+						$(this).attr(\'src\', \'../img/admin/less.png\');
 					});
-					$("#accordion").accordion("activate", '.$goto.');
-					'.($goto != '0' ? '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 1000 , 
+				});
+			else if (id == \'all_close\')
+				$(\'.tab_module_content\').each(function(){
+					$(\'#all_open\').show();
+					$(\'#all_close\').hide();
+					$(this).slideUp();
+					$(\'.header_module_img\').each(function(){
+						$(this).attr(\'src\', \'../img/admin/more.png\');
+					});
+				});
+			else
+			{
+				if ($(\'#\'+id+\'_content\').css(\'display\') == \'none\')
+		 			$(\'#\'+id+\'_img\').attr(\'src\', \'../img/admin/less.png\');
+		 		else
+		 			$(\'#\'+id+\'_img\').attr(\'src\', \'../img/admin/more.png\');
+		 		
+		 		$(\'#\'+$(this).attr(\'id\')+\'_content\').slideToggle();
+		 	}
+		 	return false;
+		 });
+			 			'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
 						{onAfter:function(){
 							$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
 								$(this).fadeTo(100, 0, function (){
-									$(this).fadeTo(100, 1, function (){
-										$(this).fadeTo(100, 0, function (){
-											$(this).fadeTo(100, 1 )}
+									$(this).fadeTo(50, 1, function (){
+										$(this).fadeTo(50, 0, function (){
+											$(this).fadeTo(50, 1 )}
 												)}
 											)}
 										)}
 									)}
-								});' : '').'
+								});').'
 			});
 			
 		 </script>';
 		if (!empty($orderModule))
 		{
-		echo '<div class="basic" id="accordion">';
+		
 		/* Browse modules by tab type */
 		foreach ($orderModule AS $tab => $tabModule)
 		{
 			echo '
-			<h4 id="'.$tab.'" style="-moz-border-radius:0;margin:0;height:25px;padding-top:5px;" >
-			<div style="float:right;margin-right:10px;font-style:italic;font-size:12px">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</div>
-				<a href="modgo_'.$tab.'"><b>'.$this->listTabModules[$tab].'</b> </a> 
-			</h4><div class="basic" id="'.$tab.'" style="background:none;-moz-border-radius:0;overflow:hidden">';
+			<div id="'.$tab.'" class="header_module">
+			<div class="nbr_module">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</div>
+				<a class="header_module_toggle" id="'.$tab.'" href="modgo_'.$tab.'" style="margin-left: 5px;">
+					<span style="padding-right:0.5em">
+					<img class="header_module_img" id="'.$tab.'_img" src="../img/admin/more.png" alt="" />
+					</span>'.$this->listTabModules[$tab].'</a> 
+			</div>
+			<div id="'.$tab.'_content" class="tab_module_content" style="overflow:hidden;display:none;border:solid 1px #CCC">';
 			/* Display modules for each tab type */
 			foreach ($tabModule as $module)
 			{
@@ -575,12 +611,20 @@ class AdminModules extends AdminTab
 			echo '</div>';
 		}
 		echo '
-			
-		</div>
-		<div style="margin-top: 12px; width:600px;">
+			<div style="margin-top: 12px; width:600px;">
 				<input type="button" class="button big" value="'.$this->l('Install the selection').'" onclick="modules_management(\'install\')"/>
 				<input type="button" class="button big" value="'.$this->l('Uninstall the selection').'" onclick="modules_management(\'uninstall\')" />
 			</div>
+			<br>
+			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
+				<tr style="height:35px;background-color:#EEEEEE">
+					<td><strong>'.$this->l('Icon legend').' : </strong></td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but some warnings').'</td>
+					<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
+				</tr>
+			</table>
 		<div style="clear:both">&nbsp;</div>';
 		}
 		else
@@ -618,9 +662,9 @@ class AdminModules extends AdminTab
 			$return .= '<a class="action_module" href="'.$currentIndex.'&token='.$this->token.'&module_name='.urlencode($module->name).'&reset&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Reset').'</a>&nbsp;&nbsp;';
 		
 		if ((int)($module->id) AND method_exists($module, 'getContent'))
-			$return .= '<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
+			$return .= '<a class="action_module href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
-		$return .= '<a onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		$return .= '<a class="action_module onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
 		return $return;
 	}
 	
