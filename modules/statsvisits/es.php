@@ -13,7 +13,7 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'
 $_MODULE['<{statsvisits}prestashop>statsvisits_9d528c1740b4ec88b125b4d10d07bf30'] = 'La evolución del gráficovisitantes\' y del gráfico visitas\' proporciona una información adicional. ¿Los visitantes vuelven a visitar su tienda?';
 $_MODULE['<{statsvisits}prestashop>statsvisits_deaaec5a2a384a7a1a7c10e355aaaa77'] = 'Si es el caso, enhorabuena, su sitio está bien pensado y resulta agradable.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_659a9716f03e76005b7bf2d4eeeddeda'] = 'En el caso contrario, la conclusión no es simple. El problema puede ser estético o ergonómico o la oferta no es suficiente. También es posible que el visitante haya llegado a su tienda sin un interés particular, es algo frecuente cuando se utilizan los motores de búsqueda.';
-$_MODULE['<{statsvisits}prestashop>statsvisits_c49393dfe6a439b15b8fb51993a7e902'] = 'Esta información es sobre todo cualitativa.  Usted deberá determinar el interés de este tipo de visitas.';
+$_MODULE['<{statsvisits}prestashop>statsvisits_4793db9717cc512af1406b09766a0a1f'] = 'Esta información es sobre todo cualitativa.  Usted deberá determinar el interés de este tipo de visitas.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_39b960b0a5e2ebaaa638d946f1892050'] = 'Número de visitas y visitantes únicos';
 $_MODULE['<{statsvisits}prestashop>statsvisits_d7e637a6e9ff116de2fa89551240a94d'] = 'Visitas';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ae5d01b6efa819cc7a7c05a8c57fcc2c'] = 'Visitantes';

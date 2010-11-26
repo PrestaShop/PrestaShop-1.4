@@ -76,7 +76,7 @@ class StatsVisits extends ModuleGraph
 					<li>'.$this->l('if this is the case, congratulations, your website is well-thought-out and undeniably pleases.').'</li>
 					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be esthetic or ergonomic, or else the offer not sufficient. It\'s also possible that these visitors mistakenly came here, without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
 				</ul>
-				'.$this->l('This information is mostly qualitative: you have to determin the interest of a disjointed visit.').'<br />
+				'.$this->l('This information is mostly qualitative: you have to determine the interest of a disjointed visit.').'<br />
 		</fieldset>';
 		
 		return $this->_html;

@@ -101,7 +101,7 @@ class AdminStockMvt extends AdminTab
 		if (!isset($_GET['addstock_mvt_reason']) AND (Tools::isSubmit('submitAddstock_mvt_reason') OR !Tools::getValue('id_stock_mvt_reason')))
 		{
 			$old_post = $_POST;
-			echo '<h2>'.$this->l('Stock mouvement history').'</h2>';
+			echo '<h2>'.$this->l('Stock movement history').'</h2>';
 			parent::display();
 			if (!isset($_GET['view'.$this->table]))
 				echo '
@@ -143,7 +143,7 @@ class AdminStockMvt extends AdminTab
 		
 		unset($this->_select, $this->_join, $this->_group, $this->_filterHaving, $this->_filter);
 		
-		echo '<h2>'.$this->l('Stock mouvement reason').'</h2>';
+		echo '<h2>'.$this->l('Stock movement reason').'</h2>';
 		$this->postProcess();
 		return parent::display();
 	}
