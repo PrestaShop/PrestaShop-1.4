@@ -2,7 +2,7 @@
 
 class FrontController extends FrontControllerCore
 {
-	public $memory = array();
+	public $_memory = array();
 	
 	private function displayMemoryColor($n)
 	{

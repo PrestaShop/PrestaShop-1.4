@@ -440,7 +440,7 @@ class FrontControllerCore
 			'stock_management' => (int)($stock_management)));
 	}
 	
-	public function pagination($nbProducts)
+	public function pagination($nbProducts = 10)
 	{
 		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);

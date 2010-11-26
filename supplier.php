@@ -39,7 +39,7 @@ if ($id = (int)(Tools::getValue('id_'.$objectType)))
 			$rewrited_url = $link->getManufacturerLink($object->id, $object->link_rewrite);
 		
 		$nbProducts = $object->getProducts($id, NULL, NULL, NULL, $controller->orderBy, $controller->orderWay, true);
-		include(dirname(__FILE__).'/pagination.php');
+		$controller->pagination($nbProducts);
 		$smarty->assign(array(
 			'nb_products' => $nbProducts,
 			'products' => $object->getProducts($id, (int)($cookie->id_lang), (int)($controller->p), (int)($controller->n), $controller->orderBy, $controller->orderWay),
@@ -59,7 +59,7 @@ else
 	$controller->displayHeader();
 	$data = call_user_func(array($className, 'get'.$className.'s'), false, (int)($cookie->id_lang), true);
 	$nbProducts = sizeof($data);
-	$controller->pagination();
+	$controller->pagination($nbProducts);
 
 	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
 	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;

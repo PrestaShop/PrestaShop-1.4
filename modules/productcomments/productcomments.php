@@ -500,7 +500,7 @@ class ProductComments extends Module
 		global $smarty, $cookie, $nbProducts;
 
 		$commentNumber = (int)(ProductComment::getCommentNumber((int)(Tools::getValue('id_product'))));
-
+		$controller = new FrontController();
 		$averages = ProductComment::getAveragesByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang);
 
 		$id_guest = (!$id_customer = (int)$cookie->id_customer) ? (int)$cookie->id_guest : false;
@@ -523,7 +523,7 @@ class ProductComments extends Module
 			'delay' => Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')
 		));
 		$nbProducts = $commentNumber;
-		require_once(dirname(__FILE__).'/../../pagination.php');
+		$controller->pagination($nbProducts);
 		return ($this->display(__FILE__, '/productcomments.tpl'));
 	}
 
