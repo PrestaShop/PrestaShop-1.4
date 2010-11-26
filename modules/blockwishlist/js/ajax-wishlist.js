@@ -13,13 +13,23 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 		data: 'action=' + action + '&id_product=' + id_product + '&quantity=' + quantity + '&token=' + static_token + '&id_product_attribute=' + id_product_attribute,
 		success: function(data)
 		{
-			var elementToTransfert = null;
-			elementToTransfert = $('div#image-block');
-			elementToTransfert.TransferTo({
-						to: $('#wishlist_block').get(0),
-						className:'transferProduct',
-						duration: 800
-			});
+			if (action == 'add')
+			{
+				var $element = $('#bigpic');
+				if (!$element.length)
+					var $element = $('#wishlist_button');
+				var $picture = $element.clone();
+				var pictureOffsetOriginal = $element.offset();
+				$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
+				var pictureOffset = $picture.offset();
+				var wishlistBlockOffset = $('#wishlist_block').offset();
+
+				$picture.appendTo('body');
+				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
+				.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': wishlistBlockOffset.top + 30, 'left': wishlistBlockOffset.left + 15 }, 1000)
+				.fadeOut(800);
+			}
+			
 			if($('#' + id).length != 0)
 			{
 				$('#' + id).slideUp('normal');

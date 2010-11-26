@@ -61,7 +61,7 @@ abstract class ModuleCore
 	 * @param string $name Module unique name
 	 */
 	private static $modulesCache;
-	private static $hookModulesCache;
+	private static $_hookModulesCache;
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -96,9 +96,9 @@ abstract class ModuleCore
 		if (!Validate::isModuleName($this->name))
 			die(Tools::displayError());
 		$result = Db::getInstance()->getRow('
-				SELECT `id_module`
-				FROM `'._DB_PREFIX_.'module`
-				WHERE `name` = \''.pSQL($this->name).'\'');
+		SELECT `id_module`
+		FROM `'._DB_PREFIX_.'module`
+		WHERE `name` = \''.pSQL($this->name).'\'');
 		if ($result)
 			return false;
 		$result = Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, array('name' => $this->name, 'active' => 1), 'INSERT');
@@ -118,20 +118,20 @@ abstract class ModuleCore
 		if (!Validate::isUnsignedId($this->id))
 			return false;
 		$result = Db::getInstance()->ExecuteS('
-				SELECT `id_hook`
-				FROM `'._DB_PREFIX_.'hook_module` hm
-				WHERE `id_module` = '.(int)($this->id));
+		SELECT `id_hook`
+		FROM `'._DB_PREFIX_.'hook_module` hm
+		WHERE `id_module` = '.(int)($this->id));
 		foreach	($result AS $row)
 		{
 			Db::getInstance()->Execute('
-					DELETE FROM `'._DB_PREFIX_.'hook_module`
-					WHERE `id_module` = '.(int)($this->id).'
-					AND `id_hook` = '.(int)($row['id_hook']));
+			DELETE FROM `'._DB_PREFIX_.'hook_module`
+			WHERE `id_module` = '.(int)($this->id).'
+			AND `id_hook` = '.(int)($row['id_hook']));
 			$this->cleanPositions($row['id_hook']);
 		}
 		return Db::getInstance()->Execute('
-				DELETE FROM `'._DB_PREFIX_.'module`
-				WHERE `id_module` = '.(int)($this->id));
+			DELETE FROM `'._DB_PREFIX_.'module`
+			WHERE `id_module` = '.(int)($this->id));
 	}
 
 	/**
@@ -298,9 +298,9 @@ abstract class ModuleCore
 	static public function getInstanceById($id_module)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT `name`
-			FROM `'._DB_PREFIX_.'module`
-			WHERE `id_module` = '.(int)($id_module));
+		SELECT `name`
+		FROM `'._DB_PREFIX_.'module`
+		WHERE `id_module` = '.(int)($id_module));
 		return ($result ? Module::getInstanceByName($result['name']) : false);
 	}
 
@@ -388,8 +388,9 @@ abstract class ModuleCore
 			$hookArgs['cookie'] = $cookie;
 		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
 			$hookArgs['cart'] = $cart;
+		$hook_name = strtolower($hook_name);
 
-		if (!isset(self::$hookModulesCache))
+		if (!isset(self::$_hookModulesCache))
 		{
 			$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 			$result = $db->ExecuteS('
@@ -399,21 +400,22 @@ abstract class ModuleCore
 			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
 			AND m.`active` = 1
 			ORDER BY hm.`position`', false);
-			self::$hookModulesCache = array();
+			self::$_hookModulesCache = array();
 			while ($row = $db->nextRow())
 			{
-				if (!isset(self::$hookModulesCache[$row['hook']]))
-					self::$hookModulesCache[$row['hook']] = array();
-				self::$hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
+				$row['hook'] = strtolower($row['hook']);
+				if (!isset(self::$_hookModulesCache[$row['hook']]))
+					self::$_hookModulesCache[$row['hook']] = array();
+				self::$_hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
 			}
 		}
 
-		if (!isset(self::$hookModulesCache[$hook_name]))
+		if (!isset(self::$_hookModulesCache[$hook_name]))
 			return;
 		$altern = 0;
 		$output = '';
-		foreach (self::$hookModulesCache[$hook_name] AS $array)
-    	{
+		foreach (self::$_hookModulesCache[$hook_name] AS $array)
+		{
 			if ($id_module AND $id_module != $array['id_module'])
 				continue;
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))

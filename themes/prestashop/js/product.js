@@ -294,9 +294,10 @@ function displayImage(domAAroundImgThumb)
     {
         var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
         if ($('#bigpic').attr('src') != newSrc)
-		{ 
+	{ 
             $('#bigpic').fadeOut('fast', function(){
                 $(this).attr('src', newSrc).show();
+		$(this).attr('href', newSrc);
                 if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
 	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
             });
@@ -404,6 +405,8 @@ $(document).ready(function()
 	$('a#resetImages').click(function() {
 		updateColorSelect(0);
 	});
+	
+	$('.thickbox').fancybox();
 });
 
 function saveCustomization()

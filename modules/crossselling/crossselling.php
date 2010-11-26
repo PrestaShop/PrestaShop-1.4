@@ -23,6 +23,7 @@ class CrossSelling extends Module
 	{
 		if (!parent::install() OR
 			!$this->registerHook('productFooter') OR
+			!$this->registerHook('header') OR
 			!Configuration::updateValue('CROSSSELLING_DISPLAY_PRICE', 0))
 			return false;
 		return true;
@@ -61,6 +62,11 @@ class CrossSelling extends Module
 		</fieldset>
 		</form>';
 		return $this->_html;
+	}
+	
+	public function hookHeader()
+	{
+		Tools::addCSS(($this->_path).'crossselling.css', 'all');
 	}
 
 	/**
@@ -103,6 +109,8 @@ class CrossSelling extends Module
 				elseif (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND $taxes_calc == 1)
 					$orderProduct['displayed_price'] = Product::getPriceStatic((int)($orderProduct['product_id']), false, NULL);
 			}
+			
+			Tools::addCSS(($this->_path).'crossselling.css', 'all');
 			
 			$smarty->assign(array(
 				'orderProducts' => $orderProducts,

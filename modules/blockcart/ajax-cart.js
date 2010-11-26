@@ -157,36 +157,37 @@ var ajaxCart = {
 			async: true,
 			cache: false,
 			dataType : "json",
-			data: 'add=1&ajax=true&qty=' + ( (quantity && quantity != null) ? quantity : '1') + '&id_product=' + idProduct + '&token=' + static_token + ( (parseInt(idCombination) && idCombination != null) ? '&ipa=' + parseInt(idCombination): ''),
+			data: 'add=1&ajax=true&qty=' + ((quantity && quantity != null) ? quantity : '1') + '&id_product=' + idProduct + '&token=' + static_token + ( (parseInt(idCombination) && idCombination != null) ? '&ipa=' + parseInt(idCombination): ''),
 			success: function(jsonData)
 			{
 				// add appliance to whishlist module
 				if (whishlist && !jsonData.errors)
 					WishlistAddProductCart(whishlist[0], idProduct, idCombination, whishlist[1]);
-					
-				//apply 'transfert' effect
-				var elementToTransfert = null;
-				if (callerElement && callerElement != null)
-					$(callerElement).parents().each( function() {
-						if ($(this).is('.ajax_block_product')) elementToTransfert = $(this);
-					});
-				else
-					elementToTransfert = $(addedFromProductPage ? 'div#image-block' : ('.ajax_block_product_id_' + idProduct) );
-					elementToTransfert.TransferTo({
-								to: $('#cart_block').get(0),
-								className:'transferProduct',
-								duration: 800,
-								complete: function () {
-									ajaxCart.updateCart(jsonData);
-									//reactive the button when adding has finished
-									if (addedFromProductPage)
-										$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
-									else
-										$('.ajax_add_to_cart_button').removeAttr('disabled');
-								}
-					});
+				
+				// add the picture to the cart
+				var $element = $(callerElement).parent().parent().find('a.product_image img,a.product_img_link img');
+				if (!$element.length)
+					$element = $('#bigpic');
+				var $picture = $element.clone();
+				var pictureOffsetOriginal = $element.offset();
+				$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
+				var pictureOffset = $picture.offset();
+				var cartBlockOffset = $('#cart_block').offset();
+
+				$picture.appendTo('body');
+				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
+				.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': cartBlockOffset.top + 30, 'left': cartBlockOffset.left + 15 }, 1000)
+				.fadeOut(800, function() {
+					ajaxCart.updateCart(jsonData);
+					//reactive the button when adding has finished
+					if (addedFromProductPage)
+						$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
+					else
+						$('.ajax_add_to_cart_button').removeAttr('disabled');				
+				});
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) {
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
 				alert("TECHNICAL ERROR: unable to add the product.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
 				//reactive the button when adding has finished
 				if (addedFromProductPage)

@@ -1191,7 +1191,8 @@ class ToolsCore
 		return true;
 	}
 
-	static public function addCSS($css_uri, $css_media_type = 'all') {
+	static public function addCSS($css_uri, $css_media_type = 'all')
+	{
 		global $css_files;
 		
 		// avoid useless opération...

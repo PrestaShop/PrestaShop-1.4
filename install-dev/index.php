@@ -71,7 +71,7 @@ if ($lm->getIncludeTradFilename())
 	<meta http-equiv="Expires" content="-1" />
 	<title><?php echo lang('PrestaShop '.INSTALL_VERSION.' Installer')?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
-	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.2.6.pack.js"></script>
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/ajaxfileupload.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery.pngFix.pack.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jqminmax-compressed.js"></script>

@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<script type="text/javascript" src="http://{$url}js/jquery/jquery-1.2.6.pack.js"></script>
+		<script type="text/javascript" src="http://{$url}js/jquery/jquery-1.4.4.min.js"></script>
 	</head>
 	<body>
 		<p>{$redirect_text}<br /><a href="javascript:history.go(-1);">{$cancel_text}</a></p>

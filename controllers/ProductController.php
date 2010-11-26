@@ -7,9 +7,9 @@ class ProductControllerCore extends FrontController
 		parent::setMedia();
 		
 		Tools::addCSS(_THEME_CSS_DIR_.'product.css');
-		Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'screen');
+		Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css', 'screen');
 		Tools::addJS(array(
-			_PS_JS_DIR_.'jquery/thickbox-modified.js',
+			_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
 			_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js',
 			_PS_JS_DIR_.'jquery/jquery.scrollto.js',
 			_PS_JS_DIR_.'jquery/jquery.serialScroll.js',

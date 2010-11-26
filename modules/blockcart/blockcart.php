@@ -156,10 +156,7 @@ class BlockCart extends Module
 	{
 		Tools::addCSS(($this->_path).'blockcart.css', 'all');
 		if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')))
-		{
-			Tools::addJS(array(_PS_JS_DIR_.'jquery/iutil.prestashop-modifications.js', _PS_JS_DIR_.'jquery/ifxtransfer.js'));
 			Tools::addJS(($this->_path).'ajax-cart.js');
-		}
 	}
 }
 
