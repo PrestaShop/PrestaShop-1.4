@@ -137,25 +137,25 @@ class CartCore extends ObjectModel
 		$cart = new Cart((int)($id_cart));
 		if (!Validate::isLoadedObject($cart))
 			die(Tools::displayError());
-		
+
 		if (!Configuration::get('PS_TAX'))
 			return 0;
-		
+
 		$products = $cart->getProducts();
 		$totalProducts_moy = 0;
 		$ratioTax = 0;
 		
 		if (!sizeof($products))
 			return 0;
-			
+
 		$country_id = null;
-		$id_address = (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+		$id_address = (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		if (!empty($id_address))
 		{
 				$address_infos = Address::getCountryAndState($id_address);
 				$country_id = (int)$address_infos['id_country'];
 		}
-					
+
 		foreach ($products AS $product)
 		{
 			if ($product['rate'] == 0)
@@ -708,9 +708,12 @@ class CartCore extends ObjectModel
 				$price = Product::getPriceStatic((int)$product['id_product'], false, (int)$product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity'], false, (int)$this->id_customer ? (int)$this->id_customer : NULL, (int)$this->id, $id_address);
 				$total_price = $price * (int)($product['cart_quantity']);
 				if ($withTaxes)
+				{
 					$total_price = Tools::ps_round($total_price * (1 + floatval(
 						Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], floatval($product['rate']))
 						) / 100), 2);		
+					Product::applyEcotax($total_price, $product['ecotax'], true, ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				}
 			}
 			else
 			{
