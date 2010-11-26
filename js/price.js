@@ -7,6 +7,16 @@ function getTax()
 	return taxesArray[taxId];
 }
 
+function getEcotaxTaxIncluded()
+{
+	return parseFloat(document.getElementById('ecotax').value);
+}
+
+function getEcotaxTaxExcluded()
+{
+	return getEcotaxTaxIncluded() / (1 + ecotaxTaxRate);
+}
+
 function formatPrice(price)
 {
 	var fixedToSix = (Math.round(price * 1000000) / 1000000);
@@ -23,21 +33,23 @@ function calcPriceTI()
 	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
 		ps_round(newPrice, 2).toFixed(2);
 	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(priceTE) == true || priceTE < 0) ? '' : 
-		ps_round(priceTE, 2).toFixed(2);
+		(ps_round(priceTE, 2) + getEcotaxTaxExcluded()).toFixed(2);
 	calcReduction();
+	document.getElementById('priceTI').value = parseFloat(document.getElementById('priceTI').value) + getEcotaxTaxIncluded();
+	document.getElementById('finalPrice').innerHTML = parseFloat(document.getElementById('priceTI').value);
 }
 
 function calcPriceTE()
 {
 	var tax = getTax();
 	var priceTI = parseFloat(document.getElementById('priceTI').value.replace(/,/g, '.'));
-	var newPrice = ps_round(priceTI, 2) / ((tax / 100) + 1);
+	var newPrice = ps_round(priceTI - getEcotaxTaxIncluded(), 2) / ((tax / 100) + 1);
 	document.getElementById('priceTE').value =	(isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(newPrice.toFixed(6), 6);
 	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
 		ps_round(priceTI.toFixed(2), 2);
 	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
-		ps_round(newPrice.toFixed(2), 2);
+		ps_round(newPrice.toFixed(2), 2) + getEcotaxTaxExcluded();
 	calcReduction();
 }
 
@@ -69,7 +81,7 @@ function reductionPrice()
 		curPrice = curPrice - rprice.value;
 	}
 	
-	newprice.innerHTML = ps_round(parseFloat(curPrice),2).toFixed(2);
+	newprice.innerHTML = (ps_round(parseFloat(curPrice),2) + getEcotaxTaxIncluded()).toFixed(2);
 	var rpriceWithoutTaxes = ps_round(rprice.value / ((tax / 100) + 1), 2);
 	newpriceWithoutTax.innerHTML = ps_round(priceWhithoutTaxes.value - rpriceWithoutTaxes,2).toFixed(2);
 }
@@ -95,7 +107,7 @@ function reductionPercent()
 		curPrice = price.value * (1 - (rpercent.value / 100));
 	}
 	
-	newprice.innerHTML = ps_round(parseFloat(curPrice),2).toFixed(2);
+	newprice.innerHTML = (ps_round(parseFloat(curPrice),2) + getEcotaxTaxIncluded()).toFixed(2);
 	newpriceWithoutTax.innerHTML = ps_round(parseFloat(ps_round(curPrice, 2) / ((tax / 100) + 1)),2).toFixed(2);
 }
 

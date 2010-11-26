@@ -131,10 +131,7 @@ class AdminProducts extends AdminTab
 		/* Add a new product */
 		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay') OR  Tools::isSubmit('submitAddProductAndPreview'))
 		{
-		
-			if (Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1')
-				$this->submitAddproduct($token);
-			elseif ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product'))
+			if ((Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1') OR ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product')))
 				$this->submitAddproduct($token);
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -1025,6 +1022,7 @@ class AdminProducts extends AdminTab
 				$object = new $this->className($id);
 				if (Validate::isLoadedObject($object))
 				{
+					$this->_removeTaxFromEcotax();
 					$this->copyFromPost($object, $this->table);
 					if ($object->update())
 					{
@@ -1118,6 +1116,18 @@ class AdminProducts extends AdminTab
 			}
 		}
 
+	}
+
+	private function _removeTaxFromEcotax()
+	{
+		if ($ecotax = Tools::getValue('ecotax') AND $tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')))
+			$_POST['ecotax'] = Tools::ps_round($_POST['ecotax'] / (1 + $tax->rate / 100), 6);
+	}
+
+	private function _applyTaxToEcotax($product)
+	{
+		if ($product->ecotax AND $tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')))
+			$product->ecotax = Tools::ps_round($product->ecotax * (1 + $tax->rate / 100), 2);
 	}
 
 	/**
@@ -1939,6 +1949,7 @@ class AdminProducts extends AdminTab
 		else
 			$has_attribute = true;
 		$cover = Product::getCover($obj->id);
+		$this->_applyTaxToEcotax($obj);
 		
 		echo '
 		<div class="tab-page" id="step1">
@@ -2304,6 +2315,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>';
 					$taxes = Tax::getTaxes((int)($cookie->id_lang));
+					$ecotaxTax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'));
 					echo '<script type="text/javascript">';
 					echo 'noTax = '.(Tax::excludeTaxeOption() ? 'true' : 'false'), ";\n";
 					echo 'taxesArray = new Array ();'."\n";
@@ -2311,6 +2323,7 @@ class AdminProducts extends AdminTab
 					foreach ($taxes AS $k => $tax)
 						echo 'taxesArray['.$tax['id_tax'].']='.$tax['rate']."\n";
 					echo '
+						ecotaxTaxRate = '.($ecotaxTax ? $ecotaxTax->rate / 100 : 0.00).';
 					</script>';
 					echo '
 					<tr>
@@ -2348,7 +2361,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">'.$this->l('Eco-tax:').'</td>
+						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
 							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
