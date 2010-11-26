@@ -1,0 +1,3 @@
+SET NAMES 'utf8';
+
+ALTER TABLE `PREFIX_product` CHANGE `ecotax` `ecotax` DECIMAL(21, 6) NOT NULL DEFAULT '0.00';
