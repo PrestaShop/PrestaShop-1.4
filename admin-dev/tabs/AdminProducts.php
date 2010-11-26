@@ -1615,7 +1615,7 @@ class AdminProducts extends AdminTab
 					<input type="submit" name="submitSpecificTaxes" value="'.$this->l('Add').'" class="button" />
 				</div>';
 		} 
-		elseif ($countries == 0 AND $product_taxes == 0) 
+		elseif (sizeof($countries) == 0 AND sizeof($product_taxes) == 0) 
 		{
 			echo '<hr /><h4>'.$this->l('Add a new specific tax').'</h4>
 				<div class="hint clear" style="display:block;">
