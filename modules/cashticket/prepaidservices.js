@@ -6,14 +6,7 @@ function toggleImediatPayment()
 		$('#imediat_payment').show();
 }
 
-function toggleSystemLogo(img_path)
-{
-	if ($('ct_system').val() == 'P')
-		$('system_logo').attr('src', img_path + '');
-	else 
-		$('system_logo').attr('src', img_path + '');
-}
-
 $(document).ready(function() {
 	toggleImediatPayment();
 });
+
