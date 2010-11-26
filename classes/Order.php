@@ -131,6 +131,7 @@ class OrderCore extends ObjectModel
 	
 	protected	$webserviceParameters = array(
 		'objectNodeName' => 'order',
+		'objectsNodeName' => 'orders',
 		'fields' => array(
 			'id_address_delivery' => array('sqlId' => 'id_address_delivery', 'xlink_resource'=> 'addresses'),
 			'id_address_invoice' => array('sqlId' => 'id_address_invoice', 'xlink_resource'=> 'addresses'),
@@ -145,7 +146,10 @@ class OrderCore extends ObjectModel
 			'delivery_number' => array('sqlId' => 'delivery_number'),
 			'invoice_date' => array('sqlId' => 'invoice_date'),
 			'delivery_date' => array('sqlId' => 'delivery_date'),
-			'valid' => array('sqlId' => 'valid')
+			'valid' => array('sqlId' => 'valid'),
+			'current_state' => array('getter' => 'getCurrentState', 'setter' => null, 'xlink_resource'=> 'order_states'),
+			'date_add' => array('sqlId' => 'date_add'),
+			'date_upd' => array('sqlId' => 'date_upd'),
 		),
 	);
 

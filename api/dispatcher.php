@@ -64,12 +64,14 @@ $webservice_call = true;
 $old_error_handler = set_error_handler("psErrorHandler");
 include(dirname(__FILE__).'/../config/config.inc.php');
 $display_errors = strtolower(ini_get('display_errors')) != 'off';
+header('X-Powered-By: PrestaShop Webservice');
 ini_set('html_errors', 'off');
 $output = true;
 $return_code = 'HTTP/1.1 200 OK';
 $ws_url = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
 $dtd = Tools::getHttpHost(true).__PS_BASE_URI__.'tools/webservice/psws.dtd';//A METTRE SUR LE .com ;) //non car dynamique en fonction des modules
 $doc_url = 'http://prestashop.com/docs/1.4/webservice';//A METTRE SUR LE .com ;) //non car dynamique en fonction des modules
+$invalid_key = false;
 
 // http auth with a key
 if (!Configuration::get('PS_WEBSERVICE'))
@@ -93,6 +95,7 @@ else
 		elseif (strlen($auth_key) != '32')
 		{
 			$errors[] = 'Invalid authentication key format';
+			$invalid_key = true;
 			$return_code = 'HTTP/1.1 400 Bad Request';
 		}
 		else
@@ -107,7 +110,7 @@ else
 	}
 	if ($errors)
 	{
-		header('WWW-Authenticate: Basic realm="Welcome to PrestaShop Webservice, please enter the authentication key as the login. No password required."');
+		header('WWW-Authenticate: Basic'.($invalid_key ? '/StopAskTillNextRefresh' : '').' realm="Welcome to PrestaShop Webservice, please enter the authentication key as the login. No password required."');
 		$return_code = 'HTTP/1.0 401 Unauthorized';
 	}
 	else

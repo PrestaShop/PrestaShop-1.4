@@ -79,6 +79,19 @@ function saveObjectFromXmlInput($xmlString, $object, $successReturnCode, $resour
 		$sqlId = $fieldProperties['sqlId'];
 		if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && !$fieldProperties['i18n'])
 		{
+			if (isset($fieldProperties['setter']))
+			{
+				// if we have to use a specific setter
+				if (!$fieldProperties['setter'])
+				{
+					// if it's forbidden to set this field
+					$errors[] = 'parameter "'.$fieldName.'" not writable. Please remove this attribute of this XML';
+					$return_code = 'HTTP/1.1 400 Bad Request';
+				}
+				else
+					$object->$fieldProperties['sqlId']((string)$attributes->$fieldName);
+			}
+			else
 				$object->$sqlId = (string)$attributes->$fieldName;
 		}
 		elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])
@@ -236,10 +249,18 @@ if (!$errors)
 								}
 								else
 								{
-									if (isset($resourceParameters['retrieveData']['tableAlias']))
-										$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param, $resourceParameters['retrieveData']['tableAlias'].'.');
+									if (isset($resourceParameters['fields'][$field]['getter']))
+									{
+										$errors[] = 'The field "'.$field.'" is dynamic. It is not possible to filter GET query with this field.';
+										$return_code = 'HTTP/1.1 400 Bad Request';
+									}
 									else
-									$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param);
+									{
+										if (isset($resourceParameters['retrieveData']['tableAlias']))
+											$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param, $resourceParameters['retrieveData']['tableAlias'].'.');
+										else
+											$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param);
+									}
 								}
 						}
 					

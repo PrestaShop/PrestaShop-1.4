@@ -543,6 +543,13 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$field] = array('sqlId' => $field, 'required' => true, 'i18n' => true)
 				);
 			}
+		foreach ($resourceParameters['fields'] as $key => &$resourceParametersField)
+		{
+			if (!isset($resourceParametersField['sqlId']))
+			{
+				$resourceParametersField['sqlId'] = $key;
+			}
+		}
 		return $resourceParameters;
 	}
 		

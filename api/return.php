@@ -9,7 +9,9 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 	foreach ($resourceParameters['fields'] as $key => $field)
 		if ($key != 'id')
 		{
-			if (is_array($object->$key))
+			if (isset($field['getter']))
+				$object->$key = $object->$field['getter']();
+			/*if (is_array($object->$key))
 			{
 				$ret .= '<'.$field['sqlId'].'>'."\n";
 				foreach ($object->$key as $idLang => $value)
@@ -17,9 +19,9 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 				$ret .= '</'.$field['sqlId'].'>'."\n";
 			}
 			else
-			{
-				$ret .= '<'.$field['sqlId'].(array_key_exists('xlink_resource', $field) ? ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.$object->$key.'"' : '').'><![CDATA['.$object->$key.']]></'.$field['sqlId'].'>'."\n";
-			}
+			{*/
+				$ret .= '<'.$field['sqlId'].(array_key_exists('xlink_resource', $field) ? ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.$object->$key.'"' : '').' '.(isset($field['getter']) ?'dynamic="true"' : '').'><![CDATA['.$object->$key.']]></'.$field['sqlId'].'>'."\n";
+			//}
 		}
 		else
 				$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
@@ -56,18 +58,21 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 
 header($return_code);
 restore_error_handler();
+
+
 if ($output)
 {
+	$output_string = '';
 	header('Content-Type: text/xml');
-	echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-	//echo '<!DOCTYPE prestashop PUBLIC "-//PRESTASHOP//DTD REST_WEBSERVICE '._PS_VERSION_.'//EN"'."\n".'"'.$dtd.'">'."\n";
-	echo '<p:prestashop xmlns:p="'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
+	$output_string .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	//$output_string .= '<!DOCTYPE prestashop PUBLIC "-//PRESTASHOP//DTD REST_WEBSERVICE '._PS_VERSION_.'//EN"'."\n".'"'.$dtd.'">'."\n";
+	$output_string .= '<p:prestashop xmlns:p="'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 	if ($errors)
 	{
-		echo '<p:errors>'."\n";
+		$output_string .= '<p:errors>'."\n";
 		foreach ($errors as $error)
-			echo '<p:error><![CDATA['.$error.']]></p:error>'."\n";
-		echo '</p:errors>'."\n";
+			$output_string .= '<p:error><![CDATA['.$error.']]></p:error>'."\n";
+		$output_string .= '</p:errors>'."\n";
 	}
 	else
 	{
@@ -78,15 +83,15 @@ if ($output)
 				{
 					if (($resourceParameters['objectsNodeName'] != 'resources' && count($objects) || $resourceParameters['objectsNodeName'] == 'resources') && count($resources))
 					{
-						echo '<p:'.$resourceParameters['objectsNodeName'].'>'."\n";
 						if ($resourceParameters['objectsNodeName'] != 'resources')
 						{
+							$output_string .= '<p:'.$resourceParameters['objectsNodeName'].'>'."\n";
 							if ($fieldsToDisplay == 'minimum')
 								foreach ($objects as $object)
-									echo '<p:'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
+									$output_string .= '<p:'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
 							elseif ($fieldsToDisplay == 'full')
 								foreach ($objects as $object)
-									echo getXmlStringViewOfObject($resourceParameters, $object);
+									$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
 							/*else
 							{
 								die('todo : display specific fields');//TODO[id,lastname]
@@ -94,30 +99,35 @@ if ($output)
 						}
 						else
 						{
+							$output_string .= '<p:'.$resourceParameters['objectsNodeName'].' shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
 							foreach ($resources as $resourceName => $resource)
 								if (in_array($resourceName, array_keys($permissions)))
-									echo '<p:'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
+									$output_string .= '<p:'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
 										get="'.(in_array('GET', $permissions[$resourceName]) ? 'true' : 'false').'"
 										put="'.(in_array('PUT', $permissions[$resourceName]) ? 'true' : 'false').'"
 										post="'.(in_array('POST', $permissions[$resourceName]) ? 'true' : 'false').'"
 										delete="'.(in_array('DELETE', $permissions[$resourceName]) ? 'true' : 'false').'"
 									>'.$resource['description'].'</p:'.$resourceName.'>'."\n";
 						}
-						echo '</p:'.$resourceParameters['objectsNodeName'].'>'."\n";
+						$output_string .= '</p:'.$resourceParameters['objectsNodeName'].'>'."\n";
 					}
 					else
-						echo '<p:'.$resourceParameters['objectsNodeName'].' />'."\n";
+						$output_string .= '<p:'.$resourceParameters['objectsNodeName'].' />'."\n";
 				}
 				else //display entity détails
-					echo getXmlStringViewOfObject($resourceParameters, $objects[0]);
+					$output_string .= getXmlStringViewOfObject($resourceParameters, $objects[0]);
 			break;
 		
 			//add a new entry / modify existing entry
 			case 'POST':
 			case 'PUT':
-				echo getXmlStringViewOfObject($resourceParameters, $object);
+				$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
 			break;
 		}
 	}
-	echo '</p:prestashop>'."\n";
+	$output_string .= '</p:prestashop>'."\n";
+	
+	header('Content-Sha1: '.sha1($output_string));
+	
+	echo $output_string;
 }
