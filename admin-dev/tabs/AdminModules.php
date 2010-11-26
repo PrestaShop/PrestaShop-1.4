@@ -559,7 +559,7 @@ class AdminModules extends AdminTab
 					<img class="header_module_img" id="'.$tab.'_img" src="../img/admin/more.png" alt="" />
 					</span>'.$this->listTabModules[$tab].'</a> 
 			</div>
-			<div id="'.$tab.'_content" class="tab_module_content" style="overflow:hidden;display:none;border:solid 1px #CCC">';
+			<div id="'.$tab.'_content" class="tab_module_content" style="display:none;border:solid 1px #CCC">';
 			/* Display modules for each tab type */
 			foreach ($tabModule as $module)
 			{
@@ -581,11 +581,7 @@ class AdminModules extends AdminTab
 					<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').'<br />'.$module->description.'</td>
 					<td rowspan="2">';
 					if (Tools::getValue('module_name') == $module->name)
-					{
-
 						$this->displayConf();
-						//$this->displayErrors();
-					}
 					echo '</td>
 					<td class="center" style="width:60px" rowspan="2">';
 				if ($module->id)
@@ -664,7 +660,8 @@ class AdminModules extends AdminTab
 		if ((int)($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a class="action_module" href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
-		$return .= '<a class="action_module onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		
 		return $return;
 	}
 	
