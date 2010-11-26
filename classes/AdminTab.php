@@ -920,42 +920,45 @@ abstract class AdminTabCore
 	 */
 	public function	displayWarning($warn)
 	{
-		echo '<script type="text/javascript">
-				$(document).ready(function() {
-					$(\'#linkSeeMore\').unbind(\'click\').click(function(){
-						$(\'#seeMore\').show(\'slow\');
-						$(this).hide();
-						$(\'#linkHide\').show();
-						return false;
-					});
-					$(\'#linkHide\').unbind(\'click\').click(function(){
-						$(\'#seeMore\').hide(\'slow\');
-						$(this).hide();
-						$(\'#linkSeeMore\').show();
-						return false;
-					});
-					$(\'#hideWarn\').unbind(\'click\').click(function(){
-						$(\'.warn\').hide(\'slow\', function (){
-							$(\'.warn\').remove();
+		if (!empty($warn))
+		{
+			echo '<script type="text/javascript">
+					$(document).ready(function() {
+						$(\'#linkSeeMore\').unbind(\'click\').click(function(){
+							$(\'#seeMore\').show(\'slow\');
+							$(this).hide();
+							$(\'#linkHide\').show();
+							return false;
 						});
-						return false;
+						$(\'#linkHide\').unbind(\'click\').click(function(){
+							$(\'#seeMore\').hide(\'slow\');
+							$(this).hide();
+							$(\'#linkSeeMore\').show();
+							return false;
+						});
+						$(\'#hideWarn\').unbind(\'click\').click(function(){
+							$(\'.warn\').hide(\'slow\', function (){
+								$(\'.warn\').remove();
+							});
+							return false;
+						});
 					});
-				});
-			  </script>
-		<div class="warn">';
-		if (!is_array($warn))
-			echo '<img src="../img/admin/warn2.png" />'.$warn;
-		else
-		{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/warn2.png" />'.
-			(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
-			.'<span style="margin-left:20px;" id="labelSeeMore">
-			<a id="linkSeeMore" href="" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
-			<a id="linkHide" href="" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
-			foreach($warn as $val)
-				echo '<li>'.$val.'</li>';
-			echo '</ul>';
-		}	
-		echo '</div>';		
+				  </script>
+			<div class="warn">';
+			if (!is_array($warn))
+				echo '<img src="../img/admin/warn2.png" />'.$warn;
+			else
+			{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/warn2.png" />'.
+				(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
+				.'<span style="margin-left:20px;" id="labelSeeMore">
+				<a id="linkSeeMore" href="" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
+				<a id="linkHide" href="" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
+				foreach($warn as $val)
+					echo '<li>'.$val.'</li>';
+				echo '</ul>';
+			}	
+			echo '</div>';
+		}		
 	}
 
 	/**
