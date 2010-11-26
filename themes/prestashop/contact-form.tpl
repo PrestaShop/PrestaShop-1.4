@@ -83,7 +83,7 @@
 		{/if}
 		<p class="textarea">
 			<label for="message">{l s='Message'}</label>
-			 <textarea id="message" name="message" style="width:340px;height:220px">{if isset($smarty.post.message)}{$smarty.post.message|escape:'htmlall':'UTF-8'|stripslashes}{/if}</textarea>
+			 <textarea id="message" name="message" style="width:340px;height:220px">{if isset($message)}{$message|escape:'htmlall':'UTF-8'|stripslashes}{/if}</textarea>
 		</p>
 		<p class="submit">
 			<input type="submit" name="submitMessage" id="submitMessage" value="{l s='Send'}" class="button_large" onclick="$(this).hide();" />

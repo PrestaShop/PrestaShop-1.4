@@ -222,7 +222,9 @@ class ContactControllerCore extends FrontController
 			$this->smarty->assign('customerThread', $customerThread);
 		}
 		
-		$this->smarty->assign('contacts', Contact::getContacts((int)($this->cookie->id_lang)));
+		$this->smarty->assign(array('contacts' => Contact::getContacts((int)($this->cookie->id_lang)),
+		'message' => html_entity_decode(Tools::getValue('message'))
+		));
 	}
 	
 	public function displayContent()
