@@ -432,7 +432,7 @@ class AdminModules extends AdminTab
 					$warnings[] ='<a href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'">'.$module->displayName.'</a> - '.stripslashes(pSQL($module->warning));
 		$this->displayWarning($warnings);
 		echo '<form method="POST">
-			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;;margin-bottom:5px;">
+			<table cellpadding="0" cellspacing="0" style="width:100%;;margin-bottom:5px;">
 				<tr>
 					<th style="border-right:solid 1px;border:inherit">
 						<span class="button" style="padding:0.4em;">
