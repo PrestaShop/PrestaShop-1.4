@@ -447,7 +447,7 @@ class CartCore extends ObjectModel
 					$qty = '`quantity` + '.(int)($quantity);
 					
 					if (!Product::isAvailableWhenOutOfStock((int)($result2['out_of_stock'])))
-						if ((int)($quantity) > $productQty)
+						if ((int)($newQty) > $productQty)
 							return false;
 				}
 				elseif ($operator == 'down')
