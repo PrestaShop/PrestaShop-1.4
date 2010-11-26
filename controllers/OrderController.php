@@ -24,6 +24,8 @@ class OrderControllerCore extends FrontController
 	
 	public function preProcess()
 	{
+		global $isVirtualCart;
+
 		parent::preProcess();
 
 		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
@@ -255,6 +257,7 @@ class OrderControllerCore extends FrontController
 		if ($this->cart->getOrderTotal() <= 0)
 		{
 			$order = new FreeOrder();
+			$order->free_order_class = true;
 			$order->validateOrder((int)($this->cart->id), _PS_OS_PAYMENT_, 0, Tools::displayError('Free order', false));
 			Tools::redirect('history.php');
 		}

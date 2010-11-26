@@ -186,7 +186,7 @@ abstract class PaymentModuleCore extends Module
 					}
 
 					// Exclude VAT
-					if (Tax::excludeTaxeOption())
+					if (Tax::excludeTaxeOption() OR (isset($this->free_order_class) AND $this->free_order_class === true))
 					{
 						$product['tax'] = 0;
 						$product['rate'] = 0;
@@ -234,7 +234,7 @@ abstract class PaymentModuleCore extends Module
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 
-					$priceWithTax = number_format($price * (($tax + 100) / 100), 2, '.', '');
+					$priceWithTax = number_format($price * (($tax_rate + 100) / 100), 2, '.', '');
 					$customizationQuantity = 0;
 					if (isset($customizedDatas[$product['id_product']][$product['id_product_attribute']]))
 					{
