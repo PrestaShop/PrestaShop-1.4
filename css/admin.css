@@ -245,7 +245,7 @@ input[type="text"], input[type="password"], input[type="file"], textarea {
 }
 
 input[type="text"], input[type="password"], input[type="file"], input[type="radio"], input[type="checkbox"], textarea, select, option {
-	background-color: white;
+	background-color:transparent;
 }
 
 input:focus, textarea:focus {
