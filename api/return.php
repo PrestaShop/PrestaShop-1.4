@@ -5,7 +5,7 @@ if (!isset($errors))
 
 function getXmlStringViewOfObject($resourceParameters, $object) {
 	global $ws_url;
-	$ret = '<p:'.$resourceParameters['objectNodeName'].'>'."\n";
+	$ret = '<'.$resourceParameters['objectNodeName'].'>'."\n";
 	foreach ($resourceParameters['fields'] as $key => $field)
 		if ($key != 'id')
 		{
@@ -51,7 +51,7 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 		}
 		$ret .= '</associations>'."\n";
 	}
-	$ret .= '</p:'.$resourceParameters['objectNodeName'].'>'."\n";
+	$ret .= '</'.$resourceParameters['objectNodeName'].'>'."\n";
 	return $ret;
 }
 
@@ -66,13 +66,13 @@ if ($output)
 	header('Content-Type: text/xml');
 	$output_string .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	//$output_string .= '<!DOCTYPE prestashop PUBLIC "-//PRESTASHOP//DTD REST_WEBSERVICE '._PS_VERSION_.'//EN"'."\n".'"'.$dtd.'">'."\n";
-	$output_string .= '<p:prestashop xmlns:p="'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
+	$output_string .= '<prestashop xmlns:"'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 	if ($errors)
 	{
-		$output_string .= '<p:errors>'."\n";
+		$output_string .= '<errors>'."\n";
 		foreach ($errors as $error)
-			$output_string .= '<p:error><![CDATA['.$error.']]></p:error>'."\n";
-		$output_string .= '</p:errors>'."\n";
+			$output_string .= '<error><![CDATA['.$error.']]></error>'."\n";
+		$output_string .= '</errors>'."\n";
 	}
 	else
 	{
@@ -85,10 +85,10 @@ if ($output)
 					{
 						if ($resourceParameters['objectsNodeName'] != 'resources')
 						{
-							$output_string .= '<p:'.$resourceParameters['objectsNodeName'].'>'."\n";
+							$output_string .= '<'.$resourceParameters['objectsNodeName'].'>'."\n";
 							if ($fieldsToDisplay == 'minimum')
 								foreach ($objects as $object)
-									$output_string .= '<p:'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
+									$output_string .= '<'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
 							elseif ($fieldsToDisplay == 'full')
 								foreach ($objects as $object)
 									$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
@@ -99,20 +99,20 @@ if ($output)
 						}
 						else
 						{
-							$output_string .= '<p:'.$resourceParameters['objectsNodeName'].' shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
+							$output_string .= '<'.$resourceParameters['objectsNodeName'].' shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
 							foreach ($resources as $resourceName => $resource)
 								if (in_array($resourceName, array_keys($permissions)))
-									$output_string .= '<p:'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
+									$output_string .= '<'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
 										get="'.(in_array('GET', $permissions[$resourceName]) ? 'true' : 'false').'"
 										put="'.(in_array('PUT', $permissions[$resourceName]) ? 'true' : 'false').'"
 										post="'.(in_array('POST', $permissions[$resourceName]) ? 'true' : 'false').'"
 										delete="'.(in_array('DELETE', $permissions[$resourceName]) ? 'true' : 'false').'"
-									>'.$resource['description'].'</p:'.$resourceName.'>'."\n";
+									>'.$resource['description'].'</'.$resourceName.'>'."\n";
 						}
-						$output_string .= '</p:'.$resourceParameters['objectsNodeName'].'>'."\n";
+						$output_string .= '</'.$resourceParameters['objectsNodeName'].'>'."\n";
 					}
 					else
-						$output_string .= '<p:'.$resourceParameters['objectsNodeName'].' />'."\n";
+						$output_string .= '<'.$resourceParameters['objectsNodeName'].' />'."\n";
 				}
 				else //display entity détails
 					$output_string .= getXmlStringViewOfObject($resourceParameters, $objects[0]);
@@ -125,7 +125,7 @@ if ($output)
 			break;
 		}
 	}
-	$output_string .= '</p:prestashop>'."\n";
+	$output_string .= '</prestashop>'."\n";
 	
 	header('Content-Sha1: '.sha1($output_string));
 	

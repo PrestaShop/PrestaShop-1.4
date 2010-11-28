@@ -70,8 +70,7 @@ function constructSqlFilter($sqlId, $filterValue, $tableAlias = 'main.')
 function saveObjectFromXmlInput($xmlString, $object, $successReturnCode, $resourceParameters, $errors)
 {
   $xml = new SimpleXMLElement($xmlString);
-	$namespaces = $xml->getNameSpaces(true);
-	$attributes = $xml->children($namespaces['p'])->{$resourceParameters['objectNodeName']}->children();
+	$attributes = $xml->children()->{$resourceParameters['objectNodeName']}->children();
 	
 	// attributes
 	foreach ($resourceParameters['fields'] as $fieldName => $fieldProperties)
