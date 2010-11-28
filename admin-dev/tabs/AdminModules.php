@@ -373,7 +373,7 @@ class AdminModules extends AdminTab
 		$this->displayJavascript();
 			
 		echo '
-		<span onclick="openCloseLayer(\'module_install\', 0);" style="cursor:pointer"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" />
+		<span onclick="$(\'#module_install\').slideToggle()" style="cursor:pointer"><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" />
 			'.$this->l('Add a module from my computer').'
 		</span>
 		&nbsp;|&nbsp;
@@ -382,22 +382,12 @@ class AdminModules extends AdminTab
 			'.$this->l('Add a module from PrestaShop Addons').'
 		</a>
 		<div class="clear">&nbsp;</div>
-		<div id="module_install" style="float: left;width:450px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
+		<div id="module_install" style="display:none;width:900px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
 				<hr />
-				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-					<label style="width: 100px">'.$this->l('Module URL').'</label>
-					<div class="margin-form" style="padding-left: 140px">
-						<input type="text" name="url" style="width: 200px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
-						<p>'.$this->l('Download the module directly from a website.').'</p>
-					</div>
-					<div class="margin-form" style="padding-left: 140px">
-						<input type="submit" name="submitDownload" value="'.$this->l('Download this module').'" class="button" />
-					</div>
-				</form>
-				<hr />
+				<div style="float:right;margin-right:50px;border-left:solid 1px #DFD5C3">
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 					<label style="width: 100px">'.$this->l('Module file').'</label>
 					<div class="margin-form" style="padding-left: 140px">
@@ -408,7 +398,20 @@ class AdminModules extends AdminTab
 						<input type="submit" name="submitDownload2" value="'.$this->l('Upload this module').'" class="button" />
 					</div>
 				</form>
+				</div>
+				<div>
+				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+					<label style="width: 100px">'.$this->l('Module URL').'</label>
+					<div class="margin-form" style="padding-left: 140px">
+						<input type="text" name="url" style="width: 200px;" value="'.(Tools::getValue('url') ? Tools::getValue('url') : 'http://').'" />
+						<p>'.$this->l('Download the module directly from a website.').'</p>
+					</div>
+					<div class="margin-form" style="padding-left: 140px">
+						<input type="submit" name="submitDownload" value="'.$this->l('Download this module').'" class="button" />
+					</div>
+				</form>
 			</fieldset>
+			<br>
 		</div>';
 		if (Configuration::get('PRESTASTORE_LIVE'))
 			echo '
