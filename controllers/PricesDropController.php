@@ -19,7 +19,9 @@ class PricesDropControllerCore extends FrontController
 		$this->smarty->assign(array(
 			'products' => Product::getPricesDrop((int)($this->cookie->id_lang), (int)($this->p) - 1, (int)($this->n), false, $this->orderBy, $this->orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
-			'nbProducts' => $nbProducts));
+			'nbProducts' => $nbProducts,
+			'homeSize' => Image::getSize('home')
+		));
 	}
 	
 	public function displayContent()

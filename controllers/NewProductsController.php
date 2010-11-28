@@ -19,7 +19,8 @@ class NewProductsControllerCore extends FrontController
 		$this->smarty->assign(array(
 			'products' => Product::getNewProducts((int)($this->cookie->id_lang), (int)($this->p) - 1, (int)($this->n), false, $this->orderBy, $this->orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
-			'nbProducts' => (int)($nbProducts)
+			'nbProducts' => (int)($nbProducts),
+			'homeSize' => Image::getSize('home')	
 		));
 	}
 	
