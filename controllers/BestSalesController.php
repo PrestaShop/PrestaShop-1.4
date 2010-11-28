@@ -12,8 +12,9 @@ class BestSalesControllerCore extends FrontController
 		$this->smarty->assign(array(
 			'products' => ProductSale::getBestSales((int)($this->cookie->id_lang), (int)($p) - 1, (int)($n), $orderBy, $orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
-			'nbProducts' => $nbProducts)
-		);
+			'nbProducts' => $nbProducts,
+			'homeSize' => Image::getSize('home')
+		));
 	}
 
 	public function setMedia()
