@@ -145,7 +145,7 @@ abstract class AdminTabCore
 		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
 		19 => $this->l('Duplication successfully done'), 20 => $this->l('Translation added successfully but the language has been not created'),
 		21 => $this->l('Module reset successfully'), 22 => $this->l('Module delete successfully'),
-		23 => $this->l('Configuration pack imported successfully'));
+		23 => $this->l('Configuration pack imported successfully'), 24 => $this->l('Refund Successful'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
 		$className = get_class($this);
@@ -951,8 +951,8 @@ abstract class AdminTabCore
 			{	echo '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/warn2.png" />'.
 				(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
 				.'<span style="margin-left:20px;" id="labelSeeMore">
-				<a id="linkSeeMore" href="" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
-				<a id="linkHide" href="" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
+				<a id="linkSeeMore" href="#" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
+				<a id="linkHide" href="#" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
 				foreach($warn as $val)
 					echo '<li>'.$val.'</li>';
 				echo '</ul>';

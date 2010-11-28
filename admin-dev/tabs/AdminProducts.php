@@ -3313,7 +3313,7 @@ class AdminProducts extends AdminTab
 					<input type="hidden" size="2" id="curPackItemId" />
 					
 					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
-					<input type="text" size="25" id="curPackItemName" class="space" />
+					<input type="text" size="25" id="curPackItemName" />
 					<input type="text" name="curPackItemQty" id="curPackItemQty" value="1" size="1" />
 					<script language="javascript">
 					'.$this->addPackItem().'

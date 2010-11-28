@@ -62,7 +62,7 @@ class AdminInvoices extends AdminTab
 					<input type="text" size="4" maxlength="10" name="date_to" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Format: 2008-12-31 (inclusive)').'</p>
 				</div>
-				<div class="margin-form">
+				<div class="margin-form" style="padding-left:100px">
 					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint" class="button" />
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required fields').'</div>
@@ -70,11 +70,11 @@ class AdminInvoices extends AdminTab
 		</fieldset>
 		<fieldset style="float:left;width: 500px;margin-left:10px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By statuses').'</legend>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-				<label style="width:90px">'.$this->l('Statuses').'</label>
+				<label style="width:90px">'.$this->l('Statuses').' :</label>
 				<div class="margin-form" style="padding-left:100px">
 					<ul>';
 		foreach ($statuses as $status)
-			echo '		<li>
+			echo '		<li style="list-style: none;">
 							<input type="checkbox" name="id_order_state[]" value="'.(int)$status['id_order_state'].'" id="id_order_state_'.(int)$status['id_order_state'].'">
 							<label for="id_order_state_'.(int)$status['id_order_state'].'" style="float:none;'.((isset($statusStats[$status['id_order_state']]) AND $statusStats[$status['id_order_state']]) ? '' : 'font-weight:normal;').'padding:0;text-align:left;width:100%;color:#000">
 								<img src="../img/admin/charged_'.($status['invoice'] ? 'ok' : 'ko').'.gif" alt="" />
