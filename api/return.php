@@ -11,7 +11,7 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 		{
 			if (isset($field['getter']))
 				$object->$key = $object->$field['getter']();
-			/*if (is_array($object->$key))
+			if (is_array($object->$key))
 			{
 				$ret .= '<'.$field['sqlId'].'>'."\n";
 				foreach ($object->$key as $idLang => $value)
@@ -19,9 +19,9 @@ function getXmlStringViewOfObject($resourceParameters, $object) {
 				$ret .= '</'.$field['sqlId'].'>'."\n";
 			}
 			else
-			{*/
+			{
 				$ret .= '<'.$field['sqlId'].(array_key_exists('xlink_resource', $field) ? ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.$object->$key.'"' : '').' '.(isset($field['getter']) ?'dynamic="true"' : '').'><![CDATA['.$object->$key.']]></'.$field['sqlId'].'>'."\n";
-			//}
+			}
 		}
 		else
 				$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
