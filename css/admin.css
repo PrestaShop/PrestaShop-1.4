@@ -244,7 +244,10 @@ input[type="text"], input[type="password"], input[type="file"], textarea {
 	padding: 2px 4px;
 }
 
-input[type="text"], input[type="password"], input[type="file"], input[type="radio"], input[type="checkbox"], textarea, select, option {
+input[type="text"], input[type="password"], input[type="file"], textarea, select, option {
+	background-color:#FFF;
+}
+input[type="radio"], input[type="checkbox"] {
 	background-color:transparent;
 }
 
