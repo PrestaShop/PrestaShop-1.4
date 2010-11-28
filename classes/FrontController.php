@@ -53,7 +53,7 @@ class FrontControllerCore
 			return;
 		self::$initialized = true;
 			
-		global $_CONF, $cookie, $smarty, $cart, $iso, $defaultCountry;
+		global $_CONF, $cookie, $smarty, $cart, $iso, $defaultCountry, $page_name;
 		if (!isset($smarty))
 			exit;
 
@@ -211,7 +211,7 @@ class FrontControllerCore
 		$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 		$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
 
-		$smarty->assign(Tools::getMetaTags((int)($cookie->id_lang)));
+		$smarty->assign(Tools::getMetaTags($cookie->id_lang));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
 
 		/* Breadcrumb */
