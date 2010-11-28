@@ -66,7 +66,7 @@ if ($output)
 	header('Content-Type: text/xml');
 	$output_string .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	//$output_string .= '<!DOCTYPE prestashop PUBLIC "-//PRESTASHOP//DTD REST_WEBSERVICE '._PS_VERSION_.'//EN"'."\n".'"'.$dtd.'">'."\n";
-	$output_string .= '<prestashop xmlns:"'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
+	$output_string .= '<prestashop xmlns="'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 	if ($errors)
 	{
 		$output_string .= '<errors>'."\n";
