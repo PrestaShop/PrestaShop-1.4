@@ -171,7 +171,8 @@ class BlockCms extends Module
 			WHERE bcp.`id_block_cms` = '.(int)($cms_category['id_block_cms']).'
 			AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 			AND bcp.`is_category` = 0
-			AND c.`active` = 1');
+			AND c.`active` = 1
+			ORDER BY `position`');
 			$links = array();
 			if (sizeof($display_cms[$key]['cms']))
 				foreach ($display_cms[$key]['cms'] as $row)
