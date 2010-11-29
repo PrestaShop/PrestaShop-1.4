@@ -15,25 +15,10 @@ class SitemapControllerCore extends FrontController
 		
 		$depth = 0;
 		$categTree = Category::getRootCategory()->recurseLiteCategTree($depth);
+		$cms = CMSCategory::getRecurseCategory(_USER_ID_LANG_, 1, 1, 1);
 		$this->smarty->assign('categoriesTree', $categTree);
+		$this->smarty->assign('categoriescmsTree', $cms);
 		$this->smarty->assign('voucherAllowed', (int)(Configuration::get('PS_VOUCHERS')));
-
-		if (Module::isInstalled('blockcms'))
-		{
-			$this->smarty->assign('blockCMSInstalled', true);
-			$cms_module = Module::getInstanceByName('blockcms');
-			$this->smarty->assign('blocks', $cms_module->getAllBlocksCMS());
-			$this->smarty->assign('pages', $cms_module->getAllCMStitles());
-		}
-		else
-		{
-			$this->smarty->assign('blockcms', false);
-			$cms = CMS::listCms((int)($this->cookie->id_lang));
-			$id_cms = array();
-			foreach($cms AS $row)
-				$id_cms[] = (int)($row['id_cms']);
-			$this->smarty->assign('cmslinks', CMS::getLinks((int)($this->cookie->id_lang), $id_cms ? $id_cms : NULL));	
-		}
 	}
 	
 	public function displayContent()

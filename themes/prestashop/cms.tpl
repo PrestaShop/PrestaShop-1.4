@@ -26,7 +26,7 @@
 {elseif $category}
 	<div class="rte{if $content_only} content_only{/if}">
 		<h2>{$category->name}</h2>
-		{if isset($sub_category) & !empty($sub_category)}	
+		{if isset($sub_category) && !empty($sub_category)}	
 			<h4>{l s='List of sub categories in '}{$category->name} : </h4>
 			<ul class="bullet">
 				{foreach from=$sub_category item=subcategory}
@@ -36,7 +36,7 @@
 				{/foreach}
 			</ul>
 		{/if}
-		{if isset($cms_pages) & !empty($cms_pages)}
+		{if isset($cms_pages) && !empty($cms_pages)}
 		<h4>{l s='List of pages in '}{$category->name} : </h4>
 			<ul class="bullet">
 				{foreach from=$cms_pages item=cmspages}
@@ -45,6 +45,9 @@
 					</li>
 				{/foreach}
 			</ul>
+		{/if}
+		{if (!isset($sub_category) || empty($sub_category)) && (!isset($cms_pages) || empty($cms_pages))}
+			{l s='There is no sub category or page in'} {$category->name}
 		{/if}
 	</div>
 {else}

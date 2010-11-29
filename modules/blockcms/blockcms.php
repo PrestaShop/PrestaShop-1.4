@@ -35,6 +35,7 @@ class BlockCms extends Module
 		`id_cms_category` int(10) unsigned NOT NULL,
 		`location` tinyint(1) unsigned NOT NULL,
 		`position` int(10) unsigned NOT NULL default \'0\',
+		`display_store` tinyint(1) unsigned NOT NULL default \'1\',
 		PRIMARY KEY (`id_block_cms`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute('

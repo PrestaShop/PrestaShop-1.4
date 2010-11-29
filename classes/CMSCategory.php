@@ -164,29 +164,34 @@ class CMSCategoryCore extends ObjectModel
 		);
 	}
 
-	static public function getRecurseCategory($id_lang, $current = 1, $active = 1)
+	static public function getRecurseCategory($id_lang = _USER_ID_LANG_, $current = 1, $active = 1, $links = 0)
 	{
 		$category = Db::getInstance()->getRow('
-		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`
+		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`, cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'cms_category` c
 		JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON c.`id_cms_category` = cl.`id_cms_category`
 		WHERE c.`id_cms_category` = '.(int)($current).'
 		AND `id_lang` = '.(int)($id_lang));
 		$result = Db::getInstance()->ExecuteS('
-		SELECT c.`id_cms_category`, c.`id_parent`, c.`level_depth`, cl.`name`
+		SELECT c.`id_cms_category`
 		FROM `'._DB_PREFIX_.'cms_category` c
-		JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON c.`id_cms_category` = cl.`id_cms_category`
-		WHERE c.`id_parent` = '.(int)($current).'
-		AND c.`active` = 1
-		AND cl.`id_lang` = '.(int)($id_lang));
+		WHERE c.`id_parent` = '.(int)($current).
+		($active ? ' AND c.`active` = 1' : ''));
 		foreach ($result as $row)
-			$category['children'][] = self::getRecurseCategory($id_lang, $row['id_cms_category'], $active);
+			$category['children'][] = self::getRecurseCategory($id_lang, $row['id_cms_category'], $active, $links);
 		$category['cms'] = Db::getInstance()->ExecuteS('
-		SELECT c.`id_cms`, cl.`meta_title`
+		SELECT c.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'cms` c
 		JOIN `'._DB_PREFIX_.'cms_lang` cl ON c.`id_cms` = cl.`id_cms`
 		WHERE `id_cms_category` = '.(int)($current).'
 		AND cl.`id_lang` = '.(int)($id_lang).($active ? ' AND c.`active` = 1' : ''));
+		if ($links == 1)
+		{
+			$link = new Link();
+			$category['link'] = $link->getCMSCategoryLink($current, $category['link_rewrite']);
+			foreach($category['cms'] as $key => $cms)
+				$category['cms'][$key]['link'] = $link->getCMSLink($cms['id_cms'], $cms['link_rewrite']);
+		}
 		return $category;
 	}
 
