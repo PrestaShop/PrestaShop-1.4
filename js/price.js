@@ -134,14 +134,6 @@ function decimalTruncate(source, decimals)
 	return parseFloat(source.substr(0, pos + decimals + 1));
 }
 
-function showUnitPrices()
-{
-	if ($('#tr_unit_price').css('display') == 'none')
-		$('#tr_unit_price').show();
-	else
-		$('#tr_unit_price').hide();
-}
-
 function unitPriceWithTax(type)
 {
 	var tax = getTax();

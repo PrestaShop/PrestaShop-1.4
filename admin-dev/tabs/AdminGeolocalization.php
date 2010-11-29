@@ -22,7 +22,7 @@ class AdminGeolocalization extends AdminTab
 		';
 		
 		if (!$this->_isGeoLiteCityAvailable())
-			$this->displayWarning($this->l('In order to use Geolocalization, thank download').' <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz">'.$this->l('this file').'</a> '.$this->l('and decompress it into tools/geoip/ directory'));
+			$this->displayWarning($this->l('In order to use Geolocalization, please download').' <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz">'.$this->l('this file').'</a> '.$this->l('and decompress it into tools/geoip/ directory'));
 		
 		echo '
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
@@ -33,7 +33,7 @@ class AdminGeolocalization extends AdminTab
 				<div class="margin-form">
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_1" value="1" '.(Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_1"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Enabled').'</label>
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_0" value="0" '.(!Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_0"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('Disabled').'</label>
-					<p>'.$this->l('This option allows you, in other things to restrict access to your shop in many countries, see bellow.').'</p>
+					<p>'.$this->l('This option allows you to restrict access to your shop in many countries (see below).').'</p>
 				</div>
 				
 				<div class="margin-form">

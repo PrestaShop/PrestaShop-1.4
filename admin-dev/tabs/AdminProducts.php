@@ -2351,8 +2351,7 @@ class AdminProducts extends AdminTab
 							<span style="margin-left:10px">
 						</td>
 					</tr>
-					<tr><td colspan=2><span onclick="showUnitPrices();" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('Units prices').'" title="'.$this->l('Units prices').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to edit the units prices').'</span><br /><br /></td></tr>
-					<tr id="tr_unit_price" style="display:none;">
+					<tr id="tr_unit_price">
 						<td class="col-left">'.$this->l('Unit price without tax:').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.$this->getFieldValue($obj, 'unit_price').'" onkeyup="unitPriceWithTax(\'unit\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();" onchange="unitySecond();"/>'.
