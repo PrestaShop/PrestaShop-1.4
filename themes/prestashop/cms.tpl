@@ -6,7 +6,7 @@
 </div>
 <!-- /Breadcrumb -->
 
-{if $cms}
+{if $cms && !$category}
 	{if !$cms->active}
 		<br />
 		<div id="admin-action-cms">
