@@ -55,6 +55,8 @@ class AuthControllerCore extends FrontController
 				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
 				{
 					$zip_regexp = '/^'.$zip_code_format.'$/ui';
+					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
+					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
 					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
