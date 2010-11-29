@@ -66,7 +66,7 @@ class OrderOpcControllerCore extends FrontController
 						    		}
 						    	}
 						    	if (sizeof($this->errors))
-									die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								die(true);
 							}
 							break;
@@ -91,7 +91,7 @@ class OrderOpcControllerCore extends FrontController
 								elseif (!$this->cart->isVirtualCart() AND (int)(Tools::getValue('id_carrier')) != 0)
 									$this->errors[] = Tools::displayError('invalid carrier or no carrier selected');
 								if (sizeof($this->errors))
-									die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								
 								Module::hookExec('ProcessCarrier', array('cart' => $this->cart));
 								if ($this->cart->update())
@@ -102,7 +102,7 @@ class OrderOpcControllerCore extends FrontController
 								else
 									$this->errors[] = Tools::displayError('error occured on update of cart');
 								if (sizeof($this->errors))
-									die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								exit;
 							}
 							break;
@@ -134,7 +134,7 @@ class OrderOpcControllerCore extends FrontController
 								die (Tools::jsonEncode($result));
 							}
 							if (sizeof($this->errors))
-								die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+								die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 							break;
 						case 'getPaymentModule':
 							if ($this->cart->OrderExists())
@@ -218,7 +218,7 @@ class OrderOpcControllerCore extends FrontController
 						}
 					}
 					if (sizeof($this->errors))
-						die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+						die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 					exit;
 				}
 				exit;

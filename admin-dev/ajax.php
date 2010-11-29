@@ -179,9 +179,9 @@ if (array_key_exists('ajaxModulesPositions', $_POST))
 		if ($module->updatePosition($id_hook, $way, $position))
 			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'Can not update module position\'}');	
+			die('{"hasError" : true, "errors" : "Can not update module position"}');	
 	else
-		die('{\'hasError\' : true, errors : \'This module can not be loaded\'}');
+		die('{"hasError" : true, "errors" : "This module can not be loaded"}');
 }
 
 if (array_key_exists('ajaxCategoriesPositions', $_POST))
@@ -206,10 +206,10 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 		if (isset($position) && $category->updatePosition($way, $position))
 			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'Can not update categories position\'}');
+			die('{"hasError" : true, errors : "Can not update categories position"}');
 	}
 	else
-		die('{\'hasError\' : true, errors : \'This category can not be loaded\'}');
+		die('{"hasError" : true, "errors" : "This category can not be loaded"}');
 }
 
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
@@ -234,10 +234,10 @@ if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
 		if (isset($position) && $cms_category->updatePosition($way, $position))
 			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'Can not update cms categories position\'}');
+			die('{"hasError" : true, "errors" : "Can not update cms categories position"}');
 	}
 	else
-		die('{\'hasError\' : true, errors : \'This cms category can not be loaded\'}');
+		die('{"hasError" : true, "errors" : "This cms category can not be loaded"}');
 }
 
 if (array_key_exists('ajaxCMSPositions', $_POST))
@@ -262,10 +262,10 @@ if (array_key_exists('ajaxCMSPositions', $_POST))
 		if (isset($position) && $cms->updatePosition($way, $position))
 			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'Can not update cms position\'}');
+			die('{"hasError" : true, "errors" : "Can not update cms position"}');
 	}
 	else
-		die('{\'hasError\' : true, errors : \'This cms can not be loaded\'}');
+		die('{"hasError" : true, "errors" : "This cms can not be loaded"}');
 }
 
 if (array_key_exists('ajaxProductsPositions', $_POST))
@@ -292,10 +292,10 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 		if (isset($position) && $product->updatePosition($way, $position))
 			die(true);
 		else
-			die('{\'hasError\' : true, errors : \'Can not update product position\'}');
+			die('{"hasError" : true, "errors" : "Can not update product position"}');
 	}
 	else
-		die('{\'hasError\' : true, errors : \'This product can not be loaded\'}');
+		die('{"hasError" : true, "errors" : "This product can not be loaded"}');
 }
 
 if (isset($_GET['ajaxProductPackItems']))
@@ -369,7 +369,7 @@ if (Tools::getValue('submitPublishProduct'))
 		
 			$product->active = 1;
 		
-			if ($product->save())
+			if (!$product->save())
 				die($bo_product_url);
 			else 
 				die('error: saving');

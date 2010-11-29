@@ -75,7 +75,7 @@ class CartControllerCore extends FrontController
 				$producToAdd = new Product((int)($idProduct), true, (int)($this->cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 					if (Tools::getValue('ajax') == 'true')
-						die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('product is no longer available', false)).'\']}');
+						die('{"hasError" : true, "errors" : ["'.Tools::displayError('product is no longer available', false).'"]}');
 					else
 						$this->errors[] = Tools::displayError('product is no longer available', false);
 				else
@@ -85,7 +85,7 @@ class CartControllerCore extends FrontController
 					{
 						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
 							if (Tools::getValue('ajax') == 'true')
-								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
+								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock', false).'"]}');
 							else
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
@@ -96,13 +96,13 @@ class CartControllerCore extends FrontController
 							Tools::redirectAdmin($link->getProductLink($producToAdd));
 						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
 							if (Tools::getValue('ajax') == 'true')
-								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock', false)).'\']}');
+								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock', false).'"]}');
 							else	
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
 					elseif (!$delete AND !$producToAdd->checkQty((int)($qty)))
 						if (Tools::getValue('ajax') == 'true')
-								die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('there is not enough product in stock')).'\']}');
+								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock').'"]}');
 							else	
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					/* Check vouchers compatibility */
@@ -132,7 +132,7 @@ class CartControllerCore extends FrontController
 																
 								if ($updateQuantity < 0)
 									if (Tools::getValue('ajax') == 'true')
-										die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('you need add', false).' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum', false)).'\']}');
+										die('{"hasError" : true, "errors" : ["'.Tools::displayError('you need add', false).' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum', false).'"]}');
 									else
 									$this->errors[] = Tools::displayError('you need add').' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum')
 										.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
@@ -140,7 +140,7 @@ class CartControllerCore extends FrontController
 								elseif (!$updateQuantity)
 								{
 									if (Tools::getValue('ajax') == 'true')
-										die('{\'hasError\' : true, errors : [\''.addslashes(Tools::displayError('you already have the maximum quantity available for this product', false)).'\']}');
+										die('{"hasError" : true, "errors" : ["'.Tools::displayError('you already have the maximum quantity available for this product', false).'"]}');
 									else
 										$this->errors[] = Tools::displayError('you already have the maximum quantity available for this product')
 										.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.

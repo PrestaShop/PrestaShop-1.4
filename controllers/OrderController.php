@@ -310,7 +310,7 @@ class OrderControllerCore extends FrontController
 		if (sizeof($this->errors))
 		{
 			if (Tools::getValue('ajax'))
-				die('{\'hasError\' : true, errors : [\''.implode('\',\'', $this->errors).'\']}');
+				die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 			$this->step = 1;
 		}
 		if (Tools::getValue('ajax'))
