@@ -823,7 +823,7 @@ class PDFCore extends PDF_PageGroupCore
 			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 		}
 		$priceBreakDown['taxes'] = $taxes;
-		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone))) ? (self::$order->total_shipping / (1 + ($carrierTax->rate / 100))) : self::$order->total_shipping;
+		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone))) ? (!Configuration::get('PS_TAX') ? self::$order->total_shipping : (self::$order->total_shipping / (1 + ($carrierTax->rate / 100)))) : self::$order->total_shipping;
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));

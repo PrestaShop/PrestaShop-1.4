@@ -1585,7 +1585,7 @@ class ProductCore extends ObjectModel
 
 		// Attribute price
 		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $id_currency);
-		$attribute_price = $usetax ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + ($tax_rate / 100)));
+		$attribute_price = ($usetax OR !Configuration::get('PS_TAX')) ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + ($tax_rate / 100)));
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
 		$price = Tools::ps_round($price, $decimals);
