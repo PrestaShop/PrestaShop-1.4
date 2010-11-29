@@ -18,6 +18,7 @@
 			var static_token = '{$static_token}';
 			var token = '{$token}';
 			var priceDisplayPrecision = {$priceDisplayPrecision*$currency->decimals};
+			var priceDisplayMethod = '{$priceDisplay}';
 			var roundMode = {$roundMode};
 		</script>
 {if isset($css_files)}
