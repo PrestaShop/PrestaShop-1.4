@@ -247,8 +247,6 @@ function updateDisplay()
 		var attribut_price_tmp = selectedCombination['price'];
 		var tax = (taxRate / 100) + 1;
 
-		/*if (noTaxForThisProduct)
-			attribut_price_tmp /= tax;*/
 		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
 
 		var priceReduct = !(reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
