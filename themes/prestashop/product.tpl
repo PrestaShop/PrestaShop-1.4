@@ -179,7 +179,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<div class="clear"></div>
 			<ul id="color_to_pick_list">
 			{foreach from=$colors key='id_attribute' item='color'}
-				<li><a id="color_{$id_attribute|intval}" class="color_pick" style="background: {$color.value};" onclick="updateColorSelect({$id_attribute|intval});$('#resetImages').show('slow');" title="{$color.name}">{if file_exists($col_img_dir|cat:$id_attribute|cat:'.jpg')}<img src="{$img_col_dir}{$id_attribute}.jpg" alt="{$color.name}" width="20" height="20" />{/if}</a></li>
+				<li><a id="color_{$id_attribute|intval}" class="color_pick" style="background: {$color.value};" onclick="updateColorSelect({$id_attribute|intval});$('#wrapResetImages').show('slow');" title="{$color.name}">{if file_exists($col_img_dir|cat:$id_attribute|cat:'.jpg')}<img src="{$img_col_dir}{$id_attribute}.jpg" alt="{$color.name}" width="20" height="20" />{/if}</a></li>
 			{/foreach}
 			</ul>
 				<a id="color_all" onclick="updateColorSelect(0);$('a#resetImages').hide('slow');" title="{l s='Cancel'}"><img src="{$img_dir}icon/cancel.gif" alt="{l s='Cancel'}" /></a>
@@ -261,7 +261,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<p>
 				<label for="group_{$id_attribute_group|intval}">{$group.name|escape:'htmlall':'UTF-8'} :</label>
 				{assign var='groupName' value='group_'|cat:$id_attribute_group}
-				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $colors|@count > 0}$('#resetImages').show('slow');{/if};">
+				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $colors|@count > 0}$('#wrapResetImages').show('slow');{/if};">
 					{foreach from=$group.attributes key=id_attribute item=group_attribute}
 						<option value="{$id_attribute|intval}"{if (isset($smarty.get.$groupName) && $smarty.get.$groupName|intval == $id_attribute) || $group.default == $id_attribute} selected="selected"{/if} title="{$group_attribute|escape:'htmlall':'UTF-8'}">{$group_attribute|escape:'htmlall':'UTF-8'}</option>
 					{/foreach}
