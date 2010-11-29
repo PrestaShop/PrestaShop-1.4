@@ -44,16 +44,13 @@
 	<ul class="tree">
 		{foreach from=$categoriescmsTree.children item=child name=sitemapCmsTree}
 			{if $child.children|@count > 0 || $child.cms|@count > 0}
-				{if $smarty.foreach.sitemapCmsTree.last && $categoriescmsTree.cms|@count == 0}
-					{include file=$tpl_dir./category-cms-tree-branch.tpl node=$child last='true'}
-				{else}
-					{include file=$tpl_dir./category-cms-tree-branch.tpl node=$child}
-				{/if}
+				{include file=$tpl_dir./category-cms-tree-branch.tpl node=$child}
 			{/if}
 		{/foreach}
 		{foreach from=$categoriescmsTree.cms item=cms name=cmsTree}
 			<li><a href="{$cms.link|escape:'htmlall':'UTF-8'}" title="{$cms.meta_title|escape:'htmlall':'UTF-8'}">{$cms.meta_title|escape:'htmlall':'UTF-8'}</a></li>
 		{/foreach}
-		<li class="last"><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
+		<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
+		<li class="last"><a href="{$link->getPageLink('stores.php')}" title="{l s='Our stores'}">{l s='Our stores'}</a></li>
 	</ul>
 </div>

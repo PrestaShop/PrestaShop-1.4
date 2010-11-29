@@ -646,6 +646,7 @@ $_LANG['sitemap_1a6f6b88447d4c3a86da93913a1b844d'] = 'Historique des commandes';
 $_LANG['sitemap_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
 $_LANG['sitemap_453aceb005ceaf54a47da15fee8b2a26'] = 'Pages';
 $_LANG['sitemap_bbaff12800505b22a853e8b7f4eb6a22'] = 'Contact';
+$_LANG['sitemap_34c869c542dee932ef8cd96d2f91cae6'] = 'Nos magasins';
 $_LANG['stores_34c869c542dee932ef8cd96d2f91cae6'] = 'Nos magasins';
 $_LANG['stores_518c79bc64c2d9e528c1d56f7f2df9ac'] = 'Voici la liste détaillée de nos magasins, n\'hésitez pas à nous contacter :';
 $_LANG['stores_bea91105dec892251f9a0ec77ccdb182'] = 'Aucun magasin trouvé, essayez de sélection un rayon plus large';
