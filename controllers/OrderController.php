@@ -27,7 +27,7 @@ class OrderControllerCore extends FrontController
 		global $isVirtualCart;
 
 		parent::preProcess();
-
+        
 		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
 			Tools::redirect('order-opc.php');
 			
@@ -177,6 +177,7 @@ class OrderControllerCore extends FrontController
 					$summary['products'][$key]['quantity'] = $product['cart_quantity'];
 				$this->smarty->assign($summary);
 				$token = Tools::getToken(false);
+				
 				$this->smarty->assign(array(
 					'token_cart' => $token,
 					'isVirtualCart' => $this->cart->isVirtualCart(),

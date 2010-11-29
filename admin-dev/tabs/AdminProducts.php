@@ -1145,7 +1145,7 @@ class AdminProducts extends AdminTab
 				$this->_errors[] = $this->l('the field').' <b>'.$this->l('display filename').'</b> '.$this->l('is required');
 				return false;
 			}
-			if (!Tools::getValue('virtual_product_nb_days'))
+			if (Tools::getValue('virtual_product_nb_days') === false)
 			{
 				$this->_errors[] = $this->l('the field').' <b>'.$this->l('number of days').'</b> '.$this->l('is required');
 				return false;
@@ -2285,7 +2285,7 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_nb_days" class="t"><?php echo $this->l('Number of days') ?></label>
 					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" /><sup> *</sup>
-					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?></span>
+					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set zero for an unlimited access'); ?>)</em></sub></span>
 				</p>
 	<?php endif; // check if download directory is writable ?>
 			</div>
