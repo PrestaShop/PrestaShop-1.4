@@ -369,7 +369,7 @@ if (Tools::getValue('submitPublishProduct'))
 		
 			$product->active = 1;
 		
-			if (!$product->save())
+			if ($product->save())
 				die($bo_product_url);
 			else 
 				die('error: saving');
