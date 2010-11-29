@@ -2375,7 +2375,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">&nbsp;</td>
 						<td style="padding-bottom:5px;">
-							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules into Prices tab').'</p>
+							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules on Prices tab').'</p>
 						</td>
 					</tr>
 					<tr>
