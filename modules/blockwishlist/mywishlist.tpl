@@ -6,11 +6,11 @@
 
 <div id="mywishlist">
 	{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account' mod='blockwishlist'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My wishlists' mod='blockwishlist'}{/capture}
-	{include file=$tpl_dir./breadcrumb.tpl}
+	{include file="$tpl_dir./breadcrumb.tpl"}
 
 	<h2>{l s='My wishlists' mod='blockwishlist'}</h2>
 
-	{include file=$tpl_dir./errors.tpl}
+	{include file="$tpl_dir./errors.tpl"}
 
 	{if $id_customer|intval neq 0}
 		<form action="{$base_dir_ssl}modules/blockwishlist/mywishlist.php" method="post" class="std">

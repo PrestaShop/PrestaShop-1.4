@@ -14,7 +14,7 @@ $(function () {ldelim}
 		{foreach from=$scenes key='scene_key' item='scene' name='scenes'}
 		<div class="screen_scene" id="screen_scene_{$scene->id}" style="background:transparent url(img/scenes/{$scene->id}-large_scene.jpg); height:{$largeSceneImageType.height}px; width:{$largeSceneImageType.width}px; {if !$smarty.foreach.scenes.first} display:none;{/if}">
 			{foreach from=$scene->products key='product_key' item='product'}
-			{assign var=imageIds value=`$product.id_product`-`$product.id_image`}
+			{assign var=imageIds value="`$product.id_product`-`$product.id_image`"}
 				<a href="{$product.link|escape:'htmlall':'UTF-8'}" rel="#scene_products_cluetip_{$scene_key}_{$product_key}_{$product.id_product}" class="cluetip" style="width:{$product.zone_width}px; height:{$product.zone_height}px; margin-left:{$product.x_axis}px ;margin-top:{$product.y_axis}px;">
 					<span style="margin-top:{math equation='a/2 -10' a=$product.zone_height}px; margin-left:{math equation='a/2 -10' a=$product.zone_width}px;">&nbsp;</span>
 				</a>
@@ -24,7 +24,7 @@ $(function () {ldelim}
 						<p class="price">{if $priceDisplay}{convertPrice price=$product.details->getPrice(false, $product.details->getDefaultAttribute($product.id_product))}{else}{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}{/if}</p>
 							{if $product.details->on_sale}
 							<span class="on_sale">{l s='On sale!'}</span>
-						{elseif $product.reduction}
+						{elseif isset($product.reduction) && $product.reduction}
 							<span class="discount">{l s='Price lowered!'}</span>
 						{/if}
 					</div>

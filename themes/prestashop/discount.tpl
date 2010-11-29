@@ -5,11 +5,11 @@
 </script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your vouchers'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Your vouchers'}</h2>
 
-{if $discount && count($discount) && $nbDiscounts}
+{if isset($discount) && count($discount) && $nbDiscounts}
 <table class="discount std">
 	<thead>
 		<tr>
@@ -23,29 +23,29 @@
 		</tr>
 	</thead>
 	<tbody>
-	{foreach from=$discount item=discount name=myLoop}
+	{foreach from=$discount item=discountDetail name=myLoop}
 		<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
-			<td class="discount_code">{$discount.name}</td>
-			<td class="discount_description">{$discount.description}</td>
-			<td class="discount_quantity">{$discount.quantity_for_user}</td>
+			<td class="discount_code">{$discountDetail.name}</td>
+			<td class="discount_description">{$discountDetail.description}</td>
+			<td class="discount_quantity">{$discountDetail.quantity_for_user}</td>
 			<td class="discount_value">
-				{if $discount.id_discount_type == 1}
-					{$discount.value|escape:'htmlall':'UTF-8'}%
-				{elseif $discount.id_discount_type == 2}
-					{convertPrice price=$discount.value}
+				{if $discountDetail.id_discount_type == 1}
+					{$discountDetail.value|escape:'htmlall':'UTF-8'}%
+				{elseif $discountDetail.id_discount_type == 2}
+					{convertPrice price=$discountDetail.value}
 				{else}
 					{l s='Free shipping'}
 				{/if}
 			</td>
 			<td class="discount_minimum">
-				{if $discount.minimal == 0}
+				{if $discountDetail.minimal == 0}
 					{l s='none'}
 				{else}
-					{convertPrice price=$discount.minimal}
+					{convertPrice price=$discountDetail.minimal}
 				{/if}
 			</td>
 			<td class="discount_cumulative">
-				{if $discount.cumulable == 1}
+				{if $discountDetail.cumulable == 1}
 					<img src="{$img_dir}icon/yes.gif" alt="{l s='Yes'}" class="icon" />
 				{else}
 					<img src="{$img_dir}icon/no.gif" alt="{l s='No'}" class="icon" />

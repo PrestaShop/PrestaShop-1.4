@@ -474,7 +474,6 @@ abstract class ModuleCore
 		global $_MODULES, $_MODULE, $cookie;
 		
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
-
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 		if (Tools::file_exists_cache($file) AND include_once($file))
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
@@ -660,8 +659,12 @@ abstract class ModuleCore
 	public static function display($file, $template, $cacheId = NULL, $compileId = NULL)
 	{
 		global $smarty;
-		$previousTemplate = $smarty->currentTemplate;
-		$smarty->currentTemplate = substr(basename($template), 0, -4);
+
+		if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
+		{
+			$previousTemplate = $smarty->currentTemplate;
+			$smarty->currentTemplate = substr(basename($template), 0, -4);
+		}
 		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
 		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === NULL)
 			$result = Tools::displayError('No template found');
@@ -670,7 +673,8 @@ abstract class ModuleCore
 			$smarty->assign('module_template_dir', ($overloaded ? _THEME_DIR_ : __PS_BASE_URI__).'modules/'.basename($file, '.php').'/');
 			$result = $smarty->fetch(($overloaded ? _PS_THEME_DIR_.'modules/'.basename($file, '.php') : _PS_MODULE_DIR_.basename($file, '.php')).'/'.$template, $cacheId, $compileId);
 		}
-		$smarty->currentTemplate = $previousTemplate;
+		if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
+			$smarty->currentTemplate = $previousTemplate;
 		return $result;
 	}
 
@@ -683,13 +687,23 @@ abstract class ModuleCore
 	{
 		global $smarty;
 
-		return $smarty->is_cached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
+		/* Use Smarty 3 API calls */
+		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+			return $smarty->isCached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
+		/* or keep a backward compatibility if PHP version < 5.1.2 */
+		else
+			return $smarty->is_cached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
 	}
 
 	protected function _clearCache($template, $cacheId = NULL, $compileId = NULL)
 	{
 		global $smarty;
 
-		return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+		/* Use Smarty 3 API calls */
+		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+		/* or keep a backward compatibility if PHP version < 5.1.2 */
+		else
+			return $smarty->clearCache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 	}
 }

@@ -1,4 +1,4 @@
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 {if $errors|@count == 0}
 <script type="text/javascript">
 // <![CDATA[
@@ -42,10 +42,10 @@ var customizationFields = new Array();
 {assign var='imgIndex' value=0}
 {assign var='textFieldIndex' value=0}
 {foreach from=$customizationFields item='field' name='customizationFields'}
-{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
+	{assign var="key" value="pictures_`$product->id`_`$field.id_customization_field`"}
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}] = new Array();
 	customizationFields[{$smarty.foreach.customizationFields.index|intval}][0] = '{if $field.type|intval == 0}img{$imgIndex++}{else}textField{$textFieldIndex++}{/if}';
-	customizationFields[{$smarty.foreach.customizationFields.index|intval}][1] = {if $field.type|intval == 0 AND $pictures.$key}2{else}{$field.required|intval}{/if};
+	customizationFields[{$smarty.foreach.customizationFields.index|intval}][1] = {if $field.type|intval == 0 && isset($pictures.$key) && $pictures.$key}2{else}{$field.required|intval}{/if};
 {/foreach}
 
 // Images
@@ -85,12 +85,12 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 //]]>
 </script>
 
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <div id="primary_block" class="clearfix">
 	<h2>{$product->name|escape:'htmlall':'UTF-8'}</h2>
 
-	{if $adminActionDisplay}
+	{if isset($adminActionDisplay) && $adminActionDisplay}
 	<div id="admin-action">
 		<p>{l s='This product is not visible by your customers.'}
 		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
@@ -103,7 +103,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 	</div>
 	{/if}
 	
-	{if $confirmation}
+	{if isset($confirmation) && $confirmation}
 	<p class="confirmation">
 		{$confirmation}
 	</p>
@@ -127,7 +127,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<div id="thumbs_list">
 			<ul style="width: {math equation="width * nbImages" width=80 nbImages=$images|@count}px" id="thumbs_list_frame">
 				{foreach from=$images item=image name=thumbnails}
-				{assign var=imageIds value=`$product->id`-`$image.id_image`}
+				{assign var=imageIds value="`$product->id`-`$image.id_image`"}
 				<li id="thumbnail_{$image.id_image}">
 					<a href="{$link->getImageLink($product->link_rewrite, $imageIds, 'thickbox')}" rel="other-views" class="thickbox {if $smarty.foreach.thumbnails.first}shown{/if}" title="{$image.legend|htmlspecialchars}">
 						<img id="thumb_{$image.id_image}" src="{$link->getImageLink($product->link_rewrite, $imageIds, 'medium')}" alt="{$image.legend|htmlspecialchars}" height="{$mediumSize.height}" width="{$mediumSize.width}" />
@@ -259,7 +259,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{if $group.attributes|@count}
 			<p>
 				<label for="group_{$id_attribute_group|intval}">{$group.name|escape:'htmlall':'UTF-8'} :</label>
-				{assign var='groupName' value='group_'|cat:$id_attribute_group}
+				{assign var="groupName" value="group_$id_attribute_group"}
 				<select name="{$groupName}" id="group_{$id_attribute_group|intval}" onchange="javascript:findCombination();{if $colors|@count > 0}$('#wrapResetImages').show('slow');{/if};">
 					{foreach from=$group.attributes key=id_attribute item=group_attribute}
 						<option value="{$id_attribute|intval}"{if (isset($smarty.get.$groupName) && $smarty.get.$groupName|intval == $id_attribute) || $group.default == $id_attribute} selected="selected"{/if} title="{$group_attribute|escape:'htmlall':'UTF-8'}">{$group_attribute|escape:'htmlall':'UTF-8'}</option>
@@ -497,7 +497,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {if $packItems|@count > 0}
 	<div>
 		<h2>{l s='Pack content'}</h2>
-		{include file=$tpl_dir./product-list.tpl products=$packItems}
+		{include file="$tpl_dir./product-list.tpl" products=$packItems}
 	</div>
 {/if}
 

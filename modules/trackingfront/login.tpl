@@ -6,7 +6,7 @@
 		<title>PrestaShop&trade; - {l s='Affiliation' mod='trackingfront'}</title>
 	</head>
 	<body>
-		{include file=$tpl_dir./errors.tpl}
+		{include file="$tpl_dir./errors.tpl"}
 		<div style="width: 400px; height: 300px; background-color: #8AB50E; margin: 0 auto; color: white; font-family: arial; ">
 			<div style="width: 400px; height: 65px; background-color: #567500; margin: 0 auto; color: white; font-family: arial; text-align: center">
 				<div style="font-size: 36px;  margin: 5px auto; font-weight: bold; height: 65x; line-height: 65px; vertical-align: middle;">{l s='Affiliation space' mod='trackingfront'}</div>

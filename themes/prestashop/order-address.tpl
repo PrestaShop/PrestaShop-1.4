@@ -10,14 +10,14 @@
 </script>
 
 {capture name=path}{l s='Addresses'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Addresses'}</h2>
 
 {assign var='current_step' value='address'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 <form action="{$link->getPageLink('order.php', true)}" method="post">
 	<div class="addresses">
@@ -72,7 +72,7 @@
 		</p>
 		<div id="ordermsg">
 			<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
-			<p class="textarea"><textarea cols="60" rows="3" name="message">{$oldMessage}</textarea></p>
+			<p class="textarea"><textarea cols="60" rows="3" name="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
 		</div>
 	</div>
 	<p class="cart_navigation submit">

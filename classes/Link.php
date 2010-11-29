@@ -232,7 +232,8 @@ class LinkCore
 		$varsPagination = array('p');
 		$varsVarious = array('search_query');
 
-		foreach ($_GET as $k => $value)
+		$n = 0;
+		foreach ($_GET AS $k => $value)
 			if ($k != 'id_'.$type)
 			{
 				if (Configuration::get('PS_REWRITING_SETTINGS') AND ($k == 'isolang' OR $k == 'id_lang'))

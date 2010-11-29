@@ -14,17 +14,17 @@
 //]]>
 {/literal}</script>
 {/if}
-{include file=$tpl_dir./thickbox.tpl}
+{include file="$tpl_dir./thickbox.tpl"}
 
 {capture name=path}{l s='Shipping'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Shipping'}</h2>
 
 {assign var='current_step' value='shipping'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 <form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
 

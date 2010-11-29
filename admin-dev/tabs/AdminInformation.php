@@ -222,7 +222,7 @@ class AdminInformation extends AdminTab
 	// Misc functions	
 	static private function		test_phpversion()
 	{
-		return version_compare(substr(phpversion(), 0, 3), '5.0', '>=');
+		return PHP_VERSION_ID >= 50000; /* PHP version > 5.0 */
 	}
 	
 	static private function		test_mysql_support()

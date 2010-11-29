@@ -2,6 +2,8 @@
 
 function __autoload($className)
 {
+	if (stristr($className, 'smarty'))
+		return;
 	if (!class_exists($className, false))
 	{
 		require_once(dirname(__FILE__).'/../classes/'.$className.'.php');
@@ -17,3 +19,12 @@ function __autoload($className)
 		}
 	}
 }
+
+/* Use Smarty 3 API calls */
+if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+{
+	spl_autoload_register('__autoload');
+	define('SMARTY_SPL_AUTOLOAD', 0);
+}
+
+?>

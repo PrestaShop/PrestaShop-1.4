@@ -1,7 +1,7 @@
 {capture name=path}{l s='Contact'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Customer Service'} - {if $customerThread}{l s='Your reply'}{else}{l s='Contact us'}{/if}</h2>
+<h2>{l s='Customer Service'} - {if isset($customerThread) && $customerThread}{l s='Your reply'}{else}{l s='Contact us'}{/if}</h2>
 
 {if isset($confirmation)}
 	<p>{l s='Your message has been successfully sent to our team.'}</p>
@@ -15,7 +15,7 @@
 	</ul>
 {else}
 	<p class="bold">{l s='For questions about an order or for information about our products'}.</p>
-	{include file=$tpl_dir./errors.tpl}
+	{include file="$tpl_dir./errors.tpl"}
 	<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std" enctype="multipart/form-data">
 		<fieldset>
 			<h3>{l s='Send a message'}</h3>

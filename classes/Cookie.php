@@ -275,7 +275,7 @@ class	CookieCore
 			$time = time() - 1;
 		}
 
-		if (version_compare(substr(phpversion(), 0, 3), '5.2.0') == -1)
+		if (PHP_VERSION_ID >= 50200) /* PHP version > 5.2.0 */
 			return setcookie($this->_name, $content, $time, $this->_path, $this->_domain, 0);
 		else
 			return setcookie($this->_name, $content, $time, $this->_path, $this->_domain, 0, true);

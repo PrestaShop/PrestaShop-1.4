@@ -5,7 +5,7 @@
 </script>
 
 {capture name=path}{l s='My account'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='My account'}</h2>
 <h4>{l s='Welcome to your account. Here you can manage your addresses and orders.'}</h4>

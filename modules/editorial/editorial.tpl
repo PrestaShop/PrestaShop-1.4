@@ -1,6 +1,6 @@
 <!-- Module Editorial -->
 <div id="editorial_block_center" class="editorial_block">
-	{if $editorial->body_home_logo_link}<a href="{$editorial->body_home_logo_link|escape:'htmlall':'UTF-8'}" title="{$xml->body_title|escape:'htmlall':'UTF-8'|stripslashes}">{/if}
+	{if $editorial->body_home_logo_link}<a href="{$editorial->body_home_logo_link|escape:'htmlall':'UTF-8'}" title="{$editorial->body_title|escape:'htmlall':'UTF-8'|stripslashes}">{/if}
 	{if $homepage_logo}<img src="{$link->getMediaLink($image_path)}" alt="{$editorial->body_title|escape:'htmlall':'UTF-8'|stripslashes}" {if $image_width}width="{$image_width}"{/if} {if $image_height}height="{$image_height}" {/if}/>{/if}
 	{if $editorial->body_home_logo_link}</a>{/if}
 	{if $editorial->body_logo_subheading}{$editorial->body_logo_subheading|stripslashes}

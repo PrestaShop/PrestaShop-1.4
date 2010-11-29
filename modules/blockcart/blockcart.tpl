@@ -15,13 +15,13 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 	<h4>
 		<a href="{$link->getPageLink("$order_process.php", true)}">{l s='Cart' mod='blockcart'}</a>
 		{if $ajax_allowed}
-		<span id="block_cart_expand" {if $colapseExpandStatus eq 'expanded'}class="hidden"{/if}>&nbsp;</span>
-		<span id="block_cart_collapse" {if $colapseExpandStatus eq 'collapsed' || !isset($colapseExpandStatus)}class="hidden"{/if}>&nbsp;</span>
+		<span id="block_cart_expand" {if isset($colapseExpandStatus) && $colapseExpandStatus eq 'expanded'}class="hidden"{/if}>&nbsp;</span>
+		<span id="block_cart_collapse" {if isset($colapseExpandStatus) && $colapseExpandStatus eq 'collapsed' || !isset($colapseExpandStatus)}class="hidden"{/if}>&nbsp;</span>
 		{/if}
 	</h4>
 	<div class="block_content">
 	<!-- block summary -->
-	<div id="cart_block_summary" class="{if $colapseExpandStatus eq 'expanded' || !$ajax_allowed}collapsed{else}expanded{/if}">
+	<div id="cart_block_summary" class="{if isset($colapseExpandStatus) && $colapseExpandStatus eq 'expanded' || !$ajax_allowed}collapsed{else}expanded{/if}">
 		{if $cart_qties > 0}<span class="ajax_cart_quantity">{$cart_qties}</span>{/if}
 		<span class="ajax_cart_product_txt_s{if $cart_qties < 2} hidden{/if}">{l s='products' mod='blockcart'}</span>
 		<span class="ajax_cart_product_txt{if $cart_qties != 1} hidden{/if}">{l s='product' mod='blockcart'}</span>
@@ -29,7 +29,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 		{if $cart_qties == 0}<span class="ajax_cart_no_product">{if $cart_qties == 0}{l s='(empty)' mod='blockcart'}{/if}</span>{/if}
 	</div>
 	<!-- block list of products -->
-	<div id="cart_block_list" class="{if $colapseExpandStatus eq 'expanded' || !$ajax_allowed}expanded{else}collapsed{/if}">
+	<div id="cart_block_list" class="{if isset($colapseExpandStatus) && $colapseExpandStatus eq 'expanded' || !$ajax_allowed}expanded{else}collapsed{/if}">
 	{if $products}
 		<dl class="products">
 		{foreach from=$products item='product' name='myLoop'}

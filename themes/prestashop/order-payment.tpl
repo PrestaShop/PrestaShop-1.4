@@ -5,14 +5,14 @@
 </script>
 
 {capture name=path}{l s='Your payment method'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Choose your payment method'}</h2>
 
 {assign var='current_step' value='payment'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 {if $HOOK_PAYMENT}
 	<h4>{l s='Please choose the payment method you want to use to pay the amount of'}&nbsp;<span class="price">{convertPrice price=$total_price}</span> {if $taxes_enabled}{l s='(tax incl.)'}{/if}</h4><br />

@@ -1,10 +1,10 @@
 {capture name=path}{l s='Suppliers'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Suppliers'}</h2>
 
 {if isset($errors) AND $errors}
-	{include file=$tpl_dir./errors.tpl}
+	{include file="$tpl_dir./errors.tpl"}
 {else}
 
 	<p>{strip}
@@ -75,6 +75,6 @@
 		</li>
 	{/foreach}
 	</ul>
-	{include file=$tpl_dir./pagination.tpl}
+	{include file="$tpl_dir./pagination.tpl"}
 {/if}
 {/if}

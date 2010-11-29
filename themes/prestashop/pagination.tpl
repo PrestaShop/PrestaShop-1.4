@@ -1,11 +1,11 @@
 {if isset($p) AND $p}
-	{if $smarty.get.id_category|intval}
+	{if isset($smarty.get.id_category) && $smarty.get.id_category && isset($category)}
 		{assign var='requestPage' value=$link->getPaginationLink('category', $category, false, false, true, false)}
 		{assign var='requestNb' value=$link->getPaginationLink('category', $category, true, false, false, true)}
-	{elseif $smarty.get.id_manufacturer|intval}
+	{elseif isset($smarty.get.id_manufacturer) && $smarty.get.id_manufacturer && isset($manufacturer)}
 		{assign var='requestPage' value=$link->getPaginationLink('manufacturer', $manufacturer, false, false, true, false)}
 		{assign var='requestNb' value=$link->getPaginationLink('manufacturer', $manufacturer, true, false, false, true)}
-	{elseif $smarty.get.id_supplier|intval}
+	{elseif isset($smarty.get.id_supplier) && $smarty.get.id_supplier && isset($supplier)}
 		{assign var='requestPage' value=$link->getPaginationLink('supplier', $supplier, false, false, true, false)}
 		{assign var='requestNb' value=$link->getPaginationLink('supplier', $supplier, true, false, false, true)}
 	{else}

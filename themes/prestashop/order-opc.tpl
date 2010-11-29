@@ -20,9 +20,9 @@
 	var addresses = new Array();
 	//]]>
 </script>
-{include file=$tpl_dir./thickbox.tpl}
+{include file="$tpl_dir./thickbox.tpl"}
 {capture name=path}{l s='Your shopping cart'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 {if $productNumber}
 	<h2 id="cart_title">{l s='Your shopping cart'} <span id="summary_products_label" style="float:right;margin-right:10px;">{l s='contains'}<span id="summary_products_quantity">{$productNumber}</span> {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
 	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your cart is empty'}</p>
@@ -144,7 +144,7 @@
 				{assign var='productAttributeId' value=$product.id_product_attribute}
 				{assign var='quantityDisplayed' value=0}
 				{* Display the product line *}
-				{include file=$tpl_dir./shopping-cart-product-line.tpl}
+				{include file="$tpl_dir./shopping-cart-product-line.tpl"}
 				{* Then the customized datas ones*}
 				{if isset($customizedDatas.$productId.$productAttributeId)}
 					{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization'}
@@ -180,7 +180,7 @@
 						{assign var='quantityDisplayed' value=$quantityDisplayed+$customization.quantity}
 					{/foreach}
 					{* If it exists also some uncustomized products *}
-					{if $product.quantity-$quantityDisplayed > 0}{include file=$tpl_dir./shopping-cart-product-line.tpl}{/if}
+					{if $product.quantity-$quantityDisplayed > 0}{include file="$tpl_dir./shopping-cart-product-line.tpl"}{/if}
 				{/if}
 			{/foreach}
 			</tbody>

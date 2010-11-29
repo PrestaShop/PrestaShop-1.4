@@ -1,17 +1,16 @@
 <?php
-
 require_once(_PS_SMARTY_DIR_.'Smarty.class.php');
 global $smarty;
 $smarty = new Smarty();
-$smarty->template_dir 	= _PS_THEME_DIR_.'tpl';
-$smarty->compile_dir 	= _PS_SMARTY_DIR_.'compile';
-$smarty->cache_dir 		= _PS_SMARTY_DIR_.'cache';
-$smarty->config_dir 	= _PS_SMARTY_DIR_.'configs';
-$smarty->caching 		= false;
-$smarty->force_compile	= (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
-$smarty->compile_check	= false;
+$smarty->template_dir = _PS_THEME_DIR_.'tpl';
+$smarty->compile_dir = _PS_SMARTY_DIR_.'compile';
+$smarty->cache_dir = _PS_SMARTY_DIR_.'cache';
+$smarty->config_dir = _PS_SMARTY_DIR_.'configs';
+$smarty->caching = false;
+$smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
+$smarty->compile_check = false;
 //$smarty->debugging		= true;
-$smarty->debug_tpl		= _PS_ALL_THEMES_DIR_ . 'debug.tpl';
+$smarty->debug_tpl = _PS_ALL_THEMES_DIR_ . 'debug.tpl';
 
 function smartyTranslate($params, &$smarty)
 {
@@ -23,10 +22,18 @@ function smartyTranslate($params, &$smarty)
 	global $_LANG, $_MODULES, $cookie, $_MODULE;
 	if (!isset($params['js'])) $params['js'] = 0;
 	if (!isset($params['mod'])) $params['mod'] = false;
+	
 	$msg = false;
-
 	$string = str_replace('\'', '\\\'', $params['s']);
-	$key = $smarty->currentTemplate.'_'.md5($string);
+	
+	if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
+		$key = $smarty->currentTemplate.'_'.md5($string);
+	else
+	{
+		$filename = ((!isset($smarty->compiler_object) OR !is_object($smarty->compiler_object->template)) ? $smarty->template_filepath : $smarty->compiler_object->template->getTemplateFilepath());
+		$key = substr(basename($filename), 0, -4).'_'.md5($string);
+	}
+	
 	if ($params['mod'])
 	{
 		$iso = Language::getIsoById($cookie->id_lang);
@@ -51,19 +58,16 @@ function smartyTranslate($params, &$smarty)
 		$msg = (is_array($_LANG) AND key_exists($key, $_LANG)) ? ($params['js'] ? addslashes($_LANG[$key]) : stripslashes($_LANG[$key])) : $params['s'];
 	return ($params['js'] ? $msg : Tools::htmlentitiesUTF8($msg));
 }
-$smarty->register_function('l', 'smartyTranslate');
 
 function smartyDieObject($params, &$smarty)
 {
 	return Tools::d($params['var']);
 }
-$smarty->register_function('d', 'smartyDieObject');
 
 function smartyShowObject($params, &$smarty)
 {
 	return Tools::p($params['var']);
 }
-$smarty->register_function('p', 'smartyShowObject');
 
 function smartyMaxWords($params, &$smarty)
 {
@@ -77,8 +81,6 @@ function smartyMaxWords($params, &$smarty)
 	return implode(' ',  Tools::htmlentitiesUTF8($words));
 }
 
-$smarty->register_function('m', 'smartyMaxWords');
-
 function smartyTruncate($params, &$smarty)
 {
 	$text = isset($params['strip']) ? strip_tags($params['text']) : $params['text'];
@@ -91,31 +93,45 @@ function smartyTruncate($params, &$smarty)
 	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text, ENT_NOQUOTES) : $text);
 }
 
-$smarty->register_function('t', 'smartyTruncate');
-
-function smarty_modifier_truncate($string, $length = 80, $etc = '...',
-								  $break_words = false, $middle = false, $charset = 'UTF-8')
+function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false, $charset = 'UTF-8')
 {
-	if ($length == 0)
+	if (!$length)
 		return '';
  
-	if (Tools::strlen($string) > $length) {
+	if (Tools::strlen($string) > $length)
+	{
 		$length -= min($length, Tools::strlen($etc));
-		if (!$break_words && !$middle) {
+		if (!$break_words && !$middle)
 			$string = preg_replace('/\s+?(\S+)?$/u', '', Tools::substr($string, 0, $length+1, $charset));
-		}
-		if(!$middle) {
-			return Tools::substr($string, 0, $length, $charset) . $etc;
-		} else {
-			return Tools::substr($string, 0, $length/2, $charset) . $etc . Tools::substr($string, -$length/2, $charset);
-		}
-	} else {
-		return $string;
+		return !$middle ? Tools::substr($string, 0, $length, $charset).$etc : Tools::substr($string, 0, $length/2, $charset).$etc.Tools::substr($string, -$length/2, $charset);
 	}
+	else
+		return $string;
 }
 
-$smarty->register_modifier('truncate', 'smarty_modifier_truncate');
-$smarty->register_modifier('secureReferrer', array('Tools', 'secureReferrer'));
+/* Use Smarty 3 API calls */
+if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+{
+	$smarty->registerPlugin('modifier', 'truncate', 'smarty_modifier_truncate');
+	$smarty->registerPlugin('modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
+	$smarty->registerPlugin('function', 't', 'smartyTruncate');
+	$smarty->registerPlugin('function', 'm', 'smartyMaxWords');
+	$smarty->registerPlugin('function', 'p', 'smartyShowObject');
+	$smarty->registerPlugin('function', 'd', 'smartyDieObject');
+	$smarty->registerPlugin('function', 'l', 'smartyTranslate');
+	spl_autoload_register('__autoload');
+}
+/* or keep a backward compatibility if PHP version < 5.1.2 */
+else
+{
+	$smarty->register_modifier('truncate', 'smarty_modifier_truncate');
+	$smarty->register_modifier('secureReferrer', array('Tools', 'secureReferrer'));
+	$smarty->register_function('t', 'smartyTruncate');
+	$smarty->register_function('m', 'smartyMaxWords');
+	$smarty->register_function('p', 'smartyShowObject');
+	$smarty->register_function('d', 'smartyDieObject');
+	$smarty->register_function('l', 'smartyTranslate');
+}
 
 function smartyMinifyHTML($tpl_output, &$smarty)
 {

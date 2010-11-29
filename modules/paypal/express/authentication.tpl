@@ -16,9 +16,9 @@ countries = new Array();
 <h2>{l s='Check your informations' mod='paypal'}</h2>
 
 {assign var='current_step' value='login'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 <form action="{$base_dir_ssl}modules/paypal/express/submit.php" method="post" id="account-creation_form" class="std">
 	<fieldset class="account_creation">

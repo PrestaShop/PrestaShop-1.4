@@ -202,14 +202,30 @@ class FrontControllerCore
 		if (is_object($ps_language))
 			$smarty->ps_language = $ps_language;
 
-		$smarty->register_function('dateFormat', array('Tools', 'dateFormat'));
-		$smarty->register_function('productPrice', array('Product', 'productPrice'));
-		$smarty->register_function('convertPrice', array('Product', 'convertPrice'));
-		$smarty->register_function('convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
-		$smarty->register_function('convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
-		$smarty->register_function('displayWtPrice', array('Product', 'displayWtPrice'));
-		$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
-		$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
+		/* Use Smarty 3 API calls */
+		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+		{
+			$smarty->registerPlugin('function', 'dateFormat', array('Tools', 'dateFormat'));
+			$smarty->registerPlugin('function', 'productPrice', array('Product', 'productPrice'));
+			$smarty->registerPlugin('function', 'convertPrice', array('Product', 'convertPrice'));
+			$smarty->registerPlugin('function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
+			$smarty->registerPlugin('function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
+			$smarty->registerPlugin('function', 'displayWtPrice', array('Product', 'displayWtPrice'));
+			$smarty->registerPlugin('function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
+			$smarty->registerPlugin('function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
+		}
+		/* or keep a backward compatibility if PHP version < 5.1.2 */
+		else
+		{
+			$smarty->register_function('dateFormat', array('Tools', 'dateFormat'));
+			$smarty->register_function('productPrice', array('Product', 'productPrice'));
+			$smarty->register_function('convertPrice', array('Product', 'convertPrice'));
+			$smarty->register_function('convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
+			$smarty->register_function('convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
+			$smarty->register_function('displayWtPrice', array('Product', 'displayWtPrice'));
+			$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
+			$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
+		}
 
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));

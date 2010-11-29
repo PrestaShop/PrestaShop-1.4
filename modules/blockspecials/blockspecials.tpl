@@ -10,7 +10,7 @@
 			<li>
 				<h5><a href="{$special.link}" title="{$special.name|escape:html:'UTF-8'}">{$special.name|escape:html:'UTF-8'}</a></h5>
 				<span class="price-discount">{if !$priceDisplay}{displayWtPrice p=$special.price_without_reduction}{else}{displayWtPrice p=$priceWithoutReduction_tax_excl}{/if}</span>
-				{if $special.reduction_percent}<span class="reduction">(-{$special.reduction_percent}%)</span>{/if}
+				{if isset($special.reduction_percent) && $special.reduction_percent > 0}<span class="reduction">(-{$special.reduction_percent}%)</span>{/if}
 				<span class="price">{if !$priceDisplay}{displayWtPrice p=$special.price}{else}{displayWtPrice p=$special.price_tax_exc}{/if}</span>
 			</li>
 		</ul>

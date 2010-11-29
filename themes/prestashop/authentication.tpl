@@ -1,5 +1,5 @@
 {capture name=path}{l s='Login'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <script type="text/javascript">
 // <![CDATA[
@@ -46,9 +46,9 @@ $(function(){ldelim}
 <h2>{if !isset($email_create)}{l s='Log in'}{else}{l s='Create your account'}{/if}</h2>
 
 {assign var='current_step' value='login'}
-{if $opc}{include file=$tpl_dir./order-steps.tpl}{/if}
+{if $opc}{include file="$tpl_dir./order-steps.tpl"}{/if}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 {if !isset($email_create)}
 	<form action="{$link->getPageLink('authentication.php', true)}" method="post" id="create-account_form" class="std">

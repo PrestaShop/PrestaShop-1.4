@@ -18,9 +18,6 @@ define('_PS_SSL_PORT_', 443);
 /* Correct Apache charset */
 header('Content-Type: text/html; charset=utf-8');
 
-/* Autoload */
-require(dirname(__FILE__).'/autoload.php');
-
 /* No settings file? goto installer...*/
 if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 {
@@ -31,6 +28,18 @@ if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 }
 require_once(dirname(__FILE__).'/settings.inc.php');
 
+/* Include all defines */
+require_once(dirname(__FILE__).'/defines.inc.php');
+/* Defines are not in defines.inc.php file for no conflicts in installer */
+define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
+define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
+define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
+
+
+/* Autoload */
+require(dirname(__FILE__).'/autoload.php');
+
+
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 {
@@ -38,13 +47,6 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 	if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
 		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
-
-/* Include all defines */
-require_once(dirname(__FILE__).'/defines.inc.php');
-/* Defines are not in defines.inc.php file for no conflicts in installer */
-define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
-define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
-define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
 /* aliases */
 function p($var) {

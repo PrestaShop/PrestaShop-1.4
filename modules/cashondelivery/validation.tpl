@@ -1,10 +1,10 @@
 {capture name=path}{l s='Shipping' mod='cashondelivery'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Order summation' mod='cashondelivery'}</h2>
 
 {assign var='current_step' value='payment'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
 <h3>{l s='Cash on delivery (COD) payment' mod='cashondelivery'}</h3>
 

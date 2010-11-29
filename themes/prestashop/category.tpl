@@ -1,5 +1,5 @@
-{include file=$tpl_dir./breadcrumb.tpl} 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"} 
+{include file="$tpl_dir./errors.tpl"}
 
 {if $category->id AND $category->active}
 	<h2 class="category_title">{strip}
@@ -16,7 +16,7 @@
 
 	{if $scenes}
 		<!-- Scenes -->
-		{include file=$tpl_dir./scenes.tpl scenes=$scenes}
+		{include file="$tpl_dir./scenes.tpl" scenes=$scenes}
 	{else}
 		<!-- Category image -->
 		{if $category->id_image}
@@ -53,10 +53,10 @@
 	{/if}
 
 	{if $products}
-			{include file=$tpl_dir./product-compare.tpl}
-			{include file=$tpl_dir./product-sort.tpl}
-			{include file=$tpl_dir./product-list.tpl products=$products}
-			{include file=$tpl_dir./pagination.tpl}
+			{include file="$tpl_dir./product-compare.tpl"}
+			{include file="$tpl_dir./product-sort.tpl"}
+			{include file="$tpl_dir./product-list.tpl" products=$products}
+			{include file="$tpl_dir./pagination.tpl"}
 		{elseif !isset($subcategories)}
 			<p class="warning">{l s='There are no products in this category.'}</p>
 		{/if}

@@ -5,14 +5,14 @@
 </script>
 
 {capture name=path}{l s='Order confirmation'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Order confirmation'}</h2>
 
 {assign var='current_step' value='payment'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 {$HOOK_ORDER_CONFIRMATION}
 {$HOOK_PAYMENT_RETURN}

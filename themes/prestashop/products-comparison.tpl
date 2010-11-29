@@ -1,6 +1,6 @@
 {capture name=path}{l s='Product Comparison'}{/capture}
 
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 <h2>{l s='Product Comparison'}</h2>
 
 {if $hasProduct}

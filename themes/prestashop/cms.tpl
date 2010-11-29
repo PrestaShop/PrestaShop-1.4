@@ -2,11 +2,11 @@
 <div class="breadcrumb">
 	<a href="{$base_dir}" title="{l s='return to'} {l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a>
 	<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span><a href="{$link->getCMSCategoryLink(1, '')|escape:'htmlall':'UTF-8'}" title="{l s='Home'}">{l s='Home'}</a>
-	 {if $path && $category->id != 1}<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span>{if !$path|strpos:'span'}<span class="navigation_page">{$path}</span>{else}{$path}{/if}{/if}
+	 {if $path && isset($category->id) && $category->id != 1}<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span>{if !$path|strpos:'span'}<span class="navigation_page">{$path}</span>{else}{$path}{/if}{/if}
 </div>
 <!-- /Breadcrumb -->
 
-{if $cms && !$category}
+{if isset($cms) && !isset($category)}
 	{if !$cms->active}
 		<br />
 		<div id="admin-action-cms">
@@ -23,11 +23,11 @@
 	<div class="rte{if $content_only} content_only{/if}">
 		{$cms->content}
 	</div>
-{elseif $category}
+{elseif isset($category)}
 	<div class="rte{if $content_only} content_only{/if}">
 		<h2>{$category->name}</h2>
-		{if isset($sub_category) && !empty($sub_category)}	
-			<h4>{l s='List of sub categories in '}{$category->name} : </h4>
+		{if isset($sub_category) & !empty($sub_category)}	
+			<h4>{l s='List of sub categories in '}{$category->name}{l s=':'}</h4>
 			<ul class="bullet">
 				{foreach from=$sub_category item=subcategory}
 					<li>
@@ -36,8 +36,8 @@
 				{/foreach}
 			</ul>
 		{/if}
-		{if isset($cms_pages) && !empty($cms_pages)}
-		<h4>{l s='List of pages in '}{$category->name} : </h4>
+		{if isset($cms_pages) & !empty($cms_pages)}
+		<h4>{l s='List of pages in '}{$category->name}{l s=':'}</h4>
 			<ul class="bullet">
 				{foreach from=$cms_pages item=cmspages}
 					<li>
@@ -45,9 +45,6 @@
 					</li>
 				{/foreach}
 			</ul>
-		{/if}
-		{if (!isset($sub_category) || empty($sub_category)) && (!isset($cms_pages) || empty($cms_pages))}
-			{l s='There is no sub category or page in'} {$category->name}
 		{/if}
 	</div>
 {else}

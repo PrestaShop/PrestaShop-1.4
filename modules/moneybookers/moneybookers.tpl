@@ -20,7 +20,7 @@
 		{if (!empty($phone_number))}<input type="hidden" name="phone_number" value="{$phone_number}" />{/if}
 		<input type="hidden" name="postal_code" value="{$postal_code}" />
 		<input type="hidden" name="city" value="{$city}" />
-		{if (!empty($state))}<input type="hidden" name="state" value="{$state}" />{/if}
+		{if isset($state) && !empty($state)}<input type="hidden" name="state" value="{$state}" />{/if}
 		<input type="hidden" name="country" value="{$country}" />
 		<input type="hidden" name="amount" value="{$amount}" />
 		<input type="hidden" name="currency" value="{$currency}" />
@@ -67,7 +67,7 @@
 		{if (!empty($phone_number))}<input type="hidden" name="phone_number" value="{$phone_number}" />{/if}
 		<input type="hidden" name="postal_code" value="{$postal_code}" />
 		<input type="hidden" name="city" value="{$city}" />
-		{if (!empty($state))}<input type="hidden" name="state" value="{$state}" />{/if}
+		{if isset($state) && !empty($state)}<input type="hidden" name="state" value="{$state}" />{/if}
 		<input type="hidden" name="country" value="{$country}" />
 		<input type="hidden" name="amount" value="{$amount}" />
 		<input type="hidden" name="currency" value="{$currency}" />

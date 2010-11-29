@@ -23,7 +23,7 @@ class SearchControllerCore extends FrontController
 			$searchResults = Search::find((int)(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 			foreach ($searchResults AS &$product)
 				$product['product_link'] = $this->link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
-			die(json_encode($searchResults));
+			die(Tools::jsonEncode($searchResults));
 		}
 		
 		if ($this->instantSearch && !is_array($query))

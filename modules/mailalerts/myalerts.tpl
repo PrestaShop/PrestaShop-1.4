@@ -6,11 +6,11 @@
 
 <div id="myalerts">
 	{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account' mod='mailalerts'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My alerts' mod='mailalerts'}{/capture}
-	{include file=$tpl_dir./breadcrumb.tpl}
+	{include file="$tpl_dir./breadcrumb.tpl"}
 
 	<h2>{l s='My alerts' mod='mailalerts'}</h2>
 
-	{include file=$tpl_dir./errors.tpl}
+	{include file="$tpl_dir./errors.tpl"}
 
 	{if $id_customer|intval neq 0}
 		{if $alerts}

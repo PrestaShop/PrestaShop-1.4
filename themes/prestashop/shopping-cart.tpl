@@ -9,14 +9,14 @@
 </script>
 
 {capture name=path}{l s='Your shopping cart'}{/capture}
-{include file=$tpl_dir./breadcrumb.tpl}
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2 id="cart_title">{l s='Shopping cart summary'}</h2>
 
 {assign var='current_step' value='summary'}
-{include file=$tpl_dir./order-steps.tpl}
+{include file="$tpl_dir./order-steps.tpl"}
 
-{include file=$tpl_dir./errors.tpl}
+{include file="$tpl_dir./errors.tpl"}
 
 {if isset($empty)}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
@@ -161,7 +161,7 @@
 			{assign var='productAttributeId' value=$product.id_product_attribute}
 			{assign var='quantityDisplayed' value=0}
 			{* Display the product line *}
-			{include file=$tpl_dir./shopping-cart-product-line.tpl}
+			{include file="$tpl_dir./shopping-cart-product-line.tpl"}
 			{* Then the customized datas ones*}
 			{if isset($customizedDatas.$productId.$productAttributeId)}
 				{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization'}
@@ -197,7 +197,7 @@
 					{assign var='quantityDisplayed' value=$quantityDisplayed+$customization.quantity}
 				{/foreach}
 				{* If it exists also some uncustomized products *}
-				{if $product.quantity-$quantityDisplayed > 0}{include file=$tpl_dir./shopping-cart-product-line.tpl}{/if}
+				{if $product.quantity-$quantityDisplayed > 0}{include file="$tpl_dir./shopping-cart-product-line.tpl"}{/if}
 			{/if}
 		{/foreach}
 		</tbody>
@@ -222,7 +222,7 @@
 
 {if $voucherAllowed}
 <div id="cart_voucher" class="table_block">
-	{if $errors_discount}
+	{if isset($errors_discount) && $errors_discount}
 		<ul class="error">
 		{foreach from=$errors_discount key=k item=error}
 			<li>{$error|escape:'htmlall':'UTF-8'}</li>
@@ -234,7 +234,7 @@
 			<h4>{l s='Vouchers'}</h4>
 			<p>
 				<label for="discount_name">{l s='Code:'}</label>
-				<input type="text" id="discount_name" name="discount_name" value="{if $discount_name}{$discount_name}{/if}" />
+				<input type="text" id="discount_name" name="discount_name" value="{if isset($discount_name) && $discount_name}{$discount_name}{/if}" />
 			</p>
 			<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
 		{if $displayVouchers}

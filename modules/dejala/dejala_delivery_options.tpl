@@ -4,7 +4,7 @@
 
 			<h3>{l s='Shipping preferences' mod='dejala'}</h3>
 
-				{include file=$timetableTpl}
+				{include file="$timetableTpl"}
 
 				<h3>{l s='Propose shipping ' mod='dejala'}:</h3>
 				<div class="margin-form">
