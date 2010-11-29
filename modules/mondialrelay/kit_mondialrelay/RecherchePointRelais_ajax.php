@@ -71,6 +71,8 @@ else
 				$l = '10';
 			$numWSI2 = $result_mr['WSI2_RecherchePointRelaisResult']['PR'.$l]['Num'];
 		}
+		
+		$last_item = end($result_mr['WSI2_RecherchePointRelaisResult']);
 
 		echo '"base_dir" : "'.$relativ_base_dir.'", ';
 		echo '"addresses" : [';
@@ -86,7 +88,7 @@ else
 					"city" : "'.addslashes($val['Ville']).'", 
 					"iso_country" : "'.addslashes($val['Pays']).'", 
 					"num" : "'.$val['Num'].'",
-					"checked" : '.($val['Num'] == $id_cart_address ? 1 : 0).'}, ';
+					"checked" : '.($val['Num'] == $id_cart_address ? 1 : 0).'}'.($last_item == $val ? '' : ', ');
 			}
 		}
 		echo ']}';
