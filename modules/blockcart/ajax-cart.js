@@ -177,7 +177,7 @@ var ajaxCart = {
 				$picture.appendTo('body');
 				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
 				.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': cartBlockOffset.top + 30, 'left': cartBlockOffset.left + 15 }, 1000)
-				.fadeOut(800, function() {
+				.fadeOut(100, function() {
 					ajaxCart.updateCart(jsonData);
 					//reactive the button when adding has finished
 					if (addedFromProductPage)
