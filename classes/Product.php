@@ -1592,7 +1592,7 @@ class ProductCore extends ObjectModel
 		// Reduction
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND $specific_price)
-			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? $specific_price['reduction'] : ($price * $specific_price['reduction']), 2);
+			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? (self::$_taxCalculationMethod == PS_TAX_INC ? $specific_price['reduction'] : $specific_price['reduction'] / (1 + $result['rate'] / 100)) : ($price * $specific_price['reduction']), 2);
 		if ($only_reduc)
 			return $reduc;
 

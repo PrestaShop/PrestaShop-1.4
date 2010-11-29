@@ -357,7 +357,7 @@ class ProductControllerCore extends FrontController
 			if (!floatval($row['reduction'])) // The price may be directly set
 				$row['real_value'] = $price - (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
 			else
-				$row['real_value'] = $row['reduction_type'] == 'amount' ? $row['reduction'] : ($price * $row['reduction']);
+				$row['real_value'] = $row['reduction_type'] == 'amount' ? (Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100)) : ($price * $row['reduction']);
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
 		}
 		return $specificPrices;
