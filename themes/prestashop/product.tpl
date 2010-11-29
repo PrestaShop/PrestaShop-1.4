@@ -182,7 +182,6 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<li><a id="color_{$id_attribute|intval}" class="color_pick" style="background: {$color.value};" onclick="updateColorSelect({$id_attribute|intval});$('#wrapResetImages').show('slow');" title="{$color.name}">{if file_exists($col_img_dir|cat:$id_attribute|cat:'.jpg')}<img src="{$img_col_dir}{$id_attribute}.jpg" alt="{$color.name}" width="20" height="20" />{/if}</a></li>
 			{/foreach}
 			</ul>
-				<a id="color_all" onclick="updateColorSelect(0);$('a#resetImages').hide('slow');" title="{l s='Cancel'}"><img src="{$img_dir}icon/cancel.gif" alt="{l s='Cancel'}" /></a>
 			<div class="clear"></div>
 		</div>
 		{/if}
