@@ -2754,8 +2754,10 @@ class ProductCore extends ObjectModel
 		SELECT pl.`id_lang`, pl.`link_rewrite`, p.`ean13`, cl.`link_rewrite` AS category_rewrite
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'lang` l ON (pl.`id_lang` = l.`id_lang`)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (cl.`id_category` = p.`id_category_default`  AND cl.`id_lang` = pl.`id_lang`)
-		WHERE p.`id_product` = '.(int)$id_product
+		WHERE p.`id_product` = '.(int)$id_product. '
+		AND l.`active` = 1'
 		);
 
 	}
