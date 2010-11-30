@@ -1280,19 +1280,20 @@ class ProductCore extends ObjectModel
 		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
 
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
-		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		$sql = '
 		SELECT p.id_product
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE 1
 		AND p.`active` = 1
-		'.($ids_product ? ' AND p.`id_product` IN ('.implode(', ', $ids_product).')' : '').'
+		AND p.`id_product` IN ('.implode(', ', $ids_product).')
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 		)
-		ORDER BY RAND()');
+		ORDER BY RAND()';
+		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
 
 		if (!$id_product)
 			return false;
