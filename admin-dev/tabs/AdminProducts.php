@@ -1455,12 +1455,12 @@ class AdminProducts extends AdminTab
 			echo '<b>'.$this->l('You must save this product before adding specific prices').'.</b>';
 	}
 
-	private function _getFinalPrice($specificPrice, $productPrice)
+	private function _getFinalPrice($specificPrice, $productPrice, $taxRate)
 	{
-		$price = floatval($specificPrice['price']) ? $specificPrice['price'] : $productPrice;
+		$price = Tools::ps_round(floatval($specificPrice['price']) ? $specificPrice['price'] : $productPrice, 2);
 		if (!floatval($specificPrice['reduction']))
 			return floatval($specificPrice['price']);
-		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction']) : ($price - $price * $specificPrice['reduction']);
+		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction'] / (1 + $taxRate / 100)) : ($price - $price * $specificPrice['reduction']);
 	}
 
 	protected function _displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups)
@@ -1470,6 +1470,8 @@ class AdminProducts extends AdminTab
 		$obj = $this->loadObject();
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
 		$specificPricePriorities = Tools::getValue('specificPricePriority', explode(';', Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES')));
+		$tax = new Tax($obj->id_tax);
+		$taxRate = $tax ? (float)$tax->rate : 0.00;
 
 		echo '
 		<h4>'.$this->l('Priorities management').'</h4>
@@ -1559,7 +1561,7 @@ class AdminProducts extends AdminTab
 				</td>
 				<td class="cell br btt">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="spm_price[]" value="'.floatval($specificPrice['price']).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
 				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.(int)($specificPrice['from_quantity']).'" size="3" /></td>
-				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round(floatval($this->_getFinalPrice($specificPrice, floatval($obj->price))), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round(floatval($this->_getFinalPrice($specificPrice, floatval($obj->price), $taxRate)), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
 				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 			</tr>
 			<tr>
@@ -1721,6 +1723,7 @@ class AdminProducts extends AdminTab
 				<option value="amount">'.$this->l('Amount').'</option>
 				<option value="percentage">'.$this->l('Percentage').'</option>
 			</select>
+			'.$this->l('(if set to "amount", the tax is included)').'
 		</div>
 		
 		<label>'.$this->l('Reduction value:').'</label>
