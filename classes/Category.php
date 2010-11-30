@@ -822,7 +822,17 @@ class CategoryCore extends ObjectModel
 	{
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
-	
+    public static function getUrlRewriteInformations($id_category)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT l.`id_lang`, c.`link_rewrite`
+		FROM `'._DB_PREFIX_.'category_lang` AS c
+		LEFT JOIN  `'._DB_PREFIX_.'lang` AS l ON c.`id_lang` = l.`id_lang`
+		WHERE c.`id_category` = '.(int)$id_category.'
+		AND l.`active` = 1'
+		);
+
+	}
 	
 }
 
