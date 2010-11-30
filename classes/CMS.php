@@ -219,5 +219,16 @@ class CMSCore extends ObjectModel
 		AND l.id_lang = '.(int)($id_lang).'
 		ORDER BY `position`');
 	}
+    public static function getUrlRewriteInformations($id_cms)
+	{
+	    $sql = '
+		SELECT l.`id_lang`, c.`link_rewrite`
+		FROM `'._DB_PREFIX_.'cms_lang` AS c
+		LEFT JOIN  `'._DB_PREFIX_.'lang` AS l ON c.`id_lang` = l.`id_lang`
+		WHERE c.`id_cms` = '.(int)$id_cms.'
+		AND l.`active` = 1';
+		$arr_return = Db::getInstance()->ExecuteS($sql);
+		return $arr_return;
+	}
 }
 ?>
