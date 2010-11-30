@@ -167,7 +167,7 @@ if ($output)
 						// display all ressources list
 						else
 						{
-							$output_string .= '<resources shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
+							$output_string .= '<resources shop_name="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
 							foreach ($resources as $resourceName => $resource)
 								if (in_array($resourceName, array_keys($permissions)))
 									$output_string .= '<'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
