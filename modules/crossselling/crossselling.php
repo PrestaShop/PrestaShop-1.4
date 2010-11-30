@@ -99,14 +99,14 @@ class CrossSelling extends Module
 			ORDER BY RAND()
 			LIMIT 10');
 			
-			$taxes_calc = Product::getTaxCalculationMethod();
+			$taxCalc = Product::getTaxCalculationMethod();
 			foreach ($orderProducts AS &$orderProduct)
 			{
 				$orderProduct['image'] = $link->getImageLink($orderProduct['link_rewrite'], (int)($orderProduct['product_id']).'-'.(int)($orderProduct['id_image']), 'medium');
 				$orderProduct['link'] = $link->getProductLink((int)($orderProduct['product_id']), $orderProduct['link_rewrite']);
-				if (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND ($taxes_calc == 0 OR $taxes_calc == 2))
+				if (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND ($taxCalc == 0 OR $taxCalc == 2))
 					$orderProduct['displayed_price'] = Product::getPriceStatic((int)($orderProduct['product_id']), true, NULL);
-				elseif (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND $taxes_calc == 1)
+				elseif (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND $taxCalc == 1)
 					$orderProduct['displayed_price'] = Product::getPriceStatic((int)($orderProduct['product_id']), false, NULL);
 			}
 			

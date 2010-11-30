@@ -15,9 +15,11 @@ $smarty->debug_tpl = _PS_ALL_THEMES_DIR_ . 'debug.tpl';
 function smartyTranslate($params, &$smarty)
 {
 	/*
-	 * Warning : 2 lines have been added to the Smarty class.
+	 * Warning in Smarty-v2 : 2 lines have been added to the Smarty class.
 	 * "public $currentTemplate = null;" into the class itself
 	 * "$this->currentTemplate = substr(basename($resource_name), 0, -4);" into the "display" method
+	 *
+	 * In Smarty-v3 : No modifications, using the existing var $this->smarty->_current_file instead
 	 */
 	global $_LANG, $_MODULES, $cookie, $_MODULE;
 	if (!isset($params['js'])) $params['js'] = 0;

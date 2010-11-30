@@ -1,4 +1,4 @@
-{if count($orderProducts) > 0}
+{if isset($orderProducts) && count($orderProducts)}
 <div id="crossselling">
 	<script type="text/javascript">var middle = {$middlePosition_crossselling};</script>
 	<script type="text/javascript" src="{$content_dir}modules/crossselling/js/crossselling.js"></script>
@@ -6,9 +6,9 @@
 	<div id="{if count($orderProducts) > 5}crossselling{else}crossselling_noscroll{/if}">
 		{if count($orderProducts) > 5}<a id="crossselling_scroll_left" title="{l s='Previous' mod='crossselling'}" href="javascript:{ldelim}{rdelim}">{l s='Previous' mod='crossselling'}</a>{/if}
 		<div id="crossselling_list">
-			<ul {if count($orderProducts) > 5}style="width: {math equation="width * nbImages" width=107 nbImages=$orderProducts|@count}px"{/if}>
+			<ul {if count($orderProducts) > 5}style="width: {math equation="width * nbImages" width=107 nbImages="$orderProducts|@count"}px"{/if}>
 				{foreach from=$orderProducts item='orderProduct' name=orderProduct}
-				<li {if count($orderProducts) < 6}style="width: {math equation="width / nbImages" width=94 nbImages=$orderProducts|@count}%"{/if}>
+				<li {if count($orderProducts) < 6}style="width: {math equation="width / nbImages" width=94 nbImages="$orderProducts|@count"}%"{/if}>
 					<a href="{$orderProduct.link}" title="{$orderProduct.name|htmlspecialchars}">
 						<img src="{$orderProduct.image}" alt="{$orderProduct.name|htmlspecialchars}" />
 					</a><br/>
