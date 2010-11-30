@@ -3,9 +3,18 @@
 	<ul id="first-languages">
 		{foreach from=$languages key=k item=language name="languages"}
 			<li {if $language.iso_code == $lang_iso}class="selected_language"{/if}>
-				{if $language.iso_code != $lang_iso}<a href="{$link->getLanguageLink($language.id_lang, $language.name)}" title="{$language.name}">{/if}
+				{if $language.iso_code != $lang_iso}
+					{if isset($lang_rewrite_urls.{$language.id_lang})}
+						<a href="{$lang_rewrite_urls.{$language.id_lang}}" title="{$language.name}">
+					{else}
+						<a href="{$link->getLanguageLink($language.id_lang, $language.name)}" title="{$language.name}">
+					{/if}
+
+				{/if}
 					<img src="{$img_lang_dir}{$language.id_lang}.jpg" alt="{$language.iso_code}" width="16" height="11" />
-				{if $language.iso_code != $lang_iso}</a>{/if}
+				{if $language.iso_code != $lang_iso}
+					</a>
+				{/if}
 			</li>
 		{/foreach}
 	</ul>

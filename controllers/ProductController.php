@@ -1,11 +1,11 @@
 <?php
 
 class ProductControllerCore extends FrontController
-{	
+{
 	public function setMedia()
 	{
 		parent::setMedia();
-		
+
 		Tools::addCSS(_THEME_CSS_DIR_.'product.css');
 		Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css', 'screen');
 		Tools::addJS(array(
@@ -24,12 +24,28 @@ class ProductControllerCore extends FrontController
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.jqzoom.js');
 		}
 	}
-	
+
+	public function preProcess()
+	{
+			$id_product = (int)Tools::getValue('id_product');
+
+			if ($id_product)
+			{
+				$rewrite_infos = Product::getUrlRewriteInformations($id_product);
+
+				$default_rewrite = array();
+				foreach ($rewrite_infos AS $infos)
+					$default_rewrite[$infos['id_lang']] = $this->link->getProductLink($id_product, $infos['link_rewrite'], $infos['category_rewrite'], $infos['ean13'], $infos['id_lang']);
+
+				$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
+			}
+	}
+
 	public function process()
 	{
 		parent::process();
 		global $cart;
-		
+
 		if (!$id_product = (int)(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
 			$this->errors[] = Tools::displayError('product not found');
 		else
@@ -57,7 +73,7 @@ class ProductControllerCore extends FrontController
 				/* Product pictures management */
 				require_once('images.inc.php');
 				$this->smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
-				
+
 				if (Tools::isSubmit('submitCustomizedDatas'))
 				{
 					$this->pictureUpload($product, $cart);
@@ -118,7 +134,7 @@ class ProductControllerCore extends FrontController
 					'return_link' => (isset($category->id) AND $category->id) ? Tools::safeOutput($this->link->getCategoryLink($category)) : 'javascript: history.back();',
 					'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath((int)($category->id), $product->name) : Tools::getFullPath((int)($product->id_default_category), $product->name))
 				));
-				
+
 				$lang = Configuration::get('PS_LANG_DEFAULT');
 				if (Pack::isPack((int)($product->id), (int)($lang)) AND !Pack::isInStock((int)($product->id), (int)($lang)))
 					$product->quantity = 0;
@@ -132,7 +148,7 @@ class ProductControllerCore extends FrontController
 				$tax_data = Tax::getDataByProductId((int)($product->id));
 				$tax = floatval(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), floatval($tax_data['rate'])));
 				$this->smarty->assign('tax_rate', $tax);
-								
+
 				/* /Quantity discount management */
 				$this->smarty->assign(array(
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), floatval($tax_data['rate'])),
@@ -182,7 +198,7 @@ class ProductControllerCore extends FrontController
 
 				/* Attributes / Groups & colors */
 				if ($product->quantity > 0 OR Product::isAvailableWhenOutOfStock($product->out_of_stock))
-				{	
+				{
 					$colors = array();
 					$attributesGroups = $product->getAttributesGroups((int)($this->cookie->id_lang));
 
@@ -241,7 +257,7 @@ class ProductControllerCore extends FrontController
 							'combinationImages' => $combinationImages));
 					}
 				}
-				
+
 				$this->smarty->assign(array(
 					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$product->id, (int)$id_country, (int)$product->id_tax, 1),
 					'customizationFields' => $product->getCustomizationFields((int)($this->cookie->id_lang))
@@ -268,7 +284,7 @@ class ProductControllerCore extends FrontController
 
 		if (file_exists(_PS_THEME_DIR_.'thickbox.tpl'))
 			$this->smarty->display(_PS_THEME_DIR_.'thickbox.tpl');
-			
+
 		global $currency;
 		$this->smarty->assign(array(
 			'currencySign' => $currency->sign,
@@ -278,13 +294,13 @@ class ProductControllerCore extends FrontController
 			'jqZoomEnabled' => Configuration::get('PS_DISPLAY_JQZOOM')
 		));
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
 		$this->smarty->display(_PS_THEME_DIR_.'product.tpl');
 	}
-	
+
 	public function pictureUpload(Product $product, Cart $cart)
 	{
 		if (!$fieldIds = $product->getCustomizationFieldIds())
@@ -365,3 +381,4 @@ class ProductControllerCore extends FrontController
 }
 
 ?>
+
