@@ -63,13 +63,6 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 				if (is_null($schema))
 					$ret .= '<![CDATA['.$object->$key.']]>';
 				$ret .= '</'.$field['sqlId'].'>'."\n";
-				
-				
-				/*
-				
-				if ($schema == 'synopsis')
-					$ret .= ' i18n="true" required="'.($field['required'] ? 'true' : 'false').'"';
-				*/
 			}
 		}
 		else
