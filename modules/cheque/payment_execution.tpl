@@ -6,7 +6,7 @@
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}
 
-{if $nbProducts <= 0}
+{if isset($nbProducts) && $nbProducts <= 0}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
 {else}
 
@@ -25,13 +25,13 @@
 	</p>
 	<p>
 		-
-		{if $currencies|@count > 1}
+		{if isset($currencies) && $currencies|@count > 1}
 			{l s='We accept several currencies for cheques.' mod='cheque'}
 			<br /><br />
 			{l s='Choose one of the following:' mod='cheque'}
 			<select id="currency_payement" name="currency_payement" onchange="setCurrency($('#currency_payement').val());">
 			{foreach from=$currencies item=currency}
-				<option value="{$currency.id_currency}" {if $currency.id_currency == $cust_currency}selected="selected"{/if}>{$currency.name}</option>
+				<option value="{$currency.id_currency}" {if isset($currencies) && $currency.id_currency == $cust_currency}selected="selected"{/if}>{$currency.name}</option>
 			{/foreach}
 			</select>
 		{else}
