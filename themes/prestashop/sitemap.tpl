@@ -3,31 +3,6 @@
 
 <h2>{l s='Sitemap'}</h2>
 <div id="sitemap_content">
-	{if $blockCMSInstalled}
-	{foreach from=$blocks item=block}
-		<div class="sitemap_block">
-			<h3>{$block.block_name}</h3>
-			{assign var='id_block_cms' value=$block.id_block_cms}
-			<ul>
-				{foreach from=$pages[$id_block_cms] item=page}
-					{foreach from=$page item=p}
-						<li><a href="{$p.link}" title="{$p.meta_title}">{$p.meta_title}</a></li>
-					{/foreach}
-				{/foreach}
-			</ul>
-		</div>
-	{/foreach}
-	{else}
-		<div class="sitemap_block">
-			<h3>{l s='Information'}</h3>
-			<ul>
-				<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
-				{foreach from=$cmslinks item=cmslink}
-					<li><a href="{$cmslink.link}" title="{$cmslink.meta_title}">{$cmslink.meta_title}</a></li>
-				{/foreach}
-			</ul>
-		</div>
-	{/if}
 	<div class="sitemap_block">
 		<h3>{l s='Our offers'}</h3>
 		<ul>
@@ -50,16 +25,34 @@
 	</div>
 	<br class="clear" />
 </div>
-<div class="categTree">
-	<h3>{l s='Categories'}</h3>
-	<div class="tree_top"><a href="{$base_dir_ssl}">{$categoriesTree.name|escape:'htmlall':'UTF-8'}</a></div>
-	<ul class="tree">
-	{foreach from=$categoriesTree.children item=child name=sitemapTree}
-		{if isset($smarty.foreach.sitemapTree.last) && $smarty.foreach.sitemapTree.last}
-			{include file="$tpl_dir./category-tree-branch.tpl" node=$child last='true'}
-		{else}
-			{include file="$tpl_dir./category-tree-branch.tpl" node=$child}
-		{/if}
-	{/foreach}
-	</ul>
+<div>
+	<div class="categTree">
+		<h3>{l s='Categories'}</h3>
+		<div class="tree_top"><a href="{$base_dir_ssl}">{$categoriesTree.name|escape:'htmlall':'UTF-8'}</a></div>
+		<ul class="tree">
+		{foreach from=$categoriesTree.children item=child name=sitemapTree}
+			{if $smarty.foreach.sitemapTree.last}
+				{include file="$tpl_dir./category-tree-branch.tpl" node=$child last='true'}
+			{else}
+				{include file="$tpl_dir./category-tree-branch.tpl" node=$child}
+			{/if}
+		{/foreach}
+		</ul>
+	</div>
+	<div class="categTree">
+		<h3>{l s='Pages'}</h3>
+		<div class="tree_top"><a href="{$categoriescmsTree.link}">{$categoriescmsTree.name|escape:'htmlall':'UTF-8'}</a></div>
+		<ul class="tree">
+			{foreach from=$categoriescmsTree.children item=child name=sitemapCmsTree}
+				{if $child.children|@count > 0 || $child.cms|@count > 0}
+					{include file="$tpl_dir./category-cms-tree-branch.tpl" node=$child}
+				{/if}
+			{/foreach}
+			{foreach from=$categoriescmsTree.cms item=cms name=cmsTree}
+				<li><a href="{$cms.link|escape:'htmlall':'UTF-8'}" title="{$cms.meta_title|escape:'htmlall':'UTF-8'}">{$cms.meta_title|escape:'htmlall':'UTF-8'}</a></li>
+			{/foreach}
+			<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
+			<li class="last"><a href="{$link->getPageLink('stores.php')}" title="{l s='Our stores'}">{l s='Our stores'}</a></li>
+		</ul>
+	</div>
 </div>
