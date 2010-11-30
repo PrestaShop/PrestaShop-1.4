@@ -2208,6 +2208,7 @@ class AdminProducts extends AdminTab
 						$('#virtual_product_file').remove();
 						$('#virtual_product_file_label').hide();
 						$('#file_missing').hide();
+						$('#delete_downloadable_product').show();
 						$('#virtual_product_name').attr('value', fileName);
 						$('#upload-confirmation').html(
 							'<a class="link" href="get-file-admin.php?file='+msg+'&filename='+fileName+'"><?php echo $this->l('The file') ?>&nbsp;"' + fileName + '"&nbsp;<?php echo $this->l('has successfully been uploaded') ?></a>' +
@@ -2256,7 +2257,7 @@ class AdminProducts extends AdminTab
 					<p><?php echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;' . ini_get('upload_max_filesize') ?></p>
 					<?php if (!strval(Tools::getValue('virtual_product_filename'))): ?>
 					<label id="virtual_product_file_label" for="virtual_product_file" class="t"><?php echo $this->l('Upload a file') ?></label>
-					<input type="file" id="virtual_product_file" name="virtual_product_file" value="" class="" onchange="uploadFile(); $('#delete_downloadable_product').show();" maxlength="<?php echo $this->maxFileSize ?>" />
+					<input type="file" id="virtual_product_file" name="virtual_product_file" value="" class="" onchange="uploadFile();" maxlength="<?php echo $this->maxFileSize ?>" />
 					<?php endif; ?>
 					<div id="upload-confirmation">
 					<?php if ($up_filename = strval(Tools::getValue('virtual_product_filename'))): ?>
