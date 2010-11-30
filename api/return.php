@@ -3,28 +3,81 @@
 if (!isset($errors))
 	die;
 
-function getXmlStringViewOfObject($resourceParameters, $object) {
+function getXmlStringViewOfObject($resourceParameters, $object = null, $schema = null) {
+	
 	global $ws_url;
+	
+	// two modes are available : 'schema', or 'display entity'
+	
+	//p($resourceParameters);
+	
 	$ret = '<'.$resourceParameters['objectNodeName'].'>'."\n";
+	
+	// display fields
 	foreach ($resourceParameters['fields'] as $key => $field)
-		if ($key != 'id')
+		if ($key != 'id')//TODO remove this condition
 		{
-			if (isset($field['getter']))
+			// get the field value with a specific getter
+			if (isset($field['getter']) && $schema != 'ready_to_use')
 				$object->$key = $object->$field['getter']();
-			if (is_array($object->$key))
+			
+			// display i18n fields
+			if (isset($field['i18n']) && $field['i18n'])
 			{
-				$ret .= '<'.$field['sqlId'].'>'."\n";
-				foreach ($object->$key as $idLang => $value)
-					$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+				$ret .= '<'.$field['sqlId'];
+				if ($schema == 'documentation')
+				{
+					if (array_key_exists('required', $field) && $field['required'])
+						$ret .= ' required="true"';
+					if (array_key_exists('maxSize', $field) && $field['maxSize'])
+						$ret .= ' maxSize="'.$field['maxSize'].'"';
+					if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
+						$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+				}
+				$ret .= ">\n";
+				if ($schema == 'ready_to_use')
+					$ret .= '<language id=""></language>'."\n";
+				else
+					foreach ($object->$key as $idLang => $value)
+						$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
 				$ret .= '</'.$field['sqlId'].'>'."\n";
 			}
 			else
 			{
-				$ret .= '<'.$field['sqlId'].(array_key_exists('xlink_resource', $field) ? ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.$object->$key.'"' : '').' '.(isset($field['getter']) ?'dynamic="true"' : '').'><![CDATA['.$object->$key.']]></'.$field['sqlId'].'>'."\n";
+				// display not i18n field value
+				$ret .= '<'.$field['sqlId'];
+				if (array_key_exists('xlink_resource', $field) && $schema != 'ready_to_use')
+					$ret .= ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.($schema != 'documentation' ? $object->$key : '').'"';
+				if (isset($field['getter']) && $schema != 'ready_to_use')
+					$ret .= ' not_filterable="true"';
+				if ($schema == 'documentation')
+				{
+					if (array_key_exists('required', $field) && $field['required'])
+						$ret .= ' required="true"';
+					if (array_key_exists('maxSize', $field) && $field['maxSize'])
+						$ret .= ' maxSize="'.$field['maxSize'].'"';
+					if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
+						$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+				}
+				$ret .= '>';
+				if (is_null($schema))
+					$ret .= '<![CDATA['.$object->$key.']]>';
+				$ret .= '</'.$field['sqlId'].'>'."\n";
+				
+				
+				/*
+				
+				if ($schema == 'documentation')
+					$ret .= ' i18n="true" required="'.($field['required'] ? 'true' : 'false').'"';
+				*/
 			}
 		}
 		else
+				// display id
+				if (is_null($schema))
 				$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
+	
+	// display associations
 	if (isset($resourceParameters['associations']))
 	{
 		$ret .= '<associations>'."\n";
@@ -65,6 +118,7 @@ if ($output)
 	$output_string = '';
 	header('Content-Type: text/xml');
 	$output_string .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	/*$output_string .= '<?xml-stylesheet type="text/css" href="api.css"?>'."\n";*/
 	//$output_string .= '<!DOCTYPE prestashop PUBLIC "-//PRESTASHOP//DTD REST_WEBSERVICE '._PS_VERSION_.'//EN"'."\n".'"'.$dtd.'">'."\n";
 	$output_string .= '<prestashop xmlns="'.$doc_url.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 	if ($errors)
@@ -79,27 +133,48 @@ if ($output)
 		switch ($method)
 		{
 			case 'GET':
-				if (!isset($url[1]) || !strlen($url[1])) // list entities
+				// list entities
+				if (!isset($url[1]) || !strlen($url[1]))
 				{
 					if (($resourceParameters['objectsNodeName'] != 'resources' && count($objects) || $resourceParameters['objectsNodeName'] == 'resources') && count($resources))
 					{
 						if ($resourceParameters['objectsNodeName'] != 'resources')
 						{
-							$output_string .= '<'.$resourceParameters['objectsNodeName'].'>'."\n";
-							if ($fieldsToDisplay == 'minimum')
-								foreach ($objects as $object)
-									$output_string .= '<'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
-							elseif ($fieldsToDisplay == 'full')
-								foreach ($objects as $object)
-									$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
-							/*else
+							if (!is_null($schema))
 							{
-								die('todo : display specific fields');//TODO[id,lastname]
-							}*/
+								// display ready to use schema
+								if ($schema == 'ready_to_use')
+								{
+									$output_string .= getXmlStringViewOfObject($resourceParameters, null, $schema);
+									
+								}
+								// display ready to use schema
+								else
+								{
+									$output_string .= getXmlStringViewOfObject($resourceParameters, null, $schema);
+								}
+							}
+							// display specific resources list
+							else
+							{
+								$output_string .= '<'.$resourceParameters['objectsNodeName'].'>'."\n";
+								if ($fieldsToDisplay == 'minimum')
+									foreach ($objects as $object)
+										$output_string .= '<'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
+								elseif ($fieldsToDisplay == 'full')
+									foreach ($objects as $object)
+										$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
+								$output_string .= '</'.$resourceParameters['objectsNodeName'].'>'."\n";
+								/*else
+								{
+									die('todo : display specific fields');//TODO[id,lastname]
+								}*/
+							}
 						}
+						// display all ressources list
 						else
 						{
-							$output_string .= '<'.$resourceParameters['objectsNodeName'].' shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
+							$output_string .= '<resources shopName="'.Configuration::get('PS_SHOP_NAME').'">'."\n";
 							foreach ($resources as $resourceName => $resource)
 								if (in_array($resourceName, array_keys($permissions)))
 									$output_string .= '<'.$resourceName.' xlink:href="'.$ws_url.$resourceName.'"
@@ -107,14 +182,20 @@ if ($output)
 										put="'.(in_array('PUT', $permissions[$resourceName]) ? 'true' : 'false').'"
 										post="'.(in_array('POST', $permissions[$resourceName]) ? 'true' : 'false').'"
 										delete="'.(in_array('DELETE', $permissions[$resourceName]) ? 'true' : 'false').'"
-									>'.$resource['description'].'</'.$resourceName.'>'."\n";
+									>
+									<description>'.$resource['description'].'</description>
+									<schema type="ready_to_use" xlink:href="'.$ws_url.$resourceName.'?schema=ready_to_use" />
+									<schema type="documentation" xlink:href="'.$ws_url.$resourceName.'?schema=documentation" />
+									</'.$resourceName.'>'."\n";
+							$output_string .= '</resources>'."\n";
 						}
-						$output_string .= '</'.$resourceParameters['objectsNodeName'].'>'."\n";
+						
 					}
 					else
 						$output_string .= '<'.$resourceParameters['objectsNodeName'].' />'."\n";
 				}
-				else //display entity détails
+				//display one resource
+				else
 					$output_string .= getXmlStringViewOfObject($resourceParameters, $objects[0]);
 			break;
 		

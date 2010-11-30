@@ -497,7 +497,15 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod, 'i18n' => false)
+					$resourceParameters['fields'][$fieldName] = array(
+						'sqlId' => $fieldName,
+						'validateMethod' => (
+								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ? 
+								array_merge($resourceParameters['fields'][$fieldName]['validateMethod'], array($validateMethod)) :
+								array($validateMethod)
+							),
+						'i18n' => false
+					)
 				);
 			}
 		if (isset($this->fieldsRequired))
@@ -530,7 +538,15 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array('required' => false);
 				$resourceParameters['fields'][$fieldName] = array_merge(
 					$resourceParameters['fields'][$fieldName],
-					$resourceParameters['fields'][$fieldName] = array('sqlId' => $fieldName, 'validateMethod' => $validateMethod, 'i18n' => true)
+					$resourceParameters['fields'][$fieldName] = array(
+						'sqlId' => $fieldName,
+						'validateMethod' => (
+								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ? 
+								array_merge($resourceParameters['fields'][$fieldName]['validateMethod'], array($validateMethod)) :
+								array($validateMethod)
+							),
+						'i18n' => true
+					)
 				);
 			}
 		if (isset($this->fieldsRequiredLang))

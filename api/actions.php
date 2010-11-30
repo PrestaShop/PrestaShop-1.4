@@ -189,79 +189,102 @@ if (!$errors)
 					$sql_filter = '';
 					$sql_join = '';
 					$fieldsToDisplay = 'minimum';
+					$schema = null;
 					if ($url_params)
-						foreach ($url_params as $field => $url_param)
+					{
+						// if we have to display the schema
+						if (array_key_exists('schema', $url_params))
 						{
-							$available_filters = array_keys($resourceParameters['fields']);
-							if ($field != 'sort_list' && $field != 'limit_list')
-								if (!in_array($field, $available_filters))
-								{
-									if (isset($resourceParameters['linked_tables']) && isset($resourceParameters['linked_tables'][$field]))
+							if ($url_params['schema'] == 'ready_to_use')
+							{
+								$schema = 'ready_to_use';
+							}
+							elseif ($url_params['schema'] == 'documentation')
+							{
+								$schema = 'documentation';
+							}
+							else
+							{
+								$errors[] = 'Please select a schema of type \'documentation\' to get the whole schema informations (which fields are required, which kind of content...) or \'ready_to_use\' to get an empty schema to fill before using POST request';
+								$return_code = 'HTTP/1.1 400 Bad Request';
+							}
+						}
+						else
+						{
+							foreach ($url_params as $field => $url_param)
+							{
+								$available_filters = array_keys($resourceParameters['fields']);
+								if ($field != 'sort_list' && $field != 'limit_list')
+									if (!in_array($field, $available_filters))
 									{
-										// contruct SQL join for linked tables
-										$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($resourceParameters['linked_tables'][$field]['table']).'` '.pSQL($field).' ON (main.`'.pSQL($resourceParameters['fields']['id']['sqlId']).'` = '.pSQL($field).'.`'.pSQL($resourceParameters['fields']['id']['sqlId']).'`)'."\n";
-										
-										// construct SQL filter for linked tables
-										foreach ($url_param as $field2 => $value)
+										if (isset($resourceParameters['linked_tables']) && isset($resourceParameters['linked_tables'][$field]))
 										{
-											if (isset($resourceParameters['linked_tables'][$field]['fields'][$field2]))
+											// contruct SQL join for linked tables
+											$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($resourceParameters['linked_tables'][$field]['table']).'` '.pSQL($field).' ON (main.`'.pSQL($resourceParameters['fields']['id']['sqlId']).'` = '.pSQL($field).'.`'.pSQL($resourceParameters['fields']['id']['sqlId']).'`)'."\n";
+										
+											// construct SQL filter for linked tables
+											foreach ($url_param as $field2 => $value)
 											{
-												$linked_field = $resourceParameters['linked_tables'][$field]['fields'][$field2];
-												$sql_filter .= constructSqlFilter($linked_field['sqlId'], $value, $field.'.');
+												if (isset($resourceParameters['linked_tables'][$field]['fields'][$field2]))
+												{
+													$linked_field = $resourceParameters['linked_tables'][$field]['fields'][$field2];
+													$sql_filter .= constructSqlFilter($linked_field['sqlId'], $value, $field.'.');
+												}
+												else
+												{
+													$list = array_keys($resourceParameters['linked_tables'][$field]['fields']);
+													$errors[] = 'This filter does not exist for this linked table. Did you mean: "'.closest($field2, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
+													$return_code = 'HTTP/1.1 400 Bad Request';
+												}
+											}
+										}
+										elseif (is_array($url_param))
+										{
+											$error_label = '';
+											if (isset($resourceParameters['linked_tables']))
+											{
+												$list = array_keys($resourceParameters['linked_tables']);
+												$error_label .= 'This linked table does not exist, did you mean: "'.closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
 											}
 											else
-											{
-												$list = array_keys($resourceParameters['linked_tables'][$field]['fields']);
-												$errors[] = 'This filter does not exist for this linked table. Did you mean: "'.closest($field2, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
-												$return_code = 'HTTP/1.1 400 Bad Request';
-											}
+												$error_label .=  'There is no existing linked table for this resource';
+											$errors[] = $error_label;
+											$return_code = 'HTTP/1.1 400 Bad Request';
 										}
-									}
-									elseif (is_array($url_param))
-									{
-										$error_label = '';
-										if (isset($resourceParameters['linked_tables']))
+										elseif ($field == 'displayFields')
 										{
-											$list = array_keys($resourceParameters['linked_tables']);
-											$error_label .= 'This linked table does not exist, did you mean: "'.closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
+											$fieldsToDisplay = $url_param;
 										}
 										else
-											$error_label .=  'There is no existing linked table for this resource';
-										$errors[] = $error_label;
-										$return_code = 'HTTP/1.1 400 Bad Request';
+										{
+											$list = $available_filters;
+											$errors[] = 'This filter does not exist. Did you mean: "'.closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
+											$return_code = 'HTTP/1.1 400 Bad Request';
+										}
 									}
-									elseif ($field == 'displayFields')
+									elseif ($url_param == '')
 									{
-										$fieldsToDisplay = $url_param;
-									}
-									else
-									{
-										$list = $available_filters;
-										$errors[] = 'This filter does not exist. Did you mean: "'.closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
-										$return_code = 'HTTP/1.1 400 Bad Request';
-									}
-								}
-								elseif ($url_param == '')
-								{
-									$errors[] = 'The filter "'.$field.'" is malformed.';
-									$return_code = 'HTTP/1.1 400 Bad Request';
-								}
-								else
-								{
-									if (isset($resourceParameters['fields'][$field]['getter']))
-									{
-										$errors[] = 'The field "'.$field.'" is dynamic. It is not possible to filter GET query with this field.';
+										$errors[] = 'The filter "'.$field.'" is malformed.';
 										$return_code = 'HTTP/1.1 400 Bad Request';
 									}
 									else
 									{
-										if (isset($resourceParameters['retrieveData']['tableAlias']))
-											$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param, $resourceParameters['retrieveData']['tableAlias'].'.');
+										if (isset($resourceParameters['fields'][$field]['getter']))
+										{
+											$errors[] = 'The field "'.$field.'" is dynamic. It is not possible to filter GET query with this field.';
+											$return_code = 'HTTP/1.1 400 Bad Request';
+										}
 										else
-											$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param);
+										{
+											if (isset($resourceParameters['retrieveData']['tableAlias']))
+												$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param, $resourceParameters['retrieveData']['tableAlias'].'.');
+											else
+												$sql_filter .= constructSqlFilter($resourceParameters['fields'][$field]['sqlId'], $url_param);
+										}
 									}
-								}
+							}
 						}
+					}
 					
 					//construct SQL Sort
 					$sql_sort = '';
