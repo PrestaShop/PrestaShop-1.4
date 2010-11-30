@@ -195,17 +195,17 @@ if (!$errors)
 						// if we have to display the schema
 						if (array_key_exists('schema', $url_params))
 						{
-							if ($url_params['schema'] == 'ready_to_use')
+							if ($url_params['schema'] == 'blank')
 							{
-								$schema = 'ready_to_use';
+								$schema = 'blank';
 							}
-							elseif ($url_params['schema'] == 'documentation')
+							elseif ($url_params['schema'] == 'synopsis')
 							{
-								$schema = 'documentation';
+								$schema = 'synopsis';
 							}
 							else
 							{
-								$errors[] = 'Please select a schema of type \'documentation\' to get the whole schema informations (which fields are required, which kind of content...) or \'ready_to_use\' to get an empty schema to fill before using POST request';
+								$errors[] = 'Please select a schema of type \'synopsis\' to get the whole schema informations (which fields are required, which kind of content...) or \'blank\' to get an empty schema to fill before using POST request';
 								$return_code = 'HTTP/1.1 400 Bad Request';
 							}
 						}

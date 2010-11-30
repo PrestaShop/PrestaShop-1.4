@@ -18,14 +18,14 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 		if ($key != 'id')//TODO remove this condition
 		{
 			// get the field value with a specific getter
-			if (isset($field['getter']) && $schema != 'ready_to_use')
+			if (isset($field['getter']) && $schema != 'blank')
 				$object->$key = $object->$field['getter']();
 			
 			// display i18n fields
 			if (isset($field['i18n']) && $field['i18n'])
 			{
 				$ret .= '<'.$field['sqlId'];
-				if ($schema == 'documentation')
+				if ($schema == 'synopsis')
 				{
 					if (array_key_exists('required', $field) && $field['required'])
 						$ret .= ' required="true"';
@@ -35,8 +35,8 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 						$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
 				}
 				$ret .= ">\n";
-				if ($schema == 'ready_to_use')
-					$ret .= '<language id=""></language>'."\n";
+				if (!is_null($schema))
+					$ret .= '<language id="" format="isUnsignedId"></language>'."\n";
 				else
 					foreach ($object->$key as $idLang => $value)
 						$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
@@ -46,11 +46,11 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 			{
 				// display not i18n field value
 				$ret .= '<'.$field['sqlId'];
-				if (array_key_exists('xlink_resource', $field) && $schema != 'ready_to_use')
-					$ret .= ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.($schema != 'documentation' ? $object->$key : '').'"';
-				if (isset($field['getter']) && $schema != 'ready_to_use')
+				if (array_key_exists('xlink_resource', $field) && $schema != 'blank')
+					$ret .= ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.($schema != 'synopsis' ? $object->$key : '').'"';
+				if (isset($field['getter']) && $schema != 'blank')
 					$ret .= ' not_filterable="true"';
-				if ($schema == 'documentation')
+				if ($schema == 'synopsis')
 				{
 					if (array_key_exists('required', $field) && $field['required'])
 						$ret .= ' required="true"';
@@ -67,7 +67,7 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 				
 				/*
 				
-				if ($schema == 'documentation')
+				if ($schema == 'synopsis')
 					$ret .= ' i18n="true" required="'.($field['required'] ? 'true' : 'false').'"';
 				*/
 			}
@@ -143,7 +143,7 @@ if ($output)
 							if (!is_null($schema))
 							{
 								// display ready to use schema
-								if ($schema == 'ready_to_use')
+								if ($schema == 'blank')
 								{
 									$output_string .= getXmlStringViewOfObject($resourceParameters, null, $schema);
 									
@@ -184,8 +184,8 @@ if ($output)
 										delete="'.(in_array('DELETE', $permissions[$resourceName]) ? 'true' : 'false').'"
 									>
 									<description>'.$resource['description'].'</description>
-									<schema type="ready_to_use" xlink:href="'.$ws_url.$resourceName.'?schema=ready_to_use" />
-									<schema type="documentation" xlink:href="'.$ws_url.$resourceName.'?schema=documentation" />
+									<schema type="blank" xlink:href="'.$ws_url.$resourceName.'?schema=blank" />
+									<schema type="synopsis" xlink:href="'.$ws_url.$resourceName.'?schema=synopsis" />
 									</'.$resourceName.'>'."\n";
 							$output_string .= '</resources>'."\n";
 						}
