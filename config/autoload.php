@@ -21,7 +21,7 @@ function __autoload($className)
 }
 
 /* Use Smarty 3 API calls */
-if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+if (!defined('_PS_FORCE_SMARTY_2_') OR !_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
 {
 	spl_autoload_register('__autoload');
 	define('SMARTY_SPL_AUTOLOAD', 0);
