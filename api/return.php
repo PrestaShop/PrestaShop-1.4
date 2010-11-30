@@ -3,7 +3,7 @@
 if (!isset($errors))
 	die;
 
-function getXmlStringViewOfObject($resourceParameters, $object = null, $schema = null) {
+function getXmlStringViewOfObject($resourceParameters, $object = null, $schema = null, $fieldsToDisplay = 'full') {
 	
 	global $ws_url;
 	
@@ -12,63 +12,67 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 	//p($resourceParameters);
 	
 	$ret = '<'.$resourceParameters['objectNodeName'].'>'."\n";
-	
 	// display fields
 	foreach ($resourceParameters['fields'] as $key => $field)
-		if ($key != 'id')//TODO remove this condition
+	{
+		if ($fieldsToDisplay == 'full' || in_array($key, $fieldsToDisplay))
 		{
-			// get the field value with a specific getter
-			if (isset($field['getter']) && $schema != 'blank')
-				$object->$key = $object->$field['getter']();
-			
-			// display i18n fields
-			if (isset($field['i18n']) && $field['i18n'])
+			if ($key != 'id')//TODO remove this condition
 			{
-				$ret .= '<'.$field['sqlId'];
-				if ($schema == 'synopsis')
+				// get the field value with a specific getter
+				if (isset($field['getter']) && $schema != 'blank')
+					$object->$key = $object->$field['getter']();
+			
+				// display i18n fields
+				if (isset($field['i18n']) && $field['i18n'])
 				{
-					if (array_key_exists('required', $field) && $field['required'])
-						$ret .= ' required="true"';
-					if (array_key_exists('maxSize', $field) && $field['maxSize'])
-						$ret .= ' maxSize="'.$field['maxSize'].'"';
-					if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
-						$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+					$ret .= '<'.$field['sqlId'];
+					if ($schema == 'synopsis')
+					{
+						if (array_key_exists('required', $field) && $field['required'])
+							$ret .= ' required="true"';
+						if (array_key_exists('maxSize', $field) && $field['maxSize'])
+							$ret .= ' maxSize="'.$field['maxSize'].'"';
+						if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
+							$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+					}
+					$ret .= ">\n";
+					if (!is_null($schema))
+						$ret .= '<language id="" '.($schema == 'synopsis' ? 'format="isUnsignedId"' : '').'></language>'."\n";
+					else
+						foreach ($object->$key as $idLang => $value)
+							$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+					$ret .= '</'.$field['sqlId'].'>'."\n";
 				}
-				$ret .= ">\n";
-				if (!is_null($schema))
-					$ret .= '<language id="" format="isUnsignedId"></language>'."\n";
 				else
-					foreach ($object->$key as $idLang => $value)
-						$ret .= '<language id="'.$idLang.'" xlink:href="'.$ws_url.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
-				$ret .= '</'.$field['sqlId'].'>'."\n";
+				{
+					// display not i18n field value
+					$ret .= '<'.$field['sqlId'];
+					if (array_key_exists('xlink_resource', $field) && $schema != 'blank')
+						$ret .= ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.($schema != 'synopsis' ? $object->$key : '').'"';
+					if (isset($field['getter']) && $schema != 'blank')
+						$ret .= ' not_filterable="true"';
+					if ($schema == 'synopsis')
+					{
+						if (array_key_exists('required', $field) && $field['required'])
+							$ret .= ' required="true"';
+						if (array_key_exists('maxSize', $field) && $field['maxSize'])
+							$ret .= ' maxSize="'.$field['maxSize'].'"';
+						if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
+							$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+					}
+					$ret .= '>';
+					if (is_null($schema))
+						$ret .= '<![CDATA['.$object->$key.']]>';
+					$ret .= '</'.$field['sqlId'].'>'."\n";
+				}
 			}
 			else
-			{
-				// display not i18n field value
-				$ret .= '<'.$field['sqlId'];
-				if (array_key_exists('xlink_resource', $field) && $schema != 'blank')
-					$ret .= ' xlink:href="'.$ws_url.$field['xlink_resource'].'/'.($schema != 'synopsis' ? $object->$key : '').'"';
-				if (isset($field['getter']) && $schema != 'blank')
-					$ret .= ' not_filterable="true"';
-				if ($schema == 'synopsis')
-				{
-					if (array_key_exists('required', $field) && $field['required'])
-						$ret .= ' required="true"';
-					if (array_key_exists('maxSize', $field) && $field['maxSize'])
-						$ret .= ' maxSize="'.$field['maxSize'].'"';
-					if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
-						$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
-				}
-				$ret .= '>';
-				if (is_null($schema))
-					$ret .= '<![CDATA['.$object->$key.']]>';
-				$ret .= '</'.$field['sqlId'].'>'."\n";
-			}
+					// display id
+					if (is_null($schema))
+					$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
 		}
-		else
-				// display id
-				if (is_null($schema))
-				$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
+	}
 	
 	// display associations
 	if (isset($resourceParameters['associations']))
@@ -154,14 +158,10 @@ if ($output)
 								if ($fieldsToDisplay == 'minimum')
 									foreach ($objects as $object)
 										$output_string .= '<'.$resourceParameters['objectNodeName'].(array_key_exists('id', $resourceParameters['fields']) ? ' id="'.$object->id.'" xlink:href="'.$ws_url.$resourceParameters['objectsNodeName'].'/'.$object->id.'"' : '').' />'."\n";
-								elseif ($fieldsToDisplay == 'full')
+								else
 									foreach ($objects as $object)
-										$output_string .= getXmlStringViewOfObject($resourceParameters, $object);
+										$output_string .= getXmlStringViewOfObject($resourceParameters, $object, null, $fieldsToDisplay);
 								$output_string .= '</'.$resourceParameters['objectsNodeName'].'>'."\n";
-								/*else
-								{
-									die('todo : display specific fields');//TODO[id,lastname]
-								}*/
 							}
 						}
 						// display all ressources list
