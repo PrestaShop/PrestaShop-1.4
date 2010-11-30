@@ -27,6 +27,10 @@ class AdminLocalization extends AdminPreferences
 			'PS_WEIGHT_UNIT' => array('title' => $this->l('Weight unit:'), 'desc' => $this->l('The weight unit of your shop (eg. kg or lbs)'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'),
 			'PS_DISTANCE_UNIT' => array('title' => $this->l('Distance unit:'), 'desc' => $this->l('The distance unit of your shop (eg. km or mi)'), 'validation' => 'isDistanceUnit', 'required' => true, 'type' => 'text'),
 			'PS_VOLUME_UNIT' => array('title' => $this->l('Volume unit:'), 'desc' => $this->l('The volume unit of your shop'), 'validation' => 'isWeightUnit', 'required' => true, 'type' => 'text'));
+		$this->_fieldsOptions = array(
+			'PS_LOCALE_LANGUAGE' => array('title' => $this->l('Language locale:'), 'desc' => $this->l('Your server\'s language locale.'), 'validation' => 'isLanguageIsoCode', 'type' => 'text'),
+			'PS_LOCALE_COUNTRY' => array('title' => $this->l('Country locale:'), 'desc' => $this->l('Your server\'s country locale.'), 'validation' => 'isLanguageIsoCode', 'type' => 'text')
+		);
 
 		parent::__construct();
 	}
@@ -63,7 +67,8 @@ class AdminLocalization extends AdminPreferences
 					Tools::redirectAdmin($currentIndex.'&conf=23&token='.$this->token);
 			}
 		}
-	}	
+		parent::postProcess();
+	}
 
 	public function display()
 	{
@@ -90,7 +95,9 @@ class AdminLocalization extends AdminPreferences
 				</div>
 			</div>
 		</fieldset>
-		</form>';
+		</form>
+		<br />';
+		$this->_displayForm('options', $this->_fieldsOptions, $this->l('Advanced'), 'width2', 'localization');
 	}
 }
 

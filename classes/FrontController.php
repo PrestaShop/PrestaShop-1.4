@@ -191,14 +191,15 @@ class FrontControllerCore
 		if (!$cart->nbProducts())
 			$cart->id_carrier = NULL;
 
-		$ps_language = new Language((int)($cookie->id_lang));
-		setlocale(LC_COLLATE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
-		setlocale(LC_CTYPE, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
-		setlocale(LC_TIME, strtolower($ps_language->iso_code).'_'.strtoupper($ps_language->iso_code).'.UTF-8');
-		setlocale(LC_NUMERIC, 'en_EN.UTF-8');
+		$locale = strtolower(Configuration::get('PS_LOCALE_LANGUAGE')).'_'.strtoupper(Configuration::get('PS_LOCALE_COUNTRY').'.UTF-8');
+		setlocale(LC_COLLATE, $locale);
+		setlocale(LC_CTYPE, $locale);
+		setlocale(LC_TIME, $locale);
+		setlocale(LC_NUMERIC, 'en_US.UTF-8');
 
 		if (is_object($currency))
 			$smarty->ps_currency = $currency;
+		$ps_language = new Language((int)($cookie->id_lang));
 		if (is_object($ps_language))
 			$smarty->ps_language = $ps_language;
 

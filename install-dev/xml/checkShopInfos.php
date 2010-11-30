@@ -148,12 +148,14 @@ if (isFormValid())
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_EMAIL', '".pSQL($_GET['infosEmail'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_METHOD', '".pSQL($_GET['infosMailMethod'] == "smtp" ? "2": "1")."', NOW(), NOW())";
 	$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
+	$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = \''.pSQL($_GET['isoCode']).'\' WHERE name = \'PS_LOCALE_LANGUAGE\'';
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_ACTIVITY', '".(int)($_GET['infosActivity'])."', NOW(), NOW())";
 	if ((int)($_GET['infosCountry']) != 0)
 	{
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.(int)($_GET['infosCountry']).' WHERE name = \'PS_COUNTRY_DEFAULT\'';
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = "'.pSQL($_GET['infosTimezone']).'" WHERE name = \'PS_TIMEZONE\'';
 		$sql_isocode = Db::getInstance()->getValue('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($_GET['infosCountry']));
+		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = \''.pSQL($sql_isocode).'\' WHERE name = \'PS_LOCALE_COUNTRY\'';
 		$taxes = Db::getInstance()->ExecuteS('SELECT tl.`name`, t.`id_tax` FROM `'._DB_PREFIX_.'tax` t
 											  LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax`)
 											  GROUP BY t.`id_tax`');
@@ -164,7 +166,7 @@ if (isFormValid())
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tax` SET `active` = 1 WHERE `id_tax` = '.(int)($tax['id_tax']));
 		}
 	}
-	
+
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{
 		$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_SERVER', '".pSQL($_GET['smtpSrv'])."', NOW(), NOW())";

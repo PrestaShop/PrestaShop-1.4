@@ -18,5 +18,7 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 		WHERE `class_name` = 'AdminStores'
 	), 1, 1, 1, 1 FROM `PREFIX_profile`
 );
-/* PHP:reorderpositions(); */;
 
+INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) SELECT 'PS_LOCALE_LANGUAGE', l.`iso_code`, NOW(), NOW() FROM `PREFIX_configuration` c INNER JOIN `PREFIX_lang` l ON (l.`id_lang` = c.`value`) WHERE c.`name` = 'PS_LANG_DEFAULT';
+INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) SELECT 'PS_LOCALE_COUNTRY', co.`iso_code`, NOW(), NOW() FROM `PREFIX_configuration` c INNER JOIN `PREFIX_country` co ON (co.`id_country` = c.`value`) WHERE c.`name` = 'PS_COUNTRY_DEFAULT';
+/* PHP:reorderpositions(); */;

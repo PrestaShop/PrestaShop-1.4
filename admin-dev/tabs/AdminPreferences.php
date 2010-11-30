@@ -137,6 +137,7 @@ class AdminPreferences extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
+		parent::postProcess();
 	}
 
 	/**

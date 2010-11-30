@@ -27,7 +27,7 @@ class AdminTaxes extends AdminTab
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
 		'rate' => array('title' => $this->l('Rate'), 'align' => 'center', 'suffix' => '%', 'width' => 50),
 		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
-	
+
 		$this->optionTitle = $this->l('Tax options');
 		$this->_fieldsOptions = array(
 		'PS_TAX' => array('title' => $this->l('Enable tax:'), 'desc' => $this->l('Select whether or not to include tax on purchases'), 'cast' => 'intval', 'type' => 'bool'),
