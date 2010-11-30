@@ -27,7 +27,9 @@ class ProductControllerCore extends FrontController
 
 	public function preProcess()
 	{
-			$id_product = (int)Tools::getValue('id_product');
+		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
+		{	
+	        $id_product = (int)Tools::getValue('id_product');
 
 			if ($id_product)
 			{
@@ -39,6 +41,7 @@ class ProductControllerCore extends FrontController
 
 				$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
 			}
+		}
 	}
 
 	public function process()

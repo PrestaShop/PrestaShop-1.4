@@ -22,17 +22,20 @@ class CategoryControllerCore extends FrontController
     public function preProcess()
     {
         parent::preProcess();
-        $id_category = isset($_GET['id_category']) ? $_GET['id_category'] : false;
-
-		if ($id_category)
+        if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 		{
-			$rewrite_infos = Category::getUrlRewriteInformations($id_category);
-
-			$default_rewrite = array();
-			foreach ($rewrite_infos AS $infos)
-				$default_rewrite[$infos['id_lang']] = $this->link->getCategoryLink($id_category, $infos['link_rewrite'], $infos['id_lang']);
-
-			$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
+            $id_category = isset($_GET['id_category']) ? $_GET['id_category'] : false;
+    
+    		if ($id_category)
+    		{
+    			$rewrite_infos = Category::getUrlRewriteInformations($id_category);
+    
+    			$default_rewrite = array();
+    			foreach ($rewrite_infos AS $infos)
+    				$default_rewrite[$infos['id_lang']] = $this->link->getCategoryLink($id_category, $infos['link_rewrite'], $infos['id_lang']);
+    
+    			$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
+    		}
 		}
     }
 	public function process()
