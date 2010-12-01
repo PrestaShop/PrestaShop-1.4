@@ -88,7 +88,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <div id="primary_block" class="clearfix">
-	<h2>{$product->name|escape:'htmlall':'UTF-8'}</h2>
+	<h1>{$product->name|escape:'htmlall':'UTF-8'}</h1>
 
 	{if isset($adminActionDisplay) && $adminActionDisplay}
 	<div id="admin-action">

@@ -1,7 +1,7 @@
 {capture name=path}{l s='Forgot your password'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Forgot your password'}</h2>
+<h1>{l s='Forgot your password'}</h1>
 
 {include file="$tpl_dir./errors.tpl"}
 

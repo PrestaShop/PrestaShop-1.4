@@ -11,7 +11,7 @@
 {capture name=path}{l s='Your shopping cart'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2 id="cart_title">{l s='Shopping cart summary'}</h2>
+<h1 id="cart_title">{l s='Shopping cart summary'}</h1>
 
 {assign var='current_step' value='summary'}
 {include file="$tpl_dir./order-steps.tpl"}

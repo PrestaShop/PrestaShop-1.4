@@ -1,7 +1,7 @@
 {capture name=path}{l s='New products'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='New products'}</h2>
+<h1>{l s='New products'}</h1>
 
 {if $products}
 	{include file="$tpl_dir./product-sort.tpl"}

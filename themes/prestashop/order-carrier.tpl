@@ -19,7 +19,7 @@
 {capture name=path}{l s='Shipping'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Shipping'}</h2>
+<h1>{l s='Shipping'}</h1>
 
 {assign var='current_step' value='shipping'}
 {include file="$tpl_dir./order-steps.tpl"}

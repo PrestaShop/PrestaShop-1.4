@@ -164,6 +164,25 @@ a img {
 	border: none;
 	text-decoration: none
 }
+h1 {
+	font-size: 1.1em;
+	line-height: 1.6em;
+	padding-left: 0.5em;
+	margin: 0.5em 0;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #374853;
+	background: transparent url('../img/title_bg.png') no-repeat top left;
+	height: 21px
+}
+h1 span {
+	font-size: 0.9em;
+	text-transform: none;
+	font-weight: normal;
+	font-style: italic;
+	color: #374853;
+	margin-left: 1em
+}
 h2 {
 	font-size: 1.1em;
 	line-height: 1.6em;
@@ -192,10 +211,17 @@ h4 { font-size: 1em }
 	margin: 0 auto 2px auto;
 	text-align: left
 }
-h1#logo {
+#header_logo {
 	float: left;
-	width: 27%;
-	margin-top: 0.5em
+	width: 264px;
+	display:block;
+}
+
+img.logo {
+	float: left;
+	margin-top: 0.5em;
+	font-size: 2em;
+	font-weight: bold;
 }
 #header_right {
 	float: left;

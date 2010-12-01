@@ -165,8 +165,8 @@ class AdminProducts extends AdminTab
 				{
 					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
 					{
-						if ($_FILES['attachment_file']['size'] > $this->maxFileSize)
-							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.($this->maxFileSize/1000).' '.$this->l('kb');
+						if ($_FILES['attachment_file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000))
+							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000).' '.$this->l('kb');
 						else
 						{
 							$uploadDir = dirname(__FILE__).'/../../download/';

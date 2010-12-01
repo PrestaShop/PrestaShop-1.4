@@ -15,8 +15,6 @@ include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
 class AdminAttachments extends AdminTab
 {
-	protected $maxFileSize  = 2000000;
-	
 	public function __construct()
 	{
 		global $cookie;
@@ -45,10 +43,11 @@ class AdminAttachments extends AdminTab
 				$_POST['mime'] = $a->mime;
 			}
 			if (!sizeof($this->_errors))
+			{
 				if (isset($_FILES['file']) AND is_uploaded_file($_FILES['file']['tmp_name']))
 				{
-					if ($_FILES['file']['size'] > $this->maxFileSize)
-						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.($this->maxFileSize/1000).' '.$this->l('kb');
+					if ($_FILES['file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000))
+						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000).' '.$this->l('kb');
 					else
 					{
 						$uploadDir = dirname(__FILE__).'/../../download/';
@@ -61,6 +60,9 @@ class AdminAttachments extends AdminTab
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
 				}
+				else
+					$this->_errors[] = $this->l('No file or your file isn\'t uploadable, check your server configuration about the upload maximum size.');
+			}
 			$this->validateRules();
 		}
 		return parent::postProcess();

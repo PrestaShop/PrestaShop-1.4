@@ -1,4 +1,4 @@
-<h2>{l s='Page not available'}</h2>
+<h1>{l s='Page not available'}</h1>
 
 <p class="error">
 	<img src="{$img_dir}icon/error.gif" alt="{l s='Error'}" class="middle" />

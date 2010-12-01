@@ -7,7 +7,7 @@
 {capture name=path}{l s='Your payment method'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Choose your payment method'}</h2>
+<h1>{l s='Choose your payment method'}</h1>
 
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}

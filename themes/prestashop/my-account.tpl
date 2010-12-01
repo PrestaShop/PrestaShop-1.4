@@ -7,7 +7,7 @@
 {capture name=path}{l s='My account'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='My account'}</h2>
+<h1>{l s='My account'}</h1>
 <h4>{l s='Welcome to your account. Here you can manage your addresses and orders.'}</h4>
 <ul>
 	<li><a href="{$link->getPageLink('history.php', true)}" title="{l s='Orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Orders'}" class="icon" /></a><a href="{$link->getPageLink('history.php', true)}" title="{l s='Orders'}">{l s='History and details of my orders'}</a></li>

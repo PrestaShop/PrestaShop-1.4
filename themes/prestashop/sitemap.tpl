@@ -1,7 +1,7 @@
 {capture name=path}{l s='Sitemap'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Sitemap'}</h2>
+<h1>{l s='Sitemap'}</h1>
 <div id="sitemap_content">
 	<div class="sitemap_block">
 		<h3>{l s='Our offers'}</h3>

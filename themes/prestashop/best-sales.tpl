@@ -1,7 +1,7 @@
 {capture name=path}{l s='Top sellers'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Top sellers'}</h2>
+<h1>{l s='Top sellers'}</h1>
 
 {if $products}
 	{include file="$tpl_dir./product-sort.tpl"}

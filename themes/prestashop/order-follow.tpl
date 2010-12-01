@@ -7,7 +7,7 @@
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Return Merchandise Authorization (RMA)'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Return Merchandise Authorization (RMA)'}</h2>
+<h1>{l s='Return Merchandise Authorization (RMA)'}</h1>
 {if $errorQuantity}
 	<p class="error">{l s='You do not have enough products to request another merchandise return.'}</p>
 {/if}

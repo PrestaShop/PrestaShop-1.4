@@ -24,3 +24,5 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 /* PHP:reorderpositions(); */;
 
 ALTER TABLE `PREFIX_webservice_permission` CHANGE `method` `method` ENUM( 'GET', 'POST', 'PUT', 'DELETE', 'HEAD' ) NOT NULL;
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW());

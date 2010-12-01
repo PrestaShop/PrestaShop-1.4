@@ -7,7 +7,7 @@
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Order history'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Order history'}</h2>
+<h1>{l s='Order history'}</h1>
 <p>{l s='Here are the orders you have placed since the creation of your account'}.</p>
 
 {if $slowValidation}<p class="warning">{l s='If you have just placed an order, it may take time for it to be validated. Please refresh the page if your order is missing.'}</p>{/if}

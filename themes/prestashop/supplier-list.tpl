@@ -1,7 +1,7 @@
 {capture name=path}{l s='Suppliers'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Suppliers'}</h2>
+<h1>{l s='Suppliers'}</h1>
 
 {if isset($errors) AND $errors}
 	{include file="$tpl_dir./errors.tpl"}

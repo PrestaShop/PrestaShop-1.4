@@ -2,7 +2,7 @@
 {include file="$tpl_dir./errors.tpl"}
 
 {if $category->id AND $category->active}
-	<h2 class="category_title">{strip}
+	<h1 class="category_title">{strip}
 		{$category->name|escape:'htmlall':'UTF-8'}
 		<span>
 			{if $nb_products == 0}{l s='There are no products.'}
@@ -12,7 +12,7 @@
 				{if $nb_products == 1}{l s='product.'}{else}{l s='products.'}{/if}
 			{/if}
 		</span>{/strip}
-	</h2>
+	</h1>
 
 	{if $scenes}
 		<!-- Scenes -->
