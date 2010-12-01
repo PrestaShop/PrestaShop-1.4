@@ -3,27 +3,6 @@
 if (!isset($errors))
 	die;
 
-function closest($input, $words)
-{
-	$shortest = -1;
-	foreach ($words as $word)
-	{
-		$lev = levenshtein($input, $word);
-		if ($lev == 0)
-		{
-			$closest = $word;
-			$shortest = 0;
-			break;
-		}
-		if ($lev <= $shortest || $shortest < 0)
-		{
-			$closest  = $word;
-			$shortest = $lev;
-		}
-	}
-	return $closest;
-}
-
 function constructSqlFilter($sqlId, $filterValue, $tableAlias = 'main.')
 {
 	$ret = '';
@@ -318,21 +297,33 @@ if (!$errors)
 					$available_filters = array_keys($resourceParameters['fields']);
 					if (isset($url_params['sort']))
 					{
-						$sortArgs = explode('_', $url_params['sort']);
-						if (count($sortArgs) != 2 || (strtoupper($sortArgs[1]) != 'ASC' && strtoupper($sortArgs[1]) != 'DESC'))
-						{
-							$errors[] = 'The "sort" value has to be formed as this example: "field_ASC" ("field" has to be an available field)';
-							$return_code = 'HTTP/1.1 400 Bad Request';
-						}
-						elseif (!in_array($sortArgs[0], $available_filters))
-						{
-							$errors[] = 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters);
-							$return_code = 'HTTP/1.1 400 Bad Request';
-						}
+						preg_match('#^\[(.*)\]$#Ui', $url_params['sort'], $matches);
+						if (count($matches) > 1)
+							$sorts = explode(',', $matches[1]);
 						else
+							$sorts = array($url_params['sort']);
+						
+						$sql_sort .= ' ORDER BY ';
+						
+						foreach ($sorts as $sort)
 						{
-							$sql_sort .= ' ORDER BY '.(isset($resourceParameters['retrieveData']['tableAlias']) ? $resourceParameters['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($resourceParameters['fields'][$sortArgs[0]]['sqlId']).'` '.strtoupper($sortArgs[1])."\n";// ORDER BY `field` ASC|DESC
+							$sortArgs = explode('_', $sort);
+							if (count($sortArgs) != 2 || (strtoupper($sortArgs[1]) != 'ASC' && strtoupper($sortArgs[1]) != 'DESC'))
+							{
+								$errors[] = 'The "sort" value has to be formed as this example: "field_ASC" ("field" has to be an available field)';
+								$return_code = 'HTTP/1.1 400 Bad Request';
+							}
+							elseif (!in_array($sortArgs[0], $available_filters))
+							{
+								$errors[] = 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters);
+								$return_code = 'HTTP/1.1 400 Bad Request';
+							}
+							else
+							{
+								$sql_sort .= (isset($resourceParameters['retrieveData']['tableAlias']) ? $resourceParameters['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($resourceParameters['fields'][$sortArgs[0]]['sqlId']).'` '.strtoupper($sortArgs[1]).', ';// ORDER BY `field` ASC|DESC
+							}
 						}
+						$sql_sort = rtrim($sql_sort, ', ')."\n";
 					}
 			
 					//construct SQL Limit

@@ -3,6 +3,7 @@
 // initializations //
 /////////////////////
 
+
 function psErrorHandler($errno, $errstr, $errfile, $errline)
 {
 	global $errors, $display_errors;
@@ -59,6 +60,28 @@ function psErrorHandler($errno, $errstr, $errfile, $errline)
 		$errors[] = 'Internal error';
 	return true;
 }
+
+function closest($input, $words)
+{
+	$shortest = -1;
+	foreach ($words as $word)
+	{
+		$lev = levenshtein($input, $word);
+		if ($lev == 0)
+		{
+			$closest = $word;
+			$shortest = 0;
+			break;
+		}
+		if ($lev <= $shortest || $shortest < 0)
+		{
+			$closest  = $word;
+			$shortest = $lev;
+		}
+	}
+	return $closest;
+}
+
 $errors = array();
 $webservice_call = true;
 $old_error_handler = set_error_handler("psErrorHandler");
@@ -147,10 +170,11 @@ else
 	// resources parameters //
 	///////////////////////////
 			$resources = Webservice::getResources();
+			$resourceNames = array_keys($resources);
 			// set available resource paramaters
 			if ($url[0] == '')
 				$resourceParameters['objectsNodeName'] = 'resources';
-			elseif (in_array($url[0], array_keys($resources)))
+			elseif (in_array($url[0], $resourceNames))
 			{
 				if (in_array($url[0], array_keys($permissions)))
 				{
@@ -160,13 +184,13 @@ else
 				}
 				else
 				{
-					$errors[] = 'resource of type "'.$url[0].'" is not allowed with this authentication key';
+					$errors[] = 'Resource of type "'.$url[0].'" is not allowed with this authentication key';
 					$return_code = 'HTTP/1.1 401 Unauthorized';
 				}
 			}
 			else
 			{
-				$errors[] = 'resource of type "'.$url[0].'" does not exists';
+				$errors[] = 'Resource of type "'.$url[0].'" does not exists. Did you mean: "'.closest($url[0], $resourceNames).'"?'.(count($resourceNames) > 1 ? ' The full list is: "'.implode('", "', $resourceNames).'"' : '');
 				$return_code = 'HTTP/1.1 400 Bad Request';
 			}
 		}
