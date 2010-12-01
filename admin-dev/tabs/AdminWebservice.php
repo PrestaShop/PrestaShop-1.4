@@ -59,8 +59,6 @@ class AdminWebservice extends AdminTab
 			if (!in_array('mod_rewrite', $apache_modules))
 				$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using of PrestaShop webservice.');
 		}
-		/*if (!extension_loaded('curl'))
-			$warnings[] = $this->l('Please activate the PHP extension \'curl\' to allow testing of PrestaShop webservice.');*/
 		if (!extension_loaded('SimpleXML'))
 			$warnings[] = $this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.');
 		if (!configuration::get('PS_SSL_ENABLED'))
