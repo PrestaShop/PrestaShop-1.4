@@ -216,7 +216,7 @@ if (!$errors)
 								foreach ($url_params['filter'] as $field => $url_param)
 								{
 									$available_filters = array_keys($resourceParameters['fields']);
-									if ($field != 'sort_list' && $field != 'limit_list')
+									if ($field != 'sort' && $field != 'limit')
 										if (!in_array($field, $available_filters))
 										{
 											// if there are linked tables
@@ -316,12 +316,12 @@ if (!$errors)
 					// construct SQL Sort
 					$sql_sort = '';
 					$available_filters = array_keys($resourceParameters['fields']);
-					if (isset($url_params['sort_list']))
+					if (isset($url_params['sort']))
 					{
-						$sortArgs = explode('_', $url_params['sort_list']);
+						$sortArgs = explode('_', $url_params['sort']);
 						if (count($sortArgs) != 2 || (strtoupper($sortArgs[1]) != 'ASC' && strtoupper($sortArgs[1]) != 'DESC'))
 						{
-							$errors[] = 'The "sort_list" value has to be formed as this example: "field_ASC" ("field" has to be an available field)';
+							$errors[] = 'The "sort" value has to be formed as this example: "field_ASC" ("field" has to be an available field)';
 							$return_code = 'HTTP/1.1 400 Bad Request';
 						}
 						elseif (!in_array($sortArgs[0], $available_filters))
@@ -337,12 +337,12 @@ if (!$errors)
 			
 					//construct SQL Limit
 					$sql_limit = '';
-					if (isset($url_params['limit_list']))
+					if (isset($url_params['limit']))
 					{
-						$limitArgs = explode(',', $url_params['limit_list']);
+						$limitArgs = explode(',', $url_params['limit']);
 						if (count($limitArgs) > 2)
 						{
-							$errors[] = 'The "limit_list" value has to be formed as this example: "5,25" or "10"';
+							$errors[] = 'The "limit" value has to be formed as this example: "5,25" or "10"';
 							$return_code = 'HTTP/1.1 400 Bad Request';
 						}
 						else
