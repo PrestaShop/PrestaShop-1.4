@@ -187,4 +187,4 @@ class OrderHistoryCore extends ObjectModel
 
 }
 
-?>
+

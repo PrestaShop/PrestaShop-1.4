@@ -43,4 +43,4 @@ class AdminContact extends AdminPreferences
 	}
 }
 
-?>
+

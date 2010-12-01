@@ -45,4 +45,4 @@ function editorial_update()
 		}
 	}
 }
-?>
+

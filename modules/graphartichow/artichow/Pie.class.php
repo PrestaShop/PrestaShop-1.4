@@ -692,4 +692,3 @@ registerClass('PiePart');
 function callbackPerCent($value) {
 	return $value.'%';
 }
-?>

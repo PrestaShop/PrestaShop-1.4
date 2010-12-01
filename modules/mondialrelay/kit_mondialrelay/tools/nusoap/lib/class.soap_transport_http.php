@@ -1304,4 +1304,3 @@ class soap_transport_http extends nusoap_base {
 }
 
 
-?>

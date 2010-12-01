@@ -233,4 +233,3 @@ function process_result_nostack($xml_array)
 	return ($evaluations);
 }
 
-?>

@@ -12,4 +12,4 @@ echo $gcheckout->execPayment($cart);
 
 include_once(dirname(__FILE__).'/../../footer.php');
 
-?>
+

@@ -278,4 +278,4 @@ function deleteImage($id_item, $id_image = NULL)
 	return true;
 }
 
-?>
+

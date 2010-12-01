@@ -27,4 +27,3 @@ class AdminTools extends AdminTab
 	}
 }
 
-?>

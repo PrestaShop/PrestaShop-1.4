@@ -44,4 +44,4 @@ class BlockLanguages extends Module
 	}
 }
 
-?>
+

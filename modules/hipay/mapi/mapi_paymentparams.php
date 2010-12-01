@@ -847,4 +847,3 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	}
 }
 
-?>

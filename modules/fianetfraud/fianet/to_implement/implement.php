@@ -10,4 +10,3 @@ function save_flux_xml($xml, $ref_id)
 {
 }
 
-?>

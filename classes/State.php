@@ -162,4 +162,4 @@ class StateCore extends ObjectModel
 	}
 }
 
-?>
+

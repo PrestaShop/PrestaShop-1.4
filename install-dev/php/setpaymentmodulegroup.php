@@ -23,4 +23,3 @@ function set_payment_module_group()
 	}
 }
 
-?>

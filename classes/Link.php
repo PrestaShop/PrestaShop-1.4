@@ -286,4 +286,4 @@ class LinkCore
 		}
 }
 
-?>
+

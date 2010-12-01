@@ -183,4 +183,4 @@ class TagCore extends ObjectModel
 	}
 }
 
-?>
+

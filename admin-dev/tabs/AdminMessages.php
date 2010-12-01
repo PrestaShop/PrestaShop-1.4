@@ -104,4 +104,4 @@ class AdminMessages extends AdminTab
 	}
 }
 
-?>
+

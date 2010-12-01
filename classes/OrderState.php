@@ -116,4 +116,4 @@ class OrderStateCore extends ObjectModel
 	}
 }
 
-?>
+

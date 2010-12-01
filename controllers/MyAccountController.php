@@ -35,4 +35,3 @@ class MyAccountControllerCore extends FrontController
 	}
 }
 
-?>

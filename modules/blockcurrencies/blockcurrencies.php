@@ -44,4 +44,4 @@ class BlockCurrencies extends Module
 	}
 }
 
-?>
+

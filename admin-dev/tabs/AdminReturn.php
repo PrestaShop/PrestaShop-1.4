@@ -270,4 +270,4 @@ class AdminReturn extends AdminTab
 	}
 }
 
-?>
+

@@ -102,4 +102,4 @@ class AdminStatsConf extends AdminPreferences
 	}
 }
 
-?>
+

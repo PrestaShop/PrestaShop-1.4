@@ -30,4 +30,3 @@ class BestSalesControllerCore extends FrontController
 	}
 }
 
-?>

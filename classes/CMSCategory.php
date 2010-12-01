@@ -644,4 +644,4 @@ class CMSCategoryCore extends ObjectModel
 	}
 }
 
-?>
+

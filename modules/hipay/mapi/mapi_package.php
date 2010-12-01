@@ -18,4 +18,3 @@ require_once($_mapi_dir.'/mapi_order.php');
 require_once($_mapi_dir.'/mapi_payment.php');
 require_once($_mapi_dir.'/mapi_multiplepayment.php');
 require_once($_mapi_dir.'/mapi_simplepayment.php');
-?>

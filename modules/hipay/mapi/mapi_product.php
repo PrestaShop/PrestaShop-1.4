@@ -272,4 +272,3 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 
 }
 
-?>

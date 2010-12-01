@@ -190,4 +190,3 @@ class OrderReturnCore extends ObjectModel
 	}
 }
 
-?>

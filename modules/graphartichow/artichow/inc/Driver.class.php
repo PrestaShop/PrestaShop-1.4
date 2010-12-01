@@ -722,4 +722,3 @@ registerClass('FileFontDriver');
 // Include ARTICHOW_DRIVER by default to preserve backward compatibility.
 require_once dirname(__FILE__).'/drivers/'.ARTICHOW_DRIVER.'.class.php';
 
-?>

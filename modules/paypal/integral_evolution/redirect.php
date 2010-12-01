@@ -84,4 +84,3 @@ if (is_file(_PS_THEME_DIR_.'modules/paypal/integral_evolution/redirect.tpl'))
 else
 	$smarty->display(_PS_MODULE_DIR_.$paypal->name.'/integral_evolution/redirect.tpl');
 
-?>

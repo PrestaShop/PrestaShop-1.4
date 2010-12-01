@@ -28,4 +28,4 @@ $file = str_replace('{discount}', Discount::display(floatval(Configuration::get(
 
 echo $file;
 
-?>
+

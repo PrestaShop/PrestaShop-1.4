@@ -9,4 +9,3 @@ ini_set('max_execution_time', 7200);
 Search::indexation(Tools::getValue('full'));
 Tools::redirectAdmin($_SERVER['HTTP_REFERER'].'&conf=4');
 
-?>

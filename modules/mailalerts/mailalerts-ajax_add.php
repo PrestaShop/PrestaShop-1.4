@@ -40,4 +40,4 @@ if (Db::getInstance()->Execute('
 
 die ('0');
 
-?>
+

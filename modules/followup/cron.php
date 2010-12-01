@@ -13,4 +13,3 @@ if (isset($_GET['secure_key']))
 	}
 }
 
-?>

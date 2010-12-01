@@ -82,4 +82,3 @@ class BarDepthPattern extends Pattern {
 	}
 
 }
-?>

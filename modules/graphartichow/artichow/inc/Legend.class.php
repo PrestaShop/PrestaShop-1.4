@@ -707,4 +707,3 @@ interface awLegendable {
 }
 
 registerInterface('Legendable');
-?>

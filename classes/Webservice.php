@@ -160,4 +160,4 @@ class WebserviceCore extends ObjectModel
 	}
 }
 
-?>
+

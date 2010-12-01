@@ -217,4 +217,4 @@ class TabCore extends ObjectModel
 	}
 }
 
-?>
+

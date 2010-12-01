@@ -52,4 +52,4 @@ abstract class ModuleGridEngineCore extends Module
 	abstract public function setTotalCount($totalCount);
 	abstract public function render();
 }
-?>
+

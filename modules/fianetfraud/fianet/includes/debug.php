@@ -75,4 +75,3 @@ function do_dump(&$var, $var_name = NULL, $indent = NULL, $reference = NULL)
 	}
 }
 
-?>

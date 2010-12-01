@@ -48,4 +48,3 @@ echo '<config>'."\n";
 		echo '<test id="'.$key.'" result="'.$line.'"/>'."\n";
 	echo '</testList>'."\n";
 echo '</config>';
-?>

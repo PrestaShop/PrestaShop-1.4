@@ -24,7 +24,7 @@
 			<input type="hidden" name="country" value="{$country}" />
 			<input type="hidden" name="amount" value="{$amount}" />
 			<input type="hidden" name="currency" value="{$currency}" />
-			<input type="hidden" name="amount2_description" value="{$amount2_description}" />
+			<input type="hidden" name="amount2_description" value="{if isset($amount2_description)}{$amount2_description}{/if}}" />
 			<input type="hidden" name="amount2" value="{$amount2}" />
 			<input type="hidden" name="amount3_description" value="{$amount3_description}" />
 			<input type="hidden" name="amount3" value="{$amount3}" />
@@ -64,7 +64,7 @@
 			<input type="hidden" name="country" value="{$country}" />
 			<input type="hidden" name="amount" value="{$amount}" />
 			<input type="hidden" name="currency" value="{$currency}" />
-			<input type="hidden" name="amount2_description" value="{$amount2_description}" />
+			<input type="hidden" name="amount2_description" value="{if isset($amount2_description)}{$amount2_description}{/if}}" />
 			<input type="hidden" name="amount2" value="{$amount2}" />
 			<input type="hidden" name="amount3_description" value="{$amount3_description}" />
 			<input type="hidden" name="amount3" value="{$amount3}" />

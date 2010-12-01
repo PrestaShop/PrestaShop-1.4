@@ -24,4 +24,4 @@ $mrselected->MR_Selected_Ville = $_POST['Ville'];
 $mrselected->MR_Selected_Pays = $_POST['Pays'];
 $mrselected->save();
 
-?>
+

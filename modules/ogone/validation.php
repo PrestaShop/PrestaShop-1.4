@@ -78,4 +78,3 @@ if (Validate::isLoadedObject($cart))
 	}
 }
 	
-?>

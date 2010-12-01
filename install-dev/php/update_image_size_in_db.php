@@ -15,4 +15,3 @@ function update_image_size_in_db()
 		Configuration::updateValue('EDITORIAL_IMAGE_HEIGHT', (int)round($height));
 	}
 }
-?>

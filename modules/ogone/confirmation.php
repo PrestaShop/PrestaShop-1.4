@@ -16,4 +16,4 @@ echo $ogone->display(__FILE__, 'waiting.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
 
-?>
+

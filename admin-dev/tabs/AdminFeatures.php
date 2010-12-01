@@ -182,4 +182,4 @@ class AdminFeatures extends AdminTab
 	}
 }
 
-?>
+

@@ -47,4 +47,3 @@ require_once(RELATIVE_PATH . 'classes/order/fianet_xml_paracallback_builder.php'
 require_once(RELATIVE_PATH . 'classes/order/fianet_paraobject_xml.php');
 
 
-?>

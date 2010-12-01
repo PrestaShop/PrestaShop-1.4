@@ -31,4 +31,3 @@ class PricesDropControllerCore extends FrontController
 	}
 }
 
-?>

@@ -19,4 +19,3 @@ elseif (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->in
 else
 		PDF::invoice($order);
 
-?>

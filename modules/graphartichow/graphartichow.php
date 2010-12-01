@@ -350,4 +350,4 @@ class GraphArtichow extends ModuleGraphEngine
 	}
 }
 
-?>
+

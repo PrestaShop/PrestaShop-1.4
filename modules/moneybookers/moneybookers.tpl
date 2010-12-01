@@ -24,12 +24,12 @@
 		<input type="hidden" name="country" value="{$country}" />
 		<input type="hidden" name="amount" value="{$amount}" />
 		<input type="hidden" name="currency" value="{$currency}" />
-		<input type="hidden" name="amount2_description" value="{$amount2_description}" />
-		<input type="hidden" name="amount2" value="{$amount2}" />
-		<input type="hidden" name="amount3_description" value="{$amount3_description}" />
-		<input type="hidden" name="amount3" value="{$amount3}" />
-		<input type="hidden" name="amount4_description" value="{$amount4_description}" />
-		<input type="hidden" name="amount4" value="{$amount4}" />
+		<input type="hidden" name="amount2_description" value="{if isset($amount2_description)}{$amount2_description}{/if}}" />
+		<input type="hidden" name="amount2" value="{if isset($amount2)}{$amount2}{/if}}" />
+		<input type="hidden" name="amount3_description" value="{if isset($amount3_description)}{$amount3_description}{/if}}" />
+		<input type="hidden" name="amount3" value="{if isset($amount3)}{$amount3}{/if}}" />
+		<input type="hidden" name="amount4_description" value="{if isset($amount4_description)}{$amount4_description}{/if}}" />
+		<input type="hidden" name="amount4" value="{if isset($amount4)}{$amount4}{/if}}" />
 		<input type="hidden" name="return_url_target" value="2">
 		<input type="hidden" name="cancel_url_target" value="2">
 		<input type="hidden" class="payment_methods" name="payment_methods" value="ACC">
@@ -71,12 +71,12 @@
 		<input type="hidden" name="country" value="{$country}" />
 		<input type="hidden" name="amount" value="{$amount}" />
 		<input type="hidden" name="currency" value="{$currency}" />
-		<input type="hidden" name="amount2_description" value="{$amount2_description}" />
-		<input type="hidden" name="amount2" value="{$amount2}" />
-		<input type="hidden" name="amount3_description" value="{$amount3_description}" />
-		<input type="hidden" name="amount3" value="{$amount3}" />
-		<input type="hidden" name="amount4_description" value="{$amount4_description}" />
-		<input type="hidden" name="amount4" value="{$amount4}" />
+		<input type="hidden" name="amount2_description" value="{if isset($amount2_description)}{$amount2_description}{/if}}" />
+		<input type="hidden" name="amount2" value="{if isset($amount2)}{$amount2}{/if}}" />
+		<input type="hidden" name="amount3_description" value="{if isset($amount3_description)}{$amount3_description}{/if}}" />
+		<input type="hidden" name="amount3" value="{if isset($amount3)}{$amount3}{/if}}" />
+		<input type="hidden" name="amount4_description" value="{if isset($amount4_description)}{$amount4_description}{/if}}" />
+		<input type="hidden" name="amount4" value="{if isset($amount4)}{$amount4}{/if}}" />
 		<input type="hidden" class="payment_methods" name="payment_methods" value="ACC">
 		<input type="hidden" name="return_url_target" value="2">
 		<input type="hidden" name="cancel_url_target" value="2">
@@ -113,12 +113,12 @@
 		<input type="hidden" name="country" value="{$country}" />
 		<input type="hidden" name="amount" value="{$amount}" />
 		<input type="hidden" name="currency" value="{$currency}" />
-		<input type="hidden" name="amount2_description" value="{$amount2_description}" />
-		<input type="hidden" name="amount2" value="{$amount2}" />
-		<input type="hidden" name="amount3_description" value="{$amount3_description}" />
-		<input type="hidden" name="amount3" value="{$amount3}" />
-		<input type="hidden" name="amount4_description" value="{$amount4_description}" />
-		<input type="hidden" name="amount4" value="{$amount4}" />
+		<input type="hidden" name="amount2_description" value="{if isset($amount2_description)}{$amount2_description}{/if}}" />
+		<input type="hidden" name="amount2" value="{if isset($amount2)}{$amount2}{/if}}" />
+		<input type="hidden" name="amount3_description" value="{if isset($amount3_description)}{$amount3_description}{/if}}" />
+		<input type="hidden" name="amount3" value="{if isset($amount3)}{$amount3}{/if}}" />
+		<input type="hidden" name="amount4_description" value="{if isset($amount4_description)}{$amount4_description}{/if}}" />
+		<input type="hidden" name="amount4" value="{if isset($amount4)}{$amount4}{/if}}" />
 		<input type="hidden" class="payment_methods" name="payment_methods" value="ACC">
 		<input type="hidden" name="return_url_target" value="2">
 		<input type="hidden" name="cancel_url_target" value="2">

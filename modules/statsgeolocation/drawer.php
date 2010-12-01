@@ -62,4 +62,4 @@ function getCoords()
 $image = loadBaseImage($img_path);
 drawCircles($image);
 drawImage($image);
-?>
+

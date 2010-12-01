@@ -221,4 +221,4 @@ class awAntiSpam extends awImage {
 }
 
 registerClass('AntiSpam');
-?>
+

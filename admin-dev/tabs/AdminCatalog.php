@@ -156,4 +156,4 @@ class AdminCatalog extends AdminTab
 	}
 }
 
-?>
+

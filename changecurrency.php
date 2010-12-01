@@ -12,4 +12,3 @@ if (Validate::isLoadedObject($currency) AND !$currency->deleted)
 else
 	die('0');
 
-?>

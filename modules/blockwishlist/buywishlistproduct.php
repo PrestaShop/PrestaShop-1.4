@@ -26,4 +26,4 @@ else
 
 if (empty($error) === false)
 	echo $error;
-?>
+

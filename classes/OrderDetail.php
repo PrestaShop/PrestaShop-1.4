@@ -175,4 +175,4 @@ class OrderDetailCore extends ObjectModel
 
 }
 
-?>
+

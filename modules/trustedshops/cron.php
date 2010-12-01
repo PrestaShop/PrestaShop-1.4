@@ -7,4 +7,3 @@ include(dirname(__FILE__) .'/trustedshops.php');
 if (isset($_GET['secure_key']) AND Configuration::get('PS_TS_SECURE_KEY') == $_GET['secure_key'])
 		RatingAlert::executeCronTask();
 
-?>

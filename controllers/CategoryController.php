@@ -115,4 +115,3 @@ class CategoryControllerCore extends FrontController
 	}
 }
 
-?>

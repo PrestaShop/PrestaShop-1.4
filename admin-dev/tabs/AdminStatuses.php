@@ -71,4 +71,3 @@ class AdminStatuses extends AdminTab
 	}
 }
 
-?>

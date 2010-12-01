@@ -162,4 +162,3 @@ class ToolsInstall
 		return strlen($str);
 	}
 }
-?>

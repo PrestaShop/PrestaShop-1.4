@@ -471,4 +471,3 @@ class fianet_sender
 	}
 }
 
-?>

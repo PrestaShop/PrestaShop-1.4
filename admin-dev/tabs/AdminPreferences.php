@@ -442,4 +442,4 @@ class AdminPreferences extends AdminTab
 	}
 }
 
-?>
+

@@ -105,4 +105,4 @@ class GridHtml extends ModuleGridEngine
 		echo json_encode($this->_values);
 	}	
 }
-?>
+

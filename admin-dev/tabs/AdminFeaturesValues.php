@@ -100,4 +100,3 @@ class AdminFeaturesValues extends AdminTab
 	}
 }
 
-?>

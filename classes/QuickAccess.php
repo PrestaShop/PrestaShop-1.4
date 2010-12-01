@@ -67,4 +67,3 @@ class QuickAccessCore extends ObjectModel
 	}
 }
 
-?>

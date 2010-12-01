@@ -435,4 +435,4 @@ class DiscountCore extends ObjectModel
 	}
 }
 
-?>
+

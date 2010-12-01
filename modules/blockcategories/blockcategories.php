@@ -207,4 +207,4 @@ class BlockCategories extends Module
 	}
 }
 
-?>
+

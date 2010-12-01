@@ -46,4 +46,4 @@ class MyLogUtils
 			return ($mvalue);	
 	}
 }
-?>
+

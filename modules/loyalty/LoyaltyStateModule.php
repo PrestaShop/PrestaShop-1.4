@@ -72,4 +72,3 @@ class LoyaltyStateModule extends ObjectModel
 
 }
 
-?>

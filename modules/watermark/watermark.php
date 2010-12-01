@@ -232,4 +232,4 @@ class Watermark extends Module
 		return imagejpeg($image, $outputpath, 100); 
 	} 
 }
-?>
+

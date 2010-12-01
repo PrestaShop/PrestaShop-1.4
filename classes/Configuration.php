@@ -273,4 +273,4 @@ class ConfigurationCore extends ObjectModel
 	}
 }
 
-?>
+

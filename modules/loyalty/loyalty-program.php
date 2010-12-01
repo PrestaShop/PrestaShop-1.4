@@ -129,4 +129,4 @@ echo Module::display(dirname(__FILE__).'/loyalty.php', 'loyalty.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
 
-?>
+

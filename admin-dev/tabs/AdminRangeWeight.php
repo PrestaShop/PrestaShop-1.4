@@ -91,4 +91,4 @@ class AdminRangeWeight extends AdminTab
 	}
 }
 
-?>
+

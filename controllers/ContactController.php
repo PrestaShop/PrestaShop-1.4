@@ -235,4 +235,4 @@ class ContactControllerCore extends FrontController
 	}
 }
 
-?>
+

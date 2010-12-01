@@ -73,4 +73,4 @@ class AdminProfiles extends AdminTab
 	}
 }
 
-?>
+

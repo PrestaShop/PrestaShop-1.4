@@ -24,4 +24,3 @@ echo Module::display(dirname(__FILE__).'/referralprogram', 'referralprogram-rule
 if (!Tools::getValue('width') AND !Tools::getValue('height'))
 	require_once(dirname(__FILE__).'/../../footer.php');
 
-?>

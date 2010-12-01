@@ -134,4 +134,4 @@ class AdminAttributes extends AdminTab
 	}
 }
 
-?>
+

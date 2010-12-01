@@ -134,4 +134,3 @@ class OrderDetailControllerCore extends FrontController
 	}
 }
 
-?>

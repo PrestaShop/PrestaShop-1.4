@@ -205,4 +205,4 @@ class AdminSuppliers extends AdminTab
 	}
 }
 
-?>
+

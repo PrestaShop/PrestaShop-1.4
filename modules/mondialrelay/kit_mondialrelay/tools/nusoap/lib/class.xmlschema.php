@@ -970,4 +970,3 @@ class XMLSchema extends nusoap_xmlschema {
 }
 
 
-?>

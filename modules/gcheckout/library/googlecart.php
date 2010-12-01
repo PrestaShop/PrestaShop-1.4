@@ -1609,4 +1609,3 @@
       $this->type = 'merchant-private-item-data';
     }
   }
-?>

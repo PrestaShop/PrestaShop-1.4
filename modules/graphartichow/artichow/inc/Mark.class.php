@@ -487,4 +487,3 @@ class awMark {
 }
 
 registerClass('Mark');
-?>

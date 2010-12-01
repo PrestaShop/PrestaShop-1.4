@@ -136,4 +136,4 @@ class StatsRegistrations extends ModuleGraph
 	}
 }
 
-?>
+

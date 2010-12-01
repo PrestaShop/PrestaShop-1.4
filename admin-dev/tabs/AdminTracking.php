@@ -254,4 +254,4 @@ class AdminTracking extends AdminTab
 	}
 }
 
-?>
+

@@ -87,4 +87,3 @@ class soap_fault extends nusoap_fault {
 }
 
 
-?>

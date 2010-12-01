@@ -27,4 +27,3 @@ if(@fsockopen('www.prestashop.com', 80))
 		die('fail:2');
 }
 die('offline');
-?>

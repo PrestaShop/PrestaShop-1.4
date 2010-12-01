@@ -147,4 +147,4 @@ class StatsEquipment extends ModuleGraph
 	}
 }
 
-?>
+

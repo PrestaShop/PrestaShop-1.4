@@ -1722,4 +1722,4 @@ abstract class AdminTabCore
 	}
 }
 
-?>
+

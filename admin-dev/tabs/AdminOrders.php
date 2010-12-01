@@ -921,4 +921,4 @@ class AdminOrders extends AdminTab
 	}
 }
 
-?>
+

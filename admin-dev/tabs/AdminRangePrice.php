@@ -92,4 +92,4 @@ class AdminRangePrice extends AdminTab
 	}
 }
 
-?>
+

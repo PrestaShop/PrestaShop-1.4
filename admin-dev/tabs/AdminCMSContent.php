@@ -113,4 +113,3 @@ class AdminCMSContent extends AdminTab
 	}
 }
 
-?>

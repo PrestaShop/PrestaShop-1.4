@@ -436,4 +436,3 @@ class awMathPlot extends awComponent {
 }
 
 registerClass('MathPlot');
-?>

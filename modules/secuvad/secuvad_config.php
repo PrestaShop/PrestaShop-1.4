@@ -15,4 +15,4 @@ if (in_array($secuvad->getRemoteIPaddress(), $secuvad->get_secuvad_ip_config()) 
 else
 	mail($secuvad->get_secuvad_contact(), $this->l('Hack Attempt'), 'secuvad_id='.$secuvad->get_secuvad_id()."\n".$this->l('No authorized access').' (ip='.$secuvad->getRemoteIPaddress().')'."\n".$this->l('The datas sent are:')."\n\n".'GET :'."\n".print_r($_GET,true)."\n\n".'POST :'."\n".print_r($_POST,true));
 
-?>
+

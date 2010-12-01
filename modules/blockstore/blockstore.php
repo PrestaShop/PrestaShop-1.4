@@ -38,4 +38,3 @@ class BlockStore extends Module
 	}
 }
 
-?>

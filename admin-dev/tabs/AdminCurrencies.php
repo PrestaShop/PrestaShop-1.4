@@ -194,4 +194,4 @@ class AdminCurrencies extends AdminTab
 	}
 }
 
-?>
+

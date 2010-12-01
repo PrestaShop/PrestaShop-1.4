@@ -84,4 +84,3 @@ define('HIPAY_MAPI_CURL_LOGFILE', '/tmp/curl.log');
 
 define('MAPI_VERSION','1.0');
 
-?>

@@ -47,4 +47,3 @@ class LightLinePattern extends Pattern {
 	}
 
 }
-?>

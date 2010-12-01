@@ -245,4 +245,4 @@ class SupplierCore extends ObjectModel
 		return isset($row['id_supplier']);
 	}
 }
-?>
+

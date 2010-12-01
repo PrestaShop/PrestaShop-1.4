@@ -67,4 +67,4 @@ if (in_array($secuvad->getRemoteIPaddress(), $secuvad->get_secuvad_ip()))
 		$secuvad->secuvad_log('secuvad_response.php '."\n\t".' Error '.$regs[2]); 
 }
 
-?>
+

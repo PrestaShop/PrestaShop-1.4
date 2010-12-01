@@ -432,4 +432,4 @@ if (Tools::isSubmit('getCountryTaxes'))
 	die(Tools::jsonEncode($taxes));
 }
 
-?>
+

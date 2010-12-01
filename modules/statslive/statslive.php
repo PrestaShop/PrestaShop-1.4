@@ -123,4 +123,4 @@ class StatsLive extends Module
 	}
 }
 
-?>
+

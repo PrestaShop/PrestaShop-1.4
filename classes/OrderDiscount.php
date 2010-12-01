@@ -46,4 +46,3 @@ class OrderDiscountCore extends ObjectModel
 	}	
 }
 
-?>

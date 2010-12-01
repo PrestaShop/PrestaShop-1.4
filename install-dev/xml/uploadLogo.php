@@ -90,4 +90,3 @@ define('INSTALL_PATH', dirname(__FILE__));
 	echo "{";
 	echo "	error: '" . $error . "',\n";
 	echo "}";
-?>

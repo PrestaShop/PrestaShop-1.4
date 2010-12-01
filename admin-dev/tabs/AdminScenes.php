@@ -266,4 +266,4 @@ class AdminScenes extends AdminTab
 	}
 }
 
-?>
+

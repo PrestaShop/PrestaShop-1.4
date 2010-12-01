@@ -78,4 +78,4 @@ else
 
 include(dirname(__FILE__).'/../../footer.php');
 
-?>
+

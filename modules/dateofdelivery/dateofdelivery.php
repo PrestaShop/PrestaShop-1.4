@@ -483,4 +483,3 @@ class DateOfDelivery extends Module
 
 }
 
-?>

@@ -988,4 +988,4 @@ class ValidateCore
 	}
 }
 
-?>
+

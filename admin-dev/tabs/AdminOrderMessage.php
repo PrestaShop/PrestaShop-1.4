@@ -69,4 +69,4 @@ class AdminOrderMessage extends AdminTab
 	}
 }
 
-?>
+

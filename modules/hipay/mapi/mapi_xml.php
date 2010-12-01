@@ -69,4 +69,3 @@ class HIPAY_MAPI_XML {
 	}
 
 }
-?>

@@ -94,4 +94,4 @@ else /* Else display homepage */
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
 
-?>
+

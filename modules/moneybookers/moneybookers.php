@@ -465,4 +465,4 @@ class MoneyBookers extends PaymentModule
 	}
 }
 
-?>
+

@@ -77,4 +77,4 @@ class AdminPPreferences extends AdminPreferences
 	}
 }
 
-?>
+

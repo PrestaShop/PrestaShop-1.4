@@ -32,4 +32,3 @@ class DejalaCart extends ObjectModel
 }
 
 
-?>

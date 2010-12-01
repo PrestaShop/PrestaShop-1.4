@@ -124,4 +124,4 @@ class MessageCore extends ObjectModel
 	}
 }
 
-?>
+

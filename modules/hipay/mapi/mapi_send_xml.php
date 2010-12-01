@@ -80,4 +80,3 @@ class HIPAY_MAPI_SEND_XML {
         return trim($cleanXML);
     }
 }
-?>

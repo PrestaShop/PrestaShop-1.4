@@ -455,4 +455,4 @@ class AdminDiscounts extends AdminTab
 	}
 }
 
-?>
+

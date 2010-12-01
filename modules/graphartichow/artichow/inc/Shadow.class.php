@@ -403,4 +403,3 @@ class awShadow {
 }
 
 registerClass('Shadow');
-?>

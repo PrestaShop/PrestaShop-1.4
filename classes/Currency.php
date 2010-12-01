@@ -259,4 +259,4 @@ class CurrencyCore extends ObjectModel
 	}
 }
 
-?>
+

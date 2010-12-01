@@ -362,4 +362,4 @@ class AdminCMS extends AdminTab
 	}
 }
 
-?>
+

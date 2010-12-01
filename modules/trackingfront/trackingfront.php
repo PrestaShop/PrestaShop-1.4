@@ -236,4 +236,3 @@ class TrackingFront extends Module
 	}	
 }
 
-?>

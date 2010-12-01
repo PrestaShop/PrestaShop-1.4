@@ -70,4 +70,4 @@ class ZoneCore extends ObjectModel
 	}
 }
 
-?>
+

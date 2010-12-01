@@ -119,4 +119,4 @@ class HIPAY_MAPI_COMM_XML
 
 	}
 }
-?>
+

@@ -191,4 +191,4 @@ class FeatureCore extends ObjectModel
 		ORDER BY nb DESC');
 	}
 }
-?>
+

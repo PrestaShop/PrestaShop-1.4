@@ -10,4 +10,4 @@ class AdminAddonsMyAccount extends AdminTab
 	}
 }
 
-?>
+

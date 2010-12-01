@@ -88,4 +88,4 @@ class AdminAliases extends AdminTab
 	}
 }
 
-?>
+

@@ -69,4 +69,4 @@ class AdminSearchConf extends AdminPreferences
 	}
 }
 
-?>
+

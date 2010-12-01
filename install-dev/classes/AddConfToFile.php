@@ -64,4 +64,3 @@ class	AddConfToFile
 		return $string;
 	}
 }
-?>

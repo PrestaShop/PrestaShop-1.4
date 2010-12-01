@@ -23,4 +23,3 @@ if ($result['return_code'] != 0)
 else
 	Tools::redirectLink($result['message']);
 
-?>

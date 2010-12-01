@@ -80,4 +80,3 @@ class AliasCore extends ObjectModel
 	}
 }
 
-?>

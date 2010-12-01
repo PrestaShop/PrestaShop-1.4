@@ -17,4 +17,3 @@ if ($mA->customerHasNotification((int)($id_customer), (int)($id_product), (int)(
 	die ('1');
 die('0');
 
-?>

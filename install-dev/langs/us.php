@@ -85,4 +85,4 @@ $_LANG['Saint Barthelemy'] = 'Saint Barthélemy';
 $_LANG['Sao Tome and Principe'] = 'São Tomé and Príncipe';
 $_LANG['Aland Islands'] = 'Åland Islands';
 
-?>
+

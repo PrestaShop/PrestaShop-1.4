@@ -184,4 +184,4 @@ class Ogone extends PaymentModule
 	}
 }
 
-?>
+

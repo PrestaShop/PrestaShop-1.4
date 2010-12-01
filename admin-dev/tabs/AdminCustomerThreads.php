@@ -587,4 +587,3 @@ class AdminCustomerThreads extends AdminTab
 	}
 }
 
-?>

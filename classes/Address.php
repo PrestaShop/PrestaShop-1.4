@@ -277,4 +277,4 @@ class AddressCore extends ObjectModel
 	}
 }
 
-?>
+

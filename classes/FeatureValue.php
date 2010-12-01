@@ -151,4 +151,4 @@ class FeatureValueCore extends ObjectModel
 	}
 }
 
-?>
+

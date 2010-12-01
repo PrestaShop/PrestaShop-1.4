@@ -595,4 +595,3 @@ class Fianetfraud extends Module
 	}
 }
 
-?>

@@ -93,4 +93,4 @@ set_error_handler('errorHandlerArtichow');
 function errorHandlerArtichow($level, $message, $file, $line) {
 	awImage::drawError($message.' in '.$file.' on line '.$line.'.');
 }
-?>
+

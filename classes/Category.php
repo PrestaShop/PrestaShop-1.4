@@ -836,4 +836,4 @@ class CategoryCore extends ObjectModel
 	
 }
 
-?>
+

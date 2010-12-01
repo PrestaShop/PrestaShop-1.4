@@ -194,4 +194,3 @@ foreach ($this->paymentModules AS $module)
 	
 }
 
-?>

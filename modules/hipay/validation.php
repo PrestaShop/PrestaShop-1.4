@@ -5,4 +5,4 @@ include(dirname(__FILE__).'/hipay.php');
 $hipay = new HiPay();
 $hipay->validation();
 
-?>
+

@@ -133,4 +133,4 @@ class AdminDb extends AdminPreferences
 	}
 }
 
-?>
+

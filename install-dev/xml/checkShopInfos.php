@@ -219,4 +219,4 @@ foreach ($error AS $key => $line)
 	echo '<field id="'.$key.'" result="'.( $line != "" ? 'fail' : 'ok').'" error="'.$line.'" />'."\n";
 echo '</shopConfig>';
 
-?>
+

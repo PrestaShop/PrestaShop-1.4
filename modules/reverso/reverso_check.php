@@ -13,4 +13,4 @@ $reverso_result = $reverso->callReverso(pSQL(Tools::getValue('phone')));
 
 echo $reverso_result;
 exit;
-?>
+

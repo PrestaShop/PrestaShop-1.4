@@ -132,4 +132,4 @@ class iAdvize extends Module
 	}
 }
 
-?>
+

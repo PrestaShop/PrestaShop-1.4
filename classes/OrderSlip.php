@@ -117,4 +117,3 @@ class OrderSlipCore extends ObjectModel
 	}
 }
 
-?>

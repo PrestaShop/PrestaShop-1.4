@@ -199,4 +199,3 @@ class CartControllerCore extends FrontController
 	}
 }
 
-?>

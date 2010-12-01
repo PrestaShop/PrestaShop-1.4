@@ -204,4 +204,4 @@ class HookCore extends ObjectModel
 	}
 }
 
-?>
+

@@ -233,4 +233,4 @@ $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action re
 $result .= $requests;
 die($result.'</action>'."\n");
 
-?>
+

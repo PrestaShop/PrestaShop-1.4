@@ -61,4 +61,3 @@ if ($ret === false)
 	die (Tools::displayError('Unable to display backup file').' "'.addslashes($backupfile).'"');
 
 
-?>

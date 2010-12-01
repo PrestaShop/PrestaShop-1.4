@@ -617,4 +617,4 @@ class Loyalty extends Module
 
 }
 
-?>
+

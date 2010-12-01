@@ -28,4 +28,3 @@ function invoice_number_set()
 	Configuration::updateValue('PS_INVOICE_NUMBER', (int)($number));
 }
 
-?>

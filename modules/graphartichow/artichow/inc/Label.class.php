@@ -585,4 +585,3 @@ class awLabel implements awPositionable {
 }
 
 registerClass('Label');
-?>

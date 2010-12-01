@@ -42,4 +42,3 @@ class HIPAY_MAPI_MultiplePayment extends HIPAY_MAPI_Payment {
 	
 	
 }
-?>

@@ -49,4 +49,4 @@ class DateRangeCore extends ObjectModel
 	}
 }
 
-?>
+

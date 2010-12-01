@@ -71,4 +71,4 @@ class AdminSubDomains extends AdminTab
 	}
 }
 
-?>
+

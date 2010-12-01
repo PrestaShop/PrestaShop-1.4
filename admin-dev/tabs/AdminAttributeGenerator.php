@@ -268,4 +268,4 @@ class AdminAttributeGenerator extends AdminTab
 	}
 }
 
-?>
+

@@ -71,4 +71,3 @@ class CompareControllerCore extends FrontController
 	}
 }
 
-?>

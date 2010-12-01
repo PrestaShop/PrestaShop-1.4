@@ -108,4 +108,3 @@ function latin1_database_to_utf8()
 		}
 	}
 }
-?>

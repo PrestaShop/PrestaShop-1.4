@@ -186,4 +186,4 @@ class AdminOrdersStates extends AdminTab
 	}
 }
 
-?>
+

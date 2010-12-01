@@ -30,4 +30,3 @@ echo '			</div>
 	</body>
 </html>';
 
-?>

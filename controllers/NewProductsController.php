@@ -31,4 +31,3 @@ class NewProductsControllerCore extends FrontController
 	}
 }
 
-?>

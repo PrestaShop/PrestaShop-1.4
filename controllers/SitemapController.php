@@ -28,4 +28,3 @@ class SitemapControllerCore extends FrontController
 	}
 }
 
-?>

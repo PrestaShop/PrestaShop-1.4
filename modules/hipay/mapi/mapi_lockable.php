@@ -21,4 +21,3 @@ class HIPAY_MAPI_lockable extends HIPAY_MAPI_XML {
 
 
 }
-?>

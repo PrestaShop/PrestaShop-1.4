@@ -81,4 +81,4 @@ if (empty($employee->bo_theme) OR !file_exists($path.$employee->bo_theme.'/admin
 	$employee->update();
 }
 
-?>
+

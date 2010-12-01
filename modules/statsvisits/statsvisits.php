@@ -138,4 +138,4 @@ class StatsVisits extends ModuleGraph
 	}
 }
 
-?>
+

@@ -121,4 +121,4 @@ class AdminTags extends AdminTab
 	}
 }
 
-?>
+

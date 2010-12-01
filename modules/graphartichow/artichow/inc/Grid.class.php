@@ -288,4 +288,3 @@ class awGrid {
 }
 
 registerClass('Grid');
-?>

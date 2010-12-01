@@ -110,4 +110,4 @@ class AdminAttachments extends AdminTab
 	}
 }
 
-?>
+

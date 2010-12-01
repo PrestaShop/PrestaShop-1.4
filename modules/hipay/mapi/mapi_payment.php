@@ -445,4 +445,3 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 
 
 }
-?>

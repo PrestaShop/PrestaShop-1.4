@@ -21,4 +21,3 @@ class	fianet_paraobject_xml
 	}
 }
 
-?>

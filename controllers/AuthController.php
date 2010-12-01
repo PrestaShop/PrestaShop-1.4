@@ -271,4 +271,4 @@ class AuthControllerCore extends FrontController
 	}
 }
 
-?>
+

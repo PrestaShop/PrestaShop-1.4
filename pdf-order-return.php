@@ -18,4 +18,3 @@ elseif ($orderReturn->state < 2)
 else
 	PDF::orderReturn($orderReturn);
 
-?>

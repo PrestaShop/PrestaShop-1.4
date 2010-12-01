@@ -122,4 +122,4 @@ class BlockAdvertising extends Module
 
 }
 
-?>
+

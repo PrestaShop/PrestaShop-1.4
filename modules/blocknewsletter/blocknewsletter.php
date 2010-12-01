@@ -224,4 +224,4 @@ class Blocknewsletter extends Module
 	}
 }
 
-?>
+

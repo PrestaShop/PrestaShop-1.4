@@ -5,4 +5,4 @@ function alter_cms_block()
 		return Db::getInstance()->execute('ALTER TABLE '._DB_PREFIX_.'cms_block` ADD `display_store` TINYINT NOT NULL DEFAULT \'1\'');
 	return true;
 }
-?>
+

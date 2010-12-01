@@ -245,4 +245,4 @@ class AdminStores extends AdminTab
 	}
 }
 
-?>
+

@@ -173,4 +173,4 @@ class StatsGeoLocation extends Module
 		return $output;
 	}
 }
-?>
+

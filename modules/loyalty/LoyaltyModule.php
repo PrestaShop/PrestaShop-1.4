@@ -213,4 +213,4 @@ class LoyaltyModule extends ObjectModel
 
 }
 
-?>
+

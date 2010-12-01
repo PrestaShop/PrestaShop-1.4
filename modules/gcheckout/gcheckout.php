@@ -163,4 +163,4 @@ class GCheckout extends PaymentModule
     }
 }
 
-?>
+

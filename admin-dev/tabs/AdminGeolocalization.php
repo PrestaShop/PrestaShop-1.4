@@ -131,4 +131,3 @@ class AdminGeolocalization extends AdminTab
 	}
 }
 
-?>

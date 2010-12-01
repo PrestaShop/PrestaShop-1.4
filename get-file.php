@@ -13,7 +13,7 @@ function displayError($msg)
 		'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
 		'Dear customer, you exceed the expiration date.' => Tools::displayError('Dear customer, you exceed the expiration date.'),
 		'You reach the maximum number of allowed downloads.' => Tools::displayError('You reach the maximum number of allowed downloads.'));
-?>
+
 <script type="text/javascript">
 <!--
 alert("<?php echo html_entity_decode($translations[$msg], ENT_QUOTES, 'utf-8'); ?>");
@@ -265,4 +265,3 @@ readfile($file);
 
 exit;
 
-?>

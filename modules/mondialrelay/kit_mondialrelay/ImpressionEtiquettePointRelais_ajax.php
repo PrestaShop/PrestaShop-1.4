@@ -41,4 +41,3 @@ $sortie.='http://www.mondialrelay.fr'.$result_mr['WSI2_GetEtiquettesResult']['UR
 }
 }
 echo ':THISTAG:'.$sortie.':THISTAG:';
-?>

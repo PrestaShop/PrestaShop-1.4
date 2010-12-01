@@ -454,4 +454,4 @@ class AdminReferrers extends AdminTab
 	}
 }
 
-?>
+

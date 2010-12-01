@@ -128,4 +128,4 @@ class Blockrss extends Module
 	}
 }
 
-?>
+

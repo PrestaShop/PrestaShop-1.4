@@ -429,4 +429,4 @@ abstract class PaymentModuleCore extends Module
 	}
 }
 
-?>
+

@@ -10,4 +10,4 @@ class AdminAddonsCatalog extends AdminTab
 	}
 }
 
-?>
+

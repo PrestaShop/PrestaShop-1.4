@@ -837,4 +837,4 @@ class Socolissimo extends Module
 	
 }
 
-?>
+

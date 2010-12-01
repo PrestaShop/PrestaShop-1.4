@@ -192,8 +192,8 @@ echo '
 echo '
 						</tbody>
 					</table>
-					<script>';
-				?>
+					<script>';?>
+				
 						$(function() {
 							$('table.permissions input.all').click(function() {
 								if($(this).is(':checked'))
@@ -277,7 +277,7 @@ echo '
 		libxml_use_internal_errors(true);
 		
 		$xml = simplexml_load_string("
-		<?xml version='1.0' encoding='utf-8'?>
+		<?xml version='1.0' encoding='utf-8'
 		<!DOCTYPE prestashop PUBLIC \"-//PRESTASHOP//DTD REST_WEBSERVICE 1.4.0.2//EN\"
 		\"http://localhost/ps/v1/trunk/tools/webservice/psws.dtd\">
 		<p:prestashop xmlns:p=\"http://prestashop.com/docs/1.4/webservice\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
@@ -957,4 +957,4 @@ echo '
 	}
 }
 
-?>
+

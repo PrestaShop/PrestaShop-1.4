@@ -443,4 +443,4 @@ class Hipay extends PaymentModule
 	}
 }
 
-?>
+

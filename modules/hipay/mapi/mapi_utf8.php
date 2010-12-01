@@ -65,4 +65,3 @@ class HIPAY_MAPI_UTF8 {
 	    return $count;
 	}
 }
-?>

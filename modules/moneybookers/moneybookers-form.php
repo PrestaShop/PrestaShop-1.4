@@ -294,4 +294,4 @@ $smarty->assign($mbParams);
 
 $smarty->display(dirname(__FILE__).'/moneybookers-form.tpl');
 
-?>
+

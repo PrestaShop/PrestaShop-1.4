@@ -141,4 +141,4 @@ class GroupCore extends ObjectModel
 	}
 }
 
-?>
+

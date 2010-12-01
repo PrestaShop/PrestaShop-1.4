@@ -71,4 +71,3 @@ class OrderReturnControllerCore extends FrontController
 	}
 }
 
-?>

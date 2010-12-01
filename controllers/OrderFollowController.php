@@ -74,4 +74,3 @@ class OrderFollowControllerCore extends FrontController
 	}
 }
 
-?>

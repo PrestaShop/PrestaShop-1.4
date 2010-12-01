@@ -357,4 +357,4 @@ class AdminModulesPositions extends AdminTab
 	}
 }
 
-?>
+

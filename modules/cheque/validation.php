@@ -22,4 +22,3 @@ $cheque->validateOrder((int)($cart->id), _PS_OS_CHEQUE_, $total, $cheque->displa
 $order = new Order($cheque->currentOrder);
 Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)($cart->id).'&id_module='.(int)($cheque->id).'&id_order='.$cheque->currentOrder.'&key='.$order->secure_key);
 
-?>

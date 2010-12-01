@@ -1600,4 +1600,4 @@ function cmpPriceDesc($a,$b)
 	return (0);
 }
 
-?>
+

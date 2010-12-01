@@ -166,4 +166,3 @@ class ReferralProgramModule extends ObjectModel
 
 }
 
-?>

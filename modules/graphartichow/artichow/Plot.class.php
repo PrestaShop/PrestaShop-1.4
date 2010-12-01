@@ -1461,4 +1461,3 @@ class awPlotGroup extends awComponentGroup {
 }
 
 registerClass('PlotGroup');
-?>

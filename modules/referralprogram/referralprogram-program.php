@@ -162,4 +162,4 @@ echo Module::display(dirname(__FILE__).'/referralprogram.php', 'referralprogram-
 
 include(dirname(__FILE__).'/../../footer.php'); 
 
-?>
+

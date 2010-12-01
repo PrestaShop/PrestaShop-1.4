@@ -3490,4 +3490,3 @@ class AdminProducts extends AdminTab
 	}
 }
 
-?>

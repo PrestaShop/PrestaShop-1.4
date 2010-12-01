@@ -105,4 +105,3 @@ recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays
 		}
 </script>';
 
-?>

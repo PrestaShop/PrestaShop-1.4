@@ -888,4 +888,4 @@ class OrderCore extends ObjectModel
 	}
 }
 
-?>
+

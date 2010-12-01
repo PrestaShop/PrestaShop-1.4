@@ -1333,4 +1333,3 @@ if(function_exists('imagecreatetruecolor') === FALSE) {
 	awImage::drawErrorFile('missing-gd2');
 }
 
-?>

@@ -2766,3 +2766,4 @@ class ProductCore extends ObjectModel
 }
 
 
+

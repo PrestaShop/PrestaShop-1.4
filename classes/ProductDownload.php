@@ -257,4 +257,4 @@ class ProductDownloadCore extends ObjectModel
 
 }
 
-?>
+

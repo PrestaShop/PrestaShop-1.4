@@ -18,4 +18,3 @@ class HIPAY_MAPI_SimplePayment extends HIPAY_MAPI_Payment {
 	}
 
 }
-?>

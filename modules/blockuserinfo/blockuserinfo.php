@@ -49,4 +49,4 @@ class BlockUserInfo extends Module
 	}
 }
 
-?>
+

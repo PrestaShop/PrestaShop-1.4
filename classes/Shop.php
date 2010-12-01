@@ -36,4 +36,4 @@ class ShopCore extends ObjectModel
 	}
 }
 
-?>
+

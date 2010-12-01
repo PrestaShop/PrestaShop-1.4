@@ -48,4 +48,3 @@ class RangeWeightCore extends ObjectModel
 	}
 }
 
-?>

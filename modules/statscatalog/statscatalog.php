@@ -215,4 +215,4 @@ class StatsCatalog extends Module
 	}
 }
 
-?>
+

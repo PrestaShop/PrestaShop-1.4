@@ -260,4 +260,3 @@ if(function_exists('putenv')) {
 	putenv('GDFONTPATH='.ARTICHOW_FONT);
 }
 
-?>

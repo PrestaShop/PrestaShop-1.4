@@ -61,4 +61,4 @@ if (is_file(_PS_THEME_DIR_.'modules/paypal/standard/redirect.tpl'))
 else
 	$smarty->display(_PS_MODULE_DIR_.$paypal->name.'/standard/redirect.tpl');
 
-?>
+

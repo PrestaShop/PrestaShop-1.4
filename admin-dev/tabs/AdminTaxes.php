@@ -197,4 +197,4 @@ class AdminTaxes extends AdminTab
 	}
 }
 
-?>
+

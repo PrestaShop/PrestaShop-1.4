@@ -175,4 +175,4 @@ foreach ($timezones as $timezone)
 $xml .= '</timezones></result>'."\n";
 
 die($xml);
-?>
+

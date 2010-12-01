@@ -189,4 +189,4 @@ class StatsData extends Module
 	}
 }
 
-?>
+

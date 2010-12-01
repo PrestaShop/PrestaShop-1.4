@@ -309,4 +309,4 @@ class BlockWishList extends Module
 		return $this->l('You need to be logged to manage your wishlist');
 	}
 }
-?>
+

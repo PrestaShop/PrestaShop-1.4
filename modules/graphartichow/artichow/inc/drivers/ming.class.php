@@ -771,4 +771,3 @@ if(function_exists('ming_useswfversion') === FALSE) {
 	awImage::drawErrorFile('missing-ming');
 }
 
-?>

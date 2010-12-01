@@ -102,4 +102,4 @@ class PageCore extends ObjectModel
 	}
 }
 
-?>
+

@@ -20,4 +20,3 @@ $order->products = OrderSlip::getOrdersSlipProducts((int)($orderSlip->id), $orde
 $ref = NULL;
 PDF::invoice($order, 'D', false, $ref, $orderSlip);
 
-?>

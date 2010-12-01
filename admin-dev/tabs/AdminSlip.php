@@ -64,4 +64,3 @@ class AdminSlip extends AdminTab
 	}
 }
 
-?>

@@ -579,4 +579,4 @@ class ProductComments extends Module
 	}
 }
 
-?>
+

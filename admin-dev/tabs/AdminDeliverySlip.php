@@ -87,4 +87,4 @@ class AdminDeliverySlip extends AdminTab
 	}
 }
 
-?>
+

@@ -331,4 +331,4 @@ class AdminAddresses extends AdminTab
 	}
 }
 
-?>
+

@@ -158,4 +158,4 @@
       $this->digital_content = true;
     }
   }
-?>
+

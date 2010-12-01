@@ -20,7 +20,7 @@ $affiliate = (Tools::getValue('ac') ? '?ac='.(int)(Tools::getValue('ac')) : '');
 // Send feed
 header("Content-Type:text/xml; charset=utf-8");
 echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-?>
+
 <rss version="2.0">
 	<channel>
 		<title><![CDATA[<?php echo Configuration::get('PS_SHOP_NAME') ?>]]></title>
@@ -53,6 +53,6 @@ echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		echo "\t\t\t<link><![CDATA[".htmlspecialchars($link->getproductLink($product['id_product'], $product['link_rewrite'], Category::getLinkRewrite((int)($product['id_category_default']), $cookie->id_lang))).$affiliate."]]></link>\n";
 		echo "\t\t</item>\n";
 	}
-?>
+
 	</channel>
 </rss>

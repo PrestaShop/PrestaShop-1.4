@@ -13,4 +13,3 @@ $module = new BirthdayPresent();
 $module->createTodaysVouchers();
 die ('OK');
 
-?>

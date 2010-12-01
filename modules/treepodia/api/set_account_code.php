@@ -18,4 +18,3 @@ if (isset($_POST['token']) AND !empty($_POST['token']))
 else
         echo 'Bad token';
 
-?>

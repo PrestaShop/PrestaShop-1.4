@@ -34,4 +34,3 @@ class AddressesControllerCore extends FrontController
 	}
 }
 
-?>

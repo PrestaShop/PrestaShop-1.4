@@ -9,4 +9,4 @@ function set_discount_category()
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'discount_category` (`id_discount`,`id_category`) VALUES ('.(int)($discount['id_discount']).','.(int)($category['id_category']).')');
 }
 
-?>
+

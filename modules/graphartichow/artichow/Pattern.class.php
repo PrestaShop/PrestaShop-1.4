@@ -94,4 +94,3 @@ abstract class awPattern {
 }
 
 registerClass('Pattern', TRUE);
-?>

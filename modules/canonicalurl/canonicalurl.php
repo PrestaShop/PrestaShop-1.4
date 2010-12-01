@@ -79,4 +79,4 @@ class canonicalUrl extends Module
 	}
 }
 
-?>
+

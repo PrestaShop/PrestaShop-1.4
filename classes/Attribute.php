@@ -166,4 +166,3 @@ class AttributeCore extends ObjectModel
 	}
 }
 
-?>

@@ -102,4 +102,4 @@ class IdentityControllerCore extends FrontController
 	}
 }
 
-?>
+

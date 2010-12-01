@@ -134,4 +134,4 @@ abstract class ModuleGridCore extends Module
 		return $this->_id_lang;
 	}
 }
-?>
+

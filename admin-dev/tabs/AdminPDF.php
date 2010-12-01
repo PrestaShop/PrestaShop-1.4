@@ -91,4 +91,3 @@ class AdminPDF extends AdminPreferences
 		$this->_displayForm('PDF', $this->_fieldsPDF, $this->l('PDF settings for the current language:').' '.$language->name, 'width2', 'pdf');
 	}
 }
-?>

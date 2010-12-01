@@ -11,4 +11,4 @@ function update_order_details()
 	}
 }
 
-?>
+

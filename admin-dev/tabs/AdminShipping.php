@@ -269,4 +269,4 @@ class AdminShipping extends AdminTab
 	}
 }
 
-?>
+

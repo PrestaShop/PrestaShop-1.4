@@ -179,4 +179,4 @@ class AdminGenerator extends AdminTab
 	}
 }
 
-?>
+

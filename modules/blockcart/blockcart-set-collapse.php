@@ -16,4 +16,4 @@ if ( isset($_POST['ajax_blockcart_display']) || isset($_GET['ajax_blockcart_disp
 	die ('ERROR : bad status setted. Only collapse or expand status of the blockcart module are available.');
 }
 else die('ERROR : No status setted.');
-?>
+

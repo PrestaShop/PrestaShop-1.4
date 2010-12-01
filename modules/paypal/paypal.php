@@ -1184,4 +1184,4 @@ class PayPal extends PaymentModule
 	}
 }
 
-?>
+

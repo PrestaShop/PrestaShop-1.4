@@ -140,4 +140,4 @@ class Reverso extends Module
 		return rtrim($to_presta, ',');
 	}
 }
-?>
+

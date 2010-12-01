@@ -55,4 +55,4 @@ class BlockPermanentLinks extends Module
 	}
 }
 
-?>
+

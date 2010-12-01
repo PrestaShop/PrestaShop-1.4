@@ -21,4 +21,3 @@ function configuration_double_cleaner()
 		FROM '._DB_PREFIX_.'configuration)');
 }
 
-?>

@@ -10,4 +10,4 @@ class AdminAppearance extends AdminThemes // extends AdminThemes only for retro-
 	}
 }
 
-?>
+

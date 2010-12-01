@@ -84,4 +84,4 @@ elseif (Tools::getValue('action') == 'dnd')
 	}
 }
 
-?>
+

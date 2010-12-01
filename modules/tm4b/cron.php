@@ -20,4 +20,3 @@ foreach ($numbers as $number)
 $sms->Send(Configuration::get('TM4B_SIM'));
 die ('OK');
 
-?>

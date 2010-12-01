@@ -64,4 +64,3 @@ class Feeder extends Module
 		return $this->display(__FILE__, 'feederHeader.tpl');
 	}
 }
-?>

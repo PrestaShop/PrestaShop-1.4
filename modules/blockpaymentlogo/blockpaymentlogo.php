@@ -110,4 +110,4 @@ class BlockPaymentLogo extends Module
 
 }
 
-?>
+

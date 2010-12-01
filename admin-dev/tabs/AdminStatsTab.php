@@ -235,4 +235,4 @@ abstract class AdminStatsTab extends AdminPreferences
 	}
 }
 
-?>
+

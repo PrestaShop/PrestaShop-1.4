@@ -54,4 +54,4 @@ class SearchEngineCore extends ObjectModel
 	}
 }
 
-?>
+

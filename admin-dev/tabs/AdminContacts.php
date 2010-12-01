@@ -96,4 +96,4 @@ class AdminContacts extends AdminTab
 	}
 }
 
-?>
+

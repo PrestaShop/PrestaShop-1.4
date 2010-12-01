@@ -65,4 +65,4 @@ class AdminZones extends AdminTab
 	}
 }
 
-?>
+

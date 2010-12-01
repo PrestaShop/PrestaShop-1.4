@@ -55,4 +55,3 @@ class CustomerThreadCore extends ObjectModel
 	}	
 }
 
-?>

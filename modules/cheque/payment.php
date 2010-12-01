@@ -15,4 +15,4 @@ echo $cheque->execPayment($cart);
 
 include_once(dirname(__FILE__).'/../../footer.php');
 
-?>
+

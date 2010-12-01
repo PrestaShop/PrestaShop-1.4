@@ -228,4 +228,4 @@ class GraphGoogleChart extends ModuleGraphEngine
 	}
 }
 
-?>
+

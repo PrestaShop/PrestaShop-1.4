@@ -572,4 +572,4 @@ class CustomerCore extends ObjectModel
 	}
 }
 
-?>
+

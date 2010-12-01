@@ -1645,4 +1645,4 @@ class AdminTranslations extends AdminTab
 		return isset($themes) ? $themes : array();
 	}
 }
-?>
+

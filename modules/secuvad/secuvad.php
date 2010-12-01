@@ -1304,4 +1304,4 @@ class Secuvad extends Module
 	}
 }
 
-?>
+

@@ -69,4 +69,3 @@ elseif (isset($_GET['deliveryslips']))
 		PDF::multipleDelivery($slips);
 }
 
-?>

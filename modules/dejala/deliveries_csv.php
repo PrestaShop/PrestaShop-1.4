@@ -65,4 +65,3 @@
 					$smarty->display(dirname(__FILE__).'/dejala_deliveries_csv.tpl');
 				}
 		}
-?>

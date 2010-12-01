@@ -10,4 +10,3 @@ function moduleReinstaller($moduleName, $force = false)
 	return false;
 }
 
-?>

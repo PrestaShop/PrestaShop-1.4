@@ -6,4 +6,3 @@ abstract class CarrierModuleCore extends Module
 	abstract function getOrderShippingCostExternal($params);	
 }
 
-?>

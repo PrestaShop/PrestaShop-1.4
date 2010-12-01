@@ -82,4 +82,3 @@ $fonts = array(
 	'TuffyItalic'
 );
 
-?>

@@ -507,4 +507,4 @@ class MailAlerts extends Module
 	}
 }
 
-?>
+

@@ -82,4 +82,4 @@ else if ($option == 3)
 	echo insert_coords($id_lang, $id_country, $x, $y);
 }
 
-?>
+

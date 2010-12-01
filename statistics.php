@@ -46,4 +46,3 @@ elseif ($_POST['type'] == 'pagetime')
 	Connection::setPageTime($tokenArray[0], $tokenArray[1], substr($tokenArray[2], 0, 19), (int)($_POST['time']));
 }
 
-?>

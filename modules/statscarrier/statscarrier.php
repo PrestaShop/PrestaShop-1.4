@@ -90,4 +90,4 @@ class StatsCarrier extends ModuleGraph
 	}
 }
 
-?>
+

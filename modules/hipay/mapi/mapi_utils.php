@@ -71,4 +71,3 @@ class HIPAY_MAPI_UTILS {
 		return $array;
 	}
 }
-?>

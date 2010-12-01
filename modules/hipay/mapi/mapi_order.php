@@ -368,4 +368,3 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		parent::__construct();
 	}
 }
-?>

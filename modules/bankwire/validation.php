@@ -20,4 +20,3 @@ $mailVars = array(
 $bankwire->validateOrder($cart->id, _PS_OS_BANKWIRE_, $total, $bankwire->displayName, NULL, $mailVars, $currency->id);
 $order = new Order($bankwire->currentOrder);
 Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.$cart->id.'&id_module='.$bankwire->id.'&id_order='.$bankwire->currentOrder.'&key='.$order->secure_key);
-?>

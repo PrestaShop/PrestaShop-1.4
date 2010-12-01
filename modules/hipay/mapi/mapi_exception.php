@@ -124,4 +124,3 @@ class MAPI_Exception extends Exception {
 		return $this->value;
 	}
 }
-?>

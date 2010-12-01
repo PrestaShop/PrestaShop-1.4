@@ -227,4 +227,4 @@ class StatsPersonalInfos extends ModuleGraph
 	}
 }
 
-?>
+

@@ -383,5 +383,5 @@ class ProductControllerCore extends FrontController
 	}
 }
 
-?>
+
 

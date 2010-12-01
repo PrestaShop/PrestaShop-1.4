@@ -195,4 +195,4 @@ $_LANG['You have to create a database, help available in readme_en.txt'] = 'Debe
 $_LANG['Discover your store'] = 'Descubra su tienda';
 $_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Esta opción se puede bloquear si su configuración de correo electrónico está mal, gracias a desactivarla si usted no puede moverse a la siguiente etapa.';
 
-?>
+

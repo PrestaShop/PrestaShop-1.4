@@ -107,4 +107,4 @@ class StoreCore extends ObjectModel
 	}
 }
 
-?>
+

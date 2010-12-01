@@ -80,4 +80,3 @@ class CmsControllerCore extends FrontController
 	}
 }
 
-?>

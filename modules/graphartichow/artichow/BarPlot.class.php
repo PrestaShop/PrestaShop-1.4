@@ -361,4 +361,4 @@ class awBarPlot extends awPlot implements awLegendable {
 }
 
 registerClass('BarPlot');
-?>
+

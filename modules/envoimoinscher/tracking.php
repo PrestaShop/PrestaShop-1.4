@@ -82,4 +82,3 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 else
 d(Tools::displayError('Hack attempt'));
 
-?>

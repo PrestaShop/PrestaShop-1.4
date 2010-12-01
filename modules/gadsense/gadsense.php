@@ -88,4 +88,3 @@ class GAdsense extends Module
 	}
 
 }
-?>

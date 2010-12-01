@@ -85,4 +85,4 @@ class AdminImageResize extends AdminTab
 		}
 }
 
-?>
+

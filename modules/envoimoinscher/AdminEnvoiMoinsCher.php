@@ -285,4 +285,4 @@ class AdminEnvoiMoinsCher extends AdminTab
 	}
 }
 
-?>
+

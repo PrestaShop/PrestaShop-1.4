@@ -10,4 +10,3 @@ $cart->id_lang = (int)($cookie->id_lang);
 $blockCart = new BlockCart();
 echo $blockCart->hookAjaxCall(array('cookie' => $cookie, 'cart' => $cart));
 
-?>

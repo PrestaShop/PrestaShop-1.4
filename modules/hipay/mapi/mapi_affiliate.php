@@ -227,4 +227,3 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 		parent::__construct();
 	}
 }
-?>

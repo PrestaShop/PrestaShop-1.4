@@ -231,4 +231,4 @@ class CMSCore extends ObjectModel
 		return $arr_return;
 	}
 }
-?>
+

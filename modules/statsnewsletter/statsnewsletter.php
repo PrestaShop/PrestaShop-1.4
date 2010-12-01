@@ -128,4 +128,4 @@ class StatsNewsletter extends ModuleGraph
 	}
 }
 
-?>
+

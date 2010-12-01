@@ -1248,4 +1248,3 @@ class Dejala extends Module
 	}
 }
 
-?>

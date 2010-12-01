@@ -272,4 +272,3 @@ $montant = sprintf("%01.2f",$montant);
     
     }
 }
-?>

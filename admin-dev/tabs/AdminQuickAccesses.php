@@ -74,4 +74,4 @@ class AdminQuickAccesses extends AdminTab
 	}
 }
 
-?>
+

@@ -417,4 +417,4 @@ class AdminPerformance extends AdminTab
 	}
 }
 
-?>
+

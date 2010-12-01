@@ -30,4 +30,3 @@ if ($option) $graph->setOption($option, $layers);
 $graph->create($render, $type, $width, $height, $layers);
 $graph->draw();
 
-?>

@@ -56,4 +56,4 @@ class AdminSearchEngines extends AdminTab
 	}
 }
 
-?>
+

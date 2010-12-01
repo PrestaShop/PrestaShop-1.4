@@ -8,4 +8,3 @@ define('URl_SAC_GETVALIDSTACK', '/engine/get_validstack.cgi');
 define('URl_SAC_GETALERT', '/engine/get_alert.cgi');
 
 define('FIANET_MAX_DELIVERY_TIME', 23);
-?>

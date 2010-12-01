@@ -94,4 +94,4 @@ class ConnectionsSourceCore extends ObjectModel
 	}
 }
 
-?>
+

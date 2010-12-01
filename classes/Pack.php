@@ -157,4 +157,4 @@ class PackCore extends Product
 	}
 }
 
-?>
+

@@ -361,4 +361,4 @@ class AdminLanguages extends AdminTab
 	}
 }
 
-?>
+

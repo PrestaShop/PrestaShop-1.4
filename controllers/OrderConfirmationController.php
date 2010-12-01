@@ -42,4 +42,3 @@ class OrderConfirmationControllerCore extends FrontController
 	}
 }
 
-?>

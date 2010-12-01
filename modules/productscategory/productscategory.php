@@ -153,4 +153,4 @@ class productsCategory extends Module
 		return $this->display(__FILE__, 'productscategory.tpl');
 	}
 }
-?>
+

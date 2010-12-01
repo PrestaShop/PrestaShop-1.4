@@ -69,4 +69,3 @@ function get_delivery_date($delivery_times)
 	return (date("Y-m-d", $date));
 }
 
-?>

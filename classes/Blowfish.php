@@ -450,4 +450,4 @@ class BlowfishCore extends Crypt_Blowfish
 	}
 }
 
-?>
+

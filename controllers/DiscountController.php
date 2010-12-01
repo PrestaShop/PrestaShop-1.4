@@ -31,4 +31,3 @@ class DiscountControllerCore extends FrontController
 	}
 }
 
-?>

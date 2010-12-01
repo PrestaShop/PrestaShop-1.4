@@ -8,4 +8,3 @@ class PageNotFoundControllerCore extends FrontController
 	}
 }
 
-?>

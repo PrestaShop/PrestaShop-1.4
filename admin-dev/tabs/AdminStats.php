@@ -17,4 +17,4 @@ class AdminStats extends AdminStatsTab
 {
 }
 
-?>
+

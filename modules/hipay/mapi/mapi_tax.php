@@ -166,4 +166,3 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 		parent::__construct();
 	}
 }
-?>

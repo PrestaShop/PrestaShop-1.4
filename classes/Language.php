@@ -500,4 +500,4 @@ class LanguageCore extends ObjectModel
 	}
 }
 
-?>
+

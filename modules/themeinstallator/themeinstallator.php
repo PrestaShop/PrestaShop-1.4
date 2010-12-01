@@ -1232,4 +1232,3 @@ class ThemeInstallator extends Module
 		</form>';
 	}
 }
-?>

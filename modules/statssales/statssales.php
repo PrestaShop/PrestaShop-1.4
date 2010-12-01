@@ -203,4 +203,4 @@ class StatsSales extends ModuleGraph
 	}
 }
 
-?>
+

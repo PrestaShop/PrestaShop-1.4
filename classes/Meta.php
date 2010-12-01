@@ -173,4 +173,4 @@ class MetaCore extends ObjectModel
 		AND id_lang = '.(int)($new_id_lang));
 	}
 }
-?>
+

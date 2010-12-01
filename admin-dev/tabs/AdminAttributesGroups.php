@@ -208,4 +208,4 @@ class AdminAttributesGroups extends AdminTab
 	}
 }
 
-?>
+

@@ -274,4 +274,4 @@ class ImageCore extends ObjectModel
 	}
 }
 
-?>
+

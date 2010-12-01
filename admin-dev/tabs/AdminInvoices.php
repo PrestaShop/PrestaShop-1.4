@@ -142,4 +142,4 @@ class AdminInvoices extends AdminTab
 	}
 }
 
-?>
+

@@ -120,4 +120,4 @@ class AdminMeta extends AdminTab
 	}
 }
 
-?>
+

@@ -185,4 +185,4 @@ class GuestCore extends ObjectModel
 	}
 }
 
-?>
+

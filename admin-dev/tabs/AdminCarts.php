@@ -282,4 +282,4 @@ class AdminCarts extends AdminTab
 	}
 }
 
-?>
+

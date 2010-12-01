@@ -112,4 +112,3 @@ if (!empty($errors) AND isset($_POST['custom']))
 		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />', array(), NULL, false, $cart_secure[1]);
 }
 
-?>

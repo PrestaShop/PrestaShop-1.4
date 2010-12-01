@@ -63,4 +63,4 @@ class BlockMyAccount extends Module
 	}
 }
 
-?>
+

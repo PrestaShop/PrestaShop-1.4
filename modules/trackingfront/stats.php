@@ -10,4 +10,3 @@ if (!$tf->active)
 $tf->postProcess();
 echo $tf->isLogged() ? $tf->displayAccount() : $tf->displayLogin();
 
-?>

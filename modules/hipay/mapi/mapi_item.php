@@ -34,4 +34,3 @@ class HIPAY_MAPI_Item extends HIPAY_MAPI_lockable {
 	}
 
 }
-?>

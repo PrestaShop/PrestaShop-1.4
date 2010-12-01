@@ -152,4 +152,4 @@ class Secuvad_connection
     		$this->secuvad_h->secuvad_log('secuvad_connection.php::send_transaction() '."\n\t".' Error: '.$rep);
 	}
 }
-?>
+

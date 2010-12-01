@@ -205,4 +205,4 @@ abstract class ModuleGraphCore extends Module
 	}
 }
 
-?>
+

@@ -132,7 +132,9 @@ else
 					</div>
 	';
 }
+
 ?>
+
 <script type="text/javascript">
 <!--
 if (document.getElementById('email')) document.getElementById('email').focus();
@@ -147,4 +149,4 @@ echo '
 	</body>
 </html>';
 
-?>
+

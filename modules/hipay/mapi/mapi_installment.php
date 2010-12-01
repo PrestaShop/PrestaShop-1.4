@@ -206,4 +206,3 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 		parent::__construct();
 	}
 }
-?>

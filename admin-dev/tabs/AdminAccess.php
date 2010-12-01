@@ -121,4 +121,4 @@ class AdminAccess extends AdminTab
 	}
 }
 
-?>
+

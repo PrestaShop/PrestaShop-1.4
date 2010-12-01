@@ -143,4 +143,3 @@ class AttributeGroupCore extends ObjectModel
 	}
 }
 
-?>

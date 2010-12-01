@@ -75,4 +75,4 @@ class BlockSpecials extends Module
 	}
 }
 
-?>
+

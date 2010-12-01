@@ -204,4 +204,4 @@ class Newsletter extends Module
 		return $this->_html;
     }
 }
-?>
+

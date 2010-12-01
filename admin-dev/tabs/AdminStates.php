@@ -154,4 +154,4 @@ class AdminStates extends AdminTab
 	}
 }
 
-?>
+

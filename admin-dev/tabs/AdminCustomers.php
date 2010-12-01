@@ -704,4 +704,4 @@ class AdminCustomers extends AdminTab
 	}
 }
 
-?>
+

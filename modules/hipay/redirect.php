@@ -13,4 +13,4 @@ if (!$cookie->isLogged())
 $hipay = new HiPay();
 $hipay->payment();
 
-?>
+
