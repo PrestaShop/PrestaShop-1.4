@@ -482,7 +482,7 @@ class Secuvad extends Module
 			if (Tools::getValue('civilite') != 'M'
 				AND Tools::getValue('civilite') != 'Mme'
 				AND Tools::getValue('civilite') != 'Mlle')
-				$errors[] = $this->l('Civility type is invalid');
+				$errors[] = $this->l('Title is invalid');
 			if (Tools::getValue('nom') == NULL OR !Validate::isName(Tools::getValue('nom')))
 				$errors[] = $this->l('Last name is invalid');
 			if (Tools::getValue('prenom') == NULL OR !Validate::isName(Tools::getValue('prenom')))
@@ -773,7 +773,7 @@ class Secuvad extends Module
 	private function _setFormRegister($lock = false)
 	{
 		$this->_html .= '
-		<h3>'.$this->l('In order to use Secuvad module, thank to fill this form, click on "Send" and on "Register"').'</h3>
+		<h3>'.$this->l('In order to use the Secuvad module, please fill in this form, then click on "Register"').'</h3>
 		<form method="POST" action="'.($lock ? $this->_getSecuvadRegisterURL() : $_SERVER['REQUEST_URI']).'">';
 		if ($lock)
 		{
@@ -867,7 +867,7 @@ class Secuvad extends Module
 			<fieldset style="width:430px;">
 				<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Company contact').'</legend>
 				
-				<label for="civilite">'.$this->l('Civility:').'</label>
+				<label for="civilite">'.$this->l('Title:').'</label>
 				<div class="margin-form">
 					<select name="civilite" id="'.($lock ? '' : 'civilite').'" '.($lock ? 'disabled="disabled"' : '').'>
 						<option value="M" '.(Tools::getValue('civilite') == 'M' ? 'selected' : '').'>'.$this->l('Mr').'</option>

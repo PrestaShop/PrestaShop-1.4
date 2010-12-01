@@ -48,7 +48,7 @@ class BirthdayPresent extends Module
 				<div class="margin-form">
 					<img src="../img/admin/enabled.gif" /> <input type="radio" name="bp_active" value="1"'.(Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
 					<img src="../img/admin/disabled.gif" /> <input type="radio" name="bp_active" value="0"'.(!Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
-					<p style="clear: both;">'.$this->l('Additionnaly, you have to set a CRON rule which calls the file').'<br />http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/birthdaypresent/cron.php '.$this->l('everyday').'</p>
+					<p style="clear: both;">'.$this->l('Additionally, you have to set a CRON rule which calls the file').'<br />http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/birthdaypresent/cron.php '.$this->l('every day').'</p>
 				</div>
 				<label>'.$this->l('Type').'</label>
 				<div class="margin-form">
@@ -64,7 +64,7 @@ class BirthdayPresent extends Module
 					<input type="text" size="15" name="discount_value" value="'.Configuration::get('BIRTHDAY_DISCOUNT_VALUE').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
 					<p style="clear: both;">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
 				</div>
-				<label>'.$this->l('Minimal order').'</label>
+				<label>'.$this->l('Minimum order').'</label>
 				<div class="margin-form">
 					<input type="text" size="15" name="minimal_order" value="'.Configuration::get('BIRTHDAY_MINIMAL_ORDER').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
 					<p style="clear: both;">'.$this->l('The minimal order amount needed to use the voucher').'</p>
@@ -77,7 +77,7 @@ class BirthdayPresent extends Module
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Develop clients\' loyalty').'</h2>
-			<p>'.$this->l('Offering a present to a client is a means of securing its loyalty.').'</p>
+			<p>'.$this->l('Offering a present to a client is a means of securing his loyalty.').'</p>
 			<h3>'.$this->l('What should you do?').'</h3>
 			<p>
 				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop its loyalty, in other words to make him come back in your webshop.').' <br />

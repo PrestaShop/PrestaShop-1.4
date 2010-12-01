@@ -83,7 +83,7 @@ class BankWire extends PaymentModule
 	{
 		$this->_html .= '<img src="../modules/bankwire/bankwire.jpg" style="float:left; margin-right:15px;"><b>'.$this->l('This module allows you to accept payments by bank wire.').'</b><br /><br />
 		'.$this->l('If the client chooses this payment mode, the order will change its status into a \'Waiting for payment\' status.').'<br />
-		'.$this->l('Therefore, you will need to manually confirm the order as soon as you receive a wire..').'<br /><br /><br />';
+		'.$this->l('Therefore, you will need to manually confirm the order as soon as you receive a wire.').'<br /><br /><br />';
 	}
 
 	private function _displayForm()
