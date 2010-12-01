@@ -43,11 +43,13 @@
 		<h3>{l s='Pages'}</h3>
 		<div class="tree_top"><a href="{$categoriescmsTree.link}">{$categoriescmsTree.name|escape:'htmlall':'UTF-8'}</a></div>
 		<ul class="tree">
-			{foreach from=$categoriescmsTree.children item=child name=sitemapCmsTree}
-				{if $child.children|@count > 0 || $child.cms|@count > 0}
-					{include file="$tpl_dir./category-cms-tree-branch.tpl" node=$child}
-				{/if}
-			{/foreach}
+			{if isset($categoriescmsTree.children)}
+				{foreach from=$categoriescmsTree.children item=child name=sitemapCmsTree}
+					{if $child.children|@count > 0 || $child.cms|@count > 0}
+						{include file="$tpl_dir./category-cms-tree-branch.tpl" node=$child}
+					{/if}
+				{/foreach}
+			{/if}
 			{foreach from=$categoriescmsTree.cms item=cms name=cmsTree}
 				<li><a href="{$cms.link|escape:'htmlall':'UTF-8'}" title="{$cms.meta_title|escape:'htmlall':'UTF-8'}">{$cms.meta_title|escape:'htmlall':'UTF-8'}</a></li>
 			{/foreach}
