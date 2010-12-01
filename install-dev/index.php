@@ -181,7 +181,7 @@ if ($lm->getIncludeTradFilename())
 <body>
 
 <div id="noJavaScript">
-	<?php echo lang('This application need you to activate Javascript to correctly work.')
+	<?php echo lang('This application need you to activate Javascript to correctly work.'); ?>
 </div>
 
 <div id="container">
@@ -233,14 +233,14 @@ if ($lm->getIncludeTradFilename())
 		<h3><?php echo lang('Choose the installer language:')?></h3>
 		<form id="formSetInstallerLanguage" action="<?php $_SERVER['REQUEST_URI']; ?>" method="get">
 			<ul id="langList" style="line-height: 20px;">
-			<?php foreach ($lm->getAvailableLangs() as $lang):
+			<?php foreach ($lm->getAvailableLangs() as $lang): ?>
 				<li><input onclick="setInstallerLanguage()" type="radio" value="<?php echo $lang['id'] ?>" <?php echo ( $lang['id'] == $lm->getIdSelectedLang() ) ? "checked=\"checked\"" : '' ?> id="lang_<?php echo $lang['id'] ?>" name="language" style="vertical-align: middle; margin-right: 0;" /><label for="lang_<?php echo $lang['id'] ?>">
-				<?php foreach ($lang->flags->url as $url_flag):
+				<?php foreach ($lang->flags->url as $url_flag): ?>
 					<img src="<?php echo $url_flag ?>" alt="<?php echo $lang['label'] ?>" style="vertical-align: middle;" />
-				<?php endforeach 
+				<?php endforeach;  ?>
 				<?php echo $lang['label'] ?></label></li>
 				
-			<?php endforeach
+			<?php endforeach; ?>
 			</ul>
 		</form>
 		<h3 class="no-margin"><?php echo lang('Did you know?'); ?></h3>
@@ -263,10 +263,10 @@ if ($lm->getIncludeTradFilename())
 			<h3><?php echo lang('Required set-up. Please make sure the following checklist items are true.')?></h3>
 			
 			<p>
-				<?php echo lang('If you have any questions, please visit our '); 
+				<?php echo lang('If you have any questions, please visit our '); ?>
 				<a href="http://www.prestashop.com/wiki/Getting_Started/ " target="_blank"><?php echo lang('Documentation Wiki'); ?></a>
-				<?php echo lang('and/or'); 
-				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); 
+				<?php echo lang('and/or'); ?>
+				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
 			<h3 id="resultConfig" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
@@ -491,9 +491,9 @@ if ($lm->getIncludeTradFilename())
 					<?php echo lang('Optional languages'); ?><br/>
 					<select style="width:300px;" id="aLList" multiple="multiple" size="4">
 					<?php foreach ($lm->getAvailableLangs() as $lang){
-						if ( $lang['id'] != $lm->getIdSelectedLang() AND $lang['id']  != "0" ){
+						if ( $lang['id'] != $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
 							<option value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
-					<?php }} 
+					<?php }} ?>
 					</select>
 				</div>
 				
@@ -507,18 +507,18 @@ if ($lm->getIncludeTradFilename())
 					<select style="width:240px;" id="wLList" size="4">
 						<option value="en">English (English)</option>
 						<?php foreach ($lm->getAvailableLangs() as $lang){
-							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){
+							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
 								<option value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
-						<?php }} 
+						<?php }} ?>
 						
 					</select><br/>
 					<label for="dLList"><?php echo lang('Shop\'s default language'); ?></label><br/>
 					<select style="width:180px;" id="dLList">
 						<option selected="selected" value="en">English (English)</option>
 						<?php foreach ($lm->getAvailableLangs() as $lang){
-							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){
+							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
 								<option selected="selected" value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
-						<?php }} 
+						<?php }} ?>
 					</select>
 				</div>
 			</form>
@@ -569,13 +569,13 @@ if ($lm->getIncludeTradFilename())
 				<div id="resultEnd"></div>
 			</div>
 			<?php
-			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)):
+			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
 			
 			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
-			endif;
+			endif; ?>
 			
 		</div>
 		
@@ -596,10 +596,10 @@ if ($lm->getIncludeTradFilename())
 			<h3><?php echo lang('Required set-up. Please make sure the following checklist items are true.'); ?></h3>
 			
 			<p>
-				<?php echo lang('If you have any questions, please visit our '); 
+				<?php echo lang('If you have any questions, please visit our '); ?>
 				<a href="http://www.prestashop.com/doc/doku.php" target="_blank"><?php echo lang('Documentation Wiki'); ?></a>
-				<?php echo lang('and/or'); 
-				<a href="http://www.prestashop.com/forum/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); 
+				<?php echo lang('and/or'); ?>
+				<a href="http://www.prestashop.com/forum/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 			
 			<h3 id="resultConfig_update" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
@@ -660,13 +660,13 @@ if ($lm->getIncludeTradFilename())
 				</a>
 			</div>
 			<?php
-			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)):
+			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
 			
 			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
-			endif;
+			endif; ?>
 			
 		</div>
 	
