@@ -107,25 +107,25 @@ class MailAlerts extends Module
 			$message = $this->l('No message');
 
 		$itemsTable = '';
-		foreach ($params['cart']->getProducts() AS $key => $product)
+		foreach ($params['order']->getProducts() AS $key => $product)
 		{
-			$unit_price = Product::getPriceStatic($product['id_product'], (bool)(Product::getTaxCalculationMethod() == PS_TAX_INC), $product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity']);
-			$price = Product::getPriceStatic($product['id_product'], (bool)(Product::getTaxCalculationMethod() == PS_TAX_INC), $product['id_product_attribute'], 6, NULL, false, true, $product['cart_quantity']);
+			$unit_price = $product['product_price_wt'];
+			$price = $product['total_price'];
 			$itemsTable .=
 				'<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
-					<td style="padding:0.6em 0.4em;">'.$product['reference'].'</td>
-					<td style="padding:0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+					<td style="padding:0.6em 0.4em;">'.$product['product_reference'].'</td>
+					<td style="padding:0.6em 0.4em;"><strong>'.$product['product_name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
 					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($unit_price, $currency, false, false).'</td>
-					<td style="padding:0.6em 0.4em; text-align:center;">'.(int)($product['cart_quantity']).'</td>
-					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($price * $product['cart_quantity']), $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:center;">'.(int)($product['product_quantity']).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false, false).'</td>
 				</tr>';
 		}
-		foreach ($params['cart']->getDiscounts() AS $discount)
+		foreach ($params['order']->getDiscounts() AS $discount)
 		{
 			$itemsTable .=
 			'<tr style="background-color:#EBECEE;">
 					<td colspan="4" style="padding:0.6em 0.4em; text-align:right;">'.$this->l('Voucher code:').' '.$discount['name'].'</td>
-					<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($discount['value_real'], $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($discount['value'], $currency, false, false).'</td>
 			</tr>';
 		}
 		if ($delivery->id_state)
@@ -134,6 +134,8 @@ class MailAlerts extends Module
 			$invoice_state = new State((int)($invoice->id_state));
 
 		// Filling-in vars for email
+		$template = 'new_order';
+		$subject = $this->l('New order');
 		$templateVars = array(
 			'{firstname}' => $customer->firstname,
 			'{lastname}' => $customer->lastname,
@@ -176,7 +178,7 @@ class MailAlerts extends Module
 		);
 		$iso = Language::getIsoById((int)($id_lang));
 		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
-			Mail::Send($id_lang, 'new_order', Mail::l('New order'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
+			Mail::Send($id_lang, $template, $subject, $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
 	}
 
 	public function hookProductOutOfStock($params)
