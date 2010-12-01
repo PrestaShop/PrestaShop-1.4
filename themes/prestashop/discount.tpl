@@ -51,7 +51,7 @@
 					<img src="{$img_dir}icon/no.gif" alt="{l s='No'}" class="icon" />
 				{/if}
 			</td>
-			<td class="discount_expiration_date">{dateFormat date=$discount.date_to}</td>
+			<td class="discount_expiration_date">{dateFormat date=$discountDetail.date_to}</td>
 		</tr>
 	{/foreach}
 	</tbody>
