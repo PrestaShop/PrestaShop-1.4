@@ -64,7 +64,6 @@ $webservice_call = true;
 $old_error_handler = set_error_handler("psErrorHandler");
 include(dirname(__FILE__).'/../config/config.inc.php');
 $display_errors = strtolower(ini_get('display_errors')) != 'off';
-header('X-Powered-By: PrestaShop Webservice');
 ini_set('html_errors', 'off');
 $output = true;
 $return_code = 'HTTP/1.1 200 OK';
@@ -72,6 +71,7 @@ $ws_url = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
 $dtd = Tools::getHttpHost(true).__PS_BASE_URI__.'tools/webservice/psws.dtd';//A METTRE SUR LE .com ;) //non car dynamique en fonction des modules
 $doc_url = 'http://prestashop.com/docs/1.4/webservice';//A METTRE SUR LE .com ;) //non car dynamique en fonction des modules
 $invalid_key = false;
+$authenticated = false;
 
 // http auth with a key
 if (!Configuration::get('PS_WEBSERVICE'))
@@ -115,6 +115,9 @@ else
 	}
 	else
 	{
+		// only now we ca say the access is authenticated
+		$authenticated = true;
+		
 		//get call informations
 		$method = $_SERVER['REQUEST_METHOD'];
 		$url = explode('/', $_GET['url']);
@@ -122,7 +125,7 @@ else
 		unset($url_params['url']);
 
 		//check method validity
-		if (!in_array($method, array('GET', 'POST', 'PUT', 'DELETE')))
+		if (!in_array($method, array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 		{
 			$errors[] = 'Method '.$method.' is not valid';
 			$return_code = 'HTTP/1.1 405 Method Not Allowed';

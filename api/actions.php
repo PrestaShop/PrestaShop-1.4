@@ -183,6 +183,7 @@ if (!$errors)
 		{
 			//get the matching resource(s)
 			case 'GET':
+			case 'HEAD':
 				if ($resourceParameters['objectsNodeName'] != 'resources')
 				{
 					//construct SQL filter

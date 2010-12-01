@@ -139,7 +139,7 @@ class WebserviceCore extends ObjectModel
 			{
 				$permissions = array();
 				$resources = Webservice::getResources();
-				$methods = array('GET', 'PUT', 'POST', 'DELETE');
+				$methods = array('GET', 'PUT', 'POST', 'DELETE', 'HEAD');
 				foreach ($permissionsToSet as $resourceName => $resource_methods)
 					if (in_array($resourceName, array_keys($resources)))
 						foreach ($resource_methods as $methodName => $value)

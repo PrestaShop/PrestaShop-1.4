@@ -31,7 +31,7 @@ class AdminWebservice extends AdminTab
 		
 		$this->optionTitle = $this->l('Configuration');
 		$this->_fieldsOptions = array(
-		'PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT and DELETE are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'),
+		'PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT, DELETE and HEAD are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'),
 		);
 	
 		parent::__construct();
@@ -164,6 +164,7 @@ class AdminWebservice extends AdminTab
 								<th width="50">'.$this->l('Modify (PUT)').'</th>
 								<th width="50">'.$this->l('Add (POST)').'</th>
 								<th width="50">'.$this->l('Delete (DELETE)').'</th>
+								<th width="50">'.$this->l('Fast view (HEAD)').'</th>
 							</tr>
 							
 						</thead>
@@ -175,6 +176,7 @@ class AdminWebservice extends AdminTab
 								<th><input type="checkbox" class="all_put put " /></th>
 								<th><input type="checkbox" class="all_post post " /></th>
 								<th><input type="checkbox" class="all_delete delete" /></th>
+								<th><input type="checkbox" class="all_head head" /></th>
 							</tr>
 						';
 $ressources = Webservice::getResources();
@@ -188,6 +190,7 @@ echo '
 								<td><input type="checkbox" class="put" name="resources['.$resourceName.'][PUT]" '.(isset($permissions[$resourceName]) && in_array('PUT', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
 								<td><input type="checkbox" class="post" name="resources['.$resourceName.'][POST]" '.(isset($permissions[$resourceName]) && in_array('POST', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
 								<td><input type="checkbox" class="delete" name="resources['.$resourceName.'][DELETE]" '.(isset($permissions[$resourceName]) && in_array('DELETE', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
+								<td><input type="checkbox" class="head" name="resources['.$resourceName.'][HEAD]" '.(isset($permissions[$resourceName]) && in_array('HEAD', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
 							</tr>';
 echo '
 						</tbody>
@@ -197,9 +200,9 @@ echo '
 						$(function() {
 							$('table.permissions input.all').click(function() {
 								if($(this).is(':checked'))
-									$(this).parent().parent().find('input.get:not(:checked), input.put:not(:checked), input.post:not(:checked), input.delete:not(:checked)').click();
+									$(this).parent().parent().find('input.get:not(:checked), input.put:not(:checked), input.post:not(:checked), input.delete:not(:checked), input.head:not(:checked)').click();
 								else
-									$(this).parent().parent().find('input.get:checked, input.put:checked, input.post:checked, input.delete:checked').click();
+									$(this).parent().parent().find('input.get:checked, input.put:checked, input.post:checked, input.delete:checked, input.head:checked').click();
 							});
 							$('table.permissions .all_get').click(function() {
 								if($(this).is(':checked'))
@@ -224,6 +227,12 @@ echo '
 									$(this).parent().parent().parent().find('input.delete:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.delete:checked').click();
+							});
+							$('table.permissions .all_head').click(function() {
+								if($(this).is(':checked'))
+									$(this).parent().parent().parent().find('input.head:not(:checked)').click();
+								else
+									$(this).parent().parent().parent().find('input.head:checked').click();
 							});
 						});
 				<?php echo '
@@ -806,7 +815,7 @@ echo '
 		{
 			$data = call_user_func(array('AdminWebservice','config_case'), Tools::getValue('case'), $resourceName, $resource);
 			$data['method'] = strtoupper($data['method']);
-			if (!in_array($data['method'], array('GET', 'POST', 'PUT', 'DELETE')))
+			if (!in_array($data['method'], array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 				$errors[] = 'Method '.$data['method'].' is not valid';
 		}
 

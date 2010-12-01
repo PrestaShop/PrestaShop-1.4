@@ -109,6 +109,11 @@ function getXmlStringViewOfObject($resourceParameters, $object = null, $schema =
 header($return_code);
 restore_error_handler();
 
+header('X-Powered-By: PrestaShop Webservice');
+
+// set this header only now (avoid hackers happiness...)
+if ($authenticated)
+	header('PSWS-Version: '._PS_VERSION_);
 
 if ($output)
 {
@@ -129,6 +134,7 @@ if ($output)
 	{
 		switch ($method)
 		{
+			case 'HEAD':
 			case 'GET':
 				// list entities
 				if (!isset($url[1]) || !strlen($url[1]))
@@ -175,6 +181,7 @@ if ($output)
 										put="'.(in_array('PUT', $permissions[$resourceName]) ? 'true' : 'false').'"
 										post="'.(in_array('POST', $permissions[$resourceName]) ? 'true' : 'false').'"
 										delete="'.(in_array('DELETE', $permissions[$resourceName]) ? 'true' : 'false').'"
+										head="'.(in_array('HEAD', $permissions[$resourceName]) ? 'true' : 'false').'"
 									>
 									<description>'.$resource['description'].'</description>
 									<schema type="blank" xlink:href="'.$ws_url.$resourceName.'?schema=blank" />
@@ -202,6 +209,6 @@ if ($output)
 	$output_string .= '</prestashop>'."\n";
 	
 	header('Content-Sha1: '.sha1($output_string));
-	
+	//header('Content-Sha1: '.sha1($output_string));
 	echo $output_string;
 }
