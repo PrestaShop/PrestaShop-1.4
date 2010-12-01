@@ -324,7 +324,7 @@ class ToolsCore
 	*/
 	static public function dateFormat($params, &$smarty)
 	{
-		return self::displayDate($params['date'], $smarty->ps_language->id, $params['full']);
+		return self::displayDate($params['date'], $smarty->ps_language->id, (isset($params['full']) ? $params['full'] : false));
 	}
 
 	/**
