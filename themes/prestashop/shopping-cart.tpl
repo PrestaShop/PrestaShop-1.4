@@ -250,7 +250,7 @@
 </div>
 {/if}
 {$HOOK_SHOPPING_CART}
-{if ($carrier->id AND !$virtualCart) OR $delivery->id OR $invoice->id}
+{if ($carrier->id AND !isset($virtualCart)) OR $delivery->id OR $invoice->id}
 <div class="order_delivery">
 	{if $delivery->id}
 	<ul id="delivery_address" class="address item">
@@ -274,7 +274,7 @@
 		<li class="address_country">{$invoice->country|escape:'htmlall':'UTF-8'} {if $invoice_state}({$invoice_state|escape:'htmlall':'UTF-8'}){/if}</li>
 	</ul>
 	{/if}
-	{if $carrier->id AND !$virtualCart}
+	{if $carrier->id AND !isset($virtualCart)}
 	<div id="order_carrier">
 		<h4>{l s='Carrier:'}</h4>
 		{if isset($carrierPicture)}<img src="{$img_ship_dir}{$carrier->id}.jpg" alt="{l s='Carrier'}" />{/if}
