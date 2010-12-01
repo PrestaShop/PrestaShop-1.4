@@ -22,7 +22,7 @@
 </div>
 {/if}
 
-{if $followup}
+{if isset($followup)}
 <p class="bold">{l s='Click the following link to track delivery of your order'}</p>
 <a href="{$followup|escape:'htmlall':'UTF-8'}">{$followup|escape:'htmlall':'UTF-8'}</a>
 {/if}
@@ -120,7 +120,7 @@
 		</tfoot>
 		<tbody>
 		{foreach from=$products item=product name=products}
-			{if !$product.deleted}
+			{if !isset($product.deleted)}
 				{assign var='productId' value=$product.product_id}
 				{assign var='productAttributeId' value=$product.product_attribute_id}
 				{if isset($customizedDatas.$productId.$productAttributeId)}{assign var='productQuantity' value=$product.product_quantity-$product.customizationQuantityTotal}{else}{assign var='productQuantity' value=$product.product_quantity}{/if}
