@@ -2017,7 +2017,7 @@ class AdminProducts extends AdminTab
 		echo '	
 			<hr class="clear"/>
 			<br />
-				<table cellpadding="5" style="width: 450px; float: left; margin-right: 20px; border-right: 1px solid #E0D0B1;">
+				<table cellpadding="5" style="width: 50%; float: left; margin-right: 20px; border-right: 1px solid #E0D0B1;">
 					<tr>
 						<td class="col-left">'.$this->l('Name:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
@@ -2068,7 +2068,7 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 				</table>
-				<table cellpadding="5" style="width: 426px; float: left; margin-left: 10px;">
+				<table cellpadding="5" style="width: 40%; float: left; margin-left: 10px;">
 					<tr>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Status:').'</td>
 						<td style="padding-bottom:5px;">
