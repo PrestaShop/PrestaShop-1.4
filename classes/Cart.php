@@ -161,7 +161,7 @@ class CartCore extends ObjectModel
 			if ($product['rate'] == 0)
 				$product['rate'] = 1;
 			$totalProducts_moy += $product['total_wt'];
-			$ratioTax += $product['total_wt'] * Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], floatval($product['rate']));
+			$ratioTax += $product['total_wt'] * Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], (float)($product['rate']));
 		}
 		if ($totalProducts_moy > 0)
 			return $ratioTax / $totalProducts_moy;
@@ -308,7 +308,7 @@ class CartCore extends ObjectModel
 		foreach ($result AS $k => $row)
 		{
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
-				$row['ecotax'] = floatval($row['ecotax_attr']);
+				$row['ecotax'] = (float)($row['ecotax_attr']);
 			$row['stock_quantity'] = (int)($row['quantity']);
 			// for compatibility with 1.2 themes
 			$row['quantity'] = (int)($row['cart_quantity']);
@@ -318,7 +318,7 @@ class CartCore extends ObjectModel
 			{
 				$row['price'] = Product::getPriceStatic((int)($row['id_product']), false, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = Product::getPriceStatic((int)($row['id_product']), true, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
-				$row['total_wt'] = Tools::ps_round($row['price'] * floatval($row['cart_quantity']) * (1 + floatval($row['rate']) / 100), 2);
+				$row['total_wt'] = Tools::ps_round($row['price'] * (float)($row['cart_quantity']) * (1 + (float)($row['rate']) / 100), 2);
 				$row['total'] = $row['price'] * (int)($row['cart_quantity']);
 			}
 			else
@@ -330,7 +330,7 @@ class CartCore extends ObjectModel
 				$row['total_wt'] = $row['price_wt'] * (int)($row['cart_quantity']);
 				$row['total'] = Tools::ps_round($row['price'] * (int)($row['cart_quantity']), 2);
 			}
-			$row['reduction_applies'] = $specificPriceOutput AND floatval($specificPriceOutput['reduction']);
+			$row['reduction_applies'] = $specificPriceOutput AND (float)($specificPriceOutput['reduction']);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic((int)($row['id_product']));
@@ -709,8 +709,8 @@ class CartCore extends ObjectModel
 				$total_price = $price * (int)($product['cart_quantity']);
 				if ($withTaxes)
 				{
-					$total_price = Tools::ps_round($total_price * (1 + floatval(
-						Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], floatval($product['rate']))
+					$total_price = Tools::ps_round($total_price * (1 + (float)(
+						Tax::getProductTaxRate((int)$product['id_product'], $country_id, (int)$product['id_tax'], (float)($product['rate']))
 						) / 100), 2);		
 					Product::applyEcotax($total_price, $product['ecotax'], true, ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				}
@@ -732,11 +732,11 @@ class CartCore extends ObjectModel
 		$wrapping_fees = 0;
 		if ($this->gift)
 		{
-			$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+			$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
 			if ($withTaxes)
 			{
 				$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-				$wrapping_fees *= 1 + ((floatval($wrapping_fees_tax->rate) / 100));
+				$wrapping_fees *= 1 + (((float)($wrapping_fees_tax->rate) / 100));
 			}
 			$wrapping_fees = Tools::convertPrice(Tools::ps_round($wrapping_fees, 2), Currency::getCurrencyInstance((int)($this->id_currency)));
 		}
@@ -770,7 +770,7 @@ class CartCore extends ObjectModel
 				/* Secondly applying all vouchers to the correct amount */
 				foreach ($discounts AS $discount)
 					if ($discount->id_discount_type != 3)
-						$order_total -= Tools::ps_round(floatval($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, (int)($withTaxes))), 2);
+						$order_total -= Tools::ps_round((float)($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, (int)($withTaxes))), 2);
 			}
 		}
 		
@@ -779,7 +779,7 @@ class CartCore extends ObjectModel
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
 		
-		return Tools::ps_round(floatval($order_total), 2);
+		return Tools::ps_round((float)($order_total), 2);
 	}
 
 	/**
@@ -939,11 +939,11 @@ class CartCore extends ObjectModel
 		// Free fees
 		$free_fees_price = 0;
 		if (isset($configuration['PS_SHIPPING_FREE_PRICE']))
-			$free_fees_price = Tools::convertPrice(floatval($configuration['PS_SHIPPING_FREE_PRICE']), Currency::getCurrencyInstance((int)($this->id_currency)));
+			$free_fees_price = Tools::convertPrice((float)($configuration['PS_SHIPPING_FREE_PRICE']), Currency::getCurrencyInstance((int)($this->id_currency)));
 		$orderTotalwithDiscounts = $this->getOrderTotal(true, 4);
-		if ($orderTotalwithDiscounts >= floatval($free_fees_price) AND floatval($free_fees_price) > 0)
+		if ($orderTotalwithDiscounts >= (float)($free_fees_price) AND (float)($free_fees_price) > 0)
 			return $shipping_cost;
-		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $this->getTotalWeight() >= floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) AND floatval($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
+		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $this->getTotalWeight() >= (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) AND (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
 			return $shipping_cost;
 
 		// Get shipping cost using correct method
@@ -975,7 +975,7 @@ class CartCore extends ObjectModel
 			}
 		// Adding handling charges
 		if (isset($configuration['PS_SHIPPING_HANDLING']) AND $carrier->shipping_handling)
-			$shipping_cost += floatval($configuration['PS_SHIPPING_HANDLING']);
+			$shipping_cost += (float)($configuration['PS_SHIPPING_HANDLING']);
 		
 		$shipping_cost = Tools::convertPrice($shipping_cost, Currency::getCurrencyInstance((int)($this->id_currency)));
 		
@@ -1002,7 +1002,7 @@ class CartCore extends ObjectModel
 		if (isset($carrierTax))
 			$shipping_cost *= 1 + ($carrierTax / 100);
 		
-		return floatval(Tools::ps_round(floatval($shipping_cost), 2));
+		return (float)(Tools::ps_round((float)($shipping_cost), 2));
     }
 
 	/**
@@ -1032,7 +1032,7 @@ class CartCore extends ObjectModel
 		WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
 		AND cp.`id_cart` = '.(int)($this->id));
 
-		$this->_totalWeight = round(floatval($result['nb']) + floatval($result2['nb']), 3);
+		$this->_totalWeight = round((float)($result['nb']) + (float)($result2['nb']), 3);
 
 		return $this->_totalWeight;
 	}
@@ -1142,7 +1142,7 @@ class CartCore extends ObjectModel
 		if ($total_tax < 0)
 			$total_tax = 0;
 			
-		if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->id_currency))))
+		if ($free_ship = Tools::convertPrice((float)(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->id_currency))))
 		{
 		    $discounts = $this->getDiscounts();
 		    $total_free_ship =  $free_ship - ($this->getOrderTotal(true, 1) + $this->getOrderTotal(true, 2));

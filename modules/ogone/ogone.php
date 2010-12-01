@@ -124,7 +124,7 @@ class Ogone extends PaymentModule
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');
 		$ogoneParams['OPERATION'] = 'SAL';
 		$ogoneParams['ORDERID'] = pSQL($params['cart']->id.'_'.$params['cart']->secure_key);
-		$ogoneParams['AMOUNT'] = number_format(Tools::convertPrice(floatval(number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '')), $currency), 2, '.', '') * 100;
+		$ogoneParams['AMOUNT'] = number_format(Tools::convertPrice((float)(number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '')), $currency), 2, '.', '') * 100;
 		$ogoneParams['CURRENCY'] = $currency->iso_code;
 		$ogoneParams['LANGUAGE'] = $lang->iso_code.'_'.strtoupper($lang->iso_code);
 		$ogoneParams['CN'] = $customer->lastname;

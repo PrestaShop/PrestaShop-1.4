@@ -31,7 +31,7 @@ class GroupReductionCore extends ObjectModel
 		parent::validateFields();
 		$fields['id_group'] = (int)($this->id_group);
 		$fields['id_category'] = (int)($this->id_category);
-		$fields['reduction'] = floatval($this->reduction);
+		$fields['reduction'] = (float)($this->reduction);
 		return $fields;
 	}
 
@@ -55,7 +55,7 @@ class GroupReductionCore extends ObjectModel
 		, false);
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_group_reduction_cache` (`id_product`, `id_group`, `reduction`) VALUES ';
 		while ($row = Db::getInstance()->nextRow($resource))
-			$query .= '('.(int)($row['id_product']).', '.(int)($this->id_group).', '.floatval($this->reduction).'), ';
+			$query .= '('.(int)($row['id_product']).', '.(int)($this->id_group).', '.(float)($this->reduction).'), ';
 		return Db::getInstance()->Execute(rtrim($query, ', '));
 	}
 

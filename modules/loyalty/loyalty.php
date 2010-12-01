@@ -148,8 +148,8 @@ class Loyalty extends Module
 			if (!sizeof($this->_errors))
 			{
 				Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $this->voucherCategories(Tools::getValue('categoryBox')));
-				Configuration::updateValue('PS_LOYALTY_POINT_VALUE', floatval(Tools::getValue('point_value')));
-				Configuration::updateValue('PS_LOYALTY_POINT_RATE', floatval(Tools::getValue('point_rate')));
+				Configuration::updateValue('PS_LOYALTY_POINT_VALUE', (float)(Tools::getValue('point_value')));
+				Configuration::updateValue('PS_LOYALTY_POINT_RATE', (float)(Tools::getValue('point_rate')));
 				Configuration::updateValue('PS_LOYALTY_NONE_AWARD', (int)(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
 				$this->loyaltyStateValidation->id_order_state = (int)(Tools::getValue('id_order_state_validation'));
 				$this->loyaltyStateCancel->id_order_state = (int)(Tools::getValue('id_order_state_cancel'));
@@ -234,11 +234,11 @@ class Loyalty extends Module
 				
 				<label>'.$this->l('Ratio').'</label>
 				<div class="margin-form">
-					<input type="text" size="2" id="point_rate" name="point_rate" value="'.floatval(Configuration::get('PS_LOYALTY_POINT_RATE')).'" /> '.$currency->sign.'
+					<input type="text" size="2" id="point_rate" name="point_rate" value="'.(float)(Configuration::get('PS_LOYALTY_POINT_RATE')).'" /> '.$currency->sign.'
 					<label for="point_rate" class="t"> = '.$this->l('1 reward point').'.</label>
 					<br />
 					<label for="point_value" class="t">'.$this->l('1 point = ').'</label>
-					<input type="text" size="2" name="point_value" id="point_value" value="'.floatval(Configuration::get('PS_LOYALTY_POINT_VALUE')).'" /> '.$currency->sign.'
+					<input type="text" size="2" name="point_value" id="point_value" value="'.(float)(Configuration::get('PS_LOYALTY_POINT_VALUE')).'" /> '.$currency->sign.'
 					<label for="point_value" class="t">'.$this->l('for the discount').'.</label>
 				</div>
 				<div class="clear"></div>
@@ -464,7 +464,7 @@ class Loyalty extends Module
 			$totalPrice += $result['ttc'] * $detail['product_quantity'];
 		}
 		
-		$canceledTotal = floor($totalPrice / floatval(Configuration::get('PS_LOYALTY_POINT_RATE')));
+		$canceledTotal = floor($totalPrice / (float)(Configuration::get('PS_LOYALTY_POINT_RATE')));
 		if ($canceledTotal > $loyalty->points)
 			$canceledTotal = $loyalty->points;
 				

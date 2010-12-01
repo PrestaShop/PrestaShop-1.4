@@ -39,7 +39,7 @@ class TaxCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['rate'] = floatval($this->rate);
+		$fields['rate'] = (float)($this->rate);
 		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
@@ -177,7 +177,7 @@ class TaxCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = ts.`id_tax`)
 			WHERE `id_state` = '.(int)($id_state).
 			($active == 1 ? ' AND t.`active` = 1' : ''));
-		return $tax ? floatval($tax['rate']) : false;
+		return $tax ? (float)($tax['rate']) : false;
 	}
 
 	/**
@@ -274,7 +274,7 @@ class TaxCore extends ObjectModel
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `id_tax`
 			FROM `'._DB_PREFIX_.'tax`
-			WHERE `rate` = '.floatval($rate).
+			WHERE `rate` = '.(float)($rate).
 			($active == 1 ? ' AND `active` = 1' : ''));
 		return $tax ? (int)($tax['id_tax']) : false;
 	}
@@ -300,7 +300,7 @@ class TaxCore extends ObjectModel
 		$rate = Tax::getProductCountryTaxRate((int)($id_product), intval($id_country));
 
 		if (!$rate)
-			$rate = Tax::getApplicableTaxRate((int)($id_tax), floatval($product_tax), (int)($id_address));
+			$rate = Tax::getApplicableTaxRate((int)($id_tax), (float)($product_tax), (int)($id_address));
 	
 		return $rate;
 	}

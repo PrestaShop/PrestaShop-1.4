@@ -109,14 +109,14 @@ abstract class PaymentModuleCore extends Module
 			$order->gift_message = $cart->gift_message;
 			$currency = new Currency($order->id_currency);
 			$order->conversion_rate = $currency->conversion_rate;
-			$amountPaid = !$dont_touch_amount ? Tools::ps_round(floatval($amountPaid), 2) : $amountPaid;
+			$amountPaid = !$dont_touch_amount ? Tools::ps_round((float)($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
-			$order->total_products = floatval($cart->getOrderTotal(false, 1));
-			$order->total_products_wt = floatval($cart->getOrderTotal(true, 1));
-			$order->total_discounts = floatval(abs($cart->getOrderTotal(true, 2)));
-			$order->total_shipping = floatval($cart->getOrderShippingCost());
-			$order->total_wrapping = floatval(abs($cart->getOrderTotal(true, 6)));
-			$order->total_paid = floatval(Tools::ps_round(floatval($cart->getOrderTotal(true, 3)), 2));
+			$order->total_products = (float)($cart->getOrderTotal(false, 1));
+			$order->total_products_wt = (float)($cart->getOrderTotal(true, 1));
+			$order->total_discounts = (float)(abs($cart->getOrderTotal(true, 2)));
+			$order->total_shipping = (float)($cart->getOrderShippingCost());
+			$order->total_wrapping = (float)(abs($cart->getOrderTotal(true, 6)));
+			$order->total_paid = (float)(Tools::ps_round((float)($cart->getOrderTotal(true, 3)), 2));
 			$order->invoice_date = '0000-00-00 00:00:00';
 			$order->delivery_date = '0000-00-00 00:00:00';
 			// Amount paid by customer is not the right one -> Status = payment error
@@ -202,7 +202,7 @@ abstract class PaymentModuleCore extends Module
 						else
 							$id_country = Country::getDefaultCountryId();
 					
-						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), (int)($id_country), (int)($product['id_tax']), floatval($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), (int)($id_country), (int)($product['id_tax']), (float)($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 					}
 
 					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTaxRate((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
@@ -216,19 +216,19 @@ abstract class PaymentModuleCore extends Module
 						\''.pSQL($product['name'].((isset($product['attributes']) AND $product['attributes'] != NULL) ? ' - '.$product['attributes'] : '')).'\',
 						'.(int)($product['cart_quantity']).',
 						'.$quantityInStock.',
-						'.floatval(Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice)).',
-						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
-						'.floatval(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
-						'.floatval(Group::getReduction((int)($order->id_customer))).',
+						'.(float)(Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice)).',
+						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
+						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
+						'.(float)(Group::getReduction((int)($order->id_customer))).',
 						'.$quantityDiscountValue.',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
 						'.(empty($product['upc']) ? 'NULL' : '\''.pSQL($product['upc']).'\'').',
 						'.(empty($product['reference']) ? 'NULL' : '\''.pSQL($product['reference']).'\'').',
 						'.(empty($product['supplier_reference']) ? 'NULL' : '\''.pSQL($product['supplier_reference']).'\'').',
-						'.floatval($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',
+						'.(float)($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',
 						\''.(empty($tax_rate) ? '' : pSQL($product['tax'])).'\',
-						'.floatval($tax_rate).',
-						'.floatval($product['ecotax']).',
+						'.(float)($tax_rate).',
+						'.(float)($product['ecotax']).',
 						'.(float)$ecotaxRate.',
 						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',
 						\''.pSQL($deadline).'\',

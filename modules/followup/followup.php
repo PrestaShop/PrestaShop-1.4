@@ -63,7 +63,7 @@ class Followup extends Module
 		/* Save settings */
 		if (Tools::isSubmit('submitFollowUp'))	
 			foreach ($this->confKeys AS $c)
-				Configuration::updateValue($c, floatval(Tools::getValue($c)));
+				Configuration::updateValue($c, (float)(Tools::getValue($c)));
 		
 		/* Init */
 		$conf = Configuration::getMultiple($this->confKeys);
@@ -258,7 +258,7 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_1', 'PS_FOLLOW_UP_DAYS_1'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(1, floatval($conf['PS_FOLLOW_UP_AMOUNT_1']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_1']).' day')), $this->l('Discount for your cancelled cart'));				
+				$voucher = $this->createDiscount(1, (float)($conf['PS_FOLLOW_UP_AMOUNT_1']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_1']).' day')), $this->l('Discount for your cancelled cart'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_1'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_1'], '{voucher_num}' => $voucher->name);
@@ -285,7 +285,7 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_2', 'PS_FOLLOW_UP_DAYS_2'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(2, floatval($conf['PS_FOLLOW_UP_AMOUNT_2']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_2']).' day')), $this->l('Thanks for your order'));				
+				$voucher = $this->createDiscount(2, (float)($conf['PS_FOLLOW_UP_AMOUNT_2']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_2']).' day')), $this->l('Thanks for your order'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_2'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_2'], '{voucher_num}' => $voucher->name);
@@ -306,7 +306,7 @@ class Followup extends Module
 		WHERE o.valid = 1 AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) <= o.date_add AND cu.id_customer NOT IN
 		(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 3)
 		GROUP BY o.id_customer
-		HAVING total >= '.floatval(Configuration::get('PS_FOLLOW_UP_THRESHOLD_3')));
+		HAVING total >= '.(float)(Configuration::get('PS_FOLLOW_UP_THRESHOLD_3')));
 		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -314,7 +314,7 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_3', 'PS_FOLLOW_UP_DAYS_3'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(3, floatval($conf['PS_FOLLOW_UP_AMOUNT_3']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_3']).' day')), $this->l('You are one of our best customers'));				
+				$voucher = $this->createDiscount(3, (float)($conf['PS_FOLLOW_UP_AMOUNT_3']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_3']).' day')), $this->l('You are one of our best customers'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_3'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_3'], '{voucher_num}' => $voucher->name);
@@ -345,7 +345,7 @@ class Followup extends Module
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_4', 'PS_FOLLOW_UP_DAYS_4'));
 		foreach ($emails AS $email)
 		{
-				$voucher = $this->createDiscount(4, floatval($conf['PS_FOLLOW_UP_AMOUNT_4']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_4']).' day')), $this->l('We miss you'));				
+				$voucher = $this->createDiscount(4, (float)($conf['PS_FOLLOW_UP_AMOUNT_4']), (int)($email['id_customer']), strftime('%Y-%m-%d', strtotime('+'.(int)($conf['PS_FOLLOW_UP_DAYS_4']).' day')), $this->l('We miss you'));				
 				if ($voucher !== false)
 				{
 					$templateVars = array('{email}' => $email['email'], '{lastname}' => $email['lastname'], '{firstname}' => $email['firstname'], '{amount}' => $conf['PS_FOLLOW_UP_AMOUNT_4'], '{days}' => $conf['PS_FOLLOW_UP_DAYS_4'], '{days_threshold}' => (int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')), '{voucher_num}' => $voucher->name);
@@ -359,7 +359,7 @@ class Followup extends Module
 	{
 		$discount = new Discount();
 		$discount->id_discount_type = 1;
-		$discount->value = floatval($amount);
+		$discount->value = (float)($amount);
 		$discount->id_customer = (int)($id_customer);
 		$discount->date_to = $dateValidity;
 		$discount->date_from = date('Y-m-d H:i:s');

@@ -41,7 +41,7 @@ class StoresControllerCore extends FrontController
 					
 				$stores = Db::getInstance()->ExecuteS('
 				SELECT s.*, cl.name country, st.iso_code state,
-				('.(int)($multiplicator).' * acos(cos(radians('.floatval(Tools::getValue('latitude')).')) * cos(radians(latitude)) * cos(radians(longitude) - radians('.floatval(Tools::getValue('longitude')).')) + sin(radians('.floatval(Tools::getValue('latitude')).')) * sin(radians(latitude)))) distance
+				('.(int)($multiplicator).' * acos(cos(radians('.(float)(Tools::getValue('latitude')).')) * cos(radians(latitude)) * cos(radians(longitude) - radians('.(float)(Tools::getValue('longitude')).')) + sin(radians('.(float)(Tools::getValue('latitude')).')) * sin(radians(latitude)))) distance
 				FROM '._DB_PREFIX_.'store s
 				LEFT JOIN '._DB_PREFIX_.'country_lang cl ON (cl.id_country = s.id_country)
 				LEFT JOIN '._DB_PREFIX_.'state st ON (st.id_state = s.id_state)
@@ -89,8 +89,8 @@ class StoresControllerCore extends FrontController
 					$newnode->setAttribute('phone', $store['phone']);
 					$newnode->setAttribute('id_store', (int)($store['id_store']));
 					$newnode->setAttribute('has_store_picture', file_exists(_PS_STORE_IMG_DIR_.(int)($store['id_store']).'.jpg'));
-					$newnode->setAttribute('lat', floatval($store['latitude']));
-					$newnode->setAttribute('lng', floatval($store['longitude']));
+					$newnode->setAttribute('lat', (float)($store['latitude']));
+					$newnode->setAttribute('lng', (float)($store['longitude']));
 					
 					if (isset($store['distance']))
 						$newnode->setAttribute('distance', (int)($store['distance']));

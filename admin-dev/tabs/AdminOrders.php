@@ -911,11 +911,11 @@ class AdminOrders extends AdminTab
 		$total = 0;
 		foreach($this->_list AS $item)
 			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
-				$total += floatval($item['total_paid']);
+				$total += (float)($item['total_paid']);
 			else
 			{
 				$currency = new Currency((int)($item['id_currency']));
-				$total += Tools::ps_round(floatval($item['total_paid']) / floatval($currency->conversion_rate), 2);
+				$total += Tools::ps_round((float)($item['total_paid']) / (float)($currency->conversion_rate), 2);
 			}
 		return $total;
 	}

@@ -14,7 +14,7 @@ if (!$id_order = $pp->getOrder($transaction_id))
 $order = new Order((int)($id_order));
 if (!Validate::isLoadedObject($order) OR !$order->id)
 	die('Invalid order');
-if (!$amount = floatval(Tools::getValue('mc_gross')) OR $amount != $order->total_paid)
+if (!$amount = (float)(Tools::getValue('mc_gross')) OR $amount != $order->total_paid)
 	die('Incorrect amount');
 
 if (!$status = strval(Tools::getValue('payment_status')))

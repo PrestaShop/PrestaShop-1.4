@@ -48,7 +48,7 @@ class DeliveryCore extends ObjectModel
 		$fields['id_range_price'] = (int)($this->id_range_price);
 		$fields['id_range_weight'] = (int)($this->id_range_weight);
 		$fields['id_zone'] = (int)($this->id_zone);
-		$fields['price'] = floatval($this->price);
+		$fields['price'] = (float)($this->price);
 		
 		return $fields;
 	}	

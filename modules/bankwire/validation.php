@@ -10,7 +10,7 @@ if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_addr
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
 $currency = new Currency((int)(isset($_POST['currency_payement']) ? $_POST['currency_payement'] : $cookie->id_currency));
-$total = floatval($cart->getOrderTotal(true, 3));
+$total = (float)($cart->getOrderTotal(true, 3));
 $mailVars = array(
 	'{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
 	'{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),

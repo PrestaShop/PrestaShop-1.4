@@ -329,7 +329,7 @@ class PayPal extends PaymentModule
 		$products = $order->getProducts();
 		$amt = $products[(int)($order_detail->id)]['product_price_wt'] * (int)($_POST['cancelQuantity'][(int)($order_detail->id)]);
 		
-		$response = $this->_makeRefund($id_transaction, floatval($amt));
+		$response = $this->_makeRefund($id_transaction, (float)($amt));
 		$message = $this->l('Cancel products result:').'<br>';
 		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
@@ -350,7 +350,7 @@ class PayPal extends PaymentModule
 		$currency = new Currency((int)($id_currency));
 		$iso_currency = $currency->iso_code;
 		$token = $cookie->paypal_token;
-		$total = floatval($cart->getOrderTotal(true, 3));
+		$total = (float)($cart->getOrderTotal(true, 3));
 		$paymentType = Configuration::get('PAYPAL_CAPTURE') == 1 ? 'Authorization' : 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);
 		$bn = ($type == 'express' ? 'ECS' : 'ECM');
@@ -414,7 +414,7 @@ class PayPal extends PaymentModule
 		}
 
 		// Call payment validation method
-		$this->validateOrder($id_cart, $id_order_state, floatval($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency);
+		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency);
 		
 		// Clean cookie
 		unset($cookie->paypal_token);
@@ -937,7 +937,7 @@ class PayPal extends PaymentModule
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`)
 			');
-			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Partial&AMT='.floatval($amt).'&CURRENCYCODE='.urlencode(strtoupper($iso_currency));
+			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Partial&AMT='.(float)($amt).'&CURRENCYCODE='.urlencode(strtoupper($iso_currency));
 		}
 		$paypalLib = new PaypalLib();
 		return $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'RefundTransaction', $request);
@@ -978,13 +978,13 @@ class PayPal extends PaymentModule
 		$amt = 0.00;
 		foreach ($products as $product)
 			if ($product['product_quantity_refunded'] == 0)
-				$amt += floatval($product['total_price']);
-		$amt += floatval($order->total_shipping);
+				$amt += (float)($product['total_price']);
+		$amt += (float)($order->total_shipping);
 		// check if total or partial
 		if ($order->total_products_wt == $amt)
 			$response = $this->_makeRefund($id_transaction);
 		else
-			$response = $this->_makeRefund($id_transaction, floatval($amt));
+			$response = $this->_makeRefund($id_transaction, (float)($amt));
 		$message = $this->l('Refund operation result:').'<br>';
 		foreach ($response as $k => $value)
 			$message .= $k.': '.$value.'<br>';
@@ -1021,7 +1021,7 @@ class PayPal extends PaymentModule
 		
 		$order = new Order((int)($id_order));
 		$currency = new Currency((int)($order->id_currency));
-		$request = '&AUTHORIZATIONID='.urlencode($id_transaction).'&AMT='.floatval($order->total_paid).'&CURRENCYCODE='.$currency->iso_code.'&COMPLETETYPE=Complete';
+		$request = '&AUTHORIZATIONID='.urlencode($id_transaction).'&AMT='.(float)($order->total_paid).'&CURRENCYCODE='.$currency->iso_code.'&COMPLETETYPE=Complete';
 		$paypalLib = new PaypalLib();
 		$response = $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoCapture', $request);
 		$message = $this->l('Capture operation result:').'<br>';

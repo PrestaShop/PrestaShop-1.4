@@ -1500,7 +1500,7 @@ FileETag INode MTime Size
 			  if (is_float($json))
 			  {
 			    // Always use "." for floats.
-			    return floatval(str_replace(",", ".", strval($json)));
+			    return (float)(str_replace(",", ".", strval($json)));
 			  }
 			
 			  if (is_string($json))
@@ -1584,18 +1584,18 @@ FileETag INode MTime Size
 /* Externalized because of a bug in PHP 5.1.6 when inside an object */
 function cmpPriceAsc($a,$b)
 {
-	if (floatval($a['price_tmp']) < floatval($b['price_tmp']))
+	if ((float)($a['price_tmp']) < (float)($b['price_tmp']))
 		return (-1);
-	elseif (floatval($a['price_tmp']) > floatval($b['price_tmp']))
+	elseif ((float)($a['price_tmp']) > (float)($b['price_tmp']))
 		return (1);
 	return (0);
 }
 
 function cmpPriceDesc($a,$b)
 {
-	if (floatval($a['price_tmp']) < floatval($b['price_tmp']))
+	if ((float)($a['price_tmp']) < (float)($b['price_tmp']))
 		return (1);
-	elseif (floatval($a['price_tmp']) > floatval($b['price_tmp']))
+	elseif ((float)($a['price_tmp']) > (float)($b['price_tmp']))
 		return (-1);
 	return (0);
 }

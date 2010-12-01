@@ -35,8 +35,8 @@ class BirthdayPresent extends Module
 		{
 			Configuration::updateValue('BIRTHDAY_ACTIVE', (int)(Tools::getValue('bp_active')));
 			Configuration::updateValue('BIRTHDAY_DISCOUNT_TYPE', (int)(Tools::getValue('id_discount_type')));
-			Configuration::updateValue('BIRTHDAY_DISCOUNT_VALUE', floatval(Tools::getValue('discount_value')));
-			Configuration::updateValue('BIRTHDAY_MINIMAL_ORDER', floatval(Tools::getValue('minimal_order')));
+			Configuration::updateValue('BIRTHDAY_DISCOUNT_VALUE', (float)(Tools::getValue('discount_value')));
+			Configuration::updateValue('BIRTHDAY_MINIMAL_ORDER', (float)(Tools::getValue('minimal_order')));
 			Tools::redirectAdmin($currentIndex.'&configure=birthdaypresent&token='.Tools::getValue('token').'&conf=4');
 		}
 		

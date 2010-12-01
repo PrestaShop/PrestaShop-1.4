@@ -614,9 +614,9 @@ class AdminProducts extends AdminTab
 						$specificPrice->id_currency = (int)($id_currencies[$key]);
 						$specificPrice->id_country = (int)($id_countries[$key]);
 						$specificPrice->id_group = (int)($id_groups[$key]);
-						$specificPrice->price = floatval($prices[$key]);
+						$specificPrice->price = (float)($prices[$key]);
 						$specificPrice->from_quantity = (int)($from_quantities[$key]);
-						$specificPrice->reduction = floatval($reduction_types[$key] == 'percentage' ? ($reductions[$key] / 100) : $reductions[$key]);
+						$specificPrice->reduction = (float)($reduction_types[$key] == 'percentage' ? ($reductions[$key] / 100) : $reductions[$key]);
 						$specificPrice->reduction_type = !$reductions[$key] ? 'amount' : $reduction_types[$key];
 						$specificPrice->from = !$froms[$key] ? '0000-00-00 00:00:00' : $froms[$key];
 						$specificPrice->to = !$tos[$key] ? '0000-00-00 00:00:00' : $tos[$key];
@@ -640,7 +640,7 @@ class AdminProducts extends AdminTab
 				$id_group = Tools::getValue('sp_id_group');
 				$price = Tools::getValue('sp_price');
 				$from_quantity = Tools::getValue('sp_from_quantity');
-				$reduction = floatval(Tools::getValue('sp_reduction'));
+				$reduction = (float)(Tools::getValue('sp_reduction'));
 				$reduction_type = !$reduction ? 'amount' : Tools::getValue('sp_reduction_type');
 				$from = Tools::getValue('sp_from');
 				$to = Tools::getValue('sp_to');
@@ -652,9 +652,9 @@ class AdminProducts extends AdminTab
 					$specificPrice->id_currency = (int)($id_currency);
 					$specificPrice->id_country = (int)($id_country);
 					$specificPrice->id_group = (int)($id_group);
-					$specificPrice->price = floatval($price);
+					$specificPrice->price = (float)($price);
 					$specificPrice->from_quantity = (int)($from_quantity);
-					$specificPrice->reduction = floatval($reduction_type == 'percentage' ? $reduction / 100 : $reduction);
+					$specificPrice->reduction = (float)($reduction_type == 'percentage' ? $reduction / 100 : $reduction);
 					$specificPrice->reduction_type = $reduction_type;
 					$specificPrice->from = !$from ? '0000-00-00 00:00:00' : $from;
 					$specificPrice->to = !$to ? '0000-00-00 00:00:00' : $to;
@@ -1457,9 +1457,9 @@ class AdminProducts extends AdminTab
 
 	private function _getFinalPrice($specificPrice, $productPrice, $taxRate)
 	{
-		$price = Tools::ps_round(floatval($specificPrice['price']) ? $specificPrice['price'] : $productPrice, 2);
-		if (!floatval($specificPrice['reduction']))
-			return floatval($specificPrice['price']);
+		$price = Tools::ps_round((float)($specificPrice['price']) ? $specificPrice['price'] : $productPrice, 2);
+		if (!(float)($specificPrice['reduction']))
+			return (float)($specificPrice['price']);
 		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction'] / (1 + $taxRate / 100)) : ($price - $price * $specificPrice['reduction']);
 	}
 
@@ -1559,15 +1559,15 @@ class AdminProducts extends AdminTab
 			echo '	
 					</select>
 				</td>
-				<td class="cell br btt">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="spm_price[]" value="'.floatval($specificPrice['price']).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td class="cell br btt">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="spm_price[]" value="'.(float)($specificPrice['price']).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
 				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.(int)($specificPrice['from_quantity']).'" size="3" /></td>
-				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round(floatval($this->_getFinalPrice($specificPrice, floatval($obj->price), $taxRate)), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
 				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 			</tr>
 			<tr>
 				<td colspan="6" class="bl bt br bb" style="border-bottom: 1px dashed black;height:40px;">
 					'.$this->l('Reduction:').'
-					<input type="text" name="spm_reduction[]" value="'.floatval($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" size="11" />
+					<input type="text" name="spm_reduction[]" value="'.(float)($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" size="11" />
 					<select name="spm_reduction_type[]">
 						<option value="">---</option>
 						<option value="amount"'.($specificPrice['reduction_type'] == 'amount' ? ' selected="selected"' : '').'>'.$this->l('Amount').'</option>
@@ -1705,7 +1705,7 @@ class AdminProducts extends AdminTab
 		
 		<label>'.$this->l('Price (tax excl.):').'</label>
 		<div class="margin-form">
-			'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="sp_price" value="'.floatval($product->price).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'
+			'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="sp_price" value="'.(float)($product->price).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'
 			<div class="hint clear" style="display:block;">
 				'.$this->l('You can set this value at 0 in order to apply the default price').'
 			</div>

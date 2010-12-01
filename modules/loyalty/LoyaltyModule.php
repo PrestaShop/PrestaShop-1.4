@@ -103,7 +103,7 @@ class LoyaltyModule extends ObjectModel
 	{
 		global $cookie;
 		
-		return floatval(floatval($nbPoints) * floatval(Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency((int)($cookie->id_currency)))));
+		return (float)((float)($nbPoints) * (float)(Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency((int)($cookie->id_currency)))));
 	}
 
 	static public function getNbPointsByPrice($price)
@@ -120,7 +120,7 @@ class LoyaltyModule extends ObjectModel
 		}
 
 		/* Prevent division by zero */
-		if ($pointRate = floatval(Configuration::get('PS_LOYALTY_POINT_RATE')))
+		if ($pointRate = (float)(Configuration::get('PS_LOYALTY_POINT_RATE')))
 			$points = floor($price / $pointRate);
 		return $points;
 	}

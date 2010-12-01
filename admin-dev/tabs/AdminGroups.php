@@ -157,7 +157,7 @@ class AdminGroups extends AdminTab
 			<div style="float: right"><a href="'.$currentIndex.'&updategroup&id_group='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
 			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[(int)($cookie->id_lang)]).'</span>
 			<div class="clear">&nbsp;</div>
-			'.$this->l('Reduction:').' '.floatval($obj->reduction).$this->l('%').'
+			'.$this->l('Reduction:').' '.(float)($obj->reduction).$this->l('%').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 
@@ -253,7 +253,7 @@ class AdminGroups extends AdminTab
 				{
 					$groupReduction->id_category = (int)($id_category);
 					$groupReduction->id_group = (int)($obj->id);
-					$groupReduction->reduction = floatval($reduction) / 100;
+					$groupReduction->reduction = (float)($reduction) / 100;
 					if (!$groupReduction->add())
 						$this->_errors[] = Tools::displayError('An error occured while adding a category group reduction');
 					else

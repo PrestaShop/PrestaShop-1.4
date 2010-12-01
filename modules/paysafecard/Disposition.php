@@ -8,7 +8,7 @@ class Disposition
 	{
 		return Db::getInstance()->Execute(
 		'INSERT INTO `'._DB_PREFIX_.self::TABLE_NAME.'` (`id_cart`, `mtid`, `amount`, `currency`)
-		 VALUES ('.(int)($id_cart).',\''.pSQL($mtid).'\','.floatval($amount).',\''.pSQL($currency).'\')');
+		 VALUES ('.(int)($id_cart).',\''.pSQL($mtid).'\','.(float)($amount).',\''.pSQL($currency).'\')');
 	}
 	
 	public static function delete($id)
@@ -48,7 +48,7 @@ class Disposition
 	public static function updateAmount($id_disposition, $amount)
 	{
 		return Db::getInstance()->Execute(
-		'UPDATE `'._DB_PREFIX_.self::TABLE_NAME.'` SET `amount` = `amount` - '.floatval($amount).' WHERE `id_disposition` = '.(int)($id_disposition));
+		'UPDATE `'._DB_PREFIX_.self::TABLE_NAME.'` SET `amount` = `amount` - '.(float)($amount).' WHERE `id_disposition` = '.(int)($id_disposition));
 	}
 	 
 

@@ -49,7 +49,7 @@ class OrderSlipCore extends ObjectModel
 
 		$fields['id_customer'] = (int)($this->id_customer);
 		$fields['id_order'] = (int)($this->id_order);
-		$fields['conversion_rate'] = floatval($this->conversion_rate);
+		$fields['conversion_rate'] = (float)($this->conversion_rate);
 		$fields['shipping_cost'] = (int)($this->shipping_cost);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);

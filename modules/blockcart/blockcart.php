@@ -47,7 +47,7 @@ class BlockCart extends Module
 		foreach ($products AS $product)
 			$nbTotalProducts += (int)($product['cart_quantity']);
 
-		$wrappingCost = floatval($params['cart']->getOrderTotal($useTax, 6));
+		$wrappingCost = (float)($params['cart']->getOrderTotal($useTax, 6));
 		$totalToPay = $params['cart']->getOrderTotal($useTax);
 		
 		if ($useTax AND Configuration::get('PS_TAX_DISPLAY') == 1)

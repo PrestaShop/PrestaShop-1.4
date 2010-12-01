@@ -23,15 +23,15 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		foreach ($arr AS $attr)
 		{
-			$price += floatval($_POST['price_impact'][(int)($attr)]);
-			$weight += floatval($_POST['weight_impact'][(int)($attr)]);
+			$price += (float)($_POST['price_impact'][(int)($attr)]);
+			$weight += (float)($_POST['weight_impact'][(int)($attr)]);
 		}
 		if ($this->product->id)
 		{
 			return (array(
 					'id_product' => (int)($this->product->id),
-					'price' => floatval($price),
-					'weight' => floatval($weight),
+					'price' => (float)($price),
+					'weight' => (float)($weight),
 					'ecotax' => 0,
 					'quantity' => (int)($_POST['quantity']),
 					'reference' => pSQL($_POST['reference']),
@@ -139,7 +139,7 @@ class AdminAttributeGenerator extends AdminTab
         $attributes = array();
         foreach ($tab AS $group)
             foreach ($group AS $attribute)
-                $attributes[] = '('.(int)($id_product).', '.(int)($attribute).', '.floatval($_POST['price_impact'][(int)($attribute)]).', '.floatval($_POST['weight_impact'][(int)($attribute)]).')';
+                $attributes[] = '('.(int)($id_product).', '.(int)($attribute).', '.(float)($_POST['price_impact'][(int)($attribute)]).', '.(float)($_POST['weight_impact'][(int)($attribute)]).')';
         return Db::getInstance()->Execute(
         'INSERT INTO `'._DB_PREFIX_.'attribute_impact` (`id_product`, `id_attribute`, `price`, `weight`)
         VALUES '.implode(',', $attributes).'
@@ -158,8 +158,8 @@ class AdminAttributeGenerator extends AdminTab
             return array();
         foreach ($result AS $impact)
         {
-            $tab[$impact['id_attribute']]['price'] = floatval($impact['price']);
-            $tab[$impact['id_attribute']]['weight'] = floatval($impact['weight']);
+            $tab[$impact['id_attribute']]['price'] = (float)($impact['price']);
+            $tab[$impact['id_attribute']]['weight'] = (float)($impact['weight']);
         }
         return $tab;
     }

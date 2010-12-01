@@ -106,7 +106,7 @@ class CartControllerCore extends FrontController
 							else	
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					/* Check vouchers compatibility */
-					if ($add AND (($producToAdd->specificPrice AND floatval($producToAdd->specificPrice['reduction'])) OR $producToAdd->on_sale))
+					if ($add AND (($producToAdd->specificPrice AND (float)($producToAdd->specificPrice['reduction'])) OR $producToAdd->on_sale))
 					{
 						$discounts = $this->cart->getDiscounts();
 						foreach($discounts as $discount)

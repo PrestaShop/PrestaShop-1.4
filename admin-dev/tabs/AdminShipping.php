@@ -213,7 +213,7 @@ class AdminShipping extends AdminTab
 				foreach ($delivery AS $deliv)
 					$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];
 				foreach ($ranges AS $range)
-					echo '<th style="font-size: 11px;">'.floatval($range['delimiter1']).$suffix.' '.$this->l('to').' '.floatval($range['delimiter2']).$suffix.'</th>';
+					echo '<th style="font-size: 11px;">'.(float)($range['delimiter1']).$suffix.' '.$this->l('to').' '.(float)($range['delimiter2']).$suffix.'</th>';
 				echo '</tr>';
 
 				$zones = $carrierSelected->getZones();

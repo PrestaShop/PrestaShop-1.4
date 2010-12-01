@@ -70,7 +70,7 @@ class CurrencyCore extends ObjectModel
 		$fields['format'] = (int)($this->format);
 		$fields['decimals'] = (int)($this->decimals);
 		$fields['blank'] = (int)($this->blank);
-		$fields['conversion_rate'] = floatval($this->conversion_rate);
+		$fields['conversion_rate'] = (float)($this->conversion_rate);
 		$fields['deleted'] = (int)($this->deleted);
 		$fields['active'] = (int)($this->active);
 
@@ -201,12 +201,12 @@ class CurrencyCore extends ObjectModel
 			/* Seeking for rate in feed */
 			foreach ($data->currency AS $obj)
 				if ($this->iso_code == strval($obj['iso_code']))
-					$this->conversion_rate = round(floatval($obj['rate']) /  $defaultCurrency->conversion_rate, 6);
+					$this->conversion_rate = round((float)($obj['rate']) /  $defaultCurrency->conversion_rate, 6);
 		}
 		else
 		{
 			/* If currency is like isoCodeSource, setting it to default conversion rate */
-			$this->conversion_rate = round(1 / floatval($defaultCurrency->conversion_rate), 6);
+			$this->conversion_rate = round(1 / (float)($defaultCurrency->conversion_rate), 6);
 		}
 		$this->update();
 	}
@@ -219,7 +219,7 @@ class CurrencyCore extends ObjectModel
 		if ($defaultCurrency->iso_code != $isoCodeSource)
 			foreach ($data->currency AS $obj)
 				if ($defaultCurrency->iso_code == strval($obj['iso_code']))
-					$defaultCurrency->conversion_rate = round(floatval($obj['rate']), 6);
+					$defaultCurrency->conversion_rate = round((float)($obj['rate']), 6);
 		return $defaultCurrency;
 	}
 

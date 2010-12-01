@@ -288,7 +288,7 @@ class Socolissimo extends Module
 		<label>'.$this->l('Overcost').' : </label>
 		<div class="margin-form">
 		<input id="priceTE" size="11" onkeyup="calcPriceTI();" type="text" size="5" name="overcost" onkeyup="this.value = this.value.replace(/,/g, \'.\');" 
-		value="'.floatval(Tools::getValue('overcost',number_format(Configuration::get('SOCOLISSIMO_OVERCOST'), 2, '.', ''))).'" /> € HT
+		value="'.(float)(Tools::getValue('overcost',number_format(Configuration::get('SOCOLISSIMO_OVERCOST'), 2, '.', ''))).'" /> € HT
 		<br/><br/>
 		<input id="priceTI" size="11" onkeyup="calcPriceTE();" type="text" size="5" onkeyup="this.value = this.value.replace(/,/g, \'.\');" /> € TTC
 		</div>
@@ -392,7 +392,7 @@ class Socolissimo extends Module
 	private function _postProcess()
 	{
 		
-		if (Configuration::updateValue('SOCOLISSIMO_ID', Tools::getValue('id_user')) AND Configuration::updateValue('SOCOLISSIMO_KEY', Tools::getValue('key')) AND Configuration::updateValue('SOCOLISSIMO_URL', pSQL(Tools::getValue('url_so'))) AND Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', (int)(Tools::getValue('dypreparationtime'))) AND Configuration::updateValue('SOCOLISSIMO_OVERCOST', floatval(Tools::getValue('overcost')))
+		if (Configuration::updateValue('SOCOLISSIMO_ID', Tools::getValue('id_user')) AND Configuration::updateValue('SOCOLISSIMO_KEY', Tools::getValue('key')) AND Configuration::updateValue('SOCOLISSIMO_URL', pSQL(Tools::getValue('url_so'))) AND Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', (int)(Tools::getValue('dypreparationtime'))) AND Configuration::updateValue('SOCOLISSIMO_OVERCOST', (float)(Tools::getValue('overcost')))
 		AND Configuration::updateValue('SOCOLISSIMO_CARRIER_ID', (int)(Tools::getValue('carrier'))) 
 		AND Configuration::updateValue('SOCOLISSIMO_SUP_URL', Tools::getValue('url_sup'))
 		AND Configuration::updateValue('SOCOLISSIMO_OVERCOST_TAX', Tools::getValue('id_tax'))
@@ -435,7 +435,7 @@ class Socolissimo extends Module
 		{	
 			$signature = $this->make_key(substr($params['address']->lastname,0,34),
 						 (int)(Configuration::Get('SOCOLISSIMO_PREPARATION_TIME')),
-						 number_format(floatval($params['cart']->getOrderShippingCost($carrierSo->id, true)), 2, ',', ''),
+						 number_format((float)($params['cart']->getOrderShippingCost($carrierSo->id, true)), 2, ',', ''),
 						 (int)($params['address']->id_customer),(int)($params['address']->id));
 
 			$orderId = $this->formatOrderId((int)($params['address']->id));
@@ -452,10 +452,10 @@ class Socolissimo extends Module
 							'CEADRESS4' => substr($this->upper($params['address']->address2),0,38),
 							'CEZIPCODE' => $params['address']->postcode,
 							'CETOWN' => substr($this->upper($params['address']->city),0,32),
-							'DYWEIGHT' => (floatval($params['cart']->getTotalWeight()) * 1000),
+							'DYWEIGHT' => ((float)($params['cart']->getTotalWeight()) * 1000),
 							'SIGNATURE' => htmlentities($signature,ENT_NOQUOTES, 'UTF-8'),
 							'TRPARAMPLUS' => (int)($carrierSo->id),
-							'DYFORWARDINGCHARGES' => number_format(floatval($params['cart']->getOrderShippingCost($carrierSo->id)), 2, ',', ''),
+							'DYFORWARDINGCHARGES' => number_format((float)($params['cart']->getOrderShippingCost($carrierSo->id)), 2, ',', ''),
 							'DYPREPARATIONTIME' => (int)(Configuration::Get('SOCOLISSIMO_PREPARATION_TIME')),
 							'TRRETURNURLKO' => htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),
 							'TRRETURNURLOK' => htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'));

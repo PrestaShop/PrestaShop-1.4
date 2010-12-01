@@ -140,7 +140,7 @@ abstract class PrepaidServices extends PaymentModule
 		$language = $this->_getSupportedLanguageIsoById((int)($cookie->id_lang));
 		$mid = Configuration::get($this->prefix.'MERCHANT_ID_'.$currency->iso_code);
 		$mtid = $cart->id.'-'.time();
-		$amount = number_format(floatval($cart->getOrderTotal(true, 3)), 2, '.',''); 
+		$amount = number_format((float)($cart->getOrderTotal(true, 3)), 2, '.',''); 
 		$currency_iso = $currency->iso_code;
 		$business_type = Configuration::get($this->prefix.'BUSINESS_TYPE');
 		$reporting_criteria = '';
@@ -188,7 +188,7 @@ abstract class PrepaidServices extends PaymentModule
 			if ($amount == $disposition['amount'] || $close_flag)
 				Disposition::delete((int)($disposition['id_disposition']));
 			else 
-				Disposition::updateAmount((int)($disposition['id_disposition']), floatval($amount));				
+				Disposition::updateAmount((int)($disposition['id_disposition']), (float)($amount));				
 		}
 			
 		return $result;
@@ -507,7 +507,7 @@ abstract class PrepaidServices extends PaymentModule
 			return false;
 
 		// check max amount
-		$amount = floatval($params['cart']->getOrderTotal(true, 3));
+		$amount = (float)($params['cart']->getOrderTotal(true, 3));
 		$id_currency_max = Currency::getIdByIsoCode($this->max_amount_currency);
 
 		if ($currency->id != $id_currency_max)

@@ -201,7 +201,7 @@ class Secuvad_flux
 			WHERE pl.`id_product` = '.(int)($product['product_id']).'
 			ORDER BY c.`level_depth` DESC
 			',true);
-			$flux_xml .= '<produit categorie="'.(int)($data['category_id']).'" reference="'.(int)($product['product_id']).'-'.(int)($product['product_attribute_id']).'" modele="'.addslashes($data['name']).'" prix="'.floatval($product['product_price_wt']).'" quantite="'.(int)($product['product_quantity']).'"></produit>'."\n";
+			$flux_xml .= '<produit categorie="'.(int)($data['category_id']).'" reference="'.(int)($product['product_id']).'-'.(int)($product['product_attribute_id']).'" modele="'.addslashes($data['name']).'" prix="'.(float)($product['product_price_wt']).'" quantite="'.(int)($product['product_quantity']).'"></produit>'."\n";
 		}
 		$flux_xml = '<caddie nbproduit="'.sizeof($products).'">'."\n".$flux_xml.'</caddie>'."\n";
 		return $flux_xml;

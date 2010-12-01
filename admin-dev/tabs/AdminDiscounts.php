@@ -213,7 +213,7 @@ class AdminDiscounts extends AdminTab
 				<div id="value-div" style="display:none">
 					<label>'.$this->l('Value').'</label>
 					<div class="margin-form">
-						<input style="float:left;width:80px" type="text" name="value" id="discount_value" value="'.floatval($this->getFieldValue($obj, 'value')).'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
+						<input style="float:left;width:80px" type="text" name="value" id="discount_value" value="'.(float)($this->getFieldValue($obj, 'value')).'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
 						<select id="id_currency" name="id_currency" style="float:left;margin-left:10px;width:50px;display:none">
 							<option value="0">--</option>';
 		foreach (Currency::getCurrencies() as $row)
@@ -268,7 +268,7 @@ class AdminDiscounts extends AdminTab
 				</div>
 				<label>'.$this->l('Minimum amount').'</label>
 				<div class="margin-form">
-					<input type="text" size="15" name="minimal" value="'.($this->getFieldValue($obj, 'minimal') ? floatval($this->getFieldValue($obj, 'minimal')) : '0').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>
+					<input type="text" size="15" name="minimal" value="'.($this->getFieldValue($obj, 'minimal') ? (float)($this->getFieldValue($obj, 'minimal')) : '0').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>
 					<p class="clear">'.$this->l('Leave blank or 0 if not applicable').'</p>
 				</div>
 				<div class="margin-form">

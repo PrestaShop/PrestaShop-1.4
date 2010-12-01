@@ -79,7 +79,7 @@ class OrderDetailControllerCore extends FrontController
 				$addressInvoice = new Address((int)($order->id_address_invoice));
 				$addressDelivery = new Address((int)($order->id_address_delivery));
 				if ($order->total_discounts > 0)
-					$this->smarty->assign('total_old', floatval($order->total_paid - $order->total_discounts));
+					$this->smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
 				$products = $order->getProducts();
 				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);

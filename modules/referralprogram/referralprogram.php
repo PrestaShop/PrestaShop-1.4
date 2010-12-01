@@ -115,7 +115,7 @@ class ReferralProgram extends Module
 	{
 		Configuration::updateValue('REFERRAL_ORDER_QUANTITY', (int)(Tools::getValue('order_quantity')));
 		foreach (Tools::getValue('discount_value') as $id_currency => $discount_value)
-			Configuration::updateValue('REFERRAL_DISCOUNT_VALUE_'.(int)($id_currency), floatval($discount_value));
+			Configuration::updateValue('REFERRAL_DISCOUNT_VALUE_'.(int)($id_currency), (float)($discount_value));
 		Configuration::updateValue('REFERRAL_DISCOUNT_TYPE', (int)(Tools::getValue('discount_type')));
 		Configuration::updateValue('REFERRAL_NB_FRIENDS', (int)(Tools::getValue('nb_friends')));
 		Configuration::updateValue('REFERRAL_DISCOUNT_DESCRIPTION', Tools::getValue('discount_description'));
@@ -471,7 +471,7 @@ class ReferralProgram extends Module
 								'{firstname}' => $newCustomer->firstname,
 								'{lastname}' => $newCustomer->lastname,
 								'{voucher_num}' => $discount->name,
-								'{voucher_amount}' => Tools::displayPrice(floatval(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.(int)($cookie->id_currency))), (int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
+								'{voucher_amount}' => Tools::displayPrice((float)(Configuration::get('REFERRAL_DISCOUNT_VALUE_'.(int)($cookie->id_currency))), (int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
 
 							Mail::Send((int)($cookie->id_lang), 'referralprogram-voucher', Mail::l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						}

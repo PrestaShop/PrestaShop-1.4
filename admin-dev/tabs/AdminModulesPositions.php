@@ -263,7 +263,7 @@ class AdminModulesPositions extends AdminTab
 						echo '<td style="padding-left: 10px;" colspan="3"><label class="lab_modules_positions" for="'.$hook['id_hook'].'_'.$instance->id.'">';
 					echo '
 					<img src="../modules/'.$instance->name.'/logo.gif" alt="'.stripslashes($instance->name).'" /> <strong>'.stripslashes($instance->displayName).'</strong>
-						'.($instance->version ? ' v'.((int)($instance->version) == $instance->version? sprintf('%.1f', $instance->version) : floatval($instance->version)) : '').'<br />'.$instance->description.'
+						'.($instance->version ? ' v'.((int)($instance->version) == $instance->version? sprintf('%.1f', $instance->version) : (float)($instance->version)) : '').'<br />'.$instance->description.'
 					</label></td>
 						<td width="60">
 							<a href="'.$currentIndex.'&id_module='.$instance->id.'&id_hook='.$hook['id_hook'].'&editGraft'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token.'"><img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>

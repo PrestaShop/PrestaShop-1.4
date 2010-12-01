@@ -17,7 +17,7 @@ class DejalaCarrierUtils
 		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
 		
-		$vatRate = floatval($dejalaProduct['vat']);
+		$vatRate = (float)($dejalaProduct['vat']);
 		// MFR091130 - get or create the tax & attach it to our zone if needed
 		$id_tax = Tax::getTaxIdByRate($vatRate);
 		if (!$id_tax) 
@@ -79,7 +79,7 @@ class DejalaCarrierUtils
 		global $cookie;
 		
 		$electedCarrier = NULL;
-		$totalCartWeight = floatval($dejalaProduct['max_weight']);
+		$totalCartWeight = (float)($dejalaProduct['max_weight']);
 		if ($totalCartWeight <= 0)
 			$totalCartWeight = 3.99;
 		else

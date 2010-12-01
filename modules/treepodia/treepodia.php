@@ -115,7 +115,7 @@ XML;
 			$product->addCData('manufacturer', $sqlProduct['manufacturer']);			
 			if (file_exists(dirname(__FILE__).'/../../img/m/'.(int)($sqlProduct['id_manufacturer']).'jpg'))
 				$product->addCData('manufacturer-logo', $_SERVER['HTTP_HOST'].__PS_BASE_URI__.'img/m/'.(int)($sqlProduct['id_manufacturer']).'jpg');			
-			$product->addChild('weight', floatval($sqlProduct['weight']));
+			$product->addChild('weight', (float)($sqlProduct['weight']));
 			$product->addChild('weight_unit', strtolower(Configuration::get('PS_WEIGHT_UNIT')));
 			$product->addCData('supplier', $sqlProduct['supplier']);
 			$name = $product->addChild('name');
@@ -166,7 +166,7 @@ XML;
 			$price->addChild('final-retail-price-with-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), true));
 			$price->addChild('final-retail-price-without-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $specificPrice));
 			$price->addChild('reduction_percent', ($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00);
-			$price->addChild('reduction_price', ($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? floatval($specificPrice['reduction']) : 0.00);
+			$price->addChild('reduction_price', ($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (float)($specificPrice['reduction']) : 0.00);
 			$price->addChild('display-on-sale', (int)($sqlProduct['on_sale']));
 
 			$product->addChild('downloadable', $sqlProduct['id_product_download'] >= 1 ? 1 : 0);
@@ -243,7 +243,7 @@ XML;
 			{
 				$discount = $product->addChild('discount');
 				$discount->addChild('discount-quantity', (int)($quantityDiscount['from_quantity']));
-				$discount->addChild('discount-value', (floatval($quantityDiscount['price']) AND $quantityDiscount['reduction_type'] == 'amount') ? floatval($quantityDiscount['price']) : $quantityDiscount['reduction'] * 100);
+				$discount->addChild('discount-value', ((float)($quantityDiscount['price']) AND $quantityDiscount['reduction_type'] == 'amount') ? (float)($quantityDiscount['price']) : $quantityDiscount['reduction'] * 100);
 				$discount->addChild('discount-type', ($quantityDiscount['reduction_type'] == 'amount' ? $defaultCurrencyIsoCode : '%'));
 			}
 
@@ -389,7 +389,7 @@ XML;
 					
 					$attributeCombination = $product->addChild('attribute-combination');	
 					$attributeCombination->addAttribute('id', $id_product_attribute);
-					$attributeCombination->addChild('weight', floatval($sqlProduct['weight'] + $productAttribute['weight']));
+					$attributeCombination->addChild('weight', (float)($sqlProduct['weight'] + $productAttribute['weight']));
 					$attributeCombination->addChild('final-retail-price-with-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), true, $id_product_attribute));
 					$attributeCombination->addChild('final-retail-price-without-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), false, $id_product_attribute));	
 					$attributeCombination->addChild('quantity', $productAttribute['quantity'] );

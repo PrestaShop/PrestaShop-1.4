@@ -41,12 +41,12 @@ switch ($status)
 {	
 	/* Bankwire */
 	case 0:
-		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_BANKWIRE_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_BANKWIRE_, (float)($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Payment OK */
 	case 2:
-		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_PAYMENT_, floatval($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_PAYMENT_, (float)($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Unknown or error */

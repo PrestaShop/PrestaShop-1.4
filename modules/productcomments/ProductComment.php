@@ -62,7 +62,7 @@ class ProductComment extends ObjectModel
 		$fields['id_guest'] = (int)($this->id_guest);
 		$fields['customer_name'] = pSQL($this->customer_name);
 		$fields['content'] = pSQL($this->content);
-		$fields['grade'] = floatval($this->grade);
+		$fields['grade'] = (float)($this->grade);
 		$fields['validate'] = (int)($this->validate);
 		$fields['deleted'] = (int)($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);

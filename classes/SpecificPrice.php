@@ -42,9 +42,9 @@ class SpecificPriceCore extends ObjectModel
 		$fields['id_country'] = (int)($this->id_country);
 		$fields['id_group'] = (int)($this->id_group);
 		$fields['priority'] = (int)($this->priority);
-		$fields['price'] = floatval($this->price);
+		$fields['price'] = (float)($this->price);
 		$fields['from_quantity'] = (int)($this->from_quantity);
-		$fields['reduction'] = floatval($this->reduction);
+		$fields['reduction'] = (float)($this->reduction);
 		$fields['reduction_type'] = pSQL($this->reduction_type);
 		$fields['from'] = pSQL($this->from);
 		$fields['to'] = pSQL($this->to);

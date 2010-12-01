@@ -162,8 +162,8 @@ class CarrierCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'delivery` d
 			LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON (d.`id_range_weight` = w.`id_range_weight`)
 			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.floatval($totalWeight).' >= w.`delimiter1`
-			AND '.floatval($totalWeight).' < w.`delimiter2`
+			AND '.(float)($totalWeight).' >= w.`delimiter1`
+			AND '.(float)($totalWeight).' < w.`delimiter2`
 			AND d.`id_carrier` = '.(int)($this->id).'
 			ORDER BY w.`delimiter1` ASC');
 			if (!isset($result['price']))
@@ -184,8 +184,8 @@ class CarrierCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'delivery` d
 			LEFT JOIN `'._DB_PREFIX_.'range_weight` w ON d.`id_range_weight` = w.`id_range_weight`
 			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.floatval($totalWeight).' >= w.`delimiter1`
-			AND '.floatval($totalWeight).' < w.`delimiter2`
+			AND '.(float)($totalWeight).' >= w.`delimiter1`
+			AND '.(float)($totalWeight).' < w.`delimiter2`
 			AND d.`id_carrier` = '.(int)($id_carrier).'
 			ORDER BY w.`delimiter1` ASC');
 			self::$priceByWeight2[$cache_key] = (isset($result['price']));
@@ -227,8 +227,8 @@ class CarrierCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'delivery` d
 			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
 			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.floatval($orderTotal).' >= r.`delimiter1`
-			AND '.floatval($orderTotal).' < r.`delimiter2`
+			AND '.(float)($orderTotal).' >= r.`delimiter1`
+			AND '.(float)($orderTotal).' < r.`delimiter2`
 			AND d.`id_carrier` = '.(int)($this->id).'
 			ORDER BY r.`delimiter1` ASC');
 			if (!isset($result['price']))
@@ -261,8 +261,8 @@ class CarrierCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'delivery` d
 			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
 			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.floatval($orderTotal).' >= r.`delimiter1`
-			AND '.floatval($orderTotal).' < r.`delimiter2`
+			AND '.(float)($orderTotal).' >= r.`delimiter1`
+			AND '.(float)($orderTotal).' < r.`delimiter2`
 			AND d.`id_carrier` = '.(int)($id_carrier).'
 			ORDER BY r.`delimiter1` ASC');
 			self::$priceByPrice2[$cache_key] = (isset($result['price']));
@@ -529,7 +529,7 @@ class CarrierCore extends ObjectModel
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'range_price` (`id_carrier`, `delimiter1`, `delimiter2`)
-			VALUES ('.(int)($this->id).','.floatval($val['delimiter1']).','.floatval($val['delimiter2']).')');
+			VALUES ('.(int)($this->id).','.(float)($val['delimiter1']).','.(float)($val['delimiter2']).')');
 			$maxRangePrice = Db::getInstance()->Insert_ID();
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
@@ -538,7 +538,7 @@ class CarrierCore extends ObjectModel
 			foreach ($res2 as $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
-				VALUES ('.(int)($this->id).','.(int)($maxRangePrice).',NULL,'.(int)($val2['id_zone']).','.floatval($val2['price']).')');
+				VALUES ('.(int)($this->id).','.(int)($maxRangePrice).',NULL,'.(int)($val2['id_zone']).','.(float)($val2['price']).')');
 		}
 
 		// Copy existing ranges weight
@@ -549,7 +549,7 @@ class CarrierCore extends ObjectModel
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'range_weight` (`id_carrier`, `delimiter1`, `delimiter2`)
-			VALUES ('.(int)($this->id).','.floatval($val['delimiter1']).','.floatval($val['delimiter2']).')');
+			VALUES ('.(int)($this->id).','.(float)($val['delimiter1']).','.(float)($val['delimiter2']).')');
 			$maxRangeWeight = Db::getInstance()->Insert_ID();
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
@@ -558,7 +558,7 @@ class CarrierCore extends ObjectModel
 			foreach ($res2 as $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
-				VALUES ('.(int)($this->id).',NULL,'.(int)($maxRangeWeight).','.(int)($val2['id_zone']).','.floatval($val2['price']).')');
+				VALUES ('.(int)($this->id).',NULL,'.(int)($maxRangeWeight).','.(int)($val2['id_zone']).','.(float)($val2['price']).')');
 		}
 
 		// Copy existing zones

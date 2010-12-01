@@ -144,8 +144,8 @@ class StatsCatalog extends Module
 		
 		$totalPageViewed = $this->getTotalPageViewed();
 		$averageViewed = $total ? ($totalPageViewed / $total) : 0;		
-		$conversion = number_format(floatval($totalPageViewed ? ($totalBought / $totalPageViewed) : 0), 2, '.', '');
-		if ($conversionReverse = number_format(floatval($totalBought ? ($totalPageViewed / $totalBought) : 0), 2, '.', ''))
+		$conversion = number_format((float)($totalPageViewed ? ($totalBought / $totalPageViewed) : 0), 2, '.', '');
+		if ($conversionReverse = number_format((float)($totalBought ? ($totalPageViewed / $totalBought) : 0), 2, '.', ''))
 			$conversion .= ' (1 '.$this->l('purchase').' / '.$conversionReverse.' '.$this->l('visits').')';
 
 		$totalNV = $total - $this->getTotalProductViewed();
@@ -172,10 +172,10 @@ class StatsCatalog extends Module
 				'.$this->returnLine($this->l('Average price (base price):'), Tools::displayPrice($averagePrice, $currency)).'
 				'.$this->returnLine($this->l('Product pages viewed:'), (int)($totalPageViewed)).'
 				'.$this->returnLine($this->l('Products bought:'), (int)($totalBought)).'
-				'.$this->returnLine($this->l('Average number of page visits:'), number_format(floatval($averageViewed), 2, '.', '')).'
-				'.$this->returnLine($this->l('Average number of purchases:'), number_format(floatval($averagePurchase), 2, '.', '')).'
+				'.$this->returnLine($this->l('Average number of page visits:'), number_format((float)($averageViewed), 2, '.', '')).'
+				'.$this->returnLine($this->l('Average number of purchases:'), number_format((float)($averagePurchase), 2, '.', '')).'
 				'.$this->returnLine($this->l('Images available:'), (int)($totalPictures)).'
-				'.$this->returnLine($this->l('Average number of images:'), number_format(floatval($averagePictures), 2, '.', '')).'
+				'.$this->returnLine($this->l('Average number of images:'), number_format((float)($averagePictures), 2, '.', '')).'
 				'.$this->returnLine($this->l('Products never viewed:'), (int)($totalNV).' / '.(int)($total)).'
 				'.$this->returnLine('<a style="cursor : pointer" onclick="openCloseLayer(\'pnb\')">'.$this->l('Products never bought:').'</a>', (int)($totalNB).' / '.(int)($total)).'
 				'.$this->returnLine($this->l('Conversion rate*:'), $conversion).'

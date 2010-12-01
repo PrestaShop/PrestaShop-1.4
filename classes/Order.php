@@ -174,18 +174,18 @@ class OrderCore extends ObjectModel
 		$fields['secure_key'] = pSQL($this->secure_key);
 		$fields['payment'] = pSQL($this->payment);
 		$fields['module'] = pSQL($this->module);
-		$fields['conversion_rate'] = floatval($this->conversion_rate);
+		$fields['conversion_rate'] = (float)($this->conversion_rate);
 		$fields['recyclable'] = (int)($this->recyclable);
 		$fields['gift'] = (int)($this->gift);
 		$fields['gift_message'] = pSQL($this->gift_message);
 		$fields['shipping_number'] = pSQL($this->shipping_number);
-		$fields['total_discounts'] = floatval($this->total_discounts);
-		$fields['total_paid'] = floatval($this->total_paid);
-		$fields['total_paid_real'] = floatval($this->total_paid_real);
-		$fields['total_products'] = floatval($this->total_products);
-		$fields['total_products_wt'] = floatval($this->total_products_wt);
-		$fields['total_shipping'] = floatval($this->total_shipping);
-		$fields['total_wrapping'] = floatval($this->total_wrapping);
+		$fields['total_discounts'] = (float)($this->total_discounts);
+		$fields['total_paid'] = (float)($this->total_paid);
+		$fields['total_paid_real'] = (float)($this->total_paid_real);
+		$fields['total_products'] = (float)($this->total_products);
+		$fields['total_products_wt'] = (float)($this->total_products_wt);
+		$fields['total_shipping'] = (float)($this->total_shipping);
+		$fields['total_wrapping'] = (float)($this->total_wrapping);
 		$fields['invoice_number'] = (int)($this->invoice_number);
 		$fields['delivery_number'] = (int)($this->delivery_number);
 		$fields['invoice_date'] = pSQL($this->invoice_date);
@@ -755,7 +755,7 @@ class OrderCore extends ObjectModel
 	 */
 	public function	addDiscount($id_discount, $name, $value)
 	{
-		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_discount', array('id_order' => (int)($this->id), 'id_discount' => (int)($id_discount), 'name' => pSQL($name), 'value' => floatval($value)), 'INSERT');
+		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_discount', array('id_order' => (int)($this->id), 'id_discount' => (int)($id_discount), 'name' => pSQL($name), 'value' => (float)($value)), 'INSERT');
 	}
 
 	/**
@@ -876,7 +876,7 @@ class OrderCore extends ObjectModel
 		FROM '._DB_PREFIX_.'order_detail
 		WHERE id_order = '.(int)($this->id));
 
-		return floatval($result['weight']);
+		return (float)($result['weight']);
 	}
 
 	static public function getInvoice($id_invoice)

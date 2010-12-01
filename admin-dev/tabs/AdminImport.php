@@ -243,8 +243,8 @@ class AdminImport extends AdminTab
 
 	private static function getPrice($field)
 	{
-		$field = (floatval(str_replace(',', '.', $field)));
-		$field = (floatval(str_replace('%', '', $field)));
+		$field = ((float)(str_replace(',', '.', $field)));
+		$field = ((float)(str_replace('%', '', $field)));
 		return $field;
 	}
 
@@ -533,11 +533,11 @@ class AdminImport extends AdminTab
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 			// Find id_tax corresponding to given values for product taxe
 			if (isset($product->tax_rate))
-				$product->id_tax = (int)(Tax::getTaxIdByRate(floatval($product->tax_rate)));
+				$product->id_tax = (int)(Tax::getTaxIdByRate((float)($product->tax_rate)));
 			if (isset($product->tax_rate) AND !$product->id_tax)
 			{
 				$tax = new Tax();
-				$tax->rate = floatval($product->tax_rate);
+				$tax->rate = (float)($product->tax_rate);
 				$tax->name = self::createMultiLangField(strval($product->tax_rate));
 				if (($fieldError = $tax->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $tax->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $tax->add())
 					$product->id_tax = (int)($tax->id);
@@ -595,7 +595,7 @@ class AdminImport extends AdminTab
 				$product->price = $product->price_tin;				
 				// If a tax is already included in price, withdraw it from price
 				if ($product->tax_rate)
-					$product->price = floatval(number_format($product->price / (1 + $product->tax_rate / 100), 6));
+					$product->price = (float)(number_format($product->price / (1 + $product->tax_rate / 100), 6));
 			}
 			elseif (isset($product->price_tin) AND isset($product->price_tex)) 
 				$product->price = $product->price_tex;
@@ -818,7 +818,7 @@ class AdminImport extends AdminTab
 			
 			self::setDefaultValues($info);
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute(floatval($info['price']), floatval($info['weight']), floatval($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
+			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), (float)($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));

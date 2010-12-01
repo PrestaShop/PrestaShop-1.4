@@ -46,7 +46,7 @@ if (Validate::isLoadedObject($cart))
 			case 5:
 			case 9:
 				/* Payment OK */
-				$ogone->validate(_PS_OS_PAYMENT_, floatval($_GET['amount']), $ogone->l('Payment authorized / OK').$params, true);
+				$ogone->validate(_PS_OS_PAYMENT_, (float)($_GET['amount']), $ogone->l('Payment authorized / OK').$params, true);
 				break;
 			case 6:
 			case 7:
@@ -67,7 +67,7 @@ if (Validate::isLoadedObject($cart))
 				}
 				break;
 			default:
-				$ogone->validate(_PS_OS_ERROR_, floatval($_GET['amount']), $ogone->l('Unknown status:').' '.$_GET['STATUS'].$params);
+				$ogone->validate(_PS_OS_ERROR_, (float)($_GET['amount']), $ogone->l('Unknown status:').' '.$_GET['STATUS'].$params);
 		}
 		exit;
 	}

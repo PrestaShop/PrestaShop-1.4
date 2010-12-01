@@ -55,7 +55,7 @@ class GroupCore extends ObjectModel
 		parent::validateFields();
 		if (isset($this->id))
 			$fields['id_group'] = (int)($this->id);
-		$fields['reduction'] = floatval($this->reduction);
+		$fields['reduction'] = (float)($this->reduction);
 		$fields['price_display_method'] = (int)($this->price_display_method);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);

@@ -92,14 +92,14 @@ class DiscountCore extends ObjectModel
 		$fields['id_currency'] = (int)($this->id_currency);
 		$fields['id_discount_type'] = (int)($this->id_discount_type);
 		$fields['name'] = pSQL($this->name);
-		$fields['value'] = floatval($this->value);
+		$fields['value'] = (float)($this->value);
 		$fields['quantity'] = (int)($this->quantity);
 		$fields['quantity_per_user'] = (int)($this->quantity_per_user);
 		$fields['cumulable'] = (int)($this->cumulable);
 		$fields['cumulable_reduction'] = (int)($this->cumulable_reduction);
 		$fields['date_from'] = pSQL($this->date_from);
 		$fields['date_to'] = pSQL($this->date_to);
-		$fields['minimal'] = floatval($this->minimal);
+		$fields['minimal'] = (float)($this->minimal);
 		$fields['active'] = (int)($this->active);
 		$fields['cart_display'] = (int)($this->cart_display);
 		$fields['date_add'] = pSQL($this->date_add);
@@ -254,7 +254,7 @@ class DiscountCore extends ObjectModel
 			if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))
 				$totalAmount += $useTax ? $product['total_wt'] : $product['total'];
 		
-		$totalAmount += floatval($shipping_fees);
+		$totalAmount += (float)($shipping_fees);
 		if ($this->minimal > 0 AND $totalAmount < $this->minimal)
 			return 0;
 
@@ -361,7 +361,7 @@ class DiscountCore extends ObjectModel
 		$voucher->id_discount_type = 2;
 		foreach ($languages as $language)
 			$voucher->description[$language['id_lang']] = strval($name).(int)($order->id);
-		$voucher->value = floatval($total);
+		$voucher->value = (float)($total);
 		$voucher->name = 'V0C'.(int)($order->id_customer).'O'.(int)($order->id);
 		$voucher->id_customer = (int)($order->id_customer);
 		$voucher->id_currency = (int)($order->id_currency);
@@ -369,7 +369,7 @@ class DiscountCore extends ObjectModel
 		$voucher->quantity_per_user = 1;
 		$voucher->cumulable = 1;
 		$voucher->cumulable_reduction = 1;
-		$voucher->minimal = floatval($voucher->value);
+		$voucher->minimal = (float)($voucher->value);
 		$voucher->active = 1;
 		$now = time();
 		$voucher->date_from = date('Y-m-d H:i:s', $now);
@@ -386,7 +386,7 @@ class DiscountCore extends ObjectModel
 
 	static public function display($discountValue, $discountType, $currency = false)
 	{
-		if (floatval($discountValue) AND (int)($discountType))
+		if ((float)($discountValue) AND (int)($discountType))
 		{
 			if ($discountType == 1)
 				return $discountValue.chr(37); // ASCII #37 --> % (percent)

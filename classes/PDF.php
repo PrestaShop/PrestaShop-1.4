@@ -520,7 +520,7 @@ class PDFCore extends PDF_PageGroupCore
 				$pdf->Ln(4);
 			}
 
-			if(isset(self::$order->total_wrapping) and (floatval(self::$order->total_wrapping) > 0))
+			if(isset(self::$order->total_wrapping) and ((float)(self::$order->total_wrapping) > 0))
 			{
 				$pdf->Cell($width, 0, self::l('Total wrapping').' : ', 0, 0, 'R');
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
@@ -761,10 +761,10 @@ class PDFCore extends PDF_PageGroupCore
 			if (!isset($taxes[$product['tax_rate']]))
 				$taxes[$product['tax_rate']] = 0;
 			/* Without tax */
-			$product['priceWithoutTax'] = Tools::ps_round(self::$_priceDisplayMethod == PS_TAX_EXC ? floatval($product['product_price']) : $product['product_price_wt_but_ecotax'] / (1 + $product['tax_rate'] / 100), 2) * (int)($product['product_quantity']);
+			$product['priceWithoutTax'] = Tools::ps_round(self::$_priceDisplayMethod == PS_TAX_EXC ? (float)($product['product_price']) : $product['product_price_wt_but_ecotax'] / (1 + $product['tax_rate'] / 100), 2) * (int)($product['product_quantity']);
 			$amountWithoutTax += $product['priceWithoutTax'];
 			/* With tax */
-			$product['priceWithTax'] = floatval($product['product_price_wt']) * (int)($product['product_quantity']);
+			$product['priceWithTax'] = (float)($product['product_price_wt']) * (int)($product['product_quantity']);
 			$product['priceEcotax'] = $product['ecotax'] * (1 + $product['ecotax_tax_rate'] / 100);
 		}
 
@@ -774,20 +774,20 @@ class PDFCore extends PDF_PageGroupCore
 		$tmp = 0;
 		$product = &$tmp;
 		/* And secondly assign to each tax its own reduction part */
-		$discountAmount = floatval(self::$order->total_discounts);
+		$discountAmount = (float)(self::$order->total_discounts);
 		foreach ($products as $product)
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
 			$priceWithTaxAndReduction = $product['priceWithTax'] - $discountAmount * $ratio;
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)
 			{
-				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / ((floatval($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
+				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / (((float)($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 			}
 			else
 			{
-				$vat = floatval($product['priceWithoutTax']) * (floatval($product['tax_rate'])  / 100) * $product['product_quantity'];
+				$vat = (float)($product['priceWithoutTax']) * ((float)($product['tax_rate'])  / 100) * $product['product_quantity'];
 				$priceBreakDown['totalsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
@@ -827,7 +827,7 @@ class PDFCore extends PDF_PageGroupCore
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
-			$priceBreakDown['wrappingCostWithoutTax'] = self::$order->total_wrapping / (1 + (floatval($wrappingTax->rate) / 100));
+			$priceBreakDown['wrappingCostWithoutTax'] = self::$order->total_wrapping / (1 + ((float)($wrappingTax->rate) / 100));
 		}
 	}
 

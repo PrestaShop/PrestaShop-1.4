@@ -74,7 +74,7 @@ class LocalizationPackCore
 				$attributes = $taxData->attributes();
 				$tax = new Tax();
 				$tax->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
-				$tax->rate = floatval($attributes['rate']);
+				$tax->rate = (float)($attributes['rate']);
 				if (!$tax->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid tax properties.');

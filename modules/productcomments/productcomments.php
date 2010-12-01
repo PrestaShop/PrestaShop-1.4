@@ -508,7 +508,7 @@ class ProductComments extends Module
 		
 		$averageTotal = 0;
 		foreach ($averages AS $average)
-			$averageTotal += floatval($average);
+			$averageTotal += (float)($average);
 		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
 		
 		$smarty->assign(array(
@@ -553,7 +553,7 @@ class ProductComments extends Module
 				foreach ($criterions AS $criterion)
 				{					
 					$list_product_grades[$criterion['id_product_comment_criterion']][$id_product] = $grades[$criterion['id_product_comment_criterion']];
-					$grade_total += floatval($grades[$criterion['id_product_comment_criterion']]);
+					$grade_total += (float)($grades[$criterion['id_product_comment_criterion']]);
 					
 					if (!array_key_exists($criterion['id_product_comment_criterion'], $list_grades))
 						$list_grades[$criterion['id_product_comment_criterion']] = $criterion['name'];

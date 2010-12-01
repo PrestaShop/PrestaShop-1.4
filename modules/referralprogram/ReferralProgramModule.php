@@ -80,7 +80,7 @@ class ReferralProgramModule extends ObjectModel
 		));
 		$discount = new Discount();
 		$discount->id_discount_type = (int)($configurations['REFERRAL_DISCOUNT_TYPE']);
-		$discount->value = floatval($configurations['REFERRAL_DISCOUNT_VALUE_'.(int)($id_currency)]);
+		$discount->value = (float)($configurations['REFERRAL_DISCOUNT_VALUE_'.(int)($id_currency)]);
 		$discount->quantity = 1;
 		$discount->quantity_per_user = 1;
 		$discount->date_from = date('Y-m-d H:i:s', time());

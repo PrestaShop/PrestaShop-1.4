@@ -98,7 +98,7 @@ class ProductControllerCore extends FrontController
 				if (Product::$_taxCalculationMethod == PS_TAX_INC)
 					$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
 
-				$productPriceWithoutEcoTax = floatval($productPriceWithTax - $product->ecotax);
+				$productPriceWithoutEcoTax = (float)($productPriceWithTax - $product->ecotax);
 				$configs = Configuration::getMultiple(array('PS_ORDER_OUT_OF_STOCK', 'PS_LAST_QTIES'));
 
 				/* Features / Values */
@@ -149,17 +149,17 @@ class ProductControllerCore extends FrontController
 
 				// Tax
 				$tax_data = Tax::getDataByProductId((int)($product->id));
-				$tax = floatval(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), floatval($tax_data['rate'])));
+				$tax = (float)(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), (float)($tax_data['rate'])));
 				$this->smarty->assign('tax_rate', $tax);
 
 				/* /Quantity discount management */
 				$this->smarty->assign(array(
-					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), floatval($tax_data['rate'])),
+					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax_data['rate'])),
 					'product' => $product,
 					'homeSize' => Image::getSize('home'),
 					'product_manufacturer' => new Manufacturer((int)($product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),
 					'token' => Tools::getToken(false),
-					'productPriceWithoutEcoTax' => floatval($productPriceWithoutEcoTax),
+					'productPriceWithoutEcoTax' => (float)($productPriceWithoutEcoTax),
 					'features' => $features,
 					'attachments' => $attachments,
 					'allow_oosp' => $product->isAvailableWhenOutOfStock((int)($product->out_of_stock)),
@@ -228,9 +228,9 @@ class ProductControllerCore extends FrontController
 
 							$combinations[$row['id_product_attribute']]['attributes_values'][$row['id_attribute_group']] = $row['attribute_name'];
 							$combinations[$row['id_product_attribute']]['attributes'][] = (int)($row['id_attribute']);
-							$combinations[$row['id_product_attribute']]['price'] = floatval($row['price']);
-							$combinations[$row['id_product_attribute']]['ecotax'] = floatval($row['ecotax']);
-							$combinations[$row['id_product_attribute']]['weight'] = floatval($row['weight']);
+							$combinations[$row['id_product_attribute']]['price'] = (float)($row['price']);
+							$combinations[$row['id_product_attribute']]['ecotax'] = (float)($row['ecotax']);
+							$combinations[$row['id_product_attribute']]['weight'] = (float)($row['weight']);
 							$combinations[$row['id_product_attribute']]['quantity'] = (int)($row['quantity']);
 							$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
 							$combinations[$row['id_product_attribute']]['unit_impact'] = $row['unit_price_impact'];
@@ -282,8 +282,8 @@ class ProductControllerCore extends FrontController
 			'display_qties' => (int)(Configuration::get('PS_DISPLAY_QTIES')),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'display_ht' => !Tax::excludeTaxeOption(),
-			'ecotax' => ($product->ecotax > 0 ? Tools::convertPrice(floatval($product->ecotax)) : 0),
-			'unit_price' => ($product->unit_price > 0 ? Tools::convertPrice(floatval($product->unit_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod((int)($this->cookie->id_customer)) == 0) ? ((floatval($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0)));
+			'ecotax' => ($product->ecotax > 0 ? Tools::convertPrice((float)($product->ecotax)) : 0),
+			'unit_price' => ($product->unit_price > 0 ? Tools::convertPrice((float)($product->unit_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod((int)($this->cookie->id_customer)) == 0) ? (((float)($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0)));
 
 		if (file_exists(_PS_THEME_DIR_.'thickbox.tpl'))
 			$this->smarty->display(_PS_THEME_DIR_.'thickbox.tpl');
@@ -373,7 +373,7 @@ class ProductControllerCore extends FrontController
 		foreach ($specificPrices AS $key => &$row)
 		{
 			$row['quantity'] = &$row['from_quantity'];
-			if (!floatval($row['reduction'])) // The price may be directly set
+			if (!(float)($row['reduction'])) // The price may be directly set
 				$row['real_value'] = $price - (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
 			else
 				$row['real_value'] = $row['reduction_type'] == 'amount' ? (Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100)) : ($price * $row['reduction']);

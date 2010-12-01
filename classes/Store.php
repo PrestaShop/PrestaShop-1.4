@@ -92,8 +92,8 @@ class StoreCore extends ObjectModel
 		$fields['address2'] = pSQL($this->address2);
 		$fields['postcode'] = pSQL($this->postcode);
 		$fields['city'] = pSQL($this->city);
-		$fields['latitude'] = floatval($this->latitude);
-		$fields['longitude'] = floatval($this->longitude);
+		$fields['latitude'] = (float)($this->latitude);
+		$fields['longitude'] = (float)($this->longitude);
 		$fields['hours'] = pSQL($this->hours);
 		$fields['phone'] = pSQL($this->phone);
 		$fields['fax'] = pSQL($this->fax);

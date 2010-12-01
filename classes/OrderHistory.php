@@ -137,7 +137,7 @@ class OrderHistoryCore extends ObjectModel
 			$data = array('{lastname}' => $result['lastname'], '{firstname}' => $result['firstname'], '{id_order}' => (int)($this->id_order));
 			if ($templateVars) $data = array_merge($data, $templateVars);
 			$order = new Order((int)($this->id_order));
-			$data['{total_paid}'] = Tools::displayPrice(floatval($order->total_paid), new Currency((int)($order->id_currency)), false, false);
+			$data['{total_paid}'] = Tools::displayPrice((float)($order->total_paid), new Currency((int)($order->id_currency)), false, false);
 			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
 			// additionnal links for download virtual product
 			if ($virtualProducts = $order->getVirtualProducts() AND $this->id_order_state==_PS_OS_PAYMENT_)

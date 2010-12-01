@@ -163,7 +163,7 @@ class GAnalytics extends Module
 			if ($order->id_currency != Configuration::get('PS_CURRENCY_DEFAULT'))
 			{
 				$currency = new Currency((int)($order->id_currency));
-				$conversion_rate = floatval($currency->conversion_rate);
+				$conversion_rate = (float)($currency->conversion_rate);
 			}
 
 			/* Order general information */
@@ -184,9 +184,9 @@ class GAnalytics extends Module
         pageTracker._addTrans(
           "'.(int)($order->id).'", // Order ID
           "PrestaShop", // Affiliation
-          "'.Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2).'", // Total
+          "'.Tools::ps_round((float)($order->total_paid) / (float)($conversion_rate), 2).'", // Total
           "0", // Tax
-          "'.Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2).'", // Shipping
+          "'.Tools::ps_round((float)($order->total_shipping) / (float)($conversion_rate), 2).'", // Shipping
           "'.addslashes($deliveryAddress->city).'", // City
           "", // State
           "'.addslashes($deliveryAddress->country).'" // Country
@@ -207,7 +207,7 @@ class GAnalytics extends Module
 					"'.addslashes($product['product_reference']).'", // SKU
 					"'.addslashes($product['product_name']).'", // Product Name 
 					"'.addslashes($category['name']).'", // Category
-					"'.Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2).'", // Price
+					"'.Tools::ps_round((float)($product['product_price_wt']) / (float)($conversion_rate), 2).'", // Price
 					"'.addslashes((int)($product['product_quantity'])).'" // Quantity
 					);
 				';

@@ -249,7 +249,7 @@ class ProductCore extends ObjectModel
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
 				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL, (int)($this->id_tax), (float)($tax->rate));
 			else
-				$this->tax_rate = floatval($tax->rate);
+				$this->tax_rate = (float)($tax->rate);
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
 		}
@@ -272,20 +272,20 @@ class ProductCore extends ObjectModel
 		$fields['id_color_default'] = (int)($this->id_color_default);
 		$fields['quantity'] = (int)($this->quantity);
 		$fields['minimal_quantity'] = (int)($this->minimal_quantity);
-		$fields['price'] = floatval($this->price);
-		$fields['additional_shipping_cost'] = floatval($this->additional_shipping_cost);
-		$fields['wholesale_price'] = floatval($this->wholesale_price);
+		$fields['price'] = (float)($this->price);
+		$fields['additional_shipping_cost'] = (float)($this->additional_shipping_cost);
+		$fields['wholesale_price'] = (float)($this->wholesale_price);
 		$fields['on_sale'] = (int)($this->on_sale);
 		$fields['online_only'] = (int)($this->online_only);
-		$fields['ecotax'] = floatval($this->ecotax);
+		$fields['ecotax'] = (float)($this->ecotax);
 		$fields['unity'] = pSQL($this->unity);
-		$fields['unit_price'] = floatval($this->unit_price);
+		$fields['unit_price'] = (float)($this->unit_price);
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['upc'] = pSQL($this->upc);
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
-		$fields['weight'] = floatval($this->weight);
+		$fields['weight'] = (float)($this->weight);
 		$fields['out_of_stock'] = pSQL($this->out_of_stock);
 		$fields['quantity_discount'] = (int)($this->quantity_discount);
 		$fields['customizable'] = (int)($this->customizable);
@@ -767,8 +767,8 @@ class ProductCore extends ObjectModel
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
 		Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute',
-		array('id_product' => (int)($this->id), 'price' => floatval($price), 'ecotax' => floatval($ecotax), 'quantity' => (int)($quantity),
-		'weight' => ($weight ? floatval($weight) : 0), 'unit_price_impact' => ($unit_impact ? floatval($unit_impact) : 0),
+		array('id_product' => (int)($this->id), 'price' => (float)($price), 'ecotax' => (float)($ecotax), 'quantity' => (int)($quantity),
+		'weight' => ($weight ? (float)($weight) : 0), 'unit_price_impact' => ($unit_impact ? (float)($unit_impact) : 0),
 		'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'upc' => pSQL($upc), 'default_on' => (int)($default)),
 		'INSERT');
@@ -791,7 +791,7 @@ class ProductCore extends ObjectModel
 	{
 		if (
 			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc)
-			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.floatval($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
+			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
 		)
 			return false;
 		return (int)($id_product_attribute);
@@ -880,11 +880,11 @@ class ProductCore extends ObjectModel
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
 		$data = array(
-		'wholesale_price' => floatval($wholesale_price),
-		'price' => floatval($price),
-		'ecotax' => floatval($ecotax),
-		'weight' => ($weight ? floatval($weight) : 0),
-		'unit_price_impact' => ($unit ? floatval($unit) : 0),
+		'wholesale_price' => (float)($wholesale_price),
+		'price' => (float)($price),
+		'ecotax' => (float)($ecotax),
+		'weight' => ($weight ? (float)($weight) : 0),
+		'unit_price_impact' => ($unit ? (float)($unit) : 0),
 		'reference' => pSQL($reference),
 		'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location),
@@ -1573,8 +1573,8 @@ class ProductCore extends ObjectModel
 
 		$specific_price = self::$_pricesLevel3[$cacheId3];
 
-		$price = floatval((!$specific_price OR floatval($specific_price['reduction'])) ? $result['price'] : $specific_price['price']);
-		if (!$specific_price OR (floatval($specific_price['price'])) AND !$specific_price['id_currency'])
+		$price = (float)((!$specific_price OR (float)($specific_price['reduction'])) ? $result['price'] : $specific_price['price']);
+		if (!$specific_price OR ((float)($specific_price['price'])) AND !$specific_price['id_currency'])
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = $specific_price;
 
@@ -1585,7 +1585,7 @@ class ProductCore extends ObjectModel
 			$price = $price * (1 + ($tax_rate / 100));
 
 		// Attribute price
-		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? floatval($result['attribute_price']) : 0), $id_currency);
+		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0), $id_currency);
 		$attribute_price = ($usetax OR !Configuration::get('PS_TAX')) ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + ($tax_rate / 100)));
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
@@ -1605,7 +1605,7 @@ class ProductCore extends ObjectModel
 		}
 
 		// Group reduction
-		if ($reductionFromCategory = floatval(GroupReduction::getValueForProduct($id_product, $id_group)))
+		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
 		if ($usereduc)
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
@@ -2314,7 +2314,7 @@ class ProductCore extends ObjectModel
 
 		// Tax
 		$usetax = true;
-		$tax = Tax::getProductTaxRate((int)($row['id_product']), NULL, (int)($row['id_tax']), floatval($row['rate']));
+		$tax = Tax::getProductTaxRate((int)($row['id_product']), NULL, (int)($row['id_tax']), (float)($row['rate']));
 		if (Tax::excludeTaxeOption() OR !$tax)
 			$usetax = false;
 
@@ -2326,7 +2326,7 @@ class ProductCore extends ObjectModel
 		$link = new Link();
 		$row['category'] = Category::getLinkRewrite($row['id_category_default'], (int)($id_lang));
 		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
-		$row['attribute_price'] = (isset($row['id_product_attribute']) AND $row['id_product_attribute']) ? floatval(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
+		$row['attribute_price'] = (isset($row['id_product_attribute']) AND $row['id_product_attribute']) ? (float)(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
 		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), (self::$_taxCalculationMethod == PS_TAX_EXC ? 2 : 6));
 		if (self::$_taxCalculationMethod == PS_TAX_EXC)
 		{

@@ -25,7 +25,7 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 	if (!isset($return['ERRORCODE']) OR $return['ERRORCODE'] == NULL OR in_array($return['ERRORCODE'],$nonBlockingError))
 	{	
 	
-		if ($return['SIGNATURE'] === socolissimo::make_key($return['CENAME'],floatval($return['DYPREPARATIONTIME']),$return['DYFORWARDINGCHARGES'],$return['TRCLIENTNUMBER'], $return['ORDERID']))
+		if ($return['SIGNATURE'] === socolissimo::make_key($return['CENAME'],(float)($return['DYPREPARATIONTIME']),$return['DYFORWARDINGCHARGES'],$return['TRCLIENTNUMBER'], $return['ORDERID']))
 		{
 			global $cookie ;	
 			if (isset($cookie) OR is_object($cookie))

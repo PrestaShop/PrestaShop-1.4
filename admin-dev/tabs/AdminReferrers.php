@@ -236,17 +236,17 @@ class AdminReferrers extends AdminTab
 			<fieldset><legend><img src="../img/admin/money.png" /> '.$this->l('Commission plan').'</legend>
 				<label>'.$this->l('Click fee').'</label>
 				<div class="margin-form">
-					<input type="text" size="8" name="click_fee" value="'.number_format(floatval($this->getFieldValue($obj, 'click_fee')), 2).'" />
+					<input type="text" size="8" name="click_fee" value="'.number_format((float)($this->getFieldValue($obj, 'click_fee')), 2).'" />
 					<p>'.$this->l('Fee given for each visit.').'</p>
 				</div>
 				<label>'.$this->l('Base fee').'</label>
 				<div class="margin-form">
-					<input type="text" size="8" name="base_fee" value="'.number_format(floatval($this->getFieldValue($obj, 'base_fee')), 2).'" />
+					<input type="text" size="8" name="base_fee" value="'.number_format((float)($this->getFieldValue($obj, 'base_fee')), 2).'" />
 					<p>'.$this->l('Fee given for each order placed.').'</p>
 				</div>
 				<label>'.$this->l('Percent fee').'</label>
 				<div class="margin-form">
-					<input type="text" size="8" name="percent_fee" value="'.number_format(floatval($this->getFieldValue($obj, 'percent_fee')), 2).'" />
+					<input type="text" size="8" name="percent_fee" value="'.number_format((float)($this->getFieldValue($obj, 'percent_fee')), 2).'" />
 					<p>'.$this->l('Percent of the sales.').'</p>
 				</div>
 			</fieldset>

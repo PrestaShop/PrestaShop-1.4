@@ -158,7 +158,7 @@ class Dejala extends Module
 					{
 						$errors[] = $value . ' ' . $this->l('is not a valid margin.');
 					}
-					$margin = floatval($_POST[$key]);
+					$margin = (float)($_POST[$key]);
 					foreach ($products as $l_product){
 						if ($l_product['id'] == $productID)
 						{
@@ -698,7 +698,7 @@ class Dejala extends Module
 			return ;
 		}
 
-		$totalCartWeight = floatval($cart->getTotalWeight());
+		$totalCartWeight = (float)($cart->getTotalWeight());
 
 		$address = $params['address'];
 		// ask dejala.fr for a quotation
@@ -725,7 +725,7 @@ class Dejala extends Module
 
 		$electedProduct = NULL;
 		foreach ($products as $key=>$product) {
-			if (floatval($product['max_weight']) >= $totalCartWeight) {
+			if ((float)($product['max_weight']) >= $totalCartWeight) {
 				if ( is_null($electedProduct) || ((int)($electedProduct['priority']) > (int)($key)) )
 					$electedProduct = $product;
 			}
@@ -994,7 +994,7 @@ class Dejala extends Module
 			return ;
 		}
 
-		$totalCartWeight = floatval($cart->getTotalWeight());
+		$totalCartWeight = (float)($cart->getTotalWeight());
 
 		$address = new Address($cart->id_address_delivery) ;
 		// ask dejala.fr for a quotation
@@ -1193,7 +1193,7 @@ class Dejala extends Module
 			$id_cart = $mOrder->id_cart;
 			/* set weight */
 			$cart = new Cart($id_cart);
-			$delivery['weight'] = floatval($cart->getTotalWeight());
+			$delivery['weight'] = (float)($cart->getTotalWeight());
 
 			/* set dejalaProductID and sender_availability = shipping date */
 			$djlCart = new DejalaCart($id_cart);

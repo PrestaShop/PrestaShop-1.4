@@ -42,7 +42,7 @@ class OrderControllerCore extends FrontController
 		$orderTotal = $this->cart->getOrderTotal();
 
 		$orderTotalDefaultCurrency = Tools::convertPrice($this->cart->getOrderTotal(true, 1), Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
-		$minimalPurchase = floatval(Configuration::get('PS_PURCHASE_MINIMUM'));
+		$minimalPurchase = (float)(Configuration::get('PS_PURCHASE_MINIMUM'));
 		if ($orderTotalDefaultCurrency < $minimalPurchase)
 		{
 			$this->step = 0;
@@ -160,7 +160,7 @@ class OrderControllerCore extends FrontController
 				$customizedDatas = Product::getAllCustomizedDatas((int)($this->cart->id));
 				Product::addCustomizationPrice($summary['products'], $customizedDatas);
 
-				if ($free_ship = Tools::convertPrice(floatval(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->cart->id_currency))))
+				if ($free_ship = Tools::convertPrice((float)(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->cart->id_currency))))
 				{
 					$discounts = $this->cart->getDiscounts();
 					$total_free_ship =  $free_ship - ($summary['total_products_wt'] + $summary['total_discounts']);
@@ -464,9 +464,9 @@ class OrderControllerCore extends FrontController
 		}
 
 		// Wrapping fees
-		$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+		$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
 		$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-		$wrapping_fees_tax_inc = $wrapping_fees * (1 + ((floatval($wrapping_fees_tax->rate) / 100)));
+		$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
 
 		if (Validate::isUnsignedInt($this->cart->id_carrier) AND $this->cart->id_carrier)
 		{
@@ -490,7 +490,7 @@ class OrderControllerCore extends FrontController
 			'conditions' => (int)(Configuration::get('PS_CONDITIONS')),
 			'link_conditions' => $this->link_conditions,
 			'recyclable' => (int)($this->cart->recyclable),
-			'gift_wrapping_price' => floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
+			'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 			'carriers' => $resultsArray,
 			'default_carrier' => (int)(Configuration::get('PS_CARRIER_DEFAULT')),
 			'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
@@ -514,7 +514,7 @@ class OrderControllerCore extends FrontController
 		$this->cookie->checkedTOS = '1';
 		$this->smarty->assign(array(
 			'HOOK_PAYMENT' => Module::hookExecPayment(), 
-			'total_price' => floatval($orderTotal),
+			'total_price' => (float)($orderTotal),
 			'taxes_enabled' => (int)(Configuration::get('PS_TAX'))
 		));
 	}

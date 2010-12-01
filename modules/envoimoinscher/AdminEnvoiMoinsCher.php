@@ -159,7 +159,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 			$tabDetailsProduct = array();
 			$tabDetailsProduct['id'] = (int)($details['product_id']);
 			$tabDetailsProduct['nb'] = (int)($details['product_quantity']);
-			$tabDetailsProduct['poids'] = floatval($details['product_weight']);
+			$tabDetailsProduct['poids'] = (float)($details['product_weight']);
 			$tabDetailsProduct['description'] = htmlspecialchars($details['product_name'], ENT_COMPAT, 'UTF-8');
 				foreach($features as $key => $value)
 					$tabDetailsProduct[$key] = $value;
@@ -245,7 +245,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 						$weight = 0;
 						foreach($values as $key => $features)
 						{		
-							$weight += floatval($features['poids']*$features['nb']);
+							$weight += (float)($features['poids']*$features['nb']);
 						}
 						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.poids" value="'.$weight.'">';						
 					}
@@ -256,10 +256,10 @@ class AdminEnvoiMoinsCher extends AdminTab
 					}
 					else
 					{
-						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.poids" value="'.(isset($values[0]['poids']) ? (floatval($values[0]['poids']*$values[0]['nb'])) : '').'">';
-						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.longueur" value="'.(isset($values[0]['longueur']) ? floatval($values[0]['longueur']) : '').'">';
-						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.hauteur" value="'.(isset($values[0]['hauteur']) ? floatval($values[0]['hauteur']) : '').'">';
-						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.largeur" value="'.(isset($values[0]['largeur']) ? floatval($values[0]['largeur']) : '').'">';								echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.description" value="'.(isset($values[0]['description']) ? htmlentities($values[0]['description'], ENT_COMPAT, 'UTF-8') : '').'">';
+						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.poids" value="'.(isset($values[0]['poids']) ? ((float)($values[0]['poids']*$values[0]['nb'])) : '').'">';
+						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.longueur" value="'.(isset($values[0]['longueur']) ? (float)($values[0]['longueur']) : '').'">';
+						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.hauteur" value="'.(isset($values[0]['hauteur']) ? (float)($values[0]['hauteur']) : '').'">';
+						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.largeur" value="'.(isset($values[0]['largeur']) ? (float)($values[0]['largeur']) : '').'">';								echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.description" value="'.(isset($values[0]['description']) ? htmlentities($values[0]['description'], ENT_COMPAT, 'UTF-8') : '').'">';
 					}
 				}	
 				elseif ($detail == 'packaging')

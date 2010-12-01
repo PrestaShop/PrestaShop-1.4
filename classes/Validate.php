@@ -91,12 +91,12 @@ class ValidateCore
 	*/
     static public function isFloat($float)
     {
-		return strval(floatval($float)) == strval($float);
+		return strval((float)($float)) == strval($float);
 	}
 	
     static public function isUnsignedFloat($float)
     {
-			return strval(floatval($float)) == strval($float) AND $float >= 0;
+			return strval((float)($float)) == strval($float) AND $float >= 0;
 	}
 
 	/**
