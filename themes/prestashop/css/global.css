@@ -933,7 +933,8 @@ div.exclusive .block_content {
 	display: block;
 	width: 118px;
 	height: 50px;
-	margin-left: 2px
+	margin-left: 2px;
+	margin-bottom: 8px;
 }
 
 #center_column div.products_block a.product_image img {

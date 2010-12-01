@@ -989,6 +989,7 @@ CREATE TABLE `PREFIX_order_return_state_lang` (
 
 CREATE TABLE `PREFIX_order_slip` (
   `id_order_slip` int(10) unsigned NOT NULL auto_increment,
+  `conversion_rate` decimal(13,6) NOT NULL default 1,
   `id_customer` int(10) unsigned NOT NULL,
   `id_order` int(10) unsigned NOT NULL,
   `shipping_cost` tinyint(3) unsigned NOT NULL default '0',
