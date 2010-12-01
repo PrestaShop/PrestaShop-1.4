@@ -24,7 +24,8 @@ if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) OR substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
 	if(!file_exists(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
-	Tools::redirect('install', $dir);
+	header('Location: install/');
+	exit;
 }
 require_once(dirname(__FILE__).'/settings.inc.php');
 
