@@ -172,7 +172,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		</div>
 		{/if}
 
-		{if $colors}
+		{if isset($colors) && $colors}
 		<!-- colors -->
 		<div id="color_picker">
 			<p>{l s='Pick a color:' js=1}</p>
