@@ -59,9 +59,11 @@ var combinationImages = new Array();
 {/foreach}
 
 combinationImages[0] = new Array();
-{foreach from=$images item='image' name='f_defaultImages'}
-	combinationImages[0][{$smarty.foreach.f_defaultImages.index}] = {$image.id_image};
-{/foreach}
+{if isset($images)}
+	{foreach from=$images item='image' name='f_defaultImages'}
+		combinationImages[0][{$smarty.foreach.f_defaultImages.index}] = {$image.id_image};
+	{/foreach}
+{/if}
 
 // Translations
 var doesntExist = '{l s='The product does not exist in this model. Please choose another.' js=1}';
@@ -120,26 +122,28 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		{/if}
 		</div>
 
-		{if count($images) > 0}
+		{if isset($images) && count($images) > 0}
 		<!-- thumbnails -->
-		<div id="views_block" {if count($images) < 2}class="hidden"{/if}>
-		{if count($images) > 3}<span class="view_scroll_spacer"><a id="view_scroll_left" class="hidden" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Previous'}</a></span>{/if}
+		<div id="views_block" {if isset($images) && count($images) < 2}class="hidden"{/if}>
+		{if isset($images) && count($images) > 3}<span class="view_scroll_spacer"><a id="view_scroll_left" class="hidden" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Previous'}</a></span>{/if}
 		<div id="thumbs_list">
 			<ul style="width: {math equation="width * nbImages" width=80 nbImages=$images|@count}px" id="thumbs_list_frame">
-				{foreach from=$images item=image name=thumbnails}
-				{assign var=imageIds value="`$product->id`-`$image.id_image`"}
-				<li id="thumbnail_{$image.id_image}">
-					<a href="{$link->getImageLink($product->link_rewrite, $imageIds, 'thickbox')}" rel="other-views" class="thickbox {if $smarty.foreach.thumbnails.first}shown{/if}" title="{$image.legend|htmlspecialchars}">
-						<img id="thumb_{$image.id_image}" src="{$link->getImageLink($product->link_rewrite, $imageIds, 'medium')}" alt="{$image.legend|htmlspecialchars}" height="{$mediumSize.height}" width="{$mediumSize.width}" />
-					</a>
-				</li>
-				{/foreach}
+				{if isset($images)}
+					{foreach from=$images item=image name=thumbnails}
+					{assign var=imageIds value="`$product->id`-`$image.id_image`"}
+					<li id="thumbnail_{$image.id_image}">
+						<a href="{$link->getImageLink($product->link_rewrite, $imageIds, 'thickbox')}" rel="other-views" class="thickbox {if $smarty.foreach.thumbnails.first}shown{/if}" title="{$image.legend|htmlspecialchars}">
+							<img id="thumb_{$image.id_image}" src="{$link->getImageLink($product->link_rewrite, $imageIds, 'medium')}" alt="{$image.legend|htmlspecialchars}" height="{$mediumSize.height}" width="{$mediumSize.width}" />
+						</a>
+					</li>
+					{/foreach}
+				{/if}
 			</ul>
 		</div>
-		{if count($images) > 3}<a id="view_scroll_right" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Next'}</a>{/if}
+		{if isset($images) && count($images) > 3}<a id="view_scroll_right" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Next'}</a>{/if}
 		</div>
 		{/if}
-		{if count($images) > 1}<p class="align_center clear"><span id="wrapResetImages" style="display:none;"><img src="{$img_dir}icon/cancel_16x18.gif" alt="{l s='Cancel'}" width="16" height="18"/> <a id="resetImages" href="{$link->getProductLink($product)}" onclick="$('span#wrapResetImages').hide('slow');return (false);">{l s='Display all pictures'}</a></span></p>{/if}
+		{if isset($images) && count($images) > 1}<p class="align_center clear"><span id="wrapResetImages" style="display:none;"><img src="{$img_dir}icon/cancel_16x18.gif" alt="{l s='Cancel'}" width="16" height="18"/> <a id="resetImages" href="{$link->getProductLink($product)}" onclick="$('span#wrapResetImages').hide('slow');return (false);">{l s='Display all pictures'}</a></span></p>{/if}
 		<!-- usefull links-->
 		<ul id="usefull_link_block">
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
