@@ -282,8 +282,8 @@ class ProductControllerCore extends FrontController
 			'display_qties' => (int)(Configuration::get('PS_DISPLAY_QTIES')),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'display_ht' => !Tax::excludeTaxeOption(),
-			'ecotax' => ($product->ecotax > 0 ? Tools::convertPrice((float)($product->ecotax)) : 0),
-			'unit_price' => ($product->unit_price > 0 ? Tools::convertPrice((float)($product->unit_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod((int)($this->cookie->id_customer)) == 0) ? (((float)($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0)));
+			'ecotax' => (!sizeof($this->errors) AND $product->ecotax > 0 ? Tools::convertPrice((float)($product->ecotax)) : 0),
+			'unit_price' => (!sizeof($this->errors) AND $product->unit_price > 0 ? Tools::convertPrice((float)($product->unit_price)) * ((Configuration::get('PS_TAX') AND Product::getTaxCalculationMethod((int)($this->cookie->id_customer)) == 0) ? (((float)($product->tax_rate) / 100) + 1) : 1) * ($group_reduction < 1 ? $group_reduction : 1) : 0)));
 
 		if (file_exists(_PS_THEME_DIR_.'thickbox.tpl'))
 			$this->smarty->display(_PS_THEME_DIR_.'thickbox.tpl');
