@@ -30,7 +30,7 @@ class WebserviceRequest
 		),
 		'products' => array(),
 		'categories' => array(),
-		'manufactuters' => array(),
+		'manufacturers' => array(),
 		'suppliers' => array(),
 		'scenes' => array(),
 		'stores' => array()
@@ -155,72 +155,80 @@ class WebserviceRequest
 	
 	private function manageImages()
 	{
-		if (count($this->_urlFolders) == 1 || $this->_urlFolders[1] == '')
+		if (count($this->_urlFolders) == 1)
+			$this->_urlFolders[1] = '';
+		switch ($this->_urlFolders[1])
 		{
-			$this->_xmlContent .= '<image_types>'."\n";
-			foreach ($this->_imageTypes as $imageTypeName => $imageType)
-				$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName."\" />\n";
-			$this->_xmlContent .= '</image_types>'."\n";
-		}
-		elseif($this->_urlFolders[1] == 'general')
-		{
-			if (count($this->_urlFolders) == 2)
-				$this->_urlFolders[2] = '';
-			switch ($this->_urlFolders[2])
-			{
-				case '':
-					$this->_xmlContent .= '<general_image_types>'."\n";
-					foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
-						$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName."\" />\n";
-					$this->_xmlContent .= '</general_image_types>'."\n";
-					break;
+			case '':
+				$this->_xmlContent .= '<image_types>'."\n";
+				foreach ($this->_imageTypes as $imageTypeName => $imageType)
+					$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName."\" />\n";
+				$this->_xmlContent .= '</image_types>'."\n";
+				break;
+			
+			case 'general':
+				if (count($this->_urlFolders) == 2)
+						$this->_urlFolders[2] = '';
+					switch ($this->_urlFolders[2])
+					{
+						case '':
+							$this->_xmlContent .= '<general_image_types>'."\n";
+							foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
+								$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName."\" />\n";
+							$this->_xmlContent .= '</general_image_types>'."\n";
+							break;
+						
+						case 'header':
+							$this->_imgToDisplay = _PS_IMG_DIR_.'logo.jpg';
+							break;
+						case 'mail':
+							$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_mail.jpg') ? _PS_IMG_DIR_.'logo_mail.jpg' : _PS_IMG_DIR_.'logo.jpg';
+							break;
+						case 'invoice':
+							$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_invoice.jpg') ? _PS_IMG_DIR_.'logo_invoice.jpg' : _PS_IMG_DIR_.'logo.jpg';
+							break;
+						case 'store_icon':
+							$this->_imgToDisplay = _PS_IMG_DIR_.'logo_stores.gif';
+							$this->_imgType = 'gif';
+							break;
+						default:
+							$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
+							return false;
+					}
+				break;
+			case 'products':
+				$this->_xmlContent = 'case "images/products"';
+				break;
+			case 'categories':
+				$this->_xmlContent = 'case "images/categories"';
+				break;
+			case 'suppliers':
+				$this->_xmlContent = 'case "images/suppliers"';
+				break;
+			case 'manufacturers':
+				$this->_xmlContent = 'case "images/manufacturers"';
+				break;
+			case 'scenes':
+				$this->_xmlContent = 'case "images/scenes"';
+				break;
+			case 'stores':
+				$this->_xmlContent = 'case "images/stores"';
+				break;
+			default:
+				$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
+				return false;
+			
 				
-				case 'header':
-					$this->_imgToDisplay = _PS_IMG_DIR_.'logo.jpg';
-					break;
-				case 'mail':
-					$this->_imgToDisplay = _PS_IMG_DIR_.'logo_mail.jpg';
-					break;
 				case 'invoice':
-					$this->_imgToDisplay = _PS_IMG_DIR_.'logo_invoice.jpg';
-					break;
-				case 'store_icon':
-					$this->_imgToDisplay = _PS_IMG_DIR_.'logo_stores.gif';
-					$this->_imgType = 'gif';
-					break;
-				default:
-					$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
-					return false;
-			}
-		}
-		elseif($this->_urlFolders[1] == 'products')
-		{
-			$this->_xmlContent = 'case "images/products"';
-		}
-		elseif($this->_urlFolders[1] == 'categories')
-		{
-			$this->_xmlContent = 'case "images/categories"';
-		}
-		elseif($this->_urlFolders[1] == 'suppliers')
-		{
-			$this->_xmlContent = 'case "images/suppliers"';
-		}
-		elseif($this->_urlFolders[1] == 'manufacters')
-		{
-			$this->_xmlContent = 'case "images/manufacters"';
-		}
-		elseif($this->_urlFolders[1] == 'scenes')
-		{
-			$this->_xmlContent = 'case "images/scenes"';
-		}
-		elseif($this->_urlFolders[1] == 'stores')
-		{
-			$this->_xmlContent = 'case "images/stores"';
-		}
-		else
-		{
-			$this->setError(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[1], array_keys($this->_imageTypes)).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes)).'"');
-			return false;
+				$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_invoice.jpg') ? _PS_IMG_DIR_.'logo_invoice.jpg' : _PS_IMG_DIR_.'logo.jpg';
+				break;
+			case 'store_icon':
+				$this->_imgToDisplay = _PS_IMG_DIR_.'logo_stores.gif';
+				$this->_imgType = 'gif';
+				break;
+			default:
+				$this->setError(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[1], array_keys($this->_imageTypes)).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes)).'"');
+				return false;
 		}
 	}
 	
