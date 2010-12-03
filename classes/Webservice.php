@@ -72,8 +72,9 @@ class WebserviceCore extends ObjectModel
 			'orders' => array('description' => 'The Customers orders','class' => 'Order'),
 			'order_histories' => array('description' => 'The Order histories','class' => 'OrderHistory'),
 			'order_states' => array('description' => 'The Order states','class' => 'OrderState'),
-			'tags' => array('description' => 'The Products tagsorders','class' => 'Tag'),
+			'tags' => array('description' => 'The Products tags','class' => 'Tag'),
 			'carriers' => array('description' => 'The Carriers','class' => 'Carrier'),
+			'images' => array('description' => 'The images', 'specific_management' => true),
 		);
 		ksort($resources);
 		return $resources;

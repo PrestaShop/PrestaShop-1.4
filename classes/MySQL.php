@@ -194,13 +194,13 @@ class MySQLCore extends Db
 
 	public function displayMySQLError($query = false)
 	{
-		global $webservice_call, $errors, $display_errors;
+		global $webservice_call, $display_errors;
 		if ($webservice_call && mysql_errno())
 		{
 			if ($display_errors)
-				$errors[] = '[SQL Error] '.mysql_error().'. Query was : '.$query;
+				WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error().'. Query was : '.$query);
 			else
-				$errors[] = 'Internal error occured';
+				WebserviceRequest::getInstance()->setError(500, 'Internal error occured');
 		}
 		elseif (_PS_DEBUG_SQL_ AND mysql_errno() AND !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{
