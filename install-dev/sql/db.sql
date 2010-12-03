@@ -349,7 +349,7 @@ CREATE TABLE `PREFIX_contact_lang` (
 CREATE TABLE `PREFIX_country` (
   `id_country` int(10) unsigned NOT NULL auto_increment,
   `id_zone` int(10) unsigned NOT NULL,
-  `id_currency` int(10) unsigned NOT NULL,
+  `id_currency` int(10) unsigned NOT NULL default '0',
   `iso_code` varchar(3) NOT NULL,
   `call_prefix` int(10) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
