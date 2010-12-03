@@ -129,13 +129,13 @@ class DateOfDelivery extends Module
 		if (Tools::isSubmit('submitCarrierRule'))
 		{	
 			if (!Validate::isUnsignedInt(Tools::getValue('minimal_time')))
-				$errors[] = $this->l('Minimal time is invalid');
+				$errors[] = $this->l('Minimum time is invalid');
 			if (!Validate::isUnsignedInt(Tools::getValue('maximal_time')))
-				$errors[] = $this->l('Maximal time is invalid');
+				$errors[] = $this->l('Maximum time is invalid');
 			if (($carrier = new Carrier((int)(Tools::getValue('id_carrier')))) AND !Validate::isLoadedObject($carrier))
 				$errors[] = $this->l('Carrier is invalid');
 			if ($this->_isAlreadyDefinedForCarrier((int)($carrier->id), (int)(Tools::getValue('id_carrier_rule', 0))))
-				$errors[] = $this->l('you can\'t used this carrier, a rule has been already save');
+				$errors[] = $this->l('you cannot used this carrier, a rule has been already saved');
 			
 			if(!sizeof($errors))
 			{
@@ -147,7 +147,7 @@ class DateOfDelivery extends Module
 					'))
 						Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmAddCarrierRule');
 					else
-						$this->_html .= $this->displayError($this->l('an error occured on adding of rule carrier'));
+						$this->_html .= $this->displayError($this->l('an error occurred on adding of carrier rule'));
 				}
 				else
 				{
@@ -158,7 +158,7 @@ class DateOfDelivery extends Module
 					))
 						Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmEditCarrierRule');
 					else
-						$this->_html .= $this->displayError($this->l('an error occured on updating of rule carrier'));
+						$this->_html .= $this->displayError($this->l('an error occurred on updating of carrier rule'));
 				}
 				
 			}

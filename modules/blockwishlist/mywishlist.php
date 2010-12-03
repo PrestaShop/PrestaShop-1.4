@@ -27,7 +27,7 @@ if ($cookie->isLogged())
 			if (empty($name))
 				$errors[] = Tools::displayError('you must specify a name');
 			if (WishList::isExistsByNameForUser($name))
-				$errors[] = Tools::displayError('this name is already used by an other list');
+				$errors[] = Tools::displayError('this name is already used by another list');
 			
 			if(!sizeof($errors))
 			{
@@ -54,7 +54,7 @@ if ($cookie->isLogged())
 		if (Validate::isLoadedObject($wishlist))
 			$wishlist->delete();
 		else
-			$errors[] = Tools::displayError('can`t delete this whislist');
+			$errors[] = Tools::displayError('cannot delete this wishlist');
 	}
 	$smarty->assign('wishlists', WishList::getByIdCustomer((int)($cookie->id_customer)));
 	$smarty->assign('nbProducts', WishList::getInfosByIdCustomer((int)($cookie->id_customer)));

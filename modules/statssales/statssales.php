@@ -56,7 +56,7 @@ class StatsSales extends ModuleGraph
 				<input type="submit" name="submitCountry" value="'.$this->l('Filter').'" class="button" />
 			</form>
 			<p><center><img src="../img/admin/down.gif" />
-				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tools, but at least you can overview the rentability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in theses two graphs.').'
+				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tool, but at least you can overview the viability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in these two graphs.').'
 			</center></p>
 			<p>'.$this->l('Orders placed:').' '.(int)($totals['orderCount']).'</p>
 			<p>'.$this->l('Products bought:').' '.(int)($totals['products']).'</p>

@@ -306,7 +306,7 @@ class BlockWishList extends Module
 	*/
 	public function errorLogged()
 	{
-		return $this->l('You need to be logged to manage your wishlist');
+		return $this->l('You need to be logged in to manage your wishlists');
 	}
 }
 

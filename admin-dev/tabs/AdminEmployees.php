@@ -46,7 +46,7 @@ class AdminEmployees extends AdminTab
 
 		$this->optionTitle = $this->l('Employees options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_BACK' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for regenerate a new password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes')),
+			'PS_PASSWD_TIME_BACK' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for a new password to regenerate'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes')),
 			'PS_BO_ALLOW_EMPLOYEE_FORM_LANG' => array('title' => $this->l('Memorize form language:'), 'desc' => $this->l('Allow employees to save their own default form language'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => array(
 				'0' => array('value' => 0, 'name' => $this->l('No')), 
 				'1' => array('value' => 1, 'name' => $this->l('Yes')) 
@@ -132,7 +132,7 @@ class AdminEmployees extends AdminTab
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Allow or disallow this employee to log in to this Back Office').'</p>
+					<p>'.$this->l('Allow or disallow this employee to log into this Back Office').'</p>
 				</div>
 				<label>'.$this->l('Profile:').' </label>
 				<div class="margin-form">
@@ -160,7 +160,7 @@ class AdminEmployees extends AdminTab
 		{
 			if ($cookie->id_employee == Tools::getValue('id_employee'))
 			{
-				$this->_errors[] = Tools::displayError('You can\'t disable or delete your own account.');
+				$this->_errors[] = Tools::displayError('You cannot disable or delete your own account.');
 				return false;
 			}
 			
@@ -176,7 +176,7 @@ class AdminEmployees extends AdminTab
 		{
 			if ($cookie->id_employee == Tools::getValue('id_employee') && Tools::getvalue('active') == 0)
 			{
-				$this->_errors[] = Tools::displayError('You can\'t disable your own account.');
+				$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
 				return false;
 			}
 		
@@ -194,7 +194,7 @@ class AdminEmployees extends AdminTab
 				
 				if (Tools::getvalue('active') == 0)
 				{
-					$this->_errors[] = Tools::displayError('You can\'t disable or delete the last administrator account.');
+					$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
 					return false;
 				}
 			}

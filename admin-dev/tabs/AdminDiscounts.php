@@ -72,7 +72,7 @@ class AdminDiscounts extends AdminTab
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
 			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
-				$this->_errors[] = Tools::displayError('You need set a currency for this voucher');
+				$this->_errors[] = Tools::displayError('You need to set a currency for this voucher');
 			if (!Validate::isBool_Id(Tools::getValue('id_target')))
 				$this->_errors[] = Tools::displayError('Invalid customer or group id field');
 			else
@@ -328,7 +328,7 @@ class AdminDiscounts extends AdminTab
 										}
 										if (obj.groups.length >= 50)
 										{
-											formDiscount.id_target.options[50].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
+											formDiscount.id_target.options[50].text = "'.$this->l('Too many results...',__CLASS__ , true, false).'";
 											formDiscount.id_target.options[50].value = "_";
 											formDiscount.id_target.options[50].className = "groups_filtered";
 										}
@@ -350,7 +350,7 @@ class AdminDiscounts extends AdminTab
 										}
 										if (obj.customers.length >= 50)
 										{
-											formDiscount.id_target.options[groups_length+50+i].text = "'.$this->l('Too much results...',__CLASS__ , true, false).'";
+											formDiscount.id_target.options[groups_length+50+i].text = "'.$this->l('Too many results...',__CLASS__ , true, false).'";
 											formDiscount.id_target.options[groups_length+50+i].value = "_";
 											formDiscount.id_target.options[groups_length+50+i].className = "customers_filtered";
 										}

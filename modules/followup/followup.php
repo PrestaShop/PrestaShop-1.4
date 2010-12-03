@@ -86,7 +86,7 @@ class Followup extends Module
 				'.$this->l('Define settings and put this URL in crontab or call it manually daily:').'<br />
 				<b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'modules/followup/cron.php?secure_key='.Configuration::get('PS_FOLLOWUP_SECURE_KEY').'</b></p>
 				<hr size="1" />
-				<p><b>1. '.$this->l('Canceled carts').'</b><br /><br />'.$this->l('For each cancelled cart (with no order), generate a discount and send it to the customer').'</p>
+				<p><b>1. '.$this->l('Cancelled carts').'</b><br /><br />'.$this->l('For each cancelled cart (with no order), generate a discount and send it to the customer').'</p>
 				<label>'.$this->l('Enable').'</label>
 				<div class="margin-form" style="padding-top: 5px;"><input type="checkbox" name="PS_FOLLOW_UP_ENABLE_1" value="1" style="vertical-align: middle;" '.($conf['PS_FOLLOW_UP_ENABLE_1'] == 1 ? 'checked="checked"' : '').' /></div>
 				<label>'.$this->l('Discount amount').'</label>

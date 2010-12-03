@@ -47,7 +47,7 @@ class AdminCustomers extends AdminTab
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for regenerate a new password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
+			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for a new password  to regenerate'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
 		);
 
 		parent::__construct();
@@ -678,7 +678,7 @@ class AdminCustomers extends AdminTab
 						}
 						echo '
 					</table>
-					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of groups to which the customer is to be member').'<sup> *</sup></p>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of groups in which the customer is to be a member').'<sup> *</sup></p>
 					';
 					} else
 						echo '<p>'.$this->l('No group created').'</p>';

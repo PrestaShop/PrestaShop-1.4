@@ -8,7 +8,7 @@ $_MODULE['<{followup}prestashop>followup_f71a41841c80c2ef0ec02a6ad5449c65'] = 'E
 $_MODULE['<{followup}prestashop>followup_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{followup}prestashop>followup_1b28c1e5c11e0da4134d11eac04200cc'] = 'Quatre types de relances afin de rester en contact avec vos clients !';
 $_MODULE['<{followup}prestashop>followup_a22d91090ad7c8712028cb3bc761f3ae'] = 'Effectuez vos réglages et ajoutez cette URL à votre crontab ou appelez-la manuellement chaque jour :';
-$_MODULE['<{followup}prestashop>followup_4a43635068b63d16d845f9feb6bcc125'] = 'Paniers annulés';
+$_MODULE['<{followup}prestashop>followup_b547c073d144a57761d1d00d0b9d9f27'] = 'Paniers annulés';
 $_MODULE['<{followup}prestashop>followup_6f78d3a24317eef6068e57e2577752f5'] = 'Pour chaque panier abandonné (sans commande), génère un bon d\'achat et l\'envoi au client';
 $_MODULE['<{followup}prestashop>followup_2faec1f9f8cc7f8f40d521c4dd574f49'] = 'Activé';
 $_MODULE['<{followup}prestashop>followup_b30690be173bcd4a83df0cd68f89a385'] = 'Montant de la remise';
@@ -33,7 +33,6 @@ $_MODULE['<{followup}prestashop>followup_f23b0eec6c25c49afa4b29c57e671728'] = 'E
 $_MODULE['<{followup}prestashop>followup_fde0b9a66bffdd6ee0886613e8031d9a'] = 'U = Nombre de bons d\'achat utilisés (commandes valides uniquement)';
 $_MODULE['<{followup}prestashop>followup_cceb59e78d00c10436ff5e777dd5d895'] = '% = Taux de transformation';
 $_MODULE['<{followup}prestashop>followup_44749712dbec183e983dcd78a7736c41'] = 'Date';
-$_MODULE['<{followup}prestashop>followup_b547c073d144a57761d1d00d0b9d9f27'] = 'Paniers annulés';
 $_MODULE['<{followup}prestashop>followup_5e53dfa887dfb989f0bc3e9fb9b34a2d'] = 'Meilleurs clients';
 $_MODULE['<{followup}prestashop>followup_66ff4e89c767ab0a4e5ddc0251a101bc'] = 'Mauvais clients';
 $_MODULE['<{followup}prestashop>followup_5dbc98dcc983a70728bd082d1a47546e'] = 'E';

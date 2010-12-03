@@ -186,11 +186,11 @@ class ThemeInstallator extends Module
 		{
 			$zip = new ZipArchive();
 			if ($_FILES['themearchive']['error'] OR !file_exists($_FILES['themearchive']['tmp_name']))
-				$this->errors .= parent::displayError($this->l('An error has occured during the file upload.'));
+				$this->errors .= parent::displayError($this->l('An error has occurred during the file upload.'));
 			else if (substr($_FILES['themearchive']['name'], -4) != '.zip')
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
 			else if (!rename($_FILES['themearchive']['tmp_name'], ARCHIVE_NAME))
-				$this->errors .= parent::displayError($this->l('An error has occured during the file copy.'));
+				$this->errors .= parent::displayError($this->l('An error has occurred during the file copy.'));
 			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) === true)
 				$this->page = 2;
 			else
@@ -984,9 +984,9 @@ class ThemeInstallator extends Module
 		$website = Tools::getValue('website');
 		
 		if ($mail AND !preg_match('#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#', $mail))
-			$this->_html .= parent::displayError($this->l('There is an error on your email syntax!'));
+			$this->_html .= parent::displayError($this->l('There is an error in your e-mail syntax!'));
 		else if ($website AND (!Validate::isURL($website) OR !Validate::isAbsoluteUrl($website)))
-			$this->_html .= parent::displayError($this->l('There is an error on your url syntax!'));
+			$this->_html .= parent::displayError($this->l('There is an error in your URL syntax!'));
 		else if (!$this->checkVersionsAndCompatibility() OR !$this->checkNames() OR !$this->checkDocumentation())
 			return false;
 		else

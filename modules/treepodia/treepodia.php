@@ -565,7 +565,7 @@ XML;
 					<div class="clear" />
 					<br />
 					<input type="radio" name="trpd_integration_type" value="1" style="vertical-align: middle;" '.((int)(Configuration::get('TREEPODIA_INTEGRATION_TYPE')) == 1 ? 'checked' : '').' /> <label style="font-size: 14px; color: #268CCD; float: none;">'.$this->l('Or, implement your own integration').'</label>
-					<p style="margin-bottom: 30px;">'.$this->l('Use this option if you wish to implement the Treepodia integration code on your own. The built-in integration code will be disactivated if you choose this option.').' <a target="_blank" href="https://www.treepodia.com/prestashop/api/alternative-integration" style="color: rgb(38, 140, 205); text-decoration: underline;">'.$this->l('Read here how to implement Treepodia integration code on your own').'</a></p>
+					<p style="margin-bottom: 30px;">'.$this->l('Use this option if you wish to implement the Treepodia integration code on your own. The built-in integration code will be deactivated if you choose this option.').' <a target="_blank" href="https://www.treepodia.com/prestashop/api/alternative-integration" style="color: rgb(38, 140, 205); text-decoration: underline;">'.$this->l('Read here how to implement Treepodia integration code on your own').'</a></p>
 					<center><input type="submit" class="button" name="submitTreepodia" value="'.$this->l('Save settings').'" /></center>
 				</form>
 			</fieldset>';	

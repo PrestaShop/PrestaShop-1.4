@@ -12,7 +12,7 @@ $_MODULE['<{referralprogram}prestashop>order-confirmation_cda09d90a2d64cf06ae651
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_d3d2e617335f08df83599665eef8a418'] = 'Cerrado';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_7a81aa9275331bb0f5e6adb5e8650a03'] = 'o tecla Esc';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mi cuenta';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_bfe8efc882100ef93bb09d02f2dbeed5'] = 'Patrocinio';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_6540b502e953f4c05abeb8f234cd50bf'] = 'Programa de patrocinio';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_6b31baf25848e7a6563ecc3946626c80'] = 'Patrocinio';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_dbc65cd60abde51277c2881ce915a225'] = '¡Necesita aceptar las condiciones del programa de patrocinio!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_83fc792f687bc45d75ac35c84c721a26'] = '¡Al menos una dirección de correo no es válida!';
@@ -45,7 +45,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_868ca5fe643791c23
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_31fde7b05ac8952dacf4af8a704074ec'] = 'Vista previa';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8e8dc296c6bf3876468aa028974bfebe'] = 'Invitación por email';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_a86073a0c3b0bebf11bd807caf8e505a'] = 'Email por defecto ';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_7116a7c3972b72ec34293df1b50740a0'] = 'que se enviará a su amigo o amigos.';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_7532696b81dfc0b94a37e876677152c5'] = 'que se enviará a su amigo o amigos.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ad3d06d03d94223fa652babc913de686'] = 'Validar';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_59352cd5314a67c0fb10c964831920f3'] = 'Para ser un patrocinador, es necesario que usted tenga por lo menos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ec7342814444c667ab93181b30b28e38'] = '¡Estos amigos aún no han realizado ningún pedido en este sitio web patrocinado, pero usted puede intentarlo nuevamente! Para ello, marque la casilla de verificación de los amigos a los que desea contactar de nuevo. A continuación, haga clic en el botón \\\"contactar a mi(s) amigo (s)\\\"';

@@ -12,7 +12,7 @@
 	//]]>
 </script>
 
-{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account' mod='referralprogram'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='ReferralProgram' mod='referralprogram'}{/capture}
+{capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account' mod='referralprogram'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Referral Program' mod='referralprogram'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{l s='Referral program' mod='referralprogram'}</h2>
@@ -104,7 +104,7 @@
 					<a href="{$base_dir_ssl}modules/referralprogram/referralprogram-rules.php?height=500&amp;width=400" class="thickbox" title="{l s='Conditions of the referral program' mod='referralprogram'}">{l s='Read conditions.' mod='referralprogram'}</a>
 				</p>
 				<p>
-					{l s='Preview' mod='referralprogram'} <a href="{$base_dir_ssl}modules/referralprogram/preview-email.php?height=500&amp;width=600&amp;mail={$lang_iso}/referralprogram-invitation.html" class="thickbox" title="{l s='Invitation e-mail' mod='referralprogram'}">{l s='the default e-mail' mod='referralprogram'}</a> {l s='that will be sent to your(s) friend(s).' mod='referralprogram'}
+					{l s='Preview' mod='referralprogram'} <a href="{$base_dir_ssl}modules/referralprogram/preview-email.php?height=500&amp;width=600&amp;mail={$lang_iso}/referralprogram-invitation.html" class="thickbox" title="{l s='Invitation e-mail' mod='referralprogram'}">{l s='the default e-mail' mod='referralprogram'}</a> {l s='that will be sent to your friend(s).' mod='referralprogram'}
 				</p>
 				<p class="submit">
 					<input type="submit" id="submitSponsorFriends" name="submitSponsorFriends" class="button_large" value="{l s='Validate' mod='referralprogram'}" />

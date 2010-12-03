@@ -57,12 +57,12 @@ class AdminWebservice extends AdminTab
 			if (!in_array('mod_auth_basic', $apache_modules))
 				$warnings[] = $this->l('Please activate the Apache module \'mod_auth_basic\' to allow authentication of PrestaShop webservice.');
 			if (!in_array('mod_rewrite', $apache_modules))
-				$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using of PrestaShop webservice.');
+				$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using the PrestaShop webservice.');
 		}
 		if (!extension_loaded('SimpleXML'))
 			$warnings[] = $this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.');
 		if (!configuration::get('PS_SSL_ENABLED'))
-			$warnings[] = $this->l('if you have the possibility, it is preferable to use the SSL (https) for webservice calls, it avoids the security issues of type "man in the middle".');
+			$warnings[] = $this->l('If possible, it is preferable to use SSL (https) for webservice calls, as it avoids the security issues of type "man in the middle".');
 		
 		$this->displayWarning($warnings);
 		

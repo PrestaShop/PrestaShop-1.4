@@ -84,7 +84,7 @@ class ProductControllerCore extends FrontController
 					$this->formTargetFormat();
 				}
 				elseif (isset($_GET['deletePicture']) AND !$cart->deletePictureToProduct((int)($product->id), (int)(Tools::getValue('deletePicture'))))
-					$this->errors[] = Tools::displayError('An error occured while deleting the selected picture');
+					$this->errors[] = Tools::displayError('An error occurred while deleting the selected picture');
 
 				$files = $this->cookie->getFamily('pictures_'.(int)($product->id));
 				$textFields = $this->cookie->getFamily('textFields_'.(int)($product->id));

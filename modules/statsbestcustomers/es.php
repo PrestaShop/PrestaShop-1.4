@@ -15,7 +15,7 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8b83489bd116cb60e2f
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cdc31cfb8cc370e79d854a2f82849dd2'] = 'Lista de los mejores clientes';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cb21e843b037359d0fb5b793fccf964f'] = 'Desarrolle la fidelidad de sus clientes';
-$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_e1b9cd2cf691574ade4e2e1077b03441'] = 'Mantener un cliente satisfecho es más rentable que captar uno nuevo. Por lo tanto, es necesario ganarse su lealtad, para que vuelva a su tienda.';
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_ddc52d619df96876824d6cdfa9dbd4a0'] = 'Mantener un cliente satisfecho es más rentable que captar uno nuevo. Por lo tanto, es necesario ganarse su lealtad, para que vuelva a su tienda.';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_7b6ac3f2cdb42a4462ff7ca3c4358f71'] = 'El boca a boca es uno de los  mejores medios de conseguir clientes satisfechos; un cliente satisfecho atrae nuevos clientes.';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_410008089d5bb723438103a84d48a59c'] = 'Para alcanzar este objetivo usted puede organizar: ';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_3e788301a1b0ce341aa5ce15bc520545'] = 'Operaciones puntuales: recompensas comerciales (ofertas especiales personalizadas, producto o servicio ofrecidos), recompensas no comerciales (prioridad en el envío de un pedido o de un producto), recompensas pecuniarias (enlaces, cupones del descuento, reembolsos...)';

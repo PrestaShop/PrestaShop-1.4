@@ -24,7 +24,7 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_87f8a6ab85c9ced3702b4ea641ad4
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_28d0edd045e05cf5af64e35ae0c4c6ef'] = 'Basse';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_81409371045072999a0a11bfb62b4578'] = 'n\'a pas de liste cadeaux';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_641254d77e7a473aa5910574f3f9453c'] = 'Liste de cadeaux';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_f78d03ece6d4341c3a5579730548c495'] = 'Vous devez être enregistré pour gérer vos listes de cadeaux';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_4798abb3b616ca42337913ba52cb450b'] = 'Vous devez être identifié pour gérer vos liste voeux';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4a84e5921e203aede886d04fc41a414b'] = 'Enlever ce produit de ma liste';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Détails produit';

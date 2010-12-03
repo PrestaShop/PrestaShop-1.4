@@ -158,7 +158,7 @@ class AdminReferrers extends AdminTab
 								<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
 							</div>
 							<br class="clear" />
-							<p>'.$this->l('Direct traffic can be quite consuming, you should consider to enable it only if you have a strong database server and the need for it.').'</p>
+							<p>'.$this->l('Direct traffic can be quite consuming, you should consider enabling it only if you have a strong database server and the need for it.').'</p>
 							<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
 						</form>
 						<hr />
@@ -228,7 +228,7 @@ class AdminReferrers extends AdminTab
 					<p>'.$this->l('Leave blank if no change').'</p>
 				</div>
 				<p>
-					'.$this->l('Affiliates can access to their own data with these name and password.').'<br />
+					'.$this->l('Affiliates can access their own data with this name and password.').'<br />
 					'.$this->l('Front access:').' <a href="'.$uri.'modules/trackingfront/stats.php" style="font-style: italic;">'.$uri.'modules/trackingfront/stats.php</a>
 				</p>
 			</fieldset>
@@ -264,8 +264,8 @@ class AdminReferrers extends AdminTab
 					<br />
 					<li>
 						'.$this->l('The field `request_uri` is the URL by which the customer come to your website.').'<br />
-						'.$this->l('For example, if the visitor access to a product page, this URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
-						'.$this->l('This is interesting because you can add some tags or token in the links pointing to your website. For exemple, you can post a link').' "'.$uri.'index.php?prestashop" '.$this->l('in the forum and get statistics by entering "%prestashop" in the field `request_uri`. You will get all the visitors coming from the forum.').'
+						'.$this->l('For example, if the visitor accesses a product page, this URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
+						'.$this->l('This is interesting because you can add some tags or tokens in the links pointing to your website. For example, you can post a link').' "'.$uri.'index.php?prestashop" '.$this->l('in the forum and get statistics by entering "%prestashop" in the field `request_uri`. You will get all the visitors coming from the forum.').'
 						'.$this->l('This method is more reliable than the `http_referer` one, but there is a danger: if a search engine read a page with your link, then it will be displayed in its results and you will have not only the forum visitors, but also the ones from the search engine.').'
 					</li>
 					<br />
@@ -287,7 +287,7 @@ class AdminReferrers extends AdminTab
 					<br />
 					<li>
 						'.$this->l('The simple mode uses the MySQL "LIKE", but for a higher potency you can use MySQL regular expressions.').'
-						<a href="http://dev.mysql.com/doc/refman/5.0/en/regexp.html" target="_blank" style="font-style: italic;">'.$this->l('Take a look to the documentation for more details...').'</a>
+						<a href="http://dev.mysql.com/doc/refman/5.0/en/regexp.html" target="_blank" style="font-style: italic;">'.$this->l('Take a look at the documentation for more details...').'</a>
 					</li>
 				</ul>
 			</div>

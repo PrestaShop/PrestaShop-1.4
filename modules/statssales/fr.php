@@ -6,7 +6,7 @@ $_MODULE['<{statssales}prestashop>statssales_45c4b3e103155326596d6ccd2fea0f25'] 
 $_MODULE['<{statssales}prestashop>statssales_09a6e97d1ccb13182c8fd316450dbebf'] = 'Affiche l\'évolution du chiffre d\'affaires et la répartition des commandes par statut';
 $_MODULE['<{statssales}prestashop>statssales_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Tout afficher';
 $_MODULE['<{statssales}prestashop>statssales_d7778d0c64b6ba21494c97f77a66885a'] = 'Filtrer';
-$_MODULE['<{statssales}prestashop>statssales_a252c24ec397a14367098b74b482d7a0'] = 'Ces graphiques représentent l\'évolution de vos commandes et chiffre d\'affaires pour une période donnée. Ce n\'est pas un outil d\'analyse avancé mais il vous permet toutefois de visualiser la rentabilité de votre boutique en un clin d\'oeil. Vous pouvez également comparer les ventes entre différentes périodes (Noël...). Seules les commandes valides sont inclues dans ces deux graphes.';
+$_MODULE['<{statssales}prestashop>statssales_be11cd88b6b8d28325b01854907ba0d9'] = 'Ces graphiques représentent l\'évolution de vos commandes et chiffre d\'affaires pour une période donnée. Ce n\'est pas un outil d\'analyse avancé mais il vous permet toutefois de visualiser la rentabilité de votre boutique en un clin d\'oeil. Vous pouvez également comparer les ventes entre différentes périodes (Noël...). Seules les commandes valides sont inclues dans ces deux graphes.';
 $_MODULE['<{statssales}prestashop>statssales_9ccb8353e945f1389a9585e7f21b5a0d'] = 'Commandes passées :';
 $_MODULE['<{statssales}prestashop>statssales_156e5c5872c9af24a5c982da07a883c2'] = 'Produits commandés :';
 $_MODULE['<{statssales}prestashop>statssales_ec3e48bb9aa902ba2ad608547fdcbfdc'] = 'Chiffre d\'affaires :';

@@ -18,7 +18,7 @@ class BlockAdvertising extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Block advertising');
-		$this->description = $this->l('Adds a block to display an advertising');
+		$this->description = $this->l('Adds a block to display an advertisement');
 
 		$this->adv_imgname = 'advertising_custom.jpg';
 

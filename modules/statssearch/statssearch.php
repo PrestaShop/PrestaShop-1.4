@@ -76,7 +76,7 @@ class StatsSearch extends ModuleGraph
 		<thead>
 			<tr>
 				<th style="width:400px;">'.$this->l('keywords').'</th>
-				<th style="width:50px; text-align: right">'.$this->l('Occurences').'</th>
+				<th style="width:50px; text-align: right">'.$this->l('Occurrences').'</th>
 				<th style="width:50px; text-align: right">'.$this->l('Results').'</th>
 			</tr>
 		</thead><tbody>';

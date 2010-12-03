@@ -16,7 +16,7 @@ $_MODULE['<{cashticket}prestashop>cashticket_4512bbd48918c03027387a6c8e911342'] 
 $_MODULE['<{cashticket}prestashop>cashticket_21d3d890383dc93343ce57c221ce5b3d'] = 'Aceptar los pagos a través de CashTicket';
 $_MODULE['<{cashticket}prestashop>cashticket_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposición creada. En espera del débito';
 $_MODULE['<{cashticket}prestashop>cashticket_894f0316a71ef67255369c82bf8a0e5b'] = 'El estado de la disposición no es válido:';
-$_MODULE['<{cashticket}prestashop>cashticket_e79174d4c28918ea3743a8386092cfab'] = 'Se ha producido un error durante el pago:';
+$_MODULE['<{cashticket}prestashop>cashticket_c1c25198721552ea8ddd963c7278d4ab'] = 'Se ha producido un error durante el pago:';
 $_MODULE['<{cashticket}prestashop>cashticket_36ec50c0e914dd2fb48a1b27540512ce'] = 'Pago aceptado.';
 $_MODULE['<{cashticket}prestashop>cashticket_d6ca44369efe062cec0c09f392465f55'] = 'Este módulo requiere la librería PHP cURL para funcionar correctamente.';
 $_MODULE['<{cashticket}prestashop>cashticket_fe9da2c5e2e153d2415b4cd5d91166a4'] = 'No tiene derechos de escritura.';
@@ -30,7 +30,7 @@ $_MODULE['<{cashticket}prestashop>cashticket_a01813de717585e9ac9458bbfc54485a'] 
 $_MODULE['<{cashticket}prestashop>cashticket_254f642527b45bc260048e30704edb39'] = 'Configuración';
 $_MODULE['<{cashticket}prestashop>cashticket_0ba29c6a1afacf586b03a26162c72274'] = 'Entorno';
 $_MODULE['<{cashticket}prestashop>cashticket_1d5ad3d37f236c9eebda547690373bba'] = 'Tipo de negocio';
-$_MODULE['<{cashticket}prestashop>cashticket_9eacfa0a89b48392a962b3fed24cd58e'] = 'Pago inmediato';
+$_MODULE['<{cashticket}prestashop>cashticket_b024248d9fecf8c34f629e89a9fb93b4'] = 'Pago inmediato';
 $_MODULE['<{cashticket}prestashop>cashticket_c80a51a60c5ee43553c3881459b8f431'] = 'Actualizar la configuración';
 $_MODULE['<{cashticket}prestashop>cashticket_1ed8d28fc462cdaba8f2ce9a400f2bfa'] = 'Debe dar un certificado para el ID del vendedor';
 $_MODULE['<{cashticket}prestashop>cashticket_bbced877c13c763f0141ff906c8ed0e5'] = 'Archivo no válido';
@@ -41,9 +41,9 @@ $_MODULE['<{cashticket}prestashop>cashticket_d2bbf245e9591814fe994df3cae95964'] 
 $_MODULE['<{cashticket}prestashop>cashticket_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'La transacción no ha podido inicializarse debido a problemas de conexión. Si el problema persiste, contáctenos.';
 $_MODULE['<{cashticket}prestashop>cashticket_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposición consumida';
 $_MODULE['<{cashticket}prestashop>cashticket_c3e260f43a99b6fd907538953fe700d0'] = 'Disposición abandonada';
-$_MODULE['<{cashticket}prestashop>cashticket_022492bc69b8205957d53b4166cd7090'] = 'Se ha producido un error en el momento de abandonar.';
+$_MODULE['<{cashticket}prestashop>cashticket_f6a62a622cbba2c1b8cd0be062deff96'] = 'Se ha producido un error en el momento de abandonar.';
 $_MODULE['<{cashticket}prestashop>cashticket_12f989194ad92e23c0eb3941db7f6720'] = 'Acepte los pagos con prepago en su tienda en línea. Cash-Ticket es un método de pago seguro y sencillo para Internet. Cash-Ticket permite pagos sin tarjeta de crédito ni datos bancarios personales. Lo único que se necesita para pagar en una tienda en línea es un código PIN de 16 cifras. Así, los consumidores pueden realizar pagos en línea sin tarjeta de crédito ni cuenta bancaria. ';
-$_MODULE['<{cashticket}prestashop>cashticket_75f5c89352ca1b7efc6bb03899ab9224'] = 'Se ha producido un error. Consulte el apartado \"Mensajes\" para más información.';
+$_MODULE['<{cashticket}prestashop>cashticket_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Se ha producido un error. Consulte el apartado \"Mensajes\" para más información';
 $_MODULE['<{cashticket}prestashop>cashticket_a9ced76f2dd6907220fa95b3a136b04a'] = 'Importe incorrecto';
 $_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'La disposición se encuentra en un estado no válido';
 $_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = 'No tiene autorización para recuperar el pago.';

@@ -65,7 +65,7 @@ class AdminEmails extends AdminPreferences
 			<script type="text/javascript">
 				var textMsg = "'.$this->l('This is a test message, your server is now available to send email').'";
 				var textSubject = "'.$this->l('Test message - Prestashop').'";
-				var textSendOk = "'.$this->l('Mail is send').'";
+				var textSendOk = "'.$this->l('Mail is sent').'";
 				var textSendError= "'.$this->l('Error: please check your configuration').'";
 				var errorMail = "'.$this->l('This email adress is wrong!').'";
 			</script>

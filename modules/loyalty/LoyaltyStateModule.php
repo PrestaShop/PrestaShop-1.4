@@ -56,7 +56,7 @@ class LoyaltyStateModule extends ObjectModel
 
 		$cancel = new LoyaltyStateModule(LoyaltyStateModule::getCancelId());
 		$cancel->id_order_state = _PS_OS_CANCELED_;
-		$cancel->name[$defaultLanguage] = $loyaltyModule->getL('Canceled');
+		$cancel->name[$defaultLanguage] = $loyaltyModule->getL('Cancelled');
 		$cancel->save();
 
 		$convert = new LoyaltyStateModule(LoyaltyStateModule::getConvertId());

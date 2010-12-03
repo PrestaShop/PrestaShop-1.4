@@ -62,7 +62,7 @@ class ProductComments extends Module
 			$productCommentCriterion = new ProductCommentCriterion((int)$id_criterion);
 			if ($productCommentCriterion->id)
 				if ($productCommentCriterion->delete())
-					$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Criterion deleted').'</div>';
+					$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Criteria deleted').'</div>';
 		}
 	}
 	
@@ -146,7 +146,7 @@ class ProductComments extends Module
 
 			
 			if ($productCommentCriterion->save())
-				$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Criterion updated').'</div>';
+				$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Criteria updated').'</div>';
 		}
 		elseif (!empty($action_criterion) AND empty($name))
 		{
@@ -292,9 +292,9 @@ class ProductComments extends Module
 		$id_criterion = (int)Tools::getValue('editCriterion');
 		$criterion = new ProductCommentCriterion((int)$id_criterion);
 		$languageIds = 'criterion';
-		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'img/note.png" alt="" title="" />'.$this->l('Comment\'s criterions').'</legend>
+		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'img/note.png" alt="" title="" />'.$this->l('Comment\'s criteria').'</legend>
 				<form action="'.$this->_baseUrl.'" method="post" name="criterion_form">
-				<label for="criterion">'.$this->l('Comment\'s criterion').'</label>
+				<label for="criterion">'.$this->l('Comment\'s criteria').'</label>
 				<div class="margin-form">
 				<input type="hidden" name="id_product_comment_criterion" value="'.$criterion->id.'" />';
 				foreach ($langs AS $lang)
@@ -321,7 +321,7 @@ class ProductComments extends Module
 				</div>
 				<div class="margin-form">
 					<input type="submit" name="submitAddCriterion" value="'.$this->l('Save').'" class="button" />
-					<p>'.$this->l('Create a new grading criterion for your products.').'<br />'.
+					<p>'.$this->l('Create a new grading criteria for your products.').'<br />'.
 					$this->l('Once created, you must activate it for the desired products with the form below.').'</p>
 				</div>
 				</form>';
@@ -332,7 +332,7 @@ class ProductComments extends Module
 						 $this->_html.= '<br /><table class="table">
 						 <thead>
 						  <tr>
-							<th style="width:260px;">'.$this->l('Criterion').'</th>
+							<th style="width:260px;">'.$this->l('Criteria').'</th>
 							<th style="width:260px;">'.$this->l('Type').'</th>
 							<th style="width:50px;">'.$this->l('Status').'</th>
 							<th style="width:30px;">'.$this->l('Actions').'</th>
@@ -377,7 +377,7 @@ class ProductComments extends Module
 		}
 
 		$this->_html .= '
-			<fieldset><legend><img src="'.$this->_path.'img/note_go.png" alt="" title="" />'.$this->l('Criterions Application').'</legend>
+			<fieldset><legend><img src="'.$this->_path.'img/note_go.png" alt="" title="" />'.$this->l('Criteria Application').'</legend>
 			<form action="'.$this->_baseUrl.'" method="post" name="product_criterion_form">
 				<label for="id_product">'.$this->l('Grading criterions').'</label>
 				<div class="margin-form">
@@ -482,7 +482,7 @@ class ProductComments extends Module
 						if (($i - 1) > 0)
 							$comment->grade = ($grade / ($i - 1));
 						if (!$comment->save())
-							$errors[] = $this->l('An error occured while saving your comment.');
+							$errors[] = $this->l('An error occurred while saving your comment.');
 						else
 							$smarty->assign('confirmation', $this->l('Comment posted successfully.').((int)(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? $this->l(' Awaiting moderator validation.') : ''));
 					}

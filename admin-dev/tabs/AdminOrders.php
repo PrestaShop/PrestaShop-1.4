@@ -671,7 +671,7 @@ class AdminOrders extends AdminTab
 		// List of products
 		echo '
 		<a name="products"><br /></a>
-		<form action="'.$currentIndex.'&submitCreditSlip&vieworder&token='.$this->token.'" method="post" onsubmit="return orderDeleteProduct(\''.$this->l('Cannot return this product').'\', \''.$this->l('Quantity to cancel is superior than quantity available').'\');">
+		<form action="'.$currentIndex.'&submitCreditSlip&vieworder&token='.$this->token.'" method="post" onsubmit="return orderDeleteProduct(\''.$this->l('Cannot return this product').'\', \''.$this->l('Quantity to cancel is greater than quantity available').'\');">
 			<input type="hidden" name="id_order" value="'.$order->id.'" />
 			<fieldset style="width: 868px; ">
 				<legend><img src="../img/admin/cart.gif" alt="'.$this->l('Products').'" />'.$this->l('Products').'</legend>

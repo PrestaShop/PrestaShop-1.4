@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{productscategory}prestashop>productscategory_db33983df8ef521000b0ab60dcb5a83f'] = 'Categoría de productos';
 $_MODULE['<{productscategory}prestashop>productscategory_c167dc9a6cdefdab35fb3b5e325cc815'] = 'Mostrar productos de la misma categoría en la página producto';
-$_MODULE['<{productscategory}prestashop>productscategory_e316b4398212d473f7f53c7728fe1c37'] = 'Parámetros actualizados con éxito';
+$_MODULE['<{productscategory}prestashop>productscategory_462390017ab0938911d2d4e964c0cab7'] = 'Parámetros actualizados con éxito';
 $_MODULE['<{productscategory}prestashop>productscategory_f4f70727dc34561dfde1a3c529b6205c'] = 'Parámetros';
 $_MODULE['<{productscategory}prestashop>productscategory_b6bf131edd323320bac67303a3f4de8a'] = 'Mostrar el precio del producto';
 $_MODULE['<{productscategory}prestashop>productscategory_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';

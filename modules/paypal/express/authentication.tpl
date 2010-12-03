@@ -13,7 +13,7 @@ countries = new Array();
 //]]>
 </script>
 
-<h2>{l s='Check your informations' mod='paypal'}</h2>
+<h2>{l s='Check your information' mod='paypal'}</h2>
 
 {assign var='current_step' value='login'}
 {include file="$tpl_dir./order-steps.tpl"}

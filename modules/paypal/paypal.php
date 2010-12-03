@@ -125,7 +125,7 @@ class PayPal extends PaymentModule
 		$this->_postProcess();
 		$this->_setPayPalSubscription();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php'))
-			$this->_html .= '<div class="warning warn"><h3>'.$this->l('Please not use and remove PayPalAPI module.').'</h3></div>';
+			$this->_html .= '<div class="warning warn"><h3>'.$this->l('Please do not use, and remove PayPalAPI module.').'</h3></div>';
 		$this->_setConfigurationForm();
 		
 		return $this->_html;
@@ -258,7 +258,7 @@ class PayPal extends PaymentModule
 			<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Validation').'</legend>
-				<p><b>'.$this->l('Informations:').'</b> '.(OrderHistory::getLastOrderState((int)($params['id_order']))->id == (int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')) ? $this->l('Pending Capture - No shipping') : $this->l('Pending Payment - No shipping')).'</p>
+				<p><b>'.$this->l('Information:').'</b> '.(OrderHistory::getLastOrderState((int)($params['id_order']))->id == (int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')) ? $this->l('Pending Capture - No shipping') : $this->l('Pending Payment - No shipping')).'</p>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<input type="hidden" name="id_order" value="'.$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalValidation" value="'.$this->l('Get payment status').'" /></p>
@@ -385,7 +385,7 @@ class PayPal extends PaymentModule
 			$this->displayPayPalAPIError($this->l('PayPal returned error'), $this->_logs);
 		elseif (!isset($result['TOKEN']) OR $result['TOKEN'] != $cookie->paypal_token)
 		{
-			$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same that cookie one', 'submit').'</b>';
+			$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same as the cookie token', 'submit').'</b>';
 			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal returned error', 'submit'), $logs);
 		}
 
@@ -468,7 +468,7 @@ class PayPal extends PaymentModule
 			'mc_gross' => $this->l('Paypal key \'mc_gross\' not specified, can\'t control amount paid.'),
 			'payment_status' => $this->l('Paypal key \'payment_status\' not specified, can\'t control payment validity'),
 			'payment' => $this->l('Payment: '),
-			'custom' => $this->l('Paypal key \'custom\' not specified, can\'t rely to cart'),
+			'custom' => $this->l('Paypal key \'custom\' not specified, cannot relay to cart'),
 			'txn_id' => $this->l('Paypal key \'txn_id\' not specified, transaction unknown'),
 			'mc_currency' => $this->l('Paypal key \'mc_currency\' not specified, currency unknown'),
 			'cart' => $this->l('Cart not found'),
@@ -670,7 +670,7 @@ class PayPal extends PaymentModule
 					'.$this->_getSettingsTabHtml().'
 				</div>
 				<div class="tab-page" id="step3">
-					<h4 class="tab">'.$this->l('Logos and personalizations').'</h2>
+					<h4 class="tab">'.$this->l('Logos and personalization').'</h2>
 					'.$this->_getPersonalizationsTabHtml().'
 				</div>
 			</div>
@@ -720,7 +720,7 @@ class PayPal extends PaymentModule
 		<label>'.$this->l('Sandbox mode (tests)').':</label>
 		<div class="margin-form" style="padding-top:2px;">
 			<input type="radio" name="sandbox_mode" id="sandbox_mode_1" value="1" '.($sandbox_mode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_1" class="t">'.$this->l('Active').'</label> 
-			<input type="radio" name="sandbox_mode" id="sandbox_mode_0" value="0" style="margin-left:15px;" '.(!$sandbox_mode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_0" class="t">'.$this->l('Desactive').'</label>
+			<input type="radio" name="sandbox_mode" id="sandbox_mode_0" value="0" style="margin-left:15px;" '.(!$sandbox_mode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_0" class="t">'.$this->l('Inactive').'</label>
 		</div>
 		<div class="clear"></div>
 		<label>'.$this->l('Payment type').':</label>
@@ -772,7 +772,7 @@ class PayPal extends PaymentModule
 			<input type="radio" name="template_paypal" id="template_paypal_b" value="B" style="margin-left:10px;" '.($template_paypal == 'B' ? 'checked="checked" ' : '').'/> <label for="template_paypal_b" class="t">B</label>
 			<input type="radio" name="template_paypal" id="template_paypal_c" value="C" style="margin-left:10px;" '.($template_paypal == 'C' ? 'checked="checked" ' : '').'/> <label for="template_paypal_c" class="t">C</label>
 		</div>
-		<p style="clear:both;"><a style="color:blue;text-decoration:underline;" href="https://cms.paypal.com/cms_content/FR/fr_FR/files/developer/Paypal_Integral_Evolution_Personnalisation.pdf" target="_blank">'.$this->l('Click here to learn how to customize these template').'</a></p>
+		<p style="clear:both;"><a style="color:blue;text-decoration:underline;" href="https://cms.paypal.com/cms_content/FR/fr_FR/files/developer/Paypal_Integral_Evolution_Personnalisation.pdf" target="_blank">'.$this->l('Click here to learn how to customize these templates').'</a></p>
 		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
 		';
 		

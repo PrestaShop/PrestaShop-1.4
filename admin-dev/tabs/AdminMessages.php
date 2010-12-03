@@ -93,7 +93,7 @@ class AdminMessages extends AdminTab
 			if (isset($_GET['id_order']) AND (empty($_GET['id_order']) OR $_GET['id_order'] == '--'))
 			{
 				echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.
-				Tools::displayError('Cannot display this message because the customer has not finalized its order').'</p>';
+				Tools::displayError('Cannot display this message because the customer has not finalized their order').'</p>';
 			}
 			foreach ($this->_list AS $k => $item)
 				if (Tools::strlen($item['last_message']) > 150 + Tools::strlen('...'))

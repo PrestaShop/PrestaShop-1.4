@@ -40,7 +40,7 @@ class CashTicket extends PrepaidServices
 		$translations = array(
 				'disposition_created' => $this->l('Disposition created. Waiting for debit.'),
 				'disposition_invalid' => $this->l('Invalid disposition state:'),
-				'payment_error' => $this->l('An error has occured during payment:'),
+				'payment_error' => $this->l('An error has occurred during payment:'),
 				'payment_accepted' => $this->l('Payment accepted.'),
 				'curl_required' => $this->l('This module requires the curl PHP extension to function properly.'),
 				'not_writable' => $this->l('is not writable!'),
@@ -54,7 +54,7 @@ class CashTicket extends PrepaidServices
 				'configuration' => $this->l('Configuration'),
 				'environment' => $this->l('Environment'),
 				'business_type' => $this->l('Business Type'),
-				'immediat_payment' => $this->l('Immediat Payment'),
+				'immediat_payment' => $this->l('Immediate Payment'),
 				'update_configuration' => $this->l('Update configuration'),
 				'certificate_required' => $this->l('You must provide a certificat for MERCHANT ID'),
 				'invalid_file' => $this->l('Invalid file'),
@@ -67,7 +67,7 @@ class CashTicket extends PrepaidServices
 				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),	
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
-				'release_error' => $this->l('An error has occured during the release'),
+				'release_error' => $this->l('An error has occurred during the release'),
 				'introduction' => $this->l('Accept prepaid payments in your webshop. All that is required to pay at a web-shop is the Cash-Ticket’s 16 digit pin code. This way, consumers can make online payments without a credit card or a bank account.')				
 			);
 			
@@ -76,7 +76,7 @@ class CashTicket extends PrepaidServices
 	
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
-		$error_msg = array(1 => $this->l('An error has occured, check Messages for more infos'),
+		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
 						   2 => $this->l('Invalid amount'));
 						   
 		return $error_msg[$error_code];

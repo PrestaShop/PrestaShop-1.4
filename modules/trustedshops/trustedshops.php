@@ -209,7 +209,7 @@ class TrustedShops extends Module
 					$error = $this->l('Customer Rating has not yet been activated for this Trusted Shops ID').' ['.Language::getIsoById($iso_lang).']. '.$this->l('Please register').' <a href="'.$this->getApplyUrl().'">' .$this->l('here').'</a> '. $this->l('or contact service@trustedshops.co.uk.');
 					break;
 				default:
-					$error = $this->l('An error has occured');
+					$error = $this->l('An error has occurred');
 			}
 		}
 		

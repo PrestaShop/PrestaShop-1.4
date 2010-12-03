@@ -6,7 +6,7 @@ $_MODULE['<{statssales}prestashop>statssales_45c4b3e103155326596d6ccd2fea0f25'] 
 $_MODULE['<{statssales}prestashop>statssales_09a6e97d1ccb13182c8fd316450dbebf'] = 'Mostrar la evolución de las ventas y de los pedidos por estados';
 $_MODULE['<{statssales}prestashop>statssales_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Todos';
 $_MODULE['<{statssales}prestashop>statssales_d7778d0c64b6ba21494c97f77a66885a'] = 'Filtrar';
-$_MODULE['<{statssales}prestashop>statssales_a252c24ec397a14367098b74b482d7a0'] = 'Estos gráficos representan la evolución de los pedidos y del volumen de ventas en un periodo dado. No son herramientas de análisis avanzadas pero le permiten ver la rentabilidad de su tienda inmediatamente. También puede observar variaciones en periodos concretos, como Navidad. Sólo los pedidos válidos se incluyen en estos gráficos. ';
+$_MODULE['<{statssales}prestashop>statssales_be11cd88b6b8d28325b01854907ba0d9'] = 'Estos gráficos representan la evolución de los pedidos y del volumen de ventas en un periodo dado. No son herramientas de análisis avanzadas pero le permiten ver la rentabilidad de su tienda inmediatamente. También puede observar variaciones en periodos concretos, como Navidad. Sólo los pedidos válidos se incluyen en estos gráficos. ';
 $_MODULE['<{statssales}prestashop>statssales_9ccb8353e945f1389a9585e7f21b5a0d'] = 'Pedidos realizados:';
 $_MODULE['<{statssales}prestashop>statssales_156e5c5872c9af24a5c982da07a883c2'] = 'Productos pedidos:';
 $_MODULE['<{statssales}prestashop>statssales_ec3e48bb9aa902ba2ad608547fdcbfdc'] = 'Ventas:';

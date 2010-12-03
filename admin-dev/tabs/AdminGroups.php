@@ -229,7 +229,7 @@ class AdminGroups extends AdminTab
 				{
 					$groupReduction = new GroupReduction((int)($id_group_reduction));
 					if (!$groupReduction->delete())
-						$this->_errors[] = Tools::displayError('An error occured while deleting the group reduction');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting the group reduction');
 					else
 						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.(int)(Tools::getValue('id_group')).'&conf=1&token='.$token);
 				}
@@ -255,7 +255,7 @@ class AdminGroups extends AdminTab
 					$groupReduction->id_group = (int)($obj->id);
 					$groupReduction->reduction = (float)($reduction) / 100;
 					if (!$groupReduction->add())
-						$this->_errors[] = Tools::displayError('An error occured while adding a category group reduction');
+						$this->_errors[] = Tools::displayError('An error occurred while adding a category group reduction');
 					else
 						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.(int)(Tools::getValue('id_group')).'&conf=3&token='.$this->token);
 				}

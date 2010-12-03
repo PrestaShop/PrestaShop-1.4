@@ -286,7 +286,7 @@ class OrderControllerCore extends FrontController
 			$this->cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
 			$this->cart->id_address_invoice = Tools::isSubmit('same') ? $this->cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
 			if (!$this->cart->update())
-				$this->errors[] = Tools::displayError('an error occured while updating your cart');
+				$this->errors[] = Tools::displayError('an error occurred while updating your cart');
 
 			if (Tools::isSubmit('message') AND !empty($_POST['message']))
 			{

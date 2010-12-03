@@ -176,7 +176,7 @@ class BlockLink extends Module
 	     	  	if ($this->addLink())
 	     	  		$this->_html .= $this->displayConfirmation($this->l('The link has been added successfully'));
 	     	  	else
-	     	 		$this->_html .= $this->displayError($this->l('An error occured during link creation'));
+	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link creation'));
      	}
      	/* Update a link */
      	elseif (isset($_POST['submitLinkUpdate']))
@@ -187,7 +187,7 @@ class BlockLink extends Module
      	 		$this->_html .= $this->displayError($this->l('Bad URL'));
 	     	else
 	     	 	if (empty($_POST['id']) OR !is_numeric($_POST['id']) OR !$this->updateLink())
-	     	 		$this->_html .= $this->displayError($this->l('An error occured during link updating'));
+	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link updating'));
 	     	 	else
 	     	 		$this->_html .= $this->displayConfirmation($this->l('The link has been updated successfully'));
      	}

@@ -166,7 +166,7 @@ class AdminCarriers extends AdminTab
 				{
 					echo '<label>'.$this->l('Module:').' </label>
 						  <div class="margin-form"><p> - '.
-						  $this->l('This carrier is bind to this module ').' => '.$this->getFieldValue($obj, 'external_module_name').'</p>
+						  $this->l('This carrier is bound to this module ').' => '.$this->getFieldValue($obj, 'external_module_name').'</p>
 						  <input type="hidden" name="is_module" value="1">
 						  <input type="hidden" name="external_module_name" value="'.$this->getFieldValue($obj, 'external_module_name').'">';
 						  

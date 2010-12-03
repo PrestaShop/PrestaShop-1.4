@@ -49,8 +49,8 @@ class AdminInformation extends AdminTab
 			'phpversion' => $this->l('Update your PHP version'),
 			'upload' => $this->l('Configure your server for allow the upload file'),
 			'system' => $this->l('Configure your server for allow the creation of directories and write on file'),
-			'gd' => $this->l('Active the GD library on your server'),
-			'mysql_support' => $this->l('Active the MySQL support on your server'),
+			'gd' => $this->l('Activate the GD library on your server'),
+			'mysql_support' => $this->l('Activate the MySQL support on your server'),
 			'config_dir' => $this->l('Set write permissions on config folder'),
 			'tools_dir' => $this->l('Set write permissions on tools folder'),
 			'cache_dir' => $this->l('Set write permissions on cache folder'),
@@ -62,9 +62,9 @@ class AdminInformation extends AdminTab
 			'translations_dir' => $this->l('Set write permissions on translations folder and subfolders/recursively'),
 			'customizable_products_dir' => $this->l('Set write permissions on upload folder and subfolders/recursively'),
 			'virtual_products_dir' => $this->l('Set write permissions on download folder and subfolders/recursively'),
-			'fopen' => $this->l('Active fopen on your server'),
+			'fopen' => $this->l('Activate fopen on your server'),
 			'register_globals' => $this->l('Set PHP register global option at off'),
-			'gz' => $this->l('Active GZIP compression on your server')
+			'gz' => $this->l('Activate GZIP compression on your server')
 		);
 
 		$paramsRequiredResults = self::check($tests);
@@ -116,15 +116,15 @@ class AdminInformation extends AdminTab
 		global $currentIndex;
 		
 		echo '
-		<h2>'.$this->l('Informations').'</h2>
+		<h2>'.$this->l('Information').'</h2>
 		<fieldset>
 			<legend><img src="../img/t/AdminInformation.gif" alt="" /> '.$this->l('Help').'</legend>
-			<p>'.$this->l('These informations must be indicated when you report a bug on our bug tracker or if you report a problem on our forum.').'</p>
+			<p>'.$this->l('This information must be indicated when you report a bug on our bug tracker or if you report a problem on our forum.').'</p>
 		</fieldset>
 		<br />
 		<fieldset>
-			<legend><img src="../img/t/AdminInformation.gif" alt="" /> '.$this->l('Informations about your configuration').'</legend>
-			<h3>'.$this->l('Server informations').'</h3>
+			<legend><img src="../img/t/AdminInformation.gif" alt="" /> '.$this->l('Information about your configuration').'</legend>
+			<h3>'.$this->l('Server information').'</h3>
 			<p>
 				<b>'.$this->l('Prestashop Version').':</b> 
 				'._PS_VERSION_.'
@@ -146,7 +146,7 @@ class AdminInformation extends AdminTab
 				'.mysql_get_server_info().'
 			</p>
 			<hr />
-			<h3>'.$this->l('Store informations').'</h3>
+			<h3>'.$this->l('Store information').'</h3>
 			<p>
 				<b>'.$this->l('URL of your website').':</b> 
 				'.Tools::getHttpHost(true).__PS_BASE_URI__.'
@@ -156,7 +156,7 @@ class AdminInformation extends AdminTab
 				'._THEME_NAME_.'
 			</p>
 			<hr />
-			<h3>'.$this->l('Mail informations').'</h3>
+			<h3>'.$this->l('Mail information').'</h3>
 			<p>
 				<b>'.$this->l('Mail method').':</b>
 		';
@@ -190,9 +190,9 @@ class AdminInformation extends AdminTab
 		}
 		echo '
 			<hr />
-			<h3>'.$this->l('Your informations').'</h3>
+			<h3>'.$this->l('Your information').'</h3>
 			<p>
-				<b>'.$this->l('Informations from you').':</b> 
+				<b>'.$this->l('Information from you').':</b> 
 				'.$_SERVER["HTTP_USER_AGENT"].'
 			</p>
 		</fieldset>

@@ -78,7 +78,7 @@ else /* Else display homepage */
     {
 		echo '<p>'.translate('Update notification unavailable').'</p>';
 		echo '<p>&nbsp;</p>';
-		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.translate('more infos').'</a>]</p>';
+		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.translate('more info').'</a>]</p>';
 		echo '<p>'.translate('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 	}
   echo '</div>';

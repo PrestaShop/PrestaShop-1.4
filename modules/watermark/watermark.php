@@ -40,7 +40,7 @@ class Watermark extends Module
 		$this->description = $this->l('Protect image by watermark');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 		if (!isset($this->transparency) OR !isset($this->xAlign) OR !isset($this->yAlign))
-			$this->warning = $this->l('Watermark image has to be uploaded in order to work this module correctly');
+			$this->warning = $this->l('Watermark image has to be uploaded in order for this module to work correctly');
 	}
 
 	public function install()
@@ -122,7 +122,7 @@ class Watermark extends Module
 		$this->_html .=
 		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
 			<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" />'.$this->l('Watermark details').'</legend>
-				<p>'.$this->l('Once you\'ve set up the module, you have to regenerate the images using to tool in Preferences > Images. However, the watermark will be added automatically in the new images.').'</p>
+				<p>'.$this->l('Once you\'ve set up the module, you have to regenerate the images using the tool in Preferences > Images. However, the watermark will be added automatically to the new images.').'</p>
 				<table border="0" width="500" cellpadding="0" cellspacing="0" id="form">
 					<tr>
 						<td />

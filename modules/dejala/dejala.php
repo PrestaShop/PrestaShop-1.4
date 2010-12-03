@@ -206,7 +206,7 @@ class Dejala extends Module
 			}
 			else {
 				if ($response['status'] == 401) {
-					$errors[] = $this->l('An error occured while authenticating your account on Dejala.fr. Your credentials were not recognized');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.fr. Your credentials were not recognized');
 				}
 				else {
 					$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
@@ -248,27 +248,27 @@ class Dejala extends Module
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreLocation($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating location');
+				$errors[] = $this->l('An error occurred while updating location');
 		}
 		else if ($method == 'contact')
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreContacts($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating contacts');
+				$errors[] = $this->l('An error occurred while updating contacts');
 		}
 		else if ($method == 'processes')
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreProcesses($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating processes');
+				$errors[] = $this->l('An error occurred while updating processes');
 		}
 		else if ($method == 'products') {
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreProducts($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating products');
+				$errors[] = $this->l('An error occurred while updating products');
 		}
 		else if ($method == 'technical_options') {
 			$maxSatuses = $_POST['status_max'];
@@ -290,7 +290,7 @@ class Dejala extends Module
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreCalendar($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating products');
+				$errors[] = $this->l('An error occurred while updating products');
 
 			$m_attributes['nb_days_displayed'] = htmlentities(Tools::getValue('nb_days'), ENT_COMPAT, 'UTF-8');
 			$m_attributes['delivery_delay'] = htmlentities(Tools::getValue('delivery_delay'), ENT_COMPAT, 'UTF-8');
@@ -298,7 +298,7 @@ class Dejala extends Module
 
 			$response = $djlUtil->setStoreAttributes($this->dejalaConfig, $m_attributes);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while updating products');
+				$errors[] = $this->l('An error occurred while updating products');
 
 		} else if ($method == 'golive') {
 			$djlUtil = new DejalaUtils();
@@ -390,9 +390,9 @@ class Dejala extends Module
 				$smarty->assign("registered", $registered?"1":"0");
 			else {
 				if (401 == $responsePing['status'])
-					$errors[] = $this->l('An error occured while authenticating your account on Dejala.fr. Your credentials were not recognized');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.fr. Your credentials were not recognized');
 				else
-					$errors[] = $this->l('An error occured while authenticating your account on Dejala.fr. This can be due to a temporary network or platform problem. Please try again later or contact Dejala.fr');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.fr. This can be due to a temporary network or platform problem. Please try again later or contact Dejala.fr');
 				unset($_GET['cat']);
 				$registered= FALSE;
 			}
@@ -568,7 +568,7 @@ class Dejala extends Module
 		$storeAttrs = array();
 		$response = $djlUtil->getStoreAttributes($this->dejalaConfig, $storeAttrs);
 		if (200 != $response['status'])
-			$errors[] = $this->l('An error occured while getting store, please try again later or contact Dejala.fr');
+			$errors[] = $this->l('An error occurred while getting store, please try again later or contact Dejala.fr');
 		else
 		{
 			$smarty->assign("account_balance", $storeAttrs['account_balance']);
@@ -1049,7 +1049,7 @@ class Dejala extends Module
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->getStoreProductByID($this->dejalaConfig, $dejalaProductID, $product);
 			if ($response['status'] != 200)
-				$errors[] = $this->l('An error occured while fetching shipping product from Dejala');
+				$errors[] = $this->l('An error occurred while fetching shipping product from Dejala');
 			else
 			{
 				$timelimit = 3;

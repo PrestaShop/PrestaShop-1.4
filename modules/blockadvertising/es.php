@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_fd4c71c948857cce596a69fbaea7426b'] = 'Bloque de publicidad';
-$_MODULE['<{blockadvertising}prestashop>blockadvertising_2c6706322b2b9f670251533d907d2bbc'] = 'Añadir un bloque para mostrar la publicidad';
+$_MODULE['<{blockadvertising}prestashop>blockadvertising_d993a5263d116672929440278640e438'] = 'Añadir un bloque para mostrar la publicidad';
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_226ed577d0eff50725be6447bcd5a2f0'] = 'error al desplazar el fichero uploado';
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_6e7be6d836003f069c00cd217660913b'] = 'Configuración del bloque de publicidad';
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_2ce5fc289845ce826261032b9c6749ea'] = 'Publicidad';

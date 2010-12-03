@@ -45,12 +45,12 @@ function getInfos()
 
 	if (!is_array($result) OR !isset($result['ACK']) OR strtoupper($result['ACK']) != 'SUCCESS')
 	{
-		$logs[] = '<b>'.$ppExpress->l('Cannot retreive PayPal account informations', 'submit').'</b>';
+		$logs[] = '<b>'.$ppExpress->l('Cannot retrieve PayPal account information', 'submit').'</b>';
 		$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal returned error', 'submit'), $logs);
 	}
 	elseif (!isset($result['TOKEN']) OR $result['TOKEN'] != $cookie->paypal_token)
 	{
-		$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same that cookie one', 'submit').'</b>';
+		$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same as the cookie token', 'submit').'</b>';
 		$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal returned error', 'submit'), $logs);
 	}
 	return $result;

@@ -58,7 +58,7 @@ class AdminReturn extends AdminTab
 							if (OrderReturn::deleteOrderReturnDetail($id_order_return, $id_order_detail, (int)(Tools::getValue('id_customization', 0))))
 								Tools::redirectAdmin($currentIndex.'&conf=4token='.$this->token);
 							else
-								$this->_errors[] = Tools::displayError('an error occured while deleting an order return detail');
+								$this->_errors[] = Tools::displayError('an error occurred while deleting an order return detail');
 						}
 						else
 							$this->_errors[] = Tools::displayError('you need at least one product');

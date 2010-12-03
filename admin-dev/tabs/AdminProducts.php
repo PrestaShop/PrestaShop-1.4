@@ -621,7 +621,7 @@ class AdminProducts extends AdminTab
 						$specificPrice->from = !$froms[$key] ? '0000-00-00 00:00:00' : $froms[$key];
 						$specificPrice->to = !$tos[$key] ? '0000-00-00 00:00:00' : $tos[$key];
 						if (!$specificPrice->update())
-							$this->_errors = Tools::displayError('An error occured while updating the specific price');
+							$this->_errors = Tools::displayError('An error occurred while updating the specific price');
 					}
 				if (!sizeof($this->_errors))
 					Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(int)(Tools::getValue('id_category')).'&update'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
@@ -659,7 +659,7 @@ class AdminProducts extends AdminTab
 					$specificPrice->from = !$from ? '0000-00-00 00:00:00' : $from;
 					$specificPrice->to = !$to ? '0000-00-00 00:00:00' : $to;
 					if (!$specificPrice->add())
-						$this->_errors = Tools::displayError('An error occured while updating the specific price');
+						$this->_errors = Tools::displayError('An error occurred while updating the specific price');
 					else
 						Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 				}
@@ -678,7 +678,7 @@ class AdminProducts extends AdminTab
 				{
 					$specificPrice = new SpecificPrice((int)($id_specific_price));
 					if (!$specificPrice->delete())
-						$this->_errors[] = Tools::displayError('An error occured while deleting the specific price');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting the specific price');
 					else
 						Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
 				}
@@ -733,12 +733,12 @@ class AdminProducts extends AdminTab
 			elseif (Tools::isSubmit('specificPricePriorityToAll'))
 			{
 				if (!SpecificPrice::setPriorities($priorities))
-					$this->_errors[] = Tools::displayError('An error occured while updating priorities.');
+					$this->_errors[] = Tools::displayError('An error occurred while updating priorities.');
 				else
 					Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 			}
 			elseif (!SpecificPrice::setSpecificPriorities((int)($obj->id), $priorities))
-				$this->_errors[] = Tools::displayError('An error occured while setting priorities.');
+				$this->_errors[] = Tools::displayError('An error occurred while setting priorities.');
 			else
 				Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 		}
@@ -750,14 +750,14 @@ class AdminProducts extends AdminTab
 				if (Validate::isLoadedObject($product = new Product((int)(Tools::getValue('id_product')))))
 				{
 					if (!$product->createLabels((int)($_POST['uploadable_files']) - (int)($product->uploadable_files), (int)($_POST['text_fields']) - (int)($product->text_fields)))
-						$this->_errors[] = Tools::displayError('an error occured while creating customization fields');
+						$this->_errors[] = Tools::displayError('an error occurred while creating customization fields');
 					if (!sizeof($this->_errors) AND !$product->updateLabels())
-						$this->_errors[] = Tools::displayError('an error occured while updating customization');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization');
 					$product->uploadable_files = (int)($_POST['uploadable_files']);
 					$product->text_fields = (int)($_POST['text_fields']);
 					$product->customizable = ((int)($_POST['uploadable_files']) > 0 OR (int)($_POST['text_fields']) > 0) ? 1 : 0;
 					if (!sizeof($this->_errors) AND !$product->update())
-						$this->_errors[] = Tools::displayError('an error occured while updating customization configuration');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization configuration');
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
@@ -777,7 +777,7 @@ class AdminProducts extends AdminTab
 						if (strncmp($field, 'label_', 6) == 0 AND !Validate::isLabel($value))
 							$this->_errors[] = Tools::displayError('label fields are invalid');
 					if (!sizeof($this->_errors) AND !$product->updateLabels())
-						$this->_errors[] = Tools::displayError('an error occured while updating customization');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization');
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
@@ -921,7 +921,7 @@ class AdminProducts extends AdminTab
 		else
 		{		
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
-				$this->_errors[] = Tools::displayError('An error occured during the image upload');
+				$this->_errors[] = Tools::displayError('An error occurred during the image upload');
 			elseif (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying image');
 			elseif($method == 'auto')
@@ -2380,7 +2380,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">&nbsp;</td>
 						<td style="padding-bottom:5px;">
-							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules on Prices tab').'</p>
+							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules on the Prices tab').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -2411,10 +2411,10 @@ class AdminProducts extends AdminTab
 							</td>
 						</tr>
 						<tr>
-						<td class="col-left">'.$this->l('Minimal quantity:').'</td>
+						<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 							<td style="padding-bottom:5px;">
 								<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
-								<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
+								<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 							</td>
 						</tr>';
 					}
@@ -3010,7 +3010,7 @@ class AdminProducts extends AdminTab
 				</td>
 			</tr>
 			<tr>
-			<td class="col-left">'.$this->l('Minimal quantity:').'</td>
+			<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 				<td style="padding-bottom:5px;">
 					<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 					<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>

@@ -1,4 +1,4 @@
-<h2>{l s='Please login' mod='paypal'}</h2>
+<h2>{l s='Please log in' mod='paypal'}</h2>
 
 {assign var='current_step' value='login'}
 {include file="$tpl_dir./order-steps.tpl"}
@@ -7,7 +7,7 @@
 
 <form action="{$base_dir_ssl}modules/paypal/express/submit.php" method="post" id="login_form" class="std">
 	<fieldset>
-		<h3>{l s='This email has already been registered, please login !' mod='paypal'}</h3>
+		<h3>{l s='This email has already been registered, please log in !' mod='paypal'}</h3>
 		<p class="text">
 			<label for="email" style="text-align:left; margin-left:10px;">{l s='E-mail address' mod='paypal'}</label>
 			<span><input type="text" id="email" name="email" value="{$email|escape:'htmlall'|stripslashes}" class="account_input" /></span>

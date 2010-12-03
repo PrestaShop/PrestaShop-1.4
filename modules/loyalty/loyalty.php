@@ -273,7 +273,7 @@ class Loyalty extends Module
 		$html .= '</select>
 				</div>
 				<div class="clear"></div>
-				<label>'.$this->l('Points are canceled when the order is').'</label>
+				<label>'.$this->l('Points are cancelled when the order is').'</label>
 				<div class="margin-form" style="margin-top:10px">
 					<select id="id_order_state_cancel" name="id_order_state_cancel">';
 		foreach ($order_states as $order_state)
@@ -344,7 +344,7 @@ class Loyalty extends Module
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'validation_loyalty_state', true);
 		$html .= '	</div>
 				<div class="clear"></div>
-				<label>'.$this->l('Canceled').'</label>
+				<label>'.$this->l('Cancelled').'</label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
 			$html .= '
@@ -608,7 +608,7 @@ class Loyalty extends Module
 		$translations = array(
 		'Awaiting validation' => $this->l('Awaiting validation'),
 		'Available' => $this->l('Available'),
-		'Canceled' => $this->l('Canceled'),
+		'Cancelled' => $this->l('Cancelled'),
 		'Already converted' => $this->l('Already converted'),
 		'Unavailable on discounts' => $this->l('Unavailable on discounts'));
 

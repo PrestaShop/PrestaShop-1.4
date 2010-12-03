@@ -10,12 +10,12 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_98110868b266d63c3bacdac4430
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_a39df5444246aeb081729db7e17f51bc'] = 'Configuration: Date de livraison';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0ea55758c7a68c0309b915e4b718d6b8'] = 'Le format de la date est invalide';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7ccf58c950043c9fbfed668df13ce608'] = 'Paramètres mis à jour';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4747dd1c9b94dcb5fd1e77e2b74ebc20'] = 'Délais minimal incorrect';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_08c21d563944ee3bccf5b72861a4c50f'] = 'Délais maximal incorrect';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ecfe3ba0ff66a97029088e8e90a3f051'] = 'Délais minimum incorrect';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0245cd1cce5ecea8eb23b043be00d80a'] = 'Délais maximum incorrect';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6843321c8b0edea8cf333519316ed7b'] = 'Transporteur invalide';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_5e221b7fdd53e39676773815e4ec78cd'] = 'vous ne pouvez pas utiliser de transporteur, une régle a déjà été enregistrée';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_1a0bc5085f780fd6e5ac6b9152bf1220'] = 'une erreur s\'est produite lors de l\'ajout de la régle';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_3af27afe16f98d77396f3a7f61d9b0fe'] = 'une erreur s\'est produite lors de la mise à jour de la régle';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_2a303931eec9986d9161cd47cf9f3705'] = 'vous ne pouvez pas utiliser de transporteur, une régle a déjà été enregistrée';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4c17dd5a837bfe49a98fea2f9d00b78c'] = 'une erreur s\'est produite lors de l\'ajout de la régle';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d0853b509396370c9f192e151b8d1096'] = 'une erreur s\'est produite lors de la mise à jour de la régle';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_6e2523984e15e5a97656eb6b1d5510e6'] = 'Régle de transporteur a été supprimée avec succés';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_aaf25471dc6ebf54bd5a4e397056f32f'] = 'Régle de transporteur a été ajoutée avec succés';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_511b1e7b6e62149db2c1e7f4d5b619b6'] = 'Régle de transporteur a été mise à jour avec succés';

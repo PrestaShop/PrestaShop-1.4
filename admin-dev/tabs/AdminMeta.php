@@ -99,7 +99,7 @@ class AdminMeta extends AdminTab
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'title¤description¤keywords¤url_rewrite', 'keywords');
 		echo '	</div>
 				<div style="clear:both;">&nbsp;</div>
-				<label>'.$this->l('Rewrited URL:').' </label>
+				<label>'.$this->l('Rewritten URL:').' </label>
 				<div class="margin-form">';
 				foreach ($this->_languages as $language)
 					echo '

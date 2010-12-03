@@ -93,7 +93,7 @@ class Newsletter extends Module
 				<a href="../modules/newsletter/'.strval($_POST['action']).'_'.$this->_file.'"><b>'.$this->l('Download the file').' '.$this->_file.'</b></a>
 				<br />
 				<ol style="margin-top: 10px;">
-					<li style="color: red;">'.$this->l('WARNING: If you try to open this the .csv file with Excel, do no forget to choose UTF-8 encoding or you\'ll may see strange characters').'</li>
+					<li style="color: red;">'.$this->l('WARNING: If you try to open this .csv file with Excel, do not forget to choose UTF-8 encoding or you may see strange characters').'</li>
 				</ol>');
 			}
 			else

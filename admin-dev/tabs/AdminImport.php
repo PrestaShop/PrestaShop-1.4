@@ -108,7 +108,7 @@ class AdminImport extends AdminTab
 				'meta_title' => $this->l('Meta-title'),
 				'meta_keywords' => $this->l('Meta-keywords'),
 				'meta_description' => $this->l('Meta-description'),
-				'link_rewrite' => $this->l('URL rewrited'),
+				'link_rewrite' => $this->l('URL rewritten'),
 				'image' => $this->l('Image URL'));
 				
 				self::$default_values = array('active' => '1', 'parent' => '1', 'link_rewrite' => '');
@@ -185,7 +185,7 @@ class AdminImport extends AdminTab
 				'lastname' => $this->l('Lastname *'),
 				'firstname' => $this->l('Firstname *'),
 				'newsletter' => $this->l('Newsletter (0/1)'),
-				'optin' => $this->l('Optin (0/1)'));
+				'optin' => $this->l('Opt in (0/1)'));
 				
 				self::$default_values = array('active' => '1');
 
@@ -477,7 +477,7 @@ class AdminImport extends AdminTab
 			}
 				
 			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrited link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite[$defaultLanguageId];
+				$this->_warnings[] = Tools::displayError('Rewrote link for').' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$category->link_rewrite[$defaultLanguageId];
 			$res = false;
 			if (($fieldError = $category->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $category->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
@@ -663,7 +663,7 @@ class AdminImport extends AdminTab
 					$link_rewrite = 'friendly-url-autogeneration-failed';
 			}
 			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrited link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
+				$this->_warnings[] = Tools::displayError('Rewrote link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
 		
 			$product->link_rewrite = self::createMultiLangField($link_rewrite);
 			
@@ -1437,7 +1437,7 @@ class AdminImport extends AdminTab
 			if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))
 				$this->_errors[] = $this->l('no file selected');
 			elseif (!file_exists($_FILES['file']['tmp_name']) OR !@rename($_FILES['file']['tmp_name'], dirname(__FILE__).'/../import/'.$_FILES['file']['name'].'.'.date('Ymdhis')))
-				$this->_errors[] = $this->l('an error occured while uploading and copying file');
+				$this->_errors[] = $this->l('an error occurred while uploading and copying file');
 			else
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=18');
 		}

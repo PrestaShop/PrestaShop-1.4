@@ -62,12 +62,12 @@ class PaysafeCard extends PrepaidServices
 				'invalid_business_type' => $this->displayError('Invalid business type'),
 				'invalid_environment' => $this->displayError('Invalid environment'),
 				'settings_updated' => $this->l('Settings updated'),
-				'file_partialy_uploaded' => $this->l('The file was partialy uploaded'),
+				'file_partialy_uploaded' => $this->l('The file was partially uploaded'),
 				'file_empty' => $this->l('The file is empty'),
 				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
-				'release_error' => $this->l('An error has occured during the release'),
+				'release_error' => $this->l('An error has occurred during the release'),
 				'introduction' => $this->l('paysafecard is Europe’s first prepaid solution for payments on the Internet to comply with banking laws.  Over the past years, paysafecard has become one of Europe’s leading alternative online payment solutions.')
 			);
 			
@@ -76,7 +76,7 @@ class PaysafeCard extends PrepaidServices
 	
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
-		$error_msg = array(1 => $this->l('An error has occured, check Messages for more infos'),
+		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
 						   2 => $this->l('Invalid amount'));
 						   
 		return $error_msg[$error_code];

@@ -16,7 +16,7 @@ $_MODULE['<{cashticket}prestashop>cashticket_4512bbd48918c03027387a6c8e911342'] 
 $_MODULE['<{cashticket}prestashop>cashticket_21d3d890383dc93343ce57c221ce5b3d'] = 'Accepter les paiements via CashTicket';
 $_MODULE['<{cashticket}prestashop>cashticket_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposition crée. En attente du débit.';
 $_MODULE['<{cashticket}prestashop>cashticket_894f0316a71ef67255369c82bf8a0e5b'] = 'L\'état de la disposition est invalide :';
-$_MODULE['<{cashticket}prestashop>cashticket_e79174d4c28918ea3743a8386092cfab'] = 'Une erreur est survenue pendant le paiement :';
+$_MODULE['<{cashticket}prestashop>cashticket_c1c25198721552ea8ddd963c7278d4ab'] = 'Une erreur est survenue pendant le paiement :';
 $_MODULE['<{cashticket}prestashop>cashticket_36ec50c0e914dd2fb48a1b27540512ce'] = 'Paiement accepté.';
 $_MODULE['<{cashticket}prestashop>cashticket_d6ca44369efe062cec0c09f392465f55'] = 'Ce module requiert la librairie PHP cURL pour fonctionner correctement.';
 $_MODULE['<{cashticket}prestashop>cashticket_fe9da2c5e2e153d2415b4cd5d91166a4'] = 'n\'a pas les droits en écriture.';
@@ -30,7 +30,7 @@ $_MODULE['<{cashticket}prestashop>cashticket_a01813de717585e9ac9458bbfc54485a'] 
 $_MODULE['<{cashticket}prestashop>cashticket_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{cashticket}prestashop>cashticket_0ba29c6a1afacf586b03a26162c72274'] = 'Environement';
 $_MODULE['<{cashticket}prestashop>cashticket_1d5ad3d37f236c9eebda547690373bba'] = 'Business Type';
-$_MODULE['<{cashticket}prestashop>cashticket_9eacfa0a89b48392a962b3fed24cd58e'] = 'Paiement immédiat';
+$_MODULE['<{cashticket}prestashop>cashticket_b024248d9fecf8c34f629e89a9fb93b4'] = 'Paiement immédiat';
 $_MODULE['<{cashticket}prestashop>cashticket_c80a51a60c5ee43553c3881459b8f431'] = 'Mettre à jour la configuration';
 $_MODULE['<{cashticket}prestashop>cashticket_1ed8d28fc462cdaba8f2ce9a400f2bfa'] = 'Vous devez fournir un certificat pour l\'ID marchand';
 $_MODULE['<{cashticket}prestashop>cashticket_bbced877c13c763f0141ff906c8ed0e5'] = 'Fichier invalide';
@@ -41,9 +41,9 @@ $_MODULE['<{cashticket}prestashop>cashticket_d2bbf245e9591814fe994df3cae95964'] 
 $_MODULE['<{cashticket}prestashop>cashticket_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'La transaction n\'a pu être initialisée du à des problèmes de connexions. Si le problème persiste, merci de nous contacter.';
 $_MODULE['<{cashticket}prestashop>cashticket_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposition consommée';
 $_MODULE['<{cashticket}prestashop>cashticket_c3e260f43a99b6fd907538953fe700d0'] = 'Disposition relachée';
-$_MODULE['<{cashticket}prestashop>cashticket_022492bc69b8205957d53b4166cd7090'] = 'Une erreur est survenue au moment de la relache.';
+$_MODULE['<{cashticket}prestashop>cashticket_f6a62a622cbba2c1b8cd0be062deff96'] = 'Une erreur est survenue au moment de la relache.';
 $_MODULE['<{cashticket}prestashop>cashticket_12f989194ad92e23c0eb3941db7f6720'] = 'Acceptez les paiements prépayés dans votre boutique en ligne. Cash-Ticket est une méthode de paiement simple et sécurisée pour l’internet. Cash-Ticket permet des paiements sans carte bancaires ni coordonnées bancaires personnelles. Tout ce qui est nécessaire pour payer dans une boutique en ligne est un code PIN de 16 chiffres. De cette façon les consommateurs peuvent réaliser des paiements en ligne sans carte de crédit ni même compte bancaire.';
-$_MODULE['<{cashticket}prestashop>cashticket_75f5c89352ca1b7efc6bb03899ab9224'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
+$_MODULE['<{cashticket}prestashop>cashticket_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
 $_MODULE['<{cashticket}prestashop>cashticket_a9ced76f2dd6907220fa95b3a136b04a'] = 'Montant incorrect';
 $_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'La disposition est dans un état invalide';
 $_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Vous n\'êtes pas authorisé à récupérer le paiement.';

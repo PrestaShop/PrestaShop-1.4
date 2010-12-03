@@ -134,7 +134,7 @@ class AdminCustomerThreads extends AdminTab
 				$cm->message = Tools::htmlentitiesutf8(nl2br2(Tools::getValue('reply_message')));
 				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
 				if (isset($_FILES) AND !empty($_FILES['joinFile']['name']) AND $_FILES['joinFile']['error'] != 0)
-					$this->_errors[] = Tools::displayError('an error occured with the file upload');
+					$this->_errors[] = Tools::displayError('an error occurred with the file upload');
 				else if ($cm->add())
 				{
 					$fileAttachment = NULL;
@@ -153,7 +153,7 @@ class AdminCustomerThreads extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occured, your message wasn\'t sent please contact your system administrator');
+					$this->_errors[] = Tools::displayError('an error occurred, your message wasn\'t sent, please contact your system administrator');
 			}
 		}
 
@@ -457,7 +457,7 @@ class AdminCustomerThreads extends AdminTab
 		else
 			echo $this->displayButton('
 			<img src="../img/admin/msg-ok.png" title="'.$this->l('Go to the oldest next unanswered message').'" style="margin-bottom: 10px;" />
-			<br />'.$this->l('The other messages of this category have been answered'));
+			<br />'.$this->l('The other messages in this category have been answered'));
 
 		if ($thread->status != "closed")
 			echo $this->displayButton('

@@ -69,7 +69,7 @@ class PasswordControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('We can\'t regenerate your password with the datas you submitted');
 		}
 		elseif (($token = Tools::getValue('token')) || ($id_customer = Tools::getValue('id')))
-			$this->errors[] = Tools::displayError('We can\'t regenerate your password with the datas you submitted');
+			$this->errors[] = Tools::displayError('We cannot regenerate your password with the data you submitted');
 	}
 	
 	public function displayContent()

@@ -100,7 +100,7 @@ class OrderOpcControllerCore extends FrontController
 									die(Tools::jsonEncode($summary));
 								}
 								else
-									$this->errors[] = Tools::displayError('error occured on update of cart');
+									$this->errors[] = Tools::displayError('error occurred on update of cart');
 								if (sizeof($this->errors))
 									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								exit;

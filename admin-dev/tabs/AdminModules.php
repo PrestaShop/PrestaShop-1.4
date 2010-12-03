@@ -159,7 +159,7 @@ class AdminModules extends AdminTab
 				elseif (substr($_FILES['file']['name'], -4) != '.tar' AND substr($_FILES['file']['name'], -4) != '.zip' AND substr($_FILES['file']['name'], -4) != '.tgz' AND substr($_FILES['file']['name'], -7) != '.tar.gz')
 					$this->_errors[] = Tools::displayError('unknown archive type');
 				elseif (!@copy($_FILES['file']['tmp_name'], _PS_MODULE_DIR_.$_FILES['file']['name']))
-					$this->_errors[] = Tools::displayError('an error occured while copying archive to module directory');
+					$this->_errors[] = Tools::displayError('an error occurred while copying archive to module directory');
 				else
 					$this->extractArchive(_PS_MODULE_DIR_.$_FILES['file']['name']);
 			}
@@ -474,7 +474,7 @@ class AdminModules extends AdminTab
 						</select>
 						&nbsp;
 						<select name="country_module_value">
-							<option value="0" >'.$this->l('All country').'</option>
+							<option value="0" >'.$this->l('All countries').'</option>
 							<option value="1" '.($showCountryModules == 1 ? 'selected="selected"' : '').'>'.$this->l('Current country:').' '.$nameCountryDefault.'</option>
 						</select>
 					</th>
@@ -663,7 +663,7 @@ class AdminModules extends AdminTab
 		if ((int)($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a class="action_module" href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
-		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action removes definitely the module from the server. Are you really sure ? ').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action removes the module from the server. Are you really sure ?').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
 		
 		return $return;
 	}

@@ -39,12 +39,12 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_1ed8d28fc462cdaba8f2ce9a400f2bfa'
 $_MODULE['<{paysafecard}prestashop>paysafecard_bbced877c13c763f0141ff906c8ed0e5'] = 'Fichier invalide';
 $_MODULE['<{paysafecard}prestashop>paysafecard_97e5793f511c7930ab295997cb28553a'] = 'ID marchand invalide';
 $_MODULE['<{paysafecard}prestashop>paysafecard_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
-$_MODULE['<{paysafecard}prestashop>paysafecard_d139abab2541129dfae24c733635104c'] = 'Le fichier n\'a pas été téléchargé correctement';
+$_MODULE['<{paysafecard}prestashop>paysafecard_a98658e7f6aa80803873db3a3e982f4d'] = 'Le fichier n\'a pas été téléchargé correctement';
 $_MODULE['<{paysafecard}prestashop>paysafecard_d2bbf245e9591814fe994df3cae95964'] = 'Le fichier est vide';
 $_MODULE['<{paysafecard}prestashop>paysafecard_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'La transaction n\'a pu être initialisée du à des problèmes de connexions. Si le problème persiste, merci de nous contacter.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposition consommée';
 $_MODULE['<{paysafecard}prestashop>paysafecard_c3e260f43a99b6fd907538953fe700d0'] = 'Disposition relachée';
-$_MODULE['<{paysafecard}prestashop>paysafecard_022492bc69b8205957d53b4166cd7090'] = 'Une erreur est survenue au moment de la relache';
+$_MODULE['<{paysafecard}prestashop>paysafecard_f6a62a622cbba2c1b8cd0be062deff96'] = 'Une erreur est survenue au moment de la relache.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a43ec27b265e2877cf1ec044bac3eae8'] = 'Tout le monde peut utiliser paysafecard puisqu’elle ne nécessite ni carte de crédit ni compte bancaire.  Aux cours des dernières années, Paysafecard est devenu l\'un des leaders des moyens de paiement en ligne alternatifs.  ';
-$_MODULE['<{paysafecard}prestashop>paysafecard_75f5c89352ca1b7efc6bb03899ab9224'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
+$_MODULE['<{paysafecard}prestashop>paysafecard_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a9ced76f2dd6907220fa95b3a136b04a'] = 'Montant incorrect';

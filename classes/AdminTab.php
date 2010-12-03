@@ -143,8 +143,8 @@ abstract class AdminTabCore
 		13 => $this->l('Module uninstalled successfully'), 14 => $this->l('Language successfully copied'),
 		15 => $this->l('Translations successfully added'), 16 => $this->l('Module transplanted successfully to hook'),
 		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
-		19 => $this->l('Duplication successfully done'), 20 => $this->l('Translation added successfully but the language has been not created'),
-		21 => $this->l('Module reset successfully'), 22 => $this->l('Module delete successfully'),
+		19 => $this->l('Duplication completed successfully'), 20 => $this->l('Translation added successfully but the language has been not created'),
+		21 => $this->l('Module reset successfully'), 22 => $this->l('Module deleted successfully'),
 		23 => $this->l('Configuration pack imported successfully'), 24 => $this->l('Refund Successful'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
@@ -225,7 +225,7 @@ abstract class AdminTabCore
 		
 		echo '<br />
 						<fieldset class="width1"><legend>'.$this->l('Required Fields').'</legend><form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
-						<p><b>'.$this->l('Select the fields you want required.').'<br />
+						<p><b>'.$this->l('Select the fields you require.').'<br />
 						'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
 						<table cellspacing="0" cellpadding="0" class="table width1 clear">
 						<tr>

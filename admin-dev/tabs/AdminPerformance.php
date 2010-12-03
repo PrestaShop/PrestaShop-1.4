@@ -73,7 +73,7 @@ class AdminPerformance extends AdminTab
 					if (Memcached::addServer(pSQL(Tools::getValue('memcachedIp')), (int)Tools::getValue('memcachedPort'), (int)Tools::getValue('memcachedWeight')))
 						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 					else
-						$this->_errors[] = Tools::displayError('Can\'t add Memcached server');
+						$this->_errors[] = Tools::displayError('Cannot add Memcached server');
 				}
 			}
 			else
@@ -257,7 +257,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
-				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but require PHP extension "mcrypt". If you change this configuration, every cookies will be reset.').'</p>
+				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
 				<label>'.$this->l('Algorithm').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
@@ -276,7 +276,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
-				<p>'.$this->l('CCC allows you to reduce the loading time of your page, browser-side. With these settings you will gain performance without touching the code of your theme. Caution, however, that your theme is compatible PrestaShop 1.4+, CCC otherwise cause problems.').'</p>
+				<p>'.$this->l('CCC allows you to reduce the loading time of your page, browser-side. With these settings you will gain performance without touching the code of your theme. Caution, ensure that your theme is compatible with PrestaShop 1.4+, CCC otherwise this may cause problems.').'</p>
 				<label>'.$this->l('Smart cache for CSS').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_CSS_THEME_CACHE" id="PS_CSS_THEME_CACHE_1" '.(Configuration::get('PS_CSS_THEME_CACHE') ? 'checked="checked"' : '').' />
@@ -313,10 +313,10 @@ class AdminPerformance extends AdminTab
 					<label class="t" for="PS_JS_HTML_THEME_COMPRESSION_0">'.$this->l('Keep inline JavaScript in HTML as original').'</label>
 				</div>
 				
-				<label>'.$this->l('High and dangerous HTML compression').' </label>
+				<label>'.$this->l('High risk HTML compression').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_HIGH_HTML_THEME_COMPRESSION" id="PS_HIGH_HTML_THEME_COMPRESSION_1" '.(Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION') ? 'checked="checked"' : '').' />
-					<label class="t" for="PS_HIGH_HTML_THEME_COMPRESSION_1">'.$this->l('HTML compress up but cancels the W3C validation (only when "Minify HTML" is enabled)').'</label>
+					<label class="t" for="PS_HIGH_HTML_THEME_COMPRESSION_1">'.$this->l('HTML is compressed but cancels the W3C validation (only when "Minify HTML" is enabled)').'</label>
 					<br />
 					<input type="radio" value="0" name="PS_HIGH_HTML_THEME_COMPRESSION" id="PS_HIGH_HTML_THEME_COMPRESSION_0" '.(Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION') ? '' : 'checked="checked"').' />
 					<label class="t" for="PS_HIGH_HTML_THEME_COMPRESSION_0">'.$this->l('Keep W3C validation').'</label>

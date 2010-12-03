@@ -59,7 +59,7 @@ class LocalizationPackCore
 				}
 				if (!$state->add())
 				{
-					$this->_errors[] = Tools::displayError('An error occured while adding the state.');
+					$this->_errors[] = Tools::displayError('An error occurred while adding the state.');
 					return false;
 				}
 			}
@@ -82,7 +82,7 @@ class LocalizationPackCore
 				}
 				if (!$tax->add())
 				{
-					$this->_errors[] = Tools::displayError('An error occured while importing the tax: ').strval($attributes['name']);
+					$this->_errors[] = Tools::displayError('An error occurred while importing the tax: ').strval($attributes['name']);
 					return false;
 				}
 				if (isset($taxData->applications->application))
@@ -139,7 +139,7 @@ class LocalizationPackCore
 				}
 				if (!$currency->add())
 				{
-					$this->_errors[] = Tools::displayError('An error occured while importing the currency: ').strval($attributes['name']);
+					$this->_errors[] = Tools::displayError('An error occurred while importing the currency: ').strval($attributes['name']);
 					return false;
 				}
 				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
@@ -162,7 +162,7 @@ class LocalizationPackCore
 				}
 				if (!Language::checkAndAddLanguage(strval($attributes['iso_code'])))
 				{
-					$this->_errors[] = Tools::displayError('An error occured while creating the language: ').strval($attributes['iso_code']);
+					$this->_errors[] = Tools::displayError('An error occurred while creating the language: ').strval($attributes['iso_code']);
 					return false;
 				}
 			}
@@ -183,7 +183,7 @@ class LocalizationPackCore
 				}
 				if (!Configuration::updateValue($varNames[strval($attributes['type'])], strval($attributes['value'])))
 				{
-					$this->_errors[] = Tools::displayError('An error occured while setting the units.');
+					$this->_errors[] = Tools::displayError('An error occurred while setting the units.');
 					return false;
 				}
 			}

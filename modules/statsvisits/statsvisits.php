@@ -60,7 +60,7 @@ class StatsVisits extends ModuleGraph
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p><center>
-				<img src="../img/admin/down.gif" />'.$this->l('A visit correspond to the coming of an internet user on your shop. Until the end of his session, only one visit is counted.').'
+				<img src="../img/admin/down.gif" />'.$this->l('A visit corresponds to an internet user coming to your shop. Until the end of their session, only one visit is counted.').'
 				'.$this->l('A visitor is an unknown person - who has not registered or logged on - surfing on your shop. A visitor can come and visit your shop many times.').'
 			</center></p>
 			<div style="margin-top:20px"></div>
@@ -73,7 +73,7 @@ class StatsVisits extends ModuleGraph
 				<h2>'.$this->l('Determine the interest of a visit').'</h2>
 				'.$this->l('Visitors\' evolution graph strongly looks like to the visits\' graph, but provides an additional information: <strong>Do your visitors come back?</strong>').'<br />
 				<ul>
-					<li>'.$this->l('if this is the case, congratulations, your website is well-thought-out and undeniably pleases.').'</li>
+					<li>'.$this->l('If this is the case, congratulations, your website is well thought out and pleasing.').'</li>
 					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be esthetic or ergonomic, or else the offer not sufficient. It\'s also possible that these visitors mistakenly came here, without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
 				</ul>
 				'.$this->l('This information is mostly qualitative: you have to determine the interest of a disjointed visit.').'<br />

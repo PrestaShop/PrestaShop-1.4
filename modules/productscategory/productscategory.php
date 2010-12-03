@@ -44,7 +44,7 @@ class productsCategory extends Module
 		elseif (Tools::isSubmit('submitCross'))
 		{
 			Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', Tools::getValue('displayPrice'));
-			$this->_html .= $this->displayConfirmation($this->l('Settings updated succesfully'));
+			$this->_html .= $this->displayConfirmation($this->l('Settings updated successfully'));
 		}
 		$this->_html .= '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">

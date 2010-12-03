@@ -165,7 +165,7 @@ class BackupCore
 			{
 				fclose($fp);
 				$this->delete();
-				echo Tools::displayError('An error occur while backing up. Unable to obtain the schema of').' "'.$table;
+				echo Tools::displayError('An error occurred while backing up. Unable to obtain the schema of').' "'.$table;
 				return false;
 			}
 

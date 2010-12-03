@@ -77,7 +77,7 @@ class Blockrss extends Module
 				<label>'.$this->l('Add a feed URL').'</label>
 				<div class="margin-form">
 					<input type="text" size="85" name="urlfeed" value="'.Tools::getValue('urlfeed', Configuration::get('RSS_FEED_URL')).'" />
-					<p class="clear">'.$this->l('Add the url of the feed you wan\'t to use').'</p>
+					<p class="clear">'.$this->l('Add the URL of the feed you want to use').'</p>
 
 				</div>
 				<label>'.$this->l('Number of threads displayed').'</label>

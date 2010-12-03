@@ -9,10 +9,10 @@ function displayError($msg)
 		'Invalid key.' => Tools::displayError('Invalid key.'),
 		'This product doesn\'t exists in our store.' => Tools::displayError('This product doesn\'t exists in our store.'),
 		'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
-		'This file no more exists.'	=> Tools::displayError('This file no more exists.'),
+		'This file no longer exists.'	=> Tools::displayError('This file no longer exists.'),
 		'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
-		'Dear customer, you exceed the expiration date.' => Tools::displayError('Dear customer, you exceed the expiration date.'),
-		'You reach the maximum number of allowed downloads.' => Tools::displayError('You reach the maximum number of allowed downloads.'));
+		'Dear customer, you have exceeded the expiration date.' => Tools::displayError('Dear customer, you have exceeded the expiration date.'),
+		'You have reached the maximum number of allowed downloads.' => Tools::displayError('You have reached the maximum number of allowed downloads.'));
 
 <script type="text/javascript">
 <!--
@@ -71,7 +71,7 @@ else
 		displayError('This product has been deleted.');
 
 	if (!file_exists(_PS_DOWNLOAD_DIR_.$filename))
-		displayError('This file no more exists.');
+		displayError('This file no longer exists.');
 
 	$now = time();
 
@@ -81,10 +81,10 @@ else
 
 	$customer_deadline = strtotime($info['date_expiration']);
 	if ($now > $customer_deadline AND $info['date_expiration'] != '0000-00-00 00:00:00')
-		displayError('Dear customer, you exceed the expiration date.');
+		displayError('Dear customer, you have exceeded the expiration date.');
 
 	if ($info['download_nb'] >= $info['nb_downloadable'] AND $info['nb_downloadable'])
-		displayError('You reach the maximum number of allowed downloads.');
+		displayError('You have reached the maximum number of allowed downloads.');
 
 	/* Access is authorized -> increment download value for the customer */
 	OrderDetail::incrementDownload($info['id_order_detail']);

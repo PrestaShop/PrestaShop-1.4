@@ -12,7 +12,7 @@ $_MODULE['<{trustedshops}prestashop>trustedshops_24bbca53f91f119c930d147557a4e99
 $_MODULE['<{trustedshops}prestashop>trustedshops_6c92285fa6d3e827b198d120ea3ac674'] = 'ici';
 $_MODULE['<{trustedshops}prestashop>trustedshops_9ad6278cff9ee53a9970b3a9ecc00a5c'] = 'ou contacter service@trustedshops.com.';
 $_MODULE['<{trustedshops}prestashop>trustedshops_b4fc8e4eaf37aa936859367ad7c642ca'] = 'Le système d’évaluation Trusted Shops n’a pas encore été activé pour ce Trusted Shops ID.';
-$_MODULE['<{trustedshops}prestashop>trustedshops_8144eaaa3a1db5748161ec93fa3b5f1c'] = 'Une erreur est survenue';
+$_MODULE['<{trustedshops}prestashop>trustedshops_8db5bd2272b51b3525ad7661c10d8b2b'] = 'Une erreur est survenue';
 $_MODULE['<{trustedshops}prestashop>trustedshops_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{trustedshops}prestashop>trustedshops_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Actif';
 $_MODULE['<{trustedshops}prestashop>trustedshops_eeb41070f0552af9f1339ed58da237fb'] = 'Inactif tant que vous n\'avez pas spécifiez votre Trusted Shops ID';

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_1bd130f5640104712b3c7dec66b7b0a1'] = 'Bloc logo de paiement';
-$_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_524bb57a2d122b48b63270c1dc37d8aa'] = 'Ajoute un bloc affichant tous les logos des modes de paiement';
+$_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_0811e5b9a87d4140e53e6af73760b4bd'] = 'Ajoute un bloc affichant tous les logos des modes de paiement';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_8fc87743f34723d06ebff41629d2fdb5'] = 'Logo de paiement';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_7ccf58c950043c9fbfed668df13ce608'] = 'Paramètres mis à jour';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_d16dbbe71a327e22461456cfc5e7dfb2'] = 'Aucune page CMS est disponible';

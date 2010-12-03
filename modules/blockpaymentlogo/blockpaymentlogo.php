@@ -14,7 +14,7 @@ class BlockPaymentLogo extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Block payment logo');
-		$this->description = $this->l('Adds a block to display all payment logo');
+		$this->description = $this->l('Adds a block to display all payment logos');
 	}
 
 	public function install()
