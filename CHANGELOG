@@ -576,6 +576,107 @@ Release Notes for PrestaShop 1.3
 --------------------------------
 
 ####################################
+#   v1.3.3.0 - 3662 (2010-12-02)   #
+####################################
+
+	Improved/changed features :
+
+	[*] MO : On gsitemap module - substract the page search.php to the list.
+	
+	Fixed bugs :
+	
+	[-] FO : ASC => asc for google referencement compatibility. Bug #5850 fixed
+	[-] FO : Attributes reduction on product untaxed are now untaxed too everywhere. Bug #5338 fixed
+	[-] FO : Bug fixed #5262 clean position of product when update categories
+	[-] FO : Bug fixed #5501 - Product picture is not displayed in list
+	[-] FO : Bug fixed #5627 - Redirect 301 in order to avoid duplicate content
+	[-] FO : Bug Fixed #5773 - Small issue in tools::d() function
+	[-] FO : Bug fixed #5870 - SSL and redirection 301
+	[-] FO : Bug fixed #5995 - Invalid redirection on product page
+	[-] FO : Duplicate content due to missing EAN13 in product url 
+	[-] FO : Ecotax conversion fixed on product page (when the customer currency was different from the default one)
+	[-] FO : Fixed bug #5263 - UTF8 support
+	[-] FO : Fixed Bug #5516 - Missing pictures height and width
+	[-] FO : fixed bug #5769
+	[-] FO : fixed bug #5806
+	[-] FO : fixed bug #5806
+	[-] FO : fixed bug #6148
+	[-] FO : In product.tpl in the color picker block, the cancel button has been deleted. Indeed the button behavior was not according to his name. It displayed all pictures when a user already choosed a color declination. The icon has been moved on the side of the button "display all pictures".
+	[-] FO : Invoice + Confirmation email displays customization details 
+	[-] FO : Invoice customization encoding
+	[-] FO : fixed search with old templates version
+	[-] FO : Product price display fixed on the category page
+	[-] FO : Product price fixed (rounding issue) when quantity discount applied
+	[-] FO : Product-sort repaired. (desc didn't work and w3c correction)
+	[-] FO : Quantity discount application fixed when price display method set to tax excluded
+	[-] FO : Quantity discount display fixed (when the customer group price display is set to tax excluded)
+	[-] FO : set getPriceStatic() method in getPriceWithoutReduct().
+	[-] FO : Strange french traduction with a ’ instead of a \', Bug #5678 fixed
+	[-] FO : When a product is new, it is display everytime product-list is displayed. Bug #5654 fixed
+	
+	[-] BO / FO : Invoices works perfectly with a 100% voucher and a total paid price of 0.00. Bug #5984 fixed
+	
+	[-] BO : #5458 AdminModules - Counter and tab displaying are now according to modules which are shown and usable by selected countries.
+	[-] BO : AdminPayment permissions works fine
+	[-] BO : Bug #5965 fixed. When passing an argument id_cart to getPriceStatic, new cart replace global cart
+	[-] BO : Bug fixed #5217 - Live feed non https
+	[-] BO : Cache problem fixed on IE for manufacturer on AdminProduct page. Bug #5502 fixed
+	[-] BO : Customized product price fixed on order detail
+	[-] BO : delivery prices set to 0 when you add a new range
+	[-] BO : Ecotax input fixed
+	[-] BO : Ecotax input fixed
+	[-] BO : fixed bug #5677
+	[-] BO : fixed bug #5793
+	[-] BO : fixed bug #6006 - Track The Order link to new page
+	[-] BO : fixed bug ecotax
+	[-] BO : fixed js bug
+	[-] BO : Fixed SQL error on AdminImport page when entering an empty category
+	[-] BO : Image changed in AdminAttributesGroups : Bug #5795 fixed
+	[-] BO : missing images for 6th level categories
+	[-] BO : Moneybookers description : "." removed. Bug #5465 fixed
+	[-] BO : Number of messages was always 0 in Customer messages
+	[-] BO : Optimisation of Category::recurseLiteCategTree, Bug #6007 fixed
+	[-] BO : Permissions for Payment page reworks : Bug #5835 fixed
+	[-] BO : Reduction displayed correctly now. Bug #5500.
+	[-] BO : bad filter key for profiles in AdminEmployees, bug #5952 fixed
+	[-] BO : You can now edit carrier's price for disabled zones. Bug #6074 fixed
+	
+	[-] Classes : bug fixed #5527 - change preg_match() pattern to allow 5 chars, number and dash. 
+	[-] Classes : Carrier getDeliveryPriceByPrice() & checkDeliveryPriceByPrice() now convert to default currency
+	[-] Classes : date('Y-m-d H:m:i') became date('Y-m-d H:i:s'), bug #6033 fixed
+	[-] Classes : Ecotax tax application fixes (does apply the tax regarding the customer location)
+	[-] Classes : fixed bug #5990
+	[-] Classes : fixed bug #6000 - W3C validation of search result page, error in Link.php 
+	[-] Classes : fixed bug #6079 - Fatal error on pdf invoice
+	[-] Classes : Free shipping voucher display fixed
+	[-] Classes : Free shipping voucher display fixed (second part)
+	[-] Classes : French ecotax fixed (was working only without reduction and with a product tax of 19.6%)
+	[-] Classes : Ordered product price display fixed (when both reduction and customer group reduction applied). It concerns both the BO, FO, PDF and emails.
+	[-] Classes : Order voucher fixed (when ecotax applied)
+	[-] Classes : Prices (product & shipping) fixed when taxes were disabled but one of them assigned to the product/shipping
+	[-] Classes : Product price fixed (when using customer group reduction)
+	[-] Classes : setlocale() fixed
+	[-] Classes : 'Y-m-d H:m:i' becomes 'Y-m-d H:i:s'. Bug #6038 fixed
+	[-] Classes : Invoice PDF was never sent by mail
+	
+	[-] MO : blocklink installation repaired
+	[-] MO : Bug #5440 mailalerts/product.tpl message now disappear on change of color or other parameters.
+	[-] MO : Bug fixed #6185 (1.3) - Module MailAlerts - Module Mailalert now refers to order
+	[-] MO : Canonical URL module is repaired (http:/∕ and https://)
+	[-] MO : bug fixed #5748 - translation fix for paypalapi/payement/payment.tpl and paypalapi/fr.php
+	[-] MO : bug fixed #5768 - change smarty modifier for display the first letter of the user lastname.
+	[-] MO : editorial : Bug Fixed #5469 - Editorial module document_base_url is missing for TinyMCE
+	[-] MO : fixed bug #5571 - Customer Qty Email on mailalert module
+	[-] MO : fixed bug on mail alert module #5733
+	[-] MO : fixed bugs on loyalty points when happens a return are now not negative
+	[-] MO : mailalerts : New order email now displays customization informations
+	[-] MO : Paypalapi Module don't break css and js anymore. Bug #5736 fixed
+	[-] MO : Sales & Orders Stats Module fixed
+	[-] MO : statsdata installation repaired
+	
+	[-] PDF : Ecotax display fixed
+
+####################################
 #   v1.3.2.3 - 2887 (2010-10-01)   #
 ####################################
 
