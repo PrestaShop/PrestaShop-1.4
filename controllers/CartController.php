@@ -42,7 +42,7 @@ class CartControllerCore extends FrontController
 	public function preProcess()
 	{
 		parent::preProcess();
-		
+
 		$orderTotal = $this->cart->getOrderTotal(true, 1);
 
 		$this->cartDiscounts = $this->cart->getDiscounts();
@@ -55,7 +55,7 @@ class CartControllerCore extends FrontController
 
 		if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 			strcasecmp(Tools::getToken(false), strval(Tools::getValue('token'))) &&
-			$this->$this->cookie->isLogged() === true)
+			$this->cookie->isLogged() === true)
 			$this->errors[] = Tools::displayError('invalid token');
 
 		// Update the cart ONLY if $this->cookies are available, in order to avoid ghost carts created by bots
@@ -97,13 +97,13 @@ class CartControllerCore extends FrontController
 						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
 							if (Tools::getValue('ajax') == 'true')
 								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock', false).'"]}');
-							else	
+							else
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
 					elseif (!$delete AND !$producToAdd->checkQty((int)($qty)))
 						if (Tools::getValue('ajax') == 'true')
 								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock').'"]}');
-							else	
+							else
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					/* Check vouchers compatibility */
 					if ($add AND (($producToAdd->specificPrice AND (float)($producToAdd->specificPrice['reduction'])) OR $producToAdd->on_sale))
@@ -129,7 +129,7 @@ class CartControllerCore extends FrontController
 							if (!sizeof($this->errors))
 							{
 								$updateQuantity = $this->cart->updateQty((int)($qty), (int)($idProduct), (int)($idProductAttribute), $customizationId, Tools::getValue('op', 'up'));
-																
+
 								if ($updateQuantity < 0)
 									if (Tools::getValue('ajax') == 'true')
 										die('{"hasError" : true, "errors" : ["'.Tools::displayError('you need add', false).' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum', false).'"]}');
@@ -187,15 +187,14 @@ class CartControllerCore extends FrontController
 				}
 				if (Tools::getValue('ajax') != 'true' AND !sizeof($this->errors))
 					Tools::redirect('order.php?'.(isset($idProduct) ? 'ipa='.(int)($idProduct) : ''));
-					
+
 			}
 		}
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
 		$this->smarty->display(_PS_THEME_DIR_.'errors.tpl');
 	}
 }
-
