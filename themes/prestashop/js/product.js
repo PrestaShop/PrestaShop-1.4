@@ -244,7 +244,6 @@ function updateDisplay()
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
-		console.log(productPriceTaxExcluded);
 		var tax = (taxRate / 100) + 1;
 		var taxExclPrice = productPriceTaxExcluded + selectedCombination['price'];
 
