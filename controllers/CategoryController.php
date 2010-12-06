@@ -50,6 +50,8 @@ class CategoryControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('category does not exist');
 			elseif (!$category->checkAccess((int)($this->cookie->id_customer)))
 				$this->errors[] = Tools::displayError('you do not have access to this category');
+			elseif (!$category->active)
+				$smarty->assign('category', $category);
 			else
 			{
 				$rewrited_url = $this->link->getCategoryLink($category->id, $category->link_rewrite);
