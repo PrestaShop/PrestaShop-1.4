@@ -244,43 +244,42 @@ function updateDisplay()
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
-		var attribut_price_tmp = selectedCombination['price'];
+		console.log(productPriceTaxExcluded);
 		var tax = (taxRate / 100) + 1;
-
-		var productPriceWithoutReduction2 = (ps_round(attribut_price_tmp * currencyRate) + productPriceWithoutReduction);
-
-		var priceReduct = !(reduction_price || reduction_percent) ? 0 : (productPriceWithoutReduction2 / 100 * parseFloat(reduction_percent) + reduction_price);
-		var newUnitPrice = (parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price'])) * currencyRate;
-		var priceProduct = productPriceWithoutReduction2 - priceReduct;
+		var taxExclPrice = productPriceTaxExcluded + selectedCombination['price'];
 
 		if (!noTaxForThisProduct)
-			var productPricePretaxed = (productPriceWithoutReduction2 - priceReduct) / tax;
+		{
+			var productPrice = ps_round(taxExclPrice * tax, 2);
+			reduction_price /= tax;
+		}
 		else
-			var productPricePretaxed = priceProduct;
-		
+			var productPrice = ps_round(taxExclPrice, 2);
+		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
+		productPrice -= reduction;
+		if (group_reduction)
+			productPrice *= group_reduction;
+		productPrice = ps_round(productPrice * currencyRate, 2);
+		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
+		$('#old_price_display').text(formatCurrency(productBasic, currencyFormat, currencySign, currencyBlank));				
+		/* Special feature: "Display product price tax excluded on product page" */
+		if (!noTaxForThisProduct)
+			var productPricePretaxed = productPrice / tax;
+		else
+			var productPricePretaxed = productPrice;
+		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
+		/* Unit price */
+		var newUnitPrice = parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price']);
 		if (!noTaxForThisProduct && displayPrice != 1)
 			newUnitPrice *= tax;
-		
-		if (displayPrice == 1)
-		{
-			priceProduct = productPricePretaxed;
-			productPriceWithoutReduction2 /= tax;
-		}
-
 		if (group_reduction)
-		{
-			priceProduct *= group_reduction;
-			productPricePretaxed *= group_reduction;
 			newUnitPrice *= group_reduction;
-		}
-		if (productPriceWithoutReduction2 && priceProduct)
-			newUnitPrice *= parseFloat(priceProduct) / parseFloat(productPriceWithoutReduction2);
-		
+		if (productPrice && productPriceWithoutReduction)
+			newUnitPrice *= productPrice / productPriceWithoutReduction;
+		newUnitPrice = ps_round(newUnitPrice * currencyRate, 2);
 		if (productUnitPrice)
 			$('#unit_price_display').text(formatCurrency(newUnitPrice, currencyFormat, currencySign, currencyBlank));
-		$('#our_price_display').text(formatCurrency(priceProduct, currencyFormat, currencySign, currencyBlank));
-		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
-		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction2, currencyFormat, currencySign, currencyBlank));
+		/* Ecotax */
 		$('#ecotax_price_display').text(formatCurrency(selectedCombination['ecotax'], currencyFormat, currencySign, currencyBlank));
 	}
 }

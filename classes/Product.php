@@ -1578,18 +1578,19 @@ class ProductCore extends ObjectModel
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = $specific_price;
 
+		// Attribute price
+		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0), $id_currency);
+		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
+			$price += $attribute_price;
+
 		// Exclude tax
 		if (!$tax_rate = (float)($forceAssociatedTax ? $result['rate'] : Tax::getProductTaxRate((int)($id_product), (int)($id_country), (int)($result['id_tax']), (float)($result['rate']), ($id_address ? (int)($id_address) : NULL))))
 			$usetax = false;
 		if ($usetax)
 			$price = $price * (1 + ($tax_rate / 100));
 
-		// Attribute price
-		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0), $id_currency);
-		$attribute_price = ($usetax OR !Configuration::get('PS_TAX')) ? Tools::ps_round($attribute_price, 2) : ($attribute_price / (1 + ($tax_rate / 100)));
-		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
-			$price += $attribute_price;
 		$price = Tools::ps_round($price, $decimals);
+
 		// Reduction
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND $specific_price)

@@ -1128,7 +1128,7 @@ CREATE TABLE `PREFIX_product_attribute` (
   `ean13` varchar(13) default NULL,
   `upc` varchar(12) default NULL,
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
-  `price` decimal(17,2) NOT NULL default '0.00',
+  `price` decimal(20,6) NOT NULL default '0.000000',
   `ecotax` decimal(17,2) NOT NULL default '0.00',
   `quantity` int(10) unsigned NOT NULL default '0',
   `weight` float NOT NULL default '0',

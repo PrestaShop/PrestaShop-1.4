@@ -22,7 +22,7 @@ var quantityAvailable = {if $display_qties == 1 && $product->quantity}{$product-
 var allowBuyWhenOutOfStock = {if $allow_oosp == 1}true{else}false{/if};
 var availableNowValue = '{$product->available_now|escape:'quotes':'UTF-8'}';
 var availableLaterValue = '{$product->available_later|escape:'quotes':'UTF-8'}';
-var productPriceWithoutReduction = {$product->getPriceWithoutReduct()|default:'null'};
+var productPriceTaxExcluded = {$product->getPriceWithoutReduct(true)|default:'null'};
 var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{else}0{/if};
 var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{else}0{/if};
 var group_reduction = '{$group_reduction}';
@@ -51,12 +51,15 @@ var customizationFields = new Array();
 // Images
 var img_prod_dir = '{$img_prod_dir}';
 var combinationImages = new Array();
-{foreach from=$combinationImages item='combination' key='combinationId' name='f_combinationImages'}
-	combinationImages[{$combinationId}] = new Array();
-	{foreach from=$combination item='image' name='f_combinationImage'}
-		combinationImages[{$combinationId}][{$smarty.foreach.f_combinationImage.index}] = {$image.id_image|intval};
+
+{if isset($combinationImages)}
+	{foreach from=$combinationImages item='combination' key='combinationId' name='f_combinationImages'}
+		combinationImages[{$combinationId}] = new Array();
+		{foreach from=$combination item='image' name='f_combinationImage'}
+			combinationImages[{$combinationId}][{$smarty.foreach.f_combinationImage.index}] = {$image.id_image|intval};
+		{/foreach}
 	{/foreach}
-{/foreach}
+{/if}
 
 combinationImages[0] = new Array();
 {if isset($images)}

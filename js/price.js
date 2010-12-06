@@ -53,6 +53,33 @@ function calcPriceTE()
 	calcReduction();
 }
 
+function calcImpactPriceTI()
+{
+	var tax = getTax();
+	var priceTE = parseFloat(document.getElementById('attribute_price').value.replace(/,/g, '.'));
+	var newPrice = priceTE * ((tax / 100) + 1);
+	$('#attribute_priceTI').val((isNaN(newPrice) == true || newPrice < 0) ? '' :ps_round(newPrice.toFixed(6), 6));
+	var total = ps_round((parseFloat($('#attribute_priceTI').val())*parseInt($('#attribute_price_impact').val())+parseFloat($('#finalPrice').html())), 2);
+	if (isNaN(total))
+		$('#attribute_new_total_price').html('0.00');
+	else
+		$('#attribute_new_total_price').html(total);
+}
+
+function calcImpactPriceTE()
+{
+	var tax = getTax();
+	var priceTI = parseFloat(document.getElementById('attribute_priceTI').value.replace(/,/g, '.'));
+	priceTI = (isNaN(priceTI)) ? 0 : ps_round(priceTI);
+	var newPrice = ps_round(priceTI - getEcotaxTaxIncluded(), 2) / ((tax / 100) + 1);
+	$('#attribute_price').val((isNaN(newPrice) == true || newPrice < 0) ? '' :ps_round(newPrice.toFixed(6), 6));
+	var total = ps_round((parseFloat($('#attribute_priceTI').val())*parseInt($('#attribute_price_impact').val())+parseFloat($('#finalPrice').html())), 2);
+	if (isNaN(total))
+		$('#attribute_new_total_price').html('0.00');
+	else
+		$('#attribute_new_total_price').html(total);
+}
+
 function calcReduction()
 {
 	if (parseFloat($('#reduction_price').val()) > 0)
@@ -152,13 +179,4 @@ function unitySecond()
 	}
 	else
 		$('#tr_unit_impact').hide();
-}
-
-function updateNewPriceAttribute()
-{
-	var total = ps_round((parseFloat($('#attribute_price').val())*parseInt($('#attribute_price_impact').val())+parseFloat($('#finalPrice').html())), 2);
-	if (isNaN(total))
-		$('#attribute_new_total_price').html('0.00');
-	else
-		$('#attribute_new_total_price').html(total);
 }
