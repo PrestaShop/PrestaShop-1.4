@@ -256,12 +256,13 @@ function updateDisplay()
 		else
 			var productPrice = ps_round(taxExclPrice, 2);
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
+		productPriceWthoutReduction = productPrice;
 		productPrice -= reduction;
 		if (group_reduction)
 			productPrice *= group_reduction;
 		productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
-		$('#old_price_display').text(formatCurrency(productBasic, currencyFormat, currencySign, currencyBlank));				
+		$('#old_price_display').text(formatCurrency(productPriceWthoutReduction, currencyFormat, currencySign, currencyBlank));				
 		/* Special feature: "Display product price tax excluded on product page" */
 		if (!noTaxForThisProduct)
 			var productPricePretaxed = productPrice / tax;
