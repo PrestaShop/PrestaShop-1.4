@@ -11,6 +11,7 @@ class WebserviceRequest
 	private $_docUrl = 'http://prestashop.com/docs/1.4/webservice';
 	private $_authenticated = false;
 	private $_method;
+	private $_realMethod;
 	private $_urlFolders = array();
 	private $_urlParams = array();
 	private $_startTime = 0;
@@ -37,6 +38,8 @@ class WebserviceRequest
 	);
 	private $_imgToDisplay;
 	private $_imgType = 'jpg';
+	private $_imgMaxSize = 3000000;
+	private $_imgTypes = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 	
 	private static $_instance;
 	
@@ -59,7 +62,8 @@ class WebserviceRequest
 		if ($this->isActivated() && $this->authenticate())
 		{
 			//parse request url
-			$this->_method = $_SERVER['REQUEST_METHOD'];
+			$this->_method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
+			$this->_realMethod = $_SERVER['REQUEST_METHOD'];
 			$this->_urlFolders = explode('/', $_GET['url']);
 			$this->_urlParams = $_GET;
 			unset($this->_urlParams['url']);
@@ -86,7 +90,9 @@ class WebserviceRequest
 								$this->constructXMLOutputAfterGet();
 							break;
 						case 'POST':
-							if ($this->executePost())
+							if (array_key_exists(1, $this->_urlFolders))
+								$this->setError(400, 'id is forbidden when adding a new resource');
+							elseif ($this->executePost())
 								$this->constructXMLOutputAfterModification();
 							break;
 						case 'PUT':
@@ -153,6 +159,151 @@ class WebserviceRequest
 		}
 	}
 	
+	private function writeImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL)
+	{
+		if ($this->_realMethod == 'PUT')
+		{
+			$this->setError(405, 'Method PUT is currently not implemented with image resource. Please use the POST method and use the method simulator by adding a "ps_method" parameter with the value "PUT"');//TODO
+			return false;
+		}
+		elseif ($this->_realMethod == 'POST')
+		{
+			if (isset($_FILES['image']['tmp_name']) AND $_FILES['image']['tmp_name'])
+			{
+				$file = $_FILES['image'];
+				if ($file['size'] > $this->_imgMaxSize)
+				{
+					$this->setError(400, 'The image size is too large (maximum allowed is '.($this->_imgMaxSize/1000).' KB)');
+					return false;
+				}
+				// Get mime content type
+				$mime_type = false;
+				if (Tools::isCallable('finfo_open'))
+				{
+					$const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
+					$finfo = finfo_open($const);
+					$mime_type = finfo_file($finfo, $file['tmp_name']);
+					finfo_close($finfo);
+				}
+				elseif (Tools::isCallable('mime_content_type'))
+					$mime_type = mime_content_type($file['tmp_name']);
+				elseif (Tools::isCallable('exec'))
+					$mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
+				if (empty($mime_type) || $mime_type == 'regular file')
+					$mime_type = $file['type'];
+				if (($pos = strpos($mime_type, ';')) !== false)
+					$mime_type = substr($mime_type, 0, $pos);
+				
+				// Check mime content type
+				if(!$mime_type || !in_array($mime_type, $this->_imgTypes))
+				{
+					$this->setError(400, 'This type of image format not recognized, allowed formats are: '.implode('", "', $this->_imgTypes));
+					return false;
+				}
+				// Check error while uploading
+				elseif ($file['error'])
+				{
+					$this->setError(400, 'Error while uploading image. Please change your server\'s settings');
+					return false;
+				}
+				
+				// Try to copy image file to a temporary file
+				if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image']['tmp_name'], $tmpName))
+				{
+					$this->setError(400, 'Error while copying image to the temporary directory');
+					return false;
+				}
+				// Try to copy image file to the image folder
+				else
+				{
+					list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($tmpName);
+					if (!$sourceWidth)
+					{
+						$this->setError(400, 'Image width was null');
+						return false;
+					}
+					if ($destWidth == NULL) $destWidth = $sourceWidth;
+					if ($destHeight == NULL) $destHeight = $sourceHeight;
+					
+					switch ($type)
+					{
+						case 1:
+							$sourceImage = imagecreatefromgif($tmpName);
+							break;
+						case 3:
+							$sourceImage = imagecreatefrompng($tmpName);
+							break;
+						case 2:
+						default:
+							$sourceImage = imagecreatefromjpeg($tmpName);
+							break;
+					}
+				
+					$widthDiff = $destWidth / $sourceWidth;
+					$heightDiff = $destHeight / $sourceHeight;
+					
+					if ($widthDiff > 1 AND $heightDiff > 1)
+					{
+						$nextWidth = $sourceWidth;
+						$nextHeight = $sourceHeight;
+					}
+					else
+					{
+						if ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
+						{
+							$nextHeight = $destHeight;
+							$nextWidth = (int)(($sourceWidth * $nextHeight) / $sourceHeight);
+							$destWidth = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
+						}
+						else
+						{
+							$nextWidth = $destWidth;
+							$nextHeight = (int)($sourceHeight * $destWidth / $sourceWidth);
+							$destHeight = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
+						}
+					}
+					
+					$borderWidth = (int)(($destWidth - $nextWidth) / 2);
+					$borderHeight = (int)(($destHeight - $nextHeight) / 2);
+					
+					$destImage = imagecreatetruecolor($destWidth, $destHeight);
+				
+					$white = imagecolorallocate($destImage, 255, 255, 255);
+					imagefill($destImage, 0, 0, $white);
+				
+					imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
+					imagecolortransparent($destImage, $white);
+					$flag = false;
+					switch ($mime_type)
+					{
+						case 'gif':
+							$flag = imagegif($destImage, $receptionPath);
+							break;
+						case 'png':
+							$flag = imagepng($destImage, $receptionPath, 7);
+							break;
+						case 'jpeg':
+						default:
+							$flag = imagejpeg($destImage, $receptionPath, 90);
+							break;
+					}
+					imagedestroy($destImage);
+					return $receptionPath;
+				}
+				unlink($tmpName);
+			}
+			else
+			{
+				$this->setError(400, 'Please set an "image" parameter with image data for value');
+				return false;
+			}
+		}
+		else
+		{
+			$this->setError(405, 'Method '.$this->_method.' is not allowed for an image resource');
+			return false;
+		}
+	}
 	private function manageImages()
 	{
 		if (count($this->_urlFolders) == 1)
@@ -162,39 +313,68 @@ class WebserviceRequest
 			case '':
 				$this->_xmlContent .= '<image_types>'."\n";
 				foreach ($this->_imageTypes as $imageTypeName => $imageType)
-					$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName."\" />\n";
+					$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName.'" get="true" put="false" post="false" delete="false" head="true" upload_allowed_types="'.implode(', ', $this->_imgTypes).'" />'."\n";
 				$this->_xmlContent .= '</image_types>'."\n";
 				break;
 			
 			case 'general':
+				// Check if method is allowed
+				if ($this->_method != 'GET' && $this->_method != 'HEAD' && $this->_method != 'PUT')
+				{
+					$this->setError(405, 'This method is not allowed with general image resources.');
+					return false;
+				}
+				
+				// Execute action
 				if (count($this->_urlFolders) == 2)
-						$this->_urlFolders[2] = '';
-					switch ($this->_urlFolders[2])
+					$this->_urlFolders[2] = '';
+				$path = '';
+				$alternative_path = '';
+				switch ($this->_urlFolders[2])
+				{
+					case '':
+						$this->_xmlContent .= '<general_image_types>'."\n";
+						foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
+							$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_types="'.implode(', ', $this->_imgTypes).'" />'."\n";
+						$this->_xmlContent .= '</general_image_types>'."\n";
+						break;
+					
+					case 'header':
+						$path = _PS_IMG_DIR_.'logo.jpg';
+						break;
+					case 'mail':
+						$path = _PS_IMG_DIR_.'logo_mail.jpg';
+						$alternative_path = _PS_IMG_DIR_.'logo.jpg';
+						break;
+					case 'invoice':
+						$path = _PS_IMG_DIR_.'logo_invoice.jpg';
+						$alternative_path = _PS_IMG_DIR_.'logo.jpg';
+						break;
+					case 'store_icon':
+						$path = _PS_IMG_DIR_.'logo_stores.gif';
+						$this->_imgType = 'gif';
+						break;
+					default:
+						$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
+						return false;
+				}
+				if ($path != '')
+				{
+					if ($this->_method == 'GET' || $this->_method == 'HEAD')
 					{
-						case '':
-							$this->_xmlContent .= '<general_image_types>'."\n";
-							foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
-								$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName."\" />\n";
-							$this->_xmlContent .= '</general_image_types>'."\n";
-							break;
-						
-						case 'header':
-							$this->_imgToDisplay = _PS_IMG_DIR_.'logo.jpg';
-							break;
-						case 'mail':
-							$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_mail.jpg') ? _PS_IMG_DIR_.'logo_mail.jpg' : _PS_IMG_DIR_.'logo.jpg';
-							break;
-						case 'invoice':
-							$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_invoice.jpg') ? _PS_IMG_DIR_.'logo_invoice.jpg' : _PS_IMG_DIR_.'logo.jpg';
-							break;
-						case 'store_icon':
-							$this->_imgToDisplay = _PS_IMG_DIR_.'logo_stores.gif';
-							$this->_imgType = 'gif';
-							break;
-						default:
-							$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
-							return false;
+						$this->_imgToDisplay = ($alternative_path != '' && file_exists($alternative_path)) ? $alternative_path : $path;
 					}
+					elseif ($this->_method == 'PUT')
+					{
+						if ($this->writeImageOnDisk($path, NULL, NULL))
+							$this->_imgToDisplay = $path;
+						else
+						{
+							$this->setError(400, 'Error while copying image to the directory');
+							return false;
+						}
+					}
+				}
 				break;
 			case 'products':
 				$this->_xmlContent = 'case "images/products"';
@@ -313,8 +493,6 @@ class WebserviceRequest
 			$this->setError(405, 'Method '.$this->_method.' is not valid');
 		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlFolders))
 			$this->setError(401, 'Method '.$this->_method.' need you to specify an id');
-		elseif (($this->_method == 'POST') && array_key_exists(1, $this->_urlFolders))
-			$this->setError(400, 'id is forbidden when adding a new resource');
 		elseif ($this->_urlFolders[0] && !in_array($this->_method, $this->_permissions[$this->_urlFolders[0]]))
 			$this->setError(405, 'Method '.$this->_method.' is not allowed for the ressource '.$this->_urlFolders[0].' with this authentication key');
 		else
@@ -563,7 +741,8 @@ class WebserviceRequest
 	{
 		$object = new $this->_resourceConfiguration['retrieveData']['className']();
 		$i18n = false;
-		$xmlString = $_POST['xml'];
+		// we prefer use $_REQUEST as $_POST because of simulated methods
+		$xmlString = $_REQUEST['xml'];
 		$this->saveObjectFromXmlInput($xmlString, $object, 201);
 	}
 	
@@ -575,10 +754,18 @@ class WebserviceRequest
 		if ($object->id)
 		{
 			$xmlString = '';
-			$putresource = fopen("php://input", "r");
-			while ($putData = fread($putresource, 1024))
-				$xmlString .= $putData;
-			fclose($putresource);
+			if ($this->_realMethod == 'PUT')
+			{
+				$putresource = fopen("php://input", "r");
+				while ($putData = fread($putresource, 1024))
+					$xmlString .= $putData;
+				fclose($putresource);
+			}
+			else
+			{
+				// we prefer use $_REQUEST as $_POST or $_GET because of simulated methods
+				$xmlString .= $_REQUEST['xml'];
+			}
 			$this->saveObjectFromXmlInput($xmlString, $object, 200);
 		}
 		else

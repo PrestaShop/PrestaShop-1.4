@@ -75,6 +75,7 @@ class WebserviceCore extends ObjectModel
 			'tags' => array('description' => 'The Products tags','class' => 'Tag'),
 			'carriers' => array('description' => 'The Carriers','class' => 'Carrier'),
 			'images' => array('description' => 'The images', 'specific_management' => true),
+			'image_types' => array('description' => 'The image types', 'class' => 'ImageType'),
 		);
 		ksort($resources);
 		return $resources;
