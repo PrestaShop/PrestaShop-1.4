@@ -52,6 +52,8 @@ abstract class DbCore
 	array('server' => '192.168.0.3', 'user' => 'myuser', 'password' => 'mypassword', 'database' => 'mydatabase'),
 	*/
 	);
+	
+	private static $_idServer;
 
 	/**
 	 * Get Db object instance (Singleton)
@@ -61,12 +63,11 @@ abstract class DbCore
 	 */
 	public static function getInstance($master = 1)
 	{
-		
 		if ($master OR ($nServers = sizeof(self::$_servers)) == 1)
 			$idServer = 0;
 		else
-			$idServer = ($nServers > 2) ? rand(1, (int)($nServers)) : 1;
-		
+			$idServer = ($nServers > 2 AND ($id = ++self::$_idServer % (int)$nServers) !== 0) ? $id : 1;
+
 		if(!isset(self::$_instance[$idServer]))
 			self::$_instance[(int)($idServer)] = new MySQL(self::$_servers[(int)($idServer)]['server'], self::$_servers[(int)($idServer)]['user'], self::$_servers[(int)($idServer)]['password'], self::$_servers[(int)($idServer)]['database']);
 		
