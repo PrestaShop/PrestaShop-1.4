@@ -224,7 +224,6 @@ class WebserviceRequest
 					}
 					if ($destWidth == NULL) $destWidth = $sourceWidth;
 					if ($destHeight == NULL) $destHeight = $sourceHeight;
-					
 					switch ($type)
 					{
 						case 1:
@@ -274,7 +273,7 @@ class WebserviceRequest
 					imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
 					imagecolortransparent($destImage, $white);
 					$flag = false;
-					switch ($mime_type)
+					switch ($this->_imgType)
 					{
 						case 'gif':
 							$flag = imagegif($destImage, $receptionPath);
@@ -393,18 +392,6 @@ class WebserviceRequest
 				break;
 			case 'stores':
 				$this->_xmlContent = 'case "images/stores"';
-				break;
-			default:
-				$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
-				return false;
-			
-				
-				case 'invoice':
-				$this->_imgToDisplay = file_exists(_PS_IMG_DIR_.'logo_invoice.jpg') ? _PS_IMG_DIR_.'logo_invoice.jpg' : _PS_IMG_DIR_.'logo.jpg';
-				break;
-			case 'store_icon':
-				$this->_imgToDisplay = _PS_IMG_DIR_.'logo_stores.gif';
-				$this->_imgType = 'gif';
 				break;
 			default:
 				$this->setError(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[1], array_keys($this->_imageTypes)).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes)).'"');
