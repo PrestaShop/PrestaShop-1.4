@@ -118,7 +118,7 @@ class AdminProducts extends AdminTab
 
 	public function deleteVirtualProduct()
 	{
-		if (!($id_product_download = ProductDownload::getIdFromIdProduct(Tools::getValue('id_product'))))
+		if (!($id_product_download = ProductDownload::getIdFromIdProduct(intval(Tools::getValue('id_product')))))
 			return false;
 		$productDownload = new ProductDownload((int)($id_product_download));
 		return $productDownload->deleteFile();
