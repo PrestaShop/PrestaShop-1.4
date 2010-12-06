@@ -6,11 +6,11 @@ $smarty->template_dir = _PS_THEME_DIR_.'tpl';
 $smarty->compile_dir = _PS_SMARTY_DIR_.'compile';
 $smarty->cache_dir = _PS_SMARTY_DIR_.'cache';
 $smarty->config_dir = _PS_SMARTY_DIR_.'configs';
-$smarty->caching = false;
+$smarty->caching = (bool)Configuration::get('PS_SMARTY_CACHE');
 $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
 //$smarty->debugging		= true;
-$smarty->debug_tpl = _PS_ALL_THEMES_DIR_ . 'debug.tpl';
+$smarty->debug_tpl = _PS_ALL_THEMES_DIR_.'debug.tpl';
 
 function smartyTranslate($params, &$smarty)
 {

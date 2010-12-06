@@ -113,7 +113,6 @@ class BlockCategories extends Module
 		$id_category = (int)(Tools::getValue('id_category', 0));
 		$id_lang = (int)($params['cookie']->id_lang);
 		$smartyCacheId = 'blockcategories|'.$id_group.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
-		Tools::forceCache(2);
 
 		if (!$this->isCached('blockcategories.tpl', $smartyCacheId))
 		{
@@ -169,7 +168,6 @@ class BlockCategories extends Module
 		}
 		$smarty->cache_lifetime = 31536000; // 1 Year
 		$display = $this->display(__FILE__, 'blockcategories.tpl', $smartyCacheId);
-		Tools::restoreCacheSettings();
 		return $display;
 	}
 

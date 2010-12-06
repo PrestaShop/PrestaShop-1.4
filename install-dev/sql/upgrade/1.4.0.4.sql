@@ -25,7 +25,9 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 
 ALTER TABLE `PREFIX_webservice_permission` CHANGE `method` `method` ENUM( 'GET', 'POST', 'PUT', 'DELETE', 'HEAD' ) NOT NULL;
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW());
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW()),
+('PS_SMARTY_CACHE', '1', NOW(), NOW());
 
 ALTER TABLE `PREFIX_product_attribute` CHANGE `price` `price` decimal(20,6) NOT NULL default '0.000000';
 UPDATE `PREFIX_product_attribute` pa SET pa.`price` = pa.`price` / (1 + (SELECT t.`rate` FROM `PREFIX_tax` t INNER JOIN `PREFIX_product` p ON (p.`id_tax` = t.`id_tax`) WHERE p.`id_product` = pa.`id_product`) / 100);

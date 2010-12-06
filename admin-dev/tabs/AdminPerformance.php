@@ -182,6 +182,7 @@ class AdminPerformance extends AdminTab
 			if ($this->tabAccess['edit'] === '1')
 			{
 				Configuration::updateValue('PS_SMARTY_FORCE_COMPILE', Tools::getValue('smarty_force_compile', 0));
+				Configuration::updateValue('PS_SMARTY_CACHE', Tools::getValue('smarty_cache', 0));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
@@ -339,7 +340,13 @@ class AdminPerformance extends AdminTab
 					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_0" value="0" '.(!Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
 					<p>'.$this->l('This forces Smarty to (re)compile templates on every invocation. This is handy for development and debugging. It should never be used in a production environment.').'</p>
 				</div>
-				
+				<label>'.$this->l('Cache:').'</label>
+				<div class="margin-form">
+					<input type="radio" name="smarty_cache" id="smarty_cache_1" value="1" '.(Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
+					<input type="radio" name="smarty_cache" id="smarty_cache_0" value="0" '.(!Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
+					<p>'.$this->l('Should be enabled except for debuging.').'</p>
+				</div>
+
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitSmartyConfig" class="button" />
 				</div>
