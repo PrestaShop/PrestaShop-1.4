@@ -157,7 +157,7 @@ class FrontControllerCore
 			$cart = new Cart((int)($cookie->id_cart));
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart);
-			/* Delete product of cart, if user can't make an order form his country */
+			/* Delete product of cart, if user can't make an order from his country */
 			elseif (intval(Configuration::get('PS_GEOLOCALIZATION_ENABLED')) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND $cart->nbProducts())
 				unset($cookie->id_cart, $cart);
 			elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)

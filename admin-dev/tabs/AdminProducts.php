@@ -3022,7 +3022,7 @@ class AdminProducts extends AdminTab
 			  <td style="padding-bottom:5px;"><b><span style="display:none;" id="attribute_quantity"></span></b></td>
 		  </tr>
 			<tr>
-				<td colspan="2"><sup>*</sup> '.$this->l('included tax').'</td>
+				<td colspan="2"><sup>*</sup> '.$this->l('including tax').'</td>
 			</tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
 		  <tr>
