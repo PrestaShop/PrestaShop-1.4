@@ -151,7 +151,7 @@ class SearchCore
 		$words = explode(' ', Search::sanitize($expr, $id_lang));
 
 		foreach ($words as $key => $word)
-			if (!empty($word) AND strlen($word) > (int)Configuration::get('PS_SEARCH_MINWORDLEN'))
+			if (!empty($word) AND strlen($word) >= (int)Configuration::get('PS_SEARCH_MINWORDLEN'))
 			{
 				$word = str_replace('%', '\\%', $word);
 				$word = str_replace('_', '\\_', $word);
