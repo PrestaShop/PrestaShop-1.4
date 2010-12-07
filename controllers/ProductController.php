@@ -151,11 +151,14 @@ class ProductControllerCore extends FrontController
 				$tax_data = Tax::getDataByProductId((int)($product->id));
 				$tax = (float)(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), (float)($tax_data['rate'])));
 				$this->smarty->assign('tax_rate', $tax);
-
+				$ecotaxTaxAmount = $product->ecotax;
+				if ($ecotaxTax = new Tax(Configuration::get('PS_ECOTAX_TAX_ID')) AND Product::$_taxCalculationMethod == PS_TAX_INC)
+					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + Tax::getApplicableTaxRate((int)$ecotaxTax->id, (float)$ecotaxTax->rate) / 100), 2);
 				/* /Quantity discount management */
 				$this->smarty->assign(array(
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax_data['rate'])),
 					'product' => $product,
+					'ecotax_tax_inc' => $ecotaxTaxAmount,
 					'homeSize' => Image::getSize('home'),
 					'product_manufacturer' => new Manufacturer((int)($product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),
 					'token' => Tools::getToken(false),

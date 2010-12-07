@@ -1024,6 +1024,8 @@ class AdminProducts extends AdminTab
 				{
 					$this->_removeTaxFromEcotax();
 					$this->copyFromPost($object, $this->table);
+					if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
+						$object->ecotax = Tools::ps_round($object->ecotax / (1 + $ecotaxTax->rate / 100), 6);
 					if ($object->update())
 					{
 						if (in_array($mvt_type = Tools::getValue('mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('mvt_quantity') AND $mvt_qty != 0))
@@ -1083,6 +1085,8 @@ class AdminProducts extends AdminTab
 			{
 				$object = new $this->className();
 				$this->copyFromPost($object, $this->table);
+				if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
+					$object->ecotax = Tools::ps_round($object->ecotax / (1 + $ecotaxTax->rate / 100), 6);
 				if ($object->add())
 				{
 					$this->updateAccessories($object);
@@ -1953,7 +1957,10 @@ class AdminProducts extends AdminTab
 			$has_attribute = true;
 		$cover = Product::getCover($obj->id);
 		$this->_applyTaxToEcotax($obj);
-		
+
+		if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
+			$obj->ecotax = Tools::ps_round($obj->ecotax * (1 + $ecotaxTax->rate / 100), 2);
+
 		echo '
 		<div class="tab-page" id="step1">
 			<h4 class="tab">1. '.$this->l('Info.').'</h4>
@@ -2350,6 +2357,13 @@ class AdminProducts extends AdminTab
 				echo '</td>
 					</tr>
 					<tr>
+						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
+						<td style="padding-bottom:5px;">
+							'.($currency->format == 1 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
+							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
+						</td>
+					</tr>
+					<tr>
 						<td class="col-left">'.$this->l('Retail price with tax:').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="calcPriceTE();" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
@@ -2362,13 +2376,6 @@ class AdminProducts extends AdminTab
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.$this->getFieldValue($obj, 'unit_price').'" onkeyup="unitPriceWithTax(\'unit\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();" onchange="unitySecond();"/>'.
 							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format == 1 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
 							<span style="margin-left:10px">
-						</td>
-					</tr>
-					<tr>
-						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
-						<td style="padding-bottom:5px;">
-							'.($currency->format == 1 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
-							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
 						</td>
 					</tr>
 					<tr>
