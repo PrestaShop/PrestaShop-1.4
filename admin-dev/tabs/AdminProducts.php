@@ -2962,7 +2962,7 @@ class AdminProducts extends AdminTab
 				  <option value="0">'.$this->l('None').'</option>
 				  <option value="1">'.$this->l('Increase').'</option>
 				  <option value="-1">'.$this->l('Reduction').'</option>
-				</select> <sup>*</sup>
+				</select>
 				<span id="span_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
 					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax excl.)').' '.$this->l('or').' '.($currency->format == 1 ? $currency->sign.' ' : '').'
 					<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').' '.$this->l('final product price will be set to').' '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format == 2 ? $currency->sign.' ' : '').'
@@ -3021,9 +3021,6 @@ class AdminProducts extends AdminTab
 			  <td style="width:150px">'.$this->l('Quantity in stock:').'</td>
 			  <td style="padding-bottom:5px;"><b><span style="display:none;" id="attribute_quantity"></span></b></td>
 		  </tr>
-			<tr>
-				<td colspan="2"><sup>*</sup> '.$this->l('including tax').'</td>
-			</tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
 		  <tr>
 			  <td style="width:150px">'.$this->l('Image:').'</td>

@@ -154,7 +154,7 @@
      * @return array the status code and body of the response
      */
     function SendChargeOrder($google_order, $amount='') {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <charge-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\">";
       if ($amount != '') {
@@ -181,7 +181,7 @@
      */
     function SendRefundOrder($google_order, $amount, $reason, 
                               $comment='') {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <refund-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\">" .
                   "<reason>". $reason . "</reason>";
@@ -207,7 +207,7 @@
      * @return array the status code and body of the response
      */
     function SendCancelOrder($google_order, $reason, $comment) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <cancel-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\">
                   <reason>".
@@ -236,7 +236,7 @@
      */
     function SendTrackingData($google_order, $carrier, 
                                               $tracking_no) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <add-tracking-data xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">
                   <tracking-data>
@@ -261,7 +261,7 @@
      */
     function SendMerchantOrderNumber($google_order, 
                                               $merchant_order, $timeout=false) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <add-merchant-order-number xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">
                   <merchant-order-number>" . $merchant_order . 
@@ -288,7 +288,7 @@
      */
     function SendBuyerMessage($google_order, $message, 
                                       $send_mail="true", $timeout=false) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <send-buyer-message xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">
                   <message>" . 
@@ -312,7 +312,7 @@
      * @return array the status code and body of the response
      */
     function SendProcessOrder($google_order) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <process-order xmlns=\"".$this->schema_url    .
                   "\" google-order-number=\"". $google_order. "\"/> ";
       return $this->SendReq($this->request_url, 
@@ -338,7 +338,7 @@
      */
     function SendDeliverOrder($google_order, $carrier="",
                               $tracking_no="", $send_mail = "true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <deliver-order xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">";
       if($carrier != "" && $tracking_no != "") {
@@ -364,7 +364,7 @@
      * @return array the status code and body of the response
      */
     function SendArchiveOrder($google_order) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <archive-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\"/>";
       return $this->SendReq($this->request_url, 
@@ -383,7 +383,7 @@
      * @return array the status code and body of the response
      */
     function SendUnarchiveOrder($google_order) {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <unarchive-order xmlns=\"".
                   $this->schema_url."\" google-order-number=\"". 
                   $google_order. "\"/>";
@@ -414,7 +414,7 @@
      */
 
     function SendShipItems($google_order, $items_list=array(), $send_mail="true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <ship-items xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">" .
                   "<item-shipping-information-list>\n";
@@ -458,7 +458,7 @@
      * @return array the status code and body of the response
      */
     function SendBackorderItems($google_order, $items_list=array(), $send_mail="true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <backorder-items xmlns=\"".
                   $this->schema_url."\" google-order-number=\"". 
                   $google_order. "\">";
@@ -492,7 +492,7 @@
      */
     function SendCancelItems($google_order, $items_list=array(), $reason, 
                                                $comment='', $send_mail="true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <cancel-items xmlns=\"".
                   $this->schema_url."\" google-order-number=\"". 
                   $google_order. "\">";
@@ -529,7 +529,7 @@
      * @return array the status code and body of the response
      */
     function SendReturnItems($google_order, $items_list=array(), $send_mail="true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <return-items xmlns=\"".
                   $this->schema_url."\" google-order-number=\"". 
                   $google_order. "\">";
@@ -560,7 +560,7 @@
      * @return array the status code and body of the response
      */
     function SendResetItemsShippingInformation($google_order, $items_list=array(), $send_mail="true") {
-      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"
+      $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <reset-items-shipping-information xmlns=\"".
                   $this->schema_url."\" google-order-number=\"". 
                   $google_order. "\">";
@@ -755,4 +755,3 @@ class GoogleShipItem {
     }
   }
 }
-
