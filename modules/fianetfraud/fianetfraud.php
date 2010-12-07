@@ -51,7 +51,7 @@ class Fianetfraud extends Module
 	public function __construct()
 	{
 		$this->name = 'fianetfraud';
-	 	$this->tab = 'analytics_stats';
+	 	$this->tab = 'payment_security';
 		$this->version = '1.1';
 		$this->limited_countries = array('fr');
 

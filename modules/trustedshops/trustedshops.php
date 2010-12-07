@@ -28,7 +28,7 @@ class TrustedShops extends Module
 	public function __construct()
 	{
 		$this->name = 'trustedshops';
-		$this->tab = 'front_office_features';
+		$this->tab = 'payment_security';
 		$this->version = 1.1;
 		
 		$this->limited_countries = $this->available_languages;

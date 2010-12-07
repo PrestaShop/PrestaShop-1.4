@@ -38,13 +38,13 @@ class AdminModules extends AdminTab
 		if (!$this->isFresh()) 
 			$this->refresh();
 		
-		$this->listTabModules = array('administration'=> $this->l('Administration'), 'advertising_marketing'=> $this->l('Advertising & Marketing'),
-		 'analytics_stats'=> $this->l('Analytics & Stats'), 'billing_invoicing'=> $this->l('Billing & Invoicing'), 'checkout'=> $this->l('Checkout'),
-		 'content_management'=> $this->l('Content Management'), 'export'=> $this->l('Export'), 'front_office_features'=> $this->l('Front office features'),
-		 'i18n_localization'=> $this->l('I18n & Localization'), 'merchandizing'=> $this->l('Merchandizing'), 'migration_tools'=> $this->l('Migration tools'),
-		 'payments_gateways'=> $this->l('Payments & Gateways'), 'pricing_promotion'=> $this->l('Pricing & Promotion'), 'quick_bulk_update'=> $this->l('Quick / Bulk update'),
-		 'search_filter'=> $this->l('Search & Filter'), 'seo'=> $this->l('SEO'), 'shipping_logistics'=> $this->l('Shipping & Logistics'), 'slideshows'=> $this->l('Slideshows'),
-		 'smart_shopping'=> $this->l('Smart shopping'), 'social_networks'=> $this->l('Social Networks'), 'others'=> $this->l('Others Modules'));
+		$this->listTabModules = array('administration' => $this->l('Administration'), 'advertising_marketing' => $this->l('Advertising & Marketing'),
+		 'analytics_stats' => $this->l('Analytics & Stats'), 'billing_invoicing' => $this->l('Billing & Invoicing'), 'checkout' => $this->l('Checkout'),
+		 'content_management' => $this->l('Content Management'), 'export' => $this->l('Export'), 'front_office_features' => $this->l('Front office features'),
+		 'i18n_localization' => $this->l('I18n & Localization'), 'merchandizing' => $this->l('Merchandizing'), 'migration_tools' => $this->l('Migration tools'),
+		 'payments_gateways' => $this->l('Payments & Gateways'), 'payment_security' => $this->l('Payment Security'), 'pricing_promotion' => $this->l('Pricing & Promotion'),
+		 'quick_bulk_update' => $this->l('Quick / Bulk update'), 'search_filter' => $this->l('Search & Filter'), 'seo' => $this->l('SEO'), 'shipping_logistics' => $this->l('Shipping & Logistics'),
+		 'slideshows' => $this->l('Slideshows'), 'smart_shopping' => $this->l('Smart shopping'), 'social_networks' => $this->l('Social Networks'), 'others'=> $this->l('Others Modules'));
 		 
 		 $xmlModules = @simplexml_load_file($this->_moduleCacheFile);
 
@@ -423,9 +423,7 @@ class AdminModules extends AdminTab
 		$orderModule = array();
 	    $irow = 0;
 		foreach ($modules AS $module)
-		{
 			$orderModule[(isset($module->tab) AND !empty($module->tab) AND array_key_exists($module->tab, $this->listTabModules)) ? $module->tab : 'others' ][] = $module;
-		}					
 		asort($orderModule);
 		
 		$concatWarning = array();

@@ -14,7 +14,7 @@ class Secuvad extends Module
 	public function __construct()
 	{
   		$this->name = 'secuvad';
-  		$this->tab = 'payments_gateways';
+  		$this->tab = 'payment_security';
   		$this->version = '2.0.1';
   		$this->currencies = NULL;
   		$this->currencies_mode = NULL;

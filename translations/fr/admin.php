@@ -1252,6 +1252,7 @@ $_LANGADM['AdminModulescef02fed5f63407268c2c0202d1d3708'] = 'International & Loc
 $_LANGADM['AdminModules335676135e0f03d2756262a437c95a0e'] = 'Merchandizing';
 $_LANGADM['AdminModules843796256f3547491c3d73656eb4ea87'] = 'Outils de migration';
 $_LANGADM['AdminModulese77ecbf1af4f4c210146d351f8dfbc3b'] = 'Paiement';
+$_LANGADM['AdminModules2bcde8baf68a8b2a88a4a072437639e8'] = 'Sécurité des paiements';
 $_LANGADM['AdminModules87a3a6caeffcd74b07ad451f7695dda7'] = 'Prix & Promotions';
 $_LANGADM['AdminModulesa9964513dc046a2cd404413f77b4656e'] = 'Edition rapide / de masse';
 $_LANGADM['AdminModules485e7b5a1a22f24d67a011c7ae21382a'] = 'Recherche et Filtres';
