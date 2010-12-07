@@ -27,6 +27,7 @@ var reduction_percent = {if $product->specificPrice AND $product->specificPrice.
 var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{else}0{/if};
 var group_reduction = '{$group_reduction}';
 var default_eco_tax = {$product->ecotax};
+var ecotaxTax_rate = {$ecotaxTax_rate};
 var currentDate = '{$smarty.now|date_format:'%Y-%m-%d %H:%M:%S'}';
 var maxQuantityToAllowDisplayOfLastQuantityMessage = {$last_qties};
 var noTaxForThisProduct = {if $no_tax == 1}true{else}false{/if};

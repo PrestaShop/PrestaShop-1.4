@@ -247,13 +247,13 @@ function updateDisplay()
 		var tax = (taxRate / 100) + 1;
 		var taxExclPrice = productPriceTaxExcluded * currencyRate + selectedCombination['price'] * currencyRate;
 
-		if (!noTaxForThisProduct)
+		if (!displayPrice)
 		{
 			var productPrice = ps_round(taxExclPrice * tax, 2);
 			reduction_price /= tax;
 		}
 		else
-		var productPrice = ps_round(taxExclPrice, 2);
+			var productPrice = ps_round(taxExclPrice, 2);
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
 		productPriceWithoutReduction = productPrice;
 		productPrice -= reduction;
@@ -281,7 +281,8 @@ function updateDisplay()
 		if (productUnitPrice)
 			$('#unit_price_display').text(formatCurrency(newUnitPrice, currencyFormat, currencySign, currencyBlank));
 		/* Ecotax */
-		$('#ecotax_price_display').text(formatCurrency(selectedCombination['ecotax'], currencyFormat, currencySign, currencyBlank));
+		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
+		$('#ecotax_price_display').text(formatCurrency(ecotaxAmount, currencyFormat, currencySign, currencyBlank));
 	}
 }
 

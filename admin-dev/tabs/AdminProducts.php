@@ -1024,8 +1024,6 @@ class AdminProducts extends AdminTab
 				{
 					$this->_removeTaxFromEcotax();
 					$this->copyFromPost($object, $this->table);
-					if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
-						$object->ecotax = Tools::ps_round($object->ecotax / (1 + $ecotaxTax->rate / 100), 6);
 					if ($object->update())
 					{
 						if (in_array($mvt_type = Tools::getValue('mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('mvt_quantity') AND $mvt_qty != 0))
@@ -1085,8 +1083,6 @@ class AdminProducts extends AdminTab
 			{
 				$object = new $this->className();
 				$this->copyFromPost($object, $this->table);
-				if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
-					$object->ecotax = Tools::ps_round($object->ecotax / (1 + $ecotaxTax->rate / 100), 6);
 				if ($object->add())
 				{
 					$this->updateAccessories($object);
@@ -1957,9 +1953,6 @@ class AdminProducts extends AdminTab
 			$has_attribute = true;
 		$cover = Product::getCover($obj->id);
 		$this->_applyTaxToEcotax($obj);
-
-		if ($ecotaxTaxId = Configuration::get('PS_ECOTAX_TAX_ID') AND $ecotaxTax = new Tax($ecotaxTaxId))
-			$obj->ecotax = Tools::ps_round($obj->ecotax * (1 + $ecotaxTax->rate / 100), 2);
 
 		echo '
 		<div class="tab-page" id="step1">
