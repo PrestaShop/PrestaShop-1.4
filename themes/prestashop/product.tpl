@@ -251,7 +251,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					<br class="clear" />
 				{/if}
 				{if $product->ecotax != 0}
-					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{convertPrice price=$product->ecotax}</span> {l s='for green tax'}</p>
+					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{$product->ecotax|convertAndFormatPrice}</span> {l s='for green tax'}</p>
 				{/if}
 				{if !empty($product->unity) && $unit_price > 0.000000}
 					<p class="unit-price"><span id="unit_price_display">{convertPrice price=$unit_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>

@@ -1475,10 +1475,12 @@ class ProductCore extends ObjectModel
 		return isset($ret) ? $ret : 0;
 	}
 
-	static public function applyEcotax(&$price, $ecotax, $usetax, $id_address)
+	static public function applyEcotax(&$price, $ecotax, $usetax, $id_address, $currency = NULL)
 	{
 		if ($ecotax AND $usetax)
 		{
+			if ($currency)
+				$ecotax = Tools::convertPrice($ecotax, $currency);
 			if ($tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')) AND $taxRate = Tax::getApplicableTaxRate((int)$tax->id, (float)$tax->rate, $id_address))
 				$price += $ecotax * (1 + $taxRate / 100);
 			else
@@ -1550,7 +1552,6 @@ class ProductCore extends ObjectModel
 
 		$id_shop = (int)(Shop::getCurrentShop());
 		// END Initialization
-
 		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.($id_product_attribute === NULL ? 'NULL' : ($id_product_attribute === false ? 'false' : $id_product_attribute)).'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
@@ -1570,41 +1571,34 @@ class ProductCore extends ObjectModel
 
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
-
 		$specific_price = self::$_pricesLevel3[$cacheId3];
-
 		$price = (float)((!$specific_price OR (float)($specific_price['reduction'])) ? $result['price'] : $specific_price['price']);
-		if (!$specific_price OR ((float)($specific_price['price'])) AND !$specific_price['id_currency'])
+		if (!$specific_price OR (!(float)($specific_price['price']) AND !$specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = $specific_price;
 
 		// Attribute price
-		$attribute_price = Tools::convertPrice((array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0), $id_currency);
+		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
-
 		// Exclude tax
 		if (!$tax_rate = (float)($forceAssociatedTax ? $result['rate'] : Tax::getProductTaxRate((int)($id_product), (int)($id_country), (int)($result['id_tax']), (float)($result['rate']), ($id_address ? (int)($id_address) : NULL))))
 			$usetax = false;
 		if ($usetax)
 			$price = $price * (1 + ($tax_rate / 100));
-
 		$price = Tools::ps_round($price, $decimals);
-
 		// Reduction
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND $specific_price)
 			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? (self::$_taxCalculationMethod == PS_TAX_INC ? $specific_price['reduction'] : $specific_price['reduction'] / (1 + $result['rate'] / 100)) : ($price * $specific_price['reduction']), 2);
 		if ($only_reduc)
 			return $reduc;
-
 		if ($usereduc)
 		{
 			if ($reduc)
 				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
 		}
-
 		// Group reduction
 		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
@@ -1612,9 +1606,16 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
-		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL);
+		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
+	}
+
+	static public function convertAndFormatPrice($price, $currency = false)
+	{
+	if (!$currency)
+	$currency = Currency::getCurrent();
+	return Tools::displayPrice(Tools::convertPrice($price, $currency), $currency);
 	}
 
 	static public function isDiscounted($id_product, $quantity = 1)

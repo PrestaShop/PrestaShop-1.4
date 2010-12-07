@@ -802,7 +802,6 @@ class PDFCore extends PDF_PageGroupCore
 		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrierTax->rate OR $carrierTax->rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
 
-		// Display product tax
 		foreach ($taxes AS $tax_rate => &$vat)
 		{
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)

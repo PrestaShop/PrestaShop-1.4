@@ -214,6 +214,7 @@ class FrontControllerCore
 			$smarty->registerPlugin('function', 'displayWtPrice', array('Product', 'displayWtPrice'));
 			$smarty->registerPlugin('function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 			$smarty->registerPlugin('function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
+			$smarty->registerPlugin('modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
 		}
 		/* or keep a backward compatibility if PHP version < 5.1.2 */
 		else
@@ -226,6 +227,7 @@ class FrontControllerCore
 			$smarty->register_function('displayWtPrice', array('Product', 'displayWtPrice'));
 			$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 			$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
+			$smarty->register_modifier('convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
 		}
 
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang));

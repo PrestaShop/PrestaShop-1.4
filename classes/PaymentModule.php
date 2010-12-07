@@ -228,7 +228,7 @@ abstract class PaymentModuleCore extends Module
 						'.(float)($product['id_product_attribute'] ? $product['weight_attribute'] : $product['weight']).',
 						\''.(empty($tax_rate) ? '' : pSQL($product['tax'])).'\',
 						'.(float)($tax_rate).',
-						'.(float)($product['ecotax']).',
+						'.(float)Tools::convertPrice(floatval($product['ecotax']), intval($order->id_currency)).',
 						'.(float)$ecotaxRate.',
 						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',
 						\''.pSQL($deadline).'\',
