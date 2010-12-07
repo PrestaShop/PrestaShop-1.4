@@ -20,7 +20,7 @@ function oosHookJsCode()
 	{
 		if (function_exists(oosHookJsCodeFunctions[i]))
 		setTimeout(oosHookJsCodeFunctions[i]+'()', 0);
-	}	
+	}
 }
 
 //add a combination of attributes in the global JS sytem
@@ -50,7 +50,7 @@ function findCombination(firstTime)
 	});
 	var nbAttributesEquals = 0;
 	//testing every combination to find the conbination's attributes' case of the user
-	
+
 	for (combination in combinations)
 	{
 		//verify if this combinaison is the same that the user's choice
@@ -67,7 +67,7 @@ function findCombination(firstTime)
 				}
 			}
 		}
-		
+
 		if (nbAttributesEquals == choice.length)
 		{
 			//combination of the user has been found in our specifications of combinations (created in back office)
@@ -83,11 +83,11 @@ function findCombination(firstTime)
 				selectedCombination['ecotax'] = combinations[combination]['ecotax'];
 			else
 				selectedCombination['ecotax'] = default_eco_tax;
-			
+
 			//show the large image in relation to the selected combination
 			if (combinations[combination]['image'] && combinations[combination]['image'] != -1)
 				displayImage( $('#thumb_'+combinations[combination]['image']).parent() );
-			
+
 			//update the display
 			updateDisplay();
 
@@ -126,13 +126,13 @@ function updateDisplay()
 	{
 		//show the choice of quantities
 		$('#quantity_wanted_p:hidden').show('slow');
-		
+
 		//show the "add to cart" button ONLY if it was hidden
 		$('#add_to_cart:hidden').fadeIn(600);
-		
+
 		//hide the hook out of stock
 		$('#oosHook').hide();
-		
+
 		//availability value management
 		if (availableNowValue != '')
 		{
@@ -146,7 +146,7 @@ function updateDisplay()
 			//hide the availability value
 			$('#availability_statut:visible').hide();
 		}
-		
+
 		//'last quantities' message management
 		if (quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage && !allowBuyWhenOutOfStock)
 		{
@@ -158,12 +158,12 @@ function updateDisplay()
 			//hide the 'last quantities' message
 			$('#last_quantities').hide('slow');
 		}
-	
+
 		//display the quantities of pieces (only if allowed)
 		if (quantitiesDisplayAllowed)
 		{
 			$('#pQuantityAvailable:hidden').show('slow');
-			$('#quantityAvailable').text(quantityAvailable); 
+			$('#quantityAvailable').text(quantityAvailable);
 			if(quantityAvailable < 2)
 			{
 				$('#quantityAvailableTxt').show();
@@ -185,17 +185,17 @@ function updateDisplay()
 			if ($('#oosHook').length > 0 && function_exists('oosHookJsCode'))
 				oosHookJsCode();
 		}
-		
+
 		//hide 'last quantities' message if it was previously visible
 		$('#last_quantities:visible').hide('slow');
 
 		//hide the quantity of pieces if it was previously visible
 		$('#pQuantityAvailable:visible').hide('slow');
-		
+
 		//hide the choice of quantities
 		if (!allowBuyWhenOutOfStock)
 			$('#quantity_wanted_p:visible').hide('slow');
-		
+
 		//display that the product is unavailable with theses attributes
 		if (!selectedCombination['unavailable'])
 			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning-inline');
@@ -206,7 +206,7 @@ function updateDisplay()
 		}
 		$('#availability_statut:hidden').show();
 
-		
+
 		//show the 'add to cart' button ONLY IF it's possible to buy when out of stock AND if it was previously invisible
 		if (allowBuyWhenOutOfStock && !selectedCombination['unavailable'] && productAvailableForOrder == 1)
 		{
@@ -218,18 +218,18 @@ function updateDisplay()
 				$('p#availability_statut:hidden').show('slow');
 			}
 			else
-				$('p#availability_statut:visible').hide('slow');			
+				$('p#availability_statut:visible').hide('slow');
 		}
 		else
 		{
 			$('#add_to_cart:visible').fadeOut(600);
 			$('p#availability_statut:hidden').show('slow');
 		}
-		
+
 		if (productAvailableForOrder == 0)
 			$('p#availability_statut:visible').hide();
 	}
-	
+
 	if (selectedCombination['reference'] || productReference)
 	{
 		if (selectedCombination['reference'])
@@ -240,14 +240,12 @@ function updateDisplay()
 	}
 	else
 		$('#product_reference:visible').hide('slow');
-	
+
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
 		var tax = (taxRate / 100) + 1;
 		var taxExclPrice = productPriceTaxExcluded * currencyRate + selectedCombination['price'] * currencyRate;
-console.log(productPriceTaxExcluded * currencyRate);
-console.log(selectedCombination['price'] * currencyRate);
 
 		if (!noTaxForThisProduct)
 		{
@@ -255,18 +253,16 @@ console.log(selectedCombination['price'] * currencyRate);
 			reduction_price /= tax;
 		}
 		else
-			var productPrice = ps_round(taxExclPrice, 2);
-console.log(productPrice);
+		var productPrice = ps_round(taxExclPrice, 2);
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
 		productPriceWithoutReduction = productPrice;
 		productPrice -= reduction;
-console.log('reduction: '+reduction);
-console.log(productPrice);
+
 		if (group_reduction)
 			productPrice *= group_reduction;
 		//productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
-		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));				
+		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
 		/* Special feature: "Display product price tax excluded on product page" */
 		if (!noTaxForThisProduct)
 			var productPricePretaxed = productPrice / tax;
@@ -296,7 +292,7 @@ function displayImage(domAAroundImgThumb)
     {
         var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
         if ($('#bigpic').attr('src') != newSrc)
-	{ 
+	{
             $('#bigpic').fadeOut('fast', function(){
                 $(this).attr('src', newSrc).show();
 		$(this).attr('href', newSrc);
@@ -314,11 +310,11 @@ function serialScrollFixLock(event, targeted, scrolled, items, position)
 {
 	serialScrollNbImages = $('#thumbs_list li:visible').length;
 	serialScrollNbImagesDisplayed = 3;
-	
+
 	var leftArrow = position == 0 ? true : false;
 	var rightArrow = position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? true : false;
-	
-	$('a#view_scroll_left').css('cursor', leftArrow ? 'default' : 'pointer').css('display', leftArrow ? 'none' : 'block').fadeTo(0, leftArrow ? 0 : 1);		
+
+	$('a#view_scroll_left').css('cursor', leftArrow ? 'default' : 'pointer').css('display', leftArrow ? 'none' : 'block').fadeTo(0, leftArrow ? 0 : 1);
 	$('a#view_scroll_right').css('cursor', rightArrow ? 'default' : 'pointer').fadeTo(0, rightArrow ? 0 : 1).css('display', rightArrow ? 'none' : 'block');
 	return true;
 }
@@ -361,7 +357,7 @@ $(document).ready(function()
 		force:false,
 		cycle:false
 	});
-	
+
 	$('#thumbs_list').trigger('goto', 1);// SerialScroll Bug on goto 0 ?
 	$('#thumbs_list').trigger('goto', 0);
 
@@ -370,7 +366,7 @@ $(document).ready(function()
 		function(){displayImage($(this));},
 		function(){}
 	);
-	
+
 	//set jqZoom parameters if needed
 	if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
 	{
@@ -407,7 +403,7 @@ $(document).ready(function()
 	$('a#resetImages').click(function() {
 		updateColorSelect(0);
 	});
-	
+
 	$('.thickbox').fancybox();
 });
 
@@ -424,16 +420,17 @@ function saveCustomization()
 
 function submitPublishProduct(url, redirect)
 {
-	var id_product = $('#admin-action-product-id').val();	
+	var id_product = $('#admin-action-product-id').val();
 
 	$.ajaxSetup({async: false});
 	$.post(url+'/ajax.php', { submitPublishProduct: '1', id_product: id_product, status: 1, redirect: redirect },
 		function(data)
 		{
 			if (data.indexOf('error') === -1)
-				document.location.href = data;				
-		}	
+				document.location.href = data;
+		}
 	);
-	
+
 	return true;
 }
+
