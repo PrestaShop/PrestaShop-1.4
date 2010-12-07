@@ -312,7 +312,7 @@ class WebserviceRequest
 			case '':
 				$this->_xmlContent .= '<image_types>'."\n";
 				foreach ($this->_imageTypes as $imageTypeName => $imageType)
-					$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName.'" get="true" put="false" post="false" delete="false" head="true" upload_allowed_types="'.implode(', ', $this->_imgTypes).'" />'."\n";
+					$this->_xmlContent .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName.'" get="true" put="false" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_imgTypes).'" />'."\n";
 				$this->_xmlContent .= '</image_types>'."\n";
 				break;
 			
@@ -334,7 +334,7 @@ class WebserviceRequest
 					case '':
 						$this->_xmlContent .= '<general_image_types>'."\n";
 						foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
-							$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_types="'.implode(', ', $this->_imgTypes).'" />'."\n";
+							$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_imgTypes).'" />'."\n";
 						$this->_xmlContent .= '</general_image_types>'."\n";
 						break;
 					
@@ -375,11 +375,145 @@ class WebserviceRequest
 					}
 				}
 				break;
+			case 'categories':
+				// Execute action
+				if (count($this->_urlFolders) == 2)
+					$this->_urlFolders[2] = '';
+				$path = '';
+				$categoryImageTypes = ImageType::getImagesTypes('categories');
+				switch ($this->_urlFolders[2])
+				{
+					case '':
+						// Check if method is allowed
+						if ($this->_method != 'GET')
+						{
+							$this->setError(405, 'This method is not allowed for listing category images.');
+							return false;
+						}
+						
+						// Display the list of category images present on disk 
+						$this->_xmlContent .= '<image_types>'."\n";
+						foreach ($categoryImageTypes as $imageType)
+							$this->_xmlContent .= '<image_type id="'.$imageType['id_image_type'].'" name="'.$imageType['name'].'" xlink:href="'.$this->_wsUrl.'image_types/'.$imageType['id_image_type'].'" />'."\n";
+						$this->_xmlContent .= '</image_types>'."\n";
+						$this->_xmlContent .= '<category_images>'."\n";
+						$nodes = scandir(_PS_CAT_IMG_DIR_);
+						foreach ($nodes as $node)
+							// avoid too much preg_match...
+							if ($node != '.' && $node != '..' && $node != '.svn')
+							{
+								preg_match('/^(\d)\.jpg*$/Ui', $node, $matches);
+								if (isset($matches[1]))
+								{
+									$id = $matches[1];
+									$this->_xmlContent .= '<category_image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$id.'" />'."\n";
+								}
+							}
+						$this->_xmlContent .= '</category_images>'."\n";
+						break;
+					
+					case 'default':
+						// "Default" category image management
+						
+						d('default categ image case TODO');//TODO
+						break;
+					
+					default:
+						// Specific category image management
+						$orig_filename = _PS_CAT_IMG_DIR_.$this->_urlFolders[2].'.jpg';
+						if (file_exists($orig_filename))
+						{
+							// If no size was given...
+							if (count($this->_urlFolders) == 3)
+								$this->_urlFolders[3] = '';
+							//d($this->_urlFolders);
+							if ($this->_urlFolders[3] == '')
+							{
+								// Management of the original image (GET, PUT, POST, DELETE)
+								switch ($this->_method)
+								{
+									case 'GET':
+									case 'HEAD':
+										
+										// Display the resized specific image
+										$this->_imgToDisplay = $orig_filename;
+										break;
+									case 'PUT':
+										d('TODO');//TODO
+										break;
+									case 'POST':
+										d('TODO');//TODO
+										break;
+									case 'DELETE':
+										d('TODO');//TODO
+										break;
+									default : 
+										$this->setError(405, 'This method is not allowed for listing category images.');
+										return false;
+								}
+							}
+							else
+							{
+								// If a size was given...
+								
+								// Check if method is allowed
+								if ($this->_method != 'GET')
+								{
+									$this->setError(405, 'This method is not allowed for listing category images.');
+									return false;
+								}
+								
+								// Check the given size
+								$categoryImageTypeNames = array();
+								foreach ($categoryImageTypes as $categoryImageType)
+									$categoryImageTypeNames[] = $categoryImageType['name'];
+								if (!in_array($this->_urlFolders[3], $categoryImageTypeNames))
+								{
+									$this->setError(400, 'This image type does not exist for the category images. Did you mean: "'.$this->closest($this->_urlFolders[3], $categoryImageTypeNames).'"? The full list is: "'.implode('", "', $categoryImageTypeNames).'"');
+									return false;
+								}
+								$filename = _PS_CAT_IMG_DIR_.$this->_urlFolders[2].'-'.$this->_urlFolders[3].'.jpg';
+								
+								// Display the resized specific image
+								if (file_exists($filename))
+									$this->_imgToDisplay = $filename;
+								else
+								{
+									$this->setError(500, 'This image does not exist on disk');
+									return false;
+								}
+								/*
+								d($categoryImageTypeNames);
+								d($this->_urlFolders[3]);
+								*/
+							}
+						}
+						else
+						{
+							$this->setStatus(404);
+							return false;
+						}
+				}
+				if ($path != '')
+				{
+					if ($this->_method == 'GET' || $this->_method == 'HEAD')
+					{
+						$this->_imgToDisplay = ($alternative_path != '' && file_exists($alternative_path)) ? $alternative_path : $path;
+					}
+					elseif ($this->_method == 'PUT')
+					{
+						if ($this->writeImageOnDisk($path, NULL, NULL))
+							$this->_imgToDisplay = $path;
+						else
+						{
+							$this->setError(400, 'Error while copying image to the directory');
+							return false;
+						}
+					}
+				}
+				break;
 			case 'products':
 				$this->_xmlContent = 'case "images/products"';
-				break;
-			case 'categories':
-				$this->_xmlContent = 'case "images/categories"';
 				break;
 			case 'suppliers':
 				$this->_xmlContent = 'case "images/suppliers"';
@@ -924,7 +1058,7 @@ class WebserviceRequest
 		foreach ($this->_resourceConfiguration['fields'] as $fieldName => $fieldProperties)
 		{
 			$sqlId = $fieldProperties['sqlId'];
-			if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && !$fieldProperties['i18n'])
+			if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && (!isset($fieldProperties['i18n']) || !$fieldProperties['i18n'])))
 			{
 				if (isset($fieldProperties['setter']))
 				{
@@ -972,7 +1106,7 @@ class WebserviceRequest
 			}
 		if (!$this->hasErrors())
 		{
-			if ($i18n && ($retValidateFieldsLang = $object->validateFieldsLang(false, true)) !== true)
+			if (isset($i18n) && $i18n && ($retValidateFieldsLang = $object->validateFieldsLang(false, true)) !== true)
 			{
 				$this->setError(400, $display_errors ? 'Validation error: "'.$retValidateFieldsLang.'"' : 'Internal error');
 				return false;
