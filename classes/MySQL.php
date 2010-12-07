@@ -165,10 +165,13 @@ class MySQLCore extends Db
 
 	protected function q($query, $use_cache = 1)
 	{
+		global $webservice_call;
 		$this->_result = false;
 		if ($this->_link)
 		{
 			$result =  mysql_query($query, $this->_link);
+			if ($webservice_call)
+				$this->displayMySQLError($query);
 			if ($use_cache AND _PS_CACHE_ENABLED_)
 				Cache::getInstance()->deleteQuery($query);
 			return $result;
@@ -194,13 +197,11 @@ class MySQLCore extends Db
 
 	public function displayMySQLError($query = false)
 	{
-		global $webservice_call, $display_errors;
+		global $webservice_call;
 		if ($webservice_call && mysql_errno())
 		{
-			if ($display_errors)
-				WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error().'. Query was : '.$query);
-			else
-				WebserviceRequest::getInstance()->setError(500, 'Internal error occured');
+			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error().'. Query was : '.$query);
+
 		}
 		elseif (_PS_DEBUG_SQL_ AND mysql_errno() AND !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{

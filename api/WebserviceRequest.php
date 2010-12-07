@@ -20,6 +20,7 @@ class WebserviceRequest
 	private $_permissions;
 	private $_xmlContent = '';
 	private $_objects;
+	private $_object;
 	private $_schema;
 	private $_fieldsToDisplay = 'minimum';
 	private $_imageTypes = array(
@@ -57,7 +58,17 @@ class WebserviceRequest
 		ini_set('html_errors', 'off');
 		
 		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
-		
+	}
+	
+	public static function getInstance()
+	{
+		if(!isset(self::$_instance))
+			self::$_instance = new WebserviceRequest();
+		return self::$_instance;
+	}
+	
+	public function begin()
+	{
 		// check webservice activation and request authentication
 		if ($this->isActivated() && $this->authenticate())
 		{
@@ -121,14 +132,7 @@ class WebserviceRequest
 			$this->display();
 	}
 	
-	public static function getInstance()
-	{
-		if(!isset(self::$_instance))
-			self::$_instance = new WebserviceRequest();
-		return self::$_instance;
-	}
-	
-	private function setStatus($num)
+	public function setStatus($num)
 	{
 		switch ($num)
 		{
@@ -533,10 +537,11 @@ class WebserviceRequest
 		}
 	}
 	
-	private function setError($num, $label)
+	public function setError($num, $label)
 	{
+		global $display_errors;
 		$this->setStatus($num);
-		$this->_errors[] = $label;
+		$this->_errors[] = $display_errors ? $label : 'Internal error';
 	}
 	
 	private function hasErrors()
@@ -860,19 +865,16 @@ class WebserviceRequest
 	
 	private function executePost()
 	{
-		$object = new $this->_resourceConfiguration['retrieveData']['className']();
-		$i18n = false;
+		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']();
 		// we prefer use $_REQUEST as $_POST because of simulated methods
-		$xmlString = $_REQUEST['xml'];
-		$this->saveObjectFromXmlInput($xmlString, $object, 201);
+		return $this->saveObjectFromXmlInput($_REQUEST['xml'], 201);
 	}
 	
 	private function executePut()
 	{
-		$object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlFolders[1]);
-		$i18n = false;
+		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlFolders[1]);
 
-		if ($object->id)
+		if ($this->_object->id)
 		{
 			$xmlString = '';
 			if ($this->_realMethod == 'PUT')
@@ -887,12 +889,13 @@ class WebserviceRequest
 				// we prefer use $_REQUEST as $_POST or $_GET because of simulated methods
 				$xmlString .= $_REQUEST['xml'];
 			}
-			$this->saveObjectFromXmlInput($xmlString, $object, 200);
+			return $this->saveObjectFromXmlInput($xmlString, 200);
 		}
 		else
 		{
 			$this->setStatus(404);
 			$this->_output = false;
+			return false;
 		}
 	}
 	
@@ -982,7 +985,7 @@ class WebserviceRequest
 	private function constructXMLOutputAfterModification()
 	{
 		$this->_fieldsToDisplay = 'full';
-		$this->_xmlContent .= $this->getXmlStringViewOfObject($object);
+		$this->_xmlContent .= $this->getXmlStringViewOfObject($this->_object);
 	}
 	
 	private function display()
@@ -1049,11 +1052,11 @@ class WebserviceRequest
 		die;
 	}
 	
-	private function saveObjectFromXmlInput($xmlString, $object, $successReturnCode)
+	private function saveObjectFromXmlInput($xmlString, $successReturnCode)
 	{
 		$xml = new SimpleXMLElement($xmlString);
 		$attributes = $xml->children()->{$this->_resourceConfiguration['objectNodeName']}->children();
-	
+		$i18n = false;
 		// attributes
 		foreach ($this->_resourceConfiguration['fields'] as $fieldName => $fieldProperties)
 		{
@@ -1070,10 +1073,10 @@ class WebserviceRequest
 						return false;
 					}
 					else
-						$object->$fieldProperties['sqlId']((string)$attributes->$fieldName);
+						$this->_object->$fieldProperties['sqlId']((string)$attributes->$fieldName);
 				}
 				else
-					$object->$sqlId = (string)$attributes->$fieldName;
+					$this->_object->$sqlId = (string)$attributes->$fieldName;
 			}
 			elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])
 			{
@@ -1081,7 +1084,7 @@ class WebserviceRequest
 				return false;
 			}
 			elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
-				$object->$sqlId = null;
+				$this->_object->$sqlId = null;
 		}
 	
 		if (isset($attributes->associations))
@@ -1100,25 +1103,26 @@ class WebserviceRequest
 						{
 							$langs[(string)$translation['id']] = (string)$translation;
 						}
-						$object->$fieldName = $langs;
+						$this->_object->$fieldName = $langs;
 					}
 				}
 			}
 		if (!$this->hasErrors())
 		{
-			if (isset($i18n) && $i18n && ($retValidateFieldsLang = $object->validateFieldsLang(false, true)) !== true)
+			if ($i18n && ($retValidateFieldsLang = $this->_object->validateFieldsLang(false, true)) !== true)
 			{
-				$this->setError(400, $display_errors ? 'Validation error: "'.$retValidateFieldsLang.'"' : 'Internal error');
+				$this->setError(400, 'Validation error: "'.$retValidateFieldsLang.'"');
 				return false;
 			}
-			elseif (($retValidateFields = $object->validateFields(false, true)) !== true)
+			elseif (($retValidateFields = $this->_object->validateFields(false, true)) !== true)
 			{
-				$this->setError(400, $display_errors ? 'Validation error: "'.$retValidateFields.'"' : 'Internal error');
+				$this->setError(400, 'Validation error: "'.$retValidateFields.'"');
 				return false;
 			}
 			else
 			{
-				if($object->save())
+				//d($this->_object);
+				if($this->_object->save())
 				{
 					if (isset($attributes->associations))
 						foreach ($attributes->associations->children() as $association)
@@ -1134,20 +1138,27 @@ class WebserviceRequest
 									foreach ($fields as $field)
 										$values[] = (string)$field;
 									$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
-									$object->$setter($values);
+									if (!$this->_object->$setter($values))
+									{
+										$this->setError(500, 'Error occured while setting the '.$association->getName().' value');
+										return false;
+									}
 								}
 							}
 							elseif ($association->getName() != 'i18n')
 							{
-								$this->setError(400, $display_errors ? 'The association "'.$association->getName().'" does not exists' : 'Internal error');
+								$this->setError(400, 'The association "'.$association->getName().'" does not exists');
 								return false;
 							}
 						}
 					if (!$this->hasErrors())
+					{
 						$this->setStatus($successReturnCode);
+						return true;
+					}
 				}
 				else
-					$this->setStatus(500);
+					$this->setError(500, 'Unable to save resource');
 			}
 		}
 	}
@@ -1197,59 +1208,53 @@ class WebserviceRequest
 	
 	private function psErrorHandler($errno, $errstr, $errfile, $errline)
 	{
-		global $display_errors;
 		if (!(error_reporting() & $errno))
 		{
 			return;
 		}
-		if ($display_errors)
-		{
-			switch($errno){
-				case E_ERROR:
-					$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_WARNING:
-					$this->setError(500, '[PHP Warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_PARSE:
-					$this->setError(500, '[PHP Parse #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_NOTICE:
-					$this->setError(500, '[PHP Notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_CORE_ERROR:
-					$this->setError(500, '[PHP Core #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_CORE_WARNING:
-					$this->setError(500, '[PHP Core warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_COMPILE_ERROR:
-					$this->setError(500, '[PHP Compile #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_COMPILE_WARNING:
-					$this->setError(500, '[PHP Compile warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_USER_ERROR:
-					$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_USER_WARNING:
-					$this->setError(500, '[PHP User warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_USER_NOTICE:
-					$this->setError(500, '[PHP User notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_STRICT:
-					$this->setError(500, '[PHP Strict #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				case E_RECOVERABLE_ERROR:
-					$this->setError(500, '[PHP Recoverable error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-					break;
-				default:
-					$this->setError(500, '[PHP Unknown error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
-			}
+		switch($errno){
+			case E_ERROR:
+				$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_WARNING:
+				$this->setError(500, '[PHP Warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_PARSE:
+				$this->setError(500, '[PHP Parse #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_NOTICE:
+				$this->setError(500, '[PHP Notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_CORE_ERROR:
+				$this->setError(500, '[PHP Core #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_CORE_WARNING:
+				$this->setError(500, '[PHP Core warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_COMPILE_ERROR:
+				$this->setError(500, '[PHP Compile #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_COMPILE_WARNING:
+				$this->setError(500, '[PHP Compile warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_USER_ERROR:
+				$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_USER_WARNING:
+				$this->setError(500, '[PHP User warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_USER_NOTICE:
+				$this->setError(500, '[PHP User notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_STRICT:
+				$this->setError(500, '[PHP Strict #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			case E_RECOVERABLE_ERROR:
+				$this->setError(500, '[PHP Recoverable error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				break;
+			default:
+				$this->setError(500, '[PHP Unknown error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 		}
-		else
-			$this->setError(500, 'Internal error');
 		return true;
 	}
 	
