@@ -135,7 +135,7 @@ class ProductControllerCore extends FrontController
 
 				$this->smarty->assign(array(
 					'return_link' => (isset($category->id) AND $category->id) ? Tools::safeOutput($this->link->getCategoryLink($category)) : 'javascript: history.back();',
-					'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath((int)($category->id), $product->name) : Tools::getFullPath((int)($product->id_default_category), $product->name))
+					'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath((int)($category->id), $product->name) : Tools::getFullPath((int)($product->id_category_default), $product->name))
 				));
 
 				$lang = Configuration::get('PS_LANG_DEFAULT');
