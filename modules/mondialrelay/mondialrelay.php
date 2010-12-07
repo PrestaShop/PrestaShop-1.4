@@ -21,6 +21,11 @@ class MondialRelay extends Module
 		$this->description = $this->l('Deliver in Relay points');
 		
 		define('_MR_CSS_', dirname(__FILE__) . '/style.css');
+		if (!Configuration::get('MONDIAL_RELAY_1_4'))
+		{
+			$this->update_v1_4();
+			Configuration::updateValue('MONDIAL_RELAY_1_4', 1);
+		}
 	}
 	
 	public function install()
@@ -40,9 +45,6 @@ class MondialRelay extends Module
 			!$this->registerHook('updateCarrier') OR
 			!$this->registerHook('orderDetailDisplayed'))
 			return false;
-
-		Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', 3);
-		Configuration::updateValue('MONDIAL_RELAY_SECURE_KEY', md5(time().rand(0,10)));
 		
 		if (!file_exists(_PS_MODULE_DIR_. '/mondialrelay/' . self::INSTALL_SQL_FILE))
 			return false;
@@ -82,20 +84,21 @@ class MondialRelay extends Module
 			@copy(_PS_MODULE_DIR_.'mondialrelay/AdminMondialRelay.gif', _PS_IMG_DIR_.'t/AdminMondialRelay.gif');
 		}	
 
+		Configuration::updateValue('MONDIAL_RELAY_1_4', '1');
 		Configuration::updateValue('MONDIAL_RELAY_INSTALL_UPDATE_1', 1);
+		Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', 3);
+		Configuration::updateValue('MONDIAL_RELAY_SECURE_KEY', md5(time().rand(0,10)));
 		Configuration::updateValue('MR_GOOGLE_MAP', '1');
 		Configuration::updateValue('MR_ENSEIGNE_WEBSERVICE', '');
 		Configuration::updateValue('MR_CODE_MARQUE', '');
 		Configuration::updateValue('MR_KEY_WEBSERVICE', '');
 		Configuration::updateValue('MR_LANGUAGE', '');
 		Configuration::updateValue('MR_WEIGHT_COEF', '');
-		$this->infodoc();
 		return true;
 	}
 	
 	public function uninstall()
 	{
-	
 		if (!parent::uninstall())
 			return false;
 		
@@ -110,8 +113,9 @@ class MondialRelay extends Module
 			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.(int)($id_tab));
 		}
 
-		if (!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') OR
-			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL') OR
+		if (!Configuration::deleteByName('MONDIAL_RELAY_1_4') OR
+			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') OR
+			!Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY') OR
 			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') OR
 			!Configuration::deleteByName('MR_GOOGLE_MAP') OR
 			!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') OR
@@ -121,6 +125,12 @@ class MondialRelay extends Module
 			!Db::getInstance()->Execute('UPDATE  '._DB_PREFIX_ .'carrier  set `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"') OR
 			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
 			return false;
+		return true;
+	}
+	
+	private function update_v1_4()
+	{
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `shipping_external` = 0, `need_range` = 1, `external_module_name` = "mondialrelay", `shipping_method` = 1 WHERE `id_carrier` IN (SELECT `id_mr_method` FROM `'._DB_PREFIX_.'mr_method`)');
 		return true;
 	}
 	
@@ -426,7 +436,7 @@ class MondialRelay extends Module
 		- '.$this->l('Create a Carrier').'<br />
 		- '.$this->l('Define a price for your carrier on').' <a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
 		- '.$this->l('To generate sticks, you must have register a correct address of your store on').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The contact page').'</a><br />
-		- '.$this->l('Go see the front office').'<br />'.self::infodoc().'<br class="clear" />
+		- '.$this->l('Go see the front office').'<br /><br class="clear" />
 		<p>'.$this->l('URL Cron Task:').' '.Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('MONDIAL_RELAY_SECURE_KEY').'</p></fieldset>
 		<br class="clear" />'.self::settingsForm().self::settingsstateorderForm().self::addMethodForm().self::shippingForm().
 		'<br class="clear" />';
@@ -535,30 +545,6 @@ class MondialRelay extends Module
 		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
 		return true;
 	}
-
-
-	public function infodoc()
-	{
-		$test_update_1 = Configuration::get('MONDIAL_RELAY_INSTALL_UPDATE_1');
-		
-		if ($test_update_1 != 1) 
-		{
-			Db::getInstance()->Execute(trim('ALTER TABLE `'._DB_PREFIX_.'mr_method` ADD mr_ModeAss varchar(3)  NOT NULL DEFAULT \'0\' AFTER `mr_ModeLiv` ;'));
-			Db::getInstance()->Execute(trim('ALTER TABLE `'._DB_PREFIX_.'mr_configuration` ADD `mr_weight_coef` FLOAT NOT NULL DEFAULT \'1\' AFTER `mr_Mail` ;'));
-
-			$dir_admin = PS_ADMIN_DIR;
-			$dir_module = _PS_MODULE_DIR_;
-			$dir_base = str_replace("/modules/" , "", $dir_module);
-
-			$dir_newsfiles = $dir_module.'mondialrelay/newsfiles';
-
-			Configuration::updateValue('MONDIAL_RELAY_INSTALL_UPDATE_1', 1);
-		}
-
-		return '';
-	}
-
-
 	
 	public function addMethodForm()
 	{
