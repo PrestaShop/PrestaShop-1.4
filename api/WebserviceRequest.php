@@ -1058,7 +1058,7 @@ class WebserviceRequest
 		foreach ($this->_resourceConfiguration['fields'] as $fieldName => $fieldProperties)
 		{
 			$sqlId = $fieldProperties['sqlId'];
-			if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && (!isset($fieldProperties['i18n']) || !$fieldProperties['i18n'])))
+			if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && (!isset($fieldProperties['i18n']) || !$fieldProperties['i18n']))
 			{
 				if (isset($fieldProperties['setter']))
 				{
