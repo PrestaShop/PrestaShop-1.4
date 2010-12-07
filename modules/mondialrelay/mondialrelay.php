@@ -21,7 +21,7 @@ class MondialRelay extends Module
 		$this->description = $this->l('Deliver in Relay points');
 		
 		define('_MR_CSS_', dirname(__FILE__) . '/style.css');
-		if (!Configuration::get('MONDIAL_RELAY_1_4'))
+		if (Module::isInstalled('mondialrelay') AND !Configuration::get('MONDIAL_RELAY_1_4'))
 		{
 			$this->update_v1_4();
 			Configuration::updateValue('MONDIAL_RELAY_1_4', 1);
