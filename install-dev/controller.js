@@ -979,8 +979,12 @@ $(document).ready(
 		$("#btNext")
 		.attr("disabled", "disabled")
 		.addClass("disabled");
-		$('#set_license').click(function() {
-			if ($(this).is(':checked'))
+		
+		
+			
+		function checkLicenseButton(elt)
+		{
+			if ($(elt).is(':checked'))
 			{
 				$("#btNext")
 				.removeAttr('disabled')
@@ -992,6 +996,10 @@ $(document).ready(
 				.attr("disabled", "disabled")
 				.addClass("disabled");
 			}
+		}
+			
+		$('#set_license').click(function() {
+			checkLicenseButton(this);
 		});
 	}
 );
