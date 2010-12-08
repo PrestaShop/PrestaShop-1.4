@@ -277,7 +277,7 @@ class AdminShipping extends AdminTab
 					</tr>';
 				echo '
 				</table>
-				<p>'.$this->l('Prices are tax excluded.').'</p>
+				<p>'.$this->l('Prices do not include tax.').'</p>
 			</fieldset>
 			<input type="hidden" name="id_carrier" value="'.$id_carrier.'" />
 		</form>';

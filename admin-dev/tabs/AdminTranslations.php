@@ -653,7 +653,7 @@ class AdminTranslations extends AdminTab
 					</legend>
 					<div id="submitImportContent" style="display:none;">
 						<p>'.$this->l('Import data from file (language pack).').'<br />'.
-						$this->l('If the name format is: isocode.gzip (eg fr.gzip) and the language corresponding to this package does not exist, it will automatically create.').'<br />'.
+						$this->l('If the name format is: isocode.gzip (e.g. fr.gzip) and the language corresponding to this package does not exist, it will automatically be created.').'<br />'.
 						$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
 						$this->l('Browse your computer for the language file to be imported:').'</p>
 						<div style="float:left;">

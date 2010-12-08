@@ -89,7 +89,7 @@ class AdminStores extends AdminTab
 	{
 		parent::displayOptionsList();
 		
-		echo '<br /><p><img src="../img/admin/asterisk.gif" class="middle" /> '.$this->l('You can also replace the icon representing your stores in the Google Maps: go to the Preferences tab and then the Appearance subtab').'</p>';
+		echo '<br /><p><img src="../img/admin/asterisk.gif" class="middle" /> '.$this->l('You can also replace the icon representing your store in Google Maps. Go to the Preferences tab, and then the Appearance subtab.').'</p>';
 	}
 	
 	public function postProcess()
@@ -155,7 +155,7 @@ class AdminStores extends AdminTab
 					<div class="margin-form">
 						<input type="text" size="33" name="address2" value="'.htmlentities($this->getFieldValue($obj, 'address2'), ENT_COMPAT, 'UTF-8').'" />
 					</div>
-					<label>'.$this->l('Post/Zip code:').'</label>
+					<label>'.$this->l('Postcode/ Zip Code:').'</label>
 					<div class="margin-form">
 						<input type="text" size="6" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					</div>
@@ -213,7 +213,7 @@ class AdminStores extends AdminTab
 					<label style="text-align: left; width: inherit;">'.$this->l('Picture:').' </label>
 					<div class="margin-form" style="padding: 0; display: inline;">
 						<input type="file" name="image" />
-						<p class="clear">'.$this->l('Store devanture picture').'</p>';
+						<p class="clear">'.$this->l('Store window picture').'</p>';
 
 				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.(int)(Tab::getIdFromClassName('AdminStores')).(int)($cookie->id_employee)));
 				
@@ -230,7 +230,7 @@ class AdminStores extends AdminTab
 						$days = array();
 						$days[1] = $this->l('Monday');
 						$days[2] = $this->l('Tuesday');
-						$days[3] = $this->l('Wenesday');
+						$days[3] = $this->l('Wednesday');
 						$days[4] = $this->l('Thursday');
 						$days[5] = $this->l('Friday');
 						$days[6] = $this->l('Saturday');

@@ -36,7 +36,7 @@ class Swift_Plugin_EasySwiftResponseTracker implements Swift_Events_ResponseList
   }
   /**
    * Response listener method
-   * @param Swift_Events_ResponseEvent The event occured in Swift
+   * @param Swift_Events_ResponseEvent The event occurred in Swift
    */
   public function responseReceived(Swift_Events_ResponseEvent $e)
   {

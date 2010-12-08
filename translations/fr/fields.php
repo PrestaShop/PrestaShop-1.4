@@ -266,6 +266,7 @@ $_FIELDS['OrderDetail_dabbb2437dc6cd8558ac9c83e3589d9e'] = 'poids du produit';
 $_FIELDS['OrderDetail_3e940f08dd66ba7e45282ba98250ebcd'] = 'nom de la taxe';
 $_FIELDS['OrderDetail_1ba8a02e3f08527607256b38ea8d70a4'] = 'taux de la taxe';
 $_FIELDS['OrderDetail_ae10d61c45ba89be06639c38776f612d'] = 'éco-taxe';
+$_FIELDS['OrderDetail_1f0102715b48ab5f3f5609b2cd8a323d'] = 'taux de l\'éco-taxe';
 $_FIELDS['OrderDetail_825483936ff7f3ef97b7d972c0dd4bf4'] = 'nombre de téléchargement';
 $_FIELDS['OrderDiscount_34888c23070f33d8455a5f341826282d'] = 'ID de la commande';
 $_FIELDS['OrderDiscount_b068931cc450442b63f5b3d276ea4297'] = 'nom';

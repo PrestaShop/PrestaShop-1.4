@@ -65,7 +65,7 @@ class PaysafeCard extends PrepaidServices
 		$translations = array(
 				'disposition_created' => $this->l('Disposition created. Waiting for debit.'),
 				'disposition_invalid' => $this->l('Invalid disposition state:'),
-				'payment_error' => $this->l('An error has occured during payment:'),
+				'payment_error' => $this->l('An error has occurred during payment:'),
 				'payment_accepted' => $this->l('Payment accepted.'),
 				'curl_required' => $this->l('This module requires the curl PHP extension to function properly.'),
 				'not_writable' => $this->l('is not writable!'),

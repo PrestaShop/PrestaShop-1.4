@@ -172,7 +172,7 @@ class AdminReferrers extends AdminTab
 								<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
 							</div>
 							<br class="clear" />
-							<p>'.$this->l('Direct traffic can be quite consuming, you should consider enabling it only if you have a strong database server and the need for it.').'</p>
+							<p>'.$this->l('Direct traffic can be quite consuming. You should consider enabling it only if you have a strong database server and a strong need for it.').'</p>
 							<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
 						</form>
 						<hr />
@@ -270,15 +270,15 @@ class AdminReferrers extends AdminTab
 				<p>'.$this->l('Definitions:').'</p>
 				<ul style="list-style: disc; margin-left: 20px;">
 					<li>
-						'.$this->l('The field `http_referer` is the website from which your customers come.').'<br />
+						'.$this->l('The field `http_referer` is the website from which your customers arrive.').'<br />
 						'.$this->l('For example, visitors coming from Google will have a `http_referer` like this one: "http://www.google.com/search?q=prestashop".').'<br />
-						'.$this->l('If the visitor come directly (by typing the URL of your shop or by using its bookmarks for example), `http_referer` will be empty.').'<br />
+						'.$this->l('If the visitor arrives directly (by typing the URL of your shop or by using its bookmarks, for example), `http_referer` will be empty.').'<br />
 						'.$this->l('So if you want all the visitors coming from google, you can type "%google%" in this field, or "%google.fr%" if you want the visitors coming from Google France only.').'<br />
 					</li>
 					<br />
 					<li>
-						'.$this->l('The field `request_uri` is the URL by which the customer come to your website.').'<br />
-						'.$this->l('For example, if the visitor accesses a product page, this URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
+						'.$this->l('The field `request_uri` is the URL from which the customer arrives to your website.').'<br />
+						'.$this->l('For example, if the visitor accesses a product page, the URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
 						'.$this->l('This is interesting because you can add some tags or tokens in the links pointing to your website. For example, you can post a link').' "'.$uri.'index.php?prestashop" '.$this->l('in the forum and get statistics by entering "%prestashop" in the field `request_uri`. You will get all the visitors coming from the forum.').'
 						'.$this->l('This method is more reliable than the `http_referer` one, but there is a danger: if a search engine read a page with your link, then it will be displayed in its results and you will have not only the forum visitors, but also the ones from the search engine.').'
 					</li>
@@ -301,7 +301,7 @@ class AdminReferrers extends AdminTab
 					<br />
 					<li>
 						'.$this->l('The simple mode uses the MySQL "LIKE", but for a higher potency you can use MySQL regular expressions.').'
-						<a href="http://dev.mysql.com/doc/refman/5.0/en/regexp.html" target="_blank" style="font-style: italic;">'.$this->l('Take a look at the documentation for more details...').'</a>
+						<a href="http://dev.mysql.com/doc/refman/5.0/en/regexp.html" target="_blank" style="font-style: italic;">'.$this->l('Take a look at the document for more details...').'</a>
 					</li>
 				</ul>
 			</div>

@@ -166,11 +166,11 @@ if ($lm->getIncludeTradFilename())
 		txtError[17] = "<?php echo lang('Error while creating the /config/settings.inc.php file.'); ?>";
 		txtError[18] = "<?php echo lang('Error:'); ?>";
 		txtError[19] = "<?php echo lang('This PrestaShop database already exists. Please revalidate your authentication informations to the database.'); ?>";
-		txtError[22] = "<?php echo lang('An error occured while resizing the picture.'); ?>";
+		txtError[22] = "<?php echo lang('An error occurred while resizing the picture.'); ?>";
 		txtError[23] = "<?php echo lang('Database connection is available!'); ?>";
 		txtError[24] = "<?php echo lang('Database Server is available but database is not found'); ?>";
 		txtError[25] = "<?php echo lang('Database Server is not found. Please verify the login, password and server fields.'); ?>";
-		txtError[26] = "<?php echo lang('An error occured while sending email, please verify your parameters.'); ?>";
+		txtError[26] = "<?php echo lang('An error occurred while sending email, please verify your parameters.'); ?>";
 		txtError[37] = "<?php echo lang('Impossible to write the image /img/logo.jpg. If this image already exists, please delete it.'); ?>";
 		txtError[38] = "<?php echo lang('The uploaded file exceeds the upload_max_filesize directive in php.ini'); ?>";
 		txtError[39] = "<?php echo lang('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'); ?>";

@@ -10,7 +10,6 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_050991b5b76aad0be75563b
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_57c1ed81b02e5d3361323c7930897295'] = 'Se ha producido un error durante la copia del archivo.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5fd13c2b89a6eaaa4614bfe258f6c40f'] = 'El archivo zip parece corrupto';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dea6caeb83e5c11d3678284e64ebed8'] = 'Se ha producido un error durante el envío del archivo';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_1935807babcbaf9051e8936250220d46'] = 'Se ha producido un error durante la copia del archivo.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9ee8d388ffb'] = 'Se ha producido un error durante la extracción del archivo zip';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Configuración de archivo errónea';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentación';

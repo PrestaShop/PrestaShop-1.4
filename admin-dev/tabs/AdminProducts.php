@@ -716,7 +716,7 @@ class AdminProducts extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 				}
 				else 
-					$this->_errors[] = Tools::displayError('An error occured while adding a specific tax');							
+					$this->_errors[] = Tools::displayError('An error occurred while adding a specific tax');							
 				}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -735,7 +735,7 @@ class AdminProducts extends AdminTab
 				if (Tax::deleteProductCountryTax($id_product, $id_country))
 					Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 				else 
-					$this->_errors[] = Tools::displayError('An error occured while adding a specific tax');				
+					$this->_errors[] = Tools::displayError('An error occurred while adding a specific tax');				
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');		

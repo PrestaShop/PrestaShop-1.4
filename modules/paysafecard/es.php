@@ -19,7 +19,7 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_be9240e3ec97017ab6af036384ff7199'
 $_MODULE['<{paysafecard}prestashop>paysafecard_1d7e39d8fb6c4bbacdf63b7d0d872246'] = 'Aceptar los pagos a través de PaysafeCard';
 $_MODULE['<{paysafecard}prestashop>paysafecard_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposición creada. En espera del débito.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_894f0316a71ef67255369c82bf8a0e5b'] = 'El estado de la disposición no es válido:';
-$_MODULE['<{paysafecard}prestashop>paysafecard_e79174d4c28918ea3743a8386092cfab'] = 'Se ha producido un error durante el pago:';
+$_MODULE['<{paysafecard}prestashop>paysafecard_c1c25198721552ea8ddd963c7278d4ab'] = 'Se ha producido un error durante el pago:';
 $_MODULE['<{paysafecard}prestashop>paysafecard_36ec50c0e914dd2fb48a1b27540512ce'] = 'Pago aceptado';
 $_MODULE['<{paysafecard}prestashop>paysafecard_d6ca44369efe062cec0c09f392465f55'] = 'Este módulo necesita la librería PHP cURL para funcionar correctamente.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_fe9da2c5e2e153d2415b4cd5d91166a4'] = 'no tiene los derechos en escritura.';

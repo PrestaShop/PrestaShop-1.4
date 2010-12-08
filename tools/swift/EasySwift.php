@@ -133,7 +133,7 @@ class EasySwift
     return $this->errors;
   }
   /**
-   * Get the last error that occured
+   * Get the last error that occurred
    * @return string
    */
   public function getLastError()

@@ -240,7 +240,7 @@ class ThemeInstallator extends Module
 			if (substr($filename, -4) != '.zip')
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
 			else if (!copy($filename, ARCHIVE_NAME))
-				$this->errors .= parent::displayError($this->l('An error has occured during the file copy.'));
+				$this->errors .= parent::displayError($this->l('An error has occurred during the file copy.'));
 			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) === true)
 				$this->page = 2;
 			else
