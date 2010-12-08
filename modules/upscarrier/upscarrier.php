@@ -55,7 +55,7 @@ class UpsCarrier extends CarrierModule
 	{
 		global $cookie;
 		
-		$this->name = 'UpsCarrier';
+		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '0.1';
 
@@ -180,7 +180,6 @@ class UpsCarrier extends CarrierModule
 
 	public static function createExternalCarrier($config)
 	{
-		print_r($config);
 		$carrier = new Carrier();
 		$carrier->name = $config['name'];
 		$carrier->id_tax = $config['id_tax'];
@@ -413,8 +412,7 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_ID', (int)($params['carrier']->id));
 		*/
 	}
-	
-	
+
 	public function getOrderShippingCost($params, $shipping_cost)
 	{
 		// for exemple the module return shipping cost with overcost set in the back-office, but you can call a webservice or calculat what you want before return value to the Cart
@@ -427,7 +425,7 @@ class UpsCarrier extends CarrierModule
 		$country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.intval($address->id_country));
 		foreach ($cartProducts as $product)
 		{		
-			$ups_params = array(
+			$upsParams = array(
 				'address1' => $address->address1,
 				'address2' => $address->address2,
 				'postcode' => $address->postcode,
@@ -435,7 +433,7 @@ class UpsCarrier extends CarrierModule
 				'country_iso_code' => $country['iso_code'],
 				'weight' => $product['weight'],
 			);
-			$result = $this->getUPSShippingCost($ups_params);
+			$result = $this->getUPSShippingCost($upsParams);
 			if ($result['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success' && $result['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['MONETARYVALUE'] > 0)
 				$ups_cost += $result['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['MONETARYVALUE'];
 		}
@@ -444,21 +442,12 @@ class UpsCarrier extends CarrierModule
 			return $ups_cost;
 		return $shipping_cost;
 	}
-	
+
 	public function getOrderShippingCostExternal($params)
 	{
 		return 18;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public function recurseTab(&$resultTab, $levelTab, $index, $value)
 	{
 		if (isset($levelTab[$index]))
@@ -467,10 +456,10 @@ class UpsCarrier extends CarrierModule
 			$resultTab = $value;
 	}
 		
-	public function getUPSShippingCost($ups_params = array())
+	public function getUPSShippingCost($upsParams = array())
 	{
 		// Curl Request
-		$xml = $this->getXml($ups_params);
+		$xml = $this->getXml($upsParams);
 		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");  
 		curl_setopt($ch, CURLOPT_HEADER, 1);  
 		curl_setopt($ch,CURLOPT_POST,1);  
@@ -510,21 +499,11 @@ class UpsCarrier extends CarrierModule
 
 		return $resultTab;
 	}
-	
-	
-	
-	
-	public function getXml($ups_params = array())
+
+	public function getXml($upsParams = array())
 	{
-		if (!$ups_params)
-			$ups_params = array(
-				'address1' => 'Rue lacepede',
-				'address2' => '',
-				'postcode' => '75005',
-				'city' => 'Paris',
-				'weight' => '0.23',
-				'country_iso_code' => 'FR',
-			);
+		if (!$upsParams)
+			$upsParams = array('address1' => 'Rue lacepede', 'address2' => '', 'postcode' => '75005', 'city' => 'Paris', 'weight' => '0.23', 'country_iso_code' => 'FR');
 	
 		$country = Db::getInstance()->getRow("
 		SELECT c.`iso_code`
@@ -532,76 +511,58 @@ class UpsCarrier extends CarrierModule
 		LEFT JOIN `"._DB_PREFIX_."country` c ON (c.`id_country` = cl.`id_country`)
 		WHERE cl.`name` LIKE '".pSQL(Configuration::get('PS_SHOP_COUNTRY'))."'");
 	
-		$xml = '<?xml version="1.0" ?>
-	<AccessRequest xml:lang="en-US">
-		<AccessLicenseNumber>'.Configuration::get('UPS_CARRIER_API_KEY').'</AccessLicenseNumber>
-		<UserId>'.Configuration::get('UPS_CARRIER_LOGIN').'</UserId>
-		<Password>'.Configuration::get('UPS_CARRIER_PASSWORD').'</Password>
-	</AccessRequest>
-	<?xml version="1.0" ?>
-		<RatingServiceSelectionRequest>
-			<Request>
-				<TransactionReference>
-					<CustomerContext>Rating and Service</CustomerContext>
-					<XpciVersion>1.0</XpciVersion>
-				</TransactionReference>
-				<RequestAction>Rate</RequestAction>
-				<RequestOption>Rate</RequestOption>
-			</Request>
-			<PickupType>
-				<Code>'.Configuration::get('UPS_CARRIER_PICKUP_TYPE').'</Code>
-				<Description>Pickup Description</Description>
-			</PickupType>
-			<Shipment>
-				<Description>Rate Shopping - Domestic</Description>
-				<Shipper>
-					<ShipperNumber>'.Configuration::get('UPS_CARRIER_SHIPPER_ID').'</ShipperNumber>
-					<Address>
-						<AddressLine1>'.Configuration::get('PS_SHOP_ADDR1').'</AddressLine1>
-						<AddressLine2>'.Configuration::get('PS_SHOP_ADDR2').'</AddressLine2>
-						<AddressLine3 />
-						<City>'.Configuration::get('PS_SHOP_CITY').'</City>
-						<PostalCode>'.Configuration::get('PS_SHOP_CODE').'</PostalCode>
-						<CountryCode>'.$country['iso_code'].'</CountryCode>
-					</Address>
-				</Shipper>
-				<ShipTo>
-					<Address>
-						<AddressLine1>'.$ups_params['address1'].'</AddressLine1>
-						<AddressLine2>'.$ups_params['address2'].'</AddressLine2>
-						<AddressLine3 />
-						<City>'.$ups_params['city'].'</City>
-						<PostalCode>'.$ups_params['postcode'].'</PostalCode>
-						<CountryCode>'.$ups_params['country_iso_code'].'</CountryCode>
-					</Address>
-				</ShipTo>
-				<ShipFrom>
-					<Address>
-						<AddressLine1>'.Configuration::get('PS_SHOP_ADDR1').'</AddressLine1>
-						<AddressLine2>'.Configuration::get('PS_SHOP_ADDR2').'</AddressLine2>
-						<AddressLine3 />
-						<City>'.Configuration::get('PS_SHOP_CITY').'</City>
-						<PostalCode>'.Configuration::get('PS_SHOP_CODE').'</PostalCode>
-						<CountryCode>'.$country['iso_code'].'</CountryCode>
-					</Address>
-				</ShipFrom>
-				<Service><Code>65</Code></Service>
-				<Package>
-					<PackagingType>
-						<Code>'.Configuration::get('UPS_CARRIER_PACKAGING_TYPE').'</Code>
-						<Description>Packaging Description</Description>
-					</PackagingType>
-					<Description>Rate</Description>
-					<PackageWeight>
-						<UnitOfMeasurement>
-							<Code>KGS</Code>
-						</UnitOfMeasurement>
-						<Weight>'.$ups_params['weight'].'</Weight>
-					</PackageWeight>
-				</Package>
-				<ShipmentServiceOptions />
-			</Shipment>
-		</RatingServiceSelectionRequest>';
+		$search = array(
+			'[[AccessLicenseNumber]]',
+			'[[UserId]]',
+			'[[Password]]',
+			'[[PickupTypeCode]]',
+			'[[ShipperNumber]]',
+			'[[ShipperAddressLine1]]',
+			'[[ShipperAddressLine2]]',
+			'[[ShipperCity]]',
+			'[[ShipperPostalCode]]',
+			'[[ShipperCountryCode]]',
+			'[[ShipToAddressLine1]]',
+			'[[ShipToAddressLine2]]',
+			'[[ShipToCity]]',
+			'[[ShipToPostalCode]]',
+			'[[ShipToCountryCode]]',
+			'[[ShipFromAddressLine1]]',
+			'[[ShipFromAddressLine2]]',
+			'[[ShipFromCity]]',
+			'[[ShipFromPostalCode]]',
+			'[[ShipFromCountryCode]]',
+			'[[PackagingTypeCode]]',
+			'[[PackageWeight]]'
+		);
+
+		$replace = array(
+			Configuration::get('UPS_CARRIER_API_KEY'),
+			Configuration::get('UPS_CARRIER_LOGIN'),
+			Configuration::get('UPS_CARRIER_PASSWORD'),
+			Configuration::get('UPS_CARRIER_PICKUP_TYPE'),
+			Configuration::get('UPS_CARRIER_SHIPPER_ID'),
+			Configuration::get('PS_SHOP_ADDR1'),
+			Configuration::get('PS_SHOP_ADDR2'),
+			Configuration::get('PS_SHOP_CITY'),
+			Configuration::get('PS_SHOP_CODE'),
+			$country['iso_code'],
+			$upsParams['address1'],
+			$upsParams['address2'],
+			$upsParams['city'],
+			$upsParams['postcode'],
+			$upsParams['country_iso_code'],
+			Configuration::get('PS_SHOP_ADDR1'),
+			Configuration::get('PS_SHOP_ADDR2'),
+			Configuration::get('PS_SHOP_CITY'),
+			Configuration::get('PS_SHOP_CODE'),
+			$country['iso_code'],
+			Configuration::get('UPS_CARRIER_PACKAGING_TYPE'),
+			$upsParams['weight']
+		);
+
+		$xml = file_get_contents(dirname(__FILE__).'/xml.tpl');
+		$xml = str_replace($search, $replace, $xml);
 
 		return $xml;
 	}
