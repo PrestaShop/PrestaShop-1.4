@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -74,8 +74,11 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updateproductcomments.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_details.php');
 // Update database structure (use algorithms requiring PHP)
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'database_structure.php');
-// Update cms block 
+// Update cms block
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'cms_block.php');
+// Move crossselling
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'move_crossselling.php');
+
 
 //old version detection
 $oldversion = false;
@@ -89,7 +92,7 @@ else
 	die('<action result="fail" error="30" />'."\n");
 if (!file_exists(DEFINES_FILE))
 	die('<action result="fail" error="37" />'."\n");
-include_once(SETTINGS_FILE); 
+include_once(SETTINGS_FILE);
 
 if (!defined('_THEMES_DIR_'))
 	define('_THEMES_DIR_', __PS_BASE_URI__.'themes/');
@@ -167,7 +170,7 @@ if (defined('_RIJNDAEL_IV_'))
 	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
 if(!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
-	
+
 $sqlContent = '';
 foreach($neededUpgradeFiles AS $version)
 {
@@ -186,7 +189,7 @@ error_reporting($oldLevel);
 $confFile = new AddConfToFile(SETTINGS_FILE, 'w');
 if ($confFile->error)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
-	
+
 foreach ($datas AS $data){
 	$confFile->writeInFile($data[0], $data[1]);
 }
@@ -257,5 +260,4 @@ foreach($sqlContent as $query)
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");
-
 
