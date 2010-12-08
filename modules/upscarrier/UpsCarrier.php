@@ -316,6 +316,7 @@ class UpsCarrier extends CarrierModule
 				<label>'.$this->l('Your UPS API Key').' : </label>
 				<div class="margin-form">
 					<input type="text" size="20" name="ups_carrier_api_key" value="'.Tools::getValue('ups_carrier_api_key', Configuration::get('UPS_CARRIER_API_KEY')).'" />
+					<p><a href="https://www.ups.com/upsdeveloperkit" target="_blank">' . $this->l('Please click here to get your UPS API Key.') . '</a></p>
 				</div>
 				<label>'.$this->l('Pickup Type').' : </label>
 					<div class="margin-form">
@@ -388,7 +389,7 @@ class UpsCarrier extends CarrierModule
 			$extCarrier = new Carrier(intval(Configuration::get('UPS_CARRIER_ID')));
 			$extCarrier->deleted = 0;
 			if (!$extCarrier->update())
-				$this->_postErrors[]  = $this->l('An error occured, please try again.');
+				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 		}
 	}
 	
@@ -402,7 +403,7 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_PACKAGING_TYPE', Tools::getValue('ups_carrier_packaging_type')))
 			$this->_html .= $this->displayConfirmation($this->l('Configuration updated'));
 		else
-			$this->_html .= $this->displayErrors($this->l('Settings faild'));
+			$this->_html .= $this->displayErrors($this->l('Settings failed'));
 	}
 	
 	public function hookupdateCarrier($params)

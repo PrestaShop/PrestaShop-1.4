@@ -111,12 +111,12 @@ class AdminCurrencies extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 			<fieldset>
 			<legend><img src="../img/admin/exchangesrate.gif" />'.$this->l('Currency rates').'</legend>
-			<label>'.$this->l('Update currencies rates').'</label>
+			<label>'.$this->l('Update currency rates').'</label>
 				<div class="margin-form">
 					<p>'.$this->l('Update your currencies exchanges rates with a real-time tool').'</p>
 				</div>
 				<div class="margin-form">
-					<input type="submit" value="'.$this->l('Update  currencies rates').'" name="submitExchangesRates" class="button" />
+					<input type="submit" value="'.$this->l('Update currency rates').'" name="submitExchangesRates" class="button" />
 				</div>
 			</fieldset>
 		</form>';

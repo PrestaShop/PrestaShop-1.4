@@ -267,7 +267,7 @@ class AdminDiscounts extends AdminTab
 		$this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
 		echo '
 							</table>
-							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applicated').'<sup> *</sup></p>
+							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applied').'<sup> *</sup></p>
 						</div>
 				<div class="clear" / >
 				<label>'.$this->l('Total quantity:').' </label>

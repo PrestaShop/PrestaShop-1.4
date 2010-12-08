@@ -1581,7 +1581,7 @@ class AdminProducts extends AdminTab
 			</tr>
 			<tr>
 				<td colspan="6" class="bl bt br bb" style="border-bottom: 1px dashed black;height:40px;">
-					'.$this->l('Reduction:').'
+					'.$this->l('Discount:').'
 					<input type="text" name="spm_reduction[]" value="'.(float)($specificPrice['reduction_type'] == 'percentage' ? ($specificPrice['reduction'] * 100) : $specificPrice['reduction']).'" size="11" />
 					<select name="spm_reduction_type[]">
 						<option value="">---</option>
@@ -1731,7 +1731,7 @@ class AdminProducts extends AdminTab
 			<input type="text" name="sp_from_quantity" value="1" size="3" />
 		</div>
 		
-		<label>'.$this->l('Reduction type:').'</label>
+		<label>'.$this->l('Discount type:').'</label>
 		<div class="margin-form">
 			<select name="sp_reduction_type">
 				<option selected="selected">---</option>
@@ -1741,7 +1741,7 @@ class AdminProducts extends AdminTab
 			'.$this->l('(if set to "amount", the tax is included)').'
 		</div>
 		
-		<label>'.$this->l('Reduction value:').'</label>
+		<label>'.$this->l('Discount value:').'</label>
 		<div class="margin-form">
 			<input type="text" name="sp_reduction" value="0.00" size="11" />
 		</div>
@@ -2003,7 +2003,7 @@ class AdminProducts extends AdminTab
 					}
 				});
 			</script>
-			<b>'.$this->l('Product global informations').'</b>&nbsp;-&nbsp;';
+			<b>'.$this->l('Product global information').'</b>&nbsp;-&nbsp;';
 		$preview_url = '';
 		if (isset($obj->id))
 		{
@@ -2126,7 +2126,7 @@ class AdminProducts extends AdminTab
 			echo '				<option value="'.$id_manufacturer.'" selected="selected">'.Manufacturer::getNameById($id_manufacturer).'</option>
 								<option disabled="disabled">----------</option>';
 		echo '
-							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.(int)(Tab::getIdFromClassName('AdminManufacturers')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
+							</select>&nbsp;&nbsp;&nbsp;<a href="?tab=AdminManufacturers&addmanufacturer&token='.Tools::getAdminToken('AdminManufacturers'.(int)(Tab::getIdFromClassName('AdminManufacturers')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete product information entered?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
 						</td>
 					</tr>					
 					<tr>
@@ -2395,7 +2395,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">&nbsp;</td>
 						<td style="padding-bottom:5px;">
-							<div class="hint clear" style="display: block;">'.$this->l('You can define many reductions and specific price rules on the Prices tab').'</p>
+							<div class="hint clear" style="display: block;">'.$this->l('You can define many discounts and specific price rules in the Prices tab').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -3029,7 +3029,7 @@ class AdminProducts extends AdminTab
 			<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 				<td style="padding-bottom:5px;">
 					<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
-					<p>'.$this->l('The minimal quantity for buy this product (set 1 for disable this feature)').'</p>
+					<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 				</td>
 			</tr>
 		  <tr>
@@ -3142,7 +3142,7 @@ class AdminProducts extends AdminTab
 							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['unit_impact'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
 							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\', \''.$product_attribute['upc'].'\'); calcImpactPriceTI();" /></a>&nbsp;
 							'.(!$product_attribute['default_on'] ? '<a href="'.$currentIndex.'&defaultProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.(int)(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
-							<img src="../img/admin/asterisk.gif" alt="'.$this->l('Make this combination the default one').'" title="'.$this->l('Make this combination the default one').'"></a>' : '').'
+							<img src="../img/admin/asterisk.gif" alt="'.$this->l('Make this the default combination').'" title="'.$this->l('Make this combination the default one').'"></a>' : '').'
 							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.(int)(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
 							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /></a></td>
 						</tr>';

@@ -33,7 +33,7 @@ class AdminInvoices extends AdminTab
 
 		$this->table = 'invoice';
 		
-		$this->optionTitle = $this->l('Invoices options');
+		$this->optionTitle = $this->l('Invoice options');
 		$this->_fieldsOptions = array(
 			'PS_INVOICE' => array('title' => $this->l('Enable invoices:'), 'desc' => $this->l('Select whether or not to activate invoices for your shop'), 'cast' => 'intval', 'type' => 'bool'),
 			'PS_INVOICE_PREFIX' => array('title' => $this->l('Invoice prefix:'), 'desc' => $this->l('Prefix used for invoices'), 'size' => 6, 'type' => 'textLang'),

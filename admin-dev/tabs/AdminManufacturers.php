@@ -51,7 +51,7 @@ class AdminManufacturers extends AdminTab
 		'm!manufacturer_name' => array('title' => $this->l('Manufacturer'), 'width' => 100),
 		'firstname' => array('title' => $this->l('First name'), 'width' => 80),
 		'lastname' => array('title' => $this->l('Last name'), 'width' => 100, 'filter_key' => 'a!name'),
-		'postcode' => array('title' => $this->l('Post/Zip code'), 'align' => 'right', 'width' => 50),
+		'postcode' => array('title' => $this->l('Postcode/ Zip Code'), 'align' => 'right', 'width' => 50),
 		'city' => array('title' => $this->l('City'), 'width' => 150),
 		'country' => array('title' => $this->l('Country'), 'width' => 100, 'type' => 'select', 'select' => $this->countriesArray, 'filter_key' => 'cl!id_country'));
 		$this->_includeTabTitle = array($this->l('Manufacturers addresses'));

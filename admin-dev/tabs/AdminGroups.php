@@ -49,7 +49,7 @@ class AdminGroups extends AdminTab
  		$this->fieldsDisplay = array(
 		'id_group' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 80, 'filter_key' => 'b!name'),
-		'reduction' => array('title' => $this->l('Reduction'), 'width' => 50, 'align' => 'right'),
+		'reduction' => array('title' => $this->l('Discount'), 'width' => 50, 'align' => 'right'),
 		'nb' => array('title' => $this->l('Members'), 'width' => 25, 'align' => 'center'),
 		'date_add' => array('title' => $this->l('Creation date'), 'width' => 60, 'type' => 'date', 'align' => 'right'));
 
@@ -82,15 +82,15 @@ class AdminGroups extends AdminTab
 				echo '
 				</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Reduction:').' </label>
+				<label>'.$this->l('Discount:').' </label>
 				<div class="margin-form">
 					<input type="text" size="5" name="reduction" value="'.($reduction ? $reduction : '0').'" /> '.$this->l('%').'
-					<p>'.$this->l('Will automatically apply this value as a reduction on ALL shop\'s products for this group\'s members').'</p>
+					<p>'.$this->l('Will automatically apply this value as a discount on ALL shop\'s products for this group\'s members.').'</p>
 				</div>';
 		if ($obj->id)
 		{
 			echo '
-				<label>'.$this->l('Current category reduction:').'</label>
+				<label>'.$this->l('Current category discount:').'</label>
 				<div class="margin-form">';
 			if ($groupReductions)
 			{
@@ -110,7 +110,7 @@ class AdminGroups extends AdminTab
 				echo '</table>';
 			}
 			else
-				echo $this->l('No reduction');
+				echo $this->l('No discount');
 			echo '	</div>';
 		}
 		echo '
@@ -135,7 +135,7 @@ class AdminGroups extends AdminTab
 			echo '
 			<form action="'.$currentIndex.'&update'.$this->table.'&id_group='.$obj->id.'&token='.$this->token.'" method="post" class="width3">
 				<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />
-				<fieldset><legend><img src="../img/admin/tab-groups.gif" />'.$this->l('New group reduction').'</legend>
+				<fieldset><legend><img src="../img/admin/tab-groups.gif" />'.$this->l('New group discount').'</legend>
 					<label>'.$this->l('Category:').' </label>
 					<div class="margin-form">
 						<select name="id_category">';
@@ -143,7 +143,7 @@ class AdminGroups extends AdminTab
 					echo '	<option value="'.(int)($category['id_category']).'">'.Tools::htmlentitiesUTF8($category['name']).'</option>';
 				echo '	</select><sup>*</sup>
 					</div>
-					<label>'.$this->l('Reduction (in %):').' </label>
+					<label>'.$this->l('Discount (in %):').' </label>
 					<div class="margin-form">
 						<input type="text" name="reduction" value="" /><sup>*</sup>
 					</div>
@@ -171,7 +171,7 @@ class AdminGroups extends AdminTab
 			<div style="float: right"><a href="'.$currentIndex.'&updategroup&id_group='.$obj->id.'&token='.$this->token.'"><img src="../img/admin/edit.gif" /></a></div>
 			<span style="font-weight: bold; font-size: 14px;">'.strval($obj->name[(int)($cookie->id_lang)]).'</span>
 			<div class="clear">&nbsp;</div>
-			'.$this->l('Reduction:').' '.(float)($obj->reduction).$this->l('%').'
+			'.$this->l('Discount:').' '.(float)($obj->reduction).$this->l('%').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 
@@ -182,7 +182,7 @@ class AdminGroups extends AdminTab
 			'name' => array('title' => $this->l('Name')),
 			'e-mail' => array('title' => $this->l('e-mail')),
 			'birthdate' => array('title' => $this->l('Birth date')),
-			'register_date' => array('title' => $this->l('Register date')),
+			'register_date' => array('title' => $this->l('Registration date')),
 			'orders' => array('title' => $this->l('Orders')),
 			'status' => array('title' => $this->l('Status')),
 			'actions' => array('title' => $this->l('Actions'))

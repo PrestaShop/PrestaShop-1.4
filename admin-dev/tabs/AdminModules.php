@@ -455,13 +455,13 @@ class AdminModules extends AdminTab
 								<span style="padding-right:0.5em">
 									<img src="../img/admin/more.png" alt="" />
 								</span>
-								<span id="all_open">'.$this->l('Open all tab').'</span>
+								<span id="all_open">'.$this->l('Open all tabs').'</span>
 							</a>
 							<a id="all_close" class="module_toggle_all" style="display:none;text-decoration:none;" href="#">
 								<span style="padding-right:0.5em">
 									<img src="../img/admin/less.png" alt="" />
 								</span>
-								<span id="all_open">'.$this->l('Close all tab').'</span>
+								<span id="all_open">'.$this->l('Close all tabs').'</span>
 							</a>
 						</span>
 					</th>
@@ -632,7 +632,7 @@ class AdminModules extends AdminTab
 					<td><strong>'.$this->l('Icon legend').' : </strong></td>
 					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
 					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but some warnings').'</td>
+					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but with warnings').'</td>
 					<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
 				</tr>
 			</table>
@@ -675,7 +675,7 @@ class AdminModules extends AdminTab
 		if ((int)($module->id) AND method_exists($module, 'getContent'))
 			$return .= '<a class="action_module" href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
-		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action removes the module from the server. Are you really sure ?').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
+		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action will permanently remove the module from the server. Are you sure you want to do this ?').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';
 		
 		return $return;
 	}

@@ -72,11 +72,11 @@ class AdminImport extends AdminTab
 		
 	public function __construct()
 	{
-		$this->entities = array_flip(array($this->l('Categories'), $this->l('Products'), $this->l('Attributes'), $this->l('Customers'), $this->l('Addresses'), $this->l('Manufacturers'), $this->l('Suppliers')));
+		$this->entities = array_flip(array($this->l('Categories'), $this->l('Products'), $this->l('Combinations'), $this->l('Customers'), $this->l('Addresses'), $this->l('Manufacturers'), $this->l('Suppliers')));
 					
 		switch ((int)(Tools::getValue('entity')))
 		{
-			case $this->entities[$this->l('Attributes')]:
+			case $this->entities[$this->l('Combinations')]:
 
 				self::$required_fields = array('id_product', 'options');
 				$this->available_fields = array(
@@ -144,10 +144,10 @@ class AdminImport extends AdminTab
 				'tax_rate' => $this->l('Tax rate'),
 				'wholesale_price' => $this->l('Wholesale price'),
 				'on_sale' => $this->l('On sale (0/1)'),
-				'reduction_price' => $this->l('Reduction amount'),
-				'reduction_percent' => $this->l('Reduction per cent'),
-				'reduction_from' => $this->l('Reduction from (yyyy-mm-dd)'),
-				'reduction_to' => $this->l('Reduction to (yyyy-mm-dd)'),
+				'reduction_price' => $this->l('Discount amount'),
+				'reduction_percent' => $this->l('Discount percent'),
+				'reduction_from' => $this->l('Discount from (yyyy-mm-dd)'),
+				'reduction_to' => $this->l('Discount to (yyyy-mm-dd)'),
 				'reference' => $this->l('Reference #'),
 				'supplier_reference' => $this->l('Supplier reference #'),
 				'supplier' => $this->l('Supplier'),
@@ -222,7 +222,7 @@ class AdminImport extends AdminTab
 				'firstname' => $this->l('Firstname *'),
 				'address1' => $this->l('Address 1 *'),
 				'address2' => $this->l('Address 2'),
-				'postcode' => $this->l('Postcode *'),
+				'postcode' => $this->l('Postcode*/ Zipcode*'),
 				'city' => $this->l('City *'),
 				'country' => $this->l('Country *'),
 				'state' => $this->l('State'),
@@ -727,7 +727,7 @@ class AdminImport extends AdminTab
 					$specificPrice->from = isset($info['reduction_from']) ? $info['reduction_from'] : '0000-00-00 00:00:00';
 					$specificPrice->to = isset($info['reduction_to']) ? $info['reduction_to'] : '0000-00-00 00:00:00';
 					if (!$specificPrice->add())
-						$this->_addProductWarning($info['name'], $product->id, $this->l('Reduction is invalid'));
+						$this->_addProductWarning($info['name'], $product->id, $this->l('Discount is invalid'));
 				}
 
 				if (isset($product->tags) AND !empty($product->tags))
@@ -1113,7 +1113,7 @@ class AdminImport extends AdminTab
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 		
 		if(!is_writable(PS_ADMIN_DIR.'/import/'))
-			$this->displayWarning($this->l('dir import on admin dir must be writable (CHMOD 777)'));
+			$this->displayWarning($this->l('directory import on admin directory must be writable (CHMOD 777)'));
 		
 		if(isset($this->_warnings) AND sizeof($this->_warnings))
 		{
@@ -1143,7 +1143,7 @@ class AdminImport extends AdminTab
 		<div class="space" style="height: 420px;">
 				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
 					<fieldset style="float: left; width: 650px">
-						<legend><img src="../img/admin/import.gif" />'.$this->l('Importation').'</legend>
+						<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
 						<label class="clear">'.$this->l('Select which entity to import:').' </label>
 						<div class="margin-form">
 							<select name="entity" id="entity">';
@@ -1415,7 +1415,7 @@ class AdminImport extends AdminTab
 			case $this->entities[$this->l('Addresses')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'address');
 				break;
-			case $this->entities[$this->l('Attributes')]:
+			case $this->entities[$this->l('Combinations')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_impact');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute`');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination`');
@@ -1476,7 +1476,7 @@ class AdminImport extends AdminTab
 				case $this->entities[$this->l('Addresses')]:
 					$this->addressImport();	
 				break;
-				case $this->entities[$this->l('Attributes')]:
+				case $this->entities[$this->l('Combinations')]:
 					$this->attributeImport();
 				break;
 				case $this->entities[$this->l('Manufacturers')]:

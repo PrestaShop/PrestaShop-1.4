@@ -61,8 +61,8 @@ class AdminInformation extends AdminTab
 
 		$testsErrors = array(
 			'phpversion' => $this->l('Update your PHP version'),
-			'upload' => $this->l('Configure your server for allow the upload file'),
-			'system' => $this->l('Configure your server for allow the creation of directories and write on file'),
+			'upload' => $this->l('Configure your server to allow uploading files'),
+			'system' => $this->l('Configure your server to allow for the creation of directories and writing on files'),
 			'gd' => $this->l('Activate the GD library on your server'),
 			'mysql_support' => $this->l('Activate the MySQL support on your server'),
 			'config_dir' => $this->l('Set write permissions on config folder'),
@@ -144,7 +144,7 @@ class AdminInformation extends AdminTab
 				'._PS_VERSION_.'
 			</p>
 			<p>
-				<b>'.$this->l('Server informations').':</b> 
+				<b>'.$this->l('Server information').':</b> 
 				'.php_uname('s').' '.php_uname('v').' '.php_uname('m').'
 			</p>
 			<p>

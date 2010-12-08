@@ -120,7 +120,7 @@ class AdminLanguages extends AdminTab
 					if ($object->id == Configuration::get('PS_LANG_DEFAULT'))
 						$this->_errors[] = $this->l('you cannot delete the default language');
 					elseif ($object->id == $cookie->id_lang)
-						$this->_errors[] = $this->l('you cannot delete the language currently in use, please change languages before deleting');
+						$this->_errors[] = $this->l('You cannot delete the language currently in use. Please change languages before deleting.');
 					elseif ($this->deleteNoPictureImages((int)(Tools::getValue('id_lang'))) AND $object->delete())
 						Tools::redirectLink($currentIndex.'&conf=1'.'&token='.$this->token);
 				}
@@ -287,7 +287,7 @@ class AdminLanguages extends AdminTab
 		echo '
 		<script type="text/javascript">
 		var langPackOk = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('A language pack is available for this ISO code:').'";
-		var langPackInfo = "'.$this->l('After creation of the language you can import the content of the language pack that you can download above, from the "Tools> Translations" menu').'";
+		var langPackInfo = "'.$this->l('After creating the language, you can import the content of the language pack, which you can download above under "Tools - Translations"').'";
 		var noLangPack = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('No language pack available on prestashop.com for this ISO code').'";
 		var download = "'.$this->l('Download').'";
 		</script>

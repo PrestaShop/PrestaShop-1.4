@@ -77,12 +77,12 @@ class AdminPreferences extends AdminTab
 		$this->_fieldsGeneral = array(
 			'__PS_BASE_URI__' => array('title' => $this->l('PS directory:'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop:'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use comma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
+			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP:'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use a coma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_TOKEN_ENABLE' => array('title' => $this->l('Increase Front Office security'), 'desc' => $this->l('Enable or disable token on the Front Office in order to improve PrestaShop security'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL:'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.(int)(Tab::getIdFromClassName('AdminGenerator')).(int)($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HELPBOX' => array('title' => $this->l('Back Office help boxes:'), 'desc' => $this->l('Enable yellow help boxes which are displayed under form fields in the Back Office'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_ORDER_PROCESS_TYPE' => array('title' => $this->l('Order process type:'), 'desc' => $this->l('You can choose the order process type, standard (5 steps) or One Page Checkout.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $order_process_type, 'identifier' => 'value'),
+			'PS_ORDER_PROCESS_TYPE' => array('title' => $this->l('Order process type:'), 'desc' => $this->l('You can choose the order process type to either standard (5 steps) or One Page Checkout.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $order_process_type, 'identifier' => 'value'),
 			'PS_CONDITIONS' => array('title' => $this->l('Terms of service:'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'js' => array('on' => 'onchange="changeCMSActivationAuthorization()"', 'off' => 'onchange="changeCMSActivationAuthorization()"')),
 			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use CMS page').':', 'desc' => $this->l('Choose the Conditions of use CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping:'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
@@ -91,12 +91,12 @@ class AdminPreferences extends AdminTab
 			'PS_ATTACHMENT_MAXIMUM_SIZE' => array('title' => $this->l('Attachment maximum size:'), 'desc' => $this->l('Set the maximum size of attachment files (in MegaBytes)'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging:'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode:'), 'desc' => $this->l('You can choose the rounding of prices, rounding always superior, inferior or classical rounding.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
-			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check updates to modules'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode:'), 'desc' => $this->l('You can choose how to round prices: always round superior; always round inferior, or classic rounding.'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
+			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check for module updates'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			);
 			if (function_exists('date_default_timezone_set'))
-				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Timezone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
-			$this->_fieldsGeneral['PS_THEME_V11'] = array('title' => $this->l('v1.1 theme compatibility:'), 'desc' => $this->l('My shop use a PrestaShop v1.1 theme (SSL will generate warnings in customer browser)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
+				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
+			$this->_fieldsGeneral['PS_THEME_V11'] = array('title' => $this->l('v1.1 theme compatibility:'), 'desc' => $this->l('My shop uses a PrestaShop v1.1 theme (SSL will generate warnings in customer browser)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
 
 		parent::__construct();
 	}
@@ -443,7 +443,7 @@ class AdminPreferences extends AdminTab
 			echo '<script type="text/javascript">if (getE(\'PS_MAIL_METHOD2_on\').checked) getE(\'smtp\').style.display = \'block\'; else getE(\'smtp\').style.display = \'none\';</script></div>';
 
 		if(!is_writable(PS_ADMIN_DIR.'/../config/settings.inc.php') AND $name == 'themes')
-			echo '<p><img src="../img/admin/warning.gif" alt="" /> '.$this->l('if you change theme, the settings.inc.php file must be writable (CHMOD 777)').'</p>';
+			echo '<p><img src="../img/admin/warning.gif" alt="" /> '.$this->l('if you change the theme, the settings.inc.php file must be writable (CHMOD 777)').'</p>';
 
 		echo '	<div align="center" style="margin-top: 20px;">
 					<input type="submit" value="'.$this->l('   Save   ', 'AdminPreferences').'" name="submit'.ucfirst($name).$this->table.'" class="button" />

@@ -73,7 +73,7 @@ class AdminAccess extends AdminTab
 
 		echo '
 		<script type="text/javascript">
-			setLang(Array(\''.$this->l('Profile updated').'\', \''.$this->l('Request failed!').'\', \''.$this->l('Updating in progress. Please wait.').'\', \''.$this->l('Server connection failed!').'\'));
+			setLang(Array(\''.$this->l('Profile updated').'\', \''.$this->l('Request failed!').'\', \''.$this->l('Update in progress. Please wait.').'\', \''.$this->l('Server connection failed!').'\'));
 		</script>
 		<div id="ajax_confirmation"></div>
 		<table class="table" cellspacing="0">

@@ -50,7 +50,7 @@ class AdminBackup extends AdminTab
 		$this->fieldsDisplay = array (
 			'date' => array('title' => $this->l('Date'), 'type' => 'datetime', 'width' => 120, 'align' => 'right'),
 			'age' => array('title' => $this->l('Age')),
-			'filename' => array('title' => $this->l('Filename'), 'width' => 200),
+			'filename' => array('title' => $this->l('File name'), 'width' => 200),
 			'filesize' => array('title' => $this->l('File size')));
 		$this->optionTitle = $this->l('Backup option');
 		$this->_fieldsOptions = array('PS_BACKUP_ALL' => array('title' => $this->l('Backup all tables:'), 'desc' => $this->l('If you disable this option, only the necessary tables will be imported (connections and statistics will not be imported)'), 'cast' => 'intval', 'type' => 'bool'));
@@ -62,7 +62,7 @@ class AdminBackup extends AdminTab
 	 * Load class object using identifier in $_GET (if possible)
 	 * otherwise return an empty object
 	 * This method overrides the one in AdminTab because AdminTab assumes the id is a UnsignedInt
-	 *dir backups on admin dir must be writable (CHMOD 777)
+	 * "Backups" Directory in admin directory must be writeable (CHMOD 777)
 	 * @param boolean $opt Return an empty object if load fail
 	 * @return object
 	 */
@@ -92,7 +92,7 @@ class AdminBackup extends AdminTab
 				$this->_errors[] = $object->error;
 		}
 		else
-			$this->_errors[] = $this->l('dir backups on admin dir must be writable (CHMOD 777)');
+			$this->_errors[] = $this->l('"Backups" Directory in admin directory must be writeable (CHMOD 777)');
 		$this->displayErrors();
 	}
 
@@ -124,7 +124,7 @@ class AdminBackup extends AdminTab
 
 		// Test if the backup dir is writable
 		if(!is_writable(PS_ADMIN_DIR.'/backups/'))
-			$this->displayWarning($this->l('dir backups on admin dir must be writable (CHMOD 777)'));
+			$this->displayWarning($this->l('"Backups" Directory in admin directory must be writeable (CHMOD 777)'));
 
 		$this->displayErrors();
 		echo '<br /><a href="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Create new back-up').'</a><br /><br />';

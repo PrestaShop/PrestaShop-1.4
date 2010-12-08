@@ -61,7 +61,7 @@ class AdminCustomers extends AdminTab
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Password regenerate:'), 'desc' => $this->l('Security minimum time to wait for a new password  to regenerate'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
+			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Regenerate password:'), 'desc' => $this->l('Security minimum time to wait to regenerate the password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
 		);
 
 		parent::__construct();
@@ -667,7 +667,7 @@ class AdminCustomers extends AdminTab
 					echo '<option value="'.(int)($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
 				echo '
 					</select>
-					<p>'.$this->l('The group from which apply none cumulative rules (e.g., price display method, reduction)').'</p>
+					<p>'.$this->l('Apply non-cumulative rules (e.g., price, display method, reduction)').'</p>
 				</div>
 				<label>'.$this->l('Groups:').' </label>
 				<div class="margin-form">';
@@ -692,7 +692,7 @@ class AdminCustomers extends AdminTab
 						}
 						echo '
 					</table>
-					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of groups in which the customer is to be a member').'<sup> *</sup></p>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Check all the box(es) of groups of which the customer is to be a member').'<sup> *</sup></p>
 					';
 					} else
 						echo '<p>'.$this->l('No group created').'</p>';

@@ -59,7 +59,7 @@ class AdminAddresses extends AdminTab
 		'firstname' => array('title' => $this->l('First name'), 'width' => 80, 'filter_key' => 'a!firstname'),
 		'lastname' => array('title' => $this->l('Last name'), 'width' => 100, 'filter_key' => 'a!lastname'),
 		'address1' => array('title' => $this->l('Address'), 'width' => 200),
-		'postcode' => array('title' => $this->l('Post/Zip code'), 'align' => 'right', 'width' => 50),
+		'postcode' => array('title' => $this->l('Postcode/ Zip Code'), 'align' => 'right', 'width' => 50),
 		'city' => array('title' => $this->l('City'), 'width' => 150),
 		'country' => array('title' => $this->l('Country'), 'width' => 100, 'type' => 'select', 'select' => $this->countriesArray, 'filter_key' => 'cl!id_country'));
 
@@ -300,7 +300,7 @@ class AdminAddresses extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="33" name="address2" value="'.htmlentities($this->getFieldValue($obj, 'address2'), ENT_COMPAT, 'UTF-8').'" />
 				</div>
-				<label>'.$this->l('Post/Zip code').'</label>
+				<label>'.$this->l('Postcode/ Zip Code').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>

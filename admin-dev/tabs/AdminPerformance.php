@@ -246,7 +246,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers').'</legend>
-				<p>'.$this->l('You have to put another domain or subdomain in order to use cookieless static content.').'</p>
+				<p>'.$this->l('You must enter another domain or subdomain in order to use cookieless static content.').'</p>
 				<label for="_MEDIA_SERVER_1_">'.$this->l('Media server #1').'</label>
 				<div class="margin-form">
 					<input type="text" name="_MEDIA_SERVER_1_" id="_MEDIA_SERVER_1_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_1_', _MEDIA_SERVER_1_), ENT_QUOTES, 'UTF-8').'" size="30" />
@@ -272,7 +272,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
-				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
+				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires the PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
 				<label>'.$this->l('Algorithm').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
@@ -291,7 +291,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
-				<p>'.$this->l('CCC allows you to reduce the loading time of your page, browser-side. With these settings you will gain performance without touching the code of your theme. Caution, ensure that your theme is compatible with PrestaShop 1.4+, CCC otherwise this may cause problems.').'</p>
+				<p>'.$this->l('CCC allows you to reduce the loading time of your page. With these settings you will gain performance without even touching the code of your theme. Be aware, however, that your theme is compatiblewith  PrestaShop 1.4+. Otherwise, CCC will cause problems.').'</p>
 				<label>'.$this->l('Smart cache for CSS').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_CSS_THEME_CACHE" id="PS_CSS_THEME_CACHE_1" '.(Configuration::get('PS_CSS_THEME_CACHE') ? 'checked="checked"' : '').' />
