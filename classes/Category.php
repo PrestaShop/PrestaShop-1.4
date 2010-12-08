@@ -332,7 +332,7 @@ class CategoryCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
 		WHERE cl.`id_lang` = '.(int)($id_lang).'
-		ORDER BY cl.`name`');
+		ORDER BY c.`position`');
 	}
 
 	/**
@@ -357,7 +357,7 @@ class CategoryCore extends ObjectModel
 		'.($active ? 'AND `active` = 1' : '').'
 		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 		GROUP BY c.`id_category`
-		ORDER BY `name` ASC');
+		ORDER BY `position` ASC');
 
 		/* Modify SQL result */
 		foreach ($result AS &$row)
@@ -516,7 +516,7 @@ class CategoryCore extends ObjectModel
 		WHERE `id_lang` = '.(int)($id_lang).'
 		AND c.`id_parent` = '.(int)($id_parent).'
 		'.($active ? 'AND `active` = 1' : '').'
-		ORDER BY `name` ASC');
+		ORDER BY `position` ASC');
 
 		return $result;
 	}

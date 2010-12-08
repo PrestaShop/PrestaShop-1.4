@@ -233,7 +233,7 @@
 		{foreach from=$messages item=message name="messageList"}
 			<tr class="{if $smarty.foreach.messageList.first}first_item{elseif $smarty.foreach.messageList.last}last_item{/if} {if $smarty.foreach.messageList.index % 2}alternate_item{else}item{/if}">
 				<td>
-					{if $message.ename}
+					{if isset($message.ename) && $message.ename}
 						{$message.efirstname|escape:'htmlall':'UTF-8'} {$message.elastname|escape:'htmlall':'UTF-8'}
 					{elseif $message.clastname}
 						{$message.cfirstname|escape:'htmlall':'UTF-8'} {$message.clastname|escape:'htmlall':'UTF-8'}
