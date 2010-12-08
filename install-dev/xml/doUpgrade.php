@@ -78,7 +78,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'database_structure.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'cms_block.php');
 // Move crossselling
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'move_crossselling.php');
-
+// adminstores tab
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'admin_stores_tab.php');
 
 //old version detection
 $oldversion = false;

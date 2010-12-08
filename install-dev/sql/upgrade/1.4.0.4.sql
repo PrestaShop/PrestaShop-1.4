@@ -4,20 +4,7 @@ ALTER TABLE `PREFIX_product` CHANGE `ecotax` `ecotax` DECIMAL(21, 6) NOT NULL DE
 
 UPDATE `PREFIX_cms` SET `id_cms_category` = 1;
 
-INSERT INTO `PREFIX_tab` (`class_name`, `id_parent`, `position`) VALUES ('AdminStores', 0, 11);
-
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
-(1, (SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = 'AdminStores'), 'Stores'),
-(2, (SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = 'AdminStores'), 'Magasins'),
-(3, (SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = 'AdminStores'), 'Tiendas');
-
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
-	SELECT `id_profile`, (
-		SELECT `id_tab`
-		FROM `PREFIX_tab`
-		WHERE `class_name` = 'AdminStores'
-	), 1, 1, 1, 1 FROM `PREFIX_profile`
-);
+/* PHP:admin_stores_tab(); */;
 
 INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) SELECT 'PS_LOCALE_LANGUAGE', l.`iso_code`, NOW(), NOW() FROM `PREFIX_configuration` c INNER JOIN `PREFIX_lang` l ON (l.`id_lang` = c.`value`) WHERE c.`name` = 'PS_LANG_DEFAULT';
 INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) SELECT 'PS_LOCALE_COUNTRY', co.`iso_code`, NOW(), NOW() FROM `PREFIX_configuration` c INNER JOIN `PREFIX_country` co ON (co.`id_country` = c.`value`) WHERE c.`name` = 'PS_COUNTRY_DEFAULT';
