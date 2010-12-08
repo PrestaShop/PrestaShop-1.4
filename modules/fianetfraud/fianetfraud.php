@@ -339,13 +339,13 @@ class Fianetfraud extends Module
 		WHERE id_cart='.(int)($params['cart']->id));
 		if (Db::getInstance()->NumRows() > 0)
 			Db::getInstance()->Execute('
-			UPDATE '._DB_PREFIX_.'fianet_fraud
-			SET ip_address='.(int)(ip2long($_SERVER['REMOTE_ADDR'])).', date=\''.pSQL(date('Y-m-d H:i:s')).'\'
-			WHERE id_cart='.(int)($params['cart']->id));
+			UPDATE `'._DB_PREFIX_.'fianet_fraud`
+			SET `ip_address` = '.ip2long($_SERVER['REMOTE_ADDR']).', `date` = \''.pSQL(date('Y-m-d H:i:s')).'\'
+			WHERE `id_cart` = '.(int)($params['cart']->id).' LIMIT 1');
 		else
 			Db::getInstance()->Execute('
-			INSERT INTO '._DB_PREFIX_.'fianet_fraud(id_cart, ip_address, date)
-			VALUES('.(int)($params['cart']->id).', '.(int)(ip2long($_SERVER['REMOTE_ADDR'])).',\''.date('Y-m-d H:i:s').'\')');
+			INSERT INTO `'._DB_PREFIX_.'fianet_fraud` (`id_cart`, `ip_address`, `date`)
+			VALUES ('.(int)($params['cart']->id).', '.ip2long($_SERVER['REMOTE_ADDR']).',\''.date('Y-m-d H:i:s').'\')');
 		return true;
 	}
 
@@ -353,11 +353,10 @@ class Fianetfraud extends Module
 	{
 		if ($id_cart == false)
 			return false;
-		$res = Db::getInstance()->ExecuteS('
+		return long2ip(Db::getInstance()->getValue('
 		SELECT `ip_address`
 		FROM '._DB_PREFIX_.'fianet_fraud
-		WHERE id_cart = '.(int)($id_cart).' LIMIT 1');
-		return long2ip($res[0]['ip_address']);
+		WHERE id_cart = '.(int)($id_cart)));
 	}
 
 	public function hookUpdateOrderStatus($params)
@@ -464,8 +463,7 @@ class Fianetfraud extends Module
 		$orderFianet->info_commande->montant = $params['order']->total_paid;
 		$currency = new Currency((int)($params['order']->id_currency));
 		$orderFianet->info_commande->devise = $currency->iso_code;
-		$ip_addr = self::getIpByCart((int)($params['cart']->id));
-		$orderFianet->info_commande->ip = $ip_addr;
+		$orderFianet->info_commande->ip = self::getIpByCart((int)($params['cart']->id));
 		$orderFianet->info_commande->timestamp	= date('Y-m-d H:i:s');
 
 		$products = $params['cart']->getProducts();
