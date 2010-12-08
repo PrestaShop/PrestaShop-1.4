@@ -234,7 +234,7 @@
         }else 
         {
         	$this->_imgInfoFinal['size'] = @filesize($filename);
-        	@chmod($filename, (int)($this->chmod, 8));
+        	@chmod($filename, intval($this->chmod, 8));
         }
 
         return true;
