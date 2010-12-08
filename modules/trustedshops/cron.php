@@ -1,6 +1,6 @@
 <?php
 /*
-* Copyright (C) 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  Copyright (c) 2007-2010 Prestashop SA : 6 rue lacepede, 75005 PARIS
+*  @copyright  2007-2010 Prestashop SA : 6 rue lacepede, 75005 PARIS
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
