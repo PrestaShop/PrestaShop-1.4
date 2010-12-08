@@ -164,7 +164,7 @@ class AuthControllerCore extends FrontController
 									'_POST' => $_POST,
 									'newCustomer' => $customer
 								));
-								if ($back)
+								if ($back = Tools::getValue('back'))
 									Tools::redirect($back);
 								Tools::redirect('my-account.php');
 							}
