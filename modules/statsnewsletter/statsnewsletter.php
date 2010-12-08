@@ -57,13 +57,15 @@ class StatsNewsletter extends ModuleGraph
 		if(Module::isInstalled('blocknewsletter'))
 		{
 			$totals = $this->getTotals();
-			
+			if (Tools::getValue('export'))
+				$this->csvExport(array('type' => 'line', 'layers' => 3));
 			$this->_html = '
 			<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 				<p>'.$this->l('Registrations from customers:').' '.(int)($totals['customers']).'</p>
 				<p>'.$this->l('Registrations from visitors:').' '.(int)($totals['visitors']).'</p>
 				<p>'.$this->l('Both:').' '.(int)($totals['both']).'</p>
 				<center>'.ModuleGraph::engine(array('type' => 'line', 'layers' => 3)).'</center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 			</fieldset>';
 		}
 		else

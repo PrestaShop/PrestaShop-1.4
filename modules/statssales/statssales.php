@@ -59,7 +59,13 @@ class StatsSales extends ModuleGraph
 		
 		$totals = $this->getTotals();
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-		
+		if (($id_export = (int)Tools::getValue('export')) == 1)
+			$this->csvExport(array('layers' => 2, 'type' => 'line', 'option' => '1-'.(int)Tools::getValue('id_country')));
+		elseif ($id_export == 2)
+			 $this->csvExport(array('layers' => 0, 'type' => 'line', 'option' => '2-'.(int)Tools::getValue('id_country')));
+		elseif ($id_export == 3)
+			$this->csvExport(array('type' => 'pie', 'option' => '3-'.(int)Tools::getValue('id_country')));
+			
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="float: right; margin-left: 10px;">
@@ -76,12 +82,15 @@ class StatsSales extends ModuleGraph
 			<p>'.$this->l('Orders placed:').' '.(int)($totals['orderCount']).'</p>
 			<p>'.$this->l('Products bought:').' '.(int)($totals['products']).'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.(int)(Tools::getValue('id_country')), 'layers' => 2)).'</center>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
-			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.(int)(Tools::getValue('id_country')))).'<br /><br />
+			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.(int)(Tools::getValue('id_country')))).'</center></p>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=2"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
 			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=3"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>

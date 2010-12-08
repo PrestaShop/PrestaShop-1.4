@@ -135,6 +135,50 @@ abstract class ModuleGraphCore extends Module
 		}
 	}
 	
+	protected function csvExport($datas)
+	{
+		global $cookie;
+		$this->setEmployee(intval($cookie->id_employee));
+		$this->setLang(intval($cookie->id_lang));
+
+		$layers = isset($datas['layers']) ?  $datas['layers'] : 1;
+		if (isset($datas['option']))
+			$this->setOption($datas['option'], $layers);
+		$this->getData($layers);
+		
+		if (is_array($this->_titles['main']))
+			for ($i = 1; $i <= sizeof($this->_titles['main']); $i++)
+				$this->_csv .= ';'.$this->_titles['main'][$i];
+		else
+			$this->_csv .= ';'.$this->_titles['main'];
+		$this->_csv .= "\n";
+		if (sizeof($this->_legend))
+		{
+			if ($datas['type'] == 'pie')
+				foreach ($this->_legend AS $key => $legend)
+					for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
+						$total += (is_array($this->_values[$i])  ? $this->_values[$i][$key] : $this->_values[$key]);
+			foreach ($this->_legend AS $key => $legend)
+			{
+				$this->_csv .= $legend.';';		
+				for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
+					$this->_csv .= (is_array($this->_values[$i])  ? $this->_values[$i][$key] : $this->_values[$key]) / (($datas['type'] == 'pie') ? $total : 1).';';
+				$this->_csv .= "\n";
+			}
+		}
+			Tools::d($this);
+		$this->_displayCsv();
+	}
+	
+	private function _displayCsv()
+	{
+		ob_end_clean();
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="'.$this->displayName.' - '.time().'.csv"');
+		echo $this->_csv;
+		exit;
+	}
+	
 	public function create($render, $type, $width, $height, $layers)
 	{
 		if (!Tools::file_exists_cache($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))

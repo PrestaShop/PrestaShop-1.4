@@ -73,6 +73,8 @@ class StatsVisits extends ModuleGraph
 	{
 		$totalVisits = $this->getTotalVisits();
 		$totalGuests = $this->getTotalGuests();
+		if (Tools::getValue('export'))
+			$this->csvExport(array('layers' =>2, 'type' => 'line', 'option' => 3));
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p><center>
@@ -82,7 +84,8 @@ class StatsVisits extends ModuleGraph
 			<div style="margin-top:20px"></div>
 			<p>'.$this->l('Total visits:').' '.$totalVisits.'</p>
 			<p>'.$this->l('Total visitors:').' '.$totalGuests.'</p>
-			'.($totalVisits ? ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<br /><br />' : '').'
+			'.($totalVisits ? ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>' : '').'
+			
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>

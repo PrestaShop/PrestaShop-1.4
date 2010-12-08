@@ -55,19 +55,39 @@ class StatsPersonalInfos extends ModuleGraph
 	{
 		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
 		if (sizeof(Customer::getCustomers()))
+		{
+			if (Tools::getValue('export'))
+				if (Tools::getValue('exportType') =='gender')
+					$this->csvExport(array('type' => 'pie', 'option' => 'gender'));
+				elseif (Tools::getValue('exportType') =='age')
+					$this->csvExport(array('type' => 'pie', 'option' => 'age'));
+				elseif (Tools::getValue('exportType') =='country')
+					$this->csvExport(array('type' => 'pie', 'option' => 'country'));
+				elseif (Tools::getValue('exportType') =='currency')
+					$this->csvExport(array('type' => 'pie', 'option' => 'currency'));
+				elseif (Tools::getValue('exportType') =='language')
+					$this->csvExport(array('type' => 'pie', 'option' => 'language'));
+			
 			$this->_html .= '
-			<center>
-				<p><img src="../img/admin/down.gif" />'.$this->l('Gender distribution allows you to determine the percentage of men and women among your customers.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'gender')).'<br class="clear" /><br />
-				<p><img src="../img/admin/down.gif" />'.$this->l('Age ranges allows you to determine in which age range your customers are.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'age')).'<br /><br />
-				<p><img src="../img/admin/down.gif" />'.$this->l('Country distribution allows you to determine in which part of the world your customers are.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'country')).'<br /><br />
-				<p><img src="../img/admin/down.gif" />'.$this->l('Currency ranges allows you to determine with which currency your customers pay.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'currency')).'<br /><br />
-				<p><img src="../img/admin/down.gif" />'.$this->l('Language distribution allows you to determine the general language your customers use on your shop.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'language')).'
+			
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Gender distribution allows you to determine the percentage of men and women among your customers.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'gender')).'<br /></center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=gender"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+				<br class="clear" /><br />
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Age ranges allows you to determine in which age range your customers are.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'age')).'<br /></center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=age"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Country distribution allows you to determine in which part of the world your customers are.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'country')).'<br /></center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=country"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Currency ranges allows you to determine with which currency your customers pay.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'currency')).'<br /></center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=currency"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Language distribution allows you to determine the general language your customers use on your shop.').'</p>
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'language')).'<br /></center>
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=language"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 			</center>';
+		}
 		else
 			$this->_html .= '<p>'.$this->l('No customers registered yet.').'</p>';
 		$this->_html .= '

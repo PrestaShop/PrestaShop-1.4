@@ -138,6 +138,43 @@ abstract class ModuleGridCore extends Module
 		return call_user_func(array($render, 'hookGridEngine'), $params, $grider);
 	}
 	
+	protected function csvExport($datas)
+	{
+		global $cookie;
+		$this->_sort = $datas['defaultSortColumn'];
+		$this->setLang($cookie->id_lang);
+		$this->getData();
+
+		$layers = isset($datas['layers']) ?  $datas['layers'] : 1;
+
+		if (isset($datas['option']))
+			$this->setOption($datas['option'], $layers);
+					
+		if (sizeof($datas['columns']))
+		{
+			foreach ($datas['columns'] AS $column)
+				$this->_csv .= $column['header'].';';
+			$this->_csv = rtrim($this->_csv, ';')."\n";
+			
+			foreach ($this->_values AS $value)
+			{
+				foreach ($datas['columns'] AS $column)
+					$this->_csv .= $value[$column['dataIndex']].';';
+				$this->_csv = rtrim($this->_csv, ';')."\n";
+			}
+		}		
+		$this->_displayCsv();
+	}
+	
+	private function _displayCsv()
+	{
+		ob_end_clean();
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="'.$this->displayName.' - '.time().'.csv"');
+		echo $this->_csv;
+		exit;
+	}
+	
 	abstract protected function getData();
 	
 	public function getDate()

@@ -28,7 +28,8 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
-class StatsBestVouchers extends ModuleGrid
+  
+class StatsBestManufacturers extends ModuleGrid
 {
 	private $_html = null;
 	private $_query =  null;
@@ -39,11 +40,11 @@ class StatsBestVouchers extends ModuleGrid
 	
 	function __construct()
 	{
-		$this->name = 'statsbestvouchers';
+		$this->name = 'statsbestmanufacturers';
 		$this->tab = 'analytics_stats';
-		$this->version = 1.0;
+		$this->version = '1.0';
 		
-		$this->_defaultSortColumn = 'ca';
+		$this->_defaultSortColumn = 'sales';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
@@ -53,28 +54,28 @@ class StatsBestVouchers extends ModuleGrid
 				'header' => $this->l('Name'),
 				'dataIndex' => 'name',
 				'align' => 'left',
-				'width' => 300
+				'width' => 200
 			),
 			array(
-				'id' => 'ca',
-				'header' => $this->l('Sales'),
-				'dataIndex' => 'ca',
-				'width' => 30,
+				'id' => 'quantity',
+				'header' => $this->l('Quantity sold'),
+				'dataIndex' => 'quantity',
+				'width' => 60,
 				'align' => 'right'
 			),
 			array(
-				'id' => 'total',
-				'header' => $this->l('Total used'),
-				'dataIndex' => 'total',
-				'width' => 30,
+				'id' => 'sales',
+				'header' => $this->l('Total paid'),
+				'dataIndex' => 'sales',
+				'width' => 60,
 				'align' => 'right'
 			)
 		);
 		
 		parent::__construct();
 		
-		$this->displayName = $this->l('Best vouchers');
-		$this->description = $this->l('A list of the best vouchers');
+		$this->displayName = $this->l('Best manufacturers');
+		$this->description = $this->l('A list of the best manufacturers');
 	}
 	
 	public function install()
@@ -85,17 +86,17 @@ class StatsBestVouchers extends ModuleGrid
 	public function hookAdminStatsModules($params)
 	{
 		$engineParams = array(
-			'id' => 'id_product',
+			'id' => 'id_category',
 			'title' => $this->displayName,
 			'columns' => $this->_columns,
 			'defaultSortColumn' => $this->_defaultSortColumn,
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
-		
+	
 		if (Tools::getValue('export'))
-				$this->csvExport($engineParams);
-				
+			$this->csvExport($engineParams);
+	
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
@@ -106,29 +107,38 @@ class StatsBestVouchers extends ModuleGrid
 	
 	public function getTotalCount()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
-		return $result['total'];
+		return Db::getInstance()->getValue('
+		SELECT COUNT(DISTINCT(m.id_manufacturer))
+		FROM '._DB_PREFIX_.'order_detail od
+		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = od.product_id)
+		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = od.id_order)
+		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
+		WHERE o.invoice_date BETWEEN '.$this->getDate().' AND o.valid = 1
+		AND m.id_manufacturer IS NOT NULL');
 	}
-
+	
 	public function getData()
 	{	
 		$this->_totalCount = $this->getTotalCount();
-		$this->_query = '
-		SELECT od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / o.conversion_rate as ca
-		FROM '._DB_PREFIX_.'order_discount od
-		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
-		WHERE o.valid = 1
-		AND o.invoice_date BETWEEN '.$this->getDate().'
-		GROUP BY od.id_discount';
 
+		$this->_query = '
+		SELECT m.name, SUM(od.product_quantity) as quantity, ROUND(SUM(od.product_quantity * od.product_price) / c.conversion_rate, 2) as sales
+		FROM '._DB_PREFIX_.'order_detail od
+		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = od.product_id)
+		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_order = od.id_order)
+		LEFT JOIN '._DB_PREFIX_.'currency c ON (c.id_currency = o.id_currency)
+		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
+		WHERE o.invoice_date BETWEEN '.$this->getDate().' AND o.valid = 1
+		AND m.id_manufacturer IS NOT NULL
+		GROUP BY p.id_manufacturer';
 		if (Validate::IsName($this->_sort))
 		{
 			$this->_query .= ' ORDER BY `'.$this->_sort.'`';
-			if (isset($this->_direction))
+			if (isset($this->_direction) AND Validate::IsSortDirection($this->_direction))
 				$this->_query .= ' '.$this->_direction;
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_values = Db::getInstance()->ExecuteS($this->_query);
 	}
 }

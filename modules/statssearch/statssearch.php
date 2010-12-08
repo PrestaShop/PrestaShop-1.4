@@ -83,6 +83,9 @@ class StatsSearch extends ModuleGraph
 	
 	function hookAdminStatsModules()
 	{
+		if (Tools::getValue('export'))
+			$this->csvExport(array('type' => 'pie'));
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.ModuleGraph::getDateBetween().$this->_query2);
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
@@ -105,7 +108,9 @@ class StatsSearch extends ModuleGraph
 		$table .= '</tbody></table></div>';
 		
 		if (sizeof($result))
-			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center><br class="clear" />'.$table;
+			$this->_html .= '<center>'.ModuleGraph::engine(array('type' => 'pie')).'</center>
+									<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+									<br class="clear" />'.$table;
 		else
 			$this->_html .= '<p><strong>'.$this->l('No keywords searched more than once found.').'</strong></p>';
 		$this->_html .= '</fieldset>';

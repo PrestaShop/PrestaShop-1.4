@@ -39,7 +39,7 @@
 	<!-- Bookmark -->
 	<div class="add_bookmark">
 		<script type="text/javascript">
-		writeBookmarkLink('{$come_from|replace:"'":''|addslashes}', '{$shop_name|addslashes|addslashes}', '{l s='bookmark this page' mod='blockpermanentlinks'}', '{$img_dir}icon/star.gif');</script>&nbsp;
+		writeBookmarkLink('{$come_from}', '{$shop_name|addslashes|addslashes}', '{l s='bookmark this page' mod='blockpermanentlinks'}', '{$img_dir}icon/star.gif');</script>&nbsp;
 	</div>
 </div>
 <!-- /Block permanent links module -->

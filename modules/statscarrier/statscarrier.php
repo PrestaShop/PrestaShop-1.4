@@ -62,7 +62,8 @@ class StatsCarrier extends ModuleGraph
 		WHERE o.`date_add` BETWEEN '.ModuleGraph::getDateBetween().'
 		'.((int)(Tools::getValue('id_order_state')) ? 'AND (SELECT oh.id_order_state FROM `'._DB_PREFIX_.'order_history` oh WHERE o.id_order = oh.id_order ORDER BY oh.date_add DESC, oh.id_order_history DESC LIMIT 1) = '.(int)(Tools::getValue('id_order_state')) : ''));
 		$states = OrderState::getOrderStates((int)($cookie->id_lang));
-	
+		if (Tools::getValue('export'))
+				$this->csvExport(array('type' => 'pie', 'option' => Tools::getValue('id_order_state')));
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="float: right;">
@@ -74,7 +75,7 @@ class StatsCarrier extends ModuleGraph
 				<input type="submit" name="submitState" value="'.$this->l('Filter').'" class="button" />
 			</form>
 			<p><img src="../img/admin/down.gif" />'.$this->l('This graph represents the carrier distribution for your orders. You can also limit it to one order state.').'</p>
-			'.($result['total'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => Tools::getValue('id_order_state'))) : $this->l('No valid orders for this period.')).'
+			'.($result['total'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => Tools::getValue('id_order_state'))).'<br /><br />	<a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=language"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a>' : $this->l('No valid orders for this period.')).'
 		</fieldset>';
 		return $this->_html;
 	}

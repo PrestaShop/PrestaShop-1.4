@@ -107,10 +107,12 @@ class StatsBestCustomers extends ModuleGrid
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
-	
+		if (Tools::getValue('export'))
+			$this->csvExport($engineParams);
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
+		<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2 >'.$this->l('Develop clients\' loyalty').'</h2>

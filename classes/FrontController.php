@@ -276,7 +276,6 @@ class FrontControllerCore
 		Product::initPricesComputation();
 
 		$priceDisplay = Product::getTaxCalculationMethod();
-
 		if (!Configuration::get('PS_THEME_V11'))
 		{
 			define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
@@ -288,7 +287,7 @@ class FrontControllerCore
 				'modules_dir' => _MODULE_DIR_,
 				'mail_dir' => _MAIL_DIR_,
 				'lang_iso' => $ps_language->iso_code,
-				'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
+				'come_from' => Tools::getHttpHost(true, true).Tools::htmlentitiesUTF8(str_replace('\'', '', urldecode($_SERVER['REQUEST_URI']))),
 				'shop_name' => Configuration::get('PS_SHOP_NAME'),
 				'cart_qties' => (int)($cart->nbProducts()),
 				'cart' => $cart,

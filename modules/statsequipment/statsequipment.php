@@ -93,14 +93,23 @@ class StatsEquipment extends ModuleGraph
 	
 	public function hookAdminStatsModules($params)
 	{
+		if (Tools::getValue('export'))
+			if (Tools::getValue('exportType') == 'browser')
+				$this->csvExport(array('type' => 'pie', 'option' => 'wb'));
+			elseif (Tools::getValue('exportType') == 'os')
+				$this->csvExport(array('type' => 'pie', 'option' => 'os'));
+				
 		$equipment = $this->getEquipment();
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<center>
 				<p><img src="../img/admin/down.gif" />'.$this->l('Determine the percentage of web browser used by your customers.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'wb')).'<br /><br />
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=browser"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 				<p><img src="../img/admin/down.gif" />'.$this->l('Determine the percentage of operating systems used by your customers.').'</p>
-				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'os')).'';
+				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'os')).'
+				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=os"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>';
+				
 		if ($equipment)
 		{
 			$this->_html .= '<table class="table space" border="0" cellspacing="0" cellpadding="0">

@@ -77,22 +77,26 @@ class StatsOrigin extends ModuleGraph
 	function hookAdminStatsModules()
 	{
 		$websites = $this->getOrigins(ModuleGraph::getDateBetween());
-		
-		$this->_html = '<fieldset class="width3 center"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Origin').'</legend>';
+		if (Tools::getValue('export'))
+			if (Tools::getValue('exportType') == 'top')
+				$this->csvExport(array('type' => 'pie'));
+		$this->_html = '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Origin').'</legend>';
 		if (sizeof($websites))
 		{
 			$this->_html .= '
-			<p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went through to get on your shop.').'</p>
-			'.ModuleGraph::engine(array('type' => 'pie')).'<br /><br />
+			<center><p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went through to get on your shop.').'</p>
+			'.ModuleGraph::engine(array('type' => 'pie')).'</center>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=top"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
 			<div style="overflow-y: scroll; height: 600px;">
-			<table class="table" border="0" cellspacing="0" cellspacing="0">
+			<center>
+			<table class="table " border="0" cellspacing="0" cellspacing="0">
 				<tr>
 					<th style="width:400px;">'.$this->l('Origin').'</th>
 					<th style="width:50px; text-align: right">'.$this->l('Total').'</th>
 				</tr>';
 			foreach ($websites as $website => $total)
 				$this->_html .= '<tr><td>'.(!strstr($website, ' ') ? '<a href="http://'.$website.'">' : '').$website.(!strstr($website, ' ') ? '</a>' : '').'</td><td style="text-align: right">'.$total.'</td></tr>';
-			$this->_html .= '</table></div>';
+			$this->_html .= '</table></center></div>';
 		}
 		else
 			$this->_html .= '<p><strong>'.$this->l('Direct links only').'</strong></p>';
