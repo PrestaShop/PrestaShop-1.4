@@ -237,7 +237,8 @@ class AdminAddresses extends AdminTab
 					echo '
 					<label>'.$this->l('Customer').'</label>
 					<div class="margin-form"><a style="display: block; padding-top: 4px;" href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.$tokenCustomer.'">'.$customer->lastname.' '.$customer->firstname.' ('.$customer->email.')</a></div>
-					<input type="hidden" name="id_customer" value="'.$customer->id.'" />';
+					<input type="hidden" name="id_customer" value="'.$customer->id.'" />
+					<input type="hidden" name="email" value="'.$customer->email.'" />';
 				}
 				else
 				{
