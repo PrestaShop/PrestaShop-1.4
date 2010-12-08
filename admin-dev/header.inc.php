@@ -131,7 +131,7 @@ $mainsubtablist = '';
 foreach ($tabs AS $t)
 	if (checkTabRights($t['id_tab']) === true)
 	{
-		$img = _PS_IMG_.'t/'.$t['class_name'].'.gif';
+		$img = (Tools::file_exists_cache(($path_name = _PS_ADMIN_DIR_.'/themes/'.$employee->bo_theme.'/img/t/').$t['class_name'].'.gif') ? 'themes/'.$employee->bo_theme.'/img/' : _PS_IMG_.'/').'t/'.$t['class_name'].'.gif';
 		if (trim($t['module']) != '')
 			$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
 		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
