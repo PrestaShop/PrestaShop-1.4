@@ -25,6 +25,191 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.4 - 3747 (2010-12-08)   #
+####################################
+
+	Added Features:
+	
+	[+] Project : Adding Smarty v2.6.20 as an alternate template engine (see _PS_FORCE_SMARTY_2_ in defines.inc.php)
+	[+] Project : Adding Smarty v3.0.5 as the default template engine
+	
+	[+] FO : Cart and wishlist -> New effect with the product picture! (No more "transfer" effect)
+	[+] FO : Cross selling module has now its own CSS file
+	[+] FO : Deleted thickbox, now using FancyBox!
+	
+	[+] BO: Possibility to export your data statistics
+	
+	[+] MO : New Module - UPS - upscarrier/
+	
+	[+] WS : now acceptable image types are listed is in image xml get view
+	[+] WS : now the entity image_type is managable via WS
+	[+] WS : Now the filter sort_list become sort and the filter limit_list become limit, easier to write...
+	[+] WS : now the webservice system use an nice object to improve evolutions, it is singletonized too; now the webservice is able to able manage images (get the general images for the moment)
+	[+] WS : now you can put general images via WS
+	[+] WS : Now you can request the webservice with the HEAD method to avoid useless large requests; Now you can retrieve the webservice version in the request headers, fortunately when auth was valided, for security reason...
+	[+] WS : Now you can sort by many fields as example : [id_DESC,weight_DESC]
+	[+] WS : now you can use a simulated method to use post in place of put (useful to post images)
+	[+] WS : Remove osoletes tests of webservice admin tab
+	
+	Improved/changed features:
+	
+	[*] Project : All floatval() functions are now replaced by a casting of (float) for optimization.
+	[*] Project : Upgrading from Smarty v2.6.20 to v3.0.5
+	
+	[*] Installer : new default employee profiles added to the installation
+	
+	[*] FO : Added a link to 'Our stores' in sitemap.php
+	[*] FO : add method to get all informations for make a link in each active language.
+	[*] FO : add method to get all informations for make a link in each active language.
+	[*] FO : Categories and pages are aligned to make sitemap.php a shorter page
+	[*] FO : change the style for button specialsPrice block.
+	[*] FO : change the style for button specialsPrice block.
+	[*] FO : Deleted jQuery hotkeys
+	[*] FO : Fixed bug #6176 and an other bug on order confirmation when you buy a free virtual product
+	[*] FO : for get links for each language : search active language in sql request.
+	[*] FO : get the url_rewrite for each language
+	[*] FO : h2 tags changed to h1 tags for referencement
+	[*] FO : Improve SQL replication performance
+	[*] FO : Upgrading from jQuery v1.2.6 to v1.4.4
+	
+	[*] BO : Attachment files maximum size is now setable in AdminPreferences
+	[*] BO : "Bug" #6180 corrected
+	[*] BO : Combinations impact prices are now stocked without tax into the database (You still can set it with tax)
+	[*] BO : Fixed bug #6233
+	[*] BO : New module category : Payment security
+	[*] BO : Override .ico tabs on the themes
+	[*] BO : Traductions updated
+	[*] BO : Upgrading from jQuery v1.4.2 to v1.4.4
+	[*] BO : When adding a downloadable product, you can now delete it without exiting the product page.
+	
+	[*] Classes : Smarty cache setting added to the Back Office
+	
+	[*] MO : Blockcms displays now cms ordered by position set in bo.
+	[*] MO : Module UPS - Template Xml for webservices
+	[*] MO : Mondial Relay have now an update for v1.3 to v1.4
+	
+	[*] WS : changing filter system : before you wrote id=3 and now filter[id]=3 ; displayFields become display 
+	[*] WS : improve ws
+	[*] WS : now you can get a blank xml tree an a synopsis for the resources to add
+	[*] WS : remove the useless "p" namespace, it was making me nervous...
+	
+	Fixed bugs:
+	
+	[-] Project : add condition for Tools::dateFormat() when using Tools::displayDate() method, otherwise a notice failure occured.
+	
+	[-] Installer : Bug fixed #6268 (1.4) - db.sql - id_currency in PREFIX_country was set to default '0'
+	[-] Installer : missing closure tag php
+	[-] Installer : Warning fixed (_PS_FORCE_SMARTY_2_ wasn't defined)
+	
+	[-] FO : Bug fixed #5940 - $this->$this->cookie
+	[-] FO : bug product.tpl due to update Smarty
+	[-] FO : Category title is now clickable to access category.php?id_category=1. Bug #6254 fixed
+	[-] FO : Contact-form don't return htmlentities in form now. Bug #5278 fixed
+	[-] FO : Corrected smarty problems when id_product or id_category is not set
+	[-] FO : correct link for friendly URL. Simplify some process
+	[-] FO : CSS bug on accessories.
+	[-] FO : delete back arrow button (called cancel) on color picker box.
+	[-] FO : display "see all pictures" link (js event) under thumbnail list.
+	[-] FO : ecotax display fixed
+	[-] FO : fixed bug #6206
+	[-] FO : fixed bug #6211
+	[-] FO : fixed bug #6226
+	[-] FO : Fixed bug #6258 with the automatic redirection to 'install' directory
+	[-] FO : fixed bug : price display method on cart summary
+	[-] FO : fixed bug : the id of default image missing
+	[-] FO : Fixed idTabs js, deleted @ for jQuery compatibility purposes
+	[-] FO : Good link for CMSCategory friendly url in Link classes.
+	[-] FO : Improve code for delete smarty notice
+	[-] FO : Improve code for delete smarty notice
+	[-] FO : Javascript price displaying cleaned to work exactly like php method : getPriceStatic.
+	[-] FO : JS fixed on product page (when no ecotax was defined)
+	[-] FO : New js calc price on product page debuggued. Bug #6319 fixed
+	[-] FO : Product ecotax display fixed (was the price display method was set to tax excluded)
+	[-] FO : Product::id_default_category was used rather than Product::id_category_default
+	[-] FO : product-list.tpl updated
+	[-] FO : Product page js repaired. Definitely.
+	[-] FO : Product price fixed (when an ecotax applies and the product has combinations)
+	[-] FO : Product price fixed (when a reduction applied and a currency different from the default one was selected)
+	[-] FO : Product-sort repaired. Bug #6151 fixed
+	[-] FO : Quantity discount display fixed (when the customer group price display is set to tax excluded)
+	[-] FO : recurse for cms displaying in sitemap
+	[-] FO : Removed pagination variables errors. Bug #6156
+	[-] FO : Removed Warning from sitemap (smarty update)
+	[-] FO : Reported addresses updates on AuthController. Bug #6222 fixed
+	[-] FO : Report optimization on category.php. Bug #6314.
+	[-] FO : Search minimum length was decreased by one on the FO. Bug #6309 fixed
+	[-] FO : sitemap.php is not dependant from blockcms module now (display all cms pages anytime)
+	[-] FO : Smarty cache enabling fixed
+	[-] FO : Specific prices + default attributes modifications
+	[-] FO : Removed an invisible image loaded from store.apple.com from default descriptions.
+	[-] FO : Switch language links
+	[-] FO : Templates update.
+	[-] FO : .tpl for order.php updated
+	[-] FO : updated history.tpl
+	[-] FO : Updated new sitemap.tpl for smarty update.
+	[-] FO : Updated product.tpl for smarty update
+	[-] FO : When Special product was loaded the bloc displayed a product even no product are avaiable.
+	[-] FO : wrong var was set to get the discount expiration date.
+	
+	[-] FO / MO : #6153 Conflict with same name of 2 var in 2 different module.
+	
+	[-] BO / FO : bug #6066 allow to set unlimited value for an virtual product. set with 0 value.
+
+	[-] BO : Bug fixed #6126 - AdminProduct - Problem caused by Zoom Size in IE8 is fixed now
+	[-] BO : Corrected error when modifying an address in BO when everything is alright. Bug #6328
+	[-] BO : Ecotax input fixed
+	[-] BO : Fixed a bug with themeinstallator import when there is only one theme in the archive
+	[-] BO : fixed bug #6139
+	[-] BO : fixed bug #6148
+	[-] BO : fixed bug #6169
+	[-] BO : fixed bug #6175
+	[-] BO : fixed bug #6187
+	[-] BO : fixed bug #6192
+	[-] BO : fixed bug #6195
+	[-] BO : fixed bug #6203
+	[-] BO : fixed bug #6211
+	[-] BO : fixed bug #6212
+	[-] BO : fixed bug #6214
+	[-] BO : Fixed Parse error in AdminPorduct.php for downloadable module. Bug #6307 fixed
+	[-] BO : fixed the import module fieldset display
+	[-] BO : intval restored on a cast in base 8.
+	[-] BO : Optimization PDF creation. Bug #6315 fixed
+	[-] BO : Product cancellation fixed (when using ecotax)
+	[-] BO : Product reduction clarified
+	[-] BO : Product taxes by country displays an info message
+	[-] BO : Restored an intval for a cast in base 8. Bug #6324 fixed
+	[-] BO : Traduction updated
+	[-] BO : Translations AdminProduct updated. Bug #6190 fixed
+	[-] BO : Unit price option is not hidden anymore.
+	[-] BO : When ecotax, attribute Impacts are not affected anymore
+	[-] BO : When unexpected "," in tags field, no fatal error.
+	
+	[-] Classes : fixed bug in displayWarning()
+	[-] Classes : Group reduction (concerning categories) cache clearing fixed
+	[-] Classes : Prices (product & shipping) fixed when taxes were disabled but one of them assigned to the product/shipping
+	[-] Classes : setlocale() fixed
+
+	[-] MO : Blockcms translations updated
+	[-] MO : Bug fixed #6185 (1.4) - Module MailAlerts - Module Mailalert has been repaired and now refers to order
+	[-] MO : crossselling.tpl updated
+	[-] MO : Integration problem on prepaidServices. Bug #6204 fixed
+	[-] MO : Mondial Relay cleaned
+	[-] MO : Mondialrelay try to update only if module is installed
+	[-] MO : Mondial Relay works again on Chrome.
+	
+	[-] WS : correct lang displays
+	[-] WS : Fixed check for activated keys
+	[-] WS : Fixed - We now display mysql error in debug mode
+	[-] WS : samples folder move
+	
+	[-] TR : Bug fixed #6216 - Modules BirthdayPresent, Bankwire and Secuvad - Md5 Key has been changed, french and spanish translations were reuploaded
+	[-] TR : Bug fixed #6246 #6230 - Md5 Key has been changed, french and spanish translations were reuploaded
+	[-] TR : New Translations fixed (1.4) - Md5 Key has been changed, french and spanish translations were reuploaded
+	[-] TR : Translations fixed (1.4) - Md5 Key has been changed, french and spanish translations were reuploaded
+	
+	[-] SQL : Missing `conversion_rate` in ps_order_slip in database on install
+
+####################################
 #   v1.4.0.3 - 3508 (2010-11-25)   #
 ####################################
 
