@@ -108,7 +108,7 @@ class ThemeInstallator extends Module
 			{
 				if (is_dir($src.'/'.$file))
 					self::recurseCopy($src.'/'.$file, $dst.'/'.$file);
-				else
+				else if (is_readable($src.'/'.$file) AND $file != 'Thumbs.db' AND $file != '.DS_Store' AND substr($file, -1) != '~')
 					copy($src.'/'.$file, $dst.'/'.$file);
 			}
 		closedir($dir);
@@ -654,7 +654,11 @@ class ThemeInstallator extends Module
 			</fieldset>';
 		}
 		else
-			$this->_html .= '<input type="hidden" name="variation[]" value="'.$xml->variations->variation[0]['directory'].'" />';
+			$this->_html .= '
+				<input type="hidden" name="variation[]" value="'.$xml->variations->variation[0]['directory'].'" />
+				<input type="submit" class="button" name="cancel" value="'.$this->l('Previous').'" />
+				<input type="submit" class="button" name="submitThemes" value="'.$this->l('Next').'" />
+';
 		$this->_html .= '</form>';
 	}
 	
@@ -1096,7 +1100,7 @@ class ThemeInstallator extends Module
 	
 	private function ModulesInformationForm()
 	{
-		if (count($this->to_install))
+		if ($this->to_install AND count($this->to_install))
 		{
 			$tmp = '';
 			foreach ($this->to_install as $key => $val)
@@ -1115,8 +1119,9 @@ class ThemeInstallator extends Module
 	{
 		global			$cookie;
 
+		$employee = new Employee((int)$cookie->id_employee);
 		$mail = Tools::getValue('email') ? Tools::htmlentitiesUTF8(Tools::getValue('email')) : Tools::htmlentitiesUTF8($cookie->email);
-		$author = Tools::getValue('author_name') ? Tools::htmlentitiesUTF8(Tools::getValue('author_name')) : Tools::htmlentitiesUTF8(($cookie->firstname).' '.$cookie->lastname);
+		$author = Tools::getValue('author_name') ? Tools::htmlentitiesUTF8(Tools::getValue('author_name')) : Tools::htmlentitiesUTF8(($employee->firstname).' '.$employee->lastname);
 		$website = Tools::getValue('website') ? Tools::htmlentitiesUTF8(Tools::getValue('website')) : Tools::getHttpHost(true);
 
 		$this->_html .= '
