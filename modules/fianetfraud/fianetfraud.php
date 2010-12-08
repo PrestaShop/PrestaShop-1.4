@@ -331,7 +331,6 @@ class Fianetfraud extends Module
 
 	public function hookCart($params)
 	{
-		
 		if ($_SERVER['REMOTE_ADDR'] == '0.0.0.0' OR $_SERVER['REMOTE_ADDR'] == '' OR $_SERVER['REMOTE_ADDR'] === false)
 			return true;
 		$res = Db::getInstance()->ExecuteS('
@@ -357,7 +356,7 @@ class Fianetfraud extends Module
 		$res = Db::getInstance()->ExecuteS('
 		SELECT `ip_address`
 		FROM '._DB_PREFIX_.'fianet_fraud
-		WHERE id_cart='.(int)($id_cart).' LIMIT 1');
+		WHERE id_cart = '.(int)($id_cart).' LIMIT 1');
 		return long2ip($res[0]['ip_address']);
 	}
 
