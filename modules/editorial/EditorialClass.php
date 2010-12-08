@@ -25,18 +25,6 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-/**
-  * Editorial class, EditorialClass.php
-  * Editorial management
-  * @category classes
-  *
-  * @author PrestaShop <support@prestashop.com>
-  * @copyright PrestaShop
-  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.4
-  *
-  */
-
 class		EditorialClass extends ObjectModel
 {
 	/** @var integer editorial id*/

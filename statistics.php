@@ -25,16 +25,6 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-/**
-  * Statistics
-  * @category stats
-  *
-  * @author Damien Metzger / Epitech
-  * @copyright Epitech / PrestaShop
-  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.1
-  */
-  
 if (!isset($_POST['token']) OR !isset($_POST['type']))
 	die;
 
