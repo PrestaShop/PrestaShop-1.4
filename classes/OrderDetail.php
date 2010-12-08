@@ -79,6 +79,9 @@ class OrderDetailCore extends ObjectModel
 	
 	/** @var float */
 	public $ecotax;
+
+	/** @var float */
+	public $ecotax_tax_rate;
 	
 	/** @var string */
 	public $download_hash;
@@ -115,6 +118,7 @@ class OrderDetailCore extends ObjectModel
 	'tax_name' => 'isGenericName',
 	'tax_rate' => 'isFloat',
 	'ecotax' => 'isFloat',
+	'ecotax_tax_rate' => 'isFloat',
 	'download_nb' => 'isInt',
 	);
 	
@@ -146,6 +150,7 @@ class OrderDetailCore extends ObjectModel
 		$fields['tax_name'] = pSQL($this->tax_name);
 		$fields['tax_rate'] = (float)($this->tax_rate);
 		$fields['ecotax'] = (float)($this->ecotax);
+		$fields['ecotax_tax_rate'] = (float)($this->ecotax_tax_rate);
 		$fields['download_hash'] = pSQL($this->download_hash);
 		$fields['download_nb'] = (int)($this->download_nb);
 		$fields['download_deadline'] = pSQL($this->download_deadline);
