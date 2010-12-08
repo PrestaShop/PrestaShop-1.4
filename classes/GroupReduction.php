@@ -42,7 +42,17 @@ class GroupReductionCore extends ObjectModel
 
 	public function update($nullValues = false)
 	{
-		return (parent::update($nullValues) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)($this->id_group)) AND $this->_setCache());
+		return (parent::update($nullValues) AND $this->_clearCache() AND $this->_setCache());
+	}
+
+	public function delete()
+	{
+		return $this->_clearCache() AND parent::delete();
+	}
+
+	private function _clearCache()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)($this->id_group));
 	}
 
 	private function _setCache()

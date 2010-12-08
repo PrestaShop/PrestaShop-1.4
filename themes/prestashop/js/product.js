@@ -19,7 +19,7 @@ function oosHookJsCode()
 	for (var i = 0; i < oosHookJsCodeFunctions.length; i++)
 	{
 		if (function_exists(oosHookJsCodeFunctions[i]))
-		setTimeout(oosHookJsCodeFunctions[i]+'()', 0);
+			setTimeout(oosHookJsCodeFunctions[i]+'()', 0);
 	}
 }
 
@@ -260,6 +260,8 @@ function updateDisplay()
 
 		if (group_reduction)
 			productPrice *= group_reduction;
+		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
+		productPrice += ecotaxAmount;
 		//productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
