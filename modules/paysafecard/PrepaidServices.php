@@ -340,7 +340,7 @@ abstract class PrepaidServices extends PaymentModule
 						<input type="submit" value="'.$this->getL('update_configuration').'" name="submitCtConfiguration" class="button" />
 					</div>
 					</label>
-					</fiedlset>
+					</fieldset>
 				</form>';
 	}
 	
