@@ -974,5 +974,24 @@ $(document).ready(
 		//show 1st step
 		step=1;
 		$("input#btNext").focus();
+		
+		// hide next button for licence validation
+		$("#btNext")
+		.attr("disabled", "disabled")
+		.addClass("disabled");
+		$('#set_license').click(function() {
+			if ($(this).is(':checked'))
+			{
+				$("#btNext")
+				.removeAttr('disabled')
+				.removeClass('disabled');
+			}
+			else
+			{
+				$("#btNext")
+				.attr("disabled", "disabled")
+				.addClass("disabled");
+			}
+		});
 	}
 );
