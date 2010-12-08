@@ -518,35 +518,14 @@ html>body div#PrestaShopLogo {
 	background: url(img/logo.png) left no-repeat;
 }
 
-div.updaterVersion, div.installerVersion{
-	height:42px;
-	text-indent:-1000px;
-	margin:10px auto;
+div.installerVersion, div.updaterVersion {
+	color:#FFFFFF;
+	font-size:14px;
+	text-align:left;
+	padding:10px;
+	text-transform:uppercase;
 }
 
-div#updaterVersion-en {
-	background: url(img/langs/en/updater-version.gif) left no-repeat;
-}
-
-div#installerVersion-en {
-	background: url(img/langs/en/installer-version.gif) left no-repeat;
-}
-
-div#installerVersion-fr {
-	background: url(img/langs/fr/installer-version.gif) left no-repeat;
-}
-
-div#updaterVersion-fr {
-	background: url(img/langs/fr/updater-version.gif) left no-repeat;
-}
-
-div#installerVersion-es {
-	background: url(img/langs/es/installer-version.gif) left no-repeat;
-}
-
-div#updaterVersion-es {
-	background: url(img/langs/es/updater-version.gif) left no-repeat;
-}
 p#dbResultCheck{
 	height:auto;
 }

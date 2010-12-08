@@ -1,5 +1,7 @@
 <?php
 
+$_LANG['Installer'] = 'Instalación';
+$_LANG['Updater'] = 'Actualizatión';
 $_LANG['(root of this application)'] = '(raíz de esta solicitud)';
 $_LANG['.'] = '.';
 $_LANG['A Prestashop database already exists, please drop it or change the prefix.'] = 'Ya existe una base de datos PrestaShop con este prefijo, debe eliminarla manualmente o cambiar el prefijo.';

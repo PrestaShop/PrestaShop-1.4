@@ -1,5 +1,7 @@
 <?php
 
+$_LANG['Installer'] = 'Installer';
+$_LANG['Updater'] = 'Updater';
 $_LANG['A mail has been sended!'] = 'A mail has been sent';
 $_LANG['An error occurred while sending mail, please verify your parameters.'] = 'An error occurred while sending mail. Please verify your parameters.';
 $_LANG['And now, discover your new store and Back Office'] = 'Take me to my new Front Office (online store) or Back Office (admin tool)';

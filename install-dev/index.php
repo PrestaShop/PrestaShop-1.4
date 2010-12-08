@@ -218,8 +218,8 @@ if ($lm->getIncludeTradFilename())
 <div id="leftpannel">
 	<h1>
 		<div id="PrestaShopLogo">&nbsp;</div>
-		<div class="installerVersion" id="installerVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">&nbsp;</div>
-		<div class="updaterVersion" id="updaterVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">&nbsp;</div>
+		<div class="installerVersion" id="installerVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Installer'); ?></div>
+		<div class="updaterVersion" id="updaterVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Updater'); ?></div>
 	</h1>
 	
 	<ol id="tabs"><li>&nbsp;</li></ol>
