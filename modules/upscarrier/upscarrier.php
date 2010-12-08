@@ -29,10 +29,7 @@ class UpsCarrier extends CarrierModule
 {
 	private $_html = '';
 	private $_postErrors = array();
-	private $url = '';
-	public $_errors = array();
-	public $errorMessage = array();
-	
+
 	private $_config = array(
 		'name' => 'UPS Carrier',
 		'id_tax' => 1,
@@ -44,7 +41,6 @@ class UpsCarrier extends CarrierModule
 		'delay' => array('fr'=>'Transporteur UPS',
 						 'en'=>'UPS Carrier'),
 		'id_zone' => 1,
-		'url' => '',
 		'is_module' => true,
 		'shipping_external'=> true,
 		'external_module_name'=> 'UpsCarrier',
@@ -63,7 +59,6 @@ class UpsCarrier extends CarrierModule
 
 		$this->displayName = $this->l('UPS Carrier');
 		$this->description = $this->l('Offer to your customers, different delivery methods with UPS');
-		$this->url = '';
 
 		if (self::isInstalled($this->name))
 		{
@@ -71,33 +66,31 @@ class UpsCarrier extends CarrierModule
 			
 			$carriers = Carrier::getCarriers($cookie->id_lang, true, false, false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 			foreach($carriers as $carrier)
-				$ids[] .= $carrier['id_carrier'];
+				$ids[] = $carrier['id_carrier'];
 			$warning = array();
-			if (!in_array((int)(Configuration::get('UPS_CARRIER_ID')),$ids))
-				$warning[] .= $this->l('\'Need range\'').' ';
 			if (!Configuration::get('UPS_CARRIER_LOGIN'))
-				$warning[] .= $this->l('\'UPS Login\'').' ';
+				$warning[] = $this->l('\'UPS Login\'').' ';
 			if (!Configuration::get('UPS_CARRIER_PASSWORD'))
-				$warning[] .= $this->l('\'UPS Password\'').' ';
+				$warning[] = $this->l('\'UPS Password\'').' ';
 			if (!Configuration::get('UPS_CARRIER_SHIPPER_ID'))
-				$warning[] .= $this->l('\'MyUps ID\'').' ';
+				$warning[] = $this->l('\'MyUps ID\'').' ';
 			if (!Configuration::get('UPS_CARRIER_API_KEY'))
-				$warning[] .= $this->l('\'UPS API Key ID\'').' ';
+				$warning[] = $this->l('\'UPS API Key ID\'').' ';
 			else
 			{
 				$result = $this->getUPSShippingCost();
 				if ($result['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] != 'Success')
-					$warning[] .= $this->l('UPS API Key is not working').', ';
+					$warning[] = $this->l('UPS API Key is not working').', ';
 			}
 			if (!Configuration::get('UPS_CARRIER_PICKUP_TYPE'))
-				$warning[] .= $this->l('\'UPS Pickup Type ID\'').' ';
+				$warning[] = $this->l('\'UPS Pickup Type ID\'').' ';
 			if (!Configuration::get('UPS_CARRIER_PACKAGING_TYPE'))
-				$warning[] .= $this->l('\'UPS Packaging Type ID\'').' ';
+				$warning[] = $this->l('\'UPS Packaging Type ID\'').' ';
 
 			if (!Configuration::get('PS_SHOP_CODE'))
-				$warning[] .= $this->l('\'Shop postal code is not set in Preferences Tab.\'').' ';
+				$warning[] = $this->l('\'Shop postal code is not set in Preferences Tab.\'').' ';
 			if (!Configuration::get('PS_SHOP_COUNTRY'))
-				$warning[] .= $this->l('\'Shop country is not set in Preferences Tab.\'').' ';
+				$warning[] = $this->l('\'Shop country is not set in Preferences Tab.\'').' ';
 
 			if (count($warning))
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
@@ -119,7 +112,7 @@ class UpsCarrier extends CarrierModule
 			return false;
 
 		if (Configuration::get('UPS_CARRIER_ID'))
-			Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 0), 'UPDATE', '`id_carrier` = '.intval(Configuration::get('UPS_CARRIER_ID')));
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 0), 'UPDATE', '`id_carrier` = '.(int)(Configuration::get('UPS_CARRIER_ID')));
 		else
 		{
 			// Create cache table in database
@@ -140,7 +133,7 @@ class UpsCarrier extends CarrierModule
 					  PRIMARY KEY  (`id_ups_cache`)
 					) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
-			if(!Db::getInstance()->Execute($sql) OR !$this->createExternalCarrier($this->_config))
+			if (!Db::getInstance()->Execute($sql) OR !$this->createExternalCarrier($this->_config))
 				return false;
 		}
 
@@ -162,10 +155,10 @@ class UpsCarrier extends CarrierModule
 			return false;
 		
 		//Delete External Carrier
-		$extCarrier = new Carrier(intval(Configuration::get('UPS_CARRIER_ID')));
+		$extCarrier = new Carrier((int)(Configuration::get('UPS_CARRIER_ID')));
 		//if external carrier is default set other one as default
 		
-		if(Configuration::get('PS_CARRIER_DEFAULT') == (int)($extCarrier->id))
+		if (Configuration::get('PS_CARRIER_DEFAULT') == (int)($extCarrier->id))
 		{
 			$carriersD = Carrier::getCarriers($cookie->id_lang, true, false, false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 			foreach($carriersD as $carrierD)
@@ -184,7 +177,6 @@ class UpsCarrier extends CarrierModule
 		$carrier->name = $config['name'];
 		$carrier->id_tax = $config['id_tax'];
 		$carrier->id_zone = $config['id_zone'];
-		$carrier->url = $config['url'];
 		$carrier->active = $config['active'];
 		$carrier->deleted = $config['deleted'];
 		$carrier->delay = $config['delay'];
@@ -205,13 +197,12 @@ class UpsCarrier extends CarrierModule
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
 		}
 		
-		if($carrier->add())
+		if ($carrier->add())
 		{				
 			$groups = Group::getGroups(true);
 			foreach ($groups as $group)
-			{
 				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group VALUE (\''.(int)($carrier->id).'\',\''.(int)($group['id_group']).'\')');
-			}
+
 			$rangePrice = new RangePrice();
 			$rangePrice->id_carrier = $carrier->id;
 			$rangePrice->delimiter1 = '0';
@@ -244,8 +235,6 @@ class UpsCarrier extends CarrierModule
 			return false;
 	}
 
-	
-	
 	public function getContent()
 	{
 		$this->_html .= '<h2>' . $this->l('UPS Carrier').'</h2>';
@@ -261,8 +250,7 @@ class UpsCarrier extends CarrierModule
 		$this->_displayForm();
 		return $this->_html;
 	}
-	
-	
+
 	private function _displayForm()
 	{
 		global $cookie;
@@ -325,7 +313,7 @@ class UpsCarrier extends CarrierModule
 							foreach($pickupTypeList as $kpickup => $vpickup)
 							{
 								$this->_html .= '<option value="'.$kpickup.'" '.($kpickup == (int)(Configuration::get('UPS_CARRIER_PICKUP_TYPE')) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
-								$idpickups[] .= $kpickup;
+								$idpickups[] = $kpickup;
 							}
 				$this->_html .= '</select>
 				<p>' . $this->l('Choose in pickup type list the one.') . '</p>
@@ -339,7 +327,7 @@ class UpsCarrier extends CarrierModule
 							foreach($packagingTypeList as $kpackaging => $vpackaging)
 							{
 								$this->_html .= '<option value="'.$kpackaging.'" '.($kpackaging == (int)(Configuration::get('UPS_CARRIER_PACKAGING_TYPE')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-								$idpackagings[] .= $kpackaging;
+								$idpackagings[] = $kpackaging;
 							}
 				$this->_html .= '</select>
 				<p>' . $this->l('Choose in packaging type list the one.') . '</p>
@@ -385,7 +373,7 @@ class UpsCarrier extends CarrierModule
 		
 		if (!$this->_postErrors)
 		{
-			$extCarrier = new Carrier(intval(Configuration::get('UPS_CARRIER_ID')));
+			$extCarrier = new Carrier((int)(Configuration::get('UPS_CARRIER_ID')));
 			$extCarrier->deleted = 0;
 			if (!$extCarrier->update())
 				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
@@ -422,7 +410,7 @@ class UpsCarrier extends CarrierModule
 		$address = new Address($params->id_address_delivery);
 		$cartProducts = $params->getProducts();
 
-		$country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.intval($address->id_country));
+		$country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($address->id_country));
 		foreach ($cartProducts as $product)
 		{		
 			$upsParams = array(
@@ -468,7 +456,7 @@ class UpsCarrier extends CarrierModule
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);  
 		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);  
 		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);  
-		$result = curl_exec ($ch);
+		$result = curl_exec($ch);
 
 		// Get xml from Curl Result
 		$data = strstr($result, '<?');  
@@ -502,15 +490,15 @@ class UpsCarrier extends CarrierModule
 
 	public function getXml($upsParams = array())
 	{
-		if (!$upsParams)
-			$upsParams = array('address1' => 'Rue lacepede', 'address2' => '', 'postcode' => '75005', 'city' => 'Paris', 'weight' => '0.23', 'country_iso_code' => 'FR');
-	
 		$country = Db::getInstance()->getRow("
 		SELECT c.`iso_code`
 		FROM `"._DB_PREFIX_."country_lang` cl
 		LEFT JOIN `"._DB_PREFIX_."country` c ON (c.`id_country` = cl.`id_country`)
 		WHERE cl.`name` LIKE '".pSQL(Configuration::get('PS_SHOP_COUNTRY'))."'");
 	
+		if (!$upsParams)
+			$upsParams = array('address1' => Configuration::get('PS_SHOP_ADDR1'), 'address2' => Configuration::get('PS_SHOP_ADDR2'), 'postcode' => Configuration::get('PS_SHOP_CODE'), 'city' => Configuration::get('PS_SHOP_CITY'), 'weight' => '0.23', 'country_iso_code' => $country['iso_code']);
+		
 		$search = array(
 			'[[AccessLicenseNumber]]',
 			'[[UserId]]',
@@ -561,7 +549,10 @@ class UpsCarrier extends CarrierModule
 			$upsParams['weight']
 		);
 
-		$xml = file_get_contents(dirname(__FILE__).'/xml.tpl');
+		$dir = dirname(__FILE__);
+		if (preg_match('/classes/i', $dir))
+			$dir .= '/../modules/upscarrier/';
+		$xml = @file_get_contents($dir.'/xml.tpl');
 		$xml = str_replace($search, $replace, $xml);
 
 		return $xml;
