@@ -166,7 +166,6 @@ abstract class ModuleGraphCore extends Module
 				$this->_csv .= "\n";
 			}
 		}
-			Tools::d($this);
 		$this->_displayCsv();
 	}
 	
