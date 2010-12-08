@@ -1561,10 +1561,12 @@ FileETag INode MTime Size
 		}
 	}
 
-	public static function forceCache($level = 1)
+	public static function enableCache($level = 1)
 	{
 		global $smarty;
 
+		if (!Configuration::get('PS_SMARTY_CACHE'))
+			return;
 		if ($smarty->force_compile == 0 AND $smarty->caching == $level)
 			return ;
 		self::$_forceCompile = (int)($smarty->force_compile);
