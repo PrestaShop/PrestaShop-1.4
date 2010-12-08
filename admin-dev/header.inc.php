@@ -55,22 +55,24 @@ echo '
 		<link rel="shortcut icon" href="'._PS_IMG_.'favicon.ico" />
 		'.Module::hookExec('backOfficeHeader').'
 		<!--[if IE]>
+		<link type="text/css" rel="stylesheet" href="'._PS_CSS_DIR_.'admin-ie.css" />
+		<![endif]-->
 		<style type="text/css">
-			fieldset {position:relative;padding-top:25px}
-			legend {position:absolute;top:-0.5em;left:1.1em}
+			div#header_infos, div#header_infos a#header_shopname, div#header_infos a#header_logout {
+				color:'.(Tools::getBrightness(empty($employee->bo_color) ? '#FFFFFF' : $employee->bo_color) < 128 ? 'white' : '#383838').'
+			}
 		</style>
-		<![endif]--> 
 	</head>
 	<body '.((!empty($employee->bo_color))
-		? 'style="background-color:'.Tools::htmlentitiesUTF8($employee->bo_color).'"'
-		: 'style="background:#EFEFEF url(../img/admin/bg.png)"').'
+		? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"'
+		: '').'
 	>
 	<div id="top_container" />
 		<div id="container">
-			<div id="header_infos">
-				<a id="header_shopname" href="index.php">'.Configuration::get('PS_SHOP_NAME').'</a><br />
+			<div id="header_infos"><span>
+				<a id="header_shopname" href="index.php"><span>'.Configuration::get('PS_SHOP_NAME').'</span></a><br />
 				'.Tools::substr($employee->firstname, 0, 1).'.&nbsp;'.htmlentities($employee->lastname, ENT_COMPAT, 'UTF-8').'
-				[ <a href="index.php?logout" id="header_logout">'.translate('logout').'</a> ]
+				[ <a href="index.php?logout" id="header_logout"><span>'.translate('logout').'</span></a> ]</span>
 			</div>
 			<div id="header_search">
 				<form method="post" action="index.php?tab=AdminSearch&token='.Tools::getAdminTokenLite('AdminSearch').'">
@@ -85,7 +87,7 @@ echo '
 						<option value="4" '.(Tools::getValue('bo_search_type') == 4 ? 'selected="selected"' : '').'>'.translate('invoices').'</option>
 						<option value="5" '.(Tools::getValue('bo_search_type') == 5 ? 'selected="selected"' : '').'>'.translate('carts').'</option>
 					</select>
-					<input type="submit" id="bo_search_submit" value="'.translate('Search').'"/>
+					<input type="submit" id="bo_search_submit" class="button" value="'.translate('Search').'"/>
 				</form>
 			</div>
 			<div id="header_quick">

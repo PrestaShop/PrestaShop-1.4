@@ -1,7 +1,9 @@
+body{background:#EFEFEF url(../../../img/admin/bg.png)}
 #top_container{background:url(bg-top.png) repeat-x 0 -60px;margin:0;padding:0}
-#header_infos{color:#FFF;float:left;font-size:10px;margin:10px 20px 4px 0;width:360px;height:43px}
-#header_infos #header_shopname{color:#FFF;font-size:24px;font-weight:700}
-#header_infos #header_logout{color:#FFF;text-decoration:underline}
+div#header_infos span{color:#FFF}
+#header_infos{float:left;font-size:10px;margin:10px 20px 4px 0;width:360px;height:43px}
+div#header_infos a#header_shopname span{color:#FFF;font-size:24px;font-weight:700}
+div#header_infos a#header_logout span{color:#FFF;text-decoration:underline}
 #header_search{background:url(searchbar.png) no-repeat;float:right;height:39px;width:356px}
 #header_search #bo_query{background:transparent;border:none;color:#FFF;float:left;height:16px;line-height:16px;margin:10px 0 0 30px;outline:0;vertical-align:middle;width:140px}
 #header_search #bo_search_type{background:#ECECEC;border:#000;float:left;height:21px;line-height:21px;margin-top:9px;vertical-align:middle;width:90px}
@@ -23,9 +25,9 @@ a.button{padding:3px 15px;color:white;}
 .table tr td{border-bottom:1px solid #F0EADA;color:#963;font-size:.9em;height:23px;padding:0 4px 0 6px}
 .table tr.last td{border-bottom:none}
 .alt_row{background-color:#EFEFEF}
-.path_bar{background-color:#E2EBEE;border:1px solid #999;font-family:Trebuchet,Arial,Helvetica,sans-serif;font-size:13px;margin-bottom:20px;padding:5px}
+.path_bar{background-color:#E2EBEE;border:1px solid #999999;font-family:Trebuchet,Arial,Helvetica,sans-serif;font-size:13px;margin-bottom:20px;padding:5px}
 .path_bar a{font-weight:700}
-.cat_bar{background-color:#F4E8CD;border:1px solid #999;font-family:Trebuchet,Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;margin-bottom:20px;padding:5px}
+.cat_bar{background-color:#F4E8CD;border:1px solid #999999;font-family:Trebuchet,Arial,Helvetica,sans-serif;font-size:12px;font-weight:700;margin-bottom:20px;padding:5px}
 .cat_bar a{font-weight:700}
 fieldset{background:#FFF;border:1px solid #8E8E8E;font-size:1.1em;margin:0;padding:1em}
 legend{background:#7AB51D url(thead.png) repeat-x top left;border:1px solid #364A14;font-weight:700;margin:0;padding:.2em .5em;text-align:left;color:#FFFFFF}

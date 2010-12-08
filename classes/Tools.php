@@ -1080,10 +1080,10 @@ class ToolsCore
 	static public function getBrightness($hex)
 	{
 		$hex = str_replace('#', '', $hex);
-		$c_r = hexdec(substr($hex, 0, 2));
-		$c_g = hexdec(substr($hex, 2, 2));
-		$c_b = hexdec(substr($hex, 4, 2));
-		return (($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
+		$r = hexdec(substr($hex, 0, 2));
+		$g = hexdec(substr($hex, 2, 2));
+		$b = hexdec(substr($hex, 4, 2));
+		return (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 	}
 	static public function minifyHTMLpregCallback ($preg_matches)
 	{
