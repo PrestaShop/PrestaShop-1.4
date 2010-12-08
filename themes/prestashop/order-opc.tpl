@@ -236,10 +236,10 @@
 				<h4>{l s='Vouchers'}</h4>
 				<p>
 					<label for="discount_name">{l s='Code:'}</label>
-					<input type="text" id="discount_name" name="discount_name" value="{if $discount_name}{$discount_name}{/if}" />
+					<input type="text" id="discount_name" name="discount_name" value="{if isset($discount_name) && $discount_name}{$discount_name}{/if}" />
 				</p>
 				<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
-			{if $displayVouchers}
+			{if isset($displayVouchers) && $displayVouchers}
 				<h4>{l s='Take advantage of our offers:'}</h4>
 				<div id="display_cart_vouchers">
 				{foreach from=$displayVouchers item=voucher}
@@ -284,7 +284,7 @@
 				{/section}
 				</select>
 				{else}
-					<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order-opc.php{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+					<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 				{/if}
 			</p>
 			<div class="clear"></div>
@@ -296,7 +296,7 @@
 				<li class="address_address2"></li>
 				<li class="address_city"></li>
 				<li class="address_country"></li>
-				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
+				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
 			</ul>
 			<ul class="address alternate_item" id="address_invoice">
 				<li class="address_title">{l s='Your billing address'}</li>
@@ -306,15 +306,15 @@
 				<li class="address_address2"></li>
 				<li class="address_city"></li>
 				<li class="address_country"></li>
-				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
+				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
 			</ul>
 			<br class="clear" />
 			<p class="address_add submit">
-				<a href="{$base_dir_ssl}address.php?back=order-opc.php{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+				<a href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 			</p>
 			<div id="ordermsg">
 				<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
-				<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{$oldMessage}</textarea></p>
+				<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
 			</div>
 			<p class="cart_navigation"><a href="#" type="button" class="exclusive order-opc_next" name="order-opc_block-carrier">{l s='Next >'}</a></p>
 		</div>
@@ -378,7 +378,7 @@
 			{if $giftAllowed}
 				<script type="text/javascript" src="{$js_dir}layer.js"></script>
 				<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}conditions.js"></script>
-				{if !$virtual_cart && $giftAllowed && $cart->gift == 1}
+				{if (!isset($virtual_cart) || !$virtual_cart) && $giftAllowed && $cart->gift == 1}
 				<script type="text/javascript">{literal}
 				// <![CDATA[
 				    $(function(){
