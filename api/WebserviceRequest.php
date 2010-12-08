@@ -600,8 +600,11 @@ class WebserviceRequest
 				}
 				else
 				{
-					//FIXME check if the key is activated before doing anything...
-					
+					if (!Webservice::isKeyActive($auth_key))
+					{
+						$this->setError(400, 'Authentification is not active');
+						return false;
+					}
 					$this->_permissions = Webservice::getPermissionForAccount($auth_key);
 					if (!$this->_permissions)
 					{

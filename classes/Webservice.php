@@ -131,6 +131,19 @@ class WebserviceCore extends ObjectModel
 		return $permissions;
 	}
 	
+	static public function isKeyActive($auth_key)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT a.active
+			FROM `'._DB_PREFIX_.'webservice_account` a
+			WHERE a.key = \''.pSQL($auth_key).'\'
+			AND a.active = 1
+		');
+		if ($result)
+			return true;
+		return false;
+	}
+	
 	static public function getAuthenticationKeys()
 	{
 		$result2 = array();
