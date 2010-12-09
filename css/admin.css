@@ -297,7 +297,7 @@ select optgroup option {
 /* STRUCTURE */
 
 #container {
-	width: 1050px;
+	width: 960px;
 	margin: 0 auto 2em auto;
 	text-align: left;
 }

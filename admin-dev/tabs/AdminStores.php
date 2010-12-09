@@ -55,9 +55,9 @@ class AdminStores extends AdminTab
 				
 		$this->fieldsDisplay = array(
 			'id_store' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-			'country' => array('title' => $this->l('Country'), 'width' => 120),
-			'state' => array('title' => $this->l('State'), 'width' => 120),
-			'city' => array('title' => $this->l('City'), 'width' => 120),
+			'country' => array('title' => $this->l('Country'), 'width' => 100),
+			'state' => array('title' => $this->l('State'), 'width' => 100),
+			'city' => array('title' => $this->l('City'), 'width' => 100),
 			'postcode' => array('title' => $this->l('Zip code'), 'width' => 50),
 			'name' => array('title' => $this->l('Name'), 'width' => 120),
 			'phone' => array('title' => $this->l('Phone'), 'width' => 70),

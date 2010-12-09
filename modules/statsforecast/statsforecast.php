@@ -131,7 +131,7 @@ class StatsForecast extends Module
 		while ($row = $db->nextRow($result))
 			$dataTable[strtotime($row['fix_date'])] = $row;
 		
-		$this->_html .= '<div style="float:left;width:750px">
+		$this->_html .= '<div style="float:left;width:660px">
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p style="float:left">'.$this->l('All amounts are without taxes.').'</p>
 			<form id="granularity" action="'.$ru.'#granularity" method="post" style="float:right">
