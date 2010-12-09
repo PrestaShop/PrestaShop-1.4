@@ -3,6 +3,7 @@ body{background:#EFEFEF}
 #header_infos{float:left;font-size:10px;margin:10px 20px 4px 0;width:360px;height:43px}
 #header_infos #header_shopname{font-size:24px;font-weight:700}
 #header_infos #header_logout{text-decoration:underline}
+#header_infos #header_foaccess{text-decoration:none}
 #header_search{float:right;height:39px;width:356px}
 #header_search #bo_query{float:left;height:16px;line-height:16px;margin:8px 2px 0 30px;vertical-align:middle;width:140px}
 #header_search #bo_search_type{float:left;height:21px;line-height:21px;margin:8px 2px 0 0;vertical-align:middle;width:90px}

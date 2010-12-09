@@ -58,7 +58,7 @@ echo '
 		<link type="text/css" rel="stylesheet" href="'._PS_CSS_DIR_.'admin-ie.css" />
 		<![endif]-->
 		<style type="text/css">
-			div#header_infos, div#header_infos a#header_shopname, div#header_infos a#header_logout {
+			div#header_infos, div#header_infos a#header_shopname, div#header_infos a#header_logout, div#header_infos a#header_foaccess {
 				color:'.(Tools::getBrightness(empty($employee->bo_color) ? '#FFFFFF' : $employee->bo_color) < 128 ? 'white' : '#383838').'
 			}
 		</style>
@@ -72,8 +72,9 @@ echo '
 			<div id="header_infos"><span>
 				<a id="header_shopname" href="index.php"><span>'.Configuration::get('PS_SHOP_NAME').'</span></a><br />
 				'.Tools::substr($employee->firstname, 0, 1).'.&nbsp;'.htmlentities($employee->lastname, ENT_COMPAT, 'UTF-8').'
-				[ <a href="index.php?logout" id="header_logout"><span>'.translate('logout').'</span></a> ]</span>
-			</div>
+				[ <a href="index.php?logout" id="header_logout"><span>'.translate('logout').'</span></a> ]
+				- <a href="'.__PS_BASE_URI__.'" id="header_foaccess"><span>'.translate('View my shop').'</span></a>
+			</span></div>
 			<div id="header_search">
 				<form method="post" action="index.php?tab=AdminSearch&token='.Tools::getAdminTokenLite('AdminSearch').'">
 					<input type="text" name="bo_query" id="bo_query"

@@ -4,6 +4,7 @@ div#header_infos span{color:#FFF}
 #header_infos{float:left;font-size:10px;margin:10px 20px 4px 0;width:360px;height:43px}
 div#header_infos a#header_shopname span{color:#FFF;font-size:24px;font-weight:700}
 div#header_infos a#header_logout span{color:#FFF;text-decoration:underline}
+div#header_infos a#header_foaccess span{color:#FFF;text-decoration:none}
 #header_search{background:url(searchbar.png) no-repeat;float:right;height:39px;width:356px}
 #header_search #bo_query{background:transparent;border:none;color:#FFF;float:left;height:16px;line-height:16px;margin:10px 0 0 30px;outline:0;vertical-align:middle;width:140px}
 #header_search #bo_search_type{background:#ECECEC;border:#000;float:left;height:21px;line-height:21px;margin-top:9px;vertical-align:middle;width:90px}
