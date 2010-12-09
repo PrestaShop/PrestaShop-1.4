@@ -321,7 +321,7 @@ class ThemeInstallator extends Module
 	/*
 	** Main function
 	*/
-	public function		getContent()
+	public function getContent()
 	{
 		self::init_defines();
 		if (!Tools::isSubmit('cancelExport') AND $this->page == 'exportPage')
@@ -381,7 +381,7 @@ class ThemeInstallator extends Module
 		$this->native_modules = self::getTheNativeModules();
 		foreach ($this->xml->modules->module as $row)
 		{
-			if (strval($row['action']) == 'install')
+			if (strval($row['action']) == 'install' AND !in_array(strval($row['name']), $this->native_modules))
 				$this->to_install[] = strval($row['name']);
 			else if (strval($row['action']) == 'enable')
 				$this->to_enable[] = strval($row['name']);
@@ -392,15 +392,12 @@ class ThemeInstallator extends Module
 	
 	private function updateImages()
 	{
-		$foo = '';
-		$type = (int)(Tools::getValue('imagesConfig'));
-		
 		foreach ($this->xml->images->image as $row)
 		{
 			$foo = Db::getInstance()->getRow('
 				SELECT name FROM `'._DB_PREFIX_.'image_type` i
 				WHERE i.name LIKE \''.pSQL($row['name']).'\'');
-			if ($type == 1 AND $foo)
+			if ((int)(Tools::getValue('imagesConfig')) == 1 AND $foo)
 				continue ;
 			if ($foo)
 				Db::getInstance()->Execute('
@@ -851,19 +848,19 @@ class ThemeInstallator extends Module
 				{
 					$module = $modules->addChild('module');
 					$module->addAttribute('action', 'install');
-					$module->addAttribute('name', $row);			
+					$module->addAttribute('name', $row);
 				}
 		foreach ($this->to_enable as $row)
 		{
 			$module = $modules->addChild('module');
 			$module->addAttribute('action', 'enable');
-			$module->addAttribute('name', $row);			
+			$module->addAttribute('name', $row);
 		}
 		foreach ($this->to_disable as $row)
 		{
 			$module = $modules->addChild('module');
 			$module->addAttribute('action', 'disable');
-			$module->addAttribute('name', $row);			
+			$module->addAttribute('name', $row);
 		}
 		
 		$hooks = $modules->addChild('hooks');
@@ -872,8 +869,8 @@ class ThemeInstallator extends Module
 			$array = explode(';', $row);
 			$hook = $hooks->addChild('hook');
 			$hook->addAttribute('module', $array[0]);
-			$hook->addAttribute('hook', $array[1]);			
-			$hook->addAttribute('position', $array[2]);			
+			$hook->addAttribute('hook', $array[1]);
+			$hook->addAttribute('position', $array[2]);
 		}
 		
 		$images = $theme->addChild('images');
@@ -882,7 +879,7 @@ class ThemeInstallator extends Module
 			$array = explode(';', $row);
 			$image = $images->addChild('image');
 			$image->addAttribute('name', Tools::htmlentitiesUTF8($array[0]));
-			$image->addAttribute('width', $array[1]);			
+			$image->addAttribute('width', $array[1]);
 			$image->addAttribute('height', $array[2]);
 			$image->addAttribute('products', $array[3]);
 			$image->addAttribute('categories', $array[4]);
@@ -898,7 +895,7 @@ class ThemeInstallator extends Module
 	*/
 	private function _initList()
 	{		
-		$this->native_modules = self::getTheNativeModules();	
+		$this->native_modules = self::getTheNativeModules();
 		$this->module_list = Db::getInstance()->ExecuteS('SELECT id_module, name, active FROM `'._DB_PREFIX_.'module`');
 		$this->hook_list = Db::getInstance()->ExecuteS('
 			SELECT a.id_hook, a.name as name_hook, c.position, c.id_module, d.name as name_module

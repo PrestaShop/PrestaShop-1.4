@@ -43,8 +43,9 @@ class Gsitemap extends Module
 
 		$this->displayName = $this->l('Google sitemap');
 		$this->description = $this->l('Generate your Google sitemap file');
-		
-		define('GSITEMAP_FILE', dirname(__FILE__).'/../../sitemap.xml');
+
+		if (!defined('GSITEMAP_FILE'))
+			define('GSITEMAP_FILE', dirname(__FILE__).'/../../sitemap.xml');
 	}
 
 	function uninstall()
