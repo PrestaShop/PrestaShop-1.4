@@ -113,7 +113,7 @@ function updateCurrentText()
 	$('#current_product').html($('#name_' + id_language).val());
 	if($('#link_rewrite_' + id_language).length)
 	{
-		$('#link_rewrite_' + id_language).val($('#name_' + id_language).val());
+		$('#link_rewrite_' + id_language).val(str2url($('#name_' + id_language).val(), 'UTF-8'));
 	}
 }
 
