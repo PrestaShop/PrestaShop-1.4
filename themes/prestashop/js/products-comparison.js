@@ -1,5 +1,5 @@
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,16 +32,16 @@ function checkBeforeComparison()
 		{
 			id_list += $(this).val() + '|';
 		}
-	);	
-	
-	$('#compare_product_list').val(id_list);
-	
+	);
+
+	$('.compare_product_list').val(id_list);
+
 	if ($('.comparator:checked').length == 0)
 	{
 		alert(min_item);
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -50,3 +50,4 @@ function checkForComparison(nb_max_item)
 	if ($('.comparator:checked').length > nb_max_item)
 		alert(max_item);
 }
+

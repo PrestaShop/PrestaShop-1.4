@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -24,7 +24,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-{include file="$tpl_dir./breadcrumb.tpl"} 
+{include file="$tpl_dir./breadcrumb.tpl"}
 {include file="$tpl_dir./errors.tpl"}
 
 {if isset($category)}
@@ -83,6 +83,7 @@
 				{include file="$tpl_dir./product-compare.tpl"}
 				{include file="$tpl_dir./product-sort.tpl"}
 				{include file="$tpl_dir./product-list.tpl" products=$products}
+				{include file="$tpl_dir./product-compare.tpl"}
 				{include file="$tpl_dir./pagination.tpl"}
 			{elseif !isset($subcategories)}
 				<p class="warning">{l s='There are no products in this category.'}</p>
@@ -91,3 +92,4 @@
 		<p class="warning">{l s='This category is currently unavailable.'}</p>
 	{/if}
 {/if}
+

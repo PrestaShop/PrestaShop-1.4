@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -34,7 +34,8 @@
 	<form method="get" action="products-comparison.php" onsubmit="return checkBeforeComparison();">
 		<p>
 		<input type="submit" class="button" value="{l s='Compare'}" style="float:right" />
-		<input type="hidden" name="compare_product_list" id="compare_product_list" value="" /> 
-		</p>		
+		<input type="hidden" name="compare_product_list" class="compare_product_list" value="" />
+		</p>
 	</form>
 {/if}
+
