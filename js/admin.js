@@ -111,6 +111,10 @@ function copyMeta2friendlyURL()
 function updateCurrentText()
 {
 	$('#current_product').html($('#name_' + id_language).val());
+	if($('#link_rewrite_' + id_language).length)
+	{
+		$('#link_rewrite_' + id_language).val($('#name_' + id_language).val());
+	}
 }
 
 function updateFriendlyURL()
