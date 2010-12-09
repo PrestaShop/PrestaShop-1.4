@@ -99,8 +99,10 @@ class OrderSlipCore extends ObjectModel
 	
 	static public function getOrdersSlipProducts($orderSlipId, $order)
 	{
+		$discounts = $order->getDiscounts(true);
 		$productsRet = self::getOrdersSlipDetail($orderSlipId);
 		$products = $order->getProductsDetail();
+		
 		$tmp = array();
 		foreach ($productsRet as $slip_detail)
 			$tmp[$slip_detail['id_order_detail']] = $slip_detail['product_quantity'];
@@ -110,6 +112,19 @@ class OrderSlipCore extends ObjectModel
 			{
 				$resTab[$key] = $product;
 				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];
+				if (sizeof($discounts))
+				{
+					$order->setProductPrices($product);
+					$realProductPrice = $resTab[$key]['product_price'];
+					foreach ($discounts as $discount)
+					{
+						if ($discount['id_discount_type'] == 1)
+							$resTab[$key]['product_price'] -= $realProductPrice * (1 - ($discount['value'] / 100));
+						elseif ($discount['id_discount_type'] == 2)
+							$resTab[$key]['product_price'] -= (($discount['value'] * ($product['product_price_wt'] / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
+					}
+					
+				}
 			}
 		return $order->getProducts($resTab);
 	}

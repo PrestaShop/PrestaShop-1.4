@@ -366,6 +366,15 @@ class DiscountCore extends ObjectModel
 		
 		// Totals are stored in the order currency (or at least should be)
 		$total = $order->getTotalProductsWithTaxes($products);
+		$discounts = $order->getDiscounts(true);
+		$total_tmp = $total;
+		foreach ($discounts as $discount)
+		{
+			if ($discount['id_discount_type'] == 1)
+				$total -= $total_tmp * (1 - ($discount['value'] / 100));
+			elseif ($discount['id_discount_type'] == 2)
+				$total -= (($discount['value'] * ($total_tmp / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
+		}
 		if ($shipping_cost)
 			$total += $order->total_shipping;
 
@@ -384,6 +393,7 @@ class DiscountCore extends ObjectModel
 		$voucher->cumulable_reduction = 1;
 		$voucher->minimal = (float)($voucher->value);
 		$voucher->active = 1;
+		$voucher->cart_display = 1;
 		$now = time();
 		$voucher->date_from = date('Y-m-d H:i:s', $now);
 		$voucher->date_to = date('Y-m-d H:i:s', $now + (3600 * 24 * 365.25)); /* 1 year */
@@ -445,6 +455,11 @@ class DiscountCore extends ObjectModel
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_lang` WHERE `id_discount` = '.(int)($discount['id_discount']));
 		}
 		return true;
+	}
+	
+	static public function getDiscount($id_discount)
+	{
+		return Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'discount` WHERE `id_discount` = '.(int)$id_discount);
 	}
 }
 
