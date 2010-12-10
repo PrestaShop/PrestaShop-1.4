@@ -15,7 +15,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb560
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Vous pouvez consulter la documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Faites un clic droit sur le nom et choisissez \"enregistrer le lien sous\"';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_b857ef1f431c5f3290dc5b5e644826a6'] = 'Les modules suivants on été installés';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_b857ef1f431c5f3290dc5b5e644826a6'] = 'Les modules suivants ont été installés';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_22c765d777eb4ca6b4292bcbb596872e'] = 'Les modules suivants ont été désactivés';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e501dc865768ac08d49c129a23c3ae09'] = 'Les modules suivants ont été activés';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dfbf4744524c8573235d60589d8b66e'] = 'Les images ont bien été mises à jour dans la base de données';
