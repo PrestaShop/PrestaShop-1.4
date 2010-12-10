@@ -238,7 +238,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{if !$priceDisplay || $priceDisplay == 2}
 					{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL)}
 					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct()}
-				{elseif $priceDisplay == 2}
+				{elseif $priceDisplay == 1}
 					{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
 					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true)}
 				{/if}
@@ -250,8 +250,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{/if}
 				<br />
 				<span class="our_price_display">
+				{if $priceDisplay >= 0 && $priceDisplay <= 2}
 					<span id="our_price_display">{convertPrice price=$productPrice}</span>
 						{if $tax_enabled}{l s='tax incl.'}{/if}
+				{/if}
 				</span>
 				{if $priceDisplay == 2}
 					<br />
@@ -261,9 +263,11 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				</p>
 				{if $product->specificPrice AND $product->specificPrice.reduction}
 					<p id="old_price"><span class="bold">
-					{if $productPriceWithoutRedution > $productPrice}
-						<span id="old_price_display">{convertPrice price=$productPriceWithoutRedution}</span>
-							{if $tax_enabled}{l s='tax incl.'}{/if}
+					{if $priceDisplay >= 0 && $priceDisplay <= 2}
+						{if $productPriceWithoutRedution > $productPrice}
+							<span id="old_price_display">{convertPrice price=$productPriceWithoutRedution}</span>
+								{if $tax_enabled}{l s='tax incl.'}{/if}
+						{/if}
 					{/if}
 					</span>
 					</p>
