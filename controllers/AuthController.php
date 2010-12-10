@@ -51,7 +51,11 @@ class AuthControllerCore extends FrontController
 			if (!Validate::isEmail($email = Tools::getValue('email_create')))
 				$this->errors[] = Tools::displayError('invalid e-mail address');
 			elseif (Customer::customerExists($email))
-				$this->errors[] = Tools::displayError('someone has already registered with this e-mail address');	
+			{
+				$this->errors[] = Tools::displayError('you already registered with this email, please fill in your password or ask for a new one');
+				$_POST['email'] = $_POST['email_create'];
+				unset($_POST['email_create']);
+			}
 			else
 			{
 				$create_account = 1;

@@ -32,6 +32,8 @@
 			<li>{$error}</li>
 		{/foreach}
 		</ol>
-		<p><a href="{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
+		{if isset($smarty.server.HTTP_REFERER)}
+			<p class="align_right"><a href="{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}" class="button_small" title="{l s='Back'}">&laquo; {l s='Back'}</a></p>
+		{/if}
 	</div>
 {/if}

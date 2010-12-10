@@ -612,8 +612,6 @@ img.icon { margin-right: 0.5em; vertical-align: middle }
 /* errors */
 .error {
 	width: 90%;
-	border: 1px solid #da0f00;
-	background-color: #f1f2f4;
 	color: #da0f00;
 	margin: 0.3em auto 1.5em auto;
 	padding: 0.3em 0.8em 1em
