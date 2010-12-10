@@ -40,7 +40,7 @@
 {if isset($confirmation) && $confirmation}
 	<p class="success">
 		{l s='Your personal information has been successfully updated.'}
-		{if $pwd_changed}<br />{l s='Your password has been sent to your e-mail:'} {$email|escape:'htmlall':'UTF-8'}{/if}
+		{if isset($pwd_changed)}<br />{l s='Your password has been sent to your e-mail:'} {$email|escape:'htmlall':'UTF-8'}{/if}
 	</p>
 {else}
 	<h3>{l s='Do not hesitate to update your personal information if it has changed.'}</h3>

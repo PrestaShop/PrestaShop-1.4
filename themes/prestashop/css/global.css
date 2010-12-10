@@ -641,8 +641,6 @@ img.icon { margin-right: 0.5em; vertical-align: middle }
 /* success */
 .success {
 	color: green;
-	background-color: #d0d3d8;
-	border: 1px dashed green;
 	font-weight: bold;
 	margin: 0.2em 1em;
 	padding: 0.3em 0.8em 1em
