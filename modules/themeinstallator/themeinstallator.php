@@ -48,7 +48,7 @@ class ThemeInstallator extends Module
 	public function __construct()
 	{
 		$this->name = 'themeinstallator';
-		$this->version = '1.0';
+		$this->version = '1.2';
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
 			$this->tab = 'administration';
 		else
@@ -423,6 +423,7 @@ class ThemeInstallator extends Module
 						'.($row['suppliers'] == 'true' ? 1 : 0).',
 						'.($row['scenes'] == 'true' ? 1 : 0).')');
 		}
+		return true;
 	}
 	
 	private function _displayForm4()
@@ -477,7 +478,7 @@ class ThemeInstallator extends Module
 		{
 			$flag = 0;
 			// Disable native modules
-			if ($val == 2)
+			if ($val == 2 AND $this->to_disable AND count($this->to_disable))
 				foreach ($this->to_disable as $row)
 				{
 					$obj = Module::getInstanceByName($row);
@@ -493,35 +494,34 @@ class ThemeInstallator extends Module
 					}
 				}
 			$flag = 0;
-			foreach ($this->to_enable as $row)
-			{
-				$obj = Module::getInstanceByName($row);
-				if (Validate::isLoadedObject($obj))
-					Db::getInstance()->Execute('
-						UPDATE `'._DB_PREFIX_.'module`
-						SET `active`= 1
-						WHERE `name` = \''.pSQL($row).'\'');
-				else if (!is_object($obj) OR !$obj->install())
-					continue ;
-				if ($flag++ == 0)
-					$msg .= '<b>'.$this->l('The following modules have been enabled').' :</b><br />';
-				$msg .= '<i>- '.pSQL($row).'</i><br />';
-				Db::getInstance()->Execute('
-					DELETE FROM `'._DB_PREFIX_.'hook_module` 
-					WHERE `id_module` = '.pSQL($obj->id));
-				$count = -1;
-				while (isset($hookedModule[++$count]))
-					if ($hookedModule[$count] == $row)
+			if ($this->to_enable AND count($this->to_enable))
+				foreach ($this->to_enable as $row)
+				{
+					$obj = Module::getInstanceByName($row);
+					if (Validate::isLoadedObject($obj))
 						Db::getInstance()->Execute('
-							INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
-							VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
-			}
+							UPDATE `'._DB_PREFIX_.'module`
+							SET `active`= 1
+							WHERE `name` = \''.pSQL($row).'\'');
+					else if (!is_object($obj) OR !$obj->install())
+						continue ;
+					if ($flag++ == 0)
+						$msg .= '<b>'.$this->l('The following modules have been enabled').' :</b><br />';
+					$msg .= '<i>- '.pSQL($row).'</i><br />';
+					Db::getInstance()->Execute('
+						DELETE FROM `'._DB_PREFIX_.'hook_module` 
+						WHERE `id_module` = '.pSQL($obj->id));
+					$count = -1;
+					while (isset($hookedModule[++$count]))
+						if ($hookedModule[$count] == $row)
+							Db::getInstance()->Execute('
+								INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
+								VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
+				}
 		}
-		if ((int)(Tools::getValue('imagesConfig')) != 3)
-		{
+		if ((int)(Tools::getValue('imagesConfig')) != 3 AND self::updateImages())
 			$msg .= '<br /><b>'.$this->l('Images have been correctly updated in database').'</b><br />';
-			self::updateImages();
-		}
+
 		$this->_msg .= parent::displayConfirmation($msg);
 		$this->_html .= '
 			<input type="submit" class="button" name="submitThemes" value="'.$this->l('Previous').'" />
