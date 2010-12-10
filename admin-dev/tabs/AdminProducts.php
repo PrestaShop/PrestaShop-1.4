@@ -82,6 +82,9 @@ class AdminProducts extends AdminTab
 		foreach ($languages as $language)
 			if (isset($_POST['meta_keywords_'.$language['id_lang']]))
 				$_POST['meta_keywords_'.$language['id_lang']] = preg_replace('/ *,? +,*/', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
+		$_POST['width'] = empty($_POST['width']) ? '0' : str_replace(',', '.', $_POST['width']);
+		$_POST['height'] = empty($_POST['height']) ? '0' : str_replace(',', '.', $_POST['height']);
+		$_POST['depth'] = empty($_POST['depth']) ? '0' : str_replace(',', '.', $_POST['depth']);
 		$_POST['weight'] = empty($_POST['weight']) ? '0' : str_replace(',', '.', $_POST['weight']);
 		if ($_POST['unit_price'] != NULL)
 			$object->unit_price = str_replace(',', '.', $_POST['unit_price']);
@@ -2075,6 +2078,24 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('Location (warehouse):').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="55" type="text" name="location" value="'.htmlentities($this->getFieldValue($obj, 'location'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Width:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="6" maxlength="6" name="width" type="text" value="'.htmlentities($this->getFieldValue($obj, 'width'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Height:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="6" maxlength="6" name="height" type="text" value="'.htmlentities($this->getFieldValue($obj, 'height'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">'.$this->l('Depth:').'</td>
+						<td style="padding-bottom:5px;">
+							<input size="6" maxlength="6" name="depth" type="text" value="'.htmlentities($this->getFieldValue($obj, 'depth'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
 						</td>
 					</tr>
 					<tr>

@@ -11,3 +11,7 @@ ALTER TABLE `PREFIX_image_type` ADD `stores` tinyint(1) NOT NULL default '1';
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_DIMENSION_UNIT', 'cm', NOW(), NOW());
+
+ALTER TABLE `PREFIX_product` ADD `width` FLOAT NOT NULL AFTER `location` ,
+ADD `height` FLOAT NOT NULL AFTER `width` ,
+ADD `depth` FLOAT NOT NULL AFTER `height`;

@@ -111,6 +111,15 @@ class ProductCore extends ObjectModel
 	/** @var string Location */
 	public 		$location;
 
+	/** @var string Width in default width unit */
+	public 		$width = 0;
+
+	/** @var string Height in default height unit */
+	public 		$height = 0;
+
+	/** @var string Depth in default depth unit */
+	public 		$depth = 0;
+
 	/** @var string Weight in default weight unit */
 	public 		$weight = 0;
 
@@ -208,6 +217,9 @@ class ProductCore extends ObjectModel
 		'reference' => 'isReference',
     	'supplier_reference' => 'isReference',
 		'location' => 'isReference',
+		'width' => 'isFloat',
+		'height' => 'isFloat',
+		'depth' => 'isFloat',
 		'weight' => 'isFloat',
 		'out_of_stock' => 'isUnsignedInt',
 		'quantity_discount' => 'isBool',
@@ -298,6 +310,9 @@ class ProductCore extends ObjectModel
 		$fields['reference'] = pSQL($this->reference);
 		$fields['supplier_reference'] = pSQL($this->supplier_reference);
 		$fields['location'] = pSQL($this->location);
+		$fields['width'] = (float)($this->width);
+		$fields['height'] = (float)($this->height);
+		$fields['depth'] = (float)($this->depth);
 		$fields['weight'] = (float)($this->weight);
 		$fields['out_of_stock'] = pSQL($this->out_of_stock);
 		$fields['quantity_discount'] = (int)($this->quantity_discount);
