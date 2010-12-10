@@ -1975,6 +1975,7 @@ class AdminProducts extends AdminTab
 			<script type="text/javascript">
 				$(document).ready(function() {
 					updateCurrentText();
+					updateFriendlyURL();
 					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductManufacturers:1},
 						function(j) {
 							var options = $("select#id_manufacturer").html();
@@ -2527,12 +2528,15 @@ class AdminProducts extends AdminTab
 									<td class="col-left">'.$this->l('Friendly URL:').'</td>
 									<td class="translatable">';
 		foreach ($this->_languages as $language)
+		{
 			echo '					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" onkeyup="updateFriendlyURL();" onchange="updateFriendlyURL();" /><sup> *</sup>
 											<span class="hint" name="help_box">'.$this->l('Only letters and the "less" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
-		echo '						<p class="clear" style="width: 360px; word-wrap: break-word; overflow: auto;">'.$this->l('Product link will look like this:').' '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].'/id_product-<span id="friendly-url"></span>.html</p>
+		}
+		echo '						<p class="clear" style="word-wrap: break-word; overflow: auto; padding:10px 0 0 0;">'.'<b href="" class="button" onmousedown="updateFriendlyURLByName();">'.$this->l('Generate').'</b>&nbsp;'.$this->l('Friendly-url by name\'s product.').'<br /><br />';
+		echo '						'.$this->l('Product link will look like this:').' '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].'/<b>id_product</b>-<span id="friendly-url"></span>.html</p>
 									</td>
 								</tr>';
 		echo '</td></tr></table>

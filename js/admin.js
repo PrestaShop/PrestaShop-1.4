@@ -111,16 +111,16 @@ function copyMeta2friendlyURL()
 function updateCurrentText()
 {
 	$('#current_product').html($('#name_' + id_language).val());
-	if($('#link_rewrite_' + id_language).length)
-	{
-		$('#link_rewrite_' + id_language).val(str2url($('#name_' + id_language).val(), 'UTF-8'));
-	}
 }
-
+function updateFriendlyURLByName()
+{
+	$('#link_rewrite_' + id_language).val(str2url($('#name_' + id_language).val(), 'UTF-8'));
+	$('#friendly-url').html($('#link_rewrite_' + id_language).val());
+}
 function updateFriendlyURL()
 {
 	$('#link_rewrite_' + id_language).val(str2url($('#link_rewrite_' + id_language).val(), 'UTF-8'));
-	$('#friendly-url').html($('link_rewrite_' + id_language).val());
+	$('#seo #friendly-url').text($('#link_rewrite_' + id_language).val());
 }
 
 function toggleLanguageFlags(elt)
@@ -154,7 +154,7 @@ function changeFormLanguage(id_language_new, iso_code, employee_cookie)
 	if (employee_cookie)
 		$.post("ajax.php", { form_language_id: id_language_new });
 	id_language = id_language_new;
-	
+	updateFriendlyURL();
 	updateCurrentText();
 }
 
