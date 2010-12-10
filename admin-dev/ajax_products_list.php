@@ -33,10 +33,15 @@ require_once(dirname(__FILE__).'/init.php');
 $query = Tools::getValue('q', false);
 if (!$query OR $query == '' OR strlen($query) < 1)
 	die();
-
-if ($excludeIds = Tools::getValue('excludeIds', false))
+if($pos = strpos($query, ' (ref:'))
+{
+	$query = substr($query, 0, $pos);
+}
+$excludeIds = Tools::getValue('excludeIds', false);
+if ($excludeIds && $excludeIds != 'NaN')
 	$excludeIds = implode(',', array_map('intval', explode(',', $excludeIds)));
-
+else
+	$excludeIds = '';
 $items = Db::getInstance()->ExecuteS('
 SELECT p.`id_product`, `reference`, pl.name
 FROM `'._DB_PREFIX_.'product` p
@@ -46,4 +51,4 @@ WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query)
 
 if ($items)
 	foreach ($items AS $item)
-		echo $item['name'].(!empty($item['reference']) ? ' ('.$item['reference'].')' : '').'|'.(int)($item['id_product'])."\n";
+		echo $item['name'].(!empty($item['reference']) ? ' (ref: '.$item['reference'].')' : '').'|'.(int)($item['id_product'])."\n";
