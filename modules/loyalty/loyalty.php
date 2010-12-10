@@ -446,7 +446,14 @@ class Loyalty extends Module
 				$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(true, (int)($product->getIdProductAttributeMostExpsensive()))));
 				$pointsAfter = $points;
 			}
-			$smarty->assign(array('points' => (int)($points), 'total_points' => (int)($pointsAfter), 'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)));
+			$smarty->assign(array(
+				'points' => (int)($points),
+				'total_points' => (int)($pointsAfter),
+				'point_rate' => Configuration::get('PS_LOYALTY_POINT_RATE'),
+				'point_value' => Configuration::get('PS_LOYALTY_POINT_VALUE'),
+				'points_in_cart' => $pointsBefore,
+				'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)
+				));
 
 			return $this->display(__FILE__, 'product.tpl');
 		}
