@@ -33,10 +33,17 @@ require_once(dirname(__FILE__).'/init.php');
 $query = Tools::getValue('q', false);
 if (!$query OR $query == '' OR strlen($query) < 1)
 	die();
+
+/*
+ * In the SQL request the "q" param is used entirely to match result in database.
+ * In this way if string:"(ref : #ref_pattern#)" is displayed on the return list, 
+ * they are no return values just because string:"(ref : #ref_pattern#)" 
+ * is not write in the name field of the product.
+ * So the ref pattern will be cut for the search request.
+ */
 if($pos = strpos($query, ' (ref:'))
-{
 	$query = substr($query, 0, $pos);
-}
+
 $excludeIds = Tools::getValue('excludeIds', false);
 if ($excludeIds && $excludeIds != 'NaN')
 	$excludeIds = implode(',', array_map('intval', explode(',', $excludeIds)));
