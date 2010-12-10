@@ -3,7 +3,6 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
-	if (_PS_VERSION_ <= "1.3.0.3" && !class_exists("Carrier", false)) require_once(_PS_MODULE_DIR_ . "dejala/CarrierHacked.php") ;
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalaconfig.php");
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalautils.php");
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalacarrierutils.php");
@@ -23,21 +22,21 @@ class Dejala extends Module
 	public $id_lang ;
 	private $wday_labels ;
 	private static $INSTANCE = NULL ;
-	
+
 	public function getInstance() {
 		if (!self::$INSTANCE) {
         	self::$INSTANCE = new Dejala();
 		}
-		return self::$INSTANCE; 
+		return self::$INSTANCE;
 	}
 
 	public function __construct()
 	{
 		global $cookie ;
-		
+
 		$this->name = 'dejala';
 		$this->tab = 'shipping_logistics';
-		$this->version = 1.2;
+		$this->version = 1.3;
 		$this->internal_version = '1.2.6';
 		// Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');
@@ -122,7 +121,7 @@ class Dejala extends Module
 			if (empty($_POST['password']))
 				$errors[] = $this->l('password is required.');
 			if (empty($_POST['country']))
-				$errors[] = $this->l('country is required.');	
+				$errors[] = $this->l('country is required.');
 		}
 		else if ($method == 'register')
 		{
@@ -212,7 +211,7 @@ class Dejala extends Module
 					$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
 				}
 				$this->dejalaConfig->login = null;
-				$this->dejalaConfig->password = null;				
+				$this->dejalaConfig->password = null;
 			}
 		}
 		else if ($method == 'register')
@@ -341,7 +340,7 @@ class Dejala extends Module
 	public function getContent()
 	{
 		global $smarty;
-		
+
 		$smarty->assign('country', $this->dejalaConfig->country);
 		$output = $this->display(__FILE__, 'dejala_header.tpl');
 		if (!empty($_POST))
@@ -412,8 +411,8 @@ class Dejala extends Module
 			$smarty->assign("login", html_entity_decode(Configuration::get('PS_SHOP_EMAIL'), ENT_COMPAT, 'UTF-8'));
 			if ($registered)
 			{
-				$smarty->assign("visibility_status", $this->dejalaConfig->visibility_status);				
-				$smarty->assign("visible_users_list", $this->dejalaConfig->visible_users_list);				
+				$smarty->assign("visibility_status", $this->dejalaConfig->visibility_status);
+				$smarty->assign("visible_users_list", $this->dejalaConfig->visible_users_list);
 				$smarty->assign("store_login", html_entity_decode($this->dejalaConfig->login, ENT_COMPAT, 'UTF-8'));
 				$smartifyErrors = $this->smartyfyStoreAttributes();
 				if (isset($smartifyErrors) && count($smartifyErrors))
@@ -490,7 +489,7 @@ class Dejala extends Module
 			$smartifyErrors = $this->smartyfyStoreAttributes();
 			if (isset($smartifyErrors) && count($smartifyErrors))
 				$errors = $smartifyErrors;
-					
+
 			$djlUtil = new DejalaUtils();
 			$deliveries = array();
 			$responseArray = $djlUtil->getStoreDeliveries($this->dejalaConfig, $deliveries);
@@ -509,7 +508,7 @@ class Dejala extends Module
 						$delivery['shipping_start'] = '';
 						$delivery['shipping_stop'] = '';
 					}
-					
+
 					if (isset($delivery['delivery_utc']))
 					{
 						$delivery['delivery_date'] = date('d/m/Y', $delivery['delivery_utc']);
@@ -559,7 +558,7 @@ class Dejala extends Module
 
 
 	// put in smarty context store attributes
-	function smartyfyStoreAttributes() 
+	function smartyfyStoreAttributes()
 	{
 		global $smarty;
 
@@ -732,11 +731,11 @@ class Dejala extends Module
 		}
 		if (is_null($electedProduct))
 			return ;
-		
-		$this->mylog("electedProduct=" . $this->logValue($electedProduct,1));	
+
+		$this->mylog("electedProduct=" . $this->logValue($electedProduct,1));
 
 		$electedCarrier = DejalaCarrierUtils::getDejalaCarrier($this->dejalaConfig, $electedProduct);
-		$this->mylog("electedCarrier=" . $this->logValue($electedCarrier,1));	
+		$this->mylog("electedCarrier=" . $this->logValue($electedCarrier,1));
 		if ($electedCarrier == null) {
 			// Only create a new carrier if it does not exist yet
 			if (!DejalaCarrierUtils::carrierExists($this->dejalaConfig)) {
@@ -779,7 +778,7 @@ class Dejala extends Module
 		// Calcul de la date de démarrage pour les créneaux :
 		// Avancement jusque jour dispo & ouvert
 		// Ajout du temps de préparation : 0.5 jour ou 1 nb de jours
-		// Ajustement de l'heure sur l'ouverture ou l'heure suivante xxh00 
+		// Ajustement de l'heure sur l'ouverture ou l'heure suivante xxh00
 		$deliveryDelay = $store['attributes']['delivery_delay'];
 		$calUtils = new CalendarUtils();
 		$all_exceptions = array_merge($storeCalendar['exceptions'], $electedProduct['calendar']['exceptions']);
@@ -789,8 +788,8 @@ class Dejala extends Module
 		if ($deliveryDelay > 0)
 			$dateUtc = $calUtils->addDelay($dateUtc, $deliveryDelay, $calendar, $all_exceptions);
 		if ($dateUtc == NULL)
-			return ;		
-		$dateUtc = $calUtils->adjustHour($dateUtc, $calendar);		
+			return ;
+		$dateUtc = $calUtils->adjustHour($dateUtc, $calendar);
 		$this->mylog("calendar=" . $this->logValue($calendar,1));
 		$this->mylog("starting date=" . $this->logValue(date("d/m/Y - H:i:s", $dateUtc),1));
 		/**
@@ -807,7 +806,7 @@ class Dejala extends Module
 		$iDate = 0;
 		$dates = array();
 		$balladUtc = $dateUtc;
-		
+
 		do {
 			$wd = date("w", $balladUtc);
 			if ((int)($calendar[$wd]['stop_hour']) < (int)($calendar[$wd]['start_hour'])) continue ;
@@ -830,7 +829,7 @@ class Dejala extends Module
 		else {
 			array_shift($dates) ;
 		}
-		
+
 		$this->mylog("date$=" . $this->logValue($dates,1));
 		$smarty->assign('nb_days', $nbDeliveryDates);
 		$smarty->assign('dates', $dates);
@@ -853,7 +852,7 @@ class Dejala extends Module
 		$row['price'] = $cart->getOrderShippingCost($electedCarrier->id);
 		$row['price_tax_exc'] = $cart->getOrderShippingCost($electedCarrier->id, false);
 		$row['img'] = _MODULE_DIR_.$this->name.'/dejala_carrier.gif';
-		
+
 		$resultsArray[] = $row;
 		$smarty->assign('carriers', $resultsArray);
 		if ($cart->id_carrier)
@@ -970,7 +969,7 @@ class Dejala extends Module
 		 * There's probably some unhandled cases in which the user changes his cart
 		 * and does not go back properly in the carrier selection process (order.php's steps).
 		 * He might end-up with too heavy a cart for which Dejala should not have appeared.
-		 * But this is not supposed to happen. 
+		 * But this is not supposed to happen.
 		 */
 
 		$cart = $param['cart'] ;
@@ -1027,7 +1026,7 @@ class Dejala extends Module
 		}
 		if (is_null($electedProduct))
 			return ;
-		
+
 		$electedCarrier = DejalaCarrierUtils::getDejalaCarrier($this->dejalaConfig, $electedProduct);
 
 		// Should not be null at this point.
@@ -1035,7 +1034,7 @@ class Dejala extends Module
 			return null ;
 		}
 
-		
+
 		// Process the cart for storage in dejala_cart.
 		$errors = array();
 		$dejalaCarrierID = Tools::getValue('dejala_id_carrier');
@@ -1055,7 +1054,7 @@ class Dejala extends Module
 				$timelimit = 3;
 				if (isset($product['timelimit']))
 					$timelimit = (int)($product['timelimit']);
-				
+
 				/* manage shipping preferences */
 				$date_shipping = 'NULL';
 				if ( isset($_POST['shipping_day']) AND !empty($_POST['shipping_day']) AND (10 <= strlen($_POST['shipping_day'])) )
@@ -1211,7 +1210,7 @@ class Dejala extends Module
 		return ($delivery);
 	}
 
-	
+
 
 
 	public function mylog($msg) {
