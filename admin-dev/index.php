@@ -246,10 +246,20 @@ else /* Else display homepage */
 		</div>
 		
 		<div id="table_info_large">
-			<h5><a href="#">'.translate('View more').'</a> <strong>'.translate('Statistics').'</strong> / '.translate('Sales of the week').'</h5>
-			<div id="stat_google">
-			
-			</div>
+			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> <strong>'.translate('Statistics').'</strong> / '.translate('Sales of the week').'</h5>
+			<div id="stat_google">';
+
+	define('PS_BASE_URI', __PS_BASE_URI__);
+	$chart = new Chart();
+	$currency = new Currency(1);
+	$result = Db::getInstance()->ExecuteS('SELECT total_paid, invoice_date FROM '._DB_PREFIX_.'orders WHERE valid = 1 AND invoice_date BETWEEN \''.date('Y-m-d', strtotime('-7 DAYS', time())).' 00:00:00\' AND \''.date('Y-m-d H:i:s').'\'');
+	foreach ($result as $row)
+		$chart->getCurve(1)->setPoint(strtotime($row['invoice_date']), $row['total_paid']);
+	$chart->setSize(580, 170);
+	$chart->setTimeMode(strtotime('-7 DAYS', time()), time(), 'd');
+	$chart->getCurve(1)->setLabel(translate('Sales +Tx').' ('.strtoupper($currency->iso_code).')');
+	$chart->display();
+	echo '	</div>
 		</div>
 		<table cellpadding="0" cellspacing="0" id="table_customer">
 			<thead>
