@@ -202,9 +202,9 @@ else /* Else display homepage */
 			</table>
 		</div>
 		';
-		$all = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread');
-		$unread = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` = "open"');
-		$pending = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` LIKE "%pending%"');
+		$all = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread');
+		$unread = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` = "open"');
+		$pending = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` LIKE "%pending%"');
 		$close = $all - ($unread + $pending);
 		echo '
 		<div class="table_info" id="table_info_last">
@@ -252,9 +252,13 @@ else /* Else display homepage */
 	define('PS_BASE_URI', __PS_BASE_URI__);
 	$chart = new Chart();
 	$currency = new Currency(1);
-	$result = Db::getInstance()->ExecuteS('SELECT total_paid, invoice_date FROM '._DB_PREFIX_.'orders WHERE valid = 1 AND invoice_date BETWEEN \''.date('Y-m-d', strtotime('-7 DAYS', time())).' 00:00:00\' AND \''.date('Y-m-d H:i:s').'\'');
+	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT total_paid / conversion_rate as total_converted, invoice_date
+		FROM '._DB_PREFIX_.'orders o
+		WHERE valid = 1
+		AND invoice_date BETWEEN \''.date('Y-m-d', strtotime('-7 DAYS', time())).' 00:00:00\' AND \''.date('Y-m-d H:i:s').'\'');
 	foreach ($result as $row)
-		$chart->getCurve(1)->setPoint(strtotime($row['invoice_date']), $row['total_paid']);
+		$chart->getCurve(1)->setPoint(strtotime($row['invoice_date']), $row['total_converted']);
 	$chart->setSize(580, 170);
 	$chart->setTimeMode(strtotime('-7 DAYS', time()), time(), 'd');
 	$chart->getCurve(1)->setLabel(translate('Sales +Tx').' ('.strtoupper($currency->iso_code).')');
