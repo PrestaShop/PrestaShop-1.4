@@ -52,6 +52,9 @@ class ImageTypeCore extends ObjectModel
 
 	/** @var integer Apply to scenes */
 	public 		$scenes;
+	
+	/** @var integer Apply to store */
+	public 		$stores;
 
 	protected $fieldsRequired = array('name', 'width', 'height');
 	protected $fieldsValidate = array(
@@ -62,7 +65,8 @@ class ImageTypeCore extends ObjectModel
 		'products' => 'isBool',
 		'manufacturers' => 'isBool',
 		'suppliers' => 'isBool',
-		'scenes' => 'isBool'
+		'scenes' => 'isBool',
+		'stores' => 'isBool'
 	);
 	protected $fieldsSize = array('name' => 16);
 
@@ -85,6 +89,7 @@ class ImageTypeCore extends ObjectModel
 		$fields['manufacturers'] = (int)($this->manufacturers);
 		$fields['suppliers'] = (int)($this->suppliers);
 		$fields['scenes'] = (int)($this->scenes);
+		$fields['stores'] = (int)($this->store);
 		return $fields;
 	}
 

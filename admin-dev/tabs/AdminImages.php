@@ -145,6 +145,14 @@ class AdminImages extends AdminTab
 					<label class="t" for="scenes_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('This type will be applied to scenes images').'</p>
 				</div>
+				<label>'.$this->l('Stores:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="stores" id="stores_on" value="1" '.($this->getFieldValue($obj, 'stores') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="stores_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" /></label>
+					<input type="radio" name="stores" id="stores_off" value="0" '.(!$this->getFieldValue($obj, 'stores') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="stores_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" /></label>
+					<p>'.$this->l('This type will be applied to stores images').'</p>
+				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
@@ -167,7 +175,8 @@ class AdminImages extends AdminTab
 			'manufacturers' => $this->l('Manufacturers'),
 			'suppliers' => $this->l('Suppliers'),
 			'scenes' => $this->l('Scenes'),
-			'products' => $this->l('Products')
+			'products' => $this->l('Products'),
+			'stores' => $this->l('Stores')
 		);
 		echo '
 		<h2 class="space">'.$this->l('Regenerate thumbnails').'</h2>
@@ -325,6 +334,7 @@ class AdminImages extends AdminTab
 				array('type' => 'suppliers', 'dir' => _PS_SUPP_IMG_DIR_),
 				array('type' => 'scenes', 'dir' => _PS_SCENE_IMG_DIR_),
 				array('type' => 'products', 'dir' => _PS_PROD_IMG_DIR_),
+				array('type' => 'stores', 'dir' => _PS_STORE_IMG_DIR_)
 			);
 
 		// Launching generation process

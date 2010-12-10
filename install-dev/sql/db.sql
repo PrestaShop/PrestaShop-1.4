@@ -732,6 +732,7 @@ CREATE TABLE `PREFIX_image_type` (
   `manufacturers` tinyint(1) NOT NULL default '1',
   `suppliers` tinyint(1) NOT NULL default '1',
   `scenes` tinyint(1) NOT NULL default '1',
+  `stores` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id_image_type`),
   KEY `image_type_name` (`name`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;

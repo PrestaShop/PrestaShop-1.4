@@ -6,3 +6,5 @@ UPDATE PREFIX_tab SET id_parent = 8 WHERE id_tab = @alias LIMIT 1;
 UPDATE PREFIX_tab SET id_parent = 9 WHERE id_tab = @stores LIMIT 1;
 @pdf = (SELECT id_tab FROM PREFIX_tab WHERE class_name = "AdminPDF" LIMIT 1);
 UPDATE PREFIX_tab SET id_parent = 3 WHERE id_tab = @pdf LIMIT 1;
+
+ALTER TABLE `PREFIX_image_type` ADD `stores` tinyint(1) NOT NULL default '1';
