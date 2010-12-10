@@ -637,11 +637,37 @@ class OrderCore extends ObjectModel
 		return $orders;
 	}
 	
-	static public function getOrders()
+	/*
+	* @deprecated
+	*/
+	static public function getOrders($limit = NULL)
 	{
-		$sql = 'SELECT * FROM `'._DB_PREFIX_.'orders`';
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
-		return $result;
+		Tools::displayAsDeprecated();
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT * 
+			FROM `'._DB_PREFIX_.'orders`
+			ORDER BY `date_add`
+			'.((int)$limit ? 'LIMIT 0, '.(int)$limit : ''));
+	}
+	
+	static public function getOrdersWithInformations($limit = NULL)
+	{
+		global $cookie;
+		
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT *, (
+				SELECT `name`
+				FROM `'._DB_PREFIX_.'order_history` oh
+				LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (osl.`id_order_state` = oh.`id_order_state`)
+				WHERE oh.`id_order` = o.`id_order`
+				AND osl.`id_lang` = '.(int)$cookie->id_lang.'
+				ORDER BY oh.`date_add` DESC
+				LIMIT 1
+			) AS `state_name`
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = o.`id_customer`)
+			ORDER BY o.`date_add` DESC
+			'.((int)$limit ? 'LIMIT 0, '.(int)$limit : ''));
 	}
 
 	static public function getOrdersIdInvoiceByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)

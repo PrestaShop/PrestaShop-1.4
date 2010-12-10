@@ -24,7 +24,7 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
-
+ 
 ob_start();
 define('PS_ADMIN_DIR', getcwd());
 
@@ -121,7 +121,7 @@ if ($nbErrors = sizeof($errors))
 
 echo '
 			<div id="login">
-				<h1>'.Configuration::get('PS_SHOP_NAME').'</h1>
+				<h1>'.Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_NAME')).'</h1>
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
 $randomNb = rand(100, 999);
@@ -146,9 +146,7 @@ else
 					</div>
 	';
 }
-
 ?>
-
 <script type="text/javascript">
 <!--
 if (document.getElementById('email')) document.getElementById('email').focus();
@@ -162,5 +160,3 @@ echo '
 		</div>
 	</body>
 </html>';
-
-

@@ -1,32 +1,18 @@
 <?php
-/*
-* 2007-2010 PrestaShop 
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Open Software License (OSL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/osl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2010 Prestashop SA
-*  @version  Release: $Revision: 1.4 $
-*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
-*/
+
+/**
+  * Homepage and main page for admin panel, index.php
+  * @category admin
+  *
+  * @author PrestaShop <support@prestashop.com>
+  * @copyright PrestaShop
+  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
+  * @version 1.3
+  *
+  */
 
 define('_PS_ADMIN_DIR_', getcwd());
-define('PS_ADMIN_DIR', _PS_ADMIN_DIR_);
+define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
 
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
@@ -39,9 +25,9 @@ if ($tab)
 		$tabs = array();
 		recursiveTab($id_tab);
 		$tabs = array_reverse($tabs);
-		echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.(int)(Tab::getIdFromClassName($tab)).(int)($cookie->id_employee)).'">'.translate('Back Office').'</a>';
+		echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>';
 		foreach ($tabs AS $key => $item)
-			echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" /><img src="'.((trim($item['module']) != '') ? _MODULE_DIR_.$item['module'].'/'.$item['class_name'].'.gif' : '../img/t/'.$item['class_name'].'.gif').'" style="margin-right:5px" /><a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].(int)($item['id_tab']).(int)($cookie->id_employee)).'" '.((sizeof($tabs) - 1 == $key) ? 'class="blue" style="font-color:blue;"' : '').'>'.$item['name'].'</a>';
+			echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.((sizeof($tabs) - 1 > $key) ? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">' : '').$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
 		echo '</div>';
 
 		if (Validate::isLoadedObject($adminObj))
@@ -79,33 +65,256 @@ if ($tab)
 }
 else /* Else display homepage */
 {
-	$isoDefault = Language::getIsoById((int)(Configuration::get('PS_LANG_DEFAULT')));
-	$isoUser = Language::getIsoById((int)($cookie->id_lang));
-	echo '<div id="adminHeader">
-	<img src="../img/logo.jpg" alt="Logo" title="Logo" /><br /><br />
-	<h2>'.translate('Welcome to your Back Office').'</h2>
-	'.translate('Click the tabs to navigate.').'
-	<br /><br /><br />';
+	$protocol = (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
+	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
+	$isoUser = Language::getIsoById(intval($cookie->id_lang));
+	echo '<div id="adminHeader">';
+	echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>';
+	echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.translate('Dashboard');
+	echo '</div>';
+	echo '
+	<h1>'.translate('Dashboard').'</h1>
+	<hr style="background-color: #812143;color: #812143;" />
+	<br />';
 	if (@ini_get('allow_url_fopen') AND $update = checkPSVersion())
 		echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.translate('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'">'.translate('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
     elseif (!@ini_get('allow_url_fopen'))
     {
 		echo '<p>'.translate('Update notification unavailable').'</p>';
 		echo '<p>&nbsp;</p>';
-		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.translate('more info').'</a>]</p>';
+		echo '<p>'.translate('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.translate('more infos').'</a>]</p>';
 		echo '<p>'.translate('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 	}
   echo '</div>';
+	
+	echo'
+	<!--<div id="adminpresentation">
+		<div id="iframe">
+		
+		</div>
+		<div id="list_video">
+			<h3>Chapter 1</h3>
+			<ul class="clearfix">
+				<li class="viewed"><a href="#">Video loreem video loreem</a></li>
+				<li class="viewed"><a href="#">video loreem video </a></li>
+				<li><a href="#">Video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+			</ul>
+		</div>
+		<div id="list_video">
+			<h3>Chapter 2</h3>
+			<ul class="clearfix">
+				<li class="viewed"><a href="#">Video loreem video loreem</a></li>
+				<li class="viewed"><a href="#">video loreem video </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+			</ul>
+		</div>
+		<div id="footer_iframe_home">
+			<a href="#">'.translate('View more video tutorials').'</a>
+			<input type="checkbox" value="" name="" id="dont_show_again"><label for="dont_show_again">'.translate('don\'t show again').'</label>
+		</div>
+	</div>-->
+	<div id="column_left">
+		<ul class="F_list clearfix">
+			<li id="first_block">
+				<h4><a href="index.php?tab=AdminCatalog&id_category=1&addproduct&token='.Tools::getAdminTokenLite('AdminCatalog').'">'.translate('New product').'</a></h4>
+				<p>Le Lorem Ipsum est simplement du faux texte employ dans Le Lorem Ipsum est simplement du</p>
+			</li>
+			<li id="second_block">
+				<h4><a href="index.php?tab=AdminCustomers&addcustomer&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.translate('New customer').'</a></h4>
+				<p>Le Lorem Ipsum est simplement du faux texte employ dans du faux tex </p>
+			</li>
+			<li id="third_block">
+				<h4><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('Check statistics').'</a></h4>
+				<p>Le Lorem Ipsum est siploy dans </p>
+			</li>
+			<li id="fourth_block">
+				<h4><a href="index.php?tab=AdminEmployees&addemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">'.translate('New employees').'</a></h4>
+				<p>Le Lorem Ipsum est simplement du faux texte employ dans oy dans</p>
+			</li>
+		</ul>
+		';
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT SUM(o.`total_paid_real` / o.conversion_rate) as total_sales, COUNT(*) as total_orders
+		FROM `'._DB_PREFIX_.'orders` o
+		WHERE o.valid = 1
+		AND o.`invoice_date` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\' ');
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT COUNT(`id_customer`) AS total_registrations
+		FROM `'._DB_PREFIX_.'customer` c
+		WHERE c.`date_add` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'');
+		$result3 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT SUM(pv.`counter`) AS total_viewed
+		FROM `'._DB_PREFIX_.'page_viewed` pv
+		LEFT JOIN `'._DB_PREFIX_.'date_range` dr ON pv.`id_date_range` = dr.`id_date_range`
+		LEFT JOIN `'._DB_PREFIX_.'page` p ON pv.`id_page` = p.`id_page`
+		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
+		WHERE pt.`name` = \'product.php\'
+		AND dr.`time_start` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'
+		AND dr.`time_end` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'');	
+		$results = array_merge($result, array_merge($result2, $result3));
+		$currency = Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+		echo '
+		<div class="table_info">
+			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> '.translate('Overview Statistics').' </h5>
+			<table class="table_info_details">
+				<tr class="tr_odd">
+					<td class="td_align_left">
+					'.translate('Sales').'
+					</td>
+					<td>
+						'.Tools::displayPrice($results['total_sales'], $currency).'
+					</td>
+				</tr>
+				<tr>
+					<td class="td_align_left">
+						'.translate('Total registrations').'
+					</td>
+					<td>
+						'.(int)($results['total_registrations']).'
+					</td>
+				</tr>
+				<tr class="tr_odd">
+					<td class="td_align_left">
+						'.translate('Total orders').'
+					</td>
+					<td>
+						'.(int)($results['total_orders']).'
+					</td>
+				</tr>
+				<tr>
+					<td class="td_align_left">
+						'.translate('Product pages viewed').'
+					</td>
+					<td>
+						'.(int)($results['total_viewed']).'
+					</td>
+				</tr>
+			</table>
+		</div>
+		';
+		$all = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread');
+		$unread = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` = "open"');
+		$pending = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'customer_thread` WHERE `status` LIKE "%pending%"');
+		$close = $all - ($unread + $pending);
+		echo '
+		<div class="table_info" id="table_info_last">
+			<h5><a href="index.php?tab=AdminCustomerThreads&token='.Tools::getAdminTokenLite('AdminCustomerThreads').'">'.translate('View more').'</a> '.translate('Customers service').'</h5>
+			<table class="table_info_details">
+				<tr class="tr_odd">
+					<td class="td_align_left">
+					'.translate('Thread unread').'
+					</td>
+					<td>
+						'.$unread.'
+					</td>
+				</tr>
+				<tr>
+					<td class="td_align_left">
+						'.translate('Thread pending').'
+					</td>
+					<td>
+						'.$pending.'
+					</td>
+				</tr>
+				<tr class="tr_odd">
+					<td class="td_align_left">
+						'.translate('Thread closed').'
+					</td>
+					<td>
+						'.$close.'
+					</td>
+				</tr>
+				<tr>
+					<td class="td_align_left">
+						'.translate('Total thread').'
+					</td>
+					<td>
+						'.$all.'
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id="table_info_large">
+			<h5><a href="#">'.translate('View more').'</a> <strong>'.translate('Statistics').'</strong> / '.translate('Sales of the week').'</h5>
+			<div id="stat_google">
+			
+			</div>
+		</div>
+		<table cellpadding="0" cellspacing="0" id="table_customer">
+			<thead>
+				<tr>
+					<th class="order_id"><span class="first">'.translate('ID').'</span></th>
+					<th class="order_customer"><span>'.translate('Customer Name').'</span></th>
+					<th class="order_status"><span>'.translate('Status').'</span></th>
+					<th class="order_total"><span>'.translate('Total').'</span></th>
+					<th class="order_action"><span class="last">'.translate('Action').'</span></th>
+				<tr>
+			</thead>
+			<tbody>';
+	
+	$orders = Order::getOrdersWithInformations(10);
+	$i = 0;
+	foreach ($orders AS $order)
+	{
+		$currency = Currency::getCurrency((int)$order['id_currency']);
+		echo '
+				<tr '.($i % 2 ? 'id="order_line1' : '').'">
+					<td class="order_td_first order_id">'.(int)$order['id_order'].'</td>
+					<td class="order_customer">'.Tools::htmlentitiesUTF8($order['firstname']).' '.Tools::htmlentitiesUTF8($order['lastname']).'</td>
+					<td class="order_status">'.Tools::htmlentitiesUTF8($order['state_name']).'</td>
+					<td class="order_total">'.Tools::displayPrice((float)$order['total_paid'], $currency).'</td>
+					<td class="order_action">
+						<a href="index.php?tab=AdminOrders&id_order='.(int)$order['id_order'].'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders').'" title="'.translate('Details').'"><img src="../img/admin/details.gif" alt="Voir" /></a>
+					</td>
+				</tr>
+			';
+		$i++;
+	}
+	//id="order_line1"
 
+	echo '
+			</tbody>
+		</table>
+		
+	</div>
+	<div id="column_right">
+		<div id="table_info_link">
+			<h5>'.translate('PrestaShop Link').'</h5>
+			<ul id="prestashop_link">
+				<li>
+					<p>'.translate('Discover the latest official guide :').'</p>
+					<a href ="#">'.translate('User Guide PrestaShop 1.3').'</a>
+					<a href ="#">'.translate('Technical Docummentation').'</a>
+				</li>
+				<li>
+					<p>'.translate('Use the PrestaShop forum & discover a great community').'</p>
+					<a href ="http://www.prestashop.com/forums/">'.translate('Go to forums.prestashop.com').'</a>
+				</li>
+				<li>
+					<p>'.translate('Enhance your Shop with a new templates & modules').'</p>
+					<a href ="http://addons.prestashop.com">'.translate('Go to addons.prestashop.com').'</a>
+				</li>
+			</ul>
+		</div>
+		<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>
+	</div>
+	<div class="clear"></div>
+	';
+	
 	echo Module::hookExec('backOfficeHome');
-
-	/* News from PrestaShop website */
-	echo '<div id="adminNews">
-	<h2>'.translate('PrestaShop live feed').'</h2>';
-	$protocol = (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
-	echo'<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 780px; height: 380px;" src="'.$protocol.'://www.prestashop.com/rss/news.php?v='._PS_VERSION_.'&lang='.$isoUser.'&activity='.(int)Configuration::get('PS_SHOP_ACTIVITY').'"></iframe></div>';
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
 
-
+?>

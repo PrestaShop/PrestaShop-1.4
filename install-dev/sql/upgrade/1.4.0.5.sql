@@ -15,3 +15,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ALTER TABLE `PREFIX_product` ADD `width` FLOAT NOT NULL AFTER `location` ,
 ADD `height` FLOAT NOT NULL AFTER `width` ,
 ADD `depth` FLOAT NOT NULL AFTER `height`;
+
+@id_module = (SELECT `id_module` FROM `PREFIX_module` WHERE `name` = "statshome" LIMIT 1);
+DELETE FROM `PREFIX_module` WHERE `id_module` = @id_module;
+DELETE FROM `PREFIX_hook_module` WHERE `id_module` = @id_module;
