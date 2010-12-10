@@ -8,3 +8,6 @@ UPDATE PREFIX_tab SET id_parent = 9 WHERE id_tab = @stores LIMIT 1;
 UPDATE PREFIX_tab SET id_parent = 3 WHERE id_tab = @pdf LIMIT 1;
 
 ALTER TABLE `PREFIX_image_type` ADD `stores` tinyint(1) NOT NULL default '1';
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_DIMENSION_UNIT', 'cm', NOW(), NOW());
