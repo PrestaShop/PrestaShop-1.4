@@ -64,6 +64,19 @@ function floorf(value, precision)
 	return Math.floor(value * precisionFactor) / precisionFactor;
 }
 
+function formatedNumberToFloat(price, currencyFormat, currencySign)
+{
+	price = price.replace(currencySign, '');
+	if (currencyFormat == 1)
+		return parseFloat(price.replace(',', '').replace(' ', ''));
+	else if (currencyFormat == 2)
+		return parseFloat(price.replace(' ', '').replace(',', '.'));
+	else if (currencyFormat == 3)
+		return parseFloat(price.replace('.', '').replace(' ', '').replace(',', '.'));
+	else if (currencyFormat == 4)
+		return parseFloat(price.replace(',', '').replace(' ', ''));
+	return price;
+}
 
 //return a formatted price
 function formatCurrency(price, currencyFormat, currencySign, currencyBlank)

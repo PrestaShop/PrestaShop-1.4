@@ -32,7 +32,7 @@
 <script>
 $(function() {
 	$('#attributes select').change(function() {
-		var price_for_loyalty = $('#our_price_display').html().replace(currencySign, '');
+		var price_for_loyalty = formatedNumberToFloat($('#our_price_display').html(), currencyFormat, currencySign);
 		$('#loyalty_points').html(parseInt(ps_round((parseFloat(price_for_loyalty) / currencyRate) / {$point_rate}, 0)));
 		$('#total_loyalty_points').html(ps_round({$points_in_cart}+parseInt($('#loyalty_points').html())));
 		$('#loyalty_price').html(formatCurrency(ps_round(parseFloat($('#total_loyalty_points').html() * {$point_value}), 2), currencyFormat, currencySign, currencyBlank));
