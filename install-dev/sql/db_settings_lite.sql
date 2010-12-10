@@ -166,7 +166,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (98, 'PS_LOCALE_LANGUAGE', '', NOW(), NOW()),
 (99, 'PS_LOCALE_COUNTRY', '', NOW(), NOW()),
 (100, 'PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW()),
-(101, 'PS_SMARTY_CACHE', '1', NOW(), NOW(),
+(101, 'PS_SMARTY_CACHE', '1', NOW(), NOW()),
 (102, 'PS_DIMENSION_UNIT', 'cm', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
