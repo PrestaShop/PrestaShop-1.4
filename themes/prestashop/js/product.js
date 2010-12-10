@@ -271,17 +271,26 @@ function updateDisplay()
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
 		var tax = (taxRate / 100) + 1;
-		var taxExclPrice = productPriceTaxExcluded + selectedCombination['price'] * currencyRate;
+		var taxExclPrice = (specific_price ? specific_price : productPriceTaxExcluded) + selectedCombination['price'] * currencyRate;
+		if (specific_price)
+			var productPriceWithoutReduction = productPriceTaxExcluded + selectedCombination['price'] * currencyRate;
 
 		if (!displayPrice)
 		{
 			var productPrice = ps_round(taxExclPrice * tax, 2);
+			if (specific_price)
+				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
 			reduction_price /= tax;
 		}
 		else
+		{
 			var productPrice = ps_round(taxExclPrice, 2);
+			if (specific_price)
+				productPriceWithoutReduction = ps_round(productPriceWithoutReduction, 2);
+		}
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
-		productPriceWithoutReduction = productPrice;
+		if (!specific_price)
+			productPriceWithoutReduction = productPrice;
 		productPrice -= reduction;
 
 		if (group_reduction)

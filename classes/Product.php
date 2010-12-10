@@ -1585,7 +1585,7 @@ class ProductCore extends ObjectModel
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
 		$specific_price = self::$_pricesLevel3[$cacheId3];
-		$price = (float)((!$specific_price OR (float)($specific_price['reduction'])) ? $result['price'] : $specific_price['price']);
+		$price = (float)(((!$specific_price OR (float)($specific_price['reduction'])) OR (!$usereduc AND $result['price'] > $specific_price['price'])) ? $result['price'] : $specific_price['price']);
 		if (!$specific_price OR (!(float)($specific_price['price']) AND !$specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = $specific_price;
