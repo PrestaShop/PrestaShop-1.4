@@ -120,13 +120,16 @@ class MySQLCore extends Db
 				return $result;
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
+		
 			if (_PS_DEBUG_SQL_)
 				$this->displayMySQLError($query);
 			if (!$array)
 				return $this->_result;
 			$resultArray = array();
-			while ($row = mysql_fetch_assoc($this->_result))
-				$resultArray[] = $row;
+			// Only SELECT queries and a few others return a valid resource usable with mysql_fetch_assoc
+			if ($this->_result !== true)
+				while ($row = mysql_fetch_assoc($this->_result))
+					$resultArray[] = $row;
 			if ($use_cache AND _PS_CACHE_ENABLED_)	
 				Cache::getInstance()->setQuery($query, $resultArray);
 			return $resultArray;
