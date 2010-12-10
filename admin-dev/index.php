@@ -138,7 +138,7 @@ else /* Else display homepage */
 				<p>'.translate('Manage your activity with a thorough analysis of your e-shop.').'</p>
 			</li>
 			<li id="fourth_block">
-				<h4><a href="index.php?tab=AdminEmployees&addemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">'.translate('New employees').'</a></h4>
+				<h4><a href="index.php?tab=AdminEmployees&addemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">'.translate('New employee').'</a></h4>
 				<p>'.translate('Add a new employee account and discharge a part of your duties of shop owner.').'</p>
 			</li>
 		</ul>
