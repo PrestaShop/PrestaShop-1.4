@@ -1034,7 +1034,7 @@ html[xmlns] .clearfix {
 	width: 115px;
 	color: #903E5B;
 	text-decoration: underline;
-	font-size: 14px;
+	font-size: 12px;
 	margin-top: 35px;
 	margin-bottom: 0;
 }
@@ -1048,7 +1048,7 @@ html[xmlns] .clearfix {
 }
 
 .F_list li p{
-	font-size: 7pt;
+	font-size: 8pt;
 }
 
 .table_info{

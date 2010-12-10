@@ -126,20 +126,20 @@ else /* Else display homepage */
 	<div id="column_left">
 		<ul class="F_list clearfix">
 			<li id="first_block">
-				<h4><a href="index.php?tab=AdminCatalog&id_category=1&addproduct&token='.Tools::getAdminTokenLite('AdminCatalog').'">'.translate('New product').'</a></h4>
-				<p>Le Lorem Ipsum est simplement du faux texte employ dans Le Lorem Ipsum est simplement du</p>
+				<h4><a href="index.php?tab=AdminCatalog&addcategory&token='.Tools::getAdminTokenLite('AdminCatalog').'">'.translate('New category').'</a></h4>
+				<p>'.translate('Create a new category and organize your products.').'</p>
 			</li>
 			<li id="second_block">
-				<h4><a href="index.php?tab=AdminCustomers&addcustomer&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.translate('New customer').'</a></h4>
-				<p>Le Lorem Ipsum est simplement du faux texte employ dans du faux tex </p>
+				<h4><a href="index.php?tab=AdminCatalog&id_category=1&addproduct&token='.Tools::getAdminTokenLite('AdminCatalog').'">'.translate('New product').'</a></h4>
+				<p>'.translate('Fill up your catalogue with new articles and attributes.').'</p>
 			</li>
 			<li id="third_block">
-				<h4><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('Check statistics').'</a></h4>
-				<p>Le Lorem Ipsum est siploy dans </p>
+				<h4><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('Statistics').'</a></h4>
+				<p>'.translate('Manage your activity with a thorough analysis of your e-shop.').'</p>
 			</li>
 			<li id="fourth_block">
 				<h4><a href="index.php?tab=AdminEmployees&addemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">'.translate('New employees').'</a></h4>
-				<p>Le Lorem Ipsum est simplement du faux texte employ dans oy dans</p>
+				<p>'.translate('Add a new employee account and discharge a part of your duties of shop owner.').'</p>
 			</li>
 		</ul>
 		';
