@@ -22,3 +22,7 @@ ADD `depth` FLOAT NOT NULL AFTER `height`;
 @id_module = (SELECT `id_module` FROM `PREFIX_module` WHERE `name` = "statshome" LIMIT 1);
 DELETE FROM `PREFIX_module` WHERE `id_module` = @id_module;
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` = @id_module;
+
+ALTER TABLE `PREFIX_category` ADD `nleft` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `level_depth`;
+ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `nleft`;
+/* PHP:generate_ntree(); */;

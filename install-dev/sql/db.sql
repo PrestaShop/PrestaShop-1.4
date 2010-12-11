@@ -196,6 +196,8 @@ CREATE TABLE `PREFIX_category` (
   `id_category` int(10) unsigned NOT NULL auto_increment,
   `id_parent` int(10) unsigned NOT NULL,
   `level_depth` tinyint(3) unsigned NOT NULL default '0',
+  `nleft` int(10) unsigned NOT NULL default '0',
+  `nright` int(10) unsigned NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,

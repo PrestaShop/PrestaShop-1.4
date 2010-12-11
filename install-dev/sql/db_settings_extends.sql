@@ -2,11 +2,8 @@ SET NAMES 'utf8';
 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
-
 INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (2, 1);
-
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!');
-
 INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2);
 
 UPDATE `PREFIX_configuration` SET `value` = '2' WHERE `name` = 'PS_CARRIER_DEFAULT';
@@ -280,7 +277,8 @@ INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `desc
 INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) VALUES
 (1, 0, 0, 0, 0, 0, 0, 1, 0.05, 'percentage', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
-INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`, `position`) VALUES (2, 1, 1, 1, NOW(), NOW(),0),(3, 1, 1, 1, NOW(), NOW(),1),(4, 1, 1, 1, NOW(), NOW(),2);
+INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES 
+(2, 1, 1, 2, 3, 1, NOW(), NOW(), 0),(3, 1, 1, 3, 4, 1, NOW(), NOW(), 1),(4, 1, 1, 4, 5, 1, NOW(), NOW(), 2);
 
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
 (2, 1, 'iPods', 'Now that you can buy movies from the iTunes Store and sync them to your iPod, the whole world is your theater.', 'music-ipods', '', '', ''),
