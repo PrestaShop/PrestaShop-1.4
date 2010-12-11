@@ -46,7 +46,7 @@
 			
 			<p>
 				<label for="friend-name">{l s='Friend\'s name:' mod='sendtoafriend'}</label>
-				<input type="text" id="friend-name" name="name" value="{if isset($smarty.post.name)}{$smarty.post.name|escape:'htmlall'|stripslashes}{/if}" />
+				<input type="text" id="friend-name" name="name" value="{if isset($smarty.post.name)}{$smarty.post.name|escape:'htmlall':'UTF-8'|stripslashes}{/if}" />
 			</p>
 			<p>
 				<label for="friend-address">{l s='Friend\'s email:' mod='sendtoafriend'}</label>
