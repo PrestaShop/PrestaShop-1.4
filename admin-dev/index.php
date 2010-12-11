@@ -295,7 +295,6 @@ else /* Else display homepage */
 			';
 		$i++;
 	}
-	//id="order_line1"
 
 	echo '
 			</tbody>
