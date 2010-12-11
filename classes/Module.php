@@ -714,9 +714,9 @@ abstract class ModuleCore
 
 		/* Use Smarty 3 API calls */
 		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
-			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+			return $smarty->clearCache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 		/* or keep a backward compatibility if PHP version < 5.1.2 */
 		else
-			return $smarty->clearCache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 	}
 }

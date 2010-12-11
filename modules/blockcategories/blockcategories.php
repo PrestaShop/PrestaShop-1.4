@@ -211,7 +211,6 @@ class BlockCategories extends Module
 
 	private function _clearBlockcategoriesCache()
 	{
-		Tools::forceCache();
 		$this->_clearCache(NULL, 'blockcategories');
 		Tools::restoreCacheSettings();
 	}
