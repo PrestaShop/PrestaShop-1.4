@@ -333,7 +333,8 @@ class AdminModules extends AdminTab
 		$serialModules = '';
 		$modules = Module::getModulesOnDisk();
 		foreach ($modules AS $module)
-			$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
+			if (!in_array($module->name, $this->listNativeModules))
+				$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
 		$serialModules = urlencode($serialModules);
 		
 		//filter module list

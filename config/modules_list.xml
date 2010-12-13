@@ -33,7 +33,6 @@
 		<module name="cheque"/>
 		<module name="crossselling"/>
 		<module name="dateofdelivery"/>
-		<module name="dejala"/>
 		<module name="editorial"/>
 		<module name="feeder"/>
 		<module name="followup"/>
@@ -46,24 +45,20 @@
 		<module name="graphxmlswfcharts"/>
 		<module name="gridhtml"/>
 		<module name="gsitemap"/>
-		<module name="hipay"/>
 		<module name="homefeatured"/>
 		<module name="loyalty"/>
 		<module name="mailalerts"/>
-		<module name="moneybookers"/>
 		<module name="newsletter"/>
 		<module name="pagesnotfound"/>
-		<module name="paypal"/>
-		<module name="paypalapi"/>
 		<module name="productcomments"/>
 		<module name="productscategory"/>
 		<module name="producttooltip"/>
 		<module name="referralprogram"/>
-		<module name="reverso"/>
 		<module name="sekeywords"/>
 		<module name="sendtoafriend"/>
 		<module name="statsbestcategories"/>
 		<module name="statsbestcustomers"/>
+		<module name="statsbestmanufacturers"/>
 		<module name="statsbestproducts"/>
 		<module name="statsbestsuppliers"/>
 		<module name="statsbestvouchers"/>
@@ -88,6 +83,7 @@
 		<module name="themeinstallator"/>
 		<module name="tm4b"/>
 		<module name="trackingfront"/>
+		<module name="upscarrier"/>
 		<module name="vatnumber"/>
 		<module name="watermark"/>
 	</modules>
