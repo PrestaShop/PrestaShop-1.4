@@ -68,11 +68,18 @@ class AdminWebservice extends AdminTab
 		if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false)
 			$warnings[] = $this->l('To avoid operating problems, please use an Apache server.');
 		{
-			$apache_modules = apache_get_modules();
-			if (!in_array('mod_auth_basic', $apache_modules))
-				$warnings[] = $this->l('Please activate the Apache module \'mod_auth_basic\' to allow authentication of PrestaShop webservice.');
-			if (!in_array('mod_rewrite', $apache_modules))
-				$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using the PrestaShop webservice.');
+			if (function_exists('apache_get_modules'))
+			{
+				$apache_modules = apache_get_modules();
+				if (!in_array('mod_auth_basic', $apache_modules))
+					$warnings[] = $this->l('Please activate the Apache module \'mod_auth_basic\' to allow authentication of PrestaShop webservice.');
+				if (!in_array('mod_rewrite', $apache_modules))
+					$warnings[] = $this->l('Please activate the Apache module \'mod_rewrite\' to allow using the PrestaShop webservice.');
+			}
+			else
+			{
+				$warnings[] = $this->l('We could not check if basic authentification and rewrite extensions are activated. Please manually check if they are activated in order to use the PrestaShop webservice.');
+			}
 		}
 		if (!extension_loaded('SimpleXML'))
 			$warnings[] = $this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.');
