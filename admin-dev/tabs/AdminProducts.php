@@ -1390,13 +1390,15 @@ class AdminProducts extends AdminTab
 				/* Tabs */
 		$this->displayFormInformations($obj, $currency);
 		$this->displayFormImages($obj, $this->token);
+		$countAttributes = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product_attribute WHERE id_product = '.(int)$obj->id);
+		$countAttachments = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.(int)$obj->id);
 		if ($obj->id)
 			echo '
 			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Prices').'</h4></div>
-			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Combinations').'</h4></div>
+			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Combinations').' ('.$countAttributes.')</h4></div>
 			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Features').'</h4></div>
 			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').'</h4></div>';
+			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').' ('.$countAttachments.')</h4></div>';
 		echo '<script type="text/javascript">
 					var toload = new Array();
 					toload[3] = true;
@@ -2011,27 +2013,24 @@ class AdminProducts extends AdminTab
 		$preview_url = '';
 		if (isset($obj->id))
 		{
-		
 			$preview_url = ($link->getProductLink($this->getFieldValue($obj, 'id'), $this->getFieldValue($obj, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($obj, 'id_category_default'), (int)($cookie->id_lang))));
-	
 			if (!$obj->active)
 			{
 				$admin_dir = dirname($_SERVER['PHP_SELF']);
 				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 				$token = Tools::encrypt('PreviewProduct'.$obj->id);
-						
+				
 				$preview_url .= $obj->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
 			}
 			
 			echo '
-		<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&deleteproduct&token='.$this->token.'" style="float:right;"
-		onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
-		<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" title="'.$this->l('Delete this product').'" /> '.$this->l('Delete this product').'</a>
-		<a href="'.$preview_url.'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
+			<a href="index.php?tab=AdminCatalog&id_product='.$obj->id.'&deleteproduct&token='.$this->token.'" style="float:right;"
+			onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">
+			<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this product').'" title="'.$this->l('Delete this product').'" /> '.$this->l('Delete this product').'</a>
+			<a href="'.$preview_url.'" target="_blank"><img src="../img/admin/details.gif" alt="'.$this->l('View product in shop').'" title="'.$this->l('View product in shop').'" /> '.$this->l('View product in shop').'</a>';
 
 			if (file_exists(_PS_MODULE_DIR_.'statsproduct/statsproduct.php'))
-				echo '&nbsp;-&nbsp;
-				<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.(int)(Tab::getIdFromClassName('AdminStatsModules')).(int)($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
+				echo '&nbsp;-&nbsp;<a href="index.php?tab=AdminStatsModules&module=statsproduct&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminStatsModules'.(int)(Tab::getIdFromClassName('AdminStatsModules')).(int)($cookie->id_employee)).'"><img src="../modules/statsproduct/logo.gif" alt="'.$this->l('View product sales').'" title="'.$this->l('View product sales').'" /> '.$this->l('View product sales').'</a>';
 		}
 		echo '	
 			<hr class="clear"/>
@@ -2747,9 +2746,10 @@ class AdminProducts extends AdminTab
 	{
 		global $cookie, $currentIndex, $attributeJs, $images;
 
+		$countImages = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'image WHERE id_product = '.(int)$obj->id);
 		echo '
 		<div class="tab-page" id="step2">
-				<h4 class="tab">2. '.$this->l('Images').'</h4>
+				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
 					<td><b>'.$this->l('Add a new image to this product').'</b></td>

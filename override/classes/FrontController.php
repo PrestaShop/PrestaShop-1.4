@@ -116,11 +116,30 @@ class FrontController extends FrontControllerCore
 		$this->displayFooter();
 	}
 	
+	function ini_get_display_errors()
+	{
+		$a = 'display_errors';
+		$b = ini_get($a);
+		switch (strtolower($b))
+		{
+			case 'on':
+			case 'yes':
+			case 'true':
+				return 'assert.active' !== $a;
+			case 'stdout':
+			case 'stderr':
+				return 'display_errors' === $a;
+			default:
+				return (bool)(int)$b;
+		}
+	}
 	
 	public function displayFooter()
 	{
 		global $start_time;
 		parent::displayFooter();
+		if (!$this->ini_get_display_errors())
+			return;
 		
 		$this->_memory[6] = memory_get_usage();
 		$this->_time[6] = microtime(true);
