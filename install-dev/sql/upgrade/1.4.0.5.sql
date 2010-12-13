@@ -26,3 +26,4 @@ DELETE FROM `PREFIX_hook_module` WHERE `id_module` = @id_module;
 ALTER TABLE `PREFIX_category` ADD `nleft` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `level_depth`;
 ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `nleft`;
 /* PHP:generate_ntree(); */;
+/* PHP:id_currency_country_fix(); */;
