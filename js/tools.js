@@ -140,7 +140,9 @@ function writeBookmarkLink(url, title, text, img)
 
 function writeBookmarkLinkObject(url, title, insert)
 {
-	if (window.sidebar || window.external)
+	if (window.navigator.userAgent.indexOf('Chrome') != -1)
+		return ('');
+	else if (window.sidebar || window.external)
 		return ('<a href="javascript:addBookmark(\'' + escape(url) + '\', \'' + escape(title) + '\')">' + insert + '</a>');
 	else if (window.opera && window.print)
 		return ('<a rel="sidebar" href="' + escape(url) + '" title="' + escape(title) + '">' + insert + '</a>');
