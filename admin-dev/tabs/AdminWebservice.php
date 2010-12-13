@@ -45,9 +45,9 @@ class AdminWebservice extends AdminTab
 		);
 		
 		$this->optionTitle = $this->l('Configuration');
-		$this->_fieldsOptions = array(
-		'PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT, DELETE and HEAD are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'),
-		);
+		if (file_exists(_PS_ROOT_DIR_.'/.htaccess'))
+			$this->_fieldsOptions = array('PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT, DELETE and HEAD are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'));
+		
 	
 		parent::__construct();
 	}
@@ -64,7 +64,8 @@ class AdminWebservice extends AdminTab
 	{
 		global $cookie, $currentIndex;
 		$warnings = array();
-		
+		if (!file_exists(_PS_ROOT_DIR_.'/.htaccess'))
+			$warnings[] = $this->l('In order to enable the PrestaShop Webservice, please generate the .htaccess file via the "Generators" tab (in the "Tools" tab).');
 		if (strpos($_SERVER['SERVER_SOFTWARE'], 'Apache') === false)
 			$warnings[] = $this->l('To avoid operating problems, please use an Apache server.');
 		{

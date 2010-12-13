@@ -1451,16 +1451,20 @@ class ToolsCore
 			fwrite($writeFd, "# http://www.prestashop.com - http://www.prestashop.com/forums\n\n");
 			if (!empty($specific))
 				fwrite($writeFd, $specific);
+			
 			// RewriteEngine
+			fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
+			fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
+			fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
+			// Webservice
+			fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L,E]\n");
+			
+			// Classic URL rewriting
 			if ($rewrite_settings)
-			{
-				fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
-				fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
-				fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
 				foreach ($tab['RewriteRule']['content'] as $rule => $url)
 					fwrite($writeFd, 'RewriteRule '.$rule.' '.__PS_BASE_URI__.$url."\n");
-				fwrite($writeFd, "</IfModule>\n\n");
-			}
+			
+			fwrite($writeFd, "</IfModule>\n\n");
 			
 			// ErrorDocument
 			fwrite($writeFd, $tab['ErrorDocument']['comment']."\nErrorDocument ".$tab['ErrorDocument']['content']."\n");
