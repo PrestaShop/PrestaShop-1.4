@@ -1141,7 +1141,7 @@ class WebserviceRequest
 				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
 				if (method_exists($object, $getter))
 				{
-					$associationesources = $object->$getter();
+					$associationResources = $object->$getter();
 					if (is_array($associationResources))
 						foreach ($associationResources as $associationResource)
 						{
