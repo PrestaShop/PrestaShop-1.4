@@ -27,27 +27,67 @@
 
 class WebserviceRequest
 {
-	
+	/** @var array Errors triggered at execution */
 	private $_errors = array();
+	
+	/** @var string Status header sent at return */
 	private $_status = 'HTTP/1.1 200 OK';
+	
+	/** @var boolean Set if return should display content or not */
 	private $_outputEnabled = true;
+	
+	/** @var boolean Set if the management is specific or if it is classic (entity management) */
 	private $_specificManagement = false;
+	
+	/** @var string Base PrestaShop webservice URL */
 	private $_wsUrl;
+	
+	/** @var string PrestaShop Webservice Documentation URL */
 	private $_docUrl = 'http://prestashop.com/docs/1.4/webservice';
+	
+	/** @var boolean Set if the authentication key was checked */
 	private $_authenticated = false;
+	
+	/** @var string HTTP Method to support */
 	private $_method;
+	
+	/** @var string HTTP Method used for this request, different of the $_method attributes, useful in order to using POST method and execute PUT method support */
 	private $_realMethod;
-	private $_urlFolders = array();
+	
+	/** @var array The segment of the URL */
+	private $_urlSegment = array();
+	
+	/** @var array The segment list of the URL after the "api" segment */
 	private $_urlParams = array();
+	
+	/** @var int The time in microseconds of the start of the execution of the web service request */
 	private $_startTime = 0;
+	
+	/** @var array The list of each resources manageable via web service */
 	private $_resourceList;
+	
+	/** @var array The configuration parameters of the current resource */
 	private $_resourceConfiguration;
+	
+	/** @var array The permissions for the current key */
 	private $_keyPermissions;
+	
+	/** @var string The XML string to display if web service call succeed */
 	private $_xmlOutput = '';
+	
+	/** @var array The list of objects to display */
 	private $_objects;
+	
+	/** @var ObjectModel The current object to support, it extends the PrestaShop ObjectModel */
 	private $_object;
+	
+	/** @var string The schema to display. If null, no schema have to be displayed and normal management has to be performed */
 	private $_schemaToDisplay;
+	
+	/** @var string The fields to display. These fields will be displayed when retrieving objects */
 	private $_fieldsToDisplay = 'minimum';
+	
+	/** @var array The type of images (general, categories, manufacturers, suppliers, scenes, stores...) */
 	private $_imageTypes = array(
 		'general' => array(
 			'header' => array(),
@@ -62,14 +102,28 @@ class WebserviceRequest
 		'scenes' => array(),
 		'stores' => array()
 	);
+	
+	/** @var string The file path of the image to display. If not null, the image will be displayed, even if the XML output was not empty */
 	private $_imgToDisplay;
+	
+	/** @var string The extension of the image to display */
 	private $_imgExtension = 'jpg';
+	
+	/** @var int The maximum size supported when uploading images, in bytes */
 	private $_imgMaxUploadSize = 3000000;
+	
+	/** @var array The list of supported mime types */
 	private $_acceptedImgMimeTypes = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
+	
+	/** @var boolean if the current image management has to manage a "default" image (i.e. "No product available") */
 	private $_defaultImage = false;
 	
+	/** @var WebserviceRequest Object instance for singleton */
 	private static $_instance;
 	
+	/**
+	 * Build a WebserviceRequest object
+	 */
 	private function __construct ()
 	{
 		// time logger
@@ -86,6 +140,11 @@ class WebserviceRequest
 		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
 	}
 	
+	/**
+	 * Get WebserviceRequest object instance (Singleton)
+	 *
+	 * @return object WebserviceRequest instance
+	 */
 	public static function getInstance()
 	{
 		if(!isset(self::$_instance))
@@ -93,6 +152,17 @@ class WebserviceRequest
 		return self::$_instance;
 	}
 	
+	/**
+	 * Start Webservice request
+	 * 	Check webservice activation
+	 * 	Check autentication
+	 * 	Check resource
+	 * 	Check HTTP Method
+	 * 	Execute the action
+	 * 	Display the result
+	 *
+	 * @return void
+	 */
 	public function start()
 	{
 		// check webservice activation and request authentication
@@ -101,7 +171,7 @@ class WebserviceRequest
 			//parse request url
 			$this->_method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
 			$this->_realMethod = $_SERVER['REQUEST_METHOD'];
-			$this->_urlFolders = explode('/', $_GET['url']);
+			$this->_urlSegment = explode('/', $_GET['url']);
 			$this->_urlParams = $_GET;
 			unset($this->_urlParams['url']);
 			
@@ -109,12 +179,12 @@ class WebserviceRequest
 			if ($this->checkResource() && $this->checkHTTPMethod())
 			{
 				// if the resource is a core entity...
-				if (!isset($this->_resourceList[$this->_urlFolders[0]]['specific_management']) || !$this->_resourceList[$this->_urlFolders[0]]['specific_management'])
+				if (!isset($this->_resourceList[$this->_urlSegment[0]]['specific_management']) || !$this->_resourceList[$this->_urlSegment[0]]['specific_management'])
 				{
 					// load resource configuration
-					if ($this->_urlFolders[0] != '')
+					if ($this->_urlSegment[0] != '')
 					{
-						$object = new $this->_resourceList[$this->_urlFolders[0]]['class']();
+						$object = new $this->_resourceList[$this->_urlSegment[0]]['class']();
 						$this->_resourceConfiguration = $object->getWebserviceParameters();
 					}
 					
@@ -123,28 +193,28 @@ class WebserviceRequest
 					{
 						case 'GET':
 						case 'HEAD':
-							if ($this->executeGetAndHead())
+							if ($this->executeEntityGetAndHead())
 								$this->writeXmlAfterGet();
 							break;
 						case 'POST':
-							if (array_key_exists(1, $this->_urlFolders))
+							if (array_key_exists(1, $this->_urlSegment))
 								$this->setError(400, 'id is forbidden when adding a new resource');
-							elseif ($this->executePost())
+							elseif ($this->executeEntityPost())
 								$this->writeXmlAfterModification();
 							break;
 						case 'PUT':
-							if ($this->executePut())
+							if ($this->executeEntityPut())
 								$this->writeXmlAfterModification();
 							break;
 						case 'DELETE':
-							$this->executeDelete();
+							$this->executeEntityDelete();
 							break;
 					}
 				}
 				// if the management is specific
 				else
 				{
-					$this->_specificManagement = $this->_urlFolders[0];
+					$this->_specificManagement = $this->_urlSegment[0];
 					switch($this->_specificManagement)
 					{
 						case 'images':
@@ -158,6 +228,12 @@ class WebserviceRequest
 			$this->displayXml();
 	}
 	
+	/**
+	 * Set the return header status
+	 *
+	 * @param int $num
+	 * @return void
+	 */
 	public function setStatus($num)
 	{
 		switch ($num)
@@ -189,10 +265,13 @@ class WebserviceRequest
 		}
 	}
 	
-	
-	
-	
-	
+	/**
+	 * Set a webservice error
+	 *
+	 * @param int $num
+	 * @param string $label
+	 * @return void
+	 */
 	public function setError($num, $label)
 	{
 		global $display_errors;
@@ -200,11 +279,26 @@ class WebserviceRequest
 		$this->_errors[] = $display_errors ? $label : 'Internal error';
 	}
 	
+	/**
+	 * Set a webservice error and propose a new value near from the available values
+	 *
+	 * @param int $num
+	 * @param string $label
+	 * @param array $values
+	 * @return void
+	 */
 	public function setErrorDidYouMean($num, $label, $value, $values)
 	{
 		$this->setError($num, $label.'. Did you mean: "'.$this->getClosest($value, $values).'"?'.(count($values) > 1 ? ' The full list is: "'.implode('", "', $values).'"' : ''));
 	}
 	
+	/**
+	 * Return the nearest value picked in the values list
+	 *
+	 * @param string $input
+	 * @param array $words
+	 * @return string
+	 */
 	private function getClosest($input, $words)
 	{
 		$shortest = -1;
@@ -226,13 +320,21 @@ class WebserviceRequest
 		return $closest;
 	}
 	
+	/**
+	 * Used to replace the default PHP error handler, in order to display PHP errors in a XML format 
+	 *
+	 * @param string $errno contains the level of the error raised, as an integer
+	 * @param array $errstr contains the error message, as a string
+	 * @param array $errfile errfile, which contains the filename that the error was raised in, as a string
+	 * @param array $errline errline, which contains the line number the error was raised at, as an integer
+	 * @return boolean Always return true to avoid the default PHP error handler
+	 */
 	private function webserviceErrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		if (!(error_reporting() & $errno))
-		{
 			return;
-		}
-		switch($errno){
+		switch($errno)
+		{
 			case E_ERROR:
 				$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
@@ -278,12 +380,21 @@ class WebserviceRequest
 		return true;
 	}
 	
+	/**
+	 * Check if there is one or more error
+	 *
+	 * @return boolean
+	 */
 	private function hasErrors()
 	{
-		return (int)$this->_errors;
+		return (boolean)$this->_errors;
 	}
 	
-	// check request authentication
+	/**
+	 * Check request authentication
+	 *
+	 * @return boolean
+	 */
 	private function authenticate()
 	{
 		if (!$this->hasErrors())
@@ -347,8 +458,11 @@ class WebserviceRequest
 		}
 	}
 	
-	
-	// check webservice activation
+	/**
+	 * Check webservice activation
+	 *
+	 * @return boolean
+	 */
 	private function isActivated()
 	{
 		if (!Configuration::get('PS_WEBSERVICE'))
@@ -359,44 +473,62 @@ class WebserviceRequest
 		return true;
 	}
 	
-	// check method
+	/**
+	 * Check HTTP method
+	 *
+	 * @return boolean
+	 */
 	private function checkHTTPMethod()
 	{
 		if (!in_array($this->_method, array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 			$this->setError(405, 'Method '.$this->_method.' is not valid');
-		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlFolders))
+		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlSegment))
 			$this->setError(401, 'Method '.$this->_method.' need you to specify an id');
-		elseif ($this->_urlFolders[0] && !in_array($this->_method, $this->_keyPermissions[$this->_urlFolders[0]]))
-			$this->setError(405, 'Method '.$this->_method.' is not allowed for the resource '.$this->_urlFolders[0].' with this authentication key');
+		elseif ($this->_urlSegment[0] && !in_array($this->_method, $this->_keyPermissions[$this->_urlSegment[0]]))
+			$this->setError(405, 'Method '.$this->_method.' is not allowed for the resource '.$this->_urlSegment[0].' with this authentication key');
 		else
 			return true;
 		return false;
 	}
 	
-	// check resource
+	/**
+	 * Check resource validity
+	 *
+	 * @return boolean
+	 */
 	private function checkResource()
 	{
 		$this->_resourceList = Webservice::getResources();
 		$resourceNames = array_keys($this->_resourceList);
-		if ($this->_urlFolders[0] == '')
+		if ($this->_urlSegment[0] == '')
 			$this->_resourceConfiguration['objectsNodeName'] = 'resources';
-		elseif (in_array($this->_urlFolders[0], $resourceNames))
+		elseif (in_array($this->_urlSegment[0], $resourceNames))
 		{
-			if (!in_array($this->_urlFolders[0], array_keys($this->_keyPermissions)))
+			if (!in_array($this->_urlSegment[0], array_keys($this->_keyPermissions)))
 			{
-				$this->setError(401, 'Resource of type "'.$this->_urlFolders[0].'" is not allowed with this authentication key');
+				$this->setError(401, 'Resource of type "'.$this->_urlSegment[0].'" is not allowed with this authentication key');
 				return false;
 			}
 		}
 		else
 		{
-			$this->setErrorDidYouMean(400, 'Resource of type "'.$this->_urlFolders[0].'" does not exists', $this->_urlFolders[0], $resourceNames);
+			$this->setErrorDidYouMean(400, 'Resource of type "'.$this->_urlSegment[0].'" does not exists', $this->_urlSegment[0], $resourceNames);
 			return false;
 		}
 		return true;
 	}
 	
-	private function executeGetAndHead()
+	/**
+	 * Execute GET and HEAD requests
+	 * 
+	 * Build filter
+	 * Build fields display
+	 * Build sort
+	 * Build limit
+	 * 
+	 * @return boolean
+	 */
+	private function executeEntityGetAndHead()
 	{
 		if ($this->_resourceConfiguration['objectsNodeName'] != 'resources')
 		{
@@ -444,12 +576,12 @@ class WebserviceRequest
 											if (isset($this->_resourceConfiguration['linked_tables'][$field]['fields'][$field2]))
 											{
 												$linked_field = $this->_resourceConfiguration['linked_tables'][$field]['fields'][$field2];
-												$sql_filter .= $this->writeRetrieveFilter($linked_field['sqlId'], $value, $field.'.');
+												$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, $field.'.');
 											}
 											else
 											{
 												$list = array_keys($this->_resourceConfiguration['linked_tables'][$field]['fields']);
-												$this->setErrorDidYouMean(400, 'This filter does not exist for this linked table', $field2, $list);$this->setErrorDidYouMean(400, 'This declination does not exist', $this->_urlFolders[4], $normalImageSizeNames);
+												$this->setErrorDidYouMean(400, 'This filter does not exist for this linked table', $field2, $list);$this->setErrorDidYouMean(400, 'This declination does not exist', $this->_urlSegment[4], $normalImageSizeNames);
 												return false;
 											}
 										}
@@ -484,9 +616,9 @@ class WebserviceRequest
 									else
 									{
 										if (isset($this->_resourceConfiguration['retrieveData']['tableAlias']))
-											$sql_filter .= $this->writeRetrieveFilter($this->_resourceConfiguration['fields'][$field]['sqlId'], $url_param, $this->_resourceConfiguration['retrieveData']['tableAlias'].'.');
+											$sql_filter .= $this->getSQLRetrieveFilter($this->_resourceConfiguration['fields'][$field]['sqlId'], $url_param, $this->_resourceConfiguration['retrieveData']['tableAlias'].'.');
 										else
-											$sql_filter .= $this->writeRetrieveFilter($this->_resourceConfiguration['fields'][$field]['sqlId'], $url_param);
+											$sql_filter .= $this->getSQLRetrieveFilter($this->_resourceConfiguration['fields'][$field]['sqlId'], $url_param);
 									}
 								}
 						}
@@ -571,7 +703,7 @@ class WebserviceRequest
 
 
 			$this->_objects = array();
-			if (!isset($this->_urlFolders[1]) || !strlen($this->_urlFolders[1]))
+			if (!isset($this->_urlSegment[1]) || !strlen($this->_urlSegment[1]))
 			{
 					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_join;
 					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_filter;
@@ -589,7 +721,7 @@ class WebserviceRequest
 			else
 			{
 				//get entity details
-				$object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlFolders[1]);
+				$object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlSegment[1]);
 				if ($object->id)
 					$this->_objects[] = $object;
 				else
@@ -604,16 +736,26 @@ class WebserviceRequest
 		return true;
 	}
 	
-	private function executePost()
+	/**
+	 * Execute POST method on a PrestaShop entity
+	 * 
+	 * @return boolean
+	 */
+	private function executeEntityPost()
 	{
 		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']();
 		// we prefer use $_REQUEST as $_POST because of simulated methods
 		return $this->saveEntityFromXml($_REQUEST['xml'], 201);
 	}
 	
-	private function executePut()
+	/**
+	 * Execute PUT method on a PrestaShop entity
+	 * 
+	 * @return boolean
+	 */
+	private function executeEntityPut()
 	{
-		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlFolders[1]);
+		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlSegment[1]);
 
 		if ($this->_object->id)
 		{
@@ -640,9 +782,14 @@ class WebserviceRequest
 		}
 	}
 	
-	private function executeDelete()
+	/**
+	 * Execute DELETE method on a PrestaShop entity
+	 * 
+	 * @return boolean
+	 */
+	private function executeEntityDelete()
 	{
-		$object = new $this->_resourceConfiguration['retrieveData']['className'](intval($this->_urlFolders[1]));
+		$object = new $this->_resourceConfiguration['retrieveData']['className'](intval($this->_urlSegment[1]));
 		if (!$object->id)
 			$this->setStatus(404);
 		elseif (!$object->delete())
@@ -650,10 +797,15 @@ class WebserviceRequest
 		$output = false;
 	}
 	
+	/**
+	 * Write XML output after GET and HEAD action
+	 * 
+	 * @return void
+	 */
 	private function writeXmlAfterGet()
 	{
 		// list entities
-		if (!isset($this->_urlFolders[1]) || !strlen($this->_urlFolders[1]))
+		if (!isset($this->_urlSegment[1]) || !strlen($this->_urlSegment[1]))
 		{
 			if (($this->_resourceConfiguration['objectsNodeName'] != 'resources' && count($this->_objects) || $this->_resourceConfiguration['objectsNodeName'] == 'resources') && count($this->_resourceList))
 			{
@@ -725,12 +877,24 @@ class WebserviceRequest
 		}
 	}
 	
+	/**
+	 * Write XML output after POST and PUT action
+	 * 
+	 * @return void
+	 */
 	private function writeXmlAfterModification()
 	{
 		$this->_fieldsToDisplay = 'full';
 		$this->_xmlOutput .= $this->getXmlFromEntity($this->_object);
 	}
 	
+	/**
+	 * save Entity Object from XML
+	 * 
+	 * @param string $xmlString
+	 * @param int $successReturnCode
+	 * @return boolean
+	 */
 	private function saveEntityFromXml($xmlString, $successReturnCode)
 	{
 		$xml = new SimpleXMLElement($xmlString);
@@ -842,7 +1006,15 @@ class WebserviceRequest
 		}
 	}
 	
-	private function writeRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
+	/**
+	 * get SQL retrieve Filter
+	 * 
+	 * @param string $sqlId
+	 * @param string $filterValue
+	 * @param string $tableAlias = 'main.'
+	 * @return string
+	 */
+	private function getSQLRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
 	{
 		$ret = '';
 		preg_match('/^(.*)\[(.*)\](.*)$/', $filterValue, $matches);
@@ -885,6 +1057,12 @@ class WebserviceRequest
 		return $ret;
 	}
 	
+	/**
+	 * get XML From Object Entity
+	 * 
+	 * @param ObjectModel $object = null
+	 * @return string
+	 */
 	private function getXmlFromEntity($object = null)
 	{
 	
@@ -984,6 +1162,11 @@ class WebserviceRequest
 		return $ret;
 	}
 	
+	/**
+	 *  Display XML and die the script
+	 *  
+	 * @return void
+	 */
 	private function displayXml()
 	{
 		// write headers
@@ -1048,6 +1231,11 @@ class WebserviceRequest
 		die;
 	}
 	
+	/**
+	 * Management of images URL segment
+	 * 
+	 * @return boolean
+	 */
 	private function manageImages()
 	{
 		/*
@@ -1113,29 +1301,29 @@ class WebserviceRequest
 		 * */
 		
 		// Pre configuration...
-		if (count($this->_urlFolders) == 1)
-			$this->_urlFolders[1] = '';
-		if (count($this->_urlFolders) == 2)
-			$this->_urlFolders[2] = '';
-		if (count($this->_urlFolders) == 3)
-			$this->_urlFolders[3] = '';
-		if (count($this->_urlFolders) == 4)
-			$this->_urlFolders[4] = '';
-		if (count($this->_urlFolders) == 5)
-			$this->_urlFolders[5] = '';
+		if (count($this->_urlSegment) == 1)
+			$this->_urlSegment[1] = '';
+		if (count($this->_urlSegment) == 2)
+			$this->_urlSegment[2] = '';
+		if (count($this->_urlSegment) == 3)
+			$this->_urlSegment[3] = '';
+		if (count($this->_urlSegment) == 4)
+			$this->_urlSegment[4] = '';
+		if (count($this->_urlSegment) == 5)
+			$this->_urlSegment[5] = '';
 		
-		switch ($this->_urlFolders[1])
+		switch ($this->_urlSegment[1])
 		{
 			// general images management : like header's logo, invoice logo, etc...
 			case 'general':
-				$this->manageGeneralImages();
+				return $this->manageGeneralImages();
 				break;
 			// normal images management : like the most entity images (categories, manufacturers..)...
 			case 'categories':
 			case 'manufacturers':
 			case 'suppliers':
 			case 'stores':
-				switch ($this->_urlFolders[1])
+				switch ($this->_urlSegment[1])
 				{
 					case 'categories':
 						$directory = _PS_CAT_IMG_DIR_;
@@ -1150,7 +1338,7 @@ class WebserviceRequest
 						$directory = _PS_STORE_IMG_DIR_;
 						break;
 				}
-				$this->manageNormalImages($directory);
+				return $this->manageNormalImages($directory);
 				break;
 			
 			// product image management : many image for one entity (product)
@@ -1163,21 +1351,27 @@ class WebserviceRequest
 			case '':
 				$this->_xmlOutput .= '<image_types>'."\n";
 				foreach ($this->_imageTypes as $imageTypeName => $imageType)
-					$this->_xmlOutput .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$imageTypeName.'" get="true" put="false" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
+					$this->_xmlOutput .= '<'.$imageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$imageTypeName.'" get="true" put="false" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
 				$this->_xmlOutput .= '</image_types>'."\n";
+				return true;
 				break;
 			
 			default:
-				$this->setErrorDidYouMean(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists', $this->_urlFolders[1], array_keys($this->_imageTypes));
+				$this->setErrorDidYouMean(400, 'Image of type "'.$this->_urlSegment[1].'" does not exists', $this->_urlSegment[1], array_keys($this->_imageTypes));
 				return false;
 		}
 	}
 	
+	/**
+	 * Management of general images
+	 * 
+	 * @return boolean
+	 */
 	private function manageGeneralImages()
 	{
 		$path = '';
 		$alternative_path = '';
-		switch ($this->_urlFolders[2])
+		switch ($this->_urlSegment[2])
 		{
 			// Set the image path on display in relation to the header image
 			case 'header':
@@ -1236,14 +1430,14 @@ class WebserviceRequest
 			case '':
 				$this->_xmlOutput .= '<general_image_types>'."\n";
 				foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
-					$this->_xmlOutput .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
+					$this->_xmlOutput .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$this->_urlSegment[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
 				$this->_xmlOutput .= '</general_image_types>'."\n";
 				return true;
 				break;
 			
 			// If the image type does not exist...
 			default:
-				$this->setErrorDidYouMean(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists', $this->_urlFolders[2], array_keys($this->_imageTypes['general']));
+				$this->setErrorDidYouMean(400, 'General image of type "'.$this->_urlSegment[2].'" does not exists', $this->_urlSegment[2], array_keys($this->_imageTypes['general']));
 				return false;
 		}
 		// The general image type is valid, now we try to do action in relation to the method
@@ -1269,15 +1463,21 @@ class WebserviceRequest
 		}
 	}
 	
+	/**
+	 * Management of normal images (as categories, suppliers, manufacturers and stores)
+	 * 
+	 * @param string $directory the file path of the root of the images folder type
+	 * @return boolean
+	 */
 	private function manageNormalImages($directory)
 	{
 		
 		// Get available image sizes for the current image type
-		$normalImageSizes = ImageType::getImagesTypes($this->_urlFolders[1]);
+		$normalImageSizes = ImageType::getImagesTypes($this->_urlSegment[1]);
 		$normalImageSizeNames = array();
 		foreach ($normalImageSizes as $normalImageSize)
 			$normalImageSizeNames[] = $normalImageSize['name'];
-		switch ($this->_urlFolders[2])
+		switch ($this->_urlSegment[2])
 		{
 			// Match the default images
 			case 'default':
@@ -1295,21 +1495,22 @@ class WebserviceRequest
 				
 				
 				// Display list of languages
-				if($this->_urlFolders[3] == '' && $this->_method == 'GET')
+				if($this->_urlSegment[3] == '' && $this->_method == 'GET')
 				{
 					$this->_xmlOutput .= '<languages>'."\n";
 					foreach ($langList as $lang)
-						$this->_xmlOutput .= '<language iso="'.$lang['iso_code'].'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$this->_urlFolders[2].'/'.$lang['iso_code'].'" get="true" put="true" post="true" delete="true" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
+						$this->_xmlOutput .= '<language iso="'.$lang['iso_code'].'" xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$this->_urlSegment[1].'/'.$this->_urlSegment[2].'/'.$lang['iso_code'].'" get="true" put="true" post="true" delete="true" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
 					$this->_xmlOutput .= '</languages>'."\n";
+					return true;
 				}
 				else
 				{
-					if ($this->_urlFolders[4] != '')
-						$filename = $directory.$this->_urlFolders[3].'-'.$this->_urlFolders[2].'-'.$this->_urlFolders[4].'.jpg';
+					if ($this->_urlSegment[4] != '')
+						$filename = $directory.$this->_urlSegment[3].'-'.$this->_urlSegment[2].'-'.$this->_urlSegment[4].'.jpg';
 					else
-						$filename = $directory.$this->_urlFolders[3].'.jpg';
+						$filename = $directory.$this->_urlSegment[3].'.jpg';
 					$filename_exists = file_exists($filename);
-					$this->manageNormalImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
+					return $this->manageNormalImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
 				}
 				break;
 			
@@ -1335,33 +1536,37 @@ class WebserviceRequest
 						if (isset($matches[1]))
 						{
 							$id = $matches[1];
-							$this->_xmlOutput .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$id.'" />'."\n";
+							$this->_xmlOutput .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$this->_urlSegment[1].'/'.$id.'" />'."\n";
 						}
 					}
 				$this->_xmlOutput .= '</images>'."\n";
+				return true;
 				break;
 			
 			default:
 				// If id is detected
-				if (Validate::isUnsignedId($this->_urlFolders[2]))
+				if (Validate::isUnsignedId($this->_urlSegment[2]))
 				{
-					$orig_filename = $directory.$this->_urlFolders[2].'.jpg';
-					$orig_filename_exists = file_exists($directory.$this->_urlFolders[2].'.jpg');
+					$orig_filename = $directory.$this->_urlSegment[2].'.jpg';
+					$orig_filename_exists = file_exists($directory.$this->_urlSegment[2].'.jpg');
 					
 					// If a size was given try to display it
-					if ($this->_urlFolders[3] != '')
+					if ($this->_urlSegment[3] != '')
 					{
 						// Check the given size
-						if (!in_array($this->_urlFolders[3], $normalImageSizeNames))
+						if (!in_array($this->_urlSegment[3], $normalImageSizeNames))
 						{
-							$this->setErrorDidYouMean(400, 'This image type does not exist', $this->_urlFolders[3], $normalImageSizeNames);
+							$this->setErrorDidYouMean(400, 'This image type does not exist', $this->_urlSegment[3], $normalImageSizeNames);
 							return false;
 						}
-						$filename = $directory.$this->_urlFolders[2].'-'.$this->_urlFolders[3].'.jpg';
+						$filename = $directory.$this->_urlSegment[2].'-'.$this->_urlSegment[3].'.jpg';
 						
 						// Display the resized specific image
 						if (file_exists($filename))
+						{
 							$this->_imgToDisplay = $filename;
+							return true;
+						}
 						else
 						{
 							$this->setError(500, 'This image does not exist on disk');
@@ -1371,7 +1576,7 @@ class WebserviceRequest
 					// Management of the original image (GET, PUT, POST, DELETE)
 					else
 					{
-						$this->manageNormalImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
+						return $this->manageNormalImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
 					}
 				}
 				else
@@ -1382,6 +1587,15 @@ class WebserviceRequest
 		}
 	}
 	
+	/**
+	 * Management of normal images CRUD
+	 * 
+	 * @param boolean $filename_exists if the filename exists
+	 * @param string $filename the image path
+	 * @param array $imageSizes The
+	 * @param string $directory
+	 * @return boolean
+	 */
 	private function manageNormalImagesCRUD($filename_exists, $filename, $imageSizes, $directory)
 	{
 		switch ($this->_method)
@@ -1453,6 +1667,14 @@ class WebserviceRequest
 		}
 	}
 	
+	/**
+	 * 	Delete the image on disk
+	 * 
+	 * @param string $filePath the image file path
+	 * @param array $imageTypes The differents sizes
+	 * @param string $parentPath The parent path
+	 * @return boolean
+	 */
 	private function deleteImageOnDisk($filePath, $imageTypes = NULL, $parentPath = NULL)
 	{
 		$this->_outputEnabled = false;
@@ -1467,9 +1689,9 @@ class WebserviceRequest
 				foreach ($imageTypes as $imageType)
 				{
 					if ($this->_defaultImage)
-						$declination_path = $parentPath.$this->_urlFolders[3].'-default-'.$imageType['name'].'.jpg';
+						$declination_path = $parentPath.$this->_urlSegment[3].'-default-'.$imageType['name'].'.jpg';
 					else
-					$declination_path = $parentPath.$this->_urlFolders[2].'-'.$imageType['name'].'.jpg';
+					$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
 					if (!@unlink($declination_path))
 					{
 						$this->setError(204);
@@ -1486,6 +1708,17 @@ class WebserviceRequest
 		}
 	}
 	
+	/**
+	 * Write the image on disk
+	 * 
+	 * @param string $basePath
+	 * @param string $newPath
+	 * @param int $destWidth
+	 * @param int $destHeight
+	 * @param array $imageTypes
+	 * @param string $parentPath
+	 * @return string
+	 */
 	private function writeImageOnDisk($basePath, $newPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
 	{
 		list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($basePath);
@@ -1568,9 +1801,9 @@ class WebserviceRequest
 			foreach ($imageTypes as $imageType)
 			{
 				if ($this->_defaultImage)
-					$declination_path = $parentPath.$this->_urlFolders[3].'-default-'.$imageType['name'].'.jpg';
+					$declination_path = $parentPath.$this->_urlSegment[3].'-default-'.$imageType['name'].'.jpg';
 				else
-					$declination_path = $parentPath.$this->_urlFolders[2].'-'.$imageType['name'].'.jpg';
+					$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
 				if (!$this->writeImageOnDisk($basePath, $declination_path, $imageType['width'], $imageType['height']))
 				{
 					$this->setError(500, 'Unable to save the declination "'.$imageType['name'].'" of this image.');
@@ -1582,6 +1815,16 @@ class WebserviceRequest
 		return !$this->hasErrors() ? $newPath : false;
 	}
 	
+	/**
+	 * Write the posted image on disk
+	 * 
+	 * @param string $sreceptionPath
+	 * @param int $destWidth
+	 * @param int $destHeight
+	 * @param array $imageTypes
+	 * @param string $parentPath
+	 * @return boolean
+	 */
 	private function writePostedImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
 	{
 		if ($this->_realMethod == 'PUT')
@@ -1636,7 +1879,7 @@ class WebserviceRequest
 					$this->setError(400, 'Error while copying image to the temporary directory');
 					return false;
 				}
-				// Try to copy image file to the image folder
+				// Try to copy image file to the image directory
 				else
 				{
 					return $this->writeImageOnDisk($tmpName, $receptionPath, $destWidth, $destHeight, $imageTypes, $parentPath);
