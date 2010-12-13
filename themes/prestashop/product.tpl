@@ -252,7 +252,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<span class="our_price_display">
 				{if $priceDisplay >= 0 && $priceDisplay <= 2}
 					<span id="our_price_display">{convertPrice price=$productPrice}</span>
-						{if $tax_enabled}{l s='tax incl.'}{/if}
+						{if $tax_enabled}
+							{if $priceDisplay == 1}{l s='tax excl.'}{else}{l s='tax incl.'}{/if}
+						{/if}
 				{/if}
 				</span>
 				{if $priceDisplay == 2}
@@ -266,7 +268,9 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					{if $priceDisplay >= 0 && $priceDisplay <= 2}
 						{if $productPriceWithoutRedution > $productPrice}
 							<span id="old_price_display">{convertPrice price=$productPriceWithoutRedution}</span>
-								{if $tax_enabled}{l s='tax incl.'}{/if}
+								{if $tax_enabled}
+									{if $priceDisplay == 1}{l s='tax excl.'}{else}{l s='tax incl.'}{/if}
+								{/if}
 						{/if}
 					{/if}
 					</span>
