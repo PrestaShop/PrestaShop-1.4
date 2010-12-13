@@ -49,9 +49,7 @@ class CategoryControllerCore extends FrontController
         parent::preProcess();
         if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 		{
-            $id_category = isset($_GET['id_category']) ? $_GET['id_category'] : false;
-    
-    		if ($id_category)
+    		if ($id_category = (int)Tools::getValue('id_category'))
     		{
     			$rewrite_infos = Category::getUrlRewriteInformations($id_category);
     
@@ -66,7 +64,7 @@ class CategoryControllerCore extends FrontController
 	public function process()
 	{
 		parent::process();
-		if (!isset($_GET['id_category']) OR !Validate::isUnsignedId($_GET['id_category']))
+		if (!($id_category = (int)Tools::getValue('id_category')) OR !Validate::isUnsignedId($id_category))
 			$this->errors[] = Tools::displayError('category ID is missing');
 		else
 		{
