@@ -55,7 +55,7 @@ class WebserviceRequest
 			'invoice' => array(),
 			'store_icon' => array(),
 		),
-		'products' => array(),
+		/*'products' => array(),*/
 		'categories' => array(),
 		'manufacturers' => array(),
 		'suppliers' => array(),
@@ -66,6 +66,7 @@ class WebserviceRequest
 	private $_imgType = 'jpg';
 	private $_imgMaxSize = 3000000;
 	private $_imgTypes = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
+	private $_defaultImage = false;
 	
 	private static $_instance;
 	
@@ -188,7 +189,136 @@ class WebserviceRequest
 		}
 	}
 	
-	private function writeImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL)
+	private function deleteImageOnDisk($filePath, $imageTypes = NULL, $parentPath = NULL)
+	{
+		$this->_output = false;
+		if (file_exists($filePath))
+		{
+			// delete image on disk
+			@unlink($filePath);
+			
+			// Delete declinated image if needed
+			if ($imageTypes)
+			{
+				foreach ($imageTypes as $imageType)
+				{
+					if ($this->_defaultImage)
+						$declination_path = $parentPath.$this->_urlFolders[3].'-default-'.$imageType['name'].'.jpg';
+					else
+					$declination_path = $parentPath.$this->_urlFolders[2].'-'.$imageType['name'].'.jpg';
+					if (!@unlink($declination_path))
+					{
+						$this->setError(204);
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		else
+		{
+			$this->setStatus(204);
+			return false;
+		}
+	}
+	
+	private function writeImageOnDisk($basePath, $newPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
+	{
+		list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($basePath);
+		if (!$sourceWidth)
+		{
+			$this->setError(400, 'Image width was null');
+			return false;
+		}
+		if ($destWidth == NULL) $destWidth = $sourceWidth;
+		if ($destHeight == NULL) $destHeight = $sourceHeight;
+		switch ($type)
+		{
+			case 1:
+				$sourceImage = imagecreatefromgif($basePath);
+				break;
+			case 3:
+				$sourceImage = imagecreatefrompng($basePath);
+				break;
+			case 2:
+			default:
+				$sourceImage = imagecreatefromjpeg($basePath);
+				break;
+		}
+	
+		$widthDiff = $destWidth / $sourceWidth;
+		$heightDiff = $destHeight / $sourceHeight;
+		
+		if ($widthDiff > 1 AND $heightDiff > 1)
+		{
+			$nextWidth = $sourceWidth;
+			$nextHeight = $sourceHeight;
+		}
+		else
+		{
+			if ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
+			{
+				$nextHeight = $destHeight;
+				$nextWidth = (int)(($sourceWidth * $nextHeight) / $sourceHeight);
+				$destWidth = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
+			}
+			else
+			{
+				$nextWidth = $destWidth;
+				$nextHeight = (int)($sourceHeight * $destWidth / $sourceWidth);
+				$destHeight = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
+			}
+		}
+		
+		$borderWidth = (int)(($destWidth - $nextWidth) / 2);
+		$borderHeight = (int)(($destHeight - $nextHeight) / 2);
+		
+		$destImage = imagecreatetruecolor($destWidth, $destHeight);
+	
+		$white = imagecolorallocate($destImage, 255, 255, 255);
+		imagefill($destImage, 0, 0, $white);
+	
+		imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
+		imagecolortransparent($destImage, $white);
+		$flag = false;
+		switch ($this->_imgType)
+		{
+			case 'gif':
+				$flag = imagegif($destImage, $newPath);
+				break;
+			case 'png':
+				$flag = imagepng($destImage, $newPath, 7);
+				break;
+			case 'jpeg':
+			default:
+				$flag = imagejpeg($destImage, $newPath, 90);
+				break;
+		}
+		imagedestroy($destImage);
+		if (!$flag)
+			return false;
+		
+		// Write image declinations if needed
+		if ($imageTypes)
+		{
+			foreach ($imageTypes as $imageType)
+			{
+				if ($this->_defaultImage)
+					$declination_path = $parentPath.$this->_urlFolders[3].'-default-'.$imageType['name'].'.jpg';
+				else
+					$declination_path = $parentPath.$this->_urlFolders[2].'-'.$imageType['name'].'.jpg';
+				if (!$this->writeImageOnDisk($basePath, $declination_path, $imageType['width'], $imageType['height']))
+				{
+					$this->setError(500, 'Unable to save the declination "'.$imageType['name'].'" of this image.');
+					return false;
+				}
+			}
+		}
+		
+		return !$this->hasErrors() ? $newPath : false;
+	}
+	
+	private function writePostedImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
 	{
 		if ($this->_realMethod == 'PUT')
 		{
@@ -245,78 +375,7 @@ class WebserviceRequest
 				// Try to copy image file to the image folder
 				else
 				{
-					list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($tmpName);
-					if (!$sourceWidth)
-					{
-						$this->setError(400, 'Image width was null');
-						return false;
-					}
-					if ($destWidth == NULL) $destWidth = $sourceWidth;
-					if ($destHeight == NULL) $destHeight = $sourceHeight;
-					switch ($type)
-					{
-						case 1:
-							$sourceImage = imagecreatefromgif($tmpName);
-							break;
-						case 3:
-							$sourceImage = imagecreatefrompng($tmpName);
-							break;
-						case 2:
-						default:
-							$sourceImage = imagecreatefromjpeg($tmpName);
-							break;
-					}
-				
-					$widthDiff = $destWidth / $sourceWidth;
-					$heightDiff = $destHeight / $sourceHeight;
-					
-					if ($widthDiff > 1 AND $heightDiff > 1)
-					{
-						$nextWidth = $sourceWidth;
-						$nextHeight = $sourceHeight;
-					}
-					else
-					{
-						if ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
-						{
-							$nextHeight = $destHeight;
-							$nextWidth = (int)(($sourceWidth * $nextHeight) / $sourceHeight);
-							$destWidth = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
-						}
-						else
-						{
-							$nextWidth = $destWidth;
-							$nextHeight = (int)($sourceHeight * $destWidth / $sourceWidth);
-							$destHeight = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
-						}
-					}
-					
-					$borderWidth = (int)(($destWidth - $nextWidth) / 2);
-					$borderHeight = (int)(($destHeight - $nextHeight) / 2);
-					
-					$destImage = imagecreatetruecolor($destWidth, $destHeight);
-				
-					$white = imagecolorallocate($destImage, 255, 255, 255);
-					imagefill($destImage, 0, 0, $white);
-				
-					imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
-					imagecolortransparent($destImage, $white);
-					$flag = false;
-					switch ($this->_imgType)
-					{
-						case 'gif':
-							$flag = imagegif($destImage, $receptionPath);
-							break;
-						case 'png':
-							$flag = imagepng($destImage, $receptionPath, 7);
-							break;
-						case 'jpeg':
-						default:
-							$flag = imagejpeg($destImage, $receptionPath, 90);
-							break;
-					}
-					imagedestroy($destImage);
-					return $receptionPath;
+					return $this->writeImageOnDisk($tmpName, $receptionPath, $destWidth, $destHeight, $imageTypes, $parentPath);
 				}
 				unlink($tmpName);
 			}
@@ -334,10 +393,116 @@ class WebserviceRequest
 	}
 	private function manageImages()
 	{
+		/*
+		 * available cases api/... :
+		 *   
+		 *   images ("types_list") (N-1)
+		 *   	GET    (xml)
+		 *   images/general ("general_list") (N-2)
+		 *   	GET    (xml)
+		 *   images/general/[header,+] ("general") (N-3)
+		 *   	GET    (bin)
+		 *   	PUT    (bin)
+		 *   
+		 *   
+		 *   images/[categories,+] ("normal_list") (N-2)
+		 *   	GET    (xml)
+		 *   images/[categories,+]/[1,+] ("normal") (N-3)
+		 *   	GET    (bin)
+		 *   	PUT    (bin)
+		 *   	DELETE
+		 *   	POST   (bin) (if image does not exists)
+		 *   images/[categories,+]/[1,+]/[small,+] ("normal_resized") (N-4)
+		 *   	GET    (bin)
+		 *   images/[categories,+]/default ("display_list_of_langs") (N-3)
+		 *   	GET    (xml)
+		 *   images/[categories,+]/default/[en,+] ("normal_default_i18n")  (N-4)
+		 *   	GET    (bin)
+		 *   	POST   (bin) (if image does not exists)
+		 *      PUT    (bin)
+		 *      DELETE    (bin)
+		 *   images/[categories,+]/default/[en,+]/[small,+] ("normal_default_i18n_resized")  (N-5)
+		 *   
+		 *   
+		 *   	GET    (bin)
+		 *   images/product ("product_list")  (N-2)
+		 *   	GET    (xml) (list of image)
+		 *   images/product/[1,+] ("product_description")  (N-3)
+		 *   	GET    (xml) (legend, declinations, xlink to images/product/[1,+]/bin)
+		 *   images/product/[1,+]/bin ("product_bin")  (N-4)
+		 *   	GET    (bin)
+		 *      POST   (bin) (if image does not exists)
+		 *   images/product/[1,+]/[1,+] ("product_declination")  (N-4)
+		 *   	GET    (bin)
+		 *   	POST   (xml) (legend)
+		 *   	PUT    (xml) (legend)
+		 *      DELETE
+		 *   images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
+		 *   	POST   (bin) (if image does not exists)
+		 *   	GET    (bin)
+		 *   	PUT    (bin)
+		 *   images/product/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
+		 *   	GET    (bin)
+		 *   images/product/default ("product_default") (N-3)
+		 *   	GET    (bin)
+		 *   images/product/default/[en,+] ("product_default_i18n") (N-4)
+		 *   	GET    (bin)
+		 *      POST   (bin)
+		 *      PUT   (bin)
+		 *      DELETE
+		 *   images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
+		 * 		GET    (bin)
+		 * 
+		 * */
+		
+		// Pre configuration...
 		if (count($this->_urlFolders) == 1)
 			$this->_urlFolders[1] = '';
+		if (count($this->_urlFolders) == 2)
+			$this->_urlFolders[2] = '';
+		if (count($this->_urlFolders) == 3)
+			$this->_urlFolders[3] = '';
+		if (count($this->_urlFolders) == 4)
+			$this->_urlFolders[4] = '';
+		if (count($this->_urlFolders) == 5)
+			$this->_urlFolders[5] = '';
+		
 		switch ($this->_urlFolders[1])
 		{
+			// general images management : like header's logo, invoice logo, etc...
+			case 'general':
+				$this->manageGeneralImages();
+				break;
+			// normal images management : like the most entity images (categories, manufacturers..)...
+			case 'categories':
+			case 'manufacturers':
+			case 'suppliers':
+			case 'stores':
+				switch ($this->_urlFolders[1])
+				{
+					case 'categories':
+						$directory = _PS_CAT_IMG_DIR_;
+						break;
+					case 'manufacturers':
+						$directory = _PS_MANU_IMG_DIR_;
+						break;
+					case 'suppliers':
+						$directory = _PS_SUPP_IMG_DIR_;
+						break;
+					case 'stores':
+						$directory = _PS_STORE_IMG_DIR_;
+						break;
+				}
+				$this->manageNormalImages($directory);
+				break;
+			
+			// product image management : many image for one entity (product)
+			case 'products':
+				$this->setError(500, 'Management product images is currently not implemented at this version');
+				return false;
+				break;
+			
+			// images root node management : many image for one entity (product)
 			case '':
 				$this->_xmlContent .= '<image_types>'."\n";
 				foreach ($this->_imageTypes as $imageTypeName => $imageType)
@@ -345,219 +510,321 @@ class WebserviceRequest
 				$this->_xmlContent .= '</image_types>'."\n";
 				break;
 			
-			case 'general':
-				// Check if method is allowed
-				if ($this->_method != 'GET' && $this->_method != 'HEAD' && $this->_method != 'PUT')
+			default:
+				$this->setErrorDidYouMean(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists', $this->_urlFolders[1], array_keys($this->_imageTypes));
+				return false;
+		}
+	}
+	
+	private function manageGeneralImages()
+	{
+		$path = '';
+		$alternative_path = '';
+		switch ($this->_urlFolders[2])
+		{
+			// Set the image path on display in relation to the header image
+			case 'header':
+				if (in_array($this->_method, array('GET','HEAD','PUT')))
+					$path = _PS_IMG_DIR_.'logo.jpg';
+				else
 				{
 					$this->setError(405, 'This method is not allowed with general image resources.');
 					return false;
 				}
-				
-				// Execute action
-				if (count($this->_urlFolders) == 2)
-					$this->_urlFolders[2] = '';
-				$path = '';
-				$alternative_path = '';
-				switch ($this->_urlFolders[2])
+				break;
+			
+			// Set the image path on display in relation to the mail image
+			case 'mail':
+				if (in_array($this->_method, array('GET','HEAD','PUT')))
 				{
-					case '':
-						$this->_xmlContent .= '<general_image_types>'."\n";
-						foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
-							$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_imgTypes).'" />'."\n";
-						$this->_xmlContent .= '</general_image_types>'."\n";
-						break;
-					
-					case 'header':
-						$path = _PS_IMG_DIR_.'logo.jpg';
-						break;
-					case 'mail':
-						$path = _PS_IMG_DIR_.'logo_mail.jpg';
-						$alternative_path = _PS_IMG_DIR_.'logo.jpg';
-						break;
-					case 'invoice':
-						$path = _PS_IMG_DIR_.'logo_invoice.jpg';
-						$alternative_path = _PS_IMG_DIR_.'logo.jpg';
-						break;
-					case 'store_icon':
-						$path = _PS_IMG_DIR_.'logo_stores.gif';
-						$this->_imgType = 'gif';
-						break;
-					default:
-						$this->setError(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[2], array_keys($this->_imageTypes['general'])).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes['general'])).'"');
-						return false;
+					$path = _PS_IMG_DIR_.'logo_mail.jpg';
+					$alternative_path = _PS_IMG_DIR_.'logo.jpg';
 				}
-				if ($path != '')
+				else
 				{
-					if ($this->_method == 'GET' || $this->_method == 'HEAD')
-					{
-						$this->_imgToDisplay = ($alternative_path != '' && file_exists($alternative_path)) ? $alternative_path : $path;
-					}
-					elseif ($this->_method == 'PUT')
-					{
-						if ($this->writeImageOnDisk($path, NULL, NULL))
-							$this->_imgToDisplay = $path;
-						else
-						{
-							$this->setError(400, 'Error while copying image to the directory');
-							return false;
-						}
-					}
+					$this->setError(405, 'This method is not allowed with general image resources.');
+					return false;
 				}
 				break;
-			case 'categories':
-				// Execute action
-				if (count($this->_urlFolders) == 2)
-					$this->_urlFolders[2] = '';
-				$path = '';
-				$categoryImageTypes = ImageType::getImagesTypes('categories');
-				switch ($this->_urlFolders[2])
+			
+			// Set the image path on display in relation to the invoice image
+			case 'invoice':
+				if (in_array($this->_method, array('GET','HEAD','PUT')))
 				{
-					case '':
-						// Check if method is allowed
-						if ($this->_method != 'GET')
-						{
-							$this->setError(405, 'This method is not allowed for listing category images.');
-							return false;
-						}
-						
-						// Display the list of category images present on disk 
-						$this->_xmlContent .= '<image_types>'."\n";
-						foreach ($categoryImageTypes as $imageType)
-							$this->_xmlContent .= '<image_type id="'.$imageType['id_image_type'].'" name="'.$imageType['name'].'" xlink:href="'.$this->_wsUrl.'image_types/'.$imageType['id_image_type'].'" />'."\n";
-						$this->_xmlContent .= '</image_types>'."\n";
-						$this->_xmlContent .= '<category_images>'."\n";
-						$nodes = scandir(_PS_CAT_IMG_DIR_);
-						foreach ($nodes as $node)
-							// avoid too much preg_match...
-							if ($node != '.' && $node != '..' && $node != '.svn')
-							{
-								preg_match('/^(\d)\.jpg*$/Ui', $node, $matches);
-								if (isset($matches[1]))
-								{
-									$id = $matches[1];
-									$this->_xmlContent .= '<category_image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$id.'" />'."\n";
-								}
-							}
-						$this->_xmlContent .= '</category_images>'."\n";
-						break;
-					
-					case 'default':
-						// "Default" category image management
-						
-						d('default categ image case TODO');//TODO
-						break;
-					
-					default:
-						// Specific category image management
-						$orig_filename = _PS_CAT_IMG_DIR_.$this->_urlFolders[2].'.jpg';
-						if (file_exists($orig_filename))
-						{
-							// If no size was given...
-							if (count($this->_urlFolders) == 3)
-								$this->_urlFolders[3] = '';
-							//d($this->_urlFolders);
-							if ($this->_urlFolders[3] == '')
-							{
-								// Management of the original image (GET, PUT, POST, DELETE)
-								switch ($this->_method)
-								{
-									case 'GET':
-									case 'HEAD':
-										
-										// Display the resized specific image
-										$this->_imgToDisplay = $orig_filename;
-										break;
-									case 'PUT':
-										d('TODO');//TODO
-										break;
-									case 'POST':
-										d('TODO');//TODO
-										break;
-									case 'DELETE':
-										d('TODO');//TODO
-										break;
-									default : 
-										$this->setError(405, 'This method is not allowed for listing category images.');
-										return false;
-								}
-							}
-							else
-							{
-								// If a size was given...
-								
-								// Check if method is allowed
-								if ($this->_method != 'GET')
-								{
-									$this->setError(405, 'This method is not allowed for listing category images.');
-									return false;
-								}
-								
-								// Check the given size
-								$categoryImageTypeNames = array();
-								foreach ($categoryImageTypes as $categoryImageType)
-									$categoryImageTypeNames[] = $categoryImageType['name'];
-								if (!in_array($this->_urlFolders[3], $categoryImageTypeNames))
-								{
-									$this->setError(400, 'This image type does not exist for the category images. Did you mean: "'.$this->closest($this->_urlFolders[3], $categoryImageTypeNames).'"? The full list is: "'.implode('", "', $categoryImageTypeNames).'"');
-									return false;
-								}
-								$filename = _PS_CAT_IMG_DIR_.$this->_urlFolders[2].'-'.$this->_urlFolders[3].'.jpg';
-								
-								// Display the resized specific image
-								if (file_exists($filename))
-									$this->_imgToDisplay = $filename;
-								else
-								{
-									$this->setError(500, 'This image does not exist on disk');
-									return false;
-								}
-								/*
-								d($categoryImageTypeNames);
-								d($this->_urlFolders[3]);
-								*/
-							}
-						}
-						else
-						{
-							$this->setStatus(404);
-							return false;
-						}
+					$path = _PS_IMG_DIR_.'logo_invoice.jpg';
+					$alternative_path = _PS_IMG_DIR_.'logo.jpg';
 				}
-				if ($path != '')
+				else
 				{
-					if ($this->_method == 'GET' || $this->_method == 'HEAD')
-					{
-						$this->_imgToDisplay = ($alternative_path != '' && file_exists($alternative_path)) ? $alternative_path : $path;
-					}
-					elseif ($this->_method == 'PUT')
-					{
-						if ($this->writeImageOnDisk($path, NULL, NULL))
-							$this->_imgToDisplay = $path;
-						else
-						{
-							$this->setError(400, 'Error while copying image to the directory');
-							return false;
-						}
-					}
+					$this->setError(405, 'This method is not allowed with general image resources.');
+					return false;
 				}
 				break;
-			case 'products':
-				$this->_xmlContent = 'case "images/products"';
+			
+			// Set the image path on display in relation to the icon store image
+			case 'store_icon':
+				if (in_array($this->_method, array('GET','HEAD','PUT')))
+				{
+					$path = _PS_IMG_DIR_.'logo_stores.gif';
+					$this->_imgType = 'gif';
+				}
+				else
+				{
+					$this->setError(405, 'This method is not allowed with general image resources.');
+					return false;
+				}
 				break;
-			case 'suppliers':
-				$this->_xmlContent = 'case "images/suppliers"';
+			
+			// List the general image types
+			case '':
+				$this->_xmlContent .= '<general_image_types>'."\n";
+				foreach ($this->_imageTypes['general'] as $generalImageTypeName => $generalImageType)
+					$this->_xmlContent .= '<'.$generalImageTypeName.' xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$generalImageTypeName.'" get="true" put="true" post="false" delete="false" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_imgTypes).'" />'."\n";
+				$this->_xmlContent .= '</general_image_types>'."\n";
+				return true;
 				break;
-			case 'manufacturers':
-				$this->_xmlContent = 'case "images/manufacturers"';
-				break;
-			case 'scenes':
-				$this->_xmlContent = 'case "images/scenes"';
-				break;
-			case 'stores':
-				$this->_xmlContent = 'case "images/stores"';
-				break;
+			
+			// If the image type does not exist...
 			default:
-				$this->setError(400, 'Image of type "'.$this->_urlFolders[1].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[1], array_keys($this->_imageTypes)).'"? The full list is: "'.implode('", "', array_keys($this->_imageTypes)).'"');
+				$this->setErrorDidYouMean(400, 'General image of type "'.$this->_urlFolders[2].'" does not exists', $this->_urlFolders[2], array_keys($this->_imageTypes['general']));
+				return false;
+		}
+		// The general image type is valid, now we try to do action in relation to the method
+		switch($this->_method)
+		{
+			case 'GET':
+			case 'HEAD':
+				$this->_imgToDisplay = ($alternative_path != '' && file_exists($alternative_path)) ? $alternative_path : $path;
+				return true;
+				break;
+			case 'PUT':
+				if ($this->writePostedImageOnDisk($path, NULL, NULL))
+				{
+					$this->_imgToDisplay = $path;
+					return true;
+				}
+				else
+				{
+					$this->setError(400, 'Error while copying image to the directory');
+					return false;
+				}
+				break;
+		}
+	}
+	
+	private function manageNormalImages($directory)
+	{
+		
+		// Get available image sizes for the current image type
+		$normalImageSizes = ImageType::getImagesTypes($this->_urlFolders[1]);
+		$normalImageSizeNames = array();
+		foreach ($normalImageSizes as $normalImageSize)
+			$normalImageSizeNames[] = $normalImageSize['name'];
+		switch ($this->_urlFolders[2])
+		{
+			// Match the default images
+			case 'default':
+				$this->_defaultImage = true;
+				// Get the language iso code list
+				$langList = Language::getIsoIds(true);
+				$langs = array();
+				$defaultLang = Configuration::get('PS_LANG_DEFAULT');
+				foreach ($langList as $lang)
+				{
+					if ($lang['id_lang'] == $defaultLang)
+						$defaultLang = $lang['iso_code'];
+					$langs[] = $lang['iso_code'];
+				}
+				
+				
+				// Display list of languages
+				if($this->_urlFolders[3] == '' && $this->_method == 'GET')
+				{
+					$this->_xmlContent .= '<languages>'."\n";
+					foreach ($langList as $lang)
+						$this->_xmlContent .= '<language iso="'.$lang['iso_code'].'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$this->_urlFolders[2].'/'.$lang['iso_code'].'" get="true" put="true" post="true" delete="true" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_imgTypes).'" />'."\n";
+					$this->_xmlContent .= '</languages>'."\n";
+				}
+				else
+				{
+					if ($this->_urlFolders[4] != '')
+						$filename = $directory.$this->_urlFolders[3].'-'.$this->_urlFolders[2].'-'.$this->_urlFolders[4].'.jpg';
+					else
+						$filename = $directory.$this->_urlFolders[3].'.jpg';
+					$filename_exists = file_exists($filename);
+					$this->manageNormalImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
+				}
+				/************************/
+				/*
+				if (strlen($this->_urlFolders[3]) > 0)
+				{
+					
+					
+					if (in_array($this->_urlFolders[3], $langs))
+					{
+						// if there is a size
+						if ($this->_urlFolders[4] != '')
+						{
+							if (!in_array($this->_urlFolders[4], $normalImageSizeNames))
+							{
+								$this->setErrorDidYouMean(400, 'This size does not exist', $this->_urlFolders[4], $normalImageSizeNames);
+								return false;
+							}
+							$filename = $directory.$this->_urlFolders[3].'-'.$this->_urlFolders[2].'-'.$this->_urlFolders[4].'.jpg';
+						}
+						// If there is no size
+						else
+						{
+							//TODO PUT, DELETE, POST
+							$filename = $directory.$this->_urlFolders[3].'.jpg';
+						}
+						$this->_imgToDisplay = $filename;
+					}
+				}
+				else
+				{
+					$this->setErrorDidYouMean(400, 'This default image lang does not exist', $this->_urlFolders[3], $langs);
+					return false;
+				}*/
+				/*******************/
+				break;
+			
+			// Display the list of images
+			case '':
+				// Check if method is allowed
+				if ($this->_method != 'GET')
+				{
+					$this->setError(405, 'This method is not allowed for listing category images.');
+					return false;
+				}
+				$this->_xmlContent .= '<image_types>'."\n";
+				foreach ($normalImageSizes as $imageSize)
+					$this->_xmlContent .= '<image_type id="'.$imageSize['id_image_type'].'" name="'.$imageSize['name'].'" xlink:href="'.$this->_wsUrl.'image_types/'.$imageSize['id_image_type'].'" />'."\n";
+				$this->_xmlContent .= '</image_types>'."\n";
+				$this->_xmlContent .= '<images>'."\n";
+				$nodes = scandir($directory);
+				foreach ($nodes as $node)
+					// avoid too much preg_match...
+					if ($node != '.' && $node != '..' && $node != '.svn')
+					{
+						preg_match('/^(\d)\.jpg*$/Ui', $node, $matches);
+						if (isset($matches[1]))
+						{
+							$id = $matches[1];
+							$this->_xmlContent .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlFolders[0].'/'.$this->_urlFolders[1].'/'.$id.'" />'."\n";
+						}
+					}
+				$this->_xmlContent .= '</images>'."\n";
+				break;
+			
+			default:
+				// If id is detected
+				if (Validate::isUnsignedId($this->_urlFolders[2]))
+				{
+					$orig_filename = $directory.$this->_urlFolders[2].'.jpg';
+					$orig_filename_exists = file_exists($directory.$this->_urlFolders[2].'.jpg');
+					
+					// If a size was given try to display it
+					if ($this->_urlFolders[3] != '')
+					{
+						// Check the given size
+						if (!in_array($this->_urlFolders[3], $normalImageSizeNames))
+						{
+							$this->setErrorDidYouMean(400, 'This image type does not exist', $this->_urlFolders[3], $normalImageSizeNames);
+							return false;
+						}
+						$filename = $directory.$this->_urlFolders[2].'-'.$this->_urlFolders[3].'.jpg';
+						
+						// Display the resized specific image
+						if (file_exists($filename))
+							$this->_imgToDisplay = $filename;
+						else
+						{
+							$this->setError(500, 'This image does not exist on disk');
+							return false;
+						}
+					}
+					// Management of the original image (GET, PUT, POST, DELETE)
+					else
+					{
+						$this->manageNormalImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
+					}
+				}
+				else
+				{
+					$this->setError(400, 'The image id is invalid. Please set a valid id or the "default" value');
+					return false;
+				}
+		}
+	}
+	
+	private function manageNormalImagesCRUD($filename_exists, $filename, $imageSizes, $directory)
+	{
+		switch ($this->_method)
+		{
+			// Display the image
+			case 'GET':
+			case 'HEAD':
+				if ($filename_exists)
+					$this->_imgToDisplay = $filename;
+				else
+				{
+					$this->setError(500, 'This image does not exist on disk');
+					return false;
+				}
+				break;
+			// Modify the image
+			case 'PUT':
+				if ($filename_exists)
+					if ($this->writePostedImageOnDisk($filename, NULL, NULL, $imageSizes, $directory))
+					{
+						$this->_imgToDisplay = $filename;
+						return true;
+					}
+					else
+					{
+						$this->setError(500, 'Unable to save this image.');
+						return false;
+					}
+				else
+				{
+					$this->setError(500, 'This image does not exist on disk');
+					return false;
+				}
+				break;
+			// Delete the image
+			case 'DELETE':
+				if ($filename_exists)
+					return $this->deleteImageOnDisk($filename, $imageSizes, $directory);
+				else
+				{
+					$this->setError(500, 'This image does not exist on disk');
+					return false;
+				}
+				break;
+			// Add the image
+			case 'POST':
+				if ($filename_exists)
+				{
+					$this->setError(400, 'This image already exists. To modify it, please use the PUT method');
+					return false;
+				}
+				else
+				{
+					if ($this->writePostedImageOnDisk($filename, NULL, NULL, $imageSizes, $directory))
+					{
+						$this->_imgToDisplay = $filename;
+						return true;
+					}
+					else
+					{
+						$this->setError(500, 'Unable to save this image.');
+						return false;
+					}
+				}
+				break;
+			default : 
+				$this->setError(405, 'This method is not allowed.');
 				return false;
 		}
 	}
@@ -567,6 +834,11 @@ class WebserviceRequest
 		global $display_errors;
 		$this->setStatus($num);
 		$this->_errors[] = $display_errors ? $label : 'Internal error';
+	}
+	
+	public function setErrorDidYouMean($num, $label, $value, $values)
+	{
+		$this->setError($num, $label.'. Did you mean: "'.$this->closest($value, $values).'"?'.(count($values) > 1 ? ' The full list is: "'.implode('", "', $values).'"' : ''));
 	}
 	
 	private function hasErrors()
@@ -600,12 +872,22 @@ class WebserviceRequest
 				}
 				else
 				{
-					if (!Webservice::isKeyActive($auth_key))
+					$keyValidation = Webservice::isKeyActive($auth_key);
+					if (is_null($keyValidation))
 					{
-						$this->setError(400, 'Authentification is not active');
+						$this->setError(400, 'Authentification key does not exist');
 						return false;
 					}
-					$this->_permissions = Webservice::getPermissionForAccount($auth_key);
+					elseif($keyValidation === true)
+					{
+						$this->_permissions = Webservice::getPermissionForAccount($auth_key);
+					}
+					else
+					{
+						$this->setError(400, 'Authentification key is not active');
+						return false;
+					}
+					
 					if (!$this->_permissions)
 					{
 						$this->setError(401, 'No permission for this authentication key');
@@ -671,7 +953,7 @@ class WebserviceRequest
 		}
 		else
 		{
-			$this->setError(400, 'Resource of type "'.$this->_urlFolders[0].'" does not exists. Did you mean: "'.$this->closest($this->_urlFolders[0], $resourceNames).'"?'.(count($resourceNames) > 1 ? ' The full list is: "'.implode('", "', $resourceNames).'"' : ''));
+			$this->setErrorDidYouMean(400, 'Resource of type "'.$this->_urlFolders[0].'" does not exists', $this->_urlFolders[0], $resourceNames);
 			return false;
 		}
 		return true;
@@ -730,7 +1012,7 @@ class WebserviceRequest
 											else
 											{
 												$list = array_keys($this->_resourceConfiguration['linked_tables'][$field]['fields']);
-												$this->setError(400, 'This filter does not exist for this linked table. Did you mean: "'.$this->closest($field2, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : ''));
+												$this->setErrorDidYouMean(400, 'This filter does not exist for this linked table', $field2, $list);$this->setErrorDidYouMean(400, 'This declination does not exist', $this->_urlFolders[4], $normalImageSizeNames);
 												return false;
 											}
 										}
@@ -738,21 +1020,15 @@ class WebserviceRequest
 									// if there are filters on linked tables but there are no linked table
 									elseif (is_array($url_param))
 									{
-										$error_label = '';
 										if (isset($this->_resourceConfiguration['linked_tables']))
-										{
-											$list = array_keys($this->_resourceConfiguration['linked_tables']);
-											$error_label .= 'This linked table does not exist, did you mean: "'.$this->closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : '');
-										}
+											$this->setErrorDidYouMean(400, 'This linked table does not exist', $field, array_keys($this->_resourceConfiguration['linked_tables']));
 										else
-											$error_label .=	'There is no existing linked table for this resource';
-										$this->setError(400, 'HTTP/1.1 400 Bad Request');
+											$this->setError(400, 'There is no existing linked table for this resource');
 										return false;
 									}
 									else
 									{
-										$list = $available_filters;
-										$this->setError(400, 'This filter does not exist. Did you mean: "'.$this->closest($field, $list).'"?'.(count($list) > 1 ? ' The full list is: "'.implode('", "', $list).'"' : ''));
+										$this->setErrorDidYouMean(400, 'This filter does not exist', $field, $available_filters);
 										return false;
 									}
 								}
@@ -929,9 +1205,11 @@ class WebserviceRequest
 	
 	private function executeDelete()
 	{
-		$object = new $resourceParameters['retrieveData']['className']($url[1]);
-		if (!$object->id	|| !$object->delete())
-			$return_code = 'HTTP/1.1 204 No Content';
+		$object = new $this->_resourceConfiguration['retrieveData']['className'](intval($this->_urlFolders[1]));
+		if (!$object->id)
+			$this->setStatus(404);
+		elseif (!$object->delete())
+			$this->setStatus(500);
 		$output = false;
 	}
 	
@@ -1168,7 +1446,7 @@ class WebserviceRequest
 									$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
 									if (!$this->_object->$setter($values))
 									{
-										$this->setError(500, 'Error occured while setting the '.$association->getName().' value');
+										$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
 										return false;
 									}
 								}

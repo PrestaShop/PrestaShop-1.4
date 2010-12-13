@@ -369,11 +369,14 @@ class LanguageCore extends ObjectModel
 	  * @param string $iso_code Iso code
 	  * @return array  Language (id_lang, iso_code)
 	  */
-	static public function getIsoIds() 
+	static public function getIsoIds($active = true) 
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_lang`, `iso_code`
-		FROM `'._DB_PREFIX_.'lang`');
+		FROM `'._DB_PREFIX_.'lang`
+		WHERE 1
+		'.($active ? 'AND active = 1' : '').'
+		');
 
 		return $result;
 	}

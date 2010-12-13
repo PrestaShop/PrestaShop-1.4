@@ -137,11 +137,13 @@ class WebserviceCore extends ObjectModel
 			SELECT a.active
 			FROM `'._DB_PREFIX_.'webservice_account` a
 			WHERE a.key = \''.pSQL($auth_key).'\'
-			AND a.active = 1
 		');
-		if ($result)
-			return true;
-		return false;
+		if (!isset($result[0]))
+			return null;
+		else
+		{
+			return isset($result[0]['active']) && $result[0]['active'];
+		}
 	}
 	
 	static public function getAuthenticationKeys()
