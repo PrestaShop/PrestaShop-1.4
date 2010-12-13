@@ -311,7 +311,7 @@ class Loyalty extends Module
 		$html .= '</select>
 				</div>
 				<div class="clear"></div>
-				<label>'.$this->l('Vouchers created by loyalty system can be use in the following categories :').'</label>';
+				<label>'.$this->l('Vouchers created by the loyalty system can be used in the following categories :').'</label>';
 
 		$html .=	'<table cellspacing="0" cellpadding="0" class="table">
 						<tr>

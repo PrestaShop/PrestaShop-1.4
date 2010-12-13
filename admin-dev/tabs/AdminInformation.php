@@ -61,8 +61,8 @@ class AdminInformation extends AdminTab
 
 		$testsErrors = array(
 			'phpversion' => $this->l('Update your PHP version'),
-			'upload' => $this->l('Configure your server to allow uploading files'),
-			'system' => $this->l('Configure your server to allow for the creation of directories and writing on files'),
+			'upload' => $this->l('Configure your server to allow the upload file'),
+			'system' => $this->l('Configure your server to allow the creation of directories and write to files'),
 			'gd' => $this->l('Activate the GD library on your server'),
 			'mysql_support' => $this->l('Activate the MySQL support on your server'),
 			'config_dir' => $this->l('Set write permissions on config folder'),

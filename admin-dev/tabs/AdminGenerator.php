@@ -49,7 +49,7 @@ class AdminGenerator extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		<fieldset><legend><img src="../img/admin/htaccess.gif" />'.$this->l('Htaccess file generation').'</legend>
 		<p><b>'.$this->l('Warning:').'</b> '.$this->l('this tool can ONLY be used if you are hosted by an Apache web server. Please ask your webhost.').'</p>
-		<p>'.$this->l('This tool will automatically generate a ".htaccess" file that will grant you the possibility to do URL rewriting and to catch 404 errors.').'</p>
+		<p>'.$this->l('This tool will automatically generate a ".htaccess" file that will give you the ability to do URL rewriting and to catch 404 errors.').'</p>
 		<p>'.$this->l('If you do not have "Friendly URL" enabled when generating the ".htaccess" file, this feature won\'t be available.').'</p>';
 		if ($this->_checkConfiguration($this->_htFile))
 			echo '
@@ -57,7 +57,7 @@ class AdminGenerator extends AdminTab
 			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="cacheControl" id="cacheControl" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
-				<p>'.$this->l('This will add directives to your .htaccess file which should improved cache and compression.').'</p>
+				<p>'.$this->l('This will add directives to your .htaccess file which should improve cache and compression.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>

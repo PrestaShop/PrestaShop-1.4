@@ -3213,7 +3213,7 @@ class AdminProducts extends AdminTab
 								</select>
 								&nbsp;&nbsp;<input type="submit" value="'.$this->l('OK').'" name="submitAdd'.$this->table.'AndStay" class="button" />
 								&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php?tab=AdminAttributesGroups&token='.Tools::getAdminToken('AdminAttributesGroups'.(int)(Tab::getIdFromClassName('AdminAttributesGroups')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/asterisk.gif" alt="" /> '.$this->l('Color attribute management').'</a>
-								<p >'.$this->l('Active the color choice by selecting a color attribute group.').'</p>
+								<p >'.$this->l('Activate the color choice by selecting a color attribute group.').'</p>
 							</td>
 						</tr>
 					</table>';

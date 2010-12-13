@@ -1156,7 +1156,7 @@ class ThemeInstallator extends Module
 			<label>'.$this->l('Name').'</label>
 			<div class="margin-form">
 				<input type="text" value="'.$val.'" name="theme_name" maxlength="'.MAX_NAME_LENGTH.'" />
-				<p class="clear">'.$this->l('You theme\'s name').'</p>
+				<p class="clear">'.$this->l('Your theme\'s name').'</p>
 			</div>
 			<label>'.$this->l('Description').'</label>
 			<div class="margin-form">';
@@ -1233,7 +1233,7 @@ class ThemeInstallator extends Module
 				var compatibility_length = "'.MAX_COMPATIBILITY_VER.'";
 				var compatibility_from = "'.DEFAULT_COMPATIBILITY_FROM.'";
 				var compatibility_to = "'.DEFAULT_COMPATIBILITY_TO.'";
-				var select_default = "'.$this->l('Chose a theme').'";
+				var select_default = "'.$this->l('Choose a theme').'";
 				var themes = Array();
 				var themes_id = Array();
 		';

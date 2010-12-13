@@ -47,7 +47,7 @@ class AdminGeolocalization extends AdminTab
 				<div class="margin-form">
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_1" value="1" '.(Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_1"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Enabled').'</label>
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_0" value="0" '.(!Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_0"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('Disabled').'</label>
-					<p>'.$this->l('This option allows you, among other things, to restrict access to your shop in many countries. See below.').'</p>
+					<p>'.$this->l('This option allows you, among other things, to restrict access to your shop for many countries. See below.').'</p>
 				</div>
 				
 				<div class="margin-form">

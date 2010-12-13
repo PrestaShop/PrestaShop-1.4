@@ -174,7 +174,7 @@ class AdminCarriers extends AdminTab
 						<option value="0"'.(!$this->getFieldValue($obj, 'range_behavior') ? ' selected="selected"' : '').'>'.$this->l('Apply the cost of the highest defined range').'</option>
 						<option value="1"'.($this->getFieldValue($obj, 'range_behavior') ? ' selected="selected"' : '').'>'.$this->l('Disable carrier').'</option>
 					</select>
-					<p>'.$this->l('Out-of-range behavior when none is defined (e.g., when a customer\'s cart weight is superior to the highest range limit)').'</p>
+					<p>'.$this->l('Out-of-range behavior when none is defined (e.g., when a customer\'s cart weight is greater than the highest range limit)').'</p>
 				</div>';
 				if($this->getFieldValue($obj, 'is_module'))
 				{

@@ -70,7 +70,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_49ee3087348e8d44e1feda1
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_15bbb9d0bbf25e8d2978de1168c749dc'] = 'Site Web';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_d721757161f7f70c5b0949fdb6ec2c30'] = 'Thème';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_f71c21767abd79ea6d23d733aa6a581a'] = 'Le nom de votre thème';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_f4f10e7d35bef4e7b48e76ee4bdeae24'] = 'Le nom de votre thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_742ec436610daf7b51a1ba94039adf78'] = 'Entrez une courte description de votre thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_34b6cd75171affba6957e308dcbd92be'] = 'Version';
@@ -83,6 +83,6 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_a508df4b049c5b044cb4568
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6a7b29a06022b8e648ba29c3cff429d5'] = 'Selectionnez un autre thème à inclure et sa compatibilité';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac70412e939d72a9234cdebb1af5867b'] = 'Chemin';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32cdafde142'] = 'A partir de';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_afbb577bdf54a2c1d69f7f622401d05b'] = 'Choisissez un thème';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'Choisissez un thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_abb381ee4077396e5d5d475b9022ba86'] = 'Générer l\'archive maintenant!';

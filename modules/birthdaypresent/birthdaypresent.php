@@ -84,7 +84,7 @@ class BirthdayPresent extends Module
 				<label>'.$this->l('Minimum order').'</label>
 				<div class="margin-form">
 					<input type="text" size="15" name="minimal_order" value="'.Configuration::get('BIRTHDAY_MINIMAL_ORDER').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); " />
-					<p style="clear: both;">'.$this->l('The minimal order amount needed to use the voucher').'</p>
+					<p style="clear: both;">'.$this->l('The minimum order amount needed to use the voucher').'</p>
 				</div>
 				<div class="clear center">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitBirthday" class="button" />
@@ -94,17 +94,17 @@ class BirthdayPresent extends Module
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Develop clients\' loyalty').'</h2>
-			<p>'.$this->l('Offering a present to a client is a means of securing his loyalty.').'</p>
+			<p>'.$this->l('Offering a present to a client is a means of securing their loyalty.').'</p>
 			<h3>'.$this->l('What should you do?').'</h3>
 			<p>
-				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop its loyalty, in other words to make him come back in your webshop.').' <br />
+				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop their loyalty, in other words to make them want to come back to your webshop.').' <br />
 				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
 				'.$this->l('In order to achieve this goal you can organize: ').'
 				<ul>
 					<li>'.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
 					<li>'.$this->l('Sustainable operations: loyalty or points cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
 				</ul>
-				'.$this->l('These operations encourage clients to buy and also to come back in your webshop regularly.').' <br />
+				'.$this->l('These operations encourage clients to buy and also to come back to your webshop regularly.').' <br />
 			</p>
 		</fieldset>';
 		return $this->_html;

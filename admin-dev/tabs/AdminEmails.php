@@ -81,7 +81,7 @@ class AdminEmails extends AdminPreferences
 				var textSubject = "'.$this->l('Test message - Prestashop').'";
 				var textSendOk = "'.$this->l('Mail is sent').'";
 				var textSendError= "'.$this->l('Error: please check your configuration').'";
-				var errorMail = "'.$this->l('This email adress is wrong!').'";
+				var errorMail = "'.$this->l('This email address is wrong!').'";
 			</script>
 			<script type="text/javascript" src="'._PS_JS_DIR_.'/sendMailTest.js"></script>
 			<div style="clear: both; padding-top:15px;">

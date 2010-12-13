@@ -344,7 +344,7 @@ class AdminModulesPositions extends AdminTab
 				<label>'.$this->l('Exceptions').' :</label>
 				<div class="margin-form">
 					<input type="text" name="exceptions" size="40" '.(!empty($excepts) ? 'value="'.$excepts.'"' : '').'><br />Ex: identity.php, history.php, order.php, product.php<br /><br />
-					'.$this->l('Please specify those files in which you do not want the module to be displayed').'.<br />
+					'.$this->l('Please specify those files for which you do not want the module to be displayed').'.<br />
 					'.$this->l('These files are located in your base directory').', '.$this->l('e.g., ').' <b>identity.php</b>.<br />
 					'.$this->l('Please type each filename separated by a comma').'.
 					<br /><br />

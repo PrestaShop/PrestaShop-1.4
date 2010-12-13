@@ -89,7 +89,7 @@ class AddressControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed like following :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
 					$this->errors[] = Tools::displayError('postcode is required.');

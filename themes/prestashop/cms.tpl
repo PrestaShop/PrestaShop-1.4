@@ -36,7 +36,7 @@
 	{if !$cms->active}
 		<br />
 		<div id="admin-action-cms">
-			<p>{l s='This CMS page is not visible by your customers.'}
+			<p>{l s='This CMS page is not visible to your customers.'}
 			<input type="hidden" id="admin-action-cms-id" value="{$cms->id}" />
 			<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 0)"/>			
 			<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 1)"/>			

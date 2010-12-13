@@ -177,7 +177,7 @@ class AdminTranslations extends AdminTab
 						unlink($file);
 					}
 					else
-						$this->_errors[] = Tools::displayError('Server don\'t have permissions for writing');
+						$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
 				}
 				else
 					$this->_errors[] = Tools::displayError('language not found');
@@ -604,7 +604,7 @@ class AdminTranslations extends AdminTab
 		{
 			$languages = Language::getLanguages(false);
 			echo '<fieldset><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
-			$this->l('Here you can modify translations for every text input on PrestaShop.').'<br />'.
+			$this->l('Here you can modify translations for all text input into PrestaShop.').'<br />'.
 			$this->l('First, select a section (such as Back Office or Modules), then click the flag representing the language you want to edit.').'<br /><br />
 			<form method="get" action="index.php" id="typeTranslationForm">
 				<input type="hidden" name="tab" value="AdminTranslations" />

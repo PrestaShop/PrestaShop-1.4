@@ -342,7 +342,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- minimal quantity wanted -->
-			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' quantities minimum for buy this product.'}</p>
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
 			{if $product->minimal_quantity > 1}
 			<script type="text/javascript">
 				checkMinimalQuantity();
