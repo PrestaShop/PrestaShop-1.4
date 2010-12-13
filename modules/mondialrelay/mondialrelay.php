@@ -24,8 +24,6 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
-		
-include_once(_PS_MODULE_DIR_.'/mondialrelay/MondialRelayClass.php');
 
 class MondialRelay extends Module
 {
@@ -33,8 +31,6 @@ class MondialRelay extends Module
 	
 	public function __construct()
 	{
-		error_reporting(E_ALL ^ E_NOTICE);
-
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
 		$this->version	= '1.2 rev C';
@@ -289,6 +285,8 @@ class MondialRelay extends Module
 	
 	public function hookProcessCarrier($params)
 	{
+		include_once(_PS_MODULE_DIR_.'/mondialrelay/MondialRelayClass.php');
+		
 		$cart = $params['cart'];
 		$result_MR = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($cart->id_carrier));
 		if (count($result_MR) > 0) 
