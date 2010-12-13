@@ -44,7 +44,7 @@ addLoadEvent(function() {
 </script>
 {/literal}
 
-	{if ($registered == 0)}
+	{if (isset($registered) AND $registered == 0)}
 
 		<div style="width:100%;margin:0px 10px 0px 10px">
 			<div style="width:100%;background-color:red">
@@ -60,8 +60,8 @@ addLoadEvent(function() {
 							{l s='Your shop name:' mod='dejala'} <input size="30" type="text" name="store_name" value="{$store_name}"/>
 						</div>
 						<div>
-							{l s='Select your country:' mod='dejala'} 
-							<select name="country">	
+							{l s='Select your country:' mod='dejala'}
+							<select name="country">
 								<option value="fr">{l s='France' mod='dejala'}</option>
 								<option value="es">{l s='Spain' mod='dejala'}</option>
 							</select>
@@ -77,7 +77,7 @@ addLoadEvent(function() {
 					</fieldset>
 				</form>
 			</div>
-	
+
 			<div style="float:left; margin-left:5px;width:47%;">
 				<form action="{$formAction}" method="post">
 					<input type="hidden" name="method" value="signin" />
@@ -85,8 +85,8 @@ addLoadEvent(function() {
 						<legend>{l s='I already have an account for my shop:' mod='dejala'}</legend>
 						<div>{l s='Login:' mod='dejala'} <input size="30" type="text" name="login" value="{$login}"/></div>
 						<div>
-							{l s='Select your country:' mod='dejala'} 
-							<select name="country">	
+							{l s='Select your country:' mod='dejala'}
+							<select name="country">
 								<option value="fr">{l s='France' mod='dejala'}</option>
 								<option value="es">{l s='Spain' mod='dejala'}</option>
 							</select>
@@ -109,25 +109,25 @@ addLoadEvent(function() {
 				<legend>{l s='Dejala.fr' mod='dejala'}</legend>
 				{l s='As a reminder' mod='dejala'} :<br/>
 				{l s='Your store name is' mod='dejala'} : {$store_name}<br/>
-				{l s='Your login is' mod='dejala'} : {$store_login}<br/><br/>
+				{l s='Your login is' mod='dejala'} : {if isset($store_login)}{$store_login}{/if}<br/><br/>
 				{l s='Your are running on the' mod='dejala'} : {if ($djl_mode=='TEST')}{l s='test platform' mod='dejala'}{else}{l s='production platform' mod='dejala'}{/if}<br/>
-								
+
 				{* Switch mode button : switch between test/prod modes  *}
-				{if ($djl_mode == 'PROD') }
+				{if ($djl_mode=='PROD')}
 					<form action="{$formAction}" method="post">
 						<input type="hidden" name="method" value="switchMode">
 						<input type="hidden" name="mode" value="TEST">
 						<input type="submit" name="btnSubmit" value="{l s='Switch to test mode' mod='dejala'}" class="button" />
 					</form>
 				{else}
-					{if ($isLiveReady=='1') }
+					{if (isset($isLiveReady) AND $isLiveReady=='1')}
 						<form action="{$formAction}" method="post">
 							<input type="hidden" name="method" value="switchMode">
 							<input type="hidden" name="mode" value="PROD">
 							<input type="submit" name="btnSubmit" value="{l s='Switch to production mode' mod='dejala'}" class="button" />
 						</form>
 					{else}
-						{if ($isLiveRequested=='1') }
+						{if (isset($isLiveReady) AND $isLiveRequested=='1')}
 							{l s='Your request to go live is under process : Dejala.fr will contact you to finalize your registration.' mod='dejala'}
 						{else}
 							{* Demande de passage en prod *}
@@ -138,11 +138,11 @@ addLoadEvent(function() {
 						{/if}
 					{/if}
 				{/if}
-				
-				<br/><br/>		
-				{if ($djl_mode == 'PROD') }{l s='Your credit' mod='dejala'} :{else if ($djl_mode == 'TEST') }{l s='Your virtual credit (in order to test)' mod='dejala'} :{/if} {$account_balance} {l s='euros' mod='dejala'}<br/>
+
+				<br/><br/>
+				{if ($djl_mode == 'PROD')}{l s='Your credit' mod='dejala'} :{else if ($djl_mode == 'TEST')}{l s='Your virtual credit (in order to test)' mod='dejala'} :{/if} {$account_balance} {l s='euros' mod='dejala'}<br/>
 				{if ($djl_mode == 'PROD')}<a href="http://pro.dejala.{$country}" target="_blank" style="color:blue;font-weight:bold;text-decoration:underline;">{l s='Credit your account' mod='dejala'}</a><br/>{/if}
-				
+
 				<br/><br/>
 				<form action="{$formAction}" method="post" name="visibility_form">
 					<div>
@@ -162,7 +162,8 @@ addLoadEvent(function() {
 					<input type="submit" name="btnSubmit" value="{l s='Update Dejala visibility' mod='dejala'}" class="button" />
 				</form>
 			</div>
-		
-			
+
+
 			</fieldset>
 		{/if}
+

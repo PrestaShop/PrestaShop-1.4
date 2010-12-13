@@ -1,4 +1,4 @@
-{if ($registered != 0)}
+{if (isset($registered) AND $registered != 0)}
 <div>
 	<ul id="menu">
 		<li {if ($currentTab == 'home')}class="active"{/if}>
@@ -34,3 +34,4 @@
 {/if}
 <div style="margin-top:-2px; border: 1px solid #999;">
 <br/>
+
