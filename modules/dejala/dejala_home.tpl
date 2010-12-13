@@ -155,7 +155,7 @@ addLoadEvent(function() {
 					<input type="radio" name="visibility_status" value="visible_limited" {if ($visibility_status == "visible_limited")}{"checked=\"checked\""}{/if} /> {l s='Dejala IS visible ONLY for the following users' mod='dejala'} :
 					</div>
 					<div>
-					<input size="40" type="text" id="visible_users_list" name="visible_users_list" value="{$visible_users_list}"/> {l s='(e.g. : a@foo.com, b@bar.com)' mod='dejala'}
+					<input size="40" type="text" id="visible_users_list" name="visible_users_list" value="{if isset($visible_users_list)}{$visible_users_list}{/if}"/> {l s='(e.g. : a@foo.com, b@bar.com)' mod='dejala'}
 					</div>
 					<input type="hidden" name="method" value="switchActive">
 					<br />
