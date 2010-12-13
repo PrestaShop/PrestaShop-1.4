@@ -367,7 +367,7 @@ class WebserviceRequest
 		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlFolders))
 			$this->setError(401, 'Method '.$this->_method.' need you to specify an id');
 		elseif ($this->_urlFolders[0] && !in_array($this->_method, $this->_keyPermissions[$this->_urlFolders[0]]))
-			$this->setError(405, 'Method '.$this->_method.' is not allowed for the ressource '.$this->_urlFolders[0].' with this authentication key');
+			$this->setError(405, 'Method '.$this->_method.' is not allowed for the resource '.$this->_urlFolders[0].' with this authentication key');
 		else
 			return true;
 		return false;
@@ -688,7 +688,7 @@ class WebserviceRequest
 						$this->_xmlOutput .= '</'.$this->_resourceConfiguration['objectsNodeName'].'>'."\n";
 					}
 				}
-				// display all ressources list
+				// display all resourceources list
 				else
 				{
 					$this->_xmlOutput .= '<api shop_name="'.Configuration::get('PS_SHOP_NAME').'" get="true" put="false" post="false" delete="false" head="true">'."\n";
@@ -963,12 +963,12 @@ class WebserviceRequest
 				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
 				if (method_exists($object, $getter))
 				{
-					$associationRessources = $object->$getter();
-					if (is_array($associationRessources))
-						foreach ($associationRessources as $associationRessource)
+					$associationesources = $object->$getter();
+					if (is_array($associationResources))
+						foreach ($associationResources as $associationResource)
 						{
-							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationRessource['id'].'">'."\n";
-							foreach ($associationRessource as $fieldName => $fieldValue)
+							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'">'."\n";
+							foreach ($associationResource as $fieldName => $fieldValue)
 							{
 								if ($fieldName == 'id')
 									$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
