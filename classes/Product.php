@@ -1693,9 +1693,9 @@ class ProductCore extends ObjectModel
 		return 0;
 	}
 
-	public function getPriceWithoutReduct($notax = false)
+	public function getPriceWithoutReduct($notax = false, $id_product_attribute = false)
 	{
-		return self::getPriceStatic((int)($this->id), !$notax, false, 6, NULL, false, false);
+		return self::getPriceStatic((int)($this->id), !$notax, $id_product_attribute, 6, NULL, false, false);
 	}
 
 	/**

@@ -237,10 +237,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			<p class="price">
 				{if !$priceDisplay || $priceDisplay == 2}
 					{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL)}
-					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct()}
+					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
 				{elseif $priceDisplay == 1}
 					{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
-					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true)}
+					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true, $smarty.const.NULL)}
 				{/if}
 				{if $product->on_sale}
 					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
