@@ -31,9 +31,9 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
 $errors = array();
-$cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
-$id_lang = (int)($cookie->id_lang) ? (int)($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT');
-$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)($cookie->id_lang) : Configuration::get('PS_LANG_DEFAULT')));
+
+$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+$iso = strtolower(Language::getIsoById((int)$id_lang));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
 
 if (isset($_POST['Submit']))
@@ -62,7 +62,7 @@ if (isset($_POST['Submit']))
 					$errors[] = Tools::displayError('an error occurred during your password change');
 				else
 				{
-					Mail::Send($id_lang, 'password', Mail::l('Your new admin password'), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname);
+					Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password'), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname);
 					$confirmation = 'ok';
 				}
 			}
@@ -79,6 +79,7 @@ echo '
 	<title>PrestaShop&trade; - '.translate('Administration panel').'</title>
 </head>
 <body><div id="container">';
+
 if (sizeof($errors))
 {
 	echo '<div id="error">
@@ -88,7 +89,8 @@ if (sizeof($errors))
 		echo '<li>'.$error.'</li>';
 	echo '</ol>
 	</div>';
-}		
+}
+
 echo '
 	<div id="login">
 		<h1>'.Configuration::get('PS_SHOP_NAME').'</h1>
@@ -110,5 +112,3 @@ else
 	</div>
 	<h2><a href="http://www.prestashop.com">&copy; Copyright by PrestaShop. all rights reserved.</a></h2>
 </div></body></html>';
-
-

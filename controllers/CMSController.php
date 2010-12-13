@@ -34,7 +34,8 @@ class CmsControllerCore extends FrontController
 	public function preProcess()
 	{
 		parent::preProcess();
-        
+		
+		/* assignCase (1 = CMS page, 2 = CMS category) */
 		if (($id_cms = (int)(Tools::getValue('id_cms'))) 
 		    AND $this->cms = new CMS((int)($id_cms), (int)($this->cookie->id_lang)) 
 		    AND Validate::isLoadedObject($this->cms) AND
@@ -67,10 +68,9 @@ class CmsControllerCore extends FrontController
 		parent::setMedia();
 		
 		if ($this->assignCase == 1)
-		{
 			Tools::AddJS(_THEME_JS_DIR_.'cms.js');
-			Tools::AddCSS(_THEME_CSS_DIR_.'cms.css');
-		}
+		
+		Tools::AddCSS(_THEME_CSS_DIR_.'cms.css');
 	}
 	
 	public function process()

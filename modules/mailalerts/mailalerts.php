@@ -344,8 +344,9 @@ class MailAlerts extends Module
 
 	private function _displayForm()
 	{
+		global $currentIndex;
+
 		$tab = Tools::getValue('tab');
-		$currentIndex = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__)).($tab ? '?tab='.$tab : '');
 		$token = Tools::getValue('token');
 
 		$this->_html .= '

@@ -53,7 +53,7 @@ class CategoryCore extends ObjectModel
 	/** @var integer Nested tree model "left" value */
 	public 		$nleft;
 	
-	/** @var integer Nested tree model "left" value */
+	/** @var integer Nested tree model "right" value */
 	public 		$nright;
 
 	/** @var string string used in rewrited URL */
@@ -80,7 +80,7 @@ class CategoryCore extends ObjectModel
 
 	protected 	$fieldsRequired = array('active');
  	protected 	$fieldsSize = array('active' => 1);
- 	protected 	$fieldsValidate = array('active' => 'isBool');
+ 	protected 	$fieldsValidate = array('nleft' => 'isUnsignedInt', 'nright' => 'isUnsignedInt', 'level_depth' => 'isUnsignedInt', 'active' => 'isBool');
 	protected 	$fieldsRequiredLang = array('name', 'link_rewrite');
  	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
  	protected 	$fieldsValidateLang = array('name' => 'isCatalogName', 'link_rewrite' => 'isLinkRewrite', 'description' => 'isCleanHtml',
@@ -96,9 +96,8 @@ class CategoryCore extends ObjectModel
 		'objectsNodeName' => 'categories',
 		'fields' => array(
 			'id_parent' => array('sqlId' => 'id_parent', 'xlink_resource'=> 'categories'),
-			'level_depth' => array('sqlId' => 'level_depth'),
 		),
-		'linked_tables' => array(//TODO this should be native...
+		'linked_tables' => array(
 			'i18n' => array(
 				'table' => 'category_lang',
 				'fields' => array(
@@ -188,27 +187,24 @@ class CategoryCore extends ObjectModel
 	{
 		global $link;
 
-		//get idLang
 		$idLang = is_null($idLang) ? _USER_ID_LANG_ : (int)($idLang);
 
-		//recursivity for subcategories
 		$children = array();
-		if (($maxDepth == 0 OR $currentDepth < $maxDepth) AND $subcats = $this->getSubCategories($idLang, true) AND sizeof($subcats))
-			foreach ($subcats as &$subcat)
+		if (($maxDepth == 0 OR $currentDepth < $maxDepth) AND $subcats = $this->getSubCategories((int)$idLang, true) AND sizeof($subcats))
+			foreach ($subcats AS &$subcat)
 			{
 				if (!$subcat['id_category'])
 					break;
-				elseif ( !is_array($excludedIdsArray) || !in_array($subcat['id_category'], $excludedIdsArray) )
+				elseif (!is_array($excludedIdsArray) || !in_array($subcat['id_category'], $excludedIdsArray))
 				{
-					$categ = new Category($subcat['id_category'] ,$idLang);
-					$children[] = $categ->recurseLiteCategTree($maxDepth, $currentDepth + 1, $idLang, $excludedIdsArray);
+					$categ = new Category((int)$subcat['id_category'], (int)$idLang);
+					$children[] = $categ->recurseLiteCategTree($maxDepth, $currentDepth + 1, (int)$idLang, $excludedIdsArray);
 				}
 			}
 
-
 		return array(
-			'id' => $this->id_category,
-			'link' => $link->getCategoryLink($this->id, $this->link_rewrite),
+			'id' => (int)$this->id_category,
+			'link' => $link->getCategoryLink((int)$this->id, $this->link_rewrite),
 			'name' => $this->name,
 			'desc'=> $this->description,
 			'children' => $children
@@ -443,7 +439,7 @@ class CategoryCore extends ObjectModel
 		'.($active ? 'AND `active` = 1' : '').'
 		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 		GROUP BY c.`id_category`
-		ORDER BY `position` ASC');
+		ORDER BY `level_depth` ASC, c.`position` ASC');
 
 		/* Modify SQL result */
 		foreach ($result AS &$row)

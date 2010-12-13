@@ -50,8 +50,8 @@
 		{$cms->content}
 	</div>
 {elseif isset($category)}
-	<div class="rte{if $content_only} content_only{/if}">
-		<h1>{$category->name}</h1>
+	<div>
+		<h1>{$category->name|escape:'htmlall':'UTF-8'}</h1>
 		{if isset($sub_category) & !empty($sub_category)}	
 			<h4>{l s='List of sub categories in '}{$category->name}{l s=':'}</h4>
 			<ul class="bullet">

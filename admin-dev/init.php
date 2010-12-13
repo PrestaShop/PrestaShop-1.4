@@ -41,7 +41,7 @@ if (!$cookie->isLoggedBack())
 
 $link = new Link();
 
-$currentIndex = __PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__)).(($tab = Tools::getValue('tab')) ? '?tab='.$tab : '');
+$currentIndex = $_SERVER['SCRIPT_NAME'].(($tab = Tools::getValue('tab')) ? '?tab='.$tab : '');
 if ($back = Tools::getValue('back'))
 	$currentIndex .= '&back='.urlencode($back);
 

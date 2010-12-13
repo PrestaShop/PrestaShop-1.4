@@ -151,7 +151,7 @@ class BlockCategories extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 				WHERE 1'
 				.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
-				AND (c.`active` = 1 OR c.`id_category`= 1)
+				AND (c.`active` = 1 OR c.`id_category` = 1)
 				AND cg.`id_group` = '.$id_group.'
 				ORDER BY `level_depth` ASC, c.`position` ASC')
 			)

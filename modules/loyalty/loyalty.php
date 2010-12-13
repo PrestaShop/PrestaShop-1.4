@@ -513,14 +513,14 @@ class Loyalty extends Module
 	/* Hook display on shopping cart summary */
 	public function hookShoppingCart($params)
 	{
-		if (!Validate::isLoadedObject($params['cart']))
-			die (Tools::displayError('Cart parameter is missing.'));
 		global $smarty;
-		$points = LoyaltyModule::getCartNbPoints($params['cart']);
-		$smarty->assign(array(
-			'points' => $points,
-			'voucher' => LoyaltyModule::getVoucherValue($points)
-		));
+
+		if (Validate::isLoadedObject($params['cart']))
+		{
+			$points = LoyaltyModule::getCartNbPoints($params['cart']);
+			$smarty->assign(array('points' => (int)$points, 'voucher' => LoyaltyModule::getVoucherValue((int)$points)));
+		}
+		
 		return $this->display(__FILE__, 'shopping-cart.tpl');
 	}
 

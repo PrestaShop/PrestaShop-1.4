@@ -29,7 +29,7 @@
 
 {if isset($category)}
 	{if $category->id AND $category->active}
-		<h1 class="category_title">{strip}
+		<h1>{strip}
 			{$category->name|escape:'htmlall':'UTF-8'}
 			<span>
 				{if $category->id == 1 OR $nb_products == 0}{l s='There are no products.'}

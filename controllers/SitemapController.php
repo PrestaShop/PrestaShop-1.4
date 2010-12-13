@@ -38,11 +38,8 @@ class SitemapControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$depth = 0;
-		$categTree = Category::getRootCategory()->recurseLiteCategTree($depth);
-		$cms = CMSCategory::getRecurseCategory(_USER_ID_LANG_, 1, 1, 1);
-		$this->smarty->assign('categoriesTree', $categTree);
-		$this->smarty->assign('categoriescmsTree', $cms);
+		$this->smarty->assign('categoriesTree', Category::getRootCategory()->recurseLiteCategTree(0));
+		$this->smarty->assign('categoriescmsTree', CMSCategory::getRecurseCategory(_USER_ID_LANG_, 1, 1, 1));
 		$this->smarty->assign('voucherAllowed', (int)(Configuration::get('PS_VOUCHERS')));
 	}
 	
@@ -52,4 +49,3 @@ class SitemapControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'sitemap.tpl');
 	}
 }
-

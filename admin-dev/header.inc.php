@@ -73,7 +73,7 @@ echo '
 				<a id="header_shopname" href="index.php"><span>'.Configuration::get('PS_SHOP_NAME').'</span></a><br />
 				'.Tools::substr($employee->firstname, 0, 1).'.&nbsp;'.htmlentities($employee->lastname, ENT_COMPAT, 'UTF-8').'
 				[ <a href="index.php?logout" id="header_logout"><span>'.translate('logout').'</span></a> ]
-				- <a href="'.__PS_BASE_URI__.'" id="header_foaccess"><span>'.translate('View my shop').'</span></a>
+				- <a href="'.__PS_BASE_URI__.'" id="header_foaccess" target="_blank" title="'.translate('View my shop').'"><span>'.translate('View my shop').'</span></a>
 			</span></div>
 			<div id="header_search">
 				<form method="post" action="index.php?tab=AdminSearch&token='.Tools::getAdminTokenLite('AdminSearch').'">
