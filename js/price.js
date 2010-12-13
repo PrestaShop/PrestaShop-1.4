@@ -35,7 +35,7 @@ function getTax()
 
 function getEcotaxTaxIncluded()
 {
-	return parseFloat(document.getElementById('ecotax').value);
+	return parseFloat(document.getElementById('ecotax').value != '' ? document.getElementById('ecotax').value : 0);
 }
 
 function getEcotaxTaxExcluded()
