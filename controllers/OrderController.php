@@ -450,7 +450,7 @@ class OrderControllerCore extends FrontController
 			die(Tools::displayError('Fatal error: No customer'));
 		$result = Carrier::getCarriers((int)($this->cookie->id_lang), true, false, (int)($id_zone), $customer->getGroups(), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		if (!$result)
-			$result = Carrier::getCarriers((int)($this->cookie->id_lang), true, false, (int)($id_zone), false, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$result = Carrier::getCarriers((int)($this->cookie->id_lang), true, false, (int)($id_zone), array(), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$resultsArray = array();
 		foreach ($result AS $k => $row)
 		{
