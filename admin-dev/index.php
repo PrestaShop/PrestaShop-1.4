@@ -283,13 +283,13 @@ else /* Else display homepage */
 	{
 		$currency = Currency::getCurrency((int)$order['id_currency']);
 		echo '
-				<tr '.($i % 2 ? 'id="order_line1' : '').'">
+				<tr'.($i % 2 ? ' id="order_line1' : '').'">
 					<td class="order_td_first order_id">'.(int)$order['id_order'].'</td>
 					<td class="order_customer">'.Tools::htmlentitiesUTF8($order['firstname']).' '.Tools::htmlentitiesUTF8($order['lastname']).'</td>
 					<td class="order_status">'.Tools::htmlentitiesUTF8($order['state_name']).'</td>
 					<td class="order_total">'.Tools::displayPrice((float)$order['total_paid'], $currency).'</td>
 					<td class="order_action">
-						<a href="index.php?tab=AdminOrders&id_order='.(int)$order['id_order'].'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders').'" title="'.translate('Details').'"><img src="../img/admin/details.gif" alt="Voir" /></a>
+						<a href="index.php?tab=AdminOrders&id_order='.(int)$order['id_order'].'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders').'" title="'.translate('Details').'"><img src="../img/admin/details.gif" alt="'.translate('See').'" /></a>
 					</td>
 				</tr>
 			';
