@@ -52,6 +52,7 @@ var productPriceTaxExcluded = {$product->getPriceWithoutReduct(true)|default:'nu
 var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{else}0{/if};
 var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{else}0{/if};
 var specific_price = {if $product->specificPrice AND $product->specificPrice.price}{$product->specificPrice.price}{else}0{/if};
+var specific_currency = {if $product->specificPrice AND $product->specificPrice.id_currency}true{else}false{/if};
 var group_reduction = '{$group_reduction}';
 var default_eco_tax = {$product->ecotax};
 var ecotaxTax_rate = {$ecotaxTax_rate};

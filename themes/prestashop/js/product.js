@@ -271,7 +271,7 @@ function updateDisplay()
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
 		var tax = (taxRate / 100) + 1;
-		var taxExclPrice = (specific_price ? specific_price : productPriceTaxExcluded) + selectedCombination['price'] * currencyRate;
+		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : productPriceTaxExcluded) + selectedCombination['price'] * currencyRate;
 		if (specific_price)
 			var productPriceWithoutReduction = productPriceTaxExcluded + selectedCombination['price'] * currencyRate;
 
