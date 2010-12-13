@@ -197,7 +197,8 @@ class CMSCategoryCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'cms` c
 		JOIN `'._DB_PREFIX_.'cms_lang` cl ON c.`id_cms` = cl.`id_cms`
 		WHERE `id_cms_category` = '.(int)($current).'
-		AND cl.`id_lang` = '.(int)($id_lang).($active ? ' AND c.`active` = 1' : ''));
+		AND cl.`id_lang` = '.(int)($id_lang).($active ? ' AND c.`active` = 1' : '').'
+		ORDER BY c.`position`');
 		if ($links == 1)
 		{
 			$link = new Link();
