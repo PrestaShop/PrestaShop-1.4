@@ -56,13 +56,15 @@
 		<h3>{l s='Categories'}</h3>
 		<div class="tree_top"><a href="{$base_dir_ssl}">{$categoriesTree.name|escape:'htmlall':'UTF-8'}</a></div>
 		<ul class="tree">
-		{foreach from=$categoriesTree.children item=child name=sitemapTree}
-			{if $smarty.foreach.sitemapTree.last}
-				{include file="$tpl_dir./category-tree-branch.tpl" node=$child last='true'}
-			{else}
-				{include file="$tpl_dir./category-tree-branch.tpl" node=$child}
-			{/if}
-		{/foreach}
+		{if isset($categoriesTree.children)}
+			{foreach from=$categoriesTree.children item=child name=sitemapTree}
+				{if $smarty.foreach.sitemapTree.last}
+					{include file="$tpl_dir./category-tree-branch.tpl" node=$child last='true'}
+				{else}
+					{include file="$tpl_dir./category-tree-branch.tpl" node=$child}
+				{/if}
+			{/foreach}
+		{/if}
 		</ul>
 	</div>
 	<div class="categTree">
@@ -71,7 +73,7 @@
 		<ul class="tree">
 			{if isset($categoriescmsTree.children)}
 				{foreach from=$categoriescmsTree.children item=child name=sitemapCmsTree}
-					{if $child.children|@count > 0 || $child.cms|@count > 0}
+					{if (isset($child.children) && $child.children|@count > 0) || $child.cms|@count > 0}
 						{include file="$tpl_dir./category-cms-tree-branch.tpl" node=$child}
 					{/if}
 				{/foreach}

@@ -152,18 +152,20 @@ class BlockCms extends Module
 			if ($ids[0] == 1)
 			{
 				$req = Db::getInstance()->getRow('
-				SELECT `name`, `link_rewrite` FROM `'._DB_PREFIX_.'cms_category_lang`
-				WHERE `id_cms_category` = '.(int)($ids[1]).'
-				AND `id_lang` = '.(int)($cookie->id_lang));
+				SELECT cl.`name`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_category_lang` cl
+				INNER JOIN `'._DB_PREFIX_.'cms_category` c ON (cl.`id_cms_category` = c.`id_cms_category`)
+				WHERE cl.`id_cms_category` = '.(int)($ids[1]).' AND (c.`active` = 1 OR c.`id_cms_category` = 1)
+				AND cl.`id_lang` = '.(int)($cookie->id_lang));
 				$display_footer[$cms_category]['link'] = $link->getCMSCategoryLink((int)($ids[1]), $req['link_rewrite']);
 				$display_footer[$cms_category]['meta_title'] = $req['name'];
 			}
 			elseif ($ids[0] == 0)
 			{
 				$req = Db::getInstance()->getRow('
-				SELECT `meta_title`, `link_rewrite` FROM `'._DB_PREFIX_.'cms_lang`
-				WHERE `id_cms` = '.(int)($ids[1]).'
-				AND `id_lang` = '.(int)($cookie->id_lang));
+				SELECT cl.`meta_title`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_lang` cl
+				INNER JOIN `'._DB_PREFIX_.'cms` c ON (cl.`id_cms` = c.`id_cms`)
+				WHERE cl.`id_cms` = '.(int)($ids[1]).' AND c.`active` = 1
+				AND cl.`id_lang` = '.(int)($cookie->id_lang));
 				$display_footer[$cms_category]['link'] = $link->getCMSLink((int)($ids[1]), $req['link_rewrite']);
 				$display_footer[$cms_category]['meta_title'] = $req['meta_title'];
 			}
