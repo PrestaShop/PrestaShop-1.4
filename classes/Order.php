@@ -742,6 +742,11 @@ class OrderCore extends ObjectModel
 			$price += $row['ecotax'] * (1 + $row['ecotax_tax_rate'] / 100);
 			$return += Tools::ps_round($price, 2) * $row['product_quantity'];
 		}
+		if (!$products)
+		{
+			$this->total_products_wt = $return;
+			$this->update();
+		}
 		return $return;
 	}
 
