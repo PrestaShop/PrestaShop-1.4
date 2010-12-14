@@ -439,7 +439,7 @@ class Hipay extends PaymentModule
 		if (!is_array($this->arrayCategories))
 		{
 			$this->arrayCategories = array();
-			if ($xml = simplexml_load_string(file_get_contents('https://'.($prod ? '' : 'test.').'www.hipay.com/payment-order/list-categories/id/'.$hipaySiteId)))
+			if ($xml = simplexml_load_string(file_get_contents('https://www.prestashop.com/partner/hipay/ws.php?site='.$hipaySiteId.($prod ? '&prod' : ''))))
 			{
 				foreach ($xml->children() as $categoriesList)
 					foreach ($categoriesList->children() as $category)
