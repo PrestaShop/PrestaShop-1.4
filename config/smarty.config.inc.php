@@ -24,7 +24,14 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
+
+if (Configuration::get('PS_FORCE_SMARTY_2'))
+	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty_v2/');
+else
+	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty/');
+
 require_once(_PS_SMARTY_DIR_.'Smarty.class.php');
+
 global $smarty;
 $smarty = new Smarty();
 $smarty->template_dir = _PS_THEME_DIR_.'tpl';
@@ -53,7 +60,7 @@ function smartyTranslate($params, &$smarty)
 	$msg = false;
 	$string = str_replace('\'', '\\\'', $params['s']);
 	
-	if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
+	if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
 		$key = $smarty->currentTemplate.'_'.md5($string);
 	else
 	{
@@ -137,7 +144,7 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_wo
 }
 
 /* Use Smarty 3 API calls */
-if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+if (!Configuration::get('PS_FORCE_SMARTY_2')) 
 {
 	$smarty->registerPlugin('modifier', 'truncate', 'smarty_modifier_truncate');
 	$smarty->registerPlugin('modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
@@ -146,9 +153,7 @@ if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
 	$smarty->registerPlugin('function', 'p', 'smartyShowObject');
 	$smarty->registerPlugin('function', 'd', 'smartyDieObject');
 	$smarty->registerPlugin('function', 'l', 'smartyTranslate');
-	spl_autoload_register('__autoload');
 }
-/* or keep a backward compatibility if PHP version < 5.1.2 */
 else
 {
 	$smarty->register_modifier('truncate', 'smarty_modifier_truncate');
@@ -176,4 +181,3 @@ function smartyPackJSinHTML($tpl_output, &$smarty)
 if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
 	$smarty->register_outputfilter('smartyPackJSinHTML');
 
-?>

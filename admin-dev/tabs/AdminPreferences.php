@@ -97,6 +97,7 @@ class AdminPreferences extends AdminTab
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
 			$this->_fieldsGeneral['PS_THEME_V11'] = array('title' => $this->l('v1.1 theme compatibility:'), 'desc' => $this->l('My shop uses a PrestaShop v1.1 theme (SSL will generate warnings in customer browser)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
+			$this->_fieldsGeneral['PS_FORCE_SMARTY_2'] = array('title' => $this->l('Use smarty v2 instead of v3:'), 'desc' => $this->l('Your theme is not compatible with Smarty 3 (think to update it, smarty 2 will be unsupported from the version 1.5)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
 
 		parent::__construct();
 	}

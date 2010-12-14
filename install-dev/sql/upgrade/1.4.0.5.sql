@@ -12,6 +12,7 @@ UPDATE `PREFIX_tab` SET `id_parent` = 29 WHERE `id_tab` = @tabs LIMIT 1;
 ALTER TABLE `PREFIX_image_type` ADD `stores` tinyint(1) NOT NULL default '1';
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_FORCE_SMARTY_2', '0', NOW(), NOW()),
 ('PS_DIMENSION_UNIT', 'cm', NOW(), NOW());
 
 ALTER TABLE `PREFIX_product`

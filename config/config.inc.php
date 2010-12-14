@@ -61,10 +61,8 @@ define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
 define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
 define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
-
 /* Autoload */
 require(dirname(__FILE__).'/autoload.php');
-
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
@@ -101,6 +99,18 @@ $defaultCountry = new Country((int)(Configuration::get('PS_COUNTRY_DEFAULT')), C
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
+	
+if (!function_exists('property_exists'))
+{
+	function property_exists($class, $property)
+	{
+		if (is_object($class))
+			$vars = get_object_vars($class);
+		else
+			$vars = get_class_vars($class);
+		return array_key_exists($property, $vars);
+	}
+}
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');

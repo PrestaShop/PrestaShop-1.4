@@ -82,9 +82,6 @@ class FrontControllerCore
 		if (!isset($smarty))
 			exit;
 
-		// Init Cookie
-		$cookie = new Cookie('ps');
-
 		/* Theme is missing or maintenance */
 		if (!is_dir(dirname(__FILE__).'/../themes/'._THEME_NAME_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
@@ -229,7 +226,7 @@ class FrontControllerCore
 			$smarty->ps_language = $ps_language;
 
 		/* Use Smarty 3 API calls */
-		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
+		if (!Configuration::get('PS_FORCE_SMARTY_2')) /* PHP version > 5.1.2 */
 		{
 			$smarty->registerPlugin('function', 'dateFormat', array('Tools', 'dateFormat'));
 			$smarty->registerPlugin('function', 'productPrice', array('Product', 'productPrice'));
@@ -514,5 +511,3 @@ class FrontControllerCore
 		$this->smarty->assign($pagination_infos);
 	}
 }
-
-

@@ -27,10 +27,10 @@
 
 function __autoload($className)
 {
-	if (stristr($className, 'smarty'))
-		return;
 	if (!class_exists($className, false))
 	{
+		if (function_exists('smartyAutoload') AND smartyAutoload($className)) 
+			return true;
 		require_once(dirname(__FILE__).'/../classes/'.$className.'.php');
 		if (file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php'))
 			require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
@@ -44,12 +44,3 @@ function __autoload($className)
 		}
 	}
 }
-
-/* Use Smarty 3 API calls */
-if (!defined('_PS_FORCE_SMARTY_2_') OR !_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
-{
-	spl_autoload_register('__autoload');
-	define('SMARTY_SPL_AUTOLOAD', 0);
-}
-
-?>

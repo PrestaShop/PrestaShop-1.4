@@ -327,7 +327,7 @@ class CarrierCore extends ObjectModel
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
 	 */
-	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, array $ids_group = NULL, $modules_filters = 1)
+	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, $ids_group = NULL, $modules_filters = 1)
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -653,5 +653,3 @@ class CarrierCore extends ObjectModel
 
 	
 }
-
-

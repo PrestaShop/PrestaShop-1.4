@@ -70,6 +70,7 @@ if (!defined('SMARTY_SPL_AUTOLOAD')) {
     define('SMARTY_SPL_AUTOLOAD', 0);
 } 
 
+/* PrestaShop 
 if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR . SMARTY_SYSPLUGINS_DIR) !== false) {
     $registeredAutoLoadFunctions = spl_autoload_functions();
     if (!isset($registeredAutoLoadFunctions['spl_autoload'])) {
@@ -77,8 +78,8 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
     } 
 } else {
     spl_autoload_register('smartyAutoload');
-} 
-
+}
+ End */
 /**
  * This is the main Smarty class
  */
@@ -758,14 +759,16 @@ class Smarty extends Smarty_Internal_Data {
         	return $this->wrapper->convert($name, $args);
         }
         // external Smarty methods ?
-        foreach(array('filter','register') as $external) {  
-        	if (method_exists("Smarty_Internal_{$external}",$name)) {
+        foreach(array('filter','register') as $external) {
+        /* PrestaShop */
+        	if (is_callable(array("Smarty_Internal_{$external}",$name))) {
         		if (!isset($this->$external)) {
         			$class = "Smarty_Internal_{$external}";
             		$this->$external = new $class($this);
-        		} 
+        		}
         		return call_user_func_array(array($this->$external,$name), $args);
 			}
+			/* End */
 		}
 		if (in_array($name,array('clearCompiledTemplate','compileAllTemplates','compileAllConfig','testInstall','getTags'))) {
        		if (!isset($this->utility)) {
@@ -788,9 +791,13 @@ class Smarty extends Smarty_Internal_Data {
 function smartyAutoload($class)
 {
     $_class = strtolower($class);
-    if (substr($_class, 0, 16) === 'smarty_internal_' || $_class == 'smarty_security') {
+    /* PrestaShop */
+    if (substr($_class, 0, 16) === 'smarty_internal_' || $_class == 'smarty_security' && file_exists(SMARTY_SYSPLUGINS_DIR.$_class.'.php')) {
         include SMARTY_SYSPLUGINS_DIR . $_class . '.php';
-    } 
+        return true;
+    }
+    return false;
+    /* End */
 } 
 
 /**

@@ -90,19 +90,6 @@ define('_PS_SWIFT_DIR_',            _PS_TOOL_DIR_.'swift/');
 define('_PS_FPDF_PATH_',            _PS_TOOL_DIR_.'fpdf/');
 define('_PS_PEAR_XML_PARSER_PATH_', _PS_TOOL_DIR_.'pear_xml_parser/');
 
-/* PHP version > 5.1.2 */
-if (PHP_VERSION_ID >= 50120)
-{
-	define('_PS_FORCE_SMARTY_2_', false);
-	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty/');
-}
-/* or keep a backward compatibility if PHP version < 5.1.2 */
-else 
-{
-	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty_v2/');
-	define('_PS_FORCE_SMARTY_2_', true);
-}
-
 /* settings php */
 define('_PS_TRANS_PATTERN_',            '(.*[^\\\\])');
 define('_PS_MIN_TIME_GENERATE_PASSWD_', '360');
@@ -162,4 +149,3 @@ define('_PS_CACHEFS_DIRECTORY_', dirname(__FILE__).'/../cache/cachefs/');
 /* Geolocalization */
 define('_PS_GEOLOCALIZATION_NO_CATALOG_', 0);
 define('_PS_GEOLOCALIZATION_NO_ORDER_', 1);
-?>

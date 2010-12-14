@@ -79,12 +79,6 @@ class	CookieCore
 		$this->update();
 	}
 	
-	public function __destruct()
-	{
-		if ($this->_modified)
-			$this->write();
-	}
-
 	private function getDomain()
 	{
 		$r = '!(?:(\w+)://)?(?:(\w+)\:(\w+)@)?([^/:]+)?(?:\:(\d*))?([^#?]+)?(?:\?([^#]+))?(?:#(.+$))?!i';
@@ -155,6 +149,7 @@ class	CookieCore
 		if (!$this->_modified AND (!isset($this->_content[$key]) OR (isset($this->_content[$key]) AND $this->_content[$key] != $value)))
 			$this->_modified = true;
 		$this->_content[$key] = $value;
+		$this->write();
 	}
 
 	/**
@@ -287,8 +282,7 @@ class	CookieCore
 			$content = 0;
 			$time = time() - 1;
 		}
-
-		if (PHP_VERSION_ID >= 50200) /* PHP version > 5.2.0 */
+		if (PHP_VERSION_ID <= 50200) /* PHP version > 5.2.0 */
 			return setcookie($this->_name, $content, $time, $this->_path, $this->_domain, 0);
 		else
 			return setcookie($this->_name, $content, $time, $this->_path, $this->_domain, 0, true);
@@ -338,5 +332,3 @@ class	CookieCore
 	}
 
 }
-
-

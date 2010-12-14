@@ -71,8 +71,10 @@ class ConnectionsSourceCore extends ObjectModel
 		$source = new ConnectionsSource();
 		if (isset($_SERVER['HTTP_REFERER']) AND Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
 		{
-			if ((preg_replace('/^www./', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)) == preg_replace('/^www./', '', Tools::getHttpHost(false, false)))
-				AND !strncmp(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), parse_url('http://'.Tools::getHttpHost(false, false).__PS_BASE_URI__, PHP_URL_PATH), strlen(__PS_BASE_URI__)))
+			$parsed = parse_url($_SERVER['HTTP_REFERER']);
+			$parsed_host = parse_url('http://'.Tools::getHttpHost(false, false).__PS_BASE_URI__);
+			if ((preg_replace('/^www./', '', $parsed['host']) == preg_replace('/^www./', '', Tools::getHttpHost(false, false))) 
+				AND !strncmp($parsed['path'], $parsed_host['path'], strlen(__PS_BASE_URI__)))
 				return false;
 			if (Validate::isAbsoluteUrl(strval($_SERVER['HTTP_REFERER'])))
 			{
