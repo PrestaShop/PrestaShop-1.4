@@ -29,6 +29,7 @@
 						<City>[[ShipperCity]]</City>
 						<PostalCode>[[ShipperPostalCode]]</PostalCode>
 						<CountryCode>[[ShipperCountryCode]]</CountryCode>
+						<StateProvinceCode>[[ShipperStateCode]]</StateProvinceCode>
 					</Address>
 				</Shipper>
 				<ShipTo>
@@ -39,6 +40,7 @@
 						<City>[[ShipToCity]]</City>
 						<PostalCode>[[ShipToPostalCode]]</PostalCode>
 						<CountryCode>[[ShipToCountryCode]]</CountryCode>
+						<StateProvinceCode>[[ShipToStateCode]]</StateProvinceCode>
 					</Address>
 				</ShipTo>
 				<ShipFrom>
@@ -49,6 +51,7 @@
 						<City>[[ShipFromCity]]</City>
 						<PostalCode>[[ShipFromPostalCode]]</PostalCode>
 						<CountryCode>[[ShipFromCountryCode]]</CountryCode>
+						<StateProvinceCode>[[ShipFromStateCode]]</StateProvinceCode>
 					</Address>
 				</ShipFrom>
 				<Service><Code>65</Code></Service>
@@ -58,9 +61,17 @@
 						<Description>Packaging Description</Description>
 					</PackagingType>
 					<Description>Rate</Description>
+					<Dimensions>
+						<UnitOfMeasurement>
+							<Code>[[DimensionUnit]]</Code>
+						</UnitOfMeasurement>
+						<Width>[[Width]]</Width>
+						<Height>[[Height]]</Height>
+						<Length>[[Length]]</Length>
+					</Dimensions>
 					<PackageWeight>
 						<UnitOfMeasurement>
-							<Code>KGS</Code>
+							<Code>[[WeightUnit]]</Code>
 						</UnitOfMeasurement>
 						<Weight>[[PackageWeight]]</Weight>
 					</PackageWeight>
