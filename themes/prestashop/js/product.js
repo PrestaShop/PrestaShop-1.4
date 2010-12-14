@@ -449,7 +449,7 @@ function saveCustomization()
 {
 	$('#quantityBackup').val($('#quantity_wanted').val());
 	customAction = $('#customizationForm').attr('action');
-	$('body select[@id^="group_"]').each(function() {
+	$('body select[id^="group_"]').each(function() {
 		customAction = customAction.replace(new RegExp(this.id + '=\\d+'), this.id +'='+this.value);
 	});
 	$('#customizationForm').attr('action', customAction);

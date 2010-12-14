@@ -47,6 +47,7 @@
 		"hasCustomizedDatas": {if isset($customizedDatas.$productId.$productAttributeId)}true{else}false{/if},
 
 		"customizedDatas":[
+		{if isset($customizedDatas.$productId.$productAttributeId)}
 		{foreach from=$customizedDatas.$productId.$productAttributeId key='id_customization' item='customization' name='customizedDatas'}{ldelim}
 {* This empty line was made in purpose (product addition debug), please leave it here *}
 
@@ -70,6 +71,7 @@
 			]
 		{rdelim}{if !$smarty.foreach.customizedDatas.last},{/if}
 		{/foreach}
+		{/if}
 		]
 
 
