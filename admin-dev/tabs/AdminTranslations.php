@@ -170,11 +170,13 @@ class AdminTranslations extends AdminTab
 						{
 							if (!Language::checkAndAddLanguage(Tools::getValue('iso_import_language')))
 								$conf = 20;
-							unlink($file);
+							if (!unlink($file))
+								$this->_errors[] = Tools::displayError('Cannot delete archive');
 							Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 						}
 						$this->_errors[] = Tools::displayError('archive cannot be extracted');
-						unlink($file);
+						if (!unlink($file))
+							$this->_errors[] = Tools::displayError('Cannot delete archive');
 					}
 					else
 						$this->_errors[] = Tools::displayError('Server does not have permissions for writing');

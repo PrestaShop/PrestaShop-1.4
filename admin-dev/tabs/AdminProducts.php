@@ -1552,14 +1552,18 @@ class AdminProducts extends AdminTab
 			echo '
 			<tr>
 				<td class="cell bpriority" rowspan="2" valign="top">
-					<b>'.($specificPrice['priority'] ? (int)($specificPrice['priority']) : $index++).'</b><input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'>
+					<b>'.($specificPrice['priority'] ? (int)($specificPrice['priority']) : $index).'</b><input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'>
 					<input type="hidden" name="spm_id_shop[]" value="0" />
 				</td>
 				<td class="cell br btt">
-					<select name="spm_id_currency[]">
+					<select id="spm_currency_'.$index.'" name="spm_id_currency[]" onchange="changeCurrencySpecificPrice('.$index.');">
 						<option value="0">'.$this->l('All currencies').'</option>';
 			foreach ($currencies as $currency)
+			{
 				echo '<option value="'.(int)($currency['id_currency']).'" '.($currency['id_currency'] == $specificPrice['id_currency'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+				if (($currency['id_currency'] == $specificPrice['id_currency']) || ($specificPrice['id_currency'] == 0 AND $currency['id_currency'] == $defaultCurrency->id))
+					$current_specific_currency = $currency;
+			}
 			echo '
 					</select>
 				</td>
@@ -1579,9 +1583,9 @@ class AdminProducts extends AdminTab
 			echo '	
 					</select>
 				</td>
-				<td class="cell br btt">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="spm_price[]" value="'.(float)($specificPrice['price']).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td class="cell br btt"> <span id="spm_currency_sign_pre_'.$index.'">'.($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').'</span><input type="text" name="spm_price[]" value="'.(float)($specificPrice['price']).'" size="11" /><span id="spm_currency_sign_post_'.$index.'">'.($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '').'</span></td>
 				<td class="cell br btt"><input type="text" name="spm_from_quantity[]" value="'.(int)($specificPrice['from_quantity']).'" size="3" /></td>
-				<td rowspan="2" class="br btt bb">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</td>
+				<td rowspan="2" class="br btt bb">'.($current_specific_currency['format'] == 1 ? ' '.$current_specific_currency['sign'] : '').Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2).($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '').'</td>
 				<td rowspan="2" class="border"><a href="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 			</tr>
 			<tr>
@@ -1597,12 +1601,29 @@ class AdminProducts extends AdminTab
 					'.$this->l('To').' <input type="text" name="spm_to[]" value="'.($specificPrice['to'] != '0000-00-00 00:00:00' ? $specificPrice['to'] : '0000-00-00 00:00:00').'" class="table_input" style="text-align: center" />
 				</td>
 			</tr>';
+			$index++;
 		}
 		echo '
 		</table>
 		<p class="center">
 			<input class="button" type="submit" name="submitPricesModification" value="'.$this->l('Apply').'" />
 		</p>
+		<script type="text/javascript">
+			var currencies = new Array();
+			currencies[0] = new Array();
+			currencies[0]["sign"] = "'.$defaultCurrency->sign.'";
+			currencies[0]["format"] = '.$defaultCurrency->format.';
+			';
+			foreach ($currencies as $currency)
+			{
+				echo '
+				currencies['.$currency['id_currency'].'] = new Array();
+				currencies['.$currency['id_currency'].']["sign"] = "'.$currency['sign'].'";
+				currencies['.$currency['id_currency'].']["format"] = '.$currency['format'].';
+				';
+			}
+			echo '
+		</script>
 		';
 	}
 	
@@ -1612,8 +1633,6 @@ class AdminProducts extends AdminTab
 		
 		$countries = Country::getCountriesWithoutTaxByProductId((int)$id_product, (int)$cookie->id_lang);
 		$product_taxes = Tax::getProductCountryTaxes((int)$id_product, (int)$cookie->id_lang);
-
-		
 
 		if (sizeof($countries) > 0)
 		{				
@@ -1682,6 +1701,7 @@ class AdminProducts extends AdminTab
 					$("#st_country").change(function() { updateCountryTaxes() });		
 					updateCountryTaxes();
 				});
+				
 			  </script>';
 	}
 
@@ -1695,7 +1715,7 @@ class AdminProducts extends AdminTab
 		<input type="hidden" name="sp_id_shop" value="0" />
 		<label>'.$this->l('Currency:').'</label>
 		<div class="margin-form">
-			<select name="sp_id_currency">
+			<select name="sp_id_currency" id="spm_currency_0" onchange="changeCurrencySpecificPrice(0);">
 				<option value="0">'.$this->l('All currencies').'</option>';
 			foreach ($currencies as $currency)
 				echo '<option value="'.(int)($currency['id_currency']).'">'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
@@ -1725,7 +1745,7 @@ class AdminProducts extends AdminTab
 		
 		<label>'.$this->l('Price (tax excl.):').'</label>
 		<div class="margin-form">
-			'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'<input type="text" name="sp_price" value="'.(float)($product->price).'" size="11" />'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'
+			<span id="spm_currency_sign_pre_0">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span><input type="text" name="sp_price" value="'.(float)($product->price).'" size="11" /><span id="spm_currency_sign_post_0">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
 			<div class="hint clear" style="display:block;">
 				'.$this->l('You can set this value at 0 in order to apply the default price').'
 			</div>

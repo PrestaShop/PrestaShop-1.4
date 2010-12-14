@@ -206,3 +206,18 @@ function unitySecond()
 	else
 		$('#tr_unit_impact').hide();
 }
+
+function changeCurrencySpecificPrice(index)
+{
+	var id_currency = $('#spm_currency_' + index).val();
+	if (currencies[id_currency]["format"] == 2 || currencies[id_currency]["format"] == 4)
+	{
+		$('#spm_currency_sign_pre_' + index).html('');
+		$('#spm_currency_sign_post_' + index).html(' ' + currencies[id_currency]["sign"]);
+	}
+	else if (currencies[id_currency]["format"] == 1 || currencies[id_currency]["format"] == 3)
+	{
+		$('#spm_currency_sign_post_' + index).html('');
+		$('#spm_currency_sign_pre_' + index).html(currencies[id_currency]["sign"] + ' ');
+	}
+}
