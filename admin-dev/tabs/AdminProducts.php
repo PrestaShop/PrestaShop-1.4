@@ -2426,12 +2426,11 @@ class AdminProducts extends AdminTab
 							<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'"> / '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')</span>
 						</td>
 					</tr>
-					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
-					<tr>					
-						<tr>';
+					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>';
 					if (!$has_attribute)
 					{
-						echo '<td class="col-left">'.$this->l('Stock Movement:').'</td>
+						echo '
+						<tr><td class="col-left">'.$this->l('Stock Movement:').'</td>
 							<td style="padding-bottom:5px;">
 								<select name="mvt_type">
 									<option value="--">--</option>
@@ -2454,7 +2453,8 @@ class AdminProducts extends AdminTab
 							</td>
 						</tr>';
 					}
-				echo '<td class="col-left">'.$this->l('Quantity in stock:').'</td>
+				echo '
+					<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
 						<td style="padding-bottom:5px;"><b>'.$qty.'</b>
 					</tr>
 					
