@@ -51,8 +51,9 @@ class FedexCarrier extends CarrierModule
 		'need_range' => true
 	);
 
+
 	/*** Construct Method ***/
-		
+
 	public function __construct()
 	{
 		global $cookie;
@@ -145,9 +146,9 @@ class FedexCarrier extends CarrierModule
 		}
 	}
 
-	
+
 	/*** Install / Uninstall Methods ***/
-	
+
 	public function install()
 	{
 		global $cookie;
@@ -201,7 +202,7 @@ class FedexCarrier extends CarrierModule
 
 		return true;
 	}
-	
+
 	public function uninstall()
 	{
 		global $cookie;
@@ -305,9 +306,9 @@ class FedexCarrier extends CarrierModule
 			return false;
 	}
 
-	
+
 	/*** Form Config Methods ***/
-	
+
 	public function getContent()
 	{
 		$this->_html .= '<h2>' . $this->l('Fedex Carrier').'</h2>';
@@ -426,7 +427,7 @@ class FedexCarrier extends CarrierModule
 				</form>';
 		return $html;
 	}
-	
+
 	private function _postValidation()
 	{
 		// Check configuration values
@@ -448,7 +449,7 @@ class FedexCarrier extends CarrierModule
 			$this->_postErrors[]  = $this->l('Your Fedex API Key is not specified');
 		elseif (Tools::getValue('fedex_carrier_pickup_type') == NULL OR Tools::getValue('fedex_carrier_pickup_type') == '0')
 			$this->_postErrors[]  = $this->l('Your pickup type is not specified');
-			
+
 		// Check fedex webservice availibity
 		if (!$this->_postErrors)
 		{
@@ -471,7 +472,7 @@ class FedexCarrier extends CarrierModule
 		if (!$extCarrier->update())
 			$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 	}
-	
+
 	private function _postProcess()
 	{
 		// Saving new configurations
@@ -484,13 +485,14 @@ class FedexCarrier extends CarrierModule
 		else
 			$this->_html .= $this->displayErrors($this->l('Settings failed'));
 	}
-	
+
 	public function hookupdateCarrier($params)
 	{
 	}
 
+
 	/*** Front Methods ***/
-	
+
 	public function getOrderShippingCost($params, $shipping_cost)
 	{
 		// Init var
@@ -505,6 +507,8 @@ class FedexCarrier extends CarrierModule
 		// Getting shipping cost for each product
 		foreach ($cartProducts as $product)
 		{
+			if ($product['weight'] < '0.1')
+				$product['weight'] = '0.1';
 			$fedexParams = array(
 				'recipient_address1' => $address->address1,
 				'recipient_address2' => $address->address2,
@@ -544,8 +548,6 @@ class FedexCarrier extends CarrierModule
 	}
 
 
-
-
 	/*** Webservices Methods ***/
 
 	public function webserviceTest()
@@ -554,7 +556,7 @@ class FedexCarrier extends CarrierModule
 		$dir = dirname(__FILE__);
 		if (preg_match('/classes/i', $dir))
 			$dir .= '/../modules/fedexcarrier/';
-	
+
 		// Enable Php Soap
 		ini_set("soap.wsdl_cache_enabled", "0");
 		$client = new SoapClient($dir.'/RateService_v9.wsdl', array('trace' => 1)); // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
@@ -622,9 +624,9 @@ class FedexCarrier extends CarrierModule
 		if ($cookie->id_currency != '2')
 		{
 			$currencyDollar = new Currency(2);
-			$conversionRate *= $currencyDollar->conversion_rate;
+			$conversionRate /= $currencyDollar->conversion_rate;
 			$currencySelect = new Currency((int)$cookie->id_currency);
-			$conversionRate /= $currencySelect->conversion_rate;
+			$conversionRate *= $currencySelect->conversion_rate;
 		}
 
 		// Getting module directory

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c0d00fcb670ada42dad4698b865f40cd'] = 'Transporteur Fedex';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_6aed16278d24c6e5b8cb32fb75b115a0'] = 'Propose à vos clients le transporteur UPS';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_6aed16278d24c6e5b8cb32fb75b115a0'] = 'Propose à vos clients le transporteur Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_eb913e534166c405b955e203e278445c'] = '\'Compte Fedex\'';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5e21aea90b6d79e7a88edf475caa19f8'] = 'Identifiant \'Fedex meter number\'';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_1dd66a25c3d430c4b81fb5d0e9c96a87'] = '\'Mot de passe Fedex\'';
