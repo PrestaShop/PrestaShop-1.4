@@ -371,7 +371,7 @@ class DiscountCore extends ObjectModel
 		foreach ($discounts as $discount)
 		{
 			if ($discount['id_discount_type'] == 1)
-				$total -= $total_tmp * (1 - ($discount['value'] / 100));
+				$total -= $total_tmp * ($discount['value'] / 100);
 			elseif ($discount['id_discount_type'] == 2)
 				$total -= (($discount['value'] * ($total_tmp / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
 		}
