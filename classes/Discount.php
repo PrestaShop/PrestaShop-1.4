@@ -373,7 +373,7 @@ class DiscountCore extends ObjectModel
 			if ($discount['id_discount_type'] == 1)
 				$total -= $total_tmp * ($discount['value'] / 100);
 			elseif ($discount['id_discount_type'] == 2)
-				$total -= (($discount['value'] * ($total_tmp / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
+				$total -= ($discount['value'] * ($total_tmp / $order->total_products_wt));
 		}
 		if ($shipping_cost)
 			$total += $order->total_shipping;
