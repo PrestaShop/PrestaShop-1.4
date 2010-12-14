@@ -56,15 +56,15 @@
 		{foreach from=$orders item=order name=myLoop}
 			<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
 				<td class="history_link bold">
-					{if $order.invoice && $order.virtual}<img src="{$img_dir}icon/download_product.gif" class="icon" alt="{l s='Product(s) to download'}" title="{l s='Product(s) to download'}" />{/if}
+					{if isset($order.invoice) && isset($order.virtual)}<img src="{$img_dir}icon/download_product.gif" class="icon" alt="{l s='Product(s) to download'}" title="{l s='Product(s) to download'}" />{/if}
 					<a class="color-myaccount" href="javascript:showOrder(1, {$order.id_order|intval}, 'order-detail');">{l s='#'}{$order.id_order|string_format:"%06d"}</a>
 				</td>
 				<td class="history_date bold">{dateFormat date=$order.date_add full=0}</td>
 				<td class="history_price"><span class="price">{displayPrice price=$order.total_paid_real currency=$order.id_currency no_utf8=false convert=false}</span></td>
 				<td class="history_method">{$order.payment|escape:'htmlall':'UTF-8'}</td>
-				<td class="history_state">{$order.order_state|escape:'htmlall':'UTF-8'}</td>
+				<td class="history_state">{if isset($order.order_state)}{$order.order_state|escape:'htmlall':'UTF-8'}{/if}</td>
 				<td class="history_invoice">
-				{if ($order.invoice AND $order.invoice_number) AND $invoiceAllowed}
+				{if (isset($order.invoice) AND isset($order.invoice_number)) AND isset($invoiceAllowed) AND $invoiceAllowed == true}
 					<a href="{$base_dir}pdf-invoice.php?id_order={$order.id_order|intval}" title="{l s='Invoice'}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Invoice'}" class="icon" /></a>
 					<a href="{$base_dir}pdf-invoice.php?id_order={$order.id_order|intval}" title="{l s='Invoice'}">{l s='PDF'}</a>
 				{else}-{/if}
