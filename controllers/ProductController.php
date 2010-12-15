@@ -244,6 +244,9 @@ class ProductControllerCore extends FrontController
 							{
 								$colors[$row['id_attribute']]['value'] = $row['attribute_color'];
 								$colors[$row['id_attribute']]['name'] = $row['attribute_name'];
+								if (!isset($colors[$row['id_attribute']]['attributes_quantity']))
+									$colors[$row['id_attribute']]['attributes_quantity'] = 0;
+								$colors[$row['id_attribute']]['attributes_quantity'] += (int)($row['quantity']);
 							}
 
 							$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
@@ -267,10 +270,15 @@ class ProductControllerCore extends FrontController
 						}
 						//wash attributes list (if some attributes are unavailables and if allowed to wash it)
 						if (!Product::isAvailableWhenOutOfStock($product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
+						{
 							foreach ($groups AS &$group)
 								foreach ($group['attributes_quantity'] AS $key => &$quantity)
 									if (!$quantity)
 										unset($group['attributes'][$key]);
+							foreach ($colors AS $key => $color)
+								if (!$color['attributes_quantity'])
+									unset($colors[$key]);
+						}
 						foreach($groups AS &$group)
 							natcasesort($group['attributes']);
 						foreach ($combinations AS $id_product_attribute => $comb)
