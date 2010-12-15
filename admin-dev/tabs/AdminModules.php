@@ -337,6 +337,24 @@ class AdminModules extends AdminTab
 				$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
 		$serialModules = urlencode($serialModules);
 		
+		$filterName = Tools::getValue('filtername');
+		if (!empty($filterName))
+		{
+			echo '
+			<script type="text/javascript">
+				$(document).ready(function() {	
+					$(\'#all_open\').hide();
+					$(\'#all_close\').show();			 
+					$(\'.tab_module_content\').each(function(){
+						$(this).slideDown();
+						$(\'.header_module_img\').each(function(){
+							$(this).attr(\'src\', \'../img/admin/less.png\');
+						});
+					});
+				});
+			</script>';
+		}
+		
 		//filter module list
 		foreach($modules as $key => $module)
 		{
@@ -379,8 +397,13 @@ class AdminModules extends AdminTab
 						unset($modules[$key]);
 				break;
 			}		
+			
 			if ($showCountryModules)		
 				if ((isset($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)))
+					unset($modules[$key]);
+			
+			if (!empty($filterName))
+				if (stristr($module->name, $filterName) === false AND stristr($module->displayName, $filterName) === false AND stristr($module->description, $filterName) === false)
 					unset($modules[$key]);
 		}
 
@@ -396,6 +419,7 @@ class AdminModules extends AdminTab
 			<img src="http://addons.prestashop.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" class="middle" />
 			'.$this->l('Add a module from PrestaShop Addons').'
 		</a>
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" style="float:right"><input type="text" name="filtername" value="'.Tools::htmlentitiesUTF8(Tools::getValue('filtername')).'" /> <input type="submit" value="'.$this->l('Search').'" class="button" /></form>
 		<div class="clear">&nbsp;</div>
 		<div id="module_install" style="display:none;width:900px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
 			<fieldset>
