@@ -35,7 +35,7 @@ function checkwaitingorder()
 		data:'id_cart={$id_cart|intval}&id_module={$id_module|intval}&key={$key|escape}',
 		success:function (r) {ldelim}
 			if (r == 'ok')
-				window.location.href = '{$link->getPageLink('my-account.php')}?id_cart={$id_cart|intval}&id_module={$id_module|intval}&key={$key|escape}';
+				window.location.href = '{$ogone_link}?id_cart={$id_cart|intval}&id_module={$id_module|intval}&key={$key|escape}';
 		{rdelim}
 	{rdelim});
 	setTimeout('checkwaitingorder()', 5000);
