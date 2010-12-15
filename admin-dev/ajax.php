@@ -154,9 +154,9 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	die($json);
 }
 
-if (Tools::getValue('page') == 'prestastore')
+if (Tools::getValue('page') == 'prestastore' AND @fsockopen('addons.prestashop.com'))
 	readfile('http://addons.prestashop.com/adminmodules.php?lang='.Language::getIsoById($cookie->id_lang));
-if (Tools::getValue('page') == 'themes')
+if (Tools::getValue('page') == 'themes'  AND @fsockopen('addons.prestashop.com'))
 	readfile('http://addons.prestashop.com/adminthemes.php?lang='.Language::getIsoById($cookie->id_lang));
 
 if ($step = (int)(Tools::getValue('ajaxProductTab')))

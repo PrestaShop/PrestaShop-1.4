@@ -165,7 +165,7 @@ else /* Else display homepage */
 		$currency = Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		echo '
 		<div class="table_info">
-			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> '.translate('Overview Statistics').' </h5>
+			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> '.translate('Month Statistics').' </h5>
 			<table class="table_info_details">
 				<tr class="tr_odd">
 					<td class="td_align_left">
@@ -319,9 +319,10 @@ else /* Else display homepage */
 					<a href ="http://addons.prestashop.com">'.translate('Go to addons.prestashop.com').'</a>
 				</li>
 			</ul>
-		</div>
-		<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>
-	</div>
+		</div>';
+		if (@fsockopen('addons.prestashop.com'))
+			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+	echo '</div>
 	<div class="clear"></div>
 	';
 	
