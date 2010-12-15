@@ -51,14 +51,11 @@ class WebserviceRequest
 	/** @var string HTTP Method to support */
 	private $_method;
 	
-	/** @var string HTTP Method used for this request, different of the $_method attributes, useful in order to using POST method and execute PUT method support */
-	private $_realMethod;
-	
 	/** @var array The segment of the URL */
 	private $_urlSegment = array();
 	
 	/** @var array The segment list of the URL after the "api" segment */
-	private $_urlParams = array();
+	private $_urlFragments = array();
 	
 	/** @var int The time in microseconds of the start of the execution of the web service request */
 	private $_startTime = 0;
@@ -115,8 +112,11 @@ class WebserviceRequest
 	/** @var array The list of supported mime types */
 	private $_acceptedImgMimeTypes = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 	
-	/** @var boolean if the current image management has to manage a "default" image (i.e. "No product available") */
+	/** @var boolean If the current image management has to manage a "default" image (i.e. "No product available") */
 	private $_defaultImage = false;
+	
+	/** @var string If we are in PUT or POST case, we use this attribute to store the xml string value during process */
+	private $_inputXml;
 	
 	/** @var WebserviceRequest Object instance for singleton */
 	private static $_instance;
@@ -161,19 +161,18 @@ class WebserviceRequest
 	 * 	Execute the action
 	 * 	Display the result
 	 *
-	 * @return void
+	 * @return array Returns an array of results (headers, content, type of resource...)
 	 */
-	public function start()
+	public function fetch($method, $url, $params, $inputXml = NULL)
 	{
 		// check webservice activation and request authentication
 		if ($this->isActivated() && $this->authenticate())
 		{
 			//parse request url
-			$this->_method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
-			$this->_realMethod = $_SERVER['REQUEST_METHOD'];
-			$this->_urlSegment = explode('/', $_GET['url']);
-			$this->_urlParams = $_GET;
-			unset($this->_urlParams['url']);
+			$this->_method = $method;
+			$this->_urlSegment = explode('/', $url);
+			$this->_urlFragments = $params;
+			$this->_inputXml = $inputXml;
 			
 			// check method and resource
 			if ($this->checkResource() && $this->checkHTTPMethod())
@@ -225,7 +224,7 @@ class WebserviceRequest
 			}
 		}
 		if ($this->_outputEnabled)
-			$this->displayXml();
+			return $this->returnOutput();
 	}
 	
 	/**
@@ -329,53 +328,53 @@ class WebserviceRequest
 	 * @param array $errline errline, which contains the line number the error was raised at, as an integer
 	 * @return boolean Always return true to avoid the default PHP error handler
 	 */
-	private function webserviceErrorHandler($errno, $errstr, $errfile, $errline)
+	public function webserviceErrorHandler($errno, $errstr, $errfile, $errline)
 	{
 		if (!(error_reporting() & $errno))
 			return;
 		switch($errno)
 		{
 			case E_ERROR:
-				$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_WARNING:
-				$this->setError(500, '[PHP Warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_PARSE:
-				$this->setError(500, '[PHP Parse #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Parse #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_NOTICE:
-				$this->setError(500, '[PHP Notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_CORE_ERROR:
-				$this->setError(500, '[PHP Core #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Core #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_CORE_WARNING:
-				$this->setError(500, '[PHP Core warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Core warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_COMPILE_ERROR:
-				$this->setError(500, '[PHP Compile #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Compile #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_COMPILE_WARNING:
-				$this->setError(500, '[PHP Compile warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Compile warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_USER_ERROR:
-				$this->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_USER_WARNING:
-				$this->setError(500, '[PHP User warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP User warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_USER_NOTICE:
-				$this->setError(500, '[PHP User notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP User notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_STRICT:
-				$this->setError(500, '[PHP Strict #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Strict #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			case E_RECOVERABLE_ERROR:
-				$this->setError(500, '[PHP Recoverable error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Recoverable error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 				break;
 			default:
-				$this->setError(500, '[PHP Unknown error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
+				WebserviceRequest::getInstance()->setError(500, '[PHP Unknown error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')');
 		}
 		return true;
 	}
@@ -535,16 +534,16 @@ class WebserviceRequest
 			//construct SQL filter
 			$sql_filter = '';
 			$sql_join = '';
-			if ($this->_urlParams)
+			if ($this->_urlFragments)
 			{
 				// if we have to display the schema
-				if (array_key_exists('schema', $this->_urlParams))
+				if (array_key_exists('schema', $this->_urlFragments))
 				{
-					if ($this->_urlParams['schema'] == 'blank')
+					if ($this->_urlFragments['schema'] == 'blank')
 					{
 						$this->_schemaToDisplay = 'blank';
 					}
-					elseif ($this->_urlParams['schema'] == 'synopsis')
+					elseif ($this->_urlFragments['schema'] == 'synopsis')
 					{
 						$this->_schemaToDisplay = 'synopsis';
 					}
@@ -557,8 +556,8 @@ class WebserviceRequest
 				else
 				{
 					// if there are filters
-					if (isset($this->_urlParams['filter']))
-						foreach ($this->_urlParams['filter'] as $field => $url_param)
+					if (isset($this->_urlFragments['filter']))
+						foreach ($this->_urlFragments['filter'] as $field => $url_param)
 						{
 							$available_filters = array_keys($this->_resourceConfiguration['fields']);
 							if ($field != 'sort' && $field != 'limit')
@@ -626,9 +625,9 @@ class WebserviceRequest
 			}
 	
 			// set the fields to display in the list : "full", "minimum", "field_1", "field_1,field_2,field_3" //TODO manage linked_tables too
-			if (isset($this->_urlParams['display']))
+			if (isset($this->_urlFragments['display']))
 			{
-				$this->_fieldsToDisplay = $this->_urlParams['display'];
+				$this->_fieldsToDisplay = $this->_urlFragments['display'];
 				if ($this->_fieldsToDisplay != 'full')
 				{
 					preg_match('#^\[(.*)\]$#Ui', $this->_fieldsToDisplay, $matches);
@@ -654,13 +653,13 @@ class WebserviceRequest
 			// construct SQL Sort
 			$sql_sort = '';
 			$available_filters = array_keys($this->_resourceConfiguration['fields']);
-			if (isset($this->_urlParams['sort']))
+			if (isset($this->_urlFragments['sort']))
 			{
-				preg_match('#^\[(.*)\]$#Ui', $this->_urlParams['sort'], $matches);
+				preg_match('#^\[(.*)\]$#Ui', $this->_urlFragments['sort'], $matches);
 				if (count($matches) > 1)
 					$sorts = explode(',', $matches[1]);
 				else
-					$sorts = array($this->_urlParams['sort']);
+					$sorts = array($this->_urlFragments['sort']);
 		
 				$sql_sort .= ' ORDER BY ';
 		
@@ -687,9 +686,9 @@ class WebserviceRequest
 
 			//construct SQL Limit
 			$sql_limit = '';
-			if (isset($this->_urlParams['limit']))
+			if (isset($this->_urlFragments['limit']))
 			{
-				$limitArgs = explode(',', $this->_urlParams['limit']);
+				$limitArgs = explode(',', $this->_urlFragments['limit']);
 				if (count($limitArgs) > 2)
 				{
 					$this->setError(400, 'The "limit" value has to be formed as this example: "5,25" or "10"');
@@ -744,8 +743,7 @@ class WebserviceRequest
 	private function executeEntityPost()
 	{
 		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']();
-		// we prefer use $_REQUEST as $_POST because of simulated methods
-		return $this->saveEntityFromXml($_REQUEST['xml'], 201);
+		return $this->saveEntityFromXml($this->_inputXml, 201);
 	}
 	
 	/**
@@ -759,20 +757,7 @@ class WebserviceRequest
 
 		if ($this->_object->id)
 		{
-			$xmlString = '';
-			if ($this->_realMethod == 'PUT')
-			{
-				$putresource = fopen("php://input", "r");
-				while ($putData = fread($putresource, 1024))
-					$xmlString .= $putData;
-				fclose($putresource);
-			}
-			else
-			{
-				// we prefer use $_REQUEST as $_POST or $_GET because of simulated methods
-				$xmlString .= $_REQUEST['xml'];
-			}
-			return $this->saveEntityFromXml($xmlString, 200);
+			return $this->saveEntityFromXml($this->_inputXml, 200);
 		}
 		else
 		{
@@ -1167,15 +1152,19 @@ class WebserviceRequest
 	 *  
 	 * @return void
 	 */
-	private function displayXml()
+	private function returnOutput()
 	{
+		$return = array();
+		
 		// write headers
-		header($this->_status);
-		header('X-Powered-By: PrestaShop Webservice');
+		
+		$return['status'] = $this->_status;
+		
+		$return['x_powered_by'] = 'X-Powered-By: PrestaShop Webservice';
 		// write this header only now (avoid hackers happiness...)
 		if ($this->_authenticated)
-			header('PSWS-Version: '._PS_VERSION_);
-		header('Execution-Time: '.round(microtime(true) - $this->_startTime,3));
+			$return['ps_ws_version'] = 'PSWS-Version: '._PS_VERSION_;
+		$return['execution_time'] =  'Execution-Time: '.round(microtime(true) - $this->_startTime,3);
 		
 		// display image content if needed
 		if ($this->_imgToDisplay)
@@ -1196,12 +1185,18 @@ class WebserviceRequest
 				switch ($this->_imgExtension)
 				{
 					case 'jpg':
-						header('Content-Type: image/jpeg');
-						imagejpeg($im);
+						return array(
+							'type' => 'image',
+							'content_type' => 'Content-Type: image/jpeg',
+							'resource' => $im
+						);
 						break;
 					case 'gif':
-						header('Content-Type: image/gif');
-						imagegif($im);
+						return array(
+							'type' => 'image',
+							'content_type' => 'Content-Type: image/gif',
+							'resource' => $im
+						);
 						break;
 				}
 				imagedestroy($im);
@@ -1221,14 +1216,16 @@ class WebserviceRequest
 		// display xml content if needed
 		if (strlen($this->_xmlOutput) > 0)
 		{
-			header('Content-Type: text/xml');
-			header('Content-Sha1: '.sha1($this->_xmlOutput));
 			$xml_start = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 			$xml_start .= '<prestashop xmlns="'.$this->_docUrl.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 			$xml_end = '</prestashop>'."\n";
-			echo $xml_start.$this->_xmlOutput.$xml_end;
+			
+			$return['type'] = 'xml';
+			$return['content_type'] = 'Content-Type: text/xml';
+			$return['content_sha1'] = 'Content-Sha1: '.sha1($this->_xmlOutput);
+			$return['content'] = $xml_start.$this->_xmlOutput.$xml_end;
+			return $return;
 		}
-		die;
 	}
 	
 	/**
@@ -1827,12 +1824,7 @@ class WebserviceRequest
 	 */
 	private function writePostedImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
 	{
-		if ($this->_realMethod == 'PUT')
-		{
-			$this->setError(405, 'Method PUT is currently not implemented with image resource. Please use the POST method and use the method simulator by adding a "ps_method" parameter with the value "PUT"');//TODO
-			return false;
-		}
-		elseif ($this->_realMethod == 'POST')
+		if ($this->_method == 'PUT')
 		{
 			if (isset($_FILES['image']['tmp_name']) AND $_FILES['image']['tmp_name'])
 			{

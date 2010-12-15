@@ -28,4 +28,53 @@
 require_once(dirname(__FILE__).'/../config/config.inc.php');
 
 require_once(dirname(__FILE__).'/WebserviceRequest.php');
-WebserviceRequest::getInstance()->start();
+
+$method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
+
+if (isset($_REQUEST['xml']))
+{
+	// if a XML is in POST
+	$input_xml = $_REQUEST['xml'];
+}
+else
+{
+	// if no XML
+	$input_xml = NULL;
+	
+	// if a XML is in PUT
+	if ($_SERVER['REQUEST_METHOD'] == 'PUT')
+	{
+		$putresource = fopen("php://input", "r");
+		while ($putData = fread($putresource, 1024))
+			$input_xml .= $putData;
+		fclose($putresource);
+	}
+}
+
+$params = $_GET;
+unset($params['url']);
+
+// fetch the request
+$result = WebserviceRequest::getInstance()->fetch($method, $_GET['url'], $params, $input_xml);
+// display result
+header($result['content_type']);
+header($result['status']);
+header($result['x_powered_by']);
+header($result['execution_time']);
+if (isset($result['ps_ws_version']))
+	header($result['ps_ws_version']);
+
+
+if ($result['type'] == 'xml')
+{
+	header($result['content_sha1']);
+	echo $result['content'];
+}
+elseif ($result['type'] == 'image')
+{
+	if ($result['extension'] == 'jpg')
+		
+		imagejpeg($result['resource']);
+	elseif ($result['extension'] == 'gif')
+		imagegif($result['resource']);
+}
