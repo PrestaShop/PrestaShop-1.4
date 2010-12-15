@@ -199,6 +199,7 @@ class	CookieCore
 		$this->_setcookie();
 		unset($_COOKIE[$this->_name]);
 		$this->_modified = true;
+		$this->write();
 	}
 
 	/**
@@ -219,6 +220,7 @@ class	CookieCore
 		unset($this->_content['id_address_invoice']);
 		unset($this->_content['id_address_delivery']);
 		$this->_modified = true;
+		$this->write();
 	}
 	
 	function makeNewLog()
