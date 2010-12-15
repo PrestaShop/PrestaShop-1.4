@@ -116,7 +116,7 @@ class AdminCMSCategories extends AdminTab
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->toggleStatus())
-						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_cms_category = (int)(Tools::getValue('id_cms_category')))) ? '&id_cms_category='.$id_cms_category : '').'&token='.Tools::getValue('token'));
+						Tools::redirectAdmin($currentIndex.'&conf=5'.((int)$object->id_parent ? '&id_cms_category='.(int)$object->id_parent : '').'&token='.Tools::getValue('token'));
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
