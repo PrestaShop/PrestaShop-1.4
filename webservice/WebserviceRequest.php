@@ -415,7 +415,7 @@ class WebserviceRequest
 				}
 				elseif (strlen($auth_key) != '32')
 				{
-					$this->setError(400, 'Invalid authentication key format');
+					$this->setError(401, 'Invalid authentication key format');
 					return false;
 				}
 				else
@@ -423,7 +423,7 @@ class WebserviceRequest
 					$keyValidation = Webservice::isKeyActive($auth_key);
 					if (is_null($keyValidation))
 					{
-						$this->setError(400, 'Authentification key does not exist');
+						$this->setError(401, 'Authentification key does not exist');
 						return false;
 					}
 					elseif($keyValidation === true)
@@ -432,7 +432,7 @@ class WebserviceRequest
 					}
 					else
 					{
-						$this->setError(400, 'Authentification key is not active');
+						$this->setError(401, 'Authentification key is not active');
 						return false;
 					}
 					
