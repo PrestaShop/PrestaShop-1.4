@@ -495,7 +495,7 @@ class AdminCustomerThreads extends AdminTab
 			echo $this->displayButton('
 			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=3&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-pending.png" style="margin-bottom:10px" />
-				<br />'.$this->l('Declare this message').'<br />'.$this->l('as pending').'<br />'.$this->l('(will be answered later)').'
+				<br />'.$this->l('Declare this message').'<br />'.$this->l('as "pending 1"').'<br />'.$this->l('(will be answered later)').'
 			</a>');
 		else
 			echo $this->displayButton('
@@ -508,7 +508,7 @@ class AdminCustomerThreads extends AdminTab
 			echo $this->displayButton('
 			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=4&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-pending.png" style="margin-bottom:10px" />
-				<br />'.$this->l('Declare this message').'<br />'.$this->l('as pending').'<br />'.$this->l('(will be answered later)').'
+				<br />'.$this->l('Declare this message').'<br />'.$this->l('as "pending 2"').'<br />'.$this->l('(will be answered later)').'
 			</a>');
 		else
 			echo $this->displayButton('
