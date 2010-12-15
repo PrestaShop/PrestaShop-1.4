@@ -56,7 +56,7 @@ $(function () {ldelim}
 					</div>
 					<div class="clear">
 						<a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.details->name|escape:'htmlall':'UTF-8'}">
-							<img src="{$link->getImageLink($product.id_product, $imageIds, 'medium')}" alt="" />
+							<img src="{$link->getImageLink($product.id_product, $imageIds, 'medium')}" alt="" width="{$mediumSize.width}" height="{$mediumSize.height}" />
 						</a>
 						<p class="description">{$product.details->description_short|strip_tags|truncate:170:'...'}</p>
 					</div>
@@ -75,7 +75,7 @@ $(function () {ldelim}
 			{foreach from=$scenes item='scene' name='scenes_list'}
 				<li id="scene_thumb_{$scene->id}" style="{if !$smarty.foreach.scenes_list.last} padding-right:10px;{/if}">
 					<a style="width:{$thumbSceneImageType.width}px; height:{$thumbSceneImageType.height}px" title="{$scene->name|escape:'htmlall':'UTF-8'}" href="#" rel="{$scene->id}" onclick="{ldelim}loadScene({$scene->id});return false;{rdelim}">
-						<img alt="{$scene->name|escape:'htmlall':'UTF-8'}" src="{$content_dir}img/scenes/thumbs/{$scene->id}-thumb_scene.jpg" />
+						<img alt="{$scene->name|escape:'htmlall':'UTF-8'}" src="{$content_dir}img/scenes/thumbs/{$scene->id}-thumb_scene.jpg" width="{$thumbSceneSize.width}" height="{$thumbSceneSize.height}" />
 					</a>
 				</li>
 		 	{/foreach}

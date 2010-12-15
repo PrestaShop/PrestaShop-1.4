@@ -121,6 +121,9 @@ class CategoryControllerCore extends FrontController
 					'return_category_name' => Tools::safeOutput($category->name),
 					'path' => Tools::getPath((int)($category->id), $category->name),
 					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
+					'categorySize' => Image::getSize('category'),
+					'mediumSize' => Image::getSize('medium'),
+					'thumbSceneSize' => Image::getSize('thumb_scene'),
 					'homeSize' => Image::getSize('home')
 				));
 			}

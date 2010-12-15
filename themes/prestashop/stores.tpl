@@ -34,7 +34,7 @@
 	<p>{l s='Here are the details of our stores, feel free to contact us:'}</p>
 	{foreach from=$stores item=store}
 		<div class="store-small">
-			{if $store.has_picture}<p><img src="{$img_store_dir}{$store.id_store}-medium.jpg" alt="" /></p>{/if}
+			{if $store.has_picture}<p><img src="{$img_store_dir}{$store.id_store}-medium.jpg" alt="" width="{$mediumSize.width}" height="{$mediumSize.height}" /></p>{/if}
 			<p>
 				<b>{$store.name|escape:'htmlall':'UTF-8'}</b><br />
 				{$store.address1|escape:'htmlall':'UTF-8'}<br />
