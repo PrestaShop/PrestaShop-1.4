@@ -15,6 +15,7 @@ h1 {
 	font-size: 20pt;
 	padding: 15px 10px 10px 30px;
 	margin: 0;
+	overflow: hidden;
 }
 
 h2 a {
