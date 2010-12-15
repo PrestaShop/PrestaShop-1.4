@@ -320,7 +320,7 @@ else /* Else display homepage */
 				</li>
 			</ul>
 		</div>';
-		if (@fsockopen('addons.prestashop.com'))
+		if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3))
 			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
 	echo '</div>
 	<div class="clear"></div>
