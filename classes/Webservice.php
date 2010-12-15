@@ -35,8 +35,8 @@ class WebserviceCore extends ObjectModel
 	
  	protected 	$fieldsRequired = array('key');
  	protected 	$fieldsSize = array('key' => 32);
- 	protected 	$fieldsValidate = array('key' => 'isPasswd', 'active' => 'isBool');
-		
+ 	protected 	$fieldsValidate = array('active' => 'isBool');
+
 	protected 	$table = 'webservice_account';
 	protected 	$identifier = 'id_webservice_account';
 

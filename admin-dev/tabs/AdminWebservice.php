@@ -29,6 +29,7 @@ include_once(dirname(__FILE__).'/../../classes/AdminTab.php');
 
 class AdminWebservice extends AdminTab
 {
+
 	public function __construct()
 	{
 	 	$this->table = 'webservice_account';
@@ -46,9 +47,13 @@ class AdminWebservice extends AdminTab
 		
 		$this->optionTitle = $this->l('Configuration');
 		if (file_exists(_PS_ROOT_DIR_.'/.htaccess'))
-			$this->_fieldsOptions = array('PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 'desc' => ''.$this->l('Before activating the webservice, you must be sure to: ').'<ol><li>'.$this->l('be certain URL rewrite is available on this server').'</li><li>'.$this->l('be certain that the 4 methods GET, POST, PUT, DELETE and HEAD are supported by this server').'</li></ol>', 'cast' => 'intval', 'type' => 'bool'));
-		
-	
+			$this->_fieldsOptions = array('PS_WEBSERVICE' => array('title' => $this->l('Enable PrestaShop Webservice:'), 
+																	'desc' => $this->l('Before activating the webservice, you must be sure to: ').
+																						'<ol><li>'.$this->l('be certain URL rewrite is available on this server').
+																						'</li><li>'.$this->l('be certain that the 5 methods GET, POST, PUT, DELETE and HEAD are supported by this server').
+																						'</li></ol>', 
+																	'cast' => 'intval',
+																	'type' => 'bool'));
 		parent::__construct();
 	}
 	
@@ -104,7 +109,7 @@ class AdminWebservice extends AdminTab
 			<fieldset><legend><img src="../img/admin/access.png" />'.$this->l('Webservice Accounts').'</legend>
 				<label>'.$this->l('Key:').'</label>
 				<div class="margin-form">
-					<input type="text" size="38" name="key" id="code" value="'.htmlentities(Tools::getValue('key', $obj->key), ENT_COMPAT, 'UTF-8').'" />
+					<input type="text" size="32" name="key" id="code" value="'.htmlentities(Tools::getValue('key', $obj->key), ENT_COMPAT, 'UTF-8').'" />
 					<input type="button" value="'.$this->l('   Generate!   ').'" class="button" onclick="gencode(32)" />
 					<sup>*</sup>
 					<p class="clear">'.$this->l('Webservice account key').'</p>
@@ -209,6 +214,10 @@ echo '
 			</fieldset>
 		</form>';
 	}
+	public function postProcess()
+	{
+		if (Tools::getValue('key') && strlen(Tools::getValue('key')) < 32)
+			$this->_errors[] = Tools::displayError($this->l('Key length must be 32 character long'));
+		return parent::postProcess();
+	}
 }
-
-
