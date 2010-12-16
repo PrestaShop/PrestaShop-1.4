@@ -188,7 +188,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 	$fields = $import->getAvailableFields(true);
 	foreach ($fields AS $field)
-		$jsonArray[] = '{field: \''.addslashes($field).'\'}';
+		$jsonArray[] = '{"field":"'.addslashes($field).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
 
