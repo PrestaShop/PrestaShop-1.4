@@ -48,7 +48,7 @@ class ThemeInstallator extends Module
 	public function __construct()
 	{
 		$this->name = 'themeinstallator';
-		$this->version = '1.2';
+		$this->version = '1.3';
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
 			$this->tab = 'administration';
 		else
@@ -100,7 +100,8 @@ class ThemeInstallator extends Module
 
 	private function recurseCopy($src, $dst)
 	{
-		$dir = opendir($src);
+		if (!$dir = opendir($src))
+			return;
 		if (!file_exists($dst))
 			mkdir($dst);
 		while(($file = readdir($dir)) !== false)
@@ -563,14 +564,17 @@ class ThemeInstallator extends Module
 		{
 			$var = '';
 			foreach ($this->to_install as $row)
-				$var .= '<input type="checkbox" name="modulesToExport[]" id="'.$row.'" value="'.$row.'" checked /> <label style="display:bock;float:none" for="'.$row.'">'.$row.
-				(file_exists(_PS_MODULE_DIR_.$row) ? ' <span style="font-size:0.8em">-> '.$this->l('Warning: a module with the same name already exists').'</span>' : '').'</label><br />';
-			$this->_html .= '
-				<fieldset>
-					<legend>'.$this->l('Select the theme\'s modules you wish to install').'</legend>
-					<p class="margin-form">'.$var.'</p>
-				</fieldset>
-				<p>&nbsp;</p>';
+				if (file_exists(_IMPORT_FOLDER_.'modules/'.$row))
+					$var .= '<input type="checkbox" name="modulesToExport[]" id="'.$row.'" value="'.$row.'" checked /> <label style="display:bock;float:none" for="'.$row.'">'.$row.
+					(file_exists(_PS_MODULE_DIR_.$row) ? ' <span style="font-size:0.8em">-> '.$this->l('Warning: a module with the same name already exists').'</span>' : '').'</label><br />';
+
+			if ($var != '')
+				$this->_html .= '
+					<fieldset>
+						<legend>'.$this->l('Select the theme\'s modules you wish to install').'</legend>
+						<p class="margin-form">'.$var.'</p>
+					</fieldset>
+					<p>&nbsp;</p>';
 		}
 		$this->_html .= '
 			<fieldset>
