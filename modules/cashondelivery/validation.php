@@ -33,12 +33,18 @@ $cashOnDelivery = new CashOnDelivery();
 if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$cashOnDelivery->active)
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
+$customer = new Customer((int)$cart->id_customer);
+
+if (!Validate::isLoadedObject($customer))
+	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
+
+
 /* Validate order */
 if (Tools::getValue('confirm'))
 {
 	$customer = new Customer((int)($cart->id_customer));
 	$total = $cart->getOrderTotal(true, 3);
-	$cashOnDelivery->validateOrder((int)($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName);
+	$cashOnDelivery->validateOrder((int)($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName, NULL, array(), NULL, false,$customer->secure_key);
 	$order = new Order((int)($cashOnDelivery->currentOrder));
 	Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)($cashOnDelivery->id).'&id_order='.(int)($cashOnDelivery->currentOrder));
 }
