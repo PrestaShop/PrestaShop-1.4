@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_740e53a0ed1b643f69c4aaa8ad4ae8d2'] = 'Code transporteur invalide';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_39b34487212efb0589ecf8c774413d85'] = 'Le numéro de téléphone est obligatoire';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_39b34487212efb0589ecf8c774413d85'] = 'Le client devra obligatoirement renseigner son numéro de téléphone lors de la création de son compte.';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_99dea78007133396a7b8ed70578ac6ae'] = 'Utilisateur';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_dc647eb65e6711e155375218212b3964'] = 'Mot de passe';
