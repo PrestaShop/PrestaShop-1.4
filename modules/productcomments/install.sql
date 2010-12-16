@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_comment` (
   `id_product` int(10) unsigned NOT NULL,
   `id_customer` int(10) unsigned NOT NULL,
   `id_guest` int(10) unsigned NULL,
+  `title` varchar(64) NULL,
   `content` text NOT NULL,
   `customer_name` varchar(64) NULL,
   `grade` float unsigned NOT NULL,

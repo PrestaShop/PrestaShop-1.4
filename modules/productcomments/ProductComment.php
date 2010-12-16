@@ -45,6 +45,9 @@ class ProductComment extends ObjectModel
 	/** @var integer Customer name */
 	public 		$customer_name;
 	
+	/** @var string Title */
+	public 		$title;
+	
 	/** @var string Content */
 	public 		$content;
 	
@@ -74,6 +77,7 @@ class ProductComment extends ObjectModel
 		$fields['id_customer'] = (int)($this->id_customer);
 		$fields['id_guest'] = (int)($this->id_guest);
 		$fields['customer_name'] = pSQL($this->customer_name);
+		$fields['title'] = pSQL($this->title);
 		$fields['content'] = pSQL($this->content);
 		$fields['grade'] = (float)($this->grade);
 		$fields['validate'] = (int)($this->validate);
@@ -99,7 +103,7 @@ class ProductComment extends ObjectModel
 		if ($n != null AND $n <= 0)
 			$n = 5;
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT pc.`id_product_comment`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  LEFT(c.`lastname`, 1)), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`
+		SELECT pc.`id_product_comment`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  LEFT(c.`lastname`, 1)), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`, pc.title
 		  FROM `'._DB_PREFIX_.'product_comment` pc
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON c.`id_customer` = pc.`id_customer`
 		WHERE pc.`id_product` = '.(int)($id_product).($validate == '1' ? ' AND pc.`validate` = 1' : '').'

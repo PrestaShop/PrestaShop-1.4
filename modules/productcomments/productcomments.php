@@ -489,6 +489,7 @@ class ProductComments extends Module
 					$comment->id_customer = (int)$cookie->id_customer;
 					$comment->id_guest = (int)$id_guest;
 					$comment->customer_name = pSQL($customer_name);
+					$comment->title = pSQL(Tools::getValue('title'));
 					$comment->grade = 0;
 					$comment->validate = 0;
 					if (!$comment->content)

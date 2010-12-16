@@ -66,6 +66,7 @@
 			<thead>
 				<tr>
 					<th class="first_item" style="width:80px;">{l s='From' mod='productcomments'}</th>
+					<th class="item">{l s='Title' mod='productcomments'}</th>
 					<th class="item">{l s='Comment' mod='productcomments'}</th>
 				</tr>
 			</thead>
@@ -73,9 +74,12 @@
 			{foreach from=$comments item=comment}
 				{if $comment.content}
 				<tr>
-					<td style="vertical-align: top">
+					<td style="vertical-align:top">
 						{dateFormat date=$comment.date_add|escape:'html':'UTF-8' full=0}
 						{$comment.customer_name|escape:'html':'UTF-8'}.
+					</td>
+					<td style="vertical-align:top">
+						{$comment.title}
 					</td>
 					<td style="vertical-align: top">
 						{$comment.content|escape:'html':'UTF-8'|nl2br}
@@ -119,8 +123,9 @@
 		{/section}
 		</table>
 		{/if}
-		{if $allow_guests == true && $logged == false}<p>{l s='Your name'}<input type="text" name="customer_name" /></p>{/if}
-		<p><textarea cols="50" rows="5" name="content" id="content"></textarea></p>
+		{if $allow_guests == true && $logged == false}<p><label for="customer_name">{l s='Your name:'}</label><input type="text" name="customer_name" id="customer_name" /></p>{/if}
+		<p><label for="comment_title">{l s='Title:'}</label><input type="text" name="title" id="comment_title" /></p>
+		<p><label for="content">{l s='Comment:'}</label><textarea cols="46" rows="5" name="content" id="content"></textarea></p>
 		<p class="submit">
 			<input class="button" name="submitMessage" value="{l s='Send' mod='productcomments'}" type="submit" />
 		</p>

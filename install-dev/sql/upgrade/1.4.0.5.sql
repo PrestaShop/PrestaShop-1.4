@@ -28,3 +28,4 @@ ALTER TABLE `PREFIX_category` ADD `nleft` INT UNSIGNED NOT NULL DEFAULT '0' AFTE
 ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `nleft`;
 /* PHP:generate_ntree(); */;
 /* PHP:id_currency_country_fix(); */;
+/* PHP:update_modules_sql() */;
