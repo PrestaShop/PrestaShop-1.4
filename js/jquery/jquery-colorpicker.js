@@ -369,7 +369,8 @@
   
     if (updateInput) $("#icp_" + id).css({'background-color': color, 'background-image': image});
     $("#" + id).val(color).css({'background-color': color, 'background-image': image, 'color' : textColor}).trigger('change');
-    $('body').css('background-color', color);
+    if(typeof(employeePage) != 'undefined')
+    	$('body').css('background-color', color);
     $("#mColorPickerInput").val(color);
   };
 

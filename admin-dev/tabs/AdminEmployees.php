@@ -88,6 +88,11 @@ class AdminEmployees extends AdminTab
 		$profiles = Profile::getProfiles((int)($cookie->id_lang));
 
 		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
+		 	 <script type="text/javascript">
+				var employeePage = true;
+		 	 </script>
+
+		
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 		'.((int)$this->tabAccess['view'] ? '' : '<input type="hidden" name="back" value="'.$currentIndex.'&token='.$this->token.'&updateemployee&id_employee='.(int)$obj->id.'" />').'

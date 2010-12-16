@@ -113,7 +113,7 @@ class AdminOrdersStates extends AdminTab
 		
 		$obj = $this->loadObject(true);
 
-		echo '
+		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/time.gif" />'.$this->l('Order statuses').'</legend>
@@ -138,7 +138,7 @@ class AdminOrdersStates extends AdminTab
 				</div>
 				<label>'.$this->l('Color:').' </label>
 				<div class="margin-form">
-					<input type="text" name="color" value="'.htmlentities($this->getFieldValue($obj, 'color'), ENT_COMPAT, 'UTF-8').'" />
+					<input type="color" data-hex="true" class="color mColorPickerInput" name="bo_color" value="'.htmlentities($this->getFieldValue($obj, 'color'), ENT_COMPAT, 'UTF-8').'" />
 					<p>'.$this->l('Status will be highlighted in this color. HTML colors only (e.g.,').' "lightblue", "#CC6600")</p>
 				</div>
 				<div class="margin-form">
