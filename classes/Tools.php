@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -30,7 +30,7 @@ class ToolsCore
 	protected static $file_exists_cache = array();
 	protected static $_forceCompile;
 	protected static $_caching;
-	
+
 	/**
 	* Random password generator
 	*
@@ -312,22 +312,22 @@ class ToolsCore
 			$currency = Currency::getCurrent();
 		elseif (is_numeric($currency))
 			$currency = Currency::getCurrencyInstance($currency);
-			
+
 		$c_id = (is_array($currency) ? $currency['id_currency'] : $currency->id);
 		$c_rate = (is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate);
-		
+
 		if ($c_id != (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
 		{
 			if ($to_currency)
 				$price *= $c_rate;
-			else 
+			else
 				$price /= $c_rate;
 		}
-		
+
 		return $price;
 	}
-	
-	
+
+
 
 	/**
 	* Display date regarding to language preferences
@@ -501,8 +501,8 @@ class ToolsCore
 			{
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description_short`
-				FROM `'._DB_PREFIX_.'product` p 
-				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`) 
+				FROM `'._DB_PREFIX_.'product` p
+				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`)
 				WHERE pl.id_lang = '.(int)($id_lang).' AND pl.id_product = '.(int)($id_product).' AND p.active = 1');
 				if ($row)
 				{
@@ -659,12 +659,12 @@ class ToolsCore
 	static public function getPath($id_category, $path = '', $linkOntheLastItem = false, $type_cat = 'products')
 	{
 		global $link, $cookie;
-		
+
 		if($type_cat === 'products')
 		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
 		else if ($type_cat === 'CMS')
 		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
-		
+
 		if (!Validate::isLoadedObject($category))
 			die (self::displayError());
 		if ($category->id == 1)
@@ -695,12 +695,12 @@ class ToolsCore
 		global $cookie;
 
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
-		
+
 		if($type_cat === 'products')
 		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
 		else if ($type_cat === 'CMS')
 		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
-		    
+
 		if (!Validate::isLoadedObject($category))
 			die(self::displayError());
 		if ($id_category == 1)
@@ -1016,7 +1016,7 @@ class ToolsCore
 			return $value;
 		return floor($tmp) / $precisionFactor;
 	}
-	
+
 	/**
 	 * file_exists() wrapper with cache to speedup performance
 	 *
@@ -1029,7 +1029,7 @@ class ToolsCore
 			self::$file_exists_cache[$filename] = file_exists($filename);
 		return self::$file_exists_cache[$filename];
 	}
-	
+
 	static public function minifyHTML ($html_content)
 	{
 		if (strlen($html_content) > 0)
@@ -1039,10 +1039,10 @@ class ToolsCore
 				'/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/'
 				,array('Tools', 'minifyHTMLpregCallback')
 				,$html_content);
-			
+
 			require_once(_PS_TOOL_DIR_.'minify_html/minify_html.class.php');
 			$html_content = Minify_HTML::minify($html_content, array('xhtml', 'cssMinifier', 'jsMinifier'));
-			
+
 			if (Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
 			{
 				//$html_content = preg_replace('/"([^\>\s"]*)"/i', '$1', $html_content);//FIXME create a js bug
@@ -1066,7 +1066,7 @@ class ToolsCore
 		}
 		return false;
 	}
-	
+
 	/**
 	* Translates a string with underscores into camel case (e.g. first_name -> firstName)
 	* @prototype string public static function toCamelCase(string $str[, bool $capitaliseFirstChar = false])
@@ -1094,7 +1094,7 @@ class ToolsCore
 		$output = $preg_matches[1].' '.implode(' ', $args).'>';
 		return $output;
 	}
-	
+
 	static public function packJSinHTML ($html_content)
 	{
 		if (strlen($html_content) > 0)
@@ -1107,7 +1107,7 @@ class ToolsCore
 		}
 		return false;
 	}
-	
+
 	static public function packJSinHTMLpregCallback ($preg_matches)
 	{
 		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
@@ -1117,8 +1117,8 @@ class ToolsCore
 		$output = implode('', $preg_matches);
 		return $output;
 	}
-	
-	
+
+
 	static public function packJS ($js_content, $encoding = 62)
 	{
 		if (strlen($js_content) > 0)
@@ -1129,26 +1129,26 @@ class ToolsCore
 		}
 		return false;
 	}
-	
+
 	static public function minifyCSS ($css_content, $fileuri = false)
 	{
 		global $current_css_file;
 		$current_css_file = $fileuri;
-		
+
 		if (strlen($css_content) > 0)
 		{
-			
+
 			$css_content = preg_replace('#/\*.*?\*/#s','',$css_content);
-			
+
 			$css_content = preg_replace_callback('#url\(\'?([^\)\']*)\'?\)#s',array('Tools', 'replaceByAbsoluteURL'),$css_content);
-			
+
 			/* url('../img/sitemap-top.gif') */
-			
+
 			$css_content = preg_replace('#\s+#',' ',$css_content);
 			$css_content = str_replace("\t",'',$css_content);
 			$css_content = str_replace("\n",'',$css_content);
 			//$css_content = str_replace('}',"}\n",$css_content);
-			
+
 			$css_content = str_replace('; ',';',$css_content);
 			$css_content = str_replace(': ',':',$css_content);
 			$css_content = str_replace(' {','{',$css_content);
@@ -1169,7 +1169,7 @@ class ToolsCore
 		}
 		return false;
 	}
-	
+
 	static public function replaceByAbsoluteURL($matches)
 		{
 			global $current_css_file, $protocol;
@@ -1181,7 +1181,7 @@ class ToolsCore
 			}
 			return false;
 		}
-	
+
 	static public function addJS($js_uri) {
 		global $js_files;
 
@@ -1208,7 +1208,7 @@ class ToolsCore
 	static public function addCSS($css_uri, $css_media_type = 'all')
 	{
 		global $css_files;
-		
+
 		// avoid useless opération...
 		//if (is_array($css_files) && array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
 		//	return true;
@@ -1228,8 +1228,8 @@ class ToolsCore
 
 		return true;
 	}
-	
-	
+
+
 	/**
 	* Combine Compress and Cache CSS (ccc) calls
 	*
@@ -1241,13 +1241,13 @@ class ToolsCore
 		$compressed_css_files = array();
 		$compressed_css_files_not_found = array();
 		$compressed_css_files_infos = array();
-	
+
 		// group css files by media
 		foreach ($css_files as $filename => $media)
 		{
 			if (!array_key_exists($media, $css_files_by_media))
 				$css_files_by_media[$media] = array();
-		
+
 			$infos = array();
 			$infos['uri'] = $filename;
 			$url_data = parse_url($filename);
@@ -1259,12 +1259,12 @@ class ToolsCore
 				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
 				$css_files_by_media[$media]['date']
 			);
-		
+
 			if (!array_key_exists($media, $compressed_css_files_infos))
 				$compressed_css_files_infos[$media] = array('key' => '');
 			$compressed_css_files_infos[$media]['key'] .= $filename;
 		}
-	
+
 		// get compressed css file infos
 		foreach ($compressed_css_files_infos as $media => &$info)
 		{
@@ -1300,7 +1300,7 @@ class ToolsCore
 			}
 			$compressed_css_files[$media] = $cache_filename;
 		}
-	
+
 		// rebuild the original css_files array
 		$css_files = array();
 		foreach ($compressed_css_files as $media => $filename)
@@ -1309,7 +1309,7 @@ class ToolsCore
 			$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
 		}
 	}
-	
+
 	/**
 	* Combine Compress and Cache (ccc) JS calls
 	*
@@ -1322,7 +1322,7 @@ class ToolsCore
 		$js_files_date = 0;
 		$compressed_js_file_date = 0;
 		$compressed_js_filename = '';
-	
+
 		// get js files infos
 		foreach ($js_files as $filename)
 		{
@@ -1331,21 +1331,21 @@ class ToolsCore
 			$url_data = parse_url($filename);
 			$infos['path'] =_PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
 			$js_files_infos[] = $infos;
-		
+
 			$js_files_date = max(
 				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
 				$js_files_date
 			);
 			$compressed_js_filename .= $filename;
 		}
-	
+
 		// get compressed js file infos
 		$compressed_js_filename = md5($compressed_js_filename);
-	
+
 		$compressed_js_path = _PS_THEME_DIR_.'cache/'.$compressed_js_filename.'.js';
 		$compressed_js_file_date = file_exists($compressed_js_path) ? filemtime($compressed_js_path) : 0;
-	
-	
+
+
 		// aggregate and compress js files content, write new caches files
 		if ($js_files_date > $compressed_js_file_date)
 		{
@@ -1358,7 +1358,7 @@ class ToolsCore
 					$compressed_js_files_not_found[] = $file_infos['path'];
 			}
 			$content = Tools::packJS($content);
-		
+
 			if (!empty($compressed_js_files_not_found))
 				$content = '/* WARNING ! file(s) not found : "'.
 					implode(',', $compressed_js_files_not_found).
@@ -1368,13 +1368,13 @@ class ToolsCore
 			file_put_contents($compressed_js_path, $content);
 			chmod($compressed_js_path, 0777);
 		}
-	
+
 		// rebuild the original js_files array
 		//$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
 		$js_files = array($protocol.Tools::getMediaServer($url).$url);
 	}
-	
+
 	static public function getMediaServer($filename)
 	{
 		$filename = mb_convert_encoding(md5(strtoupper($filename)),"UCS-4BE",'UTF-8');
@@ -1394,7 +1394,7 @@ class ToolsCore
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
 	{
 		if (!file_exists($path) || !is_writable($path)) // do nothing
-			return true; 
+			return true;
 
 		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
 
@@ -1423,22 +1423,22 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms_category=$1 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)(.*)$'] = 'supplier.php?id_supplier=$1$3 [QSA,L,E]';
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L,E]';
-		
-		Language::loadLanguages();		
+
+		Language::loadLanguages();
 		$default_meta = Meta::getMetasByIdLang((int)(Configuration::get('PS_LANG_DEFAULT')));
 
 		foreach (Language::getLanguages() AS $language)
-		{													
+		{
 			foreach (Meta::getMetasByIdLang($language['id_lang']) AS $key => $meta)
 			{
 				//RewriteRule ^lang-es/contacto$ contact-form.php [QSA,L,E]
 				if (!empty($meta['url_rewrite']))
 					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
-					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';					
+					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 			}
-		}						
-		
+		}
+
 		$tab['RewriteRule']['content']['^lang-([a-z]{2})/(.*)$'] = '$2?isolang=$1 [QSA,L,E]';
 
 		if (!$writeFd = @fopen($path, 'w'))
@@ -1451,24 +1451,24 @@ class ToolsCore
 			fwrite($writeFd, "# http://www.prestashop.com - http://www.prestashop.com/forums\n\n");
 			if (!empty($specific))
 				fwrite($writeFd, $specific);
-			
+
 			// RewriteEngine
 			fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
 			fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
 			fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
 			// Webservice
 			fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L,E]\n");
-			
+
 			// Classic URL rewriting
 			if ($rewrite_settings)
 				foreach ($tab['RewriteRule']['content'] as $rule => $url)
 					fwrite($writeFd, 'RewriteRule '.$rule.' '.__PS_BASE_URI__.$url."\n");
-			
+
 			fwrite($writeFd, "</IfModule>\n\n");
-			
+
 			// ErrorDocument
 			fwrite($writeFd, $tab['ErrorDocument']['comment']."\nErrorDocument ".$tab['ErrorDocument']['content']."\n");
-			
+
 			// Cache control
 			if ($cache_control)
 			{
@@ -1520,7 +1520,7 @@ FileETag INode MTime Size
 			    // Always use "." for floats.
 			    return (float)(str_replace(",", ".", strval($json)));
 			  }
-			
+
 			  if (is_string($json))
 			  {
 			    static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
@@ -1551,11 +1551,11 @@ FileETag INode MTime Size
 			}
 		}
 	}
-	
+
 	/**
 	 * Display a warning message indicating that the method is deprecated
 	 */
-	public static function displayAsDeprecated() 
+	public static function displayAsDeprecated()
 	{
 		if (_PS_DISPLAY_COMPATIBILITY_WARNING_)
 		{
@@ -1586,7 +1586,7 @@ FileETag INode MTime Size
 		$smarty->force_compile = (int)(self::$_forceCompile);
 		$smarty->caching = (int)(self::$_caching);
 	}
-	
+
 	public static function isCallable($function)
 	{
 		$disabled = explode(',', ini_get('disable_functions'));
@@ -1619,5 +1619,4 @@ function cmpPriceDesc($a,$b)
 		return (-1);
 	return (0);
 }
-
 

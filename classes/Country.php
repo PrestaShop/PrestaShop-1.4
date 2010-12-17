@@ -31,7 +31,7 @@ class CountryCore extends ObjectModel
 
 	/** @var integer Zone id which country belongs */
 	public 		$id_zone;
-	
+
 	/** @var integer Currency id which country belongs */
 	public 		$id_currency;
 
@@ -49,13 +49,13 @@ class CountryCore extends ObjectModel
 
 	/** @var boolean Need identification number dni/nif/nie */
 	public		$need_identification_number;
-	
+
 	/** @var boolean Need Zip Code */
 	public		$need_zip_code;
-	
+
 	/** @var string Zip Code Format */
 	public		$zip_code_format;
-	
+
 	/** @var boolean Status for delivery */
 	public		$active = true;
 
@@ -122,7 +122,7 @@ class CountryCore extends ObjectModel
 			return false;
 		return self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
 	}
-	
+
 	public function update($nullValues = false)
 	{
 		if (!parent::update($nullValues))
@@ -131,7 +131,7 @@ class CountryCore extends ObjectModel
 		self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
 		return  self::cleanProductCountryTaxes((int)$this->id);
 	}
-	
+
 	/**
 	  * Delete country
 	  *
@@ -144,7 +144,7 @@ class CountryCore extends ObjectModel
 		self::cleanProductCountryTaxes((int)$this->id);
 		return parent::delete();
 	}
-	
+
 	/**
 	  * Return available countries
 	  *
@@ -198,12 +198,12 @@ class CountryCore extends ObjectModel
 
 		return $result['id_country'];
 	}
-	
+
 	static public function getIdZone($id_country)
-	{		
+	{
 		if (!Validate::isUnsignedId($id_country))
 			die(Tools::displayError());
-			
+
 		if (isset(self::$_idZones[$id_country]))
 			return self::$_idZones[$id_country];
 
@@ -233,7 +233,7 @@ class CountryCore extends ObjectModel
 
 		return $result['name'];
 	}
-    
+
 	/**
 	* Get a country iso with its ID
 	*
@@ -249,12 +249,12 @@ class CountryCore extends ObjectModel
 
 		return $result['iso_code'];
 	}
-	
+
 	/**
 	* Get a country id with its name
 	*
 	* @param integer $id_lang Language ID
-	* @param string $country Country Name 
+	* @param string $country Country Name
 	* @return intval Country id
 	*/
 	static public function getIdByName($id_lang = NULL, $country)
@@ -265,20 +265,20 @@ class CountryCore extends ObjectModel
 		WHERE `name` LIKE \''.pSQL($country).'\'';
 		if ($id_lang)
 			$sql .= ' AND `id_lang` = '.(int)($id_lang);
-		 	
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 
 		return ((int)($result['id_country']));
 	}
-    
+
 	static public function getNeedIdentifcationNumber($id_country)
 	{
 		if (!(int)($id_country))
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `need_identification_number` 
-		FROM `'._DB_PREFIX_.'country` 
+		SELECT `need_identification_number`
+		FROM `'._DB_PREFIX_.'country`
 		WHERE `id_country` = '.(int)($id_country));
 	}
 
@@ -286,10 +286,10 @@ class CountryCore extends ObjectModel
 	{
 		if (!(int)($id_country))
 			return false;
-	
+
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `need_zip_code` 
-		FROM `'._DB_PREFIX_.'country` 
+		SELECT `need_zip_code`
+		FROM `'._DB_PREFIX_.'country`
 		WHERE `id_country` = '.(int)($id_country));
 	}
 
@@ -299,11 +299,11 @@ class CountryCore extends ObjectModel
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT `zip_code_format` 
-		FROM `'._DB_PREFIX_.'country` 
+		SELECT `zip_code_format`
+		FROM `'._DB_PREFIX_.'country`
 		WHERE `id_country` = '.(int)($id_country));
 	}
-	
+
 	public static function displayCallPrefix($prefix)
 	{
 		return ((int)($prefix) ? '+'.$prefix : '-');
@@ -311,7 +311,7 @@ class CountryCore extends ObjectModel
 
 	/**
 	 * Returns the default country Id
-	 * 
+	 *
 	 * @return integer default country id
 	 */
 	public static function getDefaultCountryId()
@@ -322,10 +322,10 @@ class CountryCore extends ObjectModel
 			$id_country = (int)(Country::getByIso($cookie->iso_code_country));
 		else
 			$id_country = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-		
+
 		return $id_country;
 	}
-	
+
 	/**
 	 * Return a list of countries for which no tax has been define for the specified
 	 * product
@@ -336,12 +336,12 @@ class CountryCore extends ObjectModel
 	public static function getCountriesWithoutTaxByProductId($id_product, $id_lang = NULL)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT * 
-			FROM `'._DB_PREFIX_.'country` c 
+			SELECT *
+			FROM `'._DB_PREFIX_.'country` c
 			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
 			WHERE c.`id_country` IN (SELECT `id_country`
 								   FROM `'._DB_PREFIX_.'country_tax`)
-			AND c.`id_country` NOT IN (SELECT `id_country`								 
+			AND c.`id_country` NOT IN (SELECT `id_country`
 								 	  FROM `'._DB_PREFIX_.'product_country_tax`
 								 	  WHERE `id_product` = '.(int)($id_product).'
 								 	  )'.
@@ -349,7 +349,41 @@ class CountryCore extends ObjectModel
 		);
 	}
 
-	
+	public static function getCountryWithAssociatedTaxes($id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+			SELECT *
+			FROM `'._DB_PREFIX_.'country` c
+			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
+			WHERE c.`id_country` IN (SELECT `id_country`
+									   FROM `'._DB_PREFIX_.'country_tax`)
+			AND cl.`id_lang` = '.(int)$id_lang
+		);
+	}
+
+	public static function getCountryWithoutRules($id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'country` c
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
+		WHERE c.`id_country` IN (SELECT `id_country`
+  							     FROM `'._DB_PREFIX_.'tax_rule`)
+		AND cl.`id_lang` = '.(int)$id_lang
+		);
+	}
+
+	public static function getAssociatedTaxes($id_country, $id_lang)
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'country_tax` t
+		LEFT JOIN `'._DB_PREFIX_.'country_tax_lang` tl ON (t.`id_tax` = tl.`id_tax`)
+		WHERE `id_country` = '.(int)$id_country.'
+		AND tl.`id_lang` = '.(int)$id_lang
+		);
+	}
+
 	static public function addAssociatedTaxes($id_country, $taxes)
 	{
 		if (!Validate::isInt($id_country))
@@ -364,26 +398,26 @@ class CountryCore extends ObjectModel
 		}
 		return true;
 	}
-	
+
 	static public function getIdsOfAssociatedTaxes($id_country)
 	{
 		$return = array();
-		
+
 		$taxes =  Db::getInstance()->ExecuteS('
-		SELECT `id_tax` 
-		FROM `'._DB_PREFIX_.'country_tax` 
+		SELECT `id_tax`
+		FROM `'._DB_PREFIX_.'country_tax`
 		WHERE `id_country` = '.(int)$id_country);
-		
+
 		foreach ($taxes as $tax)
 			$return[] = $tax['id_tax'];
 		return $return;
 	}
-	
+
 	static public function cleanAssociatedTaxes($id_country)
 	{
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'country_tax` WHERE `id_country` = '.(int)$id_country);
 	}
-	
+
 	public static function cleanProductCountryTaxes($id_country)
 	{
 		return Db::getInstance()->Execute('
@@ -393,6 +427,20 @@ class CountryCore extends ObjectModel
 							 FROM `'._DB_PREFIX_.'country_tax`
 							 WHERE `id_country` = '.(int)$id_country.')');
 	}
-}
 
+
+    public static function getCountriesByZoneId($id_zone, $id_lang)
+    {
+        if (empty($id_zone) OR empty($id_lang))
+            die(Tools::displayError());
+
+        return Db::getInstance()->ExecuteS('
+        SELECT *
+        FROM `'._DB_PREFIX_.'country` c
+        LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
+        WHERE c.`id_zone` = '.(int)$id_zone.'
+        AND `id_lang` = '.(int)$id_lang
+        );
+    }
+}
 

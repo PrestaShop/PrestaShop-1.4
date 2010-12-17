@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -89,25 +89,28 @@ class OrderCore extends ObjectModel
 
 	/** @var float Shipping total */
 	public 		$total_shipping;
-	
+
+	/** @var float Shipping tax rate */
+	public 		$carrier_tax_rate;
+
 	/** @var float Wrapping total */
 	public 		$total_wrapping;
 
 	/** @var integer Invoice number */
 	public 		$invoice_number;
-	
+
 	/** @var integer Delivery number */
 	public 		$delivery_number;
-	
+
 	/** @var string Invoice creation date */
 	public 		$invoice_date;
-	
+
 	/** @var string Delivery creation date */
 	public 		$delivery_date;
-	
+
 	/** @var boolean Order validity (paid and not canceled) */
 	public 		$valid;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -137,11 +140,12 @@ class OrderCore extends ObjectModel
 		'total_products' => 'isPrice',
 		'total_products_wt' => 'isPrice',
 		'total_shipping' => 'isPrice',
+		'carrier_tax_rate' => 'isFloat',
 		'total_wrapping' => 'isPrice',
 		'shipping_number' => 'isUrl',
 		'conversion_rate' => 'isFloat'
 	);
-	
+
 	protected	$webserviceParameters = array(
 		'objectNodeName' => 'order',
 		'objectsNodeName' => 'orders',
@@ -170,7 +174,7 @@ class OrderCore extends ObjectModel
 	protected 	$table = 'orders';
 	protected 	$identifier = 'id_order';
 	private		$_taxCalculationMethod = PS_TAX_EXC;
-	
+
 	private static $_historyCache = array();
 
 	public function getFields()
@@ -198,6 +202,7 @@ class OrderCore extends ObjectModel
 		$fields['total_products'] = (float)($this->total_products);
 		$fields['total_products_wt'] = (float)($this->total_products_wt);
 		$fields['total_shipping'] = (float)($this->total_shipping);
+		$fields['carrier_tax_rate'] = (float)($this->carrier_tax_rate);
 		$fields['total_wrapping'] = (float)($this->total_wrapping);
 		$fields['invoice_number'] = (int)($this->invoice_number);
 		$fields['delivery_number'] = (int)($this->delivery_number);
@@ -258,17 +263,17 @@ class OrderCore extends ObjectModel
 			$reduction_amount = Tools::ps_round($orderDetail->reduction_amount * (1 + $orderDetail->tax_rate * 0.01), 2);
 		if (isset($reduction_amount) AND $reduction_amount)
 			$price = Tools::ps_round($price - $reduction_amount, 2);
-		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');	
+		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');
 		$price += Tools::ps_round($orderDetail->ecotax * (1 + $orderDetail->ecotax_tax_rate / 100), 2);
-		$unitPrice = number_format($price, 2, '.', '');	
+		$unitPrice = number_format($price, 2, '.', '');
 		$productPrice = number_format($quantity * $price, 2, '.', '');
 		/* Update cart */
 		$cart = new Cart($this->id_cart);
 		$cart->updateQty($quantity, $orderDetail->product_id, $orderDetail->product_attribute_id, false, 'down'); // customization are deleted in deleteCustomization
 		$cart->update();
-		
+
 		/* Update order */
-		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();		
+		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();
 		$this->total_products -= $productPriceWithoutTax;
 		$this->total_products_wt -= $productPrice;
 		$this->total_shipping = $cart->getOrderShippingCost();
@@ -278,11 +283,11 @@ class OrderCore extends ObjectModel
 		else
 			$this->total_paid = $cart->getOrderTotal();
 		$this->total_paid_real -= ($productPrice + $shippingDiff);
-		
+
 		/* Prevent from floating precision issues (total_products has only 2 decimals) */
 		if ($this->total_products < 0)
 			$this->total_products = 0;
-			
+
 		/* Prevent from floating precision issues */
 		$this->total_paid = number_format($this->total_paid, 2, '.', '');
 		$this->total_paid_real = number_format($this->total_paid_real, 2, '.', '');
@@ -291,7 +296,7 @@ class OrderCore extends ObjectModel
 
 		/* Update order detail */
 		$orderDetail->product_quantity -= (int)($quantity);
-		
+
 		if (!$orderDetail->product_quantity)
 		{
 			if (!$orderDetail->delete())
@@ -337,7 +342,7 @@ class OrderCore extends ObjectModel
 	{
 		if (!$id_order_state)
 			$id_order_state = 0;
-		
+
 		if (!isset(self::$_historyCache[$id_order_state]) OR $no_hidden)
 		{
 			$id_lang = $id_lang ? (int)($id_lang) : 'o.`id_lang`';
@@ -366,7 +371,7 @@ class OrderCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'order_detail` od
 		WHERE od.`id_order` = '.(int)($this->id));
 	}
-	
+
 	public function getLastMessage()
 	{
 		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.(int)($this->id).' ORDER BY `id_message` desc';
@@ -387,6 +392,7 @@ class OrderCore extends ObjectModel
 			$row['product_price'] = Tools::ps_round($row['product_price'], 2);
 		else
 			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
+
 		if ($row['reduction_percent'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
@@ -394,6 +400,7 @@ class OrderCore extends ObjectModel
 			else
 				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['reduction_percent'] * 0.01), 2);
 		}
+
 		if ($row['reduction_amount'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
@@ -401,6 +408,7 @@ class OrderCore extends ObjectModel
 			else
 				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'] * (1 + ($row['tax_rate'] * 0.01)), 2);
 		}
+
 		if ($row['group_reduction'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
@@ -408,8 +416,10 @@ class OrderCore extends ObjectModel
 			else
 				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['group_reduction'] * 0.01), 2);
 		}
+
 		if (($row['reduction_percent'] OR $row['reduction_amount'] OR $row['group_reduction']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
 			$row['product_price'] = Tools::ps_round($row['product_price'], 2);
+
 		if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + ($row['tax_rate'] * 0.01)), 2) + Tools::ps_round($row['ecotax'] * (1 + $row['ecotax_tax_rate'] / 100), 2);
 		else
@@ -417,6 +427,7 @@ class OrderCore extends ObjectModel
 			$row['product_price_wt_but_ecotax'] = $row['product_price_wt'];
 			$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] + $row['ecotax'] * (1 + $row['ecotax_tax_rate'] / 100), 2);
 		}
+
 		$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 		$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
 	}
@@ -444,7 +455,7 @@ class OrderCore extends ObjectModel
 					continue ;
 			}
 			$this->setProductPrices($row);
-			
+
 			/* Add information for virtual product */
 			if ($row['download_hash'] AND !empty($row['download_hash']))
 				$row['filename'] = ProductDownload::getFilenameFromIdProduct($row['product_id']);
@@ -559,12 +570,12 @@ class OrderCore extends ObjectModel
 	{
 		return $this->valid;
 	}
-	
+
 	public function hasBeenDelivered()
 	{
 		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_DELIVERED_));
 	}
-	
+
 	public function hasBeenPaid()
 	{
 		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_PAYMENT_));
@@ -589,7 +600,7 @@ class OrderCore extends ObjectModel
 	static public function getCustomerOrders($id_customer)
     {
 		global $cookie;
-		
+
     	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
         SELECT o.*, (
 				SELECT SUM(od.`product_quantity`)
@@ -636,7 +647,7 @@ class OrderCore extends ObjectModel
 			$orders[] = (int)($order['id_order']);
 		return $orders;
 	}
-	
+
 	/*
 	* @deprecated
 	*/
@@ -644,16 +655,16 @@ class OrderCore extends ObjectModel
 	{
 		Tools::displayAsDeprecated();
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT * 
+			SELECT *
 			FROM `'._DB_PREFIX_.'orders`
 			ORDER BY `date_add`
 			'.((int)$limit ? 'LIMIT 0, '.(int)$limit : ''));
 	}
-	
+
 	static public function getOrdersWithInformations($limit = NULL)
 	{
 		global $cookie;
-		
+
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT *, (
 				SELECT `name`
@@ -685,7 +696,7 @@ class OrderCore extends ObjectModel
 			$orders[] = (int)($order['id_order']);
 		return $orders;
 	}
-	
+
 	static public function getOrderIdsByStatus($id_order_state)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -699,10 +710,10 @@ class OrderCore extends ObjectModel
 			LIMIT 1
 		)
 		ORDER BY invoice_date ASC');
-		
+
 		$orders = array();
 		foreach ($result AS $order)
-			$orders[] = (int)($order['id_order']);	
+			$orders[] = (int)($order['id_order']);
 		return $orders;
 	}
 
@@ -856,7 +867,7 @@ class OrderCore extends ObjectModel
 
 		// Set invoice date
 		$this->invoice_date = date('Y-m-d H:i:s');
-		
+
 		// Save
 		$this->update();
 	}
@@ -872,11 +883,11 @@ class OrderCore extends ObjectModel
 
 		// Set delivery date
 		$this->delivery_date = date('Y-m-d H:i:s');
-		
+
 		// Update object
 		$this->update();
 	}
-	
+
 	static public function printPDFIcons($id_order, $tr)
 	{
 		$order = new Order($id_order);
@@ -896,7 +907,7 @@ class OrderCore extends ObjectModel
 			echo '&nbsp;';
 		echo '</span>';
 	}
-	
+
 	static public function getByDelivery($id_delivery)
 	{
 	    $res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -905,7 +916,7 @@ class OrderCore extends ObjectModel
         WHERE `delivery_number` = '.(int)($id_delivery));
 		return new Order((int)($res['id_order']));
 	}
-	
+
 	public function getTotalWeight()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -924,5 +935,4 @@ class OrderCore extends ObjectModel
 		WHERE invoice_number = '.(int)($id_invoice));
 	}
 }
-
 

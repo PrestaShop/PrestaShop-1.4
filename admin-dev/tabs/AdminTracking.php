@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -34,11 +34,11 @@ class AdminTracking extends AdminTab
 
 		parent::__construct();
 	}
-	
+
 	public function display()
 	{
 		global $currentIndex;
-		
+
 		echo '<h2 class="space">'.$this->l('Catalog tracking').'</h2>';
 		$this->getObjects('categories_empty');
 		$this->displayCategories();
@@ -47,13 +47,13 @@ class AdminTracking extends AdminTab
 		$this->getObjects('products_nostock');
 		$this->displayProducts();
 		$this->getObjects('attributes_nostock');
-		$this->displayAttributes();		
+		$this->displayAttributes();
 	}
-	
+
 	public function getObjects($type)
 	{
 		global $cookie;
-	
+
 		switch ($type)
 		{
 			case 'categories_empty':
@@ -90,11 +90,11 @@ class AdminTracking extends AdminTab
 					)
 				';
 				$this->_list['message'] = $this->l('List of out of stock products without attributes:');
-				break ;		
+				break ;
 			case 'attributes_nostock':
 				$sql = '
 				SELECT pa.*, ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, al.`name` AS attribute_name, a.`id_attribute`,
-				m.`name` AS manufacturer_name, pl.`name` AS name, p.`weight` AS product_weight, p.`id_tax`, p.`active` AS active
+				m.`name` AS manufacturer_name, pl.`name` AS name, p.`weight` AS product_weight, p.`active` AS active
 				FROM `'._DB_PREFIX_.'product_attribute` pa
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
@@ -108,15 +108,15 @@ class AdminTracking extends AdminTab
 				ORDER BY pa.`id_product_attribute`
 				';
 				$this->_list['message'] = $this->l('List of out of stock products with attributes:');
-				break ;					
+				break ;
 		}
 		$this->_list['obj'] = Db::getInstance()->ExecuteS($sql);
 	}
-	
+
 	public function displayCategories()
 	{
 		global $currentIndex;
-		
+
 		if (isset($this->_list['obj']))
 		{
 			$nbCategories = sizeof($this->_list['obj']);
@@ -131,8 +131,8 @@ class AdminTracking extends AdminTab
 			echo '</table><br /><br />';
 		}
 	}
-	
-	
+
+
 	public function displayProducts()
 	{
 		global $currentIndex, $cookie;
@@ -167,8 +167,8 @@ class AdminTracking extends AdminTab
 			{
 				$product = new Product((int)($prod['id_product']));
 				$product->name = $product->name[(int)($cookie->id_lang)];
-				$tax = new Tax((int)($product->id_tax));
-		
+				$taxrate = Tax::getProductTaxRate($product->id);
+
 				echo '
 				<tr>
 					<td>'.$product->id.'</td>
@@ -176,7 +176,7 @@ class AdminTracking extends AdminTab
 					<td>'.$product->reference.'</td>
 					<td><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($product->name).'</a></td>
 					<td>'.Tools::displayPrice($product->getPrice(), $currency).'</td>
-					<td>'.stripslashes($tax->name[(int)($cookie->id_lang)]).'</td>
+					<td>'.(float)$taxrate.'% </td>
 					<td align="center">'.$product->quantity.'</td>
 					<td align="center">'.$product->weight.' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
 					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$product->id.'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'"><img src="../img/admin/'.($product->active ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
@@ -191,7 +191,7 @@ class AdminTracking extends AdminTab
 			echo '</table><br /><br />';
 		}
 	}
-	
+
 	public function displayAttributes()
 	{
 		global $currentIndex, $cookie;
@@ -214,7 +214,7 @@ class AdminTracking extends AdminTab
 					'status' => array('title' => $this->l('Status')),
 					'action' => array('title' => $this->l('Actions'))
 				));
-				
+
 			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 			echo '
 			<table class="table" cellpadding="0" cellspacing="0">
@@ -223,7 +223,7 @@ class AdminTracking extends AdminTab
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
-			
+
 			$attributes = array();
 			$prevAttributeId = '';
 			foreach ($this->_list['obj'] AS $prod)
@@ -232,18 +232,15 @@ class AdminTracking extends AdminTab
 					$prod['combination_name'] = $attributes[$prod['id_product_attribute']]['combination_name'].', '.$prod['group_name'].' : '.$prod['attribute_name'];
 				else
 					$prod['combination_name'] = $prod['group_name'].' : '.$prod['attribute_name'];
-					
+
 				$attributes[$prod['id_product_attribute']] = $prod;
 				$prevAttributeId = $prod['id_product_attribute'];
 			}
-			
+
 			foreach ($attributes AS $prod)
 			{
-				/*
-				$product = new Product((int)($prod['id_product']));
-				$product->name = $product->name[(int)($cookie->id_lang)];*/
-				$tax = new Tax((int)($prod['id_tax']));
-		
+				$taxrate = Tax::getProductTaxRate($prod['id_product']);
+
 				echo '
 				<tr>
 					<td>'.$prod['id_product'].'</td>
@@ -251,7 +248,7 @@ class AdminTracking extends AdminTab
 					<td>'.$prod['reference'].'</td>
 					<td><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($prod['name']).' ('.$prod['combination_name'].')'.'</a></td>
 					<td>'.Tools::displayPrice(Product::getPriceStatic((int)($prod['id_product']), true, $prod['id_product_attribute']), $currency).'</td>
-					<td>'.stripslashes($tax->name[(int)($cookie->id_lang)]).'</td>
+					<td>'.(float)$taxrate.'% </td>
 					<td align="center">'.$prod['quantity'].'</td>
 					<td align="center">'.($prod['weight'] + $prod['product_weight']).' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
 					<td align="center"><a href="index.php?tab=AdminCatalog&id_product='.$prod['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'"><img src="../img/admin/'.($prod['active'] ? 'enabled.gif' : 'disabled.gif').'" alt="" /></a></td>
@@ -267,5 +264,4 @@ class AdminTracking extends AdminTab
 		}
 	}
 }
-
 

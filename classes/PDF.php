@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -425,7 +425,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $delivery_address->country.($deliveryState ? ' - '.$deliveryState->name : '')), 0, 'L');
 		$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->country.($invoiceState ? ' - '.$invoiceState->name : '')), 0, 'L');
 		$pdf->Ln(5);
-		
+
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoice_address->vat_number))
 		{
 			$vat_delivery = '';
@@ -435,7 +435,7 @@ class PDFCore extends PDF_PageGroupCore
 			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->vat_number), 0, 'L');
 			$pdf->Ln(5);
 		}
-		
+
 		$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
 		if($invoice_customer->dni != NULL)
 			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_customer->dni), 0, 'L');
@@ -482,7 +482,7 @@ class PDFCore extends PDF_PageGroupCore
 				$pdf->DiscTab();
 			$priceBreakDown = array();
 			$pdf->priceBreakDownCalculation($priceBreakDown);
-			
+
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
 				$priceBreakDown['totalWithoutTax'] += Tools::ps_round($priceBreakDown['shippingCostWithoutTax'], 2) + Tools::ps_round($priceBreakDown['wrappingCostWithoutTax'], 2);
@@ -509,7 +509,7 @@ class PDFCore extends PDF_PageGroupCore
 				$pdf->Cell($width, 0, self::l('Total products (tax excl.)').' : ', 0, 0, 'R');
 				$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['totalProductsWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 				$pdf->Ln(4);
-	
+
 				$pdf->SetFont(self::fontname(), 'B', 8);
 				$width = 165;
 				$pdf->Cell($width, 0, self::l('Total products (tax incl.)').' : ', 0, 0, 'R');
@@ -715,7 +715,7 @@ class PDFCore extends PDF_PageGroupCore
 	}
 
 	/**
-	* Discount table with value, quantities...
+g	* Discount table with value, quantities...
 	*/
 	public function DiscTab()
 	{
@@ -810,9 +810,9 @@ class PDFCore extends PDF_PageGroupCore
 				$priceBreakDown['hasEcotax'] = 1;
 			$taxes[$product['tax_rate']] += $vat;
 		}
-		$carrier = new Carrier(self::$order->id_carrier);
-		$carrierTax = new Tax($carrier->id_tax);
-		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrierTax->rate OR $carrierTax->rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
+
+		$carrier_tax_rate = (float)self::$order->carrier_tax_rate;
+		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrier_tax_rate OR $carrier_tax_rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
 
 		foreach ($taxes AS $tax_rate => &$vat)
@@ -835,7 +835,7 @@ class PDFCore extends PDF_PageGroupCore
 			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 		}
 		$priceBreakDown['taxes'] = $taxes;
-		$priceBreakDown['shippingCostWithoutTax'] = ($carrierTax->rate AND $carrierTax->rate != '0.00' AND self::$order->total_shipping != '0.00' AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone))) ? (!Configuration::get('PS_TAX') ? self::$order->total_shipping : (self::$order->total_shipping / (1 + ($carrierTax->rate / 100)))) : self::$order->total_shipping;
+		$priceBreakDown['shippingCostWithoutTax'] = ($carrier_tax_rate AND $carrier_tax_rate != '0.00') ? (self::$order->total_shipping / (1 + ($carrier_tax_rate / 100))) : self::$order->total_shipping;
 		if (self::$order->total_wrapping AND self::$order->total_wrapping != '0.00')
 		{
 			$wrappingTax = new Tax(Configuration::get('PS_GIFT_WRAPPING_TAX'));
@@ -850,14 +850,14 @@ class PDFCore extends PDF_PageGroupCore
 	{
 		if (!$id_zone = Address::getZoneById((int)(self::$order->id_address_invoice)))
 			die(Tools::displayError());
-		
+
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoiceAddress->vat_number) AND $invoiceAddress->id_country != Configuration::get('VATNUMBER_COUNTRY'))
 		{
 			$this->Ln();
 			$this->Cell(30, 0, self::l('Exempt of VAT according section 259B of the General Tax Code.'), 0, 0, 'L');
 			return;
 		}
-		
+
 		if (self::$order->total_paid == '0.00' OR (!(int)(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
 			return ;
 
@@ -868,8 +868,8 @@ class PDFCore extends PDF_PageGroupCore
 			$products = self::$order->getProducts();
 
 		$carrier = new Carrier(self::$order->id_carrier);
-		$carrierTax = new Tax($carrier->id_tax);
-		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrierTax->rate OR $carrierTax->rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
+    	$carrier_tax_rate = (float)self::$order->carrier_tax_rate;
+		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrier_tax_rate OR $carrier_tax_rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
 
 		// Displaying header tax
@@ -913,14 +913,14 @@ class PDFCore extends PDF_PageGroupCore
 		}
 
 		// Display carrier tax
-		if ($carrierTax->rate AND $carrierTax->rate != '0.00' AND ((self::$order->total_shipping != '0.00' AND !self::$orderSlip) OR (self::$orderSlip AND self::$orderSlip->shipping_cost)) AND Tax::zoneHasTax((int)($carrier->id_tax), (int)($id_zone)))
+		if ($carrier_tax_rate AND $carrier_tax_rate != '0.00' AND ((self::$order->total_shipping != '0.00' AND !self::$orderSlip) OR (self::$orderSlip AND self::$orderSlip->shipping_cost)))
 		{
 			$nb_tax++;
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
 			$this->Cell($w[0], $lineSize, self::l('Carrier'), 0, 0, 'R');
-			$this->Cell($w[1], $lineSize, number_format($carrierTax->rate, 3, ',', ' ').' %', 0, 0, 'R');
+			$this->Cell($w[1], $lineSize, number_format($carrier_tax_rate, 3, ',', ' ').' %', 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_shipping - $priceBreakDown['shippingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			if ($priceBreakDown['hasEcotax'])
@@ -934,7 +934,7 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			$tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 			$taxRate = $tax->rate;
-			
+
 			$nb_tax++;
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
@@ -986,3 +986,4 @@ class PDFCore extends PDF_PageGroupCore
  	}
 
 }
+

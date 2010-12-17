@@ -29,3 +29,6 @@ ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFT
 /* PHP:generate_ntree(); */;
 /* PHP:id_currency_country_fix(); */;
 /* PHP:update_modules_sql() */;
+
+DROP TABLE `PREFIX_tax_state`, `PREFIX_tax_zone`;
+ALTER TABLE `PREFIX_orders` ADD `carrier_tax_rate` FLOAT NOT NULL AFTER `total_shipping`;

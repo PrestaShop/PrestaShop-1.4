@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,7 +31,7 @@ class CustomerCore extends ObjectModel
 
 	/** @var string Secure key */
 	public		$secure_key;
-	
+
 	/** @var string private note */
 	public		$note;
 
@@ -55,13 +55,13 @@ class CustomerCore extends ObjectModel
 
 	/** @var string dni */
 	public		$dni;
-	
+
 	/** @var boolean Newsletter subscription */
 	public 		$newsletter;
-	
+
 	/** @var string Newsletter ip registration */
 	public		$ip_registration_newsletter;
-	
+
 	/** @var string Newsletter ip registration */
 	public		$newsletter_date_add;
 
@@ -73,10 +73,10 @@ class CustomerCore extends ObjectModel
 
 	/** @var datetime Password */
 	public $last_passwd_gen;
-	
+
 	/** @var boolean Status */
 	public 		$active = true;
-	
+
 	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
 
@@ -163,7 +163,7 @@ class CustomerCore extends ObjectModel
 			$this->dni = NULL;
 	 	return parent::update(true);
 	}
-	
+
 	public function delete()
 	{
 		$addresses = $this->getAddresses((int)(Configuration::get('PS_LANG_DEFAULT')));
@@ -205,7 +205,7 @@ class CustomerCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_	.'customer`
 		WHERE `active` = 1
-		AND `email` = \''.pSQL($email).'\' 
+		AND `email` = \''.pSQL($email).'\'
 		'.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : '').'
 		AND `deleted` = 0');
 
@@ -218,7 +218,7 @@ class CustomerCore extends ObjectModel
 
 		return $this;
 	}
-	
+
 	/**
 	  * Check id the customer is active or not
 	  *
@@ -255,7 +255,7 @@ class CustomerCore extends ObjectModel
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `email` = \''.pSQL($email).'\'');
-		
+
 		if ($return_id)
 			return (int)($result['id_customer']);
 		else
@@ -425,7 +425,7 @@ class CustomerCore extends ObjectModel
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / o.`conversion_rate`) AS total_orders
-		FROM `'._DB_PREFIX_.'orders` o 
+		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`id_customer` = '.(int)($this->id).'
 		AND o.valid = 1');
 
@@ -444,7 +444,7 @@ class CustomerCore extends ObjectModel
 		$result['age'] = $result3['age'] != date('Y') ? $result3['age'] : '--';
 		return $result;
 	}
-	
+
 	public function getLastConnections()
     {
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -456,7 +456,7 @@ class CustomerCore extends ObjectModel
         GROUP BY c.`id_connections`
         ORDER BY c.date_add DESC
         LIMIT 10');
-    } 
+    }
 
 	/**
 	  * Return last cart ID for this customer
@@ -478,28 +478,28 @@ class CustomerCore extends ObjectModel
 	*
 	* @param $id_customer Customer id
 	* @return boolean
-	*/	
+	*/
 	// DEPRECATED
 	public function customerIdExists($id_customer)
 	{
 		return self::customerIdExistsStatic((int)($id_customer));
 	}
-	
+
 	static public function customerIdExistsStatic($id_customer)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM '._DB_PREFIX_.'customer c
 		WHERE c.`id_customer` = '.(int)($id_customer));
-		
+
 		return isset($row['id_customer']);
 	}
-	
+
 	public function cleanGroups()
 	{
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($this->id));
 	}
-	
+
 	public function addGroups($groups)
 	{
 		foreach ($groups as $group)
@@ -508,7 +508,7 @@ class CustomerCore extends ObjectModel
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 		}
 	}
-	
+
 	public static function getGroupsStatic($id_customer)
 	{
 		$groups = array();
@@ -520,17 +520,17 @@ class CustomerCore extends ObjectModel
 			$groups[] = (int)($group['id_group']);
 		return $groups;
 	}
-	
+
 	public function getGroups()
 	{
 		return self::getGroupsStatic((int)($this->id));
 	}
-	
+
 	public function isUsed()
 	{
 		return false;
 	}
-	
+
 	public function isMemberOfGroup($id_group)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -538,10 +538,10 @@ class CustomerCore extends ObjectModel
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.(int)($this->id).'
 		AND cg.`id_group` = '.(int)($id_group));
-		
+
 		return $result['nb'];
 	}
-	
+
 	public function getBoughtProducts()
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -549,16 +549,16 @@ class CustomerCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
 		WHERE o.valid = 1 AND o.`id_customer` = '.(int)($this->id));
 	}
-	
+
 	public function getNeedDNI()
 	{
 		$countries = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT `id_country` 
-		FROM `'._DB_PREFIX_.'address` 
-		WHERE `id_customer` = '.(int)($this->id).' 
+		SELECT `id_country`
+		FROM `'._DB_PREFIX_.'address`
+		WHERE `id_customer` = '.(int)($this->id).'
 		AND `deleted` = 0
 		');
-		
+
 		foreach($countries AS $country)
 			if (Country::getNeedIdentifcationNumber((int)($country['id_country'])))
 				return true;
@@ -583,6 +583,7 @@ class CustomerCore extends ObjectModel
 		$ids = Address::getCountryAndState($id_address);
 		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
 	}
-}
 
+
+}
 

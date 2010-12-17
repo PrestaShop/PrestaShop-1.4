@@ -1,0 +1,131 @@
+<?php
+
+/*
+CREATE TABLE `ps_tax_rules_group` (
+`id_tax_rules_group` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`enable` INT NOT NULL
+) ENGINE = MYISAM ;
+
+CREATE TABLE `ps_tax_rules_group_lang` (
+`id_tax_rules_group` INT NOT NULL ,
+`id_lang` INT NOT NULL ,
+`name` VARCHAR( 32 ) NOT NULL ,
+PRIMARY KEY ( `id_tax_rules_group` , `id_lang` )
+) ENGINE = MYISAM ;
+
+ALTER TABLE `ps_product`
+  DROP `id_tax`;
+*/
+
+class TaxRulesGroupCore extends ObjectModel
+{
+    public $name;
+
+    /** @var bool active state */
+    public 		$active;
+
+ 	protected 	$fieldsRequired = array('name');
+ 	protected 	$fieldsSize = array('name' => 32);
+ 	protected 	$fieldsValidate = array('name' => 'isGenericName');
+
+	protected 	$table = 'tax_rules_group';
+	protected 	$identifier = 'id_tax_rules_group';
+
+	public function getFields()
+	{
+		parent::validateFields();
+		$fields['name'] = ($this->name);
+		$fields['active'] = (int)($this->active);
+		return $fields;
+	}
+
+	public static function getTaxRulesGroups($only_active = true)
+	{
+	    return Db::getInstance()->ExecuteS('
+	    SELECT *
+	    FROM `'._DB_PREFIX_.'tax_rules_group` g'
+	    .($only_active ? ' WHERE g.`active` = 1' : '')
+	    );
+	}
+
+
+	public static function getTaxes($id_tax_rules_group, $id_country, $id_state)
+	{
+	    if (empty($id_tax_rules_group) OR empty($id_country))
+	        return array(new Tax()); // No Tax
+
+	    $rows = Db::getInstance()->ExecuteS('
+	    SELECT *
+	    FROM `'._DB_PREFIX_.'tax_rule`
+	    WHERE `id_country` = '.(int)$id_country.'
+	    AND `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
+	    AND `id_state` IN (0, '.(int)$id_state.')
+	    ORDER BY `id_state` DESC'
+	    );
+
+	    $taxes = array();
+	    foreach ($rows AS $row)
+	    {
+	       if ($row['id_state'] != 0)
+	       {
+	            switch($row['state_behavior'])
+	            {
+	                case PS_STATE_TAX: // use only product tax
+                        $taxes = array(new Tax($row['id_tax']));
+    	                break 2; // switch + foreach
+
+    	            case PS_BOTH_TAX:
+    	                $taxes[] = new Tax($row['id_tax']);
+    	                break;
+
+	                case PS_PRODUCT_TAX: // do nothing use country tax
+	                    break;
+	            }
+	       }
+	       else
+	            $taxes[] = new Tax((int)$row['id_tax']);
+	    }
+
+        return $taxes;
+	}
+
+	public static function getAssociatedTaxRatesByIdCountry($id_country)
+	{
+	    $rows = Db::getInstance()->ExecuteS('
+	    SELECT rg.`id_tax_rules_group`, t.`rate`
+	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
+   	    LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.`id_tax_rules_group` = rg.`id_tax_rules_group`)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+	    WHERE tr.`id_country` = '.(int)$id_country
+	    );
+
+	    $res = array();
+	    foreach ($rows AS $row)
+	        $res[$row['id_tax_rules_group']] = $row['rate'];
+
+	    return $res;
+	}
+
+	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state)
+	{
+	    $rate = 0;
+	    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state) AS $tax)
+	        $rate += (float)$tax->rate;
+
+	    return $rate;
+	}
+
+	public static function getIdByName($name)
+	{
+	    return Db::getInstance()->getValue(
+	    'SELECT `id_tax_rules_group`
+	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
+	    WHERE `name` = \''.pSQL($name).'\''
+	    );
+	}
+
+
+
+
+}
+

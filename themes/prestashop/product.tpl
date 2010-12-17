@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -48,7 +48,7 @@ var quantityAvailable = {if $display_qties == 1 && $product->quantity}{$product-
 var allowBuyWhenOutOfStock = {if $allow_oosp == 1}true{else}false{/if};
 var availableNowValue = '{$product->available_now|escape:'quotes':'UTF-8'}';
 var availableLaterValue = '{$product->available_later|escape:'quotes':'UTF-8'}';
-var productPriceTaxExcluded = {$product->getPriceWithoutReduct(true)|default:'null'};
+var productPriceTaxExcluded = {$product->getPriceWithoutReduct(true)|default:'null'} - {$product->ecotax};
 var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{else}0{/if};
 var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{else}0{/if};
 var specific_price = {if $product->specificPrice AND $product->specificPrice.price}{$product->specificPrice.price}{else}0{/if};
@@ -128,15 +128,15 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 	<div id="admin-action">
 		<p>{l s='This product is not visible by your customers.'}
 		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
-		<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>			
-		<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>			
+		<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>
+		<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>
 		</p>
 		<div class="clear" ></div>
 		<p id="admin-action-result"></p>
 		</p>
 	</div>
 	{/if}
-	
+
 	{if isset($confirmation) && $confirmation}
 	<p class="confirmation">
 		{$confirmation}
@@ -292,7 +292,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{/if}
 				{*close if for show price*}
 			{/if}
-			
+
 			{if isset($groups)}
 			<!-- attributes -->
 			<div id="attributes">
@@ -335,7 +335,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{/literal}
 			</script>
 			{/if}
-			
+
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) OR $virtual OR !$product->available_for_order} style="display:none;"{/if}>
 				<label>{l s='Quantity :'}</label>
@@ -364,7 +364,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				<span {if $product->quantity > 1} style="display:none;"{/if} id="quantityAvailableTxt">{l s='item in stock'}</span>
 				<span {if $product->quantity == 1} style="display:none;"{/if} id="quantityAvailableTxtMultiple">{l s='items in stock'}</span>
 			</p>
-			
+
 			<!-- Out of stock hook -->
 			<p id="oosHook"{if $product->quantity > 0} style="display:none;"{/if}>
 				{$HOOK_PRODUCT_OOS}
@@ -375,7 +375,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			{if $product->online_only}
 				<p>{l s='Online only'}</p>
 			{/if}
-			
+
 			<p{if (!$allow_oosp && $product->quantity == 0) OR !$product->available_for_order OR (isset($restricted_country_mode) AND $restricted_country_mode)} style="display:none;"{/if} id="add_to_cart" class="buttons_bottom_block"><input type="submit" name="Submit" value="{l s='Add to cart'}" class="exclusive" /></p>
 			{if $HOOK_PRODUCT_ACTIONS}
 				{$HOOK_PRODUCT_ACTIONS}
@@ -395,7 +395,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 	<table class="std">
 		<tr>
 			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
-				<th>{$quantity_discount.quantity|intval} 
+				<th>{$quantity_discount.quantity|intval}
 				{if $quantity_discount.quantity|intval > 1}
 					{l s='quantities'}
 				{else}
@@ -543,3 +543,4 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 {/if}
 
 {/if}
+

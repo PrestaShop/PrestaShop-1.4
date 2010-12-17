@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -69,7 +69,7 @@ class LocalizationPackCore
 				$state->iso_code = strval($attributes['iso_code']);
 				$state->id_country = Country::getByIso(strval($attributes['country']));
 				$state->id_zone = (int)(Zone::getIdByName(strval($attributes['zone'])));
-				$state->tax_behavior = (int)($attributes['tax_behavior']);
+
 				if (!$state->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid state properties.');
@@ -94,12 +94,18 @@ class LocalizationPackCore
 	private function _installTaxes($xml)
 	{
 		if (isset($xml->taxes->tax))
+		{
+		    $available_behavior = array(PS_PRODUCT_TAX, PS_STATE_TAX, PS_BOTH_TAX);
+		    $assoc_taxes = array();
 			foreach ($xml->taxes->tax as $taxData)
 			{
 				$attributes = $taxData->attributes();
+
 				$tax = new Tax();
 				$tax->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
 				$tax->rate = (float)($attributes['rate']);
+				$tax->active = 1;
+
 				if (!$tax->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid tax properties.');
@@ -110,22 +116,55 @@ class LocalizationPackCore
 					$this->_errors[] = Tools::displayError('An error occurred while importing the tax: ').strval($attributes['name']);
 					return false;
 				}
-				if (isset($taxData->applications->application))
-					foreach ($taxData->applications->application as $applicationData)
-					{
-						$attributes = $applicationData->attributes();
-						if (strval($attributes['type']) == 'state' AND !$tax->addState(State::getIdByIso(strval($attributes['id']))))
-						{
-							$this->_errors[] = Tools::displayError('Unable to associate the state: ').strval($attributes['id']);
-							return false;
-						}
-						elseif (strval($attributes['type']) == 'zone' AND !$tax->addZone(Zone::getIdByName(strval($attributes['id']))))
-						{
-							$this->_errors[] = Tools::displayError('Unable to associate the zone: ').strval($attributes['id']);
-							return false;
-						}
-					}
+
+				$assoc_taxes[(int)$attributes['id']] = $tax->id;
 			}
+
+			foreach ($xml->taxes->taxRulesGroup AS $group)
+			{
+			    $group_attributes = $group->attributes();
+			    if (!Validate::isGenericName($group_attributes['name']))
+			        continue;
+
+			    $trg = new TaxRulesGroup();
+			    $trg->name = $group['name'];
+			    $trg->active = 1;
+
+			    if (!$trg->save())
+			        return false;
+
+			    foreach($group->taxRule as $rule)
+			    {
+			        $rule_attributes = $rule->attributes();
+
+			        // Validation
+			        if (!isset($rule_attributes['iso_code_country']))
+			            continue;
+
+			        $id_country = Country::getByIso(strtoupper($rule_attributes['iso_code_country']));
+
+			        if (!isset($rule_attributes['id_tax']) || !array_key_exists(strval($rule_attributes['id_tax']), $assoc_taxes))
+			            continue;
+
+			        // Default values
+			        $id_state = (int) isset($rule_attributes['iso_code_state']) ? State::getIdByIso(strtoupper($rule_attributes['iso_code_state'])) : 0;
+
+                    $state_behavior = 0;
+                    if (isset($rule_attributes['state_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
+                        $state_behavior = (int)$rule_attributes['state_behavior'];
+
+			        // Creation
+			        $tr = new TaxRule();
+			        $tr->id_tax_rules_group = $trg->id;
+			        $tr->id_country = $id_country;
+			        $tr->id_state = $id_state;
+			        $tr->state_behavior = $state_behavior;
+			        $tr->id_tax = $assoc_taxes[strval($rule_attributes['id_tax'])];
+			        $tr->save();
+			    }
+			}
+		}
+
 		return true;
 	}
 
@@ -220,3 +259,4 @@ class LocalizationPackCore
 		return $this->_errors;
 	}
 }
+

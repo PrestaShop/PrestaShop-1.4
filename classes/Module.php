@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -276,12 +276,12 @@ abstract class ModuleCore
 		}
 		return true;
 	}
-	
+
 	public function editExceptions($id_hook, $excepts)
 	{
 		// Cleaning...
 		Db::getInstance()->Execute('
-				DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions` 
+				DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions`
 				WHERE `id_module` = '.(int)($this->id).' AND `id_hook` ='.(int)($id_hook));
 		return $this->registerExceptions($id_hook, $excepts);
 	}
@@ -339,7 +339,7 @@ abstract class ModuleCore
 			else
 				$errors[] = $module;
 		}
-		
+
 		if (sizeof($errors))
 		{
 			echo '<div class="alert error"><h3>'.Tools::displayError('Parse error(s) in module(s)').'</h3><ol>';
@@ -433,7 +433,7 @@ abstract class ModuleCore
 				continue;
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
 				continue;
-			
+
 			$exceptions = $moduleInstance->getExceptions((int)($array['id_hook']), $array['id_module']);
 			$phpSelf = basename($_SERVER['PHP_SELF']);
 			foreach ($exceptions as $exception)
@@ -447,7 +447,7 @@ abstract class ModuleCore
 		}
 		return $output;
 	}
-	
+
 	public static function hookExecPayment()
 	{
 		global $cart, $cookie;
@@ -485,7 +485,7 @@ abstract class ModuleCore
 	public function l($string, $specific = false)
 	{
 		global $_MODULES, $_MODULE, $cookie;
-		
+
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 		if (Tools::file_exists_cache($file) AND include_once($file))
@@ -518,9 +518,9 @@ abstract class ModuleCore
 	public function updatePosition($id_hook, $way, $position = NULL)
 	{
 		if (!$res = Db::getInstance()->ExecuteS('
-		SELECT hm.`id_module`, hm.`position`, hm.`id_hook` 
-		FROM `'._DB_PREFIX_.'hook_module` hm 
-		WHERE hm.`id_hook` = '.(int)($id_hook).' 
+		SELECT hm.`id_module`, hm.`position`, hm.`id_hook`
+		FROM `'._DB_PREFIX_.'hook_module` hm
+		WHERE hm.`id_hook` = '.(int)($id_hook).'
 		ORDER BY hm.`position` '.((int)($way) ? 'ASC' : 'DESC')))
 			return false;
 		foreach ($res AS $key => $values)
@@ -536,7 +536,7 @@ abstract class ModuleCore
 
 		if (isset($position) and !empty($position))
 			$to['position'] = (int)($position);
-		
+
 		return (Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'hook_module`
 		SET `position`= position '.($way ? '-1' : '+1').'
@@ -637,16 +637,16 @@ abstract class ModuleCore
 		Db::getInstance()->Execute('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
 		return (bool)Db::getInstance()->NumRows();
 	}
-	
+
 	public function isRegisteredInHook($hook)
 	{
 		if (!$this->id)
 			return false;
-		
+
 		return Db::getInstance()->getValue('
-		SELECT COUNT(*) 
+		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'hook_module` hm
-		LEFT JOIN `'._DB_PREFIX_.'hook` h ON (h.`id_hook` = hm.`id_hook`) 
+		LEFT JOIN `'._DB_PREFIX_.'hook` h ON (h.`id_hook` = hm.`id_hook`)
 		WHERE h.`name` = \''.pSQL($hook).'\'
 		AND hm.`id_module` = '.(int)($this->id)
 		);
@@ -720,3 +720,4 @@ abstract class ModuleCore
 			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 	}
 }
+

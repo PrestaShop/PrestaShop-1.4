@@ -1,5 +1,5 @@
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,7 +28,7 @@ function getTax()
 {
 	if (noTax)
 		return 0;
-	var selectedTax = document.getElementById('id_tax');
+	var selectedTax = document.getElementById('id_tax_rules_group');
 	var taxId = selectedTax.options[selectedTax.selectedIndex].value;
 	return taxesArray[taxId];
 }
@@ -54,11 +54,11 @@ function calcPriceTI()
 	var tax = getTax();
 	var priceTE = parseFloat(document.getElementById('priceTE').value.replace(/,/g, '.'));
 	var newPrice = priceTE * ((tax / 100) + 1);
-	document.getElementById('priceTI').value = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
+	document.getElementById('priceTI').value = (isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(newPrice, 2);
-	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
+	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(newPrice, 2).toFixed(2);
-	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(priceTE) == true || priceTE < 0) ? '' : 
+	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(priceTE) == true || priceTE < 0) ? '' :
 		(ps_round(priceTE, 2) + getEcotaxTaxExcluded()).toFixed(2);
 	calcReduction();
 	document.getElementById('priceTI').value = parseFloat(document.getElementById('priceTI').value) + getEcotaxTaxIncluded();
@@ -72,9 +72,9 @@ function calcPriceTE()
 	var newPrice = ps_round(priceTI - getEcotaxTaxIncluded(), 2) / ((tax / 100) + 1);
 	document.getElementById('priceTE').value =	(isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(newPrice.toFixed(6), 6);
-	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
+	document.getElementById('finalPrice').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(priceTI.toFixed(2), 2);
-	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' : 
+	document.getElementById('finalPriceWithoutTax').innerHTML = (isNaN(newPrice) == true || newPrice < 0) ? '' :
 		ps_round(newPrice.toFixed(2), 2) + getEcotaxTaxExcluded();
 	calcReduction();
 }
@@ -133,7 +133,7 @@ function reductionPrice()
 			rprice.value = 0;
 		curPrice = curPrice - rprice.value;
 	}
-	
+
 	newprice.innerHTML = (ps_round(parseFloat(curPrice),2) + getEcotaxTaxIncluded()).toFixed(2);
 	var rpriceWithoutTaxes = ps_round(rprice.value / ((tax / 100) + 1), 2);
 	newpriceWithoutTax.innerHTML = ps_round(priceWhithoutTaxes.value - rpriceWithoutTaxes,2).toFixed(2);
@@ -146,7 +146,7 @@ function reductionPercent()
 	var newprice = document.getElementById('finalPrice');
 	var newpriceWithoutTax = document.getElementById('finalPriceWithoutTax');
 	var curPrice = price.value;
-	
+
 	document.getElementById('reduction_price').value = 0;
 	if (isInReductionPeriod())
 	{
@@ -156,10 +156,10 @@ function reductionPercent()
 		if (parseFloat(rpercent.value) >= 100)
 			rpercent.value = 100;
 		if (parseFloat(rpercent.value) < 0)
-			rpercent.value = 0;	
+			rpercent.value = 0;
 		curPrice = price.value * (1 - (rpercent.value / 100));
 	}
-	
+
 	newprice.innerHTML = (ps_round(parseFloat(curPrice),2) + getEcotaxTaxIncluded()).toFixed(2);
 	newpriceWithoutTax.innerHTML = ps_round(parseFloat(ps_round(curPrice, 2) / ((tax / 100) + 1)),2).toFixed(2);
 }
@@ -168,10 +168,10 @@ function isInReductionPeriod()
 {
 	var start  = document.getElementById('reduction_from').value;
 	var end    = document.getElementById('reduction_to').value;
-	
+
 	if (start == end && start != "" && start != "0000-00-00 00:00:00") return true;
 
-	var sdate  = new Date(start.replace(/-/g,'/'));	
+	var sdate  = new Date(start.replace(/-/g,'/'));
 	var edate  = new Date(end.replace(/-/g,'/'));
 	var today  = new Date();
 

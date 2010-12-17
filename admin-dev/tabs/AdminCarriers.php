@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -99,13 +99,11 @@ class AdminCarriers extends AdminTab
 				</div>
 				<label>'.$this->l('Tax').'</label>
 				<div class="margin-form">
-					<select name="id_tax">
-						<option value="0"'.(($obj->id AND $obj->id_tax == 0) ? ' selected="selected"' : '').'>'.$this->l('No tax').'</option>';
-						$tvaList = Tax::getTaxes($currentLanguage);
-						foreach ($tvaList AS $line)
-							echo '<option value="'.$line['id_tax'].'"'.(($obj->id AND $obj->id_tax == $line['id_tax']) ? ' selected="selected"' : '').'>'.$line['name'].'</option>';
-					echo '</select>
-					<p>'.$this->l('Include tax on carrier, e.g., VAT').'</p>
+					 <select name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
+					    <option value="0">'.$this->l('No Tax').'</option>';
+						foreach (TaxRulesGroup::getTaxRulesGroups(true) AS $tax_rules_group)
+							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.$tax_rules_group['name'].'</option>';
+				echo '</select>
 				</div>
 				<label>'.$this->l('Zone').'</label>
 				<div class="margin-form">';
@@ -183,17 +181,17 @@ class AdminCarriers extends AdminTab
 						  $this->l('This carrier is bound to this module ').' => '.$this->getFieldValue($obj, 'external_module_name').'</p>
 						  <input type="hidden" name="is_module" value="1">
 						  <input type="hidden" name="external_module_name" value="'.$this->getFieldValue($obj, 'external_module_name').'">';
-						  
+
 					if($this->getFieldValue($obj, 'shipping_external'))
 					{
 						echo '<p> - '.$this->l('The shipping costs are calculated outside of your shop').'</p>
 						<input type="hidden" name="shipping_external" value="1">';
-					}	
+					}
 					if($this->getFieldValue($obj, 'need_range'))
 					{
 						echo '<p> - '.$this->l('This carrier uses PrestaShop range to calculate shippping costs').'</p>
 						<input type="hidden" name="need_range" value="1">';
-					}	
+					}
 
 					echo '</div>';
 				}
@@ -330,5 +328,4 @@ class AdminCarriers extends AdminTab
 		parent::displayListContent($token);
 	}
 }
-
 

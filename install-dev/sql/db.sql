@@ -120,7 +120,7 @@ CREATE TABLE `PREFIX_attribute_lang` (
 
 CREATE TABLE `PREFIX_carrier` (
   `id_carrier` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `id_tax` int(10) unsigned DEFAULT '0',
+  `id_tax_rules_group` int(10) unsigned DEFAULT '0',
   `name` varchar(64) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   `active` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -134,7 +134,7 @@ CREATE TABLE `PREFIX_carrier` (
   `shipping_method` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_carrier`),
   KEY `deleted` (`deleted`,`active`),
-  KEY `id_tax` (`id_tax`)
+  KEY `id_tax_rules_group` (`id_tax_rules_group`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_carrier_lang` (
@@ -374,7 +374,7 @@ CREATE TABLE `PREFIX_country_lang` (
 CREATE TABLE `PREFIX_country_tax` (
   `id_country_tax` int(11) NOT NULL AUTO_INCREMENT,
   `id_country` int(11) NOT NULL,
-  `id_tax` int(11) NOT NULL,
+  `id_tax_rules_group` int(11) NOT NULL,
   PRIMARY KEY (`id_country_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -864,6 +864,7 @@ CREATE TABLE `PREFIX_orders` (
   `total_products` decimal(17,2) NOT NULL default '0.00',
   `total_products_wt` DECIMAL(17, 2) NOT NULL default '0.00',
   `total_shipping` decimal(17,2) NOT NULL default '0.00',
+  `carrier_tax_rate` DECIMAL(10, 3) NOT NULL default '0.00',
   `total_wrapping` decimal(17,2) NOT NULL default '0.00',
   `invoice_number` int(10) unsigned NOT NULL default '0',
   `delivery_number` int(10) unsigned NOT NULL default '0',
@@ -1079,7 +1080,7 @@ CREATE TABLE `PREFIX_product` (
   `id_product` int(10) unsigned NOT NULL auto_increment,
   `id_supplier` int(10) unsigned default NULL,
   `id_manufacturer` int(10) unsigned default NULL,
-  `id_tax` int(10) unsigned NOT NULL,
+  `id_tax_rules_group` int(10) unsigned NOT NULL,
   `id_category_default` int(10) unsigned default NULL,
   `id_color_default` int(10) unsigned default NULL,
   `on_sale` tinyint(1) unsigned NOT NULL default '0',
@@ -1093,7 +1094,7 @@ CREATE TABLE `PREFIX_product` (
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
   `unity` varchar(255) default NULL,
   `unit_price` decimal(20,6) NOT NULL default '0.000000',
-  `additional_shipping_cost` decimal(20,2) NOT NULL default '0.00',  
+  `additional_shipping_cost` decimal(20,2) NOT NULL default '0.00',
   `reference` varchar(32) default NULL,
   `supplier_reference` varchar(32) default NULL,
   `location` varchar(64) default NULL,
@@ -1119,7 +1120,6 @@ CREATE TABLE `PREFIX_product` (
   PRIMARY KEY  (`id_product`),
   KEY `product_supplier` (`id_supplier`),
   KEY `product_manufacturer` (`id_manufacturer`),
-  KEY `id_tax` (`id_tax`),
   KEY `id_category_default` (`id_category_default`),
   KEY `id_color_default` (`id_color_default`),
   KEY `date_add` (`date_add`)
@@ -1433,18 +1433,6 @@ CREATE TABLE `PREFIX_tax_lang` (
   UNIQUE KEY `tax_lang_index` (`id_tax`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_tax_state` (
-  `id_tax` int(10) unsigned NOT NULL,
-  `id_state` int(10) unsigned NOT NULL,
-  KEY `tax_state_index` (`id_tax`,`id_state`)
-) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
-CREATE TABLE `PREFIX_tax_zone` (
-  `id_tax` int(10) unsigned NOT NULL,
-  `id_zone` int(10) unsigned NOT NULL,
-  KEY `tax_zone_index` (`id_tax`,`id_zone`)
-) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
 CREATE TABLE PREFIX_timezone (
 	id_timezone int(10) unsigned NOT NULL auto_increment,
 	name VARCHAR(32) NOT NULL,
@@ -1566,3 +1554,19 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
   `id_tax` int(11) NOT NULL,
   UNIQUE KEY `id_product` (`id_product`,`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_tax_rule` (
+`id_tax_rules_group` INT NOT NULL ,
+`id_country` INT NOT NULL ,
+`id_state` INT NOT NULL ,
+`id_tax` INT NOT NULL ,
+`state_behavior` INT NOT NULL ,
+PRIMARY KEY ( `id_tax_rules_group`, `id_country` , `id_state` )
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_tax_rules_group` (
+`id_tax_rules_group` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 32 ) NOT NULL ,
+`active` INT NOT NULL
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+

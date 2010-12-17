@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -33,12 +33,12 @@ abstract class PaymentModuleCore extends Module
 	public	$currentOrder;
 	public	$currencies = true;
 	public	$currencies_mode = 'checkbox';
-	
+
 	public function install()
 	{
 		if (!parent::install())
 			return false;
-		
+
 		// Insert currencies availability
 		if ($this->currencies_mode == 'checkbox')
 		{
@@ -65,10 +65,10 @@ abstract class PaymentModuleCore extends Module
 		$return &= Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'module_group` (id_module, id_group)
 		SELECT '.(int)($this->id).', id_group FROM `'._DB_PREFIX_.'group`');
-		
+
 		return $return;
 	}
-	
+
 	public function uninstall()
 	{
 		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE id_module = '.(int)($this->id))
@@ -94,10 +94,10 @@ abstract class PaymentModuleCore extends Module
 		global $cart;
 
 		$cart = new Cart((int)($id_cart));
-		
+
 		if ($secure_key !== false AND $secure_key != $cart->secure_key)
 			die(Tools::displayError());
-		
+
 		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
 		{
@@ -128,6 +128,7 @@ abstract class PaymentModuleCore extends Module
 			$order->total_products_wt = (float)($cart->getOrderTotal(true, 1));
 			$order->total_discounts = (float)(abs($cart->getOrderTotal(true, 2)));
 			$order->total_shipping = (float)($cart->getOrderShippingCost());
+			$order->carrier_tax_rate = (float)Tax::getCarrierTaxRate($cart->id_carrier, (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 			$order->total_wrapping = (float)(abs($cart->getOrderTotal(true, 6)));
 			$order->total_paid = (float)(Tools::ps_round((float)($cart->getOrderTotal(true, 3)), 2));
 			$order->invoice_date = '0000-00-00 00:00:00';
@@ -139,7 +140,7 @@ abstract class PaymentModuleCore extends Module
 			// Creating order
 			if ($cart->OrderExists() === 0)
 				$result = $order->add();
-			else 
+			else
 				die(Tools::displayError('An order has already been placed using this cart'));
 
 			// Next !
@@ -147,7 +148,7 @@ abstract class PaymentModuleCore extends Module
 			{
 				if (!$secure_key)
 					$message .= $this->l('Warning : the secure key is empty, check your payment account before validation');
-				// Optional message to attach to this order 
+				// Optional message to attach to this order
 				if (isset($message) AND !empty($message))
 				{
 					$msg = new Message();
@@ -179,10 +180,10 @@ abstract class PaymentModuleCore extends Module
 					{
 						if (Product::updateQuantity($product, (int)$order->id))
 							$product['stock_quantity'] -= $product['cart_quantity'];
-						
+
 						if ($product['stock_quantity'] < 0)
 							$outOfStock = true;
-							
+
 						Hook::updateQuantity($product, $order);
 						Product::updateDefaultAttribute($product['id_product']);
 					}
@@ -206,19 +207,11 @@ abstract class PaymentModuleCore extends Module
 						$tax_rate = 0;
 					}
 					else
-					{
-						$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-						$address_infos = Address::getCountryAndState($id_address);
-				
-						if ($address_infos['id_country'])
-							$id_country = (int)($address_infos['id_country']);
-						else
-							$id_country = Country::getDefaultCountryId();
-					
-						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), (int)($id_country), (int)($product['id_tax']), (float)($product['rate']), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
-					}
+						$tax_rate = Tax::getProductTaxRate((int)($product['id_product']), $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 
-					$ecotaxRate = ($product['ecotax'] AND $ecotax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID'))) ? Tax::getApplicableTaxRate((int)$ecotax->id, (float)$ecotax->rate, (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) : 0.00;
+                    $ecotaxTaxRate = 0;
+                    if (!empty($product['ecotax']))
+                        $ecotaxTaxRate = Tax::getProductEcotaxRate($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 
 					$quantityDiscount = SpecificPrice::getQuantityDiscount((int)$product['id_product'], Shop::getCurrentShop(), (int)$cart->id_currency, (int)$vat_address->id_country, (int)$customer->id_default_group, (int)$product['cart_quantity']);
 					$unitPrice = Product::getPriceStatic((int)$product['id_product'], true, ($product['id_product_attribute'] ? intval($product['id_product_attribute']) : NULL), 2, NULL, false, true, 1, false, (int)$order->id_customer, NULL, (int)$order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
@@ -242,7 +235,7 @@ abstract class PaymentModuleCore extends Module
 						\''.(empty($tax_rate) ? '' : pSQL($product['tax'])).'\',
 						'.(float)($tax_rate).',
 						'.(float)Tools::convertPrice(floatval($product['ecotax']), intval($order->id_currency)).',
-						'.(float)$ecotaxRate.',
+						'.(float)$ecotaxTaxRate.',
 						'.(($specificPrice AND $specificPrice['from_quantity'] > 1) ? 1 : 0).',
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
@@ -257,7 +250,7 @@ abstract class PaymentModuleCore extends Module
 								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
 									$customizationText .= $text['name'].$this->l(':').' '.$text['value'].', ';
 						$customizationText = rtrim($customizationText, ', ');
-						
+
 						$customizationQuantity = (int)($product['customizationQuantityTotal']);
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
@@ -318,7 +311,7 @@ abstract class PaymentModuleCore extends Module
 					foreach ($cart->getProducts() as $product)
 						if ($orderStatus->logable)
 							ProductSale::addProductSale((int)($product['id_product']), (int)($product['cart_quantity']));
-				}				
+				}
 
 				if (isset($outOfStock) AND $outOfStock)
 				{
@@ -334,7 +327,7 @@ abstract class PaymentModuleCore extends Module
 				$new_history->id_order = (int)($order->id);
 				$new_history->changeIdOrderState((int)($id_order_state), (int)($order->id));
 				$new_history->addWithemail(true, $extraVars);
-				
+
 				// Order is reloaded because the status just changed
 				$order = new Order($order->id);
 
@@ -347,7 +340,7 @@ abstract class PaymentModuleCore extends Module
 					$delivery_state = $delivery->id_state ? new State((int)($delivery->id_state)) : false;
 					$invoice_state = $invoice->id_state ? new State((int)($invoice->id_state)) : false;
 
-					$data = array(					
+					$data = array(
 					'{firstname}' => $customer->firstname,
 					'{lastname}' => $customer->lastname,
 					'{email}' => $customer->email,
@@ -360,7 +353,7 @@ abstract class PaymentModuleCore extends Module
 					'{delivery_postal_code}' => $delivery->postcode,
 					'{delivery_country}' => $delivery->country,
 					'{delivery_state}' => $delivery->id_state ? $delivery_state->name : '',
-					'{delivery_phone}' => ($delivery->phone) ? $delivery->phone : $delivery->phone_mobile, 
+					'{delivery_phone}' => ($delivery->phone) ? $delivery->phone : $delivery->phone_mobile,
 					'{delivery_other}' => $delivery->other,
 					'{invoice_company}' => $invoice->company,
 					'{invoice_vat_number}' => $invoice->vat_number,
@@ -372,7 +365,7 @@ abstract class PaymentModuleCore extends Module
 					'{invoice_postal_code}' => $invoice->postcode,
 					'{invoice_country}' => $invoice->country,
 					'{invoice_state}' => $invoice->id_state ? $invoice_state->name : '',
-					'{invoice_phone}' => ($invoice->phone) ? $invoice->phone : $invoice->phone_mobile, 
+					'{invoice_phone}' => ($invoice->phone) ? $invoice->phone : $invoice->phone_mobile,
 					'{invoice_other}' => $invoice->other,
 					'{order_name}' => sprintf("#%06d", (int)($order->id)),
 					'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), (int)($order->id_lang), 1),
@@ -385,7 +378,7 @@ abstract class PaymentModuleCore extends Module
 					'{total_discounts}' => Tools::displayPrice($order->total_discounts, $currency, false, false),
 					'{total_shipping}' => Tools::displayPrice($order->total_shipping, $currency, false, false),
 					'{total_wrapping}' => Tools::displayPrice($order->total_wrapping, $currency, false, false));
-					
+
 					if (is_array($extraVars))
 						$data = array_merge($data, $extraVars);
 
@@ -413,11 +406,11 @@ abstract class PaymentModuleCore extends Module
 		else
 			die(Tools::displayError('An order has already been placed using this cart'));
 	}
-	
+
 	public function getCurrency()
 	{
 		global $cookie;
-		
+
 		if (!$this->currencies)
 			return false;
 		if ($this->currencies_mode == 'checkbox')
@@ -441,5 +434,4 @@ abstract class PaymentModuleCore extends Module
 		return (new Currency($id_currency));
 	}
 }
-
 

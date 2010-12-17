@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,25 +28,25 @@
 class SupplierCore extends ObjectModel
 {
 	public 		$id;
-	
+
 	/** @var integer supplier ID */
 	public		$id_supplier;
-	
+
 	/** @var string Name */
 	public 		$name;
-	
+
 	/** @var string A short description for the discount */
 	public 		$description;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
 	/** @var string Object last modification date */
 	public 		$date_upd;
-	
+
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
-	
+
 	/** @var string Meta title */
 	public 		$meta_title;
 
@@ -55,39 +55,39 @@ class SupplierCore extends ObjectModel
 
 	/** @var string Meta description */
 	public 		$meta_description;
-	
+
 	/** @var boolean active */
 	public		$active;
-	
+
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
-	
+
 	protected	$fieldsSizeLang = array('description' => 128, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
 	protected	$fieldsValidateLang = array('description' => 'isGenericName', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
-	
+
 	protected 	$table = 'supplier';
 	protected 	$identifier = 'id_supplier';
-	
+
 	protected	$webserviceParameters = array(
 		'fields' => array(
 			'id_address' => array('sqlId' => 'id_address', 'xlink_resource'=> 'addresses'),
 			'link_rewrite' => array('sqlId' => 'link_rewrite'),
 		),
 	);
-	
+
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
 		parent::__construct($id, $id_lang);
-		
+
 		$this->link_rewrite = $this->getLink();
 	}
-	
+
 	public function getLink()
 	{
 		return Tools::link_rewrite($this->name, false);
 	}
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -99,13 +99,13 @@ class SupplierCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
-	
+
 	public function getTranslationsFieldsChild()
 	{
 		parent::validateFieldsLang();
 		return parent::getTranslationsFields(array('description', 'meta_title', 'meta_keywords', 'meta_description'));
 	}
-	
+
 	/**
 	  * Return suppliers
 	  *
@@ -151,7 +151,7 @@ class SupplierCore extends ObjectModel
 				$suppliers[$i]['link_rewrite'] = 0;
 		return $suppliers;
 	}
-	
+
 	/**
 	  * Return name from id
 	  *
@@ -184,10 +184,10 @@ class SupplierCore extends ObjectModel
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) OR $orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
-			
+
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-			
+
 		/* Return only the number of products */
 		if ($getTotal)
 		{
@@ -207,13 +207,16 @@ class SupplierCore extends ObjectModel
 		}
 
 		$sql = '
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, s.`name` AS supplier_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
-			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice, m.`name` AS manufacturer_name 
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, s.`name` AS supplier_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
+			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON s.`id_supplier` = p.`id_supplier`
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
@@ -224,7 +227,7 @@ class SupplierCore extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)
-		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
+		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
@@ -233,7 +236,7 @@ class SupplierCore extends ObjectModel
 			Tools::orderbyPrice($result, $orderWay);
 		return Product::getProductsProperties($id_lang, $result);
 	}
-	
+
 	public function getProductsLite($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -247,14 +250,14 @@ class SupplierCore extends ObjectModel
 	*
 	* @param $id_supplier Supplier id
 	* @return boolean
-	*/	
+	*/
 	static public function supplierExists($id_supplier)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_supplier`
 		FROM '._DB_PREFIX_.'supplier s
 		WHERE s.`id_supplier` = '.(int)($id_supplier));
-		
+
 		return isset($row['id_supplier']);
 	}
 }

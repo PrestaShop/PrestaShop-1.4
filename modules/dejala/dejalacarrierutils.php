@@ -16,28 +16,40 @@ class DejalaCarrierUtils
 		$countryID = Country::getByIso($moduleCountryIsoCode);
 		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
-		
+
 		$vatRate = (float)($dejalaProduct['vat']);
 		// MFR091130 - get or create the tax & attach it to our zone if needed
 		$id_tax = Tax::getTaxIdByRate($vatRate);
-		if (!$id_tax) 
-		{
+		$trg_id = 0;
+		if (!$id_tax)
+   		{
 			$tax = new Tax();
 			$tax->rate = $vatRate;
 			$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 			$tax->name[$defaultLanguage] = $tax->rate . '%';
 			$tax->add();
-			$id_tax = Tax::getTaxIdByRate($vatRate);
+			$id_tax = $tax->id;
+
+			$trg = new TaxRulesGroup();
+			$trg->name = 'Dejala '.$tax->name[$defaultLanguage];
+			$trg->active = 1;
+			if ($trg->save())
+			{
+			    $trg_id = $trg->id;
+
+                $tr = new TaxRule();
+                $tr->id_tax_rules_group = $trg_id;
+                $tr->id_country = (int) $countryID;
+                $tr->id_state = 0;
+                $tr->id_tax = (int)$tax->id;
+                $tr->state_behavior = 0;
+                $tr->save();
+            }
 		}
-		if (!Tax::zoneHasTax($id_tax, $id_zone))
-		{
-			// MFR : direct call because $tax->addZone($id_zone) causes errors when called
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_zone` (`id_tax` , `id_zone`) VALUES ('.(int)($id_tax).', '.(int)($id_zone).')');			
-		}
-				
+
 		$carrier = new Carrier();
 		$carrier->name = 'dejala';
-		$carrier->id_tax = $id_tax;
+		$carrier->id_tax_rules_group = $trg_id;
 		$carrier->url = 'http://tracking.dejala.' . $dejalaConfig->country . '/tracker/@';
 		$carrier->active = true;
 		$carrier->deleted = 0;
@@ -51,10 +63,10 @@ class DejalaCarrierUtils
 			if ($language['iso_code'] == 'en')
 				$carrier->delay[$language['id_lang']] = utf8_encode('When you want... Dispatch rider, '.$dejalaProduct['timelimit'].'H range');
 			if ($language['iso_code'] == 'es')
-				$carrier->delay[$language['id_lang']] = utf8_encode('Cuando quiera... Por mensajero, '.$dejalaProduct['timelimit'].'H');	
+				$carrier->delay[$language['id_lang']] = utf8_encode('Cuando quiera... Por mensajero, '.$dejalaProduct['timelimit'].'H');
 		}
 		$carrier->add();
-		
+
 		$sql = 'INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier` , `id_zone`) VALUES ('.(int)($carrier->id).', ' . (int)($id_zone) . ')';
 		Db::getInstance()->Execute($sql);
 
@@ -77,20 +89,20 @@ class DejalaCarrierUtils
 	public static function getDejalaCarrier($dejalaConfig, $dejalaProduct)
 	{
 		global $cookie;
-		
+
 		$electedCarrier = NULL;
 		$totalCartWeight = (float)($dejalaProduct['max_weight']);
 		if ($totalCartWeight <= 0)
 			$totalCartWeight = 3.99;
 		else
 			$totalCartWeight -= 0.01;
-		
-		/** MFR090828 - compare to HT price (since DejalaCarrier has a tax_id) */	
+
+		/** MFR090828 - compare to HT price (since DejalaCarrier has a tax_id) */
 		$vat_factor = (1+ ($dejalaProduct['vat'] / 100));
 		$priceTTC = round(($dejalaProduct['price']*$vat_factor) + $dejalaProduct['margin'], 2);
-		$priceHT = round($priceTTC/$vat_factor, 2);			
+		$priceHT = round($priceTTC/$vat_factor, 2);
 		$productPrice = $priceHT;
-		
+
 		// MFR091130 - get id zone from the country used in the module (if the store zones were customized)
 		// default (Europe)
 		$id_zone = 1;
@@ -98,7 +110,7 @@ class DejalaCarrierUtils
 		$countryID = Country::getByIso($moduleCountryIsoCode);
 		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
-		
+
 		$allCarriers = DejalaCarrierUtils::getCarriers((int)($cookie->id_lang), true, false, $id_zone, true);
 		$electedCarrier = NULL;
 		foreach ($allCarriers as $carrier) {
@@ -147,7 +159,7 @@ class DejalaCarrierUtils
 			'.($all ? NULL : 'AND c.`is_module` = 0').'
 			GROUP BY c.`id_carrier`';
 		$carriers = Db::getInstance()->ExecuteS($sql);
-		
+
 		if (is_array($carriers) AND count($carriers))
 		{
 			foreach ($carriers as $key => $carrier)
@@ -159,7 +171,7 @@ class DejalaCarrierUtils
 
 		return $carriers;
 	}
-	
+
 	/**
 	 * Checks if a Dejala carrier already exists
 	 */
@@ -171,12 +183,11 @@ class DejalaCarrierUtils
 		$countryID = Country::getByIso($moduleCountryIsoCode);
 		if ((int)($countryID))
 			$id_zone = Country::getIdZone($countryID);
-		$allCarriers = DejalaCarrierUtils::getCarriers((int)($cookie->id_lang), true, false, $id_zone, true);	
+		$allCarriers = DejalaCarrierUtils::getCarriers((int)($cookie->id_lang), true, false, $id_zone, true);
 		foreach ($allCarriers as $carrier) {
 			if (($carrier['name'] == 'dejala') && ($carrier['is_module'] == true)) return true ;
 		}
 		return false ;
 	}
 }
-
 

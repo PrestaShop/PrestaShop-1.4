@@ -80,6 +80,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'cms_block.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'move_crossselling.php');
 // adminstores tab
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'admin_stores_tab.php');
+// generate_tax_rules
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_tax_rules.php');
 
 //old version detection
 $oldversion = false;

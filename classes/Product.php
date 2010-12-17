@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -30,14 +30,14 @@ define('_CUSTOMIZE_TEXTFIELD_', 1);
 
 class ProductCore extends ObjectModel
 {
-	/** @var integer Tax id */
-	public		$id_tax;
-
 	/** @var string Tax name */
 	public		$tax_name;
 
 	/** @var string Tax rate */
 	public		$tax_rate;
+
+	/** @var string Tax rules group */
+	public 		$id_tax_rules_group;
 
 	/** @var integer Manufacturer id */
 	public		$id_manufacturer;
@@ -197,10 +197,10 @@ class ProductCore extends ObjectModel
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
 
-	protected $fieldsRequired = array('id_tax', 'quantity', 'price');
+	protected $fieldsRequired = array('quantity', 'price');
 	protected $fieldsSize = array('reference' => 32, 'supplier_reference' => 32, 'location' => 64, 'ean13' => 13, 'upc' => 12, 'unity' => 10);
 	protected $fieldsValidate = array(
-		'id_tax' => 'isUnsignedId',
+		'id_tax_rules_group' => 'isUnsignedId',
 		'id_manufacturer' => 'isUnsignedId',
 		'id_supplier' => 'isUnsignedId',
 		'id_category_default' => 'isUnsignedId',
@@ -250,7 +250,6 @@ class ProductCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_tax' => array('sqlId' => 'id_tax', 'required' => true, 'xlink_resource'=> 'taxes'),
 			'out_of_stock' => array('sqlId' => 'out_of_stock', 'required' => true),
 			'new' => array('sqlId' => 'new', 'i18n' => false),
 			'cache_default_attribute' => array('sqlId' => 'cache_default_attribute', 'i18n' => false),
@@ -270,11 +269,10 @@ class ProductCore extends ObjectModel
 			$this->tax_name = 'deprecated'; // The applicable tax may be BOTH the product one AND the state one (moreover this variable is some deadcode)
 			$this->manufacturer_name = Manufacturer::getNameById((int)($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById((int)($this->id_supplier));
-			$tax = new Tax((int)($this->id_tax), Configuration::get('PS_LANG_DEFAULT'));
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
-				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL, (int)($this->id_tax), (float)($tax->rate));
+				$this->tax_rate = Tax::getProductTaxRate($this->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 			else
-				$this->tax_rate = (float)($tax->rate);
+				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL);
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
 		}
@@ -290,7 +288,7 @@ class ProductCore extends ObjectModel
 		parent::validateFields();
 		if (isset($this->id))
 			$fields['id_product'] = (int)($this->id);
-		$fields['id_tax'] = (int)($this->id_tax);
+		$fields['id_tax_rules_group'] = (int)($this->id_tax_rules_group);
 		$fields['id_manufacturer'] = (int)($this->id_manufacturer);
 		$fields['id_supplier'] = (int)($this->id_supplier);
 		$fields['id_category_default'] = (int)($this->id_category_default);
@@ -686,7 +684,10 @@ class ProductCore extends ObjectModel
 		SELECT p.*, pl.* , t.`rate` AS tax_rate, m.`name` AS manufacturer_name, s.`name` AS supplier_name
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (s.`id_supplier` = p.`id_supplier`)'.
 		($id_category ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` c ON (c.`id_product` = p.`id_product`)' : '').'
@@ -1263,7 +1264,10 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE p.`active` = 1
 		AND p.`date_add` > DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)
@@ -1333,7 +1337,10 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		WHERE p.id_product = '.(int)$id_product);
 
 		return Product::getProductProperties($id_lang, $row);
@@ -1392,7 +1399,10 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE 1
 		AND p.`active` = 1
@@ -1505,11 +1515,12 @@ class ProductCore extends ObjectModel
 
 	static public function applyEcotax(&$price, $ecotax, $usetax, $id_address, $currency = NULL)
 	{
-		if ($ecotax AND $usetax)
+		if ($ecotax)
 		{
 			if ($currency)
 				$ecotax = Tools::convertPrice($ecotax, $currency);
-			if ($tax = new Tax((int)Configuration::get('PS_ECOTAX_TAX_ID')) AND $taxRate = Tax::getApplicableTaxRate((int)$tax->id, (float)$tax->rate, $id_address))
+
+			if ($usetax AND $taxRate = Tax::getProductEcotaxRate($id_address))
 				$price += $ecotax * (1 + $taxRate / 100);
 			else
 				$price += $ecotax;
@@ -1569,14 +1580,19 @@ class ProductCore extends ObjectModel
 		$id_currency = (int)(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 		if (!$id_address)
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
 
+        $id_country = (int)Country::getDefaultCountryId();
+        $id_state = 0;
+
 		$address_infos = Address::getCountryAndState($id_address);
 		if ($address_infos['id_country'])
+		{
 			$id_country = (int)($address_infos['id_country']);
-		else
-			$id_country = Country::getDefaultCountryId();
+		    $id_state = (int)$address_infos['id_state'];
+		}
 
 		$id_shop = (int)(Shop::getCurrentShop());
 		// END Initialization
@@ -1588,11 +1604,10 @@ class ProductCore extends ObjectModel
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT p.`price`, p.`id_tax`, p.`ecotax`, t.`rate`,
+			SELECT p.`price`, p.`ecotax`,
 			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.(int)($id_product).' AND default_on = 1), 0)').' AS attribute_price
 			FROM `'._DB_PREFIX_.'product` p
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
-			LEFT JOIN `'._DB_PREFIX_.'tax` AS t ON t.`id_tax` = p.`id_tax`
 			WHERE p.`id_product` = '.(int)($id_product));
 		$result = self::$_pricesLevel2[$cacheId2];
 		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
@@ -1609,8 +1624,11 @@ class ProductCore extends ObjectModel
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
 		// Exclude tax
-		if (!$tax_rate = (float)($forceAssociatedTax ? $result['rate'] : Tax::getProductTaxRate((int)($id_product), (int)($id_country), (int)($result['id_tax']), (float)($result['rate']), ($id_address ? (int)($id_address) : NULL))))
-			$usetax = false;
+		if ($forceAssociatedTax)
+		    $tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
+		else
+		    $tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
+
 		if ($usetax)
 			$price = $price * (1 + ($tax_rate / 100));
 		$price = Tools::ps_round($price, $decimals);
@@ -1633,7 +1651,8 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
-		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
+
+   		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
@@ -1967,7 +1986,10 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (p.`id_manufacturer`= m.`id_manufacturer`)
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		WHERE `id_product_1` = '.(int)($this->id).'
 		'.($active ? 'AND p.`active` = 1' : ''));
 
@@ -2058,7 +2080,10 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product`) AND i.`cover` = 1
@@ -2342,10 +2367,7 @@ class ProductCore extends ObjectModel
 			$row['id_product_attribute'] = 0;
 
 		// Tax
-		$usetax = true;
-		$tax = Tax::getProductTaxRate((int)($row['id_product']), NULL, (int)($row['id_tax']), (float)($row['rate']));
-		if (Tax::excludeTaxeOption() OR !$tax)
-			$usetax = false;
+		$usetax = Tax::excludeTaxeOption();
 
 		$cacheKey = $row['id_product'].'-'.$row['id_product_attribute'].'-'.$id_lang.'-'.(int)($usetax);
 		if (array_key_exists($cacheKey, self::$producPropertiesCache))
@@ -2363,7 +2385,9 @@ class ProductCore extends ObjectModel
 			$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : 	NULL), 6);
 		}
 		else
+		{
 			$row['price'] = Tools::ps_round(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6), 2);
+		}
 
 		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true);
 		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
@@ -2792,7 +2816,15 @@ class ProductCore extends ObjectModel
 
 	}
 
+
+	public static function getIdTaxRulesGroupByIdProduct($id_product)
+	{
+	    return Db::getInstance()->getValue('
+	    SELECT `id_tax_rules_group`
+	    FROM `'._DB_PREFIX_.'product`
+	    WHERE `id_product` = '.(int)$id_product
+	    );
+	}
+
 }
-
-
 

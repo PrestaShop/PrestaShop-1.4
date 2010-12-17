@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -29,7 +29,7 @@ class ProductSaleCore
 {
 	/*
 	** Fill the `product_sale` SQL table with data from `order_detail`
-	** @return bool True on success	  
+	** @return bool True on success
 	*/
 	static public function fillProductSales()
 	{
@@ -39,11 +39,11 @@ class ProductSaleCore
 		SELECT od.product_id, COUNT(od.product_id), SUM(od.product_quantity), NOW()
 					FROM '._DB_PREFIX_.'order_detail od GROUP BY od.product_id');
 	}
-	
+
 	/*
 	** Get number of actives products sold
-	** @return int number of actives products listed in product_sales 	
-	*/	
+	** @return int number of actives products listed in product_sales
+	*/
 	static public function getNbSales()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -53,10 +53,10 @@ class ProductSaleCore
 			WHERE p.`active` = 1');
 		return (int)($result['nb']);
 	}
-	
+
 	/*
 	** Get required informations on best sales products
-	**	
+	**
 	** @param integer $id_lang Language id
 	** @param integer $pageNumber Start from (optional)
 	** @param integer $nbProducts Number of products to return (optional)
@@ -70,19 +70,22 @@ class ProductSaleCore
 		if ($nbProducts < 1) $nbProducts = 10;
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'sales';
 		if (empty($orderWay)) $orderWay = 'DESC';
-		
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*,
 			pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`,
 			i.`id_image`, il.`legend`,
-			ps.`quantity` AS sales, t.`rate`, pl.`meta_keywords`, pl.`meta_title`, pl.`meta_description`, 
+			ps.`quantity` AS sales, t.`rate`, pl.`meta_keywords`, pl.`meta_title`, pl.`meta_description`,
 			DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
-		FROM `'._DB_PREFIX_.'product_sale` ps 
+		FROM `'._DB_PREFIX_.'product_sale` ps
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = p.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		WHERE p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
@@ -93,9 +96,9 @@ class ProductSaleCore
 		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 
-		if($orderBy == 'price')
-		{	
-			Tools::orderbyPrice($result,$orderWay);
+		if ($orderBy == 'price')
+		{
+			Tools::orderbyPrice($resultclasses,$orderWay);
 		}
 		if (!$result)
 			return false;
@@ -104,7 +107,7 @@ class ProductSaleCore
 
 	/*
 	** Get required informations on best sales products
-	**				
+	**
 	** @param integer $id_lang Language id
 	** @param integer $pageNumber Start from (optional)
 	** @param integer $nbProducts Number of products to return (optional)
@@ -113,13 +116,13 @@ class ProductSaleCore
 	static public function getBestSalesLight($id_lang, $pageNumber = 0, $nbProducts = 10)
 	{
 	 	global $link, $cookie;
-	 	
+
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
-		
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, p.`upc`, cl.`link_rewrite` AS category
-		FROM `'._DB_PREFIX_.'product_sale` ps 
+		FROM `'._DB_PREFIX_.'product_sale` ps
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
@@ -137,7 +140,7 @@ class ProductSaleCore
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 		if (!$result)
 			return $result;
-		
+
 		foreach ($result AS &$row)
 		{
 		 	$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
@@ -172,5 +175,5 @@ class ProductSaleCore
 			return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
 		return true;
 	}
-}	
+}
 

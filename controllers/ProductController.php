@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -53,7 +53,7 @@ class ProductControllerCore extends FrontController
 	public function preProcess()
 	{
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
-		{	
+		{
 	        $id_product = (int)Tools::getValue('id_product');
 
 			if ($id_product)
@@ -173,18 +173,21 @@ class ProductControllerCore extends FrontController
 				$id_country = (int)($id_customer ? Customer::getCurrentCountry($id_customer) : Configuration::get('PS_COUNTRY_DEFAULT'));
 
 				// Tax
-				$tax_data = Tax::getDataByProductId((int)($product->id));
-				$tax = (float)(Tax::getProductTaxRate((int)($product->id), (int)($id_country), (int)($tax_data['id_tax']), (float)($tax_data['rate'])));
+				$tax = (float)(Tax::getProductTaxRate((int)($product->id), $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 				$this->smarty->assign('tax_rate', $tax);
+
 				$ecotaxTaxAmount = $product->ecotax;
-				if ($ecotaxTax = new Tax(Configuration::get('PS_ECOTAX_TAX_ID')) AND Product::$_taxCalculationMethod == PS_TAX_INC)
-					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + Tax::getApplicableTaxRate((int)$ecotaxTax->id, (float)$ecotaxTax->rate) / 100), 2);
+				$ecotax_rate = (float) Tax::getProductEcotaxRate($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
+
+				if (Product::$_taxCalculationMethod == PS_TAX_INC)
+					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 				/* /Quantity discount management */
+
 				$this->smarty->assign(array(
-					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax_data['rate'])),
+					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax)),
 					'product' => $product,
 					'ecotax_tax_inc' => $ecotaxTaxAmount,
-					'ecotaxTax_rate' => Validate::isLoadedObject($ecotaxTax) ? $ecotaxTax->rate : 0.00,
+					'ecotaxTax_rate' => $ecotax_rate,
 					'homeSize' => Image::getSize('home'),
 					'product_manufacturer' => new Manufacturer((int)($product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),
 					'token' => Tools::getToken(false),
@@ -299,7 +302,7 @@ class ProductControllerCore extends FrontController
 				}
 
 				$this->smarty->assign(array(
-					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$product->id, (int)$id_country, (int)$product->id_tax, 1),
+					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
 					'customizationFields' => $product->getCustomizationFields((int)($this->cookie->id_lang))
 				));
 
@@ -419,6 +422,4 @@ class ProductControllerCore extends FrontController
 		return $specificPrices;
 	}
 }
-
-
 

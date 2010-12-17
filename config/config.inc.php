@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -74,6 +74,7 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 
 /* aliases */
 function p($var) {
+    Tools::displayAsDeprecated();
 	return (Tools::p($var));
 }
 function d($var) {
@@ -88,9 +89,6 @@ Configuration::loadConfiguration();
 
 /* Load all language definitions */
 Language::loadLanguages();
-
-/* Load all zone/tax relations */
-Tax::loadTaxZones();
 
 /* Loading default country */
 global $defaultCountry;
@@ -114,3 +112,4 @@ if (!function_exists('property_exists'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
+

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -37,7 +37,7 @@ class UpsCarrier extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LB' => 'LBS', 'LBS' => 'LBS');
 	private $_config = array(
 		'name' => 'UPS Carrier',
-		'id_tax' => 0,
+		'id_tax_rules_group' => 0,
 		'active' => true,
 		'deleted' => 0,
 		'shipping_handling' => false,
@@ -53,11 +53,10 @@ class UpsCarrier extends CarrierModule
 
 
 	/*** Construct Method ***/
-
 	public function __construct()
 	{
 		global $cookie;
-		
+
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '0.3';
@@ -197,9 +196,9 @@ class UpsCarrier extends CarrierModule
 		else if (!$this->createExternalCarrier($this->_config))
 			return false;
 
-		return true; 					
+		return true;
 	}
-	
+
 	public function uninstall()
 	{
 		global $cookie;
@@ -220,7 +219,7 @@ class UpsCarrier extends CarrierModule
 			!Db::getInstance()->Execute($sql2) OR
 			!$this->unregisterHook('updateCarrier'))
 			return false;
-		
+
 		// Delete External Carrier
 		$extCarrier = new Carrier((int)(Configuration::get('UPS_CARRIER_ID')));
 
@@ -243,7 +242,7 @@ class UpsCarrier extends CarrierModule
 	{
 		$carrier = new Carrier();
 		$carrier->name = $config['name'];
-		$carrier->id_tax = $config['id_tax'];
+		$carrier->id_tax_rules_group = $config['id_tax_rules_group'];
 		$carrier->id_zone = $config['id_zone'];
 		$carrier->active = $config['active'];
 		$carrier->deleted = $config['deleted'];
@@ -255,18 +254,18 @@ class UpsCarrier extends CarrierModule
 		$carrier->external_module_name = $config['external_module_name'];
 		$carrier->need_range = $config['need_range'];
 		$carrier->deleted = 1;
-	
+
 		$languages = Language::getLanguages(true);
-		foreach ($languages as $language) 
+		foreach ($languages as $language)
 		{
 			if ($language['iso_code'] == 'fr')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
 			if ($language['iso_code'] == 'en')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
 		}
-		
+
 		if ($carrier->add())
-		{				
+		{
 			$groups = Group::getGroups(true);
 			foreach ($groups as $group)
 				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group VALUE (\''.(int)($carrier->id).'\',\''.(int)($group['id_group']).'\')');
@@ -276,13 +275,13 @@ class UpsCarrier extends CarrierModule
 			$rangePrice->delimiter1 = '0';
 			$rangePrice->delimiter2 = '10000';
 			$rangePrice->add();
-		
+
 			$rangeWeight = new RangeWeight();
 			$rangeWeight->id_carrier = $carrier->id;
 			$rangeWeight->delimiter1 = '0';
 			$rangeWeight->delimiter2 = '10000';
 			$rangeWeight->add();
-			
+
 			$zones = Zone::getZones(true);
 			foreach ($zones as $zone)
 			{
@@ -326,7 +325,7 @@ class UpsCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		global $cookie;
-		
+
 		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>'.
 		$this->l('UPS Carrier Configurator.').'<br />'.$this->l('On this version, the UPS module will automatically choose the cheapest delivery service available.').'
 		</fieldset>
@@ -376,7 +375,7 @@ class UpsCarrier extends CarrierModule
 				}
 			</style>
 			<script>
-				$(".menuTabButton").click(function () { 
+				$(".menuTabButton").click(function () {
 				  $(".menuTabButton.selected").removeClass("selected");
 				  $(this).addClass("selected");
 				  $(".tabItem.selected").removeClass("selected");
@@ -395,7 +394,7 @@ class UpsCarrier extends CarrierModule
 
 	private function _displayFormGeneral()
 	{
-		$html = '<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1" method="post" class="form">				
+		$html = '<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1" method="post" class="form">
 					<label>'.$this->l('Your UPS Login').' : </label>
 					<div class="margin-form">
 						<input type="text" size="20" name="ups_carrier_login" value="'.Tools::getValue('ups_carrier_login', Configuration::get('UPS_CARRIER_LOGIN')).'" />
@@ -446,7 +445,6 @@ class UpsCarrier extends CarrierModule
 		return $html;
 	}
 
-	
 	private function _postValidation()
 	{
 		// Check configuration values
@@ -481,6 +479,7 @@ class UpsCarrier extends CarrierModule
 				$this->_postErrors[]  = $this->l('Prestashop could not connect to UPS webservices, check your API Key');
 		}
 
+
 		// If no errors appear, the carrier is being activated, else, the carrier is being deactivated
 		$extCarrier = new Carrier((int)(Configuration::get('UPS_CARRIER_ID')));
 		if (!$this->_postErrors)
@@ -490,7 +489,7 @@ class UpsCarrier extends CarrierModule
 		if (!$extCarrier->update())
 			$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 	}
-	
+
 	private function _postProcess()
 	{
 		// Saving new configurations
@@ -504,7 +503,7 @@ class UpsCarrier extends CarrierModule
 		else
 			$this->_html .= $this->displayErrors($this->l('Settings failed'));
 	}
-	
+
 	public function hookupdateCarrier($params)
 	{
 	}
@@ -555,7 +554,7 @@ class UpsCarrier extends CarrierModule
 			else
 				return $shipping_cost;
 		}
-		
+
 		if ($ups_cost > 0)
 			return $ups_cost;
 		return $shipping_cost;
@@ -625,23 +624,23 @@ class UpsCarrier extends CarrierModule
 			'depth' => 10,
 			'weight' => 2.0
 		);
-	
+
 		// Curl Request
 		$xml = $this->getXml($upsParams);
-		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");  
-		curl_setopt($ch, CURLOPT_HEADER, 1);  
-		curl_setopt($ch,CURLOPT_POST,1);  
-		curl_setopt($ch,CURLOPT_TIMEOUT, 60);  
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);  
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);  
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);  
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);  
+		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch,CURLOPT_POST,1);
+		curl_setopt($ch,CURLOPT_TIMEOUT, 60);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
 		$result = curl_exec($ch);
 
 		// Get xml from Curl Result
-		$data = strstr($result, '<?');  
-		$xml_parser = xml_parser_create();  
-		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);  
+		$data = strstr($result, '<?');
+		$xml_parser = xml_parser_create();
+		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);
 		xml_parser_free($xml_parser);
 
 		// Parsing XML
@@ -664,20 +663,20 @@ class UpsCarrier extends CarrierModule
 
 		// Curl Request
 		$xml = $this->getXml($upsParams);
-		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");  
-		curl_setopt($ch, CURLOPT_HEADER, 1);  
-		curl_setopt($ch,CURLOPT_POST,1);  
-		curl_setopt($ch,CURLOPT_TIMEOUT, 60);  
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);  
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);  
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);  
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);  
+		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch,CURLOPT_POST,1);
+		curl_setopt($ch,CURLOPT_TIMEOUT, 60);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
 		$result = curl_exec($ch);
 
 		// Get xml from Curl Result
-		$data = strstr($result, '<?');  
-		$xml_parser = xml_parser_create();  
-		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);  
+		$data = strstr($result, '<?');
+		$xml_parser = xml_parser_create();
+		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);
 		xml_parser_free($xml_parser);
 
 		// Parsing XML
@@ -708,7 +707,7 @@ class UpsCarrier extends CarrierModule
 	}
 
 	public function getXml($upsParams = array())
-	{		
+	{
 		$search = array(
 			'[[AccessLicenseNumber]]',
 			'[[UserId]]',
@@ -787,3 +786,4 @@ class UpsCarrier extends CarrierModule
 }
 
 ?>
+

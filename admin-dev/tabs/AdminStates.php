@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -53,16 +53,16 @@ class AdminStates extends AdminTab
 		if (isset($_GET['delete'.$this->table]))
 		{
 			global $currentIndex;
-			
+
 			// set token
-			$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;	
+			$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
 
 			// Sub included tab postProcessing
 			$this->includeSubTab('postProcess', array('submitAdd1', 'submitDel', 'delete', 'submitFilter', 'submitReset'));
-		
+
 			if ($this->tabAccess['delete'] === '1')
 			{
-				
+
 					if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
 					{
 							if (!$object->isUsed())
@@ -77,8 +77,8 @@ class AdminStates extends AdminTab
 									{
 										$object->deleted = 1;
 										if ($object->update()) Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
-									} 
-									else if ($object->delete()) 
+									}
+									else if ($object->delete())
 									{
 										Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
 									}
@@ -90,14 +90,14 @@ class AdminStates extends AdminTab
 					}
 					else
 						$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-			}	
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		} else {
 			parent::postProcess();
 		}
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
@@ -141,16 +141,6 @@ class AdminStates extends AdminTab
 					</select>
 					<p>'.$this->l('Geographical zone where this state is located').'<br />'.$this->l('Used for shipping').'</p>
 				</div>
-				<label>'.$this->l('Tax behavior:').' </label>
-				<div class="margin-form">
-					<input type="radio" name="tax_behavior" id="product_tax" value="'.PS_PRODUCT_TAX.'" '.((!$obj->id OR $this->getFieldValue($obj, 'tax_behavior') == PS_PRODUCT_TAX) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="product_tax">'.$this->l('Product tax').'</label>
-					<input type="radio" name="tax_behavior" id="state_tax" value="'.PS_STATE_TAX.'" '.(($this->getFieldValue($obj, 'tax_behavior') == PS_STATE_TAX AND $obj->id) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="state_tax">'.$this->l('State tax').'</label>
-					<input type="radio" name="tax_behavior" id="both_tax" value="'.PS_BOTH_TAX.'" '.(($this->getFieldValue($obj, 'tax_behavior') == PS_BOTH_TAX AND $obj->id) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="both_tax">'.$this->l('Both product & state tax').'</label>
-					<p>'.$this->l('Choose how tax will be applied for this state: product tax, state tax, or both.').'</p>
-				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'active')) ? 'checked="checked" ' : '').'/>
@@ -167,5 +157,4 @@ class AdminStates extends AdminTab
 		</form>';
 	}
 }
-
 

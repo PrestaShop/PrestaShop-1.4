@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -37,7 +37,7 @@ class CategoryCore extends ObjectModel
 
 	/** @var boolean Status for display */
 	public 		$active = 1;
-	
+
 	/** @var  integer category position */
 	public 		$position;
 
@@ -91,7 +91,7 @@ class CategoryCore extends ObjectModel
 
 	/** @var string id_image is the category ID when an image exists and 'default' otherwise */
 	public		$id_image = 'default';
-	
+
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'categories',
 		'fields' => array(
@@ -263,7 +263,7 @@ class CategoryCore extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.$list.')');
 
 		self::cleanPositions($this->id_parent);
-		
+
 		/* Delete categories images */
 		require_once(_PS_ROOT_DIR_.'/images.inc.php');
 		foreach ($toDelete AS $id_category)
@@ -294,7 +294,7 @@ class CategoryCore extends ObjectModel
 		Module::hookExec('categoryDeletion'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return true;
 	}
-	
+
 	/**
 	 * Delete several categories from database
 	 *
@@ -517,7 +517,7 @@ class CategoryCore extends ObjectModel
 
 		$sql = '
 		SELECT p.*, pa.`id_product_attribute`, pl.`description`, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name, t.`rate`, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
-			(p.`price` * IF(t.`rate`,((100 + (t.`rate`))/100),1)) AS orderprice 
+			(p.`price` * IF(t.`rate`,((100 + (t.`rate`))/100),1)) AS orderprice
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (p.`id_product` = pa.`id_product` AND default_on = 1)
@@ -525,7 +525,10 @@ class CategoryCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		WHERE cp.`id_category` = '.(int)($this->id).($active ? ' AND p.`active` = 1' : '').'
@@ -709,7 +712,7 @@ class CategoryCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).')
 			WHERE `name` LIKE \'%'.pSQL($query).'%\' AND c.`id_category` != 1');
 	}
-	
+
 	/**
 	  * Retrieve category by name and parent category id
 	  *
@@ -723,9 +726,9 @@ class CategoryCore extends ObjectModel
 		return Db::getInstance()->getRow('
 		SELECT c.*, cl.*
 	    FROM `'._DB_PREFIX_.'category` c
-	    LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).') 
-	    WHERE `name`  LIKE \''.pSQL($category_name).'\' 
-		AND c.`id_category` != 1 
+	    LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).')
+	    WHERE `name`  LIKE \''.pSQL($category_name).'\'
+		AND c.`id_category` != 1
 		AND c.`id_parent` = '.(int)($id_parent_category));
 	}
 
@@ -835,11 +838,11 @@ class CategoryCore extends ObjectModel
 		if (!(int)($id_group))
 			return false;
 		return Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'category_group` 
+		INSERT INTO `'._DB_PREFIX_.'category_group`
 		VALUES (1, '.(int)($id_group).')
 		');
 	}
-	
+
 	public function replaceProductIds($products)
 	{
 		$parentCategory = new Category((int)($this->id_parent));
@@ -847,21 +850,21 @@ class CategoryCore extends ObjectModel
 			die('parent category does not exist');
 		return $parentCategory->level_depth + 1;
 	}
-	
+
 	public function updatePosition($way, $position)
 	{
 		if (!$res = Db::getInstance()->ExecuteS('
-			SELECT cp.`id_category`, cp.`position`, cp.`id_parent` 
+			SELECT cp.`id_category`, cp.`position`, cp.`id_parent`
 			FROM `'._DB_PREFIX_.'category` cp
-			WHERE cp.`id_parent` = '.(int)(Tools::getValue('id_category_parent', 1)).' 
+			WHERE cp.`id_parent` = '.(int)(Tools::getValue('id_category_parent', 1)).'
 			ORDER BY cp.`position` ASC'
 		))
 			return false;
-		
+
 		foreach ($res AS $category)
 			if ((int)($category['id_category']) == (int)($this->id))
 				$movedCategory = $category;
-		
+
 		if (!isset($movedCategory) || !isset($position))
 			return false;
 		// < and > statements rather than BETWEEN operator
@@ -869,8 +872,8 @@ class CategoryCore extends ObjectModel
 		return (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
-			WHERE `position` 
-			'.($way 
+			WHERE `position`
+			'.($way
 				? '> '.(int)($movedCategory['position']).' AND `position` <= '.(int)($position)
 				: '< '.(int)($movedCategory['position']).' AND `position` >= '.(int)($position)).'
 			AND `id_parent`='.(int)($movedCategory['id_parent']))
@@ -880,7 +883,7 @@ class CategoryCore extends ObjectModel
 			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
 			AND `id_category`='.(int)($movedCategory['id_category'])));
 	}
-	
+
 	static public function cleanPositions($id_category_parent)
 	{
 		$result = Db::getInstance()->ExecuteS('
@@ -899,7 +902,7 @@ class CategoryCore extends ObjectModel
 			}
 		return true;
 	}
-	
+
 	static public function getLastPosition($id_category_parent)
 	{
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
@@ -915,7 +918,6 @@ class CategoryCore extends ObjectModel
 		);
 
 	}
-	
-}
 
+}
 

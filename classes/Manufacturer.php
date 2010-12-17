@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,31 +28,31 @@
 class ManufacturerCore extends ObjectModel
 {
 	public 		$id;
-	
+
 	/** @var integer manufacturer ID */
-	public		$id_manufacturer;	
-	
+	public		$id_manufacturer;
+
 	/** @var string Name */
 	public 		$name;
-	
+
 	/** @var string A description */
 	public 		$description;
-	
+
 	/** @var string A short description */
 	public 		$short_description;
 
 	/** @var int Address */
 	public 		$id_address;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
 	/** @var string Object last modification date */
 	public 		$date_upd;
-	
+
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
-	
+
 	/** @var string Meta title */
 	public 		$meta_title;
 
@@ -61,20 +61,20 @@ class ManufacturerCore extends ObjectModel
 
 	/** @var string Meta description */
 	public 		$meta_description;
-	
+
 	/** @var boolean active */
 	public		$active;
-	
+
  	protected 	$fieldsRequired = array('name');
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 
 	protected	$fieldsSizeLang = array('short_description' => 100, 'meta_title' => 128, 'meta_description' => 255, 'meta_description' => 255);
 	protected	$fieldsValidateLang = array('description' => 'isString', 'short_description' => 'isString', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
-	
+
 	protected 	$table = 'manufacturer';
 	protected 	$identifier = 'id_manufacturer';
-	
+
 	protected	$webserviceParameters = array(
 		'fields' => array(
 			'id_address' => array('sqlId' => 'id_address', 'xlink_resource'=> 'addresses'),
@@ -88,7 +88,7 @@ class ManufacturerCore extends ObjectModel
 
 		/* Get the manufacturer's id_address */
 		$this->id_address = $this->getManufacturerAddress();
-		
+
 		$this->link_rewrite = $this->getLink();
 	}
 
@@ -103,7 +103,7 @@ class ManufacturerCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
-	
+
 	public function getTranslationsFieldsChild()
 	{
 		$fieldsArray = array('description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description');
@@ -111,17 +111,17 @@ class ManufacturerCore extends ObjectModel
 		$languages = Language::getLanguages(false);
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		foreach ($languages as $language)
-		{		
+		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
 			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
 			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
 			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
-			
+
 			foreach ($fieldsArray as $field)
 			{
 				if (!Validate::isTableOrIdentifier($field))
 					die(Tools::displayError());
-				
+
 				/* Check fields validity */
 				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']], true);
@@ -129,7 +129,7 @@ class ManufacturerCore extends ObjectModel
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
 				else
 					$fields[$language['id_lang']][$field] = '';
-									
+
 			}
 		}
 		return $fields;
@@ -219,7 +219,7 @@ class ManufacturerCore extends ObjectModel
 				$manufacturers[$i]['link_rewrite'] = 0;
 		return $manufacturers;
 	}
-	
+
 	static public function getManufacturersWithoutAddress()
 	{
 		$sql = 'SELECT m.* FROM `'._DB_PREFIX_.'manufacturer` m
@@ -227,7 +227,7 @@ class ManufacturerCore extends ObjectModel
 				WHERE a.`id_manufacturer` IS NULL';
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 	}
-	
+
 	/**
 	  * Return name from id
 	  *
@@ -242,7 +242,7 @@ class ManufacturerCore extends ObjectModel
 			SELECT `name` FROM `'._DB_PREFIX_.'manufacturer` WHERE `id_manufacturer` = '.(int)($id_manufacturer).' AND `active` = 1');
 		return self::$cacheName[$id_manufacturer];
 	}
-	
+
 	static public function getIdByName($name)
 	{
 		$result = Db::getInstance()->getRow('
@@ -253,7 +253,7 @@ class ManufacturerCore extends ObjectModel
 			return (int)($result['id_manufacturer']);
 		return false;
 	}
-	
+
 	public function getLink()
 	{
 		return Tools::link_rewrite($this->name, false);
@@ -262,14 +262,14 @@ class ManufacturerCore extends ObjectModel
 	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
 		global $cookie;
-		
+
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
-			
+
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-			
+
 		/* Return only the number of products */
 		if ($getTotal)
 		{
@@ -288,13 +288,16 @@ class ManufacturerCore extends ObjectModel
 			return (int)(sizeof($result));
 		}
 		$sql = '
-		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new, 
-			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice 
+		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name, t.`rate`, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
+			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON t.`id_tax` = p.`id_tax`
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
+		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+	                                           	   AND tr.`id_state` = 0)
+	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		WHERE p.`id_manufacturer` = '.(int)($id_manufacturer).($active ? ' AND p.`active` = 1' : '').'
@@ -304,7 +307,7 @@ class ManufacturerCore extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
 				)
-		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).' 
+		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$result)
@@ -313,7 +316,7 @@ class ManufacturerCore extends ObjectModel
 			Tools::orderbyPrice($result, $orderWay);
 		return Product::getProductsProperties($id_lang, $result);
 	}
-	
+
 	public function getProductsLite($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -327,17 +330,17 @@ class ManufacturerCore extends ObjectModel
 	*
 	* @param $id_manufacturer Manufacturer id
 	* @return boolean
-	*/	
+	*/
 	static public function manufacturerExists($id_manufacturer)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_manufacturer`
 		FROM '._DB_PREFIX_.'manufacturer m
 		WHERE m.`id_manufacturer` = '.(int)($id_manufacturer));
-		
+
 		return isset($row['id_manufacturer']);
 	}
-	
+
 	public function getAddresses($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -349,5 +352,4 @@ class ManufacturerCore extends ObjectModel
 		AND a.`deleted` = 0');
 	}
 }
-
 

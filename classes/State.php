@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -39,19 +39,16 @@ class StateCore extends ObjectModel
 	/** @var string Name */
 	public 		$name;
 
-	/** @var interger Tax behavior */
-	public		$tax_behavior;
-
 	/** @var boolean Status for delivery */
 	public		$active = true;
 
- 	protected 	$fieldsRequired = array('id_country', 'id_zone', 'iso_code', 'name', 'tax_behavior');
+ 	protected 	$fieldsRequired = array('id_country', 'id_zone', 'iso_code', 'name');
  	protected 	$fieldsSize = array('iso_code' => 4, 'name' => 32);
- 	protected 	$fieldsValidate = array('id_country' => 'isUnsignedId', 'id_zone' => 'isUnsignedId', 'iso_code' => 'isStateIsoCode', 'name' => 'isGenericName', 'tax_behavior' => 'isUnsignedInt', 'active' => 'isBool');
+ 	protected 	$fieldsValidate = array('id_country' => 'isUnsignedId', 'id_zone' => 'isUnsignedId', 'iso_code' => 'isStateIsoCode', 'name' => 'isGenericName', 'active' => 'isBool');
 
 	protected 	$table = 'state';
 	protected 	$identifier = 'id_state';
-	
+
 	protected	$webserviceParameters = array(
 		'fields' => array(
 			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
@@ -66,7 +63,6 @@ class StateCore extends ObjectModel
 		$fields['id_zone'] = (int)($this->id_zone);
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
 		$fields['name'] = pSQL($this->name);
-		$fields['tax_behavior'] = (int)($this->tax_behavior);
 		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
@@ -74,12 +70,12 @@ class StateCore extends ObjectModel
 	public static function getStates($id_lang = false, $active = false)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT `id_state`, `id_country`, `id_zone`, `iso_code`, `name`, `tax_behavior`, `active`
+		SELECT `id_state`, `id_country`, `id_zone`, `iso_code`, `name`, `active`
 		FROM `'._DB_PREFIX_.'state`
 		'.($active ? 'WHERE active = 1' : '').'
 		ORDER BY `name` ASC');
 	}
-	
+
 	/**
 	* Get a state name with its ID
 	*
@@ -95,7 +91,7 @@ class StateCore extends ObjectModel
 
         return $result['name'];
     }
-    
+
 	/**
 	* Get a state id with its name
 	*
@@ -108,7 +104,7 @@ class StateCore extends ObjectModel
 		SELECT `id_state`
 		FROM `'._DB_PREFIX_.'state`
 		WHERE `name` LIKE \''.pSQL($state).'\'');
-		 	
+
         return ((int)($result['id_state']));
     }
 
@@ -120,13 +116,16 @@ class StateCore extends ObjectModel
 	*/
 	static public function getIdByIso($iso_code)
     {
+        p('SELECT `id_state`
+			FROM `'._DB_PREFIX_.'state`
+			WHERE `iso_code` = \''.pSQL($iso_code).'\'');
 	  	return Db::getInstance()->getValue('
 			SELECT `id_state`
 			FROM `'._DB_PREFIX_.'state`
 			WHERE `iso_code` = \''.pSQL($iso_code).'\''
 		);
     }
-	
+
 	/**
 	* Delete a state only if is not in use
 	*
@@ -137,8 +136,8 @@ class StateCore extends ObjectModel
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 	 		die(Tools::displayError());
 
-		if ($this->isUsed()) die(Tools::displayError()); 
-		
+		if ($this->isUsed()) die(Tools::displayError());
+
 		/* Database deletion */
 		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
@@ -148,18 +147,18 @@ class StateCore extends ObjectModel
 		if (method_exists($this, 'getTranslationsFieldsChild'))
 			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		return $result;
-	}	
-	
+	}
+
 	/**
 	 * Check if a state is used
 	 *
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function isUsed()
 	{
 		return ($this->countUsed() > 0);
 	}
-	
+
 		/**
 	 * Returns the number of utilisation of a state
 	 *
@@ -168,11 +167,22 @@ class StateCore extends ObjectModel
 	public function countUsed()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(*) AS nb_used 
-		FROM `'._DB_PREFIX_.'address` 
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));	
+		SELECT COUNT(*) AS nb_used
+		FROM `'._DB_PREFIX_.'address`
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		return $row['nb_used'];
 	}
-}
 
+    public static function getStatesByCountryId($id_country)
+    {
+        if (empty($id_country))
+            die(Tools::displayError());
+
+        return Db::getInstance()->ExecuteS('
+        SELECT *
+        FROM `'._DB_PREFIX_.'state` s
+        WHERE s.`id_country` = '.(int)$id_country
+        );
+    }
+}
 

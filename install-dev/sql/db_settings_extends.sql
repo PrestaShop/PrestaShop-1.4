@@ -1,7 +1,7 @@
 SET NAMES 'utf8';
 
 /* Carrier */
-INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
+INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax_rules_group`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
 INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (2, 1);
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!');
 INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2);
@@ -15,7 +15,7 @@ INSERT INTO `PREFIX_tax` (`id_tax`, `rate`, `active`) VALUES
 (11, 25, 0),(12, 21, 0),(13, 25, 0),(14, 20, 0),(15, 19, 0),(16, 25, 0),(17, 21, 0),(18, 21, 0),(19, 20, 0),(20, 20, 0),
 (21, 23, 0),(22, 21, 0),(23, 23, 0),(24, 18, 0),(25, 7.6, 0),(26, 10, 0),(27, 21, 0),(28, 19, 0),(29, 20, 0),(30, 16, 0),
 (31, 18, 0),(32, 5, 0),(33, 12.5, 0),(34, 3, 0),(35, 10, 0),(36, 14, 0),(37, 12.5, 0),(38, 10, 0),(39, 20, 0),(40, 16, 0),
-(41, 10, 0),(42, 17, 0),(43, 25, 0),(44, 7, 0),(45, 17, 0),(46, 12, 0),(47, 21, 0),(48, 7, 0);
+(41, 10, 0),(42, 17, 0),(43, 25, 0),(44, 7, 0),(45, 17, 0),(46, 12, 0),(47, 21, 0),(48, 7, 0), (49, 2.1, 1);
 
 INSERT INTO `PREFIX_tax_lang` (`id_tax`, `id_lang`, `name`) VALUES
 (1, 1, 'VAT FR 19.6%'),(1, 2, 'TVA FR 19.6%'),(1, 3, 'IVA FR 19.6%'),
@@ -65,14 +65,9 @@ INSERT INTO `PREFIX_tax_lang` (`id_tax`, `id_lang`, `name`) VALUES
 (45, 1, 'VAT CN 17%'),(45, 2, 'TVA CN 17%'),(45, 3, 'IVA CN 17%'),
 (46, 1, 'VAT VE 12%'),(46, 2, 'TVA VE 12%'),(46, 3, 'IVA VE 12%'),
 (47, 1, 'VAT IE 21%'),(47, 2, 'TVA IE 21%'),(47, 3, 'IVA IE 21%'),
-(48, 1, 'VAT SG 7%'),(48, 2, 'TVA SG 7%'),(48, 3, 'IVA SG 7%');
+(48, 1, 'VAT SG 7%'),(48, 2, 'TVA SG 7%'),(48, 3, 'IVA SG 7%'),
+(49, 1, 'VAT SG 2.1%'),(49, 2, 'TVA FR 2.1%'),(49, 3, 'IVA FR 2.1%');
 
-INSERT INTO `PREFIX_tax_zone` (`id_tax`, `id_zone`) VALUES
-(1, 1),(2, 1),(3, 1),(4, 1),(5, 1),(6, 1),(7, 1),(8, 1),(9, 1),(10, 1),
-(11, 1),(12, 1),(13, 1),(14, 1),(15, 1),(16, 1),(17, 1),(18, 1),(19, 1),(20, 1),
-(21, 1),(22, 1),(23, 1),(24, 7),(25, 7),(26, 5),(27, 6),(28, 6),(29, 1),(30, 2),
-(31, 7),(32, 5),(33, 3),(34, 3),(35, 3),(36, 4),(37, 5),(38, 3),(39, 1),(40, 3),
-(41, 3),(42, 7),(43, 1),(44, 3),(45, 3),(46, 6),(47, 1),(48, 3);
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 	('MB_PAY_TO_EMAIL', 'testmerchant@moneybookers.com', NOW(), NOW()),
@@ -159,7 +154,7 @@ CREATE TABLE `PREFIX_sekeyword` (
 CREATE TABLE `PREFIX_cms_block` (
 	`id_block_cms` int(10) unsigned NOT NULL auto_increment,
 	`id_cms_category` int(10) unsigned NOT NULL,
-	`name` varchar(40) NOT NULL, 
+	`name` varchar(40) NOT NULL,
 	`location` tinyint(1) unsigned NOT NULL,
 	`position` int(10) unsigned NOT NULL default '0',
 	`display_store` tinyint(1) NOT NULL DEFAULT '1',
@@ -186,7 +181,7 @@ CREATE TABLE `PREFIX_editorial` (
 	`body_home_logo_link` varchar(255) NOT NULL,
 	PRIMARY KEY (`id_editorial`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-		
+
 CREATE TABLE `PREFIX_editorial_lang` (
 	`id_editorial` int(10) unsigned NOT NULL,
 	`id_lang` int(10) unsigned NOT NULL,
@@ -198,13 +193,13 @@ CREATE TABLE `PREFIX_editorial_lang` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_editorial` (`id_editorial`, `body_home_logo_link`) VALUES (1, 'http://www.prestashop.com');
-INSERT INTO `PREFIX_editorial_lang` (`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`) VALUES 
+INSERT INTO `PREFIX_editorial_lang` (`id_editorial`, `id_lang`, `body_title`, `body_subheading`, `body_paragraph`, `body_logo_subheading`) VALUES
 (1, 1, 'Lorem ipsum dolor sit amet', 'Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Excepteur sint prestashop cupidatat non proident'),
 (1, 2, 'Lorem ipsum dolor sit amet', 'Excepteur sint occaecat cupidatat non proident', '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>', 'Lorem ipsum presta shop amet');
 
 INSERT INTO `PREFIX_range_price` (`id_range_price`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
 INSERT INTO `PREFIX_range_weight` (`id_range_weight`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
-INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES 
+INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES
 (1, NULL, 1, 2, 1, 5.00),(2, NULL, 1, 2, 2, 5.00),(4, 1, NULL, 2, 1, 5.00),(5, 1, NULL, 2, 2, 5.00);
 
 INSERT INTO `PREFIX_customer_group` (`id_customer`, `id_group`) VALUES (1, 1);
@@ -241,7 +236,7 @@ INSERT INTO `PREFIX_address` (`id_address`, `id_country`, `id_state`, `id_custom
 INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`, `active`) VALUES (1, 'AppleStore', NOW(), NOW(), 1);
 INSERT INTO `PREFIX_supplier` (`id_supplier`, `name`, `date_add`, `date_upd`, `active`) VALUES (2, 'Shure Online Store', NOW(), NOW(), 1);
 
-INSERT INTO `PREFIX_product` (`id_product`, `indexed`, `id_supplier`, `id_manufacturer`, `id_tax`, `id_category_default`, `id_color_default`, `on_sale`, `online_only`, `ean13`, `ecotax`, `quantity`, `price`, `wholesale_price`, `reference`, `supplier_reference`, `weight`, `out_of_stock`, `quantity_discount`, `customizable`, `uploadable_files`, `text_fields`, `active`, `date_add`, `date_upd`) VALUES
+INSERT INTO `PREFIX_product` (`id_product`, `indexed`, `id_supplier`, `id_manufacturer`, `id_tax_rules_group`, `id_category_default`, `id_color_default`, `on_sale`, `online_only`, `ean13`, `ecotax`, `quantity`, `price`, `wholesale_price`, `reference`, `supplier_reference`, `weight`, `out_of_stock`, `quantity_discount`, `customizable`, `uploadable_files`, `text_fields`, `active`, `date_add`, `date_upd`) VALUES
 (1, 1, 1, 1, 1, 2, 2, 0, 0, '0', 0.00, 800, 124.581940, 70.000000, '', '', 0.5, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
 (2, 1, 1, 1, 1, 2, 0, 0, 0, '0', 0.00, 100, 66.053500, 33.000000, '', '', 0, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
 (5, 1, 1, 1, 1, 4, 0, 0, 0, '0', 0.00, 274, 1504.180602, 1000.000000, '', NULL, 1.36, 2, 0, 0, 0, 0, 1, NOW(), NOW()),
@@ -277,7 +272,7 @@ INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `desc
 INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) VALUES
 (1, 0, 0, 0, 0, 0, 0, 1, 0.05, 'percentage', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
-INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES 
+INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES
 (2, 1, 1, 2, 3, 1, NOW(), NOW(), 0),(3, 1, 1, 3, 4, 1, NOW(), NOW(), 1),(4, 1, 1, 4, 5, 1, NOW(), NOW(), 2);
 
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
@@ -291,7 +286,7 @@ INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `descripti
 (3, 3, 'Accesorios', 'Todos los accesorios de moda para tu iPod', 'ipod-accesorios', '', '', ''),
 (2, 3, 'iPods', 'Es hora de que el mejor jugador de la música, al escenario para hacer un bis. Con el nuevo iPod, el mundo es tu escenario.', 'musica-ipods', '', '', '');
 
-INSERT INTO `PREFIX_category_product` (`id_category`, `id_product`, `position`) VALUES 
+INSERT INTO `PREFIX_category_product` (`id_category`, `id_product`, `position`) VALUES
 (1, 1, 0),(1, 2, 1),(1, 6, 2),(1, 7, 3),(2, 1, 0),(2, 2, 1),(2, 7, 2),(3, 8, 0),(3, 9, 1),(4, 5, 0),(4, 6, 1);
 
 INSERT INTO `PREFIX_attribute_group` (`id_attribute_group`, `is_color_group`) VALUES (1, 0),(2, 1),(3, 0);
@@ -1080,3 +1075,33 @@ INSERT INTO `PREFIX_store` (`id_store`, `id_country`, `id_state`, `name`, `addre
 (3, 21, 9, 'Pembroke Pines', '11001 Pines Blvd Pembroke Pines', '', 'miami', '33026', 26.009987, -80.294472, 'a:7:{i:0;s:13:"09:00 - 19:00";i:1;s:13:"09:00 - 19:00";i:2;s:13:"09:00 - 19:00";i:3;s:13:"09:00 - 19:00";i:4;s:13:"09:00 - 19:00";i:5;s:13:"10:00 - 16:00";i:6;s:13:"10:00 - 16:00";}', '', '', '', '', 1, '2010-11-09 10:58:42', '2010-11-09 11:01:11'),
 (4, 21, 9, 'Coconut Grove', '2999 SW 32nd Avenue', '', ' Miami', ' 33133', 25.736296, -80.244797, 'a:7:{i:0;s:13:"09:00 - 19:00";i:1;s:13:"09:00 - 19:00";i:2;s:13:"09:00 - 19:00";i:3;s:13:"09:00 - 19:00";i:4;s:13:"09:00 - 19:00";i:5;s:13:"10:00 - 16:00";i:6;s:13:"10:00 - 16:00";}', '', '', '', '', 1, '2010-11-09 11:00:38', '2010-11-09 11:04:52'),
 (5, 21, 9, 'N Miami/Biscayne', '12055 Biscayne Blvd', '', 'Miami', '33181', 25.886740, -80.163292, 'a:7:{i:0;s:13:"09:00 - 19:00";i:1;s:13:"09:00 - 19:00";i:2;s:13:"09:00 - 19:00";i:3;s:13:"09:00 - 19:00";i:4;s:13:"09:00 - 19:00";i:5;s:13:"10:00 - 16:00";i:6;s:13:"10:00 - 16:00";}', '', '', '', '', 1, '2010-11-09 11:11:28', '2010-11-09 11:11:28');
+
+INSERT INTO `PREFIX_tax_rules_group` (`id_tax_rules_group`, `name`, `active`) VALUES
+(1, 'FR Taux Normal (19.6%)', 1),
+(2, 'FR Taux Réduit (5.5%)', 1),
+(3, 'FR Taux Super Réduit (2.1%)', 1),
+(4, 'FR Produit Alimentaire (19.6%)', 1),
+(5, 'FR Livres (5.5%)', 1);
+
+INSERT INTO `PREFIX_tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `id_tax`, `state_behavior`) VALUES
+(1, 1, 0, 1, 0),(1, 2, 0, 1, 0),(1, 3, 1, 1, 2),(1, 6, 0, 1, 0),(1, 7, 0, 1, 0),(1, 8, 0, 1, 0),(1, 9, 0, 1, 0),
+(1, 10, 0, 1, 0),(1, 12, 0, 1, 0),(1, 13, 0, 1, 0),(1, 14, 0, 1, 0),(1, 15, 0, 1, 0),(1, 16, 0, 1, 0),(1, 17, 0, 1, 0),
+(1, 18, 0, 1, 0),(1, 20, 0, 1, 0),(1, 26, 0, 1, 0),(1, 36, 0, 1, 0),(1, 37, 0, 1, 0),(1, 76, 0, 1, 0),(1, 86, 0, 1, 0),
+(1, 125, 0, 1, 0),(1, 131, 0, 1, 0),(1, 139, 0, 1, 0),(1, 143, 0, 1, 0),(1, 193, 0, 1, 0),(1, 236, 0, 1, 0),(2, 1, 0, 2, 0),
+(2, 2, 0, 2, 0),(2, 3, 0, 2, 0),(2, 6, 0, 2, 0),(2, 7, 0, 2, 0),(2, 8, 0, 2, 0),(2, 9, 0, 2, 0),(2, 10, 0, 2, 0),(2, 12, 0, 2, 0),
+(2, 13, 0, 2, 0),(2, 14, 0, 2, 0),(2, 15, 0, 2, 0),(2, 16, 0, 2, 0),(2, 17, 0, 2, 0),(2, 18, 0, 2, 0),(2, 20, 0, 2, 0),
+(2, 26, 0, 2, 0),(2, 36, 0, 2, 0),(2, 37, 0, 2, 0),(2, 76, 0, 2, 0),(2, 86, 0, 2, 0),(2, 125, 0, 2, 0),(2, 131, 0, 2, 0),
+(2, 139, 0, 2, 0),(2, 143, 0, 2, 0),(2, 193, 0, 2, 0),(2, 236, 0, 2, 0),(3, 1, 0, 49, 0),(3, 2, 0, 49, 0),(3, 3, 0, 49, 0),
+(3, 6, 0, 49, 0),(3, 7, 0, 49, 0),(3, 8, 0, 49, 0),(3, 9, 0, 49, 0),(3, 10, 0, 49, 0),(3, 12, 0, 49, 0),(3, 13, 0, 49, 0),
+(3, 14, 0, 49, 0),(3, 15, 0, 49, 0),(3, 16, 0, 49, 0),(3, 17, 0, 49, 0),(3, 18, 0, 49, 0),(3, 20, 0, 49, 0),(3, 26, 0, 49, 0),
+(3, 36, 0, 49, 0),(3, 37, 0, 49, 0),(3, 76, 0, 49, 0),(3, 86, 0, 49, 0),(3, 125, 0, 49, 0),(3, 131, 0, 49, 0),(3, 139, 0, 49, 0),
+(3, 143, 0, 49, 0),(3, 193, 0, 49, 0),(3, 236, 0, 49, 0),(4, 1, 0, 1, 0),(4, 2, 0, 1, 0),(4, 3, 0, 1, 0),(4, 6, 0, 1, 0),
+(4, 7, 0, 1, 0),(4, 8, 0, 1, 0),(4, 9, 0, 1, 0),(4, 10, 0, 1, 0),(4, 12, 0, 1, 0),(4, 13, 0, 1, 0),(4, 14, 0, 1, 0),
+(4, 15, 0, 1, 0),(4, 16, 0, 1, 0),(4, 17, 0, 1, 0),(4, 18, 0, 1, 0),(4, 20, 0, 1, 0),(4, 26, 0, 1, 0),(4, 36, 0, 1, 0),
+(4, 37, 0, 1, 0),(4, 76, 0, 1, 0),(4, 86, 0, 1, 0),(4, 125, 0, 1, 0),(4, 131, 0, 1, 0),(4, 139, 0, 1, 0),(4, 143, 0, 1, 0),
+(4, 193, 0, 1, 0),(4, 236, 0, 1, 0),(5, 1, 0, 2, 0),(5, 2, 0, 2, 0),(5, 3, 0, 2, 0),(5, 6, 0, 2, 0),(5, 7, 0, 2, 0),
+(5, 8, 0, 2, 0),(5, 9, 0, 2, 0),(5, 10, 0, 2, 0),(5, 12, 0, 2, 0),(5, 13, 0, 2, 0),(5, 14, 0, 2, 0),(5, 15, 0, 2, 0),
+(5, 16, 0, 2, 0),(5, 17, 0, 2, 0),(5, 18, 0, 2, 0),(5, 20, 0, 2, 0),(5, 26, 0, 2, 0),(5, 36, 0, 2, 0),(5, 37, 0, 2, 0),
+(5, 76, 0, 2, 0),(5, 86, 0, 2, 0),(5, 125, 0, 2, 0),(5, 131, 0, 2, 0),(5, 139, 0, 2, 0),(5, 143, 0, 2, 0),(5, 193, 0, 2, 0),
+(5, 236, 0, 2, 0);
+

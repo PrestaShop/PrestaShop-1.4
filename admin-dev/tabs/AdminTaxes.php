@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -35,7 +35,7 @@ class AdminTaxes extends AdminTab
 	 	$this->lang = true;
 	 	$this->edit = true;
 	 	$this->delete = true;
-		
+
 		$this->fieldsDisplay = array(
 		'id_tax' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
@@ -47,21 +47,19 @@ class AdminTaxes extends AdminTab
 		'PS_TAX' => array('title' => $this->l('Enable tax:'), 'desc' => $this->l('Select whether or not to include tax on purchases'), 'cast' => 'intval', 'type' => 'bool'),
 		'PS_TAX_DISPLAY' => array('title' => $this->l('Display tax in cart:'), 'desc' => $this->l('Select whether or not to display tax on a distinct line in the cart'), 'cast' => 'intval', 'type' => 'bool'),
 		'PS_TAX_ADDRESS_TYPE' => array('title' => $this->l('Base on:'), 'cast' => 'pSQL', 'type' => 'select', 'list' => array(array('name' => $this->l('Invoice Address'), 'id' => 'id_address_invoice'), array('name' => $this->l('Delivery Address'), 'id' => 'id_address_delivery')), 'identifier' => 'id'),
-		'PS_ECOTAX_TAX_ID' => array('title' => $this->l('Ecotax:'), 'desc' => $this->l('The tax to apply on the ecotax (e.g., French ecotax: 19.6%).'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_tax', 'list' => array_merge(array(array('id_tax' => '0', 'name' => $this->l('---'))), Tax::getTaxes((int)$cookie->id_lang)))
+		'PS_ECOTAX_TAX_RULES_GROUP_ID' => array('title' => $this->l('Ecotax:'), 'desc' => $this->l('The tax to apply on the ecotax (e.g., French ecotax: 19.6%).'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_tax', 'identifier' => 'id_tax_rules_group', 'list' => TaxRulesGroup::getTaxRulesGroups())
 		);
-		
+
 		parent::__construct();
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-		
+
 		$obj = $this->loadObject(true);
-		$tax_zones = $obj->getZones();
 		$zones = Zone::getZones(true);
-		$tax_states = $obj->getStates();
 		$states = State::getStates((int)($cookie->id_lang));
 
 		echo '
@@ -91,19 +89,6 @@ class AdminTaxes extends AdminTab
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 				</div>
-				<label>'.$this->l('Zone').'</label>
-				<div class="margin-form">';
-		foreach ($zones AS $zone)
-			echo '<input type="checkbox" id="zone_'.$zone['id_zone'].'" name="zone_'.$zone['id_zone'].'" value="true" '.(Tools::getValue('zone_'.$zone['id_zone'], (is_array($tax_zones) AND in_array(array('id_tax' => $obj->id, 'id_zone' => $zone['id_zone']), $tax_zones))) ? ' checked="checked"' : '').'><label class="t" for="zone_'.$zone['id_zone'].'">&nbsp;<b>'.$zone['name'].'</b></label><br />';
-		echo '	<p>'.$this->l('Zone in which this tax is activated').'</p>
-				</div>
-				<label>'.$this->l('States').'</label>
-				<div class="margin-form">';
-		if ($states)
-			foreach ($states AS $state)
-				echo '<input type="checkbox" id="state_'.$state['id_state'].'" name="state_'.$state['id_state'].'" value="true" '.(Tools::getValue('state_'.$state['id_state'], (is_array($tax_states) AND in_array(array('id_tax' => $obj->id, 'id_state' => $state['id_state']), $tax_states))) ? ' checked="checked"' : '').'><label class="t" for="state_'.$state['id_state'].'">&nbsp;<b>'.$state['name'].'</b></label><br />';
-		echo 	'<p>'.$this->l('State in which this tax is activated').'</p>
-				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
@@ -111,13 +96,13 @@ class AdminTaxes extends AdminTab
 			</fieldset>
 		</form>';
 	}
-	
+
 	public function postProcess()
 	{
 		global $currentIndex;
-		
+
 		if(Tools::getValue('submitAdd'.$this->table))
-		{			
+		{
 		 	/* Checking fields validity */
 			$this->validateRules();
 			if (!sizeof($this->_errors))
@@ -134,13 +119,11 @@ class AdminTaxes extends AdminTab
 						{
 							$this->copyFromPost($object, $this->table);
 							$result = $object->update(false, false);
-							
+
 							if (!$result)
 								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
 							elseif ($this->postImage($object->id))
 								{
-									$this->changeZones($object->id);
-									$this->changeStates($object->id);
 									Tools::redirectAdmin($currentIndex.'&id_'.$this->table.'='.$object->id.'&conf=4'.'&token='.$this->token);
 								}
 						}
@@ -150,7 +133,7 @@ class AdminTaxes extends AdminTab
 					else
 						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				}
-				
+
 				/* Object creation */
 				else
 				{
@@ -162,8 +145,6 @@ class AdminTaxes extends AdminTab
 							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.'</b>';
 						elseif (($_POST['id_'.$this->table] = $object->id /* voluntary */) AND $this->postImage($object->id) AND $this->_redirect)
 						{
-							$this->changeZones($object->id);
-							$this->changeStates($object->id);
 							Tools::redirectAdmin($currentIndex.'&id_'.$this->table.'='.$object->id.'&conf=3'.'&token='.$this->token);
 						}
 					}
@@ -175,40 +156,5 @@ class AdminTaxes extends AdminTab
 		else
 			parent::postProcess();
 	}
-	
-	function changeZones($id)
-	{
-		$tax = new $this->className($id);
-		if (!Validate::isLoadedObject($tax))
-			die (Tools::displayError('object cannot be loaded'));
-		$zones = Zone::getZones(true);
-		foreach ($zones as $zone)
-			if (sizeof($tax->getZone($zone['id_zone'])))
-			{
-				if (!isset($_POST['zone_'.$zone['id_zone']]) OR !$_POST['zone_'.$zone['id_zone']])
-					$tax->deleteZone($zone['id_zone']);
-			}
-			elseif (isset($_POST['zone_'.$zone['id_zone']]) AND $_POST['zone_'.$zone['id_zone']])
-				$tax->addZone($zone['id_zone']);
-	}
-
-	function changeStates($id)
-	{
-		global $cookie;
-
-		$tax = new $this->className($id);
-		if (!Validate::isLoadedObject($tax))
-			die (Tools::displayError('object cannot be loaded'));
-		$states = State::getStates((int)($cookie->id_lang), true);
-		foreach ($states as $state)
-			if ($tax->getState($state['id_state']))
-			{
-				if (!isset($_POST['state_'.$state['id_state']]) OR !$_POST['state_'.$state['id_state']])
-					$tax->deleteState($state['id_state']);
-			}
-			elseif (isset($_POST['state_'.$state['id_state']]) AND $_POST['state_'.$state['id_state']])
-				$tax->addState($state['id_state']);
-	}
 }
-
 
