@@ -283,7 +283,6 @@ function updateDisplay()
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
 			reduction_price /= tax;
-					alert(productPrice);
 		}
 		else
 		{
