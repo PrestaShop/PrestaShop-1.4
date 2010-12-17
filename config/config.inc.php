@@ -74,7 +74,6 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 
 /* aliases */
 function p($var) {
-    Tools::displayAsDeprecated();
 	return (Tools::p($var));
 }
 function d($var) {
