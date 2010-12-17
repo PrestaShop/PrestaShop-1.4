@@ -91,7 +91,7 @@ function displayConfirm()
 		'mode' => 'payment/'
 	));
 
-	echo $ppPayment->display(_PS_MODULE_DIR_.'paypal/payment/PaypalPayment.php', '../confirm.tpl');
+	echo $ppPayment->display('paypal.php', 'confirm.tpl');
 	include(_PS_ROOT_DIR_.'/footer.php');
 	die ;
 }

@@ -57,6 +57,22 @@ class PaypalExpress extends Paypal
 			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
 		$request .= '&LOCALECODE='.strval($this->getCountryCode());
 		if ($this->_header) $request .= '&HDRIMG='.urlencode($this->_header);
+		// Customer informations
+		$customer = new Customer((int)$cart->id_customer);
+		$request .= '&EMAIL='.urlencode($customer->email);//customer
+		// address of delivery
+		$address = new Address((int)$cart->id_address_delivery);
+		$country = new Country((int)$address->id_country);
+		if ($address->id_state)
+			$state = new State((int)$address->id_state);
+		$request .= '&NAME='.urlencode($address->lastname.' '.$address->firstname);
+		$request .= '&SHIPTOSTREET='.urlencode($address->address1);
+		$request .= '&SHIPTOSTREET2='.urlencode($address->address2);
+		$request .= '&SHIPTOCITY='.urlencode($address->city);
+		$request .= '&SHIPTOSTATE='.($address->id_state ? $state->iso_code : $country->iso_code);
+		$request .= '&SHIPTOZIP='.urlencode($address->postcode);
+		$request .= '&SHIPTOCOUNTRY='.urlencode($country->iso_code);
+		$request .= '&SHIPTOPHONENUM='.urlencode($address->phone);
 
 		// Calling PayPal API
 		include(_PS_MODULE_DIR_.'paypal/api/paypallib.php');

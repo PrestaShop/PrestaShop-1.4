@@ -114,7 +114,7 @@ function displayConfirm()
 		'mode' => 'express/'
 	));
 
-	echo $ppExpress->display(_PS_MODULE_DIR_.'paypal/express/PaypalExpress.php', '../confirm.tpl');
+	echo $ppExpress->display('paypal.php', 'confirm.tpl');
 	include(_PS_ROOT_DIR_.'/footer.php');
 	die ;
 }
@@ -261,7 +261,7 @@ function displayLogin()
 
 	// Display all and exit
 	include(_PS_ROOT_DIR_.'/header.php');
-	echo $ppExpress->display(_PS_MODULE_DIR_.'paypal/express/PaypalExpress.php', 'login.tpl');
+	echo $ppExpress->display('paypal.php', 'express/login.tpl');
 	include(_PS_ROOT_DIR_.'/footer.php');
 	die ;
 }
@@ -317,7 +317,7 @@ function displayAccount()
 
 	// Display all and exit
 	include(_PS_ROOT_DIR_.'/header.php');
-	echo $ppExpress->display(_PS_MODULE_DIR_.'paypal/express/PaypalExpress.php', 'authentication.tpl');
+	echo $ppExpress->display('paypal.php', 'express/authentication.tpl');
 	include(_PS_ROOT_DIR_.'/footer.php');
 	die ;
 }

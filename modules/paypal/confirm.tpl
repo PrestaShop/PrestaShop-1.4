@@ -34,8 +34,8 @@
 
 <h3>{l s='PayPal payment' mod='paypal'}</h3>
 <form action="{$this_path_ssl}{$mode}submit.php" method="post">
-	<input type="hidden" name="token" value="{$ppToken|escape:'htmlall'|stripslashes}" />
-	<input type="hidden" name="payerID" value="{$payerID|escape:'htmlall'|stripslashes}" />
+	{if isset($ppToken)}<input type="hidden" name="token" value="{$ppToken|escape:'htmlall'|stripslashes}" />{/if}
+	{if isset($payerID)}<input type="hidden" name="payerID" value="{$payerID|escape:'htmlall'|stripslashes}" />{/if}
 	<p>
 		<img src="{$logo}" alt="{l s='PayPal' mod='paypal'}" style="margin-bottom: 5px" />
 		<br />{l s='You have chosen to pay with PayPal.' mod='paypal'}
