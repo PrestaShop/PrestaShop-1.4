@@ -46,5 +46,6 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_99f6765a05b697eb78e8c2e5e228f2fc'
 $_MODULE['<{paysafecard}prestashop>paysafecard_c3e260f43a99b6fd907538953fe700d0'] = 'Disposición abandonada';
 $_MODULE['<{paysafecard}prestashop>paysafecard_f6a62a622cbba2c1b8cd0be062deff96'] = 'Se ha producido un error en el momento de abandonar.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a43ec27b265e2877cf1ec044bac3eae8'] = 'Todo el mundo puede utilizar Paysafecard ya que no necesita ni tarjeta de crédito ni cuenta bancaria. En los últimos años, Paysafecard se ha convertido en uno de los líderes de los modos de pago en línea alternativos.';
+$_MODULE['<{paysafecard}prestashop>paysafecard_d59048f21fd887ad520398ce677be586'] = 'Más información';
 $_MODULE['<{paysafecard}prestashop>paysafecard_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Se ha producido un error. Consulte el apartado \"Mensajes\" para más información.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a9ced76f2dd6907220fa95b3a136b04a'] = 'Importe incorrecto';

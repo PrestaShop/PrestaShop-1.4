@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,10 +32,10 @@ class PaysafeCard extends PrepaidServices
 	public $prefix = 'PS_PSC_';
 	protected $supported_languages = array('de', 'en', 'gr', 'el', 'es', 'it', 'fr', 'nl', 'pl', 'pt', 'si', 'sk', 'tr');
 	protected $allowed_currencies = array();
-	
+
 	protected $environments = array('P' => 'Production',
 								 'T' => 'Test');
-	
+
 	protected $business_types = array('I' => 'Intangible',
 									'T' => 'Tangible');
 
@@ -43,14 +43,19 @@ class PaysafeCard extends PrepaidServices
 								   'P' => 'https://customer.cc.at.paysafecard.com/psccustomer/GetCustomerPanelServlet');
 
 	protected $supported_currencies = array('EUR', 'GBP', 'CHF', 'USD', 'PLN', 'CZK', 'SEK', 'DKK', 'RON', 'NOK', 'ARS');
-	
+
+	protected $register_url = array('en' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=8',
+	                                'fr' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=3',
+	                                'es' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=9');
+
+
 	protected $certificat_dir;
 
 	public function __construct()
 	{
 		$this->name = 'paysafecard';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.0;
+		$this->version = 1.2;
 		$this->module_dir = dirname(__FILE__);
         $this->certificat_dir = dirname(__FILE__).'/keyring/';
 
@@ -59,7 +64,7 @@ class PaysafeCard extends PrepaidServices
 		$this->displayName = $this->l('PaysafeCard');
 		$this->description = $this->l('Accepts payments by PaysafeCard');
 	}
-	
+
 	public function getL($key)
 	{
 		$translations = array(
@@ -93,19 +98,19 @@ class PaysafeCard extends PrepaidServices
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
 				'release_error' => $this->l('An error has occurred during the release'),
-				'introduction' => $this->l('paysafecard is Europe’s first prepaid solution for payments on the Internet to comply with banking laws.  Over the past years, paysafecard has become one of Europe’s leading alternative online payment solutions.')
+				'introduction' => $this->l('paysafecard is Europe’s first prepaid solution for payments on the Internet to comply with banking laws.  Over the past years, paysafecard has become one of Europe’s leading alternative online payment solutions.'),
+				'register' => $this->l('Learn more')
 			);
-			
+
 		return $translations[$key];
 	}
-	
+
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
 		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
 						   2 => $this->l('Invalid amount'));
-						   
+
 		return $error_msg[$error_code];
 	}
 }
-
 
