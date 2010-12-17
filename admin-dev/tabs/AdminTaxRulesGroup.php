@@ -152,17 +152,18 @@ class AdminTaxRulesGroup extends AdminTab
                       </tr>';
 
                       if ($country['contains_states'])
-                          $html .= '<tr class="states_row" "id="states_'.(int)$country['id_country'].'" style="display:none">
+                          $html .= '<tr class="states_row" "id="states_'.(int)$country['id_country'].'" >
                                 <td colspan="2">
-                                    <script type="text/javascript">
-                                        $("#states_'.(int)$country['id_country'].'").hide();
-                                    </script>
+
 
                                 '.
                                      $this->renderStates($tax_rules, (int)$id_zone, (int)$country['id_country'], (int)$id_lang).
                                 '
                                 </td>
-                          </tr>';
+                          </tr>
+                                                              <script type="text/javascript">
+                                        $("#states_'.(int)$country['id_country'].'").hide();
+                                    </script>';
         }
         $html .= '</table>';
 
