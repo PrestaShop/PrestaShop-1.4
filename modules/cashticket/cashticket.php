@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,10 +31,10 @@ class CashTicket extends PrepaidServices
 	public $prefix = 'PS_CT_';
 	protected $supported_languages = array('de', 'en', 'gr', 'el', 'es', 'it', 'fr', 'nl', 'pl', 'pt', 'si', 'sk', 'tr');
 	protected $allowed_currencies = array();
-	
+
 	protected $environments = array('P' => 'Production',
 								 'T' => 'Test');
-	
+
 	protected $business_types = array('I' => 'Intangible',
 									'T' => 'Tangible');
 
@@ -42,14 +42,18 @@ class CashTicket extends PrepaidServices
 								 'P' => 'https://customer.cc.at.cash-ticket.com/ctcustomer/GetCustomerPanelServlet');
 
 	protected $supported_currencies = array('CHF', 'DKK', 'SEK', 'PLN', 'GBP', 'EUR', 'USD', 'CZK');
-	
+
 	protected $certificat_dir;
-	
+
+	protected $register_url = array('en' => 'http://www.prestashop.com/partner/url.php?to=http://www.cash-ticket.com/uk',
+	                                'fr' => 'http://www.prestashop.com/partner/url.php?to=http://www.cash-ticket.com/fr',
+	                                'es' => 'http://www.prestashop.com/partner/url.php?to=http://www.cash-ticket.com/es');
+
 	public function __construct()
 	{
 		$this->name = 'cashticket';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.0;
+		$this->version = 1.2;
 		$this->module_dir = dirname(__FILE__);
         $this->certificat_dir = dirname(__FILE__).'/keyring/';
 
@@ -58,8 +62,8 @@ class CashTicket extends PrepaidServices
 		$this->displayName = $this->l('CashTicket');
 		$this->description = $this->l('Accepts payments by CashTicket');
 	}
-	
-	
+
+
 	public function getL($key)
 	{
 		$translations = array(
@@ -89,23 +93,23 @@ class CashTicket extends PrepaidServices
 				'settings_updated' => $this->l('Settings updated'),
 				'file_partialy_uploaded' => $this->l('The file was partialy uploaded'),
 				'file_empty' => $this->l('The file is empty'),
-				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),	
+				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
 				'release_error' => $this->l('An error has occurred during the release'),
-				'introduction' => $this->l('Accept prepaid payments in your webshop. All that is required to pay at a web-shop is the Cash-Ticket’s 16 digit pin code. This way, consumers can make online payments without a credit card or a bank account.')				
+				'introduction' => $this->l('Accept prepaid payments in your webshop. All that is required to pay at a web-shop is the Cash-Ticket’s 16 digit pin code. This way, consumers can make online payments without a credit card or a bank account.'),
+				'register' => $this->l('Learn more')
 			);
-			
+
 		return $translations[$key];
 	}
-	
+
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
 		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
 						   2 => $this->l('Invalid amount'));
-						   
+
 		return $error_msg[$error_code];
 	}
 }
-
 
