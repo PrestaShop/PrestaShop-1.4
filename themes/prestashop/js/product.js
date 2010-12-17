@@ -1,5 +1,5 @@
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -272,15 +272,18 @@ function updateDisplay()
 	{
 		var tax = (taxRate / 100) + 1;
 		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : productPriceTaxExcluded) + selectedCombination['price'] * currencyRate;
+
 		if (specific_price)
 			var productPriceWithoutReduction = productPriceTaxExcluded + selectedCombination['price'] * currencyRate;
 
-		if (!displayPrice)
+		if (!displayPrice && !noTaxForThisProduct)
 		{
+
 			var productPrice = ps_round(taxExclPrice * tax, 2);
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
 			reduction_price /= tax;
+					alert(productPrice);
 		}
 		else
 		{
@@ -288,6 +291,7 @@ function updateDisplay()
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction, 2);
 		}
+
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
 		if (!specific_price)
 			productPriceWithoutReduction = productPrice;
@@ -297,6 +301,7 @@ function updateDisplay()
 			productPrice *= group_reduction;
 		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
 		productPrice += ecotaxAmount;
+
 		//productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
