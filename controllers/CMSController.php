@@ -68,9 +68,9 @@ class CmsControllerCore extends FrontController
 		parent::setMedia();
 		
 		if ($this->assignCase == 1)
-			Tools::AddJS(_THEME_JS_DIR_.'cms.js');
+			Tools::addJS(_THEME_JS_DIR_.'cms.js');
 		
-		Tools::AddCSS(_THEME_CSS_DIR_.'cms.css');
+		Tools::addCSS(_THEME_CSS_DIR_.'cms.css');
 	}
 	
 	public function process()
@@ -104,4 +104,3 @@ class CmsControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'cms.tpl');
 	}
 }
-

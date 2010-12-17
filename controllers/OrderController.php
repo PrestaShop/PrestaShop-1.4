@@ -133,8 +133,8 @@ class OrderControllerCore extends FrontController
 			Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 		if ($this->step == 2)
 		{
-			Tools::addCSS(_PS_CSS_DIR_.'thickbox.css', 'all');
-			Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
+			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js');
+			Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css', 'screen');
 		}
 		if (!in_array($this->step, array(1, 2, 3)))
 			if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')))
@@ -502,9 +502,9 @@ class OrderControllerCore extends FrontController
 		$cms = new CMS((int)(Configuration::get('PS_CONDITIONS_CMS_ID')), (int)($this->cookie->id_lang));
 		$this->link_conditions = $this->link->getCMSLink($cms, $cms->link_rewrite, true);
 		if (!strpos($this->link_conditions, '?'))
-			$this->link_conditions .= '?content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
+			$this->link_conditions .= '?content_only=1';
 		else
-			$this->link_conditions .= '&content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
+			$this->link_conditions .= '&content_only=1';
 		if (!isset($checked) OR (int)($checked) == 0)
 			$checked = (int)(Configuration::get('PS_CARRIER_DEFAULT'));
 		$this->smarty->assign(array(

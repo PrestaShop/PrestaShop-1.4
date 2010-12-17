@@ -71,6 +71,7 @@ class Loyalty extends Module
 				OR !$this->registerHook('cancelProduct')
 				OR !$this->registerHook('customerAccount')
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
+				OR !Configuration::updateValue('PS_LOYALTY_MINIMAL', 0)				
 				OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
 				OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
 				OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array((int)(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher'))	
@@ -136,7 +137,7 @@ class Loyalty extends Module
 		) DEFAULT CHARSET=utf8 ;');
 		return true;
 	}
-
+	
 	function uninstall()
 	{
 		if (!parent::uninstall()
@@ -144,9 +145,9 @@ class Loyalty extends Module
 				OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')
 				OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
 				OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD')
+				OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL')
 				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
-				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS')
-			)
+				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS'))
 			return false;
 		return true;
 	}
@@ -157,6 +158,7 @@ class Loyalty extends Module
 		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'loyalty_state`;');
 		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'loyalty_state_lang`;');
 		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'loyalty_history`;');
+
 		return true;
 	}
 
@@ -176,6 +178,8 @@ class Loyalty extends Module
 				Configuration::updateValue('PS_LOYALTY_POINT_VALUE', (float)(Tools::getValue('point_value')));
 				Configuration::updateValue('PS_LOYALTY_POINT_RATE', (float)(Tools::getValue('point_rate')));
 				Configuration::updateValue('PS_LOYALTY_NONE_AWARD', (int)(Tools::getValue('PS_LOYALTY_NONE_AWARD')));
+				Configuration::updateValue('PS_LOYALTY_MINIMAL', (float)(Tools::getValue('minimal')));
+				
 				$this->loyaltyStateValidation->id_order_state = (int)(Tools::getValue('id_order_state_validation'));
 				$this->loyaltyStateCancel->id_order_state = (int)(Tools::getValue('id_order_state_cancel'));
 			
@@ -277,6 +281,11 @@ class Loyalty extends Module
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'voucher_details', true);
 		$html .= '	</div>
 				<div class="clear" style="margin-top: 20px"></div>
+				<label>'.$this->l('Minimal amount to use the voucher').'</label>
+				<div class="margin-form">
+					<input type="text" size="2" name="minimal" value="'.(float)(Configuration::get('PS_LOYALTY_MINIMAL')).'" /> '.$currency->sign.'
+				</div>
+				<div class="clear" style="margin-top: 20px"></div>
 				<label>'.$this->l('Allow discounts').' </label>
 				<div class="margin-form">
 					<input type="radio" name="PS_LOYALTY_NONE_AWARD" id="PS_LOYALTY_NONE_AWARD_on" value="1" '.(Configuration::get('PS_LOYALTY_NONE_AWARD') ? 'checked="checked" ' : '').'/>
@@ -288,7 +297,7 @@ class Loyalty extends Module
 				<label>'.$this->l('Points are awarded when the order is').'</label>
 				<div class="margin-form" style="margin-top:10px">
 					<select id="id_order_state_validation" name="id_order_state_validation">';
-		foreach ($order_states as $order_state)
+		foreach ($order_states AS $order_state)
 		{
 			$html .= '<option value="' . $order_state['id_order_state'] . '" style="background-color:' . $order_state['color'] . ';"';
 			if ((int)($this->loyaltyStateValidation->id_order_state) == $order_state['id_order_state'] )
@@ -301,7 +310,7 @@ class Loyalty extends Module
 				<label>'.$this->l('Points are cancelled when the order is').'</label>
 				<div class="margin-form" style="margin-top:10px">
 					<select id="id_order_state_cancel" name="id_order_state_cancel">';
-		foreach ($order_states as $order_state)
+		foreach ($order_states AS $order_state)
 		{
 			$html .= '<option value="' . $order_state['id_order_state'] . '" style="background-color:' . $order_state['color'] . ';"';
 			if ((int)($this->loyaltyStateCancel->id_order_state) == $order_state['id_order_state'] )
@@ -322,7 +331,7 @@ class Loyalty extends Module
 		$index = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
 		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : array();
 		foreach ($indexedCategories AS $k => $row)
-			$index[] = $row['id_category'];
+			$index[] = (int)$row['id_category'];
 		
 		$html .= $this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
 		$html .= '				</table>
@@ -383,6 +392,7 @@ class Loyalty extends Module
 				</div>
 			</fieldset>
 		</form>';
+
 		return $html;
 	}
 

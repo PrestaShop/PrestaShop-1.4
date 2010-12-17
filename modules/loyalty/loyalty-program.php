@@ -66,7 +66,7 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 		$dateFrom = $dateFrom + (60 * 60 * 24 * (int)(Configuration::get('PS_ORDER_RETURN_NB_DAYS')));
 	$voucher->date_from = date('Y-m-d H:i:s', $dateFrom);
 	$voucher->date_to = date('Y-m-d H:i:s', $dateFrom + 31536000); // + 1 year
-	$voucher->minimal = 0;
+	$voucher->minimal = (float)Configuration::get('PS_LOYALTY_MINIMAL');
 	$voucher->active = 1;
 	$categories = Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY');
 	if ($categories != '' AND $categories != 0)
@@ -147,6 +147,7 @@ else
 $smarty->assign(array(
 	'nbDiscounts' => $nbDiscounts,
 	'discounts' => $discounts,
+	'minimalLoyalty' => (float)Configuration::get('PS_LOYALTY_MINIMAL'),
 	'categories' => $categoriesNames
 ));
 

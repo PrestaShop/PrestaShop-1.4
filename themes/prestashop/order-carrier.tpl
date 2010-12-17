@@ -40,7 +40,6 @@
 //]]>
 {/literal}</script>
 {/if}
-{include file="$tpl_dir./thickbox.tpl"}
 
 {capture name=path}{l s='Shipping'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
@@ -58,8 +57,9 @@
 	<h3 class="condition_title">{l s='Terms of service'}</h3>
 	<p class="checkbox">
 		<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-		<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="thickbox">{l s='(read)'}</a>
+		<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
 	</p>
+	<script type="text/javascript">$('a.iframe').fancybox();</script>
 {/if}
 
 {if $virtual_cart}

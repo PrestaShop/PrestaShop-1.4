@@ -136,7 +136,6 @@
 <br />
 <h2>{l s='My vouchers from loyalty points' mod='loyalty'}</h2>
 
-
 {if $nbDiscounts}
 <div class="block-center" id="block-history">
 	<table id="order-list" class="std">
@@ -173,6 +172,9 @@
 	</table>
 	<div id="block-order-detail" class="hidden">&nbsp;</div>
 </div>
+
+{if $minimalLoyalty > 0}<p>{l s='The minimum order amount in order to use these vouchers is:'} {convertPrice price=$minimalLoyalty}</p>{/if}
+
 <script type="text/javascript">
 {literal}
 $(document).ready(function()

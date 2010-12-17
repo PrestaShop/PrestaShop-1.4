@@ -393,7 +393,7 @@ class CategoryCore extends ObjectModel
 		WHERE 1 '.$sql_filter.' '.($id_lang ? 'AND `id_lang` = '.(int)($id_lang) : '').'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.(!$id_lang ? 'GROUP BY c.id_category' : '').'
-		'.($sql_sort != '' ? $sql_sort : 'ORDER BY `name` ASC').'
+		'.($sql_sort != '' ? $sql_sort : 'ORDER BY c.`level_depth` ASC, c.`position` ASC').'
 		'.($sql_limit != '' ? $sql_limit : '')
 		);
 

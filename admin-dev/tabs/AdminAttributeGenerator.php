@@ -128,19 +128,16 @@ class AdminAttributeGenerator extends AdminTab
 	private function displayGroupSelect($attributeJs, $attributesGroups)
 	{
 		echo '	<div>
-					<select multiple name="attributes[]" id="attribute_group" style="width: 200px; height: 350px;">';
+					<select multiple name="attributes[]" id="attribute_group" style="width: 200px; height: 350px; margin-bottom: 10px;">';
 					
 		foreach ($attributesGroups AS $k => $attributeGroup)
 		{
-			$idGroup = $attributeGroup['id_attribute_group'];
-			
+			$idGroup = (int)$attributeGroup['id_attribute_group'];
 			if (isset($attributeJs[$idGroup]))
 			{
 				echo '	<optgroup name="'.$idGroup.'" id="'.$idGroup.'" label="'.htmlspecialchars(stripslashes($attributeGroup['name'])).'">';
-						
 				foreach ($attributeJs[$idGroup] AS $k => $v)
 					echo '	<option name="'.$k.'" id="attr_'.$k.'" value="'.$v.'" title="'.$v.'"">'.$v.'</option>';
-					
 				echo '	</optgroup>';
 			}
 		}
@@ -271,11 +268,13 @@ class AdminAttributeGenerator extends AdminTab
             self::displayGroupSelect($jsAttributes, $attributesGroups);
         echo '
 				<div>
-                    <input class="button" type="button" style="margin-left: 20px;" value="'.$this->l('Add').'" class="button" onclick="add_attr_multiple();" />
-                    <input class="button" type="button" style="margin-left: 20px;" value="'.$this->l('Delete').'" class="button" onclick="del_attr_multiple();" />
+					<p style="text-align: center;">
+						<input class="button" type="button" style="margin: 0 0 10px 20px;" value="'.$this->l('Add').'" class="button" onclick="add_attr_multiple();" />
+						<input class="button" type="button" style="margin: 0 0 10px 20px;" value="'.$this->l('Delete').'" class="button" onclick="del_attr_multiple();" /><br />
+						<input type="submit" class="button" name="back" value="'.$this->l('Back to product').'" />
+					</p>
 				</div>
 			</div>
-			<div class="center"><input type="submit" class="button" name="back" value="'.$this->l('Back to product').'" /></div>
 			<br />
 			</fieldset>
 		</form>';
