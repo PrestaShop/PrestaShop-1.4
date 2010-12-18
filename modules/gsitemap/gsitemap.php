@@ -127,23 +127,23 @@ XML;
       	}
 
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, pl.id_lang, cl.`link_rewrite` AS category, ean13, (
+		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
 			SELECT MIN(level_depth)
 			FROM '._DB_PREFIX_.'product p2
 			LEFT JOIN '._DB_PREFIX_.'category_product cp2 ON p2.id_product = cp2.id_product
 			LEFT JOIN '._DB_PREFIX_.'category c2 ON cp2.id_category = c2.id_category
-			WHERE p2.id_product = p.id_product AND p2.`active` = 1 AND c2.`active` = 1) AS level_depth , CONCAT (p.id_product,\'-\',i.id_image) as id_image, il.legend as legend_image
+			WHERE p2.id_product = p.id_product AND p2.`active` = 1 AND c2.`active` = 1) AS level_depth
 		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON p.id_product = pl.id_product
+		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
 		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
-		LEFT JOIN '._DB_PREFIX_.'image_lang il ON i.id_image = il.id_image
-		LEFT JOIN '._DB_PREFIX_.'lang l ON pl.id_lang = l.id_lang
+		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image)
+		LEFT JOIN '._DB_PREFIX_.'lang l ON (pl.id_lang = l.id_lang)
 		WHERE l.`active` = 1 AND p.`active` = 1
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
 		ORDER BY pl.id_product, pl.id_lang ASC');
 				
-		foreach($products as $product)
+		foreach($products AS $product)
 		{
 			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
@@ -194,12 +194,12 @@ XML;
 	}
 	
 	private function _addSitemapNodeImage($xml, $product)
-	{	
+	{
 		$link = new Link();	
 		$image = $xml->addChild('image', null, 'http://www.google.com/schemas/sitemap-image/1.1');
-		$image->addChild('loc', $link->getImageLink($product['link_rewrite'], $product['id_image']), 'http://www.google.com/schemas/sitemap-image/1.1');
+		$image->addChild('loc', $link->getImageLink($product['link_rewrite'], (int)$product['id_product'].'-'.(int)$product['id_image']), 'http://www.google.com/schemas/sitemap-image/1.1');
 		$image->addChild('caption', $product['legend_image'], 'http://www.google.com/schemas/sitemap-image/1.1');
-		$image->addChild('title', 'titre de l\'image', 'http://www.google.com/schemas/sitemap-image/1.1');
+		$image->addChild('title', $product['legend_image'], 'http://www.google.com/schemas/sitemap-image/1.1');
 	}
 
     private function _displaySitemap()

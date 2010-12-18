@@ -186,7 +186,8 @@ class TaxCore extends ObjectModel
 	{
 		return !Configuration::get('PS_TAX');
 	}
-    /*
+	
+	/*
 	 * @deprecated zones are not related to a tax
 	 */
 	static public function zoneHasTax($id_tax, $id_zone)

@@ -381,85 +381,28 @@ function addLoadEvent(func) {
   }
 }
 
-function helpboxParser(current) {
- 	// While the span exists and we didn't find the right one
-	for (var j = 0; j < current.parentNode.getElementsByTagName('span').length; j++) {
-
-		// For each attribut
+function helpboxParser(current)
+{
+ 	// While the span exists and we didn't find the right one, for each attribute, if attribute is "name" and has value == "help_box"
+	for (var j = 0; j < current.parentNode.getElementsByTagName('span').length; j++)
 		for(var k = 0; k < current.parentNode.getElementsByTagName('span')[j].attributes.length; k++)
-			// If it's the attribut "name" and its value is "help_box"
-			if (current.parentNode.getElementsByTagName('span')[j].attributes[k].name === 'name' && current.parentNode.getElementsByTagName('span')[j].attributes[k].nodeValue === 'help_box') {
-				// We finaly found it
+			if (current.parentNode.getElementsByTagName('span')[j].attributes[k].name === 'name' && current.parentNode.getElementsByTagName('span')[j].attributes[k].nodeValue === 'help_box')
 				return j;
-			}
-	}
+
 	return -1;
-}
-
-function prepareInputsForHints() {
-	var inputs = document.getElementsByTagName('input');
-	var found;
-
-	// For each input
-	for (var i=0; i<inputs.length; i++)
-	{
-		// on focus, show the hint
-		inputs[i].onfocus = function ()
-		{
-			var id = helpboxParser(this);
-			if (id > -1)
-				this.parentNode.getElementsByTagName('span')[id].style.display = 'inline';
-		}
-		// when the cursor moves away from the field, hide the hint
-		inputs[i].onblur = function ()
-		{
-		 	var id = helpboxParser(this);
-		 	if (id > -1)
-				this.parentNode.getElementsByTagName('span')[id].style.display = 'none';
-		}
-	}
-}
-
-function prepareBoQuery() {
-	var inputs = document.getElementsByTagName('input');
-	var found;
-
-	// For each input
-	for (var i=0; i<inputs.length; i++)
-	{
-		// on focus, show the hint
-		inputs[i].onfocus = function ()
-		{
-			if($(this).attr('id') == 'bo_query')
-				if(!dontChange($('input#bo_query').val()))
-					$('input#bo_query').val('');
-		}
-		// when the cursor moves away from the field, hide the hint
-		inputs[i].onblur = function ()
-		{
-			if($(this).attr('id') == 'bo_query' && $(this).val().length < 1 && window.search_texts)
-				$(this).val(search_texts[$('select#bo_search_type').val() - 1]);
-		}
-	}
 }
 
 if (helpboxes)
 {
-	$(function(){
+	$(function()
+	{
 		if ($('input'))
 		{
-			$('input').focus(function() {
-				$(this).parent().find('.hint').css('display', 'block');
-			});
-			$('input').blur(function() {
-				$(this).parent().find('.hint').css('display', 'none');
-			});
+			$('input').focus(function() { $(this).parent().find('.hint:first').css('display', 'block'); });
+			$('input').blur(function() { $(this).parent().find('.hint:first').css('display', 'none'); });
 		}
 	});
-	
-	//addLoadEvent(prepareInputsForHints);
 }
-addLoadEvent(prepareBoQuery);
 
 function changePic(id_product, id_image)
 {

@@ -454,7 +454,7 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (4, 2, 'Nunavut', 'NU', 1);
 
 INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blank`, `conversion_rate`, `format`, `deleted`, `active`) VALUES
-('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.2, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1), ('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
+('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.32, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1), ('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
 ('Lev', 'BGN', '975', 'лв', 1, 1.96, 2, 0, 0), ('Couronne', 'CZK', '203', 'Kč', 1, 24.58, 2, 0, 0), ('Couronne', 'DKK', '208', 'kr', 1, 7.45, 2, 0, 0),
 ('Couronne', 'EEK', '233', 'kr', 1, 15.65, 2, 0, 0), ('Forint', 'HUF', '348', 'Ft', 1, 279.65, 2, 0, 0), ('Litas', 'LTL', '440', 'Lt', 1, 3.45, 2, 0, 0),
 ('Lats letton', 'LVL', '428', 'Ls', 1, 0.71, 2, 0, 0), ('Zloty', 'PLN', '985', 'zł', 1, 3.94, 2, 0, 0), ('Leu', 'RON', '946', 'lei', 1, 4.26, 2, 0, 0),

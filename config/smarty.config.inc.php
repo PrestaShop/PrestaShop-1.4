@@ -143,6 +143,18 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_wo
 		return $string;
 }
 
+function smartyMinifyHTML($tpl_output, &$smarty)
+{
+    $tpl_output = Tools::minifyHTML($tpl_output);
+    return $tpl_output;
+}
+
+function smartyPackJSinHTML($tpl_output, &$smarty)
+{
+    $tpl_output = Tools::packJSinHTML($tpl_output);
+    return $tpl_output;
+}
+
 /* Use Smarty 3 API calls */
 if (!Configuration::get('PS_FORCE_SMARTY_2')) 
 {
@@ -153,6 +165,11 @@ if (!Configuration::get('PS_FORCE_SMARTY_2'))
 	$smarty->registerPlugin('function', 'p', 'smartyShowObject');
 	$smarty->registerPlugin('function', 'd', 'smartyDieObject');
 	$smarty->registerPlugin('function', 'l', 'smartyTranslate');
+	
+	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
+		$smarty->registerFilter('output', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
+	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
+		$smarty->registerFilter('output', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
 }
 else
 {
@@ -163,21 +180,9 @@ else
 	$smarty->register_function('p', 'smartyShowObject');
 	$smarty->register_function('d', 'smartyDieObject');
 	$smarty->register_function('l', 'smartyTranslate');
+	
+	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
+		$smarty->register_outputfilter('smartyMinifyHTML');
+	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
+		$smarty->register_outputfilter('smartyPackJSinHTML');
 }
-
-function smartyMinifyHTML($tpl_output, &$smarty)
-{
-    $tpl_output = Tools::minifyHTML($tpl_output);
-    return $tpl_output;
-}
-if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
-	$smarty->register_outputfilter('smartyMinifyHTML');
-
-function smartyPackJSinHTML($tpl_output, &$smarty)
-{
-    $tpl_output = Tools::packJSinHTML($tpl_output);
-    return $tpl_output;
-}
-if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
-	$smarty->register_outputfilter('smartyPackJSinHTML');
-

@@ -59,5 +59,3 @@ else
 	header('HTTP/1.1 500 Error');
 	echo '<return result="error" msg="big error" filename="'.ProductDownload::getNewFilename().'" />';
 }
-
-

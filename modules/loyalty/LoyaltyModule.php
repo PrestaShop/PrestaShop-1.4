@@ -102,19 +102,24 @@ class LoyaltyModule extends ObjectModel
 		if (Validate::isLoadedObject($cart))
 		{
 			$cartProducts = $cart->getProducts();
-			
 			if (isset($newProduct) AND !empty($newProduct))
 			{
-				$cartProductsNew['price_wt'] = number_format($newProduct->getPrice(true, (int)($newProduct->getIdProductAttributeMostExpsensive())), 2, '.', '');
+				$cartProductsNew['id_product'] = (int)$newProduct->id;
+				$cartProductsNew['price'] = number_format($newProduct->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)($newProduct->getIdProductAttributeMostExpsensive())), 2, '.', '');
 				$cartProductsNew['cart_quantity'] = 1;
 				$cartProducts[] = $cartProductsNew;
 			}
 			foreach ($cartProducts AS $product)
 			{
-				if (!(int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted($product['id_product']))
+				if (!(int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted((int)$product['id_product']))
+				{
+					global $smarty;
+					if (isset($smarty) AND is_object($newProduct) AND $product['id_product'] == $newProduct->id)
+						$smarty->assign('no_pts_discounted', 1);
 					continue;
+				}
 				
-				$total += $product['price_wt'] * (int)($product['cart_quantity']);
+				$total += $product['price'] * (int)($product['cart_quantity']);
 			}
 			foreach ($cart->getDiscounts(false) AS $discount)
 				$total -= $discount['value_real'];
@@ -136,7 +141,6 @@ class LoyaltyModule extends ObjectModel
 		global $cookie;
 
 		$points = 0;
-
 		if (Configuration::get('PS_CURRENCY_DEFAULT') != $cookie->id_currency)
 		{
 			$currency = new Currency((int)($cookie->id_currency));

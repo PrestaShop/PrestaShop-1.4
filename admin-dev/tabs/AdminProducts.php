@@ -175,7 +175,7 @@ class AdminProducts extends AdminTab
 				{
 					if (!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid Name');
-					elseif (strlen(Tools::getValue('attachment_name_'.(int)($language['id_lang']))) > 32)
+					elseif (Tools::strlen(Tools::getValue('attachment_name_'.(int)($language['id_lang']))) > 32)
 						$this->_errors[] = Tools::displayError('Name too long');
 					if (!Validate::isCleanHtml(Tools::getValue('attachment_description_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid description');
@@ -206,11 +206,11 @@ class AdminProducts extends AdminTab
 					$attachment->file = $uniqid;
 					$attachment->mime = $_FILES['attachment_file']['type'];
 					$attachment->file_name = pSQL($_FILES['attachment_file']['name']);
-					if (empty($attachment->mime) OR strlen($attachment->mime) > 64)
+					if (empty($attachment->mime) OR Tools::strlen($attachment->mime) > 64)
 						$this->_errors[] = Tools::displayError('Invalid file extension');
 					if (!Validate::isGenericName($attachment->file_name))
 						$this->_errors[] = Tools::displayError('Invalid file name');
-					if (strlen($attachment->file_name) > 128)
+					if (Tools::strlen($attachment->file_name) > 128)
 						$this->_errors[] = Tools::displayError('File name too long');
 					if (!sizeof($this->_errors))
 					{
@@ -2297,8 +2297,8 @@ class AdminProducts extends AdminTab
 	?>
 	<tr>
 		<td colspan="2">
-			<input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onchange="toggleVirtualProduct(this)" onclick="toggleVirtualProduct(this);" <?php if(($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
-			<label for="is_virtual_good" class="t bold"><?php echo $this->l('Is this a downloadable product?') ?></label>
+			<p><input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onclick="toggleVirtualProduct(this);" <?php if(($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
+			<label for="is_virtual_good" class="t bold" style="color: black;"><?php echo $this->l('Is this a downloadable product?') ?></label></p>
 			<div id="virtual_good" <?php if(!$productDownload->id OR !$productDownload->active) echo 'style="display:none;"' ?> >
 	<?php if(!ProductDownload::checkWritableDir()): ?>
 		<p class="alert">
@@ -2318,7 +2318,7 @@ class AdminProducts extends AdminTab
 					<p><?php echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;' . ini_get('upload_max_filesize') ?></p>
 					<?php if (!strval(Tools::getValue('virtual_product_filename'))): ?>
 					<label id="virtual_product_file_label" for="virtual_product_file" class="t"><?php echo $this->l('Upload a file') ?></label>
-					<input type="file" id="virtual_product_file" name="virtual_product_file" value="" class="" onchange="uploadFile();" maxlength="<?php echo $this->maxFileSize ?>" />
+					<p><input type="file" id="virtual_product_file" name="virtual_product_file" onchange="uploadFile();" maxlength="<?php echo $this->maxFileSize ?>" /></p>
 					<?php endif; ?>
 					<div id="upload-confirmation">
 					<?php if ($up_filename = strval(Tools::getValue('virtual_product_filename'))): ?>
@@ -2335,7 +2335,7 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_name" class="t"><?php echo $this->l('Filename') ?></label>
 					<input type="text" id="virtual_product_name" name="virtual_product_name" class="" value="<?php echo $productDownload->id > 0 ? $productDownload->display_filename : htmlentities(Tools::getValue('virtual_product_name'), ENT_COMPAT, 'UTF-8') ?>" />
-					<span class="hint" name="help_box" style="display:none;"><?php echo $this->l('The complete filename with its extension (e.g., Our best song.mp3)') ?></span>
+					<span class="hint" name="help_box" style="display:none;"><?php echo $this->l('The full filename with its extension (e.g., Book.pdf)') ?></span>
 				</p>
 				<p class="block">
 					<label for="virtual_product_nb_downloable" class="t"><?php echo $this->l('Number of downloads') ?></label>

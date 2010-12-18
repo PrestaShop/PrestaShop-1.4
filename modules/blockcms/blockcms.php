@@ -33,7 +33,7 @@ class BlockCms extends Module
 	{
 		$this->name = 'blockcms';
 		$this->tab = 'front_office_features';
-		$this->version = 1.0;
+		$this->version = 1.1;
 
 		parent::__construct();
 
@@ -45,15 +45,11 @@ class BlockCms extends Module
 	public function install()
 	{
 		$languages = Language::getLanguages(false);
-		$query_lang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`) VALUES';
-		foreach ($languages as $language)
-			$query_lang .= '(1, '.(int)($language['id_lang']).'),';
+		$queryLang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`) VALUES';
+		foreach ($languages AS $language)
+			$queryLang .= '(1, '.(int)($language['id_lang']).'),';
 	
-		if (!parent::install() OR
-		!$this->registerHook('leftColumn') OR
-		!$this->registerHook('rightColumn') OR
-		!$this->registerHook('footer') OR
-		!$this->registerHook('header') OR
+		if (!parent::install() OR !$this->registerHook('leftColumn') OR !$this->registerHook('rightColumn') OR !$this->registerHook('footer') OR !$this->registerHook('header') OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block`(
 		`id_block_cms` int(10) unsigned NOT NULL auto_increment,
@@ -72,7 +68,7 @@ class BlockCms extends Module
 		`name` varchar(40) NOT NULL default \'\',
 		PRIMARY KEY (`id_block_cms`, `id_lang`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
-		!Db::getInstance()->Execute(rtrim($query_lang, ',')) OR
+		!Db::getInstance()->Execute(rtrim($queryLang, ',')) OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_page`(
 		`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
@@ -98,141 +94,145 @@ class BlockCms extends Module
 	}
 
 	public function getBlockCMS($id_block_cms)
-	{
-		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT `id_cms_category`, `location`, `display_store` FROM `'._DB_PREFIX_.'cms_block`
-		WHERE `id_block_cms` = '.(int)($id_block_cms));
-		$cms_block_lang = Db::getInstance()->ExecuteS('
-		SELECT `id_lang`, `name` FROM `'._DB_PREFIX_.'cms_block_lang`
-		WHERE `id_block_cms` = '.(int)($id_block_cms));
+	{		
+		$cmsBlocks = Db::getInstance()->ExecuteS('
+		SELECT cb.`id_cms_category`, cb.`location`, cb.`display_store`, cbl.id_lang, cbl.name
+		FROM `'._DB_PREFIX_.'cms_block` cb
+		LEFT JOIN `'._DB_PREFIX_.'cms_block_lang` cbl ON (cbl.`id_block_cms` = cb.`id_block_cms`)
+		WHERE cb.`id_block_cms` = '.(int)($id_block_cms));
 		
-		foreach ($cms_block_lang as $lang)
-			$cms_block['name'][$lang['id_lang']] = $lang['name'];
+		foreach ($cmsBlocks AS &$cmsBlock)
+			$cmsBlock['name'][(int)$cmsBlock['id_lang']] = $cmsBlock['name'];
 		
-		return $cms_block;
+		return $cmsBlocks;
 	}
 	
 	private function getBlocksCMS($location)
 	{
 		global $cookie;
 		
-		$cms_block = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bcl.`name` AS block_name, ccl.`name` AS category_name, bc.`position`, bc.`id_cms_category`, bc.`display_store`
+		return Db::getInstance()->ExecuteS('
+		SELECT bc.`id_block_cms`, bcl.`name` block_name, ccl.`name` category_name, bc.`position`, bc.`id_cms_category`, bc.`display_store`
 		FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
 		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
-		WHERE ccl.`id_lang` = '.(int)($cookie->id_lang).'
-		AND bc.`location` = '.(int)($location).'
-		AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
+		WHERE ccl.`id_lang` = '.(int)($cookie->id_lang).' AND bc.`location` = '.(int)($location).' AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
 		ORDER BY bc.`position`');
-		
-		return $cms_block;
 	}
 	
 	public function getAllBlocksCMS()
 	{
-		$block = array();
-		$block = array_merge($this->getBlocksCMS(0), $this->getBlocksCMS(1));
-		return $block;
+		return array_merge($this->getBlocksCMS(0), $this->getBlocksCMS(1));
 	}
 
 	static public function getCMStitlesFooter()
 	{
 		global $cookie;
 		
-		$footer_cms = Configuration::get('FOOTER_CMS');
-		if (empty($footer_cms))
+		$footerCms = Configuration::get('FOOTER_CMS');
+		if (empty($footerCms))
 			return array();
-		$cms_categories = explode('|', $footer_cms);
-		$display_footer = array();
+		$cmsCategories = explode('|', $footerCms);
+		$content = array();
 		$link = new Link();
-		foreach ($cms_categories as $cms_category)
+		foreach ($cmsCategories AS $cmsCategory)
 		{
-			$ids = explode('_', $cms_category);
+			$ids = explode('_', $cmsCategory);
 			if ($ids[0] == 1)
 			{
-				$req = Db::getInstance()->getRow('
-				SELECT cl.`name`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_category_lang` cl
+				$query = Db::getInstance()->getRow('
+				SELECT cl.`name`, cl.`link_rewrite`
+				FROM `'._DB_PREFIX_.'cms_category_lang` cl
 				INNER JOIN `'._DB_PREFIX_.'cms_category` c ON (cl.`id_cms_category` = c.`id_cms_category`)
 				WHERE cl.`id_cms_category` = '.(int)($ids[1]).' AND (c.`active` = 1 OR c.`id_cms_category` = 1)
 				AND cl.`id_lang` = '.(int)($cookie->id_lang));
-				$display_footer[$cms_category]['link'] = $link->getCMSCategoryLink((int)($ids[1]), $req['link_rewrite']);
-				$display_footer[$cms_category]['meta_title'] = $req['name'];
+				
+				$content[$cmsCategory]['link'] = $link->getCMSCategoryLink((int)($ids[1]), $query['link_rewrite']);
+				$content[$cmsCategory]['meta_title'] = $query['name'];
 			}
-			elseif ($ids[0] == 0)
+			elseif (!$ids[0])
 			{
-				$req = Db::getInstance()->getRow('
-				SELECT cl.`meta_title`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_lang` cl
+				$query = Db::getInstance()->getRow('
+				SELECT cl.`meta_title`, cl.`link_rewrite` 
+				FROM `'._DB_PREFIX_.'cms_lang` cl
 				INNER JOIN `'._DB_PREFIX_.'cms` c ON (cl.`id_cms` = c.`id_cms`)
 				WHERE cl.`id_cms` = '.(int)($ids[1]).' AND c.`active` = 1
 				AND cl.`id_lang` = '.(int)($cookie->id_lang));
-				$display_footer[$cms_category]['link'] = $link->getCMSLink((int)($ids[1]), $req['link_rewrite']);
-				$display_footer[$cms_category]['meta_title'] = $req['meta_title'];
+				
+				$content[$cmsCategory]['link'] = $link->getCMSLink((int)($ids[1]), $query['link_rewrite']);
+				$content[$cmsCategory]['meta_title'] = $query['meta_title'];
 			}
 		}
-		return $display_footer;
+
+		return $content;
 	}
 
 	static public function getCMStitles($location)
 	{
 		global $cookie;
-		$cms_categories = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bc.`id_cms_category`, bc.`display_store`, ccl.`link_rewrite`, ccl.`name` AS category_name, bcl.`name` AS block_name FROM `'._DB_PREFIX_.'cms_block` bc
+
+		$cmsCategories = Db::getInstance()->ExecuteS('
+		SELECT bc.`id_block_cms`, bc.`id_cms_category`, bc.`display_store`, ccl.`link_rewrite`, ccl.`name` category_name, bcl.`name` block_name
+		FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
 		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
-		WHERE bc.`location` = '.(int)($location).'
-		AND ccl.`id_lang` = '.(int)($cookie->id_lang).'
-		AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
+		WHERE bc.`location` = '.(int)($location).' AND ccl.`id_lang` = '.(int)($cookie->id_lang).' AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
 		ORDER BY `position`');
-		$display_cms = array();
+		
+		$content = array();
 		$link = new Link();
-		foreach ($cms_categories as $cms_category)
+		foreach ($cmsCategories AS $cmsCategory)
 		{
-			$key = $cms_category['id_block_cms'];
-			$display_cms[$key]['display_store'] = $cms_category['display_store'];
-			$display_cms[$key]['cms'] = Db::getInstance()->ExecuteS('
+			$key = (int)$cmsCategory['id_block_cms'];
+			$content[$key]['display_store'] = $cmsCategory['display_store'];
+			
+			$content[$key]['cms'] = Db::getInstance()->ExecuteS('
 			SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
 			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
 			INNER JOIN `'._DB_PREFIX_.'cms_lang` cl ON (bcp.`id_cms` = cl.`id_cms`)
 			INNER JOIN `'._DB_PREFIX_.'cms` c ON (bcp.`id_cms` = c.`id_cms`)
-			WHERE bcp.`id_block_cms` = '.(int)($cms_category['id_block_cms']).'
-			AND cl.`id_lang` = '.(int)($cookie->id_lang).'
-			AND bcp.`is_category` = 0
-			AND c.`active` = 1
+			WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).' AND cl.`id_lang` = '.(int)($cookie->id_lang).' AND bcp.`is_category` = 0 AND c.`active` = 1
 			ORDER BY `position`');
+			
 			$links = array();
-			if (sizeof($display_cms[$key]['cms']))
-				foreach ($display_cms[$key]['cms'] as $row)
+			if (sizeof($content[$key]['cms']))
+				foreach ($content[$key]['cms'] AS $row)
 				{
 					$row['link'] = $link->getCMSLink((int)($row['id_cms']), $row['link_rewrite']);
 					$links[] = $row;
 				}
-			$display_cms[$key]['cms'] = $links;
-			$display_cms[$key]['categories'] = Db::getInstance()->ExecuteS('
-			SELECT bcp.`id_cms`, cl.`name`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'cms_block_page` bcp 
+
+			$content[$key]['cms'] = $links;
+			
+			$content[$key]['categories'] = Db::getInstance()->ExecuteS('
+			SELECT bcp.`id_cms`, cl.`name`, cl.`link_rewrite`
+			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
 			INNER JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (bcp.`id_cms` = cl.`id_cms_category`)
-			WHERE bcp.`id_block_cms` = '.(int)($cms_category['id_block_cms']).'
+			WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).'
 			AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 			AND bcp.`is_category` = 1');
+			
 			$links = array();
-			if (sizeof($display_cms[$key]['categories']))
-				foreach ($display_cms[$key]['categories'] as $row)
+			if (sizeof($content[$key]['categories']))
+				foreach ($content[$key]['categories'] as $row)
 				{
 					$row['link'] = $link->getCMSCategoryLink((int)($row['id_cms']), $row['link_rewrite']);
 					$links[] = $row;
 				}
-			$display_cms[$key]['categories'] = $links;
-			$display_cms[$key]['name'] = $cms_category['block_name'];
-			$display_cms[$key]['category_link'] = $link->getCMSCategoryLink((int)($cms_category['id_cms_category']), $cms_category['link_rewrite']);
-			$display_cms[$key]['category_name'] = $cms_category['category_name'];
+
+			$content[$key]['categories'] = $links;
+			$content[$key]['name'] = $cmsCategory['block_name'];
+			$content[$key]['category_link'] = $link->getCMSCategoryLink((int)($cmsCategory['id_cms_category']), $cmsCategory['link_rewrite']);
+			$content[$key]['category_name'] = $cmsCategory['category_name'];
 		}
-		return $display_cms;
+
+		return $content;
 	}
 	
 	public function getAllCMSTitles()
 	{
 		$titles = array();
-		foreach(self::getCMStitles(0) as $key => $title)
+		foreach(self::getCMStitles(0) AS $key => $title)
 		{
 			unset($title['categories']);
 			unset($title['name']);
@@ -240,7 +240,7 @@ class BlockCms extends Module
 			unset($title['category_name']);
 			$titles[$key] = $title;
 		}
-		foreach(self::getCMStitles(1) as $key => $title)
+		foreach(self::getCMStitles(1) AS $key => $title)
 		{
 			unset($title['categories']);
 			unset($title['name']);
@@ -423,9 +423,9 @@ class BlockCms extends Module
 		$languages = Language::getLanguages(false);
 		$divLangName = 'name';
 
-		$block_cms = NULL;
-		if (Tools::isSubmit('editBlockCMS') AND (int)(Tools::getValue('id_block_cms')))
-			$block_cms = $this->getBlockCMS((int)(Tools::getValue('id_block_cms')));
+		$cmsBlock = NULL;
+		if (Tools::isSubmit('editBlockCMS') AND Tools::getValue('id_block_cms'))
+			$cmsBlock = $this->getBlockCMS((int)(Tools::getValue('id_block_cms')));
 
 		$this->_html .= '
 		<script type="text/javascript" src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/'.$this->name.'.js"></script>
@@ -458,7 +458,7 @@ class BlockCms extends Module
 			<div class="margin-form">
 				<select name="id_category" id="id_category" onchange="CMSCategory_js($(this).val(), \''.$this->secure_key.'\')">';
 		$categories = CMSCategory::getCategories((int)($cookie->id_lang), false);
-		$this->_html .= CMSCategory::recurseCMSCategory($categories, $categories[0][1], 1, ($block_cms != NULL ? $block_cms[0]['id_cms_category'] : 1), 1);
+		$this->_html .= CMSCategory::recurseCMSCategory($categories, $categories[0][1], 1, ($cmsBlock != NULL ? $cmsBlock[0]['id_cms_category'] : 1), 1);
 		$this->_html .= '
 				</select>
 			</div><br />
@@ -466,18 +466,18 @@ class BlockCms extends Module
 			<label>'.$this->l('Location:').'</label>
 			<div class="margin-form">
 				<select name="block_location" id="block_location">
-					<option value="0" '.(($block_cms AND $block_cms[0]['location'] == 0) ? 'selected="selected"' : '').'>'.$this->l('Left').'</option>
-					<option value="1" '.(($block_cms AND $block_cms[0]['location'] == 1) ? 'selected="selected"' : '').'>'.$this->l('Right').'</option>
+					<option value="0" '.(($cmsBlock AND $cmsBlock[0]['location'] == 0) ? 'selected="selected"' : '').'>'.$this->l('Left').'</option>
+					<option value="1" '.(($cmsBlock AND $cmsBlock[0]['location'] == 1) ? 'selected="selected"' : '').'>'.$this->l('Right').'</option>
 				</select>
 			</div>';
 		$this->_html .=	'
 			<label for="PS_STORES_DISPLAY_CMS_on">'.$this->l('Display Stores:').'</label>
 			<div class="margin-form">
 				<img src="../img/admin/enabled.gif" alt="Yes" title="Yes" />
-		        <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_on" '.(($block_cms AND ( isset($block_cms[0]['display_store']) && $block_cms[0]['display_store'] == 0)) ? '' : 'checked="checked" ').'value="1" />
+		        <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_on" '.(($cmsBlock AND ( isset($cmsBlock[0]['display_store']) && $cmsBlock[0]['display_store'] == 0)) ? '' : 'checked="checked" ').'value="1" />
 			    <label class="t" for="PS_STORES_DISPLAY_CMS_on">'.$this->l('Yes').'</label>
 			    <img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;" />
-			    <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_off" '.(($block_cms AND ( isset($block_cms[0]['display_store']) && $block_cms[0]['display_store'] == 0)) ? 'checked="checked" ' : '').'value="0" />
+			    <input type="radio" name="PS_STORES_DISPLAY_CMS" id="PS_STORES_DISPLAY_CMS_off" '.(($cmsBlock AND ( isset($cmsBlock[0]['display_store']) && $cmsBlock[0]['display_store'] == 0)) ? 'checked="checked" ' : '').'value="0" />
 			    <label  class="t" for="PS_STORES_DISPLAY_CMS_off">'.$this->l('No').'</label><br />'
 				.$this->l('Display "our stores" at the end of the block')
 			.'</div>';
@@ -485,14 +485,12 @@ class BlockCms extends Module
 			<p class="center">
 				<input type="submit" class="button" name="submitBlockCMS" value="'.$this->l('Save').'" />
 				<a class="button" style="position:relative; padding:3px 3px 4px 3px; top:1px" href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a>
-			</p>
-		';
+			</p>';
 		
 		$this->_html .= '
 		</fieldset>
 		</form>
-		<script type="text/javascript">CMSCategory_js($(\'#id_category\').val(), \''.$this->secure_key.'\')</script>
-		';
+		<script type="text/javascript">CMSCategory_js($(\'#id_category\').val(), \''.$this->secure_key.'\')</script>';
 	}
 
 	private function _postValidation()

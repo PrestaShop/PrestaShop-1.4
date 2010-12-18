@@ -61,21 +61,20 @@ class Loyalty extends Module
 	function install()
 	{
 		if (!parent::install()
-				OR !$this->installDB()
-				OR !$this->registerHook('extraRight')
-				OR !$this->registerHook('updateOrderStatus')
-				OR !$this->registerHook('newOrder')
-				OR !$this->registerHook('adminCustomers')
-				OR !$this->registerHook('shoppingCart')
-				OR !$this->registerHook('orderReturn')
-				OR !$this->registerHook('cancelProduct')
-				OR !$this->registerHook('customerAccount')
-				OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
-				OR !Configuration::updateValue('PS_LOYALTY_MINIMAL', 0)				
-				OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
-				OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
-				OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array((int)(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher'))	
-			)
+		OR !$this->installDB()
+		OR !$this->registerHook('extraRight')
+		OR !$this->registerHook('updateOrderStatus')
+		OR !$this->registerHook('newOrder')
+		OR !$this->registerHook('adminCustomers')
+		OR !$this->registerHook('shoppingCart')
+		OR !$this->registerHook('orderReturn')
+		OR !$this->registerHook('cancelProduct')
+		OR !$this->registerHook('customerAccount')
+		OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
+		OR !Configuration::updateValue('PS_LOYALTY_MINIMAL', 0)				
+		OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
+		OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
+		OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array((int)(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher')))
 			return false;
 
 		$category_config = '';
@@ -141,13 +140,13 @@ class Loyalty extends Module
 	function uninstall()
 	{
 		if (!parent::uninstall()
-				OR !$this->uninstallDB()
-				OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')
-				OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
-				OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD')
-				OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL')
-				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
-				OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS'))
+		OR !$this->uninstallDB()
+		OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')
+		OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
+		OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD')
+		OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL')
+		OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
+		OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS'))
 			return false;
 		return true;
 	}
@@ -286,7 +285,7 @@ class Loyalty extends Module
 					<input type="text" size="2" name="minimal" value="'.(float)(Configuration::get('PS_LOYALTY_MINIMAL')).'" /> '.$currency->sign.'
 				</div>
 				<div class="clear" style="margin-top: 20px"></div>
-				<label>'.$this->l('Allow discounts').' </label>
+				<label>'.$this->l('Give points on discounted products').' </label>
 				<div class="margin-form">
 					<input type="radio" name="PS_LOYALTY_NONE_AWARD" id="PS_LOYALTY_NONE_AWARD_on" value="1" '.(Configuration::get('PS_LOYALTY_NONE_AWARD') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="PS_LOYALTY_NONE_AWARD_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
@@ -335,7 +334,7 @@ class Loyalty extends Module
 		
 		$html .= $this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
 		$html .= '				</table>
-				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'<sup> *</sup></p>
+				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'</p>
 				<div class="clear"></div>
 				<h3 style="margin-top:20px">'.$this->l('Loyalty points progression').'</h3>
 				<label>'.$this->l('Initial').'</label>
@@ -440,9 +439,7 @@ class Loyalty extends Module
 	{
 		global $smarty;
 
-		$id_product = (int)(Tools::getValue('id_product'));
-		
-		$product = new Product((int)($id_product));
+		$product = new Product((int)Tools::getValue('id_product'));
 		if (Validate::isLoadedObject($product))
 		{
 			if (Validate::isLoadedObject($params['cart']))
@@ -453,17 +450,23 @@ class Loyalty extends Module
 			}
 			else
 			{
-				$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(true, (int)($product->getIdProductAttributeMostExpsensive()))));
+				if (!(int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted((int)$product->id))
+				{
+					$points = 0;
+					$smarty->assign('no_pts_discounted', 1);
+				}
+				else			
+					$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)($product->getIdProductAttributeMostExpsensive()))));
 				$pointsAfter = $points;
+				$pointsBefore = 0;
 			}
 			$smarty->assign(array(
 				'points' => (int)($points),
 				'total_points' => (int)($pointsAfter),
 				'point_rate' => Configuration::get('PS_LOYALTY_POINT_RATE'),
 				'point_value' => Configuration::get('PS_LOYALTY_POINT_VALUE'),
-				'points_in_cart' => $pointsBefore,
-				'voucher' => LoyaltyModule::getVoucherValue($pointsAfter)
-				));
+				'points_in_cart' => (int)$pointsBefore,
+				'voucher' => LoyaltyModule::getVoucherValue((int)$pointsAfter)));
 
 			return $this->display(__FILE__, 'product.tpl');
 		}
@@ -497,13 +500,13 @@ class Loyalty extends Module
 		
 		$totalPrice = 0;
 		$details = OrderReturn::getOrdersReturnDetail((int)($params['orderReturn']->id));
-		foreach ($details as $detail)
+		foreach ($details AS $detail)
 		{
 			$result = Db::getInstance()->getRow('
-			SELECT product_price * (1 + (tax_rate / 100)) AS ttc
+			SELECT product_price * (1 + (tax_rate / 100)) AS wt
 			FROM '._DB_PREFIX_.'order_detail od
 			WHERE id_order_detail = '.(int)($detail['id_order_detail']));
-			$totalPrice += $result['ttc'] * $detail['product_quantity'];
+			$totalPrice += $result['wt'] * $detail['product_quantity'];
 		}
 		
 		$canceledTotal = floor($totalPrice / (float)(Configuration::get('PS_LOYALTY_POINT_RATE')));
@@ -540,8 +543,8 @@ class Loyalty extends Module
 		if (!Validate::isLoadedObject($params['customer']) OR !Validate::isLoadedObject($params['order']))
 			die (Tools::displayError('Some parameters are missing.'));
 		$loyalty = new LoyaltyModule();
-		$loyalty->id_customer = $params['customer']->id;
-		$loyalty->id_order = $params['order']->id;
+		$loyalty->id_customer = (int)$params['customer']->id;
+		$loyalty->id_order = (int)$params['order']->id;
 		$loyalty->points = LoyaltyModule::getOrderNbPoints($params['order']);
 		if ((int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND (int)($loyalty->points) == 0)
 			$loyalty->id_loyalty_state = LoyaltyStateModule::getNoneAwardId();
@@ -632,11 +635,11 @@ class Loyalty extends Module
 		if (!Validate::isLoadedObject($loyalty = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))))))
 			return false;
 
-		$loyalty->points = $loyalty->points - LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
+		$loyalty->points = $loyalty->points - LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100))) * $orderDetail->product_quantity);
 		$loyalty->save();
 		
 		$loyaltyNew = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))));
-		$loyaltyNew->points = LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (1 + ($orderDetail->tax_rate / 100)) * $orderDetail->product_quantity);
+		$loyaltyNew->points = LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100))) * $orderDetail->product_quantity);
 		$loyaltyNew->id_loyalty_state = LoyaltyStateModule::getCancelId();
 		$loyaltyNew->id_order = (int)($params['order']->id);
 		$loyaltyNew->id_customer = (int)($loyalty->id_customer);
@@ -656,7 +659,4 @@ class Loyalty extends Module
 
 		return $translations[$key];
 	}
-
 }
-
-

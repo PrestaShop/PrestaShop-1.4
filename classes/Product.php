@@ -1704,11 +1704,9 @@ class ProductCore extends ObjectModel
 		SELECT `id_product_attribute`
 		FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `id_product` = '.(int)($this->id).'
-		ORDER BY `price` DESC
-		');
-		if (isset($row['id_product_attribute']) AND $row['id_product_attribute'])
-			return $row['id_product_attribute'];
-		return 0;
+		ORDER BY `price` DESC');
+
+		return (isset($row['id_product_attribute']) AND $row['id_product_attribute']) ? (int)$row['id_product_attribute'] : 0;
 	}
 
 	public function getPriceWithoutReduct($notax = false, $id_product_attribute = false)
