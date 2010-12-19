@@ -2373,24 +2373,22 @@ class ProductCore extends ObjectModel
 
 		// Datas
 		$link = new Link();
-		$row['category'] = Category::getLinkRewrite($row['id_category_default'], (int)($id_lang));
-		$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
+		$row['category'] = Category::getLinkRewrite((int)$row['id_category_default'], (int)($id_lang));
+		$row['link'] = $link->getProductLink((int)$row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		$row['attribute_price'] = (isset($row['id_product_attribute']) AND $row['id_product_attribute']) ? (float)(Product::getProductAttributePrice($row['id_product_attribute'])) : 0;
-		$row['price_tax_exc'] = Product::getPriceStatic($row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), (self::$_taxCalculationMethod == PS_TAX_EXC ? 2 : 6));
+		$row['price_tax_exc'] = Product::getPriceStatic((int)$row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), (self::$_taxCalculationMethod == PS_TAX_EXC ? 2 : 6));
 		if (self::$_taxCalculationMethod == PS_TAX_EXC)
 		{
 			$row['price_tax_exc'] = Tools::ps_round($row['price_tax_exc'], 2);
-			$row['price'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : 	NULL), 6);
+			$row['price'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : 	NULL), 6);
 		}
 		else
-		{
-			$row['price'] = Tools::ps_round(Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6), 2);
-		}
+			$row['price'] = Tools::ps_round(Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6), 2);
 
 		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true);
-		$row['price_without_reduction'] = Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
+		$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		if ($row['id_product_attribute'])
-			$row['quantity'] = Product::getQuantity($row['id_product']);
+			$row['quantity'] = Product::getQuantity((int)$row['id_product']);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic((int)($id_lang), $row['id_product']);
 		$row['attachments'] = ((!isset($row['cache_has_attachments']) OR $row['cache_has_attachments']) ? Product::getAttachmentsStatic((int)($id_lang), $row['id_product']) : array());

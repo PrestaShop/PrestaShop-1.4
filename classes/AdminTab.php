@@ -590,7 +590,6 @@ abstract class AdminTabCore
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-
 							/* Specific to objects which must not be deleted */
 							if ($this->deleted AND $this->beforeDelete($object))
 							{

@@ -184,11 +184,11 @@ class ManufacturerCore extends ObjectModel
 			global $cookie;
 
 		if (!$id_lang)
-			$id_lang = Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		$sql = 'SELECT m.*, ml.`description`';
-		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` as m
+		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` m
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.(int)($id_lang).')
-		'.($active ? 'WHERE m.`active` = 1' : '');
+		'.($active ? ' WHERE m.`active` = 1' : '');
 		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n) : '');
 		$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if ($manufacturers === false)
@@ -196,20 +196,17 @@ class ManufacturerCore extends ObjectModel
 		if ($getNbProducts)
 			foreach ($manufacturers as $key => $manufacturer)
 			{
-				$sql = '
-					SELECT p.`id_product`
-					FROM `'._DB_PREFIX_.'product` p
-					LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
-					WHERE m.`id_manufacturer` = '.(int)($manufacturer['id_manufacturer']).
-					($all_group ? '' :
-					'
-					AND p.`id_product` IN (
-						SELECT cp.`id_product`
-						FROM `'._DB_PREFIX_.'category_group` cg
-						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
-					)');
-				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
+				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT p.`id_product`
+				FROM `'._DB_PREFIX_.'product` p
+				LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
+				WHERE m.`id_manufacturer` = '.(int)($manufacturer['id_manufacturer']).
+				($active ? ' AND p.`active` = 1 ' : '').
+				($all_group ? '' : ' AND p.`id_product` IN (
+					SELECT cp.`id_product`
+					FROM `'._DB_PREFIX_.'category_group` cg
+					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
+					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').')'));
+
 				$manufacturers[$key]['nb_products'] = sizeof($result);
 			}
 		for ($i = 0; $i < sizeof($manufacturers); $i++)

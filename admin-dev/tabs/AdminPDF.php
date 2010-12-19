@@ -42,7 +42,7 @@ class AdminPDF extends AdminPreferences
 		$fontList = array();
 		$arr = array();
 		
-		foreach ($fontFiles as $file)
+		foreach ($fontFiles AS $file)
 			if (substr($file, -4) == '.php' AND $file != 'index.php')
 			{
 				$arr['mode'] = substr($file, 0, -4);
@@ -54,7 +54,7 @@ class AdminPDF extends AdminPreferences
 		$encodingFiles = scandir(_PS_FPDF_PATH_.'font/makefont');
 		$encodingList = array();
 		$arr = array();
-		foreach ($encodingFiles as $file)
+		foreach ($encodingFiles AS $file)
 			if (substr($file, -4) == '.map')
 			{
 				$arr['mode'] = substr($file, 0, -4);

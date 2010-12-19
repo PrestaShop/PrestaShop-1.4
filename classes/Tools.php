@@ -702,9 +702,10 @@ class ToolsCore
 		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
 
 		if (!Validate::isLoadedObject($category))
-			die(self::displayError());
+			$id_category = 1;
 		if ($id_category == 1)
 			return htmlentities($end, ENT_NOQUOTES, 'UTF-8');
+
 		return self::getPath($id_category, $category->name, true, $type_cat).'<span class="navigation-pipe">'.$pipe.'</span> <span class="navigation_product">'.htmlentities($end, ENT_NOQUOTES, 'UTF-8').'</span>';
 	}
 

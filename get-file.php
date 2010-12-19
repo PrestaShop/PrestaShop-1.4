@@ -31,14 +31,14 @@ include(dirname(__FILE__).'/init.php');
 function displayError($msg)
 {
 	$translations = array(
-		'Invalid key.' => Tools::displayError('Invalid key.'),
-		'This product doesn\'t exists in our store.' => Tools::displayError('This product doesn\'t exists in our store.'),
-		'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
-		'This file no longer exists.'	=> Tools::displayError('This file no longer exists.'),
-		'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
-		'Dear customer, you have exceeded the expiration date.' => Tools::displayError('Dear customer, you have exceeded the expiration date.'),
-		'You have reached the maximum number of allowed downloads.' => Tools::displayError('You have reached the maximum number of allowed downloads.'));
-
+	'Invalid key.' => Tools::displayError('Invalid key.'),
+	'This product doesn\'t exists in our store.' => Tools::displayError('This product doesn\'t exists in our store.'),
+	'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
+	'This file no longer exists.'	=> Tools::displayError('This file no longer exists.'),
+	'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
+	'Dear customer, you have exceeded the expiration date.' => Tools::displayError('Dear customer, you have exceeded the expiration date.'),
+	'You have reached the maximum number of allowed downloads.' => Tools::displayError('You have reached the maximum number of allowed downloads.'));
+?>
 <script type="text/javascript">
 <!--
 alert("<?php echo html_entity_decode($translations[$msg], ENT_QUOTES, 'utf-8'); ?>");
@@ -119,19 +119,19 @@ else
 }
 
 /* Detect mime content type */
-$mime_type = false;
+$mimeType = false;
 if (function_exists('finfo_open'))
 {
 	$finfo = @finfo_open(FILEINFO_MIME);
-	$mime_type = @finfo_file($finfo, $file);
+	$mimeType = @finfo_file($finfo, $file);
 	@finfo_close($finfo);
 }
 elseif (function_exists('mime_content_type'))
-	$mime_type = @mime_content_type($file);
+	$mimeType = @mime_content_type($file);
 elseif (function_exists('exec'))
-	$mime_type = trim(@exec('file -bi '.escapeshellarg($file)));
+	$mimeType = trim(@exec('file -bi '.escapeshellarg($file)));
 
-if (empty($mime_type))
+if (empty($mimeType))
 {
 	$bName = basename($filename);
 	$bName = explode('.', $bName);
@@ -142,14 +142,6 @@ if (empty($mime_type))
 	'hqx' => 'application/mac-binhex40',
 	'cpt' => 'application/mac-compactpro',
 	'doc' => 'application/msword',
-	'bin' => 'application/octet-stream',
-	'dms' => 'application/octet-stream',
-	'lha' => 'application/octet-stream',
-	'lzh' => 'application/octet-stream',
-	'exe' => 'application/octet-stream',
-	'class' => 'application/octet-stream',
-	'so' => 'application/octet-stream',
-	'dll' => 'application/octet-stream',
 	'oda' => 'application/oda',
 	'pdf' => 'application/pdf',
 	'ai' => 'application/postscript',
@@ -275,18 +267,19 @@ if (empty($mime_type))
 	'ice' => 'x-conference-xcooltalk');
 	
 	if (isset($mimeTypes[$bName]))
-		$mime_type = $mimeTypes[$bName];
+		$mimeType = $mimeTypes[$bName];
 	else
-		$mime_type = 'application/octet-stream';
+		$mimeType = 'application/octet-stream';
 }
 
 /* Set headers for download */
 header('Content-Transfer-Encoding: binary');
-if ($mime_type)
-	header('Content-Type: '.$mime_type);
+header('Content-Type: '.$mimeType);
 header('Content-Length: '.filesize($file));
 header('Content-Disposition: attachment; filename="'.$filename.'"');
-readfile($file);
-
+ob_end_flush();
+$fp = fopen($file, 'rb');
+while (!feof($fp))
+	echo fgets($fp, 16384);
+	
 exit;
-

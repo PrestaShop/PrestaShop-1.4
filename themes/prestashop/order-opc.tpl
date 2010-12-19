@@ -192,7 +192,7 @@
 							</td>
 							<td class="cart_quantity">
 								<div style="float:right">
-								<a class="cart_quantity_delete" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" title="{l s='Delete this customization'}" class="icon" /></a>
+								<a class="cart_quantity_delete" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" title="{l s='Delete this customization'}" width="11" height="13" class="icon" /></a>
 								</div>
 								<div id="cart_quantity_button" style="float:left">
 									<a class="cart_quantity_up" id="{$product.id_product}_{$product.id_product_attribute}" href="{$base_dir_ssl}cart.php?add&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}&amp;id_customization={$id_customization}&amp;token={$token_cart}" title="{l s='Add'}"><img src="{$img_dir}icon/quantity_up.gif" alt="{l s='Add'}" width="14" height="9" /></a><br />
@@ -216,7 +216,7 @@
 				<tr class="cart_discount {if $smarty.foreach.discountLoop.last}last_item{elseif $smarty.foreach.discountLoop.first}first_item{else}item{/if}" id="cart_discount_{$discount.id_discount}">
 					<td class="cart_discount_name" colspan="2">{$discount.name}</td>
 					<td class="cart_discount_description" colspan="3">{$discount.description}</td>
-					<td class="cart_discount_delete"><a href="{$base_dir_ssl}order-opc.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" /></a></td>
+					<td class="cart_discount_delete"><a href="{$base_dir_ssl}order-opc.php?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" width="11" height="13" class="icon" /></a></td>
 					<td class="cart_discount_price"><span id="discount_price_{$discount.id_discount}" class="price-discount">
 						{if $discount.value_real > 0}
 							{if !$priceDisplay}{displayPrice price=$discount.value_real*-1}{else}{displayPrice price=$discount.value_tax_exc*-1}{/if}

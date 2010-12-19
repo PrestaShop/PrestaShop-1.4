@@ -446,7 +446,11 @@ $(document).ready(function()
 		updateColorSelect(0);
 	});
 
-	$('.thickbox').fancybox();
+	$('.thickbox').fancybox({
+		'hideOnContentClick': true,
+		'transitionIn'	: 'elastic',
+		'transitionOut'	: 'elastic'
+	});
 });
 
 function saveCustomization()

@@ -66,7 +66,6 @@ class PayPal extends PaymentModule
 			OR !$this->registerHook('backBeforePayment')
 			OR !$this->registerHook('paymentReturn')
 			OR !$this->registerHook('rightColumn')
-			OR !$this->registerHook('header')
 			OR !$this->registerHook('cancelProduct')
 			OR !$this->registerHook('adminOrder'))
 			return false;
@@ -105,7 +104,7 @@ class PayPal extends PaymentModule
 		$orderState = new OrderState();
 		$orderState->name = array();
 		// TODO espagnol ?
-		foreach (Language::getLanguages() as $language)
+		foreach (Language::getLanguages() AS $language)
 		{
 			if (strtolower($language['iso_code']) == 'fr')
 				$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
@@ -219,11 +218,6 @@ class PayPal extends PaymentModule
 	public function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
-	}
-	
-	public function hookHeader($params)
-	{
-		return $this->display(__FILE__, 'header.tpl');
 	}
 	
 	public function hookBackBeforePayment($params)
@@ -586,16 +580,16 @@ class PayPal extends PaymentModule
 
 		$send = true;
 		// Sanitinize log
-		foreach ($log as $key => $string)
+		foreach ($log AS $key => $string)
 			if ($string == 'ACK -> Success')
 				$send = false;
 			elseif (substr($string, 0, 6) == 'METHOD')
 			{
 				$values = explode('&', $string);
-				foreach ($values as $key2 => $value)
+				foreach ($values AS $key2 => $value)
 				{
 					$values2 = explode('=', $value);
-					foreach ($values2 as $key3 => $value2)
+					foreach ($values2 AS $key3 => $value2)
 						if ($value2 == 'PWD' || $value2 == 'SIGNATURE')
 							$values2[$key3 + 1] = '*********';
 					$values[$key2] = implode('=', $values2);
@@ -606,7 +600,7 @@ class PayPal extends PaymentModule
 		include(dirname(__FILE__).'/../../header.php');
 		$smarty->assign('message', $message);
 		$smarty->assign('logs', $log);
-		$data = array('{logs}' => implode("<br />", $log));
+		$data = array('{logs}' => implode('<br />', $log));
 		if ($send)
 			Mail::Send((int)($cookie->id_lang), 'error_reporting', 'Error reporting from your PayPal module', $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
 		echo $this->display(__FILE__, 'error.tpl');
@@ -623,10 +617,10 @@ class PayPal extends PaymentModule
 			SELECT `id_order` 
 			FROM `'._DB_PREFIX_.'orders` 
 			WHERE `id_cart` = '.(int)($cart->id));
+			
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'paypal_order` (`id_order`, `id_transaction`, `payment_method`, `payment_status`, `capture`) 
-			VALUES ('.(int)($id_order).', \''.pSQL($extraVars['transaction_id']).'\', '.(int)(Configuration::get('PAYPAL_PAYMENT_METHOD')).', \''.pSQL($extraVars['payment_status']).((isset($extraVars['pending_reason']) AND $extraVars['pending_reason'] == 'authorization') ? '_authorization' : '').'\', '.(int)(Configuration::get('PAYPAL_CAPTURE')).')
-			');
+			VALUES ('.(int)($id_order).', \''.pSQL($extraVars['transaction_id']).'\', '.(int)(Configuration::get('PAYPAL_PAYMENT_METHOD')).', \''.pSQL($extraVars['payment_status']).((isset($extraVars['pending_reason']) AND $extraVars['pending_reason'] == 'authorization') ? '_authorization' : '').'\', '.(int)(Configuration::get('PAYPAL_CAPTURE')).')');
 		}
 	}
 	
@@ -665,9 +659,7 @@ class PayPal extends PaymentModule
 		$result = Db::getInstance()->getRow('
 		SELECT `payment_method`, `payment_status`, `capture`  
 		FROM `'._DB_PREFIX_.'paypal_order` 
-		WHERE `id_order` = '.(int)($id_order).' 
-		AND `capture` = 1
-		');
+		WHERE `id_order` = '.(int)($id_order).' AND `capture` = 1');
 		if (!isset($result['payment_method']))
 			return false;
 		if ($result['payment_status'] != 'Pending_authorization' AND $result['payment_status'] != 'Completed')
@@ -701,57 +693,57 @@ class PayPal extends PaymentModule
 			</div>
 			<div class="clear"></div>
 			<script type="text/javascript">
-			function loadTab(id){}
-			setupAllTabs();
+				function loadTab(id){}
+				setupAllTabs();
 			</script>
-		</form>
-		';
+		</form>';
 	}
 	
 	private function _getSolutionTabHtml()
 	{
-		$payment_method = (int)(Tools::getValue('payment_method', Configuration::get('PAYPAL_PAYMENT_METHOD')));
-		$paypal_express = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_EXPRESS_CHECKOUT'));
+		$paymentMethod = (int)(Tools::getValue('payment_method', Configuration::get('PAYPAL_PAYMENT_METHOD')));
+		$paypalExpress = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_EXPRESS_CHECKOUT'));
 		
-		$html = '
+		return '
 		<h2>'.$this->l('Solution').'</h2>
 		<h3>'.$this->l('Choose a solution:').'</h3>
 		<ul style="list-style-type:none;">
-			<li><input type="radio" name="payment_method" id="payment_method_0" value="'._PAYPAL_INTEGRAL_.'" '.($payment_method == _PAYPAL_INTEGRAL_ ? 'checked="checked" ' : '').'/> <label for="payment_method_0" class="t"><b>'.$this->l('Payments by credit cards').'</b>: '.$this->l('CB , Visa, Mastercard and PayPal account').'</label></li>
-			<li><input type="radio" name="payment_method" id="payment_method_2" value="'._PAYPAL_INTEGRAL_EVOLUTION_.'" '.($payment_method == _PAYPAL_INTEGRAL_EVOLUTION_ ? 'checked="checked" ' : '').'/> <label for="payment_method_2" class="t"><b>'.$this->l('Payments by cards + seller protection').'</b></label><sup>*</sup> '.$this->l('(PayPal Integral Evolution, monthly subscription)').'</li>
-			<li><input type="radio" name="payment_method" id="payment_method_1" value="'._PAYPAL_OPTION_PLUS_.'" '.($payment_method == _PAYPAL_OPTION_PLUS_ ? 'checked="checked" ' : '').'/> <label for="payment_method_1" class="t">'.$this->l('Payments by').' <b>'.$this->l('PayPal account').'</b> '.$this->l('(PayPal Option+)').'</label></li>
+			<li><input type="radio" name="payment_method" id="payment_method_0" value="'._PAYPAL_INTEGRAL_.'" '.($paymentMethod == _PAYPAL_INTEGRAL_ ? 'checked="checked" ' : '').'/> <label for="payment_method_0" class="t"><b>'.$this->l('Payments by credit cards').'</b>: '.$this->l('CB , Visa, Mastercard and PayPal account').'</label></li>
+			<li><input type="radio" name="payment_method" id="payment_method_2" value="'._PAYPAL_INTEGRAL_EVOLUTION_.'" '.($paymentMethod == _PAYPAL_INTEGRAL_EVOLUTION_ ? 'checked="checked" ' : '').'/> <label for="payment_method_2" class="t"><b>'.$this->l('Payments by cards + seller protection').'</b></label><sup>*</sup> '.$this->l('(PayPal Integral Evolution, monthly subscription)').'</li>
+			<li><input type="radio" name="payment_method" id="payment_method_1" value="'._PAYPAL_OPTION_PLUS_.'" '.($paymentMethod == _PAYPAL_OPTION_PLUS_ ? 'checked="checked" ' : '').'/> <label for="payment_method_1" class="t">'.$this->l('Payments by').' <b>'.$this->l('PayPal account').'</b> '.$this->l('(PayPal Option+)').'</label></li>
 		</ul>
 		<p style="color:red;"><sup>*</sup> '.$this->l('Activation subject to conditions').', <a style="color:red;text-decoration:underline;" href="http://altfarm.mediaplex.com/ad/ck/3484-23403-8030-88?ID=PROCPRESTA" style="text-decoration:underline;" target="_blank">'.$this->l('click here to subscribe').'</a></p>
 		<h3>'.$this->l('Option:').'</h3>
 		<ul style="list-style-type:none;">
-			<li><input type="checkbox" name="paypal_express" id="paypal_express" value="1" '.($paypal_express ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('PayPal Express : payment in 2 clicks').'</b> '.$this->l('with PayPal account directly from cart page').'</label></li>
+			<li><input type="checkbox" name="paypal_express" id="paypal_express" value="1" '.($paypalExpress ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('PayPal Express : payment in 2 clicks').'</b> '.$this->l('with PayPal account directly from cart page').'</label></li>
 		</ul>
 		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
 		<div style="border:1px solid red;color:red;padding:15px;">
 			<span style="font-weight:bold;text-decoration:underline;">'.$this->l('Important:').'</span>
 			'.$this->l('To use any PayPal solution, you need to set up API parameters in the « Settings » Tab').'
-		</div>
-		';
-		return $html;
+		</div>';
 	}
 	
 	private function _getSettingsTabHtml()
 	{
-		$sandbox_mode = (int)(Tools::getValue('sandbox_mode', Configuration::get('PAYPAL_SANDBOX')));
-		$paypal_capture = (int)(Tools::getValue('paypal_capture', Configuration::get('PAYPAL_CAPTURE')));
+		global $cookie;
+
+		$lang = new Language((int)($cookie->id_lang));
+		$sandboxMode = (int)(Tools::getValue('sandbox_mode', Configuration::get('PAYPAL_SANDBOX')));
+		$paypalCapture = (int)(Tools::getValue('paypal_capture', Configuration::get('PAYPAL_CAPTURE')));
 		
 		$html = '
 		<h2>'.$this->l('Settings').'</h2>
 		<label>'.$this->l('Sandbox mode (tests)').':</label>
 		<div class="margin-form" style="padding-top:2px;">
-			<input type="radio" name="sandbox_mode" id="sandbox_mode_1" value="1" '.($sandbox_mode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_1" class="t">'.$this->l('Active').'</label> 
-			<input type="radio" name="sandbox_mode" id="sandbox_mode_0" value="0" style="margin-left:15px;" '.(!$sandbox_mode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_0" class="t">'.$this->l('Inactive').'</label>
+			<input type="radio" name="sandbox_mode" id="sandbox_mode_1" value="1" '.($sandboxMode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_1" class="t">'.$this->l('Active').'</label> 
+			<input type="radio" name="sandbox_mode" id="sandbox_mode_0" value="0" style="margin-left:15px;" '.(!$sandboxMode ? 'checked="checked" ' : '').'/> <label for="sandbox_mode_0" class="t">'.$this->l('Inactive').'</label>
 		</div>
 		<div class="clear"></div>
 		<label>'.$this->l('Payment type').':</label>
 		<div class="margin-form" style="padding-top:2px;">
-			<input type="radio" name="paypal_capture" id="paypal_capture_0" value="0" '.(!$paypal_capture ? 'checked="checked" ' : '').'/> <label for="paypal_capture_0" class="t">'.$this->l('Direct (sales)').'</label> 
-			<input type="radio" name="paypal_capture" id="paypal_capture_1" value="1" style="margin-left:15px;" '.($paypal_capture ? 'checked="checked" ' : '').'/> <label for="paypal_capture_1" class="t">'.$this->l('Authorization / Manual Capture').' '.$this->l('(Payment shipping)').'</label>
+			<input type="radio" name="paypal_capture" id="paypal_capture_0" value="0" '.(!$paypalCapture ? 'checked="checked" ' : '').'/> <label for="paypal_capture_0" class="t">'.$this->l('Direct (sales)').'</label> 
+			<input type="radio" name="paypal_capture" id="paypal_capture_1" value="1" style="margin-left:15px;" '.($paypalCapture ? 'checked="checked" ' : '').'/> <label for="paypal_capture_1" class="t">'.$this->l('Authorization / Manual Capture').' '.$this->l('(Payment shipping)').'</label>
 		</div>
 		<label>'.$this->l('PayPal account e-mail').':</label>
 		<div class="margin-form">
@@ -773,18 +765,20 @@ class PayPal extends PaymentModule
 		<div class="margin-form">
 			<input type="text" name="api_signature" value="'.htmlentities(Tools::getValue('api_signature', Configuration::get('PAYPAL_API_SIGNATURE')), ENT_COMPAT, 'UTF-8').'" size="40" />
 		</div>
-		<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>
-		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
-		';
+		'.($lang->iso_code == 'fr' ? '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>' : '').'
+		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
 		
 		return $html;
 	}
 	
 	private function _getPersonalizationsTabHtml()
 	{
+		global $cookie;
+
+		$lang = new Language((int)($cookie->id_lang));
 		$template_paypal = Tools::getValue('template_paypal', Configuration::get('PAYPAL_TEMPLATE'));
 		
-		$html = '
+		return '
 		<h2>'.$this->l('Logos and personalizations').'</h2>
 		<label for="banner_url">'.$this->l('Banner image URL').':</label>
 		<div class="margin-form">
@@ -797,11 +791,8 @@ class PayPal extends PaymentModule
 			<input type="radio" name="template_paypal" id="template_paypal_b" value="B" style="margin-left:10px;" '.($template_paypal == 'B' ? 'checked="checked" ' : '').'/> <label for="template_paypal_b" class="t">B</label>
 			<input type="radio" name="template_paypal" id="template_paypal_c" value="C" style="margin-left:10px;" '.($template_paypal == 'C' ? 'checked="checked" ' : '').'/> <label for="template_paypal_c" class="t">C</label>
 		</div>
-		<p style="clear:both;"><a style="color:blue;text-decoration:underline;" href="https://cms.paypal.com/cms_content/FR/fr_FR/files/developer/Paypal_Integral_Evolution_Personnalisation.pdf" target="_blank">'.$this->l('Click here to learn how to customize these templates').'</a></p>
-		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
-		';
-		
-		return $html;
+		'.($lang->iso_code == 'fr' ? '<p style="clear:both;"><a style="color:blue;text-decoration:underline;" href="https://cms.paypal.com/cms_content/FR/fr_FR/files/developer/Paypal_Integral_Evolution_Personnalisation.pdf" target="_blank">'.$this->l('Click here to learn how to customize these templates').'</a></p>' : '').'
+		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
 	}
 	
 	private function _setPayPalSubscription()
@@ -957,12 +948,11 @@ class PayPal extends PaymentModule
 			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Full';
 		else
 		{
-			$iso_currency = Db::getInstance()->getValue('
+			$isoCurrency = Db::getInstance()->getValue('
 			SELECT `iso_code`
 			FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`)
-			');
-			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Partial&AMT='.(float)($amt).'&CURRENCYCODE='.urlencode(strtoupper($iso_currency));
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`)');
+			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Partial&AMT='.(float)($amt).'&CURRENCYCODE='.urlencode(strtoupper($isoCurrency));
 		}
 		$paypalLib = new PaypalLib();
 		return $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'RefundTransaction', $request);
@@ -979,6 +969,7 @@ class PayPal extends PaymentModule
 		$msg->message = $message;
 		$msg->id_order = (int)($id_order);
 		$msg->private = 1;
+
 		return $msg->add();
 	}
 	
@@ -1001,7 +992,7 @@ class PayPal extends PaymentModule
 		$products = $order->getProducts();
 		// Amount for refund
 		$amt = 0.00;
-		foreach ($products as $product)
+		foreach ($products AS $product)
 			if ($product['product_quantity_refunded'] == 0)
 				$amt += (float)($product['total_price']);
 		$amt += (float)($order->total_shipping);
@@ -1011,7 +1002,7 @@ class PayPal extends PaymentModule
 		else
 			$response = $this->_makeRefund($id_transaction, (float)($amt));
 		$message = $this->l('Refund operation result:').'<br>';
-		foreach ($response as $k => $value)
+		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
 		if (array_key_exists('ACK', $response) AND $response['ACK'] == 'Success' AND $response['REFUNDTRANSACTIONID'] != '')
 		{
@@ -1026,6 +1017,7 @@ class PayPal extends PaymentModule
 		else
 			$message .= $this->l('Error on transaction!');
 		$this->_addNewPrivateMessage((int)($id_order), $message);
+
 		return $response;
 	}
 	
@@ -1050,7 +1042,7 @@ class PayPal extends PaymentModule
 		$paypalLib = new PaypalLib();
 		$response = $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoCapture', $request);
 		$message = $this->l('Capture operation result:').'<br>';
-		foreach ($response as $k => $value)
+		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
 		if (array_key_exists('ACK', $response) AND $response['ACK'] == 'Success' AND $response['PAYMENTSTATUS'] == 'Completed')
 		{
@@ -1065,6 +1057,7 @@ class PayPal extends PaymentModule
 		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\' WHERE `id_order` = '.(int)($id_order)))
 			die(Tools::displayError('Error when updating PayPal database'));
 		$this->_addNewPrivateMessage((int)($id_order), $message);
+
 		return $response;
 	}
 	
@@ -1118,7 +1111,7 @@ class PayPal extends PaymentModule
 				}
 			}
 			$message = $this->l('Verification status:').'<br>';
-			foreach ($response as $k => $value)
+			foreach ($response AS $k => $value)
 				$message .= $k.': '.$value.'<br>';
 			$this->_addNewPrivateMessage((int)($id_order), $message);
 			return $response;
@@ -1153,7 +1146,7 @@ class PayPal extends PaymentModule
 					$paypalapi->uninstall();
 					Configuration::loadConfiguration();
 				}
-				foreach ($confs as $key => $value)
+				foreach ($confs AS $key => $value)
 					Configuration::updateValue($key, $value);
 			}
 			/* Create Table */
@@ -1162,23 +1155,23 @@ class PayPal extends PaymentModule
 			`id_order` int(10) unsigned NOT NULL auto_increment,
 			`id_transaction` varchar(255) NOT NULL,
 			PRIMARY KEY (`id_order`)
-			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8
-			'))
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8'))
 				$ok = false;
 			if (!Db::getInstance()->Execute('
 			ALTER TABLE `'._DB_PREFIX_.'paypal_order` ADD `payment_method` INT NOT NULL,
 			ADD `payment_status` VARCHAR(255) NOT NULL,
-			ADD `capture` INT NOT NULL
-			'))
+			ADD `capture` INT NOT NULL'))
 				$ok = false;
+
 			/* Hook */
 			$this->registerHook('cancelProduct');
 			$this->registerHook('adminOrder');
+
 			/* Create OrderState */
 			$orderState = new OrderState();
 			$orderState->name = array();
 			// TODO espagnol ?
-			foreach (Language::getLanguages() as $language)
+			foreach (Language::getLanguages() AS $language)
 			{
 				if (strtolower($language['iso_code']) == 'fr')
 					$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
@@ -1194,19 +1187,21 @@ class PayPal extends PaymentModule
 			if ($orderState->add())
 				copy(_PS_ROOT_DIR_.'/img/os/'._PS_OS_PAYPAL_.'.gif', _PS_ROOT_DIR_.'/img/os/'.(int)($orderState->id).'.gif');
 			Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
+
 			/* Delete unseless configuration */
 			Configuration::deleteByName('PAYPAL_INTEGRAL');
+
 			/* Add new Configurations */
 			if (!Configuration::get('PAYPAL_PAYMENT_METHOD'))
 				Configuration::updateValue('PAYPAL_PAYMENT_METHOD', _PAYPAL_INTEGRAL_);
 			Configuration::updateValue('PAYPAL_CAPTURE', 0);
 			Configuration::updateValue('PAYPAL_TEMPLATE', 'A');
+
 			if ($ok)
 				Configuration::updateValue('PAYPAL_NEW', 1);
+
 			return $ok;
 		}
 		return false;
 	}
 }
-
-

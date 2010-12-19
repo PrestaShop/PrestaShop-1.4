@@ -539,7 +539,7 @@ class CarrierCore extends ObjectModel
 		$res = Db::getInstance()->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'range_price`
 		WHERE id_carrier = '.(int)($oldId));
-		foreach ($res as $val)
+		foreach ($res AS $val)
 		{
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'range_price` (`id_carrier`, `delimiter1`, `delimiter2`)
@@ -549,7 +549,7 @@ class CarrierCore extends ObjectModel
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
 			WHERE id_carrier = '.(int)($oldId).'
 			AND id_range_price = '.(int)($val['id_range_price']));
-			foreach ($res2 as $val2)
+			foreach ($res2 AS $val2)
 				Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'delivery` (`id_carrier`,`id_range_price`,`id_range_weight`,`id_zone`, `price`)
 				VALUES ('.(int)($this->id).','.(int)($maxRangePrice).',NULL,'.(int)($val2['id_zone']).','.(float)($val2['price']).')');
@@ -659,8 +659,6 @@ class CarrierCore extends ObjectModel
 	    return Db::getInstance()->getValue('
 	    SELECT `id_tax_rules_group`
 	    FROM `'._DB_PREFIX_.'carrier`
-	    WHERE `id_carrier` = '.(int)$id_carrier
-	    );
+	    WHERE `id_carrier` = '.(int)$id_carrier);
 	}
-
 }

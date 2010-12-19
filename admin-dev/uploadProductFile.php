@@ -47,7 +47,7 @@ if (isset($_FILES['virtual_product_file']) AND is_uploaded_file($_FILES['virtual
 	if (!copy($file, _PS_DOWNLOAD_DIR_.$newfilename))
 	{
 		header('HTTP/1.1 500 Error');
-		echo '<return result="error" msg="no rights" filename="'.$filename.'" />';
+		echo '<return result="error" msg="No permissions to write in the download folder" filename="'.$filename.'" />';
 	}
 	@unlink($file);
 
@@ -57,5 +57,5 @@ if (isset($_FILES['virtual_product_file']) AND is_uploaded_file($_FILES['virtual
 else
 {
 	header('HTTP/1.1 500 Error');
-	echo '<return result="error" msg="big error" filename="'.ProductDownload::getNewFilename().'" />';
+	echo '<return result="error" msg="Unknown error" filename="'.ProductDownload::getNewFilename().'" />';
 }

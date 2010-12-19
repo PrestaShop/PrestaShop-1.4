@@ -82,8 +82,10 @@ if ($id = (int)(Tools::getValue('id_'.$objectType)))
 else
 {
 	$controller->displayHeader();
-	$data = call_user_func(array($className, 'get'.$className.'s'), false, (int)($cookie->id_lang), true);
-	$nbProducts = sizeof($data);
+	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true);
+	$nbProducts = 0;
+	foreach ($data AS $n)
+		$nbProducts += (int)$n['nb_products'];
 	$controller->pagination($nbProducts);
 
 	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
@@ -103,5 +105,3 @@ else
 }
 
 include(dirname(__FILE__).'/footer.php');
-
-

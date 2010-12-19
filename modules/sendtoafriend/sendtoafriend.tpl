@@ -27,7 +27,7 @@
 {capture name=path}{l s='Send to a friend' mod='sendtoafriend'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Send to a friend' mod='sendtoafriend'}</h2>
+<h1>{l s='Send to a friend' mod='sendtoafriend'}</h1>
 
 <p class="bold">{l s='Send this page to a friend who might be interested in the item below.' mod='sendtoafriend'}.</p>
 {include file="$tpl_dir./errors.tpl"}
