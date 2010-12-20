@@ -84,11 +84,11 @@ class UpsCarrier extends CarrierModule
 			if (!Configuration::get('UPS_CARRIER_SHIPPER_ID'))
 				$warning[] = $this->l('\'MyUps ID\'').' ';
 			if (!Configuration::get('UPS_CARRIER_API_KEY'))
-				$warning[] = $this->l('\'UPS API Key ID\'').' ';
+				$warning[] = $this->l('\'UPS API Key\'').' ';
 			if (!Configuration::get('UPS_CARRIER_PICKUP_TYPE'))
-				$warning[] = $this->l('\'UPS Pickup Type ID\'').' ';
+				$warning[] = $this->l('\'UPS Pickup Type\'').' ';
 			if (!Configuration::get('UPS_CARRIER_PACKAGING_TYPE'))
-				$warning[] = $this->l('\'UPS Packaging Type ID\'').' ';
+				$warning[] = $this->l('\'UPS Packaging Type\'').' ';
 
 			// Check shop configuration
 			if (!Configuration::get('PS_SHOP_CODE'))
@@ -96,17 +96,13 @@ class UpsCarrier extends CarrierModule
 			if (!Configuration::get('PS_SHOP_COUNTRY_ID'))
 				$warning[] = $this->l('\'Shop country (in Preferences Tab).\'').' ';
 
-			// Check webservice ups availibility
-			if (!$this->webserviceTest())
-				$warning[] = $this->l('Could not connect to UPS Webservices, check your API Key').', ';
-
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
 			if (!$this->_weightUnit)
-				$warning[] = $this->l('\'Weight Unit must be LB or KG (in Preferences > Localization Tab).\'').' ';
+				$warning[] = $this->l('\'Weight Unit (LB or KG in Preferences > Localization Tab).\'').' ';
 			if (!$this->_dimensionUnit)
-				$warning[] = $this->l('\'Dimension Unit must be CM or IN (in Preferences > Localization Tab).\'').' ';
+				$warning[] = $this->l('\'Dimension Unit (CM or IN in Preferences > Localization Tab).\'').' ';
 
 			// Generate warnings
 			if (count($warning))
@@ -162,25 +158,25 @@ class UpsCarrier extends CarrierModule
 		// Create cache table in database
 		$sql1 = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ups_cache` (
 				  `id_ups_cache` int(10) NOT NULL AUTO_INCREMENT,
-				  `id_product` int(10) NOT NULL,
-				  `id_category` int(10) NOT NULL,
-				  `pickup_type_code` varchar(64) NOT NULL,
+				  `id_cart` int(10) NOT NULL,
+				  `hash` varchar(32) NOT NULL,
+				  `id_currency` int(10) NOT NULL,
 				  `total_charges` double(10,2) NOT NULL,
-				  `currency_code` varchar(3) NOT NULL,
 				  `date_add` datetime NOT NULL,
 				  `date_upd` datetime NOT NULL,
 				  PRIMARY KEY  (`id_ups_cache`)
 				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
-		// Create cache table in database
+		// Create config table in database
 		$sql2 = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ups_config` (
 				  `id_ups_config` int(10) NOT NULL AUTO_INCREMENT,
 				  `id_product` int(10) NOT NULL,
 				  `id_category` int(10) NOT NULL,
-				  `pickup_type_code` varchar(64) NOT NULL,
+				  `id_currency` int(10) NOT NULL,
+				  `pickup_type` varchar(64) NOT NULL,
+				  `packaging_type` varchar(64) NOT NULL,
 				  `additionnal_charges` double(6,2) NOT NULL,
 				  `total_charges` double(10,2) NOT NULL,
-				  `currency_code` varchar(3) NOT NULL,
 				  `date_add` datetime NOT NULL,
 				  `date_upd` datetime NOT NULL,
 				  PRIMARY KEY  (`id_ups_config`)
@@ -342,37 +338,11 @@ class UpsCarrier extends CarrierModule
 
 			<style>
 				#menuTab { float: left; padding: 0; margin: 0; text-align: left; }
-				#menuTab li
-				{
-					text-align: left;
-					float: left;
-					display: inline;
-					padding: 5px;
-					padding-right: 10px;
-					background: #EFEFEF;
-					font-weight: bold;
-					cursor: pointer;
-					border-left: 1px solid #EFEFEF;
-					border-right: 1px solid #EFEFEF;
-					border-top: 1px solid #EFEFEF;
-				}
-				#menuTab li.menuTabButton.selected
-				{
-					background : #FFF6D3;
-					border-left: 1px solid #CCCCCC;
-					border-right: 1px solid #CCCCCC;
-					border-top: 1px solid #CCCCCC;
-				}
+				#menuTab li { text-align: left; float: left; display: inline; padding: 5px; padding-right: 10px; background: #EFEFEF; font-weight: bold; cursor: pointer; border-left: 1px solid #EFEFEF; border-right: 1px solid #EFEFEF; border-top: 1px solid #EFEFEF; }
+				#menuTab li.menuTabButton.selected { background: #FFF6D3; border-left: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; border-top: 1px solid #CCCCCC; }
 				#tabList { clear: left; }
 				.tabItem { display: none; }
-				.tabItem.selected
-				{
-					display: block;
-					background: #FFFFF0;
-					border: 1px solid #CCCCCC;
-					padding: 10px;
-					padding-top: 20px;
-				}
+				.tabItem.selected { display: block; background: #FFFFF0; border: 1px solid #CCCCCC; padding: 10px; padding-top: 20px; }
 			</style>
 			<script>
 				$(".menuTabButton").click(function () {
@@ -396,17 +366,11 @@ class UpsCarrier extends CarrierModule
 	{
 		$html = '<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1" method="post" class="form">
 					<label>'.$this->l('Your UPS Login').' : </label>
-					<div class="margin-form">
-						<input type="text" size="20" name="ups_carrier_login" value="'.Tools::getValue('ups_carrier_login', Configuration::get('UPS_CARRIER_LOGIN')).'" />
-					</div>
+					<div class="margin-form"><input type="text" size="20" name="ups_carrier_login" value="'.Tools::getValue('ups_carrier_login', Configuration::get('UPS_CARRIER_LOGIN')).'" /></div>
 					<label>'.$this->l('Your UPS Password').' : </label>
-					<div class="margin-form">
-						<input type="text" size="20" name="ups_carrier_password" value="'.Tools::getValue('ups_carrier_password', Configuration::get('UPS_CARRIER_PASSWORD')).'" />
-					</div>
+					<div class="margin-form"><input type="text" size="20" name="ups_carrier_password" value="'.Tools::getValue('ups_carrier_password', Configuration::get('UPS_CARRIER_PASSWORD')).'" /></div>
 					<label>'.$this->l('Your MyUps ID').' : </label>
-					<div class="margin-form">
-						<input type="text" size="20" name="ups_carrier_shipper_id" value="'.Tools::getValue('ups_carrier_shipper_id', Configuration::get('UPS_CARRIER_SHIPPER_ID')).'" />
-					</div>
+					<div class="margin-form"><input type="text" size="20" name="ups_carrier_shipper_id" value="'.Tools::getValue('ups_carrier_shipper_id', Configuration::get('UPS_CARRIER_SHIPPER_ID')).'" /></div>
 					<label>'.$this->l('Your UPS API Key').' : </label>
 					<div class="margin-form">
 						<input type="text" size="20" name="ups_carrier_api_key" value="'.Tools::getValue('ups_carrier_api_key', Configuration::get('UPS_CARRIER_API_KEY')).'" />
@@ -511,58 +475,151 @@ class UpsCarrier extends CarrierModule
 
 	/*** Front Methods ***/
 
+	public function getCookieCurrencyRate($id_currency_origin)
+	{
+		global $cookie;
+		$conversionRate = 1;
+		if ($cookie->id_currency != $id_currency_origin)
+		{
+			$currencyOrigin = new Currency((int)$id_currency_origin);
+			$conversionRate /= $currencyOrigin->conversion_rate;
+			$currencySelect = new Currency((int)$cookie->id_currency);
+			$conversionRate *= $currencySelect->conversion_rate;
+		}
+		return $conversionRate;
+	}
+	
+	public function getOrderShippingCostHash($wsParams)
+	{
+		$paramHash = '';
+		$productHash = '';
+		foreach ($wsParams['products'] as $product)
+		{
+			if (!empty($productHash))
+				$productHash .= '|';
+			$productHash .= $product['id_product'].':'.$product['id_product_attribute'].':'.$product['cart_quantity'];
+		}
+		foreach ($wsParams as $k => $v)
+			if ($k != 'products')
+			$paramHash .= '/'.$v;
+		return md5($productHash.$paramHash);
+	}
+
+	public function getOrderShippingCostCache($wsParams)
+	{
+		// Get Cache
+		$row = Db::getInstance()->getRow("
+		SELECT * FROM `"._DB_PREFIX_."ups_cache`
+		WHERE `id_cart` = ".(int)($wsParams['id_cart'])."
+		AND `hash` = '".pSQL($wsParams['hash'])."'");
+
+		if ($row['id_currency'])
+		{
+			// Check Currency Rate
+			$conversionRate = $this->getCookieCurrencyRate($row['id_currency']);
+
+			// Return Cache
+			return $row['total_charges'] * $conversionRate;
+		}
+		
+		return false;
+	}
+
+	public function saveOrderShippingCostCache($wsParams, $wscost)
+	{
+		global $cookie;
+		$date = date('Y-m-d H:i:s');
+		$insert = array(
+			'id_cart' => (int)($wsParams['id_cart']),
+			'hash' => pSQL($wsParams['hash']),
+			'id_currency' => (int)($cookie->id_currency),
+			'total_charges' => pSQL($wscost),
+			'date_add' => pSQL($date),
+			'date_upd' => pSQL($date)
+		);
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'ups_cache', $insert, 'INSERT');
+	}
+	
+	public function getWebserviceShippingCost($wsParams)
+	{
+		// Init var
+		$cost = 0;
+
+		// Getting shipping cost for each product
+		foreach ($wsParams['products'] as $product)
+		{
+			// Load param product
+			if ($product['weight'] < '0.1')
+				$product['weight'] = '0.1';
+			$wsParams['width'] = $product['width'];
+			$wsParams['height'] = $product['height'];
+			$wsParams['depth'] = $product['depth'];
+			$wsParams['weight'] = $product['weight'];
+
+			// If webservice return a cost, we add it, else, we return the original shipping cost
+			$result = $this->getUpsShippingCost($wsParams);
+			if ($result['connect'] && $result['cost'] > 0)
+				$cost += $result['cost'];
+			else
+				return false;
+		}
+
+		if ($cost > 0)
+			return $cost;
+		return false;
+	}
+
 	public function getOrderShippingCost($params, $shipping_cost)
 	{
 		// Init var
-		$ups_cost = 0;
 		$address = new Address($params->id_address_delivery);
-		$cartProducts = $params->getProducts();
 		$recipient_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($address->id_country));
 		$recipient_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)($address->id_state));
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('PS_SHOP_COUNTRY_ID')));
 		$shipper_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)(Configuration::get('PS_SHOP_STATE_ID')));
+		$products = $params->getProducts();
 
-		// Getting shipping cost for each product
-		foreach ($cartProducts as $product)
+		// Webservices Params
+		$wsParams = array(
+			'id_cart' => $params->id,
+			'id_address_delivery' => $params->id_address_delivery,
+			'recipient_address1' => $address->address1,
+			'recipient_address2' => $address->address2,
+			'recipient_postalcode' => $address->postcode,
+			'recipient_city' => $address->city,
+			'recipient_country_iso' => $recipient_country['iso_code'],
+			'recipient_state_iso' => $recipient_state['iso_code'],
+			'shipper_address1' => Configuration::get('PS_SHOP_ADDR1'),
+			'shipper_address2' => Configuration::get('PS_SHOP_ADDR2'),
+			'shipper_postalcode' => Configuration::get('PS_SHOP_CODE'),
+			'shipper_city' => Configuration::get('PS_SHOP_CITY'),
+			'shipper_country_iso' => $shipper_country['iso_code'],
+			'shipper_state_iso' => $shipper_state['iso_code'],
+			'pickup_type' => Configuration::get('UPS_CARRIER_PICKUP_TYPE'),
+			'packaging_type' => Configuration::get('UPS_CARRIER_PACKAGING_TYPE'),
+			'products' => $params->getProducts()
+		);
+		$wsParams['hash'] = $this->getOrderShippingCostHash($wsParams);
+
+		// Check cache
+		$ups_cost_cache = $this->getOrderShippingCostCache($wsParams);
+		if ($ups_cost_cache)
+			return $ups_cost_cache;
+
+		// Get Webservices Cost and Cache it
+		$wscost = $this->getWebserviceShippingCost($wsParams);
+		if ($wscost > 0)
 		{
-			if ($product['weight'] < '0.1')
-				$product['weight'] = '0.1';
-			$upsParams = array(
-				'recipient_address1' => $address->address1,
-				'recipient_address2' => $address->address2,
-				'recipient_postalcode' => $address->postcode,
-				'recipient_city' => $address->city,
-				'recipient_country_iso' => $recipient_country['iso_code'],
-				'recipient_state_iso' => $recipient_state['iso_code'],
-				'shipper_address1' => Configuration::get('PS_SHOP_ADDR1'),
-				'shipper_address2' => Configuration::get('PS_SHOP_ADDR2'),
-				'shipper_postalcode' => Configuration::get('PS_SHOP_CODE'),
-				'shipper_city' => Configuration::get('PS_SHOP_CITY'),
-				'shipper_country_iso' => $shipper_country['iso_code'],
-				'shipper_state_iso' => $shipper_state['iso_code'],
-				'pickuptype' => Configuration::get('UPS_CARRIER_PICKUP_TYPE'),
-				'width' => $product['width'],
-				'height' => $product['height'],
-				'depth' => $product['depth'],
-				'weight' => $product['weight']
-			);
-
-			// If webservice return a cost, we add it, else, we return the original shipping cost
-			$result = $this->getUpsShippingCost($upsParams);
-			if ($result['connect'] && $result['cost'] > 0)
-				$ups_cost += $result['cost'];
-			else
-				return $shipping_cost;
+			$this->saveOrderShippingCostCache($wsParams, $wscost);
+			return $wscost;
 		}
 
-		if ($ups_cost > 0)
-			return $ups_cost;
 		return $shipping_cost;
 	}
 
 	public function getOrderShippingCostExternal($params)
 	{
-		return 23;
+		return $this->getOrderShippingCost($params, 23);
 	}
 
 
@@ -647,8 +704,6 @@ class UpsCarrier extends CarrierModule
 		$resultTab = $this->parseXML($valTab);
 
 		// Return results
-		// echo '<pre>'.htmlentities(str_replace('><', ">\n<", $xml)).'</pre>';
-		// echo '<pre>'; print_r($resultTab); echo '</pre>';
 		if ($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
 			return true;
 		$this->_postErrors[]  = $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
@@ -683,23 +738,14 @@ class UpsCarrier extends CarrierModule
 		$resultTab = $this->parseXML($valTab);
 
 		// Check currency
-		global $cookie;
 		$conversionRate = 1;
 		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']))
 		{
 			$id_currency_return = Db::getInstance()->getValue('SELECT `id_currency` FROM `'._DB_PREFIX_.'currency` WHERE `iso_code` = \''.pSQL($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']).'\'');
-			if ($cookie->id_currency != $id_currency_return)
-			{
-				$currencyReturn = new Currency((int)$id_currency_return);
-				$conversionRate /= $currencyReturn->conversion_rate;
-				$currencySelect = new Currency((int)$cookie->id_currency);
-				$conversionRate *= $currencySelect->conversion_rate;
-			}
+			$conversionRate = $this->getCookieCurrencyRate($id_currency_return);
 		}
 
 		// Return results
-		// echo '<pre>'.htmlentities(str_replace('><', ">\n<", $xml)).'</pre>';
-		// echo '<pre>'; print_r($resultTab); echo '</pre>';
 		if ($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
 			return array('connect' => true, 'cost' => $resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['MONETARYVALUE'] * $conversionRate);
 		$this->_postErrors[]  = $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
@@ -774,10 +820,7 @@ class UpsCarrier extends CarrierModule
 			$this->_dimensionUnit
 		);
 
-		$dir = dirname(__FILE__);
-		if (preg_match('/classes/i', $dir))
-			$dir .= '/../modules/upscarrier/';
-		$xml = @file_get_contents($dir.'/xml.tpl');
+		$xml = @file_get_contents(dirname(__FILE__).'/xml.tpl');
 		$xml = str_replace($search, $replace, $xml);
 
 		return $xml;
