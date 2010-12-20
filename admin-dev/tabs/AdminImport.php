@@ -237,14 +237,23 @@ class AdminImport extends AdminTab
 			case $this->entities[$this->l('Manufacturers')]:
 			case $this->entities[$this->l('Suppliers')]:
 
-				//Overwrite validators AS name is not MultiLangField but only description is needed AS MultiLangField
-				self::$validators = array('description' => array('AdminImport', 'createMultiLangField'));
+				//Overwrite validators AS name is not MultiLangField
+				self::$validators = array(
+				'description' => array('AdminImport', 'createMultiLangField'),
+				'description_short' => array('AdminImport', 'createMultiLangField'),
+				'meta_title' => array('AdminImport', 'createMultiLangField'),
+				'meta_keywords' => array('AdminImport', 'createMultiLangField'),
+				'meta_description' => array('AdminImport', 'createMultiLangField'));
 
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
 				'id' => $this->l('ID'),
 				'name' => $this->l('Name *'),
-				'description' => $this->l('Description'));
+				'description' => $this->l('Description'),
+				'short_description' => $this->l('Short description'),
+				'meta_title' => $this->l('Meta-title'),
+				'meta_keywords' => $this->l('Meta-keywords'),
+				'meta_description' => $this->l('Meta-description'));
 			break;
 		}
 		parent::__construct();
