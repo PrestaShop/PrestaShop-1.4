@@ -176,7 +176,7 @@ class AdminImport extends AdminTab
 				'active' => '1',
 				'quantity' => 0,
 				'price' => 0,
-				'id_tax' => 0,
+				'id_tax_rules_group' => 0,
 				'description_short' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'link_rewrite' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'online_only' => 0);
