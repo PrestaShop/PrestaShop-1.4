@@ -243,46 +243,28 @@ class AdminPerformance extends AdminTab
 							});
 						});
 		</script>
-		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
-			<fieldset>
-				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers').'</legend>
-				<p>'.$this->l('You must enter another domain or subdomain in order to use cookieless static content.').'</p>
-				<label for="_MEDIA_SERVER_1_">'.$this->l('Media server #1').'</label>
-				<div class="margin-form">
-					<input type="text" name="_MEDIA_SERVER_1_" id="_MEDIA_SERVER_1_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_1_', _MEDIA_SERVER_1_), ENT_QUOTES, 'UTF-8').'" size="30" />
-					<p>'.$this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'</p>
-				</div>
-				<label for="_MEDIA_SERVER_2_">'.$this->l('Media server #2').'</label>
-				<div class="margin-form">
-					<input type="text" name="_MEDIA_SERVER_2_" id="_MEDIA_SERVER_2_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_2_', _MEDIA_SERVER_2_), ENT_QUOTES, 'UTF-8').'" size="30" />
-					<p>'.$this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'</p>
-				</div>
-				<label for="_MEDIA_SERVER_3_">'.$this->l('Media server #3').'</label>
-				<div class="margin-form">
-					<input type="text" name="_MEDIA_SERVER_3_" id="_MEDIA_SERVER_3_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_3_', _MEDIA_SERVER_3_), ENT_QUOTES, 'UTF-8').'" size="30" />
-					<p>'.$this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'</p>
-				</div>
-				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Save   ').'" name="submitMediaServers" class="button" />
-				</div>
-			</fieldset>
-		</form>';
+		';
 		
 		echo '
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
-				<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
-				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires the PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
-				<label>'.$this->l('Algorithm').' </label>
+				<legend><img src="../img/admin/prefs.gif" /> '.$this->l('Smarty').'</legend>
+				
+				<label>'.$this->l('Force compile:').'</label>
 				<div class="margin-form">
-					<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
-					<label class="t" for="PS_CIPHER_ALGORITHM_1">'.$this->l('Use Rijndael with mcrypt lib.').'</label>
-					<br />
-					<input type="radio" value="0" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_0" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? '' : 'checked="checked"').' />
-					<label class="t" for="PS_CIPHER_ALGORITHM_0">'.$this->l('Keep the custom BlowFish class.').'</label>
+					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_1" value="1" '.(Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
+					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_0" value="0" '.(!Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
+					<p>'.$this->l('This forces Smarty to (re)compile templates on every invocation. This is handy for development and debugging. It should never be used in a production environment.').'</p>
 				</div>
+				<label>'.$this->l('Cache:').'</label>
 				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Save   ').'" name="submitCiphering" class="button" />
+					<input type="radio" name="smarty_cache" id="smarty_cache_1" value="1" '.(Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
+					<input type="radio" name="smarty_cache" id="smarty_cache_0" value="0" '.(!Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
+					<p>'.$this->l('Should be enabled except for debuging.').'</p>
+				</div>
+
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitSmartyConfig" class="button" />
 				</div>
 			</fieldset>
 		</form>';
@@ -343,26 +325,27 @@ class AdminPerformance extends AdminTab
 			</fieldset>
 		</form>';
 		
-		echo '
-		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
+		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
-				<legend><img src="../img/admin/prefs.gif" /> '.$this->l('Smarty').'</legend>
-				
-				<label>'.$this->l('Force compile:').'</label>
+				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers (used only with CCC)').'</legend>
+				<p>'.$this->l('You must enter another domain or subdomain in order to use cookieless static content.').'</p>
+				<label for="_MEDIA_SERVER_1_">'.$this->l('Media server #1').'</label>
 				<div class="margin-form">
-					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_1" value="1" '.(Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
-					<input type="radio" name="smarty_force_compile" id="smarty_force_compile_0" value="0" '.(!Configuration::get('PS_SMARTY_FORCE_COMPILE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
-					<p>'.$this->l('This forces Smarty to (re)compile templates on every invocation. This is handy for development and debugging. It should never be used in a production environment.').'</p>
+					<input type="text" name="_MEDIA_SERVER_1_" id="_MEDIA_SERVER_1_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_1_', _MEDIA_SERVER_1_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the second domain of your shop, (e.g., myshop-media-server-1.com). If you do not have another domain, leave this field blank').'</p>
 				</div>
-				<label>'.$this->l('Cache:').'</label>
+				<label for="_MEDIA_SERVER_2_">'.$this->l('Media server #2').'</label>
 				<div class="margin-form">
-					<input type="radio" name="smarty_cache" id="smarty_cache_1" value="1" '.(Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
-					<input type="radio" name="smarty_cache" id="smarty_cache_0" value="0" '.(!Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
-					<p>'.$this->l('Should be enabled except for debuging.').'</p>
+					<input type="text" name="_MEDIA_SERVER_2_" id="_MEDIA_SERVER_2_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_2_', _MEDIA_SERVER_2_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the third domain of your shop, (e.g., myshop-media-server-2.com). If you do not have another domain, leave this field blank').'</p>
 				</div>
-
+				<label for="_MEDIA_SERVER_3_">'.$this->l('Media server #3').'</label>
 				<div class="margin-form">
-					<input type="submit" value="'.$this->l('   Save   ').'" name="submitSmartyConfig" class="button" />
+					<input type="text" name="_MEDIA_SERVER_3_" id="_MEDIA_SERVER_3_" value="'.htmlentities(Tools::getValue('_MEDIA_SERVER_3_', _MEDIA_SERVER_3_), ENT_QUOTES, 'UTF-8').'" size="30" />
+					<p>'.$this->l('Name of the fourth domain of your shop, (e.g., myshop-media-server-3.com). If you do not have another domain, leave this field blank').'</p>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitMediaServers" class="button" />
 				</div>
 			</fieldset>
 		</form>';
@@ -435,6 +418,25 @@ class AdminPerformance extends AdminTab
 					echo '</table></div>';
 				}
 				echo '</div></fieldset>';
+				
+				echo '
+				<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
+					<fieldset>
+						<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
+						<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires the PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
+						<label>'.$this->l('Algorithm').' </label>
+						<div class="margin-form">
+							<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
+							<label class="t" for="PS_CIPHER_ALGORITHM_1">'.$this->l('Use Rijndael with mcrypt lib.').'</label>
+							<br />
+							<input type="radio" value="0" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_0" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? '' : 'checked="checked"').' />
+							<label class="t" for="PS_CIPHER_ALGORITHM_0">'.$this->l('Keep the custom BlowFish class.').'</label>
+						</div>
+						<div class="margin-form">
+							<input type="submit" value="'.$this->l('   Save   ').'" name="submitCiphering" class="button" />
+						</div>
+					</fieldset>
+				</form>';
 	}
 }
 
