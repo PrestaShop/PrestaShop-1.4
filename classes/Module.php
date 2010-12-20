@@ -299,7 +299,10 @@ abstract class ModuleCore
 		include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
 		if (!class_exists($moduleName, false))
 			return false;
-		return (new $moduleName);
+			
+		if (method_exists($moduleName, 'getInstance'))
+			return (call_user_func(array($moduleName, 'getInstance')));
+		return (new $moduleName); 
 	}
 
 	/**

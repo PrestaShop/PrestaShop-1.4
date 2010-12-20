@@ -997,11 +997,7 @@ class CartCore extends ObjectModel
 		if ($carrier->shipping_external)
 		{
 			$moduleName = $carrier->external_module_name;
-			if(file_exists(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php'))
-				include_once(_PS_MODULE_DIR_ .$moduleName.'/'.$moduleName.'.php');
-			else
-				die(Tools::displayError('Hack attempt: "carrier error"'));
-			$module = new $moduleName();
+			$module = Module::getInstanceByName($moduleName);
 			if($carrier->need_range)
 				$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 			else
