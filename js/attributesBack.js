@@ -27,8 +27,11 @@
 function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location, upc)
 {
 	init_elems();
+	$('#stock_mvt_attribute').show();
+	$('#initial_stock_attribute').hide();
 	$('#attribute_quantity').html(quantity);
 	$('#attribute_quantity').show();
+	$('#attr_qty_stock').show();
 	getE('attribute_reference').value = reference;
 	getE('attribute_supplier_reference').value = supplier_reference;
 	getE('attribute_ean13').value = ean;
@@ -188,6 +191,9 @@ function check_unit_impact()
 
 function init_elems()
 {
+	$('#stock_mvt_attribute').hide();
+	$('#initial_stock_attribute').show();
+	$('#attr_qty_stock').hide();
 	var elem = getE('product_att_list');
 
 	if (elem.length)

@@ -498,15 +498,8 @@ class AdminProducts extends AdminTab
 								$id_product_attribute = $product->addCombinationEntity(Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'), Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
-                                Tools::getValue('attribute_ecotax'), false,	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'),
+                                Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'),
                                 Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
-
-							if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
-							{
-								$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
-								if (!$product->addStockMvt($qty, (int)(Tools::getValue('id_mvt_reason')), (int)$id_product_attribute, NULL, $cookie->id_employee))
-									$this->_errors[] = Tools::displayError('an error occurred while updating qty');
-							}
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('edit something here.');
@@ -2460,35 +2453,46 @@ class AdminProducts extends AdminTab
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>';
 					if (!$has_attribute)
 					{
-						echo '
-						<tr><td class="col-left">'.$this->l('Stock Movement:').'</td>
-							<td style="padding-bottom:5px;">
-								<select name="mvt_type">
-									<option value="--">--</option>
-									<option value="1">'.$this->l('Add').'</option>
-									<option value="2">'.$this->l('Delete').'</option>
-								</select>
-								<select name="id_mvt_reason">';
-						$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
-						foreach ($reasons AS $reason)
-							echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
-						echo '</select>
-								<input type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>
-							</td>
-						</tr>
-						<tr>
-						<td class="col-left">'.$this->l('Minimum quantity:').'</td>
-							<td style="padding-bottom:5px;">
-								<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
-								<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
-							</td>
-						</tr>';
+						if ($obj->id)
+						{
+							echo '
+							<tr><td class="col-left">'.$this->l('Stock Movement:').'</td>
+								<td style="padding-bottom:5px;">
+									<select name="mvt_type">
+										<option value="--">--</option>
+										<option value="1">'.$this->l('Add').'</option>
+										<option value="2">'.$this->l('Delete').'</option>
+									</select>
+									<select name="id_mvt_reason">';
+							$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
+							foreach ($reasons AS $reason)
+								echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
+							echo '</select>
+									<input type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>
+								</td>
+							</tr>';
+						}
+						else
+							echo '<tr><td class="col-left">'.$this->l('Initial stock:').'</td>
+									<td style="padding-bottom:5px;">
+										<input size="3" maxlength="6" name="quantity" type="text" value="1" />
+									</td>';						
+						echo  '<tr>
+								<td class="col-left">'.$this->l('Minimum quantity:').'</td>
+									<td style="padding-bottom:5px;">
+										<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
+										<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
+									</td>
+								</tr>';
 					}
-				echo '
-					<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
-						<td style="padding-bottom:5px;"><b>'.$qty.'</b>
-					</tr>
+				
+				if ($obj->id)
+					echo '
+						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
+							<td style="padding-bottom:5px;"><b>'.$qty.'</b>
+						</tr>';
 
+				echo '
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
 						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
@@ -3065,8 +3069,13 @@ class AdminProducts extends AdminTab
 			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
 			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
 		  </tr>
-			<tr>
-				<td class="col-left">'.$this->l('Stock movement:').'</td>
+		  <tr id="initial_stock_attribute">
+				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Initial stock:').'</td>
+				<td><input type="text" name="attribute_quantity" size="3" maxlength="6" value="1"/></td>
+		  </tr>
+		  </tr>
+			<tr id="stock_mvt_attribute" style="display:none;">
+				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Stock movement:').'</td>
 				<td style="padding-bottom:5px;">
 					<select name="attribute_mvt_type">
 						<option value="--">--</option>
@@ -3082,13 +3091,13 @@ class AdminProducts extends AdminTab
 				</td>
 			</tr>
 			<tr>
-			<td class="col-left">'.$this->l('Minimum quantity:').'</td>
+			<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Minimum quantity:').'</td>
 				<td style="padding-bottom:5px;">
 					<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 					<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 				</td>
 			</tr>
-		  <tr>
+		  <tr style="display:none;" id="attr_qty_stock">
 			  <td style="width:150px">'.$this->l('Quantity in stock:').'</td>
 			  <td style="padding-bottom:5px;"><b><span style="display:none;" id="attribute_quantity"></span></b></td>
 		  </tr>
@@ -3122,7 +3131,7 @@ class AdminProducts extends AdminTab
 				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this combination').'" class="button" onclick="attr_selectall(); this.form.action += \'&addproduct&tabs=3\';" /> </span>
 				<span id="ResetSpan" style="float: left; margin-left: 8px; display: none;">
 				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="init_elems(); getE(\'submitProductAttribute\').value = \''.$this->l('Add this attributes group', __CLASS__, true).'\';
-				  getE(\'id_product_attribute\').value = -1; openCloseLayer(\'ResetSpan\');" class="button" value="'.$this->l('Cancel modification').'" /></span><span class="clear"></span>
+				  getE(\'id_product_attribute\').value = 0; openCloseLayer(\'ResetSpan\');" class="button" value="'.$this->l('Cancel modification').'" /></span><span class="clear"></span>
 			  </td>
 		  </tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
