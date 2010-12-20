@@ -1659,9 +1659,9 @@ class ProductCore extends ObjectModel
 
 	static public function convertAndFormatPrice($price, $currency = false)
 	{
-	if (!$currency)
-	$currency = Currency::getCurrent();
-	return Tools::displayPrice(Tools::convertPrice($price, $currency), $currency);
+		if (!$currency)
+			$currency = Currency::getCurrent();
+		return Tools::displayPrice(Tools::convertPrice($price, $currency), $currency);
 	}
 
 	static public function isDiscounted($id_product, $quantity = 1)

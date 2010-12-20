@@ -167,9 +167,9 @@ if (!Configuration::get('PS_FORCE_SMARTY_2'))
 	$smarty->registerPlugin('function', 'l', 'smartyTranslate');
 	
 	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
-		$smarty->registerFilter('output', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
+		$smarty->registerFilter('output', 'smartyMinifyHTML');
 	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
-		$smarty->registerFilter('output', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
+		$smarty->registerFilter('output', 'smartyPackJSinHTML');
 }
 else
 {
