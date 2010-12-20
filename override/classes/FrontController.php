@@ -87,6 +87,9 @@ class FrontController extends FrontControllerCore
 	
 	public function __construct()
 	{
+		$this->_memory = array_fill(0, 10, 0);
+		$this->_time = array_fill(0, 10, 0);
+
 		$this->_memory[-2] = memory_get_usage();
 		$this->_time[-2] = microtime(true);
 		parent::__construct();
