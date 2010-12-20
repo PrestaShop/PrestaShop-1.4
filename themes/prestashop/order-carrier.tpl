@@ -75,7 +75,7 @@
 
 	{$HOOK_BEFORECARRIER}
 
-	{if $carriers && count($carriers)}
+	{if ($carriers && count($carriers)) || $HOOK_EXTRACARRIER}
 	<div class="table_block"><br />
 		<table class="std">
 			<thead>
@@ -87,29 +87,31 @@
 				</tr>
 			</thead>
 			<tbody>
-			{foreach from=$carriers item=carrier name=myLoop}
-				<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
-					<td class="carrier_action radio">
-						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked || ($checked == 0 && $i == 0) || ($carriers|@sizeof == 1) || $default_carrier == $carrier.id_carrier}checked="checked"{/if} />
-					</td>
-					<td class="carrier_name">
-						<label for="id_carrier{$carrier.id_carrier|intval}">
-							{if $carrier.img}<img src="{$carrier.img|escape:'htmlall':'UTF-8'}" alt="{$carrier.name|escape:'htmlall':'UTF-8'}" />{else}{$carrier.name|escape:'htmlall':'UTF-8'}{/if}
-						</label>
-					</td>
-					<td class="carrier_infos">{$carrier.delay|escape:'htmlall':'UTF-8'}</td>
-					<td class="carrier_price">
-						{if $carrier.price}
-							<span class="price">
-								{if $priceDisplay == 1}{convertPrice price=$carrier.price_tax_exc}{else}{convertPrice price=$carrier.price}{/if}
-							</span>
-							{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if}
-						{else}
-							{l s='Free!'}
-						{/if}
-					</td>
-				</tr>
-			{/foreach}
+			{if $carriers && count($carriers)}
+				{foreach from=$carriers item=carrier name=myLoop}
+					<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
+						<td class="carrier_action radio">
+							<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked || ($checked == 0 && $i == 0) || ($carriers|@sizeof == 1) || $default_carrier == $carrier.id_carrier}checked="checked"{/if} />
+						</td>
+						<td class="carrier_name">
+							<label for="id_carrier{$carrier.id_carrier|intval}">
+								{if $carrier.img}<img src="{$carrier.img|escape:'htmlall':'UTF-8'}" alt="{$carrier.name|escape:'htmlall':'UTF-8'}" />{else}{$carrier.name|escape:'htmlall':'UTF-8'}{/if}
+							</label>
+						</td>
+						<td class="carrier_infos">{$carrier.delay|escape:'htmlall':'UTF-8'}</td>
+						<td class="carrier_price">
+							{if $carrier.price}
+								<span class="price">
+									{if $priceDisplay == 1}{convertPrice price=$carrier.price_tax_exc}{else}{convertPrice price=$carrier.price}{/if}
+								</span>
+								{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if}
+							{else}
+								{l s='Free!'}
+							{/if}
+						</td>
+					</tr>
+				{/foreach}
+			{/if}
 			{$HOOK_EXTRACARRIER}
 			</tbody>
 		</table>
