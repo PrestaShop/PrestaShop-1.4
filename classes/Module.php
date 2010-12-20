@@ -75,6 +75,9 @@ abstract class ModuleCore
 	 */
 	private static $modulesCache;
 	private static $_hookModulesCache;
+	
+	private static $_INSTANCE = array();
+	
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -299,10 +302,10 @@ abstract class ModuleCore
 		include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
 		if (!class_exists($moduleName, false))
 			return false;
-			
-		if (method_exists($moduleName, 'getInstance'))
-			return (call_user_func(array($moduleName, 'getInstance')));
-		return (new $moduleName); 
+
+		if (!isset(self::$_INSTANCE[$moduleName]))
+			self::$_INSTANCE[$moduleName] = new $moduleName;
+		return self::$_INSTANCE[$moduleName];
 	}
 
 	/**
