@@ -331,7 +331,7 @@ class AdminModules extends AdminTab
 		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
 		$serialModules = '';
-		$modules = Module::getModulesOnDisk();
+		$modules = Module::getModulesOnDisk(true);
 		foreach ($modules AS $module)
 			if (!in_array($module->name, $this->listNativeModules))
 				$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
@@ -399,7 +399,7 @@ class AdminModules extends AdminTab
 			}		
 			
 			if ($showCountryModules)		
-				if ((isset($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)))
+				if (isset($module->limited_countries) AND ((is_array($module->limited_countries) AND !in_array(strtolower($isoCountryDefault), $module->limited_countries)) OR (!is_array($module->limited_countries) AND strtolower($isoCountryDefault) != strval($module->limited_countries))))
 					unset($modules[$key]);
 			
 			if (!empty($filterName))
@@ -462,7 +462,7 @@ class AdminModules extends AdminTab
 		$orderModule = array();
 	    $irow = 0;
 		foreach ($modules AS $module)
-			$orderModule[(isset($module->tab) AND !empty($module->tab) AND array_key_exists($module->tab, $this->listTabModules)) ? $module->tab : 'others' ][] = $module;
+			$orderModule[(isset($module->tab) AND !empty($module->tab) AND array_key_exists(strval($module->tab), $this->listTabModules)) ? strval($module->tab) : 'others' ][] = $module;
 		asort($orderModule);
 		
 		$concatWarning = array();
@@ -603,8 +603,8 @@ class AdminModules extends AdminTab
 			/* Display modules for each tab type */
 			foreach ($tabModule as $module)
 			{
-			echo '<div id="modgo_'.$module->name.'">';
-			if ($module->id)
+				echo '<div id="modgo_'.$module->name.'">';
+				if ($module->id)
 				{
 					$img = '<img src="../img/admin/module_install.png" alt="'.$this->l('Module enabled').'" title="'.$this->l('Module enabled').'" />';
 					if ($module->warning)
@@ -697,7 +697,7 @@ class AdminModules extends AdminTab
 		if ((int)($module->id) AND $module->active)
 			$return .= '<a class="action_module" href="'.$currentIndex.'&token='.$this->token.'&module_name='.urlencode($module->name).'&reset&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Reset').'</a>&nbsp;&nbsp;';
 		
-		if ((int)($module->id) AND method_exists($module, 'getContent'))
+		if ((int)($module->id) AND (method_exists($module, 'getContent') OR (isset($module->is_configurable) AND (int)$module->is_configurable)))
 			$return .= '<a class="action_module" href="'.$currentIndex.'&configure='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Configure').'</a>&nbsp;&nbsp;';
 			
 		$return .= '<a class="action_module" onclick="return confirm(\''.$this->l('This action will permanently remove the module from the server. Are you sure you want to do this ?').'\');" href="'.$currentIndex.'&deleteModule='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.urlencode($module->name).'">'.$this->l('Delete').'</a>&nbsp;&nbsp;';

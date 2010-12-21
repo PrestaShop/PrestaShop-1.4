@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>fianetsceau</name>
+    <displayName>FIA-NET Sceau de Confiance</displayName>
+    <version>1.0</version>
+    <description><![CDATA[Transformez vos visiteurs en acheteurs en cr&eacute;ant la confiance sur votre site]]></description>
+    <tab>seo</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+    <limited_countries>fr</limited_countries>
+</module>

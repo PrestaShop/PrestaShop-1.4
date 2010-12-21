@@ -326,24 +326,59 @@ abstract class ModuleCore
 	/**
 	  * Return available modules
 	  *
+	  * @param boolean $useConfig in order to use config.xml file in module dir
 	  * @return array Modules
 	  */
-	public static function getModulesOnDisk()
+	public static function getModulesOnDisk($useConfig = false)
 	{
+		global $cookie, $_MODULE;
+
 		$moduleList = array();
 		$errors = array();
 		$modules_dir = self::getModulesDirOnDisk();
 		foreach ($modules_dir AS $module)
 		{
-			$file = trim(file_get_contents(_PS_MODULE_DIR_.'/'.$module.'/'.$module.'.php'));
-			if (substr($file, 0, 5) == '<?php')
-				$file = substr($file, 5);
-			if (substr($file, -2) == '?>')
-				$file = substr($file, 0, -2);
-			if (class_exists($module, false) OR eval($file) !== false)
-				$moduleList[] = new $module;
-			else
-				$errors[] = $module;
+			if ($useConfig AND $xml_exist = file_exists(_PS_MODULE_DIR_.'/'.$module.'/config.xml'))
+			{
+				$xml_module = simplexml_load_file(_PS_MODULE_DIR_.'/'.$module.'/config.xml');
+				if ((int)$xml_module->need_instance == 0)
+				{
+					if (file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.Language::getIsoById($cookie->id_lang).'.php'))
+					{
+						include(_PS_MODULE_DIR_.'/'.$module.'/'.Language::getIsoById($cookie->id_lang).'.php');
+						$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->displayName));
+						if (is_array($_MODULE) AND isset($_MODULE[$key]))
+							$xml_module->displayName = $_MODULE[$key];
+						$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->description));
+						if (is_array($_MODULE) AND isset($_MODULE[$key]))
+							$xml_module->description = $_MODULE[$key];
+						if (isset($xml_module->confirmUninstall))
+						{
+							$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->confirmUninstall));
+							if (is_array($_MODULE) AND isset($_MODULE[$key]))
+								$xml_module->confirmUninstall = $_MODULE[$key];
+						}
+					}
+					$result = Db::getInstance()->getRow('SELECT `id_module`, `active` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.strval($xml_module->name).'\'');
+					if (isset($result['active']) AND $result['active'])
+						$xml_module->active = $result['active'];
+					if (isset($result['id_module']) AND $result['id_module'])
+						$xml_module->id = $result['id_module'];
+					$moduleList[] = $xml_module;
+				}
+			}
+			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1))
+			{
+				$file = trim(file_get_contents(_PS_MODULE_DIR_.'/'.$module.'/'.$module.'.php'));
+				if (substr($file, 0, 5) == '<?php')
+					$file = substr($file, 5);
+				if (substr($file, -2) == '?>')
+					$file = substr($file, 0, -2);
+				if (class_exists($module, false) OR eval($file) !== false)
+					$moduleList[] = new $module;
+				else
+					$errors[] = $module;
+			}
 		}
 
 		if (sizeof($errors))

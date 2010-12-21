@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>canonicalurl</name>
+    <displayName>Canonical URL</displayName>
+    <version>1.3</version>
+    <description>Improve SEO by avoiding the "duplicate content" status for your Website.</description>
+    <tab>seo</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+</module>

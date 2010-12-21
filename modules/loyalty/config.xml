@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>loyalty</name>
+    <displayName>Customer loyalty and rewards</displayName>
+    <version>1.7</version>
+    <description>Provide a loyalty program to your customers</description>
+    <tab>pricing_promotion</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>

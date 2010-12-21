@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>uspscarrier</name>
+    <displayName>USPS Carrier</displayName>
+    <version>0.3</version>
+    <description>Offer to your customers, different delivery methods with USPS</description>
+    <tab>shipping_logistics</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+</module>

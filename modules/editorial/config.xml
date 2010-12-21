@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>editorial</name>
+    <displayName>Home text editor</displayName>
+    <version>1.6</version>
+    <description>A text editor module for your homepage</description>
+    <tab>front_office_features</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>

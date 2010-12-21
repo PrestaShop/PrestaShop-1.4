@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>productscategory</name>
+    <displayName>Products Category</displayName>
+    <version>1.2.1</version>
+    <description>Display products of the same category on the product page</description>
+    <tab>front_office_features</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>

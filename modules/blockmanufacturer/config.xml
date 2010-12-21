@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>blockmanufacturer</name>
+    <displayName>Manufacturers block</displayName>
+    <version>1.0</version>
+    <description>Displays a block of manufacturers/brands</description>
+    <tab>front_office_features</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>

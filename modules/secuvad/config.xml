@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>secuvad</name>
+    <displayName>Secuvad Module</displayName>
+    <version>2.0.1</version>
+    <description>Solution struggling against online fraud</description>
+    <tab>payment_security</tab>
+    <confirmUninstall>Are you sure you want to delete this module ?</confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>

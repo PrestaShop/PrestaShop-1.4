@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>blocksupplier</name>
+    <displayName>Suppliers block</displayName>
+    <version>1.0</version>
+    <description>Add a block displaying suppliers</description>
+    <tab>front_office_features</tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+</module>
