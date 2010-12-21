@@ -73,7 +73,6 @@ class TaxCore extends ObjectModel
 	{
 		/* Clean associations */
 		TaxRule::deleteTaxRuleByIdTax((int)$this->id);
-		self::cleanAssociatedCountries((int)$this->id);
 		return parent::delete();
 	}
 
@@ -186,7 +185,7 @@ class TaxCore extends ObjectModel
 	{
 		return !Configuration::get('PS_TAX');
 	}
-	
+
 	/*
 	 * @deprecated zones are not related to a tax
 	 */
@@ -283,9 +282,6 @@ class TaxCore extends ObjectModel
 
 		    if (!empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
 				    return 0;
-
-		    if ($rate = Tax::getProductCountryTaxRate((int)($id_product), (int)$id_country))
-		        return $rate;
 		}
 
 	    if ($rate = Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state))
@@ -320,50 +316,6 @@ class TaxCore extends ObjectModel
 	}
 
 	/**
-	 * Return the product country tax rate
-	 *
-	 * @param integer $id_product
-	 * @param integer $id_country
-	 * @return float
-	 */
-	public static function getProductCountryTaxRate($id_product, $id_country)
-	{
-		$tax = Tax::getProductCountryTax($id_product, $id_country);
-		return $tax ? $tax->rate : 0;
-	}
-
-	/**
-	 * Return the product country tax
-	 *
-	 * @param integer $id_product
-	 * @param integer $id_country
-	 * @return Tax
-	 */
-	public static function getProductCountryTax($id_product, $id_country)
-	{
-		if (!isset(self::$_product_country_tax[$id_product.'-'.$id_country]))
-		{
-		    $tax = false;
-		    $id_tax = Db::getInstance()->getValue('
-			    SELECT `id_tax`
-			    FROM `'._DB_PREFIX_.'product_country_tax`
-			    WHERE `id_product` = '.(int)$id_product.'
-			    AND `id_country` = '.(int)$id_country.'
-			    ORDER BY `id_country` DESC, `id_product` DESC'
-		    );
-
-            if (!empty($id_tax))
-                $tax = new Tax((int)$id_tax);
-
-			self::$_product_country_tax[$id_product.'-'.$id_country] = $tax;
-		}
-
-		return self::$_product_country_tax[$id_product.'-'.$id_country];
-	}
-
-
-
-	/**
 	 * Return the product tax rate using the tax rules system
 	 *
 	 * @param integer $id_product
@@ -382,51 +334,7 @@ class TaxCore extends ObjectModel
 	}
 
 
-	public static function getProductCountryTaxes($id_product, $id_lang)
-	{
-		return 	Db::getInstance()->ExecuteS('
-		SELECT c.`id_country`, c.`name` AS country, t.`rate`
-		FROM `'._DB_PREFIX_.'product_country_tax` pct
-		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = pct.`id_tax`)
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` c ON (c.`id_country` = pct.`id_country`)
-		WHERE pct.`id_product` = '.(int)($id_product).'
-		AND c.`id_lang` = '.(int)($id_lang)
-		);
-	}
-
-
-	public static function deleteProductCountryTax($id_product, $id_country)
-	{
-		return Db::getInstance()->Execute('
-			DELETE FROM `'._DB_PREFIX_.'product_country_tax`
-			WHERE `id_product` = '.(int)$id_product.'
-			AND `id_country` = '.(int)$id_country
-		);
-	}
-
-	/**
-	 * Create a product tax
-	 *
-	 * @param integer $id_product
-	 * @param integer $id_country
-	 * @param integer $id_tax
-	 * @return boolean
-	 */
-	public static function setProductCountryTax($id_product, $id_country, $id_tax)
-	{
-		return Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'product_country_tax`(`id_product`, `id_country`, `id_tax`)
-			VALUES ('.(int)($id_product).','.(int)($id_country).','.(int)($id_tax).')
-		');
-	}
-
-	static public function cleanAssociatedCountries($id_tax)
-	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'country_tax` WHERE `id_tax` = '.(int)$id_tax);
-	}
-
-
-	public function getCarrierTaxRate($id_carrier, $id_address = NULL)
+	public static function getCarrierTaxRate($id_carrier, $id_address = NULL)
 	{
         $id_country = (int)Country::getDefaultCountryId();
         $id_state = 0;

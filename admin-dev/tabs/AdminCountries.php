@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,7 +32,7 @@ class AdminCountries extends AdminTab
 	public function __construct()
 	{
 		global $cookie;
-		
+
 	 	$this->table = 'country';
 	 	$this->className = 'Country';
 	 	$this->lang = true;
@@ -40,7 +40,7 @@ class AdminCountries extends AdminTab
 		$this->deleted = false;
 	 	$this->_select = 'z.`name` AS zone';
 	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'zone` z ON (z.`id_zone` = a.`id_zone`)';
-				
+
 		$this->fieldsDisplay = array(
 		'id_country' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Country'), 'width' => 130, 'filter_key' => 'b!name'),
@@ -48,12 +48,12 @@ class AdminCountries extends AdminTab
 		'call_prefix' => array('title' => $this->l('Call prefix'), 'width' => 40, 'align' => 'center', 'callback' => 'displayCallPrefix'),
 		'zone' => array('title' => $this->l('Zone'), 'width' => 100, 'filter_key' => 'z!name'),
 		'a!active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false, 'filter_key' => 'a!active'));
-	
+
 		$this->optionTitle = $this->l('Countries options');
 		$this->_fieldsOptions = array('PS_COUNTRY_DEFAULT' => array('title' => $this->l('Default country:'), 'desc' => $this->l('The default country used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_country', 'list' => Country::getCountries((int)($cookie->id_lang))));
 		parent::__construct();
 	}
-	
+
 	public function postProcess()
 	{
 		if (isset($_GET['delete'.$this->table]) OR Tools::getValue('submitDel'.$this->table))
@@ -61,18 +61,14 @@ class AdminCountries extends AdminTab
 		else
 			return parent::postProcess();
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-		
+
 		$obj = $this->loadObject(true);
-		if ((int)$obj->id)
-			$associatedTaxes = Country::getIdsOfAssociatedTaxes($obj->id);
-		else
-			$associatedTaxes = array();
-		
+
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
@@ -109,28 +105,6 @@ class AdminCountries extends AdminTab
 			echo '<option value="'.intval($currency['id_currency']).'" '.(Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 		echo '
 					</select>
-				</div>
-				<label>'.$this->l('Taxes to apply for this country:').' </label>
-				<div class="margin-form">
-					<table class="table" cellspacing="0">
-						<thead>
-							<tr>
-								<th>&nbsp;</th>
-								<th>'.$this->l('Tax').'</th>
-							</tr>
-						</thead>
-						<tbody>';
-		$taxes = Tax::getTaxes(intval($cookie->id_lang));
-		foreach ($taxes as $tax)
-			echo '
-			<tr>
-				<td><input type="checkbox" name="country_taxes[]" value="'.intval($tax['id_tax']).'" '.(in_array($tax['id_tax'], $associatedTaxes) ? 'checked="checked"' : '').'/></td>
-				<td>'.Tools::htmlentitiesUTF8($tax['name']).'</td>
-			</tr>
-			';
-		echo '
-						</tbody>
-					</table>
 				</div>
 				<label>'.$this->l('Zone:').' </label>
 				<div class="margin-form">
@@ -184,5 +158,4 @@ class AdminCountries extends AdminTab
 		<script type="text/javascript">disableZipFormat();</script>';
 	}
 }
-
 

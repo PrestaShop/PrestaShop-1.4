@@ -698,47 +698,6 @@ class AdminProducts extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
-		elseif (Tools::isSubmit('submitSpecificTaxes'))
-		{
-			$_POST['tabs'] = 5;
-			if ($this->tabAccess['add'] === '1')
-			{
-				$id_country = (int)Tools::getValue('st_country');
-				$id_tax = (int)Tools::getValue('st_tax');
-				$id_product = (int)Tools::getValue('id_product');
-
-				if (!$tax = Tax::getProductCountryTax($id_product, $id_country))
-				{
-					Tax::setProductCountryTax($id_product, $id_country, $id_tax);
-					Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
-				}
-				else
-					$this->_errors[] = Tools::displayError('An error occurred while adding a specific tax');
-
-			}
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
-		}
-		elseif (Tools::isSubmit('deleteSpecificTax'))
-		{
-			$_POST['tabs'] = 5;
-			if ($this->tabAccess['delete'] === '1')
-			{
-				$id_country = (int)Tools::getValue('id_country');
-				$id_product = (int)Tools::getValue('id_product');
-
-				if (empty($id_country) OR empty($id_product))
-					die(Tools::displayError());
-
-				if (Tax::deleteProductCountryTax($id_product, $id_country))
-					Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
-				else
-					$this->_errors[] = Tools::displayError('An error occured while adding a specific tax');
-			}
-
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
-		}
 		elseif (Tools::isSubmit('submitSpecificPricePriorities'))
 		{
 			$obj = $this->loadObject();
@@ -1467,7 +1426,6 @@ class AdminProducts extends AdminTab
 			$defaultCurrency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 			$this->_displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 			$this->_displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups);
-			$this->_displaySpecificTaxesForm($obj->id);
 		}
 		else
 			echo '<b>'.$this->l('You must save this product before adding specific prices').'.</b>';
@@ -1623,84 +1581,6 @@ class AdminProducts extends AdminTab
 			echo '
 		</script>
 		';
-	}
-
-	protected function _displaySpecificTaxesForm($id_product)
-	{
-		global $currentIndex, $cookie;
-
-		$countries = Country::getCountriesWithoutTaxByProductId((int)$id_product, (int)$cookie->id_lang);
-		$product_taxes = Tax::getProductCountryTaxes((int)$id_product, (int)$cookie->id_lang);
-
-		if (sizeof($countries) > 0)
-		{
-			echo '<hr /><h4>'.$this->l('Add a new specific tax').'</h4>'.
-				$this->_displaySpecificTaxesFormJS()
-				.'
-				<label>'.$this->l('Country:').'</label>
-				<div class="margin-form">
-					<select name="st_country" id="st_country">';
-					foreach ($countries as $country)
-						echo '<option value="'.(int)($country['id_country']).'">'.Tools::htmlentitiesUTF8($country['name']).'</option>';
-					echo '
-					</select>
-				</div>
-				<label>'.$this->l('Tax:').'</label>
-				<div class="margin-form">
-					<select name="st_tax" id="st_tax">
-					</select>
-				</div>
-				<div class="margin-form">
-					<input type="submit" name="submitSpecificTaxes" value="'.$this->l('Add').'" class="button" />
-				</div>';
-		}
-		elseif (sizeof($countries) == 0 AND sizeof($product_taxes) == 0)
-		{
-			echo '<hr /><h4>'.$this->l('Add a new specific tax').'</h4>
-				<div class="hint clear" style="display:block;">
-					'.$this->l('In order to create tax rules, associate at least one tax to a country.').'
-				</div>';
-		}
-
-		if (sizeof($product_taxes) > 0)
-		{
-			echo '<h4>'.$this->l('Current tax rules').'</h4>';
-
-			foreach ($product_taxes AS $specific)
-				echo '<label>'.$specific['country'].'</label>
-  					  <div class="margin-form">
-  					  '.Tools::htmlentitiesUTF8($specific['rate']).'<a href="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificTax&id_country='.(int)($specific['id_country']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a>
-  					  </div>';
-
-		 }
-	}
-
-	protected function _displaySpecificTaxesFormJS()
-	{
-		echo '<script type="text/javascript">
-				function updateCountryTaxes()
-				{
-					$.ajax({
-						url: "ajax.php",
-						dataType: "json",
-						data: "getCountryTaxes&id_country="+$("#st_country").val()+"&token='.$this->token.'",
-						success: function(data)
-						{
-							var options = "";
-							for(i=0; i < data.length; i++)
-								options += "<option value=\""+data[i].id+"\">"+data[i].name+"</option>";
-
-							$("#st_tax").html(options);
-						}
-					});
-				}
-
-				$(document).ready(function() {
-					$("#st_country").change(function() { updateCountryTaxes() });
-					updateCountryTaxes();
-				});
-
-			  </script>';
 	}
 
 	protected function _displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups)
@@ -2476,7 +2356,7 @@ class AdminProducts extends AdminTab
 							echo '<tr><td class="col-left">'.$this->l('Initial stock:').'</td>
 									<td style="padding-bottom:5px;">
 										<input size="3" maxlength="6" name="quantity" type="text" value="1" />
-									</td>';						
+									</td>';
 						echo  '<tr>
 								<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 									<td style="padding-bottom:5px;">
@@ -2485,7 +2365,7 @@ class AdminProducts extends AdminTab
 									</td>
 								</tr>';
 					}
-				
+
 				if ($obj->id)
 					echo '
 						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>

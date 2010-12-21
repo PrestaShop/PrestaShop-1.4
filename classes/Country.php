@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -114,35 +114,6 @@ class CountryCore extends ObjectModel
 	{
 		parent::validateFieldsLang();
 		return parent::getTranslationsFields(array('name'));
-	}
-
-	public function add($autodate = true, $nullValues = false)
-	{
-		if (!parent::add($autodate, $nullValues))
-			return false;
-		return self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
-	}
-
-	public function update($nullValues = false)
-	{
-		if (!parent::update($nullValues))
-			return false;
-		self::cleanAssociatedTaxes((int)$this->id);
-		self::addAssociatedTaxes((int)$this->id, Tools::getValue('country_taxes'));
-		return  self::cleanProductCountryTaxes((int)$this->id);
-	}
-
-	/**
-	  * Delete country
-	  *
-	  * @return bool
-	  */
-	public function delete()
-	{
-		/* Clean associations */
-		self::cleanAssociatedTaxes((int)$this->id);
-		self::cleanProductCountryTaxes((int)$this->id);
-		return parent::delete();
 	}
 
 	/**
@@ -324,108 +295,6 @@ class CountryCore extends ObjectModel
 			$id_country = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		return $id_country;
-	}
-
-	/**
-	 * Return a list of countries for which no tax has been define for the specified
-	 * product
-	 *
-	 * @param integer $id_product
-	 * @param integer $id_lang
-	 */
-	public static function getCountriesWithoutTaxByProductId($id_product, $id_lang = NULL)
-	{
-		return Db::getInstance()->ExecuteS('
-			SELECT *
-			FROM `'._DB_PREFIX_.'country` c
-			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
-			WHERE c.`id_country` IN (SELECT `id_country`
-								   FROM `'._DB_PREFIX_.'country_tax`)
-			AND c.`id_country` NOT IN (SELECT `id_country`
-								 	  FROM `'._DB_PREFIX_.'product_country_tax`
-								 	  WHERE `id_product` = '.(int)($id_product).'
-								 	  )'.
-			((!empty($id_lang)) ? ' AND cl.`id_lang` = '.(int)($id_lang) : '')
-		);
-	}
-
-	public static function getCountryWithAssociatedTaxes($id_lang)
-	{
-		return Db::getInstance()->ExecuteS('
-			SELECT *
-			FROM `'._DB_PREFIX_.'country` c
-			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
-			WHERE c.`id_country` IN (SELECT `id_country`
-									   FROM `'._DB_PREFIX_.'country_tax`)
-			AND cl.`id_lang` = '.(int)$id_lang
-		);
-	}
-
-	public static function getCountryWithoutRules($id_lang)
-	{
-		return Db::getInstance()->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'country` c
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` )
-		WHERE c.`id_country` IN (SELECT `id_country`
-  							     FROM `'._DB_PREFIX_.'tax_rule`)
-		AND cl.`id_lang` = '.(int)$id_lang
-		);
-	}
-
-	public static function getAssociatedTaxes($id_country, $id_lang)
-	{
-		return Db::getInstance()->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'country_tax` t
-		LEFT JOIN `'._DB_PREFIX_.'country_tax_lang` tl ON (t.`id_tax` = tl.`id_tax`)
-		WHERE `id_country` = '.(int)$id_country.'
-		AND tl.`id_lang` = '.(int)$id_lang
-		);
-	}
-
-	static public function addAssociatedTaxes($id_country, $taxes)
-	{
-		if (!Validate::isInt($id_country))
-			return false;
-		if (is_array($taxes))
-		{
-			$sql = 'INSERT INTO `'._DB_PREFIX_.'country_tax` VALUES';
-			foreach ($taxes as $id_tax)
-				$sql .= '(NULL, '.(int)$id_country.', '.(int)$id_tax.'),';
-			$sql = rtrim($sql, ',');
-			return Db::getInstance()->Execute($sql);
-		}
-		return true;
-	}
-
-	static public function getIdsOfAssociatedTaxes($id_country)
-	{
-		$return = array();
-
-		$taxes =  Db::getInstance()->ExecuteS('
-		SELECT `id_tax`
-		FROM `'._DB_PREFIX_.'country_tax`
-		WHERE `id_country` = '.(int)$id_country);
-
-		foreach ($taxes as $tax)
-			$return[] = $tax['id_tax'];
-		return $return;
-	}
-
-	static public function cleanAssociatedTaxes($id_country)
-	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'country_tax` WHERE `id_country` = '.(int)$id_country);
-	}
-
-	public static function cleanProductCountryTaxes($id_country)
-	{
-		return Db::getInstance()->Execute('
-		DELETE FROM `'._DB_PREFIX_.'product_country_tax`
-		WHERE `id_country` = '.(int)$id_country.'
-		AND `id_tax` NOT IN (SELECT `id_tax`
-							 FROM `'._DB_PREFIX_.'country_tax`
-							 WHERE `id_country` = '.(int)$id_country.')');
 	}
 
 

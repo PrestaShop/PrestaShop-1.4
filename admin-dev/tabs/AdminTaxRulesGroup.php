@@ -19,7 +19,7 @@ class AdminTaxRulesGroup extends AdminTab
 	}
 
 
-    public function displayForm()
+    public function displayForm($isMainTab = true)
     {
         global $cookie, $currentIndex;
 		parent::displayForm();
@@ -29,7 +29,7 @@ class AdminTaxRulesGroup extends AdminTab
         echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
     			<input type="hidden" name="tabs" id="tabs" value="0" />
-    			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>';
+    			<fieldset style="margin:0px; padding:0px"><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>';
 
         echo '<label>'.$this->l('Name').'</label>
     			<div class="margin-form">
@@ -190,9 +190,9 @@ class AdminTaxRulesGroup extends AdminTab
                         <td width="170px">'.Tools::htmlentitiesUTF8($state['name']).'</td>
                         <td>
                             <select id="behavior_state_'.$state['id_state'].'" name="behavior_state_'.$state['id_state'].'" onchange="disableStateTaxRate(\''.$id_country.'\',\''.$state['id_state'].'\')">
-                                <option value="'.(int)PS_PRODUCT_TAX.'" '.($selected  == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>product_tax</option>
-                                <option value="'.(int)PS_STATE_TAX.'" '.($selected == PS_STATE_TAX ? 'selected="selected"' : '').'>state_tax</option>
-                                <option value="'.(int)PS_BOTH_TAX.'" '.($selected == PS_BOTH_TAX ? 'selected="selected"' : '').'>both_tax</option>
+                                <option value="'.(int)PS_PRODUCT_TAX.'" '.($selected  == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply product tax only').'</option>
+                                <option value="'.(int)PS_STATE_TAX.'" '.($selected == PS_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
+                                <option value="'.(int)PS_BOTH_TAX.'" '.($selected == PS_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
                             </select>
                         </td>
                         <td>
