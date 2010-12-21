@@ -1141,7 +1141,7 @@ class ToolsCore
 	static public function packJSinHTMLpregCallback ($preg_matches)
 	{
 		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
-		$preg_matches[2] = self::packJS($preg_matches[2], 'None');
+		$preg_matches[2] = self::packJS($preg_matches[2]);
 		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
 		unset($preg_matches[0]);
 		$output = implode('', $preg_matches);
@@ -1149,13 +1149,12 @@ class ToolsCore
 	}
 
 
-	static public function packJS ($js_content, $encoding = 62)
+	static public function packJS ($js_content)
 	{
 		if (strlen($js_content) > 0)
 		{
-			require_once(_PS_TOOL_DIR_.'javascript_packer/class.JavaScriptPacker.php');
-			$packer = new JavaScriptPacker($js_content, $encoding, true, true);
-			return $packer->pack();
+			require_once(_PS_TOOL_DIR_.'js_minify/jsmin.php');
+			return JSMin::minify($js_content);
 		}
 		return false;
 	}
