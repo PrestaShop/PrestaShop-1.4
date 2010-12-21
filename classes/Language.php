@@ -39,7 +39,7 @@ class LanguageCore extends ObjectModel
 	public 		$active = true;
 	
 	protected 	$fieldsRequired = array('name', 'iso_code');
-	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3);
+	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2);
 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool');
 	
 	protected 	$table = 'lang';
@@ -48,6 +48,14 @@ class LanguageCore extends ObjectModel
 	/** @var array Languages cache */
 	private static $_checkedLangs;
 	private static $_LANGUAGES;
+	
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'name' => array('sqlId' => 'name'),
+			'active' => array('sqlId' => 'active'),
+			'iso_code' => array('sqlId' => 'iso_code')
+		)
+	);
 	
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{

@@ -95,7 +95,32 @@ class DiscountCore extends ObjectModel
 
 	protected 	$table = 'discount';
 	protected 	$identifier = 'id_discount';
-		
+	
+	
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'id_discount_type' => array('sqlId' => 'id_discount_type', 'xlink_resource' => 'discount_types'),
+			'id_customer' => array('sqlId' => 'id_customer', 'xlink_resource' => 'customers'),
+			'id_group' => array('sqlId' => 'id_group', 'xlink_resource' => 'groups'),
+			'id_currency' => array('sqlId' => 'id_currency', 'xlink_resource' => 'currencies'),
+			'name' => array('sqlId' => 'name'),
+			'value' => array('sqlId' => 'value'),
+			'quantity' => array('sqlId' => 'quantity'),
+			'quantity_per_user' => array('sqlId' => 'quantity_per_user'),
+			'cumulable' => array('sqlId' => 'cumulable'),
+			'cumulable_reduction' => array('sqlId' => 'cumulable_reduction'),
+			'date_from' => array('sqlId' => 'date_from'),
+			'date_to' => array('sqlId' => 'date_to'),
+			'minimal' => array('sqlId' => 'minimal'),
+			'active' => array('sqlId' => 'active'),
+			'cart_display' => array('sqlId' => 'cart_display'),
+			'date_add' => array('sqlId' => 'date_add'),
+			'date_upd' => array('sqlId' => 'date_upd')
+		)
+	);
+	
+	
+	
 	public function getFields()
 	{
 		parent::validateFields();

@@ -36,7 +36,15 @@ class RangePriceCore extends ObjectModel
 
 	protected 	$table = 'range_price';
 	protected 	$identifier = 'id_range_price';
-		
+
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'id_carrier' => array('sqlId' => 'id_carrier', 'xlink_resource' => 'carriers'),
+			'delimiter1' => array('sqlId' => 'delimiter1'),
+			'delimiter2' => array('sqlId' => 'delimiter2')
+		)
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();

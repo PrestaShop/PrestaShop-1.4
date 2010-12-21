@@ -52,6 +52,15 @@ class DeliveryCore extends ObjectModel
 	protected 	$table = 'delivery';
 	protected 	$identifier = 'id_delivery';
 	
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'id_carrier' => array('sqlId' => 'id_carrier', 'xlink_resource' => 'carriers'),
+			'id_range_price' => array('sqlId' => 'id_range_price', 'xlink_resource' => 'priceranges'),
+			'id_range_weight' => array('sqlId' => 'id_range_weight', 'xlink_resource' => 'weightranges'),
+			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource' => 'zones'),
+			'price' => array('sqlId' => 'price')
+		)
+	);
 	
 	public function getFields()
 	{

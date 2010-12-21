@@ -89,6 +89,14 @@ class WebserviceCore extends ObjectModel
 			'carriers' => array('description' => 'The Carriers','class' => 'Carrier'),
 			'images' => array('description' => 'The images', 'specific_management' => true),
 			'image_types' => array('description' => 'The image types', 'class' => 'ImageType'),
+			'deliveries' => array('description' => 'Product delivery', 'class' => 'Delivery'),
+			'price_ranges' => array('description' => 'Price ranges', 'class' => 'RangePrice'),
+			'weight_ranges' => array('description' => 'Weight ranges', 'class' => 'RangeWeight'),
+			'configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration'),
+			'languages' => array('description' => 'Shop languages', 'class' => 'Language'),
+			'order_details' => array('description' => 'Details of an order', 'class' => 'OrderDetail'),
+			'order_discounts' => array('description' => 'Discounts of an order', 'class' => 'OrderDiscount'),
+			'stores' => array('description' => 'Stores', 'class' => 'Store')
 		);
 		ksort($resources);
 		return $resources;

@@ -33,6 +33,9 @@ class OrderDiscountCore extends ObjectModel
 	/** @var integer */
 	public $id_order;
 
+	/** @var integer */
+	public $id_discount;
+	
 	/** @var string */	
 	public $name;
 
@@ -47,6 +50,15 @@ class OrderDiscountCore extends ObjectModel
 	/* MySQL does not allow 'order detail' for a table name */
 	protected 	$table = 'order_discount';
 	protected 	$identifier = 'id_order_discount';
+
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'id_order' => array('sqlId' => 'id_order'),
+			'id_discount' => array('sqlId' => 'id_discount'),
+			'name' => array('sqlId' => 'name'),
+			'value' => array('sqlId' => 'value')
+		)
+	);
 	
 	public function getFields()
 	{

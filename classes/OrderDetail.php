@@ -67,6 +67,9 @@ class OrderDetailCore extends ObjectModel
 	public $reduction_amount;
 	
 	/** @var float */
+	public $group_reduction;
+	
+	/** @var float */
 	public $product_quantity_discount;
 	
 	/** @var string */
@@ -96,6 +99,9 @@ class OrderDetailCore extends ObjectModel
 	/** @var float */
 	public $ecotax_tax_rate;
 	
+	/** @var integer */
+	public $discount_quantity_applied;
+
 	/** @var string */
 	public $download_hash;
 	
@@ -137,6 +143,39 @@ class OrderDetailCore extends ObjectModel
 	
 	protected 	$table = 'order_detail';
 	protected 	$identifier = 'id_order_detail';
+	
+	protected	$webserviceParameters = array(
+	'fields' => array (
+		'id_order' => array('sqlId' => 'id_order', 'xlink_resource' => 'orders'),
+		'product_id' => array('sqlId' => 'product_id', 'xlink_resource' => 'products'),
+		'product_attribute_id' => array('sqlId' => 'product_attribute_id', 'xlink_resource' => 'product_attributes'),
+		'product_name' => array('sqlId' => 'product_name'),
+		'product_quantity' => array('sqlId' => 'product_quantity'),
+		'product_quantity_in_stock' => array('sqlId' => 'product_quantity_in_stock'),
+		'product_quantity_refunded' => array('sqlId' => 'product_quantity_refunded'),
+		'product_quantity_return' => array('sqlId' => 'product_quantity_return'),
+		'product_quantity_reinjected' => array('sqlId' => 'product_quantity_reinjected'),
+		'product_price' => array('sqlId' => 'product_price'),
+		'reduction_percent' => array('sqlId' => 'reduction_percent'),
+		'reduction_amount' => array('sqlId' => 'reduction_amount'),
+		'group_reduction' => array('sqlId' => 'group_reduction'),
+		'product_quantity_discount' => array('sqlId' => 'product_quantity_discount'),
+		'product_ean13' => array('sqlId' => 'product_ean13'),
+		'product_upc' => array('sqlId' => 'product_upc'),
+		'product_reference' => array('sqlId' => 'product_reference'),
+		'product_supplier_reference' => array('sqlId' => 'product_supplier_reference'),
+		'product_weight' => array('sqlId' => 'product_weight'),
+		'tax_name' => array('sqlId' => 'tax_name'),
+		'tax_rate' => array('sqlId' => 'tax_rate'),
+		'ecotax' => array('sqlId' => 'ecotax'),
+		'ecotax_tax_rate' => array('sqlId' => 'ecotax_tax_rate'),
+		'discount_quantity_applied' => array('sqlId' => 'discount_quantity_applied'),
+		'download_hash' => array('sqlId' => 'download_hash'),
+		'download_nb' => array('sqlId' => 'download_nb'),
+		'download_deadline' => array('sqlId' => 'download_deadline')
+		)
+	);
+	
 	
 	public function getFields()
 	{

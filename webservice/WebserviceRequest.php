@@ -542,10 +542,12 @@ class WebserviceRequest
 					if ($this->_urlFragments['schema'] == 'blank')
 					{
 						$this->_schemaToDisplay = 'blank';
+						return true;
 					}
 					elseif ($this->_urlFragments['schema'] == 'synopsis')
 					{
 						$this->_schemaToDisplay = 'synopsis';
+						return true;
 					}
 					else
 					{
@@ -792,7 +794,9 @@ class WebserviceRequest
 		// list entities
 		if (!isset($this->_urlSegment[1]) || !strlen($this->_urlSegment[1]))
 		{
-			if (($this->_resourceConfiguration['objectsNodeName'] != 'resources' && count($this->_objects) || $this->_resourceConfiguration['objectsNodeName'] == 'resources') && count($this->_resourceList))
+			if (($this->_resourceConfiguration['objectsNodeName'] != 'resources' && count($this->_objects)) || 
+			($this->_resourceConfiguration['objectsNodeName'] == 'resources' && count($this->_resourceList)) ||
+			($this->_schemaToDisplay != null))
 			{
 				if ($this->_resourceConfiguration['objectsNodeName'] != 'resources')
 				{

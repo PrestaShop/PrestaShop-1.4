@@ -53,6 +53,15 @@ class ConfigurationCore extends ObjectModel
 	/** @var array Configuration multilang cache */
 	private static $_CONF_LANG;
 
+	protected	$webserviceParameters = array(
+			'fields' => array(
+			'name' => array('sqlId' => 'name'),
+			'value' => array('sqlId' => 'value'),
+			'date_add' => array('sqlId' => 'date_add'),
+			'date_upd' => array('sqlId' => 'date_upd')
+		)
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();
