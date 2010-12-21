@@ -275,7 +275,7 @@
 	</form>
 </div>
 {/if}
-{$HOOK_SHOPPING_CART}
+<div id="HOOK_SHOPPING_CART">{$HOOK_SHOPPING_CART}</div>
 {if ($carrier->id AND !isset($virtualCart)) OR $delivery->id OR $invoice->id}
 <div class="order_delivery">
 	{if $delivery->id}
@@ -315,6 +315,6 @@
 </p>
 <p class="clear"><br /><br /></p>
 <p class="cart_navigation_extra">
-	{$HOOK_SHOPPING_CART_EXTRA}
+	<span id="HOOK_SHOPPING_CART_EXTRA">{$HOOK_SHOPPING_CART_EXTRA}</span>
 </p>
 {/if}

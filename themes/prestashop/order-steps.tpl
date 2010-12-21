@@ -25,6 +25,7 @@
 *}
 
 {* Assign a value to 'current_step' to display current style *}
+{if !$opc}
 <!-- Steps -->
 <ul class="step" id="order_step">
 	<li class="{if $current_step=='summary'}step_current{else}{if $current_step=='payment' || $current_step=='shipping' || $current_step=='address' || $current_step=='login'}step_done{else}step_todo{/if}{/if}">
@@ -68,3 +69,4 @@
 	</li>
 </ul>
 <!-- /Steps -->
+{/if}

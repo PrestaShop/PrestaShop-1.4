@@ -125,6 +125,7 @@ class OrderDetailControllerCore extends FrontController
 					'invoiceState' => (Validate::isLoadedObject($addressInvoice) AND $addressInvoice->id_state) ? new State((int)($addressInvoice->id_state)) : false,
 					'address_delivery' => $addressDelivery,
 					'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State((int)($addressDelivery->id_state)) : false,
+					'is_guest' => false,
 					'messages' => Message::getMessagesByOrderId((int)($order->id)),
 					'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 					'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,

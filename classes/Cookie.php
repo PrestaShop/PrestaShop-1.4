@@ -169,8 +169,11 @@ class	CookieCore
 	  *
 	  * @return boolean customer validity
 	  */
-	public function isLogged()
+	public function isLogged($withGuest = false)
 	{
+		if (!$withGuest AND $this->is_guest == 1)
+			return false;
+		
 		/* Customer is valid only if it can be load and if cookie password is the same as database one */
 	 	if ($this->logged == 1 AND $this->id_customer AND Validate::isUnsignedId($this->id_customer) AND Customer::checkPassword((int)($this->id_customer), $this->passwd))
         	return true;
@@ -210,6 +213,7 @@ class	CookieCore
 	{
 		unset($this->_content['id_customer']);
 		unset($this->_content['id_guest']);
+		unset($this->_content['is_guest']);
 		unset($this->_content['id_connections']);
 		unset($this->_content['customer_lastname']);
 		unset($this->_content['customer_firstname']);

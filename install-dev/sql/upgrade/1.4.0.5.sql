@@ -24,6 +24,9 @@ SET @id_module = (SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `
 DELETE FROM `PREFIX_module` WHERE `id_module` = @id_module;
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` = @id_module;
 
+ALTER TABLE `PREFIX_customer` ADD `is_guest` TINYINT(1) NOT NULL DEFAULT '0' AFTER `deleted`;
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_GUEST_CHECKOUT_ENABLED', '0', NOW(), NOW());
+
 ALTER TABLE `PREFIX_category` ADD `nleft` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `level_depth`;
 ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `nleft`;
 ALTER TABLE `PREFIX_category` ADD INDEX `nleftright` (`nleft`, `nright`);

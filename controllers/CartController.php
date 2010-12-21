@@ -49,6 +49,8 @@ class CartControllerCore extends FrontController
 				}
 				$result['summary'] = $this->cart->getSummaryDetails();
 				$result['customizedDatas'] = Product::getAllCustomizedDatas((int)($this->cart->id));
+				$result['HOOK_SHOPPING_CART'] = Module::hookExec('shoppingCart', $result['summary']);
+				$result['HOOK_SHOPPING_CART_EXTRA'] = Module::hookExec('shoppingCartExtra', $result['summary']);
 				die(Tools::jsonEncode($result));
 			}
 			else

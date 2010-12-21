@@ -67,7 +67,7 @@ function displayConfirm()
 {
 	global $cookie, $smarty, $ppPayment, $cart;
 
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged(true))
 		die('Not logged');
 	unset($cookie->paypal_token);
 
@@ -100,7 +100,7 @@ function submitConfirm()
 {
 	global $cookie, $smarty, $ppPayment, $cart;
 
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged(true))
 		die('Not logged');
 	elseif (!$id_currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
@@ -116,7 +116,7 @@ function submitConfirm()
 function validOrder()
 {
 	global $cookie, $cart, $ppPayment;
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged(true))
 		die('Not logged');
 	elseif (!$cart->getOrderTotal(true, 3))
 		die('Empty cart');

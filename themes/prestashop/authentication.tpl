@@ -74,7 +74,7 @@ $(function(){ldelim}
 <h1>{if !isset($email_create)}{l s='Log in'}{else}{l s='Create your account'}{/if}</h1>
 
 {assign var='current_step' value='login'}
-{if $opc}{include file="$tpl_dir./order-steps.tpl"}{/if}
+{include file="$tpl_dir./order-steps.tpl"}
 
 {include file="$tpl_dir./errors.tpl"}
 
@@ -112,6 +112,92 @@ $(function(){ldelim}
 			<p class="lost_password"><a href="{$link->getPageLink('password.php')}">{l s='Forgot your password?'}</a></p>
 		</fieldset>
 	</form>
+	{if isset($inOrderProcess) && $inOrderProcess && $PS_GUEST_CHECKOUT_ENABLED}
+		<form action="{$link->getPageLink('authentication.php', true)}?back={$back}" method="post" id="new_account_form" class="std">
+			<fieldset>
+				<h3>Instant Checkout</h3>
+				<div id="opc_account_form" style="display: block; ">
+					<!-- Account -->
+					<p class="required text">
+						<label for="email">{l s='E-mail address'}</label>
+						<input type="text" class="text" id="guest_email" name="guest_email" value="{if isset($smarty.post.guest_email)}{$smarty.post.guest_email|escape:'htmlall'|stripslashes}{/if}">
+						<sup>*</sup>
+					</p>
+					<p class="radio required">
+						<span>Title</span>
+						<input type="radio" name="id_gender" id="id_gender1" value="1" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '1'}checked="checked"{/if}>
+						<label for="id_gender1" class="top">{l s='Mr.'}</label>
+						<input type="radio" name="id_gender" id="id_gender2" value="2" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '2'}checked="checked"{/if}>
+						<label for="id_gender2" class="top">{l s='Ms.'}</label>
+					</p>
+					<p class="required text">
+						<label for="firstname">{l s='First name'}</label>
+						<input type="text" class="text" id="firstname" name="firstname" onblur="$('#customer_firstname').val($(this).val());" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname|escape:'htmlall'|stripslashes}{/if}">
+						<input type="hidden" class="text" id="customer_firstname" name="customer_firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname|escape:'htmlall'|stripslashes}{/if}">
+						<sup>*</sup>
+					</p>
+					<p class="required text">
+						<label for="lastname">{l s='Last name'}</label>
+						<input type="text" class="text" id="lastname" name="lastname" onblur="$('#customer_lastname').val($(this).val());" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname|escape:'htmlall'|stripslashes}{/if}">
+						<input type="hidden" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname|escape:'htmlall'|stripslashes}{/if}">
+						<sup>*</sup>
+					</p>
+					<p class="checkbox">
+						<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($smarty.post.newsletter) && $smarty.post.newsletter == '1'}checked="checked"{/if}>
+						<label for="newsletter">{l s='Sign up for our newsletter'}</label>
+					</p>
+					<p class="checkbox">
+						<input type="checkbox" name="optin" id="optin" value="1" {if isset($smarty.post.optin) && $smarty.post.optin == '1'}checked="checked"{/if}>
+						<label for="optin">{l s='Receive special offers from our partners'}</label>
+					</p>
+					<h3>{l s='Delivery address'}</h3>
+					<p class="required text">
+						<label for="address1">{l s='Address'}</label>
+						<input type="text" class="text" name="address1" id="address1" value="{if isset($smarty.post.address1)}{$smarty.post.address1|escape:'htmlall'|stripslashes}{/if}">
+						<sup>*</sup>
+					</p>
+					<p class="required postcode text" style="">
+						<label for="postcode">{l s='Postal code / Zip code'}</label>
+						<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode|escape:'htmlall'|stripslashes}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());">
+						<sup>*</sup>
+					</p>
+					<p class="required text">
+						<label for="city">{l s='City'}</label>
+						<input type="text" class="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city|escape:'htmlall'|stripslashes}{/if}">
+						<sup>*</sup>
+					</p>
+					<p class="required select">
+						<label for="id_country">{l s='Country'}</label>
+						<select name="id_country" id="id_country">
+							<option value="">-</option>
+							{foreach from=$countries item=v}
+							<option value="{$v.id_country}" {if ($sl_country == $v.id_country)} selected="selected"{/if}>{$v.name|escape:'htmlall':'UTF-8'}</option>
+							{/foreach}
+						</select>
+						<sup>*</sup>
+					</p>
+					<p class="required id_state select">
+						<label for="id_state">{l s='State'}</label>
+						<select name="id_state" id="id_state">
+							<option value="">-</option>
+						</select>
+						<sup>*</sup>
+					</p>
+					<p class="text">
+						<label for="phone">{l s='Phone'}</label>
+						<input type="text" class="text" name="phone" id="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone|escape:'htmlall'|stripslashes}{/if}"> <sup style="color:red;">*</sup>
+					</p>
+					<input type="hidden" name="alias" id="alias" value="{l s='My address'}">
+					<input type="hidden" name="is_new_customer" id="is_new_customer" value="0">
+					
+					<!-- END Account -->
+					<p class="text">
+						<input type="submit" class="button" name="submitGuestAccount" id="submitGuestAccount" value="{l s='Continue'}">
+					</p>
+				</div>
+			</fieldset>
+		</form>
+	{/if}
 {else}
 <form action="{$link->getPageLink('authentication.php', true)}" method="post" id="account-creation_form" class="std">
 	{$HOOK_CREATE_ACCOUNT_TOP}

@@ -156,6 +156,21 @@ class AdminCustomers extends AdminTab
 		elseif (Tools::isSubmit('submitDel'.$this->table) AND $this->tabAccess['delete'] === '1')
 			foreach (Tools::getValue('customerBox') as $id_customer)
 				Discount::deleteByIdCustomer((int)($id_customer));
+		elseif (Tools::isSubmit('submitGuestToCustomer') AND Tools::getValue('id_customer'))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				$customer = new Customer((int)Tools::getValue('id_customer'));
+				if (!Validate::isLoadedObject($customer))
+					$this->_errors[] = Tools::displayError('this customer doesn\'t exists');
+				if ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
+					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while updating customer');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+		}
 		return parent::postProcess();
 	}
 
@@ -203,7 +218,19 @@ class AdminCustomers extends AdminTab
 			'.$this->l('Opt-in:').' '.($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'<br />
 			'.$this->l('Age:').' '.$customerStats['age'].' '.((!empty($customer->birthday['age'])) ? '('.Tools::displayDate($customer->birthday, (int)($cookie->id_lang)).')' : $this->l('unknown')).'<br /><br />
 			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, (int)($cookie->id_lang), true).'<br />
-			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').'
+			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />');
+		if ($customer->isGuest())
+			echo '
+		    <div>
+		  	  '.$this->l('This customer is registered as').' <b>'.$this->l('guest').'</b>
+		  	  <form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
+		  	  	<input type="hidden" name="id_lang" value="'.(int)(sizeof($orders) ? $orders[0]['id_lang'] : Configuration::get('PS_LANG_DEFAULT')).'" />
+		  	  	<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
+		  	  	'.$this->l('This feature going to generate a random password and send a e-mail at customer').'
+		  	  </form>
+		    </div>
+		    ';
+		echo '
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 		

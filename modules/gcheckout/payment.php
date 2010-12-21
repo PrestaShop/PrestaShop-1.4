@@ -29,7 +29,7 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../header.php');
 include(dirname(__FILE__).'/gcheckout.php');
 
-if (!$cookie->isLogged())
+if (!$cookie->isLogged(true))
     Tools::redirect('authentication.php?back=order.php');
 	
 $gcheckout = new GCheckout();

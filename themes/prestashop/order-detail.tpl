@@ -59,7 +59,7 @@
 {if $invoice AND $invoiceAllowed}
 <p>
 	<img src="{$img_dir}icon/pdf.gif" alt="" class="icon" />
-	<a href="{$base_dir}pdf-invoice.php?id_order={$order->id|intval}">{l s='Download your invoice as a .PDF file'}</a>
+	<a href="{$base_dir}pdf-invoice.php?id_order={$order->id|intval}{if $is_guest}&secure_key={$order->secure_key}{/if}">{l s='Download your invoice as a .PDF file'}</a>
 </p>
 {/if}
 {if $order->recyclable}
@@ -93,7 +93,7 @@
 	{if $address_delivery->phone_mobile}<li class="address_phone_mobile">{$address_delivery->phone_mobile|escape:'htmlall':'UTF-8'}</li>{/if}
 </ul>
 {$HOOK_ORDERDETAILDISPLAYED}
-<form action="{$link->getPageLink('order-follow.php', true)}" method="post">
+{if !$is_guest}<form action="{$link->getPageLink('order-follow.php', true)}" method="post">{/if}
 <div id="order-detail-content" class="table_block">
 	<table class="std">
 		<thead>
@@ -231,69 +231,72 @@
 		</tbody>
 	</table>
 </div>
-{if $return_allowed}
-<br />
-<p class="bold">{l s='Merchandise return'}</p>
-<p>{l s='If you want to return one or several products, please mark the corresponding checkbox(es) and provide an explanation for the return. Then click the button below.'}</p>
-<p class="textarea">
-	<textarea cols="67" rows="3" name="returnText"></textarea>
-</p>
-<p class="submit">
-	<input type="submit" value="{l s='Make a RMA slip'}" name="submitReturnMerchandise" class="button_large" />
-	<input type="hidden" class="hidden" value="{$order->id|intval}" name="id_order" />
-</p>
-<br />
-{/if}
-</form>
-{if count($messages)}
-<p class="bold">{l s='Messages'}</p>
-<div class="table_block">
-	<table class="detail_step_by_step std">
-		<thead>
-			<tr>
-				<th class="first_item" style="width:150px;">{l s='From'}</th>
-				<th class="last_item">{l s='Message'}</th>
-			</tr>
-		</thead>
-		<tbody>
-		{foreach from=$messages item=message name="messageList"}
-			<tr class="{if $smarty.foreach.messageList.first}first_item{elseif $smarty.foreach.messageList.last}last_item{/if} {if $smarty.foreach.messageList.index % 2}alternate_item{else}item{/if}">
-				<td>
-					{if isset($message.ename) && $message.ename}
-						{$message.efirstname|escape:'htmlall':'UTF-8'} {$message.elastname|escape:'htmlall':'UTF-8'}
-					{elseif $message.clastname}
-						{$message.cfirstname|escape:'htmlall':'UTF-8'} {$message.clastname|escape:'htmlall':'UTF-8'}
-					{else}
-						<b>{$shop_name|escape:'htmlall':'UTF-8'}</b>
-					{/if}
-					<br />
-					{dateFormat date=$message.date_add full=1}
-				</td>
-				<td>{$message.message|nl2br}</td>
-			</tr>
-		{/foreach}
-		</tbody>
-	</table>
-</div>
-{/if}
-{if isset($errors) && $errors}
-	<div class="error">
-		<p>{if $errors|@count > 1}{l s='There are'}{else}{l s='There is'}{/if} {$errors|@count} {if $errors|@count > 1}{l s='errors'}{else}{l s='error'}{/if} :</p>
-		<ol>
-		{foreach from=$errors key=k item=error}
-			<li>{$error}</li>
-		{/foreach}
-		</ol>
-	</div>
-{/if}
-<form action="{$link->getPageLink('order-detail.php', true)}" method="post" class="std" id="sendOrderMessage">
-	<p class="bold">{l s='Add a message:'}</p>
-	<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+{if !$is_guest}
+	{if $return_allowed}
+	<br />
+	<p class="bold">{l s='Merchandise return'}</p>
+	<p>{l s='If you want to return one or several products, please mark the corresponding checkbox(es) and provide an explanation for the return. Then click the button below.'}</p>
 	<p class="textarea">
-		<textarea cols="67" rows="3" name="msgText"></textarea>
+		<textarea cols="67" rows="3" name="returnText"></textarea>
 	</p>
 	<p class="submit">
-		<input type="hidden" name="id_order" value="{$order->id|intval}" />
-		<input type="submit" class="button" name="submitMessage" value="{l s='Send'}"/>
+		<input type="submit" value="{l s='Make a RMA slip'}" name="submitReturnMerchandise" class="button_large" />
+		<input type="hidden" class="hidden" value="{$order->id|intval}" name="id_order" />
 	</p>
-</form>
+	<br />
+	{/if}
+	</form>
+
+	{if count($messages)}
+	<p class="bold">{l s='Messages'}</p>
+	<div class="table_block">
+		<table class="detail_step_by_step std">
+			<thead>
+				<tr>
+					<th class="first_item" style="width:150px;">{l s='From'}</th>
+					<th class="last_item">{l s='Message'}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{foreach from=$messages item=message name="messageList"}
+				<tr class="{if $smarty.foreach.messageList.first}first_item{elseif $smarty.foreach.messageList.last}last_item{/if} {if $smarty.foreach.messageList.index % 2}alternate_item{else}item{/if}">
+					<td>
+						{if isset($message.ename) && $message.ename}
+							{$message.efirstname|escape:'htmlall':'UTF-8'} {$message.elastname|escape:'htmlall':'UTF-8'}
+						{elseif $message.clastname}
+							{$message.cfirstname|escape:'htmlall':'UTF-8'} {$message.clastname|escape:'htmlall':'UTF-8'}
+						{else}
+							<b>{$shop_name|escape:'htmlall':'UTF-8'}</b>
+						{/if}
+						<br />
+						{dateFormat date=$message.date_add full=1}
+					</td>
+					<td>{$message.message|nl2br}</td>
+				</tr>
+			{/foreach}
+			</tbody>
+		</table>
+	</div>
+	{/if}
+	{if isset($errors) && $errors}
+		<div class="error">
+			<p>{if $errors|@count > 1}{l s='There are'}{else}{l s='There is'}{/if} {$errors|@count} {if $errors|@count > 1}{l s='errors'}{else}{l s='error'}{/if} :</p>
+			<ol>
+			{foreach from=$errors key=k item=error}
+				<li>{$error}</li>
+			{/foreach}
+			</ol>
+		</div>
+	{/if}
+	<form action="{$link->getPageLink('order-detail.php', true)}" method="post" class="std" id="sendOrderMessage">
+		<p class="bold">{l s='Add a message:'}</p>
+		<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+		<p class="textarea">
+			<textarea cols="67" rows="3" name="msgText"></textarea>
+		</p>
+		<p class="submit">
+			<input type="hidden" name="id_order" value="{$order->id|intval}" />
+			<input type="submit" class="button" name="submitMessage" value="{l s='Send'}"/>
+		</p>
+	</form>
+{/if}

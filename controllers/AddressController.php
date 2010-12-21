@@ -30,6 +30,7 @@ class AddressControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->auth = true;
+		$this->guestAllowed = true;
 		$this->authRedirection = 'addresses.php';
 		$this->ssl = true;
 	
@@ -43,18 +44,30 @@ class AddressControllerCore extends FrontController
 			$this->smarty->assign('back', Tools::safeOutput($back));
 		if ($mod = Tools::getValue('mod'))
 			$this->smarty->assign('mod', Tools::safeOutput($mod));
-			
-		if ($id_address = (int)(Tools::getValue('id_address')))
+		
+		if (Tools::isSubmit('ajax') AND Tools::isSubmit('type'))
+		{
+			if (Tools::getValue('type') == 'delivery')
+				$id_address = isset($this->cart->id_address_delivery) ? (int)$this->cart->id_address_delivery : 0;
+			elseif (Tools::getValue('type') == 'invoice')
+				$id_address = (isset($this->cart->id_address_invoice) AND $this->cart->id_address_invoice != $this->cart->id_address_delivery) ? (int)$this->cart->id_address_invoice : 0;
+			else
+				exit;
+		}
+		else
+			$id_address = (int)Tools::getValue('id_address', 0);
+		
+		if ($id_address)
 		{
 			$address = new Address((int)($id_address));
 			if (Validate::isLoadedObject($address) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($id_address)))
 			{
 				if (Tools::isSubmit('delete'))
 				{
-					if ($cart->id_address_invoice == $address->id)
-						unset($cart->id_address_invoice);
-					if ($cart->id_address_delivery == $address->id)
-						unset($cart->id_address_delivery);
+					if ($this->cart->id_address_invoice == $address->id)
+						unset($this->cart->id_address_invoice);
+					if ($this->cart->id_address_delivery == $address->id)
+						unset($this->cart->id_address_delivery);
 					if ($address->delete())
 						Tools::redirect('addresses.php');
 					$this->errors[] = Tools::displayError('this address cannot be deleted');
@@ -64,6 +77,8 @@ class AddressControllerCore extends FrontController
 					'id_address' => (int)($id_address)
 				));
 			}
+			elseif (Tools::isSubmit('ajax'))
+				exit;
 			else
 				Tools::redirect('addresses.php');
 		}
@@ -96,14 +111,15 @@ class AddressControllerCore extends FrontController
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
 					$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
 			}
+
 			if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 				strcmp(Tools::getToken(false), Tools::getValue('token')) AND
-				$this->cookie->isLogged() === true)
+				$this->cookie->isLogged(true) === true)
 				$this->errors[] = Tools::displayError('invalid token');
 
 			if ((int)($country->contains_states) AND !(int)($address->id_state))
 				$this->errors[] = Tools::displayError('this country requires a state selection');
-
+			
 			if (!sizeof($this->errors))
 			{
 				if (isset($id_address))
@@ -114,11 +130,14 @@ class AddressControllerCore extends FrontController
 					$address_old = new Address((int)($id_address));
 					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($address_old->id)))
 					{
-						if ($cart->id_address_invoice == $address_old->id)
-							unset($cart->id_address_invoice);
-						if ($cart->id_address_delivery == $address_old->id)
-							unset($cart->id_address_delivery);
-
+						if (!Tools::isSubmit('ajax'))
+						{
+							if ($this->cart->id_address_invoice == $address_old->id)
+								unset($this->cart->id_address_invoice);
+							if ($this->cart->id_address_delivery == $address_old->id)
+								unset($this->cart->id_address_delivery);
+						}
+						
 						if ($address_old->isUsed())
 							$address_old->delete();
 						else
@@ -128,14 +147,26 @@ class AddressControllerCore extends FrontController
 						}
 					}
 				}
+				elseif ($this->cookie->is_guest)
+					Tools::redirect('addresses.php');
 				
 				if ($result = $address->save())
 				{
-					if ((bool)(Tools::getValue('select_address', false)) == true)
+					if ((bool)(Tools::getValue('select_address', false)) == true OR (Tools::isSubmit('ajax') AND Tools::getValue('type') == 'invoice'))
 					{
 						/* This new adress is for invoice_adress, select it */
-						$cart->id_address_invoice = (int)($address->id);
-						$cart->update();
+						$this->cart->id_address_invoice = (int)($address->id);
+						$this->cart->update();
+					}
+					if (Tools::isSubmit('ajax'))
+					{
+						$return = array(
+							'hasError' => !empty($this->errors), 
+							'errors' => $this->errors,
+							'id_address_delivery' => $this->cart->id_address_delivery,
+							'id_address_invoice' => $this->cart->id_address_invoice
+						);
+						die(Tools::jsonEncode($return));
 					}
 					Tools::redirect($back ? ($mod ? $back.'&back='.$mod : $back) : 'addresses.php');
 				}
@@ -151,7 +182,14 @@ class AddressControllerCore extends FrontController
 				$_POST['lastname'] = $customer->lastname;
 			}
 		}
-		
+		if (Tools::isSubmit('ajax') AND sizeof($this->errors))
+		{
+			$return = array(
+				'hasError' => !empty($this->errors), 
+				'errors' => $this->errors
+			);
+			die(Tools::jsonEncode($return));
+		}
 	}
 	
 	public function setMedia()
@@ -164,6 +202,10 @@ class AddressControllerCore extends FrontController
 	{
 		parent::process();
 
+		/* Secure restriction for guest */
+		if ($this->cookie->is_guest)
+			Tools::redirect('addresses.php');
+		
 		if (Tools::isSubmit('id_country') AND Tools::getValue('id_country') != NULL AND is_numeric(Tools::getValue('id_country')))
 			$selectedCountry = (int)(Tools::getValue('id_country'));
 		elseif (isset($address) AND isset($address->id_country) AND !empty($address->id_country) AND is_numeric($address->id_country))
@@ -191,10 +233,22 @@ class AddressControllerCore extends FrontController
 		));
 	}
 	
+	public function displayHeader()
+	{
+		if (Tools::getValue('ajax') != 'true')
+			parent::displayHeader();
+	}
+	
 	public function displayContent()
 	{
 		parent::displayContent();
 		$this->smarty->display(_PS_THEME_DIR_.'address.tpl');
+	}
+	
+	public function displayFooter()
+	{
+		if (Tools::getValue('ajax') != 'true')
+			parent::displayFooter();
 	}
 }
 

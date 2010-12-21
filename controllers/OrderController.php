@@ -75,7 +75,7 @@ class OrderControllerCore extends FrontController
 			' '.Tools::displayError('is required in order to validate your order');
 		}
 
-		if (!$this->cookie->isLogged() AND in_array($this->step, array(1, 2, 3)))
+		if (!$this->cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
 			Tools::redirect('authentication.php?back=order.php?step='.$this->step);
 
 		$this->smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
@@ -432,6 +432,8 @@ class OrderControllerCore extends FrontController
 					$this->smarty->assign('invoice', $invoiceAddress);
 			}
 		}
+		if ($this->cookie->is_guest)
+			Tools::redirect('order.php?step=2');
 		if ($oldMessage = Message::getMessageByCartId((int)($this->cart->id)))
 			$this->smarty->assign('oldMessage', $oldMessage['message']);
 		$this->smarty->assign('cart', $this->cart);
@@ -521,6 +523,7 @@ class OrderControllerCore extends FrontController
 			'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
 			'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $resultsArray)),
 			'checked' => (int)($checked),
+			'is_guest'=> (isset($this->cookie->is_guest) ? $this->cookie->is_guest : 0),
 			'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
 			'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency)))));
 	}

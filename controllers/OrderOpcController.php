@@ -155,7 +155,12 @@ class OrderOpcControllerCore extends FrontController
 							{
 								$this->cart->id_carrier = 0;
 								$this->cart->update();
-								$result = array('carriers' => Carrier::getCarriersOpc((int)($address_delivery->id_country), $groups));
+								$carriers = Carrier::getCarriersOpc((int)($address_delivery->id_country), $groups);
+								$result = array(
+									'carriers' => $carriers,
+									'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers)),
+									'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address_delivery))
+								);
 								die (Tools::jsonEncode($result));
 							}
 							if (sizeof($this->errors))
@@ -203,6 +208,23 @@ class OrderOpcControllerCore extends FrontController
 							
 							die(Module::hookExec('payment'));
 							break;
+						case 'editCustomer':
+							$customer = new Customer((int)$this->cookie->id_customer);
+							$this->errors = $customer->validateControler();
+							$customer->newsletter = (int)Tools::isSubmit('newsletter');
+							$customer->optin = (int)Tools::isSubmit('optin');
+							$return = array(
+								'hasError' => !empty($this->errors), 
+								'errors' => $this->errors,
+								'id_customer' => (int)$this->cookie->id_customer,
+								'token' => Tools::getToken(false)
+							);
+							if (!sizeof($this->errors))
+								$return['isSaved'] = (bool)$customer->update();
+							else
+								$return['isSaved'] = false;
+							die(Tools::jsonEncode($return));
+							break;
 						default:
 							exit;
 					}
@@ -234,10 +256,12 @@ class OrderOpcControllerCore extends FrontController
 							}
 							else
 								$groups = array(1);
-							$address = new Address((int)($this->cart->id_address_delivery));
+							$carriers = Carrier::getCarriersOpc((int)($address_delivery->id_country), $groups);
 							$result = array(
-								'carriers' => Carrier::getCarriersOpc((int)($address_delivery->id_country), $groups),
-								'summary' => $this->cart->getSummaryDetails()
+								'carriers' => $carriers,
+								'summary' => $this->cart->getSummaryDetails(),
+								'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers)),
+								'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address_delivery))
 							);
 							die(Tools::jsonEncode($result));
 						}
@@ -300,6 +324,7 @@ class OrderOpcControllerCore extends FrontController
 			Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/thickbox-modified.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-typewatch.pack.js');
+		Tools::addJS(_THEME_JS_DIR_.'tools/statesManagement.js');
 	}
 	
 	public function process()
@@ -323,6 +348,21 @@ class OrderOpcControllerCore extends FrontController
 		    $this->smarty->assign('free_ship', $total_free_ship);
 		}
 		
+		// Wrapping fees
+		$wrapping_fees = floatval(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+    	$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+    	$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
+    
+		$cms = new CMS((int)(Configuration::get('PS_CONDITIONS_CMS_ID')), (int)($this->cookie->id_lang));
+		$this->link_conditions = $this->link->getCMSLink($cms, $cms->link_rewrite, true);
+    	if (!strpos($this->link_conditions, '?'))
+    		$this->link_conditions .= '?content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
+    	else
+    		$this->link_conditions .= '&content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
+		
+		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$countries = Country::getCountries((int)($this->cookie->id_lang), true);
+		
 		// for compatibility with 1.2 themes
 		foreach($summary['products'] AS $key => $product)
 		    $summary['products'][$key]['quantity'] = $product['cart_quantity'];
@@ -340,14 +380,55 @@ class OrderOpcControllerCore extends FrontController
 		    'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 		    'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			'isLogged' => $this->isLogged,
+			'isGuest' => isset($this->cookie->is_guest) ? $this->cookie->is_guest : 0,
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,
 			'currencyFormat' => $currency->format,
 			'currencyBlank' => $currency->blank,
-			'displayVouchers' => Discount::getVouchersToCartDisplay((int)($this->cookie->id_lang), (isset($this->cookie->id_customer) ? (int)($this->cookie->id_customer) : 0))
+			'displayVouchers' => Discount::getVouchersToCartDisplay((int)($this->cookie->id_lang), (isset($this->cookie->id_customer) ? (int)($this->cookie->id_customer) : 0)),
+			'checkedTOS' => (int)($this->cookie->checkedTOS),
+			'recyclablePackAllowed' => (int)(Configuration::get('PS_RECYCLABLE_PACK')),
+	    	'giftAllowed' => (int)(Configuration::get('PS_GIFT_WRAPPING')),
+	    	'cms_id' => (int)(Configuration::get('PS_CONDITIONS_CMS_ID')),
+	    	'conditions' => (int)(Configuration::get('PS_CONDITIONS')),
+	    	'link_conditions' => $this->link_conditions,
+	    	'recyclable' => (int)($this->cart->recyclable),
+	    	'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
+			'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
+			'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency))),
+			'countries' => $countries,
+			'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
+			'vat_management' => Configuration::get('VATNUMBER_MANAGEMENT'),
+			'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED')
 		));
 		
-		if ((int)($this->cookie->id_customer) AND Customer::customerIdExistsStatic((int)($this->cookie->id_customer)))
+		/* Load guest informations */
+		if ($this->isLogged AND $this->cookie->is_guest)
+		{
+			$customer = new Customer((int)($this->cookie->id_customer));
+			$address_delivery = new Address((int)$this->cart->id_address_delivery);
+			
+			$guestInformations = array(
+				'id_customer' => (int)($this->cookie->id_customer),
+				'email' => Tools::htmlentitiesUTF8($customer->email),
+				'lastname' => Tools::htmlentitiesUTF8($customer->lastname),
+				'firstname' => Tools::htmlentitiesUTF8($customer->firstname),
+				'newsletter' => (int)$customer->newsletter,
+				'optin' => (int)$customer->optin,
+				'id_address_delivery' => (int)$this->cart->id_address_delivery,
+				'address1' => Tools::htmlentitiesUTF8($address_delivery->address1),
+				'postcode' => Tools::htmlentitiesUTF8($address_delivery->postcode),
+				'city' => Tools::htmlentitiesUTF8($address_delivery->city),
+				'phone' => Tools::htmlentitiesUTF8($address_delivery->phone),
+				'phone_mobile' => Tools::htmlentitiesUTF8($address_delivery->phone_mobile),
+				'id_country' => (int)($address_delivery->id_country),
+				'id_state' => (int)($address_delivery->id_state),
+				'id_gender' => (int)$customer->id_gender
+			);
+			$this->smarty->assign('guestInformations', $guestInformations);
+		}
+		
+		if ($this->isLogged)
 		{
 			// ADDRESS
 			if (!Customer::getAddressesTotalById((int)($this->cookie->id_customer)))
@@ -389,13 +470,7 @@ class OrderOpcControllerCore extends FrontController
 				$this->smarty->assign('oldMessage', $oldMessage['message']);
 			
 			// CARRIER
-			
 			$carriers = Carrier::getCarriersOpc((int)($deliveryAddress->id_country), $customer->getGroups());
-			
-			// Wrapping fees
-			$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
-			$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-			$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
 			
 			$checked = 0;
 			if (Validate::isUnsignedInt($this->cart->id_carrier) AND $this->cart->id_carrier)
@@ -404,31 +479,21 @@ class OrderOpcControllerCore extends FrontController
 				if ($carrier->active AND !$carrier->deleted)
 					$checked = (int)($this->cart->id_carrier);
 			}
-			$cms = new CMS((int)(Configuration::get('PS_CONDITIONS_CMS_ID')), (int)($this->cookie->id_lang));
-			$this->link_conditions = $this->link->getCMSLink($cms, $cms->link_rewrite, true);
-			if (!strpos($this->link_conditions, '?'))
-				$this->link_conditions .= '?content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
-			else
-				$this->link_conditions .= '&content_only=1&TB_iframe=true&width=450&height=500&thickbox=true';
 			$this->smarty->assign(array(
-				'checkedTOS' => (int)($this->cookie->checkedTOS),
-				'recyclablePackAllowed' => (int)(Configuration::get('PS_RECYCLABLE_PACK')),
-				'giftAllowed' => (int)(Configuration::get('PS_GIFT_WRAPPING')),
-				'cms_id' => (int)(Configuration::get('PS_CONDITIONS_CMS_ID')),
-				'conditions' => (int)(Configuration::get('PS_CONDITIONS')),
-				'link_conditions' => $this->link_conditions,
-				'recyclable' => (int)($this->cart->recyclable),
-				'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
+				'checked' => (int)($checked),
 				'carriers' => $carriers,
 				'default_carrier' => (int)(Configuration::get('PS_CARRIER_DEFAULT')),
 				'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $deliveryAddress)),
-				'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers)),
-				'checked' => (int)($checked),
-				'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
-				'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency)))
+				'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers))
 			));
 		}
 		Tools::safePostVars();
+	}
+	
+	public function displayHeader()
+	{
+		if (Tools::getValue('ajax') != 'true')
+			parent::displayHeader();
 	}
 	
 	public function displayContent()
@@ -438,6 +503,13 @@ class OrderOpcControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'errors.tpl');
 		$this->smarty->display(_PS_THEME_DIR_.'order-opc.tpl');
 	}
+	
+	public function displayFooter()
+	{
+		if (Tools::getValue('ajax') != 'true')
+			parent::displayFooter();
+	}
+	
 }
 
 

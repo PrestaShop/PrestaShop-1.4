@@ -40,6 +40,7 @@ class FrontControllerCore
 	public $n;
 	
 	public $auth = false;
+	public $guestAllowed = false;
 	public $authRedirection = false;
 	public $ssl = false;
 	
@@ -58,7 +59,7 @@ class FrontControllerCore
 		$this->cart = &$cart;
 		$this->iso = &$iso;
 
-		if ($this->auth AND !$this->cookie->isLogged())
+		if ($this->auth AND !$this->cookie->isLogged($this->guestAllowed))
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 	}
 	
@@ -313,7 +314,8 @@ class FrontControllerCore
 				'img_dir' => _THEME_IMG_DIR_,
 				'css_dir' => _THEME_CSS_DIR_,
 				'js_dir' => _THEME_JS_DIR_,
-				'pic_dir' => _THEME_PROD_PIC_DIR_
+				'pic_dir' => _THEME_PROD_PIC_DIR_,
+				'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
 			);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 
 			foreach ($assignArray as $assignKey => $assignValue)
@@ -363,7 +365,9 @@ class FrontControllerCore
 				'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 				'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
 				'use_taxes' => (int)(Configuration::get('PS_TAX')),
-				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
+				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT')),
+				'opc' => !(bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
+			));
 		}
 
 		/* Display a maintenance page if shop is closed */

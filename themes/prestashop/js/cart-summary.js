@@ -131,9 +131,11 @@ function deletProductFromSummary(id)
 						});
 				}
 				updateCartSummary(jsonData.summary);
+				updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
+				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 				updateCustomizedDatas(jsonData.customizedDatas);
 				if (jsonData.carriers != null)
-					updateCarrierList(jsonData.carriers);
+					updateCarrierList(jsonData);
 				
     		}
        	},
@@ -178,8 +180,10 @@ function upQuantity(id, qty)
     		{
     			updateCustomizedDatas(jsonData.customizedDatas);
     			updateCartSummary(jsonData.summary);
+    			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
+				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 	    		if (jsonData.carriers != null)
-					updateCarrierList(jsonData.carriers);
+					updateCarrierList(jsonData);
     		}
     	},
        error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
@@ -232,8 +236,10 @@ function downQuantity(id, qty)
 	    		{
 	    			updateCustomizedDatas(jsonData.customizedDatas);
 	    			updateCartSummary(jsonData.summary);
+	    			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
+					updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 	    			if (jsonData.carriers != null)
-						updateCarrierList(jsonData.carriers);
+						updateCarrierList(jsonData);
 	    		}
 	    	},
 	       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
@@ -365,4 +371,14 @@ function updateCustomizedDatas(json)
 				$('input[name=quantity_'+i+'_'+j+'_'+k+'_hidden]').val(json[i][j][k]['quantity']);
 				$('input[name=quantity_'+i+'_'+j+'_'+k+']').val(json[i][j][k]['quantity']);
 			}
+}
+
+function updateHookShoppingCart(html)
+{
+	$('#HOOK_SHOPPING_CART').html(html);
+}
+
+function updateHookShoppingCartExtra(html)
+{
+	$('#HOOK_SHOPPING_CART_EXTRA').html(html);
 }

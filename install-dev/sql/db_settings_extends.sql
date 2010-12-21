@@ -205,8 +205,8 @@ INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight
 INSERT INTO `PREFIX_customer_group` (`id_customer`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (2, 1),(3, 1),(4, 1);
 
-INSERT INTO `PREFIX_customer` (`id_customer`, `id_gender`, `id_default_group`, `secure_key`, `email`, `passwd`, `birthday`, `lastname`, `newsletter`, `optin`, `firstname`, `active`, `date_add`, `date_upd`)
-	VALUES (1, 1, 1, '47ce86627c1f3c792a80773c5d2deaf8', 'pub@prestashop.com', 'ad807bdf0426766c05c64041124d30ce', '1970-01-15', 'DOE', 1, 1, 'John', 1, NOW(), NOW());
+INSERT INTO `PREFIX_customer` (`id_customer`, `id_gender`, `id_default_group`, `secure_key`, `email`, `passwd`, `birthday`, `lastname`, `newsletter`, `optin`, `firstname`, `active`, `is_guest`, `date_add`, `date_upd`)
+	VALUES (1, 1, 1, '47ce86627c1f3c792a80773c5d2deaf8', 'pub@prestashop.com', 'ad807bdf0426766c05c64041124d30ce', '1970-01-15', 'DOE', 1, 1, 'John', 1, 0, NOW(), NOW());
 INSERT INTO `PREFIX_connections` (`id_connections`, `id_guest`, `id_page`, `ip_address`, `date_add`, `http_referer`)
 	VALUES (1, 1, 1, '2130706433', NOW(), 'http://www.prestashop.com');
 INSERT INTO `PREFIX_guest` (`id_guest`, `id_operating_system`, `id_web_browser`, `id_customer`, `javascript`, `screen_resolution_x`, `screen_resolution_y`, `screen_color`, `sun_java`, `adobe_flash`, `adobe_director`, `apple_quicktime`, `real_player`, `windows_media`, `accept_language`)

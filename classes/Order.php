@@ -934,5 +934,19 @@ class OrderCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE invoice_number = '.(int)($id_invoice));
 	}
+	
+	public function isAssociatedAtGuest($email)
+	{
+		if (!$email)
+			return false;
+		return (bool)Db::getInstance()->getValue('
+			SELECT COUNT(*) 
+			FROM `'._DB_PREFIX_.'orders` o 
+			LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = o.`id_customer`) 
+			WHERE o.`id_order` = '.(int)$this->id.' 
+			AND c.`email` = \''.pSQL($email).'\' 
+			AND c.`is_guest` = 1
+		');
+	}
 }
 

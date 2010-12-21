@@ -77,6 +77,9 @@ class CustomerCore extends ObjectModel
 	/** @var boolean Status */
 	public 		$active = true;
 
+	/** @var boolean Status */
+	public 		$is_guest = 0;
+	
 	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
 
@@ -95,7 +98,7 @@ class CustomerCore extends ObjectModel
  	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
  	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16, 'note' => 65000);
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
-		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDniBool', 'note' => 'isCleanHtml');
+		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDniBool', 'note' => 'isCleanHtml', 'is_guest' => 'isBool');
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
@@ -136,6 +139,7 @@ class CustomerCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
+		$fields['is_guest'] = (int)($this->is_guest);
 		$fields['deleted'] = (int)($this->deleted);
 		return $fields;
 	}
@@ -146,6 +150,9 @@ class CustomerCore extends ObjectModel
 		$this->secure_key = md5(uniqid(rand(), true));
 		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT').'minutes'));
 		$this->id_default_group = 1;
+		/* Can't create a guest customer, if this feature is disabled */
+		if ($this->is_guest AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
+			return false;
 	 	$res = parent::add($autodate, $nullValues);
 		if (!$res)
 			return false;
@@ -207,7 +214,8 @@ class CustomerCore extends ObjectModel
 		WHERE `active` = 1
 		AND `email` = \''.pSQL($email).'\'
 		'.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : '').'
-		AND `deleted` = 0');
+		AND `deleted` = 0
+		AND `is_guest` = 0');
 
 		if (!$result)
 			return false;
@@ -584,6 +592,37 @@ class CustomerCore extends ObjectModel
 		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
 	}
 
-
+	public function isGuest()
+	{
+		return (bool)$this->is_guest;
+	}
+	
+	public function transformToCustomer($id_lang, $password = NULL)
+	{
+		if (!$this->isGuest())
+			return false;
+		if (empty($password))
+			$password = Tools::passwdGen();
+		if (!Validate::isPasswd($password))
+			return false;
+		
+		$this->is_guest = 0;
+		$this->passwd = Tools::encrypt($password);
+		if ($this->update())
+		{
+			//templateVars
+			//static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_)
+			$vars = array(
+				'{firstname}' => $this->firstname,
+				'{lastname}' => $this->lastname,
+			    '{email}' => $this->email,
+			    '{passwd}' => $password
+			);
+			
+			Mail::Send((int)$id_lang, 'guest_to_customer', Mail::l('Your guest account has been transformed to customer account'), $vars, $this->email, $this->firstname.' '.$this->lastname);
+			return true;
+		}
+		return false;
+	}
 }
 

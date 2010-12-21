@@ -94,7 +94,7 @@ function displayConfirm()
 {
 	global $cookie, $smarty, $ppExpress, $cart, $payerID;
 
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged(true))
 		die('Not logged');
 	if (!$payerID AND !$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID'))))
 		die('No payer ID');
@@ -123,7 +123,7 @@ function submitConfirm()
 {
 	global $cookie, $smarty, $ppExpress, $cart;
 
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged(true))
 		die('Not logged');
 	elseif (!$currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
@@ -246,9 +246,9 @@ function displayLogin()
 	// Customer exists, login form
 
 	// If customer already logged, check if same mail than PayPal, and go through, or unlog
-	if ($cookie->isLogged() AND isset($result['EMAIL']) AND $cookie->email == $result['EMAIL'])
+	if ($cookie->isLogged(true) AND isset($result['EMAIL']) AND $cookie->email == $result['EMAIL'])
 		displayProcess($payerID);
-	elseif ($cookie->isLogged())
+	elseif ($cookie->isLogged(true))
 		$cookie->makeNewLog();
 
 	// Smarty assigns
@@ -273,7 +273,7 @@ function displayAccount()
 	// Customer does not exists, signup form
 
 	// If customer already logged, unlog him
-	if ($cookie->isLogged())
+	if ($cookie->isLogged(true))
 		$cookie->makeNewLog();
 
 	// Generate years, months and days

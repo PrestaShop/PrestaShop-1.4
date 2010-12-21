@@ -29,12 +29,16 @@
 	var baseDir = '{$base_dir_ssl}';
 	var imgDir = '{$img_dir}';
 	var orderProcess = 'order-opc';
+	var guestCheckoutEnabled = {$PS_GUEST_CHECKOUT_ENABLED|intval};
 	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
 	var currencyRate = '{$currencyRate|floatval}';
 	var currencyFormat = '{$currencyFormat|intval}';
 	var currencyBlank = '{$currencyBlank|intval}';
 	var displayPrice = {$priceDisplay};
 	var taxEnabled = {$use_taxes};
+	var countries = new Array();
+	var countriesNeedIDNumber = new Array();
+	var countriesNeedZipCode = new Array();
 	
 	var txtWithTax = "{l s='(tax incl.)'}";
 	var txtWithoutTax = "{l s='(tax excl.)'}";
@@ -42,14 +46,21 @@
 	var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
 	var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
 	var txtTOSIsNotAccepted = "{l s='Terms of service isn\'t accepted'}";
+	var txtThereis = "{l s='There is'}";
+	var txtErrors = "{l s='error(s)'}";
+	var txtDeliveryAddress = "{l s='Delivery address'}";
+	var txtInvoiceAddress = "{l s='Invoice address'}";
 
 	var addresses = new Array();
+	var isLogged = {$isLogged|intval};
+	var isGuest = {$isGuest|intval};
 	//]]>
 </script>
 {include file="$tpl_dir./thickbox.tpl"}
 {capture name=path}{l s='Your shopping cart'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 {if $productNumber}
+	<!-- Shopping cart -->
 	<h2 id="cart_title">{l s='Your shopping cart'} <span id="summary_products_label" style="float:right;margin-right:10px;">{l s='contains'}<span id="summary_products_quantity">{$productNumber}</span> {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></h2>
 	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your cart is empty'}</p>
 	<div id="order-detail-content" class="table_block">
@@ -251,95 +262,383 @@
 		</form>
 	</div>
 	{/if}
-	{$HOOK_SHOPPING_CART}
-	{if $isLogged}
-		<p class="cart_navigation first_next_button"><a href="#" type="button" class="exclusive order-opc_next" name="order-opc_block-address">{l s='Next >'}</a></p>
-		<h2 id="order-opc_address" class="order-opc_block"><img src="{$img_dir}icon/more.gif" alt="" class="order-opc_block-status" /> {l s='Addresses'}</h2>
-		<div id="order-opc_block-address" class="addresses order-opc_block-content">
-			<script type="text/javascript">
-			 // <![CDATA[
-				{foreach from=$addresses key=k item=address}
-					addresses[{$address.id_address|intval}] = new Array('{$address.company|addslashes}', '{$address.firstname|addslashes}', '{$address.lastname|addslashes}', '{$address.address1|addslashes}', '{$address.address2|addslashes}', '{$address.postcode|addslashes}', '{$address.city|addslashes}', '{$address.country|addslashes}', '{$address.state|default:''|addslashes}');
-				{/foreach}
-			//]]>
-			</script>
-			<p class="address_delivery select">
-				<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
-				<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay();">
-				{foreach from=$addresses key=k item=address}
-					<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_delivery}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
-				{/foreach}
-				</select>
-			</p>
-			<p class="checkbox">
-				<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery || $addresses|@count == 1}checked="checked"{/if} />
-				<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
-			</p>
-			<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
-			{if $addresses|@count > 1}
-				<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
-				<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();">
-				{section loop=$addresses step=-1 name=address}
-					<option value="{$addresses[address].id_address|intval}" {if $addresses[address].id_address == $cart->id_address_invoice && $cart->id_address_delivery != $cart->id_address_invoice}selected="selected"{/if}>{$addresses[address].alias|escape:'htmlall':'UTF-8'}</option>
-				{/section}
-				</select>
-				{else}
-					<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
-				{/if}
-			</p>
-			<div class="clear"></div>
-			<ul class="address item" id="address_delivery">
-				<li class="address_title">{l s='Your delivery address'}</li>
-				<li class="address_company"></li>
-				<li class="address_name"></li>
-				<li class="address_address1"></li>
-				<li class="address_address2"></li>
-				<li class="address_city"></li>
-				<li class="address_country"></li>
-				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
-			</ul>
-			<ul class="address alternate_item" id="address_invoice">
-				<li class="address_title">{l s='Your billing address'}</li>
-				<li class="address_company"></li>
-				<li class="address_name"></li>
-				<li class="address_address1"></li>
-				<li class="address_address2"></li>
-				<li class="address_city"></li>
-				<li class="address_country"></li>
-				<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
-			</ul>
-			<br class="clear" />
-			<p class="address_add submit">
-				<a href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
-			</p>
-			<div id="ordermsg">
-				<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
-				<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
+	<div id="HOOK_SHOPPING_CART">{$HOOK_SHOPPING_CART}</div>
+	<p>
+		<span id="HOOK_SHOPPING_CART_EXTRA">{$HOOK_SHOPPING_CART_EXTRA}</span>
+	</p>
+	<!-- END Shopping cart -->
+	{if $isLogged AND !$isGuest}
+		<!-- Address block (only for logged customer) -->
+		<h2>1. {l s='Addresses'}</h2>
+		<div id="opc_block_1" class="opc_block_content">
+				<div class="addresses">
+				<script type="text/javascript">
+				 // <![CDATA[
+					{foreach from=$addresses key=k item=address}
+						addresses[{$address.id_address|intval}] = new Array('{$address.company|addslashes}', '{$address.firstname|addslashes}', '{$address.lastname|addslashes}', '{$address.address1|addslashes}', '{$address.address2|addslashes}', '{$address.postcode|addslashes}', '{$address.city|addslashes}', '{$address.country|addslashes}', '{$address.state|default:''|addslashes}');
+					{/foreach}
+				//]]>
+				</script>
+				<p class="address_delivery select">
+					<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
+					<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay();">
+					{foreach from=$addresses key=k item=address}
+						<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_delivery}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
+					{/foreach}
+					</select>
+				</p>
+				<p class="checkbox">
+					<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();" {if $cart->id_address_invoice == $cart->id_address_delivery || $addresses|@count == 1}checked="checked"{/if} />
+					<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
+				</p>
+				<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
+				{if $addresses|@count > 1}
+					<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
+					<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();">
+					{section loop=$addresses step=-1 name=address}
+						<option value="{$addresses[address].id_address|intval}" {if $addresses[address].id_address == $cart->id_address_invoice && $cart->id_address_delivery != $cart->id_address_invoice}selected="selected"{/if}>{$addresses[address].alias|escape:'htmlall':'UTF-8'}</option>
+					{/section}
+					</select>
+					{else}
+						<a style="margin-left: 221px;" href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+					{/if}
+				</p>
+				<div class="clear"></div>
+				<ul class="address item" id="address_delivery">
+					<li class="address_title">{l s='Your delivery address'}</li>
+					<li class="address_company"></li>
+					<li class="address_name"></li>
+					<li class="address_address1"></li>
+					<li class="address_address2"></li>
+					<li class="address_city"></li>
+					<li class="address_country"></li>
+					<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
+				</ul>
+				<ul class="address alternate_item" id="address_invoice">
+					<li class="address_title">{l s='Your billing address'}</li>
+					<li class="address_company"></li>
+					<li class="address_name"></li>
+					<li class="address_address1"></li>
+					<li class="address_address2"></li>
+					<li class="address_city"></li>
+					<li class="address_country"></li>
+					<li class="address_update"><a href="{$base_dir_ssl}address.php?id_address={$address.id_address|intval}&amp;back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a></li>
+				</ul>
+				<br class="clear" />
+				<p class="address_add submit">
+					<a href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+				</p>
+				<div id="ordermsg">
+					<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+					<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
+				</div>
 			</div>
-			<p class="cart_navigation"><a href="#" type="button" class="exclusive order-opc_next" name="order-opc_block-carrier">{l s='Next >'}</a></p>
+			
+			<div>
+				<div style="float:right;"><a href="#opc_block_2" class="exclusive opc_button">{l s='Continue'}</a></div>
+			</div>
+			<div class="clear"></div>
 		</div>
-		<p id="order-opc_status-address" class="order-opc_status">
-			{l s='Delivery address:'} "<span id="order-opc_status-address_delivery">Mon adresse</span>" {l s='has been selected'}<br />
-			{l s='Invoice address:'} "<span id="order-opc_status-address_invoice">Mon adresse</span>" {l s='has been selected'}
-		</p>
-		
-		<h2 class="order-opc_block"><img src="{$img_dir}icon/more.gif" alt="" class="order-opc_block-status" /> {l s='Choose your delivery method'}</h2>
-		{$HOOK_BEFORECARRIER}
-		<div id="order-opc_block-carrier" class="table_block order-opc_block-content">
-		{if $isVirtualCart}
-			<p class="warning">{l s='No carrier needed for this order'}</p>
+		<div id="opc_block_1_status" class="opc_status">
+			<p>{l s='Delivery address:'} "<span id="opc_status-address_delivery">Mon adresse</span>" {l s='has been selected'}</p>
+			<p>{l s='Invoice address:'} "<span id="opc_status-address_invoice">Mon adresse</span>" {l s='has been selected'}</p>
+		</div>
+		<!-- END Address block -->
+	{else}
+		<!-- Create account / Guest account / Login block -->
+		<h2>1. {l s='Account'}</h2>
+		<div id="opc_block_1" class="opc_block_content">
+			<form action="{$base_dir_ssl}authentication.php?back=order-opc.php" method="post" id="login_form" class="std">
+				<fieldset>
+					<h3>{l s='Already registered?'} <a href="#" id="openLoginFormBlock">{l s='Click here'}</a></h3>
+					<div id="login_form_content" style="display:none;">
+						<div style="margin-left:40px;margin-bottom:5px;float:left;width:40%;">
+							<label for="email">{l s='E-mail address'}</label>
+							<span><input type="text" id="email" name="email" /></span>
+						</div>
+						<div style="margin-left:40px;margin-bottom:5px;float:left;width:40%;">
+							<label for="passwd">{l s='Password'}</label>
+							<span><input type="password" id="passwd" name="passwd" /></span>
+						</div>
+						<p class="submit">
+							{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'htmlall':'UTF-8'}" />{/if}
+							<input type="submit" id="SubmitLogin" name="SubmitLogin" class="button" value="{l s='Log in'}" />
+						</p>
+						<p class="lost_password"><a href="{$base_dir}password.php">{l s='Forgot your password?'}</a></p>
+					</div>
+				</fieldset>
+			</form>
+			<form action="#" method="post" id="new_account_form" class="std">
+				<fieldset>
+					<h3>{l s='New Customer'}</h3>
+					<div id="opc_account_choice">
+						<div class="opc_float">
+							<h4>{l s='Instant Checkout'}</h4>
+							<p>
+								<input type="button" class="exclusive_large" id="opc_guestCheckout" value="{l s='Checkout as guest'}" />
+							</p>
+						</div>
+						
+						<div class="opc_float">
+							<h4>{l s='Create your account and enjoy many benefits:'}</h4>
+							<ul class="bullet">
+								<li>{l s='Personalized and secure access'}</li>
+								<li>{l s='Fast and easy check out'}</li>
+							</ul>
+							<p>
+								<input type="button" class="button_large" id="opc_createAccount" value="{l s='Make your own account'}" />
+							</p>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div id="opc_account_form">
+						<script type="text/javascript">
+						// <![CDATA[
+						idSelectedCountry = {if isset($guestInformations) && $guestInformations.id_state}{$guestInformations.id_state|intval}{else}false{/if};
+						{if isset($countries)}
+							{foreach from=$countries item='country'}
+								{if isset($country.states) && $country.contains_states}
+									countries[{$country.id_country|intval}] = new Array();
+									{foreach from=$country.states item='state' name='states'}
+										countries[{$country.id_country|intval}].push({ldelim}'id' : '{$state.id_state}', 'name' : '{$state.name|escape:'htmlall':'UTF-8'}'{rdelim});
+									{/foreach}
+								{/if}
+								{if $country.need_identification_number}
+									countriesNeedIDNumber.push({$country.id_country|intval});
+								{/if}	
+								{if isset($country.need_zip_code)}
+									countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
+								{/if}
+							{/foreach}
+						{/if}
+						//]]>
+						{if $vat_management}
+							{literal}
+							$(document).ready(function() {
+								$('#company').blur(function(){
+									vat_number();
+								});
+								vat_number();
+								function vat_number()
+								{
+									if ($('#company').val() != '')
+										$('#vat_number').show();
+									else
+										$('#vat_number').hide();
+								}
+							});
+							{/literal}
+						{/if}
+						</script>
+						<!-- Error return block -->
+						<div id="opc_account_errors" class="error" style="display:none;"></div>
+						<!-- END Error return block -->
+						<!-- Account -->
+						<input type="hidden" id="is_new_customer" name="is_new_customer" value="0" />
+						<input type="hidden" id="opc_id_customer" name="opc_id_customer" value="{if isset($guestInformations) && $guestInformations.id_customer}{$guestInformations.id_customer}{else}0{/if}" />
+						<input type="hidden" id="opc_id_address_delivery" name="opc_id_address_delivery" value="{if isset($guestInformations) && $guestInformations.id_address_delivery}{$guestInformations.id_address_delivery}{else}0{/if}" />
+						<input type="hidden" id="opc_id_address_invoice" name="opc_id_address_invoice" value="{if isset($guestInformations) && $guestInformations.id_address_delivery}{$guestInformations.id_address_delivery}{else}0{/if}" />
+						<p class="required text">
+							<label for="email">{l s='E-mail'}</label>
+							<input type="text" class="text" id="email" name="email" value="{if isset($guestInformations) && $guestInformations.email}{$guestInformations.email}{/if}" />
+							<sup>*</sup>
+						</p>
+						<p class="required password is_customer_param">
+							<label for="passwd">{l s='Password'}</label>
+							<input type="password" class="text" name="passwd" id="passwd" />
+							<sup>*</sup>
+							<span class="form_info">{l s='(5 characters min.)'}</span>
+						</p>
+						<p class="radio required">
+							<span>{l s='Title'}</span>
+							<input type="radio" name="id_gender" id="id_gender1" value="1" {if isset($guestInformations) && $guestInformations.id_gender == 1}checked="checked"{/if} />
+							<label for="id_gender1" class="top">{l s='Mr.'}</label>
+							<input type="radio" name="id_gender" id="id_gender2" value="2" {if isset($guestInformations) && $guestInformations.id_gender == 2}checked="checked"{/if} />
+							<label for="id_gender2" class="top">{l s='Ms.'}</label>
+						</p>
+						<p class="required text">
+							<label for="firstname">{l s='First name'}</label>
+							<input type="text" class="text" id="firstname" name="firstname" onblur="$('#customer_firstname').val($(this).val());" value="{if isset($guestInformations) && $guestInformations.firstname}{$guestInformations.firstname}{/if}" />
+							<input type="hidden" class="text" id="customer_firstname" name="customer_firstname" value="{if isset($guestInformations) && $guestInformations.firstname}{$guestInformations.firstname}{/if}" />
+							<sup>*</sup>
+						</p>
+						<p class="required text">
+							<label for="lastname">{l s='Last name'}</label>
+							<input type="text" class="text" id="lastname" name="lastname" onblur="$('#customer_lastname').val($(this).val());" value="{if isset($guestInformations) && $guestInformations.lastname}{$guestInformations.lastname}{/if}" />
+							<input type="hidden" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($guestInformations) && $guestInformations.lastname}{$guestInformations.lastname}{/if}" />
+							<sup>*</sup>
+						</p>
+						<p class="checkbox">
+							<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($guestInformations) && $guestInformations.newsletter}checked="checked"{/if} />
+							<label for="newsletter">{l s='Sign up for our newsletter'}</label>
+						</p>
+						<p class="checkbox" >
+							<input type="checkbox"name="optin" id="optin" value="1" {if isset($guestInformations) && $guestInformations.optin}checked="checked"{/if} />
+							<label for="optin">{l s='Receive special offers from our partners'}</label>
+						</p>
+						<h3>{l s='Delivery address'}</h3>
+						<p class="text is_customer_param">
+							<label for="company">{l s='Company'}</label>
+							<input type="text" class="text" id="company" name="company" value="" />
+						</p>
+						<div id="vat_number is_customer_param" style="display:none;">
+							<p class="text">
+								<label for="vat_number">{l s='VAT number'}</label>
+								<input type="text" class="text" name="vat_number" id="vat_number" value="" />
+							</p>
+						</div>
+						<p class="required text">
+							<label for="address1">{l s='Address'}</label>
+							<input type="text" class="text" name="address1" id="address1" value="{if isset($guestInformations) && $guestInformations.address1}{$guestInformations.address1}{/if}" />
+							<sup>*</sup>
+						</p>
+						<p class="text is_customer_param">
+							<label for="address2">{l s='Address (2)'}</label>
+							<input type="text" class="text" name="address2" id="address2" value="" />
+						</p>
+						<p class="required postcode text">
+							<label for="postcode">{l s='Postal code / Zip code'}</label>
+							<input type="text" class="text" name="postcode" id="postcode" value="{if isset($guestInformations) && $guestInformations.postcode}{$guestInformations.postcode}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
+							<sup>*</sup>
+						</p>
+						<p class="required text">
+							<label for="city">{l s='City'}</label>
+							<input type="text" class="text" name="city" id="city" value="{if isset($guestInformations) && $guestInformations.city}{$guestInformations.city}{/if}" />
+							<sup>*</sup>
+						</p>
+						<p class="required select">
+							<label for="id_country">{l s='Country'}</label>
+							<select name="id_country" id="id_country">
+								<option value="">-</option>
+								{foreach from=$countries item=v}
+								<option value="{$v.id_country}" {if (isset($guestInformations) AND $guestInformations.id_country == $v.id_country) OR (!isset($guestInformations) && $sl_country == $v.id_country)} selected="selected"{/if}>{$v.name|escape:'htmlall':'UTF-8'}</option>
+								{/foreach}
+							</select>
+							<sup>*</sup>
+						</p>
+						<p class="required id_state select">
+							<label for="id_state">{l s='State'}</label>
+							<select name="id_state" id="id_state">
+								<option value="">-</option>
+							</select>
+							<sup>*</sup>
+						</p>
+						<p class="textarea is_customer_param">
+							<label for="other">{l s='Additional information'}</label>
+							<textarea name="other" id="other" cols="26" rows="3"></textarea>
+						</p>
+						<p class="text">
+							<label for="phone">{l s='Home phone'}</label>
+							<input type="text" class="text" name="phone" id="phone" value="{if isset($guestInformations) && $guestInformations.phone}{$guestInformations.phone}{/if}" /> <sup style="color:red;">*</sup>
+						</p>
+						<p class="text is_customer_param">
+							<label for="phone_mobile">{l s='Mobile phone'}</label>
+							<input type="text" class="text" name="phone_mobile" id="phone_mobile" value="" />
+						</p>
+						<input type="hidden" name="alias" id="alias" value="{l s='My address'}" />
+						
+						<p class="checkbox is_customer_param">
+							<input type="checkbox" name="invoice_address" id="invoice_address" />
+							<label for="invoice_address"><b>{l s='Use an other address for invoice'}</b></label>
+						</p>
+						
+						<div id="opc_invoice_address" class="is_customer_param">
+							<h3>{l s='Invoice address'}</h3>
+							<p class="text is_customer_param">
+								<label for="company_invoice">{l s='Company'}</label>
+								<input type="text" class="text" id="company_invoice" name="company_invoice" value="" />
+							</p>
+							<div id="vat_number is_customer_param" style="display:none;">
+								<p class="text">
+									<label for="vat_number_invoice">{l s='VAT number'}</label>
+									<input type="text" class="text" id="vat_number_invoice" name="vat_number_invoice" value="" />
+								</p>
+							</div>
+							<p class="required text">
+								<label for="address1_invoice">{l s='Address'}</label>
+								<input type="text" class="text" name="address1_invoice" id="address1_invoice" value="" />
+								<sup>*</sup>
+							</p>
+							<p class="text is_customer_param">
+								<label for="address2_invoice">{l s='Address (2)'}</label>
+								<input type="text" class="text" name="address2_invoice" id="address2_invoice" value="" />
+							</p>
+							<p class="required postcode text">
+								<label for="postcode_invoice">{l s='Postal code / Zip code'}</label>
+								<input type="text" class="text" name="postcode_invoice" id="postcode_invoice" value="" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
+								<sup>*</sup>
+							</p>
+							<p class="required text">
+								<label for="city_invoice">{l s='City'}</label>
+								<input type="text" class="text" name="city_invoice" id="city_invoice" value="" />
+								<sup>*</sup>
+							</p>
+							<p class="required select">
+								<label for="id_country_invoice">{l s='Country'}</label>
+								<select name="id_country_invoice" id="id_country_invoice">
+									<option value="">-</option>
+									{foreach from=$countries item=v}
+									<option value="{$v.id_country}" {if ($sl_country == $v.id_country)} selected="selected"{/if}>{$v.name|escape:'htmlall':'UTF-8'}</option>
+									{/foreach}
+								</select>
+								<sup>*</sup>
+							</p>
+							<p class="required id_state select">
+								<label for="id_state_invoice">{l s='State'}</label>
+								<select name="id_state_invoice" id="id_state_invoice">
+									<option value="">-</option>
+								</select>
+								<sup>*</sup>
+							</p>
+							<p class="textarea is_customer_param">
+								<label for="other_invoice">{l s='Additional information'}</label>
+								<textarea name="other_invoice" id="other_invoice" cols="26" rows="3"></textarea>
+							</p>
+							<p class="text">
+								<label for="phone_invoice">{l s='Home phone'}</label>
+								<input type="text" class="text" name="phone_invoice" id="phone_invoice" value="" /> <sup style="color:red;">*</sup>
+							</p>
+							<p class="text is_customer_param">
+								<label for="phone_mobile_invoice">{l s='Mobile phone'}</label>
+								<input type="text" class="text" name="phone_mobile_invoice" id="phone_mobile_invoice" value="" />
+							</p>
+							<input type="hidden" name="alias_invoice" id="alias_invoice" value="{l s='My Invoice address'}" />
+						</div>
+						<!-- END Account -->
+						<p class="text">
+							<input type="submit" class="button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" />
+						</p>
+					</div>
+				</fieldset>
+			</form>
+			
+			<div id="opc_block_1_button" style="display:none;">
+				<div style="float:right;"><a href="#opc_block_2" class="exclusive opc_button">{l s='Continue'}</a></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div id="opc_block_1_status" class="opc_status"></div>
+		<!-- END Create account / Guest account / Login block -->
+	{/if}
+	<!-- Delivery method block -->
+	<h2>2. {l s='Delivery methods'}</h2>
+	<div id="opc_block_2" class="opc_block_content">
+		<div id="HOOK_BEFORECARRIER">{if isset($carriers)}{$HOOK_BEFORECARRIER}{/if}</div>
+		{if isset($virtualCart) && $isVirtualCart}
+		<p class="warning">{l s='No carrier needed for this order'}</p>
 		{else}
-			<p class="warning" id="noCarrierWarning" {if $carriers && count($carriers)}style="display:none;"{/if}>{l s='There are no carriers available that will deliver to this address!'}</p>
-			<table id="carrierTable" class="std" {if !$carriers || !count($carriers)}style="display:none;"{/if}>
-				<thead>
-					<tr>
-						<th class="carrier_action first_item"></th>
-						<th class="carrier_name item">{l s='Carrier'}</th>
-						<th class="carrier_infos item">{l s='Information'}</th>
-						<th class="carrier_price last_item">{l s='Price'}</th>
-					</tr>
-				</thead>
-				<tbody>
+		<p class="warning" id="noCarrierWarning" {if isset($carriers) && $carriers && count($carriers)}style="display:none;"{/if}>{l s='There are no carriers available that will deliver to this address!'}</p>
+		<table id="carrierTable" class="std" {if !isset($carriers) || !$carriers || !count($carriers)}style="display:none;"{/if}>
+			<thead>
+				<tr>
+					<th class="carrier_action first_item"></th>
+					<th class="carrier_name item">{l s='Carrier'}</th>
+					<th class="carrier_infos item">{l s='Information'}</th>
+					<th class="carrier_price last_item">{l s='Price'}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{if isset($carriers)}
 				{foreach from=$carriers item=carrier name=myLoop}
 					<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
 						<td class="carrier_action radio">
@@ -363,103 +662,91 @@
 						</td>
 					</tr>
 				{/foreach}
-				{$HOOK_EXTRACARRIER}
-				</tbody>
-			</table>
-			<div style="display: none;" id="extra_carrier"></div>
-		
-			{if $recyclablePackAllowed}
-			<p id="recyclable_block" class="checkbox" {if !$carriers || !count($carriers)}style="display:none;"{/if}>
-				<input type="checkbox" name="recyclable" id="recyclable" value="1" {if $recyclable == 1}checked="checked"{/if} onclick="updateCarrierSelectionAndGift();" />
-				<label for="recyclable">{l s='I agree to receive my order in recycled packaging'}.</label>
-			</p>
+				<div id="HOOK_EXTRACARRIER">{$HOOK_EXTRACARRIER}</div>
 			{/if}
-		
-			{if $giftAllowed}
-				<script type="text/javascript" src="{$js_dir}layer.js"></script>
-				<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}conditions.js"></script>
-				{if (!isset($virtual_cart) || !$virtual_cart) && $giftAllowed && $cart->gift == 1}
-				<script type="text/javascript">{literal}
-				// <![CDATA[
-				    $(function(){
-				    	  $('#gift_div').toggle('slow');
-				    });
-				 //]]>
-				{/literal}</script>
-				{/if}
-				<h3 class="gift_title">{l s='Gift'}</h3>
-				<p class="checkbox">
-					<input type="checkbox" name="gift" id="gift" value="1" {if $cart->gift == 1}checked="checked"{/if} onclick="$('#gift_div').toggle('slow');updateCarrierSelectionAndGift();"/>
-					<label for="gift">{l s='I would like the order to be gift-wrapped.'}</label>
-					<br />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					{if $gift_wrapping_price > 0}
-						({l s='Additional cost of'}
-						<span class="price">
-							{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc}{else}{convertPrice price=$total_wrapping}{/if}
-						</span>
-						{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if})
-					{/if}
-				</p>
-				<p id="gift_div" class="textarea">
-					<label for="gift_message">{l s='If you wish, you can add a note to the gift:'}</label>
-					<textarea rows="5" cols="35" id="gift_message" name="gift_message">{$cart->gift_message|escape:'htmlall':'UTF-8'}</textarea>
-				</p>
-			{/if}
-		{/if}
-		<p class="cart_navigation"><a href="#" type="button" class="exclusive order-opc_next" name="order-opc_block-conditions">{l s='Next >'}</a></p>
-		</div>
-		<p id="order-opc_status-carrier" class="order-opc_status"></p>
-		{if $conditions AND $cms_id}
-			<h2 class="condition_title order-opc_block"><img src="{$img_dir}icon/more.gif" alt="" class="order-opc_block-status" /> {l s='Terms of service'}</h2>
-			<p id="order-opc_block-conditions" class="checkbox order-opc_block-content">
-				<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-				<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="thickbox">{l s='(read)'}</a>
-			</p>
-			<p id="order-opc_status-TOS" class="order-opc_status"></p>
-		{/if}
-		<p id ="proceed_to_checkout" class="cart_navigation">
-			<a href="#" class="exclusive_large" onclick="showPaymentModule();return false;">{l s='Proceed to Checkout'}</a>
+			</tbody>
+		</table>
+		<div style="display: none;" id="extra_carrier"></div>
+	
+		{if $recyclablePackAllowed}
+		<p id="recyclable_block" class="checkbox" {if !isset($carriers) || !$carriers || !count($carriers)}style="display:none;"{/if}>
+			<input type="checkbox" name="recyclable" id="recyclable" value="1" {if $recyclable == 1}checked="checked"{/if} onclick="updateCarrierSelectionAndGift();" />
+			<label for="recyclable">{l s='I agree to receive my order in recycled packaging'}.</label>
 		</p>
+		{/if}
+	
+		{if $giftAllowed}
+			<script type="text/javascript" src="{$js_dir}layer.js"></script>
+			<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}conditions.js"></script>
+			{if isset($virtual_cart) && !$virtual_cart && $giftAllowed && $cart->gift == 1}
+			<script type="text/javascript">{literal}
+			// <![CDATA[
+			    $(function(){
+			    	  $('#gift_div').toggle('slow');
+			    });
+			 //]]>
+			{/literal}</script>
+			{/if}
+			<h3 class="gift_title">{l s='Gift'}</h3>
+			<p class="checkbox">
+				<input type="checkbox" name="gift" id="gift" value="1" {if $cart->gift == 1}checked="checked"{/if} onclick="$('#gift_div').toggle('slow');updateCarrierSelectionAndGift();"/>
+				<label for="gift">{l s='I would like the order to be gift-wrapped.'}</label>
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				{if $gift_wrapping_price > 0}
+					({l s='Additional cost of'}
+					<span class="price">
+						{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc}{else}{convertPrice price=$total_wrapping}{/if}
+					</span>
+					{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if})
+				{/if}
+			</p>
+			<p id="gift_div" class="textarea">
+				<label for="gift_message">{l s='If you wish, you can add a note to the gift:'}</label>
+				<textarea rows="5" cols="35" id="gift_message" name="gift_message">{$cart->gift_message|escape:'htmlall':'UTF-8'}</textarea>
+			</p>
+			{/if}
+		{/if}
+	
+		<div>
+			<div style="float:left;"><a href="#opc_block_1" class="button opc_button">{l s='Back'}</a></div>
+			<div style="float:right;"><a href="#opc_block_3" class="exclusive opc_button">{l s='Continue'}</a></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div id="opc_block_2_status" class="opc_status"></div>
+	<!-- END Delivery method block -->
+	
+	<!-- Terms of service block -->
+	<h2>3. {l s='Terms of service'}</h2>
+	<div id="opc_block_3" class="opc_block_content">
+		{if $conditions AND $cms_id}
+		<p class="checkbox">
+			<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
+			<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="thickbox">{l s='(read)'}</a>
+		</p>
+		{/if}
 		
-		<h2 id="payment_module_list_title">{l s='Proceed to Checkout'}</h2>
-		<div id="payment_module_list" class="clear"></div>
-	{else}
-	<h2>{l s='LOG IN'}</h2>
-	<form action="{$base_dir_ssl}authentication.php?back=order-opc.php#order-opc_address" method="post" id="create-account_form" class="std">
-		<fieldset>
-			<h3>{l s='Create your account'}</h3>
-			<h4>{l s='Enter your e-mail address to create your account'}.</h4>
-			<p class="text">
-				<label for="email_create">{l s='E-mail address'}</label>
-				<span><input type="text" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
-			</p>
-			<p class="submit">
-			{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'htmlall':'UTF-8'}" />{/if}
-				<input type="submit" id="SubmitCreate" name="SubmitCreate" class="button_large" value="{l s='Create your account'}" />
-				<input type="hidden" class="hidden" name="SubmitCreate" value="{l s='Create your account'}" />
-			</p>
-		</fieldset>
-	</form>
-	<form action="{$base_dir_ssl}authentication.php?back=order-opc.php#order-opc_address" method="post" id="login_form" class="std">
-		<fieldset>
-			<h3>{l s='Already registered ?'}</h3>
-			<p class="text">
-				<label for="email">{l s='E-mail address'}</label>
-				<span><input type="text" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
-			</p>
-			<p class="text">
-				<label for="passwd">{l s='Password'}</label>
-				<span><input type="password" id="passwd" name="passwd" value="{if isset($smarty.post.passwd)}{$smarty.post.passwd|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
-			</p>
-			<p class="submit">
-				{if isset($back)}<input type="hidden" class="hidden" name="back" value="{$back|escape:'htmlall':'UTF-8'}" />{/if}
-				<input type="submit" id="SubmitLogin" name="SubmitLogin" class="button" value="{l s='Log in'}" />
-			</p>
-			<p class="lost_password"><a href="{$base_dir}password.php">{l s='Forgot your password?'}</a></p>
-		</fieldset>
-	</form>
-	{/if}
+		<div>
+			<div style="float:left;"><a href="#opc_block_2" class="button opc_button">{l s='Back'}</a></div>
+			<div style="float:right;"><a href="#opc_block_4" class="exclusive opc_button">{l s='Continue'}</a></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div id="opc_block_3_status" class="opc_status"></div>
+	<!-- END Terms of service block -->
+	
+	<!-- Payment methods block -->
+	<h2>4. {l s='Payment methods'}</h2>
+	<div id="opc_block_4" class="opc_block_content">
+		<div id="opc_payment_list"></div>
+		
+		<div>
+			<div style="float:left;"><a href="#opc_block_3" class="button opc_button">{l s='Back'}</a></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<!-- END Terms of service block -->
 	<div class="clear"></div>
 	
 {else}

@@ -1,41 +1,43 @@
-
-#create-account_form,
- #order-opc #login_form {
-	width: 49%;
-	height: 25em;
-	clear: none;
-	float: left
-} 
-#create-account_form h4 {
-	height: 3.4em;
-	padding: 0.3em 3em 0 4em
+#order-opc .opc_status {
+	border: 1px solid #d0d3d8;
+	background: #D0D1D5 url('../img/form_bg.jpg') repeat-x top left;
+	font-size: 12px;
 }
-#create-account_form p.text,
- #order-opc #login_form p.text {
+
+.opc_float {
+	float:left;
+	width:49%;
+}
+
+.opc_float_status {
+	float:left;
+	width:45%;
+	padding:10px;
+	margin-bottom:10px;
+}
+
+#order-opc #login_form {
+	width: 100%;
+	clear: none
+} 
+
+#order-opc #login_form p.text {
 	height: 3.4em;
 	margin-left: 4em;
 	padding-left: 0;
 	padding-right: 0
 }
+
 #order-opc #login_form a { color: #374853 }
-#create-account_form { margin-right: 7px }
-#create-account_form p.text {
-	text-align: left;
-	width: 100px
-}
-#order-opc #create-account_form p.text label { width: 100px }
-#order-opc input#SubmitCreate,
- #order-opc input#SubmitLogin { margin: 0 }
-#order-opc #create-account_form p.submit, #order-opc #login_form p.submit {
+#order-opc input#SubmitLogin { margin: 0 }
+#order-opc #login_form p.submit {
 	margin-right: 0;
 	text-align: left;
 	padding-left: 17%!important
 }
 #order-opc p.lost_password { padding-left: 4em }
-#order-opc #create-account_form fieldset,
- #order-opc #login_form fieldset { height: 18em }
 #order-opc p.submit span { padding-right: 0.5em }
-#create-account_form label, #order-opc #login_form label {
+#order-opc #login_form label {
 	float: none;
 	clear: both;
 	display: block;
@@ -43,17 +45,6 @@
 	width: 100%;
 	margin-bottom: 0.3em
 }
-#account-creation_form input.text, 
-#account-creation_form #id_country, 
-#account-creation_form #id_state, 
-  #order-opc textarea { width: 17em }
 
-#order-opc h2.order-opc_block { clear:both; cursor: pointer; margin-top:10px; }
+#order-opc textarea { width: 17em }
 
-#order-opc p.order-opc_status {
-	font-size:12px;
-	border: 1px solid #d0d3d8;
-	background: #D0D1D5 url('../img/form_bg.jpg') repeat-x top left;
-	padding: 0.6em;
-	width: 540px
-}

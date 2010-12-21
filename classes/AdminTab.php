@@ -237,7 +237,10 @@ abstract class AdminTabCore
 
 
 		echo '<br />
-						<fieldset class="width1"><legend>'.$this->l('Required Fields').'</legend><form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
+						<a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Advanced parameters...').'</a>
+						<fieldset style="display:none;" class="width1 requiredFieldsParameters">
+						<legend>'.$this->l('Required Fields').'</legend>
+						<form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
 						<p><b>'.$this->l('Select the fields you require.').'<br />
 						'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
 						<table cellspacing="0" cellpadding="0" class="table width1 clear">

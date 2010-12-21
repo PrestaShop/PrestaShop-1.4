@@ -55,9 +55,20 @@ class OrderConfirmationControllerCore extends FrontController
 	{
 		parent::process();
 		$this->smarty->assign(array(
+			'is_guest' => $this->cookie->is_guest,
 			'HOOK_ORDER_CONFIRMATION' => Hook::orderConfirmation((int)($this->id_order)),
 			'HOOK_PAYMENT_RETURN' => Hook::paymentReturn((int)($this->id_order), (int)($this->id_module))
 		));
+		
+		if ($this->cookie->is_guest)
+		{
+			$this->smarty->assign(array(
+				'id_order' => $this->id_order,
+				'id_order_formatted' => sprintf('#%06d', $this->id_order)
+			));
+			/* If guest we clear the cookie for security reason */
+			$this->cookie->logout();
+		}
 	}
 	
 	public function displayContent()

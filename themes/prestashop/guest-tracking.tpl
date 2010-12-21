@@ -1,0 +1,85 @@
+{*
+* 2007-2010 PrestaShop 
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author Prestashop SA <contact@prestashop.com>
+*  @copyright  2007-2010 Prestashop SA
+*  @version  Release: $Revision: 1.4 $
+*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  International Registred Trademark & Property of PrestaShop SA
+*}
+
+{capture name=path}{l s='Guest tracking'}{/capture}
+{include file="$tpl_dir./breadcrumb.tpl"}
+
+<h2>{l s='Guest Tracking'}</h2>
+
+{if isset($order)}
+	<div id="block-history">
+		<div id="block-order-detail" class="std">
+		{include file="$tpl_dir./order-detail.tpl"}
+		</div>
+	</div>
+	
+	<h2 id="guestToCustomer">{l s='For more advantages...'}</h2>
+	
+	{include file="$tpl_dir./errors.tpl"}
+	
+	{if isset($transformSuccess)}
+		<p class="success">{l s='Your guest account has been transformed to customer account with success, you can now login at this'} <a href="{$link->getPageLink('authentication.php', true)}">{l s='page'}</a></p>
+	{else}
+		<form method="POST" action="{$action|escape:'htmlall':'UTF-8'}#guestToCustomer" class="std">
+			<fieldset>
+				<p class="bold">{l s='Transform your guest account to a customer account and enjoy many benefits:'}</p>
+				<ul class="bullet">
+					<li>{l s='make new order faster'}</li>
+					<li>{l s='have a secure and personalized access'}</li>
+					<li>{l s='make a return of merchandise easiest'}</li>
+				</ul>
+				<p class="text">
+					<label>{l s='Define your password:'}</label>
+					<input type="password" name="password" />
+				</p>
+				
+				<input type="hidden" name="id_order" value="{if isset($smarty.get.id_order)}{$smarty.get.id_order|escape:'htmlall':'UTF-8'}{else}{if isset($smarty.post.id_order)}{$smarty.post.id_order|escape:'htmlall':'UTF-8'}{/if}{/if}" />
+				<input type="hidden" name="email" value="{if isset($smarty.get.email)}{$smarty.get.email|escape:'htmlall':'UTF-8'}{else}{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall':'UTF-8'}{/if}{/if}" />
+				
+				<p class="center"><input type="submit" class="exclusive_large" name="submitTransformGuestToCustomer" value="{l s='Send'}" /></p>
+			</fieldset>
+		</form>
+	{/if}
+{else}
+	{include file="$tpl_dir./errors.tpl"}
+	<form method="POST" action="{$action|escape:'htmlall':'UTF-8'}" class="std">
+		<fieldset>
+			<p>{l s='In order to following your order, thank to enter the following informations:'}</p>
+			<p class="text">
+				<label>{l s='Order ID:'} <b>#</b></label>
+				<input type="text" name="id_order" value="{if isset($smarty.get.id_order)}{$smarty.get.id_order|escape:'htmlall':'UTF-8'}{else}{if isset($smarty.post.id_order)}{$smarty.post.id_order|escape:'htmlall':'UTF-8'}{/if}{/if}" size="8" />
+				<i>{l s='For example: 010123'}</i>
+			</p>
+			
+			<p class="text">
+				<label>{l s='E-mail:'}</label>
+				<input type="text" name="email" value="{if isset($smarty.get.email)}{$smarty.get.email|escape:'htmlall':'UTF-8'}{else}{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall':'UTF-8'}{/if}{/if}" />
+			</p>
+		
+			<p class="center"><input type="submit" class="button" name="submitGuestTracking" value="{l s='Send'}" /></p>
+		</fieldset>
+	</form>
+{/if}

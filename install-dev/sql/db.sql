@@ -412,6 +412,7 @@ CREATE TABLE `PREFIX_customer` (
   `secure_key` varchar(32) NOT NULL default '-1',
   `note` text,
   `active` tinyint(1) unsigned NOT NULL default '0',
+  `is_guest` tinyint(1) NOT NULL default '0',
   `deleted` tinyint(1) NOT NULL default '0',
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,

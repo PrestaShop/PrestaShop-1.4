@@ -37,7 +37,7 @@ class AuthControllerCore extends FrontController
 	{
 		parent::preProcess();
 		
-		if ($this->cookie->isLogged())
+		if ($this->cookie->isLogged() AND !Tools::isSubmit('ajax'))
 			Tools::redirect('my-account.php');
 		
 		if (Tools::getValue('create_account'))
@@ -48,7 +48,7 @@ class AuthControllerCore extends FrontController
 
 		if (Tools::isSubmit('SubmitCreate'))
 		{
-			if (!Validate::isEmail($email = Tools::getValue('email_create')))
+			if (!Validate::isEmail($email = Tools::getValue('email_create')) OR empty($email))
 				$this->errors[] = Tools::displayError('invalid e-mail address');
 			elseif (Customer::customerExists($email))
 			{
@@ -64,17 +64,26 @@ class AuthControllerCore extends FrontController
 			}
 		}
 
-		if (Tools::isSubmit('submitAccount'))
+		if (Tools::isSubmit('submitAccount') OR Tools::isSubmit('submitGuestAccount'))
 		{
 			$create_account = 1;
-			$this->smarty->assign('email_create', 1);
+			if (Tools::isSubmit('submitAccount'))
+				$this->smarty->assign('email_create', 1);
 			$validateDni = Validate::isDni(Tools::getValue('dni'));
 
-			if (!Validate::isEmail($email = Tools::getValue('email')))
+			/* New Guest customer */
+			if (!Tools::getValue('is_new_customer') AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
+				$this->errors[] = Tools::displayError('you can\'t create a guest account');
+			if (!Tools::getValue('is_new_customer'))
+				$_POST['passwd'] = md5(time()._COOKIE_KEY_);
+			if (isset($_POST['guest_email']) AND $_POST['guest_email'])
+				$_POST['email'] = $_POST['guest_email'];
+
+			if (!Validate::isEmail($email = Tools::getValue('email')) OR empty($email))
 				$this->errors[] = Tools::displayError('e-mail not valid');
 			elseif (Customer::customerExists($email))
 				$this->errors[] = Tools::displayError('someone has already registered with this e-mail address');
-			if (!Validate::isPasswd(Tools::getValue('passwd')))
+			if (!Validate::isPasswd(Tools::getValue('passwd')) AND Tools::isSubmit('is_new_customer'))
 				$this->errors[] = Tools::displayError('invalid password');
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
@@ -141,6 +150,8 @@ class AuthControllerCore extends FrontController
 					else
 					{
 						$customer->active = 1;
+						/* New Guest customer */
+						$customer->is_guest = !Tools::getValue('is_new_customer', 1);
 						if (!$customer->add())
 							$this->errors[] = Tools::displayError('an error occurred while creating your account');
 						else
@@ -150,9 +161,12 @@ class AuthControllerCore extends FrontController
 								$this->errors[] = Tools::displayError('an error occurred while creating your address');
 							else
 							{
-								if (!Mail::Send((int)($this->cookie->id_lang), 'account', Mail::l('Welcome!'),
-								array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
-									$this->errors[] = Tools::displayError('cannot send email');
+								if (!$customer->is_guest)
+								{
+									if (!Mail::Send((int)($this->cookie->id_lang), 'account', Mail::l('Welcome!'),
+									array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
+										$this->errors[] = Tools::displayError('cannot send email');
+								}
 								$this->smarty->assign('confirmation', 1);
 								$this->cookie->id_customer = (int)($customer->id);
 								$this->cookie->customer_lastname = $customer->lastname;
@@ -160,6 +174,7 @@ class AuthControllerCore extends FrontController
 								$this->cookie->passwd = $customer->passwd;
 								$this->cookie->logged = 1;
 								$this->cookie->email = $customer->email;
+								$this->cookie->is_guest = !Tools::getValue('is_new_customer', 1);
 								/* Update cart address */
 								$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
 								$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
@@ -168,6 +183,19 @@ class AuthControllerCore extends FrontController
 									'_POST' => $_POST,
 									'newCustomer' => $customer
 								));
+								if (Tools::isSubmit('ajax'))
+								{
+									$return = array(
+										'hasError' => !empty($this->errors), 
+										'errors' => $this->errors,
+										'isSaved' => true,
+										'id_customer' => (int)$this->cookie->id_customer,
+										'id_address_delivery' => $this->cart->id_address_delivery,
+										'id_address_invoice' => $this->cart->id_address_invoice,
+										'token' => Tools::getToken(false)
+									);
+									die(Tools::jsonEncode($return));
+								}
 								if ($back = Tools::getValue('back'))
 									Tools::redirect($back);
 								Tools::redirect('my-account.php');
@@ -176,8 +204,23 @@ class AuthControllerCore extends FrontController
 					}
 				}
 			}
+			if (sizeOf($this->errors))
+			{
+				if (!Tools::getValue('is_new_customer'))
+					unset($_POST['passwd']);
+				if (Tools::isSubmit('ajax'))
+				{
+					$return = array(
+						'hasError' => !empty($this->errors), 
+						'errors' => $this->errors,
+						'isSaved' => false,
+						'id_customer' => 0
+					);
+					die(Tools::jsonEncode($return));
+				}
+			}
 		}
-
+		
 		if (Tools::isSubmit('SubmitLogin'))
 		{
 			$passwd = trim(Tools::getValue('passwd'));
@@ -206,6 +249,7 @@ class AuthControllerCore extends FrontController
 					$this->cookie->customer_lastname = $customer->lastname;
 					$this->cookie->customer_firstname = $customer->firstname;
 					$this->cookie->logged = 1;
+					$this->cookie->is_guest = $customer->isGuest();
 					$this->cookie->passwd = $customer->passwd;
 					$this->cookie->email = $customer->email;
 					if (Configuration::get('PS_CART_FOLLOWING') AND (empty($this->cookie->id_cart) OR Cart::getNbProducts($this->cookie->id_cart) == 0))
@@ -266,9 +310,10 @@ class AuthControllerCore extends FrontController
 			));
 
 			/* Call a hook to display more information on form */
-			$this->smarty->assign(array('HOOK_CREATE_ACCOUNT_FORM' => Module::hookExec('createAccountForm'),
-																					'HOOK_CREATE_ACCOUNT_TOP' => Module::hookExec('createAccountTop')
-																));
+			$this->smarty->assign(array(
+				'HOOK_CREATE_ACCOUNT_FORM' => Module::hookExec('createAccountForm'),
+				'HOOK_CREATE_ACCOUNT_TOP' => Module::hookExec('createAccountTop')
+			));
 		}
 	}
 	
@@ -283,14 +328,24 @@ class AuthControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$this->smarty->assign('opc', (int)(Configuration::get('PS_ORDER_PROCESS_TYPE')));
-		
 		$back = Tools::getValue('back');
 		$key = Tools::safeOutput(Tools::getValue('key'));
 		if (!empty($key))
 			$back .= (strpos($back, '?') !== false ? '&' : '?').'key='.$key;
 		if (!empty($back))
+		{
 			$this->smarty->assign('back', Tools::safeOutput($back));
+			if (strpos($back, 'order.php') !== false)
+			{
+				$countries = Country::getCountries((int)($this->cookie->id_lang), true);
+				$this->smarty->assign(array(
+					'inOrderProcess' => true, 
+					'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
+					'sl_country' => (int)Tools::getValue('id_country', Configuration::get('PS_COUNTRY_DEFAULT')),
+					'countries' => $countries
+				));
+			}
+		}
 	}
 	
 	public function displayContent()
