@@ -554,30 +554,13 @@ class AdminImport extends AdminTab
 				$product = new Product();
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
-			/*
-			// Find id_tax corresponding to given values for product taxe
-			if (isset($product->tax_rate))
-				$product->id_tax = (int)(Tax::getTaxIdByRate((float)($product->tax_rate)));
-			if (isset($product->tax_rate) AND !$product->id_tax)
-			{
-				$tax = new Tax();
-				$tax->rate = (float)($product->tax_rate);
-				$tax->name = self::createMultiLangField(strval($product->tax_rate));
-				if (($fieldError = $tax->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $tax->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $tax->add())
-					$product->id_tax = (int)($tax->id);
-				else
-				{
-					$this->_errors[] = 'TAX '.$tax->name[$defaultLanguageId].' '.Tools::displayError('cannot be saved');
-					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
-				}
-			}*/
 
             $trg_name = trim($product->tax_rules_group_name);
-            p('NAME='.$trg_name);
+
 			if (!empty($trg_name))
 			{
 			    $id_trg = (int)TaxRulesGroup::getIdByName($trg_name);
-			     p('ID_TRG='.$id_trg );
+
 			    if (!$id_trg)
 			    {
 			       	$trg = new TaxRulesGroup();
