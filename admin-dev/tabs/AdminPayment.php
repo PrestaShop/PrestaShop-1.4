@@ -32,7 +32,7 @@ class AdminPayment extends AdminTab
 	public function __construct()
 	{
 		/* Get all modules then select only payment ones*/
-		$modules = Module::getModulesOnDisk();
+		$modules = Module::getModulesOnDisk(true);
 		foreach ($modules AS $module)
 			if ($module->tab == 'payments_gateways')
 			{
