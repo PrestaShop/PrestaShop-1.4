@@ -102,7 +102,7 @@ class PDFCore extends PDF_PageGroupCore
 	/**
 	* Constructor
 	*/
-	public function PDF($orientation='P', $unit='mm', $format='A4')
+	public function __construct($orientation='P', $unit='mm', $format='A4')
 	{
 		global $cookie;
 
@@ -982,6 +982,8 @@ g	* Discount table with value, quantities...
 	static private function fontname()
 	{
 		$font = self::embedfont();
+		if (in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts))
+			$font = self::$_pdfparams[self::$_iso]['font'];
 		return $font ? $font : 'Arial';
  	}
 
