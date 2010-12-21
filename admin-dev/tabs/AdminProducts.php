@@ -2207,7 +2207,7 @@ class AdminProducts extends AdminTab
 				</p>
 				<p class="block">
 					<label for="virtual_product_name" class="t"><?php echo $this->l('Filename') ?></label>
-					<input type="text" id="virtual_product_name" name="virtual_product_name" class="" value="<?php echo $productDownload->id > 0 ? $productDownload->display_filename : htmlentities(Tools::getValue('virtual_product_name'), ENT_COMPAT, 'UTF-8') ?>" />
+					<input type="text" id="virtual_product_name" name="virtual_product_name" style="width:200px" value="<?php echo $productDownload->id > 0 ? $productDownload->display_filename : htmlentities(Tools::getValue('virtual_product_name'), ENT_COMPAT, 'UTF-8') ?>" />
 					<span class="hint" name="help_box" style="display:none;"><?php echo $this->l('The full filename with its extension (e.g., Book.pdf)') ?></span>
 				</p>
 				<p class="block">
