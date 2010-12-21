@@ -830,7 +830,11 @@ class CartCore extends ObjectModel
 			return $shipping_cost;
 
 		// Get id zone
-		if (isset($this->id_address_delivery) AND $this->id_address_delivery)
+		if (
+      isset($this->id_address_delivery)
+      AND $this->id_address_delivery
+      AND Customer::customerHasAddress($this->id_customer, $this->id_address_delivery)
+    ) 
 			$id_zone = Address::getZoneById((int)($this->id_address_delivery));
 		else
 			$id_zone = (int)($defaultCountry->id_zone);
@@ -961,7 +965,11 @@ class CartCore extends ObjectModel
 			if ($carrier->range_behavior)
 			{
 				// Get id zone
-		        if (isset($this->id_address_delivery) AND $this->id_address_delivery)
+		        if (
+              isset($this->id_address_delivery)
+              AND $this->id_address_delivery
+              AND Customer::customerHasAddress($this->id_customer, $this->id_address_delivery)
+            )
 					$id_zone = Address::getZoneById((int)($this->id_address_delivery));
 				else
 					$id_zone = (int)($defaultCountry->id_zone);
