@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -35,15 +35,17 @@ class CategoryControllerCore extends FrontController
 			_THEME_CSS_DIR_.'scenes.css' => 'all',
 			_THEME_CSS_DIR_.'category.css' => 'all',
 			_THEME_CSS_DIR_.'product_list.css' => 'all'));
-		Tools::addJS(_THEME_JS_DIR_.'products-comparison.js');
+
+		if (Configuration::get('PS_COMPARATOR_MAX_ITEM') > 0)
+    		Tools::addJS(_THEME_JS_DIR_.'products-comparison.js');
 	}
-	
+
 	public function displayHeader()
 	{
 		parent::displayHeader();
 		$this->productSort();
 	}
-	
+
 	public function preProcess()
 	{
 		parent::preProcess();
@@ -76,7 +78,7 @@ class CategoryControllerCore extends FrontController
 			else
 			{
 				$rewrited_url = $this->link->getCategoryLink((int)$category->id, $category->link_rewrite);
-				
+
 				/* Scenes  (could be externalised to another controler if you need them */
 				$this->smarty->assign('scenes', Scene::getScenes((int)($category->id), (int)($this->cookie->id_lang), true, false));
 
@@ -93,7 +95,7 @@ class CategoryControllerCore extends FrontController
 					$this->smarty->assign('thumbSceneImageType', isset($thumbSceneImageType) ? $thumbSceneImageType : NULL);
 					$this->smarty->assign('largeSceneImageType', isset($largeSceneImageType) ? $largeSceneImageType : NULL);
 				}
-				
+
 				$category->description = nl2br2($category->description);
 				$subCategories = $category->getSubCategories((int)($this->cookie->id_lang));
 				$this->smarty->assign('category', $category);
@@ -132,7 +134,7 @@ class CategoryControllerCore extends FrontController
 			'suppliers' => Supplier::getSuppliers()
 		));
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
