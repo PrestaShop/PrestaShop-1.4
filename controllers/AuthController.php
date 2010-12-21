@@ -176,6 +176,7 @@ class AuthControllerCore extends FrontController
 								$this->cookie->email = $customer->email;
 								$this->cookie->is_guest = !Tools::getValue('is_new_customer', 1);
 								/* Update cart address */
+								$this->cart->secure_key = $customer->secure_key;
 								$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
 								$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
 								$this->cart->update();
