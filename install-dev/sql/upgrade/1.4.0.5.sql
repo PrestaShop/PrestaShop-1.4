@@ -28,9 +28,57 @@ ALTER TABLE `PREFIX_category` ADD `nleft` INT UNSIGNED NOT NULL DEFAULT '0' AFTE
 ALTER TABLE `PREFIX_category` ADD `nright` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `nleft`;
 ALTER TABLE `PREFIX_category` ADD INDEX `nleftright` (`nleft`, `nright`);
 
-/* PHP:generate_ntree(); */;
-/* PHP:id_currency_country_fix(); */;
-/* PHP:update_modules_sql() */;
+ALTER TABLE `PREFIX_product` ADD  `id_tax_rules_group` int(10) unsigned NOT NULL AFTER `id_tax`;
+ALTER TABLE `PREFIX_carrier` ADD  `id_tax_rules_group` int(10) unsigned NOT NULL AFTER `id_tax`;
 
-DROP TABLE `PREFIX_tax_state`, `PREFIX_tax_zone`;
+CREATE TABLE `PREFIX_tax_rule` (
+`id_tax_rules_group` INT NOT NULL ,
+`id_country` INT NOT NULL ,
+`id_state` INT NOT NULL ,
+`id_tax` INT NOT NULL ,
+`state_behavior` INT NOT NULL ,
+PRIMARY KEY ( `id_tax_rules_group`, `id_country` , `id_state` )
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+CREATE TABLE `PREFIX_tax_rules_group` (
+`id_tax_rules_group` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`name` VARCHAR( 32 ) NOT NULL ,
+`active` INT NOT NULL
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+
+
+INSERT INTO `PREFIX_tab` (id_parent, class_name, position)
+VALUES
+(
+(SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPayment' LIMIT 1) AS tmp), 'AdminTaxRulesGroup', (SELECT tmp.max FROM (SELECT MAX(position) + 1  max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPayment' LIMIT 1) AS tmp )) AS tmp)
+);
+
+
+INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
+	SELECT id_lang,
+	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminTaxRulesGroup' LIMIT 1),
+	'Taxes Rules' FROM PREFIX_lang);
+
+UPDATE `PREFIX_tab_lang` SET `name` = 'Règles de taxes'
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
+
+UPDATE `PREFIX_tab_lang` SET `name` = 'Reglas de Impuestos'
+	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup')
+	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'es');
+
+INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES (1,(SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup'),1,1,1,1);
+
+
+/* PHP:generate_ntree(); */;
+/* PHP:generate_tax_rules(); */;
+/* PHP:id_currency_country_fix(); */;
+/* PHP:update_modules_sql(); */;
+
+ALTER TABLE `PREFIX_product` DROP `id_tax`;
+ALTER TABLE `PREFIX_carrier` DROP `id_tax`;
+
+DROP TABLE `PREFIX_tax_state`, `PREFIX_tax_zone`, `PREFIX_country_tax`;
 ALTER TABLE `PREFIX_orders` ADD `carrier_tax_rate` DECIMAL(10, 3) NOT NULL default '0.00' AFTER `total_shipping`;
+

@@ -82,6 +82,9 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'move_crossselling.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'admin_stores_tab.php');
 // generate_tax_rules
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_tax_rules.php');
+// generate_ntree
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_ntree.php');
+
 
 //old version detection
 $oldversion = false;
