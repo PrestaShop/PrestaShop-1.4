@@ -100,10 +100,9 @@ class BlockCms extends Module
 		FROM `'._DB_PREFIX_.'cms_block` cb
 		LEFT JOIN `'._DB_PREFIX_.'cms_block_lang` cbl ON (cbl.`id_block_cms` = cb.`id_block_cms`)
 		WHERE cb.`id_block_cms` = '.(int)($id_block_cms));
-		
-		foreach ($cmsBlocks AS &$cmsBlock)
-			$cmsBlock['name'][(int)$cmsBlock['id_lang']] = $cmsBlock['name'];
-		
+
+		foreach ($cmsBlocks AS $cmsBlock)
+			$cmsBlocks['name'][(int)$cmsBlock['id_lang']] = $cmsBlock['name'];
 		return $cmsBlocks;
 	}
 	
@@ -407,7 +406,7 @@ class BlockCms extends Module
 					<th width="3%">'.$this->l('ID').'</th>
 					<th width="94%">'.$this->l('Name').'</th>
 				</tr>';
-			self::displayRecurseCheckboxes(CMSCategory::getRecurseCategory($cookie->id_lang), explode('|', Configuration::get('FOOTER_CMS')));
+			$this->displayRecurseCheckboxes(CMSCategory::getRecurseCategory($cookie->id_lang), explode('|', Configuration::get('FOOTER_CMS')));
 		$this->_html .= '
 			</table>
 			<p class="center"><input type="submit" class="button" name="submitFooterCMS" value="'.$this->l('Save').'" /></p>
@@ -449,7 +448,7 @@ class BlockCms extends Module
 				foreach ($languages as $language)
 					$this->_html .= '
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').';float: left;">
-						<input type="text" name="block_name_'.$language['id_lang'].'" id="block_name_'.$language['id_lang'].'" size="30" value="'.(Tools::getValue('block_name_'.$language['id_lang']) ? Tools::getValue('block_name_'.$language['id_lang']) : (isset($block_cms['name'][$language['id_lang']]) ? $block_cms['name'][$language['id_lang']] : '')).'" />
+						<input type="text" name="block_name_'.$language['id_lang'].'" id="block_name_'.$language['id_lang'].'" size="30" value="'.(Tools::getValue('block_name_'.$language['id_lang']) ? Tools::getValue('block_name_'.$language['id_lang']) : (isset($cmsBlock['name'][$language['id_lang']]) ? $cmsBlock['name'][$language['id_lang']] : '')).'" />
 					</div>';
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'name', true);
 		$this->_html .= '<p class="clear">'.$this->l('If you leave this field empty, the block name will use the category name').'</p>

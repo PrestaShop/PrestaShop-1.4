@@ -158,6 +158,40 @@ INSERT IGNORE INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `link_rewrite`, `meta
             WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms`=`PREFIX_cms`.`id_cms`)
 	FROM `PREFIX_lang` CROSS JOIN `PREFIX_cms`);
 	
+INSERT IGNORE INTO `PREFIX_cms_category_lang` (`id_cms_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`)
+    (SELECT `id_cms_category`, id_lang,
+    (SELECT tl.`name`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`),
+    (SELECT tl.`description`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`),
+	(SELECT tl.`link_rewrite`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`),
+	(SELECT tl.`meta_title`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`),
+    (SELECT tl.`meta_description`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`),
+	(SELECT tl.`meta_keywords`
+        FROM `PREFIX_cms_category_lang` tl
+        WHERE tl.`id_lang` = (SELECT c.`value`
+            FROM `PREFIX_configuration` c
+            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_cms_category`=`PREFIX_cms_category`.`id_cms_category`)
+	FROM `PREFIX_lang` CROSS JOIN `PREFIX_cms_category`);
+	
 	INSERT IGNORE INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`)
     (SELECT `id_carrier`, id_lang, (SELECT tl.`delay`
         FROM `PREFIX_carrier_lang` tl
